@@ -28,21 +28,21 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 class Main extends egret.DisplayObjectContainer {
-
-
-
     public constructor() {
         super();
+
         this.addEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
     }
 
     private onAddToStage(event: egret.Event) {
+        egret.sys.screenAdapter = new GameBase.ScreenAdapter();
+        this.stage.setContentSize(this.stage.width, this.stage.height);
+
+        GameBase.NetCenter.init();
 
         egret.lifecycle.addLifecycleListener((context) => {
             // custom lifecycle plugin
-
             context.onUpdate = () => {
-
             }
         })
 
@@ -57,9 +57,6 @@ class Main extends egret.DisplayObjectContainer {
         this.runGame().catch(e => {
             console.log(e);
         })
-
-
-
     }
 
     private async runGame() {

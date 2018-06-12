@@ -11,6 +11,8 @@
 	"game": [
 		"bin-debug/LoadingUI.js",
 		"bin-debug/Main.js",
-		"bin-debug/Platform.js"
+		"bin-debug/Platform.js",
+		"bin-debug/base/NetCenter.js",
+		"bin-debug/base/ScreenAdapter.js"
 	]
 }
