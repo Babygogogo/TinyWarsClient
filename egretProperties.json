@@ -1,28 +1,32 @@
 {
-  "engineVersion": "5.2.2",
-  "compilerVersion": "5.2.2",
-  "template": {},
-  "target": {
-    "current": "web"
-  },
-  "modules": [
-    {
-      "name": "egret"
+    "engineVersion": "5.2.2",
+    "compilerVersion": "5.2.2",
+    "template": {},
+    "target": {
+        "current": "web"
     },
-    {
-      "name": "game"
-    },
-    {
-      "name": "tween"
-    },
-    {
-      "name": "assetsmanager"
-    },
-    {
-      "name": "eui"
-    },
-    {
-      "name": "promise"
-    }
-  ]
+    "modules": [
+        {
+            "name": "egret"
+        },
+        {
+            "name": "game"
+        },
+        {
+            "name": "tween"
+        },
+        {
+            "name": "assetsmanager"
+        },
+        {
+            "name": "eui"
+        },
+        {
+            "name": "promise"
+        },
+        {
+            "name": "SocketIoClient",
+            "path": "../TinyWarsExternals/SocketIoClient"
+        }
+    ]
 }
