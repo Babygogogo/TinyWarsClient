@@ -57,6 +57,9 @@ class Main extends egret.DisplayObjectContainer {
         this.runGame().catch(e => {
             console.log(e);
         })
+
+        const a = io();
+        console.log("IO!!", io, a);
     }
 
     private async runGame() {
