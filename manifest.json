@@ -7,7 +7,8 @@
 		"libs/modules/assetsmanager/assetsmanager.js",
 		"libs/modules/eui/eui.js",
 		"libs/modules/promise/promise.js",
-		"libs/modules/SocketIoClient/SocketIoClient.js"
+		"libs/modules/SocketIoClient/SocketIoClient.js",
+		"libs/modules/ProtobufJs/ProtobufJs.js"
 	],
 	"game": [
 		"bin-debug/LoadingUI.js",
