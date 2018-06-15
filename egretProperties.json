@@ -26,11 +26,11 @@
         },
         {
             "name": "SocketIoClient",
-            "path": "../TinyWarsExternals/SocketIoClient"
+            "path": "../TinyWarsExternals/ClientDependencies/SocketIoClient"
         },
         {
             "name": "ProtobufJs",
-            "path": "../TinyWarsExternals/ProtobufJs"
+            "path": "../TinyWarsExternals/ClientDependencies/ProtobufJs"
         }
     ]
 }
