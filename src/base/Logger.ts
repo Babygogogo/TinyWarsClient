@@ -2,22 +2,21 @@
 namespace GameBase {
     export module Logger {
         const enum LogLevels {
-            ALL   = 0,
-            TRACE = 1,
-            DEBUG = 2,
-            LOG   = 3,
-            INFO  = 4,
-            WARN  = 5,
-            ERROR = 6,
-            FATAL = 7,
-            OFF   = 0xFFFFFFFF,
+            All   = 0,
+            Trace = 1,
+            Debug = 2,
+            Log   = 3,
+            Info  = 4,
+            Warn  = 5,
+            Error = 6,
+            Off   = 0xFFFFFFFF,
         }
 
-        const logLevel: LogLevels = LogLevels.ALL;
+        const logLevel: LogLevels = LogLevels.All;
         const console : Console = window.console;
 
         export function trace(...rest: any[]): void {
-            if (logLevel <= LogLevels.TRACE) {
+            if (logLevel <= LogLevels.Trace) {
                 if (egret.Capabilities.isMobile) {
                     console.trace(rest.join(" "));
                 } else {
@@ -27,7 +26,7 @@ namespace GameBase {
         }
 
         export function debug(...rest: any[]): void {
-            if (logLevel <= LogLevels.DEBUG) {
+            if (logLevel <= LogLevels.Debug) {
                 if (egret.Capabilities.isMobile) {
                     console.debug(rest.join(" "));
                 } else {
@@ -37,7 +36,7 @@ namespace GameBase {
         }
 
         export function log(...rest: any[]): void {
-            if (logLevel <= LogLevels.LOG) {
+            if (logLevel <= LogLevels.Log) {
                 if (egret.Capabilities.isMobile) {
                     console.log(rest.join(" "));
                 } else {
@@ -47,7 +46,7 @@ namespace GameBase {
         }
 
         export function info(...rest: any[]): void {
-            if (logLevel <= LogLevels.INFO) {
+            if (logLevel <= LogLevels.Info) {
                 if (egret.Capabilities.isMobile) {
                     console.info(rest.join(" "));
                 } else {
@@ -57,7 +56,7 @@ namespace GameBase {
         }
 
         export function warn(...rest: any[]): void {
-            if (logLevel <= LogLevels.WARN) {
+            if (logLevel <= LogLevels.Warn) {
                 if (egret.Capabilities.isMobile) {
                     console.warn(rest.join(" "));
                 } else {
@@ -67,7 +66,7 @@ namespace GameBase {
         }
 
         export function error(...rest: any[]): void {
-            if (logLevel <= LogLevels.ERROR) {
+            if (logLevel <= LogLevels.Error) {
                 if (egret.Capabilities.isMobile) {
                     console.error(rest.join(" "));
                 } else {

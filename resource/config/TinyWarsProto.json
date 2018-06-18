@@ -1,0 +1,50 @@
+{
+  "nested": {
+    "Container": {
+      "fields": {
+        "C_Register": {
+          "type": "C_Register",
+          "id": 1
+        }
+      }
+    },
+    "C_Register": {
+      "fields": {
+        "msgCode": {
+          "type": "int32",
+          "id": 0
+        },
+        "account": {
+          "type": "string",
+          "id": 1
+        },
+        "password": {
+          "type": "string",
+          "id": 2
+        }
+      }
+    },
+    "S_Register": {
+      "fields": {
+        "msgCode": {
+          "type": "int32",
+          "id": 0
+        },
+        "status": {
+          "type": "Status",
+          "id": 1
+        }
+      },
+      "nested": {
+        "Status": {
+          "values": {
+            "SUCCEED": 0,
+            "ACCOUNT_INVALID": 1,
+            "ACCOUNT_USED": 2,
+            "PASSWORD_INVALID": 3
+          }
+        }
+      }
+    }
+  }
+}

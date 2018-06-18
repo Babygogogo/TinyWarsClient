@@ -38,8 +38,6 @@ class Main extends egret.DisplayObjectContainer {
         egret.sys.screenAdapter = new GameBase.ScreenAdapter();
         this.stage.setContentSize(this.stage.width, this.stage.height);
 
-        GameBase.NetCenter.init();
-
         egret.lifecycle.addLifecycleListener((context) => {
             // custom lifecycle plugin
             context.onUpdate = () => {
@@ -57,9 +55,6 @@ class Main extends egret.DisplayObjectContainer {
         this.runGame().catch(e => {
             console.log(e);
         })
-
-        const a = io();
-        console.log("IO!!", io, a);
     }
 
     private async runGame() {
@@ -71,6 +66,10 @@ class Main extends egret.DisplayObjectContainer {
         const userInfo = await platform.getUserInfo();
         console.log(userInfo);
 
+        GameBase.NetCenter.init();
+        GameBase.NetCenter.addMsgHandlers([
+            { msgName: "C_Register", callback: (data: GameBase.NetCenter.NetMessage) => {GameBase.Logger.log(data)} },
+        ]);
     }
 
     private async loadResource() {
@@ -99,6 +98,9 @@ class Main extends egret.DisplayObjectContainer {
         let stageH = this.stage.stageHeight;
         sky.width = stageW;
         sky.height = stageH;
+        sky.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
+            GameBase.NetCenter.send("C_Register", {msgCode: 1, account: "account", password: "password"});
+        }, this);
 
         let topMask = new egret.Shape();
         topMask.graphics.beginFill(0x000000, 0.5);
@@ -151,7 +153,7 @@ class Main extends egret.DisplayObjectContainer {
      * Create a Bitmap object according to name keyword.As for the property of name please refer to the configuration file of resources/resource.json.
      */
     private createBitmapByName(name: string) {
-        let result = new egret.Bitmap();
+        let result = new eui.Image();
         let texture: egret.Texture = RES.getRes(name);
         result.texture = texture;
         return result;
