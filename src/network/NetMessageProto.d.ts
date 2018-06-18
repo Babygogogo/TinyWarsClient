@@ -1,4 +1,4 @@
-
+export as namespace Network;
 
 /** Properties of a Container. */
 export interface IContainer {
@@ -32,6 +32,7 @@ export interface IS_Register {
     /** S_Register status */
     status?: (S_Register.Status|null);
 }
+
 
 
 export namespace S_Register {

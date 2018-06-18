@@ -14,8 +14,8 @@
 		"bin-debug/LoadingUI.js",
 		"bin-debug/Main.js",
 		"bin-debug/Platform.js",
-		"bin-debug/base/Logger.js",
-		"bin-debug/base/NetCenter.js",
-		"bin-debug/base/ScreenAdapter.js"
+		"bin-debug/network/Network.js",
+		"bin-debug/utility/Logger.js",
+		"bin-debug/utility/ScreenAdapter.js"
 	]
 }

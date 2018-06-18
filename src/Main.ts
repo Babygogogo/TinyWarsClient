@@ -35,7 +35,7 @@ class Main extends egret.DisplayObjectContainer {
     }
 
     private onAddToStage(event: egret.Event) {
-        egret.sys.screenAdapter = new GameBase.ScreenAdapter();
+        egret.sys.screenAdapter = new Utility.ScreenAdapter();
         this.stage.setContentSize(this.stage.width, this.stage.height);
 
         egret.lifecycle.addLifecycleListener((context) => {
@@ -66,9 +66,9 @@ class Main extends egret.DisplayObjectContainer {
         const userInfo = await platform.getUserInfo();
         console.log(userInfo);
 
-        GameBase.NetCenter.init();
-        GameBase.NetCenter.addMsgHandlers([
-            { msgName: "C_Register", callback: (data: GameBase.NetCenter.NetMessage) => {GameBase.Logger.log(data)} },
+        Network.init();
+        Network.addMsgHandlers([
+            { msgName: "C_Register", callback: (data: Network.NetMessage) => {Utility.Logger.log(data)} },
         ]);
     }
 
@@ -99,7 +99,7 @@ class Main extends egret.DisplayObjectContainer {
         sky.width = stageW;
         sky.height = stageH;
         sky.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
-            GameBase.NetCenter.send("C_Register", {msgCode: 1, account: "account", password: "password"});
+            Network.send("C_Register", {msgCode: 1, account: "account", password: "password"});
         }, this);
 
         let topMask = new egret.Shape();

@@ -1,5 +1,5 @@
 
-namespace GameBase {
+namespace Utility {
     // The game is in landscape mode, which means that its design max height equals its design width, 960.
     const DESIGN_WIDTH        : number = 960;
     const DESIGN_MIN_HEIGHT   : number = 480;

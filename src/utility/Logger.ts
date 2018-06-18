@@ -1,6 +1,6 @@
 
-namespace GameBase {
-    export module Logger {
+namespace Utility {
+    export namespace Logger {
         const enum LogLevels {
             All   = 0,
             Trace = 1,
