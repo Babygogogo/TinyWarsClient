@@ -1,13 +1,5 @@
 {
   "nested": {
-    "Container": {
-      "fields": {
-        "C_Register": {
-          "type": "C_Register",
-          "id": 1
-        }
-      }
-    },
     "C_Register": {
       "fields": {
         "msgCode": {

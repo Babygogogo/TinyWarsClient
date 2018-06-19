@@ -19,8 +19,8 @@ namespace Network {
             [key: string]: NetMsgData | number | string;
         }
         type MsgHandler = {
-            msgName : string;
-            callback: (data: NetMessage) => void;
+            msgCode : number;
+            callback: (msg: NetMessage) => void;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -65,17 +65,27 @@ namespace Network {
             }
         }
 
-        export function send(msgName: string, msg: NetMessage): void {
-            socket.emit(msgName, encode(msgName, msg));
+        export function send(msg: NetMessage): void {
+            const msgName = Codes[msg.msgCode];
+            if (!msgName) {
+                Utility.Logger.error("NetManager.send() failed to find the msgName with code: ", msg.msgCode);
+            } else {
+                socket.emit(msgName, encode(msgName, msg));
+            }
         }
 
         function registerMsgHandler(handler: MsgHandler): void {
-            socket.on(
-                handler.msgName,
-                (data: ReceivedData) => {
-                    handler.callback(decode(handler.msgName, data));
-                }
-            );
+            const msgName = Codes[handler.msgCode];
+            if (!msgName) {
+                Utility.Logger.error("NetManager.registerMsgHandler() failed to find the msgName with code: ", handler.msgCode);
+            } else {
+                socket.on(
+                    msgName,
+                    (data: ReceivedData) => {
+                        handler.callback(decode(msgName, data));
+                    }
+                );
+            }
         }
 
         function encode(msgName: string, msg: NetMessage): Uint8Array {

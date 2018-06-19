@@ -68,7 +68,7 @@ class Main extends egret.DisplayObjectContainer {
 
         Network.Manager.init();
         Network.Manager.addMsgHandlers([
-            { msgName: "C_Register", callback: (data: Network.Proto.IC_Register) => {Utility.Logger.log(data)} },
+            { msgCode: Network.Codes.C_Register, callback: (data: Network.Proto.IC_Register) => {Utility.Logger.log(data)} },
         ]);
     }
 
@@ -99,7 +99,7 @@ class Main extends egret.DisplayObjectContainer {
         sky.width = stageW;
         sky.height = stageH;
         sky.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
-            Network.Manager.send("C_Register", {msgCode: 1, account: "account", password: "password"});
+            Network.Manager.send({msgCode: Network.Codes.C_Register, account: "account", password: "password"});
         }, this);
 
         let topMask = new egret.Shape();

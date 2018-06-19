@@ -2,14 +2,6 @@
 namespace Network {
     export namespace Proto {
 
-        /** Properties of a Container. */
-        export interface IContainer {
-
-            /** Container C_Register */
-            C_Register?: (IC_Register | null);
-        }
-
-
         /** Properties of a C_Register. */
         export interface IC_Register {
 
@@ -33,7 +25,6 @@ namespace Network {
             status?: (S_Register.Status | null);
         }
 
-
         export namespace S_Register {
             /** Status enum. */
             export const enum Status {
@@ -43,6 +34,5 @@ namespace Network {
                 PASSWORD_INVALID = 3
             }
         }
-
     }
 }
