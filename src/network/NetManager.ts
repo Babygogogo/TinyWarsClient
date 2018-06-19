@@ -14,7 +14,7 @@ namespace Network {
         type NetMsgData = {
             [key: string]: NetMsgData | number | string;
         };
-        export type NetMessage = {
+        type NetMessage = {
             msgCode: number;
             [key: string]: NetMsgData | number | string;
         }
@@ -26,9 +26,10 @@ namespace Network {
         ////////////////////////////////////////////////////////////////////////////////
         // Local variables.
         ////////////////////////////////////////////////////////////////////////////////
-        declare const protobuf: any; // protobuf
+        const Logger = Utility.Logger; // for convenience
+
         let   socket     : SocketIOClient.Socket;
-        let   protoRoot  : any; // protobuf.Root
+        let   protoRoot  : protobuf.Root;
         const msgHandlers: MsgHandler[] = [];
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -68,8 +69,9 @@ namespace Network {
         export function send(msg: NetMessage): void {
             const msgName = Codes[msg.msgCode];
             if (!msgName) {
-                Utility.Logger.error("NetManager.send() failed to find the msgName with code: ", msg.msgCode);
+                Logger.error("NetManager.send() failed to find the msgName with code: ", msg.msgCode);
             } else {
+                Logger.log("NetManager send: ", msgName, msg);
                 socket.emit(msgName, encode(msgName, msg));
             }
         }
@@ -77,12 +79,14 @@ namespace Network {
         function registerMsgHandler(handler: MsgHandler): void {
             const msgName = Codes[handler.msgCode];
             if (!msgName) {
-                Utility.Logger.error("NetManager.registerMsgHandler() failed to find the msgName with code: ", handler.msgCode);
+                Logger.error("NetManager.registerMsgHandler() failed to find the msgName with code: ", handler.msgCode);
             } else {
                 socket.on(
                     msgName,
                     (data: ReceivedData) => {
-                        handler.callback(decode(msgName, data));
+                        const msg = decode(msgName, data);
+                        Logger.log("NetManager receive: ", msgName, msg);
+                        handler.callback(msg);
                     }
                 );
             }
@@ -91,11 +95,11 @@ namespace Network {
         function encode(msgName: string, msg: NetMessage): Uint8Array {
             const t = protoRoot.lookupType(msgName);
             if (!t) {
-                Utility.Logger.error("NetCenter.encode() failed to find the type: ", msgName);
+                Logger.error("NetCenter.encode() failed to find the type: ", msgName);
             } else {
                 const err = t.verify(msg);
                 if (err) {
-                    Utility.Logger.error("NetCenter.encode() failed to verify the message: ", err);
+                    Logger.error("NetCenter.encode() failed to verify the message: ", err);
                 } else {
                     return t.encode(t.create(msg)).finish();
                 }
@@ -105,19 +109,20 @@ namespace Network {
         function decode(msgName: string, encodedData: ReceivedData): NetMessage {
             const t = protoRoot.lookupType(msgName);
             if (!t) {
-                Utility.Logger.error("NetCenter.decode() failed to find the type: ", msgName);
+                Logger.error("NetCenter.decode() failed to find the type: ", msgName);
             } else {
-                return t.decode(getDataForDecode(encodedData));
+                return t.decode(getDataForDecode(encodedData)) as any as NetMessage;
             }
         }
 
-        function getDataForDecode(encodedData: ReceivedData): Uint8Array | any[] {
+        function getDataForDecode(encodedData: ReceivedData): Uint8Array | protobuf.Reader {
             if (encodedData instanceof ArrayBuffer) {
                 return new Uint8Array(encodedData);
             } else {
+                // TODO: fix the type
                 return Object.keys(encodedData).map(function(k) {
                     return encodedData[k];
-                });
+                }) as any as Uint8Array;
             }
         }
     }

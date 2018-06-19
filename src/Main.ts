@@ -64,11 +64,11 @@ class Main extends egret.DisplayObjectContainer {
         this.startAnimation(result);
         await platform.login();
         const userInfo = await platform.getUserInfo();
-        console.log(userInfo);
+        // console.log(userInfo);
 
         Network.Manager.init();
         Network.Manager.addMsgHandlers([
-            { msgCode: Network.Codes.C_Register, callback: (data: Network.Proto.IC_Register) => {Utility.Logger.log(data)} },
+            { msgCode: Network.Codes.C_Register, callback: (data: Network.Proto.IC_Register) => {} },
         ]);
     }
 

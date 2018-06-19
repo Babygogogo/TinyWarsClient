@@ -11,13 +11,13 @@
 		"libs/modules/ProtobufJs/ProtobufJs.js"
 	],
 	"game": [
+		"bin-debug/utility/Logger.js",
 		"bin-debug/LoadingUI.js",
 		"bin-debug/Main.js",
 		"bin-debug/Platform.js",
 		"bin-debug/network/NetManager.js",
 		"bin-debug/network/NetMessageCodes.js",
 		"bin-debug/network/NetMessageProto.js",
-		"bin-debug/utility/Logger.js",
 		"bin-debug/utility/ScreenAdapter.js"
 	]
 }
