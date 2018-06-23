@@ -18,6 +18,7 @@
 		"bin-debug/network/NetManager.js",
 		"bin-debug/network/NetMessageCodes.js",
 		"bin-debug/network/NetMessageProto.js",
-		"bin-debug/utility/ScreenAdapter.js"
+		"bin-debug/utility/ScreenAdapter.js",
+		"bin-debug/utility/Types.js"
 	]
 }

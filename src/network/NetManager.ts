@@ -11,16 +11,27 @@ namespace Network {
         // Type definitions.
         ////////////////////////////////////////////////////////////////////////////////
         type ReceivedData = any;
-        type NetMsgData = {
-            [key: string]: NetMsgData | number | string;
-        };
-        type NetMessage = {
-            msgCode: number;
-            [key: string]: NetMsgData | number | string;
+        type Action       = Types.Action;
+        type MsgListener = {
+            actionCode: Codes;
+            callback  : (e: egret.Event) => void;
+            thisObject: any;
         }
-        type MsgHandler = {
-            msgCode : number;
-            callback: (msg: NetMessage) => void;
+
+        class NetMessageDispatcherCls extends egret.EventDispatcher {
+            public dispatchWithContainer(container: Proto.Container): void {
+                const code = container.actionCode;
+                const name = Codes[code];
+                this.dispatchEventWith(name, false, container[name]);
+            }
+
+            public addListener(code: Codes, callback: Function, thisObject: any): void {
+                this.addEventListener(Codes[code], callback, thisObject);
+            }
+
+            public removeListener(code: Codes, callback: Function, thisObject: any): void {
+                this.removeEventListener(Codes[code], callback, thisObject);
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -30,10 +41,25 @@ namespace Network {
 
         let   socket     : SocketIOClient.Socket;
         let   protoRoot  : protobuf.Root;
-        const msgHandlers: MsgHandler[] = [];
+        const dispatcher : NetMessageDispatcherCls = new NetMessageDispatcherCls();
+        const msgHandlers: MsgListener[] = [];
 
         ////////////////////////////////////////////////////////////////////////////////
-        // Functions.
+        // Helpers.
+        ////////////////////////////////////////////////////////////////////////////////
+        function getDataForDecode(encodedData: ReceivedData): Uint8Array | protobuf.Reader {
+            if (encodedData instanceof ArrayBuffer) {
+                return new Uint8Array(encodedData);
+            } else {
+                // TODO: fix the type
+                return Object.keys(encodedData).map(function(k) {
+                    return encodedData[k];
+                }) as any as Uint8Array;
+            }
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+        // Exports.
         ////////////////////////////////////////////////////////////////////////////////
         export function init(): void {
             protobuf.load(PROTO_FILENAME, (err, root) => {
@@ -44,85 +70,49 @@ namespace Network {
                 }
             });
 
-            reset();
+            resetSocket();
         }
 
-        export function reset(): void {
+        export function resetSocket(): void {
             if (socket) {
                 socket.removeAllListeners();
                 socket.disconnect();
             }
             socket = io(SERVER_ADDRESS);
+            socket.on("message", (data: ReceivedData) => {
+                const protoClass = protoRoot.lookupType("Container") as any as typeof Proto.Container;
+                dispatcher.dispatchWithContainer(protoClass.decode(getDataForDecode(data)));
+            });
+        }
 
-            for (const handler of msgHandlers) {
-                registerMsgHandler(handler);
+        export function addListeners(...listeners: MsgListener[]): void {
+            for (const one of listeners) {
+                dispatcher.addEventListener(Codes[one.actionCode], one.callback, one.thisObject);
             }
         }
 
-        export function addMsgHandlers(handlers: MsgHandler[]): void {
-            for (const handler of handlers) {
-                registerMsgHandler(handler);
-                msgHandlers.push(handler);
+        export function removeListeners(...listeners: MsgListener[]): void {
+            for (const one of listeners) {
+                dispatcher.removeEventListener(Codes[one.actionCode], one.callback, one.thisObject);
             }
         }
 
-        export function send(msg: NetMessage): void {
-            const msgName = Codes[msg.msgCode];
-            if (!msgName) {
-                Logger.error("NetManager.send() failed to find the msgName with code: ", msg.msgCode);
+        export function send(action: Action): void {
+            const code = action.actionCode;
+            const name = Codes[code];
+
+            if (!name) {
+                Logger.error("NetManager.send() failed to find the msgName with code: ", code);
             } else {
-                Logger.log("NetManager send: ", msgName, msg);
-                socket.emit(msgName, encode(msgName, msg));
-            }
-        }
-
-        function registerMsgHandler(handler: MsgHandler): void {
-            const msgName = Codes[handler.msgCode];
-            if (!msgName) {
-                Logger.error("NetManager.registerMsgHandler() failed to find the msgName with code: ", handler.msgCode);
-            } else {
-                socket.on(
-                    msgName,
-                    (data: ReceivedData) => {
-                        const msg = decode(msgName, data);
-                        Logger.log("NetManager receive: ", msgName, msg);
-                        handler.callback(msg);
-                    }
+                Logger.log("NetManager send: ", name, action);
+                const protoClass = protoRoot.lookupType("Container") as any as typeof Proto.Container;
+                socket.emit(
+                    "message",
+                    protoRoot.lookupType("Container").encode({
+                        actionCode: code,
+                        [name]    : action,
+                    }).finish()
                 );
-            }
-        }
-
-        function encode(msgName: string, msg: NetMessage): Uint8Array {
-            const t = protoRoot.lookupType(msgName);
-            if (!t) {
-                Logger.error("NetCenter.encode() failed to find the type: ", msgName);
-            } else {
-                const err = t.verify(msg);
-                if (err) {
-                    Logger.error("NetCenter.encode() failed to verify the message: ", err);
-                } else {
-                    return t.encode(t.create(msg)).finish();
-                }
-            }
-        }
-
-        function decode(msgName: string, encodedData: ReceivedData): NetMessage {
-            const t = protoRoot.lookupType(msgName);
-            if (!t) {
-                Logger.error("NetCenter.decode() failed to find the type: ", msgName);
-            } else {
-                return t.decode(getDataForDecode(encodedData)) as any as NetMessage;
-            }
-        }
-
-        function getDataForDecode(encodedData: ReceivedData): Uint8Array | protobuf.Reader {
-            if (encodedData instanceof ArrayBuffer) {
-                return new Uint8Array(encodedData);
-            } else {
-                // TODO: fix the type
-                return Object.keys(encodedData).map(function(k) {
-                    return encodedData[k];
-                }) as any as Uint8Array;
             }
         }
     }

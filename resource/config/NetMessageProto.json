@@ -1,8 +1,64 @@
 {
   "nested": {
+    "Container": {
+      "fields": {
+        "actionCode": {
+          "type": "int32",
+          "id": 0
+        },
+        "C_Heartbeat": {
+          "type": "C_Heartbeat",
+          "id": 1
+        },
+        "S_Heartbeat": {
+          "type": "S_Heartbeat",
+          "id": 2
+        },
+        "C_Register": {
+          "type": "C_Register",
+          "id": 3
+        },
+        "S_Register": {
+          "type": "S_Register",
+          "id": 4
+        },
+        "C_Login": {
+          "type": "C_Login",
+          "id": 5
+        },
+        "S_Login": {
+          "type": "S_Login",
+          "id": 6
+        },
+        "C_Logout": {
+          "type": "C_Logout",
+          "id": 7
+        },
+        "S_Logout": {
+          "type": "S_Logout",
+          "id": 8
+        }
+      }
+    },
+    "C_Heartbeat": {
+      "fields": {
+        "actionCode": {
+          "type": "int32",
+          "id": 0
+        }
+      }
+    },
+    "S_Heartbeat": {
+      "fields": {
+        "actionCode": {
+          "type": "int32",
+          "id": 0
+        }
+      }
+    },
     "C_Register": {
       "fields": {
-        "msgCode": {
+        "actionCode": {
           "type": "int32",
           "id": 0
         },
@@ -18,7 +74,7 @@
     },
     "S_Register": {
       "fields": {
-        "msgCode": {
+        "actionCode": {
           "type": "int32",
           "id": 0
         },
@@ -30,10 +86,75 @@
       "nested": {
         "Status": {
           "values": {
-            "SUCCEED": 0,
-            "ACCOUNT_INVALID": 1,
-            "ACCOUNT_USED": 2,
-            "PASSWORD_INVALID": 3
+            "Succeed": 0,
+            "AccountInvalid": 1,
+            "AccountUsed": 2,
+            "PasswordInvalid": 3
+          }
+        }
+      }
+    },
+    "C_Login": {
+      "fields": {
+        "actionCode": {
+          "type": "int32",
+          "id": 0
+        },
+        "account": {
+          "type": "string",
+          "id": 1
+        },
+        "password": {
+          "type": "string",
+          "id": 2
+        }
+      }
+    },
+    "S_Login": {
+      "fields": {
+        "actionCode": {
+          "type": "int32",
+          "id": 0
+        },
+        "status": {
+          "type": "Status",
+          "id": 1
+        }
+      },
+      "nested": {
+        "Status": {
+          "values": {
+            "Succeed": 0,
+            "AccountInvalid": 1,
+            "PasswordInvalid": 2
+          }
+        }
+      }
+    },
+    "C_Logout": {
+      "fields": {
+        "actionCode": {
+          "type": "int32",
+          "id": 0
+        }
+      }
+    },
+    "S_Logout": {
+      "fields": {
+        "actionCode": {
+          "type": "int32",
+          "id": 0
+        },
+        "status": {
+          "type": "Status",
+          "id": 1
+        }
+      },
+      "nested": {
+        "Status": {
+          "values": {
+            "SelfRequest": 0,
+            "Collision": 1
           }
         }
       }
