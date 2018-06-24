@@ -79,18 +79,8 @@
           "id": 0
         },
         "status": {
-          "type": "Status",
+          "type": "int32",
           "id": 1
-        }
-      },
-      "nested": {
-        "Status": {
-          "values": {
-            "Succeed": 0,
-            "AccountInvalid": 1,
-            "AccountUsed": 2,
-            "PasswordInvalid": 3
-          }
         }
       }
     },
@@ -117,17 +107,8 @@
           "id": 0
         },
         "status": {
-          "type": "Status",
+          "type": "int32",
           "id": 1
-        }
-      },
-      "nested": {
-        "Status": {
-          "values": {
-            "Succeed": 0,
-            "AccountInvalid": 1,
-            "PasswordInvalid": 2
-          }
         }
       }
     },
@@ -146,16 +127,8 @@
           "id": 0
         },
         "status": {
-          "type": "Status",
+          "type": "int32",
           "id": 1
-        }
-      },
-      "nested": {
-        "Status": {
-          "values": {
-            "SelfRequest": 0,
-            "Collision": 1
-          }
         }
       }
     }
