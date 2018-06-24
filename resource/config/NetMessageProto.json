@@ -3,7 +3,7 @@
     "Container": {
       "fields": {
         "actionCode": {
-          "type": "int32",
+          "type": "uint32",
           "id": 0
         },
         "C_Heartbeat": {
@@ -43,7 +43,7 @@
     "C_Heartbeat": {
       "fields": {
         "actionCode": {
-          "type": "int32",
+          "type": "uint32",
           "id": 0
         }
       }
@@ -51,7 +51,7 @@
     "S_Heartbeat": {
       "fields": {
         "actionCode": {
-          "type": "int32",
+          "type": "uint32",
           "id": 0
         }
       }
@@ -59,7 +59,7 @@
     "C_Register": {
       "fields": {
         "actionCode": {
-          "type": "int32",
+          "type": "uint32",
           "id": 0
         },
         "account": {
@@ -75,19 +75,23 @@
     "S_Register": {
       "fields": {
         "actionCode": {
-          "type": "int32",
+          "type": "uint32",
           "id": 0
         },
         "status": {
-          "type": "int32",
+          "type": "uint32",
           "id": 1
+        },
+        "userId": {
+          "type": "uint32",
+          "id": 2
         }
       }
     },
     "C_Login": {
       "fields": {
         "actionCode": {
-          "type": "int32",
+          "type": "uint32",
           "id": 0
         },
         "account": {
@@ -103,19 +107,23 @@
     "S_Login": {
       "fields": {
         "actionCode": {
-          "type": "int32",
+          "type": "uint32",
           "id": 0
         },
         "status": {
-          "type": "int32",
+          "type": "uint32",
           "id": 1
+        },
+        "userId": {
+          "type": "uint32",
+          "id": 2
         }
       }
     },
     "C_Logout": {
       "fields": {
         "actionCode": {
-          "type": "int32",
+          "type": "uint32",
           "id": 0
         }
       }
@@ -123,11 +131,11 @@
     "S_Logout": {
       "fields": {
         "actionCode": {
-          "type": "int32",
+          "type": "uint32",
           "id": 0
         },
         "status": {
-          "type": "int32",
+          "type": "uint32",
           "id": 1
         }
       }

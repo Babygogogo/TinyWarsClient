@@ -430,6 +430,9 @@ namespace Network {
 
             /** S_Register status */
             status?: (number | null);
+
+            /** S_Register userId */
+            userId?: (number | null);
         }
 
         /** Represents a S_Register. */
@@ -446,6 +449,9 @@ namespace Network {
 
             /** S_Register status. */
             public status: number;
+
+            /** S_Register userId. */
+            public userId: number;
 
             /**
              * Creates a new S_Register instance using the specified properties.
@@ -628,6 +634,9 @@ namespace Network {
 
             /** S_Login status */
             status?: (number | null);
+
+            /** S_Login userId */
+            userId?: (number | null);
         }
 
         /** Represents a S_Login. */
@@ -644,6 +653,9 @@ namespace Network {
 
             /** S_Login status. */
             public status: number;
+
+            /** S_Login userId. */
+            public userId: number;
 
             /**
              * Creates a new S_Login instance using the specified properties.

@@ -4,6 +4,7 @@ namespace ProtoEnums {
         Succeed,
         AccountInvalid,
         PasswordInvalid,
+        AlreadyLoggedIn,
     }
 
     export const enum S_Register_Status {
@@ -11,6 +12,7 @@ namespace ProtoEnums {
         AccountInvalid,
         AccountUsed,
         PasswordInvalid,
+        AlreadyLoggedIn,
     }
 
     export const enum S_Logout_Status {

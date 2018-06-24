@@ -69,7 +69,12 @@ class Main extends egret.DisplayObjectContainer {
         Network.Manager.init();
         Network.Manager.addListeners(
             {
-                actionCode: Network.Codes.C_Register,
+                actionCode: Network.Codes.S_Login,
+                callback: (e: egret.Event) => {Utility.Logger.log(e.data)},
+                thisObject: this,
+            },
+            {
+                actionCode: Network.Codes.S_Logout,
                 callback: (e: egret.Event) => {Utility.Logger.log(e.data)},
                 thisObject: this,
             },
@@ -102,8 +107,12 @@ class Main extends egret.DisplayObjectContainer {
         let stageH = this.stage.stageHeight;
         sky.width = stageW;
         sky.height = stageH;
+
+        const data = [
+            {actionCode: Network.Codes.C_Login, account: "account", password: "password"},
+        ];
         sky.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
-            Network.Manager.send({actionCode: Network.Codes.C_Register, account: "account", password: "password"});
+            Network.Manager.send(data[0]);
         }, this);
 
         let topMask = new egret.Shape();
