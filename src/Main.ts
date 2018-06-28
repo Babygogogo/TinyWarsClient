@@ -35,8 +35,8 @@ class Main extends egret.DisplayObjectContainer {
     }
 
     private onAddToStage(event: egret.Event) {
-        egret.sys.screenAdapter = new Utility.ScreenAdapter();
-        this.stage.setContentSize(this.stage.width, this.stage.height);
+        GameUi.StageManager.init(this.stage);
+        GameUi.LayerManager.init();
 
         egret.lifecycle.addLifecycleListener((context) => {
             // custom lifecycle plugin
@@ -102,11 +102,9 @@ class Main extends egret.DisplayObjectContainer {
      */
     private createGameScene() {
         let sky = this.createBitmapByName("bg_jpg");
-        this.addChild(sky);
-        let stageW = this.stage.stageWidth;
-        let stageH = this.stage.stageHeight;
-        sky.width = stageW;
-        sky.height = stageH;
+        sky.horizontalCenter = 0;
+        sky.verticalCenter   = 0;
+        GameUi.LayerManager.getLayer(GameUi.Layers.Bottom).addChild(sky);
 
         const data = [
             {actionCode: Network.Codes.C_Login, account: "account", password: "password"},
@@ -115,6 +113,8 @@ class Main extends egret.DisplayObjectContainer {
             Network.Manager.send(data[0]);
         }, this);
 
+        let stageW = this.stage.stageWidth;
+        let stageH = this.stage.stageHeight;
         let topMask = new egret.Shape();
         topMask.graphics.beginFill(0x000000, 0.5);
         topMask.graphics.drawRect(0, 0, stageW, 172);

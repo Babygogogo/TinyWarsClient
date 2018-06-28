@@ -12,14 +12,17 @@
 	],
 	"game": [
 		"bin-debug/utility/Logger.js",
-		"bin-debug/LoadingUI.js",
-		"bin-debug/Main.js",
+		"bin-debug/utility/Types.js",
 		"bin-debug/Platform.js",
+		"bin-debug/gameui/LayerManager.js",
+		"bin-debug/gameui/StageManager.js",
+		"bin-debug/gameui/component/UiLabel.js",
+		"bin-debug/gameui/component/UiScrollList.js",
 		"bin-debug/network/NetManager.js",
 		"bin-debug/network/NetMessageCodes.js",
 		"bin-debug/network/NetMessageProto.js",
+		"bin-debug/LoadingUI.js",
 		"bin-debug/utility/ProtoEnums.js",
-		"bin-debug/utility/ScreenAdapter.js",
-		"bin-debug/utility/Types.js"
+		"bin-debug/Main.js"
 	]
 }
