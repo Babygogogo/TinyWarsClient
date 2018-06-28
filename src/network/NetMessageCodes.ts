@@ -10,5 +10,6 @@ namespace Network {
         S_Login = 6,
         C_Logout = 7,
         S_Logout = 8,
+        S_Error = 10,
     }
 }

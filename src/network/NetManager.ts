@@ -105,7 +105,6 @@ namespace Network {
                 Logger.error("NetManager.send() failed to find the msgName with code: ", code);
             } else {
                 Logger.log("NetManager send: ", name, action);
-                const protoClass = protoRoot.lookupType("Container") as any as typeof Proto.Container;
                 socket.emit(
                     "message",
                     protoRoot.lookupType("Container").encode({

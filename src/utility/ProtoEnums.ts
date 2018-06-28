@@ -12,6 +12,8 @@ namespace ProtoEnums {
         AccountInvalid,
         AccountUsed,
         PasswordInvalid,
+        NicknameInvalid,
+        NicknameUsed,
         AlreadyLoggedIn,
     }
 

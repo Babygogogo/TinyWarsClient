@@ -31,6 +31,9 @@ namespace Network {
 
             /** Container S_Logout */
             S_Logout?: (IS_Logout | null);
+
+            /** Container S_Error */
+            S_Error?: (IS_Error | null);
         }
 
         /** Represents a Container. */
@@ -68,6 +71,9 @@ namespace Network {
 
             /** Container S_Logout. */
             public S_Logout?: (IS_Logout | null);
+
+            /** Container S_Error. */
+            public S_Error?: (IS_Error | null);
 
             /**
              * Creates a new Container instance using the specified properties.
@@ -331,6 +337,9 @@ namespace Network {
 
             /** C_Register password */
             password?: (string | null);
+
+            /** C_Register nickname */
+            nickname?: (string | null);
         }
 
         /** Represents a C_Register. */
@@ -350,6 +359,9 @@ namespace Network {
 
             /** C_Register password. */
             public password: string;
+
+            /** C_Register nickname. */
+            public nickname: string;
 
             /**
              * Creates a new C_Register instance using the specified properties.
@@ -430,9 +442,6 @@ namespace Network {
 
             /** S_Register status */
             status?: (number | null);
-
-            /** S_Register userId */
-            userId?: (number | null);
         }
 
         /** Represents a S_Register. */
@@ -449,9 +458,6 @@ namespace Network {
 
             /** S_Register status. */
             public status: number;
-
-            /** S_Register userId. */
-            public userId: number;
 
             /**
              * Creates a new S_Register instance using the specified properties.
@@ -637,6 +643,9 @@ namespace Network {
 
             /** S_Login userId */
             userId?: (number | null);
+
+            /** S_Login privilege */
+            privilege?: (number | null);
         }
 
         /** Represents a S_Login. */
@@ -656,6 +665,9 @@ namespace Network {
 
             /** S_Login userId. */
             public userId: number;
+
+            /** S_Login privilege. */
+            public privilege: number;
 
             /**
              * Creates a new S_Login instance using the specified properties.
@@ -909,6 +921,102 @@ namespace Network {
 
             /**
              * Converts this S_Logout to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S_Error. */
+        export declare interface IS_Error {
+
+            /** S_Error actionCode */
+            actionCode?: (number | null);
+
+            /** S_Error status */
+            status?: (number | null);
+        }
+
+        /** Represents a S_Error. */
+        export declare class S_Error implements IS_Error {
+
+            /**
+             * Constructs a new S_Error.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: IS_Error);
+
+            /** S_Error actionCode. */
+            public actionCode: number;
+
+            /** S_Error status. */
+            public status: number;
+
+            /**
+             * Creates a new S_Error instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S_Error instance
+             */
+            public static create(properties?: IS_Error): S_Error;
+
+            /**
+             * Encodes the specified S_Error message. Does not implicitly {@link S_Error.verify|verify} messages.
+             * @param message S_Error message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: IS_Error, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S_Error message, length delimited. Does not implicitly {@link S_Error.verify|verify} messages.
+             * @param message S_Error message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: IS_Error, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S_Error message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S_Error
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): S_Error;
+
+            /**
+             * Decodes a S_Error message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S_Error
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): S_Error;
+
+            /**
+             * Verifies a S_Error message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string | null);
+
+            /**
+             * Creates a S_Error message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S_Error
+             */
+            public static fromObject(object: { [k: string]: any }): S_Error;
+
+            /**
+             * Creates a plain object from a S_Error message. Also converts values to other types if specified.
+             * @param message S_Error
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: S_Error, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S_Error to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };

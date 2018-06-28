@@ -37,6 +37,10 @@
         "S_Logout": {
           "type": "S_Logout",
           "id": 8
+        },
+        "S_Error": {
+          "type": "S_Error",
+          "id": 10
         }
       }
     },
@@ -69,6 +73,10 @@
         "password": {
           "type": "string",
           "id": 2
+        },
+        "nickname": {
+          "type": "string",
+          "id": 3
         }
       }
     },
@@ -81,10 +89,6 @@
         "status": {
           "type": "uint32",
           "id": 1
-        },
-        "userId": {
-          "type": "uint32",
-          "id": 2
         }
       }
     },
@@ -117,6 +121,10 @@
         "userId": {
           "type": "uint32",
           "id": 2
+        },
+        "privilege": {
+          "type": "uint32",
+          "id": 3
         }
       }
     },
@@ -129,6 +137,18 @@
       }
     },
     "S_Logout": {
+      "fields": {
+        "actionCode": {
+          "type": "uint32",
+          "id": 0
+        },
+        "status": {
+          "type": "uint32",
+          "id": 1
+        }
+      }
+    },
+    "S_Error": {
       "fields": {
         "actionCode": {
           "type": "uint32",
