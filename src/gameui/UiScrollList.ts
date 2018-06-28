@@ -1,8 +1,8 @@
 
 namespace GameUi {
     export class UiScrollList extends eui.Scroller {
-        private _itemRenderer : any;                 // 列表项的类，由代码指定；示例参照下方的TestItemRenderer
-        private _dataProvider : eui.ArrayCollection; // 提供给列表项使用的数据，由代码指定
+        private _itemRenderer : any;
+        private _dataProvider : eui.ArrayCollection;
 
         private _scrollVerticalPercentage   : number;
         private _scrollHorizontalPercentage : number;
@@ -116,7 +116,6 @@ namespace GameUi {
 
             const viewport = this.viewport;
             viewport.scrollH = this._scrollHorizontalPercentage / 100  * Math.max(0, viewport.contentWidth - viewport.width);
-
         }
     }
 }
