@@ -1,5 +1,13 @@
 
 namespace GameUi {
+    export const enum LayerType {
+        Top,
+        Notify,
+        Hud,
+        Scene,
+        Bottom,
+    }
+
     export namespace StageManager {
         // The game is in landscape mode, which means that its design max height equals its design width, 960.
         export const DESIGN_WIDTH         = 960;
@@ -7,7 +15,8 @@ namespace GameUi {
         export const DESIGN_MAX_HEIGHT    = DESIGN_WIDTH;
         export const RATIO_FOR_MIN_HEIGHT = DESIGN_WIDTH / DESIGN_MIN_HEIGHT;
 
-        let stage: egret.Stage;
+        let   stage : egret.Stage;
+        const layers: { [layerType: number]: eui.UILayer } = {};
 
         export function init(stg: egret.Stage): void {
             stage = stg;
@@ -15,15 +24,25 @@ namespace GameUi {
             egret.sys.screenAdapter = new ScreenAdapter();
             stage.setContentSize(stage.stageWidth, stage.stageHeight);
 
-            stage.addEventListener(egret.Event.RESIZE, _onResize, StageManager);
+            _addLayer(LayerType.Bottom);
+            _addLayer(LayerType.Scene);
+            _addLayer(LayerType.Hud);
+            _addLayer(LayerType.Notify);
+            _addLayer(LayerType.Top);
         }
 
         export function getStage(): egret.Stage {
             return stage;
         }
 
-        function _onResize(e: egret.Event): void {
-            LayerManager.resize();
+        export function getLayer(layer: LayerType): eui.UILayer {
+            return layers[layer];
+        }
+
+        function _addLayer(layer: LayerType): void {
+            egret.assert(!layers[layer], "LayerManager.addLayer() duplicated layer: " + layer);
+            layers[layer] = new eui.UILayer();
+            StageManager.getStage().addChild(layers[layer]);
         }
 
         class ScreenAdapter implements egret.sys.IScreenAdapter {

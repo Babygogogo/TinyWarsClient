@@ -36,7 +36,6 @@ class Main extends egret.DisplayObjectContainer {
 
     private onAddToStage(event: egret.Event) {
         GameUi.StageManager.init(this.stage);
-        GameUi.LayerManager.init();
 
         egret.lifecycle.addLifecycleListener((context) => {
             // custom lifecycle plugin
@@ -104,7 +103,7 @@ class Main extends egret.DisplayObjectContainer {
         let sky = this.createBitmapByName("bg_jpg");
         sky.horizontalCenter = 0;
         sky.verticalCenter   = 0;
-        GameUi.LayerManager.getLayer(GameUi.Layers.Bottom).addChild(sky);
+        GameUi.StageManager.getLayer(GameUi.LayerType.Bottom).addChild(sky);
 
         const data = [
             {actionCode: Network.Codes.C_Login, account: "account", password: "password"},
