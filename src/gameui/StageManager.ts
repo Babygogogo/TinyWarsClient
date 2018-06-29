@@ -56,7 +56,7 @@ namespace GameUi {
                 const height = StageManager.getStage().stageHeight;
                 for (let i = 0; i < this.numChildren; ++i) {
                     const child = this.getChildAt(i);
-                    if ((child instanceof UiPanel) && (child.checkIsAutoAdjustHeight())) {
+                    if ((child instanceof Component.UiPanel) && (child.checkIsAutoAdjustHeight())) {
                         child.height = height;
                     }
                 }
