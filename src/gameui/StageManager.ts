@@ -39,10 +39,28 @@ namespace GameUi {
             return layers[layer];
         }
 
-        function _addLayer(layer: LayerType): void {
-            egret.assert(!layers[layer], "LayerManager.addLayer() duplicated layer: " + layer);
-            layers[layer] = new eui.UILayer();
-            StageManager.getStage().addChild(layers[layer]);
+        function _addLayer(layerType: LayerType): void {
+            egret.assert(!layers[layerType], "LayerManager.addLayer() duplicated layer: " + layerType);
+            layers[layerType] = new UiLayer();
+            StageManager.getStage().addChild(layers[layerType]);
+        }
+
+        class UiLayer extends eui.UILayer {
+            public constructor() {
+                super();
+
+                this.addEventListener(egret.Event.RESIZE, this._onResize, this);
+            }
+
+            private _onResize(e: egret.Event): void {
+                const height = StageManager.getStage().stageHeight;
+                for (let i = 0; i < this.numChildren; ++i) {
+                    const child = this.getChildAt(i);
+                    if ((child instanceof UiPanel) && (child.checkIsAutoAdjustHeight())) {
+                        child.height = height;
+                    }
+                }
+            }
         }
 
         class ScreenAdapter implements egret.sys.IScreenAdapter {
