@@ -1,21 +1,22 @@
 
 namespace GameUi {
     export namespace Component {
-        export class UiPanel extends eui.Component {
-            private _isChildrenCreated  : boolean;
-            private _isAllSkinPartsAdded: boolean;
-            private _isEverOpened       : boolean;
+        export abstract class UiPanel extends eui.Component {
+            protected abstract readonly _layerType: LayerType;
+            protected abstract readonly _isAlone  : boolean;
 
-            protected _argForOpen: any;
-            private _panelName   : string;
-
-            private _isAutoAdjustHeight       : boolean = false;
-            private _isCloseOnTouchedOutside  : boolean;
-            private _isSwallowOnTouchedOutside: boolean;
-
-            protected _uiListeners    : { btn: egret.DisplayObject, callback: ((e: egret.TouchEvent) => void), thisObject?: any }[];
+            protected _uiListeners    : { ui: egret.DisplayObject, callback: ((e: egret.TouchEvent) => void), thisObject?: any }[];
             protected _notifyListeners: Utility.Notify.Listener[];
             protected _notifyPriority = 0;
+
+            private _isChildrenCreated   = false;
+            private _isAllSkinPartsAdded = false;
+            private _isEverOpened        = false;
+            private _isOpening           = false;
+
+            private _isAutoAdjustHeight        = false;
+            private _isCloseOnTouchedOutside   = false;
+            private _isSwallowOnTouchedOutside = false;;
 
             private _touchMask: eui.Group;
 
@@ -55,34 +56,28 @@ namespace GameUi {
             ////////////////////////////////////////////////////////////////////////////////
             // Functions for open self.
             ////////////////////////////////////////////////////////////////////////////////
-            public open(params?: any): void {
-                this.close();
+            public open(): void {
+                const layer = StageManager.getLayer(this._layerType);
+                (!this._isAlone) && (layer.removeAllPanels(this));
+                (!this.parent) && (layer.addChild(this));
 
-                this._argForOpen = params;
                 this._doOpen();
             }
 
             private _doOpen(): void {
                 if (this._checkIsReadyForOpen()) {
-                    if ((this._isCloseOnTouchedOutside) || (this._isSwallowOnTouchedOutside)) {
-                        this.addChildAt(this._touchMask, 0);
-                    }
-                    if (this._isAutoAdjustHeight) {
-                        this.height = StageManager.getStage().stageHeight;
-                    }
+                    this._enableAutoAdjustHeight(this._isAutoAdjustHeight);
+                    this._enableCloseOnTouchedOutside(this._isCloseOnTouchedOutside);
+                    this._enableSwallowOnTouchedOutside(this._isSwallowOnTouchedOutside);
 
                     if (!this._isEverOpened) {
                         this._isEverOpened = true;
                         this._onFirstOpened();
                     }
 
-                    if (this._notifyListeners) {
-                        Utility.Notify.addEventListeners(this._notifyListeners, this);
-                    }
-                    if (this._uiListeners) {
-                        for (const event of this._uiListeners) {
-                            event.btn.addEventListener(egret.TouchEvent.TOUCH_TAP, event.callback, event.thisObject || this);
-                        }
+                    if (!this._isOpening) {
+                        this._isOpening = true;
+                        this._registerListeners();
                     }
 
                     this._onOpened();
@@ -105,19 +100,15 @@ namespace GameUi {
             // Functions for close self.
             ////////////////////////////////////////////////////////////////////////////////
             public close(): void {
-                this._argForOpen = undefined;
-
                 this._doClose();
             }
 
             private _doClose(): void {
-                if (this._notifyListeners) {
-                    Utility.Notify.removeEventListeners(this._notifyListeners, this);
-                }
-                if (this._uiListeners) {
-                    for (const event of this._uiListeners) {
-                        event.btn.removeEventListener(egret.TouchEvent.TOUCH_TAP, event.callback, event.thisObject || this);
-                    }
+                (this.parent) && (this.parent.removeChild(this));
+
+                if (this._isOpening) {
+                    this._isOpening = false;
+                    this._unregisterListeners();
                 }
 
                 this._onClosed();
@@ -129,75 +120,71 @@ namespace GameUi {
             ////////////////////////////////////////////////////////////////////////////////
             // Other functions.
             ////////////////////////////////////////////////////////////////////////////////
-            public setPanelName(panelName: string): void {
-                this._panelName = panelName;
-            }
-
-            public getPanelName(): string {
-                return this._panelName;
-            }
-
             public checkIsAutoAdjustHeight(): boolean {
                 return this._isAutoAdjustHeight;
             }
 
-            protected enableCloseOnTouchedOutside(isEnabled: boolean = true): void {
-                if (this._isCloseOnTouchedOutside !== isEnabled) {
-                    this._isCloseOnTouchedOutside = isEnabled;
+            protected _enableCloseOnTouchedOutside(isEnabled: boolean = true): void {
+                this._isCloseOnTouchedOutside = isEnabled;
 
-                    if (!isEnabled) {
-                        if ((!this._isSwallowOnTouchedOutside) && (this._touchMask) && (this._touchMask.parent)) {
-                            this.removeChild(this._touchMask);
-                        }
-                    } else {
-                        this._touchMask = this._touchMask || this._createTouchMask();
-                        if (!this._touchMask.parent) {
-                            this.addChildAt(this._touchMask, 0);
-                        }
-                    }
+                this._setTouchMaskEnabled(isEnabled || this._isSwallowOnTouchedOutside);
+            }
+
+            protected _enableSwallowOnTouchedOutside(isEnabled: boolean = true): void {
+                this._isSwallowOnTouchedOutside = isEnabled;
+
+                this._setTouchMaskEnabled(isEnabled || this._isCloseOnTouchedOutside);
+            }
+
+            protected _enableAutoAdjustHeight(isEnabled: boolean = true): void {
+                this._isAutoAdjustHeight = isEnabled;
+
+                if (isEnabled) {
+                    this.height = StageManager.getStage().stageHeight;
                 }
             }
 
-            protected enableSwallowOnTouchedOutside(isEnabled: boolean = true): void {
-                if (this._isSwallowOnTouchedOutside !== isEnabled) {
-                    this._isSwallowOnTouchedOutside = isEnabled;
-
-                    if (!isEnabled) {
-                        if ((!this._isCloseOnTouchedOutside) && (this._touchMask) && (this._touchMask.parent)) {
-                            this.removeChild(this._touchMask);
-                        }
-                    } else {
-                        this._touchMask = this._touchMask || this._createTouchMask();
-                        if (!this._touchMask.parent) {
-                            this.addChildAt(this._touchMask, 0);
-                        }
+            private _setTouchMaskEnabled(enabled: boolean): void {
+                if (!enabled) {
+                    (this._touchMask) && (this._touchMask.parent) && (this._touchMask.parent.removeChild(this._touchMask));
+                } else {
+                    if (!this._touchMask) {
+                        const newMask        = new eui.Group();
+                        newMask.width        = StageManager.DESIGN_WIDTH;
+                        newMask.height       = StageManager.DESIGN_MAX_HEIGHT;
+                        newMask.touchEnabled = true;
+                        newMask.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedTouchMask, this);
+                        this._touchMask = newMask;
                     }
+                    this.addChildAt(this._touchMask, 0);
                 }
-            }
-
-            protected enableAutoAdjustHeight(isEnabled: boolean = true): void {
-                if (this._isAutoAdjustHeight !== isEnabled) {
-                    this._isAutoAdjustHeight = isEnabled;
-
-                    if (isEnabled) {
-                        this.height = StageManager.getStage().stageHeight;
-                    }
-                }
-            }
-
-            private _createTouchMask(): eui.Group {
-                const mask        = new eui.Group();
-                mask.width        = StageManager.DESIGN_WIDTH;
-                mask.height       = StageManager.DESIGN_MAX_HEIGHT;
-                mask.touchEnabled = true;
-                mask.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedTouchMask, this);
-
-                return mask;
             }
 
             private _onTouchedTouchMask(e: egret.TouchEvent): void {
                 if (this._isCloseOnTouchedOutside) {
                     this.close();
+                }
+            }
+
+            private _registerListeners(): void {
+                if (this._notifyListeners) {
+                    Utility.Notify.addEventListeners(this._notifyListeners, this);
+                }
+                if (this._uiListeners) {
+                    for (const event of this._uiListeners) {
+                        event.ui.addEventListener(egret.TouchEvent.TOUCH_TAP, event.callback, event.thisObject || this);
+                    }
+                }
+            }
+
+            private _unregisterListeners(): void {
+                if (this._notifyListeners) {
+                    Utility.Notify.removeEventListeners(this._notifyListeners, this);
+                }
+                if (this._uiListeners) {
+                    for (const event of this._uiListeners) {
+                        event.ui.removeEventListener(egret.TouchEvent.TOUCH_TAP, event.callback, event.thisObject || this);
+                    }
                 }
             }
         }

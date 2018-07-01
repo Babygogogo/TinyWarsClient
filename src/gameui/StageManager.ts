@@ -16,7 +16,7 @@ namespace GameUi {
         export const RATIO_FOR_MIN_HEIGHT = DESIGN_WIDTH / DESIGN_MIN_HEIGHT;
 
         let   stage : egret.Stage;
-        const layers: { [layerType: number]: eui.UILayer } = {};
+        const layers: { [layerType: number]: UiLayer } = {};
 
         export function init(stg: egret.Stage): void {
             stage = stg;
@@ -35,7 +35,7 @@ namespace GameUi {
             return stage;
         }
 
-        export function getLayer(layer: LayerType): eui.UILayer {
+        export function getLayer(layer: LayerType): UiLayer {
             return layers[layer];
         }
 
@@ -49,7 +49,17 @@ namespace GameUi {
             public constructor() {
                 super();
 
+                this.touchEnabled = false;
                 this.addEventListener(egret.Event.RESIZE, this._onResize, this);
+            }
+
+            public removeAllPanels(execpt?: Component.UiPanel): void {
+                for (let i = this.numChildren - 1; i >= 0; --i) {
+                    const child = this.getChildAt(i);
+                    if ((child instanceof Component.UiPanel) && (child !== execpt)) {
+                        this.removeChildAt(i);
+                    }
+                }
             }
 
             private _onResize(e: egret.Event): void {
