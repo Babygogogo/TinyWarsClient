@@ -11,12 +11,14 @@ namespace GameUi {
 
             private _isChildrenCreated   = false;
             private _isAllSkinPartsAdded = false;
+            private _isCalledOpen        = false;
+
             private _isEverOpened        = false;
             private _isOpening           = false;
 
-            private _isAutoAdjustHeight        = false;
-            private _isCloseOnTouchedOutside   = false;
-            private _isSwallowOnTouchedOutside = false;;
+            private _isAutoAdjustHeight = false;
+            private _isTouchMaskEnabled = false;
+            protected _handlerForTouchMask: () => void;
 
             private _touchMask: eui.Group;
 
@@ -61,14 +63,16 @@ namespace GameUi {
                 (!this._isAlone) && (layer.removeAllPanels(this));
                 (!this.parent) && (layer.addChild(this));
 
+                this._isCalledOpen = true;
                 this._doOpen();
             }
 
             private _doOpen(): void {
                 if (this._checkIsReadyForOpen()) {
-                    this._enableAutoAdjustHeight(this._isAutoAdjustHeight);
-                    this._enableCloseOnTouchedOutside(this._isCloseOnTouchedOutside);
-                    this._enableSwallowOnTouchedOutside(this._isSwallowOnTouchedOutside);
+                    this._isCalledOpen = false;
+
+                    this._setAutoAdjustHeightEnabled(this._isAutoAdjustHeight);
+                    this._setTouchMaskEnabled(this._isTouchMaskEnabled);
 
                     if (!this._isEverOpened) {
                         this._isEverOpened = true;
@@ -93,7 +97,8 @@ namespace GameUi {
             private _checkIsReadyForOpen(): boolean {
                 return (this.stage != null)
                     && (this._isChildrenCreated)
-                    && (this._isAllSkinPartsAdded);
+                    && (this._isAllSkinPartsAdded)
+                    && (this._isCalledOpen);
             }
 
             ////////////////////////////////////////////////////////////////////////////////
@@ -124,27 +129,17 @@ namespace GameUi {
                 return this._isAutoAdjustHeight;
             }
 
-            protected _enableCloseOnTouchedOutside(isEnabled: boolean = true): void {
-                this._isCloseOnTouchedOutside = isEnabled;
+            protected _setAutoAdjustHeightEnabled(enabled = true): void {
+                this._isAutoAdjustHeight = enabled;
 
-                this._setTouchMaskEnabled(isEnabled || this._isSwallowOnTouchedOutside);
-            }
-
-            protected _enableSwallowOnTouchedOutside(isEnabled: boolean = true): void {
-                this._isSwallowOnTouchedOutside = isEnabled;
-
-                this._setTouchMaskEnabled(isEnabled || this._isCloseOnTouchedOutside);
-            }
-
-            protected _enableAutoAdjustHeight(isEnabled: boolean = true): void {
-                this._isAutoAdjustHeight = isEnabled;
-
-                if (isEnabled) {
+                if (enabled) {
                     this.height = StageManager.getStage().stageHeight;
                 }
             }
 
-            private _setTouchMaskEnabled(enabled: boolean): void {
+            protected _setTouchMaskEnabled(enabled = true): void {
+                this._isTouchMaskEnabled = enabled;
+
                 if (!enabled) {
                     (this._touchMask) && (this._touchMask.parent) && (this._touchMask.parent.removeChild(this._touchMask));
                 } else {
@@ -161,9 +156,7 @@ namespace GameUi {
             }
 
             private _onTouchedTouchMask(e: egret.TouchEvent): void {
-                if (this._isCloseOnTouchedOutside) {
-                    this.close();
-                }
+                this._handlerForTouchMask && this._handlerForTouchMask();
             }
 
             private _registerListeners(): void {

@@ -24,7 +24,7 @@ namespace lobby {
         private constructor() {
             super();
 
-            this._enableAutoAdjustHeight();
+            this._setAutoAdjustHeightEnabled();
             this.skinName = "resource/skins/lobby/LobbyPanel.exml";
         }
 
