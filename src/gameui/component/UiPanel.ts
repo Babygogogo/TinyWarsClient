@@ -1,11 +1,18 @@
 
 namespace GameUi {
     export namespace Component {
+        type UiListener = {
+            ui         : egret.DisplayObject,
+            callback   : (e: egret.Event) => void,
+            eventType ?: string,
+            thisObject?: any,
+        }
+
         export abstract class UiPanel extends eui.Component {
             protected abstract readonly _layerType: LayerType;
             protected abstract readonly _isAlone  : boolean;
 
-            protected _uiListeners    : { ui: egret.DisplayObject, callback: ((e: egret.TouchEvent) => void), thisObject?: any }[];
+            protected _uiListeners    : UiListener[];
             protected _notifyListeners: Utility.Notify.Listener[];
             protected _notifyPriority = 0;
 
@@ -164,8 +171,8 @@ namespace GameUi {
                     Utility.Notify.addEventListeners(this._notifyListeners, this);
                 }
                 if (this._uiListeners) {
-                    for (const event of this._uiListeners) {
-                        event.ui.addEventListener(egret.TouchEvent.TOUCH_TAP, event.callback, event.thisObject || this);
+                    for (const l of this._uiListeners) {
+                        l.ui.addEventListener(l.eventType || egret.TouchEvent.TOUCH_TAP, l.callback, l.thisObject || this);
                     }
                 }
             }
@@ -175,8 +182,8 @@ namespace GameUi {
                     Utility.Notify.removeEventListeners(this._notifyListeners, this);
                 }
                 if (this._uiListeners) {
-                    for (const event of this._uiListeners) {
-                        event.ui.removeEventListener(egret.TouchEvent.TOUCH_TAP, event.callback, event.thisObject || this);
+                    for (const l of this._uiListeners) {
+                        l.ui.removeEventListener(l.eventType || egret.TouchEvent.TOUCH_TAP, l.callback, l.thisObject || this);
                     }
                 }
             }

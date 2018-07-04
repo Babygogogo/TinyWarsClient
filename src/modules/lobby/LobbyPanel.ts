@@ -9,6 +9,10 @@ namespace lobby {
         private static _instance: LobbyPanel;
 
         private _imgBg: Comp.UiImage;
+        private _group1: eui.Group;
+        private _group2: eui.Group;
+        private _group3: eui.Group;
+        private _group4: eui.Group;
 
         public static create(): void {
             egret.assert(!LobbyPanel._instance);
@@ -30,8 +34,17 @@ namespace lobby {
 
         protected _onFirstOpened(): void {
             this._uiListeners = [
-                {ui: this._imgBg, callback: () => Utility.Logger.log("asdf")},
+                { ui: this,        callback: this._onResize, eventType: egret.Event.RESIZE },
+                { ui: this._imgBg, callback: () => Utility.Logger.log("asdf") },
             ];
+            this.addEventListener(egret.Event.RESIZE, this._onResize, this);
+        }
+
+        private _onResize(e: egret.Event): void {
+            this._group1.height = (this.height - 40 - 90) / 2;
+            this._group2.height = (this.height - 40 - 90) / 2;
+            this._group3.height = (this.height - 40 - 90) / 2;
+            this._group4.height = (this.height - 40 - 90) / 2;
         }
     }
 }
