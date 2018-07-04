@@ -25,13 +25,13 @@ namespace Utility {
         }
     }
 
-    class LoadingUiPanel extends GameUi.Component.UiPanel implements RES.PromiseTaskReporter {
+    class LoadingUiPanel extends GameUi.UiPanel implements RES.PromiseTaskReporter {
         protected _isAlone   = true;
-        protected _layerType = GameUi.LayerType.Top;
+        protected _layerType = Types.LayerType.Top;
 
         private static _instance: LoadingUiPanel;
 
-        private _labelProgress: GameUi.Component.UILabel;
+        private _labelProgress: GameUi.UILabel;
 
         public static create(): LoadingUiPanel {
             egret.assert(!LoadingUiPanel._instance);

@@ -8,4 +8,12 @@ namespace Types {
         actionCode   : number;
         [key: string]: ActionData | number | string;
     }
+
+    export const enum LayerType {
+        Top,
+        Notify,
+        Hud,
+        Scene,
+        Bottom,
+    }
 }

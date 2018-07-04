@@ -1,14 +1,12 @@
 
 namespace lobby {
-    import Comp = GameUi.Component;
-
-    export class LobbyPanel extends Comp.UiPanel {
-        protected readonly _layerType = GameUi.LayerType.Scene;
+    export class LobbyPanel extends GameUi.UiPanel {
+        protected readonly _layerType = Types.LayerType.Scene;
         protected readonly _isAlone   = true;
 
         private static _instance: LobbyPanel;
 
-        private _imgBg: Comp.UiImage;
+        private _imgBg: GameUi.UiImage;
         private _group1: eui.Group;
         private _group2: eui.Group;
         private _group3: eui.Group;

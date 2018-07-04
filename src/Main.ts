@@ -25,7 +25,7 @@ class Main extends egret.DisplayObjectContainer {
     }
 
     private async runGame(): Promise<void> {
-        GameUi.StageManager.init(this.stage);
+        await Utility.StageManager.init(this.stage);
         await Utility.ResManager.init();
 
         // this.createGameScene();
@@ -61,7 +61,7 @@ class Main extends egret.DisplayObjectContainer {
         let sky = this.createBitmapByName("bg_jpg");
         sky.horizontalCenter = 0;
         sky.verticalCenter   = 0;
-        GameUi.StageManager.getLayer(GameUi.LayerType.Bottom).addChild(sky);
+        Utility.StageManager.getLayer(Types.LayerType.Bottom).addChild(sky);
 
         const data = [
             {actionCode: Network.Codes.C_Login, account: "account", password: "password"},

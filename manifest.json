@@ -11,21 +11,21 @@
 		"libs/modules/ProtobufJs/ProtobufJs.js"
 	],
 	"game": [
-		"bin-debug/gameui/component/UiImage.js",
-		"bin-debug/gameui/component/UiPanel.js",
 		"bin-debug/utility/Logger.js",
-		"bin-debug/modules/lobby/LobbyPanel.js",
-		"bin-debug/gameui/component/UiLabel.js",
+		"bin-debug/gameui/UiPanel.js",
+		"bin-debug/utility/Types.js",
+		"bin-debug/gameui/UiImage.js",
 		"bin-debug/Platform.js",
-		"bin-debug/gameui/component/UiScrollList.js",
-		"bin-debug/Main.js",
+		"bin-debug/gameui/UiScrollList.js",
+		"bin-debug/modules/lobby/LobbyPanel.js",
 		"bin-debug/network/NetManager.js",
-		"bin-debug/network/NetMessageCodes.js",
 		"bin-debug/network/NetMessageProto.js",
-		"bin-debug/gameui/StageManager.js",
+		"bin-debug/gameui/UiLabel.js",
+		"bin-debug/Main.js",
 		"bin-debug/utility/Notify.js",
 		"bin-debug/utility/ProtoEnums.js",
 		"bin-debug/utility/ResManager.js",
-		"bin-debug/utility/Types.js"
+		"bin-debug/utility/StageManager.js",
+		"bin-debug/network/NetMessageCodes.js"
 	]
 }

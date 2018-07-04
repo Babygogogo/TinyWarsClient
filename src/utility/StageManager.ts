@@ -1,14 +1,7 @@
 
-namespace GameUi {
-    export const enum LayerType {
-        Top,
-        Notify,
-        Hud,
-        Scene,
-        Bottom,
-    }
-
+namespace Utility {
     export namespace StageManager {
+        import LayerType = Types.LayerType;
         // The game is in landscape mode, which means that its design max height equals its design width, 960.
         export const DESIGN_WIDTH         = 960;
         export const DESIGN_MIN_HEIGHT    = 480;
@@ -53,10 +46,10 @@ namespace GameUi {
                 this.addEventListener(egret.Event.RESIZE, this._onResize, this);
             }
 
-            public removeAllPanels(execpt?: Component.UiPanel): void {
+            public removeAllPanels(execpt?: GameUi.UiPanel): void {
                 for (let i = this.numChildren - 1; i >= 0; --i) {
                     const child = this.getChildAt(i);
-                    if ((child instanceof Component.UiPanel) && (child !== execpt)) {
+                    if ((child instanceof GameUi.UiPanel) && (child !== execpt)) {
                         this.removeChildAt(i);
                     }
                 }
@@ -66,7 +59,7 @@ namespace GameUi {
                 const height = StageManager.getStage().stageHeight;
                 for (let i = 0; i < this.numChildren; ++i) {
                     const child = this.getChildAt(i);
-                    if ((child instanceof Component.UiPanel) && (child.checkIsAutoAdjustHeight())) {
+                    if ((child instanceof GameUi.UiPanel) && (child.checkIsAutoAdjustHeight())) {
                         child.height = height;
                     }
                 }
