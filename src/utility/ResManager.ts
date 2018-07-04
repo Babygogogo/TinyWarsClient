@@ -1,8 +1,12 @@
 
 namespace Utility {
     export namespace ResManager {
-        export function init(): void {
+        export async function init(): Promise<void> {
             egret.registerImplementation("eui.IAssetAdapter", new AssetAdapter());
+
+            await RES.loadConfig("resource/default.res.json", "resource/");
+            await RES.loadGroup("preload", 0, LoadingUiPanel.create());
+            LoadingUiPanel.destroy();
         }
     }
 
@@ -18,6 +22,39 @@ namespace Utility {
                     RES.getResAsync(source, callback, thisObject);
                 }
             }
+        }
+    }
+
+    class LoadingUiPanel extends GameUi.Component.UiPanel implements RES.PromiseTaskReporter {
+        protected _isAlone   = true;
+        protected _layerType = GameUi.LayerType.Top;
+
+        private static _instance: LoadingUiPanel;
+
+        private _labelProgress: GameUi.Component.UILabel;
+
+        public static create(): LoadingUiPanel {
+            egret.assert(!LoadingUiPanel._instance);
+            LoadingUiPanel._instance = new LoadingUiPanel();
+            LoadingUiPanel._instance.open();
+
+            return LoadingUiPanel._instance;
+        }
+
+        public static destroy(): void {
+            LoadingUiPanel._instance.close();
+            delete LoadingUiPanel._instance;
+        }
+
+        private constructor() {
+            super();
+
+            this._setAutoAdjustHeightEnabled();
+            this.skinName = "resource/skins/utility/LoadingUiPanel.exml";
+        }
+
+        public onProgress(current: number, total: number): void {
+            this._labelProgress.text = `Loading...${current}/${total}`;
         }
     }
 }

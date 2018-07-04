@@ -16,7 +16,7 @@ namespace lobby {
 
         public static create(): void {
             egret.assert(!LobbyPanel._instance);
-            LobbyPanel._instance = new LobbyPanel;
+            LobbyPanel._instance = new LobbyPanel();
             LobbyPanel._instance.open();
         }
 

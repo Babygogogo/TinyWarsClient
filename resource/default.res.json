@@ -7,24 +7,24 @@
 	],
 	"resources": [
 		{
-			"name": "bg_jpg",
+			"url": "assets/bg.jpg",
 			"type": "image",
-			"url": "assets/bg.jpg"
+			"name": "bg_jpg"
 		},
 		{
-			"name": "egret_icon_png",
+			"url": "assets/egret_icon.png",
 			"type": "image",
-			"url": "assets/egret_icon.png"
+			"name": "egret_icon_png"
 		},
 		{
-			"name": "description_json",
+			"url": "config/description.json",
 			"type": "json",
-			"url": "config/description.json"
+			"name": "description_json"
 		},
 		{
-			"name": "c03_t01_s01_f01_png",
+			"url": "assets/ui/c03_t01_s01_f01.png",
 			"type": "image",
-			"url": "assets/ui/c03_t01_s01_f01.png"
+			"name": "c03_t01_s01_f01_png"
 		}
 	]
 }
