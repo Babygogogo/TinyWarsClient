@@ -56,7 +56,7 @@ namespace Utility {
             }
 
             private _onResize(e: egret.Event): void {
-                const height = StageManager.getStage().stageHeight;
+                const height = this.height;
                 for (let i = 0; i < this.numChildren; ++i) {
                     const child = this.getChildAt(i);
                     if ((child instanceof GameUi.UiPanel) && (child.checkIsAutoAdjustHeight())) {

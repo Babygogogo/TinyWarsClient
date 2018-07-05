@@ -26,8 +26,8 @@ namespace Utility {
     }
 
     class LoadingUiPanel extends GameUi.UiPanel implements RES.PromiseTaskReporter {
-        protected _isAlone   = true;
-        protected _layerType = Types.LayerType.Top;
+        protected readonly _isAlone   = true;
+        protected readonly _layerType = Types.LayerType.Top;
 
         private static _instance: LoadingUiPanel;
 

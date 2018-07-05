@@ -27,9 +27,10 @@ class Main extends egret.DisplayObjectContainer {
     private async runGame(): Promise<void> {
         await Utility.StageManager.init(this.stage);
         await Utility.ResManager.init();
+        Login.LoginBackgroundPanel.create();
 
         // this.createGameScene();
-        lobby.LobbyPanel.create();
+        // lobby.LobbyPanel.create();
         const result = await RES.getResAsync("description_json")
         // this.startAnimation(result);
         await platform.login();

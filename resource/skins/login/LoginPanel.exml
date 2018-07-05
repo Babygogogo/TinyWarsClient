@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="GameUi.*"
+        xmlns:w="http://ns.egret.com/wing">
+    <GameUi:UiImage source="bg_jpg" horizontalCenter="0" verticalCenter="0" scaleX="1.5" scaleY="1.5" />
+
+	<e:Group width="320" height="200" horizontalCenter="0" verticalCenter="0">
+		<GameUi:UiImage source="c03_t01_s01_f01_png" scale9Grid="4,6,1,1" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" left="0" right="0" top="0" bottom="0"/>
+		<GameUi:UILabel text="登陆" textColor="0xffffff" stroke="2" y="13" horizontalCenter="0" size="20"/>
+		<GameUi:UILabel text="账号：" textColor="0xFFFFFF" stroke="2" y="50" size="20" x="20"/>
+		<GameUi:UILabel text="密码：" textColor="0xFFFFFF" stroke="2" y="98" size="20" x="20"/>
+	</e:Group>
+</e:Skin>
