@@ -1,14 +1,29 @@
 
 namespace Login {
     export namespace LoginProxy {
+        import NotifyType = Types.NotifyType;
+        import NetManager = Network.Manager;
+        import ActionCode = Network.Codes;
+
         export function init(): void {
-            Network.Manager.addListeners(
-                {actionCode: Network.Codes.S_Login, callback: _onSLogin, thisObject: LoginProxy},
+            NetManager.addListeners(
+                { actionCode: Network.Codes.S_Login, callback: _onSLogin, thisObject: LoginProxy },
             );
         }
 
+        export function reqLogin(account: string, password: string): void {
+            NetManager.send({
+                actionCode: ActionCode.C_Login,
+                account   : account,
+                password  : password,
+            });
+        }
         function _onSLogin(e: egret.Event): void {
             const data = e.data as Network.Proto.IS_Login;
+            if (data.status === ProtoEnums.S_Login_Status.Succeed) {
+                User.UserModel.updateOnLogin(data);
+            }
+            Utility.Notify.dispatch(NotifyType.SLogin, data);
         }
     }
 }

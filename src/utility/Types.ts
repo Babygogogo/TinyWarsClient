@@ -25,4 +25,11 @@ namespace Types {
         Blue,
         White,
     }
+
+    export const NotifyType = {
+        SLogin : "",
+    }
+    for (const k in NotifyType) {
+        NotifyType[k] = k;
+    }
 }

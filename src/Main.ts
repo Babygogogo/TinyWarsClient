@@ -27,6 +27,8 @@ class Main extends egret.DisplayObjectContainer {
     private async runGame(): Promise<void> {
         await Utility.StageManager.init(this.stage);
         await Utility.ResManager.init();
+        await Network.Manager.init();
+        await Login.LoginProxy.init();
         Login.LoginBackgroundPanel.create();
         Login.LoginPanel.create();
 
@@ -38,7 +40,6 @@ class Main extends egret.DisplayObjectContainer {
         const userInfo = await platform.getUserInfo();
         // console.log(userInfo);
 
-        Network.Manager.init();
         Network.Manager.addListeners(
             {
                 actionCode: Network.Codes.S_Login,
