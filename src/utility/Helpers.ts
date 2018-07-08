@@ -5,6 +5,27 @@ namespace Utility {
             return egret.Capabilities.renderMode === "webgl";
         }
 
+        export function checkIsAccountValid(str: string | undefined | null): boolean {
+            return (typeof str === "string")
+                && (str.length >= 6)
+                && (str.length <= 20)
+                && (str.search(/\W/) < 0);
+        }
+
+        export function checkIsPasswordValid(str: string | undefined | null): boolean {
+            return (typeof str === "string")
+                && (str.length >= 6)
+                && (str.length <= 20)
+                && (str.search(/\W/) < 0);
+        }
+
+        export function checkIsNicknameValid(str: string | undefined | null): boolean {
+            return (typeof str === "string")
+                && (str.length >= 6)
+                && (str.length <= 20)
+                && (str.search(/\W/) < 0);
+        }
+
         export function changeColor(obj: egret.DisplayObject, color: Types.ColorType, value = 100): void {
             if (checkIsWebGl()) {
                 obj.filters = [new egret.ColorMatrixFilter(getColorMatrix(color, value))];

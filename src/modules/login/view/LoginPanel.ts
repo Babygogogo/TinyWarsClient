@@ -1,5 +1,8 @@
 
 namespace Login {
+    import FloatText = Utility.FloatText;
+    import Lang      = Utility.Lang;
+
     export class LoginPanel extends GameUi.UiPanel {
         protected readonly _layerType = Types.LayerType.Hud;
         protected readonly _isAlone   = true;
@@ -41,18 +44,26 @@ namespace Login {
         private _onNotifySLogin(e: egret.Event): void {
             const data = e.data as Network.Proto.IS_Login;
             if (data.status === ProtoEnums.S_Login_Status.AccountInvalid) {
-                Utility.FloatText.show("用户名不正确");
+                FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S00));
             } else if (data.status === ProtoEnums.S_Login_Status.AlreadyLoggedIn) {
-                Utility.FloatText.show("当前已登陆");
+                FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S01));
             } else if (data.status === ProtoEnums.S_Login_Status.PasswordInvalid) {
-                Utility.FloatText.show("密码不正确");
+                FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S00));
             } else {
-                Utility.FloatText.show("成功登陆");
+                FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S02));
+                LoginPanel.destroy();
+                lobby.LobbyPanel.create();
             }
         }
 
         private _onTouchedBtnLogin(e: egret.TouchEvent): void {
-            LoginProxy.reqLogin(this._inputAccount.text || "", this._inputPassword.text || "");
+            const account  = this._inputAccount.text;
+            const password = this._inputPassword.text;
+            if ((!Utility.Helpers.checkIsAccountValid(account)) || (!Utility.Helpers.checkIsPasswordValid(password))) {
+                FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S00));
+            } else {
+                LoginProxy.reqLogin(account, password);
+            }
         }
     }
 }
