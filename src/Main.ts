@@ -28,6 +28,7 @@ class Main extends egret.DisplayObjectContainer {
         await Utility.StageManager.init(this.stage);
         await Utility.ResManager.init();
         Login.LoginBackgroundPanel.create();
+        Login.LoginPanel.create();
 
         // this.createGameScene();
         // lobby.LobbyPanel.create();

@@ -1,7 +1,7 @@
 {
 	"groups": [
 		{
-			"keys": "bg_jpg,egret_icon_png,description_json,c03_t01_s01_f01_png",
+			"keys": "bg_jpg,egret_icon_png,description_json,c03_t01_s01_f01_png,c03_t06_s01_f01_png",
 			"name": "preload"
 		}
 	],
@@ -25,6 +25,11 @@
 			"url": "assets/ui/c03_t01_s01_f01.png",
 			"type": "image",
 			"name": "c03_t01_s01_f01_png"
+		},
+		{
+			"name": "c03_t06_s01_f01_png",
+			"type": "image",
+			"url": "assets/ui/c03_t06_s01_f01.png"
 		}
 	]
 }
