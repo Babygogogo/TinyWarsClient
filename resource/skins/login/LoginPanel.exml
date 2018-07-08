@@ -5,7 +5,7 @@
     <e:Group width="320" height="190" horizontalCenter="0" verticalCenter="0">
         <GameUi:UiImage source="c03_t01_s01_f01_png" scale9Grid="4,6,1,1" anchorOffsetX="0" anchorOffsetY="0"
                         alpha="0.8" left="0" right="0" top="0" bottom="0" />
-        <GameUi:UILabel text="登陆" textColor="0xffffff" stroke="2" y="13" horizontalCenter="0" size="20" />
+        <GameUi:UiLabel text="登陆" textColor="0xffffff" stroke="2" y="13" horizontalCenter="0" size="20" />
         <GameUi:UiButton id="_btnRegister" label="去注册&gt;&gt;" y="12" x="225">
             <GameUi:skinName>
                 <e:Skin states="up,down,disabled">
@@ -15,8 +15,8 @@
                 </e:Skin>
             </GameUi:skinName>
         </GameUi:UiButton>
-        <GameUi:UILabel text="账号：" textColor="0xFFFFFF" stroke="2" y="50" size="20" x="20" />
-        <GameUi:UILabel text="密码：" textColor="0xFFFFFF" stroke="2" y="98" size="20" x="20" />
+        <GameUi:UiLabel text="账号：" textColor="0xFFFFFF" stroke="2" y="50" size="20" x="20" />
+        <GameUi:UiLabel text="密码：" textColor="0xFFFFFF" stroke="2" y="98" size="20" x="20" />
         <GameUi:UiTextInput id="_inputAccount" width="220" x="80" y="47" anchorOffsetX="0" anchorOffsetY="0"
                             restrict="A-Za-z0-9_" maxChars="20">
             <GameUi:skinName>

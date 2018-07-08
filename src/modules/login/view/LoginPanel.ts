@@ -28,5 +28,15 @@ namespace Login {
             this._setAutoAdjustHeightEnabled();
             this.skinName = "resource/skins/login/LoginPanel.exml";
         }
+
+        protected _onFirstOpened(): void {
+            this._uiListeners = [
+                { ui: this._btnLogin, callback: this._onTouchedBtnLogin },
+            ];
+        }
+
+        private _onTouchedBtnLogin(e: egret.TouchEvent): void {
+            Utility.FloatText.show("login touched!");
+        }
     }
 }

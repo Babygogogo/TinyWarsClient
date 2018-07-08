@@ -31,7 +31,7 @@ namespace Utility {
 
         private static _instance: LoadingUiPanel;
 
-        private _labelProgress: GameUi.UILabel;
+        private _labelProgress: GameUi.UiLabel;
 
         public static create(): LoadingUiPanel {
             egret.assert(!LoadingUiPanel._instance);

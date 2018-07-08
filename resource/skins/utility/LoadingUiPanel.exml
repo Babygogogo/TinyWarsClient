@@ -2,6 +2,6 @@
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
     <GameUi:UiImage source="bg_jpg" horizontalCenter="0" verticalCenter="0" scaleX="1.5" scaleY="1.5" />
-    <GameUi:UILabel id="_labelProgress" text="Loading..." horizontalCenter="0" verticalCenter="100" textColor="0xffffff"
+    <GameUi:UiLabel id="_labelProgress" text="Loading..." horizontalCenter="0" verticalCenter="100" textColor="0xffffff"
                     stroke="2" />
 </e:Skin>
