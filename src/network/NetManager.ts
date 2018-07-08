@@ -11,7 +11,7 @@ namespace Network {
         // Type definitions.
         ////////////////////////////////////////////////////////////////////////////////
         type ReceivedData = any;
-        type Action       = Types.Action;
+        type Action       = Utility.Types.Action;
         type MsgListener = {
             actionCode: Codes;
             callback  : (e: egret.Event) => void;

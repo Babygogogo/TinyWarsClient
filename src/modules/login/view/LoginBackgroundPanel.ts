@@ -1,7 +1,7 @@
 
 namespace Login {
     export class LoginBackgroundPanel extends GameUi.UiPanel {
-        protected readonly _layerType = Types.LayerType.Bottom;
+        protected readonly _layerType = Utility.Types.LayerType.Bottom;
         protected readonly _isAlone   = true;
 
         private static _instance: LoginBackgroundPanel;

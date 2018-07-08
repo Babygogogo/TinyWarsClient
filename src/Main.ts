@@ -64,7 +64,7 @@ class Main extends egret.DisplayObjectContainer {
         let sky = this.createBitmapByName("bg_jpg");
         sky.horizontalCenter = 0;
         sky.verticalCenter   = 0;
-        Utility.StageManager.getLayer(Types.LayerType.Bottom).addChild(sky);
+        Utility.StageManager.getLayer(Utility.Types.LayerType.Bottom).addChild(sky);
 
         const data = [
             {actionCode: Network.Codes.C_Login, account: "account", password: "password"},

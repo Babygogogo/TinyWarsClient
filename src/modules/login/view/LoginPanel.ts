@@ -1,10 +1,11 @@
 
 namespace Login {
-    import FloatText = Utility.FloatText;
-    import Lang      = Utility.Lang;
+    import FloatText  = Utility.FloatText;
+    import Lang       = Utility.Lang;
+    import NotifyType = Utility.Notify.Type;
 
     export class LoginPanel extends GameUi.UiPanel {
-        protected readonly _layerType = Types.LayerType.Hud;
+        protected readonly _layerType = Utility.Types.LayerType.Hud;
         protected readonly _isAlone   = true;
 
         private _inputAccount : GameUi.UiTextInput;
@@ -34,7 +35,7 @@ namespace Login {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { name: Types.NotifyType.SLogin, callback: this._onNotifySLogin },
+                { name: NotifyType.SLogin, callback: this._onNotifySLogin },
             ];
             this._uiListeners = [
                 { ui: this._btnLogin, callback: this._onTouchedBtnLogin },

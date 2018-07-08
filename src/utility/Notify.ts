@@ -1,6 +1,13 @@
 
 namespace Utility {
     export namespace Notify {
+        export const Type = {
+            SLogin : "",
+        }
+        for (const k in Type) {
+            Type[k] = k;
+        }
+
         const dispatcher = new egret.EventDispatcher();
 
         export type Listener = {

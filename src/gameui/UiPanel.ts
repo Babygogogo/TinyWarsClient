@@ -8,7 +8,7 @@ namespace GameUi {
     }
 
     export abstract class UiPanel extends eui.Component {
-        protected abstract readonly _layerType: Types.LayerType;
+        protected abstract readonly _layerType: Utility.Types.LayerType;
         protected abstract readonly _isAlone  : boolean;
 
         protected _uiListeners    : UiListener[];

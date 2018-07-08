@@ -1,5 +1,8 @@
 
 namespace GameUi {
+    import Helpers = Utility.Helpers;
+    import Types   = Utility.Types;
+
     export class UiButton extends eui.Button {
         private _imgExtra: eui.Image;
         private _imgRed  : eui.Image;
@@ -43,13 +46,13 @@ namespace GameUi {
             this.setExtraVisible(false);
         }
         private _onTouchBegin(e: egret.TouchEvent): void {
-            Utility.Helpers.changeColor(this, Types.ColorType.White, 50);
+            Helpers.changeColor(this, Types.ColorType.White, 50);
         }
         private _onTouchEnd(e: egret.TouchEvent): void {
-            Utility.Helpers.changeColor(this, Types.ColorType.Origin);
+            Helpers.changeColor(this, Types.ColorType.Origin);
         }
         private _onTouchReleaseOutside(e: egret.TouchEvent): void {
-            Utility.Helpers.changeColor(this, Types.ColorType.Origin);
+            Helpers.changeColor(this, Types.ColorType.Origin);
         }
     }
 }

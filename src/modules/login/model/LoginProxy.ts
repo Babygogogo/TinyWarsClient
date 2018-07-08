@@ -1,7 +1,7 @@
 
 namespace Login {
     export namespace LoginProxy {
-        import NotifyType = Types.NotifyType;
+        import NotifyType = Utility.Notify.Type;
         import NetManager = Network.Manager;
         import ActionCode = Network.Codes;
 
