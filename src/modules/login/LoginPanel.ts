@@ -4,6 +4,11 @@ namespace Login {
         protected readonly _layerType = Types.LayerType.Hud;
         protected readonly _isAlone   = true;
 
+        private _inputAccount : GameUi.UiTextInput;
+        private _inputPassword: GameUi.UiTextInput;
+        private _btnRegister  : GameUi.UiButton;
+        private _btnLogin     : GameUi.UiButton;
+
         private static _instance: LoginPanel;
 
         public static create(): void {

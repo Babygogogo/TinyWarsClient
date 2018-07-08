@@ -16,4 +16,13 @@ namespace Types {
         Scene,
         Bottom,
     }
+
+    export const enum ColorType {
+        Origin,
+        Gray,
+        Red,
+        Green,
+        Blue,
+        White,
+    }
 }
