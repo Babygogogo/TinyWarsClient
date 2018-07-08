@@ -31,6 +31,7 @@ namespace GameUi {
         protected constructor() {
             super();
 
+            this.touchEnabled = false;
             this.addEventListener(egret.Event.COMPLETE, this._onAllSkinPartsAdded, this);
             this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
         }
