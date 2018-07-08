@@ -12,19 +12,19 @@
 	],
 	"game": [
 		"bin-debug/utility/Logger.js",
-		"bin-debug/utility/Lang.js",
-		"bin-debug/utility/Types.js",
-		"bin-debug/gameui/UiPanel.js",
 		"bin-debug/utility/Notify.js",
 		"bin-debug/network/NetManager.js",
 		"bin-debug/network/NetMessageCodes.js",
 		"bin-debug/utility/Helpers.js",
 		"bin-debug/utility/FloatText.js",
-		"bin-debug/modules/login/model/LoginModel.js",
+		"bin-debug/utility/Lang.js",
+		"bin-debug/utility/Types.js",
+		"bin-debug/gameui/UiPanel.js",
+		"bin-debug/utility/ProtoEnums.js",
 		"bin-debug/modules/login/model/LoginProxy.js",
 		"bin-debug/modules/login/view/LoginBackgroundPanel.js",
 		"bin-debug/modules/login/view/LoginPanel.js",
-		"bin-debug/modules/user/UserModel.js",
+		"bin-debug/Platform.js",
 		"bin-debug/gameui/UiButton.js",
 		"bin-debug/gameui/UiImage.js",
 		"bin-debug/network/NetMessageProto.js",
@@ -33,9 +33,9 @@
 		"bin-debug/Main.js",
 		"bin-debug/gameui/UiScrollList.js",
 		"bin-debug/gameui/UiTextInput.js",
-		"bin-debug/utility/ProtoEnums.js",
+		"bin-debug/modules/login/model/LoginModel.js",
 		"bin-debug/utility/ResManager.js",
 		"bin-debug/utility/StageManager.js",
-		"bin-debug/Platform.js"
+		"bin-debug/modules/user/UserModel.js"
 	]
 }

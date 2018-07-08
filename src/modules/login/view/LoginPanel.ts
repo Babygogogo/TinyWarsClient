@@ -3,6 +3,7 @@ namespace Login {
     import FloatText  = Utility.FloatText;
     import Lang       = Utility.Lang;
     import NotifyType = Utility.Notify.Type;
+    import ProtoEnums = Utility.ProtoEnums;
 
     export class LoginPanel extends GameUi.UiPanel {
         protected readonly _layerType = Utility.Types.LayerType.Hud;

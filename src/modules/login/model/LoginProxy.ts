@@ -20,7 +20,7 @@ namespace Login {
         }
         function _onSLogin(e: egret.Event): void {
             const data = e.data as Network.Proto.IS_Login;
-            if (data.status === ProtoEnums.S_Login_Status.Succeed) {
+            if (data.status === Utility.ProtoEnums.S_Login_Status.Succeed) {
                 User.UserModel.updateOnLogin(data);
             }
             Utility.Notify.dispatch(NotifyType.SLogin, data);
