@@ -21,7 +21,7 @@ namespace Utility {
 
         export function checkIsNicknameValid(str: string | undefined | null): boolean {
             return (typeof str === "string")
-                && (str.length >= 6)
+                && (str.length >= 4)
                 && (str.length <= 20)
                 && (str.search(/\W/) < 0);
         }
