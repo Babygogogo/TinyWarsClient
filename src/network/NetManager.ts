@@ -20,9 +20,12 @@ namespace Network {
 
         class NetMessageDispatcherCls extends egret.EventDispatcher {
             public dispatchWithContainer(container: Proto.Container): void {
-                const code = container.actionCode;
-                const name = Codes[code];
-                this.dispatchEventWith(name, false, container[name]);
+                const name   = Codes[container.actionCode];
+                const action = container[name];
+                if (action.errorCode) {
+                    Utility.FloatText.show(Utility.Lang.getNetErrorText(action.errorCode));
+                }
+                this.dispatchEventWith(name, false, action);
             }
 
             public addListener(code: Codes, callback: Function, thisObject: any): void {

@@ -86,7 +86,7 @@
           "type": "uint32",
           "id": 0
         },
-        "status": {
+        "errorCode": {
           "type": "uint32",
           "id": 1
         }
@@ -114,7 +114,7 @@
           "type": "uint32",
           "id": 0
         },
-        "status": {
+        "errorCode": {
           "type": "uint32",
           "id": 1
         },
@@ -142,7 +142,7 @@
           "type": "uint32",
           "id": 0
         },
-        "status": {
+        "errorCode": {
           "type": "uint32",
           "id": 1
         }
@@ -154,7 +154,7 @@
           "type": "uint32",
           "id": 0
         },
-        "status": {
+        "errorCode": {
           "type": "uint32",
           "id": 1
         }
