@@ -440,8 +440,8 @@ namespace Network {
             /** S_Register actionCode */
             actionCode?: (number | null);
 
-            /** S_Register status */
-            status?: (number | null);
+            /** S_Register errorCode */
+            errorCode?: (number | null);
         }
 
         /** Represents a S_Register. */
@@ -456,8 +456,8 @@ namespace Network {
             /** S_Register actionCode. */
             public actionCode: number;
 
-            /** S_Register status. */
-            public status: number;
+            /** S_Register errorCode. */
+            public errorCode: number;
 
             /**
              * Creates a new S_Register instance using the specified properties.
@@ -638,8 +638,8 @@ namespace Network {
             /** S_Login actionCode */
             actionCode?: (number | null);
 
-            /** S_Login status */
-            status?: (number | null);
+            /** S_Login errorCode */
+            errorCode?: (number | null);
 
             /** S_Login userId */
             userId?: (number | null);
@@ -660,8 +660,8 @@ namespace Network {
             /** S_Login actionCode. */
             public actionCode: number;
 
-            /** S_Login status. */
-            public status: number;
+            /** S_Login errorCode. */
+            public errorCode: number;
 
             /** S_Login userId. */
             public userId: number;
@@ -836,8 +836,8 @@ namespace Network {
             /** S_Logout actionCode */
             actionCode?: (number | null);
 
-            /** S_Logout status */
-            status?: (number | null);
+            /** S_Logout errorCode */
+            errorCode?: (number | null);
         }
 
         /** Represents a S_Logout. */
@@ -852,8 +852,8 @@ namespace Network {
             /** S_Logout actionCode. */
             public actionCode: number;
 
-            /** S_Logout status. */
-            public status: number;
+            /** S_Logout errorCode. */
+            public errorCode: number;
 
             /**
              * Creates a new S_Logout instance using the specified properties.
@@ -932,8 +932,8 @@ namespace Network {
             /** S_Error actionCode */
             actionCode?: (number | null);
 
-            /** S_Error status */
-            status?: (number | null);
+            /** S_Error errorCode */
+            errorCode?: (number | null);
         }
 
         /** Represents a S_Error. */
@@ -948,8 +948,8 @@ namespace Network {
             /** S_Error actionCode. */
             public actionCode: number;
 
-            /** S_Error status. */
-            public status: number;
+            /** S_Error errorCode. */
+            public errorCode: number;
 
             /**
              * Creates a new S_Error instance using the specified properties.
