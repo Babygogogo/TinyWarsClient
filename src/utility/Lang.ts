@@ -11,7 +11,7 @@ namespace Utility {
             B00, // 各种提示
         }
         export const enum SubType {
-            S00, S01, S02, S03,
+            S00, S01, S02, S03, S04,
         }
 
         const LangData: string[][][] = [
@@ -31,6 +31,10 @@ namespace Utility {
                 [ // 00-03
                     "密码不符合要求，请检查后重试",
                     "Invalid password.",
+                ],
+                [ // 00-04
+                    "注册成功，正在自动登陆…",
+                    "Register successfully! Now logging in...",
                 ],
             ],
         ];

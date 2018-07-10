@@ -442,6 +442,12 @@ namespace Network {
 
             /** S_Register errorCode */
             errorCode?: (number | null);
+
+            /** S_Register account */
+            account?: (string | null);
+
+            /** S_Register password */
+            password?: (string | null);
         }
 
         /** Represents a S_Register. */
@@ -458,6 +464,12 @@ namespace Network {
 
             /** S_Register errorCode. */
             public errorCode: number;
+
+            /** S_Register account. */
+            public account: string;
+
+            /** S_Register password. */
+            public password: string;
 
             /**
              * Creates a new S_Register instance using the specified properties.

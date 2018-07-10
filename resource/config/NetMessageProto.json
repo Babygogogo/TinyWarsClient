@@ -89,6 +89,14 @@
         "errorCode": {
           "type": "uint32",
           "id": 1
+        },
+        "account": {
+          "type": "string",
+          "id": 2
+        },
+        "password": {
+          "type": "string",
+          "id": 3
         }
       }
     },
