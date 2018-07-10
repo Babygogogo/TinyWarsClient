@@ -1,6 +1,8 @@
 
 namespace Network {
     export namespace Manager {
+        import Logger = Utility.Logger; // for convenience
+
         ////////////////////////////////////////////////////////////////////////////////
         // Constants.
         ////////////////////////////////////////////////////////////////////////////////
@@ -22,6 +24,7 @@ namespace Network {
             public dispatchWithContainer(container: Proto.Container): void {
                 const name   = Codes[container.actionCode];
                 const action = container[name];
+                Logger.log("NetManager receive: ", name, action);
                 if (action.errorCode) {
                     Utility.FloatText.show(Utility.Lang.getNetErrorText(action.errorCode));
                 }
@@ -40,12 +43,11 @@ namespace Network {
         ////////////////////////////////////////////////////////////////////////////////
         // Local variables.
         ////////////////////////////////////////////////////////////////////////////////
-        const Logger = Utility.Logger; // for convenience
-
-        let   socket     : SocketIOClient.Socket;
-        let   protoRoot  : protobuf.Root;
-        const dispatcher : NetMessageDispatcherCls = new NetMessageDispatcherCls();
-        const msgHandlers: MsgListener[] = [];
+        let   socket        : SocketIOClient.Socket;
+        let   protoRoot     : protobuf.Root;
+        let   containerClass: typeof Proto.Container;
+        const dispatcher    : NetMessageDispatcherCls = new NetMessageDispatcherCls();
+        const msgHandlers   : MsgListener[] = [];
 
         ////////////////////////////////////////////////////////////////////////////////
         // Helpers.
@@ -69,7 +71,8 @@ namespace Network {
                 if ((err) || (!root)) {
                     throw err || "no root";
                 } else {
-                    protoRoot = root;
+                    protoRoot      = root;
+                    containerClass = root.lookupType("Container") as any;
                 }
             });
 
@@ -83,8 +86,7 @@ namespace Network {
             }
             socket = io(SERVER_ADDRESS);
             socket.on("message", (data: ReceivedData) => {
-                const protoClass = protoRoot.lookupType("Container") as any as typeof Proto.Container;
-                dispatcher.dispatchWithContainer(protoClass.decode(getDataForDecode(data)));
+                dispatcher.dispatchWithContainer(containerClass.decode(getDataForDecode(data)));
             });
         }
 
@@ -110,7 +112,7 @@ namespace Network {
                 Logger.log("NetManager send: ", name, action);
                 socket.emit(
                     "message",
-                    protoRoot.lookupType("Container").encode({
+                    containerClass.encode({
                         actionCode: code,
                         [name]    : action,
                     }).finish()

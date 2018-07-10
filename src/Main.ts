@@ -39,19 +39,6 @@ class Main extends egret.DisplayObjectContainer {
         await platform.login();
         const userInfo = await platform.getUserInfo();
         // console.log(userInfo);
-
-        Network.Manager.addListeners(
-            {
-                actionCode: Network.Codes.S_Login,
-                callback: (e: egret.Event) => {Utility.Logger.log(e.data)},
-                thisObject: this,
-            },
-            {
-                actionCode: Network.Codes.S_Logout,
-                callback: (e: egret.Event) => {Utility.Logger.log(e.data)},
-                thisObject: this,
-            },
-        );
     }
 
     private textfield: egret.TextField;
