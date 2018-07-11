@@ -13,14 +13,17 @@ namespace lobby {
         private _group4: eui.Group;
 
         public static create(): void {
-            egret.assert(!LobbyPanel._instance);
-            LobbyPanel._instance = new LobbyPanel();
-            LobbyPanel._instance.open();
+            if (!LobbyPanel._instance) {
+                LobbyPanel._instance = new LobbyPanel();
+                LobbyPanel._instance.open();
+            }
         }
 
         public static destroy(): void {
-            LobbyPanel._instance.close();
-            delete LobbyPanel._instance;
+            if (LobbyPanel._instance) {
+                LobbyPanel._instance.close();
+                delete LobbyPanel._instance;
+            }
         }
 
         private constructor() {
@@ -32,8 +35,10 @@ namespace lobby {
 
         protected _onFirstOpened(): void {
             this._uiListeners = [
-                { ui: this,        callback: this._onResize, eventType: egret.Event.RESIZE },
-                { ui: this._imgBg, callback: () => Utility.Logger.log("asdf") },
+                { ui: this, callback: this._onResize, eventType: egret.Event.RESIZE },
+            ];
+            this._notifyListeners = [
+                { name: Utility.Notify.Type.SLogout, callback: this._onNotifySLogout },
             ];
             this.addEventListener(egret.Event.RESIZE, this._onResize, this);
         }
@@ -43,6 +48,10 @@ namespace lobby {
             this._group2.height = (this.height - 40 - 90) / 2;
             this._group3.height = (this.height - 40 - 90) / 2;
             this._group4.height = (this.height - 40 - 90) / 2;
+        }
+
+        private _onNotifySLogout(e: egret.Event): void {
+            LobbyPanel.destroy();
         }
     }
 }

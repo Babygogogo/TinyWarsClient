@@ -153,6 +153,10 @@
         "errorCode": {
           "type": "uint32",
           "id": 1
+        },
+        "reason": {
+          "type": "uint32",
+          "id": 2
         }
       }
     },

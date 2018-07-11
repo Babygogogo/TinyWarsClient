@@ -1,7 +1,8 @@
 
 namespace Network {
     export namespace Manager {
-        import Logger = Utility.Logger; // for convenience
+        import Logger = Utility.Logger;
+        import Notify = Utility.Notify;
 
         ////////////////////////////////////////////////////////////////////////////////
         // Constants.
@@ -85,6 +86,12 @@ namespace Network {
                 socket.disconnect();
             }
             socket = io(SERVER_ADDRESS);
+            socket.on("connect", () => {
+                Notify.dispatch(Notify.Type.NetworkConnected);
+            });
+            socket.on("disconnect", () => {
+                Notify.dispatch(Notify.Type.NetworkDisconnected);
+            });
             socket.on("message", (data: ReceivedData) => {
                 dispatcher.dispatchWithContainer(containerClass.decode(getDataForDecode(data)));
             });

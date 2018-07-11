@@ -2,8 +2,12 @@
 namespace Utility {
     export namespace Notify {
         export const Type = {
+            NetworkConnected   : "",
+            NetworkDisconnected: "",
+
             SLogin   : "",
             SRegister: "",
+            SLogout  : "",
         }
         for (const k in Type) {
             Type[k] = k;

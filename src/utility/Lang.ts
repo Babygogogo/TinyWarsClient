@@ -11,7 +11,7 @@ namespace Utility {
             B00, // 各种提示
         }
         export const enum SubType {
-            S00, S01, S02, S03, S04,
+            S00, S01, S02, S03, S04, S05, S06
         }
 
         const LangData: string[][][] = [
@@ -35,6 +35,14 @@ namespace Utility {
                 [ // 00-04
                     "注册成功，正在自动登陆…",
                     "Register successfully! Now logging in...",
+                ],
+                [ // 00-05
+                    "您已成功退出登陆，欢迎再次进入游戏。",
+                    "Logout successfully.",
+                ],
+                [ // 00-06
+                    "您的账号被异地登陆，您已自动下线。",
+                    "Someone logged in with your account!",
                 ],
             ],
         ];

@@ -16,14 +16,17 @@ namespace Login {
         private static _instance: LoginPanel;
 
         public static create(): void {
-            egret.assert(!LoginPanel._instance);
-            LoginPanel._instance = new LoginPanel();
-            LoginPanel._instance.open();
+            if (!LoginPanel._instance) {
+                LoginPanel._instance = new LoginPanel();
+                LoginPanel._instance.open();
+            }
         }
 
         public static destroy(): void {
-            LoginPanel._instance.close();
-            delete LoginPanel._instance;
+            if (LoginPanel._instance) {
+                LoginPanel._instance.close();
+                delete LoginPanel._instance;
+            }
         }
 
         private constructor() {

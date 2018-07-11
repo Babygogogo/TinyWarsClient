@@ -850,6 +850,9 @@ namespace Network {
 
             /** S_Logout errorCode */
             errorCode?: (number | null);
+
+            /** S_Logout reason */
+            reason?: (number | null);
         }
 
         /** Represents a S_Logout. */
@@ -866,6 +869,9 @@ namespace Network {
 
             /** S_Logout errorCode. */
             public errorCode: number;
+
+            /** S_Logout reason. */
+            public reason: number;
 
             /**
              * Creates a new S_Logout instance using the specified properties.

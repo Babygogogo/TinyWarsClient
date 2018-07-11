@@ -7,14 +7,17 @@ namespace Login {
         private static _instance: LoginBackgroundPanel;
 
         public static create(): void {
-            egret.assert(!LoginBackgroundPanel._instance);
-            LoginBackgroundPanel._instance = new LoginBackgroundPanel();
-            LoginBackgroundPanel._instance.open();
+            if (!LoginBackgroundPanel._instance) {
+                LoginBackgroundPanel._instance = new LoginBackgroundPanel();
+                LoginBackgroundPanel._instance.open();
+            }
         }
 
         public static destroy(): void {
-            LoginBackgroundPanel._instance.close();
-            delete LoginBackgroundPanel._instance;
+            if (LoginBackgroundPanel._instance) {
+                LoginBackgroundPanel._instance.close();
+                delete LoginBackgroundPanel._instance;
+            }
         }
 
         private constructor() {

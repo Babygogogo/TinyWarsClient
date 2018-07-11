@@ -26,5 +26,10 @@ namespace Utility {
             Blue,
             White,
         }
+
+        export const enum LogoutType {
+            SelfRequest,
+            LoginCollision,
+        }
     }
 }

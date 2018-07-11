@@ -11,20 +11,20 @@
 		"libs/modules/ProtobufJs/ProtobufJs.js"
 	],
 	"game": [
+		"bin-debug/utility/Notify.js",
 		"bin-debug/network/NetErrorCode.js",
 		"bin-debug/utility/Logger.js",
 		"bin-debug/network/NetMessageCodes.js",
 		"bin-debug/gameui/UiPanel.js",
-		"bin-debug/network/NetMessageProto.js",
 		"bin-debug/network/NetManager.js",
 		"bin-debug/utility/Helpers.js",
 		"bin-debug/utility/Lang.js",
 		"bin-debug/utility/Types.js",
-		"bin-debug/utility/Notify.js",
+		"bin-debug/network/NetMessageProto.js",
 		"bin-debug/utility/FloatText.js",
 		"bin-debug/modules/login/view/LoginBackgroundPanel.js",
 		"bin-debug/modules/login/view/LoginPanel.js",
-		"bin-debug/Platform.js",
+		"bin-debug/modules/login/view/RegisterPanel.js",
 		"bin-debug/modules/user/UserModel.js",
 		"bin-debug/gameui/UiButton.js",
 		"bin-debug/gameui/UiImage.js",
@@ -37,6 +37,6 @@
 		"bin-debug/modules/login/model/LoginProxy.js",
 		"bin-debug/utility/ResManager.js",
 		"bin-debug/utility/StageManager.js",
-		"bin-debug/modules/login/view/RegisterPanel.js"
+		"bin-debug/Platform.js"
 	]
 }

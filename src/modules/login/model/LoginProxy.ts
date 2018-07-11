@@ -11,6 +11,7 @@ namespace Login {
             NetManager.addListeners(
                 { actionCode: ActionCode.S_Login,    callback: _onSLogin,    thisObject: LoginProxy },
                 { actionCode: ActionCode.S_Register, callback: _onSRegister, thisObject: LoginProxy },
+                { actionCode: ActionCode.S_Logout,   callback: _onSLogout,   thisObject: LoginProxy },
             );
         }
 
@@ -41,6 +42,18 @@ namespace Login {
             const data = e.data as Proto.IS_Register;
             if (!data.errorCode) {
                 Notify.dispatch(NotifyType.SRegister, data);
+            }
+        }
+
+        export function reqLogout(): void {
+            NetManager.send({
+                actionCode: ActionCode.C_Logout,
+            });
+        }
+        function _onSLogout(e: egret.Event): void {
+            const data = e.data as Proto.IS_Logout;
+            if (!data.errorCode) {
+                Notify.dispatch(NotifyType.SLogout, data);
             }
         }
     }
