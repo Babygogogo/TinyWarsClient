@@ -5,9 +5,10 @@ namespace Utility {
             NetworkConnected   : "",
             NetworkDisconnected: "",
 
-            SLogin   : "",
-            SRegister: "",
-            SLogout  : "",
+            SLogin    : "",
+            SRegister : "",
+            SLogout   : "",
+            SHeartbeat: "",
         }
         for (const k in Type) {
             Type[k] = k;

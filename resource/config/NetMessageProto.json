@@ -49,6 +49,10 @@
         "actionCode": {
           "type": "uint32",
           "id": 0
+        },
+        "counter": {
+          "type": "uint32",
+          "id": 1
         }
       }
     },
@@ -57,6 +61,18 @@
         "actionCode": {
           "type": "uint32",
           "id": 0
+        },
+        "errorCode": {
+          "type": "uint32",
+          "id": 1
+        },
+        "counter": {
+          "type": "uint32",
+          "id": 2
+        },
+        "timestamp": {
+          "type": "uint32",
+          "id": 3
         }
       }
     },

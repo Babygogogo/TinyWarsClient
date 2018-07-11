@@ -151,6 +151,9 @@ namespace Network {
 
             /** C_Heartbeat actionCode */
             actionCode?: (number | null);
+
+            /** C_Heartbeat counter */
+            counter?: (number | null);
         }
 
         /** Represents a C_Heartbeat. */
@@ -164,6 +167,9 @@ namespace Network {
 
             /** C_Heartbeat actionCode. */
             public actionCode: number;
+
+            /** C_Heartbeat counter. */
+            public counter: number;
 
             /**
              * Creates a new C_Heartbeat instance using the specified properties.
@@ -241,6 +247,15 @@ namespace Network {
 
             /** S_Heartbeat actionCode */
             actionCode?: (number | null);
+
+            /** S_Heartbeat errorCode */
+            errorCode?: (number | null);
+
+            /** S_Heartbeat counter */
+            counter?: (number | null);
+
+            /** S_Heartbeat timestamp */
+            timestamp?: (number | null);
         }
 
         /** Represents a S_Heartbeat. */
@@ -254,6 +269,15 @@ namespace Network {
 
             /** S_Heartbeat actionCode. */
             public actionCode: number;
+
+            /** S_Heartbeat errorCode. */
+            public errorCode: number;
+
+            /** S_Heartbeat counter. */
+            public counter: number;
+
+            /** S_Heartbeat timestamp. */
+            public timestamp: number;
 
             /**
              * Creates a new S_Heartbeat instance using the specified properties.

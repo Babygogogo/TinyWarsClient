@@ -10,9 +10,7 @@ namespace User {
 
         export function init(): void {
             Notify.addEventListeners([
-                { name: Notify.Type.NetworkConnected,    callback: _onNotifyNetworkConnected,    thisObject: UserModel },
-                { name: Notify.Type.NetworkDisconnected, callback: _onNotifyNetworkDisconnected, thisObject: UserModel },
-                { name: Notify.Type.SLogout,             callback: _onNotifySLogout,             thisObject: UserModel },
+                { name: Notify.Type.SLogout, callback: _onNotifySLogout, thisObject: UserModel },
             ]);
         }
 
@@ -27,16 +25,6 @@ namespace User {
 
         export function getUserPrivilege(): number {
             return userPrivilege;
-        }
-
-        function _onNotifyNetworkConnected(e: egret.Event): void {
-            // TODO
-            Utility.FloatText.show("AAAAAAAAAA");
-        }
-
-        function _onNotifyNetworkDisconnected(e: egret.Event): void {
-            // TODO
-            Utility.FloatText.show("BBBBBBBBBBBB");
         }
 
         function _onNotifySLogout(e: egret.Event): void {

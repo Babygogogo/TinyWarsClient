@@ -11,7 +11,7 @@ namespace Utility {
             B00, // 各种提示
         }
         export const enum SubType {
-            S00, S01, S02, S03, S04, S05, S06
+            S00, S01, S02, S03, S04, S05, S06, S07, S08, S09,
         }
 
         const LangData: string[][][] = [
@@ -43,6 +43,14 @@ namespace Utility {
                 [ // 00-06
                     "您的账号被异地登陆，您已自动下线。",
                     "Someone logged in with your account!",
+                ],
+                [ // 00-07
+                    "已成功连接服务器。",
+                    "Connected to server successfully.",
+                ],
+                [ // 00-08
+                    "连接服务器失败，正在重新连接…",
+                    "Failed to connect to server. Now reconnecting...",
                 ],
             ],
         ];
