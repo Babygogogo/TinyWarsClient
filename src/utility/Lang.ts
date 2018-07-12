@@ -52,6 +52,10 @@ namespace Utility {
                     "连接服务器失败，正在重新连接…",
                     "Failed to connect to server. Now reconnecting...",
                 ],
+                [ // 00-09
+                    "您的网络连接不稳定，请尝试改善",
+                    "The network connection is not stable.",
+                ],
             ],
         ];
 

@@ -1,8 +1,10 @@
 
 namespace Network {
     export namespace Manager {
-        import Logger = Utility.Logger;
-        import Notify = Utility.Notify;
+        import Logger    = Utility.Logger;
+        import Notify    = Utility.Notify;
+        import FloatText = Utility.FloatText;
+        import Lang      = Utility.Lang;
 
         ////////////////////////////////////////////////////////////////////////////////
         // Constants.
@@ -27,7 +29,7 @@ namespace Network {
                 const action = container[name];
                 Logger.log("NetManager receive: ", name, action);
                 if (action.errorCode) {
-                    Utility.FloatText.show(Utility.Lang.getNetErrorText(action.errorCode));
+                    FloatText.show(Utility.Lang.getNetErrorText(action.errorCode));
                 }
                 this.dispatchEventWith(name, false, action);
             }
@@ -77,21 +79,38 @@ namespace Network {
                 }
             });
 
-            resetSocket();
+            initSocket();
         }
 
-        export function resetSocket(): void {
+        function initSocket(): void {
             if (socket) {
                 socket.removeAllListeners();
                 socket.disconnect();
             }
             socket = io(SERVER_ADDRESS);
+
             socket.on("connect", () => {
+                FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S07));
                 Notify.dispatch(Notify.Type.NetworkConnected);
             });
-            socket.on("disconnect", () => {
-                Notify.dispatch(Notify.Type.NetworkDisconnected);
+
+            socket.on("connect_error", () => {
+                FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S08) + "connect_error");
             });
+
+            socket.on("error", () => {
+                FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S08) + "error");
+            });
+
+            socket.on("disconnect", (reason: string) => {
+                FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S08) + "disconnect: " + reason);
+                Notify.dispatch(Notify.Type.NetworkDisconnected);
+
+                if (reason === 'io server disconnect') {
+                    socket.connect();
+                }
+            });
+
             socket.on("message", (data: ReceivedData) => {
                 dispatcher.dispatchWithContainer(containerClass.decode(getDataForDecode(data)));
             });
@@ -117,13 +136,10 @@ namespace Network {
                 Logger.error("NetManager.send() failed to find the msgName with code: ", code);
             } else {
                 Logger.log("NetManager send: ", name, action);
-                socket.emit(
-                    "message",
-                    containerClass.encode({
-                        actionCode: code,
-                        [name]    : action,
-                    }).finish()
-                );
+                socket.send(containerClass.encode({
+                    actionCode: code,
+                    [name]    : action,
+                }).finish());
             }
         }
     }

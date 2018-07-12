@@ -4,6 +4,7 @@ namespace Utility {
         export const Type = {
             NetworkConnected   : "",
             NetworkDisconnected: "",
+            TimeTick           : "",
 
             SLogin    : "",
             SRegister : "",
