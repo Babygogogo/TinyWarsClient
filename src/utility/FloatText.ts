@@ -1,9 +1,10 @@
 
 namespace Utility {
     export namespace FloatText {
-        const DURATION_IN_MS = 2000;
-        const START_Y        = 120;
-        const END_Y          = 0;
+        const SHOW_TIME_MS = 3000;
+        const LOCK_TIME_MS = 480;
+        const START_Y      = 120;
+        const END_Y        = 0;
 
         const dataList        : string[] = [];
         let   timeoutIdForLock: number;
@@ -17,7 +18,7 @@ namespace Utility {
 
         function showFloatText(): void {
             if ((dataList.length > 0) && (timeoutIdForLock == null)) {
-                timeoutIdForLock = egret.setTimeout(onTimerComplete, FloatText, 320);
+                timeoutIdForLock = egret.setTimeout(onTimerComplete, FloatText, LOCK_TIME_MS);
 
                 const floatText = new UiFloatText(dataList.splice(0, 1)[0]);
                 StageManager.getLayer(Types.LayerType.Notify).addChild(floatText);
@@ -26,10 +27,10 @@ namespace Utility {
                 floatText.scaleY = 0.5;
                 egret.Tween.get(floatText)
                     .to({ scaleX: 1, scaleY: 1 }, 100)
-                    .wait(DURATION_IN_MS - 100 - 100)
+                    .wait(SHOW_TIME_MS - 100 - 100)
                     .to({ alpha: 0}, 100);
                 egret.Tween.get(floatText)
-                    .to({ y: END_Y }, DURATION_IN_MS)
+                    .to({ y: END_Y }, SHOW_TIME_MS)
                     .call(() => {
                         (floatText.parent) && (floatText.parent.removeChild(floatText));
                     });

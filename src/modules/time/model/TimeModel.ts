@@ -56,11 +56,7 @@ namespace Time {
             if (!isHeartbeatAnswered) {
                 Utility.FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S09));
             }
-
-            Network.Manager.send({
-                actionCode: Network.Codes.C_Heartbeat,
-                counter   : heartbeatCounter,
-            });
+            TimeProxy.reqHeartbeat(heartbeatCounter);
         }
     }
 }
