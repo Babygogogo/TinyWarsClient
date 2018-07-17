@@ -1,5 +1,118 @@
 {
   "nested": {
+    "InstantialCompAttacker": {
+      "fields": {
+        "primaryWeaponCurrentAmmo": {
+          "type": "uint32",
+          "id": 0
+        }
+      }
+    },
+    "InstantialCompAttackable": {
+      "fields": {
+        "currentHp": {
+          "type": "uint32",
+          "id": 0
+        }
+      }
+    },
+    "InstantialCompBuilder": {
+      "fields": {
+        "isBuilding": {
+          "type": "bool",
+          "id": 0
+        },
+        "currentMaterial": {
+          "type": "uint32",
+          "id": 1
+        }
+      }
+    },
+    "InstantialCompBuildable": {
+      "fields": {
+        "currentBuildPoint": {
+          "type": "uint32",
+          "id": 0
+        }
+      }
+    },
+    "InstantialCompCapturer": {
+      "fields": {
+        "isCapturing": {
+          "type": "bool",
+          "id": 0
+        }
+      }
+    },
+    "InstantialCompCapturable": {
+      "fields": {
+        "currentCapturePoint": {
+          "type": "uint32",
+          "id": 0
+        }
+      }
+    },
+    "InstantialCompDiver": {
+      "fields": {
+        "isDiving": {
+          "type": "bool",
+          "id": 0
+        }
+      }
+    },
+    "InstantialCompFlareLauncher": {
+      "fields": {
+        "currentAmmo": {
+          "type": "uint32",
+          "id": 0
+        }
+      }
+    },
+    "InstantialCompMovable": {
+      "fields": {
+        "currentFuel": {
+          "type": "uint32",
+          "id": 0
+        }
+      }
+    },
+    "InstantialCompGridIndexable": {
+      "fields": {
+        "x": {
+          "type": "uint32",
+          "id": 0
+        },
+        "y": {
+          "type": "uint32",
+          "id": 1
+        }
+      }
+    },
+    "InstantialCompPromotable": {
+      "fields": {
+        "currentPromotion": {
+          "type": "uint32",
+          "id": 0
+        }
+      }
+    },
+    "InstantialCompProducer": {
+      "fields": {
+        "currentMaterial": {
+          "type": "uint32",
+          "id": 0
+        }
+      }
+    },
+    "InstantialCompLoader": {
+      "fields": {
+        "loadedUnitIds": {
+          "rule": "repeated",
+          "type": "uint32",
+          "id": 0
+        }
+      }
+    },
     "Container": {
       "fields": {
         "actionCode": {
