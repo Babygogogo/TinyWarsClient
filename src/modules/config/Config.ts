@@ -3,8 +3,9 @@ namespace Config {
     import TileType     = Utility.Types.TileType;
     import UnitType     = Utility.Types.UnitType;
     import UnitCategory = Utility.Types.UnitCategory;
+    import TileCategory = Utility.Types.TileCategory;
 
-    const raw = {
+    const ORIGINAL_CONFIG = {
         maxPromotion  : 3,
         promotionBonus: [
             {attack: 0,  defense: 0 },
@@ -13,7 +14,9 @@ namespace Config {
             {attack: 20, defense: 20},
         ],
 
-        categories: {
+        unitCategories: {
+            [UnitCategory.None]: [
+            ],
             [UnitCategory.All]: [
                 UnitType.Infantry,   UnitType.Mech,         UnitType.Bike,            UnitType.Recon,
                 UnitType.Flare,      UnitType.AntiAir,      UnitType.Tank,            UnitType.MediumTank,
@@ -62,8 +65,6 @@ namespace Config {
                 UnitType.Artillery, UnitType.AntiTank, UnitType.Rockets, UnitType.Missiles,
                 UnitType.Battleship,
             ],
-            [UnitCategory.None]: [
-            ],
             [UnitCategory.Foot]: [
                 UnitType.Infantry, UnitType.Mech,
             ],
@@ -99,9 +100,26 @@ namespace Config {
             ],
         },
 
+        tileCategories: {
+            [TileCategory.None]: [
+            ],
+            [TileCategory.All]: [
+                TileType.Plain,        TileType.River,       TileType.Sea,          TileType.Beach,
+                TileType.Road,         TileType.Bridge,      TileType.Wood,         TileType.Mountain,
+                TileType.Wasteland,    TileType.Ruins,       TileType.Fire,         TileType.Rough,
+                TileType.Mist,         TileType.Reef,        TileType.Plasma,       TileType.Meteor,
+                TileType.Silo,         TileType.EmptySilo,   TileType.Headquarters, TileType.City,
+                TileType.CommandTower, TileType.Radar,       TileType.Factory,      TileType.Airport,
+                TileType.Seaport,      TileType.TempAirport, TileType.TempSeaport,  TileType.GreenPlasma,
+            ],
+            [TileCategory.LoadableForSeaTransports]: [
+                TileType.Beach, TileType.Seaport, TileType.TempSeaport,
+            ],
+        },
+
         tileTemplate: {
         },
     };
-    const config: Readonly<typeof raw> = raw;
+    const CONFIG: Readonly<typeof ORIGINAL_CONFIG> = ORIGINAL_CONFIG;
 
 }

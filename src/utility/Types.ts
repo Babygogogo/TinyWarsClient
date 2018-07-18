@@ -14,14 +14,14 @@ namespace Utility {
         }
 
         export type TemplateTile = {
-            defenseAmount        : number;
-            defenseTargetCategory: UnitCategory;
+            defenseAmount      : number;
+            defenseUnitCategory: UnitCategory;
 
-            moveCosts: {[moveType: number]: number};
+            moveCosts: { [moveType: number]: number | undefined };
 
-            maxBuildPoint    : number;
+            maxBuildPoint: number;
 
-            hideTargetCategory: UnitCategory;
+            hideUnitCategory: UnitCategory;
 
             visionRange          : number;
             isVisionEnabledForAll: boolean;
@@ -33,12 +33,12 @@ namespace Utility {
             maxCapturePoint  : number;
             isDefeatOnCapture: boolean;
 
-            repairAmount        : number;
-            repairTargetCategory: UnitCategory;
+            repairAmount      : number;
+            repairUnitCategory: UnitCategory;
 
             income: number;
 
-            produceTargetCategory: UnitCategory;
+            produceUnitCategory: UnitCategory;
 
             globalAttackBonus : number;
             globalDefenseBonus: number;
@@ -51,8 +51,83 @@ namespace Utility {
 
             currentCapturePoint: number;
 
-            gridX: number;
-            gridY: number;
+            gridIndex: number;
+        }
+
+        export type TemplateUnit = {
+            minAttackRange        : number;
+            maxAttackRange        : number;
+            canAttackAfterMove    : boolean;
+            canAttackDivingUnits  : boolean;
+            primaryWeaponMaxAmmo  : number;
+            primaryWeaponDamages  : { [armorType: number]: number | undefined };
+            secondaryWeaponDamages: { [armorType: number]: number | undefined };
+
+            maxHp           : number;
+            armorType       : ArmorType;
+            isAffectedByLuck: boolean;
+
+            moveType : MoveType;
+            moveRange: number;
+
+            maxFuel               : number;
+            fuelConsumptionPerTurn: number;
+            isDestroyedOnOutOfFuel: boolean;
+
+            canLaunchSilo: boolean;
+
+            productionCost: number;
+
+            visionRange       : number;
+            visionBonusOnTiles: { [tileType: number]: number };
+
+            flareMaxAmmo : number;
+            flareMaxRange: number;
+            flareRadius  : number;
+
+            canSupplyAdjacentUnits: boolean;
+
+            buildTiles      : { [tileType: number]: TileType };
+            maxBuildMaterial: number;
+
+            maxLoadUnitsCount         : number;
+            loadUnitCategory          : UnitCategory;
+            loadableTileCategory      : TileCategory;
+            canLaunchLoadedUnits      : boolean;
+            canDropLoadedUnits        : boolean;
+            canSupplyLoadedUnits      : boolean;
+            repairAmountForLoadedUnits: number;
+
+            produceUnitType   : UnitType;
+            maxProduceMaterial: number;
+
+            fuelConsumptionInDiving: number;
+        }
+
+        export type InstantialUnit = {
+            primaryWeaponCurrentAmmo: number;
+
+            currentHp: number;
+
+            isCapturingTile: boolean;
+
+            isDiving: boolean;
+
+            flareCurrentAmmo: number;
+
+            currentFuel: number;
+
+            gridIndex: number;
+
+            currentBuildMaterial: number;
+
+            currentProduceMaterial: number;
+
+            currentPromotion: number;
+
+            isBuildingTile: number;
+
+            loadedUnitIds: number[];
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -111,6 +186,10 @@ namespace Utility {
             Indirect,      /* 8 */            Foot,          /* 9 */            Infantry,      /* 10 */           Vehicle,       /* 11 */
             DirectMachine, /* 12 */           Transport,     /* 13 */           LargeNavel,    /* 14 */           Copter,        /* 15 */
             Tank,          /* 16 */           CommonAir,     /* 17 */
+        }
+
+        export const enum TileCategory {
+            None,              /* 0 */            All,               /* 1 */            LoadableForSeaTransports, /* 2 */
         }
 
         export const enum ArmorType {
