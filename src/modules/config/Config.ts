@@ -5,15 +5,6 @@ namespace Config {
     import UnitCategory = Utility.Types.UnitCategory;
 
     const raw = {
-        maxCapturePoint           : 20,
-        maxBuildPoint             : 20,
-        unitMaxHP                 : 100,
-        tileMaxHP                 : 99,
-        incomePerTurn             : 1000,
-        commandTowerAttackBonus   : 5,
-        commandTowerDefenseBonus  : 5,
-        baseNormalizedRepairAmount: 2,
-
         maxPromotion  : 3,
         promotionBonus: [
             {attack: 0,  defense: 0 },
@@ -101,6 +92,10 @@ namespace Config {
             ],
             [UnitCategory.Tank]: [
                 UnitType.Tank, UnitType.MediumTank, UnitType.WarTank,
+            ],
+            [UnitCategory.CommonAir]: [
+                UnitType.Fighter,         UnitType.Bomber, UnitType.Duster, UnitType.BattleCopter,
+                UnitType.TransportCopter,
             ],
         },
 
