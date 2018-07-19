@@ -19,29 +19,29 @@ namespace Utility {
 
             moveCosts: { [moveType: number]: number | undefined };
 
-            maxBuildPoint: number;
+            maxBuildPoint?: number;
 
-            hideUnitCategory: UnitCategory;
+            hideUnitCategory?: UnitCategory;
 
-            visionRange          : number;
-            isVisionEnabledForAll: boolean;
+            visionRange          ?: number;
+            isVisionEnabledForAll?: boolean;
 
-            maxHp           : number;
-            armorType       : ArmorType;
-            isAffectedByLuck: boolean;
+            maxHp           ?: number;
+            armorType       ?: ArmorType;
+            isAffectedByLuck?: boolean;
 
-            maxCapturePoint  : number;
-            isDefeatOnCapture: boolean;
+            maxCapturePoint  ?: number;
+            isDefeatOnCapture?: boolean;
 
-            repairAmount      : number;
-            repairUnitCategory: UnitCategory;
+            repairAmount      ?: number;
+            repairUnitCategory?: UnitCategory;
 
-            income: number;
+            incomePerTurn?: number;
 
-            produceUnitCategory: UnitCategory;
+            produceUnitCategory?: UnitCategory;
 
-            globalAttackBonus : number;
-            globalDefenseBonus: number;
+            globalAttackBonus ?: number;
+            globalDefenseBonus?: number;
         }
 
         export type InstantialTile = {
@@ -160,14 +160,28 @@ namespace Utility {
             Tank,      /* 4 */            Air,       /* 5 */            Ship,      /* 6 */            Transport, /* 7 */
         }
 
+        export const enum TileBaseType {
+            Plain,        /* 0 */       River,         /* 1 */      Sea,           /* 2 */      Beach,        /* 3 */
+        }
+
+        export const enum TileObjectType {
+            Road,         /* 0 */       Bridge,        /* 1 */      Wood,          /* 2 */      Mountain,     /* 3 */
+            Wasteland,    /* 4 */       Ruins,         /* 5 */      Fire,          /* 6 */      Rough,        /* 7 */
+            Mist,         /* 8 */       Reef,          /* 9 */      Plasma,        /* 10 */     Meteor,       /* 11 */
+            Silo,         /* 12 */      EmptySilo,     /* 13 */     Headquarters,  /* 14 */     City,         /* 15 */
+            CommandTower, /* 16 */      Radar,         /* 17 */     Factory,       /* 18 */     Airport,      /* 19 */
+            Seaport,      /* 20 */      TempAirport,   /* 21 */     TempSeaport,   /* 22 */     GreenPlasma,  /* 23 */
+        }
+
         export const enum TileType {
-            Plain,        /* 0 */            River,        /* 1 */            Sea,          /* 2 */            Beach,        /* 3 */
-            Road,         /* 4 */            Bridge,       /* 5 */            Wood,         /* 6 */            Mountain,     /* 7 */
-            Wasteland,    /* 8 */            Ruins,        /* 9 */            Fire,         /* 10 */           Rough,        /* 11 */
-            Mist,         /* 12 */           Reef,         /* 13 */           Plasma,       /* 14 */           Meteor,       /* 15 */
-            Silo,         /* 16 */           EmptySilo,    /* 17 */           Headquarters, /* 18 */           City,         /* 19 */
-            CommandTower, /* 20 */           Radar,        /* 21 */           Factory,      /* 22 */           Airport,      /* 23 */
-            Seaport,      /* 24 */           TempAirport,  /* 25 */           TempSeaport,  /* 26 */           GreenPlasma,  /* 27 */
+            Plain,         /* 0 */      River,         /* 1 */      Sea,           /* 2 */      Beach,         /* 3 */
+            Road,          /* 4 */      BridgeOnPlain, /* 5 */      BridgeOnRiver, /* 6 */      BridgeOnBeach, /* 7 */
+            BridgeOnSea,   /* 8 */      Wood,          /* 9 */      Mountain,      /* 10 */     Wasteland,     /* 11 */
+            Ruins,         /* 12 */     Fire,          /* 13 */     Rough,         /* 14 */     Mist,          /* 15 */
+            Reef,          /* 16 */     Plasma,        /* 17 */     Meteor,        /* 18 */     Silo,          /* 19 */
+            EmptySilo,     /* 20 */     Headquarters,  /* 21 */     City,          /* 22 */     CommandTower,  /* 23 */
+            Radar,         /* 24 */     Factory,       /* 25 */     Airport,       /* 26 */     Seaport,       /* 27 */
+            TempAirport,   /* 28 */     TempSeaport,   /* 29 */     GreenPlasma,   /* 30 */
         }
 
         export const enum UnitType {
