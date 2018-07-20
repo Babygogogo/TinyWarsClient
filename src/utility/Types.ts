@@ -58,13 +58,13 @@ namespace Utility {
         }
 
         export type TemplateUnit = {
-            minAttackRange        : number;
-            maxAttackRange        : number;
-            canAttackAfterMove    : boolean;
-            canAttackDivingUnits  : boolean;
-            primaryWeaponMaxAmmo  : number;
-            primaryWeaponDamages  : { [armorType: number]: number | undefined };
-            secondaryWeaponDamages: { [armorType: number]: number | undefined };
+            minAttackRange        ?: number;
+            maxAttackRange        ?: number;
+            canAttackAfterMove    ?: boolean;
+            canAttackDivingUnits  ?: boolean;
+            primaryWeaponMaxAmmo  ?: number;
+            primaryWeaponDamages  ?: { [armorType: number]: number | undefined };
+            secondaryWeaponDamages?: { [armorType: number]: number | undefined };
 
             maxHp           : number;
             armorType       : ArmorType;
@@ -77,34 +77,36 @@ namespace Utility {
             fuelConsumptionPerTurn: number;
             isDestroyedOnOutOfFuel: boolean;
 
-            canLaunchSilo: boolean;
+            canCaptureTile?: boolean;
+
+            canLaunchSilo?: boolean;
 
             productionCost: number;
 
-            visionRange       : number;
-            visionBonusOnTiles: { [tileType: number]: number };
+            visionRange        : number;
+            visionBonusOnTiles?: { [tileType: number]: number };
 
-            flareMaxAmmo : number;
-            flareMaxRange: number;
-            flareRadius  : number;
+            flareMaxAmmo ?: number;
+            flareMaxRange?: number;
+            flareRadius  ?: number;
 
-            canSupplyAdjacentUnits: boolean;
+            canSupplyAdjacentUnits?: boolean;
 
-            buildTiles      : { [tileType: number]: TileType };
-            maxBuildMaterial: number;
+            buildTiles      ?: { [tileType: number]: TileType };
+            maxBuildMaterial?: number;
 
-            maxLoadUnitsCount         : number;
-            loadUnitCategory          : UnitCategory;
-            loadableTileCategory      : TileCategory;
-            canLaunchLoadedUnits      : boolean;
-            canDropLoadedUnits        : boolean;
-            canSupplyLoadedUnits      : boolean;
-            repairAmountForLoadedUnits: number;
+            maxLoadUnitsCount         ?: number;
+            loadUnitCategory          ?: UnitCategory;
+            loadableTileCategory      ?: TileCategory;
+            canLaunchLoadedUnits      ?: boolean;
+            canDropLoadedUnits        ?: boolean;
+            canSupplyLoadedUnits      ?: boolean;
+            repairAmountForLoadedUnits?: number;
 
-            produceUnitType   : UnitType;
-            maxProduceMaterial: number;
+            produceUnitType   ?: UnitType;
+            maxProduceMaterial?: number;
 
-            fuelConsumptionInDiving: number;
+            fuelConsumptionInDiving?: number;
         }
 
         export type InstantialUnit = {

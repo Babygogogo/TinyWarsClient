@@ -14,6 +14,7 @@ namespace Config {
         unitCategories: { [unitCategory: number]: UnitType[] };
         tileCategories: { [tileCategory: number]: TileType[] };
         templateTile  : { [tileType: number]: Types.TemplateTile };
+        templateUnit  : { [unitType: number]: Types.TemplateUnit };
     }
 
     const ORIGINAL_CONFIG: GameConfig = {
@@ -536,6 +537,135 @@ namespace Config {
                 isVisionEnabledForAllPlayers: false,
 
                 hideUnitCategory: UnitCategory.GroundOrNaval,
+            },
+        },
+
+        templateUnit: {
+            [UnitType.Infantry]: {
+                minAttackRange        : 1,
+                maxAttackRange        : 1,
+                canAttackAfterMove    : true,
+                canAttackDivingUnits  : false,
+                secondaryWeaponDamages: {
+                    [ArmorType.Infantry]       : 55,            [ArmorType.Mech]      : 45,             [ArmorType.Bike]        : 45,
+                    [ArmorType.Recon]          : 12,            [ArmorType.Flare]     : 10,             [ArmorType.AntiAir]     : 3,
+                    [ArmorType.Tank]           : 5,             [ArmorType.MediumTank]: 5,              [ArmorType.WarTank]     : 1,
+                    [ArmorType.Artillery]      : 10,            [ArmorType.AntiTank]  : 30,             [ArmorType.Rockets]     : 20,
+                    [ArmorType.Missiles]       : 20,            [ArmorType.Rig]       : 14,             [ArmorType.Fighter]     : undefined,
+                    [ArmorType.Bomber]         : undefined,     [ArmorType.Duster]    : undefined,      [ArmorType.BattleCopter]: 8,
+                    [ArmorType.TransportCopter]: 30,            [ArmorType.Seaplane]  : undefined,      [ArmorType.Battleship]  : undefined,
+                    [ArmorType.Carrier]        : undefined,     [ArmorType.Submarine] : undefined,      [ArmorType.Cruiser]     : undefined,
+                    [ArmorType.Lander]         : undefined,     [ArmorType.Gunboat]   : undefined,      [ArmorType.Meteor]      : 1,
+                },
+
+                maxHp           : 100,
+                armorType       : ArmorType.Infantry,
+                isAffectedByLuck: true,
+
+                moveRange: 3,
+                moveType : MoveType.Infantry,
+
+                maxFuel               : 99,
+                fuelConsumptionPerTurn: 0,
+                isDestroyedOnOutOfFuel: false,
+
+                canCaptureTile: true,
+
+                canLaunchSilo: true,
+
+                productionCost: 1500,
+
+                visionRange: 2,
+                visionBonusOnTiles: {
+                    [TileType.Mountain]: 3,
+                },
+            },
+            [UnitType.Mech]: {
+                minAttackRange      : 1,
+                maxAttackRange      : 1,
+                canAttackAfterMove  : true,
+                canAttackDivingUnits: false,
+                primaryWeaponMaxAmmo: 3,
+                primaryWeaponDamages: {
+                    [ArmorType.Infantry]       : undefined,     [ArmorType.Mech]      : undefined,      [ArmorType.Bike]        : undefined,
+                    [ArmorType.Recon]          : 85,            [ArmorType.Flare]     : 80,             [ArmorType.AntiAir]     : 55,
+                    [ArmorType.Tank]           : 55,            [ArmorType.MediumTank]: 25,             [ArmorType.WarTank]     : 15,
+                    [ArmorType.Artillery]      : 70,            [ArmorType.AntiTank]  : 55,             [ArmorType.Rockets]     : 85,
+                    [ArmorType.Missiles]       : 85,            [ArmorType.Rig]       : 75,             [ArmorType.Fighter]     : undefined,
+                    [ArmorType.Bomber]         : undefined,     [ArmorType.Duster]    : undefined,      [ArmorType.BattleCopter]: undefined,
+                    [ArmorType.TransportCopter]: undefined,     [ArmorType.Seaplane]  : undefined,      [ArmorType.Battleship]  : undefined,
+                    [ArmorType.Carrier]        : undefined,     [ArmorType.Submarine] : undefined,      [ArmorType.Cruiser]     : undefined,
+                    [ArmorType.Lander]         : undefined,     [ArmorType.Gunboat]   : undefined,      [ArmorType.Meteor]      : 15,
+                },
+                secondaryWeaponDamages: {
+                    [ArmorType.Infantry]       : 65,            [ArmorType.Mech]      : 55,             [ArmorType.Bike]        : 55,
+                    [ArmorType.Recon]          : 18,            [ArmorType.Flare]     : 15,             [ArmorType.AntiAir]     : 5,
+                    [ArmorType.Tank]           : 8,             [ArmorType.MediumTank]: 5,              [ArmorType.WarTank]     : 1,
+                    [ArmorType.Artillery]      : 15,            [ArmorType.AntiTank]  : 35,             [ArmorType.Rockets]     : 35,
+                    [ArmorType.Missiles]       : 35,            [ArmorType.Rig]       : 20,             [ArmorType.Fighter]     : undefined,
+                    [ArmorType.Bomber]         : undefined,     [ArmorType.Duster]    : undefined,      [ArmorType.BattleCopter]: 12,
+                    [ArmorType.TransportCopter]: 35,            [ArmorType.Seaplane]  : undefined,      [ArmorType.Battleship]  : undefined,
+                    [ArmorType.Carrier]        : undefined,     [ArmorType.Submarine] : undefined,      [ArmorType.Cruiser]     : undefined,
+                    [ArmorType.Lander]         : undefined,     [ArmorType.Gunboat]   : undefined,      [ArmorType.Meteor]      : 1,
+                },
+
+                maxHp           : 100,
+                armorType       : ArmorType.Mech,
+                isAffectedByLuck: true,
+
+                moveRange: 2,
+                moveType : MoveType.Mech,
+
+                maxFuel               : 70,
+                fuelConsumptionPerTurn: 0,
+                isDestroyedOnOutOfFuel: false,
+
+                canCaptureTile: true,
+
+                canLaunchSilo: true,
+
+                productionCost: 2500,
+
+                visionRange: 2,
+                visionBonusOnTiles: {
+                    [TileType.Mountain]: 3,
+                },
+            },
+            [UnitType.Bike]: {
+                minAttackRange        : 1,
+                maxAttackRange        : 1,
+                canAttackAfterMove    : true,
+                canAttackDivingUnits  : false,
+                secondaryWeaponDamages: {
+                    [ArmorType.Infantry]       : 65,            [ArmorType.Mech]      : 55,             [ArmorType.Bike]        : 55,
+                    [ArmorType.Recon]          : 18,            [ArmorType.Flare]     : 15,             [ArmorType.AntiAir]     : 5,
+                    [ArmorType.Tank]           : 8,             [ArmorType.MediumTank]: 5,              [ArmorType.WarTank]     : 1,
+                    [ArmorType.Artillery]      : 15,            [ArmorType.AntiTank]  : 35,             [ArmorType.Rockets]     : 35,
+                    [ArmorType.Missiles]       : 35,            [ArmorType.Rig]       : 20,             [ArmorType.Fighter]     : undefined,
+                    [ArmorType.Bomber]         : undefined,     [ArmorType.Duster]    : undefined,      [ArmorType.BattleCopter]: 12,
+                    [ArmorType.TransportCopter]: 35,            [ArmorType.Seaplane]  : undefined,      [ArmorType.Battleship]  : undefined,
+                    [ArmorType.Carrier]        : undefined,     [ArmorType.Submarine] : undefined,      [ArmorType.Cruiser]     : undefined,
+                    [ArmorType.Lander]         : undefined,     [ArmorType.Gunboat]   : undefined,      [ArmorType.Meteor]      : 1,
+                },
+
+                maxHp           : 100,
+                armorType       : ArmorType.Bike,
+                isAffectedByLuck: true,
+
+                moveRange: 5,
+                moveType : MoveType.TireB,
+
+                maxFuel               : 70,
+                fuelConsumptionPerTurn: 0,
+                isDestroyedOnOutOfFuel: false,
+
+                canCaptureTile: true,
+
+                canLaunchSilo: true,
+
+                productionCost: 2500,
+
+                visionRange: 2,
             },
         },
     };
