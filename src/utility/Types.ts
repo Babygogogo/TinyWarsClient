@@ -23,8 +23,8 @@ namespace Utility {
 
             hideUnitCategory?: UnitCategory;
 
-            visionRange          ?: number;
-            isVisionEnabledForAll?: boolean;
+            visionRange                 ?: number;
+            isVisionEnabledForAllPlayers?: boolean;
 
             maxHp           ?: number;
             armorType       ?: ArmorType;
@@ -42,6 +42,8 @@ namespace Utility {
 
             globalAttackBonus ?: number;
             globalDefenseBonus?: number;
+
+            isDestroyedWithAdjacentMeteor?: boolean;
         }
 
         export type InstantialTile = {
@@ -51,7 +53,8 @@ namespace Utility {
 
             currentCapturePoint: number;
 
-            gridIndex: number;
+            gridX: number;
+            gridY: number;
         }
 
         export type TemplateUnit = {
@@ -117,7 +120,8 @@ namespace Utility {
 
             currentFuel: number;
 
-            gridIndex: number;
+            gridX: number;
+            gridY: number;
 
             currentBuildMaterial: number;
 
@@ -178,10 +182,10 @@ namespace Utility {
             Road,          /* 4 */      BridgeOnPlain, /* 5 */      BridgeOnRiver, /* 6 */      BridgeOnBeach, /* 7 */
             BridgeOnSea,   /* 8 */      Wood,          /* 9 */      Mountain,      /* 10 */     Wasteland,     /* 11 */
             Ruins,         /* 12 */     Fire,          /* 13 */     Rough,         /* 14 */     Mist,          /* 15 */
-            Reef,          /* 16 */     Plasma,        /* 17 */     Meteor,        /* 18 */     Silo,          /* 19 */
-            EmptySilo,     /* 20 */     Headquarters,  /* 21 */     City,          /* 22 */     CommandTower,  /* 23 */
-            Radar,         /* 24 */     Factory,       /* 25 */     Airport,       /* 26 */     Seaport,       /* 27 */
-            TempAirport,   /* 28 */     TempSeaport,   /* 29 */     GreenPlasma,   /* 30 */
+            Reef,          /* 16 */     Plasma,        /* 17 */     GreenPlasma,   /* 18 */     Meteor,        /* 19 */
+            Silo,          /* 20 */     EmptySilo,     /* 21 */     Headquarters,  /* 22 */     City,          /* 23 */
+            CommandTower,  /* 24 */     Radar,         /* 25 */     Factory,       /* 26 */     Airport,       /* 27 */
+            Seaport,       /* 28 */     TempAirport,   /* 29 */     TempSeaport,   /* 30 */
         }
 
         export const enum UnitType {
@@ -195,11 +199,11 @@ namespace Utility {
         }
 
         export const enum UnitCategory {
-            None,          /* 0 */            All,           /* 1 */            Ground,        /* 2 */            Naval,         /* 3 */
-            Air,           /* 4 */            GroundOrNaval, /* 5 */            GroundOrAir,   /* 6 */            Direct,        /* 7 */
-            Indirect,      /* 8 */            Foot,          /* 9 */            Infantry,      /* 10 */           Vehicle,       /* 11 */
-            DirectMachine, /* 12 */           Transport,     /* 13 */           LargeNavel,    /* 14 */           Copter,        /* 15 */
-            Tank,          /* 16 */           CommonAir,     /* 17 */
+            None,          /* 0 */            All,               /* 1 */            Ground,        /* 2 */            Naval,         /* 3 */
+            Air,           /* 4 */            GroundOrNaval,     /* 5 */            GroundOrAir,   /* 6 */            Direct,        /* 7 */
+            Indirect,      /* 8 */            Foot,              /* 9 */            Infantry,      /* 10 */           Vehicle,       /* 11 */
+            DirectMachine, /* 12 */           Transport,         /* 13 */           LargeNavel,    /* 14 */           Copter,        /* 15 */
+            Tank,          /* 16 */           AirExceptSeaplane, /* 17 */
         }
 
         export const enum TileCategory {

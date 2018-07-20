@@ -6,6 +6,7 @@ namespace Config {
     import UnitCategory = Types.UnitCategory;
     import TileCategory = Types.TileCategory;
     import MoveType     = Types.MoveType;
+    import ArmorType    = Types.ArmorType;
 
     type GameConfig = {
         maxPromotion  : number;
@@ -104,8 +105,8 @@ namespace Config {
             [UnitCategory.Tank]: [
                 UnitType.Tank, UnitType.MediumTank, UnitType.WarTank,
             ],
-            [UnitCategory.CommonAir]: [
-                UnitType.Fighter,         UnitType.Bomber, UnitType.Duster, UnitType.BattleCopter,
+            [UnitCategory.AirExceptSeaplane]: [
+                UnitType.Fighter,         UnitType.Bomber,  UnitType.Duster,    UnitType.BattleCopter,
                 UnitType.TransportCopter,
             ],
         },
@@ -194,6 +195,347 @@ namespace Config {
                     [MoveType.Infantry]: 1,     [MoveType.Mech]: 1,     [MoveType.TireA]: 1,            [MoveType.TireB]    : 1,
                     [MoveType.Tank]    : 1,     [MoveType.Air] : 1,     [MoveType.Ship] : undefined,    [MoveType.Transport]: undefined,
                 },
+            },
+            [TileType.BridgeOnBeach]: {
+                defenseAmount      : 0,
+                defenseUnitCategory: UnitCategory.None,
+
+                moveCosts: {
+                    [MoveType.Infantry]: 1,     [MoveType.Mech]: 1,     [MoveType.TireA]: 1,            [MoveType.TireB]    : 1,
+                    [MoveType.Tank]    : 1,     [MoveType.Air] : 1,     [MoveType.Ship] : undefined,    [MoveType.Transport]: 1,
+                },
+            },
+            [TileType.BridgeOnSea]: {
+                defenseAmount      : 0,
+                defenseUnitCategory: UnitCategory.None,
+
+                moveCosts: {
+                    [MoveType.Infantry]: 1,     [MoveType.Mech]: 1,     [MoveType.TireA]: 1,            [MoveType.TireB]    : 1,
+                    [MoveType.Tank]    : 1,     [MoveType.Air] : 1,     [MoveType.Ship] : 1,            [MoveType.Transport]: 1,
+                },
+            },
+            [TileType.Wood]: {
+                defenseAmount      : 30,
+                defenseUnitCategory: UnitCategory.Ground,
+
+                moveCosts: {
+                    [MoveType.Infantry]: 1,     [MoveType.Mech]: 1,     [MoveType.TireA]: 3,            [MoveType.TireB]    : 3,
+                    [MoveType.Tank]    : 2,     [MoveType.Air] : 1,     [MoveType.Ship] : undefined,    [MoveType.Transport]: undefined,
+                },
+
+                hideUnitCategory: UnitCategory.Ground,
+            },
+            [TileType.Mountain]: {
+                defenseAmount      : 40,
+                defenseUnitCategory: UnitCategory.Ground,
+
+                moveCosts: {
+                    [MoveType.Infantry]: 2,             [MoveType.Mech]: 1,     [MoveType.TireA]: undefined,    [MoveType.TireB]    : undefined,
+                    [MoveType.Tank]    : undefined,     [MoveType.Air] : 1,     [MoveType.Ship] : undefined,    [MoveType.Transport]: undefined,
+                },
+            },
+            [TileType.Wasteland]: {
+                defenseAmount      : 20,
+                defenseUnitCategory: UnitCategory.Ground,
+
+                moveCosts: {
+                    [MoveType.Infantry]: 1,     [MoveType.Mech]: 1,     [MoveType.TireA]: 3,            [MoveType.TireB]    : 3,
+                    [MoveType.Tank]    : 2,     [MoveType.Air] : 1,     [MoveType.Ship] : undefined,    [MoveType.Transport]: undefined,
+                },
+            },
+            [TileType.Ruins]: {
+                defenseAmount      : 10,
+                defenseUnitCategory: UnitCategory.Ground,
+
+                moveCosts: {
+                    [MoveType.Infantry]: 1,     [MoveType.Mech]: 1,     [MoveType.TireA]: 2,            [MoveType.TireB]    : 1,
+                    [MoveType.Tank]    : 1,     [MoveType.Air] : 1,     [MoveType.Ship] : undefined,    [MoveType.Transport]: undefined,
+                },
+
+                hideUnitCategory: UnitCategory.Ground,
+            },
+            [TileType.Fire]: {
+                defenseAmount      : 0,
+                defenseUnitCategory: UnitCategory.None,
+
+                moveCosts: {
+                    [MoveType.Infantry]: undefined,     [MoveType.Mech]: undefined,     [MoveType.TireA]: undefined,    [MoveType.TireB]    : undefined,
+                    [MoveType.Tank]    : undefined,     [MoveType.Air] : undefined,     [MoveType.Ship] : undefined,    [MoveType.Transport]: undefined,
+                },
+
+                visionRange                 : 5,
+                isVisionEnabledForAllPlayers: true,
+            },
+            [TileType.Rough]: {
+                defenseAmount      : 20,
+                defenseUnitCategory: UnitCategory.Naval,
+
+                moveCosts: {
+                    [MoveType.Infantry]: undefined,     [MoveType.Mech]: undefined,     [MoveType.TireA]: undefined,    [MoveType.TireB]    : undefined,
+                    [MoveType.Tank]    : undefined,     [MoveType.Air] : 1,             [MoveType.Ship] : 2,            [MoveType.Transport]: 2,
+                },
+            },
+            [TileType.Mist]: {
+                defenseAmount      : 10,
+                defenseUnitCategory: UnitCategory.Naval,
+
+                moveCosts: {
+                    [MoveType.Infantry]: undefined,     [MoveType.Mech]: undefined,     [MoveType.TireA]: undefined,    [MoveType.TireB]    : undefined,
+                    [MoveType.Tank]    : undefined,     [MoveType.Air] : 1,             [MoveType.Ship] : 1,            [MoveType.Transport]: 1,
+                },
+
+                hideUnitCategory: UnitCategory.Naval,
+            },
+            [TileType.Reef]: {
+                defenseAmount      : 20,
+                defenseUnitCategory: UnitCategory.Naval,
+
+                moveCosts: {
+                    [MoveType.Infantry]: undefined,     [MoveType.Mech]: undefined,     [MoveType.TireA]: undefined,    [MoveType.TireB]    : undefined,
+                    [MoveType.Tank]    : undefined,     [MoveType.Air] : 1,             [MoveType.Ship] : 2,            [MoveType.Transport]: 2,
+                },
+
+                hideUnitCategory: UnitCategory.Naval,
+            },
+            [TileType.Plasma]: {
+                defenseAmount      : 0,
+                defenseUnitCategory: UnitCategory.None,
+
+                moveCosts: {
+                    [MoveType.Infantry]: undefined,     [MoveType.Mech]: undefined,     [MoveType.TireA]: undefined,    [MoveType.TireB]    : undefined,
+                    [MoveType.Tank]    : undefined,     [MoveType.Air] : undefined,     [MoveType.Ship] : undefined,    [MoveType.Transport]: undefined,
+                },
+
+                isDestroyedWithAdjacentMeteor: true,
+            },
+            [TileType.GreenPlasma]: {
+                defenseAmount      : 0,
+                defenseUnitCategory: UnitCategory.None,
+
+                moveCosts: {
+                    [MoveType.Infantry]: undefined,     [MoveType.Mech]: undefined,     [MoveType.TireA]: undefined,    [MoveType.TireB]    : undefined,
+                    [MoveType.Tank]    : undefined,     [MoveType.Air] : undefined,     [MoveType.Ship] : undefined,    [MoveType.Transport]: undefined,
+                },
+            },
+            [TileType.Meteor]: {
+                defenseAmount      : 0,
+                defenseUnitCategory: UnitCategory.None,
+
+                moveCosts: {
+                    [MoveType.Infantry]: undefined,     [MoveType.Mech]: undefined,     [MoveType.TireA]: undefined,    [MoveType.TireB]    : undefined,
+                    [MoveType.Tank]    : undefined,     [MoveType.Air] : undefined,     [MoveType.Ship] : undefined,    [MoveType.Transport]: undefined,
+                },
+
+                maxHp           : 99,
+                armorType       : ArmorType.Meteor,
+                isAffectedByLuck: false,
+            },
+            [TileType.Silo]: {
+                defenseAmount      : 20,
+                defenseUnitCategory: UnitCategory.Ground,
+
+                moveCosts: {
+                    [MoveType.Infantry]: 1,     [MoveType.Mech]: 1,     [MoveType.TireA]: 1,            [MoveType.TireB]    : 1,
+                    [MoveType.Tank]    : 1,     [MoveType.Air] : 1,     [MoveType.Ship] : undefined,    [MoveType.Transport]: undefined,
+                },
+            },
+            [TileType.EmptySilo]: {
+                defenseAmount      : 20,
+                defenseUnitCategory: UnitCategory.Ground,
+
+                moveCosts: {
+                    [MoveType.Infantry]: 1,     [MoveType.Mech]: 1,     [MoveType.TireA]: 1,            [MoveType.TireB]    : 1,
+                    [MoveType.Tank]    : 1,     [MoveType.Air] : 1,     [MoveType.Ship] : undefined,    [MoveType.Transport]: undefined,
+                },
+            },
+            [TileType.Headquarters]: {
+                defenseAmount      : 40,
+                defenseUnitCategory: UnitCategory.Ground,
+
+                moveCosts: {
+                    [MoveType.Infantry]: 1,     [MoveType.Mech]: 1,     [MoveType.TireA]: 1,            [MoveType.TireB]    : 1,
+                    [MoveType.Tank]    : 1,     [MoveType.Air] : 1,     [MoveType.Ship] : undefined,    [MoveType.Transport]: undefined,
+                },
+
+                maxCapturePoint  : 20,
+                isDefeatOnCapture: true,
+
+                repairAmount      : 2,
+                repairUnitCategory: UnitCategory.Ground,
+
+                incomePerTurn: 1000,
+
+                visionRange                 : 2,
+                isVisionEnabledForAllPlayers: false,
+
+                hideUnitCategory: UnitCategory.Ground,
+            },
+            [TileType.City]: {
+                defenseAmount      : 20,
+                defenseUnitCategory: UnitCategory.Ground,
+
+                moveCosts: {
+                    [MoveType.Infantry]: 1,     [MoveType.Mech]: 1,     [MoveType.TireA]: 1,            [MoveType.TireB]    : 1,
+                    [MoveType.Tank]    : 1,     [MoveType.Air] : 1,     [MoveType.Ship] : undefined,    [MoveType.Transport]: undefined,
+                },
+
+                maxCapturePoint: 20,
+
+                repairAmount      : 2,
+                repairUnitCategory: UnitCategory.Ground,
+
+                incomePerTurn: 1000,
+
+                visionRange                 : 2,
+                isVisionEnabledForAllPlayers: false,
+
+                hideUnitCategory: UnitCategory.Ground,
+            },
+            [TileType.CommandTower]: {
+                defenseAmount      : 30,
+                defenseUnitCategory: UnitCategory.Ground,
+
+                moveCosts: {
+                    [MoveType.Infantry]: 1,     [MoveType.Mech]: 1,     [MoveType.TireA]: 1,            [MoveType.TireB]    : 1,
+                    [MoveType.Tank]    : 1,     [MoveType.Air] : 1,     [MoveType.Ship] : undefined,    [MoveType.Transport]: undefined,
+                },
+
+                maxCapturePoint: 20,
+
+                incomePerTurn: 1000,
+
+                visionRange                 : 2,
+                isVisionEnabledForAllPlayers: false,
+
+                hideUnitCategory: UnitCategory.Ground,
+
+                globalAttackBonus : 5,
+                globalDefenseBonus: 5,
+            },
+            [TileType.Radar]: {
+                defenseAmount      : 30,
+                defenseUnitCategory: UnitCategory.Ground,
+
+                moveCosts: {
+                    [MoveType.Infantry]: 1,     [MoveType.Mech]: 1,     [MoveType.TireA]: 1,            [MoveType.TireB]    : 1,
+                    [MoveType.Tank]    : 1,     [MoveType.Air] : 1,     [MoveType.Ship] : undefined,    [MoveType.Transport]: undefined,
+                },
+
+                maxCapturePoint: 20,
+
+                incomePerTurn: 1000,
+
+                visionRange                 : 5,
+                isVisionEnabledForAllPlayers: false,
+
+                hideUnitCategory: UnitCategory.Ground,
+            },
+            [TileType.Factory]: {
+                defenseAmount      : 30,
+                defenseUnitCategory: UnitCategory.Ground,
+
+                moveCosts: {
+                    [MoveType.Infantry]: 1,     [MoveType.Mech]: 1,     [MoveType.TireA]: 1,            [MoveType.TireB]    : 1,
+                    [MoveType.Tank]    : 1,     [MoveType.Air] : 1,     [MoveType.Ship] : undefined,    [MoveType.Transport]: undefined,
+                },
+
+                maxCapturePoint: 20,
+
+                repairAmount      : 2,
+                repairUnitCategory: UnitCategory.Ground,
+
+                incomePerTurn: 1000,
+
+                visionRange                 : 2,
+                isVisionEnabledForAllPlayers: false,
+
+                hideUnitCategory: UnitCategory.Ground,
+
+                produceUnitCategory: UnitCategory.Ground,
+            },
+            [TileType.Airport]: {
+                defenseAmount      : 30,
+                defenseUnitCategory: UnitCategory.Ground,
+
+                moveCosts: {
+                    [MoveType.Infantry]: 1,     [MoveType.Mech]: 1,     [MoveType.TireA]: 1,            [MoveType.TireB]    : 1,
+                    [MoveType.Tank]    : 1,     [MoveType.Air] : 1,     [MoveType.Ship] : undefined,    [MoveType.Transport]: undefined,
+                },
+
+                maxCapturePoint: 20,
+
+                repairAmount      : 2,
+                repairUnitCategory: UnitCategory.Air,
+
+                incomePerTurn: 1000,
+
+                visionRange                 : 2,
+                isVisionEnabledForAllPlayers: false,
+
+                hideUnitCategory: UnitCategory.GroundOrAir,
+
+                produceUnitCategory: UnitCategory.AirExceptSeaplane,
+            },
+            [TileType.Seaport]: {
+                defenseAmount      : 30,
+                defenseUnitCategory: UnitCategory.GroundOrNaval,
+
+                moveCosts: {
+                    [MoveType.Infantry]: 1,     [MoveType.Mech]: 1,     [MoveType.TireA]: 1,    [MoveType.TireB]    : 1,
+                    [MoveType.Tank]    : 1,     [MoveType.Air] : 1,     [MoveType.Ship] : 1,    [MoveType.Transport]: 1,
+                },
+
+                maxCapturePoint: 20,
+
+                repairAmount      : 2,
+                repairUnitCategory: UnitCategory.Naval,
+
+                incomePerTurn: 1000,
+
+                visionRange                 : 2,
+                isVisionEnabledForAllPlayers: false,
+
+                hideUnitCategory: UnitCategory.GroundOrNaval,
+
+                produceUnitCategory: UnitCategory.Naval,
+            },
+            [TileType.TempAirport]: {
+                defenseAmount      : 10,
+                defenseUnitCategory: UnitCategory.Ground,
+
+                moveCosts: {
+                    [MoveType.Infantry]: 1,     [MoveType.Mech]: 1,     [MoveType.TireA]: 1,            [MoveType.TireB]    : 1,
+                    [MoveType.Tank]    : 1,     [MoveType.Air] : 1,     [MoveType.Ship] : undefined,    [MoveType.Transport]: undefined,
+                },
+
+                maxCapturePoint: 20,
+
+                repairAmount      : 2,
+                repairUnitCategory: UnitCategory.Air,
+
+                visionRange                 : 2,
+                isVisionEnabledForAllPlayers: false,
+
+                hideUnitCategory: UnitCategory.GroundOrAir,
+            },
+            [TileType.TempSeaport]: {
+                defenseAmount      : 10,
+                defenseUnitCategory: UnitCategory.GroundOrNaval,
+
+                moveCosts: {
+                    [MoveType.Infantry]: 1,     [MoveType.Mech]: 1,     [MoveType.TireA]: 1,    [MoveType.TireB]    : 1,
+                    [MoveType.Tank]    : 1,     [MoveType.Air] : 1,     [MoveType.Ship] : 1,    [MoveType.Transport]: 1,
+                },
+
+                maxCapturePoint: 20,
+
+                repairAmount      : 2,
+                repairUnitCategory: UnitCategory.Naval,
+
+                visionRange                 : 2,
+                isVisionEnabledForAllPlayers: false,
+
+                hideUnitCategory: UnitCategory.GroundOrNaval,
             },
         },
     };
