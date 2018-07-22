@@ -1,115 +1,42 @@
 {
   "nested": {
-    "InstantialCompAttacker": {
-      "fields": {
-        "primaryWeaponCurrentAmmo": {
-          "type": "uint32",
-          "id": 0
-        }
-      }
-    },
-    "InstantialCompAttackable": {
+    "InstantialTile": {
       "fields": {
         "currentHp": {
           "type": "uint32",
-          "id": 0
-        }
-      }
-    },
-    "InstantialCompBuilder": {
-      "fields": {
-        "isBuilding": {
-          "type": "bool",
-          "id": 0
-        },
-        "currentMaterial": {
-          "type": "uint32",
           "id": 1
-        }
-      }
-    },
-    "InstantialCompBuildable": {
-      "fields": {
+        },
         "currentBuildPoint": {
           "type": "uint32",
-          "id": 0
-        }
-      }
-    },
-    "InstantialCompCapturer": {
-      "fields": {
-        "isCapturing": {
-          "type": "bool",
-          "id": 0
-        }
-      }
-    },
-    "InstantialCompCapturable": {
-      "fields": {
+          "id": 2
+        },
         "currentCapturePoint": {
           "type": "uint32",
-          "id": 0
+          "id": 3
         }
       }
     },
-    "InstantialCompDiver": {
+    "SerializedTile": {
       "fields": {
-        "isDiving": {
-          "type": "bool",
-          "id": 0
-        }
-      }
-    },
-    "InstantialCompFlareLauncher": {
-      "fields": {
-        "currentAmmo": {
-          "type": "uint32",
-          "id": 0
-        }
-      }
-    },
-    "InstantialCompMovable": {
-      "fields": {
-        "currentFuel": {
-          "type": "uint32",
-          "id": 0
-        }
-      }
-    },
-    "InstantialCompGridIndexable": {
-      "fields": {
-        "x": {
-          "type": "uint32",
-          "id": 0
-        },
-        "y": {
+        "gridX": {
           "type": "uint32",
           "id": 1
-        }
-      }
-    },
-    "InstantialCompPromotable": {
-      "fields": {
-        "currentPromotion": {
+        },
+        "gridY": {
           "type": "uint32",
-          "id": 0
-        }
-      }
-    },
-    "InstantialCompProducer": {
-      "fields": {
-        "currentMaterial": {
+          "id": 2
+        },
+        "baseViewId": {
           "type": "uint32",
-          "id": 0
-        }
-      }
-    },
-    "InstantialCompLoader": {
-      "fields": {
-        "loadedUnitIds": {
-          "rule": "repeated",
+          "id": 3
+        },
+        "objectViewId": {
           "type": "uint32",
-          "id": 0
+          "id": 4
+        },
+        "instantialData": {
+          "type": "InstantialTile",
+          "id": 5
         }
       }
     },
