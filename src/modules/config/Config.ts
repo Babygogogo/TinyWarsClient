@@ -1,21 +1,88 @@
 
 namespace Config {
-    import Types        = Utility.Types;
-    import TileType     = Types.TileType;
-    import UnitType     = Types.UnitType;
-    import UnitCategory = Types.UnitCategory;
-    import TileCategory = Types.TileCategory;
-    import MoveType     = Types.MoveType;
-    import ArmorType    = Types.ArmorType;
+    import Types          = Utility.Types;
+    import TemplateTile   = Types.TemplateTile;
+    import TileBaseType   = Types.TileBaseType;
+    import TileObjectType = Types.TileObjectType;
+    import TileType       = Types.TileType;
+    import TemplateUnit   = Types.TemplateUnit;
+    import UnitType       = Types.UnitType;
+    import UnitCategory   = Types.UnitCategory;
+    import TileCategory   = Types.TileCategory;
+    import MoveType       = Types.MoveType;
+    import ArmorType      = Types.ArmorType;
+
+    const TILE_TYPE_MAPPING: Readonly<{ [tileBaseType: number]: { [tileObjectType: number]: TileType } }> = {
+        [TileBaseType.Beach]: {
+            [TileObjectType.Empty]       : TileType.Beach,              [TileObjectType.Road]        : TileType.Road,
+            [TileObjectType.Bridge]      : TileType.BridgeOnBeach,      [TileObjectType.Wood]        : TileType.Wood,
+            [TileObjectType.Mountain]    : TileType.Mountain,           [TileObjectType.Wasteland]   : TileType.Wasteland,
+            [TileObjectType.Ruins]       : TileType.Ruins,              [TileObjectType.Fire]        : TileType.Fire,
+            [TileObjectType.Rough]       : TileType.Rough,              [TileObjectType.Mist]        : TileType.Mist,
+            [TileObjectType.Reef]        : TileType.Reef,               [TileObjectType.Plasma]      : TileType.Plasma,
+            [TileObjectType.Meteor]      : TileType.Meteor,             [TileObjectType.Silo]        : TileType.Silo,
+            [TileObjectType.EmptySilo]   : TileType.EmptySilo,          [TileObjectType.Headquarters]: TileType.Headquarters,
+            [TileObjectType.City]        : TileType.City,               [TileObjectType.CommandTower]: TileType.CommandTower,
+            [TileObjectType.Radar]       : TileType.Radar,              [TileObjectType.Factory]     : TileType.Factory,
+            [TileObjectType.Airport]     : TileType.Airport,            [TileObjectType.Seaport]     : TileType.Seaport,
+            [TileObjectType.TempAirport] : TileType.TempAirport,        [TileObjectType.TempSeaport] : TileType.TempSeaport,
+            [TileObjectType.GreenPlasma] : TileType.GreenPlasma,
+        },
+        [TileBaseType.Plain]: {
+            [TileObjectType.Empty]       : TileType.Beach,              [TileObjectType.Road]        : TileType.Road,
+            [TileObjectType.Bridge]      : TileType.BridgeOnPlain,      [TileObjectType.Wood]        : TileType.Wood,
+            [TileObjectType.Mountain]    : TileType.Mountain,           [TileObjectType.Wasteland]   : TileType.Wasteland,
+            [TileObjectType.Ruins]       : TileType.Ruins,              [TileObjectType.Fire]        : TileType.Fire,
+            [TileObjectType.Rough]       : TileType.Rough,              [TileObjectType.Mist]        : TileType.Mist,
+            [TileObjectType.Reef]        : TileType.Reef,               [TileObjectType.Plasma]      : TileType.Plasma,
+            [TileObjectType.Meteor]      : TileType.Meteor,             [TileObjectType.Silo]        : TileType.Silo,
+            [TileObjectType.EmptySilo]   : TileType.EmptySilo,          [TileObjectType.Headquarters]: TileType.Headquarters,
+            [TileObjectType.City]        : TileType.City,               [TileObjectType.CommandTower]: TileType.CommandTower,
+            [TileObjectType.Radar]       : TileType.Radar,              [TileObjectType.Factory]     : TileType.Factory,
+            [TileObjectType.Airport]     : TileType.Airport,            [TileObjectType.Seaport]     : TileType.Seaport,
+            [TileObjectType.TempAirport] : TileType.TempAirport,        [TileObjectType.TempSeaport] : TileType.TempSeaport,
+            [TileObjectType.GreenPlasma] : TileType.GreenPlasma,
+        },
+        [TileBaseType.River]: {
+            [TileObjectType.Empty]       : TileType.Beach,              [TileObjectType.Road]        : TileType.Road,
+            [TileObjectType.Bridge]      : TileType.BridgeOnRiver,      [TileObjectType.Wood]        : TileType.Wood,
+            [TileObjectType.Mountain]    : TileType.Mountain,           [TileObjectType.Wasteland]   : TileType.Wasteland,
+            [TileObjectType.Ruins]       : TileType.Ruins,              [TileObjectType.Fire]        : TileType.Fire,
+            [TileObjectType.Rough]       : TileType.Rough,              [TileObjectType.Mist]        : TileType.Mist,
+            [TileObjectType.Reef]        : TileType.Reef,               [TileObjectType.Plasma]      : TileType.Plasma,
+            [TileObjectType.Meteor]      : TileType.Meteor,             [TileObjectType.Silo]        : TileType.Silo,
+            [TileObjectType.EmptySilo]   : TileType.EmptySilo,          [TileObjectType.Headquarters]: TileType.Headquarters,
+            [TileObjectType.City]        : TileType.City,               [TileObjectType.CommandTower]: TileType.CommandTower,
+            [TileObjectType.Radar]       : TileType.Radar,              [TileObjectType.Factory]     : TileType.Factory,
+            [TileObjectType.Airport]     : TileType.Airport,            [TileObjectType.Seaport]     : TileType.Seaport,
+            [TileObjectType.TempAirport] : TileType.TempAirport,        [TileObjectType.TempSeaport] : TileType.TempSeaport,
+            [TileObjectType.GreenPlasma] : TileType.GreenPlasma,
+        },
+        [TileBaseType.Sea]: {
+            [TileObjectType.Empty]       : TileType.Beach,              [TileObjectType.Road]        : TileType.Road,
+            [TileObjectType.Bridge]      : TileType.BridgeOnSea,        [TileObjectType.Wood]        : TileType.Wood,
+            [TileObjectType.Mountain]    : TileType.Mountain,           [TileObjectType.Wasteland]   : TileType.Wasteland,
+            [TileObjectType.Ruins]       : TileType.Ruins,              [TileObjectType.Fire]        : TileType.Fire,
+            [TileObjectType.Rough]       : TileType.Rough,              [TileObjectType.Mist]        : TileType.Mist,
+            [TileObjectType.Reef]        : TileType.Reef,               [TileObjectType.Plasma]      : TileType.Plasma,
+            [TileObjectType.Meteor]      : TileType.Meteor,             [TileObjectType.Silo]        : TileType.Silo,
+            [TileObjectType.EmptySilo]   : TileType.EmptySilo,          [TileObjectType.Headquarters]: TileType.Headquarters,
+            [TileObjectType.City]        : TileType.City,               [TileObjectType.CommandTower]: TileType.CommandTower,
+            [TileObjectType.Radar]       : TileType.Radar,              [TileObjectType.Factory]     : TileType.Factory,
+            [TileObjectType.Airport]     : TileType.Airport,            [TileObjectType.Seaport]     : TileType.Seaport,
+            [TileObjectType.TempAirport] : TileType.TempAirport,        [TileObjectType.TempSeaport] : TileType.TempSeaport,
+            [TileObjectType.GreenPlasma] : TileType.GreenPlasma,
+        },
+    };
 
     type GameConfig = {
         maxPromotion  : number;
         promotionBonus: { attack: number, defense: number }[];
         unitCategories: { [unitCategory: number]: UnitType[] };
         tileCategories: { [tileCategory: number]: TileType[] };
-        templateTile  : { [tileType: number]: Types.TemplateTile };
-        templateUnit  : { [unitType: number]: Types.TemplateUnit };
-    }
+        templateTile  : { [tileType: number]: TemplateTile };
+        templateUnit  : { [unitType: number]: TemplateUnit };
+    };
 
     const ORIGINAL_CONFIG: GameConfig = {
         maxPromotion  : 3,
@@ -1495,4 +1562,11 @@ namespace Config {
     };
     const CONFIG: Readonly<GameConfig> = ORIGINAL_CONFIG;
 
+    export function getTileType(baseType: TileBaseType, objectType: TileObjectType): TileType {
+        return TILE_TYPE_MAPPING[baseType][objectType];
+    }
+
+    export function getTemplateTile(baseType: TileBaseType, objectType: TileObjectType): Readonly<TemplateTile> {
+        return CONFIG.templateTile[getTileType(baseType, objectType)];
+    }
 }

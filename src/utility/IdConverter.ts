@@ -1,12 +1,25 @@
 
 namespace Utility {
-    export namespace IdConverter {
-        export function getTileBaseModelId(tileBaseViewId: number): number {
+    import TileBaseType   = Types.TileBaseType;
+    import TileObjectType = Types.TileObjectType;
 
+    type TileObjectTypeAndPlayerIndex = {
+        tileObjectType: TileObjectType;
+        playerIndex   : number;
+    }
+
+    export namespace IdConverter {
+        export function getTileBaseType(tileBaseViewId: number): TileBaseType {
+            // TODO
+            return TileBaseType.Plain;
         }
 
-        export function getTileObjectModelId(tileObjectViewId: number): number {
-
+        export function getTileObjectTypeAndPlayerIndex(tileObjectViewId: number): TileObjectTypeAndPlayerIndex {
+            // TODO
+            return {
+                tileObjectType: TileObjectType.Empty,
+                playerIndex   : 0,
+            };
         }
     }
 }
