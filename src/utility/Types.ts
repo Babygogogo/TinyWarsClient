@@ -52,9 +52,16 @@ namespace Utility {
             currentBuildPoint: number;
 
             currentCapturePoint: number;
+        }
 
+        export type SerializedTile = {
             gridX: number;
             gridY: number;
+
+            baseViewId  : number;
+            objectViewId: number;
+
+            instantialData?: InstantialTile;
         }
 
         export type TemplateUnit = {
@@ -167,16 +174,18 @@ namespace Utility {
         }
 
         export const enum TileBaseType {
-            Plain,        /* 0 */       River,         /* 1 */      Sea,           /* 2 */      Beach,        /* 3 */
+            Empty,  /* 0 */            Plain,  /* 1 */            River,  /* 2 */            Sea,    /* 3 */
+            Beach,  /* 4 */
         }
 
         export const enum TileObjectType {
-            Road,         /* 0 */       Bridge,        /* 1 */      Wood,          /* 2 */      Mountain,     /* 3 */
-            Wasteland,    /* 4 */       Ruins,         /* 5 */      Fire,          /* 6 */      Rough,        /* 7 */
-            Mist,         /* 8 */       Reef,          /* 9 */      Plasma,        /* 10 */     Meteor,       /* 11 */
-            Silo,         /* 12 */      EmptySilo,     /* 13 */     Headquarters,  /* 14 */     City,         /* 15 */
-            CommandTower, /* 16 */      Radar,         /* 17 */     Factory,       /* 18 */     Airport,      /* 19 */
-            Seaport,      /* 20 */      TempAirport,   /* 21 */     TempSeaport,   /* 22 */     GreenPlasma,  /* 23 */
+            Empty,        /* 0 */             Road,         /* 1 */             Bridge,       /* 2 */             Wood,         /* 3 */
+            Mountain,     /* 4 */             Wasteland,    /* 5 */             Ruins,        /* 6 */             Fire,         /* 7 */
+            Rough,        /* 8 */             Mist,         /* 9 */             Reef,         /* 10 */            Plasma,       /* 11 */
+            Meteor,       /* 12 */            Silo,         /* 13 */            EmptySilo,    /* 14 */            Headquarters, /* 15 */
+            City,         /* 16 */            CommandTower, /* 17 */            Radar,        /* 18 */            Factory,      /* 19 */
+            Airport,      /* 20 */            Seaport,      /* 21 */            TempAirport,  /* 22 */            TempSeaport,  /* 23 */
+            GreenPlasma,  /* 24 */
         }
 
         export const enum TileType {
