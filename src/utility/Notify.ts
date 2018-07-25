@@ -1,20 +1,37 @@
 
 namespace Utility {
     export namespace Notify {
+        ////////////////////////////////////////////////////////////////////////////////
+        // Notify types.
+        ////////////////////////////////////////////////////////////////////////////////
         export const Type = {
             NetworkConnected   : "",
             NetworkDisconnected: "",
             TimeTick           : "",
+            TileAnimationTick  : "",
+            UnitAnimationTick  : "",
 
             SLogin    : "",
             SRegister : "",
             SLogout   : "",
             SHeartbeat: "",
+
+            TileModelUpdated: "",
         }
         for (const k in Type) {
             Type[k] = k;
         }
 
+        ////////////////////////////////////////////////////////////////////////////////
+        // Notify datas.
+        ////////////////////////////////////////////////////////////////////////////////
+        export namespace Data {
+            export type TileModelUpdated = OnlineWar.TileModel;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+        // Dispatcher functions.
+        ////////////////////////////////////////////////////////////////////////////////
         const dispatcher = new egret.EventDispatcher();
 
         export type Listener = {
