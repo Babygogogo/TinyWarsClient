@@ -2,13 +2,13 @@
 namespace OnlineWar {
     import Types          = Utility.Types;
     import IdConverter    = Utility.IdConverter;
+    import Notify         = Utility.Notify;
     import SerializedTile = Types.SerializedTile;
     import InstantialTile = Types.InstantialTile;
 
     export class TileModel {
         private _template     : Readonly<Types.TemplateTile>;
         private _isInitialized: boolean;
-        private _view         : TileView;
 
         private _gridX              : number;
         private _gridY              : number;
@@ -39,8 +39,6 @@ namespace OnlineWar {
             this._playerIndex   = t.playerIndex;
             this._template      = Config.getTemplateTile(this._baseType, this._objectType);
             this._loadInstantialData(data.instantialData);
-
-            this.updateView();
         }
 
         public serialize(): SerializedTile {
@@ -52,17 +50,6 @@ namespace OnlineWar {
                 objectViewId  : this._objectViewId,
                 instantialData: this._createInstantialData(),
             };
-        }
-
-        public setView(view: TileView): void {
-            this._view = view;
-            this.updateView();
-        }
-
-        public updateView(): void {
-            if ((this._isInitialized) && (this._view)) {
-                // TODO
-            }
         }
 
         private _createInstantialData(): InstantialTile | undefined {
