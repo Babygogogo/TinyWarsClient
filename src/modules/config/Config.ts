@@ -76,6 +76,7 @@ namespace Config {
     };
 
     type GameConfig = {
+        gridSize      : { width: number, height: number };
         maxPromotion  : number;
         promotionBonus: { attack: number, defense: number }[];
         unitCategories: { [unitCategory: number]: UnitType[] };
@@ -85,6 +86,8 @@ namespace Config {
     };
 
     const ORIGINAL_CONFIG: GameConfig = {
+        gridSize: { width: 72, height: 72 },
+
         maxPromotion  : 3,
         promotionBonus: [
             {attack: 0,  defense: 0 },
@@ -1561,6 +1564,10 @@ namespace Config {
         },
     };
     const CONFIG: Readonly<GameConfig> = ORIGINAL_CONFIG;
+
+    export function getGridSize(): Readonly<{width: number, height: number}> {
+        return CONFIG.gridSize;
+    }
 
     export function getTileType(baseType: TileBaseType, objectType: TileObjectType): TileType {
         return TILE_TYPE_MAPPING[baseType][objectType];
