@@ -13,6 +13,11 @@ namespace Utility {
             [key: string]: ActionData | number | string;
         }
 
+        export type GridSize = {
+            width : number;
+            height: number;
+        }
+
         export type TemplateTile = {
             defenseAmount      : number;
             defenseUnitCategory: UnitCategory;

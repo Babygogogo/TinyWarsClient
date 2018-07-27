@@ -76,7 +76,7 @@ namespace Config {
     };
 
     type GameConfig = {
-        gridSize      : { width: number, height: number };
+        gridSize      : Types.GridSize;
         maxPromotion  : number;
         promotionBonus: { attack: number, defense: number }[];
         unitCategories: { [unitCategory: number]: UnitType[] };
@@ -1565,7 +1565,7 @@ namespace Config {
     };
     const CONFIG: Readonly<GameConfig> = ORIGINAL_CONFIG;
 
-    export function getGridSize(): Readonly<{width: number, height: number}> {
+    export function getGridSize(): Types.GridSize {
         return CONFIG.gridSize;
     }
 
