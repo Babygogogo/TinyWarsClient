@@ -52,11 +52,11 @@ namespace Utility {
         }
 
         export type InstantialTile = {
-            currentHp: number;
+            currentHp?: number;
 
-            currentBuildPoint: number;
+            currentBuildPoint?: number;
 
-            currentCapturePoint: number;
+            currentCapturePoint?: number;
         }
 
         export type SerializedTile = {

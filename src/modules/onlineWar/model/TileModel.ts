@@ -3,6 +3,7 @@ namespace OnlineWar {
     import Types          = Utility.Types;
     import IdConverter    = Utility.IdConverter;
     import Notify         = Utility.Notify;
+    import Helpers        = Utility.Helpers;
     import SerializedTile = Types.SerializedTile;
     import InstantialTile = Types.InstantialTile;
 
@@ -53,25 +54,27 @@ namespace OnlineWar {
         }
 
         private _createInstantialData(): InstantialTile | undefined {
-            const t = this._template;
-            if ((this._currentHp           == t.maxHp)         &&
-                (this._currentBuildPoint   == t.maxBuildPoint) &&
-                (this._currentCapturePoint == t.maxCapturePoint)) {
-                return undefined;
-            } else {
-                return {
-                    currentHp          : this._currentHp,
-                    currentBuildPoint  : this._currentBuildPoint,
-                    currentCapturePoint: this._currentCapturePoint,
-                }
+            const template = this._template;
+            const data: InstantialTile = {};
+
+            if (this._currentHp !== template.maxHp) {
+                data.currentHp = this._currentHp;
             }
+            if (this._currentBuildPoint !== template.maxBuildPoint) {
+                data.currentBuildPoint = this._currentBuildPoint;
+            }
+            if (this._currentCapturePoint !== template.maxCapturePoint) {
+                data.currentCapturePoint = this._currentCapturePoint;
+            }
+
+            return Helpers.checkIsEmptyObject(data) ? undefined : data;
         }
 
-        private _loadInstantialData(i: InstantialTile | undefined) {
+        private _loadInstantialData(d: InstantialTile | undefined) {
             const t = this._template;
-            this._currentHp           = (i) && (i.currentHp         != null)   ? i.currentHp           : t.maxHp;
-            this._currentBuildPoint   = (i) && (i.currentBuildPoint != null)   ? i.currentBuildPoint   : t.maxBuildPoint;
-            this._currentCapturePoint = (i) && (i.currentCapturePoint != null) ? i.currentCapturePoint : t.maxCapturePoint;
+            this._currentHp           = (d) && (d.currentHp           != null) ? d.currentHp           : t.maxHp;
+            this._currentBuildPoint   = (d) && (d.currentBuildPoint   != null) ? d.currentBuildPoint   : t.maxBuildPoint;
+            this._currentCapturePoint = (d) && (d.currentCapturePoint != null) ? d.currentCapturePoint : t.maxCapturePoint;
         }
     }
 }

@@ -81,6 +81,13 @@ namespace Utility {
             }
         }
 
+        export function checkIsEmptyObject(obj: { [key: string]: any }): boolean {
+            for (const k in obj) {
+                return false;
+            }
+            return true;
+        }
+
         function getColorMatrix(color: Types.ColorType, value = 100): number[] {
             switch (color) {
                 case Types.ColorType.Blue:
