@@ -281,18 +281,211 @@ namespace Utility {
         /* 109 */ ["c02_t024_s16_f01", "c02_t024_s16_f02", "c02_t024_s16_f03",],
     ];
 
+    const TILE_BASE_TYPES: Readonly<TileBaseType[]> = [
+        ////////// empty: 0 (1 total) //////////
+        TileBaseType.Empty,
+
+        ////////// plain: 1 (1 total) //////////
+        TileBaseType.Plain,
+
+        ////////// river: 2 - 17 (16 total) //////////
+        TileBaseType.River, TileBaseType.River, TileBaseType.River, TileBaseType.River, TileBaseType.River,
+        TileBaseType.River, TileBaseType.River, TileBaseType.River, TileBaseType.River, TileBaseType.River,
+        TileBaseType.River, TileBaseType.River, TileBaseType.River, TileBaseType.River, TileBaseType.River,
+        TileBaseType.River,
+
+        ////////// sea: 18 - 64 (47 total) //////////
+        TileBaseType.Sea,   TileBaseType.Sea,   TileBaseType.Sea,   TileBaseType.Sea,   TileBaseType.Sea,
+        TileBaseType.Sea,   TileBaseType.Sea,   TileBaseType.Sea,   TileBaseType.Sea,   TileBaseType.Sea,
+        TileBaseType.Sea,   TileBaseType.Sea,   TileBaseType.Sea,   TileBaseType.Sea,   TileBaseType.Sea,
+        TileBaseType.Sea,   TileBaseType.Sea,   TileBaseType.Sea,   TileBaseType.Sea,   TileBaseType.Sea,
+        TileBaseType.Sea,   TileBaseType.Sea,   TileBaseType.Sea,   TileBaseType.Sea,   TileBaseType.Sea,
+        TileBaseType.Sea,   TileBaseType.Sea,   TileBaseType.Sea,   TileBaseType.Sea,   TileBaseType.Sea,
+        TileBaseType.Sea,   TileBaseType.Sea,   TileBaseType.Sea,   TileBaseType.Sea,   TileBaseType.Sea,
+        TileBaseType.Sea,   TileBaseType.Sea,   TileBaseType.Sea,   TileBaseType.Sea,   TileBaseType.Sea,
+        TileBaseType.Sea,   TileBaseType.Sea,   TileBaseType.Sea,   TileBaseType.Sea,   TileBaseType.Sea,
+        TileBaseType.Sea,   TileBaseType.Sea,
+
+        ////////// beach: 65 - 100 (36 total) //////////
+        TileBaseType.Beach, TileBaseType.Beach, TileBaseType.Beach, TileBaseType.Beach, TileBaseType.Beach,
+        TileBaseType.Beach, TileBaseType.Beach, TileBaseType.Beach, TileBaseType.Beach, TileBaseType.Beach,
+        TileBaseType.Beach, TileBaseType.Beach, TileBaseType.Beach, TileBaseType.Beach, TileBaseType.Beach,
+        TileBaseType.Beach, TileBaseType.Beach, TileBaseType.Beach, TileBaseType.Beach, TileBaseType.Beach,
+        TileBaseType.Beach, TileBaseType.Beach, TileBaseType.Beach, TileBaseType.Beach, TileBaseType.Beach,
+        TileBaseType.Beach, TileBaseType.Beach, TileBaseType.Beach, TileBaseType.Beach, TileBaseType.Beach,
+        TileBaseType.Beach, TileBaseType.Beach, TileBaseType.Beach, TileBaseType.Beach, TileBaseType.Beach,
+        TileBaseType.Beach,
+    ];
+
+    const TILE_OBJECT_TYPES_AND_PLAYER_INDEX: Readonly<TileObjectTypeAndPlayerIndex[]> = [
+        ////////// empty //////////
+        /*   0 */ { tileObjectType: TileObjectType.Empty, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+
+        ////////// road //////////
+        /*   1 */ { tileObjectType: TileObjectType.Road, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*   2 */ { tileObjectType: TileObjectType.Road, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*   3 */ { tileObjectType: TileObjectType.Road, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*   4 */ { tileObjectType: TileObjectType.Road, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*   5 */ { tileObjectType: TileObjectType.Road, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*   6 */ { tileObjectType: TileObjectType.Road, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*   7 */ { tileObjectType: TileObjectType.Road, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*   8 */ { tileObjectType: TileObjectType.Road, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*   9 */ { tileObjectType: TileObjectType.Road, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*  10 */ { tileObjectType: TileObjectType.Road, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*  11 */ { tileObjectType: TileObjectType.Road, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+
+        ////////// bridge //////////
+        /*  12 */ { tileObjectType: TileObjectType.Bridge, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*  13 */ { tileObjectType: TileObjectType.Bridge, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*  14 */ { tileObjectType: TileObjectType.Bridge, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*  15 */ { tileObjectType: TileObjectType.Bridge, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*  16 */ { tileObjectType: TileObjectType.Bridge, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*  17 */ { tileObjectType: TileObjectType.Bridge, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*  18 */ { tileObjectType: TileObjectType.Bridge, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*  19 */ { tileObjectType: TileObjectType.Bridge, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*  20 */ { tileObjectType: TileObjectType.Bridge, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*  21 */ { tileObjectType: TileObjectType.Bridge, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*  22 */ { tileObjectType: TileObjectType.Bridge, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+
+        ////////// wood //////////
+        /*  23 */ { tileObjectType: TileObjectType.Wood, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+
+        ////////// mountain //////////
+        /*  24 */ { tileObjectType: TileObjectType.Mountain, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+
+        ////////// wasteland //////////
+        /*  25 */ { tileObjectType: TileObjectType.Wasteland, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+
+        ////////// ruins //////////
+        /*  26 */ { tileObjectType: TileObjectType.Ruins, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+
+        ////////// fire //////////
+        /*  27 */ { tileObjectType: TileObjectType.Fire, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+
+        ////////// rough //////////
+        /*  28 */ { tileObjectType: TileObjectType.Rough, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+
+        ////////// mist //////////
+        /*  29 */ { tileObjectType: TileObjectType.Mist, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+
+        ////////// reef //////////
+        /*  30 */ { tileObjectType: TileObjectType.Reef, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+
+        ////////// plasma //////////
+        /*  31 */ { tileObjectType: TileObjectType.Plasma, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*  32 */ { tileObjectType: TileObjectType.Plasma, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*  33 */ { tileObjectType: TileObjectType.Plasma, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*  34 */ { tileObjectType: TileObjectType.Plasma, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*  35 */ { tileObjectType: TileObjectType.Plasma, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*  36 */ { tileObjectType: TileObjectType.Plasma, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*  37 */ { tileObjectType: TileObjectType.Plasma, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*  38 */ { tileObjectType: TileObjectType.Plasma, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*  39 */ { tileObjectType: TileObjectType.Plasma, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*  40 */ { tileObjectType: TileObjectType.Plasma, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*  41 */ { tileObjectType: TileObjectType.Plasma, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*  42 */ { tileObjectType: TileObjectType.Plasma, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*  43 */ { tileObjectType: TileObjectType.Plasma, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*  44 */ { tileObjectType: TileObjectType.Plasma, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*  45 */ { tileObjectType: TileObjectType.Plasma, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*  46 */ { tileObjectType: TileObjectType.Plasma, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+
+        ////////// meteor //////////
+        /*  47 */ { tileObjectType: TileObjectType.Meteor, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+
+        ////////// silo //////////
+        /*  48 */ { tileObjectType: TileObjectType.Silo, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+
+        ////////// emptysilo //////////
+        /*  49 */ { tileObjectType: TileObjectType.EmptySilo, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+
+        ////////// headquaters //////////
+        /*  50 */ { tileObjectType: TileObjectType.Headquarters, playerIndex: 1 } as TileObjectTypeAndPlayerIndex,
+        /*  51 */ { tileObjectType: TileObjectType.Headquarters, playerIndex: 2 } as TileObjectTypeAndPlayerIndex,
+        /*  52 */ { tileObjectType: TileObjectType.Headquarters, playerIndex: 3 } as TileObjectTypeAndPlayerIndex,
+        /*  53 */ { tileObjectType: TileObjectType.Headquarters, playerIndex: 4 } as TileObjectTypeAndPlayerIndex,
+
+        ////////// city //////////
+        /*  54 */ { tileObjectType: TileObjectType.City, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*  55 */ { tileObjectType: TileObjectType.City, playerIndex: 1 } as TileObjectTypeAndPlayerIndex,
+        /*  56 */ { tileObjectType: TileObjectType.City, playerIndex: 2 } as TileObjectTypeAndPlayerIndex,
+        /*  57 */ { tileObjectType: TileObjectType.City, playerIndex: 3 } as TileObjectTypeAndPlayerIndex,
+        /*  58 */ { tileObjectType: TileObjectType.City, playerIndex: 4 } as TileObjectTypeAndPlayerIndex,
+
+        ////////// commandtower //////////
+        /*  59 */ { tileObjectType: TileObjectType.CommandTower, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*  60 */ { tileObjectType: TileObjectType.CommandTower, playerIndex: 1 } as TileObjectTypeAndPlayerIndex,
+        /*  61 */ { tileObjectType: TileObjectType.CommandTower, playerIndex: 2 } as TileObjectTypeAndPlayerIndex,
+        /*  62 */ { tileObjectType: TileObjectType.CommandTower, playerIndex: 3 } as TileObjectTypeAndPlayerIndex,
+        /*  63 */ { tileObjectType: TileObjectType.CommandTower, playerIndex: 4 } as TileObjectTypeAndPlayerIndex,
+
+        ////////// radar //////////
+        /*  64 */ { tileObjectType: TileObjectType.Radar, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*  65 */ { tileObjectType: TileObjectType.Radar, playerIndex: 1 } as TileObjectTypeAndPlayerIndex,
+        /*  66 */ { tileObjectType: TileObjectType.Radar, playerIndex: 2 } as TileObjectTypeAndPlayerIndex,
+        /*  67 */ { tileObjectType: TileObjectType.Radar, playerIndex: 3 } as TileObjectTypeAndPlayerIndex,
+        /*  68 */ { tileObjectType: TileObjectType.Radar, playerIndex: 4 } as TileObjectTypeAndPlayerIndex,
+
+        ////////// factory //////////
+        /*  69 */ { tileObjectType: TileObjectType.Factory, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*  70 */ { tileObjectType: TileObjectType.Factory, playerIndex: 1 } as TileObjectTypeAndPlayerIndex,
+        /*  71 */ { tileObjectType: TileObjectType.Factory, playerIndex: 2 } as TileObjectTypeAndPlayerIndex,
+        /*  72 */ { tileObjectType: TileObjectType.Factory, playerIndex: 3 } as TileObjectTypeAndPlayerIndex,
+        /*  73 */ { tileObjectType: TileObjectType.Factory, playerIndex: 4 } as TileObjectTypeAndPlayerIndex,
+
+        ////////// airport //////////
+        /*  74 */ { tileObjectType: TileObjectType.Airport, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*  75 */ { tileObjectType: TileObjectType.Airport, playerIndex: 1 } as TileObjectTypeAndPlayerIndex,
+        /*  76 */ { tileObjectType: TileObjectType.Airport, playerIndex: 2 } as TileObjectTypeAndPlayerIndex,
+        /*  77 */ { tileObjectType: TileObjectType.Airport, playerIndex: 3 } as TileObjectTypeAndPlayerIndex,
+        /*  78 */ { tileObjectType: TileObjectType.Airport, playerIndex: 4 } as TileObjectTypeAndPlayerIndex,
+
+        ////////// seaport //////////
+        /*  79 */ { tileObjectType: TileObjectType.Seaport, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*  80 */ { tileObjectType: TileObjectType.Seaport, playerIndex: 1 } as TileObjectTypeAndPlayerIndex,
+        /*  81 */ { tileObjectType: TileObjectType.Seaport, playerIndex: 2 } as TileObjectTypeAndPlayerIndex,
+        /*  82 */ { tileObjectType: TileObjectType.Seaport, playerIndex: 3 } as TileObjectTypeAndPlayerIndex,
+        /*  83 */ { tileObjectType: TileObjectType.Seaport, playerIndex: 4 } as TileObjectTypeAndPlayerIndex,
+
+        ////////// tempairport //////////
+        /*  84 */ { tileObjectType: TileObjectType.TempAirport, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*  85 */ { tileObjectType: TileObjectType.TempAirport, playerIndex: 1 } as TileObjectTypeAndPlayerIndex,
+        /*  86 */ { tileObjectType: TileObjectType.TempAirport, playerIndex: 2 } as TileObjectTypeAndPlayerIndex,
+        /*  87 */ { tileObjectType: TileObjectType.TempAirport, playerIndex: 3 } as TileObjectTypeAndPlayerIndex,
+        /*  88 */ { tileObjectType: TileObjectType.TempAirport, playerIndex: 4 } as TileObjectTypeAndPlayerIndex,
+
+        ////////// tempseaport //////////
+        /*  89 */ { tileObjectType: TileObjectType.TempSeaport, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*  90 */ { tileObjectType: TileObjectType.TempSeaport, playerIndex: 1 } as TileObjectTypeAndPlayerIndex,
+        /*  91 */ { tileObjectType: TileObjectType.TempSeaport, playerIndex: 2 } as TileObjectTypeAndPlayerIndex,
+        /*  92 */ { tileObjectType: TileObjectType.TempSeaport, playerIndex: 3 } as TileObjectTypeAndPlayerIndex,
+        /*  93 */ { tileObjectType: TileObjectType.TempSeaport, playerIndex: 4 } as TileObjectTypeAndPlayerIndex,
+
+        ////////// greenplasma //////////
+        /*  94 */ { tileObjectType: TileObjectType.GreenPlasma, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*  95 */ { tileObjectType: TileObjectType.GreenPlasma, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*  96 */ { tileObjectType: TileObjectType.GreenPlasma, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*  97 */ { tileObjectType: TileObjectType.GreenPlasma, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*  98 */ { tileObjectType: TileObjectType.GreenPlasma, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /*  99 */ { tileObjectType: TileObjectType.GreenPlasma, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /* 100 */ { tileObjectType: TileObjectType.GreenPlasma, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /* 101 */ { tileObjectType: TileObjectType.GreenPlasma, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /* 102 */ { tileObjectType: TileObjectType.GreenPlasma, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /* 103 */ { tileObjectType: TileObjectType.GreenPlasma, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /* 104 */ { tileObjectType: TileObjectType.GreenPlasma, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /* 105 */ { tileObjectType: TileObjectType.GreenPlasma, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /* 106 */ { tileObjectType: TileObjectType.GreenPlasma, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /* 107 */ { tileObjectType: TileObjectType.GreenPlasma, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /* 108 */ { tileObjectType: TileObjectType.GreenPlasma, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+        /* 109 */ { tileObjectType: TileObjectType.GreenPlasma, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
+    ];
+
     export namespace IdConverter {
         export function getTileBaseType(tileBaseViewId: number): TileBaseType {
-            // TODO
-            return TileBaseType.Plain;
+            return TILE_BASE_TYPES[tileBaseViewId];
         }
 
         export function getTileObjectTypeAndPlayerIndex(tileObjectViewId: number): TileObjectTypeAndPlayerIndex {
-            // TODO
-            return {
-                tileObjectType: TileObjectType.Empty,
-                playerIndex   : 0,
-            };
+            return TILE_OBJECT_TYPES_AND_PLAYER_INDEX[tileObjectViewId];
         }
 
         export function getTileBaseImageSource(tileBaseViewId: number, tickCount: number): string {
