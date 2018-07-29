@@ -88,6 +88,10 @@ namespace Utility {
             return true;
         }
 
+        export function getNormalizedHp(hp: number): number {
+            return Math.ceil(hp / 10);
+        }
+
         function getColorMatrix(color: Types.ColorType, value = 100): number[] {
             switch (color) {
                 case Types.ColorType.Blue:

@@ -18,11 +18,15 @@ namespace Utility {
             height: number;
         }
 
+        export type MoveCosts = {
+            [moveType: number]: number | undefined;
+        }
+
         export type TemplateTile = {
             defenseAmount      : number;
             defenseUnitCategory: UnitCategory;
 
-            moveCosts: { [moveType: number]: number | undefined };
+            moveCosts: MoveCosts;
 
             maxBuildPoint?: number;
 

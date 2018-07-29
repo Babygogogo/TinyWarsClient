@@ -1576,4 +1576,8 @@ namespace Config {
     export function getTemplateTile(baseType: TileBaseType, objectType: TileObjectType): Readonly<TemplateTile> {
         return CONFIG.templateTile[getTileType(baseType, objectType)];
     }
+
+    export function getUnitTypesByCategory(category: UnitCategory): UnitType[] {
+        return CONFIG.unitCategories[category];
+    }
 }
