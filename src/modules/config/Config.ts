@@ -1577,6 +1577,10 @@ namespace Config {
         return CONFIG.templateTile[getTileType(baseType, objectType)];
     }
 
+    export function getTemplateUnit(unitType: UnitType): Readonly<TemplateUnit> {
+        return CONFIG.templateUnit[unitType];
+    }
+
     export function getUnitTypesByCategory(category: UnitCategory): UnitType[] {
         return CONFIG.unitCategories[category];
     }

@@ -126,30 +126,40 @@ namespace Utility {
         }
 
         export type InstantialUnit = {
-            primaryWeaponCurrentAmmo: number;
+            state?: UnitState;
 
-            currentHp: number;
+            primaryWeaponCurrentAmmo?: number;
 
-            isCapturingTile: boolean;
+            currentHp?: number;
 
-            isDiving: boolean;
+            isCapturingTile?: boolean;
 
-            flareCurrentAmmo: number;
+            isDiving?: boolean;
 
-            currentFuel: number;
+            flareCurrentAmmo?: number;
 
+            currentFuel?: number;
+
+            currentBuildMaterial?: number;
+
+            currentProduceMaterial?: number;
+
+            currentPromotion?: number;
+
+            isBuildingTile?: number;
+
+            loadedUnitIds?: number[];
+        }
+
+        export type SerializedUnit = {
             gridX: number;
             gridY: number;
 
-            currentBuildMaterial: number;
+            viewId: number;
 
-            currentProduceMaterial: number;
+            unitId: number;
 
-            currentPromotion: number;
-
-            isBuildingTile: number;
-
-            loadedUnitIds: number[];
+            instantialData?: InstantialUnit;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -238,6 +248,10 @@ namespace Utility {
             Duster,          /* 16 */           BattleCopter,    /* 17 */           TransportCopter, /* 18 */           Seaplane,        /* 19 */
             Battleship,      /* 20 */           Carrier,         /* 21 */           Submarine,       /* 22 */           Cruiser,         /* 23 */
             Lander,          /* 24 */           Gunboat,         /* 25 */           Meteor,          /* 26 */
+        }
+
+        export const enum UnitState {
+            Idle,   /* 0 */         Actioned,   /* 1 */
         }
     }
 }

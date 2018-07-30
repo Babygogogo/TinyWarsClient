@@ -18,6 +18,7 @@ namespace OnlineWar {
         private _baseType           : Types.TileBaseType;
         private _objectType         : Types.TileObjectType;
         private _playerIndex        : number;
+
         private _currentHp          : number;
         private _currentBuildPoint  : number;
         private _currentCapturePoint: number;
