@@ -2,10 +2,16 @@
 namespace Utility {
     import TileBaseType   = Types.TileBaseType;
     import TileObjectType = Types.TileObjectType;
+    import UnitType       = Types.UnitType;
 
     type TileObjectTypeAndPlayerIndex = {
         tileObjectType: TileObjectType;
         playerIndex   : number;
+    }
+
+    type UnitTypeAndPlayerIndex = {
+        unitType   : UnitType;
+        playerIndex: number;
     }
 
     const TILE_BASE_IMAGE_SOURCES: Readonly<string[]>[] = [
@@ -479,6 +485,167 @@ namespace Utility {
         /* 109 */ { tileObjectType: TileObjectType.GreenPlasma, playerIndex: 0 } as TileObjectTypeAndPlayerIndex,
     ];
 
+    const UNIT_TYPES_AND_PLAYER_INDEX: Readonly<UnitTypeAndPlayerIndex[]> = [
+        ////////// empty //////////
+        /*   0 */ undefined,
+
+        ////////// infantry //////////
+        /*   1 */ { unitType: UnitType.Infantry, playerIndex: 1 } as UnitTypeAndPlayerIndex,
+        /*   2 */ { unitType: UnitType.Infantry, playerIndex: 2 } as UnitTypeAndPlayerIndex,
+        /*   3 */ { unitType: UnitType.Infantry, playerIndex: 3 } as UnitTypeAndPlayerIndex,
+        /*   4 */ { unitType: UnitType.Infantry, playerIndex: 4 } as UnitTypeAndPlayerIndex,
+
+        ////////// mech //////////
+        /*   5 */ { unitType: UnitType.Mech, playerIndex: 1 } as UnitTypeAndPlayerIndex,
+        /*   6 */ { unitType: UnitType.Mech, playerIndex: 2 } as UnitTypeAndPlayerIndex,
+        /*   7 */ { unitType: UnitType.Mech, playerIndex: 3 } as UnitTypeAndPlayerIndex,
+        /*   8 */ { unitType: UnitType.Mech, playerIndex: 4 } as UnitTypeAndPlayerIndex,
+
+        ////////// bike //////////
+        /*   9 */ { unitType: UnitType.Bike, playerIndex: 1 } as UnitTypeAndPlayerIndex,
+        /*  10 */ { unitType: UnitType.Bike, playerIndex: 2 } as UnitTypeAndPlayerIndex,
+        /*  11 */ { unitType: UnitType.Bike, playerIndex: 3 } as UnitTypeAndPlayerIndex,
+        /*  12 */ { unitType: UnitType.Bike, playerIndex: 4 } as UnitTypeAndPlayerIndex,
+
+        ////////// recon //////////
+        /*  13 */ { unitType: UnitType.Recon, playerIndex: 1 } as UnitTypeAndPlayerIndex,
+        /*  14 */ { unitType: UnitType.Recon, playerIndex: 2 } as UnitTypeAndPlayerIndex,
+        /*  15 */ { unitType: UnitType.Recon, playerIndex: 3 } as UnitTypeAndPlayerIndex,
+        /*  16 */ { unitType: UnitType.Recon, playerIndex: 4 } as UnitTypeAndPlayerIndex,
+
+        ////////// flare //////////
+        /*  17 */ { unitType: UnitType.Flare, playerIndex: 1 } as UnitTypeAndPlayerIndex,
+        /*  18 */ { unitType: UnitType.Flare, playerIndex: 2 } as UnitTypeAndPlayerIndex,
+        /*  19 */ { unitType: UnitType.Flare, playerIndex: 3 } as UnitTypeAndPlayerIndex,
+        /*  20 */ { unitType: UnitType.Flare, playerIndex: 4 } as UnitTypeAndPlayerIndex,
+
+        ////////// antiair //////////
+        /*  21 */ { unitType: UnitType.AntiAir, playerIndex: 1 } as UnitTypeAndPlayerIndex,
+        /*  22 */ { unitType: UnitType.AntiAir, playerIndex: 2 } as UnitTypeAndPlayerIndex,
+        /*  23 */ { unitType: UnitType.AntiAir, playerIndex: 3 } as UnitTypeAndPlayerIndex,
+        /*  24 */ { unitType: UnitType.AntiAir, playerIndex: 4 } as UnitTypeAndPlayerIndex,
+
+        ////////// tank //////////
+        /*  25 */ { unitType: UnitType.Tank, playerIndex: 1 } as UnitTypeAndPlayerIndex,
+        /*  26 */ { unitType: UnitType.Tank, playerIndex: 2 } as UnitTypeAndPlayerIndex,
+        /*  27 */ { unitType: UnitType.Tank, playerIndex: 3 } as UnitTypeAndPlayerIndex,
+        /*  28 */ { unitType: UnitType.Tank, playerIndex: 4 } as UnitTypeAndPlayerIndex,
+
+        ////////// mediumtank //////////
+        /*  29 */ { unitType: UnitType.MediumTank, playerIndex: 1 } as UnitTypeAndPlayerIndex,
+        /*  30 */ { unitType: UnitType.MediumTank, playerIndex: 2 } as UnitTypeAndPlayerIndex,
+        /*  31 */ { unitType: UnitType.MediumTank, playerIndex: 3 } as UnitTypeAndPlayerIndex,
+        /*  32 */ { unitType: UnitType.MediumTank, playerIndex: 4 } as UnitTypeAndPlayerIndex,
+
+        ////////// wartank //////////
+        /*  33 */ { unitType: UnitType.WarTank, playerIndex: 1 } as UnitTypeAndPlayerIndex,
+        /*  34 */ { unitType: UnitType.WarTank, playerIndex: 2 } as UnitTypeAndPlayerIndex,
+        /*  35 */ { unitType: UnitType.WarTank, playerIndex: 3 } as UnitTypeAndPlayerIndex,
+        /*  36 */ { unitType: UnitType.WarTank, playerIndex: 4 } as UnitTypeAndPlayerIndex,
+
+        ////////// artillery //////////
+        /*  37 */ { unitType: UnitType.Artillery, playerIndex: 1 } as UnitTypeAndPlayerIndex,
+        /*  38 */ { unitType: UnitType.Artillery, playerIndex: 2 } as UnitTypeAndPlayerIndex,
+        /*  39 */ { unitType: UnitType.Artillery, playerIndex: 3 } as UnitTypeAndPlayerIndex,
+        /*  40 */ { unitType: UnitType.Artillery, playerIndex: 4 } as UnitTypeAndPlayerIndex,
+
+        ////////// antitank //////////
+        /*  41 */ { unitType: UnitType.AntiTank, playerIndex: 1 } as UnitTypeAndPlayerIndex,
+        /*  42 */ { unitType: UnitType.AntiTank, playerIndex: 2 } as UnitTypeAndPlayerIndex,
+        /*  43 */ { unitType: UnitType.AntiTank, playerIndex: 3 } as UnitTypeAndPlayerIndex,
+        /*  44 */ { unitType: UnitType.AntiTank, playerIndex: 4 } as UnitTypeAndPlayerIndex,
+
+        ////////// rockets //////////
+        /*  45 */ { unitType: UnitType.Rockets, playerIndex: 1 } as UnitTypeAndPlayerIndex,
+        /*  46 */ { unitType: UnitType.Rockets, playerIndex: 2 } as UnitTypeAndPlayerIndex,
+        /*  47 */ { unitType: UnitType.Rockets, playerIndex: 3 } as UnitTypeAndPlayerIndex,
+        /*  48 */ { unitType: UnitType.Rockets, playerIndex: 4 } as UnitTypeAndPlayerIndex,
+
+        ////////// missiles //////////
+        /*  49 */ { unitType: UnitType.Missiles, playerIndex: 1 } as UnitTypeAndPlayerIndex,
+        /*  50 */ { unitType: UnitType.Missiles, playerIndex: 2 } as UnitTypeAndPlayerIndex,
+        /*  51 */ { unitType: UnitType.Missiles, playerIndex: 3 } as UnitTypeAndPlayerIndex,
+        /*  52 */ { unitType: UnitType.Missiles, playerIndex: 4 } as UnitTypeAndPlayerIndex,
+
+        ////////// rig //////////
+        /*  53 */ { unitType: UnitType.Rig, playerIndex: 1 } as UnitTypeAndPlayerIndex,
+        /*  54 */ { unitType: UnitType.Rig, playerIndex: 2 } as UnitTypeAndPlayerIndex,
+        /*  55 */ { unitType: UnitType.Rig, playerIndex: 3 } as UnitTypeAndPlayerIndex,
+        /*  56 */ { unitType: UnitType.Rig, playerIndex: 4 } as UnitTypeAndPlayerIndex,
+
+        ////////// fighter //////////
+        /*  57 */ { unitType: UnitType.Fighter, playerIndex: 1 } as UnitTypeAndPlayerIndex,
+        /*  58 */ { unitType: UnitType.Fighter, playerIndex: 2 } as UnitTypeAndPlayerIndex,
+        /*  59 */ { unitType: UnitType.Fighter, playerIndex: 3 } as UnitTypeAndPlayerIndex,
+        /*  60 */ { unitType: UnitType.Fighter, playerIndex: 4 } as UnitTypeAndPlayerIndex,
+
+        ////////// bomber //////////
+        /*  61 */ { unitType: UnitType.Bomber, playerIndex: 1 } as UnitTypeAndPlayerIndex,
+        /*  62 */ { unitType: UnitType.Bomber, playerIndex: 2 } as UnitTypeAndPlayerIndex,
+        /*  63 */ { unitType: UnitType.Bomber, playerIndex: 3 } as UnitTypeAndPlayerIndex,
+        /*  64 */ { unitType: UnitType.Bomber, playerIndex: 4 } as UnitTypeAndPlayerIndex,
+
+        ////////// duster //////////
+        /*  65 */ { unitType: UnitType.Duster, playerIndex: 1 } as UnitTypeAndPlayerIndex,
+        /*  66 */ { unitType: UnitType.Duster, playerIndex: 2 } as UnitTypeAndPlayerIndex,
+        /*  67 */ { unitType: UnitType.Duster, playerIndex: 3 } as UnitTypeAndPlayerIndex,
+        /*  68 */ { unitType: UnitType.Duster, playerIndex: 4 } as UnitTypeAndPlayerIndex,
+
+        ////////// battlecopter //////////
+        /*  69 */ { unitType: UnitType.BattleCopter, playerIndex: 1 } as UnitTypeAndPlayerIndex,
+        /*  70 */ { unitType: UnitType.BattleCopter, playerIndex: 2 } as UnitTypeAndPlayerIndex,
+        /*  71 */ { unitType: UnitType.BattleCopter, playerIndex: 3 } as UnitTypeAndPlayerIndex,
+        /*  72 */ { unitType: UnitType.BattleCopter, playerIndex: 4 } as UnitTypeAndPlayerIndex,
+
+        ////////// transportcopter //////////
+        /*  73 */ { unitType: UnitType.TransportCopter, playerIndex: 1 } as UnitTypeAndPlayerIndex,
+        /*  74 */ { unitType: UnitType.TransportCopter, playerIndex: 2 } as UnitTypeAndPlayerIndex,
+        /*  75 */ { unitType: UnitType.TransportCopter, playerIndex: 3 } as UnitTypeAndPlayerIndex,
+        /*  76 */ { unitType: UnitType.TransportCopter, playerIndex: 4 } as UnitTypeAndPlayerIndex,
+
+        ////////// seaplane //////////
+        /*  77 */ { unitType: UnitType.Seaplane, playerIndex: 1 } as UnitTypeAndPlayerIndex,
+        /*  78 */ { unitType: UnitType.Seaplane, playerIndex: 2 } as UnitTypeAndPlayerIndex,
+        /*  79 */ { unitType: UnitType.Seaplane, playerIndex: 3 } as UnitTypeAndPlayerIndex,
+        /*  80 */ { unitType: UnitType.Seaplane, playerIndex: 4 } as UnitTypeAndPlayerIndex,
+
+        ////////// battleship //////////
+        /*  81 */ { unitType: UnitType.Battleship, playerIndex: 1 } as UnitTypeAndPlayerIndex,
+        /*  82 */ { unitType: UnitType.Battleship, playerIndex: 2 } as UnitTypeAndPlayerIndex,
+        /*  83 */ { unitType: UnitType.Battleship, playerIndex: 3 } as UnitTypeAndPlayerIndex,
+        /*  84 */ { unitType: UnitType.Battleship, playerIndex: 4 } as UnitTypeAndPlayerIndex,
+
+        ////////// carrier //////////
+        /*  85 */ { unitType: UnitType.Carrier, playerIndex: 1 } as UnitTypeAndPlayerIndex,
+        /*  86 */ { unitType: UnitType.Carrier, playerIndex: 2 } as UnitTypeAndPlayerIndex,
+        /*  87 */ { unitType: UnitType.Carrier, playerIndex: 3 } as UnitTypeAndPlayerIndex,
+        /*  88 */ { unitType: UnitType.Carrier, playerIndex: 4 } as UnitTypeAndPlayerIndex,
+
+        ////////// submarine //////////
+        /*  89 */ { unitType: UnitType.Submarine, playerIndex: 1 } as UnitTypeAndPlayerIndex,
+        /*  90 */ { unitType: UnitType.Submarine, playerIndex: 2 } as UnitTypeAndPlayerIndex,
+        /*  91 */ { unitType: UnitType.Submarine, playerIndex: 3 } as UnitTypeAndPlayerIndex,
+        /*  92 */ { unitType: UnitType.Submarine, playerIndex: 4 } as UnitTypeAndPlayerIndex,
+
+        ////////// cruiser //////////
+        /*  93 */ { unitType: UnitType.Cruiser, playerIndex: 1 } as UnitTypeAndPlayerIndex,
+        /*  94 */ { unitType: UnitType.Cruiser, playerIndex: 2 } as UnitTypeAndPlayerIndex,
+        /*  95 */ { unitType: UnitType.Cruiser, playerIndex: 3 } as UnitTypeAndPlayerIndex,
+        /*  96 */ { unitType: UnitType.Cruiser, playerIndex: 4 } as UnitTypeAndPlayerIndex,
+
+        ////////// lander //////////
+        /*  97 */ { unitType: UnitType.Lander, playerIndex: 1 } as UnitTypeAndPlayerIndex,
+        /*  98 */ { unitType: UnitType.Lander, playerIndex: 2 } as UnitTypeAndPlayerIndex,
+        /*  99 */ { unitType: UnitType.Lander, playerIndex: 3 } as UnitTypeAndPlayerIndex,
+        /* 100 */ { unitType: UnitType.Lander, playerIndex: 4 } as UnitTypeAndPlayerIndex,
+
+        ////////// gunboat //////////
+        /* 101 */ { unitType: UnitType.Gunboat, playerIndex: 1 } as UnitTypeAndPlayerIndex,
+        /* 102 */ { unitType: UnitType.Gunboat, playerIndex: 2 } as UnitTypeAndPlayerIndex,
+        /* 103 */ { unitType: UnitType.Gunboat, playerIndex: 3 } as UnitTypeAndPlayerIndex,
+        /* 104 */ { unitType: UnitType.Gunboat, playerIndex: 4 } as UnitTypeAndPlayerIndex,
+    ];
+
     export namespace IdConverter {
         export function getTileBaseType(tileBaseViewId: number): TileBaseType {
             return TILE_BASE_TYPES[tileBaseViewId];
@@ -486,6 +653,10 @@ namespace Utility {
 
         export function getTileObjectTypeAndPlayerIndex(tileObjectViewId: number): TileObjectTypeAndPlayerIndex {
             return TILE_OBJECT_TYPES_AND_PLAYER_INDEX[tileObjectViewId];
+        }
+
+        export function getUnitTypeAndPlayerIndex(unitViewId: number): UnitTypeAndPlayerIndex {
+            return UNIT_TYPES_AND_PLAYER_INDEX[unitViewId];
         }
 
         export function getTileBaseImageSource(tileBaseViewId: number, tickCount: number): string {
