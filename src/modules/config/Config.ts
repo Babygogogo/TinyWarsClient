@@ -1577,11 +1577,27 @@ namespace Config {
         return CONFIG.templateTile[getTileType(baseType, objectType)];
     }
 
+    export function getTileTypesByCategory(category: TileCategory): TileType[] {
+        return CONFIG.tileCategories[category];
+    }
+
     export function getTemplateUnit(unitType: UnitType): Readonly<TemplateUnit> {
         return CONFIG.templateUnit[unitType];
     }
 
     export function getUnitTypesByCategory(category: UnitCategory): UnitType[] {
         return CONFIG.unitCategories[category];
+    }
+
+    export function getUnitMaxPromotion(): number {
+        return CONFIG.maxPromotion;
+    }
+
+    export function getUnitPromotionAttackBonus(promotion: number): number {
+        return CONFIG.promotionBonus[promotion].attack;
+    }
+
+    export function getUnitPromotionDefenseBonus(promotion: number): number {
+        return CONFIG.promotionBonus[promotion].defense;
     }
 }

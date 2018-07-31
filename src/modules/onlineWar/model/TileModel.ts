@@ -136,11 +136,11 @@ namespace OnlineWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for defense amount for units.
         ////////////////////////////////////////////////////////////////////////////////
-        public getNormalizedRawDefenseAmount(): number {
-            return Math.floor(this.getRawDefenseAmount() / 10);
+        public getNormalizedDefenseAmount(): number {
+            return Math.floor(this.getDefenseAmount() / 10);
         }
 
-        public getRawDefenseAmount(): number {
+        public getDefenseAmount(): number {
             return this._template.defenseAmount;
         }
 
@@ -162,7 +162,7 @@ namespace OnlineWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for income.
         ////////////////////////////////////////////////////////////////////////////////
-        public getRawIncomeAmountPerTurn(): number | undefined {
+        public getIncomeAmountPerTurn(): number | undefined {
             return this._template.incomePerTurn;
         }
 
@@ -176,8 +176,12 @@ namespace OnlineWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for move cost.
         ////////////////////////////////////////////////////////////////////////////////
-        public getRawMoveCosts(): Types.MoveCosts {
+        public getMoveCosts(): Types.MoveCosts {
             return this._template.moveCosts;
+        }
+
+        public getMoveCost(moveType: Types.MoveType): number | undefined {
+            return this.getMoveCosts()[moveType];
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -187,7 +191,7 @@ namespace OnlineWar {
             return this._template.repairUnitCategory;
         }
 
-        public getRawRepairAmount(): number | undefined {
+        public getRepairAmount(): number | undefined {
             return this._template.repairAmount;
         }
 
@@ -211,7 +215,7 @@ namespace OnlineWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for vision.
         ////////////////////////////////////////////////////////////////////////////////
-        public getRawVisionRange(): number | undefined {
+        public getVisionRange(): number | undefined {
             return this._template.visionRange;
         }
 

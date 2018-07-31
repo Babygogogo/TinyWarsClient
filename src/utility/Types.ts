@@ -89,9 +89,10 @@ namespace Utility {
             moveType : MoveType;
             moveRange: number;
 
-            maxFuel               : number;
-            fuelConsumptionPerTurn: number;
-            isDestroyedOnOutOfFuel: boolean;
+            maxFuel                 : number;
+            fuelConsumptionPerTurn  : number;
+            isDestroyedOnOutOfFuel  : boolean;
+            fuelConsumptionInDiving?: number;
 
             canCaptureTile?: boolean;
 
@@ -121,8 +122,6 @@ namespace Utility {
 
             produceUnitType   ?: UnitType;
             maxProduceMaterial?: number;
-
-            fuelConsumptionInDiving?: number;
         }
 
         export type InstantialUnit = {
@@ -146,7 +145,7 @@ namespace Utility {
 
             currentPromotion?: number;
 
-            isBuildingTile?: number;
+            isBuildingTile?: boolean;
 
             loadedUnitIds?: number[];
         }
