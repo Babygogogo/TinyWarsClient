@@ -4,24 +4,25 @@ namespace OnlineWar {
     import IdConverter    = Utility.IdConverter;
     import Notify         = Utility.Notify;
     import Helpers        = Utility.Helpers;
+    import Logger         = Utility.Logger;
     import SerializedTile = Types.SerializedTile;
     import InstantialTile = Types.InstantialTile;
 
     export class TileModel {
-        private _template     : Types.TemplateTile;
-        private _isInitialized: boolean;
+        private _isInitialized: boolean = false;
 
-        private _gridX              : number;
-        private _gridY              : number;
-        private _baseViewId         : number;
-        private _objectViewId       : number;
-        private _baseType           : Types.TileBaseType;
-        private _objectType         : Types.TileObjectType;
-        private _playerIndex        : number;
+        private _template    : Types.TemplateTile;
+        private _gridX       : number;
+        private _gridY       : number;
+        private _baseViewId  : number;
+        private _objectViewId: number;
+        private _baseType    : Types.TileBaseType;
+        private _objectType  : Types.TileObjectType;
+        private _playerIndex : number;
 
-        private _currentHp          : number;
-        private _currentBuildPoint  : number;
-        private _currentCapturePoint: number;
+        private _currentHp          : number | undefined;
+        private _currentBuildPoint  : number | undefined;
+        private _currentCapturePoint: number | undefined;
 
         public constructor(data?: SerializedTile) {
             if (data) {
@@ -44,7 +45,7 @@ namespace OnlineWar {
         }
 
         public serialize(): SerializedTile {
-            egret.assert(this._isInitialized, "TileModel.serialize() the tile hasn't been initialized!");
+            Logger.assert(this._isInitialized, "TileModel.serialize() the tile hasn't been initialized!");
             return {
                 gridX         : this._gridX,
                 gridY         : this._gridY,
@@ -76,22 +77,29 @@ namespace OnlineWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for hp and armor.
         ////////////////////////////////////////////////////////////////////////////////
-        public getMaxHp(): number {
+        public getMaxHp(): number | undefined {
             return this._template.maxHp;
         }
 
-        public getNormalizedCurrentHp(): number {
-            return Helpers.getNormalizedHp(this.getCurrentHp());
+        public getNormalizedCurrentHp(): number | undefined {
+            const currentHp = this.getCurrentHp();
+            return currentHp != null ? Helpers.getNormalizedHp(currentHp) : undefined;
         }
-        public getCurrentHp(): number {
+        public getCurrentHp(): number | undefined {
             return this._currentHp;
         }
-        public setCurrentHp(hp: number): void {
-            egret.assert((hp >= 0) && (hp <= this.getMaxHp()));
+        public setCurrentHp(hp: number | undefined): void {
+            const maxHp = this.getMaxHp();
+            if (maxHp == null) {
+                Logger.assert(hp == null, "TileModel.setCurrentHp() error, hp: ", hp);
+            } else {
+                Logger.assert((hp != null) && (hp >= 0) && (hp <= maxHp), "TileModel.setCurrentHp() error, hp: ", hp);
+            }
+
             this._currentHp = hp;
         }
 
-        public getArmorType(): Types.ArmorType {
+        public getArmorType(): Types.ArmorType | undefined {
             return this._template.armorType;
         }
 
@@ -106,11 +114,17 @@ namespace OnlineWar {
             return this._template.maxBuildPoint;
         }
 
-        public getCurrentBuildPoint(): number {
+        public getCurrentBuildPoint(): number | undefined {
             return this._currentBuildPoint;
         }
-        public setCurrentBuildPoint(point: number): void {
-            egret.assert((point >= 0) && (point <= this.getMaxBuildPoint()));
+        public setCurrentBuildPoint(point: number | undefined): void {
+            const maxPoint = this.getMaxBuildPoint();
+            if (maxPoint == null) {
+                Logger.assert(point == null, "TileModel.setCurrentBuildPoint() error, point: ", point);
+            } else {
+                Logger.assert((point != null) && (point >= 0) && (point <= maxPoint), "TileModel.setCurrentBuildPoint() error, point: ", point);
+            }
+
             this._currentBuildPoint = point;
         }
 
@@ -121,11 +135,17 @@ namespace OnlineWar {
             return this._template.maxCapturePoint;
         }
 
-        public getCurrentCapturePoint(): number {
+        public getCurrentCapturePoint(): number | undefined {
             return this._currentCapturePoint;
         }
-        public setCurrentCapturePoint(point: number): void {
-            egret.assert((point >= 0) && (point <= this.getMaxCapturePoint()));
+        public setCurrentCapturePoint(point: number | undefined): void {
+            const maxPoint = this.getMaxCapturePoint();
+            if (maxPoint == null) {
+                Logger.assert(point == null, "TileModel.setCurrentCapturePoint() error, point: ", point);
+            } else {
+                Logger.assert((point != null) && (point >= 0) && (point <= maxPoint), "TileModel.setCurrentCapturePoint() error, point: ", point);
+            }
+
             this._currentCapturePoint = point;
         }
 
