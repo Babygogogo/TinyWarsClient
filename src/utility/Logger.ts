@@ -12,71 +12,82 @@ namespace Utility {
             Off   = 0xFFFFFFFF,
         }
 
-        const logLevel: LogLevels = LogLevels.All;
-        const console : Console = window.console;
+        const CONSOLE           = window.console;
+        const LOG_LEVEL         = LogLevels.All;
+        const IS_ASSERT_ENABLED = true;
 
         export function trace(...rest: any[]): void {
-            if (logLevel <= LogLevels.Trace) {
+            if (LOG_LEVEL <= LogLevels.Trace) {
                 if (egret.Capabilities.isMobile) {
-                    console.trace(rest.join(" "));
+                    CONSOLE.trace(rest.join(" "));
                 } else {
-                    console.trace.apply(console, rest);
+                    CONSOLE.trace.apply(CONSOLE, rest);
                 }
             }
         }
 
         export function debug(...rest: any[]): void {
-            if (logLevel <= LogLevels.Debug) {
+            if (LOG_LEVEL <= LogLevels.Debug) {
                 if (egret.Capabilities.isMobile) {
-                    console.debug(rest.join(" "));
+                    CONSOLE.debug(rest.join(" "));
                 } else {
-                    console.debug.apply(console, rest);
+                    CONSOLE.debug.apply(CONSOLE, rest);
                 }
             }
         }
 
         export function log(...rest: any[]): void {
-            if (logLevel <= LogLevels.Log) {
+            if (LOG_LEVEL <= LogLevels.Log) {
                 if (egret.Capabilities.isMobile) {
-                    console.log(rest.join(" "));
+                    CONSOLE.log(rest.join(" "));
                 } else {
-                    console.log.apply(console, rest);
+                    CONSOLE.log.apply(CONSOLE, rest);
                 }
             }
         }
 
         export function info(...rest: any[]): void {
-            if (logLevel <= LogLevels.Info) {
+            if (LOG_LEVEL <= LogLevels.Info) {
                 if (egret.Capabilities.isMobile) {
-                    console.info(rest.join(" "));
+                    CONSOLE.info(rest.join(" "));
                 } else {
-                    console.info.apply(console, rest);
+                    CONSOLE.info.apply(CONSOLE, rest);
                 }
             }
         }
 
         export function warn(...rest: any[]): void {
-            if (logLevel <= LogLevels.Warn) {
+            if (LOG_LEVEL <= LogLevels.Warn) {
                 if (egret.Capabilities.isMobile) {
-                    console.warn(rest.join(" "));
+                    CONSOLE.warn(rest.join(" "));
                 } else {
-                    console.warn.apply(console, rest);
+                    CONSOLE.warn.apply(CONSOLE, rest);
                 }
             }
         }
 
         export function error(...rest: any[]): void {
-            if (logLevel <= LogLevels.Error) {
+            if (LOG_LEVEL <= LogLevels.Error) {
                 if (egret.Capabilities.isMobile) {
-                    console.error(rest.join(" "));
+                    CONSOLE.error(rest.join(" "));
                 } else {
-                    console.error.apply(console, rest);
+                    CONSOLE.error.apply(CONSOLE, rest);
                 }
             }
         }
 
         export function dump(obj): void {
             Logger.log(JSON.stringify(obj));
+        }
+
+        export function assert(...rest: any[]): void {
+            if (IS_ASSERT_ENABLED) {
+                if (egret.Capabilities.isMobile) {
+                    CONSOLE.assert(rest.shift(), rest.join(" "));
+                } else {
+                    CONSOLE.assert.apply(console, rest);
+                }
+            }
         }
     }
 }
