@@ -1,6 +1,7 @@
 
 namespace Config {
     import Types          = Utility.Types;
+    import GridSize       = Types.GridSize;
     import TemplateTile   = Types.TemplateTile;
     import TileBaseType   = Types.TileBaseType;
     import TileObjectType = Types.TileObjectType;
@@ -76,7 +77,7 @@ namespace Config {
     };
 
     type GameConfig = {
-        gridSize      : Types.GridSize;
+        gridSize      : GridSize;
         maxPromotion  : number;
         promotionBonus: { attack: number, defense: number }[];
         unitCategories: { [unitCategory: number]: UnitType[] };
@@ -1565,7 +1566,7 @@ namespace Config {
     };
     const CONFIG: Readonly<GameConfig> = ORIGINAL_CONFIG;
 
-    export function getGridSize(): Types.GridSize {
+    export function getGridSize(): GridSize {
         return CONFIG.gridSize;
     }
 
