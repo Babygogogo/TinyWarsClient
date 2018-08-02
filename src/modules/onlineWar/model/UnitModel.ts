@@ -3,6 +3,7 @@ namespace OnlineWar {
     import Types          = Utility.Types;
     import IdConverter    = Utility.IdConverter;
     import Helpers        = Utility.Helpers;
+    import Logger         = Utility.Logger;
     import SerializedUnit = Types.SerializedUnit;
     import InstantialUnit = Types.InstantialUnit;
     import UnitState      = Types.UnitState;
@@ -12,28 +13,29 @@ namespace OnlineWar {
     import MoveType       = Types.MoveType;
 
     export class UnitModel {
-        private _template: Types.TemplateUnit;
-        private _isInitialized: boolean;
+        private _isInitialized: boolean = false;
 
-        private _gridX              : number;
-        private _gridY              : number;
-        private _viewId             : number;
-        private _unitId             : number;
-        private _unitType           : UnitType;
-        private _playerIndex        : number;
+        private _template   : Types.TemplateUnit;
+        private _gridX      : number;
+        private _gridY      : number;
+        private _viewId     : number;
+        private _unitId     : number;
+        private _unitType   : UnitType;
+        private _playerIndex: number;
 
-        private _state                   : UnitState;
-        private _currentHp               : number;
-        private _currentFuel             : number;
-        private _currentBuildMaterial    : number;
-        private _currentProduceMaterial  : number;
-        private _currentPromotion        : number;
-        private _flareCurrentAmmo        : number;
-        private _isBuildingTile          : boolean;
-        private _isCapturingTile         : boolean;
-        private _isDiving                : boolean;
-        private _loadedUnitIds           : number[];
-        private _primaryWeaponCurrentAmmo: number;
+        private _state           : UnitState;
+        private _currentHp       : number;
+        private _currentFuel     : number;
+        private _currentPromotion: number;
+
+        private _currentBuildMaterial    : number    | undefined;
+        private _currentProduceMaterial  : number    | undefined;
+        private _flareCurrentAmmo        : number    | undefined;
+        private _isBuildingTile          : boolean   | undefined;
+        private _isCapturingTile         : boolean   | undefined;
+        private _isDiving                : boolean   | undefined;
+        private _loadedUnitIds           : number[]  | undefined;
+        private _primaryWeaponCurrentAmmo: number    | undefined;
 
         public constructor(data?: SerializedUnit) {
             if (data) {
@@ -42,20 +44,22 @@ namespace OnlineWar {
         }
 
         public deserialize(data: SerializedUnit): void {
-            const t             = IdConverter.getUnitTypeAndPlayerIndex(data.viewId);
+            const t = IdConverter.getUnitTypeAndPlayerIndex(data.viewId);
+            Logger.assert(t, "UnitModel.deserialize() invalid SerializedUnit! ", data);
+
             this._isInitialized = true;
             this._gridX         = data.gridX;
             this._gridY         = data.gridY;
             this._viewId        = data.viewId;
             this._unitId        = data.unitId;
-            this._unitType      = t.unitType;
-            this._playerIndex   = t.playerIndex;
+            this._unitType      = t!.unitType;
+            this._playerIndex   = t!.playerIndex;
             this._template      = Config.getTemplateUnit(this._unitType);
             this._loadInstantialData(data.instantialData);
         }
 
         public serialize(): SerializedUnit {
-            egret.assert(this._isInitialized, "UnitModel.serialize() the tile hasn't been initialized!");
+            Logger.assert(this._isInitialized, "UnitModel.serialize() the tile hasn't been initialized!");
             return {
                 gridX         : this._gridX,
                 gridY         : this._gridY,
@@ -84,6 +88,13 @@ namespace OnlineWar {
         }
 
         ////////////////////////////////////////////////////////////////////////////////
+        // Functions for player index.
+        ////////////////////////////////////////////////////////////////////////////////
+        public getPlayerIndex(): number {
+            return this._playerIndex;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
         // Functions for hp and armor.
         ////////////////////////////////////////////////////////////////////////////////
         public getMaxHp(): number {
@@ -97,7 +108,7 @@ namespace OnlineWar {
             return this._currentHp;
         }
         public setCurrentHp(hp: number): void {
-            egret.assert((hp >= 0) && (hp <= this.getMaxHp()));
+            Logger.assert((hp >= 0) && (hp <= this.getMaxHp()), "UnitModel.setCurrentHp() error, hp: ", hp);
             this._currentHp = hp;
         }
 
@@ -116,20 +127,27 @@ namespace OnlineWar {
             return this._template.primaryWeaponDamages != null;
         }
 
-        public getPrimaryWeaponMaxAmmo(): number {
+        public getPrimaryWeaponMaxAmmo(): number | undefined {
             return this._template.primaryWeaponMaxAmmo;
         }
 
-        public getPrimaryWeaponCurrentAmmo(): number {
+        public getPrimaryWeaponCurrentAmmo(): number | undefined{
             return this._primaryWeaponCurrentAmmo;
         }
-        public setPrimaryWeaponCurrentAmmo(ammo: number): void {
+        public setPrimaryWeaponCurrentAmmo(ammo: number | undefined): void {
+            const maxAmmo = this.getPrimaryWeaponMaxAmmo();
+            if (maxAmmo == null) {
+                Logger.assert(ammo == null, "UnitModel.setPrimaryWeaponCurrentAmmo() error, ammo: ", ammo);
+            } else {
+                Logger.assert((ammo != null) && (ammo >= 0) && (ammo <= maxAmmo), "UnitModel.setPrimaryWeaponCurrentAmmo() error, ammo: ", ammo);
+            }
+
             this._primaryWeaponCurrentAmmo = ammo;
         }
 
         public checkIsPrimaryWeaponAmmoInShort(): boolean {
             const maxAmmo = this.getPrimaryWeaponMaxAmmo();
-            return maxAmmo != null ? this.getPrimaryWeaponCurrentAmmo() <= maxAmmo * 0.4 : undefined;
+            return maxAmmo != null ? this.getPrimaryWeaponCurrentAmmo()! <= maxAmmo * 0.4 : false;
         }
 
         public getPrimaryWeaponDamage(armorType: ArmorType): number | undefined {
@@ -168,9 +186,12 @@ namespace OnlineWar {
         // Functions for capture.
         ////////////////////////////////////////////////////////////////////////////////
         public getIsCapturingTile(): boolean {
-            return this._isCapturingTile;
+            return this._isCapturingTile || false;
         }
         public setIsCapturingTile(isCapturing: boolean): void {
+            if (!this.checkCanCaptureTile()) {
+                Logger.assert(!isCapturing, "UnitModel.setIsCapturingTile() error, isCapturing: ", isCapturing);
+            }
             this._isCapturingTile = isCapturing;
         }
 
@@ -186,9 +207,12 @@ namespace OnlineWar {
         // Functions for dive.
         ////////////////////////////////////////////////////////////////////////////////
         public getIsDiving(): boolean {
-            return this._isDiving;
+            return this._isDiving || false;
         }
         public setIsDiving(isDiving: boolean): void {
+            if (!this.checkCanDive()) {
+                Logger.assert(!isDiving, "UnitModel.setIsDiving() error, isDiving: ", isDiving);
+            }
             this._isDiving = isDiving;
         }
 
@@ -202,7 +226,8 @@ namespace OnlineWar {
         public getCurrentFuel(): number {
             return this._currentFuel;
         }
-        public setCurrentFuel(fuel): void {
+        public setCurrentFuel(fuel: number): void {
+            Logger.assert((fuel >= 0) && (fuel <= this.getMaxFuel()), "UnitModel.setCurrentFuel() error, fuel: ", fuel);
             this._currentFuel = fuel;
         }
 
@@ -211,7 +236,7 @@ namespace OnlineWar {
         }
 
         public getFuelConsumptionPerTurn(): number {
-            return this.getIsDiving() ? this._template.fuelConsumptionInDiving : this._template.fuelConsumptionPerTurn;
+            return this.getIsDiving() ? this._template.fuelConsumptionInDiving! : this._template.fuelConsumptionPerTurn;
         }
 
         public checkIsDestroyedOnOutOfFuel(): boolean {
@@ -240,13 +265,20 @@ namespace OnlineWar {
         public getFlareCurrentAmmo(): number | undefined {
             return this._flareCurrentAmmo;
         }
-        public setFlareCurrentAmmo(ammo: number): void {
+        public setFlareCurrentAmmo(ammo: number | undefined): void {
+            const maxAmmo = this.getFlareMaxAmmo();
+            if (maxAmmo == null) {
+                Logger.assert(ammo == null, "UnitModel.setFlareCurrentAmmo() error, ammo: ", ammo);
+            } else {
+                Logger.assert((ammo != null) && (ammo >= 0) && (ammo <= maxAmmo), "UnitModel.setFlareCurrentAmmo() error, ammo:", ammo);
+            }
+
             this._flareCurrentAmmo = ammo;
         }
 
         public checkIsFlareAmmoInShort(): boolean {
             const maxAmmo = this.getFlareMaxAmmo();
-            return (maxAmmo != null) && (this.getFlareCurrentAmmo() <= maxAmmo * 0.4);
+            return maxAmmo != null ? this.getFlareCurrentAmmo()! <= maxAmmo * 0.4 : false;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -280,7 +312,14 @@ namespace OnlineWar {
         public getCurrentProduceMaterial(): number | undefined {
             return this._currentProduceMaterial;
         }
-        public setCurrentProduceMaterial(material: number): void {
+        public setCurrentProduceMaterial(material: number | undefined): void {
+            const maxMaterial = this.getMaxProduceMaterial();
+            if (maxMaterial == null) {
+                Logger.assert(material == null, "UnitModel.setCurrentProduceMaterial() error, material: ", matchMedia);
+            } else {
+                Logger.assert((material != null) && (material >= 0) && (material <= maxMaterial), "UnitModel.setCurrentProduceMaterial() error, material: ", matchMedia);
+            }
+
             this._currentProduceMaterial = material;
         }
 
@@ -313,6 +352,7 @@ namespace OnlineWar {
             return this._currentPromotion;
         }
         public setCurrentPromotion(promotion: number): void {
+            Logger.assert((promotion >= 0) && (promotion <= this.getMaxPromotion()), "UnitModel.setCurrentPromotion() error, promotion: ", promotion);
             this._currentPromotion = promotion;
         }
 
@@ -335,10 +375,17 @@ namespace OnlineWar {
         // Functions for build tile.
         ////////////////////////////////////////////////////////////////////////////////
         public getIsBuildingTile(): boolean {
-            return this._isBuildingTile;
+            return this._isBuildingTile || false;
         }
         public setIsBuildingTile(isBuilding: boolean): void {
+            if (!this.checkCanBuildTile()) {
+                Logger.assert(!isBuilding, "UnitModel.setIsBuildingTile() error, isBuilding: ", isBuilding);
+            }
             this._isBuildingTile = isBuilding;
+        }
+
+        public checkCanBuildTile(): boolean {
+            return this._template.buildTiles != null;
         }
 
         public getBuildTargetTile(srcType: TileType): TileType | undefined {
@@ -346,8 +393,26 @@ namespace OnlineWar {
             return buildTiles ? buildTiles[srcType] : undefined;
         }
 
-        public getBuildAmount(srcType: TileType): number {
-            return this.getBuildTargetTile(srcType) != null ? this.getNormalizedCurrentHp() : undefined;
+        public getBuildAmount(): number | undefined {
+            return this.checkCanBuildTile() ? this.getNormalizedCurrentHp() : undefined;
+        }
+
+        public getMaxBuildMaterial(): number | undefined {
+            return this._template.maxBuildMaterial;
+        }
+
+        public getCurrentBuildMaterial(): number | undefined {
+            return this._currentBuildMaterial;
+        }
+        public setCurrentBuildMaterial(material: number | undefined): void {
+            const maxMaterial = this.getMaxBuildMaterial();
+            if (maxMaterial == null) {
+                Logger.assert(material == null, "UnitModel.setCurrentBuildMaterial() error, material: ", material);
+            } else {
+                Logger.assert((material != null) && (material >= 0) && (material <= maxMaterial), "UnitModel.setCurrentBuildMaterial() error, material: ", material);
+            }
+
+            this._currentBuildMaterial = material;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -370,16 +435,6 @@ namespace OnlineWar {
             return ids ? ids.indexOf(id) >= 0 : false;
         }
 
-        public checkCanLoadUnit(unitType: UnitType, tileType: TileType): boolean {
-            const unitCategory = this._template.loadUnitCategory;
-            const tileCategory = this._template.loadableTileCategory;
-            return (this.getLoadedUnitsCount() < this.getMaxLoadUnitsCount())
-                && (unitCategory != null)
-                && (Config.getUnitTypesByCategory(unitCategory).indexOf(unitType) >= 0)
-                && (tileCategory != null)
-                && (Config.getTileTypesByCategory(tileCategory).indexOf(tileType) >= 0);
-        }
-
         public checkCanDropLoadedUnit(): boolean | undefined {
             return this._template.canDropLoadedUnits;
         }
@@ -397,12 +452,29 @@ namespace OnlineWar {
         }
 
         public addLoadUnitId(id: number): void {
-            this._loadedUnitIds.push(id);
+            const loadedCount = this.getLoadedUnitsCount();
+            const maxCount    = this.getMaxLoadUnitsCount();
+            Logger.assert(
+                (loadedCount != null) && (maxCount != null) && (loadedCount < maxCount) && (!this.checkHasLoadUnitId(id)),
+                "UnitModel.addLoadUnitId() error, id: ", id
+            );
+
+            this._loadedUnitIds!.push(id);
         }
         public removeLoadUnitId(id: number): void {
-            this._loadedUnitIds.splice(this._loadedUnitIds.indexOf(id), 1);
+            Logger.assert(this.checkHasLoadUnitId(id), "UnitModel.removeLoadUnitId() error, id: ", id);
+
+            const ids = this._loadedUnitIds!;
+            ids.splice(ids.indexOf(id), 1);
         }
-        private _setLoadUnitIds(ids: number[]): void {
+        private _setLoadUnitIds(ids: number[] | undefined): void {
+            const maxCount = this.getMaxLoadUnitsCount();
+            if (maxCount == null) {
+                Logger.assert(ids == null, "UnitModel._setLoadUnitIds() error, ids: ", ids);
+            } else {
+                Logger.assert((ids != null) && (ids.length <= maxCount), "UnitModel._setLoadUnitIds() error, ids: ", ids);
+            }
+
             this._loadedUnitIds = ids;
         }
 
@@ -461,6 +533,9 @@ namespace OnlineWar {
             const isBuildingTile = this.getIsBuildingTile();
             (isBuildingTile) && (data.isBuildingTile = isBuildingTile);
 
+            const buildMaterial = this.getCurrentBuildMaterial();
+            (buildMaterial !== this.getMaxBuildMaterial()) && (data.currentBuildMaterial = buildMaterial);
+
             const loadedUnitIds = this.getLoadedUnitIds();
             (loadedUnitIds) && (loadedUnitIds.length > 0) && (data.loadedUnitIds = loadedUnitIds);
 
@@ -478,7 +553,8 @@ namespace OnlineWar {
             this.setCurrentProduceMaterial(  (d) && (d.currentProduceMaterial   != null) ? d.currentProduceMaterial   : this.getMaxProduceMaterial());
             this.setCurrentPromotion(        (d) && (d.currentPromotion         != null) ? d.currentPromotion         : 0);
             this.setIsBuildingTile(          (d) && (d.isBuildingTile           != null) ? d.isBuildingTile           : false);
-            this._setLoadUnitIds(            (d) && (d.loadedUnitIds            != null) ? d.loadedUnitIds            : []);
+            this.setCurrentBuildMaterial(    (d) && (d.currentBuildMaterial     != null) ? d.currentBuildMaterial     : this.getMaxBuildMaterial());
+            this._setLoadUnitIds(            (d) && (d.loadedUnitIds            != null) ? d.loadedUnitIds            : undefined);
         }
     }
 }
