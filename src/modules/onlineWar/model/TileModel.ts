@@ -11,14 +11,15 @@ namespace OnlineWar {
     export class TileModel {
         private _isInitialized: boolean = false;
 
-        private _template    : Types.TemplateTile;
-        private _gridX       : number;
-        private _gridY       : number;
-        private _baseViewId  : number;
-        private _objectViewId: number;
-        private _baseType    : Types.TileBaseType;
-        private _objectType  : Types.TileObjectType;
-        private _playerIndex : number;
+        private _configVersion: number;
+        private _template     : Types.TemplateTile;
+        private _gridX        : number;
+        private _gridY        : number;
+        private _baseViewId   : number;
+        private _objectViewId : number;
+        private _baseType     : Types.TileBaseType;
+        private _objectType   : Types.TileObjectType;
+        private _playerIndex  : number;
 
         private _currentHp          : number | undefined;
         private _currentBuildPoint  : number | undefined;
@@ -31,8 +32,11 @@ namespace OnlineWar {
         }
 
         public deserialize(data: SerializedTile): void {
-            const t             = IdConverter.getTileObjectTypeAndPlayerIndex(data.objectViewId);
+            const t = IdConverter.getTileObjectTypeAndPlayerIndex(data.objectViewId);
+            Logger.assert(t, "TileModel.deserialize() invalid SerializedTile! ", data);
+
             this._isInitialized = true;
+            this._configVersion = data.configVersion;
             this._gridX         = data.gridX;
             this._gridY         = data.gridY;
             this._baseViewId    = data.baseViewId;
@@ -40,13 +44,14 @@ namespace OnlineWar {
             this._baseType      = IdConverter.getTileBaseType(data.baseViewId);
             this._objectType    = t.tileObjectType;
             this._playerIndex   = t.playerIndex;
-            this._template      = Config.getTemplateTile(this._baseType, this._objectType);
+            this._template      = Config.getTemplateTile(this._configVersion, this._baseType, this._objectType);
             this._loadInstantialData(data.instantialData);
         }
 
         public serialize(): SerializedTile {
             Logger.assert(this._isInitialized, "TileModel.serialize() the tile hasn't been initialized!");
             return {
+                configVersion : this._configVersion,
                 gridX         : this._gridX,
                 gridY         : this._gridY,
                 baseViewId    : this._baseViewId,
@@ -222,7 +227,7 @@ namespace OnlineWar {
             const category = this._template.hideUnitCategory;
             return category == null
                 ? false
-                : Config.getUnitTypesByCategory(category).indexOf(unitType) >= 0;
+                : Config.getUnitTypesByCategory(this._configVersion, category).indexOf(unitType) >= 0;
         }
 
         ////////////////////////////////////////////////////////////////////////////////

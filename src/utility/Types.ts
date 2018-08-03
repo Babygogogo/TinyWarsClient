@@ -64,6 +64,8 @@ namespace Utility {
         }
 
         export type SerializedTile = {
+            configVersion: number;
+
             gridX: number;
             gridY: number;
 
@@ -151,6 +153,8 @@ namespace Utility {
         }
 
         export type SerializedUnit = {
+            configVersion: number;
+
             gridX: number;
             gridY: number;
 

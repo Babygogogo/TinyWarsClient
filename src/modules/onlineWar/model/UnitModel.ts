@@ -15,13 +15,14 @@ namespace OnlineWar {
     export class UnitModel {
         private _isInitialized: boolean = false;
 
-        private _template   : Types.TemplateUnit;
-        private _gridX      : number;
-        private _gridY      : number;
-        private _viewId     : number;
-        private _unitId     : number;
-        private _unitType   : UnitType;
-        private _playerIndex: number;
+        private _configVersion: number;
+        private _template     : Types.TemplateUnit;
+        private _gridX        : number;
+        private _gridY        : number;
+        private _viewId       : number;
+        private _unitId       : number;
+        private _unitType     : UnitType;
+        private _playerIndex  : number;
 
         private _state           : UnitState;
         private _currentHp       : number;
@@ -48,19 +49,21 @@ namespace OnlineWar {
             Logger.assert(t, "UnitModel.deserialize() invalid SerializedUnit! ", data);
 
             this._isInitialized = true;
+            this._configVersion = data.configVersion;
             this._gridX         = data.gridX;
             this._gridY         = data.gridY;
             this._viewId        = data.viewId;
             this._unitId        = data.unitId;
             this._unitType      = t!.unitType;
             this._playerIndex   = t!.playerIndex;
-            this._template      = Config.getTemplateUnit(this._unitType);
+            this._template      = Config.getTemplateUnit(this._configVersion, this._unitType);
             this._loadInstantialData(data.instantialData);
         }
 
         public serialize(): SerializedUnit {
             Logger.assert(this._isInitialized, "UnitModel.serialize() the tile hasn't been initialized!");
             return {
+                configVersion : this._configVersion,
                 gridX         : this._gridX,
                 gridY         : this._gridY,
                 viewId        : this._viewId,
@@ -345,7 +348,7 @@ namespace OnlineWar {
         // Functions for promotion.
         ////////////////////////////////////////////////////////////////////////////////
         public getMaxPromotion(): number {
-            return Config.getUnitMaxPromotion();
+            return Config.getUnitMaxPromotion(this._configVersion);
         }
 
         public getCurrentPromotion(): number {
@@ -357,11 +360,11 @@ namespace OnlineWar {
         }
 
         public getPromotionAttackBonus(): number {
-            return Config.getUnitPromotionAttackBonus(this.getCurrentPromotion());
+            return Config.getUnitPromotionAttackBonus(this._configVersion, this.getCurrentPromotion());
         }
 
         public getPromotionDefenseBonus(): number {
-            return Config.getUnitPromotionDefenseBonus(this.getCurrentPromotion());
+            return Config.getUnitPromotionDefenseBonus(this._configVersion, this.getCurrentPromotion());
         }
 
         ////////////////////////////////////////////////////////////////////////////////

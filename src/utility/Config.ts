@@ -13,6 +13,9 @@ namespace Config {
     import MoveType       = Types.MoveType;
     import ArmorType      = Types.ArmorType;
 
+    ////////////////////////////////////////////////////////////////////////////////
+    // Configurations and initialization.
+    ////////////////////////////////////////////////////////////////////////////////
     const TILE_TYPE_MAPPING: Readonly<{ [tileBaseType: number]: { [tileObjectType: number]: TileType } }> = {
         [TileBaseType.Beach]: {
             [TileObjectType.Empty]       : TileType.Beach,              [TileObjectType.Road]        : TileType.Road,
@@ -76,19 +79,21 @@ namespace Config {
         },
     };
 
-    type GameConfig = {
-        gridSize      : GridSize;
-        maxPromotion  : number;
-        promotionBonus: { attack: number, defense: number }[];
-        unitCategories: { [unitCategory: number]: UnitType[] };
-        tileCategories: { [tileCategory: number]: TileType[] };
-        templateTile  : { [tileType: number]: TemplateTile };
-        templateUnit  : { [unitType: number]: TemplateUnit };
+    const GRID_SIZE: GridSize = {
+        width: 72,
+        height: 72
     };
 
-    const ORIGINAL_CONFIG: GameConfig = {
-        gridSize: { width: 72, height: 72 },
+    type GameConfig = {
+        maxPromotion  ?: number;
+        promotionBonus?: { attack: number, defense: number }[];
+        tileCategories?: { [tileCategory: number]: TileType[] };
+        unitCategories?: { [unitCategory: number]: UnitType[] };
+        templateTile  ?: { [tileType: number]: TemplateTile };
+        templateUnit  ?: { [unitType: number]: TemplateUnit };
+    };
 
+    const CONFIG_0: GameConfig = {
         maxPromotion  : 3,
         promotionBonus: [
             {attack: 0,  defense: 0 },
@@ -1564,41 +1569,84 @@ namespace Config {
             },
         },
     };
-    const CONFIG: Readonly<GameConfig> = ORIGINAL_CONFIG;
 
+    const CONFIGS = [CONFIG_0];
+
+    for (let i = 1; i < CONFIGS.length; ++i) {
+        const prevCfg = CONFIGS[0];
+        const currCfg = CONFIGS[i];
+        currCfg.maxPromotion   = currCfg.maxPromotion   != null ? currCfg.maxPromotion   : prevCfg.maxPromotion;
+        currCfg.promotionBonus = currCfg.promotionBonus != null ? currCfg.promotionBonus : prevCfg.promotionBonus;
+
+        if (!currCfg.tileCategories) {
+            currCfg.tileCategories = prevCfg.tileCategories;
+        } else {
+            for (const c in prevCfg.tileCategories!) {
+                currCfg.tileCategories[c] = currCfg.tileCategories[c] || prevCfg.tileCategories![c];
+            }
+        }
+
+        if (!currCfg.unitCategories) {
+            currCfg.unitCategories = prevCfg.unitCategories;
+        } else {
+            for (const c in prevCfg.unitCategories!) {
+                currCfg.unitCategories[c] = currCfg.unitCategories[c] || prevCfg.unitCategories![c];
+            }
+        }
+
+        if (!currCfg.templateTile) {
+            currCfg.templateTile = prevCfg.templateTile;
+        } else {
+            for (const c in prevCfg.templateTile!) {
+                currCfg.templateTile[c] = currCfg.templateTile[c] || prevCfg.templateTile![c];
+            }
+        }
+
+        if (!currCfg.templateUnit) {
+            currCfg.templateUnit = prevCfg.templateUnit;
+        } else {
+            for (const c in prevCfg.templateUnit!) {
+                currCfg.templateUnit[c] = currCfg.templateUnit[c] || prevCfg.templateUnit![c];
+            }
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    // Exports.
+    ////////////////////////////////////////////////////////////////////////////////
     export function getGridSize(): GridSize {
-        return CONFIG.gridSize;
+        return GRID_SIZE;
     }
 
     export function getTileType(baseType: TileBaseType, objectType: TileObjectType): TileType {
         return TILE_TYPE_MAPPING[baseType][objectType];
     }
 
-    export function getTemplateTile(baseType: TileBaseType, objectType: TileObjectType): Readonly<TemplateTile> {
-        return CONFIG.templateTile[getTileType(baseType, objectType)];
+    export function getTemplateTile(version: number, baseType: TileBaseType, objectType: TileObjectType): TemplateTile {
+        return CONFIGS[version].templateTile![getTileType(baseType, objectType)];
     }
 
-    export function getTileTypesByCategory(category: TileCategory): TileType[] {
-        return CONFIG.tileCategories[category];
+    export function getTileTypesByCategory(version: number, category: TileCategory): TileType[] {
+        return CONFIGS[version].tileCategories![category];
     }
 
-    export function getTemplateUnit(unitType: UnitType): Readonly<TemplateUnit> {
-        return CONFIG.templateUnit[unitType];
+    export function getTemplateUnit(version: number, unitType: UnitType): TemplateUnit {
+        return CONFIGS[version].templateUnit![unitType];
     }
 
-    export function getUnitTypesByCategory(category: UnitCategory): UnitType[] {
-        return CONFIG.unitCategories[category];
+    export function getUnitTypesByCategory(version: number, category: UnitCategory): UnitType[] {
+        return CONFIGS[version].unitCategories![category];
     }
 
-    export function getUnitMaxPromotion(): number {
-        return CONFIG.maxPromotion;
+    export function getUnitMaxPromotion(version: number): number {
+        return CONFIGS[version].maxPromotion!;
     }
 
-    export function getUnitPromotionAttackBonus(promotion: number): number {
-        return CONFIG.promotionBonus[promotion].attack;
+    export function getUnitPromotionAttackBonus(version: number, promotion: number): number {
+        return CONFIGS[version].promotionBonus![promotion].attack;
     }
 
-    export function getUnitPromotionDefenseBonus(promotion: number): number {
-        return CONFIG.promotionBonus[promotion].defense;
+    export function getUnitPromotionDefenseBonus(version: number, promotion: number): number {
+        return CONFIGS[version].promotionBonus![promotion].defense;
     }
 }
