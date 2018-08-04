@@ -1,8 +1,9 @@
 
 namespace Login {
-    import FloatText  = Utility.FloatText;
-    import Lang       = Utility.Lang;
-    import NotifyType = Utility.Notify.Type;
+    import FloatText    = Utility.FloatText;
+    import Lang         = Utility.Lang;
+    import NotifyType   = Utility.Notify.Type;
+    import LocalStorage = Utility.LocalStorage;
 
     export class LoginPanel extends GameUi.UiPanel {
         protected readonly _layerType = Utility.Types.LayerType.Hud;
@@ -44,12 +45,27 @@ namespace Login {
                 { ui: this._btnLogin,    callback: this._onTouchedBtnLogin },
                 { ui: this._btnRegister, callback: this._onTouchedBtnRegister },
             ];
+
+            // let test = new OnlineWar.TileMapView();
+            // test.init(100, 100);
+            // test.scaleX = 0.15;
+            // test.scaleY = 0.15;
+            // this.addChildAt(test, 0);
+
+            // let testImg = new GameUi.UiImage("c01_t01_s01_f01");
+            // testImg.bottom = 0;
+            // testImg.left = 0;
+            // this.addChild(testImg);
+        }
+
+        protected _onOpened(): void {
+            this._inputAccount.text = LocalStorage.getAccount();
         }
 
         private _onNotifySLogin(e: egret.Event): void {
             FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S00));
             LoginPanel.destroy();
-            lobby.LobbyPanel.create();
+            Lobby.LobbyPanel.create();
         }
 
         private _onTouchedBtnLogin(e: egret.TouchEvent): void {

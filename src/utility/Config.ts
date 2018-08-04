@@ -1,7 +1,7 @@
 
 namespace Config {
     import Types          = Utility.Types;
-    import GridSize       = Types.GridSize;
+    import GridSize       = Types.Size;
     import TemplateTile   = Types.TemplateTile;
     import TileBaseType   = Types.TileBaseType;
     import TileObjectType = Types.TileObjectType;

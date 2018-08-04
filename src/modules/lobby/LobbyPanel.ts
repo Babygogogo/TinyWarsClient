@@ -1,5 +1,5 @@
 
-namespace lobby {
+namespace Lobby {
     export class LobbyPanel extends GameUi.UiPanel {
         protected readonly _layerType = Utility.Types.LayerType.Scene;
         protected readonly _isAlone   = true;

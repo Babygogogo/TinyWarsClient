@@ -48,7 +48,7 @@ namespace Login {
         private _onNotifySLogin(e: egret.Event): void {
             FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S00));
             RegisterPanel.destroy();
-            lobby.LobbyPanel.create();
+            Lobby.LobbyPanel.create();
         }
 
         private _onNotifySRegister(e: egret.Event): void {
