@@ -898,6 +898,9 @@ namespace Network {
 
             /** S_Login privilege */
             privilege?: (number | null);
+
+            /** S_Login account */
+            account?: (string | null);
         }
 
         /** Represents a S_Login. */
@@ -920,6 +923,9 @@ namespace Network {
 
             /** S_Login privilege. */
             public privilege: number;
+
+            /** S_Login account. */
+            public account: string;
 
             /**
              * Creates a new S_Login instance using the specified properties.

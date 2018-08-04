@@ -189,6 +189,10 @@
         "privilege": {
           "type": "uint32",
           "id": 3
+        },
+        "account": {
+          "type": "string",
+          "id": 4
         }
       }
     },

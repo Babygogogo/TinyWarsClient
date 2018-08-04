@@ -1,12 +1,14 @@
 
 namespace User {
     export namespace UserModel {
-        import Notify = Utility.Notify;
-        import Types  = Utility.Types;
-        import Lang   = Utility.Lang;
+        import Notify       = Utility.Notify;
+        import Types        = Utility.Types;
+        import Lang         = Utility.Lang;
+        import LocalStorage = Utility.LocalStorage;
 
         let userId       : number;
         let userPrivilege: number;
+        let userAccount  : string;
 
         export function init(): void {
             Notify.addEventListeners([
@@ -17,6 +19,9 @@ namespace User {
         export function updateOnLogin(data: Network.Proto.IS_Login): void {
             userId        = data.userId;
             userPrivilege = data.privilege;
+            userAccount   = data.account;
+
+            LocalStorage.setAccount(data.account);
         }
 
         export function getUserId(): number {
