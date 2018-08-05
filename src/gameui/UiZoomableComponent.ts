@@ -42,14 +42,16 @@ namespace GameUi {
 
         public setContentWidth(width: number): void {
             this._contentWidth = width;
-            this.reviseContentX();
+
+            this._reviseContentScaleAndPosition();
         }
         public getContentWidth(): number {
             return this._contentWidth;
         }
         public setContentHeight(height: number): void {
             this._contentHeight = height;
-            this.reviseContentY();
+
+            this._reviseContentScaleAndPosition();
         }
         public getContentHeight(): number {
             return this._contentHeight;
@@ -61,45 +63,45 @@ namespace GameUi {
             this._spacingForLeft   = left;
             this._spacingForRight  = right;
 
-            this.reviseContentX();
-            this.reviseContentY();
+            this._reviseContentScaleAndPosition();
         }
 
-        public setContentX(x: number): void {
-            x = Math.max(x, this._getMinContentX());
-            x = Math.min(x, this._getMaxContentX());
+        public setContentX(x: number, needRevise: boolean): void {
             this._contents.x = x;
+            (needRevise) && (this._reviseContentX());
         }
         public getContentX(): number {
             return this._contents.x;
         }
-        public setContentY(y: number): void {
-            y = Math.max(y, this._getMinContentY());
-            y = Math.min(y, this._getMaxContentY());
+        public setContentY(y: number, needRevise: boolean): void {
             this._contents.y = y;
+            (needRevise) && (this._reviseContentY());
         }
         public getContentY(): number {
             return this._contents.y;
         }
 
-        public reviseContentX(): void {
-            this.setContentX(this.getContentX());
+        public setContentScale(scale: number, needRevise: boolean): void {
+            this._contents.scaleX = scale;
+            this._contents.scaleY = scale;
+
+            (needRevise) && (this._reviseContentScaleAndPosition());
         }
-        public reviseContentY(): void {
-            this.setContentY(this.getContentY());
+        public getContentScale(): number {
+            return this._contents.scaleX;
         }
 
         public setZoomByScroll(focusPoint: Types.Point, scrollValue: number): void {
             this._setZoom(
                 focusPoint,
-                this._getNewScale(this.scaleX, this._getScaleModifierByScrollValue(scrollValue))
+                this._getNewScale(this.getContentScale(), this._getScaleModifierByScrollValue(scrollValue))
             );
         }
 
         public setZoomByTouches(touches: TouchEvents, prevPoints: TouchPoints): void {
             this._setZoom(
                 this._getCenterPoint(touches),
-                this._getNewScale(this.scaleX, this._getScaleModifierByTouches(touches, prevPoints))
+                this._getNewScale(this.getContentScale(), this._getScaleModifierByTouches(touches, prevPoints))
             );
         }
 
@@ -107,17 +109,15 @@ namespace GameUi {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
         private _onResize(e: egret.Event): void {
-            this.reviseContentX();
-            this.reviseContentY();
+            this._reviseContentScaleAndPosition();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _getMaxScale(): number {
-            return 2;
+            return Math.max(2, this._getMinScale());
         }
-
         private _getMinScale(): number {
             const boundaryWidth  = this._getBoundaryWidth();
             const boundaryHeight = this._getBoundaryHeight();
@@ -206,8 +206,7 @@ namespace GameUi {
             const newGlobalPoint = this.localToGlobal(focusPoint.x, focusPoint.y);
             this.x = this.x - newGlobalPoint.x + oldGlobalPoint.x;
             this.y = this.y - newGlobalPoint.y + oldGlobalPoint.y;
-            this.reviseContentX();
-            this.reviseContentY();
+            this._reviseContentPosition();
         }
 
         private _getBoundaryWidth(): number {
@@ -219,7 +218,7 @@ namespace GameUi {
 
         private _getMinContentX(): number {
             const boundaryWidth = this._getBoundaryWidth();
-            const contentWidth  = this.getContentWidth();
+            const contentWidth  = this.getContentWidth() * this.getContentScale();
             if (contentWidth <= boundaryWidth) {
                 return this._spacingForLeft + (boundaryWidth - contentWidth) / 2;
             } else {
@@ -228,7 +227,7 @@ namespace GameUi {
         }
         private _getMaxContentX(): number {
             const boundaryWidth = this._getBoundaryWidth();
-            const contentWidth  = this.getContentWidth();
+            const contentWidth  = this.getContentWidth() * this.getContentScale();
             if (contentWidth <= boundaryWidth) {
                 return this._spacingForLeft + (boundaryWidth - contentWidth) / 2;
             } else {
@@ -237,7 +236,7 @@ namespace GameUi {
         }
         private _getMinContentY(): number {
             const boundaryHeight = this._getBoundaryHeight();
-            const contentHeight  = this.getContentHeight();
+            const contentHeight  = this.getContentHeight() * this.getContentScale();
             if (contentHeight <= boundaryHeight) {
                 return this._spacingForTop + (boundaryHeight - contentHeight) / 2;
             } else {
@@ -246,12 +245,37 @@ namespace GameUi {
         }
         private _getMaxContentY(): number {
             const boundaryHeight = this._getBoundaryHeight();
-            const contentHeight  = this.getContentHeight();
+            const contentHeight  = this.getContentHeight() * this.getContentScale();
             if (contentHeight <= boundaryHeight) {
                 return this._spacingForTop + (boundaryHeight - contentHeight) / 2;
             } else {
                 return this._spacingForTop;
             }
+        }
+
+        private _reviseContentX(): void {
+            let x = this.getContentX();
+            x = Math.max(x, this._getMinContentX());
+            x = Math.min(x, this._getMaxContentX());
+            this.setContentX(x, false);
+        }
+        private _reviseContentY(): void {
+            let y = this.getContentY();
+            y = Math.max(y, this._getMinContentY());
+            y = Math.min(y, this._getMaxContentY());
+            this.setContentY(y, false);
+        }
+        private _reviseContentPosition(): void {
+            this._reviseContentX();
+            this._reviseContentY();
+        }
+        private _reviseContentScaleAndPosition(): void {
+            let scale = this.getContentScale();
+            scale = Math.max(scale, this._getMinScale());
+            scale = Math.min(scale, this._getMaxScale());
+            this.setContentScale(scale, false);
+
+            this._reviseContentPosition();
         }
 
         private _resetMask(): void {
