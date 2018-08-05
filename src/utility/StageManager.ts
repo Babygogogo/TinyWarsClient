@@ -9,10 +9,19 @@ namespace Utility {
         export const RATIO_FOR_MIN_HEIGHT = DESIGN_WIDTH / DESIGN_MIN_HEIGHT;
 
         let   stage : egret.Stage;
+        let   mouseX: number;
+        let   mouseY: number;
         const layers: { [layerType: number]: UiLayer } = {};
 
         export function init(stg: egret.Stage): void {
             stage = stg;
+
+            if (!egret.Capabilities.isMobile) {
+                mouse.enable(stage);
+                mouse.setMouseMoveEnabled(true);
+                stage.addEventListener(mouse.MouseEvent.MOUSE_MOVE,  _onMouseMove,  StageManager);
+                stage.addEventListener(mouse.MouseEvent.MOUSE_WHEEL, _onMouseWheel, StageManager);
+            }
 
             egret.sys.screenAdapter = new ScreenAdapter();
             stage.setContentSize(stage.stageWidth, stage.stageHeight);
@@ -28,6 +37,14 @@ namespace Utility {
             return stage;
         }
 
+        export function getMouseX(): number {
+            return mouseX;
+        }
+
+        export function getMouseY(): number {
+            return mouseY;
+        }
+
         export function getLayer(layer: LayerType): UiLayer {
             return layers[layer];
         }
@@ -38,52 +55,61 @@ namespace Utility {
             StageManager.getStage().addChild(layers[layerType]);
         }
 
-        class UiLayer extends eui.UILayer {
-            public constructor() {
-                super();
+        function _onMouseMove(e: egret.TouchEvent): void {
+            mouseX = e.stageX;
+            mouseY = e.stageY;
+        }
 
-                this.touchEnabled = false;
-                this.addEventListener(egret.Event.RESIZE, this._onResize, this);
-            }
+        function _onMouseWheel(e: egret.Event): void {
+            Notify.dispatch(Notify.Type.MouseWheel, e.data);
+        }
+    }
 
-            public removeAllPanels(execpt?: GameUi.UiPanel): void {
-                for (let i = this.numChildren - 1; i >= 0; --i) {
-                    const child = this.getChildAt(i);
-                    if ((child instanceof GameUi.UiPanel) && (child !== execpt)) {
-                        this.removeChildAt(i);
-                    }
-                }
-            }
+    class UiLayer extends eui.UILayer {
+        public constructor() {
+            super();
 
-            private _onResize(e: egret.Event): void {
-                const height = this.height;
-                for (let i = 0; i < this.numChildren; ++i) {
-                    const child = this.getChildAt(i);
-                    if ((child instanceof GameUi.UiPanel) && (child.checkIsAutoAdjustHeight())) {
-                        child.height = height;
-                    }
+            this.touchEnabled = false;
+            this.addEventListener(egret.Event.RESIZE, this._onResize, this);
+        }
+
+        public removeAllPanels(execpt?: GameUi.UiPanel): void {
+            for (let i = this.numChildren - 1; i >= 0; --i) {
+                const child = this.getChildAt(i);
+                if ((child instanceof GameUi.UiPanel) && (child !== execpt)) {
+                    this.removeChildAt(i);
                 }
             }
         }
 
-        class ScreenAdapter implements egret.sys.IScreenAdapter {
-            public calculateStageSize(scaleMode: string, screenWidth: number, screenHeight: number, contentWidth: number, contentHeight: number): egret.sys.StageDisplaySize {
-                const currRatio = screenWidth / screenHeight;
-                if (currRatio > RATIO_FOR_MIN_HEIGHT) {
-                    return {
-                        stageWidth: DESIGN_WIDTH,
-                        stageHeight: DESIGN_MIN_HEIGHT,
-                        displayWidth: screenHeight * RATIO_FOR_MIN_HEIGHT,
-                        displayHeight: screenHeight,
-                    };
-                } else {
-                    return {
-                        stageWidth: DESIGN_WIDTH,
-                        stageHeight: screenHeight / screenWidth * DESIGN_WIDTH,
-                        displayWidth: screenWidth,
-                        displayHeight: screenHeight,
-                    };
+        private _onResize(e: egret.Event): void {
+            const height = this.height;
+            for (let i = 0; i < this.numChildren; ++i) {
+                const child = this.getChildAt(i);
+                if ((child instanceof GameUi.UiPanel) && (child.checkIsAutoAdjustHeight())) {
+                    child.height = height;
                 }
+            }
+        }
+    }
+
+    class ScreenAdapter implements egret.sys.IScreenAdapter {
+        public calculateStageSize(scaleMode: string, screenWidth: number, screenHeight: number, contentWidth: number, contentHeight: number): egret.sys.StageDisplaySize {
+            const currRatio = screenWidth / screenHeight;
+            if (currRatio > StageManager.RATIO_FOR_MIN_HEIGHT) {
+                return {
+                    stageWidth   : StageManager.DESIGN_WIDTH,
+                    stageHeight  : StageManager.DESIGN_MIN_HEIGHT,
+                    displayWidth : screenHeight * StageManager.RATIO_FOR_MIN_HEIGHT,
+                    displayHeight: screenHeight,
+                };
+            } else {
+                return {
+                    stageWidth   : StageManager.DESIGN_WIDTH,
+                    stageHeight  : screenHeight / screenWidth * StageManager.DESIGN_WIDTH,
+                    displayWidth : screenWidth,
+                    displayHeight: screenHeight,
+                };
             }
         }
     }

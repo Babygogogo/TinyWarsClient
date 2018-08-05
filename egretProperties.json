@@ -31,6 +31,10 @@
         {
             "name": "ProtobufJs",
             "path": "../TinyWarsExternals/ClientDependencies/libs/ProtobufJs"
+        },
+        {
+            "name": "mouse",
+            "path": "../TinyWarsExternals/ClientDependencies/libs/mouse"
         }
     ]
 }
