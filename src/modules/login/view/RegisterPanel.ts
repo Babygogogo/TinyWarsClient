@@ -5,8 +5,8 @@ namespace Login {
     import NotifyType = Utility.Notify.Type;
 
     export class RegisterPanel extends GameUi.UiPanel {
-        protected readonly _layerType = Utility.Types.LayerType.Hud;
-        protected readonly _isAlone   = true;
+        protected readonly _layerType   = Utility.Types.LayerType.Hud;
+        protected readonly _isExclusive = true;
 
         private _inputAccount : GameUi.UiTextInput;
         private _inputPassword: GameUi.UiTextInput;

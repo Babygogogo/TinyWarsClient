@@ -1,8 +1,8 @@
 
 namespace Lobby {
     export class LobbyTopPanel extends GameUi.UiPanel {
-        protected readonly _layerType = Utility.Types.LayerType.Notify;
-        protected readonly _isAlone   = false;
+        protected readonly _layerType   = Utility.Types.LayerType.Notify;
+        protected readonly _isExclusive = true;
 
         private static _instance: LobbyTopPanel;
 

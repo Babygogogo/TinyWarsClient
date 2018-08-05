@@ -39,6 +39,9 @@ namespace GameUi {
         public removeContent(content: egret.DisplayObject): void {
             this._contents.removeChild(content);
         }
+        public removeAllContents(): void {
+            this._contents.removeChildren();
+        }
 
         public setContentWidth(width: number): void {
             this._contentWidth = width;
@@ -171,14 +174,21 @@ namespace GameUi {
         }
 
         private _setZoom(focusPoint: Point, scaleModifier: number): void {
-            const oldGlobalPoint = this._contents.localToGlobal(focusPoint.x, focusPoint.y);
-            this.setContentScale(this.getContentScale() * scaleModifier, false);
+            const currentScale = this.getContentScale();
+            let newScale = currentScale * scaleModifier;
+            newScale = Math.max(newScale, this._getMinContentScale());
+            newScale = Math.min(newScale, this._getMaxContentScale());
 
-            const newGlobalPoint = this._contents.localToGlobal(focusPoint.x, focusPoint.y);
-            this.setContentX(this.getContentX() - newGlobalPoint.x + oldGlobalPoint.x, false);
-            this.setContentY(this.getContentY() - newGlobalPoint.y + oldGlobalPoint.y, false);
+            if (newScale !== currentScale) {
+                const oldGlobalPoint = this._contents.localToGlobal(focusPoint.x, focusPoint.y);
+                this.setContentScale(newScale, false);
 
-            this._reviseContentScaleAndPosition();
+                const newGlobalPoint = this._contents.localToGlobal(focusPoint.x, focusPoint.y);
+                this.setContentX(this.getContentX() - newGlobalPoint.x + oldGlobalPoint.x, false);
+                this.setContentY(this.getContentY() - newGlobalPoint.y + oldGlobalPoint.y, false);
+
+                this._reviseContentScaleAndPosition();
+            }
         }
 
         private _getMaxContentScale(): number {

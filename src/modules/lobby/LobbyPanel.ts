@@ -1,8 +1,10 @@
 
 namespace Lobby {
+    import Lang = Utility.Lang;
+
     export class LobbyPanel extends GameUi.UiPanel {
-        protected readonly _layerType = Utility.Types.LayerType.Scene;
-        protected readonly _isAlone   = true;
+        protected readonly _layerType   = Utility.Types.LayerType.Scene;
+        protected readonly _isExclusive = true;
 
         private static _instance: LobbyPanel;
 
@@ -10,6 +12,8 @@ namespace Lobby {
         private _group2: eui.Group;
         private _group3: eui.Group;
         private _group4: eui.Group;
+
+        private _listCommand: GameUi.UiScrollList;
 
         public static open(): void {
             if (!LobbyPanel._instance) {
@@ -38,9 +42,21 @@ namespace Lobby {
             this._notifyListeners = [
                 { name: Utility.Notify.Type.SLogout, callback: this._onNotifySLogout },
             ];
-            this.addEventListener(egret.Event.RESIZE, this._onResize, this);
+
+            this._listCommand.setItemRenderer(CommandRenderer);
         }
 
+        protected _onOpened(): void {
+            this._listCommand.bindData(this._createDataForListCommand());
+        }
+
+        protected _onClosed(): void {
+            this._listCommand.clear();
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+        // Callbacks.
+        ////////////////////////////////////////////////////////////////////////////////
         private _onResize(e: egret.Event): void {
             this._group1.height = (this.height - 40 - 90) / 2;
             this._group2.height = (this.height - 40 - 90) / 2;
@@ -50,6 +66,41 @@ namespace Lobby {
 
         private _onNotifySLogout(e: egret.Event): void {
             LobbyPanel.close();
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+        // Private functions.
+        ////////////////////////////////////////////////////////////////////////////////
+        private _createDataForListCommand(): DataForCommandRenderer[] {
+            return [
+                {
+                    name    : Lang.getText(Lang.BigType.B01, Lang.SubType.S00),
+                    callback: (): void => {
+                        LobbyPanel.close();
+                        OnlineWar.ChooseNewMapPanel.open();
+                    },
+                },
+            ];
+        }
+    }
+
+    type DataForCommandRenderer = {
+        name    : string;
+        callback: () => void;
+    }
+
+    class CommandRenderer extends eui.ItemRenderer {
+        private _labelCommand: GameUi.UiLabel;
+
+        protected dataChanged(): void {
+            super.dataChanged();
+
+            const data = this.data as DataForCommandRenderer;
+            this._labelCommand.text = data.name;
+        }
+
+        public onItemTapEvent(e: eui.ItemTapEvent): void {
+            (this.data as DataForCommandRenderer).callback();
         }
     }
 }

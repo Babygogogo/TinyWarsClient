@@ -9,7 +9,7 @@ namespace GameUi {
 
     export abstract class UiPanel extends eui.Component {
         protected abstract readonly _layerType: Utility.Types.LayerType;
-        protected abstract readonly _isAlone  : boolean;
+        protected abstract readonly _isExclusive  : boolean;
 
         protected _uiListeners    : UiListener[];
         protected _notifyListeners: Utility.Notify.Listener[];
@@ -67,7 +67,7 @@ namespace GameUi {
         ////////////////////////////////////////////////////////////////////////////////
         public open(): void {
             const layer = Utility.StageManager.getLayer(this._layerType);
-            (!this._isAlone) && (layer.removeAllPanels(this));
+            (this._isExclusive) && (layer.removeAllPanels(this));
             (!this.parent) && (layer.addChild(this));
 
             this._isCalledOpen = true;

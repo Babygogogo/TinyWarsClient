@@ -127,31 +127,15 @@
         <GameUi:UiImage source="c03_t01_s01_f01_png" scale9Grid="4,6,1,1" anchorOffsetX="0" anchorOffsetY="0"
                         alpha="0.8" left="0" right="0" top="0" bottom="0" />
         <GameUi:UiLabel text="其他操作" y="15" textColor="0x000000" horizontalCenter="0" />
-        <GameUi:UiScrollList left="0" right="0" bottom="0" top="50">
+        <GameUi:UiScrollList id="_listCommand" left="0" right="0" bottom="0" top="50">
             <e:List>
                 <e:itemRendererSkinName>
                     <e:Skin width="200" height="40">
-                        <GameUi:UiLabel id="_bmlabelRank" anchorOffsetX="0" anchorOffsetY="0" text="氪金"
+                        <GameUi:UiLabel id="_labelCommand" anchorOffsetX="0" anchorOffsetY="0" text="氪金"
                                         textAlign="center" y="7" scaleX="0.7" scaleY="0.7" textColor="0x000000"
                                         horizontalCenter="0" />
                     </e:Skin>
                 </e:itemRendererSkinName>
-                <e:ArrayCollection>
-                    <e:Array>
-                        <e:Object a="null" />
-                        <e:Object a="null" />
-                        <e:Object a="null" />
-                        <e:Object a="null" />
-                        <e:Object a="null" />
-                        <e:Object a="null" />
-                        <e:Object a="null" />
-                        <e:Object a="null" />
-                        <e:Object a="null" />
-                        <e:Object a="null" />
-                        <e:Object a="null" />
-                        <e:Object a="null" />
-                    </e:Array>
-                </e:ArrayCollection>
             </e:List>
         </GameUi:UiScrollList>
     </e:Group>

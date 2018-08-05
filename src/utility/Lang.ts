@@ -9,6 +9,7 @@ namespace Utility {
         }
         export const enum BigType {
             B00, // 各种提示
+            B01, // 常用短语
         }
         export const enum SubType {
             S00, S01, S02, S03, S04, S05, S06, S07, S08, S09,
@@ -55,6 +56,12 @@ namespace Utility {
                 [ // 00-09
                     "您的网络连接不稳定，请尝试改善",
                     "The network connection is not stable.",
+                ],
+            ],
+            [
+                [ // 01-00
+                    "创建房间",
+                    "Create Game",
                 ],
             ],
         ];
