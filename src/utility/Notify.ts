@@ -11,6 +11,8 @@ namespace Utility {
             TileAnimationTick  : "",
             UnitAnimationTick  : "",
 
+            MouseWheel: "",
+
             SLogin    : "",
             SRegister : "",
             SLogout   : "",

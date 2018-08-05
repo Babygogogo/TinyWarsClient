@@ -23,6 +23,14 @@ namespace Utility {
             y: number;
         }
 
+        export type TouchEvents = {
+            [touchId: number]: egret.TouchEvent;
+        }
+
+        export type TouchPoints = {
+            [touchId: number]: Point;
+        }
+
         export type MoveCosts = {
             [moveType: number]: number | undefined;
         }

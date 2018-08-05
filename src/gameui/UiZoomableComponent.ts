@@ -91,18 +91,18 @@ namespace GameUi {
             return this._contents.scaleX;
         }
 
-        public setZoomByScroll(focusPoint: Types.Point, scrollValue: number): void {
-            this._setZoom(
-                focusPoint,
-                this._getNewScale(this.getContentScale(), this._getScaleModifierByScrollValue(scrollValue))
-            );
+        public setZoomByScroll(stageX: number, stageY: number, scrollValue: number): void {
+            const point = (stageX != null) && (stageY != null) ? this._contents.globalToLocal(stageX, stageY) : undefined;
+            if (this._checkIsInsideContents(point)) {
+                this._setZoom(point, this._getScaleModifierByScrollValue(scrollValue));
+            }
         }
 
         public setZoomByTouches(touches: TouchEvents, prevPoints: TouchPoints): void {
-            this._setZoom(
-                this._getCenterPoint(touches),
-                this._getNewScale(this.getContentScale(), this._getScaleModifierByTouches(touches, prevPoints))
-            );
+            const point = this._getCenterPoint(touches);
+            if (this._checkIsInsideContents(point)) {
+                this._setZoom(point, this._getScaleModifierByTouches(touches, prevPoints));
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -115,33 +115,9 @@ namespace GameUi {
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
-        private _getMaxScale(): number {
-            return Math.max(2, this._getMinScale());
-        }
-        private _getMinScale(): number {
-            const boundaryWidth  = this._getBoundaryWidth();
-            const boundaryHeight = this._getBoundaryHeight();
-            const contentWidth   = this.getContentWidth();
-            const contentHeight  = this.getContentHeight();
-            if ((!boundaryWidth) || (!boundaryHeight) || (!contentWidth) || (!contentHeight)) {
-                return 1;
-            } else {
-                return Math.min(boundaryWidth / contentWidth, boundaryHeight / contentHeight);
-            }
-        }
-
-        private _getNewScale(currScale: number, modifier: number): number {
-            let newScale = currScale * modifier;
-            newScale = Math.max(this._getMinScale(), newScale);
-            newScale = Math.min(this._getMaxScale(), newScale);
-
-            return newScale;
-        }
-
         private _getScaleModifierByScrollValue(value: number): number {
-            return 1 - value / 10;
+            return Math.max(0.01, 1 + value / 1000);
         }
-
         private _getScaleModifierByTouches(touches: TouchEvents, prevPoints: TouchPoints): number {
             const distances: number[] = [];
             for (const id in touches) {
@@ -165,8 +141,8 @@ namespace GameUi {
             }
         }
 
-        private _getCenterPoint(touches: TouchEvents): Types.Point {
-            const points: Types.Point[] = [];
+        private _getCenterPoint(touches: TouchEvents): Point {
+            const points: Point[] = [];
             for (const id in touches) {
                 points.push({x: touches[id].localX, y: touches[id].localY});
                 if (points.length >= 2) {
@@ -186,27 +162,38 @@ namespace GameUi {
             }
         }
 
-        private _checkShouldZoom(scaleModifier: number): boolean {
-            const currentScale = this.scaleX;
-            if (scaleModifier === 1) {
-                return false;
-            } else if ((scaleModifier > 1) && (currentScale >= this._getMaxScale())) {
-                return false;
-            } else if ((scaleModifier < 1) && (currentScale <= this._getMinScale())) {
-                return false;
-            } else {
-                return true;
-            }
+        private _checkIsInsideContents(point: Point): boolean {
+            return (point != null)
+                && (point.x >= 0)
+                && (point.y >= 0)
+                && (point.x <= this.getContentWidth())
+                && (point.y <= this.getContentHeight());
         }
 
-        private _setZoom(focusPoint: Types.Point, scale: number): void {
-            const oldGlobalPoint = this.localToGlobal(focusPoint.x, focusPoint.y);
-            this.scaleX = this.scaleY = scale;
+        private _setZoom(focusPoint: Point, scaleModifier: number): void {
+            const oldGlobalPoint = this._contents.localToGlobal(focusPoint.x, focusPoint.y);
+            this.setContentScale(this.getContentScale() * scaleModifier, false);
 
-            const newGlobalPoint = this.localToGlobal(focusPoint.x, focusPoint.y);
-            this.x = this.x - newGlobalPoint.x + oldGlobalPoint.x;
-            this.y = this.y - newGlobalPoint.y + oldGlobalPoint.y;
-            this._reviseContentPosition();
+            const newGlobalPoint = this._contents.localToGlobal(focusPoint.x, focusPoint.y);
+            this.setContentX(this.getContentX() - newGlobalPoint.x + oldGlobalPoint.x, false);
+            this.setContentY(this.getContentY() - newGlobalPoint.y + oldGlobalPoint.y, false);
+
+            this._reviseContentScaleAndPosition();
+        }
+
+        private _getMaxContentScale(): number {
+            return Math.max(2, this._getMinContentScale());
+        }
+        private _getMinContentScale(): number {
+            const boundaryWidth  = this._getBoundaryWidth();
+            const boundaryHeight = this._getBoundaryHeight();
+            const contentWidth   = this.getContentWidth();
+            const contentHeight  = this.getContentHeight();
+            if ((!boundaryWidth) || (!boundaryHeight) || (!contentWidth) || (!contentHeight)) {
+                return 1;
+            } else {
+                return Math.min(boundaryWidth / contentWidth, boundaryHeight / contentHeight);
+            }
         }
 
         private _getBoundaryWidth(): number {
@@ -265,17 +252,14 @@ namespace GameUi {
             y = Math.min(y, this._getMaxContentY());
             this.setContentY(y, false);
         }
-        private _reviseContentPosition(): void {
-            this._reviseContentX();
-            this._reviseContentY();
-        }
         private _reviseContentScaleAndPosition(): void {
             let scale = this.getContentScale();
-            scale = Math.max(scale, this._getMinScale());
-            scale = Math.min(scale, this._getMaxScale());
+            scale = Math.max(scale, this._getMinContentScale());
+            scale = Math.min(scale, this._getMaxContentScale());
             this.setContentScale(scale, false);
 
-            this._reviseContentPosition();
+            this._reviseContentX();
+            this._reviseContentY();
         }
 
         private _resetMask(): void {
