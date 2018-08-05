@@ -33,8 +33,8 @@ class Main extends egret.DisplayObjectContainer {
         await User.UserModel.init();
         await Login.LoginProxy.init();
 
-        Login.LoginBackgroundPanel.create();
-        Login.LoginPanel.create();
+        Login.LoginBackgroundPanel.open();
+        Login.LoginPanel.open();
 
         // this.createGameScene();
         // lobby.LobbyPanel.create();

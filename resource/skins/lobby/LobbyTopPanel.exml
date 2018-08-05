@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="GameUi.*"
+        xmlns:w="http://ns.egret.com/wing">
+    <e:Group left="35" top="0" right="35" height="40">
+        <GameUi:UiImage source="c03_t01_s01_f01_png" scale9Grid="4,6,1,1" anchorOffsetX="0" anchorOffsetY="0"
+                        alpha="0.8" left="0" right="0" top="0" bottom="0" />
+        <GameUi:UiLabel text="babygogogo" y="11" textColor="0x000000" size="16" x="10" />
+        <GameUi:UiLabel text="天梯分:-9999" y="11" textColor="0x000000" size="16" x="108" />
+        <GameUi:UiLabel text="段位:劣质塑料" y="11" textColor="0x000000" size="16" x="215" />
+    </e:Group>
+</e:Skin>

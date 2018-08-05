@@ -6,23 +6,21 @@ namespace Lobby {
 
         private static _instance: LobbyPanel;
 
-        private _imgBg: GameUi.UiImage;
         private _group1: eui.Group;
         private _group2: eui.Group;
         private _group3: eui.Group;
         private _group4: eui.Group;
 
-        public static create(): void {
+        public static open(): void {
             if (!LobbyPanel._instance) {
                 LobbyPanel._instance = new LobbyPanel();
-                LobbyPanel._instance.open();
             }
+            LobbyPanel._instance.open();
         }
 
-        public static destroy(): void {
+        public static close(): void {
             if (LobbyPanel._instance) {
                 LobbyPanel._instance.close();
-                delete LobbyPanel._instance;
             }
         }
 
@@ -51,7 +49,7 @@ namespace Lobby {
         }
 
         private _onNotifySLogout(e: egret.Event): void {
-            LobbyPanel.destroy();
+            LobbyPanel.close();
         }
     }
 }

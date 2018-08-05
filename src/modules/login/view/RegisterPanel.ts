@@ -16,15 +16,17 @@ namespace Login {
 
         private static _instance: RegisterPanel;
 
-        public static create(): void {
-            egret.assert(!RegisterPanel._instance);
-            RegisterPanel._instance = new RegisterPanel();
+        public static open(): void {
+            if (!RegisterPanel._instance) {
+                RegisterPanel._instance = new RegisterPanel();
+            }
             RegisterPanel._instance.open();
         }
 
-        public static destroy(): void {
-            RegisterPanel._instance.close();
-            delete RegisterPanel._instance;
+        public static close(): void {
+            if (RegisterPanel._instance) {
+                RegisterPanel._instance.close();
+            }
         }
 
         private constructor() {
@@ -47,8 +49,8 @@ namespace Login {
 
         private _onNotifySLogin(e: egret.Event): void {
             FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S00));
-            RegisterPanel.destroy();
-            Lobby.LobbyPanel.create();
+            RegisterPanel.close();
+            Lobby.LobbyPanel.open();
         }
 
         private _onNotifySRegister(e: egret.Event): void {
@@ -58,8 +60,8 @@ namespace Login {
         }
 
         private _onTouchedBtnLogin(e: egret.TouchEvent): void {
-            LoginPanel.create();
-            RegisterPanel.destroy();
+            LoginPanel.open();
+            RegisterPanel.close();
         }
 
         private _onTouchedBtnRegister(e: egret.TouchEvent): void {

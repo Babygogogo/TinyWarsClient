@@ -16,17 +16,16 @@ namespace Login {
 
         private static _instance: LoginPanel;
 
-        public static create(): void {
+        public static open(): void {
             if (!LoginPanel._instance) {
                 LoginPanel._instance = new LoginPanel();
-                LoginPanel._instance.open();
             }
+            LoginPanel._instance.open();
         }
 
-        public static destroy(): void {
+        public static close(): void {
             if (LoginPanel._instance) {
                 LoginPanel._instance.close();
-                delete LoginPanel._instance;
             }
         }
 
@@ -51,11 +50,6 @@ namespace Login {
             // test.scaleX = 0.15;
             // test.scaleY = 0.15;
             // this.addChildAt(test, 0);
-
-            // let testImg = new GameUi.UiImage("c01_t01_s01_f01");
-            // testImg.bottom = 0;
-            // testImg.left = 0;
-            // this.addChild(testImg);
         }
 
         protected _onOpened(): void {
@@ -64,8 +58,9 @@ namespace Login {
 
         private _onNotifySLogin(e: egret.Event): void {
             FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S00));
-            LoginPanel.destroy();
-            Lobby.LobbyPanel.create();
+            LoginPanel.close();
+            Lobby.LobbyTopPanel.open();
+            Lobby.LobbyPanel.open();
         }
 
         private _onTouchedBtnLogin(e: egret.TouchEvent): void {
@@ -81,8 +76,8 @@ namespace Login {
         }
 
         private _onTouchedBtnRegister(e: egret.TouchEvent): void {
-            RegisterPanel.create();
-            LoginPanel.destroy();
+            RegisterPanel.open();
+            LoginPanel.close();
         }
     }
 }

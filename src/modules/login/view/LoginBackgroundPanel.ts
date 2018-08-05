@@ -6,17 +6,16 @@ namespace Login {
 
         private static _instance: LoginBackgroundPanel;
 
-        public static create(): void {
+        public static open(): void {
             if (!LoginBackgroundPanel._instance) {
                 LoginBackgroundPanel._instance = new LoginBackgroundPanel();
-                LoginBackgroundPanel._instance.open();
             }
+            LoginBackgroundPanel._instance.open();
         }
 
-        public static destroy(): void {
+        public static close(): void {
             if (LoginBackgroundPanel._instance) {
                 LoginBackgroundPanel._instance.close();
-                delete LoginBackgroundPanel._instance;
             }
         }
 

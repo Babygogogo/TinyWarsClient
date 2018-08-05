@@ -77,7 +77,7 @@ namespace Utility {
             for (let i = this.numChildren - 1; i >= 0; --i) {
                 const child = this.getChildAt(i);
                 if ((child instanceof GameUi.UiPanel) && (child !== execpt)) {
-                    this.removeChildAt(i);
+                    child.close();
                 }
             }
         }

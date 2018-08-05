@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
-
     <e:Group width="320" height="190" horizontalCenter="0" verticalCenter="0">
         <GameUi:UiImage source="c03_t01_s01_f01_png" scale9Grid="4,6,1,1" anchorOffsetX="0" anchorOffsetY="0"
                         alpha="0.8" left="0" right="0" top="0" bottom="0" />
