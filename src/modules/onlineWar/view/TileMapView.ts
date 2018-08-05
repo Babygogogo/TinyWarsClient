@@ -32,15 +32,21 @@ namespace OnlineWar {
                 { name: Notify.Type.TileAnimationTick, callback: this._onNotifyTileAnimationTick }
             ], this);
 
-            this._initTest();
+            // this._initTest();
         }
 
-        public updateWithBaseViewIds(ids: number[][]): void {
-            this._baseLayer.updateWithViewIds(ids);
+        public updateWithBaseViewIdArray(ids: number[]): void {
+            this._baseLayer.updateWithViewIdArray(ids);
+        }
+        public updateWithBaseViewIdMatrix(ids: number[][]): void {
+            this._baseLayer.updateWithViewIdMatrix(ids);
         }
 
-        public updateWithObjectViewIds(ids: number[][]): void {
-            this._objectLayer.updateWithViewIds(ids);
+        public updateWithObjectViewIdArray(ids: number[]): void {
+            this._objectLayer.updateWithViewIdArray(ids);
+        }
+        public updateWithObjectViewIdMatrix(ids: number[][]): void {
+            this._objectLayer.updateWithViewIdMatrix(ids);
         }
 
         public updateWithBaseViewId(id: number, x: number, y: number): void {
@@ -67,8 +73,8 @@ namespace OnlineWar {
                     ids2[x][y] = Math.floor(Math.random() * 109);
                 }
             }
-            this.updateWithBaseViewIds(ids1);
-            this.updateWithObjectViewIds(ids2);
+            this.updateWithBaseViewIdMatrix(ids1);
+            this.updateWithObjectViewIdMatrix(ids2);
         }
     }
 
@@ -109,7 +115,20 @@ namespace OnlineWar {
             }
         }
 
-        public updateWithViewIds(ids: number[][]): void {
+        public updateWithViewIdArray(ids: number[]): void {
+            const tickCount = TimeModel.getTileAnimationTickCount();
+            const cols      = this._colCount;
+            const rows      = this._rowCount;
+            for (let x = 0; x < cols; ++x) {
+                for (let y = 0; y < rows; ++y) {
+                    const id = ids[x + y * cols];
+                    this._ids[x][y]           = id;
+                    this._images[x][y].source = this._getImageSource(id, tickCount);
+                }
+            }
+        }
+
+        public updateWithViewIdMatrix(ids: number[][]): void {
             const tickCount = TimeModel.getTileAnimationTickCount();
             for (let x = 0; x < this._colCount; ++x) {
                 for (let y = 0; y < this._rowCount; ++y) {

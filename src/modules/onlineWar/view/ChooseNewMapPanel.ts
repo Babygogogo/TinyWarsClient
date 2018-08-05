@@ -1,7 +1,9 @@
 
 namespace OnlineWar {
     import Notify       = Utility.Notify;
+    import Types        = Utility.Types;
     import StageManager = Utility.StageManager;
+    import MapManager   = Utility.MapManager;
     import FloatText    = Utility.FloatText;
 
     export class ChooseNewMapPanel extends GameUi.UiPanel {
@@ -50,21 +52,35 @@ namespace OnlineWar {
         }
 
         protected _onOpened(): void {
-            const tileMapView = new TileMapView();
-            const rows = 20;
-            const cols = 20;
-            const gridSize = Config.getGridSize();
-            tileMapView.init(rows, cols);
-
-            this._zoomMap.setContentWidth(cols * gridSize.width);
-            this._zoomMap.setContentHeight(rows * gridSize.height);
-            this._zoomMap.addContent(tileMapView);
+            this._listMap.bindData(this._createDataForListMap());
         }
 
         protected _onClosed(): void {
             this._zoomMap.removeAllContents();
+            this._listMap.clear();
         }
 
+        public showMap(name: string): void {
+            Utility.FloatText.show(name);
+            MapManager.getMapData(name, (data: Types.TemplateMap, url: string) => {
+                Utility.FloatText.show("succeed!");
+                const tileMapView = new TileMapView();
+                tileMapView.init(data.mapWidth, data.mapHeight);
+                tileMapView.updateWithBaseViewIdArray(data.tileBases);
+                tileMapView.updateWithObjectViewIdArray(data.tileObjects);
+
+                const gridSize    = Config.getGridSize();
+                this._zoomMap.removeAllContents();
+                this._zoomMap.setContentWidth(data.mapWidth * gridSize.width);
+                this._zoomMap.setContentHeight(data.mapHeight * gridSize.height);
+                this._zoomMap.addContent(tileMapView);
+                this._zoomMap.setContentScale(0, true);
+            });
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+        // Callbacks.
+        ////////////////////////////////////////////////////////////////////////////////
         private _onNotifyMouseWheel(e: egret.Event): void {
             this._zoomMap.setZoomByScroll(StageManager.getMouseX(), StageManager.getMouseY(), e.data);
         }
@@ -89,16 +105,48 @@ namespace OnlineWar {
             ChooseNewMapPanel.close();
             Lobby.LobbyPanel.open();
         }
+
+        ////////////////////////////////////////////////////////////////////////////////
+        // Private functions.
+        ////////////////////////////////////////////////////////////////////////////////
+        private _createDataForListMap(): DataForMapNameRenderer[] {
+            const data: DataForMapNameRenderer[] = [];
+            for (const name of MapManager.getAllMapNames()) {
+                data.push({
+                    name : name,
+                    panel: this,
+                });
+            }
+            return data;
+        }
+    }
+
+    type DataForMapNameRenderer = {
+        name : string;
+        panel: ChooseNewMapPanel;
     }
 
     class MapNameRenderer extends eui.ItemRenderer {
-        private _labelName: GameUi.UiLabel;
-        private _btnNext  : GameUi.UiButton;
+        private _btnName: GameUi.UiButton;
+        private _btnNext: GameUi.UiButton;
 
         protected childrenCreated(): void {
             super.childrenCreated();
 
+            this._btnName.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchTapBtnName, this);
             this._btnNext.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchTapBtnNext, this);
+        }
+
+        protected dataChanged(): void {
+            super.dataChanged();
+
+            const data = this.data as DataForMapNameRenderer;
+            this._btnName.label = data.name;
+        }
+
+        private _onTouchTapBtnName(e: egret.TouchEvent): void {
+            const data = this.data as DataForMapNameRenderer;
+            data.panel.showMap(data.name);
         }
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {

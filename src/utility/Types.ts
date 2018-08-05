@@ -35,6 +35,17 @@ namespace Utility {
             [moveType: number]: number | undefined;
         }
 
+        export type TemplateMap = {
+            designer    : string;
+            mapName     : string;
+            mapWidth    : number;
+            mapHeight   : number;
+            playersCount: number;
+            tileBases   : number[];
+            tileObjects : number[];
+            units       : number[];
+        }
+
         export type TemplateTile = {
             defenseAmount      : number;
             defenseUnitCategory: UnitCategory;
