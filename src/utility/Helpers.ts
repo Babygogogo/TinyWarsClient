@@ -88,6 +88,14 @@ namespace Utility {
             return true;
         }
 
+        export function pickRandomElement<T>(list: T[]): T {
+            if (!list) {
+                return undefined;
+            } else {
+                return list[Math.floor(Math.random() * list.length)];
+            }
+        }
+
         export function getNormalizedHp(hp: number): number {
             return Math.ceil(hp / 10);
         }

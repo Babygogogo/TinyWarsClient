@@ -14,8 +14,11 @@ namespace Utility {
         export const enum SubType {
             S00, S01, S02, S03, S04, S05, S06, S07, S08, S09,
         }
+        export const enum FormatType {
+            F00, F01,
+        }
 
-        const LangData: string[][][] = [
+        const LANG_DATA: string[][][] = [
             [
                 [ // 00-00
                     "登陆成功，祝您游戏愉快！",
@@ -66,7 +69,18 @@ namespace Utility {
             ],
         ];
 
-        const NetErrorText: {[code: number]: string[]} = {
+        const FORMAT_DATA: string[][] = [
+            [
+                "地图名称: %s",
+                "Map name: %s",
+            ],
+            [
+                "作者: %s",
+                "Designer: %s",
+            ],
+        ];
+
+        const NET_ERROR_TEXT: {[code: number]: string[]} = {
             [ErrCode.Login_AlreadyLoggedIn]: [
                 "您已处于登陆状态，不可再次登陆",
                 "You have logged in already.",
@@ -104,11 +118,15 @@ namespace Utility {
         let language = Language.Chinese;
 
         export function getText(bigType: BigType, subType: SubType, ...params: any[]): string {
-            return LangData[bigType][subType][language];
+            return LANG_DATA[bigType][subType][language];
+        }
+
+        export function getFormatedText(formatType: FormatType, ...params: any[]): string {
+            return Helpers.formatString(FORMAT_DATA[formatType][language], ...params);
         }
 
         export function getNetErrorText(code: ErrCode): string {
-            return NetErrorText[code][language];
+            return NET_ERROR_TEXT[code][language];
         }
     }
 }

@@ -5,6 +5,8 @@ namespace OnlineWar {
     import StageManager = Utility.StageManager;
     import MapManager   = Utility.MapManager;
     import FloatText    = Utility.FloatText;
+    import Helpers      = Utility.Helpers;
+    import Lang         = Utility.Lang;
 
     export class ChooseNewMapPanel extends GameUi.UiPanel {
         protected readonly _layerType   = Utility.Types.LayerType.Scene;
@@ -12,12 +14,15 @@ namespace OnlineWar {
 
         private static _instance: ChooseNewMapPanel;
 
-        private _listMap: GameUi.UiScrollList;
-        private _zoomMap: GameUi.UiZoomableComponent;
-        private _btnBack: GameUi.UiButton;
+        private _listMap      : GameUi.UiScrollList;
+        private _zoomMap      : GameUi.UiZoomableComponent;
+        private _labelMapName : GameUi.UiLabel;
+        private _labelDesigner: GameUi.UiLabel;
+        private _btnBack      : GameUi.UiButton;
 
-        private _touchOffsetX: number;
-        private _touchOffsetY: number;
+        private _dataForListMap: DataForMapNameRenderer[];
+        private _touchOffsetX  : number;
+        private _touchOffsetY  : number;
 
         public static open(): void {
             if (!ChooseNewMapPanel._instance) {
@@ -49,10 +54,13 @@ namespace OnlineWar {
                 { ui: this._btnBack, callback: this._onTouchTapBtnBack },
             ];
             this._listMap.setItemRenderer(MapNameRenderer);
+
+            this._dataForListMap = this._createDataForListMap();
         }
 
         protected _onOpened(): void {
-            this._listMap.bindData(this._createDataForListMap());
+            this._listMap.bindData(this._dataForListMap);
+            this.showMap(Helpers.pickRandomElement(this._dataForListMap).fileName);
         }
 
         protected _onClosed(): void {
@@ -61,9 +69,10 @@ namespace OnlineWar {
         }
 
         public showMap(fileName: string): void {
-            Utility.FloatText.show(fileName);
             MapManager.getMapData(fileName, (data: Types.TemplateMap, url: string) => {
-                Utility.FloatText.show("succeed!");
+                this._labelMapName.text  = Lang.getFormatedText(Lang.FormatType.F00, data.mapName);
+                this._labelDesigner.text = Lang.getFormatedText(Lang.FormatType.F01, data.designer);
+
                 const tileMapView = new TileMapView();
                 tileMapView.init(data.mapWidth, data.mapHeight);
                 tileMapView.updateWithBaseViewIdArray(data.tileBases);
