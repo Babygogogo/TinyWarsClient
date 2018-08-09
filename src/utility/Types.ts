@@ -35,6 +35,12 @@ namespace Utility {
             [moveType: number]: number | undefined;
         }
 
+        export type TemplateMapBasicInfo = {
+            playersCount: number;
+            designer    : string;
+            mapName     : string;
+        }
+
         export type TemplateMap = {
             designer    : string;
             mapName     : string;

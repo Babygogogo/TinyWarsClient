@@ -60,16 +60,16 @@ namespace OnlineWar {
             this._listMap.clear();
         }
 
-        public showMap(name: string): void {
-            Utility.FloatText.show(name);
-            MapManager.getMapData(name, (data: Types.TemplateMap, url: string) => {
+        public showMap(fileName: string): void {
+            Utility.FloatText.show(fileName);
+            MapManager.getMapData(fileName, (data: Types.TemplateMap, url: string) => {
                 Utility.FloatText.show("succeed!");
                 const tileMapView = new TileMapView();
                 tileMapView.init(data.mapWidth, data.mapHeight);
                 tileMapView.updateWithBaseViewIdArray(data.tileBases);
                 tileMapView.updateWithObjectViewIdArray(data.tileObjects);
 
-                const gridSize    = Config.getGridSize();
+                const gridSize = Config.getGridSize();
                 this._zoomMap.removeAllContents();
                 this._zoomMap.setContentWidth(data.mapWidth * gridSize.width);
                 this._zoomMap.setContentHeight(data.mapHeight * gridSize.height);
@@ -110,11 +110,13 @@ namespace OnlineWar {
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _createDataForListMap(): DataForMapNameRenderer[] {
+            const mapList = MapManager.getAllMapList();
             const data: DataForMapNameRenderer[] = [];
-            for (const name of MapManager.getAllMapNames()) {
+            for (const fileName in mapList) {
                 data.push({
-                    name : name,
-                    panel: this,
+                    fileName: fileName,
+                    mapName : mapList[fileName].mapName,
+                    panel   : this,
                 });
             }
             return data;
@@ -122,8 +124,9 @@ namespace OnlineWar {
     }
 
     type DataForMapNameRenderer = {
-        name : string;
-        panel: ChooseNewMapPanel;
+        fileName: string;
+        mapName : string;
+        panel   : ChooseNewMapPanel;
     }
 
     class MapNameRenderer extends eui.ItemRenderer {
@@ -141,12 +144,12 @@ namespace OnlineWar {
             super.dataChanged();
 
             const data = this.data as DataForMapNameRenderer;
-            this._btnName.label = data.name;
+            this._btnName.label = data.mapName;
         }
 
         private _onTouchTapBtnName(e: egret.TouchEvent): void {
             const data = this.data as DataForMapNameRenderer;
-            data.panel.showMap(data.name);
+            data.panel.showMap(data.fileName);
         }
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
