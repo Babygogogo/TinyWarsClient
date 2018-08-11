@@ -6,8 +6,13 @@
         <GameUi:UiImage source="c03_t01_s01_f01_png" scale9Grid="4,6,1,1" anchorOffsetX="0" anchorOffsetY="0"
                         alpha="0.8" left="0" right="0" top="0" bottom="0" />
         <GameUi:UiZoomableComponent id="_zoomMap" left="4" right="5" top="6" bottom="7" />
-        <GameUi:UiLabel id="_labelMapName" text="作者: 未知" x="18" y="17" stroke="2" size="20" />
-        <GameUi:UiLabel id="_labelDesigner" text="作者: 未知" x="18" y="42" stroke="2" size="20" />
+        <e:Group id="_groupInfo" x="8" y="10" touchThrough="true" touchEnabled="false" touchChildren="false">
+            <GameUi:UiLabel id="_labelMapName" text="地图名: 未知" y="0" stroke="2" size="20" scaleX="1" scaleY="1" />
+            <GameUi:UiLabel id="_labelDesigner" text="作者: 未知" y="25" stroke="2" size="20" scaleX="1" scaleY="1" />
+            <GameUi:UiLabel id="_labelPlayersCount" text="玩家数: 未知" y="50" stroke="2" size="20" scaleX="1" scaleY="1" />
+            <GameUi:UiLabel id="_labelRating" text="评分: 未知" y="75" stroke="2" size="20" scaleX="1" scaleY="1" />
+            <GameUi:UiLabel id="_labelPlayedTimes" text="全服游戏次数: 未知" y="100" stroke="2" size="20" scaleX="1" scaleY="1" />
+        </e:Group>
     </e:Group>
     <e:Group top="70" bottom="30" width="200" x="725">
         <GameUi:UiImage source="c03_t01_s01_f01_png" scale9Grid="4,6,1,1" anchorOffsetX="0" anchorOffsetY="0"

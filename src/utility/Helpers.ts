@@ -96,6 +96,10 @@ namespace Utility {
             }
         }
 
+        export function getMapFileName(k: Types.MapIndexKeys): string {
+            return `${k.mapName}_${k.designer}_${k.version < 10 ? "0" : ""}${k.version}`;
+        }
+
         export function getNormalizedHp(hp: number): number {
             return Math.ceil(hp / 10);
         }

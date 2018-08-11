@@ -1,7 +1,6 @@
 
 namespace Network {
     export namespace Proto {
-
         /** Properties of an InstantialTile. */
         export declare interface IInstantialTile {
 
@@ -218,6 +217,132 @@ namespace Network {
             public toJSON(): { [k: string]: any };
         }
 
+        /** Properties of a MapInfo. */
+        export declare interface IMapInfo {
+
+            /** MapInfo id */
+            id?: (number | null);
+
+            /** MapInfo mapName */
+            mapName?: (string | null);
+
+            /** MapInfo designer */
+            designer?: (string | null);
+
+            /** MapInfo version */
+            version?: (number | null);
+
+            /** MapInfo playersCount */
+            playersCount?: (number | null);
+
+            /** MapInfo rating */
+            rating?: (number | null);
+
+            /** MapInfo playedTimes */
+            playedTimes?: (number | null);
+        }
+
+        /** Represents a MapInfo. */
+        export declare class MapInfo implements IMapInfo {
+
+            /**
+             * Constructs a new MapInfo.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: IMapInfo);
+
+            /** MapInfo id. */
+            public id: number;
+
+            /** MapInfo mapName. */
+            public mapName: string;
+
+            /** MapInfo designer. */
+            public designer: string;
+
+            /** MapInfo version. */
+            public version: number;
+
+            /** MapInfo playersCount. */
+            public playersCount: number;
+
+            /** MapInfo rating. */
+            public rating: number;
+
+            /** MapInfo playedTimes. */
+            public playedTimes: number;
+
+            /**
+             * Creates a new MapInfo instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns MapInfo instance
+             */
+            public static create(properties?: IMapInfo): MapInfo;
+
+            /**
+             * Encodes the specified MapInfo message. Does not implicitly {@link MapInfo.verify|verify} messages.
+             * @param message MapInfo message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: IMapInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified MapInfo message, length delimited. Does not implicitly {@link MapInfo.verify|verify} messages.
+             * @param message MapInfo message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: IMapInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a MapInfo message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns MapInfo
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): MapInfo;
+
+            /**
+             * Decodes a MapInfo message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns MapInfo
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): MapInfo;
+
+            /**
+             * Verifies a MapInfo message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string | null);
+
+            /**
+             * Creates a MapInfo message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns MapInfo
+             */
+            public static fromObject(object: { [k: string]: any }): MapInfo;
+
+            /**
+             * Creates a plain object from a MapInfo message. Also converts values to other types if specified.
+             * @param message MapInfo
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: MapInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this MapInfo to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
         /** Properties of a Container. */
         export declare interface IContainer {
 
@@ -250,6 +375,12 @@ namespace Network {
 
             /** Container S_Error */
             S_Error?: (IS_Error | null);
+
+            /** Container C_GetNewestMapInfos */
+            C_GetNewestMapInfos?: (IC_GetNewestMapInfos | null);
+
+            /** Container S_GetNewestMapInfos */
+            S_GetNewestMapInfos?: (IS_GetNewestMapInfos | null);
         }
 
         /** Represents a Container. */
@@ -290,6 +421,12 @@ namespace Network {
 
             /** Container S_Error. */
             public S_Error?: (IS_Error | null);
+
+            /** Container C_GetNewestMapInfos. */
+            public C_GetNewestMapInfos?: (IC_GetNewestMapInfos | null);
+
+            /** Container S_GetNewestMapInfos. */
+            public S_GetNewestMapInfos?: (IS_GetNewestMapInfos | null);
 
             /**
              * Creates a new Container instance using the specified properties.
@@ -1281,6 +1418,228 @@ namespace Network {
 
             /**
              * Converts this S_Error to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a C_GetNewestMapInfos. */
+        export declare interface IC_GetNewestMapInfos {
+
+            /** C_GetNewestMapInfos actionCode */
+            actionCode?: (number | null);
+
+            /** C_GetNewestMapInfos mapName */
+            mapName?: (string | null);
+
+            /** C_GetNewestMapInfos designer */
+            designer?: (string | null);
+
+            /** C_GetNewestMapInfos playersCount */
+            playersCount?: (number | null);
+
+            /** C_GetNewestMapInfos minRating */
+            minRating?: (number | null);
+
+            /** C_GetNewestMapInfos minPlayedTimes */
+            minPlayedTimes?: (number | null);
+        }
+
+        /** Represents a C_GetNewestMapInfos. */
+        export declare class C_GetNewestMapInfos implements IC_GetNewestMapInfos {
+
+            /**
+             * Constructs a new C_GetNewestMapInfos.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: IC_GetNewestMapInfos);
+
+            /** C_GetNewestMapInfos actionCode. */
+            public actionCode: number;
+
+            /** C_GetNewestMapInfos mapName. */
+            public mapName: string;
+
+            /** C_GetNewestMapInfos designer. */
+            public designer: string;
+
+            /** C_GetNewestMapInfos playersCount. */
+            public playersCount: number;
+
+            /** C_GetNewestMapInfos minRating. */
+            public minRating: number;
+
+            /** C_GetNewestMapInfos minPlayedTimes. */
+            public minPlayedTimes: number;
+
+            /**
+             * Creates a new C_GetNewestMapInfos instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C_GetNewestMapInfos instance
+             */
+            public static create(properties?: IC_GetNewestMapInfos): C_GetNewestMapInfos;
+
+            /**
+             * Encodes the specified C_GetNewestMapInfos message. Does not implicitly {@link C_GetNewestMapInfos.verify|verify} messages.
+             * @param message C_GetNewestMapInfos message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: IC_GetNewestMapInfos, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C_GetNewestMapInfos message, length delimited. Does not implicitly {@link C_GetNewestMapInfos.verify|verify} messages.
+             * @param message C_GetNewestMapInfos message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: IC_GetNewestMapInfos, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C_GetNewestMapInfos message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C_GetNewestMapInfos
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): C_GetNewestMapInfos;
+
+            /**
+             * Decodes a C_GetNewestMapInfos message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C_GetNewestMapInfos
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): C_GetNewestMapInfos;
+
+            /**
+             * Verifies a C_GetNewestMapInfos message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string | null);
+
+            /**
+             * Creates a C_GetNewestMapInfos message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C_GetNewestMapInfos
+             */
+            public static fromObject(object: { [k: string]: any }): C_GetNewestMapInfos;
+
+            /**
+             * Creates a plain object from a C_GetNewestMapInfos message. Also converts values to other types if specified.
+             * @param message C_GetNewestMapInfos
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: C_GetNewestMapInfos, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C_GetNewestMapInfos to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S_GetNewestMapInfos. */
+        export declare interface IS_GetNewestMapInfos {
+
+            /** S_GetNewestMapInfos actionCode */
+            actionCode?: (number | null);
+
+            /** S_GetNewestMapInfos errorCode */
+            errorCode?: (number | null);
+
+            /** S_GetNewestMapInfos mapInfos */
+            mapInfos?: (IMapInfo[] | null);
+        }
+
+        /** Represents a S_GetNewestMapInfos. */
+        export declare class S_GetNewestMapInfos implements IS_GetNewestMapInfos {
+
+            /**
+             * Constructs a new S_GetNewestMapInfos.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: IS_GetNewestMapInfos);
+
+            /** S_GetNewestMapInfos actionCode. */
+            public actionCode: number;
+
+            /** S_GetNewestMapInfos errorCode. */
+            public errorCode: number;
+
+            /** S_GetNewestMapInfos mapInfos. */
+            public mapInfos: IMapInfo[];
+
+            /**
+             * Creates a new S_GetNewestMapInfos instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S_GetNewestMapInfos instance
+             */
+            public static create(properties?: IS_GetNewestMapInfos): S_GetNewestMapInfos;
+
+            /**
+             * Encodes the specified S_GetNewestMapInfos message. Does not implicitly {@link S_GetNewestMapInfos.verify|verify} messages.
+             * @param message S_GetNewestMapInfos message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: IS_GetNewestMapInfos, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S_GetNewestMapInfos message, length delimited. Does not implicitly {@link S_GetNewestMapInfos.verify|verify} messages.
+             * @param message S_GetNewestMapInfos message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: IS_GetNewestMapInfos, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S_GetNewestMapInfos message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S_GetNewestMapInfos
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): S_GetNewestMapInfos;
+
+            /**
+             * Decodes a S_GetNewestMapInfos message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S_GetNewestMapInfos
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): S_GetNewestMapInfos;
+
+            /**
+             * Verifies a S_GetNewestMapInfos message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string | null);
+
+            /**
+             * Creates a S_GetNewestMapInfos message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S_GetNewestMapInfos
+             */
+            public static fromObject(object: { [k: string]: any }): S_GetNewestMapInfos;
+
+            /**
+             * Creates a plain object from a S_GetNewestMapInfos message. Also converts values to other types if specified.
+             * @param message S_GetNewestMapInfos
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: S_GetNewestMapInfos, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S_GetNewestMapInfos to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };

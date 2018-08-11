@@ -4,13 +4,9 @@ namespace Utility {
         ////////////////////////////////////////////////////////////////////////////////
         // Types.
         ////////////////////////////////////////////////////////////////////////////////
-        type ActionData = {
-            [key: string]: ActionData | number | string;
-        };
-
         export type Action = {
-            actionCode   : number;
-            [key: string]: ActionData | number | string;
+            actionCode   ?: number;
+            [key: string] : any;
         }
 
         export type Size = {
@@ -35,10 +31,10 @@ namespace Utility {
             [moveType: number]: number | undefined;
         }
 
-        export type TemplateMapBasicInfo = {
-            playersCount: number;
+        export type MapIndexKeys = {
             designer    : string;
             mapName     : string;
+            version     : number;
         }
 
         export type TemplateMap = {

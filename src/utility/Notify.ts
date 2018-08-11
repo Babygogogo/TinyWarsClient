@@ -13,10 +13,11 @@ namespace Utility {
 
             MouseWheel: "",
 
-            SLogin    : "",
-            SRegister : "",
-            SLogout   : "",
-            SHeartbeat: "",
+            SLogin              : "",
+            SRegister           : "",
+            SLogout             : "",
+            SHeartbeat          : "",
+            SGetNewestMapInfos  : "",
 
             TileModelUpdated: "",
         }

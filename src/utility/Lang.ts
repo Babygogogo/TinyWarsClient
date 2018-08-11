@@ -15,7 +15,7 @@ namespace Utility {
             S00, S01, S02, S03, S04, S05, S06, S07, S08, S09,
         }
         export const enum FormatType {
-            F00, F01,
+            F000, F001, F002, F003, F004,
         }
 
         const LANG_DATA: string[][][] = [
@@ -66,17 +66,33 @@ namespace Utility {
                     "创建房间",
                     "Create Game",
                 ],
+                [ // 01-01
+                    "无",
+                    "None",
+                ],
             ],
         ];
 
         const FORMAT_DATA: string[][] = [
-            [
+            [ // 000
                 "地图名称: %s",
                 "Map name: %s",
             ],
-            [
+            [ // 001
                 "作者: %s",
                 "Designer: %s",
+            ],
+            [ // 002
+                "人数: %s",
+                "Players: %s",
+            ],
+            [ // 003
+                "全服评分: %s",
+                "Rating: %s",
+            ],
+            [ // 004
+                "全服游玩次数: %s",
+                "Games played: %s",
             ],
         ];
 

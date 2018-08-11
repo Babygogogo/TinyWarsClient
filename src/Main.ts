@@ -27,11 +27,12 @@ class Main extends egret.DisplayObjectContainer {
     private async runGame(): Promise<void> {
         await Utility.StageManager.init(this.stage);
         await Utility.ResManager.init();
-        await Utility.MapManager.init();
         await Network.Manager.init();
         await Time.TimeProxy.init();
         await Time.TimeModel.init();
         await User.UserModel.init();
+        await TemplateMap.TemplateMapProxy.init();
+        await TemplateMap.TemplateMapModel.init();
         await Login.LoginProxy.init();
 
         Login.LoginBackgroundPanel.open();

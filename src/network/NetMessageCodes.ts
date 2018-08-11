@@ -11,5 +11,7 @@ namespace Network {
         C_Logout = 7,
         S_Logout = 8,
         S_Error = 10,
+        C_GetNewestMapInfos = 11,
+        S_GetNewestMapInfos = 12,
     }
 }

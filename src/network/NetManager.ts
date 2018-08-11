@@ -24,7 +24,7 @@ namespace Network {
         }
 
         class NetMessageDispatcherCls extends egret.EventDispatcher {
-            public dispatchWithContainer(container: Proto.Container): void {
+            public dispatchWithContainer(container: Proto.IContainer): void {
                 const name   = Codes[container.actionCode];
                 const action = container[name];
                 Logger.log("NetManager receive: ", name, action);
@@ -112,7 +112,7 @@ namespace Network {
             });
 
             socket.on("message", (data: ReceivedData) => {
-                dispatcher.dispatchWithContainer(containerClass.decode(getDataForDecode(data)));
+                dispatcher.dispatchWithContainer(containerClass.decode(getDataForDecode(data)).toJSON());
             });
         }
 
