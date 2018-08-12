@@ -70,6 +70,7 @@ namespace OnlineWar {
         protected _onClosed(): void {
             this._zoomMap.removeAllContents();
             this._listMap.clear();
+            egret.Tween.removeTweens(this._groupInfo);
         }
 
         public async showMap(keys: Types.MapIndexKeys): Promise<void> {

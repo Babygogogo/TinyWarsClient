@@ -1,6 +1,24 @@
 
 namespace Utility {
+    import ColorType = Types.ColorType;
+
     export namespace Helpers {
+        const COLOR_MATRIX_FILTERS = {
+            [ColorType.Gray]: new egret.ColorMatrixFilter([
+                0.3, 0.6, 0, 0, 0,
+                0.3, 0.6, 0, 0, 0,
+                0.3, 0.6, 0, 0, 0,
+                0, 0, 0, 1, 0
+            ]),
+
+            [ColorType.Dark]: new egret.ColorMatrixFilter([
+                0.625,  0,      0,      0,  0,
+                0,      0.625,  0,      0,  0,
+                0,      0,      0.625,  0,  0,
+                0,      0,      0,      1,  0
+            ]),
+        };
+
         export function checkIsWebGl(): boolean {
             return egret.Capabilities.renderMode === "webgl";
         }
@@ -77,7 +95,13 @@ namespace Utility {
 
         export function changeColor(obj: egret.DisplayObject, color: Types.ColorType, value = 100): void {
             if (checkIsWebGl()) {
-                obj.filters = [new egret.ColorMatrixFilter(getColorMatrix(color, value))];
+                if ((color === ColorType.Gray) || (color === ColorType.Dark)) {
+                    obj.filters = [COLOR_MATRIX_FILTERS[color]];
+                } else if (color === ColorType.Origin) {
+                    obj.filters = undefined;
+                } else {
+                    obj.filters = [new egret.ColorMatrixFilter(getColorMatrix(color, value))];
+                }
             }
         }
 
@@ -118,14 +142,6 @@ namespace Utility {
                         0, 0, 0, 1, 0
                     ];
 
-                case Types.ColorType.Gray:
-                    return [
-                        0.3, 0.6, 0, 0, 0,
-                        0.3, 0.6, 0, 0, 0,
-                        0.3, 0.6, 0, 0, 0,
-                        0, 0, 0, 1, 0
-                    ];
-
                 case Types.ColorType.Green:
                     return [
                         1, 0, 0, 0, 0,
@@ -150,14 +166,8 @@ namespace Utility {
                         0, 0, 0, 1, 0
                     ];
 
-                case Types.ColorType.Origin:
                 default:
-                    return [
-                        1, 0, 0, 0, 0,
-                        0, 1, 0, 0, 0,
-                        0, 0, 1, 0, 0,
-                        0, 0, 0, 1, 0
-                    ];
+                    return undefined;
             }
         }
     }

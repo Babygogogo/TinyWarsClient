@@ -205,6 +205,7 @@ namespace Utility {
         export const enum ColorType {
             Origin,
             Gray,
+            Dark,
             Red,
             Green,
             Blue,
