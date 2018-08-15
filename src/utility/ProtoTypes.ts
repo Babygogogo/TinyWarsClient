@@ -1,6 +1,6 @@
 
-namespace Network {
-    export namespace Proto {
+namespace Utility {
+    export namespace ProtoTypes {
         /** Properties of an InstantialTile. */
         export declare interface IInstantialTile {
 

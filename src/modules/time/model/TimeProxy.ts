@@ -3,9 +3,9 @@ namespace Time {
     export namespace TimeProxy {
         import Notify     = Utility.Notify;
         import NotifyType = Utility.Notify.Type;
+        import ProtoTypes = Utility.ProtoTypes;
         import NetManager = Network.Manager;
         import ActionCode = Network.Codes;
-        import Proto      = Network.Proto;
 
         export function init(): void {
             NetManager.addListeners(
@@ -20,7 +20,7 @@ namespace Time {
             });
         }
         function _onSHeartbeat(e: egret.Event): void {
-            const data = e.data as Proto.IS_Heartbeat;
+            const data = e.data as ProtoTypes.IS_Heartbeat;
             if (!data.errorCode) {
                 Notify.dispatch(NotifyType.SHeartbeat, data);
             }

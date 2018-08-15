@@ -1,16 +1,17 @@
 
 namespace Network {
     export namespace Manager {
-        import Logger    = Utility.Logger;
-        import Notify    = Utility.Notify;
-        import FloatText = Utility.FloatText;
-        import Lang      = Utility.Lang;
+        import Logger       = Utility.Logger;
+        import Notify       = Utility.Notify;
+        import FloatText    = Utility.FloatText;
+        import Lang         = Utility.Lang;
+        import ProtoTypes   = Utility.ProtoTypes;
+        import ProtoManager = Utility.ProtoManager;
 
         ////////////////////////////////////////////////////////////////////////////////
         // Constants.
         ////////////////////////////////////////////////////////////////////////////////
         const SERVER_ADDRESS = window.location.hostname + ":3000";
-        const PROTO_FILENAME = "resource/config/NetMessageProto.json";
 
         ////////////////////////////////////////////////////////////////////////////////
         // Type definitions.
@@ -24,7 +25,7 @@ namespace Network {
         }
 
         class NetMessageDispatcherCls extends egret.EventDispatcher {
-            public dispatchWithContainer(container: Proto.IContainer): void {
+            public dispatchWithContainer(container: ProtoTypes.IContainer): void {
                 const name   = Codes[container.actionCode];
                 const action = container[name];
                 Logger.log("NetManager receive: ", name, action);
@@ -49,38 +50,13 @@ namespace Network {
         let   socket          : SocketIOClient.Socket;
         let   reinitIntervalId: number;
 
-        let   protoRoot     : protobuf.Root;
-        let   containerClass: typeof Proto.Container;
-        const dispatcher    : NetMessageDispatcherCls = new NetMessageDispatcherCls();
-        const msgHandlers   : MsgListener[] = [];
-
-        ////////////////////////////////////////////////////////////////////////////////
-        // Helpers.
-        ////////////////////////////////////////////////////////////////////////////////
-        function getDataForDecode(encodedData: ReceivedData): Uint8Array | protobuf.Reader {
-            if (encodedData instanceof ArrayBuffer) {
-                return new Uint8Array(encodedData);
-            } else {
-                // TODO: fix the type
-                return Object.keys(encodedData).map(function(k) {
-                    return encodedData[k];
-                }) as any as Uint8Array;
-            }
-        }
+        const dispatcher : NetMessageDispatcherCls = new NetMessageDispatcherCls();
+        const msgHandlers: MsgListener[] = [];
 
         ////////////////////////////////////////////////////////////////////////////////
         // Exports.
         ////////////////////////////////////////////////////////////////////////////////
         export function init(): void {
-            protobuf.load(PROTO_FILENAME, (err, root) => {
-                if ((err) || (!root)) {
-                    throw err || "no root";
-                } else {
-                    protoRoot      = root;
-                    containerClass = root.lookupType("Container") as any;
-                }
-            });
-
             _resetSocket();
             reinitIntervalId = egret.setInterval(() => {
                 FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S08) + "init_failed");
@@ -108,10 +84,7 @@ namespace Network {
                 Logger.error("NetManager.send() failed to find the msgName with code: ", code);
             } else {
                 Logger.log("NetManager send: ", name, action);
-                socket.send(containerClass.encode({
-                    actionCode: code,
-                    [name]    : action,
-                }).finish());
+                socket.send(ProtoManager.encodeAsContainer(action));
             }
         }
 
@@ -148,7 +121,7 @@ namespace Network {
             });
 
             socket.on("message", (data: ReceivedData) => {
-                dispatcher.dispatchWithContainer(containerClass.decode(getDataForDecode(data)).toJSON());
+                dispatcher.dispatchWithContainer(ProtoManager.decodeAsContainer(data));
             });
         }
     }

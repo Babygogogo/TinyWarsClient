@@ -2,7 +2,7 @@
 namespace TemplateMap {
     import NetManager   = Network.Manager;
     import ActionCode   = Network.Codes;
-    import ProtoTypes   = Network.Proto;
+    import ProtoTypes   = Utility.ProtoTypes;
     import Notify       = Utility.Notify;
 
     export namespace TemplateMapProxy {

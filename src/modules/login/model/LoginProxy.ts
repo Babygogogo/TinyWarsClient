@@ -3,9 +3,9 @@ namespace Login {
     export namespace LoginProxy {
         import Notify     = Utility.Notify;
         import NotifyType = Utility.Notify.Type;
+        import ProtoTypes = Utility.ProtoTypes;
         import NetManager = Network.Manager;
         import ActionCode = Network.Codes;
-        import Proto      = Network.Proto;
 
         export function init(): void {
             NetManager.addListeners(
@@ -23,7 +23,7 @@ namespace Login {
             });
         }
         function _onSLogin(e: egret.Event): void {
-            const data = e.data as Proto.IS_Login;
+            const data = e.data as ProtoTypes.IS_Login;
             if (!data.errorCode) {
                 User.UserModel.updateOnLogin(data);
                 Notify.dispatch(NotifyType.SLogin, data);
@@ -39,7 +39,7 @@ namespace Login {
             });
         }
         function _onSRegister(e: egret.Event): void {
-            const data = e.data as Proto.IS_Register;
+            const data = e.data as ProtoTypes.IS_Register;
             if (!data.errorCode) {
                 Notify.dispatch(NotifyType.SRegister, data);
             }
@@ -51,7 +51,7 @@ namespace Login {
             });
         }
         function _onSLogout(e: egret.Event): void {
-            const data = e.data as Proto.IS_Logout;
+            const data = e.data as ProtoTypes.IS_Logout;
             if (!data.errorCode) {
                 Notify.dispatch(NotifyType.SLogout, data);
             }

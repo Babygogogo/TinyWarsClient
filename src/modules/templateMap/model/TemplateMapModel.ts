@@ -2,7 +2,7 @@
 namespace TemplateMap {
     import Types        = Utility.Types;
     import Helpers      = Utility.Helpers;
-    import ProtoTypes   = Network.Proto;
+    import ProtoTypes   = Utility.ProtoTypes;
 
     export namespace TemplateMapModel {
         const allMapInfos: { [fileName: string]: ProtoTypes.IMapInfo } = {};

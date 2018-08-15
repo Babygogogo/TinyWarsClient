@@ -6,9 +6,9 @@ namespace OnlineWar {
     import FloatText        = Utility.FloatText;
     import Helpers          = Utility.Helpers;
     import Lang             = Utility.Lang;
+    import ProtoTypes       = Utility.ProtoTypes;
     import TemplateMapModel = TemplateMap.TemplateMapModel;
     import TemplateMapProxy = TemplateMap.TemplateMapProxy;
-    import ProtoTypes       = Network.Proto;
 
     export class ChooseNewMapPanel extends GameUi.UiPanel {
         protected readonly _layerType   = Utility.Types.LayerType.Scene;

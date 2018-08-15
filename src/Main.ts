@@ -27,6 +27,7 @@ class Main extends egret.DisplayObjectContainer {
     private async runGame(): Promise<void> {
         await Utility.StageManager.init(this.stage);
         await Utility.ResManager.init();
+        await Utility.ProtoManager.init();
         await Network.Manager.init();
         await Time.TimeProxy.init();
         await Time.TimeModel.init();

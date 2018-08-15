@@ -65,7 +65,7 @@ namespace Time {
         }
 
         function _onSHeartbeat(e: egret.Event): void {
-            const data = e.data as Network.Proto.IS_Heartbeat;
+            const data = e.data as Utility.ProtoTypes.IS_Heartbeat;
             if (data.counter === heartbeatCounter) {
                 isHeartbeatAnswered = true;
                 ++heartbeatCounter;

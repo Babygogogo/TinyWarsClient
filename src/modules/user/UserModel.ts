@@ -5,6 +5,7 @@ namespace User {
         import Types        = Utility.Types;
         import Lang         = Utility.Lang;
         import LocalStorage = Utility.LocalStorage;
+        import ProtoTypes   = Utility.ProtoTypes;
 
         let userId       : number;
         let userPrivilege: number;
@@ -16,7 +17,7 @@ namespace User {
             ]);
         }
 
-        export function updateOnLogin(data: Network.Proto.IS_Login): void {
+        export function updateOnLogin(data: ProtoTypes.IS_Login): void {
             userId        = data.userId;
             userPrivilege = data.privilege;
             userAccount   = data.account;
@@ -33,7 +34,7 @@ namespace User {
         }
 
         function _onNotifySLogout(e: egret.Event): void {
-            const data = e.data as Network.Proto.IS_Logout;
+            const data = e.data as ProtoTypes.IS_Logout;
             if (data.reason === Types.LogoutType.SelfRequest) {
                 Utility.FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S05));
             } else if (data.reason === Types.LogoutType.LoginCollision) {

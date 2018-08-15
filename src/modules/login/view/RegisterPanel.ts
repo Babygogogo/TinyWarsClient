@@ -54,7 +54,7 @@ namespace Login {
         }
 
         private _onNotifySRegister(e: egret.Event): void {
-            const data = e.data as Network.Proto.IS_Register;
+            const data = e.data as Utility.ProtoTypes.IS_Register;
             FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S04));
             LoginProxy.reqLogin(data.account, data.password);
         }
