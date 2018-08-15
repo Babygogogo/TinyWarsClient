@@ -46,7 +46,9 @@ namespace Network {
         ////////////////////////////////////////////////////////////////////////////////
         // Local variables.
         ////////////////////////////////////////////////////////////////////////////////
-        let   socket        : SocketIOClient.Socket;
+        let   socket          : SocketIOClient.Socket;
+        let   reinitIntervalId: number;
+
         let   protoRoot     : protobuf.Root;
         let   containerClass: typeof Proto.Container;
         const dispatcher    : NetMessageDispatcherCls = new NetMessageDispatcherCls();
@@ -79,41 +81,11 @@ namespace Network {
                 }
             });
 
-            initSocket();
-        }
-
-        function initSocket(): void {
-            if (socket) {
-                socket.removeAllListeners();
-                socket.disconnect();
-            }
-            socket = io(SERVER_ADDRESS);
-
-            socket.on("connect", () => {
-                FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S07));
-                Notify.dispatch(Notify.Type.NetworkConnected);
-            });
-
-            socket.on("connect_error", () => {
-                FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S08) + "connect_error");
-            });
-
-            socket.on("error", () => {
-                FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S08) + "error");
-            });
-
-            socket.on("disconnect", (reason: string) => {
-                FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S08) + "disconnect: " + reason);
-                Notify.dispatch(Notify.Type.NetworkDisconnected);
-
-                if (reason === 'io server disconnect') {
-                    socket.connect();
-                }
-            });
-
-            socket.on("message", (data: ReceivedData) => {
-                dispatcher.dispatchWithContainer(containerClass.decode(getDataForDecode(data)).toJSON());
-            });
+            _resetSocket();
+            reinitIntervalId = egret.setInterval(() => {
+                FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S08) + "init_failed");
+                _resetSocket();
+            }, Manager, 10000);
         }
 
         export function addListeners(...listeners: MsgListener[]): void {
@@ -141,6 +113,43 @@ namespace Network {
                     [name]    : action,
                 }).finish());
             }
+        }
+
+        function _resetSocket(): void {
+            if (socket) {
+                socket.removeAllListeners();
+                socket.disconnect();
+            }
+            socket = io(SERVER_ADDRESS);
+
+            socket.on("connect", () => {
+                egret.clearInterval(reinitIntervalId);
+                reinitIntervalId = undefined;
+
+                FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S07));
+                Notify.dispatch(Notify.Type.NetworkConnected);
+            });
+
+            socket.on("connect_error", () => {
+                FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S08) + "connect_error");
+            });
+
+            socket.on("error", () => {
+                FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S08) + "error");
+            });
+
+            socket.on("disconnect", (reason: string) => {
+                FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S08) + "disconnect: " + reason);
+                Notify.dispatch(Notify.Type.NetworkDisconnected);
+
+                if (reason === 'io server disconnect') {
+                    socket.connect();
+                }
+            });
+
+            socket.on("message", (data: ReceivedData) => {
+                dispatcher.dispatchWithContainer(containerClass.decode(getDataForDecode(data)).toJSON());
+            });
         }
     }
 }
