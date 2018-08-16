@@ -31,6 +31,7 @@ namespace OnlineWar {
             for (const data of datas) {
                 this._addUnit(data, tickCount);
             }
+            this._reviseZOrderForAllUnits();
         }
 
         private _onNotifyUnitAnimationTick(e: egret.Event): void {
@@ -40,14 +41,40 @@ namespace OnlineWar {
             }
         }
 
+        private _reviseZOrderForAllUnits(): void {
+            this._reviseZOrderForSingleLayer(this._airLayer);
+            this._reviseZOrderForSingleLayer(this._groundLayer);
+            this._reviseZOrderForSingleLayer(this._seaLayer);
+        }
+
+        private _reviseZOrderForSingleLayer(layer: egret.DisplayObjectContainer): void {
+            const unitsCount = layer.numChildren;
+            const unitViews: UnitView[] = [];
+            for (let i = 0; i < unitsCount; ++i) {
+                unitViews.push(layer.getChildAt(i) as UnitView);
+            }
+            unitViews.sort((a, b): number => {
+                const dataA = a.getData();
+                const dataB = b.getData();
+                return dataA.gridY !== dataB.gridY ? dataA.gridY - dataB.gridY : dataA.unitId - dataB.unitId;
+            })
+
+            for (let i = 0; i < unitsCount; ++i) {
+                layer.addChildAt(unitViews[i], i);
+            }
+        }
+
         private _addUnit(data: Types.UnitViewData, tickCount: number): void {
             const unitType = IdConverter.getUnitTypeAndPlayerIndex(data.viewId).unitType;
+            const view     = new UnitView(data, tickCount);
+            this._unitViews.push(view);
+
             if (Config.checkIsInUnitCategory(data.configVersion, unitType, Types.UnitCategory.Air)) {
-                this._airLayer.addChild(new UnitView(data, tickCount));
+                this._airLayer.addChild(view);
             } else if (Config.checkIsInUnitCategory(data.configVersion, unitType, Types.UnitCategory.Ground)) {
-                this._groundLayer.addChild(new UnitView(data, tickCount));
+                this._groundLayer.addChild(view);
             } else {
-                this._seaLayer.addChild(new UnitView(data, tickCount));
+                this._seaLayer.addChild(view);
             }
         }
 

@@ -2,7 +2,7 @@
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
     <e:Group width="430" height="300" horizontalCenter="0" verticalCenter="0">
-        <GameUi:UiImage source="c03_t01_s01_f01_png" scale9Grid="4,6,1,1" anchorOffsetX="0" anchorOffsetY="0"
+        <GameUi:UiImage source="c04_t01_s01_f01_png" scale9Grid="4,6,1,1" anchorOffsetX="0" anchorOffsetY="0"
                         alpha="0.8" left="0" right="0" top="0" bottom="0" />
         <GameUi:UiLabel text="注册" textColor="0xffffff" stroke="2" y="13" horizontalCenter="0" size="20" />
         <GameUi:UiButton id="_btnLogin" label="去登陆&gt;&gt;" y="13" right="10">
@@ -19,7 +19,7 @@
                             restrict="A-Za-z0-9_" maxChars="20">
             <GameUi:skinName>
                 <e:Skin width="100" height="30">
-                    <e:Image source="c03_t06_s01_f01_png" left="0" right="0" y="27" />
+                    <e:Image source="c04_t06_s01_f01_png" left="0" right="0" y="27" />
                     <e:EditableText id="textDisplay" size="24" left="0" right="0" height="30" textColor="0x000000" />
                     <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0" right="0" text="" height="30"
                              textColor="0x808080" />
@@ -31,7 +31,7 @@
                             restrict="A-Za-z0-9_" maxChars="20" displayAsPassword="true">
             <GameUi:skinName>
                 <e:Skin width="100" height="30">
-                    <e:Image source="c03_t06_s01_f01_png" left="0" right="0" y="27" />
+                    <e:Image source="c04_t06_s01_f01_png" left="0" right="0" y="27" />
                     <e:EditableText id="textDisplay" size="24" left="0" right="0" height="30" textColor="0x000000" />
                     <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0" right="0" text="" height="30"
                              textColor="0x808080" />
@@ -43,7 +43,7 @@
                             restrict="A-Za-z0-9_" maxChars="20">
             <GameUi:skinName>
                 <e:Skin width="100" height="30">
-                    <e:Image source="c03_t06_s01_f01_png" left="0" right="0" y="27" />
+                    <e:Image source="c04_t06_s01_f01_png" left="0" right="0" y="27" />
                     <e:EditableText id="textDisplay" size="24" left="0" right="0" height="30" textColor="0x000000" />
                     <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0" right="0" text="" height="30"
                              textColor="0x808080" />

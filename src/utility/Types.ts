@@ -194,10 +194,12 @@ namespace Utility {
         export type UnitViewData = {
             configVersion: number;
 
-            viewId: number;
-
             gridX: number;
             gridY: number;
+
+            viewId: number;
+
+            unitId: number;
 
             instantialData?: InstantialUnit;
         }

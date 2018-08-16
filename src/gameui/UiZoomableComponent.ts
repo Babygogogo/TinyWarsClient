@@ -274,7 +274,7 @@ namespace GameUi {
 
         private _resetMask(): void {
             if (!this._maskForContents) {
-                const mask  = new UiImage("c03_t06_s01_f01_png");
+                const mask  = new UiImage("c04_t06_s01_f01_png");
                 mask.left   = 0;
                 mask.right  = 0;
                 mask.top    = 0;

@@ -99,7 +99,7 @@ namespace OnlineWar {
             this._zoomMap.setContentWidth(data.mapWidth * gridSize.width);
             this._zoomMap.setContentHeight(data.mapHeight * gridSize.height);
             this._zoomMap.addContent(tileMapView);
-            this._zoomMap.addChild(unitMapView);
+            this._zoomMap.addContent(unitMapView);
             this._zoomMap.setContentScale(0, true);
         }
 
@@ -157,18 +157,21 @@ namespace OnlineWar {
             const configVersion = Config.getLatestConfigVersion();
             const datas: Types.UnitViewData[] = [];
 
-            let index = 0;
+            let index  = 0;
+            let unitId = 0;
             for (let y = 0; y < mapHeight; ++y) {
                 for (let x = 0; x < mapWidth; ++x) {
-                    const id = unitViewIds[index];
+                    const viewId = unitViewIds[index];
                     ++index;
-                    if (id > 0) {
+                    if (viewId > 0) {
                         datas.push({
                             configVersion: configVersion,
                             gridX        : x,
                             gridY        : y,
-                            viewId       : id,
+                            viewId       : viewId,
+                            unitId       : unitId,
                         });
+                        ++unitId;
                     }
                 }
             }

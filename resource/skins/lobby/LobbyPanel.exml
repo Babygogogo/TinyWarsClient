@@ -3,7 +3,7 @@
         xmlns:w="http://ns.egret.com/wing">
     <GameUi:UiImage id="_imgBg" source="bg_jpg" horizontalCenter="0" verticalCenter="0" scaleX="1.5" scaleY="1.5" />
     <e:Group left="35" top="70" bottom="30" width="200">
-        <GameUi:UiImage source="c03_t01_s01_f01_png" scale9Grid="4,6,1,1" anchorOffsetX="0" anchorOffsetY="0"
+        <GameUi:UiImage source="c04_t01_s01_f01_png" scale9Grid="4,6,1,1" anchorOffsetX="0" anchorOffsetY="0"
                         alpha="0.8" left="0" right="0" top="0" bottom="0" />
         <GameUi:UiLabel text="天梯" y="15" textColor="0x000000" horizontalCenter="0" />
         <GameUi:UiScrollList left="0" right="0" bottom="0" top="50">
@@ -30,7 +30,7 @@
         </GameUi:UiScrollList>
     </e:Group>
     <e:Group id="_group1" top="70" width="200" x="265" height="205">
-        <GameUi:UiImage source="c03_t01_s01_f01_png" scale9Grid="4,6,1,1" anchorOffsetX="0" anchorOffsetY="0"
+        <GameUi:UiImage source="c04_t01_s01_f01_png" scale9Grid="4,6,1,1" anchorOffsetX="0" anchorOffsetY="0"
                         alpha="0.8" left="0" right="0" top="0" bottom="0" />
         <GameUi:UiLabel text="我的对局" y="15" textColor="0x000000" horizontalCenter="0" />
         <GameUi:UiScrollList left="0" right="0" bottom="0" top="50">
@@ -53,7 +53,7 @@
         </GameUi:UiScrollList>
     </e:Group>
     <e:Group id="_group2" top="70" width="200" x="495" height="205">
-        <GameUi:UiImage source="c03_t01_s01_f01_png" scale9Grid="4,6,1,1" anchorOffsetX="0" anchorOffsetY="0"
+        <GameUi:UiImage source="c04_t01_s01_f01_png" scale9Grid="4,6,1,1" anchorOffsetX="0" anchorOffsetY="0"
                         alpha="0.8" left="0" right="0" top="0" bottom="0" />
         <GameUi:UiLabel text="单人战役" y="15" textColor="0x000000" horizontalCenter="0" />
         <GameUi:UiScrollList left="0" right="0" bottom="0" top="50">
@@ -77,7 +77,7 @@
         </GameUi:UiScrollList>
     </e:Group>
     <e:Group id="_group3" bottom="30" width="200" x="265" height="205">
-        <GameUi:UiImage source="c03_t01_s01_f01_png" scale9Grid="4,6,1,1" anchorOffsetX="0" anchorOffsetY="0"
+        <GameUi:UiImage source="c04_t01_s01_f01_png" scale9Grid="4,6,1,1" anchorOffsetX="0" anchorOffsetY="0"
                         alpha="0.8" left="0" right="0" top="0" bottom="0" />
         <GameUi:UiLabel text="快速加入" y="15" textColor="0x000000" horizontalCenter="0" />
         <GameUi:UiScrollList left="0" right="0" bottom="0" top="50">
@@ -101,7 +101,7 @@
         </GameUi:UiScrollList>
     </e:Group>
     <e:Group id="_group4" bottom="30" width="200" x="495" height="205">
-        <GameUi:UiImage source="c03_t01_s01_f01_png" scale9Grid="4,6,1,1" anchorOffsetX="0" anchorOffsetY="0"
+        <GameUi:UiImage source="c04_t01_s01_f01_png" scale9Grid="4,6,1,1" anchorOffsetX="0" anchorOffsetY="0"
                         alpha="0.8" left="0" right="0" top="0" bottom="0" />
         <GameUi:UiLabel text="创建房间" y="15" textColor="0x000000" horizontalCenter="0" />
         <GameUi:UiScrollList left="0" right="0" bottom="0" top="50">
@@ -124,7 +124,7 @@
         </GameUi:UiScrollList>
     </e:Group>
     <e:Group top="70" bottom="30" width="200" x="725">
-        <GameUi:UiImage source="c03_t01_s01_f01_png" scale9Grid="4,6,1,1" anchorOffsetX="0" anchorOffsetY="0"
+        <GameUi:UiImage source="c04_t01_s01_f01_png" scale9Grid="4,6,1,1" anchorOffsetX="0" anchorOffsetY="0"
                         alpha="0.8" left="0" right="0" top="0" bottom="0" />
         <GameUi:UiLabel text="其他操作" y="15" textColor="0x000000" horizontalCenter="0" />
         <GameUi:UiScrollList id="_listCommand" left="0" right="0" bottom="0" top="50">
