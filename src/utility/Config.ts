@@ -1618,6 +1618,10 @@ namespace Config {
         return GRID_SIZE;
     }
 
+    export function getLatestConfigVersion(): number {
+        return CONFIGS.length - 1;
+    }
+
     export function getTileType(baseType: TileBaseType, objectType: TileObjectType): TileType {
         return TILE_TYPE_MAPPING[baseType][objectType];
     }
@@ -1636,6 +1640,11 @@ namespace Config {
 
     export function getUnitTypesByCategory(version: number, category: UnitCategory): UnitType[] {
         return CONFIGS[version].unitCategories![category];
+    }
+
+    export function checkIsInUnitCategory(version: number, unitType: UnitType, category: UnitCategory): boolean {
+        const types = getUnitTypesByCategory(version, category);
+        return (types != null) && (types.indexOf(unitType) >= 0);
     }
 
     export function getUnitMaxPromotion(version: number): number {

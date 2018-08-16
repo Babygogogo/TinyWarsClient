@@ -91,11 +91,15 @@ namespace OnlineWar {
             tileMapView.updateWithBaseViewIdArray(data.tileBases);
             tileMapView.updateWithObjectViewIdArray(data.tileObjects);
 
+            const unitMapView = new UnitMapView();
+            unitMapView.initWithDatas(this._createUnitViewDatas(data.units, data.mapWidth, data.mapHeight));
+
             const gridSize = Config.getGridSize();
             this._zoomMap.removeAllContents();
             this._zoomMap.setContentWidth(data.mapWidth * gridSize.width);
             this._zoomMap.setContentHeight(data.mapHeight * gridSize.height);
             this._zoomMap.addContent(tileMapView);
+            this._zoomMap.addChild(unitMapView);
             this._zoomMap.setContentScale(0, true);
         }
 
@@ -147,6 +151,28 @@ namespace OnlineWar {
                 });
             }
             return data;
+        }
+
+        private _createUnitViewDatas(unitViewIds: number[], mapWidth: number, mapHeight: number): Types.UnitViewData[] {
+            const configVersion = Config.getLatestConfigVersion();
+            const datas: Types.UnitViewData[] = [];
+
+            let index = 0;
+            for (let y = 0; y < mapHeight; ++y) {
+                for (let x = 0; x < mapWidth; ++x) {
+                    const id = unitViewIds[index];
+                    ++index;
+                    if (id > 0) {
+                        datas.push({
+                            configVersion: configVersion,
+                            gridX        : x,
+                            gridY        : y,
+                            viewId       : id,
+                        });
+                    }
+                }
+            }
+            return datas;
         }
     }
 
