@@ -2,11 +2,11 @@
 	"skins": {},
 	"autoGenerateExmlsList": true,
 	"exmls": [
-		"resource/skins/lobby/LobbyPanel.exml",
-		"resource/skins/lobby/LobbyTopPanel.exml",
 		"resource/skins/login/LoginBackgroundPanel.exml",
 		"resource/skins/login/LoginPanel.exml",
 		"resource/skins/login/RegisterPanel.exml",
+		"resource/skins/lobby/LobbyPanel.exml",
+		"resource/skins/lobby/LobbyTopPanel.exml",
 		"resource/skins/onlineWar/ChooseNewMapPanel.exml",
 		"resource/skins/utility/LoadingUiPanel.exml"
 	],
