@@ -210,7 +210,8 @@ namespace Utility {
         export const enum LayerType {
             Top,
             Notify,
-            Hud,
+            Hud1,
+            Hud0,
             Scene,
             Bottom,
         }

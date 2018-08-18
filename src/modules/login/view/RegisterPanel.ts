@@ -5,7 +5,7 @@ namespace Login {
     import NotifyType = Utility.Notify.Type;
 
     export class RegisterPanel extends GameUi.UiPanel {
-        protected readonly _layerType   = Utility.Types.LayerType.Hud;
+        protected readonly _layerType   = Utility.Types.LayerType.Hud0;
         protected readonly _isExclusive = true;
 
         private _inputAccount : GameUi.UiTextInput;
@@ -49,8 +49,7 @@ namespace Login {
 
         private _onNotifySLogin(e: egret.Event): void {
             FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S00));
-            RegisterPanel.close();
-            Lobby.LobbyPanel.open();
+            Utility.StageManager.gotoLobby();
         }
 
         private _onNotifySRegister(e: egret.Event): void {
@@ -60,8 +59,7 @@ namespace Login {
         }
 
         private _onTouchedBtnLogin(e: egret.TouchEvent): void {
-            LoginPanel.open();
-            RegisterPanel.close();
+            Utility.StageManager.gotoLobby();
         }
 
         private _onTouchedBtnRegister(e: egret.TouchEvent): void {

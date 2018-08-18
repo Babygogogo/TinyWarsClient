@@ -28,7 +28,8 @@ namespace Utility {
 
             _addLayer(LayerType.Bottom);
             _addLayer(LayerType.Scene);
-            _addLayer(LayerType.Hud);
+            _addLayer(LayerType.Hud0);
+            _addLayer(LayerType.Hud1);
             _addLayer(LayerType.Notify);
             _addLayer(LayerType.Top);
         }
@@ -47,6 +48,23 @@ namespace Utility {
 
         export function getLayer(layer: LayerType): UiLayer {
             return layers[layer];
+        }
+
+        export function gotoLogin(): void {
+            _closeAllPanels();
+            Login.LoginBackgroundPanel.open();
+            Login.LoginPanel.open();
+        }
+        export function gotoLobby(): void {
+            _closeAllPanels();
+            Lobby.LobbyPanel.open();
+            Lobby.LobbyTopPanel.open();
+        }
+
+        function _closeAllPanels(): void {
+            for (const t in layers) {
+                layers[t].closeAllPanels();
+            }
         }
 
         function _addLayer(layerType: LayerType): void {
@@ -73,7 +91,7 @@ namespace Utility {
             this.addEventListener(egret.Event.RESIZE, this._onResize, this);
         }
 
-        public removeAllPanels(execpt?: GameUi.UiPanel): void {
+        public closeAllPanels(execpt?: GameUi.UiPanel): void {
             for (let i = this.numChildren - 1; i >= 0; --i) {
                 const child = this.getChildAt(i);
                 if ((child instanceof GameUi.UiPanel) && (child !== execpt)) {

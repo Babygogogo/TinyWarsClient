@@ -6,7 +6,7 @@ namespace Login {
     import LocalStorage = Utility.LocalStorage;
 
     export class LoginPanel extends GameUi.UiPanel {
-        protected readonly _layerType   = Utility.Types.LayerType.Hud;
+        protected readonly _layerType   = Utility.Types.LayerType.Hud0;
         protected readonly _isExclusive = true;
 
         private _inputAccount : GameUi.UiTextInput;
@@ -58,9 +58,7 @@ namespace Login {
 
         private _onNotifySLogin(e: egret.Event): void {
             FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S00));
-            LoginPanel.close();
-            Lobby.LobbyTopPanel.open();
-            Lobby.LobbyPanel.open();
+            Utility.StageManager.gotoLobby();
         }
 
         private _onTouchedBtnLogin(e: egret.TouchEvent): void {

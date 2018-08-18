@@ -67,7 +67,7 @@ namespace GameUi {
         ////////////////////////////////////////////////////////////////////////////////
         public open(): void {
             const layer = Utility.StageManager.getLayer(this._layerType);
-            (this._isExclusive) && (layer.removeAllPanels(this));
+            (this._isExclusive) && (layer.closeAllPanels(this));
             (!this.parent) && (layer.addChild(this));
 
             this._isCalledOpen = true;

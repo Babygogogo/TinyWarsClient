@@ -40,8 +40,7 @@ namespace User {
             } else if (data.reason === Types.LogoutType.LoginCollision) {
                 Utility.FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S06));
             }
-            Login.LoginBackgroundPanel.open();
-            Login.LoginPanel.open();
+            Utility.StageManager.gotoLogin();
         }
     }
 }

@@ -36,8 +36,7 @@ class Main extends egret.DisplayObjectContainer {
         await TemplateMap.TemplateMapModel.init();
         await Login.LoginProxy.init();
 
-        Login.LoginBackgroundPanel.open();
-        Login.LoginPanel.open();
+        Utility.StageManager.gotoLogin();
 
         // this.createGameScene();
         // lobby.LobbyPanel.create();
