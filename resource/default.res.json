@@ -1,7 +1,7 @@
 {
 	"groups": [
 		{
-			"keys": "bg_jpg,egret_icon_png,description_json,tileBase_json,tileObject_json,c04_t01_s01_f01_png,c04_t06_s01_f01_png,unit_json,transparent_png",
+			"keys": "bg_jpg,egret_icon_png,description_json,tileBase_json,tileObject_json,c04_t01_s01_f01_png,c04_t06_s01_f01_png,unit_json,transparent_png,semi_transparent_png",
 			"name": "preload"
 		}
 	],
@@ -53,6 +53,11 @@
 			"name": "transparent_png",
 			"type": "image",
 			"url": "assets/ui/transparent.png"
+		},
+		{
+			"name": "semi_transparent_png",
+			"type": "image",
+			"url": "assets/ui/semi_transparent.png"
 		}
 	]
 }

@@ -29,8 +29,10 @@ namespace TemplateMap {
 
         export function setNewestMapInfos(infos: ProtoTypes.IS_GetNewestMapInfos): void {
             newestMapInfos = infos;
-            for (const info of infos.mapInfos) {
-                allMapInfos[Helpers.getMapFileName(info as Types.MapIndexKeys)] = info;
+            if (infos.mapInfos) {
+                for (const info of infos.mapInfos) {
+                    allMapInfos[Helpers.getMapFileName(info as Types.MapIndexKeys)] = info;
+                }
             }
         }
         export function getNewestMapInfos(): ProtoTypes.IS_GetNewestMapInfos {

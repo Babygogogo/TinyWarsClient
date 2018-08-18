@@ -30,6 +30,7 @@ namespace Utility {
             _addLayer(LayerType.Scene);
             _addLayer(LayerType.Hud0);
             _addLayer(LayerType.Hud1);
+            _addLayer(LayerType.Hud2);
             _addLayer(LayerType.Notify);
             _addLayer(LayerType.Top);
         }

@@ -16,9 +16,10 @@ namespace OnlineWar {
 
         private static _instance: ChooseNewMapPanel;
 
-        private _listMap      : GameUi.UiScrollList;
-        private _zoomMap      : GameUi.UiZoomableComponent;
-        private _btnBack      : GameUi.UiButton;
+        private _listMap   : GameUi.UiScrollList;
+        private _zoomMap   : GameUi.UiZoomableComponent;
+        private _btnSearch : GameUi.UiButton;
+        private _btnBack   : GameUi.UiButton;
 
         private _groupInfo          : eui.Group;
         private _labelMapName       : GameUi.UiLabel;
@@ -57,9 +58,10 @@ namespace OnlineWar {
                 { name: Notify.Type.SGetNewestMapInfos, callback: this._onNotifySGetNewestMapInfos },
             ];
             this._uiListeners = [
-                { ui: this._zoomMap, callback: this._onTouchBeginZoomMap, eventType: egret.TouchEvent.TOUCH_BEGIN },
-                { ui: this._zoomMap, callback: this._onTouchEndZoomMap,   eventType: egret.TouchEvent.TOUCH_END },
-                { ui: this._btnBack, callback: this._onTouchTapBtnBack },
+                { ui: this._zoomMap,   callback: this._onTouchBeginZoomMap, eventType: egret.TouchEvent.TOUCH_BEGIN },
+                { ui: this._zoomMap,   callback: this._onTouchEndZoomMap,   eventType: egret.TouchEvent.TOUCH_END },
+                { ui: this._btnSearch, callback: this._onTouchTapBtnSearch },
+                { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
             ];
             this._listMap.setItemRenderer(MapNameRenderer);
         }
@@ -94,10 +96,12 @@ namespace OnlineWar {
         }
 
         private _onNotifySGetNewestMapInfos(e: egret.Event): void {
-            const data        = this._createDataForListMap(e.data);
-            this._dataForList = data;
-            this._listMap.bindData(data);
-            this.setSelectedIndex(Math.floor(Math.random() * data.length));
+            const newData = this._createDataForListMap(e.data);
+            if (newData.length > 0) {
+                this._dataForList = newData;
+                this._listMap.bindData(newData);
+                this.setSelectedIndex(Math.floor(Math.random() * newData.length));
+            }
         }
 
         private _onTouchBeginZoomMap(e: egret.TouchEvent): void {
@@ -137,6 +141,10 @@ namespace OnlineWar {
             this._previousTouchPoints[touchId] = { x: e.stageX, y: e.stageY };
         }
 
+        private _onTouchTapBtnSearch(e: egret.TouchEvent): void {
+            TemplateMap.SearchMapPanel.open();
+        }
+
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
             ChooseNewMapPanel.close();
             Lobby.LobbyPanel.open();
@@ -147,15 +155,17 @@ namespace OnlineWar {
         ////////////////////////////////////////////////////////////////////////////////
         private _createDataForListMap(infos: ProtoTypes.IS_GetNewestMapInfos): DataForMapNameRenderer[] {
             const data: DataForMapNameRenderer[] = [];
-            for (let i = 0; i < infos.mapInfos.length; ++i) {
-                const info = infos.mapInfos[i];
-                data.push({
-                    mapName : info.mapName,
-                    designer: info.designer,
-                    version : info.version,
-                    index   : i,
-                    panel   : this,
-                });
+            if (infos.mapInfos) {
+                for (let i = 0; i < infos.mapInfos.length; ++i) {
+                    const info = infos.mapInfos[i];
+                    data.push({
+                        mapName : info.mapName,
+                        designer: info.designer,
+                        version : info.version,
+                        index   : i,
+                        panel   : this,
+                    });
+                }
             }
             return data;
         }

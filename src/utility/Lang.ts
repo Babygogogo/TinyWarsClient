@@ -13,6 +13,7 @@ namespace Utility {
         }
         export const enum SubType {
             S00, S01, S02, S03, S04, S05, S06, S07, S08, S09,
+            S10, S11, S12,
         }
         export const enum FormatType {
             F000, F001, F002, F003, F004,
@@ -59,6 +60,18 @@ namespace Utility {
                 [ // 00-09
                     "您的网络连接不稳定，请尝试改善",
                     "The network connection is not stable.",
+                ],
+                [ // 00-10
+                    "没有符合条件的地图，请更换条件再试",
+                    "No maps found.",
+                ],
+                [ // 00-11
+                    "正在查找地图",
+                    "Searching for maps...",
+                ],
+                [ // 00-12
+                    "已找到符合条件的地图",
+                    "Maps found.",
                 ],
             ],
             [
