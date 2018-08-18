@@ -225,6 +225,11 @@ namespace Utility {
             White,
         }
 
+        export const UiState = {
+            Up  : "Up",
+            Down: "Down",
+        }
+
         export const enum LogoutType {
             SelfRequest,
             LoginCollision,

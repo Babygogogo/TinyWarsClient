@@ -29,6 +29,8 @@ namespace OnlineWar {
 
         private _currentTouchPoints : Types.TouchPoints = {};
         private _previousTouchPoints: Types.TouchPoints = {};
+        private _dataForList        : DataForMapNameRenderer[];
+        private _selectedIndex      : number;
 
         public static open(): void {
             if (!ChooseNewMapPanel._instance) {
@@ -73,34 +75,15 @@ namespace OnlineWar {
             egret.Tween.removeTweens(this._groupInfo);
         }
 
-        public async showMap(keys: Types.MapIndexKeys): Promise<void> {
-            const data    = await TemplateMapModel.getMapData(keys);
-            const mapInfo = TemplateMapModel.getMapInfo(keys);
-            this._labelMapName.text      = Lang.getFormatedText(Lang.FormatType.F000, mapInfo.mapName);
-            this._labelDesigner.text     = Lang.getFormatedText(Lang.FormatType.F001, mapInfo.designer);
-            this._labelPlayersCount.text = Lang.getFormatedText(Lang.FormatType.F002, mapInfo.playersCount);
-            this._labelRating.text       = Lang.getFormatedText(Lang.FormatType.F003, mapInfo.rating != null ? mapInfo.rating.toFixed(2) : Lang.getText(Lang.BigType.B01, Lang.SubType.S01));
-            this._labelPlayedTimes.text  = Lang.getFormatedText(Lang.FormatType.F004, mapInfo.playedTimes);
-            this._groupInfo.visible      = true;
-            this._groupInfo.alpha        = 1;
-            egret.Tween.removeTweens(this._groupInfo);
-            egret.Tween.get(this._groupInfo).wait(5000).to({alpha: 0}, 1000).call(() => {this._groupInfo.visible = false; this._groupInfo.alpha = 1});
-
-            const tileMapView = new TileMapView();
-            tileMapView.init(data.mapWidth, data.mapHeight);
-            tileMapView.updateWithBaseViewIdArray(data.tileBases);
-            tileMapView.updateWithObjectViewIdArray(data.tileObjects);
-
-            const unitMapView = new UnitMapView();
-            unitMapView.initWithDatas(this._createUnitViewDatas(data.units, data.mapWidth, data.mapHeight));
-
-            const gridSize = Config.getGridSize();
-            this._zoomMap.removeAllContents();
-            this._zoomMap.setContentWidth(data.mapWidth * gridSize.width);
-            this._zoomMap.setContentHeight(data.mapHeight * gridSize.height);
-            this._zoomMap.addContent(tileMapView);
-            this._zoomMap.addContent(unitMapView);
-            this._zoomMap.setContentScale(0, true);
+        public async setSelectedIndex(index: number): Promise<void> {
+            if (this._selectedIndex !== index) {
+                this._selectedIndex = index;
+                this._listMap.bindData(this._dataForList);
+                await this._showMap(this._dataForList[index]);
+            }
+        }
+        public getSelectedIndex(): number {
+            return this._selectedIndex;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -111,9 +94,10 @@ namespace OnlineWar {
         }
 
         private _onNotifySGetNewestMapInfos(e: egret.Event): void {
-            const data = this._createDataForListMap(e.data);
+            const data        = this._createDataForListMap(e.data);
+            this._dataForList = data;
             this._listMap.bindData(data);
-            this.showMap(Helpers.pickRandomElement(data));
+            this.setSelectedIndex(Math.floor(Math.random() * data.length));
         }
 
         private _onTouchBeginZoomMap(e: egret.TouchEvent): void {
@@ -163,11 +147,13 @@ namespace OnlineWar {
         ////////////////////////////////////////////////////////////////////////////////
         private _createDataForListMap(infos: ProtoTypes.IS_GetNewestMapInfos): DataForMapNameRenderer[] {
             const data: DataForMapNameRenderer[] = [];
-            for (const info of infos.mapInfos) {
+            for (let i = 0; i < infos.mapInfos.length; ++i) {
+                const info = infos.mapInfos[i];
                 data.push({
                     mapName : info.mapName,
                     designer: info.designer,
                     version : info.version,
+                    index   : i,
                     panel   : this,
                 });
             }
@@ -198,23 +184,55 @@ namespace OnlineWar {
             }
             return datas;
         }
+
+        private async _showMap(keys: Types.MapIndexKeys): Promise<void> {
+            const data    = await TemplateMapModel.getMapData(keys);
+            const mapInfo = TemplateMapModel.getMapInfo(keys);
+            this._labelMapName.text      = Lang.getFormatedText(Lang.FormatType.F000, mapInfo.mapName);
+            this._labelDesigner.text     = Lang.getFormatedText(Lang.FormatType.F001, mapInfo.designer);
+            this._labelPlayersCount.text = Lang.getFormatedText(Lang.FormatType.F002, mapInfo.playersCount);
+            this._labelRating.text       = Lang.getFormatedText(Lang.FormatType.F003, mapInfo.rating != null ? mapInfo.rating.toFixed(2) : Lang.getText(Lang.BigType.B01, Lang.SubType.S01));
+            this._labelPlayedTimes.text  = Lang.getFormatedText(Lang.FormatType.F004, mapInfo.playedTimes);
+            this._groupInfo.visible      = true;
+            this._groupInfo.alpha        = 1;
+            egret.Tween.removeTweens(this._groupInfo);
+            egret.Tween.get(this._groupInfo).wait(5000).to({alpha: 0}, 1000).call(() => {this._groupInfo.visible = false; this._groupInfo.alpha = 1});
+
+            const tileMapView = new TileMapView();
+            tileMapView.init(data.mapWidth, data.mapHeight);
+            tileMapView.updateWithBaseViewIdArray(data.tileBases);
+            tileMapView.updateWithObjectViewIdArray(data.tileObjects);
+
+            const unitMapView = new UnitMapView();
+            unitMapView.initWithDatas(this._createUnitViewDatas(data.units, data.mapWidth, data.mapHeight));
+
+            const gridSize = Config.getGridSize();
+            this._zoomMap.removeAllContents();
+            this._zoomMap.setContentWidth(data.mapWidth * gridSize.width);
+            this._zoomMap.setContentHeight(data.mapHeight * gridSize.height);
+            this._zoomMap.addContent(tileMapView);
+            this._zoomMap.addContent(unitMapView);
+            this._zoomMap.setContentScale(0, true);
+        }
     }
 
     type DataForMapNameRenderer = {
         mapName : string;
         designer: string;
         version : number;
+        index   : number;
         panel   : ChooseNewMapPanel;
     }
 
     class MapNameRenderer extends eui.ItemRenderer {
-        private _btnName: GameUi.UiButton;
-        private _btnNext: GameUi.UiButton;
+        private _btnChoose: GameUi.UiButton;
+        private _btnNext  : GameUi.UiButton;
+        private _labelName: GameUi.UiLabel;
 
         protected childrenCreated(): void {
             super.childrenCreated();
 
-            this._btnName.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchTapBtnName, this);
+            this._btnChoose.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchTapBtnChoose, this);
             this._btnNext.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchTapBtnNext, this);
         }
 
@@ -222,12 +240,13 @@ namespace OnlineWar {
             super.dataChanged();
 
             const data = this.data as DataForMapNameRenderer;
-            this._btnName.label = data.mapName;
+            this.currentState    = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
+            this._labelName.text = data.mapName;
         }
 
-        private _onTouchTapBtnName(e: egret.TouchEvent): void {
+        private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
             const data = this.data as DataForMapNameRenderer;
-            data.panel.showMap(data);
+            data.panel.setSelectedIndex(data.index);
         }
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
@@ -235,3 +254,4 @@ namespace OnlineWar {
         }
     }
 }
+// 6225 7583 4051 6631
