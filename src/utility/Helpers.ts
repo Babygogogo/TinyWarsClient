@@ -112,6 +112,14 @@ namespace Utility {
             return true;
         }
 
+        export function getKeysCount(obj: { [key: string]: any }): number {
+            let count = 0;
+            for (const k in obj) {
+                ++count;
+            }
+            return count;
+        }
+
         export function pickRandomElement<T>(list: T[]): T {
             if (!list) {
                 return undefined;

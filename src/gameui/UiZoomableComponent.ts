@@ -10,8 +10,6 @@ namespace GameUi {
         x: 0,
         y: 0
     };
-    type TouchEvents = { [toucheId: number]: egret.TouchEvent };
-    type TouchPoints = { [toucheId: number]: Point };
 
     export class UiZoomableComponent extends eui.Component {
         private _maskForContents: UiImage;
@@ -101,10 +99,11 @@ namespace GameUi {
             }
         }
 
-        public setZoomByTouches(touches: TouchEvents, prevPoints: TouchPoints): void {
-            const point = this._getCenterPoint(touches);
+        public setZoomByTouches(currPointsInStage: Types.TouchPoints, initPointsInStage: Types.TouchPoints): void {
+            const pointInStage = this._getCenterPoint(currPointsInStage);
+            const point        = this._contents.globalToLocal(pointInStage.x, pointInStage.y);
             if (this._checkIsInsideContents(point)) {
-                this._setZoom(point, this._getScaleModifierByTouches(touches, prevPoints));
+                this._setZoom(point, this._getScaleModifierByTouches(currPointsInStage, initPointsInStage));
             }
         }
 
@@ -121,33 +120,26 @@ namespace GameUi {
         private _getScaleModifierByScrollValue(value: number): number {
             return Math.max(0.01, 1 + value / 1000);
         }
-        private _getScaleModifierByTouches(touches: TouchEvents, prevPoints: TouchPoints): number {
-            const distances: number[] = [];
-            for (const id in touches) {
-                const touch     = touches[id];
-                const prevPoint = prevPoints[id];
-                if (!prevPoint) {
-                    distances.push(0);
-                } else {
-                    distances.push(Helpers.getPointDistance(touch.localX, touch.localY, prevPoint.x, prevPoint.y));
-                }
+        private _getScaleModifierByTouches(currPoints: Types.TouchPoints, initPoints: Types.TouchPoints): number {
+            const oldPoints: Point[] = [];
+            const newPoints: Point[] = [];
+            for (const id in currPoints) {
+                oldPoints.push(this._contents.globalToLocal(initPoints[id].x, initPoints[id].y));
+                newPoints.push(this._contents.globalToLocal(currPoints[id].x, currPoints[id].y));
 
-                if (distances.length >= 2) {
+                if (oldPoints.length >= 2) {
                     break;
                 }
             }
 
-            if ((distances.length <= 1) || (distances[0] === 0) || (distances[1] === 0)) {
-                return 1;
-            } else {
-                return distances[1] / distances[0];
-            }
+            return Helpers.getPointDistance(newPoints[0].x, newPoints[0].y, newPoints[1].x, newPoints[1].y)
+                /  Helpers.getPointDistance(oldPoints[0].x, oldPoints[0].y, oldPoints[1].x, oldPoints[1].y);
         }
 
-        private _getCenterPoint(touches: TouchEvents): Point {
+        private _getCenterPoint(touches: Types.TouchPoints): Point {
             const points: Point[] = [];
             for (const id in touches) {
-                points.push({x: touches[id].localX, y: touches[id].localY});
+                points.push({ x: touches[id].x, y: touches[id].y });
                 if (points.length >= 2) {
                     break;
                 }
