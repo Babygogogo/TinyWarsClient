@@ -99,11 +99,11 @@ namespace GameUi {
             }
         }
 
-        public setZoomByTouches(currPointsInStage: Types.TouchPoints, initPointsInStage: Types.TouchPoints): void {
+        public setZoomByTouches(currPointsInStage: Types.TouchPoints, prevPointsInStage: Types.TouchPoints): void {
             const pointInStage = this._getCenterPoint(currPointsInStage);
             const point        = this._contents.globalToLocal(pointInStage.x, pointInStage.y);
             if (this._checkIsInsideContents(point)) {
-                this._setZoom(point, this._getScaleModifierByTouches(currPointsInStage, initPointsInStage));
+                this._setZoom(point, this._getScaleModifierByTouches(currPointsInStage, prevPointsInStage));
             }
         }
 
@@ -120,11 +120,11 @@ namespace GameUi {
         private _getScaleModifierByScrollValue(value: number): number {
             return Math.max(0.01, 1 + value / 1000);
         }
-        private _getScaleModifierByTouches(currPoints: Types.TouchPoints, initPoints: Types.TouchPoints): number {
+        private _getScaleModifierByTouches(currPoints: Types.TouchPoints, prevPoints: Types.TouchPoints): number {
             const oldPoints: Point[] = [];
             const newPoints: Point[] = [];
             for (const id in currPoints) {
-                oldPoints.push(this._contents.globalToLocal(initPoints[id].x, initPoints[id].y));
+                oldPoints.push(this._contents.globalToLocal(prevPoints[id].x, prevPoints[id].y));
                 newPoints.push(this._contents.globalToLocal(currPoints[id].x, currPoints[id].y));
 
                 if (oldPoints.length >= 2) {

@@ -27,10 +27,8 @@ namespace OnlineWar {
         private _labelPlayedTimes   : GameUi.UiLabel;
         private _labelPlayersCount  : GameUi.UiLabel;
 
-        private _touchOffsetX       : { [touchId: number]: number } = {};
-        private _touchOffsetY       : { [touchId: number]: number } = {};
         private _currentTouchPoints : Types.TouchPoints = {};
-        private _initialTouchPoints : Types.TouchPoints = {};
+        private _previousTouchPoints: Types.TouchPoints = {};
 
         public static open(): void {
             if (!ChooseNewMapPanel._instance) {
@@ -126,19 +124,14 @@ namespace OnlineWar {
 
             const touchId = e.touchPointID;
             if (touchesCount <= 1) {
-                this._currentTouchPoints[touchId] = { x: e.stageX, y: e.stageY };
-                this._initialTouchPoints[touchId] = this._initialTouchPoints[touchId] || { x: e.stageX, y: e.stageY };
+                this._currentTouchPoints[touchId]  = { x: e.stageX, y: e.stageY };
+                this._previousTouchPoints[touchId] = { x: e.stageX, y: e.stageY };
             }
-
-            this._touchOffsetX[touchId] = e.stageX - this._zoomMap.getContentX();
-            this._touchOffsetY[touchId] = e.stageY - this._zoomMap.getContentY();
         }
 
         private _onTouchEndZoomMap(e: egret.TouchEvent): void {
             delete this._currentTouchPoints[e.touchPointID];
-            delete this._initialTouchPoints[e.touchPointID];
-            delete this._touchOffsetX[e.touchPointID];
-            delete this._touchOffsetY[e.touchPointID];
+            delete this._previousTouchPoints[e.touchPointID];
 
             if (Helpers.checkIsEmptyObject(this._currentTouchPoints)) {
                 this._zoomMap.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this._onTouchMoveZoomMap, this);
@@ -146,13 +139,18 @@ namespace OnlineWar {
         }
 
         private _onTouchMoveZoomMap(e: egret.TouchEvent): void {
+            const touchId = e.touchPointID;
+            this._currentTouchPoints[touchId] = { x: e.stageX, y: e.stageY };
+
             if (Helpers.getKeysCount(this._currentTouchPoints) > 1) {
-                this._currentTouchPoints[e.touchPointID] = { x: e.stageX, y: e.stageY };
-                this._zoomMap.setZoomByTouches(this._currentTouchPoints, this._initialTouchPoints);
+                this._zoomMap.setZoomByTouches(this._currentTouchPoints, this._previousTouchPoints);
             } else {
-                this._zoomMap.setContentX(e.stageX - this._touchOffsetX[e.touchPointID], true);
-                this._zoomMap.setContentY(e.stageY - this._touchOffsetY[e.touchPointID], true);
+                const zoomMap = this._zoomMap;
+                zoomMap.setContentX(zoomMap.getContentX() + e.stageX - this._previousTouchPoints[touchId].x, true);
+                zoomMap.setContentY(zoomMap.getContentY() + e.stageY - this._previousTouchPoints[touchId].y, true);
             }
+
+            this._previousTouchPoints[touchId] = { x: e.stageX, y: e.stageY };
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
