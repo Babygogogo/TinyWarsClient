@@ -77,6 +77,7 @@ namespace Lobby {
                     name    : Lang.getText(Lang.BigType.B01, Lang.SubType.S00),
                     callback: (): void => {
                         LobbyPanel.close();
+                        TemplateMap.TemplateMapProxy.reqGetNewestMapInfos();
                         OnlineWar.ChooseNewMapPanel.open();
                     },
                 },

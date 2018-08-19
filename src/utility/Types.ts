@@ -228,8 +228,8 @@ namespace Utility {
         }
 
         export const UiState = {
-            Up  : "Up",
-            Down: "Down",
+            Up  : "up",
+            Down: "down",
         }
 
         export const enum LogoutType {

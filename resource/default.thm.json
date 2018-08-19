@@ -8,8 +8,9 @@
 		"resource/skins/login/LoginPanel.exml",
 		"resource/skins/login/RegisterPanel.exml",
 		"resource/skins/onlineWar/ChooseNewMapPanel.exml",
-		"resource/skins/utility/LoadingUiPanel.exml",
-		"resource/skins/templateMap/SearchMapPanel.exml"
+		"resource/skins/onlineWar/ChooseSettingsPanel.exml",
+		"resource/skins/templateMap/SearchMapPanel.exml",
+		"resource/skins/utility/LoadingUiPanel.exml"
 	],
 	"path": "resource/default.thm.json"
 }

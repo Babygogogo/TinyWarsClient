@@ -30,7 +30,7 @@ namespace OnlineWar {
 
         private _currentTouchPoints : Types.TouchPoints = {};
         private _previousTouchPoints: Types.TouchPoints = {};
-        private _dataForList        : DataForMapNameRenderer[];
+        private _dataForList        : DataForMapNameRenderer[] = [];
         private _selectedIndex      : number;
 
         public static open(): void {
@@ -65,23 +65,28 @@ namespace OnlineWar {
             ];
             this._listMap.setItemRenderer(MapNameRenderer);
         }
-
         protected _onOpened(): void {
             this._groupInfo.visible = false;
-            TemplateMapProxy.reqGetNewestMapInfos();
+            this._listMap.bindData(this._dataForList);
+            this.setSelectedIndex(this._selectedIndex);
         }
-
         protected _onClosed(): void {
             this._zoomMap.removeAllContents();
             this._listMap.clear();
             egret.Tween.removeTweens(this._groupInfo);
         }
 
-        public async setSelectedIndex(index: number): Promise<void> {
-            if (this._selectedIndex !== index) {
-                this._selectedIndex = index;
-                this._listMap.bindData(this._dataForList);
-                await this._showMap(this._dataForList[index]);
+        public async setSelectedIndex(newIndex: number): Promise<void> {
+            const datas = this._dataForList;
+            if (datas.length <= 0) {
+                this._selectedIndex = undefined;
+            } else if (datas[newIndex]) {
+                const oldIndex      = this._selectedIndex;
+                this._selectedIndex = newIndex;
+                (datas[oldIndex])       && (this._listMap.updateSingleData(oldIndex, datas[oldIndex]));
+                (oldIndex !== newIndex) && (this._listMap.updateSingleData(newIndex, datas[newIndex]));
+
+                await this._showMap(datas[newIndex]);
             }
         }
         public getSelectedIndex(): number {
@@ -96,7 +101,7 @@ namespace OnlineWar {
         }
 
         private _onNotifySGetNewestMapInfos(e: egret.Event): void {
-            const newData = this._createDataForListMap(e.data);
+            const newData = this._createDataForListMap();
             if (newData.length > 0) {
                 this._dataForList = newData;
                 this._listMap.bindData(newData);
@@ -153,8 +158,9 @@ namespace OnlineWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
-        private _createDataForListMap(infos: ProtoTypes.IS_GetNewestMapInfos): DataForMapNameRenderer[] {
+        private _createDataForListMap(): DataForMapNameRenderer[] {
             const data: DataForMapNameRenderer[] = [];
+            const infos = TemplateMapModel.getNewestMapInfos();
             if (infos.mapInfos) {
                 for (let i = 0; i < infos.mapInfos.length; ++i) {
                     const info = infos.mapInfos[i];
@@ -260,7 +266,8 @@ namespace OnlineWar {
         }
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
-            FloatText.show("下一步？不存在的");
+            ChooseNewMapPanel.close();
+            ChooseSettingsPanel.open();
         }
     }
 }

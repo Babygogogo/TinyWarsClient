@@ -72,7 +72,7 @@ namespace GameUi {
             return data.pageInstance;
         }
 
-        public setBarItemRenderer(itemRenderer: any): void {
+        public setBarItemRenderer(itemRenderer: new () => eui.ItemRenderer ): void {
             this._barItemRenderer = itemRenderer;
             if (this._bar) {
                 this._bar.itemRenderer = itemRenderer;
