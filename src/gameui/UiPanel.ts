@@ -8,8 +8,8 @@ namespace GameUi {
     }
 
     export abstract class UiPanel extends eui.Component {
-        protected abstract readonly _layerType: Utility.Types.LayerType;
-        protected abstract readonly _isExclusive  : boolean;
+        protected abstract readonly _LAYER_TYPE  : Utility.Types.LayerType;
+        protected abstract readonly _IS_EXCLUSIVE: boolean;
 
         protected _uiListeners    : UiListener[];
         protected _notifyListeners: Utility.Notify.Listener[];
@@ -24,7 +24,7 @@ namespace GameUi {
 
         private _isAutoAdjustHeight = false;
         private _isTouchMaskEnabled = false;
-        protected _handlerForTouchMask: () => void;
+        protected _callbackForTouchMask: () => void;
 
         private _touchMask: eui.Group;
 
@@ -66,8 +66,8 @@ namespace GameUi {
         // Functions for open self.
         ////////////////////////////////////////////////////////////////////////////////
         public open(): void {
-            const layer = Utility.StageManager.getLayer(this._layerType);
-            (this._isExclusive) && (layer.closeAllPanels(this));
+            const layer = Utility.StageManager.getLayer(this._LAYER_TYPE);
+            (this._IS_EXCLUSIVE) && (layer.closeAllPanels(this));
             (!this.parent) && (layer.addChild(this));
 
             this._isCalledOpen = true;
@@ -163,7 +163,7 @@ namespace GameUi {
         }
 
         private _onTouchedTouchMask(e: egret.TouchEvent): void {
-            this._handlerForTouchMask && this._handlerForTouchMask();
+            this._callbackForTouchMask && this._callbackForTouchMask();
         }
 
         private _registerListeners(): void {

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="GameUi.*"
+        xmlns:w="http://ns.egret.com/wing">
+    <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="semi_transparent_png" />
+    <e:Group width="430" height="300" horizontalCenter="0" verticalCenter="0">
+        <GameUi:UiImage source="c04_t01_s01_f01_png" scale9Grid="4,6,1,1" anchorOffsetX="0" anchorOffsetY="0"
+                        alpha="0.8" left="0" right="0" top="0" bottom="0" />
+        <GameUi:UiLabel id="_labelTitle" text="标题" textColor="0xffffff" stroke="2" y="12" horizontalCenter="0" size="24" />
+
+			<e:Scroller left="20" right="20" top="45" bottom="20">
+				<e:Group>
+					<GameUi:UiLabel id="_labelContent" text="帮助内容" textColor="0xFFFFFF" stroke="2" size="20" left="0" right="0"/>
+				</e:Group>
+			</e:Scroller>
+
+
+
+
+
+
+
+
+
+
+
+
+    </e:Group>
+</e:Skin>

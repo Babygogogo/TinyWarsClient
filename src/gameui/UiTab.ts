@@ -3,8 +3,8 @@ namespace GameUi {
     import Logger = Utility.Logger;
 
     export class UiTab extends eui.Component {
-        private _bar     : eui.TabBar;    // 页签栏
-        private _page    : eui.Component; // 页面内容，仅用于占位
+        private _bar     : eui.TabBar;  // 页签栏
+        private _page    : eui.Group;   // 页面内容，仅用于占位
 
         private _dataProvider    : eui.ArrayCollection;
         private _barItemRenderer : any;

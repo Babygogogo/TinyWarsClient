@@ -7,8 +7,8 @@ namespace TemplateMap {
     import ProtoTypes = Utility.ProtoTypes;
 
     export class SearchMapPanel extends GameUi.UiPanel {
-        protected _isExclusive = false;
-        protected _layerType   = Types.LayerType.Hud2;
+        protected _IS_EXCLUSIVE = false;
+        protected _LAYER_TYPE   = Types.LayerType.Hud2;
 
         private static _instance: SearchMapPanel;
 

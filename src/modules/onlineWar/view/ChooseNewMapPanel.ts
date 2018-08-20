@@ -11,8 +11,8 @@ namespace OnlineWar {
     import TemplateMapProxy = TemplateMap.TemplateMapProxy;
 
     export class ChooseNewMapPanel extends GameUi.UiPanel {
-        protected readonly _layerType   = Utility.Types.LayerType.Scene;
-        protected readonly _isExclusive = true;
+        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
+        protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: ChooseNewMapPanel;
 

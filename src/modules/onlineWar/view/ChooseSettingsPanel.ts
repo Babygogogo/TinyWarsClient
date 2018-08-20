@@ -1,8 +1,8 @@
 
 namespace OnlineWar {
     export class ChooseSettingsPanel extends GameUi.UiPanel {
-        protected readonly _layerType   = Utility.Types.LayerType.Hud0;
-        protected readonly _isExclusive = true;
+        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
+        protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: ChooseSettingsPanel;
 
@@ -41,42 +41,42 @@ namespace OnlineWar {
             this._tabSettings.bindData([
                 {
                     tabItemData: {name: "" + Math.random()},
-                    pageClass  : ChooseWarNamePage,
+                    pageClass  : ChooseBasicSettingsPage,
                     pageData   : undefined,
                 },
                 {
                     tabItemData: {name: "" + Math.random()},
-                    pageClass  : ChooseWarNamePage,
+                    pageClass  : ChooseBasicSettingsPage,
                     pageData   : undefined,
                 },
                 {
                     tabItemData: {name: "" + Math.random()},
-                    pageClass  : ChooseWarNamePage,
+                    pageClass  : ChooseBasicSettingsPage,
                     pageData   : undefined,
                 },
                 {
                     tabItemData: {name: "" + Math.random()},
-                    pageClass  : ChooseWarNamePage,
+                    pageClass  : ChooseBasicSettingsPage,
                     pageData   : undefined,
                 },
                 {
                     tabItemData: {name: "" + Math.random()},
-                    pageClass  : ChooseWarNamePage,
+                    pageClass  : ChooseBasicSettingsPage,
                     pageData   : undefined,
                 },
                 {
                     tabItemData: {name: "" + Math.random()},
-                    pageClass  : ChooseWarNamePage,
+                    pageClass  : ChooseBasicSettingsPage,
                     pageData   : undefined,
                 },
                 {
                     tabItemData: {name: "" + Math.random()},
-                    pageClass  : ChooseWarNamePage,
+                    pageClass  : ChooseBasicSettingsPage,
                     pageData   : undefined,
                 },
                 {
                     tabItemData: {name: "" + Math.random()},
-                    pageClass  : ChooseWarNamePage,
+                    pageClass  : ChooseBasicSettingsPage,
                     pageData   : undefined,
                 },
             ]);
