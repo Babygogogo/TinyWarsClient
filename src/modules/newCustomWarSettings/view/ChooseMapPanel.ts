@@ -1,5 +1,5 @@
 
-namespace OnlineWar {
+namespace NewCustomWarSettings {
     import Notify           = Utility.Notify;
     import Types            = Utility.Types;
     import StageManager     = Utility.StageManager;
@@ -10,11 +10,11 @@ namespace OnlineWar {
     import TemplateMapModel = TemplateMap.TemplateMapModel;
     import TemplateMapProxy = TemplateMap.TemplateMapProxy;
 
-    export class ChooseNewMapPanel extends GameUi.UiPanel {
+    export class ChooseMapPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: ChooseNewMapPanel;
+        private static _instance: ChooseMapPanel;
 
         private _listMap   : GameUi.UiScrollList;
         private _zoomMap   : GameUi.UiZoomableComponent;
@@ -34,14 +34,14 @@ namespace OnlineWar {
         private _selectedIndex      : number;
 
         public static open(): void {
-            if (!ChooseNewMapPanel._instance) {
-                ChooseNewMapPanel._instance = new ChooseNewMapPanel();
+            if (!ChooseMapPanel._instance) {
+                ChooseMapPanel._instance = new ChooseMapPanel();
             }
-            ChooseNewMapPanel._instance.open();
+            ChooseMapPanel._instance.open();
         }
         public static close(): void {
-            if (ChooseNewMapPanel._instance) {
-                ChooseNewMapPanel._instance.close();
+            if (ChooseMapPanel._instance) {
+                ChooseMapPanel._instance.close();
             }
         }
 
@@ -49,7 +49,7 @@ namespace OnlineWar {
             super();
 
             this._setAutoAdjustHeightEnabled();
-            this.skinName = "resource/skins/onlineWar/ChooseNewMapPanel.exml";
+            this.skinName = "resource/skins/newCustomWarSettings/ChooseMapPanel.exml";
         }
 
         protected _onFirstOpened(): void {
@@ -151,7 +151,7 @@ namespace OnlineWar {
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
-            ChooseNewMapPanel.close();
+            ChooseMapPanel.close();
             Lobby.LobbyPanel.open();
         }
 
@@ -214,12 +214,12 @@ namespace OnlineWar {
             egret.Tween.removeTweens(this._groupInfo);
             egret.Tween.get(this._groupInfo).wait(5000).to({alpha: 0}, 1000).call(() => {this._groupInfo.visible = false; this._groupInfo.alpha = 1});
 
-            const tileMapView = new TileMapView();
+            const tileMapView = new OnlineWar.TileMapView();
             tileMapView.init(data.mapWidth, data.mapHeight);
             tileMapView.updateWithBaseViewIdArray(data.tileBases);
             tileMapView.updateWithObjectViewIdArray(data.tileObjects);
 
-            const unitMapView = new UnitMapView();
+            const unitMapView = new OnlineWar.UnitMapView();
             unitMapView.initWithDatas(this._createUnitViewDatas(data.units, data.mapWidth, data.mapHeight));
 
             const gridSize = Config.getGridSize();
@@ -237,7 +237,7 @@ namespace OnlineWar {
         designer: string;
         version : number;
         index   : number;
-        panel   : ChooseNewMapPanel;
+        panel   : ChooseMapPanel;
     }
 
     class MapNameRenderer extends eui.ItemRenderer {
@@ -266,8 +266,8 @@ namespace OnlineWar {
         }
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
-            ChooseNewMapPanel.close();
-            ChooseSettingsPanel.open();
+            ChooseMapPanel.close();
+            SettingsPanel.open();
         }
     }
 }

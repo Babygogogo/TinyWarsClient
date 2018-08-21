@@ -3,15 +3,15 @@
 	"autoGenerateExmlsList": true,
 	"exmls": [
 		"resource/skins/common/HelpPanel.exml",
+		"resource/skins/lobby/LobbyPanel.exml",
+		"resource/skins/lobby/LobbyTopPanel.exml",
 		"resource/skins/login/LoginBackgroundPanel.exml",
 		"resource/skins/login/LoginPanel.exml",
 		"resource/skins/login/RegisterPanel.exml",
-		"resource/skins/lobby/LobbyPanel.exml",
-		"resource/skins/lobby/LobbyTopPanel.exml",
+		"resource/skins/newCustomWarSettings/BasicSettingsPage.exml",
+		"resource/skins/newCustomWarSettings/ChooseMapPanel.exml",
+		"resource/skins/newCustomWarSettings/SettingsPanel.exml",
 		"resource/skins/templateMap/SearchMapPanel.exml",
-		"resource/skins/onlineWar/ChooseBasicSettingsPage.exml",
-		"resource/skins/onlineWar/ChooseNewMapPanel.exml",
-		"resource/skins/onlineWar/ChooseSettingsPanel.exml",
 		"resource/skins/utility/LoadingUiPanel.exml"
 	],
 	"path": "resource/default.thm.json"

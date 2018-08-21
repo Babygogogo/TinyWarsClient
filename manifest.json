@@ -33,10 +33,10 @@
 		"bin-debug/gameui/UiImage.js",
 		"bin-debug/utility/Config.js",
 		"bin-debug/modules/templateMap/model/TemplateMapProxy.js",
+		"bin-debug/modules/newCustomWarSettings/view/SettingsPanel.js",
+		"bin-debug/modules/onlineWar/model/ChooseSettingsModel.js",
+		"bin-debug/modules/onlineWar/model/TileModel.js",
 		"bin-debug/modules/onlineWar/model/UnitModel.js",
-		"bin-debug/modules/onlineWar/view/ChooseBasicSettingsPage.js",
-		"bin-debug/modules/onlineWar/view/ChooseNewMapPanel.js",
-		"bin-debug/modules/onlineWar/view/ChooseSettingsPanel.js",
 		"bin-debug/modules/onlineWar/view/TileMapView.js",
 		"bin-debug/modules/onlineWar/view/UnitMapView.js",
 		"bin-debug/modules/onlineWar/view/UnitView.js",
@@ -58,9 +58,9 @@
 		"bin-debug/modules/login/view/LoginBackgroundPanel.js",
 		"bin-debug/modules/login/view/LoginPanel.js",
 		"bin-debug/modules/login/view/RegisterPanel.js",
-		"bin-debug/modules/onlineWar/model/ChooseSettingsModel.js",
+		"bin-debug/modules/newCustomWarSettings/view/BasicSettingsPage.js",
 		"bin-debug/utility/ResManager.js",
-		"bin-debug/modules/onlineWar/model/TileModel.js",
+		"bin-debug/modules/newCustomWarSettings/view/ChooseMapPanel.js",
 		"bin-debug/Platform.js"
 	]
 }
