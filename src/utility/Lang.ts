@@ -83,6 +83,14 @@ namespace Utility {
                     "无",
                     "None",
                 ],
+                [ // 01-02
+                    "基本设置",
+                    "Basic Settings",
+                ],
+                [ // 01-03
+                    "高级设置",
+                    "Advanced Settings",
+                ],
             ],
         ];
 

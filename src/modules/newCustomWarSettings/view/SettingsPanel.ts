@@ -1,5 +1,7 @@
 
 namespace NewCustomWarSettings {
+    import Lang = Utility.Lang;
+
     export class SettingsPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = true;
@@ -40,14 +42,12 @@ namespace NewCustomWarSettings {
         protected _onOpened(): void {
             this._tabSettings.bindData([
                 {
-                    tabItemData: {name: "基本设置"},
+                    tabItemData: { name: Lang.getText(Lang.BigType.B01, Lang.SubType.S02) },
                     pageClass  : BasicSettingsPage,
-                    pageData   : undefined,
                 },
                 {
-                    tabItemData: {name: "高级设置"},
+                    tabItemData: { name: Lang.getText(Lang.BigType.B01, Lang.SubType.S03) },
                     pageClass  : BasicSettingsPage,
-                    pageData   : undefined,
                 },
             ]);
         }

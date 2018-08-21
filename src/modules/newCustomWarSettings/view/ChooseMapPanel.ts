@@ -267,6 +267,8 @@ namespace NewCustomWarSettings {
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
             ChooseMapPanel.close();
+
+            SettingsModel.setMapIndexKeys(this.data as DataForMapNameRenderer);
             SettingsPanel.open();
         }
     }
