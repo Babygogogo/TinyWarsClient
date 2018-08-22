@@ -40,8 +40,8 @@ namespace Common {
         }
 
         protected _onOpened(): void {
-            this._labelTitle.text   = this._openData.title;
-            this._labelContent.text = this._openData.content;
+            this._labelTitle.text = this._openData.title;
+            this._labelContent.setRichText(this._openData.content);
         }
     }
 }

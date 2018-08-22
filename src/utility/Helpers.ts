@@ -140,6 +140,40 @@ namespace Utility {
             return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
         }
 
+        export function getColorText(playerIndex: number): string {
+            switch (playerIndex) {
+                case 1  : return Lang.getText(Lang.BigType.B01, Lang.SubType.S04);
+                case 2  : return Lang.getText(Lang.BigType.B01, Lang.SubType.S05);
+                case 3  : return Lang.getText(Lang.BigType.B01, Lang.SubType.S06);
+                case 4  : return Lang.getText(Lang.BigType.B01, Lang.SubType.S07);
+                default : return undefined;
+            }
+        }
+
+        export function getTeamText(teamIndex: number): string {
+            switch (teamIndex) {
+                case 1  : return Lang.getText(Lang.BigType.B01, Lang.SubType.S08);
+                case 2  : return Lang.getText(Lang.BigType.B01, Lang.SubType.S09);
+                case 3  : return Lang.getText(Lang.BigType.B01, Lang.SubType.S10);
+                case 4  : return Lang.getText(Lang.BigType.B01, Lang.SubType.S11);
+                default : return undefined;
+            }
+        }
+
+        export function getTimeText(totalSeconds: number): string {
+            const seconds = totalSeconds % 60;
+            const minutes = Math.floor(totalSeconds / 60) % 60;
+            const hours   = Math.floor(totalSeconds / (60 * 60)) % 24;
+            const days    = Math.floor(totalSeconds / (60 * 60 * 24));
+
+            let text: string = "";
+            (days    > 0) && (text = `${text}${days}${Lang.getText(Lang.BigType.B01, Lang.SubType.S14)}`);
+            (hours   > 0) && (text = `${text}${hours}${Lang.getText(Lang.BigType.B01, Lang.SubType.S15)}`);
+            (minutes > 0) && (text = `${text}${minutes}${Lang.getText(Lang.BigType.B01, Lang.SubType.S16)}`);
+            (seconds > 0) && (text = `${text}${seconds}${Lang.getText(Lang.BigType.B01, Lang.SubType.S17)}`);
+            return text;
+        }
+
         function getColorMatrix(color: Types.ColorType, value = 100): number[] {
             switch (color) {
                 case Types.ColorType.Blue:

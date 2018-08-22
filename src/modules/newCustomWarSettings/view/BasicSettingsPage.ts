@@ -3,6 +3,9 @@ namespace NewCustomWarSettings {
     import Types            = Utility.Types;
     import ProtoTypes       = Utility.ProtoTypes;
     import FloatText        = Utility.FloatText;
+    import Helpers          = Utility.Helpers;
+    import Lang             = Utility.Lang;
+    import HelpPanel        = Common.HelpPanel;
     import TemplateMapModel = TemplateMap.TemplateMapModel;
 
     export class BasicSettingsPage extends GameUi.UiTabPage {
@@ -16,6 +19,7 @@ namespace NewCustomWarSettings {
         private _btnPrevPlayerIndex : GameUi.UiButton;
         private _btnNextPlayerIndex : GameUi.UiButton;
         private _labelPlayerIndex   : GameUi.UiLabel;
+        private _btnHelpPlayerIndex : GameUi.UiButton;
 
         private _btnPrevTeam    : GameUi.UiButton;
         private _btnNextTeam    : GameUi.UiButton;
@@ -47,6 +51,7 @@ namespace NewCustomWarSettings {
                 { ui: this._inputWarComment,    callback: this._onFocusOutInputWarComment,  eventType: egret.Event.FOCUS_OUT, },
                 { ui: this._btnPrevPlayerIndex, callback: this._onTouchedBtnPrevPlayerIndex, },
                 { ui: this._btnNextPlayerIndex, callback: this._onTouchedBtnNextPlayerIndex, },
+                { ui: this._btnHelpPlayerIndex, callback: this._onTouchedBtnHelpPlayerIndex, },
                 { ui: this._btnPrevTeam,        callback: this._onTouchedBtnPrevTeam, },
                 { ui: this._btnNextTeam,        callback: this._onTouchedBtnNextTeam, },
                 { ui: this._btnHelpTeam,        callback: this._onTouchedBtnHelpTeam, },
@@ -60,7 +65,7 @@ namespace NewCustomWarSettings {
         }
 
         protected _onOpened(): void {
-            this._mapInfo = TemplateMapModel.getMapInfo(SettingsModel.getMapIndexKeys());
+            this._mapInfo = SettingsModel.getMapInfo();
 
             this._updateLabelMapName();
             this._updateLabelPlayersCount();
@@ -70,62 +75,83 @@ namespace NewCustomWarSettings {
         // Event callbacks.
         ////////////////////////////////////////////////////////////////////////////////
         private _onFocusOutInputWarName(e: egret.Event): void {
-            FloatText.show("AAAA");
+            SettingsModel.setWarName(this._inputWarName.text);
         }
 
         private _onFocusOutInputWarPassword(e: egret.Event): void {
-            FloatText.show("AAAA");
+            SettingsModel.setWarPassword(this._inputWarPassword.text);
         }
 
         private _onFocusOutInputWarComment(e: egret.Event): void {
-            FloatText.show("AAAA");
+            SettingsModel.setWarComment(this._inputWarComment.text);
         }
 
         private _onTouchedBtnPrevPlayerIndex(e: egret.TouchEvent): void {
-
+            SettingsModel.setPrevPlayerIndex();
+            this._updateLabelPlayerIndex();
         }
 
         private _onTouchedBtnNextPlayerIndex(e: egret.TouchEvent): void {
+            SettingsModel.setNextPlayerIndex();
+            this._updateLabelPlayerIndex();
+        }
 
+        private _onTouchedBtnHelpPlayerIndex(e: egret.TouchEvent): void {
+            HelpPanel.open({
+                title  : Lang.getText(Lang.BigType.B01, Lang.SubType.S18),
+                content: Lang.getRichText(Lang.RichType.R000),
+            });
         }
 
         private _onTouchedBtnPrevTeam(e: egret.TouchEvent): void {
-
+            SettingsModel.setPrevTeamIndex();
+            this._updateLabelTeam();
         }
 
         private _onTouchedBtnNextTeam(e: egret.TouchEvent): void {
-
+            SettingsModel.setNextTeamIndex();
+            this._updateLabelTeam();
         }
 
         private _onTouchedBtnHelpTeam(e: egret.TouchEvent): void {
-            Common.HelpPanel.open({
-                title: "AAAAAAAAA",
-                content: `BBBBBBB\nCCCCCCCCCCCCC\nDDDDDDDDDDDDD\nBBBBBBBB\nCCCCCCCCCCCCC\nDDDDDDDDDDDDD\nBBBBBBBB\nCCCCCCCCCCCCC\nDDDDDDDDDDDDD\nBBBBBBBB\nCCCCCCCCCCCCC\nDDDDDDDDDDDDD\nBBBBBBBB\nCCCCCCCCCCCCC\nDDDDDDDDDDDDD\nBBBBBBBB\nCCCCCCCCCCCCC\nDDDDDDDDDDDDD\n`,
+            HelpPanel.open({
+                title  : Lang.getText(Lang.BigType.B01, Lang.SubType.S19),
+                content: Lang.getRichText(Lang.RichType.R001),
             });
         }
 
         private _onTouchedBtnPrevFog(e: egret.TouchEvent): void {
-
+            SettingsModel.setPrevHasFog();
+            this._updateLabelFog();
         }
 
         private _onTouchedBtnNextFog(e: egret.TouchEvent): void {
-
+            SettingsModel.setNextHasFog();
+            this._updateLabelFog();
         }
 
         private _onTouchedBtnHelpFog(e: egret.TouchEvent): void {
-
+            HelpPanel.open({
+                title  : Lang.getText(Lang.BigType.B01, Lang.SubType.S20),
+                content: Lang.getRichText(Lang.RichType.R002),
+            });
         }
 
         private _onTouchedBtnPrevTimeLimit(e: egret.TouchEvent): void {
-
+            SettingsModel.setPrevTimeLimit();
+            this._updateLabelTimeLimit();
         }
 
         private _onTouchedBtnNextTimeLimit(e: egret.TouchEvent): void {
-
+            SettingsModel.setNextTimeLimit();
+            this._updateLabelTimeLimit();
         }
 
         private _onTouchedBtnHelpTimeLimit(e: egret.TouchEvent): void {
-
+            HelpPanel.open({
+                title  : Lang.getText(Lang.BigType.B01, Lang.SubType.S21),
+                content: Lang.getRichText(Lang.RichType.R003),
+            });
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -137,6 +163,23 @@ namespace NewCustomWarSettings {
 
         private _updateLabelPlayersCount(): void {
             this._labelPlayersCount.text = "" + this._mapInfo.playersCount;
+        }
+
+        private _updateLabelPlayerIndex(): void {
+            const index = SettingsModel.getPlayerIndex();
+            this._labelPlayerIndex.text = `${index} (${Helpers.getColorText(index)})`;
+        }
+
+        private _updateLabelTeam(): void {
+            this._labelTeam.text = Helpers.getTeamText(SettingsModel.getTeamIndex());
+        }
+
+        private _updateLabelFog(): void {
+            this._labelFog.text = Lang.getText(Lang.BigType.B01, SettingsModel.getHasFog() ? Lang.SubType.S12 : Lang.SubType.S13);
+        }
+
+        private _updateLabelTimeLimit(): void {
+            this._labelTimeLimit.text = Helpers.getTimeText(SettingsModel.getTimeLimit());
         }
     }
 }

@@ -1,8 +1,8 @@
 
 namespace Utility {
-    export namespace Lang {
-        import ErrCode = Network.NetErrorCode;
+    import ErrCode = Network.NetErrorCode;
 
+    export namespace Lang {
         export const enum Language {
             Chinese,
             English,
@@ -13,10 +13,14 @@ namespace Utility {
         }
         export const enum SubType {
             S00, S01, S02, S03, S04, S05, S06, S07, S08, S09,
-            S10, S11, S12,
+            S10, S11, S12, S13, S14, S15, S16, S17, S18, S19,
+            S20, S21,
         }
         export const enum FormatType {
             F000, F001, F002, F003, F004,
+        }
+        export const enum RichType {
+            R000, R001, R002, R003,
         }
 
         const LANG_DATA: string[][][] = [
@@ -91,6 +95,78 @@ namespace Utility {
                     "高级设置",
                     "Advanced Settings",
                 ],
+                [ // 01-04
+                    "红方",
+                    "red",
+                ],
+                [ // 01-05
+                    "蓝方",
+                    "blue",
+                ],
+                [ // 01-06
+                    "黄方",
+                    "yellow",
+                ],
+                [ // 01-07
+                    "黑方",
+                    "black",
+                ],
+                [ // 01-08
+                    "A队",
+                    "A Team",
+                ],
+                [ // 01-09
+                    "B队",
+                    "B Team",
+                ],
+                [ // 01-10
+                    "C队",
+                    "C Team",
+                ],
+                [ // 01-11
+                    "D队",
+                    "D Team",
+                ],
+                [ // 01-12
+                    "是",
+                    "Yes",
+                ],
+                [ // 01-13
+                    "否",
+                    "No",
+                ],
+                [ // 01-14
+                    "天",
+                    "d",
+                ],
+                [ // 01-15
+                    "时",
+                    "h",
+                ],
+                [ // 01-16
+                    "分",
+                    "m",
+                ],
+                [ // 01-17
+                    "秒",
+                    "s",
+                ],
+                [ // 01-18
+                    "行动次序",
+                    "Force",
+                ],
+                [ // 01-19
+                    "队伍",
+                    "Team",
+                ],
+                [ // 01-20
+                    "战争迷雾",
+                    "Fog",
+                ],
+                [ // 01-21
+                    "回合显示",
+                    "Time Limit",
+                ],
             ],
         ];
 
@@ -152,9 +228,62 @@ namespace Utility {
             ],
         };
 
+const RICH_DATA: string[][] = [
+[ // R000
+`本选项影响您在回合中的行动顺序。
+
+本游戏固定了每回合中的行动顺序为：
+1 红方
+2 蓝方
+3 黄方
+4 黑方
+其中，2人局不存在黄方和黑方，3人局不存在黑方。
+每个玩家只能选择其中一项，不能重复。
+
+默认为当前可用选项中最靠前的一项。`,
+
+`Untranslated...`,
+],
+
+[ // R001
+`本选项规定您所属的队伍。
+
+战局中，属于同一队伍的玩家共享视野，部队能够相互穿越，不能相互攻击/装载/用后勤车补给。
+此外，可以使用队友的建筑来维修/补给自己的部队（消耗自己的金钱），但不能占领队友的建筑。
+
+默认为当前未被其他玩家选用的队伍中最靠前的一项。`,
+
+`Untranslated...`,
+],
+
+[ // R002
+`本选项影响战局是明战或雾战。
+
+明战下，您可以观察到整个战场的情况。雾战下，您只能看到自己军队的视野内的战场情况。
+雾战难度相对较大。如果您是新手，建议先通过明战熟悉游戏系统，再尝试雾战模式。
+
+默认为“否”（即明战）。`,
+
+`Untranslated...`,
+],
+
+[ // R003
+`本选项影响所有玩家的每回合的时限。
+
+如果某个玩家的回合时间超出了本限制，则服务器将自动为该玩家执行投降操作。
+当战局满员，或某个玩家结束回合后，则服务器自动开始下个玩家回合的倒计时（无论该玩家是否在线）。
+因此，请仅在已约好对手的情况下才选择“15分”，以免造成不必要的败绩。
+
+默认为“3天”。`,
+
+`Untranslated`,
+]
+
+];
+
         let language = Language.Chinese;
 
-        export function getText(bigType: BigType, subType: SubType, ...params: any[]): string {
+        export function getText(bigType: BigType, subType: SubType): string {
             return LANG_DATA[bigType][subType][language];
         }
 
@@ -164,6 +293,10 @@ namespace Utility {
 
         export function getNetErrorText(code: ErrCode): string {
             return NET_ERROR_TEXT[code][language];
+        }
+
+        export function getRichText(richType: RichType): string {
+            return RICH_DATA[richType][language];
         }
     }
 }

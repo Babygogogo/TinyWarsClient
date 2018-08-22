@@ -269,6 +269,7 @@ namespace NewCustomWarSettings {
             ChooseMapPanel.close();
 
             SettingsModel.setMapIndexKeys(this.data as DataForMapNameRenderer);
+            SettingsModel.resetSettings();
             SettingsPanel.open();
         }
     }
