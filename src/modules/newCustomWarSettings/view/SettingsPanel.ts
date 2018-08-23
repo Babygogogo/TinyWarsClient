@@ -47,7 +47,7 @@ namespace NewCustomWarSettings {
                 },
                 {
                     tabItemData: { name: Lang.getText(Lang.BigType.B01, Lang.SubType.S03) },
-                    pageClass  : BasicSettingsPage,
+                    pageClass  : AdvancedSettingsPage,
                 },
             ]);
         }

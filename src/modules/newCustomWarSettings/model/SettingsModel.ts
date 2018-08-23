@@ -14,16 +14,49 @@ namespace NewCustomWarSettings {
         ];
         const DEFAULT_TIME_LIMIT = TIME_LIMITS[3];
 
+        export const MAX_INITIAL_FUND     = 1000000;
+        export const MIN_INITIAL_FUND     = 0;
+        export const DEFAULT_INITIAL_FUND = 0;
+
+        export const MAX_INCOME_MODIFIER     = 1000;
+        export const MIN_INCOME_MODIFIER     = 0;
+        export const DEFAULT_INCOME_MODIFIER = 0;
+
+        export const MAX_INITIAL_ENERGY     = 100;
+        export const MIN_INITIAL_ENERGY     = 0;
+        export const DEFAULT_INITIAL_ENERGY = 0;
+
+        export const MAX_ENERGY_MODIFIER     = 1000;
+        export const MIN_ENERGY_MODIFIER     = 0;
+        export const DEFAULT_ENERGY_MODIFIER = 0;
+
+        const MOVE_RANGE_MODIFIERS        = [-2, -1, 0, 1, 2];
+        const DEFAULT_MOVE_RANGE_MODIFIER = 0;
+
+        const ATTACK_MODIFIERS        = [-30, -20, -10, 0, 10, 20, 30];
+        const DEFAULT_ATTACK_MODIFIER = 0;
+
+        const VISION_MODIFIERS        = [-2, -1, 0, 1, 2];
+        const DEFAULT_VISION_MODIFIER = 0;
+
         let mapIndexKeys: Types.MapIndexKeys;
         let mapInfo     : ProtoTypes.IMapInfo;
 
-        let warName     : string;
-        let warPassword : string;
-        let warComment  : string;
-        let playerIndex : number;
-        let teamIndex   : number;
-        let hasFog      : boolean;
-        let timeLimit   : number;
+        let warName         : string;
+        let warPassword     : string;
+        let warComment      : string;
+        let playerIndex     : number;
+        let teamIndex       : number;
+        let hasFog          : boolean;
+        let timeLimit       : number;
+
+        let initialFund         : number;
+        let incomeModifier      : number;
+        let initialEnergy       : number;
+        let energyModifier      : number;
+        let moveRangeModifier   : number;
+        let attackModifier      : number;
+        let visionModifier      : number;
 
         export function setMapIndexKeys(keys: Types.MapIndexKeys): void {
             mapIndexKeys = keys;
@@ -44,6 +77,14 @@ namespace NewCustomWarSettings {
             setTeamIndex(1);
             setHasFog(false);
             setTimeLimit(DEFAULT_TIME_LIMIT);
+
+            setInitialFund(0);
+            setIncomeModifier(0);
+            setInitialEnergy(0);
+            setEnergyModifier(0);
+            setMoveRangeModifier(DEFAULT_MOVE_RANGE_MODIFIER);
+            setAttackModifier(DEFAULT_ATTACK_MODIFIER);
+            setVisionModifier(DEFAULT_VISION_MODIFIER);
         }
 
         export function setWarName(name: string): void {
@@ -135,6 +176,121 @@ namespace NewCustomWarSettings {
         }
         export function getTimeLimit(): number {
             return timeLimit;
+        }
+
+        export function setInitialFund(fund: number): void {
+            initialFund = fund;
+        }
+        export function getInitialFund(): number {
+            return initialFund;
+        }
+
+        export function setIncomeModifier(modifier: number): void {
+            incomeModifier = modifier;
+        }
+        export function getIncomeModifier(): number {
+            return incomeModifier;
+        }
+
+        export function setInitialEnergy(energy: number): void {
+            initialEnergy = energy;
+        }
+        export function getInitialEnergy(): number {
+            return initialEnergy;
+        }
+
+        export function setEnergyModifier(modifier: number): void {
+            energyModifier = modifier;
+        }
+        export function getEnergyModifier(): number {
+            return energyModifier;
+        }
+
+        export function setMoveRangeModifier(modifier: number): void {
+            moveRangeModifier = modifier;
+        }
+        export function setPrevMoveRangeModifier(): void {
+            const currModifier = getMoveRangeModifier();
+            const modifiers    = MOVE_RANGE_MODIFIERS;
+            const index        = modifiers.indexOf(currModifier);
+            if (index < 0) {
+                setMoveRangeModifier(DEFAULT_MOVE_RANGE_MODIFIER);
+            } else {
+                const newIndex = index - 1;
+                setMoveRangeModifier(newIndex >= 0 ? modifiers[newIndex] : modifiers[modifiers.length - 1]);
+            }
+        }
+        export function setNextMoveRangeModifier(): void {
+            const currModifier = getMoveRangeModifier();
+            const modifiers    = MOVE_RANGE_MODIFIERS;
+            const index        = modifiers.indexOf(currModifier);
+            if (index < 0) {
+                setMoveRangeModifier(DEFAULT_MOVE_RANGE_MODIFIER);
+            } else {
+                const newIndex = index + 1;
+                setMoveRangeModifier(newIndex < modifiers.length ? modifiers[newIndex] : modifiers[0]);
+            }
+        }
+        export function getMoveRangeModifier(): number {
+            return moveRangeModifier;
+        }
+
+        export function setAttackModifier(modifier: number): void {
+            attackModifier = modifier;
+        }
+        export function setPrevAttackModifier(): void {
+            const currModifier = getAttackModifier();
+            const modifiers    = ATTACK_MODIFIERS;
+            const index        = modifiers.indexOf(currModifier);
+            if (index < 0) {
+                setAttackModifier(DEFAULT_ATTACK_MODIFIER);
+            } else {
+                const newIndex = index - 1;
+                setAttackModifier(newIndex >= 0 ? modifiers[newIndex] : modifiers[modifiers.length - 1]);
+            }
+        }
+        export function setNextAttackModifier(): void {
+            const currModifier = getAttackModifier();
+            const modifiers    = ATTACK_MODIFIERS;
+            const index        = modifiers.indexOf(currModifier);
+            if (index < 0) {
+                setAttackModifier(DEFAULT_ATTACK_MODIFIER);
+            } else {
+                const newIndex = index + 1;
+                setAttackModifier(newIndex < modifiers.length ? modifiers[newIndex] : modifiers[0]);
+            }
+        }
+        export function getAttackModifier(): number {
+            return attackModifier;
+        }
+
+        export function setVisionModifier(modifier: number): void {
+            visionModifier = modifier;
+        }
+        export function setPrevVisionModifier(): void {
+            const currModifier = getVisionModifier();
+            const modifiers    = VISION_MODIFIERS;
+            const index        = modifiers.indexOf(currModifier);
+            if (index < 0) {
+                setVisionModifier(DEFAULT_VISION_MODIFIER);
+            } else {
+                const newIndex = index - 1;
+                setVisionModifier(newIndex >= 0 ? modifiers[newIndex] : modifiers[modifiers.length - 1]);
+            }
+        }
+        export function setNextVisionModifier(): void {
+            const currModifier = getVisionModifier();
+            const modifiers    = VISION_MODIFIERS;
+            const index        = modifiers.indexOf(currModifier);
+            if (index < 0) {
+                setVisionModifier(DEFAULT_VISION_MODIFIER);
+            } else {
+                const newIndex = index + 1;
+                setVisionModifier(newIndex < modifiers.length ? modifiers[newIndex] : modifiers[0]);
+            }
+        }
+        export function getVisionModifier(): number {
+            return visionModifier;
         }
     }
 }

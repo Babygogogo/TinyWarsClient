@@ -1,6 +1,5 @@
 
 namespace OnlineWar {
-    import UiImage     = GameUi.UiImage;
     import Notify      = Utility.Notify;
     import IdConverter = Utility.IdConverter;
     import Types       = Utility.Types

@@ -69,6 +69,10 @@ namespace NewCustomWarSettings {
 
             this._updateLabelMapName();
             this._updateLabelPlayersCount();
+            this._updateLabelPlayerIndex();
+            this._updateLabelTeam();
+            this._updateLabelFog();
+            this._updateLabelTimeLimit();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
