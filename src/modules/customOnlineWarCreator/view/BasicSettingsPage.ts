@@ -67,6 +67,9 @@ namespace CustomOnlineWarCreator {
         protected _onOpened(): void {
             this._mapInfo = CreateWarModel.getMapInfo();
 
+            this._updateInputWarName();
+            this._updateInputWarPassword();
+            this._updateInputWarComment();
             this._updateLabelMapName();
             this._updateLabelPlayersCount();
             this._updateLabelPlayerIndex();
@@ -161,6 +164,18 @@ namespace CustomOnlineWarCreator {
         ////////////////////////////////////////////////////////////////////////////////
         // View functions.
         ////////////////////////////////////////////////////////////////////////////////
+        private _updateInputWarName(): void {
+            this._inputWarName.text = CreateWarModel.getWarName();
+        }
+
+        private _updateInputWarPassword(): void {
+            this._inputWarPassword.text = CreateWarModel.getWarPassword();
+        }
+
+        private _updateInputWarComment(): void {
+            this._inputWarComment.text = CreateWarModel.getWarComment();
+        }
+
         private _updateLabelMapName(): void {
             this._labelMapName.text = this._mapInfo.mapName;
         }

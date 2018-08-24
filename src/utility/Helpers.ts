@@ -105,6 +105,14 @@ namespace Utility {
             }
         }
 
+        export function cloneObject(obj: { [key: string]: any }): { [key: string]: any } {
+            const o: { [key: string]: any } = {};
+            for (const k in obj) {
+                o[k] = obj[k];
+            }
+            return o;
+        }
+
         export function checkIsEmptyObject(obj: { [key: string]: any }): boolean {
             for (const k in obj) {
                 return false;

@@ -53,10 +53,10 @@ namespace CustomOnlineWarCreator {
         let initialFund         : number;
         let incomeModifier      : number;
         let initialEnergy       : number;
-        let energyModifier      : number;
+        let energyGrowthModifier: number;
         let moveRangeModifier   : number;
-        let attackModifier      : number;
-        let visionModifier      : number;
+        let attackPowerModifier : number;
+        let visionRangeModifier : number;
 
         export function setMapIndexKeys(keys: Types.MapIndexKeys): void {
             mapIndexKeys = keys;
@@ -81,10 +81,33 @@ namespace CustomOnlineWarCreator {
             setInitialFund(0);
             setIncomeModifier(0);
             setInitialEnergy(0);
-            setEnergyModifier(0);
+            setEnergyGrowthModifier(0);
             setMoveRangeModifier(DEFAULT_MOVE_RANGE_MODIFIER);
-            setAttackModifier(DEFAULT_ATTACK_MODIFIER);
-            setVisionModifier(DEFAULT_VISION_MODIFIER);
+            setAttackPowerModifier(DEFAULT_ATTACK_MODIFIER);
+            setVisionRangeModifier(DEFAULT_VISION_MODIFIER);
+        }
+        export function createDataForCreateWar(): DataForCreateWar {
+            return {
+                mapName : mapInfo.mapName,
+                designer: mapInfo.designer,
+                version : mapInfo.version,
+
+                warName     : warName.length     > 0 ? warName     : undefined,
+                warPassword : warPassword.length > 0 ? warPassword : undefined,
+                warComment  : warComment.length  > 0 ? warComment  : undefined,
+                playerIndex : playerIndex,
+                teamIndex   : teamIndex,
+                hasFog      : hasFog,
+                timeLimit   : timeLimit,
+
+                initialFund         : initialFund,
+                incomeModifier      : incomeModifier,
+                initialEnergy       : initialEnergy,
+                energyGrowthModifier: energyGrowthModifier,
+                moveRangeModifier   : moveRangeModifier,
+                attackPowerModifier : attackPowerModifier,
+                visionRangeModifier : visionRangeModifier,
+            };
         }
 
         export function setWarName(name: string): void {
@@ -199,11 +222,11 @@ namespace CustomOnlineWarCreator {
             return initialEnergy;
         }
 
-        export function setEnergyModifier(modifier: number): void {
-            energyModifier = modifier;
+        export function setEnergyGrowthModifier(modifier: number): void {
+            energyGrowthModifier = modifier;
         }
-        export function getEnergyModifier(): number {
-            return energyModifier;
+        export function getEnergyGrowthModifier(): number {
+            return energyGrowthModifier;
         }
 
         export function setMoveRangeModifier(modifier: number): void {
@@ -235,62 +258,62 @@ namespace CustomOnlineWarCreator {
             return moveRangeModifier;
         }
 
-        export function setAttackModifier(modifier: number): void {
-            attackModifier = modifier;
+        export function setAttackPowerModifier(modifier: number): void {
+            attackPowerModifier = modifier;
         }
-        export function setPrevAttackModifier(): void {
-            const currModifier = getAttackModifier();
+        export function setPrevAttackPowerModifier(): void {
+            const currModifier = getAttackPowerModifier();
             const modifiers    = ATTACK_MODIFIERS;
             const index        = modifiers.indexOf(currModifier);
             if (index < 0) {
-                setAttackModifier(DEFAULT_ATTACK_MODIFIER);
+                setAttackPowerModifier(DEFAULT_ATTACK_MODIFIER);
             } else {
                 const newIndex = index - 1;
-                setAttackModifier(newIndex >= 0 ? modifiers[newIndex] : modifiers[modifiers.length - 1]);
+                setAttackPowerModifier(newIndex >= 0 ? modifiers[newIndex] : modifiers[modifiers.length - 1]);
             }
         }
-        export function setNextAttackModifier(): void {
-            const currModifier = getAttackModifier();
+        export function setNextAttackPowerModifier(): void {
+            const currModifier = getAttackPowerModifier();
             const modifiers    = ATTACK_MODIFIERS;
             const index        = modifiers.indexOf(currModifier);
             if (index < 0) {
-                setAttackModifier(DEFAULT_ATTACK_MODIFIER);
+                setAttackPowerModifier(DEFAULT_ATTACK_MODIFIER);
             } else {
                 const newIndex = index + 1;
-                setAttackModifier(newIndex < modifiers.length ? modifiers[newIndex] : modifiers[0]);
+                setAttackPowerModifier(newIndex < modifiers.length ? modifiers[newIndex] : modifiers[0]);
             }
         }
-        export function getAttackModifier(): number {
-            return attackModifier;
+        export function getAttackPowerModifier(): number {
+            return attackPowerModifier;
         }
 
-        export function setVisionModifier(modifier: number): void {
-            visionModifier = modifier;
+        export function setVisionRangeModifier(modifier: number): void {
+            visionRangeModifier = modifier;
         }
-        export function setPrevVisionModifier(): void {
-            const currModifier = getVisionModifier();
+        export function setPrevVisionRangeModifier(): void {
+            const currModifier = getVisionRangeModifier();
             const modifiers    = VISION_MODIFIERS;
             const index        = modifiers.indexOf(currModifier);
             if (index < 0) {
-                setVisionModifier(DEFAULT_VISION_MODIFIER);
+                setVisionRangeModifier(DEFAULT_VISION_MODIFIER);
             } else {
                 const newIndex = index - 1;
-                setVisionModifier(newIndex >= 0 ? modifiers[newIndex] : modifiers[modifiers.length - 1]);
+                setVisionRangeModifier(newIndex >= 0 ? modifiers[newIndex] : modifiers[modifiers.length - 1]);
             }
         }
-        export function setNextVisionModifier(): void {
-            const currModifier = getVisionModifier();
+        export function setNextVisionRangeModifier(): void {
+            const currModifier = getVisionRangeModifier();
             const modifiers    = VISION_MODIFIERS;
             const index        = modifiers.indexOf(currModifier);
             if (index < 0) {
-                setVisionModifier(DEFAULT_VISION_MODIFIER);
+                setVisionRangeModifier(DEFAULT_VISION_MODIFIER);
             } else {
                 const newIndex = index + 1;
-                setVisionModifier(newIndex < modifiers.length ? modifiers[newIndex] : modifiers[0]);
+                setVisionRangeModifier(newIndex < modifiers.length ? modifiers[newIndex] : modifiers[0]);
             }
         }
-        export function getVisionModifier(): number {
-            return visionModifier;
+        export function getVisionRangeModifier(): number {
+            return visionRangeModifier;
         }
     }
 }

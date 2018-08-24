@@ -114,7 +114,7 @@ namespace CustomOnlineWarCreator {
                 modifier = Math.min(modifier, CreateWarModel.MAX_ENERGY_MODIFIER);
                 modifier = Math.max(modifier, CreateWarModel.MIN_ENERGY_MODIFIER);
             }
-            CreateWarModel.setEnergyModifier(modifier);
+            CreateWarModel.setEnergyGrowthModifier(modifier);
             this._updateInputEnergyModifier();
         }
 
@@ -129,22 +129,22 @@ namespace CustomOnlineWarCreator {
         }
 
         private _onTouchedBtnPrevAttack(e: egret.TouchEvent): void {
-            CreateWarModel.setPrevAttackModifier();
+            CreateWarModel.setPrevAttackPowerModifier();
             this._updateLabelAttack();
         }
 
         private _onTouchedBtnNextAttack(e: egret.TouchEvent): void {
-            CreateWarModel.setNextAttackModifier();
+            CreateWarModel.setNextAttackPowerModifier();
             this._updateLabelAttack();
         }
 
         private _onTouchedBtnPrevVision(e: egret.TouchEvent): void {
-            CreateWarModel.setPrevVisionModifier();
+            CreateWarModel.setPrevVisionRangeModifier();
             this._updateLabelVision();
         }
 
         private _onTouchedBtnNextVision(e: egret.TouchEvent): void {
-            CreateWarModel.setNextVisionModifier();
+            CreateWarModel.setNextVisionRangeModifier();
             this._updateLabelVision();
         }
 
@@ -164,7 +164,7 @@ namespace CustomOnlineWarCreator {
         }
 
         private _updateInputEnergyModifier(): void {
-            this._inputEnergyModifier.text = "" + CreateWarModel.getEnergyModifier();
+            this._inputEnergyModifier.text = "" + CreateWarModel.getEnergyGrowthModifier();
         }
 
         private _updateLabelMapName(): void {
@@ -185,7 +185,7 @@ namespace CustomOnlineWarCreator {
         }
 
         private _updateLabelAttack(): void {
-            const modifier = CreateWarModel.getAttackModifier();
+            const modifier = CreateWarModel.getAttackPowerModifier();
             if (modifier <= 0) {
                 this._labelAttack.text = "" + modifier;
             } else {
@@ -194,7 +194,7 @@ namespace CustomOnlineWarCreator {
         }
 
         private _updateLabelVision(): void {
-            const modifier = CreateWarModel.getVisionModifier();
+            const modifier = CreateWarModel.getVisionRangeModifier();
             if (modifier <= 0) {
                 this._labelVision.text = "" + modifier;
             } else {
