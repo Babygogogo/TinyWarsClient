@@ -220,9 +220,6 @@ namespace Utility {
         /** Properties of a MapInfo. */
         export declare interface IMapInfo {
 
-            /** MapInfo id */
-            id?: (number | null);
-
             /** MapInfo mapName */
             mapName?: (string | null);
 
@@ -250,9 +247,6 @@ namespace Utility {
              * @param [properties] Properties to set
              */
             constructor(properties?: IMapInfo);
-
-            /** MapInfo id. */
-            public id: number;
 
             /** MapInfo mapName. */
             public mapName: string;

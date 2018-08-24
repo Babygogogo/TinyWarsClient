@@ -2,11 +2,11 @@
 	"skins": {},
 	"autoGenerateExmlsList": true,
 	"exmls": [
-		"resource/skins/common/HelpPanel.exml",
 		"resource/skins/customOnlineWarCreator/AdvancedSettingsPage.exml",
 		"resource/skins/customOnlineWarCreator/BasicSettingsPage.exml",
 		"resource/skins/customOnlineWarCreator/ChooseMapPanel.exml",
 		"resource/skins/customOnlineWarCreator/SettingsPanel.exml",
+		"resource/skins/common/HelpPanel.exml",
 		"resource/skins/lobby/LobbyPanel.exml",
 		"resource/skins/lobby/LobbyTopPanel.exml",
 		"resource/skins/login/LoginBackgroundPanel.exml",

@@ -42,33 +42,29 @@
     },
     "MapInfo": {
       "fields": {
-        "id": {
-          "type": "uint32",
-          "id": 1
-        },
         "mapName": {
           "type": "string",
-          "id": 2
+          "id": 1
         },
         "designer": {
           "type": "string",
-          "id": 3
+          "id": 2
         },
         "version": {
           "type": "uint32",
-          "id": 4
+          "id": 3
         },
         "playersCount": {
           "type": "uint32",
-          "id": 5
+          "id": 4
         },
         "rating": {
           "type": "float",
-          "id": 6
+          "id": 5
         },
         "playedTimes": {
           "type": "uint32",
-          "id": 7
+          "id": 6
         }
       }
     },
