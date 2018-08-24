@@ -13,5 +13,7 @@ namespace Network {
         S_Error = 10,
         C_GetNewestMapInfos = 11,
         S_GetNewestMapInfos = 12,
+        C_CreateCustomOnlineWar = 13,
+        S_CreateCustomOnlineWar = 14,
     }
 }

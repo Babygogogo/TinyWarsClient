@@ -12,5 +12,7 @@ namespace Network {
         Register_InvalidPassword,
         Register_InvalidNickname,
         Register_UsedNickname,
+
+        CreateCustomOnlineWar_TooManyJoinedWars,
     }
 }

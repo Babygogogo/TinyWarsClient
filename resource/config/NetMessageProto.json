@@ -117,6 +117,14 @@
         "S_GetNewestMapInfos": {
           "type": "S_GetNewestMapInfos",
           "id": 12
+        },
+        "C_CreateCustomOnlineWar": {
+          "type": "C_CreateCustomOnlineWar",
+          "id": 13
+        },
+        "S_CreateCustomOnlineWar": {
+          "type": "S_CreateCustomOnlineWar",
+          "id": 14
         }
       }
     },
@@ -310,6 +318,94 @@
           "rule": "repeated",
           "type": "MapInfo",
           "id": 2
+        }
+      }
+    },
+    "C_CreateCustomOnlineWar": {
+      "fields": {
+        "actionCode": {
+          "type": "uint32",
+          "id": 0
+        },
+        "mapName": {
+          "type": "string",
+          "id": 1
+        },
+        "designer": {
+          "type": "string",
+          "id": 2
+        },
+        "version": {
+          "type": "uint32",
+          "id": 3
+        },
+        "warName": {
+          "type": "string",
+          "id": 4
+        },
+        "warPassword": {
+          "type": "string",
+          "id": 5
+        },
+        "warComment": {
+          "type": "string",
+          "id": 6
+        },
+        "playerIndex": {
+          "type": "uint32",
+          "id": 7
+        },
+        "teamIndex": {
+          "type": "uint32",
+          "id": 8
+        },
+        "hasFog": {
+          "type": "bool",
+          "id": 9
+        },
+        "timeLimit": {
+          "type": "uint32",
+          "id": 10
+        },
+        "initialFund": {
+          "type": "uint32",
+          "id": 11
+        },
+        "incomeModifier": {
+          "type": "uint32",
+          "id": 12
+        },
+        "initialEnergy": {
+          "type": "uint32",
+          "id": 13
+        },
+        "energyGrowthModifier": {
+          "type": "uint32",
+          "id": 14
+        },
+        "moveRangeModifier": {
+          "type": "int32",
+          "id": 15
+        },
+        "attackPowerModifier": {
+          "type": "int32",
+          "id": 16
+        },
+        "visionRangeModifier": {
+          "type": "int32",
+          "id": 17
+        }
+      }
+    },
+    "S_CreateCustomOnlineWar": {
+      "fields": {
+        "actionCode": {
+          "type": "uint32",
+          "id": 0
+        },
+        "errorCode": {
+          "type": "uint32",
+          "id": 1
         }
       }
     }

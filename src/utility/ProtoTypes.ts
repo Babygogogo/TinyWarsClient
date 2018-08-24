@@ -375,6 +375,12 @@ namespace Utility {
 
             /** Container S_GetNewestMapInfos */
             S_GetNewestMapInfos?: (IS_GetNewestMapInfos | null);
+
+            /** Container C_CreateCustomOnlineWar */
+            C_CreateCustomOnlineWar?: (IC_CreateCustomOnlineWar | null);
+
+            /** Container S_CreateCustomOnlineWar */
+            S_CreateCustomOnlineWar?: (IS_CreateCustomOnlineWar | null);
         }
 
         /** Represents a Container. */
@@ -421,6 +427,12 @@ namespace Utility {
 
             /** Container S_GetNewestMapInfos. */
             public S_GetNewestMapInfos?: (IS_GetNewestMapInfos | null);
+
+            /** Container C_CreateCustomOnlineWar. */
+            public C_CreateCustomOnlineWar?: (IC_CreateCustomOnlineWar | null);
+
+            /** Container S_CreateCustomOnlineWar. */
+            public S_CreateCustomOnlineWar?: (IS_CreateCustomOnlineWar | null);
 
             /**
              * Creates a new Container instance using the specified properties.
@@ -1634,6 +1646,294 @@ namespace Utility {
 
             /**
              * Converts this S_GetNewestMapInfos to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a C_CreateCustomOnlineWar. */
+        export declare interface IC_CreateCustomOnlineWar {
+
+            /** C_CreateCustomOnlineWar actionCode */
+            actionCode?: (number | null);
+
+            /** C_CreateCustomOnlineWar mapName */
+            mapName?: (string | null);
+
+            /** C_CreateCustomOnlineWar designer */
+            designer?: (string | null);
+
+            /** C_CreateCustomOnlineWar version */
+            version?: (number | null);
+
+            /** C_CreateCustomOnlineWar warName */
+            warName?: (string | null);
+
+            /** C_CreateCustomOnlineWar warPassword */
+            warPassword?: (string | null);
+
+            /** C_CreateCustomOnlineWar warComment */
+            warComment?: (string | null);
+
+            /** C_CreateCustomOnlineWar playerIndex */
+            playerIndex?: (number | null);
+
+            /** C_CreateCustomOnlineWar teamIndex */
+            teamIndex?: (number | null);
+
+            /** C_CreateCustomOnlineWar hasFog */
+            hasFog?: (boolean | null);
+
+            /** C_CreateCustomOnlineWar timeLimit */
+            timeLimit?: (number | null);
+
+            /** C_CreateCustomOnlineWar initialFund */
+            initialFund?: (number | null);
+
+            /** C_CreateCustomOnlineWar incomeModifier */
+            incomeModifier?: (number | null);
+
+            /** C_CreateCustomOnlineWar initialEnergy */
+            initialEnergy?: (number | null);
+
+            /** C_CreateCustomOnlineWar energyGrowthModifier */
+            energyGrowthModifier?: (number | null);
+
+            /** C_CreateCustomOnlineWar moveRangeModifier */
+            moveRangeModifier?: (number | null);
+
+            /** C_CreateCustomOnlineWar attackPowerModifier */
+            attackPowerModifier?: (number | null);
+
+            /** C_CreateCustomOnlineWar visionRangeModifier */
+            visionRangeModifier?: (number | null);
+        }
+
+        /** Represents a C_CreateCustomOnlineWar. */
+        export declare class C_CreateCustomOnlineWar implements IC_CreateCustomOnlineWar {
+
+            /**
+             * Constructs a new C_CreateCustomOnlineWar.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: IC_CreateCustomOnlineWar);
+
+            /** C_CreateCustomOnlineWar actionCode. */
+            public actionCode: number;
+
+            /** C_CreateCustomOnlineWar mapName. */
+            public mapName: string;
+
+            /** C_CreateCustomOnlineWar designer. */
+            public designer: string;
+
+            /** C_CreateCustomOnlineWar version. */
+            public version: number;
+
+            /** C_CreateCustomOnlineWar warName. */
+            public warName: string;
+
+            /** C_CreateCustomOnlineWar warPassword. */
+            public warPassword: string;
+
+            /** C_CreateCustomOnlineWar warComment. */
+            public warComment: string;
+
+            /** C_CreateCustomOnlineWar playerIndex. */
+            public playerIndex: number;
+
+            /** C_CreateCustomOnlineWar teamIndex. */
+            public teamIndex: number;
+
+            /** C_CreateCustomOnlineWar hasFog. */
+            public hasFog: boolean;
+
+            /** C_CreateCustomOnlineWar timeLimit. */
+            public timeLimit: number;
+
+            /** C_CreateCustomOnlineWar initialFund. */
+            public initialFund: number;
+
+            /** C_CreateCustomOnlineWar incomeModifier. */
+            public incomeModifier: number;
+
+            /** C_CreateCustomOnlineWar initialEnergy. */
+            public initialEnergy: number;
+
+            /** C_CreateCustomOnlineWar energyGrowthModifier. */
+            public energyGrowthModifier: number;
+
+            /** C_CreateCustomOnlineWar moveRangeModifier. */
+            public moveRangeModifier: number;
+
+            /** C_CreateCustomOnlineWar attackPowerModifier. */
+            public attackPowerModifier: number;
+
+            /** C_CreateCustomOnlineWar visionRangeModifier. */
+            public visionRangeModifier: number;
+
+            /**
+             * Creates a new C_CreateCustomOnlineWar instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C_CreateCustomOnlineWar instance
+             */
+            public static create(properties?: IC_CreateCustomOnlineWar): C_CreateCustomOnlineWar;
+
+            /**
+             * Encodes the specified C_CreateCustomOnlineWar message. Does not implicitly {@link C_CreateCustomOnlineWar.verify|verify} messages.
+             * @param message C_CreateCustomOnlineWar message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: IC_CreateCustomOnlineWar, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C_CreateCustomOnlineWar message, length delimited. Does not implicitly {@link C_CreateCustomOnlineWar.verify|verify} messages.
+             * @param message C_CreateCustomOnlineWar message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: IC_CreateCustomOnlineWar, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C_CreateCustomOnlineWar message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C_CreateCustomOnlineWar
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): C_CreateCustomOnlineWar;
+
+            /**
+             * Decodes a C_CreateCustomOnlineWar message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C_CreateCustomOnlineWar
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): C_CreateCustomOnlineWar;
+
+            /**
+             * Verifies a C_CreateCustomOnlineWar message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string | null);
+
+            /**
+             * Creates a C_CreateCustomOnlineWar message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C_CreateCustomOnlineWar
+             */
+            public static fromObject(object: { [k: string]: any }): C_CreateCustomOnlineWar;
+
+            /**
+             * Creates a plain object from a C_CreateCustomOnlineWar message. Also converts values to other types if specified.
+             * @param message C_CreateCustomOnlineWar
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: C_CreateCustomOnlineWar, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C_CreateCustomOnlineWar to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S_CreateCustomOnlineWar. */
+        export declare interface IS_CreateCustomOnlineWar {
+
+            /** S_CreateCustomOnlineWar actionCode */
+            actionCode?: (number | null);
+
+            /** S_CreateCustomOnlineWar errorCode */
+            errorCode?: (number | null);
+        }
+
+        /** Represents a S_CreateCustomOnlineWar. */
+        export declare class S_CreateCustomOnlineWar implements IS_CreateCustomOnlineWar {
+
+            /**
+             * Constructs a new S_CreateCustomOnlineWar.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: IS_CreateCustomOnlineWar);
+
+            /** S_CreateCustomOnlineWar actionCode. */
+            public actionCode: number;
+
+            /** S_CreateCustomOnlineWar errorCode. */
+            public errorCode: number;
+
+            /**
+             * Creates a new S_CreateCustomOnlineWar instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S_CreateCustomOnlineWar instance
+             */
+            public static create(properties?: IS_CreateCustomOnlineWar): S_CreateCustomOnlineWar;
+
+            /**
+             * Encodes the specified S_CreateCustomOnlineWar message. Does not implicitly {@link S_CreateCustomOnlineWar.verify|verify} messages.
+             * @param message S_CreateCustomOnlineWar message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: IS_CreateCustomOnlineWar, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S_CreateCustomOnlineWar message, length delimited. Does not implicitly {@link S_CreateCustomOnlineWar.verify|verify} messages.
+             * @param message S_CreateCustomOnlineWar message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: IS_CreateCustomOnlineWar, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S_CreateCustomOnlineWar message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S_CreateCustomOnlineWar
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): S_CreateCustomOnlineWar;
+
+            /**
+             * Decodes a S_CreateCustomOnlineWar message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S_CreateCustomOnlineWar
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): S_CreateCustomOnlineWar;
+
+            /**
+             * Verifies a S_CreateCustomOnlineWar message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string | null);
+
+            /**
+             * Creates a S_CreateCustomOnlineWar message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S_CreateCustomOnlineWar
+             */
+            public static fromObject(object: { [k: string]: any }): S_CreateCustomOnlineWar;
+
+            /**
+             * Creates a plain object from a S_CreateCustomOnlineWar message. Also converts values to other types if specified.
+             * @param message S_CreateCustomOnlineWar
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: S_CreateCustomOnlineWar, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S_CreateCustomOnlineWar to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
