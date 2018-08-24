@@ -1,5 +1,5 @@
 
-namespace NewCustomWarSettings {
+namespace CustomOnlineWarCreator {
     import Types            = Utility.Types;
     import ProtoTypes       = Utility.ProtoTypes;
     import FloatText        = Utility.FloatText;
@@ -41,7 +41,7 @@ namespace NewCustomWarSettings {
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/newCustomWarSettings/BasicSettingsPage.exml";
+            this.skinName = "resource/skins/customOnlineWarCreator/BasicSettingsPage.exml";
         }
 
         protected _onFirstOpened(): void {
@@ -65,7 +65,7 @@ namespace NewCustomWarSettings {
         }
 
         protected _onOpened(): void {
-            this._mapInfo = SettingsModel.getMapInfo();
+            this._mapInfo = CreateWarModel.getMapInfo();
 
             this._updateLabelMapName();
             this._updateLabelPlayersCount();
@@ -79,24 +79,24 @@ namespace NewCustomWarSettings {
         // Event callbacks.
         ////////////////////////////////////////////////////////////////////////////////
         private _onFocusOutInputWarName(e: egret.Event): void {
-            SettingsModel.setWarName(this._inputWarName.text);
+            CreateWarModel.setWarName(this._inputWarName.text);
         }
 
         private _onFocusOutInputWarPassword(e: egret.Event): void {
-            SettingsModel.setWarPassword(this._inputWarPassword.text);
+            CreateWarModel.setWarPassword(this._inputWarPassword.text);
         }
 
         private _onFocusOutInputWarComment(e: egret.Event): void {
-            SettingsModel.setWarComment(this._inputWarComment.text);
+            CreateWarModel.setWarComment(this._inputWarComment.text);
         }
 
         private _onTouchedBtnPrevPlayerIndex(e: egret.TouchEvent): void {
-            SettingsModel.setPrevPlayerIndex();
+            CreateWarModel.setPrevPlayerIndex();
             this._updateLabelPlayerIndex();
         }
 
         private _onTouchedBtnNextPlayerIndex(e: egret.TouchEvent): void {
-            SettingsModel.setNextPlayerIndex();
+            CreateWarModel.setNextPlayerIndex();
             this._updateLabelPlayerIndex();
         }
 
@@ -108,12 +108,12 @@ namespace NewCustomWarSettings {
         }
 
         private _onTouchedBtnPrevTeam(e: egret.TouchEvent): void {
-            SettingsModel.setPrevTeamIndex();
+            CreateWarModel.setPrevTeamIndex();
             this._updateLabelTeam();
         }
 
         private _onTouchedBtnNextTeam(e: egret.TouchEvent): void {
-            SettingsModel.setNextTeamIndex();
+            CreateWarModel.setNextTeamIndex();
             this._updateLabelTeam();
         }
 
@@ -125,12 +125,12 @@ namespace NewCustomWarSettings {
         }
 
         private _onTouchedBtnPrevFog(e: egret.TouchEvent): void {
-            SettingsModel.setPrevHasFog();
+            CreateWarModel.setPrevHasFog();
             this._updateLabelFog();
         }
 
         private _onTouchedBtnNextFog(e: egret.TouchEvent): void {
-            SettingsModel.setNextHasFog();
+            CreateWarModel.setNextHasFog();
             this._updateLabelFog();
         }
 
@@ -142,12 +142,12 @@ namespace NewCustomWarSettings {
         }
 
         private _onTouchedBtnPrevTimeLimit(e: egret.TouchEvent): void {
-            SettingsModel.setPrevTimeLimit();
+            CreateWarModel.setPrevTimeLimit();
             this._updateLabelTimeLimit();
         }
 
         private _onTouchedBtnNextTimeLimit(e: egret.TouchEvent): void {
-            SettingsModel.setNextTimeLimit();
+            CreateWarModel.setNextTimeLimit();
             this._updateLabelTimeLimit();
         }
 
@@ -170,20 +170,20 @@ namespace NewCustomWarSettings {
         }
 
         private _updateLabelPlayerIndex(): void {
-            const index = SettingsModel.getPlayerIndex();
+            const index = CreateWarModel.getPlayerIndex();
             this._labelPlayerIndex.text = `${index} (${Helpers.getColorText(index)})`;
         }
 
         private _updateLabelTeam(): void {
-            this._labelTeam.text = Helpers.getTeamText(SettingsModel.getTeamIndex());
+            this._labelTeam.text = Helpers.getTeamText(CreateWarModel.getTeamIndex());
         }
 
         private _updateLabelFog(): void {
-            this._labelFog.text = Lang.getText(Lang.BigType.B01, SettingsModel.getHasFog() ? Lang.SubType.S12 : Lang.SubType.S13);
+            this._labelFog.text = Lang.getText(Lang.BigType.B01, CreateWarModel.getHasFog() ? Lang.SubType.S12 : Lang.SubType.S13);
         }
 
         private _updateLabelTimeLimit(): void {
-            this._labelTimeLimit.text = Helpers.getTimeText(SettingsModel.getTimeLimit());
+            this._labelTimeLimit.text = Helpers.getTimeText(CreateWarModel.getTimeLimit());
         }
     }
 }

@@ -1,27 +1,28 @@
 
-namespace NewCustomWarSettings {
+namespace CustomOnlineWarCreator {
     import Lang = Utility.Lang;
 
-    export class SettingsPanel extends GameUi.UiPanel {
+    export class CreateWarPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: SettingsPanel;
+        private static _instance: CreateWarPanel;
 
         private _tabSettings: GameUi.UiTab;
         private _btnBack    : GameUi.UiButton;
+        private _btnConfirm : GameUi.UiButton;
 
         private _dataForTab: GameUi.DataForUiTab[];
 
         public static open(): void {
-            if (!SettingsPanel._instance) {
-                SettingsPanel._instance = new SettingsPanel();
+            if (!CreateWarPanel._instance) {
+                CreateWarPanel._instance = new CreateWarPanel();
             }
-            SettingsPanel._instance.open();
+            CreateWarPanel._instance.open();
         }
         public static close(): void {
-            if (SettingsPanel._instance) {
-                SettingsPanel._instance.close();
+            if (CreateWarPanel._instance) {
+                CreateWarPanel._instance.close();
             }
         }
 
@@ -29,12 +30,13 @@ namespace NewCustomWarSettings {
             super();
 
             this._setAutoAdjustHeightEnabled(true);
-            this.skinName = "resource/skins/newCustomWarSettings/SettingsPanel.exml";
+            this.skinName = "resource/skins/customOnlineWarCreator/SettingsPanel.exml";
         }
 
         protected _onFirstOpened(): void {
             this._uiListeners = [
-                { ui: this._btnBack, callback: this._onTouchedBtnBack },
+                { ui: this._btnBack,    callback: this._onTouchedBtnBack },
+                { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
             ];
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
         }
@@ -57,8 +59,12 @@ namespace NewCustomWarSettings {
         }
 
         private _onTouchedBtnBack(e: egret.TouchEvent): void {
-            SettingsPanel.close();
+            CreateWarPanel.close();
             ChooseMapPanel.open();
+        }
+
+        private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
+
         }
     }
 

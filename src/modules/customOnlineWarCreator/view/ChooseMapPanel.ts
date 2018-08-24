@@ -1,5 +1,5 @@
 
-namespace NewCustomWarSettings {
+namespace CustomOnlineWarCreator {
     import Notify           = Utility.Notify;
     import Types            = Utility.Types;
     import StageManager     = Utility.StageManager;
@@ -49,7 +49,7 @@ namespace NewCustomWarSettings {
             super();
 
             this._setAutoAdjustHeightEnabled();
-            this.skinName = "resource/skins/newCustomWarSettings/ChooseMapPanel.exml";
+            this.skinName = "resource/skins/customOnlineWarCreator/ChooseMapPanel.exml";
         }
 
         protected _onFirstOpened(): void {
@@ -268,9 +268,9 @@ namespace NewCustomWarSettings {
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
             ChooseMapPanel.close();
 
-            SettingsModel.setMapIndexKeys(this.data as DataForMapNameRenderer);
-            SettingsModel.resetSettings();
-            SettingsPanel.open();
+            CreateWarModel.setMapIndexKeys(this.data as DataForMapNameRenderer);
+            CreateWarModel.resetSettings();
+            CreateWarPanel.open();
         }
     }
 }

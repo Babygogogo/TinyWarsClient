@@ -1,5 +1,5 @@
 
-namespace NewCustomWarSettings {
+namespace CustomOnlineWarCreator {
     import Types            = Utility.Types;
     import ProtoTypes       = Utility.ProtoTypes;
     import FloatText        = Utility.FloatText;
@@ -35,7 +35,7 @@ namespace NewCustomWarSettings {
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/newCustomWarSettings/AdvancedSettingsPage.exml";
+            this.skinName = "resource/skins/customOnlineWarCreator/AdvancedSettingsPage.exml";
         }
 
         protected _onFirstOpened(): void {
@@ -54,7 +54,7 @@ namespace NewCustomWarSettings {
         }
 
         protected _onOpened(): void {
-            this._mapInfo = SettingsModel.getMapInfo();
+            this._mapInfo = CreateWarModel.getMapInfo();
 
             this._updateLabelMapName();
             this._updateLabelPlayersCount();
@@ -73,78 +73,78 @@ namespace NewCustomWarSettings {
         private _onFocusOutInputInitialFund(e: egret.Event): void {
             let fund = Number(this._inputInitialFund.text);
             if (isNaN(fund)) {
-                fund = SettingsModel.DEFAULT_INITIAL_FUND;
+                fund = CreateWarModel.DEFAULT_INITIAL_FUND;
             } else {
-                fund = Math.min(fund, SettingsModel.MAX_INITIAL_FUND);
-                fund = Math.max(fund, SettingsModel.MIN_INITIAL_FUND);
+                fund = Math.min(fund, CreateWarModel.MAX_INITIAL_FUND);
+                fund = Math.max(fund, CreateWarModel.MIN_INITIAL_FUND);
             }
-            SettingsModel.setInitialFund(fund);
+            CreateWarModel.setInitialFund(fund);
             this._updateInputInitialFund();
         }
 
         private _onFocusOutInputIncomeModifier(e: egret.Event): void {
             let modifier = Number(this._inputIncomeModifier.text);
             if (isNaN(modifier)) {
-                modifier = SettingsModel.DEFAULT_INCOME_MODIFIER;
+                modifier = CreateWarModel.DEFAULT_INCOME_MODIFIER;
             } else {
-                modifier = Math.min(modifier, SettingsModel.MAX_INCOME_MODIFIER);
-                modifier = Math.max(modifier, SettingsModel.MIN_INCOME_MODIFIER);
+                modifier = Math.min(modifier, CreateWarModel.MAX_INCOME_MODIFIER);
+                modifier = Math.max(modifier, CreateWarModel.MIN_INCOME_MODIFIER);
             }
-            SettingsModel.setIncomeModifier(modifier);
+            CreateWarModel.setIncomeModifier(modifier);
             this._updateInputIncomeModifier();
         }
 
         private _onFocusOutInputInitialEnergy(e: egret.Event): void {
             let energy = Number(this._inputInitialEnergy.text);
             if (isNaN(energy)) {
-                energy = SettingsModel.DEFAULT_INITIAL_ENERGY;
+                energy = CreateWarModel.DEFAULT_INITIAL_ENERGY;
             } else {
-                energy = Math.min(energy, SettingsModel.MAX_INITIAL_ENERGY);
-                energy = Math.max(energy, SettingsModel.MIN_INITIAL_ENERGY);
+                energy = Math.min(energy, CreateWarModel.MAX_INITIAL_ENERGY);
+                energy = Math.max(energy, CreateWarModel.MIN_INITIAL_ENERGY);
             }
-            SettingsModel.setInitialEnergy(energy);
+            CreateWarModel.setInitialEnergy(energy);
             this._updateInputInitialEnergy();
         }
 
         private _onFocusOutInputEnergyModifier(e: egret.Event): void {
             let modifier = Number(this._inputEnergyModifier.text);
             if (isNaN(modifier)) {
-                modifier = SettingsModel.DEFAULT_ENERGY_MODIFIER;
+                modifier = CreateWarModel.DEFAULT_ENERGY_MODIFIER;
             } else {
-                modifier = Math.min(modifier, SettingsModel.MAX_ENERGY_MODIFIER);
-                modifier = Math.max(modifier, SettingsModel.MIN_ENERGY_MODIFIER);
+                modifier = Math.min(modifier, CreateWarModel.MAX_ENERGY_MODIFIER);
+                modifier = Math.max(modifier, CreateWarModel.MIN_ENERGY_MODIFIER);
             }
-            SettingsModel.setEnergyModifier(modifier);
+            CreateWarModel.setEnergyModifier(modifier);
             this._updateInputEnergyModifier();
         }
 
         private _onTouchedBtnPrevMoveRange(e: egret.TouchEvent): void {
-            SettingsModel.setPrevMoveRangeModifier();
+            CreateWarModel.setPrevMoveRangeModifier();
             this._updateLabelMoveRange();
         }
 
         private _onTouchedBtnNextMoveRange(e: egret.TouchEvent): void {
-            SettingsModel.setNextMoveRangeModifier();
+            CreateWarModel.setNextMoveRangeModifier();
             this._updateLabelMoveRange();
         }
 
         private _onTouchedBtnPrevAttack(e: egret.TouchEvent): void {
-            SettingsModel.setPrevAttackModifier();
+            CreateWarModel.setPrevAttackModifier();
             this._updateLabelAttack();
         }
 
         private _onTouchedBtnNextAttack(e: egret.TouchEvent): void {
-            SettingsModel.setNextAttackModifier();
+            CreateWarModel.setNextAttackModifier();
             this._updateLabelAttack();
         }
 
         private _onTouchedBtnPrevVision(e: egret.TouchEvent): void {
-            SettingsModel.setPrevVisionModifier();
+            CreateWarModel.setPrevVisionModifier();
             this._updateLabelVision();
         }
 
         private _onTouchedBtnNextVision(e: egret.TouchEvent): void {
-            SettingsModel.setNextVisionModifier();
+            CreateWarModel.setNextVisionModifier();
             this._updateLabelVision();
         }
 
@@ -152,19 +152,19 @@ namespace NewCustomWarSettings {
         // View functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateInputInitialFund(): void {
-            this._inputInitialFund.text = "" + SettingsModel.getInitialFund();
+            this._inputInitialFund.text = "" + CreateWarModel.getInitialFund();
         }
 
         private _updateInputIncomeModifier(): void {
-            this._inputIncomeModifier.text = "" + SettingsModel.getIncomeModifier();
+            this._inputIncomeModifier.text = "" + CreateWarModel.getIncomeModifier();
         }
 
         private _updateInputInitialEnergy(): void {
-            this._inputInitialEnergy.text = "" + SettingsModel.getInitialEnergy();
+            this._inputInitialEnergy.text = "" + CreateWarModel.getInitialEnergy();
         }
 
         private _updateInputEnergyModifier(): void {
-            this._inputEnergyModifier.text = "" + SettingsModel.getEnergyModifier();
+            this._inputEnergyModifier.text = "" + CreateWarModel.getEnergyModifier();
         }
 
         private _updateLabelMapName(): void {
@@ -176,7 +176,7 @@ namespace NewCustomWarSettings {
         }
 
         private _updateLabelMoveRange(): void {
-            const modifier = SettingsModel.getMoveRangeModifier();
+            const modifier = CreateWarModel.getMoveRangeModifier();
             if (modifier <= 0) {
                 this._labelMoveRange.text = "" + modifier;
             } else {
@@ -185,7 +185,7 @@ namespace NewCustomWarSettings {
         }
 
         private _updateLabelAttack(): void {
-            const modifier = SettingsModel.getAttackModifier();
+            const modifier = CreateWarModel.getAttackModifier();
             if (modifier <= 0) {
                 this._labelAttack.text = "" + modifier;
             } else {
@@ -194,7 +194,7 @@ namespace NewCustomWarSettings {
         }
 
         private _updateLabelVision(): void {
-            const modifier = SettingsModel.getVisionModifier();
+            const modifier = CreateWarModel.getVisionModifier();
             if (modifier <= 0) {
                 this._labelVision.text = "" + modifier;
             } else {

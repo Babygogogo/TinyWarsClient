@@ -32,12 +32,21 @@
             </e:skinName>
         </GameUi:UiTab>
         <GameUi:UiLabel text="战局设置" textColor="0x000000" bold="true" size="26" top="14" right="46" />
-        <GameUi:UiButton id="_btnBack" label="&lt;&lt;更换地图" bottom="14" right="34">
+        <GameUi:UiButton id="_btnConfirm" label="确定>>" bottom="14" x="800">
+            <GameUi:skinName>
+                <e:Skin states="up,down,disabled">
+                    <e:Image width="100%" height="100%" />
+                    <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="25" bold="true"
+                             textColor="0x00ff00" stroke="2" />
+                </e:Skin>
+            </GameUi:skinName>
+        </GameUi:UiButton>
+        <GameUi:UiButton id="_btnBack" label="&lt;&lt;返回" bottom="14" x="700">
             <e:skinName>
                 <e:Skin states="up,down,disabled">
                     <e:Image width="100%" height="100%" />
                     <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="25" bold="true"
-                             textColor="0x000000" />
+                             textColor="0xffffff" stroke="2" />
                 </e:Skin>
             </e:skinName>
         </GameUi:UiButton>

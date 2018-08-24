@@ -1,10 +1,10 @@
 
-namespace NewCustomWarSettings {
+namespace CustomOnlineWarCreator {
     import Types                = Utility.Types;
     import ProtoTypes           = Utility.ProtoTypes;
     import TemplateMapManager   = TemplateMap.TemplateMapModel;
 
-    export namespace SettingsModel {
+    export namespace CreateWarModel {
         const TIME_LIMITS = [
             60 * 15,            // 15 min
             60 * 60 * 24 * 1,   // 1 day
