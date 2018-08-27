@@ -237,6 +237,10 @@
         "account": {
           "type": "string",
           "id": 4
+        },
+        "password": {
+          "type": "string",
+          "id": 5
         }
       }
     },

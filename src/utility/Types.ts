@@ -236,6 +236,7 @@ namespace Utility {
         export const enum LogoutType {
             SelfRequest,
             LoginCollision,
+            NetworkFailure,
         }
 
         export const enum MoveType {

@@ -64,7 +64,7 @@ namespace CustomOnlineWarCreator {
         }
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-
+            CreateWarProxy.reqCreateCustomOnlineWar(CreateWarModel.createDataForCreateWar());
         }
     }
 

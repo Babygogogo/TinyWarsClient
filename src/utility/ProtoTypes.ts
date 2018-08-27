@@ -1044,6 +1044,9 @@ namespace Utility {
 
             /** S_Login account */
             account?: (string | null);
+
+            /** S_Login password */
+            password?: (string | null);
         }
 
         /** Represents a S_Login. */
@@ -1069,6 +1072,9 @@ namespace Utility {
 
             /** S_Login account. */
             public account: string;
+
+            /** S_Login password. */
+            public password: string;
 
             /**
              * Creates a new S_Login instance using the specified properties.

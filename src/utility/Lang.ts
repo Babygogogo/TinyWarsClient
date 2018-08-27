@@ -77,6 +77,14 @@ namespace Utility {
                     "已找到符合条件的地图",
                     "Maps found.",
                 ],
+                [ // 00-13
+                    "发生网络错误，请重新登陆。",
+                    "Network went wrong. Please re-login.",
+                ],
+                [ // 00-14
+                    "发生网络错误，请稍后再试。",
+                    "Network went wrong. Please try again later.",
+                ],
             ],
             [
                 [ // 01-00

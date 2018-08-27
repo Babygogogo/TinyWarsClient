@@ -1,13 +1,13 @@
 
 namespace Network {
-    export namespace Manager {
-        import Logger       = Utility.Logger;
-        import Notify       = Utility.Notify;
-        import FloatText    = Utility.FloatText;
-        import Lang         = Utility.Lang;
-        import ProtoTypes   = Utility.ProtoTypes;
-        import ProtoManager = Utility.ProtoManager;
+    import Logger       = Utility.Logger;
+    import Notify       = Utility.Notify;
+    import FloatText    = Utility.FloatText;
+    import Lang         = Utility.Lang;
+    import ProtoTypes   = Utility.ProtoTypes;
+    import ProtoManager = Utility.ProtoManager;
 
+    export namespace Manager {
         ////////////////////////////////////////////////////////////////////////////////
         // Constants.
         ////////////////////////////////////////////////////////////////////////////////
@@ -77,14 +77,18 @@ namespace Network {
         }
 
         export function send(action: Action): void {
-            const code = action.actionCode;
-            const name = Codes[code];
-
-            if (!name) {
-                Logger.error("NetManager.send() failed to find the msgName with code: ", code);
+            if ((!socket) || (!socket.connected)) {
+                FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S14));
             } else {
-                Logger.log("NetManager send: ", name, action);
-                socket.send(ProtoManager.encodeAsContainer(action));
+                const code = action.actionCode;
+                const name = Codes[code];
+
+                if (!name) {
+                    Logger.error("NetManager.send() failed to find the msgName with code: ", code);
+                } else {
+                    Logger.log("NetManager send: ", name, action);
+                    socket.send(ProtoManager.encodeAsContainer(action));
+                }
             }
         }
 
