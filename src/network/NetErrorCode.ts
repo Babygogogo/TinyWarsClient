@@ -14,5 +14,6 @@ namespace Network {
         Register_UsedNickname,
 
         CreateCustomOnlineWar_TooManyJoinedWars,
+        CreateCustomOnlineWar_InvalidParams,
     }
 }

@@ -4,6 +4,7 @@ namespace CustomOnlineWarCreator {
     import ActionCode = Network.Codes;
     import Helpers    = Utility.Helpers;
     import ProtoTypes = Utility.ProtoTypes;
+    import Notify     = Utility.Notify;
 
     export type DataForCreateWar = {
         mapName : string,
@@ -41,6 +42,9 @@ namespace CustomOnlineWarCreator {
         }
         function _onSCreateCustomOnlineWar(e: egret.Event): void {
             const data = e.data as ProtoTypes.IS_CreateCustomOnlineWar;
+            if (!data.errorCode) {
+                Notify.dispatch(Notify.Type.SCreateCustomOnlineWar, data);
+            }
         }
     }
 }

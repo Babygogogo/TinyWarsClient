@@ -85,6 +85,10 @@ namespace Utility {
                     "发生网络错误，请稍后再试。",
                     "Network went wrong. Please try again later.",
                 ],
+                [ // 00-15
+                    "已成功创建战局，请等待其他玩家加入",
+                    "The war is created successfully.",
+                ],
             ],
             [
                 [ // 01-00
@@ -233,6 +237,14 @@ namespace Utility {
             [ErrCode.Register_UsedNickname]: [
                 "该昵称已被使用，请修改后再试",
                 "The nickname has been used.",
+            ],
+            [ErrCode.CreateCustomOnlineWar_TooManyJoinedWars]: [
+                "您已参与了许多未开始的战局，请退出部分后重试",
+                "You have joined too many wars.",
+            ],
+            [ErrCode.CreateCustomOnlineWar_InvalidParams]: [
+                "部分设定不符合规则，请检查后重试",
+                "Invalid settings.",
             ],
         };
 

@@ -1,6 +1,11 @@
 
 namespace CustomOnlineWarCreator {
-    import Lang = Utility.Lang;
+    import Lang         = Utility.Lang;
+    import Notify       = Utility.Notify;
+    import FloatText    = Utility.FloatText;
+    import StageManager = Utility.StageManager;
+
+    const CONFIRM_INTERVAL_MS = 5000;
 
     export class CreateWarPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
@@ -12,7 +17,8 @@ namespace CustomOnlineWarCreator {
         private _btnBack    : GameUi.UiButton;
         private _btnConfirm : GameUi.UiButton;
 
-        private _dataForTab: GameUi.DataForUiTab[];
+        private _dataForTab            : GameUi.DataForUiTab[];
+        private _timeoutIdForBtnConfirm: number;
 
         public static open(): void {
             if (!CreateWarPanel._instance) {
@@ -38,6 +44,9 @@ namespace CustomOnlineWarCreator {
                 { ui: this._btnBack,    callback: this._onTouchedBtnBack },
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
             ];
+            this._notifyListeners = [
+                { name: Notify.Type.SCreateCustomOnlineWar, callback: this._onNotifySCreateCustomOnlineWar },
+            ];
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
         }
 
@@ -52,10 +61,13 @@ namespace CustomOnlineWarCreator {
                     pageClass  : AdvancedSettingsPage,
                 },
             ]);
+
+            this._btnConfirm.enabled = true;
         }
 
         protected _onClosed(): void {
             this._tabSettings.clear();
+            this._clearTimeoutForBtnConfirm();
         }
 
         private _onTouchedBtnBack(e: egret.TouchEvent): void {
@@ -65,6 +77,29 @@ namespace CustomOnlineWarCreator {
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
             CreateWarProxy.reqCreateCustomOnlineWar(CreateWarModel.createDataForCreateWar());
+
+            this._btnConfirm.enabled = false;
+            this._resetTimeoutForBtnConfirm();
+        }
+
+        private _onNotifySCreateCustomOnlineWar(e: egret.Event): void {
+            FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S15));
+            StageManager.gotoLobby();
+        }
+
+        private _resetTimeoutForBtnConfirm(): void {
+            this._clearTimeoutForBtnConfirm();
+            this._timeoutIdForBtnConfirm = egret.setTimeout(() => {
+                this._btnConfirm.enabled     = true;
+                this._timeoutIdForBtnConfirm = undefined;
+            }, this, CONFIRM_INTERVAL_MS);
+        }
+
+        private _clearTimeoutForBtnConfirm(): void {
+            if (this._timeoutIdForBtnConfirm != null) {
+                egret.clearTimeout(this._timeoutIdForBtnConfirm);
+                this._timeoutIdForBtnConfirm = undefined;
+            }
         }
     }
 
