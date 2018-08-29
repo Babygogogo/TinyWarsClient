@@ -39,8 +39,8 @@ namespace CustomOnlineWarCreator {
         const VISION_MODIFIERS        = [-2, -1, 0, 1, 2];
         const DEFAULT_VISION_MODIFIER = 0;
 
-        let mapIndexKeys: Types.MapIndexKeys;
-        let mapInfo     : ProtoTypes.IMapInfo;
+        let mapIndexKey: Types.MapIndexKey;
+        let mapInfo    : ProtoTypes.IMapInfo;
 
         let warName         : string;
         let warPassword     : string;
@@ -58,12 +58,12 @@ namespace CustomOnlineWarCreator {
         let attackPowerModifier : number;
         let visionRangeModifier : number;
 
-        export function setMapIndexKeys(keys: Types.MapIndexKeys): void {
-            mapIndexKeys = keys;
-            mapInfo      = TemplateMapManager.getMapInfo(keys);
+        export function setMapIndexKey(key: Types.MapIndexKey): void {
+            mapIndexKey = key;
+            mapInfo     = TemplateMapManager.getMapInfo(key);
         }
-        export function getMapIndexKeys(): Types.MapIndexKeys {
-            return mapIndexKeys;
+        export function getMapIndexKey(): Types.MapIndexKey {
+            return mapIndexKey;
         }
         export function getMapInfo(): ProtoTypes.IMapInfo {
             return mapInfo;

@@ -13,12 +13,14 @@ namespace Utility {
 
             MouseWheel: "",
 
-            SLogin                  : "",
-            SRegister               : "",
-            SLogout                 : "",
-            SHeartbeat              : "",
-            SGetNewestMapInfos      : "",
-            SCreateCustomOnlineWar  : "",
+            SLogin                          : "",
+            SRegister                       : "",
+            SLogout                         : "",
+            SHeartbeat                      : "",
+            SGetNewestMapInfos              : "",
+            SCreateCustomOnlineWar          : "",
+            SGetWaitingCustomOnlineWarInfos : "",
+            SExitCustomOnlineWar            : "",
 
             TileModelUpdated: "",
         }

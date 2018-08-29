@@ -36,6 +36,7 @@ class Main extends egret.DisplayObjectContainer {
         await TemplateMap.TemplateMapModel.init();
         await Login.LoginProxy.init();
         await CustomOnlineWarCreator.CreateWarProxy.init();
+        await CustomOnlineWarExiter.ExitWarProxy.init();
 
         Utility.StageManager.gotoLogin();
 

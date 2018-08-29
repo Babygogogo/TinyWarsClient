@@ -1,5 +1,5 @@
 
-namespace CustomOnlineWarCreator {
+namespace CustomOnlineWarExiter {
     import Notify           = Utility.Notify;
     import Types            = Utility.Types;
     import StageManager     = Utility.StageManager;
@@ -10,38 +10,37 @@ namespace CustomOnlineWarCreator {
     import TemplateMapModel = TemplateMap.TemplateMapModel;
     import TemplateMapProxy = TemplateMap.TemplateMapProxy;
 
-    export class ChooseMapPanel extends GameUi.UiPanel {
+    export class ExitWarListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: ChooseMapPanel;
+        private static _instance: ExitWarListPanel;
 
-        private _listMap   : GameUi.UiScrollList;
+        private _listWar   : GameUi.UiScrollList;
         private _zoomMap   : GameUi.UiZoomableComponent;
-        private _btnSearch : GameUi.UiButton;
         private _btnBack   : GameUi.UiButton;
 
-        private _groupInfo          : eui.Group;
-        private _labelMapName       : GameUi.UiLabel;
-        private _labelDesigner      : GameUi.UiLabel;
-        private _labelRating        : GameUi.UiLabel;
-        private _labelPlayedTimes   : GameUi.UiLabel;
-        private _labelPlayersCount  : GameUi.UiLabel;
+        private _groupInfo      : eui.Group;
+        private _labelMapName   : GameUi.UiLabel;
+        private _labelDesigner  : GameUi.UiLabel;
+        private _listPlayer     : GameUi.UiScrollList;
 
         private _currentTouchPoints : Types.TouchPoints = {};
         private _previousTouchPoints: Types.TouchPoints = {};
-        private _dataForList        : DataForMapNameRenderer[] = [];
-        private _selectedIndex      : number;
+        private _warInfos           : ProtoTypes.IWaitingCustomOnlineWarInfo[] = [];
+        private _dataForListWar     : DataForWarRenderer[] = [];
+        private _dataForListPlayer  : DataForPlayerRenderer[] = [];
+        private _selectedWarIndex   : number;
 
         public static open(): void {
-            if (!ChooseMapPanel._instance) {
-                ChooseMapPanel._instance = new ChooseMapPanel();
+            if (!ExitWarListPanel._instance) {
+                ExitWarListPanel._instance = new ExitWarListPanel();
             }
-            ChooseMapPanel._instance.open();
+            ExitWarListPanel._instance.open();
         }
         public static close(): void {
-            if (ChooseMapPanel._instance) {
-                ChooseMapPanel._instance.close();
+            if (ExitWarListPanel._instance) {
+                ExitWarListPanel._instance.close();
             }
         }
 
@@ -49,48 +48,51 @@ namespace CustomOnlineWarCreator {
             super();
 
             this._setAutoAdjustHeightEnabled();
-            this.skinName = "resource/skins/customOnlineWarCreator/ChooseMapPanel.exml";
+            this.skinName = "resource/skins/customOnlineWarExiter/ExitWarListPanel.exml";
         }
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { name: Notify.Type.MouseWheel,         callback: this._onNotifyMouseWheel },
-                { name: Notify.Type.SGetNewestMapInfos, callback: this._onNotifySGetNewestMapInfos },
+                { name: Notify.Type.MouseWheel,                      callback: this._onNotifyMouseWheel },
+                { name: Notify.Type.SGetWaitingCustomOnlineWarInfos, callback: this._onNotifyGetWaitingCustomOnlineWarInfos },
             ];
             this._uiListeners = [
                 { ui: this._zoomMap,   callback: this._onTouchBeginZoomMap, eventType: egret.TouchEvent.TOUCH_BEGIN },
                 { ui: this._zoomMap,   callback: this._onTouchEndZoomMap,   eventType: egret.TouchEvent.TOUCH_END },
-                { ui: this._btnSearch, callback: this._onTouchTapBtnSearch },
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
             ];
-            this._listMap.setItemRenderer(MapNameRenderer);
+            this._listWar.setItemRenderer(WarRenderer);
+            this._listPlayer.setItemRenderer(PlayerRenderer);
         }
+
         protected _onOpened(): void {
             this._groupInfo.visible = false;
-            this._listMap.bindData(this._dataForList);
-            this.setSelectedIndex(this._selectedIndex);
+
+            ExitWarProxy.reqWaitingCustomOnlineWarInfos();
         }
+
         protected _onClosed(): void {
             this._zoomMap.removeAllContents();
-            this._listMap.clear();
+            this._listWar.clear();
+            this._listPlayer.clear();
             egret.Tween.removeTweens(this._groupInfo);
         }
 
         public async setSelectedIndex(newIndex: number): Promise<void> {
-            const datas = this._dataForList;
+            const datas = this._dataForListWar;
             if (datas.length <= 0) {
-                this._selectedIndex = undefined;
+                this._selectedWarIndex = undefined;
             } else if (datas[newIndex]) {
-                const oldIndex      = this._selectedIndex;
-                this._selectedIndex = newIndex;
-                (datas[oldIndex])       && (this._listMap.updateSingleData(oldIndex, datas[oldIndex]));
-                (oldIndex !== newIndex) && (this._listMap.updateSingleData(newIndex, datas[newIndex]));
+                const oldIndex      = this._selectedWarIndex;
+                this._selectedWarIndex = newIndex;
+                (datas[oldIndex])       && (this._listWar.updateSingleData(oldIndex, datas[oldIndex]));
+                (oldIndex !== newIndex) && (this._listWar.updateSingleData(newIndex, datas[newIndex]));
 
-                await this._showMap(datas[newIndex]);
+                await this._showMap(newIndex);
             }
         }
         public getSelectedIndex(): number {
-            return this._selectedIndex;
+            return this._selectedWarIndex;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -100,11 +102,12 @@ namespace CustomOnlineWarCreator {
             this._zoomMap.setZoomByScroll(StageManager.getMouseX(), StageManager.getMouseY(), e.data);
         }
 
-        private _onNotifySGetNewestMapInfos(e: egret.Event): void {
-            const newData = this._createDataForListMap();
+        private _onNotifyGetWaitingCustomOnlineWarInfos(e: egret.Event): void {
+            this._warInfos = ExitWarModel.getWarInfos();
+            const newData  = this._createDataForListWar();
             if (newData.length > 0) {
-                this._dataForList = newData;
-                this._listMap.bindData(newData);
+                this._dataForListWar = newData;
+                this._listWar.bindData(newData);
                 this.setSelectedIndex(Math.floor(Math.random() * newData.length));
             }
         }
@@ -146,33 +149,59 @@ namespace CustomOnlineWarCreator {
             this._previousTouchPoints[touchId] = { x: e.stageX, y: e.stageY };
         }
 
-        private _onTouchTapBtnSearch(e: egret.TouchEvent): void {
-            TemplateMap.SearchMapPanel.open();
-        }
-
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
-            ChooseMapPanel.close();
+            ExitWarListPanel.close();
             Lobby.LobbyPanel.open();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
-        private _createDataForListMap(): DataForMapNameRenderer[] {
-            const data: DataForMapNameRenderer[] = [];
-            const infos = TemplateMapModel.getNewestMapInfos();
-            if (infos.mapInfos) {
-                for (let i = 0; i < infos.mapInfos.length; ++i) {
-                    const info = infos.mapInfos[i];
+        private _createDataForListWar(): DataForWarRenderer[] {
+            const data: DataForWarRenderer[] = [];
+            const infos = this._warInfos;
+            if (infos) {
+                for (let i = 0; i < infos.length; ++i) {
+                    const info = infos[i];
                     data.push({
-                        mapName : info.mapName,
-                        designer: info.designer,
-                        version : info.version,
+                        warName : info.warName || info.mapName,
                         index   : i,
                         panel   : this,
                     });
                 }
             }
+
+            return data;
+        }
+
+        private _createDataForListPlayer(warInfo: ProtoTypes.IWaitingCustomOnlineWarInfo, mapInfo: ProtoTypes.IMapInfo): DataForPlayerRenderer[] {
+            const data: DataForPlayerRenderer[] = [
+                {
+                    playerIndex: 1,
+                    playerName : warInfo.p1UserNickname,
+                    teamIndex  : warInfo.p1TeamIndex,
+                },
+                {
+                    playerIndex: 2,
+                    playerName : warInfo.p2UserNickname,
+                    teamIndex  : warInfo.p2TeamIndex,
+                },
+            ];
+            if (mapInfo.playersCount >= 3) {
+                data.push({
+                    playerIndex: 3,
+                    playerName : warInfo.p3UserNickname,
+                    teamIndex  : warInfo.p3TeamIndex,
+                });
+            }
+            if (mapInfo.playersCount >= 4) {
+                data.push({
+                    playerIndex: 4,
+                    playerName : warInfo.p4UserNickname,
+                    teamIndex  : warInfo.p4TeamIndex,
+                });
+            }
+
             return data;
         }
 
@@ -201,14 +230,14 @@ namespace CustomOnlineWarCreator {
             return datas;
         }
 
-        private async _showMap(key: Types.MapIndexKey): Promise<void> {
-            const data    = await TemplateMapModel.getMapData(key);
-            const mapInfo = TemplateMapModel.getMapInfo(key);
+        private async _showMap(index: number): Promise<void> {
+            const warInfo = this._warInfos[index];
+            const data    = await TemplateMapModel.getMapData(warInfo as Types.MapIndexKey);
+            const mapInfo = TemplateMapModel.getMapInfo(warInfo as Types.MapIndexKey);
+
             this._labelMapName.text      = Lang.getFormatedText(Lang.FormatType.F000, mapInfo.mapName);
             this._labelDesigner.text     = Lang.getFormatedText(Lang.FormatType.F001, mapInfo.designer);
-            this._labelPlayersCount.text = Lang.getFormatedText(Lang.FormatType.F002, mapInfo.playersCount);
-            this._labelRating.text       = Lang.getFormatedText(Lang.FormatType.F003, mapInfo.rating != null ? mapInfo.rating.toFixed(2) : Lang.getText(Lang.BigType.B01, Lang.SubType.S01));
-            this._labelPlayedTimes.text  = Lang.getFormatedText(Lang.FormatType.F004, mapInfo.playedTimes);
+            this._listPlayer.bindData(this._createDataForListPlayer(warInfo, mapInfo));
             this._groupInfo.visible      = true;
             this._groupInfo.alpha        = 1;
             egret.Tween.removeTweens(this._groupInfo);
@@ -232,15 +261,13 @@ namespace CustomOnlineWarCreator {
         }
     }
 
-    type DataForMapNameRenderer = {
-        mapName : string;
-        designer: string;
-        version : number;
+    type DataForWarRenderer = {
+        warName : string;
         index   : number;
-        panel   : ChooseMapPanel;
+        panel   : ExitWarListPanel;
     }
 
-    class MapNameRenderer extends eui.ItemRenderer {
+    class WarRenderer extends eui.ItemRenderer {
         private _btnChoose: GameUi.UiButton;
         private _btnNext  : GameUi.UiButton;
         private _labelName: GameUi.UiLabel;
@@ -255,22 +282,39 @@ namespace CustomOnlineWarCreator {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data = this.data as DataForMapNameRenderer;
+            const data = this.data as DataForWarRenderer;
             this.currentState    = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
-            this._labelName.text = data.mapName;
+            this._labelName.text = data.warName;
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
-            const data = this.data as DataForMapNameRenderer;
+            const data = this.data as DataForWarRenderer;
             data.panel.setSelectedIndex(data.index);
         }
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
-            ChooseMapPanel.close();
+            // TODO
+        }
+    }
 
-            CreateWarModel.setMapIndexKey(this.data as DataForMapNameRenderer);
-            CreateWarModel.resetSettings();
-            CreateWarPanel.open();
+    type DataForPlayerRenderer = {
+        playerIndex: number;
+        playerName : string;
+        teamIndex  : number;
+    }
+
+    class PlayerRenderer extends eui.ItemRenderer {
+        private _labelName : GameUi.UiLabel;
+        private _labelIndex: GameUi.UiLabel;
+        private _labelTeam : GameUi.UiLabel;
+
+        protected dataChanged(): void {
+            super.dataChanged();
+
+            const data = this.data as DataForPlayerRenderer;
+            this._labelIndex.text = Helpers.getColorText(data.playerIndex);
+            this._labelName.text  = data.playerName || "????";
+            this._labelTeam.text  = data.teamIndex != null ? Helpers.getTeamText(data.teamIndex) : "??";
         }
     }
 }

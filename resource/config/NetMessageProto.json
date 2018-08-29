@@ -68,6 +68,122 @@
         }
       }
     },
+    "WaitingCustomOnlineWarInfo": {
+      "fields": {
+        "id": {
+          "type": "uint32",
+          "id": 0
+        },
+        "mapName": {
+          "type": "string",
+          "id": 1
+        },
+        "designer": {
+          "type": "string",
+          "id": 2
+        },
+        "version": {
+          "type": "uint32",
+          "id": 3
+        },
+        "warName": {
+          "type": "string",
+          "id": 4
+        },
+        "warPassword": {
+          "type": "string",
+          "id": 5
+        },
+        "warComment": {
+          "type": "string",
+          "id": 6
+        },
+        "p1UserId": {
+          "type": "uint32",
+          "id": 7
+        },
+        "p1UserNickname": {
+          "type": "string",
+          "id": 8
+        },
+        "p1TeamIndex": {
+          "type": "uint32",
+          "id": 9
+        },
+        "p2UserId": {
+          "type": "uint32",
+          "id": 10
+        },
+        "p2UserNickname": {
+          "type": "string",
+          "id": 11
+        },
+        "p2TeamIndex": {
+          "type": "uint32",
+          "id": 12
+        },
+        "p3UserId": {
+          "type": "uint32",
+          "id": 13
+        },
+        "p3UserNickname": {
+          "type": "string",
+          "id": 14
+        },
+        "p3TeamIndex": {
+          "type": "uint32",
+          "id": 15
+        },
+        "p4UserId": {
+          "type": "uint32",
+          "id": 16
+        },
+        "p4UserNickname": {
+          "type": "string",
+          "id": 17
+        },
+        "p4TeamIndex": {
+          "type": "uint32",
+          "id": 18
+        },
+        "hasFog": {
+          "type": "uint32",
+          "id": 19
+        },
+        "timeLimit": {
+          "type": "uint32",
+          "id": 20
+        },
+        "initialFund": {
+          "type": "uint32",
+          "id": 21
+        },
+        "incomeModifier": {
+          "type": "uint32",
+          "id": 22
+        },
+        "initialEnergy": {
+          "type": "uint32",
+          "id": 23
+        },
+        "energyGrowthModifier": {
+          "type": "uint32",
+          "id": 24
+        },
+        "moveRangeModifier": {
+          "type": "int32",
+          "id": 25
+        },
+        "attackPowerModifier": {
+          "type": "int32",
+          "id": 26
+        },
+        "visionRangeModifier": {
+          "type": "int32",
+          "id": 27
+        }
+      }
+    },
     "Container": {
       "fields": {
         "actionCode": {
@@ -125,6 +241,22 @@
         "S_CreateCustomOnlineWar": {
           "type": "S_CreateCustomOnlineWar",
           "id": 14
+        },
+        "C_ExitCustomOnlineWar": {
+          "type": "C_ExitCustomOnlineWar",
+          "id": 15
+        },
+        "S_ExitCustomOnlineWar": {
+          "type": "S_ExitCustomOnlineWar",
+          "id": 16
+        },
+        "C_GetWaitingCustomOnlineWarInfos": {
+          "type": "C_GetWaitingCustomOnlineWarInfos",
+          "id": 17
+        },
+        "S_GetWaitingCustomOnlineWarInfos": {
+          "type": "S_GetWaitingCustomOnlineWarInfos",
+          "id": 18
         }
       }
     },
@@ -364,7 +496,7 @@
           "id": 8
         },
         "hasFog": {
-          "type": "bool",
+          "type": "uint32",
           "id": 9
         },
         "timeLimit": {
@@ -410,6 +542,60 @@
         "errorCode": {
           "type": "uint32",
           "id": 1
+        }
+      }
+    },
+    "C_ExitCustomOnlineWar": {
+      "fields": {
+        "actionCode": {
+          "type": "uint32",
+          "id": 0
+        },
+        "warId": {
+          "type": "uint32",
+          "id": 1
+        }
+      }
+    },
+    "S_ExitCustomOnlineWar": {
+      "fields": {
+        "actionCode": {
+          "type": "uint32",
+          "id": 0
+        },
+        "errorCode": {
+          "type": "uint32",
+          "id": 1
+        }
+      }
+    },
+    "C_GetWaitingCustomOnlineWarInfos": {
+      "fields": {
+        "actionCode": {
+          "type": "uint32",
+          "id": 0
+        }
+      }
+    },
+    "S_GetWaitingCustomOnlineWarInfos": {
+      "fields": {
+        "actionCode": {
+          "type": "uint32",
+          "id": 0
+        },
+        "errorCode": {
+          "type": "uint32",
+          "id": 1
+        },
+        "warInfos": {
+          "rule": "repeated",
+          "type": "WaitingCustomOnlineWarInfo",
+          "id": 2
+        },
+        "mapInfos": {
+          "rule": "repeated",
+          "type": "MapInfo",
+          "id": 3
         }
       }
     }

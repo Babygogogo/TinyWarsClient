@@ -15,5 +15,9 @@ namespace Network {
         S_GetNewestMapInfos = 12,
         C_CreateCustomOnlineWar = 13,
         S_CreateCustomOnlineWar = 14,
+        C_ExitCustomOnlineWar = 15,
+        S_ExitCustomOnlineWar = 16,
+        C_GetWaitingCustomOnlineWarInfos = 17,
+        S_GetWaitingCustomOnlineWarInfos = 18,
     }
 }

@@ -81,6 +81,13 @@ namespace Lobby {
                         CustomOnlineWarCreator.ChooseMapPanel.open();
                     },
                 },
+                {
+                    name    : Lang.getText(Lang.BigType.B01, Lang.SubType.S22),
+                    callback: (): void => {
+                        LobbyPanel.close();
+                        CustomOnlineWarExiter.ExitWarListPanel.open();
+                    },
+                },
             ];
         }
     }

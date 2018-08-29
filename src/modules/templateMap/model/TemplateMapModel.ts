@@ -11,8 +11,8 @@ namespace TemplateMap {
         export function init(): void {
         }
 
-        export async function getMapData(keys: Types.MapIndexKeys): Promise<Types.TemplateMap | undefined> {
-            return new Promise<any>((resolve, reject) => {
+        export async function getMapData(keys: Types.MapIndexKey): Promise<Types.TemplateMap | undefined> {
+            return new Promise<Types.TemplateMap | undefined>((resolve, reject) => {
                 const url = Helpers.formatString("resource/assets/map/%s_%s_%s%d.json", keys.mapName, keys.designer, keys.version < 10 ? "0" : "", keys.version);
                 RES.getResByUrl(
                     url,
@@ -29,17 +29,18 @@ namespace TemplateMap {
 
         export function setNewestMapInfos(infos: ProtoTypes.IS_GetNewestMapInfos): void {
             newestMapInfos = infos;
-            if (infos.mapInfos) {
-                for (const info of infos.mapInfos) {
-                    allMapInfos[Helpers.getMapFileName(info as Types.MapIndexKeys)] = info;
-                }
-            }
+            (infos.mapInfos) && (addMapInfos(infos.mapInfos));
         }
         export function getNewestMapInfos(): ProtoTypes.IS_GetNewestMapInfos {
             return newestMapInfos;
         }
 
-        export function getMapInfo(keys: Types.MapIndexKeys): ProtoTypes.IMapInfo | undefined {
+        export function addMapInfos(infos: ProtoTypes.IMapInfo[]): void {
+            for (const info of infos) {
+                allMapInfos[Helpers.getMapFileName(info as Types.MapIndexKey)] = info;
+            }
+        }
+        export function getMapInfo(keys: Types.MapIndexKey): ProtoTypes.IMapInfo | undefined {
             return allMapInfos[Helpers.getMapFileName(keys)];
         }
     }

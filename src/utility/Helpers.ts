@@ -136,7 +136,7 @@ namespace Utility {
             }
         }
 
-        export function getMapFileName(k: Types.MapIndexKeys): string {
+        export function getMapFileName(k: Types.MapIndexKey): string {
             return `${k.mapName}_${k.designer}_${k.version < 10 ? "0" : ""}${k.version}`;
         }
 

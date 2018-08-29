@@ -15,5 +15,7 @@ namespace Network {
 
         CreateCustomOnlineWar_TooManyJoinedWars,
         CreateCustomOnlineWar_InvalidParams,
+
+        ExitCustomOnlineWar_InvalidParams,
     }
 }

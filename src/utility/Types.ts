@@ -31,7 +31,7 @@ namespace Utility {
             [moveType: number]: number | undefined;
         }
 
-        export type MapIndexKeys = {
+        export type MapIndexKey = {
             designer    : string;
             mapName     : string;
             version     : number;
