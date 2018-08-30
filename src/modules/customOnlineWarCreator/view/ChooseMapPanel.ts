@@ -33,13 +33,13 @@ namespace CustomOnlineWarCreator {
         private _dataForList        : DataForMapNameRenderer[] = [];
         private _selectedIndex      : number;
 
-        public static open(): void {
+        public static show(): void {
             if (!ChooseMapPanel._instance) {
                 ChooseMapPanel._instance = new ChooseMapPanel();
             }
             ChooseMapPanel._instance.open();
         }
-        public static close(): void {
+        public static hide(): void {
             if (ChooseMapPanel._instance) {
                 ChooseMapPanel._instance.close();
             }
@@ -147,12 +147,12 @@ namespace CustomOnlineWarCreator {
         }
 
         private _onTouchTapBtnSearch(e: egret.TouchEvent): void {
-            TemplateMap.SearchMapPanel.open();
+            TemplateMap.SearchMapPanel.show();
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
-            ChooseMapPanel.close();
-            Lobby.LobbyPanel.open();
+            ChooseMapPanel.hide();
+            Lobby.LobbyPanel.show();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -266,11 +266,11 @@ namespace CustomOnlineWarCreator {
         }
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
-            ChooseMapPanel.close();
+            ChooseMapPanel.hide();
 
             CreateWarModel.setMapIndexKey(this.data as DataForMapNameRenderer);
             CreateWarModel.resetSettings();
-            CreateWarPanel.open();
+            CreateWarPanel.show();
         }
     }
 }

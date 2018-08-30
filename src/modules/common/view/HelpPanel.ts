@@ -16,7 +16,7 @@ namespace Common {
 
         private _openData: OpenDataForHelpPanel;
 
-        public static open(data: OpenDataForHelpPanel): void {
+        public static show(data: OpenDataForHelpPanel): void {
             if (!HelpPanel._instance) {
                 HelpPanel._instance = new HelpPanel();
             }
@@ -24,7 +24,7 @@ namespace Common {
             HelpPanel._instance.open();
         }
 
-        public static close(): void {
+        public static hide(): void {
             if (HelpPanel._instance) {
                 HelpPanel._instance.close();
             }
@@ -36,7 +36,7 @@ namespace Common {
             this.skinName = "resource/skins/common/HelpPanel.exml";
             this._setAutoAdjustHeightEnabled();
             this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => HelpPanel.close();
+            this._callbackForTouchMask = () => HelpPanel.hide();
         }
 
         protected _onOpened(): void {

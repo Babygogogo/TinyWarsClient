@@ -16,14 +16,14 @@ namespace Login {
 
         private static _instance: LoginPanel;
 
-        public static open(): void {
+        public static show(): void {
             if (!LoginPanel._instance) {
                 LoginPanel._instance = new LoginPanel();
             }
             LoginPanel._instance.open();
         }
 
-        public static close(): void {
+        public static hide(): void {
             if (LoginPanel._instance) {
                 LoginPanel._instance.close();
             }
@@ -74,8 +74,8 @@ namespace Login {
         }
 
         private _onTouchedBtnRegister(e: egret.TouchEvent): void {
-            RegisterPanel.open();
-            LoginPanel.close();
+            RegisterPanel.show();
+            LoginPanel.hide();
         }
     }
 }

@@ -15,14 +15,14 @@ namespace Lobby {
 
         private _listCommand: GameUi.UiScrollList;
 
-        public static open(): void {
+        public static show(): void {
             if (!LobbyPanel._instance) {
                 LobbyPanel._instance = new LobbyPanel();
             }
             LobbyPanel._instance.open();
         }
 
-        public static close(): void {
+        public static hide(): void {
             if (LobbyPanel._instance) {
                 LobbyPanel._instance.close();
             }
@@ -65,7 +65,7 @@ namespace Lobby {
         }
 
         private _onNotifySLogout(e: egret.Event): void {
-            LobbyPanel.close();
+            LobbyPanel.hide();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -76,16 +76,16 @@ namespace Lobby {
                 {
                     name    : Lang.getText(Lang.BigType.B01, Lang.SubType.S00),
                     callback: (): void => {
-                        LobbyPanel.close();
+                        LobbyPanel.hide();
                         TemplateMap.TemplateMapProxy.reqGetNewestMapInfos();
-                        CustomOnlineWarCreator.ChooseMapPanel.open();
+                        CustomOnlineWarCreator.ChooseMapPanel.show();
                     },
                 },
                 {
                     name    : Lang.getText(Lang.BigType.B01, Lang.SubType.S22),
                     callback: (): void => {
-                        LobbyPanel.close();
-                        CustomOnlineWarExiter.ExitWarListPanel.open();
+                        LobbyPanel.hide();
+                        CustomOnlineWarExiter.ExitWarListPanel.show();
                     },
                 },
             ];

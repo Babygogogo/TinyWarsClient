@@ -54,13 +54,13 @@ namespace Utility {
 
         export function gotoLogin(): void {
             _closeAllPanels();
-            Login.LoginBackgroundPanel.open();
-            Login.LoginPanel.open();
+            Login.LoginBackgroundPanel.show();
+            Login.LoginPanel.show();
         }
         export function gotoLobby(): void {
             _closeAllPanels();
-            Lobby.LobbyPanel.open();
-            Lobby.LobbyTopPanel.open();
+            Lobby.LobbyPanel.show();
+            Lobby.LobbyTopPanel.show();
         }
 
         function _closeAllPanels(): void {

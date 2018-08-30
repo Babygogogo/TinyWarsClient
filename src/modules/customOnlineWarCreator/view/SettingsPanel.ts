@@ -20,13 +20,13 @@ namespace CustomOnlineWarCreator {
         private _dataForTab            : GameUi.DataForUiTab[];
         private _timeoutIdForBtnConfirm: number;
 
-        public static open(): void {
+        public static show(): void {
             if (!CreateWarPanel._instance) {
                 CreateWarPanel._instance = new CreateWarPanel();
             }
             CreateWarPanel._instance.open();
         }
-        public static close(): void {
+        public static hide(): void {
             if (CreateWarPanel._instance) {
                 CreateWarPanel._instance.close();
             }
@@ -71,8 +71,8 @@ namespace CustomOnlineWarCreator {
         }
 
         private _onTouchedBtnBack(e: egret.TouchEvent): void {
-            CreateWarPanel.close();
-            ChooseMapPanel.open();
+            CreateWarPanel.hide();
+            ChooseMapPanel.show();
         }
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {

@@ -89,6 +89,10 @@ namespace Utility {
                     "已成功创建战局，请等待其他玩家加入",
                     "The war is created successfully.",
                 ],
+                [ // 00-16
+                    "已成功退出房间",
+                    "Quit successfully.",
+                ],
             ],
             [
                 [ // 01-00

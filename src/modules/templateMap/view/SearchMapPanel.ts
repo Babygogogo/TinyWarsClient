@@ -21,13 +21,13 @@ namespace TemplateMap {
         private _inputPlayedTimes : GameUi.UiTextInput;
         private _inputMinRating   : GameUi.UiTextInput;
 
-        public static open(): void {
+        public static show(): void {
             if (!SearchMapPanel._instance) {
                 SearchMapPanel._instance = new SearchMapPanel();
             }
             SearchMapPanel._instance.open();
         }
-        public static close(): void {
+        public static hide(): void {
             if (SearchMapPanel._instance) {
                 SearchMapPanel._instance.close();
             }
@@ -58,12 +58,12 @@ namespace TemplateMap {
         }
 
         private _onTouchedBtnClose(e: egret.TouchEvent): void {
-            SearchMapPanel.close();
+            SearchMapPanel.hide();
         }
 
         private _onTouchedBtnReset(e: egret.TouchEvent): void {
             TemplateMapProxy.reqGetNewestMapInfos();
-            SearchMapPanel.close();
+            SearchMapPanel.hide();
         }
 
         private _onTouchedBtnSearch(e: egret.TouchEvent): void {
@@ -95,7 +95,7 @@ namespace TemplateMap {
                 FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S10));
             } else {
                 FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S12));
-                SearchMapPanel.close();
+                SearchMapPanel.hide();
             }
         }
     }

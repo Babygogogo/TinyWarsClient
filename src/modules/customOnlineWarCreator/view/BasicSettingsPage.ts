@@ -104,7 +104,7 @@ namespace CustomOnlineWarCreator {
         }
 
         private _onTouchedBtnHelpPlayerIndex(e: egret.TouchEvent): void {
-            HelpPanel.open({
+            HelpPanel.show({
                 title  : Lang.getText(Lang.BigType.B01, Lang.SubType.S18),
                 content: Lang.getRichText(Lang.RichType.R000),
             });
@@ -121,7 +121,7 @@ namespace CustomOnlineWarCreator {
         }
 
         private _onTouchedBtnHelpTeam(e: egret.TouchEvent): void {
-            HelpPanel.open({
+            HelpPanel.show({
                 title  : Lang.getText(Lang.BigType.B01, Lang.SubType.S19),
                 content: Lang.getRichText(Lang.RichType.R001),
             });
@@ -138,7 +138,7 @@ namespace CustomOnlineWarCreator {
         }
 
         private _onTouchedBtnHelpFog(e: egret.TouchEvent): void {
-            HelpPanel.open({
+            HelpPanel.show({
                 title  : Lang.getText(Lang.BigType.B01, Lang.SubType.S20),
                 content: Lang.getRichText(Lang.RichType.R002),
             });
@@ -155,7 +155,7 @@ namespace CustomOnlineWarCreator {
         }
 
         private _onTouchedBtnHelpTimeLimit(e: egret.TouchEvent): void {
-            HelpPanel.open({
+            HelpPanel.show({
                 title  : Lang.getText(Lang.BigType.B01, Lang.SubType.S21),
                 content: Lang.getRichText(Lang.RichType.R003),
             });

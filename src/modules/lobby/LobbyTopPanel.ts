@@ -6,14 +6,14 @@ namespace Lobby {
 
         private static _instance: LobbyTopPanel;
 
-        public static open(): void {
+        public static show(): void {
             if (!LobbyTopPanel._instance) {
                 LobbyTopPanel._instance = new LobbyTopPanel();
             }
             LobbyTopPanel._instance.open();
         }
 
-        public static close(): void {
+        public static hide(): void {
             if (LobbyTopPanel._instance) {
                 LobbyTopPanel._instance.close();
             }
@@ -32,7 +32,7 @@ namespace Lobby {
         }
 
         private _onNotifySLogout(e: egret.Event): void {
-            LobbyTopPanel.close();
+            LobbyTopPanel.hide();
         }
     }
 }

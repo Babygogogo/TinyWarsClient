@@ -16,14 +16,14 @@ namespace Login {
 
         private static _instance: RegisterPanel;
 
-        public static open(): void {
+        public static show(): void {
             if (!RegisterPanel._instance) {
                 RegisterPanel._instance = new RegisterPanel();
             }
             RegisterPanel._instance.open();
         }
 
-        public static close(): void {
+        public static hide(): void {
             if (RegisterPanel._instance) {
                 RegisterPanel._instance.close();
             }

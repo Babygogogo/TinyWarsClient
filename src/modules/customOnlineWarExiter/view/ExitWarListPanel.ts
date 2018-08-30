@@ -32,13 +32,13 @@ namespace CustomOnlineWarExiter {
         private _dataForListPlayer  : DataForPlayerRenderer[] = [];
         private _selectedWarIndex   : number;
 
-        public static open(): void {
+        public static show(): void {
             if (!ExitWarListPanel._instance) {
                 ExitWarListPanel._instance = new ExitWarListPanel();
             }
             ExitWarListPanel._instance.open();
         }
-        public static close(): void {
+        public static hide(): void {
             if (ExitWarListPanel._instance) {
                 ExitWarListPanel._instance.close();
             }
@@ -150,8 +150,8 @@ namespace CustomOnlineWarExiter {
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
-            ExitWarListPanel.close();
-            Lobby.LobbyPanel.open();
+            ExitWarListPanel.hide();
+            Lobby.LobbyPanel.show();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -162,9 +162,8 @@ namespace CustomOnlineWarExiter {
             const infos = this._warInfos;
             if (infos) {
                 for (let i = 0; i < infos.length; ++i) {
-                    const info = infos[i];
                     data.push({
-                        warName : info.warName || info.mapName,
+                        warInfo : infos[i],
                         index   : i,
                         panel   : this,
                     });
@@ -262,7 +261,7 @@ namespace CustomOnlineWarExiter {
     }
 
     type DataForWarRenderer = {
-        warName : string;
+        warInfo : ProtoTypes.IWaitingCustomOnlineWarInfo;
         index   : number;
         panel   : ExitWarListPanel;
     }
@@ -284,7 +283,7 @@ namespace CustomOnlineWarExiter {
 
             const data = this.data as DataForWarRenderer;
             this.currentState    = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
-            this._labelName.text = data.warName;
+            this._labelName.text = data.warInfo.warName || data.warInfo.mapName;
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
@@ -293,7 +292,8 @@ namespace CustomOnlineWarExiter {
         }
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
-            // TODO
+            const data = this.data as DataForWarRenderer;
+            ExitWarDetailPanel.show(data.warInfo);
         }
     }
 

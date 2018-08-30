@@ -6,14 +6,14 @@ namespace Login {
 
         private static _instance: LoginBackgroundPanel;
 
-        public static open(): void {
+        public static show(): void {
             if (!LoginBackgroundPanel._instance) {
                 LoginBackgroundPanel._instance = new LoginBackgroundPanel();
             }
             LoginBackgroundPanel._instance.open();
         }
 
-        public static close(): void {
+        public static hide(): void {
             if (LoginBackgroundPanel._instance) {
                 LoginBackgroundPanel._instance.close();
             }
