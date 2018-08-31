@@ -3,6 +3,8 @@ namespace Network {
     export const enum NetErrorCode {
         NoError = 0,
 
+        IllegalRequest,
+
         Login_InvalidAccountOrPassword,
         Login_AlreadyLoggedIn,
 
@@ -16,6 +18,7 @@ namespace Network {
         CreateCustomOnlineWar_TooManyJoinedWars,
         CreateCustomOnlineWar_InvalidParams,
 
-        ExitCustomOnlineWar_InvalidParams,
+        ExitCustomOnlineWar_WarInfoNotExist,
+        ExitCustomOnlineWar_NotJoined,
     }
 }

@@ -28,6 +28,8 @@
         <GameUi:UiImage source="c04_t01_s01_f01_png" scale9Grid="4,6,1,1" anchorOffsetX="0" anchorOffsetY="0"
                         alpha="0.8" left="0" right="0" top="0" bottom="0" />
         <GameUi:UiLabel text="退出房间" y="14" textColor="0x000000" bold="true" size="26" x="47" />
+        <GameUi:UiLabel id="_labelNoWar" text="暂无房间" textColor="0x000000" bold="true" size="26" x="47"
+                        verticalCenter="0" />
         <GameUi:UiScrollList id="_listWar" left="0" right="0" bottom="50" top="50">
             <e:List>
                 <e:itemRendererSkinName>

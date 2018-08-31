@@ -62,9 +62,6 @@ namespace CustomOnlineWarExiter {
                 { ui: this._btnCancel,        callback: this._onTouchedBtnCancel },
                 { ui: this._btnConfirm,       callback: this._onTouchedBtnConfirm },
             ];
-            this._notifyListeners = [
-                { name: Notify.Type.SExitCustomOnlineWar, callback: this._onNotifySExitCustomOnlineWar },
-            ];
 
             this._listPlayer.setItemRenderer(PlayerRenderer);
         }
@@ -98,10 +95,6 @@ namespace CustomOnlineWarExiter {
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
             ExitWarProxy.reqExitCustomOnlineWar(this._openData.id);
             ExitWarDetailPanel.hide();
-        }
-
-        private _onNotifySExitCustomOnlineWar(e: egret.Event): void {
-            FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S16));
         }
 
         private _updateView(): void {

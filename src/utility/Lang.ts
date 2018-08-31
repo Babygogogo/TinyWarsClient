@@ -214,6 +214,10 @@ namespace Utility {
         ];
 
         const NET_ERROR_TEXT: {[code: number]: string[]} = {
+            [ErrCode.IllegalRequest]: [
+                "非法请求",
+                "Illegal request.",
+            ],
             [ErrCode.Login_AlreadyLoggedIn]: [
                 "您已处于登陆状态，不可再次登陆",
                 "You have logged in already.",
@@ -253,6 +257,14 @@ namespace Utility {
             [ErrCode.CreateCustomOnlineWar_InvalidParams]: [
                 "部分设定不符合规则，请检查后重试",
                 "Invalid settings.",
+            ],
+            [ErrCode.ExitCustomOnlineWar_NotJoined]: [
+                "您并未参加该战局",
+                "You haven't joined the game.",
+            ],
+            [ErrCode.ExitCustomOnlineWar_WarInfoNotExist]: [
+                "战局不存在",
+                "The game doesn't exist.",
             ],
         };
 

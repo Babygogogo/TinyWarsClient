@@ -17,6 +17,7 @@ namespace CustomOnlineWarExiter {
         private static _instance: ExitWarListPanel;
 
         private _listWar   : GameUi.UiScrollList;
+        private _labelNoWar: GameUi.UiLabel;
         private _zoomMap   : GameUi.UiZoomableComponent;
         private _btnBack   : GameUi.UiButton;
 
@@ -27,7 +28,6 @@ namespace CustomOnlineWarExiter {
 
         private _currentTouchPoints : Types.TouchPoints = {};
         private _previousTouchPoints: Types.TouchPoints = {};
-        private _warInfos           : ProtoTypes.IWaitingCustomOnlineWarInfo[] = [];
         private _dataForListWar     : DataForWarRenderer[] = [];
         private _dataForListPlayer  : DataForPlayerRenderer[] = [];
         private _selectedWarIndex   : number;
@@ -54,7 +54,8 @@ namespace CustomOnlineWarExiter {
         protected _onFirstOpened(): void {
             this._notifyListeners = [
                 { name: Notify.Type.MouseWheel,                      callback: this._onNotifyMouseWheel },
-                { name: Notify.Type.SGetWaitingCustomOnlineWarInfos, callback: this._onNotifyGetWaitingCustomOnlineWarInfos },
+                { name: Notify.Type.SGetWaitingCustomOnlineWarInfos, callback: this._onNotifySGetWaitingCustomOnlineWarInfos },
+                { name: Notify.Type.SExitCustomOnlineWar,            callback: this._onNotifySExitCustomOnlineWar },
             ];
             this._uiListeners = [
                 { ui: this._zoomMap,   callback: this._onTouchBeginZoomMap, eventType: egret.TouchEvent.TOUCH_BEGIN },
@@ -79,16 +80,20 @@ namespace CustomOnlineWarExiter {
         }
 
         public async setSelectedIndex(newIndex: number): Promise<void> {
-            const datas = this._dataForListWar;
-            if (datas.length <= 0) {
-                this._selectedWarIndex = undefined;
-            } else if (datas[newIndex]) {
-                const oldIndex      = this._selectedWarIndex;
-                this._selectedWarIndex = newIndex;
-                (datas[oldIndex])       && (this._listWar.updateSingleData(oldIndex, datas[oldIndex]));
-                (oldIndex !== newIndex) && (this._listWar.updateSingleData(newIndex, datas[newIndex]));
+            const oldIndex         = this._selectedWarIndex;
+            const datas            = this._dataForListWar;
+            this._selectedWarIndex = datas[newIndex] ? newIndex : undefined;
 
+            if (datas[oldIndex]) {
+                this._listWar.updateSingleData(oldIndex, datas[oldIndex])
+            };
+
+            if (datas[newIndex]) {
+                this._listWar.updateSingleData(newIndex, datas[newIndex]);
                 await this._showMap(newIndex);
+            } else {
+                this._zoomMap.removeAllContents();
+                this._groupInfo.visible = false;
             }
         }
         public getSelectedIndex(): number {
@@ -102,14 +107,22 @@ namespace CustomOnlineWarExiter {
             this._zoomMap.setZoomByScroll(StageManager.getMouseX(), StageManager.getMouseY(), e.data);
         }
 
-        private _onNotifyGetWaitingCustomOnlineWarInfos(e: egret.Event): void {
-            this._warInfos = ExitWarModel.getWarInfos();
-            const newData  = this._createDataForListWar();
+        private _onNotifySGetWaitingCustomOnlineWarInfos(e: egret.Event): void {
+            const newData        = this._createDataForListWar(ExitWarModel.getWarInfos());
+            this._dataForListWar = newData;
+
             if (newData.length > 0) {
-                this._dataForListWar = newData;
+                this._labelNoWar.visible = false;
                 this._listWar.bindData(newData);
-                this.setSelectedIndex(Math.floor(Math.random() * newData.length));
+            } else {
+                this._labelNoWar.visible = true;
+                this._listWar.clear();
             }
+            this.setSelectedIndex(0);
+        }
+
+        private _onNotifySExitCustomOnlineWar(e: egret.Event): void {
+            FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S16));
         }
 
         private _onTouchBeginZoomMap(e: egret.TouchEvent): void {
@@ -157,9 +170,8 @@ namespace CustomOnlineWarExiter {
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
-        private _createDataForListWar(): DataForWarRenderer[] {
+        private _createDataForListWar(infos: ProtoTypes.IWaitingCustomOnlineWarInfo[]): DataForWarRenderer[] {
             const data: DataForWarRenderer[] = [];
-            const infos = this._warInfos;
             if (infos) {
                 for (let i = 0; i < infos.length; ++i) {
                     data.push({
@@ -230,7 +242,7 @@ namespace CustomOnlineWarExiter {
         }
 
         private async _showMap(index: number): Promise<void> {
-            const warInfo = this._warInfos[index];
+            const warInfo = this._dataForListWar[index].warInfo;
             const data    = await TemplateMapModel.getMapData(warInfo as Types.MapIndexKey);
             const mapInfo = TemplateMapModel.getMapInfo(warInfo as Types.MapIndexKey);
 
