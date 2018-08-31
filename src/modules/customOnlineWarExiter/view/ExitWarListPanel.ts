@@ -24,6 +24,8 @@ namespace CustomOnlineWarExiter {
         private _groupInfo      : eui.Group;
         private _labelMapName   : GameUi.UiLabel;
         private _labelDesigner  : GameUi.UiLabel;
+        private _labelHasFog    : GameUi.UiLabel;
+        private _labelWarComment: GameUi.UiLabel;
         private _listPlayer     : GameUi.UiScrollList;
 
         private _currentTouchPoints : Types.TouchPoints = {};
@@ -246,13 +248,16 @@ namespace CustomOnlineWarExiter {
             const data    = await TemplateMapModel.getMapData(warInfo as Types.MapIndexKey);
             const mapInfo = TemplateMapModel.getMapInfo(warInfo as Types.MapIndexKey);
 
-            this._labelMapName.text      = Lang.getFormatedText(Lang.FormatType.F000, mapInfo.mapName);
-            this._labelDesigner.text     = Lang.getFormatedText(Lang.FormatType.F001, mapInfo.designer);
+            this._labelMapName.text    = Lang.getFormatedText(Lang.FormatType.F000, mapInfo.mapName);
+            this._labelDesigner.text   = Lang.getFormatedText(Lang.FormatType.F001, mapInfo.designer);
+            this._labelHasFog.text     = Lang.getFormatedText(Lang.FormatType.F005, Lang.getText(Lang.BigType.B01, warInfo.hasFog ? Lang.SubType.S12 : Lang.SubType.S13));
+            this._labelWarComment.text = warInfo.warComment || "----";
             this._listPlayer.bindData(this._createDataForListPlayer(warInfo, mapInfo));
+
             this._groupInfo.visible      = true;
             this._groupInfo.alpha        = 1;
             egret.Tween.removeTweens(this._groupInfo);
-            egret.Tween.get(this._groupInfo).wait(5000).to({alpha: 0}, 1000).call(() => {this._groupInfo.visible = false; this._groupInfo.alpha = 1});
+            egret.Tween.get(this._groupInfo).wait(8000).to({alpha: 0}, 1000).call(() => {this._groupInfo.visible = false; this._groupInfo.alpha = 1});
 
             const tileMapView = new OnlineWar.TileMapView();
             tileMapView.init(data.mapWidth, data.mapHeight);

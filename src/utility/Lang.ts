@@ -17,7 +17,7 @@ namespace Utility {
             S20, S21, S22,
         }
         export const enum FormatType {
-            F000, F001, F002, F003, F004,
+            F000, F001, F002, F003, F004, F005,
         }
         export const enum RichType {
             R000, R001, R002, R003,
@@ -210,6 +210,10 @@ namespace Utility {
             [ // 004
                 "全服游玩次数: %s",
                 "Games played: %s",
+            ],
+            [ // 005
+                "战争迷雾: %s",
+                "Fog: %s",
             ],
         ];
 

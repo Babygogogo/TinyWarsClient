@@ -6,11 +6,16 @@
         <GameUi:UiImage source="c04_t01_s01_f01_png" scale9Grid="4,6,1,1" anchorOffsetX="0" anchorOffsetY="0"
                         alpha="0.8" left="0" right="0" top="0" bottom="0" />
         <GameUi:UiZoomableComponent id="_zoomMap" left="4" right="5" top="6" bottom="7" />
-        <e:Group id="_groupInfo" x="8" y="10" touchThrough="true" touchEnabled="false" touchChildren="false" width="280">
+        <e:Group id="_groupInfo" y="10" touchThrough="true" touchEnabled="false" touchChildren="false" left="8"
+                 right="8">
             <GameUi:UiLabel id="_labelMapName" text="地图名: 未知" y="0" stroke="2" size="20" scaleX="1" scaleY="1" />
             <GameUi:UiLabel id="_labelDesigner" text="作者: 未知" y="25" stroke="2" size="20" scaleX="1" scaleY="1" />
-            <GameUi:UiLabel text="已参战玩家:" y="60" stroke="2" size="20" scaleX="1" scaleY="1" />
-            <GameUi:UiScrollList id="_listPlayer" left="0" right="0" height="120" y="85">
+            <GameUi:UiLabel id="_labelHasFog" text="战争迷雾: 否" y="60" stroke="2" size="20" scaleX="1" scaleY="1" />
+            <GameUi:UiLabel text="附言:" stroke="2" size="20" scaleX="1" scaleY="1" x="0" y="95" />
+            <GameUi:UiLabel id="_labelWarComment" text="ASDF" stroke="2" size="20" scaleX="1" scaleY="1" width="320"
+                            x="0" height="120" y="120" />
+            <GameUi:UiLabel text="已参战玩家:" stroke="2" size="20" scaleX="1" scaleY="1" x="340" />
+            <GameUi:UiScrollList id="_listPlayer" height="140" y="25" width="280" x="340">
                 <e:List>
                     <e:itemRendererSkinName>
                         <e:Skin width="280" height="26" currentState="up" states="up,down">
@@ -34,8 +39,7 @@
             <e:List>
                 <e:itemRendererSkinName>
                     <e:Skin width="200" height="40" currentState="up" states="up,down">
-                        <GameUi:UiButton id="_btnChoose" label="" left="0" right="0" top="0" bottom="0"
-                                         visible.down="false">
+                        <GameUi:UiButton id="_btnChoose" label="" left="0" right="0" top="0" bottom="0">
                             <GameUi:skinName>
                                 <e:Skin states="up,down,disabled">
                                     <e:Image source="transparent_png" left="0" right="0" top="0" bottom="0" />
