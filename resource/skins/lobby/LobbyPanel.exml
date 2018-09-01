@@ -3,19 +3,19 @@
         xmlns:w="http://ns.egret.com/wing">
     <GameUi:UiImage id="_imgBg" source="bg_jpg" horizontalCenter="0" verticalCenter="0" scaleX="1.5" scaleY="1.5" />
     <e:Group left="35" top="70" bottom="30" width="200">
-        <GameUi:UiImage source="c04_t01_s01_f01_png" scale9Grid="4,6,1,1" anchorOffsetX="0" anchorOffsetY="0"
-                        alpha="0.8" left="0" right="0" top="0" bottom="0" />
-        <GameUi:UiLabel text="天梯" y="15" textColor="0x000000" horizontalCenter="0" />
+        <GameUi:UiImage source="c04_t01_s02_f01_png" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" left="0" right="0"
+                        top="0" bottom="0" scale9Grid="9,9,2,2" />
+        <GameUi:UiLabel text="天梯" y="15" horizontalCenter="0" textColor="0xffffff" />
         <GameUi:UiScrollList left="0" right="0" bottom="0" top="50">
             <e:List>
                 <e:itemRendererSkinName>
                     <e:Skin width="200" height="40">
                         <GameUi:UiLabel id="_bmlabelRank" anchorOffsetX="0" anchorOffsetY="0" text="1"
                                         textAlign="center" y="7" scaleX="0.7" scaleY="0.7" horizontalCenter="-88.5"
-                                        textColor="0x000000" />
+                                        textColor="0xffffff" />
                         <GameUi:UiLabel id="_labelName" text="赵天同" y="10" size="18" fontFamily="Arial"
-                                        textAlign="center" verticalAlign="middle" textColor="0x000000" x="61" />
-                        <GameUi:UiLabel id="_labelDamage" text="9999" y="10" size="18" textColor="0x000000" x="149" />
+                                        textAlign="center" verticalAlign="middle" x="61" textColor="0xffffff" />
+                        <GameUi:UiLabel id="_labelDamage" text="9999" y="10" size="18" textColor="0xffffff" x="149" />
                     </e:Skin>
                 </e:itemRendererSkinName>
                 <e:ArrayCollection>
@@ -30,16 +30,16 @@
         </GameUi:UiScrollList>
     </e:Group>
     <e:Group id="_group1" top="70" width="200" x="265" height="205">
-        <GameUi:UiImage source="c04_t01_s01_f01_png" scale9Grid="4,6,1,1" anchorOffsetX="0" anchorOffsetY="0"
+        <GameUi:UiImage source="c04_t01_s02_f01_png" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
                         alpha="0.8" left="0" right="0" top="0" bottom="0" />
-        <GameUi:UiLabel text="我的对局" y="15" textColor="0x000000" horizontalCenter="0" />
+        <GameUi:UiLabel text="我的对局" y="15" textColor="0xffffff" horizontalCenter="0" />
         <GameUi:UiScrollList left="0" right="0" bottom="0" top="50">
             <e:List>
                 <e:itemRendererSkinName>
                     <e:Skin width="200" height="40">
                         <GameUi:UiLabel id="_bmlabelRank" anchorOffsetX="0" anchorOffsetY="0" text="插座山脉"
-                                        textAlign="center" y="7" scaleX="0.7" scaleY="0.7" textColor="0x000000" x="15" />
-                        <GameUi:UiLabel id="_labelDamage" text="我的回合" y="10" size="18" textColor="0x000000" x="117" />
+                                        textAlign="center" y="7" scaleX="0.7" scaleY="0.7" textColor="0xffffff" x="15" />
+                        <GameUi:UiLabel id="_labelDamage" text="我的回合" y="10" size="18" textColor="0xffffff" x="117" />
                     </e:Skin>
                 </e:itemRendererSkinName>
                 <e:ArrayCollection>
@@ -53,16 +53,16 @@
         </GameUi:UiScrollList>
     </e:Group>
     <e:Group id="_group2" top="70" width="200" x="495" height="205">
-        <GameUi:UiImage source="c04_t01_s01_f01_png" scale9Grid="4,6,1,1" anchorOffsetX="0" anchorOffsetY="0"
+        <GameUi:UiImage source="c04_t01_s02_f01_png" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
                         alpha="0.8" left="0" right="0" top="0" bottom="0" />
-        <GameUi:UiLabel text="单人战役" y="15" textColor="0x000000" horizontalCenter="0" />
+        <GameUi:UiLabel text="单人战役" y="15" textColor="0xffffff" horizontalCenter="0" />
         <GameUi:UiScrollList left="0" right="0" bottom="0" top="50">
             <e:List>
                 <e:itemRendererSkinName>
                     <e:Skin width="200" height="40">
                         <GameUi:UiLabel id="_bmlabelRank" anchorOffsetX="0" anchorOffsetY="0" text="不存在的"
-                                        textAlign="center" y="7" scaleX="0.7" scaleY="0.7" textColor="0x000000" x="15" />
-                        <GameUi:UiLabel id="_labelDamage" text="999pt" y="10" size="18" textColor="0x000000" x="117" />
+                                        textAlign="center" y="7" scaleX="0.7" scaleY="0.7" textColor="0xffffff" x="15" />
+                        <GameUi:UiLabel id="_labelDamage" text="999pt" y="10" size="18" textColor="0xffffff" x="117" />
                     </e:Skin>
                 </e:itemRendererSkinName>
                 <e:ArrayCollection>
@@ -77,16 +77,16 @@
         </GameUi:UiScrollList>
     </e:Group>
     <e:Group id="_group3" bottom="30" width="200" x="265" height="205">
-        <GameUi:UiImage source="c04_t01_s01_f01_png" scale9Grid="4,6,1,1" anchorOffsetX="0" anchorOffsetY="0"
+        <GameUi:UiImage source="c04_t01_s02_f01_png" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
                         alpha="0.8" left="0" right="0" top="0" bottom="0" />
-        <GameUi:UiLabel text="快速加入" y="15" textColor="0x000000" horizontalCenter="0" />
+        <GameUi:UiLabel text="快速加入" y="15" textColor="0xffffff" horizontalCenter="0" />
         <GameUi:UiScrollList left="0" right="0" bottom="0" top="50">
             <e:List>
                 <e:itemRendererSkinName>
                     <e:Skin width="200" height="40">
                         <GameUi:UiLabel id="_bmlabelRank" anchorOffsetX="0" anchorOffsetY="0" text="斯潘岛"
-                                        textAlign="center" y="7" scaleX="0.7" scaleY="0.7" textColor="0x000000" x="19" />
-                        <GameUi:UiLabel id="_labelDamage" text="1/2" y="10" size="18" textColor="0x000000" x="149" />
+                                        textAlign="center" y="7" scaleX="0.7" scaleY="0.7" textColor="0xffffff" x="19" />
+                        <GameUi:UiLabel id="_labelDamage" text="1/2" y="10" size="18" textColor="0xffffff" x="149" />
                     </e:Skin>
                 </e:itemRendererSkinName>
                 <e:ArrayCollection>
@@ -101,16 +101,16 @@
         </GameUi:UiScrollList>
     </e:Group>
     <e:Group id="_group4" bottom="30" width="200" x="495" height="205">
-        <GameUi:UiImage source="c04_t01_s01_f01_png" scale9Grid="4,6,1,1" anchorOffsetX="0" anchorOffsetY="0"
+        <GameUi:UiImage source="c04_t01_s02_f01_png" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
                         alpha="0.8" left="0" right="0" top="0" bottom="0" />
-        <GameUi:UiLabel text="创建房间" y="15" textColor="0x000000" horizontalCenter="0" />
+        <GameUi:UiLabel text="创建房间" y="15" textColor="0xffffff" horizontalCenter="0" />
         <GameUi:UiScrollList left="0" right="0" bottom="0" top="50">
             <e:List>
                 <e:itemRendererSkinName>
                     <e:Skin width="200" height="40">
                         <GameUi:UiLabel id="_bmlabelRank" anchorOffsetX="0" anchorOffsetY="0" text="王牌空军"
-                                        textAlign="center" y="7" scaleX="0.7" scaleY="0.7" textColor="0x000000" x="19" />
-                        <GameUi:UiLabel id="_labelDamage" text="2人" y="10" size="18" textColor="0x000000" x="149" />
+                                        textAlign="center" y="7" scaleX="0.7" scaleY="0.7" textColor="0xffffff" x="19" />
+                        <GameUi:UiLabel id="_labelDamage" text="2人" y="10" size="18" textColor="0xffffff" x="149" />
                     </e:Skin>
                 </e:itemRendererSkinName>
                 <e:ArrayCollection>
@@ -124,15 +124,15 @@
         </GameUi:UiScrollList>
     </e:Group>
     <e:Group top="70" bottom="30" width="200" x="725">
-        <GameUi:UiImage source="c04_t01_s01_f01_png" scale9Grid="4,6,1,1" anchorOffsetX="0" anchorOffsetY="0"
+        <GameUi:UiImage source="c04_t01_s02_f01_png" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
                         alpha="0.8" left="0" right="0" top="0" bottom="0" />
-        <GameUi:UiLabel text="其他操作" y="15" textColor="0x000000" horizontalCenter="0" />
+        <GameUi:UiLabel text="其他操作" y="15" textColor="0xffffff" horizontalCenter="0" />
         <GameUi:UiScrollList id="_listCommand" left="0" right="0" bottom="0" top="50">
             <e:List>
                 <e:itemRendererSkinName>
                     <e:Skin width="200" height="40">
                         <GameUi:UiLabel id="_labelCommand" anchorOffsetX="0" anchorOffsetY="0" text="氪金"
-                                        textAlign="center" y="7" scaleX="0.7" scaleY="0.7" textColor="0x000000"
+                                        textAlign="center" y="7" scaleX="0.7" scaleY="0.7" textColor="0xffffff"
                                         horizontalCenter="0" />
                     </e:Skin>
                 </e:itemRendererSkinName>
