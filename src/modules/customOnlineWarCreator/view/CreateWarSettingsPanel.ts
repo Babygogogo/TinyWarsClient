@@ -7,11 +7,11 @@ namespace CustomOnlineWarCreator {
 
     const CONFIRM_INTERVAL_MS = 5000;
 
-    export class CreateWarPanel extends GameUi.UiPanel {
+    export class CreateWarSettingsPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: CreateWarPanel;
+        private static _instance: CreateWarSettingsPanel;
 
         private _tabSettings: GameUi.UiTab;
         private _btnBack    : GameUi.UiButton;
@@ -21,14 +21,14 @@ namespace CustomOnlineWarCreator {
         private _timeoutIdForBtnConfirm: number;
 
         public static show(): void {
-            if (!CreateWarPanel._instance) {
-                CreateWarPanel._instance = new CreateWarPanel();
+            if (!CreateWarSettingsPanel._instance) {
+                CreateWarSettingsPanel._instance = new CreateWarSettingsPanel();
             }
-            CreateWarPanel._instance.open();
+            CreateWarSettingsPanel._instance.open();
         }
         public static hide(): void {
-            if (CreateWarPanel._instance) {
-                CreateWarPanel._instance.close();
+            if (CreateWarSettingsPanel._instance) {
+                CreateWarSettingsPanel._instance.close();
             }
         }
 
@@ -36,7 +36,7 @@ namespace CustomOnlineWarCreator {
             super();
 
             this._setAutoAdjustHeightEnabled(true);
-            this.skinName = "resource/skins/customOnlineWarCreator/SettingsPanel.exml";
+            this.skinName = "resource/skins/customOnlineWarCreator/CreateWarSettingsPanel.exml";
         }
 
         protected _onFirstOpened(): void {
@@ -54,11 +54,11 @@ namespace CustomOnlineWarCreator {
             this._tabSettings.bindData([
                 {
                     tabItemData: { name: Lang.getText(Lang.BigType.B01, Lang.SubType.S02) },
-                    pageClass  : BasicSettingsPage,
+                    pageClass  : CreateWarBasicSettingsPage,
                 },
                 {
                     tabItemData: { name: Lang.getText(Lang.BigType.B01, Lang.SubType.S03) },
-                    pageClass  : AdvancedSettingsPage,
+                    pageClass  : CreateWarAdvancedSettingsPage,
                 },
             ]);
 
@@ -71,8 +71,8 @@ namespace CustomOnlineWarCreator {
         }
 
         private _onTouchedBtnBack(e: egret.TouchEvent): void {
-            CreateWarPanel.hide();
-            ChooseMapPanel.show();
+            CreateWarSettingsPanel.hide();
+            CreateWarMapListPanel.show();
         }
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {

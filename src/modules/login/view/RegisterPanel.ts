@@ -59,7 +59,7 @@ namespace Login {
         }
 
         private _onTouchedBtnLogin(e: egret.TouchEvent): void {
-            Utility.StageManager.gotoLobby();
+            Utility.StageManager.gotoLogin();
         }
 
         private _onTouchedBtnRegister(e: egret.TouchEvent): void {

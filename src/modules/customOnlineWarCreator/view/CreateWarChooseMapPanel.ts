@@ -10,11 +10,11 @@ namespace CustomOnlineWarCreator {
     import TemplateMapModel = TemplateMap.TemplateMapModel;
     import TemplateMapProxy = TemplateMap.TemplateMapProxy;
 
-    export class ChooseMapPanel extends GameUi.UiPanel {
+    export class CreateWarMapListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: ChooseMapPanel;
+        private static _instance: CreateWarMapListPanel;
 
         private _listMap   : GameUi.UiScrollList;
         private _zoomMap   : GameUi.UiZoomableComponent;
@@ -34,14 +34,14 @@ namespace CustomOnlineWarCreator {
         private _selectedIndex      : number;
 
         public static show(): void {
-            if (!ChooseMapPanel._instance) {
-                ChooseMapPanel._instance = new ChooseMapPanel();
+            if (!CreateWarMapListPanel._instance) {
+                CreateWarMapListPanel._instance = new CreateWarMapListPanel();
             }
-            ChooseMapPanel._instance.open();
+            CreateWarMapListPanel._instance.open();
         }
         public static hide(): void {
-            if (ChooseMapPanel._instance) {
-                ChooseMapPanel._instance.close();
+            if (CreateWarMapListPanel._instance) {
+                CreateWarMapListPanel._instance.close();
             }
         }
 
@@ -49,7 +49,7 @@ namespace CustomOnlineWarCreator {
             super();
 
             this._setAutoAdjustHeightEnabled();
-            this.skinName = "resource/skins/customOnlineWarCreator/ChooseMapPanel.exml";
+            this.skinName = "resource/skins/customOnlineWarCreator/CreateWarMapListPanel.exml";
         }
 
         protected _onFirstOpened(): void {
@@ -151,7 +151,7 @@ namespace CustomOnlineWarCreator {
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
-            ChooseMapPanel.hide();
+            CreateWarMapListPanel.hide();
             Lobby.LobbyPanel.show();
         }
 
@@ -237,7 +237,7 @@ namespace CustomOnlineWarCreator {
         designer: string;
         version : number;
         index   : number;
-        panel   : ChooseMapPanel;
+        panel   : CreateWarMapListPanel;
     }
 
     class MapNameRenderer extends eui.ItemRenderer {
@@ -266,11 +266,11 @@ namespace CustomOnlineWarCreator {
         }
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
-            ChooseMapPanel.hide();
+            CreateWarMapListPanel.hide();
 
             CreateWarModel.setMapIndexKey(this.data as DataForMapNameRenderer);
             CreateWarModel.resetSettings();
-            CreateWarPanel.show();
+            CreateWarSettingsPanel.show();
         }
     }
 }

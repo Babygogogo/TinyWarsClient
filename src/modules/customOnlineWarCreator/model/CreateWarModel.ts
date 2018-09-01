@@ -79,9 +79,9 @@ namespace CustomOnlineWarCreator {
             setTimeLimit(DEFAULT_TIME_LIMIT);
 
             setInitialFund(0);
-            setIncomeModifier(0);
+            setIncomeModifier(100);
             setInitialEnergy(0);
-            setEnergyGrowthModifier(0);
+            setEnergyGrowthModifier(100);
             setMoveRangeModifier(DEFAULT_MOVE_RANGE_MODIFIER);
             setAttackPowerModifier(DEFAULT_ATTACK_MODIFIER);
             setVisionRangeModifier(DEFAULT_VISION_MODIFIER);

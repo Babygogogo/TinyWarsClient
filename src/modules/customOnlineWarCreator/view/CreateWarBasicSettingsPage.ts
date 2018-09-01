@@ -8,7 +8,7 @@ namespace CustomOnlineWarCreator {
     import HelpPanel        = Common.HelpPanel;
     import TemplateMapModel = TemplateMap.TemplateMapModel;
 
-    export class BasicSettingsPage extends GameUi.UiTabPage {
+    export class CreateWarBasicSettingsPage extends GameUi.UiTabPage {
         private _labelMapName       : GameUi.UiLabel;
         private _labelPlayersCount  : GameUi.UiLabel;
 
@@ -41,7 +41,7 @@ namespace CustomOnlineWarCreator {
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/customOnlineWarCreator/BasicSettingsPage.exml";
+            this.skinName = "resource/skins/customOnlineWarCreator/CreateWarBasicSettingsPage.exml";
         }
 
         protected _onFirstOpened(): void {

@@ -78,7 +78,7 @@ namespace Lobby {
                     callback: (): void => {
                         LobbyPanel.hide();
                         TemplateMap.TemplateMapProxy.reqGetNewestMapInfos();
-                        CustomOnlineWarCreator.ChooseMapPanel.show();
+                        CustomOnlineWarCreator.CreateWarMapListPanel.show();
                     },
                 },
                 {
