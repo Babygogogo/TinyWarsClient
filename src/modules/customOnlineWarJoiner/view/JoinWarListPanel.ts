@@ -1,5 +1,5 @@
 
-namespace CustomOnlineWarExiter {
+namespace CustomOnlineWarJoiner {
     import Notify           = Utility.Notify;
     import Types            = Utility.Types;
     import StageManager     = Utility.StageManager;
@@ -10,11 +10,11 @@ namespace CustomOnlineWarExiter {
     import TemplateMapModel = TemplateMap.TemplateMapModel;
     import TemplateMapProxy = TemplateMap.TemplateMapProxy;
 
-    export class ExitWarListPanel extends GameUi.UiPanel {
+    export class JoinWarListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: ExitWarListPanel;
+        private static _instance: JoinWarListPanel;
 
         private _listWar   : GameUi.UiScrollList;
         private _labelNoWar: GameUi.UiLabel;
@@ -35,14 +35,14 @@ namespace CustomOnlineWarExiter {
         private _selectedWarIndex   : number;
 
         public static show(): void {
-            if (!ExitWarListPanel._instance) {
-                ExitWarListPanel._instance = new ExitWarListPanel();
+            if (!JoinWarListPanel._instance) {
+                JoinWarListPanel._instance = new JoinWarListPanel();
             }
-            ExitWarListPanel._instance.open();
+            JoinWarListPanel._instance.open();
         }
         public static hide(): void {
-            if (ExitWarListPanel._instance) {
-                ExitWarListPanel._instance.close();
+            if (JoinWarListPanel._instance) {
+                JoinWarListPanel._instance.close();
             }
         }
 
@@ -50,14 +50,14 @@ namespace CustomOnlineWarExiter {
             super();
 
             this._setAutoAdjustHeightEnabled();
-            this.skinName = "resource/skins/customOnlineWarExiter/ExitWarListPanel.exml";
+            this.skinName = "resource/skins/customOnlineWarJoiner/JoinWarListPanel.exml";
         }
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { name: Notify.Type.MouseWheel,                             callback: this._onNotifyMouseWheel },
-                { name: Notify.Type.SGetJoinedWaitingCustomOnlineWarInfos,  callback: this._onNotifySGetJoinedWaitingCustomOnlineWarInfos },
-                { name: Notify.Type.SExitCustomOnlineWar,                   callback: this._onNotifySExitCustomOnlineWar },
+                { name: Notify.Type.MouseWheel,                                 callback: this._onNotifyMouseWheel },
+                { name: Notify.Type.SGetUnjoinedWaitingCustomOnlineWarInfos,    callback: this._onNotifySGetUnjoinedWaitingCustomOnlineWarInfos },
+                { name: Notify.Type.SJoinCustomOnlineWar,                       callback: this._onNotifySJoinCustomOnlineWar },
             ];
             this._uiListeners = [
                 { ui: this._zoomMap,   callback: this._onTouchBeginZoomMap, eventType: egret.TouchEvent.TOUCH_BEGIN },
@@ -71,7 +71,7 @@ namespace CustomOnlineWarExiter {
         protected _onOpened(): void {
             this._groupInfo.visible = false;
 
-            ExitWarProxy.reqJoinedWaitingCustomOnlineWarInfos();
+            JoinWarProxy.reqUnjoinedWaitingCustomOnlineWarInfos();
         }
 
         protected _onClosed(): void {
@@ -109,8 +109,8 @@ namespace CustomOnlineWarExiter {
             this._zoomMap.setZoomByScroll(StageManager.getMouseX(), StageManager.getMouseY(), e.data);
         }
 
-        private _onNotifySGetJoinedWaitingCustomOnlineWarInfos(e: egret.Event): void {
-            const newData        = this._createDataForListWar(ExitWarModel.getWarInfos());
+        private _onNotifySGetUnjoinedWaitingCustomOnlineWarInfos(e: egret.Event): void {
+            const newData        = this._createDataForListWar(JoinWarModel.getWarInfos());
             this._dataForListWar = newData;
 
             if (newData.length > 0) {
@@ -123,7 +123,7 @@ namespace CustomOnlineWarExiter {
             this.setSelectedIndex(0);
         }
 
-        private _onNotifySExitCustomOnlineWar(e: egret.Event): void {
+        private _onNotifySJoinCustomOnlineWar(e: egret.Event): void {
             FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S16));
         }
 
@@ -165,7 +165,7 @@ namespace CustomOnlineWarExiter {
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
-            ExitWarListPanel.hide();
+            JoinWarListPanel.hide();
             Lobby.LobbyPanel.show();
         }
 
@@ -280,7 +280,7 @@ namespace CustomOnlineWarExiter {
     type DataForWarRenderer = {
         warInfo : ProtoTypes.IWaitingCustomOnlineWarInfo;
         index   : number;
-        panel   : ExitWarListPanel;
+        panel   : JoinWarListPanel;
     }
 
     class WarRenderer extends eui.ItemRenderer {
@@ -310,7 +310,7 @@ namespace CustomOnlineWarExiter {
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
             const data = this.data as DataForWarRenderer;
-            ExitWarDetailPanel.show(data.warInfo);
+            JoinWarDetailPanel.show(data.warInfo);
         }
     }
 

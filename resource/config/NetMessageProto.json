@@ -250,13 +250,29 @@
           "type": "S_ExitCustomOnlineWar",
           "id": 16
         },
-        "C_GetWaitingCustomOnlineWarInfos": {
-          "type": "C_GetWaitingCustomOnlineWarInfos",
+        "C_GetJoinedWaitingCustomOnlineWarInfos": {
+          "type": "C_GetJoinedWaitingCustomOnlineWarInfos",
           "id": 17
         },
-        "S_GetWaitingCustomOnlineWarInfos": {
-          "type": "S_GetWaitingCustomOnlineWarInfos",
+        "S_GetJoinedWaitingCustomOnlineWarInfos": {
+          "type": "S_GetJoinedWaitingCustomOnlineWarInfos",
           "id": 18
+        },
+        "C_GetUnjoinedWaitingCustomOnlineWarInfos": {
+          "type": "C_GetUnjoinedWaitingCustomOnlineWarInfos",
+          "id": 19
+        },
+        "S_GetUnjoinedWaitingCustomOnlineWarInfos": {
+          "type": "S_GetUnjoinedWaitingCustomOnlineWarInfos",
+          "id": 20
+        },
+        "C_JoinCustomOnlineWar": {
+          "type": "C_JoinCustomOnlineWar",
+          "id": 21
+        },
+        "S_JoinCustomOnlineWar": {
+          "type": "S_JoinCustomOnlineWar",
+          "id": 22
         }
       }
     },
@@ -551,7 +567,7 @@
           "type": "uint32",
           "id": 0
         },
-        "warId": {
+        "infoId": {
           "type": "uint32",
           "id": 1
         }
@@ -569,7 +585,7 @@
         }
       }
     },
-    "C_GetWaitingCustomOnlineWarInfos": {
+    "C_GetJoinedWaitingCustomOnlineWarInfos": {
       "fields": {
         "actionCode": {
           "type": "uint32",
@@ -577,7 +593,7 @@
         }
       }
     },
-    "S_GetWaitingCustomOnlineWarInfos": {
+    "S_GetJoinedWaitingCustomOnlineWarInfos": {
       "fields": {
         "actionCode": {
           "type": "uint32",
@@ -596,6 +612,68 @@
           "rule": "repeated",
           "type": "MapInfo",
           "id": 3
+        }
+      }
+    },
+    "C_GetUnjoinedWaitingCustomOnlineWarInfos": {
+      "fields": {
+        "account": {
+          "type": "uint32",
+          "id": 0
+        }
+      }
+    },
+    "S_GetUnjoinedWaitingCustomOnlineWarInfos": {
+      "fields": {
+        "actionCode": {
+          "type": "uint32",
+          "id": 0
+        },
+        "errorCode": {
+          "type": "uint32",
+          "id": 1
+        },
+        "warInfos": {
+          "rule": "repeated",
+          "type": "WaitingCustomOnlineWarInfo",
+          "id": 2
+        },
+        "mapInfos": {
+          "rule": "repeated",
+          "type": "MapInfo",
+          "id": 3
+        }
+      }
+    },
+    "C_JoinCustomOnlineWar": {
+      "fields": {
+        "actionCode": {
+          "type": "uint32",
+          "id": 0
+        },
+        "infoId": {
+          "type": "uint32",
+          "id": 1
+        },
+        "playerIndex": {
+          "type": "uint32",
+          "id": 2
+        },
+        "teamIndex": {
+          "type": "uint32",
+          "id": 3
+        }
+      }
+    },
+    "S_JoinCustomOnlineWar": {
+      "fields": {
+        "actionCode": {
+          "type": "uint32",
+          "id": 0
+        },
+        "errorCode": {
+          "type": "uint32",
+          "id": 1
         }
       }
     }

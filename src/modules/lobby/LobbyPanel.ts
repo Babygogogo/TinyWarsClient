@@ -82,6 +82,13 @@ namespace Lobby {
                     },
                 },
                 {
+                    name    : Lang.getText(Lang.BigType.B01, Lang.SubType.S23),
+                    callback: (): void => {
+                        LobbyPanel.hide();
+                        CustomOnlineWarJoiner.JoinWarListPanel.show();
+                    },
+                },
+                {
                     name    : Lang.getText(Lang.BigType.B01, Lang.SubType.S22),
                     callback: (): void => {
                         LobbyPanel.hide();

@@ -37,6 +37,7 @@ class Main extends egret.DisplayObjectContainer {
         await Login.LoginProxy.init();
         await CustomOnlineWarCreator.CreateWarProxy.init();
         await CustomOnlineWarExiter.ExitWarProxy.init();
+        await CustomOnlineWarJoiner.JoinWarProxy.init();
 
         Utility.StageManager.gotoLogin();
 

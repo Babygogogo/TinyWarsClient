@@ -17,7 +17,11 @@ namespace Network {
         S_CreateCustomOnlineWar = 14,
         C_ExitCustomOnlineWar = 15,
         S_ExitCustomOnlineWar = 16,
-        C_GetWaitingCustomOnlineWarInfos = 17,
-        S_GetWaitingCustomOnlineWarInfos = 18,
+        C_GetJoinedWaitingCustomOnlineWarInfos = 17,
+        S_GetJoinedWaitingCustomOnlineWarInfos = 18,
+        C_GetUnjoinedWaitingCustomOnlineWarInfos = 19,
+        S_GetUnjoinedWaitingCustomOnlineWarInfos = 20,
+        C_JoinCustomOnlineWar = 21,
+        S_JoinCustomOnlineWar = 22,
     }
 }

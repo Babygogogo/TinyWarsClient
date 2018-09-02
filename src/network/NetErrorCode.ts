@@ -20,5 +20,10 @@ namespace Network {
 
         ExitCustomOnlineWar_WarInfoNotExist,
         ExitCustomOnlineWar_NotJoined,
+
+        JoinCustomOnlineWar_TooManyJoinedWars,
+        JoinCustomOnlineWar_InvalidParams,
+        JoinCustomOnlineWar_WarInfoNotExist,
+        JoinCustomOnlineWar_AlreadyJoined,
     }
 }
