@@ -93,6 +93,10 @@ namespace Utility {
                     "已成功退出房间",
                     "Quit successfully.",
                 ],
+                [ // 00-17
+                    "密码不正确，请检查后重试",
+                    "Invalid password.",
+                ],
             ],
             [
                 [ // 01-00

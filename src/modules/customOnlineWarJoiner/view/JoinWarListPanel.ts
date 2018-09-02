@@ -284,9 +284,10 @@ namespace CustomOnlineWarJoiner {
     }
 
     class WarRenderer extends eui.ItemRenderer {
-        private _btnChoose: GameUi.UiButton;
-        private _btnNext  : GameUi.UiButton;
-        private _labelName: GameUi.UiLabel;
+        private _btnChoose      : GameUi.UiButton;
+        private _btnNext        : GameUi.UiButton;
+        private _labelName      : GameUi.UiLabel;
+        private _labelPassword  : GameUi.UiLabel;
 
         protected childrenCreated(): void {
             super.childrenCreated();
@@ -299,8 +300,9 @@ namespace CustomOnlineWarJoiner {
             super.dataChanged();
 
             const data = this.data as DataForWarRenderer;
-            this.currentState    = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
-            this._labelName.text = data.warInfo.warName || data.warInfo.mapName;
+            this.currentState           = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
+            this._labelName.text        = data.warInfo.warName || data.warInfo.mapName;
+            this._labelPassword.visible = data.warInfo.warPassword != null;
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
@@ -310,7 +312,11 @@ namespace CustomOnlineWarJoiner {
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
             const data = this.data as DataForWarRenderer;
-            JoinWarDetailPanel.show(data.warInfo);
+            if (data.warInfo.warPassword != null) {
+                JoinWarPasswordPanel.show(data.warInfo);
+            } else {
+                JoinWarDetailPanel.show(data.warInfo);
+            }
         }
     }
 
