@@ -238,33 +238,33 @@ namespace Utility {
                 "非法请求",
                 "Illegal request.",
             ],
-            [ErrCode.Login_AlreadyLoggedIn]: [
-                "您已处于登陆状态，不可再次登陆",
-                "You have logged in already.",
-            ],
             [ErrCode.Login_InvalidAccountOrPassword]: [
                 "账号或密码不正确，请检查后重试",
                 "Invalid account and/or password.",
             ],
-            [ErrCode.Register_AlreadyLoggedIn]: [
-                "您已处于登陆状态，不可注册账号",
+            [ErrCode.Login_AlreadyLoggedIn]: [
+                "您已处于登陆状态，不可再次登陆",
                 "You have logged in already.",
             ],
             [ErrCode.Register_InvalidAccount]: [
                 "账号不符合要求，请检查后重试",
                 "Invalid account.",
             ],
-            [ErrCode.Register_InvalidNickname]: [
-                "昵称不符合要求，请检查后重试",
-                "Invalid nickname.",
+            [ErrCode.Register_UsedAccount]: [
+                "该账号已被注册，请修改后再试",
+                "The account has been registered.",
+            ],
+            [ErrCode.Register_AlreadyLoggedIn]: [
+                "您已处于登陆状态，不可注册账号",
+                "You have logged in already.",
             ],
             [ErrCode.Register_InvalidPassword]: [
                 "密码不符合要求，请检查后重试",
                 "Invalid password.",
             ],
-            [ErrCode.Register_UsedAccount]: [
-                "该账号已被注册，请修改后再试",
-                "The account has been registered.",
+            [ErrCode.Register_InvalidNickname]: [
+                "昵称不符合要求，请检查后重试",
+                "Invalid nickname.",
             ],
             [ErrCode.Register_UsedNickname]: [
                 "该昵称已被使用，请修改后再试",
@@ -278,13 +278,29 @@ namespace Utility {
                 "部分设定不符合规则，请检查后重试",
                 "Invalid settings.",
             ],
+            [ErrCode.ExitCustomOnlineWar_WarInfoNotExist]: [
+                "战局不存在",
+                "The game doesn't exist.",
+            ],
             [ErrCode.ExitCustomOnlineWar_NotJoined]: [
                 "您并未参加该战局",
                 "You haven't joined the game.",
             ],
-            [ErrCode.ExitCustomOnlineWar_WarInfoNotExist]: [
-                "战局不存在",
+            [ErrCode.JoinCustomOnlineWar_TooManyJoinedWars]: [
+                "您已参与了许多未开始的战局，请退出部分后重试",
+                "You have joined too many wars.",
+            ],
+            [ErrCode.JoinCustomOnlineWar_InvalidParams]: [
+                "部分设定不符合规则，请检查后重试",
+                "Invalid settings.",
+            ],
+            [ErrCode.JoinCustomOnlineWar_WarInfoNotExist]: [
+                "房间不存在",
                 "The game doesn't exist.",
+            ],
+            [ErrCode.JoinCustomOnlineWar_AlreadyJoined]: [
+                "您已加入了该房间。",
+                "You have already joined the game.",
             ],
         };
 
