@@ -17,8 +17,8 @@
 		"resource/skins/login/LoginBackgroundPanel.exml",
 		"resource/skins/login/LoginPanel.exml",
 		"resource/skins/login/RegisterPanel.exml",
-		"resource/skins/templateMap/SearchMapPanel.exml",
-		"resource/skins/utility/LoadingUiPanel.exml"
+		"resource/skins/utility/LoadingUiPanel.exml",
+		"resource/skins/templateMap/SearchMapPanel.exml"
 	],
 	"path": "resource/default.thm.json"
 }

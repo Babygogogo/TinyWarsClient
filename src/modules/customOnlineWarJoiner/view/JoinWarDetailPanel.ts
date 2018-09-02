@@ -1,12 +1,13 @@
 
 namespace CustomOnlineWarJoiner {
-    import ProtoTypes   = Utility.ProtoTypes;
-    import Helpers      = Utility.Helpers;
-    import Notify       = Utility.Notify;
-    import Lang         = Utility.Lang;
-    import FloatText    = Utility.FloatText;
-    import Types        = Utility.Types;
-    import HelpPanel    = Common.HelpPanel;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import Helpers          = Utility.Helpers;
+    import Notify           = Utility.Notify;
+    import Lang             = Utility.Lang;
+    import FloatText        = Utility.FloatText;
+    import Types            = Utility.Types;
+    import HelpPanel        = Common.HelpPanel;
+    import TemplateMapModel = TemplateMap.TemplateMapModel;
 
     export class JoinWarDetailPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
@@ -28,10 +29,22 @@ namespace CustomOnlineWarJoiner {
         private _labelVisionRangeModifier   : GameUi.UiLabel;
         private _listPlayer                 : GameUi.UiScrollList;
 
+        private _btnPrevPlayerIndex : GameUi.UiButton;
+        private _btnNextPlayerIndex : GameUi.UiButton;
+        private _labelPlayerIndex   : GameUi.UiLabel;
+
+        private _btnPrevTeamIndex    : GameUi.UiButton;
+        private _btnNextTeamIndex    : GameUi.UiButton;
+        private _labelTeamIndex      : GameUi.UiLabel;
+
         private _btnConfirm: GameUi.UiButton;
         private _btnCancel : GameUi.UiButton;
 
-        private _openData: ProtoTypes.IWaitingCustomOnlineWarInfo;
+        private _openData               : ProtoTypes.IWaitingCustomOnlineWarInfo;
+        private _availablePlayerIndexes : number[];
+        private _playerIndexIndex       : number;
+        private _availableTeamIndexes   : number[];
+        private _teamIndexIndex         : number;
 
         public static show(data: ProtoTypes.IWaitingCustomOnlineWarInfo): void {
             if (!JoinWarDetailPanel._instance) {
@@ -57,16 +70,27 @@ namespace CustomOnlineWarJoiner {
 
         protected _onFirstOpened(): void {
             this._uiListeners = [
-                { ui: this._btnHelpFog,       callback: this._onTouchedBtnHelpFog },
-                { ui: this._btnHelpTimeLimit, callback: this._onTouchedBtnHelpTimeLimit },
-                { ui: this._btnCancel,        callback: this._onTouchedBtnCancel },
-                { ui: this._btnConfirm,       callback: this._onTouchedBtnConfirm },
+                { ui: this._btnHelpFog,         callback: this._onTouchedBtnHelpFog },
+                { ui: this._btnHelpTimeLimit,   callback: this._onTouchedBtnHelpTimeLimit },
+                { ui: this._btnCancel,          callback: this._onTouchedBtnCancel },
+                { ui: this._btnConfirm,         callback: this._onTouchedBtnConfirm },
+                { ui: this._btnPrevPlayerIndex, callback: this._onTouchedBtnPrevPlayerIndex, },
+                { ui: this._btnNextPlayerIndex, callback: this._onTouchedBtnNextPlayerIndex, },
+                { ui: this._btnPrevTeamIndex,   callback: this._onTouchedBtnPrevTeam, },
+                { ui: this._btnNextTeamIndex,   callback: this._onTouchedBtnNextTeam, },
+            ];
+            this._notifyListeners = [
+                { name: Notify.Type.SJoinCustomOnlineWar, callback: this._onNotifySJoinCustomOnlineWar },
             ];
 
             this._listPlayer.setItemRenderer(PlayerRenderer);
         }
 
         protected _onOpened(): void {
+            this._availablePlayerIndexes = this._getAvailablePlayerIndexes();
+            this._availableTeamIndexes   = this._getAvailableTeamIndexes();
+            this._playerIndexIndex       = 0;
+            this._teamIndexIndex         = 0;
             this._updateView();
         }
 
@@ -74,6 +98,9 @@ namespace CustomOnlineWarJoiner {
             this._listPlayer.clear();
         }
 
+        ////////////////////////////////////////////////////////////////////////////////
+        // Callbacks.
+        ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnHelpFog(e: egret.TouchEvent): void {
             HelpPanel.show({
                 title  : Lang.getText(Lang.BigType.B01, Lang.SubType.S20),
@@ -93,10 +120,46 @@ namespace CustomOnlineWarJoiner {
         }
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            // JoinWarProxy.reqJoinCustomOnlineWar(this._openData.id);
+            JoinWarProxy.reqJoinCustomOnlineWar(
+                this._openData.id,
+                this._availablePlayerIndexes[this._playerIndexIndex],
+                this._availableTeamIndexes[this._teamIndexIndex]
+            );
+        }
+
+        private _onTouchedBtnPrevPlayerIndex(e: egret.TouchEvent): void {
+            const index            = this._playerIndexIndex - 1;
+            this._playerIndexIndex = index < 0 ? this._availablePlayerIndexes.length - 1 : index;
+            this._updateLabelPlayerIndex();
+        }
+
+        private _onTouchedBtnNextPlayerIndex(e: egret.TouchEvent): void {
+            const index            = this._playerIndexIndex + 1;
+            this._playerIndexIndex = index >= this._availablePlayerIndexes.length ? 0 : index;
+            this._updateLabelPlayerIndex();
+        }
+
+        private _onTouchedBtnPrevTeam(e: egret.TouchEvent): void {
+            const index          = this._teamIndexIndex - 1;
+            this._teamIndexIndex = index < 0 ? this._availableTeamIndexes.length - 1 : index;
+            this._updateLabelTeamIndex();
+        }
+
+        private _onTouchedBtnNextTeam(e: egret.TouchEvent): void {
+            const index          = this._teamIndexIndex + 1;
+            this._teamIndexIndex = index >= this._availableTeamIndexes.length ? 0 : index;
+            this._updateLabelTeamIndex();
+        }
+
+        private _onNotifySJoinCustomOnlineWar(e: egret.Event): void {
+            const data = e.data as ProtoTypes.IS_JoinCustomOnlineWar;
+            FloatText.show(Lang.getText(Lang.BigType.B00, data.isStarted ? Lang.SubType.S19 : Lang.SubType.S18));
             JoinWarDetailPanel.hide();
         }
 
+        ////////////////////////////////////////////////////////////////////////////////
+        // View functions.
+        ////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
             const info = this._openData;
             this._labelWarPassword.text             = info.warPassword  ? info.warPassword : "----";
@@ -110,6 +173,18 @@ namespace CustomOnlineWarJoiner {
             this._labelAttackPowerModifier.text     = `${info.attackPowerModifier > 0 ? "+" : ""}${info.attackPowerModifier}%`;
             this._labelVisionRangeModifier.text     = `${info.visionRangeModifier > 0 ? "+" : ""}${info.visionRangeModifier}`;
             this._listPlayer.bindData(this._getDataForListPlayer());
+            this._updateLabelPlayerIndex();
+            this._updateLabelTeamIndex();
+        }
+
+        private _updateLabelPlayerIndex(): void {
+            const index = this._availablePlayerIndexes[this._playerIndexIndex];
+            this._labelPlayerIndex.text = `${index} (${Helpers.getColorText(index)})`;
+        }
+
+        private _updateLabelTeamIndex(): void {
+            const index = this._availableTeamIndexes[this._teamIndexIndex];
+            this._labelTeamIndex.text = Helpers.getTeamText(index);
         }
 
         private _getDataForListPlayer(): DataForPlayerRenderer[] {
@@ -127,7 +202,7 @@ namespace CustomOnlineWarJoiner {
                 },
             ];
 
-            const mapInfo = TemplateMap.TemplateMapModel.getMapInfo(warInfo as Types.MapIndexKey);
+            const mapInfo = TemplateMapModel.getMapInfo(warInfo as Types.MapIndexKey);
             if (mapInfo.playersCount >= 3) {
                 data.push({
                     playerIndex: 3,
@@ -144,6 +219,70 @@ namespace CustomOnlineWarJoiner {
             }
 
             return data;
+        }
+
+        private _getAvailablePlayerIndexes(): number[] {
+            const info         = this._openData;
+            const playersCount = TemplateMapModel.getMapInfo(info as Types.MapIndexKey).playersCount;
+            const indexDict: {[index: number]: boolean} = {};
+            if ((playersCount >= 4) && (info.p4UserId == null)) {
+                indexDict[4] = true;
+            }
+            if ((playersCount >= 3) && (info.p3UserId == null)) {
+                indexDict[3] = true;
+            }
+            if ((playersCount >= 2) && (info.p2UserId == null)) {
+                indexDict[2] = true;
+            }
+            if ((playersCount >= 1) && (info.p1UserId == null)) {
+                indexDict[1] = true;
+            }
+
+            const indexes: number[] = [];
+            for (let i = 1; i <= playersCount; ++i) {
+                if (indexDict[i]) {
+                    indexes.push(i);
+                }
+            }
+            return indexes;
+        }
+
+        private _getAvailableTeamIndexes(): number[] {
+            const info = this._openData;
+            const dict: {[index: number]: number} = {};
+            (info.p1TeamIndex != null) && (dict[info.p1TeamIndex] = (dict[info.p1TeamIndex] || 0) + 1);
+            (info.p2TeamIndex != null) && (dict[info.p2TeamIndex] = (dict[info.p2TeamIndex] || 0) + 1);
+            (info.p3TeamIndex != null) && (dict[info.p3TeamIndex] = (dict[info.p3TeamIndex] || 0) + 1);
+            (info.p4TeamIndex != null) && (dict[info.p4TeamIndex] = (dict[info.p4TeamIndex] || 0) + 1);
+
+            let teamsCount  = 0;
+            let currPlayers = 0;
+            for (let i = 1; i <= 4; ++i) {
+                if (dict[i]) {
+                    ++teamsCount;
+                    currPlayers += dict[i];
+                }
+            }
+
+            const totalPlayers = TemplateMapModel.getMapInfo(info as Types.MapIndexKey).playersCount;
+            if ((teamsCount > 1) || (currPlayers < totalPlayers - 1)) {
+                const indexes: number[] = [];
+                for (let i = 1; i <= totalPlayers; ++i) {
+                    indexes.push(i);
+                }
+                while (dict[indexes[0]]) {
+                    indexes.push(indexes.shift());
+                }
+                return indexes;
+            } else {
+                const indexes: number[] = [];
+                for (let i = 1; i <= totalPlayers; ++i) {
+                    if (!dict[i]) {
+                        indexes.push(i);
+                    }
+                }
+                return indexes;
+            }
         }
     }
 

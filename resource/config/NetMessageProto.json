@@ -674,6 +674,10 @@
         "errorCode": {
           "type": "uint32",
           "id": 1
+        },
+        "isStarted": {
+          "type": "bool",
+          "id": 2
         }
       }
     }

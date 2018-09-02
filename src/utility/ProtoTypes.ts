@@ -2949,6 +2949,9 @@ namespace Utility {
 
             /** S_JoinCustomOnlineWar errorCode */
             errorCode?: (number | null);
+
+            /** S_JoinCustomOnlineWar isStarted */
+            isStarted?: (boolean | null);
         }
 
         /** Represents a S_JoinCustomOnlineWar. */
@@ -2965,6 +2968,9 @@ namespace Utility {
 
             /** S_JoinCustomOnlineWar errorCode. */
             public errorCode: number;
+
+            /** S_JoinCustomOnlineWar isStarted. */
+            public isStarted: boolean;
 
             /**
              * Creates a new S_JoinCustomOnlineWar instance using the specified properties.

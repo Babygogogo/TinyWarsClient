@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
-    <e:Group width="580" horizontalCenter="0" top="80" bottom="80">
+    <e:Group width="600" horizontalCenter="0" top="80" bottom="80">
         <GameUi:UiImage source="c04_t01_s02_f01_png" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
                         alpha="0.8" left="0" right="0" top="0" bottom="0" />
         <GameUi:UiLabel text="房间设定总览" textColor="0xFFFFFF" y="10" size="22" textAlign="right" scaleX="1" scaleY="1"
@@ -29,7 +29,7 @@
                         </GameUi:skinName>
                     </GameUi:UiButton>
                 </e:Group>
-                <e:Group id="_groupTimeLimit" y="40" x="297">
+                <e:Group id="_groupTimeLimit" y="40" x="300">
                     <GameUi:UiLabel text="回合限时：" textColor="0xFFFFFF" y="0" size="20" width="120" textAlign="right"
                                     x="0" scaleX="1" scaleY="1" />
                     <GameUi:UiLabel id="_labelTimeLimit" text="3天" textColor="0xFFFFFF" y="0" size="20" x="120"
@@ -50,7 +50,7 @@
                     <GameUi:UiLabel id="_labelInitialFund" text="0" textColor="0xFFFFFF" y="0" size="20" x="120"
                                     width="100" textAlign="center" scaleX="1" scaleY="1" />
                 </e:Group>
-                <e:Group id="_groupIncomeModifier" y="75" x="297">
+                <e:Group id="_groupIncomeModifier" y="75" x="300">
                     <GameUi:UiLabel text="收入倍率：" textColor="0xFFFFFF" y="0" size="20" width="120" textAlign="right"
                                     scaleX="1" scaleY="1" />
                     <GameUi:UiLabel id="_labelIncomeModifier" text="0" textColor="0xFFFFFF" y="0" size="20" x="120"
@@ -62,7 +62,7 @@
                     <GameUi:UiLabel id="_labelInitialEnergy" text="0" textColor="0xFFFFFF" y="0" size="20" x="120"
                                     width="100" textAlign="center" scaleX="1" scaleY="1" />
                 </e:Group>
-                <e:Group id="_groupEnergyGrowthModifier" y="100" x="297">
+                <e:Group id="_groupEnergyGrowthModifier" y="100" x="300">
                     <GameUi:UiLabel text="能量增速：" textColor="0xFFFFFF" y="0" size="20" width="120" textAlign="right"
                                     scaleX="1" scaleY="1" />
                     <GameUi:UiLabel id="_labelEnergyGrowthModifier" text="0" textColor="0xFFFFFF" y="0" size="20"
@@ -74,7 +74,7 @@
                     <GameUi:UiLabel id="_labelMoveRangeModifier" text="0" textColor="0xFFFFFF" y="0" size="20" x="120"
                                     width="100" textAlign="center" scaleX="1" scaleY="1" />
                 </e:Group>
-                <e:Group id="_groupAttackPowerModifier" y="135" x="298">
+                <e:Group id="_groupAttackPowerModifier" y="135" x="301">
                     <GameUi:UiLabel text="攻击力加成：" textColor="0xFFFFFF" y="0" size="20" width="120" textAlign="right"
                                     scaleX="1" scaleY="1" />
                     <GameUi:UiLabel id="_labelAttackPowerModifier" text="0" textColor="0xFFFFFF" y="0" size="20" x="120"
@@ -86,7 +86,55 @@
                     <GameUi:UiLabel id="_labelVisionRangeModifier" text="0" textColor="0xFFFFFF" y="0" size="20" x="120"
                                     width="100" textAlign="center" scaleX="1" scaleY="1" />
                 </e:Group>
-                <e:Group id="_groupPlayers" y="195" touchThrough="true" touchEnabled="false" touchChildren="false"
+                <e:Group id="_groupPlayerIndex" y="195" x="5">
+                    <GameUi:UiLabel text="行动次序：" textColor="0xFFFFFF" y="0" size="20" width="120" textAlign="right"
+                                    x="0" scaleX="1" scaleY="1" />
+                    <GameUi:UiButton id="_btnPrevPlayerIndex" label="&lt;&lt;" x="120" y="0" scaleX="1" scaleY="1">
+                        <GameUi:skinName>
+                            <e:Skin states="up,down,disabled">
+                                <e:Image width="100%" height="100%" />
+                                <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="20" bold="true"
+                                         textColor="0x00ff00" />
+                            </e:Skin>
+                        </GameUi:skinName>
+                    </GameUi:UiButton>
+                    <GameUi:UiButton id="_btnNextPlayerIndex" label="&gt;&gt;" x="254" y="0" scaleX="1" scaleY="1">
+                        <GameUi:skinName>
+                            <e:Skin states="up,down,disabled">
+                                <e:Image width="100%" height="100%" />
+                                <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="20" bold="true"
+                                         textColor="0x00ff00" />
+                            </e:Skin>
+                        </GameUi:skinName>
+                    </GameUi:UiButton>
+                    <GameUi:UiLabel id="_labelPlayerIndex" text="1 (红方)" textColor="0xFFFFFF" y="0" size="20" x="150"
+                                    width="100" textAlign="center" scaleX="1" scaleY="1" />
+                </e:Group>
+                <e:Group id="_groupTeamIndex" y="195" x="301">
+                    <GameUi:UiLabel text="队伍：" textColor="0xFFFFFF" y="0" size="20" width="120" textAlign="right" x="0"
+                                    scaleX="1" scaleY="1" />
+                    <GameUi:UiButton id="_btnPrevTeamIndex" label="&lt;&lt;" x="120" y="0" scaleX="1" scaleY="1">
+                        <GameUi:skinName>
+                            <e:Skin states="up,down,disabled">
+                                <e:Image width="100%" height="100%" />
+                                <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="20" bold="true"
+                                         textColor="0x00ff00" />
+                            </e:Skin>
+                        </GameUi:skinName>
+                    </GameUi:UiButton>
+                    <GameUi:UiButton id="_btnNextTeamIndex" label=">>" x="254" y="0" scaleX="1" scaleY="1">
+                        <GameUi:skinName>
+                            <e:Skin states="up,down,disabled">
+                                <e:Image width="100%" height="100%" />
+                                <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="20" bold="true"
+                                         textColor="0x00ff00" />
+                            </e:Skin>
+                        </GameUi:skinName>
+                    </GameUi:UiButton>
+                    <GameUi:UiLabel id="_labelTeamIndex" text="A队" textColor="0xFFFFFF" y="0" size="20" x="150"
+                                    width="100" textAlign="center" scaleX="1" scaleY="1" />
+                </e:Group>
+                <e:Group id="_groupPlayers" y="225" touchThrough="true" touchEnabled="false" touchChildren="false"
                          left="5" right="5" height="145">
                     <GameUi:UiLabel text="已参战玩家：" size="20" scaleX="1" scaleY="1" />
                     <GameUi:UiScrollList id="_listPlayer" left="0" right="0" top="25" bottom="0">
@@ -107,7 +155,7 @@
                 </e:Group>
             </e:Group>
         </e:Scroller>
-        <GameUi:UiButton id="_btnCancel" label="&lt;&lt;保留房间" bottom="12" x="140">
+        <GameUi:UiButton id="_btnCancel" label="&lt;&lt;返回" bottom="12" x="140">
             <GameUi:skinName>
                 <e:Skin states="up,down,disabled">
                     <e:Image width="100%" height="100%" />
@@ -116,12 +164,12 @@
                 </e:Skin>
             </GameUi:skinName>
         </GameUi:UiButton>
-        <GameUi:UiButton id="_btnConfirm" label="退出房间&gt;&gt;" bottom="12" right="140">
+        <GameUi:UiButton id="_btnConfirm" label="加入&gt;&gt;" bottom="12" right="140">
             <GameUi:skinName>
                 <e:Skin states="up,down,disabled">
                     <e:Image width="100%" height="100%" />
                     <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="20" bold="true"
-                             textColor="0xff0000" />
+                             textColor="0x00ff00" />
                 </e:Skin>
             </GameUi:skinName>
         </GameUi:UiButton>

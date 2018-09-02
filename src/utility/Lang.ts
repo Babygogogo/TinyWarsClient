@@ -97,6 +97,14 @@ namespace Utility {
                     "密码不正确，请检查后重试",
                     "Invalid password.",
                 ],
+                [ // 00-18
+                    "已成功加入房间。战局尚未开始，请继续耐心等候他人加入。",
+                    "Joined successfully.",
+                ],
+                [ // 00-19
+                    "已成功加入房间。战局正式开始，请从“继续战斗”入口进入。",
+                    "Joined successfully.",
+                ]
             ],
             [
                 [ // 01-00
