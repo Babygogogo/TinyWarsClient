@@ -4,9 +4,9 @@ namespace Time {
         import Notify = Utility.Notify;
         import Lang   = Utility.Lang;
 
-        const TILE_ANIMATION_INTERVAL = 400;       // 0.4s
-        const UNIT_ANIMATION_INTERVAL = 400;
-        const HEARTBEAT_INTERVAL      = 60 * 1000; // 1min
+        const TILE_ANIMATION_INTERVAL = 160;        // 0.16s
+        const UNIT_ANIMATION_INTERVAL = 250;        // 0.25s
+        const HEARTBEAT_INTERVAL      = 60 * 1000;  // 1min
 
         let isHeartbeatAnswered: boolean;
         let heartbeatCounter   : number;
