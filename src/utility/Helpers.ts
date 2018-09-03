@@ -137,7 +137,7 @@ namespace Utility {
         }
 
         export function getMapFileName(k: Types.MapIndexKey): string {
-            return `${k.mapName}_${k.designer}_${k.version < 10 ? "0" : ""}${k.version}`;
+            return `${k.mapName}_${k.mapDesigner}_${k.mapVersion < 10 ? "0" : ""}${k.mapVersion}`;
         }
 
         export function getNormalizedHp(hp: number): number {

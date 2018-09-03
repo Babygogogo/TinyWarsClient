@@ -46,11 +46,11 @@
           "type": "string",
           "id": 1
         },
-        "designer": {
+        "mapDesigner": {
           "type": "string",
           "id": 2
         },
-        "version": {
+        "mapVersion": {
           "type": "uint32",
           "id": 3
         },
@@ -78,11 +78,11 @@
           "type": "string",
           "id": 1
         },
-        "designer": {
+        "mapDesigner": {
           "type": "string",
           "id": 2
         },
-        "version": {
+        "mapVersion": {
           "type": "uint32",
           "id": 3
         },
@@ -438,7 +438,7 @@
           "type": "string",
           "id": 1
         },
-        "designer": {
+        "mapDesigner": {
           "type": "string",
           "id": 2
         },
@@ -483,11 +483,11 @@
           "type": "string",
           "id": 1
         },
-        "designer": {
+        "mapDesigner": {
           "type": "string",
           "id": 2
         },
-        "version": {
+        "mapVersion": {
           "type": "uint32",
           "id": 3
         },

@@ -8,8 +8,8 @@ namespace CustomOnlineWarCreator {
 
     export type DataForCreateWar = {
         mapName : string,
-        designer: string,
-        version : number,
+        mapDesigner: string,
+        mapVersion : number,
 
         warName        ?: string;
         warPassword    ?: string;

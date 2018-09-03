@@ -223,11 +223,11 @@ namespace Utility {
             /** MapInfo mapName */
             mapName?: (string | null);
 
-            /** MapInfo designer */
-            designer?: (string | null);
+            /** MapInfo mapDesigner */
+            mapDesigner?: (string | null);
 
-            /** MapInfo version */
-            version?: (number | null);
+            /** MapInfo mapVersion */
+            mapVersion?: (number | null);
 
             /** MapInfo playersCount */
             playersCount?: (number | null);
@@ -251,11 +251,11 @@ namespace Utility {
             /** MapInfo mapName. */
             public mapName: string;
 
-            /** MapInfo designer. */
-            public designer: string;
+            /** MapInfo mapDesigner. */
+            public mapDesigner: string;
 
-            /** MapInfo version. */
-            public version: number;
+            /** MapInfo mapVersion. */
+            public mapVersion: number;
 
             /** MapInfo playersCount. */
             public playersCount: number;
@@ -346,11 +346,11 @@ namespace Utility {
             /** WaitingCustomOnlineWarInfo mapName */
             mapName?: (string | null);
 
-            /** WaitingCustomOnlineWarInfo designer */
-            designer?: (string | null);
+            /** WaitingCustomOnlineWarInfo mapDesigner */
+            mapDesigner?: (string | null);
 
-            /** WaitingCustomOnlineWarInfo version */
-            version?: (number | null);
+            /** WaitingCustomOnlineWarInfo mapVersion */
+            mapVersion?: (number | null);
 
             /** WaitingCustomOnlineWarInfo warName */
             warName?: (string | null);
@@ -440,11 +440,11 @@ namespace Utility {
             /** WaitingCustomOnlineWarInfo mapName. */
             public mapName: string;
 
-            /** WaitingCustomOnlineWarInfo designer. */
-            public designer: string;
+            /** WaitingCustomOnlineWarInfo mapDesigner. */
+            public mapDesigner: string;
 
-            /** WaitingCustomOnlineWarInfo version. */
-            public version: number;
+            /** WaitingCustomOnlineWarInfo mapVersion. */
+            public mapVersion: number;
 
             /** WaitingCustomOnlineWarInfo warName. */
             public warName: string;
@@ -1744,8 +1744,8 @@ namespace Utility {
             /** C_GetNewestMapInfos mapName */
             mapName?: (string | null);
 
-            /** C_GetNewestMapInfos designer */
-            designer?: (string | null);
+            /** C_GetNewestMapInfos mapDesigner */
+            mapDesigner?: (string | null);
 
             /** C_GetNewestMapInfos playersCount */
             playersCount?: (number | null);
@@ -1772,8 +1772,8 @@ namespace Utility {
             /** C_GetNewestMapInfos mapName. */
             public mapName: string;
 
-            /** C_GetNewestMapInfos designer. */
-            public designer: string;
+            /** C_GetNewestMapInfos mapDesigner. */
+            public mapDesigner: string;
 
             /** C_GetNewestMapInfos playersCount. */
             public playersCount: number;
@@ -1966,11 +1966,11 @@ namespace Utility {
             /** C_CreateCustomOnlineWar mapName */
             mapName?: (string | null);
 
-            /** C_CreateCustomOnlineWar designer */
-            designer?: (string | null);
+            /** C_CreateCustomOnlineWar mapDesigner */
+            mapDesigner?: (string | null);
 
-            /** C_CreateCustomOnlineWar version */
-            version?: (number | null);
+            /** C_CreateCustomOnlineWar mapVersion */
+            mapVersion?: (number | null);
 
             /** C_CreateCustomOnlineWar warName */
             warName?: (string | null);
@@ -2030,11 +2030,11 @@ namespace Utility {
             /** C_CreateCustomOnlineWar mapName. */
             public mapName: string;
 
-            /** C_CreateCustomOnlineWar designer. */
-            public designer: string;
+            /** C_CreateCustomOnlineWar mapDesigner. */
+            public mapDesigner: string;
 
-            /** C_CreateCustomOnlineWar version. */
-            public version: number;
+            /** C_CreateCustomOnlineWar mapVersion. */
+            public mapVersion: number;
 
             /** C_CreateCustomOnlineWar warName. */
             public warName: string;

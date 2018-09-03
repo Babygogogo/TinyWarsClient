@@ -13,7 +13,7 @@ namespace TemplateMap {
 
         export async function getMapData(keys: Types.MapIndexKey): Promise<Types.TemplateMap | undefined> {
             return new Promise<Types.TemplateMap | undefined>((resolve, reject) => {
-                const url = Helpers.formatString("resource/assets/map/%s_%s_%s%d.json", keys.mapName, keys.designer, keys.version < 10 ? "0" : "", keys.version);
+                const url = Helpers.formatString("resource/assets/map/%s_%s_%s%d.json", keys.mapName, keys.mapDesigner, keys.mapVersion < 10 ? "0" : "", keys.mapVersion);
                 RES.getResByUrl(
                     url,
                     (data: Types.TemplateMap, u: string) => {

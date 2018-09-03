@@ -88,9 +88,9 @@ namespace CustomOnlineWarCreator {
         }
         export function createDataForCreateWar(): DataForCreateWar {
             return {
-                mapName : mapInfo.mapName,
-                designer: mapInfo.designer,
-                version : mapInfo.version,
+                mapName     : mapInfo.mapName,
+                mapDesigner : mapInfo.mapDesigner,
+                mapVersion  : mapInfo.mapVersion,
 
                 warName     : warName.length     > 0 ? warName     : undefined,
                 warPassword : warPassword.length > 0 ? warPassword : undefined,

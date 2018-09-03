@@ -249,7 +249,7 @@ namespace CustomOnlineWarExiter {
             const mapInfo = TemplateMapModel.getMapInfo(warInfo as Types.MapIndexKey);
 
             this._labelMapName.text    = Lang.getFormatedText(Lang.FormatType.F000, mapInfo.mapName);
-            this._labelDesigner.text   = Lang.getFormatedText(Lang.FormatType.F001, mapInfo.designer);
+            this._labelDesigner.text   = Lang.getFormatedText(Lang.FormatType.F001, mapInfo.mapDesigner);
             this._labelHasFog.text     = Lang.getFormatedText(Lang.FormatType.F005, Lang.getText(Lang.BigType.B01, warInfo.hasFog ? Lang.SubType.S12 : Lang.SubType.S13));
             this._labelWarComment.text = warInfo.warComment || "----";
             this._listPlayer.bindData(this._createDataForListPlayer(warInfo, mapInfo));

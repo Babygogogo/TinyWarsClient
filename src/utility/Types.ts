@@ -32,9 +32,9 @@ namespace Utility {
         }
 
         export type MapIndexKey = {
-            designer    : string;
+            mapDesigner : string;
             mapName     : string;
-            version     : number;
+            mapVersion  : number;
         }
 
         export type TemplateMap = {

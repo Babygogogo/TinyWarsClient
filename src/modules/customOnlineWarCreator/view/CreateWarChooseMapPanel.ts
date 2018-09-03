@@ -165,11 +165,11 @@ namespace CustomOnlineWarCreator {
                 for (let i = 0; i < infos.mapInfos.length; ++i) {
                     const info = infos.mapInfos[i];
                     data.push({
-                        mapName : info.mapName,
-                        designer: info.designer,
-                        version : info.version,
-                        index   : i,
-                        panel   : this,
+                        mapName     : info.mapName,
+                        mapDesigner : info.mapDesigner,
+                        mapVersion     : info.mapVersion,
+                        index       : i,
+                        panel       : this,
                     });
                 }
             }
@@ -205,7 +205,7 @@ namespace CustomOnlineWarCreator {
             const data    = await TemplateMapModel.getMapData(key);
             const mapInfo = TemplateMapModel.getMapInfo(key);
             this._labelMapName.text      = Lang.getFormatedText(Lang.FormatType.F000, mapInfo.mapName);
-            this._labelDesigner.text     = Lang.getFormatedText(Lang.FormatType.F001, mapInfo.designer);
+            this._labelDesigner.text     = Lang.getFormatedText(Lang.FormatType.F001, mapInfo.mapDesigner);
             this._labelPlayersCount.text = Lang.getFormatedText(Lang.FormatType.F002, mapInfo.playersCount);
             this._labelRating.text       = Lang.getFormatedText(Lang.FormatType.F003, mapInfo.rating != null ? mapInfo.rating.toFixed(2) : Lang.getText(Lang.BigType.B01, Lang.SubType.S01));
             this._labelPlayedTimes.text  = Lang.getFormatedText(Lang.FormatType.F004, mapInfo.playedTimes);
@@ -233,11 +233,11 @@ namespace CustomOnlineWarCreator {
     }
 
     type DataForMapNameRenderer = {
-        mapName : string;
-        designer: string;
-        version : number;
-        index   : number;
-        panel   : CreateWarMapListPanel;
+        mapName     : string;
+        mapDesigner : string;
+        mapVersion  : number;
+        index       : number;
+        panel       : CreateWarMapListPanel;
     }
 
     class MapNameRenderer extends eui.ItemRenderer {
