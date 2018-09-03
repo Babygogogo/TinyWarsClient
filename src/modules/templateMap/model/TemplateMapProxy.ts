@@ -8,7 +8,7 @@ namespace TemplateMap {
     export namespace TemplateMapProxy {
         type ParamForGetNewestMapInfos = {
             mapName         ?: string | null,
-            designer        ?: string | null,
+            mapDesigner     ?: string | null,
             playersCount    ?: number | null,
             minRating       ?: number | null,
             minPlayedTimes  ?: number | null,
@@ -24,7 +24,7 @@ namespace TemplateMap {
             NetManager.send({
                 actionCode      : ActionCode.C_GetNewestMapInfos,
                 mapName         : param && param.mapName,
-                designer        : param && param.designer,
+                mapDesigner     : param && param.mapDesigner,
                 playersCount    : param && param.playersCount,
                 minRating       : param && param.minRating,
                 minPlayedTimes  : param && param.minPlayedTimes,

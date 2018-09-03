@@ -76,13 +76,13 @@ namespace TemplateMap {
             }, this, 5000);
 
             const mapName      = this._inputMapName.text;
-            const designer     = this._inputDesigner.text;
+            const mapDesigner  = this._inputDesigner.text;
             const playersCount = Number(this._inputPlayersCount.text);
             const playedTimes  = Number(this._inputPlayedTimes.text);
             const minRating    = Number(this._inputMinRating.text);
             TemplateMapProxy.reqGetNewestMapInfos({
                 mapName         : mapName.length                                ? mapName       : undefined,
-                designer        : designer.length                               ? designer      : undefined,
+                mapDesigner     : mapDesigner.length                            ? mapDesigner   : undefined,
                 playersCount    : (!isNaN(playersCount)) && (playersCount != 0) ? playersCount  : undefined,
                 minPlayedTimes  : (!isNaN(playedTimes))  && (playedTimes != 0)  ? playedTimes   : undefined,
                 minRating       : (!isNaN(minRating))    && (minRating != 0)    ? minRating     : undefined,

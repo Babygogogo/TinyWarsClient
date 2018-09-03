@@ -38,8 +38,9 @@ namespace Utility {
         }
 
         export type TemplateMap = {
-            designer    : string;
+            mapDesigner : string;
             mapName     : string;
+            mapVersion  : number;
             mapWidth    : number;
             mapHeight   : number;
             playersCount: number;
