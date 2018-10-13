@@ -1347,6 +1347,9 @@ namespace Utility {
 
             /** S_Login password */
             password?: (string | null);
+
+            /** S_Login nickname */
+            nickname?: (string | null);
         }
 
         /** Represents a S_Login. */
@@ -1375,6 +1378,9 @@ namespace Utility {
 
             /** S_Login password. */
             public password: string;
+
+            /** S_Login nickname. */
+            public nickname: string;
 
             /**
              * Creates a new S_Login instance using the specified properties.

@@ -6,6 +6,8 @@ namespace Lobby {
 
         private static _instance: LobbyTopPanel;
 
+        private _labelNickname: GameUi.UiLabel;
+
         public static show(): void {
             if (!LobbyTopPanel._instance) {
                 LobbyTopPanel._instance = new LobbyTopPanel();
@@ -27,12 +29,25 @@ namespace Lobby {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
+                { name: Utility.Notify.Type.SLogin,  callback: this._onNotifySLogin },
                 { name: Utility.Notify.Type.SLogout, callback: this._onNotifySLogout },
             ];
         }
 
+        protected _onOpened(): void {
+            this._updateView();
+        }
+
+        private _onNotifySLogin(e: egret.Event): void {
+            this._updateView();
+        }
+
         private _onNotifySLogout(e: egret.Event): void {
             LobbyTopPanel.hide();
+        }
+
+        private _updateView(): void {
+            this._labelNickname.text = User.UserModel.getUserNickname();
         }
     }
 }

@@ -389,6 +389,10 @@
         "password": {
           "type": "string",
           "id": 5
+        },
+        "nickname": {
+          "type": "string",
+          "id": 6
         }
       }
     },

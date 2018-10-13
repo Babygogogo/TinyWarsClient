@@ -12,6 +12,7 @@ namespace User {
         let userPrivilege: number;
         let userAccount  : string;
         let userPassword : string;
+        let userNickname : string;
 
         export function init(): void {
             Notify.addEventListeners([
@@ -27,6 +28,7 @@ namespace User {
             userPrivilege = data.privilege;
             userAccount   = data.account;
             userPassword  = data.password;
+            userNickname  = data.nickname;
 
             LocalStorage.setAccount(data.account);
         }
@@ -34,9 +36,11 @@ namespace User {
         export function getUserId(): number {
             return userId;
         }
-
         export function getUserPrivilege(): number {
             return userPrivilege;
+        }
+        export function getUserNickname(): string {
+            return userNickname;
         }
 
         function _onNotifyNetworkConnected(e: egret.Event): void {

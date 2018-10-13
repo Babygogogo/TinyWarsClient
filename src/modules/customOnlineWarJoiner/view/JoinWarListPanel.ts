@@ -57,7 +57,6 @@ namespace CustomOnlineWarJoiner {
             this._notifyListeners = [
                 { name: Notify.Type.MouseWheel,                                 callback: this._onNotifyMouseWheel },
                 { name: Notify.Type.SGetUnjoinedWaitingCustomOnlineWarInfos,    callback: this._onNotifySGetUnjoinedWaitingCustomOnlineWarInfos },
-                { name: Notify.Type.SJoinCustomOnlineWar,                       callback: this._onNotifySJoinCustomOnlineWar },
             ];
             this._uiListeners = [
                 { ui: this._zoomMap,   callback: this._onTouchBeginZoomMap, eventType: egret.TouchEvent.TOUCH_BEGIN },
@@ -121,10 +120,6 @@ namespace CustomOnlineWarJoiner {
                 this._listWar.clear();
             }
             this.setSelectedIndex(0);
-        }
-
-        private _onNotifySJoinCustomOnlineWar(e: egret.Event): void {
-            FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S16));
         }
 
         private _onTouchBeginZoomMap(e: egret.TouchEvent): void {
