@@ -3,28 +3,38 @@ namespace TinyWars.TemplateMap {
     import Types        = Utility.Types;
     import Helpers      = Utility.Helpers;
     import ProtoTypes   = Utility.ProtoTypes;
+    import LocalStorage = Utility.LocalStorage;
 
     export namespace TemplateMapModel {
-        const allMapInfos: { [fileName: string]: ProtoTypes.IMapInfo } = {};
+        const _allMapInfos: { [mapUrl: string]: ProtoTypes.IMapInfo }   = {};
+        const _allMapDatas: { [mapUrl: string]: Types.TemplateMap }     = {};
+
         let newestMapInfos: ProtoTypes.IS_GetNewestMapInfos;
 
         export function init(): void {
         }
 
-        export async function getMapData(keys: Types.MapIndexKey): Promise<Types.TemplateMap | undefined> {
-            return new Promise<Types.TemplateMap | undefined>((resolve, reject) => {
-                const url = Helpers.formatString("resource/assets/map/%s_%s_%s%d.json", keys.mapName, keys.mapDesigner, keys.mapVersion < 10 ? "0" : "", keys.mapVersion);
-                RES.getResByUrl(
-                    url,
-                    (data: Types.TemplateMap, u: string) => {
-                        if (u === url) {
-                            resolve(data);
-                        }
-                    },
-                    undefined,
-                    RES.ResourceItem.TYPE_JSON
-                );
-            });
+        export async function getMapData(key: Types.MapIndexKey): Promise<Types.TemplateMap | undefined> {
+            const mapUrl    = Helpers.getMapUrl(key);
+            const localData = getLocalMapData(mapUrl);
+            if (localData) {
+                return new Promise<Types.TemplateMap>((resolve, reject) => resolve(localData));
+            } else {
+                return new Promise<Types.TemplateMap | undefined>((resolve, reject) => {
+                    RES.getResByUrl(
+                        mapUrl,
+                        (data: Types.TemplateMap, reqUrl: string) => {
+                            if (reqUrl === mapUrl) {
+                                LocalStorage.setMapData(mapUrl, JSON.stringify(data));
+                                _allMapDatas[mapUrl] = data;
+                                resolve(data);
+                            }
+                        },
+                        undefined,
+                        RES.ResourceItem.TYPE_JSON
+                    );
+                });
+            }
         }
 
         export function setNewestMapInfos(infos: ProtoTypes.IS_GetNewestMapInfos): void {
@@ -38,12 +48,20 @@ namespace TinyWars.TemplateMap {
         export function addMapInfos(infos: ProtoTypes.IMapInfo[]): void {
             if (infos) {
                 for (const info of infos) {
-                    allMapInfos[Helpers.getMapFileName(info as Types.MapIndexKey)] = info;
+                    _allMapInfos[Helpers.getMapUrl(info as Types.MapIndexKey)] = info;
                 }
             }
         }
         export function getMapInfo(keys: Types.MapIndexKey): ProtoTypes.IMapInfo | undefined {
-            return allMapInfos[Helpers.getMapFileName(keys)];
+            return _allMapInfos[Helpers.getMapUrl(keys)];
+        }
+
+        function getLocalMapData(mapUrl: string): Types.TemplateMap | undefined {
+            if (!_allMapDatas[mapUrl]) {
+                const data = LocalStorage.getMapData(mapUrl);
+                (data) && (_allMapDatas[mapUrl] = JSON.parse(data));
+            }
+            return _allMapDatas[mapUrl];
         }
     }
 }

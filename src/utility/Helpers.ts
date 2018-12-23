@@ -136,8 +136,28 @@ namespace TinyWars.Utility {
             }
         }
 
+        /** 获取一个整数的位数。不计负数的符号；0-9计为1；10-99计为2；以此类推 */
+        export function getDigitsCount(num: number): number {
+            num = Math.abs(num);
+            let count = 1;
+            while (num >= 10) {
+                ++count;
+                num = Math.floor(num / 10);
+            }
+
+            return count;
+        }
+
+        export function getNumText(num: number, targetLength = 2): string {
+            return repeatString("0", targetLength - getDigitsCount(num)) + num;
+        }
+
         export function getMapFileName(k: Types.MapIndexKey): string {
             return `${k.mapName}_${k.mapDesigner}_${k.mapVersion < 10 ? "0" : ""}${k.mapVersion}`;
+        }
+
+        export function getMapUrl(key: Types.MapIndexKey): string {
+            return formatString("resource/assets/map/%s_%s_%s.json", key.mapName, key.mapDesigner, getNumText(key.mapVersion));
         }
 
         export function getNormalizedHp(hp: number): number {
