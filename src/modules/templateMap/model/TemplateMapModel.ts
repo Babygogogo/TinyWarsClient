@@ -25,9 +25,13 @@ namespace TinyWars.TemplateMap {
                         mapUrl,
                         (data: Types.TemplateMap, reqUrl: string) => {
                             if (reqUrl === mapUrl) {
-                                LocalStorage.setMapData(mapUrl, JSON.stringify(data));
-                                _allMapDatas[mapUrl] = data;
-                                resolve(data);
+                                if (!data) {
+                                    reject(data);
+                                } else {
+                                    LocalStorage.setMapData(mapUrl, JSON.stringify(data));
+                                    _allMapDatas[mapUrl] = data;
+                                    resolve(data);
+                                }
                             }
                         },
                         undefined,
