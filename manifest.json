@@ -64,7 +64,7 @@
 		"bin-debug/modules/customOnlineWarCreator/model/CreateWarProxy.js",
 		"bin-debug/modules/customOnlineWarCreator/view/CreateWarAdvancedSettingsPage.js",
 		"bin-debug/modules/customOnlineWarCreator/view/CreateWarBasicSettingsPage.js",
-		"bin-debug/modules/customOnlineWarCreator/view/CreateWarChooseMapPanel.js",
+		"bin-debug/modules/customOnlineWarCreator/view/CreateWarMapListPanel.js",
 		"bin-debug/modules/customOnlineWarCreator/view/CreateWarSettingsPanel.js",
 		"bin-debug/modules/customOnlineWarExiter/model/ExitWarModel.js",
 		"bin-debug/modules/customOnlineWarExiter/model/ExitWarProxy.js",

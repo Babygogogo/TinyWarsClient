@@ -38,8 +38,8 @@ namespace TinyWars.Login {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { name: NotifyType.SLogin,    callback: this._onNotifySLogin },
-                { name: NotifyType.SRegister, callback: this._onNotifySRegister },
+                { type: NotifyType.SLogin,    callback: this._onNotifySLogin },
+                { type: NotifyType.SRegister, callback: this._onNotifySRegister },
             ];
             this._uiListeners = [
                 { ui: this._btnLogin,    callback: this._onTouchedBtnLogin },

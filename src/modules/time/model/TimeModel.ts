@@ -18,9 +18,9 @@ namespace TinyWars.Time {
 
         export function init(): void {
             Notify.addEventListeners([
-                { name: Notify.Type.NetworkConnected,    callback: _onNotifyNetworkConnected,    thisObject: TimeModel },
-                { name: Notify.Type.NetworkDisconnected, callback: _onNotifyNetworkDisconnected, thisObject: TimeModel },
-                { name: Notify.Type.SHeartbeat,          callback: _onSHeartbeat,                thisObject: TimeModel },
+                { type: Notify.Type.NetworkConnected,    callback: _onNotifyNetworkConnected,    thisObject: TimeModel },
+                { type: Notify.Type.NetworkDisconnected, callback: _onNotifyNetworkDisconnected, thisObject: TimeModel },
+                { type: Notify.Type.SHeartbeat,          callback: _onSHeartbeat,                thisObject: TimeModel },
             ]);
 
             egret.setInterval(() => {

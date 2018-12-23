@@ -48,7 +48,7 @@ namespace TinyWars.TemplateMap {
                 { ui: this._btnSearch, callback: this._onTouchedBtnSearch },
             ];
             this._notifyListeners = [
-                { name: Notify.Type.SGetNewestMapInfos, callback: this._onNotifySGetNewestMapInfos },
+                { type: Notify.Type.SGetNewestMapInfos, callback: this._onNotifySGetNewestMapInfos },
             ];
         }
 

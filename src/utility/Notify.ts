@@ -4,30 +4,27 @@ namespace TinyWars.Utility {
         ////////////////////////////////////////////////////////////////////////////////
         // Notify types.
         ////////////////////////////////////////////////////////////////////////////////
-        export const Type = {
-            NetworkConnected   : "",
-            NetworkDisconnected: "",
-            TimeTick           : "",
-            TileAnimationTick  : "",
-            UnitAnimationTick  : "",
+        export const enum Type {
+            NetworkConnected,
+            NetworkDisconnected,
+            TimeTick,
+            TileAnimationTick,
+            UnitAnimationTick,
 
-            MouseWheel: "",
+            MouseWheel,
 
-            SLogin                                  : "",
-            SRegister                               : "",
-            SLogout                                 : "",
-            SHeartbeat                              : "",
-            SGetNewestMapInfos                      : "",
-            SCreateCustomOnlineWar                  : "",
-            SGetJoinedWaitingCustomOnlineWarInfos   : "",
-            SGetUnjoinedWaitingCustomOnlineWarInfos : "",
-            SExitCustomOnlineWar                    : "",
-            SJoinCustomOnlineWar                    : "",
+            SLogin,
+            SRegister,
+            SLogout,
+            SHeartbeat,
+            SGetNewestMapInfos,
+            SCreateCustomOnlineWar,
+            SGetJoinedWaitingCustomOnlineWarInfos,
+            SGetUnjoinedWaitingCustomOnlineWarInfos,
+            SExitCustomOnlineWar,
+            SJoinCustomOnlineWar,
 
-            TileModelUpdated: "",
-        }
-        for (const k in Type) {
-            Type[k] = k;
+            TileModelUpdated,
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -43,25 +40,29 @@ namespace TinyWars.Utility {
         const dispatcher = new egret.EventDispatcher();
 
         export type Listener = {
-            name       : string,
+            type       : Type,
             callback   : Function,
             thisObject?: any,
         };
 
-        export function dispatch(name: string, data?: any): void {
-            dispatcher.dispatchEventWith(name, false, data);
+        export function dispatch(t: Type, data?: any): void {
+            dispatcher.dispatchEventWith(getTypeName(t), false, data);
         }
 
         export function addEventListeners(listeners: Listener[], thisObject?: any): void {
             for (const l of listeners) {
-                dispatcher.addEventListener(l.name, l.callback, l.thisObject || thisObject);
+                dispatcher.addEventListener(getTypeName(l.type), l.callback, l.thisObject || thisObject);
             }
         }
 
         export function removeEventListeners(listeners: Listener[], thisObject?: any): void {
             for (const l of listeners) {
-                dispatcher.removeEventListener(l.name, l.callback, l.thisObject || thisObject);
+                dispatcher.removeEventListener(getTypeName(l.type), l.callback, l.thisObject || thisObject);
             }
+        }
+
+        function getTypeName(t: Type): string {
+            return "Notify" + t;
         }
     }
 }

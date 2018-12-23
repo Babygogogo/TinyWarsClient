@@ -45,7 +45,7 @@ namespace TinyWars.CustomOnlineWarCreator {
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
             ];
             this._notifyListeners = [
-                { name: Notify.Type.SCreateCustomOnlineWar, callback: this._onNotifySCreateCustomOnlineWar },
+                { type: Notify.Type.SCreateCustomOnlineWar, callback: this._onNotifySCreateCustomOnlineWar },
             ];
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
         }

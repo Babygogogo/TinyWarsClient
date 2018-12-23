@@ -40,7 +40,7 @@ namespace TinyWars.Lobby {
                 { ui: this, callback: this._onResize, eventType: egret.Event.RESIZE },
             ];
             this._notifyListeners = [
-                { name: Utility.Notify.Type.SLogout, callback: this._onNotifySLogout },
+                { type: Utility.Notify.Type.SLogout, callback: this._onNotifySLogout },
             ];
 
             this._listCommand.setItemRenderer(CommandRenderer);

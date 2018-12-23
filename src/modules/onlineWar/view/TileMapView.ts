@@ -29,7 +29,7 @@ namespace TinyWars.OnlineWar {
             this.addChild(this._objectLayer);
 
             Notify.addEventListeners([
-                { name: Notify.Type.TileAnimationTick, callback: this._onNotifyTileAnimationTick }
+                { type: Notify.Type.TileAnimationTick, callback: this._onNotifyTileAnimationTick }
             ], this);
 
             // this._initTest();

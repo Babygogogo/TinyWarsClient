@@ -55,8 +55,8 @@ namespace TinyWars.CustomOnlineWarJoiner {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { name: Notify.Type.MouseWheel,                                 callback: this._onNotifyMouseWheel },
-                { name: Notify.Type.SGetUnjoinedWaitingCustomOnlineWarInfos,    callback: this._onNotifySGetUnjoinedWaitingCustomOnlineWarInfos },
+                { type: Notify.Type.MouseWheel,                                 callback: this._onNotifyMouseWheel },
+                { type: Notify.Type.SGetUnjoinedWaitingCustomOnlineWarInfos,    callback: this._onNotifySGetUnjoinedWaitingCustomOnlineWarInfos },
             ];
             this._uiListeners = [
                 { ui: this._zoomMap,   callback: this._onTouchBeginZoomMap, eventType: egret.TouchEvent.TOUCH_BEGIN },

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="646" height="360" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="GameUi.*"
+<e:Skin width="646" height="360" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
     <GameUi:UiLabel text="地图名称：" textColor="0xFFFFFF" y="10" size="20" width="120" textAlign="right" x="0" />
     <GameUi:UiLabel id="_labelMapName" text="地图名称" textColor="0xFFFFFF" y="10" size="20" x="120" />

@@ -80,7 +80,7 @@ namespace TinyWars.CustomOnlineWarJoiner {
                 { ui: this._btnNextTeamIndex,   callback: this._onTouchedBtnNextTeam, },
             ];
             this._notifyListeners = [
-                { name: Notify.Type.SJoinCustomOnlineWar, callback: this._onNotifySJoinCustomOnlineWar },
+                { type: Notify.Type.SJoinCustomOnlineWar, callback: this._onNotifySJoinCustomOnlineWar },
             ];
 
             this._listPlayer.setItemRenderer(PlayerRenderer);

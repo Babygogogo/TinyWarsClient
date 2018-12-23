@@ -55,9 +55,9 @@ namespace TinyWars.CustomOnlineWarExiter {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { name: Notify.Type.MouseWheel,                             callback: this._onNotifyMouseWheel },
-                { name: Notify.Type.SGetJoinedWaitingCustomOnlineWarInfos,  callback: this._onNotifySGetJoinedWaitingCustomOnlineWarInfos },
-                { name: Notify.Type.SExitCustomOnlineWar,                   callback: this._onNotifySExitCustomOnlineWar },
+                { type: Notify.Type.MouseWheel,                             callback: this._onNotifyMouseWheel },
+                { type: Notify.Type.SGetJoinedWaitingCustomOnlineWarInfos,  callback: this._onNotifySGetJoinedWaitingCustomOnlineWarInfos },
+                { type: Notify.Type.SExitCustomOnlineWar,                   callback: this._onNotifySExitCustomOnlineWar },
             ];
             this._uiListeners = [
                 { ui: this._zoomMap,   callback: this._onTouchBeginZoomMap, eventType: egret.TouchEvent.TOUCH_BEGIN },

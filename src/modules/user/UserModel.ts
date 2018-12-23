@@ -16,9 +16,9 @@ namespace TinyWars.User {
 
         export function init(): void {
             Notify.addEventListeners([
-                { name: Notify.Type.SLogout,             callback: _onNotifySLogout,             thisObject: UserModel },
-                { name: Notify.Type.NetworkConnected,    callback: _onNotifyNetworkConnected,    thisObject: UserModel },
-                { name: Notify.Type.NetworkDisconnected, callback: _onNotifyNetworkDisconnected, thisObject: UserModel },
+                { type: Notify.Type.SLogout,             callback: _onNotifySLogout,             thisObject: UserModel },
+                { type: Notify.Type.NetworkConnected,    callback: _onNotifyNetworkConnected,    thisObject: UserModel },
+                { type: Notify.Type.NetworkDisconnected, callback: _onNotifyNetworkDisconnected, thisObject: UserModel },
             ]);
         }
 

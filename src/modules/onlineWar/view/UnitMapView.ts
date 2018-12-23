@@ -19,7 +19,7 @@ namespace TinyWars.OnlineWar {
             this.addChild(this._airLayer);
 
             Notify.addEventListeners([
-                { name: Notify.Type.UnitAnimationTick, callback: this._onNotifyUnitAnimationTick }
+                { type: Notify.Type.UnitAnimationTick, callback: this._onNotifyUnitAnimationTick }
             ], this);
         }
 

@@ -29,8 +29,8 @@ namespace TinyWars.Lobby {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { name: Utility.Notify.Type.SLogin,  callback: this._onNotifySLogin },
-                { name: Utility.Notify.Type.SLogout, callback: this._onNotifySLogout },
+                { type: Utility.Notify.Type.SLogin,  callback: this._onNotifySLogin },
+                { type: Utility.Notify.Type.SLogout, callback: this._onNotifySLogout },
             ];
         }
 

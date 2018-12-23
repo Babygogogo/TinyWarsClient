@@ -54,8 +54,8 @@ namespace TinyWars.CustomOnlineWarCreator {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { name: Notify.Type.MouseWheel,         callback: this._onNotifyMouseWheel },
-                { name: Notify.Type.SGetNewestMapInfos, callback: this._onNotifySGetNewestMapInfos },
+                { type: Notify.Type.MouseWheel,         callback: this._onNotifyMouseWheel },
+                { type: Notify.Type.SGetNewestMapInfos, callback: this._onNotifySGetNewestMapInfos },
             ];
             this._uiListeners = [
                 { ui: this._zoomMap,   callback: this._onTouchBeginZoomMap, eventType: egret.TouchEvent.TOUCH_BEGIN },
