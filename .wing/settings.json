@@ -1,6 +1,8 @@
 {
-	"search.exclude": {
-		"**/bin-debug": true,
-		"**/bin-release": true
-	}
+    "search.exclude": {
+        "**/bin-debug": true,
+        "**/bin-release": true
+    },
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true
 }

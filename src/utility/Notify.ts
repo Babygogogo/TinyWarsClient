@@ -1,0 +1,68 @@
+
+namespace TinyWars.Utility {
+    export namespace Notify {
+        ////////////////////////////////////////////////////////////////////////////////
+        // Notify types.
+        ////////////////////////////////////////////////////////////////////////////////
+        export const enum Type {
+            NetworkConnected,
+            NetworkDisconnected,
+            TimeTick,
+            TileAnimationTick,
+            UnitAnimationTick,
+
+            MouseWheel,
+
+            SLogin,
+            SRegister,
+            SLogout,
+            SHeartbeat,
+            SGetNewestMapInfos,
+            SCreateCustomOnlineWar,
+            SGetJoinedWaitingCustomOnlineWarInfos,
+            SGetUnjoinedWaitingCustomOnlineWarInfos,
+            SExitCustomOnlineWar,
+            SJoinCustomOnlineWar,
+
+            TileModelUpdated,
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+        // Notify datas.
+        ////////////////////////////////////////////////////////////////////////////////
+        export namespace Data {
+            export type TileModelUpdated = OnlineWar.TileModel;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+        // Dispatcher functions.
+        ////////////////////////////////////////////////////////////////////////////////
+        const dispatcher = new egret.EventDispatcher();
+
+        export type Listener = {
+            type       : Type,
+            callback   : Function,
+            thisObject?: any,
+        };
+
+        export function dispatch(t: Type, data?: any): void {
+            dispatcher.dispatchEventWith(getTypeName(t), false, data);
+        }
+
+        export function addEventListeners(listeners: Listener[], thisObject?: any): void {
+            for (const l of listeners) {
+                dispatcher.addEventListener(getTypeName(l.type), l.callback, l.thisObject || thisObject);
+            }
+        }
+
+        export function removeEventListeners(listeners: Listener[], thisObject?: any): void {
+            for (const l of listeners) {
+                dispatcher.removeEventListener(getTypeName(l.type), l.callback, l.thisObject || thisObject);
+            }
+        }
+
+        function getTypeName(t: Type): string {
+            return "Notify" + t;
+        }
+    }
+}

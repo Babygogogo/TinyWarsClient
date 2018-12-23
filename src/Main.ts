@@ -1,89 +1,53 @@
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-present, Egret Technology.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
 
 class Main extends egret.DisplayObjectContainer {
-
-
-
     public constructor() {
         super();
-        this.addEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
+
+        this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
     }
 
-    private onAddToStage(event: egret.Event) {
-
+    private _onAddedToStage(event: egret.Event): void {
         egret.lifecycle.addLifecycleListener((context) => {
             // custom lifecycle plugin
-
             context.onUpdate = () => {
-
             }
         })
-
         egret.lifecycle.onPause = () => {
-            egret.ticker.pause();
+            // egret.ticker.pause();
         }
-
         egret.lifecycle.onResume = () => {
-            egret.ticker.resume();
+            // egret.ticker.resume();
         }
 
         this.runGame().catch(e => {
             console.log(e);
-        })
-
-
-
+        });
     }
 
-    private async runGame() {
-        await this.loadResource()
-        this.createGameScene();
+    private async runGame(): Promise<void> {
+        await TinyWars.Utility.StageManager.init(this.stage);
+        await TinyWars.Utility.ResManager.init();
+        await TinyWars.Utility.ProtoManager.init();
+        await TinyWars.Network.Manager.init();
+        await TinyWars.Time.TimeProxy.init();
+        await TinyWars.Time.TimeModel.init();
+        await TinyWars.User.UserModel.init();
+        await TinyWars.TemplateMap.TemplateMapProxy.init();
+        await TinyWars.TemplateMap.TemplateMapModel.init();
+        await TinyWars.Login.LoginProxy.init();
+        await TinyWars.CustomOnlineWarCreator.CreateWarProxy.init();
+        await TinyWars.CustomOnlineWarExiter.ExitWarProxy.init();
+        await TinyWars.CustomOnlineWarJoiner.JoinWarProxy.init();
+
+        TinyWars.Utility.StageManager.gotoLogin();
+
+        // this.createGameScene();
+        // lobby.LobbyPanel.create();
         const result = await RES.getResAsync("description_json")
-        this.startAnimation(result);
+        // this.startAnimation(result);
         await platform.login();
         const userInfo = await platform.getUserInfo();
-        console.log(userInfo);
-
-    }
-
-    private async loadResource() {
-        try {
-            const loadingView = new LoadingUI();
-            this.stage.addChild(loadingView);
-            await RES.loadConfig("resource/default.res.json", "resource/");
-            await RES.loadGroup("preload", 0, loadingView);
-            this.stage.removeChild(loadingView);
-        }
-        catch (e) {
-            console.error(e);
-        }
+        // console.log(userInfo);
     }
 
     private textfield: egret.TextField;
@@ -94,12 +58,19 @@ class Main extends egret.DisplayObjectContainer {
      */
     private createGameScene() {
         let sky = this.createBitmapByName("bg_jpg");
-        this.addChild(sky);
+        sky.horizontalCenter = 0;
+        sky.verticalCenter   = 0;
+        TinyWars.Utility.StageManager.getLayer(TinyWars.Utility.Types.LayerType.Bottom).addChild(sky);
+
+        const data = [
+            {actionCode: TinyWars.Network.Codes.C_Login, account: "account", password: "password"},
+        ];
+        sky.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
+            TinyWars.Network.Manager.send(data[0]);
+        }, this);
+
         let stageW = this.stage.stageWidth;
         let stageH = this.stage.stageHeight;
-        sky.width = stageW;
-        sky.height = stageH;
-
         let topMask = new egret.Shape();
         topMask.graphics.beginFill(0x000000, 0.5);
         topMask.graphics.drawRect(0, 0, stageW, 172);
@@ -151,7 +122,7 @@ class Main extends egret.DisplayObjectContainer {
      * Create a Bitmap object according to name keyword.As for the property of name please refer to the configuration file of resources/resource.json.
      */
     private createBitmapByName(name: string) {
-        let result = new egret.Bitmap();
+        let result = new eui.Image();
         let texture: egret.Texture = RES.getRes(name);
         result.texture = texture;
         return result;
