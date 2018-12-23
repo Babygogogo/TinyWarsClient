@@ -1,5 +1,5 @@
 
-namespace CustomOnlineWarExiter {
+namespace TinyWars.CustomOnlineWarExiter {
     import ProtoTypes   = Utility.ProtoTypes;
     import Helpers      = Utility.Helpers;
     import Notify       = Utility.Notify;

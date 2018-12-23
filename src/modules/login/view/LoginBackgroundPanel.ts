@@ -1,5 +1,5 @@
 
-namespace Login {
+namespace TinyWars.Login {
     export class LoginBackgroundPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Bottom;
         protected readonly _IS_EXCLUSIVE = true;

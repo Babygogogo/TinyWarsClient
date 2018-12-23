@@ -1,5 +1,5 @@
 
-namespace CustomOnlineWarExiter {
+namespace TinyWars.CustomOnlineWarExiter {
     import Notify           = Utility.Notify;
     import Types            = Utility.Types;
     import StageManager     = Utility.StageManager;

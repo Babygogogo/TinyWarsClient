@@ -1,5 +1,5 @@
 
-namespace CustomOnlineWarCreator {
+namespace TinyWars.CustomOnlineWarCreator {
     import Types            = Utility.Types;
     import ProtoTypes       = Utility.ProtoTypes;
     import FloatText        = Utility.FloatText;

@@ -1,5 +1,5 @@
 
-namespace TemplateMap {
+namespace TinyWars.TemplateMap {
     import Types      = Utility.Types;
     import Lang       = Utility.Lang;
     import FloatText  = Utility.FloatText;

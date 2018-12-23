@@ -1,5 +1,5 @@
 
-namespace Config {
+namespace TinyWars.Config {
     import Types          = Utility.Types;
     import GridSize       = Types.Size;
     import TemplateTile   = Types.TemplateTile;

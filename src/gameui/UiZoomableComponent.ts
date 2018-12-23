@@ -1,5 +1,5 @@
 
-namespace GameUi {
+namespace TinyWars.GameUi {
     import Types        = Utility.Types;
     import Helpers      = Utility.Helpers;
     import StageManager = Utility.StageManager;

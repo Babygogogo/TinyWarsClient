@@ -1,5 +1,5 @@
 
-namespace Lobby {
+namespace TinyWars.Lobby {
     export class LobbyTopPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = true;

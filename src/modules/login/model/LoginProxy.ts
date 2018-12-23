@@ -1,5 +1,5 @@
 
-namespace Login {
+namespace TinyWars.Login {
     export namespace LoginProxy {
         import Notify     = Utility.Notify;
         import NotifyType = Utility.Notify.Type;

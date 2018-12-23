@@ -1,5 +1,5 @@
 
-namespace Utility {
+namespace TinyWars.Utility {
     import ColorType = Types.ColorType;
 
     export namespace Helpers {

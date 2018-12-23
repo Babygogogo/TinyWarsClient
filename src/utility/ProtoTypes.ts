@@ -1,5 +1,5 @@
 
-namespace Utility {
+namespace TinyWars.Utility {
     export namespace ProtoTypes {
         /** Properties of an InstantialTile. */
         export declare interface IInstantialTile {

@@ -1,5 +1,5 @@
 
-namespace TemplateMap {
+namespace TinyWars.TemplateMap {
     import NetManager   = Network.Manager;
     import ActionCode   = Network.Codes;
     import ProtoTypes   = Utility.ProtoTypes;

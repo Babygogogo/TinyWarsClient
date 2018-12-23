@@ -1,5 +1,5 @@
 
-namespace CustomOnlineWarCreator {
+namespace TinyWars.CustomOnlineWarCreator {
     import NetManager = Network.Manager;
     import ActionCode = Network.Codes;
     import Helpers    = Utility.Helpers;

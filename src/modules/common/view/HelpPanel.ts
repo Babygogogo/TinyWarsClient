@@ -1,5 +1,5 @@
 
-namespace Common {
+namespace TinyWars.Common {
     export type OpenDataForHelpPanel = {
         title  : string;
         content: string;

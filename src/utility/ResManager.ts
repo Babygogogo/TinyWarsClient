@@ -1,5 +1,5 @@
 
-namespace Utility {
+namespace TinyWars.Utility {
     export namespace ResManager {
         export async function init(): Promise<void> {
             egret.registerImplementation("eui.IAssetAdapter", new AssetAdapter());

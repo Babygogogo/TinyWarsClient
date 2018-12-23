@@ -1,5 +1,5 @@
 
-namespace Network {
+namespace TinyWars.Network {
     export const enum NetErrorCode {
         NoError = 0,
 

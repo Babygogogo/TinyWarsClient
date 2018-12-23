@@ -1,5 +1,5 @@
 
-namespace Time {
+namespace TinyWars.Time {
     export namespace TimeModel {
         import Notify = Utility.Notify;
         import Lang   = Utility.Lang;

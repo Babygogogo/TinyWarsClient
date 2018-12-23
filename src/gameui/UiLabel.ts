@@ -1,5 +1,5 @@
 
-module GameUi {
+module TinyWars.GameUi {
     export class UiLabel extends eui.Label {
         public touchEnabled = false;
 

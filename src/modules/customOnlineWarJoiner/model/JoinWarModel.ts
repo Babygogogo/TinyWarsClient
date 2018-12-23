@@ -1,5 +1,5 @@
 
-namespace CustomOnlineWarJoiner {
+namespace TinyWars.CustomOnlineWarJoiner {
     import ProtoTypes = Utility.ProtoTypes;
 
     export namespace JoinWarModel {

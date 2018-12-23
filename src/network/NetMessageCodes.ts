@@ -1,5 +1,5 @@
 
-namespace Network {
+namespace TinyWars.Network {
     export enum Codes {
         actionCode = 0,
         C_Heartbeat = 1,

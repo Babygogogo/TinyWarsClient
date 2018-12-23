@@ -1,5 +1,5 @@
 
-namespace GameUi {
+namespace TinyWars.GameUi {
     export class UiScrollList extends eui.Scroller {
         private _itemRenderer : any;
         private _dataProvider : eui.ArrayCollection;

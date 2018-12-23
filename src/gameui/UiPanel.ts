@@ -1,5 +1,5 @@
 
-namespace GameUi {
+namespace TinyWars.GameUi {
     type UiListener = {
         ui         : egret.DisplayObject,
         callback   : (e: egret.Event) => void,

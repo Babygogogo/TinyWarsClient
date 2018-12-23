@@ -1,5 +1,5 @@
 
-namespace Utility {
+namespace TinyWars.Utility {
     export namespace LocalStorage {
         export function setAccount(account: string): void {
             egret.localStorage.setItem("account", account);

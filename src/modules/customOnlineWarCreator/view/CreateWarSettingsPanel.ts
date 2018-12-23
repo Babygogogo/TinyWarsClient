@@ -1,5 +1,5 @@
 
-namespace CustomOnlineWarCreator {
+namespace TinyWars.CustomOnlineWarCreator {
     import Lang         = Utility.Lang;
     import Notify       = Utility.Notify;
     import FloatText    = Utility.FloatText;

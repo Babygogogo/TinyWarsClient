@@ -1,5 +1,5 @@
 
-namespace Login {
+namespace TinyWars.Login {
     import FloatText    = Utility.FloatText;
     import Lang         = Utility.Lang;
     import NotifyType   = Utility.Notify.Type;

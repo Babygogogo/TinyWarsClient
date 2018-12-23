@@ -25,21 +25,21 @@ class Main extends egret.DisplayObjectContainer {
     }
 
     private async runGame(): Promise<void> {
-        await Utility.StageManager.init(this.stage);
-        await Utility.ResManager.init();
-        await Utility.ProtoManager.init();
-        await Network.Manager.init();
-        await Time.TimeProxy.init();
-        await Time.TimeModel.init();
-        await User.UserModel.init();
-        await TemplateMap.TemplateMapProxy.init();
-        await TemplateMap.TemplateMapModel.init();
-        await Login.LoginProxy.init();
-        await CustomOnlineWarCreator.CreateWarProxy.init();
-        await CustomOnlineWarExiter.ExitWarProxy.init();
-        await CustomOnlineWarJoiner.JoinWarProxy.init();
+        await TinyWars.Utility.StageManager.init(this.stage);
+        await TinyWars.Utility.ResManager.init();
+        await TinyWars.Utility.ProtoManager.init();
+        await TinyWars.Network.Manager.init();
+        await TinyWars.Time.TimeProxy.init();
+        await TinyWars.Time.TimeModel.init();
+        await TinyWars.User.UserModel.init();
+        await TinyWars.TemplateMap.TemplateMapProxy.init();
+        await TinyWars.TemplateMap.TemplateMapModel.init();
+        await TinyWars.Login.LoginProxy.init();
+        await TinyWars.CustomOnlineWarCreator.CreateWarProxy.init();
+        await TinyWars.CustomOnlineWarExiter.ExitWarProxy.init();
+        await TinyWars.CustomOnlineWarJoiner.JoinWarProxy.init();
 
-        Utility.StageManager.gotoLogin();
+        TinyWars.Utility.StageManager.gotoLogin();
 
         // this.createGameScene();
         // lobby.LobbyPanel.create();
@@ -60,13 +60,13 @@ class Main extends egret.DisplayObjectContainer {
         let sky = this.createBitmapByName("bg_jpg");
         sky.horizontalCenter = 0;
         sky.verticalCenter   = 0;
-        Utility.StageManager.getLayer(Utility.Types.LayerType.Bottom).addChild(sky);
+        TinyWars.Utility.StageManager.getLayer(TinyWars.Utility.Types.LayerType.Bottom).addChild(sky);
 
         const data = [
-            {actionCode: Network.Codes.C_Login, account: "account", password: "password"},
+            {actionCode: TinyWars.Network.Codes.C_Login, account: "account", password: "password"},
         ];
         sky.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
-            Network.Manager.send(data[0]);
+            TinyWars.Network.Manager.send(data[0]);
         }, this);
 
         let stageW = this.stage.stageWidth;

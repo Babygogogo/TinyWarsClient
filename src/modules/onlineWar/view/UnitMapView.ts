@@ -1,5 +1,5 @@
 
-namespace OnlineWar {
+namespace TinyWars.OnlineWar {
     import Notify      = Utility.Notify;
     import IdConverter = Utility.IdConverter;
     import Types       = Utility.Types

@@ -1,5 +1,5 @@
 
-namespace Lobby {
+namespace TinyWars.Lobby {
     import Lang = Utility.Lang;
 
     export class LobbyPanel extends GameUi.UiPanel {

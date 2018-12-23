@@ -1,5 +1,5 @@
 
-namespace User {
+namespace TinyWars.User {
     import Notify       = Utility.Notify;
     import Types        = Utility.Types;
     import Lang         = Utility.Lang;

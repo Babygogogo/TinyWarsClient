@@ -1,5 +1,5 @@
 
-namespace Utility {
+namespace TinyWars.Utility {
     import ErrCode = Network.NetErrorCode;
 
     export namespace Lang {

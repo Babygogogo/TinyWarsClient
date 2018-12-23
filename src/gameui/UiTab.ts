@@ -1,5 +1,5 @@
 
-namespace GameUi {
+namespace TinyWars.GameUi {
     import Logger = Utility.Logger;
 
     export class UiTab extends eui.Component {

@@ -1,5 +1,5 @@
 
-namespace CustomOnlineWarExiter {
+namespace TinyWars.CustomOnlineWarExiter {
     import ProtoTypes = Utility.ProtoTypes;
 
     export namespace ExitWarModel {

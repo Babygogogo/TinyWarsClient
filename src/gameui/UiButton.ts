@@ -1,5 +1,5 @@
 
-namespace GameUi {
+namespace TinyWars.GameUi {
     import Helpers = Utility.Helpers;
     import Types   = Utility.Types;
 

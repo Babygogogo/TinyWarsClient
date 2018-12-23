@@ -1,5 +1,5 @@
 
-namespace Utility {
+namespace TinyWars.Utility {
     import TileBaseType   = Types.TileBaseType;
     import TileObjectType = Types.TileObjectType;
     import UnitType       = Types.UnitType;

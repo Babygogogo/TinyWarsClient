@@ -1,5 +1,5 @@
 
-namespace Utility {
+namespace TinyWars.Utility {
     export namespace Types {
         ////////////////////////////////////////////////////////////////////////////////
         // Types.

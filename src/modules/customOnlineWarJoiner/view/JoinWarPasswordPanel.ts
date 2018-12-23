@@ -1,5 +1,5 @@
 
-namespace CustomOnlineWarJoiner {
+namespace TinyWars.CustomOnlineWarJoiner {
     import ProtoTypes   = Utility.ProtoTypes;
     import Helpers      = Utility.Helpers;
     import Notify       = Utility.Notify;

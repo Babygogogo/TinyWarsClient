@@ -1,5 +1,5 @@
 
-namespace TemplateMap {
+namespace TinyWars.TemplateMap {
     import Types        = Utility.Types;
     import Helpers      = Utility.Helpers;
     import ProtoTypes   = Utility.ProtoTypes;

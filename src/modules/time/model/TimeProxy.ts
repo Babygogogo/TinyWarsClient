@@ -1,5 +1,5 @@
 
-namespace Time {
+namespace TinyWars.Time {
     export namespace TimeProxy {
         import Notify     = Utility.Notify;
         import NotifyType = Utility.Notify.Type;

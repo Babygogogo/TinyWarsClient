@@ -1,5 +1,5 @@
 
-namespace Utility {
+namespace TinyWars.Utility {
     export namespace FloatText {
         const SHOW_TIME_MS = 3000;
         const LOCK_TIME_MS = 480;

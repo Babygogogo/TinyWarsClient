@@ -1,5 +1,5 @@
 
-namespace Utility {
+namespace TinyWars.Utility {
     export namespace StageManager {
         import LayerType = Types.LayerType;
         // The game is in landscape mode, which means that its design max height equals its design width, 960.

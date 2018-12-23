@@ -1,5 +1,5 @@
 
-namespace Network {
+namespace TinyWars.Network {
     import Logger       = Utility.Logger;
     import Notify       = Utility.Notify;
     import FloatText    = Utility.FloatText;
