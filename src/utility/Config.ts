@@ -22,7 +22,7 @@ namespace TinyWars.Config {
             [TileObjectType.Bridge]      : TileType.BridgeOnBeach,      [TileObjectType.Wood]        : TileType.Wood,
             [TileObjectType.Mountain]    : TileType.Mountain,           [TileObjectType.Wasteland]   : TileType.Wasteland,
             [TileObjectType.Ruins]       : TileType.Ruins,              [TileObjectType.Fire]        : TileType.Fire,
-            [TileObjectType.Rough]       : TileType.Rough,              [TileObjectType.Mist]        : TileType.Mist,
+            [TileObjectType.Rough]       : TileType.Rough,              [TileObjectType.Mist]        : TileType.MistOnBeach,
             [TileObjectType.Reef]        : TileType.Reef,               [TileObjectType.Plasma]      : TileType.Plasma,
             [TileObjectType.Meteor]      : TileType.Meteor,             [TileObjectType.Silo]        : TileType.Silo,
             [TileObjectType.EmptySilo]   : TileType.EmptySilo,          [TileObjectType.Headquarters]: TileType.Headquarters,
@@ -37,7 +37,7 @@ namespace TinyWars.Config {
             [TileObjectType.Bridge]      : TileType.BridgeOnPlain,      [TileObjectType.Wood]        : TileType.Wood,
             [TileObjectType.Mountain]    : TileType.Mountain,           [TileObjectType.Wasteland]   : TileType.Wasteland,
             [TileObjectType.Ruins]       : TileType.Ruins,              [TileObjectType.Fire]        : TileType.Fire,
-            [TileObjectType.Rough]       : TileType.Rough,              [TileObjectType.Mist]        : TileType.Mist,
+            [TileObjectType.Rough]       : TileType.Rough,              [TileObjectType.Mist]        : TileType.MistOnPlain,
             [TileObjectType.Reef]        : TileType.Reef,               [TileObjectType.Plasma]      : TileType.Plasma,
             [TileObjectType.Meteor]      : TileType.Meteor,             [TileObjectType.Silo]        : TileType.Silo,
             [TileObjectType.EmptySilo]   : TileType.EmptySilo,          [TileObjectType.Headquarters]: TileType.Headquarters,
@@ -52,7 +52,7 @@ namespace TinyWars.Config {
             [TileObjectType.Bridge]      : TileType.BridgeOnRiver,      [TileObjectType.Wood]        : TileType.Wood,
             [TileObjectType.Mountain]    : TileType.Mountain,           [TileObjectType.Wasteland]   : TileType.Wasteland,
             [TileObjectType.Ruins]       : TileType.Ruins,              [TileObjectType.Fire]        : TileType.Fire,
-            [TileObjectType.Rough]       : TileType.Rough,              [TileObjectType.Mist]        : TileType.Mist,
+            [TileObjectType.Rough]       : TileType.Rough,              [TileObjectType.Mist]        : TileType.MistOnRiver,
             [TileObjectType.Reef]        : TileType.Reef,               [TileObjectType.Plasma]      : TileType.Plasma,
             [TileObjectType.Meteor]      : TileType.Meteor,             [TileObjectType.Silo]        : TileType.Silo,
             [TileObjectType.EmptySilo]   : TileType.EmptySilo,          [TileObjectType.Headquarters]: TileType.Headquarters,
@@ -67,7 +67,7 @@ namespace TinyWars.Config {
             [TileObjectType.Bridge]      : TileType.BridgeOnSea,        [TileObjectType.Wood]        : TileType.Wood,
             [TileObjectType.Mountain]    : TileType.Mountain,           [TileObjectType.Wasteland]   : TileType.Wasteland,
             [TileObjectType.Ruins]       : TileType.Ruins,              [TileObjectType.Fire]        : TileType.Fire,
-            [TileObjectType.Rough]       : TileType.Rough,              [TileObjectType.Mist]        : TileType.Mist,
+            [TileObjectType.Rough]       : TileType.Rough,              [TileObjectType.Mist]        : TileType.MistOnSea,
             [TileObjectType.Reef]        : TileType.Reef,               [TileObjectType.Plasma]      : TileType.Plasma,
             [TileObjectType.Meteor]      : TileType.Meteor,             [TileObjectType.Silo]        : TileType.Silo,
             [TileObjectType.EmptySilo]   : TileType.EmptySilo,          [TileObjectType.Headquarters]: TileType.Headquarters,
@@ -93,7 +93,7 @@ namespace TinyWars.Config {
         templateUnit  ?: { [unitType: number]: TemplateUnit };
     };
 
-    const CONFIG_0: GameConfig = {
+    export const CONFIG_0: GameConfig = {
         maxPromotion  : 3,
         promotionBonus: [
             {attack: 0,  defense: 0 },
@@ -192,16 +192,18 @@ namespace TinyWars.Config {
             [TileCategory.None]: [
             ],
             [TileCategory.All]: [
-                TileType.Plain,             TileType.River,             TileType.Sea,               TileType.Beach,
-                TileType.Road,              TileType.BridgeOnPlain,     TileType.Wood,              TileType.Mountain,
-                TileType.Wasteland,         TileType.Ruins,             TileType.Fire,              TileType.Rough,
-                TileType.Mist,              TileType.Reef,              TileType.Plasma,            TileType.Meteor,
-                TileType.Silo,              TileType.EmptySilo,         TileType.Headquarters,      TileType.City,
-                TileType.CommandTower,      TileType.Radar,             TileType.Factory,           TileType.Airport,
-                TileType.Seaport,           TileType.TempAirport,       TileType.TempSeaport,       TileType.GreenPlasma,
+                TileType.Plain,         TileType.River,         TileType.Sea,           TileType.Beach,
+                TileType.Road,          TileType.BridgeOnPlain, TileType.Wood,          TileType.Mountain,
+                TileType.Wasteland,     TileType.Ruins,         TileType.Fire,          TileType.Rough,
+                TileType.MistOnSea,     TileType.Reef,          TileType.Plasma,        TileType.GreenPlasma,
+                TileType.Meteor,        TileType.Silo,          TileType.EmptySilo,     TileType.Headquarters,
+                TileType.City,          TileType.CommandTower,  TileType.Radar,         TileType.Factory,
+                TileType.Airport,       TileType.Seaport,       TileType.TempAirport,   TileType.TempSeaport,
+                TileType.MistOnPlain,   TileType.MistOnRiver,   TileType.MistOnBeach,
             ],
             [TileCategory.LoadableForSeaTransports]: [
-                TileType.Beach,             TileType.Seaport,           TileType.TempSeaport,       TileType.BridgeOnBeach,
+                TileType.Beach,         TileType.Seaport,       TileType.TempSeaport,   TileType.BridgeOnBeach,
+                TileType.MistOnBeach,
             ],
         },
 
@@ -352,7 +354,7 @@ namespace TinyWars.Config {
                     [MoveType.Tank]    : undefined,     [MoveType.Air] : 1,             [MoveType.Ship] : 2,            [MoveType.Transport]: 2,
                 },
             },
-            [TileType.Mist]: {
+            [TileType.MistOnSea]: {
                 defenseAmount      : 10,
                 defenseUnitCategory: UnitCategory.Naval,
 
@@ -612,6 +614,40 @@ namespace TinyWars.Config {
                 visionRange                 : 2,
                 isVisionEnabledForAllPlayers: false,
 
+                hideUnitCategory: UnitCategory.GroundOrNaval,
+            },
+            [TileType.MistOnPlain]: {
+                defenseAmount      : 20,
+                defenseUnitCategory: UnitCategory.Ground,
+
+                moveCosts: {
+                    [MoveType.Infantry]: 1,     [MoveType.Mech]: 1,     [MoveType.TireA]: 2,            [MoveType.TireB]    : 1,
+                    [MoveType.Tank]    : 1,     [MoveType.Air] : 1,     [MoveType.Ship] : undefined,    [MoveType.Transport]: undefined,
+                },
+
+                maxBuildPoint: 20,
+                hideUnitCategory: UnitCategory.Ground,
+            },
+            [TileType.MistOnRiver]: {
+                defenseAmount      : 10,
+                defenseUnitCategory: UnitCategory.Foot,
+
+                moveCosts: {
+                    [MoveType.Infantry]: 2,         [MoveType.Mech]: 1,     [MoveType.TireA]: undefined,    [MoveType.TireB]    : undefined,
+                    [MoveType.Tank]    : undefined, [MoveType.Air] : 1,     [MoveType.Ship] : undefined,    [MoveType.Transport]: undefined,
+                },
+                hideUnitCategory: UnitCategory.Foot,
+            },
+            [TileType.MistOnBeach]: {
+                defenseAmount      : 10,
+                defenseUnitCategory: UnitCategory.GroundOrNaval,
+
+                moveCosts: {
+                    [MoveType.Infantry]: 1,     [MoveType.Mech]: 1,     [MoveType.TireA]: 2,            [MoveType.TireB]    : 2,
+                    [MoveType.Tank]    : 1,     [MoveType.Air] : 1,     [MoveType.Ship] : undefined,    [MoveType.Transport]: 1,
+                },
+
+                maxBuildPoint: 20,
                 hideUnitCategory: UnitCategory.GroundOrNaval,
             },
         },

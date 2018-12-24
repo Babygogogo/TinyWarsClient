@@ -264,11 +264,12 @@ namespace TinyWars.Utility {
             Plain,         /* 0 */      River,         /* 1 */      Sea,           /* 2 */      Beach,         /* 3 */
             Road,          /* 4 */      BridgeOnPlain, /* 5 */      BridgeOnRiver, /* 6 */      BridgeOnBeach, /* 7 */
             BridgeOnSea,   /* 8 */      Wood,          /* 9 */      Mountain,      /* 10 */     Wasteland,     /* 11 */
-            Ruins,         /* 12 */     Fire,          /* 13 */     Rough,         /* 14 */     Mist,          /* 15 */
+            Ruins,         /* 12 */     Fire,          /* 13 */     Rough,         /* 14 */     MistOnSea,     /* 15 */
             Reef,          /* 16 */     Plasma,        /* 17 */     GreenPlasma,   /* 18 */     Meteor,        /* 19 */
             Silo,          /* 20 */     EmptySilo,     /* 21 */     Headquarters,  /* 22 */     City,          /* 23 */
             CommandTower,  /* 24 */     Radar,         /* 25 */     Factory,       /* 26 */     Airport,       /* 27 */
-            Seaport,       /* 28 */     TempAirport,   /* 29 */     TempSeaport,   /* 30 */
+            Seaport,       /* 28 */     TempAirport,   /* 29 */     TempSeaport,   /* 30 */     MistOnPlain,   /* 31 */
+            MistOnRiver,   /* 32 */     MistOnBeach,   /* 33 */
         }
 
         export const enum UnitType {
