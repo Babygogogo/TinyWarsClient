@@ -1,5 +1,380 @@
 {
   "nested": {
+    "TileCategoryCfg": {
+      "fields": {
+        "category": {
+          "type": "uint32",
+          "id": 1
+        },
+        "tileTypes": {
+          "rule": "repeated",
+          "type": "uint32",
+          "id": 2
+        }
+      }
+    },
+    "UnitCategoryCfg": {
+      "fields": {
+        "category": {
+          "type": "uint32",
+          "id": 1
+        },
+        "unitTypes": {
+          "rule": "repeated",
+          "type": "uint32",
+          "id": 2
+        }
+      }
+    },
+    "TileTemplateCfg": {
+      "fields": {
+        "type": {
+          "type": "uint32",
+          "id": 1
+        },
+        "defenseAmount": {
+          "type": "uint32",
+          "id": 2
+        },
+        "defenseUnitCategory": {
+          "type": "uint32",
+          "id": 3
+        },
+        "maxBuildPoint": {
+          "type": "uint32",
+          "id": 4
+        },
+        "maxCapturePoint": {
+          "type": "uint32",
+          "id": 5
+        },
+        "isDefeatedOnCapture": {
+          "type": "uint32",
+          "id": 6
+        },
+        "repairAmount": {
+          "type": "uint32",
+          "id": 7
+        },
+        "repairUnitCategory": {
+          "type": "uint32",
+          "id": 8
+        },
+        "incomePerTurn": {
+          "type": "uint32",
+          "id": 9
+        },
+        "visionRange": {
+          "type": "uint32",
+          "id": 10
+        },
+        "isVisionEnabledForAllPlayers": {
+          "type": "uint32",
+          "id": 11
+        },
+        "hideUnitCategory": {
+          "type": "uint32",
+          "id": 12
+        },
+        "isDestroyedWithAdjacentMeteor": {
+          "type": "uint32",
+          "id": 13
+        },
+        "produceUnitCategory": {
+          "type": "uint32",
+          "id": 14
+        },
+        "globalAttackBonus": {
+          "type": "uint32",
+          "id": 15
+        },
+        "globalDefenseBonus": {
+          "type": "uint32",
+          "id": 16
+        },
+        "maxHp": {
+          "type": "uint32",
+          "id": 17
+        },
+        "armorType": {
+          "type": "uint32",
+          "id": 18
+        },
+        "isAffectedByLuck": {
+          "type": "uint32",
+          "id": 19
+        }
+      }
+    },
+    "UnitTemplateCfg": {
+      "fields": {
+        "type": {
+          "type": "uint32",
+          "id": 1
+        },
+        "minAttackRange": {
+          "type": "uint32",
+          "id": 2
+        },
+        "maxAttackRange": {
+          "type": "uint32",
+          "id": 3
+        },
+        "canAttackAfterMove": {
+          "type": "uint32",
+          "id": 4
+        },
+        "canAttackDivingUnits": {
+          "type": "uint32",
+          "id": 5
+        },
+        "primaryWeaponMaxAmmo": {
+          "type": "uint32",
+          "id": 6
+        },
+        "maxHp": {
+          "type": "uint32",
+          "id": 7
+        },
+        "armorType": {
+          "type": "uint32",
+          "id": 8
+        },
+        "isAffectedByLuck": {
+          "type": "uint32",
+          "id": 9
+        },
+        "moveRange": {
+          "type": "uint32",
+          "id": 10
+        },
+        "moveType": {
+          "type": "uint32",
+          "id": 11
+        },
+        "maxFuel": {
+          "type": "uint32",
+          "id": 12
+        },
+        "fuelConsumptionPerTurn": {
+          "type": "uint32",
+          "id": 13
+        },
+        "fuelConsumptionInDiving": {
+          "type": "uint32",
+          "id": 14
+        },
+        "isDestroyedOnOutOfFuel": {
+          "type": "uint32",
+          "id": 15
+        },
+        "maxLoadUnitsCount": {
+          "type": "uint32",
+          "id": 16
+        },
+        "loadUnitCategory": {
+          "type": "uint32",
+          "id": 17
+        },
+        "canLaunchLoadedUnits": {
+          "type": "uint32",
+          "id": 18
+        },
+        "canDropLoadedUnits": {
+          "type": "uint32",
+          "id": 19
+        },
+        "canSupplyLoadedUnits": {
+          "type": "uint32",
+          "id": 20
+        },
+        "repairAmountForLoadedUnits": {
+          "type": "uint32",
+          "id": 21
+        },
+        "loadableTileCategory": {
+          "type": "uint32",
+          "id": 22
+        },
+        "canSupplyAdjacentUnits": {
+          "type": "uint32",
+          "id": 23
+        },
+        "produceUnitType": {
+          "type": "uint32",
+          "id": 24
+        },
+        "maxProduceMaterial": {
+          "type": "uint32",
+          "id": 25
+        },
+        "maxBuildMaterial": {
+          "type": "uint32",
+          "id": 26
+        },
+        "canCaptureTile": {
+          "type": "uint32",
+          "id": 27
+        },
+        "canLaunchSilo": {
+          "type": "uint32",
+          "id": 28
+        },
+        "productionCost": {
+          "type": "uint32",
+          "id": 29
+        },
+        "visionRange": {
+          "type": "uint32",
+          "id": 30
+        },
+        "flareMaxAmmo": {
+          "type": "uint32",
+          "id": 31
+        },
+        "flareMaxRange": {
+          "type": "uint32",
+          "id": 32
+        },
+        "flareRadius": {
+          "type": "uint32",
+          "id": 33
+        }
+      }
+    },
+    "DamageChartCfg": {
+      "fields": {
+        "attackerType": {
+          "type": "uint32",
+          "id": 1
+        },
+        "armorType": {
+          "type": "uint32",
+          "id": 2
+        },
+        "weaponType": {
+          "type": "uint32",
+          "id": 3
+        },
+        "damage": {
+          "type": "uint32",
+          "id": 4
+        }
+      }
+    },
+    "MoveCostCfg": {
+      "fields": {
+        "tileType": {
+          "type": "uint32",
+          "id": 1
+        },
+        "moveType": {
+          "type": "uint32",
+          "id": 2
+        },
+        "cost": {
+          "type": "uint32",
+          "id": 3
+        }
+      }
+    },
+    "UnitPromotionCfg": {
+      "fields": {
+        "promotion": {
+          "type": "uint32",
+          "id": 1
+        },
+        "attackBonus": {
+          "type": "uint32",
+          "id": 2
+        },
+        "defenseBonus": {
+          "type": "uint32",
+          "id": 3
+        }
+      }
+    },
+    "VisionBonusCfg": {
+      "fields": {
+        "unitType": {
+          "type": "uint32",
+          "id": 1
+        },
+        "tileType": {
+          "type": "uint32",
+          "id": 2
+        },
+        "visionBonus": {
+          "type": "uint32",
+          "id": 3
+        }
+      }
+    },
+    "BuildableTileCfg": {
+      "fields": {
+        "unitType": {
+          "type": "uint32",
+          "id": 1
+        },
+        "srcTileType": {
+          "type": "uint32",
+          "id": 2
+        },
+        "dstTileType": {
+          "type": "uint32",
+          "id": 3
+        }
+      }
+    },
+    "FullConfig": {
+      "fields": {
+        "TileCategory": {
+          "rule": "repeated",
+          "type": "TileCategoryCfg",
+          "id": 1
+        },
+        "UnitCategory": {
+          "rule": "repeated",
+          "type": "UnitCategoryCfg",
+          "id": 2
+        },
+        "TileTemplate": {
+          "rule": "repeated",
+          "type": "TileTemplateCfg",
+          "id": 3
+        },
+        "UnitTemplate": {
+          "rule": "repeated",
+          "type": "UnitTemplateCfg",
+          "id": 4
+        },
+        "DamageChart": {
+          "rule": "repeated",
+          "type": "DamageChartCfg",
+          "id": 5
+        },
+        "MoveCost": {
+          "rule": "repeated",
+          "type": "MoveCostCfg",
+          "id": 6
+        },
+        "UnitPromotion": {
+          "rule": "repeated",
+          "type": "UnitPromotionCfg",
+          "id": 7
+        },
+        "VisionBonus": {
+          "rule": "repeated",
+          "type": "VisionBonusCfg",
+          "id": 8
+        },
+        "BuildableTile": {
+          "rule": "repeated",
+          "type": "BuildableTileCfg",
+          "id": 9
+        }
+      }
+    },
     "InstantialTile": {
       "fields": {
         "currentHp": {

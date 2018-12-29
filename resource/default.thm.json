@@ -2,13 +2,13 @@
 	"skins": {},
 	"autoGenerateExmlsList": true,
 	"exmls": [
-		"resource/skins/customOnlineWarExiter/ExitWarDetailPanel.exml",
-		"resource/skins/customOnlineWarExiter/ExitWarListPanel.exml",
-		"resource/skins/common/HelpPanel.exml",
 		"resource/skins/customOnlineWarCreator/CreateWarAdvancedSettingsPage.exml",
 		"resource/skins/customOnlineWarCreator/CreateWarBasicSettingsPage.exml",
 		"resource/skins/customOnlineWarCreator/CreateWarMapListPanel.exml",
 		"resource/skins/customOnlineWarCreator/CreateWarSettingsPanel.exml",
+		"resource/skins/common/HelpPanel.exml",
+		"resource/skins/customOnlineWarExiter/ExitWarDetailPanel.exml",
+		"resource/skins/customOnlineWarExiter/ExitWarListPanel.exml",
 		"resource/skins/customOnlineWarJoiner/JoinWarDetailPanel.exml",
 		"resource/skins/customOnlineWarJoiner/JoinWarListPanel.exml",
 		"resource/skins/customOnlineWarJoiner/JoinWarPasswordPanel.exml",
@@ -17,8 +17,8 @@
 		"resource/skins/login/LoginBackgroundPanel.exml",
 		"resource/skins/login/LoginPanel.exml",
 		"resource/skins/login/RegisterPanel.exml",
-		"resource/skins/utility/LoadingUiPanel.exml",
-		"resource/skins/templateMap/SearchMapPanel.exml"
+		"resource/skins/templateMap/SearchMapPanel.exml",
+		"resource/skins/utility/LoadingUiPanel.exml"
 	],
 	"path": "resource/default.thm.json"
 }

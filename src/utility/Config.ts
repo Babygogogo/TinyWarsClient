@@ -1168,8 +1168,10 @@ namespace TinyWars.Config {
 
                 maxBuildMaterial: 1,
                 buildTiles      : {
-                    [TileType.Plain]: TileType.TempAirport,
-                    [TileType.Beach]: TileType.TempSeaport,
+                    [TileType.Plain]        : TileType.TempAirport,
+                    [TileType.Beach]        : TileType.TempSeaport,
+                    [TileType.MistOnPlain]  : TileType.TempAirport,
+                    [TileType.MistOnBeach]  : TileType.TempSeaport,
                 },
 
                 productionCost: 5000,

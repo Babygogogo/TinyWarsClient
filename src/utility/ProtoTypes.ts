@@ -1,6 +1,1332 @@
 
 namespace TinyWars.Utility {
     export namespace ProtoTypes {
+        /** Properties of a TileCategoryCfg. */
+        export declare interface ITileCategoryCfg {
+
+            /** TileCategoryCfg category */
+            category?: (number | null);
+
+            /** TileCategoryCfg tileTypes */
+            tileTypes?: (number[] | null);
+        }
+
+        /** Represents a TileCategoryCfg. */
+        export declare class TileCategoryCfg implements ITileCategoryCfg {
+
+            /**
+             * Constructs a new TileCategoryCfg.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: ITileCategoryCfg);
+
+            /** TileCategoryCfg category. */
+            public category: number;
+
+            /** TileCategoryCfg tileTypes. */
+            public tileTypes: number[];
+
+            /**
+             * Creates a new TileCategoryCfg instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns TileCategoryCfg instance
+             */
+            public static create(properties?: ITileCategoryCfg): TileCategoryCfg;
+
+            /**
+             * Encodes the specified TileCategoryCfg message. Does not implicitly {@link TileCategoryCfg.verify|verify} messages.
+             * @param message TileCategoryCfg message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: ITileCategoryCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified TileCategoryCfg message, length delimited. Does not implicitly {@link TileCategoryCfg.verify|verify} messages.
+             * @param message TileCategoryCfg message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: ITileCategoryCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a TileCategoryCfg message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns TileCategoryCfg
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): TileCategoryCfg;
+
+            /**
+             * Decodes a TileCategoryCfg message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns TileCategoryCfg
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): TileCategoryCfg;
+
+            /**
+             * Verifies a TileCategoryCfg message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string | null);
+
+            /**
+             * Creates a TileCategoryCfg message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns TileCategoryCfg
+             */
+            public static fromObject(object: { [k: string]: any }): TileCategoryCfg;
+
+            /**
+             * Creates a plain object from a TileCategoryCfg message. Also converts values to other types if specified.
+             * @param message TileCategoryCfg
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: TileCategoryCfg, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this TileCategoryCfg to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of an UnitCategoryCfg. */
+        export declare interface IUnitCategoryCfg {
+
+            /** UnitCategoryCfg category */
+            category?: (number | null);
+
+            /** UnitCategoryCfg unitTypes */
+            unitTypes?: (number[] | null);
+        }
+
+        /** Represents an UnitCategoryCfg. */
+        export declare class UnitCategoryCfg implements IUnitCategoryCfg {
+
+            /**
+             * Constructs a new UnitCategoryCfg.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: IUnitCategoryCfg);
+
+            /** UnitCategoryCfg category. */
+            public category: number;
+
+            /** UnitCategoryCfg unitTypes. */
+            public unitTypes: number[];
+
+            /**
+             * Creates a new UnitCategoryCfg instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns UnitCategoryCfg instance
+             */
+            public static create(properties?: IUnitCategoryCfg): UnitCategoryCfg;
+
+            /**
+             * Encodes the specified UnitCategoryCfg message. Does not implicitly {@link UnitCategoryCfg.verify|verify} messages.
+             * @param message UnitCategoryCfg message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: IUnitCategoryCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified UnitCategoryCfg message, length delimited. Does not implicitly {@link UnitCategoryCfg.verify|verify} messages.
+             * @param message UnitCategoryCfg message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: IUnitCategoryCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes an UnitCategoryCfg message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns UnitCategoryCfg
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): UnitCategoryCfg;
+
+            /**
+             * Decodes an UnitCategoryCfg message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns UnitCategoryCfg
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): UnitCategoryCfg;
+
+            /**
+             * Verifies an UnitCategoryCfg message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string | null);
+
+            /**
+             * Creates an UnitCategoryCfg message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns UnitCategoryCfg
+             */
+            public static fromObject(object: { [k: string]: any }): UnitCategoryCfg;
+
+            /**
+             * Creates a plain object from an UnitCategoryCfg message. Also converts values to other types if specified.
+             * @param message UnitCategoryCfg
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: UnitCategoryCfg, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this UnitCategoryCfg to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a TileTemplateCfg. */
+        export declare interface ITileTemplateCfg {
+
+            /** TileTemplateCfg type */
+            type?: (number | null);
+
+            /** TileTemplateCfg defenseAmount */
+            defenseAmount?: (number | null);
+
+            /** TileTemplateCfg defenseUnitCategory */
+            defenseUnitCategory?: (number | null);
+
+            /** TileTemplateCfg maxBuildPoint */
+            maxBuildPoint?: (number | null);
+
+            /** TileTemplateCfg maxCapturePoint */
+            maxCapturePoint?: (number | null);
+
+            /** TileTemplateCfg isDefeatedOnCapture */
+            isDefeatedOnCapture?: (number | null);
+
+            /** TileTemplateCfg repairAmount */
+            repairAmount?: (number | null);
+
+            /** TileTemplateCfg repairUnitCategory */
+            repairUnitCategory?: (number | null);
+
+            /** TileTemplateCfg incomePerTurn */
+            incomePerTurn?: (number | null);
+
+            /** TileTemplateCfg visionRange */
+            visionRange?: (number | null);
+
+            /** TileTemplateCfg isVisionEnabledForAllPlayers */
+            isVisionEnabledForAllPlayers?: (number | null);
+
+            /** TileTemplateCfg hideUnitCategory */
+            hideUnitCategory?: (number | null);
+
+            /** TileTemplateCfg isDestroyedWithAdjacentMeteor */
+            isDestroyedWithAdjacentMeteor?: (number | null);
+
+            /** TileTemplateCfg produceUnitCategory */
+            produceUnitCategory?: (number | null);
+
+            /** TileTemplateCfg globalAttackBonus */
+            globalAttackBonus?: (number | null);
+
+            /** TileTemplateCfg globalDefenseBonus */
+            globalDefenseBonus?: (number | null);
+
+            /** TileTemplateCfg maxHp */
+            maxHp?: (number | null);
+
+            /** TileTemplateCfg armorType */
+            armorType?: (number | null);
+
+            /** TileTemplateCfg isAffectedByLuck */
+            isAffectedByLuck?: (number | null);
+        }
+
+        /** Represents a TileTemplateCfg. */
+        export declare class TileTemplateCfg implements ITileTemplateCfg {
+
+            /**
+             * Constructs a new TileTemplateCfg.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: ITileTemplateCfg);
+
+            /** TileTemplateCfg type. */
+            public type: number;
+
+            /** TileTemplateCfg defenseAmount. */
+            public defenseAmount: number;
+
+            /** TileTemplateCfg defenseUnitCategory. */
+            public defenseUnitCategory: number;
+
+            /** TileTemplateCfg maxBuildPoint. */
+            public maxBuildPoint: number;
+
+            /** TileTemplateCfg maxCapturePoint. */
+            public maxCapturePoint: number;
+
+            /** TileTemplateCfg isDefeatedOnCapture. */
+            public isDefeatedOnCapture: number;
+
+            /** TileTemplateCfg repairAmount. */
+            public repairAmount: number;
+
+            /** TileTemplateCfg repairUnitCategory. */
+            public repairUnitCategory: number;
+
+            /** TileTemplateCfg incomePerTurn. */
+            public incomePerTurn: number;
+
+            /** TileTemplateCfg visionRange. */
+            public visionRange: number;
+
+            /** TileTemplateCfg isVisionEnabledForAllPlayers. */
+            public isVisionEnabledForAllPlayers: number;
+
+            /** TileTemplateCfg hideUnitCategory. */
+            public hideUnitCategory: number;
+
+            /** TileTemplateCfg isDestroyedWithAdjacentMeteor. */
+            public isDestroyedWithAdjacentMeteor: number;
+
+            /** TileTemplateCfg produceUnitCategory. */
+            public produceUnitCategory: number;
+
+            /** TileTemplateCfg globalAttackBonus. */
+            public globalAttackBonus: number;
+
+            /** TileTemplateCfg globalDefenseBonus. */
+            public globalDefenseBonus: number;
+
+            /** TileTemplateCfg maxHp. */
+            public maxHp: number;
+
+            /** TileTemplateCfg armorType. */
+            public armorType: number;
+
+            /** TileTemplateCfg isAffectedByLuck. */
+            public isAffectedByLuck: number;
+
+            /**
+             * Creates a new TileTemplateCfg instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns TileTemplateCfg instance
+             */
+            public static create(properties?: ITileTemplateCfg): TileTemplateCfg;
+
+            /**
+             * Encodes the specified TileTemplateCfg message. Does not implicitly {@link TileTemplateCfg.verify|verify} messages.
+             * @param message TileTemplateCfg message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: ITileTemplateCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified TileTemplateCfg message, length delimited. Does not implicitly {@link TileTemplateCfg.verify|verify} messages.
+             * @param message TileTemplateCfg message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: ITileTemplateCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a TileTemplateCfg message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns TileTemplateCfg
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): TileTemplateCfg;
+
+            /**
+             * Decodes a TileTemplateCfg message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns TileTemplateCfg
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): TileTemplateCfg;
+
+            /**
+             * Verifies a TileTemplateCfg message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string | null);
+
+            /**
+             * Creates a TileTemplateCfg message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns TileTemplateCfg
+             */
+            public static fromObject(object: { [k: string]: any }): TileTemplateCfg;
+
+            /**
+             * Creates a plain object from a TileTemplateCfg message. Also converts values to other types if specified.
+             * @param message TileTemplateCfg
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: TileTemplateCfg, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this TileTemplateCfg to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of an UnitTemplateCfg. */
+        export declare interface IUnitTemplateCfg {
+
+            /** UnitTemplateCfg type */
+            type?: (number | null);
+
+            /** UnitTemplateCfg minAttackRange */
+            minAttackRange?: (number | null);
+
+            /** UnitTemplateCfg maxAttackRange */
+            maxAttackRange?: (number | null);
+
+            /** UnitTemplateCfg canAttackAfterMove */
+            canAttackAfterMove?: (number | null);
+
+            /** UnitTemplateCfg canAttackDivingUnits */
+            canAttackDivingUnits?: (number | null);
+
+            /** UnitTemplateCfg primaryWeaponMaxAmmo */
+            primaryWeaponMaxAmmo?: (number | null);
+
+            /** UnitTemplateCfg maxHp */
+            maxHp?: (number | null);
+
+            /** UnitTemplateCfg armorType */
+            armorType?: (number | null);
+
+            /** UnitTemplateCfg isAffectedByLuck */
+            isAffectedByLuck?: (number | null);
+
+            /** UnitTemplateCfg moveRange */
+            moveRange?: (number | null);
+
+            /** UnitTemplateCfg moveType */
+            moveType?: (number | null);
+
+            /** UnitTemplateCfg maxFuel */
+            maxFuel?: (number | null);
+
+            /** UnitTemplateCfg fuelConsumptionPerTurn */
+            fuelConsumptionPerTurn?: (number | null);
+
+            /** UnitTemplateCfg fuelConsumptionInDiving */
+            fuelConsumptionInDiving?: (number | null);
+
+            /** UnitTemplateCfg isDestroyedOnOutOfFuel */
+            isDestroyedOnOutOfFuel?: (number | null);
+
+            /** UnitTemplateCfg maxLoadUnitsCount */
+            maxLoadUnitsCount?: (number | null);
+
+            /** UnitTemplateCfg loadUnitCategory */
+            loadUnitCategory?: (number | null);
+
+            /** UnitTemplateCfg canLaunchLoadedUnits */
+            canLaunchLoadedUnits?: (number | null);
+
+            /** UnitTemplateCfg canDropLoadedUnits */
+            canDropLoadedUnits?: (number | null);
+
+            /** UnitTemplateCfg canSupplyLoadedUnits */
+            canSupplyLoadedUnits?: (number | null);
+
+            /** UnitTemplateCfg repairAmountForLoadedUnits */
+            repairAmountForLoadedUnits?: (number | null);
+
+            /** UnitTemplateCfg loadableTileCategory */
+            loadableTileCategory?: (number | null);
+
+            /** UnitTemplateCfg canSupplyAdjacentUnits */
+            canSupplyAdjacentUnits?: (number | null);
+
+            /** UnitTemplateCfg produceUnitType */
+            produceUnitType?: (number | null);
+
+            /** UnitTemplateCfg maxProduceMaterial */
+            maxProduceMaterial?: (number | null);
+
+            /** UnitTemplateCfg maxBuildMaterial */
+            maxBuildMaterial?: (number | null);
+
+            /** UnitTemplateCfg canCaptureTile */
+            canCaptureTile?: (number | null);
+
+            /** UnitTemplateCfg canLaunchSilo */
+            canLaunchSilo?: (number | null);
+
+            /** UnitTemplateCfg productionCost */
+            productionCost?: (number | null);
+
+            /** UnitTemplateCfg visionRange */
+            visionRange?: (number | null);
+
+            /** UnitTemplateCfg flareMaxAmmo */
+            flareMaxAmmo?: (number | null);
+
+            /** UnitTemplateCfg flareMaxRange */
+            flareMaxRange?: (number | null);
+
+            /** UnitTemplateCfg flareRadius */
+            flareRadius?: (number | null);
+        }
+
+        /** Represents an UnitTemplateCfg. */
+        export declare class UnitTemplateCfg implements IUnitTemplateCfg {
+
+            /**
+             * Constructs a new UnitTemplateCfg.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: IUnitTemplateCfg);
+
+            /** UnitTemplateCfg type. */
+            public type: number;
+
+            /** UnitTemplateCfg minAttackRange. */
+            public minAttackRange: number;
+
+            /** UnitTemplateCfg maxAttackRange. */
+            public maxAttackRange: number;
+
+            /** UnitTemplateCfg canAttackAfterMove. */
+            public canAttackAfterMove: number;
+
+            /** UnitTemplateCfg canAttackDivingUnits. */
+            public canAttackDivingUnits: number;
+
+            /** UnitTemplateCfg primaryWeaponMaxAmmo. */
+            public primaryWeaponMaxAmmo: number;
+
+            /** UnitTemplateCfg maxHp. */
+            public maxHp: number;
+
+            /** UnitTemplateCfg armorType. */
+            public armorType: number;
+
+            /** UnitTemplateCfg isAffectedByLuck. */
+            public isAffectedByLuck: number;
+
+            /** UnitTemplateCfg moveRange. */
+            public moveRange: number;
+
+            /** UnitTemplateCfg moveType. */
+            public moveType: number;
+
+            /** UnitTemplateCfg maxFuel. */
+            public maxFuel: number;
+
+            /** UnitTemplateCfg fuelConsumptionPerTurn. */
+            public fuelConsumptionPerTurn: number;
+
+            /** UnitTemplateCfg fuelConsumptionInDiving. */
+            public fuelConsumptionInDiving: number;
+
+            /** UnitTemplateCfg isDestroyedOnOutOfFuel. */
+            public isDestroyedOnOutOfFuel: number;
+
+            /** UnitTemplateCfg maxLoadUnitsCount. */
+            public maxLoadUnitsCount: number;
+
+            /** UnitTemplateCfg loadUnitCategory. */
+            public loadUnitCategory: number;
+
+            /** UnitTemplateCfg canLaunchLoadedUnits. */
+            public canLaunchLoadedUnits: number;
+
+            /** UnitTemplateCfg canDropLoadedUnits. */
+            public canDropLoadedUnits: number;
+
+            /** UnitTemplateCfg canSupplyLoadedUnits. */
+            public canSupplyLoadedUnits: number;
+
+            /** UnitTemplateCfg repairAmountForLoadedUnits. */
+            public repairAmountForLoadedUnits: number;
+
+            /** UnitTemplateCfg loadableTileCategory. */
+            public loadableTileCategory: number;
+
+            /** UnitTemplateCfg canSupplyAdjacentUnits. */
+            public canSupplyAdjacentUnits: number;
+
+            /** UnitTemplateCfg produceUnitType. */
+            public produceUnitType: number;
+
+            /** UnitTemplateCfg maxProduceMaterial. */
+            public maxProduceMaterial: number;
+
+            /** UnitTemplateCfg maxBuildMaterial. */
+            public maxBuildMaterial: number;
+
+            /** UnitTemplateCfg canCaptureTile. */
+            public canCaptureTile: number;
+
+            /** UnitTemplateCfg canLaunchSilo. */
+            public canLaunchSilo: number;
+
+            /** UnitTemplateCfg productionCost. */
+            public productionCost: number;
+
+            /** UnitTemplateCfg visionRange. */
+            public visionRange: number;
+
+            /** UnitTemplateCfg flareMaxAmmo. */
+            public flareMaxAmmo: number;
+
+            /** UnitTemplateCfg flareMaxRange. */
+            public flareMaxRange: number;
+
+            /** UnitTemplateCfg flareRadius. */
+            public flareRadius: number;
+
+            /**
+             * Creates a new UnitTemplateCfg instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns UnitTemplateCfg instance
+             */
+            public static create(properties?: IUnitTemplateCfg): UnitTemplateCfg;
+
+            /**
+             * Encodes the specified UnitTemplateCfg message. Does not implicitly {@link UnitTemplateCfg.verify|verify} messages.
+             * @param message UnitTemplateCfg message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: IUnitTemplateCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified UnitTemplateCfg message, length delimited. Does not implicitly {@link UnitTemplateCfg.verify|verify} messages.
+             * @param message UnitTemplateCfg message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: IUnitTemplateCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes an UnitTemplateCfg message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns UnitTemplateCfg
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): UnitTemplateCfg;
+
+            /**
+             * Decodes an UnitTemplateCfg message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns UnitTemplateCfg
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): UnitTemplateCfg;
+
+            /**
+             * Verifies an UnitTemplateCfg message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string | null);
+
+            /**
+             * Creates an UnitTemplateCfg message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns UnitTemplateCfg
+             */
+            public static fromObject(object: { [k: string]: any }): UnitTemplateCfg;
+
+            /**
+             * Creates a plain object from an UnitTemplateCfg message. Also converts values to other types if specified.
+             * @param message UnitTemplateCfg
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: UnitTemplateCfg, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this UnitTemplateCfg to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a DamageChartCfg. */
+        export declare interface IDamageChartCfg {
+
+            /** DamageChartCfg attackerType */
+            attackerType?: (number | null);
+
+            /** DamageChartCfg armorType */
+            armorType?: (number | null);
+
+            /** DamageChartCfg weaponType */
+            weaponType?: (number | null);
+
+            /** DamageChartCfg damage */
+            damage?: (number | null);
+        }
+
+        /** Represents a DamageChartCfg. */
+        export declare class DamageChartCfg implements IDamageChartCfg {
+
+            /**
+             * Constructs a new DamageChartCfg.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: IDamageChartCfg);
+
+            /** DamageChartCfg attackerType. */
+            public attackerType: number;
+
+            /** DamageChartCfg armorType. */
+            public armorType: number;
+
+            /** DamageChartCfg weaponType. */
+            public weaponType: number;
+
+            /** DamageChartCfg damage. */
+            public damage: number;
+
+            /**
+             * Creates a new DamageChartCfg instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns DamageChartCfg instance
+             */
+            public static create(properties?: IDamageChartCfg): DamageChartCfg;
+
+            /**
+             * Encodes the specified DamageChartCfg message. Does not implicitly {@link DamageChartCfg.verify|verify} messages.
+             * @param message DamageChartCfg message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: IDamageChartCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified DamageChartCfg message, length delimited. Does not implicitly {@link DamageChartCfg.verify|verify} messages.
+             * @param message DamageChartCfg message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: IDamageChartCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a DamageChartCfg message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns DamageChartCfg
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): DamageChartCfg;
+
+            /**
+             * Decodes a DamageChartCfg message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns DamageChartCfg
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): DamageChartCfg;
+
+            /**
+             * Verifies a DamageChartCfg message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string | null);
+
+            /**
+             * Creates a DamageChartCfg message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns DamageChartCfg
+             */
+            public static fromObject(object: { [k: string]: any }): DamageChartCfg;
+
+            /**
+             * Creates a plain object from a DamageChartCfg message. Also converts values to other types if specified.
+             * @param message DamageChartCfg
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: DamageChartCfg, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this DamageChartCfg to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a MoveCostCfg. */
+        export declare interface IMoveCostCfg {
+
+            /** MoveCostCfg tileType */
+            tileType?: (number | null);
+
+            /** MoveCostCfg moveType */
+            moveType?: (number | null);
+
+            /** MoveCostCfg cost */
+            cost?: (number | null);
+        }
+
+        /** Represents a MoveCostCfg. */
+        export declare class MoveCostCfg implements IMoveCostCfg {
+
+            /**
+             * Constructs a new MoveCostCfg.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: IMoveCostCfg);
+
+            /** MoveCostCfg tileType. */
+            public tileType: number;
+
+            /** MoveCostCfg moveType. */
+            public moveType: number;
+
+            /** MoveCostCfg cost. */
+            public cost: number;
+
+            /**
+             * Creates a new MoveCostCfg instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns MoveCostCfg instance
+             */
+            public static create(properties?: IMoveCostCfg): MoveCostCfg;
+
+            /**
+             * Encodes the specified MoveCostCfg message. Does not implicitly {@link MoveCostCfg.verify|verify} messages.
+             * @param message MoveCostCfg message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: IMoveCostCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified MoveCostCfg message, length delimited. Does not implicitly {@link MoveCostCfg.verify|verify} messages.
+             * @param message MoveCostCfg message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: IMoveCostCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a MoveCostCfg message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns MoveCostCfg
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): MoveCostCfg;
+
+            /**
+             * Decodes a MoveCostCfg message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns MoveCostCfg
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): MoveCostCfg;
+
+            /**
+             * Verifies a MoveCostCfg message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string | null);
+
+            /**
+             * Creates a MoveCostCfg message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns MoveCostCfg
+             */
+            public static fromObject(object: { [k: string]: any }): MoveCostCfg;
+
+            /**
+             * Creates a plain object from a MoveCostCfg message. Also converts values to other types if specified.
+             * @param message MoveCostCfg
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: MoveCostCfg, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this MoveCostCfg to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of an UnitPromotionCfg. */
+        export declare interface IUnitPromotionCfg {
+
+            /** UnitPromotionCfg promotion */
+            promotion?: (number | null);
+
+            /** UnitPromotionCfg attackBonus */
+            attackBonus?: (number | null);
+
+            /** UnitPromotionCfg defenseBonus */
+            defenseBonus?: (number | null);
+        }
+
+        /** Represents an UnitPromotionCfg. */
+        export declare class UnitPromotionCfg implements IUnitPromotionCfg {
+
+            /**
+             * Constructs a new UnitPromotionCfg.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: IUnitPromotionCfg);
+
+            /** UnitPromotionCfg promotion. */
+            public promotion: number;
+
+            /** UnitPromotionCfg attackBonus. */
+            public attackBonus: number;
+
+            /** UnitPromotionCfg defenseBonus. */
+            public defenseBonus: number;
+
+            /**
+             * Creates a new UnitPromotionCfg instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns UnitPromotionCfg instance
+             */
+            public static create(properties?: IUnitPromotionCfg): UnitPromotionCfg;
+
+            /**
+             * Encodes the specified UnitPromotionCfg message. Does not implicitly {@link UnitPromotionCfg.verify|verify} messages.
+             * @param message UnitPromotionCfg message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: IUnitPromotionCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified UnitPromotionCfg message, length delimited. Does not implicitly {@link UnitPromotionCfg.verify|verify} messages.
+             * @param message UnitPromotionCfg message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: IUnitPromotionCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes an UnitPromotionCfg message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns UnitPromotionCfg
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): UnitPromotionCfg;
+
+            /**
+             * Decodes an UnitPromotionCfg message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns UnitPromotionCfg
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): UnitPromotionCfg;
+
+            /**
+             * Verifies an UnitPromotionCfg message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string | null);
+
+            /**
+             * Creates an UnitPromotionCfg message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns UnitPromotionCfg
+             */
+            public static fromObject(object: { [k: string]: any }): UnitPromotionCfg;
+
+            /**
+             * Creates a plain object from an UnitPromotionCfg message. Also converts values to other types if specified.
+             * @param message UnitPromotionCfg
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: UnitPromotionCfg, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this UnitPromotionCfg to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a VisionBonusCfg. */
+        export declare interface IVisionBonusCfg {
+
+            /** VisionBonusCfg unitType */
+            unitType?: (number | null);
+
+            /** VisionBonusCfg tileType */
+            tileType?: (number | null);
+
+            /** VisionBonusCfg visionBonus */
+            visionBonus?: (number | null);
+        }
+
+        /** Represents a VisionBonusCfg. */
+        export declare class VisionBonusCfg implements IVisionBonusCfg {
+
+            /**
+             * Constructs a new VisionBonusCfg.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: IVisionBonusCfg);
+
+            /** VisionBonusCfg unitType. */
+            public unitType: number;
+
+            /** VisionBonusCfg tileType. */
+            public tileType: number;
+
+            /** VisionBonusCfg visionBonus. */
+            public visionBonus: number;
+
+            /**
+             * Creates a new VisionBonusCfg instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns VisionBonusCfg instance
+             */
+            public static create(properties?: IVisionBonusCfg): VisionBonusCfg;
+
+            /**
+             * Encodes the specified VisionBonusCfg message. Does not implicitly {@link VisionBonusCfg.verify|verify} messages.
+             * @param message VisionBonusCfg message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: IVisionBonusCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified VisionBonusCfg message, length delimited. Does not implicitly {@link VisionBonusCfg.verify|verify} messages.
+             * @param message VisionBonusCfg message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: IVisionBonusCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a VisionBonusCfg message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns VisionBonusCfg
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): VisionBonusCfg;
+
+            /**
+             * Decodes a VisionBonusCfg message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns VisionBonusCfg
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): VisionBonusCfg;
+
+            /**
+             * Verifies a VisionBonusCfg message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string | null);
+
+            /**
+             * Creates a VisionBonusCfg message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns VisionBonusCfg
+             */
+            public static fromObject(object: { [k: string]: any }): VisionBonusCfg;
+
+            /**
+             * Creates a plain object from a VisionBonusCfg message. Also converts values to other types if specified.
+             * @param message VisionBonusCfg
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: VisionBonusCfg, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this VisionBonusCfg to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a BuildableTileCfg. */
+        export declare interface IBuildableTileCfg {
+
+            /** BuildableTileCfg unitType */
+            unitType?: (number | null);
+
+            /** BuildableTileCfg srcTileType */
+            srcTileType?: (number | null);
+
+            /** BuildableTileCfg dstTileType */
+            dstTileType?: (number | null);
+        }
+
+        /** Represents a BuildableTileCfg. */
+        export declare class BuildableTileCfg implements IBuildableTileCfg {
+
+            /**
+             * Constructs a new BuildableTileCfg.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: IBuildableTileCfg);
+
+            /** BuildableTileCfg unitType. */
+            public unitType: number;
+
+            /** BuildableTileCfg srcTileType. */
+            public srcTileType: number;
+
+            /** BuildableTileCfg dstTileType. */
+            public dstTileType: number;
+
+            /**
+             * Creates a new BuildableTileCfg instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns BuildableTileCfg instance
+             */
+            public static create(properties?: IBuildableTileCfg): BuildableTileCfg;
+
+            /**
+             * Encodes the specified BuildableTileCfg message. Does not implicitly {@link BuildableTileCfg.verify|verify} messages.
+             * @param message BuildableTileCfg message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: IBuildableTileCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified BuildableTileCfg message, length delimited. Does not implicitly {@link BuildableTileCfg.verify|verify} messages.
+             * @param message BuildableTileCfg message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: IBuildableTileCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a BuildableTileCfg message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns BuildableTileCfg
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): BuildableTileCfg;
+
+            /**
+             * Decodes a BuildableTileCfg message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns BuildableTileCfg
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): BuildableTileCfg;
+
+            /**
+             * Verifies a BuildableTileCfg message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string | null);
+
+            /**
+             * Creates a BuildableTileCfg message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns BuildableTileCfg
+             */
+            public static fromObject(object: { [k: string]: any }): BuildableTileCfg;
+
+            /**
+             * Creates a plain object from a BuildableTileCfg message. Also converts values to other types if specified.
+             * @param message BuildableTileCfg
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: BuildableTileCfg, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this BuildableTileCfg to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a FullConfig. */
+        export declare interface IFullConfig {
+
+            /** FullConfig TileCategory */
+            TileCategory?: (ITileCategoryCfg[] | null);
+
+            /** FullConfig UnitCategory */
+            UnitCategory?: (IUnitCategoryCfg[] | null);
+
+            /** FullConfig TileTemplate */
+            TileTemplate?: (ITileTemplateCfg[] | null);
+
+            /** FullConfig UnitTemplate */
+            UnitTemplate?: (IUnitTemplateCfg[] | null);
+
+            /** FullConfig DamageChart */
+            DamageChart?: (IDamageChartCfg[] | null);
+
+            /** FullConfig MoveCost */
+            MoveCost?: (IMoveCostCfg[] | null);
+
+            /** FullConfig UnitPromotion */
+            UnitPromotion?: (IUnitPromotionCfg[] | null);
+
+            /** FullConfig VisionBonus */
+            VisionBonus?: (IVisionBonusCfg[] | null);
+
+            /** FullConfig BuildableTile */
+            BuildableTile?: (IBuildableTileCfg[] | null);
+        }
+
+        /** Represents a FullConfig. */
+        export declare class FullConfig implements IFullConfig {
+
+            /**
+             * Constructs a new FullConfig.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: IFullConfig);
+
+            /** FullConfig TileCategory. */
+            public TileCategory: ITileCategoryCfg[];
+
+            /** FullConfig UnitCategory. */
+            public UnitCategory: IUnitCategoryCfg[];
+
+            /** FullConfig TileTemplate. */
+            public TileTemplate: ITileTemplateCfg[];
+
+            /** FullConfig UnitTemplate. */
+            public UnitTemplate: IUnitTemplateCfg[];
+
+            /** FullConfig DamageChart. */
+            public DamageChart: IDamageChartCfg[];
+
+            /** FullConfig MoveCost. */
+            public MoveCost: IMoveCostCfg[];
+
+            /** FullConfig UnitPromotion. */
+            public UnitPromotion: IUnitPromotionCfg[];
+
+            /** FullConfig VisionBonus. */
+            public VisionBonus: IVisionBonusCfg[];
+
+            /** FullConfig BuildableTile. */
+            public BuildableTile: IBuildableTileCfg[];
+
+            /**
+             * Creates a new FullConfig instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns FullConfig instance
+             */
+            public static create(properties?: IFullConfig): FullConfig;
+
+            /**
+             * Encodes the specified FullConfig message. Does not implicitly {@link FullConfig.verify|verify} messages.
+             * @param message FullConfig message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: IFullConfig, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified FullConfig message, length delimited. Does not implicitly {@link FullConfig.verify|verify} messages.
+             * @param message FullConfig message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: IFullConfig, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a FullConfig message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns FullConfig
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): FullConfig;
+
+            /**
+             * Decodes a FullConfig message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns FullConfig
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): FullConfig;
+
+            /**
+             * Verifies a FullConfig message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string | null);
+
+            /**
+             * Creates a FullConfig message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns FullConfig
+             */
+            public static fromObject(object: { [k: string]: any }): FullConfig;
+
+            /**
+             * Creates a plain object from a FullConfig message. Also converts values to other types if specified.
+             * @param message FullConfig
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: FullConfig, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this FullConfig to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
         /** Properties of an InstantialTile. */
         export declare interface IInstantialTile {
 
