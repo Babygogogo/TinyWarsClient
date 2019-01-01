@@ -1,49 +1,49 @@
 {
-    "engineVersion": "5.2.2",
-    "compilerVersion": "5.2.2",
-    "template": {},
-    "target": {
-        "current": "web"
-    },
-    "eui": {
-        "exmlRoot": [
-            "resource/skins"
-        ],
-        "themes": [
-            "resource/default.thm.json"
-        ],
-        "exmlPublishPolicy": "commonjs"
-    },
-    "modules": [
-        {
-            "name": "egret"
-        },
-        {
-            "name": "game"
-        },
-        {
-            "name": "tween"
-        },
-        {
-            "name": "assetsmanager"
-        },
-        {
-            "name": "eui"
-        },
-        {
-            "name": "promise"
-        },
-        {
-            "name": "SocketIoClient",
-            "path": "../TinyWarsExternals/ClientDependencies/libs/SocketIoClient"
-        },
-        {
-            "name": "ProtobufJs",
-            "path": "../TinyWarsExternals/ClientDependencies/libs/ProtobufJs"
-        },
-        {
-            "name": "mouse",
-            "path": "../TinyWarsExternals/ClientDependencies/libs/mouse"
-        }
-    ]
+	"engineVersion": "5.2.13",
+	"compilerVersion": "5.2.13",
+	"template": {},
+	"target": {
+		"current": "web"
+	},
+	"eui": {
+		"exmlRoot": [
+			"resource/skins"
+		],
+		"themes": [
+			"resource/default.thm.json"
+		],
+		"exmlPublishPolicy": "commonjs"
+	},
+	"modules": [
+		{
+			"name": "egret"
+		},
+		{
+			"name": "game"
+		},
+		{
+			"name": "tween"
+		},
+		{
+			"name": "assetsmanager"
+		},
+		{
+			"name": "eui"
+		},
+		{
+			"name": "promise"
+		},
+		{
+			"name": "SocketIoClient",
+			"path": "../TinyWarsExternals/ClientDependencies/libs/SocketIoClient"
+		},
+		{
+			"name": "ProtobufJs",
+			"path": "../TinyWarsExternals/ClientDependencies/libs/ProtobufJs"
+		},
+		{
+			"name": "mouse",
+			"path": "../TinyWarsExternals/ClientDependencies/libs/mouse"
+		}
+	]
 }

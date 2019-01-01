@@ -2,11 +2,11 @@
 	"skins": {},
 	"autoGenerateExmlsList": true,
 	"exmls": [
+		"resource/skins/common/HelpPanel.exml",
 		"resource/skins/customOnlineWarCreator/CreateWarAdvancedSettingsPage.exml",
 		"resource/skins/customOnlineWarCreator/CreateWarBasicSettingsPage.exml",
 		"resource/skins/customOnlineWarCreator/CreateWarMapListPanel.exml",
 		"resource/skins/customOnlineWarCreator/CreateWarSettingsPanel.exml",
-		"resource/skins/common/HelpPanel.exml",
 		"resource/skins/customOnlineWarExiter/ExitWarDetailPanel.exml",
 		"resource/skins/customOnlineWarExiter/ExitWarListPanel.exml",
 		"resource/skins/customOnlineWarJoiner/JoinWarDetailPanel.exml",
