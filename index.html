@@ -10,14 +10,84 @@
     <meta name="screen-orientation" content="portrait" />
     <meta name="x5-fullscreen" content="true" />
     <meta name="360-fullscreen" content="true" />
+
     <style>
         html, body {
             -ms-touch-action: none;
-            background: #888888;
+            background: #000000;
             padding: 0;
             border: 0;
             margin: 0;
             height: 100%;
+        }
+
+        #outLoadingLayer div{
+            display: block;
+        }
+        #outLoadingLayer{
+            z-index: 10000;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0px;
+        }
+        #loadingLayer{
+            width: 100%;
+            height: 100%;
+            background: #000000;
+        }
+        #logoDiv{
+            padding-top: 119px;
+        }
+        .fullWidth{
+            width: 100%;
+        }
+        #logoCon {
+            width: 244px;
+            height: 177px;
+            margin: 0 auto;
+            background-size: contain;
+            background-position: center;
+        }
+        #loadingContent {
+            padding-top: 20px;
+        }
+        #loadingTxt {
+            color: #b8b8b8;
+            font-size: 16px;
+            width: 100%;
+            text-align: center;
+            font-family: 微软雅黑;
+        }
+        #loadingBarCon {
+            width: 237px;
+            height: 4px;
+            margin: 23px auto 0;
+            -webkit-border-radius: 4.528125px;
+            -moz-border-radius: 4.528125px;
+            border-radius: 4.528125px;
+            background: #343234;
+        }
+        #loadingBar {
+            margin: 0;
+            width: 237px;
+            height: 100%;
+            background: #fbd067;
+            -webkit-border-radius: 4.528125px;
+            -moz-border-radius: 4.528125px;
+            border-radius: 4.528125px;
+        }
+        .addTransition{
+            transform:scale(0.01, 1);
+            transform-origin:0% 0%;
+        }
+        .line-scale {
+            transition:All 16s ease-in-out;
+            transform:scale(1, 1);
+            transform-origin:0% 0%;
+        }
+        .clickme{
+            color:burlywood;
         }
     </style>
 </head>
@@ -34,6 +104,30 @@
          data-show-fps="true"
          data-show-log="false"
          data-show-fps-style="x:0,y:0,size:12,textColor:0xffffff,bgAlpha:0.9">
+    </div>
+
+    <div id="outLoadingLayer">
+        <div id="loadingLayer">
+            <div id="logoDiv" class="fullWidth">
+                <div id="logoCon"></div>
+            </div>
+            <div id="loadingContent" class="fullWidth">
+                <div id="loadingTxt">
+                    Now loading...<br>
+                    <font color="#f69638" size="1">
+                        <script>
+                            function sclick() {
+                                location.href = "";
+                            }
+                        </script>
+                        <span id="loadingDesTxt">Get stuck? <a class="clickme" href="javascript:sclick();">Touch me to refresh</a></span>
+                    </font>
+                </div>
+                <div id="loadingBarCon">
+                    <div id="loadingBar" class="addTransition"></div>
+                </div>
+            </div>
+        </div>
     </div>
 <script>
     var loadScript = function (list, callback) {
@@ -67,6 +161,8 @@
     var xhr = new XMLHttpRequest();
     xhr.open('GET', './manifest.json?v=' + Math.random(), true);
     xhr.addEventListener("load", function () {
+        document.getElementById("loadingBar").className = "line-scale"
+
         var manifest = JSON.parse(xhr.response);
         var list = manifest.initial.concat(manifest.game);
         loadScript(list, function () {

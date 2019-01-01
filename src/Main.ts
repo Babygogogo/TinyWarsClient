@@ -39,6 +39,7 @@ class Main extends egret.DisplayObjectContainer {
         await TinyWars.CustomOnlineWarExiter.ExitWarProxy.init();
         await TinyWars.CustomOnlineWarJoiner.JoinWarProxy.init();
 
+        this._removeLoadingDom();
         TinyWars.Utility.StageManager.gotoLogin();
 
         // this.createGameScene();
@@ -156,5 +157,13 @@ class Main extends egret.DisplayObjectContainer {
         };
 
         change();
+    }
+
+    private _removeLoadingDom(): void {
+        const document = window.document;
+        if (document) {
+            const outLoadingLayer = document.getElementById("outLoadingLayer");
+            (outLoadingLayer) && (document.body.removeChild(outLoadingLayer));
+        }
     }
 }
