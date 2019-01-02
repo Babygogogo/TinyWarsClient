@@ -58,7 +58,6 @@ namespace TinyWars.Login {
 
         private _onNotifySLogin(e: egret.Event): void {
             FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S00));
-            Utility.StageManager.gotoLobby();
         }
 
         private _onTouchedBtnLogin(e: egret.TouchEvent): void {

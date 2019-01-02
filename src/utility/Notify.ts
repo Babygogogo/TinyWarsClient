@@ -7,6 +7,7 @@ namespace TinyWars.Utility {
         export const enum Type {
             NetworkConnected,
             NetworkDisconnected,
+
             TimeTick,
             TileAnimationTick,
             UnitAnimationTick,

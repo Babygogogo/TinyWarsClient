@@ -5,20 +5,23 @@ namespace TinyWars.Utility {
 
         const PROTO_FILENAME = "resource/config/NetMessageProto.json";
 
-        let protoRoot     : protobuf.Root;
-        let ContainerClass: typeof ProtoTypes.Container;
+        let _protoRoot      : protobuf.Root;
+        let _containerClass : typeof ProtoTypes.Container;
 
         export async function init(): Promise<void> {
             return new Promise<void>((resolve, reject) => {
-                protobuf.load(PROTO_FILENAME, (err, root) => {
-                    if ((err) || (!root)) {
-                        reject(err || "no root");
-                    } else {
-                        protoRoot      = root;
-                        ContainerClass = root.lookupType("Container") as any;
-                        resolve();
-                    }
-                });
+                protobuf.load(PROTO_FILENAME).then(
+                    root => {
+                        if (!root) {
+                            reject("no root!");
+                        } else {
+                            _protoRoot      = root;
+                            _containerClass = root.lookupType("Container") as any;
+                            resolve();
+                        }
+                    },
+                    reason => reject(reason)
+                );
             });
         }
 
@@ -26,7 +29,7 @@ namespace TinyWars.Utility {
             if (action.actionCode == null) {
                 throw "ProtoManager.encodeAsContainer() invalid action";
             } else {
-                return ContainerClass.encode({
+                return _containerClass.encode({
                     actionCode                : action.actionCode,
                     [Codes[action.actionCode]]: action,
                 }).finish();
@@ -34,7 +37,7 @@ namespace TinyWars.Utility {
         }
 
         export function decodeAsContainer(data: any): ProtoTypes.IContainer {
-            return ContainerClass.decode(getDataForDecode(data)).toJSON();
+            return _containerClass.decode(getDataForDecode(data)).toJSON();
         }
 
         function getDataForDecode(encodedData: any): Uint8Array | protobuf.Reader {

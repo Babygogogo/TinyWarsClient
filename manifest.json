@@ -25,6 +25,7 @@
 		"bin-debug/gameui/UiPanel.js",
 		"bin-debug/network/NetManager.js",
 		"bin-debug/utility/Helpers.js",
+		"bin-debug/utility/FlowManager.js",
 		"bin-debug/modules/templateMap/model/TemplateMapProxy.js",
 		"bin-debug/utility/IdConverter.js",
 		"bin-debug/modules/time/model/TimeModel.js",
@@ -34,7 +35,6 @@
 		"bin-debug/gameui/UiImage.js",
 		"bin-debug/modules/templateMap/model/TemplateMapModel.js",
 		"bin-debug/utility/ConfigManager.js",
-		"bin-debug/modules/customOnlineWarJoiner/model/JoinWarModel.js",
 		"bin-debug/modules/customOnlineWarJoiner/model/JoinWarProxy.js",
 		"bin-debug/modules/customOnlineWarJoiner/view/JoinWarDetailPanel.js",
 		"bin-debug/modules/customOnlineWarJoiner/view/JoinWarListPanel.js",
@@ -69,8 +69,9 @@
 		"bin-debug/modules/customOnlineWarExiter/model/ExitWarModel.js",
 		"bin-debug/modules/customOnlineWarExiter/model/ExitWarProxy.js",
 		"bin-debug/modules/customOnlineWarExiter/view/ExitWarDetailPanel.js",
-		"bin-debug/utility/ResManager.js",
 		"bin-debug/modules/customOnlineWarExiter/view/ExitWarListPanel.js",
+		"bin-debug/utility/ResManager.js",
+		"bin-debug/modules/customOnlineWarJoiner/model/JoinWarModel.js",
 		"bin-debug/modules/login/view/LoginBackgroundPanel.js"
 	]
 }

@@ -1,14 +1,36 @@
 
 namespace TinyWars.Utility {
     export namespace ResManager {
+        let _isLoadedMainResource = false;
+
         export async function init(): Promise<void> {
             egret.registerImplementation("eui.IAssetAdapter", new AssetAdapter());
             egret.registerImplementation("eui.IThemeAdapter", new ThemeAdapter());
 
             await RES.loadConfig("resource/default.res.json", "resource/");
             await _initTheme();
-            await RES.loadGroup("preload", 0, LoadingUiPanel.create());
-            LoadingUiPanel.destroy();
+            // await RES.loadGroup("preload", 0, LoadingUiPanel.create());
+            // LoadingUiPanel.destroy();
+        }
+
+        export function loadMainRes(): Promise<void> {
+            return new Promise<void>((resolve, reject) => {
+                RES.loadGroup("main").then(
+                    () => {
+                        _isLoadedMainResource = true;
+                        resolve();
+                    },
+                    (reason) => {
+                        Logger.error("ResManager.loadMainRes() error! ", reason);
+                        FloatText.show("Error loading main resource! " + reason);
+                        reject();
+                    }
+                );
+            });
+        }
+
+        export function checkIsLoadedMainResource(): boolean {
+            return _isLoadedMainResource;
         }
 
         async function _initTheme(): Promise<void> {

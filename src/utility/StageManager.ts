@@ -52,18 +52,7 @@ namespace TinyWars.Utility {
             return layers[layer];
         }
 
-        export function gotoLogin(): void {
-            _closeAllPanels();
-            Login.LoginBackgroundPanel.show();
-            Login.LoginPanel.show();
-        }
-        export function gotoLobby(): void {
-            _closeAllPanels();
-            Lobby.LobbyPanel.show();
-            Lobby.LobbyTopPanel.show();
-        }
-
-        function _closeAllPanels(): void {
+        export function closeAllPanels(): void {
             for (const t in layers) {
                 layers[t].closeAllPanels();
             }

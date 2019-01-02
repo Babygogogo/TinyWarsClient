@@ -7,12 +7,12 @@ namespace TinyWars.User {
     import ProtoTypes   = Utility.ProtoTypes;
 
     export namespace UserModel {
-        let isLoggedIn   : boolean = false;
-        let userId       : number;
-        let userPrivilege: number;
-        let userAccount  : string;
-        let userPassword : string;
-        let userNickname : string;
+        let _isLoggedIn   : boolean = false;
+        let _userId       : number;
+        let _userPrivilege: number;
+        let _userAccount  : string;
+        let _userPassword : string;
+        let _userNickname : string;
 
         export function init(): void {
             Notify.addEventListeners([
@@ -23,34 +23,37 @@ namespace TinyWars.User {
         }
 
         export function updateOnLogin(data: ProtoTypes.IS_Login): void {
-            isLoggedIn    = true;
-            userId        = data.userId;
-            userPrivilege = data.privilege;
-            userAccount   = data.account;
-            userPassword  = data.password;
-            userNickname  = data.nickname;
+            _isLoggedIn    = true;
+            _userId        = data.userId;
+            _userPrivilege = data.privilege;
+            _userAccount   = data.account;
+            _userPassword  = data.password;
+            _userNickname  = data.nickname;
 
             LocalStorage.setAccount(data.account);
         }
 
         export function getUserId(): number {
-            return userId;
+            return _userId;
         }
         export function getUserPrivilege(): number {
-            return userPrivilege;
+            return _userPrivilege;
         }
         export function getUserNickname(): string {
-            return userNickname;
+            return _userNickname;
+        }
+        export function checkIsLoggedIn(): boolean {
+            return _isLoggedIn;
         }
 
         function _onNotifyNetworkConnected(e: egret.Event): void {
-            if ((!isLoggedIn) && (userAccount != null) && (userPassword != null)) {
-                Login.LoginProxy.reqLogin(userAccount, userPassword);
+            if ((!_isLoggedIn) && (_userAccount != null) && (_userPassword != null)) {
+                Login.LoginProxy.reqLogin(_userAccount, _userPassword);
             }
         }
 
         function _onNotifyNetworkDisconnected(e: egret.Event): void {
-            isLoggedIn = false;
+            _isLoggedIn = false;
         }
 
         function _onNotifySLogout(e: egret.Event): void {
@@ -63,9 +66,8 @@ namespace TinyWars.User {
                 Utility.FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S13));
             }
 
-            isLoggedIn   = false;
-            userPassword = undefined;
-            Utility.StageManager.gotoLogin();
+            _isLoggedIn   = false;
+            _userPassword = undefined;
         }
     }
 }

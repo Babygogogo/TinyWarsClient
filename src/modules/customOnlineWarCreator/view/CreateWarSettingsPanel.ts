@@ -84,7 +84,7 @@ namespace TinyWars.CustomOnlineWarCreator {
 
         private _onNotifySCreateCustomOnlineWar(e: egret.Event): void {
             FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S15));
-            StageManager.gotoLobby();
+            Utility.FlowManager.gotoLobby();
         }
 
         private _resetTimeoutForBtnConfirm(): void {

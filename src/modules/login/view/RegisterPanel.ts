@@ -1,8 +1,9 @@
 
 namespace TinyWars.Login {
-    import FloatText  = Utility.FloatText;
-    import Lang       = Utility.Lang;
-    import NotifyType = Utility.Notify.Type;
+    import FloatText    = Utility.FloatText;
+    import Lang         = Utility.Lang;
+    import NotifyType   = Utility.Notify.Type;
+    import FlowManager  = Utility.FlowManager;
 
     export class RegisterPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
@@ -49,7 +50,6 @@ namespace TinyWars.Login {
 
         private _onNotifySLogin(e: egret.Event): void {
             FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S00));
-            Utility.StageManager.gotoLobby();
         }
 
         private _onNotifySRegister(e: egret.Event): void {
@@ -59,7 +59,7 @@ namespace TinyWars.Login {
         }
 
         private _onTouchedBtnLogin(e: egret.TouchEvent): void {
-            Utility.StageManager.gotoLogin();
+            FlowManager.gotoLogin();
         }
 
         private _onTouchedBtnRegister(e: egret.TouchEvent): void {
