@@ -90,7 +90,7 @@ namespace TinyWars.OnlineWar {
             egret.assert(!this._isInitialized, "TileLayerBase.init() already initialized!");
             this._isInitialized = true;
 
-            const gridSize = Config.getGridSize();
+            const gridSize = ConfigManager.getGridSize();
             this._colCount = colCount;
             this._rowCount = rowCount;
             this.width     = gridSize.width  * colCount;

@@ -6,7 +6,7 @@ namespace TinyWars.OnlineWar {
     import Types       = Utility.Types
     import TimeModel   = Time.TimeModel;
 
-    const GRID_SIZE   = Config.getGridSize();
+    const GRID_SIZE   = ConfigManager.getGridSize();
     const GRID_WIDTH  = GRID_SIZE.width;
     const GRID_HEIGHT = GRID_SIZE.height;
 

@@ -11,15 +11,16 @@ namespace TinyWars.OnlineWar {
     export class TileModel {
         private _isInitialized: boolean = false;
 
-        private _configVersion: number;
-        private _template     : Types.TemplateTile;
-        private _gridX        : number;
-        private _gridY        : number;
-        private _baseViewId   : number;
-        private _objectViewId : number;
-        private _baseType     : Types.TileBaseType;
-        private _objectType   : Types.TileObjectType;
-        private _playerIndex  : number;
+        private _configVersion  : number;
+        private _templateCfg    : Types.TileTemplateCfg;
+        private _moveCostCfg    : { [moveType: number]: Types.MoveCostCfg };
+        private _gridX          : number;
+        private _gridY          : number;
+        private _baseViewId     : number;
+        private _objectViewId   : number;
+        private _baseType       : Types.TileBaseType;
+        private _objectType     : Types.TileObjectType;
+        private _playerIndex    : number;
 
         private _currentHp          : number | undefined;
         private _currentBuildPoint  : number | undefined;
@@ -44,7 +45,8 @@ namespace TinyWars.OnlineWar {
             this._baseType      = IdConverter.getTileBaseType(data.baseViewId);
             this._objectType    = t.tileObjectType;
             this._playerIndex   = t.playerIndex;
-            this._template      = Config.getTemplateTile(this._configVersion, this._baseType, this._objectType);
+            this._templateCfg   = ConfigManager.getTileTemplateCfg(this._configVersion, this._baseType, this._objectType);
+            this._moveCostCfg   = ConfigManager.getMoveCostCfg(this._configVersion, this._baseType, this._objectType);
             this._loadInstantialData(data.instantialData);
         }
 
@@ -83,7 +85,7 @@ namespace TinyWars.OnlineWar {
         // Functions for hp and armor.
         ////////////////////////////////////////////////////////////////////////////////
         public getMaxHp(): number | undefined {
-            return this._template.maxHp;
+            return this._templateCfg.maxHp;
         }
 
         public getNormalizedCurrentHp(): number | undefined {
@@ -105,18 +107,18 @@ namespace TinyWars.OnlineWar {
         }
 
         public getArmorType(): Types.ArmorType | undefined {
-            return this._template.armorType;
+            return this._templateCfg.armorType;
         }
 
-        public checkIsArmorAffectByLuck(): boolean | undefined {
-            return this._template.isAffectedByLuck;
+        public checkIsArmorAffectByLuck(): boolean {
+            return this._templateCfg.isAffectedByLuck === 1;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for build.
         ////////////////////////////////////////////////////////////////////////////////
         public getMaxBuildPoint(): number | undefined {
-            return this._template.maxBuildPoint;
+            return this._templateCfg.maxBuildPoint;
         }
 
         public getCurrentBuildPoint(): number | undefined {
@@ -137,7 +139,7 @@ namespace TinyWars.OnlineWar {
         // Functions for capture.
         ////////////////////////////////////////////////////////////////////////////////
         public getMaxCapturePoint(): number | undefined {
-            return this._template.maxCapturePoint;
+            return this._templateCfg.maxCapturePoint;
         }
 
         public getCurrentCapturePoint(): number | undefined {
@@ -154,8 +156,8 @@ namespace TinyWars.OnlineWar {
             this._currentCapturePoint = point;
         }
 
-        public checkIsDefeatOnCapture(): boolean | undefined{
-            return this._template.isDefeatOnCapture;
+        public checkIsDefeatOnCapture(): boolean {
+            return this._templateCfg.isDefeatedOnCapture === 1;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -166,11 +168,11 @@ namespace TinyWars.OnlineWar {
         }
 
         public getDefenseAmount(): number {
-            return this._template.defenseAmount;
+            return this._templateCfg.defenseAmount;
         }
 
         public getDefenseUnitCategory(): Types.UnitCategory {
-            return this._template.defenseUnitCategory;
+            return this._templateCfg.defenseUnitCategory;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -188,7 +190,7 @@ namespace TinyWars.OnlineWar {
         // Functions for income.
         ////////////////////////////////////////////////////////////////////////////////
         public getIncomeAmountPerTurn(): number | undefined {
-            return this._template.incomePerTurn;
+            return this._templateCfg.incomePerTurn;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -201,51 +203,51 @@ namespace TinyWars.OnlineWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for move cost.
         ////////////////////////////////////////////////////////////////////////////////
-        public getMoveCosts(): Types.MoveCosts {
-            return this._template.moveCosts;
+        public getMoveCosts(): { [moveType: number]: Types.MoveCostCfg } {
+            return this._moveCostCfg;
         }
 
         public getMoveCost(moveType: Types.MoveType): number | undefined {
-            return this.getMoveCosts()[moveType];
+            return this.getMoveCosts()[moveType].cost;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for repair unit.
         ////////////////////////////////////////////////////////////////////////////////
         public getRepairUnitCategory(): Types.UnitCategory | undefined {
-            return this._template.repairUnitCategory;
+            return this._templateCfg.repairUnitCategory;
         }
 
         public getRepairAmount(): number | undefined {
-            return this._template.repairAmount;
+            return this._templateCfg.repairAmount;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for hide unit.
         ////////////////////////////////////////////////////////////////////////////////
         public checkCanHideUnit(unitType: Types.UnitType): boolean {
-            const category = this._template.hideUnitCategory;
+            const category = this._templateCfg.hideUnitCategory;
             return category == null
                 ? false
-                : Config.getUnitTypesByCategory(this._configVersion, category).indexOf(unitType) >= 0;
+                : ConfigManager.getUnitTypesByCategory(this._configVersion, category).indexOf(unitType) >= 0;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for produce unit.
         ////////////////////////////////////////////////////////////////////////////////
         public getProduceUnitCategory(): Types.UnitCategory | undefined {
-            return this._template.produceUnitCategory;
+            return this._templateCfg.produceUnitCategory;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for vision.
         ////////////////////////////////////////////////////////////////////////////////
         public getVisionRange(): number | undefined {
-            return this._template.visionRange;
+            return this._templateCfg.visionRange;
         }
 
-        public checkIsVisionEnabledForAllPlayers(): boolean | undefined {
-            return this._template.isVisionEnabledForAllPlayers;
+        public checkIsVisionEnabledForAllPlayers(): boolean {
+            return this._templateCfg.isVisionEnabledForAllPlayers === 1;
         }
 
         ////////////////////////////////////////////////////////////////////////////////

@@ -177,7 +177,7 @@ namespace TinyWars.CustomOnlineWarCreator {
         }
 
         private _createUnitViewDatas(unitViewIds: number[], mapWidth: number, mapHeight: number): Types.UnitViewData[] {
-            const configVersion = Config.getLatestConfigVersion();
+            const configVersion = ConfigManager.getLatestConfigVersion();
             const datas: Types.UnitViewData[] = [];
 
             let index  = 0;
@@ -222,7 +222,7 @@ namespace TinyWars.CustomOnlineWarCreator {
             const unitMapView = new OnlineWar.UnitMapView();
             unitMapView.initWithDatas(this._createUnitViewDatas(data.units, data.mapWidth, data.mapHeight));
 
-            const gridSize = Config.getGridSize();
+            const gridSize = ConfigManager.getGridSize();
             this._zoomMap.removeAllContents();
             this._zoomMap.setContentWidth(data.mapWidth * gridSize.width);
             this._zoomMap.setContentHeight(data.mapHeight * gridSize.height);

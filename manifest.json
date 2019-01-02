@@ -33,7 +33,7 @@
 		"bin-debug/modules/common/view/HelpPanel.js",
 		"bin-debug/gameui/UiImage.js",
 		"bin-debug/modules/templateMap/model/TemplateMapModel.js",
-		"bin-debug/utility/Config.js",
+		"bin-debug/utility/ConfigManager.js",
 		"bin-debug/modules/customOnlineWarJoiner/model/JoinWarModel.js",
 		"bin-debug/modules/customOnlineWarJoiner/model/JoinWarProxy.js",
 		"bin-debug/modules/customOnlineWarJoiner/view/JoinWarDetailPanel.js",

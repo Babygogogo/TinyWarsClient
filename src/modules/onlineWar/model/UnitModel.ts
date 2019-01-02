@@ -15,14 +15,17 @@ namespace TinyWars.OnlineWar {
     export class UnitModel {
         private _isInitialized: boolean = false;
 
-        private _configVersion: number;
-        private _template     : Types.TemplateUnit;
-        private _gridX        : number;
-        private _gridY        : number;
-        private _viewId       : number;
-        private _unitId       : number;
-        private _unitType     : UnitType;
-        private _playerIndex  : number;
+        private _configVersion      : number;
+        private _templateCfg        : Types.UnitTemplateCfg;
+        private _damageChartCfg     : { [armorType: number]: { [weaponType: number]: Types.DamageChartCfg } };
+        private _buildableTileCfg   : { [srcTileType: number]: Types.BuildableTileCfg };
+        private _visionBonusCfg     : { [tileType: number]: Types.VisionBonusCfg };
+        private _gridX              : number;
+        private _gridY              : number;
+        private _viewId             : number;
+        private _unitId             : number;
+        private _unitType           : UnitType;
+        private _playerIndex        : number;
 
         private _state           : UnitState;
         private _currentHp       : number;
@@ -48,15 +51,18 @@ namespace TinyWars.OnlineWar {
             const t = IdConverter.getUnitTypeAndPlayerIndex(data.viewId);
             Logger.assert(t, "UnitModel.deserialize() invalid SerializedUnit! ", data);
 
-            this._isInitialized = true;
-            this._configVersion = data.configVersion;
-            this._gridX         = data.gridX;
-            this._gridY         = data.gridY;
-            this._viewId        = data.viewId;
-            this._unitId        = data.unitId;
-            this._unitType      = t!.unitType;
-            this._playerIndex   = t!.playerIndex;
-            this._template      = Config.getTemplateUnit(this._configVersion, this._unitType);
+            this._isInitialized     = true;
+            this._configVersion     = data.configVersion;
+            this._gridX             = data.gridX;
+            this._gridY             = data.gridY;
+            this._viewId            = data.viewId;
+            this._unitId            = data.unitId;
+            this._unitType          = t!.unitType;
+            this._playerIndex       = t!.playerIndex;
+            this._templateCfg       = ConfigManager.getUnitTemplateCfg(this._configVersion, this._unitType);
+            this._damageChartCfg    = ConfigManager.getDamageChartCfgs(this._configVersion, this._unitType);
+            this._buildableTileCfg  = ConfigManager.getBuildableTileCfgs(this._configVersion, this._unitType);
+            this._visionBonusCfg    = ConfigManager.getVisionBonusCfg(this._configVersion, this._unitType);
             this._loadInstantialData(data.instantialData);
         }
 
@@ -101,7 +107,7 @@ namespace TinyWars.OnlineWar {
         // Functions for hp and armor.
         ////////////////////////////////////////////////////////////////////////////////
         public getMaxHp(): number {
-            return this._template.maxHp;
+            return this._templateCfg.maxHp;
         }
 
         public getNormalizedCurrentHp(): number {
@@ -116,22 +122,22 @@ namespace TinyWars.OnlineWar {
         }
 
         public getArmorType(): ArmorType {
-            return this._template.armorType;
+            return this._templateCfg.armorType;
         }
 
-        public checkIsArmorAffectByLuck(): boolean | undefined {
-            return this._template.isAffectedByLuck;
+        public checkIsArmorAffectByLuck(): boolean {
+            return this._templateCfg.isAffectedByLuck === 1;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for weapon.
         ////////////////////////////////////////////////////////////////////////////////
         public checkHasPrimaryWeapon(): boolean {
-            return this._template.primaryWeaponDamages != null;
+            return this._templateCfg.primaryWeaponMaxAmmo != null;
         }
 
         public getPrimaryWeaponMaxAmmo(): number | undefined {
-            return this._template.primaryWeaponMaxAmmo;
+            return this._templateCfg.primaryWeaponMaxAmmo;
         }
 
         public getPrimaryWeaponCurrentAmmo(): number | undefined{
@@ -153,18 +159,16 @@ namespace TinyWars.OnlineWar {
             return maxAmmo != null ? this.getPrimaryWeaponCurrentAmmo()! <= maxAmmo * 0.4 : false;
         }
 
-        public getPrimaryWeaponDamage(armorType: ArmorType): number | undefined {
-            const damages = this._template.primaryWeaponDamages;
-            return damages ? damages[armorType] : undefined;
+        public getPrimaryWeaponDamage(armorType: ArmorType): number | undefined | null {
+            return this._damageChartCfg[armorType][Types.WeaponType.Primary].damage;
         }
 
         public checkHasSecondaryWeapon(): boolean {
-            return this._template.secondaryWeaponDamages != null;
+            return ConfigManager.checkHasSecondaryWeapon(this._configVersion, this._unitType);
         }
 
-        public getSecondaryWeaponDamage(armorType: ArmorType): number | undefined {
-            const damages = this._template.secondaryWeaponDamages;
-            return damages ? damages[armorType] : undefined;
+        public getSecondaryWeaponDamage(armorType: ArmorType): number | undefined | null {
+            return this._damageChartCfg[armorType][Types.WeaponType.Secondary].damage;
         }
 
         public getDamage(armorType: ArmorType): number | undefined {
@@ -172,17 +176,17 @@ namespace TinyWars.OnlineWar {
         }
 
         public getMinAttackRange(): number | undefined {
-            return this._template.minAttackRange;
+            return this._templateCfg.minAttackRange;
         }
         public getMaxAttackRange(): number | undefined {
-            return this._template.maxAttackRange;
+            return this._templateCfg.maxAttackRange;
         }
 
-        public checkCanAttackAfterMove(): boolean | undefined {
-            return this._template.canAttackAfterMove;
+        public checkCanAttackAfterMove(): boolean {
+            return this._templateCfg.canAttackAfterMove === 1;
         }
-        public checkCanAttackDivingUnits(): boolean | undefined {
-            return this._template.canAttackDivingUnits;
+        public checkCanAttackDivingUnits(): boolean {
+            return this._templateCfg.canAttackDivingUnits === 1;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -198,8 +202,8 @@ namespace TinyWars.OnlineWar {
             this._isCapturingTile = isCapturing;
         }
 
-        public checkCanCaptureTile(): boolean | undefined {
-            return this._template.canCaptureTile;
+        public checkCanCaptureTile(): boolean {
+            return this._templateCfg.canCaptureTile === 1;
         }
 
         public getCaptureAmount(): number | undefined {
@@ -220,7 +224,7 @@ namespace TinyWars.OnlineWar {
         }
 
         public checkCanDive(): boolean {
-            return this._template.fuelConsumptionInDiving != null;
+            return this._templateCfg.fuelConsumptionInDiving != null;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -235,15 +239,15 @@ namespace TinyWars.OnlineWar {
         }
 
         public getMaxFuel(): number {
-            return this._template.maxFuel;
+            return this._templateCfg.maxFuel;
         }
 
         public getFuelConsumptionPerTurn(): number {
-            return this.getIsDiving() ? this._template.fuelConsumptionInDiving! : this._template.fuelConsumptionPerTurn;
+            return this.getIsDiving() ? this._templateCfg.fuelConsumptionInDiving! : this._templateCfg.fuelConsumptionPerTurn;
         }
 
         public checkIsDestroyedOnOutOfFuel(): boolean {
-            return this._template.isDestroyedOnOutOfFuel;
+            return this._templateCfg.isDestroyedOnOutOfFuel === 1;
         }
 
         public checkIsFuelInShort(): boolean {
@@ -254,15 +258,15 @@ namespace TinyWars.OnlineWar {
         // Functions for flare.
         ////////////////////////////////////////////////////////////////////////////////
         public getFlareRadius(): number | undefined {
-            return this._template.flareRadius;
+            return this._templateCfg.flareRadius;
         }
 
         public getFlareMaxRange(): number | undefined {
-            return this._template.flareMaxRange;
+            return this._templateCfg.flareMaxRange;
         }
 
         public getFlareMaxAmmo(): number | undefined {
-            return this._template.flareMaxAmmo;
+            return this._templateCfg.flareMaxAmmo;
         }
 
         public getFlareCurrentAmmo(): number | undefined {
@@ -305,11 +309,11 @@ namespace TinyWars.OnlineWar {
         // Functions for produce unit.
         ////////////////////////////////////////////////////////////////////////////////
         public getProduceUnitType(): UnitType | undefined {
-            return this._template.produceUnitType;
+            return this._templateCfg.produceUnitType;
         }
 
         public getMaxProduceMaterial(): number | undefined {
-            return this._template.maxProduceMaterial;
+            return this._templateCfg.maxProduceMaterial;
         }
 
         public getCurrentProduceMaterial(): number | undefined {
@@ -330,25 +334,25 @@ namespace TinyWars.OnlineWar {
         // Functions for move.
         ////////////////////////////////////////////////////////////////////////////////
         public getMoveRange(): number {
-            return this._template.moveRange;
+            return this._templateCfg.moveRange;
         }
 
         public getMoveType(): MoveType {
-            return this._template.moveType;
+            return this._templateCfg.moveType;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for produce self.
         ////////////////////////////////////////////////////////////////////////////////
         public getProductionCost(): number {
-            return this._template.productionCost;
+            return this._templateCfg.productionCost;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for promotion.
         ////////////////////////////////////////////////////////////////////////////////
         public getMaxPromotion(): number {
-            return Config.getUnitMaxPromotion(this._configVersion);
+            return ConfigManager.getUnitMaxPromotion(this._configVersion);
         }
 
         public getCurrentPromotion(): number {
@@ -360,18 +364,18 @@ namespace TinyWars.OnlineWar {
         }
 
         public getPromotionAttackBonus(): number {
-            return Config.getUnitPromotionAttackBonus(this._configVersion, this.getCurrentPromotion());
+            return ConfigManager.getUnitPromotionAttackBonus(this._configVersion, this.getCurrentPromotion());
         }
 
         public getPromotionDefenseBonus(): number {
-            return Config.getUnitPromotionDefenseBonus(this._configVersion, this.getCurrentPromotion());
+            return ConfigManager.getUnitPromotionDefenseBonus(this._configVersion, this.getCurrentPromotion());
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for launch silo.
         ////////////////////////////////////////////////////////////////////////////////
-        public checkCanLaunchSilo(): boolean | undefined {
-            return this._template.canLaunchSilo;
+        public checkCanLaunchSilo(): boolean {
+            return this._templateCfg.canLaunchSilo === 1;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -388,12 +392,13 @@ namespace TinyWars.OnlineWar {
         }
 
         public checkCanBuildTile(): boolean {
-            return this._template.buildTiles != null;
+            return this._buildableTileCfg != null;
         }
 
-        public getBuildTargetTile(srcType: TileType): TileType | undefined {
-            const buildTiles = this._template.buildTiles;
-            return buildTiles ? buildTiles[srcType] : undefined;
+        public getBuildTargetTile(srcType: TileType): TileType | undefined | null {
+            const cfgs  = this._buildableTileCfg;
+            const cfg   = cfgs ? cfgs[srcType] : undefined;
+            return cfg ? cfg.dstTileType : undefined;
         }
 
         public getBuildAmount(): number | undefined {
@@ -401,7 +406,7 @@ namespace TinyWars.OnlineWar {
         }
 
         public getMaxBuildMaterial(): number | undefined {
-            return this._template.maxBuildMaterial;
+            return this._templateCfg.maxBuildMaterial;
         }
 
         public getCurrentBuildMaterial(): number | undefined {
@@ -422,7 +427,7 @@ namespace TinyWars.OnlineWar {
         // Functions for load unit.
         ////////////////////////////////////////////////////////////////////////////////
         public getMaxLoadUnitsCount(): number | undefined {
-            return this._template.maxLoadUnitsCount;
+            return this._templateCfg.maxLoadUnitsCount;
         }
 
         public getLoadedUnitsCount(): number | undefined {
@@ -438,20 +443,20 @@ namespace TinyWars.OnlineWar {
             return ids ? ids.indexOf(id) >= 0 : false;
         }
 
-        public checkCanDropLoadedUnit(): boolean | undefined {
-            return this._template.canDropLoadedUnits;
+        public checkCanDropLoadedUnit(): boolean {
+            return this._templateCfg.canDropLoadedUnits === 1;
         }
 
-        public checkCanLaunchLoadedUnit(): boolean | undefined {
-            return this._template.canLaunchLoadedUnits;
+        public checkCanLaunchLoadedUnit(): boolean {
+            return this._templateCfg.canLaunchLoadedUnits === 1;
         }
 
-        public checkCanSupplyLoadedUnit(): boolean | undefined {
-            return this._template.canSupplyLoadedUnits;
+        public checkCanSupplyLoadedUnit(): boolean {
+            return this._templateCfg.canSupplyLoadedUnits === 1;
         }
 
         public getRepairAmountForLoadedUnit(): number | undefined {
-            return this._template.repairAmountForLoadedUnits;
+            return this._templateCfg.repairAmountForLoadedUnits;
         }
 
         public addLoadUnitId(id: number): void {
@@ -484,20 +489,21 @@ namespace TinyWars.OnlineWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for supply unit.
         ////////////////////////////////////////////////////////////////////////////////
-        public checkCanSupplyAdjacentUnit(): boolean | undefined {
-            return this._template.canSupplyAdjacentUnits;
+        public checkCanSupplyAdjacentUnit(): boolean {
+            return this._templateCfg.canSupplyAdjacentUnits === 1;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for vision.
         ////////////////////////////////////////////////////////////////////////////////
         public getVisionRange(): number {
-            return this._template.visionRange;
+            return this._templateCfg.visionRange;
         }
 
         public getVisionRangeOnTile(tileType: TileType): number {
-            const bonuses = this._template.visionBonusOnTiles;
-            return this.getVisionRange() + (bonuses ? bonuses[tileType] || 0 : 0);
+            const cfgs  = this._visionBonusCfg;
+            const cfg   = cfgs ? cfgs[tileType] : undefined;
+            return this.getVisionRange() + (cfg ? cfg.visionBonus || 0 : 0);
         }
 
         ////////////////////////////////////////////////////////////////////////////////

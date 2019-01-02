@@ -31,6 +31,16 @@ namespace TinyWars.Utility {
             [moveType: number]: number | undefined;
         }
 
+        export type UnitTemplateCfg     = ProtoTypes.IUnitTemplateCfg;
+        export type TileCategoryCfg     = ProtoTypes.ITileCategoryCfg;
+        export type UnitCategoryCfg     = ProtoTypes.IUnitCategoryCfg;
+        export type TileTemplateCfg     = ProtoTypes.ITileTemplateCfg;
+        export type DamageChartCfg      = ProtoTypes.IDamageChartCfg;
+        export type MoveCostCfg         = ProtoTypes.IMoveCostCfg;
+        export type UnitPromotionCfg    = ProtoTypes.IUnitPromotionCfg;
+        export type VisionBonusCfg      = ProtoTypes.IVisionBonusCfg;
+        export type BuildableTileCfg    = ProtoTypes.IBuildableTileCfg;
+
         export type MapIndexKey = {
             mapDesigner : string;
             mapName     : string;
@@ -47,39 +57,6 @@ namespace TinyWars.Utility {
             tileBases   : number[];
             tileObjects : number[];
             units       : number[];
-        }
-
-        export type TemplateTile = {
-            defenseAmount      : number;
-            defenseUnitCategory: UnitCategory;
-
-            moveCosts: MoveCosts;
-
-            maxBuildPoint?: number;
-
-            hideUnitCategory?: UnitCategory;
-
-            visionRange                 ?: number;
-            isVisionEnabledForAllPlayers?: boolean;
-
-            maxHp           ?: number;
-            armorType       ?: ArmorType;
-            isAffectedByLuck?: boolean;
-
-            maxCapturePoint  ?: number;
-            isDefeatOnCapture?: boolean;
-
-            repairAmount      ?: number;
-            repairUnitCategory?: UnitCategory;
-
-            incomePerTurn?: number;
-
-            produceUnitCategory?: UnitCategory;
-
-            globalAttackBonus ?: number;
-            globalDefenseBonus?: number;
-
-            isDestroyedWithAdjacentMeteor?: boolean;
         }
 
         export type InstantialTile = {
@@ -100,57 +77,6 @@ namespace TinyWars.Utility {
             objectViewId: number;
 
             instantialData?: InstantialTile;
-        }
-
-        export type TemplateUnit = {
-            minAttackRange        ?: number;
-            maxAttackRange        ?: number;
-            canAttackAfterMove    ?: boolean;
-            canAttackDivingUnits  ?: boolean;
-            primaryWeaponMaxAmmo  ?: number;
-            primaryWeaponDamages  ?: { [armorType: number]: number | undefined };
-            secondaryWeaponDamages?: { [armorType: number]: number | undefined };
-
-            maxHp           : number;
-            armorType       : ArmorType;
-            isAffectedByLuck: boolean;
-
-            moveType : MoveType;
-            moveRange: number;
-
-            maxFuel                 : number;
-            fuelConsumptionPerTurn  : number;
-            isDestroyedOnOutOfFuel  : boolean;
-            fuelConsumptionInDiving?: number;
-
-            canCaptureTile?: boolean;
-
-            canLaunchSilo?: boolean;
-
-            productionCost: number;
-
-            visionRange        : number;
-            visionBonusOnTiles?: { [tileType: number]: number };
-
-            flareMaxAmmo ?: number;
-            flareMaxRange?: number;
-            flareRadius  ?: number;
-
-            canSupplyAdjacentUnits?: boolean;
-
-            buildTiles      ?: { [tileType: number]: TileType };
-            maxBuildMaterial?: number;
-
-            maxLoadUnitsCount         ?: number;
-            loadUnitCategory          ?: UnitCategory;
-            loadableTileCategory      ?: TileCategory;
-            canLaunchLoadedUnits      ?: boolean;
-            canDropLoadedUnits        ?: boolean;
-            canSupplyLoadedUnits      ?: boolean;
-            repairAmountForLoadedUnits?: number;
-
-            produceUnitType   ?: UnitType;
-            maxProduceMaterial?: number;
         }
 
         export type InstantialUnit = {
@@ -306,6 +232,11 @@ namespace TinyWars.Utility {
 
         export const enum UnitState {
             Idle,   /* 0 */         Actioned,   /* 1 */
+        }
+
+        export const enum WeaponType {
+            Primary     = 0,
+            Secondary   = 1,
         }
     }
 }
