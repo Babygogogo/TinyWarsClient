@@ -133,18 +133,13 @@
 <script>
     var loadScript = function (list, callback) {
         var loaded = 0;
-        var loadNext = function () {
-            loadSingleScript(list[loaded], function () {
-                loaded++;
-                if (loaded >= list.length) {
-                    callback();
-                }
-                else {
-                    loadNext();
-                }
-            })
-        };
-        loadNext();
+        var cb = function () {
+            ++loaded;
+            (loaded >= list.length) && (callback());
+        }
+        for (var i = 0; i < list.length; ++i) {
+            loadSingleScript(list[i], cb);
+        }
     };
 
     var loadSingleScript = function (src, callback) {
