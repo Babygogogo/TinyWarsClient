@@ -648,6 +648,10 @@
         "S_JoinCustomOnlineWar": {
           "type": "S_JoinCustomOnlineWar",
           "id": 22
+        },
+        "S_NewestConfigVersion": {
+          "type": "S_NewestConfigVersion",
+          "id": 24
         }
       }
     },
@@ -1057,6 +1061,18 @@
         "isStarted": {
           "type": "bool",
           "id": 2
+        }
+      }
+    },
+    "S_NewestConfigVersion": {
+      "fields": {
+        "actionCode": {
+          "type": "uint32",
+          "id": 0
+        },
+        "version": {
+          "type": "uint32",
+          "id": 1
         }
       }
     }

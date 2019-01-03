@@ -23,5 +23,6 @@ namespace TinyWars.Network {
         S_GetUnjoinedWaitingCustomOnlineWarInfos = 20,
         C_JoinCustomOnlineWar = 21,
         S_JoinCustomOnlineWar = 22,
+        S_NewestConfigVersion = 24,
     }
 }
