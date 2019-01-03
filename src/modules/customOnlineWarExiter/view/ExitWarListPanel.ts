@@ -219,7 +219,7 @@ namespace TinyWars.CustomOnlineWarExiter {
         }
 
         private _createUnitViewDatas(unitViewIds: number[], mapWidth: number, mapHeight: number): Types.UnitViewData[] {
-            const configVersion = ConfigManager.getLatestConfigVersion();
+            const configVersion = ConfigManager.getNewestConfigVersion();
             const datas: Types.UnitViewData[] = [];
 
             let index  = 0;

@@ -7,6 +7,7 @@ namespace TinyWars.Utility {
 
         let _protoRoot      : protobuf.Root;
         let _containerClass : typeof ProtoTypes.Container;
+        let _fullConfigClass: typeof ProtoTypes.FullConfig;
 
         export async function init(): Promise<void> {
             return new Promise<void>((resolve, reject) => {
@@ -15,8 +16,9 @@ namespace TinyWars.Utility {
                         if (!root) {
                             reject("no root!");
                         } else {
-                            _protoRoot      = root;
-                            _containerClass = root.lookupType("Container") as any;
+                            _protoRoot          = root;
+                            _containerClass     = root.lookupType("Container") as any;
+                            _fullConfigClass    = root.lookupType("FullConfig") as any;
                             resolve();
                         }
                     },
@@ -38,6 +40,10 @@ namespace TinyWars.Utility {
 
         export function decodeAsContainer(data: any): ProtoTypes.IContainer {
             return _containerClass.decode(getDataForDecode(data)).toJSON();
+        }
+
+        export function decodeAsFullConfig(data: any): ProtoTypes.IFullConfig {
+            return _fullConfigClass.decode(getDataForDecode(data)).toJSON();
         }
 
         function getDataForDecode(encodedData: any): Uint8Array | protobuf.Reader {

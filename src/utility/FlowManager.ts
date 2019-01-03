@@ -1,8 +1,9 @@
 
 namespace TinyWars.Utility.FlowManager {
     const _NOTIFY_EVENTS = [
-        { type: Notify.Type.SLogin,     callback: _onNotifySLogin },
-        { type: Notify.Type.SLogout,    callback: _onNotifySLogout },
+        { type: Notify.Type.ConfigLoaded,   callback: _onNotifyConfigLoaded },
+        { type: Notify.Type.SLogin,         callback: _onNotifySLogin },
+        { type: Notify.Type.SLogout,        callback: _onNotifySLogout },
     ];
 
     export async function startGame(stage: egret.Stage): Promise<void> {
@@ -10,6 +11,7 @@ namespace TinyWars.Utility.FlowManager {
         Utility.StageManager.init(stage);
         await Promise.all([ResManager.init(), ProtoManager.init()]);
 
+        ConfigManager.init();
         Network.Manager.init();
         Time.TimeProxy.init();
         Time.TimeModel.init();
@@ -25,9 +27,7 @@ namespace TinyWars.Utility.FlowManager {
         gotoLogin();
 
         await ResManager.loadMainRes();
-        if (User.UserModel.checkIsLoggedIn()) {
-            gotoLobby();
-        }
+        (_checkCanFirstGoToLobby()) && (gotoLobby());
     }
 
     export function gotoLogin(): void {
@@ -41,13 +41,20 @@ namespace TinyWars.Utility.FlowManager {
         Lobby.LobbyTopPanel.show();
     }
 
+    function _onNotifyConfigLoaded(e: egret.Event): void {
+        (_checkCanFirstGoToLobby()) && (gotoLobby());
+    }
     function _onNotifySLogin(e: egret.Event): void {
-        if (ResManager.checkIsLoadedMainResource()) {
-            gotoLobby();
-        }
+        (_checkCanFirstGoToLobby()) && (gotoLobby());
     }
     function _onNotifySLogout(e: egret.Event): void {
         gotoLogin();
+    }
+
+    function _checkCanFirstGoToLobby(): boolean {
+        return (User.UserModel.checkIsLoggedIn())
+            && (ResManager.checkIsLoadedMainResource())
+            && (ConfigManager.checkIsLoaded(ConfigManager.getNewestConfigVersion()))
     }
 
     function _removeLoadingDom(): void {

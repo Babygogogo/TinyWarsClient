@@ -1,6 +1,10 @@
 
 namespace TinyWars.ConfigManager {
+    import Notify           = Utility.Notify;
     import Types            = Utility.Types;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import NetManager       = Network.Manager;
+    import ActionCode       = Network.Codes;
     import GridSize         = Types.Size;
     import TileBaseType     = Types.TileBaseType;
     import TileObjectType   = Types.TileObjectType;
@@ -108,16 +112,132 @@ namespace TinyWars.ConfigManager {
 
     const ALL_CONFIGS: { [version: number]: FullConfig } = {};
 
+    let _newestConfigVersion: number;
+
+    function destructTileCategoryCfg(data: TileCategoryCfg[]): { [category: number]: TileCategoryCfg } {
+        const dst: { [category: number]: TileCategoryCfg } = {};
+        for (const d of data) {
+            dst[d.category!] = d;
+        }
+        return dst;
+    }
+    function destructUnitCategoryCfg(data: UnitCategoryCfg[]): { [category: number]: UnitCategoryCfg } {
+        const dst: { [category: number]: UnitCategoryCfg } = {};
+        for (const d of data) {
+            dst[d.category!] = d;
+        }
+        return dst;
+    }
+    function destructTileTemplateCfg(data: TileTemplateCfg[]): { [tileType: number]: TileTemplateCfg } {
+        const dst: { [category: number]: TileTemplateCfg } = {};
+        for (const d of data) {
+            dst[d.type!] = d;
+        }
+        return dst;
+    }
+    function destructUnitTemplateCfg(data: UnitTemplateCfg[]): { [unitType: number]: UnitTemplateCfg } {
+        const dst: { [category: number]: UnitTemplateCfg } = {};
+        for (const d of data) {
+            dst[d.type!] = d;
+        }
+        return dst;
+    }
+    function destructDamageChartCfg(data: DamageChartCfg[]): { [attackerType: number]: { [armorType: number]: { [weaponType: number]: DamageChartCfg } } } {
+        const dst: { [attackerType: number]: { [armorType: number]: { [weaponType: number]: DamageChartCfg } } } = {};
+        for (const d of data) {
+            const attackerType  = d.attackerType!;
+            const armorType     = d.armorType!;
+            dst[attackerType]                           = dst[attackerType] || {};
+            dst[attackerType][armorType]                = dst[attackerType][armorType] || {};
+            dst[attackerType][armorType][d.weaponType!] = d;
+        }
+        return dst;
+    }
+    function destructMoveCostCfg(data: MoveCostCfg[]): { [tileType: number]: { [moveType: number]: MoveCostCfg } } {
+        const dst: { [tileType: number]: { [moveType: number]: MoveCostCfg } } = {};
+        for (const d of data) {
+            const tileType              = d.tileType!;
+            dst[tileType]               = dst[tileType] || {};
+            dst[tileType][d.moveType!]  = d;
+        }
+        return dst;
+    }
+    function destructUnitPromotionCfg(data: UnitPromotionCfg[]): { [promotion: number]: UnitPromotionCfg } {
+        const dst: { [promotion: number]: UnitPromotionCfg } = {};
+        for (const d of data) {
+            dst[d.promotion!] = d;
+        }
+        return dst;
+    }
+    function destructVisionBonusCfg(data: VisionBonusCfg[]): { [unitType: number]: { [tileType: number]: VisionBonusCfg } } {
+        const dst: { [unitType: number]: { [tileType: number]: VisionBonusCfg } } = {};
+        for (const d of data) {
+            const unitType              = d.unitType!;
+            dst[unitType]               = dst[unitType] || {};
+            dst[unitType][d.tileType!]  = d;
+        }
+        return dst;
+    }
+    function destructBuildableTileCfg(data: BuildableTileCfg[]): { [unitType: number]: { [srcTileType: number]: BuildableTileCfg } } {
+        const dst: { [unitType: number]: { [srcTileType: number]: BuildableTileCfg } } = {};
+        for (const d of data) {
+            const unitType                  = d.unitType!;
+            dst[unitType]                   = dst[unitType] || {};
+            dst[unitType][d.srcTileType!]   = d;
+        }
+        return dst;
+    }
+
+    function _onSNewestConfigVersion(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_NewestConfigVersion;
+        _newestConfigVersion = data.version;
+        loadConfig(_newestConfigVersion);
+    }
+
     ////////////////////////////////////////////////////////////////////////////////
     // Exports.
     ////////////////////////////////////////////////////////////////////////////////
-    export function getGridSize(): GridSize {
-        return GRID_SIZE;
+    export function init(): void {
+        NetManager.addListeners(
+            { actionCode: ActionCode.S_NewestConfigVersion, callback: _onSNewestConfigVersion, thisObject: ConfigManager },
+        );
     }
 
-    export function getLatestConfigVersion(): number {
-        // TODO
-        return 0;
+    export function getNewestConfigVersion(): number {
+        return _newestConfigVersion;
+    }
+
+    export function checkIsLoaded(version: number): boolean {
+        return ALL_CONFIGS[version] != null;
+    }
+
+    export async function loadConfig(version: number): Promise<FullConfig> {
+        if (!checkIsLoaded(version)) {
+            const data = Utility.ProtoManager.decodeAsFullConfig(await RES.getResByUrl(
+                `resource/config/FullConfig${Utility.Helpers.getNumText(version, 4)}.bin`,
+                undefined,
+                undefined,
+                RES.ResourceItem.TYPE_BIN
+            ));
+            ALL_CONFIGS[version] = {
+                TileCategory        : destructTileCategoryCfg(data.TileCategory!),
+                UnitCategory        : destructUnitCategoryCfg(data.UnitCategory!),
+                TileTemplate        : destructTileTemplateCfg(data.TileTemplate!),
+                UnitTemplate        : destructUnitTemplateCfg(data.UnitTemplate!),
+                DamageChart         : destructDamageChartCfg(data.DamageChart!),
+                MoveCost            : destructMoveCostCfg(data.MoveCost!),
+                UnitPromotion       : destructUnitPromotionCfg(data.UnitPromotion!),
+                VisionBonus         : destructVisionBonusCfg(data.VisionBonus!),
+                BuildableTile       : destructBuildableTileCfg(data.BuildableTile!),
+                secondaryWeaponFlag : {},
+            };
+        }
+        Notify.dispatch(Notify.Type.ConfigLoaded, version);
+        return Promise.resolve(ALL_CONFIGS[version]);
+    }
+
+    export function getGridSize(): GridSize {
+        return GRID_SIZE;
     }
 
     export function getTileType(baseType: TileBaseType, objectType: TileObjectType): TileType {

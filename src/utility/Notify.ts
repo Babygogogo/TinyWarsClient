@@ -14,6 +14,7 @@ namespace TinyWars.Utility {
 
             MouseWheel,
 
+            SNewestConfigVersion,
             SLogin,
             SRegister,
             SLogout,
@@ -25,6 +26,7 @@ namespace TinyWars.Utility {
             SExitCustomOnlineWar,
             SJoinCustomOnlineWar,
 
+            ConfigLoaded,
             TileModelUpdated,
         }
 
@@ -32,7 +34,8 @@ namespace TinyWars.Utility {
         // Notify datas.
         ////////////////////////////////////////////////////////////////////////////////
         export namespace Data {
-            export type TileModelUpdated = OnlineWar.TileModel;
+            export type ConfigLoaded        = number;
+            export type TileModelUpdated    = OnlineWar.TileModel;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
