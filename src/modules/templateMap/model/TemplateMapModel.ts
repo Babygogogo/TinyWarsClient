@@ -14,7 +14,7 @@ namespace TinyWars.TemplateMap {
         export function init(): void {
         }
 
-        export async function getMapData(key: Types.MapIndexKey): Promise<Types.TemplateMap | undefined> {
+        export function getMapData(key: Types.MapIndexKey): Promise<Types.TemplateMap | undefined> {
             const mapUrl    = Helpers.getMapUrl(key);
             const localData = getLocalMapData(mapUrl);
             if (localData) {

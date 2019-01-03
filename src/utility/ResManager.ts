@@ -33,12 +33,10 @@ namespace TinyWars.Utility {
             return _isLoadedMainResource;
         }
 
-        async function _initTheme(): Promise<void> {
+        function _initTheme(): Promise<void> {
             return new Promise<void>((resolve, reject): void => {
-                const theme = new eui.Theme("resource/default.thm.json", StageManager.getStage());
-                theme.addEventListener(eui.UIEvent.COMPLETE, () => {
-                    resolve();
-                }, undefined);
+                new eui.Theme("resource/default.thm.json", StageManager.getStage())
+                    .once(eui.UIEvent.COMPLETE, resolve, undefined);
             });
         }
     }

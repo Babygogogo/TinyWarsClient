@@ -9,7 +9,7 @@ namespace TinyWars.Utility {
         let _containerClass : typeof ProtoTypes.Container;
         let _fullConfigClass: typeof ProtoTypes.FullConfig;
 
-        export async function init(): Promise<void> {
+        export function init(): Promise<void> {
             return new Promise<void>((resolve, reject) => {
                 protobuf.load(PROTO_FILENAME).then(
                     root => {
