@@ -167,7 +167,7 @@ namespace TinyWars.CustomOnlineWarJoiner {
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
-        private _createDataForListWar(infos: ProtoTypes.IWaitingCustomOnlineWarInfo[]): DataForWarRenderer[] {
+        private _createDataForListWar(infos: ProtoTypes.IWaitingMultiCustomWarInfo[]): DataForWarRenderer[] {
             const data: DataForWarRenderer[] = [];
             if (infos) {
                 for (let i = 0; i < infos.length; ++i) {
@@ -182,7 +182,7 @@ namespace TinyWars.CustomOnlineWarJoiner {
             return data;
         }
 
-        private _createDataForListPlayer(warInfo: ProtoTypes.IWaitingCustomOnlineWarInfo, mapInfo: ProtoTypes.IMapInfo): DataForPlayerRenderer[] {
+        private _createDataForListPlayer(warInfo: ProtoTypes.IWaitingMultiCustomWarInfo, mapInfo: ProtoTypes.IMapInfo): DataForPlayerRenderer[] {
             const data: DataForPlayerRenderer[] = [
                 {
                     playerIndex: 1,
@@ -273,7 +273,7 @@ namespace TinyWars.CustomOnlineWarJoiner {
     }
 
     type DataForWarRenderer = {
-        warInfo : ProtoTypes.IWaitingCustomOnlineWarInfo;
+        warInfo : ProtoTypes.IWaitingMultiCustomWarInfo;
         index   : number;
         panel   : JoinWarListPanel;
     }

@@ -15,15 +15,15 @@ namespace TinyWars.Network {
         Register_InvalidNickname,
         Register_UsedNickname,
 
-        CreateCustomOnlineWar_TooManyJoinedWars,
-        CreateCustomOnlineWar_InvalidParams,
+        CreateMultiCustomWar_TooManyJoinedWars,
+        CreateMultiCustomWar_InvalidParams,
 
-        ExitCustomOnlineWar_WarInfoNotExist,
-        ExitCustomOnlineWar_NotJoined,
+        ExitMultiCustomWar_WarInfoNotExist,
+        ExitMultiCustomWar_NotJoined,
 
-        JoinCustomOnlineWar_TooManyJoinedWars,
-        JoinCustomOnlineWar_InvalidParams,
-        JoinCustomOnlineWar_WarInfoNotExist,
-        JoinCustomOnlineWar_AlreadyJoined,
+        JoinMultiCustomWar_TooManyJoinedWars,
+        JoinMultiCustomWar_InvalidParams,
+        JoinMultiCustomWar_WarInfoNotExist,
+        JoinMultiCustomWar_AlreadyJoined,
     }
 }

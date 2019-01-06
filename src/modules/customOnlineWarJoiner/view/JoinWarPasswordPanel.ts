@@ -19,9 +19,9 @@ namespace TinyWars.CustomOnlineWarJoiner {
         private _btnConfirm         : GameUi.UiButton;
         private _btnCancel          : GameUi.UiButton;
 
-        private _openData: ProtoTypes.IWaitingCustomOnlineWarInfo;
+        private _openData: ProtoTypes.IWaitingMultiCustomWarInfo;
 
-        public static show(data: ProtoTypes.IWaitingCustomOnlineWarInfo): void {
+        public static show(data: ProtoTypes.IWaitingMultiCustomWarInfo): void {
             if (!JoinWarPasswordPanel._instance) {
                 JoinWarPasswordPanel._instance = new JoinWarPasswordPanel();
             }

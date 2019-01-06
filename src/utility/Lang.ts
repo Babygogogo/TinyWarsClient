@@ -270,35 +270,35 @@ namespace TinyWars.Utility {
                 "该昵称已被使用，请修改后再试",
                 "The nickname has been used.",
             ],
-            [ErrCode.CreateCustomOnlineWar_TooManyJoinedWars]: [
+            [ErrCode.CreateMultiCustomWar_TooManyJoinedWars]: [
                 "您已参与了许多未开始的战局，请退出部分后重试",
                 "You have joined too many wars.",
             ],
-            [ErrCode.CreateCustomOnlineWar_InvalidParams]: [
+            [ErrCode.CreateMultiCustomWar_InvalidParams]: [
                 "部分设定不符合规则，请检查后重试",
                 "Invalid settings.",
             ],
-            [ErrCode.ExitCustomOnlineWar_WarInfoNotExist]: [
+            [ErrCode.ExitMultiCustomWar_WarInfoNotExist]: [
                 "战局不存在",
                 "The game doesn't exist.",
             ],
-            [ErrCode.ExitCustomOnlineWar_NotJoined]: [
+            [ErrCode.ExitMultiCustomWar_NotJoined]: [
                 "您并未参加该战局",
                 "You haven't joined the game.",
             ],
-            [ErrCode.JoinCustomOnlineWar_TooManyJoinedWars]: [
+            [ErrCode.JoinMultiCustomWar_TooManyJoinedWars]: [
                 "您已参与了许多未开始的战局，请退出部分后重试",
                 "You have joined too many wars.",
             ],
-            [ErrCode.JoinCustomOnlineWar_InvalidParams]: [
+            [ErrCode.JoinMultiCustomWar_InvalidParams]: [
                 "部分设定不符合规则，请检查后重试",
                 "Invalid settings.",
             ],
-            [ErrCode.JoinCustomOnlineWar_WarInfoNotExist]: [
+            [ErrCode.JoinMultiCustomWar_WarInfoNotExist]: [
                 "房间不存在",
                 "The game doesn't exist.",
             ],
-            [ErrCode.JoinCustomOnlineWar_AlreadyJoined]: [
+            [ErrCode.JoinMultiCustomWar_AlreadyJoined]: [
                 "您已加入了该房间。",
                 "You have already joined the game.",
             ],

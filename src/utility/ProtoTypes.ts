@@ -1663,253 +1663,253 @@ namespace TinyWars.Utility {
             public toJSON(): { [k: string]: any };
         }
 
-        /** Properties of a WaitingCustomOnlineWarInfo. */
-        export declare interface IWaitingCustomOnlineWarInfo {
+        /** Properties of a WaitingMultiCustomWarInfo. */
+        export declare interface IWaitingMultiCustomWarInfo {
 
-            /** WaitingCustomOnlineWarInfo id */
+            /** WaitingMultiCustomWarInfo id */
             id?: (number | null);
 
-            /** WaitingCustomOnlineWarInfo mapName */
+            /** WaitingMultiCustomWarInfo mapName */
             mapName?: (string | null);
 
-            /** WaitingCustomOnlineWarInfo mapDesigner */
+            /** WaitingMultiCustomWarInfo mapDesigner */
             mapDesigner?: (string | null);
 
-            /** WaitingCustomOnlineWarInfo mapVersion */
+            /** WaitingMultiCustomWarInfo mapVersion */
             mapVersion?: (number | null);
 
-            /** WaitingCustomOnlineWarInfo warName */
+            /** WaitingMultiCustomWarInfo warName */
             warName?: (string | null);
 
-            /** WaitingCustomOnlineWarInfo warPassword */
+            /** WaitingMultiCustomWarInfo warPassword */
             warPassword?: (string | null);
 
-            /** WaitingCustomOnlineWarInfo warComment */
+            /** WaitingMultiCustomWarInfo warComment */
             warComment?: (string | null);
 
-            /** WaitingCustomOnlineWarInfo p1UserId */
+            /** WaitingMultiCustomWarInfo p1UserId */
             p1UserId?: (number | null);
 
-            /** WaitingCustomOnlineWarInfo p1UserNickname */
+            /** WaitingMultiCustomWarInfo p1UserNickname */
             p1UserNickname?: (string | null);
 
-            /** WaitingCustomOnlineWarInfo p1TeamIndex */
+            /** WaitingMultiCustomWarInfo p1TeamIndex */
             p1TeamIndex?: (number | null);
 
-            /** WaitingCustomOnlineWarInfo p2UserId */
+            /** WaitingMultiCustomWarInfo p2UserId */
             p2UserId?: (number | null);
 
-            /** WaitingCustomOnlineWarInfo p2UserNickname */
+            /** WaitingMultiCustomWarInfo p2UserNickname */
             p2UserNickname?: (string | null);
 
-            /** WaitingCustomOnlineWarInfo p2TeamIndex */
+            /** WaitingMultiCustomWarInfo p2TeamIndex */
             p2TeamIndex?: (number | null);
 
-            /** WaitingCustomOnlineWarInfo p3UserId */
+            /** WaitingMultiCustomWarInfo p3UserId */
             p3UserId?: (number | null);
 
-            /** WaitingCustomOnlineWarInfo p3UserNickname */
+            /** WaitingMultiCustomWarInfo p3UserNickname */
             p3UserNickname?: (string | null);
 
-            /** WaitingCustomOnlineWarInfo p3TeamIndex */
+            /** WaitingMultiCustomWarInfo p3TeamIndex */
             p3TeamIndex?: (number | null);
 
-            /** WaitingCustomOnlineWarInfo p4UserId */
+            /** WaitingMultiCustomWarInfo p4UserId */
             p4UserId?: (number | null);
 
-            /** WaitingCustomOnlineWarInfo p4UserNickname */
+            /** WaitingMultiCustomWarInfo p4UserNickname */
             p4UserNickname?: (string | null);
 
-            /** WaitingCustomOnlineWarInfo p4TeamIndex */
+            /** WaitingMultiCustomWarInfo p4TeamIndex */
             p4TeamIndex?: (number | null);
 
-            /** WaitingCustomOnlineWarInfo hasFog */
+            /** WaitingMultiCustomWarInfo hasFog */
             hasFog?: (number | null);
 
-            /** WaitingCustomOnlineWarInfo timeLimit */
+            /** WaitingMultiCustomWarInfo timeLimit */
             timeLimit?: (number | null);
 
-            /** WaitingCustomOnlineWarInfo initialFund */
+            /** WaitingMultiCustomWarInfo initialFund */
             initialFund?: (number | null);
 
-            /** WaitingCustomOnlineWarInfo incomeModifier */
+            /** WaitingMultiCustomWarInfo incomeModifier */
             incomeModifier?: (number | null);
 
-            /** WaitingCustomOnlineWarInfo initialEnergy */
+            /** WaitingMultiCustomWarInfo initialEnergy */
             initialEnergy?: (number | null);
 
-            /** WaitingCustomOnlineWarInfo energyGrowthModifier */
+            /** WaitingMultiCustomWarInfo energyGrowthModifier */
             energyGrowthModifier?: (number | null);
 
-            /** WaitingCustomOnlineWarInfo moveRangeModifier */
+            /** WaitingMultiCustomWarInfo moveRangeModifier */
             moveRangeModifier?: (number | null);
 
-            /** WaitingCustomOnlineWarInfo attackPowerModifier */
+            /** WaitingMultiCustomWarInfo attackPowerModifier */
             attackPowerModifier?: (number | null);
 
-            /** WaitingCustomOnlineWarInfo visionRangeModifier */
+            /** WaitingMultiCustomWarInfo visionRangeModifier */
             visionRangeModifier?: (number | null);
         }
 
-        /** Represents a WaitingCustomOnlineWarInfo. */
-        export declare class WaitingCustomOnlineWarInfo implements IWaitingCustomOnlineWarInfo {
+        /** Represents a WaitingMultiCustomWarInfo. */
+        export declare class WaitingMultiCustomWarInfo implements IWaitingMultiCustomWarInfo {
 
             /**
-             * Constructs a new WaitingCustomOnlineWarInfo.
+             * Constructs a new WaitingMultiCustomWarInfo.
              * @param [properties] Properties to set
              */
-            constructor(properties?: IWaitingCustomOnlineWarInfo);
+            constructor(properties?: IWaitingMultiCustomWarInfo);
 
-            /** WaitingCustomOnlineWarInfo id. */
+            /** WaitingMultiCustomWarInfo id. */
             public id: number;
 
-            /** WaitingCustomOnlineWarInfo mapName. */
+            /** WaitingMultiCustomWarInfo mapName. */
             public mapName: string;
 
-            /** WaitingCustomOnlineWarInfo mapDesigner. */
+            /** WaitingMultiCustomWarInfo mapDesigner. */
             public mapDesigner: string;
 
-            /** WaitingCustomOnlineWarInfo mapVersion. */
+            /** WaitingMultiCustomWarInfo mapVersion. */
             public mapVersion: number;
 
-            /** WaitingCustomOnlineWarInfo warName. */
+            /** WaitingMultiCustomWarInfo warName. */
             public warName: string;
 
-            /** WaitingCustomOnlineWarInfo warPassword. */
+            /** WaitingMultiCustomWarInfo warPassword. */
             public warPassword: string;
 
-            /** WaitingCustomOnlineWarInfo warComment. */
+            /** WaitingMultiCustomWarInfo warComment. */
             public warComment: string;
 
-            /** WaitingCustomOnlineWarInfo p1UserId. */
+            /** WaitingMultiCustomWarInfo p1UserId. */
             public p1UserId: number;
 
-            /** WaitingCustomOnlineWarInfo p1UserNickname. */
+            /** WaitingMultiCustomWarInfo p1UserNickname. */
             public p1UserNickname: string;
 
-            /** WaitingCustomOnlineWarInfo p1TeamIndex. */
+            /** WaitingMultiCustomWarInfo p1TeamIndex. */
             public p1TeamIndex: number;
 
-            /** WaitingCustomOnlineWarInfo p2UserId. */
+            /** WaitingMultiCustomWarInfo p2UserId. */
             public p2UserId: number;
 
-            /** WaitingCustomOnlineWarInfo p2UserNickname. */
+            /** WaitingMultiCustomWarInfo p2UserNickname. */
             public p2UserNickname: string;
 
-            /** WaitingCustomOnlineWarInfo p2TeamIndex. */
+            /** WaitingMultiCustomWarInfo p2TeamIndex. */
             public p2TeamIndex: number;
 
-            /** WaitingCustomOnlineWarInfo p3UserId. */
+            /** WaitingMultiCustomWarInfo p3UserId. */
             public p3UserId: number;
 
-            /** WaitingCustomOnlineWarInfo p3UserNickname. */
+            /** WaitingMultiCustomWarInfo p3UserNickname. */
             public p3UserNickname: string;
 
-            /** WaitingCustomOnlineWarInfo p3TeamIndex. */
+            /** WaitingMultiCustomWarInfo p3TeamIndex. */
             public p3TeamIndex: number;
 
-            /** WaitingCustomOnlineWarInfo p4UserId. */
+            /** WaitingMultiCustomWarInfo p4UserId. */
             public p4UserId: number;
 
-            /** WaitingCustomOnlineWarInfo p4UserNickname. */
+            /** WaitingMultiCustomWarInfo p4UserNickname. */
             public p4UserNickname: string;
 
-            /** WaitingCustomOnlineWarInfo p4TeamIndex. */
+            /** WaitingMultiCustomWarInfo p4TeamIndex. */
             public p4TeamIndex: number;
 
-            /** WaitingCustomOnlineWarInfo hasFog. */
+            /** WaitingMultiCustomWarInfo hasFog. */
             public hasFog: number;
 
-            /** WaitingCustomOnlineWarInfo timeLimit. */
+            /** WaitingMultiCustomWarInfo timeLimit. */
             public timeLimit: number;
 
-            /** WaitingCustomOnlineWarInfo initialFund. */
+            /** WaitingMultiCustomWarInfo initialFund. */
             public initialFund: number;
 
-            /** WaitingCustomOnlineWarInfo incomeModifier. */
+            /** WaitingMultiCustomWarInfo incomeModifier. */
             public incomeModifier: number;
 
-            /** WaitingCustomOnlineWarInfo initialEnergy. */
+            /** WaitingMultiCustomWarInfo initialEnergy. */
             public initialEnergy: number;
 
-            /** WaitingCustomOnlineWarInfo energyGrowthModifier. */
+            /** WaitingMultiCustomWarInfo energyGrowthModifier. */
             public energyGrowthModifier: number;
 
-            /** WaitingCustomOnlineWarInfo moveRangeModifier. */
+            /** WaitingMultiCustomWarInfo moveRangeModifier. */
             public moveRangeModifier: number;
 
-            /** WaitingCustomOnlineWarInfo attackPowerModifier. */
+            /** WaitingMultiCustomWarInfo attackPowerModifier. */
             public attackPowerModifier: number;
 
-            /** WaitingCustomOnlineWarInfo visionRangeModifier. */
+            /** WaitingMultiCustomWarInfo visionRangeModifier. */
             public visionRangeModifier: number;
 
             /**
-             * Creates a new WaitingCustomOnlineWarInfo instance using the specified properties.
+             * Creates a new WaitingMultiCustomWarInfo instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns WaitingCustomOnlineWarInfo instance
+             * @returns WaitingMultiCustomWarInfo instance
              */
-            public static create(properties?: IWaitingCustomOnlineWarInfo): WaitingCustomOnlineWarInfo;
+            public static create(properties?: IWaitingMultiCustomWarInfo): WaitingMultiCustomWarInfo;
 
             /**
-             * Encodes the specified WaitingCustomOnlineWarInfo message. Does not implicitly {@link WaitingCustomOnlineWarInfo.verify|verify} messages.
-             * @param message WaitingCustomOnlineWarInfo message or plain object to encode
+             * Encodes the specified WaitingMultiCustomWarInfo message. Does not implicitly {@link WaitingMultiCustomWarInfo.verify|verify} messages.
+             * @param message WaitingMultiCustomWarInfo message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: IWaitingCustomOnlineWarInfo, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: IWaitingMultiCustomWarInfo, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified WaitingCustomOnlineWarInfo message, length delimited. Does not implicitly {@link WaitingCustomOnlineWarInfo.verify|verify} messages.
-             * @param message WaitingCustomOnlineWarInfo message or plain object to encode
+             * Encodes the specified WaitingMultiCustomWarInfo message, length delimited. Does not implicitly {@link WaitingMultiCustomWarInfo.verify|verify} messages.
+             * @param message WaitingMultiCustomWarInfo message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: IWaitingCustomOnlineWarInfo, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: IWaitingMultiCustomWarInfo, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Decodes a WaitingCustomOnlineWarInfo message from the specified reader or buffer.
+             * Decodes a WaitingMultiCustomWarInfo message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns WaitingCustomOnlineWarInfo
+             * @returns WaitingMultiCustomWarInfo
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): WaitingCustomOnlineWarInfo;
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): WaitingMultiCustomWarInfo;
 
             /**
-             * Decodes a WaitingCustomOnlineWarInfo message from the specified reader or buffer, length delimited.
+             * Decodes a WaitingMultiCustomWarInfo message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns WaitingCustomOnlineWarInfo
+             * @returns WaitingMultiCustomWarInfo
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): WaitingCustomOnlineWarInfo;
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): WaitingMultiCustomWarInfo;
 
             /**
-             * Verifies a WaitingCustomOnlineWarInfo message.
+             * Verifies a WaitingMultiCustomWarInfo message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             public static verify(message: { [k: string]: any }): (string | null);
 
             /**
-             * Creates a WaitingCustomOnlineWarInfo message from a plain object. Also converts values to their respective internal types.
+             * Creates a WaitingMultiCustomWarInfo message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns WaitingCustomOnlineWarInfo
+             * @returns WaitingMultiCustomWarInfo
              */
-            public static fromObject(object: { [k: string]: any }): WaitingCustomOnlineWarInfo;
+            public static fromObject(object: { [k: string]: any }): WaitingMultiCustomWarInfo;
 
             /**
-             * Creates a plain object from a WaitingCustomOnlineWarInfo message. Also converts values to other types if specified.
-             * @param message WaitingCustomOnlineWarInfo
+             * Creates a plain object from a WaitingMultiCustomWarInfo message. Also converts values to other types if specified.
+             * @param message WaitingMultiCustomWarInfo
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: WaitingCustomOnlineWarInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: WaitingMultiCustomWarInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this WaitingCustomOnlineWarInfo to JSON.
+             * Converts this WaitingMultiCustomWarInfo to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
@@ -1954,35 +1954,35 @@ namespace TinyWars.Utility {
             /** Container S_GetNewestMapInfos */
             S_GetNewestMapInfos?: (IS_GetNewestMapInfos | null);
 
-            /** Container C_CreateCustomOnlineWar */
-            C_CreateCustomOnlineWar?: (IC_CreateCustomOnlineWar | null);
+            /** Container C_CreateMultiCustomWar */
+            C_CreateMultiCustomWar?: (IC_CreateMultiCustomWar | null);
 
-            /** Container S_CreateCustomOnlineWar */
-            S_CreateCustomOnlineWar?: (IS_CreateCustomOnlineWar | null);
+            /** Container S_CreateMultiCustomWar */
+            S_CreateMultiCustomWar?: (IS_CreateMultiCustomWar | null);
 
-            /** Container C_ExitCustomOnlineWar */
-            C_ExitCustomOnlineWar?: (IC_ExitCustomOnlineWar | null);
+            /** Container C_ExitMultiCustomWar */
+            C_ExitMultiCustomWar?: (IC_ExitMultiCustomWar | null);
 
-            /** Container S_ExitCustomOnlineWar */
-            S_ExitCustomOnlineWar?: (IS_ExitCustomOnlineWar | null);
+            /** Container S_ExitMultiCustomWar */
+            S_ExitMultiCustomWar?: (IS_ExitMultiCustomWar | null);
 
-            /** Container C_GetJoinedWaitingCustomOnlineWarInfos */
-            C_GetJoinedWaitingCustomOnlineWarInfos?: (IC_GetJoinedWaitingCustomOnlineWarInfos | null);
+            /** Container C_GetJoinedWaitingMultiCustomWarInfos */
+            C_GetJoinedWaitingMultiCustomWarInfos?: (IC_GetJoinedWaitingMultiCustomWarInfos | null);
 
-            /** Container S_GetJoinedWaitingCustomOnlineWarInfos */
-            S_GetJoinedWaitingCustomOnlineWarInfos?: (IS_GetJoinedWaitingCustomOnlineWarInfos | null);
+            /** Container S_GetJoinedWaitingMultiCustomWarInfos */
+            S_GetJoinedWaitingMultiCustomWarInfos?: (IS_GetJoinedWaitingMultiCustomWarInfos | null);
 
-            /** Container C_GetUnjoinedWaitingCustomOnlineWarInfos */
-            C_GetUnjoinedWaitingCustomOnlineWarInfos?: (IC_GetUnjoinedWaitingCustomOnlineWarInfos | null);
+            /** Container C_GetUnjoinedWaitingMultiCustomWarInfos */
+            C_GetUnjoinedWaitingMultiCustomWarInfos?: (IC_GetUnjoinedWaitingMultiCustomWarInfos | null);
 
-            /** Container S_GetUnjoinedWaitingCustomOnlineWarInfos */
-            S_GetUnjoinedWaitingCustomOnlineWarInfos?: (IS_GetUnjoinedWaitingCustomOnlineWarInfos | null);
+            /** Container S_GetUnjoinedWaitingMultiCustomWarInfos */
+            S_GetUnjoinedWaitingMultiCustomWarInfos?: (IS_GetUnjoinedWaitingMultiCustomWarInfos | null);
 
-            /** Container C_JoinCustomOnlineWar */
-            C_JoinCustomOnlineWar?: (IC_JoinCustomOnlineWar | null);
+            /** Container C_JoinMultiCustomWar */
+            C_JoinMultiCustomWar?: (IC_JoinMultiCustomWar | null);
 
-            /** Container S_JoinCustomOnlineWar */
-            S_JoinCustomOnlineWar?: (IS_JoinCustomOnlineWar | null);
+            /** Container S_JoinMultiCustomWar */
+            S_JoinMultiCustomWar?: (IS_JoinMultiCustomWar | null);
 
             /** Container S_NewestConfigVersion */
             S_NewestConfigVersion?: (IS_NewestConfigVersion | null);
@@ -2033,35 +2033,35 @@ namespace TinyWars.Utility {
             /** Container S_GetNewestMapInfos. */
             public S_GetNewestMapInfos?: (IS_GetNewestMapInfos | null);
 
-            /** Container C_CreateCustomOnlineWar. */
-            public C_CreateCustomOnlineWar?: (IC_CreateCustomOnlineWar | null);
+            /** Container C_CreateMultiCustomWar. */
+            public C_CreateMultiCustomWar?: (IC_CreateMultiCustomWar | null);
 
-            /** Container S_CreateCustomOnlineWar. */
-            public S_CreateCustomOnlineWar?: (IS_CreateCustomOnlineWar | null);
+            /** Container S_CreateMultiCustomWar. */
+            public S_CreateMultiCustomWar?: (IS_CreateMultiCustomWar | null);
 
-            /** Container C_ExitCustomOnlineWar. */
-            public C_ExitCustomOnlineWar?: (IC_ExitCustomOnlineWar | null);
+            /** Container C_ExitMultiCustomWar. */
+            public C_ExitMultiCustomWar?: (IC_ExitMultiCustomWar | null);
 
-            /** Container S_ExitCustomOnlineWar. */
-            public S_ExitCustomOnlineWar?: (IS_ExitCustomOnlineWar | null);
+            /** Container S_ExitMultiCustomWar. */
+            public S_ExitMultiCustomWar?: (IS_ExitMultiCustomWar | null);
 
-            /** Container C_GetJoinedWaitingCustomOnlineWarInfos. */
-            public C_GetJoinedWaitingCustomOnlineWarInfos?: (IC_GetJoinedWaitingCustomOnlineWarInfos | null);
+            /** Container C_GetJoinedWaitingMultiCustomWarInfos. */
+            public C_GetJoinedWaitingMultiCustomWarInfos?: (IC_GetJoinedWaitingMultiCustomWarInfos | null);
 
-            /** Container S_GetJoinedWaitingCustomOnlineWarInfos. */
-            public S_GetJoinedWaitingCustomOnlineWarInfos?: (IS_GetJoinedWaitingCustomOnlineWarInfos | null);
+            /** Container S_GetJoinedWaitingMultiCustomWarInfos. */
+            public S_GetJoinedWaitingMultiCustomWarInfos?: (IS_GetJoinedWaitingMultiCustomWarInfos | null);
 
-            /** Container C_GetUnjoinedWaitingCustomOnlineWarInfos. */
-            public C_GetUnjoinedWaitingCustomOnlineWarInfos?: (IC_GetUnjoinedWaitingCustomOnlineWarInfos | null);
+            /** Container C_GetUnjoinedWaitingMultiCustomWarInfos. */
+            public C_GetUnjoinedWaitingMultiCustomWarInfos?: (IC_GetUnjoinedWaitingMultiCustomWarInfos | null);
 
-            /** Container S_GetUnjoinedWaitingCustomOnlineWarInfos. */
-            public S_GetUnjoinedWaitingCustomOnlineWarInfos?: (IS_GetUnjoinedWaitingCustomOnlineWarInfos | null);
+            /** Container S_GetUnjoinedWaitingMultiCustomWarInfos. */
+            public S_GetUnjoinedWaitingMultiCustomWarInfos?: (IS_GetUnjoinedWaitingMultiCustomWarInfos | null);
 
-            /** Container C_JoinCustomOnlineWar. */
-            public C_JoinCustomOnlineWar?: (IC_JoinCustomOnlineWar | null);
+            /** Container C_JoinMultiCustomWar. */
+            public C_JoinMultiCustomWar?: (IC_JoinMultiCustomWar | null);
 
-            /** Container S_JoinCustomOnlineWar. */
-            public S_JoinCustomOnlineWar?: (IS_JoinCustomOnlineWar | null);
+            /** Container S_JoinMultiCustomWar. */
+            public S_JoinMultiCustomWar?: (IS_JoinMultiCustomWar | null);
 
             /** Container S_NewestConfigVersion. */
             public S_NewestConfigVersion?: (IS_NewestConfigVersion | null);
@@ -3295,1087 +3295,1087 @@ namespace TinyWars.Utility {
             public toJSON(): { [k: string]: any };
         }
 
-        /** Properties of a C_CreateCustomOnlineWar. */
-        export declare interface IC_CreateCustomOnlineWar {
+        /** Properties of a C_CreateMultiCustomWar. */
+        export declare interface IC_CreateMultiCustomWar {
 
-            /** C_CreateCustomOnlineWar actionCode */
+            /** C_CreateMultiCustomWar actionCode */
             actionCode?: (number | null);
 
-            /** C_CreateCustomOnlineWar mapName */
+            /** C_CreateMultiCustomWar mapName */
             mapName?: (string | null);
 
-            /** C_CreateCustomOnlineWar mapDesigner */
+            /** C_CreateMultiCustomWar mapDesigner */
             mapDesigner?: (string | null);
 
-            /** C_CreateCustomOnlineWar mapVersion */
+            /** C_CreateMultiCustomWar mapVersion */
             mapVersion?: (number | null);
 
-            /** C_CreateCustomOnlineWar warName */
+            /** C_CreateMultiCustomWar warName */
             warName?: (string | null);
 
-            /** C_CreateCustomOnlineWar warPassword */
+            /** C_CreateMultiCustomWar warPassword */
             warPassword?: (string | null);
 
-            /** C_CreateCustomOnlineWar warComment */
+            /** C_CreateMultiCustomWar warComment */
             warComment?: (string | null);
 
-            /** C_CreateCustomOnlineWar playerIndex */
+            /** C_CreateMultiCustomWar playerIndex */
             playerIndex?: (number | null);
 
-            /** C_CreateCustomOnlineWar teamIndex */
+            /** C_CreateMultiCustomWar teamIndex */
             teamIndex?: (number | null);
 
-            /** C_CreateCustomOnlineWar hasFog */
+            /** C_CreateMultiCustomWar hasFog */
             hasFog?: (number | null);
 
-            /** C_CreateCustomOnlineWar timeLimit */
+            /** C_CreateMultiCustomWar timeLimit */
             timeLimit?: (number | null);
 
-            /** C_CreateCustomOnlineWar initialFund */
+            /** C_CreateMultiCustomWar initialFund */
             initialFund?: (number | null);
 
-            /** C_CreateCustomOnlineWar incomeModifier */
+            /** C_CreateMultiCustomWar incomeModifier */
             incomeModifier?: (number | null);
 
-            /** C_CreateCustomOnlineWar initialEnergy */
+            /** C_CreateMultiCustomWar initialEnergy */
             initialEnergy?: (number | null);
 
-            /** C_CreateCustomOnlineWar energyGrowthModifier */
+            /** C_CreateMultiCustomWar energyGrowthModifier */
             energyGrowthModifier?: (number | null);
 
-            /** C_CreateCustomOnlineWar moveRangeModifier */
+            /** C_CreateMultiCustomWar moveRangeModifier */
             moveRangeModifier?: (number | null);
 
-            /** C_CreateCustomOnlineWar attackPowerModifier */
+            /** C_CreateMultiCustomWar attackPowerModifier */
             attackPowerModifier?: (number | null);
 
-            /** C_CreateCustomOnlineWar visionRangeModifier */
+            /** C_CreateMultiCustomWar visionRangeModifier */
             visionRangeModifier?: (number | null);
         }
 
-        /** Represents a C_CreateCustomOnlineWar. */
-        export declare class C_CreateCustomOnlineWar implements IC_CreateCustomOnlineWar {
+        /** Represents a C_CreateMultiCustomWar. */
+        export declare class C_CreateMultiCustomWar implements IC_CreateMultiCustomWar {
 
             /**
-             * Constructs a new C_CreateCustomOnlineWar.
+             * Constructs a new C_CreateMultiCustomWar.
              * @param [properties] Properties to set
              */
-            constructor(properties?: IC_CreateCustomOnlineWar);
+            constructor(properties?: IC_CreateMultiCustomWar);
 
-            /** C_CreateCustomOnlineWar actionCode. */
+            /** C_CreateMultiCustomWar actionCode. */
             public actionCode: number;
 
-            /** C_CreateCustomOnlineWar mapName. */
+            /** C_CreateMultiCustomWar mapName. */
             public mapName: string;
 
-            /** C_CreateCustomOnlineWar mapDesigner. */
+            /** C_CreateMultiCustomWar mapDesigner. */
             public mapDesigner: string;
 
-            /** C_CreateCustomOnlineWar mapVersion. */
+            /** C_CreateMultiCustomWar mapVersion. */
             public mapVersion: number;
 
-            /** C_CreateCustomOnlineWar warName. */
+            /** C_CreateMultiCustomWar warName. */
             public warName: string;
 
-            /** C_CreateCustomOnlineWar warPassword. */
+            /** C_CreateMultiCustomWar warPassword. */
             public warPassword: string;
 
-            /** C_CreateCustomOnlineWar warComment. */
+            /** C_CreateMultiCustomWar warComment. */
             public warComment: string;
 
-            /** C_CreateCustomOnlineWar playerIndex. */
+            /** C_CreateMultiCustomWar playerIndex. */
             public playerIndex: number;
 
-            /** C_CreateCustomOnlineWar teamIndex. */
+            /** C_CreateMultiCustomWar teamIndex. */
             public teamIndex: number;
 
-            /** C_CreateCustomOnlineWar hasFog. */
+            /** C_CreateMultiCustomWar hasFog. */
             public hasFog: number;
 
-            /** C_CreateCustomOnlineWar timeLimit. */
+            /** C_CreateMultiCustomWar timeLimit. */
             public timeLimit: number;
 
-            /** C_CreateCustomOnlineWar initialFund. */
+            /** C_CreateMultiCustomWar initialFund. */
             public initialFund: number;
 
-            /** C_CreateCustomOnlineWar incomeModifier. */
+            /** C_CreateMultiCustomWar incomeModifier. */
             public incomeModifier: number;
 
-            /** C_CreateCustomOnlineWar initialEnergy. */
+            /** C_CreateMultiCustomWar initialEnergy. */
             public initialEnergy: number;
 
-            /** C_CreateCustomOnlineWar energyGrowthModifier. */
+            /** C_CreateMultiCustomWar energyGrowthModifier. */
             public energyGrowthModifier: number;
 
-            /** C_CreateCustomOnlineWar moveRangeModifier. */
+            /** C_CreateMultiCustomWar moveRangeModifier. */
             public moveRangeModifier: number;
 
-            /** C_CreateCustomOnlineWar attackPowerModifier. */
+            /** C_CreateMultiCustomWar attackPowerModifier. */
             public attackPowerModifier: number;
 
-            /** C_CreateCustomOnlineWar visionRangeModifier. */
+            /** C_CreateMultiCustomWar visionRangeModifier. */
             public visionRangeModifier: number;
 
             /**
-             * Creates a new C_CreateCustomOnlineWar instance using the specified properties.
+             * Creates a new C_CreateMultiCustomWar instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns C_CreateCustomOnlineWar instance
+             * @returns C_CreateMultiCustomWar instance
              */
-            public static create(properties?: IC_CreateCustomOnlineWar): C_CreateCustomOnlineWar;
+            public static create(properties?: IC_CreateMultiCustomWar): C_CreateMultiCustomWar;
 
             /**
-             * Encodes the specified C_CreateCustomOnlineWar message. Does not implicitly {@link C_CreateCustomOnlineWar.verify|verify} messages.
-             * @param message C_CreateCustomOnlineWar message or plain object to encode
+             * Encodes the specified C_CreateMultiCustomWar message. Does not implicitly {@link C_CreateMultiCustomWar.verify|verify} messages.
+             * @param message C_CreateMultiCustomWar message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: IC_CreateCustomOnlineWar, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: IC_CreateMultiCustomWar, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified C_CreateCustomOnlineWar message, length delimited. Does not implicitly {@link C_CreateCustomOnlineWar.verify|verify} messages.
-             * @param message C_CreateCustomOnlineWar message or plain object to encode
+             * Encodes the specified C_CreateMultiCustomWar message, length delimited. Does not implicitly {@link C_CreateMultiCustomWar.verify|verify} messages.
+             * @param message C_CreateMultiCustomWar message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: IC_CreateCustomOnlineWar, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: IC_CreateMultiCustomWar, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Decodes a C_CreateCustomOnlineWar message from the specified reader or buffer.
+             * Decodes a C_CreateMultiCustomWar message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns C_CreateCustomOnlineWar
+             * @returns C_CreateMultiCustomWar
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): C_CreateCustomOnlineWar;
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): C_CreateMultiCustomWar;
 
             /**
-             * Decodes a C_CreateCustomOnlineWar message from the specified reader or buffer, length delimited.
+             * Decodes a C_CreateMultiCustomWar message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns C_CreateCustomOnlineWar
+             * @returns C_CreateMultiCustomWar
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): C_CreateCustomOnlineWar;
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): C_CreateMultiCustomWar;
 
             /**
-             * Verifies a C_CreateCustomOnlineWar message.
+             * Verifies a C_CreateMultiCustomWar message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             public static verify(message: { [k: string]: any }): (string | null);
 
             /**
-             * Creates a C_CreateCustomOnlineWar message from a plain object. Also converts values to their respective internal types.
+             * Creates a C_CreateMultiCustomWar message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns C_CreateCustomOnlineWar
+             * @returns C_CreateMultiCustomWar
              */
-            public static fromObject(object: { [k: string]: any }): C_CreateCustomOnlineWar;
+            public static fromObject(object: { [k: string]: any }): C_CreateMultiCustomWar;
 
             /**
-             * Creates a plain object from a C_CreateCustomOnlineWar message. Also converts values to other types if specified.
-             * @param message C_CreateCustomOnlineWar
+             * Creates a plain object from a C_CreateMultiCustomWar message. Also converts values to other types if specified.
+             * @param message C_CreateMultiCustomWar
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: C_CreateCustomOnlineWar, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: C_CreateMultiCustomWar, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this C_CreateCustomOnlineWar to JSON.
+             * Converts this C_CreateMultiCustomWar to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
         }
 
-        /** Properties of a S_CreateCustomOnlineWar. */
-        export declare interface IS_CreateCustomOnlineWar {
+        /** Properties of a S_CreateMultiCustomWar. */
+        export declare interface IS_CreateMultiCustomWar {
 
-            /** S_CreateCustomOnlineWar actionCode */
+            /** S_CreateMultiCustomWar actionCode */
             actionCode?: (number | null);
 
-            /** S_CreateCustomOnlineWar errorCode */
+            /** S_CreateMultiCustomWar errorCode */
             errorCode?: (number | null);
         }
 
-        /** Represents a S_CreateCustomOnlineWar. */
-        export declare class S_CreateCustomOnlineWar implements IS_CreateCustomOnlineWar {
+        /** Represents a S_CreateMultiCustomWar. */
+        export declare class S_CreateMultiCustomWar implements IS_CreateMultiCustomWar {
 
             /**
-             * Constructs a new S_CreateCustomOnlineWar.
+             * Constructs a new S_CreateMultiCustomWar.
              * @param [properties] Properties to set
              */
-            constructor(properties?: IS_CreateCustomOnlineWar);
+            constructor(properties?: IS_CreateMultiCustomWar);
 
-            /** S_CreateCustomOnlineWar actionCode. */
+            /** S_CreateMultiCustomWar actionCode. */
             public actionCode: number;
 
-            /** S_CreateCustomOnlineWar errorCode. */
+            /** S_CreateMultiCustomWar errorCode. */
             public errorCode: number;
 
             /**
-             * Creates a new S_CreateCustomOnlineWar instance using the specified properties.
+             * Creates a new S_CreateMultiCustomWar instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns S_CreateCustomOnlineWar instance
+             * @returns S_CreateMultiCustomWar instance
              */
-            public static create(properties?: IS_CreateCustomOnlineWar): S_CreateCustomOnlineWar;
+            public static create(properties?: IS_CreateMultiCustomWar): S_CreateMultiCustomWar;
 
             /**
-             * Encodes the specified S_CreateCustomOnlineWar message. Does not implicitly {@link S_CreateCustomOnlineWar.verify|verify} messages.
-             * @param message S_CreateCustomOnlineWar message or plain object to encode
+             * Encodes the specified S_CreateMultiCustomWar message. Does not implicitly {@link S_CreateMultiCustomWar.verify|verify} messages.
+             * @param message S_CreateMultiCustomWar message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: IS_CreateCustomOnlineWar, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: IS_CreateMultiCustomWar, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified S_CreateCustomOnlineWar message, length delimited. Does not implicitly {@link S_CreateCustomOnlineWar.verify|verify} messages.
-             * @param message S_CreateCustomOnlineWar message or plain object to encode
+             * Encodes the specified S_CreateMultiCustomWar message, length delimited. Does not implicitly {@link S_CreateMultiCustomWar.verify|verify} messages.
+             * @param message S_CreateMultiCustomWar message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: IS_CreateCustomOnlineWar, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: IS_CreateMultiCustomWar, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Decodes a S_CreateCustomOnlineWar message from the specified reader or buffer.
+             * Decodes a S_CreateMultiCustomWar message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns S_CreateCustomOnlineWar
+             * @returns S_CreateMultiCustomWar
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): S_CreateCustomOnlineWar;
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): S_CreateMultiCustomWar;
 
             /**
-             * Decodes a S_CreateCustomOnlineWar message from the specified reader or buffer, length delimited.
+             * Decodes a S_CreateMultiCustomWar message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns S_CreateCustomOnlineWar
+             * @returns S_CreateMultiCustomWar
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): S_CreateCustomOnlineWar;
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): S_CreateMultiCustomWar;
 
             /**
-             * Verifies a S_CreateCustomOnlineWar message.
+             * Verifies a S_CreateMultiCustomWar message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             public static verify(message: { [k: string]: any }): (string | null);
 
             /**
-             * Creates a S_CreateCustomOnlineWar message from a plain object. Also converts values to their respective internal types.
+             * Creates a S_CreateMultiCustomWar message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns S_CreateCustomOnlineWar
+             * @returns S_CreateMultiCustomWar
              */
-            public static fromObject(object: { [k: string]: any }): S_CreateCustomOnlineWar;
+            public static fromObject(object: { [k: string]: any }): S_CreateMultiCustomWar;
 
             /**
-             * Creates a plain object from a S_CreateCustomOnlineWar message. Also converts values to other types if specified.
-             * @param message S_CreateCustomOnlineWar
+             * Creates a plain object from a S_CreateMultiCustomWar message. Also converts values to other types if specified.
+             * @param message S_CreateMultiCustomWar
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: S_CreateCustomOnlineWar, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: S_CreateMultiCustomWar, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this S_CreateCustomOnlineWar to JSON.
+             * Converts this S_CreateMultiCustomWar to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
         }
 
-        /** Properties of a C_ExitCustomOnlineWar. */
-        export declare interface IC_ExitCustomOnlineWar {
+        /** Properties of a C_ExitMultiCustomWar. */
+        export declare interface IC_ExitMultiCustomWar {
 
-            /** C_ExitCustomOnlineWar actionCode */
+            /** C_ExitMultiCustomWar actionCode */
             actionCode?: (number | null);
 
-            /** C_ExitCustomOnlineWar infoId */
+            /** C_ExitMultiCustomWar infoId */
             infoId?: (number | null);
         }
 
-        /** Represents a C_ExitCustomOnlineWar. */
-        export declare class C_ExitCustomOnlineWar implements IC_ExitCustomOnlineWar {
+        /** Represents a C_ExitMultiCustomWar. */
+        export declare class C_ExitMultiCustomWar implements IC_ExitMultiCustomWar {
 
             /**
-             * Constructs a new C_ExitCustomOnlineWar.
+             * Constructs a new C_ExitMultiCustomWar.
              * @param [properties] Properties to set
              */
-            constructor(properties?: IC_ExitCustomOnlineWar);
+            constructor(properties?: IC_ExitMultiCustomWar);
 
-            /** C_ExitCustomOnlineWar actionCode. */
+            /** C_ExitMultiCustomWar actionCode. */
             public actionCode: number;
 
-            /** C_ExitCustomOnlineWar infoId. */
+            /** C_ExitMultiCustomWar infoId. */
             public infoId: number;
 
             /**
-             * Creates a new C_ExitCustomOnlineWar instance using the specified properties.
+             * Creates a new C_ExitMultiCustomWar instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns C_ExitCustomOnlineWar instance
+             * @returns C_ExitMultiCustomWar instance
              */
-            public static create(properties?: IC_ExitCustomOnlineWar): C_ExitCustomOnlineWar;
+            public static create(properties?: IC_ExitMultiCustomWar): C_ExitMultiCustomWar;
 
             /**
-             * Encodes the specified C_ExitCustomOnlineWar message. Does not implicitly {@link C_ExitCustomOnlineWar.verify|verify} messages.
-             * @param message C_ExitCustomOnlineWar message or plain object to encode
+             * Encodes the specified C_ExitMultiCustomWar message. Does not implicitly {@link C_ExitMultiCustomWar.verify|verify} messages.
+             * @param message C_ExitMultiCustomWar message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: IC_ExitCustomOnlineWar, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: IC_ExitMultiCustomWar, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified C_ExitCustomOnlineWar message, length delimited. Does not implicitly {@link C_ExitCustomOnlineWar.verify|verify} messages.
-             * @param message C_ExitCustomOnlineWar message or plain object to encode
+             * Encodes the specified C_ExitMultiCustomWar message, length delimited. Does not implicitly {@link C_ExitMultiCustomWar.verify|verify} messages.
+             * @param message C_ExitMultiCustomWar message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: IC_ExitCustomOnlineWar, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: IC_ExitMultiCustomWar, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Decodes a C_ExitCustomOnlineWar message from the specified reader or buffer.
+             * Decodes a C_ExitMultiCustomWar message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns C_ExitCustomOnlineWar
+             * @returns C_ExitMultiCustomWar
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): C_ExitCustomOnlineWar;
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): C_ExitMultiCustomWar;
 
             /**
-             * Decodes a C_ExitCustomOnlineWar message from the specified reader or buffer, length delimited.
+             * Decodes a C_ExitMultiCustomWar message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns C_ExitCustomOnlineWar
+             * @returns C_ExitMultiCustomWar
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): C_ExitCustomOnlineWar;
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): C_ExitMultiCustomWar;
 
             /**
-             * Verifies a C_ExitCustomOnlineWar message.
+             * Verifies a C_ExitMultiCustomWar message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             public static verify(message: { [k: string]: any }): (string | null);
 
             /**
-             * Creates a C_ExitCustomOnlineWar message from a plain object. Also converts values to their respective internal types.
+             * Creates a C_ExitMultiCustomWar message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns C_ExitCustomOnlineWar
+             * @returns C_ExitMultiCustomWar
              */
-            public static fromObject(object: { [k: string]: any }): C_ExitCustomOnlineWar;
+            public static fromObject(object: { [k: string]: any }): C_ExitMultiCustomWar;
 
             /**
-             * Creates a plain object from a C_ExitCustomOnlineWar message. Also converts values to other types if specified.
-             * @param message C_ExitCustomOnlineWar
+             * Creates a plain object from a C_ExitMultiCustomWar message. Also converts values to other types if specified.
+             * @param message C_ExitMultiCustomWar
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: C_ExitCustomOnlineWar, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: C_ExitMultiCustomWar, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this C_ExitCustomOnlineWar to JSON.
+             * Converts this C_ExitMultiCustomWar to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
         }
 
-        /** Properties of a S_ExitCustomOnlineWar. */
-        export declare interface IS_ExitCustomOnlineWar {
+        /** Properties of a S_ExitMultiCustomWar. */
+        export declare interface IS_ExitMultiCustomWar {
 
-            /** S_ExitCustomOnlineWar actionCode */
+            /** S_ExitMultiCustomWar actionCode */
             actionCode?: (number | null);
 
-            /** S_ExitCustomOnlineWar errorCode */
+            /** S_ExitMultiCustomWar errorCode */
             errorCode?: (number | null);
         }
 
-        /** Represents a S_ExitCustomOnlineWar. */
-        export declare class S_ExitCustomOnlineWar implements IS_ExitCustomOnlineWar {
+        /** Represents a S_ExitMultiCustomWar. */
+        export declare class S_ExitMultiCustomWar implements IS_ExitMultiCustomWar {
 
             /**
-             * Constructs a new S_ExitCustomOnlineWar.
+             * Constructs a new S_ExitMultiCustomWar.
              * @param [properties] Properties to set
              */
-            constructor(properties?: IS_ExitCustomOnlineWar);
+            constructor(properties?: IS_ExitMultiCustomWar);
 
-            /** S_ExitCustomOnlineWar actionCode. */
+            /** S_ExitMultiCustomWar actionCode. */
             public actionCode: number;
 
-            /** S_ExitCustomOnlineWar errorCode. */
+            /** S_ExitMultiCustomWar errorCode. */
             public errorCode: number;
 
             /**
-             * Creates a new S_ExitCustomOnlineWar instance using the specified properties.
+             * Creates a new S_ExitMultiCustomWar instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns S_ExitCustomOnlineWar instance
+             * @returns S_ExitMultiCustomWar instance
              */
-            public static create(properties?: IS_ExitCustomOnlineWar): S_ExitCustomOnlineWar;
+            public static create(properties?: IS_ExitMultiCustomWar): S_ExitMultiCustomWar;
 
             /**
-             * Encodes the specified S_ExitCustomOnlineWar message. Does not implicitly {@link S_ExitCustomOnlineWar.verify|verify} messages.
-             * @param message S_ExitCustomOnlineWar message or plain object to encode
+             * Encodes the specified S_ExitMultiCustomWar message. Does not implicitly {@link S_ExitMultiCustomWar.verify|verify} messages.
+             * @param message S_ExitMultiCustomWar message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: IS_ExitCustomOnlineWar, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: IS_ExitMultiCustomWar, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified S_ExitCustomOnlineWar message, length delimited. Does not implicitly {@link S_ExitCustomOnlineWar.verify|verify} messages.
-             * @param message S_ExitCustomOnlineWar message or plain object to encode
+             * Encodes the specified S_ExitMultiCustomWar message, length delimited. Does not implicitly {@link S_ExitMultiCustomWar.verify|verify} messages.
+             * @param message S_ExitMultiCustomWar message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: IS_ExitCustomOnlineWar, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: IS_ExitMultiCustomWar, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Decodes a S_ExitCustomOnlineWar message from the specified reader or buffer.
+             * Decodes a S_ExitMultiCustomWar message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns S_ExitCustomOnlineWar
+             * @returns S_ExitMultiCustomWar
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): S_ExitCustomOnlineWar;
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): S_ExitMultiCustomWar;
 
             /**
-             * Decodes a S_ExitCustomOnlineWar message from the specified reader or buffer, length delimited.
+             * Decodes a S_ExitMultiCustomWar message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns S_ExitCustomOnlineWar
+             * @returns S_ExitMultiCustomWar
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): S_ExitCustomOnlineWar;
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): S_ExitMultiCustomWar;
 
             /**
-             * Verifies a S_ExitCustomOnlineWar message.
+             * Verifies a S_ExitMultiCustomWar message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             public static verify(message: { [k: string]: any }): (string | null);
 
             /**
-             * Creates a S_ExitCustomOnlineWar message from a plain object. Also converts values to their respective internal types.
+             * Creates a S_ExitMultiCustomWar message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns S_ExitCustomOnlineWar
+             * @returns S_ExitMultiCustomWar
              */
-            public static fromObject(object: { [k: string]: any }): S_ExitCustomOnlineWar;
+            public static fromObject(object: { [k: string]: any }): S_ExitMultiCustomWar;
 
             /**
-             * Creates a plain object from a S_ExitCustomOnlineWar message. Also converts values to other types if specified.
-             * @param message S_ExitCustomOnlineWar
+             * Creates a plain object from a S_ExitMultiCustomWar message. Also converts values to other types if specified.
+             * @param message S_ExitMultiCustomWar
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: S_ExitCustomOnlineWar, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: S_ExitMultiCustomWar, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this S_ExitCustomOnlineWar to JSON.
+             * Converts this S_ExitMultiCustomWar to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
         }
 
-        /** Properties of a C_GetJoinedWaitingCustomOnlineWarInfos. */
-        export declare interface IC_GetJoinedWaitingCustomOnlineWarInfos {
+        /** Properties of a C_GetJoinedWaitingMultiCustomWarInfos. */
+        export declare interface IC_GetJoinedWaitingMultiCustomWarInfos {
 
-            /** C_GetJoinedWaitingCustomOnlineWarInfos actionCode */
+            /** C_GetJoinedWaitingMultiCustomWarInfos actionCode */
             actionCode?: (number | null);
         }
 
-        /** Represents a C_GetJoinedWaitingCustomOnlineWarInfos. */
-        export declare class C_GetJoinedWaitingCustomOnlineWarInfos implements IC_GetJoinedWaitingCustomOnlineWarInfos {
+        /** Represents a C_GetJoinedWaitingMultiCustomWarInfos. */
+        export declare class C_GetJoinedWaitingMultiCustomWarInfos implements IC_GetJoinedWaitingMultiCustomWarInfos {
 
             /**
-             * Constructs a new C_GetJoinedWaitingCustomOnlineWarInfos.
+             * Constructs a new C_GetJoinedWaitingMultiCustomWarInfos.
              * @param [properties] Properties to set
              */
-            constructor(properties?: IC_GetJoinedWaitingCustomOnlineWarInfos);
+            constructor(properties?: IC_GetJoinedWaitingMultiCustomWarInfos);
 
-            /** C_GetJoinedWaitingCustomOnlineWarInfos actionCode. */
+            /** C_GetJoinedWaitingMultiCustomWarInfos actionCode. */
             public actionCode: number;
 
             /**
-             * Creates a new C_GetJoinedWaitingCustomOnlineWarInfos instance using the specified properties.
+             * Creates a new C_GetJoinedWaitingMultiCustomWarInfos instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns C_GetJoinedWaitingCustomOnlineWarInfos instance
+             * @returns C_GetJoinedWaitingMultiCustomWarInfos instance
              */
-            public static create(properties?: IC_GetJoinedWaitingCustomOnlineWarInfos): C_GetJoinedWaitingCustomOnlineWarInfos;
+            public static create(properties?: IC_GetJoinedWaitingMultiCustomWarInfos): C_GetJoinedWaitingMultiCustomWarInfos;
 
             /**
-             * Encodes the specified C_GetJoinedWaitingCustomOnlineWarInfos message. Does not implicitly {@link C_GetJoinedWaitingCustomOnlineWarInfos.verify|verify} messages.
-             * @param message C_GetJoinedWaitingCustomOnlineWarInfos message or plain object to encode
+             * Encodes the specified C_GetJoinedWaitingMultiCustomWarInfos message. Does not implicitly {@link C_GetJoinedWaitingMultiCustomWarInfos.verify|verify} messages.
+             * @param message C_GetJoinedWaitingMultiCustomWarInfos message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: IC_GetJoinedWaitingCustomOnlineWarInfos, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: IC_GetJoinedWaitingMultiCustomWarInfos, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified C_GetJoinedWaitingCustomOnlineWarInfos message, length delimited. Does not implicitly {@link C_GetJoinedWaitingCustomOnlineWarInfos.verify|verify} messages.
-             * @param message C_GetJoinedWaitingCustomOnlineWarInfos message or plain object to encode
+             * Encodes the specified C_GetJoinedWaitingMultiCustomWarInfos message, length delimited. Does not implicitly {@link C_GetJoinedWaitingMultiCustomWarInfos.verify|verify} messages.
+             * @param message C_GetJoinedWaitingMultiCustomWarInfos message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: IC_GetJoinedWaitingCustomOnlineWarInfos, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: IC_GetJoinedWaitingMultiCustomWarInfos, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Decodes a C_GetJoinedWaitingCustomOnlineWarInfos message from the specified reader or buffer.
+             * Decodes a C_GetJoinedWaitingMultiCustomWarInfos message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns C_GetJoinedWaitingCustomOnlineWarInfos
+             * @returns C_GetJoinedWaitingMultiCustomWarInfos
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): C_GetJoinedWaitingCustomOnlineWarInfos;
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): C_GetJoinedWaitingMultiCustomWarInfos;
 
             /**
-             * Decodes a C_GetJoinedWaitingCustomOnlineWarInfos message from the specified reader or buffer, length delimited.
+             * Decodes a C_GetJoinedWaitingMultiCustomWarInfos message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns C_GetJoinedWaitingCustomOnlineWarInfos
+             * @returns C_GetJoinedWaitingMultiCustomWarInfos
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): C_GetJoinedWaitingCustomOnlineWarInfos;
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): C_GetJoinedWaitingMultiCustomWarInfos;
 
             /**
-             * Verifies a C_GetJoinedWaitingCustomOnlineWarInfos message.
+             * Verifies a C_GetJoinedWaitingMultiCustomWarInfos message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             public static verify(message: { [k: string]: any }): (string | null);
 
             /**
-             * Creates a C_GetJoinedWaitingCustomOnlineWarInfos message from a plain object. Also converts values to their respective internal types.
+             * Creates a C_GetJoinedWaitingMultiCustomWarInfos message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns C_GetJoinedWaitingCustomOnlineWarInfos
+             * @returns C_GetJoinedWaitingMultiCustomWarInfos
              */
-            public static fromObject(object: { [k: string]: any }): C_GetJoinedWaitingCustomOnlineWarInfos;
+            public static fromObject(object: { [k: string]: any }): C_GetJoinedWaitingMultiCustomWarInfos;
 
             /**
-             * Creates a plain object from a C_GetJoinedWaitingCustomOnlineWarInfos message. Also converts values to other types if specified.
-             * @param message C_GetJoinedWaitingCustomOnlineWarInfos
+             * Creates a plain object from a C_GetJoinedWaitingMultiCustomWarInfos message. Also converts values to other types if specified.
+             * @param message C_GetJoinedWaitingMultiCustomWarInfos
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: C_GetJoinedWaitingCustomOnlineWarInfos, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: C_GetJoinedWaitingMultiCustomWarInfos, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this C_GetJoinedWaitingCustomOnlineWarInfos to JSON.
+             * Converts this C_GetJoinedWaitingMultiCustomWarInfos to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
         }
 
-        /** Properties of a S_GetJoinedWaitingCustomOnlineWarInfos. */
-        export declare interface IS_GetJoinedWaitingCustomOnlineWarInfos {
+        /** Properties of a S_GetJoinedWaitingMultiCustomWarInfos. */
+        export declare interface IS_GetJoinedWaitingMultiCustomWarInfos {
 
-            /** S_GetJoinedWaitingCustomOnlineWarInfos actionCode */
+            /** S_GetJoinedWaitingMultiCustomWarInfos actionCode */
             actionCode?: (number | null);
 
-            /** S_GetJoinedWaitingCustomOnlineWarInfos errorCode */
+            /** S_GetJoinedWaitingMultiCustomWarInfos errorCode */
             errorCode?: (number | null);
 
-            /** S_GetJoinedWaitingCustomOnlineWarInfos warInfos */
-            warInfos?: (IWaitingCustomOnlineWarInfo[] | null);
+            /** S_GetJoinedWaitingMultiCustomWarInfos warInfos */
+            warInfos?: (IWaitingMultiCustomWarInfo[] | null);
 
-            /** S_GetJoinedWaitingCustomOnlineWarInfos mapInfos */
+            /** S_GetJoinedWaitingMultiCustomWarInfos mapInfos */
             mapInfos?: (IMapInfo[] | null);
         }
 
-        /** Represents a S_GetJoinedWaitingCustomOnlineWarInfos. */
-        export declare class S_GetJoinedWaitingCustomOnlineWarInfos implements IS_GetJoinedWaitingCustomOnlineWarInfos {
+        /** Represents a S_GetJoinedWaitingMultiCustomWarInfos. */
+        export declare class S_GetJoinedWaitingMultiCustomWarInfos implements IS_GetJoinedWaitingMultiCustomWarInfos {
 
             /**
-             * Constructs a new S_GetJoinedWaitingCustomOnlineWarInfos.
+             * Constructs a new S_GetJoinedWaitingMultiCustomWarInfos.
              * @param [properties] Properties to set
              */
-            constructor(properties?: IS_GetJoinedWaitingCustomOnlineWarInfos);
+            constructor(properties?: IS_GetJoinedWaitingMultiCustomWarInfos);
 
-            /** S_GetJoinedWaitingCustomOnlineWarInfos actionCode. */
+            /** S_GetJoinedWaitingMultiCustomWarInfos actionCode. */
             public actionCode: number;
 
-            /** S_GetJoinedWaitingCustomOnlineWarInfos errorCode. */
+            /** S_GetJoinedWaitingMultiCustomWarInfos errorCode. */
             public errorCode: number;
 
-            /** S_GetJoinedWaitingCustomOnlineWarInfos warInfos. */
-            public warInfos: IWaitingCustomOnlineWarInfo[];
+            /** S_GetJoinedWaitingMultiCustomWarInfos warInfos. */
+            public warInfos: IWaitingMultiCustomWarInfo[];
 
-            /** S_GetJoinedWaitingCustomOnlineWarInfos mapInfos. */
+            /** S_GetJoinedWaitingMultiCustomWarInfos mapInfos. */
             public mapInfos: IMapInfo[];
 
             /**
-             * Creates a new S_GetJoinedWaitingCustomOnlineWarInfos instance using the specified properties.
+             * Creates a new S_GetJoinedWaitingMultiCustomWarInfos instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns S_GetJoinedWaitingCustomOnlineWarInfos instance
+             * @returns S_GetJoinedWaitingMultiCustomWarInfos instance
              */
-            public static create(properties?: IS_GetJoinedWaitingCustomOnlineWarInfos): S_GetJoinedWaitingCustomOnlineWarInfos;
+            public static create(properties?: IS_GetJoinedWaitingMultiCustomWarInfos): S_GetJoinedWaitingMultiCustomWarInfos;
 
             /**
-             * Encodes the specified S_GetJoinedWaitingCustomOnlineWarInfos message. Does not implicitly {@link S_GetJoinedWaitingCustomOnlineWarInfos.verify|verify} messages.
-             * @param message S_GetJoinedWaitingCustomOnlineWarInfos message or plain object to encode
+             * Encodes the specified S_GetJoinedWaitingMultiCustomWarInfos message. Does not implicitly {@link S_GetJoinedWaitingMultiCustomWarInfos.verify|verify} messages.
+             * @param message S_GetJoinedWaitingMultiCustomWarInfos message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: IS_GetJoinedWaitingCustomOnlineWarInfos, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: IS_GetJoinedWaitingMultiCustomWarInfos, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified S_GetJoinedWaitingCustomOnlineWarInfos message, length delimited. Does not implicitly {@link S_GetJoinedWaitingCustomOnlineWarInfos.verify|verify} messages.
-             * @param message S_GetJoinedWaitingCustomOnlineWarInfos message or plain object to encode
+             * Encodes the specified S_GetJoinedWaitingMultiCustomWarInfos message, length delimited. Does not implicitly {@link S_GetJoinedWaitingMultiCustomWarInfos.verify|verify} messages.
+             * @param message S_GetJoinedWaitingMultiCustomWarInfos message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: IS_GetJoinedWaitingCustomOnlineWarInfos, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: IS_GetJoinedWaitingMultiCustomWarInfos, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Decodes a S_GetJoinedWaitingCustomOnlineWarInfos message from the specified reader or buffer.
+             * Decodes a S_GetJoinedWaitingMultiCustomWarInfos message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns S_GetJoinedWaitingCustomOnlineWarInfos
+             * @returns S_GetJoinedWaitingMultiCustomWarInfos
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): S_GetJoinedWaitingCustomOnlineWarInfos;
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): S_GetJoinedWaitingMultiCustomWarInfos;
 
             /**
-             * Decodes a S_GetJoinedWaitingCustomOnlineWarInfos message from the specified reader or buffer, length delimited.
+             * Decodes a S_GetJoinedWaitingMultiCustomWarInfos message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns S_GetJoinedWaitingCustomOnlineWarInfos
+             * @returns S_GetJoinedWaitingMultiCustomWarInfos
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): S_GetJoinedWaitingCustomOnlineWarInfos;
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): S_GetJoinedWaitingMultiCustomWarInfos;
 
             /**
-             * Verifies a S_GetJoinedWaitingCustomOnlineWarInfos message.
+             * Verifies a S_GetJoinedWaitingMultiCustomWarInfos message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             public static verify(message: { [k: string]: any }): (string | null);
 
             /**
-             * Creates a S_GetJoinedWaitingCustomOnlineWarInfos message from a plain object. Also converts values to their respective internal types.
+             * Creates a S_GetJoinedWaitingMultiCustomWarInfos message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns S_GetJoinedWaitingCustomOnlineWarInfos
+             * @returns S_GetJoinedWaitingMultiCustomWarInfos
              */
-            public static fromObject(object: { [k: string]: any }): S_GetJoinedWaitingCustomOnlineWarInfos;
+            public static fromObject(object: { [k: string]: any }): S_GetJoinedWaitingMultiCustomWarInfos;
 
             /**
-             * Creates a plain object from a S_GetJoinedWaitingCustomOnlineWarInfos message. Also converts values to other types if specified.
-             * @param message S_GetJoinedWaitingCustomOnlineWarInfos
+             * Creates a plain object from a S_GetJoinedWaitingMultiCustomWarInfos message. Also converts values to other types if specified.
+             * @param message S_GetJoinedWaitingMultiCustomWarInfos
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: S_GetJoinedWaitingCustomOnlineWarInfos, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: S_GetJoinedWaitingMultiCustomWarInfos, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this S_GetJoinedWaitingCustomOnlineWarInfos to JSON.
+             * Converts this S_GetJoinedWaitingMultiCustomWarInfos to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
         }
 
-        /** Properties of a C_GetUnjoinedWaitingCustomOnlineWarInfos. */
-        export declare interface IC_GetUnjoinedWaitingCustomOnlineWarInfos {
+        /** Properties of a C_GetUnjoinedWaitingMultiCustomWarInfos. */
+        export declare interface IC_GetUnjoinedWaitingMultiCustomWarInfos {
 
-            /** C_GetUnjoinedWaitingCustomOnlineWarInfos account */
+            /** C_GetUnjoinedWaitingMultiCustomWarInfos account */
             account?: (number | null);
         }
 
-        /** Represents a C_GetUnjoinedWaitingCustomOnlineWarInfos. */
-        export declare class C_GetUnjoinedWaitingCustomOnlineWarInfos implements IC_GetUnjoinedWaitingCustomOnlineWarInfos {
+        /** Represents a C_GetUnjoinedWaitingMultiCustomWarInfos. */
+        export declare class C_GetUnjoinedWaitingMultiCustomWarInfos implements IC_GetUnjoinedWaitingMultiCustomWarInfos {
 
             /**
-             * Constructs a new C_GetUnjoinedWaitingCustomOnlineWarInfos.
+             * Constructs a new C_GetUnjoinedWaitingMultiCustomWarInfos.
              * @param [properties] Properties to set
              */
-            constructor(properties?: IC_GetUnjoinedWaitingCustomOnlineWarInfos);
+            constructor(properties?: IC_GetUnjoinedWaitingMultiCustomWarInfos);
 
-            /** C_GetUnjoinedWaitingCustomOnlineWarInfos account. */
+            /** C_GetUnjoinedWaitingMultiCustomWarInfos account. */
             public account: number;
 
             /**
-             * Creates a new C_GetUnjoinedWaitingCustomOnlineWarInfos instance using the specified properties.
+             * Creates a new C_GetUnjoinedWaitingMultiCustomWarInfos instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns C_GetUnjoinedWaitingCustomOnlineWarInfos instance
+             * @returns C_GetUnjoinedWaitingMultiCustomWarInfos instance
              */
-            public static create(properties?: IC_GetUnjoinedWaitingCustomOnlineWarInfos): C_GetUnjoinedWaitingCustomOnlineWarInfos;
+            public static create(properties?: IC_GetUnjoinedWaitingMultiCustomWarInfos): C_GetUnjoinedWaitingMultiCustomWarInfos;
 
             /**
-             * Encodes the specified C_GetUnjoinedWaitingCustomOnlineWarInfos message. Does not implicitly {@link C_GetUnjoinedWaitingCustomOnlineWarInfos.verify|verify} messages.
-             * @param message C_GetUnjoinedWaitingCustomOnlineWarInfos message or plain object to encode
+             * Encodes the specified C_GetUnjoinedWaitingMultiCustomWarInfos message. Does not implicitly {@link C_GetUnjoinedWaitingMultiCustomWarInfos.verify|verify} messages.
+             * @param message C_GetUnjoinedWaitingMultiCustomWarInfos message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: IC_GetUnjoinedWaitingCustomOnlineWarInfos, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: IC_GetUnjoinedWaitingMultiCustomWarInfos, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified C_GetUnjoinedWaitingCustomOnlineWarInfos message, length delimited. Does not implicitly {@link C_GetUnjoinedWaitingCustomOnlineWarInfos.verify|verify} messages.
-             * @param message C_GetUnjoinedWaitingCustomOnlineWarInfos message or plain object to encode
+             * Encodes the specified C_GetUnjoinedWaitingMultiCustomWarInfos message, length delimited. Does not implicitly {@link C_GetUnjoinedWaitingMultiCustomWarInfos.verify|verify} messages.
+             * @param message C_GetUnjoinedWaitingMultiCustomWarInfos message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: IC_GetUnjoinedWaitingCustomOnlineWarInfos, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: IC_GetUnjoinedWaitingMultiCustomWarInfos, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Decodes a C_GetUnjoinedWaitingCustomOnlineWarInfos message from the specified reader or buffer.
+             * Decodes a C_GetUnjoinedWaitingMultiCustomWarInfos message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns C_GetUnjoinedWaitingCustomOnlineWarInfos
+             * @returns C_GetUnjoinedWaitingMultiCustomWarInfos
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): C_GetUnjoinedWaitingCustomOnlineWarInfos;
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): C_GetUnjoinedWaitingMultiCustomWarInfos;
 
             /**
-             * Decodes a C_GetUnjoinedWaitingCustomOnlineWarInfos message from the specified reader or buffer, length delimited.
+             * Decodes a C_GetUnjoinedWaitingMultiCustomWarInfos message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns C_GetUnjoinedWaitingCustomOnlineWarInfos
+             * @returns C_GetUnjoinedWaitingMultiCustomWarInfos
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): C_GetUnjoinedWaitingCustomOnlineWarInfos;
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): C_GetUnjoinedWaitingMultiCustomWarInfos;
 
             /**
-             * Verifies a C_GetUnjoinedWaitingCustomOnlineWarInfos message.
+             * Verifies a C_GetUnjoinedWaitingMultiCustomWarInfos message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             public static verify(message: { [k: string]: any }): (string | null);
 
             /**
-             * Creates a C_GetUnjoinedWaitingCustomOnlineWarInfos message from a plain object. Also converts values to their respective internal types.
+             * Creates a C_GetUnjoinedWaitingMultiCustomWarInfos message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns C_GetUnjoinedWaitingCustomOnlineWarInfos
+             * @returns C_GetUnjoinedWaitingMultiCustomWarInfos
              */
-            public static fromObject(object: { [k: string]: any }): C_GetUnjoinedWaitingCustomOnlineWarInfos;
+            public static fromObject(object: { [k: string]: any }): C_GetUnjoinedWaitingMultiCustomWarInfos;
 
             /**
-             * Creates a plain object from a C_GetUnjoinedWaitingCustomOnlineWarInfos message. Also converts values to other types if specified.
-             * @param message C_GetUnjoinedWaitingCustomOnlineWarInfos
+             * Creates a plain object from a C_GetUnjoinedWaitingMultiCustomWarInfos message. Also converts values to other types if specified.
+             * @param message C_GetUnjoinedWaitingMultiCustomWarInfos
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: C_GetUnjoinedWaitingCustomOnlineWarInfos, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: C_GetUnjoinedWaitingMultiCustomWarInfos, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this C_GetUnjoinedWaitingCustomOnlineWarInfos to JSON.
+             * Converts this C_GetUnjoinedWaitingMultiCustomWarInfos to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
         }
 
-        /** Properties of a S_GetUnjoinedWaitingCustomOnlineWarInfos. */
-        export declare interface IS_GetUnjoinedWaitingCustomOnlineWarInfos {
+        /** Properties of a S_GetUnjoinedWaitingMultiCustomWarInfos. */
+        export declare interface IS_GetUnjoinedWaitingMultiCustomWarInfos {
 
-            /** S_GetUnjoinedWaitingCustomOnlineWarInfos actionCode */
+            /** S_GetUnjoinedWaitingMultiCustomWarInfos actionCode */
             actionCode?: (number | null);
 
-            /** S_GetUnjoinedWaitingCustomOnlineWarInfos errorCode */
+            /** S_GetUnjoinedWaitingMultiCustomWarInfos errorCode */
             errorCode?: (number | null);
 
-            /** S_GetUnjoinedWaitingCustomOnlineWarInfos warInfos */
-            warInfos?: (IWaitingCustomOnlineWarInfo[] | null);
+            /** S_GetUnjoinedWaitingMultiCustomWarInfos warInfos */
+            warInfos?: (IWaitingMultiCustomWarInfo[] | null);
 
-            /** S_GetUnjoinedWaitingCustomOnlineWarInfos mapInfos */
+            /** S_GetUnjoinedWaitingMultiCustomWarInfos mapInfos */
             mapInfos?: (IMapInfo[] | null);
         }
 
-        /** Represents a S_GetUnjoinedWaitingCustomOnlineWarInfos. */
-        export declare class S_GetUnjoinedWaitingCustomOnlineWarInfos implements IS_GetUnjoinedWaitingCustomOnlineWarInfos {
+        /** Represents a S_GetUnjoinedWaitingMultiCustomWarInfos. */
+        export declare class S_GetUnjoinedWaitingMultiCustomWarInfos implements IS_GetUnjoinedWaitingMultiCustomWarInfos {
 
             /**
-             * Constructs a new S_GetUnjoinedWaitingCustomOnlineWarInfos.
+             * Constructs a new S_GetUnjoinedWaitingMultiCustomWarInfos.
              * @param [properties] Properties to set
              */
-            constructor(properties?: IS_GetUnjoinedWaitingCustomOnlineWarInfos);
+            constructor(properties?: IS_GetUnjoinedWaitingMultiCustomWarInfos);
 
-            /** S_GetUnjoinedWaitingCustomOnlineWarInfos actionCode. */
+            /** S_GetUnjoinedWaitingMultiCustomWarInfos actionCode. */
             public actionCode: number;
 
-            /** S_GetUnjoinedWaitingCustomOnlineWarInfos errorCode. */
+            /** S_GetUnjoinedWaitingMultiCustomWarInfos errorCode. */
             public errorCode: number;
 
-            /** S_GetUnjoinedWaitingCustomOnlineWarInfos warInfos. */
-            public warInfos: IWaitingCustomOnlineWarInfo[];
+            /** S_GetUnjoinedWaitingMultiCustomWarInfos warInfos. */
+            public warInfos: IWaitingMultiCustomWarInfo[];
 
-            /** S_GetUnjoinedWaitingCustomOnlineWarInfos mapInfos. */
+            /** S_GetUnjoinedWaitingMultiCustomWarInfos mapInfos. */
             public mapInfos: IMapInfo[];
 
             /**
-             * Creates a new S_GetUnjoinedWaitingCustomOnlineWarInfos instance using the specified properties.
+             * Creates a new S_GetUnjoinedWaitingMultiCustomWarInfos instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns S_GetUnjoinedWaitingCustomOnlineWarInfos instance
+             * @returns S_GetUnjoinedWaitingMultiCustomWarInfos instance
              */
-            public static create(properties?: IS_GetUnjoinedWaitingCustomOnlineWarInfos): S_GetUnjoinedWaitingCustomOnlineWarInfos;
+            public static create(properties?: IS_GetUnjoinedWaitingMultiCustomWarInfos): S_GetUnjoinedWaitingMultiCustomWarInfos;
 
             /**
-             * Encodes the specified S_GetUnjoinedWaitingCustomOnlineWarInfos message. Does not implicitly {@link S_GetUnjoinedWaitingCustomOnlineWarInfos.verify|verify} messages.
-             * @param message S_GetUnjoinedWaitingCustomOnlineWarInfos message or plain object to encode
+             * Encodes the specified S_GetUnjoinedWaitingMultiCustomWarInfos message. Does not implicitly {@link S_GetUnjoinedWaitingMultiCustomWarInfos.verify|verify} messages.
+             * @param message S_GetUnjoinedWaitingMultiCustomWarInfos message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: IS_GetUnjoinedWaitingCustomOnlineWarInfos, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: IS_GetUnjoinedWaitingMultiCustomWarInfos, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified S_GetUnjoinedWaitingCustomOnlineWarInfos message, length delimited. Does not implicitly {@link S_GetUnjoinedWaitingCustomOnlineWarInfos.verify|verify} messages.
-             * @param message S_GetUnjoinedWaitingCustomOnlineWarInfos message or plain object to encode
+             * Encodes the specified S_GetUnjoinedWaitingMultiCustomWarInfos message, length delimited. Does not implicitly {@link S_GetUnjoinedWaitingMultiCustomWarInfos.verify|verify} messages.
+             * @param message S_GetUnjoinedWaitingMultiCustomWarInfos message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: IS_GetUnjoinedWaitingCustomOnlineWarInfos, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: IS_GetUnjoinedWaitingMultiCustomWarInfos, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Decodes a S_GetUnjoinedWaitingCustomOnlineWarInfos message from the specified reader or buffer.
+             * Decodes a S_GetUnjoinedWaitingMultiCustomWarInfos message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns S_GetUnjoinedWaitingCustomOnlineWarInfos
+             * @returns S_GetUnjoinedWaitingMultiCustomWarInfos
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): S_GetUnjoinedWaitingCustomOnlineWarInfos;
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): S_GetUnjoinedWaitingMultiCustomWarInfos;
 
             /**
-             * Decodes a S_GetUnjoinedWaitingCustomOnlineWarInfos message from the specified reader or buffer, length delimited.
+             * Decodes a S_GetUnjoinedWaitingMultiCustomWarInfos message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns S_GetUnjoinedWaitingCustomOnlineWarInfos
+             * @returns S_GetUnjoinedWaitingMultiCustomWarInfos
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): S_GetUnjoinedWaitingCustomOnlineWarInfos;
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): S_GetUnjoinedWaitingMultiCustomWarInfos;
 
             /**
-             * Verifies a S_GetUnjoinedWaitingCustomOnlineWarInfos message.
+             * Verifies a S_GetUnjoinedWaitingMultiCustomWarInfos message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             public static verify(message: { [k: string]: any }): (string | null);
 
             /**
-             * Creates a S_GetUnjoinedWaitingCustomOnlineWarInfos message from a plain object. Also converts values to their respective internal types.
+             * Creates a S_GetUnjoinedWaitingMultiCustomWarInfos message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns S_GetUnjoinedWaitingCustomOnlineWarInfos
+             * @returns S_GetUnjoinedWaitingMultiCustomWarInfos
              */
-            public static fromObject(object: { [k: string]: any }): S_GetUnjoinedWaitingCustomOnlineWarInfos;
+            public static fromObject(object: { [k: string]: any }): S_GetUnjoinedWaitingMultiCustomWarInfos;
 
             /**
-             * Creates a plain object from a S_GetUnjoinedWaitingCustomOnlineWarInfos message. Also converts values to other types if specified.
-             * @param message S_GetUnjoinedWaitingCustomOnlineWarInfos
+             * Creates a plain object from a S_GetUnjoinedWaitingMultiCustomWarInfos message. Also converts values to other types if specified.
+             * @param message S_GetUnjoinedWaitingMultiCustomWarInfos
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: S_GetUnjoinedWaitingCustomOnlineWarInfos, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: S_GetUnjoinedWaitingMultiCustomWarInfos, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this S_GetUnjoinedWaitingCustomOnlineWarInfos to JSON.
+             * Converts this S_GetUnjoinedWaitingMultiCustomWarInfos to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
         }
 
-        /** Properties of a C_JoinCustomOnlineWar. */
-        export declare interface IC_JoinCustomOnlineWar {
+        /** Properties of a C_JoinMultiCustomWar. */
+        export declare interface IC_JoinMultiCustomWar {
 
-            /** C_JoinCustomOnlineWar actionCode */
+            /** C_JoinMultiCustomWar actionCode */
             actionCode?: (number | null);
 
-            /** C_JoinCustomOnlineWar infoId */
+            /** C_JoinMultiCustomWar infoId */
             infoId?: (number | null);
 
-            /** C_JoinCustomOnlineWar playerIndex */
+            /** C_JoinMultiCustomWar playerIndex */
             playerIndex?: (number | null);
 
-            /** C_JoinCustomOnlineWar teamIndex */
+            /** C_JoinMultiCustomWar teamIndex */
             teamIndex?: (number | null);
         }
 
-        /** Represents a C_JoinCustomOnlineWar. */
-        export declare class C_JoinCustomOnlineWar implements IC_JoinCustomOnlineWar {
+        /** Represents a C_JoinMultiCustomWar. */
+        export declare class C_JoinMultiCustomWar implements IC_JoinMultiCustomWar {
 
             /**
-             * Constructs a new C_JoinCustomOnlineWar.
+             * Constructs a new C_JoinMultiCustomWar.
              * @param [properties] Properties to set
              */
-            constructor(properties?: IC_JoinCustomOnlineWar);
+            constructor(properties?: IC_JoinMultiCustomWar);
 
-            /** C_JoinCustomOnlineWar actionCode. */
+            /** C_JoinMultiCustomWar actionCode. */
             public actionCode: number;
 
-            /** C_JoinCustomOnlineWar infoId. */
+            /** C_JoinMultiCustomWar infoId. */
             public infoId: number;
 
-            /** C_JoinCustomOnlineWar playerIndex. */
+            /** C_JoinMultiCustomWar playerIndex. */
             public playerIndex: number;
 
-            /** C_JoinCustomOnlineWar teamIndex. */
+            /** C_JoinMultiCustomWar teamIndex. */
             public teamIndex: number;
 
             /**
-             * Creates a new C_JoinCustomOnlineWar instance using the specified properties.
+             * Creates a new C_JoinMultiCustomWar instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns C_JoinCustomOnlineWar instance
+             * @returns C_JoinMultiCustomWar instance
              */
-            public static create(properties?: IC_JoinCustomOnlineWar): C_JoinCustomOnlineWar;
+            public static create(properties?: IC_JoinMultiCustomWar): C_JoinMultiCustomWar;
 
             /**
-             * Encodes the specified C_JoinCustomOnlineWar message. Does not implicitly {@link C_JoinCustomOnlineWar.verify|verify} messages.
-             * @param message C_JoinCustomOnlineWar message or plain object to encode
+             * Encodes the specified C_JoinMultiCustomWar message. Does not implicitly {@link C_JoinMultiCustomWar.verify|verify} messages.
+             * @param message C_JoinMultiCustomWar message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: IC_JoinCustomOnlineWar, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: IC_JoinMultiCustomWar, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified C_JoinCustomOnlineWar message, length delimited. Does not implicitly {@link C_JoinCustomOnlineWar.verify|verify} messages.
-             * @param message C_JoinCustomOnlineWar message or plain object to encode
+             * Encodes the specified C_JoinMultiCustomWar message, length delimited. Does not implicitly {@link C_JoinMultiCustomWar.verify|verify} messages.
+             * @param message C_JoinMultiCustomWar message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: IC_JoinCustomOnlineWar, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: IC_JoinMultiCustomWar, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Decodes a C_JoinCustomOnlineWar message from the specified reader or buffer.
+             * Decodes a C_JoinMultiCustomWar message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns C_JoinCustomOnlineWar
+             * @returns C_JoinMultiCustomWar
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): C_JoinCustomOnlineWar;
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): C_JoinMultiCustomWar;
 
             /**
-             * Decodes a C_JoinCustomOnlineWar message from the specified reader or buffer, length delimited.
+             * Decodes a C_JoinMultiCustomWar message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns C_JoinCustomOnlineWar
+             * @returns C_JoinMultiCustomWar
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): C_JoinCustomOnlineWar;
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): C_JoinMultiCustomWar;
 
             /**
-             * Verifies a C_JoinCustomOnlineWar message.
+             * Verifies a C_JoinMultiCustomWar message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             public static verify(message: { [k: string]: any }): (string | null);
 
             /**
-             * Creates a C_JoinCustomOnlineWar message from a plain object. Also converts values to their respective internal types.
+             * Creates a C_JoinMultiCustomWar message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns C_JoinCustomOnlineWar
+             * @returns C_JoinMultiCustomWar
              */
-            public static fromObject(object: { [k: string]: any }): C_JoinCustomOnlineWar;
+            public static fromObject(object: { [k: string]: any }): C_JoinMultiCustomWar;
 
             /**
-             * Creates a plain object from a C_JoinCustomOnlineWar message. Also converts values to other types if specified.
-             * @param message C_JoinCustomOnlineWar
+             * Creates a plain object from a C_JoinMultiCustomWar message. Also converts values to other types if specified.
+             * @param message C_JoinMultiCustomWar
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: C_JoinCustomOnlineWar, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: C_JoinMultiCustomWar, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this C_JoinCustomOnlineWar to JSON.
+             * Converts this C_JoinMultiCustomWar to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
         }
 
-        /** Properties of a S_JoinCustomOnlineWar. */
-        export declare interface IS_JoinCustomOnlineWar {
+        /** Properties of a S_JoinMultiCustomWar. */
+        export declare interface IS_JoinMultiCustomWar {
 
-            /** S_JoinCustomOnlineWar actionCode */
+            /** S_JoinMultiCustomWar actionCode */
             actionCode?: (number | null);
 
-            /** S_JoinCustomOnlineWar errorCode */
+            /** S_JoinMultiCustomWar errorCode */
             errorCode?: (number | null);
 
-            /** S_JoinCustomOnlineWar isStarted */
+            /** S_JoinMultiCustomWar isStarted */
             isStarted?: (boolean | null);
         }
 
-        /** Represents a S_JoinCustomOnlineWar. */
-        export declare class S_JoinCustomOnlineWar implements IS_JoinCustomOnlineWar {
+        /** Represents a S_JoinMultiCustomWar. */
+        export declare class S_JoinMultiCustomWar implements IS_JoinMultiCustomWar {
 
             /**
-             * Constructs a new S_JoinCustomOnlineWar.
+             * Constructs a new S_JoinMultiCustomWar.
              * @param [properties] Properties to set
              */
-            constructor(properties?: IS_JoinCustomOnlineWar);
+            constructor(properties?: IS_JoinMultiCustomWar);
 
-            /** S_JoinCustomOnlineWar actionCode. */
+            /** S_JoinMultiCustomWar actionCode. */
             public actionCode: number;
 
-            /** S_JoinCustomOnlineWar errorCode. */
+            /** S_JoinMultiCustomWar errorCode. */
             public errorCode: number;
 
-            /** S_JoinCustomOnlineWar isStarted. */
+            /** S_JoinMultiCustomWar isStarted. */
             public isStarted: boolean;
 
             /**
-             * Creates a new S_JoinCustomOnlineWar instance using the specified properties.
+             * Creates a new S_JoinMultiCustomWar instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns S_JoinCustomOnlineWar instance
+             * @returns S_JoinMultiCustomWar instance
              */
-            public static create(properties?: IS_JoinCustomOnlineWar): S_JoinCustomOnlineWar;
+            public static create(properties?: IS_JoinMultiCustomWar): S_JoinMultiCustomWar;
 
             /**
-             * Encodes the specified S_JoinCustomOnlineWar message. Does not implicitly {@link S_JoinCustomOnlineWar.verify|verify} messages.
-             * @param message S_JoinCustomOnlineWar message or plain object to encode
+             * Encodes the specified S_JoinMultiCustomWar message. Does not implicitly {@link S_JoinMultiCustomWar.verify|verify} messages.
+             * @param message S_JoinMultiCustomWar message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: IS_JoinCustomOnlineWar, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: IS_JoinMultiCustomWar, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified S_JoinCustomOnlineWar message, length delimited. Does not implicitly {@link S_JoinCustomOnlineWar.verify|verify} messages.
-             * @param message S_JoinCustomOnlineWar message or plain object to encode
+             * Encodes the specified S_JoinMultiCustomWar message, length delimited. Does not implicitly {@link S_JoinMultiCustomWar.verify|verify} messages.
+             * @param message S_JoinMultiCustomWar message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: IS_JoinCustomOnlineWar, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: IS_JoinMultiCustomWar, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Decodes a S_JoinCustomOnlineWar message from the specified reader or buffer.
+             * Decodes a S_JoinMultiCustomWar message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns S_JoinCustomOnlineWar
+             * @returns S_JoinMultiCustomWar
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): S_JoinCustomOnlineWar;
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): S_JoinMultiCustomWar;
 
             /**
-             * Decodes a S_JoinCustomOnlineWar message from the specified reader or buffer, length delimited.
+             * Decodes a S_JoinMultiCustomWar message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns S_JoinCustomOnlineWar
+             * @returns S_JoinMultiCustomWar
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): S_JoinCustomOnlineWar;
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): S_JoinMultiCustomWar;
 
             /**
-             * Verifies a S_JoinCustomOnlineWar message.
+             * Verifies a S_JoinMultiCustomWar message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             public static verify(message: { [k: string]: any }): (string | null);
 
             /**
-             * Creates a S_JoinCustomOnlineWar message from a plain object. Also converts values to their respective internal types.
+             * Creates a S_JoinMultiCustomWar message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns S_JoinCustomOnlineWar
+             * @returns S_JoinMultiCustomWar
              */
-            public static fromObject(object: { [k: string]: any }): S_JoinCustomOnlineWar;
+            public static fromObject(object: { [k: string]: any }): S_JoinMultiCustomWar;
 
             /**
-             * Creates a plain object from a S_JoinCustomOnlineWar message. Also converts values to other types if specified.
-             * @param message S_JoinCustomOnlineWar
+             * Creates a plain object from a S_JoinMultiCustomWar message. Also converts values to other types if specified.
+             * @param message S_JoinMultiCustomWar
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: S_JoinCustomOnlineWar, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: S_JoinMultiCustomWar, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this S_JoinCustomOnlineWar to JSON.
+             * Converts this S_JoinMultiCustomWar to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };

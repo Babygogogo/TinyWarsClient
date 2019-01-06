@@ -31,17 +31,17 @@ namespace TinyWars.CustomOnlineWarCreator {
     export namespace CreateWarProxy {
         export function init(): void {
             NetManager.addListeners(
-                { actionCode: ActionCode.S_CreateCustomOnlineWar, callback: _onSCreateCustomOnlineWar, thisObject: CreateWarProxy },
+                { actionCode: ActionCode.S_CreateMultiCustomWar, callback: _onSCreateCustomOnlineWar, thisObject: CreateWarProxy },
             );
         }
 
         export function reqCreateCustomOnlineWar(param: DataForCreateWar): void {
             const obj = Helpers.cloneObject(param);
-            obj["actionCode"] = ActionCode.C_CreateCustomOnlineWar;
+            obj["actionCode"] = ActionCode.C_CreateMultiCustomWar;
             NetManager.send(obj);
         }
         function _onSCreateCustomOnlineWar(e: egret.Event): void {
-            const data = e.data as ProtoTypes.IS_CreateCustomOnlineWar;
+            const data = e.data as ProtoTypes.IS_CreateMultiCustomWar;
             if (!data.errorCode) {
                 Notify.dispatch(Notify.Type.SCreateCustomOnlineWar, data);
             }

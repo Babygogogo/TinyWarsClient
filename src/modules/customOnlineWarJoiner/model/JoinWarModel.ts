@@ -3,12 +3,12 @@ namespace TinyWars.CustomOnlineWarJoiner {
     import ProtoTypes = Utility.ProtoTypes;
 
     export namespace JoinWarModel {
-        let warInfos: ProtoTypes.IWaitingCustomOnlineWarInfo[];
+        let warInfos: ProtoTypes.IWaitingMultiCustomWarInfo[];
 
-        export function setWarInfos(infos: ProtoTypes.IWaitingCustomOnlineWarInfo[]): void {
+        export function setWarInfos(infos: ProtoTypes.IWaitingMultiCustomWarInfo[]): void {
             warInfos = infos;
         }
-        export function getWarInfos(): ProtoTypes.IWaitingCustomOnlineWarInfo[] {
+        export function getWarInfos(): ProtoTypes.IWaitingMultiCustomWarInfo[] {
             return warInfos;
         }
     }

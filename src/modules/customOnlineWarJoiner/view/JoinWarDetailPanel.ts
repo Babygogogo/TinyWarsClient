@@ -40,13 +40,13 @@ namespace TinyWars.CustomOnlineWarJoiner {
         private _btnConfirm: GameUi.UiButton;
         private _btnCancel : GameUi.UiButton;
 
-        private _openData               : ProtoTypes.IWaitingCustomOnlineWarInfo;
+        private _openData               : ProtoTypes.IWaitingMultiCustomWarInfo;
         private _availablePlayerIndexes : number[];
         private _playerIndexIndex       : number;
         private _availableTeamIndexes   : number[];
         private _teamIndexIndex         : number;
 
-        public static show(data: ProtoTypes.IWaitingCustomOnlineWarInfo): void {
+        public static show(data: ProtoTypes.IWaitingMultiCustomWarInfo): void {
             if (!JoinWarDetailPanel._instance) {
                 JoinWarDetailPanel._instance = new JoinWarDetailPanel();
             }
@@ -152,7 +152,7 @@ namespace TinyWars.CustomOnlineWarJoiner {
         }
 
         private _onNotifySJoinCustomOnlineWar(e: egret.Event): void {
-            const data = e.data as ProtoTypes.IS_JoinCustomOnlineWar;
+            const data = e.data as ProtoTypes.IS_JoinMultiCustomWar;
             FloatText.show(Lang.getText(Lang.BigType.B00, data.isStarted ? Lang.SubType.S19 : Lang.SubType.S18));
             JoinWarDetailPanel.hide();
         }

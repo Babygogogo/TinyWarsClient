@@ -9,18 +9,18 @@ namespace TinyWars.CustomOnlineWarExiter {
     export namespace ExitWarProxy {
         export function init(): void {
             NetManager.addListeners(
-                { actionCode: ActionCode.S_GetJoinedWaitingCustomOnlineWarInfos, callback: _onSGetJoinedWaitingCustomOnlineWarInfos, thisObject: ExitWarProxy },
-                { actionCode: ActionCode.S_ExitCustomOnlineWar,                  callback: _onSExitCustomOnlineWar,                  thisObject: ExitWarProxy },
+                { actionCode: ActionCode.S_GetJoinedWaitingMultiCustomWarInfos, callback: _onSGetJoinedWaitingCustomOnlineWarInfos, thisObject: ExitWarProxy },
+                { actionCode: ActionCode.S_ExitMultiCustomWar,                  callback: _onSExitCustomOnlineWar,                  thisObject: ExitWarProxy },
             );
         }
 
         export function reqJoinedWaitingCustomOnlineWarInfos(): void {
             NetManager.send({
-                actionCode: ActionCode.C_GetJoinedWaitingCustomOnlineWarInfos,
+                actionCode: ActionCode.C_GetJoinedWaitingMultiCustomWarInfos,
             });
         }
         function _onSGetJoinedWaitingCustomOnlineWarInfos(e: egret.Event): void {
-            const data = e.data as ProtoTypes.IS_GetJoinedWaitingCustomOnlineWarInfos;
+            const data = e.data as ProtoTypes.IS_GetJoinedWaitingMultiCustomWarInfos;
             if (!data.errorCode) {
                 TemplateMap.TemplateMapModel.addMapInfos(data.mapInfos);
                 ExitWarModel.setWarInfos(data.warInfos);
@@ -30,12 +30,12 @@ namespace TinyWars.CustomOnlineWarExiter {
 
         export function reqExitCustomOnlineWar(waitingWarId: number): void {
             NetManager.send({
-                actionCode: ActionCode.C_ExitCustomOnlineWar,
+                actionCode: ActionCode.C_ExitMultiCustomWar,
                 infoId    : waitingWarId,
             });
         }
         function _onSExitCustomOnlineWar(e: egret.Event): void {
-            const data = e.data as ProtoTypes.IS_ExitCustomOnlineWar;
+            const data = e.data as ProtoTypes.IS_ExitMultiCustomWar;
             if (!data.errorCode) {
                 Notify.dispatch(Notify.Type.SExitCustomOnlineWar, data);
             }

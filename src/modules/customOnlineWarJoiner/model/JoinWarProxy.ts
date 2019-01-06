@@ -9,18 +9,18 @@ namespace TinyWars.CustomOnlineWarJoiner {
     export namespace JoinWarProxy {
         export function init(): void {
             NetManager.addListeners(
-                { actionCode: ActionCode.S_GetUnjoinedWaitingCustomOnlineWarInfos, callback: _onSGetUnjoinedWaitingCustomOnlineWarInfos, thisObject: JoinWarProxy },
-                { actionCode: ActionCode.S_JoinCustomOnlineWar,                    callback: _onSJoinCustomOnlineWar,                    thisObject: JoinWarProxy },
+                { actionCode: ActionCode.S_GetUnjoinedWaitingMultiCustomWarInfos, callback: _onSGetUnjoinedWaitingCustomOnlineWarInfos, thisObject: JoinWarProxy },
+                { actionCode: ActionCode.S_JoinMultiCustomWar,                    callback: _onSJoinCustomOnlineWar,                    thisObject: JoinWarProxy },
             );
         }
 
         export function reqUnjoinedWaitingCustomOnlineWarInfos(): void {
             NetManager.send({
-                actionCode: ActionCode.C_GetUnjoinedWaitingCustomOnlineWarInfos,
+                actionCode: ActionCode.C_GetUnjoinedWaitingMultiCustomWarInfos,
             });
         }
         function _onSGetUnjoinedWaitingCustomOnlineWarInfos(e: egret.Event): void {
-            const data = e.data as ProtoTypes.IS_GetUnjoinedWaitingCustomOnlineWarInfos;
+            const data = e.data as ProtoTypes.IS_GetUnjoinedWaitingMultiCustomWarInfos;
             if (!data.errorCode) {
                 TemplateMap.TemplateMapModel.addMapInfos(data.mapInfos);
                 JoinWarModel.setWarInfos(data.warInfos);
@@ -30,14 +30,14 @@ namespace TinyWars.CustomOnlineWarJoiner {
 
         export function reqJoinCustomOnlineWar(waitingWarId: number, playerIndex: number, teamIndex: number): void {
             NetManager.send({
-                actionCode : ActionCode.C_JoinCustomOnlineWar,
+                actionCode : ActionCode.C_JoinMultiCustomWar,
                 infoId     : waitingWarId,
                 playerIndex: playerIndex,
                 teamIndex  : teamIndex,
             });
         }
         function _onSJoinCustomOnlineWar(e: egret.Event): void {
-            const data = e.data as ProtoTypes.IS_JoinCustomOnlineWar;
+            const data = e.data as ProtoTypes.IS_JoinMultiCustomWar;
             if (!data.errorCode) {
                 Notify.dispatch(Notify.Type.SJoinCustomOnlineWar, data);
             }

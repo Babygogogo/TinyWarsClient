@@ -31,9 +31,9 @@ namespace TinyWars.CustomOnlineWarExiter {
         private _btnConfirm: GameUi.UiButton;
         private _btnCancel : GameUi.UiButton;
 
-        private _openData: ProtoTypes.IWaitingCustomOnlineWarInfo;
+        private _openData: ProtoTypes.IWaitingMultiCustomWarInfo;
 
-        public static show(data: ProtoTypes.IWaitingCustomOnlineWarInfo): void {
+        public static show(data: ProtoTypes.IWaitingMultiCustomWarInfo): void {
             if (!ExitWarDetailPanel._instance) {
                 ExitWarDetailPanel._instance = new ExitWarDetailPanel();
             }
