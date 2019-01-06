@@ -120,7 +120,7 @@ namespace TinyWars.Utility {
             return true;
         }
 
-        export function getKeysCount(obj: { [key: string]: any }): number {
+        export function getObjectKeysCount(obj: { [key: string]: any }): number {
             let count = 0;
             for (const k in obj) {
                 ++count;

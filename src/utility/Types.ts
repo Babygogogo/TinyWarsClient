@@ -42,6 +42,7 @@ namespace TinyWars.Utility.Types {
 
     export type SerializedMcTile    = ProtoTypes.ISerializedMcTile;
     export type SerializedMcUnit    = ProtoTypes.ISerializedMcUnit;
+    export type SerializedMcPlayer  = ProtoTypes.ISerializedMcPlayer;
 
     export type MapIndexKey = {
         mapDesigner : string;

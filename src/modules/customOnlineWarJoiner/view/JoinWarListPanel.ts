@@ -123,7 +123,7 @@ namespace TinyWars.CustomOnlineWarJoiner {
         }
 
         private _onTouchBeginZoomMap(e: egret.TouchEvent): void {
-            const touchesCount = Helpers.getKeysCount(this._currentTouchPoints);
+            const touchesCount = Helpers.getObjectKeysCount(this._currentTouchPoints);
             if (touchesCount <= 0) {
                 this._zoomMap.addEventListener(egret.TouchEvent.TOUCH_MOVE, this._onTouchMoveZoomMap, this);
             }
@@ -148,7 +148,7 @@ namespace TinyWars.CustomOnlineWarJoiner {
             const touchId = e.touchPointID;
             this._currentTouchPoints[touchId] = { x: e.stageX, y: e.stageY };
 
-            if (Helpers.getKeysCount(this._currentTouchPoints) > 1) {
+            if (Helpers.getObjectKeysCount(this._currentTouchPoints) > 1) {
                 this._zoomMap.setZoomByTouches(this._currentTouchPoints, this._previousTouchPoints);
             } else {
                 const zoomMap = this._zoomMap;
