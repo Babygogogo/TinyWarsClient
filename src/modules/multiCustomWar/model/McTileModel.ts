@@ -1,11 +1,11 @@
 
 namespace TinyWars.MultiCustomWar {
-    import Types          = Utility.Types;
-    import IdConverter    = Utility.IdConverter;
-    import Notify         = Utility.Notify;
-    import Helpers        = Utility.Helpers;
-    import Logger         = Utility.Logger;
-    import SerializedTile = Types.SerializedTile;
+    import Types            = Utility.Types;
+    import IdConverter      = Utility.IdConverter;
+    import Notify           = Utility.Notify;
+    import Helpers          = Utility.Helpers;
+    import Logger           = Utility.Logger;
+    import SerializedMcTile = Types.SerializedMcTile;
 
     export class McTileModel {
         private _isInitialized: boolean = false;
@@ -25,13 +25,13 @@ namespace TinyWars.MultiCustomWar {
         private _currentBuildPoint  : number | undefined;
         private _currentCapturePoint: number | undefined;
 
-        public constructor(data?: SerializedTile, configVersion?: number) {
+        public constructor(data?: SerializedMcTile, configVersion?: number) {
             if ((data) && (configVersion != null)) {
-                this.deserialize(data, configVersion);
+                this.init(data, configVersion);
             }
         }
 
-        public deserialize(data: SerializedTile, configVersion: number): void {
+        public init(data: SerializedMcTile, configVersion: number): void {
             const t = IdConverter.getTileObjectTypeAndPlayerIndex(data.objectViewId);
             Logger.assert(t, "TileModel.deserialize() invalid SerializedTile! ", data);
 
@@ -51,10 +51,10 @@ namespace TinyWars.MultiCustomWar {
             this.setCurrentCapturePoint(data.currentCapturePoint != null ? data.currentCapturePoint : this.getMaxCapturePoint());
         }
 
-        public serialize(): SerializedTile {
+        public serialize(): SerializedMcTile {
             Logger.assert(this._isInitialized, "TileModel.serialize() the tile hasn't been initialized!");
 
-            const data: SerializedTile = {
+            const data: SerializedMcTile = {
                 gridX         : this._gridX,
                 gridY         : this._gridY,
                 baseViewId    : this._baseViewId,

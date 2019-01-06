@@ -1,15 +1,15 @@
 
 namespace TinyWars.MultiCustomWar {
-    import Types          = Utility.Types;
-    import IdConverter    = Utility.IdConverter;
-    import Helpers        = Utility.Helpers;
-    import Logger         = Utility.Logger;
-    import SerializedUnit = Types.SerializedUnit;
-    import UnitState      = Types.UnitState;
-    import ArmorType      = Types.ArmorType;
-    import TileType       = Types.TileType;
-    import UnitType       = Types.UnitType;
-    import MoveType       = Types.MoveType;
+    import Types            = Utility.Types;
+    import IdConverter      = Utility.IdConverter;
+    import Helpers          = Utility.Helpers;
+    import Logger           = Utility.Logger;
+    import SerializedMcUnit = Types.SerializedMcUnit;
+    import UnitState        = Types.UnitState;
+    import ArmorType        = Types.ArmorType;
+    import TileType         = Types.TileType;
+    import UnitType         = Types.UnitType;
+    import MoveType         = Types.MoveType;
 
     export class McUnitModel {
         private _isInitialized: boolean = false;
@@ -40,13 +40,13 @@ namespace TinyWars.MultiCustomWar {
         private _loadedUnitIds           : number[]  | undefined;
         private _primaryWeaponCurrentAmmo: number    | undefined;
 
-        public constructor(data?: SerializedUnit, configVersion?: number) {
+        public constructor(data?: SerializedMcUnit, configVersion?: number) {
             if ((data) && (configVersion != null)) {
-                this.deserialize(data, configVersion);
+                this.init(data, configVersion);
             }
         }
 
-        public deserialize(data: SerializedUnit, configVersion: number): void {
+        public init(data: SerializedMcUnit, configVersion: number): void {
             const t = IdConverter.getUnitTypeAndPlayerIndex(data.viewId);
             Logger.assert(t, "UnitModel.deserialize() invalid SerializedUnit! ", data);
 
@@ -76,10 +76,10 @@ namespace TinyWars.MultiCustomWar {
             this._setLoadUnitIds(            data.loadedUnitIds            != null ? data.loadedUnitIds            : undefined);
         }
 
-        public serialize(): SerializedUnit {
+        public serialize(): SerializedMcUnit {
             Logger.assert(this._isInitialized, "UnitModel.serialize() the tile hasn't been initialized!");
 
-            const data: SerializedUnit = {
+            const data: SerializedMcUnit = {
                 gridX   : this._gridX,
                 gridY   : this._gridY,
                 viewId  : this._viewId,

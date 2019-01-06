@@ -1327,217 +1327,307 @@ namespace TinyWars.Utility {
             public toJSON(): { [k: string]: any };
         }
 
-        /** Properties of an InstantialTile. */
-        export declare interface IInstantialTile {
+        /** Properties of a SerializedMcTile. */
+        export declare interface ISerializedMcTile {
 
-            /** InstantialTile currentHp */
+            /** SerializedMcTile gridX */
+            gridX?: (number | null);
+
+            /** SerializedMcTile gridY */
+            gridY?: (number | null);
+
+            /** SerializedMcTile baseViewId */
+            baseViewId?: (number | null);
+
+            /** SerializedMcTile objectViewId */
+            objectViewId?: (number | null);
+
+            /** SerializedMcTile currentHp */
             currentHp?: (number | null);
 
-            /** InstantialTile currentBuildPoint */
+            /** SerializedMcTile currentBuildPoint */
             currentBuildPoint?: (number | null);
 
-            /** InstantialTile currentCapturePoint */
+            /** SerializedMcTile currentCapturePoint */
             currentCapturePoint?: (number | null);
         }
 
-        /** Represents an InstantialTile. */
-        export declare class InstantialTile implements IInstantialTile {
+        /** Represents a SerializedMcTile. */
+        export declare class SerializedMcTile implements ISerializedMcTile {
 
             /**
-             * Constructs a new InstantialTile.
+             * Constructs a new SerializedMcTile.
              * @param [properties] Properties to set
              */
-            constructor(properties?: IInstantialTile);
+            constructor(properties?: ISerializedMcTile);
 
-            /** InstantialTile currentHp. */
+            /** SerializedMcTile gridX. */
+            public gridX: number;
+
+            /** SerializedMcTile gridY. */
+            public gridY: number;
+
+            /** SerializedMcTile baseViewId. */
+            public baseViewId: number;
+
+            /** SerializedMcTile objectViewId. */
+            public objectViewId: number;
+
+            /** SerializedMcTile currentHp. */
             public currentHp: number;
 
-            /** InstantialTile currentBuildPoint. */
+            /** SerializedMcTile currentBuildPoint. */
             public currentBuildPoint: number;
 
-            /** InstantialTile currentCapturePoint. */
+            /** SerializedMcTile currentCapturePoint. */
             public currentCapturePoint: number;
 
             /**
-             * Creates a new InstantialTile instance using the specified properties.
+             * Creates a new SerializedMcTile instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns InstantialTile instance
+             * @returns SerializedMcTile instance
              */
-            public static create(properties?: IInstantialTile): InstantialTile;
+            public static create(properties?: ISerializedMcTile): SerializedMcTile;
 
             /**
-             * Encodes the specified InstantialTile message. Does not implicitly {@link InstantialTile.verify|verify} messages.
-             * @param message InstantialTile message or plain object to encode
+             * Encodes the specified SerializedMcTile message. Does not implicitly {@link SerializedMcTile.verify|verify} messages.
+             * @param message SerializedMcTile message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: IInstantialTile, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: ISerializedMcTile, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified InstantialTile message, length delimited. Does not implicitly {@link InstantialTile.verify|verify} messages.
-             * @param message InstantialTile message or plain object to encode
+             * Encodes the specified SerializedMcTile message, length delimited. Does not implicitly {@link SerializedMcTile.verify|verify} messages.
+             * @param message SerializedMcTile message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: IInstantialTile, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: ISerializedMcTile, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Decodes an InstantialTile message from the specified reader or buffer.
+             * Decodes a SerializedMcTile message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns InstantialTile
+             * @returns SerializedMcTile
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): InstantialTile;
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): SerializedMcTile;
 
             /**
-             * Decodes an InstantialTile message from the specified reader or buffer, length delimited.
+             * Decodes a SerializedMcTile message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns InstantialTile
+             * @returns SerializedMcTile
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): InstantialTile;
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): SerializedMcTile;
 
             /**
-             * Verifies an InstantialTile message.
+             * Verifies a SerializedMcTile message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             public static verify(message: { [k: string]: any }): (string | null);
 
             /**
-             * Creates an InstantialTile message from a plain object. Also converts values to their respective internal types.
+             * Creates a SerializedMcTile message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns InstantialTile
+             * @returns SerializedMcTile
              */
-            public static fromObject(object: { [k: string]: any }): InstantialTile;
+            public static fromObject(object: { [k: string]: any }): SerializedMcTile;
 
             /**
-             * Creates a plain object from an InstantialTile message. Also converts values to other types if specified.
-             * @param message InstantialTile
+             * Creates a plain object from a SerializedMcTile message. Also converts values to other types if specified.
+             * @param message SerializedMcTile
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: InstantialTile, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: SerializedMcTile, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this InstantialTile to JSON.
+             * Converts this SerializedMcTile to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
         }
 
-        /** Properties of a SerializedTile. */
-        export declare interface ISerializedTile {
+        /** Properties of a SerializedMcUnit. */
+        export declare interface ISerializedMcUnit {
 
-            /** SerializedTile gridX */
+            /** SerializedMcUnit gridX */
             gridX?: (number | null);
 
-            /** SerializedTile gridY */
+            /** SerializedMcUnit gridY */
             gridY?: (number | null);
 
-            /** SerializedTile baseViewId */
-            baseViewId?: (number | null);
+            /** SerializedMcUnit viewId */
+            viewId?: (number | null);
 
-            /** SerializedTile objectViewId */
-            objectViewId?: (number | null);
+            /** SerializedMcUnit unitId */
+            unitId?: (number | null);
 
-            /** SerializedTile instantialData */
-            instantialData?: (IInstantialTile | null);
+            /** SerializedMcUnit state */
+            state?: (number | null);
+
+            /** SerializedMcUnit primaryWeaponCurrentAmmo */
+            primaryWeaponCurrentAmmo?: (number | null);
+
+            /** SerializedMcUnit currentHp */
+            currentHp?: (number | null);
+
+            /** SerializedMcUnit isCapturingTile */
+            isCapturingTile?: (boolean | null);
+
+            /** SerializedMcUnit isDiving */
+            isDiving?: (boolean | null);
+
+            /** SerializedMcUnit flareCurrentAmmo */
+            flareCurrentAmmo?: (number | null);
+
+            /** SerializedMcUnit currentFuel */
+            currentFuel?: (number | null);
+
+            /** SerializedMcUnit currentBuildMaterial */
+            currentBuildMaterial?: (number | null);
+
+            /** SerializedMcUnit currentProduceMaterial */
+            currentProduceMaterial?: (number | null);
+
+            /** SerializedMcUnit currentPromotion */
+            currentPromotion?: (number | null);
+
+            /** SerializedMcUnit isBuildingTile */
+            isBuildingTile?: (boolean | null);
+
+            /** SerializedMcUnit loadedUnitIds */
+            loadedUnitIds?: (number[] | null);
         }
 
-        /** Represents a SerializedTile. */
-        export declare class SerializedTile implements ISerializedTile {
+        /** Represents a SerializedMcUnit. */
+        export declare class SerializedMcUnit implements ISerializedMcUnit {
 
             /**
-             * Constructs a new SerializedTile.
+             * Constructs a new SerializedMcUnit.
              * @param [properties] Properties to set
              */
-            constructor(properties?: ISerializedTile);
+            constructor(properties?: ISerializedMcUnit);
 
-            /** SerializedTile gridX. */
+            /** SerializedMcUnit gridX. */
             public gridX: number;
 
-            /** SerializedTile gridY. */
+            /** SerializedMcUnit gridY. */
             public gridY: number;
 
-            /** SerializedTile baseViewId. */
-            public baseViewId: number;
+            /** SerializedMcUnit viewId. */
+            public viewId: number;
 
-            /** SerializedTile objectViewId. */
-            public objectViewId: number;
+            /** SerializedMcUnit unitId. */
+            public unitId: number;
 
-            /** SerializedTile instantialData. */
-            public instantialData?: (IInstantialTile | null);
+            /** SerializedMcUnit state. */
+            public state: number;
+
+            /** SerializedMcUnit primaryWeaponCurrentAmmo. */
+            public primaryWeaponCurrentAmmo: number;
+
+            /** SerializedMcUnit currentHp. */
+            public currentHp: number;
+
+            /** SerializedMcUnit isCapturingTile. */
+            public isCapturingTile: boolean;
+
+            /** SerializedMcUnit isDiving. */
+            public isDiving: boolean;
+
+            /** SerializedMcUnit flareCurrentAmmo. */
+            public flareCurrentAmmo: number;
+
+            /** SerializedMcUnit currentFuel. */
+            public currentFuel: number;
+
+            /** SerializedMcUnit currentBuildMaterial. */
+            public currentBuildMaterial: number;
+
+            /** SerializedMcUnit currentProduceMaterial. */
+            public currentProduceMaterial: number;
+
+            /** SerializedMcUnit currentPromotion. */
+            public currentPromotion: number;
+
+            /** SerializedMcUnit isBuildingTile. */
+            public isBuildingTile: boolean;
+
+            /** SerializedMcUnit loadedUnitIds. */
+            public loadedUnitIds: number[];
 
             /**
-             * Creates a new SerializedTile instance using the specified properties.
+             * Creates a new SerializedMcUnit instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns SerializedTile instance
+             * @returns SerializedMcUnit instance
              */
-            public static create(properties?: ISerializedTile): SerializedTile;
+            public static create(properties?: ISerializedMcUnit): SerializedMcUnit;
 
             /**
-             * Encodes the specified SerializedTile message. Does not implicitly {@link SerializedTile.verify|verify} messages.
-             * @param message SerializedTile message or plain object to encode
+             * Encodes the specified SerializedMcUnit message. Does not implicitly {@link SerializedMcUnit.verify|verify} messages.
+             * @param message SerializedMcUnit message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: ISerializedTile, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: ISerializedMcUnit, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified SerializedTile message, length delimited. Does not implicitly {@link SerializedTile.verify|verify} messages.
-             * @param message SerializedTile message or plain object to encode
+             * Encodes the specified SerializedMcUnit message, length delimited. Does not implicitly {@link SerializedMcUnit.verify|verify} messages.
+             * @param message SerializedMcUnit message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: ISerializedTile, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: ISerializedMcUnit, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Decodes a SerializedTile message from the specified reader or buffer.
+             * Decodes a SerializedMcUnit message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns SerializedTile
+             * @returns SerializedMcUnit
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): SerializedTile;
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): SerializedMcUnit;
 
             /**
-             * Decodes a SerializedTile message from the specified reader or buffer, length delimited.
+             * Decodes a SerializedMcUnit message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns SerializedTile
+             * @returns SerializedMcUnit
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): SerializedTile;
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): SerializedMcUnit;
 
             /**
-             * Verifies a SerializedTile message.
+             * Verifies a SerializedMcUnit message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             public static verify(message: { [k: string]: any }): (string | null);
 
             /**
-             * Creates a SerializedTile message from a plain object. Also converts values to their respective internal types.
+             * Creates a SerializedMcUnit message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns SerializedTile
+             * @returns SerializedMcUnit
              */
-            public static fromObject(object: { [k: string]: any }): SerializedTile;
+            public static fromObject(object: { [k: string]: any }): SerializedMcUnit;
 
             /**
-             * Creates a plain object from a SerializedTile message. Also converts values to other types if specified.
-             * @param message SerializedTile
+             * Creates a plain object from a SerializedMcUnit message. Also converts values to other types if specified.
+             * @param message SerializedMcUnit
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: SerializedTile, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: SerializedMcUnit, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this SerializedTile to JSON.
+             * Converts this SerializedMcUnit to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
