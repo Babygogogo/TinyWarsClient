@@ -1,18 +1,17 @@
 
-namespace TinyWars.OnlineWar {
+namespace TinyWars.MultiCustomWar {
     import Types          = Utility.Types;
     import IdConverter    = Utility.IdConverter;
     import Helpers        = Utility.Helpers;
     import Logger         = Utility.Logger;
     import SerializedUnit = Types.SerializedUnit;
-    import InstantialUnit = Types.InstantialUnit;
     import UnitState      = Types.UnitState;
     import ArmorType      = Types.ArmorType;
     import TileType       = Types.TileType;
     import UnitType       = Types.UnitType;
     import MoveType       = Types.MoveType;
 
-    export class UnitModel {
+    export class McUnitModel {
         private _isInitialized: boolean = false;
 
         private _configVersion      : number;
@@ -41,18 +40,18 @@ namespace TinyWars.OnlineWar {
         private _loadedUnitIds           : number[]  | undefined;
         private _primaryWeaponCurrentAmmo: number    | undefined;
 
-        public constructor(data?: SerializedUnit) {
-            if (data) {
-                this.deserialize(data);
+        public constructor(data?: SerializedUnit, configVersion?: number) {
+            if ((data) && (configVersion != null)) {
+                this.deserialize(data, configVersion);
             }
         }
 
-        public deserialize(data: SerializedUnit): void {
+        public deserialize(data: SerializedUnit, configVersion: number): void {
             const t = IdConverter.getUnitTypeAndPlayerIndex(data.viewId);
             Logger.assert(t, "UnitModel.deserialize() invalid SerializedUnit! ", data);
 
             this._isInitialized     = true;
-            this._configVersion     = data.configVersion;
+            this._configVersion     = configVersion;
             this._gridX             = data.gridX;
             this._gridY             = data.gridY;
             this._viewId            = data.viewId;
@@ -63,19 +62,67 @@ namespace TinyWars.OnlineWar {
             this._damageChartCfg    = ConfigManager.getDamageChartCfgs(this._configVersion, this._unitType);
             this._buildableTileCfg  = ConfigManager.getBuildableTileCfgs(this._configVersion, this._unitType);
             this._visionBonusCfg    = ConfigManager.getVisionBonusCfg(this._configVersion, this._unitType);
-            this._loadInstantialData(data.instantialData);
+            this.setState(                   data.state                    != null ? data.state                    : UnitState.Idle);
+            this.setCurrentHp(               data.currentHp                != null ? data.currentHp                : this.getMaxHp());
+            this.setPrimaryWeaponCurrentAmmo(data.primaryWeaponCurrentAmmo != null ? data.primaryWeaponCurrentAmmo : this.getPrimaryWeaponMaxAmmo());
+            this.setIsCapturingTile(         data.isCapturingTile          != null ? data.isCapturingTile          : false);
+            this.setIsDiving(                data.isDiving                 != null ? data.isDiving                 : false);
+            this.setCurrentFuel(             data.currentFuel              != null ? data.currentFuel              : this.getMaxFuel());
+            this.setFlareCurrentAmmo(        data.flareCurrentAmmo         != null ? data.flareCurrentAmmo         : this.getFlareMaxAmmo());
+            this.setCurrentProduceMaterial(  data.currentProduceMaterial   != null ? data.currentProduceMaterial   : this.getMaxProduceMaterial());
+            this.setCurrentPromotion(        data.currentPromotion         != null ? data.currentPromotion         : 0);
+            this.setIsBuildingTile(          data.isBuildingTile           != null ? data.isBuildingTile           : false);
+            this.setCurrentBuildMaterial(    data.currentBuildMaterial     != null ? data.currentBuildMaterial     : this.getMaxBuildMaterial());
+            this._setLoadUnitIds(            data.loadedUnitIds            != null ? data.loadedUnitIds            : undefined);
         }
 
         public serialize(): SerializedUnit {
             Logger.assert(this._isInitialized, "UnitModel.serialize() the tile hasn't been initialized!");
-            return {
-                configVersion : this._configVersion,
-                gridX         : this._gridX,
-                gridY         : this._gridY,
-                viewId        : this._viewId,
-                unitId        : this._unitId,
-                instantialData: this._createInstantialData(),
+
+            const data: SerializedUnit = {
+                gridX   : this._gridX,
+                gridY   : this._gridY,
+                viewId  : this._viewId,
+                unitId  : this._unitId,
             };
+
+            const state = this.getState();
+            (state !== UnitState.Idle) && (data.state = state);
+
+            const currentHp = this.getCurrentHp();
+            (currentHp !== this.getMaxHp()) && (data.currentHp = currentHp);
+
+            const currentAmmo = this.getPrimaryWeaponCurrentAmmo();
+            (currentAmmo !== this.getPrimaryWeaponMaxAmmo()) && (data.primaryWeaponCurrentAmmo = currentAmmo);
+
+            const isCapturing = this.getIsCapturingTile();
+            (isCapturing) && (data.isCapturingTile = isCapturing);
+
+            const isDiving = this.getIsDiving();
+            (isDiving) && (data.isDiving = isDiving);
+
+            const currentFuel = this.getCurrentFuel();
+            (currentFuel !== this.getMaxFuel()) && (data.currentFuel = currentFuel);
+
+            const flareAmmo = this.getFlareCurrentAmmo();
+            (flareAmmo !== this.getFlareMaxAmmo()) && (data.flareCurrentAmmo = flareAmmo);
+
+            const produceMaterial = this.getCurrentProduceMaterial();
+            (produceMaterial !== this.getMaxProduceMaterial()) && (data.currentProduceMaterial = produceMaterial);
+
+            const currentPromotion = this.getCurrentPromotion();
+            (currentPromotion !== 0) && (data.currentPromotion = currentPromotion);
+
+            const isBuildingTile = this.getIsBuildingTile();
+            (isBuildingTile) && (data.isBuildingTile = isBuildingTile);
+
+            const buildMaterial = this.getCurrentBuildMaterial();
+            (buildMaterial !== this.getMaxBuildMaterial()) && (data.currentBuildMaterial = buildMaterial);
+
+            const loadedUnitIds = this.getLoadedUnitIds();
+            (loadedUnitIds) && (loadedUnitIds.length > 0) && (data.loadedUnitIds = loadedUnitIds);
+
+            return data;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -504,66 +551,6 @@ namespace TinyWars.OnlineWar {
             const cfgs  = this._visionBonusCfg;
             const cfg   = cfgs ? cfgs[tileType] : undefined;
             return this.getVisionRange() + (cfg ? cfg.visionBonus || 0 : 0);
-        }
-
-        ////////////////////////////////////////////////////////////////////////////////
-        // Private functions.
-        ////////////////////////////////////////////////////////////////////////////////
-        private _createInstantialData(): InstantialUnit | undefined {
-            const data: InstantialUnit = {};
-
-            const state = this.getState();
-            (state !== UnitState.Idle) && (data.state = state);
-
-            const currentHp = this.getCurrentHp();
-            (currentHp !== this.getMaxHp()) && (data.currentHp = currentHp);
-
-            const currentAmmo = this.getPrimaryWeaponCurrentAmmo();
-            (currentAmmo !== this.getPrimaryWeaponMaxAmmo()) && (data.primaryWeaponCurrentAmmo = currentAmmo);
-
-            const isCapturing = this.getIsCapturingTile();
-            (isCapturing) && (data.isCapturingTile = isCapturing);
-
-            const isDiving = this.getIsDiving();
-            (isDiving) && (data.isDiving = isDiving);
-
-            const currentFuel = this.getCurrentFuel();
-            (currentFuel !== this.getMaxFuel()) && (data.currentFuel = currentFuel);
-
-            const flareAmmo = this.getFlareCurrentAmmo();
-            (flareAmmo !== this.getFlareMaxAmmo()) && (data.flareCurrentAmmo = flareAmmo);
-
-            const produceMaterial = this.getCurrentProduceMaterial();
-            (produceMaterial !== this.getMaxProduceMaterial()) && (data.currentProduceMaterial = produceMaterial);
-
-            const currentPromotion = this.getCurrentPromotion();
-            (currentPromotion !== 0) && (data.currentPromotion = currentPromotion);
-
-            const isBuildingTile = this.getIsBuildingTile();
-            (isBuildingTile) && (data.isBuildingTile = isBuildingTile);
-
-            const buildMaterial = this.getCurrentBuildMaterial();
-            (buildMaterial !== this.getMaxBuildMaterial()) && (data.currentBuildMaterial = buildMaterial);
-
-            const loadedUnitIds = this.getLoadedUnitIds();
-            (loadedUnitIds) && (loadedUnitIds.length > 0) && (data.loadedUnitIds = loadedUnitIds);
-
-            return Helpers.checkIsEmptyObject(data) ? undefined : data;
-        }
-
-        private _loadInstantialData(d: InstantialUnit | undefined) {
-            this.setState(                   (d) && (d.state                    != null) ? d.state                    : UnitState.Idle);
-            this.setCurrentHp(               (d) && (d.currentHp                != null) ? d.currentHp                : this.getMaxHp());
-            this.setPrimaryWeaponCurrentAmmo((d) && (d.primaryWeaponCurrentAmmo != null) ? d.primaryWeaponCurrentAmmo : this.getPrimaryWeaponMaxAmmo());
-            this.setIsCapturingTile(         (d) && (d.isCapturingTile          != null) ? d.isCapturingTile          : false);
-            this.setIsDiving(                (d) && (d.isDiving                 != null) ? d.isDiving                 : false);
-            this.setCurrentFuel(             (d) && (d.currentFuel              != null) ? d.currentFuel              : this.getMaxFuel());
-            this.setFlareCurrentAmmo(        (d) && (d.flareCurrentAmmo         != null) ? d.flareCurrentAmmo         : this.getFlareMaxAmmo());
-            this.setCurrentProduceMaterial(  (d) && (d.currentProduceMaterial   != null) ? d.currentProduceMaterial   : this.getMaxProduceMaterial());
-            this.setCurrentPromotion(        (d) && (d.currentPromotion         != null) ? d.currentPromotion         : 0);
-            this.setIsBuildingTile(          (d) && (d.isBuildingTile           != null) ? d.isBuildingTile           : false);
-            this.setCurrentBuildMaterial(    (d) && (d.currentBuildMaterial     != null) ? d.currentBuildMaterial     : this.getMaxBuildMaterial());
-            this._setLoadUnitIds(            (d) && (d.loadedUnitIds            != null) ? d.loadedUnitIds            : undefined);
         }
     }
 }

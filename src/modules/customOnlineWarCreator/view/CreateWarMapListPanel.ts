@@ -214,12 +214,12 @@ namespace TinyWars.CustomOnlineWarCreator {
             egret.Tween.removeTweens(this._groupInfo);
             egret.Tween.get(this._groupInfo).wait(5000).to({alpha: 0}, 1000).call(() => {this._groupInfo.visible = false; this._groupInfo.alpha = 1});
 
-            const tileMapView = new OnlineWar.TileMapView();
+            const tileMapView = new MultiCustomWar.TileMapView();
             tileMapView.init(data.mapWidth, data.mapHeight);
             tileMapView.updateWithBaseViewIdArray(data.tileBases);
             tileMapView.updateWithObjectViewIdArray(data.tileObjects);
 
-            const unitMapView = new OnlineWar.UnitMapView();
+            const unitMapView = new MultiCustomWar.UnitMapView();
             unitMapView.initWithDatas(this._createUnitViewDatas(data.units, data.mapWidth, data.mapHeight));
 
             const gridSize = ConfigManager.getGridSize();

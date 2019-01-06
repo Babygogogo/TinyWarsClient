@@ -1,5 +1,5 @@
 
-namespace TinyWars.OnlineWar {
+namespace TinyWars.MultiCustomWar {
     import UiImage     = GameUi.UiImage;
     import Notify      = Utility.Notify;
     import IdConverter = Utility.IdConverter;

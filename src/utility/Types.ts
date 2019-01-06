@@ -59,7 +59,13 @@ namespace TinyWars.Utility {
             units       : number[];
         }
 
-        export type InstantialTile = {
+        export type SerializedTile = {
+            gridX: number;
+            gridY: number;
+
+            baseViewId  : number;
+            objectViewId: number;
+
             currentHp?: number;
 
             currentBuildPoint?: number;
@@ -67,19 +73,14 @@ namespace TinyWars.Utility {
             currentCapturePoint?: number;
         }
 
-        export type SerializedTile = {
-            configVersion: number;
-
+        export type SerializedUnit = {
             gridX: number;
             gridY: number;
 
-            baseViewId  : number;
-            objectViewId: number;
+            viewId: number;
 
-            instantialData?: InstantialTile;
-        }
+            unitId: number;
 
-        export type InstantialUnit = {
             state?: UnitState;
 
             primaryWeaponCurrentAmmo?: number;
@@ -105,19 +106,6 @@ namespace TinyWars.Utility {
             loadedUnitIds?: number[];
         }
 
-        export type SerializedUnit = {
-            configVersion: number;
-
-            gridX: number;
-            gridY: number;
-
-            viewId: number;
-
-            unitId: number;
-
-            instantialData?: InstantialUnit;
-        }
-
         export type UnitViewData = {
             configVersion: number;
 
@@ -127,8 +115,6 @@ namespace TinyWars.Utility {
             viewId: number;
 
             unitId: number;
-
-            instantialData?: InstantialUnit;
         }
 
         ////////////////////////////////////////////////////////////////////////////////

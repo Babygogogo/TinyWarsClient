@@ -1,14 +1,13 @@
 
-namespace TinyWars.OnlineWar {
+namespace TinyWars.MultiCustomWar {
     import Types          = Utility.Types;
     import IdConverter    = Utility.IdConverter;
     import Notify         = Utility.Notify;
     import Helpers        = Utility.Helpers;
     import Logger         = Utility.Logger;
     import SerializedTile = Types.SerializedTile;
-    import InstantialTile = Types.InstantialTile;
 
-    export class TileModel {
+    export class McTileModel {
         private _isInitialized: boolean = false;
 
         private _configVersion  : number;
@@ -26,18 +25,18 @@ namespace TinyWars.OnlineWar {
         private _currentBuildPoint  : number | undefined;
         private _currentCapturePoint: number | undefined;
 
-        public constructor(data?: SerializedTile) {
-            if (data) {
-                this.deserialize(data);
+        public constructor(data?: SerializedTile, configVersion?: number) {
+            if ((data) && (configVersion != null)) {
+                this.deserialize(data, configVersion);
             }
         }
 
-        public deserialize(data: SerializedTile): void {
+        public deserialize(data: SerializedTile, configVersion: number): void {
             const t = IdConverter.getTileObjectTypeAndPlayerIndex(data.objectViewId);
             Logger.assert(t, "TileModel.deserialize() invalid SerializedTile! ", data);
 
             this._isInitialized = true;
-            this._configVersion = data.configVersion;
+            this._configVersion = configVersion;
             this._gridX         = data.gridX;
             this._gridY         = data.gridY;
             this._baseViewId    = data.baseViewId;
@@ -47,19 +46,31 @@ namespace TinyWars.OnlineWar {
             this._playerIndex   = t.playerIndex;
             this._templateCfg   = ConfigManager.getTileTemplateCfg(this._configVersion, this._baseType, this._objectType);
             this._moveCostCfg   = ConfigManager.getMoveCostCfg(this._configVersion, this._baseType, this._objectType);
-            this._loadInstantialData(data.instantialData);
+            this.setCurrentHp(          data.currentHp           != null ? data.currentHp           : this.getMaxHp());
+            this.setCurrentBuildPoint(  data.currentBuildPoint   != null ? data.currentBuildPoint   : this.getMaxBuildPoint());
+            this.setCurrentCapturePoint(data.currentCapturePoint != null ? data.currentCapturePoint : this.getMaxCapturePoint());
         }
 
         public serialize(): SerializedTile {
             Logger.assert(this._isInitialized, "TileModel.serialize() the tile hasn't been initialized!");
-            return {
-                configVersion : this._configVersion,
+
+            const data: SerializedTile = {
                 gridX         : this._gridX,
                 gridY         : this._gridY,
                 baseViewId    : this._baseViewId,
                 objectViewId  : this._objectViewId,
-                instantialData: this._createInstantialData(),
             };
+
+            const currentHp = this.getCurrentHp();
+            (currentHp !== this.getMaxHp()) && (data.currentHp = currentHp);
+
+            const buildPoint = this.getCurrentBuildPoint();
+            (buildPoint !== this.getMaxBuildPoint()) && (data.currentBuildPoint = buildPoint);
+
+            const capturePoint = this.getCurrentCapturePoint();
+            (capturePoint !== this.getMaxCapturePoint()) && (data.currentCapturePoint = capturePoint);
+
+            return data;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -248,30 +259,6 @@ namespace TinyWars.OnlineWar {
 
         public checkIsVisionEnabledForAllPlayers(): boolean {
             return this._templateCfg.isVisionEnabledForAllPlayers === 1;
-        }
-
-        ////////////////////////////////////////////////////////////////////////////////
-        // Private functions.
-        ////////////////////////////////////////////////////////////////////////////////
-        private _createInstantialData(): InstantialTile | undefined {
-            const data: InstantialTile = {};
-
-            const currentHp = this.getCurrentHp();
-            (currentHp !== this.getMaxHp()) && (data.currentHp = currentHp);
-
-            const buildPoint = this.getCurrentBuildPoint();
-            (buildPoint !== this.getMaxBuildPoint()) && (data.currentBuildPoint = buildPoint);
-
-            const capturePoint = this.getCurrentCapturePoint();
-            (capturePoint !== this.getMaxCapturePoint()) && (data.currentCapturePoint = capturePoint);
-
-            return Helpers.checkIsEmptyObject(data) ? undefined : data;
-        }
-
-        private _loadInstantialData(d: InstantialTile | undefined) {
-            this.setCurrentHp(          (d) && (d.currentHp           != null) ? d.currentHp           : this.getMaxHp());
-            this.setCurrentBuildPoint(  (d) && (d.currentBuildPoint   != null) ? d.currentBuildPoint   : this.getMaxBuildPoint());
-            this.setCurrentCapturePoint((d) && (d.currentCapturePoint != null) ? d.currentCapturePoint : this.getMaxCapturePoint());
         }
     }
 }
