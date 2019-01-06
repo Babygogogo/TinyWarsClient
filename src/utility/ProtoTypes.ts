@@ -1633,6 +1633,120 @@ namespace TinyWars.Utility {
             public toJSON(): { [k: string]: any };
         }
 
+        /** Properties of a SerializedMcPlayer. */
+        export declare interface ISerializedMcPlayer {
+
+            /** SerializedMcPlayer fund */
+            fund?: (number | null);
+
+            /** SerializedMcPlayer hasVotedForDraw */
+            hasVotedForDraw?: (boolean | null);
+
+            /** SerializedMcPlayer isAlive */
+            isAlive?: (boolean | null);
+
+            /** SerializedMcPlayer playerIndex */
+            playerIndex?: (number | null);
+
+            /** SerializedMcPlayer teamIndex */
+            teamIndex?: (number | null);
+        }
+
+        /** Represents a SerializedMcPlayer. */
+        export declare class SerializedMcPlayer implements ISerializedMcPlayer {
+
+            /**
+             * Constructs a new SerializedMcPlayer.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: ISerializedMcPlayer);
+
+            /** SerializedMcPlayer fund. */
+            public fund: number;
+
+            /** SerializedMcPlayer hasVotedForDraw. */
+            public hasVotedForDraw: boolean;
+
+            /** SerializedMcPlayer isAlive. */
+            public isAlive: boolean;
+
+            /** SerializedMcPlayer playerIndex. */
+            public playerIndex: number;
+
+            /** SerializedMcPlayer teamIndex. */
+            public teamIndex: number;
+
+            /**
+             * Creates a new SerializedMcPlayer instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns SerializedMcPlayer instance
+             */
+            public static create(properties?: ISerializedMcPlayer): SerializedMcPlayer;
+
+            /**
+             * Encodes the specified SerializedMcPlayer message. Does not implicitly {@link SerializedMcPlayer.verify|verify} messages.
+             * @param message SerializedMcPlayer message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: ISerializedMcPlayer, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified SerializedMcPlayer message, length delimited. Does not implicitly {@link SerializedMcPlayer.verify|verify} messages.
+             * @param message SerializedMcPlayer message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: ISerializedMcPlayer, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a SerializedMcPlayer message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns SerializedMcPlayer
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): SerializedMcPlayer;
+
+            /**
+             * Decodes a SerializedMcPlayer message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns SerializedMcPlayer
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): SerializedMcPlayer;
+
+            /**
+             * Verifies a SerializedMcPlayer message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string | null);
+
+            /**
+             * Creates a SerializedMcPlayer message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns SerializedMcPlayer
+             */
+            public static fromObject(object: { [k: string]: any }): SerializedMcPlayer;
+
+            /**
+             * Creates a plain object from a SerializedMcPlayer message. Also converts values to other types if specified.
+             * @param message SerializedMcPlayer
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: SerializedMcPlayer, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this SerializedMcPlayer to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
         /** Properties of a MapInfo. */
         export declare interface IMapInfo {
 
@@ -1777,6 +1891,9 @@ namespace TinyWars.Utility {
             /** WaitingMultiCustomWarInfo warComment */
             warComment?: (string | null);
 
+            /** WaitingMultiCustomWarInfo configVersion */
+            configVersion?: (number | null);
+
             /** WaitingMultiCustomWarInfo p1UserId */
             p1UserId?: (number | null);
 
@@ -1870,6 +1987,9 @@ namespace TinyWars.Utility {
 
             /** WaitingMultiCustomWarInfo warComment. */
             public warComment: string;
+
+            /** WaitingMultiCustomWarInfo configVersion. */
+            public configVersion: number;
 
             /** WaitingMultiCustomWarInfo p1UserId. */
             public p1UserId: number;
@@ -3409,6 +3529,9 @@ namespace TinyWars.Utility {
             /** C_CreateMultiCustomWar warComment */
             warComment?: (string | null);
 
+            /** C_CreateMultiCustomWar configVersion */
+            configVersion?: (number | null);
+
             /** C_CreateMultiCustomWar playerIndex */
             playerIndex?: (number | null);
 
@@ -3472,6 +3595,9 @@ namespace TinyWars.Utility {
 
             /** C_CreateMultiCustomWar warComment. */
             public warComment: string;
+
+            /** C_CreateMultiCustomWar configVersion. */
+            public configVersion: number;
 
             /** C_CreateMultiCustomWar playerIndex. */
             public playerIndex: number;

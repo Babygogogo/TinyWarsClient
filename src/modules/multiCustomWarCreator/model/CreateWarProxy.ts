@@ -7,18 +7,19 @@ namespace TinyWars.CustomOnlineWarCreator {
     import Notify     = Utility.Notify;
 
     export type DataForCreateWar = {
-        mapName : string,
-        mapDesigner: string,
-        mapVersion : number,
-
+        mapName         : string,
+        mapDesigner     : string,
+        mapVersion      : number,
         warName        ?: string;
         warPassword    ?: string;
         warComment     ?: string;
+        configVersion   : number;
+
         playerIndex     : number;
         teamIndex       : number;
-        hasFog          : boolean;
-        timeLimit       : number;
 
+        hasFog              : boolean;
+        timeLimit           : number;
         initialFund         : number;
         incomeModifier      : number;
         initialEnergy       : number;

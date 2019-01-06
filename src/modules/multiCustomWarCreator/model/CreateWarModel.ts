@@ -88,13 +88,14 @@ namespace TinyWars.CustomOnlineWarCreator {
         }
         export function createDataForCreateWar(): DataForCreateWar {
             return {
-                mapName     : mapInfo.mapName,
-                mapDesigner : mapInfo.mapDesigner,
-                mapVersion  : mapInfo.mapVersion,
+                mapName         : mapInfo.mapName,
+                mapDesigner     : mapInfo.mapDesigner,
+                mapVersion      : mapInfo.mapVersion,
+                warName         : warName.length     > 0 ? warName     : undefined,
+                warPassword     : warPassword.length > 0 ? warPassword : undefined,
+                warComment      : warComment.length  > 0 ? warComment  : undefined,
+                configVersion   : ConfigManager.getNewestConfigVersion(),
 
-                warName     : warName.length     > 0 ? warName     : undefined,
-                warPassword : warPassword.length > 0 ? warPassword : undefined,
-                warComment  : warComment.length  > 0 ? warComment  : undefined,
                 playerIndex : playerIndex,
                 teamIndex   : teamIndex,
                 hasFog      : hasFog,
