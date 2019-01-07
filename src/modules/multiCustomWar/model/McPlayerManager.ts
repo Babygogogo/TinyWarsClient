@@ -9,16 +9,16 @@ namespace TinyWars.MultiCustomWar {
         private _totalPlayersCount  : number;
         private _loggedInPlayer     : McPlayerModel;
 
-        public constructor(datas?: Types.SerializedMcPlayer[], userInfos?: McPlayerUserInfo[]) {
-            if ((datas) && (userInfos)) {
-                this.init(datas, userInfos);
+        public constructor(datas?: Types.SerializedMcPlayer[]) {
+            if (datas) {
+                this.init(datas);
             }
         }
 
-        public init(datas: Types.SerializedMcPlayer[], playerInfos: McPlayerUserInfo[]): void {
+        public init(datas: Types.SerializedMcPlayer[]): void {
             this._players = {};
             for (let i = 0; i < datas.length; ++i) {
-                this._players[datas[i].playerIndex!] = new McPlayerModel(datas[i], playerInfos[i]);
+                this._players[datas[i].playerIndex!] = new McPlayerModel(datas[i]);
             }
             this._totalPlayersCount = datas.length;
         }

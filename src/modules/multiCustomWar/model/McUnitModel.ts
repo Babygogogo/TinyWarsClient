@@ -31,14 +31,14 @@ namespace TinyWars.MultiCustomWar {
         private _currentFuel     : number;
         private _currentPromotion: number;
 
-        private _currentBuildMaterial    : number    | undefined;
-        private _currentProduceMaterial  : number    | undefined;
-        private _flareCurrentAmmo        : number    | undefined;
-        private _isBuildingTile          : boolean   | undefined;
-        private _isCapturingTile         : boolean   | undefined;
-        private _isDiving                : boolean   | undefined;
-        private _loadedUnitIds           : number[]  | undefined;
-        private _primaryWeaponCurrentAmmo: number    | undefined;
+        private _currentBuildMaterial    : number   | undefined;
+        private _currentProduceMaterial  : number   | undefined;
+        private _flareCurrentAmmo        : number   | undefined;
+        private _isBuildingTile          : boolean  | undefined;
+        private _isCapturingTile         : boolean  | undefined;
+        private _isDiving                : boolean  | undefined;
+        private _loaderUnitId            : number   | undefined;
+        private _primaryWeaponCurrentAmmo: number   | undefined;
 
         public constructor(data?: SerializedMcUnit, configVersion?: number) {
             if ((data) && (configVersion != null)) {
@@ -73,7 +73,7 @@ namespace TinyWars.MultiCustomWar {
             this.setCurrentPromotion(        data.currentPromotion         != null ? data.currentPromotion         : 0);
             this.setIsBuildingTile(          data.isBuildingTile           != null ? data.isBuildingTile           : false);
             this.setCurrentBuildMaterial(    data.currentBuildMaterial     != null ? data.currentBuildMaterial     : this.getMaxBuildMaterial());
-            this._setLoadUnitIds(            data.loadedUnitIds            != null ? data.loadedUnitIds            : undefined);
+            this.setLoaderUnitId(            data.loaderUnitId             != null ? data.loaderUnitId             : undefined);
         }
 
         public serialize(): SerializedMcUnit {
@@ -119,8 +119,8 @@ namespace TinyWars.MultiCustomWar {
             const buildMaterial = this.getCurrentBuildMaterial();
             (buildMaterial !== this.getMaxBuildMaterial()) && (data.currentBuildMaterial = buildMaterial);
 
-            const loadedUnitIds = this.getLoadedUnitIds();
-            (loadedUnitIds) && (loadedUnitIds.length > 0) && (data.loadedUnitIds = loadedUnitIds);
+            const loaderUnitId = this.getLoaderUnitId();
+            (loaderUnitId != null) && (data.loaderUnitId = loaderUnitId);
 
             return data;
         }
@@ -478,16 +478,18 @@ namespace TinyWars.MultiCustomWar {
         }
 
         public getLoadedUnitsCount(): number | undefined {
-            return this._loadedUnitIds ? this._loadedUnitIds.length : undefined;
+            // TODO
+            return 0;
         }
 
         public getLoadedUnitIds(): number[] | undefined {
-            return this._loadedUnitIds;
+            // TODO
+            return undefined;
         }
 
         public checkHasLoadUnitId(id: number): boolean {
-            const ids = this._loadedUnitIds;
-            return ids ? ids.indexOf(id) >= 0 : false;
+            // TODO
+            return false;
         }
 
         public checkCanDropLoadedUnit(): boolean {
@@ -506,31 +508,11 @@ namespace TinyWars.MultiCustomWar {
             return this._templateCfg.repairAmountForLoadedUnits;
         }
 
-        public addLoadUnitId(id: number): void {
-            const loadedCount = this.getLoadedUnitsCount();
-            const maxCount    = this.getMaxLoadUnitsCount();
-            Logger.assert(
-                (loadedCount != null) && (maxCount != null) && (loadedCount < maxCount) && (!this.checkHasLoadUnitId(id)),
-                "UnitModel.addLoadUnitId() error, id: ", id
-            );
-
-            this._loadedUnitIds!.push(id);
+        public setLoaderUnitId(id: number | undefined): void {
+            this._loaderUnitId = id;
         }
-        public removeLoadUnitId(id: number): void {
-            Logger.assert(this.checkHasLoadUnitId(id), "UnitModel.removeLoadUnitId() error, id: ", id);
-
-            const ids = this._loadedUnitIds!;
-            ids.splice(ids.indexOf(id), 1);
-        }
-        private _setLoadUnitIds(ids: number[] | undefined): void {
-            const maxCount = this.getMaxLoadUnitsCount();
-            if (maxCount == null) {
-                Logger.assert(ids == null, "UnitModel._setLoadUnitIds() error, ids: ", ids);
-            } else {
-                Logger.assert((ids != null) && (ids.length <= maxCount), "UnitModel._setLoadUnitIds() error, ids: ", ids);
-            }
-
-            this._loadedUnitIds = ids;
+        public getLoaderUnitId(): number | undefined {
+            return this._loaderUnitId;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
