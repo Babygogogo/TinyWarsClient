@@ -11,7 +11,7 @@ namespace TinyWars.MultiCustomWar {
     import UnitType         = Types.UnitType;
     import MoveType         = Types.MoveType;
 
-    export class McUnitModel {
+    export class McUnit {
         private _isInitialized: boolean = false;
 
         private _configVersion      : number;
@@ -40,6 +40,9 @@ namespace TinyWars.MultiCustomWar {
         private _loaderUnitId            : number   | undefined;
         private _primaryWeaponCurrentAmmo: number   | undefined;
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Initializers and serializers.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         public constructor(data?: SerializedMcUnit, configVersion?: number) {
             if ((data) && (configVersion != null)) {
                 this.init(data, configVersion);
@@ -55,7 +58,7 @@ namespace TinyWars.MultiCustomWar {
             this._gridX             = data.gridX;
             this._gridY             = data.gridY;
             this._viewId            = data.viewId;
-            this._unitId            = data.unitId;
+            this._setUnitId(data.unitId);
             this._unitType          = t!.unitType;
             this._playerIndex       = t!.playerIndex;
             this._templateCfg       = ConfigManager.getUnitTemplateCfg(this._configVersion, this._unitType);
@@ -83,7 +86,7 @@ namespace TinyWars.MultiCustomWar {
                 gridX   : this._gridX,
                 gridY   : this._gridY,
                 viewId  : this._viewId,
-                unitId  : this._unitId,
+                unitId  : this.getUnitId(),
             };
 
             const state = this.getState();
@@ -125,11 +128,25 @@ namespace TinyWars.MultiCustomWar {
             return data;
         }
 
+        public startRunning(war: McWar): void {
+            Logger.error("McUnit.startRunning() TODO!!");
+        }
+
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////
         public getViewId(): number {
             return this._viewId;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+        // Functions for unit id.
+        ////////////////////////////////////////////////////////////////////////////////
+        public getUnitId(): number {
+            return this._unitId;
+        }
+        private _setUnitId(id: number): void {
+            this._unitId = id;
         }
 
         ////////////////////////////////////////////////////////////////////////////////

@@ -13,6 +13,16 @@ namespace TinyWars.Utility.Types {
         height: number;
     }
 
+    export type GridIndex = {
+        x: number;
+        y: number;
+    }
+
+    export type MapSize = {
+        width   : number;
+        height  : number;
+    }
+
     export type Point = {
         x: number;
         y: number;
@@ -42,6 +52,8 @@ namespace TinyWars.Utility.Types {
 
     export type SerializedMcTile    = ProtoTypes.ISerializedMcTile;
     export type SerializedMcUnit    = ProtoTypes.ISerializedMcUnit;
+    export type SerializedMcTileMap = ProtoTypes.ISerializedMcTileMap;
+    export type SerializedMcUnitMap = ProtoTypes.ISerializedMcUnitMap;
     export type SerializedMcPlayer  = ProtoTypes.ISerializedMcPlayer;
 
     export type MapIndexKey = {
