@@ -22,7 +22,7 @@ namespace TinyWars.CustomOnlineWarJoiner {
         function _onSGetUnjoinedWaitingCustomOnlineWarInfos(e: egret.Event): void {
             const data = e.data as ProtoTypes.IS_GetUnjoinedWaitingMultiCustomWarInfos;
             if (!data.errorCode) {
-                TemplateMap.TemplateMapModel.addMapInfos(data.mapInfos);
+                Map.MapModel.addMapInfos(data.mapInfos);
                 JoinWarModel.setWarInfos(data.warInfos);
                 Notify.dispatch(Notify.Type.SGetUnjoinedWaitingCustomOnlineWarInfos, data);
             }

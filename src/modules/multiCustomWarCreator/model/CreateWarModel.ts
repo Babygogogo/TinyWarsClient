@@ -2,7 +2,7 @@
 namespace TinyWars.CustomOnlineWarCreator {
     import Types                = Utility.Types;
     import ProtoTypes           = Utility.ProtoTypes;
-    import TemplateMapManager   = TemplateMap.TemplateMapModel;
+    import TemplateMapManager   = Map.MapModel;
 
     export namespace CreateWarModel {
         const TIME_LIMITS = [

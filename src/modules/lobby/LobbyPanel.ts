@@ -77,7 +77,7 @@ namespace TinyWars.Lobby {
                     name    : Lang.getText(Lang.BigType.B01, Lang.SubType.S00),
                     callback: (): void => {
                         LobbyPanel.hide();
-                        TemplateMap.TemplateMapProxy.reqGetNewestMapInfos();
+                        Map.MapProxy.reqGetNewestMapInfos();
                         CustomOnlineWarCreator.CreateWarMapListPanel.show();
                     },
                 },

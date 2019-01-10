@@ -7,8 +7,8 @@ namespace TinyWars.CustomOnlineWarCreator {
     import Helpers          = Utility.Helpers;
     import Lang             = Utility.Lang;
     import ProtoTypes       = Utility.ProtoTypes;
-    import TemplateMapModel = TemplateMap.TemplateMapModel;
-    import TemplateMapProxy = TemplateMap.TemplateMapProxy;
+    import TemplateMapModel = Map.MapModel;
+    import TemplateMapProxy = Map.MapProxy;
 
     export class CreateWarMapListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
@@ -147,7 +147,7 @@ namespace TinyWars.CustomOnlineWarCreator {
         }
 
         private _onTouchTapBtnSearch(e: egret.TouchEvent): void {
-            TemplateMap.SearchMapPanel.show();
+            Map.MapSearchPanel.show();
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {

@@ -1,11 +1,11 @@
 
-namespace TinyWars.TemplateMap {
+namespace TinyWars.Map {
     import NetManager   = Network.Manager;
     import ActionCode   = Network.Codes;
     import ProtoTypes   = Utility.ProtoTypes;
     import Notify       = Utility.Notify;
 
-    export namespace TemplateMapProxy {
+    export namespace MapProxy {
         type ParamForGetNewestMapInfos = {
             mapName         ?: string | null,
             mapDesigner     ?: string | null,
@@ -16,7 +16,7 @@ namespace TinyWars.TemplateMap {
 
         export function init(): void {
             NetManager.addListeners(
-                { actionCode: ActionCode.S_GetNewestMapInfos, callback: _onSGetNewestMapInfos, thisObject: TemplateMapProxy },
+                { actionCode: ActionCode.S_GetNewestMapInfos, callback: _onSGetNewestMapInfos, thisObject: MapProxy },
             );
         }
 
@@ -32,7 +32,7 @@ namespace TinyWars.TemplateMap {
         }
         function _onSGetNewestMapInfos(e: egret.Event): void {
             const data = e.data as ProtoTypes.S_GetNewestMapInfos;
-            TemplateMapModel.setNewestMapInfos(data);
+            MapModel.setNewestMapInfos(data);
             Notify.dispatch(Notify.Type.SGetNewestMapInfos, data);
         }
     }

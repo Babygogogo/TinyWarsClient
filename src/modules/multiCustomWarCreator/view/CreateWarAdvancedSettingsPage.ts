@@ -6,7 +6,7 @@ namespace TinyWars.CustomOnlineWarCreator {
     import Helpers          = Utility.Helpers;
     import Lang             = Utility.Lang;
     import HelpPanel        = Common.HelpPanel;
-    import TemplateMapModel = TemplateMap.TemplateMapModel;
+    import TemplateMapModel = Map.MapModel;
 
     export class CreateWarAdvancedSettingsPage extends GameUi.UiTabPage {
         private _labelMapName       : GameUi.UiLabel;
