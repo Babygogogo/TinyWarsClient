@@ -31,9 +31,9 @@ namespace TinyWars.CustomOnlineWarCreator {
 
     export namespace CreateWarProxy {
         export function init(): void {
-            NetManager.addListeners(
-                { actionCode: ActionCode.S_CreateMultiCustomWar, callback: _onSCreateCustomOnlineWar, thisObject: CreateWarProxy },
-            );
+            NetManager.addListeners([
+                { actionCode: ActionCode.S_CreateMultiCustomWar, callback: _onSCreateCustomOnlineWar },
+            ], CreateWarProxy);
         }
 
         export function reqCreateCustomOnlineWar(param: DataForCreateWar): void {

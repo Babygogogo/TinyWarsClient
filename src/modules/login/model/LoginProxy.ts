@@ -8,11 +8,11 @@ namespace TinyWars.Login {
         import ActionCode = Network.Codes;
 
         export function init(): void {
-            NetManager.addListeners(
-                { actionCode: ActionCode.S_Login,    callback: _onSLogin,    thisObject: LoginProxy },
-                { actionCode: ActionCode.S_Register, callback: _onSRegister, thisObject: LoginProxy },
-                { actionCode: ActionCode.S_Logout,   callback: _onSLogout,   thisObject: LoginProxy },
-            );
+            NetManager.addListeners([
+                { actionCode: ActionCode.S_Login,    callback: _onSLogin,    },
+                { actionCode: ActionCode.S_Register, callback: _onSRegister, },
+                { actionCode: ActionCode.S_Logout,   callback: _onSLogout,   },
+            ], LoginProxy);
         }
 
         export function reqLogin(account: string, password: string): void {

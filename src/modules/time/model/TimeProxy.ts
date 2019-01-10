@@ -8,9 +8,9 @@ namespace TinyWars.Time {
         import ActionCode = Network.Codes;
 
         export function init(): void {
-            NetManager.addListeners(
-                { actionCode: ActionCode.S_Heartbeat, callback: _onSHeartbeat, thisObject: TimeProxy },
-            );
+            NetManager.addListeners([
+                { actionCode: ActionCode.S_Heartbeat, callback: _onSHeartbeat },
+            ], TimeProxy);
         }
 
         export function reqHeartbeat(counter: number): void {

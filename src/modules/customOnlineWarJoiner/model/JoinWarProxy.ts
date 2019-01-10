@@ -8,10 +8,10 @@ namespace TinyWars.CustomOnlineWarJoiner {
 
     export namespace JoinWarProxy {
         export function init(): void {
-            NetManager.addListeners(
-                { actionCode: ActionCode.S_GetUnjoinedWaitingMultiCustomWarInfos, callback: _onSGetUnjoinedWaitingCustomOnlineWarInfos, thisObject: JoinWarProxy },
-                { actionCode: ActionCode.S_JoinMultiCustomWar,                    callback: _onSJoinCustomOnlineWar,                    thisObject: JoinWarProxy },
-            );
+            NetManager.addListeners([
+                { actionCode: ActionCode.S_GetUnjoinedWaitingMultiCustomWarInfos, callback: _onSGetUnjoinedWaitingCustomOnlineWarInfos, },
+                { actionCode: ActionCode.S_JoinMultiCustomWar,                    callback: _onSJoinCustomOnlineWar,                    },
+            ], JoinWarProxy);
         }
 
         export function reqUnjoinedWaitingCustomOnlineWarInfos(): void {

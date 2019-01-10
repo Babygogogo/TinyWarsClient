@@ -19,9 +19,9 @@ namespace TinyWars.Network {
         type ReceivedData = any;
         type Action       = Utility.Types.Action;
         type MsgListener = {
-            actionCode: Codes;
-            callback  : (e: egret.Event) => void;
-            thisObject: any;
+            actionCode   : Codes;
+            callback     : (e: egret.Event) => void;
+            thisObject  ?: any;
         }
 
         class NetMessageDispatcherCls extends egret.EventDispatcher {
@@ -64,15 +64,15 @@ namespace TinyWars.Network {
             }, Manager, 10000);
         }
 
-        export function addListeners(...listeners: MsgListener[]): void {
+        export function addListeners(listeners: MsgListener[], thisObject?: any): void {
             for (const one of listeners) {
-                dispatcher.addEventListener(Codes[one.actionCode], one.callback, one.thisObject);
+                dispatcher.addEventListener(Codes[one.actionCode], one.callback, one.thisObject || thisObject);
             }
         }
 
-        export function removeListeners(...listeners: MsgListener[]): void {
+        export function removeListeners(listeners: MsgListener[], thisObject?: any): void {
             for (const one of listeners) {
-                dispatcher.removeEventListener(Codes[one.actionCode], one.callback, one.thisObject);
+                dispatcher.removeEventListener(Codes[one.actionCode], one.callback, one.thisObject || thisObject);
             }
         }
 

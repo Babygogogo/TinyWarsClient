@@ -198,9 +198,9 @@ namespace TinyWars.ConfigManager {
     // Exports.
     ////////////////////////////////////////////////////////////////////////////////
     export function init(): void {
-        NetManager.addListeners(
-            { actionCode: ActionCode.S_NewestConfigVersion, callback: _onSNewestConfigVersion, thisObject: ConfigManager },
-        );
+        NetManager.addListeners([
+            { actionCode: ActionCode.S_NewestConfigVersion, callback: _onSNewestConfigVersion },
+        ], ConfigManager);
     }
 
     export function getNewestConfigVersion(): number {

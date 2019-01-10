@@ -8,10 +8,10 @@ namespace TinyWars.CustomOnlineWarExiter {
 
     export namespace ExitWarProxy {
         export function init(): void {
-            NetManager.addListeners(
-                { actionCode: ActionCode.S_GetJoinedWaitingMultiCustomWarInfos, callback: _onSGetJoinedWaitingCustomOnlineWarInfos, thisObject: ExitWarProxy },
-                { actionCode: ActionCode.S_ExitMultiCustomWar,                  callback: _onSExitCustomOnlineWar,                  thisObject: ExitWarProxy },
-            );
+            NetManager.addListeners([
+                { actionCode: ActionCode.S_GetJoinedWaitingMultiCustomWarInfos, callback: _onSGetJoinedWaitingCustomOnlineWarInfos, },
+                { actionCode: ActionCode.S_ExitMultiCustomWar,                  callback: _onSExitCustomOnlineWar,                  },
+            ], ExitWarProxy);
         }
 
         export function reqJoinedWaitingCustomOnlineWarInfos(): void {

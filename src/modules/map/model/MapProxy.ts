@@ -15,9 +15,9 @@ namespace TinyWars.Map {
         }
 
         export function init(): void {
-            NetManager.addListeners(
-                { actionCode: ActionCode.S_GetNewestMapInfos, callback: _onSGetNewestMapInfos, thisObject: MapProxy },
-            );
+            NetManager.addListeners([
+                { actionCode: ActionCode.S_GetNewestMapInfos, callback: _onSGetNewestMapInfos },
+            ], MapProxy);
         }
 
         export function reqGetNewestMapInfos(param?: ParamForGetNewestMapInfos): void {
