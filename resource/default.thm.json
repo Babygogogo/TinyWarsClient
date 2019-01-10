@@ -3,10 +3,6 @@
 	"autoGenerateExmlsList": true,
 	"exmls": [
 		"resource/skins/common/HelpPanel.exml",
-		"resource/skins/customOnlineWarCreator/CreateWarAdvancedSettingsPage.exml",
-		"resource/skins/customOnlineWarCreator/CreateWarBasicSettingsPage.exml",
-		"resource/skins/customOnlineWarCreator/CreateWarMapListPanel.exml",
-		"resource/skins/customOnlineWarCreator/CreateWarSettingsPanel.exml",
 		"resource/skins/customOnlineWarExiter/ExitWarDetailPanel.exml",
 		"resource/skins/customOnlineWarExiter/ExitWarListPanel.exml",
 		"resource/skins/customOnlineWarJoiner/JoinWarDetailPanel.exml",
@@ -18,6 +14,10 @@
 		"resource/skins/login/LoginPanel.exml",
 		"resource/skins/login/RegisterPanel.exml",
 		"resource/skins/map/MapSearchPanel.exml",
+		"resource/skins/multiCustomWarRoom/McwrCreateAdvancedSettingsPage.exml",
+		"resource/skins/multiCustomWarRoom/McwrCreateBasicSettingsPage.exml",
+		"resource/skins/multiCustomWarRoom/McwrCreateMapListPanel.exml",
+		"resource/skins/multiCustomWarRoom/McwrCreateSettingsPanel.exml",
 		"resource/skins/utility/LoadingUiPanel.exml"
 	],
 	"path": "resource/default.thm.json"

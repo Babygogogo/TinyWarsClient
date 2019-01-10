@@ -1,5 +1,5 @@
 
-namespace TinyWars.CustomOnlineWarCreator {
+namespace TinyWars.MultiCustomWarRoom {
     import NetManager = Network.Manager;
     import ActionCode = Network.Codes;
     import Helpers    = Utility.Helpers;
@@ -29,14 +29,14 @@ namespace TinyWars.CustomOnlineWarCreator {
         visionRangeModifier : number;
     }
 
-    export namespace CreateWarProxy {
+    export namespace McwrProxy {
         export function init(): void {
             NetManager.addListeners([
                 { actionCode: ActionCode.S_CreateMultiCustomWar, callback: _onSCreateCustomOnlineWar },
-            ], CreateWarProxy);
+            ], McwrProxy);
         }
 
-        export function reqCreateCustomOnlineWar(param: DataForCreateWar): void {
+        export function reqCreate(param: DataForCreateWar): void {
             const obj = Helpers.cloneObject(param);
             obj["actionCode"] = ActionCode.C_CreateMultiCustomWar;
             NetManager.send(obj);

@@ -19,7 +19,7 @@ namespace TinyWars.Utility.FlowManager {
         Map.MapProxy.init();
         Map.MapModel.init();
         Login.LoginProxy.init();
-        CustomOnlineWarCreator.CreateWarProxy.init();
+        MultiCustomWarRoom.McwrProxy.init();
         CustomOnlineWarExiter.ExitWarProxy.init();
         CustomOnlineWarJoiner.JoinWarProxy.init();
 

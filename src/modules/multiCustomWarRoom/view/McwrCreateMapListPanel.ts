@@ -1,5 +1,5 @@
 
-namespace TinyWars.CustomOnlineWarCreator {
+namespace TinyWars.MultiCustomWarRoom {
     import Notify           = Utility.Notify;
     import Types            = Utility.Types;
     import StageManager     = Utility.StageManager;
@@ -10,11 +10,11 @@ namespace TinyWars.CustomOnlineWarCreator {
     import TemplateMapModel = Map.MapModel;
     import TemplateMapProxy = Map.MapProxy;
 
-    export class CreateWarMapListPanel extends GameUi.UiPanel {
+    export class McwrCreateMapListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: CreateWarMapListPanel;
+        private static _instance: McwrCreateMapListPanel;
 
         private _listMap   : GameUi.UiScrollList;
         private _zoomMap   : GameUi.UiZoomableComponent;
@@ -34,14 +34,14 @@ namespace TinyWars.CustomOnlineWarCreator {
         private _selectedIndex      : number;
 
         public static show(): void {
-            if (!CreateWarMapListPanel._instance) {
-                CreateWarMapListPanel._instance = new CreateWarMapListPanel();
+            if (!McwrCreateMapListPanel._instance) {
+                McwrCreateMapListPanel._instance = new McwrCreateMapListPanel();
             }
-            CreateWarMapListPanel._instance.open();
+            McwrCreateMapListPanel._instance.open();
         }
         public static hide(): void {
-            if (CreateWarMapListPanel._instance) {
-                CreateWarMapListPanel._instance.close();
+            if (McwrCreateMapListPanel._instance) {
+                McwrCreateMapListPanel._instance.close();
             }
         }
 
@@ -49,7 +49,7 @@ namespace TinyWars.CustomOnlineWarCreator {
             super();
 
             this._setAutoAdjustHeightEnabled();
-            this.skinName = "resource/skins/customOnlineWarCreator/CreateWarMapListPanel.exml";
+            this.skinName = "resource/skins/multiCustomWarRoom/McwrCreateMapListPanel.exml";
         }
 
         protected _onFirstOpened(): void {
@@ -151,7 +151,7 @@ namespace TinyWars.CustomOnlineWarCreator {
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
-            CreateWarMapListPanel.hide();
+            McwrCreateMapListPanel.hide();
             Lobby.LobbyPanel.show();
         }
 
@@ -237,7 +237,7 @@ namespace TinyWars.CustomOnlineWarCreator {
         mapDesigner : string;
         mapVersion  : number;
         index       : number;
-        panel       : CreateWarMapListPanel;
+        panel       : McwrCreateMapListPanel;
     }
 
     class MapNameRenderer extends eui.ItemRenderer {
@@ -266,11 +266,11 @@ namespace TinyWars.CustomOnlineWarCreator {
         }
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
-            CreateWarMapListPanel.hide();
+            McwrCreateMapListPanel.hide();
 
-            CreateWarModel.setMapIndexKey(this.data as DataForMapNameRenderer);
-            CreateWarModel.resetSettings();
-            CreateWarSettingsPanel.show();
+            McwrModel.setMapIndexKey(this.data as DataForMapNameRenderer);
+            McwrModel.resetSettings();
+            McwrCreateSettingsPanel.show();
         }
     }
 }

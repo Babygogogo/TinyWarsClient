@@ -1,10 +1,10 @@
 
-namespace TinyWars.CustomOnlineWarCreator {
-    import Types                = Utility.Types;
-    import ProtoTypes           = Utility.ProtoTypes;
-    import TemplateMapManager   = Map.MapModel;
+namespace TinyWars.MultiCustomWarRoom {
+    import Types        = Utility.Types;
+    import ProtoTypes   = Utility.ProtoTypes;
+    import MapModel     = Map.MapModel;
 
-    export namespace CreateWarModel {
+    export namespace McwrModel {
         const TIME_LIMITS = [
             60 * 15,            // 15 min
             60 * 60 * 24 * 1,   // 1 day
@@ -60,7 +60,7 @@ namespace TinyWars.CustomOnlineWarCreator {
 
         export function setMapIndexKey(key: Types.MapIndexKey): void {
             mapIndexKey = key;
-            mapInfo     = TemplateMapManager.getMapInfo(key);
+            mapInfo     = MapModel.getMapInfo(key);
         }
         export function getMapIndexKey(): Types.MapIndexKey {
             return mapIndexKey;

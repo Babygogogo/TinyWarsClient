@@ -1,5 +1,5 @@
 
-namespace TinyWars.CustomOnlineWarCreator {
+namespace TinyWars.MultiCustomWarRoom {
     import Types            = Utility.Types;
     import ProtoTypes       = Utility.ProtoTypes;
     import FloatText        = Utility.FloatText;
@@ -8,7 +8,7 @@ namespace TinyWars.CustomOnlineWarCreator {
     import HelpPanel        = Common.HelpPanel;
     import TemplateMapModel = Map.MapModel;
 
-    export class CreateWarAdvancedSettingsPage extends GameUi.UiTabPage {
+    export class McwrCreateAdvancedSettingsPage extends GameUi.UiTabPage {
         private _labelMapName       : GameUi.UiLabel;
         private _labelPlayersCount  : GameUi.UiLabel;
 
@@ -35,7 +35,7 @@ namespace TinyWars.CustomOnlineWarCreator {
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/customOnlineWarCreator/CreateWarAdvancedSettingsPage.exml";
+            this.skinName = "resource/skins/multiCustomWarRoom/McwrCreateAdvancedSettingsPage.exml";
         }
 
         protected _onFirstOpened(): void {
@@ -54,7 +54,7 @@ namespace TinyWars.CustomOnlineWarCreator {
         }
 
         protected _onOpened(): void {
-            this._mapInfo = CreateWarModel.getMapInfo();
+            this._mapInfo = McwrModel.getMapInfo();
 
             this._updateLabelMapName();
             this._updateLabelPlayersCount();
@@ -73,78 +73,78 @@ namespace TinyWars.CustomOnlineWarCreator {
         private _onFocusOutInputInitialFund(e: egret.Event): void {
             let fund = Number(this._inputInitialFund.text);
             if (isNaN(fund)) {
-                fund = CreateWarModel.DEFAULT_INITIAL_FUND;
+                fund = McwrModel.DEFAULT_INITIAL_FUND;
             } else {
-                fund = Math.min(fund, CreateWarModel.MAX_INITIAL_FUND);
-                fund = Math.max(fund, CreateWarModel.MIN_INITIAL_FUND);
+                fund = Math.min(fund, McwrModel.MAX_INITIAL_FUND);
+                fund = Math.max(fund, McwrModel.MIN_INITIAL_FUND);
             }
-            CreateWarModel.setInitialFund(fund);
+            McwrModel.setInitialFund(fund);
             this._updateInputInitialFund();
         }
 
         private _onFocusOutInputIncomeModifier(e: egret.Event): void {
             let modifier = Number(this._inputIncomeModifier.text);
             if (isNaN(modifier)) {
-                modifier = CreateWarModel.DEFAULT_INCOME_MODIFIER;
+                modifier = McwrModel.DEFAULT_INCOME_MODIFIER;
             } else {
-                modifier = Math.min(modifier, CreateWarModel.MAX_INCOME_MODIFIER);
-                modifier = Math.max(modifier, CreateWarModel.MIN_INCOME_MODIFIER);
+                modifier = Math.min(modifier, McwrModel.MAX_INCOME_MODIFIER);
+                modifier = Math.max(modifier, McwrModel.MIN_INCOME_MODIFIER);
             }
-            CreateWarModel.setIncomeModifier(modifier);
+            McwrModel.setIncomeModifier(modifier);
             this._updateInputIncomeModifier();
         }
 
         private _onFocusOutInputInitialEnergy(e: egret.Event): void {
             let energy = Number(this._inputInitialEnergy.text);
             if (isNaN(energy)) {
-                energy = CreateWarModel.DEFAULT_INITIAL_ENERGY;
+                energy = McwrModel.DEFAULT_INITIAL_ENERGY;
             } else {
-                energy = Math.min(energy, CreateWarModel.MAX_INITIAL_ENERGY);
-                energy = Math.max(energy, CreateWarModel.MIN_INITIAL_ENERGY);
+                energy = Math.min(energy, McwrModel.MAX_INITIAL_ENERGY);
+                energy = Math.max(energy, McwrModel.MIN_INITIAL_ENERGY);
             }
-            CreateWarModel.setInitialEnergy(energy);
+            McwrModel.setInitialEnergy(energy);
             this._updateInputInitialEnergy();
         }
 
         private _onFocusOutInputEnergyModifier(e: egret.Event): void {
             let modifier = Number(this._inputEnergyModifier.text);
             if (isNaN(modifier)) {
-                modifier = CreateWarModel.DEFAULT_ENERGY_MODIFIER;
+                modifier = McwrModel.DEFAULT_ENERGY_MODIFIER;
             } else {
-                modifier = Math.min(modifier, CreateWarModel.MAX_ENERGY_MODIFIER);
-                modifier = Math.max(modifier, CreateWarModel.MIN_ENERGY_MODIFIER);
+                modifier = Math.min(modifier, McwrModel.MAX_ENERGY_MODIFIER);
+                modifier = Math.max(modifier, McwrModel.MIN_ENERGY_MODIFIER);
             }
-            CreateWarModel.setEnergyGrowthModifier(modifier);
+            McwrModel.setEnergyGrowthModifier(modifier);
             this._updateInputEnergyModifier();
         }
 
         private _onTouchedBtnPrevMoveRange(e: egret.TouchEvent): void {
-            CreateWarModel.setPrevMoveRangeModifier();
+            McwrModel.setPrevMoveRangeModifier();
             this._updateLabelMoveRange();
         }
 
         private _onTouchedBtnNextMoveRange(e: egret.TouchEvent): void {
-            CreateWarModel.setNextMoveRangeModifier();
+            McwrModel.setNextMoveRangeModifier();
             this._updateLabelMoveRange();
         }
 
         private _onTouchedBtnPrevAttack(e: egret.TouchEvent): void {
-            CreateWarModel.setPrevAttackPowerModifier();
+            McwrModel.setPrevAttackPowerModifier();
             this._updateLabelAttack();
         }
 
         private _onTouchedBtnNextAttack(e: egret.TouchEvent): void {
-            CreateWarModel.setNextAttackPowerModifier();
+            McwrModel.setNextAttackPowerModifier();
             this._updateLabelAttack();
         }
 
         private _onTouchedBtnPrevVision(e: egret.TouchEvent): void {
-            CreateWarModel.setPrevVisionRangeModifier();
+            McwrModel.setPrevVisionRangeModifier();
             this._updateLabelVision();
         }
 
         private _onTouchedBtnNextVision(e: egret.TouchEvent): void {
-            CreateWarModel.setNextVisionRangeModifier();
+            McwrModel.setNextVisionRangeModifier();
             this._updateLabelVision();
         }
 
@@ -152,19 +152,19 @@ namespace TinyWars.CustomOnlineWarCreator {
         // View functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateInputInitialFund(): void {
-            this._inputInitialFund.text = "" + CreateWarModel.getInitialFund();
+            this._inputInitialFund.text = "" + McwrModel.getInitialFund();
         }
 
         private _updateInputIncomeModifier(): void {
-            this._inputIncomeModifier.text = "" + CreateWarModel.getIncomeModifier();
+            this._inputIncomeModifier.text = "" + McwrModel.getIncomeModifier();
         }
 
         private _updateInputInitialEnergy(): void {
-            this._inputInitialEnergy.text = "" + CreateWarModel.getInitialEnergy();
+            this._inputInitialEnergy.text = "" + McwrModel.getInitialEnergy();
         }
 
         private _updateInputEnergyModifier(): void {
-            this._inputEnergyModifier.text = "" + CreateWarModel.getEnergyGrowthModifier();
+            this._inputEnergyModifier.text = "" + McwrModel.getEnergyGrowthModifier();
         }
 
         private _updateLabelMapName(): void {
@@ -176,7 +176,7 @@ namespace TinyWars.CustomOnlineWarCreator {
         }
 
         private _updateLabelMoveRange(): void {
-            const modifier = CreateWarModel.getMoveRangeModifier();
+            const modifier = McwrModel.getMoveRangeModifier();
             if (modifier <= 0) {
                 this._labelMoveRange.text = "" + modifier;
             } else {
@@ -185,7 +185,7 @@ namespace TinyWars.CustomOnlineWarCreator {
         }
 
         private _updateLabelAttack(): void {
-            const modifier = CreateWarModel.getAttackPowerModifier();
+            const modifier = McwrModel.getAttackPowerModifier();
             if (modifier <= 0) {
                 this._labelAttack.text = "" + modifier;
             } else {
@@ -194,7 +194,7 @@ namespace TinyWars.CustomOnlineWarCreator {
         }
 
         private _updateLabelVision(): void {
-            const modifier = CreateWarModel.getVisionRangeModifier();
+            const modifier = McwrModel.getVisionRangeModifier();
             if (modifier <= 0) {
                 this._labelVision.text = "" + modifier;
             } else {

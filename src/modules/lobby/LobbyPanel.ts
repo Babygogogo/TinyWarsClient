@@ -78,7 +78,7 @@ namespace TinyWars.Lobby {
                     callback: (): void => {
                         LobbyPanel.hide();
                         Map.MapProxy.reqGetNewestMapInfos();
-                        CustomOnlineWarCreator.CreateWarMapListPanel.show();
+                        MultiCustomWarRoom.McwrCreateMapListPanel.show();
                     },
                 },
                 {

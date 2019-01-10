@@ -1,5 +1,5 @@
 
-namespace TinyWars.CustomOnlineWarCreator {
+namespace TinyWars.MultiCustomWarRoom {
     import Lang         = Utility.Lang;
     import Notify       = Utility.Notify;
     import FloatText    = Utility.FloatText;
@@ -7,11 +7,11 @@ namespace TinyWars.CustomOnlineWarCreator {
 
     const CONFIRM_INTERVAL_MS = 5000;
 
-    export class CreateWarSettingsPanel extends GameUi.UiPanel {
+    export class McwrCreateSettingsPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: CreateWarSettingsPanel;
+        private static _instance: McwrCreateSettingsPanel;
 
         private _tabSettings: GameUi.UiTab;
         private _btnBack    : GameUi.UiButton;
@@ -21,14 +21,14 @@ namespace TinyWars.CustomOnlineWarCreator {
         private _timeoutIdForBtnConfirm: number;
 
         public static show(): void {
-            if (!CreateWarSettingsPanel._instance) {
-                CreateWarSettingsPanel._instance = new CreateWarSettingsPanel();
+            if (!McwrCreateSettingsPanel._instance) {
+                McwrCreateSettingsPanel._instance = new McwrCreateSettingsPanel();
             }
-            CreateWarSettingsPanel._instance.open();
+            McwrCreateSettingsPanel._instance.open();
         }
         public static hide(): void {
-            if (CreateWarSettingsPanel._instance) {
-                CreateWarSettingsPanel._instance.close();
+            if (McwrCreateSettingsPanel._instance) {
+                McwrCreateSettingsPanel._instance.close();
             }
         }
 
@@ -36,7 +36,7 @@ namespace TinyWars.CustomOnlineWarCreator {
             super();
 
             this._setAutoAdjustHeightEnabled(true);
-            this.skinName = "resource/skins/customOnlineWarCreator/CreateWarSettingsPanel.exml";
+            this.skinName = "resource/skins/multiCustomWarRoom/McwrCreateSettingsPanel.exml";
         }
 
         protected _onFirstOpened(): void {
@@ -54,11 +54,11 @@ namespace TinyWars.CustomOnlineWarCreator {
             this._tabSettings.bindData([
                 {
                     tabItemData: { name: Lang.getText(Lang.BigType.B01, Lang.SubType.S02) },
-                    pageClass  : CreateWarBasicSettingsPage,
+                    pageClass  : McwrCreateBasicSettingsPage,
                 },
                 {
                     tabItemData: { name: Lang.getText(Lang.BigType.B01, Lang.SubType.S03) },
-                    pageClass  : CreateWarAdvancedSettingsPage,
+                    pageClass  : McwrCreateAdvancedSettingsPage,
                 },
             ]);
 
@@ -71,12 +71,12 @@ namespace TinyWars.CustomOnlineWarCreator {
         }
 
         private _onTouchedBtnBack(e: egret.TouchEvent): void {
-            CreateWarSettingsPanel.hide();
-            CreateWarMapListPanel.show();
+            McwrCreateSettingsPanel.hide();
+            McwrCreateMapListPanel.show();
         }
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            CreateWarProxy.reqCreateCustomOnlineWar(CreateWarModel.createDataForCreateWar());
+            McwrProxy.reqCreate(McwrModel.createDataForCreateWar());
 
             this._btnConfirm.enabled = false;
             this._resetTimeoutForBtnConfirm();
