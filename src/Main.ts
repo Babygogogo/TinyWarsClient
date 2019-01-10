@@ -1,4 +1,8 @@
 
+declare interface Window {
+    Main: typeof egret.DisplayObject;
+}
+
 class Main extends egret.DisplayObjectContainer {
     public constructor() {
         super();
@@ -22,3 +26,5 @@ class Main extends egret.DisplayObjectContainer {
         TinyWars.Utility.FlowManager.startGame(this.stage);
     }
 }
+
+window.Main = Main;
