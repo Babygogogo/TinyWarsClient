@@ -1,5 +1,5 @@
 
-namespace TinyWars.CustomOnlineWarJoiner {
+namespace TinyWars.MultiCustomWarRoom {
     import Notify           = Utility.Notify;
     import Types            = Utility.Types;
     import StageManager     = Utility.StageManager;
@@ -10,11 +10,11 @@ namespace TinyWars.CustomOnlineWarJoiner {
     import TemplateMapModel = WarMap.WarMapModel;
     import TemplateMapProxy = WarMap.WarMapProxy;
 
-    export class JoinWarListPanel extends GameUi.UiPanel {
+    export class McwrJoinMapListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: JoinWarListPanel;
+        private static _instance: McwrJoinMapListPanel;
 
         private _listWar   : GameUi.UiScrollList;
         private _labelNoWar: GameUi.UiLabel;
@@ -35,14 +35,14 @@ namespace TinyWars.CustomOnlineWarJoiner {
         private _selectedWarIndex   : number;
 
         public static show(): void {
-            if (!JoinWarListPanel._instance) {
-                JoinWarListPanel._instance = new JoinWarListPanel();
+            if (!McwrJoinMapListPanel._instance) {
+                McwrJoinMapListPanel._instance = new McwrJoinMapListPanel();
             }
-            JoinWarListPanel._instance.open();
+            McwrJoinMapListPanel._instance.open();
         }
         public static hide(): void {
-            if (JoinWarListPanel._instance) {
-                JoinWarListPanel._instance.close();
+            if (McwrJoinMapListPanel._instance) {
+                McwrJoinMapListPanel._instance.close();
             }
         }
 
@@ -50,7 +50,7 @@ namespace TinyWars.CustomOnlineWarJoiner {
             super();
 
             this._setAutoAdjustHeightEnabled();
-            this.skinName = "resource/skins/customOnlineWarJoiner/JoinWarListPanel.exml";
+            this.skinName = "resource/skins/multiCustomWarRoom/McwrJoinMapListPanel.exml";
         }
 
         protected _onFirstOpened(): void {
@@ -70,7 +70,7 @@ namespace TinyWars.CustomOnlineWarJoiner {
         protected _onOpened(): void {
             this._groupInfo.visible = false;
 
-            JoinWarProxy.reqUnjoinedWaitingCustomOnlineWarInfos();
+            McwrProxy.reqUnjoinedWaitingCustomOnlineWarInfos();
         }
 
         protected _onClosed(): void {
@@ -109,7 +109,7 @@ namespace TinyWars.CustomOnlineWarJoiner {
         }
 
         private _onNotifySGetUnjoinedWaitingCustomOnlineWarInfos(e: egret.Event): void {
-            const newData        = this._createDataForListWar(JoinWarModel.getWarInfos());
+            const newData        = this._createDataForListWar(McwrModel.getUnjoinedWarInfos());
             this._dataForListWar = newData;
 
             if (newData.length > 0) {
@@ -160,7 +160,7 @@ namespace TinyWars.CustomOnlineWarJoiner {
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
-            JoinWarListPanel.hide();
+            McwrJoinMapListPanel.hide();
             Lobby.LobbyPanel.show();
         }
 
@@ -275,7 +275,7 @@ namespace TinyWars.CustomOnlineWarJoiner {
     type DataForWarRenderer = {
         warInfo : ProtoTypes.IWaitingMultiCustomWarInfo;
         index   : number;
-        panel   : JoinWarListPanel;
+        panel   : McwrJoinMapListPanel;
     }
 
     class WarRenderer extends eui.ItemRenderer {
@@ -308,9 +308,9 @@ namespace TinyWars.CustomOnlineWarJoiner {
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
             const data = this.data as DataForWarRenderer;
             if (data.warInfo.warPassword != null) {
-                JoinWarPasswordPanel.show(data.warInfo);
+                McwrJoinPasswordPanel.show(data.warInfo);
             } else {
-                JoinWarDetailPanel.show(data.warInfo);
+                McwrJoinDetailPanel.show(data.warInfo);
             }
         }
     }

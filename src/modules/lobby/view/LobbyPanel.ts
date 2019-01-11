@@ -85,7 +85,7 @@ namespace TinyWars.Lobby {
                     name    : Lang.getText(Lang.BigType.B01, Lang.SubType.S23),
                     callback: (): void => {
                         LobbyPanel.hide();
-                        CustomOnlineWarJoiner.JoinWarListPanel.show();
+                        MultiCustomWarRoom.McwrJoinMapListPanel.show();
                     },
                 },
                 {

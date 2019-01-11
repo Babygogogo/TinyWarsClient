@@ -1,5 +1,5 @@
 
-namespace TinyWars.CustomOnlineWarJoiner {
+namespace TinyWars.MultiCustomWarRoom {
     import ProtoTypes       = Utility.ProtoTypes;
     import Helpers          = Utility.Helpers;
     import Notify           = Utility.Notify;
@@ -9,11 +9,11 @@ namespace TinyWars.CustomOnlineWarJoiner {
     import HelpPanel        = Common.HelpPanel;
     import TemplateMapModel = WarMap.WarMapModel;
 
-    export class JoinWarDetailPanel extends GameUi.UiPanel {
+    export class McwrJoinDetailPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: JoinWarDetailPanel;
+        private static _instance: McwrJoinDetailPanel;
 
         private _btnHelpFog                 : GameUi.UiButton;
         private _btnHelpTimeLimit           : GameUi.UiButton;
@@ -47,15 +47,15 @@ namespace TinyWars.CustomOnlineWarJoiner {
         private _teamIndexIndex         : number;
 
         public static show(data: ProtoTypes.IWaitingMultiCustomWarInfo): void {
-            if (!JoinWarDetailPanel._instance) {
-                JoinWarDetailPanel._instance = new JoinWarDetailPanel();
+            if (!McwrJoinDetailPanel._instance) {
+                McwrJoinDetailPanel._instance = new McwrJoinDetailPanel();
             }
-            JoinWarDetailPanel._instance._openData = data;
-            JoinWarDetailPanel._instance.open();
+            McwrJoinDetailPanel._instance._openData = data;
+            McwrJoinDetailPanel._instance.open();
         }
         public static hide(): void {
-            if (JoinWarDetailPanel._instance) {
-                JoinWarDetailPanel._instance.close();
+            if (McwrJoinDetailPanel._instance) {
+                McwrJoinDetailPanel._instance.close();
             }
         }
 
@@ -64,8 +64,8 @@ namespace TinyWars.CustomOnlineWarJoiner {
 
             this._setAutoAdjustHeightEnabled();
             this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => JoinWarDetailPanel.hide();
-            this.skinName = "resource/skins/customOnlineWarJoiner/JoinWarDetailPanel.exml";
+            this._callbackForTouchMask = () => McwrJoinDetailPanel.hide();
+            this.skinName = "resource/skins/multiCustomWarRoom/McwrJoinDetailPanel.exml";
         }
 
         protected _onFirstOpened(): void {
@@ -116,11 +116,11 @@ namespace TinyWars.CustomOnlineWarJoiner {
         }
 
         private _onTouchedBtnCancel(e: egret.TouchEvent): void {
-            JoinWarDetailPanel.hide();
+            McwrJoinDetailPanel.hide();
         }
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            JoinWarProxy.reqJoinCustomOnlineWar(
+            McwrProxy.reqJoinCustomOnlineWar(
                 this._openData.id,
                 this._availablePlayerIndexes[this._playerIndexIndex],
                 this._availableTeamIndexes[this._teamIndexIndex]
@@ -154,7 +154,7 @@ namespace TinyWars.CustomOnlineWarJoiner {
         private _onNotifySJoinCustomOnlineWar(e: egret.Event): void {
             const data = e.data as ProtoTypes.IS_JoinMultiCustomWar;
             FloatText.show(Lang.getText(Lang.BigType.B00, data.isStarted ? Lang.SubType.S19 : Lang.SubType.S18));
-            JoinWarDetailPanel.hide();
+            McwrJoinDetailPanel.hide();
         }
 
         ////////////////////////////////////////////////////////////////////////////////

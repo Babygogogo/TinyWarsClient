@@ -84,7 +84,11 @@ namespace TinyWars.MultiCustomWarRoom {
             attackPowerModifier : 0,
             visionRangeModifier : 0,
         };
+        let _unjoinedWarInfos: ProtoTypes.IWaitingMultiCustomWarInfo[];
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Functions for creating wars.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         export function getCreateWarMapInfo(): ProtoTypes.IMapInfo {
             return MapModel.getMapInfo(_dataForCreateWar);
         }
@@ -322,6 +326,16 @@ namespace TinyWars.MultiCustomWarRoom {
         }
         export function getCreateWarVisionRangeModifier(): number {
             return _dataForCreateWar.visionRangeModifier;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Functions for joining wars.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        export function setUnjoinedWarInfos(infos: ProtoTypes.IWaitingMultiCustomWarInfo[]): void {
+            _unjoinedWarInfos = infos;
+        }
+        export function getUnjoinedWarInfos(): ProtoTypes.IWaitingMultiCustomWarInfo[] {
+            return _unjoinedWarInfos;
         }
     }
 }

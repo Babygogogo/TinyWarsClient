@@ -1,5 +1,5 @@
 
-namespace TinyWars.CustomOnlineWarJoiner {
+namespace TinyWars.MultiCustomWarRoom {
     import ProtoTypes   = Utility.ProtoTypes;
     import Helpers      = Utility.Helpers;
     import Notify       = Utility.Notify;
@@ -8,11 +8,11 @@ namespace TinyWars.CustomOnlineWarJoiner {
     import Types        = Utility.Types;
     import HelpPanel    = Common.HelpPanel;
 
-    export class JoinWarPasswordPanel extends GameUi.UiPanel {
+    export class McwrJoinPasswordPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: JoinWarPasswordPanel;
+        private static _instance: McwrJoinPasswordPanel;
 
         private _inputWarPassword   : GameUi.UiLabel;
         private _labelWarName       : GameUi.UiLabel;
@@ -22,15 +22,15 @@ namespace TinyWars.CustomOnlineWarJoiner {
         private _openData: ProtoTypes.IWaitingMultiCustomWarInfo;
 
         public static show(data: ProtoTypes.IWaitingMultiCustomWarInfo): void {
-            if (!JoinWarPasswordPanel._instance) {
-                JoinWarPasswordPanel._instance = new JoinWarPasswordPanel();
+            if (!McwrJoinPasswordPanel._instance) {
+                McwrJoinPasswordPanel._instance = new McwrJoinPasswordPanel();
             }
-            JoinWarPasswordPanel._instance._openData = data;
-            JoinWarPasswordPanel._instance.open();
+            McwrJoinPasswordPanel._instance._openData = data;
+            McwrJoinPasswordPanel._instance.open();
         }
         public static hide(): void {
-            if (JoinWarPasswordPanel._instance) {
-                JoinWarPasswordPanel._instance.close();
+            if (McwrJoinPasswordPanel._instance) {
+                McwrJoinPasswordPanel._instance.close();
             }
         }
 
@@ -39,8 +39,8 @@ namespace TinyWars.CustomOnlineWarJoiner {
 
             this._setAutoAdjustHeightEnabled();
             this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => JoinWarPasswordPanel.hide();
-            this.skinName = "resource/skins/customOnlineWarJoiner/JoinWarPasswordPanel.exml";
+            this._callbackForTouchMask = () => McwrJoinPasswordPanel.hide();
+            this.skinName = "resource/skins/multiCustomWarRoom/McwrJoinPasswordPanel.exml";
         }
 
         protected _onFirstOpened(): void {
@@ -69,15 +69,15 @@ namespace TinyWars.CustomOnlineWarJoiner {
         }
 
         private _onTouchedBtnCancel(e: egret.TouchEvent): void {
-            JoinWarPasswordPanel.hide();
+            McwrJoinPasswordPanel.hide();
         }
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
             if (this._inputWarPassword.text !== this._openData.warPassword) {
                 FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S17));
             } else {
-                JoinWarPasswordPanel.hide();
-                JoinWarDetailPanel.show(this._openData);
+                McwrJoinPasswordPanel.hide();
+                McwrJoinDetailPanel.show(this._openData);
             }
         }
 
