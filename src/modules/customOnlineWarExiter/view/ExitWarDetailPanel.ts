@@ -127,7 +127,7 @@ namespace TinyWars.CustomOnlineWarExiter {
                 },
             ];
 
-            const mapInfo = Map.MapModel.getMapInfo(warInfo as Types.MapIndexKey);
+            const mapInfo = WarMap.WarMapModel.getMapInfo(warInfo as Types.MapIndexKey);
             if (mapInfo.playersCount >= 3) {
                 data.push({
                     playerIndex: 3,

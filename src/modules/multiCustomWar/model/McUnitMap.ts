@@ -3,7 +3,7 @@ namespace TinyWars.MultiCustomWar {
     import Types    = Utility.Types;
     import Helpers  = Utility.Helpers;
     import Logger   = Utility.Logger;
-    import MapModel = Map.MapModel;
+    import MapModel = WarMap.WarMapModel;
 
     type LoadedUnits = { [unitId: number]: McUnit };
 

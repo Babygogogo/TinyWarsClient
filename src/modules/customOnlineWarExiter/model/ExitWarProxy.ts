@@ -22,7 +22,7 @@ namespace TinyWars.CustomOnlineWarExiter {
         function _onSGetJoinedWaitingCustomOnlineWarInfos(e: egret.Event): void {
             const data = e.data as ProtoTypes.IS_GetJoinedWaitingMultiCustomWarInfos;
             if (!data.errorCode) {
-                Map.MapModel.addMapInfos(data.mapInfos);
+                WarMap.WarMapModel.addMapInfos(data.mapInfos);
                 ExitWarModel.setWarInfos(data.warInfos);
                 Notify.dispatch(Notify.Type.SGetJoinedWaitingCustomOnlineWarInfos, data);
             }

@@ -7,7 +7,7 @@ namespace TinyWars.CustomOnlineWarJoiner {
     import FloatText        = Utility.FloatText;
     import Types            = Utility.Types;
     import HelpPanel        = Common.HelpPanel;
-    import TemplateMapModel = Map.MapModel;
+    import TemplateMapModel = WarMap.WarMapModel;
 
     export class JoinWarDetailPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;

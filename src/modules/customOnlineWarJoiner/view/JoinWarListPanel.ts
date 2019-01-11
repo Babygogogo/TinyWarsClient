@@ -7,8 +7,8 @@ namespace TinyWars.CustomOnlineWarJoiner {
     import Helpers          = Utility.Helpers;
     import Lang             = Utility.Lang;
     import ProtoTypes       = Utility.ProtoTypes;
-    import TemplateMapModel = Map.MapModel;
-    import TemplateMapProxy = Map.MapProxy;
+    import TemplateMapModel = WarMap.WarMapModel;
+    import TemplateMapProxy = WarMap.WarMapProxy;
 
     export class JoinWarListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;

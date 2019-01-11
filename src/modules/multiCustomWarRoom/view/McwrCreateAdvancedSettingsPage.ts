@@ -6,7 +6,7 @@ namespace TinyWars.MultiCustomWarRoom {
     import Helpers          = Utility.Helpers;
     import Lang             = Utility.Lang;
     import HelpPanel        = Common.HelpPanel;
-    import TemplateMapModel = Map.MapModel;
+    import TemplateMapModel = WarMap.WarMapModel;
 
     export class McwrCreateAdvancedSettingsPage extends GameUi.UiTabPage {
         private _labelMapName       : GameUi.UiLabel;

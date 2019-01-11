@@ -16,8 +16,8 @@ namespace TinyWars.Utility.FlowManager {
         Time.TimeProxy.init();
         Time.TimeModel.init();
         User.UserModel.init();
-        Map.MapProxy.init();
-        Map.MapModel.init();
+        WarMap.WarMapProxy.init();
+        WarMap.WarMapModel.init();
         Login.LoginProxy.init();
         MultiCustomWarRoom.McwrProxy.init();
         CustomOnlineWarExiter.ExitWarProxy.init();

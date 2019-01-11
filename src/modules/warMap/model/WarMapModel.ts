@@ -1,11 +1,11 @@
 
-namespace TinyWars.Map {
+namespace TinyWars.WarMap {
     import Types        = Utility.Types;
     import Helpers      = Utility.Helpers;
     import ProtoTypes   = Utility.ProtoTypes;
     import LocalStorage = Utility.LocalStorage;
 
-    export namespace MapModel {
+    export namespace WarMapModel {
         const _allMapInfos: { [mapUrl: string]: ProtoTypes.IMapInfo }   = {};
         const _allMapDatas: { [mapUrl: string]: Types.TemplateMap }     = {};
 

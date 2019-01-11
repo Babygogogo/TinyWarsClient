@@ -7,8 +7,8 @@ namespace TinyWars.MultiCustomWarRoom {
     import Helpers          = Utility.Helpers;
     import Lang             = Utility.Lang;
     import ProtoTypes       = Utility.ProtoTypes;
-    import TemplateMapModel = Map.MapModel;
-    import TemplateMapProxy = Map.MapProxy;
+    import TemplateMapModel = WarMap.WarMapModel;
+    import TemplateMapProxy = WarMap.WarMapProxy;
 
     export class McwrCreateMapListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
@@ -147,7 +147,7 @@ namespace TinyWars.MultiCustomWarRoom {
         }
 
         private _onTouchTapBtnSearch(e: egret.TouchEvent): void {
-            Map.MapSearchPanel.show();
+            WarMap.WarMapSearchPanel.show();
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {

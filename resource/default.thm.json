@@ -13,12 +13,12 @@
 		"resource/skins/login/LoginBackgroundPanel.exml",
 		"resource/skins/login/LoginPanel.exml",
 		"resource/skins/login/RegisterPanel.exml",
-		"resource/skins/map/MapSearchPanel.exml",
 		"resource/skins/multiCustomWarRoom/McwrCreateAdvancedSettingsPage.exml",
 		"resource/skins/multiCustomWarRoom/McwrCreateBasicSettingsPage.exml",
 		"resource/skins/multiCustomWarRoom/McwrCreateMapListPanel.exml",
 		"resource/skins/multiCustomWarRoom/McwrCreateSettingsPanel.exml",
-		"resource/skins/utility/LoadingUiPanel.exml"
+		"resource/skins/utility/LoadingUiPanel.exml",
+		"resource/skins/warMap/WarMapSearchPanel.exml"
 	],
 	"path": "resource/default.thm.json"
 }

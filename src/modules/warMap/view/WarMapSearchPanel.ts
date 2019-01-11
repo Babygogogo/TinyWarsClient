@@ -1,16 +1,16 @@
 
-namespace TinyWars.Map {
+namespace TinyWars.WarMap {
     import Types      = Utility.Types;
     import Lang       = Utility.Lang;
     import FloatText  = Utility.FloatText;
     import Notify     = Utility.Notify;
     import ProtoTypes = Utility.ProtoTypes;
 
-    export class MapSearchPanel extends GameUi.UiPanel {
+    export class WarMapSearchPanel extends GameUi.UiPanel {
         protected _IS_EXCLUSIVE = false;
         protected _LAYER_TYPE   = Types.LayerType.Hud2;
 
-        private static _instance: MapSearchPanel;
+        private static _instance: WarMapSearchPanel;
 
         private _btnClose         : GameUi.UiButton;
         private _btnReset         : GameUi.UiButton;
@@ -22,14 +22,14 @@ namespace TinyWars.Map {
         private _inputMinRating   : GameUi.UiTextInput;
 
         public static show(): void {
-            if (!MapSearchPanel._instance) {
-                MapSearchPanel._instance = new MapSearchPanel();
+            if (!WarMapSearchPanel._instance) {
+                WarMapSearchPanel._instance = new WarMapSearchPanel();
             }
-            MapSearchPanel._instance.open();
+            WarMapSearchPanel._instance.open();
         }
         public static hide(): void {
-            if (MapSearchPanel._instance) {
-                MapSearchPanel._instance.close();
+            if (WarMapSearchPanel._instance) {
+                WarMapSearchPanel._instance.close();
             }
         }
 
@@ -38,7 +38,7 @@ namespace TinyWars.Map {
 
             this._setAutoAdjustHeightEnabled();
             this._setTouchMaskEnabled();
-            this.skinName = "resource/skins/map/MapSearchPanel.exml";
+            this.skinName = "resource/skins/warMap/WarMapSearchPanel.exml";
         }
 
         protected _onFirstOpened(): void {
@@ -58,12 +58,12 @@ namespace TinyWars.Map {
         }
 
         private _onTouchedBtnClose(e: egret.TouchEvent): void {
-            MapSearchPanel.hide();
+            WarMapSearchPanel.hide();
         }
 
         private _onTouchedBtnReset(e: egret.TouchEvent): void {
-            MapProxy.reqGetNewestMapInfos();
-            MapSearchPanel.hide();
+            WarMapProxy.reqGetNewestMapInfos();
+            WarMapSearchPanel.hide();
         }
 
         private _onTouchedBtnSearch(e: egret.TouchEvent): void {
@@ -80,7 +80,7 @@ namespace TinyWars.Map {
             const playersCount = Number(this._inputPlayersCount.text);
             const playedTimes  = Number(this._inputPlayedTimes.text);
             const minRating    = Number(this._inputMinRating.text);
-            MapProxy.reqGetNewestMapInfos({
+            WarMapProxy.reqGetNewestMapInfos({
                 mapName         : mapName.length                                ? mapName       : undefined,
                 mapDesigner     : mapDesigner.length                            ? mapDesigner   : undefined,
                 playersCount    : (!isNaN(playersCount)) && (playersCount != 0) ? playersCount  : undefined,
@@ -95,7 +95,7 @@ namespace TinyWars.Map {
                 FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S10));
             } else {
                 FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S12));
-                MapSearchPanel.hide();
+                WarMapSearchPanel.hide();
             }
         }
     }

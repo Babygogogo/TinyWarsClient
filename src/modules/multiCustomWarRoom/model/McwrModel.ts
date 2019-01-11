@@ -2,7 +2,7 @@
 namespace TinyWars.MultiCustomWarRoom {
     import Types        = Utility.Types;
     import ProtoTypes   = Utility.ProtoTypes;
-    import MapModel     = Map.MapModel;
+    import MapModel     = WarMap.WarMapModel;
 
     export const MAX_INITIAL_FUND     = 1000000;
     export const MIN_INITIAL_FUND     = 0;
