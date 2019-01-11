@@ -1,11 +1,16 @@
 {
     "compilerOptions": {
-        "target": "es6",
+        "target": "es5",
         "outDir": "bin-debug",
+        "downlevelIteration": true,
+        "importHelpers": true,
         "experimentalDecorators": true,
         "lib": [
-            "es6",
-            "dom"
+            "dom",
+            "es5",
+            "es2015.collection",
+            "es2015.iterable",
+            "es2015.promise"
         ],
         "types": []
     },
