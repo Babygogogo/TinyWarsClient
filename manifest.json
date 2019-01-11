@@ -53,7 +53,7 @@
 		"bin-debug/modules/multiCustomWar/view/UnitView.js",
 		"bin-debug/modules/multiCustomWarRoom/model/McwrModel.js",
 		"bin-debug/modules/multiCustomWarRoom/model/McwrProxy.js",
-		"bin-debug/modules/multiCustomWarRoom/view/CreateWarAdvancedSettingsPage.js",
+		"bin-debug/modules/multiCustomWarRoom/view/McwrCreateAdvancedSettingsPage.js",
 		"bin-debug/modules/multiCustomWarRoom/view/McwrCreateBasicSettingsPage.js",
 		"bin-debug/modules/multiCustomWarRoom/view/McwrCreateMapListPanel.js",
 		"bin-debug/modules/multiCustomWarRoom/view/McwrCreateSettingsPanel.js",

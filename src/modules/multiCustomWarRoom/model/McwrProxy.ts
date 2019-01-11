@@ -6,29 +6,6 @@ namespace TinyWars.MultiCustomWarRoom {
     import ProtoTypes = Utility.ProtoTypes;
     import Notify     = Utility.Notify;
 
-    export type DataForCreateWar = {
-        mapName         : string,
-        mapDesigner     : string,
-        mapVersion      : number,
-        warName        ?: string;
-        warPassword    ?: string;
-        warComment     ?: string;
-        configVersion   : number;
-
-        playerIndex     : number;
-        teamIndex       : number;
-
-        hasFog              : boolean;
-        timeLimit           : number;
-        initialFund         : number;
-        incomeModifier      : number;
-        initialEnergy       : number;
-        energyGrowthModifier: number;
-        moveRangeModifier   : number;
-        attackPowerModifier : number;
-        visionRangeModifier : number;
-    }
-
     export namespace McwrProxy {
         export function init(): void {
             NetManager.addListeners([

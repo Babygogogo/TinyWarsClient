@@ -268,8 +268,7 @@ namespace TinyWars.MultiCustomWarRoom {
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
             McwrCreateMapListPanel.hide();
 
-            McwrModel.setMapIndexKey(this.data as DataForMapNameRenderer);
-            McwrModel.resetSettings();
+            McwrModel.resetCreateWarData(this.data as DataForMapNameRenderer);
             McwrCreateSettingsPanel.show();
         }
     }

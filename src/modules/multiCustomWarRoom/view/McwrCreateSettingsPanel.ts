@@ -76,7 +76,7 @@ namespace TinyWars.MultiCustomWarRoom {
         }
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            McwrProxy.reqCreate(McwrModel.createDataForCreateWar());
+            McwrProxy.reqCreate(McwrModel.getCreateWarData());
 
             this._btnConfirm.enabled = false;
             this._resetTimeoutForBtnConfirm();
