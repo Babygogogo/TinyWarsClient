@@ -120,7 +120,7 @@ namespace TinyWars.MultiCustomWarRoom {
         }
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            McwrProxy.reqJoinCustomOnlineWar(
+            McwrProxy.reqJoin(
                 this._openData.id,
                 this._availablePlayerIndexes[this._playerIndexIndex],
                 this._availableTeamIndexes[this._teamIndexIndex]

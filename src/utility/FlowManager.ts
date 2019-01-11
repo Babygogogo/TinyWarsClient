@@ -20,7 +20,6 @@ namespace TinyWars.Utility.FlowManager {
         WarMap.WarMapModel.init();
         Login.LoginProxy.init();
         MultiCustomWarRoom.McwrProxy.init();
-        CustomOnlineWarExiter.ExitWarProxy.init();
 
         _removeLoadingDom();
         gotoLogin();

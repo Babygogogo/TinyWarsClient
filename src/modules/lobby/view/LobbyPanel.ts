@@ -92,7 +92,7 @@ namespace TinyWars.Lobby {
                     name    : Lang.getText(Lang.BigType.B01, Lang.SubType.S22),
                     callback: (): void => {
                         LobbyPanel.hide();
-                        CustomOnlineWarExiter.ExitWarListPanel.show();
+                        MultiCustomWarRoom.McwrExitMapListPanel.show();
                     },
                 },
             ];

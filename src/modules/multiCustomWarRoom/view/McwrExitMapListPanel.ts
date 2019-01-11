@@ -1,5 +1,5 @@
 
-namespace TinyWars.CustomOnlineWarExiter {
+namespace TinyWars.MultiCustomWarRoom {
     import Notify           = Utility.Notify;
     import Types            = Utility.Types;
     import StageManager     = Utility.StageManager;
@@ -10,11 +10,11 @@ namespace TinyWars.CustomOnlineWarExiter {
     import TemplateMapModel = WarMap.WarMapModel;
     import TemplateMapProxy = WarMap.WarMapProxy;
 
-    export class ExitWarListPanel extends GameUi.UiPanel {
+    export class McwrExitMapListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: ExitWarListPanel;
+        private static _instance: McwrExitMapListPanel;
 
         private _listWar   : GameUi.UiScrollList;
         private _labelNoWar: GameUi.UiLabel;
@@ -35,14 +35,14 @@ namespace TinyWars.CustomOnlineWarExiter {
         private _selectedWarIndex   : number;
 
         public static show(): void {
-            if (!ExitWarListPanel._instance) {
-                ExitWarListPanel._instance = new ExitWarListPanel();
+            if (!McwrExitMapListPanel._instance) {
+                McwrExitMapListPanel._instance = new McwrExitMapListPanel();
             }
-            ExitWarListPanel._instance.open();
+            McwrExitMapListPanel._instance.open();
         }
         public static hide(): void {
-            if (ExitWarListPanel._instance) {
-                ExitWarListPanel._instance.close();
+            if (McwrExitMapListPanel._instance) {
+                McwrExitMapListPanel._instance.close();
             }
         }
 
@@ -50,7 +50,7 @@ namespace TinyWars.CustomOnlineWarExiter {
             super();
 
             this._setAutoAdjustHeightEnabled();
-            this.skinName = "resource/skins/customOnlineWarExiter/ExitWarListPanel.exml";
+            this.skinName = "resource/skins/multiCustomWarRoom/McwrExitMapListPanel.exml";
         }
 
         protected _onFirstOpened(): void {
@@ -71,7 +71,7 @@ namespace TinyWars.CustomOnlineWarExiter {
         protected _onOpened(): void {
             this._groupInfo.visible = false;
 
-            ExitWarProxy.reqJoinedWaitingCustomOnlineWarInfos();
+            McwrProxy.reqJoinedWaitingCustomOnlineWarInfos();
         }
 
         protected _onClosed(): void {
@@ -110,7 +110,7 @@ namespace TinyWars.CustomOnlineWarExiter {
         }
 
         private _onNotifySGetJoinedWaitingCustomOnlineWarInfos(e: egret.Event): void {
-            const newData        = this._createDataForListWar(ExitWarModel.getWarInfos());
+            const newData        = this._createDataForListWar(McwrModel.getJoinedWarInfos());
             this._dataForListWar = newData;
 
             if (newData.length > 0) {
@@ -165,7 +165,7 @@ namespace TinyWars.CustomOnlineWarExiter {
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
-            ExitWarListPanel.hide();
+            McwrExitMapListPanel.hide();
             Lobby.LobbyPanel.show();
         }
 
@@ -280,7 +280,7 @@ namespace TinyWars.CustomOnlineWarExiter {
     type DataForWarRenderer = {
         warInfo : ProtoTypes.IWaitingMultiCustomWarInfo;
         index   : number;
-        panel   : ExitWarListPanel;
+        panel   : McwrExitMapListPanel;
     }
 
     class WarRenderer extends eui.ItemRenderer {
@@ -310,7 +310,7 @@ namespace TinyWars.CustomOnlineWarExiter {
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
             const data = this.data as DataForWarRenderer;
-            ExitWarDetailPanel.show(data.warInfo);
+            McwrExitDetailPanel.show(data.warInfo);
         }
     }
 

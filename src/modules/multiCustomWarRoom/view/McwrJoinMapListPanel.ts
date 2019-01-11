@@ -70,7 +70,7 @@ namespace TinyWars.MultiCustomWarRoom {
         protected _onOpened(): void {
             this._groupInfo.visible = false;
 
-            McwrProxy.reqUnjoinedWaitingCustomOnlineWarInfos();
+            McwrProxy.reqUnjoinedWarInfos();
         }
 
         protected _onClosed(): void {

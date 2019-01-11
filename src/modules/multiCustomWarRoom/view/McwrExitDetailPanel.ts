@@ -1,5 +1,5 @@
 
-namespace TinyWars.CustomOnlineWarExiter {
+namespace TinyWars.MultiCustomWarRoom {
     import ProtoTypes   = Utility.ProtoTypes;
     import Helpers      = Utility.Helpers;
     import Notify       = Utility.Notify;
@@ -8,11 +8,11 @@ namespace TinyWars.CustomOnlineWarExiter {
     import Types        = Utility.Types;
     import HelpPanel    = Common.HelpPanel;
 
-    export class ExitWarDetailPanel extends GameUi.UiPanel {
+    export class McwrExitDetailPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: ExitWarDetailPanel;
+        private static _instance: McwrExitDetailPanel;
 
         private _btnHelpFog                 : GameUi.UiButton;
         private _btnHelpTimeLimit           : GameUi.UiButton;
@@ -34,15 +34,15 @@ namespace TinyWars.CustomOnlineWarExiter {
         private _openData: ProtoTypes.IWaitingMultiCustomWarInfo;
 
         public static show(data: ProtoTypes.IWaitingMultiCustomWarInfo): void {
-            if (!ExitWarDetailPanel._instance) {
-                ExitWarDetailPanel._instance = new ExitWarDetailPanel();
+            if (!McwrExitDetailPanel._instance) {
+                McwrExitDetailPanel._instance = new McwrExitDetailPanel();
             }
-            ExitWarDetailPanel._instance._openData = data;
-            ExitWarDetailPanel._instance.open();
+            McwrExitDetailPanel._instance._openData = data;
+            McwrExitDetailPanel._instance.open();
         }
         public static hide(): void {
-            if (ExitWarDetailPanel._instance) {
-                ExitWarDetailPanel._instance.close();
+            if (McwrExitDetailPanel._instance) {
+                McwrExitDetailPanel._instance.close();
             }
         }
 
@@ -51,8 +51,8 @@ namespace TinyWars.CustomOnlineWarExiter {
 
             this._setAutoAdjustHeightEnabled();
             this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => ExitWarDetailPanel.hide();
-            this.skinName = "resource/skins/customOnlineWarExiter/ExitWarDetailPanel.exml";
+            this._callbackForTouchMask = () => McwrExitDetailPanel.hide();
+            this.skinName = "resource/skins/multiCustomWarRoom/McwrExitDetailPanel.exml";
         }
 
         protected _onFirstOpened(): void {
@@ -89,12 +89,12 @@ namespace TinyWars.CustomOnlineWarExiter {
         }
 
         private _onTouchedBtnCancel(e: egret.TouchEvent): void {
-            ExitWarDetailPanel.hide();
+            McwrExitDetailPanel.hide();
         }
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            ExitWarProxy.reqExitCustomOnlineWar(this._openData.id);
-            ExitWarDetailPanel.hide();
+            McwrProxy.reqExitCustomOnlineWar(this._openData.id);
+            McwrExitDetailPanel.hide();
         }
 
         private _updateView(): void {
