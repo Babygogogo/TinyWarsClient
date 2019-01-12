@@ -2,7 +2,7 @@
 namespace TinyWars.MultiCustomWar {
     import Types = Utility.Types;
 
-    export class McPlayerModel {
+    export class McPlayer {
         private _fund               : number;
         private _hasVotedForDraw    : boolean;
         private _isAlive            : boolean;
@@ -12,19 +12,18 @@ namespace TinyWars.MultiCustomWar {
         private _userId             : number;
         private _nickname           : string;
 
-        public constructor(data?: Types.SerializedMcPlayer) {
-            if (data) {
-                this.init(data);
-            }
+        public constructor() {
         }
 
-        public init(data: Types.SerializedMcPlayer): void {
+        public init(data: Types.SerializedMcPlayer): McPlayer {
             this.setFund(data.fund!);
             this.setHasVotedForDraw(data.hasVotedForDraw!);
             this.setIsAlive(data.isAlive!);
             this._setPlayerIndex(data.playerIndex!);
             this._setTeamIndex(data.teamIndex!);
             this._setUserId(data.userId);
+
+            return this;
         }
 
         public serialize(): Types.SerializedMcPlayer {
