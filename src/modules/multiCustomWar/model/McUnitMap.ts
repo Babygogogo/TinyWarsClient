@@ -86,7 +86,7 @@ namespace TinyWars.MultiCustomWar {
 
         public serializeForPlayerIndex(playerIndex: number): Types.SerializedMcUnitMap {
             Logger.error("McUnitMap.serializeForPlayerIndex() TODO!!");
-            return {};
+            return { nextUnitId: 0 };
         }
 
         public startRunning(war: McWar): void {

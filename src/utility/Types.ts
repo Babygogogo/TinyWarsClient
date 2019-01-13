@@ -50,11 +50,33 @@ namespace TinyWars.Utility.Types {
     export type VisionBonusCfg      = ProtoTypes.IVisionBonusCfg;
     export type BuildableTileCfg    = ProtoTypes.IBuildableTileCfg;
 
-    export type SerializedMcTile    = ProtoTypes.ISerializedMcTile;
-    export type SerializedMcUnit    = ProtoTypes.ISerializedMcUnit;
-    export type SerializedMcTileMap = ProtoTypes.ISerializedMcTileMap;
-    export type SerializedMcUnitMap = ProtoTypes.ISerializedMcUnitMap;
-    export type SerializedMcPlayer  = ProtoTypes.ISerializedMcPlayer;
+    export interface SerializedMcTile extends ProtoTypes.ISerializedMcTile {
+        gridX           : number;
+        gridY           : number;
+        baseViewId      : number;
+        objectViewId    : number;
+    };
+    export interface SerializedMcUnit extends ProtoTypes.ISerializedMcUnit {
+        gridX   : number;
+        gridY   : number;
+        unitId  : number;
+        viewId  : number;
+    }
+    export interface SerializedMcTileMap extends ProtoTypes.ISerializedMcTileMap {
+        tiles?: SerializedMcTile[];
+    }
+    export interface SerializedMcUnitMap extends ProtoTypes.ISerializedMcUnitMap {
+        units?      : SerializedMcUnit[];
+        nextUnitId  : number;
+    }
+    export interface SerializedMcPlayer extends ProtoTypes.ISerializedMcPlayer {
+        fund            : number;
+        hasVotedForDraw : boolean;
+        isAlive         : boolean;
+        playerIndex     : number;
+        teamIndex       : number;
+        userId          : number;
+    }
 
     export type MapIndexKey = {
         mapDesigner : string;
