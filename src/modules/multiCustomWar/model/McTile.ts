@@ -7,7 +7,7 @@ namespace TinyWars.MultiCustomWar {
     import Logger           = Utility.Logger;
     import SerializedMcTile = Types.SerializedMcTile;
 
-    export class McTileModel {
+    export class McTile {
         private _isInitialized: boolean = false;
 
         private _configVersion  : number;

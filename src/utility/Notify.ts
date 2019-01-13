@@ -34,8 +34,8 @@ namespace TinyWars.Utility {
         // Notify datas.
         ////////////////////////////////////////////////////////////////////////////////
         export namespace Data {
-            export type ConfigLoaded        = number;
-            export type TileModelUpdated    = MultiCustomWar.McTileModel;
+            export type ConfigLoaded    = number;
+            export type McTileUpdated   = MultiCustomWar.McTile;
         }
 
         ////////////////////////////////////////////////////////////////////////////////

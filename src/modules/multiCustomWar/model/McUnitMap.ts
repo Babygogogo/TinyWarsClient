@@ -5,22 +5,17 @@ namespace TinyWars.MultiCustomWar {
     import Logger   = Utility.Logger;
     import MapModel = WarMap.WarMapModel;
 
-    type LoadedUnits = { [unitId: number]: McUnit };
-
     export class McUnitMap {
         private _war            : McWar;
         private _nextUnitId     : number;
         private _map            : (McUnit | undefined)[][];
         private _mapSize        : Types.MapSize;
-        private _loadedUnits    : LoadedUnits;
+        private _loadedUnits    : Map<number, McUnit>;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Initializers and serializers.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public constructor(configVersion?: number, mapIndexKey?: Types.MapIndexKey, data?: Types.SerializedMcUnitMap) {
-            if ((configVersion != null) && (mapIndexKey)) {
-                this.init(configVersion, mapIndexKey, data);
-            }
+        public constructor() {
         }
 
         public init(configVersion: number, mapIndexKey: Types.MapIndexKey, data?: Types.SerializedMcUnitMap): Promise<void> {
@@ -35,14 +30,14 @@ namespace TinyWars.MultiCustomWar {
             const { mapWidth, mapHeight }   = await MapModel.getMapData(mapIndexKey);
             const unitDatas                 = data.units;
             const map                       = createEmptyMap(mapWidth);
-            const loadedUnits: LoadedUnits  = {};
+            const loadedUnits               = new Map<number, McUnit>();
             if (unitDatas) {
                 for (const unitData of unitDatas) {
                     const unit = new McUnit(unitData, configVersion);
                     if (unit.getLoaderUnitId() == null) {
                         map[unit.getGridX()][unit.getGridY()] = unit;
                     } else {
-                        loadedUnits[unit.getUnitId()] = unit;
+                        loadedUnits.set(unit.getUnitId(), unit);
                     }
                 }
             }
@@ -73,7 +68,7 @@ namespace TinyWars.MultiCustomWar {
             }
 
             this._map           = map;
-            this._loadedUnits   = {};
+            this._loadedUnits   = new Map<number, McUnit>();
             this._mapSize       = { width: mapWidth, height: mapHeight };
             this.setNextUnitId(nextUnitId);
         }
@@ -118,7 +113,7 @@ namespace TinyWars.MultiCustomWar {
             return this._map[gridIndex.x][gridIndex.y];
         }
         public getUnitLoadedById(unitId: number): McUnit | undefined {
-            return this._loadedUnits[unitId];
+            return this._loadedUnits.get(unitId);
         }
         public getUnitsLoadedByLoader(loader: McUnit, isRecursive: boolean): McUnit[] {
             const units: McUnit[] = [];
@@ -143,13 +138,12 @@ namespace TinyWars.MultiCustomWar {
         public setUnitLoaded(gridIndex: Types.GridIndex): void {
             const { x, y }  = gridIndex;
             const unit      = this._map[x][y]!;
-            this._loadedUnits[unit.getUnitId()] = unit;
-            this._map[x][y]                     = undefined;
+            this._map[x][y] = undefined;
+            this._loadedUnits.set(unit.getUnitId(), unit);
         }
         public setUnitUnloaded(unitId: number, gridIndex: Types.GridIndex): void {
-            const { x, y }  = gridIndex;
-            this._map[x][y] = this._loadedUnits[unitId];
-            delete this._loadedUnits[unitId];
+            this._map[gridIndex.x][gridIndex.y] = this._loadedUnits.get(unitId);
+            this._loadedUnits.delete(unitId);
         }
 
         public addUnitOnMap(unit: McUnit): void {
@@ -162,10 +156,10 @@ namespace TinyWars.MultiCustomWar {
         }
 
         public addUnitLoaded(unit: McUnit): void {
-            this._loadedUnits[unit.getUnitId()] = unit;
+            this._loadedUnits.set(unit.getUnitId(), unit);
         }
         public removeUnitLoaded(unitId: number): void {
-            delete this._loadedUnits[unitId];
+            this._loadedUnits.delete(unitId);
         }
 
         public forEachUnitOnMap(func: (unit: McUnit) => any): void {
@@ -179,9 +173,8 @@ namespace TinyWars.MultiCustomWar {
             }
         }
         public forEachUnitLoaded(func: (unit: McUnit) => any): void {
-            const loadedUnits = this._loadedUnits;
-            for (const i in loadedUnits) {
-                func(loadedUnits[i]);
+            for (const [, unit] of this._loadedUnits) {
+                func(unit);
             }
         }
     }

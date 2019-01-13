@@ -8,9 +8,10 @@ namespace TinyWars.MultiCustomWar {
         private _isAlive            : boolean;
         private _playerIndex        : number;
         private _teamIndex          : number;
-
         private _userId             : number;
+
         private _nickname           : string;
+        private _war                : McWar;
 
         public constructor() {
         }
@@ -24,6 +25,10 @@ namespace TinyWars.MultiCustomWar {
             this._setUserId(data.userId);
 
             return this;
+        }
+
+        public startRunning(war: McWar): void {
+            this._war = war;
         }
 
         public serialize(): Types.SerializedMcPlayer {
