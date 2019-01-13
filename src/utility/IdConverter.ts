@@ -1,5 +1,5 @@
 
-namespace TinyWars.Utility {
+namespace TinyWars.Utility.IdConverter {
     import TileBaseType   = Types.TileBaseType;
     import TileObjectType = Types.TileObjectType;
     import UnitType       = Types.UnitType;
@@ -966,37 +966,55 @@ namespace TinyWars.Utility {
         /* 104 */ ["c03_t26_s04_f11", "c03_t26_s04_f12", "c03_t26_s04_f13",],
     ];
 
-    export namespace IdConverter {
-        export function getTileBaseType(tileBaseViewId: number): TileBaseType {
-            return TILE_BASE_TYPES[tileBaseViewId];
-        }
+    export function getTileBaseType(tileBaseViewId: number): TileBaseType {
+        return TILE_BASE_TYPES[tileBaseViewId];
+    }
 
-        export function getTileObjectTypeAndPlayerIndex(tileObjectViewId: number): TileObjectTypeAndPlayerIndex {
-            return TILE_OBJECT_TYPES_AND_PLAYER_INDEX[tileObjectViewId];
-        }
+    export function getTileObjectTypeAndPlayerIndex(tileObjectViewId: number): TileObjectTypeAndPlayerIndex {
+        return TILE_OBJECT_TYPES_AND_PLAYER_INDEX[tileObjectViewId];
+    }
 
-        export function getUnitTypeAndPlayerIndex(unitViewId: number): UnitTypeAndPlayerIndex {
-            return UNIT_TYPES_AND_PLAYER_INDEX[unitViewId];
-        }
+    export function getUnitTypeAndPlayerIndex(unitViewId: number): UnitTypeAndPlayerIndex {
+        return UNIT_TYPES_AND_PLAYER_INDEX[unitViewId];
+    }
 
-        export function getTileBaseImageSource(tileBaseViewId: number, tickCount: number): string {
-            const sources = TILE_BASE_IMAGE_SOURCES[tileBaseViewId];
-            return sources[tickCount % sources.length];
+    export function getTileObjectViewId(type: Types.TileObjectType, playerIndex: number): number | undefined {
+        for (let id = 0; id < TILE_OBJECT_TYPES_AND_PLAYER_INDEX.length; ++id) {
+            const data = TILE_OBJECT_TYPES_AND_PLAYER_INDEX[id];
+            if ((data) && (data.playerIndex === playerIndex) && (data.tileObjectType === type)) {
+                return id;
+            }
         }
+        return undefined;
+    }
 
-        export function getTileObjectImageSource(tileObjectViewId: number, tickCount: number): string {
-            const sources = TILE_OBJECT_IMAGE_SOURCES[tileObjectViewId];
-            return sources[tickCount % sources.length];
+    export function getUnitViewId(type: Types.UnitType, playerIndex: number): number | undefined {
+        for (let id = 0; id < UNIT_TYPES_AND_PLAYER_INDEX.length; ++id) {
+            const data = UNIT_TYPES_AND_PLAYER_INDEX[id];
+            if ((data) && (data.unitType === type) && (data.playerIndex === playerIndex)) {
+                return id;
+            }
         }
+        return undefined;
+    }
 
-        export function getUnitIdleImageSource(viewId: number, tickCount: number): string {
-            const sources = UNIT_IDLE_IMAGE_SOURCES[viewId];
-            return sources[tickCount % sources.length];
-        }
+    export function getTileBaseImageSource(tileBaseViewId: number, tickCount: number): string {
+        const sources = TILE_BASE_IMAGE_SOURCES[tileBaseViewId];
+        return sources[tickCount % sources.length];
+    }
 
-        export function getUnitMovingImageSource(viewId: number, tickCount: number): string {
-            const sources = UNIT_MOVING_IMAGE_SOURCES[viewId];
-            return sources[tickCount % sources.length];
-        }
+    export function getTileObjectImageSource(tileObjectViewId: number, tickCount: number): string {
+        const sources = TILE_OBJECT_IMAGE_SOURCES[tileObjectViewId];
+        return sources[tickCount % sources.length];
+    }
+
+    export function getUnitIdleImageSource(viewId: number, tickCount: number): string {
+        const sources = UNIT_IDLE_IMAGE_SOURCES[viewId];
+        return sources[tickCount % sources.length];
+    }
+
+    export function getUnitMovingImageSource(viewId: number, tickCount: number): string {
+        const sources = UNIT_MOVING_IMAGE_SOURCES[viewId];
+        return sources[tickCount % sources.length];
     }
 }

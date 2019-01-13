@@ -40,10 +40,15 @@ namespace TinyWars.Utility.Types {
         [moveType: number]: number | undefined;
     }
 
+    export interface FullConfig extends ProtoTypes.IFullConfig {
+        TileTemplate: TileTemplateCfg[];
+    }
     export type UnitTemplateCfg     = ProtoTypes.IUnitTemplateCfg;
     export type TileCategoryCfg     = ProtoTypes.ITileCategoryCfg;
     export type UnitCategoryCfg     = ProtoTypes.IUnitCategoryCfg;
-    export type TileTemplateCfg     = ProtoTypes.ITileTemplateCfg;
+    export interface TileTemplateCfg extends ProtoTypes.ITileTemplateCfg {
+        type: TileType;
+    }
     export type DamageChartCfg      = ProtoTypes.IDamageChartCfg;
     export type MoveCostCfg         = ProtoTypes.IMoveCostCfg;
     export type UnitPromotionCfg    = ProtoTypes.IUnitPromotionCfg;

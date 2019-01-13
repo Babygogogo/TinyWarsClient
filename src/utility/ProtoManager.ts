@@ -42,8 +42,8 @@ namespace TinyWars.Utility {
             return _containerClass.decode(getDataForDecode(data)).toJSON();
         }
 
-        export function decodeAsFullConfig(data: any): ProtoTypes.IFullConfig {
-            return _fullConfigClass.decode(getDataForDecode(data)).toJSON();
+        export function decodeAsFullConfig(data: any): Types.FullConfig {
+            return _fullConfigClass.decode(getDataForDecode(data)).toJSON() as any;
         }
 
         function getDataForDecode(encodedData: any): Uint8Array | protobuf.Reader {
