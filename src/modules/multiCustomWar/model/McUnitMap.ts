@@ -1,9 +1,10 @@
 
 namespace TinyWars.MultiCustomWar {
-    import Types    = Utility.Types;
-    import Helpers  = Utility.Helpers;
-    import Logger   = Utility.Logger;
-    import MapModel = WarMap.WarMapModel;
+    import Types        = Utility.Types;
+    import Helpers      = Utility.Helpers;
+    import Logger       = Utility.Logger;
+    import Visibility   = Utility.VisibilityCalculator;
+    import MapModel     = WarMap.WarMapModel;
 
     export class McUnitMap {
         private _war            : McWar;
@@ -18,18 +19,15 @@ namespace TinyWars.MultiCustomWar {
         public constructor() {
         }
 
-        public init(configVersion: number, mapIndexKey: Types.MapIndexKey, data?: Types.SerializedMcUnitMap): Promise<void> {
-            if (data) {
-                return this._initWithSerializedData(configVersion, mapIndexKey, data);
-            } else {
-                return this._initWithoutSerializedData(configVersion, mapIndexKey);
-            }
+        public init(configVersion: number, mapIndexKey: Types.MapIndexKey, data?: Types.SerializedMcUnitMap): Promise<McUnitMap> {
+            return data
+                ? this._initWithSerializedData(configVersion, mapIndexKey, data)
+                : this._initWithoutSerializedData(configVersion, mapIndexKey);
         }
-
-        private async _initWithSerializedData(configVersion: number, mapIndexKey: Types.MapIndexKey, data: Types.SerializedMcUnitMap): Promise<void> {
+        private async _initWithSerializedData(configVersion: number, mapIndexKey: Types.MapIndexKey, data: Types.SerializedMcUnitMap): Promise<McUnitMap> {
             const { mapWidth, mapHeight }   = await MapModel.getMapData(mapIndexKey);
             const unitDatas                 = data.units;
-            const map                       = createEmptyMap(mapWidth);
+            const map                       = Helpers.createEmptyMap<McUnit>(mapWidth);
             const loadedUnits               = new Map<number, McUnit>();
             if (unitDatas) {
                 for (const unitData of unitDatas) {
@@ -44,13 +42,14 @@ namespace TinyWars.MultiCustomWar {
 
             this._map           = map;
             this._loadedUnits   = loadedUnits;
-            this._mapSize       = { width: mapWidth, height: mapHeight };
+            this._setMapSize(mapWidth, mapHeight);
             this.setNextUnitId(data.nextUnitId!);
-        }
 
-        private async _initWithoutSerializedData(configVersion: number, mapIndexKey: Types.MapIndexKey): Promise<void> {
+            return this;
+        }
+        private async _initWithoutSerializedData(configVersion: number, mapIndexKey: Types.MapIndexKey): Promise<McUnitMap> {
             const { mapWidth, mapHeight, units: unitViewIds } = await MapModel.getMapData(mapIndexKey);
-            const map       = createEmptyMap(mapWidth);
+            const map       = Helpers.createEmptyMap<McUnit>(mapWidth);
             let nextUnitId  = 0;
             for (let x = 0; x < mapWidth; ++x) {
                 for (let y = 0; y < mapHeight; ++y) {
@@ -69,8 +68,16 @@ namespace TinyWars.MultiCustomWar {
 
             this._map           = map;
             this._loadedUnits   = new Map<number, McUnit>();
-            this._mapSize       = { width: mapWidth, height: mapHeight };
+            this._setMapSize(mapWidth, mapHeight);
             this.setNextUnitId(nextUnitId);
+
+            return this;
+        }
+
+        public startRunning(war: McWar): void {
+            this._war = war;
+            this.forEachUnitOnMap(unit => unit.startRunning(war));
+            this.forEachUnitLoaded(unit => unit.startRunning(war));
         }
 
         public serialize(): Types.SerializedMcUnitMap {
@@ -83,21 +90,31 @@ namespace TinyWars.MultiCustomWar {
                 nextUnitId  : this.getNextUnitId(),
             };
         }
-
         public serializeForPlayerIndex(playerIndex: number): Types.SerializedMcUnitMap {
-            Logger.error("McUnitMap.serializeForPlayerIndex() TODO!!");
-            return { nextUnitId: 0 };
-        }
+            const war = this._war;
+            const units: Types.SerializedMcUnit[] = [];
+            this.forEachUnitOnMap(unit => {
+                if (Visibility.checkIsUnitOnMapVisibleToPlayer(war, unit.getGridIndex(), unit.getType(), unit.getIsDiving(), unit.getPlayerIndex(), playerIndex)) {
+                    units.push(unit.serialize());
 
-        public startRunning(war: McWar): void {
-            this._war = war;
-            this.forEachUnitOnMap(unit => unit.startRunning(war));
-            this.forEachUnitLoaded(unit => unit.startRunning(war));
+                    for (const loadedUnit of this.getUnitsLoadedByLoader(unit, true)) {
+                        units.push(loadedUnit.serialize());
+                    }
+                }
+            });
+
+            return {
+                units       : units.length ? units : undefined,
+                nextUnitId  : this.getNextUnitId(),
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other public functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _setMapSize(width: number, height: number): void {
+            this._mapSize = { width: width, height: height };
+        }
         public getMapSize(): Types.MapSize {
             return this._mapSize;
         }
@@ -163,7 +180,7 @@ namespace TinyWars.MultiCustomWar {
         }
 
         public forEachUnitOnMap(func: (unit: McUnit) => any): void {
-            const { width, height } = this._mapSize;
+            const { width, height } = this.getMapSize();
             const map               = this._map;
             for (let x = 0; x < width; ++x) {
                 for (let y = 0; y < height; ++y) {
@@ -178,13 +195,4 @@ namespace TinyWars.MultiCustomWar {
             }
         }
     }
-
-    function createEmptyMap(mapWidth: number): McUnit[][] {
-        const matrix = new Array<McUnit[]>(mapWidth);
-        for (let i = 0; i < mapWidth; ++i) {
-            matrix[i] = [];
-        }
-        return matrix;
-    }
 }
-

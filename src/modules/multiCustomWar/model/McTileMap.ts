@@ -22,15 +22,11 @@ namespace TinyWars.MultiCustomWar {
         }
 
         public async init(configVersion: number, mapIndexKey: Types.MapIndexKey, data?: SerializedMcTileMap): Promise<McTileMap> {
-            if (data) {
-                await this._initWithSerializedData(configVersion, mapIndexKey, data);
-            } else {
-                await this._initWithoutSerializedData(configVersion, mapIndexKey);
-            }
-
-            return this;
+            return data
+                ? this._initWithSerializedData(configVersion, mapIndexKey, data)
+                : this._initWithoutSerializedData(configVersion, mapIndexKey);
         }
-        private async _initWithSerializedData(configVersion: number, mapIndexKey: Types.MapIndexKey, data: SerializedMcTileMap): Promise<void> {
+        private async _initWithSerializedData(configVersion: number, mapIndexKey: Types.MapIndexKey, data: SerializedMcTileMap): Promise<McTileMap> {
             const mapData                   = await WarMapModel.getMapData(mapIndexKey);
             const { mapWidth, mapHeight }   = mapData;
             const map                       = Helpers.createEmptyMap<McTile>(mapWidth);
@@ -57,8 +53,10 @@ namespace TinyWars.MultiCustomWar {
             this._mapIndexKey   = mapIndexKey;
             this._map           = map;
             this._setMapSize(mapWidth, mapHeight);
+
+            return this;
         }
-        private async _initWithoutSerializedData(configVersion: number, mapIndexKey: Types.MapIndexKey): Promise<void> {
+        private async _initWithoutSerializedData(configVersion: number, mapIndexKey: Types.MapIndexKey): Promise<McTileMap> {
             const mapData                   = await WarMapModel.getMapData(mapIndexKey);
             const { mapWidth, mapHeight }   = mapData;
             const map                       = Helpers.createEmptyMap<McTile>(mapWidth);
@@ -79,6 +77,8 @@ namespace TinyWars.MultiCustomWar {
             this._mapIndexKey   = mapIndexKey;
             this._map           = map;
             this._setMapSize(mapWidth, mapHeight);
+
+            return this;
         }
 
         public startRunning(war: McWar): void {

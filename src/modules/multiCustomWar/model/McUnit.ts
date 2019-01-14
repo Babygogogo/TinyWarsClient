@@ -149,6 +149,10 @@ namespace TinyWars.MultiCustomWar {
             this._unitId = id;
         }
 
+        public getType(): UnitType {
+            return this._templateCfg.type;
+        }
+
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for state.
         ////////////////////////////////////////////////////////////////////////////////
@@ -367,6 +371,10 @@ namespace TinyWars.MultiCustomWar {
         }
         public setGridY(y: number): void {
             this._gridY = y;
+        }
+
+        public getGridIndex(): Types.GridIndex {
+            return { x: this.getGridX(), y: this.getGridY() };
         }
 
         ////////////////////////////////////////////////////////////////////////////////
