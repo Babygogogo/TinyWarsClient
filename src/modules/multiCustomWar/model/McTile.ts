@@ -5,11 +5,12 @@ namespace TinyWars.MultiCustomWar {
     import Notify           = Utility.Notify;
     import Helpers          = Utility.Helpers;
     import Logger           = Utility.Logger;
+    import Visibility       = Utility.VisibilityCalculator;
     import SerializedMcTile = Types.SerializedMcTile;
+    import TileType         = Types.TileType;
+    import TileObjectType   = Types.TileObjectType;
 
     export class McTile {
-        private _isInitialized: boolean = false;
-
         private _configVersion  : number;
         private _templateCfg    : Types.TileTemplateCfg;
         private _moveCostCfg    : { [moveType: number]: Types.MoveCostCfg };
@@ -18,42 +19,44 @@ namespace TinyWars.MultiCustomWar {
         private _baseViewId     : number;
         private _objectViewId   : number;
         private _baseType       : Types.TileBaseType;
-        private _objectType     : Types.TileObjectType;
+        private _objectType     : TileObjectType;
         private _playerIndex    : number;
 
         private _currentHp          : number | undefined;
         private _currentBuildPoint  : number | undefined;
         private _currentCapturePoint: number | undefined;
 
-        public constructor(data?: SerializedMcTile, configVersion?: number) {
-            if ((data) && (configVersion != null)) {
-                this.init(data, configVersion);
-            }
+        private _war    : McWar;
+
+        public constructor() {
         }
 
-        public init(data: SerializedMcTile, configVersion: number): void {
-            const t = IdConverter.getTileObjectTypeAndPlayerIndex(data.objectViewId);
+        public init(data: SerializedMcTile, configVersion: number): McTile {
+            const t = IdConverter.getTileObjectTypeAndPlayerIndex(data.objectViewId!);
             Logger.assert(t, "TileModel.deserialize() invalid SerializedTile! ", data);
 
-            this._isInitialized = true;
             this._configVersion = configVersion;
-            this._gridX         = data.gridX;
-            this._gridY         = data.gridY;
-            this._baseViewId    = data.baseViewId;
-            this._objectViewId  = data.baseViewId;
+            this._setGridX(data.gridX);
+            this._setGridY(data.gridY);
+            this._setBaseViewId(data.baseViewId);
+            this._setObjectViewId(data.objectViewId);
             this._baseType      = IdConverter.getTileBaseType(data.baseViewId);
             this._objectType    = t.tileObjectType;
-            this._playerIndex   = t.playerIndex;
-            this._templateCfg   = ConfigManager.getTileTemplateCfg(this._configVersion, this._baseType, this._objectType);
-            this._moveCostCfg   = ConfigManager.getMoveCostCfg(this._configVersion, this._baseType, this._objectType);
+            this._setPlayerIndex(t.playerIndex);
+            this._templateCfg   = ConfigManager.getTileTemplateCfg(configVersion, this._baseType, this._objectType);
+            this._moveCostCfg   = ConfigManager.getMoveCostCfg(configVersion, this._baseType, this._objectType);
             this.setCurrentHp(          data.currentHp           != null ? data.currentHp           : this.getMaxHp());
             this.setCurrentBuildPoint(  data.currentBuildPoint   != null ? data.currentBuildPoint   : this.getMaxBuildPoint());
             this.setCurrentCapturePoint(data.currentCapturePoint != null ? data.currentCapturePoint : this.getMaxCapturePoint());
+
+            return this;
+        }
+
+        public startRunning(war: McWar): void {
+            this._war = war;
         }
 
         public serialize(): SerializedMcTile {
-            Logger.assert(this._isInitialized, "TileModel.serialize() the tile hasn't been initialized!");
-
             const data: SerializedMcTile = {
                 gridX         : this._gridX,
                 gridY         : this._gridY,
@@ -73,23 +76,53 @@ namespace TinyWars.MultiCustomWar {
             return data;
         }
 
+        public serializeForPlayer(playerIndex: number): SerializedMcTile {
+            if (Visibility.checkIsTileVisibleToPlayer(this._war, this.getGridIndex(), playerIndex)) {
+                return this.serialize();
+            } else if (this.getType() === TileType.Headquarters) {
+                return {
+                    gridX       : this.getGridX(),
+                    gridY       : this.getGridY(),
+                    baseViewId  : this.getBaseViewId(),
+                    objectViewId: this.getObjectViewId(),
+                }
+            } else if (this.getPlayerIndex() !== 0) {
+                return {
+                    gridX       : this.getGridX(),
+                    gridY       : this.getGridY(),
+                    baseViewId  : this.getBaseViewId(),
+                    objectViewId: this.getNeutralObjectViewId(),
+                }
+            } else {
+                const currentHp = this.getCurrentHp();
+                return {
+                    gridX       : this.getGridX(),
+                    gridY       : this.getGridY(),
+                    baseViewId  : this.getBaseViewId(),
+                    objectViewId: this.getObjectViewId(),
+                    currentHp   : currentHp == this.getMaxHp() ? undefined : currentHp,
+                }
+            }
+        }
+
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////
+        private _setBaseViewId(id: number): void {
+            this._baseViewId = id;
+        }
         public getBaseViewId(): number {
             return this._baseViewId;
         }
-        public getBaseViewIdForPlayer(playerIndex: number): number {
-            // TODO
-            return this.getBaseViewId();
-        }
 
+        private _setObjectViewId(id: number): void {
+            this._objectViewId = id;
+        }
         public getObjectViewId(): number {
             return this._objectViewId;
         }
-        public getObjectViewIdForPlayer(playerIndex: number): number {
-            // TODO
-            return this.getObjectViewId();
+        public getNeutralObjectViewId(): number {
+            return this.getObjectViewId() - this.getPlayerIndex();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -189,12 +222,64 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for grid position.
         ////////////////////////////////////////////////////////////////////////////////
+        private _setGridX(x: number): void {
+            this._gridX = x;
+        }
         public getGridX(): number {
             return this._gridX;
         }
 
+        private _setGridY(y: number): void {
+            this._gridY = y;
+        }
         public getGridY(): number {
             return this._gridY;
+        }
+
+        public getGridIndex(): Types.GridIndex {
+            return { x: this.getGridX(), y: this.getGridY() };
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+        // Functions for type.
+        ////////////////////////////////////////////////////////////////////////////////
+        public getType(): TileType {
+            return this._templateCfg.type;
+        }
+
+        public resetByObjectViewIdAndBaseViewId(objectViewId: number, baseViewId = this.getBaseViewId()): void {
+            this.init({
+                gridX       : this.getGridX(),
+                gridY       : this.getGridY(),
+                objectViewId: objectViewId,
+                baseViewId  : baseViewId,
+            }, this._configVersion);
+
+            this.startRunning(this._war);
+        }
+
+        public resetByPlayerIndex(playerIndex: number): void {
+            if (this.getType() === TileType.Headquarters) {
+                this.init({
+                    gridX       : this.getGridX(),
+                    gridY       : this.getGridY(),
+                    objectViewId: IdConverter.getTileObjectViewId(TileObjectType.City, playerIndex)!,
+                    baseViewId  : this.getBaseViewId(),
+                }, this._configVersion);
+            } else {
+                this.init({
+                    gridX       : this.getGridX(),
+                    gridY       : this.getGridY(),
+                    objectViewId: this.getNeutralObjectViewId() + playerIndex,
+                    baseViewId  : this.getBaseViewId(),
+                }, this._configVersion);
+            }
+
+            this.startRunning(this._war);
+        }
+
+        public destroyTileObject(): void {
+            this.resetByObjectViewIdAndBaseViewId(0);
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -207,8 +292,18 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for player index.
         ////////////////////////////////////////////////////////////////////////////////
+        private _setPlayerIndex(index: number): void {
+            this._playerIndex = index;
+        }
         public getPlayerIndex(): number {
             return this._playerIndex;
+        }
+
+        public getTeamIndex(): number | undefined {
+            const playerIndex = this.getPlayerIndex();
+            return playerIndex === 0
+                ? undefined
+                : this._war.getPlayer(playerIndex)!.getTeamIndex();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
