@@ -31,7 +31,7 @@ namespace TinyWars.MultiCustomWar {
             const loadedUnits               = new Map<number, McUnit>();
             if (unitDatas) {
                 for (const unitData of unitDatas) {
-                    const unit = new McUnit(unitData, configVersion);
+                    const unit = new McUnit().init(unitData, configVersion);
                     if (unit.getLoaderUnitId() == null) {
                         map[unit.getGridX()][unit.getGridY()] = unit;
                     } else {
@@ -55,7 +55,7 @@ namespace TinyWars.MultiCustomWar {
                 for (let y = 0; y < mapHeight; ++y) {
                     const viewId = unitViewIds[x + y * mapWidth];
                     if (viewId !== 0) {
-                        map[x][y] = new McUnit({
+                        map[x][y] = new McUnit().init({
                             gridX   : x,
                             gridY   : y,
                             viewId  : viewId,

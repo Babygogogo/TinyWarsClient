@@ -12,8 +12,6 @@ namespace TinyWars.MultiCustomWar {
     import MoveType         = Types.MoveType;
 
     export class McUnit {
-        private _isInitialized: boolean = false;
-
         private _configVersion      : number;
         private _templateCfg        : Types.UnitTemplateCfg;
         private _damageChartCfg     : { [armorType: number]: { [weaponType: number]: Types.DamageChartCfg } };
@@ -23,48 +21,46 @@ namespace TinyWars.MultiCustomWar {
         private _gridY              : number;
         private _viewId             : number;
         private _unitId             : number;
-        private _unitType           : UnitType;
         private _playerIndex        : number;
+        private _teamIndex          : number;
 
-        private _state           : UnitState;
-        private _currentHp       : number;
-        private _currentFuel     : number;
-        private _currentPromotion: number;
+        private _state                      : UnitState;
+        private _currentHp                  : number;
+        private _currentFuel                : number;
+        private _currentPromotion           : number;
+        private _currentBuildMaterial       : number   | undefined;
+        private _currentProduceMaterial     : number   | undefined;
+        private _flareCurrentAmmo           : number   | undefined;
+        private _isBuildingTile             : boolean  | undefined;
+        private _isCapturingTile            : boolean  | undefined;
+        private _isDiving                   : boolean  | undefined;
+        private _loaderUnitId               : number   | undefined;
+        private _primaryWeaponCurrentAmmo   : number   | undefined;
 
-        private _currentBuildMaterial    : number   | undefined;
-        private _currentProduceMaterial  : number   | undefined;
-        private _flareCurrentAmmo        : number   | undefined;
-        private _isBuildingTile          : boolean  | undefined;
-        private _isCapturingTile         : boolean  | undefined;
-        private _isDiving                : boolean  | undefined;
-        private _loaderUnitId            : number   | undefined;
-        private _primaryWeaponCurrentAmmo: number   | undefined;
+        private _war: McWar;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Initializers and serializers.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public constructor(data?: SerializedMcUnit, configVersion?: number) {
-            if ((data) && (configVersion != null)) {
-                this.init(data, configVersion);
-            }
+        public constructor() {
         }
 
-        public init(data: SerializedMcUnit, configVersion: number): void {
+        public init(data: SerializedMcUnit, configVersion: number): McUnit {
             const t = IdConverter.getUnitTypeAndPlayerIndex(data.viewId);
             Logger.assert(t, "UnitModel.deserialize() invalid SerializedUnit! ", data);
 
-            this._isInitialized     = true;
+            const unitType          = t.unitType;
             this._configVersion     = configVersion;
-            this._gridX             = data.gridX;
-            this._gridY             = data.gridY;
-            this._viewId            = data.viewId;
+            this.setGridX(data.gridX);
+            this.setGridY(data.gridY);
+            this._setViewId(data.viewId);
             this._setUnitId(data.unitId);
-            this._unitType          = t!.unitType;
-            this._playerIndex       = t!.playerIndex;
-            this._templateCfg       = ConfigManager.getUnitTemplateCfg(this._configVersion, this._unitType);
-            this._damageChartCfg    = ConfigManager.getDamageChartCfgs(this._configVersion, this._unitType);
-            this._buildableTileCfg  = ConfigManager.getBuildableTileCfgs(this._configVersion, this._unitType);
-            this._visionBonusCfg    = ConfigManager.getVisionBonusCfg(this._configVersion, this._unitType);
+            this._setPlayerIndex(t.playerIndex);
+            this._setTeamIndex(undefined);
+            this._templateCfg       = ConfigManager.getUnitTemplateCfg(this._configVersion, unitType);
+            this._damageChartCfg    = ConfigManager.getDamageChartCfgs(this._configVersion, unitType);
+            this._buildableTileCfg  = ConfigManager.getBuildableTileCfgs(this._configVersion, unitType);
+            this._visionBonusCfg    = ConfigManager.getVisionBonusCfg(this._configVersion, unitType);
             this.setState(                   data.state                    != null ? data.state                    : UnitState.Idle);
             this.setCurrentHp(               data.currentHp                != null ? data.currentHp                : this.getMaxHp());
             this.setPrimaryWeaponCurrentAmmo(data.primaryWeaponCurrentAmmo != null ? data.primaryWeaponCurrentAmmo : this.getPrimaryWeaponMaxAmmo());
@@ -77,15 +73,21 @@ namespace TinyWars.MultiCustomWar {
             this.setIsBuildingTile(          data.isBuildingTile           != null ? data.isBuildingTile           : false);
             this.setCurrentBuildMaterial(    data.currentBuildMaterial     != null ? data.currentBuildMaterial     : this.getMaxBuildMaterial());
             this.setLoaderUnitId(            data.loaderUnitId             != null ? data.loaderUnitId             : undefined);
+
+            return this;
+        }
+
+        public startRunning(war: McWar): void {
+            Logger.error("McUnit.startRunning() TODO!!");
+            this._war = war;
+            this._setTeamIndex(war.getPlayer(this.getPlayerIndex())!.getTeamIndex());
         }
 
         public serialize(): SerializedMcUnit {
-            Logger.assert(this._isInitialized, "UnitModel.serialize() the tile hasn't been initialized!");
-
             const data: SerializedMcUnit = {
-                gridX   : this._gridX,
-                gridY   : this._gridY,
-                viewId  : this._viewId,
+                gridX   : this.getGridX(),
+                gridY   : this.getGridY(),
+                viewId  : this.getViewId(),
                 unitId  : this.getUnitId(),
             };
 
@@ -128,13 +130,12 @@ namespace TinyWars.MultiCustomWar {
             return data;
         }
 
-        public startRunning(war: McWar): void {
-            Logger.error("McUnit.startRunning() TODO!!");
-        }
-
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////
+        private _setViewId(id: number): void {
+            this._viewId = id;
+        }
         public getViewId(): number {
             return this._viewId;
         }
@@ -159,16 +160,25 @@ namespace TinyWars.MultiCustomWar {
         public getState(): UnitState {
             return this._state;
         }
-
         public setState(state: UnitState): void {
             this._state = state;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
-        // Functions for player index.
+        // Functions for player index and team index.
         ////////////////////////////////////////////////////////////////////////////////
+        private _setPlayerIndex(index: number): void {
+            this._playerIndex = index;
+        }
         public getPlayerIndex(): number {
             return this._playerIndex;
+        }
+
+        private _setTeamIndex(index: number | undefined): void {
+            this._teamIndex = index;
+        }
+        public getTeamIndex(): number | undefined {
+            return this._teamIndex;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -232,7 +242,7 @@ namespace TinyWars.MultiCustomWar {
         }
 
         public checkHasSecondaryWeapon(): boolean {
-            return ConfigManager.checkHasSecondaryWeapon(this._configVersion, this._unitType);
+            return ConfigManager.checkHasSecondaryWeapon(this._configVersion, this.getType());
         }
 
         public getSecondaryWeaponDamage(armorType: ArmorType): number | undefined | null {

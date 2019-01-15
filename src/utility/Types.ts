@@ -41,7 +41,15 @@ namespace TinyWars.Utility.Types {
     }
 
     export interface FullConfig extends ProtoTypes.IFullConfig {
-        TileTemplate: TileTemplateCfg[];
+        TileCategory    : TileCategoryCfg[];
+        UnitCategory    : UnitCategoryCfg[];
+        TileTemplate    : TileTemplateCfg[];
+        UnitTemplate    : UnitTemplateCfg[];
+        DamageChart     : DamageChartCfg[];
+        MoveCost        : MoveCostCfg[];
+        UnitPromotion   : UnitPromotionCfg[];
+        VisionBonus     : VisionBonusCfg[];
+        BuildableTile   : BuildableTileCfg[];
     }
     export type UnitTemplateCfg     = ProtoTypes.IUnitTemplateCfg;
     export type TileCategoryCfg     = ProtoTypes.ITileCategoryCfg;
