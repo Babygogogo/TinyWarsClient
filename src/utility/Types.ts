@@ -241,7 +241,7 @@ namespace TinyWars.Utility.Types {
         None,          /* 0 */            All,               /* 1 */            Ground,        /* 2 */            Naval,         /* 3 */
         Air,           /* 4 */            GroundOrNaval,     /* 5 */            GroundOrAir,   /* 6 */            Direct,        /* 7 */
         Indirect,      /* 8 */            Foot,              /* 9 */            Infantry,      /* 10 */           Vehicle,       /* 11 */
-        DirectMachine, /* 12 */           Transport,         /* 13 */           LargeNavel,    /* 14 */           Copter,        /* 15 */
+        DirectMachine, /* 12 */           Transport,         /* 13 */           LargeNaval,    /* 14 */           Copter,        /* 15 */
         Tank,          /* 16 */           AirExceptSeaplane, /* 17 */
     }
 

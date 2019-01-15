@@ -262,7 +262,7 @@ namespace TinyWars.ConfigManager {
         return ALL_CONFIGS[version].UnitCategory[category].unitTypes;
     }
 
-    export function checkIsInUnitCategory(version: number, unitType: UnitType, category: UnitCategory): boolean {
+    export function checkIsUnitTypeInCategory(version: number, unitType: UnitType, category: UnitCategory): boolean {
         const types = getUnitTypesByCategory(version, category);
         return (types != null) && (types.indexOf(unitType) >= 0);
     }

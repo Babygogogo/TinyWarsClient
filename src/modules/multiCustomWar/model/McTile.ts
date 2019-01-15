@@ -221,8 +221,7 @@ namespace TinyWars.MultiCustomWar {
             return this._templateCfg.defenseUnitCategory;
         }
         public checkCanDefendUnit(unit: McUnit): boolean {
-            const cfg = ConfigManager.getUnitTypesByCategory(this._configVersion, this.getDefenseUnitCategory());
-            return (cfg != null) && (cfg.indexOf(unit.getType()) >= 0);
+            return ConfigManager.checkIsUnitTypeInCategory(this._configVersion, unit.getType(), this.getDefenseUnitCategory());
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -319,8 +318,18 @@ namespace TinyWars.MultiCustomWar {
             return this._moveCostCfg;
         }
 
-        public getMoveCost(moveType: Types.MoveType): number | undefined {
+        public getMoveCostByMoveType(moveType: Types.MoveType): number | undefined | null {
             return this.getMoveCosts()[moveType].cost;
+        }
+        public getMoveCostByUnit(unit: McUnit): number | undefined | null {
+            const tileType = this.getType();
+            if (((tileType === TileType.Seaport) || (tileType === TileType.TempSeaport))    &&
+                (this.getTeamIndex() !== unit.getTeamIndex())                               &&
+                (ConfigManager.checkIsUnitTypeInCategory(this._configVersion, unit.getType(), Types.UnitCategory.LargeNaval))) {
+                return undefined;
+            } else {
+                return this.getMoveCostByMoveType(unit.getMoveType());
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////
