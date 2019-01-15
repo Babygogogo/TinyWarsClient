@@ -237,7 +237,7 @@ namespace TinyWars.MultiCustomWar {
             return maxAmmo != null ? this.getPrimaryWeaponCurrentAmmo()! <= maxAmmo * 0.4 : false;
         }
 
-        public getPrimaryWeaponDamage(armorType: ArmorType): number | undefined | null {
+        public getPrimaryWeaponBaseDamage(armorType: ArmorType): number | undefined | null {
             return this._damageChartCfg[armorType][Types.WeaponType.Primary].damage;
         }
 
@@ -245,12 +245,12 @@ namespace TinyWars.MultiCustomWar {
             return ConfigManager.checkHasSecondaryWeapon(this._configVersion, this.getType());
         }
 
-        public getSecondaryWeaponDamage(armorType: ArmorType): number | undefined | null {
+        public getSecondaryWeaponBaseDamage(armorType: ArmorType): number | undefined | null {
             return this._damageChartCfg[armorType][Types.WeaponType.Secondary].damage;
         }
 
-        public getDamage(armorType: ArmorType): number | undefined {
-            return this.getPrimaryWeaponDamage(armorType) || this.getSecondaryWeaponDamage(armorType);
+        public getBaseDamange(armorType: ArmorType): number | undefined {
+            return this.getPrimaryWeaponBaseDamage(armorType) || this.getSecondaryWeaponBaseDamage(armorType);
         }
 
         public getMinAttackRange(): number | undefined {
@@ -274,18 +274,21 @@ namespace TinyWars.MultiCustomWar {
             return this._isCapturingTile || false;
         }
         public setIsCapturingTile(isCapturing: boolean): void {
-            if (!this.checkCanCaptureTile()) {
+            if (!this.checkCanCapture()) {
                 Logger.assert(!isCapturing, "UnitModel.setIsCapturingTile() error, isCapturing: ", isCapturing);
             }
             this._isCapturingTile = isCapturing;
         }
 
-        public checkCanCaptureTile(): boolean {
+        public checkCanCapture(): boolean {
             return this._templateCfg.canCaptureTile === 1;
+        }
+        public checkCanCaptureTile(tile: McTile): boolean {
+            return (this.checkCanCapture()) && (this.getTeamIndex() !== tile.getTeamIndex());
         }
 
         public getCaptureAmount(): number | undefined {
-            return this.checkCanCaptureTile() ? this.getNormalizedCurrentHp() : undefined;
+            return this.checkCanCapture() ? this.getNormalizedCurrentHp() : undefined;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -295,13 +298,13 @@ namespace TinyWars.MultiCustomWar {
             return this._isDiving || false;
         }
         public setIsDiving(isDiving: boolean): void {
-            if (!this.checkCanDive()) {
+            if (!this.checkIsDiver()) {
                 Logger.assert(!isDiving, "UnitModel.setIsDiving() error, isDiving: ", isDiving);
             }
             this._isDiving = isDiving;
         }
 
-        public checkCanDive(): boolean {
+        public checkIsDiver(): boolean {
             return this._templateCfg.fuelConsumptionInDiving != null;
         }
 
@@ -394,6 +397,15 @@ namespace TinyWars.MultiCustomWar {
             return this._templateCfg.produceUnitType;
         }
 
+        public getProduceUnitCost(): number | undefined {
+            const type = this.getProduceUnitType();
+            if (type == null) {
+                return undefined;
+            } else {
+                return ConfigManager.getUnitTemplateCfg(this._configVersion, type).productionCost;
+            }
+        }
+
         public getMaxProduceMaterial(): number | undefined {
             return this._templateCfg.maxProduceMaterial;
         }
@@ -410,6 +422,13 @@ namespace TinyWars.MultiCustomWar {
             }
 
             this._currentProduceMaterial = material;
+        }
+
+        public checkIsProduceMaterialInShort(): boolean {
+            const maxMaterial = this.getMaxProduceMaterial();
+            return maxMaterial == null
+                ? false
+                : this.getCurrentProduceMaterial()! / maxMaterial <= 0.4;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -505,6 +524,13 @@ namespace TinyWars.MultiCustomWar {
             this._currentBuildMaterial = material;
         }
 
+        public checkIsBuildMaterialInShort(): boolean {
+            const maxMaterial = this.getMaxBuildMaterial();
+            return maxMaterial == null
+                ? false
+                : this.getCurrentBuildMaterial()! / maxMaterial <= 0.4;
+        }
+
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for load unit.
         ////////////////////////////////////////////////////////////////////////////////
@@ -568,6 +594,28 @@ namespace TinyWars.MultiCustomWar {
             const cfgs  = this._visionBonusCfg;
             const cfg   = cfgs ? cfgs[tileType] : undefined;
             return this.getVisionRange() + (cfg ? cfg.visionBonus || 0 : 0);
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+        // Functions for join.
+        ////////////////////////////////////////////////////////////////////////////////
+        public checkCanJoinUnit(unit: McUnit): boolean {
+            return (this.getViewId() === unit.getViewId())
+                && (this.getNormalizedCurrentHp() < ConfigManager.MAX_UNIT_NORMALIZED_HP)
+                && (this.getLoadedUnitsCount() === 0)
+                && (unit.getLoadedUnitsCount() === 0);
+        }
+
+        public getJoinIncome(unit: McUnit): number | undefined {
+            if (!this.checkCanJoinUnit(unit)) {
+                return undefined;
+            } else {
+                const maxHp     = ConfigManager.MAX_UNIT_NORMALIZED_HP;
+                const joinedHp  = this.getNormalizedCurrentHp() + unit.getNormalizedCurrentHp();
+                return joinedHp <= maxHp
+                    ? 0
+                    : Math.floor((joinedHp - maxHp) * this.getProductionCost() / 10);
+            }
         }
     }
 }

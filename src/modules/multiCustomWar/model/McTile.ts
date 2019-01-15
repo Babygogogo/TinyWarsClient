@@ -210,13 +210,19 @@ namespace TinyWars.MultiCustomWar {
         public getNormalizedDefenseAmount(): number {
             return Math.floor(this.getDefenseAmount() / 10);
         }
-
         public getDefenseAmount(): number {
             return this._templateCfg.defenseAmount;
+        }
+        public getDefenseAmountForUnit(unit: McUnit): number {
+            return this.checkCanDefendUnit(unit) ? this.getDefenseAmount() : 0;
         }
 
         public getDefenseUnitCategory(): Types.UnitCategory {
             return this._templateCfg.defenseUnitCategory;
+        }
+        public checkCanDefendUnit(unit: McUnit): boolean {
+            const cfg = ConfigManager.getUnitTypesByCategory(this._configVersion, this.getDefenseUnitCategory());
+            return (cfg != null) && (cfg.indexOf(unit.getType()) >= 0);
         }
 
         ////////////////////////////////////////////////////////////////////////////////
