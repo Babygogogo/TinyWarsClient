@@ -1,6 +1,68 @@
 
 namespace TinyWars.Utility.Types {
     ////////////////////////////////////////////////////////////////////////////////
+    // Config types.
+    ////////////////////////////////////////////////////////////////////////////////
+    export interface FullConfig extends ProtoTypes.IFullConfig {
+        TileCategory    : TileCategoryCfg[];
+        UnitCategory    : UnitCategoryCfg[];
+        TileTemplate    : TileTemplateCfg[];
+        UnitTemplate    : UnitTemplateCfg[];
+        DamageChart     : DamageChartCfg[];
+        MoveCost        : MoveCostCfg[];
+        UnitPromotion   : UnitPromotionCfg[];
+        VisionBonus     : VisionBonusCfg[];
+        BuildableTile   : BuildableTileCfg[];
+    }
+    export interface TileCategoryCfg extends ProtoTypes.ITileCategoryCfg {
+        category: TileCategory;
+    }
+    export interface UnitCategoryCfg extends ProtoTypes.IUnitCategoryCfg {
+        category: UnitCategory;
+    }
+    export interface TileTemplateCfg extends ProtoTypes.ITileTemplateCfg {
+        type                : TileType;
+        defenseAmount       : number;
+        defenseUnitCategory : UnitCategory;
+    }
+    export interface UnitTemplateCfg extends ProtoTypes.IUnitTemplateCfg {
+        type                    : UnitType;
+        maxHp                   : number;
+        armorType               : ArmorType;
+        isAffectedByLuck        : number;
+        moveRange               : number;
+        moveType                : MoveType;
+        maxFuel                 : number;
+        fuelConsumptionPerTurn  : number;
+        productionCost          : number;
+        visionRange             : number;
+    }
+    export interface DamageChartCfg extends ProtoTypes.IDamageChartCfg {
+        attackerType: UnitType;
+        armorType   : ArmorType;
+        weaponType  : WeaponType;
+    }
+    export interface MoveCostCfg extends ProtoTypes.IMoveCostCfg {
+        tileType    : TileType;
+        moveType    : MoveType;
+    }
+    export interface UnitPromotionCfg extends ProtoTypes.IUnitPromotionCfg {
+        promotion   : number;
+        attackBonus : number;
+        defenseBonus: number;
+    }
+    export interface VisionBonusCfg extends ProtoTypes.IVisionBonusCfg {
+        unitType    : UnitType;
+        tileType    : TileType;
+        visionBonus : number;
+    }
+    export interface BuildableTileCfg extends ProtoTypes.IBuildableTileCfg {
+        unitType    : UnitType;
+        srcTileType : TileType;
+        dstTileType : TileType;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
     // Types.
     ////////////////////////////////////////////////////////////////////////////////
     export type Action = {
@@ -39,29 +101,6 @@ namespace TinyWars.Utility.Types {
     export type MoveCosts = {
         [moveType: number]: number | undefined;
     }
-
-    export interface FullConfig extends ProtoTypes.IFullConfig {
-        TileCategory    : TileCategoryCfg[];
-        UnitCategory    : UnitCategoryCfg[];
-        TileTemplate    : TileTemplateCfg[];
-        UnitTemplate    : UnitTemplateCfg[];
-        DamageChart     : DamageChartCfg[];
-        MoveCost        : MoveCostCfg[];
-        UnitPromotion   : UnitPromotionCfg[];
-        VisionBonus     : VisionBonusCfg[];
-        BuildableTile   : BuildableTileCfg[];
-    }
-    export type UnitTemplateCfg     = ProtoTypes.IUnitTemplateCfg;
-    export type TileCategoryCfg     = ProtoTypes.ITileCategoryCfg;
-    export type UnitCategoryCfg     = ProtoTypes.IUnitCategoryCfg;
-    export interface TileTemplateCfg extends ProtoTypes.ITileTemplateCfg {
-        type: TileType;
-    }
-    export type DamageChartCfg      = ProtoTypes.IDamageChartCfg;
-    export type MoveCostCfg         = ProtoTypes.IMoveCostCfg;
-    export type UnitPromotionCfg    = ProtoTypes.IUnitPromotionCfg;
-    export type VisionBonusCfg      = ProtoTypes.IVisionBonusCfg;
-    export type BuildableTileCfg    = ProtoTypes.IBuildableTileCfg;
 
     export interface SerializedMcTile extends ProtoTypes.ISerializedMcTile {
         gridX           : number;
