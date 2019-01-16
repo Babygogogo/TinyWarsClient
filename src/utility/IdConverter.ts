@@ -966,6 +966,8 @@ namespace TinyWars.Utility.IdConverter {
         /* 104 */ ["c03_t26_s04_f11", "c03_t26_s04_f12", "c03_t26_s04_f13",],
     ];
 
+    const TILE_OBJECT_VIEW_IDS = new Map<TileObjectType, Map<number, number | undefined>>();
+
     export function getTileBaseType(tileBaseViewId: number): TileBaseType {
         return TILE_BASE_TYPES[tileBaseViewId];
     }
@@ -979,13 +981,21 @@ namespace TinyWars.Utility.IdConverter {
     }
 
     export function getTileObjectViewId(type: Types.TileObjectType, playerIndex: number): number | undefined {
-        for (let id = 0; id < TILE_OBJECT_TYPES_AND_PLAYER_INDEX.length; ++id) {
-            const data = TILE_OBJECT_TYPES_AND_PLAYER_INDEX[id];
-            if ((data) && (data.playerIndex === playerIndex) && (data.tileObjectType === type)) {
-                return id;
+        if (!TILE_OBJECT_VIEW_IDS.has(type)) {
+            TILE_OBJECT_VIEW_IDS.set(type, new Map());
+        }
+        const idMap = TILE_OBJECT_VIEW_IDS.get(type)!;
+        if (!idMap.has(playerIndex)) {
+            idMap.set(playerIndex, undefined);
+            for (let id = 0; id < TILE_OBJECT_TYPES_AND_PLAYER_INDEX.length; ++id) {
+                const data = TILE_OBJECT_TYPES_AND_PLAYER_INDEX[id];
+                if ((data) && (data.playerIndex === playerIndex) && (data.tileObjectType === type)) {
+                    idMap.set(playerIndex, id);
+                    break;
+                }
             }
         }
-        return undefined;
+        return idMap.get(playerIndex);
     }
 
     export function getUnitViewId(type: Types.UnitType, playerIndex: number): number | undefined {

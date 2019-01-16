@@ -68,9 +68,9 @@ namespace TinyWars.MultiCustomWar {
             const view     = new UnitView(data, tickCount);
             this._unitViews.push(view);
 
-            if (ConfigManager.checkIsInUnitCategory(data.configVersion, unitType, Types.UnitCategory.Air)) {
+            if (ConfigManager.checkIsUnitTypeInCategory(data.configVersion, unitType, Types.UnitCategory.Air)) {
                 this._airLayer.addChild(view);
-            } else if (ConfigManager.checkIsInUnitCategory(data.configVersion, unitType, Types.UnitCategory.Ground)) {
+            } else if (ConfigManager.checkIsUnitTypeInCategory(data.configVersion, unitType, Types.UnitCategory.Ground)) {
                 this._groundLayer.addChild(view);
             } else {
                 this._seaLayer.addChild(view);

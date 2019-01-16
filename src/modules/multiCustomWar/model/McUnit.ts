@@ -475,8 +475,12 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for launch silo.
         ////////////////////////////////////////////////////////////////////////////////
-        public checkCanLaunchSilo(): boolean {
-            return this._templateCfg.canLaunchSilo === 1;
+        public checkCanLaunchSiloOnTile(tile: McTile): boolean {
+            return (this._templateCfg.canLaunchSilo === 1) && (tile.getType() === TileType.Silo);
+        }
+
+        public getTileObjectViewIdAfterLaunchSilo(): number {
+            return IdConverter.getTileObjectViewId(Types.TileObjectType.Silo, 0);
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -486,24 +490,27 @@ namespace TinyWars.MultiCustomWar {
             return this._isBuildingTile || false;
         }
         public setIsBuildingTile(isBuilding: boolean): void {
-            if (!this.checkCanBuildTile()) {
+            if (!this.checkIsTileBuilder()) {
                 Logger.assert(!isBuilding, "UnitModel.setIsBuildingTile() error, isBuilding: ", isBuilding);
             }
             this._isBuildingTile = isBuilding;
         }
 
-        public checkCanBuildTile(): boolean {
+        public checkIsTileBuilder(): boolean {
             return this._buildableTileCfg != null;
         }
+        public checkCanBuildOnTile(tile: McTile): boolean {
+            return this.getBuildTargetTileType(tile.getType()) != null;
+        }
 
-        public getBuildTargetTile(srcType: TileType): TileType | undefined | null {
+        public getBuildTargetTileType(srcType: TileType): TileType | undefined | null {
             const cfgs  = this._buildableTileCfg;
             const cfg   = cfgs ? cfgs[srcType] : undefined;
             return cfg ? cfg.dstTileType : undefined;
         }
 
         public getBuildAmount(): number | undefined {
-            return this.checkCanBuildTile() ? this.getNormalizedCurrentHp() : undefined;
+            return this.checkIsTileBuilder() ? this.getNormalizedCurrentHp() : undefined;
         }
 
         public getMaxBuildMaterial(): number | undefined {

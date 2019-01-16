@@ -339,8 +339,15 @@ namespace TinyWars.MultiCustomWar {
             return this._templateCfg.repairUnitCategory;
         }
 
-        public getRepairAmount(): number | undefined {
+        public getNormalizedRepairAmount(): number | undefined {
             return this._templateCfg.repairAmount;
+        }
+
+        public checkCanRepairUnit(unit: McUnit): boolean {
+            const category = this.getRepairUnitCategory();
+            return (category != null)
+                && (unit.getTeamIndex() === this.getTeamIndex())
+                && (ConfigManager.checkIsUnitTypeInCategory(this._configVersion, unit.getType(), category));
         }
 
         ////////////////////////////////////////////////////////////////////////////////
