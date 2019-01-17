@@ -2,4 +2,6 @@
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
     <GameUi:UiImage source="bg_jpg" horizontalCenter="0" verticalCenter="0" />
+    <GameUi:UiLabel id="_labelVersion" text="TinyWars  v19.0118.0149" stroke="2" bottom="2" right="2" italic="true"
+                    size="20" />
 </e:Skin>

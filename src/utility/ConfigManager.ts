@@ -1371,6 +1371,7 @@ namespace TinyWars.ConfigManager {
     // Exports.
     ////////////////////////////////////////////////////////////////////////////////
     export const MAX_UNIT_NORMALIZED_HP = 10;
+    export const GAME_VERSION           = "19.0118.0154";
 
     export function init(): void {
         NetManager.addListeners([

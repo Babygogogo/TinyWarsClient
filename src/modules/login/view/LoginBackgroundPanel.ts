@@ -6,6 +6,8 @@ namespace TinyWars.Login {
 
         private static _instance: LoginBackgroundPanel;
 
+        private _labelVersion: GameUi.UiLabel;
+
         public static show(): void {
             if (!LoginBackgroundPanel._instance) {
                 LoginBackgroundPanel._instance = new LoginBackgroundPanel();
@@ -24,6 +26,10 @@ namespace TinyWars.Login {
 
             this._setAutoAdjustHeightEnabled();
             this.skinName = "resource/skins/login/LoginBackgroundPanel.exml";
+        }
+
+        protected _onOpened(): void {
+            this._labelVersion.text = `TinyWars v${ConfigManager.GAME_VERSION}`;
         }
     }
 }
