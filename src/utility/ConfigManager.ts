@@ -172,6 +172,43 @@ namespace TinyWars.ConfigManager {
         ])],
     ]);
 
+    const _TILE_TYPE_TO_TILE_OBJECT_TYPE = new Map<TileType, TileObjectType>([
+        [TileType.Airport,          TileObjectType.Airport],
+        [TileType.Beach,            TileObjectType.Empty],
+        [TileType.BridgeOnBeach,    TileObjectType.Bridge],
+        [TileType.BridgeOnPlain,    TileObjectType.Bridge],
+        [TileType.BridgeOnRiver,    TileObjectType.Bridge],
+        [TileType.BridgeOnSea,      TileObjectType.Bridge],
+        [TileType.City,             TileObjectType.City],
+        [TileType.CommandTower,     TileObjectType.CommandTower],
+        [TileType.EmptySilo,        TileObjectType.EmptySilo],
+        [TileType.Factory,          TileObjectType.Factory],
+        [TileType.Fire,             TileObjectType.Fire],
+        [TileType.GreenPlasma,      TileObjectType.GreenPlasma],
+        [TileType.Headquarters,     TileObjectType.Headquarters],
+        [TileType.Meteor,           TileObjectType.Meteor],
+        [TileType.MistOnBeach,      TileObjectType.Mist],
+        [TileType.MistOnPlain,      TileObjectType.Mist],
+        [TileType.MistOnRiver,      TileObjectType.Mist],
+        [TileType.MistOnSea,        TileObjectType.Mist],
+        [TileType.Mountain,         TileObjectType.Mountain],
+        [TileType.Plain,            TileObjectType.Empty],
+        [TileType.Plasma,           TileObjectType.Plasma],
+        [TileType.Radar,            TileObjectType.Radar],
+        [TileType.Reef,             TileObjectType.Reef],
+        [TileType.River,            TileObjectType.Empty],
+        [TileType.Road,             TileObjectType.Road],
+        [TileType.Rough,            TileObjectType.Rough],
+        [TileType.Ruins,            TileObjectType.Ruins],
+        [TileType.Sea,              TileObjectType.Empty],
+        [TileType.Seaport,          TileObjectType.Seaport],
+        [TileType.Silo,             TileObjectType.Silo],
+        [TileType.TempAirport,      TileObjectType.TempAirport],
+        [TileType.TempSeaport,      TileObjectType.TempSeaport],
+        [TileType.Wasteland,        TileObjectType.Wasteland],
+        [TileType.Wood,             TileObjectType.Wood],
+    ]);
+
     const _TILE_BASE_IMAGE_SOURCES = new Map<number, string[]>([
         ////////// plain * 1 //////////
         [  1, ["c01_t01_s01_f01",]],
@@ -1456,6 +1493,10 @@ namespace TinyWars.ConfigManager {
     export function getTileObjectViewId(type: Types.TileObjectType, playerIndex: number): number | undefined {
         const mapping = _TILE_OBJECT_VIEW_IDS.get(type);
         return mapping ? mapping.get(playerIndex) : undefined;
+    }
+
+    export function getTileObjectTypeByTileType(type: TileType): TileObjectType {
+        return _TILE_TYPE_TO_TILE_OBJECT_TYPE.get(type)!;
     }
 
     export function getUnitViewId(type: Types.UnitType, playerIndex: number): number | undefined {

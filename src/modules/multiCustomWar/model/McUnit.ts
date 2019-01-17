@@ -507,6 +507,12 @@ namespace TinyWars.MultiCustomWar {
             const cfg   = cfgs ? cfgs[srcType] : undefined;
             return cfg ? cfg.dstTileType : undefined;
         }
+        public getBuildTargetTileObjectViewId(srcType: TileType): TileType | undefined | null {
+            const dstType = this.getBuildTargetTileType(srcType);
+            return dstType == null
+                ? undefined
+                : ConfigManager.getTileObjectViewId(ConfigManager.getTileObjectTypeByTileType(dstType), this.getPlayerIndex());
+        }
 
         public getBuildAmount(): number | undefined {
             return this.checkIsTileBuilder() ? this.getNormalizedCurrentHp() : undefined;
