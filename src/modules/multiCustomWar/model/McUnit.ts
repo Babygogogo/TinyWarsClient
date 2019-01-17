@@ -1,7 +1,6 @@
 
 namespace TinyWars.MultiCustomWar {
     import Types            = Utility.Types;
-    import IdConverter      = Utility.IdConverter;
     import Helpers          = Utility.Helpers;
     import Logger           = Utility.Logger;
     import SerializedMcUnit = Types.SerializedMcUnit;
@@ -46,7 +45,7 @@ namespace TinyWars.MultiCustomWar {
         }
 
         public init(data: SerializedMcUnit, configVersion: number): McUnit {
-            const t = IdConverter.getUnitTypeAndPlayerIndex(data.viewId);
+            const t = ConfigManager.getUnitTypeAndPlayerIndex(data.viewId);
             Logger.assert(t, "UnitModel.deserialize() invalid SerializedUnit! ", data);
 
             const unitType          = t.unitType;
@@ -480,7 +479,7 @@ namespace TinyWars.MultiCustomWar {
         }
 
         public getTileObjectViewIdAfterLaunchSilo(): number {
-            return IdConverter.getTileObjectViewId(Types.TileObjectType.Silo, 0);
+            return ConfigManager.getTileObjectViewId(Types.TileObjectType.Silo, 0);
         }
 
         ////////////////////////////////////////////////////////////////////////////////

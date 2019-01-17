@@ -1,7 +1,6 @@
 
 namespace TinyWars.MultiCustomWar {
     import Notify      = Utility.Notify;
-    import IdConverter = Utility.IdConverter;
     import Types       = Utility.Types
     import TimeModel   = Time.TimeModel;
 
@@ -64,7 +63,7 @@ namespace TinyWars.MultiCustomWar {
         }
 
         private _addUnit(data: Types.UnitViewData, tickCount: number): void {
-            const unitType = IdConverter.getUnitTypeAndPlayerIndex(data.viewId).unitType;
+            const unitType = ConfigManager.getUnitTypeAndPlayerIndex(data.viewId).unitType;
             const view     = new UnitView(data, tickCount);
             this._unitViews.push(view);
 

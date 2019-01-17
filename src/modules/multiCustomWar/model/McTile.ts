@@ -1,7 +1,6 @@
 
 namespace TinyWars.MultiCustomWar {
     import Types            = Utility.Types;
-    import IdConverter      = Utility.IdConverter;
     import Notify           = Utility.Notify;
     import Helpers          = Utility.Helpers;
     import Logger           = Utility.Logger;
@@ -32,7 +31,7 @@ namespace TinyWars.MultiCustomWar {
         }
 
         public init(data: SerializedMcTile, configVersion: number): McTile {
-            const t = IdConverter.getTileObjectTypeAndPlayerIndex(data.objectViewId!);
+            const t = ConfigManager.getTileObjectTypeAndPlayerIndex(data.objectViewId!);
             Logger.assert(t, "TileModel.deserialize() invalid SerializedTile! ", data);
 
             this._configVersion = configVersion;
@@ -40,7 +39,7 @@ namespace TinyWars.MultiCustomWar {
             this._setGridY(data.gridY);
             this._setBaseViewId(data.baseViewId);
             this._setObjectViewId(data.objectViewId);
-            this._baseType      = IdConverter.getTileBaseType(data.baseViewId);
+            this._baseType      = ConfigManager.getTileBaseType(data.baseViewId);
             this._objectType    = t.tileObjectType;
             this._setPlayerIndex(t.playerIndex);
             this._templateCfg   = ConfigManager.getTileTemplateCfg(configVersion, this._baseType, this._objectType);
@@ -268,7 +267,7 @@ namespace TinyWars.MultiCustomWar {
                 this.init({
                     gridX       : this.getGridX(),
                     gridY       : this.getGridY(),
-                    objectViewId: IdConverter.getTileObjectViewId(TileObjectType.City, playerIndex)!,
+                    objectViewId: ConfigManager.getTileObjectViewId(TileObjectType.City, playerIndex)!,
                     baseViewId  : this.getBaseViewId(),
                 }, this._configVersion);
             } else {

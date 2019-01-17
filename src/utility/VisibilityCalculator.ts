@@ -1,13 +1,12 @@
 
-
 namespace TinyWars.Utility.VisibilityCalculator {
     import McWar        = MultiCustomWar.McWar;
     import McUnit       = MultiCustomWar.McUnit;
-    import McTile       = MultiCustomWar.McTile;
+    // import McTile       = MultiCustomWar.McTile;
     import GridIndex    = Types.GridIndex;
 
     type Discoveries = {
-        tiles: McTile[],
+        tiles: MultiCustomWar.McTile[],
         units: McUnit[],
     }
 

@@ -52,7 +52,7 @@ namespace TinyWars.Utility.FlowManager {
     function _checkCanFirstGoToLobby(): boolean {
         return (User.UserModel.checkIsLoggedIn())
             && (ResManager.checkIsLoadedMainResource())
-            && (ConfigManager.checkIsLoaded(ConfigManager.getNewestConfigVersion()))
+            && (ConfigManager.checkIsConfigLoaded(ConfigManager.getNewestConfigVersion()))
     }
 
     function _removeLoadingDom(): void {

@@ -2,7 +2,6 @@
 namespace TinyWars.MultiCustomWar {
     import UiImage     = GameUi.UiImage;
     import Notify      = Utility.Notify;
-    import IdConverter = Utility.IdConverter;
     import TimeModel   = Time.TimeModel;
 
     export class TileMapView extends egret.DisplayObjectContainer {
@@ -162,7 +161,7 @@ namespace TinyWars.MultiCustomWar {
         protected _getImageSource(id: number, tickCount: number): string {
             return id == null
                 ? undefined
-                : IdConverter.getTileBaseImageSource(id, tickCount);
+                : ConfigManager.getTileBaseImageSource(id, tickCount);
         }
     }
 
@@ -170,7 +169,7 @@ namespace TinyWars.MultiCustomWar {
         protected _getImageSource(id: number, tickCount: number): string {
             return id == null
             ? undefined
-            : IdConverter.getTileObjectImageSource(id, tickCount);
+            : ConfigManager.getTileObjectImageSource(id, tickCount);
         }
     }
 }

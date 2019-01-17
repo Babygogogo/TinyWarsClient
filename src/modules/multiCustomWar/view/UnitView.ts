@@ -2,7 +2,6 @@
 namespace TinyWars.MultiCustomWar {
     import UiImage     = GameUi.UiImage;
     import Notify      = Utility.Notify;
-    import IdConverter = Utility.IdConverter;
     import Types       = Utility.Types
     import TimeModel   = Time.TimeModel;
 
@@ -47,9 +46,9 @@ namespace TinyWars.MultiCustomWar {
         public updateOnAnimationTick(tickCount: number): void {
             if (this._data) {
                 if (this._state === Types.UnitState.Idle) {
-                    this._unitImage.source = IdConverter.getUnitIdleImageSource(this._data.viewId, tickCount);
+                    this._unitImage.source = ConfigManager.getUnitIdleImageSource(this._data.viewId, tickCount);
                 } else {
-                    this._unitImage.source = IdConverter.getUnitMovingImageSource(this._data.viewId, tickCount);
+                    this._unitImage.source = ConfigManager.getUnitMovingImageSource(this._data.viewId, tickCount);
                 }
             }
         }
