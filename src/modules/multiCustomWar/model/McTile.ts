@@ -332,7 +332,7 @@ namespace TinyWars.MultiCustomWar {
         }
 
         ////////////////////////////////////////////////////////////////////////////////
-        // Functions for repair unit.
+        // Functions for repair/supply unit.
         ////////////////////////////////////////////////////////////////////////////////
         public getRepairUnitCategory(): Types.UnitCategory | undefined {
             return this._templateCfg.repairUnitCategory;
@@ -347,6 +347,9 @@ namespace TinyWars.MultiCustomWar {
             return (category != null)
                 && (unit.getTeamIndex() === this.getTeamIndex())
                 && (ConfigManager.checkIsUnitTypeInCategory(this._configVersion, unit.getType(), category));
+        }
+        public checkCanSupplyUnit(unit: McUnit): boolean {
+            return (this.checkCanRepairUnit(unit)) && (unit.checkCanBeSupplied());
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -372,9 +375,18 @@ namespace TinyWars.MultiCustomWar {
         public getVisionRange(): number | undefined {
             return this._templateCfg.visionRange;
         }
-
         public checkIsVisionEnabledForAllPlayers(): boolean {
             return this._templateCfg.isVisionEnabledForAllPlayers === 1;
+        }
+
+        public getVisionRangeForPlayer(playerIndex: number): number | null | undefined {
+            if (this.checkIsVisionEnabledForAllPlayers()) {
+                return this.getVisionRange();
+            } else if (this.getTeamIndex() !== this._war.getPlayer(playerIndex)!.getTeamIndex()) {
+                return undefined;
+            } else {
+                return this.getVisionRange();
+            }
         }
     }
 }
