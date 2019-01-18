@@ -4,7 +4,7 @@ namespace TinyWars.MultiCustomWar {
     import Notify           = Utility.Notify;
     import Helpers          = Utility.Helpers;
     import Logger           = Utility.Logger;
-    import Visibility       = Utility.VisibilityCalculator;
+    import Visibility       = Utility.VisibilityHelpers;
     import SerializedMcTile = Types.SerializedMcTile;
     import TileType         = Types.TileType;
     import TileObjectType   = Types.TileObjectType;

@@ -159,10 +159,6 @@ namespace TinyWars.Utility.Helpers {
         return formatString("resource/assets/map/%s_%s_%s.json", key.mapName, key.mapDesigner, getNumText(key.mapVersion));
     }
 
-    export function checkIsGridIndexEqual(gridIndex1: Types.GridIndex, gridIndex2: Types.GridIndex): boolean {
-        return (gridIndex1.x === gridIndex2.x) && (gridIndex1.y === gridIndex2.y);
-    }
-
     export function getNormalizedHp(hp: number): number {
         return Math.ceil(hp / 10);
     }

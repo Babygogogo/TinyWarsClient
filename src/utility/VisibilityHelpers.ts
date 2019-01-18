@@ -1,5 +1,5 @@
 
-namespace TinyWars.Utility.VisibilityCalculator {
+namespace TinyWars.Utility.VisibilityHelpers {
     import McWar        = MultiCustomWar.McWar;
     import McUnit       = MultiCustomWar.McUnit;
     // import McTile       = MultiCustomWar.McTile;

@@ -3,6 +3,7 @@ namespace TinyWars.MultiCustomWar {
     import Types            = Utility.Types;
     import Helpers          = Utility.Helpers;
     import Logger           = Utility.Logger;
+    import GridIndexHelpers = Utility.GridIndexHelpers;
     import SerializedMcUnit = Types.SerializedMcUnit;
     import UnitState        = Types.UnitState;
     import ArmorType        = Types.ArmorType;
@@ -507,7 +508,7 @@ namespace TinyWars.MultiCustomWar {
             const cfg   = cfgs ? cfgs[srcType] : undefined;
             return cfg ? cfg.dstTileType : undefined;
         }
-        public getBuildTargetTileObjectViewId(srcType: TileType): TileType | undefined | null {
+        public getBuildTargetTileObjectViewId(srcType: TileType): number | undefined | null {
             const dstType = this.getBuildTargetTileType(srcType);
             return dstType == null
                 ? undefined
@@ -546,38 +547,55 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for load unit.
         ////////////////////////////////////////////////////////////////////////////////
-        public getMaxLoadUnitsCount(): number | undefined {
+        public getMaxLoadUnitsCount(): number | undefined | null {
             return this._templateCfg.maxLoadUnitsCount;
         }
-
-        public getLoadedUnitsCount(): number | undefined {
-            // TODO
-            return 0;
+        public getLoadedUnitsCount(): number {
+            return this.getLoadedUnits()!.length;
         }
-
-        public getLoadedUnitIds(): number[] | undefined {
-            // TODO
-            return undefined;
+        public getLoadedUnits(): McUnit[] {
+            return this._war.getUnitMap().getUnitsLoadedByLoader(this, false);
         }
 
         public checkHasLoadUnitId(id: number): boolean {
-            // TODO
+            for (const unit of this.getLoadedUnits()) {
+                if (unit.getUnitId() === id) {
+                    return true;
+                }
+            }
             return false;
         }
 
-        public checkCanDropLoadedUnit(): boolean {
-            return this._templateCfg.canDropLoadedUnits === 1;
+        public checkCanLoadUnit(unit: McUnit): boolean {
+            const cfg                   = this._templateCfg;
+            const loadUnitCategory      = cfg.loadUnitCategory;
+            const loadableTileCategory  = cfg.loadableTileCategory;
+            const maxLoadUnitsCount     = this.getMaxLoadUnitsCount();
+            return (loadUnitCategory != null)
+                && (loadableTileCategory != null)
+                && (maxLoadUnitsCount != null)
+                && (ConfigManager.checkIsTileTypeInCategory(this._configVersion, this._war.getTileMap().getTile(this.getGridIndex()).getType(), loadableTileCategory))
+                && (ConfigManager.checkIsUnitTypeInCategory(this._configVersion, unit.getType(), loadUnitCategory))
+                && (this.getPlayerIndex() === unit.getPlayerIndex())
+                && (this.getLoadedUnitsCount() < maxLoadUnitsCount);
         }
-
+        public checkCanDropLoadedUnit(tileType: TileType): boolean {
+            const cfg       = this._templateCfg;
+            const category  = cfg.loadableTileCategory;
+            return (cfg.canDropLoadedUnits === 1)
+                && (category != null)
+                && (ConfigManager.checkIsTileTypeInCategory(this._configVersion, tileType, category));
+        }
         public checkCanLaunchLoadedUnit(): boolean {
             return this._templateCfg.canLaunchLoadedUnits === 1;
         }
-
         public checkCanSupplyLoadedUnit(): boolean {
             return this._templateCfg.canSupplyLoadedUnits === 1;
         }
-
-        public getRepairAmountForLoadedUnit(): number | undefined {
+        public checkCanRepairLoadedUnit(): boolean {
+            return this.getRepairAmountForLoadedUnit() != null;
+        }
+        public getRepairAmountForLoadedUnit(): number | undefined | null {
             return this._templateCfg.repairAmountForLoadedUnits;
         }
 
@@ -591,8 +609,33 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for supply unit.
         ////////////////////////////////////////////////////////////////////////////////
-        public checkCanSupplyAdjacentUnit(): boolean {
+        public checkIsAdjacentUnitSupplier(): boolean {
             return this._templateCfg.canSupplyAdjacentUnits === 1;
+        }
+        public checkCanSupplyAdjacentUnit(unit: McUnit): boolean {
+            return (this.checkIsAdjacentUnitSupplier())
+                && (this.getLoaderUnitId() == null)
+                && (unit.getLoaderUnitId() == null)
+                && (this.getPlayerIndex() === unit.getPlayerIndex())
+                && (GridIndexHelpers.getDistance(this.getGridIndex(), unit.getGridIndex()) === 1)
+                && (unit.checkCanBeSupplied());
+        }
+
+        public checkCanBeSuppliedWithFuel(): boolean {
+            return this.getCurrentFuel() <= this.getMaxFuel();
+        }
+        public checkCanBeSuppliedWithPrimaryWeaponAmmo(): boolean {
+            const maxAmmo = this.getPrimaryWeaponMaxAmmo();
+            return (maxAmmo != null) && (this.getPrimaryWeaponCurrentAmmo()! < maxAmmo);
+        }
+        public checkCanBeSuppliedWithFlareAmmo(): boolean {
+            const maxAmmo = this.getFlareMaxAmmo();
+            return (maxAmmo != null) && (this.getFlareCurrentAmmo()! < maxAmmo);
+        }
+        public checkCanBeSupplied(): boolean {
+            return (this.checkCanBeSuppliedWithFuel())
+                || (this.checkCanBeSuppliedWithPrimaryWeaponAmmo())
+                || (this.checkCanBeSuppliedWithFlareAmmo());
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -601,11 +644,18 @@ namespace TinyWars.MultiCustomWar {
         public getVisionRange(): number {
             return this._templateCfg.visionRange;
         }
-
-        public getVisionRangeOnTile(tileType: TileType): number {
+        public getVisionRangeBonusOnTile(tileType: TileType): number {
             const cfgs  = this._visionBonusCfg;
             const cfg   = cfgs ? cfgs[tileType] : undefined;
-            return this.getVisionRange() + (cfg ? cfg.visionBonus || 0 : 0);
+            return cfg ? cfg.visionBonus || 0 : 0;
+        }
+
+        public getVisionRangeForPlayer(playerIndex: number, tileType: TileType): number | undefined {
+            if (this.getTeamIndex() !== this._war.getPlayer(playerIndex)!.getTeamIndex()) {
+                return undefined;
+            } else {
+                return this.getVisionRange() + this.getVisionRangeBonusOnTile(tileType);
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////

@@ -1,10 +1,11 @@
 
 namespace TinyWars.MultiCustomWar {
-    import Types        = Utility.Types;
-    import Helpers      = Utility.Helpers;
-    import Logger       = Utility.Logger;
-    import Visibility   = Utility.VisibilityCalculator;
-    import MapModel     = WarMap.WarMapModel;
+    import Types            = Utility.Types;
+    import Helpers          = Utility.Helpers;
+    import Logger           = Utility.Logger;
+    import Visibility       = Utility.VisibilityHelpers;
+    import GridIndexHelpers = Utility.GridIndexHelpers;
+    import MapModel         = WarMap.WarMapModel;
 
     export class McUnitMap {
         private _war            : McWar;
@@ -144,7 +145,7 @@ namespace TinyWars.MultiCustomWar {
         }
 
         public swapUnit(gridIndex1: Types.GridIndex, gridIndex2: Types.GridIndex): void {
-            if (!Helpers.checkIsGridIndexEqual(gridIndex1, gridIndex2)) {
+            if (!GridIndexHelpers.checkIsEqual(gridIndex1, gridIndex2)) {
                 const {x: x1, y: y1}    = gridIndex1;
                 const {x: x2, y: y2}    = gridIndex1;
                 const map               = this._map;

@@ -1446,6 +1446,11 @@ namespace TinyWars.ConfigManager {
         return (types != null) && (types.indexOf(unitType) >= 0);
     }
 
+    export function checkIsTileTypeInCategory(version: number, tileType: TileType, category: TileCategory): boolean {
+        const types = getTileTypesByCategory(version, category);
+        return (types != null) && (types.indexOf(tileType) >= 0);
+    }
+
     export function getUnitMaxPromotion(version: number): number {
         return _ALL_CONFIGS.get(version)!.maxUnitPromotion!;
     }
