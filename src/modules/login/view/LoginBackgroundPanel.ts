@@ -29,7 +29,7 @@ namespace TinyWars.Login {
         }
 
         protected _onOpened(): void {
-            this._labelVersion.text = `TinyWars v${ConfigManager.GAME_VERSION}`;
+            this._labelVersion.text = `TinyWars v.${window.CLIENT_VERSION}`;
         }
     }
 }

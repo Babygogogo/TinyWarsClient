@@ -1,6 +1,7 @@
 
 declare interface Window {
-    Main: typeof egret.DisplayObject;
+    CLIENT_VERSION  : string;
+    Main            : typeof egret.DisplayObject;
 }
 
 class Main extends egret.DisplayObjectContainer {
