@@ -91,7 +91,7 @@ namespace TinyWars.MultiCustomWar {
                 nextUnitId  : this.getNextUnitId(),
             };
         }
-        public serializeForPlayerIndex(playerIndex: number): Types.SerializedMcUnitMap {
+        public serializeForPlayer(playerIndex: number): Types.SerializedMcUnitMap {
             const war = this._war;
             const units: Types.SerializedMcUnit[] = [];
             this.forEachUnitOnMap(unit => {

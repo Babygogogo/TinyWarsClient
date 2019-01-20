@@ -68,7 +68,7 @@ namespace TinyWars.MultiCustomWar {
                 mapsForPath             : mapsForPath.length ? mapsForPath : undefined,
             };
         }
-        public serializeForPlayerIndex(targetPlayerIndex: number): SerializedMcFogMap {
+        public serializeForPlayer(targetPlayerIndex: number): SerializedMcFogMap {
             const mapSize           = this.getMapSize();
             const targetTeamIndex   = this._war.getPlayer(targetPlayerIndex)!.getTeamIndex();
             const mapsForPath: Types.SerializedMcFogMapForPath[] = [];

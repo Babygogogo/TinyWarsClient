@@ -86,7 +86,7 @@ namespace TinyWars.MultiCustomWar {
             this.forEachTile(tile => tile.startRunning(war));
         }
 
-        public serialize(): SerializedMcTileMap {
+        public serialize(): SerializedMcTileMap | undefined {
             const mapData           = this._templateMap;
             const { width, height } = this.getMapSize();
             const map               = this._map;
@@ -97,9 +97,9 @@ namespace TinyWars.MultiCustomWar {
                     (checkShouldSerializeTile(tileData, mapData, x + y * width)) && (tilesData.push(tileData));
                 }
             }
-            return tilesData.length ? { tiles: tilesData } : {};
+            return tilesData.length ? { tiles: tilesData } : undefined;
         }
-        public serializeForPlayer(playerIndex: number): SerializedMcTileMap {
+        public serializeForPlayer(playerIndex: number): SerializedMcTileMap | undefined {
             const mapData           = this._templateMap;
             const { width, height } = this.getMapSize();
             const map               = this._map;
@@ -110,7 +110,7 @@ namespace TinyWars.MultiCustomWar {
                     (checkShouldSerializeTile(tileData, mapData, x + y * width)) && (tilesData.push(tileData));
                 }
             }
-            return tilesData.length ? { tiles: tilesData } : {};
+            return tilesData.length ? { tiles: tilesData } : undefined;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

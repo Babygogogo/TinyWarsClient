@@ -117,6 +117,36 @@ namespace TinyWars.Utility.Types {
         fromUnits   : VisibilityFromUnits,
     }
 
+    export type MapIndexKey = {
+        mapDesigner : string;
+        mapName     : string;
+        mapVersion  : number;
+    }
+
+    export type TemplateMap = {
+        mapDesigner : string;
+        mapName     : string;
+        mapVersion  : number;
+        mapWidth    : number;
+        mapHeight   : number;
+        playersCount: number;
+        tileBases   : number[];
+        tileObjects : number[];
+        units       : number[];
+    }
+
+
+    export type UnitViewData = {
+        configVersion: number;
+
+        gridX: number;
+        gridY: number;
+
+        viewId: number;
+
+        unitId: number;
+    }
+
     export interface SerializedMcTile extends ProtoTypes.ISerializedMcTile {
         gridX           : number;
         gridY           : number;
@@ -151,35 +181,10 @@ namespace TinyWars.Utility.Types {
         playerIndex : number;
         encodedMap  : string;
     }
-
-    export type MapIndexKey = {
-        mapDesigner : string;
-        mapName     : string;
-        mapVersion  : number;
-    }
-
-    export type TemplateMap = {
-        mapDesigner : string;
-        mapName     : string;
-        mapVersion  : number;
-        mapWidth    : number;
-        mapHeight   : number;
-        playersCount: number;
-        tileBases   : number[];
-        tileObjects : number[];
-        units       : number[];
-    }
-
-
-    export type UnitViewData = {
-        configVersion: number;
-
-        gridX: number;
-        gridY: number;
-
-        viewId: number;
-
-        unitId: number;
+    export interface SerializedMcField extends ProtoTypes.ISerializedMcField {
+        fogMap  : SerializedMcFogMap;
+        unitMap?: SerializedMcUnitMap;
+        tileMap?: SerializedMcTileMap;
     }
 
     ////////////////////////////////////////////////////////////////////////////////
