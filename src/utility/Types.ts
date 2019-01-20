@@ -108,6 +108,15 @@ namespace TinyWars.Utility.Types {
         isBlocked       : boolean;
     }
 
+    export type VisibilityFromPaths = 0 | 1 | 2;
+    export type VisibilityFromTiles = 0 | 1;
+    export type VisibilityFromUnits = 0 | 1;
+    export type Visibility          = {
+        fromPaths   : VisibilityFromPaths,
+        fromTiles   : VisibilityFromTiles,
+        fromUnits   : VisibilityFromUnits,
+    }
+
     export interface SerializedMcTile extends ProtoTypes.ISerializedMcTile {
         gridX           : number;
         gridY           : number;

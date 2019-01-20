@@ -8,6 +8,10 @@ namespace TinyWars.MultiCustomWar {
         public constructor() {
         }
 
+        public checkHasFogByDefault(): boolean {
+            return false;
+        }
+
         public getPlayerManager(): McPlayerManager {
             return this._playerManager;
         }

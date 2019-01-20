@@ -96,5 +96,11 @@ namespace TinyWars.MultiCustomWar {
             const player = this.getLoggedInPlayer();
             return player ? player.getPlayerIndex() : undefined;
         }
+
+        public forEachPlayer(func: (p: McPlayer) => void): void {
+            for (const [, player] of this._players) {
+                func(player);
+            }
+        }
     }
 }
