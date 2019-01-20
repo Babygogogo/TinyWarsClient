@@ -201,10 +201,15 @@ namespace TinyWars.Utility.Helpers {
         return text;
     }
 
-    export function createEmptyMap<T>(mapWidth: number): T[][] {
+    export function createEmptyMap<T>(mapWidth: number, mapHeight?: number, defaultValue?: T): T[][] {
         const map = new Array<T[]>(mapWidth);
         for (let i = 0; i < mapWidth; ++i) {
-            map[i] = [];
+            if (!mapHeight) {
+                map[i] = [];
+            } else {
+                map[i] = new Array(mapHeight);
+                (defaultValue != null) && (map[i].fill(defaultValue));
+            }
         }
         return map;
     }

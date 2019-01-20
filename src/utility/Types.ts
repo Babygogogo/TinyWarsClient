@@ -102,6 +102,12 @@ namespace TinyWars.Utility.Types {
         [moveType: number]: number | undefined;
     }
 
+    export type MovePath = {
+        nodes           : GridIndex[];
+        fuelConsumption : number;
+        isBlocked       : boolean;
+    }
+
     export interface SerializedMcTile extends ProtoTypes.ISerializedMcTile {
         gridX           : number;
         gridY           : number;
@@ -128,6 +134,13 @@ namespace TinyWars.Utility.Types {
         playerIndex     : number;
         teamIndex       : number;
         userId          : number;
+    }
+    export interface SerializedMcFogMap extends ProtoTypes.ISerializedMcFogMap {
+        mapsForPath?: SerializedMcFogMapForPath[];
+    }
+    export interface SerializedMcFogMapForPath extends ProtoTypes.ISerializedMcFogMapForPath {
+        playerIndex : number;
+        encodedMap  : string;
     }
 
     export type MapIndexKey = {
@@ -266,5 +279,18 @@ namespace TinyWars.Utility.Types {
     export const enum WeaponType {
         Primary     = 0,
         Secondary   = 1,
+    }
+
+    export const enum ForceFogCode {
+        None,
+        Clear,
+        Fog,
+    }
+
+    export const enum Direction {
+        Left,
+        Right,
+        Up,
+        Down,
     }
 }
