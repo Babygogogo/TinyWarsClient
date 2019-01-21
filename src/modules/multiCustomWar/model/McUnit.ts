@@ -207,6 +207,18 @@ namespace TinyWars.MultiCustomWar {
             return this._templateCfg.isAffectedByLuck === 1;
         }
 
+        public updateOnRepaired(repairHp: number): void {
+            this.setCurrentHp(this.getCurrentHp() + repairHp);
+            this.setCurrentFuel(this.getMaxFuel());
+            this.setPrimaryWeaponCurrentAmmo(this.getPrimaryWeaponMaxAmmo());
+            this.setFlareCurrentAmmo(this.getFlareMaxAmmo());
+        }
+        public updateOnSupplied(): void {
+            this.setCurrentFuel(this.getMaxFuel());
+            this.setPrimaryWeaponCurrentAmmo(this.getPrimaryWeaponMaxAmmo());
+            this.setFlareCurrentAmmo(this.getFlareMaxAmmo());
+        }
+
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for weapon.
         ////////////////////////////////////////////////////////////////////////////////
@@ -445,8 +457,11 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for produce self.
         ////////////////////////////////////////////////////////////////////////////////
-        public getProductionCost(): number {
+        public getProductionBaseCost(): number {
             return this._templateCfg.productionCost;
+        }
+        public getProductionFinalCost(): number {
+            return this.getProductionBaseCost();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -592,10 +607,12 @@ namespace TinyWars.MultiCustomWar {
         public checkCanSupplyLoadedUnit(): boolean {
             return this._templateCfg.canSupplyLoadedUnits === 1;
         }
-        public checkCanRepairLoadedUnit(): boolean {
-            return this.getRepairAmountForLoadedUnit() != null;
+        private _checkCanRepairLoadedUnit(unit: McUnit): boolean {
+            return (this.getNormalizedRepairHpForLoadedUnit() != null)
+                && (unit.getLoaderUnitId() === this.getUnitId())
+                && ((unit.getCurrentHp() < unit.getMaxHp()) || (unit.checkCanBeSupplied()));
         }
-        public getRepairAmountForLoadedUnit(): number | undefined | null {
+        public getNormalizedRepairHpForLoadedUnit(): number | undefined | null {
             return this._templateCfg.repairAmountForLoadedUnits;
         }
 
@@ -604,6 +621,34 @@ namespace TinyWars.MultiCustomWar {
         }
         public getLoaderUnitId(): number | undefined {
             return this._loaderUnitId;
+        }
+        public getLoaderUnit(): McUnit | undefined {
+            const id = this.getLoaderUnitId();
+            if (id == null) {
+                return undefined;
+            } else {
+                const unitMap = this._war.getUnitMap();
+                return unitMap.getUnitLoadedById(id) || unitMap.getUnitOnMap(this.getGridIndex());
+            }
+        }
+
+        public getRepairHpAndCostForLoadedUnit(unit: McUnit): Types.RepairHpAndCost | undefined {
+            if (!this._checkCanRepairLoadedUnit(unit)) {
+                return undefined;
+            } else {
+                const maxNormalizedHp       = ConfigManager.MAX_UNIT_NORMALIZED_HP;
+                const productionCost        = unit.getProductionFinalCost();
+                const normalizedCurrentHp   = unit.getNormalizedCurrentHp();
+                const normalizedRepairHp    = Math.min(
+                    maxNormalizedHp - normalizedCurrentHp,
+                    this.getNormalizedRepairHpForLoadedUnit()!,
+                    Math.floor(this._war.getPlayer(unit.getPlayerIndex())!.getFund() * maxNormalizedHp / productionCost)
+                );
+                return {
+                    hp  : (normalizedRepairHp + normalizedCurrentHp) * ConfigManager.UNIT_HP_NORMALIZER - unit.getCurrentHp(),
+                    cost: Math.floor(normalizedRepairHp * productionCost / maxNormalizedHp),
+                };
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -650,11 +695,11 @@ namespace TinyWars.MultiCustomWar {
             return cfg ? cfg.visionBonus || 0 : 0;
         }
 
-        public getVisionRangeForPlayer(playerIndex: number, tileType: TileType): number | undefined {
+        public getVisionRangeForPlayer(playerIndex: number, gridIndex: Types.GridIndex): number | undefined {
             if (this.getTeamIndex() !== this._war.getPlayer(playerIndex)!.getTeamIndex()) {
                 return undefined;
             } else {
-                return this.getVisionRange() + this.getVisionRangeBonusOnTile(tileType);
+                return this.getVisionRange() + this.getVisionRangeBonusOnTile(this._war.getTileMap().getTile(gridIndex).getType());
             }
         }
 
@@ -676,7 +721,7 @@ namespace TinyWars.MultiCustomWar {
                 const joinedHp  = this.getNormalizedCurrentHp() + unit.getNormalizedCurrentHp();
                 return joinedHp <= maxHp
                     ? 0
-                    : Math.floor((joinedHp - maxHp) * this.getProductionCost() / 10);
+                    : Math.floor((joinedHp - maxHp) * this.getProductionFinalCost() / 10);
             }
         }
     }

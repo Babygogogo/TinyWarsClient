@@ -131,10 +131,6 @@ namespace TinyWars.MultiCustomWar {
             return this._templateCfg.maxHp;
         }
 
-        public getNormalizedCurrentHp(): number | undefined {
-            const currentHp = this.getCurrentHp();
-            return currentHp != null ? Helpers.getNormalizedHp(currentHp) : undefined;
-        }
         public getCurrentHp(): number | undefined {
             return this._currentHp;
         }
@@ -292,6 +288,14 @@ namespace TinyWars.MultiCustomWar {
         public getIncomeAmountPerTurn(): number | undefined {
             return this._templateCfg.incomePerTurn;
         }
+        public getIncomeForPlayer(playerIndex: number): number {
+            const baseIncome = this.getIncomeAmountPerTurn();
+            if ((baseIncome == null) || (this.getPlayerIndex() !== playerIndex)) {
+                return 0;
+            } else {
+                return Math.floor(baseIncome * this._war.getSettingsIncomeModifier() / 100);
+            }
+        }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for player index.
@@ -338,18 +342,42 @@ namespace TinyWars.MultiCustomWar {
             return this._templateCfg.repairUnitCategory;
         }
 
-        public getNormalizedRepairAmount(): number | undefined {
+        public getNormalizedRepairHp(): number | undefined | null {
             return this._templateCfg.repairAmount;
         }
 
-        public checkCanRepairUnit(unit: McUnit): boolean {
+        private _checkCanRepairUnit(unit: McUnit): boolean {
             const category = this.getRepairUnitCategory();
             return (category != null)
+                && ((unit.getCurrentHp() < unit.getMaxHp()) || (unit.checkCanBeSupplied()))
                 && (unit.getTeamIndex() === this.getTeamIndex())
                 && (ConfigManager.checkIsUnitTypeInCategory(this._configVersion, unit.getType(), category));
         }
         public checkCanSupplyUnit(unit: McUnit): boolean {
-            return (this.checkCanRepairUnit(unit)) && (unit.checkCanBeSupplied());
+            const category = this.getRepairUnitCategory();
+            return (category != null)
+                && (unit.checkCanBeSupplied())
+                && (unit.getTeamIndex() === this.getTeamIndex())
+                && (ConfigManager.checkIsUnitTypeInCategory(this._configVersion, unit.getType(), category));
+        }
+
+        public getRepairHpAndCostForUnit(unit: McUnit): Types.RepairHpAndCost | undefined {
+            if (!this._checkCanRepairUnit(unit)) {
+                return undefined;
+            } else {
+                const maxNormalizedHp       = ConfigManager.MAX_UNIT_NORMALIZED_HP;
+                const productionCost        = unit.getProductionFinalCost();
+                const normalizedCurrentHp   = unit.getNormalizedCurrentHp();
+                const normalizedRepairHp    = Math.min(
+                    maxNormalizedHp - normalizedCurrentHp,
+                    this.getNormalizedRepairHp()!,
+                    Math.floor(this._war.getPlayer(unit.getPlayerIndex())!.getFund() * maxNormalizedHp / productionCost)
+                );
+                return {
+                    hp  : (normalizedRepairHp + normalizedCurrentHp) * ConfigManager.UNIT_HP_NORMALIZER - unit.getCurrentHp(),
+                    cost: Math.floor(normalizedRepairHp * productionCost / maxNormalizedHp),
+                };
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////

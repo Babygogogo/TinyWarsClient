@@ -108,6 +108,11 @@ namespace TinyWars.Utility.Types {
         isBlocked       : boolean;
     }
 
+    export type RepairHpAndCost = {
+        hp  : number;
+        cost: number;
+    }
+
     export type VisibilityFromPaths = 0 | 1 | 2;
     export type VisibilityFromTiles = 0 | 1;
     export type VisibilityFromUnits = 0 | 1;
@@ -134,7 +139,6 @@ namespace TinyWars.Utility.Types {
         tileObjects : number[];
         units       : number[];
     }
-
 
     export type UnitViewData = {
         configVersion: number;
@@ -185,6 +189,11 @@ namespace TinyWars.Utility.Types {
         fogMap  : SerializedMcFogMap;
         unitMap?: SerializedMcUnitMap;
         tileMap?: SerializedMcTileMap;
+    }
+    export interface SerializedMcTurn extends ProtoTypes.ISerializedMcTurn {
+        turnIndex       : number;
+        playerIndex     : number;
+        turnPhaseCode   : TurnPhaseCode;
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -306,5 +315,22 @@ namespace TinyWars.Utility.Types {
         Right,
         Up,
         Down,
+    }
+
+    export const enum TurnPhaseCode {
+        RequestBeginTurn,
+        Beginning,
+        GetFund,
+        ConsumeFuel,
+        RepairUnitByTile,
+        DestroyUnitsOutOfFuel,
+        RepairUnitByUnit,
+        Main,
+        ResetUnitState,
+        ResetVisionForCurrentPlayer,
+        TickTurnAndPlayerIndex,
+        ResetSkillState,
+        ResetVisionForNextPlayer,
+        ResetVotesForDraw,
     }
 }

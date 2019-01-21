@@ -111,7 +111,7 @@ namespace TinyWars.MultiCustomWar {
         }
 
         public checkHasFogByDefault(): boolean {
-            return this._war.checkHasFogByDefault();
+            return this._war.getSettingsHasFog();
         }
         public checkHasFogCurrently(): boolean {
             const fogCode = this.getForceFogCode();
@@ -149,10 +149,9 @@ namespace TinyWars.MultiCustomWar {
         public updateMapFromPathsByUnitAndPath(unit: McUnit, path: GridIndex[]): void {
             const playerIndex   = unit.getPlayerIndex();
             const map           = this._mapsFromPaths.get(playerIndex)!;
-            const tileMap       = this._war.getTileMap();
             const mapSize       = this.getMapSize();
             for (const pathNode of path) {
-                const visionRange = unit.getVisionRangeForPlayer(playerIndex, tileMap.getTile(pathNode).getType());
+                const visionRange = unit.getVisionRangeForPlayer(playerIndex, pathNode);
                 if (visionRange) {
                     for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(pathNode, 0, 1, mapSize)) {
                         map[gridIndex.x][gridIndex.y] = 2;
@@ -188,11 +187,10 @@ namespace TinyWars.MultiCustomWar {
         public resetMapFromUnitsForPlayer(playerIndex: number): void {
             const map       = this._mapsFromUnits.get(playerIndex)!;
             const mapSize   = this.getMapSize();
-            const tileMap   = this._war.getTileMap();
             fillMap(map, 0);
             this._war.getUnitMap().forEachUnitOnMap(unit => {
                 const gridIndex = unit.getGridIndex();
-                updateMap(map, mapSize, gridIndex, unit.getVisionRangeForPlayer(playerIndex, tileMap.getTile(gridIndex).getType()), 1);
+                updateMap(map, mapSize, gridIndex, unit.getVisionRangeForPlayer(playerIndex, gridIndex), 1);
             });
         }
         public updateMapFromUnitsForPlayerOnArriving(playerIndex: number, gridIndex: GridIndex, vision: number): void {

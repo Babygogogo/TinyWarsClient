@@ -4,12 +4,16 @@ namespace TinyWars.MultiCustomWar {
         private _playerManager  : McPlayerManager;
         private _unitMap        : McUnitMap;
         private _tileMap        : McTileMap;
+        private _fogMap         : McFogMap;
 
         public constructor() {
         }
 
-        public checkHasFogByDefault(): boolean {
+        public getSettingsHasFog(): boolean {
             return false;
+        }
+        public getSettingsIncomeModifier(): number {
+            return 0;
         }
 
         public getPlayerManager(): McPlayerManager {
@@ -24,6 +28,9 @@ namespace TinyWars.MultiCustomWar {
         }
         public getTileMap(): McTileMap {
             return this._tileMap;
+        }
+        public getFogMap(): McFogMap {
+            return this._fogMap;
         }
     }
 }
