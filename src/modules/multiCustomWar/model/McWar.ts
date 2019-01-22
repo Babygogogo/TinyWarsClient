@@ -6,6 +6,8 @@ namespace TinyWars.MultiCustomWar {
         private _tileMap        : McTileMap;
         private _fogMap         : McFogMap;
 
+        private _isEnded        = false;
+
         public constructor() {
         }
 
@@ -14,6 +16,13 @@ namespace TinyWars.MultiCustomWar {
         }
         public getSettingsIncomeModifier(): number {
             return 0;
+        }
+
+        public setIsEnded(ended: boolean): void {
+            this._isEnded = ended;
+        }
+        public getIsEnded(): boolean {
+            return this._isEnded;
         }
 
         public getPlayerManager(): McPlayerManager {

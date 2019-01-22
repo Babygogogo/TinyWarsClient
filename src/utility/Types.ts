@@ -319,7 +319,6 @@ namespace TinyWars.Utility.Types {
 
     export const enum TurnPhaseCode {
         RequestBeginTurn,
-        Beginning,
         GetFund,
         ConsumeFuel,
         RepairUnitByTile,

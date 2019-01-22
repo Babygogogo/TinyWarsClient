@@ -133,6 +133,12 @@ namespace TinyWars.MultiCustomWar {
             return this._forceExpirePlayerIndex;
         }
 
+        public resetAllMapsForPlayer(playerIndex: number): void {
+            this.resetMapFromPathsForPlayer(playerIndex);
+            this.resetMapFromTilesForPlayer(playerIndex);
+            this.resetMapFromUnitsForPlayer(playerIndex);
+        }
+
         public resetMapFromPathsForPlayer(playerIndex: number, encodedData?: string): void {
             const map = this._mapsFromPaths.get(playerIndex)!;
             if (encodedData == null) {

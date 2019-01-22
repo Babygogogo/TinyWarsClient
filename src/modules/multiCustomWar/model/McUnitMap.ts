@@ -179,13 +179,22 @@ namespace TinyWars.MultiCustomWar {
         public removeUnitLoaded(unitId: number): void {
             this._loadedUnits.delete(unitId);
         }
+        public removeUnitsLoadedForPlayer(playerIndex: number): void {
+            const units = this._loadedUnits;
+            for (const [unitId, unit] of units) {
+                if (unit.getPlayerIndex() === playerIndex) {
+                    units.delete(unitId);
+                }
+            }
+        }
 
+        public forEachUnit(func: (unit: McUnit) => any): void {
+            this.forEachUnitOnMap(func);
+            this.forEachUnitLoaded(func);
+        }
         public forEachUnitOnMap(func: (unit: McUnit) => any): void {
-            const { width, height } = this.getMapSize();
-            const map               = this._map;
-            for (let x = 0; x < width; ++x) {
-                for (let y = 0; y < height; ++y) {
-                    const unit = map[x][y];
+            for (const column of this._map) {
+                for (const unit of column) {
                     (unit) && (func(unit));
                 }
             }
@@ -194,6 +203,25 @@ namespace TinyWars.MultiCustomWar {
             for (const [, unit] of this._loadedUnits) {
                 func(unit);
             }
+        }
+
+        public countUnitsOnMapForPlayer(playerIndex: number): number {
+            let count = 0;
+            this.forEachUnitOnMap(unit => {
+                (unit.getPlayerIndex() === playerIndex) && (++count);
+            });
+            return count;
+        }
+
+        public checkHasUnit(playerIndex: number): boolean {
+            for (const column of this._map) {
+                for (const unit of column) {
+                    if ((unit) && (unit.getPlayerIndex() === playerIndex)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
     }
 }
