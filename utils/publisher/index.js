@@ -14,6 +14,7 @@ const TSCONFIG_FOR_PUBLISH  = {
         "lib": [
             "dom",
             "es5",
+            "es6",
             "es2015.collection",
             "es2015.iterable",
             "es2015.promise"
