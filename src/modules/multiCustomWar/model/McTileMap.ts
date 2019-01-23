@@ -1,5 +1,4 @@
 
-
 namespace TinyWars.MultiCustomWar {
     import Types                = Utility.Types;
     import WarMapModel          = WarMap.WarMapModel;

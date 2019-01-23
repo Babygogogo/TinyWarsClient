@@ -12,8 +12,6 @@ namespace TinyWars.MultiCustomWar {
         private _phaseCode          : TurnPhaseCode;
         private _war                : McWar;
 
-        private _shouldCheckPlayerAliveInPhaseMain = false;
-
         public constructor() {
         }
 
@@ -47,7 +45,26 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The functions for running turn.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public runTurn(): void {
+        public beginPhaseGetFund(): void {
+            Logger.assert(
+                this.getPhaseCode() === TurnPhaseCode.RequestBeginTurn,
+                "McTurnManager.beginPhaseGetFund() invalid current phase code: ", this.getPhaseCode()
+            );
+
+            this._setPhaseCode(TurnPhaseCode.GetFund);
+            this._runTurn();
+        }
+        public endPhaseMain(): void {
+            Logger.assert(
+                this.getPhaseCode() === TurnPhaseCode.Main,
+                "McTurnManager.endPhaseMain() invalid current phase code: ", this.getPhaseCode()
+            );
+
+            this._setPhaseCode(TurnPhaseCode.ResetUnitState);
+            this._runTurn();
+        }
+
+        private _runTurn(): void {
             if (this.getPhaseCode() === TurnPhaseCode.GetFund) {
                 this._runPhaseGetFund();
                 this._setPhaseCode(TurnPhaseCode.ConsumeFuel);
@@ -101,27 +118,6 @@ namespace TinyWars.MultiCustomWar {
                 // DO NOT update phase code.
             }
         }
-
-        public beginPhaseGetFund(): void {
-            Logger.assert(
-                this.getPhaseCode() === TurnPhaseCode.RequestBeginTurn,
-                "McTurnManager.beginPhaseGetFund() invalid current phase code: ", this.getPhaseCode()
-            );
-
-            this._setPhaseCode(TurnPhaseCode.GetFund);
-            this.runTurn();
-        }
-
-        public endPhaseMain(): void {
-            Logger.assert(
-                this.getPhaseCode() === TurnPhaseCode.Main,
-                "McTurnManager.endPhaseMain() invalid current phase code: ", this.getPhaseCode()
-            );
-
-            this._setPhaseCode(TurnPhaseCode.ResetUnitState);
-            this.runTurn();
-        }
-
         private _runPhaseGetFund(): void {
             const playerIndex   = this.getPlayerIndexInTurn();
             let totalIncome     = 0;
@@ -192,23 +188,17 @@ namespace TinyWars.MultiCustomWar {
                     unit.updateOnSupplied();
                 }
             }
-
-            this._shouldCheckPlayerAliveInPhaseMain = true;
         }
         private _runPhaseMain(): void {
-            if (this._shouldCheckPlayerAliveInPhaseMain) {
-                this._shouldCheckPlayerAliveInPhaseMain = false;
+            const war           = this._war;
+            const playerIndex   = this.getPlayerIndexInTurn();
+            if (!war.getUnitMap().checkHasUnit(playerIndex)) {
+                DestructionHelpers.destroyPlayerForce(war, playerIndex);
 
-                const war           = this._war;
-                const playerIndex   = this.getPlayerIndexInTurn();
-                if (!war.getUnitMap().checkHasUnit(playerIndex)) {
-                    DestructionHelpers.destroyPlayerForce(war, playerIndex);
-
-                    if (war.getPlayerManager().getAliveTeamsCount() <= 1) {
-                        war.setIsEnded(true);
-                    } else {
-                        this.endPhaseMain();
-                    }
+                if (war.getPlayerManager().getAliveTeamsCount() <= 1) {
+                    war.setIsEnded(true);
+                } else {
+                    this.endPhaseMain();
                 }
             }
         }
