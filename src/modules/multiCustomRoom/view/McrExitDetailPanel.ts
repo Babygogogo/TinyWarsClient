@@ -52,7 +52,7 @@ namespace TinyWars.MultiCustomRoom {
             this._setAutoAdjustHeightEnabled();
             this._setTouchMaskEnabled();
             this._callbackForTouchMask = () => McrExitDetailPanel.hide();
-            this.skinName = "resource/skins/multiCustomWarRoom/McwrExitDetailPanel.exml";
+            this.skinName = "resource/skins/multiCustomRoom/McrExitDetailPanel.exml";
         }
 
         protected _onFirstOpened(): void {

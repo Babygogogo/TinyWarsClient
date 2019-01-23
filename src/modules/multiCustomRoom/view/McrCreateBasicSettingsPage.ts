@@ -41,7 +41,7 @@ namespace TinyWars.MultiCustomRoom {
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/multiCustomWarRoom/McwrCreateBasicSettingsPage.exml";
+            this.skinName = "resource/skins/multiCustomRoom/McrCreateBasicSettingsPage.exml";
         }
 
         protected _onFirstOpened(): void {

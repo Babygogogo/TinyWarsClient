@@ -50,7 +50,7 @@ namespace TinyWars.MultiCustomRoom {
             super();
 
             this._setAutoAdjustHeightEnabled();
-            this.skinName = "resource/skins/multiCustomWarRoom/McwrExitMapListPanel.exml";
+            this.skinName = "resource/skins/multiCustomRoom/McrExitMapListPanel.exml";
         }
 
         protected _onFirstOpened(): void {

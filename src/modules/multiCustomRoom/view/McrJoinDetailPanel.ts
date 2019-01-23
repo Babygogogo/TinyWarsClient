@@ -65,7 +65,7 @@ namespace TinyWars.MultiCustomRoom {
             this._setAutoAdjustHeightEnabled();
             this._setTouchMaskEnabled();
             this._callbackForTouchMask = () => McrJoinDetailPanel.hide();
-            this.skinName = "resource/skins/multiCustomWarRoom/McwrJoinDetailPanel.exml";
+            this.skinName = "resource/skins/multiCustomRoom/McrJoinDetailPanel.exml";
         }
 
         protected _onFirstOpened(): void {
