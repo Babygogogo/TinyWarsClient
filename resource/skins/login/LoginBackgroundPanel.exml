@@ -2,6 +2,8 @@
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
     <GameUi:UiImage source="bg_jpg" horizontalCenter="0" verticalCenter="0" />
+    <GameUi:UiLabel text="Caution: The game is under development.\nAny of your game data may be deleted without notice."
+                    stroke="2" size="22" horizontalCenter="0" textAlign="center"  verticalCenter="180"/>
     <GameUi:UiLabel id="_labelVersion" text="TinyWars  v19.0118.0149" stroke="2" bottom="2" right="2" italic="true"
                     size="20" />
 </e:Skin>
