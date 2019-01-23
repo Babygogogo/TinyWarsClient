@@ -78,21 +78,21 @@ namespace TinyWars.Lobby {
                     callback: (): void => {
                         LobbyPanel.hide();
                         WarMap.WarMapProxy.reqGetNewestMapInfos();
-                        MultiCustomWarRoom.McwrCreateMapListPanel.show();
+                        MultiCustomRoom.McrCreateMapListPanel.show();
                     },
                 },
                 {
                     name    : Lang.getText(Lang.BigType.B01, Lang.SubType.S23),
                     callback: (): void => {
                         LobbyPanel.hide();
-                        MultiCustomWarRoom.McwrJoinMapListPanel.show();
+                        MultiCustomRoom.McrJoinMapListPanel.show();
                     },
                 },
                 {
                     name    : Lang.getText(Lang.BigType.B01, Lang.SubType.S22),
                     callback: (): void => {
                         LobbyPanel.hide();
-                        MultiCustomWarRoom.McwrExitMapListPanel.show();
+                        MultiCustomRoom.McrExitMapListPanel.show();
                     },
                 },
             ];

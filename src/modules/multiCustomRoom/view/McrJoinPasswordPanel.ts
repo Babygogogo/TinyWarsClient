@@ -1,5 +1,5 @@
 
-namespace TinyWars.MultiCustomWarRoom {
+namespace TinyWars.MultiCustomRoom {
     import ProtoTypes   = Utility.ProtoTypes;
     import Helpers      = Utility.Helpers;
     import Notify       = Utility.Notify;
@@ -8,29 +8,29 @@ namespace TinyWars.MultiCustomWarRoom {
     import Types        = Utility.Types;
     import HelpPanel    = Common.HelpPanel;
 
-    export class McwrJoinPasswordPanel extends GameUi.UiPanel {
+    export class McrJoinPasswordPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: McwrJoinPasswordPanel;
+        private static _instance: McrJoinPasswordPanel;
 
         private _inputWarPassword   : GameUi.UiLabel;
         private _labelWarName       : GameUi.UiLabel;
         private _btnConfirm         : GameUi.UiButton;
         private _btnCancel          : GameUi.UiButton;
 
-        private _openData: ProtoTypes.IWaitingMultiCustomWarInfo;
+        private _openData: ProtoTypes.IMcrWaitingInfo;
 
-        public static show(data: ProtoTypes.IWaitingMultiCustomWarInfo): void {
-            if (!McwrJoinPasswordPanel._instance) {
-                McwrJoinPasswordPanel._instance = new McwrJoinPasswordPanel();
+        public static show(data: ProtoTypes.IMcrWaitingInfo): void {
+            if (!McrJoinPasswordPanel._instance) {
+                McrJoinPasswordPanel._instance = new McrJoinPasswordPanel();
             }
-            McwrJoinPasswordPanel._instance._openData = data;
-            McwrJoinPasswordPanel._instance.open();
+            McrJoinPasswordPanel._instance._openData = data;
+            McrJoinPasswordPanel._instance.open();
         }
         public static hide(): void {
-            if (McwrJoinPasswordPanel._instance) {
-                McwrJoinPasswordPanel._instance.close();
+            if (McrJoinPasswordPanel._instance) {
+                McrJoinPasswordPanel._instance.close();
             }
         }
 
@@ -39,7 +39,7 @@ namespace TinyWars.MultiCustomWarRoom {
 
             this._setAutoAdjustHeightEnabled();
             this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => McwrJoinPasswordPanel.hide();
+            this._callbackForTouchMask = () => McrJoinPasswordPanel.hide();
             this.skinName = "resource/skins/multiCustomWarRoom/McwrJoinPasswordPanel.exml";
         }
 
@@ -69,15 +69,15 @@ namespace TinyWars.MultiCustomWarRoom {
         }
 
         private _onTouchedBtnCancel(e: egret.TouchEvent): void {
-            McwrJoinPasswordPanel.hide();
+            McrJoinPasswordPanel.hide();
         }
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
             if (this._inputWarPassword.text !== this._openData.warPassword) {
                 FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S17));
             } else {
-                McwrJoinPasswordPanel.hide();
-                McwrJoinDetailPanel.show(this._openData);
+                McrJoinPasswordPanel.hide();
+                McrJoinDetailPanel.show(this._openData);
             }
         }
 

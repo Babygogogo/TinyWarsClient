@@ -1,5 +1,5 @@
 
-namespace TinyWars.MultiCustomWarRoom {
+namespace TinyWars.MultiCustomRoom {
     import Types        = Utility.Types;
     import ProtoTypes   = Utility.ProtoTypes;
     import MapModel     = WarMap.WarMapModel;
@@ -61,7 +61,7 @@ namespace TinyWars.MultiCustomWarRoom {
         visionRangeModifier : number;
     }
 
-    export namespace McwrModel {
+    export namespace McrModel {
         const _dataForCreateWar: DataForCreateWar = {
             mapName         : "",
             mapDesigner     : "",
@@ -84,8 +84,8 @@ namespace TinyWars.MultiCustomWarRoom {
             attackPowerModifier : 0,
             visionRangeModifier : 0,
         };
-        let _unjoinedWarInfos: ProtoTypes.IWaitingMultiCustomWarInfo[];
-        let _joinedWarInfos: ProtoTypes.IWaitingMultiCustomWarInfo[];
+        let _unjoinedWarInfos: ProtoTypes.IMcrWaitingInfo[];
+        let _joinedWarInfos: ProtoTypes.IMcrWaitingInfo[];
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for creating wars.
@@ -332,20 +332,20 @@ namespace TinyWars.MultiCustomWarRoom {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for joining wars.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        export function setUnjoinedWarInfos(infos: ProtoTypes.IWaitingMultiCustomWarInfo[]): void {
+        export function setUnjoinedWarInfos(infos: ProtoTypes.IMcrWaitingInfo[]): void {
             _unjoinedWarInfos = infos;
         }
-        export function getUnjoinedWarInfos(): ProtoTypes.IWaitingMultiCustomWarInfo[] {
+        export function getUnjoinedWarInfos(): ProtoTypes.IMcrWaitingInfo[] {
             return _unjoinedWarInfos;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for exiting joined wars.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        export function setJoinedWarInfos(infos: ProtoTypes.IWaitingMultiCustomWarInfo[]): void {
+        export function setJoinedWarInfos(infos: ProtoTypes.IMcrWaitingInfo[]): void {
             _joinedWarInfos = infos;
         }
-        export function getJoinedWarInfos(): ProtoTypes.IWaitingMultiCustomWarInfo[] {
+        export function getJoinedWarInfos(): ProtoTypes.IMcrWaitingInfo[] {
             return _joinedWarInfos;
         }
     }

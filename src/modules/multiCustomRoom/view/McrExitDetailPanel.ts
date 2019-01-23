@@ -1,5 +1,5 @@
 
-namespace TinyWars.MultiCustomWarRoom {
+namespace TinyWars.MultiCustomRoom {
     import ProtoTypes   = Utility.ProtoTypes;
     import Helpers      = Utility.Helpers;
     import Notify       = Utility.Notify;
@@ -8,11 +8,11 @@ namespace TinyWars.MultiCustomWarRoom {
     import Types        = Utility.Types;
     import HelpPanel    = Common.HelpPanel;
 
-    export class McwrExitDetailPanel extends GameUi.UiPanel {
+    export class McrExitDetailPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: McwrExitDetailPanel;
+        private static _instance: McrExitDetailPanel;
 
         private _btnHelpFog                 : GameUi.UiButton;
         private _btnHelpTimeLimit           : GameUi.UiButton;
@@ -31,18 +31,18 @@ namespace TinyWars.MultiCustomWarRoom {
         private _btnConfirm: GameUi.UiButton;
         private _btnCancel : GameUi.UiButton;
 
-        private _openData: ProtoTypes.IWaitingMultiCustomWarInfo;
+        private _openData: ProtoTypes.IMcrWaitingInfo;
 
-        public static show(data: ProtoTypes.IWaitingMultiCustomWarInfo): void {
-            if (!McwrExitDetailPanel._instance) {
-                McwrExitDetailPanel._instance = new McwrExitDetailPanel();
+        public static show(data: ProtoTypes.IMcrWaitingInfo): void {
+            if (!McrExitDetailPanel._instance) {
+                McrExitDetailPanel._instance = new McrExitDetailPanel();
             }
-            McwrExitDetailPanel._instance._openData = data;
-            McwrExitDetailPanel._instance.open();
+            McrExitDetailPanel._instance._openData = data;
+            McrExitDetailPanel._instance.open();
         }
         public static hide(): void {
-            if (McwrExitDetailPanel._instance) {
-                McwrExitDetailPanel._instance.close();
+            if (McrExitDetailPanel._instance) {
+                McrExitDetailPanel._instance.close();
             }
         }
 
@@ -51,7 +51,7 @@ namespace TinyWars.MultiCustomWarRoom {
 
             this._setAutoAdjustHeightEnabled();
             this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => McwrExitDetailPanel.hide();
+            this._callbackForTouchMask = () => McrExitDetailPanel.hide();
             this.skinName = "resource/skins/multiCustomWarRoom/McwrExitDetailPanel.exml";
         }
 
@@ -89,12 +89,12 @@ namespace TinyWars.MultiCustomWarRoom {
         }
 
         private _onTouchedBtnCancel(e: egret.TouchEvent): void {
-            McwrExitDetailPanel.hide();
+            McrExitDetailPanel.hide();
         }
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            McwrProxy.reqExitCustomOnlineWar(this._openData.id);
-            McwrExitDetailPanel.hide();
+            McrProxy.reqExitCustomOnlineWar(this._openData.id);
+            McrExitDetailPanel.hide();
         }
 
         private _updateView(): void {

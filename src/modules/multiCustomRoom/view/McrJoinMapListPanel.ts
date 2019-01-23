@@ -1,5 +1,5 @@
 
-namespace TinyWars.MultiCustomWarRoom {
+namespace TinyWars.MultiCustomRoom {
     import Notify           = Utility.Notify;
     import Types            = Utility.Types;
     import StageManager     = Utility.StageManager;
@@ -10,11 +10,11 @@ namespace TinyWars.MultiCustomWarRoom {
     import TemplateMapModel = WarMap.WarMapModel;
     import TemplateMapProxy = WarMap.WarMapProxy;
 
-    export class McwrJoinMapListPanel extends GameUi.UiPanel {
+    export class McrJoinMapListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: McwrJoinMapListPanel;
+        private static _instance: McrJoinMapListPanel;
 
         private _listWar   : GameUi.UiScrollList;
         private _labelNoWar: GameUi.UiLabel;
@@ -35,14 +35,14 @@ namespace TinyWars.MultiCustomWarRoom {
         private _selectedWarIndex   : number;
 
         public static show(): void {
-            if (!McwrJoinMapListPanel._instance) {
-                McwrJoinMapListPanel._instance = new McwrJoinMapListPanel();
+            if (!McrJoinMapListPanel._instance) {
+                McrJoinMapListPanel._instance = new McrJoinMapListPanel();
             }
-            McwrJoinMapListPanel._instance.open();
+            McrJoinMapListPanel._instance.open();
         }
         public static hide(): void {
-            if (McwrJoinMapListPanel._instance) {
-                McwrJoinMapListPanel._instance.close();
+            if (McrJoinMapListPanel._instance) {
+                McrJoinMapListPanel._instance.close();
             }
         }
 
@@ -56,7 +56,7 @@ namespace TinyWars.MultiCustomWarRoom {
         protected _onFirstOpened(): void {
             this._notifyListeners = [
                 { type: Notify.Type.MouseWheel,                                 callback: this._onNotifyMouseWheel },
-                { type: Notify.Type.SGetUnjoinedWaitingCustomOnlineWarInfos,    callback: this._onNotifySGetUnjoinedWaitingCustomOnlineWarInfos },
+                { type: Notify.Type.SMcrGetUnjoinedWaitingInfos,    callback: this._onNotifySGetUnjoinedWaitingCustomOnlineWarInfos },
             ];
             this._uiListeners = [
                 { ui: this._zoomMap,   callback: this._onTouchBeginZoomMap, eventType: egret.TouchEvent.TOUCH_BEGIN },
@@ -70,7 +70,7 @@ namespace TinyWars.MultiCustomWarRoom {
         protected _onOpened(): void {
             this._groupInfo.visible = false;
 
-            McwrProxy.reqUnjoinedWarInfos();
+            McrProxy.reqUnjoinedWarInfos();
         }
 
         protected _onClosed(): void {
@@ -109,7 +109,7 @@ namespace TinyWars.MultiCustomWarRoom {
         }
 
         private _onNotifySGetUnjoinedWaitingCustomOnlineWarInfos(e: egret.Event): void {
-            const newData        = this._createDataForListWar(McwrModel.getUnjoinedWarInfos());
+            const newData        = this._createDataForListWar(McrModel.getUnjoinedWarInfos());
             this._dataForListWar = newData;
 
             if (newData.length > 0) {
@@ -160,14 +160,14 @@ namespace TinyWars.MultiCustomWarRoom {
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
-            McwrJoinMapListPanel.hide();
+            McrJoinMapListPanel.hide();
             Lobby.LobbyPanel.show();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
-        private _createDataForListWar(infos: ProtoTypes.IWaitingMultiCustomWarInfo[]): DataForWarRenderer[] {
+        private _createDataForListWar(infos: ProtoTypes.IMcrWaitingInfo[]): DataForWarRenderer[] {
             const data: DataForWarRenderer[] = [];
             if (infos) {
                 for (let i = 0; i < infos.length; ++i) {
@@ -182,7 +182,7 @@ namespace TinyWars.MultiCustomWarRoom {
             return data;
         }
 
-        private _createDataForListPlayer(warInfo: ProtoTypes.IWaitingMultiCustomWarInfo, mapInfo: ProtoTypes.IMapInfo): DataForPlayerRenderer[] {
+        private _createDataForListPlayer(warInfo: ProtoTypes.IMcrWaitingInfo, mapInfo: ProtoTypes.IMapInfo): DataForPlayerRenderer[] {
             const data: DataForPlayerRenderer[] = [
                 {
                     playerIndex: 1,
@@ -273,9 +273,9 @@ namespace TinyWars.MultiCustomWarRoom {
     }
 
     type DataForWarRenderer = {
-        warInfo : ProtoTypes.IWaitingMultiCustomWarInfo;
+        warInfo : ProtoTypes.IMcrWaitingInfo;
         index   : number;
-        panel   : McwrJoinMapListPanel;
+        panel   : McrJoinMapListPanel;
     }
 
     class WarRenderer extends eui.ItemRenderer {
@@ -308,9 +308,9 @@ namespace TinyWars.MultiCustomWarRoom {
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
             const data = this.data as DataForWarRenderer;
             if (data.warInfo.warPassword != null) {
-                McwrJoinPasswordPanel.show(data.warInfo);
+                McrJoinPasswordPanel.show(data.warInfo);
             } else {
-                McwrJoinDetailPanel.show(data.warInfo);
+                McrJoinDetailPanel.show(data.warInfo);
             }
         }
     }

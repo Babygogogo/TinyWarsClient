@@ -1,5 +1,5 @@
 
-namespace TinyWars.MultiCustomWarRoom {
+namespace TinyWars.MultiCustomRoom {
     import Lang         = Utility.Lang;
     import Notify       = Utility.Notify;
     import FloatText    = Utility.FloatText;
@@ -7,11 +7,11 @@ namespace TinyWars.MultiCustomWarRoom {
 
     const CONFIRM_INTERVAL_MS = 5000;
 
-    export class McwrCreateSettingsPanel extends GameUi.UiPanel {
+    export class McrCreateSettingsPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: McwrCreateSettingsPanel;
+        private static _instance: McrCreateSettingsPanel;
 
         private _tabSettings: GameUi.UiTab;
         private _btnBack    : GameUi.UiButton;
@@ -21,14 +21,14 @@ namespace TinyWars.MultiCustomWarRoom {
         private _timeoutIdForBtnConfirm: number;
 
         public static show(): void {
-            if (!McwrCreateSettingsPanel._instance) {
-                McwrCreateSettingsPanel._instance = new McwrCreateSettingsPanel();
+            if (!McrCreateSettingsPanel._instance) {
+                McrCreateSettingsPanel._instance = new McrCreateSettingsPanel();
             }
-            McwrCreateSettingsPanel._instance.open();
+            McrCreateSettingsPanel._instance.open();
         }
         public static hide(): void {
-            if (McwrCreateSettingsPanel._instance) {
-                McwrCreateSettingsPanel._instance.close();
+            if (McrCreateSettingsPanel._instance) {
+                McrCreateSettingsPanel._instance.close();
             }
         }
 
@@ -45,7 +45,7 @@ namespace TinyWars.MultiCustomWarRoom {
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
             ];
             this._notifyListeners = [
-                { type: Notify.Type.SCreateCustomOnlineWar, callback: this._onNotifySCreateCustomOnlineWar },
+                { type: Notify.Type.SMcrCreateWar, callback: this._onNotifySCreateCustomOnlineWar },
             ];
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
         }
@@ -54,11 +54,11 @@ namespace TinyWars.MultiCustomWarRoom {
             this._tabSettings.bindData([
                 {
                     tabItemData: { name: Lang.getText(Lang.BigType.B01, Lang.SubType.S02) },
-                    pageClass  : McwrCreateBasicSettingsPage,
+                    pageClass  : McrCreateBasicSettingsPage,
                 },
                 {
                     tabItemData: { name: Lang.getText(Lang.BigType.B01, Lang.SubType.S03) },
-                    pageClass  : McwrCreateAdvancedSettingsPage,
+                    pageClass  : McrCreateAdvancedSettingsPage,
                 },
             ]);
 
@@ -71,12 +71,12 @@ namespace TinyWars.MultiCustomWarRoom {
         }
 
         private _onTouchedBtnBack(e: egret.TouchEvent): void {
-            McwrCreateSettingsPanel.hide();
-            McwrCreateMapListPanel.show();
+            McrCreateSettingsPanel.hide();
+            McrCreateMapListPanel.show();
         }
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            McwrProxy.reqCreate(McwrModel.getCreateWarData());
+            McrProxy.reqCreate(McrModel.getCreateWarData());
 
             this._btnConfirm.enabled = false;
             this._resetTimeoutForBtnConfirm();

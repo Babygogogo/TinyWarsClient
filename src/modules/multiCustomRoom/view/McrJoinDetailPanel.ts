@@ -1,5 +1,5 @@
 
-namespace TinyWars.MultiCustomWarRoom {
+namespace TinyWars.MultiCustomRoom {
     import ProtoTypes       = Utility.ProtoTypes;
     import Helpers          = Utility.Helpers;
     import Notify           = Utility.Notify;
@@ -9,11 +9,11 @@ namespace TinyWars.MultiCustomWarRoom {
     import HelpPanel        = Common.HelpPanel;
     import TemplateMapModel = WarMap.WarMapModel;
 
-    export class McwrJoinDetailPanel extends GameUi.UiPanel {
+    export class McrJoinDetailPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: McwrJoinDetailPanel;
+        private static _instance: McrJoinDetailPanel;
 
         private _btnHelpFog                 : GameUi.UiButton;
         private _btnHelpTimeLimit           : GameUi.UiButton;
@@ -40,22 +40,22 @@ namespace TinyWars.MultiCustomWarRoom {
         private _btnConfirm: GameUi.UiButton;
         private _btnCancel : GameUi.UiButton;
 
-        private _openData               : ProtoTypes.IWaitingMultiCustomWarInfo;
+        private _openData               : ProtoTypes.IMcrWaitingInfo;
         private _availablePlayerIndexes : number[];
         private _playerIndexIndex       : number;
         private _availableTeamIndexes   : number[];
         private _teamIndexIndex         : number;
 
-        public static show(data: ProtoTypes.IWaitingMultiCustomWarInfo): void {
-            if (!McwrJoinDetailPanel._instance) {
-                McwrJoinDetailPanel._instance = new McwrJoinDetailPanel();
+        public static show(data: ProtoTypes.IMcrWaitingInfo): void {
+            if (!McrJoinDetailPanel._instance) {
+                McrJoinDetailPanel._instance = new McrJoinDetailPanel();
             }
-            McwrJoinDetailPanel._instance._openData = data;
-            McwrJoinDetailPanel._instance.open();
+            McrJoinDetailPanel._instance._openData = data;
+            McrJoinDetailPanel._instance.open();
         }
         public static hide(): void {
-            if (McwrJoinDetailPanel._instance) {
-                McwrJoinDetailPanel._instance.close();
+            if (McrJoinDetailPanel._instance) {
+                McrJoinDetailPanel._instance.close();
             }
         }
 
@@ -64,7 +64,7 @@ namespace TinyWars.MultiCustomWarRoom {
 
             this._setAutoAdjustHeightEnabled();
             this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => McwrJoinDetailPanel.hide();
+            this._callbackForTouchMask = () => McrJoinDetailPanel.hide();
             this.skinName = "resource/skins/multiCustomWarRoom/McwrJoinDetailPanel.exml";
         }
 
@@ -80,7 +80,7 @@ namespace TinyWars.MultiCustomWarRoom {
                 { ui: this._btnNextTeamIndex,   callback: this._onTouchedBtnNextTeam, },
             ];
             this._notifyListeners = [
-                { type: Notify.Type.SJoinCustomOnlineWar, callback: this._onNotifySJoinCustomOnlineWar },
+                { type: Notify.Type.SMcrJoinWar, callback: this._onNotifySJoinCustomOnlineWar },
             ];
 
             this._listPlayer.setItemRenderer(PlayerRenderer);
@@ -116,11 +116,11 @@ namespace TinyWars.MultiCustomWarRoom {
         }
 
         private _onTouchedBtnCancel(e: egret.TouchEvent): void {
-            McwrJoinDetailPanel.hide();
+            McrJoinDetailPanel.hide();
         }
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            McwrProxy.reqJoin(
+            McrProxy.reqJoin(
                 this._openData.id,
                 this._availablePlayerIndexes[this._playerIndexIndex],
                 this._availableTeamIndexes[this._teamIndexIndex]
@@ -152,9 +152,9 @@ namespace TinyWars.MultiCustomWarRoom {
         }
 
         private _onNotifySJoinCustomOnlineWar(e: egret.Event): void {
-            const data = e.data as ProtoTypes.IS_JoinMultiCustomWar;
+            const data = e.data as ProtoTypes.IS_McrJoinWar;
             FloatText.show(Lang.getText(Lang.BigType.B00, data.isStarted ? Lang.SubType.S19 : Lang.SubType.S18));
-            McwrJoinDetailPanel.hide();
+            McrJoinDetailPanel.hide();
         }
 
         ////////////////////////////////////////////////////////////////////////////////

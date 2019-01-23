@@ -1,5 +1,5 @@
 
-namespace TinyWars.MultiCustomWarRoom {
+namespace TinyWars.MultiCustomRoom {
     import Types            = Utility.Types;
     import ProtoTypes       = Utility.ProtoTypes;
     import FloatText        = Utility.FloatText;
@@ -8,7 +8,7 @@ namespace TinyWars.MultiCustomWarRoom {
     import HelpPanel        = Common.HelpPanel;
     import TemplateMapModel = WarMap.WarMapModel;
 
-    export class McwrCreateBasicSettingsPage extends GameUi.UiTabPage {
+    export class McrCreateBasicSettingsPage extends GameUi.UiTabPage {
         private _labelMapName       : GameUi.UiLabel;
         private _labelPlayersCount  : GameUi.UiLabel;
 
@@ -65,7 +65,7 @@ namespace TinyWars.MultiCustomWarRoom {
         }
 
         protected _onOpened(): void {
-            this._mapInfo = McwrModel.getCreateWarMapInfo();
+            this._mapInfo = McrModel.getCreateWarMapInfo();
 
             this._updateInputWarName();
             this._updateInputWarPassword();
@@ -82,24 +82,24 @@ namespace TinyWars.MultiCustomWarRoom {
         // Event callbacks.
         ////////////////////////////////////////////////////////////////////////////////
         private _onFocusOutInputWarName(e: egret.Event): void {
-            McwrModel.setCreateWarName(this._inputWarName.text);
+            McrModel.setCreateWarName(this._inputWarName.text);
         }
 
         private _onFocusOutInputWarPassword(e: egret.Event): void {
-            McwrModel.setCreateWarPassword(this._inputWarPassword.text);
+            McrModel.setCreateWarPassword(this._inputWarPassword.text);
         }
 
         private _onFocusOutInputWarComment(e: egret.Event): void {
-            McwrModel.setCreateWarComment(this._inputWarComment.text);
+            McrModel.setCreateWarComment(this._inputWarComment.text);
         }
 
         private _onTouchedBtnPrevPlayerIndex(e: egret.TouchEvent): void {
-            McwrModel.setCreateWarPrevPlayerIndex();
+            McrModel.setCreateWarPrevPlayerIndex();
             this._updateLabelPlayerIndex();
         }
 
         private _onTouchedBtnNextPlayerIndex(e: egret.TouchEvent): void {
-            McwrModel.setCreateWarNextPlayerIndex();
+            McrModel.setCreateWarNextPlayerIndex();
             this._updateLabelPlayerIndex();
         }
 
@@ -111,12 +111,12 @@ namespace TinyWars.MultiCustomWarRoom {
         }
 
         private _onTouchedBtnPrevTeam(e: egret.TouchEvent): void {
-            McwrModel.setCreateWarPrevTeamIndex();
+            McrModel.setCreateWarPrevTeamIndex();
             this._updateLabelTeam();
         }
 
         private _onTouchedBtnNextTeam(e: egret.TouchEvent): void {
-            McwrModel.setCreateWarNextTeamIndex();
+            McrModel.setCreateWarNextTeamIndex();
             this._updateLabelTeam();
         }
 
@@ -128,12 +128,12 @@ namespace TinyWars.MultiCustomWarRoom {
         }
 
         private _onTouchedBtnPrevFog(e: egret.TouchEvent): void {
-            McwrModel.setCreateWarPrevHasFog();
+            McrModel.setCreateWarPrevHasFog();
             this._updateLabelFog();
         }
 
         private _onTouchedBtnNextFog(e: egret.TouchEvent): void {
-            McwrModel.setCreateWarNextHasFog();
+            McrModel.setCreateWarNextHasFog();
             this._updateLabelFog();
         }
 
@@ -145,12 +145,12 @@ namespace TinyWars.MultiCustomWarRoom {
         }
 
         private _onTouchedBtnPrevTimeLimit(e: egret.TouchEvent): void {
-            McwrModel.setCreateWarPrevTimeLimit();
+            McrModel.setCreateWarPrevTimeLimit();
             this._updateLabelTimeLimit();
         }
 
         private _onTouchedBtnNextTimeLimit(e: egret.TouchEvent): void {
-            McwrModel.setCreateWarNextTimeLimit();
+            McrModel.setCreateWarNextTimeLimit();
             this._updateLabelTimeLimit();
         }
 
@@ -165,15 +165,15 @@ namespace TinyWars.MultiCustomWarRoom {
         // View functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateInputWarName(): void {
-            this._inputWarName.text = McwrModel.getCreateWarName();
+            this._inputWarName.text = McrModel.getCreateWarName();
         }
 
         private _updateInputWarPassword(): void {
-            this._inputWarPassword.text = McwrModel.getCreateWarPassword();
+            this._inputWarPassword.text = McrModel.getCreateWarPassword();
         }
 
         private _updateInputWarComment(): void {
-            this._inputWarComment.text = McwrModel.getCreateWarComment();
+            this._inputWarComment.text = McrModel.getCreateWarComment();
         }
 
         private _updateLabelMapName(): void {
@@ -185,20 +185,20 @@ namespace TinyWars.MultiCustomWarRoom {
         }
 
         private _updateLabelPlayerIndex(): void {
-            const index = McwrModel.getCreateWarPlayerIndex();
+            const index = McrModel.getCreateWarPlayerIndex();
             this._labelPlayerIndex.text = `${index} (${Helpers.getColorText(index)})`;
         }
 
         private _updateLabelTeam(): void {
-            this._labelTeam.text = Helpers.getTeamText(McwrModel.getCreateWarTeamIndex());
+            this._labelTeam.text = Helpers.getTeamText(McrModel.getCreateWarTeamIndex());
         }
 
         private _updateLabelFog(): void {
-            this._labelFog.text = Lang.getText(Lang.BigType.B01, McwrModel.getCreateWarHasFog() ? Lang.SubType.S12 : Lang.SubType.S13);
+            this._labelFog.text = Lang.getText(Lang.BigType.B01, McrModel.getCreateWarHasFog() ? Lang.SubType.S12 : Lang.SubType.S13);
         }
 
         private _updateLabelTimeLimit(): void {
-            this._labelTimeLimit.text = Helpers.getTimeText(McwrModel.getCreateWarTimeLimit());
+            this._labelTimeLimit.text = Helpers.getTimeText(McrModel.getCreateWarTimeLimit());
         }
     }
 }
