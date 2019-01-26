@@ -17,9 +17,10 @@ namespace TinyWars.Login {
 
         export function reqLogin(account: string, password: string): void {
             NetManager.send({
-                actionCode: ActionCode.C_Login,
-                account   : account,
-                password  : password,
+                C_Login: {
+                    account   : account,
+                    password  : password,
+                },
             });
         }
         function _onSLogin(e: egret.Event): void {
@@ -32,10 +33,11 @@ namespace TinyWars.Login {
 
         export function reqRegister(account: string, password: string, nickname: string): void {
             NetManager.send({
-                actionCode: ActionCode.C_Register,
-                account   : account,
-                password  : password,
-                nickname  : nickname,
+                C_Register: {
+                    account   : account,
+                    password  : password,
+                    nickname  : nickname,
+                },
             });
         }
         function _onSRegister(e: egret.Event): void {
@@ -47,7 +49,8 @@ namespace TinyWars.Login {
 
         export function reqLogout(): void {
             NetManager.send({
-                actionCode: ActionCode.C_Logout,
+                C_Logout: {
+                },
             });
         }
         function _onSLogout(e: egret.Event): void {

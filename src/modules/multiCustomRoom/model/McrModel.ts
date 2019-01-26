@@ -50,7 +50,7 @@ namespace TinyWars.MultiCustomRoom {
         playerIndex     : number;
         teamIndex       : number;
 
-        hasFog              : boolean;
+        hasFog              : number;
         timeLimit           : number;
         initialFund         : number;
         incomeModifier      : number;
@@ -74,7 +74,7 @@ namespace TinyWars.MultiCustomRoom {
             playerIndex     : 0,
             teamIndex       : 0,
 
-            hasFog              : false,
+            hasFog              : 0,
             timeLimit           : 0,
             initialFund         : 0,
             incomeModifier      : 0,
@@ -175,7 +175,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         export function setCreateWarHasFog(has: boolean): void {
-            _dataForCreateWar.hasFog = has;
+            _dataForCreateWar.hasFog = has ? 1 : 0;
         }
         export function setCreateWarPrevHasFog(): void {
             setCreateWarHasFog(!getCreateWarHasFog());
@@ -184,7 +184,7 @@ namespace TinyWars.MultiCustomRoom {
             setCreateWarHasFog(!getCreateWarHasFog());
         }
         export function getCreateWarHasFog(): boolean {
-            return _dataForCreateWar.hasFog;
+            return !!_dataForCreateWar.hasFog;
         }
 
         export function setCreateWarTimeLimit(limit: number): void {

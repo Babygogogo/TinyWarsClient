@@ -1,7 +1,6 @@
 
 namespace TinyWars.Network {
     export enum Codes {
-        actionCode = 0,
         C_Heartbeat = 1,
         S_Heartbeat = 2,
         C_Register = 3,

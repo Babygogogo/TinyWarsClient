@@ -67,8 +67,7 @@ namespace TinyWars.Utility.Types {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Serialization data types.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export interface SerializedMcAction extends ProtoTypes.IContainer {
-        actionCode  : Codes;
+    export interface SerializedMcAction extends ProtoTypes.IActionContainer {
     }
     export interface SerializedMcTile extends ProtoTypes.ISerializedMcTile {
         gridX           : number;
@@ -145,11 +144,6 @@ namespace TinyWars.Utility.Types {
     ////////////////////////////////////////////////////////////////////////////////
     // Types.
     ////////////////////////////////////////////////////////////////////////////////
-    export type Action = {
-        actionCode   ?: number;
-        [key: string] : any;
-    }
-
     export type Size = {
         width : number;
         height: number;

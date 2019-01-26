@@ -12,9 +12,9 @@
 		"libs/modules/mouse/mouse.js"
 	],
 	"game": [
+		"bin-debug/network/NetMessageCodes.js",
 		"bin-debug/utility/Types.js",
 		"bin-debug/network/NetErrorCode.js",
-		"bin-debug/network/NetMessageCodes.js",
 		"bin-debug/utility/Notify.js",
 		"bin-debug/utility/ProtoTypes.js",
 		"bin-debug/utility/Logger.js",

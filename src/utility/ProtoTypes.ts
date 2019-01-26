@@ -2408,7 +2408,7 @@ namespace TinyWars.Utility {
             enterTurnTime?: (number | null);
 
             /** SerializedMcWar executedActions */
-            executedActions?: (IContainer[] | null);
+            executedActions?: (IActionContainer[] | null);
 
             /** SerializedMcWar players */
             players?: (ISerializedMcPlayer[] | null);
@@ -2487,7 +2487,7 @@ namespace TinyWars.Utility {
             public enterTurnTime: number;
 
             /** SerializedMcWar executedActions. */
-            public executedActions: IContainer[];
+            public executedActions: IActionContainer[];
 
             /** SerializedMcWar players. */
             public players: ISerializedMcPlayer[];
@@ -2947,223 +2947,217 @@ namespace TinyWars.Utility {
             public toJSON(): { [k: string]: any };
         }
 
-        /** Properties of a Container. */
-        export declare interface IContainer {
+        /** Properties of an ActionContainer. */
+        export declare interface IActionContainer {
 
-            /** Container actionCode */
-            actionCode?: (number | null);
-
-            /** Container C_Heartbeat */
+            /** ActionContainer C_Heartbeat */
             C_Heartbeat?: (IC_Heartbeat | null);
 
-            /** Container S_Heartbeat */
+            /** ActionContainer S_Heartbeat */
             S_Heartbeat?: (IS_Heartbeat | null);
 
-            /** Container C_Register */
+            /** ActionContainer C_Register */
             C_Register?: (IC_Register | null);
 
-            /** Container S_Register */
+            /** ActionContainer S_Register */
             S_Register?: (IS_Register | null);
 
-            /** Container C_Login */
+            /** ActionContainer C_Login */
             C_Login?: (IC_Login | null);
 
-            /** Container S_Login */
+            /** ActionContainer S_Login */
             S_Login?: (IS_Login | null);
 
-            /** Container C_Logout */
+            /** ActionContainer C_Logout */
             C_Logout?: (IC_Logout | null);
 
-            /** Container S_Logout */
+            /** ActionContainer S_Logout */
             S_Logout?: (IS_Logout | null);
 
-            /** Container S_Error */
+            /** ActionContainer S_Error */
             S_Error?: (IS_Error | null);
 
-            /** Container C_GetNewestMapInfos */
+            /** ActionContainer C_GetNewestMapInfos */
             C_GetNewestMapInfos?: (IC_GetNewestMapInfos | null);
 
-            /** Container S_GetNewestMapInfos */
+            /** ActionContainer S_GetNewestMapInfos */
             S_GetNewestMapInfos?: (IS_GetNewestMapInfos | null);
 
-            /** Container S_NewestConfigVersion */
+            /** ActionContainer S_NewestConfigVersion */
             S_NewestConfigVersion?: (IS_NewestConfigVersion | null);
 
-            /** Container C_McrCreateWar */
+            /** ActionContainer C_McrCreateWar */
             C_McrCreateWar?: (IC_McrCreateWar | null);
 
-            /** Container S_McrCreateWar */
+            /** ActionContainer S_McrCreateWar */
             S_McrCreateWar?: (IS_McrCreateWar | null);
 
-            /** Container C_McrExitWar */
+            /** ActionContainer C_McrExitWar */
             C_McrExitWar?: (IC_McrExitWar | null);
 
-            /** Container S_McrExitWar */
+            /** ActionContainer S_McrExitWar */
             S_McrExitWar?: (IS_McrExitWar | null);
 
-            /** Container C_McrGetJoinedWaitingInfos */
+            /** ActionContainer C_McrGetJoinedWaitingInfos */
             C_McrGetJoinedWaitingInfos?: (IC_McrGetJoinedWaitingInfos | null);
 
-            /** Container S_McrGetJoinedWaitingInfos */
+            /** ActionContainer S_McrGetJoinedWaitingInfos */
             S_McrGetJoinedWaitingInfos?: (IS_McrGetJoinedWaitingInfos | null);
 
-            /** Container C_McrGetUnjoinedWaitingInfos */
+            /** ActionContainer C_McrGetUnjoinedWaitingInfos */
             C_McrGetUnjoinedWaitingInfos?: (IC_McrGetUnjoinedWaitingInfos | null);
 
-            /** Container S_McrGetUnjoinedWaitingInfos */
+            /** ActionContainer S_McrGetUnjoinedWaitingInfos */
             S_McrGetUnjoinedWaitingInfos?: (IS_McrGetUnjoinedWaitingInfos | null);
 
-            /** Container C_McrJoinWar */
+            /** ActionContainer C_McrJoinWar */
             C_McrJoinWar?: (IC_McrJoinWar | null);
 
-            /** Container S_McrJoinWar */
+            /** ActionContainer S_McrJoinWar */
             S_McrJoinWar?: (IS_McrJoinWar | null);
         }
 
-        /** Represents a Container. */
-        export declare class Container implements IContainer {
+        /** Represents an ActionContainer. */
+        export declare class ActionContainer implements IActionContainer {
 
             /**
-             * Constructs a new Container.
+             * Constructs a new ActionContainer.
              * @param [properties] Properties to set
              */
-            constructor(properties?: IContainer);
+            constructor(properties?: IActionContainer);
 
-            /** Container actionCode. */
-            public actionCode: number;
-
-            /** Container C_Heartbeat. */
+            /** ActionContainer C_Heartbeat. */
             public C_Heartbeat?: (IC_Heartbeat | null);
 
-            /** Container S_Heartbeat. */
+            /** ActionContainer S_Heartbeat. */
             public S_Heartbeat?: (IS_Heartbeat | null);
 
-            /** Container C_Register. */
+            /** ActionContainer C_Register. */
             public C_Register?: (IC_Register | null);
 
-            /** Container S_Register. */
+            /** ActionContainer S_Register. */
             public S_Register?: (IS_Register | null);
 
-            /** Container C_Login. */
+            /** ActionContainer C_Login. */
             public C_Login?: (IC_Login | null);
 
-            /** Container S_Login. */
+            /** ActionContainer S_Login. */
             public S_Login?: (IS_Login | null);
 
-            /** Container C_Logout. */
+            /** ActionContainer C_Logout. */
             public C_Logout?: (IC_Logout | null);
 
-            /** Container S_Logout. */
+            /** ActionContainer S_Logout. */
             public S_Logout?: (IS_Logout | null);
 
-            /** Container S_Error. */
+            /** ActionContainer S_Error. */
             public S_Error?: (IS_Error | null);
 
-            /** Container C_GetNewestMapInfos. */
+            /** ActionContainer C_GetNewestMapInfos. */
             public C_GetNewestMapInfos?: (IC_GetNewestMapInfos | null);
 
-            /** Container S_GetNewestMapInfos. */
+            /** ActionContainer S_GetNewestMapInfos. */
             public S_GetNewestMapInfos?: (IS_GetNewestMapInfos | null);
 
-            /** Container S_NewestConfigVersion. */
+            /** ActionContainer S_NewestConfigVersion. */
             public S_NewestConfigVersion?: (IS_NewestConfigVersion | null);
 
-            /** Container C_McrCreateWar. */
+            /** ActionContainer C_McrCreateWar. */
             public C_McrCreateWar?: (IC_McrCreateWar | null);
 
-            /** Container S_McrCreateWar. */
+            /** ActionContainer S_McrCreateWar. */
             public S_McrCreateWar?: (IS_McrCreateWar | null);
 
-            /** Container C_McrExitWar. */
+            /** ActionContainer C_McrExitWar. */
             public C_McrExitWar?: (IC_McrExitWar | null);
 
-            /** Container S_McrExitWar. */
+            /** ActionContainer S_McrExitWar. */
             public S_McrExitWar?: (IS_McrExitWar | null);
 
-            /** Container C_McrGetJoinedWaitingInfos. */
+            /** ActionContainer C_McrGetJoinedWaitingInfos. */
             public C_McrGetJoinedWaitingInfos?: (IC_McrGetJoinedWaitingInfos | null);
 
-            /** Container S_McrGetJoinedWaitingInfos. */
+            /** ActionContainer S_McrGetJoinedWaitingInfos. */
             public S_McrGetJoinedWaitingInfos?: (IS_McrGetJoinedWaitingInfos | null);
 
-            /** Container C_McrGetUnjoinedWaitingInfos. */
+            /** ActionContainer C_McrGetUnjoinedWaitingInfos. */
             public C_McrGetUnjoinedWaitingInfos?: (IC_McrGetUnjoinedWaitingInfos | null);
 
-            /** Container S_McrGetUnjoinedWaitingInfos. */
+            /** ActionContainer S_McrGetUnjoinedWaitingInfos. */
             public S_McrGetUnjoinedWaitingInfos?: (IS_McrGetUnjoinedWaitingInfos | null);
 
-            /** Container C_McrJoinWar. */
+            /** ActionContainer C_McrJoinWar. */
             public C_McrJoinWar?: (IC_McrJoinWar | null);
 
-            /** Container S_McrJoinWar. */
+            /** ActionContainer S_McrJoinWar. */
             public S_McrJoinWar?: (IS_McrJoinWar | null);
 
             /**
-             * Creates a new Container instance using the specified properties.
+             * Creates a new ActionContainer instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns Container instance
+             * @returns ActionContainer instance
              */
-            public static create(properties?: IContainer): Container;
+            public static create(properties?: IActionContainer): ActionContainer;
 
             /**
-             * Encodes the specified Container message. Does not implicitly {@link Container.verify|verify} messages.
-             * @param message Container message or plain object to encode
+             * Encodes the specified ActionContainer message. Does not implicitly {@link ActionContainer.verify|verify} messages.
+             * @param message ActionContainer message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: IContainer, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: IActionContainer, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified Container message, length delimited. Does not implicitly {@link Container.verify|verify} messages.
-             * @param message Container message or plain object to encode
+             * Encodes the specified ActionContainer message, length delimited. Does not implicitly {@link ActionContainer.verify|verify} messages.
+             * @param message ActionContainer message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: IContainer, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: IActionContainer, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Decodes a Container message from the specified reader or buffer.
+             * Decodes an ActionContainer message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns Container
+             * @returns ActionContainer
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): Container;
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): ActionContainer;
 
             /**
-             * Decodes a Container message from the specified reader or buffer, length delimited.
+             * Decodes an ActionContainer message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns Container
+             * @returns ActionContainer
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): Container;
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): ActionContainer;
 
             /**
-             * Verifies a Container message.
+             * Verifies an ActionContainer message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             public static verify(message: { [k: string]: any }): (string | null);
 
             /**
-             * Creates a Container message from a plain object. Also converts values to their respective internal types.
+             * Creates an ActionContainer message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns Container
+             * @returns ActionContainer
              */
-            public static fromObject(object: { [k: string]: any }): Container;
+            public static fromObject(object: { [k: string]: any }): ActionContainer;
 
             /**
-             * Creates a plain object from a Container message. Also converts values to other types if specified.
-             * @param message Container
+             * Creates a plain object from an ActionContainer message. Also converts values to other types if specified.
+             * @param message ActionContainer
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: Container, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: ActionContainer, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this Container to JSON.
+             * Converts this ActionContainer to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
@@ -3171,9 +3165,6 @@ namespace TinyWars.Utility {
 
         /** Properties of a C_Heartbeat. */
         export declare interface IC_Heartbeat {
-
-            /** C_Heartbeat actionCode */
-            actionCode?: (number | null);
 
             /** C_Heartbeat counter */
             counter?: (number | null);
@@ -3187,9 +3178,6 @@ namespace TinyWars.Utility {
              * @param [properties] Properties to set
              */
             constructor(properties?: IC_Heartbeat);
-
-            /** C_Heartbeat actionCode. */
-            public actionCode: number;
 
             /** C_Heartbeat counter. */
             public counter: number;
@@ -3268,9 +3256,6 @@ namespace TinyWars.Utility {
         /** Properties of a S_Heartbeat. */
         export declare interface IS_Heartbeat {
 
-            /** S_Heartbeat actionCode */
-            actionCode?: (number | null);
-
             /** S_Heartbeat errorCode */
             errorCode?: (number | null);
 
@@ -3289,9 +3274,6 @@ namespace TinyWars.Utility {
              * @param [properties] Properties to set
              */
             constructor(properties?: IS_Heartbeat);
-
-            /** S_Heartbeat actionCode. */
-            public actionCode: number;
 
             /** S_Heartbeat errorCode. */
             public errorCode: number;
@@ -3376,9 +3358,6 @@ namespace TinyWars.Utility {
         /** Properties of a C_Register. */
         export declare interface IC_Register {
 
-            /** C_Register actionCode */
-            actionCode?: (number | null);
-
             /** C_Register account */
             account?: (string | null);
 
@@ -3397,9 +3376,6 @@ namespace TinyWars.Utility {
              * @param [properties] Properties to set
              */
             constructor(properties?: IC_Register);
-
-            /** C_Register actionCode. */
-            public actionCode: number;
 
             /** C_Register account. */
             public account: string;
@@ -3484,9 +3460,6 @@ namespace TinyWars.Utility {
         /** Properties of a S_Register. */
         export declare interface IS_Register {
 
-            /** S_Register actionCode */
-            actionCode?: (number | null);
-
             /** S_Register errorCode */
             errorCode?: (number | null);
 
@@ -3505,9 +3478,6 @@ namespace TinyWars.Utility {
              * @param [properties] Properties to set
              */
             constructor(properties?: IS_Register);
-
-            /** S_Register actionCode. */
-            public actionCode: number;
 
             /** S_Register errorCode. */
             public errorCode: number;
@@ -3592,9 +3562,6 @@ namespace TinyWars.Utility {
         /** Properties of a C_Login. */
         export declare interface IC_Login {
 
-            /** C_Login actionCode */
-            actionCode?: (number | null);
-
             /** C_Login account */
             account?: (string | null);
 
@@ -3610,9 +3577,6 @@ namespace TinyWars.Utility {
              * @param [properties] Properties to set
              */
             constructor(properties?: IC_Login);
-
-            /** C_Login actionCode. */
-            public actionCode: number;
 
             /** C_Login account. */
             public account: string;
@@ -3694,9 +3658,6 @@ namespace TinyWars.Utility {
         /** Properties of a S_Login. */
         export declare interface IS_Login {
 
-            /** S_Login actionCode */
-            actionCode?: (number | null);
-
             /** S_Login errorCode */
             errorCode?: (number | null);
 
@@ -3724,9 +3685,6 @@ namespace TinyWars.Utility {
              * @param [properties] Properties to set
              */
             constructor(properties?: IS_Login);
-
-            /** S_Login actionCode. */
-            public actionCode: number;
 
             /** S_Login errorCode. */
             public errorCode: number;
@@ -3819,9 +3777,6 @@ namespace TinyWars.Utility {
 
         /** Properties of a C_Logout. */
         export declare interface IC_Logout {
-
-            /** C_Logout actionCode */
-            actionCode?: (number | null);
         }
 
         /** Represents a C_Logout. */
@@ -3832,9 +3787,6 @@ namespace TinyWars.Utility {
              * @param [properties] Properties to set
              */
             constructor(properties?: IC_Logout);
-
-            /** C_Logout actionCode. */
-            public actionCode: number;
 
             /**
              * Creates a new C_Logout instance using the specified properties.
@@ -3910,9 +3862,6 @@ namespace TinyWars.Utility {
         /** Properties of a S_Logout. */
         export declare interface IS_Logout {
 
-            /** S_Logout actionCode */
-            actionCode?: (number | null);
-
             /** S_Logout errorCode */
             errorCode?: (number | null);
 
@@ -3928,9 +3877,6 @@ namespace TinyWars.Utility {
              * @param [properties] Properties to set
              */
             constructor(properties?: IS_Logout);
-
-            /** S_Logout actionCode. */
-            public actionCode: number;
 
             /** S_Logout errorCode. */
             public errorCode: number;
@@ -4012,9 +3958,6 @@ namespace TinyWars.Utility {
         /** Properties of a S_Error. */
         export declare interface IS_Error {
 
-            /** S_Error actionCode */
-            actionCode?: (number | null);
-
             /** S_Error errorCode */
             errorCode?: (number | null);
         }
@@ -4027,9 +3970,6 @@ namespace TinyWars.Utility {
              * @param [properties] Properties to set
              */
             constructor(properties?: IS_Error);
-
-            /** S_Error actionCode. */
-            public actionCode: number;
 
             /** S_Error errorCode. */
             public errorCode: number;
@@ -4108,9 +4048,6 @@ namespace TinyWars.Utility {
         /** Properties of a C_GetNewestMapInfos. */
         export declare interface IC_GetNewestMapInfos {
 
-            /** C_GetNewestMapInfos actionCode */
-            actionCode?: (number | null);
-
             /** C_GetNewestMapInfos mapName */
             mapName?: (string | null);
 
@@ -4135,9 +4072,6 @@ namespace TinyWars.Utility {
              * @param [properties] Properties to set
              */
             constructor(properties?: IC_GetNewestMapInfos);
-
-            /** C_GetNewestMapInfos actionCode. */
-            public actionCode: number;
 
             /** C_GetNewestMapInfos mapName. */
             public mapName: string;
@@ -4228,9 +4162,6 @@ namespace TinyWars.Utility {
         /** Properties of a S_GetNewestMapInfos. */
         export declare interface IS_GetNewestMapInfos {
 
-            /** S_GetNewestMapInfos actionCode */
-            actionCode?: (number | null);
-
             /** S_GetNewestMapInfos errorCode */
             errorCode?: (number | null);
 
@@ -4246,9 +4177,6 @@ namespace TinyWars.Utility {
              * @param [properties] Properties to set
              */
             constructor(properties?: IS_GetNewestMapInfos);
-
-            /** S_GetNewestMapInfos actionCode. */
-            public actionCode: number;
 
             /** S_GetNewestMapInfos errorCode. */
             public errorCode: number;
@@ -4330,9 +4258,6 @@ namespace TinyWars.Utility {
         /** Properties of a S_NewestConfigVersion. */
         export declare interface IS_NewestConfigVersion {
 
-            /** S_NewestConfigVersion actionCode */
-            actionCode?: (number | null);
-
             /** S_NewestConfigVersion version */
             version?: (number | null);
         }
@@ -4345,9 +4270,6 @@ namespace TinyWars.Utility {
              * @param [properties] Properties to set
              */
             constructor(properties?: IS_NewestConfigVersion);
-
-            /** S_NewestConfigVersion actionCode. */
-            public actionCode: number;
 
             /** S_NewestConfigVersion version. */
             public version: number;
@@ -4426,9 +4348,6 @@ namespace TinyWars.Utility {
         /** Properties of a C_McrCreateWar. */
         export declare interface IC_McrCreateWar {
 
-            /** C_McrCreateWar actionCode */
-            actionCode?: (number | null);
-
             /** C_McrCreateWar mapName */
             mapName?: (string | null);
 
@@ -4492,9 +4411,6 @@ namespace TinyWars.Utility {
              * @param [properties] Properties to set
              */
             constructor(properties?: IC_McrCreateWar);
-
-            /** C_McrCreateWar actionCode. */
-            public actionCode: number;
 
             /** C_McrCreateWar mapName. */
             public mapName: string;
@@ -4624,9 +4540,6 @@ namespace TinyWars.Utility {
         /** Properties of a S_McrCreateWar. */
         export declare interface IS_McrCreateWar {
 
-            /** S_McrCreateWar actionCode */
-            actionCode?: (number | null);
-
             /** S_McrCreateWar errorCode */
             errorCode?: (number | null);
         }
@@ -4639,9 +4552,6 @@ namespace TinyWars.Utility {
              * @param [properties] Properties to set
              */
             constructor(properties?: IS_McrCreateWar);
-
-            /** S_McrCreateWar actionCode. */
-            public actionCode: number;
 
             /** S_McrCreateWar errorCode. */
             public errorCode: number;
@@ -4720,9 +4630,6 @@ namespace TinyWars.Utility {
         /** Properties of a C_McrExitWar. */
         export declare interface IC_McrExitWar {
 
-            /** C_McrExitWar actionCode */
-            actionCode?: (number | null);
-
             /** C_McrExitWar infoId */
             infoId?: (number | null);
         }
@@ -4735,9 +4642,6 @@ namespace TinyWars.Utility {
              * @param [properties] Properties to set
              */
             constructor(properties?: IC_McrExitWar);
-
-            /** C_McrExitWar actionCode. */
-            public actionCode: number;
 
             /** C_McrExitWar infoId. */
             public infoId: number;
@@ -4816,9 +4720,6 @@ namespace TinyWars.Utility {
         /** Properties of a S_McrExitWar. */
         export declare interface IS_McrExitWar {
 
-            /** S_McrExitWar actionCode */
-            actionCode?: (number | null);
-
             /** S_McrExitWar errorCode */
             errorCode?: (number | null);
         }
@@ -4831,9 +4732,6 @@ namespace TinyWars.Utility {
              * @param [properties] Properties to set
              */
             constructor(properties?: IS_McrExitWar);
-
-            /** S_McrExitWar actionCode. */
-            public actionCode: number;
 
             /** S_McrExitWar errorCode. */
             public errorCode: number;
@@ -4911,9 +4809,6 @@ namespace TinyWars.Utility {
 
         /** Properties of a C_McrGetJoinedWaitingInfos. */
         export declare interface IC_McrGetJoinedWaitingInfos {
-
-            /** C_McrGetJoinedWaitingInfos actionCode */
-            actionCode?: (number | null);
         }
 
         /** Represents a C_McrGetJoinedWaitingInfos. */
@@ -4924,9 +4819,6 @@ namespace TinyWars.Utility {
              * @param [properties] Properties to set
              */
             constructor(properties?: IC_McrGetJoinedWaitingInfos);
-
-            /** C_McrGetJoinedWaitingInfos actionCode. */
-            public actionCode: number;
 
             /**
              * Creates a new C_McrGetJoinedWaitingInfos instance using the specified properties.
@@ -5002,9 +4894,6 @@ namespace TinyWars.Utility {
         /** Properties of a S_McrGetJoinedWaitingInfos. */
         export declare interface IS_McrGetJoinedWaitingInfos {
 
-            /** S_McrGetJoinedWaitingInfos actionCode */
-            actionCode?: (number | null);
-
             /** S_McrGetJoinedWaitingInfos errorCode */
             errorCode?: (number | null);
 
@@ -5023,9 +4912,6 @@ namespace TinyWars.Utility {
              * @param [properties] Properties to set
              */
             constructor(properties?: IS_McrGetJoinedWaitingInfos);
-
-            /** S_McrGetJoinedWaitingInfos actionCode. */
-            public actionCode: number;
 
             /** S_McrGetJoinedWaitingInfos errorCode. */
             public errorCode: number;
@@ -5200,9 +5086,6 @@ namespace TinyWars.Utility {
         /** Properties of a S_McrGetUnjoinedWaitingInfos. */
         export declare interface IS_McrGetUnjoinedWaitingInfos {
 
-            /** S_McrGetUnjoinedWaitingInfos actionCode */
-            actionCode?: (number | null);
-
             /** S_McrGetUnjoinedWaitingInfos errorCode */
             errorCode?: (number | null);
 
@@ -5221,9 +5104,6 @@ namespace TinyWars.Utility {
              * @param [properties] Properties to set
              */
             constructor(properties?: IS_McrGetUnjoinedWaitingInfos);
-
-            /** S_McrGetUnjoinedWaitingInfos actionCode. */
-            public actionCode: number;
 
             /** S_McrGetUnjoinedWaitingInfos errorCode. */
             public errorCode: number;
@@ -5308,9 +5188,6 @@ namespace TinyWars.Utility {
         /** Properties of a C_McrJoinWar. */
         export declare interface IC_McrJoinWar {
 
-            /** C_McrJoinWar actionCode */
-            actionCode?: (number | null);
-
             /** C_McrJoinWar infoId */
             infoId?: (number | null);
 
@@ -5329,9 +5206,6 @@ namespace TinyWars.Utility {
              * @param [properties] Properties to set
              */
             constructor(properties?: IC_McrJoinWar);
-
-            /** C_McrJoinWar actionCode. */
-            public actionCode: number;
 
             /** C_McrJoinWar infoId. */
             public infoId: number;
@@ -5416,9 +5290,6 @@ namespace TinyWars.Utility {
         /** Properties of a S_McrJoinWar. */
         export declare interface IS_McrJoinWar {
 
-            /** S_McrJoinWar actionCode */
-            actionCode?: (number | null);
-
             /** S_McrJoinWar errorCode */
             errorCode?: (number | null);
 
@@ -5434,9 +5305,6 @@ namespace TinyWars.Utility {
              * @param [properties] Properties to set
              */
             constructor(properties?: IS_McrJoinWar);
-
-            /** S_McrJoinWar actionCode. */
-            public actionCode: number;
 
             /** S_McrJoinWar errorCode. */
             public errorCode: number;

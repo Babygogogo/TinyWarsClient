@@ -6,6 +6,7 @@ namespace TinyWars.Network {
     import Lang         = Utility.Lang;
     import ProtoTypes   = Utility.ProtoTypes;
     import ProtoManager = Utility.ProtoManager;
+    import Helpers      = Utility.Helpers;
 
     export namespace Manager {
         ////////////////////////////////////////////////////////////////////////////////
@@ -17,7 +18,6 @@ namespace TinyWars.Network {
         // Type definitions.
         ////////////////////////////////////////////////////////////////////////////////
         type ReceivedData = any;
-        type Action       = Utility.Types.Action;
         type MsgListener = {
             actionCode   : Codes;
             callback     : (e: egret.Event) => void;
@@ -25,9 +25,9 @@ namespace TinyWars.Network {
         }
 
         class NetMessageDispatcherCls extends egret.EventDispatcher {
-            public dispatchWithContainer(container: ProtoTypes.IContainer): void {
-                const name   = Codes[container.actionCode];
-                const action = container[name];
+            public dispatchWithContainer(container: ProtoTypes.IActionContainer): void {
+                const name      = Helpers.getActionName(container);
+                const action    = container[name];
                 Logger.log("NetManager receive: ", name, action);
                 if (action.errorCode) {
                     FloatText.show(Utility.Lang.getNetErrorText(action.errorCode));
@@ -76,19 +76,12 @@ namespace TinyWars.Network {
             }
         }
 
-        export function send(action: Action): void {
+        export function send(action: ProtoTypes.IActionContainer): void {
             if ((!socket) || (!socket.connected)) {
                 FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S14));
             } else {
-                const code = action.actionCode;
-                const name = Codes[code];
-
-                if (!name) {
-                    Logger.error("NetManager.send() failed to find the msgName with code: ", code);
-                } else {
-                    Logger.log("NetManager send: ", name, action);
-                    socket.send(ProtoManager.encodeAsContainer(action));
-                }
+                const encodedData = ProtoManager.encodeAsContainer(action);
+                (encodedData != null) && (socket.emit("message", encodedData));
             }
         }
 

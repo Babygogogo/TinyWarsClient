@@ -6,7 +6,7 @@ namespace TinyWars.Utility {
         const PROTO_FILENAME = "resource/config/NetMessageProto.json";
 
         let _protoRoot      : protobuf.Root;
-        let _containerClass : typeof ProtoTypes.Container;
+        let _containerClass : typeof ProtoTypes.ActionContainer;
         let _fullConfigClass: typeof ProtoTypes.FullConfig;
 
         export function init(): Promise<void> {
@@ -17,7 +17,7 @@ namespace TinyWars.Utility {
                             reject("no root!");
                         } else {
                             _protoRoot          = root;
-                            _containerClass     = root.lookupType("Container") as any;
+                            _containerClass     = root.lookupType("ActionContainer") as any;
                             _fullConfigClass    = root.lookupType("FullConfig") as any;
                             resolve();
                         }
@@ -27,18 +27,16 @@ namespace TinyWars.Utility {
             });
         }
 
-        export function encodeAsContainer(action: Types.Action): Uint8Array {
-            if (action.actionCode == null) {
-                throw "ProtoManager.encodeAsContainer() invalid action";
+        export function encodeAsContainer(action: ProtoTypes.IActionContainer): Uint8Array | undefined {
+            if (Helpers.getActionCode(action) != null) {
+                return _containerClass.encode(action).finish();
             } else {
-                return _containerClass.encode({
-                    actionCode                : action.actionCode,
-                    [Codes[action.actionCode]]: action,
-                }).finish();
+                Logger.assert(false, "ProtoManager.encodeAsContainer() invalid action! ", JSON.stringify(action));
+                return undefined;
             }
         }
 
-        export function decodeAsContainer(data: any): ProtoTypes.IContainer {
+        export function decodeAsContainer(data: any): ProtoTypes.IActionContainer {
             return _containerClass.decode(getDataForDecode(data)).toJSON();
         }
 

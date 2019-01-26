@@ -15,8 +15,9 @@ namespace TinyWars.Time {
 
         export function reqHeartbeat(counter: number): void {
             NetManager.send({
-                actionCode: ActionCode.C_Heartbeat,
-                counter   : counter,
+                C_Heartbeat: {
+                    counter   : counter,
+                },
             });
         }
         function _onSHeartbeat(e: egret.Event): void {

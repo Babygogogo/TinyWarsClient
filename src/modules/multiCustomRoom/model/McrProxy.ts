@@ -18,9 +18,11 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         export function reqCreate(param: DataForCreateWar): void {
-            const obj = Helpers.cloneObject(param) as Utility.Types.Action;
-            obj.actionCode = ActionCode.C_McrCreateWar;
-            NetManager.send(obj);
+            // const obj = Helpers.cloneObject(param) as Utility.Types.Action;
+            // obj.actionCode = ActionCode.C_McrCreateWar;
+            NetManager.send({
+                C_McrCreateWar: param,
+            });
         }
         function _onSMcrCreateWar(e: egret.Event): void {
             const data = e.data as ProtoTypes.IS_McrCreateWar;
@@ -31,7 +33,8 @@ namespace TinyWars.MultiCustomRoom {
 
         export function reqUnjoinedWarInfos(): void {
             NetManager.send({
-                actionCode: ActionCode.C_McrGetUnjoinedWaitingInfos,
+                C_McrGetUnjoinedWaitingInfos: {
+                },
             });
         }
         function _onSMcrGetUnjoinedWaitingInfos(e: egret.Event): void {
@@ -45,10 +48,11 @@ namespace TinyWars.MultiCustomRoom {
 
         export function reqJoin(waitingWarId: number, playerIndex: number, teamIndex: number): void {
             NetManager.send({
-                actionCode : ActionCode.C_McrJoinWar,
-                infoId     : waitingWarId,
-                playerIndex: playerIndex,
-                teamIndex  : teamIndex,
+                C_McrJoinWar: {
+                    infoId     : waitingWarId,
+                    playerIndex: playerIndex,
+                    teamIndex  : teamIndex,
+                },
             });
         }
         function _onSMcrJoinWar(e: egret.Event): void {
@@ -60,7 +64,8 @@ namespace TinyWars.MultiCustomRoom {
 
         export function reqJoinedWaitingCustomOnlineWarInfos(): void {
             NetManager.send({
-                actionCode: ActionCode.C_McrGetJoinedWaitingInfos,
+                C_McrGetJoinedWaitingInfos: {
+                },
             });
         }
         function _onSMcrGetJoinedWaitingInfos(e: egret.Event): void {
@@ -74,8 +79,9 @@ namespace TinyWars.MultiCustomRoom {
 
         export function reqExitCustomOnlineWar(waitingWarId: number): void {
             NetManager.send({
-                actionCode: ActionCode.C_McrExitWar,
-                infoId    : waitingWarId,
+                C_McrExitWar: {
+                    infoId    : waitingWarId,
+                },
             });
         }
         function _onSMcrExitWar(e: egret.Event): void {

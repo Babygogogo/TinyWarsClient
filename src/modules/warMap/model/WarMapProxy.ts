@@ -22,12 +22,13 @@ namespace TinyWars.WarMap {
 
         export function reqGetNewestMapInfos(param?: ParamForGetNewestMapInfos): void {
             NetManager.send({
-                actionCode      : ActionCode.C_GetNewestMapInfos,
-                mapName         : param && param.mapName,
-                mapDesigner     : param && param.mapDesigner,
-                playersCount    : param && param.playersCount,
-                minRating       : param && param.minRating,
-                minPlayedTimes  : param && param.minPlayedTimes,
+                C_GetNewestMapInfos: {
+                    mapName         : param && param.mapName,
+                    mapDesigner     : param && param.mapDesigner,
+                    playersCount    : param && param.playersCount,
+                    minRating       : param && param.minRating,
+                    minPlayedTimes  : param && param.minPlayedTimes,
+                },
             });
         }
         function _onSGetNewestMapInfos(e: egret.Event): void {

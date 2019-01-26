@@ -1,6 +1,7 @@
 
 namespace TinyWars.Utility.Helpers {
-    import ColorType = Types.ColorType;
+    import ColorType    = Types.ColorType;
+    import Codes        = Network.Codes;
 
     const COLOR_MATRIX_FILTERS = {
         [ColorType.Gray]: new egret.ColorMatrixFilter([
@@ -102,6 +103,18 @@ namespace TinyWars.Utility.Helpers {
                 obj.filters = [new egret.ColorMatrixFilter(getColorMatrix(color, value))];
             }
         }
+    }
+
+    export function getActionCode(action: ProtoTypes.IActionContainer): Codes | undefined {
+        const name = getActionName(action);
+        return name == null ? undefined : Codes[name as any] as any;
+    }
+
+    export function getActionName(action: ProtoTypes.IActionContainer): string | undefined {
+        for (const k in action) {
+            return k;
+        }
+        return undefined;
     }
 
     export function cloneObject(obj: { [key: string]: any }): { [key: string]: any } {
