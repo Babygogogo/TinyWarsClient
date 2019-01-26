@@ -1,5 +1,7 @@
 
 namespace TinyWars.Utility.Types {
+    import Codes = Network.Codes;
+
     ////////////////////////////////////////////////////////////////////////////////
     // Config types.
     ////////////////////////////////////////////////////////////////////////////////
@@ -60,6 +62,84 @@ namespace TinyWars.Utility.Types {
         unitType    : UnitType;
         srcTileType : TileType;
         dstTileType : TileType;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Serialization data types.
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    export interface SerializedMcAction extends ProtoTypes.IContainer {
+        actionCode  : Codes;
+    }
+    export interface SerializedMcTile extends ProtoTypes.ISerializedMcTile {
+        gridX           : number;
+        gridY           : number;
+        baseViewId      : number;
+        objectViewId    : number;
+    };
+    export interface SerializedMcUnit extends ProtoTypes.ISerializedMcUnit {
+        gridX   : number;
+        gridY   : number;
+        unitId  : number;
+        viewId  : number;
+    }
+    export interface SerializedMcTileMap extends ProtoTypes.ISerializedMcTileMap {
+        tiles?: SerializedMcTile[];
+    }
+    export interface SerializedMcUnitMap extends ProtoTypes.ISerializedMcUnitMap {
+        units?      : SerializedMcUnit[];
+        nextUnitId  : number;
+    }
+    export interface SerializedMcPlayer extends ProtoTypes.ISerializedMcPlayer {
+        fund            : number;
+        hasVotedForDraw : boolean;
+        isAlive         : boolean;
+        playerIndex     : number;
+        teamIndex       : number;
+        userId          : number;
+    }
+    export interface SerializedMcFogMap extends ProtoTypes.ISerializedMcFogMap {
+        mapsForPath?: SerializedMcFogMapForPath[];
+    }
+    export interface SerializedMcFogMapForPath extends ProtoTypes.ISerializedMcFogMapForPath {
+        playerIndex : number;
+        encodedMap  : string;
+    }
+    export interface SerializedMcField extends ProtoTypes.ISerializedMcField {
+        fogMap  : SerializedMcFogMap;
+        unitMap?: SerializedMcUnitMap;
+        tileMap?: SerializedMcTileMap;
+    }
+    export interface SerializedMcTurn extends ProtoTypes.ISerializedMcTurn {
+        turnIndex       : number;
+        playerIndex     : number;
+        turnPhaseCode   : TurnPhaseCode;
+    }
+    export interface SerializedMcWar extends ProtoTypes.ISerializedMcWar {
+        warId           : number;
+        configVersion   : number;
+        mapName         : string;
+        mapDesigner     : string;
+        mapVersion      : number;
+        warName         : string;
+        warPassword     : string;
+        warComment      : string;
+
+        hasFogByDefault     : boolean;
+        timeLimit           : number;
+        initialFund         : number;
+        incomeModifier      : number;
+        initialEnergy       : number;
+        energyGrowthModifier: number;
+        moveRangeModifier   : number;
+        attackPowerModifier : number;
+        visionRangeModifier : number;
+
+        remainingVotesForDraw?  : number;
+        enterTurnTime?          : number;
+        executedActions         : SerializedMcAction[];
+        players                 : SerializedMcPlayer[];
+        turn                    : SerializedMcTurn;
+        field                   : SerializedMcField;
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -149,51 +229,6 @@ namespace TinyWars.Utility.Types {
         viewId: number;
 
         unitId: number;
-    }
-
-    export interface SerializedMcTile extends ProtoTypes.ISerializedMcTile {
-        gridX           : number;
-        gridY           : number;
-        baseViewId      : number;
-        objectViewId    : number;
-    };
-    export interface SerializedMcUnit extends ProtoTypes.ISerializedMcUnit {
-        gridX   : number;
-        gridY   : number;
-        unitId  : number;
-        viewId  : number;
-    }
-    export interface SerializedMcTileMap extends ProtoTypes.ISerializedMcTileMap {
-        tiles?: SerializedMcTile[];
-    }
-    export interface SerializedMcUnitMap extends ProtoTypes.ISerializedMcUnitMap {
-        units?      : SerializedMcUnit[];
-        nextUnitId  : number;
-    }
-    export interface SerializedMcPlayer extends ProtoTypes.ISerializedMcPlayer {
-        fund            : number;
-        hasVotedForDraw : boolean;
-        isAlive         : boolean;
-        playerIndex     : number;
-        teamIndex       : number;
-        userId          : number;
-    }
-    export interface SerializedMcFogMap extends ProtoTypes.ISerializedMcFogMap {
-        mapsForPath?: SerializedMcFogMapForPath[];
-    }
-    export interface SerializedMcFogMapForPath extends ProtoTypes.ISerializedMcFogMapForPath {
-        playerIndex : number;
-        encodedMap  : string;
-    }
-    export interface SerializedMcField extends ProtoTypes.ISerializedMcField {
-        fogMap  : SerializedMcFogMap;
-        unitMap?: SerializedMcUnitMap;
-        tileMap?: SerializedMcTileMap;
-    }
-    export interface SerializedMcTurn extends ProtoTypes.ISerializedMcTurn {
-        turnIndex       : number;
-        playerIndex     : number;
-        turnPhaseCode   : TurnPhaseCode;
     }
 
     ////////////////////////////////////////////////////////////////////////////////
