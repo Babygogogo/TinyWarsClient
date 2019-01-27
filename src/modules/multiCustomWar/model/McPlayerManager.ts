@@ -49,36 +49,6 @@ namespace TinyWars.MultiCustomWar {
             return undefined;
         }
 
-        public getTotalPlayersCount(): number {
-            return this._players.size;
-        }
-
-        public getAlivePlayersCount(): number {
-            let count = 0;
-            for (const [, player] of this._players) {
-                if (player.getIsAlive()) {
-                    ++count;
-                }
-            }
-            return count;
-        }
-
-        public getAliveTeamsCount(ignoredPlayerIndex?: number): number {
-            const aliveTeams = new Map<number, boolean>();
-            for (const [, player] of this._players) {
-                if ((player.getIsAlive()) && (player.getPlayerIndex() !== ignoredPlayerIndex)) {
-                    aliveTeams.set(player.getTeamIndex(), true);
-                }
-            }
-            return aliveTeams.size;
-        }
-
-        public checkIsSameTeam(playerIndex1: number, playerIndex2: number): boolean {
-            const p1 = this._players.get(playerIndex1);
-            const p2 = this._players.get(playerIndex2);
-            return (p1 != null) && (p2 != null) && (p1.getTeamIndex() === p2.getTeamIndex());
-        }
-
         public getLoggedInPlayer(): McPlayer | undefined {
             if (!this._loggedInPlayer) {
                 const userId = User.UserModel.getUserId();
@@ -97,9 +67,42 @@ namespace TinyWars.MultiCustomWar {
             return player ? player.getPlayerIndex() : undefined;
         }
 
-        public forEachPlayer(func: (p: McPlayer) => void): void {
-            for (const [, player] of this._players) {
-                func(player);
+        public getTotalPlayersCount(includeNeutral: boolean): number {
+            return includeNeutral ? this._players.size : this._players.size - 1;
+        }
+
+        public getAlivePlayersCount(includeNeutral: boolean): number {
+            let count = 0;
+            for (const [playerIndex, player] of this._players) {
+                if ((player.getIsAlive())                   &&
+                    ((includeNeutral) || (playerIndex !== 0))) {
+                    ++count;
+                }
+            }
+            return count;
+        }
+
+        public getAliveTeamsCount(includeNeutral: boolean, ignoredPlayerIndex?: number): number {
+            const aliveTeams = new Map<number, boolean>();
+            for (const [playerIndex, player] of this._players) {
+                if ((player.getIsAlive())                   &&
+                    (playerIndex !== ignoredPlayerIndex)    &&
+                    ((includeNeutral) || (playerIndex !== 0))) {
+                    aliveTeams.set(player.getTeamIndex(), true);
+                }
+            }
+            return aliveTeams.size;
+        }
+
+        public checkIsSameTeam(playerIndex1: number, playerIndex2: number): boolean {
+            const p1 = this._players.get(playerIndex1);
+            const p2 = this._players.get(playerIndex2);
+            return (p1 != null) && (p2 != null) && (p1.getTeamIndex() === p2.getTeamIndex());
+        }
+
+        public forEachPlayer(includeNeutral: boolean, func: (p: McPlayer) => void): void {
+            for (const [playerIndex, player] of this._players) {
+                ((includeNeutral) || (playerIndex !== 0)) && (func(player));
             }
         }
     }

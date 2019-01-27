@@ -207,7 +207,7 @@ namespace TinyWars.MultiCustomWar {
                 if ((this._hasUnitOnBeginningTurn) && (!war.getUnitMap().checkHasUnit(playerIndex))) {
                     DestructionHelpers.destroyPlayerForce(war, playerIndex);
 
-                    if (war.getPlayerManager().getAliveTeamsCount() <= 1) {
+                    if (war.getPlayerManager().getAliveTeamsCount(false) <= 1) {
                         war.setIsEnded(true);
                     } else {
                         this.endPhaseMain();
@@ -283,12 +283,12 @@ namespace TinyWars.MultiCustomWar {
 
         private _getNextTurnAndPlayerIndex(): { turnIndex: number, playerIndex: number } {
             const playerManager = this._war.getPlayerManager();
-            const playersCount  = playerManager.getTotalPlayersCount();
+            const playersCount  = playerManager.getTotalPlayersCount(true);
             let nextTurnIndex   = this.getTurnIndex();
             let nextPlayerIndex = this.getPlayerIndexInTurn() + 1;
             while (true) {
                 if (nextPlayerIndex > playersCount) {
-                    nextPlayerIndex = 1;
+                    nextPlayerIndex = 0;
                     nextTurnIndex   += 1;
                 }
 

@@ -231,7 +231,7 @@ namespace TinyWars.MultiCustomWar {
                 };
             } else {
                 let [fromPaths, fromTiles, fromUnits] = [0, 0, 0];
-                this._war.getPlayerManager().forEachPlayer((player: McPlayer) => {
+                this._war.getPlayerManager().forEachPlayer(false, (player: McPlayer) => {
                     if ((player.getIsAlive()) && (player.getTeamIndex() === teamIndex)) {
                         const v = this.getVisibilityForPlayer(gridIndex, player.getPlayerIndex());
                         fromPaths   = Math.max(fromPaths, v.fromPaths);
