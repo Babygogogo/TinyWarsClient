@@ -134,7 +134,7 @@ namespace TinyWars.Utility.Types {
         visionRangeModifier : number;
 
         remainingVotesForDraw?  : number;
-        enterTurnTime?          : number;
+        enterTurnTime           : number;
         executedActions         : SerializedMcAction[];
         players                 : SerializedMcPlayer[];
         turn                    : SerializedMcTurn;

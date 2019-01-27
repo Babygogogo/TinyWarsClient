@@ -297,7 +297,7 @@ namespace TinyWars.MultiCustomRoom {
             const data = this.data as DataForWarRenderer;
             this.currentState           = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
             this._labelName.text        = data.warInfo.warName || data.warInfo.mapName;
-            this._labelPassword.visible = data.warInfo.warPassword != null;
+            this._labelPassword.visible = (data.warInfo.warPassword != null) && (data.warInfo.warPassword.length > 0);
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
@@ -307,7 +307,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
             const data = this.data as DataForWarRenderer;
-            if (data.warInfo.warPassword != null) {
+            if (data.warInfo.warPassword) {
                 McrJoinPasswordPanel.show(data.warInfo);
             } else {
                 McrJoinDetailPanel.show(data.warInfo);

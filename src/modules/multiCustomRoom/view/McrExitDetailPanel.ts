@@ -99,7 +99,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _updateView(): void {
             const info = this._openData;
-            this._labelWarPassword.text             = info.warPassword  ? info.warPassword : "----";
+            this._labelWarPassword.text             = info.warPassword ? info.warPassword : "----";
             this._labelHasFog.text                  = Lang.getText(Lang.BigType.B01, info.hasFog ? Lang.SubType.S12 : Lang.SubType.S13);
             this._labelTimeLimit.text               = Helpers.getTimeText(info.timeLimit);
             this._labelInitialFund.text             = `${info.initialFund}`;

@@ -80,7 +80,7 @@ namespace TinyWars.Network {
             if ((!socket) || (!socket.connected)) {
                 FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S14));
             } else {
-                const encodedData = ProtoManager.encodeAsContainer(action);
+                const encodedData = ProtoManager.encodeAsActionContainer(action);
                 (encodedData != null) && (socket.emit("message", encodedData));
             }
         }
@@ -118,7 +118,7 @@ namespace TinyWars.Network {
             });
 
             socket.on("message", (data: ReceivedData) => {
-                dispatcher.dispatchWithContainer(ProtoManager.decodeAsContainer(data));
+                dispatcher.dispatchWithContainer(ProtoManager.decodeAsActionContainer(data));
             });
         }
     }

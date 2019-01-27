@@ -197,10 +197,10 @@ namespace TinyWars.MultiCustomWar {
             return id > 0 ? id - 1 : undefined;
         }
 
-        public setEnterTurnTime(timestamp: number | undefined): void {
+        public setEnterTurnTime(timestamp: number): void {
             this._enterTurnTime = timestamp;
         }
-        public getEnterTurnTime(): number | undefined {
+        public getEnterTurnTime(): number {
             return this._enterTurnTime;
         }
 

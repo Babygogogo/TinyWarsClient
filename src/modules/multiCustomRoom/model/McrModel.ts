@@ -66,9 +66,9 @@ namespace TinyWars.MultiCustomRoom {
             mapName         : "",
             mapDesigner     : "",
             mapVersion      : 0,
-            warName         : undefined,
-            warPassword     : undefined,
-            warComment      : undefined,
+            warName         : "",
+            warPassword     : "",
+            warComment      : "",
             configVersion   : ConfigManager.getNewestConfigVersion(),
 
             playerIndex     : 0,
@@ -120,23 +120,23 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         export function setCreateWarName(name: string): void {
-            _dataForCreateWar.warName = name.length > 0 ? name : undefined;
+            _dataForCreateWar.warName = name;
         }
-        export function getCreateWarName(): string | undefined {
+        export function getCreateWarName(): string {
             return _dataForCreateWar.warName;
         }
 
         export function setCreateWarPassword(password: string): void {
-            _dataForCreateWar.warPassword = password.length > 0 ? password : undefined;
+            _dataForCreateWar.warPassword = password;
         }
-        export function getCreateWarPassword(): string | undefined {
+        export function getCreateWarPassword(): string {
             return _dataForCreateWar.warPassword;
         }
 
         export function setCreateWarComment(comment: string): void {
-            _dataForCreateWar.warComment = comment.length > 0 ? comment : undefined;
+            _dataForCreateWar.warComment = comment;
         }
-        export function getCreateWarComment(): string | undefined {
+        export function getCreateWarComment(): string {
             return _dataForCreateWar.warComment;
         }
 
