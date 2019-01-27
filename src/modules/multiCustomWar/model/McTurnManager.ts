@@ -12,6 +12,8 @@ namespace TinyWars.MultiCustomWar {
         private _phaseCode          : TurnPhaseCode;
         private _war                : McWar;
 
+        private _hasUnitOnBeginningTurn = false;
+
         public constructor() {
         }
 
@@ -119,18 +121,21 @@ namespace TinyWars.MultiCustomWar {
             }
         }
         private _runPhaseGetFund(): void {
-            const playerIndex   = this.getPlayerIndexInTurn();
-            let totalIncome     = 0;
-            this._war.getTileMap().forEachTile(tile => {
-                totalIncome += tile.getIncomeForPlayer(playerIndex);
-            });
+            const playerIndex = this.getPlayerIndexInTurn();
+            if (playerIndex !== 0) {
+                let totalIncome = 0;
+                this._war.getTileMap().forEachTile(tile => {
+                    totalIncome += tile.getIncomeForPlayer(playerIndex);
+                });
 
-            const player = this._war.getPlayer(playerIndex)!;
-            player.setFund(player.getFund() + totalIncome);
+                const player = this._war.getPlayer(playerIndex)!;
+                player.setFund(player.getFund() + totalIncome);
+                this._hasUnitOnBeginningTurn = this._war.getUnitMap().checkHasUnit(playerIndex);
+            }
         }
         private _runPhaseConsumeFuel(): void {
-            if (this.getTurnIndex() > 1) {
-                const playerIndex = this.getPlayerIndexInTurn();
+            const playerIndex = this.getPlayerIndexInTurn();
+            if ((playerIndex !== 0) && (this.getTurnIndex() > 0)) {
                 this._war.getUnitMap().forEachUnitOnMap(unit => {
                     if (unit.getPlayerIndex() === playerIndex) {
                         unit.setCurrentFuel(Math.max(0, unit.getCurrentFuel() - unit.getFuelConsumptionPerTurn()));
@@ -139,77 +144,92 @@ namespace TinyWars.MultiCustomWar {
             }
         }
         private _runPhaseRepairUnitByTile(): void {
-            const playerIndex   = this.getPlayerIndexInTurn();
-            const war           = this._war;
-            const allUnitsOnMap = [] as McUnit[];
-            war.getUnitMap().forEachUnitOnMap(unit => {
-                (unit.getPlayerIndex() === playerIndex) && (allUnitsOnMap.push(unit));
-            });
+            const playerIndex = this.getPlayerIndexInTurn();
+            if (playerIndex !== 0) {
+                const war           = this._war;
+                const allUnitsOnMap = [] as McUnit[];
+                war.getUnitMap().forEachUnitOnMap(unit => {
+                    (unit.getPlayerIndex() === playerIndex) && (allUnitsOnMap.push(unit));
+                });
 
-            const tileMap   = war.getTileMap();
-            const player    = war.getPlayer(playerIndex)!;
-            for (const unit of allUnitsOnMap.sort(sorterForRepairUnits)) {
-                const repairData = tileMap.getTile(unit.getGridIndex()).getRepairHpAndCostForUnit(unit);
-                if (repairData) {
-                    unit.updateOnRepaired(repairData.hp);
-                    player.setFund(player.getFund() - repairData.cost);
+                const tileMap   = war.getTileMap();
+                const player    = war.getPlayer(playerIndex)!;
+                for (const unit of allUnitsOnMap.sort(sorterForRepairUnits)) {
+                    const repairData = tileMap.getTile(unit.getGridIndex()).getRepairHpAndCostForUnit(unit);
+                    if (repairData) {
+                        unit.updateOnRepaired(repairData.hp);
+                        player.setFund(player.getFund() - repairData.cost);
+                    }
                 }
             }
         }
         private _runPhaseDestroyUnitsOutOfFuel(): void {
-            const playerIndex   = this.getPlayerIndexInTurn();
-            const war           = this._war;
-            const fogMap        = war.getFogMap();
-            war.getUnitMap().forEachUnitOnMap(unit => {
-                if ((unit.checkIsDestroyedOnOutOfFuel()) && (unit.getCurrentFuel() <= 0) && (unit.getPlayerIndex() === playerIndex)) {
-                    const gridIndex = unit.getGridIndex();
-                    fogMap.updateMapFromPathsByUnitAndPath(unit, [gridIndex]);
-                    DestructionHelpers.destroyUnitOnMap(war, gridIndex, true);
-                }
-            });
+            const playerIndex = this.getPlayerIndexInTurn();
+            if (playerIndex !== 0) {
+                const war           = this._war;
+                const fogMap        = war.getFogMap();
+                war.getUnitMap().forEachUnitOnMap(unit => {
+                    if ((unit.checkIsDestroyedOnOutOfFuel()) && (unit.getCurrentFuel() <= 0) && (unit.getPlayerIndex() === playerIndex)) {
+                        const gridIndex = unit.getGridIndex();
+                        fogMap.updateMapFromPathsByUnitAndPath(unit, [gridIndex]);
+                        DestructionHelpers.destroyUnitOnMap(war, gridIndex, true);
+                    }
+                });
+            }
         }
         private _runPhaseRepairUnitByUnit(): void {
-            const playerIndex       = this.getPlayerIndexInTurn();
-            const allUnitsLoaded    = [] as McUnit[];
-            const war               = this._war;
-            const unitMap           = war.getUnitMap();
-            unitMap.forEachUnitLoaded(unit => {
-                (unit.getPlayerIndex() === playerIndex) && (allUnitsLoaded.push(unit));
-            });
+            const playerIndex = this.getPlayerIndexInTurn();
+            if (playerIndex !== 0) {
+                const allUnitsLoaded    = [] as McUnit[];
+                const war               = this._war;
+                const unitMap           = war.getUnitMap();
+                unitMap.forEachUnitLoaded(unit => {
+                    (unit.getPlayerIndex() === playerIndex) && (allUnitsLoaded.push(unit));
+                });
 
-            const player = war.getPlayer(playerIndex)!;
-            for (const unit of allUnitsLoaded.sort(sorterForRepairUnits)) {
-                const loader        = unit.getLoaderUnit()!;
-                const repairData    = loader.getRepairHpAndCostForLoadedUnit(unit);
-                if (repairData) {
-                    unit.updateOnRepaired(repairData.hp);
-                    player.setFund(player.getFund() - repairData.cost);
-                } else if (loader.checkCanSupplyLoadedUnit()) {
-                    unit.updateOnSupplied();
+                const player = war.getPlayer(playerIndex)!;
+                for (const unit of allUnitsLoaded.sort(sorterForRepairUnits)) {
+                    const loader        = unit.getLoaderUnit()!;
+                    const repairData    = loader.getRepairHpAndCostForLoadedUnit(unit);
+                    if (repairData) {
+                        unit.updateOnRepaired(repairData.hp);
+                        player.setFund(player.getFund() - repairData.cost);
+                    } else if (loader.checkCanSupplyLoadedUnit()) {
+                        unit.updateOnSupplied();
+                    }
                 }
             }
         }
         private _runPhaseMain(): void {
             const war           = this._war;
             const playerIndex   = this.getPlayerIndexInTurn();
-            if (!war.getUnitMap().checkHasUnit(playerIndex)) {
-                DestructionHelpers.destroyPlayerForce(war, playerIndex);
+            if (playerIndex !== 0) {
+                if ((this._hasUnitOnBeginningTurn) && (!war.getUnitMap().checkHasUnit(playerIndex))) {
+                    DestructionHelpers.destroyPlayerForce(war, playerIndex);
 
-                if (war.getPlayerManager().getAliveTeamsCount() <= 1) {
-                    war.setIsEnded(true);
-                } else {
-                    this.endPhaseMain();
+                    if (war.getPlayerManager().getAliveTeamsCount() <= 1) {
+                        war.setIsEnded(true);
+                    } else {
+                        this.endPhaseMain();
+                    }
                 }
+            } else {
+                // TODO: Activate neutral map weapons.
             }
         }
         private _runPhaseResetUnitState(): void {
-            const playerIndex   = this.getPlayerIndexInTurn();
-            this._war.getUnitMap().forEachUnit(unit => {
-                (unit.getPlayerIndex() === playerIndex) && (unit.setState(Types.UnitState.Idle));
-            })
+            const playerIndex = this.getPlayerIndexInTurn();
+            if (playerIndex !== 0) {
+                this._war.getUnitMap().forEachUnit(unit => {
+                    (unit.getPlayerIndex() === playerIndex) && (unit.setState(Types.UnitState.Idle));
+                });
+            }
         }
         private _runPhaseResetVisionForCurrentPlayer(): void {
-            this._war.getFogMap().resetMapFromPathsForPlayer(this.getPlayerIndexInTurn());
+            const playerIndex = this.getPlayerIndexInTurn();
+            if (playerIndex !== 0) {
+                this._war.getFogMap().resetMapFromPathsForPlayer(this.getPlayerIndexInTurn());
+            }
         }
         private _runPhaseTickTurnAndPlayerIndex(): void {
             const data = this._getNextTurnAndPlayerIndex();
@@ -217,13 +237,18 @@ namespace TinyWars.MultiCustomWar {
             this._setPlayerIndexInTurn(data.playerIndex);
         }
         private _runPhaseResetSkillState(): void {
-            // Do nothing for now.
+            const playerIndex = this.getPlayerIndexInTurn();
+            if (playerIndex !== 0) {
+                // TODO
+            }
         }
         private _runPhaseResetVisionForNextPlayer(): void {
-            const fogMap        = this._war.getFogMap();
-            const playerIndex   = this.getPlayerIndexInTurn();
-            fogMap.resetMapFromTilesForPlayer(playerIndex);
-            fogMap.resetMapFromUnitsForPlayer(playerIndex);
+            const playerIndex = this.getPlayerIndexInTurn();
+            if (playerIndex !== 0) {
+                const fogMap = this._war.getFogMap();
+                fogMap.resetMapFromTilesForPlayer(playerIndex);
+                fogMap.resetMapFromUnitsForPlayer(playerIndex);
+            }
         }
         private _runPhaseResetVotesForDraw(): void {
             this._war.getPlayer(this.getPlayerIndexInTurn())!.setHasVotedForDraw(false);
