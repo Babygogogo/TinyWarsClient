@@ -8,7 +8,7 @@ namespace TinyWars.MultiCustomWar {
         private _isAlive            : boolean;
         private _playerIndex        : number;
         private _teamIndex          : number;
-        private _userId             : number;
+        private _userId?            : number;
 
         private _nickname           : string;
         private _war                : McWar;
@@ -77,10 +77,10 @@ namespace TinyWars.MultiCustomWar {
             return this._teamIndex;
         }
 
-        private _setUserId(id: number): void {
+        private _setUserId(id: number | undefined): void {
             this._userId = id;
         }
-        public getUserId(): number {
+        public getUserId(): number | undefined {
             return this._userId;
         }
 

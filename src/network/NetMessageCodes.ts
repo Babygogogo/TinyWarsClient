@@ -23,5 +23,7 @@ namespace TinyWars.Network {
         S_McrGetUnjoinedWaitingInfos = 108,
         C_McrJoinWar = 109,
         S_McrJoinWar = 110,
+        C_McrGetJoinedOngoingInfos = 111,
+        S_McrGetJoinedOngoingInfos = 112,
     }
 }

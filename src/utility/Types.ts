@@ -94,7 +94,7 @@ namespace TinyWars.Utility.Types {
         isAlive         : boolean;
         playerIndex     : number;
         teamIndex       : number;
-        userId          : number;
+        userId?         : number;
     }
     export interface SerializedMcFogMap extends ProtoTypes.ISerializedMcFogMap {
         mapsForPath?: SerializedMcFogMapForPath[];

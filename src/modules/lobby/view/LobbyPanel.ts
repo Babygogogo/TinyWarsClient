@@ -95,6 +95,13 @@ namespace TinyWars.Lobby {
                         MultiCustomRoom.McrExitMapListPanel.show();
                     },
                 },
+                {
+                    name    : Lang.getText(Lang.BigType.B01, Lang.SubType.S24),
+                    callback: () => {
+                        // LobbyPanel.hide();
+                        MultiCustomRoom.McrProxy.reqGetJoinedOngoingWarInfos();
+                    },
+                },
             ];
         }
     }

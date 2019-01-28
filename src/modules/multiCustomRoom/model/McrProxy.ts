@@ -90,5 +90,15 @@ namespace TinyWars.MultiCustomRoom {
                 Notify.dispatch(Notify.Type.SMcrExitWar, data);
             }
         }
+
+        export function reqGetJoinedOngoingWarInfos(): void {
+            NetManager.send({
+                C_McrGetJoinedOngoingInfos: {},
+            });
+        }
+        function _onSMcrGetJoinedOngoingInfos(e: egret.Event): void {
+            const data = e.data as ProtoTypes.IS_McrGetJoinedOngoingInfos;
+            // TODO
+        }
     }
 }

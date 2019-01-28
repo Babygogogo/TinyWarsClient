@@ -2947,6 +2947,204 @@ namespace TinyWars.Utility {
             public toJSON(): { [k: string]: any };
         }
 
+        /** Properties of a McwOngoingInfo. */
+        export declare interface IMcwOngoingInfo {
+
+            /** McwOngoingInfo id */
+            id?: (number | null);
+
+            /** McwOngoingInfo configVersion */
+            configVersion?: (number | null);
+
+            /** McwOngoingInfo mapName */
+            mapName?: (string | null);
+
+            /** McwOngoingInfo mapDesigner */
+            mapDesigner?: (string | null);
+
+            /** McwOngoingInfo mapVersion */
+            mapVersion?: (number | null);
+
+            /** McwOngoingInfo warName */
+            warName?: (string | null);
+
+            /** McwOngoingInfo warPassword */
+            warPassword?: (string | null);
+
+            /** McwOngoingInfo warComment */
+            warComment?: (string | null);
+
+            /** McwOngoingInfo playerIndexInTurn */
+            playerIndexInTurn?: (number | null);
+
+            /** McwOngoingInfo turnIndex */
+            turnIndex?: (number | null);
+
+            /** McwOngoingInfo hasFog */
+            hasFog?: (number | null);
+
+            /** McwOngoingInfo timeLimit */
+            timeLimit?: (number | null);
+
+            /** McwOngoingInfo initialFund */
+            initialFund?: (number | null);
+
+            /** McwOngoingInfo incomeModifier */
+            incomeModifier?: (number | null);
+
+            /** McwOngoingInfo initialEnergy */
+            initialEnergy?: (number | null);
+
+            /** McwOngoingInfo energyGrowthModifier */
+            energyGrowthModifier?: (number | null);
+
+            /** McwOngoingInfo moveRangeModifier */
+            moveRangeModifier?: (number | null);
+
+            /** McwOngoingInfo attackPowerModifier */
+            attackPowerModifier?: (number | null);
+
+            /** McwOngoingInfo visionRangeModifier */
+            visionRangeModifier?: (number | null);
+        }
+
+        /** Represents a McwOngoingInfo. */
+        export declare class McwOngoingInfo implements IMcwOngoingInfo {
+
+            /**
+             * Constructs a new McwOngoingInfo.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: IMcwOngoingInfo);
+
+            /** McwOngoingInfo id. */
+            public id: number;
+
+            /** McwOngoingInfo configVersion. */
+            public configVersion: number;
+
+            /** McwOngoingInfo mapName. */
+            public mapName: string;
+
+            /** McwOngoingInfo mapDesigner. */
+            public mapDesigner: string;
+
+            /** McwOngoingInfo mapVersion. */
+            public mapVersion: number;
+
+            /** McwOngoingInfo warName. */
+            public warName: string;
+
+            /** McwOngoingInfo warPassword. */
+            public warPassword: string;
+
+            /** McwOngoingInfo warComment. */
+            public warComment: string;
+
+            /** McwOngoingInfo playerIndexInTurn. */
+            public playerIndexInTurn: number;
+
+            /** McwOngoingInfo turnIndex. */
+            public turnIndex: number;
+
+            /** McwOngoingInfo hasFog. */
+            public hasFog: number;
+
+            /** McwOngoingInfo timeLimit. */
+            public timeLimit: number;
+
+            /** McwOngoingInfo initialFund. */
+            public initialFund: number;
+
+            /** McwOngoingInfo incomeModifier. */
+            public incomeModifier: number;
+
+            /** McwOngoingInfo initialEnergy. */
+            public initialEnergy: number;
+
+            /** McwOngoingInfo energyGrowthModifier. */
+            public energyGrowthModifier: number;
+
+            /** McwOngoingInfo moveRangeModifier. */
+            public moveRangeModifier: number;
+
+            /** McwOngoingInfo attackPowerModifier. */
+            public attackPowerModifier: number;
+
+            /** McwOngoingInfo visionRangeModifier. */
+            public visionRangeModifier: number;
+
+            /**
+             * Creates a new McwOngoingInfo instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns McwOngoingInfo instance
+             */
+            public static create(properties?: IMcwOngoingInfo): McwOngoingInfo;
+
+            /**
+             * Encodes the specified McwOngoingInfo message. Does not implicitly {@link McwOngoingInfo.verify|verify} messages.
+             * @param message McwOngoingInfo message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: IMcwOngoingInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified McwOngoingInfo message, length delimited. Does not implicitly {@link McwOngoingInfo.verify|verify} messages.
+             * @param message McwOngoingInfo message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: IMcwOngoingInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a McwOngoingInfo message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns McwOngoingInfo
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): McwOngoingInfo;
+
+            /**
+             * Decodes a McwOngoingInfo message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns McwOngoingInfo
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): McwOngoingInfo;
+
+            /**
+             * Verifies a McwOngoingInfo message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string | null);
+
+            /**
+             * Creates a McwOngoingInfo message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns McwOngoingInfo
+             */
+            public static fromObject(object: { [k: string]: any }): McwOngoingInfo;
+
+            /**
+             * Creates a plain object from a McwOngoingInfo message. Also converts values to other types if specified.
+             * @param message McwOngoingInfo
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: McwOngoingInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this McwOngoingInfo to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
         /** Properties of an ActionContainer. */
         export declare interface IActionContainer {
 
@@ -3015,6 +3213,12 @@ namespace TinyWars.Utility {
 
             /** ActionContainer S_McrJoinWar */
             S_McrJoinWar?: (IS_McrJoinWar | null);
+
+            /** ActionContainer C_McrGetJoinedOngoingInfos */
+            C_McrGetJoinedOngoingInfos?: (IC_McrGetJoinedOngoingInfos | null);
+
+            /** ActionContainer S_McrGetJoinedOngoingInfos */
+            S_McrGetJoinedOngoingInfos?: (IS_McrGetJoinedOngoingInfos | null);
         }
 
         /** Represents an ActionContainer. */
@@ -3091,6 +3295,12 @@ namespace TinyWars.Utility {
 
             /** ActionContainer S_McrJoinWar. */
             public S_McrJoinWar?: (IS_McrJoinWar | null);
+
+            /** ActionContainer C_McrGetJoinedOngoingInfos. */
+            public C_McrGetJoinedOngoingInfos?: (IC_McrGetJoinedOngoingInfos | null);
+
+            /** ActionContainer S_McrGetJoinedOngoingInfos. */
+            public S_McrGetJoinedOngoingInfos?: (IS_McrGetJoinedOngoingInfos | null);
 
             /**
              * Creates a new ActionContainer instance using the specified properties.
@@ -4995,9 +5205,6 @@ namespace TinyWars.Utility {
 
         /** Properties of a C_McrGetUnjoinedWaitingInfos. */
         export declare interface IC_McrGetUnjoinedWaitingInfos {
-
-            /** C_McrGetUnjoinedWaitingInfos account */
-            account?: (number | null);
         }
 
         /** Represents a C_McrGetUnjoinedWaitingInfos. */
@@ -5008,9 +5215,6 @@ namespace TinyWars.Utility {
              * @param [properties] Properties to set
              */
             constructor(properties?: IC_McrGetUnjoinedWaitingInfos);
-
-            /** C_McrGetUnjoinedWaitingInfos account. */
-            public account: number;
 
             /**
              * Creates a new C_McrGetUnjoinedWaitingInfos instance using the specified properties.
@@ -5378,6 +5582,180 @@ namespace TinyWars.Utility {
 
             /**
              * Converts this S_McrJoinWar to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a C_McrGetJoinedOngoingInfos. */
+        export declare interface IC_McrGetJoinedOngoingInfos {
+        }
+
+        /** Represents a C_McrGetJoinedOngoingInfos. */
+        export declare class C_McrGetJoinedOngoingInfos implements IC_McrGetJoinedOngoingInfos {
+
+            /**
+             * Constructs a new C_McrGetJoinedOngoingInfos.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: IC_McrGetJoinedOngoingInfos);
+
+            /**
+             * Creates a new C_McrGetJoinedOngoingInfos instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C_McrGetJoinedOngoingInfos instance
+             */
+            public static create(properties?: IC_McrGetJoinedOngoingInfos): C_McrGetJoinedOngoingInfos;
+
+            /**
+             * Encodes the specified C_McrGetJoinedOngoingInfos message. Does not implicitly {@link C_McrGetJoinedOngoingInfos.verify|verify} messages.
+             * @param message C_McrGetJoinedOngoingInfos message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: IC_McrGetJoinedOngoingInfos, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C_McrGetJoinedOngoingInfos message, length delimited. Does not implicitly {@link C_McrGetJoinedOngoingInfos.verify|verify} messages.
+             * @param message C_McrGetJoinedOngoingInfos message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: IC_McrGetJoinedOngoingInfos, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C_McrGetJoinedOngoingInfos message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C_McrGetJoinedOngoingInfos
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): C_McrGetJoinedOngoingInfos;
+
+            /**
+             * Decodes a C_McrGetJoinedOngoingInfos message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C_McrGetJoinedOngoingInfos
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): C_McrGetJoinedOngoingInfos;
+
+            /**
+             * Verifies a C_McrGetJoinedOngoingInfos message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string | null);
+
+            /**
+             * Creates a C_McrGetJoinedOngoingInfos message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C_McrGetJoinedOngoingInfos
+             */
+            public static fromObject(object: { [k: string]: any }): C_McrGetJoinedOngoingInfos;
+
+            /**
+             * Creates a plain object from a C_McrGetJoinedOngoingInfos message. Also converts values to other types if specified.
+             * @param message C_McrGetJoinedOngoingInfos
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: C_McrGetJoinedOngoingInfos, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C_McrGetJoinedOngoingInfos to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S_McrGetJoinedOngoingInfos. */
+        export declare interface IS_McrGetJoinedOngoingInfos {
+
+            /** S_McrGetJoinedOngoingInfos infos */
+            infos?: (IMcwOngoingInfo[] | null);
+        }
+
+        /** Represents a S_McrGetJoinedOngoingInfos. */
+        export declare class S_McrGetJoinedOngoingInfos implements IS_McrGetJoinedOngoingInfos {
+
+            /**
+             * Constructs a new S_McrGetJoinedOngoingInfos.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: IS_McrGetJoinedOngoingInfos);
+
+            /** S_McrGetJoinedOngoingInfos infos. */
+            public infos: IMcwOngoingInfo[];
+
+            /**
+             * Creates a new S_McrGetJoinedOngoingInfos instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S_McrGetJoinedOngoingInfos instance
+             */
+            public static create(properties?: IS_McrGetJoinedOngoingInfos): S_McrGetJoinedOngoingInfos;
+
+            /**
+             * Encodes the specified S_McrGetJoinedOngoingInfos message. Does not implicitly {@link S_McrGetJoinedOngoingInfos.verify|verify} messages.
+             * @param message S_McrGetJoinedOngoingInfos message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: IS_McrGetJoinedOngoingInfos, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S_McrGetJoinedOngoingInfos message, length delimited. Does not implicitly {@link S_McrGetJoinedOngoingInfos.verify|verify} messages.
+             * @param message S_McrGetJoinedOngoingInfos message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: IS_McrGetJoinedOngoingInfos, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S_McrGetJoinedOngoingInfos message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S_McrGetJoinedOngoingInfos
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): S_McrGetJoinedOngoingInfos;
+
+            /**
+             * Decodes a S_McrGetJoinedOngoingInfos message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S_McrGetJoinedOngoingInfos
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): S_McrGetJoinedOngoingInfos;
+
+            /**
+             * Verifies a S_McrGetJoinedOngoingInfos message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string | null);
+
+            /**
+             * Creates a S_McrGetJoinedOngoingInfos message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S_McrGetJoinedOngoingInfos
+             */
+            public static fromObject(object: { [k: string]: any }): S_McrGetJoinedOngoingInfos;
+
+            /**
+             * Creates a plain object from a S_McrGetJoinedOngoingInfos message. Also converts values to other types if specified.
+             * @param message S_McrGetJoinedOngoingInfos
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: S_McrGetJoinedOngoingInfos, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S_McrGetJoinedOngoingInfos to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
