@@ -2947,199 +2947,295 @@ namespace TinyWars.Utility {
             public toJSON(): { [k: string]: any };
         }
 
-        /** Properties of a McwOngoingInfo. */
-        export declare interface IMcwOngoingInfo {
+        /** Properties of a McwOngoingDetail. */
+        export declare interface IMcwOngoingDetail {
 
-            /** McwOngoingInfo id */
+            /** McwOngoingDetail id */
             id?: (number | null);
 
-            /** McwOngoingInfo configVersion */
+            /** McwOngoingDetail configVersion */
             configVersion?: (number | null);
 
-            /** McwOngoingInfo mapName */
+            /** McwOngoingDetail mapName */
             mapName?: (string | null);
 
-            /** McwOngoingInfo mapDesigner */
+            /** McwOngoingDetail mapDesigner */
             mapDesigner?: (string | null);
 
-            /** McwOngoingInfo mapVersion */
+            /** McwOngoingDetail mapVersion */
             mapVersion?: (number | null);
 
-            /** McwOngoingInfo warName */
+            /** McwOngoingDetail warName */
             warName?: (string | null);
 
-            /** McwOngoingInfo warPassword */
+            /** McwOngoingDetail warPassword */
             warPassword?: (string | null);
 
-            /** McwOngoingInfo warComment */
+            /** McwOngoingDetail warComment */
             warComment?: (string | null);
 
-            /** McwOngoingInfo playerIndexInTurn */
+            /** McwOngoingDetail playerIndexInTurn */
             playerIndexInTurn?: (number | null);
 
-            /** McwOngoingInfo turnIndex */
+            /** McwOngoingDetail turnIndex */
             turnIndex?: (number | null);
 
-            /** McwOngoingInfo hasFog */
+            /** McwOngoingDetail hasFog */
             hasFog?: (number | null);
 
-            /** McwOngoingInfo timeLimit */
+            /** McwOngoingDetail timeLimit */
             timeLimit?: (number | null);
 
-            /** McwOngoingInfo initialFund */
+            /** McwOngoingDetail initialFund */
             initialFund?: (number | null);
 
-            /** McwOngoingInfo incomeModifier */
+            /** McwOngoingDetail incomeModifier */
             incomeModifier?: (number | null);
 
-            /** McwOngoingInfo initialEnergy */
+            /** McwOngoingDetail initialEnergy */
             initialEnergy?: (number | null);
 
-            /** McwOngoingInfo energyGrowthModifier */
+            /** McwOngoingDetail energyGrowthModifier */
             energyGrowthModifier?: (number | null);
 
-            /** McwOngoingInfo moveRangeModifier */
+            /** McwOngoingDetail moveRangeModifier */
             moveRangeModifier?: (number | null);
 
-            /** McwOngoingInfo attackPowerModifier */
+            /** McwOngoingDetail attackPowerModifier */
             attackPowerModifier?: (number | null);
 
-            /** McwOngoingInfo visionRangeModifier */
+            /** McwOngoingDetail visionRangeModifier */
             visionRangeModifier?: (number | null);
+
+            /** McwOngoingDetail p1UserId */
+            p1UserId?: (number | null);
+
+            /** McwOngoingDetail p1TeamIndex */
+            p1TeamIndex?: (number | null);
+
+            /** McwOngoingDetail p1IsAlive */
+            p1IsAlive?: (boolean | null);
+
+            /** McwOngoingDetail p1UserNickname */
+            p1UserNickname?: (string | null);
+
+            /** McwOngoingDetail p2UserId */
+            p2UserId?: (number | null);
+
+            /** McwOngoingDetail p2TeamIndex */
+            p2TeamIndex?: (number | null);
+
+            /** McwOngoingDetail p2IsAlive */
+            p2IsAlive?: (boolean | null);
+
+            /** McwOngoingDetail p2UserNickname */
+            p2UserNickname?: (string | null);
+
+            /** McwOngoingDetail p3UserId */
+            p3UserId?: (number | null);
+
+            /** McwOngoingDetail p3TeamIndex */
+            p3TeamIndex?: (number | null);
+
+            /** McwOngoingDetail p3IsAlive */
+            p3IsAlive?: (boolean | null);
+
+            /** McwOngoingDetail p3UserNickname */
+            p3UserNickname?: (string | null);
+
+            /** McwOngoingDetail p4UserId */
+            p4UserId?: (number | null);
+
+            /** McwOngoingDetail p4TeamIndex */
+            p4TeamIndex?: (number | null);
+
+            /** McwOngoingDetail p4IsAlive */
+            p4IsAlive?: (boolean | null);
+
+            /** McwOngoingDetail p4UserNickname */
+            p4UserNickname?: (string | null);
         }
 
-        /** Represents a McwOngoingInfo. */
-        export declare class McwOngoingInfo implements IMcwOngoingInfo {
+        /** Represents a McwOngoingDetail. */
+        export declare class McwOngoingDetail implements IMcwOngoingDetail {
 
             /**
-             * Constructs a new McwOngoingInfo.
+             * Constructs a new McwOngoingDetail.
              * @param [properties] Properties to set
              */
-            constructor(properties?: IMcwOngoingInfo);
+            constructor(properties?: IMcwOngoingDetail);
 
-            /** McwOngoingInfo id. */
+            /** McwOngoingDetail id. */
             public id: number;
 
-            /** McwOngoingInfo configVersion. */
+            /** McwOngoingDetail configVersion. */
             public configVersion: number;
 
-            /** McwOngoingInfo mapName. */
+            /** McwOngoingDetail mapName. */
             public mapName: string;
 
-            /** McwOngoingInfo mapDesigner. */
+            /** McwOngoingDetail mapDesigner. */
             public mapDesigner: string;
 
-            /** McwOngoingInfo mapVersion. */
+            /** McwOngoingDetail mapVersion. */
             public mapVersion: number;
 
-            /** McwOngoingInfo warName. */
+            /** McwOngoingDetail warName. */
             public warName: string;
 
-            /** McwOngoingInfo warPassword. */
+            /** McwOngoingDetail warPassword. */
             public warPassword: string;
 
-            /** McwOngoingInfo warComment. */
+            /** McwOngoingDetail warComment. */
             public warComment: string;
 
-            /** McwOngoingInfo playerIndexInTurn. */
+            /** McwOngoingDetail playerIndexInTurn. */
             public playerIndexInTurn: number;
 
-            /** McwOngoingInfo turnIndex. */
+            /** McwOngoingDetail turnIndex. */
             public turnIndex: number;
 
-            /** McwOngoingInfo hasFog. */
+            /** McwOngoingDetail hasFog. */
             public hasFog: number;
 
-            /** McwOngoingInfo timeLimit. */
+            /** McwOngoingDetail timeLimit. */
             public timeLimit: number;
 
-            /** McwOngoingInfo initialFund. */
+            /** McwOngoingDetail initialFund. */
             public initialFund: number;
 
-            /** McwOngoingInfo incomeModifier. */
+            /** McwOngoingDetail incomeModifier. */
             public incomeModifier: number;
 
-            /** McwOngoingInfo initialEnergy. */
+            /** McwOngoingDetail initialEnergy. */
             public initialEnergy: number;
 
-            /** McwOngoingInfo energyGrowthModifier. */
+            /** McwOngoingDetail energyGrowthModifier. */
             public energyGrowthModifier: number;
 
-            /** McwOngoingInfo moveRangeModifier. */
+            /** McwOngoingDetail moveRangeModifier. */
             public moveRangeModifier: number;
 
-            /** McwOngoingInfo attackPowerModifier. */
+            /** McwOngoingDetail attackPowerModifier. */
             public attackPowerModifier: number;
 
-            /** McwOngoingInfo visionRangeModifier. */
+            /** McwOngoingDetail visionRangeModifier. */
             public visionRangeModifier: number;
 
+            /** McwOngoingDetail p1UserId. */
+            public p1UserId: number;
+
+            /** McwOngoingDetail p1TeamIndex. */
+            public p1TeamIndex: number;
+
+            /** McwOngoingDetail p1IsAlive. */
+            public p1IsAlive: boolean;
+
+            /** McwOngoingDetail p1UserNickname. */
+            public p1UserNickname: string;
+
+            /** McwOngoingDetail p2UserId. */
+            public p2UserId: number;
+
+            /** McwOngoingDetail p2TeamIndex. */
+            public p2TeamIndex: number;
+
+            /** McwOngoingDetail p2IsAlive. */
+            public p2IsAlive: boolean;
+
+            /** McwOngoingDetail p2UserNickname. */
+            public p2UserNickname: string;
+
+            /** McwOngoingDetail p3UserId. */
+            public p3UserId: number;
+
+            /** McwOngoingDetail p3TeamIndex. */
+            public p3TeamIndex: number;
+
+            /** McwOngoingDetail p3IsAlive. */
+            public p3IsAlive: boolean;
+
+            /** McwOngoingDetail p3UserNickname. */
+            public p3UserNickname: string;
+
+            /** McwOngoingDetail p4UserId. */
+            public p4UserId: number;
+
+            /** McwOngoingDetail p4TeamIndex. */
+            public p4TeamIndex: number;
+
+            /** McwOngoingDetail p4IsAlive. */
+            public p4IsAlive: boolean;
+
+            /** McwOngoingDetail p4UserNickname. */
+            public p4UserNickname: string;
+
             /**
-             * Creates a new McwOngoingInfo instance using the specified properties.
+             * Creates a new McwOngoingDetail instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns McwOngoingInfo instance
+             * @returns McwOngoingDetail instance
              */
-            public static create(properties?: IMcwOngoingInfo): McwOngoingInfo;
+            public static create(properties?: IMcwOngoingDetail): McwOngoingDetail;
 
             /**
-             * Encodes the specified McwOngoingInfo message. Does not implicitly {@link McwOngoingInfo.verify|verify} messages.
-             * @param message McwOngoingInfo message or plain object to encode
+             * Encodes the specified McwOngoingDetail message. Does not implicitly {@link McwOngoingDetail.verify|verify} messages.
+             * @param message McwOngoingDetail message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: IMcwOngoingInfo, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: IMcwOngoingDetail, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified McwOngoingInfo message, length delimited. Does not implicitly {@link McwOngoingInfo.verify|verify} messages.
-             * @param message McwOngoingInfo message or plain object to encode
+             * Encodes the specified McwOngoingDetail message, length delimited. Does not implicitly {@link McwOngoingDetail.verify|verify} messages.
+             * @param message McwOngoingDetail message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: IMcwOngoingInfo, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: IMcwOngoingDetail, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Decodes a McwOngoingInfo message from the specified reader or buffer.
+             * Decodes a McwOngoingDetail message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns McwOngoingInfo
+             * @returns McwOngoingDetail
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): McwOngoingInfo;
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): McwOngoingDetail;
 
             /**
-             * Decodes a McwOngoingInfo message from the specified reader or buffer, length delimited.
+             * Decodes a McwOngoingDetail message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns McwOngoingInfo
+             * @returns McwOngoingDetail
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): McwOngoingInfo;
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): McwOngoingDetail;
 
             /**
-             * Verifies a McwOngoingInfo message.
+             * Verifies a McwOngoingDetail message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             public static verify(message: { [k: string]: any }): (string | null);
 
             /**
-             * Creates a McwOngoingInfo message from a plain object. Also converts values to their respective internal types.
+             * Creates a McwOngoingDetail message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns McwOngoingInfo
+             * @returns McwOngoingDetail
              */
-            public static fromObject(object: { [k: string]: any }): McwOngoingInfo;
+            public static fromObject(object: { [k: string]: any }): McwOngoingDetail;
 
             /**
-             * Creates a plain object from a McwOngoingInfo message. Also converts values to other types if specified.
-             * @param message McwOngoingInfo
+             * Creates a plain object from a McwOngoingDetail message. Also converts values to other types if specified.
+             * @param message McwOngoingDetail
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: McwOngoingInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: McwOngoingDetail, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this McwOngoingInfo to JSON.
+             * Converts this McwOngoingDetail to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
@@ -5675,7 +5771,7 @@ namespace TinyWars.Utility {
         export declare interface IS_McrGetJoinedOngoingInfos {
 
             /** S_McrGetJoinedOngoingInfos infos */
-            infos?: (IMcwOngoingInfo[] | null);
+            infos?: (IMcwOngoingDetail[] | null);
         }
 
         /** Represents a S_McrGetJoinedOngoingInfos. */
@@ -5688,7 +5784,7 @@ namespace TinyWars.Utility {
             constructor(properties?: IS_McrGetJoinedOngoingInfos);
 
             /** S_McrGetJoinedOngoingInfos infos. */
-            public infos: IMcwOngoingInfo[];
+            public infos: IMcwOngoingDetail[];
 
             /**
              * Creates a new S_McrGetJoinedOngoingInfos instance using the specified properties.
