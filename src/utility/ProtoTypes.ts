@@ -3280,6 +3280,12 @@ namespace TinyWars.Utility {
             /** ActionContainer S_NewestConfigVersion */
             S_NewestConfigVersion?: (IS_NewestConfigVersion | null);
 
+            /** ActionContainer C_GetMapDynamicInfo */
+            C_GetMapDynamicInfo?: (IC_GetMapDynamicInfo | null);
+
+            /** ActionContainer S_GetMapDynamicInfo */
+            S_GetMapDynamicInfo?: (IS_GetMapDynamicInfo | null);
+
             /** ActionContainer C_McrCreateWar */
             C_McrCreateWar?: (IC_McrCreateWar | null);
 
@@ -3361,6 +3367,12 @@ namespace TinyWars.Utility {
 
             /** ActionContainer S_NewestConfigVersion. */
             public S_NewestConfigVersion?: (IS_NewestConfigVersion | null);
+
+            /** ActionContainer C_GetMapDynamicInfo. */
+            public C_GetMapDynamicInfo?: (IC_GetMapDynamicInfo | null);
+
+            /** ActionContainer S_GetMapDynamicInfo. */
+            public S_GetMapDynamicInfo?: (IS_GetMapDynamicInfo | null);
 
             /** ActionContainer C_McrCreateWar. */
             public C_McrCreateWar?: (IC_McrCreateWar | null);
@@ -4646,6 +4658,204 @@ namespace TinyWars.Utility {
 
             /**
              * Converts this S_NewestConfigVersion to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a C_GetMapDynamicInfo. */
+        export declare interface IC_GetMapDynamicInfo {
+
+            /** C_GetMapDynamicInfo mapName */
+            mapName?: (string | null);
+
+            /** C_GetMapDynamicInfo mapDesigner */
+            mapDesigner?: (string | null);
+
+            /** C_GetMapDynamicInfo mapVersion */
+            mapVersion?: (number | null);
+        }
+
+        /** Represents a C_GetMapDynamicInfo. */
+        export declare class C_GetMapDynamicInfo implements IC_GetMapDynamicInfo {
+
+            /**
+             * Constructs a new C_GetMapDynamicInfo.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: IC_GetMapDynamicInfo);
+
+            /** C_GetMapDynamicInfo mapName. */
+            public mapName: string;
+
+            /** C_GetMapDynamicInfo mapDesigner. */
+            public mapDesigner: string;
+
+            /** C_GetMapDynamicInfo mapVersion. */
+            public mapVersion: number;
+
+            /**
+             * Creates a new C_GetMapDynamicInfo instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C_GetMapDynamicInfo instance
+             */
+            public static create(properties?: IC_GetMapDynamicInfo): C_GetMapDynamicInfo;
+
+            /**
+             * Encodes the specified C_GetMapDynamicInfo message. Does not implicitly {@link C_GetMapDynamicInfo.verify|verify} messages.
+             * @param message C_GetMapDynamicInfo message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: IC_GetMapDynamicInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C_GetMapDynamicInfo message, length delimited. Does not implicitly {@link C_GetMapDynamicInfo.verify|verify} messages.
+             * @param message C_GetMapDynamicInfo message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: IC_GetMapDynamicInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C_GetMapDynamicInfo message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C_GetMapDynamicInfo
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): C_GetMapDynamicInfo;
+
+            /**
+             * Decodes a C_GetMapDynamicInfo message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C_GetMapDynamicInfo
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): C_GetMapDynamicInfo;
+
+            /**
+             * Verifies a C_GetMapDynamicInfo message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string | null);
+
+            /**
+             * Creates a C_GetMapDynamicInfo message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C_GetMapDynamicInfo
+             */
+            public static fromObject(object: { [k: string]: any }): C_GetMapDynamicInfo;
+
+            /**
+             * Creates a plain object from a C_GetMapDynamicInfo message. Also converts values to other types if specified.
+             * @param message C_GetMapDynamicInfo
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: C_GetMapDynamicInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C_GetMapDynamicInfo to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S_GetMapDynamicInfo. */
+        export declare interface IS_GetMapDynamicInfo {
+
+            /** S_GetMapDynamicInfo errorCode */
+            errorCode?: (number | null);
+
+            /** S_GetMapDynamicInfo mapInfos */
+            mapInfos?: (IMapInfo[] | null);
+        }
+
+        /** Represents a S_GetMapDynamicInfo. */
+        export declare class S_GetMapDynamicInfo implements IS_GetMapDynamicInfo {
+
+            /**
+             * Constructs a new S_GetMapDynamicInfo.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: IS_GetMapDynamicInfo);
+
+            /** S_GetMapDynamicInfo errorCode. */
+            public errorCode: number;
+
+            /** S_GetMapDynamicInfo mapInfos. */
+            public mapInfos: IMapInfo[];
+
+            /**
+             * Creates a new S_GetMapDynamicInfo instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S_GetMapDynamicInfo instance
+             */
+            public static create(properties?: IS_GetMapDynamicInfo): S_GetMapDynamicInfo;
+
+            /**
+             * Encodes the specified S_GetMapDynamicInfo message. Does not implicitly {@link S_GetMapDynamicInfo.verify|verify} messages.
+             * @param message S_GetMapDynamicInfo message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: IS_GetMapDynamicInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S_GetMapDynamicInfo message, length delimited. Does not implicitly {@link S_GetMapDynamicInfo.verify|verify} messages.
+             * @param message S_GetMapDynamicInfo message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: IS_GetMapDynamicInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S_GetMapDynamicInfo message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S_GetMapDynamicInfo
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): S_GetMapDynamicInfo;
+
+            /**
+             * Decodes a S_GetMapDynamicInfo message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S_GetMapDynamicInfo
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): S_GetMapDynamicInfo;
+
+            /**
+             * Verifies a S_GetMapDynamicInfo message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string | null);
+
+            /**
+             * Creates a S_GetMapDynamicInfo message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S_GetMapDynamicInfo
+             */
+            public static fromObject(object: { [k: string]: any }): S_GetMapDynamicInfo;
+
+            /**
+             * Creates a plain object from a S_GetMapDynamicInfo message. Also converts values to other types if specified.
+             * @param message S_GetMapDynamicInfo
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: S_GetMapDynamicInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S_GetMapDynamicInfo to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };

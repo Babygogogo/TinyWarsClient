@@ -25,5 +25,7 @@ namespace TinyWars.Network {
         JoinMultiCustomWar_InvalidParams,
         JoinMultiCustomWar_WarInfoNotExist,
         JoinMultiCustomWar_AlreadyJoined,
+
+        GetMapDynamicInfo_NoSuchMap,
     }
 }

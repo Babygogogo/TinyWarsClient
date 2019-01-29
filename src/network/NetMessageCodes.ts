@@ -13,6 +13,8 @@ namespace TinyWars.Network {
         C_GetNewestMapInfos = 11,
         S_GetNewestMapInfos = 12,
         S_NewestConfigVersion = 14,
+        C_GetMapDynamicInfo = 15,
+        S_GetMapDynamicInfo = 16,
         C_McrCreateWar = 101,
         S_McrCreateWar = 102,
         C_McrExitWar = 103,

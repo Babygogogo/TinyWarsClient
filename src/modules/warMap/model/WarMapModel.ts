@@ -6,8 +6,8 @@ namespace TinyWars.WarMap {
     import LocalStorage = Utility.LocalStorage;
 
     export namespace WarMapModel {
-        const _allMapInfos: { [mapUrl: string]: ProtoTypes.IMapInfo }   = {};
-        const _allMapDatas: { [mapUrl: string]: Types.TemplateMap }     = {};
+        const _allMapInfos = new Map<string, ProtoTypes.IMapInfo>();
+        const _allMapDatas = new Map<string, Types.TemplateMap>();
 
         let newestMapInfos: ProtoTypes.IS_GetNewestMapInfos;
 
@@ -29,7 +29,7 @@ namespace TinyWars.WarMap {
                                     reject(data);
                                 } else {
                                     LocalStorage.setMapData(mapUrl, JSON.stringify(data));
-                                    _allMapDatas[mapUrl] = data;
+                                    _allMapDatas.set(mapUrl, data);
                                     resolve(data);
                                 }
                             }
@@ -52,20 +52,25 @@ namespace TinyWars.WarMap {
         export function addMapInfos(infos: ProtoTypes.IMapInfo[]): void {
             if (infos) {
                 for (const info of infos) {
-                    _allMapInfos[Helpers.getMapUrl(info as Types.MapIndexKey)] = info;
+                    _allMapInfos.set(Helpers.getMapUrl(info as Types.MapIndexKey), info);
                 }
             }
         }
         export function getMapInfo(keys: Types.MapIndexKey): ProtoTypes.IMapInfo | undefined {
-            return _allMapInfos[Helpers.getMapUrl(keys)];
+            const key = Helpers.getMapUrl(keys);
+            if (_allMapInfos.has(key)) {
+                return _allMapInfos.get(key);
+            } else {
+
+            }
         }
 
         function getLocalMapData(mapUrl: string): Types.TemplateMap | undefined {
-            if (!_allMapDatas[mapUrl]) {
+            if (!_allMapDatas.has(mapUrl)) {
                 const data = LocalStorage.getMapData(mapUrl);
-                (data) && (_allMapDatas[mapUrl] = JSON.parse(data));
+                (data) && (_allMapDatas.set(mapUrl, JSON.parse(data)));
             }
-            return _allMapDatas[mapUrl];
+            return _allMapDatas.get(mapUrl);
         }
     }
 }
