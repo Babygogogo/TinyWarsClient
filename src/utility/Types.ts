@@ -26,6 +26,7 @@ namespace TinyWars.Utility.Types {
         type                : TileType;
         defenseAmount       : number;
         defenseUnitCategory : UnitCategory;
+        hideUnitCategory?   : UnitCategory;
     }
     export interface UnitTemplateCfg extends ProtoTypes.IUnitTemplateCfg {
         type                    : UnitType;

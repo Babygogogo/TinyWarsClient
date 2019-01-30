@@ -390,6 +390,11 @@ namespace TinyWars.MultiCustomWar {
                 : ConfigManager.getUnitTypesByCategory(this._configVersion, category).indexOf(unitType) >= 0;
         }
 
+        public checkIsUnitHider(): boolean {
+            const category = this._templateCfg.hideUnitCategory;
+            return (category != null) && (category != Types.UnitCategory.None);
+        }
+
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for produce unit.
         ////////////////////////////////////////////////////////////////////////////////

@@ -67,6 +67,10 @@ namespace TinyWars.MultiCustomWar {
             return player ? player.getPlayerIndex() : undefined;
         }
 
+        public getTeamIndex(playerIndex: number): number {
+            return this.getPlayer(playerIndex)!.getTeamIndex();
+        }
+
         public getTotalPlayersCount(includeNeutral: boolean): number {
             return includeNeutral ? this._players.size : this._players.size - 1;
         }

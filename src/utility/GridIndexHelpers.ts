@@ -57,6 +57,10 @@ namespace TinyWars.Utility.GridIndexHelpers {
         return Math.abs(g1.x - g2.x) + Math.abs(g1.y - g2.y);
     }
 
+    export function checkIsAdjacent(g1: GridIndex, g2: GridIndex): boolean {
+        return getDistance(g1, g2) === 1;
+    }
+
     export function checkIsEqual(g1: GridIndex, g2: GridIndex): boolean {
         return (g1.x === g2.x) && (g1.y === g2.y);
     }
