@@ -90,7 +90,7 @@ namespace TinyWars.WarMap {
         }
 
         private _onNotifySGetNewestMapInfos(e: egret.Event): void {
-            const data = e.data as ProtoTypes.IS_GetNewestMapInfos;
+            const data = e.data as ProtoTypes.IS_GetNewestMapDynamicInfos;
             if ((!data.mapInfos) || (data.mapInfos.length <= 0)) {
                 FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S10));
             } else {

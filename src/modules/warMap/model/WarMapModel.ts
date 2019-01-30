@@ -9,7 +9,7 @@ namespace TinyWars.WarMap {
         const _allMapInfos = new Map<string, ProtoTypes.IMapInfo>();
         const _allMapDatas = new Map<string, Types.TemplateMap>();
 
-        let newestMapInfos: ProtoTypes.IS_GetNewestMapInfos;
+        let _newestMapInfos: ProtoTypes.IS_GetNewestMapDynamicInfos;
 
         export function init(): void {
         }
@@ -41,12 +41,12 @@ namespace TinyWars.WarMap {
             }
         }
 
-        export function setNewestMapInfos(infos: ProtoTypes.IS_GetNewestMapInfos): void {
-            newestMapInfos = infos;
+        export function setNewestMapInfos(infos: ProtoTypes.IS_GetNewestMapDynamicInfos): void {
+            _newestMapInfos = infos;
             addMapInfos(infos.mapInfos);
         }
-        export function getNewestMapInfos(): ProtoTypes.IS_GetNewestMapInfos {
-            return newestMapInfos;
+        export function getNewestMapInfos(): ProtoTypes.IS_GetNewestMapDynamicInfos {
+            return _newestMapInfos;
         }
 
         export function addMapInfos(infos: ProtoTypes.IMapInfo[]): void {
@@ -57,12 +57,7 @@ namespace TinyWars.WarMap {
             }
         }
         export function getMapInfo(keys: Types.MapIndexKey): ProtoTypes.IMapInfo | undefined {
-            const key = Helpers.getMapUrl(keys);
-            if (_allMapInfos.has(key)) {
-                return _allMapInfos.get(key);
-            } else {
-
-            }
+            return _allMapInfos.get(Helpers.getMapUrl(keys));
         }
 
         function getLocalMapData(mapUrl: string): Types.TemplateMap | undefined {

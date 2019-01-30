@@ -16,13 +16,13 @@ namespace TinyWars.WarMap {
 
         export function init(): void {
             NetManager.addListeners([
-                { actionCode: ActionCode.S_GetNewestMapInfos, callback: _onSGetNewestMapInfos },
+                { actionCode: ActionCode.S_GetNewestMapDynamicInfos, callback: _onSGetNewestMapInfos },
             ], WarMapProxy);
         }
 
         export function reqGetNewestMapInfos(param?: ParamForGetNewestMapInfos): void {
             NetManager.send({
-                C_GetNewestMapInfos: {
+                C_GetNewestMapDynamicInfos: {
                     mapName         : param && param.mapName,
                     mapDesigner     : param && param.mapDesigner,
                     playersCount    : param && param.playersCount,
@@ -32,7 +32,7 @@ namespace TinyWars.WarMap {
             });
         }
         function _onSGetNewestMapInfos(e: egret.Event): void {
-            const data = e.data as ProtoTypes.S_GetNewestMapInfos;
+            const data = e.data as ProtoTypes.S_GetNewestMapDynamicInfos;
             WarMapModel.setNewestMapInfos(data);
             Notify.dispatch(Notify.Type.SGetNewestMapInfos, data);
         }

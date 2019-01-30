@@ -3271,11 +3271,11 @@ namespace TinyWars.Utility {
             /** ActionContainer S_Error */
             S_Error?: (IS_Error | null);
 
-            /** ActionContainer C_GetNewestMapInfos */
-            C_GetNewestMapInfos?: (IC_GetNewestMapInfos | null);
+            /** ActionContainer C_GetNewestMapDynamicInfos */
+            C_GetNewestMapDynamicInfos?: (IC_GetNewestMapDynamicInfos | null);
 
-            /** ActionContainer S_GetNewestMapInfos */
-            S_GetNewestMapInfos?: (IS_GetNewestMapInfos | null);
+            /** ActionContainer S_GetNewestMapDynamicInfos */
+            S_GetNewestMapDynamicInfos?: (IS_GetNewestMapDynamicInfos | null);
 
             /** ActionContainer S_NewestConfigVersion */
             S_NewestConfigVersion?: (IS_NewestConfigVersion | null);
@@ -3359,11 +3359,11 @@ namespace TinyWars.Utility {
             /** ActionContainer S_Error. */
             public S_Error?: (IS_Error | null);
 
-            /** ActionContainer C_GetNewestMapInfos. */
-            public C_GetNewestMapInfos?: (IC_GetNewestMapInfos | null);
+            /** ActionContainer C_GetNewestMapDynamicInfos. */
+            public C_GetNewestMapDynamicInfos?: (IC_GetNewestMapDynamicInfos | null);
 
-            /** ActionContainer S_GetNewestMapInfos. */
-            public S_GetNewestMapInfos?: (IS_GetNewestMapInfos | null);
+            /** ActionContainer S_GetNewestMapDynamicInfos. */
+            public S_GetNewestMapDynamicInfos?: (IS_GetNewestMapDynamicInfos | null);
 
             /** ActionContainer S_NewestConfigVersion. */
             public S_NewestConfigVersion?: (IS_NewestConfigVersion | null);
@@ -4363,211 +4363,211 @@ namespace TinyWars.Utility {
             public toJSON(): { [k: string]: any };
         }
 
-        /** Properties of a C_GetNewestMapInfos. */
-        export declare interface IC_GetNewestMapInfos {
+        /** Properties of a C_GetNewestMapDynamicInfos. */
+        export declare interface IC_GetNewestMapDynamicInfos {
 
-            /** C_GetNewestMapInfos mapName */
+            /** C_GetNewestMapDynamicInfos mapName */
             mapName?: (string | null);
 
-            /** C_GetNewestMapInfos mapDesigner */
+            /** C_GetNewestMapDynamicInfos mapDesigner */
             mapDesigner?: (string | null);
 
-            /** C_GetNewestMapInfos playersCount */
+            /** C_GetNewestMapDynamicInfos playersCount */
             playersCount?: (number | null);
 
-            /** C_GetNewestMapInfos minRating */
+            /** C_GetNewestMapDynamicInfos minRating */
             minRating?: (number | null);
 
-            /** C_GetNewestMapInfos minPlayedTimes */
+            /** C_GetNewestMapDynamicInfos minPlayedTimes */
             minPlayedTimes?: (number | null);
         }
 
-        /** Represents a C_GetNewestMapInfos. */
-        export declare class C_GetNewestMapInfos implements IC_GetNewestMapInfos {
+        /** Represents a C_GetNewestMapDynamicInfos. */
+        export declare class C_GetNewestMapDynamicInfos implements IC_GetNewestMapDynamicInfos {
 
             /**
-             * Constructs a new C_GetNewestMapInfos.
+             * Constructs a new C_GetNewestMapDynamicInfos.
              * @param [properties] Properties to set
              */
-            constructor(properties?: IC_GetNewestMapInfos);
+            constructor(properties?: IC_GetNewestMapDynamicInfos);
 
-            /** C_GetNewestMapInfos mapName. */
+            /** C_GetNewestMapDynamicInfos mapName. */
             public mapName: string;
 
-            /** C_GetNewestMapInfos mapDesigner. */
+            /** C_GetNewestMapDynamicInfos mapDesigner. */
             public mapDesigner: string;
 
-            /** C_GetNewestMapInfos playersCount. */
+            /** C_GetNewestMapDynamicInfos playersCount. */
             public playersCount: number;
 
-            /** C_GetNewestMapInfos minRating. */
+            /** C_GetNewestMapDynamicInfos minRating. */
             public minRating: number;
 
-            /** C_GetNewestMapInfos minPlayedTimes. */
+            /** C_GetNewestMapDynamicInfos minPlayedTimes. */
             public minPlayedTimes: number;
 
             /**
-             * Creates a new C_GetNewestMapInfos instance using the specified properties.
+             * Creates a new C_GetNewestMapDynamicInfos instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns C_GetNewestMapInfos instance
+             * @returns C_GetNewestMapDynamicInfos instance
              */
-            public static create(properties?: IC_GetNewestMapInfos): C_GetNewestMapInfos;
+            public static create(properties?: IC_GetNewestMapDynamicInfos): C_GetNewestMapDynamicInfos;
 
             /**
-             * Encodes the specified C_GetNewestMapInfos message. Does not implicitly {@link C_GetNewestMapInfos.verify|verify} messages.
-             * @param message C_GetNewestMapInfos message or plain object to encode
+             * Encodes the specified C_GetNewestMapDynamicInfos message. Does not implicitly {@link C_GetNewestMapDynamicInfos.verify|verify} messages.
+             * @param message C_GetNewestMapDynamicInfos message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: IC_GetNewestMapInfos, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: IC_GetNewestMapDynamicInfos, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified C_GetNewestMapInfos message, length delimited. Does not implicitly {@link C_GetNewestMapInfos.verify|verify} messages.
-             * @param message C_GetNewestMapInfos message or plain object to encode
+             * Encodes the specified C_GetNewestMapDynamicInfos message, length delimited. Does not implicitly {@link C_GetNewestMapDynamicInfos.verify|verify} messages.
+             * @param message C_GetNewestMapDynamicInfos message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: IC_GetNewestMapInfos, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: IC_GetNewestMapDynamicInfos, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Decodes a C_GetNewestMapInfos message from the specified reader or buffer.
+             * Decodes a C_GetNewestMapDynamicInfos message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns C_GetNewestMapInfos
+             * @returns C_GetNewestMapDynamicInfos
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): C_GetNewestMapInfos;
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): C_GetNewestMapDynamicInfos;
 
             /**
-             * Decodes a C_GetNewestMapInfos message from the specified reader or buffer, length delimited.
+             * Decodes a C_GetNewestMapDynamicInfos message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns C_GetNewestMapInfos
+             * @returns C_GetNewestMapDynamicInfos
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): C_GetNewestMapInfos;
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): C_GetNewestMapDynamicInfos;
 
             /**
-             * Verifies a C_GetNewestMapInfos message.
+             * Verifies a C_GetNewestMapDynamicInfos message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             public static verify(message: { [k: string]: any }): (string | null);
 
             /**
-             * Creates a C_GetNewestMapInfos message from a plain object. Also converts values to their respective internal types.
+             * Creates a C_GetNewestMapDynamicInfos message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns C_GetNewestMapInfos
+             * @returns C_GetNewestMapDynamicInfos
              */
-            public static fromObject(object: { [k: string]: any }): C_GetNewestMapInfos;
+            public static fromObject(object: { [k: string]: any }): C_GetNewestMapDynamicInfos;
 
             /**
-             * Creates a plain object from a C_GetNewestMapInfos message. Also converts values to other types if specified.
-             * @param message C_GetNewestMapInfos
+             * Creates a plain object from a C_GetNewestMapDynamicInfos message. Also converts values to other types if specified.
+             * @param message C_GetNewestMapDynamicInfos
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: C_GetNewestMapInfos, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: C_GetNewestMapDynamicInfos, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this C_GetNewestMapInfos to JSON.
+             * Converts this C_GetNewestMapDynamicInfos to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
         }
 
-        /** Properties of a S_GetNewestMapInfos. */
-        export declare interface IS_GetNewestMapInfos {
+        /** Properties of a S_GetNewestMapDynamicInfos. */
+        export declare interface IS_GetNewestMapDynamicInfos {
 
-            /** S_GetNewestMapInfos errorCode */
+            /** S_GetNewestMapDynamicInfos errorCode */
             errorCode?: (number | null);
 
-            /** S_GetNewestMapInfos mapInfos */
+            /** S_GetNewestMapDynamicInfos mapInfos */
             mapInfos?: (IMapInfo[] | null);
         }
 
-        /** Represents a S_GetNewestMapInfos. */
-        export declare class S_GetNewestMapInfos implements IS_GetNewestMapInfos {
+        /** Represents a S_GetNewestMapDynamicInfos. */
+        export declare class S_GetNewestMapDynamicInfos implements IS_GetNewestMapDynamicInfos {
 
             /**
-             * Constructs a new S_GetNewestMapInfos.
+             * Constructs a new S_GetNewestMapDynamicInfos.
              * @param [properties] Properties to set
              */
-            constructor(properties?: IS_GetNewestMapInfos);
+            constructor(properties?: IS_GetNewestMapDynamicInfos);
 
-            /** S_GetNewestMapInfos errorCode. */
+            /** S_GetNewestMapDynamicInfos errorCode. */
             public errorCode: number;
 
-            /** S_GetNewestMapInfos mapInfos. */
+            /** S_GetNewestMapDynamicInfos mapInfos. */
             public mapInfos: IMapInfo[];
 
             /**
-             * Creates a new S_GetNewestMapInfos instance using the specified properties.
+             * Creates a new S_GetNewestMapDynamicInfos instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns S_GetNewestMapInfos instance
+             * @returns S_GetNewestMapDynamicInfos instance
              */
-            public static create(properties?: IS_GetNewestMapInfos): S_GetNewestMapInfos;
+            public static create(properties?: IS_GetNewestMapDynamicInfos): S_GetNewestMapDynamicInfos;
 
             /**
-             * Encodes the specified S_GetNewestMapInfos message. Does not implicitly {@link S_GetNewestMapInfos.verify|verify} messages.
-             * @param message S_GetNewestMapInfos message or plain object to encode
+             * Encodes the specified S_GetNewestMapDynamicInfos message. Does not implicitly {@link S_GetNewestMapDynamicInfos.verify|verify} messages.
+             * @param message S_GetNewestMapDynamicInfos message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: IS_GetNewestMapInfos, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: IS_GetNewestMapDynamicInfos, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified S_GetNewestMapInfos message, length delimited. Does not implicitly {@link S_GetNewestMapInfos.verify|verify} messages.
-             * @param message S_GetNewestMapInfos message or plain object to encode
+             * Encodes the specified S_GetNewestMapDynamicInfos message, length delimited. Does not implicitly {@link S_GetNewestMapDynamicInfos.verify|verify} messages.
+             * @param message S_GetNewestMapDynamicInfos message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: IS_GetNewestMapInfos, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: IS_GetNewestMapDynamicInfos, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Decodes a S_GetNewestMapInfos message from the specified reader or buffer.
+             * Decodes a S_GetNewestMapDynamicInfos message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns S_GetNewestMapInfos
+             * @returns S_GetNewestMapDynamicInfos
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): S_GetNewestMapInfos;
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): S_GetNewestMapDynamicInfos;
 
             /**
-             * Decodes a S_GetNewestMapInfos message from the specified reader or buffer, length delimited.
+             * Decodes a S_GetNewestMapDynamicInfos message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns S_GetNewestMapInfos
+             * @returns S_GetNewestMapDynamicInfos
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): S_GetNewestMapInfos;
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): S_GetNewestMapDynamicInfos;
 
             /**
-             * Verifies a S_GetNewestMapInfos message.
+             * Verifies a S_GetNewestMapDynamicInfos message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             public static verify(message: { [k: string]: any }): (string | null);
 
             /**
-             * Creates a S_GetNewestMapInfos message from a plain object. Also converts values to their respective internal types.
+             * Creates a S_GetNewestMapDynamicInfos message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns S_GetNewestMapInfos
+             * @returns S_GetNewestMapDynamicInfos
              */
-            public static fromObject(object: { [k: string]: any }): S_GetNewestMapInfos;
+            public static fromObject(object: { [k: string]: any }): S_GetNewestMapDynamicInfos;
 
             /**
-             * Creates a plain object from a S_GetNewestMapInfos message. Also converts values to other types if specified.
-             * @param message S_GetNewestMapInfos
+             * Creates a plain object from a S_GetNewestMapDynamicInfos message. Also converts values to other types if specified.
+             * @param message S_GetNewestMapDynamicInfos
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: S_GetNewestMapInfos, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: S_GetNewestMapDynamicInfos, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this S_GetNewestMapInfos to JSON.
+             * Converts this S_GetNewestMapDynamicInfos to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };

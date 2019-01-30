@@ -28,7 +28,6 @@ namespace TinyWars.Network {
             public dispatchWithContainer(container: ProtoTypes.IActionContainer): void {
                 const name      = Helpers.getActionName(container);
                 const action    = container[name];
-                Logger.log("NetManager receive: ", name, action);
                 if (action.errorCode) {
                     FloatText.show(Utility.Lang.getNetErrorText(action.errorCode));
                 }
@@ -117,8 +116,12 @@ namespace TinyWars.Network {
                 }
             });
 
-            socket.on("message", (data: ReceivedData) => {
-                dispatcher.dispatchWithContainer(ProtoManager.decodeAsActionContainer(data));
+            socket.on("message", (data: ArrayBuffer) => {
+                const container = ProtoManager.decodeAsActionContainer(data);
+                const name      = Helpers.getActionName(container);
+                Logger.log("NetManager receive: ", name, ", length: ", data.byteLength, "\n", container[name]);
+
+                dispatcher.dispatchWithContainer(container);
             });
         }
     }
