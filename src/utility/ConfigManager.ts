@@ -1429,6 +1429,9 @@ namespace TinyWars.ConfigManager {
     export function getTileTemplateCfg(version: number, baseType: TileBaseType, objectType: TileObjectType): TileTemplateCfg {
         return _ALL_CONFIGS.get(version)!.TileTemplate[getTileType(baseType, objectType)];
     }
+    export function getTileTemplateCfgByType(version: number, tileType: TileType): TileTemplateCfg {
+        return _ALL_CONFIGS.get(version)!.TileTemplate[tileType];
+    }
 
     export function getTileTypesByCategory(version: number, category: TileCategory): TileType[] | undefined | null {
         return _ALL_CONFIGS.get(version)!.TileCategory[category].tileTypes;

@@ -95,7 +95,14 @@ namespace TinyWars.MultiCustomWar {
             const war = this._war;
             const units: Types.SerializedMcUnit[] = [];
             this.forEachUnitOnMap(unit => {
-                if (Visibility.checkIsUnitOnMapVisibleToPlayer(war, unit.getGridIndex(), unit.getType(), unit.getIsDiving(), unit.getPlayerIndex(), playerIndex)) {
+                if (Visibility.checkIsUnitOnMapVisibleToPlayer({
+                    war,
+                    gridIndex           : unit.getGridIndex(),
+                    unitType            : unit.getType(),
+                    isDiving            : unit.getIsDiving(),
+                    unitPlayerIndex     : unit.getPlayerIndex(),
+                    observerPlayerIndex : playerIndex})
+                ) {
                     units.push(unit.serialize());
 
                     for (const loadedUnit of this.getUnitsLoadedByLoader(unit, true)) {
