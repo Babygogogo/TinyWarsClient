@@ -354,6 +354,7 @@ namespace TinyWars.Utility.Types {
         RepairUnitByTile,
         DestroyUnitsOutOfFuel,
         RepairUnitByUnit,
+        ActivateMapWeapon,
         Main,
         ResetUnitState,
         ResetVisionForCurrentPlayer,
