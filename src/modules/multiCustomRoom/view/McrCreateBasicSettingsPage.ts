@@ -36,7 +36,7 @@ namespace TinyWars.MultiCustomRoom {
         private _labelTimeLimit     : GameUi.UiLabel;
         private _btnHelpTimeLimit   : GameUi.UiButton;
 
-        protected _mapInfo: ProtoTypes.IMapInfo;
+        protected _mapInfo: ProtoTypes.IMapDynamicInfo;
 
         public constructor() {
             super();

@@ -6,7 +6,7 @@ namespace TinyWars.WarMap {
     import LocalStorage = Utility.LocalStorage;
 
     export namespace WarMapModel {
-        const _allMapInfos = new Map<string, ProtoTypes.IMapInfo>();
+        const _allMapInfos = new Map<string, ProtoTypes.IMapDynamicInfo>();
         const _allMapDatas = new Map<string, Types.TemplateMap>();
 
         let _newestMapInfos: ProtoTypes.IS_GetNewestMapDynamicInfos;
@@ -49,14 +49,14 @@ namespace TinyWars.WarMap {
             return _newestMapInfos;
         }
 
-        export function addMapInfos(infos: ProtoTypes.IMapInfo[]): void {
+        export function addMapInfos(infos: ProtoTypes.IMapDynamicInfo[]): void {
             if (infos) {
                 for (const info of infos) {
                     _allMapInfos.set(Helpers.getMapUrl(info as Types.MapIndexKey), info);
                 }
             }
         }
-        export function getMapInfo(keys: Types.MapIndexKey): ProtoTypes.IMapInfo | undefined {
+        export function getMapInfo(keys: Types.MapIndexKey): ProtoTypes.IMapDynamicInfo | undefined {
             return _allMapInfos.get(Helpers.getMapUrl(keys));
         }
 

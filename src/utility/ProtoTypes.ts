@@ -2665,121 +2665,121 @@ namespace TinyWars.Utility {
             public toJSON(): { [k: string]: any };
         }
 
-        /** Properties of a MapInfo. */
-        export declare interface IMapInfo {
+        /** Properties of a MapDynamicInfo. */
+        export declare interface IMapDynamicInfo {
 
-            /** MapInfo mapName */
+            /** MapDynamicInfo mapName */
             mapName?: (string | null);
 
-            /** MapInfo mapDesigner */
+            /** MapDynamicInfo mapDesigner */
             mapDesigner?: (string | null);
 
-            /** MapInfo mapVersion */
+            /** MapDynamicInfo mapVersion */
             mapVersion?: (number | null);
 
-            /** MapInfo playersCount */
+            /** MapDynamicInfo playersCount */
             playersCount?: (number | null);
 
-            /** MapInfo rating */
+            /** MapDynamicInfo rating */
             rating?: (number | null);
 
-            /** MapInfo playedTimes */
+            /** MapDynamicInfo playedTimes */
             playedTimes?: (number | null);
         }
 
-        /** Represents a MapInfo. */
-        export declare class MapInfo implements IMapInfo {
+        /** Represents a MapDynamicInfo. */
+        export declare class MapDynamicInfo implements IMapDynamicInfo {
 
             /**
-             * Constructs a new MapInfo.
+             * Constructs a new MapDynamicInfo.
              * @param [properties] Properties to set
              */
-            constructor(properties?: IMapInfo);
+            constructor(properties?: IMapDynamicInfo);
 
-            /** MapInfo mapName. */
+            /** MapDynamicInfo mapName. */
             public mapName: string;
 
-            /** MapInfo mapDesigner. */
+            /** MapDynamicInfo mapDesigner. */
             public mapDesigner: string;
 
-            /** MapInfo mapVersion. */
+            /** MapDynamicInfo mapVersion. */
             public mapVersion: number;
 
-            /** MapInfo playersCount. */
+            /** MapDynamicInfo playersCount. */
             public playersCount: number;
 
-            /** MapInfo rating. */
+            /** MapDynamicInfo rating. */
             public rating: number;
 
-            /** MapInfo playedTimes. */
+            /** MapDynamicInfo playedTimes. */
             public playedTimes: number;
 
             /**
-             * Creates a new MapInfo instance using the specified properties.
+             * Creates a new MapDynamicInfo instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns MapInfo instance
+             * @returns MapDynamicInfo instance
              */
-            public static create(properties?: IMapInfo): MapInfo;
+            public static create(properties?: IMapDynamicInfo): MapDynamicInfo;
 
             /**
-             * Encodes the specified MapInfo message. Does not implicitly {@link MapInfo.verify|verify} messages.
-             * @param message MapInfo message or plain object to encode
+             * Encodes the specified MapDynamicInfo message. Does not implicitly {@link MapDynamicInfo.verify|verify} messages.
+             * @param message MapDynamicInfo message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: IMapInfo, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: IMapDynamicInfo, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified MapInfo message, length delimited. Does not implicitly {@link MapInfo.verify|verify} messages.
-             * @param message MapInfo message or plain object to encode
+             * Encodes the specified MapDynamicInfo message, length delimited. Does not implicitly {@link MapDynamicInfo.verify|verify} messages.
+             * @param message MapDynamicInfo message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: IMapInfo, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: IMapDynamicInfo, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Decodes a MapInfo message from the specified reader or buffer.
+             * Decodes a MapDynamicInfo message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns MapInfo
+             * @returns MapDynamicInfo
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): MapInfo;
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): MapDynamicInfo;
 
             /**
-             * Decodes a MapInfo message from the specified reader or buffer, length delimited.
+             * Decodes a MapDynamicInfo message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns MapInfo
+             * @returns MapDynamicInfo
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): MapInfo;
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): MapDynamicInfo;
 
             /**
-             * Verifies a MapInfo message.
+             * Verifies a MapDynamicInfo message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             public static verify(message: { [k: string]: any }): (string | null);
 
             /**
-             * Creates a MapInfo message from a plain object. Also converts values to their respective internal types.
+             * Creates a MapDynamicInfo message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns MapInfo
+             * @returns MapDynamicInfo
              */
-            public static fromObject(object: { [k: string]: any }): MapInfo;
+            public static fromObject(object: { [k: string]: any }): MapDynamicInfo;
 
             /**
-             * Creates a plain object from a MapInfo message. Also converts values to other types if specified.
-             * @param message MapInfo
+             * Creates a plain object from a MapDynamicInfo message. Also converts values to other types if specified.
+             * @param message MapDynamicInfo
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: MapInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: MapDynamicInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this MapInfo to JSON.
+             * Converts this MapDynamicInfo to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
@@ -4712,7 +4712,7 @@ namespace TinyWars.Utility {
             errorCode?: (number | null);
 
             /** S_GetNewestMapDynamicInfos mapInfos */
-            mapInfos?: (IMapInfo[] | null);
+            mapInfos?: (IMapDynamicInfo[] | null);
         }
 
         /** Represents a S_GetNewestMapDynamicInfos. */
@@ -4728,7 +4728,7 @@ namespace TinyWars.Utility {
             public errorCode: number;
 
             /** S_GetNewestMapDynamicInfos mapInfos. */
-            public mapInfos: IMapInfo[];
+            public mapInfos: IMapDynamicInfo[];
 
             /**
              * Creates a new S_GetNewestMapDynamicInfos instance using the specified properties.
@@ -5000,7 +5000,7 @@ namespace TinyWars.Utility {
             errorCode?: (number | null);
 
             /** S_GetMapDynamicInfo mapInfos */
-            mapInfos?: (IMapInfo[] | null);
+            mapInfos?: (IMapDynamicInfo[] | null);
         }
 
         /** Represents a S_GetMapDynamicInfo. */
@@ -5016,7 +5016,7 @@ namespace TinyWars.Utility {
             public errorCode: number;
 
             /** S_GetMapDynamicInfo mapInfos. */
-            public mapInfos: IMapInfo[];
+            public mapInfos: IMapDynamicInfo[];
 
             /**
              * Creates a new S_GetMapDynamicInfo instance using the specified properties.
@@ -5645,7 +5645,7 @@ namespace TinyWars.Utility {
             warInfos?: (IMcrWaitingInfo[] | null);
 
             /** S_McrGetJoinedWaitingInfos mapInfos */
-            mapInfos?: (IMapInfo[] | null);
+            mapInfos?: (IMapDynamicInfo[] | null);
         }
 
         /** Represents a S_McrGetJoinedWaitingInfos. */
@@ -5664,7 +5664,7 @@ namespace TinyWars.Utility {
             public warInfos: IMcrWaitingInfo[];
 
             /** S_McrGetJoinedWaitingInfos mapInfos. */
-            public mapInfos: IMapInfo[];
+            public mapInfos: IMapDynamicInfo[];
 
             /**
              * Creates a new S_McrGetJoinedWaitingInfos instance using the specified properties.
@@ -5831,7 +5831,7 @@ namespace TinyWars.Utility {
             warInfos?: (IMcrWaitingInfo[] | null);
 
             /** S_McrGetUnjoinedWaitingInfos mapInfos */
-            mapInfos?: (IMapInfo[] | null);
+            mapInfos?: (IMapDynamicInfo[] | null);
         }
 
         /** Represents a S_McrGetUnjoinedWaitingInfos. */
@@ -5850,7 +5850,7 @@ namespace TinyWars.Utility {
             public warInfos: IMcrWaitingInfo[];
 
             /** S_McrGetUnjoinedWaitingInfos mapInfos. */
-            public mapInfos: IMapInfo[];
+            public mapInfos: IMapDynamicInfo[];
 
             /**
              * Creates a new S_McrGetUnjoinedWaitingInfos instance using the specified properties.

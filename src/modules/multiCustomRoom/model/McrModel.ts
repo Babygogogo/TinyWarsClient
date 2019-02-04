@@ -90,7 +90,7 @@ namespace TinyWars.MultiCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for creating wars.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        export function getCreateWarMapInfo(): ProtoTypes.IMapInfo {
+        export function getCreateWarMapInfo(): ProtoTypes.IMapDynamicInfo {
             return MapModel.getMapInfo(_dataForCreateWar);
         }
 

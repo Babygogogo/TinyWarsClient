@@ -30,7 +30,7 @@ namespace TinyWars.MultiCustomRoom {
         private _btnNextVision : GameUi.UiButton;
         private _labelVision   : GameUi.UiLabel;
 
-        protected _mapInfo: ProtoTypes.IMapInfo;
+        protected _mapInfo: ProtoTypes.IMapDynamicInfo;
 
         public constructor() {
             super();
