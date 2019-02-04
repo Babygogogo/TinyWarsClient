@@ -3070,12 +3070,6 @@ namespace TinyWars.Utility {
             /** McwOngoingDetail warComment */
             warComment?: (string | null);
 
-            /** McwOngoingDetail playerIndexInTurn */
-            playerIndexInTurn?: (number | null);
-
-            /** McwOngoingDetail turnIndex */
-            turnIndex?: (number | null);
-
             /** McwOngoingDetail hasFog */
             hasFog?: (number | null);
 
@@ -3150,6 +3144,15 @@ namespace TinyWars.Utility {
 
             /** McwOngoingDetail p4UserNickname */
             p4UserNickname?: (string | null);
+
+            /** McwOngoingDetail playerIndexInTurn */
+            playerIndexInTurn?: (number | null);
+
+            /** McwOngoingDetail turnIndex */
+            turnIndex?: (number | null);
+
+            /** McwOngoingDetail enterTurnTime */
+            enterTurnTime?: (number | null);
         }
 
         /** Represents a McwOngoingDetail. */
@@ -3184,12 +3187,6 @@ namespace TinyWars.Utility {
 
             /** McwOngoingDetail warComment. */
             public warComment: string;
-
-            /** McwOngoingDetail playerIndexInTurn. */
-            public playerIndexInTurn: number;
-
-            /** McwOngoingDetail turnIndex. */
-            public turnIndex: number;
 
             /** McwOngoingDetail hasFog. */
             public hasFog: number;
@@ -3265,6 +3262,15 @@ namespace TinyWars.Utility {
 
             /** McwOngoingDetail p4UserNickname. */
             public p4UserNickname: string;
+
+            /** McwOngoingDetail playerIndexInTurn. */
+            public playerIndexInTurn: number;
+
+            /** McwOngoingDetail turnIndex. */
+            public turnIndex: number;
+
+            /** McwOngoingDetail enterTurnTime. */
+            public enterTurnTime: number;
 
             /**
              * Creates a new McwOngoingDetail instance using the specified properties.
