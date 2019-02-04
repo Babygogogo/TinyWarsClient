@@ -12,7 +12,7 @@ namespace TinyWars.MultiCustomWar {
         public constructor() {
         }
 
-        public init(datas: Types.SerializedMcPlayer[]): McPlayerManager {
+        public init(datas: Types.SerializedMcwPlayer[]): McPlayerManager {
             this._players.clear();
             for (const data of datas) {
                 this._players.set(data.playerIndex!, new McwPlayer().init(data));
@@ -20,8 +20,8 @@ namespace TinyWars.MultiCustomWar {
             return this;
         }
 
-        public serialize(): Types.SerializedMcPlayer[] {
-            const data: Types.SerializedMcPlayer[] = [];
+        public serialize(): Types.SerializedMcwPlayer[] {
+            const data: Types.SerializedMcwPlayer[] = [];
             for (const [, player] of this._players) {
                 data.push(player.serialize());
             }

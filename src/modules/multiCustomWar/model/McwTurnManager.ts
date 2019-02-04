@@ -3,7 +3,7 @@ namespace TinyWars.MultiCustomWar {
     import Types                = Utility.Types;
     import DestructionHelpers   = Utility.DestructionHelpers;
     import Logger               = Utility.Logger;
-    import SerializedMcTurn     = Types.SerializedMcTurn;
+    import SerializedMcTurn     = Types.SerializedMcwTurn;
     import TurnPhaseCode        = Types.TurnPhaseCode;
 
     export class McwTurnManager {

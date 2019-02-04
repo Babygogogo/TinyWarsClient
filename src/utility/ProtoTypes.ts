@@ -1327,1243 +1327,1243 @@ namespace TinyWars.Utility {
             public toJSON(): { [k: string]: any };
         }
 
-        /** Properties of a SerializedMcTile. */
-        export declare interface ISerializedMcTile {
+        /** Properties of a SerializedMcwTile. */
+        export declare interface ISerializedMcwTile {
 
-            /** SerializedMcTile gridX */
+            /** SerializedMcwTile gridX */
             gridX?: (number | null);
 
-            /** SerializedMcTile gridY */
+            /** SerializedMcwTile gridY */
             gridY?: (number | null);
 
-            /** SerializedMcTile baseViewId */
+            /** SerializedMcwTile baseViewId */
             baseViewId?: (number | null);
 
-            /** SerializedMcTile objectViewId */
+            /** SerializedMcwTile objectViewId */
             objectViewId?: (number | null);
 
-            /** SerializedMcTile currentHp */
+            /** SerializedMcwTile currentHp */
             currentHp?: (number | null);
 
-            /** SerializedMcTile currentBuildPoint */
+            /** SerializedMcwTile currentBuildPoint */
             currentBuildPoint?: (number | null);
 
-            /** SerializedMcTile currentCapturePoint */
+            /** SerializedMcwTile currentCapturePoint */
             currentCapturePoint?: (number | null);
         }
 
-        /** Represents a SerializedMcTile. */
-        export declare class SerializedMcTile implements ISerializedMcTile {
+        /** Represents a SerializedMcwTile. */
+        export declare class SerializedMcwTile implements ISerializedMcwTile {
 
             /**
-             * Constructs a new SerializedMcTile.
+             * Constructs a new SerializedMcwTile.
              * @param [properties] Properties to set
              */
-            constructor(properties?: ISerializedMcTile);
+            constructor(properties?: ISerializedMcwTile);
 
-            /** SerializedMcTile gridX. */
+            /** SerializedMcwTile gridX. */
             public gridX: number;
 
-            /** SerializedMcTile gridY. */
+            /** SerializedMcwTile gridY. */
             public gridY: number;
 
-            /** SerializedMcTile baseViewId. */
+            /** SerializedMcwTile baseViewId. */
             public baseViewId: number;
 
-            /** SerializedMcTile objectViewId. */
+            /** SerializedMcwTile objectViewId. */
             public objectViewId: number;
 
-            /** SerializedMcTile currentHp. */
+            /** SerializedMcwTile currentHp. */
             public currentHp: number;
 
-            /** SerializedMcTile currentBuildPoint. */
+            /** SerializedMcwTile currentBuildPoint. */
             public currentBuildPoint: number;
 
-            /** SerializedMcTile currentCapturePoint. */
+            /** SerializedMcwTile currentCapturePoint. */
             public currentCapturePoint: number;
 
             /**
-             * Creates a new SerializedMcTile instance using the specified properties.
+             * Creates a new SerializedMcwTile instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns SerializedMcTile instance
+             * @returns SerializedMcwTile instance
              */
-            public static create(properties?: ISerializedMcTile): SerializedMcTile;
+            public static create(properties?: ISerializedMcwTile): SerializedMcwTile;
 
             /**
-             * Encodes the specified SerializedMcTile message. Does not implicitly {@link SerializedMcTile.verify|verify} messages.
-             * @param message SerializedMcTile message or plain object to encode
+             * Encodes the specified SerializedMcwTile message. Does not implicitly {@link SerializedMcwTile.verify|verify} messages.
+             * @param message SerializedMcwTile message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: ISerializedMcTile, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: ISerializedMcwTile, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified SerializedMcTile message, length delimited. Does not implicitly {@link SerializedMcTile.verify|verify} messages.
-             * @param message SerializedMcTile message or plain object to encode
+             * Encodes the specified SerializedMcwTile message, length delimited. Does not implicitly {@link SerializedMcwTile.verify|verify} messages.
+             * @param message SerializedMcwTile message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: ISerializedMcTile, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: ISerializedMcwTile, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Decodes a SerializedMcTile message from the specified reader or buffer.
+             * Decodes a SerializedMcwTile message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns SerializedMcTile
+             * @returns SerializedMcwTile
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): SerializedMcTile;
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): SerializedMcwTile;
 
             /**
-             * Decodes a SerializedMcTile message from the specified reader or buffer, length delimited.
+             * Decodes a SerializedMcwTile message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns SerializedMcTile
+             * @returns SerializedMcwTile
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): SerializedMcTile;
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): SerializedMcwTile;
 
             /**
-             * Verifies a SerializedMcTile message.
+             * Verifies a SerializedMcwTile message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             public static verify(message: { [k: string]: any }): (string | null);
 
             /**
-             * Creates a SerializedMcTile message from a plain object. Also converts values to their respective internal types.
+             * Creates a SerializedMcwTile message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns SerializedMcTile
+             * @returns SerializedMcwTile
              */
-            public static fromObject(object: { [k: string]: any }): SerializedMcTile;
+            public static fromObject(object: { [k: string]: any }): SerializedMcwTile;
 
             /**
-             * Creates a plain object from a SerializedMcTile message. Also converts values to other types if specified.
-             * @param message SerializedMcTile
+             * Creates a plain object from a SerializedMcwTile message. Also converts values to other types if specified.
+             * @param message SerializedMcwTile
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: SerializedMcTile, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: SerializedMcwTile, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this SerializedMcTile to JSON.
+             * Converts this SerializedMcwTile to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
         }
 
-        /** Properties of a SerializedMcUnit. */
-        export declare interface ISerializedMcUnit {
+        /** Properties of a SerializedMcwUnit. */
+        export declare interface ISerializedMcwUnit {
 
-            /** SerializedMcUnit gridX */
+            /** SerializedMcwUnit gridX */
             gridX?: (number | null);
 
-            /** SerializedMcUnit gridY */
+            /** SerializedMcwUnit gridY */
             gridY?: (number | null);
 
-            /** SerializedMcUnit viewId */
+            /** SerializedMcwUnit viewId */
             viewId?: (number | null);
 
-            /** SerializedMcUnit unitId */
+            /** SerializedMcwUnit unitId */
             unitId?: (number | null);
 
-            /** SerializedMcUnit state */
+            /** SerializedMcwUnit state */
             state?: (number | null);
 
-            /** SerializedMcUnit primaryWeaponCurrentAmmo */
+            /** SerializedMcwUnit primaryWeaponCurrentAmmo */
             primaryWeaponCurrentAmmo?: (number | null);
 
-            /** SerializedMcUnit currentHp */
+            /** SerializedMcwUnit currentHp */
             currentHp?: (number | null);
 
-            /** SerializedMcUnit isCapturingTile */
+            /** SerializedMcwUnit isCapturingTile */
             isCapturingTile?: (boolean | null);
 
-            /** SerializedMcUnit isDiving */
+            /** SerializedMcwUnit isDiving */
             isDiving?: (boolean | null);
 
-            /** SerializedMcUnit flareCurrentAmmo */
+            /** SerializedMcwUnit flareCurrentAmmo */
             flareCurrentAmmo?: (number | null);
 
-            /** SerializedMcUnit currentFuel */
+            /** SerializedMcwUnit currentFuel */
             currentFuel?: (number | null);
 
-            /** SerializedMcUnit currentBuildMaterial */
+            /** SerializedMcwUnit currentBuildMaterial */
             currentBuildMaterial?: (number | null);
 
-            /** SerializedMcUnit currentProduceMaterial */
+            /** SerializedMcwUnit currentProduceMaterial */
             currentProduceMaterial?: (number | null);
 
-            /** SerializedMcUnit currentPromotion */
+            /** SerializedMcwUnit currentPromotion */
             currentPromotion?: (number | null);
 
-            /** SerializedMcUnit isBuildingTile */
+            /** SerializedMcwUnit isBuildingTile */
             isBuildingTile?: (boolean | null);
 
-            /** SerializedMcUnit loaderUnitId */
+            /** SerializedMcwUnit loaderUnitId */
             loaderUnitId?: (number | null);
         }
 
-        /** Represents a SerializedMcUnit. */
-        export declare class SerializedMcUnit implements ISerializedMcUnit {
+        /** Represents a SerializedMcwUnit. */
+        export declare class SerializedMcwUnit implements ISerializedMcwUnit {
 
             /**
-             * Constructs a new SerializedMcUnit.
+             * Constructs a new SerializedMcwUnit.
              * @param [properties] Properties to set
              */
-            constructor(properties?: ISerializedMcUnit);
+            constructor(properties?: ISerializedMcwUnit);
 
-            /** SerializedMcUnit gridX. */
+            /** SerializedMcwUnit gridX. */
             public gridX: number;
 
-            /** SerializedMcUnit gridY. */
+            /** SerializedMcwUnit gridY. */
             public gridY: number;
 
-            /** SerializedMcUnit viewId. */
+            /** SerializedMcwUnit viewId. */
             public viewId: number;
 
-            /** SerializedMcUnit unitId. */
+            /** SerializedMcwUnit unitId. */
             public unitId: number;
 
-            /** SerializedMcUnit state. */
+            /** SerializedMcwUnit state. */
             public state: number;
 
-            /** SerializedMcUnit primaryWeaponCurrentAmmo. */
+            /** SerializedMcwUnit primaryWeaponCurrentAmmo. */
             public primaryWeaponCurrentAmmo: number;
 
-            /** SerializedMcUnit currentHp. */
+            /** SerializedMcwUnit currentHp. */
             public currentHp: number;
 
-            /** SerializedMcUnit isCapturingTile. */
+            /** SerializedMcwUnit isCapturingTile. */
             public isCapturingTile: boolean;
 
-            /** SerializedMcUnit isDiving. */
+            /** SerializedMcwUnit isDiving. */
             public isDiving: boolean;
 
-            /** SerializedMcUnit flareCurrentAmmo. */
+            /** SerializedMcwUnit flareCurrentAmmo. */
             public flareCurrentAmmo: number;
 
-            /** SerializedMcUnit currentFuel. */
+            /** SerializedMcwUnit currentFuel. */
             public currentFuel: number;
 
-            /** SerializedMcUnit currentBuildMaterial. */
+            /** SerializedMcwUnit currentBuildMaterial. */
             public currentBuildMaterial: number;
 
-            /** SerializedMcUnit currentProduceMaterial. */
+            /** SerializedMcwUnit currentProduceMaterial. */
             public currentProduceMaterial: number;
 
-            /** SerializedMcUnit currentPromotion. */
+            /** SerializedMcwUnit currentPromotion. */
             public currentPromotion: number;
 
-            /** SerializedMcUnit isBuildingTile. */
+            /** SerializedMcwUnit isBuildingTile. */
             public isBuildingTile: boolean;
 
-            /** SerializedMcUnit loaderUnitId. */
+            /** SerializedMcwUnit loaderUnitId. */
             public loaderUnitId: number;
 
             /**
-             * Creates a new SerializedMcUnit instance using the specified properties.
+             * Creates a new SerializedMcwUnit instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns SerializedMcUnit instance
+             * @returns SerializedMcwUnit instance
              */
-            public static create(properties?: ISerializedMcUnit): SerializedMcUnit;
+            public static create(properties?: ISerializedMcwUnit): SerializedMcwUnit;
 
             /**
-             * Encodes the specified SerializedMcUnit message. Does not implicitly {@link SerializedMcUnit.verify|verify} messages.
-             * @param message SerializedMcUnit message or plain object to encode
+             * Encodes the specified SerializedMcwUnit message. Does not implicitly {@link SerializedMcwUnit.verify|verify} messages.
+             * @param message SerializedMcwUnit message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: ISerializedMcUnit, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: ISerializedMcwUnit, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified SerializedMcUnit message, length delimited. Does not implicitly {@link SerializedMcUnit.verify|verify} messages.
-             * @param message SerializedMcUnit message or plain object to encode
+             * Encodes the specified SerializedMcwUnit message, length delimited. Does not implicitly {@link SerializedMcwUnit.verify|verify} messages.
+             * @param message SerializedMcwUnit message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: ISerializedMcUnit, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: ISerializedMcwUnit, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Decodes a SerializedMcUnit message from the specified reader or buffer.
+             * Decodes a SerializedMcwUnit message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns SerializedMcUnit
+             * @returns SerializedMcwUnit
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): SerializedMcUnit;
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): SerializedMcwUnit;
 
             /**
-             * Decodes a SerializedMcUnit message from the specified reader or buffer, length delimited.
+             * Decodes a SerializedMcwUnit message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns SerializedMcUnit
+             * @returns SerializedMcwUnit
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): SerializedMcUnit;
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): SerializedMcwUnit;
 
             /**
-             * Verifies a SerializedMcUnit message.
+             * Verifies a SerializedMcwUnit message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             public static verify(message: { [k: string]: any }): (string | null);
 
             /**
-             * Creates a SerializedMcUnit message from a plain object. Also converts values to their respective internal types.
+             * Creates a SerializedMcwUnit message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns SerializedMcUnit
+             * @returns SerializedMcwUnit
              */
-            public static fromObject(object: { [k: string]: any }): SerializedMcUnit;
+            public static fromObject(object: { [k: string]: any }): SerializedMcwUnit;
 
             /**
-             * Creates a plain object from a SerializedMcUnit message. Also converts values to other types if specified.
-             * @param message SerializedMcUnit
+             * Creates a plain object from a SerializedMcwUnit message. Also converts values to other types if specified.
+             * @param message SerializedMcwUnit
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: SerializedMcUnit, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: SerializedMcwUnit, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this SerializedMcUnit to JSON.
+             * Converts this SerializedMcwUnit to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
         }
 
-        /** Properties of a SerializedMcPlayer. */
-        export declare interface ISerializedMcPlayer {
+        /** Properties of a SerializedMcwPlayer. */
+        export declare interface ISerializedMcwPlayer {
 
-            /** SerializedMcPlayer fund */
+            /** SerializedMcwPlayer fund */
             fund?: (number | null);
 
-            /** SerializedMcPlayer hasVotedForDraw */
+            /** SerializedMcwPlayer hasVotedForDraw */
             hasVotedForDraw?: (boolean | null);
 
-            /** SerializedMcPlayer isAlive */
+            /** SerializedMcwPlayer isAlive */
             isAlive?: (boolean | null);
 
-            /** SerializedMcPlayer playerIndex */
+            /** SerializedMcwPlayer playerIndex */
             playerIndex?: (number | null);
 
-            /** SerializedMcPlayer teamIndex */
+            /** SerializedMcwPlayer teamIndex */
             teamIndex?: (number | null);
 
-            /** SerializedMcPlayer userId */
+            /** SerializedMcwPlayer userId */
             userId?: (number | null);
         }
 
-        /** Represents a SerializedMcPlayer. */
-        export declare class SerializedMcPlayer implements ISerializedMcPlayer {
+        /** Represents a SerializedMcwPlayer. */
+        export declare class SerializedMcwPlayer implements ISerializedMcwPlayer {
 
             /**
-             * Constructs a new SerializedMcPlayer.
+             * Constructs a new SerializedMcwPlayer.
              * @param [properties] Properties to set
              */
-            constructor(properties?: ISerializedMcPlayer);
+            constructor(properties?: ISerializedMcwPlayer);
 
-            /** SerializedMcPlayer fund. */
+            /** SerializedMcwPlayer fund. */
             public fund: number;
 
-            /** SerializedMcPlayer hasVotedForDraw. */
+            /** SerializedMcwPlayer hasVotedForDraw. */
             public hasVotedForDraw: boolean;
 
-            /** SerializedMcPlayer isAlive. */
+            /** SerializedMcwPlayer isAlive. */
             public isAlive: boolean;
 
-            /** SerializedMcPlayer playerIndex. */
+            /** SerializedMcwPlayer playerIndex. */
             public playerIndex: number;
 
-            /** SerializedMcPlayer teamIndex. */
+            /** SerializedMcwPlayer teamIndex. */
             public teamIndex: number;
 
-            /** SerializedMcPlayer userId. */
+            /** SerializedMcwPlayer userId. */
             public userId: number;
 
             /**
-             * Creates a new SerializedMcPlayer instance using the specified properties.
+             * Creates a new SerializedMcwPlayer instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns SerializedMcPlayer instance
+             * @returns SerializedMcwPlayer instance
              */
-            public static create(properties?: ISerializedMcPlayer): SerializedMcPlayer;
+            public static create(properties?: ISerializedMcwPlayer): SerializedMcwPlayer;
 
             /**
-             * Encodes the specified SerializedMcPlayer message. Does not implicitly {@link SerializedMcPlayer.verify|verify} messages.
-             * @param message SerializedMcPlayer message or plain object to encode
+             * Encodes the specified SerializedMcwPlayer message. Does not implicitly {@link SerializedMcwPlayer.verify|verify} messages.
+             * @param message SerializedMcwPlayer message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: ISerializedMcPlayer, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: ISerializedMcwPlayer, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified SerializedMcPlayer message, length delimited. Does not implicitly {@link SerializedMcPlayer.verify|verify} messages.
-             * @param message SerializedMcPlayer message or plain object to encode
+             * Encodes the specified SerializedMcwPlayer message, length delimited. Does not implicitly {@link SerializedMcwPlayer.verify|verify} messages.
+             * @param message SerializedMcwPlayer message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: ISerializedMcPlayer, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: ISerializedMcwPlayer, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Decodes a SerializedMcPlayer message from the specified reader or buffer.
+             * Decodes a SerializedMcwPlayer message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns SerializedMcPlayer
+             * @returns SerializedMcwPlayer
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): SerializedMcPlayer;
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): SerializedMcwPlayer;
 
             /**
-             * Decodes a SerializedMcPlayer message from the specified reader or buffer, length delimited.
+             * Decodes a SerializedMcwPlayer message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns SerializedMcPlayer
+             * @returns SerializedMcwPlayer
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): SerializedMcPlayer;
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): SerializedMcwPlayer;
 
             /**
-             * Verifies a SerializedMcPlayer message.
+             * Verifies a SerializedMcwPlayer message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             public static verify(message: { [k: string]: any }): (string | null);
 
             /**
-             * Creates a SerializedMcPlayer message from a plain object. Also converts values to their respective internal types.
+             * Creates a SerializedMcwPlayer message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns SerializedMcPlayer
+             * @returns SerializedMcwPlayer
              */
-            public static fromObject(object: { [k: string]: any }): SerializedMcPlayer;
+            public static fromObject(object: { [k: string]: any }): SerializedMcwPlayer;
 
             /**
-             * Creates a plain object from a SerializedMcPlayer message. Also converts values to other types if specified.
-             * @param message SerializedMcPlayer
+             * Creates a plain object from a SerializedMcwPlayer message. Also converts values to other types if specified.
+             * @param message SerializedMcwPlayer
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: SerializedMcPlayer, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: SerializedMcwPlayer, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this SerializedMcPlayer to JSON.
+             * Converts this SerializedMcwPlayer to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
         }
 
-        /** Properties of a SerializedMcTurn. */
-        export declare interface ISerializedMcTurn {
+        /** Properties of a SerializedMcwTurn. */
+        export declare interface ISerializedMcwTurn {
 
-            /** SerializedMcTurn turnIndex */
+            /** SerializedMcwTurn turnIndex */
             turnIndex?: (number | null);
 
-            /** SerializedMcTurn playerIndex */
+            /** SerializedMcwTurn playerIndex */
             playerIndex?: (number | null);
 
-            /** SerializedMcTurn turnPhaseCode */
+            /** SerializedMcwTurn turnPhaseCode */
             turnPhaseCode?: (number | null);
         }
 
-        /** Represents a SerializedMcTurn. */
-        export declare class SerializedMcTurn implements ISerializedMcTurn {
+        /** Represents a SerializedMcwTurn. */
+        export declare class SerializedMcwTurn implements ISerializedMcwTurn {
 
             /**
-             * Constructs a new SerializedMcTurn.
+             * Constructs a new SerializedMcwTurn.
              * @param [properties] Properties to set
              */
-            constructor(properties?: ISerializedMcTurn);
+            constructor(properties?: ISerializedMcwTurn);
 
-            /** SerializedMcTurn turnIndex. */
+            /** SerializedMcwTurn turnIndex. */
             public turnIndex: number;
 
-            /** SerializedMcTurn playerIndex. */
+            /** SerializedMcwTurn playerIndex. */
             public playerIndex: number;
 
-            /** SerializedMcTurn turnPhaseCode. */
+            /** SerializedMcwTurn turnPhaseCode. */
             public turnPhaseCode: number;
 
             /**
-             * Creates a new SerializedMcTurn instance using the specified properties.
+             * Creates a new SerializedMcwTurn instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns SerializedMcTurn instance
+             * @returns SerializedMcwTurn instance
              */
-            public static create(properties?: ISerializedMcTurn): SerializedMcTurn;
+            public static create(properties?: ISerializedMcwTurn): SerializedMcwTurn;
 
             /**
-             * Encodes the specified SerializedMcTurn message. Does not implicitly {@link SerializedMcTurn.verify|verify} messages.
-             * @param message SerializedMcTurn message or plain object to encode
+             * Encodes the specified SerializedMcwTurn message. Does not implicitly {@link SerializedMcwTurn.verify|verify} messages.
+             * @param message SerializedMcwTurn message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: ISerializedMcTurn, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: ISerializedMcwTurn, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified SerializedMcTurn message, length delimited. Does not implicitly {@link SerializedMcTurn.verify|verify} messages.
-             * @param message SerializedMcTurn message or plain object to encode
+             * Encodes the specified SerializedMcwTurn message, length delimited. Does not implicitly {@link SerializedMcwTurn.verify|verify} messages.
+             * @param message SerializedMcwTurn message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: ISerializedMcTurn, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: ISerializedMcwTurn, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Decodes a SerializedMcTurn message from the specified reader or buffer.
+             * Decodes a SerializedMcwTurn message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns SerializedMcTurn
+             * @returns SerializedMcwTurn
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): SerializedMcTurn;
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): SerializedMcwTurn;
 
             /**
-             * Decodes a SerializedMcTurn message from the specified reader or buffer, length delimited.
+             * Decodes a SerializedMcwTurn message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns SerializedMcTurn
+             * @returns SerializedMcwTurn
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): SerializedMcTurn;
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): SerializedMcwTurn;
 
             /**
-             * Verifies a SerializedMcTurn message.
+             * Verifies a SerializedMcwTurn message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             public static verify(message: { [k: string]: any }): (string | null);
 
             /**
-             * Creates a SerializedMcTurn message from a plain object. Also converts values to their respective internal types.
+             * Creates a SerializedMcwTurn message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns SerializedMcTurn
+             * @returns SerializedMcwTurn
              */
-            public static fromObject(object: { [k: string]: any }): SerializedMcTurn;
+            public static fromObject(object: { [k: string]: any }): SerializedMcwTurn;
 
             /**
-             * Creates a plain object from a SerializedMcTurn message. Also converts values to other types if specified.
-             * @param message SerializedMcTurn
+             * Creates a plain object from a SerializedMcwTurn message. Also converts values to other types if specified.
+             * @param message SerializedMcwTurn
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: SerializedMcTurn, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: SerializedMcwTurn, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this SerializedMcTurn to JSON.
+             * Converts this SerializedMcwTurn to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
         }
 
-        /** Properties of a SerializedMcTileMap. */
-        export declare interface ISerializedMcTileMap {
+        /** Properties of a SerializedMcwTileMap. */
+        export declare interface ISerializedMcwTileMap {
 
-            /** SerializedMcTileMap tiles */
-            tiles?: (ISerializedMcTile[] | null);
+            /** SerializedMcwTileMap tiles */
+            tiles?: (ISerializedMcwTile[] | null);
         }
 
-        /** Represents a SerializedMcTileMap. */
-        export declare class SerializedMcTileMap implements ISerializedMcTileMap {
+        /** Represents a SerializedMcwTileMap. */
+        export declare class SerializedMcwTileMap implements ISerializedMcwTileMap {
 
             /**
-             * Constructs a new SerializedMcTileMap.
+             * Constructs a new SerializedMcwTileMap.
              * @param [properties] Properties to set
              */
-            constructor(properties?: ISerializedMcTileMap);
+            constructor(properties?: ISerializedMcwTileMap);
 
-            /** SerializedMcTileMap tiles. */
-            public tiles: ISerializedMcTile[];
+            /** SerializedMcwTileMap tiles. */
+            public tiles: ISerializedMcwTile[];
 
             /**
-             * Creates a new SerializedMcTileMap instance using the specified properties.
+             * Creates a new SerializedMcwTileMap instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns SerializedMcTileMap instance
+             * @returns SerializedMcwTileMap instance
              */
-            public static create(properties?: ISerializedMcTileMap): SerializedMcTileMap;
+            public static create(properties?: ISerializedMcwTileMap): SerializedMcwTileMap;
 
             /**
-             * Encodes the specified SerializedMcTileMap message. Does not implicitly {@link SerializedMcTileMap.verify|verify} messages.
-             * @param message SerializedMcTileMap message or plain object to encode
+             * Encodes the specified SerializedMcwTileMap message. Does not implicitly {@link SerializedMcwTileMap.verify|verify} messages.
+             * @param message SerializedMcwTileMap message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: ISerializedMcTileMap, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: ISerializedMcwTileMap, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified SerializedMcTileMap message, length delimited. Does not implicitly {@link SerializedMcTileMap.verify|verify} messages.
-             * @param message SerializedMcTileMap message or plain object to encode
+             * Encodes the specified SerializedMcwTileMap message, length delimited. Does not implicitly {@link SerializedMcwTileMap.verify|verify} messages.
+             * @param message SerializedMcwTileMap message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: ISerializedMcTileMap, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: ISerializedMcwTileMap, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Decodes a SerializedMcTileMap message from the specified reader or buffer.
+             * Decodes a SerializedMcwTileMap message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns SerializedMcTileMap
+             * @returns SerializedMcwTileMap
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): SerializedMcTileMap;
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): SerializedMcwTileMap;
 
             /**
-             * Decodes a SerializedMcTileMap message from the specified reader or buffer, length delimited.
+             * Decodes a SerializedMcwTileMap message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns SerializedMcTileMap
+             * @returns SerializedMcwTileMap
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): SerializedMcTileMap;
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): SerializedMcwTileMap;
 
             /**
-             * Verifies a SerializedMcTileMap message.
+             * Verifies a SerializedMcwTileMap message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             public static verify(message: { [k: string]: any }): (string | null);
 
             /**
-             * Creates a SerializedMcTileMap message from a plain object. Also converts values to their respective internal types.
+             * Creates a SerializedMcwTileMap message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns SerializedMcTileMap
+             * @returns SerializedMcwTileMap
              */
-            public static fromObject(object: { [k: string]: any }): SerializedMcTileMap;
+            public static fromObject(object: { [k: string]: any }): SerializedMcwTileMap;
 
             /**
-             * Creates a plain object from a SerializedMcTileMap message. Also converts values to other types if specified.
-             * @param message SerializedMcTileMap
+             * Creates a plain object from a SerializedMcwTileMap message. Also converts values to other types if specified.
+             * @param message SerializedMcwTileMap
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: SerializedMcTileMap, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: SerializedMcwTileMap, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this SerializedMcTileMap to JSON.
+             * Converts this SerializedMcwTileMap to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
         }
 
-        /** Properties of a SerializedMcUnitMap. */
-        export declare interface ISerializedMcUnitMap {
+        /** Properties of a SerializedMcwUnitMap. */
+        export declare interface ISerializedMcwUnitMap {
 
-            /** SerializedMcUnitMap nextUnitId */
+            /** SerializedMcwUnitMap nextUnitId */
             nextUnitId?: (number | null);
 
-            /** SerializedMcUnitMap units */
-            units?: (ISerializedMcUnit[] | null);
+            /** SerializedMcwUnitMap units */
+            units?: (ISerializedMcwUnit[] | null);
         }
 
-        /** Represents a SerializedMcUnitMap. */
-        export declare class SerializedMcUnitMap implements ISerializedMcUnitMap {
+        /** Represents a SerializedMcwUnitMap. */
+        export declare class SerializedMcwUnitMap implements ISerializedMcwUnitMap {
 
             /**
-             * Constructs a new SerializedMcUnitMap.
+             * Constructs a new SerializedMcwUnitMap.
              * @param [properties] Properties to set
              */
-            constructor(properties?: ISerializedMcUnitMap);
+            constructor(properties?: ISerializedMcwUnitMap);
 
-            /** SerializedMcUnitMap nextUnitId. */
+            /** SerializedMcwUnitMap nextUnitId. */
             public nextUnitId: number;
 
-            /** SerializedMcUnitMap units. */
-            public units: ISerializedMcUnit[];
+            /** SerializedMcwUnitMap units. */
+            public units: ISerializedMcwUnit[];
 
             /**
-             * Creates a new SerializedMcUnitMap instance using the specified properties.
+             * Creates a new SerializedMcwUnitMap instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns SerializedMcUnitMap instance
+             * @returns SerializedMcwUnitMap instance
              */
-            public static create(properties?: ISerializedMcUnitMap): SerializedMcUnitMap;
+            public static create(properties?: ISerializedMcwUnitMap): SerializedMcwUnitMap;
 
             /**
-             * Encodes the specified SerializedMcUnitMap message. Does not implicitly {@link SerializedMcUnitMap.verify|verify} messages.
-             * @param message SerializedMcUnitMap message or plain object to encode
+             * Encodes the specified SerializedMcwUnitMap message. Does not implicitly {@link SerializedMcwUnitMap.verify|verify} messages.
+             * @param message SerializedMcwUnitMap message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: ISerializedMcUnitMap, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: ISerializedMcwUnitMap, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified SerializedMcUnitMap message, length delimited. Does not implicitly {@link SerializedMcUnitMap.verify|verify} messages.
-             * @param message SerializedMcUnitMap message or plain object to encode
+             * Encodes the specified SerializedMcwUnitMap message, length delimited. Does not implicitly {@link SerializedMcwUnitMap.verify|verify} messages.
+             * @param message SerializedMcwUnitMap message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: ISerializedMcUnitMap, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: ISerializedMcwUnitMap, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Decodes a SerializedMcUnitMap message from the specified reader or buffer.
+             * Decodes a SerializedMcwUnitMap message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns SerializedMcUnitMap
+             * @returns SerializedMcwUnitMap
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): SerializedMcUnitMap;
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): SerializedMcwUnitMap;
 
             /**
-             * Decodes a SerializedMcUnitMap message from the specified reader or buffer, length delimited.
+             * Decodes a SerializedMcwUnitMap message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns SerializedMcUnitMap
+             * @returns SerializedMcwUnitMap
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): SerializedMcUnitMap;
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): SerializedMcwUnitMap;
 
             /**
-             * Verifies a SerializedMcUnitMap message.
+             * Verifies a SerializedMcwUnitMap message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             public static verify(message: { [k: string]: any }): (string | null);
 
             /**
-             * Creates a SerializedMcUnitMap message from a plain object. Also converts values to their respective internal types.
+             * Creates a SerializedMcwUnitMap message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns SerializedMcUnitMap
+             * @returns SerializedMcwUnitMap
              */
-            public static fromObject(object: { [k: string]: any }): SerializedMcUnitMap;
+            public static fromObject(object: { [k: string]: any }): SerializedMcwUnitMap;
 
             /**
-             * Creates a plain object from a SerializedMcUnitMap message. Also converts values to other types if specified.
-             * @param message SerializedMcUnitMap
+             * Creates a plain object from a SerializedMcwUnitMap message. Also converts values to other types if specified.
+             * @param message SerializedMcwUnitMap
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: SerializedMcUnitMap, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: SerializedMcwUnitMap, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this SerializedMcUnitMap to JSON.
+             * Converts this SerializedMcwUnitMap to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
         }
 
-        /** Properties of a SerializedMcFogMapForPath. */
-        export declare interface ISerializedMcFogMapForPath {
+        /** Properties of a SerializedMcwFogMapForPath. */
+        export declare interface ISerializedMcwFogMapForPath {
 
-            /** SerializedMcFogMapForPath playerIndex */
+            /** SerializedMcwFogMapForPath playerIndex */
             playerIndex?: (number | null);
 
-            /** SerializedMcFogMapForPath encodedMap */
+            /** SerializedMcwFogMapForPath encodedMap */
             encodedMap?: (string | null);
         }
 
-        /** Represents a SerializedMcFogMapForPath. */
-        export declare class SerializedMcFogMapForPath implements ISerializedMcFogMapForPath {
+        /** Represents a SerializedMcwFogMapForPath. */
+        export declare class SerializedMcwFogMapForPath implements ISerializedMcwFogMapForPath {
 
             /**
-             * Constructs a new SerializedMcFogMapForPath.
+             * Constructs a new SerializedMcwFogMapForPath.
              * @param [properties] Properties to set
              */
-            constructor(properties?: ISerializedMcFogMapForPath);
+            constructor(properties?: ISerializedMcwFogMapForPath);
 
-            /** SerializedMcFogMapForPath playerIndex. */
+            /** SerializedMcwFogMapForPath playerIndex. */
             public playerIndex: number;
 
-            /** SerializedMcFogMapForPath encodedMap. */
+            /** SerializedMcwFogMapForPath encodedMap. */
             public encodedMap: string;
 
             /**
-             * Creates a new SerializedMcFogMapForPath instance using the specified properties.
+             * Creates a new SerializedMcwFogMapForPath instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns SerializedMcFogMapForPath instance
+             * @returns SerializedMcwFogMapForPath instance
              */
-            public static create(properties?: ISerializedMcFogMapForPath): SerializedMcFogMapForPath;
+            public static create(properties?: ISerializedMcwFogMapForPath): SerializedMcwFogMapForPath;
 
             /**
-             * Encodes the specified SerializedMcFogMapForPath message. Does not implicitly {@link SerializedMcFogMapForPath.verify|verify} messages.
-             * @param message SerializedMcFogMapForPath message or plain object to encode
+             * Encodes the specified SerializedMcwFogMapForPath message. Does not implicitly {@link SerializedMcwFogMapForPath.verify|verify} messages.
+             * @param message SerializedMcwFogMapForPath message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: ISerializedMcFogMapForPath, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: ISerializedMcwFogMapForPath, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified SerializedMcFogMapForPath message, length delimited. Does not implicitly {@link SerializedMcFogMapForPath.verify|verify} messages.
-             * @param message SerializedMcFogMapForPath message or plain object to encode
+             * Encodes the specified SerializedMcwFogMapForPath message, length delimited. Does not implicitly {@link SerializedMcwFogMapForPath.verify|verify} messages.
+             * @param message SerializedMcwFogMapForPath message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: ISerializedMcFogMapForPath, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: ISerializedMcwFogMapForPath, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Decodes a SerializedMcFogMapForPath message from the specified reader or buffer.
+             * Decodes a SerializedMcwFogMapForPath message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns SerializedMcFogMapForPath
+             * @returns SerializedMcwFogMapForPath
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): SerializedMcFogMapForPath;
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): SerializedMcwFogMapForPath;
 
             /**
-             * Decodes a SerializedMcFogMapForPath message from the specified reader or buffer, length delimited.
+             * Decodes a SerializedMcwFogMapForPath message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns SerializedMcFogMapForPath
+             * @returns SerializedMcwFogMapForPath
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): SerializedMcFogMapForPath;
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): SerializedMcwFogMapForPath;
 
             /**
-             * Verifies a SerializedMcFogMapForPath message.
+             * Verifies a SerializedMcwFogMapForPath message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             public static verify(message: { [k: string]: any }): (string | null);
 
             /**
-             * Creates a SerializedMcFogMapForPath message from a plain object. Also converts values to their respective internal types.
+             * Creates a SerializedMcwFogMapForPath message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns SerializedMcFogMapForPath
+             * @returns SerializedMcwFogMapForPath
              */
-            public static fromObject(object: { [k: string]: any }): SerializedMcFogMapForPath;
+            public static fromObject(object: { [k: string]: any }): SerializedMcwFogMapForPath;
 
             /**
-             * Creates a plain object from a SerializedMcFogMapForPath message. Also converts values to other types if specified.
-             * @param message SerializedMcFogMapForPath
+             * Creates a plain object from a SerializedMcwFogMapForPath message. Also converts values to other types if specified.
+             * @param message SerializedMcwFogMapForPath
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: SerializedMcFogMapForPath, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: SerializedMcwFogMapForPath, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this SerializedMcFogMapForPath to JSON.
+             * Converts this SerializedMcwFogMapForPath to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
         }
 
-        /** Properties of a SerializedMcFogMap. */
-        export declare interface ISerializedMcFogMap {
+        /** Properties of a SerializedMcwFogMap. */
+        export declare interface ISerializedMcwFogMap {
 
-            /** SerializedMcFogMap forceFogCode */
+            /** SerializedMcwFogMap forceFogCode */
             forceFogCode?: (number | null);
 
-            /** SerializedMcFogMap forceExpirePlayerIndex */
+            /** SerializedMcwFogMap forceExpirePlayerIndex */
             forceExpirePlayerIndex?: (number | null);
 
-            /** SerializedMcFogMap forceExpireTurnIndex */
+            /** SerializedMcwFogMap forceExpireTurnIndex */
             forceExpireTurnIndex?: (number | null);
 
-            /** SerializedMcFogMap mapsForPath */
-            mapsForPath?: (ISerializedMcFogMapForPath[] | null);
+            /** SerializedMcwFogMap mapsForPath */
+            mapsForPath?: (ISerializedMcwFogMapForPath[] | null);
         }
 
-        /** Represents a SerializedMcFogMap. */
-        export declare class SerializedMcFogMap implements ISerializedMcFogMap {
+        /** Represents a SerializedMcwFogMap. */
+        export declare class SerializedMcwFogMap implements ISerializedMcwFogMap {
 
             /**
-             * Constructs a new SerializedMcFogMap.
+             * Constructs a new SerializedMcwFogMap.
              * @param [properties] Properties to set
              */
-            constructor(properties?: ISerializedMcFogMap);
+            constructor(properties?: ISerializedMcwFogMap);
 
-            /** SerializedMcFogMap forceFogCode. */
+            /** SerializedMcwFogMap forceFogCode. */
             public forceFogCode: number;
 
-            /** SerializedMcFogMap forceExpirePlayerIndex. */
+            /** SerializedMcwFogMap forceExpirePlayerIndex. */
             public forceExpirePlayerIndex: number;
 
-            /** SerializedMcFogMap forceExpireTurnIndex. */
+            /** SerializedMcwFogMap forceExpireTurnIndex. */
             public forceExpireTurnIndex: number;
 
-            /** SerializedMcFogMap mapsForPath. */
-            public mapsForPath: ISerializedMcFogMapForPath[];
+            /** SerializedMcwFogMap mapsForPath. */
+            public mapsForPath: ISerializedMcwFogMapForPath[];
 
             /**
-             * Creates a new SerializedMcFogMap instance using the specified properties.
+             * Creates a new SerializedMcwFogMap instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns SerializedMcFogMap instance
+             * @returns SerializedMcwFogMap instance
              */
-            public static create(properties?: ISerializedMcFogMap): SerializedMcFogMap;
+            public static create(properties?: ISerializedMcwFogMap): SerializedMcwFogMap;
 
             /**
-             * Encodes the specified SerializedMcFogMap message. Does not implicitly {@link SerializedMcFogMap.verify|verify} messages.
-             * @param message SerializedMcFogMap message or plain object to encode
+             * Encodes the specified SerializedMcwFogMap message. Does not implicitly {@link SerializedMcwFogMap.verify|verify} messages.
+             * @param message SerializedMcwFogMap message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: ISerializedMcFogMap, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: ISerializedMcwFogMap, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified SerializedMcFogMap message, length delimited. Does not implicitly {@link SerializedMcFogMap.verify|verify} messages.
-             * @param message SerializedMcFogMap message or plain object to encode
+             * Encodes the specified SerializedMcwFogMap message, length delimited. Does not implicitly {@link SerializedMcwFogMap.verify|verify} messages.
+             * @param message SerializedMcwFogMap message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: ISerializedMcFogMap, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: ISerializedMcwFogMap, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Decodes a SerializedMcFogMap message from the specified reader or buffer.
+             * Decodes a SerializedMcwFogMap message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns SerializedMcFogMap
+             * @returns SerializedMcwFogMap
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): SerializedMcFogMap;
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): SerializedMcwFogMap;
 
             /**
-             * Decodes a SerializedMcFogMap message from the specified reader or buffer, length delimited.
+             * Decodes a SerializedMcwFogMap message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns SerializedMcFogMap
+             * @returns SerializedMcwFogMap
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): SerializedMcFogMap;
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): SerializedMcwFogMap;
 
             /**
-             * Verifies a SerializedMcFogMap message.
+             * Verifies a SerializedMcwFogMap message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             public static verify(message: { [k: string]: any }): (string | null);
 
             /**
-             * Creates a SerializedMcFogMap message from a plain object. Also converts values to their respective internal types.
+             * Creates a SerializedMcwFogMap message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns SerializedMcFogMap
+             * @returns SerializedMcwFogMap
              */
-            public static fromObject(object: { [k: string]: any }): SerializedMcFogMap;
+            public static fromObject(object: { [k: string]: any }): SerializedMcwFogMap;
 
             /**
-             * Creates a plain object from a SerializedMcFogMap message. Also converts values to other types if specified.
-             * @param message SerializedMcFogMap
+             * Creates a plain object from a SerializedMcwFogMap message. Also converts values to other types if specified.
+             * @param message SerializedMcwFogMap
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: SerializedMcFogMap, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: SerializedMcwFogMap, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this SerializedMcFogMap to JSON.
+             * Converts this SerializedMcwFogMap to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
         }
 
-        /** Properties of a SerializedMcField. */
-        export declare interface ISerializedMcField {
+        /** Properties of a SerializedMcwField. */
+        export declare interface ISerializedMcwField {
 
-            /** SerializedMcField fogMap */
-            fogMap?: (ISerializedMcFogMap | null);
+            /** SerializedMcwField fogMap */
+            fogMap?: (ISerializedMcwFogMap | null);
 
-            /** SerializedMcField tileMap */
-            tileMap?: (ISerializedMcTileMap | null);
+            /** SerializedMcwField tileMap */
+            tileMap?: (ISerializedMcwTileMap | null);
 
-            /** SerializedMcField unitMap */
-            unitMap?: (ISerializedMcUnitMap | null);
+            /** SerializedMcwField unitMap */
+            unitMap?: (ISerializedMcwUnitMap | null);
         }
 
-        /** Represents a SerializedMcField. */
-        export declare class SerializedMcField implements ISerializedMcField {
+        /** Represents a SerializedMcwField. */
+        export declare class SerializedMcwField implements ISerializedMcwField {
 
             /**
-             * Constructs a new SerializedMcField.
+             * Constructs a new SerializedMcwField.
              * @param [properties] Properties to set
              */
-            constructor(properties?: ISerializedMcField);
+            constructor(properties?: ISerializedMcwField);
 
-            /** SerializedMcField fogMap. */
-            public fogMap?: (ISerializedMcFogMap | null);
+            /** SerializedMcwField fogMap. */
+            public fogMap?: (ISerializedMcwFogMap | null);
 
-            /** SerializedMcField tileMap. */
-            public tileMap?: (ISerializedMcTileMap | null);
+            /** SerializedMcwField tileMap. */
+            public tileMap?: (ISerializedMcwTileMap | null);
 
-            /** SerializedMcField unitMap. */
-            public unitMap?: (ISerializedMcUnitMap | null);
+            /** SerializedMcwField unitMap. */
+            public unitMap?: (ISerializedMcwUnitMap | null);
 
             /**
-             * Creates a new SerializedMcField instance using the specified properties.
+             * Creates a new SerializedMcwField instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns SerializedMcField instance
+             * @returns SerializedMcwField instance
              */
-            public static create(properties?: ISerializedMcField): SerializedMcField;
+            public static create(properties?: ISerializedMcwField): SerializedMcwField;
 
             /**
-             * Encodes the specified SerializedMcField message. Does not implicitly {@link SerializedMcField.verify|verify} messages.
-             * @param message SerializedMcField message or plain object to encode
+             * Encodes the specified SerializedMcwField message. Does not implicitly {@link SerializedMcwField.verify|verify} messages.
+             * @param message SerializedMcwField message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: ISerializedMcField, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: ISerializedMcwField, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified SerializedMcField message, length delimited. Does not implicitly {@link SerializedMcField.verify|verify} messages.
-             * @param message SerializedMcField message or plain object to encode
+             * Encodes the specified SerializedMcwField message, length delimited. Does not implicitly {@link SerializedMcwField.verify|verify} messages.
+             * @param message SerializedMcwField message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: ISerializedMcField, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: ISerializedMcwField, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Decodes a SerializedMcField message from the specified reader or buffer.
+             * Decodes a SerializedMcwField message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns SerializedMcField
+             * @returns SerializedMcwField
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): SerializedMcField;
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): SerializedMcwField;
 
             /**
-             * Decodes a SerializedMcField message from the specified reader or buffer, length delimited.
+             * Decodes a SerializedMcwField message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns SerializedMcField
+             * @returns SerializedMcwField
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): SerializedMcField;
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): SerializedMcwField;
 
             /**
-             * Verifies a SerializedMcField message.
+             * Verifies a SerializedMcwField message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             public static verify(message: { [k: string]: any }): (string | null);
 
             /**
-             * Creates a SerializedMcField message from a plain object. Also converts values to their respective internal types.
+             * Creates a SerializedMcwField message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns SerializedMcField
+             * @returns SerializedMcwField
              */
-            public static fromObject(object: { [k: string]: any }): SerializedMcField;
+            public static fromObject(object: { [k: string]: any }): SerializedMcwField;
 
             /**
-             * Creates a plain object from a SerializedMcField message. Also converts values to other types if specified.
-             * @param message SerializedMcField
+             * Creates a plain object from a SerializedMcwField message. Also converts values to other types if specified.
+             * @param message SerializedMcwField
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: SerializedMcField, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: SerializedMcwField, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this SerializedMcField to JSON.
+             * Converts this SerializedMcwField to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
         }
 
-        /** Properties of a SerializedMcWar. */
-        export declare interface ISerializedMcWar {
+        /** Properties of a SerializedMcwWar. */
+        export declare interface ISerializedMcwWar {
 
-            /** SerializedMcWar warId */
+            /** SerializedMcwWar warId */
             warId?: (number | null);
 
-            /** SerializedMcWar configVersion */
+            /** SerializedMcwWar configVersion */
             configVersion?: (number | null);
 
-            /** SerializedMcWar mapName */
+            /** SerializedMcwWar mapName */
             mapName?: (string | null);
 
-            /** SerializedMcWar mapDesigner */
+            /** SerializedMcwWar mapDesigner */
             mapDesigner?: (string | null);
 
-            /** SerializedMcWar mapVersion */
+            /** SerializedMcwWar mapVersion */
             mapVersion?: (number | null);
 
-            /** SerializedMcWar warName */
+            /** SerializedMcwWar warName */
             warName?: (string | null);
 
-            /** SerializedMcWar warPassword */
+            /** SerializedMcwWar warPassword */
             warPassword?: (string | null);
 
-            /** SerializedMcWar warComment */
+            /** SerializedMcwWar warComment */
             warComment?: (string | null);
 
-            /** SerializedMcWar hasFogByDefault */
+            /** SerializedMcwWar hasFogByDefault */
             hasFogByDefault?: (boolean | null);
 
-            /** SerializedMcWar timeLimit */
+            /** SerializedMcwWar timeLimit */
             timeLimit?: (number | null);
 
-            /** SerializedMcWar initialFund */
+            /** SerializedMcwWar initialFund */
             initialFund?: (number | null);
 
-            /** SerializedMcWar incomeModifier */
+            /** SerializedMcwWar incomeModifier */
             incomeModifier?: (number | null);
 
-            /** SerializedMcWar initialEnergy */
+            /** SerializedMcwWar initialEnergy */
             initialEnergy?: (number | null);
 
-            /** SerializedMcWar energyGrowthModifier */
+            /** SerializedMcwWar energyGrowthModifier */
             energyGrowthModifier?: (number | null);
 
-            /** SerializedMcWar moveRangeModifier */
+            /** SerializedMcwWar moveRangeModifier */
             moveRangeModifier?: (number | null);
 
-            /** SerializedMcWar attackPowerModifier */
+            /** SerializedMcwWar attackPowerModifier */
             attackPowerModifier?: (number | null);
 
-            /** SerializedMcWar visionRangeModifier */
+            /** SerializedMcwWar visionRangeModifier */
             visionRangeModifier?: (number | null);
 
-            /** SerializedMcWar remainingVotesForDraw */
+            /** SerializedMcwWar remainingVotesForDraw */
             remainingVotesForDraw?: (number | null);
 
-            /** SerializedMcWar enterTurnTime */
+            /** SerializedMcwWar enterTurnTime */
             enterTurnTime?: (number | null);
 
-            /** SerializedMcWar executedActions */
+            /** SerializedMcwWar executedActions */
             executedActions?: (IActionContainer[] | null);
 
-            /** SerializedMcWar players */
-            players?: (ISerializedMcPlayer[] | null);
+            /** SerializedMcwWar players */
+            players?: (ISerializedMcwPlayer[] | null);
 
-            /** SerializedMcWar turn */
-            turn?: (ISerializedMcTurn | null);
+            /** SerializedMcwWar turn */
+            turn?: (ISerializedMcwTurn | null);
 
-            /** SerializedMcWar field */
-            field?: (ISerializedMcField | null);
+            /** SerializedMcwWar field */
+            field?: (ISerializedMcwField | null);
         }
 
-        /** Represents a SerializedMcWar. */
-        export declare class SerializedMcWar implements ISerializedMcWar {
+        /** Represents a SerializedMcwWar. */
+        export declare class SerializedMcwWar implements ISerializedMcwWar {
 
             /**
-             * Constructs a new SerializedMcWar.
+             * Constructs a new SerializedMcwWar.
              * @param [properties] Properties to set
              */
-            constructor(properties?: ISerializedMcWar);
+            constructor(properties?: ISerializedMcwWar);
 
-            /** SerializedMcWar warId. */
+            /** SerializedMcwWar warId. */
             public warId: number;
 
-            /** SerializedMcWar configVersion. */
+            /** SerializedMcwWar configVersion. */
             public configVersion: number;
 
-            /** SerializedMcWar mapName. */
+            /** SerializedMcwWar mapName. */
             public mapName: string;
 
-            /** SerializedMcWar mapDesigner. */
+            /** SerializedMcwWar mapDesigner. */
             public mapDesigner: string;
 
-            /** SerializedMcWar mapVersion. */
+            /** SerializedMcwWar mapVersion. */
             public mapVersion: number;
 
-            /** SerializedMcWar warName. */
+            /** SerializedMcwWar warName. */
             public warName: string;
 
-            /** SerializedMcWar warPassword. */
+            /** SerializedMcwWar warPassword. */
             public warPassword: string;
 
-            /** SerializedMcWar warComment. */
+            /** SerializedMcwWar warComment. */
             public warComment: string;
 
-            /** SerializedMcWar hasFogByDefault. */
+            /** SerializedMcwWar hasFogByDefault. */
             public hasFogByDefault: boolean;
 
-            /** SerializedMcWar timeLimit. */
+            /** SerializedMcwWar timeLimit. */
             public timeLimit: number;
 
-            /** SerializedMcWar initialFund. */
+            /** SerializedMcwWar initialFund. */
             public initialFund: number;
 
-            /** SerializedMcWar incomeModifier. */
+            /** SerializedMcwWar incomeModifier. */
             public incomeModifier: number;
 
-            /** SerializedMcWar initialEnergy. */
+            /** SerializedMcwWar initialEnergy. */
             public initialEnergy: number;
 
-            /** SerializedMcWar energyGrowthModifier. */
+            /** SerializedMcwWar energyGrowthModifier. */
             public energyGrowthModifier: number;
 
-            /** SerializedMcWar moveRangeModifier. */
+            /** SerializedMcwWar moveRangeModifier. */
             public moveRangeModifier: number;
 
-            /** SerializedMcWar attackPowerModifier. */
+            /** SerializedMcwWar attackPowerModifier. */
             public attackPowerModifier: number;
 
-            /** SerializedMcWar visionRangeModifier. */
+            /** SerializedMcwWar visionRangeModifier. */
             public visionRangeModifier: number;
 
-            /** SerializedMcWar remainingVotesForDraw. */
+            /** SerializedMcwWar remainingVotesForDraw. */
             public remainingVotesForDraw: number;
 
-            /** SerializedMcWar enterTurnTime. */
+            /** SerializedMcwWar enterTurnTime. */
             public enterTurnTime: number;
 
-            /** SerializedMcWar executedActions. */
+            /** SerializedMcwWar executedActions. */
             public executedActions: IActionContainer[];
 
-            /** SerializedMcWar players. */
-            public players: ISerializedMcPlayer[];
+            /** SerializedMcwWar players. */
+            public players: ISerializedMcwPlayer[];
 
-            /** SerializedMcWar turn. */
-            public turn?: (ISerializedMcTurn | null);
+            /** SerializedMcwWar turn. */
+            public turn?: (ISerializedMcwTurn | null);
 
-            /** SerializedMcWar field. */
-            public field?: (ISerializedMcField | null);
+            /** SerializedMcwWar field. */
+            public field?: (ISerializedMcwField | null);
 
             /**
-             * Creates a new SerializedMcWar instance using the specified properties.
+             * Creates a new SerializedMcwWar instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns SerializedMcWar instance
+             * @returns SerializedMcwWar instance
              */
-            public static create(properties?: ISerializedMcWar): SerializedMcWar;
+            public static create(properties?: ISerializedMcwWar): SerializedMcwWar;
 
             /**
-             * Encodes the specified SerializedMcWar message. Does not implicitly {@link SerializedMcWar.verify|verify} messages.
-             * @param message SerializedMcWar message or plain object to encode
+             * Encodes the specified SerializedMcwWar message. Does not implicitly {@link SerializedMcwWar.verify|verify} messages.
+             * @param message SerializedMcwWar message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: ISerializedMcWar, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: ISerializedMcwWar, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified SerializedMcWar message, length delimited. Does not implicitly {@link SerializedMcWar.verify|verify} messages.
-             * @param message SerializedMcWar message or plain object to encode
+             * Encodes the specified SerializedMcwWar message, length delimited. Does not implicitly {@link SerializedMcwWar.verify|verify} messages.
+             * @param message SerializedMcwWar message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: ISerializedMcWar, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: ISerializedMcwWar, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Decodes a SerializedMcWar message from the specified reader or buffer.
+             * Decodes a SerializedMcwWar message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns SerializedMcWar
+             * @returns SerializedMcwWar
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): SerializedMcWar;
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): SerializedMcwWar;
 
             /**
-             * Decodes a SerializedMcWar message from the specified reader or buffer, length delimited.
+             * Decodes a SerializedMcwWar message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns SerializedMcWar
+             * @returns SerializedMcwWar
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): SerializedMcWar;
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): SerializedMcwWar;
 
             /**
-             * Verifies a SerializedMcWar message.
+             * Verifies a SerializedMcwWar message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             public static verify(message: { [k: string]: any }): (string | null);
 
             /**
-             * Creates a SerializedMcWar message from a plain object. Also converts values to their respective internal types.
+             * Creates a SerializedMcwWar message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns SerializedMcWar
+             * @returns SerializedMcwWar
              */
-            public static fromObject(object: { [k: string]: any }): SerializedMcWar;
+            public static fromObject(object: { [k: string]: any }): SerializedMcwWar;
 
             /**
-             * Creates a plain object from a SerializedMcWar message. Also converts values to other types if specified.
-             * @param message SerializedMcWar
+             * Creates a plain object from a SerializedMcwWar message. Also converts values to other types if specified.
+             * @param message SerializedMcwWar
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: SerializedMcWar, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: SerializedMcwWar, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this SerializedMcWar to JSON.
+             * Converts this SerializedMcwWar to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };

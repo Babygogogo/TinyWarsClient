@@ -5,7 +5,7 @@ namespace TinyWars.MultiCustomWar {
     import MapManager               = WarMap.WarMapModel;
     import Helpers                  = Utility.Helpers;
     import GridIndexHelpers         = Utility.GridIndexHelpers;
-    import SerializedMcFogMap       = Types.SerializedMcFogMap;
+    import SerializedMcFogMap       = Types.SerializedMcwFogMap;
     import ForceFogCode             = Types.ForceFogCode;
     import GridIndex                = Types.GridIndex;
     import MapSize                  = Types.MapSize;
@@ -51,7 +51,7 @@ namespace TinyWars.MultiCustomWar {
 
         public serialize(): SerializedMcFogMap {
             const mapSize = this.getMapSize();
-            const mapsForPath: Types.SerializedMcFogMapForPath[] = [];
+            const mapsForPath: Types.SerializedMcwFogMapForPath[] = [];
             for (const [playerIndex, map] of this._mapsFromPaths) {
                 const serializedData = encodeMapForPaths(map, mapSize);
                 if (serializedData != null) {
@@ -71,7 +71,7 @@ namespace TinyWars.MultiCustomWar {
         public serializeForPlayer(targetPlayerIndex: number): SerializedMcFogMap {
             const mapSize           = this.getMapSize();
             const targetTeamIndex   = this._war.getPlayer(targetPlayerIndex)!.getTeamIndex();
-            const mapsForPath: Types.SerializedMcFogMapForPath[] = [];
+            const mapsForPath: Types.SerializedMcwFogMapForPath[] = [];
 
             for (const [playerIndex, map] of this._mapsFromPaths) {
                 const player = this._war.getPlayer(playerIndex)!;

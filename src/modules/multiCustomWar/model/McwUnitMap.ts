@@ -20,12 +20,12 @@ namespace TinyWars.MultiCustomWar {
         public constructor() {
         }
 
-        public init(configVersion: number, mapIndexKey: Types.MapIndexKey, data?: Types.SerializedMcUnitMap): Promise<McwUnitMap> {
+        public init(configVersion: number, mapIndexKey: Types.MapIndexKey, data?: Types.SerializedMcwUnitMap): Promise<McwUnitMap> {
             return data
                 ? this._initWithSerializedData(configVersion, mapIndexKey, data)
                 : this._initWithoutSerializedData(configVersion, mapIndexKey);
         }
-        private async _initWithSerializedData(configVersion: number, mapIndexKey: Types.MapIndexKey, data: Types.SerializedMcUnitMap): Promise<McwUnitMap> {
+        private async _initWithSerializedData(configVersion: number, mapIndexKey: Types.MapIndexKey, data: Types.SerializedMcwUnitMap): Promise<McwUnitMap> {
             const { mapWidth, mapHeight }   = await MapModel.getMapData(mapIndexKey);
             const unitDatas                 = data.units;
             const map                       = Helpers.createEmptyMap<McwUnit>(mapWidth);
@@ -81,8 +81,8 @@ namespace TinyWars.MultiCustomWar {
             this.forEachUnitLoaded(unit => unit.startRunning(war));
         }
 
-        public serialize(): Types.SerializedMcUnitMap {
-            const units: Types.SerializedMcUnit[] = [];
+        public serialize(): Types.SerializedMcwUnitMap {
+            const units: Types.SerializedMcwUnit[] = [];
             this.forEachUnitOnMap(unit => units.push(unit.serialize()));
             this.forEachUnitLoaded(unit => units.push(unit.serialize()));
 
@@ -91,9 +91,9 @@ namespace TinyWars.MultiCustomWar {
                 nextUnitId  : this.getNextUnitId(),
             };
         }
-        public serializeForPlayer(playerIndex: number): Types.SerializedMcUnitMap {
+        public serializeForPlayer(playerIndex: number): Types.SerializedMcwUnitMap {
             const war = this._war;
-            const units: Types.SerializedMcUnit[] = [];
+            const units: Types.SerializedMcwUnit[] = [];
             this.forEachUnitOnMap(unit => {
                 if (Utility.VisibilityHelpers.checkIsUnitOnMapVisibleToPlayer({
                     war,

@@ -16,7 +16,7 @@ namespace TinyWars.MultiCustomWar {
         public constructor() {
         }
 
-        public init(data: Types.SerializedMcPlayer): McwPlayer {
+        public init(data: Types.SerializedMcwPlayer): McwPlayer {
             this.setFund(data.fund!);
             this.setHasVotedForDraw(data.hasVotedForDraw!);
             this.setIsAlive(data.isAlive!);
@@ -31,7 +31,7 @@ namespace TinyWars.MultiCustomWar {
             this._war = war;
         }
 
-        public serialize(): Types.SerializedMcPlayer {
+        public serialize(): Types.SerializedMcwPlayer {
             return {
                 fund            : this.getFund(),
                 hasVotedForDraw : this.getHasVotedForDraw(),

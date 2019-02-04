@@ -8,7 +8,7 @@ namespace TinyWars.Utility {
         let _protoRoot              : protobuf.Root;
         let _actionContainerClass   : typeof ProtoTypes.ActionContainer;
         let _fullConfigClass        : typeof ProtoTypes.FullConfig;
-        let _serializedMcWarClass   : typeof ProtoTypes.SerializedMcWar;
+        let _serializedMcwWarClass  : typeof ProtoTypes.SerializedMcwWar;
 
         export function init(): Promise<void> {
             return new Promise<void>((resolve, reject) => {
@@ -20,7 +20,7 @@ namespace TinyWars.Utility {
                             _protoRoot              = root;
                             _actionContainerClass   = root.lookupType("ActionContainer") as any;
                             _fullConfigClass        = root.lookupType("FullConfig") as any;
-                            _serializedMcWarClass   = root.lookupType("SerializedMcWar") as any;
+                            _serializedMcwWarClass   = root.lookupType("SerializedMcwWar") as any;
                             resolve();
                         }
                     },
@@ -45,11 +45,11 @@ namespace TinyWars.Utility {
             return _fullConfigClass.decode(getDataForDecode(data)).toJSON() as any;
         }
 
-        export function encodeAsSerializedMcWar(data: Types.SerializedMcWar): Uint8Array {
-            return _serializedMcWarClass.encode(data).finish();
+        export function encodeAsSerializedMcwWar(data: Types.SerializedMcwWar): Uint8Array {
+            return _serializedMcwWarClass.encode(data).finish();
         }
-        export function decodeAsSerializedMcWar(data: any): Types.SerializedMcWar {
-            return _serializedMcWarClass.decode(data).toJSON() as any;
+        export function decodeAsSerializedMcwWar(data: any): Types.SerializedMcwWar {
+            return _serializedMcwWarClass.decode(data).toJSON() as any;
         }
 
         function getDataForDecode(encodedData: any): Uint8Array | protobuf.Reader {

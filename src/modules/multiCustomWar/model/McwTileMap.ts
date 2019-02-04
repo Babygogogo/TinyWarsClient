@@ -3,8 +3,8 @@ namespace TinyWars.MultiCustomWar {
     import Types                = Utility.Types;
     import WarMapModel          = WarMap.WarMapModel;
     import Helpers              = Utility.Helpers;
-    import SerializedMcTileMap  = Types.SerializedMcTileMap;
-    import SerializedMcTile     = Types.SerializedMcTile;
+    import SerializedMcTileMap  = Types.SerializedMcwTileMap;
+    import SerializedMcTile     = Types.SerializedMcwTile;
     import MapSize              = Types.MapSize;
 
     export class McwTileMap {

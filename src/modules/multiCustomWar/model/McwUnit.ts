@@ -4,7 +4,7 @@ namespace TinyWars.MultiCustomWar {
     import Helpers          = Utility.Helpers;
     import Logger           = Utility.Logger;
     import GridIndexHelpers = Utility.GridIndexHelpers;
-    import SerializedMcUnit = Types.SerializedMcUnit;
+    import SerializedMcUnit = Types.SerializedMcwUnit;
     import UnitState        = Types.UnitState;
     import ArmorType        = Types.ArmorType;
     import TileType         = Types.TileType;

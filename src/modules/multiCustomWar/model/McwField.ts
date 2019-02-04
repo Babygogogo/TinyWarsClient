@@ -2,7 +2,7 @@
 
 namespace TinyWars.MultiCustomWar {
     import Types                = Utility.Types;
-    import SerializedMcField    = Types.SerializedMcField;
+    import SerializedMcField    = Types.SerializedMcwField;
 
     export class McwField {
         private _unitMap: McwUnitMap;

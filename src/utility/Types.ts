@@ -68,28 +68,28 @@ namespace TinyWars.Utility.Types {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Serialization data types.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export interface SerializedMcAction extends ProtoTypes.IActionContainer {
+    export interface SerializedMcwAction extends ProtoTypes.IActionContainer {
     }
-    export interface SerializedMcTile extends ProtoTypes.ISerializedMcTile {
+    export interface SerializedMcwTile extends ProtoTypes.ISerializedMcwTile {
         gridX           : number;
         gridY           : number;
         baseViewId      : number;
         objectViewId    : number;
     };
-    export interface SerializedMcUnit extends ProtoTypes.ISerializedMcUnit {
+    export interface SerializedMcwUnit extends ProtoTypes.ISerializedMcwUnit {
         gridX   : number;
         gridY   : number;
         unitId  : number;
         viewId  : number;
     }
-    export interface SerializedMcTileMap extends ProtoTypes.ISerializedMcTileMap {
-        tiles?: SerializedMcTile[];
+    export interface SerializedMcwTileMap extends ProtoTypes.ISerializedMcwTileMap {
+        tiles?: SerializedMcwTile[];
     }
-    export interface SerializedMcUnitMap extends ProtoTypes.ISerializedMcUnitMap {
-        units?      : SerializedMcUnit[];
+    export interface SerializedMcwUnitMap extends ProtoTypes.ISerializedMcwUnitMap {
+        units?      : SerializedMcwUnit[];
         nextUnitId  : number;
     }
-    export interface SerializedMcPlayer extends ProtoTypes.ISerializedMcPlayer {
+    export interface SerializedMcwPlayer extends ProtoTypes.ISerializedMcwPlayer {
         fund            : number;
         hasVotedForDraw : boolean;
         isAlive         : boolean;
@@ -97,24 +97,24 @@ namespace TinyWars.Utility.Types {
         teamIndex       : number;
         userId?         : number;
     }
-    export interface SerializedMcFogMap extends ProtoTypes.ISerializedMcFogMap {
-        mapsForPath?: SerializedMcFogMapForPath[];
+    export interface SerializedMcwFogMap extends ProtoTypes.ISerializedMcwFogMap {
+        mapsForPath?: SerializedMcwFogMapForPath[];
     }
-    export interface SerializedMcFogMapForPath extends ProtoTypes.ISerializedMcFogMapForPath {
+    export interface SerializedMcwFogMapForPath extends ProtoTypes.ISerializedMcwFogMapForPath {
         playerIndex : number;
         encodedMap  : string;
     }
-    export interface SerializedMcField extends ProtoTypes.ISerializedMcField {
-        fogMap  : SerializedMcFogMap;
-        unitMap?: SerializedMcUnitMap;
-        tileMap?: SerializedMcTileMap;
+    export interface SerializedMcwField extends ProtoTypes.ISerializedMcwField {
+        fogMap  : SerializedMcwFogMap;
+        unitMap?: SerializedMcwUnitMap;
+        tileMap?: SerializedMcwTileMap;
     }
-    export interface SerializedMcTurn extends ProtoTypes.ISerializedMcTurn {
+    export interface SerializedMcwTurn extends ProtoTypes.ISerializedMcwTurn {
         turnIndex       : number;
         playerIndex     : number;
         turnPhaseCode   : TurnPhaseCode;
     }
-    export interface SerializedMcWar extends ProtoTypes.ISerializedMcWar {
+    export interface SerializedMcwWar extends ProtoTypes.ISerializedMcwWar {
         warId           : number;
         configVersion   : number;
         mapName         : string;
@@ -136,10 +136,10 @@ namespace TinyWars.Utility.Types {
 
         remainingVotesForDraw?  : number;
         enterTurnTime           : number;
-        executedActions         : SerializedMcAction[];
-        players                 : SerializedMcPlayer[];
-        turn                    : SerializedMcTurn;
-        field                   : SerializedMcField;
+        executedActions         : SerializedMcwAction[];
+        players                 : SerializedMcwPlayer[];
+        turn                    : SerializedMcwTurn;
+        field                   : SerializedMcwField;
     }
 
     ////////////////////////////////////////////////////////////////////////////////
