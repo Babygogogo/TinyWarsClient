@@ -6,18 +6,18 @@ namespace TinyWars.MultiCustomWar {
     import SerializedMcTurn     = Types.SerializedMcTurn;
     import TurnPhaseCode        = Types.TurnPhaseCode;
 
-    export class McTurnManager {
+    export class McwTurnManager {
         private _turnIndex          : number;
         private _playerIndexInTurn  : number;
         private _phaseCode          : TurnPhaseCode;
-        private _war                : McWar;
+        private _war                : McwWar;
 
         private _hasUnitOnBeginningTurn = false;
 
         public constructor() {
         }
 
-        public init(data: SerializedMcTurn): McTurnManager {
+        public init(data: SerializedMcTurn): McwTurnManager {
             this._turnIndex         = data.turnIndex;
             this._playerIndexInTurn = data.playerIndex;
             this._phaseCode         = data.turnPhaseCode;
@@ -25,7 +25,7 @@ namespace TinyWars.MultiCustomWar {
             return this;
         }
 
-        public startRunning(war: McWar): void {
+        public startRunning(war: McwWar): void {
             this._war = war;
         }
 
@@ -147,7 +147,7 @@ namespace TinyWars.MultiCustomWar {
             const playerIndex = this.getPlayerIndexInTurn();
             if (playerIndex !== 0) {
                 const war           = this._war;
-                const allUnitsOnMap = [] as McUnit[];
+                const allUnitsOnMap = [] as McwUnit[];
                 war.getUnitMap().forEachUnitOnMap(unit => {
                     (unit.getPlayerIndex() === playerIndex) && (allUnitsOnMap.push(unit));
                 });
@@ -180,7 +180,7 @@ namespace TinyWars.MultiCustomWar {
         private _runPhaseRepairUnitByUnit(): void {
             const playerIndex = this.getPlayerIndexInTurn();
             if (playerIndex !== 0) {
-                const allUnitsLoaded    = [] as McUnit[];
+                const allUnitsLoaded    = [] as McwUnit[];
                 const war               = this._war;
                 const unitMap           = war.getUnitMap();
                 unitMap.forEachUnitLoaded(unit => {
@@ -301,7 +301,7 @@ namespace TinyWars.MultiCustomWar {
         }
     }
 
-    function sorterForRepairUnits(unit1: McUnit, unit2: McUnit): number {
+    function sorterForRepairUnits(unit1: McwUnit, unit2: McwUnit): number {
         const cost1 = unit1.getProductionFinalCost();
         const cost2 = unit2.getProductionFinalCost();
         if (cost1 !== cost2) {

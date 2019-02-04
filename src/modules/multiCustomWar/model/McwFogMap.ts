@@ -14,7 +14,7 @@ namespace TinyWars.MultiCustomWar {
     import VisibilityFromTiles      = Types.VisibilityFromTiles;
     import VisibilityFromUnits      = Types.VisibilityFromUnits;
 
-    export class McFogMap {
+    export class McwFogMap {
         private _forceFogCode           : ForceFogCode;
         private _forceExpirePlayerIndex : number | null;
         private _forceExpireTurnIndex   : number | null;
@@ -22,12 +22,12 @@ namespace TinyWars.MultiCustomWar {
         private _mapsFromPaths          : Map<number, VisibilityFromPaths[][]>;
         private _mapsFromTiles          : Map<number, number[][]>;
         private _mapsFromUnits          : Map<number, number[][]>;
-        private _war                    : McWar;
+        private _war                    : McwWar;
 
         public constructor() {
         }
 
-        public async init(data: SerializedMcFogMap, mapIndexKey: Types.MapIndexKey): Promise<McFogMap> {
+        public async init(data: SerializedMcFogMap, mapIndexKey: Types.MapIndexKey): Promise<McwFogMap> {
             const mapInfo           = await MapManager.getMapData(mapIndexKey);
             const mapSize: MapSize  = { width: mapInfo.mapWidth, height: mapInfo.mapHeight };
             this._mapsFromPaths     = createEmptyMaps<VisibilityFromPaths>(mapSize, mapInfo.playersCount);
@@ -45,7 +45,7 @@ namespace TinyWars.MultiCustomWar {
             return this;
         }
 
-        public startRunning(war: McWar): void {
+        public startRunning(war: McwWar): void {
             this._war = war;
         }
 
@@ -152,7 +152,7 @@ namespace TinyWars.MultiCustomWar {
                 }
             }
         }
-        public updateMapFromPathsByUnitAndPath(unit: McUnit, path: GridIndex[]): void {
+        public updateMapFromPathsByUnitAndPath(unit: McwUnit, path: GridIndex[]): void {
             const playerIndex   = unit.getPlayerIndex();
             const map           = this._mapsFromPaths.get(playerIndex)!;
             const mapSize       = this.getMapSize();
@@ -231,7 +231,7 @@ namespace TinyWars.MultiCustomWar {
                 };
             } else {
                 let [fromPaths, fromTiles, fromUnits] = [0, 0, 0];
-                this._war.getPlayerManager().forEachPlayer(false, (player: McPlayer) => {
+                this._war.getPlayerManager().forEachPlayer(false, (player: McwPlayer) => {
                     if ((player.getIsAlive()) && (player.getTeamIndex() === teamIndex)) {
                         const v = this.getVisibilityForPlayer(gridIndex, player.getPlayerIndex());
                         fromPaths   = Math.max(fromPaths, v.fromPaths);

@@ -35,7 +35,7 @@ namespace TinyWars.Utility {
         ////////////////////////////////////////////////////////////////////////////////
         export namespace Data {
             export type ConfigLoaded    = number;
-            export type McTileUpdated   = MultiCustomWar.McTile;
+            export type McTileUpdated   = MultiCustomWar.McwTile;
         }
 
         ////////////////////////////////////////////////////////////////////////////////

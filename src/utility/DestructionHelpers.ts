@@ -1,10 +1,10 @@
 
 namespace TinyWars.Utility.DestructionHelpers {
     import GridIndex    = Types.GridIndex;
-    import McWar        = MultiCustomWar.McWar;
-    import McUnit       = MultiCustomWar.McUnit;
+    import McwWar       = MultiCustomWar.McwWar;
+    import McwUnit      = MultiCustomWar.McwUnit;
 
-    export function destroyUnitOnMap(war: McWar, gridIndex: GridIndex, retainVisibility: boolean): McUnit[] {
+    export function destroyUnitOnMap(war: McwWar, gridIndex: GridIndex, retainVisibility: boolean): McwUnit[] {
         resetTile(war, gridIndex);
 
         const unitMap           = war.getUnitMap();
@@ -25,7 +25,7 @@ namespace TinyWars.Utility.DestructionHelpers {
         return destroyedUnits;
     }
 
-    export function destroyPlayerForce(war: McWar, playerIndex: number): void {
+    export function destroyPlayerForce(war: McwWar, playerIndex: number): void {
         const unitMap = war.getUnitMap();
         unitMap.forEachUnitOnMap(unit => {
             if (unit.getPlayerIndex() === playerIndex) {
@@ -45,7 +45,7 @@ namespace TinyWars.Utility.DestructionHelpers {
         war.getPlayer(playerIndex)!.setIsAlive(false);
     }
 
-    function resetTile(war: McWar, gridIndex: GridIndex): void {
+    function resetTile(war: McwWar, gridIndex: GridIndex): void {
         const tile = war.getTileMap().getTile(gridIndex);
         tile.setCurrentBuildPoint(tile.getMaxBuildPoint());
         tile.setCurrentCapturePoint(tile.getMaxCapturePoint());

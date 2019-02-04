@@ -3,16 +3,16 @@ namespace TinyWars.MultiCustomWar {
     import Types            = Utility.Types;
     import Helpers          = Utility.Helpers;
     import Logger           = Utility.Logger;
-    import Visibility       = Utility.VisibilityHelpers;
+    // import Visibility       = Utility.VisibilityHelpers;
     import GridIndexHelpers = Utility.GridIndexHelpers;
     import MapModel         = WarMap.WarMapModel;
 
-    export class McUnitMap {
-        private _war            : McWar;
+    export class McwUnitMap {
+        private _war            : McwWar;
         private _nextUnitId     : number;
-        private _map            : (McUnit | undefined)[][];
+        private _map            : (McwUnit | undefined)[][];
         private _mapSize        : Types.MapSize;
-        private _loadedUnits    : Map<number, McUnit>;
+        private _loadedUnits    : Map<number, McwUnit>;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Initializers and serializers.
@@ -20,19 +20,19 @@ namespace TinyWars.MultiCustomWar {
         public constructor() {
         }
 
-        public init(configVersion: number, mapIndexKey: Types.MapIndexKey, data?: Types.SerializedMcUnitMap): Promise<McUnitMap> {
+        public init(configVersion: number, mapIndexKey: Types.MapIndexKey, data?: Types.SerializedMcUnitMap): Promise<McwUnitMap> {
             return data
                 ? this._initWithSerializedData(configVersion, mapIndexKey, data)
                 : this._initWithoutSerializedData(configVersion, mapIndexKey);
         }
-        private async _initWithSerializedData(configVersion: number, mapIndexKey: Types.MapIndexKey, data: Types.SerializedMcUnitMap): Promise<McUnitMap> {
+        private async _initWithSerializedData(configVersion: number, mapIndexKey: Types.MapIndexKey, data: Types.SerializedMcUnitMap): Promise<McwUnitMap> {
             const { mapWidth, mapHeight }   = await MapModel.getMapData(mapIndexKey);
             const unitDatas                 = data.units;
-            const map                       = Helpers.createEmptyMap<McUnit>(mapWidth);
-            const loadedUnits               = new Map<number, McUnit>();
+            const map                       = Helpers.createEmptyMap<McwUnit>(mapWidth);
+            const loadedUnits               = new Map<number, McwUnit>();
             if (unitDatas) {
                 for (const unitData of unitDatas) {
-                    const unit = new McUnit().init(unitData, configVersion);
+                    const unit = new McwUnit().init(unitData, configVersion);
                     if (unit.getLoaderUnitId() == null) {
                         map[unit.getGridX()][unit.getGridY()] = unit;
                     } else {
@@ -48,15 +48,15 @@ namespace TinyWars.MultiCustomWar {
 
             return this;
         }
-        private async _initWithoutSerializedData(configVersion: number, mapIndexKey: Types.MapIndexKey): Promise<McUnitMap> {
+        private async _initWithoutSerializedData(configVersion: number, mapIndexKey: Types.MapIndexKey): Promise<McwUnitMap> {
             const { mapWidth, mapHeight, units: unitViewIds } = await MapModel.getMapData(mapIndexKey);
-            const map       = Helpers.createEmptyMap<McUnit>(mapWidth);
+            const map       = Helpers.createEmptyMap<McwUnit>(mapWidth);
             let nextUnitId  = 0;
             for (let x = 0; x < mapWidth; ++x) {
                 for (let y = 0; y < mapHeight; ++y) {
                     const viewId = unitViewIds[x + y * mapWidth];
                     if (viewId !== 0) {
-                        map[x][y] = new McUnit().init({
+                        map[x][y] = new McwUnit().init({
                             gridX   : x,
                             gridY   : y,
                             viewId  : viewId,
@@ -68,14 +68,14 @@ namespace TinyWars.MultiCustomWar {
             }
 
             this._map           = map;
-            this._loadedUnits   = new Map<number, McUnit>();
+            this._loadedUnits   = new Map<number, McwUnit>();
             this._setMapSize(mapWidth, mapHeight);
             this.setNextUnitId(nextUnitId);
 
             return this;
         }
 
-        public startRunning(war: McWar): void {
+        public startRunning(war: McwWar): void {
             this._war = war;
             this.forEachUnitOnMap(unit => unit.startRunning(war));
             this.forEachUnitLoaded(unit => unit.startRunning(war));
@@ -95,7 +95,7 @@ namespace TinyWars.MultiCustomWar {
             const war = this._war;
             const units: Types.SerializedMcUnit[] = [];
             this.forEachUnitOnMap(unit => {
-                if (Visibility.checkIsUnitOnMapVisibleToPlayer({
+                if (Utility.VisibilityHelpers.checkIsUnitOnMapVisibleToPlayer({
                     war,
                     gridIndex           : unit.getGridIndex(),
                     unitType            : unit.getType(),
@@ -134,15 +134,15 @@ namespace TinyWars.MultiCustomWar {
             this._nextUnitId = id;
         }
 
-        public getUnitOnMap(gridIndex: Types.GridIndex): McUnit | undefined {
+        public getUnitOnMap(gridIndex: Types.GridIndex): McwUnit | undefined {
             return this._map[gridIndex.x][gridIndex.y];
         }
-        public getUnitLoadedById(unitId: number): McUnit | undefined {
+        public getUnitLoadedById(unitId: number): McwUnit | undefined {
             return this._loadedUnits.get(unitId);
         }
-        public getUnitsLoadedByLoader(loader: McUnit, isRecursive: boolean): McUnit[] {
-            const units: McUnit[] = [];
-            this.forEachUnitLoaded((unit: McUnit) => {
+        public getUnitsLoadedByLoader(loader: McwUnit, isRecursive: boolean): McwUnit[] {
+            const units: McwUnit[] = [];
+            this.forEachUnitLoaded((unit: McwUnit) => {
                 if (unit.getLoaderUnitId() === loader.getUnitId()) {
                     units.push(unit);
                     (isRecursive) && (units.push(...this.getUnitsLoadedByLoader(unit, isRecursive)));
@@ -171,7 +171,7 @@ namespace TinyWars.MultiCustomWar {
             this._loadedUnits.delete(unitId);
         }
 
-        public addUnitOnMap(unit: McUnit): void {
+        public addUnitOnMap(unit: McwUnit): void {
             const x = unit.getGridX();
             const y = unit.getGridY();
             this._map[x][y] = unit;
@@ -180,7 +180,7 @@ namespace TinyWars.MultiCustomWar {
             this._map[gridIndex.x][gridIndex.y] = undefined;
         }
 
-        public addUnitLoaded(unit: McUnit): void {
+        public addUnitLoaded(unit: McwUnit): void {
             this._loadedUnits.set(unit.getUnitId(), unit);
         }
         public removeUnitLoaded(unitId: number): void {
@@ -195,18 +195,18 @@ namespace TinyWars.MultiCustomWar {
             }
         }
 
-        public forEachUnit(func: (unit: McUnit) => any): void {
+        public forEachUnit(func: (unit: McwUnit) => any): void {
             this.forEachUnitOnMap(func);
             this.forEachUnitLoaded(func);
         }
-        public forEachUnitOnMap(func: (unit: McUnit) => any): void {
+        public forEachUnitOnMap(func: (unit: McwUnit) => any): void {
             for (const column of this._map) {
                 for (const unit of column) {
                     (unit) && (func(unit));
                 }
             }
         }
-        public forEachUnitLoaded(func: (unit: McUnit) => any): void {
+        public forEachUnitLoaded(func: (unit: McwUnit) => any): void {
             for (const [, unit] of this._loadedUnits) {
                 func(unit);
             }

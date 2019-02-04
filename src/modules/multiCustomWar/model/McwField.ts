@@ -4,23 +4,23 @@ namespace TinyWars.MultiCustomWar {
     import Types                = Utility.Types;
     import SerializedMcField    = Types.SerializedMcField;
 
-    export class McField {
-        private _unitMap: McUnitMap;
-        private _tileMap: McTileMap;
-        private _fogMap : McFogMap;
+    export class McwField {
+        private _unitMap: McwUnitMap;
+        private _tileMap: McwTileMap;
+        private _fogMap : McwFogMap;
 
         public constructor() {
         }
 
-        public async init(data: SerializedMcField, configVersion: number, mapIndexKey: Types.MapIndexKey): Promise<McField> {
-            this._setFogMap(await new McFogMap().init(data.fogMap, mapIndexKey));
-            this._setTileMap(await new McTileMap().init(configVersion, mapIndexKey, data.tileMap));
-            this._setUnitMap(await new McUnitMap().init(configVersion, mapIndexKey, data.unitMap));
+        public async init(data: SerializedMcField, configVersion: number, mapIndexKey: Types.MapIndexKey): Promise<McwField> {
+            this._setFogMap(await new McwFogMap().init(data.fogMap, mapIndexKey));
+            this._setTileMap(await new McwTileMap().init(configVersion, mapIndexKey, data.tileMap));
+            this._setUnitMap(await new McwUnitMap().init(configVersion, mapIndexKey, data.unitMap));
 
             return this;
         }
 
-        public startRunning(war: McWar): void {
+        public startRunning(war: McwWar): void {
             this.getTileMap().startRunning(war);
             this.getUnitMap().startRunning(war);
             this.getFogMap().startRunning(war);
@@ -44,24 +44,24 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _setFogMap(map: McFogMap): void {
+        private _setFogMap(map: McwFogMap): void {
             this._fogMap = map;
         }
-        public getFogMap(): McFogMap {
+        public getFogMap(): McwFogMap {
             return this._fogMap;
         }
 
-        private _setTileMap(map: McTileMap): void {
+        private _setTileMap(map: McwTileMap): void {
             this._tileMap = map;
         }
-        public getTileMap(): McTileMap {
+        public getTileMap(): McwTileMap {
             return this._tileMap;
         }
 
-        private _setUnitMap(map: McUnitMap): void {
+        private _setUnitMap(map: McwUnitMap): void {
             this._unitMap = map;
         }
-        public getUnitMap(): McUnitMap {
+        public getUnitMap(): McwUnitMap {
             return this._unitMap;
         }
     }

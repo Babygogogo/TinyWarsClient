@@ -11,7 +11,7 @@ namespace TinyWars.MultiCustomWar {
     import UnitType         = Types.UnitType;
     import MoveType         = Types.MoveType;
 
-    export class McUnit {
+    export class McwUnit {
         private _configVersion      : number;
         private _templateCfg        : Types.UnitTemplateCfg;
         private _damageChartCfg     : { [armorType: number]: { [weaponType: number]: Types.DamageChartCfg } };
@@ -37,7 +37,7 @@ namespace TinyWars.MultiCustomWar {
         private _loaderUnitId               : number   | undefined;
         private _primaryWeaponCurrentAmmo   : number   | undefined;
 
-        private _war: McWar;
+        private _war: McwWar;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Initializers and serializers.
@@ -45,7 +45,7 @@ namespace TinyWars.MultiCustomWar {
         public constructor() {
         }
 
-        public init(data: SerializedMcUnit, configVersion: number): McUnit {
+        public init(data: SerializedMcUnit, configVersion: number): McwUnit {
             const t = ConfigManager.getUnitTypeAndPlayerIndex(data.viewId);
             Logger.assert(t, "UnitModel.deserialize() invalid SerializedUnit! ", data);
 
@@ -77,7 +77,7 @@ namespace TinyWars.MultiCustomWar {
             return this;
         }
 
-        public startRunning(war: McWar): void {
+        public startRunning(war: McwWar): void {
             Logger.error("McUnit.startRunning() TODO!!");
             this._war = war;
             this._setTeamIndex(war.getPlayer(this.getPlayerIndex())!.getTeamIndex());
@@ -295,7 +295,7 @@ namespace TinyWars.MultiCustomWar {
         public checkCanCapture(): boolean {
             return this._templateCfg.canCaptureTile === 1;
         }
-        public checkCanCaptureTile(tile: McTile): boolean {
+        public checkCanCaptureTile(tile: McwTile): boolean {
             return (this.checkCanCapture()) && (this.getTeamIndex() !== tile.getTeamIndex());
         }
 
@@ -490,7 +490,7 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for launch silo.
         ////////////////////////////////////////////////////////////////////////////////
-        public checkCanLaunchSiloOnTile(tile: McTile): boolean {
+        public checkCanLaunchSiloOnTile(tile: McwTile): boolean {
             return (this._templateCfg.canLaunchSilo === 1) && (tile.getType() === TileType.Silo);
         }
 
@@ -514,7 +514,7 @@ namespace TinyWars.MultiCustomWar {
         public checkIsTileBuilder(): boolean {
             return this._buildableTileCfg != null;
         }
-        public checkCanBuildOnTile(tile: McTile): boolean {
+        public checkCanBuildOnTile(tile: McwTile): boolean {
             return this.getBuildTargetTileType(tile.getType()) != null;
         }
 
@@ -568,7 +568,7 @@ namespace TinyWars.MultiCustomWar {
         public getLoadedUnitsCount(): number {
             return this.getLoadedUnits()!.length;
         }
-        public getLoadedUnits(): McUnit[] {
+        public getLoadedUnits(): McwUnit[] {
             return this._war.getUnitMap().getUnitsLoadedByLoader(this, false);
         }
 
@@ -581,7 +581,7 @@ namespace TinyWars.MultiCustomWar {
             return false;
         }
 
-        public checkCanLoadUnit(unit: McUnit): boolean {
+        public checkCanLoadUnit(unit: McwUnit): boolean {
             const cfg                   = this._templateCfg;
             const loadUnitCategory      = cfg.loadUnitCategory;
             const loadableTileCategory  = cfg.loadableTileCategory;
@@ -607,7 +607,7 @@ namespace TinyWars.MultiCustomWar {
         public checkCanSupplyLoadedUnit(): boolean {
             return this._templateCfg.canSupplyLoadedUnits === 1;
         }
-        private _checkCanRepairLoadedUnit(unit: McUnit): boolean {
+        private _checkCanRepairLoadedUnit(unit: McwUnit): boolean {
             return (this.getNormalizedRepairHpForLoadedUnit() != null)
                 && (unit.getLoaderUnitId() === this.getUnitId())
                 && ((unit.getCurrentHp() < unit.getMaxHp()) || (unit.checkCanBeSupplied()));
@@ -622,7 +622,7 @@ namespace TinyWars.MultiCustomWar {
         public getLoaderUnitId(): number | undefined {
             return this._loaderUnitId;
         }
-        public getLoaderUnit(): McUnit | undefined {
+        public getLoaderUnit(): McwUnit | undefined {
             const id = this.getLoaderUnitId();
             if (id == null) {
                 return undefined;
@@ -632,7 +632,7 @@ namespace TinyWars.MultiCustomWar {
             }
         }
 
-        public getRepairHpAndCostForLoadedUnit(unit: McUnit): Types.RepairHpAndCost | undefined {
+        public getRepairHpAndCostForLoadedUnit(unit: McwUnit): Types.RepairHpAndCost | undefined {
             if (!this._checkCanRepairLoadedUnit(unit)) {
                 return undefined;
             } else {
@@ -657,7 +657,7 @@ namespace TinyWars.MultiCustomWar {
         public checkIsAdjacentUnitSupplier(): boolean {
             return this._templateCfg.canSupplyAdjacentUnits === 1;
         }
-        public checkCanSupplyAdjacentUnit(unit: McUnit): boolean {
+        public checkCanSupplyAdjacentUnit(unit: McwUnit): boolean {
             return (this.checkIsAdjacentUnitSupplier())
                 && (this.getLoaderUnitId() == null)
                 && (unit.getLoaderUnitId() == null)
@@ -706,14 +706,14 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for join.
         ////////////////////////////////////////////////////////////////////////////////
-        public checkCanJoinUnit(unit: McUnit): boolean {
+        public checkCanJoinUnit(unit: McwUnit): boolean {
             return (this.getViewId() === unit.getViewId())
                 && (this.getNormalizedCurrentHp() < ConfigManager.MAX_UNIT_NORMALIZED_HP)
                 && (this.getLoadedUnitsCount() === 0)
                 && (unit.getLoadedUnitsCount() === 0);
         }
 
-        public getJoinIncome(unit: McUnit): number | undefined {
+        public getJoinIncome(unit: McwUnit): number | undefined {
             if (!this.checkCanJoinUnit(unit)) {
                 return undefined;
             } else {

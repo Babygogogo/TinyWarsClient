@@ -5,7 +5,7 @@ namespace TinyWars.MultiCustomWar {
     import Action           = Types.SerializedMcAction;
     import SerializedMcWar  = Types.SerializedMcWar;
 
-    export class McWar {
+    export class McwWar {
         private _warId                  : number;
         private _warName                : string;
         private _warPassword            : string;
@@ -28,13 +28,13 @@ namespace TinyWars.MultiCustomWar {
         private _isEnded        = false;
 
         private _playerManager  : McPlayerManager;
-        private _field          : McField;
-        private _turnManager    : McTurnManager;
+        private _field          : McwField;
+        private _turnManager    : McwTurnManager;
 
         public constructor() {
         }
 
-        public async init(data: SerializedMcWar): Promise<McWar> {
+        public async init(data: SerializedMcWar): Promise<McwWar> {
             this._warId                 = data.warId;
             this._warName               = data.warName;
             this._warPassword           = data.warPassword;
@@ -54,13 +54,13 @@ namespace TinyWars.MultiCustomWar {
             this._setMapIndexKey(data);
             this.setEnterTurnTime(data.enterTurnTime);
             this._setPlayerManager(new McPlayerManager().init(data.players));
-            this._setField(await new McField().init(data.field, this._configVersion, this.getMapIndexKey()));
-            this._setTurnManager(new McTurnManager().init(data.turn));
+            this._setField(await new McwField().init(data.field, this._configVersion, this.getMapIndexKey()));
+            this._setTurnManager(new McwTurnManager().init(data.turn));
 
             return this;
         }
 
-        public startRunning(): McWar {
+        public startRunning(): McwWar {
             this.getTurnManager().startRunning(this);
             this.getPlayerManager().startRunning(this);
             this.getField().startRunning(this);
@@ -224,30 +224,30 @@ namespace TinyWars.MultiCustomWar {
         public getPlayerManager(): McPlayerManager {
             return this._playerManager;
         }
-        public getPlayer(playerIndex: number): McPlayer | undefined {
+        public getPlayer(playerIndex: number): McwPlayer | undefined {
             return this.getPlayerManager().getPlayer(playerIndex);
         }
 
-        private _setField(field: McField): void {
+        private _setField(field: McwField): void {
             this._field = field;
         }
-        public getField(): McField {
+        public getField(): McwField {
             return this._field;
         }
-        public getUnitMap(): McUnitMap {
+        public getUnitMap(): McwUnitMap {
             return this.getField().getUnitMap();
         }
-        public getTileMap(): McTileMap {
+        public getTileMap(): McwTileMap {
             return this.getField().getTileMap();
         }
-        public getFogMap(): McFogMap {
+        public getFogMap(): McwFogMap {
             return this.getField().getFogMap();
         }
 
-        private _setTurnManager(manager: McTurnManager): void {
+        private _setTurnManager(manager: McwTurnManager): void {
             this._turnManager = manager;
         }
-        public getTurnManager(): McTurnManager {
+        public getTurnManager(): McwTurnManager {
             return this._turnManager;
         }
     }

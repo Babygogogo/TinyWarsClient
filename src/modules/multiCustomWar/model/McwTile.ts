@@ -4,12 +4,12 @@ namespace TinyWars.MultiCustomWar {
     import Notify           = Utility.Notify;
     import Helpers          = Utility.Helpers;
     import Logger           = Utility.Logger;
-    import Visibility       = Utility.VisibilityHelpers;
+    // import Visibility       = Utility.VisibilityHelpers;
     import SerializedMcTile = Types.SerializedMcTile;
     import TileType         = Types.TileType;
     import TileObjectType   = Types.TileObjectType;
 
-    export class McTile {
+    export class McwTile {
         private _configVersion  : number;
         private _templateCfg    : Types.TileTemplateCfg;
         private _moveCostCfg    : { [moveType: number]: Types.MoveCostCfg };
@@ -25,12 +25,12 @@ namespace TinyWars.MultiCustomWar {
         private _currentBuildPoint  : number | undefined;
         private _currentCapturePoint: number | undefined;
 
-        private _war    : McWar;
+        private _war    : McwWar;
 
         public constructor() {
         }
 
-        public init(data: SerializedMcTile, configVersion: number): McTile {
+        public init(data: SerializedMcTile, configVersion: number): McwTile {
             const t = ConfigManager.getTileObjectTypeAndPlayerIndex(data.objectViewId!);
             Logger.assert(t, "TileModel.deserialize() invalid SerializedTile! ", data);
 
@@ -51,7 +51,7 @@ namespace TinyWars.MultiCustomWar {
             return this;
         }
 
-        public startRunning(war: McWar): void {
+        public startRunning(war: McwWar): void {
             this._war = war;
         }
 
@@ -76,7 +76,7 @@ namespace TinyWars.MultiCustomWar {
         }
 
         public serializeForPlayer(playerIndex: number): SerializedMcTile {
-            if (Visibility.checkIsTileVisibleToPlayer(this._war, this.getGridIndex(), playerIndex)) {
+            if (Utility.VisibilityHelpers.checkIsTileVisibleToPlayer(this._war, this.getGridIndex(), playerIndex)) {
                 return this.serialize();
             } else if (this.getType() === TileType.Headquarters) {
                 return {
@@ -208,14 +208,14 @@ namespace TinyWars.MultiCustomWar {
         public getDefenseAmount(): number {
             return this._templateCfg.defenseAmount;
         }
-        public getDefenseAmountForUnit(unit: McUnit): number {
+        public getDefenseAmountForUnit(unit: McwUnit): number {
             return this.checkCanDefendUnit(unit) ? this.getDefenseAmount() : 0;
         }
 
         public getDefenseUnitCategory(): Types.UnitCategory {
             return this._templateCfg.defenseUnitCategory;
         }
-        public checkCanDefendUnit(unit: McUnit): boolean {
+        public checkCanDefendUnit(unit: McwUnit): boolean {
             return ConfigManager.checkIsUnitTypeInCategory(this._configVersion, unit.getType(), this.getDefenseUnitCategory());
         }
 
@@ -324,7 +324,7 @@ namespace TinyWars.MultiCustomWar {
         public getMoveCostByMoveType(moveType: Types.MoveType): number | undefined | null {
             return this.getMoveCosts()[moveType].cost;
         }
-        public getMoveCostByUnit(unit: McUnit): number | undefined | null {
+        public getMoveCostByUnit(unit: McwUnit): number | undefined | null {
             const tileType = this.getType();
             if (((tileType === TileType.Seaport) || (tileType === TileType.TempSeaport))    &&
                 (this.getTeamIndex() !== unit.getTeamIndex())                               &&
@@ -346,14 +346,14 @@ namespace TinyWars.MultiCustomWar {
             return this._templateCfg.repairAmount;
         }
 
-        private _checkCanRepairUnit(unit: McUnit): boolean {
+        private _checkCanRepairUnit(unit: McwUnit): boolean {
             const category = this.getRepairUnitCategory();
             return (category != null)
                 && ((unit.getCurrentHp() < unit.getMaxHp()) || (unit.checkCanBeSupplied()))
                 && (unit.getTeamIndex() === this.getTeamIndex())
                 && (ConfigManager.checkIsUnitTypeInCategory(this._configVersion, unit.getType(), category));
         }
-        public checkCanSupplyUnit(unit: McUnit): boolean {
+        public checkCanSupplyUnit(unit: McwUnit): boolean {
             const category = this.getRepairUnitCategory();
             return (category != null)
                 && (unit.checkCanBeSupplied())
@@ -361,7 +361,7 @@ namespace TinyWars.MultiCustomWar {
                 && (ConfigManager.checkIsUnitTypeInCategory(this._configVersion, unit.getType(), category));
         }
 
-        public getRepairHpAndCostForUnit(unit: McUnit): Types.RepairHpAndCost | undefined {
+        public getRepairHpAndCostForUnit(unit: McwUnit): Types.RepairHpAndCost | undefined {
             if (!this._checkCanRepairUnit(unit)) {
                 return undefined;
             } else {
