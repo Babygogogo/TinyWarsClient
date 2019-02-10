@@ -27,5 +27,7 @@ namespace TinyWars.Network {
         JoinMultiCustomWar_AlreadyJoined,
 
         GetMapDynamicInfo_NoSuchMap,
+
+        ServerDisconnect_ServerMaintainance,
     }
 }

@@ -3490,6 +3490,9 @@ namespace TinyWars.Utility {
             /** ActionContainer S_GetMapDynamicInfo */
             S_GetMapDynamicInfo?: (IS_GetMapDynamicInfo | null);
 
+            /** ActionContainer S_ServerDisconnect */
+            S_ServerDisconnect?: (IS_ServerDisconnect | null);
+
             /** ActionContainer C_McrCreateWar */
             C_McrCreateWar?: (IC_McrCreateWar | null);
 
@@ -3589,6 +3592,9 @@ namespace TinyWars.Utility {
 
             /** ActionContainer S_GetMapDynamicInfo. */
             public S_GetMapDynamicInfo?: (IS_GetMapDynamicInfo | null);
+
+            /** ActionContainer S_ServerDisconnect. */
+            public S_ServerDisconnect?: (IS_ServerDisconnect | null);
 
             /** ActionContainer C_McrCreateWar. */
             public C_McrCreateWar?: (IC_McrCreateWar | null);
@@ -5084,6 +5090,96 @@ namespace TinyWars.Utility {
 
             /**
              * Converts this S_GetMapDynamicInfo to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S_ServerDisconnect. */
+        export declare interface IS_ServerDisconnect {
+
+            /** S_ServerDisconnect errorCode */
+            errorCode?: (number | null);
+        }
+
+        /** Represents a S_ServerDisconnect. */
+        export declare class S_ServerDisconnect implements IS_ServerDisconnect {
+
+            /**
+             * Constructs a new S_ServerDisconnect.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: IS_ServerDisconnect);
+
+            /** S_ServerDisconnect errorCode. */
+            public errorCode: number;
+
+            /**
+             * Creates a new S_ServerDisconnect instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S_ServerDisconnect instance
+             */
+            public static create(properties?: IS_ServerDisconnect): S_ServerDisconnect;
+
+            /**
+             * Encodes the specified S_ServerDisconnect message. Does not implicitly {@link S_ServerDisconnect.verify|verify} messages.
+             * @param message S_ServerDisconnect message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: IS_ServerDisconnect, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S_ServerDisconnect message, length delimited. Does not implicitly {@link S_ServerDisconnect.verify|verify} messages.
+             * @param message S_ServerDisconnect message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: IS_ServerDisconnect, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S_ServerDisconnect message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S_ServerDisconnect
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): S_ServerDisconnect;
+
+            /**
+             * Decodes a S_ServerDisconnect message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S_ServerDisconnect
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): S_ServerDisconnect;
+
+            /**
+             * Verifies a S_ServerDisconnect message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string | null);
+
+            /**
+             * Creates a S_ServerDisconnect message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S_ServerDisconnect
+             */
+            public static fromObject(object: { [k: string]: any }): S_ServerDisconnect;
+
+            /**
+             * Creates a plain object from a S_ServerDisconnect message. Also converts values to other types if specified.
+             * @param message S_ServerDisconnect
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: S_ServerDisconnect, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S_ServerDisconnect to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };

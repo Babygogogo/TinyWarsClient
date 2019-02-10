@@ -1,5 +1,8 @@
 
 namespace TinyWars.Utility.FlowManager {
+    const _NET_EVENTS = [
+        { actionCode: Network.Codes.S_ServerDisconnect,   callback: _onNetSServerDisconnect },
+    ];
     const _NOTIFY_EVENTS = [
         { type: Notify.Type.ConfigLoaded,   callback: _onNotifyConfigLoaded },
         { type: Notify.Type.SLogin,         callback: _onNotifySLogin },
@@ -7,6 +10,7 @@ namespace TinyWars.Utility.FlowManager {
     ];
 
     export async function startGame(stage: egret.Stage): Promise<void> {
+        Network.Manager.addListeners(_NET_EVENTS, FlowManager);
         Notify.addEventListeners(_NOTIFY_EVENTS, FlowManager);
         Utility.StageManager.init(stage);
         await Promise.all([ResManager.init(), ProtoManager.init()]);
@@ -39,6 +43,13 @@ namespace TinyWars.Utility.FlowManager {
         Lobby.LobbyTopPanel.show();
     }
 
+    function _onNetSServerDisconnect(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_ServerDisconnect;
+        Common.AlertPanel.show({
+            title   : Lang.getText(Lang.BigType.B01, Lang.SubType.S25),
+            content : Lang.getText(Lang.BigType.B00, Lang.SubType.S20),
+        });
+    }
     function _onNotifyConfigLoaded(e: egret.Event): void {
         (_checkCanFirstGoToLobby()) && (gotoLobby());
     }

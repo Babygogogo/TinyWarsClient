@@ -14,7 +14,7 @@ namespace TinyWars.Utility {
         export const enum SubType {
             S00, S01, S02, S03, S04, S05, S06, S07, S08, S09,
             S10, S11, S12, S13, S14, S15, S16, S17, S18, S19,
-            S20, S21, S22, S23, S24,
+            S20, S21, S22, S23, S24, S25, S26, S27, S28, S29,
         }
         export const enum FormatType {
             F000, F001, F002, F003, F004, F005,
@@ -104,6 +104,10 @@ namespace TinyWars.Utility {
                 [SubType.S19, [
                     "已成功加入房间。战局正式开始，请从“继续战斗”入口进入。",
                     "Joined successfully.",
+                ]],
+                [SubType.S20, [
+                    `服务器维护中，请稍后登陆`,
+                    `The server is under maintainance. Please wait and login later.`,
                 ]],
             ])],
             [BigType.B01, new Map([
@@ -207,6 +211,14 @@ namespace TinyWars.Utility {
                     "继续战斗",
                     "Continue",
                 ]],
+                [SubType.S25, [
+                    `连接已断开`,
+                    `Disconnected`,
+                ]],
+                [SubType.S26, [
+                    `确定`,
+                    `Confirm`,
+                ]],
             ])],
         ]);
 
@@ -305,6 +317,10 @@ namespace TinyWars.Utility {
             [ErrCode.JoinMultiCustomWar_AlreadyJoined, [
                 "您已加入了该房间。",
                 "You have already joined the game.",
+            ]],
+            [ErrCode.ServerDisconnect_ServerMaintainance, [
+                `服务器维护中`,
+                `The server is under maintainance.`,
             ]],
         ]);
 
