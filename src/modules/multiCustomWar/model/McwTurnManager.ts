@@ -18,9 +18,9 @@ namespace TinyWars.MultiCustomWar {
         }
 
         public init(data: SerializedMcTurn): McwTurnManager {
-            this._turnIndex         = data.turnIndex;
-            this._playerIndexInTurn = data.playerIndex;
-            this._phaseCode         = data.turnPhaseCode;
+            this._setTurnIndex(data.turnIndex);
+            this._setPlayerIndexInTurn(data.playerIndex);
+            this._setPhaseCode(data.turnPhaseCode);
 
             return this;
         }
@@ -47,10 +47,10 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The functions for running turn.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public beginPhaseGetFund(): void {
+        public endPhaseWaitBeginTurn(): void {
             Logger.assert(
-                this.getPhaseCode() === TurnPhaseCode.RequestBeginTurn,
-                "McTurnManager.beginPhaseGetFund() invalid current phase code: ", this.getPhaseCode()
+                this.getPhaseCode() === TurnPhaseCode.WaitBeginTurn,
+                "McTurnManager.endPhaseWaitBeginTurn() invalid current phase code: ", this.getPhaseCode()
             );
 
             this._setPhaseCode(TurnPhaseCode.GetFund);
@@ -113,9 +113,9 @@ namespace TinyWars.MultiCustomWar {
             }
             if (this.getPhaseCode() === TurnPhaseCode.ResetVotesForDraw) {
                 this._runPhaseResetVotesForDraw();
-                this._setPhaseCode(TurnPhaseCode.RequestBeginTurn);
+                this._setPhaseCode(TurnPhaseCode.WaitBeginTurn);
             }
-            if (this.getPhaseCode() === TurnPhaseCode.RequestBeginTurn) {
+            if (this.getPhaseCode() === TurnPhaseCode.WaitBeginTurn) {
                 this._runPhaseRequestBeginTurn();
                 // DO NOT update phase code.
             }
