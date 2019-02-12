@@ -75,12 +75,14 @@ namespace TinyWars.Network {
             }
         }
 
-        export function send(action: ProtoTypes.IActionContainer): void {
+        export function send(container: ProtoTypes.IActionContainer): void {
             if ((!socket) || (!socket.connected)) {
                 FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S14));
             } else {
-                const encodedData = ProtoManager.encodeAsActionContainer(action);
-                (encodedData != null) && (socket.emit("message", encodedData));
+                const name          = Helpers.getActionName(container);
+                const encodedData   = ProtoManager.encodeAsActionContainer(container);
+                Logger.log("%cNetManager send: ", "background:#97FF4F;", name, ", length: ", encodedData.byteLength, "\n", container[name]);
+                socket.emit("message", encodedData);
             }
         }
 
@@ -119,7 +121,7 @@ namespace TinyWars.Network {
             socket.on("message", (data: ArrayBuffer) => {
                 const container = ProtoManager.decodeAsActionContainer(data);
                 const name      = Helpers.getActionName(container);
-                Logger.log("NetManager receive: ", name, ", length: ", data.byteLength, "\n", container[name]);
+                Logger.log("%cNetManager receive: ", "background:#FFD777", name, ", length: ", data.byteLength, "\n", container[name]);
 
                 dispatcher.dispatchWithContainer(container);
             });

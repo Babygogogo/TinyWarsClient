@@ -202,30 +202,29 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _showMap(key: Types.MapIndexKey): Promise<void> {
-            const data    = await TemplateMapModel.getMapData(key);
-            const mapInfo = TemplateMapModel.getMapInfo(key);
-            this._labelMapName.text      = Lang.getFormatedText(Lang.FormatType.F000, mapInfo.mapName);
-            this._labelDesigner.text     = Lang.getFormatedText(Lang.FormatType.F001, mapInfo.mapDesigner);
-            this._labelPlayersCount.text = Lang.getFormatedText(Lang.FormatType.F002, mapInfo.playersCount);
-            this._labelRating.text       = Lang.getFormatedText(Lang.FormatType.F003, mapInfo.rating != null ? mapInfo.rating.toFixed(2) : Lang.getText(Lang.BigType.B01, Lang.SubType.S01));
-            this._labelPlayedTimes.text  = Lang.getFormatedText(Lang.FormatType.F004, mapInfo.playedTimes);
-            this._groupInfo.visible      = true;
-            this._groupInfo.alpha        = 1;
+            const [mapData, mapInfo]        = await Promise.all([TemplateMapModel.getMapData(key), TemplateMapModel.getMapDynamicInfoAsync(key)]);
+            this._labelMapName.text         = Lang.getFormatedText(Lang.FormatType.F000, mapData.mapName);
+            this._labelDesigner.text        = Lang.getFormatedText(Lang.FormatType.F001, mapData.mapDesigner);
+            this._labelPlayersCount.text    = Lang.getFormatedText(Lang.FormatType.F002, mapData.playersCount);
+            this._labelRating.text          = Lang.getFormatedText(Lang.FormatType.F003, mapInfo.rating != null ? mapInfo.rating.toFixed(2) : Lang.getText(Lang.BigType.B01, Lang.SubType.S01));
+            this._labelPlayedTimes.text     = Lang.getFormatedText(Lang.FormatType.F004, mapInfo.playedTimes);
+            this._groupInfo.visible         = true;
+            this._groupInfo.alpha           = 1;
             egret.Tween.removeTweens(this._groupInfo);
             egret.Tween.get(this._groupInfo).wait(5000).to({alpha: 0}, 1000).call(() => {this._groupInfo.visible = false; this._groupInfo.alpha = 1});
 
             const tileMapView = new MultiCustomWar.TileMapView();
-            tileMapView.init(data.mapWidth, data.mapHeight);
-            tileMapView.updateWithBaseViewIdArray(data.tileBases);
-            tileMapView.updateWithObjectViewIdArray(data.tileObjects);
+            tileMapView.init(mapData.mapWidth, mapData.mapHeight);
+            tileMapView.updateWithBaseViewIdArray(mapData.tileBases);
+            tileMapView.updateWithObjectViewIdArray(mapData.tileObjects);
 
             const unitMapView = new MultiCustomWar.UnitMapView();
-            unitMapView.initWithDatas(this._createUnitViewDatas(data.units, data.mapWidth, data.mapHeight));
+            unitMapView.initWithDatas(this._createUnitViewDatas(mapData.units, mapData.mapWidth, mapData.mapHeight));
 
             const gridSize = ConfigManager.getGridSize();
             this._zoomMap.removeAllContents();
-            this._zoomMap.setContentWidth(data.mapWidth * gridSize.width);
-            this._zoomMap.setContentHeight(data.mapHeight * gridSize.height);
+            this._zoomMap.setContentWidth(mapData.mapWidth * gridSize.width);
+            this._zoomMap.setContentHeight(mapData.mapHeight * gridSize.height);
             this._zoomMap.addContent(tileMapView);
             this._zoomMap.addContent(unitMapView);
             this._zoomMap.setContentScale(0, true);

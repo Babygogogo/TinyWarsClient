@@ -91,7 +91,7 @@ namespace TinyWars.MultiCustomRoom {
         // Functions for creating wars.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         export function getCreateWarMapInfo(): ProtoTypes.IMapDynamicInfo {
-            return MapModel.getMapInfo(_dataForCreateWar);
+            return MapModel.getMapDynamicInfoSync(_dataForCreateWar);
         }
 
         export function resetCreateWarData(key: Types.MapIndexKey): void {

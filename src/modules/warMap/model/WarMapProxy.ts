@@ -4,6 +4,7 @@ namespace TinyWars.WarMap {
     import ActionCode   = Network.Codes;
     import ProtoTypes   = Utility.ProtoTypes;
     import Notify       = Utility.Notify;
+    import Types        = Utility.Types;
 
     export namespace WarMapProxy {
         type ParamForGetNewestMapInfos = {
@@ -16,7 +17,8 @@ namespace TinyWars.WarMap {
 
         export function init(): void {
             NetManager.addListeners([
-                { actionCode: ActionCode.S_GetNewestMapDynamicInfos, callback: _onSGetNewestMapInfos },
+                { actionCode: ActionCode.S_GetNewestMapDynamicInfos,    callback: _onSGetNewestMapDynamicInfos },
+                { actionCode: ActionCode.S_GetMapDynamicInfo,           callback: _onSGetMapDynamicInfo },
             ], WarMapProxy);
         }
 
@@ -31,10 +33,25 @@ namespace TinyWars.WarMap {
                 },
             });
         }
-        function _onSGetNewestMapInfos(e: egret.Event): void {
-            const data = e.data as ProtoTypes.S_GetNewestMapDynamicInfos;
+        function _onSGetNewestMapDynamicInfos(e: egret.Event): void {
+            const data = e.data as ProtoTypes.IS_GetNewestMapDynamicInfos;
             WarMapModel.setNewestMapInfos(data);
             Notify.dispatch(Notify.Type.SGetNewestMapInfos, data);
+        }
+
+        export function reqGetMapDynamicInfo(key: Types.MapIndexKey): void {
+            NetManager.send({
+                C_GetMapDynamicInfo: key,
+            });
+        }
+        function _onSGetMapDynamicInfo(e: egret.Event): void {
+            const data = e.data as ProtoTypes.IS_GetMapDynamicInfo;
+            if (data.errorCode) {
+                Notify.dispatch(Notify.Type.SGetMapDynamicInfoFailed, data);
+            } else {
+                (data.mapDynamicInfo) && (WarMapModel.updateMapDynamicInfo(data.mapDynamicInfo));
+                Notify.dispatch(Notify.Type.SGetMapDynamicInfo, data);
+            }
         }
     }
 }

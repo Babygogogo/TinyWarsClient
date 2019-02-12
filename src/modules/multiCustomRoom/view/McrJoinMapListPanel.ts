@@ -55,8 +55,8 @@ namespace TinyWars.MultiCustomRoom {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.MouseWheel,                                 callback: this._onNotifyMouseWheel },
-                { type: Notify.Type.SMcrGetUnjoinedWaitingInfos,    callback: this._onNotifySGetUnjoinedWaitingCustomOnlineWarInfos },
+                { type: Notify.Type.MouseWheel,                     callback: this._onNotifyMouseWheel },
+                { type: Notify.Type.SMcrGetUnjoinedWaitingInfos,    callback: this._onNotifySMcrGetUnjoinedWaitingInfos },
             ];
             this._uiListeners = [
                 { ui: this._zoomMap,   callback: this._onTouchBeginZoomMap, eventType: egret.TouchEvent.TOUCH_BEGIN },
@@ -108,7 +108,7 @@ namespace TinyWars.MultiCustomRoom {
             this._zoomMap.setZoomByScroll(StageManager.getMouseX(), StageManager.getMouseY(), e.data);
         }
 
-        private _onNotifySGetUnjoinedWaitingCustomOnlineWarInfos(e: egret.Event): void {
+        private _onNotifySMcrGetUnjoinedWaitingInfos(e: egret.Event): void {
             const newData        = this._createDataForListWar(McrModel.getUnjoinedWarInfos());
             this._dataForListWar = newData;
 
@@ -182,7 +182,7 @@ namespace TinyWars.MultiCustomRoom {
             return data;
         }
 
-        private _createDataForListPlayer(warInfo: ProtoTypes.IMcrWaitingInfo, mapInfo: ProtoTypes.IMapDynamicInfo): DataForPlayerRenderer[] {
+        private _createDataForListPlayer(warInfo: ProtoTypes.IMcrWaitingInfo, mapPlayersCount: number): DataForPlayerRenderer[] {
             const data: DataForPlayerRenderer[] = [
                 {
                     playerIndex: 1,
@@ -195,14 +195,14 @@ namespace TinyWars.MultiCustomRoom {
                     teamIndex  : warInfo.p2TeamIndex,
                 },
             ];
-            if (mapInfo.playersCount >= 3) {
+            if (mapPlayersCount >= 3) {
                 data.push({
                     playerIndex: 3,
                     playerName : warInfo.p3UserNickname,
                     teamIndex  : warInfo.p3TeamIndex,
                 });
             }
-            if (mapInfo.playersCount >= 4) {
+            if (mapPlayersCount >= 4) {
                 data.push({
                     playerIndex: 4,
                     playerName : warInfo.p4UserNickname,
@@ -240,14 +240,12 @@ namespace TinyWars.MultiCustomRoom {
 
         private async _showMap(index: number): Promise<void> {
             const warInfo = this._dataForListWar[index].warInfo;
-            const data    = await TemplateMapModel.getMapData(warInfo as Types.MapIndexKey);
-            const mapInfo = TemplateMapModel.getMapInfo(warInfo as Types.MapIndexKey);
-
-            this._labelMapName.text    = Lang.getFormatedText(Lang.FormatType.F000, mapInfo.mapName);
-            this._labelDesigner.text   = Lang.getFormatedText(Lang.FormatType.F001, mapInfo.mapDesigner);
+            const mapData = await TemplateMapModel.getMapData(warInfo as Types.MapIndexKey);
+            this._labelMapName.text    = Lang.getFormatedText(Lang.FormatType.F000, mapData.mapName);
+            this._labelDesigner.text   = Lang.getFormatedText(Lang.FormatType.F001, mapData.mapDesigner);
             this._labelHasFog.text     = Lang.getFormatedText(Lang.FormatType.F005, Lang.getText(Lang.BigType.B01, warInfo.hasFog ? Lang.SubType.S12 : Lang.SubType.S13));
             this._labelWarComment.text = warInfo.warComment || "----";
-            this._listPlayer.bindData(this._createDataForListPlayer(warInfo, mapInfo));
+            this._listPlayer.bindData(this._createDataForListPlayer(warInfo, mapData.playersCount));
 
             this._groupInfo.visible      = true;
             this._groupInfo.alpha        = 1;
@@ -255,17 +253,17 @@ namespace TinyWars.MultiCustomRoom {
             egret.Tween.get(this._groupInfo).wait(8000).to({alpha: 0}, 1000).call(() => {this._groupInfo.visible = false; this._groupInfo.alpha = 1});
 
             const tileMapView = new MultiCustomWar.TileMapView();
-            tileMapView.init(data.mapWidth, data.mapHeight);
-            tileMapView.updateWithBaseViewIdArray(data.tileBases);
-            tileMapView.updateWithObjectViewIdArray(data.tileObjects);
+            tileMapView.init(mapData.mapWidth, mapData.mapHeight);
+            tileMapView.updateWithBaseViewIdArray(mapData.tileBases);
+            tileMapView.updateWithObjectViewIdArray(mapData.tileObjects);
 
             const unitMapView = new MultiCustomWar.UnitMapView();
-            unitMapView.initWithDatas(this._createUnitViewDatas(data.units, data.mapWidth, data.mapHeight));
+            unitMapView.initWithDatas(this._createUnitViewDatas(mapData.units, mapData.mapWidth, mapData.mapHeight));
 
             const gridSize = ConfigManager.getGridSize();
             this._zoomMap.removeAllContents();
-            this._zoomMap.setContentWidth(data.mapWidth * gridSize.width);
-            this._zoomMap.setContentHeight(data.mapHeight * gridSize.height);
+            this._zoomMap.setContentWidth(mapData.mapWidth * gridSize.width);
+            this._zoomMap.setContentHeight(mapData.mapHeight * gridSize.height);
             this._zoomMap.addContent(tileMapView);
             this._zoomMap.addContent(unitMapView);
             this._zoomMap.setContentScale(0, true);

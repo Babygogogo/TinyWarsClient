@@ -80,24 +80,21 @@ namespace TinyWars.MultiCustomRoom {
                 content: Lang.getRichText(Lang.RichType.R002),
             });
         }
-
         private _onTouchedBtnHelpTimeLimit(e: egret.TouchEvent): void {
             HelpPanel.show({
                 title  : Lang.getText(Lang.BigType.B01, Lang.SubType.S21),
                 content: Lang.getRichText(Lang.RichType.R003),
             });
         }
-
         private _onTouchedBtnCancel(e: egret.TouchEvent): void {
             McrExitDetailPanel.hide();
         }
-
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
             McrProxy.reqExitCustomOnlineWar(this._openData.id);
             McrExitDetailPanel.hide();
         }
 
-        private _updateView(): void {
+        private async _updateView(): Promise<void> {
             const info = this._openData;
             this._labelWarPassword.text             = info.warPassword ? info.warPassword : "----";
             this._labelHasFog.text                  = Lang.getText(Lang.BigType.B01, info.hasFog ? Lang.SubType.S12 : Lang.SubType.S13);
@@ -109,41 +106,45 @@ namespace TinyWars.MultiCustomRoom {
             this._labelMoveRangeModifier.text       = `${info.moveRangeModifier > 0 ? "+" : ""}${info.moveRangeModifier}`;
             this._labelAttackPowerModifier.text     = `${info.attackPowerModifier > 0 ? "+" : ""}${info.attackPowerModifier}%`;
             this._labelVisionRangeModifier.text     = `${info.visionRangeModifier > 0 ? "+" : ""}${info.visionRangeModifier}`;
-            this._listPlayer.bindData(this._getDataForListPlayer());
+            this._listPlayer.bindData(await this._getDataForListPlayer());
         }
 
-        private _getDataForListPlayer(): DataForPlayerRenderer[] {
+        private async _getDataForListPlayer(): Promise<DataForPlayerRenderer[]> {
             const warInfo = this._openData;
-            const data: DataForPlayerRenderer[] = [
-                {
-                    playerIndex: 1,
-                    playerName : warInfo.p1UserNickname,
-                    teamIndex  : warInfo.p1TeamIndex,
-                },
-                {
-                    playerIndex: 2,
-                    playerName : warInfo.p2UserNickname,
-                    teamIndex  : warInfo.p2TeamIndex,
-                },
-            ];
+            const mapInfo = await WarMap.WarMapModel.getMapDynamicInfoAsync(warInfo as Types.MapIndexKey);
+            if (!mapInfo) {
+                return [];
+            } else {
+                const data: DataForPlayerRenderer[] = [
+                    {
+                        playerIndex: 1,
+                        playerName : warInfo.p1UserNickname,
+                        teamIndex  : warInfo.p1TeamIndex,
+                    },
+                    {
+                        playerIndex: 2,
+                        playerName : warInfo.p2UserNickname,
+                        teamIndex  : warInfo.p2TeamIndex,
+                    },
+                ];
 
-            const mapInfo = WarMap.WarMapModel.getMapInfo(warInfo as Types.MapIndexKey);
-            if (mapInfo.playersCount >= 3) {
-                data.push({
-                    playerIndex: 3,
-                    playerName : warInfo.p3UserNickname,
-                    teamIndex  : warInfo.p3TeamIndex,
-                });
-            }
-            if (mapInfo.playersCount >= 4) {
-                data.push({
-                    playerIndex: 4,
-                    playerName : warInfo.p4UserNickname,
-                    teamIndex  : warInfo.p4TeamIndex,
-                });
-            }
+                if (mapInfo.playersCount >= 3) {
+                    data.push({
+                        playerIndex: 3,
+                        playerName : warInfo.p3UserNickname,
+                        teamIndex  : warInfo.p3TeamIndex,
+                    });
+                }
+                if (mapInfo.playersCount >= 4) {
+                    data.push({
+                        playerIndex: 4,
+                        playerName : warInfo.p4UserNickname,
+                        teamIndex  : warInfo.p4TeamIndex,
+                    });
+                }
 
-            return data;
+                return data;
+            }
         }
     }
 

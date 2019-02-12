@@ -20,6 +20,8 @@ namespace TinyWars.Utility {
             SLogout,
             SHeartbeat,
             SGetNewestMapInfos,
+            SGetMapDynamicInfo,
+            SGetMapDynamicInfoFailed,
             SMcrCreateWar,
             SMcrGetJoinedWaitingInfos,
             SMcrGetUnjoinedWaitingInfos,
@@ -41,27 +43,33 @@ namespace TinyWars.Utility {
         ////////////////////////////////////////////////////////////////////////////////
         // Dispatcher functions.
         ////////////////////////////////////////////////////////////////////////////////
-        const dispatcher = new egret.EventDispatcher();
+        const _DISPATCHER = new egret.EventDispatcher();
 
         export type Listener = {
             type       : Type,
-            callback   : Function,
+            callback   : (e: egret.Event) => void,
             thisObject?: any,
         };
 
         export function dispatch(t: Type, data?: any): void {
-            dispatcher.dispatchEventWith(getTypeName(t), false, data);
+            _DISPATCHER.dispatchEventWith(getTypeName(t), false, data);
         }
 
+        export function addEventListener(type: Type, callback: (e: egret.Event) => void, thisObject?: any): void {
+            _DISPATCHER.addEventListener(getTypeName(type), callback, thisObject);
+        }
         export function addEventListeners(listeners: Listener[], thisObject?: any): void {
             for (const l of listeners) {
-                dispatcher.addEventListener(getTypeName(l.type), l.callback, l.thisObject || thisObject);
+                addEventListener(l.type, l.callback, l.thisObject || thisObject);
             }
         }
 
+        export function removeEventListener(type: Type, callback: (e: egret.Event) => void, thisObject?: any): void {
+            _DISPATCHER.removeEventListener(getTypeName(type), callback, thisObject);
+        }
         export function removeEventListeners(listeners: Listener[], thisObject?: any): void {
             for (const l of listeners) {
-                dispatcher.removeEventListener(getTypeName(l.type), l.callback, l.thisObject || thisObject);
+                removeEventListener(l.type, l.callback, l.thisObject || thisObject);
             }
         }
 

@@ -40,7 +40,6 @@ namespace TinyWars.MultiCustomRoom {
         function _onSMcrGetUnjoinedWaitingInfos(e: egret.Event): void {
             const data = e.data as ProtoTypes.IS_McrGetUnjoinedWaitingInfos;
             if (!data.errorCode) {
-                WarMap.WarMapModel.addMapInfos(data.mapInfos);
                 McrModel.setUnjoinedWarInfos(data.warInfos);
                 Notify.dispatch(Notify.Type.SMcrGetUnjoinedWaitingInfos, data);
             }
@@ -71,7 +70,6 @@ namespace TinyWars.MultiCustomRoom {
         function _onSMcrGetJoinedWaitingInfos(e: egret.Event): void {
             const data = e.data as ProtoTypes.IS_McrGetJoinedWaitingInfos;
             if (!data.errorCode) {
-                WarMap.WarMapModel.addMapInfos(data.mapInfos);
                 McrModel.setJoinedWarInfos(data.warInfos);
                 Notify.dispatch(Notify.Type.SMcrGetJoinedWaitingInfos, data);
             }

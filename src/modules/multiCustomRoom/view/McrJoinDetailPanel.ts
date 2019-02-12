@@ -86,9 +86,9 @@ namespace TinyWars.MultiCustomRoom {
             this._listPlayer.setItemRenderer(PlayerRenderer);
         }
 
-        protected _onOpened(): void {
-            this._availablePlayerIndexes = this._getAvailablePlayerIndexes();
-            this._availableTeamIndexes   = this._getAvailableTeamIndexes();
+        protected async _onOpened(): Promise<void> {
+            this._availablePlayerIndexes = await this._getAvailablePlayerIndexes();
+            this._availableTeamIndexes   = await this._getAvailableTeamIndexes();
             this._playerIndexIndex       = 0;
             this._teamIndexIndex         = 0;
             this._updateView();
@@ -160,7 +160,7 @@ namespace TinyWars.MultiCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////
         // View functions.
         ////////////////////////////////////////////////////////////////////////////////
-        private _updateView(): void {
+        private async _updateView(): Promise<void> {
             const info = this._openData;
             this._labelWarPassword.text             = info.warPassword ? info.warPassword : "----";
             this._labelHasFog.text                  = Lang.getText(Lang.BigType.B01, info.hasFog ? Lang.SubType.S12 : Lang.SubType.S13);
@@ -172,7 +172,7 @@ namespace TinyWars.MultiCustomRoom {
             this._labelMoveRangeModifier.text       = `${info.moveRangeModifier > 0 ? "+" : ""}${info.moveRangeModifier}`;
             this._labelAttackPowerModifier.text     = `${info.attackPowerModifier > 0 ? "+" : ""}${info.attackPowerModifier}%`;
             this._labelVisionRangeModifier.text     = `${info.visionRangeModifier > 0 ? "+" : ""}${info.visionRangeModifier}`;
-            this._listPlayer.bindData(this._getDataForListPlayer());
+            this._listPlayer.bindData(await this._getDataForListPlayer());
             this._updateLabelPlayerIndex();
             this._updateLabelTeamIndex();
         }
@@ -187,7 +187,7 @@ namespace TinyWars.MultiCustomRoom {
             this._labelTeamIndex.text = Helpers.getTeamText(index);
         }
 
-        private _getDataForListPlayer(): DataForPlayerRenderer[] {
+        private async _getDataForListPlayer(): Promise<DataForPlayerRenderer[]> {
             const warInfo = this._openData;
             const data: DataForPlayerRenderer[] = [
                 {
@@ -202,15 +202,15 @@ namespace TinyWars.MultiCustomRoom {
                 },
             ];
 
-            const mapInfo = TemplateMapModel.getMapInfo(warInfo as Types.MapIndexKey);
-            if (mapInfo.playersCount >= 3) {
+            const playersCount = (await TemplateMapModel.getMapDynamicInfoAsync(warInfo as Types.MapIndexKey)).playersCount;
+            if (playersCount >= 3) {
                 data.push({
                     playerIndex: 3,
                     playerName : warInfo.p3UserNickname,
                     teamIndex  : warInfo.p3TeamIndex,
                 });
             }
-            if (mapInfo.playersCount >= 4) {
+            if (playersCount >= 4) {
                 data.push({
                     playerIndex: 4,
                     playerName : warInfo.p4UserNickname,
@@ -221,9 +221,9 @@ namespace TinyWars.MultiCustomRoom {
             return data;
         }
 
-        private _getAvailablePlayerIndexes(): number[] {
+        private async _getAvailablePlayerIndexes(): Promise<number[]> {
             const info         = this._openData;
-            const playersCount = TemplateMapModel.getMapInfo(info as Types.MapIndexKey).playersCount;
+            const playersCount = (await TemplateMapModel.getMapDynamicInfoAsync(info as Types.MapIndexKey)).playersCount;
             const indexDict: {[index: number]: boolean} = {};
             if ((playersCount >= 4) && (info.p4UserId == null)) {
                 indexDict[4] = true;
@@ -247,7 +247,7 @@ namespace TinyWars.MultiCustomRoom {
             return indexes;
         }
 
-        private _getAvailableTeamIndexes(): number[] {
+        private async _getAvailableTeamIndexes(): Promise<number[]> {
             const info = this._openData;
             const dict: {[index: number]: number} = {};
             (info.p1TeamIndex != null) && (dict[info.p1TeamIndex] = (dict[info.p1TeamIndex] || 0) + 1);
@@ -264,7 +264,7 @@ namespace TinyWars.MultiCustomRoom {
                 }
             }
 
-            const totalPlayers = TemplateMapModel.getMapInfo(info as Types.MapIndexKey).playersCount;
+            const totalPlayers = (await TemplateMapModel.getMapDynamicInfoAsync(info as Types.MapIndexKey)).playersCount;
             if ((teamsCount > 1) || (currPlayers < totalPlayers - 1)) {
                 const indexes: number[] = [];
                 for (let i = 1; i <= totalPlayers; ++i) {

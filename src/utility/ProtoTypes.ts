@@ -5005,8 +5005,17 @@ namespace TinyWars.Utility {
             /** S_GetMapDynamicInfo errorCode */
             errorCode?: (number | null);
 
-            /** S_GetMapDynamicInfo mapInfos */
-            mapInfos?: (IMapDynamicInfo[] | null);
+            /** S_GetMapDynamicInfo mapName */
+            mapName?: (string | null);
+
+            /** S_GetMapDynamicInfo mapDesigner */
+            mapDesigner?: (string | null);
+
+            /** S_GetMapDynamicInfo mapVersion */
+            mapVersion?: (number | null);
+
+            /** S_GetMapDynamicInfo mapDynamicInfo */
+            mapDynamicInfo?: (IMapDynamicInfo | null);
         }
 
         /** Represents a S_GetMapDynamicInfo. */
@@ -5021,8 +5030,17 @@ namespace TinyWars.Utility {
             /** S_GetMapDynamicInfo errorCode. */
             public errorCode: number;
 
-            /** S_GetMapDynamicInfo mapInfos. */
-            public mapInfos: IMapDynamicInfo[];
+            /** S_GetMapDynamicInfo mapName. */
+            public mapName: string;
+
+            /** S_GetMapDynamicInfo mapDesigner. */
+            public mapDesigner: string;
+
+            /** S_GetMapDynamicInfo mapVersion. */
+            public mapVersion: number;
+
+            /** S_GetMapDynamicInfo mapDynamicInfo. */
+            public mapDynamicInfo?: (IMapDynamicInfo | null);
 
             /**
              * Creates a new S_GetMapDynamicInfo instance using the specified properties.
@@ -5739,9 +5757,6 @@ namespace TinyWars.Utility {
 
             /** S_McrGetJoinedWaitingInfos warInfos */
             warInfos?: (IMcrWaitingInfo[] | null);
-
-            /** S_McrGetJoinedWaitingInfos mapInfos */
-            mapInfos?: (IMapDynamicInfo[] | null);
         }
 
         /** Represents a S_McrGetJoinedWaitingInfos. */
@@ -5758,9 +5773,6 @@ namespace TinyWars.Utility {
 
             /** S_McrGetJoinedWaitingInfos warInfos. */
             public warInfos: IMcrWaitingInfo[];
-
-            /** S_McrGetJoinedWaitingInfos mapInfos. */
-            public mapInfos: IMapDynamicInfo[];
 
             /**
              * Creates a new S_McrGetJoinedWaitingInfos instance using the specified properties.
@@ -5925,9 +5937,6 @@ namespace TinyWars.Utility {
 
             /** S_McrGetUnjoinedWaitingInfos warInfos */
             warInfos?: (IMcrWaitingInfo[] | null);
-
-            /** S_McrGetUnjoinedWaitingInfos mapInfos */
-            mapInfos?: (IMapDynamicInfo[] | null);
         }
 
         /** Represents a S_McrGetUnjoinedWaitingInfos. */
@@ -5944,9 +5953,6 @@ namespace TinyWars.Utility {
 
             /** S_McrGetUnjoinedWaitingInfos warInfos. */
             public warInfos: IMcrWaitingInfo[];
-
-            /** S_McrGetUnjoinedWaitingInfos mapInfos. */
-            public mapInfos: IMapDynamicInfo[];
 
             /**
              * Creates a new S_McrGetUnjoinedWaitingInfos instance using the specified properties.
