@@ -3,7 +3,8 @@
         "target": "es6",
         "outDir": "bin-debug",
         "experimentalDecorators": true,
-        "types": []
+        "types": [],
+        "sourceMap": true
     },
     "include": [
         "src",
