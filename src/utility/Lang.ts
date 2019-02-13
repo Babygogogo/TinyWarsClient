@@ -219,6 +219,14 @@ namespace TinyWars.Utility {
                     `确定`,
                     `Confirm`,
                 ]],
+                [SubType.S27, [
+                    `倒计时`,
+                    `Countdown`,
+                ]],
+                [SubType.S28, [
+                    `即将超时`,
+                    `Timeout soon`,
+                ]],
             ])],
         ]);
 
@@ -399,7 +407,7 @@ namespace TinyWars.Utility {
         }
 
         export function getRichText(richType: RichType): string {
-            return RICH_DATA[richType][language];
+            return RICH_DATA.get(richType)[language];
         }
     }
 }

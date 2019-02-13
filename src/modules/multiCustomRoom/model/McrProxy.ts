@@ -14,12 +14,11 @@ namespace TinyWars.MultiCustomRoom {
                 { actionCode: ActionCode.S_McrJoinWar,                  callback: _onSMcrJoinWar, },
                 { actionCode: ActionCode.S_McrGetJoinedWaitingInfos,    callback: _onSMcrGetJoinedWaitingInfos, },
                 { actionCode: ActionCode.S_McrExitWar,                  callback: _onSMcrExitWar, },
+                { actionCode: ActionCode.S_McrGetJoinedOngoingInfos,    callback: _onSMcrGetJoinedOngoingInfos, },
             ], McrProxy);
         }
 
         export function reqCreate(param: DataForCreateWar): void {
-            // const obj = Helpers.cloneObject(param) as Utility.Types.Action;
-            // obj.actionCode = ActionCode.C_McrCreateWar;
             NetManager.send({
                 C_McrCreateWar: param,
             });
@@ -40,7 +39,7 @@ namespace TinyWars.MultiCustomRoom {
         function _onSMcrGetUnjoinedWaitingInfos(e: egret.Event): void {
             const data = e.data as ProtoTypes.IS_McrGetUnjoinedWaitingInfos;
             if (!data.errorCode) {
-                McrModel.setUnjoinedWarInfos(data.warInfos);
+                McrModel.setUnjoinedWaitingInfos(data.warInfos);
                 Notify.dispatch(Notify.Type.SMcrGetUnjoinedWaitingInfos, data);
             }
         }
@@ -70,7 +69,7 @@ namespace TinyWars.MultiCustomRoom {
         function _onSMcrGetJoinedWaitingInfos(e: egret.Event): void {
             const data = e.data as ProtoTypes.IS_McrGetJoinedWaitingInfos;
             if (!data.errorCode) {
-                McrModel.setJoinedWarInfos(data.warInfos);
+                McrModel.setJoinedWaitingInfos(data.warInfos);
                 Notify.dispatch(Notify.Type.SMcrGetJoinedWaitingInfos, data);
             }
         }
@@ -89,14 +88,15 @@ namespace TinyWars.MultiCustomRoom {
             }
         }
 
-        export function reqGetJoinedOngoingWarInfos(): void {
+        export function reqGetJoinedOngoingInfos(): void {
             NetManager.send({
                 C_McrGetJoinedOngoingInfos: {},
             });
         }
         function _onSMcrGetJoinedOngoingInfos(e: egret.Event): void {
             const data = e.data as ProtoTypes.IS_McrGetJoinedOngoingInfos;
-            // TODO
+            McrModel.setJoinedOngoingInfos(data.infos);
+            Notify.dispatch(Notify.Type.SMcrGetJoinedOngoingInfos, data);
         }
     }
 }

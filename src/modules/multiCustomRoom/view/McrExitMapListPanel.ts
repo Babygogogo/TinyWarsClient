@@ -110,7 +110,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onNotifySMcrGetJoinedWaitingInfos(e: egret.Event): void {
-            const newData        = this._createDataForListWar(McrModel.getJoinedWarInfos());
+            const newData        = this._createDataForListWar(McrModel.getJoinedWaitingInfos());
             this._dataForListWar = newData;
 
             if (newData.length > 0) {

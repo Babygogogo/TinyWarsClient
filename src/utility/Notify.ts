@@ -25,6 +25,7 @@ namespace TinyWars.Utility {
             SMcrCreateWar,
             SMcrGetJoinedWaitingInfos,
             SMcrGetUnjoinedWaitingInfos,
+            SMcrGetJoinedOngoingInfos,
             SMcrExitWar,
             SMcrJoinWar,
 
