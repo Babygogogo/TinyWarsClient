@@ -109,6 +109,10 @@ namespace TinyWars.Utility {
                     `服务器维护中，请稍后登陆`,
                     `The server is under maintainance. Please wait and login later.`,
                 ]],
+                [SubType.S21, [
+                    `正在读取战局数据，请稍候`,
+                    `Downloading the war data. Please wait.`,
+                ]],
             ])],
             [BigType.B01, new Map([
                 [SubType.S00, [
@@ -227,6 +231,10 @@ namespace TinyWars.Utility {
                     `即将超时`,
                     `Timeout soon`,
                 ]],
+                [SubType.S29, [
+                    `读取中`,
+                    `Now loading`,
+                ]],
             ])],
         ]);
 
@@ -329,6 +337,14 @@ namespace TinyWars.Utility {
             [ErrCode.ServerDisconnect_ServerMaintainance, [
                 `服务器维护中`,
                 `The server is under maintainance.`,
+            ]],
+            [ErrCode.McrContinueWar_NoSuchWar, [
+                `战局不存在`,
+                `The game doesn't exist.`,
+            ]],
+            [ErrCode.McrContinueWar_DefeatedOrNotJoined, [
+                `您未参与该战局，或已经被击败`,
+                `You have not joined the game, or you have been defeated.`,
             ]],
         ]);
 

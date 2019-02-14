@@ -28,6 +28,8 @@ namespace TinyWars.Network {
         S_McrJoinWar = 110,
         C_McrGetJoinedOngoingInfos = 111,
         S_McrGetJoinedOngoingInfos = 112,
+        C_McrContinueWar = 113,
+        S_McrContinueWar = 114,
         C_McwBeginTurn = 151,
         S_McwBeginTurn = 152,
         C_McwEndTurn = 153,

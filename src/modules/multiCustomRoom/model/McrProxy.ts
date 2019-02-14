@@ -15,6 +15,7 @@ namespace TinyWars.MultiCustomRoom {
                 { actionCode: ActionCode.S_McrGetJoinedWaitingInfos,    callback: _onSMcrGetJoinedWaitingInfos, },
                 { actionCode: ActionCode.S_McrExitWar,                  callback: _onSMcrExitWar, },
                 { actionCode: ActionCode.S_McrGetJoinedOngoingInfos,    callback: _onSMcrGetJoinedOngoingInfos, },
+                { actionCode: ActionCode.S_McrContinueWar,              callback: _onSMcrContinueWar, },
             ], McrProxy);
         }
 
@@ -97,6 +98,22 @@ namespace TinyWars.MultiCustomRoom {
             const data = e.data as ProtoTypes.IS_McrGetJoinedOngoingInfos;
             McrModel.setJoinedOngoingInfos(data.infos);
             Notify.dispatch(Notify.Type.SMcrGetJoinedOngoingInfos, data);
+        }
+
+        export function reqContinueWar(warId: number): void {
+            NetManager.send({
+                C_McrContinueWar: {
+                    warId: warId,
+                },
+            });
+        }
+        function _onSMcrContinueWar(e: egret.Event): void {
+            const data = e.data as ProtoTypes.IS_McrContinueWar;
+            if (data.errorCode) {
+                Notify.dispatch(Notify.Type.SMcrContinueWarFailed, data);
+            } else {
+                Notify.dispatch(Notify.Type.SMcrContinueWar, data);
+            }
         }
     }
 }

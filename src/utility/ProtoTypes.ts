@@ -3529,6 +3529,12 @@ namespace TinyWars.Utility {
             /** ActionContainer S_McrGetJoinedOngoingInfos */
             S_McrGetJoinedOngoingInfos?: (IS_McrGetJoinedOngoingInfos | null);
 
+            /** ActionContainer C_McrContinueWar */
+            C_McrContinueWar?: (IC_McrContinueWar | null);
+
+            /** ActionContainer S_McrContinueWar */
+            S_McrContinueWar?: (IS_McrContinueWar | null);
+
             /** ActionContainer C_McwBeginTurn */
             C_McwBeginTurn?: (IC_McwBeginTurn | null);
 
@@ -3631,6 +3637,12 @@ namespace TinyWars.Utility {
 
             /** ActionContainer S_McrGetJoinedOngoingInfos. */
             public S_McrGetJoinedOngoingInfos?: (IS_McrGetJoinedOngoingInfos | null);
+
+            /** ActionContainer C_McrContinueWar. */
+            public C_McrContinueWar?: (IC_McrContinueWar | null);
+
+            /** ActionContainer S_McrContinueWar. */
+            public S_McrContinueWar?: (IS_McrContinueWar | null);
 
             /** ActionContainer C_McwBeginTurn. */
             public C_McwBeginTurn?: (IC_McwBeginTurn | null);
@@ -6392,6 +6404,198 @@ namespace TinyWars.Utility {
 
             /**
              * Converts this S_McrGetJoinedOngoingInfos to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a C_McrContinueWar. */
+        export declare interface IC_McrContinueWar {
+
+            /** C_McrContinueWar warId */
+            warId?: (number | null);
+        }
+
+        /** Represents a C_McrContinueWar. */
+        export declare class C_McrContinueWar implements IC_McrContinueWar {
+
+            /**
+             * Constructs a new C_McrContinueWar.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: IC_McrContinueWar);
+
+            /** C_McrContinueWar warId. */
+            public warId: number;
+
+            /**
+             * Creates a new C_McrContinueWar instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C_McrContinueWar instance
+             */
+            public static create(properties?: IC_McrContinueWar): C_McrContinueWar;
+
+            /**
+             * Encodes the specified C_McrContinueWar message. Does not implicitly {@link C_McrContinueWar.verify|verify} messages.
+             * @param message C_McrContinueWar message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: IC_McrContinueWar, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C_McrContinueWar message, length delimited. Does not implicitly {@link C_McrContinueWar.verify|verify} messages.
+             * @param message C_McrContinueWar message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: IC_McrContinueWar, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C_McrContinueWar message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C_McrContinueWar
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): C_McrContinueWar;
+
+            /**
+             * Decodes a C_McrContinueWar message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C_McrContinueWar
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): C_McrContinueWar;
+
+            /**
+             * Verifies a C_McrContinueWar message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string | null);
+
+            /**
+             * Creates a C_McrContinueWar message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C_McrContinueWar
+             */
+            public static fromObject(object: { [k: string]: any }): C_McrContinueWar;
+
+            /**
+             * Creates a plain object from a C_McrContinueWar message. Also converts values to other types if specified.
+             * @param message C_McrContinueWar
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: C_McrContinueWar, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C_McrContinueWar to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S_McrContinueWar. */
+        export declare interface IS_McrContinueWar {
+
+            /** S_McrContinueWar errorCode */
+            errorCode?: (number | null);
+
+            /** S_McrContinueWar warId */
+            warId?: (number | null);
+
+            /** S_McrContinueWar war */
+            war?: (ISerializedMcwWar | null);
+        }
+
+        /** Represents a S_McrContinueWar. */
+        export declare class S_McrContinueWar implements IS_McrContinueWar {
+
+            /**
+             * Constructs a new S_McrContinueWar.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: IS_McrContinueWar);
+
+            /** S_McrContinueWar errorCode. */
+            public errorCode: number;
+
+            /** S_McrContinueWar warId. */
+            public warId: number;
+
+            /** S_McrContinueWar war. */
+            public war?: (ISerializedMcwWar | null);
+
+            /**
+             * Creates a new S_McrContinueWar instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S_McrContinueWar instance
+             */
+            public static create(properties?: IS_McrContinueWar): S_McrContinueWar;
+
+            /**
+             * Encodes the specified S_McrContinueWar message. Does not implicitly {@link S_McrContinueWar.verify|verify} messages.
+             * @param message S_McrContinueWar message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: IS_McrContinueWar, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S_McrContinueWar message, length delimited. Does not implicitly {@link S_McrContinueWar.verify|verify} messages.
+             * @param message S_McrContinueWar message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: IS_McrContinueWar, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S_McrContinueWar message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S_McrContinueWar
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): S_McrContinueWar;
+
+            /**
+             * Decodes a S_McrContinueWar message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S_McrContinueWar
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): S_McrContinueWar;
+
+            /**
+             * Verifies a S_McrContinueWar message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string | null);
+
+            /**
+             * Creates a S_McrContinueWar message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S_McrContinueWar
+             */
+            public static fromObject(object: { [k: string]: any }): S_McrContinueWar;
+
+            /**
+             * Creates a plain object from a S_McrContinueWar message. Also converts values to other types if specified.
+             * @param message S_McrContinueWar
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: S_McrContinueWar, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S_McrContinueWar to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };

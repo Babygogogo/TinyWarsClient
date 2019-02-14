@@ -3,6 +3,7 @@
 	"autoGenerateExmlsList": true,
 	"exmls": [
 		"resource/skins/common/AlertPanel.exml",
+		"resource/skins/common/BlockPanel.exml",
 		"resource/skins/common/HelpPanel.exml",
 		"resource/skins/lobby/LobbyPanel.exml",
 		"resource/skins/lobby/LobbyTopPanel.exml",

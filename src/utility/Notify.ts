@@ -28,6 +28,8 @@ namespace TinyWars.Utility {
             SMcrGetJoinedOngoingInfos,
             SMcrExitWar,
             SMcrJoinWar,
+            SMcrContinueWarFailed,
+            SMcrContinueWar,
 
             ConfigLoaded,
             TileModelUpdated,

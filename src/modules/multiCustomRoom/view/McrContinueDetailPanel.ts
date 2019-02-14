@@ -7,6 +7,7 @@ namespace TinyWars.MultiCustomRoom {
     import FloatText    = Utility.FloatText;
     import Types        = Utility.Types;
     import HelpPanel    = Common.HelpPanel;
+    import BlockPanel   = Common.BlockPanel;
 
     export class McrContinueDetailPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
@@ -62,6 +63,10 @@ namespace TinyWars.MultiCustomRoom {
                 { ui: this._btnCancel,        callback: this._onTouchedBtnCancel },
                 { ui: this._btnConfirm,       callback: this._onTouchedBtnConfirm },
             ];
+            this._notifyListeners = [
+                { type: Notify.Type.SMcrContinueWar,        callback: this._onNotifySMcrContinueWar },
+                { type: Notify.Type.SMcrContinueWarFailed,  callback: this._onNotifySMcrContinueWarFailed },
+            ];
 
             this._listPlayer.setItemRenderer(PlayerRenderer);
         }
@@ -74,6 +79,9 @@ namespace TinyWars.MultiCustomRoom {
             this._listPlayer.clear();
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Callbacks.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnHelpFog(e: egret.TouchEvent): void {
             HelpPanel.show({
                 title  : Lang.getText(Lang.BigType.B01, Lang.SubType.S20),
@@ -90,10 +98,26 @@ namespace TinyWars.MultiCustomRoom {
             McrContinueDetailPanel.hide();
         }
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            McrProxy.reqExitCustomOnlineWar(this._openData.id);
+            BlockPanel.show({
+                title   : Lang.getText(Lang.BigType.B01, Lang.SubType.S29),
+                content : Lang.getText(Lang.BigType.B00, Lang.SubType.S21),
+            });
+            McrProxy.reqContinueWar(this._openData.id);
+        }
+
+        private _onNotifySMcrContinueWar(e: egret.Event): void {
+            BlockPanel.hide();
+            McrContinueDetailPanel.hide();
+            // TODO: enter the war.
+        }
+        private _onNotifySMcrContinueWarFailed(e: egret.Event): void {
+            BlockPanel.hide();
             McrContinueDetailPanel.hide();
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Other functions.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         private async _updateView(): Promise<void> {
             const info = this._openData;
             this._labelWarPassword.text             = info.warPassword ? info.warPassword : "----";

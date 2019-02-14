@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
+        xmlns:w="http://ns.egret.com/wing">
+    <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="semi_transparent_png" />
+    <e:Group width="430" height="300" horizontalCenter="0" verticalCenter="0">
+        <GameUi:UiImage source="c04_t01_s02_f01_png" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
+                        alpha="0.8" left="0" right="0" top="0" bottom="0" />
+        <GameUi:UiLabel id="_labelTitle" text="标题" textColor="0xffffff" y="12" horizontalCenter="0" size="24" />
+        <e:Scroller left="20" right="20" top="45" bottom="50">
+            <e:Group>
+                <GameUi:UiLabel id="_labelContent" text="内容" textColor="0xFFFFFF" size="18" left="5" right="5" top="5"
+                                textAlign="center" />
+            </e:Group>
+        </e:Scroller>
+    </e:Group>
+</e:Skin>

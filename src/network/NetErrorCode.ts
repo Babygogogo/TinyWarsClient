@@ -28,6 +28,9 @@ namespace TinyWars.Network {
 
         GetMapDynamicInfo_NoSuchMap,
 
+        McrContinueWar_NoSuchWar,
+        McrContinueWar_DefeatedOrNotJoined,
+
         ServerDisconnect_ServerMaintainance,
     }
 }
