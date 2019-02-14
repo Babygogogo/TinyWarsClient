@@ -1,11 +1,11 @@
 
-namespace TinyWars.MultiCustomWar {
+namespace TinyWars.WarMap {
     import Notify      = Utility.Notify;
     import Types       = Utility.Types
     import TimeModel   = Time.TimeModel;
 
-    export class UnitMapView extends egret.DisplayObjectContainer {
-        private _unitViews  : UnitView[] = [];
+    export class WarMapUnitMapView extends egret.DisplayObjectContainer {
+        private _unitViews  : WarMapUnitView[] = [];
         private _airLayer   : egret.DisplayObjectContainer = new egret.DisplayObjectContainer();
         private _groundLayer: egret.DisplayObjectContainer = new egret.DisplayObjectContainer();
         private _seaLayer   : egret.DisplayObjectContainer = new egret.DisplayObjectContainer();
@@ -47,9 +47,9 @@ namespace TinyWars.MultiCustomWar {
 
         private _reviseZOrderForSingleLayer(layer: egret.DisplayObjectContainer): void {
             const unitsCount = layer.numChildren;
-            const unitViews: UnitView[] = [];
+            const unitViews: WarMapUnitView[] = [];
             for (let i = 0; i < unitsCount; ++i) {
-                unitViews.push(layer.getChildAt(i) as UnitView);
+                unitViews.push(layer.getChildAt(i) as WarMapUnitView);
             }
             unitViews.sort((a, b): number => {
                 const dataA = a.getData();
@@ -64,7 +64,7 @@ namespace TinyWars.MultiCustomWar {
 
         private _addUnit(data: Types.UnitViewData, tickCount: number): void {
             const unitType = ConfigManager.getUnitTypeAndPlayerIndex(data.viewId).unitType;
-            const view     = new UnitView(data, tickCount);
+            const view     = new WarMapUnitView(data, tickCount);
             this._unitViews.push(view);
 
             if (ConfigManager.checkIsUnitTypeInCategory(data.configVersion, unitType, Types.UnitCategory.Air)) {

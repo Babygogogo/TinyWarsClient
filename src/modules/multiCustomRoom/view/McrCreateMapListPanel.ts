@@ -213,12 +213,12 @@ namespace TinyWars.MultiCustomRoom {
             egret.Tween.removeTweens(this._groupInfo);
             egret.Tween.get(this._groupInfo).wait(5000).to({alpha: 0}, 1000).call(() => {this._groupInfo.visible = false; this._groupInfo.alpha = 1});
 
-            const tileMapView = new MultiCustomWar.TileMapView();
+            const tileMapView = new WarMap.WarMapTileMapView();
             tileMapView.init(mapData.mapWidth, mapData.mapHeight);
             tileMapView.updateWithBaseViewIdArray(mapData.tileBases);
             tileMapView.updateWithObjectViewIdArray(mapData.tileObjects);
 
-            const unitMapView = new MultiCustomWar.UnitMapView();
+            const unitMapView = new WarMap.WarMapUnitMapView();
             unitMapView.initWithDatas(this._createUnitViewDatas(mapData.units, mapData.mapWidth, mapData.mapHeight));
 
             const gridSize = ConfigManager.getGridSize();

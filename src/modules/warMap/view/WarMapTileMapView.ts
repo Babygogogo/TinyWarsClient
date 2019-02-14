@@ -1,10 +1,10 @@
 
-namespace TinyWars.MultiCustomWar {
+namespace TinyWars.WarMap {
     import UiImage     = GameUi.UiImage;
     import Notify      = Utility.Notify;
     import TimeModel   = Time.TimeModel;
 
-    export class TileMapView extends egret.DisplayObjectContainer {
+    export class WarMapTileMapView extends egret.DisplayObjectContainer {
         private _isInitialized: boolean;
 
         private _colCount   : number;
@@ -13,7 +13,7 @@ namespace TinyWars.MultiCustomWar {
         private _objectLayer: TileObjectLayer;
 
         public init(colCount: number, rowCount: number): void {
-            egret.assert(!this._isInitialized, "TileMapView.init() already initialized!");
+            egret.assert(!this._isInitialized, "WarMapTileMapView.init() already initialized!");
             this._isInitialized = true;
 
             this._colCount = colCount;

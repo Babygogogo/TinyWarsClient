@@ -1,5 +1,5 @@
 
-namespace TinyWars.MultiCustomWar {
+namespace TinyWars.WarMap {
     import UiImage     = GameUi.UiImage;
     import Notify      = Utility.Notify;
     import Types       = Utility.Types
@@ -9,7 +9,7 @@ namespace TinyWars.MultiCustomWar {
     const GRID_WIDTH  = GRID_SIZE.width;
     const GRID_HEIGHT = GRID_SIZE.height;
 
-    export class UnitView extends egret.DisplayObjectContainer {
+    export class WarMapUnitView extends egret.DisplayObjectContainer {
         private _unitImage: UiImage;
 
         private _data : Types.UnitViewData;
