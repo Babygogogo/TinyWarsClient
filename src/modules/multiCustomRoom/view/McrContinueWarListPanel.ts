@@ -312,7 +312,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
             const data = this.data as DataForWarRenderer;
-            McrExitDetailPanel.show(data.warInfo);
+            McrContinueDetailPanel.show(data.warInfo);
         }
 
         private _checkIsInTurn(info: ProtoTypes.IMcwOngoingDetail): boolean {

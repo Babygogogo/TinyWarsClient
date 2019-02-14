@@ -41,6 +41,7 @@
 		"bin-debug/modules/time/model/TimeModel.js",
 		"bin-debug/utility/StageManager.js",
 		"bin-debug/modules/multiCustomWar/model/McwPlayerManager.js",
+		"bin-debug/modules/multiCustomRoom/view/McrJoinDetailPanel.js",
 		"bin-debug/modules/multiCustomRoom/view/McrJoinMapListPanel.js",
 		"bin-debug/modules/multiCustomRoom/view/McrJoinPasswordPanel.js",
 		"bin-debug/modules/multiCustomWar/model/McwField.js",
@@ -71,15 +72,15 @@
 		"bin-debug/modules/login/view/RegisterPanel.js",
 		"bin-debug/modules/multiCustomRoom/model/McrModel.js",
 		"bin-debug/modules/multiCustomRoom/model/McrProxy.js",
+		"bin-debug/modules/multiCustomRoom/view/McrContinueDetailPanel.js",
 		"bin-debug/modules/multiCustomRoom/view/McrContinueWarListPanel.js",
 		"bin-debug/modules/multiCustomRoom/view/McrCreateAdvancedSettingsPage.js",
 		"bin-debug/modules/multiCustomRoom/view/McrCreateBasicSettingsPage.js",
 		"bin-debug/modules/multiCustomRoom/view/McrCreateMapListPanel.js",
 		"bin-debug/modules/multiCustomRoom/view/McrCreateSettingsPanel.js",
-		"bin-debug/modules/multiCustomRoom/view/McrExitDetailPanel.js",
 		"bin-debug/utility/ResManager.js",
+		"bin-debug/modules/multiCustomRoom/view/McrExitDetailPanel.js",
 		"bin-debug/modules/multiCustomRoom/view/McrExitMapListPanel.js",
-		"bin-debug/modules/multiCustomRoom/view/McrJoinDetailPanel.js",
 		"bin-debug/utility/VisibilityHelpers.js"
 	]
 }

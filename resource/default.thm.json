@@ -9,6 +9,7 @@
 		"resource/skins/login/LoginBackgroundPanel.exml",
 		"resource/skins/login/LoginPanel.exml",
 		"resource/skins/login/RegisterPanel.exml",
+		"resource/skins/multiCustomRoom/McrContinueDetailPanel.exml",
 		"resource/skins/multiCustomRoom/McrContinueWarListPanel.exml",
 		"resource/skins/multiCustomRoom/McrCreateAdvancedSettingsPage.exml",
 		"resource/skins/multiCustomRoom/McrCreateBasicSettingsPage.exml",
