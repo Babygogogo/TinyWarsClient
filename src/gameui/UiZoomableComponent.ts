@@ -27,8 +27,29 @@ namespace TinyWars.GameUi {
 
             this.addEventListener(egret.Event.RESIZE, this._onResize, this);
 
-            this._resetMask();
             this.addChild(this._contents);
+        }
+
+        public setMaskEnabled(enabled: boolean): void {
+            if (enabled) {
+                if (!this._maskForContents) {
+                    const mask  = new UiImage("c04_t06_s01_f01_png");
+                    mask.left   = 0;
+                    mask.right  = 0;
+                    mask.top    = 0;
+                    mask.bottom = 0;
+
+                    this._maskForContents = mask;
+                    this._contents.mask   = mask;
+                    this.addChildAt(mask, 0);
+                }
+            } else {
+                if (this._maskForContents) {
+                    this._contents.mask = undefined;
+                    this.removeChild(this._maskForContents);
+                    delete this._maskForContents;
+                }
+            }
         }
 
         public addContent(content: egret.DisplayObject): void {
@@ -262,20 +283,6 @@ namespace TinyWars.GameUi {
 
             this._reviseContentX();
             this._reviseContentY();
-        }
-
-        private _resetMask(): void {
-            if (!this._maskForContents) {
-                const mask  = new UiImage("c04_t06_s01_f01_png");
-                mask.left   = 0;
-                mask.right  = 0;
-                mask.top    = 0;
-                mask.bottom = 0;
-
-                this._maskForContents = mask;
-                this._contents.mask   = mask;
-                this.addChildAt(mask, 0);
-            }
         }
     }
 }

@@ -30,7 +30,7 @@ namespace TinyWars.Common {
             }
         }
 
-        public constructor() {
+        private constructor() {
             super();
 
             this.skinName = "resource/skins/common/HelpPanel.exml";
