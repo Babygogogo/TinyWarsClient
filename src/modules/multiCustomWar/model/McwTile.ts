@@ -1,13 +1,13 @@
 
 namespace TinyWars.MultiCustomWar {
-    import Types            = Utility.Types;
-    import Notify           = Utility.Notify;
-    import Helpers          = Utility.Helpers;
-    import Logger           = Utility.Logger;
-    // import Visibility       = Utility.VisibilityHelpers;
-    import SerializedMcTile = Types.SerializedMcwTile;
-    import TileType         = Types.TileType;
-    import TileObjectType   = Types.TileObjectType;
+    import Types                = Utility.Types;
+    import Notify               = Utility.Notify;
+    import Helpers              = Utility.Helpers;
+    import Logger               = Utility.Logger;
+    // import VisibilityHelpers    = Utility.VisibilityHelpers;
+    import SerializedMcTile     = Types.SerializedMcwTile;
+    import TileType             = Types.TileType;
+    import TileObjectType       = Types.TileObjectType;
 
     export class McwTile {
         private _configVersion  : number;
@@ -26,6 +26,7 @@ namespace TinyWars.MultiCustomWar {
         private _currentCapturePoint: number | undefined;
 
         private _war    : McwWar;
+        private _view   : McwTileView;
 
         public constructor() {
         }
@@ -48,11 +49,15 @@ namespace TinyWars.MultiCustomWar {
             this.setCurrentBuildPoint(  data.currentBuildPoint   != null ? data.currentBuildPoint   : this.getMaxBuildPoint());
             this.setCurrentCapturePoint(data.currentCapturePoint != null ? data.currentCapturePoint : this.getMaxCapturePoint());
 
+            this._view = this._view || new McwTileView();
+            this._view.init(this);
+
             return this;
         }
 
         public startRunning(war: McwWar): void {
             this._war = war;
+            this.getView().startRunning();
         }
 
         public serialize(): SerializedMcTile {
@@ -107,6 +112,10 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////
+        public getView(): McwTileView {
+            return this._view;
+        }
+
         private _setBaseViewId(id: number): void {
             this._baseViewId = id;
         }
@@ -420,6 +429,14 @@ namespace TinyWars.MultiCustomWar {
             } else {
                 return this.getVisionRange();
             }
+        }
+
+        public checkIsVisibleToLoggedInPlayer(): boolean {
+            return Utility.VisibilityHelpers.checkIsTileVisibleToPlayer(
+                this._war,
+                this.getGridIndex(),
+                this._war.getPlayerManager().getLoggedInPlayerIndex()
+            );
         }
     }
 }

@@ -3,7 +3,7 @@
         xmlns:w="http://ns.egret.com/wing">
     <GameUi:UiImage source="bg_jpg" horizontalCenter="0" verticalCenter="0" scaleX="1.5" scaleY="1.5" />
     <e:Group left="35" top="70" bottom="30" width="660">
-        <GameUi:UiImage source="c04_t01_s02_f01_png" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
+        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
                         alpha="0.8" left="0" right="0" top="0" bottom="0" />
         <GameUi:UiZoomableComponent id="_zoomMap" left="4" right="5" top="6" bottom="7" />
         <e:Group id="_groupInfo" y="10" touchThrough="true" touchEnabled="false" touchChildren="false" left="8"
@@ -30,7 +30,7 @@
         </e:Group>
     </e:Group>
     <e:Group top="70" bottom="30" width="200" x="725">
-        <GameUi:UiImage source="c04_t01_s02_f01_png" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
+        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
                         alpha="0.8" left="0" right="0" top="0" bottom="0" />
         <GameUi:UiLabel text="继续战斗" y="14" bold="true" size="25" x="50" textColor="0xffffff" />
         <GameUi:UiLabel id="_labelNoWar" text="暂无战局" bold="true" size="26" x="47" verticalCenter="0"
@@ -42,7 +42,7 @@
                         <GameUi:UiButton id="_btnChoose" label="" left="0" right="0" top="0" bottom="0">
                             <GameUi:skinName>
                                 <e:Skin states="up,down,disabled">
-                                    <e:Image source="transparent_png" left="0" right="0" top="0" bottom="0" />
+                                    <e:Image source="transparent" left="0" right="0" top="0" bottom="0" />
                                     <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="22"
                                              bold="true" textColor="0x000000" />
                                 </e:Skin>

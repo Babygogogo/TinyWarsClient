@@ -31,6 +31,8 @@ namespace TinyWars.MultiCustomWar {
         private _field          : McwField;
         private _turnManager    : McwTurnManager;
 
+        private _view   : McwWarView;
+
         public constructor() {
         }
 
@@ -57,6 +59,9 @@ namespace TinyWars.MultiCustomWar {
             this._setField(await new McwField().init(data.field, this._configVersion, this.getMapIndexKey()));
             this._setTurnManager(new McwTurnManager().init(data.turn));
 
+            this._view = this._view || new McwWarView();
+            this._view.init(this);
+
             return this;
         }
 
@@ -64,6 +69,13 @@ namespace TinyWars.MultiCustomWar {
             this.getTurnManager().startRunning(this);
             this.getPlayerManager().startRunning(this);
             this.getField().startRunning(this);
+
+            this.getView().startRunning();
+
+            return this;
+        }
+        public stopRunning(): McwWar {
+            this.getField().stopRunning();
 
             return this;
         }
@@ -128,6 +140,10 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        public getView(): McwWarView {
+            return this._view;
+        }
+
         public getWarId(): number {
             return this._warId;
         }

@@ -8,6 +8,7 @@ namespace TinyWars.MultiCustomWar {
         private _unitMap: McwUnitMap;
         private _tileMap: McwTileMap;
         private _fogMap : McwFogMap;
+        private _view   : McwFieldView;
 
         public constructor() {
         }
@@ -17,6 +18,9 @@ namespace TinyWars.MultiCustomWar {
             this._setTileMap(await new McwTileMap().init(configVersion, mapIndexKey, data.tileMap));
             this._setUnitMap(await new McwUnitMap().init(configVersion, mapIndexKey, data.unitMap));
 
+            this._view = this._view || new McwFieldView();
+            this._view.init(this);
+
             return this;
         }
 
@@ -24,6 +28,12 @@ namespace TinyWars.MultiCustomWar {
             this.getTileMap().startRunning(war);
             this.getUnitMap().startRunning(war);
             this.getFogMap().startRunning(war);
+
+            this.getView().startRunning();
+        }
+        public stopRunning(): void {
+            this.getTileMap().stopRunning();
+            this.getUnitMap().stopRunning();
         }
 
         public serialize(): SerializedMcField {
@@ -44,6 +54,10 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        public getView(): McwFieldView {
+            return this._view;
+        }
+
         private _setFogMap(map: McwFogMap): void {
             this._fogMap = map;
         }

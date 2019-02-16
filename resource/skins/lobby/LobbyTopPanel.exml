@@ -2,7 +2,7 @@
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
     <e:Group left="35" top="0" right="35" height="40">
-        <GameUi:UiImage source="c04_t01_s02_f01_png" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
+        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
                         alpha="0.8" left="0" right="0" top="0" bottom="0" />
         <GameUi:UiLabel id="_labelNickname" text="babygogogo" y="11" size="16" x="10" textColor="0xffffff" />
         <GameUi:UiLabel text="天梯分:-9999" y="11" size="16" x="108" textColor="0xffffff" />

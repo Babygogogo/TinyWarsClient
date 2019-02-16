@@ -3,7 +3,7 @@
         xmlns:w="http://ns.egret.com/wing">
     <e:Group width="320" height="190" horizontalCenter="0" verticalCenter="0">
         <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" left="0" right="0" top="0" bottom="0"
-                        source="c04_t01_s02_f01_png" scale9Grid="9,9,2,2" />
+                        source="c04_t01_s02_f01" scale9Grid="9,9,2,2" />
         <GameUi:UiLabel text="登陆" textColor="0xffffff" y="13" horizontalCenter="0" size="20" />
         <GameUi:UiButton id="_btnRegister" label="去注册&gt;&gt;" y="12" x="225">
             <GameUi:skinName>

@@ -14,6 +14,8 @@ namespace TinyWars.MultiCustomWar {
         private _mapSize    : MapSize;
         private _war        : McwWar;
 
+        private _view   : McwTileMapView;
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Initializers and serializers.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -21,9 +23,16 @@ namespace TinyWars.MultiCustomWar {
         }
 
         public async init(configVersion: number, mapIndexKey: Types.MapIndexKey, data?: SerializedMcTileMap): Promise<McwTileMap> {
-            return data
-                ? this._initWithSerializedData(configVersion, mapIndexKey, data)
-                : this._initWithoutSerializedData(configVersion, mapIndexKey);
+            if (data) {
+                await this._initWithSerializedData(configVersion, mapIndexKey, data)
+            } else {
+                await this._initWithoutSerializedData(configVersion, mapIndexKey);
+            }
+
+            this._view = this._view || new McwTileMapView();
+            this._view.init(this);
+
+            return this;
         }
         private async _initWithSerializedData(configVersion: number, mapIndexKey: Types.MapIndexKey, data: SerializedMcTileMap): Promise<McwTileMap> {
             const mapData                   = await WarMapModel.getMapData(mapIndexKey);
@@ -83,6 +92,11 @@ namespace TinyWars.MultiCustomWar {
         public startRunning(war: McwWar): void {
             this._war = war;
             this.forEachTile(tile => tile.startRunning(war));
+
+            this.getView().startRunning();
+        }
+        public stopRunning(): void {
+            this.getView().stopRunning();
         }
 
         public serialize(): SerializedMcTileMap | undefined {
@@ -115,6 +129,10 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other public functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        public getView(): McwTileMapView {
+            return this._view;
+        }
+
         public forEachTile(func: (mcTile: McwTile) => any): void {
             for (const column of this._map) {
                 for (const tile of column) {

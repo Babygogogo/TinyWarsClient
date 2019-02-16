@@ -3,9 +3,9 @@
         xmlns:w="http://ns.egret.com/wing">
     <GameUi:UiImage source="bg_jpg" horizontalCenter="0" verticalCenter="0" scaleX="1.5" scaleY="1.5" />
     <e:Group left="35" top="70" bottom="30" right="35">
-        <GameUi:UiImage source="c04_t01_s02_f01_png" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
+        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
                         alpha="0.8" left="0" top="0" bottom="0" width="660" />
-        <GameUi:UiImage source="c04_t01_s02_f01_png" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
+        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
                         alpha="0.8" right="0" top="0" bottom="0" width="200" />
         <GameUi:UiTab id="_tabSettings" left="4" top="6" bottom="7" width="882">
             <e:skinName>

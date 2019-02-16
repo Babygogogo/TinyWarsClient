@@ -80,6 +80,8 @@ namespace TinyWars.MultiCustomWar {
             this.forEachUnitOnMap(unit => unit.startRunning(war));
             this.forEachUnitLoaded(unit => unit.startRunning(war));
         }
+        public stopRunning(): void {
+        }
 
         public serialize(): Types.SerializedMcwUnitMap {
             const units: Types.SerializedMcwUnit[] = [];
