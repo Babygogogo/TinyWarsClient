@@ -103,12 +103,13 @@ namespace TinyWars.WarMap {
             }
 
             for (let y = 0; y < rowCount; ++y) {
-                const bottom = gridSize.height * (rowCount - y - 1);
+                const posY = gridSize.height * (y + 1);
                 for (let x = 0; x < colCount; ++x) {
                     const img = new UiImage();
-                    img.left   = gridSize.width * x;
-                    img.bottom = bottom;
-                    this._images[x][y] = img;
+                    img.addEventListener(eui.UIEvent.RESIZE, () => img.anchorOffsetY = img.height, img);
+                    img.x               = gridSize.width * x;
+                    img.y               = posY;
+                    this._images[x][y]  = img;
                     this.addChild(img);
                 }
             }
