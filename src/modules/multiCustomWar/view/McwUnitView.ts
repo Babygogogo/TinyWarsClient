@@ -63,10 +63,10 @@ namespace TinyWars.MultiCustomWar {
         }
         public updateUnitAnimationFrame(): void {
             if (this._animationType === UnitAnimationType.Stand) {
-                this._imgUnit.x         = -_GRID_SIZE / 4;
+                this._imgUnit.x         = 0;
                 this._imgUnit.source    = ConfigManager.getUnitIdleImageSource(this._unit.getViewId(), TimeModel.getUnitAnimationTickCount());
             } else {
-                this._imgUnit.x         = 0;
+                this._imgUnit.x         = -_GRID_SIZE.width / 4;
                 this._imgUnit.source    = ConfigManager.getUnitMovingImageSource(this._unit.getViewId(), TimeModel.getUnitAnimationTickCount());
             }
         }

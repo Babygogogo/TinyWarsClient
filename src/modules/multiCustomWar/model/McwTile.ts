@@ -57,6 +57,8 @@ namespace TinyWars.MultiCustomWar {
 
         public startRunning(war: McwWar): void {
             this._war = war;
+        }
+        public startRunningView(): void {
             this.getView().startRunning();
         }
 
@@ -265,6 +267,7 @@ namespace TinyWars.MultiCustomWar {
             }, this._configVersion);
 
             this.startRunning(this._war);
+            this.startRunningView();
         }
 
         public resetByPlayerIndex(playerIndex: number): void {
@@ -285,6 +288,7 @@ namespace TinyWars.MultiCustomWar {
             }
 
             this.startRunning(this._war);
+            this.startRunningView();
         }
 
         public destroyTileObject(): void {

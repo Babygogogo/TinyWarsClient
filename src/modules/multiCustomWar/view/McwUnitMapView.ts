@@ -4,6 +4,8 @@ namespace TinyWars.MultiCustomWar {
     import Types        = Utility.Types;
     import UnitCategory = Types.UnitCategory;
 
+    const _GRID_SIZE = ConfigManager.getGridSize();
+
     export class McwUnitMapView extends egret.DisplayObjectContainer {
         private _layerForNaval  = new egret.DisplayObjectContainer();
         private _layerForGround = new egret.DisplayObjectContainer();
@@ -28,6 +30,9 @@ namespace TinyWars.MultiCustomWar {
 
         public init(unitMap: McwUnitMap): void {
             this._unitMap = unitMap;
+
+            unitMap.forEachUnit(unit => this.addUnit(unit.getView(), false));
+            this._resetZOrderForAllLayers();
         }
 
         public startRunning(): void {
@@ -42,10 +47,14 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         public addUnit(view: McwUnitView, needResetZOrder: boolean): void {
             const model = view.getUnit();
+
+            view.x = _GRID_SIZE.width * model.getGridX();
+            view.y = _GRID_SIZE.height * model.getGridY();
+            (model.getLoaderUnitId() != null) && (view.visible = false);
+
             const layer = this._getLayerByUnitType(model.getType());
             layer.addChild(view);
             (needResetZOrder) && (this._resetZOrderForLayer(layer));
-            (model.getLoaderUnitId() != null) && (view.visible = false);
         }
 
         public resetZOrder(unitType: Types.UnitType): void {
@@ -74,6 +83,11 @@ namespace TinyWars.MultiCustomWar {
             for (let i = 0; i < viewsCount; ++i) {
                 layer.setChildIndex(views[i], i);
             }
+        }
+        private _resetZOrderForAllLayers(): void {
+            this._resetZOrderForLayer(this._layerForAir);
+            this._resetZOrderForLayer(this._layerForGround);
+            this._resetZOrderForLayer(this._layerForNaval);
         }
 
         private _updateAnimationsOnTick(layer: egret.DisplayObjectContainer): void {

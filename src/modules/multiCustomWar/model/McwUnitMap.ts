@@ -90,8 +90,11 @@ namespace TinyWars.MultiCustomWar {
             this._war = war;
             this.forEachUnitOnMap(unit => unit.startRunning(war));
             this.forEachUnitLoaded(unit => unit.startRunning(war));
-
+        }
+        public startRunningView(): void {
             this.getView().startRunning();
+            this.forEachUnitOnMap(unit => unit.startRunningView());
+            this.forEachUnitLoaded(unit => unit.startRunningView());
         }
         public stopRunning(): void {
             this.getView().stopRunning();

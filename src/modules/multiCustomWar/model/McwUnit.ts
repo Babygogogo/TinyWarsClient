@@ -84,7 +84,8 @@ namespace TinyWars.MultiCustomWar {
         public startRunning(war: McwWar): void {
             this._war = war;
             this._setTeamIndex(war.getPlayer(this.getPlayerIndex())!.getTeamIndex());
-
+        }
+        public startRunningView(): void {
             this.getView().startRunning();
         }
 

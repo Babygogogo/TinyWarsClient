@@ -92,8 +92,10 @@ namespace TinyWars.MultiCustomWar {
         public startRunning(war: McwWar): void {
             this._war = war;
             this.forEachTile(tile => tile.startRunning(war));
-
+        }
+        public startRunningView(): void {
             this.getView().startRunning();
+            this.forEachTile(tile => tile.startRunningView());
         }
         public stopRunning(): void {
             this.getView().stopRunning();

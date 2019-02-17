@@ -70,12 +70,17 @@ namespace TinyWars.MultiCustomWar {
             this.getPlayerManager().startRunning(this);
             this.getField().startRunning(this);
 
+            return this;
+        }
+        public startRunningView(): McwWar {
             this.getView().startRunning();
+            this.getField().startRunningView();
 
             return this;
         }
         public stopRunning(): McwWar {
             this.getField().stopRunning();
+            this.getView().stopRunning();
 
             return this;
         }

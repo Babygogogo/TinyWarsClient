@@ -6,6 +6,7 @@ namespace TinyWars.MultiCustomRoom {
     import Lang         = Utility.Lang;
     import FloatText    = Utility.FloatText;
     import Types        = Utility.Types;
+    import FlowManager  = Utility.FlowManager;
     import HelpPanel    = Common.HelpPanel;
     import BlockPanel   = Common.BlockPanel;
 
@@ -106,9 +107,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onNotifySMcrContinueWar(e: egret.Event): void {
-            BlockPanel.hide();
-            McrContinueDetailPanel.hide();
-            // TODO: enter the war.
+            FlowManager.gotoMultiCustomWar((e.data as ProtoTypes.IS_McrContinueWar).war as Types.SerializedMcwWar);
         }
         private _onNotifySMcrContinueWarFailed(e: egret.Event): void {
             BlockPanel.hide();

@@ -28,8 +28,11 @@ namespace TinyWars.MultiCustomWar {
             this.getTileMap().startRunning(war);
             this.getUnitMap().startRunning(war);
             this.getFogMap().startRunning(war);
-
+        }
+        public startRunningView(): void {
             this.getView().startRunning();
+            this.getTileMap().startRunningView();
+            this.getUnitMap().startRunningView();
         }
         public stopRunning(): void {
             this.getTileMap().stopRunning();

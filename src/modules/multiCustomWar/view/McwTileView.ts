@@ -10,8 +10,8 @@ namespace TinyWars.MultiCustomWar {
         private _imgObject  = new GameUi.UiImage;
 
         public constructor() {
-            this._imgBase.addEventListener(  eui.UIEvent.RESIZE, () => this._imgBase.anchorOffsetY   = this._imgBase.y,   this);
-            this._imgObject.addEventListener(eui.UIEvent.RESIZE, () => this._imgObject.anchorOffsetY = this._imgObject.y, this);
+            this._imgBase.addEventListener(  eui.UIEvent.RESIZE, () => this._imgBase.anchorOffsetY   = this._imgBase.height,   this);
+            this._imgObject.addEventListener(eui.UIEvent.RESIZE, () => this._imgObject.anchorOffsetY = this._imgObject.height, this);
         }
 
         public init(tile: McwTile): void {
@@ -21,7 +21,7 @@ namespace TinyWars.MultiCustomWar {
         }
 
         public startRunning(): void {
-            this.setHasFog(this._tile.checkIsVisibleToLoggedInPlayer());
+            this.setHasFog(!this._tile.checkIsVisibleToLoggedInPlayer());
         }
 
         public setHasFog(hasFog: boolean): void {

@@ -8,10 +8,10 @@ namespace TinyWars.Utility {
         export const DESIGN_MAX_HEIGHT    = DESIGN_WIDTH;
         export const RATIO_FOR_MIN_HEIGHT = DESIGN_WIDTH / DESIGN_MIN_HEIGHT;
 
-        let   stage : egret.Stage;
-        let   mouseX: number;
-        let   mouseY: number;
-        const layers: { [layerType: number]: UiLayer } = {};
+        let   stage     : egret.Stage;
+        let   mouseX    : number;
+        let   mouseY    : number;
+        const _LAYERS   = new Map<LayerType, UiLayer>();
 
         export function init(stg: egret.Stage): void {
             stage = stg;
@@ -49,19 +49,19 @@ namespace TinyWars.Utility {
         }
 
         export function getLayer(layer: LayerType): UiLayer {
-            return layers[layer];
+            return _LAYERS.get(layer);
         }
 
         export function closeAllPanels(): void {
-            for (const t in layers) {
-                layers[t].closeAllPanels();
+            for (const [, layer] of _LAYERS) {
+                layer.closeAllPanels();
             }
         }
 
         function _addLayer(layerType: LayerType): void {
-            egret.assert(!layers[layerType], "LayerManager.addLayer() duplicated layer: " + layerType);
-            layers[layerType] = new UiLayer();
-            StageManager.getStage().addChild(layers[layerType]);
+            egret.assert(!_LAYERS.has(layerType), "LayerManager.addLayer() duplicated layer: " + layerType);
+            _LAYERS.set(layerType, new UiLayer());
+            StageManager.getStage().addChild(_LAYERS.get(layerType));
         }
 
         function _onMouseMove(e: egret.TouchEvent): void {

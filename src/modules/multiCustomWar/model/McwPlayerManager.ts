@@ -30,7 +30,9 @@ namespace TinyWars.MultiCustomWar {
 
         public startRunning(war: McwWar): void {
             this._war = war;
-            Logger.error("McPlayerManager.startRunning() TODO!!");
+            for (const [, player] of this._players) {
+                player.startRunning(war);
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////

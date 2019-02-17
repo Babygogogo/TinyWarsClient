@@ -42,6 +42,16 @@ namespace TinyWars.Utility.FlowManager {
         Lobby.LobbyPanel.show();
         Lobby.LobbyTopPanel.show();
     }
+    export async function gotoMultiCustomWar(data: Types.SerializedMcwWar): Promise<void> {
+        const war = await new MultiCustomWar.McwWar().init(data);
+        war.startRunning().startRunningView();
+        StageManager.closeAllPanels();
+        MultiCustomWar.McwBackgroundView.show();
+
+        const layer = StageManager.getLayer(Types.LayerType.Scene);
+        layer.removeChildren();
+        layer.addChild(war.getView());
+    }
 
     function _onNetSServerDisconnect(e: egret.Event): void {
         const data = e.data as ProtoTypes.IS_ServerDisconnect;
