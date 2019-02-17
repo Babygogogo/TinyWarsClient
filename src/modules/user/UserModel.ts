@@ -16,10 +16,9 @@ namespace TinyWars.User {
 
         export function init(): void {
             Notify.addEventListeners([
-                { type: Notify.Type.SLogout,             callback: _onNotifySLogout,             thisObject: UserModel },
-                { type: Notify.Type.NetworkConnected,    callback: _onNotifyNetworkConnected,    thisObject: UserModel },
-                { type: Notify.Type.NetworkDisconnected, callback: _onNotifyNetworkDisconnected, thisObject: UserModel },
-            ]);
+                { type: Notify.Type.SLogout,             callback: _onNotifySLogout, },
+                { type: Notify.Type.NetworkDisconnected, callback: _onNotifyNetworkDisconnected, },
+            ], UserModel);
         }
 
         export function updateOnLogin(data: ProtoTypes.IS_Login): void {
@@ -33,23 +32,23 @@ namespace TinyWars.User {
             LocalStorage.setAccount(data.account);
         }
 
+        export function checkIsLoggedIn(): boolean {
+            return _isLoggedIn;
+        }
         export function getUserId(): number {
             return _userId;
         }
         export function getUserPrivilege(): number {
             return _userPrivilege;
         }
+        export function getUserAccount(): string {
+            return _userAccount;
+        }
+        export function getUserPassword(): string {
+            return _userPassword;
+        }
         export function getUserNickname(): string {
             return _userNickname;
-        }
-        export function checkIsLoggedIn(): boolean {
-            return _isLoggedIn;
-        }
-
-        function _onNotifyNetworkConnected(e: egret.Event): void {
-            if ((!_isLoggedIn) && (_userAccount != null) && (_userPassword != null)) {
-                Login.LoginProxy.reqLogin(_userAccount, _userPassword);
-            }
         }
 
         function _onNotifyNetworkDisconnected(e: egret.Event): void {

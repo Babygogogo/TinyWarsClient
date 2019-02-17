@@ -121,7 +121,7 @@ namespace TinyWars.MultiCustomWar {
                 warPassword             : this.getWarPassword(),
                 warComment              : this.getWarComment(),
                 configVersion           : this.getConfigVersion(),
-                executedActions         : this._executedActions,
+                executedActions         : [],
                 remainingVotesForDraw   : this.getRemainingVotesForDraw(),
                 timeLimit               : this.getSettingsTimeLimit(),
                 hasFogByDefault         : this.getSettingsHasFog(),

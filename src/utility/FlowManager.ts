@@ -1,13 +1,18 @@
 
 namespace TinyWars.Utility.FlowManager {
+    import UserModel = User.UserModel;
+
     const _NET_EVENTS = [
         { actionCode: Network.Codes.S_ServerDisconnect,   callback: _onNetSServerDisconnect },
     ];
     const _NOTIFY_EVENTS = [
-        { type: Notify.Type.ConfigLoaded,   callback: _onNotifyConfigLoaded },
-        { type: Notify.Type.SLogin,         callback: _onNotifySLogin },
-        { type: Notify.Type.SLogout,        callback: _onNotifySLogout },
+        { type: Notify.Type.NetworkConnected,   callback: _onNotifyNetworkConnected, },
+        { type: Notify.Type.ConfigLoaded,       callback: _onNotifyConfigLoaded },
+        { type: Notify.Type.SLogin,             callback: _onNotifySLogin },
+        { type: Notify.Type.SLogout,            callback: _onNotifySLogout },
     ];
+
+    let _hasOnceWentToLobby = false;
 
     export async function startGame(stage: egret.Stage): Promise<void> {
         Network.Manager.addListeners(_NET_EVENTS, FlowManager);
@@ -38,6 +43,7 @@ namespace TinyWars.Utility.FlowManager {
         Login.LoginPanel.show();
     }
     export function gotoLobby(): void {
+        _hasOnceWentToLobby = true;
         StageManager.closeAllPanels();
         Lobby.LobbyPanel.show();
         Lobby.LobbyTopPanel.show();
@@ -53,6 +59,17 @@ namespace TinyWars.Utility.FlowManager {
         layer.addChild(war.getView());
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Callbacks.
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    function _onNotifyNetworkConnected(e: egret.Event): void {
+        const account   = UserModel.getUserAccount();
+        const password  = UserModel.getUserPassword();
+        if ((!UserModel.checkIsLoggedIn()) && (account != null) && (password != null)) {
+            Login.LoginProxy.reqLogin(account, password);
+        }
+    }
+
     function _onNetSServerDisconnect(e: egret.Event): void {
         const data = e.data as ProtoTypes.IS_ServerDisconnect;
         Common.AlertPanel.show({
@@ -60,18 +77,25 @@ namespace TinyWars.Utility.FlowManager {
             content : Lang.getText(Lang.BigType.B00, Lang.SubType.S20),
         });
     }
+
     function _onNotifyConfigLoaded(e: egret.Event): void {
         (_checkCanFirstGoToLobby()) && (gotoLobby());
     }
+
     function _onNotifySLogin(e: egret.Event): void {
         (_checkCanFirstGoToLobby()) && (gotoLobby());
     }
+
     function _onNotifySLogout(e: egret.Event): void {
         gotoLogin();
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Other private functions.
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
     function _checkCanFirstGoToLobby(): boolean {
-        return (User.UserModel.checkIsLoggedIn())
+        return (!_hasOnceWentToLobby)
+            && (User.UserModel.checkIsLoggedIn())
             && (ResManager.checkIsLoadedMainResource())
             && (ConfigManager.checkIsConfigLoaded(ConfigManager.getNewestConfigVersion()))
     }
