@@ -37,7 +37,8 @@ namespace TinyWars.MultiCustomWar {
         private _loaderUnitId               : number   | undefined;
         private _primaryWeaponCurrentAmmo   : number   | undefined;
 
-        private _war: McwWar;
+        private _war    : McwWar;
+        private _view   : McwUnitView;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Initializers and serializers.
@@ -74,13 +75,17 @@ namespace TinyWars.MultiCustomWar {
             this.setCurrentBuildMaterial(    data.currentBuildMaterial     != null ? data.currentBuildMaterial     : this.getMaxBuildMaterial());
             this.setLoaderUnitId(            data.loaderUnitId             != null ? data.loaderUnitId             : undefined);
 
+            this._view = this._view || new McwUnitView();
+            this._view.init(this);
+
             return this;
         }
 
         public startRunning(war: McwWar): void {
-            Logger.error("McUnit.startRunning() TODO!!");
             this._war = war;
             this._setTeamIndex(war.getPlayer(this.getPlayerIndex())!.getTeamIndex());
+
+            this.getView().startRunning();
         }
 
         public serialize(): SerializedMcUnit {
@@ -130,6 +135,10 @@ namespace TinyWars.MultiCustomWar {
             return data;
         }
 
+        public getWar(): McwWar | undefined {
+            return this._war;
+        }
+
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////
@@ -138,6 +147,10 @@ namespace TinyWars.MultiCustomWar {
         }
         public getViewId(): number {
             return this._viewId;
+        }
+
+        public getView(): McwUnitView {
+            return this._view;
         }
 
         ////////////////////////////////////////////////////////////////////////////////

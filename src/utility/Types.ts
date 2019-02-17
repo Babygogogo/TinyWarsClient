@@ -329,6 +329,11 @@ namespace TinyWars.Utility.Types {
         Idle,   /* 0 */         Actioned,   /* 1 */
     }
 
+    export const enum UnitAnimationType {
+        Stand,
+        Move,
+    }
+
     export const enum WeaponType {
         Primary     = 0,
         Secondary   = 1,

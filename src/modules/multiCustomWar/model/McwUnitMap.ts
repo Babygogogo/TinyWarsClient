@@ -9,10 +9,13 @@ namespace TinyWars.MultiCustomWar {
 
     export class McwUnitMap {
         private _war            : McwWar;
+        private _configVersion  : number;
         private _nextUnitId     : number;
         private _map            : (McwUnit | undefined)[][];
         private _mapSize        : Types.MapSize;
         private _loadedUnits    : Map<number, McwUnit>;
+
+        private _view   : McwUnitMapView;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Initializers and serializers.
@@ -20,10 +23,18 @@ namespace TinyWars.MultiCustomWar {
         public constructor() {
         }
 
-        public init(configVersion: number, mapIndexKey: Types.MapIndexKey, data?: Types.SerializedMcwUnitMap): Promise<McwUnitMap> {
-            return data
-                ? this._initWithSerializedData(configVersion, mapIndexKey, data)
-                : this._initWithoutSerializedData(configVersion, mapIndexKey);
+        public async init(configVersion: number, mapIndexKey: Types.MapIndexKey, data?: Types.SerializedMcwUnitMap): Promise<McwUnitMap> {
+            this._configVersion = configVersion;
+            if (data) {
+                await this._initWithSerializedData(configVersion, mapIndexKey, data)
+            } else {
+                await this._initWithoutSerializedData(configVersion, mapIndexKey);
+            }
+
+            this._view = this._view || new McwUnitMapView();
+            this._view.init(this);
+
+            return this;
         }
         private async _initWithSerializedData(configVersion: number, mapIndexKey: Types.MapIndexKey, data: Types.SerializedMcwUnitMap): Promise<McwUnitMap> {
             const { mapWidth, mapHeight }   = await MapModel.getMapData(mapIndexKey);
@@ -79,8 +90,11 @@ namespace TinyWars.MultiCustomWar {
             this._war = war;
             this.forEachUnitOnMap(unit => unit.startRunning(war));
             this.forEachUnitLoaded(unit => unit.startRunning(war));
+
+            this.getView().startRunning();
         }
         public stopRunning(): void {
+            this.getView().stopRunning();
         }
 
         public serialize(): Types.SerializedMcwUnitMap {
@@ -116,12 +130,20 @@ namespace TinyWars.MultiCustomWar {
             return {
                 units       : units.length ? units : undefined,
                 nextUnitId  : this.getNextUnitId(),
-            }
+            };
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other public functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        public getView(): McwUnitMapView {
+            return this._view;
+        }
+
+        public getConfigVersion(): number {
+            return this._configVersion;
+        }
+
         private _setMapSize(width: number, height: number): void {
             this._mapSize = { width: width, height: height };
         }

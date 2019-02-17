@@ -10,7 +10,7 @@ namespace TinyWars.MultiCustomWar {
         private _tileMap    : McwTileMap;
 
         private _notifyListeners = [
-            { type: Notify.Type.TileAnimationTick, callback: this._onNotifyTileAnimationTick }
+            { type: Notify.Type.TileAnimationTick, callback: this._onNotifyTileAnimationTick },
         ];
 
         public constructor() {
@@ -49,7 +49,6 @@ namespace TinyWars.MultiCustomWar {
         public startRunning(): void {
             Notify.addEventListeners(this._notifyListeners, this);
         }
-
         public stopRunning(): void {
             Notify.removeEventListeners(this._notifyListeners, this);
         }
