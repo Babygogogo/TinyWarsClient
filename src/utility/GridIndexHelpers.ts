@@ -106,10 +106,13 @@ namespace TinyWars.Utility.GridIndexHelpers {
 
         for (let distance = minDistance; distance <= maxDistance; ++distance) {
             for (const offsetItem of _ADJACENT_OFFSETS) {
-                const gridIndex = add(origin, sub(scale(offsetItem.offset, distance), offsetItem.clockwiseOffset));
-                if ((checkIsInsideMap(gridIndex, mapSize)) &&
-                    ((!predicate) || (predicate(gridIndex)))) {
-                    grids.push(gridIndex);
+                let gridIndex = add(origin, sub(scale(offsetItem.offset, distance), offsetItem.clockwiseOffset));
+                for (let i = 1; i <= distance; ++i) {
+                    gridIndex = add(gridIndex, offsetItem.clockwiseOffset);
+                    if ((checkIsInsideMap(gridIndex, mapSize)) &&
+                        ((!predicate) || (predicate(gridIndex)))) {
+                        grids.push(gridIndex);
+                    }
                 }
             }
         }

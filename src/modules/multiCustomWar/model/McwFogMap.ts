@@ -47,6 +47,11 @@ namespace TinyWars.MultiCustomWar {
 
         public startRunning(war: McwWar): void {
             this._war = war;
+
+            for (const [playerIndex, ] of this._mapsFromTiles) {
+                this.resetMapFromTilesForPlayer(playerIndex);
+                this.resetMapFromUnitsForPlayer(playerIndex);
+            }
         }
 
         public serialize(): SerializedMcFogMap {
