@@ -94,8 +94,8 @@ namespace TinyWars.MultiCustomWar {
             const viewsCount = layer.numChildren;
             for (let i = 0; i < viewsCount; ++i) {
                 const view = layer.getChildAt(i) as McwUnitView;
-                view.updateStateAnimationFrame();
-                view.updateUnitAnimationFrame();
+                view.tickStateAnimationFrame();
+                view.tickUnitAnimationFrame();
             }
         }
 

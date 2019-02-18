@@ -931,7 +931,7 @@ namespace TinyWars.ConfigManager {
         [104, { unitType: UnitType.Gunboat, playerIndex: 4 }],
     ]);
 
-    const UNIT_IDLE_IMAGE_SOURCES = new Map<number, string[]>([
+    const _UNIT_IDLE_NORMAL_IMAGE_SOURCES = new Map<number, string[]>([
         ////////// infantry //////////
         [  1, ["c03_t01_s01_f01", "c03_t01_s01_f01", "c03_t01_s01_f02", "c03_t01_s01_f02", "c03_t01_s01_f03", "c03_t01_s01_f03", "c03_t01_s01_f04", "c03_t01_s01_f04",]],
         [  2, ["c03_t01_s02_f01", "c03_t01_s02_f01", "c03_t01_s02_f02", "c03_t01_s02_f02", "c03_t01_s02_f03", "c03_t01_s02_f03", "c03_t01_s02_f04", "c03_t01_s02_f04",]],
@@ -1089,7 +1089,16 @@ namespace TinyWars.ConfigManager {
         [104, ["c03_t26_s04_f01", "c03_t26_s04_f01", "c03_t26_s04_f02", "c03_t26_s04_f02", "c03_t26_s04_f03", "c03_t26_s04_f03", "c03_t26_s04_f04", "c03_t26_s04_f04",]],
     ]);
 
-    const UNIT_MOVING_IMAGE_SOURCES = new Map<number,string[]>([
+    const _UNIT_IDLE_DARK_IMAGE_SOURCES = new Map<number, string[]>();
+    for (const [viewId, rawSources] of _UNIT_IDLE_NORMAL_IMAGE_SOURCES) {
+        const sources = rawSources.concat();
+        for (let i = 0; i < sources.length; ++i) {
+            sources[i] = sources[i].replace("c03", "c07");
+        }
+        _UNIT_IDLE_DARK_IMAGE_SOURCES.set(viewId, sources);
+    }
+
+    const _UNIT_MOVING_NORMAL_IMAGE_SOURCES = new Map<number, string[]>([
         ////////// infantry //////////
         [  1, ["c03_t01_s01_f11", "c03_t01_s01_f12", "c03_t01_s01_f13", "c03_t01_s01_f14",]],
         [  2, ["c03_t01_s02_f11", "c03_t01_s02_f12", "c03_t01_s02_f13", "c03_t01_s02_f14",]],
@@ -1246,6 +1255,15 @@ namespace TinyWars.ConfigManager {
         [103, ["c03_t26_s03_f11", "c03_t26_s03_f12", "c03_t26_s03_f13",]],
         [104, ["c03_t26_s04_f11", "c03_t26_s04_f12", "c03_t26_s04_f13",]],
     ]);
+
+    const _UNIT_MOVING_DARK_IMAGE_SOURCES = new Map<number, string[]>();
+    for (const [viewId, rawSources] of _UNIT_MOVING_NORMAL_IMAGE_SOURCES) {
+        const sources = rawSources.concat();
+        for (let i = 0; i < sources.length; ++i) {
+            sources[i] = sources[i].replace("c03", "c07");
+        }
+        _UNIT_MOVING_DARK_IMAGE_SOURCES.set(viewId, sources);
+    }
 
     ////////////////////////////////////////////////////////////////////////////////
     // Initializers.
@@ -1545,13 +1563,17 @@ namespace TinyWars.ConfigManager {
         return sources[tickCount % sources.length];
     }
 
-    export function getUnitIdleImageSource(viewId: number, tickCount: number): string {
-        const sources = UNIT_IDLE_IMAGE_SOURCES.get(viewId);
+    export function getUnitIdleImageSource(viewId: number, tickCount: number, isDark: boolean): string {
+        const sources = isDark
+            ? _UNIT_IDLE_DARK_IMAGE_SOURCES.get(viewId)
+            : _UNIT_IDLE_NORMAL_IMAGE_SOURCES.get(viewId);
         return sources[tickCount % sources.length];
     }
 
-    export function getUnitMovingImageSource(viewId: number, tickCount: number): string {
-        const sources = UNIT_MOVING_IMAGE_SOURCES.get(viewId);
+    export function getUnitMovingImageSource(viewId: number, tickCount: number, isDark: boolean): string {
+        const sources = isDark
+            ? _UNIT_MOVING_DARK_IMAGE_SOURCES.get(viewId)
+            : _UNIT_MOVING_NORMAL_IMAGE_SOURCES.get(viewId);
         return sources[tickCount % sources.length];
     }
 }

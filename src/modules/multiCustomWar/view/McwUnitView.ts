@@ -13,8 +13,9 @@ namespace TinyWars.MultiCustomWar {
         private _imgState   = new GameUi.UiImage();
         private _imgUnit    = new GameUi.UiImage();
 
-        private _animationType              = UnitAnimationType.Stand;
         private _unit                       : McwUnit;
+        private _animationType              = UnitAnimationType.Stand;
+        private _isDark                     = false;
         private _framesForStateAnimation    = [] as string[];
 
         public constructor() {
@@ -36,38 +37,34 @@ namespace TinyWars.MultiCustomWar {
 
         public init(unit: McwUnit): void {
             this._unit = unit;
-
-            this.showUnitAnimation(UnitAnimationType.Stand);
-            this.updateColor();
-            this.updateImageHp();
         }
 
         public startRunning(): void {
-            this.resetStateAnimationFrames();
+            this.resetAllViews();
         }
 
         public getUnit(): McwUnit {
             return this._unit;
         }
 
-        public updateColor(): void {
-            const color = this._unit.getState() === Types.UnitState.Idle ? Types.ColorType.Origin : Types.ColorType.Dark;
-            Helpers.changeColor(this._imgHp, color);
-            Helpers.changeColor(this._imgState, color);
-            Helpers.changeColor(this._imgUnit, color);
+        public resetAllViews(): void {
+            this._isDark = this._unit.getState() === Types.UnitState.Actioned;
+            this.resetStateAnimationFrames();
+            this.showUnitAnimation(UnitAnimationType.Stand);
+            this.updateImageHp();
         }
 
         public showUnitAnimation(type: UnitAnimationType): void {
             this._animationType = type;
-            this.updateUnitAnimationFrame();
+            this.tickUnitAnimationFrame();
         }
-        public updateUnitAnimationFrame(): void {
+        public tickUnitAnimationFrame(): void {
             if (this._animationType === UnitAnimationType.Stand) {
                 this._imgUnit.x         = 0;
-                this._imgUnit.source    = ConfigManager.getUnitIdleImageSource(this._unit.getViewId(), TimeModel.getUnitAnimationTickCount());
+                this._imgUnit.source    = ConfigManager.getUnitIdleImageSource(this._unit.getViewId(), TimeModel.getUnitAnimationTickCount(), this._isDark);
             } else {
                 this._imgUnit.x         = -_GRID_SIZE.width / 4;
-                this._imgUnit.source    = ConfigManager.getUnitMovingImageSource(this._unit.getViewId(), TimeModel.getUnitAnimationTickCount());
+                this._imgUnit.source    = ConfigManager.getUnitMovingImageSource(this._unit.getViewId(), TimeModel.getUnitAnimationTickCount(), this._isDark);
             }
         }
 
@@ -77,7 +74,9 @@ namespace TinyWars.MultiCustomWar {
                 this._imgHp.visible = false;
             } else {
                 this._imgHp.visible = true;
-                this._imgHp.source  = `c02_t99_s01_f${Helpers.getNumText(normalizedHp)}`;
+                this._imgHp.source  = this._isDark
+                    ? `c07_t99_s01_f${Helpers.getNumText(normalizedHp)}`
+                    : `c03_t99_s01_f${Helpers.getNumText(normalizedHp)}`;
             }
         }
 
@@ -93,8 +92,10 @@ namespace TinyWars.MultiCustomWar {
             this._addFrameForBuild();
             this._addFrameForLoader();
             this._addFrameForMaterial();
+
+            this.tickStateAnimationFrame();
         }
-        public updateStateAnimationFrame(): void {
+        public tickStateAnimationFrame(): void {
             const framesCount       = this._framesForStateAnimation.length;
             this._imgState.source   = framesCount <= 0
                 ? undefined

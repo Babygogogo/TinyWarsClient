@@ -46,9 +46,9 @@ namespace TinyWars.WarMap {
         public updateOnAnimationTick(tickCount: number): void {
             if (this._data) {
                 if (this._state === Types.UnitState.Idle) {
-                    this._unitImage.source = ConfigManager.getUnitIdleImageSource(this._data.viewId, tickCount);
+                    this._unitImage.source = ConfigManager.getUnitIdleImageSource(this._data.viewId, tickCount, false);
                 } else {
-                    this._unitImage.source = ConfigManager.getUnitMovingImageSource(this._data.viewId, tickCount);
+                    this._unitImage.source = ConfigManager.getUnitMovingImageSource(this._data.viewId, tickCount, false);
                 }
             }
         }
