@@ -8,6 +8,7 @@ namespace TinyWars.MultiCustomWar {
         private _tile       : McwTile;
         private _imgBase    = new GameUi.UiImage;
         private _imgObject  = new GameUi.UiImage;
+        private _hasFog     = false;
 
         public constructor() {
             this._imgBase.addEventListener(  eui.UIEvent.RESIZE, () => this._imgBase.anchorOffsetY   = this._imgBase.height,   this);
@@ -25,9 +26,8 @@ namespace TinyWars.MultiCustomWar {
         }
 
         public setHasFog(hasFog: boolean): void {
-            const color = hasFog ? Types.ColorType.Dark : Types.ColorType.Origin;
-            Helpers.changeColor(this._imgBase, color);
-            Helpers.changeColor(this._imgObject, color);
+            this._hasFog = hasFog;
+            this.updateImages();
         }
 
         public getImgObject(): GameUi.UiImage {
@@ -38,14 +38,24 @@ namespace TinyWars.MultiCustomWar {
         }
 
         public updateImages(): void {
-            const tile              = this._tile;
-            const tickCount         = TimeModel.getTileAnimationTickCount();
+            const tile      = this._tile;
+            const tickCount = TimeModel.getTileAnimationTickCount();
 
-            const objectId          = tile.getObjectViewId();
-            this._imgObject.source  = objectId == null ? "" : ConfigManager.getTileObjectImageSource(objectId, tickCount);
+            const objectId = tile.getObjectViewId();
+            if (objectId == null) {
+                this._imgObject.visible = false;
+            } else {
+                this._imgObject.visible = true;
+                this._imgObject.source  = ConfigManager.getTileObjectImageSource(objectId, tickCount, this._hasFog);
+            }
 
-            const baseId            = tile.getBaseViewId();
-            this._imgBase.source    = baseId == null ? "" : ConfigManager.getTileBaseImageSource(baseId, tickCount);
+            const baseId = tile.getBaseViewId();
+            if (baseId == null) {
+                this._imgBase.visible = false;
+            } else {
+                this._imgBase.visible = true;
+                this._imgBase.source  = ConfigManager.getTileBaseImageSource(baseId, tickCount, this._hasFog);
+            }
         }
     }
 }

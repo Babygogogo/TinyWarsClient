@@ -162,7 +162,7 @@ namespace TinyWars.WarMap {
         protected _getImageSource(id: number, tickCount: number): string {
             return id == null
                 ? undefined
-                : ConfigManager.getTileBaseImageSource(id, tickCount);
+                : ConfigManager.getTileBaseImageSource(id, tickCount, false);
         }
     }
 
@@ -170,7 +170,7 @@ namespace TinyWars.WarMap {
         protected _getImageSource(id: number, tickCount: number): string {
             return id == null
             ? undefined
-            : ConfigManager.getTileObjectImageSource(id, tickCount);
+            : ConfigManager.getTileObjectImageSource(id, tickCount, false);
         }
     }
 }

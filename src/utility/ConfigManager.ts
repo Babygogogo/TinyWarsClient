@@ -209,7 +209,7 @@ namespace TinyWars.ConfigManager {
         [TileType.Wood,             TileObjectType.Wood],
     ]);
 
-    const _TILE_BASE_IMAGE_SOURCES = new Map<number, string[]>([
+    const _TILE_BASE_NORMAL_IMAGE_SOURCES = new Map<number, string[]>([
         ////////// plain * 1 //////////
         [  1, ["c01_t01_s01_f01",]],
 
@@ -319,7 +319,16 @@ namespace TinyWars.ConfigManager {
         [100, ["c01_t04_s36_f01", "c01_t04_s36_f02", "c01_t04_s36_f03", "c01_t04_s36_f04", "c01_t04_s36_f03", "c01_t04_s36_f02",]],
     ]);
 
-    const _TILE_OBJECT_IMAGE_SOURCES = new Map<number, string[]>([
+    const _TILE_BASE_FOG_IMAGE_SOURCES = new Map<number, string[]>();
+    for (const [viewId, rawSources] of _TILE_BASE_NORMAL_IMAGE_SOURCES) {
+        const sources = rawSources.concat();
+        for (let i = 0; i < sources.length; ++i) {
+            sources[i] = sources[i].replace("c01", "c05");
+        }
+        _TILE_BASE_FOG_IMAGE_SOURCES.set(viewId, sources);
+    }
+
+    const _TILE_OBJECT_NORMAL_IMAGE_SOURCES = new Map<number, string[]>([
         [  0, []],
 
         ////////// road * 11 //////////
@@ -479,6 +488,15 @@ namespace TinyWars.ConfigManager {
         [108, ["c02_t024_s15_f01", "c02_t024_s15_f02", "c02_t024_s15_f03",]],
         [109, ["c02_t024_s16_f01", "c02_t024_s16_f02", "c02_t024_s16_f03",]],
     ]);
+
+    const _TILE_OBJECT_FOG_IMAGE_SOURCES = new Map<number, string[]>();
+    for (const [viewId, rawSources] of _TILE_OBJECT_NORMAL_IMAGE_SOURCES) {
+        const sources = rawSources.concat();
+        for (let i = 0; i < sources.length; ++i) {
+            sources[i] = sources[i].replace("c02", "c06");
+        }
+        _TILE_OBJECT_FOG_IMAGE_SOURCES.set(viewId, sources);
+    }
 
     const _TILE_BASE_TYPES = new Map<number, TileBaseType>([
         ////////// empty: 0 (1 total) //////////
@@ -1513,13 +1531,17 @@ namespace TinyWars.ConfigManager {
         return mapping ? mapping.get(playerIndex) : undefined;
     }
 
-    export function getTileBaseImageSource(tileBaseViewId: number, tickCount: number): string {
-        const sources = _TILE_BASE_IMAGE_SOURCES.get(tileBaseViewId)!;
+    export function getTileBaseImageSource(tileBaseViewId: number, tickCount: number, hasFog: boolean): string {
+        const sources = hasFog
+            ? _TILE_BASE_FOG_IMAGE_SOURCES.get(tileBaseViewId)!
+            : _TILE_BASE_NORMAL_IMAGE_SOURCES.get(tileBaseViewId)!;
         return sources[tickCount % sources.length];
     }
 
-    export function getTileObjectImageSource(tileObjectViewId: number, tickCount: number): string {
-        const sources = _TILE_OBJECT_IMAGE_SOURCES.get(tileObjectViewId)!;
+    export function getTileObjectImageSource(tileObjectViewId: number, tickCount: number, hasFog: boolean): string {
+        const sources = hasFog
+            ? _TILE_OBJECT_FOG_IMAGE_SOURCES.get(tileObjectViewId)!
+            : _TILE_OBJECT_NORMAL_IMAGE_SOURCES.get(tileObjectViewId)!;
         return sources[tickCount % sources.length];
     }
 
