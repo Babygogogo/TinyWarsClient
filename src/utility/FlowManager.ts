@@ -38,26 +38,24 @@ namespace TinyWars.Utility.FlowManager {
     }
 
     export function gotoLogin(): void {
+        McwWarManager.unloadWar();
         StageManager.closeAllPanels();
         Login.LoginBackgroundPanel.show();
         Login.LoginPanel.show();
     }
     export function gotoLobby(): void {
         _hasOnceWentToLobby = true;
+        McwWarManager.unloadWar();
         StageManager.closeAllPanels();
         Lobby.LobbyPanel.show();
         Lobby.LobbyTopPanel.show();
     }
     export async function gotoMultiCustomWar(data: Types.SerializedMcwWar): Promise<void> {
-        const war = await new MultiCustomWar.McwWar().init(data);
-        war.startRunning().startRunningView();
+        await McwWarManager.loadWar(data);
         StageManager.closeAllPanels();
         MultiCustomWar.McwBackgroundPanel.show();
         MultiCustomWar.McwTopPanel.show();
-
-        const layer = StageManager.getLayer(Types.LayerType.Scene);
-        layer.removeChildren();
-        layer.addChild(war.getView());
+        MultiCustomWar.McwWarPanel.show();
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

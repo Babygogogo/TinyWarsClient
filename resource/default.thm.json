@@ -24,6 +24,7 @@
 		"resource/skins/multiCustomRoom/McrJoinPasswordPanel.exml",
 		"resource/skins/multiCustomWar/McwBackgroundPanel.exml",
 		"resource/skins/multiCustomWar/McwTopPanel.exml",
+		"resource/skins/multiCustomWar/McwWarPanel.exml",
 		"resource/skins/utility/LoadingUiPanel.exml",
 		"resource/skins/warMap/WarMapSearchPanel.exml"
 	],
