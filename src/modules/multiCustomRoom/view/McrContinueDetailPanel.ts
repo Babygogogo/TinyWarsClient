@@ -190,7 +190,7 @@ namespace TinyWars.MultiCustomRoom {
             const data = this.data as DataForPlayerRenderer;
             if (data.defeatTimestamp != null) {
                 const leftTime = data.defeatTimestamp - Time.TimeModel.getServerTimestamp();
-                this._labelIndex.text       = Helpers.getColorText(data.playerIndex);
+                this._labelIndex.text       = Helpers.getColorTextForPlayerIndex(data.playerIndex);
                 this._labelIndex.textColor  = 0x00FF00;
                 this._labelTeam.text        = Helpers.getTeamText(data.teamIndex);
                 this._labelTeam.textColor   = 0x00FF00
@@ -199,7 +199,7 @@ namespace TinyWars.MultiCustomRoom {
                     : ` (${Lang.getText(Lang.BigType.B01, Lang.SubType.S28)})`);
                 this._labelName.textColor   = 0x00FF00;
             } else {
-                this._labelIndex.text       = Helpers.getColorText(data.playerIndex);
+                this._labelIndex.text       = Helpers.getColorTextForPlayerIndex(data.playerIndex);
                 this._labelIndex.textColor  = 0xFFFFFF;
                 this._labelTeam.text        = Helpers.getTeamText(data.teamIndex);
                 this._labelTeam.textColor   = 0xFFFFFF;

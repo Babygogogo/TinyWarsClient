@@ -180,8 +180,9 @@ namespace TinyWars.Utility.Helpers {
         return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
     }
 
-    export function getColorText(playerIndex: number): string {
+    export function getColorTextForPlayerIndex(playerIndex: number): string {
         switch (playerIndex) {
+            case 0  : return Lang.getText(Lang.BigType.B01, Lang.SubType.S30);
             case 1  : return Lang.getText(Lang.BigType.B01, Lang.SubType.S04);
             case 2  : return Lang.getText(Lang.BigType.B01, Lang.SubType.S05);
             case 3  : return Lang.getText(Lang.BigType.B01, Lang.SubType.S06);

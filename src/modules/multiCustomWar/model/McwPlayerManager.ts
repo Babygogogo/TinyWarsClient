@@ -51,7 +51,7 @@ namespace TinyWars.MultiCustomWar {
             return undefined;
         }
 
-        public getLoggedInPlayer(): McwPlayer | undefined {
+        public getPlayerLoggedIn(): McwPlayer | undefined {
             if (!this._loggedInPlayer) {
                 const userId = User.UserModel.getUserId();
                 for (const [, player] of this._players) {
@@ -64,9 +64,13 @@ namespace TinyWars.MultiCustomWar {
             return this._loggedInPlayer;
         }
 
-        public getLoggedInPlayerIndex(): number | undefined {
-            const player = this.getLoggedInPlayer();
+        public getPlayerIndexLoggedIn(): number | undefined {
+            const player = this.getPlayerLoggedIn();
             return player ? player.getPlayerIndex() : undefined;
+        }
+
+        public getPlayerInTurn(): McwPlayer {
+            return this.getPlayer(this._war.getTurnManager().getPlayerIndexInTurn());
         }
 
         public getTeamIndex(playerIndex: number): number {

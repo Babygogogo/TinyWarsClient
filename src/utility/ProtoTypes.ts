@@ -1653,6 +1653,9 @@ namespace TinyWars.Utility {
 
             /** SerializedMcwPlayer userId */
             userId?: (number | null);
+
+            /** SerializedMcwPlayer nickname */
+            nickname?: (string | null);
         }
 
         /** Represents a SerializedMcwPlayer. */
@@ -1681,6 +1684,9 @@ namespace TinyWars.Utility {
 
             /** SerializedMcwPlayer userId. */
             public userId: number;
+
+            /** SerializedMcwPlayer nickname. */
+            public nickname: string;
 
             /**
              * Creates a new SerializedMcwPlayer instance using the specified properties.

@@ -74,9 +74,7 @@ namespace TinyWars.MultiCustomWar {
                 this._imgHp.visible = false;
             } else {
                 this._imgHp.visible = true;
-                this._imgHp.source  = this._isDark
-                    ? `c07_t99_s01_f${Helpers.getNumText(normalizedHp)}`
-                    : `c03_t99_s01_f${Helpers.getNumText(normalizedHp)}`;
+                this._imgHp.source  = `${getImageSourcePrefix(this._isDark)}_t99_s01_f${Helpers.getNumText(normalizedHp)}`;
             }
         }
 
@@ -116,32 +114,32 @@ namespace TinyWars.MultiCustomWar {
         private _addFrameForPromotion(): void {
             const promotion = this._unit.getCurrentPromotion();
             if (promotion > 0) {
-                this._framesForStateAnimation.push(`c02_t99_s05_f${Helpers.getNumText(promotion)}`);
+                this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s05_f${Helpers.getNumText(promotion)}`);
             }
         }
         private _addFrameForFuel(): void {
             if (this._unit.checkIsFuelInShort()) {
-                this._framesForStateAnimation.push(`c02_t99_s02_f01`);
+                this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s02_f01`);
             }
         }
         private _addFrameForAmmo(): void {
             if ((this._unit.checkIsPrimaryWeaponAmmoInShort()) || (this._unit.checkIsFlareAmmoInShort())) {
-                this._framesForStateAnimation.push(`c02_t99_s02_f02`);
+                this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s02_f02`);
             }
         }
         private _addFrameForDive(): void {
             if (this._unit.getIsDiving()) {
-                this._framesForStateAnimation.push(`c02_t99_s03_f${Helpers.getNumText(this._unit.getPlayerIndex())}`);
+                this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s03_f${Helpers.getNumText(this._unit.getPlayerIndex())}`);
             }
         }
         private _addFrameForCapture(): void {
             if (this._unit.getIsCapturingTile()) {
-                this._framesForStateAnimation.push(`c02_t99_s04_f${Helpers.getNumText(this._unit.getPlayerIndex())}`);
+                this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s04_f${Helpers.getNumText(this._unit.getPlayerIndex())}`);
             }
         }
         private _addFrameForBuild(): void {
             if (this._unit.getIsBuildingTile()) {
-                this._framesForStateAnimation.push(`c02_t99_s04_f${Helpers.getNumText(this._unit.getPlayerIndex())}`);
+                this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s04_f${Helpers.getNumText(this._unit.getPlayerIndex())}`);
             }
         }
         private _addFrameForLoader(): void {
@@ -151,20 +149,24 @@ namespace TinyWars.MultiCustomWar {
                 const unitPlayerIndex = unit.getPlayerIndex();
                 if (!war.getFogMap().checkHasFogCurrently()) {
                     if (unit.getLoadedUnitsCount() > 0) {
-                        this._framesForStateAnimation.push(`c02_t99_s06_f${Helpers.getNumText(unitPlayerIndex)}`);
+                        this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s06_f${Helpers.getNumText(unitPlayerIndex)}`);
                     }
                 } else {
                     const playerManager = war.getPlayerManager();
-                    if (!playerManager.checkIsSameTeam(unitPlayerIndex, playerManager.getLoggedInPlayerIndex())) {
-                        this._framesForStateAnimation.push(`c02_t99_s06_f${Helpers.getNumText(unitPlayerIndex)}`);
+                    if (!playerManager.checkIsSameTeam(unitPlayerIndex, playerManager.getPlayerIndexLoggedIn())) {
+                        this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s06_f${Helpers.getNumText(unitPlayerIndex)}`);
                     }
                 }
             }
         }
         private _addFrameForMaterial(): void {
             if ((this._unit.checkIsBuildMaterialInShort()) || (this._unit.checkIsProduceMaterialInShort())) {
-                this._framesForStateAnimation.push(`c02_t99_s02_f04`);
+                this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s02_f04`);
             }
         }
+    }
+
+    function getImageSourcePrefix(isDark: boolean): string {
+        return isDark ? `c07` : `c03`;
     }
 }

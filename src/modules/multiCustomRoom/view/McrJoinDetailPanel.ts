@@ -179,7 +179,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _updateLabelPlayerIndex(): void {
             const index = this._availablePlayerIndexes[this._playerIndexIndex];
-            this._labelPlayerIndex.text = `${index} (${Helpers.getColorText(index)})`;
+            this._labelPlayerIndex.text = `${index} (${Helpers.getColorTextForPlayerIndex(index)})`;
         }
 
         private _updateLabelTeamIndex(): void {
@@ -301,7 +301,7 @@ namespace TinyWars.MultiCustomRoom {
             super.dataChanged();
 
             const data = this.data as DataForPlayerRenderer;
-            this._labelIndex.text = Helpers.getColorText(data.playerIndex);
+            this._labelIndex.text = Helpers.getColorTextForPlayerIndex(data.playerIndex);
             this._labelName.text  = data.playerName || "????";
             this._labelTeam.text  = data.teamIndex != null ? Helpers.getTeamText(data.teamIndex) : "??";
         }

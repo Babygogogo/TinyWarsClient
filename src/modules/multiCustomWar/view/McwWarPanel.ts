@@ -24,6 +24,7 @@ namespace TinyWars.MultiCustomWar {
         private constructor() {
             super();
 
+            this._setAutoAdjustHeightEnabled();
             this.skinName = "resource/skins/multiCustomWar/McwWarPanel.exml";
         }
 

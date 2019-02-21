@@ -1,8 +1,11 @@
 
 namespace TinyWars.MultiCustomWar {
-    import FloatText    = Utility.FloatText;
-    import FlowManager  = Utility.FlowManager;
-    import ConfirmPanel = Common.ConfirmPanel;
+    import FloatText        = Utility.FloatText;
+    import FlowManager      = Utility.FlowManager;
+    import McwWarManager    = Utility.McwWarManager;
+    import Lang             = Utility.Lang;
+    import Helpers          = Utility.Helpers;
+    import ConfirmPanel     = Common.ConfirmPanel;
 
     export class McwTopPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
@@ -11,10 +14,14 @@ namespace TinyWars.MultiCustomWar {
         private static _instance: McwTopPanel;
 
         private _labelPlayer    : GameUi.UiLabel;
+        private _labelFund      : GameUi.UiLabel;
+        private _labelEnergy    : GameUi.UiLabel;
         private _btnFindUnit    : GameUi.UiButton;
         private _btnFindBuilding: GameUi.UiButton;
         private _btnEndTurn     : GameUi.UiButton;
         private _btnMenu        : GameUi.UiButton;
+
+        private _war    : McwWar;
 
         public static show(): void {
             if (!McwTopPanel._instance) {
@@ -47,9 +54,17 @@ namespace TinyWars.MultiCustomWar {
         }
 
         protected _onOpened(): void {
+            this._war = McwWarManager.getWar();
             this._updateView();
         }
 
+        protected _onClosed(): void {
+            delete this._war;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Callbacks.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnFindUnit(e: egret.TouchEvent): void {
             FloatText.show("TODO");
         }
@@ -67,8 +82,30 @@ namespace TinyWars.MultiCustomWar {
             });
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Functions for views.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            this._labelPlayer.text = User.UserModel.getUserNickname();
+            this._updateLabelPlayer();
+            this._updateLabelFund();
+            this._updateLabelEnergy();
+        }
+        private _updateLabelPlayer(): void {
+            const player            = this._war.getPlayerManager().getPlayerInTurn();
+            this._labelPlayer.text  = `${Lang.getText(Lang.BigType.B01, Lang.SubType.S31)}:${player.getNickname()} (${Helpers.getColorTextForPlayerIndex(player.getPlayerIndex())})`;
+        }
+        private _updateLabelFund(): void {
+            const war               = this._war;
+            const playerManager     = this._war.getPlayerManager();
+            const playerInTurn      = playerManager.getPlayerInTurn();
+            const playerLoggedIn    = playerManager.getPlayerLoggedIn();
+            this._labelFund.text    = (war.getFogMap().checkHasFogCurrently()) && (playerInTurn.getTeamIndex() !== playerLoggedIn.getTeamIndex())
+                ? `${Lang.getText(Lang.BigType.B01, Lang.SubType.S32)}: ????`
+                : `${Lang.getText(Lang.BigType.B01, Lang.SubType.S32)}: ${playerInTurn.getFund()}`;
+        }
+        private _updateLabelEnergy(): void {
+            // TODO
+            this._labelEnergy.visible = false;
         }
     }
 }

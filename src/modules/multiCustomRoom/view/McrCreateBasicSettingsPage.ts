@@ -186,7 +186,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _updateLabelPlayerIndex(): void {
             const index = McrModel.getCreateWarPlayerIndex();
-            this._labelPlayerIndex.text = `${index} (${Helpers.getColorText(index)})`;
+            this._labelPlayerIndex.text = `${index} (${Helpers.getColorTextForPlayerIndex(index)})`;
         }
 
         private _updateLabelTeam(): void {

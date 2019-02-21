@@ -23,6 +23,7 @@ namespace TinyWars.MultiCustomWar {
             this._setPlayerIndex(data.playerIndex!);
             this._setTeamIndex(data.teamIndex!);
             this._setUserId(data.userId);
+            this._setNickname(data.nickname);
 
             return this;
         }

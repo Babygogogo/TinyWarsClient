@@ -329,7 +329,7 @@ namespace TinyWars.MultiCustomRoom {
             super.dataChanged();
 
             const data = this.data as DataForPlayerRenderer;
-            this._labelIndex.text = Helpers.getColorText(data.playerIndex);
+            this._labelIndex.text = Helpers.getColorTextForPlayerIndex(data.playerIndex);
             this._labelName.text  = data.playerName || "????";
             this._labelTeam.text  = data.teamIndex != null ? Helpers.getTeamText(data.teamIndex) : "??";
         }

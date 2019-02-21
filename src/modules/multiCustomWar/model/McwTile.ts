@@ -439,7 +439,7 @@ namespace TinyWars.MultiCustomWar {
             return Utility.VisibilityHelpers.checkIsTileVisibleToPlayer(
                 this._war,
                 this.getGridIndex(),
-                this._war.getPlayerManager().getLoggedInPlayerIndex()
+                this._war.getPlayerManager().getPlayerIndexLoggedIn()
             );
         }
     }
