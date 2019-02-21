@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin width="960" height="40" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
+        xmlns:w="http://ns.egret.com/wing">
+    <e:Group left="35" top="0" right="35" height="40">
+        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
+                        alpha="0.8" left="0" right="0" top="0" bottom="0" />
+        <GameUi:UiLabel id="_labelPlayer" text="玩家:玩家名居然能有十个字(红)" size="16" x="10" textColor="0xffffff"  verticalCenter="0"/>
+        <GameUi:UiLabel id="_labelFund" text="金钱:999999" size="16" x="280" textColor="0xffffff"  verticalCenter="0"/>
+			<GameUi:UiLabel id="_labelEnergy" text="能量:99/99/99" size="16" x="390" textColor="0xFFFFFF" verticalCenter="0"/>
+			<GameUi:UiButton id="_btnFindUnit" label="寻找部队" x="610" verticalCenter="0" width="28">
+				<GameUi:skinName>
+				<e:Skin states="up,down,disabled">
+					<e:Image width="100%" height="100%"/>
+					<e:Label id="labelDisplay" size="12" left="0" right="0" top="0" bottom="0" textColor="0x00ff00"/>
+				</e:Skin>
+				</GameUi:skinName>
+			</GameUi:UiButton>
+			<GameUi:UiButton id="_btnFindBuilding" label="寻找建筑" x="690" verticalCenter="0" width="28">
+				<GameUi:skinName>
+				<e:Skin states="up,down,disabled">
+					<e:Image width="100%" height="100%"/>
+					<e:Label id="labelDisplay" size="12" left="0" right="0" top="0" bottom="0" textColor="0x00ff00"/>
+				</e:Skin>
+				</GameUi:skinName>
+			</GameUi:UiButton>
+
+        <GameUi:UiButton id="_btnEndTurn" label="结束回合" x="770" verticalCenter="0" width="28">
+            <GameUi:skinName>
+                <e:Skin states="up,down,disabled">
+                    <e:Image width="100%" height="100%" />
+                    <e:Label id="labelDisplay" size="12"  left="0" right="0" top="0" bottom="0" textColor="0x00ff00"/>
+                </e:Skin>
+            </GameUi:skinName>
+        </GameUi:UiButton>
+			<GameUi:UiButton id="_btnMenu" label="菜单" x="850" verticalCenter="0" width="28">
+				<GameUi:skinName>
+				<e:Skin states="up,down,disabled">
+					<e:Image width="100%" height="100%"/>
+					<e:Label id="labelDisplay" size="12" left="0" right="0" top="0" bottom="0" textColor="0x00ff00"/>
+				</e:Skin>
+				</GameUi:skinName>
+			</GameUi:UiButton>
+    </e:Group>
+</e:Skin>

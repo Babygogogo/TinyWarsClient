@@ -52,7 +52,8 @@ namespace TinyWars.Utility.FlowManager {
         const war = await new MultiCustomWar.McwWar().init(data);
         war.startRunning().startRunningView();
         StageManager.closeAllPanels();
-        MultiCustomWar.McwBackgroundView.show();
+        MultiCustomWar.McwBackgroundPanel.show();
+        MultiCustomWar.McwTopPanel.show();
 
         const layer = StageManager.getLayer(Types.LayerType.Scene);
         layer.removeChildren();
