@@ -1,6 +1,7 @@
 
 namespace TinyWars.MultiCustomWar {
-    import Types = Utility.Types;
+    import Types    = Utility.Types;
+    import Notify   = Utility.Notify;
 
     export class McwPlayer {
         private _fund               : number;
@@ -44,7 +45,10 @@ namespace TinyWars.MultiCustomWar {
         }
 
         public setFund(fund: number): void {
-            this._fund = fund;
+            if (this._fund !== fund) {
+                this._fund = fund;
+                Notify.dispatch(Notify.Type.McwPlayerFundChanged, this);
+            }
         }
         public getFund(): number {
             return this._fund;

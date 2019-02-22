@@ -62,7 +62,7 @@ namespace TinyWars.Common {
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
             ConfirmPanel.hide();
-            (this._openData as OpenDataForConfirmPanel).callback();
+            this._openData.callback();
         }
     }
 }

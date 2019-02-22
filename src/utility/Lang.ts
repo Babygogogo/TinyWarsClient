@@ -114,6 +114,14 @@ namespace TinyWars.Utility {
                     `正在读取战局数据，请稍候`,
                     `Downloading the war data. Please wait.`,
                 ]],
+                [SubType.S22, [
+                    `恭喜您获得本局的胜利！\n即将回到大厅…`,
+                    `Congratulations!`,
+                ]],
+                [SubType.S23, [
+                    `很遗憾您已战败，请再接再厉！\n即将回到大厅…`,
+                    `Good luck next war!`,
+                ]],
             ])],
             [BigType.B01, new Map([
                 [SubType.S00, [
@@ -251,6 +259,14 @@ namespace TinyWars.Utility {
                 [SubType.S33, [
                     `能量`,
                     `Energy`,
+                ]],
+                [SubType.S34, [
+                    `胜利`,
+                    `Win`,
+                ]],
+                [SubType.S35, [
+                    `失败`,
+                    `Defeat`,
                 ]],
             ])],
         ]);

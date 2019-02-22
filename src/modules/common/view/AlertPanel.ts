@@ -3,8 +3,9 @@ namespace TinyWars.Common {
     import Lang = Utility.Lang;
 
     export type OpenDataForAlertPanel = {
-        title  : string;
-        content: string;
+        title       : string;
+        content     : string;
+        callback?   : () => any;
     }
 
     export class AlertPanel extends GameUi.UiPanel {
@@ -55,6 +56,7 @@ namespace TinyWars.Common {
 
         private _onTouchedBtnClose(e: egret.TouchEvent): void {
             AlertPanel.hide();
+            (this._openData.callback) && (this._openData.callback());
         }
     }
 }

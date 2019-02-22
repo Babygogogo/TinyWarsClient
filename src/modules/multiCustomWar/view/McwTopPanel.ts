@@ -5,6 +5,7 @@ namespace TinyWars.MultiCustomWar {
     import McwWarManager    = Utility.McwWarManager;
     import Lang             = Utility.Lang;
     import Helpers          = Utility.Helpers;
+    import Notify           = Utility.Notify;
     import ConfirmPanel     = Common.ConfirmPanel;
 
     export class McwTopPanel extends GameUi.UiPanel {
@@ -44,6 +45,7 @@ namespace TinyWars.MultiCustomWar {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
+                { type: Notify.Type.McwPlayerFundChanged, callback: this._onNotifyMcwPlayerFundChanged },
             ];
             this._uiListeners = [
                 { ui: this._btnFindUnit,        callback: this._onTouchedBtnFindUnit, },
@@ -65,6 +67,10 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _onNotifyMcwPlayerFundChanged(e: egret.Event): void {
+            this._updateLabelFund();
+        }
+
         private _onTouchedBtnFindUnit(e: egret.TouchEvent): void {
             FloatText.show("TODO");
         }
@@ -96,7 +102,7 @@ namespace TinyWars.MultiCustomWar {
         }
         private _updateLabelFund(): void {
             const war               = this._war;
-            const playerManager     = this._war.getPlayerManager();
+            const playerManager     = war.getPlayerManager();
             const playerInTurn      = playerManager.getPlayerInTurn();
             const playerLoggedIn    = playerManager.getPlayerLoggedIn();
             this._labelFund.text    = (war.getFogMap().checkHasFogCurrently()) && (playerInTurn.getTeamIndex() !== playerLoggedIn.getTeamIndex())

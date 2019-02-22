@@ -33,14 +33,20 @@ namespace TinyWars.Utility {
 
             ConfigLoaded,
             TileModelUpdated,
+
+            McwPlayerIndexInTurnChanged,
+            McwPlayerFundChanged,
+            McwPlayerEnergyChanged,
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Notify datas.
         ////////////////////////////////////////////////////////////////////////////////
         export namespace Data {
-            export type ConfigLoaded    = number;
-            export type McTileUpdated   = MultiCustomWar.McwTile;
+            export type ConfigLoaded                = number;
+            export type McwPlayerIndexInTurnChanged = number;
+            export type McwPlayerFundChanged        = MultiCustomWar.McwPlayer;
+            export type McwPlayerEnergyChanged      = MultiCustomWar.McwPlayer;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
