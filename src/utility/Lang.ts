@@ -6,10 +6,6 @@ namespace TinyWars.Utility.Lang {
         Chinese,
         English,
     }
-    export const enum BigType {
-        B00, // 各种提示
-        B01, // 常用短语
-    }
     export const enum Type {
         A0000, A0001, A0002, A0003, A0004, A0005, A0006, A0007, A0008, A0009,
         A0010, A0011, A0012, A0013, A0014, A0015, A0016, A0017, A0018, A0019,
@@ -20,15 +16,17 @@ namespace TinyWars.Utility.Lang {
         B0010, B0011, B0012, B0013, B0014, B0015, B0016, B0017, B0018, B0019,
         B0020, B0021, B0022, B0023, B0024, B0025, B0026, B0027, B0028, B0029,
         B0030, B0031, B0032, B0033, B0034, B0035, B0036, B0037, B0038, B0039,
-    }
-    export const enum FormatType {
-        F000, F001, F002, F003, F004, F005,
+
+        F0000, F0001, F0002, F0003, F0004, F0005, F0006, F0007, F0008, F0009,
     }
     export const enum RichType {
         R000, R001, R002, R003,
     }
 
     const _LANG_DATA = new Map<Type, string[]>([
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Long strings.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.A0000, [
             "登陆成功，祝您游戏愉快！",
             "Logged in successfully!",
@@ -126,6 +124,9 @@ namespace TinyWars.Utility.Lang {
             `Good luck next war!`,
         ]],
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Short strings.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B0000, [
             "创建房间",
             "Create Game",
@@ -270,30 +271,31 @@ namespace TinyWars.Utility.Lang {
             `失败`,
             `Defeat`,
         ]],
-    ]);
 
-    const FORMAT_DATA = new Map<FormatType, string[]>([
-        [FormatType.F000, [
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Formater strings.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        [Type.F0000, [
             "地图名称: %s",
             "Map name: %s",
         ]],
-        [FormatType.F001, [
+        [Type.F0001, [
             "作者: %s",
             "Designer: %s",
         ]],
-        [FormatType.F002, [
+        [Type.F0002, [
             "人数: %s",
             "Players: %s",
         ]],
-        [FormatType.F003, [
+        [Type.F0003, [
             "全服评分: %s",
             "Rating: %s",
         ]],
-        [FormatType.F004, [
+        [Type.F0004, [
             "全服游玩次数: %s",
             "Games played: %s",
         ]],
-        [FormatType.F005, [
+        [Type.F0005, [
             "战争迷雾: %s",
             "Fog: %s",
         ]],
@@ -448,8 +450,8 @@ namespace TinyWars.Utility.Lang {
         return _LANG_DATA.get(t)[language];
     }
 
-    export function getFormatedText(formatType: FormatType, ...params: any[]): string {
-        return Helpers.formatString(FORMAT_DATA.get(formatType)[language], ...params);
+    export function getFormatedText(t: Type, ...params: any[]): string {
+        return Helpers.formatString(getText(t), ...params);
     }
 
     export function getNetErrorText(code: ErrCode): string {
