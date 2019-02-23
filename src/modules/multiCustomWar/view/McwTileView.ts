@@ -17,17 +17,19 @@ namespace TinyWars.MultiCustomWar {
 
         public init(tile: McwTile): void {
             this._tile = tile;
-
-            this.updateImages();
         }
 
-        public startRunning(): void {
-            this.setHasFog(!this._tile.checkIsVisibleToLoggedInPlayer());
+        public startRunningView(): void {
+            this.updateView();
+        }
+
+        public updateView(): void {
+            this.setHasFog(this._tile.getIsFogEnabled());
         }
 
         public setHasFog(hasFog: boolean): void {
             this._hasFog = hasFog;
-            this.updateImages();
+            this._updateImages();
         }
 
         public getImgObject(): GameUi.UiImage {
@@ -37,7 +39,11 @@ namespace TinyWars.MultiCustomWar {
             return this._imgBase;
         }
 
-        public updateImages(): void {
+        public updateOnAnimationTick(): void {
+            this._updateImages();
+        }
+
+        private _updateImages(): void {
             const tile      = this._tile;
             const tickCount = TimeModel.getTileAnimationTickCount();
 

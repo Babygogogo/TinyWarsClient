@@ -5,7 +5,7 @@ namespace TinyWars.MultiCustomWar {
     import Helpers              = Utility.Helpers;
     import Logger               = Utility.Logger;
     // import VisibilityHelpers    = Utility.VisibilityHelpers;
-    import SerializedMcTile     = Types.SerializedMcwTile;
+    import SerializedMcwTile    = Types.SerializedMcwTile;
     import TileType             = Types.TileType;
     import TileObjectType       = Types.TileObjectType;
 
@@ -25,13 +25,14 @@ namespace TinyWars.MultiCustomWar {
         private _currentBuildPoint  : number | undefined;
         private _currentCapturePoint: number | undefined;
 
-        private _war    : McwWar;
-        private _view   : McwTileView;
+        private _war            : McwWar;
+        private _view           : McwTileView;
+        private _isFogEnabled   : boolean;
 
         public constructor() {
         }
 
-        public init(data: SerializedMcTile, configVersion: number): McwTile {
+        public init(data: SerializedMcwTile, configVersion: number): McwTile {
             const t = ConfigManager.getTileObjectTypeAndPlayerIndex(data.objectViewId!);
             Logger.assert(t, "TileModel.deserialize() invalid SerializedTile! ", data);
 
@@ -59,11 +60,11 @@ namespace TinyWars.MultiCustomWar {
             this._war = war;
         }
         public startRunningView(): void {
-            this.getView().startRunning();
+            this.getView().startRunningView();
         }
 
-        public serialize(): SerializedMcTile {
-            const data: SerializedMcTile = {
+        public serialize(): SerializedMcwTile {
+            const data: SerializedMcwTile = {
                 gridX         : this._gridX,
                 gridY         : this._gridY,
                 baseViewId    : this._baseViewId,
@@ -82,7 +83,7 @@ namespace TinyWars.MultiCustomWar {
             return data;
         }
 
-        public serializeForPlayer(playerIndex: number): SerializedMcTile {
+        public serializeForPlayer(playerIndex: number): SerializedMcwTile {
             if (Utility.VisibilityHelpers.checkIsTileVisibleToPlayer(this._war, this.getGridIndex(), playerIndex)) {
                 return this.serialize();
             } else if (this.getType() === TileType.Headquarters) {
@@ -116,6 +117,10 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////
         public getView(): McwTileView {
             return this._view;
+        }
+
+        public updateView(): void {
+            this.getView().updateView();
         }
 
         private _setBaseViewId(id: number): void {
@@ -267,7 +272,6 @@ namespace TinyWars.MultiCustomWar {
             }, this._configVersion);
 
             this.startRunning(this._war);
-            this.startRunningView();
         }
 
         public resetByPlayerIndex(playerIndex: number): void {
@@ -288,7 +292,6 @@ namespace TinyWars.MultiCustomWar {
             }
 
             this.startRunning(this._war);
-            this.startRunningView();
         }
 
         public destroyTileObject(): void {
@@ -435,12 +438,43 @@ namespace TinyWars.MultiCustomWar {
             }
         }
 
-        public checkIsVisibleToLoggedInPlayer(): boolean {
-            return Utility.VisibilityHelpers.checkIsTileVisibleToPlayer(
-                this._war,
-                this.getGridIndex(),
-                this._war.getPlayerManager().getPlayerIndexLoggedIn()
-            );
+        ////////////////////////////////////////////////////////////////////////////////
+        // Functions for fog.
+        ////////////////////////////////////////////////////////////////////////////////
+        public setFogEnabled(): void {
+            this._isFogEnabled = true;
+
+            const currentHp = this.getCurrentHp();
+            this.resetByPlayerIndex(0);
+            this.setCurrentBuildPoint(this.getMaxBuildPoint());
+            this.setCurrentCapturePoint(this.getMaxCapturePoint());
+            this.setCurrentHp(currentHp);
+        }
+
+        public setFogDisabled(data?: SerializedMcwTile): void {
+            this._isFogEnabled = false;
+
+            if (data) {
+                this.init(data, this._configVersion);
+            } else {
+                const tileMap   = this._war.getTileMap();
+                const mapData   = tileMap.getTemplateMap();
+                const gridX     = this.getGridX();
+                const gridY     = this.getGridY();
+                const index     = gridX + gridY * tileMap.getMapSize().width;
+                this.init({
+                    objectViewId: mapData.tileObjects[index],
+                    baseViewId  : mapData.tileBases[index],
+                    gridX,
+                    gridY,
+                }, this._configVersion);
+            }
+
+            this.startRunning(this._war);
+        }
+
+        public getIsFogEnabled(): boolean {
+            return this._isFogEnabled;
         }
     }
 }

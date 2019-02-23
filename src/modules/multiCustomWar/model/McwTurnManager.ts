@@ -4,7 +4,9 @@ namespace TinyWars.MultiCustomWar {
     import Lang                 = Utility.Lang;
     import Types                = Utility.Types;
     import DestructionHelpers   = Utility.DestructionHelpers;
+    import VisibilityHelpers    = Utility.VisibilityHelpers;
     import Logger               = Utility.Logger;
+    import Notify               = Utility.Notify;
     import ProtoTypes           = Utility.ProtoTypes;
     import FlowManager          = Utility.FlowManager;
     import SerializedMcTurn     = Types.SerializedMcwTurn;
@@ -80,7 +82,7 @@ namespace TinyWars.MultiCustomWar {
             this._runPhaseResetSkillState();
             this._runPhaseResetVisionForNextPlayer();
             this._runPhaseResetVotesForDraw();
-            this._runPhaseRequestBeginTurn();
+            this._runPhaseWaitBeginTurn();
 
             this._setPhaseCode(TurnPhaseCode.WaitBeginTurn);
         }
@@ -113,7 +115,7 @@ namespace TinyWars.MultiCustomWar {
                     if ((unit.checkIsDestroyedOnOutOfFuel()) && (unit.getCurrentFuel() <= 0) && (unit.getPlayerIndex() === playerIndex)) {
                         const gridIndex = unit.getGridIndex();
                         fogMap.updateMapFromPathsByUnitAndPath(unit, [gridIndex]);
-                        DestructionHelpers.destroyUnitOnMap(war, gridIndex, true);
+                        DestructionHelpers.destroyUnitOnMap(war, gridIndex, false);
                     }
                 });
             }
@@ -172,7 +174,12 @@ namespace TinyWars.MultiCustomWar {
         private _runPhaseResetVisionForCurrentPlayer(): void {
             const playerIndex = this.getPlayerIndexInTurn();
             if (playerIndex !== 0) {
-                this._war.getFogMap().resetMapFromPathsForPlayer(this.getPlayerIndexInTurn());
+                const war = this._war;
+                war.getFogMap().resetMapFromPathsForPlayer(playerIndex);
+
+                if (playerIndex === war.getPlayerIndexLoggedIn()) {
+                    this._resetFogForPlayerLoggedIn();
+                }
             }
         }
         private _runPhaseTickTurnAndPlayerIndex(): void {
@@ -181,23 +188,28 @@ namespace TinyWars.MultiCustomWar {
             this._setPlayerIndexInTurn(data.playerIndex);
         }
         private _runPhaseResetSkillState(): void {
-            const playerIndex = this.getPlayerIndexInTurn();
-            if (playerIndex !== 0) {
-                // TODO
-            }
+            // TODO
+            // const playerIndex = this.getPlayerIndexInTurn();
+            // if (playerIndex !== 0) {
+            // }
         }
         private _runPhaseResetVisionForNextPlayer(): void {
             const playerIndex = this.getPlayerIndexInTurn();
             if (playerIndex !== 0) {
-                const fogMap = this._war.getFogMap();
+                const war       = this._war;
+                const fogMap    = war.getFogMap();
                 fogMap.resetMapFromTilesForPlayer(playerIndex);
                 fogMap.resetMapFromUnitsForPlayer(playerIndex);
+
+                if (playerIndex === war.getPlayerIndexLoggedIn()) {
+                    this._resetFogForPlayerLoggedIn();
+                }
             }
         }
         private _runPhaseResetVotesForDraw(): void {
             this._war.getPlayer(this.getPlayerIndexInTurn())!.setHasVotedForDraw(false);
         }
-        private _runPhaseRequestBeginTurn(): void {
+        private _runPhaseWaitBeginTurn(): void {
             // Do nothing.
         }
 
@@ -208,21 +220,30 @@ namespace TinyWars.MultiCustomWar {
             return this._turnIndex;
         }
         private _setTurnIndex(index: number): void {
-            this._turnIndex = index;
+            if (this._turnIndex !== index){
+                this._turnIndex = index;
+                Notify.dispatch(Notify.Type.McwTurnIndexChanged);
+            }
         }
 
         public getPlayerIndexInTurn(): number {
             return this._playerIndexInTurn;
         }
         private _setPlayerIndexInTurn(index: number): void {
-            this._playerIndexInTurn = index;
+            if (this._playerIndexInTurn !== index) {
+                this._playerIndexInTurn = index;
+                Notify.dispatch(Notify.Type.McwPlayerIndexInTurnChanged);
+            }
         }
 
         public getPhaseCode(): TurnPhaseCode {
             return this._phaseCode;
         }
         private _setPhaseCode(code: TurnPhaseCode): void {
-            this._phaseCode = code;
+            if (this._phaseCode !== code) {
+                this._phaseCode = code;
+                Notify.dispatch(Notify.Type.McwTurnPhaseCodeChanged);
+            }
         }
 
         private _getNextTurnAndPlayerIndex(): { turnIndex: number, playerIndex: number } {
@@ -242,6 +263,31 @@ namespace TinyWars.MultiCustomWar {
                     ++nextPlayerIndex;
                 }
             }
+        }
+
+        private _resetFogForPlayerLoggedIn(): void {
+            const war           = this._war;
+            const playerIndex   = war.getPlayerIndexLoggedIn();
+            war.getUnitMap().forEachUnitOnMap(unit => {
+                const gridIndex = unit.getGridIndex();
+                if (!VisibilityHelpers.checkIsUnitOnMapVisibleToPlayer({
+                    war,
+                    gridIndex,
+                    unitType            : unit.getType(),
+                    isDiving            : unit.getIsDiving(),
+                    unitPlayerIndex     : unit.getPlayerIndex(),
+                    observerPlayerIndex : playerIndex,
+                })) {
+                    DestructionHelpers.destroyUnitOnMap(war, gridIndex, false);
+                }
+            });
+
+            war.getTileMap().forEachTile(tile => {
+                if (!VisibilityHelpers.checkIsTileVisibleToPlayer(war, tile.getGridIndex(), playerIndex)) {
+                    tile.setFogEnabled();
+                    tile.updateView();
+                }
+            });
         }
     }
 

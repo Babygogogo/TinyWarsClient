@@ -1,8 +1,16 @@
 
 namespace TinyWars.Utility.McwWarManager {
-    import McwWar = MultiCustomWar.McwWar;
+    import NetManager   = Network.Manager;
+    import McwWar       = MultiCustomWar.McwWar;
+
+    const _NET_EVENTS = [
+    ];
 
     let _war: McwWar;
+
+    export function init(): void {
+        NetManager.addListeners(_NET_EVENTS, McwWarManager);
+    }
 
     export async function loadWar(data: Types.SerializedMcwWar): Promise<McwWar> {
         if (_war) {

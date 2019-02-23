@@ -22,6 +22,7 @@ namespace TinyWars.Utility.FlowManager {
 
         ConfigManager.init();
         Network.Manager.init();
+        McwWarManager.init();
         Time.TimeProxy.init();
         Time.TimeModel.init();
         User.UserModel.init();

@@ -1,7 +1,7 @@
 
 namespace TinyWars.MultiCustomWar {
-    import Types                = Utility.Types;
     import WarMapModel          = WarMap.WarMapModel;
+    import Types                = Utility.Types;
     import Helpers              = Utility.Helpers;
     import SerializedMcTileMap  = Types.SerializedMcwTileMap;
     import SerializedMcTile     = Types.SerializedMcwTile;
@@ -151,6 +151,10 @@ namespace TinyWars.MultiCustomWar {
         }
         public getMapSize(): MapSize {
             return this._mapSize;
+        }
+
+        public getTemplateMap(): Types.TemplateMap {
+            return this._templateMap;
         }
     }
 

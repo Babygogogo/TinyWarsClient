@@ -39,7 +39,7 @@ namespace TinyWars.MultiCustomWar {
             this._unit = unit;
         }
 
-        public startRunning(): void {
+        public startRunningView(): void {
             this.resetAllViews();
         }
 

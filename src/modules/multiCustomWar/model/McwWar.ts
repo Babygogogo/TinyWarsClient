@@ -248,6 +248,9 @@ namespace TinyWars.MultiCustomWar {
         public getPlayer(playerIndex: number): McwPlayer | undefined {
             return this.getPlayerManager().getPlayer(playerIndex);
         }
+        public getPlayerIndexLoggedIn(): number | undefined {
+            return this.getPlayerManager().getPlayerIndexLoggedIn();
+        }
 
         private _setField(field: McwField): void {
             this._field = field;

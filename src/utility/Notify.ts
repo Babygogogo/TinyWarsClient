@@ -34,6 +34,8 @@ namespace TinyWars.Utility {
             ConfigLoaded,
             TileModelUpdated,
 
+            McwTurnIndexChanged,
+            McwTurnPhaseCodeChanged,
             McwPlayerIndexInTurnChanged,
             McwPlayerFundChanged,
             McwPlayerEnergyChanged,

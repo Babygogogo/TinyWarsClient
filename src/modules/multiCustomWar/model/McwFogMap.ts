@@ -1,10 +1,11 @@
 
 
 namespace TinyWars.MultiCustomWar {
-    import Types                    = Utility.Types;
     import MapManager               = WarMap.WarMapModel;
+    import Types                    = Utility.Types;
     import Helpers                  = Utility.Helpers;
     import GridIndexHelpers         = Utility.GridIndexHelpers;
+    import VisibilityHelpers        = Utility.VisibilityHelpers;
     import SerializedMcFogMap       = Types.SerializedMcwFogMap;
     import ForceFogCode             = Types.ForceFogCode;
     import GridIndex                = Types.GridIndex;
@@ -52,6 +53,13 @@ namespace TinyWars.MultiCustomWar {
                 this.resetMapFromTilesForPlayer(playerIndex);
                 this.resetMapFromUnitsForPlayer(playerIndex);
             }
+
+            const playerIndex = war.getPlayerIndexLoggedIn();
+            war.getTileMap().forEachTile(tile => {
+                if (!VisibilityHelpers.checkIsTileVisibleToPlayer(war, tile.getGridIndex(), playerIndex)) {
+                    tile.setFogEnabled();
+                }
+            });
         }
 
         public serialize(): SerializedMcFogMap {

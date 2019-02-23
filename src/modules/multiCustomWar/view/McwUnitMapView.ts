@@ -57,6 +57,10 @@ namespace TinyWars.MultiCustomWar {
             (needResetZOrder) && (this._resetZOrderForLayer(layer));
         }
 
+        public removeUnit(view: McwUnitView): void {
+            view.parent.removeChild(view);
+        }
+
         public resetZOrder(unitType: Types.UnitType): void {
             this._resetZOrderForLayer(this._getLayerByUnitType(unitType));
         }

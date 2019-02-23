@@ -55,7 +55,7 @@ namespace TinyWars.MultiCustomWar {
 
         private _onNotifyTileAnimationTick(e: egret.Event): void {
             for (const view of this._tileViews) {
-                view.updateImages();
+                view.updateOnAnimationTick();
             }
         }
     }

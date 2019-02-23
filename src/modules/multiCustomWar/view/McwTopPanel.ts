@@ -1,12 +1,13 @@
 
 namespace TinyWars.MultiCustomWar {
+    import ConfirmPanel     = Common.ConfirmPanel;
     import FloatText        = Utility.FloatText;
     import FlowManager      = Utility.FlowManager;
     import McwWarManager    = Utility.McwWarManager;
     import Lang             = Utility.Lang;
     import Helpers          = Utility.Helpers;
     import Notify           = Utility.Notify;
-    import ConfirmPanel     = Common.ConfirmPanel;
+    import Types            = Utility.Types;
 
     export class McwTopPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
@@ -45,7 +46,10 @@ namespace TinyWars.MultiCustomWar {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.McwPlayerFundChanged, callback: this._onNotifyMcwPlayerFundChanged },
+                { type: Notify.Type.McwTurnPhaseCodeChanged,        callback: this._onNotifyMcwTurnPhaseCodeChanged },
+                { type: Notify.Type.McwPlayerFundChanged,           callback: this._onNotifyMcwPlayerFundChanged },
+                { type: Notify.Type.McwPlayerIndexInTurnChanged,    callback: this._onNotifyMcwPlayerIndexInTurnChanged },
+                { type: Notify.Type.McwPlayerEnergyChanged,         callback: this._onNotifyMcwPlayerEnergyChanged },
             ];
             this._uiListeners = [
                 { ui: this._btnFindUnit,        callback: this._onTouchedBtnFindUnit, },
@@ -67,8 +71,19 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _onNotifyMcwTurnPhaseCodeChanged(e: egret.Event): void {
+            this._updateBtnEndTurn();
+            this._updateBtnFindUnit();
+            this._updateBtnFindBuilding();
+        }
         private _onNotifyMcwPlayerFundChanged(e: egret.Event): void {
             this._updateLabelFund();
+        }
+        private _onNotifyMcwPlayerIndexInTurnChanged(e: egret.Event): void {
+            this._updateView();
+        }
+        private _onNotifyMcwPlayerEnergyChanged(e: egret.Event): void {
+            this._updateLabelEnergy();
         }
 
         private _onTouchedBtnFindUnit(e: egret.TouchEvent): void {
@@ -95,11 +110,16 @@ namespace TinyWars.MultiCustomWar {
             this._updateLabelPlayer();
             this._updateLabelFund();
             this._updateLabelEnergy();
+            this._updateBtnEndTurn();
+            this._updateBtnFindUnit();
+            this._updateBtnFindBuilding();
         }
+
         private _updateLabelPlayer(): void {
             const player            = this._war.getPlayerManager().getPlayerInTurn();
             this._labelPlayer.text  = `${Lang.getText(Lang.Type.B0031)}:${player.getNickname()} (${Helpers.getColorTextForPlayerIndex(player.getPlayerIndex())})`;
         }
+
         private _updateLabelFund(): void {
             const war               = this._war;
             const playerManager     = war.getPlayerManager();
@@ -109,9 +129,31 @@ namespace TinyWars.MultiCustomWar {
                 ? `${Lang.getText(Lang.Type.B0032)}: ????`
                 : `${Lang.getText(Lang.Type.B0032)}: ${playerInTurn.getFund()}`;
         }
+
         private _updateLabelEnergy(): void {
             // TODO
             this._labelEnergy.visible = false;
+        }
+
+        private _updateBtnEndTurn(): void {
+            const war                   = this._war;
+            const turnManager           = war.getTurnManager();
+            this._btnEndTurn.visible    = (turnManager.getPlayerIndexInTurn() === war.getPlayerIndexLoggedIn())
+                && (turnManager.getPhaseCode() === Types.TurnPhaseCode.Main);
+        }
+
+        private _updateBtnFindUnit(): void {
+            const war                   = this._war;
+            const turnManager           = war.getTurnManager();
+            this._btnFindUnit.visible   = (turnManager.getPlayerIndexInTurn() === war.getPlayerIndexLoggedIn())
+                && (turnManager.getPhaseCode() === Types.TurnPhaseCode.Main);
+        }
+
+        private _updateBtnFindBuilding(): void {
+            const war                       = this._war;
+            const turnManager               = war.getTurnManager();
+            this._btnFindBuilding.visible   = (turnManager.getPlayerIndexInTurn() === war.getPlayerIndexLoggedIn())
+                && (turnManager.getPhaseCode() === Types.TurnPhaseCode.Main);
         }
     }
 }

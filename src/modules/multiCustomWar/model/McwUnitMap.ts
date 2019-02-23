@@ -202,22 +202,29 @@ namespace TinyWars.MultiCustomWar {
             const x = unit.getGridX();
             const y = unit.getGridY();
             this._map[x][y] = unit;
+            this.getView().addUnit(unit.getView(), true);
         }
         public removeUnitOnMap(gridIndex: Types.GridIndex): void {
+            const unit = this.getUnitOnMap(gridIndex);
             this._map[gridIndex.x][gridIndex.y] = undefined;
+            this.getView().removeUnit(unit.getView());
         }
 
         public addUnitLoaded(unit: McwUnit): void {
             this._loadedUnits.set(unit.getUnitId(), unit);
+            this.getView().addUnit(unit.getView(), true);
         }
         public removeUnitLoaded(unitId: number): void {
+            const unit = this._loadedUnits.get(unitId);
             this._loadedUnits.delete(unitId);
+            this.getView().removeUnit(unit.getView());
         }
         public removeUnitsLoadedForPlayer(playerIndex: number): void {
             const units = this._loadedUnits;
             for (const [unitId, unit] of units) {
                 if (unit.getPlayerIndex() === playerIndex) {
                     units.delete(unitId);
+                    this.getView().removeUnit(unit.getView());
                 }
             }
         }
