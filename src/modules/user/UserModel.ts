@@ -58,11 +58,11 @@ namespace TinyWars.User {
         function _onNotifySLogout(e: egret.Event): void {
             const data = e.data as ProtoTypes.IS_Logout;
             if (data.reason === Types.LogoutType.SelfRequest) {
-                Utility.FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S05));
+                Utility.FloatText.show(Lang.getText(Lang.Type.A0005));
             } else if (data.reason === Types.LogoutType.LoginCollision) {
-                Utility.FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S06));
+                Utility.FloatText.show(Lang.getText(Lang.Type.A0006));
             } else if (data.reason === Types.LogoutType.NetworkFailure) {
-                Utility.FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S13));
+                Utility.FloatText.show(Lang.getText(Lang.Type.A0013));
             }
 
             _isLoggedIn   = false;

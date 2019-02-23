@@ -141,16 +141,16 @@ namespace TinyWars.MultiCustomWar {
                 const playerManager = war.getPlayerManager();
                 if (playerManager.getPlayerIndexLoggedIn() === playerIndex) {
                     AlertPanel.show({
-                        title   : Lang.getText(Lang.BigType.B01, Lang.SubType.S35),
-                        content : Lang.getText(Lang.BigType.B00, Lang.SubType.S23),
+                        title   : Lang.getText(Lang.Type.B0035),
+                        content : Lang.getText(Lang.Type.A0023),
                         callback: () => FlowManager.gotoLobby(),
                     });
                     war.setIsEnded(true);
                 } else {
                     if (playerManager.getAliveTeamsCount(false) === 1) {
                         AlertPanel.show({
-                            title   : Lang.getText(Lang.BigType.B01, Lang.SubType.S34),
-                            content : Lang.getText(Lang.BigType.B00, Lang.SubType.S22),
+                            title   : Lang.getText(Lang.Type.B0034),
+                            content : Lang.getText(Lang.Type.A0022),
                             callback: () => FlowManager.gotoLobby(),
                         });
                         war.setIsEnded(true);

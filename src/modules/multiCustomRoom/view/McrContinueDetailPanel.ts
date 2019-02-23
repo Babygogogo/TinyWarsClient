@@ -85,13 +85,13 @@ namespace TinyWars.MultiCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnHelpFog(e: egret.TouchEvent): void {
             HelpPanel.show({
-                title  : Lang.getText(Lang.BigType.B01, Lang.SubType.S20),
+                title  : Lang.getText(Lang.Type.B0020),
                 content: Lang.getRichText(Lang.RichType.R002),
             });
         }
         private _onTouchedBtnHelpTimeLimit(e: egret.TouchEvent): void {
             HelpPanel.show({
-                title  : Lang.getText(Lang.BigType.B01, Lang.SubType.S21),
+                title  : Lang.getText(Lang.Type.B0021),
                 content: Lang.getRichText(Lang.RichType.R003),
             });
         }
@@ -100,8 +100,8 @@ namespace TinyWars.MultiCustomRoom {
         }
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
             BlockPanel.show({
-                title   : Lang.getText(Lang.BigType.B01, Lang.SubType.S29),
-                content : Lang.getText(Lang.BigType.B00, Lang.SubType.S21),
+                title   : Lang.getText(Lang.Type.B0029),
+                content : Lang.getText(Lang.Type.A0021),
             });
             McrProxy.reqContinueWar(this._openData.id);
         }
@@ -120,7 +120,7 @@ namespace TinyWars.MultiCustomRoom {
         private async _updateView(): Promise<void> {
             const info = this._openData;
             this._labelWarPassword.text             = info.warPassword ? info.warPassword : "----";
-            this._labelHasFog.text                  = Lang.getText(Lang.BigType.B01, info.hasFog ? Lang.SubType.S12 : Lang.SubType.S13);
+            this._labelHasFog.text                  = Lang.getText(info.hasFog ? Lang.Type.B0012 : Lang.Type.B0013);
             this._labelTimeLimit.text               = Helpers.getTimeText(info.timeLimit);
             this._labelInitialFund.text             = `${info.initialFund}`;
             this._labelIncomeModifier.text          = `${info.incomeModifier}%`;
@@ -195,8 +195,8 @@ namespace TinyWars.MultiCustomRoom {
                 this._labelTeam.text        = Helpers.getTeamText(data.teamIndex);
                 this._labelTeam.textColor   = 0x00FF00
                 this._labelName.text        = data.playerName + (leftTime > 0
-                    ? ` (${Lang.getText(Lang.BigType.B01, Lang.SubType.S27)}:${Helpers.getTimeText(leftTime)})`
-                    : ` (${Lang.getText(Lang.BigType.B01, Lang.SubType.S28)})`);
+                    ? ` (${Lang.getText(Lang.Type.B0027)}:${Helpers.getTimeText(leftTime)})`
+                    : ` (${Lang.getText(Lang.Type.B0028)})`);
                 this._labelName.textColor   = 0x00FF00;
             } else {
                 this._labelIndex.text       = Helpers.getColorTextForPlayerIndex(data.playerIndex);

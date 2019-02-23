@@ -207,7 +207,7 @@ namespace TinyWars.MultiCustomRoom {
             this._labelMapName.text         = Lang.getFormatedText(Lang.FormatType.F000, mapData.mapName);
             this._labelDesigner.text        = Lang.getFormatedText(Lang.FormatType.F001, mapData.mapDesigner);
             this._labelPlayersCount.text    = Lang.getFormatedText(Lang.FormatType.F002, mapData.playersCount);
-            this._labelRating.text          = Lang.getFormatedText(Lang.FormatType.F003, mapInfo.rating != null ? mapInfo.rating.toFixed(2) : Lang.getText(Lang.BigType.B01, Lang.SubType.S01));
+            this._labelRating.text          = Lang.getFormatedText(Lang.FormatType.F003, mapInfo.rating != null ? mapInfo.rating.toFixed(2) : Lang.getText(Lang.Type.B0001));
             this._labelPlayedTimes.text     = Lang.getFormatedText(Lang.FormatType.F004, mapInfo.playedTimes);
             this._groupInfo.visible         = true;
             this._groupInfo.alpha           = 1;

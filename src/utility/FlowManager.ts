@@ -72,8 +72,8 @@ namespace TinyWars.Utility.FlowManager {
     function _onNetSServerDisconnect(e: egret.Event): void {
         const data = e.data as ProtoTypes.IS_ServerDisconnect;
         Common.AlertPanel.show({
-            title   : Lang.getText(Lang.BigType.B01, Lang.SubType.S25),
-            content : Lang.getText(Lang.BigType.B00, Lang.SubType.S20),
+            title   : Lang.getText(Lang.Type.B0025),
+            content : Lang.getText(Lang.Type.A0020),
         });
     }
 

@@ -105,7 +105,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onTouchedBtnHelpPlayerIndex(e: egret.TouchEvent): void {
             HelpPanel.show({
-                title  : Lang.getText(Lang.BigType.B01, Lang.SubType.S18),
+                title  : Lang.getText(Lang.Type.B0018),
                 content: Lang.getRichText(Lang.RichType.R000),
             });
         }
@@ -122,7 +122,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onTouchedBtnHelpTeam(e: egret.TouchEvent): void {
             HelpPanel.show({
-                title  : Lang.getText(Lang.BigType.B01, Lang.SubType.S19),
+                title  : Lang.getText(Lang.Type.B0019),
                 content: Lang.getRichText(Lang.RichType.R001),
             });
         }
@@ -139,7 +139,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onTouchedBtnHelpFog(e: egret.TouchEvent): void {
             HelpPanel.show({
-                title  : Lang.getText(Lang.BigType.B01, Lang.SubType.S20),
+                title  : Lang.getText(Lang.Type.B0020),
                 content: Lang.getRichText(Lang.RichType.R002),
             });
         }
@@ -156,7 +156,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onTouchedBtnHelpTimeLimit(e: egret.TouchEvent): void {
             HelpPanel.show({
-                title  : Lang.getText(Lang.BigType.B01, Lang.SubType.S21),
+                title  : Lang.getText(Lang.Type.B0021),
                 content: Lang.getRichText(Lang.RichType.R003),
             });
         }
@@ -194,7 +194,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _updateLabelFog(): void {
-            this._labelFog.text = Lang.getText(Lang.BigType.B01, McrModel.getCreateWarHasFog() ? Lang.SubType.S12 : Lang.SubType.S13);
+            this._labelFog.text = Lang.getText(McrModel.getCreateWarHasFog() ? Lang.Type.B0012 : Lang.Type.B0013);
         }
 
         private _updateLabelTimeLimit(): void {

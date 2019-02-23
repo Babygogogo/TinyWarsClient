@@ -125,7 +125,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onNotifySMcrExitWar(e: egret.Event): void {
-            FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S16));
+            FloatText.show(Lang.getText(Lang.Type.A0016));
         }
 
         private _onTouchBeginZoomMap(e: egret.TouchEvent): void {
@@ -250,7 +250,7 @@ namespace TinyWars.MultiCustomRoom {
             const [mapData, mapInfo]    = await Promise.all([TemplateMapModel.getMapData(warInfo as Types.MapIndexKey), TemplateMapModel.getMapDynamicInfoAsync(warInfo as Types.MapIndexKey)]);
             this._labelMapName.text     = Lang.getFormatedText(Lang.FormatType.F000, mapInfo.mapName);
             this._labelDesigner.text    = Lang.getFormatedText(Lang.FormatType.F001, mapInfo.mapDesigner);
-            this._labelHasFog.text      = Lang.getFormatedText(Lang.FormatType.F005, Lang.getText(Lang.BigType.B01, warInfo.hasFog ? Lang.SubType.S12 : Lang.SubType.S13));
+            this._labelHasFog.text      = Lang.getFormatedText(Lang.FormatType.F005, Lang.getText(warInfo.hasFog ? Lang.Type.B0012 : Lang.Type.B0013));
             this._labelWarComment.text  = warInfo.warComment || "----";
             this._listPlayer.bindData(this._createDataForListPlayer(warInfo, mapInfo));
 
@@ -349,8 +349,8 @@ namespace TinyWars.MultiCustomRoom {
                 this._labelTeam.text        = Helpers.getTeamText(data.teamIndex);
                 this._labelTeam.textColor   = 0x00FF00
                 this._labelName.text        = data.playerName + (leftTime > 0
-                    ? ` (${Lang.getText(Lang.BigType.B01, Lang.SubType.S27)}:${Helpers.getTimeText(leftTime)})`
-                    : ` (${Lang.getText(Lang.BigType.B01, Lang.SubType.S28)})`);
+                    ? ` (${Lang.getText(Lang.Type.B0027)}:${Helpers.getTimeText(leftTime)})`
+                    : ` (${Lang.getText(Lang.Type.B0028)})`);
                 this._labelName.textColor   = 0x00FF00;
             } else {
                 this._labelIndex.text       = Helpers.getColorTextForPlayerIndex(data.playerIndex);

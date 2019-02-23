@@ -76,13 +76,13 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onTouchedBtnHelpFog(e: egret.TouchEvent): void {
             HelpPanel.show({
-                title  : Lang.getText(Lang.BigType.B01, Lang.SubType.S20),
+                title  : Lang.getText(Lang.Type.B0020),
                 content: Lang.getRichText(Lang.RichType.R002),
             });
         }
         private _onTouchedBtnHelpTimeLimit(e: egret.TouchEvent): void {
             HelpPanel.show({
-                title  : Lang.getText(Lang.BigType.B01, Lang.SubType.S21),
+                title  : Lang.getText(Lang.Type.B0021),
                 content: Lang.getRichText(Lang.RichType.R003),
             });
         }
@@ -97,7 +97,7 @@ namespace TinyWars.MultiCustomRoom {
         private async _updateView(): Promise<void> {
             const info = this._openData;
             this._labelWarPassword.text             = info.warPassword ? info.warPassword : "----";
-            this._labelHasFog.text                  = Lang.getText(Lang.BigType.B01, info.hasFog ? Lang.SubType.S12 : Lang.SubType.S13);
+            this._labelHasFog.text                  = Lang.getText(info.hasFog ? Lang.Type.B0012 : Lang.Type.B0013);
             this._labelTimeLimit.text               = Helpers.getTimeText(info.timeLimit);
             this._labelInitialFund.text             = `${info.initialFund}`;
             this._labelIncomeModifier.text          = `${info.incomeModifier}%`;

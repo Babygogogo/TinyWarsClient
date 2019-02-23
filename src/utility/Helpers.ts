@@ -182,21 +182,21 @@ namespace TinyWars.Utility.Helpers {
 
     export function getColorTextForPlayerIndex(playerIndex: number): string {
         switch (playerIndex) {
-            case 0  : return Lang.getText(Lang.BigType.B01, Lang.SubType.S30);
-            case 1  : return Lang.getText(Lang.BigType.B01, Lang.SubType.S04);
-            case 2  : return Lang.getText(Lang.BigType.B01, Lang.SubType.S05);
-            case 3  : return Lang.getText(Lang.BigType.B01, Lang.SubType.S06);
-            case 4  : return Lang.getText(Lang.BigType.B01, Lang.SubType.S07);
+            case 0  : return Lang.getText(Lang.Type.B0030);
+            case 1  : return Lang.getText(Lang.Type.B0004);
+            case 2  : return Lang.getText(Lang.Type.B0005);
+            case 3  : return Lang.getText(Lang.Type.B0006);
+            case 4  : return Lang.getText(Lang.Type.B0007);
             default : return undefined;
         }
     }
 
     export function getTeamText(teamIndex: number): string {
         switch (teamIndex) {
-            case 1  : return Lang.getText(Lang.BigType.B01, Lang.SubType.S08);
-            case 2  : return Lang.getText(Lang.BigType.B01, Lang.SubType.S09);
-            case 3  : return Lang.getText(Lang.BigType.B01, Lang.SubType.S10);
-            case 4  : return Lang.getText(Lang.BigType.B01, Lang.SubType.S11);
+            case 1  : return Lang.getText(Lang.Type.B0008);
+            case 2  : return Lang.getText(Lang.Type.B0009);
+            case 3  : return Lang.getText(Lang.Type.B0010);
+            case 4  : return Lang.getText(Lang.Type.B0011);
             default : return undefined;
         }
     }
@@ -208,10 +208,10 @@ namespace TinyWars.Utility.Helpers {
         const days    = Math.floor(totalSeconds / (60 * 60 * 24));
 
         let text: string = "";
-        (days    > 0) && (text = `${text}${days}${Lang.getText(Lang.BigType.B01, Lang.SubType.S14)}`);
-        (hours   > 0) && (text = `${text}${hours}${Lang.getText(Lang.BigType.B01, Lang.SubType.S15)}`);
-        (minutes > 0) && (text = `${text}${minutes}${Lang.getText(Lang.BigType.B01, Lang.SubType.S16)}`);
-        (seconds > 0) && (text = `${text}${seconds}${Lang.getText(Lang.BigType.B01, Lang.SubType.S17)}`);
+        (days    > 0) && (text = `${text}${days}${Lang.getText(Lang.Type.B0014)}`);
+        (hours   > 0) && (text = `${text}${hours}${Lang.getText(Lang.Type.B0015)}`);
+        (minutes > 0) && (text = `${text}${minutes}${Lang.getText(Lang.Type.B0016)}`);
+        (seconds > 0) && (text = `${text}${seconds}${Lang.getText(Lang.Type.B0017)}`);
         return text;
     }
 

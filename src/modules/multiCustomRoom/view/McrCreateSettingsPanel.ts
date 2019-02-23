@@ -53,11 +53,11 @@ namespace TinyWars.MultiCustomRoom {
         protected _onOpened(): void {
             this._tabSettings.bindData([
                 {
-                    tabItemData: { name: Lang.getText(Lang.BigType.B01, Lang.SubType.S02) },
+                    tabItemData: { name: Lang.getText(Lang.Type.B0002) },
                     pageClass  : McrCreateBasicSettingsPage,
                 },
                 {
-                    tabItemData: { name: Lang.getText(Lang.BigType.B01, Lang.SubType.S03) },
+                    tabItemData: { name: Lang.getText(Lang.Type.B0003) },
                     pageClass  : McrCreateAdvancedSettingsPage,
                 },
             ]);
@@ -83,7 +83,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onNotifySCreateCustomOnlineWar(e: egret.Event): void {
-            FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S15));
+            FloatText.show(Lang.getText(Lang.Type.A0015));
             Utility.FlowManager.gotoLobby();
         }
 

@@ -78,7 +78,7 @@ namespace TinyWars.Time {
 
         function heartbeat(): void {
             if (!isHeartbeatAnswered) {
-                Utility.FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S09));
+                Utility.FloatText.show(Lang.getText(Lang.Type.A0009));
             }
             TimeProxy.reqHeartbeat(heartbeatCounter);
         }

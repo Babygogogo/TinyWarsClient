@@ -58,7 +58,7 @@ namespace TinyWars.Network {
         export function init(): void {
             _resetSocket();
             reinitIntervalId = egret.setInterval(() => {
-                FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S08) + "init_failed");
+                FloatText.show(Lang.getText(Lang.Type.A0008) + "init_failed");
                 _resetSocket();
             }, Manager, 10000);
         }
@@ -77,7 +77,7 @@ namespace TinyWars.Network {
 
         export function send(container: ProtoTypes.IActionContainer): void {
             if ((!socket) || (!socket.connected)) {
-                FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S14));
+                FloatText.show(Lang.getText(Lang.Type.A0014));
             } else {
                 const name          = Helpers.getActionName(container);
                 const encodedData   = ProtoManager.encodeAsActionContainer(container);
@@ -97,20 +97,20 @@ namespace TinyWars.Network {
                 egret.clearInterval(reinitIntervalId);
                 reinitIntervalId = undefined;
 
-                FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S07));
+                FloatText.show(Lang.getText(Lang.Type.A0007));
                 Notify.dispatch(Notify.Type.NetworkConnected);
             });
 
             socket.on("connect_error", () => {
-                FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S08) + "connect_error");
+                FloatText.show(Lang.getText(Lang.Type.A0008) + "connect_error");
             });
 
             socket.on("error", () => {
-                FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S08) + "error");
+                FloatText.show(Lang.getText(Lang.Type.A0008) + "error");
             });
 
             socket.on("disconnect", (reason: string) => {
-                FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S08) + "disconnect: " + reason);
+                FloatText.show(Lang.getText(Lang.Type.A0008) + "disconnect: " + reason);
                 Notify.dispatch(Notify.Type.NetworkDisconnected);
 
                 if (reason === 'io server disconnect') {

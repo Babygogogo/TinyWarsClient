@@ -98,7 +98,7 @@ namespace TinyWars.MultiCustomWar {
         }
         private _updateLabelPlayer(): void {
             const player            = this._war.getPlayerManager().getPlayerInTurn();
-            this._labelPlayer.text  = `${Lang.getText(Lang.BigType.B01, Lang.SubType.S31)}:${player.getNickname()} (${Helpers.getColorTextForPlayerIndex(player.getPlayerIndex())})`;
+            this._labelPlayer.text  = `${Lang.getText(Lang.Type.B0031)}:${player.getNickname()} (${Helpers.getColorTextForPlayerIndex(player.getPlayerIndex())})`;
         }
         private _updateLabelFund(): void {
             const war               = this._war;
@@ -106,8 +106,8 @@ namespace TinyWars.MultiCustomWar {
             const playerInTurn      = playerManager.getPlayerInTurn();
             const playerLoggedIn    = playerManager.getPlayerLoggedIn();
             this._labelFund.text    = (war.getFogMap().checkHasFogCurrently()) && (playerInTurn.getTeamIndex() !== playerLoggedIn.getTeamIndex())
-                ? `${Lang.getText(Lang.BigType.B01, Lang.SubType.S32)}: ????`
-                : `${Lang.getText(Lang.BigType.B01, Lang.SubType.S32)}: ${playerInTurn.getFund()}`;
+                ? `${Lang.getText(Lang.Type.B0032)}: ????`
+                : `${Lang.getText(Lang.Type.B0032)}: ${playerInTurn.getFund()}`;
         }
         private _updateLabelEnergy(): void {
             // TODO

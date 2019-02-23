@@ -67,7 +67,7 @@ namespace TinyWars.WarMap {
         }
 
         private _onTouchedBtnSearch(e: egret.TouchEvent): void {
-            FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S11));
+            FloatText.show(Lang.getText(Lang.Type.A0011));
             this._btnReset.enabled  = false;
             this._btnSearch.enabled = false;
             egret.setTimeout(() => {
@@ -92,9 +92,9 @@ namespace TinyWars.WarMap {
         private _onNotifySGetNewestMapInfos(e: egret.Event): void {
             const data = e.data as ProtoTypes.IS_GetNewestMapDynamicInfos;
             if ((!data.mapInfos) || (data.mapInfos.length <= 0)) {
-                FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S10));
+                FloatText.show(Lang.getText(Lang.Type.A0010));
             } else {
-                FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S12));
+                FloatText.show(Lang.getText(Lang.Type.A0012));
                 WarMapSearchPanel.hide();
             }
         }

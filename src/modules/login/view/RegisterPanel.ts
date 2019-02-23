@@ -49,12 +49,12 @@ namespace TinyWars.Login {
         }
 
         private _onNotifySLogin(e: egret.Event): void {
-            FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S00));
+            FloatText.show(Lang.getText(Lang.Type.A0000));
         }
 
         private _onNotifySRegister(e: egret.Event): void {
             const data = e.data as Utility.ProtoTypes.IS_Register;
-            FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S04));
+            FloatText.show(Lang.getText(Lang.Type.A0004));
             LoginProxy.reqLogin(data.account, data.password);
         }
 
@@ -67,11 +67,11 @@ namespace TinyWars.Login {
             const password = this._inputPassword.text;
             const nickname = this._inputNickname.text;
             if (!Utility.Helpers.checkIsAccountValid(account)) {
-                FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S01));
+                FloatText.show(Lang.getText(Lang.Type.A0001));
             } else if (!Utility.Helpers.checkIsPasswordValid(password)) {
-                FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S03));
+                FloatText.show(Lang.getText(Lang.Type.A0003));
             } else if (!Utility.Helpers.checkIsNicknameValid(nickname)) {
-                FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S02));
+                FloatText.show(Lang.getText(Lang.Type.A0002));
             } else {
                 LoginProxy.reqRegister(account, password, nickname);
             }

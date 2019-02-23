@@ -74,7 +74,7 @@ namespace TinyWars.Lobby {
         private _createDataForListCommand(): DataForCommandRenderer[] {
             return [
                 {
-                    name    : Lang.getText(Lang.BigType.B01, Lang.SubType.S00),
+                    name    : Lang.getText(Lang.Type.B0000),
                     callback: (): void => {
                         LobbyPanel.hide();
                         WarMap.WarMapProxy.reqGetNewestMapInfos();
@@ -82,21 +82,21 @@ namespace TinyWars.Lobby {
                     },
                 },
                 {
-                    name    : Lang.getText(Lang.BigType.B01, Lang.SubType.S23),
+                    name    : Lang.getText(Lang.Type.B0023),
                     callback: (): void => {
                         LobbyPanel.hide();
                         MultiCustomRoom.McrJoinMapListPanel.show();
                     },
                 },
                 {
-                    name    : Lang.getText(Lang.BigType.B01, Lang.SubType.S22),
+                    name    : Lang.getText(Lang.Type.B0022),
                     callback: (): void => {
                         LobbyPanel.hide();
                         MultiCustomRoom.McrExitMapListPanel.show();
                     },
                 },
                 {
-                    name    : Lang.getText(Lang.BigType.B01, Lang.SubType.S24),
+                    name    : Lang.getText(Lang.Type.B0024),
                     callback: () => {
                         LobbyPanel.hide();
                         MultiCustomRoom.McrContinueWarListPanel.show();

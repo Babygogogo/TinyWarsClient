@@ -57,16 +57,16 @@ namespace TinyWars.Login {
         }
 
         private _onNotifySLogin(e: egret.Event): void {
-            FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S00));
+            FloatText.show(Lang.getText(Lang.Type.A0000));
         }
 
         private _onTouchedBtnLogin(e: egret.TouchEvent): void {
             const account  = this._inputAccount.text;
             const password = this._inputPassword.text;
             if (!Utility.Helpers.checkIsAccountValid(account)) {
-                FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S01));
+                FloatText.show(Lang.getText(Lang.Type.A0001));
             } else if (!Utility.Helpers.checkIsPasswordValid(password)) {
-                FloatText.show(Lang.getText(Lang.BigType.B00, Lang.SubType.S03));
+                FloatText.show(Lang.getText(Lang.Type.A0003));
             } else {
                 LoginProxy.reqLogin(account, password);
             }
