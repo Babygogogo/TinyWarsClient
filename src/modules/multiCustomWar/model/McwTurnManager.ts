@@ -60,6 +60,8 @@ namespace TinyWars.MultiCustomWar {
                 "McTurnManager.endPhaseWaitBeginTurn() invalid current phase code: ", this.getPhaseCode()
             );
 
+            Utility.FloatText.show(`${this._war.getPlayerInTurn().getNickname()} p${this.getPlayerIndexInTurn()}回合正式开始！！`);
+
             this._runPhaseGetFund(data);
             this._runPhaseConsumeFuel(data);
             this._runPhaseRepairUnitByTile(data);

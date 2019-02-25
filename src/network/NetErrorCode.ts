@@ -31,6 +31,11 @@ namespace TinyWars.Network {
         McrContinueWar_NoSuchWar,
         McrContinueWar_DefeatedOrNotJoined,
 
+        McwBeginTurn_NoSuchWar,
+        McwBeginTurn_NotInTurn,
+        McwEndTurn_NoSuchWar,
+        McwEndTurn_NotInTurn,
+
         ServerDisconnect_ServerMaintainance,
     }
 }

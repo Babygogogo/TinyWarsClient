@@ -18,7 +18,7 @@ namespace TinyWars.Network {
         // Type definitions.
         ////////////////////////////////////////////////////////////////////////////////
         type ReceivedData = any;
-        type MsgListener = {
+        export type MsgListener = {
             actionCode   : Codes;
             callback     : (e: egret.Event) => void;
             thisObject  ?: any;

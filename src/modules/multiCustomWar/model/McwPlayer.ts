@@ -2,6 +2,7 @@
 namespace TinyWars.MultiCustomWar {
     import Types    = Utility.Types;
     import Notify   = Utility.Notify;
+    import Lang     = Utility.Lang;
 
     export class McwPlayer {
         private _fund               : number;
@@ -24,7 +25,7 @@ namespace TinyWars.MultiCustomWar {
             this._setPlayerIndex(data.playerIndex!);
             this._setTeamIndex(data.teamIndex!);
             this._setUserId(data.userId);
-            this._setNickname(data.nickname);
+            this._setNickname(data.nickname || Lang.getText(Lang.Type.B0030));
 
             return this;
         }

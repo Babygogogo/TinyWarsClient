@@ -1,7 +1,5 @@
 
 namespace TinyWars.MultiCustomWar {
-    import McwWarManager = Utility.McwWarManager;
-
     export class McwWarPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
@@ -29,7 +27,7 @@ namespace TinyWars.MultiCustomWar {
         }
 
         protected _onOpened(): void {
-            this.addChild(McwWarManager.getWar().getView());
+            this.addChild(McwModel.getWar().getView());
         }
 
         protected _onClosed(): void {

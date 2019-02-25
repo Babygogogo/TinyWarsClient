@@ -3,7 +3,6 @@ namespace TinyWars.MultiCustomWar {
     import ConfirmPanel     = Common.ConfirmPanel;
     import FloatText        = Utility.FloatText;
     import FlowManager      = Utility.FlowManager;
-    import McwWarManager    = Utility.McwWarManager;
     import Lang             = Utility.Lang;
     import Helpers          = Utility.Helpers;
     import Notify           = Utility.Notify;
@@ -60,7 +59,7 @@ namespace TinyWars.MultiCustomWar {
         }
 
         protected _onOpened(): void {
-            this._war = McwWarManager.getWar();
+            this._war = McwModel.getWar();
             this._updateView();
         }
 
@@ -116,16 +115,14 @@ namespace TinyWars.MultiCustomWar {
         }
 
         private _updateLabelPlayer(): void {
-            const player            = this._war.getPlayerManager().getPlayerInTurn();
+            const player            = this._war.getPlayerInTurn();
             this._labelPlayer.text  = `${Lang.getText(Lang.Type.B0031)}:${player.getNickname()} (${Helpers.getColorTextForPlayerIndex(player.getPlayerIndex())})`;
         }
 
         private _updateLabelFund(): void {
             const war               = this._war;
-            const playerManager     = war.getPlayerManager();
-            const playerInTurn      = playerManager.getPlayerInTurn();
-            const playerLoggedIn    = playerManager.getPlayerLoggedIn();
-            this._labelFund.text    = (war.getFogMap().checkHasFogCurrently()) && (playerInTurn.getTeamIndex() !== playerLoggedIn.getTeamIndex())
+            const playerInTurn      = war.getPlayerInTurn();
+            this._labelFund.text    = (war.getFogMap().checkHasFogCurrently()) && (playerInTurn.getTeamIndex() !== war.getPlayerLoggedIn().getTeamIndex())
                 ? `${Lang.getText(Lang.Type.B0032)}: ????`
                 : `${Lang.getText(Lang.Type.B0032)}: ${playerInTurn.getFund()}`;
         }

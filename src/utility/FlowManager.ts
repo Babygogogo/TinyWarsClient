@@ -1,6 +1,8 @@
 
 namespace TinyWars.Utility.FlowManager {
-    import UserModel = User.UserModel;
+    import UserModel    = User.UserModel;
+    import McwProxy     = MultiCustomWar.McwProxy;
+    import McwModel     = MultiCustomWar.McwModel;
 
     const _NET_EVENTS = [
         { actionCode: Network.Codes.S_ServerDisconnect,   callback: _onNetSServerDisconnect },
@@ -22,7 +24,8 @@ namespace TinyWars.Utility.FlowManager {
 
         ConfigManager.init();
         Network.Manager.init();
-        McwWarManager.init();
+        McwProxy.init();
+        McwModel.init();
         Time.TimeProxy.init();
         Time.TimeModel.init();
         User.UserModel.init();
@@ -39,20 +42,20 @@ namespace TinyWars.Utility.FlowManager {
     }
 
     export function gotoLogin(): void {
-        McwWarManager.unloadWar();
+        McwModel.unloadWar();
         StageManager.closeAllPanels();
         Login.LoginBackgroundPanel.show();
         Login.LoginPanel.show();
     }
     export function gotoLobby(): void {
         _hasOnceWentToLobby = true;
-        McwWarManager.unloadWar();
+        McwModel.unloadWar();
         StageManager.closeAllPanels();
         Lobby.LobbyPanel.show();
         Lobby.LobbyTopPanel.show();
     }
     export async function gotoMultiCustomWar(data: Types.SerializedMcwWar): Promise<void> {
-        await McwWarManager.loadWar(data);
+        await McwModel.loadWar(data);
         StageManager.closeAllPanels();
         MultiCustomWar.McwBackgroundPanel.show();
         MultiCustomWar.McwTopPanel.show();
