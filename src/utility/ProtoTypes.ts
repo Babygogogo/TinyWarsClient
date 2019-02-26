@@ -2407,6 +2407,9 @@ namespace TinyWars.Utility {
             /** SerializedMcwWar visionRangeModifier */
             visionRangeModifier?: (number | null);
 
+            /** SerializedMcwWar nextActionId */
+            nextActionId?: (number | null);
+
             /** SerializedMcwWar remainingVotesForDraw */
             remainingVotesForDraw?: (number | null);
 
@@ -2485,6 +2488,9 @@ namespace TinyWars.Utility {
 
             /** SerializedMcwWar visionRangeModifier. */
             public visionRangeModifier: number;
+
+            /** SerializedMcwWar nextActionId. */
+            public nextActionId: number;
 
             /** SerializedMcwWar remainingVotesForDraw. */
             public remainingVotesForDraw: number;

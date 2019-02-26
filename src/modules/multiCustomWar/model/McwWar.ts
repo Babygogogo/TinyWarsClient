@@ -13,6 +13,7 @@ namespace TinyWars.MultiCustomWar {
         private _configVersion          : number;
         private _mapIndexKey            : MapIndexKey;
         private _executedActions        : Action[];
+        private _nextActionId           : number;
         private _enterTurnTime          : number;
         private _remainingVotesForDraw  : number;
         private _timeLimit              : number;
@@ -31,7 +32,9 @@ namespace TinyWars.MultiCustomWar {
         private _field          : McwField;
         private _turnManager    : McwTurnManager;
 
-        private _view   : McwWarView;
+        private _view               : McwWarView;
+        private _isRunningAction    = false;
+        private _isRunningWar       = false;
 
         public constructor() {
         }
@@ -43,6 +46,7 @@ namespace TinyWars.MultiCustomWar {
             this._warComment            = data.warComment;
             this._configVersion         = data.configVersion;
             this._executedActions       = data.executedActions;
+            this.setNextActionId(data.nextActionId);
             this._remainingVotesForDraw = data.remainingVotesForDraw;
             this._timeLimit             = data.timeLimit;
             this._hasFogByDefault       = data.hasFogByDefault;
@@ -70,6 +74,8 @@ namespace TinyWars.MultiCustomWar {
             this.getPlayerManager().startRunning(this);
             this.getField().startRunning(this);
 
+            this._isRunningWar = true;
+
             return this;
         }
         public startRunningView(): McwWar {
@@ -82,64 +88,9 @@ namespace TinyWars.MultiCustomWar {
             this.getField().stopRunning();
             this.getView().stopRunning();
 
-            return this;
-        }
+            this._isRunningWar = false;
 
-        public serialize(): SerializedMcWar {
-            const mapIndexKey = this.getMapIndexKey();
-            return {
-                warId                   : this.getWarId(),
-                warName                 : this.getWarName(),
-                warPassword             : this.getWarPassword(),
-                warComment              : this.getWarComment(),
-                configVersion           : this.getConfigVersion(),
-                executedActions         : this._executedActions,
-                remainingVotesForDraw   : this.getRemainingVotesForDraw(),
-                timeLimit               : this.getSettingsTimeLimit(),
-                hasFogByDefault         : this.getSettingsHasFog(),
-                incomeModifier          : this.getSettingsIncomeModifier(),
-                energyGrowthModifier    : this.getSettingsEnergyGrowthModifier(),
-                attackPowerModifier     : this.getSettingsAttackPowerModifier(),
-                moveRangeModifier       : this.getSettingsMoveRangeModifier(),
-                visionRangeModifier     : this.getSettingsVisionRangeModifier(),
-                initialFund             : this.getSettingsInitialFund(),
-                initialEnergy           : this.getSettingsInitialEnergy(),
-                mapName                 : mapIndexKey.mapName,
-                mapDesigner             : mapIndexKey.mapDesigner,
-                mapVersion              : mapIndexKey.mapVersion,
-                enterTurnTime           : this.getEnterTurnTime(),
-                players                 : this.getPlayerManager().serialize(),
-                field                   : this.getField().serialize(),
-                turn                    : this.getTurnManager().serialize(),
-            };
-        }
-        public serializeForPlayer(playerIndex: number): SerializedMcWar {
-            const mapIndexKey = this.getMapIndexKey();
-            return {
-                warId                   : this.getWarId(),
-                warName                 : this.getWarName(),
-                warPassword             : this.getWarPassword(),
-                warComment              : this.getWarComment(),
-                configVersion           : this.getConfigVersion(),
-                executedActions         : [],
-                remainingVotesForDraw   : this.getRemainingVotesForDraw(),
-                timeLimit               : this.getSettingsTimeLimit(),
-                hasFogByDefault         : this.getSettingsHasFog(),
-                incomeModifier          : this.getSettingsIncomeModifier(),
-                energyGrowthModifier    : this.getSettingsEnergyGrowthModifier(),
-                attackPowerModifier     : this.getSettingsAttackPowerModifier(),
-                moveRangeModifier       : this.getSettingsMoveRangeModifier(),
-                visionRangeModifier     : this.getSettingsVisionRangeModifier(),
-                initialFund             : this.getSettingsInitialFund(),
-                initialEnergy           : this.getSettingsInitialEnergy(),
-                mapName                 : mapIndexKey.mapName,
-                mapDesigner             : mapIndexKey.mapDesigner,
-                mapVersion              : mapIndexKey.mapVersion,
-                enterTurnTime           : this.getEnterTurnTime(),
-                players                 : this.getPlayerManager().serialize(),
-                field                   : this.getField().serializeForPlayer(playerIndex),
-                turn                    : this.getTurnManager().serializeForPlayer(playerIndex),
-            };
+            return this;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -147,6 +98,17 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         public getView(): McwWarView {
             return this._view;
+        }
+
+        public getIsRunningAction(): boolean {
+            return this._isRunningAction;
+        }
+        public setIsRunningAction(isRunning: boolean): void {
+            this._isRunningAction = isRunning;
+        }
+
+        public getIsRunningWar(): boolean {
+            return this._isRunningWar;
         }
 
         public getWarId(): number {
@@ -211,11 +173,10 @@ namespace TinyWars.MultiCustomWar {
             this._executedActions.push(action);
         }
         public getNextActionId(): number {
-            return this._executedActions.length;
+            return this._nextActionId;
         }
-        public getCurrentActionId(): number | undefined {
-            const id = this.getNextActionId();
-            return id > 0 ? id - 1 : undefined;
+        public setNextActionId(actionId: number): void {
+            this._nextActionId = actionId;
         }
 
         public setEnterTurnTime(timestamp: number): void {

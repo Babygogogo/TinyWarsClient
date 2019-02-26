@@ -35,6 +35,7 @@ namespace TinyWars.Network {
         McwBeginTurn_NotInTurn,
         McwEndTurn_NoSuchWar,
         McwEndTurn_NotInTurn,
+        McwEndTurn_NotVotedForDraw,
 
         ServerDisconnect_ServerMaintainance,
     }
