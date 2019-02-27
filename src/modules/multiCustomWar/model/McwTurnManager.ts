@@ -9,6 +9,7 @@ namespace TinyWars.MultiCustomWar {
     import Notify               = Utility.Notify;
     import ProtoTypes           = Utility.ProtoTypes;
     import FlowManager          = Utility.FlowManager;
+    import TimeModel            = Time.TimeModel;
     import SerializedMcTurn     = Types.SerializedMcwTurn;
     import TurnPhaseCode        = Types.TurnPhaseCode;
     import GridIndex            = Types.GridIndex;
@@ -17,6 +18,8 @@ namespace TinyWars.MultiCustomWar {
         private _turnIndex          : number;
         private _playerIndexInTurn  : number;
         private _phaseCode          : TurnPhaseCode;
+        private _enterTurnTime      : number;
+
         private _war                : McwWar;
 
         private _hasUnitOnBeginningTurn = false;
@@ -28,6 +31,7 @@ namespace TinyWars.MultiCustomWar {
             this._setTurnIndex(data.turnIndex);
             this._setPlayerIndexInTurn(data.playerIndex);
             this._setPhaseCode(data.turnPhaseCode);
+            this._setEnterTurnTime(data.enterTurnTime);
 
             return this;
         }
@@ -41,6 +45,7 @@ namespace TinyWars.MultiCustomWar {
                 turnIndex       : this.getTurnIndex(),
                 playerIndex     : this.getPlayerIndexInTurn(),
                 turnPhaseCode   : this.getPhaseCode(),
+                enterTurnTime   : this.getEnterTurnTime(),
             };
         }
         public serializeForPlayer(playerIndex: number): SerializedMcTurn {
@@ -48,6 +53,7 @@ namespace TinyWars.MultiCustomWar {
                 turnIndex       : this.getTurnIndex(),
                 playerIndex     : this.getPlayerIndexInTurn(),
                 turnPhaseCode   : this.getPhaseCode(),
+                enterTurnTime   : this.getEnterTurnTime(),
             };
         }
 
@@ -188,6 +194,7 @@ namespace TinyWars.MultiCustomWar {
             const data = this._getNextTurnAndPlayerIndex();
             this._setTurnIndex(data.turnIndex);
             this._setPlayerIndexInTurn(data.playerIndex);
+            this._setEnterTurnTime(TimeModel.getServerTimestamp());
         }
         private _runPhaseResetSkillState(): void {
             // TODO
@@ -246,6 +253,13 @@ namespace TinyWars.MultiCustomWar {
                 this._phaseCode = code;
                 Notify.dispatch(Notify.Type.McwTurnPhaseCodeChanged);
             }
+        }
+
+        public getEnterTurnTime(): number {
+            return this._enterTurnTime;
+        }
+        private _setEnterTurnTime(time: number): void {
+            this._enterTurnTime = time;
         }
 
         private _getNextTurnAndPlayerIndex(): { turnIndex: number, playerIndex: number } {

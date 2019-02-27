@@ -14,7 +14,6 @@ namespace TinyWars.MultiCustomWar {
         private _mapIndexKey            : MapIndexKey;
         private _executedActions        : Action[];
         private _nextActionId           : number;
-        private _enterTurnTime          : number;
         private _remainingVotesForDraw  : number;
         private _timeLimit              : number;
         private _hasFogByDefault        : boolean;
@@ -58,7 +57,6 @@ namespace TinyWars.MultiCustomWar {
             this._initialFund           = data.initialFund;
             this._initialEnergy         = data.initialEnergy;
             this._setMapIndexKey(data);
-            this.setEnterTurnTime(data.enterTurnTime);
             this._setPlayerManager(new McPlayerManager().init(data.players));
             this._setField(await new McwField().init(data.field, this._configVersion, this.getMapIndexKey()));
             this._setTurnManager(new McwTurnManager().init(data.turn));
@@ -179,11 +177,8 @@ namespace TinyWars.MultiCustomWar {
             this._nextActionId = actionId;
         }
 
-        public setEnterTurnTime(timestamp: number): void {
-            this._enterTurnTime = timestamp;
-        }
         public getEnterTurnTime(): number {
-            return this._enterTurnTime;
+            return this.getTurnManager().getEnterTurnTime();
         }
 
         public setRemainingVotesForDraw(votes: number | undefined): void {

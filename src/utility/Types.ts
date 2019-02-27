@@ -113,6 +113,7 @@ namespace TinyWars.Utility.Types {
         turnIndex       : number;
         playerIndex     : number;
         turnPhaseCode   : TurnPhaseCode;
+        enterTurnTime   : number;
     }
     export interface SerializedMcwWar extends ProtoTypes.ISerializedMcwWar {
         warId           : number;
@@ -135,7 +136,6 @@ namespace TinyWars.Utility.Types {
         visionRangeModifier : number;
 
         remainingVotesForDraw?  : number;
-        enterTurnTime           : number;
         executedActions         : SerializedMcwAction[];
         players                 : SerializedMcwPlayer[];
         turn                    : SerializedMcwTurn;

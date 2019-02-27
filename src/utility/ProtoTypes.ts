@@ -1770,6 +1770,9 @@ namespace TinyWars.Utility {
 
             /** SerializedMcwTurn turnPhaseCode */
             turnPhaseCode?: (number | null);
+
+            /** SerializedMcwTurn enterTurnTime */
+            enterTurnTime?: (number | null);
         }
 
         /** Represents a SerializedMcwTurn. */
@@ -1789,6 +1792,9 @@ namespace TinyWars.Utility {
 
             /** SerializedMcwTurn turnPhaseCode. */
             public turnPhaseCode: number;
+
+            /** SerializedMcwTurn enterTurnTime. */
+            public enterTurnTime: number;
 
             /**
              * Creates a new SerializedMcwTurn instance using the specified properties.
@@ -2413,9 +2419,6 @@ namespace TinyWars.Utility {
             /** SerializedMcwWar remainingVotesForDraw */
             remainingVotesForDraw?: (number | null);
 
-            /** SerializedMcwWar enterTurnTime */
-            enterTurnTime?: (number | null);
-
             /** SerializedMcwWar executedActions */
             executedActions?: (IActionContainer[] | null);
 
@@ -2494,9 +2497,6 @@ namespace TinyWars.Utility {
 
             /** SerializedMcwWar remainingVotesForDraw. */
             public remainingVotesForDraw: number;
-
-            /** SerializedMcwWar enterTurnTime. */
-            public enterTurnTime: number;
 
             /** SerializedMcwWar executedActions. */
             public executedActions: IActionContainer[];
