@@ -123,6 +123,10 @@ namespace TinyWars.Utility.Lang {
             `很遗憾您已战败，请再接再厉！\n即将回到大厅…`,
             `Good luck next war!`,
         ]],
+        [Type.A0024, [
+            `您确定要结束回合吗？`,
+            `Are you sure to end your turn?`,
+        ]],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -271,6 +275,10 @@ namespace TinyWars.Utility.Lang {
             `失败`,
             `Defeat`,
         ]],
+        [Type.B0036, [
+            `结束回合`,
+            `End Turn`,
+        ]],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Formater strings.
@@ -298,6 +306,14 @@ namespace TinyWars.Utility.Lang {
         [Type.F0005, [
             "战争迷雾: %s",
             "Fog: %s",
+        ]],
+        [Type.F0006, [
+            `%d个部队尚未行动。`,
+            `%d unit(s) have taken no action yet.`
+        ]],
+        [Type.F0007, [
+            `%d个建筑尚未生产部队。`,
+            `%d building(s) have built nothing yet.`
         ]],
     ]);
 

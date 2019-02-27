@@ -92,7 +92,11 @@ namespace TinyWars.MultiCustomWar {
             FloatText.show("TODO");
         }
         private _onTouchedBtnEndTurn(e: egret.TouchEvent): void {
-
+            ConfirmPanel.show({
+                title   : Lang.getText(Lang.Type.B0036),
+                content : this._getHintForEndTurn(),
+                callback: () => McwProxy.reqMcwEndTurn(this._war.getWarId()),
+            });
         }
         private _onTouchedBtnMenu(e: egret.TouchEvent): void {
             ConfirmPanel.show({
@@ -151,6 +155,35 @@ namespace TinyWars.MultiCustomWar {
             const turnManager               = war.getTurnManager();
             this._btnFindBuilding.visible   = (turnManager.getPlayerIndexInTurn() === war.getPlayerIndexLoggedIn())
                 && (turnManager.getPhaseCode() === Types.TurnPhaseCode.Main);
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Util functions.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _getHintForEndTurn(): string {
+            const war           = this._war;
+            const playerIndex   = war.getPlayerIndexLoggedIn();
+            const unitMap       = war.getUnitMap();
+            const hints         = new Array<string>();
+
+            let idleUnitsCount = 0;
+            unitMap.forEachUnitOnMap(unit => {
+                if ((unit.getPlayerIndex() === playerIndex) && (unit.getState() === Types.UnitState.Idle)) {
+                    ++idleUnitsCount;
+                }
+            });
+            (idleUnitsCount) && (hints.push(Lang.getFormatedText(Lang.Type.F0006, idleUnitsCount)));
+
+            let idleBuildingsCount = 0;
+            war.getTileMap().forEachTile(tile => {
+                if ((tile.getPlayerIndex() === playerIndex) && (tile.checkIsUnitProducer()) && (!unitMap.getUnitOnMap(tile.getGridIndex()))) {
+                    ++idleBuildingsCount;
+                }
+            });
+            (idleBuildingsCount) && (hints.push(Lang.getFormatedText(Lang.Type.F0007, idleBuildingsCount)));
+
+            hints.push(Lang.getText(Lang.Type.A0024));
+            return hints.join(`\n`);
         }
     }
 }

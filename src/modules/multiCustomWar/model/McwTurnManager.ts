@@ -254,7 +254,7 @@ namespace TinyWars.MultiCustomWar {
             let nextTurnIndex   = this.getTurnIndex();
             let nextPlayerIndex = this.getPlayerIndexInTurn() + 1;
             while (true) {
-                if (nextPlayerIndex > playersCount) {
+                if (nextPlayerIndex >= playersCount) {
                     nextPlayerIndex = 0;
                     nextTurnIndex   += 1;
                 }

@@ -417,6 +417,10 @@ namespace TinyWars.MultiCustomWar {
         public getProduceUnitCategory(): Types.UnitCategory | undefined {
             return this._templateCfg.produceUnitCategory;
         }
+        public checkIsUnitProducer(): boolean {
+            const category = this.getProduceUnitCategory();
+            return (category != null) && (category !== Types.UnitCategory.None);
+        }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for vision.

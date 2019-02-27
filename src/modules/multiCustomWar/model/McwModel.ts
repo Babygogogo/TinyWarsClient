@@ -7,8 +7,9 @@ namespace TinyWars.MultiCustomWar.McwModel {
     import ActionContainer  = ProtoTypes.IActionContainer;
     import ActionCodes      = Network.Codes;
 
-    const _HANDLERS = new Map<ActionCodes, (data: ActionContainer) => void>([
-        [ActionCodes.S_McwBeginTurn, _handleMcwBeginTurn],
+    const _HANDLERS = new Map<ActionCodes, (data: ActionContainer) => Promise<void>>([
+        [ActionCodes.S_McwBeginTurn,    _handleMcwBeginTurn],
+        [ActionCodes.S_McwEndTurn,      _handleMcwEndTurn],
     ]);
 
     let _war            : McwWar;
@@ -48,9 +49,10 @@ namespace TinyWars.MultiCustomWar.McwModel {
     // Handlers for war actions that McwProxy receives.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export function updateOnBeginTurn(data: ProtoTypes.IS_McwBeginTurn): void {
-        _updateByActionContainer({
-            S_McwBeginTurn: data
-        }, data.warId, data.actionId);
+        _updateByActionContainer({ S_McwBeginTurn: data }, data.warId, data.actionId);
+    }
+    export function updateOnEndTurn(data: ProtoTypes.IS_McwEndTurn): void {
+        _updateByActionContainer({ S_McwEndTurn: data }, data.warId, data.actionId);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -67,10 +69,17 @@ namespace TinyWars.MultiCustomWar.McwModel {
         }
     }
 
-    function _checkAndRunFirstCachedAction(): void {
-        const action = _cachedActions.length ? _cachedActions.shift() : undefined;
-        if ((action) && (_war.getIsRunningWar()) && (!_war.getIsRunningAction())) {
-            _HANDLERS.get(Helpers.getActionCode(action))(action);
+    async function _checkAndRunFirstCachedAction(): Promise<void> {
+        const container = _cachedActions.length ? _cachedActions.shift() : undefined;
+        if ((container) && (_war.getIsRunningWar()) && (!_war.getIsEnded()) && (!_war.getIsRunningAction())) {
+            _war.setIsRunningAction(true);
+            _war.setNextActionId(_war.getNextActionId() + 1);
+            await _HANDLERS.get(Helpers.getActionCode(container))(container);
+            _war.setIsRunningAction(false);
+
+            if (_war.getIsEnded()) {
+                // TODO: show the ending summary and exit to lobby.
+            }
         }
     }
 
@@ -85,7 +94,15 @@ namespace TinyWars.MultiCustomWar.McwModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // The 'true' handlers for war actions.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    function _handleMcwBeginTurn(data: ActionContainer): void {
-        _war.getTurnManager().endPhaseWaitBeginTurn(data.S_McwBeginTurn);
+    async function _handleMcwBeginTurn(data: ActionContainer): Promise<void> {
+        await _war.getTurnManager().endPhaseWaitBeginTurn(data.S_McwBeginTurn);
+    }
+
+    async function _handleMcwEndTurn(data: ActionContainer): Promise<void> {
+        await _war.getTurnManager().endPhaseMain();
+
+        if (_war.getPlayerInTurn() === _war.getPlayerLoggedIn()) {
+            McwProxy.reqMcwBeginTurn(_war.getWarId());
+        }
     }
 }
