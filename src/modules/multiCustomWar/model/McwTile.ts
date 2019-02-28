@@ -425,7 +425,7 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for vision.
         ////////////////////////////////////////////////////////////////////////////////
-        public getVisionRange(): number | undefined {
+        public getCfgVisionRange(): number | undefined {
             return this._templateCfg.visionRange;
         }
         public checkIsVisionEnabledForAllPlayers(): boolean {
@@ -433,12 +433,17 @@ namespace TinyWars.MultiCustomWar {
         }
 
         public getVisionRangeForPlayer(playerIndex: number): number | null | undefined {
-            if (this.checkIsVisionEnabledForAllPlayers()) {
-                return this.getVisionRange();
-            } else if (this.getTeamIndex() !== this._war.getPlayer(playerIndex)!.getTeamIndex()) {
+            const cfgVision = this.getCfgVisionRange();
+            if (cfgVision == null) {
                 return undefined;
             } else {
-                return this.getVisionRange();
+                const war = this._war;
+                // TODO: take co skills into account.
+                if ((!this.checkIsVisionEnabledForAllPlayers()) && (this.getTeamIndex() !== war.getPlayer(playerIndex).getTeamIndex())) {
+                    return undefined;
+                } else {
+                    return Math.max(0, cfgVision + war.getSettingsVisionRangeModifier());
+                }
             }
         }
 

@@ -700,7 +700,7 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for vision.
         ////////////////////////////////////////////////////////////////////////////////
-        public getVisionRange(): number {
+        public getCfgVisionRange(): number {
             return this._templateCfg.visionRange;
         }
         public getVisionRangeBonusOnTile(tileType: TileType): number {
@@ -710,10 +710,14 @@ namespace TinyWars.MultiCustomWar {
         }
 
         public getVisionRangeForPlayer(playerIndex: number, gridIndex: Types.GridIndex): number | undefined {
-            if (this.getTeamIndex() !== this._war.getPlayer(playerIndex)!.getTeamIndex()) {
+            const war = this._war;
+            if (this.getTeamIndex() !== war.getPlayer(playerIndex)!.getTeamIndex()) {
                 return undefined;
             } else {
-                return this.getVisionRange() + this.getVisionRangeBonusOnTile(this._war.getTileMap().getTile(gridIndex).getType());
+                return Math.max(
+                    1,
+                    this.getCfgVisionRange() + this.getVisionRangeBonusOnTile(war.getTileMap().getTile(gridIndex).getType()) + war.getSettingsVisionRangeModifier()
+                );
             }
         }
 
