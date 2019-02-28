@@ -1,8 +1,8 @@
 {
   "file": "ui.png",
   "frames": { 
-    "c04_t01_s02_f01": {"x":0,"y":18,"w":20,"h":20},
-    "semi_transparent": {"x":5,"y":0,"w":16,"h":16},
-    "transparent": {"x":0,"y":0,"w":3,"h":3,"offX":0,"offY":0,"sourceW":4,"sourceH":4}
+    "c04_t01_s02_f01": {"x":1,"y":1,"w":20,"h":20},
+    "semi_transparent": {"x":1,"y":25,"w":4,"h":4},
+    "transparent": {"x":9,"y":25,"w":3,"h":3,"offX":0,"offY":0,"sourceW":4,"sourceH":4}
   }
 }
