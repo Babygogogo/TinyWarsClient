@@ -84,18 +84,18 @@ namespace TinyWars.MultiCustomWar {
             }
         }
         private _onTouchMoveFieldContainer(e: egret.TouchEvent): void {
-            const touchId = e.touchPointID;
-            this._currentTouchPoints[touchId] = { x: e.stageX, y: e.stageY };
+            // const touchId = e.touchPointID;
+            // this._currentTouchPoints[touchId] = { x: e.stageX, y: e.stageY };
 
-            if (Helpers.getObjectKeysCount(this._currentTouchPoints) > 1) {
-                this._fieldContainer.setZoomByTouches(this._currentTouchPoints, this._previousTouchPoints);
-            } else {
-                const zoomMap = this._fieldContainer;
-                zoomMap.setContentX(zoomMap.getContentX() + e.stageX - this._previousTouchPoints[touchId].x, true);
-                zoomMap.setContentY(zoomMap.getContentY() + e.stageY - this._previousTouchPoints[touchId].y, true);
-            }
+            // if (Helpers.getObjectKeysCount(this._currentTouchPoints) > 1) {
+            //     this._fieldContainer.setZoomByTouches(this._currentTouchPoints, this._previousTouchPoints);
+            // } else {
+            //     const zoomMap = this._fieldContainer;
+            //     zoomMap.setContentX(zoomMap.getContentX() + e.stageX - this._previousTouchPoints[touchId].x, true);
+            //     zoomMap.setContentY(zoomMap.getContentY() + e.stageY - this._previousTouchPoints[touchId].y, true);
+            // }
 
-            this._previousTouchPoints[touchId] = { x: e.stageX, y: e.stageY };
+            // this._previousTouchPoints[touchId] = { x: e.stageX, y: e.stageY };
         }
     }
 }

@@ -28,8 +28,6 @@ namespace TinyWars.MultiCustomRoom {
         private _labelPlayedTimes   : GameUi.UiLabel;
         private _labelPlayersCount  : GameUi.UiLabel;
 
-        private _currentTouchPoints : Types.TouchPoints = {};
-        private _previousTouchPoints: Types.TouchPoints = {};
         private _dataForList        : DataForMapNameRenderer[] = [];
         private _selectedIndex      : number;
 
@@ -57,8 +55,6 @@ namespace TinyWars.MultiCustomRoom {
                 { type: Notify.Type.SGetNewestMapInfos, callback: this._onNotifySGetNewestMapInfos },
             ];
             this._uiListeners = [
-                { ui: this._zoomMap,   callback: this._onTouchBeginZoomMap, eventType: egret.TouchEvent.TOUCH_BEGIN },
-                { ui: this._zoomMap,   callback: this._onTouchEndZoomMap,   eventType: egret.TouchEvent.TOUCH_END },
                 { ui: this._btnSearch, callback: this._onTouchTapBtnSearch },
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
             ];
@@ -68,12 +64,14 @@ namespace TinyWars.MultiCustomRoom {
         protected _onOpened(): void {
             this._groupInfo.visible = false;
             this._zoomMap.setMouseWheelListenerEnabled(true);
+            this._zoomMap.setTouchListenerEnabled(true);
             this._listMap.bindData(this._dataForList);
             this.setSelectedIndex(this._selectedIndex);
         }
         protected _onClosed(): void {
             this._zoomMap.removeAllContents();
             this._zoomMap.setMouseWheelListenerEnabled(false);
+            this._zoomMap.setTouchListenerEnabled(false);
             this._listMap.clear();
             egret.Tween.removeTweens(this._groupInfo);
         }
@@ -105,43 +103,6 @@ namespace TinyWars.MultiCustomRoom {
                 this._listMap.bindData(newData);
                 this.setSelectedIndex(Math.floor(Math.random() * newData.length));
             }
-        }
-
-        private _onTouchBeginZoomMap(e: egret.TouchEvent): void {
-            const touchesCount = Helpers.getObjectKeysCount(this._currentTouchPoints);
-            if (touchesCount <= 0) {
-                this._zoomMap.addEventListener(egret.TouchEvent.TOUCH_MOVE, this._onTouchMoveZoomMap, this);
-            }
-
-            const touchId = e.touchPointID;
-            if (touchesCount <= 1) {
-                this._currentTouchPoints[touchId]  = { x: e.stageX, y: e.stageY };
-                this._previousTouchPoints[touchId] = { x: e.stageX, y: e.stageY };
-            }
-        }
-
-        private _onTouchEndZoomMap(e: egret.TouchEvent): void {
-            delete this._currentTouchPoints[e.touchPointID];
-            delete this._previousTouchPoints[e.touchPointID];
-
-            if (Helpers.checkIsEmptyObject(this._currentTouchPoints)) {
-                this._zoomMap.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this._onTouchMoveZoomMap, this);
-            }
-        }
-
-        private _onTouchMoveZoomMap(e: egret.TouchEvent): void {
-            const touchId = e.touchPointID;
-            this._currentTouchPoints[touchId] = { x: e.stageX, y: e.stageY };
-
-            if (Helpers.getObjectKeysCount(this._currentTouchPoints) > 1) {
-                this._zoomMap.setZoomByTouches(this._currentTouchPoints, this._previousTouchPoints);
-            } else {
-                const zoomMap = this._zoomMap;
-                zoomMap.setContentX(zoomMap.getContentX() + e.stageX - this._previousTouchPoints[touchId].x, true);
-                zoomMap.setContentY(zoomMap.getContentY() + e.stageY - this._previousTouchPoints[touchId].y, true);
-            }
-
-            this._previousTouchPoints[touchId] = { x: e.stageX, y: e.stageY };
         }
 
         private _onTouchTapBtnSearch(e: egret.TouchEvent): void {

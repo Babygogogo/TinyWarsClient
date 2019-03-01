@@ -11,6 +11,7 @@ namespace TinyWars.GameUi {
         x: 0,
         y: 0
     };
+    type TouchPoints = Map<number, Types.Point>;
 
     export class UiZoomableComponent extends eui.Component {
         private _maskForContents: UiImage;
@@ -24,6 +25,8 @@ namespace TinyWars.GameUi {
         private _spacingForRight                : number = 0;
         private _isMouseWheelListenerEnabled    = false;
         private _isTouchListenerEnabled         = false;
+        private _currentTouchPoints             = new Map<number, Types.Point>();
+        private _previousTouchPoints            = new Map<number, Types.Point>();
 
         public constructor() {
             super();
@@ -56,15 +59,29 @@ namespace TinyWars.GameUi {
             }
         }
 
-        public setTouchListenerEnabled(enabled: boolean): void {
-
-        }
-
         public setMouseWheelListenerEnabled(enabled: boolean): void {
             if ((enabled) && (!this._isMouseWheelListenerEnabled)) {
                 Notify.addEventListener(Notify.Type.MouseWheel, this._onNotifyMouseWheel, this);
             } else if ((!enabled) && (this._isMouseWheelListenerEnabled)) {
                 Notify.removeEventListener(Notify.Type.MouseWheel, this._onNotifyMouseWheel, this);
+            }
+        }
+
+        public setTouchListenerEnabled(enabled: boolean): void {
+            if ((enabled) && (!this._isTouchListenerEnabled)) {
+                this.addEventListener(egret.TouchEvent.TOUCH_BEGIN,             this._onTouchBegin,             this);
+                this.addEventListener(egret.TouchEvent.TOUCH_CANCEL,            this._onTouchCancel,            this);
+                this.addEventListener(egret.TouchEvent.TOUCH_END,               this._onTouchEnd,               this);
+                this.addEventListener(egret.TouchEvent.TOUCH_RELEASE_OUTSIDE,   this._onTouchReleaseOutside,    this);
+
+            } else if ((!enabled) && (this._isTouchListenerEnabled)) {
+                this.removeEventListener(egret.TouchEvent.TOUCH_BEGIN,              this._onTouchBegin,             this);
+                this.removeEventListener(egret.TouchEvent.TOUCH_CANCEL,             this._onTouchCancel,            this);
+                this.removeEventListener(egret.TouchEvent.TOUCH_END,                this._onTouchEnd,               this);
+                this.removeEventListener(egret.TouchEvent.TOUCH_RELEASE_OUTSIDE,    this._onTouchReleaseOutside,    this);
+                this.removeEventListener(egret.TouchEvent.TOUCH_MOVE,               this._onTouchMove,              this);
+                this._currentTouchPoints.clear();
+                this._previousTouchPoints.clear();
             }
         }
 
@@ -136,7 +153,7 @@ namespace TinyWars.GameUi {
             }
         }
 
-        public setZoomByTouches(currPointsInStage: Types.TouchPoints, prevPointsInStage: Types.TouchPoints): void {
+        public setZoomByTouches(currPointsInStage: TouchPoints, prevPointsInStage: TouchPoints): void {
             const pointInStage = this._getCenterPoint(currPointsInStage);
             const point        = this._contents.globalToLocal(pointInStage.x, pointInStage.y);
             if (this._checkIsInsideContents(point)) {
@@ -159,32 +176,74 @@ namespace TinyWars.GameUi {
             this.setZoomByScroll(StageManager.getMouseX(), StageManager.getMouseY(), e.data);
         }
 
+        private _onTouchBegin(e: egret.TouchEvent): void {
+            const touchesCount = this._currentTouchPoints.size;
+            if (touchesCount <= 0) {
+                this.addEventListener(egret.TouchEvent.TOUCH_MOVE, this._onTouchMove, this);
+            }
+
+            const touchId = e.touchPointID;
+            if (touchesCount <= 1) {
+                this._currentTouchPoints.set(touchId, { x: e.stageX, y: e.stageY });
+                this._previousTouchPoints.set(touchId, { x: e.stageX, y: e.stageY });
+            }
+        }
+        private _onTouchEnd(e: egret.TouchEvent): void {
+            this._removeTouch(e.touchPointID);
+        }
+        private _onTouchCancel(e: egret.TouchEvent): void {
+            this._removeTouch(e.touchPointID);
+        }
+        private _onTouchReleaseOutside(e: egret.TouchEvent): void {
+            this._removeTouch(e.touchPointID);
+        }
+        private _onTouchMove(e: egret.TouchEvent): void {
+            const touchId = e.touchPointID;
+            this._currentTouchPoints.set(touchId, { x: e.stageX, y: e.stageY });
+
+            if (this._currentTouchPoints.size > 1) {
+                this.setZoomByTouches(this._currentTouchPoints, this._previousTouchPoints);
+            } else {
+                this.setContentX(this.getContentX() + e.stageX - this._previousTouchPoints.get(touchId).x, true);
+                this.setContentY(this.getContentY() + e.stageY - this._previousTouchPoints.get(touchId).y, true);
+            }
+
+            this._previousTouchPoints.set(touchId, { x: e.stageX, y: e.stageY });
+        }
+        private _removeTouch(touchPointId: number): void {
+            this._currentTouchPoints.delete(touchPointId);
+            this._previousTouchPoints.delete(touchPointId);
+
+            if (!this._currentTouchPoints.size) {
+                this.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this._onTouchMove, this);
+            }
+        }
+
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _getScaleModifierByScrollValue(value: number): number {
             return Math.max(0.01, 1 + value / 1000);
         }
-        private _getScaleModifierByTouches(currPoints: Types.TouchPoints, prevPoints: Types.TouchPoints): number {
-            const oldPoints: Point[] = [];
+        private _getScaleModifierByTouches(currPoints: TouchPoints, prevPoints: TouchPoints): number {
             const newPoints: Point[] = [];
-            for (const id in currPoints) {
-                oldPoints.push(this._contents.globalToLocal(prevPoints[id].x, prevPoints[id].y));
-                newPoints.push(this._contents.globalToLocal(currPoints[id].x, currPoints[id].y));
+            for (const [id, point] of currPoints) {
+                newPoints.push(this._contents.globalToLocal(point.x, point.y));
+            }
 
-                if (oldPoints.length >= 2) {
-                    break;
-                }
+            const oldPoints: Point[] = [];
+            for (const [id, point] of prevPoints) {
+                oldPoints.push(this._contents.globalToLocal(point.x, point.y));
             }
 
             return Helpers.getPointDistance(newPoints[0].x, newPoints[0].y, newPoints[1].x, newPoints[1].y)
                 /  Helpers.getPointDistance(oldPoints[0].x, oldPoints[0].y, oldPoints[1].x, oldPoints[1].y);
         }
 
-        private _getCenterPoint(touches: Types.TouchPoints): Point {
+        private _getCenterPoint(touches: TouchPoints): Point {
             const points: Point[] = [];
-            for (const id in touches) {
-                points.push({ x: touches[id].x, y: touches[id].y });
+            for (const [, point] of touches) {
+                points.push({ x: point.x, y: point.y });
                 if (points.length >= 2) {
                     break;
                 }
