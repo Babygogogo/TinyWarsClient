@@ -55,7 +55,6 @@ namespace TinyWars.MultiCustomRoom {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.MouseWheel,                 callback: this._onNotifyMouseWheel },
                 { type: Notify.Type.SMcrGetJoinedOngoingInfos,  callback: this._onNotifySMcrGetJoinedOngoingInfos },
                 { type: Notify.Type.SMcrExitWar,                callback: this._onNotifySMcrExitWar },
             ];
@@ -71,12 +70,13 @@ namespace TinyWars.MultiCustomRoom {
 
         protected _onOpened(): void {
             this._groupInfo.visible = false;
-
+            this._zoomMap.setMouseWheelListenerEnabled(true);
             McrProxy.reqGetJoinedOngoingInfos();
         }
 
         protected _onClosed(): void {
             this._zoomMap.removeAllContents();
+            this._zoomMap.setMouseWheelListenerEnabled(false);
             this._listWar.clear();
             this._listPlayer.clear();
             egret.Tween.removeTweens(this._groupInfo);
@@ -106,10 +106,6 @@ namespace TinyWars.MultiCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyMouseWheel(e: egret.Event): void {
-            this._zoomMap.setZoomByScroll(StageManager.getMouseX(), StageManager.getMouseY(), e.data);
-        }
-
         private _onNotifySMcrGetJoinedOngoingInfos(e: egret.Event): void {
             const newData        = this._createDataForListWar(McrModel.getJoinedOngoingInfos());
             this._dataForListWar = newData;

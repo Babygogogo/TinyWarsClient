@@ -3,6 +3,7 @@ namespace TinyWars.GameUi {
     import Types        = Utility.Types;
     import Helpers      = Utility.Helpers;
     import StageManager = Utility.StageManager;
+    import Notify       = Utility.Notify;
     import Size         = Types.Size;
     import Point        = Types.Point;
 
@@ -14,18 +15,21 @@ namespace TinyWars.GameUi {
     export class UiZoomableComponent extends eui.Component {
         private _maskForContents: UiImage;
 
-        private _contents        : egret.DisplayObjectContainer = new egret.DisplayObjectContainer();
-        private _contentWidth    : number = 0;
-        private _contentHeight   : number = 0;
-        private _spacingForTop   : number = 0;
-        private _spacingForBottom: number = 0;
-        private _spacingForLeft  : number = 0;
-        private _spacingForRight : number = 0;
+        private _contents                       : egret.DisplayObjectContainer = new egret.DisplayObjectContainer();
+        private _contentWidth                   : number = 0;
+        private _contentHeight                  : number = 0;
+        private _spacingForTop                  : number = 0;
+        private _spacingForBottom               : number = 0;
+        private _spacingForLeft                 : number = 0;
+        private _spacingForRight                : number = 0;
+        private _isMouseWheelListenerEnabled    = false;
+        private _isTouchListenerEnabled         = false;
 
         public constructor() {
             super();
 
-            this.addEventListener(egret.Event.RESIZE, this._onResize, this);
+            this.addEventListener(egret.Event.RESIZE,               this._onResize,             this);
+            this.addEventListener(egret.Event.REMOVED_FROM_STAGE,   this._onRemovedFromStage,   this);
 
             this.addChild(this._contents);
         }
@@ -49,6 +53,18 @@ namespace TinyWars.GameUi {
                     this.removeChild(this._maskForContents);
                     delete this._maskForContents;
                 }
+            }
+        }
+
+        public setTouchListenerEnabled(enabled: boolean): void {
+
+        }
+
+        public setMouseWheelListenerEnabled(enabled: boolean): void {
+            if ((enabled) && (!this._isMouseWheelListenerEnabled)) {
+                Notify.addEventListener(Notify.Type.MouseWheel, this._onNotifyMouseWheel, this);
+            } else if ((!enabled) && (this._isMouseWheelListenerEnabled)) {
+                Notify.removeEventListener(Notify.Type.MouseWheel, this._onNotifyMouseWheel, this);
             }
         }
 
@@ -133,6 +149,14 @@ namespace TinyWars.GameUi {
         ////////////////////////////////////////////////////////////////////////////////
         private _onResize(e: egret.Event): void {
             this._reviseContentScaleAndPosition();
+        }
+        private _onRemovedFromStage(e: egret.Event): void {
+            this.setMouseWheelListenerEnabled(false);
+            this.setTouchListenerEnabled(false);
+        }
+
+        private _onNotifyMouseWheel(e: egret.Event): void {
+            this.setZoomByScroll(StageManager.getMouseX(), StageManager.getMouseY(), e.data);
         }
 
         ////////////////////////////////////////////////////////////////////////////////

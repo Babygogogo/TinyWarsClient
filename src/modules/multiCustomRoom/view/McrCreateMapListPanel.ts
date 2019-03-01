@@ -54,7 +54,6 @@ namespace TinyWars.MultiCustomRoom {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.MouseWheel,         callback: this._onNotifyMouseWheel },
                 { type: Notify.Type.SGetNewestMapInfos, callback: this._onNotifySGetNewestMapInfos },
             ];
             this._uiListeners = [
@@ -68,11 +67,13 @@ namespace TinyWars.MultiCustomRoom {
         }
         protected _onOpened(): void {
             this._groupInfo.visible = false;
+            this._zoomMap.setMouseWheelListenerEnabled(true);
             this._listMap.bindData(this._dataForList);
             this.setSelectedIndex(this._selectedIndex);
         }
         protected _onClosed(): void {
             this._zoomMap.removeAllContents();
+            this._zoomMap.setMouseWheelListenerEnabled(false);
             this._listMap.clear();
             egret.Tween.removeTweens(this._groupInfo);
         }
@@ -97,10 +98,6 @@ namespace TinyWars.MultiCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyMouseWheel(e: egret.Event): void {
-            this._zoomMap.setZoomByScroll(StageManager.getMouseX(), StageManager.getMouseY(), e.data);
-        }
-
         private _onNotifySGetNewestMapInfos(e: egret.Event): void {
             const newData = this._createDataForListMap();
             if (newData.length > 0) {

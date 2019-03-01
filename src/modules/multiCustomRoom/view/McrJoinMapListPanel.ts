@@ -55,7 +55,6 @@ namespace TinyWars.MultiCustomRoom {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.MouseWheel,                     callback: this._onNotifyMouseWheel },
                 { type: Notify.Type.SMcrGetUnjoinedWaitingInfos,    callback: this._onNotifySMcrGetUnjoinedWaitingInfos },
             ];
             this._uiListeners = [
@@ -70,12 +69,13 @@ namespace TinyWars.MultiCustomRoom {
 
         protected _onOpened(): void {
             this._groupInfo.visible = false;
-
+            this._zoomMap.setMouseWheelListenerEnabled(true);
             McrProxy.reqUnjoinedWarInfos();
         }
 
         protected _onClosed(): void {
             this._zoomMap.removeAllContents();
+            this._zoomMap.setMouseWheelListenerEnabled(false);
             this._listWar.clear();
             this._listPlayer.clear();
             egret.Tween.removeTweens(this._groupInfo);
@@ -105,10 +105,6 @@ namespace TinyWars.MultiCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyMouseWheel(e: egret.Event): void {
-            this._zoomMap.setZoomByScroll(StageManager.getMouseX(), StageManager.getMouseY(), e.data);
-        }
-
         private _onNotifySMcrGetUnjoinedWaitingInfos(e: egret.Event): void {
             const newData        = this._createDataForListWar(McrModel.getUnjoinedWaitingInfos());
             this._dataForListWar = newData;
