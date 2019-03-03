@@ -1,17 +1,21 @@
 
 namespace TinyWars.MultiCustomWar {
-    import Types = Utility.Types;
+    import Types            = Utility.Types;
+    import Logger           = Utility.Logger;
+    import GridIndexHelpers = Utility.GridIndexHelpers;
+    import Helpers          = Utility.Helpers;
+    import GridIndex        = Types.GridIndex;
 
     const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = ConfigManager.getGridSize();
-    const _CORNER_WIDTH             = 28;
-    const _CORNER_HEIGHT            = 28;
-    const _PULSE_IN_DURATION        = 150;
-    const _PULSE_OUT_DURATION       = 150;
-    const _PULSE_INTERVAL_DURATION  = 300;
-    const _TARGET_FRAME_DURATION    = 100;
-
-    const _IMG_SOURCE_FOR_NORMAL_CORNER = "c04_t03_s01_f01";
-    const _IMG_SOURCES_FOR_TARGET       = [
+    const _CORNER_WIDTH                         = 28;
+    const _CORNER_HEIGHT                        = 28;
+    const _PULSE_IN_DURATION                    = 150;
+    const _PULSE_OUT_DURATION                   = 150;
+    const _PULSE_INTERVAL_DURATION              = 300;
+    const _TARGET_FRAME_DURATION                = 100;
+    const _DRAG_FIELD_SQUARED_TRIGGER_DISTANCE  = 400;
+    const _IMG_SOURCE_FOR_NORMAL_CORNER         = "c04_t03_s01_f01";
+    const _IMG_SOURCES_FOR_TARGET               = [
         `c04_t03_s02_f01`,
         `c04_t03_s02_f02`,
         `c04_t03_s02_f03`,
@@ -35,9 +39,16 @@ namespace TinyWars.MultiCustomWar {
     const _LOWER_RIGHT_CORNER_INNER_X   = _GRID_WIDTH  - 4;
     const _LOWER_RIGHT_CORNER_INNER_Y   = _GRID_HEIGHT - 4;
 
-    export class McwCursorView extends egret.DisplayObjectContainer {
+    export class McwCursorView extends eui.Group {
         private _cursor                 : McwCursor;
+        private _mapSize                : Types.MapSize;
         private _frameIndexForImgTarget = 0;
+
+        private _currGlobalTouchPoints      = new Map<number, Types.Point>();
+        private _prevGlobalTouchPoints      = new Map<number, Types.Point>();
+        private _touchIdForTouchingCursor   : number;
+        private _initialGlobalTouchPoint    : Types.Point;
+        private _isTouchMovedOrMultiple     : boolean;
 
         private _conForAll              = new egret.DisplayObjectContainer();
         private _conForNormal           = new egret.DisplayObjectContainer();
@@ -56,25 +67,126 @@ namespace TinyWars.MultiCustomWar {
             this.addChild(this._conForAll);
             this._initConForNormal();
             this._initConForTarget();
-            this._initConForSiloArea()
+            this._initConForSiloArea();
         }
 
         public init(cursor: McwCursor): void {
             egret.assert(!this._cursor, "McwCursorView.init() already initialied!");
-            this._cursor = cursor;
+            this._cursor    = cursor;
+            this._mapSize   = cursor.getMapSize();
+            this.width      = this._mapSize.width * _GRID_WIDTH;
+            this.height     = this._mapSize.height * _GRID_HEIGHT;
         }
 
         public startRunningView(): void {
             this._startNormalAnimation();
             this._startTargetAnimation();
+
+            this.addEventListener(egret.TouchEvent.TOUCH_BEGIN,             this._onTouchBegin,             this);
+            this.addEventListener(egret.TouchEvent.TOUCH_CANCEL,            this._onTouchCancel,            this);
+            this.addEventListener(egret.TouchEvent.TOUCH_END,               this._onTouchEnd,               this);
+            this.addEventListener(egret.TouchEvent.TOUCH_RELEASE_OUTSIDE,   this._onTouchReleaseOutside,    this);
         }
         public stopRunningView(): void {
             this._stopNormalAnimation();
             this._stopTargetAnimation();
+
+            this.removeEventListener(egret.TouchEvent.TOUCH_BEGIN,              this._onTouchBegin,             this);
+            this.removeEventListener(egret.TouchEvent.TOUCH_CANCEL,             this._onTouchCancel,            this);
+            this.removeEventListener(egret.TouchEvent.TOUCH_END,                this._onTouchEnd,               this);
+            this.removeEventListener(egret.TouchEvent.TOUCH_RELEASE_OUTSIDE,    this._onTouchReleaseOutside,    this);
+            this.removeEventListener(egret.TouchEvent.TOUCH_MOVE,               this._onTouchMove,              this);
+            this._currGlobalTouchPoints.clear();
+            this._prevGlobalTouchPoints.clear();
+            delete this._initialGlobalTouchPoint;
+            delete this._isTouchMovedOrMultiple;
+            delete this._touchIdForTouchingCursor;
         }
 
         public updateView(): void {
+            this._updatePos();
+        }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Callbacks.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _onTouchBegin(e: egret.TouchEvent): void {
+            const cursor    = this._cursor;
+            const touchId   = e.touchPointID;
+            if (this._currGlobalTouchPoints.size <= 0) {
+                this.addEventListener(egret.TouchEvent.TOUCH_MOVE, this._onTouchMove, this);
+                this._initialGlobalTouchPoint   = { x: e.stageX, y: e.stageY };
+                this._isTouchMovedOrMultiple    = false;
+                this._touchIdForTouchingCursor  = GridIndexHelpers.checkIsEqual(this._cursor.getGridIndex(), this._getGridIndexByLocalXY(e.localX, e.localY))
+                    ? touchId
+                    : undefined
+            }
+
+            if (this._currGlobalTouchPoints.size <= 1) {
+                this._currGlobalTouchPoints.set(touchId, { x: e.stageX, y: e.stageY });
+                this._prevGlobalTouchPoints.set(touchId, { x: e.stageX, y: e.stageY });
+            }
+            if (this._currGlobalTouchPoints.size >= 2) {
+                this._isTouchMovedOrMultiple = true;
+            }
+        }
+        private _onTouchEnd(e: egret.TouchEvent): void {
+            this._removeTouch(e.touchPointID);
+        }
+        private _onTouchCancel(e: egret.TouchEvent): void {
+            this._removeTouch(e.touchPointID);
+        }
+        private _onTouchReleaseOutside(e: egret.TouchEvent): void {
+            this._removeTouch(e.touchPointID);
+        }
+        private _onTouchMove(e: egret.TouchEvent): void {
+            const touchId           = e.touchPointID;
+            const currGlobalPoint   = { x: e.stageX, y: e.stageY };
+            const cursor            = this._cursor;
+            this._currGlobalTouchPoints.set(touchId, currGlobalPoint);
+            this._isTouchMovedOrMultiple = (this._isTouchMovedOrMultiple)
+                || (Helpers.getSquaredPointDistance(e.stageX, e.stageY, this._initialGlobalTouchPoint.x, this._initialGlobalTouchPoint.y) > _DRAG_FIELD_SQUARED_TRIGGER_DISTANCE);
+
+            if (this._currGlobalTouchPoints.size > 1) {
+                // Zoom the map.
+            } else {
+                if (this._touchIdForTouchingCursor != null) {
+                    const gridIndex = this._getGridIndexByLocalXY(e.localX, e.localY);
+                    if (!GridIndexHelpers.checkIsEqual(gridIndex, cursor.getGridIndex())) {
+                        this._isTouchMovedOrMultiple = true;
+                        cursor.setGridIndex(gridIndex);
+                        this.updateView();
+                    }
+                } else {
+                    // Drag the map.
+                }
+            }
+        }
+        private _removeTouch(touchId: number): void {
+            this._currGlobalTouchPoints.delete(touchId);
+            this._prevGlobalTouchPoints.delete(touchId);
+
+            if (!this._currGlobalTouchPoints.has(this._touchIdForTouchingCursor)) {
+                delete this._touchIdForTouchingCursor;
+            }
+            if (!this._currGlobalTouchPoints.size) {
+                this.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this._onTouchMove, this);
+                if (!this._isTouchMovedOrMultiple) {
+                    const gridIndex = this._getGridIndexByGlobalXY(this._initialGlobalTouchPoint.x, this._initialGlobalTouchPoint.y);
+                    if (!GridIndexHelpers.checkIsEqual(gridIndex, this._cursor.getGridIndex())) {
+                        this._cursor.setGridIndex(gridIndex);
+                        this.updateView();
+                    }
+                }
+            }
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Functions for view.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _updatePos(): void {
+            this._conForAll.x = this._cursor.getGridX() * _GRID_WIDTH;
+            this._conForAll.y = this._cursor.getGridY() * _GRID_HEIGHT;
         }
 
         private _initConForNormal(): void {
@@ -154,6 +266,29 @@ namespace TinyWars.MultiCustomWar {
         }
         private _stopTargetAnimation(): void {
             egret.Tween.removeTweens(this._imgTarget);
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Utils.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _getGridXByLocalX(localX: number): number {
+            let gridX = Math.floor(localX / _GRID_WIDTH);
+            gridX = Math.max(gridX, 0);
+            gridX = Math.min(gridX, this._mapSize.width - 1);
+            return gridX;
+        }
+        private _getGridYByLocalY(localY: number): number {
+            let gridY = Math.floor(localY / _GRID_HEIGHT);
+            gridY = Math.max(gridY, 0);
+            gridY = Math.min(gridY, this._mapSize.height - 1);
+            return gridY;
+        }
+        private _getGridIndexByLocalXY(localX: number, localY: number): GridIndex {
+            return { x: this._getGridXByLocalX(localX), y: this._getGridYByLocalY(localY) };
+        }
+        private _getGridIndexByGlobalXY(globalX: number, globalY: number): GridIndex {
+            const point = this.globalToLocal(globalX, globalY);
+            return this._getGridIndexByLocalXY(point.x, point.y);
         }
     }
 }
