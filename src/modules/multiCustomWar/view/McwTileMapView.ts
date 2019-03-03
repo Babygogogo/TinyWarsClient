@@ -46,10 +46,10 @@ namespace TinyWars.MultiCustomWar {
             });
         }
 
-        public startRunning(): void {
+        public startRunningView(): void {
             Notify.addEventListeners(this._notifyListeners, this);
         }
-        public stopRunning(): void {
+        public stopRunningView(): void {
             Notify.removeEventListeners(this._notifyListeners, this);
         }
 

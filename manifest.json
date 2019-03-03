@@ -47,6 +47,7 @@
 		"bin-debug/utility/ConfigManager.js",
 		"bin-debug/utility/StageManager.js",
 		"bin-debug/modules/warMap/model/WarMapProxy.js",
+		"bin-debug/modules/multiCustomWar/model/McwField.js",
 		"bin-debug/modules/multiCustomWar/model/McwFogMap.js",
 		"bin-debug/Main.js",
 		"bin-debug/modules/multiCustomWar/model/McwPlayer.js",
@@ -59,6 +60,7 @@
 		"bin-debug/gameui/UiButton.js",
 		"bin-debug/gameui/UiScrollList.js",
 		"bin-debug/modules/multiCustomWar/view/McwBackgroundPanel.js",
+		"bin-debug/modules/multiCustomWar/view/McwCursorView.js",
 		"bin-debug/modules/multiCustomWar/view/McwFieldView.js",
 		"bin-debug/modules/multiCustomWar/view/McwTileMapView.js",
 		"bin-debug/modules/multiCustomWar/view/McwTileView.js",
@@ -93,7 +95,7 @@
 		"bin-debug/modules/multiCustomRoom/view/McrJoinMapListPanel.js",
 		"bin-debug/utility/ResManager.js",
 		"bin-debug/modules/multiCustomRoom/view/McrJoinPasswordPanel.js",
-		"bin-debug/modules/multiCustomWar/model/McwField.js",
+		"bin-debug/modules/multiCustomWar/model/McwCursor.js",
 		"bin-debug/modules/multiCustomWar/model/McwTileMap.js"
 	]
 }

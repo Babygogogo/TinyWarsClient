@@ -12,7 +12,6 @@ namespace TinyWars.MultiCustomWar {
         private _previousTouchPoints: Types.TouchPoints = {};
 
         private _notifyListeners = [
-            { type: Notify.Type.MouseWheel, callback: this._onNotifyMouseWheel },
         ];
         private _uiListeners = [
             { ui: this._fieldContainer, callback: this._onTouchBeginFieldContainer, eventType: egret.TouchEvent.TOUCH_BEGIN },
@@ -52,17 +51,18 @@ namespace TinyWars.MultiCustomWar {
             for (const listener of this._uiListeners) {
                 listener.ui.addEventListener(listener.eventType, listener.callback, this);
             }
+
+            this._fieldContainer.setMouseWheelListenerEnabled(true);
         }
         public stopRunning(): void {
             Notify.removeEventListeners(this._notifyListeners, this);
             for (const listener of this._uiListeners) {
                 listener.ui.removeEventListener(listener.eventType, listener.callback, this);
             }
+
+            this._fieldContainer.setMouseWheelListenerEnabled(false);
         }
 
-        private _onNotifyMouseWheel(e: egret.Event): void {
-            this._fieldContainer.setZoomByScroll(StageManager.getMouseX(), StageManager.getMouseY(), e.data);
-        }
         private _onTouchBeginFieldContainer(e: egret.TouchEvent): void {
             const touchesCount = Helpers.getObjectKeysCount(this._currentTouchPoints);
             if (touchesCount <= 0) {

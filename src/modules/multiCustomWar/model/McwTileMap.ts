@@ -94,11 +94,11 @@ namespace TinyWars.MultiCustomWar {
             this.forEachTile(tile => tile.startRunning(war));
         }
         public startRunningView(): void {
-            this.getView().startRunning();
+            this.getView().startRunningView();
             this.forEachTile(tile => tile.startRunningView());
         }
         public stopRunning(): void {
-            this.getView().stopRunning();
+            this.getView().stopRunningView();
         }
 
         public serialize(): SerializedMcTileMap | undefined {

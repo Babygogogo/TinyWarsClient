@@ -1,5 +1,4 @@
 
-
 namespace TinyWars.MultiCustomWar {
     import Types                = Utility.Types;
     import SerializedMcField    = Types.SerializedMcwField;
@@ -8,6 +7,7 @@ namespace TinyWars.MultiCustomWar {
         private _unitMap: McwUnitMap;
         private _tileMap: McwTileMap;
         private _fogMap : McwFogMap;
+        private _cursor : McwCursor;
         private _view   : McwFieldView;
 
         public constructor() {
@@ -17,6 +17,7 @@ namespace TinyWars.MultiCustomWar {
             this._setFogMap(await new McwFogMap().init(data.fogMap, mapIndexKey));
             this._setTileMap(await new McwTileMap().init(configVersion, mapIndexKey, data.tileMap));
             this._setUnitMap(await new McwUnitMap().init(configVersion, mapIndexKey, data.unitMap));
+            this._setCursor(await new McwCursor().init(mapIndexKey));
 
             this._view = this._view || new McwFieldView();
             this._view.init(this);
@@ -28,30 +29,18 @@ namespace TinyWars.MultiCustomWar {
             this.getTileMap().startRunning(war);
             this.getUnitMap().startRunning(war);
             this.getFogMap().startRunning(war);
+            this.getCursor().startRunning(war);
         }
         public startRunningView(): void {
             this.getView().startRunning();
             this.getTileMap().startRunningView();
             this.getUnitMap().startRunningView();
+            this.getCursor().startRunningView();
         }
         public stopRunning(): void {
             this.getTileMap().stopRunning();
             this.getUnitMap().stopRunning();
-        }
-
-        public serialize(): SerializedMcField {
-            return {
-                fogMap  : this.getFogMap().serialize(),
-                unitMap : this.getUnitMap().serialize(),
-                tileMap : this.getTileMap().serialize(),
-            };
-        }
-        public serializeForPlayer(playerIndex: number): SerializedMcField {
-            return {
-                fogMap  : this.getFogMap().serializeForPlayer(playerIndex),
-                unitMap : this.getUnitMap().serializeForPlayer(playerIndex),
-                tileMap : this.getTileMap().serializeForPlayer(playerIndex),
-            };
+            this.getCursor().stopRunning();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -80,6 +69,13 @@ namespace TinyWars.MultiCustomWar {
         }
         public getUnitMap(): McwUnitMap {
             return this._unitMap;
+        }
+
+        private _setCursor(cursor: McwCursor): void {
+            this._cursor = cursor;
+        }
+        public getCursor(): McwCursor {
+            return this._cursor;
         }
     }
 }
