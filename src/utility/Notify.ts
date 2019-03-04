@@ -1,91 +1,100 @@
 
-namespace TinyWars.Utility {
-    export namespace Notify {
-        ////////////////////////////////////////////////////////////////////////////////
-        // Notify types.
-        ////////////////////////////////////////////////////////////////////////////////
-        export const enum Type {
-            NetworkConnected,
-            NetworkDisconnected,
+namespace TinyWars.Utility.Notify {
+    import GridIndex    = Types.GridIndex;
+    import TouchPoints  = Types.TouchPoints;
 
-            TimeTick,
-            TileAnimationTick,
-            UnitAnimationTick,
+    ////////////////////////////////////////////////////////////////////////////////
+    // Notify types.
+    ////////////////////////////////////////////////////////////////////////////////
+    export const enum Type {
+        NetworkConnected,
+        NetworkDisconnected,
 
-            MouseWheel,
+        TimeTick,
+        TileAnimationTick,
+        UnitAnimationTick,
 
-            SNewestConfigVersion,
-            SLogin,
-            SRegister,
-            SLogout,
-            SHeartbeat,
-            SGetNewestMapInfos,
-            SGetMapDynamicInfo,
-            SGetMapDynamicInfoFailed,
-            SMcrCreateWar,
-            SMcrGetJoinedWaitingInfos,
-            SMcrGetUnjoinedWaitingInfos,
-            SMcrGetJoinedOngoingInfos,
-            SMcrExitWar,
-            SMcrJoinWar,
-            SMcrContinueWarFailed,
-            SMcrContinueWar,
+        MouseWheel,
 
-            ConfigLoaded,
-            TileModelUpdated,
+        SNewestConfigVersion,
+        SLogin,
+        SRegister,
+        SLogout,
+        SHeartbeat,
+        SGetNewestMapInfos,
+        SGetMapDynamicInfo,
+        SGetMapDynamicInfoFailed,
+        SMcrCreateWar,
+        SMcrGetJoinedWaitingInfos,
+        SMcrGetUnjoinedWaitingInfos,
+        SMcrGetJoinedOngoingInfos,
+        SMcrExitWar,
+        SMcrJoinWar,
+        SMcrContinueWarFailed,
+        SMcrContinueWar,
 
-            McwTurnIndexChanged,
-            McwTurnPhaseCodeChanged,
-            McwPlayerIndexInTurnChanged,
-            McwPlayerFundChanged,
-            McwPlayerEnergyChanged,
+        ConfigLoaded,
+        TileModelUpdated,
+
+        McwTurnIndexChanged,
+        McwTurnPhaseCodeChanged,
+        McwPlayerIndexInTurnChanged,
+        McwPlayerFundChanged,
+        McwPlayerEnergyChanged,
+        McwCursorTapped,
+        McwCursorDragged,
+        McwFieldZoomed,
+        McwFieldDragged,
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    // Notify datas.
+    ////////////////////////////////////////////////////////////////////////////////
+    export namespace Data {
+        export type ConfigLoaded                = number;
+        export type McwPlayerIndexInTurnChanged = number;
+        export type McwPlayerFundChanged        = MultiCustomWar.McwPlayer;
+        export type McwPlayerEnergyChanged      = MultiCustomWar.McwPlayer;
+        export type McwCursorTapped             = { current: GridIndex, tappedOn: GridIndex };
+        export type McwCursorDragged            = { current: GridIndex, draggedTo: GridIndex };
+        export type McwFieldZoomed              = { previous: TouchPoints, current: TouchPoints };
+        export type McwFieldDragged             = { previous: Types.Point, current: Types.Point };
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    // Dispatcher functions.
+    ////////////////////////////////////////////////////////////////////////////////
+    const _DISPATCHER = new egret.EventDispatcher();
+
+    export type Listener = {
+        type       : Type,
+        callback   : (e: egret.Event) => void,
+        thisObject?: any,
+    };
+
+    export function dispatch(t: Type, data?: any): void {
+        _DISPATCHER.dispatchEventWith(getTypeName(t), false, data);
+    }
+
+    export function addEventListener(type: Type, callback: (e: egret.Event) => void, thisObject?: any): void {
+        _DISPATCHER.addEventListener(getTypeName(type), callback, thisObject);
+    }
+    export function addEventListeners(listeners: Listener[], thisObject?: any): void {
+        for (const l of listeners) {
+            addEventListener(l.type, l.callback, l.thisObject || thisObject);
         }
+    }
 
-        ////////////////////////////////////////////////////////////////////////////////
-        // Notify datas.
-        ////////////////////////////////////////////////////////////////////////////////
-        export namespace Data {
-            export type ConfigLoaded                = number;
-            export type McwPlayerIndexInTurnChanged = number;
-            export type McwPlayerFundChanged        = MultiCustomWar.McwPlayer;
-            export type McwPlayerEnergyChanged      = MultiCustomWar.McwPlayer;
+    export function removeEventListener(type: Type, callback: (e: egret.Event) => void, thisObject?: any): void {
+        _DISPATCHER.removeEventListener(getTypeName(type), callback, thisObject);
+    }
+    export function removeEventListeners(listeners: Listener[], thisObject?: any): void {
+        for (const l of listeners) {
+            removeEventListener(l.type, l.callback, l.thisObject || thisObject);
         }
+    }
 
-        ////////////////////////////////////////////////////////////////////////////////
-        // Dispatcher functions.
-        ////////////////////////////////////////////////////////////////////////////////
-        const _DISPATCHER = new egret.EventDispatcher();
-
-        export type Listener = {
-            type       : Type,
-            callback   : (e: egret.Event) => void,
-            thisObject?: any,
-        };
-
-        export function dispatch(t: Type, data?: any): void {
-            _DISPATCHER.dispatchEventWith(getTypeName(t), false, data);
-        }
-
-        export function addEventListener(type: Type, callback: (e: egret.Event) => void, thisObject?: any): void {
-            _DISPATCHER.addEventListener(getTypeName(type), callback, thisObject);
-        }
-        export function addEventListeners(listeners: Listener[], thisObject?: any): void {
-            for (const l of listeners) {
-                addEventListener(l.type, l.callback, l.thisObject || thisObject);
-            }
-        }
-
-        export function removeEventListener(type: Type, callback: (e: egret.Event) => void, thisObject?: any): void {
-            _DISPATCHER.removeEventListener(getTypeName(type), callback, thisObject);
-        }
-        export function removeEventListeners(listeners: Listener[], thisObject?: any): void {
-            for (const l of listeners) {
-                removeEventListener(l.type, l.callback, l.thisObject || thisObject);
-            }
-        }
-
-        function getTypeName(t: Type): string {
-            return "Notify" + t;
-        }
+    function getTypeName(t: Type): string {
+        return "Notify" + t;
     }
 }

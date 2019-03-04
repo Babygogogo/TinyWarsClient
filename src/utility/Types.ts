@@ -169,9 +169,7 @@ namespace TinyWars.Utility.Types {
         [touchId: number]: egret.TouchEvent;
     }
 
-    export type TouchPoints = {
-        [touchId: number]: Point;
-    }
+    export type TouchPoints = Map<number, Point>;
 
     export type MoveCosts = {
         [moveType: number]: number | undefined;

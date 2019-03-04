@@ -6,12 +6,7 @@ namespace TinyWars.GameUi {
     import Notify       = Utility.Notify;
     import Size         = Types.Size;
     import Point        = Types.Point;
-
-    const ORIGIN: Point = {
-        x: 0,
-        y: 0
-    };
-    type TouchPoints = Map<number, Types.Point>;
+    import TouchPoints  = Types.TouchPoints;
 
     export class UiZoomableComponent extends eui.Component {
         private _maskForContents: UiImage;
@@ -165,6 +160,11 @@ namespace TinyWars.GameUi {
             }
         }
 
+        public setDragByTouches(currGlobalPoint: Point, prevGlobalPoint: Point): void {
+            this.setContentX(this.getContentX() + currGlobalPoint.x - prevGlobalPoint.x, true);
+            this.setContentY(this.getContentY() + currGlobalPoint.y - prevGlobalPoint.y, true);
+        }
+
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
@@ -208,8 +208,7 @@ namespace TinyWars.GameUi {
             if (this._currGlobalTouchPoints.size > 1) {
                 this.setZoomByTouches(this._currGlobalTouchPoints, this._prevGlobalTouchPoints);
             } else {
-                this.setContentX(this.getContentX() + e.stageX - this._prevGlobalTouchPoints.get(touchId).x, true);
-                this.setContentY(this.getContentY() + e.stageY - this._prevGlobalTouchPoints.get(touchId).y, true);
+                this.setDragByTouches(this._currGlobalTouchPoints.get(touchId), this._prevGlobalTouchPoints.get(touchId));
             }
 
             this._prevGlobalTouchPoints.set(touchId, { x: e.stageX, y: e.stageY });

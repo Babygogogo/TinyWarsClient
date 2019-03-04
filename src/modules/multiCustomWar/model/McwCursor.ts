@@ -2,6 +2,7 @@
 namespace TinyWars.MultiCustomWar {
     import Types        = Utility.Types;
     import Helpers      = Utility.Helpers;
+    import Notify       = Utility.Notify;
     import WarMapModel  = WarMap.WarMapModel;
 
     export class McwCursor {
@@ -11,6 +12,11 @@ namespace TinyWars.MultiCustomWar {
         private _view       : McwCursorView;
 
         private _war    : McwWar;
+
+        private _notifyListeners: Notify.Listener[] = [
+            { type: Notify.Type.McwCursorTapped,    callback: this._onNotifyMcwCursorTapped },
+            { type: Notify.Type.McwCursorDragged,   callback: this._onNotifyMcwCursorDragged },
+        ];
 
         public constructor() {
         }
@@ -28,14 +34,35 @@ namespace TinyWars.MultiCustomWar {
 
         public startRunning(war: McwWar): void {
             this._war = war;
+
+            Notify.addEventListeners(this._notifyListeners, this);
         }
         public startRunningView(): void {
             this.getView().startRunningView();
         }
         public stopRunning(): void {
+            Notify.removeEventListeners(this._notifyListeners, this);
+
             this.getView().stopRunningView();
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Callbacks.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _onNotifyMcwCursorTapped(e: egret.Event): void {
+            const data = e.data as Notify.Data.McwCursorTapped;
+            this.setGridIndex(data.tappedOn);
+            this.updateView();
+        }
+        private _onNotifyMcwCursorDragged(e: egret.Event): void {
+            const data = e.data as Notify.Data.McwCursorDragged;
+            this.setGridIndex(data.draggedTo);
+            this.updateView();
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Other functions.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         public getView(): McwCursorView {
             return this._view;
         }

@@ -8,14 +8,12 @@ namespace TinyWars.MultiCustomWar {
     export class McwWarView extends eui.Group {
         private _fieldContainer     = new GameUi.UiZoomableComponent();
         private _war                : McwWar;
-        private _currentTouchPoints : Types.TouchPoints = {};
-        private _previousTouchPoints: Types.TouchPoints = {};
 
-        private _notifyListeners = [
+        private _notifyListeners: Notify.Listener[] = [
+            { type: Notify.Type.McwFieldZoomed,     callback: this._onNotifyMcwFieldZoomed },
+            { type: Notify.Type.McwFieldDragged,    callback: this._onNotifyMcwFieldDragged },
         ];
         private _uiListeners = [
-            { ui: this._fieldContainer, callback: this._onTouchBeginFieldContainer, eventType: egret.TouchEvent.TOUCH_BEGIN },
-            { ui: this._fieldContainer, callback: this._onTouchEndFieldContainer,   eventType: egret.TouchEvent.TOUCH_END },
         ];
 
         public constructor() {
@@ -63,39 +61,16 @@ namespace TinyWars.MultiCustomWar {
             this._fieldContainer.setMouseWheelListenerEnabled(false);
         }
 
-        private _onTouchBeginFieldContainer(e: egret.TouchEvent): void {
-            const touchesCount = Helpers.getObjectKeysCount(this._currentTouchPoints);
-            if (touchesCount <= 0) {
-                this._fieldContainer.addEventListener(egret.TouchEvent.TOUCH_MOVE, this._onTouchMoveFieldContainer, this);
-            }
-
-            const touchId = e.touchPointID;
-            if (touchesCount <= 1) {
-                this._currentTouchPoints[touchId]  = { x: e.stageX, y: e.stageY };
-                this._previousTouchPoints[touchId] = { x: e.stageX, y: e.stageY };
-            }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Callbacks.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _onNotifyMcwFieldZoomed(e: egret.Event): void {
+            const data = e.data as Notify.Data.McwFieldZoomed;
+            this._fieldContainer.setZoomByTouches(data.current, data.previous);
         }
-        private _onTouchEndFieldContainer(e: egret.TouchEvent): void {
-            delete this._currentTouchPoints[e.touchPointID];
-            delete this._previousTouchPoints[e.touchPointID];
-
-            if (Helpers.checkIsEmptyObject(this._currentTouchPoints)) {
-                this._fieldContainer.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this._onTouchMoveFieldContainer, this);
-            }
-        }
-        private _onTouchMoveFieldContainer(e: egret.TouchEvent): void {
-            // const touchId = e.touchPointID;
-            // this._currentTouchPoints[touchId] = { x: e.stageX, y: e.stageY };
-
-            // if (Helpers.getObjectKeysCount(this._currentTouchPoints) > 1) {
-            //     this._fieldContainer.setZoomByTouches(this._currentTouchPoints, this._previousTouchPoints);
-            // } else {
-            //     const zoomMap = this._fieldContainer;
-            //     zoomMap.setContentX(zoomMap.getContentX() + e.stageX - this._previousTouchPoints[touchId].x, true);
-            //     zoomMap.setContentY(zoomMap.getContentY() + e.stageY - this._previousTouchPoints[touchId].y, true);
-            // }
-
-            // this._previousTouchPoints[touchId] = { x: e.stageX, y: e.stageY };
+        private _onNotifyMcwFieldDragged(e: egret.Event): void {
+            const data = e.data as Notify.Data.McwFieldDragged;
+            this._fieldContainer.setDragByTouches(data.current, data.previous);
         }
     }
 }

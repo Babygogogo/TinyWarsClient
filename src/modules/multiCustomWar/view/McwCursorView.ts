@@ -4,6 +4,7 @@ namespace TinyWars.MultiCustomWar {
     import Logger           = Utility.Logger;
     import GridIndexHelpers = Utility.GridIndexHelpers;
     import Helpers          = Utility.Helpers;
+    import Notify           = Utility.Notify;
     import GridIndex        = Types.GridIndex;
 
     const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = ConfigManager.getGridSize();
@@ -111,7 +112,6 @@ namespace TinyWars.MultiCustomWar {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onTouchBegin(e: egret.TouchEvent): void {
-            const cursor    = this._cursor;
             const touchId   = e.touchPointID;
             if (this._currGlobalTouchPoints.size <= 0) {
                 this.addEventListener(egret.TouchEvent.TOUCH_MOVE, this._onTouchMove, this);
@@ -140,27 +140,39 @@ namespace TinyWars.MultiCustomWar {
             this._removeTouch(e.touchPointID);
         }
         private _onTouchMove(e: egret.TouchEvent): void {
-            const touchId           = e.touchPointID;
-            const currGlobalPoint   = { x: e.stageX, y: e.stageY };
-            const cursor            = this._cursor;
-            this._currGlobalTouchPoints.set(touchId, currGlobalPoint);
-            this._isTouchMovedOrMultiple = (this._isTouchMovedOrMultiple)
+            const touchId                   = e.touchPointID;
+            const currGlobalPoint           = { x: e.stageX, y: e.stageY };
+            this._isTouchMovedOrMultiple    = (this._isTouchMovedOrMultiple)
                 || (Helpers.getSquaredPointDistance(e.stageX, e.stageY, this._initialGlobalTouchPoint.x, this._initialGlobalTouchPoint.y) > _DRAG_FIELD_SQUARED_TRIGGER_DISTANCE);
+            this._currGlobalTouchPoints.set(touchId, currGlobalPoint);
 
             if (this._currGlobalTouchPoints.size > 1) {
-                // Zoom the map.
+                Notify.dispatch(Notify.Type.McwFieldZoomed, {
+                    current : this._currGlobalTouchPoints,
+                    previous: this._prevGlobalTouchPoints,
+                } as Notify.Data.McwFieldZoomed);
             } else {
                 if (this._touchIdForTouchingCursor != null) {
-                    const gridIndex = this._getGridIndexByLocalXY(e.localX, e.localY);
-                    if (!GridIndexHelpers.checkIsEqual(gridIndex, cursor.getGridIndex())) {
+                    const gridIndex     = this._getGridIndexByLocalXY(e.localX, e.localY);
+                    const currGridIndex = this._cursor.getGridIndex();
+                    if (!GridIndexHelpers.checkIsEqual(gridIndex, currGridIndex)) {
                         this._isTouchMovedOrMultiple = true;
-                        cursor.setGridIndex(gridIndex);
-                        this.updateView();
+                        Notify.dispatch(Notify.Type.McwCursorDragged, {
+                            current     : currGridIndex,
+                            draggedTo   : gridIndex,
+                        } as Notify.Data.McwCursorDragged);
                     }
                 } else {
-                    // Drag the map.
+                    if (this._isTouchMovedOrMultiple) {
+                        Notify.dispatch(Notify.Type.McwFieldDragged, {
+                            current : this._currGlobalTouchPoints.values().next().value,
+                            previous: this._prevGlobalTouchPoints.values().next().value,
+                        } as Notify.Data.McwFieldDragged);
+                    }
                 }
             }
+
+            this._prevGlobalTouchPoints.set(touchId, { x: e.stageX, y: e.stageY });
         }
         private _removeTouch(touchId: number): void {
             this._currGlobalTouchPoints.delete(touchId);
@@ -172,10 +184,13 @@ namespace TinyWars.MultiCustomWar {
             if (!this._currGlobalTouchPoints.size) {
                 this.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this._onTouchMove, this);
                 if (!this._isTouchMovedOrMultiple) {
-                    const gridIndex = this._getGridIndexByGlobalXY(this._initialGlobalTouchPoint.x, this._initialGlobalTouchPoint.y);
-                    if (!GridIndexHelpers.checkIsEqual(gridIndex, this._cursor.getGridIndex())) {
-                        this._cursor.setGridIndex(gridIndex);
-                        this.updateView();
+                    const gridIndex     = this._getGridIndexByGlobalXY(this._initialGlobalTouchPoint.x, this._initialGlobalTouchPoint.y);
+                    const currGridIndex = this._cursor.getGridIndex();
+                    if (!GridIndexHelpers.checkIsEqual(gridIndex, currGridIndex)) {
+                        Notify.dispatch(Notify.Type.McwCursorTapped, {
+                            current : currGridIndex,
+                            tappedOn: gridIndex,
+                        } as Notify.Data.McwCursorTapped);
                     }
                 }
             }
