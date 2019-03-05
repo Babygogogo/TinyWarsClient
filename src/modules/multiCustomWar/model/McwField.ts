@@ -4,11 +4,12 @@ namespace TinyWars.MultiCustomWar {
     import SerializedMcField    = Types.SerializedMcwField;
 
     export class McwField {
-        private _unitMap: McwUnitMap;
-        private _tileMap: McwTileMap;
-        private _fogMap : McwFogMap;
-        private _cursor : McwCursor;
-        private _view   : McwFieldView;
+        private _unitMap        : McwUnitMap;
+        private _tileMap        : McwTileMap;
+        private _fogMap         : McwFogMap;
+        private _cursor         : McwCursor;
+        private _actionPlanner  : McwActionPlanner;
+        private _view           : McwFieldView;
 
         public constructor() {
         }
@@ -18,6 +19,7 @@ namespace TinyWars.MultiCustomWar {
             this._setTileMap(await new McwTileMap().init(configVersion, mapIndexKey, data.tileMap));
             this._setUnitMap(await new McwUnitMap().init(configVersion, mapIndexKey, data.unitMap));
             this._setCursor(await new McwCursor().init(mapIndexKey));
+            this._setActionPlanner(await new McwActionPlanner().init(mapIndexKey));
 
             this._view = this._view || new McwFieldView();
             this._view.init(this);
@@ -30,17 +32,20 @@ namespace TinyWars.MultiCustomWar {
             this.getUnitMap().startRunning(war);
             this.getFogMap().startRunning(war);
             this.getCursor().startRunning(war);
+            this.getActionPlanner().startRunning(war);
         }
         public startRunningView(): void {
             this.getView().startRunning();
             this.getTileMap().startRunningView();
             this.getUnitMap().startRunningView();
             this.getCursor().startRunningView();
+            this.getActionPlanner().startRunningView();
         }
         public stopRunning(): void {
             this.getTileMap().stopRunning();
             this.getUnitMap().stopRunning();
             this.getCursor().stopRunning();
+            this.getActionPlanner().stopRunning();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -76,6 +81,13 @@ namespace TinyWars.MultiCustomWar {
         }
         public getCursor(): McwCursor {
             return this._cursor;
+        }
+
+        private _setActionPlanner(actionPlanner: McwActionPlanner): void {
+            this._actionPlanner = actionPlanner;
+        }
+        public getActionPlanner(): McwActionPlanner {
+            return this._actionPlanner;
         }
     }
 }

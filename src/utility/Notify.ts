@@ -13,6 +13,7 @@ namespace TinyWars.Utility.Notify {
         TimeTick,
         TileAnimationTick,
         UnitAnimationTick,
+        GridAnimationTick,
 
         MouseWheel,
 

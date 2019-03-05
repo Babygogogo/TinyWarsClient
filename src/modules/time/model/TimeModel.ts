@@ -5,6 +5,7 @@ namespace TinyWars.Time.TimeModel {
 
     const TILE_ANIMATION_INTERVAL = 160;        // 0.16s
     const UNIT_ANIMATION_INTERVAL = 250;        // 0.25s
+    const GRID_ANIMATION_INTERVAL = 100;        // 0.1s
     const HEARTBEAT_INTERVAL      = 60 * 1000;  // 1min
 
     let _isHeartbeatAnswered: boolean;
@@ -12,8 +13,9 @@ namespace TinyWars.Time.TimeModel {
     let _heartbeatIntervalId: number;
     let _serverTimestamp    : number;
 
-    let _tileAnimationTickCount : number = 0;
-    let _unitAnimationTickCount : number = 0;
+    let _tileAnimationTickCount = 0;
+    let _unitAnimationTickCount = 0;
+    let _gridAnimationTickCount = 0;
 
     export function init(): void {
         Notify.addEventListeners([
@@ -33,6 +35,11 @@ namespace TinyWars.Time.TimeModel {
         // }, TimeModel, TILE_ANIMATION_INTERVAL);
 
         egret.setInterval(() => {
+            ++_gridAnimationTickCount;
+            Notify.dispatch(Notify.Type.GridAnimationTick);
+        }, TimeModel, GRID_ANIMATION_INTERVAL);
+
+        egret.setInterval(() => {
             ++_unitAnimationTickCount;
             Notify.dispatch(Notify.Type.UnitAnimationTick);
         }, TimeModel, UNIT_ANIMATION_INTERVAL);
@@ -48,6 +55,10 @@ namespace TinyWars.Time.TimeModel {
 
     export function getUnitAnimationTickCount(): number {
         return _unitAnimationTickCount;
+    }
+
+    export function getGridAnimationTickCount(): number {
+        return _gridAnimationTickCount;
     }
 
     function _onNotifyNetworkConnected(e: egret.Event): void {
