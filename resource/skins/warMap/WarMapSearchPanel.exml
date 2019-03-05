@@ -20,7 +20,7 @@
                             maxChars="20">
             <GameUi:skinName>
                 <e:Skin width="100" height="30">
-                    <e:Image source="c04_t06_s01_f01" left="0" right="0" y="27" />
+                    <e:Image source="c08_t06_s01_f01" left="0" right="0" y="27" />
                     <e:EditableText id="textDisplay" size="24" left="0" right="0" height="30" textColor="0xffffff" />
                     <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0" right="0" text="" height="30"
                              textColor="0x808080" />
@@ -32,7 +32,7 @@
                             maxChars="20">
             <GameUi:skinName>
                 <e:Skin width="100" height="30">
-                    <e:Image source="c04_t06_s01_f01" left="0" right="0" y="27" />
+                    <e:Image source="c08_t06_s01_f01" left="0" right="0" y="27" />
                     <e:EditableText id="textDisplay" size="24" left="0" right="0" height="30" textColor="0xffffff" />
                     <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0" right="0" text="" height="30"
                              textColor="0x808080" />
@@ -44,7 +44,7 @@
                             restrict="2-4" maxChars="1">
             <GameUi:skinName>
                 <e:Skin width="100" height="30">
-                    <e:Image source="c04_t06_s01_f01" left="0" right="0" y="27" />
+                    <e:Image source="c08_t06_s01_f01" left="0" right="0" y="27" />
                     <e:EditableText id="textDisplay" size="24" left="0" right="0" height="30" textColor="0xffffff" />
                     <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0" right="0" text="" height="30"
                              textColor="0x808080" />
@@ -56,7 +56,7 @@
                             restrict="0-9" maxChars="9">
             <GameUi:skinName>
                 <e:Skin width="100" height="30">
-                    <e:Image source="c04_t06_s01_f01" left="0" right="0" y="27" />
+                    <e:Image source="c08_t06_s01_f01" left="0" right="0" y="27" />
                     <e:EditableText id="textDisplay" size="24" left="0" right="0" height="30" textColor="0xffffff" />
                     <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0" right="0" text="" height="30"
                              textColor="0x808080" />
@@ -68,7 +68,7 @@
                             restrict="0-9." maxChars="4">
             <GameUi:skinName>
                 <e:Skin width="100" height="30">
-                    <e:Image source="c04_t06_s01_f01" left="0" right="0" y="27" />
+                    <e:Image source="c08_t06_s01_f01" left="0" right="0" y="27" />
                     <e:EditableText id="textDisplay" size="24" left="0" right="0" height="30" textColor="0xffffff" />
                     <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0" right="0" text="" height="30"
                              textColor="0x808080" />

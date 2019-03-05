@@ -35,7 +35,7 @@ namespace TinyWars.GameUi {
         public setMaskEnabled(enabled: boolean): void {
             if (enabled) {
                 if (!this._maskForContents) {
-                    const mask  = new UiImage("c04_t06_s01_f01");
+                    const mask  = new UiImage("c08_t06_s01_f01");
                     mask.left   = 0;
                     mask.right  = 0;
                     mask.top    = 0;
