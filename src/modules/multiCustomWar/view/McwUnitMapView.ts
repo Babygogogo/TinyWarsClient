@@ -11,10 +11,12 @@ namespace TinyWars.MultiCustomWar {
         private _layerForGround = new egret.DisplayObjectContainer();
         private _layerForAir    = new egret.DisplayObjectContainer();
 
-        private _unitMap: McwUnitMap;
+        private _unitMap        : McwUnitMap;
+        private _actionPlanner  : McwActionPlanner;
 
         private _notifyListeners = [
-            { type: Notify.Type.UnitAnimationTick, callback: this._onNotifyUnitAnimationTick },
+            { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
+            { type: Notify.Type.McwActionPlannerStateChanged,   callback: this._onNotifyMcwActionPlannerStateChanged },
         ];
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -36,6 +38,7 @@ namespace TinyWars.MultiCustomWar {
         }
 
         public startRunning(): void {
+            this._actionPlanner = this._unitMap.getWar().getField().getActionPlanner();
             Notify.addEventListeners(this._notifyListeners, this);
         }
         public stopRunning(): void {
@@ -72,6 +75,14 @@ namespace TinyWars.MultiCustomWar {
             this._updateAnimationsOnTick(this._layerForAir);
             this._updateAnimationsOnTick(this._layerForGround);
             this._updateAnimationsOnTick(this._layerForNaval);
+        }
+
+        private _onNotifyMcwActionPlannerStateChanged(e: egret.Event): void {
+            const actionPlanner = this._actionPlanner;
+            const state         = actionPlanner.getState();
+            if (state === Types.ActionPlannerState.Idle) {
+                this._setAllUnitsOnMapVisible(true);
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -114,6 +125,10 @@ namespace TinyWars.MultiCustomWar {
             } else {
                 return undefined;
             }
+        }
+
+        private _setAllUnitsOnMapVisible(visible: boolean): void {
+            this._unitMap.forEachUnitOnMap(unit => unit.getView().visible = visible);
         }
     }
 }

@@ -46,6 +46,7 @@ namespace TinyWars.Utility.Notify {
         McwCursorDragged,
         McwFieldZoomed,
         McwFieldDragged,
+        McwActionPlannerStateChanged,
     }
 
     ////////////////////////////////////////////////////////////////////////////////

@@ -366,4 +366,12 @@ namespace TinyWars.Utility.Types {
         ResetVisionForNextPlayer,
         ResetVotesForDraw,
     }
+
+    export const enum ActionPlannerState {
+        Idle,
+        MakingMovePath,
+        ChoosingProductionTarget,
+        PreviewingAttackableArea,
+        PreviewingMovableArea,
+    }
 }

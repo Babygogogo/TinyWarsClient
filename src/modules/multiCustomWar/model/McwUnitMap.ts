@@ -87,7 +87,7 @@ namespace TinyWars.MultiCustomWar {
         }
 
         public startRunning(war: McwWar): void {
-            this._war = war;
+            this._setWar(war);
             this.forEachUnitOnMap(unit => unit.startRunning(war));
             this.forEachUnitLoaded(unit => unit.startRunning(war));
         }
@@ -111,7 +111,7 @@ namespace TinyWars.MultiCustomWar {
             };
         }
         public serializeForPlayer(playerIndex: number): Types.SerializedMcwUnitMap {
-            const war = this._war;
+            const war = this.getWar();
             const units: Types.SerializedMcwUnit[] = [];
             this.forEachUnitOnMap(unit => {
                 if (Utility.VisibilityHelpers.checkIsUnitOnMapVisibleToPlayer({
@@ -143,6 +143,13 @@ namespace TinyWars.MultiCustomWar {
             return this._view;
         }
 
+        private _setWar(war: McwWar): void {
+            this._war = war;
+        }
+        public getWar(): McwWar {
+            return this._war;
+        }
+
         public getConfigVersion(): number {
             return this._configVersion;
         }
@@ -159,6 +166,12 @@ namespace TinyWars.MultiCustomWar {
         }
         public setNextUnitId(id: number): void {
             this._nextUnitId = id;
+        }
+
+        public getUnit(gridIndex: Types.GridIndex, unitId?: number): McwUnit | undefined {
+            return unitId != null
+                ? this.getUnitLoadedById(unitId)
+                : this.getUnitOnMap(gridIndex);
         }
 
         public getUnitOnMap(gridIndex: Types.GridIndex): McwUnit | undefined {
