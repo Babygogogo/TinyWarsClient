@@ -90,7 +90,7 @@ namespace TinyWars.ConfigManager {
             [TileObjectType.GreenPlasma,    TileType.GreenPlasma],
         ])],
         [TileBaseType.Plain, new Map([
-            [TileObjectType.Empty,          TileType.Beach],
+            [TileObjectType.Empty,          TileType.Plain],
             [TileObjectType.Road,           TileType.Road],
             [TileObjectType.Bridge,         TileType.BridgeOnPlain],
             [TileObjectType.Wood,           TileType.Wood],
@@ -117,7 +117,7 @@ namespace TinyWars.ConfigManager {
             [TileObjectType.GreenPlasma,    TileType.GreenPlasma],
         ])],
         [TileBaseType.River, new Map([
-            [TileObjectType.Empty,          TileType.Beach],
+            [TileObjectType.Empty,          TileType.River],
             [TileObjectType.Road,           TileType.Road],
             [TileObjectType.Bridge,         TileType.BridgeOnRiver],
             [TileObjectType.Wood,           TileType.Wood],
@@ -144,7 +144,7 @@ namespace TinyWars.ConfigManager {
             [TileObjectType.GreenPlasma,    TileType.GreenPlasma],
         ])],
         [TileBaseType.Sea, new Map([
-            [TileObjectType.Empty,          TileType.Beach],
+            [TileObjectType.Empty,          TileType.Sea],
             [TileObjectType.Road,           TileType.Road],
             [TileObjectType.Bridge,         TileType.BridgeOnSea],
             [TileObjectType.Wood,           TileType.Wood],

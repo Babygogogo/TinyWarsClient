@@ -3,10 +3,12 @@ namespace TinyWars.MultiCustomWar {
     import WarMapModel      = WarMap.WarMapModel;
     import Types            = Utility.Types;
     import Notify           = Utility.Notify;
+    import GridIndexHelpers = Utility.GridIndexHelpers;
     import TurnPhaseCode    = Types.TurnPhaseCode;
     import UnitState        = Types.UnitState;
     import GridIndex        = Types.GridIndex;
     import State            = Types.ActionPlannerState;
+    import MovableGrid      = Types.MovableGrid;
 
     export class McwActionPlanner {
         private _view               : McwActionPlannerView;
@@ -25,6 +27,7 @@ namespace TinyWars.MultiCustomWar {
         private _unitsForPreviewMove        : McwUnit[] = [];
         private _gridsForPreviewAttack      : GridIndex[] = [];
         private _gridsForPreviewMove        : GridIndex[] = [];
+        private _movableArea                : MovableGrid[][];
 
         private _notifyListeners: Notify.Listener[] = [
             { type: Notify.Type.McwCursorTapped,    callback: this._onNotifyMcwCursorTapped },
@@ -77,8 +80,9 @@ namespace TinyWars.MultiCustomWar {
                 if (currState === State.Idle) {
                     if (this._checkCanSetStateMakingMovePath(gridIndex)) {
                         this._setStateMakingMovePath(gridIndex);
-                        this._updateView();
                     }
+                } else if (currState === State.MakingMovePath) {
+                    this.setStateIdle();
                 }
             }
         }
@@ -110,8 +114,13 @@ namespace TinyWars.MultiCustomWar {
         private _setStateMakingMovePath(beginningGridIndex: GridIndex, launchUnitId?: number): void {
             this._state = State.MakingMovePath;
 
-            const unit = this._unitMap.getUnit(beginningGridIndex, launchUnitId);
+            const focusUnit = this._unitMap.getUnit(beginningGridIndex, launchUnitId);
+            if (this._focusUnit !== focusUnit) {
+                this._focusUnit = focusUnit;
+                this._resetMovableArea();
+            }
 
+            this._updateView();
         }
 
         private _checkCanSetStateMakingMovePath(gridIndex: GridIndex, unitId?: number): boolean {
@@ -149,6 +158,31 @@ namespace TinyWars.MultiCustomWar {
         }
         private _setIsWaitingForServerResponse(isWaiting: boolean) {
             this._isWaitingForServerResponse = isWaiting;
+        }
+
+        private _resetMovableArea(): void {
+            const unit = this._focusUnit;
+            this._movableArea = McwHelpers.createMovableArea(
+                unit.getGridIndex(),
+                unit.getFinalMoveRange(),
+                gridIndex => this._getMoveCost(gridIndex, unit)
+            );
+        }
+        public getMovableArea(): MovableGrid[][] {
+            return this._movableArea;
+        }
+
+        private _getMoveCost(targetGridIndex: GridIndex, movingUnit: McwUnit): number | undefined {
+            if (!GridIndexHelpers.checkIsInsideMap(targetGridIndex, this.getMapSize())) {
+                return undefined;
+            } else {
+                const existingUnit = this._unitMap.getUnitOnMap(targetGridIndex);
+                if ((existingUnit) && (existingUnit.getTeamIndex() !== movingUnit.getTeamIndex())) {
+                    return undefined;
+                } else {
+                    return this._tileMap.getTile(targetGridIndex).getMoveCostByUnit(movingUnit);
+                }
+            }
         }
     }
 }

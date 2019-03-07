@@ -460,8 +460,14 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for move.
         ////////////////////////////////////////////////////////////////////////////////
-        public getMoveRange(): number {
+        public getCfgMoveRange(): number {
             return this._templateCfg.moveRange;
+        }
+        public getFinalMoveRange(): number {
+            return Math.min(
+                this.getCfgMoveRange(),
+                this.getCurrentFuel()
+            );
         }
 
         public getMoveType(): MoveType {

@@ -50,6 +50,7 @@
 		"bin-debug/modules/multiCustomWar/model/McwCursor.js",
 		"bin-debug/modules/multiCustomWar/model/McwField.js",
 		"bin-debug/modules/multiCustomWar/model/McwFogMap.js",
+		"bin-debug/modules/multiCustomWar/model/McwHelpers.js",
 		"bin-debug/Main.js",
 		"bin-debug/modules/multiCustomWar/model/McwPlayer.js",
 		"bin-debug/modules/multiCustomWar/model/McwPlayerManager.js",

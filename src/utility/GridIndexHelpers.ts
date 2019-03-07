@@ -70,11 +70,13 @@ namespace TinyWars.Utility.GridIndexHelpers {
         return (x >= 0) && (y >= 0) && (x < mapSize.width) && (y < mapSize.height);
     }
 
-    export function getAdjacentGrids(g: GridIndex, mapSize: MapSize): GridIndex[] {
+    export function getAdjacentGrids(g: GridIndex, mapSize?: MapSize): GridIndex[] {
         const grids: GridIndex[] = [];
         for (const o of _ADJACENT_OFFSETS) {
             const adjacentGrid = add(g, o.offset);
-            (checkIsInsideMap(adjacentGrid, mapSize)) && (grids.push(adjacentGrid));
+            if ((!mapSize) || (checkIsInsideMap(adjacentGrid, mapSize))) {
+                grids.push(adjacentGrid);
+            }
         }
         return grids;
     }

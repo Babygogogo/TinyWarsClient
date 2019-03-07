@@ -140,7 +140,8 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         public updateView(): void {
             switch (this._actionPlanner.getState()) {
-                case State.Idle: this._updateAsIdle();  return;
+                case State.Idle             : this._updateAsIdle();             return;
+                case State.MakingMovePath   : this._updateAsMakingMovePath();   return;
             }
         }
 
@@ -149,6 +150,21 @@ namespace TinyWars.MultiCustomWar {
             this._conForMovableGrids.visible    = false;
             this._conForMoveDestination.visible = false;
             this._conForMovePath.visible        = false;
+        }
+
+        private _updateAsMakingMovePath(): void {
+            this._conForAttackableGrids.visible = false;    // TODO
+            this._conForMovableGrids.visible    = true;
+            this._conForMoveDestination.visible = false;
+            this._conForMovePath.visible        = false;    // TODO
+
+            const area = this._actionPlanner.getMovableArea();
+            const { width, height } = this._mapSize;
+            for (let x = 0; x < width; ++x) {
+                for (let y = 0; y < height; ++y) {
+                    this._imgsForMovableGrids[x][y].visible = (!!area[x]) && (!!area[x][y]);
+                }
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
