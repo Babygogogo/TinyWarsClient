@@ -4,7 +4,9 @@ namespace TinyWars.MultiCustomWar.McwHelpers {
     import Helpers          = Utility.Helpers;
     import GridIndexHelpers = Utility.GridIndexHelpers;
     import GridIndex        = Types.GridIndex;
-    import MovableGrid      = Types.MovableGrid;
+    import MovableArea      = Types.MovableArea;
+    import AttackableArea   = Types.AttackableArea;
+    import MapSize          = Types.MapSize;
 
     type AvailableMovableGrid = {
         currGridIndex   : GridIndex;
@@ -12,8 +14,8 @@ namespace TinyWars.MultiCustomWar.McwHelpers {
         totalMoveCost   : number;
     }
 
-    export function createMovableArea(origin: GridIndex, maxMoveCost: number, moveCostGetter: (g: GridIndex) => number | undefined): MovableGrid[][] {
-        const area              = [] as MovableGrid[][];
+    export function createMovableArea(origin: GridIndex, maxMoveCost: number, moveCostGetter: (g: GridIndex) => number | undefined): MovableArea {
+        const area              = [] as MovableArea;
         const availableGrids    = [] as AvailableMovableGrid[];
         _pushToAvailableMovableGrids(availableGrids, origin, undefined, 0);
 
@@ -21,7 +23,7 @@ namespace TinyWars.MultiCustomWar.McwHelpers {
         while (index < availableGrids.length) {
             const availableGrid = availableGrids[index];
             const { currGridIndex, totalMoveCost } = availableGrid;
-            if (_updateMovableArea(area, currGridIndex, availableGrid.prevGridIndex, totalMoveCost)) {
+            if (_checkAndUpdateMovableArea(area, currGridIndex, availableGrid.prevGridIndex, totalMoveCost)) {
                 for (const nextGridIndex of GridIndexHelpers.getAdjacentGrids(currGridIndex)) {
                     const nextMoveCost = moveCostGetter(nextGridIndex);
                     if ((nextMoveCost != null) && (nextMoveCost + totalMoveCost <= maxMoveCost)) {
@@ -36,6 +38,36 @@ namespace TinyWars.MultiCustomWar.McwHelpers {
         return area;
     }
 
+    export function createAttackableArea(movableArea: MovableArea, mapSize: MapSize, minAttackRange: number, maxAttackRange: number, checkCanAttack: (destination: GridIndex, target: GridIndex) => boolean): AttackableArea {
+        const area = [] as AttackableArea;
+        const { width, height } = mapSize;
+        for (let moveX = 0; moveX < width; ++moveX) {
+            if (movableArea[moveX]) {
+                for (let moveY = 0; moveY < height; ++moveY) {
+                    const movableGrid = movableArea[moveX][moveY];
+                    if (movableGrid) {
+                        const moveGridIndex = { x: moveX, y: moveY };
+                        for (const attackGridIndex of GridIndexHelpers.getGridsWithinDistance(moveGridIndex, minAttackRange, maxAttackRange, mapSize)) {
+                            const { x: attackX, y: attackY } = attackGridIndex;
+                            if (checkCanAttack(moveGridIndex, attackGridIndex)) {
+                                area[attackX] = area[attackX] || [];
+                                const attackableGrid = area[attackX][attackY];
+                                if ((!attackableGrid)                                                                                                               ||
+                                    (movableGrid.totalMoveCost < movableArea[attackableGrid.movePathDestination.x][attackableGrid.movePathDestination.y].totalMoveCost)
+                                ) {
+                                    area[attackX][attackY] = {
+                                        movePathDestination: { x: moveX, y: moveY },
+                                    };
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return area;
+    }
+
     function _pushToAvailableMovableGrids(grids: AvailableMovableGrid[], gridIndex: GridIndex, prev: GridIndex, totalMoveCost: number): void {
         grids.push({
             currGridIndex: gridIndex,
@@ -43,7 +75,7 @@ namespace TinyWars.MultiCustomWar.McwHelpers {
             totalMoveCost,
         });
     }
-    function _updateMovableArea(area: MovableGrid[][], gridIndex: GridIndex, prev: GridIndex, totalMoveCost: number): boolean {
+    function _checkAndUpdateMovableArea(area: MovableArea, gridIndex: GridIndex, prev: GridIndex, totalMoveCost: number): boolean {
         const { x, y } = gridIndex;
         area[x] = area[x] || [];
 

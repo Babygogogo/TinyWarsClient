@@ -8,7 +8,8 @@ namespace TinyWars.MultiCustomWar {
     import UnitState        = Types.UnitState;
     import GridIndex        = Types.GridIndex;
     import State            = Types.ActionPlannerState;
-    import MovableGrid      = Types.MovableGrid;
+    import MovableArea      = Types.MovableArea;
+    import AttackableArea   = Types.AttackableArea;
 
     export class McwActionPlanner {
         private _view               : McwActionPlannerView;
@@ -27,7 +28,8 @@ namespace TinyWars.MultiCustomWar {
         private _unitsForPreviewMove        : McwUnit[] = [];
         private _gridsForPreviewAttack      : GridIndex[] = [];
         private _gridsForPreviewMove        : GridIndex[] = [];
-        private _movableArea                : MovableGrid[][];
+        private _movableArea                : MovableArea;
+        private _attackableArea             : AttackableArea;
 
         private _notifyListeners: Notify.Listener[] = [
             { type: Notify.Type.McwCursorTapped,    callback: this._onNotifyMcwCursorTapped },
@@ -57,7 +59,7 @@ namespace TinyWars.MultiCustomWar {
             this.setStateIdle();
             this._setIsWaitingForServerResponse(false);
 
-            Notify.addEventListeners(this._notifyListeners, this);
+            Notify.addEventListeners(this._notifyListeners, this, undefined, 1);
         }
         public startRunningView(): void {
             this.getView().startRunningView();
@@ -72,16 +74,16 @@ namespace TinyWars.MultiCustomWar {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onNotifyMcwCursorTapped(e: egret.Event): void {
-            if (!this._getIsWaitingForServerResponse()) {
-                const data      = e.data as Notify.Data.McwCursorTapped;
-                const currState = this.getState();
-                const gridIndex = data.tappedOn;
+            const data      = e.data as Notify.Data.McwCursorTapped;
+            const currState = this.getState();
+            const gridIndex = data.tappedOn;
 
-                if (currState === State.Idle) {
-                    if (this._checkCanSetStateMakingMovePath(gridIndex)) {
-                        this._setStateMakingMovePath(gridIndex);
-                    }
-                } else if (currState === State.MakingMovePath) {
+            if (currState === State.Idle) {
+                if (this._checkCanSetStateMakingMovePath(gridIndex)) {
+                    this._setStateMakingMovePathForUnitOnMap(gridIndex);
+                }
+            } else if (currState === State.MakingMovePathForUnitOnMap) {
+                if (this._checkCanSetStateIdle()) {
                     this.setStateIdle();
                 }
             }
@@ -110,29 +112,40 @@ namespace TinyWars.MultiCustomWar {
             this._updateView();
             Notify.dispatch(Notify.Type.McwActionPlannerStateChanged);
         }
+        private _checkCanSetStateIdle(): boolean {
+            return true;
+        }
 
-        private _setStateMakingMovePath(beginningGridIndex: GridIndex, launchUnitId?: number): void {
-            this._state = State.MakingMovePath;
+        private _setStateMakingMovePathForUnitOnMap(beginningGridIndex: GridIndex): void {
+            const currState = this.getState();
+            this._state = State.MakingMovePathForUnitOnMap;
 
-            const focusUnit = this._unitMap.getUnit(beginningGridIndex, launchUnitId);
+            const focusUnit = this._unitMap.getUnitOnMap(beginningGridIndex);
             if (this._focusUnit !== focusUnit) {
                 this._focusUnit = focusUnit;
                 this._resetMovableArea();
+                this._resetAttackableArea();
             }
 
             this._updateView();
         }
-
-        private _checkCanSetStateMakingMovePath(gridIndex: GridIndex, unitId?: number): boolean {
+        private _checkCanSetStateMakingMovePath(gridIndex: GridIndex): boolean {
             const turnManager = this._turnManager;
-            if ((turnManager.getPhaseCode() !== TurnPhaseCode.Main) ||
+            if ((this._war.getIsRunningAction())                                ||
+                (this._isWaitingForServerResponse)                              ||
+                (turnManager.getPhaseCode() !== TurnPhaseCode.Main)             ||
                 (turnManager.getPlayerIndexInTurn() !== this._playerIndexLoggedIn)) {
                 return false;
             } else {
-                const unit = this._unitMap.getUnit(gridIndex, unitId);
-                return (unit != null)
-                    && (unit.getState() === UnitState.Idle)
-                    && (unit.getPlayerIndex() === this._playerIndexLoggedIn);
+                const state = this.getState();
+                if (state === State.Idle) {
+                    const unit = this._unitMap.getUnitOnMap(gridIndex);
+                    return (unit != null)
+                        && (unit.getState() === UnitState.Idle)
+                        && (unit.getPlayerIndex() === this._playerIndexLoggedIn);
+                } else {
+                    // TODO
+                }
             }
         }
 
@@ -168,8 +181,34 @@ namespace TinyWars.MultiCustomWar {
                 gridIndex => this._getMoveCost(gridIndex, unit)
             );
         }
-        public getMovableArea(): MovableGrid[][] {
+        public getMovableArea(): MovableArea {
             return this._movableArea;
+        }
+
+        private _resetAttackableArea(): void {
+            const unit                  = this._focusUnit;
+            const canAttakAfterMove     = unit.checkCanAttackAfterMove();
+            const isLoaded              = unit.getLoaderUnitId() != null;
+            const beginningGridIndex    = unit.getGridIndex();
+            const hasAmmo               = (unit.getPrimaryWeaponCurrentAmmo() > 0) || (unit.checkHasSecondaryWeapon());
+            this._attackableArea        = McwHelpers.createAttackableArea(
+                this.getMovableArea(),
+                this.getMapSize(),
+                unit.getMinAttackRange(),
+                unit.getMaxAttackRange(),
+                (moveGridIndex: GridIndex, attackGridIndex: GridIndex): boolean => {
+                    if (!hasAmmo) {
+                        return false;
+                    } else {
+                        const hasMoved = !GridIndexHelpers.checkIsEqual(moveGridIndex, beginningGridIndex);
+                        return ((!isLoaded) || (hasMoved))
+                            && ((canAttakAfterMove) || (!hasMoved))
+                    }
+                }
+            );
+        }
+        public getAttackableArea(): AttackableArea {
+            return this._attackableArea;
         }
 
         private _getMoveCost(targetGridIndex: GridIndex, movingUnit: McwUnit): number | undefined {

@@ -224,10 +224,14 @@ namespace TinyWars.Utility.Types {
         unitId: number;
     }
 
-    export type MovableGrid = {
+    export type MovableArea = {
         prevGridIndex   : GridIndex | undefined;
         totalMoveCost   : number;
-    }
+    }[][];
+
+    export type AttackableArea = {
+        movePathDestination: GridIndex;
+    }[][];
 
     ////////////////////////////////////////////////////////////////////////////////
     // Enums.
@@ -374,7 +378,7 @@ namespace TinyWars.Utility.Types {
 
     export const enum ActionPlannerState {
         Idle,
-        MakingMovePath,
+        MakingMovePathForUnitOnMap,
         ChoosingProductionTarget,
         PreviewingAttackableArea,
         PreviewingMovableArea,

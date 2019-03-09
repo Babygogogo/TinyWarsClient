@@ -69,30 +69,43 @@ namespace TinyWars.Utility.Notify {
     const _DISPATCHER = new egret.EventDispatcher();
 
     export type Listener = {
-        type       : Type,
-        callback   : (e: egret.Event) => void,
-        thisObject?: any,
+        type        : Type,
+        callback    : (e: egret.Event) => void,
+        thisObject? : any,
+        useCapture? : boolean,
+        priority?   : number;
     };
 
     export function dispatch(t: Type, data?: any): void {
         _DISPATCHER.dispatchEventWith(getTypeName(t), false, data);
     }
 
-    export function addEventListener(type: Type, callback: (e: egret.Event) => void, thisObject?: any): void {
-        _DISPATCHER.addEventListener(getTypeName(type), callback, thisObject);
+    export function addEventListener(type: Type, callback: (e: egret.Event) => void, thisObject?: any, useCapture?: boolean, priority?: number): void {
+        _DISPATCHER.addEventListener(getTypeName(type), callback, thisObject, useCapture, priority);
     }
-    export function addEventListeners(listeners: Listener[], thisObject?: any): void {
+    export function addEventListeners(listeners: Listener[], thisObject?: any, useCapture?: boolean, priority?: number): void {
         for (const l of listeners) {
-            addEventListener(l.type, l.callback, l.thisObject || thisObject);
+            addEventListener(
+                l.type,
+                l.callback,
+                l.thisObject != null ? l.thisObject : thisObject,
+                l.useCapture != null ? l.useCapture : useCapture,
+                l.priority   != null ? l.priority   : priority
+            );
         }
     }
 
-    export function removeEventListener(type: Type, callback: (e: egret.Event) => void, thisObject?: any): void {
-        _DISPATCHER.removeEventListener(getTypeName(type), callback, thisObject);
+    export function removeEventListener(type: Type, callback: (e: egret.Event) => void, thisObject?: any, useCapture?: boolean): void {
+        _DISPATCHER.removeEventListener(getTypeName(type), callback, thisObject, useCapture);
     }
-    export function removeEventListeners(listeners: Listener[], thisObject?: any): void {
+    export function removeEventListeners(listeners: Listener[], thisObject?: any, useCapture?: boolean): void {
         for (const l of listeners) {
-            removeEventListener(l.type, l.callback, l.thisObject || thisObject);
+            removeEventListener(
+                l.type,
+                l.callback,
+                l.thisObject != null ? l.thisObject : thisObject,
+                l.useCapture != null ? l.useCapture : useCapture
+            );
         }
     }
 
