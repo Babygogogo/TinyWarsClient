@@ -184,14 +184,10 @@ namespace TinyWars.MultiCustomWar {
             if (!this._currGlobalTouchPoints.size) {
                 this.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this._onTouchMove, this);
                 if (!this._isTouchMovedOrMultiple) {
-                    const gridIndex     = this._getGridIndexByGlobalXY(this._initialGlobalTouchPoint.x, this._initialGlobalTouchPoint.y);
-                    const currGridIndex = this._cursor.getGridIndex();
-                    if (!GridIndexHelpers.checkIsEqual(gridIndex, currGridIndex)) {
-                        Notify.dispatch(Notify.Type.McwCursorTapped, {
-                            current : currGridIndex,
-                            tappedOn: gridIndex,
-                        } as Notify.Data.McwCursorTapped);
-                    }
+                    Notify.dispatch(Notify.Type.McwCursorTapped, {
+                        current : this._cursor.getGridIndex(),
+                        tappedOn: this._getGridIndexByGlobalXY(this._initialGlobalTouchPoint.x, this._initialGlobalTouchPoint.y),
+                    } as Notify.Data.McwCursorTapped);
                 }
             }
         }

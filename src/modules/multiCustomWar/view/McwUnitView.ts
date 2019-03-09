@@ -35,12 +35,16 @@ namespace TinyWars.MultiCustomWar {
             this.addChild(this._imgHp);
         }
 
-        public init(unit: McwUnit): void {
+        public init(unit: McwUnit): McwUnitView {
             this._unit = unit;
+
+            return this;
         }
 
-        public startRunningView(): void {
+        public startRunningView(): McwUnitView {
             this.resetAllViews();
+
+            return this;
         }
 
         public getUnit(): McwUnit {
@@ -61,7 +65,7 @@ namespace TinyWars.MultiCustomWar {
         public tickUnitAnimationFrame(): void {
             if (this._animationType === UnitAnimationType.Stand) {
                 this._imgUnit.x         = 0;
-                this._imgUnit.source    = ConfigManager.getUnitIdleImageSource(this._unit.getViewId(), TimeModel.getUnitAnimationTickCount(), this._isDark);
+                this._imgUnit.source    = ConfigManager.getUnitIdleImageSource(this._unit.getViewId(), Math.floor(TimeModel.getUnitAnimationTickCount() / 2), this._isDark);
             } else {
                 this._imgUnit.x         = -_GRID_SIZE.width / 4;
                 this._imgUnit.source    = ConfigManager.getUnitMovingImageSource(this._unit.getViewId(), TimeModel.getUnitAnimationTickCount(), this._isDark);
@@ -97,7 +101,7 @@ namespace TinyWars.MultiCustomWar {
             const framesCount       = this._framesForStateAnimation.length;
             this._imgState.source   = framesCount <= 0
                 ? undefined
-                : this._framesForStateAnimation[Math.floor(TimeModel.getUnitAnimationTickCount() / 3) % framesCount];
+                : this._framesForStateAnimation[Math.floor(TimeModel.getUnitAnimationTickCount() / 6) % framesCount];
         }
 
         public moveAlongPath(path: GridIndex[], isDiving: boolean, callback: Function, aiming?: GridIndex): void {

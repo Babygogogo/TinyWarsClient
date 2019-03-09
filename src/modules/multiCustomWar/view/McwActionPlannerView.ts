@@ -86,20 +86,24 @@ namespace TinyWars.MultiCustomWar {
         private _imgForMoveDestination  : GameUi.UiImage;
 
         private _conForUnits            = new egret.DisplayObjectContainer();
+        private _focusUnitViews         = new Map<number, McwUnitView>();
 
         private _notifyEvents: Notify.Listener[] = [
             { type: Notify.Type.GridAnimationTick, callback: this._onNotifyGridAnimationTick },
+            { type: Notify.Type.UnitAnimationTick, callback: this._onNotifyUnitAnimationTick },
         ];
 
         public constructor() {
             super();
 
-            const conForGrids = this.getConForGrids();
+            const conForGrids = this._conForGrids;
             this.addChild(conForGrids);
             conForGrids.addChild(this._conForMovableGrids);
             conForGrids.addChild(this._conForMoveDestination);
             conForGrids.addChild(this._conForAttackableGrids);
             conForGrids.addChild(this._conForMovePath);
+
+            this.addChild(this._conForUnits);
         }
 
         public init(actionPlanner: McwActionPlanner): void {
@@ -114,7 +118,7 @@ namespace TinyWars.MultiCustomWar {
         public startRunningView(): void {
             Notify.addEventListeners(this._notifyEvents, this);
 
-            this._updateAsIdle();
+            this.updateView();
         }
         public stopRunningView(): void {
             Notify.removeEventListeners(this._notifyEvents, this);
@@ -132,7 +136,6 @@ namespace TinyWars.MultiCustomWar {
                     image.x         = x * _GRID_WIDTH;
                     image.y         = y * _GRID_HEIGHT;
                     image.visible   = false;
-                    image.visible   = Math.random() > 0.5;
                     images[x][y]    = image;
                     this._conForMovableGrids.addChild(image);
                 }
@@ -158,7 +161,6 @@ namespace TinyWars.MultiCustomWar {
                     image.x         = x * _GRID_WIDTH;
                     image.y         = y * _GRID_HEIGHT;
                     image.visible   = false;
-                    image.visible   = Math.random() > 0.5;
                     images[x][y]    = image;
                     this._conForAttackableGrids.addChild(image);
                 }
@@ -187,63 +189,162 @@ namespace TinyWars.MultiCustomWar {
             this._imgForMoveDestination.source = sourceForMovable;
         }
 
+        private _onNotifyUnitAnimationTick(e: egret.Event): void {
+            for (const [, view] of this._focusUnitViews) {
+                view.tickUnitAnimationFrame();
+                view.tickStateAnimationFrame();
+            }
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         public updateView(): void {
-            switch (this._actionPlanner.getState()) {
-                case State.Idle                         : this._updateAsIdle();             return;
-                case State.MakingMovePathForUnitOnMap   : this._updateAsMakingMovePath();   return;
-            }
-        }
-
-        private _updateAsIdle(): void {
-            this._conForAttackableGrids.visible = false;
-            this._conForMovableGrids.visible    = false;
-            this._conForMoveDestination.visible = false;
-            this._conForMovePath.visible        = false;
-        }
-
-        private _updateAsMakingMovePath(): void {
-            this._conForAttackableGrids.visible = true;
-            this._conForMovableGrids.visible    = true;
-            this._conForMoveDestination.visible = false;
-            this._conForMovePath.visible        = true;
-
-            const actionPlanner     = this._actionPlanner;
-            const movableArea       = actionPlanner.getMovableArea();
-            const attackableArea    = actionPlanner.getAttackableArea();
-            const { width, height } = this._mapSize;
-            for (let x = 0; x < width; ++x) {
-                for (let y = 0; y < height; ++y) {
-                    const isMovable = (!!movableArea[x]) && (!!movableArea[x][y]);
-                    this._imgsForMovableGrids[x][y].visible     = isMovable;
-                    this._imgsForAttackableGrids[x][y].visible  = (!isMovable) && (!!attackableArea[x]) && (!!attackableArea[x][y]);
-                }
-            }
-
+            this._resetConForAttackableGrids();
+            this._resetConForMovableGrids();
+            this._resetConForMoveDestination();
             this.resetConForMovePath();
+            this._resetConForUnits();
         }
+
+        private _resetConForAttackableGrids(): void {
+            const con           = this._conForAttackableGrids;
+            const actionPlanner = this._actionPlanner;
+            const state         = actionPlanner.getState();
+
+            if (state === State.Idle) {
+                con.visible = false;
+
+            } else if (state === State.MakingMovePathForUnitOnMap) {
+                con.visible = true;
+
+                const movableArea       = actionPlanner.getMovableArea();
+                const attackableArea    = actionPlanner.getAttackableArea();
+                const { width, height } = this._mapSize;
+                for (let x = 0; x < width; ++x) {
+                    for (let y = 0; y < height; ++y) {
+                        const isMovable = (!!movableArea[x]) && (!!movableArea[x][y]);
+                        this._imgsForAttackableGrids[x][y].visible = (!isMovable) && (!!attackableArea[x]) && (!!attackableArea[x][y]);
+                    }
+                }
+
+            } else if (state === State.PreviewingAttackableArea) {
+                con.visible = true;
+
+                const attackableArea    = actionPlanner.getAreaForPreviewingAttack();
+                const { width, height } = this._mapSize;
+                for (let x = 0; x < width; ++x) {
+                    for (let y = 0; y < height; ++y) {
+                        this._imgsForAttackableGrids[x][y].visible = (!!attackableArea[x]) && (!!attackableArea[x][y]);
+                    }
+                }
+
+            } else {
+                // TODO
+            }
+        }
+
+        private _resetConForMovableGrids(): void {
+            const con           = this._conForMovableGrids;
+            const actionPlanner = this._actionPlanner;
+            const state         = actionPlanner.getState();
+
+            if (state === State.Idle) {
+                con.visible = false;
+
+            } else if (state === State.MakingMovePathForUnitOnMap) {
+                con.visible = true;
+
+                const movableArea       = actionPlanner.getMovableArea();
+                const { width, height } = this._mapSize;
+                for (let x = 0; x < width; ++x) {
+                    for (let y = 0; y < height; ++y) {
+                        this._imgsForMovableGrids[x][y].visible = (!!movableArea[x]) && (!!movableArea[x][y]);
+                    }
+                }
+
+            } else if (state === State.PreviewingAttackableArea) {
+                con.visible = false;
+
+            } else {
+                // TODO
+            }
+        }
+
+        private _resetConForMoveDestination(): void {
+            const con           = this._conForMoveDestination;
+            const actionPlanner = this._actionPlanner;
+            const state         = actionPlanner.getState();
+            // TODO
+            con.visible = false;
+        }
+
 
         public resetConForMovePath(): void {
-            const con = this._conForMovePath;
+            const con           = this._conForMovePath;
+            const actionPlanner = this._actionPlanner;
+            const state         = actionPlanner.getState();
             con.removeChildren();
 
-            const path = this._actionPlanner.getMovePath();
-            for (let i = 0; i < path.length; ++i) {
-                const img = _createImgForMovePathGrid(path[i - 1], path[i], path[i + 1]);
-                img && con.addChild(img);
+            if (state == State.Idle) {
+                con.visible = false;
+
+            } else if (state === State.MakingMovePathForUnitOnMap) {
+                con.visible = true;
+
+                const path = this._actionPlanner.getMovePath();
+                for (let i = 0; i < path.length; ++i) {
+                    const img = _createImgForMovePathGrid(path[i - 1], path[i], path[i + 1]);
+                    img && con.addChild(img);
+                }
+
+            } else if (state === State.PreviewingAttackableArea) {
+                con.visible = false;
+
+            } else {
+                // TODO
+            }
+        }
+
+        private _resetConForUnits(): void {
+            const con           = this._conForUnits;
+            const views         = this._focusUnitViews;
+            const actionPlanner = this._actionPlanner;
+            const state         = actionPlanner.getState();
+            con.removeChildren();
+            views.clear();
+
+            if (state === State.Idle) {
+                con.visible = false;
+
+            } else if (state === State.MakingMovePathForUnitOnMap) {
+                con.visible = true;
+
+                const unit = actionPlanner.getFocusUnitOnMap();
+                this._addUnitView(unit, unit.getGridIndex());
+
+            } else if (state === State.PreviewingAttackableArea) {
+                con.visible = true;
+
+                for (const [, unit] of actionPlanner.getUnitsForPreviewingAttackableArea()) {
+                    this._addUnitView(unit, unit.getGridIndex());
+                }
+
+            } else {
+                // TODO
             }
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public getConForGrids(): egret.DisplayObjectContainer {
-            return this._conForGrids;
-        }
-        public getConForUnits(): egret.DisplayObjectContainer {
-            return this._conForUnits;
+        private _addUnitView(unit: McwUnit, gridIndex: GridIndex): void {
+            const view = new McwUnitView().init(unit).startRunningView();
+            view.x  = gridIndex.x * _GRID_WIDTH;
+            view.y  = gridIndex.y * _GRID_HEIGHT;
+            view.showUnitAnimation(Types.UnitAnimationType.Move);
+            this._focusUnitViews.set(unit.getUnitId(), view);
+            this._conForUnits.addChild(view);
         }
     }
 

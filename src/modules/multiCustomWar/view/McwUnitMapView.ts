@@ -1,8 +1,9 @@
 
 namespace TinyWars.MultiCustomWar {
-    import Notify       = Utility.Notify;
-    import Types        = Utility.Types;
-    import UnitCategory = Types.UnitCategory;
+    import Notify               = Utility.Notify;
+    import Types                = Utility.Types;
+    import UnitCategory         = Types.UnitCategory;
+    import ActionPlannerState   = Types.ActionPlannerState;
 
     const _GRID_SIZE = ConfigManager.getGridSize();
 
@@ -80,10 +81,19 @@ namespace TinyWars.MultiCustomWar {
         private _onNotifyMcwActionPlannerStateChanged(e: egret.Event): void {
             const actionPlanner = this._actionPlanner;
             const state         = actionPlanner.getState();
-            if (state === Types.ActionPlannerState.Idle) {
+            if (state === ActionPlannerState.Idle) {
                 this._setAllUnitsOnMapVisible(true);
-            } else {
+
+            } else if (state === ActionPlannerState.MakingMovePathForUnitOnMap) {
                 actionPlanner.getFocusUnitOnMap().getView().visible = false;
+
+            } else if (state === ActionPlannerState.PreviewingAttackableArea) {
+                for (const [, unit] of actionPlanner.getUnitsForPreviewingAttackableArea()) {
+                    unit.getView().visible = false;
+                }
+
+            } else {
+                // TODO
             }
         }
 

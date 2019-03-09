@@ -4,7 +4,7 @@ namespace TinyWars.Time.TimeModel {
     import Lang   = Utility.Lang;
 
     const TILE_ANIMATION_INTERVAL = 160;        // 0.16s
-    const UNIT_ANIMATION_INTERVAL = 250;        // 0.25s
+    const UNIT_ANIMATION_INTERVAL = 120;        // 0.12s
     const GRID_ANIMATION_INTERVAL = 100;        // 0.1s
     const HEARTBEAT_INTERVAL      = 60 * 1000;  // 1min
 
