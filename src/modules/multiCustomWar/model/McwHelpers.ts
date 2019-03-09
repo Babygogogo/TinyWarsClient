@@ -7,6 +7,7 @@ namespace TinyWars.MultiCustomWar.McwHelpers {
     import MovableArea      = Types.MovableArea;
     import AttackableArea   = Types.AttackableArea;
     import MapSize          = Types.MapSize;
+    import MovePathNode     = Types.MovePathNode;
 
     type AvailableMovableGrid = {
         currGridIndex   : GridIndex;
@@ -66,6 +67,26 @@ namespace TinyWars.MultiCustomWar.McwHelpers {
             }
         }
         return area;
+    }
+
+    export function createShortestMovePath(area: MovableArea, destination: GridIndex): MovePathNode[] {
+        const reversedPath = [] as MovePathNode[];
+        let gridIndex   = destination;
+        let movableNode = area[gridIndex.x][gridIndex.y];
+
+        while (true) {
+            reversedPath.push({
+                x               : gridIndex.x,
+                y               : gridIndex.y,
+                totalMoveCost   : movableNode.totalMoveCost,
+            });
+
+            gridIndex = movableNode.prevGridIndex;
+            if (!gridIndex) {
+                return reversedPath.reverse();
+            }
+            movableNode = area[gridIndex.x][gridIndex.y];
+        }
     }
 
     function _pushToAvailableMovableGrids(grids: AvailableMovableGrid[], gridIndex: GridIndex, prev: GridIndex, totalMoveCost: number): void {

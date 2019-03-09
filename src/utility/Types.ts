@@ -181,6 +181,12 @@ namespace TinyWars.Utility.Types {
         isBlocked       : boolean;
     }
 
+    export type MovePathNode = {
+        x               : number;
+        y               : number;
+        totalMoveCost   : number;
+    }
+
     export type RepairHpAndCost = {
         hp  : number;
         cost: number;
@@ -353,6 +359,7 @@ namespace TinyWars.Utility.Types {
     }
 
     export const enum Direction {
+        Undefined,
         Left,
         Right,
         Up,

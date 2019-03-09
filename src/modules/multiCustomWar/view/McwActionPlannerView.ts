@@ -1,10 +1,25 @@
 
 namespace TinyWars.MultiCustomWar {
-    import TimeModel    = Time.TimeModel;
-    import Types        = Utility.Types;
-    import Helpers      = Utility.Helpers;
-    import Notify       = Utility.Notify;
-    import State        = Types.ActionPlannerState;
+    import TimeModel        = Time.TimeModel;
+    import Types            = Utility.Types;
+    import Helpers          = Utility.Helpers;
+    import Notify           = Utility.Notify;
+    import GridIndexHelpers = Utility.GridIndexHelpers;
+    import State            = Types.ActionPlannerState;
+    import GridIndex        = Types.GridIndex;
+    import Direction        = Types.Direction;
+
+    const _PATH_GRID_SOURCE_EMPTY               = undefined;
+    const _PATH_GRID_SOURCE_LINE_VERTICAL       = `c08_t01_s01_f01`;
+    const _PATH_GRID_SOURCE_LINE_HORIZONTAL     = `c08_t01_s02_f01`;
+    const _PATH_GRID_SOURCE_ARROW_UP            = `c08_t01_s03_f01`;
+    const _PATH_GRID_SOURCE_ARROW_DOWN          = `c08_t01_s04_f01`;
+    const _PATH_GRID_SOURCE_ARROW_LEFT          = `c08_t01_s05_f01`;
+    const _PATH_GRID_SOURCE_ARROW_RIGHT         = `c08_t01_s06_f01`;
+    const _PATH_GRID_SOURCE_CORNER_DOWN_LEFT    = `c08_t01_s07_f01`;
+    const _PATH_GRID_SOURCE_CORNER_DOWN_RIGHT   = `c08_t01_s08_f01`;
+    const _PATH_GRID_SOURCE_CORNER_UP_LEFT      = `c08_t01_s09_f01`;
+    const _PATH_GRID_SOURCE_CORNER_UP_RIGHT     = `c08_t01_s10_f01`;
 
     const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = ConfigManager.getGridSize();
     const _MOVABLE_GRID_FRAMES = [
@@ -19,6 +34,43 @@ namespace TinyWars.MultiCustomWar {
         `c08_t02_s02_f09`, `c08_t02_s02_f10`, `c08_t02_s02_f11`, `c08_t02_s02_f12`,
         `c08_t02_s02_f13`, `c08_t02_s02_f14`, `c08_t02_s02_f15`,
     ];
+    const _PATH_GRID_SOURCES = new Map<Direction, Map<Direction, string>>([
+        [Direction.Undefined, new Map([
+            [Direction.Undefined,   _PATH_GRID_SOURCE_EMPTY],
+            [Direction.Up,          _PATH_GRID_SOURCE_LINE_VERTICAL],
+            [Direction.Down,        _PATH_GRID_SOURCE_LINE_VERTICAL],
+            [Direction.Left,        _PATH_GRID_SOURCE_LINE_HORIZONTAL],
+            [Direction.Right,       _PATH_GRID_SOURCE_LINE_HORIZONTAL],
+        ])],
+        [Direction.Up, new Map([
+            [Direction.Undefined,   _PATH_GRID_SOURCE_ARROW_DOWN],
+            [Direction.Up,          _PATH_GRID_SOURCE_EMPTY],
+            [Direction.Down,        _PATH_GRID_SOURCE_LINE_VERTICAL],
+            [Direction.Left,        _PATH_GRID_SOURCE_CORNER_UP_LEFT],
+            [Direction.Right,       _PATH_GRID_SOURCE_CORNER_UP_RIGHT],
+        ])],
+        [Direction.Down, new Map([
+            [Direction.Undefined,   _PATH_GRID_SOURCE_ARROW_UP],
+            [Direction.Up,          _PATH_GRID_SOURCE_LINE_VERTICAL],
+            [Direction.Down,        _PATH_GRID_SOURCE_EMPTY],
+            [Direction.Left,        _PATH_GRID_SOURCE_CORNER_DOWN_LEFT],
+            [Direction.Right,       _PATH_GRID_SOURCE_CORNER_DOWN_RIGHT],
+        ])],
+        [Direction.Left, new Map([
+            [Direction.Undefined,   _PATH_GRID_SOURCE_ARROW_RIGHT],
+            [Direction.Up,          _PATH_GRID_SOURCE_CORNER_UP_LEFT],
+            [Direction.Down,        _PATH_GRID_SOURCE_CORNER_DOWN_LEFT],
+            [Direction.Left,        _PATH_GRID_SOURCE_EMPTY],
+            [Direction.Right,       _PATH_GRID_SOURCE_LINE_HORIZONTAL],
+        ])],
+        [Direction.Right, new Map([
+            [Direction.Undefined,   _PATH_GRID_SOURCE_ARROW_LEFT],
+            [Direction.Up,          _PATH_GRID_SOURCE_CORNER_UP_RIGHT],
+            [Direction.Down,        _PATH_GRID_SOURCE_CORNER_DOWN_RIGHT],
+            [Direction.Left,        _PATH_GRID_SOURCE_LINE_HORIZONTAL],
+            [Direction.Right,       _PATH_GRID_SOURCE_EMPTY],
+        ])],
+    ]);
 
     export class McwActionPlannerView extends egret.DisplayObjectContainer {
         private _actionPlanner  : McwActionPlanner;
@@ -156,7 +208,7 @@ namespace TinyWars.MultiCustomWar {
             this._conForAttackableGrids.visible = true;
             this._conForMovableGrids.visible    = true;
             this._conForMoveDestination.visible = false;
-            this._conForMovePath.visible        = false;    // TODO
+            this._conForMovePath.visible        = true;
 
             const actionPlanner     = this._actionPlanner;
             const movableArea       = actionPlanner.getMovableArea();
@@ -169,6 +221,19 @@ namespace TinyWars.MultiCustomWar {
                     this._imgsForAttackableGrids[x][y].visible  = (!isMovable) && (!!attackableArea[x]) && (!!attackableArea[x][y]);
                 }
             }
+
+            this.resetConForMovePath();
+        }
+
+        public resetConForMovePath(): void {
+            const con = this._conForMovePath;
+            con.removeChildren();
+
+            const path = this._actionPlanner.getMovePath();
+            for (let i = 0; i < path.length; ++i) {
+                const img = _createImgForMovePathGrid(path[i - 1], path[i], path[i + 1]);
+                img && con.addChild(img);
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -179,6 +244,18 @@ namespace TinyWars.MultiCustomWar {
         }
         public getConForUnits(): egret.DisplayObjectContainer {
             return this._conForUnits;
+        }
+    }
+
+    function _createImgForMovePathGrid(prev: GridIndex, curr: GridIndex, next: GridIndex): GameUi.UiImage {
+        const source = _PATH_GRID_SOURCES.get(GridIndexHelpers.getAdjacentDirection(prev, curr)).get(GridIndexHelpers.getAdjacentDirection(next, curr));
+        if (!source) {
+            return undefined;
+        } else {
+            const image = new GameUi.UiImage(source);
+            image.x = curr.x * _GRID_WIDTH;
+            image.y = curr.y * _GRID_HEIGHT;
+            return image;
         }
     }
 }

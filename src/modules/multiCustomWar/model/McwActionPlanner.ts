@@ -10,6 +10,7 @@ namespace TinyWars.MultiCustomWar {
     import State            = Types.ActionPlannerState;
     import MovableArea      = Types.MovableArea;
     import AttackableArea   = Types.AttackableArea;
+    import MovePathGrid     = Types.MovePathNode;
 
     export class McwActionPlanner {
         private _view               : McwActionPlannerView;
@@ -22,14 +23,15 @@ namespace TinyWars.MultiCustomWar {
 
         private _state                      : State;
         private _isWaitingForServerResponse : boolean;
-        private _focusUnit                  : McwUnit;
-        private _launchUnitId               : number;
+        private _focusUnitOnMap             : McwUnit;
+        private _focusUnitsLoaded           : McwUnit[] = [];
         private _unitsForPreviewAttack      : McwUnit[] = [];
         private _unitsForPreviewMove        : McwUnit[] = [];
         private _gridsForPreviewAttack      : GridIndex[] = [];
         private _gridsForPreviewMove        : GridIndex[] = [];
         private _movableArea                : MovableArea;
         private _attackableArea             : AttackableArea;
+        private _movePath                   : MovePathGrid[] = [];
 
         private _notifyListeners: Notify.Listener[] = [
             { type: Notify.Type.McwCursorTapped,    callback: this._onNotifyMcwCursorTapped },
@@ -79,7 +81,7 @@ namespace TinyWars.MultiCustomWar {
             const gridIndex = data.tappedOn;
 
             if (currState === State.Idle) {
-                if (this._checkCanSetStateMakingMovePath(gridIndex)) {
+                if (this._checkCanSetStateMakingMovePathForUnitOnMap(gridIndex)) {
                     this._setStateMakingMovePathForUnitOnMap(gridIndex);
                 }
             } else if (currState === State.MakingMovePathForUnitOnMap) {
@@ -90,7 +92,17 @@ namespace TinyWars.MultiCustomWar {
         }
 
         private _onNotifyMcwCursorDragged(e: egret.Event): void {
-            const data = e.data as Notify.Data.McwCursorDragged;
+            const data      = e.data as Notify.Data.McwCursorDragged;
+            const currState = this.getState();
+            if (currState === State.ChoosingProductionTarget) {
+                if (this._checkCanSetStateIdle()) {
+                    this.setStateIdle();
+                }
+            } else if (currState === State.MakingMovePathForUnitOnMap) {
+                this._updateMovePath(data.draggedTo);
+            } else {
+                // TODO
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -102,8 +114,8 @@ namespace TinyWars.MultiCustomWar {
 
         public setStateIdle(): void {
             this._state                 = State.Idle;
-            this._focusUnit             = undefined;
-            this._launchUnitId          = undefined;
+            this._setFocusUnitOnMap(undefined);
+            this._clearFocusUnitsLoaded();
             this._unitsForPreviewAttack = [];
             this._unitsForPreviewMove   = [];
             this._gridsForPreviewAttack = [];
@@ -121,15 +133,18 @@ namespace TinyWars.MultiCustomWar {
             this._state = State.MakingMovePathForUnitOnMap;
 
             const focusUnit = this._unitMap.getUnitOnMap(beginningGridIndex);
-            if (this._focusUnit !== focusUnit) {
-                this._focusUnit = focusUnit;
+            if (this.getFocusUnitOnMap() !== focusUnit) {
+                this._setFocusUnitOnMap(focusUnit);
                 this._resetMovableArea();
                 this._resetAttackableArea();
+                this._resetMovePath(beginningGridIndex);
             }
+            this._clearFocusUnitsLoaded();
 
             this._updateView();
+            Notify.dispatch(Notify.Type.McwActionPlannerStateChanged);
         }
-        private _checkCanSetStateMakingMovePath(gridIndex: GridIndex): boolean {
+        private _checkCanSetStateMakingMovePathForUnitOnMap(gridIndex: GridIndex): boolean {
             const turnManager = this._turnManager;
             if ((this._war.getIsRunningAction())                                ||
                 (this._isWaitingForServerResponse)                              ||
@@ -173,8 +188,32 @@ namespace TinyWars.MultiCustomWar {
             this._isWaitingForServerResponse = isWaiting;
         }
 
+        public getFocusUnitOnMap(): McwUnit | undefined {
+            return this._focusUnitOnMap;
+        }
+        private _setFocusUnitOnMap(unit: McwUnit): void {
+            this._focusUnitOnMap = unit;
+        }
+
+        public getAllFocusUnitsLoaded(): McwUnit[] {
+            return this._focusUnitsLoaded;
+        }
+        public getFocusUnitLoaded(): McwUnit | undefined {
+            const units = this.getAllFocusUnitsLoaded();
+            return units[units.length - 1];
+        }
+        private _pushBackFocusUnitLoaded(unit: McwUnit): void {
+            this.getAllFocusUnitsLoaded().push(unit);
+        }
+        private _popBackFocusUnitLoaded(): void {
+            this.getAllFocusUnitsLoaded().length -= 1;
+        }
+        private _clearFocusUnitsLoaded(): void {
+            this.getAllFocusUnitsLoaded().length = 0;
+        }
+
         private _resetMovableArea(): void {
-            const unit = this._focusUnit;
+            const unit = this.getFocusUnitOnMap();
             this._movableArea = McwHelpers.createMovableArea(
                 unit.getGridIndex(),
                 unit.getFinalMoveRange(),
@@ -186,7 +225,7 @@ namespace TinyWars.MultiCustomWar {
         }
 
         private _resetAttackableArea(): void {
-            const unit                  = this._focusUnit;
+            const unit                  = this.getFocusUnitOnMap();
             const canAttakAfterMove     = unit.checkCanAttackAfterMove();
             const isLoaded              = unit.getLoaderUnitId() != null;
             const beginningGridIndex    = unit.getGridIndex();
@@ -211,6 +250,67 @@ namespace TinyWars.MultiCustomWar {
             return this._attackableArea;
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Functions for move path.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _resetMovePath(beginningGridIndex: GridIndex): void {
+            this._movePath = [{
+                x               : beginningGridIndex.x,
+                y               : beginningGridIndex.y,
+                totalMoveCost   : 0,
+            }];
+        }
+        public getMovePath(): MovePathGrid[] {
+            return this._movePath;
+        }
+        private _updateMovePath(destination: GridIndex): void {
+            const { x, y }      = destination;
+            const movableArea   = this.getMovableArea();
+            const currPath      = this.getMovePath();
+            if ((movableArea[x]) && (movableArea[x][y]) && (!GridIndexHelpers.checkIsEqual(currPath[currPath.length - 1], destination))) {
+                if ((!this._checkAndTruncateMovePath(destination)) && (!this._checkAndExtendMovePath(destination))) {
+                    this._movePath = McwHelpers.createShortestMovePath(movableArea, destination);
+                }
+
+                this.getView().resetConForMovePath();
+            }
+        }
+        private _checkAndTruncateMovePath(destination: GridIndex): boolean {
+            const path      = this.getMovePath();
+            const length    = path.length;
+            for (let i = 0; i < length; ++i) {
+                if (GridIndexHelpers.checkIsEqual(path[i], destination)) {
+                    path.length = i + 1;
+                    return true;
+                }
+            }
+            return false;
+        }
+        private _checkAndExtendMovePath(destination: GridIndex): boolean {
+            const path      = this.getMovePath();
+            const length    = path.length;
+            const prevGrid  = path[length - 1];
+            if (!GridIndexHelpers.checkIsAdjacent(prevGrid, destination)) {
+                return false;
+            } else {
+                const focusUnit     = this.getFocusUnitLoaded() || this.getFocusUnitOnMap();
+                const totalMoveCost = this._getMoveCost(destination, focusUnit) + prevGrid.totalMoveCost;
+                if (totalMoveCost > focusUnit.getFinalMoveRange()) {
+                    return false;
+                } else {
+                    path.push({
+                        x   : destination.x,
+                        y   : destination.y,
+                        totalMoveCost,
+                    });
+                    return true;
+                }
+            }
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Other functions.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _getMoveCost(targetGridIndex: GridIndex, movingUnit: McwUnit): number | undefined {
             if (!GridIndexHelpers.checkIsInsideMap(targetGridIndex, this.getMapSize())) {
                 return undefined;

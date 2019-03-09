@@ -82,6 +82,8 @@ namespace TinyWars.MultiCustomWar {
             const state         = actionPlanner.getState();
             if (state === Types.ActionPlannerState.Idle) {
                 this._setAllUnitsOnMapVisible(true);
+            } else {
+                actionPlanner.getFocusUnitOnMap().getView().visible = false;
             }
         }
 

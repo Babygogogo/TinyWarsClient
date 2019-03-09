@@ -8,8 +8,8 @@ namespace TinyWars.Utility.GridIndexHelpers {
     const _ADJACENT_OFFSETS = [
         { offset: { x: -1, y:  0 }, direction: Direction.Left,  clockwiseOffset: { x:  1, y:  1 }, },
         { offset: { x:  1, y:  0 }, direction: Direction.Right, clockwiseOffset: { x: -1, y: -1 }, },
-        { offset: { x:  0, y: -1 }, direction: Direction.Down,  clockwiseOffset: { x: -1, y:  1 }, },
-        { offset: { x:  0, y:  1 }, direction: Direction.Up,    clockwiseOffset: { x:  1, y: -1 }, },
+        { offset: { x:  0, y: -1 }, direction: Direction.Up,    clockwiseOffset: { x: -1, y:  1 }, },
+        { offset: { x:  0, y:  1 }, direction: Direction.Down,  clockwiseOffset: { x:  1, y: -1 }, },
     ];
 
     export function createGridIndexByPoint(p: Point): GridIndex {
@@ -85,8 +85,8 @@ namespace TinyWars.Utility.GridIndexHelpers {
      * If g1 is not adjacent to g2, undefined is returned.
      * Else, if index1 is at the right side of index2, then Direction.Right is returned, and so on.
     */
-    export function getAdjacentDirection(g1: GridIndex, g2: GridIndex): Direction | undefined {
-        if (getDistance(g1, g2) === 1) {
+    export function getAdjacentDirection(g1: GridIndex, g2: GridIndex): Direction {
+        if ((g1) && (g2) && (getDistance(g1, g2) === 1)) {
             const offset = sub(g1, g2);
             for (const o of _ADJACENT_OFFSETS) {
                 if (checkIsEqual(offset, o.offset)) {
@@ -94,7 +94,7 @@ namespace TinyWars.Utility.GridIndexHelpers {
                 }
             }
         }
-        return undefined;
+        return Direction.Undefined;
     }
 
     export function getGridsWithinDistance(origin: GridIndex, minDistance: number, maxDistance: number, mapSize: MapSize, predicate?: (g: GridIndex) => boolean) {
