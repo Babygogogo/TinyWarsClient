@@ -63,6 +63,10 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        public getWar(): McwWar {
+            return this._war;
+        }
+
         public getView(): McwCursorView {
             return this._view;
         }
@@ -77,16 +81,8 @@ namespace TinyWars.MultiCustomWar {
             return this._mapSize;
         }
 
-        public setGridX(x: number): void {
-            this._gridX = x;
-            this.getView().updateView();
-        }
         public getGridX(): number {
             return this._gridX;
-        }
-        public setGridY(y: number): void {
-            this._gridY = y;
-            this.getView().updateView();
         }
         public getGridY(): number {
             return this._gridY;

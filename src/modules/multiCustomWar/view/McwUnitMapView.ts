@@ -81,8 +81,13 @@ namespace TinyWars.MultiCustomWar {
         private _onNotifyMcwActionPlannerStateChanged(e: egret.Event): void {
             const actionPlanner = this._actionPlanner;
             const state         = actionPlanner.getState();
+            this._setAllUnitsOnMapVisible(true);
+
             if (state === ActionPlannerState.Idle) {
-                this._setAllUnitsOnMapVisible(true);
+                // Do nothing.
+
+            } else if (state === ActionPlannerState.ChoosingProductionTarget) {
+                // Do nothing.
 
             } else if (state === ActionPlannerState.MakingMovePathForUnitOnMap) {
                 actionPlanner.getFocusUnitOnMap().getView().visible = false;
@@ -91,6 +96,9 @@ namespace TinyWars.MultiCustomWar {
                 for (const [, unit] of actionPlanner.getUnitsForPreviewingAttackableArea()) {
                     unit.getView().visible = false;
                 }
+
+            } else if (state === ActionPlannerState.PreviewingMovableArea) {
+                // TODO
 
             } else {
                 // TODO

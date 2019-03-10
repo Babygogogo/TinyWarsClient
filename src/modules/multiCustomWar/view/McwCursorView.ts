@@ -1,11 +1,12 @@
 
 namespace TinyWars.MultiCustomWar {
-    import Types            = Utility.Types;
-    import Logger           = Utility.Logger;
-    import GridIndexHelpers = Utility.GridIndexHelpers;
-    import Helpers          = Utility.Helpers;
-    import Notify           = Utility.Notify;
-    import GridIndex        = Types.GridIndex;
+    import Types                = Utility.Types;
+    import Logger               = Utility.Logger;
+    import GridIndexHelpers     = Utility.GridIndexHelpers;
+    import Helpers              = Utility.Helpers;
+    import Notify               = Utility.Notify;
+    import GridIndex            = Types.GridIndex;
+    import ActionPlannerState   = Types.ActionPlannerState;
 
     const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = ConfigManager.getGridSize();
     const _CORNER_WIDTH                         = 28;
@@ -43,6 +44,9 @@ namespace TinyWars.MultiCustomWar {
     export class McwCursorView extends eui.Group {
         private _cursor                 : McwCursor;
         private _mapSize                : Types.MapSize;
+        private _actionPlanner          : McwActionPlanner;
+        private _tileMap                : McwTileMap;
+        private _unitMap                : McwUnitMap;
         private _frameIndexForImgTarget = 0;
 
         private _currGlobalTouchPoints      = new Map<number, Types.Point>();
@@ -62,6 +66,10 @@ namespace TinyWars.MultiCustomWar {
         private _imgTarget              = new GameUi.UiImage(_IMG_SOURCES_FOR_TARGET[this._frameIndexForImgTarget]);
         private _imgSiloArea            = new GameUi.UiImage(`c04_t03_s03_f01`);
 
+        private _notifyListeners: Notify.Listener[] = [
+            { type: Notify.Type.McwActionPlannerStateChanged, callback: this._onNotifyMcwActionPlannerStateChanged },
+        ];
+
         public constructor() {
             super();
 
@@ -80,6 +88,11 @@ namespace TinyWars.MultiCustomWar {
         }
 
         public startRunningView(): void {
+            const field         = this._cursor.getWar().getField();
+            this._tileMap       = field.getTileMap();
+            this._unitMap       = field.getUnitMap();
+            this._actionPlanner = field.getActionPlanner();
+
             this._startNormalAnimation();
             this._startTargetAnimation();
 
@@ -87,6 +100,8 @@ namespace TinyWars.MultiCustomWar {
             this.addEventListener(egret.TouchEvent.TOUCH_CANCEL,            this._onTouchCancel,            this);
             this.addEventListener(egret.TouchEvent.TOUCH_END,               this._onTouchEnd,               this);
             this.addEventListener(egret.TouchEvent.TOUCH_RELEASE_OUTSIDE,   this._onTouchReleaseOutside,    this);
+
+            this.updateView();
         }
         public stopRunningView(): void {
             this._stopNormalAnimation();
@@ -106,11 +121,18 @@ namespace TinyWars.MultiCustomWar {
 
         public updateView(): void {
             this._updatePos();
+            this._updateConForNormal();
+            this._updateConForTarget();
+            this._updateConForSiloArea();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _onNotifyMcwActionPlannerStateChanged(e: egret.Event): void {
+            this.updateView();
+        }
+
         private _onTouchBegin(e: egret.TouchEvent): void {
             const touchId   = e.touchPointID;
             if (this._currGlobalTouchPoints.size <= 0) {
@@ -198,6 +220,82 @@ namespace TinyWars.MultiCustomWar {
         private _updatePos(): void {
             this._conForAll.x = this._cursor.getGridX() * _GRID_WIDTH;
             this._conForAll.y = this._cursor.getGridY() * _GRID_HEIGHT;
+        }
+
+        private _updateConForNormal(): void {
+            const con           = this._conForNormal;
+            const gridIndex     = this._cursor.getGridIndex();
+            const actionPlanner = this._actionPlanner;
+            const state         = actionPlanner.getState();
+
+            if (state === ActionPlannerState.Idle) {
+                con.visible = true;
+
+            } else if (state === ActionPlannerState.MakingMovePathForUnitOnMap) {
+                con.visible = !actionPlanner.getFocusUnitOnMap().checkCanAttackTargetAfterMovePath(actionPlanner.getMovePath(), gridIndex);
+
+            } else if (state === ActionPlannerState.ChoosingProductionTarget) {
+                con.visible = true;
+
+            } else if (state === ActionPlannerState.PreviewingAttackableArea) {
+                con.visible = true;
+
+            } else if (state === ActionPlannerState.PreviewingMovableArea) {
+                con.visible = true;
+
+            } else {
+                // TODO
+            }
+        }
+        private _updateConForTarget(): void {
+            const con           = this._conForTarget;
+            const gridIndex     = this._cursor.getGridIndex();
+            const actionPlanner = this._actionPlanner;
+            const state         = actionPlanner.getState();
+
+            if (state === ActionPlannerState.Idle) {
+                con.visible = false;
+
+            } else if (state === ActionPlannerState.MakingMovePathForUnitOnMap) {
+                con.visible = actionPlanner.getFocusUnitOnMap().checkCanAttackTargetAfterMovePath(actionPlanner.getMovePath(), gridIndex);
+
+            } else if (state === ActionPlannerState.ChoosingProductionTarget) {
+                con.visible = false;
+
+            } else if (state === ActionPlannerState.PreviewingAttackableArea) {
+                con.visible = false;
+
+            } else if (state === ActionPlannerState.PreviewingMovableArea) {
+                con.visible = false;
+
+            } else {
+                // TODO
+            }
+        }
+        private _updateConForSiloArea(): void {
+            const con           = this._conForSiloArea;
+            const gridIndex     = this._cursor.getGridIndex();
+            const actionPlanner = this._actionPlanner;
+            const state         = actionPlanner.getState();
+
+            if (state === ActionPlannerState.Idle) {
+                con.visible = false;
+
+            } else if (state === ActionPlannerState.MakingMovePathForUnitOnMap) {
+                con.visible = false;
+
+            } else if (state === ActionPlannerState.ChoosingProductionTarget) {
+                con.visible = false;
+
+            } else if (state === ActionPlannerState.PreviewingAttackableArea) {
+                con.visible = false;
+
+            } else if (state === ActionPlannerState.PreviewingMovableArea) {
+                con.visible = false;
+
+            } else {
+                // TODO
+            }
         }
 
         private _initConForNormal(): void {

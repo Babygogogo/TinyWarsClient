@@ -10,6 +10,8 @@ namespace TinyWars.MultiCustomWar {
     import TileType         = Types.TileType;
     import UnitType         = Types.UnitType;
     import MoveType         = Types.MoveType;
+    import GridIndex        = Types.GridIndex;
+    import MovePathNode     = Types.MovePathNode;
 
     export class McwUnit {
         private _configVersion      : number;
@@ -293,6 +295,31 @@ namespace TinyWars.MultiCustomWar {
             return this._templateCfg.canAttackDivingUnits === 1;
         }
 
+        public checkCanAttackTargetAfterMovePath(movePath: MovePathNode[], targetGridIndex: GridIndex): boolean {
+            const pathLength    = movePath.length;
+            const distance      = GridIndexHelpers.getDistance(movePath[pathLength - 1], targetGridIndex);
+            const primaryAmmo   = this.getPrimaryWeaponCurrentAmmo();
+            if (((!this.checkCanAttackAfterMove()) && (pathLength > 1))                             ||
+                ((this.getLoaderUnitId() != null) && (pathLength <= 1))                             ||
+                ((!primaryAmmo) && (!this.checkHasSecondaryWeapon()))                               ||
+                (!((distance <= this.getMaxAttackRange()) && (distance >= this.getMinAttackRange())))
+            ) {
+                return false;
+            } else {
+                const targetUnit = this._war.getUnitMap().getUnitOnMap(targetGridIndex);
+                if (targetUnit) {
+                    const armorType = targetUnit.getArmorType();
+                    return (targetUnit.getTeamIndex() !== this.getTeamIndex())
+                        && ((!targetUnit.getIsDiving()) || (this.checkCanAttackDivingUnits()))
+                        && (((!!primaryAmmo) && (this.getPrimaryWeaponBaseDamage(armorType)) != null) || (this.getSecondaryWeaponBaseDamage(armorType) != null))
+                } else {
+                    const armorType = this._war.getTileMap().getTile(targetGridIndex).getArmorType();
+                    return (armorType != null)
+                        && (((!!primaryAmmo) && (this.getPrimaryWeaponBaseDamage(armorType)) != null) || (this.getSecondaryWeaponBaseDamage(armorType) != null));
+                }
+            }
+        }
+
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for capture.
         ////////////////////////////////////////////////////////////////////////////////
@@ -412,7 +439,7 @@ namespace TinyWars.MultiCustomWar {
             this._gridY = y;
         }
 
-        public getGridIndex(): Types.GridIndex {
+        public getGridIndex(): GridIndex {
             return { x: this.getGridX(), y: this.getGridY() };
         }
 
@@ -715,7 +742,7 @@ namespace TinyWars.MultiCustomWar {
             return cfg ? cfg.visionBonus || 0 : 0;
         }
 
-        public getVisionRangeForPlayer(playerIndex: number, gridIndex: Types.GridIndex): number | undefined {
+        public getVisionRangeForPlayer(playerIndex: number, gridIndex: GridIndex): number | undefined {
             const war = this._war;
             if (this.getTeamIndex() !== war.getPlayer(playerIndex)!.getTeamIndex()) {
                 return undefined;

@@ -10,7 +10,7 @@ namespace TinyWars.MultiCustomWar {
     import State            = Types.ActionPlannerState;
     import MovableArea      = Types.MovableArea;
     import AttackableArea   = Types.AttackableArea;
-    import MovePathGrid     = Types.MovePathNode;
+    import MovePathNode     = Types.MovePathNode;
 
     export class McwActionPlanner {
         private _view               : McwActionPlannerView;
@@ -31,7 +31,7 @@ namespace TinyWars.MultiCustomWar {
         private _gridsForPreviewMove            : GridIndex[] = [];
         private _movableArea                    : MovableArea;
         private _attackableArea                 : AttackableArea;
-        private _movePath                       : MovePathGrid[] = [];
+        private _movePath                       : MovePathNode[] = [];
 
         private _notifyListeners: Notify.Listener[] = [
             { type: Notify.Type.McwCursorTapped,    callback: this._onNotifyMcwCursorTapped },
@@ -89,19 +89,32 @@ namespace TinyWars.MultiCustomWar {
                     this._setStatePreviewingAttackableArea(gridIndex);
                 } else if (this._checkCanSetStatePreviewingMovableArea(gridIndex)) {
                     this._setStatePreviewingMovableArea(gridIndex);
+                } else if (this._checkCanSetStateIdle()) {
+                    this.setStateIdle();
                 }
 
             } else if (currState === State.MakingMovePathForUnitOnMap) {
-                if (this._checkCanSetStateIdle()) {
+                if (this._checkCanSetStateMakingMovePathForUnitOnMap(gridIndex)) {
+                    this._setStateMakingMovePathForUnitOnMap(gridIndex);
+                } else if (this._checkCanSetStateChooseProductionTarget(gridIndex)) {
+                    this._setStateChooseProductionTarget(gridIndex);
+                } else if (this._checkCanSetStatePreviewingAttackableArea(gridIndex)) {
+                    this._setStatePreviewingAttackableArea(gridIndex);
+                } else if (this._checkCanSetStatePreviewingMovableArea(gridIndex)) {
+                    this._setStatePreviewingMovableArea(gridIndex);
+                } else if (this._checkCanSetStateIdle()) {
                     this.setStateIdle();
-                } else {
-                    // TODO
                 }
 
             } else if (currState === State.PreviewingAttackableArea) {
-                if (this._checkCanSetStatePreviewingAttackableArea(gridIndex)) {
+                if (this._checkCanSetStateMakingMovePathForUnitOnMap(gridIndex)) {
+                    this._setStateMakingMovePathForUnitOnMap(gridIndex);
+                } else if (this._checkCanSetStateChooseProductionTarget(gridIndex)) {
+                    this._setStateChooseProductionTarget(gridIndex);
+                } else if (this._checkCanSetStatePreviewingAttackableArea(gridIndex)) {
                     this._setStatePreviewingAttackableArea(gridIndex);
-                // TODO
+                } else if (this._checkCanSetStatePreviewingMovableArea(gridIndex)) {
+                    this._setStatePreviewingMovableArea(gridIndex);
                 } else if (this._checkCanSetStateIdle()) {
                     this.setStateIdle();
                 }
@@ -141,7 +154,7 @@ namespace TinyWars.MultiCustomWar {
             Notify.dispatch(Notify.Type.McwActionPlannerStateChanged);
         }
         private _checkCanSetStateIdle(): boolean {
-            return true;
+            return this.getState() !== State.Idle;
         }
 
         private _setStateMakingMovePathForUnitOnMap(beginningGridIndex: GridIndex): void {
@@ -168,14 +181,24 @@ namespace TinyWars.MultiCustomWar {
                 (turnManager.getPlayerIndexInTurn() !== this._playerIndexLoggedIn)) {
                 return false;
             } else {
-                const state = this.getState();
-                if (state === State.Idle) {
-                    const unit = this._unitMap.getUnitOnMap(gridIndex);
-                    return (unit != null)
-                        && (unit.getState() === UnitState.Idle)
-                        && (unit.getPlayerIndex() === this._playerIndexLoggedIn);
+                const state     = this.getState();
+                const unit      = this._unitMap.getUnitOnMap(gridIndex);
+                const canMove   = (unit != null)
+                    && (unit.getState() === UnitState.Idle)
+                    && (unit.getPlayerIndex() === this._playerIndexLoggedIn);
+                if (state === State.MakingMovePathForUnitOnMap) {
+                    return (canMove) && (unit !== this.getFocusUnitOnMap());
+                } else if (state === State.ChoosingProductionTarget) {
+                    return canMove;
+                } else if (state === State.PreviewingAttackableArea) {
+                    return canMove;
+                } else if (state === State.PreviewingMovableArea) {
+                    return canMove;
+                } else if (state === State.Idle) {
+                    return canMove;
                 } else {
                     // TODO
+                    return false;
                 }
             }
         }
@@ -207,11 +230,18 @@ namespace TinyWars.MultiCustomWar {
                 return false;
             } else {
                 const state = this.getState();
-                if (state === State.Idle) {
+                if (state === State.MakingMovePathForUnitOnMap) {
+                    return true;
+                } else if (state === State.ChoosingProductionTarget) {
                     return true;
                 } else if (state === State.PreviewingAttackableArea) {
                     return !this.getUnitsForPreviewingAttackableArea().has(unit.getUnitId());
+                } else if (state === State.PreviewingMovableArea) {
+                    return true;
+                } else if (state === State.Idle) {
+                    return true;
                 } else {
+                    // TODO
                     return false;
                 }
             }
@@ -317,7 +347,7 @@ namespace TinyWars.MultiCustomWar {
         private _resetMovePath(destination: GridIndex): void {
             this._movePath = McwHelpers.createShortestMovePath(this.getMovableArea(), destination);
         }
-        public getMovePath(): MovePathGrid[] {
+        public getMovePath(): MovePathNode[] {
             return this._movePath;
         }
         private _updateMovePathAndView(destination: GridIndex): void {
