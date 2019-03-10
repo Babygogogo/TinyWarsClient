@@ -98,7 +98,7 @@ namespace TinyWars.MultiCustomWar {
                 }
 
             } else if (state === ActionPlannerState.PreviewingMovableArea) {
-                // TODO
+                actionPlanner.getUnitForPreviewingMovableArea().getView().visible = false;
 
             } else {
                 // TODO

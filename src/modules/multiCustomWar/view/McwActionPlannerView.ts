@@ -228,16 +228,22 @@ namespace TinyWars.MultiCustomWar {
                     }
                 }
 
+            } else if (state === State.ChoosingProductionTarget) {
+                con.visible = false;
+
             } else if (state === State.PreviewingAttackableArea) {
                 con.visible = true;
 
-                const attackableArea    = actionPlanner.getAreaForPreviewingAttack();
+                const area              = actionPlanner.getAreaForPreviewingAttack();
                 const { width, height } = this._mapSize;
                 for (let x = 0; x < width; ++x) {
                     for (let y = 0; y < height; ++y) {
-                        this._imgsForAttackableGrids[x][y].visible = (!!attackableArea[x]) && (!!attackableArea[x][y]);
+                        this._imgsForAttackableGrids[x][y].visible = (!!area[x]) && (!!area[x][y]);
                     }
                 }
+
+            } else if (state === State.PreviewingMovableArea) {
+                con.visible = false;
 
             } else {
                 // TODO
@@ -263,8 +269,22 @@ namespace TinyWars.MultiCustomWar {
                     }
                 }
 
+            } else if (state === State.ChoosingProductionTarget) {
+                con.visible = false;
+
             } else if (state === State.PreviewingAttackableArea) {
                 con.visible = false;
+
+            } else if (state === State.PreviewingMovableArea) {
+                con.visible = true;
+
+                const area              = actionPlanner.getAreaForPreviewingMove();
+                const { width, height } = this._mapSize;
+                for (let x = 0; x < width; ++x) {
+                    for (let y = 0; y < height; ++y) {
+                        this._imgsForMovableGrids[x][y].visible = (!!area[x]) && (!!area[x][y]);
+                    }
+                }
 
             } else {
                 // TODO
@@ -298,7 +318,13 @@ namespace TinyWars.MultiCustomWar {
                     img && con.addChild(img);
                 }
 
+            } else if (state === State.ChoosingProductionTarget) {
+                con.visible = false;
+
             } else if (state === State.PreviewingAttackableArea) {
+                con.visible = false;
+
+            } else if (state === State.PreviewingMovableArea) {
                 con.visible = false;
 
             } else {
@@ -323,12 +349,21 @@ namespace TinyWars.MultiCustomWar {
                 const unit = actionPlanner.getFocusUnitOnMap();
                 this._addUnitView(unit, unit.getGridIndex());
 
+            } else if (state === State.ChoosingProductionTarget) {
+                con.visible = false;
+
             } else if (state === State.PreviewingAttackableArea) {
                 con.visible = true;
 
                 for (const [, unit] of actionPlanner.getUnitsForPreviewingAttackableArea()) {
                     this._addUnitView(unit, unit.getGridIndex());
                 }
+
+            } else if (state === State.PreviewingMovableArea) {
+                con.visible = true;
+
+                const unit = actionPlanner.getUnitForPreviewingMovableArea();
+                this._addUnitView(unit, unit.getGridIndex());
 
             } else {
                 // TODO
