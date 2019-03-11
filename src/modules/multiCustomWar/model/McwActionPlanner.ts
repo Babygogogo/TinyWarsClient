@@ -4,6 +4,7 @@ namespace TinyWars.MultiCustomWar {
     import Types            = Utility.Types;
     import Notify           = Utility.Notify;
     import GridIndexHelpers = Utility.GridIndexHelpers;
+    import Logger           = Utility.Logger;
     import TurnPhaseCode    = Types.TurnPhaseCode;
     import UnitState        = Types.UnitState;
     import GridIndex        = Types.GridIndex;
@@ -76,77 +77,93 @@ namespace TinyWars.MultiCustomWar {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onNotifyMcwCursorTapped(e: egret.Event): void {
-            const data      = e.data as Notify.Data.McwCursorTapped;
-            const currState = this.getState();
-            const gridIndex = data.tappedOn;
+            // const data      = e.data as Notify.Data.McwCursorTapped;
+            // const currState = this.getState();
+            // const gridIndex = data.tappedOn;
 
-            if (currState === State.Idle) {
-                if (this._checkCanSetStateMakingMovePathForUnitOnMap(gridIndex)) {
-                    this._setStateMakingMovePathForUnitOnMap(gridIndex);
-                } else if (this._checkCanSetStateChooseProductionTarget(gridIndex)) {
-                    this._setStateChooseProductionTarget(gridIndex);
-                } else if (this._checkCanSetStatePreviewingAttackableArea(gridIndex)) {
-                    this._setStatePreviewingAttackableArea(gridIndex);
-                } else if (this._checkCanSetStatePreviewingMovableArea(gridIndex)) {
-                    this._setStatePreviewingMovableArea(gridIndex);
-                } else if (this._checkCanSetStateIdle()) {
-                    this.setStateIdle();
-                }
+            // if (currState === State.Idle) {
+            //     if (this._checkCanSetStateMakingMovePathForUnitOnMap(gridIndex)) {
+            //         this._setStateMakingMovePathForUnitOnMap(gridIndex);
+            //     } else if (this._checkCanSetStateChooseProductionTarget(gridIndex)) {
+            //         this._setStateChooseProductionTarget(gridIndex);
+            //     } else if (this._checkCanSetStatePreviewingAttackableArea(gridIndex)) {
+            //         this._setStatePreviewingAttackableArea(gridIndex);
+            //     } else if (this._checkCanSetStatePreviewingMovableArea(gridIndex)) {
+            //         this._setStatePreviewingMovableArea(gridIndex);
+            //     } else if (this._checkCanSetStateIdle()) {
+            //         this.setStateIdle();
+            //     }
 
-            } else if (currState === State.MakingMovePathForUnitOnMap) {
-                if (this._checkCanSetStateMakingMovePathForUnitOnMap(gridIndex)) {
-                    this._setStateMakingMovePathForUnitOnMap(gridIndex);
-                } else if (this._checkCanSetStateChooseProductionTarget(gridIndex)) {
-                    this._setStateChooseProductionTarget(gridIndex);
-                } else if (this._checkCanSetStatePreviewingAttackableArea(gridIndex)) {
-                    this._setStatePreviewingAttackableArea(gridIndex);
-                } else if (this._checkCanSetStatePreviewingMovableArea(gridIndex)) {
-                    this._setStatePreviewingMovableArea(gridIndex);
-                } else if (this._checkCanSetStateIdle()) {
-                    this.setStateIdle();
-                }
+            // } else if (currState === State.MakingMovePathForUnitOnMap) {
+            //     if (this._checkCanSetStateMakingMovePathForUnitOnMap(gridIndex)) {
+            //         this._setStateMakingMovePathForUnitOnMap(gridIndex);
+            //     } else if (this._checkCanSetStateChooseProductionTarget(gridIndex)) {
+            //         this._setStateChooseProductionTarget(gridIndex);
+            //     } else if (this._checkCanSetStatePreviewingAttackableArea(gridIndex)) {
+            //         this._setStatePreviewingAttackableArea(gridIndex);
+            //     } else if (this._checkCanSetStatePreviewingMovableArea(gridIndex)) {
+            //         this._setStatePreviewingMovableArea(gridIndex);
+            //     } else if (this._checkCanSetStateIdle()) {
+            //         this.setStateIdle();
+            //     }
 
-            } else if (currState === State.ChoosingProductionTarget) {
-                if (this._checkCanSetStateMakingMovePathForUnitOnMap(gridIndex)) {
-                    this._setStateMakingMovePathForUnitOnMap(gridIndex);
-                } else if (this._checkCanSetStateChooseProductionTarget(gridIndex)) {
-                    this._setStateChooseProductionTarget(gridIndex);
-                } else if (this._checkCanSetStatePreviewingAttackableArea(gridIndex)) {
-                    this._setStatePreviewingAttackableArea(gridIndex);
-                } else if (this._checkCanSetStatePreviewingMovableArea(gridIndex)) {
-                    this._setStatePreviewingMovableArea(gridIndex);
-                } else if (this._checkCanSetStateIdle()) {
-                    this.setStateIdle();
-                }
+            // } else if (currState === State.ChoosingProductionTarget) {
+            //     if (this._checkCanSetStateMakingMovePathForUnitOnMap(gridIndex)) {
+            //         this._setStateMakingMovePathForUnitOnMap(gridIndex);
+            //     } else if (this._checkCanSetStateChooseProductionTarget(gridIndex)) {
+            //         this._setStateChooseProductionTarget(gridIndex);
+            //     } else if (this._checkCanSetStatePreviewingAttackableArea(gridIndex)) {
+            //         this._setStatePreviewingAttackableArea(gridIndex);
+            //     } else if (this._checkCanSetStatePreviewingMovableArea(gridIndex)) {
+            //         this._setStatePreviewingMovableArea(gridIndex);
+            //     } else if (this._checkCanSetStateIdle()) {
+            //         this.setStateIdle();
+            //     }
 
-            } else if (currState === State.PreviewingAttackableArea) {
-                if (this._checkCanSetStateMakingMovePathForUnitOnMap(gridIndex)) {
-                    this._setStateMakingMovePathForUnitOnMap(gridIndex);
-                } else if (this._checkCanSetStateChooseProductionTarget(gridIndex)) {
-                    this._setStateChooseProductionTarget(gridIndex);
-                } else if (this._checkCanSetStatePreviewingAttackableArea(gridIndex)) {
-                    this._setStatePreviewingAttackableArea(gridIndex);
-                } else if (this._checkCanSetStatePreviewingMovableArea(gridIndex)) {
-                    this._setStatePreviewingMovableArea(gridIndex);
-                } else if (this._checkCanSetStateIdle()) {
-                    this.setStateIdle();
-                }
+            // } else if (currState === State.PreviewingAttackableArea) {
+            //     if (this._checkCanSetStateMakingMovePathForUnitOnMap(gridIndex)) {
+            //         this._setStateMakingMovePathForUnitOnMap(gridIndex);
+            //     } else if (this._checkCanSetStateChooseProductionTarget(gridIndex)) {
+            //         this._setStateChooseProductionTarget(gridIndex);
+            //     } else if (this._checkCanSetStatePreviewingAttackableArea(gridIndex)) {
+            //         this._setStatePreviewingAttackableArea(gridIndex);
+            //     } else if (this._checkCanSetStatePreviewingMovableArea(gridIndex)) {
+            //         this._setStatePreviewingMovableArea(gridIndex);
+            //     } else if (this._checkCanSetStateIdle()) {
+            //         this.setStateIdle();
+            //     }
 
-            } else if (currState === State.PreviewingMovableArea) {
-                if (this._checkCanSetStateMakingMovePathForUnitOnMap(gridIndex)) {
-                    this._setStateMakingMovePathForUnitOnMap(gridIndex);
-                } else if (this._checkCanSetStateChooseProductionTarget(gridIndex)) {
-                    this._setStateChooseProductionTarget(gridIndex);
-                } else if (this._checkCanSetStatePreviewingMovableArea(gridIndex)) {
-                    this._setStatePreviewingMovableArea(gridIndex);
-                } else if (this._checkCanSetStatePreviewingAttackableArea(gridIndex)) {
-                    this._setStatePreviewingAttackableArea(gridIndex);
-                } else if (this._checkCanSetStateIdle()) {
-                    this.setStateIdle();
-                }
+            // } else if (currState === State.PreviewingMovableArea) {
+            //     if (this._checkCanSetStateMakingMovePathForUnitOnMap(gridIndex)) {
+            //         this._setStateMakingMovePathForUnitOnMap(gridIndex);
+            //     } else if (this._checkCanSetStateChooseProductionTarget(gridIndex)) {
+            //         this._setStateChooseProductionTarget(gridIndex);
+            //     } else if (this._checkCanSetStatePreviewingMovableArea(gridIndex)) {
+            //         this._setStatePreviewingMovableArea(gridIndex);
+            //     } else if (this._checkCanSetStatePreviewingAttackableArea(gridIndex)) {
+            //         this._setStatePreviewingAttackableArea(gridIndex);
+            //     } else if (this._checkCanSetStateIdle()) {
+            //         this.setStateIdle();
+            //     }
 
+            // } else {
+            //     // TODO
+            // }
+
+            const gridIndex = (e.data as Notify.Data.McwCursorTapped).tappedOn;
+            const nextState = this._getNextStateOnTap(gridIndex);
+            if (nextState === State.Idle){
+                this.setStateIdle();
+            } else if (nextState === State.ChoosingProductionTarget) {
+                this._setStateChooseProductionTarget(gridIndex);
+            } else if (nextState === State.MakingMovePathForUnitOnMap) {
+                this._setStateMakingMovePathForUnitOnMap(gridIndex);
+            } else if (nextState === State.PreviewingAttackableArea) {
+                this._setStatePreviewingAttackableArea(gridIndex);
+            } else if (nextState === State.PreviewingMovableArea) {
+                this._setStatePreviewingMovableArea(gridIndex);
             } else {
-                // TODO
+                Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() invalid next state!`, nextState);
             }
         }
 
@@ -548,5 +565,114 @@ namespace TinyWars.MultiCustomWar {
                 }
             }
         }
+
+        private _getNextStateOnTap(gridIndex: GridIndex): State {
+            switch (this.getState()) {
+                case State.Idle                         : return this._getNextStateOnTapWhenIdle(gridIndex);
+                case State.MakingMovePathForUnitOnMap   : return this._getNextStateOnTapWhenMakingMovePathForUnitOnMap(gridIndex);
+                default                                 : return State.Idle;
+            }
+        }
+        private _getNextStateOnTapWhenIdle(gridIndex: GridIndex): State {
+            if ((this._war.getIsRunningAction()) || (this._getIsWaitingForServerResponse())) {
+                return State.Idle;
+            } else {
+                const turnManager       = this._turnManager;
+                const unit              = this._unitMap.getUnitOnMap(gridIndex);
+                const selfPlayerIndex   = this._playerIndexLoggedIn;
+                const isSelfInTurn      = (turnManager.getPlayerIndexInTurn() === selfPlayerIndex) && (turnManager.getPhaseCode() === TurnPhaseCode.Main);
+                if (!unit) {
+                    const tile = this._tileMap.getTile(gridIndex);
+                    if ((isSelfInTurn) && (tile.getPlayerIndex() === selfPlayerIndex) && (tile.checkIsUnitProducer())) {
+                        return State.ChoosingProductionTarget;
+                    } else {
+                        return State.Idle;
+                    }
+                } else {
+                    if ((isSelfInTurn) && ((unit.getState() === UnitState.Idle) && (unit.getPlayerIndex() === selfPlayerIndex))) {
+                        return State.MakingMovePathForUnitOnMap;
+                    } else {
+                        if (unit.checkHasWeapon()) {
+                            return State.PreviewingAttackableArea;
+                        } else {
+                            return State.PreviewingMovableArea;
+                        }
+                    }
+                }
+            }
+        }
+        private _getNextStateOnTapWhenMakingMovePathForUnitOnMap(gridIndex: GridIndex): State {
+            const targetUnit        = this._unitMap.getUnitOnMap(gridIndex);
+            const focusUnit         = this.getFocusUnitOnMap();
+            const selfPlayerIndex   = this._playerIndexLoggedIn;
+            const movableArea       = this.getMovableArea();
+
+            if (checkAreaHasGrid(movableArea, gridIndex)) {
+                if (!targetUnit) {
+                    return State.Idle;  // TODO: should be choosingActionForUnitOnMap
+                } else {
+                    if (targetUnit.getPlayerIndex() !== selfPlayerIndex) {
+                        if (targetUnit.checkHasWeapon()) {
+                            return State.PreviewingAttackableArea;
+                        } else {
+                            return State.ChoosingProductionTarget;
+                        }
+                    } else {
+                        if ((targetUnit.checkCanJoinUnit(focusUnit)) || (targetUnit.checkCanLoadUnit(focusUnit))) {
+                            return State.Idle;  // TODO: should be choosingActionForUnitOnMap
+                        } else {
+                            if (targetUnit.getState() === UnitState.Idle) {
+                                return State.MakingMovePathForUnitOnMap;
+                            } else {
+                                return State.Idle;
+                            }
+                        }
+                    }
+                }
+            } else {
+                const attackableArea = this.getAttackableArea();
+                if (!checkAreaHasGrid(attackableArea, gridIndex)) {
+                    if (!targetUnit) {
+                        return State.Idle;
+                    } else {
+                        if ((targetUnit.getPlayerIndex() === selfPlayerIndex) || (targetUnit.getState() === UnitState.Idle)) {
+                            return State.MakingMovePathForUnitOnMap;
+                        } else {
+                            if (targetUnit.checkHasWeapon()) {
+                                return State.PreviewingAttackableArea;
+                            } else {
+                                return State.ChoosingProductionTarget;
+                            }
+                        }
+                    }
+                } else {
+                    const { x, y } = gridIndex;
+                    if ((focusUnit.checkCanAttackTargetAfterMovePath(this.getMovePath(), gridIndex)) ||
+                        (focusUnit.checkCanAttackTargetAfterMovePath(McwHelpers.createShortestMovePath(movableArea, attackableArea[x][y].movePathDestination), gridIndex))
+                    ) {
+                        return State.Idle;  // TODO: should be confirmingAttackTarget
+                    } else {
+                        if (!targetUnit) {
+                            return State.Idle;
+                        } else {
+                            if ((targetUnit.getPlayerIndex() === selfPlayerIndex) || (targetUnit.getState() === UnitState.Idle)) {
+                                return State.MakingMovePathForUnitOnMap;
+                            } else {
+                                if (targetUnit.checkHasWeapon()) {
+                                    return State.PreviewingAttackableArea;
+                                } else {
+                                    return State.ChoosingProductionTarget;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    function checkAreaHasGrid(area: AttackableArea | MovableArea, gridIndex: GridIndex): boolean {
+        const { x, y } = gridIndex;
+        return (!!area[x]) && (!!area[x][y]);
     }
 }

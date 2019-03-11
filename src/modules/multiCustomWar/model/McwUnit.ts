@@ -238,6 +238,10 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for weapon.
         ////////////////////////////////////////////////////////////////////////////////
+        public checkHasWeapon(): boolean {
+            return this.checkHasPrimaryWeapon() || this.checkHasSecondaryWeapon();
+        }
+
         public checkHasPrimaryWeapon(): boolean {
             return this._templateCfg.primaryWeaponMaxAmmo != null;
         }
