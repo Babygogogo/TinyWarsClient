@@ -23,16 +23,19 @@ namespace TinyWars.MultiCustomWar {
         private _mapSize            : Types.MapSize;
         private _playerIndexLoggedIn: number;
 
-        private _state                          : State;
-        private _focusUnitOnMap                 : McwUnit;
-        private _focusUnitsLoaded               : McwUnit[] = [];
-        private _unitsForPreviewAttackableArea  = new Map<number, McwUnit>();
-        private _areaForPreviewAttack           : AttackableArea = [];
-        private _unitForPreviewMove             : McwUnit;
-        private _areaForPreviewMove             : MovableArea;
-        private _movableArea                    : MovableArea;
-        private _attackableArea                 : AttackableArea;
-        private _movePath                       : MovePathNode[] = [];
+        private _state  : State;
+
+        private _focusUnitOnMap     : McwUnit;
+        private _focusUnitLoaded    : McwUnit;
+        private _unitsForDrop       : McwUnit[] = [];
+        private _movableArea        : MovableArea;
+        private _attackableArea     : AttackableArea;
+        private _movePath           : MovePathNode[] = [];
+
+        private _unitsForPreviewAttack  = new Map<number, McwUnit>();
+        private _areaForPreviewAttack   : AttackableArea = [];
+        private _unitForPreviewMove     : McwUnit;
+        private _areaForPreviewMove     : MovableArea;
 
         private _notifyListeners: Notify.Listener[] = [
             { type: Notify.Type.McwCursorTapped,    callback: this._onNotifyMcwCursorTapped },
@@ -112,17 +115,49 @@ namespace TinyWars.MultiCustomWar {
         }
 
         private _onNotifyMcwCursorDragged(e: egret.Event): void {
-            const data      = e.data as Notify.Data.McwCursorDragged;
-            const currState = this.getState();
-            if (currState === State.ChoosingProductionTarget) {
-                if (this._checkCanSetStateIdle()) {
-                    this.setStateIdle();
-                }
-            } else if (currState === State.MakingMovePathForUnitOnMap) {
-                this._updateMovePathAndView(data.draggedTo);
+            const gridIndex = (e.data as Notify.Data.McwCursorDragged).draggedTo;
+            const nextState = this._getNextStateOnDrag(gridIndex);
+            if (nextState === State.Idle) {
+                this.setStateIdle();
+
+            } else if (nextState === State.MakingMovePathForUnitOnMap) {
+                this._setStateMakingMovePathForUnitOnMap(gridIndex);
+
+            } else if (nextState === State.ChoosingActionForUnitOnMap) {
+                this._setStateChoosingActionForUnitOnMap(gridIndex);
+
+            } else if (nextState === State.MakingMovePathForUnitLoaded) {
+                this._setStateMakingMovePathForUnitLoaded(gridIndex);
+
+            } else if (nextState === State.ChoosingActionForUnitLoaded) {
+                this._setStateChoosingActionForUnitLoaded(gridIndex);
+
+            } else if (nextState === State.ChoosingDropDestination) {
+                this._setStateChoosingDropDestination(gridIndex);
+
+            } else if (nextState === State.ChoosingProductionTarget) {
+                this._setStateChooseProductionTarget(gridIndex);
+
+            } else if (nextState === State.PreviewingAttackableArea) {
+                this._setStatePreviewingAttackableArea(gridIndex);
+
+            } else if (nextState === State.PreviewingMovableArea) {
+                this._setStatePreviewingMovableArea(gridIndex);
+
             } else {
-                // TODO
+                Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() invalid nextState!`, nextState);
             }
+
+            // const currState = this.getState();
+            // if (currState === State.ChoosingProductionTarget) {
+            //     if (this._checkCanSetStateIdle()) {
+            //         this.setStateIdle();
+            //     }
+            // } else if (currState === State.MakingMovePathForUnitOnMap) {
+            //     this._updateMovePathAndView(gridIndex);
+            // } else {
+            //     // TODO
+            // }
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -139,7 +174,8 @@ namespace TinyWars.MultiCustomWar {
         public setStateIdle(): void {
             this._state = State.Idle;
             this._setFocusUnitOnMap(undefined);
-            this._clearFocusUnitsLoaded();
+            this._setFocusUnitLoaded(undefined);
+            this._clearUnitsForDrop();
             this._clearDataForPreviewingAttackableArea();
             this._clearDataForPreviewingMovableArea();
 
@@ -157,7 +193,8 @@ namespace TinyWars.MultiCustomWar {
                 this._resetAttackableArea();
                 this._resetMovePath(beginningGridIndex);
             }
-            this._clearFocusUnitsLoaded();
+            this._setFocusUnitLoaded(undefined);
+            this._clearUnitsForDrop();
             this._clearDataForPreviewingAttackableArea();
             this._clearDataForPreviewingMovableArea();
 
@@ -187,13 +224,22 @@ namespace TinyWars.MultiCustomWar {
 
         private _setStateChooseProductionTarget(gridIndex: GridIndex): void {
             this._state = State.ChoosingProductionTarget;
-            // TODO
+            this._setFocusUnitOnMap(undefined);
+            this._setFocusUnitLoaded(undefined);
+            this._clearUnitsForDrop();
+            this._clearDataForPreviewingAttackableArea();
+            this._clearDataForPreviewingMovableArea();
+
+            this._updateView();
+            Notify.dispatch(Notify.Type.McwActionPlannerStateChanged);
+            // TODO: open the production panel.
         }
 
         private _setStatePreviewingAttackableArea(gridIndex: GridIndex): void {
             this._state = State.PreviewingAttackableArea;
             this._setFocusUnitOnMap(undefined);
-            this._clearFocusUnitsLoaded();
+            this._setFocusUnitLoaded(undefined);
+            this._clearUnitsForDrop();
             this._addUnitForPreviewAttackableArea(this._unitMap.getUnitOnMap(gridIndex));
             this._clearDataForPreviewingMovableArea();
 
@@ -204,7 +250,8 @@ namespace TinyWars.MultiCustomWar {
         private _setStatePreviewingMovableArea(gridIndex: GridIndex): void {
             this._state = State.PreviewingMovableArea;
             this._setFocusUnitOnMap(undefined);
-            this._clearFocusUnitsLoaded();
+            this._setFocusUnitLoaded(undefined);
+            this._clearUnitsForDrop();
             this._clearDataForPreviewingAttackableArea();
             this._setUnitForPreviewingMovableArea(this._unitMap.getUnitOnMap(gridIndex));
 
@@ -260,21 +307,24 @@ namespace TinyWars.MultiCustomWar {
             this._focusUnitOnMap = unit;
         }
 
-        public getAllFocusUnitsLoaded(): McwUnit[] {
-            return this._focusUnitsLoaded;
-        }
         public getFocusUnitLoaded(): McwUnit | undefined {
-            const units = this._focusUnitsLoaded;
-            return units[units.length - 1];
+            return this._focusUnitLoaded;
         }
-        private _pushBackFocusUnitLoaded(unit: McwUnit): void {
-            this._focusUnitsLoaded.push(unit);
+        private _setFocusUnitLoaded(unit: McwUnit): void {
+            this._focusUnitLoaded = unit;
         }
-        private _popBackFocusUnitLoaded(): void {
-            this._focusUnitsLoaded.length -= 1;
+
+        public getAllUnitsForDrop(): McwUnit[] {
+            return this._unitsForDrop;
         }
-        private _clearFocusUnitsLoaded(): void {
-            this._focusUnitsLoaded.length = 0;
+        private _pushBackUnitForDrop(unit: McwUnit): void {
+            this._unitsForDrop.push(unit);
+        }
+        private _popBackUnitForDrop(): void {
+            this._unitsForDrop.length -= 1;
+        }
+        private _clearUnitsForDrop(): void {
+            this._unitsForDrop.length = 0;
         }
 
         private _resetMovableArea(): void {
@@ -373,13 +423,13 @@ namespace TinyWars.MultiCustomWar {
         // Functions for previewing attackable area.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         public getUnitsForPreviewingAttackableArea(): Map<number, McwUnit> {
-            return this._unitsForPreviewAttackableArea;
+            return this._unitsForPreviewAttack;
         }
         public getAreaForPreviewingAttack(): AttackableArea {
             return this._areaForPreviewAttack;
         }
         private _clearDataForPreviewingAttackableArea(): void {
-            this._unitsForPreviewAttackableArea.clear();
+            this._unitsForPreviewAttack.clear();
             this._areaForPreviewAttack.length = 0;
         }
         private _addUnitForPreviewAttackableArea(unit: McwUnit): void {
@@ -401,7 +451,7 @@ namespace TinyWars.MultiCustomWar {
                     ((canAttakAfterMove) || (GridIndexHelpers.checkIsEqual(moveGridIndex, beginningGridIndex)))
             );
 
-            this._unitsForPreviewAttackableArea.set(unit.getUnitId(), unit);
+            this._unitsForPreviewAttack.set(unit.getUnitId(), unit);
             if (!this._areaForPreviewAttack.length) {
                 this._areaForPreviewAttack = newArea;
             } else {
@@ -642,6 +692,15 @@ namespace TinyWars.MultiCustomWar {
                         }
                     }
                 }
+            }
+        }
+
+        private _getNextStateOnDrag(gridIndex: GridIndex): State {
+            const currState = this.getState();
+            if (currState === State.ChoosingProductionTarget) {
+                return State.Idle;
+            } else {
+                return currState;
             }
         }
 
