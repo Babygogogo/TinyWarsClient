@@ -19,11 +19,11 @@ namespace TinyWars.MultiCustomWar {
         private _unitMap            : McwUnitMap;
         private _tileMap            : McwTileMap;
         private _turnManager        : McwTurnManager;
+        private _cursor             : McwCursor;
         private _mapSize            : Types.MapSize;
         private _playerIndexLoggedIn: number;
 
         private _state                          : State;
-        private _isWaitingForServerResponse     : boolean;
         private _focusUnitOnMap                 : McwUnit;
         private _focusUnitsLoaded               : McwUnit[] = [];
         private _unitsForPreviewAttackableArea  = new Map<number, McwUnit>();
@@ -57,10 +57,10 @@ namespace TinyWars.MultiCustomWar {
             this._unitMap               = war.getUnitMap();
             this._tileMap               = war.getTileMap();
             this._turnManager           = war.getTurnManager();
+            this._cursor                = war.getField().getCursor();
             this._playerIndexLoggedIn   = war.getPlayerIndexLoggedIn();
 
             this.setStateIdle();
-            this._setIsWaitingForServerResponse(false);
 
             Notify.addEventListeners(this._notifyListeners, this, undefined, 1);
         }
@@ -77,93 +77,37 @@ namespace TinyWars.MultiCustomWar {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onNotifyMcwCursorTapped(e: egret.Event): void {
-            // const data      = e.data as Notify.Data.McwCursorTapped;
-            // const currState = this.getState();
-            // const gridIndex = data.tappedOn;
-
-            // if (currState === State.Idle) {
-            //     if (this._checkCanSetStateMakingMovePathForUnitOnMap(gridIndex)) {
-            //         this._setStateMakingMovePathForUnitOnMap(gridIndex);
-            //     } else if (this._checkCanSetStateChooseProductionTarget(gridIndex)) {
-            //         this._setStateChooseProductionTarget(gridIndex);
-            //     } else if (this._checkCanSetStatePreviewingAttackableArea(gridIndex)) {
-            //         this._setStatePreviewingAttackableArea(gridIndex);
-            //     } else if (this._checkCanSetStatePreviewingMovableArea(gridIndex)) {
-            //         this._setStatePreviewingMovableArea(gridIndex);
-            //     } else if (this._checkCanSetStateIdle()) {
-            //         this.setStateIdle();
-            //     }
-
-            // } else if (currState === State.MakingMovePathForUnitOnMap) {
-            //     if (this._checkCanSetStateMakingMovePathForUnitOnMap(gridIndex)) {
-            //         this._setStateMakingMovePathForUnitOnMap(gridIndex);
-            //     } else if (this._checkCanSetStateChooseProductionTarget(gridIndex)) {
-            //         this._setStateChooseProductionTarget(gridIndex);
-            //     } else if (this._checkCanSetStatePreviewingAttackableArea(gridIndex)) {
-            //         this._setStatePreviewingAttackableArea(gridIndex);
-            //     } else if (this._checkCanSetStatePreviewingMovableArea(gridIndex)) {
-            //         this._setStatePreviewingMovableArea(gridIndex);
-            //     } else if (this._checkCanSetStateIdle()) {
-            //         this.setStateIdle();
-            //     }
-
-            // } else if (currState === State.ChoosingProductionTarget) {
-            //     if (this._checkCanSetStateMakingMovePathForUnitOnMap(gridIndex)) {
-            //         this._setStateMakingMovePathForUnitOnMap(gridIndex);
-            //     } else if (this._checkCanSetStateChooseProductionTarget(gridIndex)) {
-            //         this._setStateChooseProductionTarget(gridIndex);
-            //     } else if (this._checkCanSetStatePreviewingAttackableArea(gridIndex)) {
-            //         this._setStatePreviewingAttackableArea(gridIndex);
-            //     } else if (this._checkCanSetStatePreviewingMovableArea(gridIndex)) {
-            //         this._setStatePreviewingMovableArea(gridIndex);
-            //     } else if (this._checkCanSetStateIdle()) {
-            //         this.setStateIdle();
-            //     }
-
-            // } else if (currState === State.PreviewingAttackableArea) {
-            //     if (this._checkCanSetStateMakingMovePathForUnitOnMap(gridIndex)) {
-            //         this._setStateMakingMovePathForUnitOnMap(gridIndex);
-            //     } else if (this._checkCanSetStateChooseProductionTarget(gridIndex)) {
-            //         this._setStateChooseProductionTarget(gridIndex);
-            //     } else if (this._checkCanSetStatePreviewingAttackableArea(gridIndex)) {
-            //         this._setStatePreviewingAttackableArea(gridIndex);
-            //     } else if (this._checkCanSetStatePreviewingMovableArea(gridIndex)) {
-            //         this._setStatePreviewingMovableArea(gridIndex);
-            //     } else if (this._checkCanSetStateIdle()) {
-            //         this.setStateIdle();
-            //     }
-
-            // } else if (currState === State.PreviewingMovableArea) {
-            //     if (this._checkCanSetStateMakingMovePathForUnitOnMap(gridIndex)) {
-            //         this._setStateMakingMovePathForUnitOnMap(gridIndex);
-            //     } else if (this._checkCanSetStateChooseProductionTarget(gridIndex)) {
-            //         this._setStateChooseProductionTarget(gridIndex);
-            //     } else if (this._checkCanSetStatePreviewingMovableArea(gridIndex)) {
-            //         this._setStatePreviewingMovableArea(gridIndex);
-            //     } else if (this._checkCanSetStatePreviewingAttackableArea(gridIndex)) {
-            //         this._setStatePreviewingAttackableArea(gridIndex);
-            //     } else if (this._checkCanSetStateIdle()) {
-            //         this.setStateIdle();
-            //     }
-
-            // } else {
-            //     // TODO
-            // }
-
             const gridIndex = (e.data as Notify.Data.McwCursorTapped).tappedOn;
             const nextState = this._getNextStateOnTap(gridIndex);
             if (nextState === State.Idle){
                 this.setStateIdle();
-            } else if (nextState === State.ChoosingProductionTarget) {
-                this._setStateChooseProductionTarget(gridIndex);
+
             } else if (nextState === State.MakingMovePathForUnitOnMap) {
                 this._setStateMakingMovePathForUnitOnMap(gridIndex);
+
+            } else if (nextState === State.ChoosingActionForUnitOnMap) {
+                this._setStateChoosingActionForUnitOnMap(gridIndex);
+
+            } else if (nextState === State.MakingMovePathForUnitLoaded) {
+                this._setStateMakingMovePathForUnitLoaded(gridIndex);
+
+            } else if (nextState === State.ChoosingActionForUnitLoaded) {
+                this._setStateChoosingActionForUnitLoaded(gridIndex);
+
+            } else if (nextState === State.ChoosingDropDestination) {
+                this._setStateChoosingDropDestination(gridIndex);
+
+            } else if (nextState === State.ChoosingProductionTarget) {
+                this._setStateChooseProductionTarget(gridIndex);
+
             } else if (nextState === State.PreviewingAttackableArea) {
                 this._setStatePreviewingAttackableArea(gridIndex);
+
             } else if (nextState === State.PreviewingMovableArea) {
                 this._setStatePreviewingMovableArea(gridIndex);
+
             } else {
-                Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() invalid next state!`, nextState);
+                Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() invalid nextState!`, nextState);
             }
         }
 
@@ -188,6 +132,10 @@ namespace TinyWars.MultiCustomWar {
             return this._state;
         }
 
+        private _checkCanSetStateIdle(): boolean {
+            return this.getState() !== State.Idle;
+        }
+
         public setStateIdle(): void {
             this._state = State.Idle;
             this._setFocusUnitOnMap(undefined);
@@ -197,9 +145,6 @@ namespace TinyWars.MultiCustomWar {
 
             this._updateView();
             Notify.dispatch(Notify.Type.McwActionPlannerStateChanged);
-        }
-        private _checkCanSetStateIdle(): boolean {
-            return this.getState() !== State.Idle;
         }
 
         private _setStateMakingMovePathForUnitOnMap(beginningGridIndex: GridIndex): void {
@@ -219,42 +164,30 @@ namespace TinyWars.MultiCustomWar {
             this._updateView();
             Notify.dispatch(Notify.Type.McwActionPlannerStateChanged);
         }
-        private _checkCanSetStateMakingMovePathForUnitOnMap(gridIndex: GridIndex): boolean {
-            const turnManager = this._turnManager;
-            if ((this._war.getIsRunningAction())                                ||
-                (this._getIsWaitingForServerResponse())                         ||
-                (turnManager.getPhaseCode() !== TurnPhaseCode.Main)             ||
-                (turnManager.getPlayerIndexInTurn() !== this._playerIndexLoggedIn)) {
-                return false;
-            } else {
-                const state     = this.getState();
-                const unit      = this._unitMap.getUnitOnMap(gridIndex);
-                const canMove   = (unit != null)
-                    && (unit.getState() === UnitState.Idle)
-                    && (unit.getPlayerIndex() === this._playerIndexLoggedIn);
-                if (state === State.MakingMovePathForUnitOnMap) {
-                    return (canMove) && (unit !== this.getFocusUnitOnMap());
-                } else if (state === State.ChoosingProductionTarget) {
-                    return canMove;
-                } else if (state === State.PreviewingAttackableArea) {
-                    return canMove;
-                } else if (state === State.PreviewingMovableArea) {
-                    return canMove;
-                } else if (state === State.Idle) {
-                    return canMove;
-                } else {
-                    // TODO
-                    return false;
-                }
-            }
+
+        private _setStateChoosingActionForUnitOnMap(gridIndex: GridIndex): void {
+            this._state = State.ChoosingActionForUnitOnMap;
+            // TODO
+        }
+
+        private _setStateMakingMovePathForUnitLoaded(beginningGridIndex: GridIndex): void {
+            this._state = State.MakingMovePathForUnitLoaded;
+            // TODO
+        }
+
+        private _setStateChoosingActionForUnitLoaded(gridIndex: GridIndex): void {
+            this._state = State.ChoosingActionForUnitLoaded;
+            // TODO
+        }
+
+        private _setStateChoosingDropDestination(gridIndex: GridIndex): void {
+            this._state = State.ChoosingDropDestination;
+            // TODO
         }
 
         private _setStateChooseProductionTarget(gridIndex: GridIndex): void {
+            this._state = State.ChoosingProductionTarget;
             // TODO
-        }
-        private _checkCanSetStateChooseProductionTarget(gridIndex: GridIndex): boolean {
-            // TODO
-            return false;
         }
 
         private _setStatePreviewingAttackableArea(gridIndex: GridIndex): void {
@@ -267,35 +200,6 @@ namespace TinyWars.MultiCustomWar {
             this._updateView();
             Notify.dispatch(Notify.Type.McwActionPlannerStateChanged);
         }
-        private _checkCanSetStatePreviewingAttackableArea(gridIndex: GridIndex): boolean {
-            const unit          = this._unitMap.getUnitOnMap(gridIndex);
-            const playerIndex   = this._playerIndexLoggedIn;
-            if ((this._war.getIsRunningAction())                                                                ||
-                (this._getIsWaitingForServerResponse())                                                         ||
-                (!unit)                                                                                         ||
-                ((!unit.checkHasPrimaryWeapon()) && (!unit.checkHasSecondaryWeapon()))                          ||
-                ((unit.getState() === UnitState.Idle) && (unit.getPlayerIndex() === playerIndex) && (playerIndex === this._turnManager.getPlayerIndexInTurn()))
-            ) {
-                return false;
-            } else {
-                const state = this.getState();
-                if (state === State.MakingMovePathForUnitOnMap) {
-                    // TODO
-                    return true;
-                } else if (state === State.ChoosingProductionTarget) {
-                    return true;
-                } else if (state === State.PreviewingAttackableArea) {
-                    return !this.getUnitsForPreviewingAttackableArea().has(unit.getUnitId());
-                } else if (state === State.PreviewingMovableArea) {
-                    return true;
-                } else if (state === State.Idle) {
-                    return true;
-                } else {
-                    // TODO
-                    return false;
-                }
-            }
-        }
 
         private _setStatePreviewingMovableArea(gridIndex: GridIndex): void {
             this._state = State.PreviewingMovableArea;
@@ -306,35 +210,6 @@ namespace TinyWars.MultiCustomWar {
 
             this._updateView();
             Notify.dispatch(Notify.Type.McwActionPlannerStateChanged);
-        }
-        private _checkCanSetStatePreviewingMovableArea(gridIndex: GridIndex): boolean {
-            const unit          = this._unitMap.getUnitOnMap(gridIndex);
-            const playerIndex   = this._playerIndexLoggedIn;
-            if ((this._war.getIsRunningAction())                                                                ||
-                (this._getIsWaitingForServerResponse())                                                         ||
-                (!unit)                                                                                         ||
-                ((unit.getState() === UnitState.Idle) && (unit.getPlayerIndex() === playerIndex) && (playerIndex === this._turnManager.getPlayerIndexInTurn()))
-            ) {
-                return false;
-            } else {
-                const hasWeapon = unit.checkHasPrimaryWeapon() || unit.checkHasSecondaryWeapon();
-                const state     = this.getState();
-                if (state === State.MakingMovePathForUnitOnMap) {
-                    // TODO
-                    return !hasWeapon;
-                } else if (state === State.ChoosingProductionTarget) {
-                    return !hasWeapon;
-                } else if (state === State.PreviewingAttackableArea) {
-                    return (!hasWeapon) || (this.getUnitsForPreviewingAttackableArea().has(unit.getUnitId()));
-                } else if (state === State.PreviewingMovableArea) {
-                    return this.getUnitForPreviewingMovableArea() !== unit;
-                } else if (state === State.Idle) {
-                    return !hasWeapon;
-                } else {
-                    // TODO
-                    return false;
-                }
-            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -354,11 +229,28 @@ namespace TinyWars.MultiCustomWar {
             return this._mapSize;
         }
 
-        private _getIsWaitingForServerResponse(): boolean {
-            return this._isWaitingForServerResponse;
-        }
-        private _setIsWaitingForServerResponse(isWaiting: boolean) {
-            this._isWaitingForServerResponse = isWaiting;
+        private _checkIsWaitingForServerResponse(): boolean {
+            const state = this.getState();
+            return (state === State.RequestingPlayerActivateSkill)
+                || (state === State.RequestingPlayerBeginTurn)
+                || (state === State.RequestingPlayerDestroyUnit)
+                || (state === State.RequestingPlayerEndTurn)
+                || (state === State.RequestingPlayerSurrender)
+                || (state === State.RequestingPlayerVoteForDraw)
+                || (state === State.RequestingTileProduceUnit)
+                || (state === State.RequestingUnitAttack)
+                || (state === State.RequestingUnitBeLoaded)
+                || (state === State.RequestingUnitBuild)
+                || (state === State.RequestingUnitCapture)
+                || (state === State.RequestingUnitDive)
+                || (state === State.RequestingUnitDrop)
+                || (state === State.RequestingUnitJoin)
+                || (state === State.RequestingUnitLaunchFlare)
+                || (state === State.RequestingUnitLaunchSilo)
+                || (state === State.RequestingUnitProduceUnit)
+                || (state === State.RequestingUnitSupply)
+                || (state === State.RequestingUnitSurface)
+                || (state === State.RequestingUnitWait);
         }
 
         public getFocusUnitOnMap(): McwUnit | undefined {
@@ -551,30 +443,31 @@ namespace TinyWars.MultiCustomWar {
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Other functions.
+        // Functions for getting the next state when the player inputs.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _getMoveCost(targetGridIndex: GridIndex, movingUnit: McwUnit): number | undefined {
-            if (!GridIndexHelpers.checkIsInsideMap(targetGridIndex, this.getMapSize())) {
-                return undefined;
+        private _getNextStateOnTap(gridIndex: GridIndex): State {
+            const currState = this.getState();
+            if (this._checkIsWaitingForServerResponse()) {
+                return currState;
             } else {
-                const existingUnit = this._unitMap.getUnitOnMap(targetGridIndex);
-                if ((existingUnit) && (existingUnit.getTeamIndex() !== movingUnit.getTeamIndex())) {
-                    return undefined;
-                } else {
-                    return this._tileMap.getTile(targetGridIndex).getMoveCostByUnit(movingUnit);
+                switch (currState) {
+                    case State.Idle                         : return this._getNextStateOnTapWhenIdle(gridIndex);
+                    case State.MakingMovePathForUnitOnMap   : return this._getNextStateOnTapWhenMakingMovePathForUnitOnMap(gridIndex);
+                    case State.ChoosingActionForUnitOnMap   : return this._getNextStateOnTapWhenChoosingActionForUnitOnMap(gridIndex);
+                    case State.MakingMovePathForUnitLoaded  : return this._getNextStateOnTapWhenMakingMovePathForUnitLoaded(gridIndex);
+                    case State.ChoosingActionForUnitLoaded  : return this._getNextStateOnTapWhenChoosingActionForUnitLoaded(gridIndex);
+                    case State.ChoosingDropDestination      : return this._getNextStateOnTapWhenChoosingDropDestination(gridIndex);
+                    case State.ChoosingProductionTarget     : return this._getNextStateOnTapWhenChoosingProductionTarget(gridIndex);
+                    case State.PreviewingAttackableArea     : return this._getNextStateOnTapWhenPreviewingAttackableArea(gridIndex);
+                    case State.PreviewingMovableArea        : return this._getNextStateOnTapWhenPreviewingMovableArea(gridIndex);
+                    default:
+                        Logger.error(`McwActionPlanner._getNextStateOnTap() invalid currState!`);
+                        return State.Idle;
                 }
             }
         }
-
-        private _getNextStateOnTap(gridIndex: GridIndex): State {
-            switch (this.getState()) {
-                case State.Idle                         : return this._getNextStateOnTapWhenIdle(gridIndex);
-                case State.MakingMovePathForUnitOnMap   : return this._getNextStateOnTapWhenMakingMovePathForUnitOnMap(gridIndex);
-                default                                 : return State.Idle;
-            }
-        }
         private _getNextStateOnTapWhenIdle(gridIndex: GridIndex): State {
-            if ((this._war.getIsRunningAction()) || (this._getIsWaitingForServerResponse())) {
+            if (this._war.getIsRunningAction()) {
                 return State.Idle;
             } else {
                 const turnManager       = this._turnManager;
@@ -603,13 +496,10 @@ namespace TinyWars.MultiCustomWar {
         }
         private _getNextStateOnTapWhenMakingMovePathForUnitOnMap(gridIndex: GridIndex): State {
             const targetUnit        = this._unitMap.getUnitOnMap(gridIndex);
-            const focusUnit         = this.getFocusUnitOnMap();
             const selfPlayerIndex   = this._playerIndexLoggedIn;
-            const movableArea       = this.getMovableArea();
-
-            if (checkAreaHasGrid(movableArea, gridIndex)) {
+            if (checkAreaHasGrid(this.getMovableArea(), gridIndex)) {
                 if (!targetUnit) {
-                    return State.Idle;  // TODO: should be choosingActionForUnitOnMap
+                    return State.ChoosingActionForUnitOnMap;
                 } else {
                     if (targetUnit.getPlayerIndex() !== selfPlayerIndex) {
                         if (targetUnit.checkHasWeapon()) {
@@ -618,8 +508,9 @@ namespace TinyWars.MultiCustomWar {
                             return State.ChoosingProductionTarget;
                         }
                     } else {
+                        const focusUnit = this.getFocusUnitOnMap();
                         if ((targetUnit.checkCanJoinUnit(focusUnit)) || (targetUnit.checkCanLoadUnit(focusUnit))) {
-                            return State.Idle;  // TODO: should be choosingActionForUnitOnMap
+                            return State.ChoosingActionForUnitOnMap;
                         } else {
                             if (targetUnit.getState() === UnitState.Idle) {
                                 return State.MakingMovePathForUnitOnMap;
@@ -630,8 +521,13 @@ namespace TinyWars.MultiCustomWar {
                     }
                 }
             } else {
-                const attackableArea = this.getAttackableArea();
-                if (!checkAreaHasGrid(attackableArea, gridIndex)) {
+                if (this._checkCanFocusUnitOnMapAttackTarget(gridIndex)) {
+                    if (GridIndexHelpers.checkIsEqual(gridIndex, this._cursor.getGridIndex())) {
+                        return State.RequestingUnitAttack;
+                    } else {
+                        return State.MakingMovePathForUnitOnMap;
+                    }
+                } else {
                     if (!targetUnit) {
                         return State.Idle;
                     } else {
@@ -645,27 +541,139 @@ namespace TinyWars.MultiCustomWar {
                             }
                         }
                     }
-                } else {
-                    const { x, y } = gridIndex;
-                    if ((focusUnit.checkCanAttackTargetAfterMovePath(this.getMovePath(), gridIndex)) ||
-                        (focusUnit.checkCanAttackTargetAfterMovePath(McwHelpers.createShortestMovePath(movableArea, attackableArea[x][y].movePathDestination), gridIndex))
-                    ) {
-                        return State.Idle;  // TODO: should be confirmingAttackTarget
+                }
+            }
+        }
+        private _getNextStateOnTapWhenChoosingActionForUnitOnMap(gridIndex: GridIndex): State {
+            // TODO
+            return State.Idle;
+        }
+        private _getNextStateOnTapWhenMakingMovePathForUnitLoaded(gridIndex: GridIndex): State {
+            // TODO
+            return State.Idle;
+        }
+        private _getNextStateOnTapWhenChoosingActionForUnitLoaded(gridIndex: GridIndex): State {
+            // TODO
+            return State.Idle;
+        }
+        private _getNextStateOnTapWhenChoosingDropDestination(gridIndex: GridIndex): State {
+            // TODO
+            return State.Idle;
+        }
+        private _getNextStateOnTapWhenChoosingProductionTarget(gridIndex: GridIndex): State {
+            if (GridIndexHelpers.checkIsEqual(this._cursor.getGridIndex(), gridIndex)) {
+                return State.Idle;
+            } else {
+                const turnManager       = this._turnManager;
+                const unit              = this._unitMap.getUnitOnMap(gridIndex);
+                const selfPlayerIndex   = this._playerIndexLoggedIn;
+                const isSelfInTurn      = (turnManager.getPlayerIndexInTurn() === selfPlayerIndex) && (turnManager.getPhaseCode() === TurnPhaseCode.Main);
+                if (!unit) {
+                    const tile = this._tileMap.getTile(gridIndex);
+                    if ((isSelfInTurn) && (tile.getPlayerIndex() === selfPlayerIndex) && (tile.checkIsUnitProducer())) {
+                        return State.ChoosingProductionTarget;
                     } else {
-                        if (!targetUnit) {
-                            return State.Idle;
+                        return State.Idle;
+                    }
+                } else {
+                    if ((isSelfInTurn) && ((unit.getState() === UnitState.Idle) && (unit.getPlayerIndex() === selfPlayerIndex))) {
+                        return State.MakingMovePathForUnitOnMap;
+                    } else {
+                        if (unit.checkHasWeapon()) {
+                            return State.PreviewingAttackableArea;
                         } else {
-                            if ((targetUnit.getPlayerIndex() === selfPlayerIndex) || (targetUnit.getState() === UnitState.Idle)) {
-                                return State.MakingMovePathForUnitOnMap;
-                            } else {
-                                if (targetUnit.checkHasWeapon()) {
-                                    return State.PreviewingAttackableArea;
-                                } else {
-                                    return State.ChoosingProductionTarget;
-                                }
-                            }
+                            return State.PreviewingMovableArea;
                         }
                     }
+                }
+            }
+        }
+        private _getNextStateOnTapWhenPreviewingAttackableArea(gridIndex: GridIndex): State {
+            const turnManager       = this._turnManager;
+            const unit              = this._unitMap.getUnitOnMap(gridIndex);
+            const selfPlayerIndex   = this._playerIndexLoggedIn;
+            const isSelfInTurn      = (turnManager.getPlayerIndexInTurn() === selfPlayerIndex) && (turnManager.getPhaseCode() === TurnPhaseCode.Main);
+            if (!unit) {
+                const tile = this._tileMap.getTile(gridIndex);
+                if ((isSelfInTurn) && (tile.getPlayerIndex() === selfPlayerIndex) && (tile.checkIsUnitProducer())) {
+                    return State.ChoosingProductionTarget;
+                } else {
+                    return State.Idle;
+                }
+            } else {
+                if ((isSelfInTurn) && ((unit.getState() === UnitState.Idle) && (unit.getPlayerIndex() === selfPlayerIndex))) {
+                    return State.MakingMovePathForUnitOnMap;
+                } else {
+                    if (this.getUnitsForPreviewingAttackableArea().has(unit.getUnitId())) {
+                        return State.PreviewingMovableArea;
+                    } else {
+                        if (unit.checkHasWeapon()) {
+                            return State.PreviewingAttackableArea;
+                        } else {
+                            return State.PreviewingMovableArea;
+                        }
+                    }
+                }
+            }
+        }
+        private _getNextStateOnTapWhenPreviewingMovableArea(gridIndex: GridIndex): State {
+            const turnManager       = this._turnManager;
+            const unit              = this._unitMap.getUnitOnMap(gridIndex);
+            const selfPlayerIndex   = this._playerIndexLoggedIn;
+            const isSelfInTurn      = (turnManager.getPlayerIndexInTurn() === selfPlayerIndex) && (turnManager.getPhaseCode() === TurnPhaseCode.Main);
+            if (!unit) {
+                const tile = this._tileMap.getTile(gridIndex);
+                if ((isSelfInTurn) && (tile.getPlayerIndex() === selfPlayerIndex) && (tile.checkIsUnitProducer())) {
+                    return State.ChoosingProductionTarget;
+                } else {
+                    return State.Idle;
+                }
+            } else {
+                if ((isSelfInTurn) && ((unit.getState() === UnitState.Idle) && (unit.getPlayerIndex() === selfPlayerIndex))) {
+                    return State.MakingMovePathForUnitOnMap;
+                } else {
+                    if (this.getUnitForPreviewingMovableArea() !== unit) {
+                        return State.PreviewingMovableArea;
+                    } else {
+                        if (unit.checkHasWeapon()) {
+                            return State.PreviewingAttackableArea;
+                        } else {
+                            return State.Idle;
+                        }
+                    }
+                }
+            }
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Other functions.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _getMoveCost(targetGridIndex: GridIndex, movingUnit: McwUnit): number | undefined {
+            if (!GridIndexHelpers.checkIsInsideMap(targetGridIndex, this.getMapSize())) {
+                return undefined;
+            } else {
+                const existingUnit = this._unitMap.getUnitOnMap(targetGridIndex);
+                if ((existingUnit) && (existingUnit.getTeamIndex() !== movingUnit.getTeamIndex())) {
+                    return undefined;
+                } else {
+                    return this._tileMap.getTile(targetGridIndex).getMoveCostByUnit(movingUnit);
+                }
+            }
+        }
+
+        private _checkCanFocusUnitOnMapAttackTarget(gridIndex: GridIndex): boolean {
+            const attackableArea = this.getAttackableArea();
+            if (!checkAreaHasGrid(attackableArea, gridIndex)) {
+                return false;
+            } else {
+                const focusUnit = this.getFocusUnitOnMap();
+                if (focusUnit.checkCanAttackTargetAfterMovePath(this.getMovePath(), gridIndex)) {
+                    return true;
+                } else {
+                    return focusUnit.checkCanAttackTargetAfterMovePath(
+                        McwHelpers.createShortestMovePath(this.getMovableArea(), attackableArea[gridIndex.x][gridIndex.y].movePathDestination),
+                        gridIndex
+                    );
                 }
             }
         }

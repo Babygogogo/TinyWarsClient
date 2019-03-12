@@ -301,16 +301,19 @@ namespace TinyWars.MultiCustomWar {
 
         public checkCanAttackTargetAfterMovePath(movePath: MovePathNode[], targetGridIndex: GridIndex): boolean {
             const pathLength    = movePath.length;
-            const distance      = GridIndexHelpers.getDistance(movePath[pathLength - 1], targetGridIndex);
+            const destination   = movePath[pathLength - 1];
+            const distance      = GridIndexHelpers.getDistance(destination, targetGridIndex);
             const primaryAmmo   = this.getPrimaryWeaponCurrentAmmo();
+            const unitMap       = this._war.getUnitMap();
             if (((!this.checkCanAttackAfterMove()) && (pathLength > 1))                             ||
                 ((this.getLoaderUnitId() != null) && (pathLength <= 1))                             ||
+                ((pathLength > 1) && (unitMap.getUnitOnMap(destination)))                           ||
                 ((!primaryAmmo) && (!this.checkHasSecondaryWeapon()))                               ||
                 (!((distance <= this.getMaxAttackRange()) && (distance >= this.getMinAttackRange())))
             ) {
                 return false;
             } else {
-                const targetUnit = this._war.getUnitMap().getUnitOnMap(targetGridIndex);
+                const targetUnit = unitMap.getUnitOnMap(targetGridIndex);
                 if (targetUnit) {
                     const armorType = targetUnit.getArmorType();
                     return (targetUnit.getTeamIndex() !== this.getTeamIndex())
