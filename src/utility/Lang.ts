@@ -17,6 +17,11 @@ namespace TinyWars.Utility.Lang {
         B0020, B0021, B0022, B0023, B0024, B0025, B0026, B0027, B0028, B0029,
         B0030, B0031, B0032, B0033, B0034, B0035, B0036, B0037, B0038, B0039,
 
+        B1000, B1001, B1002, B1003, B1004, B1005, B1006, B1007, B1008, B1009,
+        B1010, B1011, B1012, B1013, B1014, B1015, B1016, B1017, B1018, B1019,
+        B1020, B1021, B1022, B1023, B1024, B1025, B1026, B1027, B1028, B1029,
+        B1030, B1031, B1032, B1033, B1034, B1035, B1036, B1037, B1038, B1039,
+
         F0000, F0001, F0002, F0003, F0004, F0005, F0006, F0007, F0008, F0009,
     }
     export const enum RichType {
@@ -280,6 +285,143 @@ namespace TinyWars.Utility.Lang {
             `End Turn`,
         ]],
 
+        [Type.B1000, [
+            `平原`,
+            `Plain`,
+        ]],
+        [Type.B1001, [
+            `河流`,
+            `River`,
+        ]],
+        [Type.B1002, [
+            `海洋`,
+            `Sea`,
+        ]],
+        [Type.B1003, [
+            `沙滩`,
+            `Beach`,
+        ]],
+        [Type.B1004, [
+            `道路`,
+            `Road`,
+        ]],
+        [Type.B1005, [
+            `桥梁`,
+            `BridgeOnPlain`,
+        ]],
+        [Type.B1006, [
+            `桥梁`,
+            `BridgeOnRiver`,
+        ]],
+        [Type.B1007, [
+            `桥梁`,
+            `BridgeOnBeach`,
+        ]],
+        [Type.B1008, [
+            `桥梁`,
+            `BridgeOnSea`,
+        ]],
+        [Type.B1009, [
+            `森林`,
+            `Wood`,
+        ]],
+        [Type.B1010, [
+            `高山`,
+            `Mountain`,
+        ]],
+        [Type.B1011, [
+            `荒野`,
+            `Wasteland`,
+        ]],
+        [Type.B1012, [
+            `废墟`,
+            `Ruins`,
+        ]],
+        [Type.B1013, [
+            `火堆`,
+            `Fire`,
+        ]],
+        [Type.B1014, [
+            `巨浪`,
+            `Rough`,
+        ]],
+        [Type.B1015, [
+            `迷雾`,
+            `MistOnSea`,
+        ]],
+        [Type.B1016, [
+            `礁石`,
+            `Reef`,
+        ]],
+        [Type.B1017, [
+            `等离子`,
+            `Plasma`,
+        ]],
+        [Type.B1018, [
+            `超级等离子`,
+            `GreenPlasma`,
+        ]],
+        [Type.B1019, [
+            `陨石`,
+            `Meteor`,
+        ]],
+        [Type.B1020, [
+            `导弹井`,
+            `Silo`,
+        ]],
+        [Type.B1021, [
+            `空导弹井`,
+            `EmptySilo`,
+        ]],
+        [Type.B1022, [
+            `指挥部`,
+            `Headquarters`,
+        ]],
+        [Type.B1023, [
+            `城市`,
+            `City`,
+        ]],
+        [Type.B1024, [
+            `指挥塔`,
+            `CommandTower`,
+        ]],
+        [Type.B1025, [
+            `雷达`,
+            `Radar`,
+        ]],
+        [Type.B1026, [
+            `工厂`,
+            `Factory`,
+        ]],
+        [Type.B1027, [
+            `机场`,
+            `Airport`,
+        ]],
+        [Type.B1028, [
+            `海港`,
+            `Seaport`,
+        ]],
+        [Type.B1029, [
+            `临时机场`,
+            `TempAirport`,
+        ]],
+        [Type.B1030, [
+            `临时海港`,
+            `TempSeaport`,
+        ]],
+        [Type.B1031, [
+            `迷雾`,
+            `MistOnPlain`,
+        ]],
+        [Type.B1032, [
+            `迷雾`,
+            `MistOnRiver`,
+        ]],
+        [Type.B1033, [
+            `迷雾`,
+            `MistOnBeach`,
+        ]],
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Formater strings.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -476,5 +618,45 @@ namespace TinyWars.Utility.Lang {
 
     export function getRichText(richType: RichType): string {
         return RICH_DATA.get(richType)[language];
+    }
+
+    export function getTileName(tileType: Types.TileType): string {
+        switch (tileType) {
+            case Types.TileType.Plain           : return getText(Type.B1000);
+            case Types.TileType.River           : return getText(Type.B1001);
+            case Types.TileType.Sea             : return getText(Type.B1002);
+            case Types.TileType.Beach           : return getText(Type.B1003);
+            case Types.TileType.Road            : return getText(Type.B1004);
+            case Types.TileType.BridgeOnPlain   : return getText(Type.B1005);
+            case Types.TileType.BridgeOnRiver   : return getText(Type.B1006);
+            case Types.TileType.BridgeOnBeach   : return getText(Type.B1007);
+            case Types.TileType.BridgeOnSea     : return getText(Type.B1008);
+            case Types.TileType.Wood            : return getText(Type.B1009);
+            case Types.TileType.Mountain        : return getText(Type.B1010);
+            case Types.TileType.Wasteland       : return getText(Type.B1011);
+            case Types.TileType.Ruins           : return getText(Type.B1012);
+            case Types.TileType.Fire            : return getText(Type.B1013);
+            case Types.TileType.Rough           : return getText(Type.B1014);
+            case Types.TileType.MistOnSea       : return getText(Type.B1015);
+            case Types.TileType.Reef            : return getText(Type.B1016);
+            case Types.TileType.Plasma          : return getText(Type.B1017);
+            case Types.TileType.GreenPlasma     : return getText(Type.B1018);
+            case Types.TileType.Meteor          : return getText(Type.B1019);
+            case Types.TileType.Silo            : return getText(Type.B1020);
+            case Types.TileType.EmptySilo       : return getText(Type.B1021);
+            case Types.TileType.Headquarters    : return getText(Type.B1022);
+            case Types.TileType.City            : return getText(Type.B1023);
+            case Types.TileType.CommandTower    : return getText(Type.B1024);
+            case Types.TileType.Radar           : return getText(Type.B1025);
+            case Types.TileType.Factory         : return getText(Type.B1026);
+            case Types.TileType.Airport         : return getText(Type.B1027);
+            case Types.TileType.Seaport         : return getText(Type.B1028);
+            case Types.TileType.TempAirport     : return getText(Type.B1029);
+            case Types.TileType.TempSeaport     : return getText(Type.B1030);
+            case Types.TileType.MistOnPlain     : return getText(Type.B1031);
+            case Types.TileType.MistOnRiver     : return getText(Type.B1032);
+            case Types.TileType.MistOnBeach     : return getText(Type.B1033);
+            default                             : return undefined;
+        }
     }
 }

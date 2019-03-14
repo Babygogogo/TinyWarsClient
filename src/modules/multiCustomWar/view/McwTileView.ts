@@ -15,8 +15,10 @@ namespace TinyWars.MultiCustomWar {
             this._imgObject.addEventListener(eui.UIEvent.RESIZE, () => this._imgObject.anchorOffsetY = this._imgObject.height, this);
         }
 
-        public init(tile: McwTile): void {
+        public init(tile: McwTile): McwTileView {
             this._tile = tile;
+
+            return this;
         }
 
         public startRunningView(): void {

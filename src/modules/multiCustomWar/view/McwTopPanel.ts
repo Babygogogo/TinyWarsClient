@@ -10,7 +10,7 @@ namespace TinyWars.MultiCustomWar {
 
     export class McwTopPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = true;
+        protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: McwTopPanel;
 

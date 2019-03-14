@@ -28,7 +28,7 @@ namespace TinyWars.MultiCustomWar {
             this._fieldContainer.bottom    = 0;
             this._fieldContainer.left      = 0;
             this._fieldContainer.right     = 0;
-            this._fieldContainer.setBoundarySpacings(50, 50, 50, 50);
+            this._fieldContainer.setBoundarySpacings(150, 150, 50, 50);
             this.addChild(this._fieldContainer);
         }
 

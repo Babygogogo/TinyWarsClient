@@ -65,6 +65,7 @@
 		"bin-debug/modules/multiCustomWar/view/McwBackgroundPanel.js",
 		"bin-debug/modules/multiCustomWar/view/McwCursorView.js",
 		"bin-debug/modules/multiCustomWar/view/McwFieldView.js",
+		"bin-debug/modules/multiCustomWar/view/McwTileBriefPanel.js",
 		"bin-debug/modules/multiCustomWar/view/McwTileMapView.js",
 		"bin-debug/modules/multiCustomWar/view/McwTileView.js",
 		"bin-debug/modules/multiCustomWar/view/McwTopPanel.js",
