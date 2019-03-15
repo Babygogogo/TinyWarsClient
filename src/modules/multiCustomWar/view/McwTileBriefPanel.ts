@@ -1,7 +1,8 @@
 
 namespace TinyWars.MultiCustomWar {
-    import Notify   = Utility.Notify;
-    import Lang     = Utility.Lang;
+    import Notify       = Utility.Notify;
+    import Lang         = Utility.Lang;
+    import StageManager = Utility.StageManager;
 
     const _IMAGE_SOURCE_HP      = `c04_t10_s00_f00`;
     const _IMAGE_SOURCE_FUEL    = `c04_t10_s01_f00`;
@@ -9,6 +10,8 @@ namespace TinyWars.MultiCustomWar {
     const _IMAGE_SOURCE_DEFENSE = `c04_t10_s03_f00`;
     const _IMAGE_SOURCE_CAPTURE = `c04_t10_s04_f00`;
     const _IMAGE_SOURCE_BUILD   = `c04_t10_s05_f00`;
+    const _LEFT_X               = 0;
+    const _RIGHT_X              = 880;
 
     export class McwTileBriefPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
@@ -16,6 +19,7 @@ namespace TinyWars.MultiCustomWar {
 
         private static _instance: McwTileBriefPanel;
 
+        private _group          : eui.Group;
         private _conTileView    : eui.Group;
         private _tileView       : McwTileView;
         private _labelName      : GameUi.UiLabel;
@@ -49,6 +53,8 @@ namespace TinyWars.MultiCustomWar {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
+                { type: Notify.Type.GlobalTouchBegin,   callback: this._onNotifyGlobalTouchBegin },
+                { type: Notify.Type.GlobalTouchMove,    callback: this._onNotifyGlobalTouchMove },
                 { type: Notify.Type.McwCursorTapped,    callback: this._onNotifyMcwCursorTapped },
                 { type: Notify.Type.McwCursorDragged,   callback: this._onNotifyMcwCursorDragged },
                 { type: Notify.Type.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
@@ -72,8 +78,14 @@ namespace TinyWars.MultiCustomWar {
             delete this._war;
         }
 
-        private _onTouchedThis(e: egret.TouchEvent): void {
-            Utility.FloatText.show("TODO");
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Callbacks.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _onNotifyGlobalTouchBegin(e: egret.Event): void {
+            this._adjustPositionOnTouch(e.data);
+        }
+        private _onNotifyGlobalTouchMove(e: egret.Event): void {
+            this._adjustPositionOnTouch(e.data);
         }
         private _onNotifyMcwCursorTapped(e: egret.Event): void {
             this._updateView();
@@ -85,6 +97,13 @@ namespace TinyWars.MultiCustomWar {
             this._tileView.updateOnAnimationTick();
         }
 
+        private _onTouchedThis(e: egret.TouchEvent): void {
+            Utility.FloatText.show("TODO");
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Functions for view.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
             const tile = this._tileMap.getTile(this._cursor.getGridIndex());
             this._tileView.init(tile).startRunningView();
@@ -109,6 +128,12 @@ namespace TinyWars.MultiCustomWar {
             } else {
                 this._imgState.visible      = false;
                 this._labelState.visible    = false;
+            }
+        }
+
+        private _adjustPositionOnTouch(e: egret.TouchEvent): void {
+            if (e.target !== this._group) {
+                this._group.x = (e.stageX >= StageManager.getStage().stageWidth / 2) ? _LEFT_X : _RIGHT_X;
             }
         }
     }

@@ -8,23 +8,25 @@ namespace TinyWars.Utility {
         export const DESIGN_MAX_HEIGHT    = DESIGN_WIDTH;
         export const RATIO_FOR_MIN_HEIGHT = DESIGN_WIDTH / DESIGN_MIN_HEIGHT;
 
-        let   stage     : egret.Stage;
-        let   mouseX    : number;
-        let   mouseY    : number;
+        let   _stage    : egret.Stage;
+        let   _mouseX   : number;
+        let   _mouseY   : number;
         const _LAYERS   = new Map<LayerType, UiLayer>();
 
         export function init(stg: egret.Stage): void {
-            stage = stg;
+            _stage = stg;
 
             if (!egret.Capabilities.isMobile) {
-                mouse.enable(stage);
+                mouse.enable(_stage);
                 mouse.setMouseMoveEnabled(true);
-                stage.addEventListener(mouse.MouseEvent.MOUSE_MOVE,  _onMouseMove,  StageManager);
-                stage.addEventListener(mouse.MouseEvent.MOUSE_WHEEL, _onMouseWheel, StageManager);
+                _stage.addEventListener(mouse.MouseEvent.MOUSE_MOVE,  _onMouseMove,  StageManager);
+                _stage.addEventListener(mouse.MouseEvent.MOUSE_WHEEL, _onMouseWheel, StageManager);
             }
+            stg.addEventListener(egret.TouchEvent.TOUCH_BEGIN,  _onTouchBegin,  StageManager);
+            stg.addEventListener(egret.TouchEvent.TOUCH_MOVE,   _onTouchMove,   StageManager);
 
             egret.sys.screenAdapter = new ScreenAdapter();
-            stage.setContentSize(stage.stageWidth, stage.stageHeight);
+            _stage.setContentSize(_stage.stageWidth, _stage.stageHeight);
 
             _addLayer(LayerType.Bottom);
             _addLayer(LayerType.Scene);
@@ -37,15 +39,15 @@ namespace TinyWars.Utility {
         }
 
         export function getStage(): egret.Stage {
-            return stage;
+            return _stage;
         }
 
         export function getMouseX(): number {
-            return mouseX;
+            return _mouseX;
         }
 
         export function getMouseY(): number {
-            return mouseY;
+            return _mouseY;
         }
 
         export function getLayer(layer: LayerType): UiLayer {
@@ -65,12 +67,18 @@ namespace TinyWars.Utility {
         }
 
         function _onMouseMove(e: egret.TouchEvent): void {
-            mouseX = e.stageX;
-            mouseY = e.stageY;
+            _mouseX = e.stageX;
+            _mouseY = e.stageY;
         }
-
         function _onMouseWheel(e: egret.Event): void {
             Notify.dispatch(Notify.Type.MouseWheel, e.data);
+        }
+
+        function _onTouchBegin(e: egret.TouchEvent): void {
+            Notify.dispatch(Notify.Type.GlobalTouchBegin, e);
+        }
+        function _onTouchMove(e: egret.TouchEvent): void {
+            Notify.dispatch(Notify.Type.GlobalTouchMove, e);
         }
     }
 

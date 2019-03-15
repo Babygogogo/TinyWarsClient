@@ -16,6 +16,8 @@ namespace TinyWars.Utility.Notify {
         GridAnimationTick,
 
         MouseWheel,
+        GlobalTouchBegin,
+        GlobalTouchMove,
 
         SNewestConfigVersion,
         SLogin,
