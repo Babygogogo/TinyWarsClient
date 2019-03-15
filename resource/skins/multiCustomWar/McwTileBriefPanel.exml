@@ -4,8 +4,11 @@
     <e:Group id="_group" height="120" width="80" x="0" bottom="0">
         <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" />
-        <e:Group id="_conTileView" y="72" scaleX="0.5" scaleY="0.5" x="22" touchChildren="false" touchEnabled="false" />
-        <GameUi:UiLabel id="_labelName" text="地名五个字" size="12" textColor="0xffffff" y="6" horizontalCenter="0" />
+        <e:Group id="_conTileView" y="74" scaleX="0.5" scaleY="0.5" x="22" touchChildren="false" touchEnabled="false" />
+        <GameUi:UiLabel id="_labelName" text="地名五个字" size="12" textColor="0xffffff" y="8" horizontalCenter="0"
+                        stroke="2" />
+        <GameUi:UiLabel id="_labelGridIndex" text="x11 y22" size="12" textColor="0xFFFFFF" y="22" horizontalCenter="0"
+                        stroke="2" />
         <GameUi:UiImage id="_imgDefense" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" source="c04_t10_s03_f00" y="76"
                         x="20" />
         <GameUi:UiImage id="_imgState" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" y="94" x="20"

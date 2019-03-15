@@ -61,6 +61,7 @@ namespace TinyWars.Utility.FlowManager {
         MultiCustomWar.McwTopPanel.show();
         MultiCustomWar.McwWarPanel.show();
         MultiCustomWar.McwTileBriefPanel.show();
+        MultiCustomWar.McwUnitBriefPanel.show();
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

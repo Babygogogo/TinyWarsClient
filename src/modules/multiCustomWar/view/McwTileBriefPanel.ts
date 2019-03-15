@@ -23,6 +23,7 @@ namespace TinyWars.MultiCustomWar {
         private _conTileView    : eui.Group;
         private _tileView       : McwTileView;
         private _labelName      : GameUi.UiLabel;
+        private _labelGridIndex : GameUi.UiLabel;
         private _labelState     : GameUi.UiLabel;
         private _labelDefense   : GameUi.UiLabel;
         private _imgDefense     : GameUi.UiImage;
@@ -105,10 +106,12 @@ namespace TinyWars.MultiCustomWar {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            const tile = this._tileMap.getTile(this._cursor.getGridIndex());
+            const gridIndex = this._cursor.getGridIndex();
+            const tile      = this._tileMap.getTile(gridIndex);
             this._tileView.init(tile).startRunningView();
-            this._labelDefense.text = `${Math.floor(tile.getDefenseAmount() / 10)}`;
-            this._labelName.text    = Lang.getTileName(tile.getType());
+            this._labelDefense.text     = `${Math.floor(tile.getDefenseAmount() / 10)}`;
+            this._labelName.text        = Lang.getTileName(tile.getType());
+            this._labelGridIndex.text   = `x${gridIndex.x} y${gridIndex.y}`;
 
             if (tile.getCurrentHp() != null) {
                 this._imgState.visible      = true;

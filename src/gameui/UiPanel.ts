@@ -16,7 +16,6 @@ namespace TinyWars.GameUi {
         protected _notifyPriority = 0;
 
         private _isChildrenCreated   = false;
-        private _isAllSkinPartsAdded = false;
         private _isCalledOpen        = false;
 
         private _isEverOpened        = false;
@@ -32,7 +31,6 @@ namespace TinyWars.GameUi {
             super();
 
             this.touchEnabled = false;
-            this.addEventListener(egret.Event.COMPLETE, this._onAllSkinPartsAdded, this);
             this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
         }
 
@@ -40,13 +38,6 @@ namespace TinyWars.GameUi {
             super.childrenCreated();
 
             this._isChildrenCreated = true;
-            this._doOpen();
-        }
-
-        private _onAllSkinPartsAdded(): void {
-            this.removeEventListener(egret.Event.COMPLETE, this._onAllSkinPartsAdded, this);
-
-            this._isAllSkinPartsAdded = true;
             this._doOpen();
         }
 
@@ -104,7 +95,6 @@ namespace TinyWars.GameUi {
         private _checkIsReadyForOpen(): boolean {
             return (this.stage != null)
                 && (this._isChildrenCreated)
-                && (this._isAllSkinPartsAdded)
                 && (this._isCalledOpen);
         }
 
