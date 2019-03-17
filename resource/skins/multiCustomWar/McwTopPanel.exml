@@ -8,7 +8,7 @@
                         verticalCenter="0" />
         <GameUi:UiLabel id="_labelFund" text="金钱:999999" size="16" x="280" textColor="0xffffff" verticalCenter="0" />
         <GameUi:UiLabel id="_labelEnergy" text="能量:99/99/99" size="16" x="390" textColor="0xFFFFFF" verticalCenter="0" />
-        <GameUi:UiButton id="_btnFindUnit" label="寻找部队" x="610" verticalCenter="0" width="28">
+        <GameUi:UiButton id="_btnUnitList" label="部队列表" x="610" verticalCenter="0" width="28">
             <GameUi:skinName>
                 <e:Skin states="up,down,disabled">
                     <e:Image width="100%" height="100%" />

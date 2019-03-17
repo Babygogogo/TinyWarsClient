@@ -90,6 +90,7 @@ namespace TinyWars.MultiCustomWar {
         public setGridIndex(gridIndex: Types.GridIndex): void {
             this._gridX = gridIndex.x;
             this._gridY = gridIndex.y;
+            Notify.dispatch(Notify.Type.McwCursorGridIndexChanged);
         }
         public getGridIndex(): Types.GridIndex {
             return { x: this.getGridX(), y: this.getGridY() };

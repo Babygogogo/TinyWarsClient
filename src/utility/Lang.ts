@@ -21,6 +21,10 @@ namespace TinyWars.Utility.Lang {
         B1010, B1011, B1012, B1013, B1014, B1015, B1016, B1017, B1018, B1019,
         B1020, B1021, B1022, B1023, B1024, B1025, B1026, B1027, B1028, B1029,
         B1030, B1031, B1032, B1033, B1034, B1035, B1036, B1037, B1038, B1039,
+        B1200, B1201, B1202, B1203, B1204, B1205, B1206, B1207, B1208, B1209,
+        B1210, B1211, B1212, B1213, B1214, B1215, B1216, B1217, B1218, B1219,
+        B1220, B1221, B1222, B1223, B1224, B1225, B1226, B1227, B1228, B1229,
+        B1230, B1231, B1232, B1233, B1234, B1235, B1236, B1237, B1238, B1239,
 
         F0000, F0001, F0002, F0003, F0004, F0005, F0006, F0007, F0008, F0009,
     }
@@ -422,6 +426,110 @@ namespace TinyWars.Utility.Lang {
             `MistOnBeach`,
         ]],
 
+        [Type.B1200, [
+            `步兵`,
+            `Infantry`,
+        ]],
+        [Type.B1201, [
+            `反坦克兵`,
+            `Mech`,
+        ]],
+        [Type.B1202, [
+            `摩托兵`,
+            `Bike`,
+        ]],
+        [Type.B1203, [
+            `侦察车`,
+            `Recon`,
+        ]],
+        [Type.B1204, [
+            `照明车`,
+            `Flare`,
+        ]],
+        [Type.B1205, [
+            `防空车`,
+            `AntiAir`,
+        ]],
+        [Type.B1206, [
+            `轻型坦克`,
+            `Tank`,
+        ]],
+        [Type.B1207, [
+            `中型坦克`,
+            `MediumTank`,
+        ]],
+        [Type.B1208, [
+            `弩级坦克`,
+            `WarTank`,
+        ]],
+        [Type.B1209, [
+            `自走炮`,
+            `Artillery`,
+        ]],
+        [Type.B1210, [
+            `反坦克炮`,
+            `AntiTank`,
+        ]],
+        [Type.B1211, [
+            `火箭炮`,
+            `Rockets`,
+        ]],
+        [Type.B1212, [
+            `防空导弹车`,
+            `Missiles`,
+        ]],
+        [Type.B1213, [
+            `工程车`,
+            `Rig`,
+        ]],
+        [Type.B1214, [
+            `战斗机`,
+            `Fighter`,
+        ]],
+        [Type.B1215, [
+            `轰炸机`,
+            `Bomber`,
+        ]],
+        [Type.B1216, [
+            `攻击机`,
+            `Duster`,
+        ]],
+        [Type.B1217, [
+            `武装直升机`,
+            `BattleCopter`,
+        ]],
+        [Type.B1218, [
+            `运输直升机`,
+            `TransportCopter`,
+        ]],
+        [Type.B1219, [
+            `舰载机`,
+            `Seaplane`,
+        ]],
+        [Type.B1220, [
+            `战列舰`,
+            `Battleship`,
+        ]],
+        [Type.B1221, [
+            `航母`,
+            `Carrier`,
+        ]],
+        [Type.B1222, [
+            `潜艇`,
+            `Submarine`,
+        ]],
+        [Type.B1223, [
+            `驱逐舰`,
+            `Cruiser`,
+        ]],
+        [Type.B1224, [
+            `登陆舰`,
+            `Lander`,
+        ]],
+        [Type.B1225, [
+            `炮舰`,
+            `Gunboat`,
+        ]],
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Formater strings.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -656,6 +764,38 @@ namespace TinyWars.Utility.Lang {
             case Types.TileType.MistOnPlain     : return getText(Type.B1031);
             case Types.TileType.MistOnRiver     : return getText(Type.B1032);
             case Types.TileType.MistOnBeach     : return getText(Type.B1033);
+            default                             : return undefined;
+        }
+    }
+
+    export function getUnitName(unitType: Types.UnitType): string {
+        switch (unitType) {
+            case Types.UnitType.Infantry        : return getText(Type.B1200);
+            case Types.UnitType.Mech            : return getText(Type.B1201);
+            case Types.UnitType.Bike            : return getText(Type.B1202);
+            case Types.UnitType.Recon           : return getText(Type.B1203);
+            case Types.UnitType.Flare           : return getText(Type.B1204);
+            case Types.UnitType.AntiAir         : return getText(Type.B1205);
+            case Types.UnitType.Tank            : return getText(Type.B1206);
+            case Types.UnitType.MediumTank      : return getText(Type.B1207);
+            case Types.UnitType.WarTank         : return getText(Type.B1208);
+            case Types.UnitType.Artillery       : return getText(Type.B1209);
+            case Types.UnitType.AntiTank        : return getText(Type.B1210);
+            case Types.UnitType.Rockets         : return getText(Type.B1211);
+            case Types.UnitType.Missiles        : return getText(Type.B1212);
+            case Types.UnitType.Rig             : return getText(Type.B1213);
+            case Types.UnitType.Fighter         : return getText(Type.B1214);
+            case Types.UnitType.Bomber          : return getText(Type.B1215);
+            case Types.UnitType.Duster          : return getText(Type.B1216);
+            case Types.UnitType.BattleCopter    : return getText(Type.B1217);
+            case Types.UnitType.TransportCopter : return getText(Type.B1218);
+            case Types.UnitType.Seaplane        : return getText(Type.B1219);
+            case Types.UnitType.Battleship      : return getText(Type.B1220);
+            case Types.UnitType.Carrier         : return getText(Type.B1221);
+            case Types.UnitType.Submarine       : return getText(Type.B1222);
+            case Types.UnitType.Cruiser         : return getText(Type.B1223);
+            case Types.UnitType.Lander          : return getText(Type.B1224);
+            case Types.UnitType.Gunboat         : return getText(Type.B1225);
             default                             : return undefined;
         }
     }

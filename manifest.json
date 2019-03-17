@@ -70,6 +70,7 @@
 		"bin-debug/modules/multiCustomWar/view/McwTileView.js",
 		"bin-debug/modules/multiCustomWar/view/McwTopPanel.js",
 		"bin-debug/modules/multiCustomWar/view/McwUnitBriefPanel.js",
+		"bin-debug/modules/multiCustomWar/view/McwUnitListPanel.js",
 		"bin-debug/modules/multiCustomWar/view/McwUnitMapView.js",
 		"bin-debug/modules/multiCustomWar/view/McwUnitView.js",
 		"bin-debug/modules/multiCustomWar/view/McwWarPanel.js",

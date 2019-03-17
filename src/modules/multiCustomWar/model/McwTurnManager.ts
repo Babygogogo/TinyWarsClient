@@ -244,6 +244,14 @@ namespace TinyWars.MultiCustomWar {
                 Notify.dispatch(Notify.Type.McwPlayerIndexInTurnChanged);
             }
         }
+        public getNextPlayerIndex(playerIndex: number, includeNeutral = false): number {
+            const data = this._getNextTurnAndPlayerIndex(undefined, playerIndex);
+            if ((data.playerIndex !== 0) || (includeNeutral)) {
+                return data.playerIndex;
+            } else {
+                return this._getNextTurnAndPlayerIndex(data.turnIndex, data.playerIndex).playerIndex;
+            }
+        }
 
         public getPhaseCode(): TurnPhaseCode {
             return this._phaseCode;
@@ -262,11 +270,11 @@ namespace TinyWars.MultiCustomWar {
             this._enterTurnTime = time;
         }
 
-        private _getNextTurnAndPlayerIndex(): { turnIndex: number, playerIndex: number } {
+        private _getNextTurnAndPlayerIndex(currTurnIndex = this.getTurnIndex(), currPlayerIndex = this.getPlayerIndexInTurn()): { turnIndex: number, playerIndex: number } {
             const playerManager = this._war.getPlayerManager();
             const playersCount  = playerManager.getTotalPlayersCount(true);
-            let nextTurnIndex   = this.getTurnIndex();
-            let nextPlayerIndex = this.getPlayerIndexInTurn() + 1;
+            let nextTurnIndex   = currTurnIndex;
+            let nextPlayerIndex = currPlayerIndex + 1;
             while (true) {
                 if (nextPlayerIndex >= playersCount) {
                     nextPlayerIndex = 0;

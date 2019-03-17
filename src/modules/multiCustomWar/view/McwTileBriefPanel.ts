@@ -54,11 +54,10 @@ namespace TinyWars.MultiCustomWar {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.GlobalTouchBegin,   callback: this._onNotifyGlobalTouchBegin },
-                { type: Notify.Type.GlobalTouchMove,    callback: this._onNotifyGlobalTouchMove },
-                { type: Notify.Type.McwCursorTapped,    callback: this._onNotifyMcwCursorTapped },
-                { type: Notify.Type.McwCursorDragged,   callback: this._onNotifyMcwCursorDragged },
-                { type: Notify.Type.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
+                { type: Notify.Type.GlobalTouchBegin,           callback: this._onNotifyGlobalTouchBegin },
+                { type: Notify.Type.GlobalTouchMove,            callback: this._onNotifyGlobalTouchMove },
+                { type: Notify.Type.McwCursorGridIndexChanged,  callback: this._onNotifyMcwCursorGridIndexChanged },
+                { type: Notify.Type.TileAnimationTick,          callback: this._onNotifyTileAnimationTick },
             ];
             this._uiListeners = [
                 { ui: this, callback: this._onTouchedThis, },
@@ -88,10 +87,7 @@ namespace TinyWars.MultiCustomWar {
         private _onNotifyGlobalTouchMove(e: egret.Event): void {
             this._adjustPositionOnTouch(e.data);
         }
-        private _onNotifyMcwCursorTapped(e: egret.Event): void {
-            this._updateView();
-        }
-        private _onNotifyMcwCursorDragged(e: egret.Event): void {
+        private _onNotifyMcwCursorGridIndexChanged(e: egret.Event): void {
             this._updateView();
         }
         private _onNotifyTileAnimationTick(e: egret.Event): void {

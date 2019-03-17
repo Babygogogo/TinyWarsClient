@@ -17,7 +17,7 @@ namespace TinyWars.MultiCustomWar {
         private _labelPlayer    : GameUi.UiLabel;
         private _labelFund      : GameUi.UiLabel;
         private _labelEnergy    : GameUi.UiLabel;
-        private _btnFindUnit    : GameUi.UiButton;
+        private _btnUnitList    : GameUi.UiButton;
         private _btnFindBuilding: GameUi.UiButton;
         private _btnEndTurn     : GameUi.UiButton;
         private _btnMenu        : GameUi.UiButton;
@@ -51,7 +51,7 @@ namespace TinyWars.MultiCustomWar {
                 { type: Notify.Type.McwPlayerEnergyChanged,         callback: this._onNotifyMcwPlayerEnergyChanged },
             ];
             this._uiListeners = [
-                { ui: this._btnFindUnit,        callback: this._onTouchedBtnFindUnit, },
+                { ui: this._btnUnitList,        callback: this._onTouchedBtnUnitList, },
                 { ui: this._btnFindBuilding,    callback: this._onTouchedBtnFindBuilding, },
                 { ui: this._btnEndTurn,         callback: this._onTouchedBtnEndTurn, },
                 { ui: this._btnMenu,            callback: this._onTouchedBtnMenu, },
@@ -85,8 +85,9 @@ namespace TinyWars.MultiCustomWar {
             this._updateLabelEnergy();
         }
 
-        private _onTouchedBtnFindUnit(e: egret.TouchEvent): void {
-            FloatText.show("TODO");
+        private _onTouchedBtnUnitList(e: egret.TouchEvent): void {
+            this._war.getField().getActionPlanner().setStateIdle();
+            McwUnitListPanel.show();
         }
         private _onTouchedBtnFindBuilding(e: egret.TouchEvent): void {
             FloatText.show("TODO");
@@ -146,7 +147,7 @@ namespace TinyWars.MultiCustomWar {
         private _updateBtnFindUnit(): void {
             const war                   = this._war;
             const turnManager           = war.getTurnManager();
-            this._btnFindUnit.visible   = (turnManager.getPlayerIndexInTurn() === war.getPlayerIndexLoggedIn())
+            this._btnUnitList.visible   = (turnManager.getPlayerIndexInTurn() === war.getPlayerIndexLoggedIn())
                 && (turnManager.getPhaseCode() === Types.TurnPhaseCode.Main);
         }
 
