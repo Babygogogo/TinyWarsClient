@@ -81,27 +81,46 @@ namespace TinyWars.MultiCustomWar {
         private _onNotifyMcwActionPlannerStateChanged(e: egret.Event): void {
             const actionPlanner = this._actionPlanner;
             const state         = actionPlanner.getState();
-            this._setAllUnitsOnMapVisible(true);
 
             if (state === ActionPlannerState.Idle) {
-                // Do nothing.
-
-            } else if (state === ActionPlannerState.ChoosingProductionTarget) {
-                // Do nothing.
+                this._setAllUnitsOnMapVisible(true);
 
             } else if (state === ActionPlannerState.MakingMovePathForUnitOnMap) {
+                this._setAllUnitsOnMapVisible(true);
                 actionPlanner.getFocusUnitOnMap().getView().visible = false;
 
+            } else if (state === ActionPlannerState.ChoosingActionForUnitOnMap) {
+                this._setAllUnitsOnMapVisible(true);
+                actionPlanner.getFocusUnitOnMap().getView().visible = false;
+
+            } else if (state === ActionPlannerState.MakingMovePathForUnitLoaded) {
+                this._setAllUnitsOnMapVisible(true);
+                actionPlanner.getFocusUnitOnMap().getView().visible     = false;
+                actionPlanner.getFocusUnitLoaded().getView().visible    = false;
+
+            } else if (state === ActionPlannerState.ChoosingActionForUnitLoaded) {
+                this._setAllUnitsOnMapVisible(true);
+                actionPlanner.getFocusUnitOnMap().getView().visible     = false;
+                actionPlanner.getFocusUnitLoaded().getView().visible    = false;
+
+            } else if (state === ActionPlannerState.ChoosingDropDestination) {
+                // TODO
+
+            } else if (state === ActionPlannerState.ChoosingProductionTarget) {
+                this._setAllUnitsOnMapVisible(true);
+
             } else if (state === ActionPlannerState.PreviewingAttackableArea) {
+                this._setAllUnitsOnMapVisible(true);
                 for (const [, unit] of actionPlanner.getUnitsForPreviewingAttackableArea()) {
                     unit.getView().visible = false;
                 }
 
             } else if (state === ActionPlannerState.PreviewingMovableArea) {
+                this._setAllUnitsOnMapVisible(true);
                 actionPlanner.getUnitForPreviewingMovableArea().getView().visible = false;
 
             } else {
-                // TODO
+                // Nothing to do.
             }
         }
 

@@ -25,6 +25,7 @@
 		"resource/skins/multiCustomWar/McwBackgroundPanel.exml",
 		"resource/skins/multiCustomWar/McwTileBriefPanel.exml",
 		"resource/skins/multiCustomWar/McwTopPanel.exml",
+		"resource/skins/multiCustomWar/McwUnitActionsPanel.exml",
 		"resource/skins/multiCustomWar/McwUnitBriefCell.exml",
 		"resource/skins/multiCustomWar/McwUnitBriefPanel.exml",
 		"resource/skins/multiCustomWar/McwUnitListPanel.exml",
