@@ -1,8 +1,10 @@
 
 namespace TinyWars.MultiCustomWar {
-    import Notify       = Utility.Notify;
-    import Lang         = Utility.Lang;
-    import StageManager = Utility.StageManager;
+    import Notify           = Utility.Notify;
+    import Lang             = Utility.Lang;
+    import StageManager     = Utility.StageManager;
+    import Types            = Utility.Types;
+    import UnitActionType   = Types.UnitActionType;
 
     const _LEFT_X       = 0;
     const _RIGHT_X      = 860;
@@ -88,8 +90,8 @@ namespace TinyWars.MultiCustomWar {
     }
 
     export type DataForUnitActionRenderer = {
-        name    : string;
-        callback: () => void;
+        actionType  : UnitActionType;
+        callback    : () => void;
     }
 
     class UnitActionRenderer extends eui.ItemRenderer {
@@ -103,7 +105,7 @@ namespace TinyWars.MultiCustomWar {
             super.dataChanged();
 
             const data              = this.data as DataForUnitActionRenderer;
-            this._labelAction.text  = data.name;
+            this._labelAction.text  = Lang.getUnitActionName(data.actionType);
         }
 
         public onItemTapEvent(e: eui.ItemTapEvent): void {

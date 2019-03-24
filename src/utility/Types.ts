@@ -415,4 +415,21 @@ namespace TinyWars.Utility.Types {
         RequestingUnitSurface,
         RequestingUnitWait,
     }
+
+    export const enum UnitActionType {
+        BeLoaded,
+        Join,
+        Attack,
+        Capture,
+        Dive,
+        Surface,
+        BuildTile,
+        Supply,
+        Launch,
+        Drop,
+        Flare,
+        Silo,
+        ProduceUnit,
+        Wait,
+    }
 }

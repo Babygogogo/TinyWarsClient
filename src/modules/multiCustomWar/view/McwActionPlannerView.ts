@@ -380,8 +380,8 @@ namespace TinyWars.MultiCustomWar {
                 views.clear();
                 con.visible = true;
 
-                const movePath = actionPlanner.getMovePath();
-                this._addUnitView(actionPlanner.getFocusUnitOnMap(), movePath[movePath.length - 1]);
+                const unit = actionPlanner.getFocusUnitOnMap();
+                this._addUnitView(unit, unit.getGridIndex());
 
             } else if (state === State.MakingMovePathForUnitLoaded) {
                 con.removeChildren();
@@ -402,8 +402,8 @@ namespace TinyWars.MultiCustomWar {
                 const unitOnMap = actionPlanner.getFocusUnitOnMap();
                 this._addUnitView(unitOnMap, unitOnMap.getGridIndex());
 
-                const movePath = actionPlanner.getMovePath();
-                this._addUnitView(actionPlanner.getFocusUnitLoaded(), movePath[movePath.length - 1]);
+                const unitLoaded = actionPlanner.getFocusUnitLoaded();
+                this._addUnitView(unitLoaded, unitLoaded.getGridIndex());
 
             } else if (state === State.ChoosingDropDestination) {
                 // TODO

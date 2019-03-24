@@ -12,6 +12,7 @@ namespace TinyWars.MultiCustomWar {
     import MovableArea      = Types.MovableArea;
     import AttackableArea   = Types.AttackableArea;
     import MovePathNode     = Types.MovePathNode;
+    import UnitActionType   = Types.UnitActionType;
 
     export class McwActionPlanner {
         private _view               : McwActionPlannerView;
@@ -419,6 +420,18 @@ namespace TinyWars.MultiCustomWar {
             // Nothing to do.
         }
 
+        private _setStateRequestingUnitBeLoaded(): void {
+            Utility.FloatText.show("Unit load TODO!!!");
+        }
+
+        private _setStateRequestingUnitJoin(): void {
+            Utility.FloatText.show("Unit join TODO!!!");
+        }
+
+        private _setStateRequestingUnitWait(): void {
+            Utility.FloatText.show("Unit wait TODO!!!");
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -430,7 +443,7 @@ namespace TinyWars.MultiCustomWar {
 
             const currState = this.getState();
             if ((currState === State.ChoosingActionForUnitLoaded) || (currState === State.ChoosingActionForUnitOnMap)) {
-                McwUnitActionsPanel.show(this._generateDataForUnitActionsPanel());
+                McwUnitActionsPanel.show(this._getDataForUnitActionsPanel());
             } else {
                 McwUnitActionsPanel.hide();
             }
@@ -546,6 +559,10 @@ namespace TinyWars.MultiCustomWar {
         }
         public getMovePath(): MovePathNode[] {
             return this._movePath;
+        }
+        public getMovePathDestination(): MovePathNode {
+            const movePath = this.getMovePath();
+            return movePath[movePath.length - 1];
         }
         private _updateMovePathByDestination(destination: GridIndex): void {
             const { x, y }      = destination;
@@ -876,6 +893,63 @@ namespace TinyWars.MultiCustomWar {
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Functions for generating actions for the focused unit.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _getDataForUnitActionsPanel(): DataForUnitActionRenderer[] {
+            let action = this._getActionUnitBeLoaded();
+            if (action) {
+                return [action];
+            }
+            action = this._getActionUnitJoin();
+            if (action) {
+                return [action];
+            }
+
+            const datas = new Array<DataForUnitActionRenderer>();
+            action = this._getActionUnitAttack();   (action) && (datas.push(action));
+            action = this._getActionUnitWait();     (action) && (datas.push(action));
+
+            Logger.assert(datas.length, `McwActionPlanner._getDataForUntiActionsPanel() no actions available?!`);
+            return datas;
+        }
+
+        private _getActionUnitBeLoaded(): DataForUnitActionRenderer | undefined {
+            const destination   = this.getMovePathDestination();
+            const focusUnit     = this.getFocusUnitLoaded() || this.getFocusUnitOnMap();
+            if (GridIndexHelpers.checkIsEqual(focusUnit.getGridIndex(), destination)) {
+                return undefined;
+            } else {
+                const loader = this._unitMap.getUnitOnMap(destination);
+                return (loader) && (loader.checkCanLoadUnit(focusUnit))
+                    ? { actionType: UnitActionType.BeLoaded, callback: () => this._setStateRequestingUnitBeLoaded() }
+                    : undefined;
+            }
+        }
+        private _getActionUnitJoin(): DataForUnitActionRenderer | undefined {
+            const destination   = this.getMovePathDestination();
+            const focusUnit     = this.getFocusUnitLoaded() || this.getFocusUnitOnMap();
+            if (GridIndexHelpers.checkIsEqual(focusUnit.getGridIndex(), destination)) {
+                return undefined;
+            } else {
+                const target = this._unitMap.getUnitOnMap(destination);
+                return (target) && (target.checkCanJoinUnit(focusUnit))
+                    ? { actionType: UnitActionType.Join, callback: () => this._setStateRequestingUnitJoin() }
+                    : undefined;
+            }
+        }
+        public _getActionUnitAttack(): DataForUnitActionRenderer | undefined {
+            return undefined;
+        }
+        public _getActionUnitWait(): DataForUnitActionRenderer | undefined {
+            const existingUnit = this._unitMap.getUnitOnMap(this.getMovePathDestination());
+            if ((existingUnit) && (existingUnit !== (this.getFocusUnitLoaded() || this.getFocusUnitOnMap()))) {
+                return undefined;
+            } else {
+                return { actionType: UnitActionType.Wait, callback: () => this._setStateRequestingUnitWait() };
+            }
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _getMoveCost(targetGridIndex: GridIndex, movingUnit: McwUnit): number | undefined {
@@ -906,10 +980,6 @@ namespace TinyWars.MultiCustomWar {
                     );
                 }
             }
-        }
-
-        private _generateDataForUnitActionsPanel(): DataForUnitActionRenderer[] {
-            return [{name: "AAA", callback: () => {}}];
         }
     }
 

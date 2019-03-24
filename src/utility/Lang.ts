@@ -16,6 +16,8 @@ namespace TinyWars.Utility.Lang {
         B0010, B0011, B0012, B0013, B0014, B0015, B0016, B0017, B0018, B0019,
         B0020, B0021, B0022, B0023, B0024, B0025, B0026, B0027, B0028, B0029,
         B0030, B0031, B0032, B0033, B0034, B0035, B0036, B0037, B0038, B0039,
+        B0040, B0041, B0042, B0043, B0044, B0045, B0046, B0047, B0048, B0049,
+        B0050, B0051, B0052, B0053, B0054, B0055, B0056, B0057, B0058, B0059,
 
         B1000, B1001, B1002, B1003, B1004, B1005, B1006, B1007, B1008, B1009,
         B1010, B1011, B1012, B1013, B1014, B1015, B1016, B1017, B1018, B1019,
@@ -287,6 +289,82 @@ namespace TinyWars.Utility.Lang {
         [Type.B0036, [
             `结束回合`,
             `End Turn`,
+        ]],
+        [Type.B0037, [
+            `装载`,
+            `load`,
+        ]],
+        [Type.B0038, [
+            `合流`,
+            `Join`,
+        ]],
+        [Type.B0039, [
+            `攻击`,
+            `Attack`,
+        ]],
+        [Type.B0040, [
+            `占领`,
+            `Capture`,
+        ]],
+        [Type.B0041, [
+            `下潜`,
+            `Dive`,
+        ]],
+        [Type.B0042, [
+            `上浮`,
+            `Surface`,
+        ]],
+        [Type.B0043, [
+            `建造`,
+            `Build`,
+        ]],
+        [Type.B0044, [
+            `补给`,
+            `Supply`,
+        ]],
+        [Type.B0045, [
+            `发射`,
+            `Launch`,
+        ]],
+        [Type.B0046, [
+            `卸载`,
+            `Drop`,
+        ]],
+        [Type.B0047, [
+            `照明`,
+            `Flare`,
+        ]],
+        [Type.B0048, [
+            `发射导弹`,
+            `Silo`,
+        ]],
+        [Type.B0049, [
+            `制造`,
+            `Produce`,
+        ]],
+        [Type.B0050, [
+            `待机`,
+            `Wait`,
+        ]],
+        [Type.B0051, [
+        ]],
+        [Type.B0052, [
+        ]],
+        [Type.B0052, [
+        ]],
+        [Type.B0053, [
+        ]],
+        [Type.B0054, [
+        ]],
+        [Type.B0055, [
+        ]],
+        [Type.B0056, [
+        ]],
+        [Type.B0057, [
+        ]],
+        [Type.B0058, [
+        ]],
+        [Type.B0059, [
         ]],
 
         [Type.B1000, [
@@ -797,6 +875,26 @@ namespace TinyWars.Utility.Lang {
             case Types.UnitType.Lander          : return getText(Type.B1224);
             case Types.UnitType.Gunboat         : return getText(Type.B1225);
             default                             : return undefined;
+        }
+    }
+
+    export function getUnitActionName(actionType: Types.UnitActionType): string {
+        switch (actionType) {
+            case Types.UnitActionType.BeLoaded      : return getText(Type.B0037);
+            case Types.UnitActionType.Join          : return getText(Type.B0038);
+            case Types.UnitActionType.Attack        : return getText(Type.B0039);
+            case Types.UnitActionType.Capture       : return getText(Type.B0040);
+            case Types.UnitActionType.Dive          : return getText(Type.B0041);
+            case Types.UnitActionType.Surface       : return getText(Type.B0042);
+            case Types.UnitActionType.BuildTile     : return getText(Type.B0043);
+            case Types.UnitActionType.Supply        : return getText(Type.B0044);
+            case Types.UnitActionType.Launch        : return getText(Type.B0045);
+            case Types.UnitActionType.Drop          : return getText(Type.B0046);
+            case Types.UnitActionType.Flare         : return getText(Type.B0047);
+            case Types.UnitActionType.Silo          : return getText(Type.B0048);
+            case Types.UnitActionType.ProduceUnit   : return getText(Type.B0049);
+            case Types.UnitActionType.Wait          : return getText(Type.B0050);
+            default                                 : return undefined;
         }
     }
 }
