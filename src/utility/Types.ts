@@ -389,6 +389,7 @@ namespace TinyWars.Utility.Types {
         ChoosingActionForUnitOnMap,
         MakingMovePathForUnitLoaded,
         ChoosingActionForUnitLoaded,
+        ChoosingAttackTarget,
         ChoosingDropDestination,
         ChoosingProductionTarget,
         PreviewingAttackableArea,

@@ -234,6 +234,21 @@ namespace TinyWars.MultiCustomWar {
             } else if (state === ActionPlannerState.MakingMovePathForUnitOnMap) {
                 con.visible = !actionPlanner.getFocusUnitOnMap().checkCanAttackTargetAfterMovePath(actionPlanner.getMovePath(), gridIndex);
 
+            } else if (state === ActionPlannerState.ChoosingActionForUnitOnMap) {
+                con.visible = true;
+
+            } else if (state === ActionPlannerState.MakingMovePathForUnitLoaded) {
+                con.visible = !actionPlanner.getFocusUnitLoaded().checkCanAttackTargetAfterMovePath(actionPlanner.getMovePath(), gridIndex);
+
+            } else if (state === ActionPlannerState.ChoosingActionForUnitLoaded) {
+                con.visible = true;
+
+            } else if (state === ActionPlannerState.ChoosingAttackTarget) {
+                con.visible = !actionPlanner.checkHasAttackableGridAfterMove(gridIndex);
+
+            } else if (state === ActionPlannerState.ChoosingDropDestination) {
+                con.visible = true;
+
             } else if (state === ActionPlannerState.ChoosingProductionTarget) {
                 con.visible = true;
 
@@ -258,6 +273,21 @@ namespace TinyWars.MultiCustomWar {
 
             } else if (state === ActionPlannerState.MakingMovePathForUnitOnMap) {
                 con.visible = actionPlanner.getFocusUnitOnMap().checkCanAttackTargetAfterMovePath(actionPlanner.getMovePath(), gridIndex);
+
+            } else if (state === ActionPlannerState.ChoosingActionForUnitOnMap) {
+                con.visible = false;
+
+            } else if (state === ActionPlannerState.MakingMovePathForUnitLoaded) {
+                con.visible = actionPlanner.getFocusUnitLoaded().checkCanAttackTargetAfterMovePath(actionPlanner.getMovePath(), gridIndex);
+
+            } else if (state === ActionPlannerState.ChoosingActionForUnitLoaded) {
+                con.visible = false;
+
+            } else if (state === ActionPlannerState.ChoosingAttackTarget) {
+                con.visible = actionPlanner.checkHasAttackableGridAfterMove(gridIndex);
+
+            } else if (state === ActionPlannerState.ChoosingDropDestination) {
+                con.visible = false;
 
             } else if (state === ActionPlannerState.ChoosingProductionTarget) {
                 con.visible = false;

@@ -26,12 +26,13 @@ namespace TinyWars.MultiCustomWar {
 
         private _state  : State;
 
-        private _focusUnitOnMap     : McwUnit;
-        private _focusUnitLoaded    : McwUnit;
-        private _chosenUnitsForDrop : McwUnit[] = [];
-        private _movableArea        : MovableArea;
-        private _attackableArea     : AttackableArea;
-        private _movePath           : MovePathNode[] = [];
+        private _focusUnitOnMap             : McwUnit;
+        private _focusUnitLoaded            : McwUnit;
+        private _chosenUnitsForDrop         : McwUnit[] = [];
+        private _movableArea                : MovableArea;
+        private _attackableArea             : AttackableArea;
+        private _attackableGridsAfterMove   : GridIndex[];
+        private _movePath                   : MovePathNode[] = [];
 
         private _gridIndexForTileProduceUnit    : GridIndex;
         private _unitsForPreviewAttack          = new Map<number, McwUnit>();
@@ -99,6 +100,9 @@ namespace TinyWars.MultiCustomWar {
             } else if (nextState === State.ChoosingActionForUnitLoaded) {
                 this._setStateChoosingActionForUnitLoadedOnTap(gridIndex);
 
+            } else if (nextState === State.ChoosingAttackTarget) {
+                this._setStateChoosingAttackTargetOnTap(gridIndex);
+
             } else if (nextState === State.ChoosingDropDestination) {
                 this._setStateChoosingDropDestinationOnTap(gridIndex);
 
@@ -133,6 +137,9 @@ namespace TinyWars.MultiCustomWar {
 
             } else if (nextState === State.ChoosingActionForUnitLoaded) {
                 this._setStateChoosingActionForUnitLoadedOnDrag(gridIndex);
+
+            } else if (nextState === State.ChoosingAttackTarget) {
+                this._setStateChoosingAttackTargetOnDrag(gridIndex);
 
             } else if (nextState === State.ChoosingDropDestination) {
                 this._setStateChoosingDropDestinationOnDrag(gridIndex);
@@ -322,6 +329,9 @@ namespace TinyWars.MultiCustomWar {
             } else if (currState === State.ChoosingActionForUnitLoaded) {
                 Logger.error(`McwActionPlanner._setStateChoosingActionForUnitOnMapOnTap() error 3, currState: ${currState}`);
 
+            } else if (currState === State.ChoosingAttackTarget) {
+                // Do nothing.
+
             } else if (currState === State.ChoosingDropDestination) {
                 this._clearFocusUnitLoaded();
 
@@ -363,6 +373,29 @@ namespace TinyWars.MultiCustomWar {
         private _setStateChoosingActionForUnitLoadedOnDrag(gridIndex: GridIndex): void {
             // TODO
             this._setState(State.ChoosingActionForUnitLoaded);
+        }
+
+        private _setStateChoosingAttackTargetOnTap(gridIndex: GridIndex): void {
+            const currState = this.getState();
+            if (currState !== State.ChoosingAttackTarget) {
+                Logger.error(`McwActionPlanner._setStateChoosingAttackTargetOnTap() error 1, currState: ${currState}`);
+            } else {
+                // Do nothing.
+            }
+        }
+        private _setStateChoosingAttackTargetOnDrag(gridIndex: GridIndex): void {
+            const currState = this.getState();
+            if (currState !== State.ChoosingAttackTarget) {
+                Logger.error(`McwActionPlanner._setStateChoosingAttackTargetOnDrag() error 1, currState: ${currState}`);
+            } else {
+                // Do nothing.
+            }
+        }
+        private _setStateChoosingAttackTargetOnChooseAction(): void {
+            this._setAttackableGridsAfterMove(this._createAttackableGridsAfterMove());
+
+            this._setState(State.ChoosingAttackTarget);
+            this._updateView();
         }
 
         private _setStateChoosingDropDestinationOnTap(gridIndex: GridIndex): void {
@@ -548,6 +581,31 @@ namespace TinyWars.MultiCustomWar {
             return this._attackableArea;
         }
 
+        private _setAttackableGridsAfterMove(grids: GridIndex[]): void {
+            this._attackableGridsAfterMove = grids;
+        }
+        public getAttackableGridsAfterMove(): GridIndex[] {
+            return this._attackableGridsAfterMove;
+        }
+        public checkHasAttackableGridAfterMove(gridIndex: GridIndex): boolean {
+            for (const grid of this.getAttackableGridsAfterMove()) {
+                if (GridIndexHelpers.checkIsEqual(grid, gridIndex)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        private _createAttackableGridsAfterMove(): GridIndex[] {
+            const unit = this.getFocusUnitLoaded() || this.getFocusUnitOnMap();
+            return GridIndexHelpers.getGridsWithinDistance(
+                this.getMovePathDestination(),
+                unit.getMinAttackRange(),
+                unit.getMaxAttackRange(),
+                this._mapSize,
+                (gridIndex) => unit.checkCanAttackTargetAfterMovePath(this.getMovePath(), gridIndex)
+            );
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for move path.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -694,6 +752,7 @@ namespace TinyWars.MultiCustomWar {
                     case State.ChoosingActionForUnitOnMap   : return this._getNextStateOnTapWhenChoosingActionForUnitOnMap(gridIndex);
                     case State.MakingMovePathForUnitLoaded  : return this._getNextStateOnTapWhenMakingMovePathForUnitLoaded(gridIndex);
                     case State.ChoosingActionForUnitLoaded  : return this._getNextStateOnTapWhenChoosingActionForUnitLoaded(gridIndex);
+                    case State.ChoosingAttackTarget         : return this._getNextStateOnTapWhenChoosingAttackTarget(gridIndex);
                     case State.ChoosingDropDestination      : return this._getNextStateOnTapWhenChoosingDropDestination(gridIndex);
                     case State.ChoosingProductionTarget     : return this._getNextStateOnTapWhenChoosingProductionTarget(gridIndex);
                     case State.PreviewingAttackableArea     : return this._getNextStateOnTapWhenPreviewingAttackableArea(gridIndex);
@@ -747,7 +806,7 @@ namespace TinyWars.MultiCustomWar {
                         }
                     } else {
                         const focusUnit = this.getFocusUnitOnMap();
-                        if ((targetUnit.checkCanJoinUnit(focusUnit)) || (targetUnit.checkCanLoadUnit(focusUnit))) {
+                        if ((focusUnit === targetUnit) || (targetUnit.checkCanJoinUnit(focusUnit)) || (targetUnit.checkCanLoadUnit(focusUnit))) {
                             return State.ChoosingActionForUnitOnMap;
                         } else {
                             if (targetUnit.getState() === UnitState.Idle) {
@@ -793,6 +852,21 @@ namespace TinyWars.MultiCustomWar {
         private _getNextStateOnTapWhenChoosingActionForUnitLoaded(gridIndex: GridIndex): State {
             // TODO
             return State.Idle;
+        }
+        private _getNextStateOnTapWhenChoosingAttackTarget(gridIndex: GridIndex): State {
+            if (!this.checkHasAttackableGridAfterMove(gridIndex)) {
+                if (this.getFocusUnitLoaded()) {
+                    return State.ChoosingActionForUnitLoaded;
+                } else {
+                    return State.ChoosingActionForUnitOnMap;
+                }
+            } else {
+                if (GridIndexHelpers.checkIsEqual(this._cursor.getGridIndex(), gridIndex)) {
+                    return State.RequestingUnitAttack;
+                } else {
+                    return State.ChoosingAttackTarget;
+                }
+            }
         }
         private _getNextStateOnTapWhenChoosingDropDestination(gridIndex: GridIndex): State {
             // TODO
@@ -937,10 +1011,12 @@ namespace TinyWars.MultiCustomWar {
                     : undefined;
             }
         }
-        public _getActionUnitAttack(): DataForUnitActionRenderer | undefined {
-            return undefined;
+        private _getActionUnitAttack(): DataForUnitActionRenderer | undefined {
+            return !this._createAttackableGridsAfterMove().length
+                ? undefined
+                : { actionType: UnitActionType.Attack, callback: () => this._setStateChoosingAttackTargetOnChooseAction() };
         }
-        public _getActionUnitWait(): DataForUnitActionRenderer | undefined {
+        private _getActionUnitWait(): DataForUnitActionRenderer | undefined {
             const existingUnit = this._unitMap.getUnitOnMap(this.getMovePathDestination());
             if ((existingUnit) && (existingUnit !== (this.getFocusUnitLoaded() || this.getFocusUnitOnMap()))) {
                 return undefined;

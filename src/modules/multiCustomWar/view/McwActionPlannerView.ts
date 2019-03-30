@@ -228,6 +228,41 @@ namespace TinyWars.MultiCustomWar {
                     }
                 }
 
+            } else if (state === State.ChoosingActionForUnitOnMap) {
+                con.visible = false;
+
+            } else if (state === State.MakingMovePathForUnitLoaded) {
+                con.visible = true;
+
+                const movableArea       = actionPlanner.getMovableArea();
+                const attackableArea    = actionPlanner.getAttackableArea();
+                const { width, height } = this._mapSize;
+                for (let x = 0; x < width; ++x) {
+                    for (let y = 0; y < height; ++y) {
+                        const isMovable = (!!movableArea[x]) && (!!movableArea[x][y]);
+                        this._imgsForAttackableGrids[x][y].visible = (!isMovable) && (!!attackableArea[x]) && (!!attackableArea[x][y]);
+                    }
+                }
+
+            } else if (state === State.ChoosingActionForUnitLoaded) {
+                con.visible = false;
+
+            } else if (state === State.ChoosingAttackTarget) {
+                con.visible = true;
+
+                const { width, height } = this._mapSize;
+                for (let x = 0; x < width; ++x) {
+                    for (let y = 0; y < height; ++y) {
+                        this._imgsForAttackableGrids[x][y].visible = false;
+                    }
+                }
+                for (const grid of actionPlanner.getAttackableGridsAfterMove()) {
+                    this._imgsForAttackableGrids[grid.x][grid.y].visible = true;
+                }
+
+            } else if (state === State.ChoosingDropDestination) {
+                con.visible = false;
+
             } else if (state === State.ChoosingProductionTarget) {
                 con.visible = false;
 
@@ -268,6 +303,29 @@ namespace TinyWars.MultiCustomWar {
                         this._imgsForMovableGrids[x][y].visible = (!!movableArea[x]) && (!!movableArea[x][y]);
                     }
                 }
+
+            } else if (state === State.ChoosingActionForUnitOnMap) {
+                con.visible = false;
+
+            } else if (state === State.MakingMovePathForUnitLoaded) {
+                con.visible = true;
+
+                const movableArea       = actionPlanner.getMovableArea();
+                const { width, height } = this._mapSize;
+                for (let x = 0; x < width; ++x) {
+                    for (let y = 0; y < height; ++y) {
+                        this._imgsForMovableGrids[x][y].visible = (!!movableArea[x]) && (!!movableArea[x][y]);
+                    }
+                }
+
+            } else if (state === State.ChoosingActionForUnitLoaded) {
+                con.visible = false;
+
+            } else if (state === State.ChoosingAttackTarget) {
+                con.visible = false;
+
+            } else if (state === State.ChoosingDropDestination) {
+                // TODO
 
             } else if (state === State.ChoosingProductionTarget) {
                 con.visible = false;
@@ -328,6 +386,12 @@ namespace TinyWars.MultiCustomWar {
                 this._addMovePathView();
 
             } else if (state === State.ChoosingActionForUnitLoaded) {
+                con.removeChildren();
+                con.visible = true;
+
+                this._addMovePathView();
+
+            } else if (state === State.ChoosingAttackTarget) {
                 con.removeChildren();
                 con.visible = true;
 
@@ -404,6 +468,17 @@ namespace TinyWars.MultiCustomWar {
 
                 const unitLoaded = actionPlanner.getFocusUnitLoaded();
                 this._addUnitView(unitLoaded, unitLoaded.getGridIndex());
+
+            } else if (state === State.ChoosingAttackTarget) {
+                con.removeChildren();
+                views.clear();
+                con.visible = true;
+
+                const unitOnMap = actionPlanner.getFocusUnitOnMap();
+                this._addUnitView(unitOnMap, unitOnMap.getGridIndex());
+
+                const unitLoaded = actionPlanner.getFocusUnitLoaded();
+                (unitLoaded) && (this._addUnitView(unitLoaded, unitLoaded.getGridIndex()));
 
             } else if (state === State.ChoosingDropDestination) {
                 // TODO
