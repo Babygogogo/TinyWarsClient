@@ -156,6 +156,18 @@ namespace TinyWars.MultiCustomWar {
         public getTemplateMap(): Types.TemplateMap {
             return this._templateMap;
         }
+
+        public getTilesCount(tileType: Types.TileType, playerIndex: number): number {
+            let count = 0;
+            for (const column of this._map) {
+                for (const tile of column) {
+                    if ((tile.getType() === tileType) && (tile.getPlayerIndex() === playerIndex)) {
+                        ++ count;
+                    }
+                }
+            }
+            return count;
+        }
     }
 
     function checkShouldSerializeTile(tileData: SerializedMcTile, mapData: Types.TemplateMap, posIndex: number): boolean {

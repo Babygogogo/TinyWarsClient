@@ -59,12 +59,14 @@ namespace TinyWars.MultiCustomWar {
         private _conForNormal           = new egret.DisplayObjectContainer();
         private _conForTarget           = new egret.DisplayObjectContainer();
         private _conForSiloArea         = new egret.DisplayObjectContainer();
+        private _conForDamage           = new egret.DisplayObjectContainer();
         private _imgUpperLeftCorner     = new GameUi.UiImage(_IMG_SOURCE_FOR_NORMAL_CORNER);
         private _imgUpperRightCorner    = new GameUi.UiImage(_IMG_SOURCE_FOR_NORMAL_CORNER);
         private _imgLowerLeftCorner     = new GameUi.UiImage(_IMG_SOURCE_FOR_NORMAL_CORNER);
         private _imgLowerRightCorner    = new GameUi.UiImage(_IMG_SOURCE_FOR_NORMAL_CORNER);
         private _imgTarget              = new GameUi.UiImage(_IMG_SOURCES_FOR_TARGET[this._frameIndexForImgTarget]);
         private _imgSiloArea            = new GameUi.UiImage(`c04_t03_s03_f01`);
+        private _labelDamage            = new GameUi.UiLabel();
 
         private _notifyListeners: Notify.Listener[] = [
             { type: Notify.Type.McwActionPlannerStateChanged, callback: this._onNotifyMcwActionPlannerStateChanged },
@@ -77,6 +79,7 @@ namespace TinyWars.MultiCustomWar {
             this._initConForNormal();
             this._initConForTarget();
             this._initConForSiloArea();
+            this._initConForDamage();
         }
 
         public init(cursor: McwCursor): void {
@@ -124,6 +127,7 @@ namespace TinyWars.MultiCustomWar {
             this._updateConForNormal();
             this._updateConForTarget();
             this._updateConForSiloArea();
+            this._updateConForDamage();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -327,6 +331,70 @@ namespace TinyWars.MultiCustomWar {
                 // TODO
             }
         }
+        private _updateConForDamage(): void {
+            const con           = this._conForDamage;
+            const gridIndex     = this._cursor.getGridIndex();
+            const actionPlanner = this._actionPlanner;
+            const state         = actionPlanner.getState();
+
+            if (state === ActionPlannerState.Idle) {
+                con.visible = false;
+
+            } else if (state === ActionPlannerState.MakingMovePathForUnitOnMap) {
+                const damage = (actionPlanner.getFocusUnitLoaded() || actionPlanner.getFocusUnitOnMap()).getEstimatedAttackDamageAfterMovePath(
+                    actionPlanner.getMovePath(), gridIndex
+                );
+                if (damage == null) {
+                    con.visible = false;
+                } else {
+                    con.visible = true;
+                    this._labelDamage.text = `DMG: ${damage}%`;
+                }
+
+            } else if (state === ActionPlannerState.ChoosingActionForUnitOnMap) {
+                con.visible = false;
+
+            } else if (state === ActionPlannerState.MakingMovePathForUnitLoaded) {
+                const damage = (actionPlanner.getFocusUnitLoaded() || actionPlanner.getFocusUnitOnMap()).getEstimatedAttackDamageAfterMovePath(
+                    actionPlanner.getMovePath(), gridIndex
+                );
+                if (damage == null) {
+                    con.visible = false;
+                } else {
+                    con.visible = true;
+                    this._labelDamage.text = `DMG: ${damage}%`;
+                }
+
+            } else if (state === ActionPlannerState.ChoosingActionForUnitLoaded) {
+                con.visible = false;
+
+            } else if (state === ActionPlannerState.ChoosingAttackTarget) {
+                const damage = (actionPlanner.getFocusUnitLoaded() || actionPlanner.getFocusUnitOnMap()).getEstimatedAttackDamageAfterMovePath(
+                    actionPlanner.getMovePath(), gridIndex
+                );
+                if (damage == null) {
+                    con.visible = false;
+                } else {
+                    con.visible = true;
+                    this._labelDamage.text = `DMG: ${damage}%`;
+                }
+
+            } else if (state === ActionPlannerState.ChoosingDropDestination) {
+                con.visible = false;
+
+            } else if (state === ActionPlannerState.ChoosingProductionTarget) {
+                con.visible = false;
+
+            } else if (state === ActionPlannerState.PreviewingAttackableArea) {
+                con.visible = false;
+
+            } else if (state === ActionPlannerState.PreviewingMovableArea) {
+                con.visible = false;
+
+            } else {
+                // TODO
+            }
+        }
 
         private _initConForNormal(): void {
             this._imgUpperLeftCorner.x = _UPPER_LEFT_CORNER_OUTER_X;
@@ -363,6 +431,29 @@ namespace TinyWars.MultiCustomWar {
             this._conForSiloArea.addChild(this._imgSiloArea);
 
             this._conForAll.addChild(this._conForSiloArea);
+        }
+        private _initConForDamage(): void {
+            const width     = 110;
+            const height    = 40;
+
+            const imgBg         = new GameUi.UiImage("c04_t01_s02_f01");
+            imgBg.scale9Grid    = new egret.Rectangle(9, 9, 2, 2);
+            imgBg.width         = width;
+            imgBg.height        = height;
+            imgBg.alpha         = 0.9;
+            this._conForDamage.addChild(imgBg);
+
+            const labelDamage           = this._labelDamage;
+            labelDamage.size            = 16;
+            labelDamage.width           = width;
+            labelDamage.height          = height;
+            labelDamage.textAlign       = egret.HorizontalAlign.CENTER;
+            labelDamage.verticalAlign   = egret.VerticalAlign.MIDDLE;
+            this._conForDamage.addChild(labelDamage);
+
+            this._conForDamage.x = (_GRID_WIDTH - width) / 2;
+            this._conForDamage.y = -height;
+            this._conForAll.addChild(this._conForDamage);
         }
 
         private _startNormalAnimation(): void {

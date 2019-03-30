@@ -318,11 +318,78 @@ namespace TinyWars.MultiCustomWar {
                     const armorType = targetUnit.getArmorType();
                     return (targetUnit.getTeamIndex() !== this.getTeamIndex())
                         && ((!targetUnit.getIsDiving()) || (this.checkCanAttackDivingUnits()))
-                        && (((!!primaryAmmo) && (this.getPrimaryWeaponBaseDamage(armorType)) != null) || (this.getSecondaryWeaponBaseDamage(armorType) != null))
+                        && (((!!primaryAmmo) && (this.getPrimaryWeaponBaseDamage(armorType) != null)) || (this.getSecondaryWeaponBaseDamage(armorType) != null))
                 } else {
                     const armorType = this._war.getTileMap().getTile(targetGridIndex).getArmorType();
                     return (armorType != null)
-                        && (((!!primaryAmmo) && (this.getPrimaryWeaponBaseDamage(armorType)) != null) || (this.getSecondaryWeaponBaseDamage(armorType) != null));
+                        && (((!!primaryAmmo) && (this.getPrimaryWeaponBaseDamage(armorType) != null)) || (this.getSecondaryWeaponBaseDamage(armorType) != null));
+                }
+            }
+        }
+
+        public getEstimatedAttackDamageAfterMovePath(movePath: MovePathNode[], targetGridIndex: GridIndex): number | undefined {
+            const pathLength    = movePath.length;
+            const destination   = movePath[pathLength - 1];
+            const distance      = GridIndexHelpers.getDistance(destination, targetGridIndex);
+            const primaryAmmo   = this.getPrimaryWeaponCurrentAmmo();
+            const unitMap       = this._war.getUnitMap();
+            if (((!this.checkCanAttackAfterMove()) && (pathLength > 1))                             ||
+                ((this.getLoaderUnitId() != null) && (pathLength <= 1))                             ||
+                ((pathLength > 1) && (unitMap.getUnitOnMap(destination)))                           ||
+                ((!primaryAmmo) && (!this.checkHasSecondaryWeapon()))                               ||
+                (!((distance <= this.getMaxAttackRange()) && (distance >= this.getMinAttackRange())))
+            ) {
+                return undefined;
+            } else {
+                const targetUnit = unitMap.getUnitOnMap(targetGridIndex);
+                if (targetUnit) {
+                    if ((targetUnit.getTeamIndex() === this.getTeamIndex())                 ||
+                        ((targetUnit.getIsDiving()) && (!this.checkCanAttackDivingUnits()))
+                    ) {
+                        return undefined;
+                    } else {
+                        const armorType         = targetUnit.getArmorType();
+                        const primaryBaseDmg    = primaryAmmo ? this.getPrimaryWeaponBaseDamage(armorType) : undefined;
+                        const baseDamage        = primaryBaseDmg != null ? primaryBaseDmg : this.getSecondaryWeaponBaseDamage(armorType);
+                        if (baseDamage == null) {
+                            return undefined;
+                        } else {
+                            // TODO: Take co skills into account.
+                            const tileMap           = this._war.getTileMap();
+                            const commandTowerType  = Types.TileType.CommandTower;
+                            const cfg               = ConfigManager.getTileTemplateCfgByType(this._configVersion, commandTowerType);
+                            return Math.floor(baseDamage
+                                * (100
+                                    + tileMap.getTilesCount(commandTowerType, this.getPlayerIndex()) * cfg.globalAttackBonus
+                                    + this.getPromotionAttackBonus())
+                                / (100
+                                    + tileMap.getTilesCount(commandTowerType, targetUnit.getPlayerIndex()) * cfg.globalDefenseBonus
+                                    + targetUnit.getPromotionDefenseBonus())
+                            );
+                        }
+                    }
+                } else {
+                    const tileMap   = this._war.getTileMap();
+                    const armorType = tileMap.getTile(targetGridIndex).getArmorType();
+                    if (armorType == null) {
+                        return undefined;
+                    } else {
+                        const primaryBaseDmg    = primaryAmmo ? this.getPrimaryWeaponBaseDamage(armorType) : undefined;
+                        const baseDamage        = primaryBaseDmg != null ? primaryBaseDmg : this.getSecondaryWeaponBaseDamage(armorType);
+                        if (baseDamage == null) {
+                            return undefined;
+                        } else {
+                            // TODO: Take co skills into account.
+                            const tileMap           = this._war.getTileMap();
+                            const commandTowerType  = Types.TileType.CommandTower;
+                            const cfg               = ConfigManager.getTileTemplateCfgByType(this._configVersion, commandTowerType);
+                            return Math.floor(baseDamage
+                                * (100
+                                    + tileMap.getTilesCount(commandTowerType, this.getPlayerIndex()) * cfg.globalAttackBonus
+                                    + this.getPromotionAttackBonus())
+                            );
+                        }
+                    }
                 }
             }
         }
