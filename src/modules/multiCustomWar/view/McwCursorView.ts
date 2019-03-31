@@ -341,9 +341,7 @@ namespace TinyWars.MultiCustomWar {
                 con.visible = false;
 
             } else if (state === ActionPlannerState.MakingMovePathForUnitOnMap) {
-                const damage = (actionPlanner.getFocusUnitLoaded() || actionPlanner.getFocusUnitOnMap()).getEstimatedAttackDamageAfterMovePath(
-                    actionPlanner.getMovePath(), gridIndex
-                );
+                const damage = actionPlanner.getFocusUnitOnMap().getEstimatedAttackDamageAfterMovePath(actionPlanner.getMovePath(), gridIndex);
                 if (damage == null) {
                     con.visible = false;
                 } else {
@@ -355,9 +353,7 @@ namespace TinyWars.MultiCustomWar {
                 con.visible = false;
 
             } else if (state === ActionPlannerState.MakingMovePathForUnitLoaded) {
-                const damage = (actionPlanner.getFocusUnitLoaded() || actionPlanner.getFocusUnitOnMap()).getEstimatedAttackDamageAfterMovePath(
-                    actionPlanner.getMovePath(), gridIndex
-                );
+                const damage = actionPlanner.getFocusUnitLoaded().getEstimatedAttackDamageAfterMovePath(actionPlanner.getMovePath(), gridIndex);
                 if (damage == null) {
                     con.visible = false;
                 } else {
@@ -369,9 +365,7 @@ namespace TinyWars.MultiCustomWar {
                 con.visible = false;
 
             } else if (state === ActionPlannerState.ChoosingAttackTarget) {
-                const damage = (actionPlanner.getFocusUnitLoaded() || actionPlanner.getFocusUnitOnMap()).getEstimatedAttackDamageAfterMovePath(
-                    actionPlanner.getMovePath(), gridIndex
-                );
+                const damage = actionPlanner.getFocusUnit().getEstimatedAttackDamageAfterMovePath(actionPlanner.getMovePath(), gridIndex);
                 if (damage == null) {
                     con.visible = false;
                 } else {
@@ -433,7 +427,7 @@ namespace TinyWars.MultiCustomWar {
             this._conForAll.addChild(this._conForSiloArea);
         }
         private _initConForDamage(): void {
-            const width     = 110;
+            const width     = 120;
             const height    = 40;
 
             const imgBg         = new GameUi.UiImage("c04_t01_s02_f01");
@@ -444,7 +438,7 @@ namespace TinyWars.MultiCustomWar {
             this._conForDamage.addChild(imgBg);
 
             const labelDamage           = this._labelDamage;
-            labelDamage.size            = 16;
+            labelDamage.size            = 18;
             labelDamage.width           = width;
             labelDamage.height          = height;
             labelDamage.textAlign       = egret.HorizontalAlign.CENTER;

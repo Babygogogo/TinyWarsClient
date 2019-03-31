@@ -90,8 +90,11 @@ namespace TinyWars.MultiCustomWar {
     }
 
     export type DataForUnitActionRenderer = {
-        actionType  : UnitActionType;
-        callback    : () => void;
+        actionType      : UnitActionType;
+        callback        : () => void;
+        launchUnitId?   : number;
+        dropUnitId?     : number;
+        produceUnitType?: Types.UnitType;
     }
 
     class UnitActionRenderer extends eui.ItemRenderer {

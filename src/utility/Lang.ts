@@ -347,12 +347,16 @@ namespace TinyWars.Utility.Lang {
             `Wait`,
         ]],
         [Type.B0051, [
+            `生产材料已耗尽`,
+            `No material`,
         ]],
         [Type.B0052, [
-        ]],
-        [Type.B0052, [
+            `没有空闲的装载位置`,
+            `No empty load slot`,
         ]],
         [Type.B0053, [
+            `资金不足`,
+            `Insufficient fund`,
         ]],
         [Type.B0054, [
         ]],
@@ -888,10 +892,10 @@ namespace TinyWars.Utility.Lang {
             case Types.UnitActionType.Surface       : return getText(Type.B0042);
             case Types.UnitActionType.BuildTile     : return getText(Type.B0043);
             case Types.UnitActionType.Supply        : return getText(Type.B0044);
-            case Types.UnitActionType.Launch        : return getText(Type.B0045);
-            case Types.UnitActionType.Drop          : return getText(Type.B0046);
-            case Types.UnitActionType.Flare         : return getText(Type.B0047);
-            case Types.UnitActionType.Silo          : return getText(Type.B0048);
+            case Types.UnitActionType.LaunchUnit    : return getText(Type.B0045);
+            case Types.UnitActionType.DropUnit      : return getText(Type.B0046);
+            case Types.UnitActionType.LaunchFlare   : return getText(Type.B0047);
+            case Types.UnitActionType.LaunchSilo    : return getText(Type.B0048);
             case Types.UnitActionType.ProduceUnit   : return getText(Type.B0049);
             case Types.UnitActionType.Wait          : return getText(Type.B0050);
             default                                 : return undefined;

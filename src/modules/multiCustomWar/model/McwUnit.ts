@@ -434,6 +434,12 @@ namespace TinyWars.MultiCustomWar {
         public checkIsDiver(): boolean {
             return this._templateCfg.fuelConsumptionInDiving != null;
         }
+        public checkCanDive(): boolean {
+            return (this.checkIsDiver()) && (!this.getIsDiving());
+        }
+        public checkCanSurface(): boolean {
+            return (this.checkIsDiver()) && (this.getIsDiving());
+        }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for fuel.
@@ -525,6 +531,7 @@ namespace TinyWars.MultiCustomWar {
         }
 
         public getProduceUnitCost(): number | undefined {
+            // TODO: take skills into account.
             const type = this.getProduceUnitType();
             if (type == null) {
                 return undefined;
@@ -636,7 +643,7 @@ namespace TinyWars.MultiCustomWar {
             return this._buildableTileCfg != null;
         }
         public checkCanBuildOnTile(tile: McwTile): boolean {
-            return this.getBuildTargetTileType(tile.getType()) != null;
+            return (this.getBuildTargetTileType(tile.getType()) != null) && (this.getCurrentBuildMaterial() > 0);
         }
 
         public getBuildTargetTileType(srcType: TileType): TileType | undefined | null {
