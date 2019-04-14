@@ -10,6 +10,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
     const _HANDLERS = new Map<ActionCodes, (data: ActionContainer) => Promise<void>>([
         [ActionCodes.S_McwBeginTurn,    _handleMcwBeginTurn],
         [ActionCodes.S_McwEndTurn,      _handleMcwEndTurn],
+        [ActionCodes.S_McwUntiWait,     _handleMcwUnitWait],
     ]);
 
     let _war            : McwWar;
@@ -54,6 +55,9 @@ namespace TinyWars.MultiCustomWar.McwModel {
     export function updateOnEndTurn(data: ProtoTypes.IS_McwEndTurn): void {
         _updateByActionContainer({ S_McwEndTurn: data }, data.warId, data.actionId);
     }
+    export function updateOnUnitWait(data: ProtoTypes.IS_McwUnitWait): void {
+        _updateByActionContainer({ S_McwUntiWait: data }, data.warId, data.actionId);
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Util functions.
@@ -87,7 +91,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         const turnManager = _war.getTurnManager();
         if ((turnManager.getPhaseCode() === Types.TurnPhaseCode.WaitBeginTurn) &&
             (_war.getPlayerIndexLoggedIn() ===  turnManager.getPlayerIndexInTurn())) {
-            McwProxy.reqMcwBeginTurn(_war.getWarId());
+            McwProxy.reqMcwBeginTurn(_war);
         }
     }
 
@@ -102,7 +106,11 @@ namespace TinyWars.MultiCustomWar.McwModel {
         await _war.getTurnManager().endPhaseMain();
 
         if (_war.getPlayerInTurn() === _war.getPlayerLoggedIn()) {
-            McwProxy.reqMcwBeginTurn(_war.getWarId());
+            McwProxy.reqMcwBeginTurn(_war);
         }
+    }
+
+    async function _handleMcwUnitWait(data: ActionContainer): Promise<void> {
+        // TODO
     }
 }

@@ -1,6 +1,6 @@
 
 namespace TinyWars.Utility.Lang {
-    import ErrCode = Network.NetErrorCode;
+    import ErrorCode = Network.NetErrorCode;
 
     export const enum Language {
         Chinese,
@@ -649,86 +649,115 @@ namespace TinyWars.Utility.Lang {
         ]],
     ]);
 
-    const NET_ERROR_TEXT = new Map<ErrCode, string[]>([
-        [ErrCode.IllegalRequest, [
+    const NET_ERROR_TEXT = new Map<ErrorCode, string[]>([
+        [ErrorCode.IllegalRequest, [
             "非法请求",
             "Illegal request.",
         ]],
-        [ErrCode.Login_InvalidAccountOrPassword, [
+        [ErrorCode.Login_InvalidAccountOrPassword, [
             "账号或密码不正确，请检查后重试",
             "Invalid account and/or password.",
         ]],
-        [ErrCode.Login_AlreadyLoggedIn, [
+        [ErrorCode.Login_AlreadyLoggedIn, [
             "您已处于登陆状态，不可再次登陆",
             "You have logged in already.",
         ]],
-        [ErrCode.Register_InvalidAccount, [
+        [ErrorCode.Register_InvalidAccount, [
             "账号不符合要求，请检查后重试",
             "Invalid account.",
         ]],
-        [ErrCode.Register_UsedAccount, [
+        [ErrorCode.Register_UsedAccount, [
             "该账号已被注册，请修改后再试",
             "The account has been registered.",
         ]],
-        [ErrCode.Register_AlreadyLoggedIn, [
+        [ErrorCode.Register_AlreadyLoggedIn, [
             "您已处于登陆状态，不可注册账号",
             "You have logged in already.",
         ]],
-        [ErrCode.Register_InvalidPassword, [
+        [ErrorCode.Register_InvalidPassword, [
             "密码不符合要求，请检查后重试",
             "Invalid password.",
         ]],
-        [ErrCode.Register_InvalidNickname, [
+        [ErrorCode.Register_InvalidNickname, [
             "昵称不符合要求，请检查后重试",
             "Invalid nickname.",
         ]],
-        [ErrCode.Register_UsedNickname, [
+        [ErrorCode.Register_UsedNickname, [
             "该昵称已被使用，请修改后再试",
             "The nickname has been used.",
         ]],
-        [ErrCode.CreateMultiCustomWar_TooManyJoinedWars, [
+        [ErrorCode.CreateMultiCustomWar_TooManyJoinedWars, [
             "您已参与了许多未开始的战局，请退出部分后重试",
             "You have joined too many wars.",
         ]],
-        [ErrCode.CreateMultiCustomWar_InvalidParams, [
+        [ErrorCode.CreateMultiCustomWar_InvalidParams, [
             "部分设定不符合规则，请检查后重试",
             "Invalid settings.",
         ]],
-        [ErrCode.ExitMultiCustomWar_WarInfoNotExist, [
+        [ErrorCode.ExitMultiCustomWar_WarInfoNotExist, [
             "战局不存在",
             "The game doesn't exist.",
         ]],
-        [ErrCode.ExitMultiCustomWar_NotJoined, [
+        [ErrorCode.ExitMultiCustomWar_NotJoined, [
             "您并未参加该战局",
             "You haven't joined the game.",
         ]],
-        [ErrCode.JoinMultiCustomWar_TooManyJoinedWars, [
+        [ErrorCode.JoinMultiCustomWar_TooManyJoinedWars, [
             "您已参与了许多未开始的战局，请退出部分后重试",
             "You have joined too many wars.",
         ]],
-        [ErrCode.JoinMultiCustomWar_InvalidParams, [
+        [ErrorCode.JoinMultiCustomWar_InvalidParams, [
             "部分设定不符合规则，请检查后重试",
             "Invalid settings.",
         ]],
-        [ErrCode.JoinMultiCustomWar_WarInfoNotExist, [
+        [ErrorCode.JoinMultiCustomWar_WarInfoNotExist, [
             "房间不存在",
             "The game doesn't exist.",
         ]],
-        [ErrCode.JoinMultiCustomWar_AlreadyJoined, [
+        [ErrorCode.JoinMultiCustomWar_AlreadyJoined, [
             "您已加入了该房间。",
             "You have already joined the game.",
         ]],
-        [ErrCode.ServerDisconnect_ServerMaintainance, [
+        [ErrorCode.ServerDisconnect_ServerMaintainance, [
             `服务器维护中`,
             `The server is under maintainance.`,
         ]],
-        [ErrCode.McrContinueWar_NoSuchWar, [
+        [ErrorCode.McrContinueWar_NoSuchWar, [
             `战局不存在`,
             `The game doesn't exist.`,
         ]],
-        [ErrCode.McrContinueWar_DefeatedOrNotJoined, [
+        [ErrorCode.McrContinueWar_DefeatedOrNotJoined, [
             `您未参与该战局，或已经被击败`,
             `You have not joined the game, or you have been defeated.`,
+        ]],
+
+        [ErrorCode.McwBeginTurn_InvalidActionId, [
+            `战局数据不同步，请刷新`,
+            `The local data is out of synchronization. Please refresh.`,
+        ]],
+        [ErrorCode.McwBeginTurn_NoSuchWar, [
+            `战局不存在`,
+            `The game doesn't exist.`,
+        ]],
+        [ErrorCode.McwBeginTurn_NotInTurn, [
+            `当前无法开始您的回合`,
+            `Unable to begin turn.`,
+        ]],
+        [ErrorCode.McwEndTurn_InvalidActionId, [
+            `战局数据不同步，请刷新`,
+            `The local data is out of synchronization. Please refresh.`,
+        ]],
+        [ErrorCode.McwEndTurn_NoSuchWar, [
+            `战局不存在`,
+            `The game doesn't exist.`,
+        ]],
+        [ErrorCode.McwEndTurn_NotInTurn, [
+            `当前无法结束您的回合`,
+            `Unable to begin turn.`,
+        ]],
+        [ErrorCode.McwEndTurn_NotVotedForDraw, [
+            `您尚未完成关于和局的投票`,
+            `You haven't voted for the draw of game.`,
         ]],
     ]);
 
@@ -802,7 +831,7 @@ namespace TinyWars.Utility.Lang {
         return Helpers.formatString(getText(t), ...params);
     }
 
-    export function getNetErrorText(code: ErrCode): string {
+    export function getNetErrorText(code: ErrorCode): string {
         return NET_ERROR_TEXT.get(code)[language];
     }
 

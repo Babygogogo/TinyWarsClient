@@ -32,8 +32,10 @@ namespace TinyWars.Network {
         McrContinueWar_DefeatedOrNotJoined,
 
         McwBeginTurn_NoSuchWar,
+        McwBeginTurn_InvalidActionId,
         McwBeginTurn_NotInTurn,
         McwEndTurn_NoSuchWar,
+        McwEndTurn_InvalidActionId,
         McwEndTurn_NotInTurn,
         McwEndTurn_NotVotedForDraw,
 

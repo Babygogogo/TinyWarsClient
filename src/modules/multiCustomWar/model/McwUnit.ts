@@ -411,7 +411,9 @@ namespace TinyWars.MultiCustomWar {
             return this._templateCfg.canCaptureTile === 1;
         }
         public checkCanCaptureTile(tile: McwTile): boolean {
-            return (this.checkCanCapture()) && (this.getTeamIndex() !== tile.getTeamIndex());
+            return (this.checkCanCapture())
+                && (this.getTeamIndex() !== tile.getTeamIndex())
+                && (tile.getMaxCapturePoint() != null);
         }
 
         public getCaptureAmount(): number | undefined {

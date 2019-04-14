@@ -19,23 +19,6 @@ namespace TinyWars.Utility.Notify {
         GlobalTouchBegin,
         GlobalTouchMove,
 
-        SNewestConfigVersion,
-        SLogin,
-        SRegister,
-        SLogout,
-        SHeartbeat,
-        SGetNewestMapInfos,
-        SGetMapDynamicInfo,
-        SGetMapDynamicInfoFailed,
-        SMcrCreateWar,
-        SMcrGetJoinedWaitingInfos,
-        SMcrGetUnjoinedWaitingInfos,
-        SMcrGetJoinedOngoingInfos,
-        SMcrExitWar,
-        SMcrJoinWar,
-        SMcrContinueWarFailed,
-        SMcrContinueWar,
-
         ConfigLoaded,
         TileModelUpdated,
 
@@ -50,6 +33,28 @@ namespace TinyWars.Utility.Notify {
         McwFieldZoomed,
         McwFieldDragged,
         McwActionPlannerStateChanged,
+
+        SNewestConfigVersion,
+        SLogin,
+        SRegister,
+        SLogout,
+        SHeartbeat,
+        SGetNewestMapInfos,
+        SGetMapDynamicInfo,
+        SGetMapDynamicInfoFailed,
+
+        SMcrCreateWar,
+        SMcrGetJoinedWaitingInfos,
+        SMcrGetUnjoinedWaitingInfos,
+        SMcrGetJoinedOngoingInfos,
+        SMcrExitWar,
+        SMcrJoinWar,
+        SMcrContinueWarFailed,
+        SMcrContinueWar,
+
+        SMcwBeginTurn,
+        SMcwEndTurn,
+        SMcwUnitWait,
     }
 
     ////////////////////////////////////////////////////////////////////////////////

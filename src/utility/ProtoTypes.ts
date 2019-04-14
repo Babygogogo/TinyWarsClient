@@ -2677,6 +2677,102 @@ namespace TinyWars.Utility {
             public toJSON(): { [k: string]: any };
         }
 
+        /** Properties of a MovePath. */
+        export declare interface IMovePath {
+
+            /** MovePath path */
+            path?: (IGridIndex[] | null);
+
+            /** MovePath isBlocked */
+            isBlocked?: (boolean | null);
+        }
+
+        /** Represents a MovePath. */
+        export declare class MovePath implements IMovePath {
+
+            /**
+             * Constructs a new MovePath.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: IMovePath);
+
+            /** MovePath path. */
+            public path: IGridIndex[];
+
+            /** MovePath isBlocked. */
+            public isBlocked: boolean;
+
+            /**
+             * Creates a new MovePath instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns MovePath instance
+             */
+            public static create(properties?: IMovePath): MovePath;
+
+            /**
+             * Encodes the specified MovePath message. Does not implicitly {@link MovePath.verify|verify} messages.
+             * @param message MovePath message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: IMovePath, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified MovePath message, length delimited. Does not implicitly {@link MovePath.verify|verify} messages.
+             * @param message MovePath message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: IMovePath, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a MovePath message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns MovePath
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): MovePath;
+
+            /**
+             * Decodes a MovePath message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns MovePath
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): MovePath;
+
+            /**
+             * Verifies a MovePath message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string | null);
+
+            /**
+             * Creates a MovePath message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns MovePath
+             */
+            public static fromObject(object: { [k: string]: any }): MovePath;
+
+            /**
+             * Creates a plain object from a MovePath message. Also converts values to other types if specified.
+             * @param message MovePath
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: MovePath, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this MovePath to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
         /** Properties of a MapDynamicInfo. */
         export declare interface IMapDynamicInfo {
 
@@ -3558,6 +3654,12 @@ namespace TinyWars.Utility {
 
             /** ActionContainer S_McwEndTurn */
             S_McwEndTurn?: (IS_McwEndTurn | null);
+
+            /** ActionContainer C_McwUnitWait */
+            C_McwUnitWait?: (IC_McwUnitWait | null);
+
+            /** ActionContainer S_McwUntiWait */
+            S_McwUntiWait?: (IS_McwUnitWait | null);
         }
 
         /** Represents an ActionContainer. */
@@ -3667,6 +3769,12 @@ namespace TinyWars.Utility {
 
             /** ActionContainer S_McwEndTurn. */
             public S_McwEndTurn?: (IS_McwEndTurn | null);
+
+            /** ActionContainer C_McwUnitWait. */
+            public C_McwUnitWait?: (IC_McwUnitWait | null);
+
+            /** ActionContainer S_McwUntiWait. */
+            public S_McwUntiWait?: (IS_McwUnitWait | null);
 
             /**
              * Creates a new ActionContainer instance using the specified properties.
@@ -6618,6 +6726,9 @@ namespace TinyWars.Utility {
 
             /** C_McwBeginTurn warId */
             warId?: (number | null);
+
+            /** C_McwBeginTurn actionId */
+            actionId?: (number | null);
         }
 
         /** Represents a C_McwBeginTurn. */
@@ -6631,6 +6742,9 @@ namespace TinyWars.Utility {
 
             /** C_McwBeginTurn warId. */
             public warId: number;
+
+            /** C_McwBeginTurn actionId. */
+            public actionId: number;
 
             /**
              * Creates a new C_McwBeginTurn instance using the specified properties.
@@ -6834,6 +6948,9 @@ namespace TinyWars.Utility {
 
             /** C_McwEndTurn warId */
             warId?: (number | null);
+
+            /** C_McwEndTurn actionId */
+            actionId?: (number | null);
         }
 
         /** Represents a C_McwEndTurn. */
@@ -6847,6 +6964,9 @@ namespace TinyWars.Utility {
 
             /** C_McwEndTurn warId. */
             public warId: number;
+
+            /** C_McwEndTurn actionId. */
+            public actionId: number;
 
             /**
              * Creates a new C_McwEndTurn instance using the specified properties.
@@ -7016,6 +7136,252 @@ namespace TinyWars.Utility {
 
             /**
              * Converts this S_McwEndTurn to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a C_McwUnitWait. */
+        export declare interface IC_McwUnitWait {
+
+            /** C_McwUnitWait warId */
+            warId?: (number | null);
+
+            /** C_McwUnitWait actionId */
+            actionId?: (number | null);
+
+            /** C_McwUnitWait path */
+            path?: (IGridIndex[] | null);
+
+            /** C_McwUnitWait launchUnitId */
+            launchUnitId?: (number | null);
+        }
+
+        /** Represents a C_McwUnitWait. */
+        export declare class C_McwUnitWait implements IC_McwUnitWait {
+
+            /**
+             * Constructs a new C_McwUnitWait.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: IC_McwUnitWait);
+
+            /** C_McwUnitWait warId. */
+            public warId: number;
+
+            /** C_McwUnitWait actionId. */
+            public actionId: number;
+
+            /** C_McwUnitWait path. */
+            public path: IGridIndex[];
+
+            /** C_McwUnitWait launchUnitId. */
+            public launchUnitId: number;
+
+            /**
+             * Creates a new C_McwUnitWait instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C_McwUnitWait instance
+             */
+            public static create(properties?: IC_McwUnitWait): C_McwUnitWait;
+
+            /**
+             * Encodes the specified C_McwUnitWait message. Does not implicitly {@link C_McwUnitWait.verify|verify} messages.
+             * @param message C_McwUnitWait message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: IC_McwUnitWait, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C_McwUnitWait message, length delimited. Does not implicitly {@link C_McwUnitWait.verify|verify} messages.
+             * @param message C_McwUnitWait message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: IC_McwUnitWait, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C_McwUnitWait message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C_McwUnitWait
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): C_McwUnitWait;
+
+            /**
+             * Decodes a C_McwUnitWait message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C_McwUnitWait
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): C_McwUnitWait;
+
+            /**
+             * Verifies a C_McwUnitWait message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string | null);
+
+            /**
+             * Creates a C_McwUnitWait message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C_McwUnitWait
+             */
+            public static fromObject(object: { [k: string]: any }): C_McwUnitWait;
+
+            /**
+             * Creates a plain object from a C_McwUnitWait message. Also converts values to other types if specified.
+             * @param message C_McwUnitWait
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: C_McwUnitWait, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C_McwUnitWait to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S_McwUnitWait. */
+        export declare interface IS_McwUnitWait {
+
+            /** S_McwUnitWait errorCode */
+            errorCode?: (number | null);
+
+            /** S_McwUnitWait warId */
+            warId?: (number | null);
+
+            /** S_McwUnitWait actionId */
+            actionId?: (number | null);
+
+            /** S_McwUnitWait path */
+            path?: (IMovePath | null);
+
+            /** S_McwUnitWait launchUnitId */
+            launchUnitId?: (number | null);
+
+            /** S_McwUnitWait discoveredUnits */
+            discoveredUnits?: (ISerializedMcwUnit[] | null);
+
+            /** S_McwUnitWait discoveredTiles */
+            discoveredTiles?: (ISerializedMcwTile[] | null);
+
+            /** S_McwUnitWait actingUnits */
+            actingUnits?: (ISerializedMcwUnit[] | null);
+
+            /** S_McwUnitWait actingTiles */
+            actingTiles?: (ISerializedMcwTile[] | null);
+        }
+
+        /** Represents a S_McwUnitWait. */
+        export declare class S_McwUnitWait implements IS_McwUnitWait {
+
+            /**
+             * Constructs a new S_McwUnitWait.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: IS_McwUnitWait);
+
+            /** S_McwUnitWait errorCode. */
+            public errorCode: number;
+
+            /** S_McwUnitWait warId. */
+            public warId: number;
+
+            /** S_McwUnitWait actionId. */
+            public actionId: number;
+
+            /** S_McwUnitWait path. */
+            public path?: (IMovePath | null);
+
+            /** S_McwUnitWait launchUnitId. */
+            public launchUnitId: number;
+
+            /** S_McwUnitWait discoveredUnits. */
+            public discoveredUnits: ISerializedMcwUnit[];
+
+            /** S_McwUnitWait discoveredTiles. */
+            public discoveredTiles: ISerializedMcwTile[];
+
+            /** S_McwUnitWait actingUnits. */
+            public actingUnits: ISerializedMcwUnit[];
+
+            /** S_McwUnitWait actingTiles. */
+            public actingTiles: ISerializedMcwTile[];
+
+            /**
+             * Creates a new S_McwUnitWait instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S_McwUnitWait instance
+             */
+            public static create(properties?: IS_McwUnitWait): S_McwUnitWait;
+
+            /**
+             * Encodes the specified S_McwUnitWait message. Does not implicitly {@link S_McwUnitWait.verify|verify} messages.
+             * @param message S_McwUnitWait message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: IS_McwUnitWait, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S_McwUnitWait message, length delimited. Does not implicitly {@link S_McwUnitWait.verify|verify} messages.
+             * @param message S_McwUnitWait message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: IS_McwUnitWait, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S_McwUnitWait message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S_McwUnitWait
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader | Uint8Array), length?: number): S_McwUnitWait;
+
+            /**
+             * Decodes a S_McwUnitWait message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S_McwUnitWait
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader | Uint8Array)): S_McwUnitWait;
+
+            /**
+             * Verifies a S_McwUnitWait message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string | null);
+
+            /**
+             * Creates a S_McwUnitWait message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S_McwUnitWait
+             */
+            public static fromObject(object: { [k: string]: any }): S_McwUnitWait;
+
+            /**
+             * Creates a plain object from a S_McwUnitWait message. Also converts values to other types if specified.
+             * @param message S_McwUnitWait
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: S_McwUnitWait, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S_McwUnitWait to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };

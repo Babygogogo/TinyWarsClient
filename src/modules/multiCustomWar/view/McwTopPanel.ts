@@ -96,7 +96,7 @@ namespace TinyWars.MultiCustomWar {
             ConfirmPanel.show({
                 title   : Lang.getText(Lang.Type.B0036),
                 content : this._getHintForEndTurn(),
-                callback: () => McwProxy.reqMcwEndTurn(this._war.getWarId()),
+                callback: () => McwProxy.reqMcwEndTurn(this._war),
             });
         }
         private _onTouchedBtnMenu(e: egret.TouchEvent): void {

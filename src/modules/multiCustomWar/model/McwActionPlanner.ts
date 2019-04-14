@@ -92,88 +92,85 @@ namespace TinyWars.MultiCustomWar {
         private _onNotifyMcwCursorTapped(e: egret.Event): void {
             const gridIndex = (e.data as Notify.Data.McwCursorTapped).tappedOn;
             const nextState = this._getNextStateOnTap(gridIndex);
-            if (nextState === State.Idle) {
-                this.setStateIdle();
-
-            } else if (nextState === State.MakingMovePathForUnitOnMap) {
-                this._setStateMakingMovePathForUnitOnMapOnTap(gridIndex);
-
-            } else if (nextState === State.ChoosingActionForUnitOnMap) {
-                this._setStateChoosingActionForUnitOnMapOnTap(gridIndex);
-
-            } else if (nextState === State.MakingMovePathForUnitLoaded) {
-                this._setStateMakingMovePathForUnitLoadedOnTap(gridIndex);
-
-            } else if (nextState === State.ChoosingActionForUnitLoaded) {
-                this._setStateChoosingActionForUnitLoadedOnTap(gridIndex);
-
-            } else if (nextState === State.ChoosingAttackTarget) {
-                this._setStateChoosingAttackTargetOnTap(gridIndex);
-
-            } else if (nextState === State.ChoosingDropDestination) {
-                this._setStateChoosingDropDestinationOnTap(gridIndex);
-
-            } else if (nextState === State.ChoosingProductionTarget) {
-                this._setStateChoosingProductionTargetOnTap(gridIndex);
-
-            } else if (nextState === State.PreviewingAttackableArea) {
-                this._setStatePreviewingAttackableAreaOnTap(gridIndex);
-
-            } else if (nextState === State.PreviewingMovableArea) {
-                this._setStatePreviewingMovableAreaOnTap(gridIndex);
-
+            if ((checkIsStateRequesting(nextState)) && (nextState === this.getState())) {
+                // Do noting.
             } else {
-                Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() invalid nextState!`, nextState);
+                if (nextState === State.Idle) {
+                    this.setStateIdle();
+
+                } else if (nextState === State.MakingMovePathForUnitOnMap) {
+                    this._setStateMakingMovePathForUnitOnMapOnTap(gridIndex);
+
+                } else if (nextState === State.ChoosingActionForUnitOnMap) {
+                    this._setStateChoosingActionForUnitOnMapOnTap(gridIndex);
+
+                } else if (nextState === State.MakingMovePathForUnitLoaded) {
+                    this._setStateMakingMovePathForUnitLoadedOnTap(gridIndex);
+
+                } else if (nextState === State.ChoosingActionForUnitLoaded) {
+                    this._setStateChoosingActionForUnitLoadedOnTap(gridIndex);
+
+                } else if (nextState === State.ChoosingAttackTarget) {
+                    this._setStateChoosingAttackTargetOnTap(gridIndex);
+
+                } else if (nextState === State.ChoosingDropDestination) {
+                    this._setStateChoosingDropDestinationOnTap(gridIndex);
+
+                } else if (nextState === State.ChoosingProductionTarget) {
+                    this._setStateChoosingProductionTargetOnTap(gridIndex);
+
+                } else if (nextState === State.PreviewingAttackableArea) {
+                    this._setStatePreviewingAttackableAreaOnTap(gridIndex);
+
+                } else if (nextState === State.PreviewingMovableArea) {
+                    this._setStatePreviewingMovableAreaOnTap(gridIndex);
+
+                } else {
+                    Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() invalid nextState!`, nextState);
+                }
             }
         }
 
         private _onNotifyMcwCursorDragged(e: egret.Event): void {
             const gridIndex = (e.data as Notify.Data.McwCursorDragged).draggedTo;
             const nextState = this._getNextStateOnDrag(gridIndex);
-            if (nextState === State.Idle) {
-                this.setStateIdle();
-
-            } else if (nextState === State.MakingMovePathForUnitOnMap) {
-                this._setStateMakingMovePathForUnitOnMapOnDrag(gridIndex);
-
-            } else if (nextState === State.ChoosingActionForUnitOnMap) {
-                this._setStateChoosingActionForUnitOnMapOnDrag(gridIndex);
-
-            } else if (nextState === State.MakingMovePathForUnitLoaded) {
-                this._setStateMakingMovePathForUnitLoadedOnDrag(gridIndex);
-
-            } else if (nextState === State.ChoosingActionForUnitLoaded) {
-                this._setStateChoosingActionForUnitLoadedOnDrag(gridIndex);
-
-            } else if (nextState === State.ChoosingAttackTarget) {
-                this._setStateChoosingAttackTargetOnDrag(gridIndex);
-
-            } else if (nextState === State.ChoosingDropDestination) {
-                this._setStateChoosingDropDestinationOnDrag(gridIndex);
-
-            } else if (nextState === State.ChoosingProductionTarget) {
-                this._setStateChoosingProductionTargetOnDrag(gridIndex);
-
-            } else if (nextState === State.PreviewingAttackableArea) {
-                this._setStatePreviewingAttackableAreaOnDrag(gridIndex);
-
-            } else if (nextState === State.PreviewingMovableArea) {
-                this._setStatePreviewingMovableAreaOnDrag(gridIndex);
-
+            if ((checkIsStateRequesting(nextState)) && (nextState === this.getState())) {
+                // Do noting.
             } else {
-                Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() invalid nextState!`, nextState);
-            }
+                if (nextState === State.Idle) {
+                    this.setStateIdle();
 
-            // const currState = this.getState();
-            // if (currState === State.ChoosingProductionTarget) {
-            //     if (this._checkCanSetStateIdle()) {
-            //         this.setStateIdle();
-            //     }
-            // } else if (currState === State.MakingMovePathForUnitOnMap) {
-            //     this._updateMovePathAndView(gridIndex);
-            // } else {
-            //     // TODO
-            // }
+                } else if (nextState === State.MakingMovePathForUnitOnMap) {
+                    this._setStateMakingMovePathForUnitOnMapOnDrag(gridIndex);
+
+                } else if (nextState === State.ChoosingActionForUnitOnMap) {
+                    this._setStateChoosingActionForUnitOnMapOnDrag(gridIndex);
+
+                } else if (nextState === State.MakingMovePathForUnitLoaded) {
+                    this._setStateMakingMovePathForUnitLoadedOnDrag(gridIndex);
+
+                } else if (nextState === State.ChoosingActionForUnitLoaded) {
+                    this._setStateChoosingActionForUnitLoadedOnDrag(gridIndex);
+
+                } else if (nextState === State.ChoosingAttackTarget) {
+                    this._setStateChoosingAttackTargetOnDrag(gridIndex);
+
+                } else if (nextState === State.ChoosingDropDestination) {
+                    this._setStateChoosingDropDestinationOnDrag(gridIndex);
+
+                } else if (nextState === State.ChoosingProductionTarget) {
+                    this._setStateChoosingProductionTargetOnDrag(gridIndex);
+
+                } else if (nextState === State.PreviewingAttackableArea) {
+                    this._setStatePreviewingAttackableAreaOnDrag(gridIndex);
+
+                } else if (nextState === State.PreviewingMovableArea) {
+                    this._setStatePreviewingMovableAreaOnDrag(gridIndex);
+
+                } else {
+                    Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() invalid nextState!`, nextState);
+                }
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -505,7 +502,11 @@ namespace TinyWars.MultiCustomWar {
         }
 
         private _setStateRequestingUnitWait(): void {
-            FloatText.show("Unit wait TODO!!!");
+            const unit = this.getFocusUnitLoaded();
+            McwProxy.reqMcwUnitWait(this._war, this.getMovePath(), unit ? unit.getUnitId() : undefined);
+
+            this._setState(State.RequestingUnitWait);
+            this._updateView();
         }
 
         private _setStateRequestingUnitAttack(): void {
@@ -573,27 +574,7 @@ namespace TinyWars.MultiCustomWar {
         }
 
         private _checkIsWaitingForServerResponse(): boolean {
-            const state = this.getState();
-            return (state === State.RequestingPlayerActivateSkill)
-                || (state === State.RequestingPlayerBeginTurn)
-                || (state === State.RequestingPlayerDestroyUnit)
-                || (state === State.RequestingPlayerEndTurn)
-                || (state === State.RequestingPlayerSurrender)
-                || (state === State.RequestingPlayerVoteForDraw)
-                || (state === State.RequestingTileProduceUnit)
-                || (state === State.RequestingUnitAttack)
-                || (state === State.RequestingUnitBeLoaded)
-                || (state === State.RequestingUnitBuildTile)
-                || (state === State.RequestingUnitCapture)
-                || (state === State.RequestingUnitDive)
-                || (state === State.RequestingUnitDrop)
-                || (state === State.RequestingUnitJoin)
-                || (state === State.RequestingUnitLaunchFlare)
-                || (state === State.RequestingUnitLaunchSilo)
-                || (state === State.RequestingUnitProduceUnit)
-                || (state === State.RequestingUnitSupply)
-                || (state === State.RequestingUnitSurface)
-                || (state === State.RequestingUnitWait);
+            return checkIsStateRequesting(this.getState());
         }
 
         public getFocusUnit(): McwUnit | undefined {
@@ -931,16 +912,14 @@ namespace TinyWars.MultiCustomWar {
             }
         }
         private _getNextStateOnTapWhenChoosingActionForUnitOnMap(gridIndex: GridIndex): State {
-            // TODO
-            return State.Idle;
+            return State.MakingMovePathForUnitOnMap;
         }
         private _getNextStateOnTapWhenMakingMovePathForUnitLoaded(gridIndex: GridIndex): State {
             // TODO
             return State.Idle;
         }
         private _getNextStateOnTapWhenChoosingActionForUnitLoaded(gridIndex: GridIndex): State {
-            // TODO
-            return State.Idle;
+            return State.MakingMovePathForUnitLoaded;
         }
         private _getNextStateOnTapWhenChoosingAttackTarget(gridIndex: GridIndex): State {
             if (!this.checkHasAttackableGridAfterMove(gridIndex)) {
@@ -1172,8 +1151,6 @@ namespace TinyWars.MultiCustomWar {
             const chosenUnits   = this.getChosenUnitsForDrop();
             const actions       = new Array<DataForUnitActionRenderer>();
             if ((loadedUnits.length > chosenUnits.length) && (focusUnit.checkCanDropLoadedUnit(this._tileMap.getTile(destination).getType()))) {
-                const loaderBeginningGridIndex  = focusUnit.getGridIndex();
-                const unitMap                   = this._unitMap;
                 for (const unit of loadedUnits) {
                     if ((chosenUnits.every(value => value.unit !== unit)) && (this._getAvailableDropDestination(unit).length)) {
                         const dropUnitId = unit.getUnitId();
@@ -1282,12 +1259,11 @@ namespace TinyWars.MultiCustomWar {
             const loaderBeginningGridIndex  = this.getFocusUnit().getGridIndex();
             const loaderEndingGridIndex     = this.getMovePathDestination();
             const chosenUnits               = this.getChosenUnitsForDrop();
-            const mapSize                   = this._mapSize;
             const tileMap                   = this._tileMap;
             const unitMap                   = this._unitMap;
             const destinations              = new Array<GridIndex>();
             if (tileMap.getTile(loaderEndingGridIndex).getMoveCostByUnit(unitForDrop) != null) {
-                for (const gridIndex of GridIndexHelpers.getAdjacentGrids(loaderEndingGridIndex, mapSize)) {
+                for (const gridIndex of GridIndexHelpers.getAdjacentGrids(loaderEndingGridIndex, this._mapSize)) {
                     if ((tileMap.getTile(gridIndex).getMoveCostByUnit(unitForDrop) != null)                         &&
                         (chosenUnits.every(value => !GridIndexHelpers.checkIsEqual(value.destination, gridIndex)))  &&
                         ((!unitMap.getUnitOnMap(gridIndex)) || (gridIndex === loaderBeginningGridIndex))
@@ -1303,5 +1279,28 @@ namespace TinyWars.MultiCustomWar {
     function checkAreaHasGrid(area: AttackableArea | MovableArea, gridIndex: GridIndex): boolean {
         const { x, y } = gridIndex;
         return (!!area[x]) && (!!area[x][y]);
+    }
+
+    function checkIsStateRequesting(state: State): boolean {
+        return (state === State.RequestingPlayerActivateSkill)
+            || (state === State.RequestingPlayerBeginTurn)
+            || (state === State.RequestingPlayerDestroyUnit)
+            || (state === State.RequestingPlayerEndTurn)
+            || (state === State.RequestingPlayerSurrender)
+            || (state === State.RequestingPlayerVoteForDraw)
+            || (state === State.RequestingTileProduceUnit)
+            || (state === State.RequestingUnitAttack)
+            || (state === State.RequestingUnitBeLoaded)
+            || (state === State.RequestingUnitBuildTile)
+            || (state === State.RequestingUnitCapture)
+            || (state === State.RequestingUnitDive)
+            || (state === State.RequestingUnitDrop)
+            || (state === State.RequestingUnitJoin)
+            || (state === State.RequestingUnitLaunchFlare)
+            || (state === State.RequestingUnitLaunchSilo)
+            || (state === State.RequestingUnitProduceUnit)
+            || (state === State.RequestingUnitSupply)
+            || (state === State.RequestingUnitSurface)
+            || (state === State.RequestingUnitWait);
     }
 }

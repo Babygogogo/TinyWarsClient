@@ -34,5 +34,7 @@ namespace TinyWars.Network {
         S_McwBeginTurn = 152,
         C_McwEndTurn = 153,
         S_McwEndTurn = 154,
+        C_McwUnitWait = 155,
+        S_McwUntiWait = 156,
     }
 }
