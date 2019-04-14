@@ -10,7 +10,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
     const _HANDLERS = new Map<ActionCodes, (data: ActionContainer) => Promise<void>>([
         [ActionCodes.S_McwBeginTurn,    _handleMcwBeginTurn],
         [ActionCodes.S_McwEndTurn,      _handleMcwEndTurn],
-        [ActionCodes.S_McwUntiWait,     _handleMcwUnitWait],
+        [ActionCodes.S_McwUnitWait,     _handleMcwUnitWait],
     ]);
 
     let _war            : McwWar;
@@ -56,7 +56,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         _updateByActionContainer({ S_McwEndTurn: data }, data.warId, data.actionId);
     }
     export function updateOnUnitWait(data: ProtoTypes.IS_McwUnitWait): void {
-        _updateByActionContainer({ S_McwUntiWait: data }, data.warId, data.actionId);
+        _updateByActionContainer({ S_McwUnitWait: data }, data.warId, data.actionId);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -89,9 +89,10 @@ namespace TinyWars.MultiCustomWar.McwModel {
 
     function _checkAndRequestBeginTurn(): void {
         const turnManager = _war.getTurnManager();
-        if ((turnManager.getPhaseCode() === Types.TurnPhaseCode.WaitBeginTurn) &&
-            (_war.getPlayerIndexLoggedIn() ===  turnManager.getPlayerIndexInTurn())) {
-            McwProxy.reqMcwBeginTurn(_war);
+        if ((turnManager.getPhaseCode() === Types.TurnPhaseCode.WaitBeginTurn)      &&
+            (_war.getPlayerIndexLoggedIn() ===  turnManager.getPlayerIndexInTurn())
+        ) {
+            _war.getActionPlanner().setStateRequestingPlayerBeginTurn();
         }
     }
 
@@ -99,18 +100,28 @@ namespace TinyWars.MultiCustomWar.McwModel {
     // The 'true' handlers for war actions.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function _handleMcwBeginTurn(data: ActionContainer): Promise<void> {
+        const actionPlanner = _war.getActionPlanner();
+        actionPlanner.setStateExecutingAction();
         await _war.getTurnManager().endPhaseWaitBeginTurn(data.S_McwBeginTurn);
+        actionPlanner.setStateIdle();
     }
 
     async function _handleMcwEndTurn(data: ActionContainer): Promise<void> {
+        const actionPlanner = _war.getActionPlanner();
+        actionPlanner.setStateExecutingAction();
         await _war.getTurnManager().endPhaseMain();
 
         if (_war.getPlayerInTurn() === _war.getPlayerLoggedIn()) {
-            McwProxy.reqMcwBeginTurn(_war);
+            actionPlanner.setStateRequestingPlayerBeginTurn();
+        } else {
+            actionPlanner.setStateIdle();
         }
     }
 
     async function _handleMcwUnitWait(data: ActionContainer): Promise<void> {
+        const actionPlanner = _war.getActionPlanner();
+        actionPlanner.setStateExecutingAction();
         // TODO
+
     }
 }

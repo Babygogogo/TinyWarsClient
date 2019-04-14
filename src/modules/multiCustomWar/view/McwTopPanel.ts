@@ -49,6 +49,7 @@ namespace TinyWars.MultiCustomWar {
                 { type: Notify.Type.McwPlayerFundChanged,           callback: this._onNotifyMcwPlayerFundChanged },
                 { type: Notify.Type.McwPlayerIndexInTurnChanged,    callback: this._onNotifyMcwPlayerIndexInTurnChanged },
                 { type: Notify.Type.McwPlayerEnergyChanged,         callback: this._onNotifyMcwPlayerEnergyChanged },
+                { type: Notify.Type.McwActionPlannerStateChanged,   callback: this._onNotifyMcwActionPlannerStateChanged },
             ];
             this._uiListeners = [
                 { ui: this._btnUnitList,        callback: this._onTouchedBtnUnitList, },
@@ -84,6 +85,9 @@ namespace TinyWars.MultiCustomWar {
         private _onNotifyMcwPlayerEnergyChanged(e: egret.Event): void {
             this._updateLabelEnergy();
         }
+        private _onNotifyMcwActionPlannerStateChanged(e: egret.Event): void {
+            this._updateBtnEndTurn();
+        }
 
         private _onTouchedBtnUnitList(e: egret.TouchEvent): void {
             this._war.getField().getActionPlanner().setStateIdle();
@@ -96,7 +100,7 @@ namespace TinyWars.MultiCustomWar {
             ConfirmPanel.show({
                 title   : Lang.getText(Lang.Type.B0036),
                 content : this._getHintForEndTurn(),
-                callback: () => McwProxy.reqMcwEndTurn(this._war),
+                callback: () => this._war.getActionPlanner().setStateRequestingPlayerEndTurn(),
             });
         }
         private _onTouchedBtnMenu(e: egret.TouchEvent): void {
@@ -141,7 +145,8 @@ namespace TinyWars.MultiCustomWar {
             const war                   = this._war;
             const turnManager           = war.getTurnManager();
             this._btnEndTurn.visible    = (turnManager.getPlayerIndexInTurn() === war.getPlayerIndexLoggedIn())
-                && (turnManager.getPhaseCode() === Types.TurnPhaseCode.Main);
+                && (turnManager.getPhaseCode() === Types.TurnPhaseCode.Main)
+                && (war.getActionPlanner().getState() === Types.ActionPlannerState.Idle);
         }
 
         private _updateBtnFindUnit(): void {

@@ -92,7 +92,10 @@ namespace TinyWars.MultiCustomWar {
         private _onNotifyMcwCursorTapped(e: egret.Event): void {
             const gridIndex = (e.data as Notify.Data.McwCursorTapped).tappedOn;
             const nextState = this._getNextStateOnTap(gridIndex);
-            if ((checkIsStateRequesting(nextState)) && (nextState === this.getState())) {
+            const currState = this.getState();
+            if (((checkIsStateRequesting(nextState)) || (currState === State.ExecutingAction)) &&
+                (nextState === currState)
+            ) {
                 // Do noting.
             } else {
                 if (nextState === State.Idle) {
@@ -174,7 +177,7 @@ namespace TinyWars.MultiCustomWar {
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Functions for state.
+        // Functions for setting common state.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         public getState(): State {
             return this._state;
@@ -194,6 +197,18 @@ namespace TinyWars.MultiCustomWar {
             delete this._gridIndexForTileProduceUnit;
 
             this._setState(State.Idle);
+            this._updateView();
+        }
+
+        public setStateExecutingAction(): void {
+            this._clearFocusUnitOnMap();
+            this._clearFocusUnitLoaded();
+            this._clearChosenUnitsForDrop();
+            this._clearDataForPreviewingAttackableArea();
+            this._clearDataForPreviewingMovableArea();
+            delete this._gridIndexForTileProduceUnit;
+
+            this._setState(State.ExecutingAction);
             this._updateView();
         }
 
@@ -493,6 +508,9 @@ namespace TinyWars.MultiCustomWar {
             // Nothing to do.
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Functions for setting requesting state.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _setStateRequestingUnitBeLoaded(): void {
             FloatText.show("Unit load TODO!!!");
         }
@@ -547,6 +565,20 @@ namespace TinyWars.MultiCustomWar {
 
         private _setStateRequestingUnitSupply(): void {
             FloatText.show(`Unit supply TODO!!!`);
+        }
+
+        public setStateRequestingPlayerBeginTurn(): void {
+            McwProxy.reqMcwBeginTurn(this._war);
+
+            this._setState(State.RequestingPlayerBeginTurn);
+            this._updateView();
+        }
+
+        public setStateRequestingPlayerEndTurn(): void {
+            McwProxy.reqMcwEndTurn(this._war);
+
+            this._setState(State.RequestingPlayerEndTurn);
+            this._updateView();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -813,7 +845,7 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _getNextStateOnTap(gridIndex: GridIndex): State {
             const currState = this.getState();
-            if (this._checkIsWaitingForServerResponse()) {
+            if ((this._checkIsWaitingForServerResponse()) || (currState === State.ExecutingAction)) {
                 return currState;
             } else {
                 switch (currState) {

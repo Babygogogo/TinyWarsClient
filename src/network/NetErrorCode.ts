@@ -1,44 +1,44 @@
 
 namespace TinyWars.Network {
-    export const enum NetErrorCode {
-        NoError = 0,
+export const enum NetErrorCode {
+    NoError = 0,
 
-        IllegalRequest,
+    IllegalRequest,
 
-        Login_InvalidAccountOrPassword,
-        Login_AlreadyLoggedIn,
+    Login_InvalidAccountOrPassword,
+    Login_AlreadyLoggedIn,
 
-        Register_InvalidAccount,
-        Register_UsedAccount,
-        Register_AlreadyLoggedIn,
-        Register_InvalidPassword,
-        Register_InvalidNickname,
-        Register_UsedNickname,
+    Register_InvalidAccount,
+    Register_UsedAccount,
+    Register_AlreadyLoggedIn,
+    Register_InvalidPassword,
+    Register_InvalidNickname,
+    Register_UsedNickname,
 
-        CreateMultiCustomWar_TooManyJoinedWars,
-        CreateMultiCustomWar_InvalidParams,
+    CreateMultiCustomWar_TooManyJoinedWars,
+    CreateMultiCustomWar_InvalidParams,
 
-        ExitMultiCustomWar_WarInfoNotExist,
-        ExitMultiCustomWar_NotJoined,
+    ExitMultiCustomWar_WarInfoNotExist,
+    ExitMultiCustomWar_NotJoined,
 
-        JoinMultiCustomWar_TooManyJoinedWars,
-        JoinMultiCustomWar_InvalidParams,
-        JoinMultiCustomWar_WarInfoNotExist,
-        JoinMultiCustomWar_AlreadyJoined,
+    JoinMultiCustomWar_TooManyJoinedWars,
+    JoinMultiCustomWar_InvalidParams,
+    JoinMultiCustomWar_WarInfoNotExist,
+    JoinMultiCustomWar_AlreadyJoined,
 
-        GetMapDynamicInfo_NoSuchMap,
+    GetMapDynamicInfo_NoSuchMap,
 
-        McrContinueWar_NoSuchWar,
-        McrContinueWar_DefeatedOrNotJoined,
+    McrContinueWar_NoSuchWar,
+    McrContinueWar_DefeatedOrNotJoined,
 
-        McwBeginTurn_NoSuchWar,
-        McwBeginTurn_InvalidActionId,
-        McwBeginTurn_NotInTurn,
-        McwEndTurn_NoSuchWar,
-        McwEndTurn_InvalidActionId,
-        McwEndTurn_NotInTurn,
-        McwEndTurn_NotVotedForDraw,
+    McwBeginTurn_NoSuchWar,
+    McwBeginTurn_InvalidActionId,
+    McwBeginTurn_NotInTurn,
+    McwEndTurn_NoSuchWar,
+    McwEndTurn_InvalidActionId,
+    McwEndTurn_NotInTurn,
+    McwEndTurn_NotVotedForDraw,
 
-        ServerDisconnect_ServerMaintainance,
-    }
+    ServerDisconnect_ServerMaintainance,
+}
 }

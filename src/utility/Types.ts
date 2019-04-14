@@ -385,6 +385,7 @@ namespace TinyWars.Utility.Types {
 
     export const enum ActionPlannerState {
         Idle,
+        ExecutingAction,
         MakingMovePathForUnitOnMap,
         ChoosingActionForUnitOnMap,
         MakingMovePathForUnitLoaded,

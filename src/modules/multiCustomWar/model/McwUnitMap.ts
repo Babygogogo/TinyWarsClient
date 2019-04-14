@@ -168,7 +168,7 @@ namespace TinyWars.MultiCustomWar {
             this._nextUnitId = id;
         }
 
-        public getUnit(gridIndex: Types.GridIndex, unitId?: number): McwUnit | undefined {
+        public getUnit(gridIndex: Types.GridIndex, unitId: number | undefined | null): McwUnit | undefined {
             return unitId != null
                 ? this.getUnitLoadedById(unitId)
                 : this.getUnitOnMap(gridIndex);

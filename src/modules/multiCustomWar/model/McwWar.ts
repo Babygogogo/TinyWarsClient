@@ -230,6 +230,10 @@ namespace TinyWars.MultiCustomWar {
             return this.getField().getFogMap();
         }
 
+        public getActionPlanner(): McwActionPlanner {
+            return this.getField().getActionPlanner();
+        }
+
         private _setTurnManager(manager: McwTurnManager): void {
             this._turnManager = manager;
         }
