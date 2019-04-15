@@ -287,7 +287,9 @@ var egret;
                     audio.autoplay = !0;
                     audio.muted = true;
                 }
-                if (ua.indexOf("edge") >= 0) {
+                //edge and ie11
+                var ie = ua.indexOf("edge") >= 0 || ua.indexOf("trident") >= 0;
+                if (ie) {
                     document.body.appendChild(audio);
                 }
                 audio.load();
@@ -302,6 +304,9 @@ var egret;
                         audio.pause();
                         audio.muted = false;
                     }
+                    if (ie) {
+                        document.body.appendChild(audio);
+                    }
                     self.loaded = true;
                     self.dispatchEventWith(egret.Event.COMPLETE);
                 }
@@ -312,7 +317,7 @@ var egret;
                 function removeListeners() {
                     audio.removeEventListener("canplaythrough", onAudioLoaded);
                     audio.removeEventListener("error", onAudioError);
-                    if (ua.indexOf("edge") >= 0) {
+                    if (ie) {
                         document.body.removeChild(audio);
                     }
                 }
@@ -643,7 +648,7 @@ var egret;
                     WebAudioDecode.isDecoding = false;
                     WebAudioDecode.decodeAudios();
                 }, function () {
-                    alert("sound decode error: " + decodeInfo["url"] + "！\nsee http://edn.egret.com/cn/docs/page/156");
+                    egret.log('sound decode error');
                     if (decodeInfo["fail"]) {
                         decodeInfo["fail"]();
                     }
@@ -705,14 +710,20 @@ var egret;
                 request.open("GET", url, true);
                 request.responseType = "arraybuffer";
                 request.addEventListener("load", function () {
-                    WebAudioDecode.decodeArr.push({
-                        "buffer": request.response,
-                        "success": onAudioLoaded,
-                        "fail": onAudioError,
-                        "self": self,
-                        "url": self.url
-                    });
-                    WebAudioDecode.decodeAudios();
+                    var ioError = (request.status >= 400);
+                    if (ioError) {
+                        self.dispatchEventWith(egret.IOErrorEvent.IO_ERROR);
+                    }
+                    else {
+                        WebAudioDecode.decodeArr.push({
+                            "buffer": request.response,
+                            "success": onAudioLoaded,
+                            "fail": onAudioError,
+                            "self": self,
+                            "url": self.url
+                        });
+                        WebAudioDecode.decodeAudios();
+                    }
                 });
                 request.addEventListener("error", function () {
                     self.dispatchEventWith(egret.IOErrorEvent.IO_ERROR);
@@ -1569,6 +1580,10 @@ var egret;
             function WebHttpRequest() {
                 var _this = _super.call(this) || this;
                 /**
+                 *
+                 */
+                _this.timeout = 0;
+                /**
                  * @private
                  */
                 _this._url = "";
@@ -1672,6 +1687,7 @@ var egret;
                     xhr.onreadystatechange = this.onReadyStateChange.bind(this);
                 }
                 xhr.onprogress = this.updateProgress.bind(this);
+                xhr.ontimeout = this.onTimeout.bind(this);
                 xhr.open(this._method, this._url, true);
                 this._xhr = xhr;
             };
@@ -1692,6 +1708,7 @@ var egret;
                         this._xhr.setRequestHeader(key, this.headerObj[key]);
                     }
                 }
+                this._xhr.timeout = this.timeout;
                 this._xhr.send(data);
             };
             /**
@@ -1741,6 +1758,15 @@ var egret;
             /**
              * @private
              */
+            WebHttpRequest.prototype.onTimeout = function () {
+                if (true) {
+                    egret.$warn(1052, this._url);
+                }
+                this.dispatchEventWith(egret.IOErrorEvent.IO_ERROR);
+            };
+            /**
+             * @private
+             */
             WebHttpRequest.prototype.onReadyStateChange = function () {
                 var xhr = this._xhr;
                 if (xhr.readyState == 4) {
@@ -1773,8 +1799,19 @@ var egret;
              */
             WebHttpRequest.prototype.onload = function () {
                 var self = this;
+                var xhr = this._xhr;
+                var url = this._url;
+                var ioError = (xhr.status >= 400);
                 window.setTimeout(function () {
-                    self.dispatchEventWith(egret.Event.COMPLETE);
+                    if (ioError) {
+                        if (true && !self.hasEventListener(egret.IOErrorEvent.IO_ERROR)) {
+                            egret.$error(1011, url);
+                        }
+                        self.dispatchEventWith(egret.IOErrorEvent.IO_ERROR);
+                    }
+                    else {
+                        self.dispatchEventWith(egret.Event.COMPLETE);
+                    }
                 }, 0);
             };
             /**
