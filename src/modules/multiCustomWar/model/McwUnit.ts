@@ -155,6 +155,16 @@ namespace TinyWars.MultiCustomWar {
         public getView(): McwUnitView {
             return this._view;
         }
+        public updateView(): void {
+            this.getView().resetAllViews();
+        }
+        public setViewVisible(visible: boolean): void {
+            this.getView().visible = visible;
+        }
+
+        public moveViewAlongPath(pathNodes: GridIndex[], isDiving: boolean, callback: () => void): void {
+            this.getView().moveAlongPath(pathNodes, isDiving, callback);
+        }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for unit id.
@@ -523,6 +533,10 @@ namespace TinyWars.MultiCustomWar {
 
         public getGridIndex(): GridIndex {
             return { x: this.getGridX(), y: this.getGridY() };
+        }
+        public setGridIndex(gridIndex: GridIndex): void {
+            this.setGridX(gridIndex.x);
+            this.setGridY(gridIndex.y);
         }
 
         ////////////////////////////////////////////////////////////////////////////////

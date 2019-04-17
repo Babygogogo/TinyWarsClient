@@ -6,10 +6,11 @@ namespace TinyWars.MultiCustomWar {
     import WarMapModel  = WarMap.WarMapModel;
 
     export class McwCursor {
-        private _gridX      = 0;
-        private _gridY      = 0;
-        private _mapSize    : Types.MapSize;
-        private _view       : McwCursorView;
+        private _gridX              = 0;
+        private _gridY              = 0;
+        private _mapSize            : Types.MapSize;
+        private _isMovableByTouches = true;
+        private _view               : McwCursorView;
 
         private _war    : McwWar;
 
@@ -50,14 +51,18 @@ namespace TinyWars.MultiCustomWar {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onNotifyMcwCursorTapped(e: egret.Event): void {
-            const data = e.data as Notify.Data.McwCursorTapped;
-            this.setGridIndex(data.tappedOn);
-            this.updateView();
+            if (this.getIsMovableByTouches()) {
+                const data = e.data as Notify.Data.McwCursorTapped;
+                this.setGridIndex(data.tappedOn);
+                this.updateView();
+            }
         }
         private _onNotifyMcwCursorDragged(e: egret.Event): void {
-            const data = e.data as Notify.Data.McwCursorDragged;
-            this.setGridIndex(data.draggedTo);
-            this.updateView();
+            if (this.getIsMovableByTouches()) {
+                const data = e.data as Notify.Data.McwCursorDragged;
+                this.setGridIndex(data.draggedTo);
+                this.updateView();
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -72,6 +77,16 @@ namespace TinyWars.MultiCustomWar {
         }
         public updateView(): void {
             this.getView().updateView();
+        }
+
+        public setVisibleForConForNormal(visible: boolean): void {
+            this.getView().setVisibleForConForNormal(visible);
+        }
+        public setVisibleForConForTarget(visible: boolean): void {
+            this.getView().setVisibleForConForTarget(visible);
+        }
+        public setVisibleForConForSiloArea(visible: boolean): void {
+            this.getView().setVisibleForConForSiloArea(visible);
         }
 
         private _setMapSize(size: Types.MapSize): void {
@@ -94,6 +109,13 @@ namespace TinyWars.MultiCustomWar {
         }
         public getGridIndex(): Types.GridIndex {
             return { x: this.getGridX(), y: this.getGridY() };
+        }
+
+        public setIsMovableByTouches(isMovable: boolean): void {
+            this._isMovableByTouches = isMovable;
+        }
+        public getIsMovableByTouches(): boolean {
+            return this._isMovableByTouches;
         }
     }
 }

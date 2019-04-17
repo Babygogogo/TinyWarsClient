@@ -36,4 +36,6 @@ C_McwEndTurn = 153,
 S_McwEndTurn = 154,
 C_McwUnitWait = 155,
 S_McwUnitWait = 156,
+C_McwUnitBeLoaded = 157,
+S_McwUnitBeLoaded = 158,
 }}

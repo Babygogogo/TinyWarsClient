@@ -85,23 +85,26 @@ namespace TinyWars.MultiCustomWar {
             if (state === ActionPlannerState.Idle) {
                 this._setAllUnitsOnMapVisible(true);
 
+            } else if (state === ActionPlannerState.ExecutingAction) {
+                this._setAllUnitsOnMapVisible(true);
+
             } else if (state === ActionPlannerState.MakingMovePathForUnitOnMap) {
                 this._setAllUnitsOnMapVisible(true);
-                actionPlanner.getFocusUnitOnMap().getView().visible = false;
+                actionPlanner.getFocusUnitOnMap().setViewVisible(false);
 
             } else if (state === ActionPlannerState.ChoosingActionForUnitOnMap) {
                 this._setAllUnitsOnMapVisible(true);
-                actionPlanner.getFocusUnitOnMap().getView().visible = false;
+                actionPlanner.getFocusUnitOnMap().setViewVisible(false);
 
             } else if (state === ActionPlannerState.MakingMovePathForUnitLoaded) {
                 this._setAllUnitsOnMapVisible(true);
-                actionPlanner.getFocusUnitOnMap().getView().visible     = false;
-                actionPlanner.getFocusUnitLoaded().getView().visible    = false;
+                actionPlanner.getFocusUnitOnMap().setViewVisible(false);
+                actionPlanner.getFocusUnitLoaded().setViewVisible(false);
 
             } else if (state === ActionPlannerState.ChoosingActionForUnitLoaded) {
                 this._setAllUnitsOnMapVisible(true);
-                actionPlanner.getFocusUnitOnMap().getView().visible     = false;
-                actionPlanner.getFocusUnitLoaded().getView().visible    = false;
+                actionPlanner.getFocusUnitOnMap().setViewVisible(false);
+                actionPlanner.getFocusUnitLoaded().setViewVisible(false);
 
             } else if (state === ActionPlannerState.ChoosingDropDestination) {
                 // TODO
@@ -112,12 +115,12 @@ namespace TinyWars.MultiCustomWar {
             } else if (state === ActionPlannerState.PreviewingAttackableArea) {
                 this._setAllUnitsOnMapVisible(true);
                 for (const [, unit] of actionPlanner.getUnitsForPreviewingAttackableArea()) {
-                    unit.getView().visible = false;
+                    unit.setViewVisible(false);
                 }
 
             } else if (state === ActionPlannerState.PreviewingMovableArea) {
                 this._setAllUnitsOnMapVisible(true);
-                actionPlanner.getUnitForPreviewingMovableArea().getView().visible = false;
+                actionPlanner.getUnitForPreviewingMovableArea().setViewVisible(false);
 
             } else {
                 // Nothing to do.
@@ -167,7 +170,7 @@ namespace TinyWars.MultiCustomWar {
         }
 
         private _setAllUnitsOnMapVisible(visible: boolean): void {
-            this._unitMap.forEachUnitOnMap(unit => unit.getView().visible = visible);
+            this._unitMap.forEachUnitOnMap(unit => unit.setViewVisible(visible));
         }
     }
 }

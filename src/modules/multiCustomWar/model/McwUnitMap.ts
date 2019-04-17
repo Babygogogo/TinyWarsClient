@@ -194,7 +194,7 @@ namespace TinyWars.MultiCustomWar {
         public swapUnit(gridIndex1: Types.GridIndex, gridIndex2: Types.GridIndex): void {
             if (!GridIndexHelpers.checkIsEqual(gridIndex1, gridIndex2)) {
                 const {x: x1, y: y1}    = gridIndex1;
-                const {x: x2, y: y2}    = gridIndex1;
+                const {x: x2, y: y2}    = gridIndex2;
                 const map               = this._map;
                 [map[x1][y1], map[x2][y2]] = [map[x2][y2], map[x1][y1]];
             }

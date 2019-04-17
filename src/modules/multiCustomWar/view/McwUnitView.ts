@@ -3,10 +3,15 @@ namespace TinyWars.MultiCustomWar {
     import TimeModel            = Time.TimeModel;
     import Types                = Utility.Types;
     import Helpers              = Utility.Helpers;
+    import VisibilityHelpers    = Utility.VisibilityHelpers;
     import UnitAnimationType    = Types.UnitAnimationType;
     import GridIndex            = Types.GridIndex;
 
-    const _GRID_SIZE = ConfigManager.getGridSize();
+    const { width: _GRID_WIDTH, height: _GRID_HEIGHT }  = ConfigManager.getGridSize();
+    const _IMG_UNIT_STAND_ANCHOR_OFFSET_X               = _GRID_WIDTH / 2;
+    const _IMG_UNIT_STAND_POS_X                         = _GRID_WIDTH / 2;
+    const _IMG_UNIT_MOVING_ANCHOR_OFFSET_X              = _GRID_WIDTH / 4 * 3;
+    const _IMG_UNIT_MOVING_POS_X                        = _GRID_WIDTH / 2;
 
     export class McwUnitView extends egret.DisplayObjectContainer {
         private _imgHp      = new GameUi.UiImage();
@@ -24,12 +29,13 @@ namespace TinyWars.MultiCustomWar {
             this._imgUnit.addEventListener( eui.UIEvent.RESIZE, () => this._imgUnit.anchorOffsetY  = this._imgUnit.height,  this);
             this._imgState.addEventListener(eui.UIEvent.RESIZE, () => this._imgState.anchorOffsetY = this._imgState.height, this);
             this._imgHp.addEventListener(   eui.UIEvent.RESIZE, () => this._imgHp.anchorOffsetY    = this._imgHp.height,    this);
-            this._imgUnit.x     = 0;
-            this._imgUnit.y     = _GRID_SIZE.height;
-            this._imgState.x    = 3;
-            this._imgState.y    = _GRID_SIZE.height;
-            this._imgHp.x       = _GRID_SIZE.width - 24;
-            this._imgHp.y       = _GRID_SIZE.height;
+            this._imgUnit.x             = _IMG_UNIT_STAND_POS_X;
+            this._imgUnit.y             = _GRID_HEIGHT;
+            this._imgUnit.anchorOffsetX = _IMG_UNIT_STAND_ANCHOR_OFFSET_X;
+            this._imgState.x            = 3;
+            this._imgState.y            = _GRID_HEIGHT;
+            this._imgHp.x               = _GRID_WIDTH - 24;
+            this._imgHp.y               = _GRID_HEIGHT;
             this.addChild(this._imgUnit);
             this.addChild(this._imgState);
             this.addChild(this._imgHp);
@@ -64,11 +70,13 @@ namespace TinyWars.MultiCustomWar {
         }
         public tickUnitAnimationFrame(): void {
             if (this._animationType === UnitAnimationType.Stand) {
-                this._imgUnit.x         = 0;
-                this._imgUnit.source    = ConfigManager.getUnitIdleImageSource(this._unit.getViewId(), Math.floor(TimeModel.getUnitAnimationTickCount() / 2), this._isDark);
+                this._imgUnit.x             = _IMG_UNIT_STAND_POS_X;
+                this._imgUnit.anchorOffsetX = _IMG_UNIT_STAND_ANCHOR_OFFSET_X;
+                this._imgUnit.source        = ConfigManager.getUnitIdleImageSource(this._unit.getViewId(), Math.floor(TimeModel.getUnitAnimationTickCount() / 2), this._isDark);
             } else {
-                this._imgUnit.x         = -_GRID_SIZE.width / 4;
-                this._imgUnit.source    = ConfigManager.getUnitMovingImageSource(this._unit.getViewId(), TimeModel.getUnitAnimationTickCount(), this._isDark);
+                this._imgUnit.x             = _IMG_UNIT_MOVING_POS_X;
+                this._imgUnit.anchorOffsetX = _IMG_UNIT_MOVING_ANCHOR_OFFSET_X;
+                this._imgUnit.source        = ConfigManager.getUnitMovingImageSource(this._unit.getViewId(), TimeModel.getUnitAnimationTickCount(), this._isDark);
             }
         }
 
@@ -107,6 +115,94 @@ namespace TinyWars.MultiCustomWar {
         public moveAlongPath(path: GridIndex[], isDiving: boolean, callback: Function, aiming?: GridIndex): void {
             this.showUnitAnimation(UnitAnimationType.Move);
 
+            const startingPoint = getPosition(path[0]);
+            this.x              = startingPoint.x;
+            this.y              = startingPoint.y;
+
+            const unit                  = this._unit;
+            const war                   = unit.getWar();
+            const playerIndex           = unit.getPlayerIndex();
+            const playerIndexMod        = playerIndex % 2;
+            const playerIndexLoggedIn   = war.getPlayerIndexLoggedIn();
+            const unitType              = unit.getType();
+            const isAlwaysVisible       = unit.getTeamIndex() === war.getPlayerLoggedIn().getTeamIndex();
+            const tween                 = egret.Tween.get(this);
+
+            (isAlwaysVisible) && (this.visible = true);
+            for (let i = 1; i < path.length; ++i) {
+                const gridIndex = path[i];
+                const currentX  = gridIndex.x;
+                const previousX = path[i - 1].x;
+                if (currentX < previousX) {
+                    tween.call(() => this._setImgUnitFlippedX(playerIndexMod === 1));
+                } else if (currentX > previousX) {
+                    tween.call(() => this._setImgUnitFlippedX(playerIndexMod === 0));
+                }
+
+                if (!isAlwaysVisible) {
+                    if (isDiving) {
+                        if ((i === path.length - 1)                             &&
+                            (VisibilityHelpers.checkIsUnitOnMapVisibleToPlayer({
+                                war,
+                                gridIndex,
+                                unitType,
+                                isDiving,
+                                unitPlayerIndex     : playerIndex,
+                                observerPlayerIndex : playerIndexLoggedIn,
+                            }))
+                        ){
+                            tween.call(() => this.visible = true);
+                        } else {
+                            tween.call(() => this.visible = false);
+                        }
+                    } else {
+                        if ((VisibilityHelpers.checkIsUnitOnMapVisibleToPlayer({
+                                war,
+                                gridIndex           : path[i - 1],
+                                unitType,
+                                isDiving,
+                                unitPlayerIndex     : playerIndex,
+                                observerPlayerIndex : playerIndexLoggedIn,
+                            }))                                                     ||
+                            (VisibilityHelpers.checkIsUnitOnMapVisibleToPlayer({
+                                war,
+                                gridIndex,
+                                unitType,
+                                isDiving,
+                                unitPlayerIndex     : playerIndex,
+                                observerPlayerIndex : playerIndexLoggedIn,
+                            }))
+                        ) {
+                            tween.call(() => this.visible = true);
+                        } else {
+                            tween.call(() => this.visible = false);
+                        }
+                    }
+                }
+
+                tween.to(getPosition(gridIndex), 200);
+            }
+
+            if (!aiming) {
+                tween.call(() => {
+                    this._setImgUnitFlippedX(false);
+                    (callback) && (callback());
+                });
+            } else {
+                const cursor = war.getField().getCursor();
+                tween.call(() => {
+                    cursor.setIsMovableByTouches(false);
+                    cursor.setGridIndex(aiming);
+                    cursor.setVisibleForConForTarget(true);
+                })
+                .wait(500)
+                .call(() => {
+                    cursor.setIsMovableByTouches(true);
+                    cursor.updateView();
+                    this._setImgUnitFlippedX(false);
+                    (callback) && (callback());
+                });
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -168,9 +264,20 @@ namespace TinyWars.MultiCustomWar {
                 this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s02_f04`);
             }
         }
+
+        private _setImgUnitFlippedX(isFlipped: boolean): void {
+            this._imgUnit.scaleX = isFlipped ? -1 : 1;
+        }
     }
 
     function getImageSourcePrefix(isDark: boolean): string {
         return isDark ? `c07` : `c03`;
+    }
+
+    function getPosition(gridIndex: GridIndex): Types.Point {
+        return {
+            x: _GRID_WIDTH * gridIndex.x,
+            y: _GRID_HEIGHT * gridIndex.y
+        };
     }
 }

@@ -3666,6 +3666,12 @@ export declare interface IActionContainer {
 
     /** ActionContainer S_McwUnitWait */
     S_McwUnitWait?: (IS_McwUnitWait|null);
+
+    /** ActionContainer C_McwUnitBeLoaded */
+    C_McwUnitBeLoaded?: (IC_McwUnitBeLoaded|null);
+
+    /** ActionContainer S_McwUnitBeLoaded */
+    S_McwUnitBeLoaded?: (IS_McwUnitBeLoaded|null);
 }
 
 /** Represents an ActionContainer. */
@@ -3781,6 +3787,12 @@ export declare class ActionContainer implements IActionContainer {
 
     /** ActionContainer S_McwUnitWait. */
     public S_McwUnitWait?: (IS_McwUnitWait|null);
+
+    /** ActionContainer C_McwUnitBeLoaded. */
+    public C_McwUnitBeLoaded?: (IC_McwUnitBeLoaded|null);
+
+    /** ActionContainer S_McwUnitBeLoaded. */
+    public S_McwUnitBeLoaded?: (IS_McwUnitBeLoaded|null);
 
     /**
      * Creates a new ActionContainer instance using the specified properties.
@@ -7388,6 +7400,252 @@ export declare class S_McwUnitWait implements IS_McwUnitWait {
 
     /**
      * Converts this S_McwUnitWait to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_McwUnitBeLoaded. */
+export declare interface IC_McwUnitBeLoaded {
+
+    /** C_McwUnitBeLoaded warId */
+    warId?: (number|null);
+
+    /** C_McwUnitBeLoaded actionId */
+    actionId?: (number|null);
+
+    /** C_McwUnitBeLoaded path */
+    path?: (IGridIndex[]|null);
+
+    /** C_McwUnitBeLoaded launchUnitId */
+    launchUnitId?: (number|null);
+}
+
+/** Represents a C_McwUnitBeLoaded. */
+export declare class C_McwUnitBeLoaded implements IC_McwUnitBeLoaded {
+
+    /**
+     * Constructs a new C_McwUnitBeLoaded.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_McwUnitBeLoaded);
+
+    /** C_McwUnitBeLoaded warId. */
+    public warId: number;
+
+    /** C_McwUnitBeLoaded actionId. */
+    public actionId: number;
+
+    /** C_McwUnitBeLoaded path. */
+    public path: IGridIndex[];
+
+    /** C_McwUnitBeLoaded launchUnitId. */
+    public launchUnitId: number;
+
+    /**
+     * Creates a new C_McwUnitBeLoaded instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_McwUnitBeLoaded instance
+     */
+    public static create(properties?: IC_McwUnitBeLoaded): C_McwUnitBeLoaded;
+
+    /**
+     * Encodes the specified C_McwUnitBeLoaded message. Does not implicitly {@link C_McwUnitBeLoaded.verify|verify} messages.
+     * @param message C_McwUnitBeLoaded message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_McwUnitBeLoaded, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_McwUnitBeLoaded message, length delimited. Does not implicitly {@link C_McwUnitBeLoaded.verify|verify} messages.
+     * @param message C_McwUnitBeLoaded message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_McwUnitBeLoaded, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_McwUnitBeLoaded message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_McwUnitBeLoaded
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_McwUnitBeLoaded;
+
+    /**
+     * Decodes a C_McwUnitBeLoaded message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_McwUnitBeLoaded
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_McwUnitBeLoaded;
+
+    /**
+     * Verifies a C_McwUnitBeLoaded message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_McwUnitBeLoaded message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_McwUnitBeLoaded
+     */
+    public static fromObject(object: { [k: string]: any }): C_McwUnitBeLoaded;
+
+    /**
+     * Creates a plain object from a C_McwUnitBeLoaded message. Also converts values to other types if specified.
+     * @param message C_McwUnitBeLoaded
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_McwUnitBeLoaded, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_McwUnitBeLoaded to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_McwUnitBeLoaded. */
+export declare interface IS_McwUnitBeLoaded {
+
+    /** S_McwUnitBeLoaded errorCode */
+    errorCode?: (number|null);
+
+    /** S_McwUnitBeLoaded warId */
+    warId?: (number|null);
+
+    /** S_McwUnitBeLoaded actionId */
+    actionId?: (number|null);
+
+    /** S_McwUnitBeLoaded path */
+    path?: (IMovePath|null);
+
+    /** S_McwUnitBeLoaded launchUnitId */
+    launchUnitId?: (number|null);
+
+    /** S_McwUnitBeLoaded discoveredUnits */
+    discoveredUnits?: (ISerializedMcwUnit[]|null);
+
+    /** S_McwUnitBeLoaded discoveredTiles */
+    discoveredTiles?: (ISerializedMcwTile[]|null);
+
+    /** S_McwUnitBeLoaded actingUnits */
+    actingUnits?: (ISerializedMcwUnit[]|null);
+
+    /** S_McwUnitBeLoaded actingTiles */
+    actingTiles?: (ISerializedMcwTile[]|null);
+}
+
+/** Represents a S_McwUnitBeLoaded. */
+export declare class S_McwUnitBeLoaded implements IS_McwUnitBeLoaded {
+
+    /**
+     * Constructs a new S_McwUnitBeLoaded.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_McwUnitBeLoaded);
+
+    /** S_McwUnitBeLoaded errorCode. */
+    public errorCode: number;
+
+    /** S_McwUnitBeLoaded warId. */
+    public warId: number;
+
+    /** S_McwUnitBeLoaded actionId. */
+    public actionId: number;
+
+    /** S_McwUnitBeLoaded path. */
+    public path?: (IMovePath|null);
+
+    /** S_McwUnitBeLoaded launchUnitId. */
+    public launchUnitId: number;
+
+    /** S_McwUnitBeLoaded discoveredUnits. */
+    public discoveredUnits: ISerializedMcwUnit[];
+
+    /** S_McwUnitBeLoaded discoveredTiles. */
+    public discoveredTiles: ISerializedMcwTile[];
+
+    /** S_McwUnitBeLoaded actingUnits. */
+    public actingUnits: ISerializedMcwUnit[];
+
+    /** S_McwUnitBeLoaded actingTiles. */
+    public actingTiles: ISerializedMcwTile[];
+
+    /**
+     * Creates a new S_McwUnitBeLoaded instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_McwUnitBeLoaded instance
+     */
+    public static create(properties?: IS_McwUnitBeLoaded): S_McwUnitBeLoaded;
+
+    /**
+     * Encodes the specified S_McwUnitBeLoaded message. Does not implicitly {@link S_McwUnitBeLoaded.verify|verify} messages.
+     * @param message S_McwUnitBeLoaded message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_McwUnitBeLoaded, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_McwUnitBeLoaded message, length delimited. Does not implicitly {@link S_McwUnitBeLoaded.verify|verify} messages.
+     * @param message S_McwUnitBeLoaded message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_McwUnitBeLoaded, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_McwUnitBeLoaded message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_McwUnitBeLoaded
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_McwUnitBeLoaded;
+
+    /**
+     * Decodes a S_McwUnitBeLoaded message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_McwUnitBeLoaded
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_McwUnitBeLoaded;
+
+    /**
+     * Verifies a S_McwUnitBeLoaded message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_McwUnitBeLoaded message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_McwUnitBeLoaded
+     */
+    public static fromObject(object: { [k: string]: any }): S_McwUnitBeLoaded;
+
+    /**
+     * Creates a plain object from a S_McwUnitBeLoaded message. Also converts values to other types if specified.
+     * @param message S_McwUnitBeLoaded
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_McwUnitBeLoaded, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_McwUnitBeLoaded to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };

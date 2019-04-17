@@ -12,6 +12,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         NetManager.addListeners([
             { actionCode: NetMessageCodes.S_McwBeginTurn,   callback: _onSMcwBeginTurn, },
             { actionCode: NetMessageCodes.S_McwEndTurn,     callback: _onSMcwEndTurn, },
+            { actionCode: NetMessageCodes.S_McwUnitWait,    callback: _onSMcwUnitWait, },
         ], McwProxy);
     }
 

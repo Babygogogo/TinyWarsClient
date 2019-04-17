@@ -12,7 +12,6 @@ namespace TinyWars.MultiCustomWar {
         private _warComment             : string;
         private _configVersion          : number;
         private _mapIndexKey            : MapIndexKey;
-        private _executedActions        : Action[];
         private _nextActionId           : number;
         private _remainingVotesForDraw  : number;
         private _timeLimit              : number;
@@ -44,7 +43,6 @@ namespace TinyWars.MultiCustomWar {
             this._warPassword           = data.warPassword;
             this._warComment            = data.warComment;
             this._configVersion         = data.configVersion;
-            this._executedActions       = data.executedActions;
             this.setNextActionId(data.nextActionId);
             this._remainingVotesForDraw = data.remainingVotesForDraw;
             this._timeLimit             = data.timeLimit;
@@ -164,12 +162,6 @@ namespace TinyWars.MultiCustomWar {
             return this._mapIndexKey;
         }
 
-        public getExecutedAction(actionId: number): Action {
-            return this._executedActions[actionId];
-        }
-        public addExecutedAction(action: Action): void {
-            this._executedActions.push(action);
-        }
         public getNextActionId(): number {
             return this._nextActionId;
         }

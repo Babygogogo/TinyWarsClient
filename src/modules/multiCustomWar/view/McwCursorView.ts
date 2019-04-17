@@ -130,6 +130,16 @@ namespace TinyWars.MultiCustomWar {
             this._updateConForDamage();
         }
 
+        public setVisibleForConForNormal(visible: boolean): void {
+            this._conForNormal.visible = visible;
+        }
+        public setVisibleForConForTarget(visible: boolean): void {
+            this._conForTarget.visible = visible;
+        }
+        public setVisibleForConForSiloArea(visible: boolean): void {
+            this._conForSiloArea.visible = visible;
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////

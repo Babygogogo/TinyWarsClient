@@ -215,6 +215,9 @@ namespace TinyWars.MultiCustomWar {
             if (state === State.Idle) {
                 con.visible = false;
 
+            } else if (state === State.ExecutingAction) {
+                con.visible = false;
+
             } else if (state === State.MakingMovePathForUnitOnMap) {
                 con.visible = true;
 
@@ -293,6 +296,9 @@ namespace TinyWars.MultiCustomWar {
             if (state === State.Idle) {
                 con.visible = false;
 
+            } else if (state === State.ExecutingAction) {
+                con.visible = false;
+
             } else if (state === State.MakingMovePathForUnitOnMap) {
                 con.visible = true;
 
@@ -367,6 +373,10 @@ namespace TinyWars.MultiCustomWar {
                 con.removeChildren();
                 con.visible = false;
 
+            } else if (state === State.ExecutingAction) {
+                con.removeChildren();
+                con.visible = false;
+
             } else if (state === State.MakingMovePathForUnitOnMap) {
                 con.removeChildren();
                 con.visible = true;
@@ -430,6 +440,11 @@ namespace TinyWars.MultiCustomWar {
                 con.removeChildren();
                 views.clear();
                 con.visible = false;
+
+            } else if (state === State.ExecutingAction) {
+                con.removeChildren();
+                con.visible = false;
+                views.clear();
 
             } else if (state === State.MakingMovePathForUnitOnMap) {
                 con.removeChildren();
