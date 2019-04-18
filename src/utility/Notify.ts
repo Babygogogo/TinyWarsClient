@@ -22,18 +22,34 @@ namespace TinyWars.Utility.Notify {
         ConfigLoaded,
         TileModelUpdated,
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         McwTurnIndexChanged,
         McwTurnPhaseCodeChanged,
         McwPlayerIndexInTurnChanged,
+
         McwPlayerFundChanged,
         McwPlayerEnergyChanged,
+
         McwCursorTapped,
         McwCursorDragged,
         McwCursorGridIndexChanged,
+
         McwFieldZoomed,
         McwFieldDragged,
+
         McwActionPlannerStateChanged,
 
+        McwUnitBeDestroyed,
+        McwUnitBeAttacked,
+        McwUnitBeSupplied,
+        McwUnitBeRepaired,
+
+        McwTileBeDestroyed,
+        McwTileBeAttacked,
+
+        McwSiloExploded,
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         SNewestConfigVersion,
         SLogin,
         SRegister,
@@ -43,6 +59,7 @@ namespace TinyWars.Utility.Notify {
         SGetMapDynamicInfo,
         SGetMapDynamicInfoFailed,
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         SMcrCreateWar,
         SMcrGetJoinedWaitingInfos,
         SMcrGetUnjoinedWaitingInfos,
@@ -52,6 +69,7 @@ namespace TinyWars.Utility.Notify {
         SMcrContinueWarFailed,
         SMcrContinueWar,
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         SMcwBeginTurn,
         SMcwEndTurn,
         SMcwUnitWait,

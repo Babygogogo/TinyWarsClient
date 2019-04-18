@@ -4,12 +4,13 @@ namespace TinyWars.MultiCustomWar {
     import SerializedMcField    = Types.SerializedMcwField;
 
     export class McwField {
-        private _unitMap        : McwUnitMap;
-        private _tileMap        : McwTileMap;
-        private _fogMap         : McwFogMap;
-        private _cursor         : McwCursor;
-        private _actionPlanner  : McwActionPlanner;
-        private _view           : McwFieldView;
+        private _unitMap            : McwUnitMap;
+        private _tileMap            : McwTileMap;
+        private _fogMap             : McwFogMap;
+        private _cursor             : McwCursor;
+        private _actionPlanner      : McwActionPlanner;
+        private _gridVisionEffect   : McwGridVisionEffect;
+        private _view               : McwFieldView;
 
         public constructor() {
         }
@@ -20,6 +21,7 @@ namespace TinyWars.MultiCustomWar {
             this._setUnitMap(await new McwUnitMap().init(configVersion, mapIndexKey, data.unitMap));
             this._setCursor(await new McwCursor().init(mapIndexKey));
             this._setActionPlanner(await new McwActionPlanner().init(mapIndexKey));
+            this._setGridVisionEffect(await new McwGridVisionEffect().init());
 
             this._view = this._view || new McwFieldView();
             this._view.init(this);
@@ -33,6 +35,7 @@ namespace TinyWars.MultiCustomWar {
             this.getFogMap().startRunning(war);
             this.getCursor().startRunning(war);
             this.getActionPlanner().startRunning(war);
+            this.getGridVisionEffect().startRunning(war);
         }
         public startRunningView(): void {
             this.getView().startRunning();
@@ -40,12 +43,14 @@ namespace TinyWars.MultiCustomWar {
             this.getUnitMap().startRunningView();
             this.getCursor().startRunningView();
             this.getActionPlanner().startRunningView();
+            this.getGridVisionEffect().startRunningView();
         }
         public stopRunning(): void {
             this.getTileMap().stopRunning();
             this.getUnitMap().stopRunning();
             this.getCursor().stopRunning();
             this.getActionPlanner().stopRunning();
+            this.getGridVisionEffect().stopRunning();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -88,6 +93,13 @@ namespace TinyWars.MultiCustomWar {
         }
         public getActionPlanner(): McwActionPlanner {
             return this._actionPlanner;
+        }
+
+        private _setGridVisionEffect(gridVisionEffect: McwGridVisionEffect): void {
+            this._gridVisionEffect = gridVisionEffect;
+        }
+        public getGridVisionEffect(): McwGridVisionEffect {
+            return this._gridVisionEffect;
         }
     }
 }

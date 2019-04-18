@@ -226,6 +226,10 @@ namespace TinyWars.MultiCustomWar {
             return this.getField().getActionPlanner();
         }
 
+        public getGridVisionEffect(): McwGridVisionEffect {
+            return this.getField().getGridVisionEffect();
+        }
+
         private _setTurnManager(manager: McwTurnManager): void {
             this._turnManager = manager;
         }

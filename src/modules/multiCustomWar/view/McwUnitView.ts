@@ -4,6 +4,7 @@ namespace TinyWars.MultiCustomWar {
     import Types                = Utility.Types;
     import Helpers              = Utility.Helpers;
     import VisibilityHelpers    = Utility.VisibilityHelpers;
+    import GridIndexHelpers     = Utility.GridIndexHelpers;
     import UnitAnimationType    = Types.UnitAnimationType;
     import GridIndex            = Types.GridIndex;
 
@@ -115,7 +116,7 @@ namespace TinyWars.MultiCustomWar {
         public moveAlongPath(path: GridIndex[], isDiving: boolean, callback: Function, aiming?: GridIndex): void {
             this.showUnitAnimation(UnitAnimationType.Move);
 
-            const startingPoint = getPosition(path[0]);
+            const startingPoint = GridIndexHelpers.createPointByGridIndex(path[0]);
             this.x              = startingPoint.x;
             this.y              = startingPoint.y;
 
@@ -180,7 +181,7 @@ namespace TinyWars.MultiCustomWar {
                     }
                 }
 
-                tween.to(getPosition(gridIndex), 200);
+                tween.to(GridIndexHelpers.createPointByGridIndex(gridIndex), 200);
             }
 
             if (!aiming) {
@@ -272,12 +273,5 @@ namespace TinyWars.MultiCustomWar {
 
     function getImageSourcePrefix(isDark: boolean): string {
         return isDark ? `c07` : `c03`;
-    }
-
-    function getPosition(gridIndex: GridIndex): Types.Point {
-        return {
-            x: _GRID_WIDTH * gridIndex.x,
-            y: _GRID_HEIGHT * gridIndex.y
-        };
     }
 }

@@ -146,7 +146,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
             focusUnit.updateView();
             updateTilesAndUnitsOnVisibilityChanged(_war);
             if (path.isBlocked) {
-                // TODO: show the block effect.
+                _war.getGridVisionEffect().showEffectBlock(pathNodes[pathNodes.length - 1]);
             }
 
             actionPlanner.setStateIdle();
