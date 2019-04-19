@@ -3,6 +3,7 @@ namespace TinyWars.MultiCustomWar {
     import Notify       = Utility.Notify;
     import Lang         = Utility.Lang;
     import StageManager = Utility.StageManager;
+    import Types        = Utility.Types;
 
     const _CELL_WIDTH           = 80;
     const _LEFT_X               = 80;
@@ -44,10 +45,11 @@ namespace TinyWars.MultiCustomWar {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.GlobalTouchBegin,           callback: this._onNotifyGlobalTouchBegin },
-                { type: Notify.Type.GlobalTouchMove,            callback: this._onNotifyGlobalTouchMove },
-                { type: Notify.Type.McwCursorGridIndexChanged,  callback: this._onNotifyMcwCursorGridIndexChanged },
-                { type: Notify.Type.UnitAnimationTick,          callback: this._onNotifyUnitAnimationTick },
+                { type: Notify.Type.GlobalTouchBegin,               callback: this._onNotifyGlobalTouchBegin },
+                { type: Notify.Type.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
+                { type: Notify.Type.McwCursorGridIndexChanged,      callback: this._onNotifyMcwCursorGridIndexChanged },
+                { type: Notify.Type.McwActionPlannerStateChanged,   callback: this._onNotifyMcwActionPlannerStateChanged },
+                { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
             ];
         }
         protected _onOpened(): void {
@@ -80,6 +82,14 @@ namespace TinyWars.MultiCustomWar {
         }
         private _onNotifyMcwCursorGridIndexChanged(e: egret.Event): void {
             this._updateView();
+        }
+        private _onNotifyMcwActionPlannerStateChanged(e: egret.Event): void {
+            const planner = this._war.getActionPlanner();
+            if ((planner.getPreviousState() === Types.ActionPlannerState.ExecutingAction) &&
+                (planner.getState() !== Types.ActionPlannerState.ExecutingAction)
+            ) {
+                this._updateView();
+            }
         }
         private _onNotifyUnitAnimationTick(e: egret.Event): void {
             for (const cell of this._cellList) {

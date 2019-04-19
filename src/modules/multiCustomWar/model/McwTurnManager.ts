@@ -109,33 +109,62 @@ namespace TinyWars.MultiCustomWar {
             }
         }
         private _runPhaseRepairUnitByTile(data: ProtoTypes.IS_McwBeginTurn): void {
-            const unitMap = this._war.getUnitMap();
+            const war               = this._war;
+            const unitMap           = war.getUnitMap();
+            const gridVisionEffect  = war.getGridVisionEffect();
+
             for (const repairData of data.repairDataByTile || []) {
-                unitMap.getUnitOnMap(repairData.gridIndex as GridIndex).updateOnRepaired(repairData.repairAmount || 0);
+                const gridIndex     = repairData.gridIndex as GridIndex;
+                const repairAmount  = repairData.repairAmount || 0;
+                const unit          = unitMap.getUnitOnMap(gridIndex);
+                if (repairAmount > 0) {
+                    gridVisionEffect.showEffectRepair(gridIndex);
+                } else {
+                    (unit.checkCanBeSupplied()) && (gridVisionEffect.showEffectSupply(gridIndex));
+                }
+                unit.updateOnRepaired(repairAmount);
             }
         }
         private _runPhaseDestroyUnitsOutOfFuel(data: ProtoTypes.IS_McwBeginTurn): void {
             const playerIndex = this.getPlayerIndexInTurn();
             if (playerIndex !== 0) {
-                const war       = this._war;
-                const fogMap    = war.getFogMap();
+                const war               = this._war;
+                const fogMap            = war.getFogMap();
+                const gridVisionEffect  = war.getGridVisionEffect();
                 war.getUnitMap().forEachUnitOnMap(unit => {
                     if ((unit.checkIsDestroyedOnOutOfFuel()) && (unit.getCurrentFuel() <= 0) && (unit.getPlayerIndex() === playerIndex)) {
                         const gridIndex = unit.getGridIndex();
                         fogMap.updateMapFromPathsByUnitAndPath(unit, [gridIndex]);
                         DestructionHelpers.destroyUnitOnMap(war, gridIndex, false);
+                        gridVisionEffect.showEffectExplosion(gridIndex);
                     }
                 });
             }
         }
         private _runPhaseRepairUnitByUnit(data: ProtoTypes.IS_McwBeginTurn): void {
-            const unitMap = this._war.getUnitMap();
+            const war               = this._war;
+            const unitMap           = war.getUnitMap();
+            const gridVisionEffect  = war.getGridVisionEffect();
+
             for (const repairData of data.repairDataByUnit || []) {
-                const unitLoaded = unitMap.getUnitLoadedById(repairData.unitId);
-                if (unitLoaded) {
-                    unitLoaded.updateOnRepaired(repairData.repairAmount || 0);
+                const repairAmount = repairData.repairAmount || 0;
+                if (repairData.unitId != null) {
+                    const unit = unitMap.getUnitLoadedById(repairData.unitId);
+                    if (repairAmount > 0) {
+                        gridVisionEffect.showEffectRepair(unit.getGridIndex());
+                    } else {
+                        (unit.checkCanBeSupplied()) && (gridVisionEffect.showEffectSupply(unit.getGridIndex()));
+                    }
+                    unit.updateOnRepaired(repairAmount);
                 } else {
-                    unitMap.getUnitOnMap(repairData.gridIndex as GridIndex).updateOnRepaired(repairData.repairAmount || 0);
+                    const gridIndex = repairData.gridIndex as GridIndex;
+                    const unit      = unitMap.getUnitOnMap(gridIndex);
+                    if (repairAmount > 0) {
+                        gridVisionEffect.showEffectRepair(gridIndex);
+                    } else {
+                        (unit.checkCanBeSupplied()) && (gridVisionEffect.showEffectSupply(gridIndex));
+                    }
+                    unit.updateOnRepaired(repairAmount);
                 }
             }
         }
@@ -144,8 +173,14 @@ namespace TinyWars.MultiCustomWar {
         }
         private _runPhaseMain(data: ProtoTypes.IS_McwBeginTurn): void {
             if (data.isDefeated) {
-                const war           = this._war;
-                const playerIndex   = this.getPlayerIndexInTurn();
+                const war               = this._war;
+                const playerIndex       = this.getPlayerIndexInTurn();
+                const gridVisionEffect  = war.getGridVisionEffect();
+                war.getUnitMap().forEachUnitOnMap(unit => {
+                    if (unit.getPlayerIndex() === playerIndex) {
+                        gridVisionEffect.showEffectExplosion(unit.getGridIndex());
+                    }
+                });
                 DestructionHelpers.destroyPlayerForce(war, playerIndex);
 
                 const playerManager = war.getPlayerManager();
@@ -175,7 +210,10 @@ namespace TinyWars.MultiCustomWar {
             const playerIndex = this.getPlayerIndexInTurn();
             if (playerIndex !== 0) {
                 this._war.getUnitMap().forEachUnit(unit => {
-                    (unit.getPlayerIndex() === playerIndex) && (unit.setState(Types.UnitState.Idle));
+                    if (unit.getPlayerIndex() === playerIndex) {
+                        unit.setState(Types.UnitState.Idle);
+                        unit.updateView();
+                    }
                 });
             }
         }

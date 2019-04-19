@@ -31,7 +31,8 @@ namespace TinyWars.MultiCustomWar {
         private _mapSize            : Types.MapSize;
         private _playerIndexLoggedIn: number;
 
-        private _state  : State;
+        private _state      : State;
+        private _prevState  : State;
 
         private _focusUnitOnMap             : McwUnit;
         private _focusUnitLoaded            : McwUnit;
@@ -182,8 +183,12 @@ namespace TinyWars.MultiCustomWar {
         public getState(): State {
             return this._state;
         }
+        public getPreviousState(): State | undefined {
+            return this._prevState;
+        }
         private _setState(state: State): void {
-            this._state = state;
+            this._prevState = this._state;
+            this._state     = state;
             Logger.log(`McwActionPlanner._setState() ${state}`);
             Notify.dispatch(Notify.Type.McwActionPlannerStateChanged);
         }

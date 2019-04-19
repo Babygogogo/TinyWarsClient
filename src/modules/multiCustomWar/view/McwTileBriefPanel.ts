@@ -3,6 +3,7 @@ namespace TinyWars.MultiCustomWar {
     import Notify       = Utility.Notify;
     import Lang         = Utility.Lang;
     import StageManager = Utility.StageManager;
+    import Types        = Utility.Types;
 
     const _IMAGE_SOURCE_HP      = `c04_t10_s00_f00`;
     const _IMAGE_SOURCE_FUEL    = `c04_t10_s01_f00`;
@@ -54,10 +55,11 @@ namespace TinyWars.MultiCustomWar {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.GlobalTouchBegin,           callback: this._onNotifyGlobalTouchBegin },
-                { type: Notify.Type.GlobalTouchMove,            callback: this._onNotifyGlobalTouchMove },
-                { type: Notify.Type.McwCursorGridIndexChanged,  callback: this._onNotifyMcwCursorGridIndexChanged },
-                { type: Notify.Type.TileAnimationTick,          callback: this._onNotifyTileAnimationTick },
+                { type: Notify.Type.GlobalTouchBegin,               callback: this._onNotifyGlobalTouchBegin },
+                { type: Notify.Type.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
+                { type: Notify.Type.McwCursorGridIndexChanged,      callback: this._onNotifyMcwCursorGridIndexChanged },
+                { type: Notify.Type.McwActionPlannerStateChanged,   callback: this._onNotifyMcwActionPlannerStateChanged },
+                { type: Notify.Type.TileAnimationTick,              callback: this._onNotifyTileAnimationTick },
             ];
             this._uiListeners = [
                 { ui: this, callback: this._onTouchedThis, },
@@ -89,6 +91,14 @@ namespace TinyWars.MultiCustomWar {
         }
         private _onNotifyMcwCursorGridIndexChanged(e: egret.Event): void {
             this._updateView();
+        }
+        private _onNotifyMcwActionPlannerStateChanged(e: egret.Event): void {
+            const planner = this._war.getActionPlanner();
+            if ((planner.getPreviousState() === Types.ActionPlannerState.ExecutingAction) &&
+                (planner.getState() !== Types.ActionPlannerState.ExecutingAction)
+            ) {
+                this._updateView();
+            }
         }
         private _onNotifyTileAnimationTick(e: egret.Event): void {
             this._tileView.updateOnAnimationTick();

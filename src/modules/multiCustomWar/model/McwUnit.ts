@@ -811,7 +811,7 @@ namespace TinyWars.MultiCustomWar {
         }
 
         public checkCanBeSuppliedWithFuel(): boolean {
-            return this.getCurrentFuel() <= this.getMaxFuel();
+            return this.getCurrentFuel() < this.getMaxFuel();
         }
         public checkCanBeSuppliedWithPrimaryWeaponAmmo(): boolean {
             const maxAmmo = this.getPrimaryWeaponMaxAmmo();
