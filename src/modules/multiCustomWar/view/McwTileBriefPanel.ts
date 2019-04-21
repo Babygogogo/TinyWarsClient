@@ -59,6 +59,8 @@ namespace TinyWars.MultiCustomWar {
                 { type: Notify.Type.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
                 { type: Notify.Type.McwCursorGridIndexChanged,      callback: this._onNotifyMcwCursorGridIndexChanged },
                 { type: Notify.Type.McwActionPlannerStateChanged,   callback: this._onNotifyMcwActionPlannerStateChanged },
+                { type: Notify.Type.McwWarMenuPanelOpened,          callback: this._onNotifyMcwWarMenuPanelOpened },
+                { type: Notify.Type.McwWarMenuPanelClosed,          callback: this._onNotifyMcwWarMenuPanelClosed },
                 { type: Notify.Type.TileAnimationTick,              callback: this._onNotifyTileAnimationTick },
             ];
             this._uiListeners = [
@@ -100,6 +102,12 @@ namespace TinyWars.MultiCustomWar {
                 this._updateView();
             }
         }
+        private _onNotifyMcwWarMenuPanelOpened(e: egret.Event): void {
+            this._updateView();
+        }
+        private _onNotifyMcwWarMenuPanelClosed(e: egret.Event): void {
+            this._updateView();
+        }
         private _onNotifyTileAnimationTick(e: egret.Event): void {
             this._tileView.updateOnAnimationTick();
         }
@@ -112,31 +120,37 @@ namespace TinyWars.MultiCustomWar {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            const gridIndex = this._cursor.getGridIndex();
-            const tile      = this._tileMap.getTile(gridIndex);
-            this._tileView.init(tile).startRunningView();
-            this._labelDefense.text     = `${Math.floor(tile.getDefenseAmount() / 10)}`;
-            this._labelName.text        = Lang.getTileName(tile.getType());
-            this._labelGridIndex.text   = `x${gridIndex.x} y${gridIndex.y}`;
-
-            if (tile.getCurrentHp() != null) {
-                this._imgState.visible      = true;
-                this._imgState.source       = _IMAGE_SOURCE_HP;
-                this._labelState.visible    = true;
-                this._labelState.text       = `${tile.getCurrentHp()}`;
-            } else if (tile.getCurrentCapturePoint() != null) {
-                this._imgState.visible      = true;
-                this._imgState.source       = _IMAGE_SOURCE_CAPTURE;
-                this._labelState.visible    = true;
-                this._labelState.text       = `${tile.getCurrentCapturePoint()}`;
-            } else if (tile.getCurrentBuildPoint() != null) {
-                this._imgState.visible      = true;
-                this._imgState.source       = _IMAGE_SOURCE_BUILD;
-                this._labelState.visible    = true;
-                this._labelState.text       = `${tile.getCurrentBuildPoint()}`;
+            if (McwWarMenuPanel.getIsOpening()) {
+                this.visible = false;
             } else {
-                this._imgState.visible      = false;
-                this._labelState.visible    = false;
+                this.visible = true;
+
+                const gridIndex = this._cursor.getGridIndex();
+                const tile      = this._tileMap.getTile(gridIndex);
+                this._tileView.init(tile).startRunningView();
+                this._labelDefense.text     = `${Math.floor(tile.getDefenseAmount() / 10)}`;
+                this._labelName.text        = Lang.getTileName(tile.getType());
+                this._labelGridIndex.text   = `x${gridIndex.x} y${gridIndex.y}`;
+
+                if (tile.getCurrentHp() != null) {
+                    this._imgState.visible      = true;
+                    this._imgState.source       = _IMAGE_SOURCE_HP;
+                    this._labelState.visible    = true;
+                    this._labelState.text       = `${tile.getCurrentHp()}`;
+                } else if (tile.getCurrentCapturePoint() != null) {
+                    this._imgState.visible      = true;
+                    this._imgState.source       = _IMAGE_SOURCE_CAPTURE;
+                    this._labelState.visible    = true;
+                    this._labelState.text       = `${tile.getCurrentCapturePoint()}`;
+                } else if (tile.getCurrentBuildPoint() != null) {
+                    this._imgState.visible      = true;
+                    this._imgState.source       = _IMAGE_SOURCE_BUILD;
+                    this._labelState.visible    = true;
+                    this._labelState.text       = `${tile.getCurrentBuildPoint()}`;
+                } else {
+                    this._imgState.visible      = false;
+                    this._labelState.visible    = false;
+                }
             }
         }
 

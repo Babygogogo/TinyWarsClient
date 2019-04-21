@@ -94,7 +94,7 @@ namespace TinyWars.MultiCustomWar {
             const gridIndex = (e.data as Notify.Data.McwCursorTapped).tappedOn;
             const nextState = this._getNextStateOnTap(gridIndex);
             const currState = this.getState();
-            if (((checkIsStateRequesting(nextState)) || (currState === State.ExecutingAction)) &&
+            if (((_checkIsStateRequesting(nextState)) || (currState === State.ExecutingAction)) &&
                 (nextState === currState)
             ) {
                 // Do noting.
@@ -138,7 +138,7 @@ namespace TinyWars.MultiCustomWar {
         private _onNotifyMcwCursorDragged(e: egret.Event): void {
             const gridIndex = (e.data as Notify.Data.McwCursorDragged).draggedTo;
             const nextState = this._getNextStateOnDrag(gridIndex);
-            if ((checkIsStateRequesting(nextState)) && (nextState === this.getState())) {
+            if ((_checkIsStateRequesting(nextState)) && (nextState === this.getState())) {
                 // Do noting.
             } else {
                 if (nextState === State.Idle) {
@@ -573,16 +573,23 @@ namespace TinyWars.MultiCustomWar {
         }
 
         public setStateRequestingPlayerBeginTurn(): void {
-            McwProxy.reqMcwBeginTurn(this._war);
+            McwProxy.reqMcwPlayerBeginTurn(this._war);
 
             this._setState(State.RequestingPlayerBeginTurn);
             this._updateView();
         }
 
         public setStateRequestingPlayerEndTurn(): void {
-            McwProxy.reqMcwEndTurn(this._war);
+            McwProxy.reqMcwPlayerEndTurn(this._war);
 
             this._setState(State.RequestingPlayerEndTurn);
+            this._updateView();
+        }
+
+        public setStateRequestingPlayerSurrender(): void {
+            McwProxy.reqMcwPlayerSurrender(this._war);
+
+            this._setState(State.RequestingPlayerSurrender);
             this._updateView();
         }
 
@@ -610,8 +617,8 @@ namespace TinyWars.MultiCustomWar {
             return this._mapSize;
         }
 
-        private _checkIsWaitingForServerResponse(): boolean {
-            return checkIsStateRequesting(this.getState());
+        public checkIsStateRequesting(): boolean {
+            return _checkIsStateRequesting(this.getState());
         }
 
         public getFocusUnit(): McwUnit | undefined {
@@ -850,7 +857,7 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _getNextStateOnTap(gridIndex: GridIndex): State {
             const currState = this.getState();
-            if ((this._checkIsWaitingForServerResponse()) || (currState === State.ExecutingAction)) {
+            if ((this.checkIsStateRequesting()) || (currState === State.ExecutingAction)) {
                 return currState;
             } else {
                 switch (currState) {
@@ -1318,7 +1325,7 @@ namespace TinyWars.MultiCustomWar {
         return (!!area[x]) && (!!area[x][y]);
     }
 
-    function checkIsStateRequesting(state: State): boolean {
+    function _checkIsStateRequesting(state: State): boolean {
         return (state === State.RequestingPlayerActivateSkill)
             || (state === State.RequestingPlayerBeginTurn)
             || (state === State.RequestingPlayerDestroyUnit)

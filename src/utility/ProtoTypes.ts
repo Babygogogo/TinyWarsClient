@@ -3649,17 +3649,23 @@ export declare interface IActionContainer {
     /** ActionContainer S_McrContinueWar */
     S_McrContinueWar?: (IS_McrContinueWar|null);
 
-    /** ActionContainer C_McwBeginTurn */
-    C_McwBeginTurn?: (IC_McwBeginTurn|null);
+    /** ActionContainer C_McwPlayerBeginTurn */
+    C_McwPlayerBeginTurn?: (IC_McwPlayerBeginTurn|null);
 
-    /** ActionContainer S_McwBeginTurn */
-    S_McwBeginTurn?: (IS_McwBeginTurn|null);
+    /** ActionContainer S_McwPlayerBeginTurn */
+    S_McwPlayerBeginTurn?: (IS_McwPlayerBeginTurn|null);
 
-    /** ActionContainer C_McwEndTurn */
-    C_McwEndTurn?: (IC_McwEndTurn|null);
+    /** ActionContainer C_McwPlayerEndTurn */
+    C_McwPlayerEndTurn?: (IC_McwPlayerEndTurn|null);
 
-    /** ActionContainer S_McwEndTurn */
-    S_McwEndTurn?: (IS_McwEndTurn|null);
+    /** ActionContainer S_McwPlayerEndTurn */
+    S_McwPlayerEndTurn?: (IS_McwPlayerEndTurn|null);
+
+    /** ActionContainer C_McwPlayerSurrender */
+    C_McwPlayerSurrender?: (IC_McwPlayerSurrender|null);
+
+    /** ActionContainer S_McwPlayerSurrender */
+    S_McwPlayerSurrender?: (IS_McwPlayerSurrender|null);
 
     /** ActionContainer C_McwUnitWait */
     C_McwUnitWait?: (IC_McwUnitWait|null);
@@ -3770,17 +3776,23 @@ export declare class ActionContainer implements IActionContainer {
     /** ActionContainer S_McrContinueWar. */
     public S_McrContinueWar?: (IS_McrContinueWar|null);
 
-    /** ActionContainer C_McwBeginTurn. */
-    public C_McwBeginTurn?: (IC_McwBeginTurn|null);
+    /** ActionContainer C_McwPlayerBeginTurn. */
+    public C_McwPlayerBeginTurn?: (IC_McwPlayerBeginTurn|null);
 
-    /** ActionContainer S_McwBeginTurn. */
-    public S_McwBeginTurn?: (IS_McwBeginTurn|null);
+    /** ActionContainer S_McwPlayerBeginTurn. */
+    public S_McwPlayerBeginTurn?: (IS_McwPlayerBeginTurn|null);
 
-    /** ActionContainer C_McwEndTurn. */
-    public C_McwEndTurn?: (IC_McwEndTurn|null);
+    /** ActionContainer C_McwPlayerEndTurn. */
+    public C_McwPlayerEndTurn?: (IC_McwPlayerEndTurn|null);
 
-    /** ActionContainer S_McwEndTurn. */
-    public S_McwEndTurn?: (IS_McwEndTurn|null);
+    /** ActionContainer S_McwPlayerEndTurn. */
+    public S_McwPlayerEndTurn?: (IS_McwPlayerEndTurn|null);
+
+    /** ActionContainer C_McwPlayerSurrender. */
+    public C_McwPlayerSurrender?: (IC_McwPlayerSurrender|null);
+
+    /** ActionContainer S_McwPlayerSurrender. */
+    public S_McwPlayerSurrender?: (IS_McwPlayerSurrender|null);
 
     /** ActionContainer C_McwUnitWait. */
     public C_McwUnitWait?: (IC_McwUnitWait|null);
@@ -6739,421 +6751,619 @@ export declare class S_McrContinueWar implements IS_McrContinueWar {
     public toJSON(): { [k: string]: any };
 }
 
-/** Properties of a C_McwBeginTurn. */
-export declare interface IC_McwBeginTurn {
+/** Properties of a C_McwPlayerBeginTurn. */
+export declare interface IC_McwPlayerBeginTurn {
 
-    /** C_McwBeginTurn warId */
+    /** C_McwPlayerBeginTurn warId */
     warId?: (number|null);
 
-    /** C_McwBeginTurn actionId */
+    /** C_McwPlayerBeginTurn actionId */
     actionId?: (number|null);
 }
 
-/** Represents a C_McwBeginTurn. */
-export declare class C_McwBeginTurn implements IC_McwBeginTurn {
+/** Represents a C_McwPlayerBeginTurn. */
+export declare class C_McwPlayerBeginTurn implements IC_McwPlayerBeginTurn {
 
     /**
-     * Constructs a new C_McwBeginTurn.
+     * Constructs a new C_McwPlayerBeginTurn.
      * @param [properties] Properties to set
      */
-    constructor(properties?: IC_McwBeginTurn);
+    constructor(properties?: IC_McwPlayerBeginTurn);
 
-    /** C_McwBeginTurn warId. */
+    /** C_McwPlayerBeginTurn warId. */
     public warId: number;
 
-    /** C_McwBeginTurn actionId. */
+    /** C_McwPlayerBeginTurn actionId. */
     public actionId: number;
 
     /**
-     * Creates a new C_McwBeginTurn instance using the specified properties.
+     * Creates a new C_McwPlayerBeginTurn instance using the specified properties.
      * @param [properties] Properties to set
-     * @returns C_McwBeginTurn instance
+     * @returns C_McwPlayerBeginTurn instance
      */
-    public static create(properties?: IC_McwBeginTurn): C_McwBeginTurn;
+    public static create(properties?: IC_McwPlayerBeginTurn): C_McwPlayerBeginTurn;
 
     /**
-     * Encodes the specified C_McwBeginTurn message. Does not implicitly {@link C_McwBeginTurn.verify|verify} messages.
-     * @param message C_McwBeginTurn message or plain object to encode
+     * Encodes the specified C_McwPlayerBeginTurn message. Does not implicitly {@link C_McwPlayerBeginTurn.verify|verify} messages.
+     * @param message C_McwPlayerBeginTurn message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encode(message: IC_McwBeginTurn, writer?: protobuf.Writer): protobuf.Writer;
+    public static encode(message: IC_McwPlayerBeginTurn, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Encodes the specified C_McwBeginTurn message, length delimited. Does not implicitly {@link C_McwBeginTurn.verify|verify} messages.
-     * @param message C_McwBeginTurn message or plain object to encode
+     * Encodes the specified C_McwPlayerBeginTurn message, length delimited. Does not implicitly {@link C_McwPlayerBeginTurn.verify|verify} messages.
+     * @param message C_McwPlayerBeginTurn message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encodeDelimited(message: IC_McwBeginTurn, writer?: protobuf.Writer): protobuf.Writer;
+    public static encodeDelimited(message: IC_McwPlayerBeginTurn, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Decodes a C_McwBeginTurn message from the specified reader or buffer.
+     * Decodes a C_McwPlayerBeginTurn message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
-     * @returns C_McwBeginTurn
+     * @returns C_McwPlayerBeginTurn
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_McwBeginTurn;
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_McwPlayerBeginTurn;
 
     /**
-     * Decodes a C_McwBeginTurn message from the specified reader or buffer, length delimited.
+     * Decodes a C_McwPlayerBeginTurn message from the specified reader or buffer, length delimited.
      * @param reader Reader or buffer to decode from
-     * @returns C_McwBeginTurn
+     * @returns C_McwPlayerBeginTurn
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_McwBeginTurn;
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_McwPlayerBeginTurn;
 
     /**
-     * Verifies a C_McwBeginTurn message.
+     * Verifies a C_McwPlayerBeginTurn message.
      * @param message Plain object to verify
      * @returns `null` if valid, otherwise the reason why it is not
      */
     public static verify(message: { [k: string]: any }): (string|null);
 
     /**
-     * Creates a C_McwBeginTurn message from a plain object. Also converts values to their respective internal types.
+     * Creates a C_McwPlayerBeginTurn message from a plain object. Also converts values to their respective internal types.
      * @param object Plain object
-     * @returns C_McwBeginTurn
+     * @returns C_McwPlayerBeginTurn
      */
-    public static fromObject(object: { [k: string]: any }): C_McwBeginTurn;
+    public static fromObject(object: { [k: string]: any }): C_McwPlayerBeginTurn;
 
     /**
-     * Creates a plain object from a C_McwBeginTurn message. Also converts values to other types if specified.
-     * @param message C_McwBeginTurn
+     * Creates a plain object from a C_McwPlayerBeginTurn message. Also converts values to other types if specified.
+     * @param message C_McwPlayerBeginTurn
      * @param [options] Conversion options
      * @returns Plain object
      */
-    public static toObject(message: C_McwBeginTurn, options?: protobuf.IConversionOptions): { [k: string]: any };
+    public static toObject(message: C_McwPlayerBeginTurn, options?: protobuf.IConversionOptions): { [k: string]: any };
 
     /**
-     * Converts this C_McwBeginTurn to JSON.
+     * Converts this C_McwPlayerBeginTurn to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };
 }
 
-/** Properties of a S_McwBeginTurn. */
-export declare interface IS_McwBeginTurn {
+/** Properties of a S_McwPlayerBeginTurn. */
+export declare interface IS_McwPlayerBeginTurn {
 
-    /** S_McwBeginTurn errorCode */
+    /** S_McwPlayerBeginTurn errorCode */
     errorCode?: (number|null);
 
-    /** S_McwBeginTurn warId */
+    /** S_McwPlayerBeginTurn warId */
     warId?: (number|null);
 
-    /** S_McwBeginTurn actionId */
+    /** S_McwPlayerBeginTurn actionId */
     actionId?: (number|null);
 
-    /** S_McwBeginTurn remainingFund */
+    /** S_McwPlayerBeginTurn remainingFund */
     remainingFund?: (number|null);
 
-    /** S_McwBeginTurn isDefeated */
+    /** S_McwPlayerBeginTurn isDefeated */
     isDefeated?: (boolean|null);
 
-    /** S_McwBeginTurn repairDataByTile */
+    /** S_McwPlayerBeginTurn repairDataByTile */
     repairDataByTile?: (IMcwRepairData[]|null);
 
-    /** S_McwBeginTurn repairDataByUnit */
+    /** S_McwPlayerBeginTurn repairDataByUnit */
     repairDataByUnit?: (IMcwRepairData[]|null);
 }
 
-/** Represents a S_McwBeginTurn. */
-export declare class S_McwBeginTurn implements IS_McwBeginTurn {
+/** Represents a S_McwPlayerBeginTurn. */
+export declare class S_McwPlayerBeginTurn implements IS_McwPlayerBeginTurn {
 
     /**
-     * Constructs a new S_McwBeginTurn.
+     * Constructs a new S_McwPlayerBeginTurn.
      * @param [properties] Properties to set
      */
-    constructor(properties?: IS_McwBeginTurn);
+    constructor(properties?: IS_McwPlayerBeginTurn);
 
-    /** S_McwBeginTurn errorCode. */
+    /** S_McwPlayerBeginTurn errorCode. */
     public errorCode: number;
 
-    /** S_McwBeginTurn warId. */
+    /** S_McwPlayerBeginTurn warId. */
     public warId: number;
 
-    /** S_McwBeginTurn actionId. */
+    /** S_McwPlayerBeginTurn actionId. */
     public actionId: number;
 
-    /** S_McwBeginTurn remainingFund. */
+    /** S_McwPlayerBeginTurn remainingFund. */
     public remainingFund: number;
 
-    /** S_McwBeginTurn isDefeated. */
+    /** S_McwPlayerBeginTurn isDefeated. */
     public isDefeated: boolean;
 
-    /** S_McwBeginTurn repairDataByTile. */
+    /** S_McwPlayerBeginTurn repairDataByTile. */
     public repairDataByTile: IMcwRepairData[];
 
-    /** S_McwBeginTurn repairDataByUnit. */
+    /** S_McwPlayerBeginTurn repairDataByUnit. */
     public repairDataByUnit: IMcwRepairData[];
 
     /**
-     * Creates a new S_McwBeginTurn instance using the specified properties.
+     * Creates a new S_McwPlayerBeginTurn instance using the specified properties.
      * @param [properties] Properties to set
-     * @returns S_McwBeginTurn instance
+     * @returns S_McwPlayerBeginTurn instance
      */
-    public static create(properties?: IS_McwBeginTurn): S_McwBeginTurn;
+    public static create(properties?: IS_McwPlayerBeginTurn): S_McwPlayerBeginTurn;
 
     /**
-     * Encodes the specified S_McwBeginTurn message. Does not implicitly {@link S_McwBeginTurn.verify|verify} messages.
-     * @param message S_McwBeginTurn message or plain object to encode
+     * Encodes the specified S_McwPlayerBeginTurn message. Does not implicitly {@link S_McwPlayerBeginTurn.verify|verify} messages.
+     * @param message S_McwPlayerBeginTurn message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encode(message: IS_McwBeginTurn, writer?: protobuf.Writer): protobuf.Writer;
+    public static encode(message: IS_McwPlayerBeginTurn, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Encodes the specified S_McwBeginTurn message, length delimited. Does not implicitly {@link S_McwBeginTurn.verify|verify} messages.
-     * @param message S_McwBeginTurn message or plain object to encode
+     * Encodes the specified S_McwPlayerBeginTurn message, length delimited. Does not implicitly {@link S_McwPlayerBeginTurn.verify|verify} messages.
+     * @param message S_McwPlayerBeginTurn message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encodeDelimited(message: IS_McwBeginTurn, writer?: protobuf.Writer): protobuf.Writer;
+    public static encodeDelimited(message: IS_McwPlayerBeginTurn, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Decodes a S_McwBeginTurn message from the specified reader or buffer.
+     * Decodes a S_McwPlayerBeginTurn message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
-     * @returns S_McwBeginTurn
+     * @returns S_McwPlayerBeginTurn
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_McwBeginTurn;
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_McwPlayerBeginTurn;
 
     /**
-     * Decodes a S_McwBeginTurn message from the specified reader or buffer, length delimited.
+     * Decodes a S_McwPlayerBeginTurn message from the specified reader or buffer, length delimited.
      * @param reader Reader or buffer to decode from
-     * @returns S_McwBeginTurn
+     * @returns S_McwPlayerBeginTurn
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_McwBeginTurn;
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_McwPlayerBeginTurn;
 
     /**
-     * Verifies a S_McwBeginTurn message.
+     * Verifies a S_McwPlayerBeginTurn message.
      * @param message Plain object to verify
      * @returns `null` if valid, otherwise the reason why it is not
      */
     public static verify(message: { [k: string]: any }): (string|null);
 
     /**
-     * Creates a S_McwBeginTurn message from a plain object. Also converts values to their respective internal types.
+     * Creates a S_McwPlayerBeginTurn message from a plain object. Also converts values to their respective internal types.
      * @param object Plain object
-     * @returns S_McwBeginTurn
+     * @returns S_McwPlayerBeginTurn
      */
-    public static fromObject(object: { [k: string]: any }): S_McwBeginTurn;
+    public static fromObject(object: { [k: string]: any }): S_McwPlayerBeginTurn;
 
     /**
-     * Creates a plain object from a S_McwBeginTurn message. Also converts values to other types if specified.
-     * @param message S_McwBeginTurn
+     * Creates a plain object from a S_McwPlayerBeginTurn message. Also converts values to other types if specified.
+     * @param message S_McwPlayerBeginTurn
      * @param [options] Conversion options
      * @returns Plain object
      */
-    public static toObject(message: S_McwBeginTurn, options?: protobuf.IConversionOptions): { [k: string]: any };
+    public static toObject(message: S_McwPlayerBeginTurn, options?: protobuf.IConversionOptions): { [k: string]: any };
 
     /**
-     * Converts this S_McwBeginTurn to JSON.
+     * Converts this S_McwPlayerBeginTurn to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };
 }
 
-/** Properties of a C_McwEndTurn. */
-export declare interface IC_McwEndTurn {
+/** Properties of a C_McwPlayerEndTurn. */
+export declare interface IC_McwPlayerEndTurn {
 
-    /** C_McwEndTurn warId */
+    /** C_McwPlayerEndTurn warId */
     warId?: (number|null);
 
-    /** C_McwEndTurn actionId */
+    /** C_McwPlayerEndTurn actionId */
     actionId?: (number|null);
 }
 
-/** Represents a C_McwEndTurn. */
-export declare class C_McwEndTurn implements IC_McwEndTurn {
+/** Represents a C_McwPlayerEndTurn. */
+export declare class C_McwPlayerEndTurn implements IC_McwPlayerEndTurn {
 
     /**
-     * Constructs a new C_McwEndTurn.
+     * Constructs a new C_McwPlayerEndTurn.
      * @param [properties] Properties to set
      */
-    constructor(properties?: IC_McwEndTurn);
+    constructor(properties?: IC_McwPlayerEndTurn);
 
-    /** C_McwEndTurn warId. */
+    /** C_McwPlayerEndTurn warId. */
     public warId: number;
 
-    /** C_McwEndTurn actionId. */
+    /** C_McwPlayerEndTurn actionId. */
     public actionId: number;
 
     /**
-     * Creates a new C_McwEndTurn instance using the specified properties.
+     * Creates a new C_McwPlayerEndTurn instance using the specified properties.
      * @param [properties] Properties to set
-     * @returns C_McwEndTurn instance
+     * @returns C_McwPlayerEndTurn instance
      */
-    public static create(properties?: IC_McwEndTurn): C_McwEndTurn;
+    public static create(properties?: IC_McwPlayerEndTurn): C_McwPlayerEndTurn;
 
     /**
-     * Encodes the specified C_McwEndTurn message. Does not implicitly {@link C_McwEndTurn.verify|verify} messages.
-     * @param message C_McwEndTurn message or plain object to encode
+     * Encodes the specified C_McwPlayerEndTurn message. Does not implicitly {@link C_McwPlayerEndTurn.verify|verify} messages.
+     * @param message C_McwPlayerEndTurn message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encode(message: IC_McwEndTurn, writer?: protobuf.Writer): protobuf.Writer;
+    public static encode(message: IC_McwPlayerEndTurn, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Encodes the specified C_McwEndTurn message, length delimited. Does not implicitly {@link C_McwEndTurn.verify|verify} messages.
-     * @param message C_McwEndTurn message or plain object to encode
+     * Encodes the specified C_McwPlayerEndTurn message, length delimited. Does not implicitly {@link C_McwPlayerEndTurn.verify|verify} messages.
+     * @param message C_McwPlayerEndTurn message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encodeDelimited(message: IC_McwEndTurn, writer?: protobuf.Writer): protobuf.Writer;
+    public static encodeDelimited(message: IC_McwPlayerEndTurn, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Decodes a C_McwEndTurn message from the specified reader or buffer.
+     * Decodes a C_McwPlayerEndTurn message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
-     * @returns C_McwEndTurn
+     * @returns C_McwPlayerEndTurn
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_McwEndTurn;
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_McwPlayerEndTurn;
 
     /**
-     * Decodes a C_McwEndTurn message from the specified reader or buffer, length delimited.
+     * Decodes a C_McwPlayerEndTurn message from the specified reader or buffer, length delimited.
      * @param reader Reader or buffer to decode from
-     * @returns C_McwEndTurn
+     * @returns C_McwPlayerEndTurn
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_McwEndTurn;
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_McwPlayerEndTurn;
 
     /**
-     * Verifies a C_McwEndTurn message.
+     * Verifies a C_McwPlayerEndTurn message.
      * @param message Plain object to verify
      * @returns `null` if valid, otherwise the reason why it is not
      */
     public static verify(message: { [k: string]: any }): (string|null);
 
     /**
-     * Creates a C_McwEndTurn message from a plain object. Also converts values to their respective internal types.
+     * Creates a C_McwPlayerEndTurn message from a plain object. Also converts values to their respective internal types.
      * @param object Plain object
-     * @returns C_McwEndTurn
+     * @returns C_McwPlayerEndTurn
      */
-    public static fromObject(object: { [k: string]: any }): C_McwEndTurn;
+    public static fromObject(object: { [k: string]: any }): C_McwPlayerEndTurn;
 
     /**
-     * Creates a plain object from a C_McwEndTurn message. Also converts values to other types if specified.
-     * @param message C_McwEndTurn
+     * Creates a plain object from a C_McwPlayerEndTurn message. Also converts values to other types if specified.
+     * @param message C_McwPlayerEndTurn
      * @param [options] Conversion options
      * @returns Plain object
      */
-    public static toObject(message: C_McwEndTurn, options?: protobuf.IConversionOptions): { [k: string]: any };
+    public static toObject(message: C_McwPlayerEndTurn, options?: protobuf.IConversionOptions): { [k: string]: any };
 
     /**
-     * Converts this C_McwEndTurn to JSON.
+     * Converts this C_McwPlayerEndTurn to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };
 }
 
-/** Properties of a S_McwEndTurn. */
-export declare interface IS_McwEndTurn {
+/** Properties of a S_McwPlayerEndTurn. */
+export declare interface IS_McwPlayerEndTurn {
 
-    /** S_McwEndTurn errorCode */
+    /** S_McwPlayerEndTurn errorCode */
     errorCode?: (number|null);
 
-    /** S_McwEndTurn warId */
+    /** S_McwPlayerEndTurn warId */
     warId?: (number|null);
 
-    /** S_McwEndTurn actionId */
+    /** S_McwPlayerEndTurn actionId */
     actionId?: (number|null);
 }
 
-/** Represents a S_McwEndTurn. */
-export declare class S_McwEndTurn implements IS_McwEndTurn {
+/** Represents a S_McwPlayerEndTurn. */
+export declare class S_McwPlayerEndTurn implements IS_McwPlayerEndTurn {
 
     /**
-     * Constructs a new S_McwEndTurn.
+     * Constructs a new S_McwPlayerEndTurn.
      * @param [properties] Properties to set
      */
-    constructor(properties?: IS_McwEndTurn);
+    constructor(properties?: IS_McwPlayerEndTurn);
 
-    /** S_McwEndTurn errorCode. */
+    /** S_McwPlayerEndTurn errorCode. */
     public errorCode: number;
 
-    /** S_McwEndTurn warId. */
+    /** S_McwPlayerEndTurn warId. */
     public warId: number;
 
-    /** S_McwEndTurn actionId. */
+    /** S_McwPlayerEndTurn actionId. */
     public actionId: number;
 
     /**
-     * Creates a new S_McwEndTurn instance using the specified properties.
+     * Creates a new S_McwPlayerEndTurn instance using the specified properties.
      * @param [properties] Properties to set
-     * @returns S_McwEndTurn instance
+     * @returns S_McwPlayerEndTurn instance
      */
-    public static create(properties?: IS_McwEndTurn): S_McwEndTurn;
+    public static create(properties?: IS_McwPlayerEndTurn): S_McwPlayerEndTurn;
 
     /**
-     * Encodes the specified S_McwEndTurn message. Does not implicitly {@link S_McwEndTurn.verify|verify} messages.
-     * @param message S_McwEndTurn message or plain object to encode
+     * Encodes the specified S_McwPlayerEndTurn message. Does not implicitly {@link S_McwPlayerEndTurn.verify|verify} messages.
+     * @param message S_McwPlayerEndTurn message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encode(message: IS_McwEndTurn, writer?: protobuf.Writer): protobuf.Writer;
+    public static encode(message: IS_McwPlayerEndTurn, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Encodes the specified S_McwEndTurn message, length delimited. Does not implicitly {@link S_McwEndTurn.verify|verify} messages.
-     * @param message S_McwEndTurn message or plain object to encode
+     * Encodes the specified S_McwPlayerEndTurn message, length delimited. Does not implicitly {@link S_McwPlayerEndTurn.verify|verify} messages.
+     * @param message S_McwPlayerEndTurn message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encodeDelimited(message: IS_McwEndTurn, writer?: protobuf.Writer): protobuf.Writer;
+    public static encodeDelimited(message: IS_McwPlayerEndTurn, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Decodes a S_McwEndTurn message from the specified reader or buffer.
+     * Decodes a S_McwPlayerEndTurn message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
-     * @returns S_McwEndTurn
+     * @returns S_McwPlayerEndTurn
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_McwEndTurn;
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_McwPlayerEndTurn;
 
     /**
-     * Decodes a S_McwEndTurn message from the specified reader or buffer, length delimited.
+     * Decodes a S_McwPlayerEndTurn message from the specified reader or buffer, length delimited.
      * @param reader Reader or buffer to decode from
-     * @returns S_McwEndTurn
+     * @returns S_McwPlayerEndTurn
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_McwEndTurn;
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_McwPlayerEndTurn;
 
     /**
-     * Verifies a S_McwEndTurn message.
+     * Verifies a S_McwPlayerEndTurn message.
      * @param message Plain object to verify
      * @returns `null` if valid, otherwise the reason why it is not
      */
     public static verify(message: { [k: string]: any }): (string|null);
 
     /**
-     * Creates a S_McwEndTurn message from a plain object. Also converts values to their respective internal types.
+     * Creates a S_McwPlayerEndTurn message from a plain object. Also converts values to their respective internal types.
      * @param object Plain object
-     * @returns S_McwEndTurn
+     * @returns S_McwPlayerEndTurn
      */
-    public static fromObject(object: { [k: string]: any }): S_McwEndTurn;
+    public static fromObject(object: { [k: string]: any }): S_McwPlayerEndTurn;
 
     /**
-     * Creates a plain object from a S_McwEndTurn message. Also converts values to other types if specified.
-     * @param message S_McwEndTurn
+     * Creates a plain object from a S_McwPlayerEndTurn message. Also converts values to other types if specified.
+     * @param message S_McwPlayerEndTurn
      * @param [options] Conversion options
      * @returns Plain object
      */
-    public static toObject(message: S_McwEndTurn, options?: protobuf.IConversionOptions): { [k: string]: any };
+    public static toObject(message: S_McwPlayerEndTurn, options?: protobuf.IConversionOptions): { [k: string]: any };
 
     /**
-     * Converts this S_McwEndTurn to JSON.
+     * Converts this S_McwPlayerEndTurn to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_McwPlayerSurrender. */
+export declare interface IC_McwPlayerSurrender {
+
+    /** C_McwPlayerSurrender warId */
+    warId?: (number|null);
+
+    /** C_McwPlayerSurrender actionId */
+    actionId?: (number|null);
+}
+
+/** Represents a C_McwPlayerSurrender. */
+export declare class C_McwPlayerSurrender implements IC_McwPlayerSurrender {
+
+    /**
+     * Constructs a new C_McwPlayerSurrender.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_McwPlayerSurrender);
+
+    /** C_McwPlayerSurrender warId. */
+    public warId: number;
+
+    /** C_McwPlayerSurrender actionId. */
+    public actionId: number;
+
+    /**
+     * Creates a new C_McwPlayerSurrender instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_McwPlayerSurrender instance
+     */
+    public static create(properties?: IC_McwPlayerSurrender): C_McwPlayerSurrender;
+
+    /**
+     * Encodes the specified C_McwPlayerSurrender message. Does not implicitly {@link C_McwPlayerSurrender.verify|verify} messages.
+     * @param message C_McwPlayerSurrender message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_McwPlayerSurrender, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_McwPlayerSurrender message, length delimited. Does not implicitly {@link C_McwPlayerSurrender.verify|verify} messages.
+     * @param message C_McwPlayerSurrender message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_McwPlayerSurrender, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_McwPlayerSurrender message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_McwPlayerSurrender
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_McwPlayerSurrender;
+
+    /**
+     * Decodes a C_McwPlayerSurrender message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_McwPlayerSurrender
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_McwPlayerSurrender;
+
+    /**
+     * Verifies a C_McwPlayerSurrender message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_McwPlayerSurrender message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_McwPlayerSurrender
+     */
+    public static fromObject(object: { [k: string]: any }): C_McwPlayerSurrender;
+
+    /**
+     * Creates a plain object from a C_McwPlayerSurrender message. Also converts values to other types if specified.
+     * @param message C_McwPlayerSurrender
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_McwPlayerSurrender, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_McwPlayerSurrender to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_McwPlayerSurrender. */
+export declare interface IS_McwPlayerSurrender {
+
+    /** S_McwPlayerSurrender errorCode */
+    errorCode?: (number|null);
+
+    /** S_McwPlayerSurrender warId */
+    warId?: (number|null);
+
+    /** S_McwPlayerSurrender actionId */
+    actionId?: (number|null);
+}
+
+/** Represents a S_McwPlayerSurrender. */
+export declare class S_McwPlayerSurrender implements IS_McwPlayerSurrender {
+
+    /**
+     * Constructs a new S_McwPlayerSurrender.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_McwPlayerSurrender);
+
+    /** S_McwPlayerSurrender errorCode. */
+    public errorCode: number;
+
+    /** S_McwPlayerSurrender warId. */
+    public warId: number;
+
+    /** S_McwPlayerSurrender actionId. */
+    public actionId: number;
+
+    /**
+     * Creates a new S_McwPlayerSurrender instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_McwPlayerSurrender instance
+     */
+    public static create(properties?: IS_McwPlayerSurrender): S_McwPlayerSurrender;
+
+    /**
+     * Encodes the specified S_McwPlayerSurrender message. Does not implicitly {@link S_McwPlayerSurrender.verify|verify} messages.
+     * @param message S_McwPlayerSurrender message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_McwPlayerSurrender, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_McwPlayerSurrender message, length delimited. Does not implicitly {@link S_McwPlayerSurrender.verify|verify} messages.
+     * @param message S_McwPlayerSurrender message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_McwPlayerSurrender, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_McwPlayerSurrender message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_McwPlayerSurrender
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_McwPlayerSurrender;
+
+    /**
+     * Decodes a S_McwPlayerSurrender message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_McwPlayerSurrender
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_McwPlayerSurrender;
+
+    /**
+     * Verifies a S_McwPlayerSurrender message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_McwPlayerSurrender message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_McwPlayerSurrender
+     */
+    public static fromObject(object: { [k: string]: any }): S_McwPlayerSurrender;
+
+    /**
+     * Creates a plain object from a S_McwPlayerSurrender message. Also converts values to other types if specified.
+     * @param message S_McwPlayerSurrender
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_McwPlayerSurrender, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_McwPlayerSurrender to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };

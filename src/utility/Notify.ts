@@ -39,6 +39,9 @@ namespace TinyWars.Utility.Notify {
 
         McwActionPlannerStateChanged,
 
+        McwWarMenuPanelOpened,
+        McwWarMenuPanelClosed,
+
         McwUnitBeDestroyed,
         McwUnitBeAttacked,
         McwUnitBeSupplied,
@@ -72,6 +75,7 @@ namespace TinyWars.Utility.Notify {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         SMcwBeginTurn,
         SMcwEndTurn,
+        SMcwPlayerSurrender,
         SMcwUnitWait,
     }
 

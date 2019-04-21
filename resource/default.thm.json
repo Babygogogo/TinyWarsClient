@@ -29,6 +29,7 @@
 		"resource/skins/multiCustomWar/McwUnitBriefCell.exml",
 		"resource/skins/multiCustomWar/McwUnitBriefPanel.exml",
 		"resource/skins/multiCustomWar/McwUnitListPanel.exml",
+		"resource/skins/multiCustomWar/McwWarMenuPanel.exml",
 		"resource/skins/multiCustomWar/McwWarPanel.exml",
 		"resource/skins/utility/LoadingUiPanel.exml",
 		"resource/skins/warMap/WarMapSearchPanel.exml"

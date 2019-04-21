@@ -104,11 +104,7 @@ namespace TinyWars.MultiCustomWar {
             });
         }
         private _onTouchedBtnMenu(e: egret.TouchEvent): void {
-            ConfirmPanel.show({
-                title   : "返回大厅",
-                content : "确定要回到大厅吗？",
-                callback: () => FlowManager.gotoLobby(),
-            });
+            McwWarMenuPanel.show();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

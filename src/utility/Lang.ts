@@ -138,6 +138,14 @@ namespace TinyWars.Utility.Lang {
             `您确定要结束回合吗？`,
             `Are you sure to end your turn?`,
         ]],
+        [Type.A0025, [
+            `您确定要返回大厅吗？`,
+            `Are you sure to go to the lobby?`,
+        ]],
+        [Type.A0026, [
+            `您确定要投降吗？`,
+            `Are you sure to resign?`,
+        ]],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -359,8 +367,12 @@ namespace TinyWars.Utility.Lang {
             `Insufficient fund`,
         ]],
         [Type.B0054, [
+            `返回大厅`,
+            `Go to lobby`,
         ]],
         [Type.B0055, [
+            `投降`,
+            `Resign`,
         ]],
         [Type.B0056, [
         ]],

@@ -77,8 +77,8 @@ namespace TinyWars.GameUi {
                     this._onFirstOpened();
                 }
 
-                if (!this._isOpening) {
-                    this._isOpening = true;
+                if (!this.getIsOpening()) {
+                    this._setIsOpening(true);
                     this._registerListeners();
                 }
 
@@ -98,6 +98,13 @@ namespace TinyWars.GameUi {
                 && (this._isCalledOpen);
         }
 
+        public getIsOpening(): boolean {
+            return this._isOpening;
+        }
+        private _setIsOpening(opening: boolean): void {
+            this._isOpening = opening;
+        }
+
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for close self.
         ////////////////////////////////////////////////////////////////////////////////
@@ -108,8 +115,8 @@ namespace TinyWars.GameUi {
         private _doClose(): void {
             (this.parent) && (this.parent.removeChild(this));
 
-            if (this._isOpening) {
-                this._isOpening = false;
+            if (this.getIsOpening()) {
+                this._setIsOpening(false);
                 this._unregisterListeners();
             }
 

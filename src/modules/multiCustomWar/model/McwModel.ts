@@ -14,8 +14,8 @@ namespace TinyWars.MultiCustomWar.McwModel {
     import UnitState            = Types.UnitState;
 
     const _EXECUTORS = new Map<ActionCodes, (data: ActionContainer) => Promise<void>>([
-        [ActionCodes.S_McwBeginTurn,    _executeMcwBeginTurn],
-        [ActionCodes.S_McwEndTurn,      _executeMcwEndTurn],
+        [ActionCodes.S_McwPlayerBeginTurn,    _executeMcwBeginTurn],
+        [ActionCodes.S_McwPlayerEndTurn,      _executeMcwEndTurn],
         [ActionCodes.S_McwUnitWait,     _executeMcwUnitWait],
     ]);
 
@@ -55,11 +55,14 @@ namespace TinyWars.MultiCustomWar.McwModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Handlers for war actions that McwProxy receives.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export function updateOnBeginTurn(data: ProtoTypes.IS_McwBeginTurn): void {
-        _updateByActionContainer({ S_McwBeginTurn: data }, data.warId, data.actionId);
+    export function updateOnBeginTurn(data: ProtoTypes.IS_McwPlayerBeginTurn): void {
+        _updateByActionContainer({ S_McwPlayerBeginTurn: data }, data.warId, data.actionId);
     }
-    export function updateOnEndTurn(data: ProtoTypes.IS_McwEndTurn): void {
-        _updateByActionContainer({ S_McwEndTurn: data }, data.warId, data.actionId);
+    export function updateOnEndTurn(data: ProtoTypes.IS_McwPlayerEndTurn): void {
+        _updateByActionContainer({ S_McwPlayerEndTurn: data }, data.warId, data.actionId);
+    }
+    export function updateOnPlayerSurrender(data: ProtoTypes.IS_McwPlayerSurrender): void {
+        _updateByActionContainer({ S_McwPlayerSurrender: data }, data.warId, data.actionId);
     }
     export function updateOnUnitWait(data: ProtoTypes.IS_McwUnitWait): void {
         _updateByActionContainer({ S_McwUnitWait: data }, data.warId, data.actionId);
@@ -108,7 +111,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
     async function _executeMcwBeginTurn(data: ActionContainer): Promise<void> {
         const actionPlanner = _war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        await _war.getTurnManager().endPhaseWaitBeginTurn(data.S_McwBeginTurn);
+        await _war.getTurnManager().endPhaseWaitBeginTurn(data.S_McwPlayerBeginTurn);
         actionPlanner.setStateIdle();
     }
 

@@ -10,41 +10,58 @@ namespace TinyWars.MultiCustomWar.McwProxy {
 
     export function init(): void {
         NetManager.addListeners([
-            { actionCode: NetMessageCodes.S_McwBeginTurn,   callback: _onSMcwBeginTurn, },
-            { actionCode: NetMessageCodes.S_McwEndTurn,     callback: _onSMcwEndTurn, },
-            { actionCode: NetMessageCodes.S_McwUnitWait,    callback: _onSMcwUnitWait, },
+            { actionCode: NetMessageCodes.S_McwPlayerBeginTurn,     callback: _onSMcwPlayerBeginTurn, },
+            { actionCode: NetMessageCodes.S_McwPlayerEndTurn,       callback: _onSMcwPlayerEndTurn, },
+            { actionCode: NetMessageCodes.S_McwPlayerSurrender,     callback: _onSMcwPlayerSurrender },
+            { actionCode: NetMessageCodes.S_McwUnitWait,            callback: _onSMcwUnitWait, },
         ], McwProxy);
     }
 
-    export function reqMcwBeginTurn(war: McwWar): void {
+    export function reqMcwPlayerBeginTurn(war: McwWar): void {
         NetManager.send({
-            C_McwBeginTurn: {
+            C_McwPlayerBeginTurn: {
                 warId   : war.getWarId(),
                 actionId: war.getNextActionId(),
             },
         });
     }
-    function _onSMcwBeginTurn(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_McwBeginTurn;
+    function _onSMcwPlayerBeginTurn(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_McwPlayerBeginTurn;
         if (!data.errorCode) {
             McwModel.updateOnBeginTurn(data);
             Notify.dispatch(Notify.Type.SMcwBeginTurn, data);
         }
     }
 
-    export function reqMcwEndTurn(war: McwWar): void {
+    export function reqMcwPlayerEndTurn(war: McwWar): void {
         NetManager.send({
-            C_McwEndTurn: {
+            C_McwPlayerEndTurn: {
                 warId   : war.getWarId(),
                 actionId: war.getNextActionId(),
             },
         });
     }
-    function _onSMcwEndTurn(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_McwEndTurn;
+    function _onSMcwPlayerEndTurn(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_McwPlayerEndTurn;
         if (!data.errorCode) {
             McwModel.updateOnEndTurn(data);
             Notify.dispatch(Notify.Type.SMcwEndTurn, data);
+        }
+    }
+
+    export function reqMcwPlayerSurrender(war: McwWar): void {
+        NetManager.send({
+            C_McwPlayerSurrender: {
+                warId   : war.getWarId(),
+                actionId: war.getNextActionId(),
+            },
+        })
+    }
+    function _onSMcwPlayerSurrender(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_McwPlayerSurrender;
+        if (!data.errorCode) {
+            McwModel.updateOnPlayerSurrender(data);
+            Notify.dispatch(Notify.Type.SMcwPlayerSurrender);
         }
     }
 
