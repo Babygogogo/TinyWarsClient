@@ -127,7 +127,7 @@ namespace TinyWars.MultiCustomWar {
                         ConfirmPanel.show({
                             title   : Lang.getText(Lang.Type.B0055),
                             content : Lang.getText(Lang.Type.A0026),
-                            callback: () => war.getActionPlanner().setStateRequestingPlayerBeginTurn(),
+                            callback: () => war.getActionPlanner().setStateRequestingPlayerSurrender(),
                         });
                     },
                 }

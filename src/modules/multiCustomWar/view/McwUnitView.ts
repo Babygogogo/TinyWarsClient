@@ -246,7 +246,7 @@ namespace TinyWars.MultiCustomWar {
         private _addFrameForLoader(): void {
             const unit  = this._unit;
             const war   = unit.getWar();
-            if (war) {
+            if ((war) && (unit.getMaxLoadUnitsCount())) {
                 const unitPlayerIndex = unit.getPlayerIndex();
                 if (!war.getFogMap().checkHasFogCurrently()) {
                     if (unit.getLoadedUnitsCount() > 0) {

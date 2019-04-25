@@ -1,14 +1,11 @@
 
 namespace TinyWars.MultiCustomWar {
-    import AlertPanel           = Common.AlertPanel;
-    import Lang                 = Utility.Lang;
     import Types                = Utility.Types;
     import DestructionHelpers   = Utility.DestructionHelpers;
     import VisibilityHelpers    = Utility.VisibilityHelpers;
     import Logger               = Utility.Logger;
     import Notify               = Utility.Notify;
     import ProtoTypes           = Utility.ProtoTypes;
-    import FlowManager          = Utility.FlowManager;
     import TimeModel            = Time.TimeModel;
     import SerializedMcTurn     = Types.SerializedMcwTurn;
     import TurnPhaseCode        = Types.TurnPhaseCode;
@@ -21,8 +18,6 @@ namespace TinyWars.MultiCustomWar {
         private _enterTurnTime      : number;
 
         private _war                : McwWar;
-
-        private _hasUnitOnBeginningTurn = false;
 
         public constructor() {
         }
@@ -182,28 +177,6 @@ namespace TinyWars.MultiCustomWar {
                     }
                 });
                 DestructionHelpers.destroyPlayerForce(war, playerIndex);
-
-                const playerManager = war.getPlayerManager();
-                if (playerManager.getPlayerIndexLoggedIn() === playerIndex) {
-                    AlertPanel.show({
-                        title   : Lang.getText(Lang.Type.B0035),
-                        content : Lang.getText(Lang.Type.A0023),
-                        callback: () => FlowManager.gotoLobby(),
-                    });
-                    war.setIsEnded(true);
-                } else {
-                    if (playerManager.getAliveTeamsCount(false) === 1) {
-                        AlertPanel.show({
-                            title   : Lang.getText(Lang.Type.B0034),
-                            content : Lang.getText(Lang.Type.A0022),
-                            callback: () => FlowManager.gotoLobby(),
-                        });
-                        war.setIsEnded(true);
-
-                    } else {
-                        // Do nothing, because the server will tell what to do next.
-                    }
-                }
             }
         }
         private _runPhaseResetUnitState(): void {

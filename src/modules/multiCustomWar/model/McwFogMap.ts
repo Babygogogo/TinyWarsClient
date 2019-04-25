@@ -1,5 +1,4 @@
 
-
 namespace TinyWars.MultiCustomWar {
     import MapManager               = WarMap.WarMapModel;
     import Types                    = Utility.Types;
@@ -281,7 +280,7 @@ namespace TinyWars.MultiCustomWar {
             }
         }
 
-        return needSerialize ? data.join() : undefined;
+        return needSerialize ? data.join(``) : undefined;
     }
 
     function fillMap(map: number[][], data: number): void {

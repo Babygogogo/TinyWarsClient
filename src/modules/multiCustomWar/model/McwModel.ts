@@ -6,17 +6,21 @@ namespace TinyWars.MultiCustomWar.McwModel {
     import Helpers              = Utility.Helpers;
     import VisibilityHelpers    = Utility.VisibilityHelpers;
     import DestructionHelpers   = Utility.DestructionHelpers;
+    import Lang                 = Utility.Lang;
+    import FloatText            = Utility.FloatText;
     import ActionContainer      = ProtoTypes.IActionContainer;
     import ActionCodes          = Network.Codes;
+    import AlertPanel           = Common.AlertPanel;
     import GridIndex            = Types.GridIndex;
     import SerializedMcwTile    = Types.SerializedMcwTile;
     import SerializedMcwUnit    = Types.SerializedMcwUnit;
     import UnitState            = Types.UnitState;
 
     const _EXECUTORS = new Map<ActionCodes, (data: ActionContainer) => Promise<void>>([
-        [ActionCodes.S_McwPlayerBeginTurn,    _executeMcwBeginTurn],
-        [ActionCodes.S_McwPlayerEndTurn,      _executeMcwEndTurn],
-        [ActionCodes.S_McwUnitWait,     _executeMcwUnitWait],
+        [ActionCodes.S_McwPlayerBeginTurn,  _executeMcwPlayerBeginTurn],
+        [ActionCodes.S_McwPlayerEndTurn,    _executeMcwPlayerEndTurn],
+        [ActionCodes.S_McwPlayerSurrender,  _executeMcwPlayerSurrender],
+        [ActionCodes.S_McwUnitWait,         _executeMcwUnitWait],
     ]);
 
     let _war            : McwWar;
@@ -90,8 +94,26 @@ namespace TinyWars.MultiCustomWar.McwModel {
             await _EXECUTORS.get(Helpers.getActionCode(container))(container);
             _war.setIsRunningAction(false);
 
-            if (_war.getIsEnded()) {
-                // TODO: show the ending summary and exit to lobby.
+            if (!_war.getPlayerLoggedIn().getIsAlive()) {
+                _war.setIsEnded(true);
+                AlertPanel.show({
+                    title   : Lang.getText(Lang.Type.B0035),
+                    content : Lang.getText(Lang.Type.A0023),
+                    callback: () => Utility.FlowManager.gotoLobby(),
+                });
+
+            } else {
+                if (_war.getPlayerManager().getAliveTeamsCount(false) <= 1) {
+                    _war.setIsEnded(true);
+                    AlertPanel.show({
+                        title   : Lang.getText(Lang.Type.B0034),
+                        content : Lang.getText(Lang.Type.A0022),
+                        callback: () => Utility.FlowManager.gotoLobby(),
+                    });
+
+                } else {
+                    // Do nothing, because the server will tell what to do next.
+                }
             }
         }
     }
@@ -108,14 +130,14 @@ namespace TinyWars.MultiCustomWar.McwModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // The 'true' executors for war actions.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function _executeMcwBeginTurn(data: ActionContainer): Promise<void> {
+    async function _executeMcwPlayerBeginTurn(data: ActionContainer): Promise<void> {
         const actionPlanner = _war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
         await _war.getTurnManager().endPhaseWaitBeginTurn(data.S_McwPlayerBeginTurn);
         actionPlanner.setStateIdle();
     }
 
-    async function _executeMcwEndTurn(data: ActionContainer): Promise<void> {
+    async function _executeMcwPlayerEndTurn(data: ActionContainer): Promise<void> {
         const actionPlanner = _war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
         await _war.getTurnManager().endPhaseMain();
@@ -125,6 +147,25 @@ namespace TinyWars.MultiCustomWar.McwModel {
         } else {
             actionPlanner.setStateIdle();
         }
+    }
+
+    async function _executeMcwPlayerSurrender(data: ActionContainer): Promise<void> {
+        const actionPlanner = _war.getActionPlanner();
+        actionPlanner.setStateExecutingAction();
+
+        const player            = _war.getPlayerInTurn();
+        const playerIndex       = player.getPlayerIndex();
+        const gridVisionEffect  = _war.getGridVisionEffect();
+        _war.getUnitMap().forEachUnitOnMap(unit => {
+            if (unit.getPlayerIndex() === playerIndex) {
+                gridVisionEffect.showEffectExplosion(unit.getGridIndex());
+            }
+        });
+        DestructionHelpers.destroyPlayerForce(_war, playerIndex);
+        updateTilesAndUnitsOnVisibilityChanged(_war);
+        FloatText.show(Lang.getFormatedText(Lang.Type.F0008, player.getNickname()));
+
+        actionPlanner.setStateIdle();
     }
 
     async function _executeMcwUnitWait(data: ActionContainer): Promise<void> {
@@ -206,6 +247,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
             } else {
                 tile.setFogEnabled();
             }
+            tile.updateView();
         });
         war.getUnitMap().forEachUnitOnMap(unit => {
             const gridIndex = unit.getGridIndex();

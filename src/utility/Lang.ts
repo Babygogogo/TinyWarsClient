@@ -659,6 +659,10 @@ namespace TinyWars.Utility.Lang {
             `%d个建筑尚未生产部队。`,
             `%d building(s) have built nothing yet.`
         ]],
+        [Type.F0008, [
+            `玩家[%s]已投降！`,
+            `Player [%s] has resigned!`,
+        ]],
     ]);
 
     const NET_ERROR_TEXT = new Map<ErrorCode, string[]>([

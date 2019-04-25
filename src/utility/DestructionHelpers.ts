@@ -43,6 +43,8 @@ namespace TinyWars.Utility.DestructionHelpers {
         war.getFogMap().resetAllMapsForPlayer(playerIndex);
 
         war.getPlayer(playerIndex)!.setIsAlive(false);
+
+        war.setRemainingVotesForDraw(undefined);
     }
 
     function resetTile(war: McwWar, gridIndex: GridIndex): void {

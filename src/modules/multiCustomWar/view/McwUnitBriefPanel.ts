@@ -49,6 +49,8 @@ namespace TinyWars.MultiCustomWar {
                 { type: Notify.Type.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
                 { type: Notify.Type.McwCursorGridIndexChanged,      callback: this._onNotifyMcwCursorGridIndexChanged },
                 { type: Notify.Type.McwActionPlannerStateChanged,   callback: this._onNotifyMcwActionPlannerStateChanged },
+                { type: Notify.Type.McwWarMenuPanelOpened,          callback: this._onNotifyMcwWarMenuPanelOpened },
+                { type: Notify.Type.McwWarMenuPanelClosed,          callback: this._onNotifyMcwWarMenuPanelClosed },
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
             ];
         }
@@ -91,6 +93,12 @@ namespace TinyWars.MultiCustomWar {
                 this._updateView();
             }
         }
+        private _onNotifyMcwWarMenuPanelOpened(e: egret.Event): void {
+            this._updateView();
+        }
+        private _onNotifyMcwWarMenuPanelClosed(e: egret.Event): void {
+            this._updateView();
+        }
         private _onNotifyUnitAnimationTick(e: egret.Event): void {
             for (const cell of this._cellList) {
                 cell.updateOnAnimationTick();
@@ -105,29 +113,33 @@ namespace TinyWars.MultiCustomWar {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            const unitList  = this._unitList;
-            unitList.length = 0;
+            if (McwWarMenuPanel.getIsOpening()) {
+                this.visible = false;
+            } else {
+                const unitList  = this._unitList;
+                unitList.length = 0;
 
-            const gridIndex = this._cursor.getGridIndex();
-            const unitOnMap = this._unitMap.getUnitOnMap(gridIndex);
-            if (unitOnMap) {
-                unitList.push(unitOnMap);
-                for (const loadedUnit of this._unitMap.getUnitsLoadedByLoader(unitOnMap, true)) {
-                    unitList.push(loadedUnit);
+                const gridIndex = this._cursor.getGridIndex();
+                const unitOnMap = this._unitMap.getUnitOnMap(gridIndex);
+                if (unitOnMap) {
+                    unitList.push(unitOnMap);
+                    for (const loadedUnit of this._unitMap.getUnitsLoadedByLoader(unitOnMap, true)) {
+                        unitList.push(loadedUnit);
+                    }
                 }
-            }
 
-            this._group.removeChildren();
-            const cellList      = this._cellList;
-            const length        = unitList.length;
-            this._group.width   = length * _CELL_WIDTH;
-            for (let i = 0; i < length; ++i) {
-                cellList[i] = cellList[i] || this._createCell();
-                cellList[i].setUnit(unitList[i]);
-                this._group.addChild(cellList[i]);
-            }
+                this._group.removeChildren();
+                const cellList      = this._cellList;
+                const length        = unitList.length;
+                this._group.width   = length * _CELL_WIDTH;
+                for (let i = 0; i < length; ++i) {
+                    cellList[i] = cellList[i] || this._createCell();
+                    cellList[i].setUnit(unitList[i]);
+                    this._group.addChild(cellList[i]);
+                }
 
-            this._updatePosition();
+                this._updatePosition();
+            }
         }
 
         private _adjustPositionOnTouch(e: egret.TouchEvent): void {
