@@ -1576,4 +1576,8 @@ namespace TinyWars.ConfigManager {
             : _UNIT_MOVING_NORMAL_IMAGE_SOURCES.get(viewId);
         return sources[tickCount % sources.length];
     }
+
+    export function getRankName(rankScore: number): string {
+        return `军士长`;
+    }
 }

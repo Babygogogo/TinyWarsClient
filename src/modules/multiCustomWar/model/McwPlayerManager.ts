@@ -53,7 +53,7 @@ namespace TinyWars.MultiCustomWar {
 
         public getPlayerLoggedIn(): McwPlayer | undefined {
             if (!this._loggedInPlayer) {
-                const userId = User.UserModel.getUserId();
+                const userId = User.UserModel.getSelfUserId();
                 for (const [, player] of this._players) {
                     if (player.getUserId() === userId) {
                         this._loggedInPlayer = player;

@@ -18,6 +18,7 @@ namespace TinyWars.Utility.Lang {
         B0030, B0031, B0032, B0033, B0034, B0035, B0036, B0037, B0038, B0039,
         B0040, B0041, B0042, B0043, B0044, B0045, B0046, B0047, B0048, B0049,
         B0050, B0051, B0052, B0053, B0054, B0055, B0056, B0057, B0058, B0059,
+        B0060, B0061, B0062, B0063, B0064, B0065, B0066, B0067, B0068, B0069,
 
         B1000, B1001, B1002, B1003, B1004, B1005, B1006, B1007, B1008, B1009,
         B1010, B1011, B1012, B1013, B1014, B1015, B1016, B1017, B1018, B1019,
@@ -29,6 +30,7 @@ namespace TinyWars.Utility.Lang {
         B1230, B1231, B1232, B1233, B1234, B1235, B1236, B1237, B1238, B1239,
 
         F0000, F0001, F0002, F0003, F0004, F0005, F0006, F0007, F0008, F0009,
+        F0010, F0011, F0012, F0013, F0014, F0015, F0016, F0017, F0018, F0019,
     }
     export const enum RichType {
         R000, R001, R002, R003,
@@ -379,10 +381,20 @@ namespace TinyWars.Utility.Lang {
             `Defeat`
         ]],
         [Type.B0057, [
+            `日`,
+            `Day`,
         ]],
         [Type.B0058, [
+            `月`,
+            `Month`,
         ]],
         [Type.B0059, [
+            `年`,
+            `Year`,
+        ]],
+        [Type.B0060, [
+            `排位积分`,
+            `RankScore`,
         ]],
 
         [Type.B1000, [
@@ -664,6 +676,22 @@ namespace TinyWars.Utility.Lang {
         [Type.F0008, [
             `玩家[%s]已投降！`,
             `Player [%s] has resigned!`,
+        ]],
+        [Type.F0009, [
+            `%s 的履历`,
+            `%s's Profile`,
+        ]],
+        [Type.F0010, [
+            `%d胜`,
+            `Win: %d`,
+        ]],
+        [Type.F0011, [
+            `%d负`,
+            `Lose: %d`,
+        ]],
+        [Type.F0012, [
+            `%d平`,
+            `Draw: %d`,
         ]],
     ]);
 

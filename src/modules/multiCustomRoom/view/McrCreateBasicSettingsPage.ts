@@ -198,7 +198,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _updateLabelTimeLimit(): void {
-            this._labelTimeLimit.text = Helpers.getTimeText(McrModel.getCreateWarTimeLimit());
+            this._labelTimeLimit.text = Helpers.getTimeDurationText(McrModel.getCreateWarTimeLimit());
         }
     }
 }

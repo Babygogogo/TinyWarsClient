@@ -204,18 +204,50 @@ namespace TinyWars.Utility.Helpers {
         }
     }
 
-    export function getTimeText(totalSeconds: number): string {
-        const seconds = totalSeconds % 60;
-        const minutes = Math.floor(totalSeconds / 60) % 60;
-        const hours   = Math.floor(totalSeconds / (60 * 60)) % 24;
-        const days    = Math.floor(totalSeconds / (60 * 60 * 24));
+    export function getTimeDurationText(totalSeconds: number): string {
+        if (totalSeconds <= 0) {
+            return `0${Lang.getText(Lang.Type.B0017)}`;
+        } else {
+            const seconds = totalSeconds % 60;
+            const minutes = Math.floor(totalSeconds / 60) % 60;
+            const hours   = Math.floor(totalSeconds / (60 * 60)) % 24;
+            const days    = Math.floor(totalSeconds / (60 * 60 * 24));
 
-        let text: string = "";
-        (days    > 0) && (text = `${text}${days}${Lang.getText(Lang.Type.B0014)}`);
-        (hours   > 0) && (text = `${text}${hours}${Lang.getText(Lang.Type.B0015)}`);
-        (minutes > 0) && (text = `${text}${minutes}${Lang.getText(Lang.Type.B0016)}`);
-        (seconds > 0) && (text = `${text}${seconds}${Lang.getText(Lang.Type.B0017)}`);
-        return text;
+            let text: string = "";
+            (days    > 0) && (text = `${text}${days}${Lang.getText(Lang.Type.B0014)}`);
+            (hours   > 0) && (text = `${text}${hours}${Lang.getText(Lang.Type.B0015)}`);
+            (minutes > 0) && (text = `${text}${minutes}${Lang.getText(Lang.Type.B0016)}`);
+            (seconds > 0) && (text = `${text}${seconds}${Lang.getText(Lang.Type.B0017)}`);
+            return text;
+        }
+    }
+
+    type TimeTextController = {
+        year?   : boolean;
+        month?  : boolean;
+        date?   : boolean;
+        hour?   : boolean;
+        minute? : boolean;
+        second? : boolean;
+    }
+    /**
+     * 返回指定时间戳对应的时间，格式： x年x月x日xx:xx:xx
+     * @param controller 用于控制特定子串要不要显示，默认为全显示
+     */
+    export function getTimestampText(timestamp: number, controller?: TimeTextController): string {
+        const d = new Date(timestamp * 1000);
+        const needHour   = (!controller) || (controller.hour !== false);
+        const needMinute = (!controller) || (controller.minute !== false);
+        const needSecond = (!controller) || (controller.second !== false);
+        const strYear    = (!controller) || (controller.year !== false)  ? `${getNumText(d.getFullYear(), 4)}${Lang.getText(Lang.Type.B0059)}`     : ``;
+        const strMonth   = (!controller) || (controller.month !== false) ? `${getNumText(d.getMonth() + 1)}${Lang.getText(Lang.Type.B0058)}`    : ``;
+        const strDate    = (!controller) || (controller.date !== false)  ? `${getNumText(d.getDate())}${Lang.getText(Lang.Type.B0057)}`         : ``;
+        const strHour    = needHour                 ? `${getNumText(d.getHours())}`   : "";
+        const sep1       = needHour   && needMinute ? ":" : "";
+        const strMinute  = needMinute               ? `${getNumText(d.getMinutes())}` : "";
+        const sep2       = needMinute && needSecond ? ":" : "";
+        const strSecond  = needSecond               ? `${getNumText(d.getSeconds())}` : "";
+        return strYear + strMonth + strDate + strHour + sep1 + strMinute + sep2 + strSecond;
     }
 
     export function createEmptyMap<T>(mapWidth: number, mapHeight?: number, defaultValue?: T): T[][] {

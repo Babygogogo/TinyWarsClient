@@ -28,6 +28,8 @@ export const enum NetErrorCode {
 
     GetMapDynamicInfo_NoSuchMap,
 
+    GetUserPublicInfo_NoSuchUser,
+
     McrContinueWar_NoSuchWar,
     McrContinueWar_DefeatedOrNotJoined,
 

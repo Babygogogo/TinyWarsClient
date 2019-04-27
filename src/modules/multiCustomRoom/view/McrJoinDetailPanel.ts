@@ -164,7 +164,7 @@ namespace TinyWars.MultiCustomRoom {
             const info = this._openData;
             this._labelWarPassword.text             = info.warPassword ? info.warPassword : "----";
             this._labelHasFog.text                  = Lang.getText(info.hasFog ? Lang.Type.B0012 : Lang.Type.B0013);
-            this._labelTimeLimit.text               = Helpers.getTimeText(info.timeLimit);
+            this._labelTimeLimit.text               = Helpers.getTimeDurationText(info.timeLimit);
             this._labelInitialFund.text             = `${info.initialFund}`;
             this._labelIncomeModifier.text          = `${info.incomeModifier}%`;
             this._labelInitialEnergy.text           = `${info.initialEnergy}%`;

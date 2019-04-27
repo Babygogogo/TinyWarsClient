@@ -2,13 +2,8 @@
 namespace TinyWars.MultiCustomRoom {
     import Notify           = Utility.Notify;
     import Types            = Utility.Types;
-    import StageManager     = Utility.StageManager;
-    import FloatText        = Utility.FloatText;
-    import Helpers          = Utility.Helpers;
     import Lang             = Utility.Lang;
-    import ProtoTypes       = Utility.ProtoTypes;
     import TemplateMapModel = WarMap.WarMapModel;
-    import TemplateMapProxy = WarMap.WarMapProxy;
 
     export class McrCreateMapListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
@@ -166,7 +161,7 @@ namespace TinyWars.MultiCustomRoom {
             this._labelDesigner.text        = Lang.getFormatedText(Lang.Type.F0001, mapData.mapDesigner);
             this._labelPlayersCount.text    = Lang.getFormatedText(Lang.Type.F0002, mapData.playersCount);
             this._labelRating.text          = Lang.getFormatedText(Lang.Type.F0003, mapInfo.rating != null ? mapInfo.rating.toFixed(2) : Lang.getText(Lang.Type.B0001));
-            this._labelPlayedTimes.text     = Lang.getFormatedText(Lang.Type.F0004, mapInfo.playedTimes);
+            this._labelPlayedTimes.text     = Lang.getFormatedText(Lang.Type.F0004, mapInfo.mcwPlayedTimes + mapInfo.rankPlayedTimes);
             this._groupInfo.visible         = true;
             this._groupInfo.alpha           = 1;
             egret.Tween.removeTweens(this._groupInfo);

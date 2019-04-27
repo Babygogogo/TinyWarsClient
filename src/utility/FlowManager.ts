@@ -28,6 +28,7 @@ namespace TinyWars.Utility.FlowManager {
         McwModel.init();
         Time.TimeProxy.init();
         Time.TimeModel.init();
+        User.UserProxy.init();
         User.UserModel.init();
         WarMap.WarMapProxy.init();
         WarMap.WarMapModel.init();
@@ -68,8 +69,8 @@ namespace TinyWars.Utility.FlowManager {
     // Callbacks.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     function _onNotifyNetworkConnected(e: egret.Event): void {
-        const account   = UserModel.getUserAccount();
-        const password  = UserModel.getUserPassword();
+        const account   = UserModel.getSelfAccount();
+        const password  = UserModel.getSelfPassword();
         if ((!UserModel.checkIsLoggedIn()) && (account != null) && (password != null)) {
             Login.LoginProxy.reqLogin(account, password);
         }

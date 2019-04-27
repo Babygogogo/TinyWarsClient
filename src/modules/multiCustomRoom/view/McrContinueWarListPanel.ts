@@ -275,7 +275,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _checkIsInTurn(info: ProtoTypes.IMcwOngoingDetail): boolean {
-            const userId        = User.UserModel.getUserId();
+            const userId        = User.UserModel.getSelfUserId();
             const playerIndex   = info.playerIndexInTurn;
             return ((playerIndex === 1) && (userId === info.p1UserId))
                 || ((playerIndex === 2) && (userId === info.p2UserId))
@@ -308,7 +308,7 @@ namespace TinyWars.MultiCustomRoom {
                 this._labelTeam.text        = Helpers.getTeamText(data.teamIndex);
                 this._labelTeam.textColor   = 0x00FF00
                 this._labelName.text        = data.playerName + (leftTime > 0
-                    ? ` (${Lang.getText(Lang.Type.B0027)}:${Helpers.getTimeText(leftTime)})`
+                    ? ` (${Lang.getText(Lang.Type.B0027)}:${Helpers.getTimeDurationText(leftTime)})`
                     : ` (${Lang.getText(Lang.Type.B0028)})`);
                 this._labelName.textColor   = 0x00FF00;
             } else {

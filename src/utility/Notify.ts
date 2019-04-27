@@ -61,6 +61,7 @@ namespace TinyWars.Utility.Notify {
         SGetNewestMapInfos,
         SGetMapDynamicInfo,
         SGetMapDynamicInfoFailed,
+        SGetUserPublicInfo,
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         SMcrCreateWar,

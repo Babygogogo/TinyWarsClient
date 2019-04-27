@@ -2797,8 +2797,11 @@ export declare interface IMapDynamicInfo {
     /** MapDynamicInfo rating */
     rating?: (number|null);
 
-    /** MapDynamicInfo playedTimes */
-    playedTimes?: (number|null);
+    /** MapDynamicInfo mcwPlayedTimes */
+    mcwPlayedTimes?: (number|null);
+
+    /** MapDynamicInfo rankPlayedTimes */
+    rankPlayedTimes?: (number|null);
 }
 
 /** Represents a MapDynamicInfo. */
@@ -2825,8 +2828,11 @@ export declare class MapDynamicInfo implements IMapDynamicInfo {
     /** MapDynamicInfo rating. */
     public rating: number;
 
-    /** MapDynamicInfo playedTimes. */
-    public playedTimes: number;
+    /** MapDynamicInfo mcwPlayedTimes. */
+    public mcwPlayedTimes: number;
+
+    /** MapDynamicInfo rankPlayedTimes. */
+    public rankPlayedTimes: number;
 
     /**
      * Creates a new MapDynamicInfo instance using the specified properties.
@@ -3607,6 +3613,12 @@ export declare interface IActionContainer {
     /** ActionContainer S_ServerDisconnect */
     S_ServerDisconnect?: (IS_ServerDisconnect|null);
 
+    /** ActionContainer C_GetUserPublicInfo */
+    C_GetUserPublicInfo?: (IC_GetUserPublicInfo|null);
+
+    /** ActionContainer S_GetUserPublicInfo */
+    S_GetUserPublicInfo?: (IS_GetUserPublicInfo|null);
+
     /** ActionContainer C_McrCreateWar */
     C_McrCreateWar?: (IC_McrCreateWar|null);
 
@@ -3733,6 +3745,12 @@ export declare class ActionContainer implements IActionContainer {
 
     /** ActionContainer S_ServerDisconnect. */
     public S_ServerDisconnect?: (IS_ServerDisconnect|null);
+
+    /** ActionContainer C_GetUserPublicInfo. */
+    public C_GetUserPublicInfo?: (IC_GetUserPublicInfo|null);
+
+    /** ActionContainer S_GetUserPublicInfo. */
+    public S_GetUserPublicInfo?: (IS_GetUserPublicInfo|null);
 
     /** ActionContainer C_McrCreateWar. */
     public C_McrCreateWar?: (IC_McrCreateWar|null);
@@ -4389,6 +4407,9 @@ export declare interface IS_Login {
 
     /** S_Login nickname */
     nickname?: (string|null);
+
+    /** S_Login rank2pScore */
+    rank2pScore?: (number|null);
 }
 
 /** Represents a S_Login. */
@@ -4417,6 +4438,9 @@ export declare class S_Login implements IS_Login {
 
     /** S_Login nickname. */
     public nickname: string;
+
+    /** S_Login rank2pScore. */
+    public rank2pScore: number;
 
     /**
      * Creates a new S_Login instance using the specified properties.
@@ -5360,6 +5384,300 @@ export declare class S_ServerDisconnect implements IS_ServerDisconnect {
 
     /**
      * Converts this S_ServerDisconnect to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_GetUserPublicInfo. */
+export declare interface IC_GetUserPublicInfo {
+
+    /** C_GetUserPublicInfo userId */
+    userId?: (number|null);
+}
+
+/** Represents a C_GetUserPublicInfo. */
+export declare class C_GetUserPublicInfo implements IC_GetUserPublicInfo {
+
+    /**
+     * Constructs a new C_GetUserPublicInfo.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_GetUserPublicInfo);
+
+    /** C_GetUserPublicInfo userId. */
+    public userId: number;
+
+    /**
+     * Creates a new C_GetUserPublicInfo instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_GetUserPublicInfo instance
+     */
+    public static create(properties?: IC_GetUserPublicInfo): C_GetUserPublicInfo;
+
+    /**
+     * Encodes the specified C_GetUserPublicInfo message. Does not implicitly {@link C_GetUserPublicInfo.verify|verify} messages.
+     * @param message C_GetUserPublicInfo message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_GetUserPublicInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_GetUserPublicInfo message, length delimited. Does not implicitly {@link C_GetUserPublicInfo.verify|verify} messages.
+     * @param message C_GetUserPublicInfo message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_GetUserPublicInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_GetUserPublicInfo message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_GetUserPublicInfo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_GetUserPublicInfo;
+
+    /**
+     * Decodes a C_GetUserPublicInfo message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_GetUserPublicInfo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_GetUserPublicInfo;
+
+    /**
+     * Verifies a C_GetUserPublicInfo message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_GetUserPublicInfo message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_GetUserPublicInfo
+     */
+    public static fromObject(object: { [k: string]: any }): C_GetUserPublicInfo;
+
+    /**
+     * Creates a plain object from a C_GetUserPublicInfo message. Also converts values to other types if specified.
+     * @param message C_GetUserPublicInfo
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_GetUserPublicInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_GetUserPublicInfo to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_GetUserPublicInfo. */
+export declare interface IS_GetUserPublicInfo {
+
+    /** S_GetUserPublicInfo errorCode */
+    errorCode?: (number|null);
+
+    /** S_GetUserPublicInfo id */
+    id?: (number|null);
+
+    /** S_GetUserPublicInfo nickname */
+    nickname?: (string|null);
+
+    /** S_GetUserPublicInfo registerTime */
+    registerTime?: (number|null);
+
+    /** S_GetUserPublicInfo lastLoginTime */
+    lastLoginTime?: (number|null);
+
+    /** S_GetUserPublicInfo loginCount */
+    loginCount?: (number|null);
+
+    /** S_GetUserPublicInfo onlineTime */
+    onlineTime?: (number|null);
+
+    /** S_GetUserPublicInfo mcw2pWins */
+    mcw2pWins?: (number|null);
+
+    /** S_GetUserPublicInfo mcw2pLoses */
+    mcw2pLoses?: (number|null);
+
+    /** S_GetUserPublicInfo mcw2pDraws */
+    mcw2pDraws?: (number|null);
+
+    /** S_GetUserPublicInfo mcw3pWins */
+    mcw3pWins?: (number|null);
+
+    /** S_GetUserPublicInfo mcw3pLoses */
+    mcw3pLoses?: (number|null);
+
+    /** S_GetUserPublicInfo mcw3pDraws */
+    mcw3pDraws?: (number|null);
+
+    /** S_GetUserPublicInfo mcw4pWins */
+    mcw4pWins?: (number|null);
+
+    /** S_GetUserPublicInfo mcw4pLoses */
+    mcw4pLoses?: (number|null);
+
+    /** S_GetUserPublicInfo mcw4pDraws */
+    mcw4pDraws?: (number|null);
+
+    /** S_GetUserPublicInfo rank2pWins */
+    rank2pWins?: (number|null);
+
+    /** S_GetUserPublicInfo rank2pLoses */
+    rank2pLoses?: (number|null);
+
+    /** S_GetUserPublicInfo rank2pDraws */
+    rank2pDraws?: (number|null);
+
+    /** S_GetUserPublicInfo rank2pScore */
+    rank2pScore?: (number|null);
+}
+
+/** Represents a S_GetUserPublicInfo. */
+export declare class S_GetUserPublicInfo implements IS_GetUserPublicInfo {
+
+    /**
+     * Constructs a new S_GetUserPublicInfo.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_GetUserPublicInfo);
+
+    /** S_GetUserPublicInfo errorCode. */
+    public errorCode: number;
+
+    /** S_GetUserPublicInfo id. */
+    public id: number;
+
+    /** S_GetUserPublicInfo nickname. */
+    public nickname: string;
+
+    /** S_GetUserPublicInfo registerTime. */
+    public registerTime: number;
+
+    /** S_GetUserPublicInfo lastLoginTime. */
+    public lastLoginTime: number;
+
+    /** S_GetUserPublicInfo loginCount. */
+    public loginCount: number;
+
+    /** S_GetUserPublicInfo onlineTime. */
+    public onlineTime: number;
+
+    /** S_GetUserPublicInfo mcw2pWins. */
+    public mcw2pWins: number;
+
+    /** S_GetUserPublicInfo mcw2pLoses. */
+    public mcw2pLoses: number;
+
+    /** S_GetUserPublicInfo mcw2pDraws. */
+    public mcw2pDraws: number;
+
+    /** S_GetUserPublicInfo mcw3pWins. */
+    public mcw3pWins: number;
+
+    /** S_GetUserPublicInfo mcw3pLoses. */
+    public mcw3pLoses: number;
+
+    /** S_GetUserPublicInfo mcw3pDraws. */
+    public mcw3pDraws: number;
+
+    /** S_GetUserPublicInfo mcw4pWins. */
+    public mcw4pWins: number;
+
+    /** S_GetUserPublicInfo mcw4pLoses. */
+    public mcw4pLoses: number;
+
+    /** S_GetUserPublicInfo mcw4pDraws. */
+    public mcw4pDraws: number;
+
+    /** S_GetUserPublicInfo rank2pWins. */
+    public rank2pWins: number;
+
+    /** S_GetUserPublicInfo rank2pLoses. */
+    public rank2pLoses: number;
+
+    /** S_GetUserPublicInfo rank2pDraws. */
+    public rank2pDraws: number;
+
+    /** S_GetUserPublicInfo rank2pScore. */
+    public rank2pScore: number;
+
+    /**
+     * Creates a new S_GetUserPublicInfo instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_GetUserPublicInfo instance
+     */
+    public static create(properties?: IS_GetUserPublicInfo): S_GetUserPublicInfo;
+
+    /**
+     * Encodes the specified S_GetUserPublicInfo message. Does not implicitly {@link S_GetUserPublicInfo.verify|verify} messages.
+     * @param message S_GetUserPublicInfo message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_GetUserPublicInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_GetUserPublicInfo message, length delimited. Does not implicitly {@link S_GetUserPublicInfo.verify|verify} messages.
+     * @param message S_GetUserPublicInfo message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_GetUserPublicInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_GetUserPublicInfo message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_GetUserPublicInfo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_GetUserPublicInfo;
+
+    /**
+     * Decodes a S_GetUserPublicInfo message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_GetUserPublicInfo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_GetUserPublicInfo;
+
+    /**
+     * Verifies a S_GetUserPublicInfo message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_GetUserPublicInfo message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_GetUserPublicInfo
+     */
+    public static fromObject(object: { [k: string]: any }): S_GetUserPublicInfo;
+
+    /**
+     * Creates a plain object from a S_GetUserPublicInfo message. Also converts values to other types if specified.
+     * @param message S_GetUserPublicInfo
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_GetUserPublicInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_GetUserPublicInfo to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };

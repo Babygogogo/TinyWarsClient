@@ -7,12 +7,14 @@ namespace TinyWars.User {
     import ProtoTypes   = Utility.ProtoTypes;
 
     export namespace UserModel {
-        let _isLoggedIn   : boolean = false;
-        let _userId       : number;
-        let _userPrivilege: number;
-        let _userAccount  : string;
-        let _userPassword : string;
-        let _userNickname : string;
+        let _isLoggedIn     : boolean = false;
+        let _selfUserId     : number;
+        let _selfPrivilege  : number;
+        let _selfAccount    : string;
+        let _selfPassword   : string;
+        let _selfNickname   : string;
+        let _selfRankScore  : number = 0;
+        const _userInfos    = new Map<number, ProtoTypes.IS_GetUserPublicInfo>();
 
         export function init(): void {
             Notify.addEventListeners([
@@ -23,40 +25,52 @@ namespace TinyWars.User {
 
         export function updateOnLogin(data: ProtoTypes.IS_Login): void {
             _isLoggedIn    = true;
-            _userId        = data.userId;
-            _userPrivilege = data.privilege;
-            _userAccount   = data.account;
-            _userPassword  = data.password;
-            _userNickname  = data.nickname;
+            _selfUserId    = data.userId;
+            _selfPrivilege = data.privilege;
+            _selfAccount   = data.account;
+            _selfPassword  = data.password;
+            _selfNickname  = data.nickname;
+            _selfRankScore = data.rank2pScore;
 
             LocalStorage.setAccount(data.account);
         }
 
         export function clearLoginInfo(): void {
             _isLoggedIn     = false;
-            _userId         = undefined;
-            _userPrivilege  = undefined;
-            _userPassword   = undefined;
-            _userNickname   = undefined;
+            _selfUserId     = undefined;
+            _selfPrivilege  = undefined;
+            _selfPassword   = undefined;
+            _selfNickname   = undefined;
+            _selfRankScore  = 0;
         }
 
         export function checkIsLoggedIn(): boolean {
             return _isLoggedIn;
         }
-        export function getUserId(): number {
-            return _userId;
+        export function getSelfUserId(): number {
+            return _selfUserId;
         }
-        export function getUserPrivilege(): number {
-            return _userPrivilege;
+        export function getSelfPrivilege(): number {
+            return _selfPrivilege;
         }
-        export function getUserAccount(): string {
-            return _userAccount;
+        export function getSelfAccount(): string {
+            return _selfAccount;
         }
-        export function getUserPassword(): string {
-            return _userPassword;
+        export function getSelfPassword(): string {
+            return _selfPassword;
         }
-        export function getUserNickname(): string {
-            return _userNickname;
+        export function getSelfNickname(): string {
+            return _selfNickname;
+        }
+        export function getSelfRankScore(): number {
+            return _selfRankScore;
+        }
+
+        export function getUserInfo(userId: number): ProtoTypes.IS_GetUserPublicInfo | undefined {
+            return _userInfos.get(userId);
+        }
+        export function setUserInfo(info: ProtoTypes.IS_GetUserPublicInfo): void {
+            _userInfos.set(info.id, info);
         }
 
         function _onNotifyNetworkDisconnected(e: egret.Event): void {
@@ -74,7 +88,7 @@ namespace TinyWars.User {
             }
 
             _isLoggedIn   = false;
-            _userPassword = undefined;
+            _selfPassword = undefined;
         }
     }
 }
