@@ -375,6 +375,8 @@ namespace TinyWars.Utility.Lang {
             `Resign`,
         ]],
         [Type.B0056, [
+            `已战败`,
+            `Defeat`
         ]],
         [Type.B0057, [
         ]],

@@ -4,7 +4,6 @@ namespace TinyWars.MultiCustomRoom {
     import Helpers      = Utility.Helpers;
     import Notify       = Utility.Notify;
     import Lang         = Utility.Lang;
-    import FloatText    = Utility.FloatText;
     import Types        = Utility.Types;
     import FlowManager  = Utility.FlowManager;
     import HelpPanel    = Common.HelpPanel;
@@ -140,29 +139,33 @@ namespace TinyWars.MultiCustomRoom {
             } else {
                 const data: DataForPlayerRenderer[] = [
                     {
-                        playerIndex: 1,
-                        playerName : warInfo.p1UserNickname,
-                        teamIndex  : warInfo.p1TeamIndex,
+                        playerIndex : 1,
+                        playerName  : warInfo.p1UserNickname,
+                        teamIndex   : warInfo.p1TeamIndex,
+                        isAlive     : warInfo.p1IsAlive,
                     },
                     {
-                        playerIndex: 2,
-                        playerName : warInfo.p2UserNickname,
-                        teamIndex  : warInfo.p2TeamIndex,
+                        playerIndex : 2,
+                        playerName  : warInfo.p2UserNickname,
+                        teamIndex   : warInfo.p2TeamIndex,
+                        isAlive     : warInfo.p2IsAlive,
                     },
                 ];
 
                 if (mapInfo.playersCount >= 3) {
                     data.push({
-                        playerIndex: 3,
-                        playerName : warInfo.p3UserNickname,
-                        teamIndex  : warInfo.p3TeamIndex,
+                        playerIndex : 3,
+                        playerName  : warInfo.p3UserNickname,
+                        teamIndex   : warInfo.p3TeamIndex,
+                        isAlive     : warInfo.p3IsAlive,
                     });
                 }
                 if (mapInfo.playersCount >= 4) {
                     data.push({
-                        playerIndex: 4,
-                        playerName : warInfo.p4UserNickname,
-                        teamIndex  : warInfo.p4TeamIndex,
+                        playerIndex : 4,
+                        playerName  : warInfo.p4UserNickname,
+                        teamIndex   : warInfo.p4TeamIndex,
+                        isAlive     : warInfo.p4IsAlive,
                     });
                 }
                 data[warInfo.playerIndexInTurn - 1].defeatTimestamp = warInfo.enterTurnTime + warInfo.timeLimit;
@@ -176,6 +179,7 @@ namespace TinyWars.MultiCustomRoom {
         playerIndex     : number;
         playerName      : string;
         teamIndex       : number;
+        isAlive         : boolean;
         defeatTimestamp?: number;
     }
 
@@ -203,7 +207,9 @@ namespace TinyWars.MultiCustomRoom {
                 this._labelIndex.textColor  = 0xFFFFFF;
                 this._labelTeam.text        = Helpers.getTeamText(data.teamIndex);
                 this._labelTeam.textColor   = 0xFFFFFF;
-                this._labelName.text        = data.playerName;
+                this._labelName.text        = data.isAlive
+                    ? data.playerName
+                    : `${data.playerName} (${Lang.getText(Lang.Type.B0056)})`;
                 this._labelName.textColor   = 0xFFFFFF;
             }
         }

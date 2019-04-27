@@ -2,13 +2,11 @@
 namespace TinyWars.MultiCustomRoom {
     import Notify           = Utility.Notify;
     import Types            = Utility.Types;
-    import StageManager     = Utility.StageManager;
     import FloatText        = Utility.FloatText;
     import Helpers          = Utility.Helpers;
     import Lang             = Utility.Lang;
     import ProtoTypes       = Utility.ProtoTypes;
     import TemplateMapModel = WarMap.WarMapModel;
-    import TemplateMapProxy = WarMap.WarMapProxy;
 
     export class McrContinueWarListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
@@ -29,7 +27,6 @@ namespace TinyWars.MultiCustomRoom {
         private _listPlayer     : GameUi.UiScrollList;
 
         private _dataForListWar     : DataForWarRenderer[] = [];
-        private _dataForListPlayer  : DataForPlayerRenderer[] = [];
         private _selectedWarIndex   : number;
 
         public static show(): void {
@@ -148,28 +145,32 @@ namespace TinyWars.MultiCustomRoom {
         private _createDataForListPlayer(warInfo: ProtoTypes.IMcwOngoingDetail, mapInfo: ProtoTypes.IMapDynamicInfo): DataForPlayerRenderer[] {
             const data: DataForPlayerRenderer[] = [
                 {
-                    playerIndex: 1,
-                    playerName : warInfo.p1UserNickname,
-                    teamIndex  : warInfo.p1TeamIndex,
+                    playerIndex : 1,
+                    playerName  : warInfo.p1UserNickname,
+                    teamIndex   : warInfo.p1TeamIndex,
+                    isAlive     : warInfo.p1IsAlive,
                 },
                 {
-                    playerIndex: 2,
-                    playerName : warInfo.p2UserNickname,
-                    teamIndex  : warInfo.p2TeamIndex,
+                    playerIndex : 2,
+                    playerName  : warInfo.p2UserNickname,
+                    teamIndex   : warInfo.p2TeamIndex,
+                    isAlive     : warInfo.p2IsAlive,
                 },
             ];
             if (mapInfo.playersCount >= 3) {
                 data.push({
-                    playerIndex: 3,
-                    playerName : warInfo.p3UserNickname,
-                    teamIndex  : warInfo.p3TeamIndex,
+                    playerIndex : 3,
+                    playerName  : warInfo.p3UserNickname,
+                    teamIndex   : warInfo.p3TeamIndex,
+                    isAlive     : warInfo.p3IsAlive,
                 });
             }
             if (mapInfo.playersCount >= 4) {
                 data.push({
-                    playerIndex: 4,
-                    playerName : warInfo.p4UserNickname,
-                    teamIndex  : warInfo.p4TeamIndex,
+                    playerIndex : 4,
+                    playerName  : warInfo.p4UserNickname,
+                    teamIndex   : warInfo.p4TeamIndex,
+                    isAlive     : warInfo.p4IsAlive,
                 });
             }
             data[warInfo.playerIndexInTurn - 1].defeatTimestamp = warInfo.enterTurnTime + warInfo.timeLimit;
@@ -287,6 +288,7 @@ namespace TinyWars.MultiCustomRoom {
         playerIndex     : number;
         playerName      : string;
         teamIndex       : number;
+        isAlive         : boolean;
         defeatTimestamp?: number;
     }
 
@@ -314,7 +316,9 @@ namespace TinyWars.MultiCustomRoom {
                 this._labelIndex.textColor  = 0xFFFFFF;
                 this._labelTeam.text        = Helpers.getTeamText(data.teamIndex);
                 this._labelTeam.textColor   = 0xFFFFFF;
-                this._labelName.text        = data.playerName;
+                this._labelName.text        = data.isAlive
+                    ? data.playerName
+                    : `${data.playerName} (${Lang.getText(Lang.Type.B0056)})`;
                 this._labelName.textColor   = 0xFFFFFF;
             }
         }

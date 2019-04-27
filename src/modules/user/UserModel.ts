@@ -32,6 +32,14 @@ namespace TinyWars.User {
             LocalStorage.setAccount(data.account);
         }
 
+        export function clearLoginInfo(): void {
+            _isLoggedIn     = false;
+            _userId         = undefined;
+            _userPrivilege  = undefined;
+            _userPassword   = undefined;
+            _userNickname   = undefined;
+        }
+
         export function checkIsLoggedIn(): boolean {
             return _isLoggedIn;
         }
