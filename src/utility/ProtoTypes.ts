@@ -1189,6 +1189,102 @@ export declare class BuildableTileCfg implements IBuildableTileCfg {
     public toJSON(): { [k: string]: any };
 }
 
+/** Properties of a PlayerRankCfg. */
+export declare interface IPlayerRankCfg {
+
+    /** PlayerRankCfg minScore */
+    minScore?: (number|null);
+
+    /** PlayerRankCfg rank */
+    rank?: (number|null);
+}
+
+/** Represents a PlayerRankCfg. */
+export declare class PlayerRankCfg implements IPlayerRankCfg {
+
+    /**
+     * Constructs a new PlayerRankCfg.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IPlayerRankCfg);
+
+    /** PlayerRankCfg minScore. */
+    public minScore: number;
+
+    /** PlayerRankCfg rank. */
+    public rank: number;
+
+    /**
+     * Creates a new PlayerRankCfg instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns PlayerRankCfg instance
+     */
+    public static create(properties?: IPlayerRankCfg): PlayerRankCfg;
+
+    /**
+     * Encodes the specified PlayerRankCfg message. Does not implicitly {@link PlayerRankCfg.verify|verify} messages.
+     * @param message PlayerRankCfg message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IPlayerRankCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified PlayerRankCfg message, length delimited. Does not implicitly {@link PlayerRankCfg.verify|verify} messages.
+     * @param message PlayerRankCfg message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IPlayerRankCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a PlayerRankCfg message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns PlayerRankCfg
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): PlayerRankCfg;
+
+    /**
+     * Decodes a PlayerRankCfg message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns PlayerRankCfg
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): PlayerRankCfg;
+
+    /**
+     * Verifies a PlayerRankCfg message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a PlayerRankCfg message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns PlayerRankCfg
+     */
+    public static fromObject(object: { [k: string]: any }): PlayerRankCfg;
+
+    /**
+     * Creates a plain object from a PlayerRankCfg message. Also converts values to other types if specified.
+     * @param message PlayerRankCfg
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: PlayerRankCfg, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this PlayerRankCfg to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
 /** Properties of a FullConfig. */
 export declare interface IFullConfig {
 
@@ -1218,6 +1314,9 @@ export declare interface IFullConfig {
 
     /** FullConfig BuildableTile */
     BuildableTile?: (IBuildableTileCfg[]|null);
+
+    /** FullConfig PlayerRank */
+    PlayerRank?: (IPlayerRankCfg[]|null);
 }
 
 /** Represents a FullConfig. */
@@ -1255,6 +1354,9 @@ export declare class FullConfig implements IFullConfig {
 
     /** FullConfig BuildableTile. */
     public BuildableTile: IBuildableTileCfg[];
+
+    /** FullConfig PlayerRank. */
+    public PlayerRank: IPlayerRankCfg[];
 
     /**
      * Creates a new FullConfig instance using the specified properties.

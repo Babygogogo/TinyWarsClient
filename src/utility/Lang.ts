@@ -19,6 +19,7 @@ namespace TinyWars.Utility.Lang {
         B0040, B0041, B0042, B0043, B0044, B0045, B0046, B0047, B0048, B0049,
         B0050, B0051, B0052, B0053, B0054, B0055, B0056, B0057, B0058, B0059,
         B0060, B0061, B0062, B0063, B0064, B0065, B0066, B0067, B0068, B0069,
+        B0070, B0071, B0072, B0073, B0074, B0075, B0076, B0077, B0078, B0079,
 
         B1000, B1001, B1002, B1003, B1004, B1005, B1006, B1007, B1008, B1009,
         B1010, B1011, B1012, B1013, B1014, B1015, B1016, B1017, B1018, B1019,
@@ -395,6 +396,70 @@ namespace TinyWars.Utility.Lang {
         [Type.B0060, [
             `排位积分`,
             `RankScore`,
+        ]],
+        [Type.B0061, [
+            `列兵`,
+            `0`,
+        ]],
+        [Type.B0062, [
+            `上等兵`,
+            `1`,
+        ]],
+        [Type.B0063, [
+            `下士`,
+            `2`,
+        ]],
+        [Type.B0064, [
+            `中士`,
+            `3`,
+        ]],
+        [Type.B0065, [
+            `上士`,
+            `4`,
+        ]],
+        [Type.B0066, [
+            `军士长`,
+            `5`,
+        ]],
+        [Type.B0067, [
+            `少尉`,
+            `6`,
+        ]],
+        [Type.B0068, [
+            `中尉`,
+            `7`,
+        ]],
+        [Type.B0069, [
+            `上尉`,
+            `8`,
+        ]],
+        [Type.B0070, [
+            `少校`,
+            `9`,
+        ]],
+        [Type.B0071, [
+            `中校`,
+            `10`,
+        ]],
+        [Type.B0072, [
+            `上校`,
+            `11`,
+        ]],
+        [Type.B0073, [
+            `大校`,
+            `12`,
+        ]],
+        [Type.B0074, [
+            `少将`,
+            `13`,
+        ]],
+        [Type.B0075, [
+            `中将`,
+            `14`,
+        ]],
+        [Type.B0076, [
+            `上将`,
+            `15`,
         ]],
 
         [Type.B1000, [
@@ -974,6 +1039,28 @@ namespace TinyWars.Utility.Lang {
             case Types.UnitActionType.ProduceUnit   : return getText(Type.B0049);
             case Types.UnitActionType.Wait          : return getText(Type.B0050);
             default                                 : return undefined;
+        }
+    }
+
+    export function getRankName(playerRank: number): string {
+        switch (playerRank) {
+            case 0  : return getText(Type.B0061);
+            case 1  : return getText(Type.B0062);
+            case 2  : return getText(Type.B0063);
+            case 3  : return getText(Type.B0064);
+            case 4  : return getText(Type.B0065);
+            case 5  : return getText(Type.B0066);
+            case 6  : return getText(Type.B0067);
+            case 7  : return getText(Type.B0068);
+            case 8  : return getText(Type.B0069);
+            case 9  : return getText(Type.B0070);
+            case 10 : return getText(Type.B0071);
+            case 11 : return getText(Type.B0072);
+            case 12 : return getText(Type.B0073);
+            case 13 : return getText(Type.B0074);
+            case 14 : return getText(Type.B0075);
+            case 15 : return getText(Type.B0076);
+            default : return undefined;
         }
     }
 }

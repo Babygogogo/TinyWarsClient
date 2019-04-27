@@ -82,7 +82,7 @@ namespace TinyWars.User {
                 this._labelTitle.text       = Lang.getFormatedText(Lang.Type.F0009, info.nickname);
 
                 this._labelRankScore.text   = `${info.rank2pScore}`;
-                this._labelRankName.text    = ConfigManager.getRankName(info.rank2pScore);
+                this._labelRankName.text    = ConfigManager.getRankName(ConfigManager.getNewestConfigVersion(), info.rank2pScore);
                 this._labelRank2pWins.text  = Lang.getFormatedText(Lang.Type.F0010, info.rank2pWins);
                 this._labelRank2pLoses.text = Lang.getFormatedText(Lang.Type.F0011, info.rank2pLoses);
                 this._labelRank2pDraws.text = Lang.getFormatedText(Lang.Type.F0012, info.rank2pDraws);

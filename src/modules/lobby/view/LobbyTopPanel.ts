@@ -63,7 +63,7 @@ namespace TinyWars.Lobby {
             const score                 = UserModel.getSelfRankScore();
             this._labelNickname.text    = UserModel.getSelfNickname();
             this._labelRankScore.text   = `${Lang.getText(Lang.Type.B0060)}: ${score}`;
-            this._labelRankName.text    = ConfigManager.getRankName(score);
+            this._labelRankName.text    = ConfigManager.getRankName(ConfigManager.getNewestConfigVersion(), score);
         }
     }
 }

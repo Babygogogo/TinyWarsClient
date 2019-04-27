@@ -15,6 +15,7 @@ namespace TinyWars.Utility.Types {
         UnitPromotion   : UnitPromotionCfg[];
         VisionBonus     : VisionBonusCfg[];
         BuildableTile   : BuildableTileCfg[];
+        PlayerRank      : PlayerRankCfg[];
     }
     export interface TileCategoryCfg extends ProtoTypes.ITileCategoryCfg {
         category: TileCategory;
@@ -63,6 +64,10 @@ namespace TinyWars.Utility.Types {
         unitType    : UnitType;
         srcTileType : TileType;
         dstTileType : TileType;
+    }
+    export interface PlayerRankCfg extends ProtoTypes.IPlayerRankCfg {
+        minScore: number;
+        rank    : number;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

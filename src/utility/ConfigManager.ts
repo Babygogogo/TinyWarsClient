@@ -4,6 +4,7 @@ namespace TinyWars.ConfigManager {
     import Types            = Utility.Types;
     import ProtoTypes       = Utility.ProtoTypes;
     import Logger           = Utility.Logger;
+    import Lang             = Utility.Lang;
     import NetManager       = Network.Manager;
     import ActionCode       = Network.Codes;
     import GridSize         = Types.Size;
@@ -25,6 +26,7 @@ namespace TinyWars.ConfigManager {
     import UnitPromotionCfg = Types.UnitPromotionCfg;
     import VisionBonusCfg   = Types.VisionBonusCfg;
     import BuildableTileCfg = Types.BuildableTileCfg;
+    import PlayerRankCfg    = Types.PlayerRankCfg;
 
     ////////////////////////////////////////////////////////////////////////////////
     // Internal types.
@@ -49,6 +51,7 @@ namespace TinyWars.ConfigManager {
         UnitPromotion           : { [promotion: number]: UnitPromotionCfg };
         VisionBonus             : { [unitType: number]: { [tileType: number]: VisionBonusCfg } };
         BuildableTile           : { [unitType: number]: { [srcTileType: number]: BuildableTileCfg } };
+        PlayerRank              : { [minScore: number]: PlayerRankCfg };
         maxUnitPromotion?       : number;
         secondaryWeaponFlag?    : { [unitType: number]: boolean };
     }
@@ -1341,6 +1344,13 @@ namespace TinyWars.ConfigManager {
         }
         return dst;
     }
+    function _destructPlayerRankCfg(data: PlayerRankCfg[]): { [minScore: number]: PlayerRankCfg } {
+        const dst: { [minScore: number]: PlayerRankCfg } = {};
+        for (const d of data) {
+            dst[d.minScore!] = d;
+        }
+        return dst;
+    }
     function _getMaxUnitPromotion(cfg: { [promotion: number]: UnitPromotionCfg }): number {
         let maxPromotion = 0;
         for (const p in cfg) {
@@ -1444,6 +1454,7 @@ namespace TinyWars.ConfigManager {
                 UnitPromotion       : _destructUnitPromotionCfg(data.UnitPromotion),
                 VisionBonus         : _destructVisionBonusCfg(data.VisionBonus),
                 BuildableTile       : _destructBuildableTileCfg(data.BuildableTile),
+                PlayerRank          : _destructPlayerRankCfg(data.PlayerRank),
             };
             cfg.maxUnitPromotion    = _getMaxUnitPromotion(cfg.UnitPromotion);
             cfg.secondaryWeaponFlag = _getSecondaryWeaponFlags(cfg.DamageChart);
@@ -1577,7 +1588,18 @@ namespace TinyWars.ConfigManager {
         return sources[tickCount % sources.length];
     }
 
-    export function getRankName(rankScore: number): string {
-        return `军士长`;
+    export function getRankName(version: number, rankScore: number): string {
+        return Lang.getRankName(getPlayerRank(version, rankScore));
+    }
+    export function getPlayerRank(version: number, rankScore: number): number | undefined {
+        const cfgs  = _ALL_CONFIGS.get(version)!.PlayerRank;
+        let maxRank = 0;
+        for (const i in cfgs) {
+            const cfg = cfgs[i];
+            if (rankScore >= cfg.minScore) {
+                maxRank = cfg.rank;
+            }
+        }
+        return maxRank;
     }
 }
