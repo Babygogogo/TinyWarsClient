@@ -3798,6 +3798,12 @@ export declare interface IActionContainer {
 
     /** ActionContainer S_McwUnitCaptureTile */
     S_McwUnitCaptureTile?: (IS_McwUnitCaptureTile|null);
+
+    /** ActionContainer C_McwUnitAttack */
+    C_McwUnitAttack?: (IC_McwUnitAttack|null);
+
+    /** ActionContainer S_McwUnitAttack */
+    S_McwUnitAttack?: (IS_McwUnitAttack|null);
 }
 
 /** Represents an ActionContainer. */
@@ -3937,6 +3943,12 @@ export declare class ActionContainer implements IActionContainer {
 
     /** ActionContainer S_McwUnitCaptureTile. */
     public S_McwUnitCaptureTile?: (IS_McwUnitCaptureTile|null);
+
+    /** ActionContainer C_McwUnitAttack. */
+    public C_McwUnitAttack?: (IC_McwUnitAttack|null);
+
+    /** ActionContainer S_McwUnitAttack. */
+    public S_McwUnitAttack?: (IS_McwUnitAttack|null);
 
     /**
      * Creates a new ActionContainer instance using the specified properties.
@@ -8534,6 +8546,282 @@ export declare class S_McwUnitCaptureTile implements IS_McwUnitCaptureTile {
 
     /**
      * Converts this S_McwUnitCaptureTile to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_McwUnitAttack. */
+export declare interface IC_McwUnitAttack {
+
+    /** C_McwUnitAttack warId */
+    warId?: (number|null);
+
+    /** C_McwUnitAttack actionId */
+    actionId?: (number|null);
+
+    /** C_McwUnitAttack path */
+    path?: (IGridIndex[]|null);
+
+    /** C_McwUnitAttack launchUnitId */
+    launchUnitId?: (number|null);
+
+    /** C_McwUnitAttack targetGridIndex */
+    targetGridIndex?: (IGridIndex|null);
+}
+
+/** Represents a C_McwUnitAttack. */
+export declare class C_McwUnitAttack implements IC_McwUnitAttack {
+
+    /**
+     * Constructs a new C_McwUnitAttack.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_McwUnitAttack);
+
+    /** C_McwUnitAttack warId. */
+    public warId: number;
+
+    /** C_McwUnitAttack actionId. */
+    public actionId: number;
+
+    /** C_McwUnitAttack path. */
+    public path: IGridIndex[];
+
+    /** C_McwUnitAttack launchUnitId. */
+    public launchUnitId: number;
+
+    /** C_McwUnitAttack targetGridIndex. */
+    public targetGridIndex?: (IGridIndex|null);
+
+    /**
+     * Creates a new C_McwUnitAttack instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_McwUnitAttack instance
+     */
+    public static create(properties?: IC_McwUnitAttack): C_McwUnitAttack;
+
+    /**
+     * Encodes the specified C_McwUnitAttack message. Does not implicitly {@link C_McwUnitAttack.verify|verify} messages.
+     * @param message C_McwUnitAttack message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_McwUnitAttack, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_McwUnitAttack message, length delimited. Does not implicitly {@link C_McwUnitAttack.verify|verify} messages.
+     * @param message C_McwUnitAttack message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_McwUnitAttack, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_McwUnitAttack message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_McwUnitAttack
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_McwUnitAttack;
+
+    /**
+     * Decodes a C_McwUnitAttack message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_McwUnitAttack
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_McwUnitAttack;
+
+    /**
+     * Verifies a C_McwUnitAttack message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_McwUnitAttack message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_McwUnitAttack
+     */
+    public static fromObject(object: { [k: string]: any }): C_McwUnitAttack;
+
+    /**
+     * Creates a plain object from a C_McwUnitAttack message. Also converts values to other types if specified.
+     * @param message C_McwUnitAttack
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_McwUnitAttack, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_McwUnitAttack to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_McwUnitAttack. */
+export declare interface IS_McwUnitAttack {
+
+    /** S_McwUnitAttack errorCode */
+    errorCode?: (number|null);
+
+    /** S_McwUnitAttack warId */
+    warId?: (number|null);
+
+    /** S_McwUnitAttack actionId */
+    actionId?: (number|null);
+
+    /** S_McwUnitAttack path */
+    path?: (IMovePath|null);
+
+    /** S_McwUnitAttack launchUnitId */
+    launchUnitId?: (number|null);
+
+    /** S_McwUnitAttack discoveredUnits */
+    discoveredUnits?: (ISerializedMcwUnit[]|null);
+
+    /** S_McwUnitAttack discoveredTiles */
+    discoveredTiles?: (ISerializedMcwTile[]|null);
+
+    /** S_McwUnitAttack actingUnits */
+    actingUnits?: (ISerializedMcwUnit[]|null);
+
+    /** S_McwUnitAttack actingTiles */
+    actingTiles?: (ISerializedMcwTile[]|null);
+
+    /** S_McwUnitAttack targetGridIndex */
+    targetGridIndex?: (IGridIndex|null);
+
+    /** S_McwUnitAttack attackDamage */
+    attackDamage?: (number|null);
+
+    /** S_McwUnitAttack counterDamage */
+    counterDamage?: (number|null);
+
+    /** S_McwUnitAttack lostPlayerIndex */
+    lostPlayerIndex?: (number|null);
+}
+
+/** Represents a S_McwUnitAttack. */
+export declare class S_McwUnitAttack implements IS_McwUnitAttack {
+
+    /**
+     * Constructs a new S_McwUnitAttack.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_McwUnitAttack);
+
+    /** S_McwUnitAttack errorCode. */
+    public errorCode: number;
+
+    /** S_McwUnitAttack warId. */
+    public warId: number;
+
+    /** S_McwUnitAttack actionId. */
+    public actionId: number;
+
+    /** S_McwUnitAttack path. */
+    public path?: (IMovePath|null);
+
+    /** S_McwUnitAttack launchUnitId. */
+    public launchUnitId: number;
+
+    /** S_McwUnitAttack discoveredUnits. */
+    public discoveredUnits: ISerializedMcwUnit[];
+
+    /** S_McwUnitAttack discoveredTiles. */
+    public discoveredTiles: ISerializedMcwTile[];
+
+    /** S_McwUnitAttack actingUnits. */
+    public actingUnits: ISerializedMcwUnit[];
+
+    /** S_McwUnitAttack actingTiles. */
+    public actingTiles: ISerializedMcwTile[];
+
+    /** S_McwUnitAttack targetGridIndex. */
+    public targetGridIndex?: (IGridIndex|null);
+
+    /** S_McwUnitAttack attackDamage. */
+    public attackDamage: number;
+
+    /** S_McwUnitAttack counterDamage. */
+    public counterDamage: number;
+
+    /** S_McwUnitAttack lostPlayerIndex. */
+    public lostPlayerIndex: number;
+
+    /**
+     * Creates a new S_McwUnitAttack instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_McwUnitAttack instance
+     */
+    public static create(properties?: IS_McwUnitAttack): S_McwUnitAttack;
+
+    /**
+     * Encodes the specified S_McwUnitAttack message. Does not implicitly {@link S_McwUnitAttack.verify|verify} messages.
+     * @param message S_McwUnitAttack message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_McwUnitAttack, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_McwUnitAttack message, length delimited. Does not implicitly {@link S_McwUnitAttack.verify|verify} messages.
+     * @param message S_McwUnitAttack message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_McwUnitAttack, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_McwUnitAttack message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_McwUnitAttack
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_McwUnitAttack;
+
+    /**
+     * Decodes a S_McwUnitAttack message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_McwUnitAttack
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_McwUnitAttack;
+
+    /**
+     * Verifies a S_McwUnitAttack message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_McwUnitAttack message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_McwUnitAttack
+     */
+    public static fromObject(object: { [k: string]: any }): S_McwUnitAttack;
+
+    /**
+     * Creates a plain object from a S_McwUnitAttack message. Also converts values to other types if specified.
+     * @param message S_McwUnitAttack
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_McwUnitAttack, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_McwUnitAttack to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };

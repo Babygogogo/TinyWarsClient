@@ -269,16 +269,11 @@ namespace TinyWars.MultiCustomWar.McwModel {
                     });
                 });
             } else {
-                const playerManager = _war.getPlayerManager();
-                if ((_war.getPlayerIndexLoggedIn() === lostPlayerIndex) || (playerManager.getAliveTeamsCount(false, lostPlayerIndex) <= 1)) {
-                    _war.setIsEnded(true);
-                }
-
                 return new Promise<void>(resolve => {
                     focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false, () => {
                         focusUnit.updateView();
                         tile.updateView();
-                        FloatText.show(Lang.getFormatedText(Lang.Type.F0013, playerManager.getPlayer(lostPlayerIndex).getNickname()));
+                        FloatText.show(Lang.getFormatedText(Lang.Type.F0013, _war.getPlayerManager().getPlayer(lostPlayerIndex).getNickname()));
                         DestructionHelpers.destroyPlayerForce(_war, lostPlayerIndex, true);
                         updateTilesAndUnitsOnVisibilityChanged(_war);
 

@@ -279,20 +279,35 @@ namespace TinyWars.MultiCustomWar {
             return maxAmmo != null ? this.getPrimaryWeaponCurrentAmmo()! <= maxAmmo * 0.4 : false;
         }
 
-        public getPrimaryWeaponBaseDamage(armorType: ArmorType): number | undefined | null {
+        public getCfgPrimaryWeaponBaseDamage(armorType: ArmorType): number | undefined | null {
             return this._damageChartCfg[armorType][Types.WeaponType.Primary].damage;
+        }
+        public getPrimaryWeaponBaseDamage(armorType: ArmorType): number | undefined | null {
+            return this.getPrimaryWeaponCurrentAmmo()
+                ? this.getCfgPrimaryWeaponBaseDamage(armorType)
+                : undefined;
         }
 
         public checkHasSecondaryWeapon(): boolean {
             return ConfigManager.checkHasSecondaryWeapon(this._configVersion, this.getType());
         }
 
-        public getSecondaryWeaponBaseDamage(armorType: ArmorType): number | undefined | null {
+        public getCfgSecondaryWeaponBaseDamage(armorType: ArmorType): number | undefined | null {
             return this._damageChartCfg[armorType][Types.WeaponType.Secondary].damage;
         }
+        public getSecondaryWeaponBaseDamage(armorType: ArmorType): number | undefined | null {
+            return this.checkHasSecondaryWeapon()
+                ? this.getCfgSecondaryWeaponBaseDamage(armorType)
+                : undefined;
+        }
 
-        public getBaseDamange(armorType: ArmorType): number | undefined {
-            return this.getPrimaryWeaponBaseDamage(armorType) || this.getSecondaryWeaponBaseDamage(armorType);
+        public getCfgBaseDamage(armorType: ArmorType): number | undefined | null {
+            const primaryDamage = this.getCfgPrimaryWeaponBaseDamage(armorType);
+            return primaryDamage != null ? primaryDamage : this.getCfgSecondaryWeaponBaseDamage(armorType);
+        }
+        public getBaseDamage(armorType: ArmorType): number | undefined | null {
+            const primaryDamage = this.getPrimaryWeaponBaseDamage(armorType);
+            return primaryDamage != null ? primaryDamage : this.getSecondaryWeaponBaseDamage(armorType);
         }
 
         public getMinAttackRange(): number | undefined {
@@ -319,7 +334,7 @@ namespace TinyWars.MultiCustomWar {
                 ((this.getLoaderUnitId() != null) && (pathLength <= 1))                             ||
                 ((pathLength > 1) && (unitMap.getUnitOnMap(destination)))                           ||
                 ((!primaryAmmo) && (!this.checkHasSecondaryWeapon()))                               ||
-                (!((distance <= this.getMaxAttackRange()) && (distance >= this.getMinAttackRange())))
+                (!((distance <= this.getMaxAttackRange()!) && (distance >= this.getMinAttackRange()!)))
             ) {
                 return false;
             } else {
@@ -328,11 +343,10 @@ namespace TinyWars.MultiCustomWar {
                     const armorType = targetUnit.getArmorType();
                     return (targetUnit.getTeamIndex() !== this.getTeamIndex())
                         && ((!targetUnit.getIsDiving()) || (this.checkCanAttackDivingUnits()))
-                        && (((!!primaryAmmo) && (this.getPrimaryWeaponBaseDamage(armorType) != null)) || (this.getSecondaryWeaponBaseDamage(armorType) != null))
+                        && (this.getBaseDamage(armorType) != null);
                 } else {
                     const armorType = this._war.getTileMap().getTile(targetGridIndex).getArmorType();
-                    return (armorType != null)
-                        && (((!!primaryAmmo) && (this.getPrimaryWeaponBaseDamage(armorType) != null)) || (this.getSecondaryWeaponBaseDamage(armorType) != null));
+                    return (armorType != null) && (this.getBaseDamage(armorType) != null);
                 }
             }
         }
@@ -359,8 +373,8 @@ namespace TinyWars.MultiCustomWar {
                         return undefined;
                     } else {
                         const armorType         = targetUnit.getArmorType();
-                        const primaryBaseDmg    = primaryAmmo ? this.getPrimaryWeaponBaseDamage(armorType) : undefined;
-                        const baseDamage        = primaryBaseDmg != null ? primaryBaseDmg : this.getSecondaryWeaponBaseDamage(armorType);
+                        const primaryBaseDmg    = primaryAmmo ? this.getCfgPrimaryWeaponBaseDamage(armorType) : undefined;
+                        const baseDamage        = primaryBaseDmg != null ? primaryBaseDmg : this.getCfgSecondaryWeaponBaseDamage(armorType);
                         if (baseDamage == null) {
                             return undefined;
                         } else {
@@ -384,8 +398,8 @@ namespace TinyWars.MultiCustomWar {
                     if (armorType == null) {
                         return undefined;
                     } else {
-                        const primaryBaseDmg    = primaryAmmo ? this.getPrimaryWeaponBaseDamage(armorType) : undefined;
-                        const baseDamage        = primaryBaseDmg != null ? primaryBaseDmg : this.getSecondaryWeaponBaseDamage(armorType);
+                        const primaryBaseDmg    = primaryAmmo ? this.getCfgPrimaryWeaponBaseDamage(armorType) : undefined;
+                        const baseDamage        = primaryBaseDmg != null ? primaryBaseDmg : this.getCfgSecondaryWeaponBaseDamage(armorType);
                         if (baseDamage == null) {
                             return undefined;
                         } else {

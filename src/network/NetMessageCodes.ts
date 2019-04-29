@@ -44,4 +44,6 @@ C_McwUnitBeLoaded = 183,
 S_McwUnitBeLoaded = 184,
 C_McwUnitCaptureTile = 185,
 S_McwUnitCaptureTile = 186,
+C_McwUnitAttack = 187,
+S_McwUnitAttack = 188,
 }}
