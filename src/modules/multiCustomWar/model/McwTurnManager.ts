@@ -168,15 +168,7 @@ namespace TinyWars.MultiCustomWar {
         }
         private _runPhaseMain(data: ProtoTypes.IS_McwPlayerBeginTurn): void {
             if (data.isDefeated) {
-                const war               = this._war;
-                const playerIndex       = this.getPlayerIndexInTurn();
-                const gridVisionEffect  = war.getGridVisionEffect();
-                war.getUnitMap().forEachUnitOnMap(unit => {
-                    if (unit.getPlayerIndex() === playerIndex) {
-                        gridVisionEffect.showEffectExplosion(unit.getGridIndex());
-                    }
-                });
-                DestructionHelpers.destroyPlayerForce(war, playerIndex);
+                DestructionHelpers.destroyPlayerForce(this._war, this.getPlayerIndexInTurn(), true);
             }
         }
         private _runPhaseResetUnitState(): void {

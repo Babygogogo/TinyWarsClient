@@ -14,6 +14,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
             { actionCode: NetMessageCodes.S_McwPlayerEndTurn,       callback: _onSMcwPlayerEndTurn, },
             { actionCode: NetMessageCodes.S_McwPlayerSurrender,     callback: _onSMcwPlayerSurrender },
             { actionCode: NetMessageCodes.S_McwUnitBeLoaded,        callback: _onSMcwUnitBeLoaded },
+            { actionCode: NetMessageCodes.S_McwUnitCaptureTile,     callback: _onSMcwUnitCaptureTile },
             { actionCode: NetMessageCodes.S_McwUnitWait,            callback: _onSMcwUnitWait, },
         ], McwProxy);
     }
@@ -30,7 +31,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         const data = e.data as ProtoTypes.IS_McwPlayerBeginTurn;
         if (!data.errorCode) {
             McwModel.updateOnBeginTurn(data);
-            Notify.dispatch(Notify.Type.SMcwBeginTurn, data);
+            Notify.dispatch(Notify.Type.SMcwPlayerBeginTurn, data);
         }
     }
 
@@ -46,7 +47,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         const data = e.data as ProtoTypes.IS_McwPlayerEndTurn;
         if (!data.errorCode) {
             McwModel.updateOnEndTurn(data);
-            Notify.dispatch(Notify.Type.SMcwEndTurn, data);
+            Notify.dispatch(Notify.Type.SMcwPlayerEndTurn, data);
         }
     }
 
@@ -81,6 +82,24 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         if (!data.errorCode) {
             McwModel.updateOnUnitBeLoaded(data);
             Notify.dispatch(Notify.Type.SMcwUnitBeLoaded);
+        }
+    }
+
+    export function reqMcwUnitCaptureTile(war: McwWar, path: GridIndex[], launchUnitId?: number): void {
+        NetManager.send({
+            C_McwUnitCaptureTile: {
+                warId       : war.getWarId(),
+                actionId    : war.getNextActionId(),
+                path,
+                launchUnitId,
+            },
+        });
+    }
+    function _onSMcwUnitCaptureTile(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_McwUnitCaptureTile;
+        if (!data.errorCode) {
+            McwModel.updateOnUnitCaptureTile(data);
+            Notify.dispatch(Notify.Type.SMcwUnitCaptureTile);
         }
     }
 

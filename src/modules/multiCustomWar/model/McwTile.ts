@@ -451,35 +451,49 @@ namespace TinyWars.MultiCustomWar {
         // Functions for fog.
         ////////////////////////////////////////////////////////////////////////////////
         public setFogEnabled(): void {
-            this._isFogEnabled = true;
+            if (!this.getIsFogEnabled()) {
+                this._isFogEnabled = true;
 
-            const currentHp = this.getCurrentHp();
-            this.resetByPlayerIndex(0);
-            this.setCurrentBuildPoint(this.getMaxBuildPoint());
-            this.setCurrentCapturePoint(this.getMaxCapturePoint());
-            this.setCurrentHp(currentHp);
+                const currentHp = this.getCurrentHp();
+                this.init({
+                    gridX       : this.getGridX(),
+                    gridY       : this.getGridY(),
+                    objectViewId: this.getType() === TileType.Headquarters ? this.getObjectViewId() : this.getNeutralObjectViewId(),
+                    baseViewId  : this.getBaseViewId(),
+                }, this._configVersion);
+
+                this.startRunning(this._war);
+                this.setCurrentBuildPoint(this.getMaxBuildPoint());
+                this.setCurrentCapturePoint(this.getMaxCapturePoint());
+                this.setCurrentHp(currentHp);
+            }
         }
 
         public setFogDisabled(data?: SerializedMcwTile): void {
-            this._isFogEnabled = false;
+            if (this.getIsFogEnabled()) {
+                this._isFogEnabled = false;
 
-            if (data) {
-                this.init(data, this._configVersion);
-            } else {
-                const tileMap   = this._war.getTileMap();
-                const mapData   = tileMap.getTemplateMap();
-                const gridX     = this.getGridX();
-                const gridY     = this.getGridY();
-                const index     = gridX + gridY * tileMap.getMapSize().width;
-                this.init({
-                    objectViewId: mapData.tileObjects[index],
-                    baseViewId  : mapData.tileBases[index],
-                    gridX,
-                    gridY,
-                }, this._configVersion);
+                if (data) {
+                    this.init(data, this._configVersion);
+                } else {
+                    const tileMap   = this._war.getTileMap();
+                    const mapData   = tileMap.getTemplateMap();
+                    const gridX     = this.getGridX();
+                    const gridY     = this.getGridY();
+                    const index     = gridX + gridY * tileMap.getMapSize().width;
+                    this.init({
+                        objectViewId: mapData.tileObjects[index],
+                        baseViewId  : mapData.tileBases[index],
+                        gridX,
+                        gridY,
+                        currentHp           : this.getCurrentHp(),
+                        currentBuildPoint   : this.getCurrentBuildPoint(),
+                        currentCapturePoint : this.getCurrentCapturePoint(),
+                    }, this._configVersion);
+                }
+
+                this.startRunning(this._war);
             }
-
-            this.startRunning(this._war);
         }
 
         public getIsFogEnabled(): boolean {

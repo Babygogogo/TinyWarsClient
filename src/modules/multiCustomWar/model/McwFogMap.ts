@@ -195,10 +195,10 @@ namespace TinyWars.MultiCustomWar {
                 updateMap(map, mapSize, tile.getGridIndex(), tile.getVisionRangeForPlayer(playerIndex), 1);
             });
         }
-        public updateMapFromTilesForPlayerOnGettingOwnership(playerIndex: number, gridIndex: GridIndex, vision: number): void {
+        public updateMapFromTilesForPlayerOnGettingOwnership(playerIndex: number, gridIndex: GridIndex, vision: number | null | undefined): void {
             updateMap(this._mapsFromTiles.get(playerIndex)!, this.getMapSize(), gridIndex, vision, 1);
         }
-        public updateMapFromTilesForPlayerOnLosingOwnership(playerIndex: number, gridIndex: GridIndex, vision: number): void {
+        public updateMapFromTilesForPlayerOnLosingOwnership(playerIndex: number, gridIndex: GridIndex, vision: number | null | undefined): void {
             updateMap(this._mapsFromTiles.get(playerIndex)!, this.getMapSize(), gridIndex, vision, -1);
         }
 

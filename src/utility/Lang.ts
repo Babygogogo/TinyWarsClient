@@ -758,6 +758,10 @@ namespace TinyWars.Utility.Lang {
             `%d平`,
             `Draw: %d`,
         ]],
+        [Type.F0013, [
+            `玩家[%s]已战败！`,
+            `Player [%s] is defeated!`,
+        ]],
     ]);
 
     const NET_ERROR_TEXT = new Map<ErrorCode, string[]>([

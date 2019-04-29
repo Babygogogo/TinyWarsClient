@@ -413,7 +413,7 @@ namespace TinyWars.Utility.Types {
         RequestingUnitAttack,
         RequestingUnitBeLoaded,
         RequestingUnitBuildTile,
-        RequestingUnitCapture,
+        RequestingUnitCaptureTile,
         RequestingUnitDive,
         RequestingUnitDrop,
         RequestingUnitJoin,

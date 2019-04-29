@@ -74,10 +74,11 @@ namespace TinyWars.Utility.Notify {
         SMcrContinueWar,
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        SMcwBeginTurn,
-        SMcwEndTurn,
+        SMcwPlayerBeginTurn,
+        SMcwPlayerEndTurn,
         SMcwPlayerSurrender,
         SMcwUnitBeLoaded,
+        SMcwUnitCaptureTile,
         SMcwUnitWait,
     }
 

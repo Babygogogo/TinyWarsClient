@@ -25,13 +25,15 @@ namespace TinyWars.Utility.DestructionHelpers {
         return destroyedUnits;
     }
 
-    export function destroyPlayerForce(war: McwWar, playerIndex: number): void {
-        const unitMap = war.getUnitMap();
+    export function destroyPlayerForce(war: McwWar, playerIndex: number, showExplosionEffect: boolean): void {
+        const unitMap           = war.getUnitMap();
+        const gridVisionEffect  = showExplosionEffect ? war.getGridVisionEffect() : undefined;
         unitMap.forEachUnitOnMap(unit => {
             if (unit.getPlayerIndex() === playerIndex) {
                 const gridIndex = unit.getGridIndex();
                 resetTile(war, gridIndex);
                 unitMap.removeUnitOnMap(gridIndex);
+                (gridVisionEffect) && (gridVisionEffect.showEffectExplosion(gridIndex));
             }
         });
         unitMap.removeUnitsLoadedForPlayer(playerIndex);

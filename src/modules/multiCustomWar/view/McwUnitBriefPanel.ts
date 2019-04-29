@@ -116,6 +116,8 @@ namespace TinyWars.MultiCustomWar {
             if (McwWarMenuPanel.getIsOpening()) {
                 this.visible = false;
             } else {
+                this.visible = true;
+
                 const unitList  = this._unitList;
                 unitList.length = 0;
 

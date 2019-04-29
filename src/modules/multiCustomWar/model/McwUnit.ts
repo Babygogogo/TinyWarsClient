@@ -427,6 +427,10 @@ namespace TinyWars.MultiCustomWar {
         }
 
         public getCaptureAmount(): number | undefined {
+            // TODO: take the skills into account.
+            return this.checkCanCapture() ? this.getNormalizedCurrentHp() : undefined;
+        }
+        public getCfgCaptureAmount(): number | undefined {
             return this.checkCanCapture() ? this.getNormalizedCurrentHp() : undefined;
         }
 

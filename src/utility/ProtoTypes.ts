@@ -8430,9 +8430,6 @@ export declare interface IS_McwUnitCaptureTile {
 
     /** S_McwUnitCaptureTile actingTiles */
     actingTiles?: (ISerializedMcwTile[]|null);
-
-    /** S_McwUnitCaptureTile lostPlayerIndex */
-    lostPlayerIndex?: (number|null);
 }
 
 /** Represents a S_McwUnitCaptureTile. */
@@ -8470,9 +8467,6 @@ export declare class S_McwUnitCaptureTile implements IS_McwUnitCaptureTile {
 
     /** S_McwUnitCaptureTile actingTiles. */
     public actingTiles: ISerializedMcwTile[];
-
-    /** S_McwUnitCaptureTile lostPlayerIndex. */
-    public lostPlayerIndex: number;
 
     /**
      * Creates a new S_McwUnitCaptureTile instance using the specified properties.

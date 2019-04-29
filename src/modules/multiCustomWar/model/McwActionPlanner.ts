@@ -544,8 +544,12 @@ namespace TinyWars.MultiCustomWar {
             FloatText.show(`Unit build tile TODO!!!`);
         }
 
-        private _setStateRequestingUnitCapture(): void {
-            FloatText.show(`Unit capture TODO!!!`);
+        private _setStateRequestingUnitCaptureTile(): void {
+            const unit = this.getFocusUnitLoaded();
+            McwProxy.reqMcwUnitCaptureTile(this._war, this.getMovePath(), unit ? unit.getUnitId() : undefined);
+
+            this._setState(State.RequestingUnitCaptureTile);
+            this._updateView();
         }
 
         private _setStateRequestingUnitDive(): void {
@@ -1144,7 +1148,7 @@ namespace TinyWars.MultiCustomWar {
         }
         private _getActionUnitCapture(): DataForUnitActionRenderer | undefined {
             return (this.getFocusUnit().checkCanCaptureTile(this._tileMap.getTile(this.getMovePathDestination())))
-                ? { actionType: UnitActionType.Capture, callback: () => this._setStateRequestingUnitCapture() }
+                ? { actionType: UnitActionType.Capture, callback: () => this._setStateRequestingUnitCaptureTile() }
                 : undefined;
         }
         private _getActionUnitDive(): DataForUnitActionRenderer | undefined {
@@ -1340,7 +1344,7 @@ namespace TinyWars.MultiCustomWar {
             || (state === State.RequestingUnitAttack)
             || (state === State.RequestingUnitBeLoaded)
             || (state === State.RequestingUnitBuildTile)
-            || (state === State.RequestingUnitCapture)
+            || (state === State.RequestingUnitCaptureTile)
             || (state === State.RequestingUnitDive)
             || (state === State.RequestingUnitDrop)
             || (state === State.RequestingUnitJoin)

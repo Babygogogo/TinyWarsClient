@@ -98,6 +98,8 @@ namespace TinyWars.Utility.FlowManager {
     }
 
     function _onNotifySLogout(e: egret.Event): void {
+        _hasOnceWentToLobby = false;
+        UserModel.clearLoginInfo();
         gotoLogin();
     }
 
