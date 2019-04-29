@@ -517,7 +517,11 @@ namespace TinyWars.MultiCustomWar {
         // Functions for setting requesting state.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _setStateRequestingUnitBeLoaded(): void {
-            FloatText.show("Unit load TODO!!!");
+            const unit = this.getFocusUnitLoaded();
+            McwProxy.reqMcwUnitBeLoaded(this._war, this.getMovePath(), unit ? unit.getUnitId() : undefined);
+
+            this._setState(State.RequestingUnitBeLoaded);
+            this._updateView();
         }
 
         private _setStateRequestingUnitJoin(): void {

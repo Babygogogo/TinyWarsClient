@@ -3792,6 +3792,12 @@ export declare interface IActionContainer {
 
     /** ActionContainer S_McwUnitBeLoaded */
     S_McwUnitBeLoaded?: (IS_McwUnitBeLoaded|null);
+
+    /** ActionContainer C_McwUnitCaptureTile */
+    C_McwUnitCaptureTile?: (IC_McwUnitCaptureTile|null);
+
+    /** ActionContainer S_McwUnitCaptureTile */
+    S_McwUnitCaptureTile?: (IS_McwUnitCaptureTile|null);
 }
 
 /** Represents an ActionContainer. */
@@ -3925,6 +3931,12 @@ export declare class ActionContainer implements IActionContainer {
 
     /** ActionContainer S_McwUnitBeLoaded. */
     public S_McwUnitBeLoaded?: (IS_McwUnitBeLoaded|null);
+
+    /** ActionContainer C_McwUnitCaptureTile. */
+    public C_McwUnitCaptureTile?: (IC_McwUnitCaptureTile|null);
+
+    /** ActionContainer S_McwUnitCaptureTile. */
+    public S_McwUnitCaptureTile?: (IS_McwUnitCaptureTile|null);
 
     /**
      * Creates a new ActionContainer instance using the specified properties.
@@ -8276,6 +8288,258 @@ export declare class S_McwUnitBeLoaded implements IS_McwUnitBeLoaded {
 
     /**
      * Converts this S_McwUnitBeLoaded to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_McwUnitCaptureTile. */
+export declare interface IC_McwUnitCaptureTile {
+
+    /** C_McwUnitCaptureTile warId */
+    warId?: (number|null);
+
+    /** C_McwUnitCaptureTile actionId */
+    actionId?: (number|null);
+
+    /** C_McwUnitCaptureTile path */
+    path?: (IGridIndex[]|null);
+
+    /** C_McwUnitCaptureTile launchUnitId */
+    launchUnitId?: (number|null);
+}
+
+/** Represents a C_McwUnitCaptureTile. */
+export declare class C_McwUnitCaptureTile implements IC_McwUnitCaptureTile {
+
+    /**
+     * Constructs a new C_McwUnitCaptureTile.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_McwUnitCaptureTile);
+
+    /** C_McwUnitCaptureTile warId. */
+    public warId: number;
+
+    /** C_McwUnitCaptureTile actionId. */
+    public actionId: number;
+
+    /** C_McwUnitCaptureTile path. */
+    public path: IGridIndex[];
+
+    /** C_McwUnitCaptureTile launchUnitId. */
+    public launchUnitId: number;
+
+    /**
+     * Creates a new C_McwUnitCaptureTile instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_McwUnitCaptureTile instance
+     */
+    public static create(properties?: IC_McwUnitCaptureTile): C_McwUnitCaptureTile;
+
+    /**
+     * Encodes the specified C_McwUnitCaptureTile message. Does not implicitly {@link C_McwUnitCaptureTile.verify|verify} messages.
+     * @param message C_McwUnitCaptureTile message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_McwUnitCaptureTile, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_McwUnitCaptureTile message, length delimited. Does not implicitly {@link C_McwUnitCaptureTile.verify|verify} messages.
+     * @param message C_McwUnitCaptureTile message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_McwUnitCaptureTile, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_McwUnitCaptureTile message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_McwUnitCaptureTile
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_McwUnitCaptureTile;
+
+    /**
+     * Decodes a C_McwUnitCaptureTile message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_McwUnitCaptureTile
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_McwUnitCaptureTile;
+
+    /**
+     * Verifies a C_McwUnitCaptureTile message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_McwUnitCaptureTile message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_McwUnitCaptureTile
+     */
+    public static fromObject(object: { [k: string]: any }): C_McwUnitCaptureTile;
+
+    /**
+     * Creates a plain object from a C_McwUnitCaptureTile message. Also converts values to other types if specified.
+     * @param message C_McwUnitCaptureTile
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_McwUnitCaptureTile, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_McwUnitCaptureTile to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_McwUnitCaptureTile. */
+export declare interface IS_McwUnitCaptureTile {
+
+    /** S_McwUnitCaptureTile errorCode */
+    errorCode?: (number|null);
+
+    /** S_McwUnitCaptureTile warId */
+    warId?: (number|null);
+
+    /** S_McwUnitCaptureTile actionId */
+    actionId?: (number|null);
+
+    /** S_McwUnitCaptureTile path */
+    path?: (IMovePath|null);
+
+    /** S_McwUnitCaptureTile launchUnitId */
+    launchUnitId?: (number|null);
+
+    /** S_McwUnitCaptureTile discoveredUnits */
+    discoveredUnits?: (ISerializedMcwUnit[]|null);
+
+    /** S_McwUnitCaptureTile discoveredTiles */
+    discoveredTiles?: (ISerializedMcwTile[]|null);
+
+    /** S_McwUnitCaptureTile actingUnits */
+    actingUnits?: (ISerializedMcwUnit[]|null);
+
+    /** S_McwUnitCaptureTile actingTiles */
+    actingTiles?: (ISerializedMcwTile[]|null);
+
+    /** S_McwUnitCaptureTile lostPlayerIndex */
+    lostPlayerIndex?: (number|null);
+}
+
+/** Represents a S_McwUnitCaptureTile. */
+export declare class S_McwUnitCaptureTile implements IS_McwUnitCaptureTile {
+
+    /**
+     * Constructs a new S_McwUnitCaptureTile.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_McwUnitCaptureTile);
+
+    /** S_McwUnitCaptureTile errorCode. */
+    public errorCode: number;
+
+    /** S_McwUnitCaptureTile warId. */
+    public warId: number;
+
+    /** S_McwUnitCaptureTile actionId. */
+    public actionId: number;
+
+    /** S_McwUnitCaptureTile path. */
+    public path?: (IMovePath|null);
+
+    /** S_McwUnitCaptureTile launchUnitId. */
+    public launchUnitId: number;
+
+    /** S_McwUnitCaptureTile discoveredUnits. */
+    public discoveredUnits: ISerializedMcwUnit[];
+
+    /** S_McwUnitCaptureTile discoveredTiles. */
+    public discoveredTiles: ISerializedMcwTile[];
+
+    /** S_McwUnitCaptureTile actingUnits. */
+    public actingUnits: ISerializedMcwUnit[];
+
+    /** S_McwUnitCaptureTile actingTiles. */
+    public actingTiles: ISerializedMcwTile[];
+
+    /** S_McwUnitCaptureTile lostPlayerIndex. */
+    public lostPlayerIndex: number;
+
+    /**
+     * Creates a new S_McwUnitCaptureTile instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_McwUnitCaptureTile instance
+     */
+    public static create(properties?: IS_McwUnitCaptureTile): S_McwUnitCaptureTile;
+
+    /**
+     * Encodes the specified S_McwUnitCaptureTile message. Does not implicitly {@link S_McwUnitCaptureTile.verify|verify} messages.
+     * @param message S_McwUnitCaptureTile message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_McwUnitCaptureTile, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_McwUnitCaptureTile message, length delimited. Does not implicitly {@link S_McwUnitCaptureTile.verify|verify} messages.
+     * @param message S_McwUnitCaptureTile message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_McwUnitCaptureTile, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_McwUnitCaptureTile message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_McwUnitCaptureTile
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_McwUnitCaptureTile;
+
+    /**
+     * Decodes a S_McwUnitCaptureTile message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_McwUnitCaptureTile
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_McwUnitCaptureTile;
+
+    /**
+     * Verifies a S_McwUnitCaptureTile message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_McwUnitCaptureTile message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_McwUnitCaptureTile
+     */
+    public static fromObject(object: { [k: string]: any }): S_McwUnitCaptureTile;
+
+    /**
+     * Creates a plain object from a S_McwUnitCaptureTile message. Also converts values to other types if specified.
+     * @param message S_McwUnitCaptureTile
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_McwUnitCaptureTile, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_McwUnitCaptureTile to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };

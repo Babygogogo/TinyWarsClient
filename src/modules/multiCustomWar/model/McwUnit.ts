@@ -162,8 +162,8 @@ namespace TinyWars.MultiCustomWar {
             this.getView().visible = visible;
         }
 
-        public moveViewAlongPath(pathNodes: GridIndex[], isDiving: boolean, callback: () => void): void {
-            this.getView().moveAlongPath(pathNodes, isDiving, callback);
+        public moveViewAlongPath(pathNodes: GridIndex[], isDiving: boolean, isBlocked: boolean, callback: () => void): void {
+            this.getView().moveAlongPath(pathNodes, isDiving, isBlocked, callback);
         }
 
         ////////////////////////////////////////////////////////////////////////////////

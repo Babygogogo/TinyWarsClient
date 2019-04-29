@@ -15,11 +15,13 @@ namespace TinyWars.MultiCustomWar.McwModel {
     import SerializedMcwTile    = Types.SerializedMcwTile;
     import SerializedMcwUnit    = Types.SerializedMcwUnit;
     import UnitState            = Types.UnitState;
+    import MovePath             = Types.MovePath;
 
     const _EXECUTORS = new Map<ActionCodes, (data: ActionContainer) => Promise<void>>([
         [ActionCodes.S_McwPlayerBeginTurn,  _executeMcwPlayerBeginTurn],
         [ActionCodes.S_McwPlayerEndTurn,    _executeMcwPlayerEndTurn],
         [ActionCodes.S_McwPlayerSurrender,  _executeMcwPlayerSurrender],
+        [ActionCodes.S_McwUnitBeLoaded,     _executeMcwUnitBeLoaded],
         [ActionCodes.S_McwUnitWait,         _executeMcwUnitWait],
     ]);
 
@@ -70,6 +72,9 @@ namespace TinyWars.MultiCustomWar.McwModel {
     }
     export function updateOnUnitWait(data: ProtoTypes.IS_McwUnitWait): void {
         _updateByActionContainer({ S_McwUnitWait: data }, data.warId, data.actionId);
+    }
+    export function updateOnUnitBeLoaded(data: ProtoTypes.IS_McwUnitBeLoaded): void {
+        _updateByActionContainer({ S_McwUnitBeLoaded: data }, data.warId, data.actionId);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -168,6 +173,38 @@ namespace TinyWars.MultiCustomWar.McwModel {
         actionPlanner.setStateIdle();
     }
 
+    async function _executeMcwUnitBeLoaded(data: ActionContainer): Promise<void> {
+        const actionPlanner = _war.getActionPlanner();
+        actionPlanner.setStateExecutingAction();
+
+        const action = data.S_McwUnitBeLoaded;
+        updateTilesAndUnitsBeforeExecutingAction(
+            _war,
+            action.actingTiles as SerializedMcwTile[],
+            action.actingUnits as SerializedMcwUnit[],
+            action.discoveredTiles as SerializedMcwTile[],
+            action.discoveredUnits as SerializedMcwUnit[]
+        );
+
+        const path          = action.path as MovePath;
+        const pathNodes     = path.nodes;
+        const unitMap       = _war.getUnitMap();
+        const focusUnit     = unitMap.getUnit(pathNodes[0], action.launchUnitId);
+        const loaderUnit    = path.isBlocked ? undefined : unitMap.getUnitOnMap(pathNodes[pathNodes.length - 1]);
+        moveUnit(_war, ActionCodes.S_McwUnitBeLoaded, path, action.launchUnitId, path.fuelConsumption);
+        focusUnit.setState(UnitState.Actioned);
+        (loaderUnit) && (focusUnit.setLoaderUnitId(loaderUnit.getUnitId()));
+
+        focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
+            focusUnit.updateView();
+            focusUnit.setViewVisible(false);
+            (loaderUnit) && (loaderUnit.updateView());
+            updateTilesAndUnitsOnVisibilityChanged(_war);
+
+            actionPlanner.setStateIdle();
+        });
+    }
+
     async function _executeMcwUnitWait(data: ActionContainer): Promise<void> {
         const actionPlanner = _war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
@@ -181,17 +218,14 @@ namespace TinyWars.MultiCustomWar.McwModel {
             action.discoveredUnits as SerializedMcwUnit[]
         );
 
-        const path      = action.path;
-        const pathNodes = path.nodes as GridIndex[];
+        const path      = action.path as MovePath;
+        const pathNodes = path.nodes;
         const focusUnit = _war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
-        moveUnit(_war, ActionCodes.S_McwUnitWait, pathNodes, action.launchUnitId, path.fuelConsumption);
+        moveUnit(_war, ActionCodes.S_McwUnitWait, path, action.launchUnitId, path.fuelConsumption);
         focusUnit.setState(UnitState.Actioned);
-        focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), () => {
+        focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
             focusUnit.updateView();
             updateTilesAndUnitsOnVisibilityChanged(_war);
-            if (path.isBlocked) {
-                _war.getGridVisionEffect().showEffectBlock(pathNodes[pathNodes.length - 1]);
-            }
 
             actionPlanner.setStateIdle();
         });
@@ -266,13 +300,15 @@ namespace TinyWars.MultiCustomWar.McwModel {
         })
     }
 
-    function moveUnit(war: McwWar, actionCode: ActionCodes, pathNodes: GridIndex[], launchUnitId: number | null | undefined, fuelConsumption: number): void {
+    function moveUnit(war: McwWar, actionCode: ActionCodes, revisedPath: MovePath, launchUnitId: number | null | undefined, fuelConsumption: number): void {
+        const pathNodes             = revisedPath.nodes;
         const beginningGridIndex    = pathNodes[0];
         const fogMap                = war.getFogMap();
         const unitMap               = war.getUnitMap();
         const focusUnit             = unitMap.getUnit(beginningGridIndex, launchUnitId)!;
         const playerIndex           = focusUnit.getPlayerIndex();
         const shouldUpdateFogMap    = war.getPlayerLoggedIn().getTeamIndex() === focusUnit.getTeamIndex();
+        const isUnitBeLoaded        = (actionCode === ActionCodes.S_McwUnitBeLoaded) && (!revisedPath.isBlocked);
         if (shouldUpdateFogMap) {
             fogMap.updateMapFromPathsByUnitAndPath(focusUnit, pathNodes);
         }
@@ -291,7 +327,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
             if ((shouldUpdateFogMap) && (!isLaunching)) {
                 fogMap.updateMapFromUnitsForPlayerOnLeaving(playerIndex, beginningGridIndex, focusUnit.getVisionRangeForPlayer(playerIndex, beginningGridIndex)!);
             }
-            if ((shouldUpdateFogMap) && (actionCode !== ActionCodes.S_McwUnitBeLoaded)) {
+            if ((shouldUpdateFogMap) && (!isUnitBeLoaded)) {
                 fogMap.updateMapFromUnitsForPlayerOnArriving(playerIndex, endingGridIndex, focusUnit.getVisionRangeForPlayer(playerIndex, endingGridIndex)!);
             }
 
@@ -300,11 +336,11 @@ namespace TinyWars.MultiCustomWar.McwModel {
                 const loaderUnit = unitMap.getUnitOnMap(beginningGridIndex);
                 (loaderUnit) && (loaderUnit.updateView());
 
-                if (actionCode !== ActionCodes.S_McwUnitBeLoaded) {
+                if (!isUnitBeLoaded) {
                     unitMap.setUnitUnloaded(launchUnitId!, endingGridIndex);
                 }
             } else {
-                if (actionCode === ActionCodes.S_McwUnitBeLoaded) {
+                if (isUnitBeLoaded) {
                     unitMap.setUnitLoaded(beginningGridIndex);
                 } else {
                     unitMap.swapUnit(beginningGridIndex, endingGridIndex);

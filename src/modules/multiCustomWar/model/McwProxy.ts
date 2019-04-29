@@ -13,6 +13,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
             { actionCode: NetMessageCodes.S_McwPlayerBeginTurn,     callback: _onSMcwPlayerBeginTurn, },
             { actionCode: NetMessageCodes.S_McwPlayerEndTurn,       callback: _onSMcwPlayerEndTurn, },
             { actionCode: NetMessageCodes.S_McwPlayerSurrender,     callback: _onSMcwPlayerSurrender },
+            { actionCode: NetMessageCodes.S_McwUnitBeLoaded,        callback: _onSMcwUnitBeLoaded },
             { actionCode: NetMessageCodes.S_McwUnitWait,            callback: _onSMcwUnitWait, },
         ], McwProxy);
     }
@@ -62,6 +63,24 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         if (!data.errorCode) {
             McwModel.updateOnPlayerSurrender(data);
             Notify.dispatch(Notify.Type.SMcwPlayerSurrender);
+        }
+    }
+
+    export function reqMcwUnitBeLoaded(war: McwWar, path: GridIndex[], launchUnitId?: number): void {
+        NetManager.send({
+            C_McwUnitBeLoaded: {
+                warId       : war.getWarId(),
+                actionId    : war.getNextActionId(),
+                path,
+                launchUnitId,
+            },
+        });
+    }
+    function _onSMcwUnitBeLoaded(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_McwUnitBeLoaded;
+        if (!data.errorCode) {
+            McwModel.updateOnUnitBeLoaded(data);
+            Notify.dispatch(Notify.Type.SMcwUnitBeLoaded);
         }
     }
 

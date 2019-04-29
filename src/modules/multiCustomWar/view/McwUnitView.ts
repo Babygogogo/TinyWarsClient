@@ -113,7 +113,7 @@ namespace TinyWars.MultiCustomWar {
                 : this._framesForStateAnimation[Math.floor(TimeModel.getUnitAnimationTickCount() / 6) % framesCount];
         }
 
-        public moveAlongPath(path: GridIndex[], isDiving: boolean, callback: Function, aiming?: GridIndex): void {
+        public moveAlongPath(path: GridIndex[], isDiving: boolean, isBlocked: boolean, callback: Function, aiming?: GridIndex): void {
             this.showUnitAnimation(UnitAnimationType.Move);
 
             const startingPoint = GridIndexHelpers.createPointByGridIndex(path[0]);
@@ -187,6 +187,8 @@ namespace TinyWars.MultiCustomWar {
             if (!aiming) {
                 tween.call(() => {
                     this._setImgUnitFlippedX(false);
+                    (isBlocked) && (war.getGridVisionEffect().showEffectBlock(path[path.length - 1]));
+
                     (callback) && (callback());
                 });
             } else {
@@ -201,6 +203,8 @@ namespace TinyWars.MultiCustomWar {
                     cursor.setIsMovableByTouches(true);
                     cursor.updateView();
                     this._setImgUnitFlippedX(false);
+                    (isBlocked) && (war.getGridVisionEffect().showEffectBlock(path[path.length - 1]));
+
                     (callback) && (callback());
                 });
             }
@@ -256,6 +260,10 @@ namespace TinyWars.MultiCustomWar {
                     const playerManager = war.getPlayerManager();
                     if (!playerManager.checkIsSameTeam(unitPlayerIndex, playerManager.getPlayerIndexLoggedIn())) {
                         this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s06_f${Helpers.getNumText(unitPlayerIndex)}`);
+                    } else {
+                        if (unit.getLoadedUnitsCount() > 0) {
+                            this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s06_f${Helpers.getNumText(unitPlayerIndex)}`);
+                        }
                     }
                 }
             }

@@ -42,4 +42,6 @@ C_McwUnitWait = 181,
 S_McwUnitWait = 182,
 C_McwUnitBeLoaded = 183,
 S_McwUnitBeLoaded = 184,
+C_McwUnitCaptureTile = 185,
+S_McwUnitCaptureTile = 186,
 }}
