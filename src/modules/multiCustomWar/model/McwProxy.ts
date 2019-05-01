@@ -13,6 +13,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
             { actionCode: NetMessageCodes.S_McwPlayerBeginTurn,     callback: _onSMcwPlayerBeginTurn, },
             { actionCode: NetMessageCodes.S_McwPlayerEndTurn,       callback: _onSMcwPlayerEndTurn, },
             { actionCode: NetMessageCodes.S_McwPlayerSurrender,     callback: _onSMcwPlayerSurrender },
+            { actionCode: NetMessageCodes.S_McwUnitAttack,          callback: _onSMcwUnitAttack },
             { actionCode: NetMessageCodes.S_McwUnitBeLoaded,        callback: _onSMcwUnitBeLoaded },
             { actionCode: NetMessageCodes.S_McwUnitCaptureTile,     callback: _onSMcwUnitCaptureTile },
             { actionCode: NetMessageCodes.S_McwUnitWait,            callback: _onSMcwUnitWait, },
@@ -64,6 +65,25 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         if (!data.errorCode) {
             McwModel.updateOnPlayerSurrender(data);
             Notify.dispatch(Notify.Type.SMcwPlayerSurrender);
+        }
+    }
+
+    export function reqMcwUnitAttack(war: McwWar, path: GridIndex[], launchUnitId: number | undefined, targetGridIndex: GridIndex): void {
+        NetManager.send({
+            C_McwUnitAttack: {
+                warId       : war.getWarId(),
+                actionId    : war.getNextActionId(),
+                path,
+                launchUnitId,
+                targetGridIndex,
+            },
+        });
+    }
+    function _onSMcwUnitAttack(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_McwUnitAttack;
+        if (!data.errorCode) {
+            McwModel.updateOnUnitAttack(data);
+            Notify.dispatch(Notify.Type.SMcwUnitAttack);
         }
     }
 

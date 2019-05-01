@@ -162,8 +162,8 @@ namespace TinyWars.MultiCustomWar {
             this.getView().visible = visible;
         }
 
-        public moveViewAlongPath(pathNodes: GridIndex[], isDiving: boolean, isBlocked: boolean, callback: () => void): void {
-            this.getView().moveAlongPath(pathNodes, isDiving, isBlocked, callback);
+        public moveViewAlongPath(pathNodes: GridIndex[], isDiving: boolean, isBlocked: boolean, callback: () => void, aiming?: GridIndex): void {
+            this.getView().moveAlongPath(pathNodes, isDiving, isBlocked, callback, aiming);
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -279,10 +279,12 @@ namespace TinyWars.MultiCustomWar {
             return maxAmmo != null ? this.getPrimaryWeaponCurrentAmmo()! <= maxAmmo * 0.4 : false;
         }
 
-        public getCfgPrimaryWeaponBaseDamage(armorType: ArmorType): number | undefined | null {
-            return this._damageChartCfg[armorType][Types.WeaponType.Primary].damage;
+        public getCfgPrimaryWeaponBaseDamage(armorType: ArmorType | null | undefined): number | undefined | null {
+            return armorType == null
+                ? undefined
+                : this._damageChartCfg[armorType][Types.WeaponType.Primary].damage;
         }
-        public getPrimaryWeaponBaseDamage(armorType: ArmorType): number | undefined | null {
+        public getPrimaryWeaponBaseDamage(armorType: ArmorType | null | undefined): number | undefined | null {
             return this.getPrimaryWeaponCurrentAmmo()
                 ? this.getCfgPrimaryWeaponBaseDamage(armorType)
                 : undefined;
@@ -292,10 +294,12 @@ namespace TinyWars.MultiCustomWar {
             return ConfigManager.checkHasSecondaryWeapon(this._configVersion, this.getType());
         }
 
-        public getCfgSecondaryWeaponBaseDamage(armorType: ArmorType): number | undefined | null {
-            return this._damageChartCfg[armorType][Types.WeaponType.Secondary].damage;
+        public getCfgSecondaryWeaponBaseDamage(armorType: ArmorType | null | undefined): number | undefined | null {
+            return armorType == null
+                ? undefined
+                : this._damageChartCfg[armorType][Types.WeaponType.Secondary].damage;
         }
-        public getSecondaryWeaponBaseDamage(armorType: ArmorType): number | undefined | null {
+        public getSecondaryWeaponBaseDamage(armorType: ArmorType | null | undefined): number | undefined | null {
             return this.checkHasSecondaryWeapon()
                 ? this.getCfgSecondaryWeaponBaseDamage(armorType)
                 : undefined;
@@ -347,73 +351,6 @@ namespace TinyWars.MultiCustomWar {
                 } else {
                     const armorType = this._war.getTileMap().getTile(targetGridIndex).getArmorType();
                     return (armorType != null) && (this.getBaseDamage(armorType) != null);
-                }
-            }
-        }
-
-        public getEstimatedAttackDamageAfterMovePath(movePath: MovePathNode[], targetGridIndex: GridIndex): number | undefined {
-            const pathLength    = movePath.length;
-            const destination   = movePath[pathLength - 1];
-            const distance      = GridIndexHelpers.getDistance(destination, targetGridIndex);
-            const primaryAmmo   = this.getPrimaryWeaponCurrentAmmo();
-            const unitMap       = this._war.getUnitMap();
-            if (((!this.checkCanAttackAfterMove()) && (pathLength > 1))                             ||
-                ((this.getLoaderUnitId() != null) && (pathLength <= 1))                             ||
-                ((pathLength > 1) && (unitMap.getUnitOnMap(destination)))                           ||
-                ((!primaryAmmo) && (!this.checkHasSecondaryWeapon()))                               ||
-                (!((distance <= this.getMaxAttackRange()) && (distance >= this.getMinAttackRange())))
-            ) {
-                return undefined;
-            } else {
-                const targetUnit = unitMap.getUnitOnMap(targetGridIndex);
-                if (targetUnit) {
-                    if ((targetUnit.getTeamIndex() === this.getTeamIndex())                 ||
-                        ((targetUnit.getIsDiving()) && (!this.checkCanAttackDivingUnits()))
-                    ) {
-                        return undefined;
-                    } else {
-                        const armorType         = targetUnit.getArmorType();
-                        const primaryBaseDmg    = primaryAmmo ? this.getCfgPrimaryWeaponBaseDamage(armorType) : undefined;
-                        const baseDamage        = primaryBaseDmg != null ? primaryBaseDmg : this.getCfgSecondaryWeaponBaseDamage(armorType);
-                        if (baseDamage == null) {
-                            return undefined;
-                        } else {
-                            // TODO: Take co skills into account.
-                            const tileMap           = this._war.getTileMap();
-                            const commandTowerType  = Types.TileType.CommandTower;
-                            const cfg               = ConfigManager.getTileTemplateCfgByType(this._configVersion, commandTowerType);
-                            return Math.floor(baseDamage
-                                * (100
-                                    + tileMap.getTilesCount(commandTowerType, this.getPlayerIndex()) * cfg.globalAttackBonus
-                                    + this.getPromotionAttackBonus())
-                                / (100
-                                    + tileMap.getTilesCount(commandTowerType, targetUnit.getPlayerIndex()) * cfg.globalDefenseBonus
-                                    + targetUnit.getPromotionDefenseBonus())
-                            );
-                        }
-                    }
-                } else {
-                    const tileMap   = this._war.getTileMap();
-                    const armorType = tileMap.getTile(targetGridIndex).getArmorType();
-                    if (armorType == null) {
-                        return undefined;
-                    } else {
-                        const primaryBaseDmg    = primaryAmmo ? this.getCfgPrimaryWeaponBaseDamage(armorType) : undefined;
-                        const baseDamage        = primaryBaseDmg != null ? primaryBaseDmg : this.getCfgSecondaryWeaponBaseDamage(armorType);
-                        if (baseDamage == null) {
-                            return undefined;
-                        } else {
-                            // TODO: Take co skills into account.
-                            const tileMap           = this._war.getTileMap();
-                            const commandTowerType  = Types.TileType.CommandTower;
-                            const cfg               = ConfigManager.getTileTemplateCfgByType(this._configVersion, commandTowerType);
-                            return Math.floor(baseDamage
-                                * (100
-                                    + tileMap.getTilesCount(commandTowerType, this.getPlayerIndex()) * cfg.globalAttackBonus
-                                    + this.getPromotionAttackBonus())
-                            );
-                        }
-                    }
                 }
             }
         }

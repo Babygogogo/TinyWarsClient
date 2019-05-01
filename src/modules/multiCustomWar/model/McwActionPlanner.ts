@@ -129,6 +129,9 @@ namespace TinyWars.MultiCustomWar {
                 } else if (nextState === State.PreviewingMovableArea) {
                     this._setStatePreviewingMovableAreaOnTap(gridIndex);
 
+                } else if (nextState === State.RequestingUnitAttack) {
+                    this._setStateRequestingUnitAttack(gridIndex);
+
                 } else {
                     Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() invalid nextState!`, nextState);
                 }
@@ -536,8 +539,12 @@ namespace TinyWars.MultiCustomWar {
             this._updateView();
         }
 
-        private _setStateRequestingUnitAttack(): void {
-            FloatText.show(`Unit attack TODO!!!`);
+        private _setStateRequestingUnitAttack(targetGridIndex: GridIndex): void {
+            const unit = this.getFocusUnitLoaded();
+            McwProxy.reqMcwUnitAttack(this._war, this.getMovePath(), unit ? unit.getUnitId() : undefined, targetGridIndex);
+
+            this._setState(State.RequestingUnitAttack);
+            this._updateView();
         }
 
         private _setStateRequestingUnitBuildTile(): void {
@@ -683,13 +690,15 @@ namespace TinyWars.MultiCustomWar {
             const isLoaded              = unit.getLoaderUnitId() != null;
             const beginningGridIndex    = unit.getGridIndex();
             const hasAmmo               = (unit.getPrimaryWeaponCurrentAmmo() > 0) || (unit.checkHasSecondaryWeapon());
+            const unitMap               = this._unitMap;
             this._attackableArea        = McwHelpers.createAttackableArea(
                 this.getMovableArea(),
                 this.getMapSize(),
                 unit.getMinAttackRange(),
                 unit.getMaxAttackRange(),
                 (moveGridIndex: GridIndex, attackGridIndex: GridIndex): boolean => {
-                    if (!hasAmmo) {
+                    const existingUnit = unitMap.getUnitOnMap(moveGridIndex);
+                    if ((!hasAmmo) || ((existingUnit) && (existingUnit !== unit))) {
                         return false;
                     } else {
                         const hasMoved = !GridIndexHelpers.checkIsEqual(moveGridIndex, beginningGridIndex);
@@ -805,6 +814,7 @@ namespace TinyWars.MultiCustomWar {
             const beginningGridIndex    = unit.getGridIndex();
             const hasAmmo               = (unit.getPrimaryWeaponCurrentAmmo() > 0) || (unit.checkHasSecondaryWeapon());
             const mapSize               = this.getMapSize();
+            const unitMap               = this._unitMap;
             const newArea               = McwHelpers.createAttackableArea(
                 McwHelpers.createMovableArea(
                     unit.getGridIndex(),
@@ -814,9 +824,12 @@ namespace TinyWars.MultiCustomWar {
                 mapSize,
                 unit.getMinAttackRange(),
                 unit.getMaxAttackRange(),
-                (moveGridIndex, attackGridIndex) =>
-                    (hasAmmo)                                                                                   &&
-                    ((canAttakAfterMove) || (GridIndexHelpers.checkIsEqual(moveGridIndex, beginningGridIndex)))
+                (moveGridIndex, attackGridIndex) => {
+                    const existingUnit = unitMap.getUnitOnMap(moveGridIndex);
+                    return ((!existingUnit) || (existingUnit === unit))
+                        && (hasAmmo)
+                        && ((canAttakAfterMove) || (GridIndexHelpers.checkIsEqual(moveGridIndex, beginningGridIndex)));
+                }
             );
 
             this._unitsForPreviewAttack.set(unit.getUnitId(), unit);

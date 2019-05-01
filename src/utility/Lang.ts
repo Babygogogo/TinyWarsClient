@@ -461,6 +461,14 @@ namespace TinyWars.Utility.Lang {
             `上将`,
             `15`,
         ]],
+        [Type.B0077, [
+            `攻`,
+            `Deal`,
+        ]],
+        [Type.B0078, [
+            `受`,
+            `Take`,
+        ]],
 
         [Type.B1000, [
             `平原`,
@@ -760,6 +768,18 @@ namespace TinyWars.Utility.Lang {
         ]],
         [Type.F0013, [
             `玩家[%s]已战败！`,
+            `Player [%s] is defeated!`,
+        ]],
+        [Type.F0014, [
+            `玩家[%s]的最后一个部队耗尽燃料而坠毁，因而战败！`,
+            `Player [%s] is defeated!`,
+        ]],
+        [Type.F0015, [
+            `玩家[%s]的所有部队均被消灭，因而战败！`,
+            `Player [%s] is defeated!`,
+        ]],
+        [Type.F0016, [
+            `玩家[%s]的指挥部被占领，因而战败！`,
             `Player [%s] is defeated!`,
         ]],
     ]);

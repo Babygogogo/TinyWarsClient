@@ -211,10 +211,10 @@ namespace TinyWars.MultiCustomWar {
                 updateMap(map, mapSize, gridIndex, unit.getVisionRangeForPlayer(playerIndex, gridIndex), 1);
             });
         }
-        public updateMapFromUnitsForPlayerOnArriving(playerIndex: number, gridIndex: GridIndex, vision: number): void {
+        public updateMapFromUnitsForPlayerOnArriving(playerIndex: number, gridIndex: GridIndex, vision: number | null | undefined): void {
             updateMap(this._mapsFromUnits.get(playerIndex)!, this.getMapSize(), gridIndex, vision, 1);
         }
-        public updateMapFromUnitsForPlayerOnLeaving(playerIndex: number, gridIndex: GridIndex, vision: number): void {
+        public updateMapFromUnitsForPlayerOnLeaving(playerIndex: number, gridIndex: GridIndex, vision: number | null | undefined): void {
             updateMap(this._mapsFromUnits.get(playerIndex)!, this.getMapSize(), gridIndex, vision, -1);
         }
 

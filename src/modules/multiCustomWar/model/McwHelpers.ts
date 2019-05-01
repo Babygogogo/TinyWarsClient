@@ -1,13 +1,15 @@
 
 namespace TinyWars.MultiCustomWar.McwHelpers {
-    import Types            = Utility.Types;
-    import Helpers          = Utility.Helpers;
-    import GridIndexHelpers = Utility.GridIndexHelpers;
-    import GridIndex        = Types.GridIndex;
-    import MovableArea      = Types.MovableArea;
-    import AttackableArea   = Types.AttackableArea;
-    import MapSize          = Types.MapSize;
-    import MovePathNode     = Types.MovePathNode;
+    import Types                = Utility.Types;
+    import Helpers              = Utility.Helpers;
+    import GridIndexHelpers     = Utility.GridIndexHelpers;
+    import VisibilityHelpers    = Utility.VisibilityHelpers;
+    import DestructionHelpers   = Utility.DestructionHelpers;
+    import GridIndex            = Types.GridIndex;
+    import MovableArea          = Types.MovableArea;
+    import AttackableArea       = Types.AttackableArea;
+    import MapSize              = Types.MapSize;
+    import MovePathNode         = Types.MovePathNode;
 
     type AvailableMovableGrid = {
         currGridIndex   : GridIndex;
@@ -87,6 +89,51 @@ namespace TinyWars.MultiCustomWar.McwHelpers {
             }
             movableNode = area[gridIndex.x][gridIndex.y];
         }
+    }
+
+    export function updateTilesAndUnitsOnVisibilityChanged(war: McwWar): void {
+        const playerIndexLoggedIn   = war.getPlayerIndexLoggedIn();
+        const fogMap                = war.getFogMap();
+
+        war.getTileMap().forEachTile(tile => {
+            const gridIndex = tile.getGridIndex();
+            if (VisibilityHelpers.checkIsTileVisibleToPlayer(war, gridIndex, playerIndexLoggedIn)) {
+                if (tile.getIsFogEnabled()) {
+                    const playerIndex = tile.getPlayerIndex();
+                    if (playerIndex > 0) {
+                        fogMap.updateMapFromTilesForPlayerOnGettingOwnership(playerIndex, gridIndex, tile.getVisionRangeForPlayer(playerIndex));
+                    }
+
+                    tile.setFogDisabled();
+                }
+            } else {
+                if (!tile.getIsFogEnabled()) {
+                    const playerIndex = tile.getPlayerIndex();
+                    if (playerIndex > 0) {
+                        fogMap.updateMapFromTilesForPlayerOnLosingOwnership(playerIndex, gridIndex, tile.getVisionRangeForPlayer(playerIndex));
+                    }
+
+                    tile.setFogEnabled();
+                }
+            }
+            tile.updateView();
+        });
+
+        war.getUnitMap().forEachUnitOnMap(unit => {
+            const gridIndex = unit.getGridIndex();
+            if (VisibilityHelpers.checkIsUnitOnMapVisibleToPlayer({
+                war,
+                gridIndex,
+                unitType            : unit.getType(),
+                isDiving            : unit.getIsDiving(),
+                unitPlayerIndex     : unit.getPlayerIndex(),
+                observerPlayerIndex : playerIndexLoggedIn,
+            })) {
+                unit.setViewVisible(true);
+            } else {
+                DestructionHelpers.destroyUnitOnMap(war, gridIndex, false, false);
+            }
+        })
     }
 
     function _pushToAvailableMovableGrids(grids: AvailableMovableGrid[], gridIndex: GridIndex, prev: GridIndex, totalMoveCost: number): void {

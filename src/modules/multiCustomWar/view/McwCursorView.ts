@@ -5,6 +5,8 @@ namespace TinyWars.MultiCustomWar {
     import GridIndexHelpers     = Utility.GridIndexHelpers;
     import Helpers              = Utility.Helpers;
     import Notify               = Utility.Notify;
+    import DamageCalculator     = Utility.DamageCalculator;
+    import Lang                 = Utility.Lang;
     import GridIndex            = Types.GridIndex;
     import ActionPlannerState   = Types.ActionPlannerState;
 
@@ -67,10 +69,6 @@ namespace TinyWars.MultiCustomWar {
         private _imgTarget              = new GameUi.UiImage(_IMG_SOURCES_FOR_TARGET[this._frameIndexForImgTarget]);
         private _imgSiloArea            = new GameUi.UiImage(`c04_t03_s03_f01`);
         private _labelDamage            = new GameUi.UiLabel();
-
-        private _notifyListeners: Notify.Listener[] = [
-            { type: Notify.Type.McwActionPlannerStateChanged, callback: this._onNotifyMcwActionPlannerStateChanged },
-        ];
 
         public constructor() {
             super();
@@ -143,10 +141,6 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyMcwActionPlannerStateChanged(e: egret.Event): void {
-            this.updateView();
-        }
-
         private _onTouchBegin(e: egret.TouchEvent): void {
             const touchId   = e.touchPointID;
             if (this._currGlobalTouchPoints.size <= 0) {
@@ -272,6 +266,9 @@ namespace TinyWars.MultiCustomWar {
             } else if (state === ActionPlannerState.PreviewingMovableArea) {
                 con.visible = true;
 
+            } else if (state === ActionPlannerState.ExecutingAction) {
+                con.visible = true;
+
             } else {
                 // TODO
             }
@@ -312,6 +309,9 @@ namespace TinyWars.MultiCustomWar {
             } else if (state === ActionPlannerState.PreviewingMovableArea) {
                 con.visible = false;
 
+            } else if (state === ActionPlannerState.ExecutingAction) {
+                con.visible = false;
+
             } else {
                 // TODO
             }
@@ -337,6 +337,9 @@ namespace TinyWars.MultiCustomWar {
             } else if (state === ActionPlannerState.PreviewingMovableArea) {
                 con.visible = false;
 
+            } else if (state === ActionPlannerState.ExecutingAction) {
+                con.visible = false;
+
             } else {
                 // TODO
             }
@@ -351,36 +354,52 @@ namespace TinyWars.MultiCustomWar {
                 con.visible = false;
 
             } else if (state === ActionPlannerState.MakingMovePathForUnitOnMap) {
-                const damage = actionPlanner.getFocusUnitOnMap().getEstimatedAttackDamageAfterMovePath(actionPlanner.getMovePath(), gridIndex);
-                if (damage == null) {
+                const [attackDamage, counterDamage] = DamageCalculator.getEstimatedBattleDamage(
+                    this._cursor.getWar(),
+                    actionPlanner.getMovePath(),
+                    undefined,
+                    gridIndex
+                );
+                if (attackDamage == null) {
                     con.visible = false;
                 } else {
                     con.visible = true;
-                    this._labelDamage.text = `DMG: ${damage}%`;
+                    this._labelDamage.text = `${Lang.getText(Lang.Type.B0077)}: ${attackDamage}%\n${Lang.getText(Lang.Type.B0078)}: ${counterDamage == null ? `---` : counterDamage}%`;
                 }
 
             } else if (state === ActionPlannerState.ChoosingActionForUnitOnMap) {
                 con.visible = false;
 
             } else if (state === ActionPlannerState.MakingMovePathForUnitLoaded) {
-                const damage = actionPlanner.getFocusUnitLoaded().getEstimatedAttackDamageAfterMovePath(actionPlanner.getMovePath(), gridIndex);
-                if (damage == null) {
+                const [attackDamage, counterDamage] = DamageCalculator.getEstimatedBattleDamage(
+                    this._cursor.getWar(),
+                    actionPlanner.getMovePath(),
+                    actionPlanner.getFocusUnitLoaded().getUnitId(),
+                    gridIndex
+                );
+                if (attackDamage == null) {
                     con.visible = false;
                 } else {
                     con.visible = true;
-                    this._labelDamage.text = `DMG: ${damage}%`;
+                    this._labelDamage.text = `${Lang.getText(Lang.Type.B0077)}: ${attackDamage}%\n${Lang.getText(Lang.Type.B0078)}: ${counterDamage == null ? `---` : counterDamage}%`;
                 }
 
             } else if (state === ActionPlannerState.ChoosingActionForUnitLoaded) {
                 con.visible = false;
 
             } else if (state === ActionPlannerState.ChoosingAttackTarget) {
-                const damage = actionPlanner.getFocusUnit().getEstimatedAttackDamageAfterMovePath(actionPlanner.getMovePath(), gridIndex);
-                if (damage == null) {
+                const focusUnit = actionPlanner.getFocusUnitLoaded();
+                const [attackDamage, counterDamage] = DamageCalculator.getEstimatedBattleDamage(
+                    this._cursor.getWar(),
+                    actionPlanner.getMovePath(),
+                    focusUnit ? focusUnit.getUnitId() : undefined,
+                    gridIndex
+                );
+                if (attackDamage == null) {
                     con.visible = false;
                 } else {
                     con.visible = true;
-                    this._labelDamage.text = `DMG: ${damage}%`;
+                    this._labelDamage.text = `${Lang.getText(Lang.Type.B0077)}: ${attackDamage}%\n${Lang.getText(Lang.Type.B0078)}: ${counterDamage == null ? `---` : counterDamage}%`;
                 }
 
             } else if (state === ActionPlannerState.ChoosingDropDestination) {
@@ -393,6 +412,9 @@ namespace TinyWars.MultiCustomWar {
                 con.visible = false;
 
             } else if (state === ActionPlannerState.PreviewingMovableArea) {
+                con.visible = false;
+
+            } else if (state === ActionPlannerState.ExecutingAction) {
                 con.visible = false;
 
             } else {
@@ -438,7 +460,7 @@ namespace TinyWars.MultiCustomWar {
         }
         private _initConForDamage(): void {
             const width     = 120;
-            const height    = 40;
+            const height    = 60;
 
             const imgBg         = new GameUi.UiImage("c04_t01_s02_f01");
             imgBg.scale9Grid    = new egret.Rectangle(9, 9, 2, 2);

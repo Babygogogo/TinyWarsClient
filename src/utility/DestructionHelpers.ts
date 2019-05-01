@@ -4,7 +4,7 @@ namespace TinyWars.Utility.DestructionHelpers {
     import McwWar       = MultiCustomWar.McwWar;
     import McwUnit      = MultiCustomWar.McwUnit;
 
-    export function destroyUnitOnMap(war: McwWar, gridIndex: GridIndex, retainVisibility: boolean): McwUnit[] {
+    export function destroyUnitOnMap(war: McwWar, gridIndex: GridIndex, retainVisibility: boolean, showExplosionEffect: boolean): McwUnit[] {
         resetTile(war, gridIndex);
 
         const unitMap           = war.getUnitMap();
@@ -21,6 +21,9 @@ namespace TinyWars.Utility.DestructionHelpers {
             const playerIndex = unit.getPlayerIndex();
             war.getFogMap().updateMapFromUnitsForPlayerOnLeaving(playerIndex, gridIndex, unit.getVisionRangeForPlayer(playerIndex, gridIndex)!);
         }
+
+        const gridVisionEffect = showExplosionEffect ? war.getGridVisionEffect() : undefined;
+        (gridVisionEffect) && (gridVisionEffect.showEffectExplosion(gridIndex));
 
         return destroyedUnits;
     }
