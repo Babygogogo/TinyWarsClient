@@ -52,6 +52,7 @@ namespace TinyWars.MultiCustomWar {
                 { type: Notify.Type.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
                 { type: Notify.Type.McwActionPlannerStateChanged,   callback: this._onNotifyMcwPlannerStateChanged },
+                { type: Notify.Type.McwWarMenuPanelOpened,          callback: this._onNotifyMcwWarMenuPanelOpened },
             ];
             this._uiListeners = [
                 { ui: this._btnSwitch, callback: this._onTouchedBtnSwitch },
@@ -92,6 +93,9 @@ namespace TinyWars.MultiCustomWar {
             }
         }
         private _onNotifyMcwPlannerStateChanged(e: egret.Event): void {
+            this.close();
+        }
+        private _onNotifyMcwWarMenuPanelOpened(e: egret.Event): void {
             this.close();
         }
 

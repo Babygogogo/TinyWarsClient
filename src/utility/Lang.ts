@@ -466,7 +466,7 @@ namespace TinyWars.Utility.Lang {
             `Deal`,
         ]],
         [Type.B0078, [
-            `受`,
+            `反`,
             `Take`,
         ]],
 
