@@ -61,6 +61,8 @@ namespace TinyWars.MultiCustomWar {
                 { type: Notify.Type.McwActionPlannerStateChanged,   callback: this._onNotifyMcwActionPlannerStateChanged },
                 { type: Notify.Type.McwWarMenuPanelOpened,          callback: this._onNotifyMcwWarMenuPanelOpened },
                 { type: Notify.Type.McwWarMenuPanelClosed,          callback: this._onNotifyMcwWarMenuPanelClosed },
+                { type: Notify.Type.McwProduceUnitPanelOpened,      callback: this._onNotifyMcwProduceUnitPanelOpened },
+                { type: Notify.Type.McwProduceUnitPanelClosed,      callback: this._onNotifyMcwProduceUnitPanelClosed },
                 { type: Notify.Type.TileAnimationTick,              callback: this._onNotifyTileAnimationTick },
             ];
             this._uiListeners = [
@@ -108,6 +110,12 @@ namespace TinyWars.MultiCustomWar {
         private _onNotifyMcwWarMenuPanelClosed(e: egret.Event): void {
             this._updateView();
         }
+        private _onNotifyMcwProduceUnitPanelOpened(e: egret.Event): void {
+            this._updateView();
+        }
+        private _onNotifyMcwProduceUnitPanelClosed(e: egret.Event): void {
+            this._updateView();
+        }
         private _onNotifyTileAnimationTick(e: egret.Event): void {
             this._tileView.updateOnAnimationTick();
         }
@@ -120,7 +128,7 @@ namespace TinyWars.MultiCustomWar {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            if (McwWarMenuPanel.getIsOpening()) {
+            if ((McwWarMenuPanel.getIsOpening()) || (McwProduceUnitPanel.getIsOpening())) {
                 this.visible = false;
             } else {
                 this.visible = true;

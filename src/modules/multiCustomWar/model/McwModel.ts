@@ -19,13 +19,14 @@ namespace TinyWars.MultiCustomWar.McwModel {
     import TileType             = Types.TileType;
 
     const _EXECUTORS = new Map<ActionCodes, (data: ActionContainer) => Promise<void>>([
-        [ActionCodes.S_McwPlayerBeginTurn,  _executeMcwPlayerBeginTurn],
-        [ActionCodes.S_McwPlayerEndTurn,    _executeMcwPlayerEndTurn],
-        [ActionCodes.S_McwPlayerSurrender,  _executeMcwPlayerSurrender],
-        [ActionCodes.S_McwUnitAttack,       _executeMcwUnitAttack],
-        [ActionCodes.S_McwUnitBeLoaded,     _executeMcwUnitBeLoaded],
-        [ActionCodes.S_McwUnitCaptureTile,  _executeMcwUnitCaptureTile],
-        [ActionCodes.S_McwUnitWait,         _executeMcwUnitWait],
+        [ActionCodes.S_McwPlayerBeginTurn,      _executeMcwPlayerBeginTurn],
+        [ActionCodes.S_McwPlayerEndTurn,        _executeMcwPlayerEndTurn],
+        [ActionCodes.S_McwPlayerSurrender,      _executeMcwPlayerSurrender],
+        [ActionCodes.S_McwProduceUnitOnTile,    _executeMcwProduceUnitOnTile],
+        [ActionCodes.S_McwUnitAttack,           _executeMcwUnitAttack],
+        [ActionCodes.S_McwUnitBeLoaded,         _executeMcwUnitBeLoaded],
+        [ActionCodes.S_McwUnitCaptureTile,      _executeMcwUnitCaptureTile],
+        [ActionCodes.S_McwUnitWait,             _executeMcwUnitWait],
     ]);
 
     let _war            : McwWar;
@@ -72,6 +73,9 @@ namespace TinyWars.MultiCustomWar.McwModel {
     }
     export function updateOnPlayerSurrender(data: ProtoTypes.IS_McwPlayerSurrender): void {
         _updateByActionContainer({ S_McwPlayerSurrender: data }, data.warId, data.actionId);
+    }
+    export function updateOnProduceUnitOnTile(data: ProtoTypes.IS_McwProduceUnitOnTile): void {
+        _updateByActionContainer({ S_McwProduceUnitOnTile: data }, data.warId, data.actionId);
     }
     export function updateOnUnitAttack(data: ProtoTypes.IS_McwUnitAttack): void {
         _updateByActionContainer({ S_McwUnitAttack: data }, data.warId, data.actionId);
@@ -171,6 +175,43 @@ namespace TinyWars.MultiCustomWar.McwModel {
         DestructionHelpers.destroyPlayerForce(_war, player.getPlayerIndex(), true);
         McwHelpers.updateTilesAndUnitsOnVisibilityChanged(_war);
         FloatText.show(Lang.getFormatedText(Lang.Type.F0008, player.getNickname()));
+
+        actionPlanner.setStateIdle();
+    }
+
+    async function _executeMcwProduceUnitOnTile(data: ActionContainer): Promise<void> {
+        const actionPlanner = _war.getActionPlanner();
+        actionPlanner.setStateExecutingAction();
+
+        const action = data.S_McwProduceUnitOnTile;
+        updateTilesAndUnitsBeforeExecutingAction(_war, action);
+
+        const gridIndex     = action.gridIndex as GridIndex;
+        const unitMap       = _war.getUnitMap();
+        const unitId        = unitMap.getNextUnitId();
+        const playerInTurn  = _war.getPlayerInTurn();
+
+        if ((gridIndex) && (action.unitType != null)) {
+            // TODO: take skills into account.
+            const playerIndex   = playerInTurn.getPlayerIndex();
+            const unit          = new McwUnit().init({
+                unitId,
+                viewId  : ConfigManager.getUnitViewId(action.unitType, playerIndex)!,
+                gridX   : gridIndex.x,
+                gridY   : gridIndex.y,
+            }, _war.getConfigVersion());
+            unit.setState(UnitState.Actioned);
+            unit.startRunning(_war);
+            unit.startRunningView();
+
+            unitMap.addUnitOnMap(unit);
+            _war.getFogMap().updateMapFromUnitsForPlayerOnArriving(playerIndex, gridIndex, unit.getVisionRangeForPlayer(playerIndex, gridIndex));
+        }
+
+        unitMap.setNextUnitId(unitId + 1);
+        playerInTurn.setFund(playerInTurn.getFund() - action.cost);
+
+        McwHelpers.updateTilesAndUnitsOnVisibilityChanged(_war);
 
         actionPlanner.setStateIdle();
     }

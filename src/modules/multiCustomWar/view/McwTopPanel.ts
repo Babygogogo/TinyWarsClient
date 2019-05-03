@@ -104,6 +104,10 @@ namespace TinyWars.MultiCustomWar {
             });
         }
         private _onTouchedBtnMenu(e: egret.TouchEvent): void {
+            const actionPlanner = this._war.getActionPlanner();
+            if (!actionPlanner.checkIsStateRequesting()) {
+                actionPlanner.setStateIdle();
+            }
             McwWarMenuPanel.show();
         }
 

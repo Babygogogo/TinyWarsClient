@@ -7,12 +7,14 @@ namespace TinyWars.MultiCustomWar.McwProxy {
     import ProtoTypes       = Utility.ProtoTypes;
     import Notify           = Utility.Notify;
     import GridIndex        = Types.GridIndex;
+    import UnitType         = Types.UnitType;
 
     export function init(): void {
         NetManager.addListeners([
             { actionCode: NetMessageCodes.S_McwPlayerBeginTurn,     callback: _onSMcwPlayerBeginTurn, },
             { actionCode: NetMessageCodes.S_McwPlayerEndTurn,       callback: _onSMcwPlayerEndTurn, },
             { actionCode: NetMessageCodes.S_McwPlayerSurrender,     callback: _onSMcwPlayerSurrender },
+            { actionCode: NetMessageCodes.S_McwProduceUnitOnTile,   callback: _onSMcwProduceUnitOnTile },
             { actionCode: NetMessageCodes.S_McwUnitAttack,          callback: _onSMcwUnitAttack },
             { actionCode: NetMessageCodes.S_McwUnitBeLoaded,        callback: _onSMcwUnitBeLoaded },
             { actionCode: NetMessageCodes.S_McwUnitCaptureTile,     callback: _onSMcwUnitCaptureTile },
@@ -65,6 +67,24 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         if (!data.errorCode) {
             McwModel.updateOnPlayerSurrender(data);
             Notify.dispatch(Notify.Type.SMcwPlayerSurrender);
+        }
+    }
+
+    export function reqMcwProduceUnitOnTile(war: McwWar, gridIndex: GridIndex, unitType: UnitType): void {
+        NetManager.send({
+            C_McwProduceUnitOnTile: {
+                warId   : war.getWarId(),
+                actionId: war.getNextActionId(),
+                gridIndex,
+                unitType,
+            },
+        });
+    }
+    function _onSMcwProduceUnitOnTile(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_McwProduceUnitOnTile;
+        if (!data.errorCode) {
+            McwModel.updateOnProduceUnitOnTile(data);
+            Notify.dispatch(Notify.Type.SMcwProduceUnitOnTile);
         }
     }
 

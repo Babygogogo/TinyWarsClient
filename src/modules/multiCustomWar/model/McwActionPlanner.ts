@@ -15,6 +15,7 @@ namespace TinyWars.MultiCustomWar {
     import AttackableArea   = Types.AttackableArea;
     import MovePathNode     = Types.MovePathNode;
     import UnitActionType   = Types.UnitActionType;
+    import UnitType         = Types.UnitType;
 
     type ChosenUnitForDrop = {
         unit        : McwUnit;
@@ -42,11 +43,10 @@ namespace TinyWars.MultiCustomWar {
         private _attackableGridsAfterMove   : GridIndex[];
         private _movePath                   : MovePathNode[] = [];
 
-        private _gridIndexForTileProduceUnit    : GridIndex;
-        private _unitsForPreviewAttack          = new Map<number, McwUnit>();
-        private _areaForPreviewAttack           : AttackableArea = [];
-        private _unitForPreviewMove             : McwUnit;
-        private _areaForPreviewMove             : MovableArea;
+        private _unitsForPreviewAttack  = new Map<number, McwUnit>();
+        private _areaForPreviewAttack   : AttackableArea = [];
+        private _unitForPreviewMove     : McwUnit;
+        private _areaForPreviewMove     : MovableArea;
 
         private _notifyListeners: Notify.Listener[] = [
             { type: Notify.Type.McwCursorTapped,    callback: this._onNotifyMcwCursorTapped },
@@ -93,9 +93,8 @@ namespace TinyWars.MultiCustomWar {
         private _onNotifyMcwCursorTapped(e: egret.Event): void {
             const gridIndex = (e.data as Notify.Data.McwCursorTapped).tappedOn;
             const nextState = this._getNextStateOnTap(gridIndex);
-            const currState = this.getState();
-            if (((_checkIsStateRequesting(nextState)) || (currState === State.ExecutingAction)) &&
-                (nextState === currState)
+            if ((nextState === this.getState())                                                 &&
+                ((nextState === State.ExecutingAction) || (_checkIsStateRequesting(nextState)))
             ) {
                 // Do noting.
             } else {
@@ -120,6 +119,12 @@ namespace TinyWars.MultiCustomWar {
                 } else if (nextState === State.ChoosingDropDestination) {
                     this._setStateChoosingDropDestinationOnTap(gridIndex);
 
+                } else if (nextState === State.ChoosingFlareDestination) {
+                    this._setStateChoosingFlareDestinationOnTap(gridIndex);
+
+                } else if (nextState === State.ChoosingSiloDestination) {
+                    this._setStateChoosingSiloDestinationOnTap(gridIndex);
+
                 } else if (nextState === State.ChoosingProductionTarget) {
                     this._setStateChoosingProductionTargetOnTap(gridIndex);
 
@@ -141,7 +146,9 @@ namespace TinyWars.MultiCustomWar {
         private _onNotifyMcwCursorDragged(e: egret.Event): void {
             const gridIndex = (e.data as Notify.Data.McwCursorDragged).draggedTo;
             const nextState = this._getNextStateOnDrag(gridIndex);
-            if ((_checkIsStateRequesting(nextState)) && (nextState === this.getState())) {
+            if ((nextState === this.getState())                                                 &&
+                ((nextState === State.ExecutingAction) || (_checkIsStateRequesting(nextState)))
+            ) {
                 // Do noting.
             } else {
                 if (nextState === State.Idle) {
@@ -164,6 +171,12 @@ namespace TinyWars.MultiCustomWar {
 
                 } else if (nextState === State.ChoosingDropDestination) {
                     this._setStateChoosingDropDestinationOnDrag(gridIndex);
+
+                } else if (nextState === State.ChoosingFlareDestination) {
+                    this._setStateChoosingFlareDestinationOnDrag(gridIndex);
+
+                } else if (nextState === State.ChoosingSiloDestination) {
+                    this._setStateChoosingSiloDestinationOnDrag(gridIndex);
 
                 } else if (nextState === State.ChoosingProductionTarget) {
                     this._setStateChoosingProductionTargetOnDrag(gridIndex);
@@ -202,7 +215,6 @@ namespace TinyWars.MultiCustomWar {
             this._clearChosenUnitsForDrop();
             this._clearDataForPreviewingAttackableArea();
             this._clearDataForPreviewingMovableArea();
-            delete this._gridIndexForTileProduceUnit;
 
             this._setState(State.Idle);
             this._updateView();
@@ -214,7 +226,6 @@ namespace TinyWars.MultiCustomWar {
             this._clearChosenUnitsForDrop();
             this._clearDataForPreviewingAttackableArea();
             this._clearDataForPreviewingMovableArea();
-            delete this._gridIndexForTileProduceUnit;
 
             this._setState(State.ExecutingAction);
             this._updateView();
@@ -260,7 +271,6 @@ namespace TinyWars.MultiCustomWar {
                 this._resetMovableArea();
                 this._resetAttackableArea();
                 this._resetMovePathAsShortest(gridIndex);
-                delete this._gridIndexForTileProduceUnit;
 
             } else if (currState === State.PreviewingAttackableArea) {
                 this._setFocusUnitOnMap(this._unitMap.getUnitOnMap(gridIndex));
@@ -476,11 +486,10 @@ namespace TinyWars.MultiCustomWar {
             this._clearChosenUnitsForDrop();
             this._clearDataForPreviewingAttackableArea();
             this._clearDataForPreviewingMovableArea();
-            this._gridIndexForTileProduceUnit = { x: gridIndex.x, y: gridIndex.y };
 
             this._setState(State.ChoosingProductionTarget);
             this._updateView();
-            // TODO: open the production panel.
+            McwProduceUnitPanel.show(gridIndex);
         }
         private _setStateChoosingProductionTargetOnDrag(gridIndex: GridIndex): void {
             Logger.error(`McwActionPlanner._setStateChoosingProductionTargetOnDrag() this function should not be called!`);
@@ -492,7 +501,6 @@ namespace TinyWars.MultiCustomWar {
             this._clearChosenUnitsForDrop();
             this._addUnitForPreviewAttackableArea(this._unitMap.getUnitOnMap(gridIndex));
             this._clearDataForPreviewingMovableArea();
-            delete this._gridIndexForTileProduceUnit;
 
             this._setState(State.PreviewingAttackableArea);
             this._updateView();
@@ -507,7 +515,6 @@ namespace TinyWars.MultiCustomWar {
             this._clearChosenUnitsForDrop();
             this._clearDataForPreviewingAttackableArea();
             this._setUnitForPreviewingMovableArea(this._unitMap.getUnitOnMap(gridIndex));
-            delete this._gridIndexForTileProduceUnit;
 
             this._setState(State.PreviewingMovableArea);
             this._updateView();
@@ -519,6 +526,17 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for setting requesting state.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        public setStateRequestingProduceUnitOnTile(gridIndex: GridIndex, unitType: UnitType): void {
+            McwProxy.reqMcwProduceUnitOnTile(this._war, gridIndex, unitType);
+
+            this._setState(State.RequestingProduceUnitOnTile);
+            this._updateView();
+        }
+
+        private _setStateRequestingUnitProduceUnit(): void {
+            FloatText.show(`Unit produce unit TODO!!!`);
+        }
+
         private _setStateRequestingUnitBeLoaded(): void {
             const unit = this.getFocusUnitLoaded();
             McwProxy.reqMcwUnitBeLoaded(this._war, this.getMovePath(), unit ? unit.getUnitId() : undefined);
@@ -577,10 +595,6 @@ namespace TinyWars.MultiCustomWar {
 
         private _setStateRequestingUnitLaunchSilo(): void {
             FloatText.show(`Unit launch silo TODO!!!`);
-        }
-
-        private _setStateRequestingUnitProduceUnit(): void {
-            FloatText.show(`Unit produce unit TODO!!!`);
         }
 
         private _setStateRequestingUnitSupply(): void {
@@ -889,6 +903,8 @@ namespace TinyWars.MultiCustomWar {
                     case State.ChoosingActionForUnitLoaded  : return this._getNextStateOnTapWhenChoosingActionForUnitLoaded(gridIndex);
                     case State.ChoosingAttackTarget         : return this._getNextStateOnTapWhenChoosingAttackTarget(gridIndex);
                     case State.ChoosingDropDestination      : return this._getNextStateOnTapWhenChoosingDropDestination(gridIndex);
+                    case State.ChoosingFlareDestination     : return this._getNextStateOnTapWhenChoosingFlareDestination(gridIndex);
+                    case State.ChoosingSiloDestination      : return this._getNextStateOnTapWhenChoosingSiloDestination(gridIndex);
                     case State.ChoosingProductionTarget     : return this._getNextStateOnTapWhenChoosingProductionTarget(gridIndex);
                     case State.PreviewingAttackableArea     : return this._getNextStateOnTapWhenPreviewingAttackableArea(gridIndex);
                     case State.PreviewingMovableArea        : return this._getNextStateOnTapWhenPreviewingMovableArea(gridIndex);
@@ -1002,6 +1018,14 @@ namespace TinyWars.MultiCustomWar {
             }
         }
         private _getNextStateOnTapWhenChoosingDropDestination(gridIndex: GridIndex): State {
+            // TODO
+            return State.Idle;
+        }
+        private _getNextStateOnTapWhenChoosingFlareDestination(gridIndex: GridIndex): State {
+            // TODO
+            return State.Idle;
+        }
+        private _getNextStateOnTapWhenChoosingSiloDestination(gridIndex: GridIndex): State {
             // TODO
             return State.Idle;
         }
@@ -1353,7 +1377,7 @@ namespace TinyWars.MultiCustomWar {
             || (state === State.RequestingPlayerEndTurn)
             || (state === State.RequestingPlayerSurrender)
             || (state === State.RequestingPlayerVoteForDraw)
-            || (state === State.RequestingTileProduceUnit)
+            || (state === State.RequestingProduceUnitOnTile)
             || (state === State.RequestingUnitAttack)
             || (state === State.RequestingUnitBeLoaded)
             || (state === State.RequestingUnitBuildTile)

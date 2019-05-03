@@ -10,6 +10,7 @@ namespace TinyWars.MultiCustomWar.McwHelpers {
     import AttackableArea       = Types.AttackableArea;
     import MapSize              = Types.MapSize;
     import MovePathNode         = Types.MovePathNode;
+    import UnitType             = Types.UnitType;
 
     type AvailableMovableGrid = {
         currGridIndex   : GridIndex;
@@ -134,6 +135,12 @@ namespace TinyWars.MultiCustomWar.McwHelpers {
                 DestructionHelpers.destroyUnitOnMap(war, gridIndex, false, false);
             }
         })
+    }
+
+    export function getUnitProductionCost(war: McwWar, unitType: UnitType): number | undefined {
+        // TODO: take skills into account.
+        const cfg = ConfigManager.getUnitTemplateCfg(war.getConfigVersion(), unitType);
+        return cfg ? cfg.productionCost : undefined;
     }
 
     function _pushToAvailableMovableGrids(grids: AvailableMovableGrid[], gridIndex: GridIndex, prev: GridIndex, totalMoveCost: number): void {

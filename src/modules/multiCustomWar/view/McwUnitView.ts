@@ -196,7 +196,9 @@ namespace TinyWars.MultiCustomWar {
                 tween.call(() => {
                     cursor.setIsMovableByTouches(false);
                     cursor.setGridIndex(aiming);
+                    cursor.updateView();
                     cursor.setVisibleForConForTarget(true);
+                    cursor.setVisibleForConForNormal(false);
                 })
                 .wait(500)
                 .call(() => {

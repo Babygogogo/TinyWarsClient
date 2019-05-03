@@ -68,7 +68,7 @@ namespace TinyWars.MultiCustomWar {
             this.setCurrentHp(               data.currentHp                != null ? data.currentHp                : this.getMaxHp());
             this.setPrimaryWeaponCurrentAmmo(data.primaryWeaponCurrentAmmo != null ? data.primaryWeaponCurrentAmmo : this.getPrimaryWeaponMaxAmmo());
             this.setIsCapturingTile(         data.isCapturingTile          != null ? data.isCapturingTile          : false);
-            this.setIsDiving(                data.isDiving                 != null ? data.isDiving                 : false);
+            this.setIsDiving(                data.isDiving                 != null ? data.isDiving                 : unitType === UnitType.Submarine);
             this.setCurrentFuel(             data.currentFuel              != null ? data.currentFuel              : this.getMaxFuel());
             this.setFlareCurrentAmmo(        data.flareCurrentAmmo         != null ? data.flareCurrentAmmo         : this.getFlareMaxAmmo());
             this.setCurrentProduceMaterial(  data.currentProduceMaterial   != null ? data.currentProduceMaterial   : this.getMaxProduceMaterial());
@@ -112,7 +112,7 @@ namespace TinyWars.MultiCustomWar {
             (isCapturing) && (data.isCapturingTile = isCapturing);
 
             const isDiving = this.getIsDiving();
-            (isDiving) && (data.isDiving = isDiving);
+            ((isDiving) || (this.getType() === UnitType.Submarine)) && (data.isDiving = isDiving);
 
             const currentFuel = this.getCurrentFuel();
             (currentFuel !== this.getMaxFuel()) && (data.currentFuel = currentFuel);

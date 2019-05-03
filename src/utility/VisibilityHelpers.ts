@@ -195,6 +195,48 @@ namespace TinyWars.Utility.VisibilityHelpers {
         return { tiles: discoveredTiles, units: discoveredUnits };
     }
 
+    export function getDiscoveriesByProduceUnitOnTile(war: McwWar, producerGridIndex: GridIndex, unitType: Types.UnitType): Discoveries {
+        // TODO: take skills into account.
+        const tileMap           = war.getTileMap();
+        const unitMap           = war.getUnitMap();
+        const producerTile      = tileMap.getTile(producerGridIndex);
+        const producerTileType  = producerTile.getType();
+        const playerIndex       = producerTile.getPlayerIndex();
+        const configVersion     = war.getConfigVersion();
+        const visionBonusCfg    = ConfigManager.getVisionBonusCfg(configVersion, unitType);
+        const visionRange       = ConfigManager.getUnitTemplateCfg(configVersion, unitType).visionRange
+            + (visionBonusCfg && visionBonusCfg[producerTileType] ? visionBonusCfg[producerTileType].visionBonus || 0 : 0);
+
+        const discoveredTiles   = new Set<McwTile>();
+        const discoveredUnits   = new Set<McwUnit>();
+        for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(producerGridIndex, 1, visionRange, tileMap.getMapSize())) {
+            const distance  = GridIndexHelpers.getDistance(gridIndex, producerGridIndex);
+            const tile      = tileMap.getTile(gridIndex);
+            if ((!checkIsTileVisibleToPlayer(war, gridIndex, playerIndex))  &&
+                ((distance === 1) || (!tile.checkIsUnitHider()))
+            ) {
+                discoveredTiles.add(tile);
+            }
+
+            const unit = unitMap.getUnitOnMap(gridIndex);
+            if ((unit)                              &&
+                (!checkIsUnitOnMapVisibleToPlayer({
+                    war,
+                    gridIndex,
+                    isDiving            : unit.getIsDiving(),
+                    unitType            : unit.getType(),
+                    unitPlayerIndex     : unit.getPlayerIndex(),
+                    observerPlayerIndex : playerIndex,
+                }))                                 &&
+                ((distance === 1) || ((!tile.checkCanHideUnit(unit.getType())) && (!unit.getIsDiving())))
+            ) {
+                discoveredUnits.add(unit);
+            }
+        }
+
+        return { tiles: discoveredTiles, units: discoveredUnits };
+    }
+
     function _checkHasUnitWithTeamIndexOnAdjacentGrid(unitMap: McwUnitMap, origin: GridIndex, teamIndex: number): boolean {
         for (const adjacentGrid of GridIndexHelpers.getAdjacentGrids(origin, unitMap.getMapSize())) {
             const unit = unitMap.getUnitOnMap(adjacentGrid);

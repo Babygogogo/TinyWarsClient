@@ -469,6 +469,10 @@ namespace TinyWars.Utility.Lang {
             `反`,
             `Take`,
         ]],
+        [Type.B0079, [
+            `费用`,
+            `Cost`,
+        ]],
 
         [Type.B1000, [
             `平原`,
