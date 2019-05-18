@@ -22,6 +22,7 @@ namespace TinyWars.Utility.FlowManager {
         Utility.StageManager.init(stage);
         await Promise.all([ResManager.init(), ProtoManager.init()]);
 
+        NoSleepManager.init();
         ConfigManager.init();
         Network.Manager.init();
         McwProxy.init();

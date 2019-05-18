@@ -42,6 +42,10 @@
 			"path": "../TinyWarsExternals/ClientDependencies/libs/ProtobufJs"
 		},
 		{
+			"name": "NoSleep",
+			"path": "../TinyWarsExternals/ClientDependencies/libs/NoSleep"
+		},
+		{
 			"name": "mouse",
 			"path": "../TinyWarsExternals/ClientDependencies/libs/mouse"
 		}

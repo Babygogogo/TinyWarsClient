@@ -1,9 +1,10 @@
 
 namespace TinyWars.Login {
-    import FloatText    = Utility.FloatText;
-    import Lang         = Utility.Lang;
-    import NotifyType   = Utility.Notify.Type;
-    import LocalStorage = Utility.LocalStorage;
+    import FloatText        = Utility.FloatText;
+    import Lang             = Utility.Lang;
+    import NotifyType       = Utility.Notify.Type;
+    import LocalStorage     = Utility.LocalStorage;
+    import NoSleepManager   = Utility.NoSleepManager;
 
     export class LoginPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
@@ -61,6 +62,8 @@ namespace TinyWars.Login {
         }
 
         private _onTouchedBtnLogin(e: egret.TouchEvent): void {
+            NoSleepManager.enable();
+
             const account  = this._inputAccount.text;
             const password = this._inputPassword.text;
             if (!Utility.Helpers.checkIsAccountValid(account)) {
@@ -79,6 +82,8 @@ namespace TinyWars.Login {
         }
 
         private _onTouchedBtnRegister(e: egret.TouchEvent): void {
+            NoSleepManager.enable();
+
             RegisterPanel.show();
             LoginPanel.hide();
         }
