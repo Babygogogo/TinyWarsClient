@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
-    <e:Group id="_group" width="100" bottom="120" top="40" x="860">
+    <e:Group id="_group" width="130" bottom="120" top="40" right="0">
         <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" />
         <GameUi:UiScrollList id="_listAction" left="5" right="5" top="5" bottom="5">
             <e:List>
                 <e:itemRendererSkinName>
-                    <e:Skin width="90" height="50" currentState="up" states="up,down">
-                        <GameUi:UiLabel id="_labelAction" text="阿弥陀佛" size="22" verticalCenter="0" horizontalCenter="0" />
+                    <e:Skin width="120" height="50" currentState="withUnit" states="withUnit,withoutUnit">
+                        <e:Group id="_conUnitView" width="60" height="100" x="0" y="0" scaleX="0.5" scaleY="0.5"
+                                 visible.withoutUnit="false" />
+                        <GameUi:UiLabel id="_labelAction" text="Label" x="30" height="50" size="20"
+                                        verticalAlign="middle" width="90" textAlign="center" y="0" x.withoutUnit="15" />
                     </e:Skin>
                 </e:itemRendererSkinName>
             </e:List>

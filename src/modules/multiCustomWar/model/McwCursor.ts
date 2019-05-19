@@ -1,13 +1,14 @@
 
 namespace TinyWars.MultiCustomWar {
     import Types        = Utility.Types;
-    import Helpers      = Utility.Helpers;
     import Notify       = Utility.Notify;
     import WarMapModel  = WarMap.WarMapModel;
+    import GridIndex    = Types.GridIndex;
 
     export class McwCursor {
         private _gridX              = 0;
         private _gridY              = 0;
+        private _previousGridIndex  : GridIndex;
         private _mapSize            : Types.MapSize;
         private _isMovableByTouches = true;
         private _view               : McwCursorView;
@@ -17,7 +18,7 @@ namespace TinyWars.MultiCustomWar {
         private _notifyListeners: Notify.Listener[] = [
             { type: Notify.Type.McwCursorTapped,                callback: this._onNotifyMcwCursorTapped },
             { type: Notify.Type.McwCursorDragged,               callback: this._onNotifyMcwCursorDragged },
-            // { type: Notify.Type.McwActionPlannerStateChanged,   callback: this._onNotifyMcwActionPlannerStateChanged },
+            { type: Notify.Type.McwActionPlannerStateChanged,   callback: this._onNotifyMcwActionPlannerStateChanged },
         ];
 
         public constructor() {
@@ -37,7 +38,7 @@ namespace TinyWars.MultiCustomWar {
         public startRunning(war: McwWar): void {
             this._war = war;
 
-            Notify.addEventListeners(this._notifyListeners, this);
+            Notify.addEventListeners(this._notifyListeners, this, undefined, 10);
         }
         public startRunningView(): void {
             this.getView().startRunningView();
@@ -106,13 +107,22 @@ namespace TinyWars.MultiCustomWar {
         public getGridY(): number {
             return this._gridY;
         }
-        public setGridIndex(gridIndex: Types.GridIndex): void {
+        public setGridIndex(gridIndex: GridIndex): void {
+            this._setPreviousGridIndex(this.getGridIndex());
+
             this._gridX = gridIndex.x;
             this._gridY = gridIndex.y;
             Notify.dispatch(Notify.Type.McwCursorGridIndexChanged);
         }
-        public getGridIndex(): Types.GridIndex {
+        public getGridIndex(): GridIndex {
             return { x: this.getGridX(), y: this.getGridY() };
+        }
+
+        private _setPreviousGridIndex(gridIndex: GridIndex): void {
+            this._previousGridIndex = gridIndex;
+        }
+        public getPreviousGridIndex(): GridIndex | undefined {
+            return this._previousGridIndex;
         }
 
         public setIsMovableByTouches(isMovable: boolean): void {

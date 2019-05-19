@@ -231,194 +231,174 @@ namespace TinyWars.MultiCustomWar {
         }
 
         private _updateConForNormal(): void {
-            const con           = this._conForNormal;
-            const gridIndex     = this._cursor.getGridIndex();
             const actionPlanner = this._actionPlanner;
-            const state         = actionPlanner.getState();
+            if (actionPlanner) {
+                const con       = this._conForNormal;
+                const gridIndex = this._cursor.getGridIndex();
+                const state     = actionPlanner.getState();
 
-            if (state === ActionPlannerState.Idle) {
-                con.visible = true;
+                if (state === ActionPlannerState.Idle) {
+                    con.visible = true;
 
-            } else if (state === ActionPlannerState.MakingMovePathForUnitOnMap) {
-                con.visible = !actionPlanner.getFocusUnitOnMap().checkCanAttackTargetAfterMovePath(actionPlanner.getMovePath(), gridIndex);
+                } else if (state === ActionPlannerState.MakingMovePath) {
+                    con.visible = !actionPlanner.getFocusUnit().checkCanAttackTargetAfterMovePath(actionPlanner.getMovePath(), gridIndex);
 
-            } else if (state === ActionPlannerState.ChoosingActionForUnitOnMap) {
-                con.visible = true;
+                } else if (state === ActionPlannerState.ChoosingAction) {
+                    con.visible = true;
 
-            } else if (state === ActionPlannerState.MakingMovePathForUnitLoaded) {
-                con.visible = !actionPlanner.getFocusUnitLoaded().checkCanAttackTargetAfterMovePath(actionPlanner.getMovePath(), gridIndex);
+                } else if (state === ActionPlannerState.ChoosingAttackTarget) {
+                    con.visible = !actionPlanner.checkHasAttackableGridAfterMove(gridIndex);
 
-            } else if (state === ActionPlannerState.ChoosingActionForUnitLoaded) {
-                con.visible = true;
+                } else if (state === ActionPlannerState.ChoosingDropDestination) {
+                    con.visible = true;
 
-            } else if (state === ActionPlannerState.ChoosingAttackTarget) {
-                con.visible = !actionPlanner.checkHasAttackableGridAfterMove(gridIndex);
+                } else if (state === ActionPlannerState.ChoosingProductionTarget) {
+                    con.visible = true;
 
-            } else if (state === ActionPlannerState.ChoosingDropDestination) {
-                con.visible = true;
+                } else if (state === ActionPlannerState.PreviewingAttackableArea) {
+                    con.visible = true;
 
-            } else if (state === ActionPlannerState.ChoosingProductionTarget) {
-                con.visible = true;
+                } else if (state === ActionPlannerState.PreviewingMovableArea) {
+                    con.visible = true;
 
-            } else if (state === ActionPlannerState.PreviewingAttackableArea) {
-                con.visible = true;
+                } else if (state === ActionPlannerState.ExecutingAction) {
+                    con.visible = true;
 
-            } else if (state === ActionPlannerState.PreviewingMovableArea) {
-                con.visible = true;
-
-            } else if (state === ActionPlannerState.ExecutingAction) {
-                con.visible = true;
-
-            } else {
-                // TODO
+                } else {
+                    // TODO
+                }
             }
         }
         private _updateConForTarget(): void {
-            const con           = this._conForTarget;
-            const gridIndex     = this._cursor.getGridIndex();
             const actionPlanner = this._actionPlanner;
-            const state         = actionPlanner.getState();
+            if (actionPlanner) {
+                const con       = this._conForTarget;
+                const gridIndex = this._cursor.getGridIndex();
+                const state     = actionPlanner.getState();
 
-            if (state === ActionPlannerState.Idle) {
-                con.visible = false;
+                if (state === ActionPlannerState.Idle) {
+                    con.visible = false;
 
-            } else if (state === ActionPlannerState.MakingMovePathForUnitOnMap) {
-                con.visible = actionPlanner.getFocusUnitOnMap().checkCanAttackTargetAfterMovePath(actionPlanner.getMovePath(), gridIndex);
+                } else if (state === ActionPlannerState.MakingMovePath) {
+                    con.visible = actionPlanner.getFocusUnit().checkCanAttackTargetAfterMovePath(actionPlanner.getMovePath(), gridIndex);
 
-            } else if (state === ActionPlannerState.ChoosingActionForUnitOnMap) {
-                con.visible = false;
+                } else if (state === ActionPlannerState.ChoosingAction) {
+                    con.visible = false;
 
-            } else if (state === ActionPlannerState.MakingMovePathForUnitLoaded) {
-                con.visible = actionPlanner.getFocusUnitLoaded().checkCanAttackTargetAfterMovePath(actionPlanner.getMovePath(), gridIndex);
+                } else if (state === ActionPlannerState.ChoosingAttackTarget) {
+                    con.visible = actionPlanner.checkHasAttackableGridAfterMove(gridIndex);
 
-            } else if (state === ActionPlannerState.ChoosingActionForUnitLoaded) {
-                con.visible = false;
+                } else if (state === ActionPlannerState.ChoosingDropDestination) {
+                    con.visible = false;
 
-            } else if (state === ActionPlannerState.ChoosingAttackTarget) {
-                con.visible = actionPlanner.checkHasAttackableGridAfterMove(gridIndex);
+                } else if (state === ActionPlannerState.ChoosingProductionTarget) {
+                    con.visible = false;
 
-            } else if (state === ActionPlannerState.ChoosingDropDestination) {
-                con.visible = false;
+                } else if (state === ActionPlannerState.PreviewingAttackableArea) {
+                    con.visible = false;
 
-            } else if (state === ActionPlannerState.ChoosingProductionTarget) {
-                con.visible = false;
+                } else if (state === ActionPlannerState.PreviewingMovableArea) {
+                    con.visible = false;
 
-            } else if (state === ActionPlannerState.PreviewingAttackableArea) {
-                con.visible = false;
+                } else if (state === ActionPlannerState.ExecutingAction) {
+                    con.visible = false;
 
-            } else if (state === ActionPlannerState.PreviewingMovableArea) {
-                con.visible = false;
-
-            } else if (state === ActionPlannerState.ExecutingAction) {
-                con.visible = false;
-
-            } else {
-                // TODO
+                } else {
+                    // TODO
+                }
             }
         }
         private _updateConForSiloArea(): void {
-            const con           = this._conForSiloArea;
-            const gridIndex     = this._cursor.getGridIndex();
             const actionPlanner = this._actionPlanner;
-            const state         = actionPlanner.getState();
+            if (actionPlanner) {
+                const con       = this._conForSiloArea;
+                const gridIndex = this._cursor.getGridIndex();
+                const state     = actionPlanner.getState();
 
-            if (state === ActionPlannerState.Idle) {
-                con.visible = false;
+                if (state === ActionPlannerState.Idle) {
+                    con.visible = false;
 
-            } else if (state === ActionPlannerState.MakingMovePathForUnitOnMap) {
-                con.visible = false;
+                } else if (state === ActionPlannerState.MakingMovePath) {
+                    con.visible = false;
 
-            } else if (state === ActionPlannerState.ChoosingProductionTarget) {
-                con.visible = false;
+                } else if (state === ActionPlannerState.ChoosingProductionTarget) {
+                    con.visible = false;
 
-            } else if (state === ActionPlannerState.PreviewingAttackableArea) {
-                con.visible = false;
+                } else if (state === ActionPlannerState.PreviewingAttackableArea) {
+                    con.visible = false;
 
-            } else if (state === ActionPlannerState.PreviewingMovableArea) {
-                con.visible = false;
+                } else if (state === ActionPlannerState.PreviewingMovableArea) {
+                    con.visible = false;
 
-            } else if (state === ActionPlannerState.ExecutingAction) {
-                con.visible = false;
+                } else if (state === ActionPlannerState.ExecutingAction) {
+                    con.visible = false;
 
-            } else {
-                // TODO
+                } else {
+                    // TODO
+                }
             }
         }
         private _updateConForDamage(): void {
-            const con           = this._conForDamage;
-            const gridIndex     = this._cursor.getGridIndex();
             const actionPlanner = this._actionPlanner;
-            const state         = actionPlanner.getState();
+            if (actionPlanner) {
+                const con           = this._conForDamage;
+                const gridIndex     = this._cursor.getGridIndex();
+                const state         = actionPlanner.getState();
 
-            if (state === ActionPlannerState.Idle) {
-                con.visible = false;
-
-            } else if (state === ActionPlannerState.MakingMovePathForUnitOnMap) {
-                const [attackDamage, counterDamage] = DamageCalculator.getEstimatedBattleDamage(
-                    this._cursor.getWar(),
-                    actionPlanner.getMovePath(),
-                    undefined,
-                    gridIndex
-                );
-                if (attackDamage == null) {
+                if (state === ActionPlannerState.Idle) {
                     con.visible = false;
-                } else {
-                    con.visible = true;
-                    this._labelDamage.text = `${Lang.getText(Lang.Type.B0077)}: ${attackDamage}%\n${Lang.getText(Lang.Type.B0078)}: ${counterDamage == null ? `---` : counterDamage}%`;
-                }
 
-            } else if (state === ActionPlannerState.ChoosingActionForUnitOnMap) {
-                con.visible = false;
+                } else if (state === ActionPlannerState.MakingMovePath) {
+                    const focusUnitLoaded               = actionPlanner.getFocusUnitLoaded();
+                    const [attackDamage, counterDamage] = DamageCalculator.getEstimatedBattleDamage(
+                        this._cursor.getWar(),
+                        actionPlanner.getMovePath(),
+                        focusUnitLoaded ? focusUnitLoaded.getUnitId() : undefined,
+                        gridIndex
+                    );
+                    if (attackDamage == null) {
+                        con.visible = false;
+                    } else {
+                        con.visible = true;
+                        this._labelDamage.text = `${Lang.getText(Lang.Type.B0077)}: ${attackDamage}%\n${Lang.getText(Lang.Type.B0078)}: ${counterDamage == null ? `---` : counterDamage}%`;
+                    }
 
-            } else if (state === ActionPlannerState.MakingMovePathForUnitLoaded) {
-                const [attackDamage, counterDamage] = DamageCalculator.getEstimatedBattleDamage(
-                    this._cursor.getWar(),
-                    actionPlanner.getMovePath(),
-                    actionPlanner.getFocusUnitLoaded().getUnitId(),
-                    gridIndex
-                );
-                if (attackDamage == null) {
+                } else if (state === ActionPlannerState.ChoosingAction) {
                     con.visible = false;
-                } else {
-                    con.visible = true;
-                    this._labelDamage.text = `${Lang.getText(Lang.Type.B0077)}: ${attackDamage}%\n${Lang.getText(Lang.Type.B0078)}: ${counterDamage == null ? `---` : counterDamage}%`;
-                }
 
-            } else if (state === ActionPlannerState.ChoosingActionForUnitLoaded) {
-                con.visible = false;
+                } else if (state === ActionPlannerState.ChoosingAttackTarget) {
+                    const focusUnitLoaded               = actionPlanner.getFocusUnitLoaded();
+                    const [attackDamage, counterDamage] = DamageCalculator.getEstimatedBattleDamage(
+                        this._cursor.getWar(),
+                        actionPlanner.getMovePath(),
+                        focusUnitLoaded ? focusUnitLoaded.getUnitId() : undefined,
+                        gridIndex
+                    );
+                    if (attackDamage == null) {
+                        con.visible = false;
+                    } else {
+                        con.visible = true;
+                        this._labelDamage.text = `${Lang.getText(Lang.Type.B0077)}: ${attackDamage}%\n${Lang.getText(Lang.Type.B0078)}: ${counterDamage == null ? `---` : counterDamage}%`;
+                    }
 
-            } else if (state === ActionPlannerState.ChoosingAttackTarget) {
-                const focusUnit = actionPlanner.getFocusUnitLoaded();
-                const [attackDamage, counterDamage] = DamageCalculator.getEstimatedBattleDamage(
-                    this._cursor.getWar(),
-                    actionPlanner.getMovePath(),
-                    focusUnit ? focusUnit.getUnitId() : undefined,
-                    gridIndex
-                );
-                if (attackDamage == null) {
+                } else if (state === ActionPlannerState.ChoosingDropDestination) {
                     con.visible = false;
+
+                } else if (state === ActionPlannerState.ChoosingProductionTarget) {
+                    con.visible = false;
+
+                } else if (state === ActionPlannerState.PreviewingAttackableArea) {
+                    con.visible = false;
+
+                } else if (state === ActionPlannerState.PreviewingMovableArea) {
+                    con.visible = false;
+
+                } else if (state === ActionPlannerState.ExecutingAction) {
+                    con.visible = false;
+
                 } else {
-                    con.visible = true;
-                    this._labelDamage.text = `${Lang.getText(Lang.Type.B0077)}: ${attackDamage}%\n${Lang.getText(Lang.Type.B0078)}: ${counterDamage == null ? `---` : counterDamage}%`;
+                    // TODO
                 }
-
-            } else if (state === ActionPlannerState.ChoosingDropDestination) {
-                con.visible = false;
-
-            } else if (state === ActionPlannerState.ChoosingProductionTarget) {
-                con.visible = false;
-
-            } else if (state === ActionPlannerState.PreviewingAttackableArea) {
-                con.visible = false;
-
-            } else if (state === ActionPlannerState.PreviewingMovableArea) {
-                con.visible = false;
-
-            } else if (state === ActionPlannerState.ExecutingAction) {
-                con.visible = false;
-
-            } else {
-                // TODO
             }
         }
 

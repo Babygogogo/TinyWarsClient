@@ -88,26 +88,21 @@ namespace TinyWars.MultiCustomWar {
             } else if (state === ActionPlannerState.ExecutingAction) {
                 this._setAllUnitsOnMapVisible(true);
 
-            } else if (state === ActionPlannerState.MakingMovePathForUnitOnMap) {
+            } else if (state === ActionPlannerState.MakingMovePath) {
                 this._setAllUnitsOnMapVisible(true);
                 actionPlanner.getFocusUnitOnMap().setViewVisible(false);
+                const focusUnitLoaded = actionPlanner.getFocusUnitLoaded();
+                (focusUnitLoaded) && (focusUnitLoaded.setViewVisible(false));
 
-            } else if (state === ActionPlannerState.ChoosingActionForUnitOnMap) {
+            } else if (state === ActionPlannerState.ChoosingAction) {
                 this._setAllUnitsOnMapVisible(true);
                 actionPlanner.getFocusUnitOnMap().setViewVisible(false);
-
-            } else if (state === ActionPlannerState.MakingMovePathForUnitLoaded) {
-                this._setAllUnitsOnMapVisible(true);
-                actionPlanner.getFocusUnitOnMap().setViewVisible(false);
-                actionPlanner.getFocusUnitLoaded().setViewVisible(false);
-
-            } else if (state === ActionPlannerState.ChoosingActionForUnitLoaded) {
-                this._setAllUnitsOnMapVisible(true);
-                actionPlanner.getFocusUnitOnMap().setViewVisible(false);
-                actionPlanner.getFocusUnitLoaded().setViewVisible(false);
+                const focusUnitLoaded = actionPlanner.getFocusUnitLoaded();
+                (focusUnitLoaded) && (focusUnitLoaded.setViewVisible(false));
 
             } else if (state === ActionPlannerState.ChoosingDropDestination) {
-                // TODO
+                this._setAllUnitsOnMapVisible(true);
+                actionPlanner.getFocusUnitOnMap().setViewVisible(false);
 
             } else if (state === ActionPlannerState.ChoosingProductionTarget) {
                 this._setAllUnitsOnMapVisible(true);

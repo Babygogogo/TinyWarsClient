@@ -46,7 +46,8 @@ namespace TinyWars.MultiCustomWar {
             this._notifyListeners = [
                 // { type: Notify.Type.GlobalTouchBegin,           callback: this._onNotifyGlobalTouchBegin },
                 // { type: Notify.Type.GlobalTouchMove,            callback: this._onNotifyGlobalTouchMove },
-                { type: Notify.Type.TileAnimationTick,          callback: this._onNotifyTileAnimationTick },
+                // { type: Notify.Type.TileAnimationTick,          callback: this._onNotifyTileAnimationTick },
+                { type: Notify.Type.UnitAnimationTick,          callback: this._onNotifyUnitAnimationTick },
             ];
 
             this._listAction.setItemRenderer(UnitActionRenderer);
@@ -74,6 +75,13 @@ namespace TinyWars.MultiCustomWar {
         }
         private _onNotifyTileAnimationTick(e: egret.Event): void {
         }
+        private _onNotifyUnitAnimationTick(e: egret.Event): void {
+            const viewList = this._listAction.getViewList();
+            for (let i = 0; i < viewList.numChildren; ++i) {
+                const child = viewList.getChildAt(i);
+                (child instanceof UnitActionRenderer) && (child.updateOnUnitAnimationTick());
+            }
+        }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
@@ -92,27 +100,48 @@ namespace TinyWars.MultiCustomWar {
     export type DataForUnitActionRenderer = {
         actionType      : UnitActionType;
         callback        : () => void;
-        launchUnitId?   : number;
-        dropUnitId?     : number;
+        unitForLaunch?  : McwUnit;
+        unitForDrop?    : McwUnit;
         produceUnitType?: Types.UnitType;
     }
 
     class UnitActionRenderer extends eui.ItemRenderer {
         private _labelAction: GameUi.UiLabel;
+        private _conUnitView: eui.Group;
+
+        private _unitView   : McwUnitView;
 
         protected childrenCreated(): void {
             super.childrenCreated();
+
+            this._unitView = new McwUnitView();
+            this._conUnitView.addChild(this._unitView);
         }
 
         protected dataChanged(): void {
             super.dataChanged();
 
             const data              = this.data as DataForUnitActionRenderer;
+            const unit              = data.unitForLaunch || data.unitForDrop;
             this._labelAction.text  = Lang.getUnitActionName(data.actionType);
+            if (unit == null) {
+                this.currentState = "withoutUnit";
+            } else {
+                this.currentState = "withUnit";
+                this._unitView.init(unit).startRunningView();
+            }
         }
 
         public onItemTapEvent(e: eui.ItemTapEvent): void {
             (this.data as DataForUnitActionRenderer).callback();
+        }
+
+        public updateOnUnitAnimationTick(): void {
+            const data = this.data as DataForUnitActionRenderer;
+            if ((data.unitForDrop) || (data.unitForLaunch) || (data.produceUnitType != null)) {
+                this._unitView.tickUnitAnimationFrame();
+                this._unitView.tickStateAnimationFrame();
+            }
         }
     }
 }
