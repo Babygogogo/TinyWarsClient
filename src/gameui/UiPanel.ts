@@ -15,11 +15,12 @@ namespace TinyWars.GameUi {
         protected _notifyListeners: Utility.Notify.Listener[];
         protected _notifyPriority = 0;
 
-        private _isChildrenCreated   = false;
-        private _isCalledOpen        = false;
+        private _isChildrenCreated  = false;
+        private _isSkinLoaded       = false;
+        private _isCalledOpen       = false;
 
-        private _isEverOpened        = false;
-        private _isOpening           = false;
+        private _isEverOpened       = false;
+        private _isOpening          = false;
 
         private _isAutoAdjustHeight = false;
         private _isTouchMaskEnabled = false;
@@ -32,6 +33,7 @@ namespace TinyWars.GameUi {
 
             this.touchEnabled = false;
             this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
+            this.once(egret.Event.COMPLETE, this._onSkinLoaded, this);
         }
 
         protected childrenCreated(): void {
@@ -41,14 +43,20 @@ namespace TinyWars.GameUi {
             this._doOpen();
         }
 
-        private _onAddedToStage(): void {
+        private _onAddedToStage(e: egret.Event): void {
             this.removeEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
             this.addEventListener(egret.Event.REMOVED_FROM_STAGE, this._onRemovedFromStage, this);
 
             this._doOpen();
         }
 
-        private _onRemovedFromStage(): void {
+        private _onSkinLoaded(e: egret.Event): void {
+            this._isSkinLoaded = true;
+
+            this._doOpen();
+        }
+
+        private _onRemovedFromStage(e: egret.Event): void {
             this.removeEventListener(egret.Event.REMOVED_FROM_STAGE, this._onRemovedFromStage, this);
             this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
         }
@@ -95,6 +103,7 @@ namespace TinyWars.GameUi {
         private _checkIsReadyForOpen(): boolean {
             return (this.stage != null)
                 && (this._isChildrenCreated)
+                && (this._isSkinLoaded)
                 && (this._isCalledOpen);
         }
 

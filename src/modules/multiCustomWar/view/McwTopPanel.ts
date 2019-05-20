@@ -20,6 +20,7 @@ namespace TinyWars.MultiCustomWar {
         private _btnUnitList    : GameUi.UiButton;
         private _btnFindBuilding: GameUi.UiButton;
         private _btnEndTurn     : GameUi.UiButton;
+        private _btnCancel      : GameUi.UiButton;
         private _btnMenu        : GameUi.UiButton;
 
         private _war    : McwWar;
@@ -55,6 +56,7 @@ namespace TinyWars.MultiCustomWar {
                 { ui: this._btnUnitList,        callback: this._onTouchedBtnUnitList, },
                 { ui: this._btnFindBuilding,    callback: this._onTouchedBtnFindBuilding, },
                 { ui: this._btnEndTurn,         callback: this._onTouchedBtnEndTurn, },
+                { ui: this._btnCancel,          callback: this._onTouchedBtnCancel },
                 { ui: this._btnMenu,            callback: this._onTouchedBtnMenu, },
             ];
         }
@@ -75,6 +77,7 @@ namespace TinyWars.MultiCustomWar {
             this._updateBtnEndTurn();
             this._updateBtnFindUnit();
             this._updateBtnFindBuilding();
+            this._updateBtnCancel();
         }
         private _onNotifyMcwPlayerFundChanged(e: egret.Event): void {
             this._updateLabelFund();
@@ -87,6 +90,7 @@ namespace TinyWars.MultiCustomWar {
         }
         private _onNotifyMcwActionPlannerStateChanged(e: egret.Event): void {
             this._updateBtnEndTurn();
+            this._updateBtnCancel();
         }
 
         private _onTouchedBtnUnitList(e: egret.TouchEvent): void {
@@ -102,6 +106,9 @@ namespace TinyWars.MultiCustomWar {
                 content : this._getHintForEndTurn(),
                 callback: () => this._war.getActionPlanner().setStateRequestingPlayerEndTurn(),
             });
+        }
+        private _onTouchedBtnCancel(e: egret.TouchEvent): void {
+            this._war.getField().getActionPlanner().setStateIdle();
         }
         private _onTouchedBtnMenu(e: egret.TouchEvent): void {
             const actionPlanner = this._war.getActionPlanner();
@@ -121,6 +128,7 @@ namespace TinyWars.MultiCustomWar {
             this._updateBtnEndTurn();
             this._updateBtnFindUnit();
             this._updateBtnFindBuilding();
+            this._updateBtnCancel();
         }
 
         private _updateLabelPlayer(): void {
@@ -161,6 +169,16 @@ namespace TinyWars.MultiCustomWar {
             const turnManager               = war.getTurnManager();
             this._btnFindBuilding.visible   = (turnManager.getPlayerIndexInTurn() === war.getPlayerIndexLoggedIn())
                 && (turnManager.getPhaseCode() === Types.TurnPhaseCode.Main);
+        }
+
+        private _updateBtnCancel(): void {
+            const war               = this._war;
+            const turnManager       = war.getTurnManager();
+            const actionPlanner     = war.getActionPlanner();
+            this._btnCancel.visible = (turnManager.getPlayerIndexInTurn() === war.getPlayerIndexLoggedIn())
+                && (turnManager.getPhaseCode() === Types.TurnPhaseCode.Main)
+                && (actionPlanner.getState() !== Types.ActionPlannerState.Idle)
+                && (!actionPlanner.checkIsStateRequesting());
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
