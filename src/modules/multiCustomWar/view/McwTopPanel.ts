@@ -175,9 +175,11 @@ namespace TinyWars.MultiCustomWar {
             const war               = this._war;
             const turnManager       = war.getTurnManager();
             const actionPlanner     = war.getActionPlanner();
+            const state             = actionPlanner.getState();
             this._btnCancel.visible = (turnManager.getPlayerIndexInTurn() === war.getPlayerIndexLoggedIn())
                 && (turnManager.getPhaseCode() === Types.TurnPhaseCode.Main)
-                && (actionPlanner.getState() !== Types.ActionPlannerState.Idle)
+                && (state !== Types.ActionPlannerState.Idle)
+                && (state !== Types.ActionPlannerState.ExecutingAction)
                 && (!actionPlanner.checkIsStateRequesting());
         }
 
