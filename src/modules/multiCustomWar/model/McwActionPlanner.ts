@@ -146,7 +146,7 @@ namespace TinyWars.MultiCustomWar {
                     Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() error 4, nextState: ${nextState}`);
 
                 } else if (nextState === State.RequestingUnitDrop) {
-                    this._setStateRequestingUnitDrop();
+                    this._setStateRequestingUnitDropOnTap(gridIndex);
 
                 } else if (nextState === State.RequestingUnitJoin) {
                     Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() error 5, nextState: ${nextState}`);
@@ -907,8 +907,34 @@ namespace TinyWars.MultiCustomWar {
             FloatText.show(`Unit surface TODO!!!`);
         }
 
-        private _setStateRequestingUnitDrop(): void {
-            FloatText.show(`Unit drop TODO!!!`);
+        private _setStateRequestingUnitDropOnTap(gridIndex: GridIndex): void {
+            this._pushBackChosenUnitForDrop({
+                unit        : this.getChoosingUnitForDrop(),
+                destination : gridIndex,
+            });
+
+            const destinations = [] as Types.DropDestination[];
+            for (const data of this.getChosenUnitsForDrop()) {
+                destinations.push({ unitId: data.unit.getUnitId(), gridIndex: data.destination });
+            }
+
+            const unit = this.getFocusUnitLoaded();
+            McwProxy.reqMcwUnitDrop(this._war, this.getMovePath(), unit ? unit.getUnitId() : undefined, destinations);
+
+            this._setState(State.RequestingUnitDrop);
+            this._updateView();
+        }
+        private _setStateRequestingUnitDropOnChooseAction(): void {
+            const destinations = [] as Types.DropDestination[];
+            for (const data of this.getChosenUnitsForDrop()) {
+                destinations.push({ unitId: data.unit.getUnitId(), gridIndex: data.destination });
+            }
+
+            const unit = this.getFocusUnitLoaded();
+            McwProxy.reqMcwUnitDrop(this._war, this.getMovePath(), unit ? unit.getUnitId() : undefined, destinations);
+
+            this._setState(State.RequestingUnitDrop);
+            this._updateView();
         }
 
         private _setStateRequestingUnitLaunchFlare(gridIndex: GridIndex): void {
@@ -1681,7 +1707,7 @@ namespace TinyWars.MultiCustomWar {
                 return undefined;
             } else {
                 if (this.getChosenUnitsForDrop().length) {
-                    return { actionType: UnitActionType.Wait, callback: () => this._setStateRequestingUnitDrop() };
+                    return { actionType: UnitActionType.Wait, callback: () => this._setStateRequestingUnitDropOnChooseAction() };
                 } else {
                     return { actionType: UnitActionType.Wait, callback: () => this._setStateRequestingUnitWait() };
                 }

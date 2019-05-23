@@ -26,6 +26,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         [ActionCodes.S_McwUnitAttack,           _executeMcwUnitAttack],
         [ActionCodes.S_McwUnitBeLoaded,         _executeMcwUnitBeLoaded],
         [ActionCodes.S_McwUnitCaptureTile,      _executeMcwUnitCaptureTile],
+        [ActionCodes.S_McwUnitDrop,             _executeMcwUnitDrop],
         [ActionCodes.S_McwUnitWait,             _executeMcwUnitWait],
     ]);
 
@@ -85,6 +86,9 @@ namespace TinyWars.MultiCustomWar.McwModel {
     }
     export function updateOnUnitCaptureTile(data: ProtoTypes.IS_McwUnitCaptureTile): void {
         _updateByActionContainer({ S_McwUnitCaptureTile: data }, data.warId, data.actionId);
+    }
+    export function updateOnUnitDrop(data: ProtoTypes.IS_McwUnitDrop): void {
+        _updateByActionContainer({ S_McwUnitDrop: data }, data.warId, data.actionId);
     }
     export function updateOnUnitWait(data: ProtoTypes.IS_McwUnitWait): void {
         _updateByActionContainer({ S_McwUnitWait: data }, data.warId, data.actionId);
@@ -419,6 +423,73 @@ namespace TinyWars.MultiCustomWar.McwModel {
                 });
             }
         }
+    }
+
+    async function _executeMcwUnitDrop(data: ActionContainer): Promise<void> {
+        const actionPlanner = _war.getActionPlanner();
+        actionPlanner.setStateExecutingAction();
+
+        const action = data.S_McwUnitDrop;
+        updateTilesAndUnitsBeforeExecutingAction(_war, action);
+
+        const path              = action.path as MovePath;
+        const pathNodes         = path.nodes;
+        const unitMap           = _war.getUnitMap();
+        const endingGridIndex   = pathNodes[pathNodes.length - 1];
+        const focusUnit         = unitMap.getUnit(pathNodes[0], action.launchUnitId);
+        moveUnit(_war, ActionCodes.S_McwUnitDrop, path, action.launchUnitId, path.fuelConsumption);
+        focusUnit.setState(UnitState.Actioned);
+
+        const playerIndex           = focusUnit.getPlayerIndex();
+        const shouldUpdateFogMap    = _war.getPlayerLoggedIn().getTeamIndex() === focusUnit.getTeamIndex();
+        const fogMap                = _war.getFogMap();
+        const unitsForDrop          = [] as McwUnit[];
+        for (const { unitId, gridIndex } of action.dropDestinations as Types.DropDestination[]) {
+            const unitForDrop = unitMap.getUnitLoadedById(unitId);
+            unitMap.setUnitUnloaded(unitId, gridIndex);
+            for (const unit of unitMap.getUnitsLoadedByLoader(unitForDrop, true)) {
+                unit.setGridIndex(gridIndex);
+            }
+
+            unitForDrop.setLoaderUnitId(undefined);
+            unitForDrop.setGridIndex(gridIndex);
+            unitForDrop.setState(UnitState.Actioned);
+            unitsForDrop.push(unitForDrop);
+
+            if (shouldUpdateFogMap) {
+                fogMap.updateMapFromPathsByUnitAndPath(unitForDrop, [endingGridIndex, gridIndex]);
+                fogMap.updateMapFromUnitsForPlayerOnArriving(playerIndex, gridIndex, unitForDrop.getVisionRangeForPlayer(playerIndex, gridIndex));
+            }
+        }
+
+        return new Promise<void>(resolve => {
+            focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
+                if (action.isDropBlocked) {
+                    _war.getGridVisionEffect().showEffectBlock(endingGridIndex);
+                }
+                focusUnit.updateView();
+
+                const promises = [] as Promise<void>[];
+                for (const unitForDrop of unitsForDrop) {
+                    promises.push(new Promise<void>(r => {
+                        unitForDrop.moveViewAlongPath(
+                            [endingGridIndex, unitForDrop.getGridIndex()],
+                            unitForDrop.getIsDiving(),
+                            false,
+                            () => {
+                                unitForDrop.updateView();
+                                r();
+                            }
+                        );
+                    }))
+                }
+                Promise.all(promises).then(() => {
+                    McwHelpers.updateTilesAndUnitsOnVisibilityChanged(_war);
+                    actionPlanner.setStateIdle();
+                    resolve();
+                });
+            });
+        });
     }
 
     async function _executeMcwUnitWait(data: ActionContainer): Promise<void> {

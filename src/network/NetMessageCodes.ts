@@ -48,4 +48,6 @@ C_McwUnitAttack = 187,
 S_McwUnitAttack = 188,
 C_McwProduceUnitOnTile = 189,
 S_McwProduceUnitOnTile = 190,
+C_McwUnitDrop = 191,
+S_McwUnitDrop = 192,
 }}

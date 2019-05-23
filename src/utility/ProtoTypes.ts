@@ -2881,6 +2881,102 @@ export declare class MovePath implements IMovePath {
     public toJSON(): { [k: string]: any };
 }
 
+/** Properties of a DropDestination. */
+export declare interface IDropDestination {
+
+    /** DropDestination unitId */
+    unitId?: (number|null);
+
+    /** DropDestination gridIndex */
+    gridIndex?: (IGridIndex|null);
+}
+
+/** Represents a DropDestination. */
+export declare class DropDestination implements IDropDestination {
+
+    /**
+     * Constructs a new DropDestination.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IDropDestination);
+
+    /** DropDestination unitId. */
+    public unitId: number;
+
+    /** DropDestination gridIndex. */
+    public gridIndex?: (IGridIndex|null);
+
+    /**
+     * Creates a new DropDestination instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns DropDestination instance
+     */
+    public static create(properties?: IDropDestination): DropDestination;
+
+    /**
+     * Encodes the specified DropDestination message. Does not implicitly {@link DropDestination.verify|verify} messages.
+     * @param message DropDestination message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IDropDestination, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified DropDestination message, length delimited. Does not implicitly {@link DropDestination.verify|verify} messages.
+     * @param message DropDestination message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IDropDestination, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a DropDestination message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns DropDestination
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): DropDestination;
+
+    /**
+     * Decodes a DropDestination message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns DropDestination
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): DropDestination;
+
+    /**
+     * Verifies a DropDestination message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a DropDestination message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns DropDestination
+     */
+    public static fromObject(object: { [k: string]: any }): DropDestination;
+
+    /**
+     * Creates a plain object from a DropDestination message. Also converts values to other types if specified.
+     * @param message DropDestination
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: DropDestination, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this DropDestination to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
 /** Properties of a MapDynamicInfo. */
 export declare interface IMapDynamicInfo {
 
@@ -3810,6 +3906,12 @@ export declare interface IActionContainer {
 
     /** ActionContainer S_McwProduceUnitOnTile */
     S_McwProduceUnitOnTile?: (IS_McwProduceUnitOnTile|null);
+
+    /** ActionContainer C_McwUnitDrop */
+    C_McwUnitDrop?: (IC_McwUnitDrop|null);
+
+    /** ActionContainer S_McwUnitDrop */
+    S_McwUnitDrop?: (IS_McwUnitDrop|null);
 }
 
 /** Represents an ActionContainer. */
@@ -3961,6 +4063,12 @@ export declare class ActionContainer implements IActionContainer {
 
     /** ActionContainer S_McwProduceUnitOnTile. */
     public S_McwProduceUnitOnTile?: (IS_McwProduceUnitOnTile|null);
+
+    /** ActionContainer C_McwUnitDrop. */
+    public C_McwUnitDrop?: (IC_McwUnitDrop|null);
+
+    /** ActionContainer S_McwUnitDrop. */
+    public S_McwUnitDrop?: (IS_McwUnitDrop|null);
 
     /**
      * Creates a new ActionContainer instance using the specified properties.
@@ -9074,6 +9182,270 @@ export declare class S_McwUnitAttack implements IS_McwUnitAttack {
 
     /**
      * Converts this S_McwUnitAttack to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_McwUnitDrop. */
+export declare interface IC_McwUnitDrop {
+
+    /** C_McwUnitDrop warId */
+    warId?: (number|null);
+
+    /** C_McwUnitDrop actionId */
+    actionId?: (number|null);
+
+    /** C_McwUnitDrop path */
+    path?: (IGridIndex[]|null);
+
+    /** C_McwUnitDrop launchUnitId */
+    launchUnitId?: (number|null);
+
+    /** C_McwUnitDrop dropDestinations */
+    dropDestinations?: (IDropDestination[]|null);
+}
+
+/** Represents a C_McwUnitDrop. */
+export declare class C_McwUnitDrop implements IC_McwUnitDrop {
+
+    /**
+     * Constructs a new C_McwUnitDrop.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_McwUnitDrop);
+
+    /** C_McwUnitDrop warId. */
+    public warId: number;
+
+    /** C_McwUnitDrop actionId. */
+    public actionId: number;
+
+    /** C_McwUnitDrop path. */
+    public path: IGridIndex[];
+
+    /** C_McwUnitDrop launchUnitId. */
+    public launchUnitId: number;
+
+    /** C_McwUnitDrop dropDestinations. */
+    public dropDestinations: IDropDestination[];
+
+    /**
+     * Creates a new C_McwUnitDrop instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_McwUnitDrop instance
+     */
+    public static create(properties?: IC_McwUnitDrop): C_McwUnitDrop;
+
+    /**
+     * Encodes the specified C_McwUnitDrop message. Does not implicitly {@link C_McwUnitDrop.verify|verify} messages.
+     * @param message C_McwUnitDrop message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_McwUnitDrop, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_McwUnitDrop message, length delimited. Does not implicitly {@link C_McwUnitDrop.verify|verify} messages.
+     * @param message C_McwUnitDrop message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_McwUnitDrop, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_McwUnitDrop message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_McwUnitDrop
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_McwUnitDrop;
+
+    /**
+     * Decodes a C_McwUnitDrop message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_McwUnitDrop
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_McwUnitDrop;
+
+    /**
+     * Verifies a C_McwUnitDrop message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_McwUnitDrop message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_McwUnitDrop
+     */
+    public static fromObject(object: { [k: string]: any }): C_McwUnitDrop;
+
+    /**
+     * Creates a plain object from a C_McwUnitDrop message. Also converts values to other types if specified.
+     * @param message C_McwUnitDrop
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_McwUnitDrop, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_McwUnitDrop to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_McwUnitDrop. */
+export declare interface IS_McwUnitDrop {
+
+    /** S_McwUnitDrop errorCode */
+    errorCode?: (number|null);
+
+    /** S_McwUnitDrop warId */
+    warId?: (number|null);
+
+    /** S_McwUnitDrop actionId */
+    actionId?: (number|null);
+
+    /** S_McwUnitDrop path */
+    path?: (IMovePath|null);
+
+    /** S_McwUnitDrop launchUnitId */
+    launchUnitId?: (number|null);
+
+    /** S_McwUnitDrop discoveredUnits */
+    discoveredUnits?: (ISerializedMcwUnit[]|null);
+
+    /** S_McwUnitDrop discoveredTiles */
+    discoveredTiles?: (ISerializedMcwTile[]|null);
+
+    /** S_McwUnitDrop actingUnits */
+    actingUnits?: (ISerializedMcwUnit[]|null);
+
+    /** S_McwUnitDrop actingTiles */
+    actingTiles?: (ISerializedMcwTile[]|null);
+
+    /** S_McwUnitDrop dropDestinations */
+    dropDestinations?: (IDropDestination[]|null);
+
+    /** S_McwUnitDrop isDropBlocked */
+    isDropBlocked?: (boolean|null);
+}
+
+/** Represents a S_McwUnitDrop. */
+export declare class S_McwUnitDrop implements IS_McwUnitDrop {
+
+    /**
+     * Constructs a new S_McwUnitDrop.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_McwUnitDrop);
+
+    /** S_McwUnitDrop errorCode. */
+    public errorCode: number;
+
+    /** S_McwUnitDrop warId. */
+    public warId: number;
+
+    /** S_McwUnitDrop actionId. */
+    public actionId: number;
+
+    /** S_McwUnitDrop path. */
+    public path?: (IMovePath|null);
+
+    /** S_McwUnitDrop launchUnitId. */
+    public launchUnitId: number;
+
+    /** S_McwUnitDrop discoveredUnits. */
+    public discoveredUnits: ISerializedMcwUnit[];
+
+    /** S_McwUnitDrop discoveredTiles. */
+    public discoveredTiles: ISerializedMcwTile[];
+
+    /** S_McwUnitDrop actingUnits. */
+    public actingUnits: ISerializedMcwUnit[];
+
+    /** S_McwUnitDrop actingTiles. */
+    public actingTiles: ISerializedMcwTile[];
+
+    /** S_McwUnitDrop dropDestinations. */
+    public dropDestinations: IDropDestination[];
+
+    /** S_McwUnitDrop isDropBlocked. */
+    public isDropBlocked: boolean;
+
+    /**
+     * Creates a new S_McwUnitDrop instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_McwUnitDrop instance
+     */
+    public static create(properties?: IS_McwUnitDrop): S_McwUnitDrop;
+
+    /**
+     * Encodes the specified S_McwUnitDrop message. Does not implicitly {@link S_McwUnitDrop.verify|verify} messages.
+     * @param message S_McwUnitDrop message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_McwUnitDrop, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_McwUnitDrop message, length delimited. Does not implicitly {@link S_McwUnitDrop.verify|verify} messages.
+     * @param message S_McwUnitDrop message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_McwUnitDrop, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_McwUnitDrop message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_McwUnitDrop
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_McwUnitDrop;
+
+    /**
+     * Decodes a S_McwUnitDrop message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_McwUnitDrop
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_McwUnitDrop;
+
+    /**
+     * Verifies a S_McwUnitDrop message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_McwUnitDrop message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_McwUnitDrop
+     */
+    public static fromObject(object: { [k: string]: any }): S_McwUnitDrop;
+
+    /**
+     * Creates a plain object from a S_McwUnitDrop message. Also converts values to other types if specified.
+     * @param message S_McwUnitDrop
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_McwUnitDrop, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_McwUnitDrop to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };

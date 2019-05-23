@@ -197,6 +197,11 @@ namespace TinyWars.Utility.Types {
         cost: number;
     }
 
+    export type DropDestination = {
+        unitId      : number;
+        gridIndex   : GridIndex;
+    }
+
     export type VisibilityFromPaths = 0 | 1 | 2;
     export type VisibilityFromTiles = 0 | 1;
     export type VisibilityFromUnits = 0 | 1;

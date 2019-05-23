@@ -419,22 +419,30 @@ namespace TinyWars.MultiCustomWar {
                 views.clear();
                 con.visible = true;
 
-                const unitOnMap = actionPlanner.getFocusUnitOnMap();
-                this._addUnitView(unitOnMap, unitOnMap.getGridIndex());
-
-                const unitLoaded = actionPlanner.getFocusUnitLoaded();
-                (unitLoaded) && (this._addUnitView(unitLoaded, unitLoaded.getGridIndex()));
+                const unitOnMap     = actionPlanner.getFocusUnitOnMap();
+                const unitLoaded    = actionPlanner.getFocusUnitLoaded();
+                const movePath      = actionPlanner.getMovePath();
+                if (!unitLoaded) {
+                    this._addUnitView(unitOnMap, movePath[movePath.length - 1]);
+                } else {
+                    this._addUnitView(unitOnMap, unitOnMap.getGridIndex());
+                    this._addUnitView(unitLoaded, movePath[movePath.length - 1]);
+                }
 
             } else if (state === State.ChoosingAction) {
                 con.removeChildren();
                 views.clear();
                 con.visible = true;
 
-                const unitOnMap = actionPlanner.getFocusUnitOnMap();
-                this._addUnitView(unitOnMap, unitOnMap.getGridIndex());
-
-                const unitLoaded = actionPlanner.getFocusUnitLoaded();
-                (unitLoaded) && (this._addUnitView(unitLoaded, unitLoaded.getGridIndex()));
+                const unitOnMap     = actionPlanner.getFocusUnitOnMap();
+                const unitLoaded    = actionPlanner.getFocusUnitLoaded();
+                const movePath      = actionPlanner.getMovePath();
+                if (!unitLoaded) {
+                    this._addUnitView(unitOnMap, movePath[movePath.length - 1]);
+                } else {
+                    this._addUnitView(unitOnMap, unitOnMap.getGridIndex());
+                    this._addUnitView(unitLoaded, movePath[movePath.length - 1]);
+                }
 
                 for (const data of actionPlanner.getChosenUnitsForDrop()) {
                     this._addUnitView(data.unit, data.destination);
@@ -445,11 +453,15 @@ namespace TinyWars.MultiCustomWar {
                 views.clear();
                 con.visible = true;
 
-                const unitOnMap = actionPlanner.getFocusUnitOnMap();
-                this._addUnitView(unitOnMap, unitOnMap.getGridIndex());
-
-                const unitLoaded = actionPlanner.getFocusUnitLoaded();
-                (unitLoaded) && (this._addUnitView(unitLoaded, unitLoaded.getGridIndex()));
+                const unitOnMap     = actionPlanner.getFocusUnitOnMap();
+                const unitLoaded    = actionPlanner.getFocusUnitLoaded();
+                const movePath      = actionPlanner.getMovePath();
+                if (!unitLoaded) {
+                    this._addUnitView(unitOnMap, movePath[movePath.length - 1]);
+                } else {
+                    this._addUnitView(unitOnMap, unitOnMap.getGridIndex());
+                    this._addUnitView(unitLoaded, movePath[movePath.length - 1]);
+                }
 
             } else if (state === State.ChoosingDropDestination) {
                 con.removeChildren();
