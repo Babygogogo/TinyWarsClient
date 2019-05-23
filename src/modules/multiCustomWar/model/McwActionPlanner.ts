@@ -848,10 +848,10 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for setting requesting state.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public setStateRequestingProduceUnitOnTile(gridIndex: GridIndex, unitType: UnitType): void {
-            McwProxy.reqMcwProduceUnitOnTile(this._war, gridIndex, unitType);
+        public setStateRequestingPlayerProduceUnit(gridIndex: GridIndex, unitType: UnitType): void {
+            McwProxy.reqMcwPlayerProduceUnit(this._war, gridIndex, unitType);
 
-            this._setState(State.RequestingProduceUnitOnTile);
+            this._setState(State.RequestingPlayerProduceUnit);
             this._updateView();
         }
 
@@ -1780,7 +1780,7 @@ namespace TinyWars.MultiCustomWar {
             || (state === State.RequestingPlayerEndTurn)
             || (state === State.RequestingPlayerSurrender)
             || (state === State.RequestingPlayerVoteForDraw)
-            || (state === State.RequestingProduceUnitOnTile)
+            || (state === State.RequestingPlayerProduceUnit)
             || (state === State.RequestingUnitAttack)
             || (state === State.RequestingUnitBeLoaded)
             || (state === State.RequestingUnitBuildTile)

@@ -181,7 +181,7 @@ namespace TinyWars.MultiCustomWar {
             if (data.currentFund < data.cost) {
                 FloatText.show(Lang.getText(Lang.Type.B0053));
             } else {
-                data.actionPlanner.setStateRequestingProduceUnitOnTile(data.gridIndex, data.unitType);
+                data.actionPlanner.setStateRequestingPlayerProduceUnit(data.gridIndex, data.unitType);
             }
         }
 

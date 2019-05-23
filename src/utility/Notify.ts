@@ -79,7 +79,7 @@ namespace TinyWars.Utility.Notify {
         SMcwPlayerBeginTurn,
         SMcwPlayerEndTurn,
         SMcwPlayerSurrender,
-        SMcwProduceUnitOnTile,
+        SMcwPlayerProduceUnit,
         SMcwUnitAttack,
         SMcwUnitBeLoaded,
         SMcwUnitCaptureTile,

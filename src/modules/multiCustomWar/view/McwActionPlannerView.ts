@@ -204,7 +204,7 @@ namespace TinyWars.MultiCustomWar {
             this._resetConForAttackableGrids();
             this._resetConForMovableGrids();
             this._resetConForMoveDestination();
-            this.resetConForMovePath();
+            this._resetConForMovePath();
             this._resetConForUnits();
         }
 
@@ -344,7 +344,7 @@ namespace TinyWars.MultiCustomWar {
             con.visible = false;
         }
 
-        public resetConForMovePath(): void {
+        private _resetConForMovePath(): void {
             const con           = this._conForMovePath;
             const actionPlanner = this._actionPlanner;
             const state         = actionPlanner.getState();

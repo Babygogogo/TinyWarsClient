@@ -133,8 +133,12 @@ namespace TinyWars.MultiCustomWar {
                 const unitOnMap = this._unitMap.getUnitOnMap(gridIndex);
                 if (unitOnMap) {
                     unitList.push(unitOnMap);
-                    for (const loadedUnit of this._unitMap.getUnitsLoadedByLoader(unitOnMap, true)) {
-                        unitList.push(loadedUnit);
+
+                    const war = this._war;
+                    if ((!war.getFogMap().checkHasFogCurrently()) || (war.getPlayerLoggedIn().getTeamIndex() === unitOnMap.getTeamIndex())) {
+                        for (const loadedUnit of this._unitMap.getUnitsLoadedByLoader(unitOnMap, true)) {
+                            unitList.push(loadedUnit);
+                        }
                     }
                 }
 

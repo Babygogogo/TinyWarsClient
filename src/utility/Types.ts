@@ -412,7 +412,7 @@ namespace TinyWars.Utility.Types {
         RequestingPlayerEndTurn,
         RequestingPlayerSurrender,
         RequestingPlayerVoteForDraw,
-        RequestingProduceUnitOnTile,
+        RequestingPlayerProduceUnit,
         RequestingUnitAttack,
         RequestingUnitBeLoaded,
         RequestingUnitBuildTile,

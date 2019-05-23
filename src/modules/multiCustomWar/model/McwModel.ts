@@ -22,7 +22,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         [ActionCodes.S_McwPlayerBeginTurn,      _executeMcwPlayerBeginTurn],
         [ActionCodes.S_McwPlayerEndTurn,        _executeMcwPlayerEndTurn],
         [ActionCodes.S_McwPlayerSurrender,      _executeMcwPlayerSurrender],
-        [ActionCodes.S_McwProduceUnitOnTile,    _executeMcwProduceUnitOnTile],
+        [ActionCodes.S_McwPlayerProduceUnit,    _executeMcwPlayerProduceUnit],
         [ActionCodes.S_McwUnitAttack,           _executeMcwUnitAttack],
         [ActionCodes.S_McwUnitBeLoaded,         _executeMcwUnitBeLoaded],
         [ActionCodes.S_McwUnitCaptureTile,      _executeMcwUnitCaptureTile],
@@ -75,8 +75,8 @@ namespace TinyWars.MultiCustomWar.McwModel {
     export function updateOnPlayerSurrender(data: ProtoTypes.IS_McwPlayerSurrender): void {
         _updateByActionContainer({ S_McwPlayerSurrender: data }, data.warId, data.actionId);
     }
-    export function updateOnProduceUnitOnTile(data: ProtoTypes.IS_McwProduceUnitOnTile): void {
-        _updateByActionContainer({ S_McwProduceUnitOnTile: data }, data.warId, data.actionId);
+    export function updateOnPlayerProduceUnit(data: ProtoTypes.IS_McwPlayerProduceUnit): void {
+        _updateByActionContainer({ S_McwPlayerProduceUnit: data }, data.warId, data.actionId);
     }
     export function updateOnUnitAttack(data: ProtoTypes.IS_McwUnitAttack): void {
         _updateByActionContainer({ S_McwUnitAttack: data }, data.warId, data.actionId);
@@ -183,11 +183,11 @@ namespace TinyWars.MultiCustomWar.McwModel {
         actionPlanner.setStateIdle();
     }
 
-    async function _executeMcwProduceUnitOnTile(data: ActionContainer): Promise<void> {
+    async function _executeMcwPlayerProduceUnit(data: ActionContainer): Promise<void> {
         const actionPlanner = _war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action = data.S_McwProduceUnitOnTile;
+        const action = data.S_McwPlayerProduceUnit;
         updateTilesAndUnitsBeforeExecutingAction(_war, action);
 
         const gridIndex     = action.gridIndex as GridIndex;
@@ -444,7 +444,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         const shouldUpdateFogMap    = _war.getPlayerLoggedIn().getTeamIndex() === focusUnit.getTeamIndex();
         const fogMap                = _war.getFogMap();
         const unitsForDrop          = [] as McwUnit[];
-        for (const { unitId, gridIndex } of action.dropDestinations as Types.DropDestination[]) {
+        for (const { unitId, gridIndex } of (action.dropDestinations || []) as Types.DropDestination[]) {
             const unitForDrop = unitMap.getUnitLoadedById(unitId);
             unitMap.setUnitUnloaded(unitId, gridIndex);
             for (const unit of unitMap.getUnitsLoadedByLoader(unitForDrop, true)) {

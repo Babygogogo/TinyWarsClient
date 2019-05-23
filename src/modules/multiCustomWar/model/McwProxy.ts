@@ -14,7 +14,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
             { actionCode: NetMessageCodes.S_McwPlayerBeginTurn,     callback: _onSMcwPlayerBeginTurn, },
             { actionCode: NetMessageCodes.S_McwPlayerEndTurn,       callback: _onSMcwPlayerEndTurn, },
             { actionCode: NetMessageCodes.S_McwPlayerSurrender,     callback: _onSMcwPlayerSurrender },
-            { actionCode: NetMessageCodes.S_McwProduceUnitOnTile,   callback: _onSMcwProduceUnitOnTile },
+            { actionCode: NetMessageCodes.S_McwPlayerProduceUnit,   callback: _onSMcwPlayerProduceUnit },
             { actionCode: NetMessageCodes.S_McwUnitAttack,          callback: _onSMcwUnitAttack },
             { actionCode: NetMessageCodes.S_McwUnitBeLoaded,        callback: _onSMcwUnitBeLoaded },
             { actionCode: NetMessageCodes.S_McwUnitCaptureTile,     callback: _onSMcwUnitCaptureTile },
@@ -71,9 +71,9 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         }
     }
 
-    export function reqMcwProduceUnitOnTile(war: McwWar, gridIndex: GridIndex, unitType: UnitType): void {
+    export function reqMcwPlayerProduceUnit(war: McwWar, gridIndex: GridIndex, unitType: UnitType): void {
         NetManager.send({
-            C_McwProduceUnitOnTile: {
+            C_McwPlayerProduceUnit: {
                 warId   : war.getWarId(),
                 actionId: war.getNextActionId(),
                 gridIndex,
@@ -81,11 +81,11 @@ namespace TinyWars.MultiCustomWar.McwProxy {
             },
         });
     }
-    function _onSMcwProduceUnitOnTile(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_McwProduceUnitOnTile;
+    function _onSMcwPlayerProduceUnit(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_McwPlayerProduceUnit;
         if (!data.errorCode) {
-            McwModel.updateOnProduceUnitOnTile(data);
-            Notify.dispatch(Notify.Type.SMcwProduceUnitOnTile);
+            McwModel.updateOnPlayerProduceUnit(data);
+            Notify.dispatch(Notify.Type.SMcwPlayerProduceUnit);
         }
     }
 

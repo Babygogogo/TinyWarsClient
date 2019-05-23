@@ -195,7 +195,7 @@ namespace TinyWars.Utility.VisibilityHelpers {
         return { tiles: discoveredTiles, units: discoveredUnits };
     }
 
-    export function getDiscoveriesByProduceUnitOnTile(war: McwWar, producerGridIndex: GridIndex, unitType: Types.UnitType): Discoveries {
+    export function getDiscoveriesByPlayerProduceUnit(war: McwWar, producerGridIndex: GridIndex, unitType: Types.UnitType): Discoveries {
         // TODO: take skills into account.
         const tileMap           = war.getTileMap();
         const unitMap           = war.getUnitMap();
