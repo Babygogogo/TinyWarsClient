@@ -18,11 +18,11 @@ namespace TinyWars.MultiCustomWar {
         private _group      : eui.Group;
         private _listAction : GameUi.UiScrollList;
 
-        private _openData       : DataForUnitActionRenderer[];
+        private _openData       : OpenDataForMcwUnitActionsPanel;
         private _war            : McwWar;
         private _actionPlanner  : McwActionPlanner;
 
-        public static show(data: DataForUnitActionRenderer[]): void {
+        public static show(data: OpenDataForMcwUnitActionsPanel): void {
             if (!McwUnitActionsPanel._instance) {
                 McwUnitActionsPanel._instance = new McwUnitActionsPanel();
             }
@@ -87,7 +87,27 @@ namespace TinyWars.MultiCustomWar {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            this._listAction.bindData(this._openData);
+            const war           = McwModel.getWar();
+            const datasForList  = [] as DataForUnitActionRenderer[];
+            for (const data of this._openData) {
+                const unitForProduce = data.produceUnitType == null
+                    ? undefined
+                    : new McwUnit().init({
+                        gridX   : -1,
+                        gridY   : -1,
+                        unitId  : -1,
+                        viewId  : ConfigManager.getUnitViewId(data.produceUnitType, war.getPlayerIndexLoggedIn()),
+                    }, war.getConfigVersion());
+
+                datasForList.push({
+                    actionType      : data.actionType,
+                    callback        : data.callback,
+                    unit            : data.unitForDrop || data.unitForLaunch || unitForProduce,
+                    canProduceUnit  : data.canProduceUnit,
+                });
+            }
+
+            this._listAction.bindData(datasForList);
         }
 
         private _adjustPositionOnTouch(e: egret.TouchEvent): void {
@@ -97,16 +117,25 @@ namespace TinyWars.MultiCustomWar {
         }
     }
 
-    export type DataForUnitActionRenderer = {
+    export type OpenDataForMcwUnitActionsPanel  = DataForMcwUnitAction[];
+    export type DataForMcwUnitAction            = {
         actionType      : UnitActionType;
         callback        : () => void;
         unitForLaunch?  : McwUnit;
         unitForDrop?    : McwUnit;
         produceUnitType?: Types.UnitType;
+        canProduceUnit? : boolean;
+    }
+    type DataForUnitActionRenderer = {
+        actionType      : UnitActionType;
+        callback        : () => void;
+        unit?           : McwUnit;
+        canProduceUnit? : boolean;
     }
 
     class UnitActionRenderer extends eui.ItemRenderer {
         private _labelAction: GameUi.UiLabel;
+        private _labelCost  : GameUi.UiLabel;
         private _conUnitView: eui.Group;
 
         private _unitView   : McwUnitView;
@@ -122,12 +151,17 @@ namespace TinyWars.MultiCustomWar {
             super.dataChanged();
 
             const data              = this.data as DataForUnitActionRenderer;
-            const unit              = data.unitForLaunch || data.unitForDrop;
             this._labelAction.text  = Lang.getUnitActionName(data.actionType);
+
+            const unit = data.unit;
             if (unit == null) {
-                this.currentState = "withoutUnit";
+                this.currentState       = "withoutUnit";
+                this._labelCost.text    = "";
             } else {
-                this.currentState = "withUnit";
+                this.currentState       = "withUnit";
+                this._labelCost.text    = data.actionType !== Types.UnitActionType.ProduceUnit
+                    ? ""
+                    : `${Lang.getText(Lang.Type.B0079)}: ${unit.getProductionFinalCost()}`;
                 this._unitView.init(unit).startRunningView();
             }
         }
@@ -137,8 +171,7 @@ namespace TinyWars.MultiCustomWar {
         }
 
         public updateOnUnitAnimationTick(): void {
-            const data = this.data as DataForUnitActionRenderer;
-            if ((data.unitForDrop) || (data.unitForLaunch) || (data.produceUnitType != null)) {
+            if ((this.data as DataForUnitActionRenderer).unit) {
                 this._unitView.tickUnitAnimationFrame();
                 this._unitView.tickStateAnimationFrame();
             }

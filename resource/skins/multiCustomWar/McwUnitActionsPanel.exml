@@ -12,6 +12,8 @@
                                  visible.withoutUnit="false" />
                         <GameUi:UiLabel id="_labelAction" text="Label" x="30" height="50" size="20"
                                         verticalAlign="middle" width="90" textAlign="center" y="0" x.withoutUnit="15" />
+                        <GameUi:UiLabel id="_labelCost" text="费用: 99999" size="12" horizontalCenter="15"
+                                        textColor="0x00ff00" />
                     </e:Skin>
                 </e:itemRendererSkinName>
             </e:List>
