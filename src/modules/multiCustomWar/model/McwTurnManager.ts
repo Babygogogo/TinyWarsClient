@@ -142,25 +142,15 @@ namespace TinyWars.MultiCustomWar {
             const gridVisionEffect  = war.getGridVisionEffect();
 
             for (const repairData of data.repairDataByUnit || []) {
-                const repairAmount = repairData.repairAmount || 0;
-                if (repairData.unitId != null) {
-                    const unit = unitMap.getUnitLoadedById(repairData.unitId);
-                    if (repairAmount > 0) {
-                        gridVisionEffect.showEffectRepair(unit.getGridIndex());
-                    } else {
-                        (unit.checkCanBeSupplied()) && (gridVisionEffect.showEffectSupply(unit.getGridIndex()));
-                    }
-                    unit.updateOnRepaired(repairAmount);
+                const repairAmount  = repairData.repairAmount || 0;
+                const gridIndex     = repairData.gridIndex as GridIndex;
+                const unit          = unitMap.getUnitLoadedById(repairData.unitId) || unitMap.getUnitOnMap(gridIndex);
+                if (repairAmount > 0) {
+                    gridVisionEffect.showEffectRepair(gridIndex);
                 } else {
-                    const gridIndex = repairData.gridIndex as GridIndex;
-                    const unit      = unitMap.getUnitOnMap(gridIndex);
-                    if (repairAmount > 0) {
-                        gridVisionEffect.showEffectRepair(gridIndex);
-                    } else {
-                        (unit.checkCanBeSupplied()) && (gridVisionEffect.showEffectSupply(gridIndex));
-                    }
-                    unit.updateOnRepaired(repairAmount);
+                    (unit.checkCanBeSupplied()) && (gridVisionEffect.showEffectSupply(gridIndex));
                 }
+                unit.updateOnRepaired(repairAmount);
             }
         }
         private _runPhaseActivateMapWeapon(data: ProtoTypes.IS_McwPlayerBeginTurn): void {

@@ -888,7 +888,11 @@ namespace TinyWars.MultiCustomWar {
         }
 
         private _setStateRequestingUnitBuildTile(): void {
-            FloatText.show(`Unit build tile TODO!!!`);
+            const unit = this.getFocusUnitLoaded();
+            McwProxy.reqMcwUnitBuildTile(this._war, this.getMovePath(), unit ? unit.getUnitId() : undefined);
+
+            this._setState(State.RequestingUnitBuildTile);
+            this._updateView();
         }
 
         private _setStateRequestingUnitCaptureTile(): void {

@@ -50,4 +50,6 @@ C_McwUnitAttack = 187,
 S_McwUnitAttack = 188,
 C_McwUnitDrop = 189,
 S_McwUnitDrop = 190,
+C_McwUnitBuildTile = 191,
+S_McwUnitBuildTile = 192,
 }}

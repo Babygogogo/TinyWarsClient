@@ -17,6 +17,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
             { actionCode: NetMessageCodes.S_McwPlayerProduceUnit,   callback: _onSMcwPlayerProduceUnit },
             { actionCode: NetMessageCodes.S_McwUnitAttack,          callback: _onSMcwUnitAttack },
             { actionCode: NetMessageCodes.S_McwUnitBeLoaded,        callback: _onSMcwUnitBeLoaded },
+            { actionCode: NetMessageCodes.S_McwUnitBuildTile,       callback: _onSMcwUnitBuildTile },
             { actionCode: NetMessageCodes.S_McwUnitCaptureTile,     callback: _onSMcwUnitCaptureTile },
             { actionCode: NetMessageCodes.S_McwUnitDrop,            callback: _onSMcwUnitDrop },
             { actionCode: NetMessageCodes.S_McwUnitWait,            callback: _onSMcwUnitWait, },
@@ -123,6 +124,24 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         if (!data.errorCode) {
             McwModel.updateOnUnitBeLoaded(data);
             Notify.dispatch(Notify.Type.SMcwUnitBeLoaded);
+        }
+    }
+
+    export function reqMcwUnitBuildTile(war: McwWar, path: GridIndex[], launchUnitId?: number): void {
+        NetManager.send({
+            C_McwUnitBuildTile: {
+                warId       : war.getWarId(),
+                actionId    : war.getNextActionId(),
+                path,
+                launchUnitId,
+            },
+        });
+    }
+    function _onSMcwUnitBuildTile(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_McwUnitBuildTile;
+        if (!data.errorCode) {
+            McwModel.updateOnUnitBuildTile(data);
+            Notify.dispatch(Notify.Type.SMcwUnitBuildTile);
         }
     }
 

@@ -18,13 +18,14 @@ namespace TinyWars.MultiCustomWar.McwModel {
     import MovePath             = Types.MovePath;
     import TileType             = Types.TileType;
 
-    const _EXECUTORS = new Map<ActionCodes, (data: ActionContainer) => Promise<void>>([
+    const _EXECUTORS = new Map<ActionCodes, (war: McwWar, data: ActionContainer) => Promise<void>>([
         [ActionCodes.S_McwPlayerBeginTurn,      _executeMcwPlayerBeginTurn],
         [ActionCodes.S_McwPlayerEndTurn,        _executeMcwPlayerEndTurn],
         [ActionCodes.S_McwPlayerSurrender,      _executeMcwPlayerSurrender],
         [ActionCodes.S_McwPlayerProduceUnit,    _executeMcwPlayerProduceUnit],
         [ActionCodes.S_McwUnitAttack,           _executeMcwUnitAttack],
         [ActionCodes.S_McwUnitBeLoaded,         _executeMcwUnitBeLoaded],
+        [ActionCodes.S_McwUnitBuildTile,        _executeMcwUnitBuildTile],
         [ActionCodes.S_McwUnitCaptureTile,      _executeMcwUnitCaptureTile],
         [ActionCodes.S_McwUnitDrop,             _executeMcwUnitDrop],
         [ActionCodes.S_McwUnitWait,             _executeMcwUnitWait],
@@ -84,6 +85,9 @@ namespace TinyWars.MultiCustomWar.McwModel {
     export function updateOnUnitBeLoaded(data: ProtoTypes.IS_McwUnitBeLoaded): void {
         _updateByActionContainer({ S_McwUnitBeLoaded: data }, data.warId, data.actionId);
     }
+    export function updateOnUnitBuildTile(data: ProtoTypes.IS_McwUnitBuildTile): void {
+        _updateByActionContainer({ S_McwUnitBuildTile: data }, data.warId, data.actionId);
+    }
     export function updateOnUnitCaptureTile(data: ProtoTypes.IS_McwUnitCaptureTile): void {
         _updateByActionContainer({ S_McwUnitCaptureTile: data }, data.warId, data.actionId);
     }
@@ -113,7 +117,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         if ((container) && (_war.getIsRunningWar()) && (!_war.getIsEnded()) && (!_war.getIsRunningAction())) {
             _war.setIsRunningAction(true);
             _war.setNextActionId(_war.getNextActionId() + 1);
-            await _EXECUTORS.get(Helpers.getActionCode(container))(container);
+            await _EXECUTORS.get(Helpers.getActionCode(container))(_war, container);
             _war.setIsRunningAction(false);
 
             if (!_war.getPlayerLoggedIn().getIsAlive()) {
@@ -152,48 +156,48 @@ namespace TinyWars.MultiCustomWar.McwModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // The 'true' executors for war actions.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function _executeMcwPlayerBeginTurn(data: ActionContainer): Promise<void> {
-        const actionPlanner = _war.getActionPlanner();
+    async function _executeMcwPlayerBeginTurn(war: McwWar, data: ActionContainer): Promise<void> {
+        const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        await _war.getTurnManager().endPhaseWaitBeginTurn(data.S_McwPlayerBeginTurn);
+        await war.getTurnManager().endPhaseWaitBeginTurn(data.S_McwPlayerBeginTurn);
         actionPlanner.setStateIdle();
     }
 
-    async function _executeMcwPlayerEndTurn(data: ActionContainer): Promise<void> {
-        const actionPlanner = _war.getActionPlanner();
+    async function _executeMcwPlayerEndTurn(war: McwWar, data: ActionContainer): Promise<void> {
+        const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        await _war.getTurnManager().endPhaseMain();
+        await war.getTurnManager().endPhaseMain();
 
-        if (_war.getPlayerInTurn() === _war.getPlayerLoggedIn()) {
+        if (war.getPlayerInTurn() === war.getPlayerLoggedIn()) {
             actionPlanner.setStateRequestingPlayerBeginTurn();
         } else {
             actionPlanner.setStateIdle();
         }
     }
 
-    async function _executeMcwPlayerSurrender(data: ActionContainer): Promise<void> {
-        const actionPlanner = _war.getActionPlanner();
+    async function _executeMcwPlayerSurrender(war: McwWar, data: ActionContainer): Promise<void> {
+        const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const player = _war.getPlayerInTurn();
-        DestructionHelpers.destroyPlayerForce(_war, player.getPlayerIndex(), true);
-        McwHelpers.updateTilesAndUnitsOnVisibilityChanged(_war);
+        const player = war.getPlayerInTurn();
+        DestructionHelpers.destroyPlayerForce(war, player.getPlayerIndex(), true);
+        McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
         FloatText.show(Lang.getFormatedText(Lang.Type.F0008, player.getNickname()));
 
         actionPlanner.setStateIdle();
     }
 
-    async function _executeMcwPlayerProduceUnit(data: ActionContainer): Promise<void> {
-        const actionPlanner = _war.getActionPlanner();
+    async function _executeMcwPlayerProduceUnit(war: McwWar, data: ActionContainer): Promise<void> {
+        const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
         const action = data.S_McwPlayerProduceUnit;
-        updateTilesAndUnitsBeforeExecutingAction(_war, action);
+        updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const gridIndex     = action.gridIndex as GridIndex;
-        const unitMap       = _war.getUnitMap();
+        const unitMap       = war.getUnitMap();
         const unitId        = unitMap.getNextUnitId();
-        const playerInTurn  = _war.getPlayerInTurn();
+        const playerInTurn  = war.getPlayerInTurn();
 
         if ((gridIndex) && (action.unitType != null)) {
             // TODO: take skills into account.
@@ -203,42 +207,42 @@ namespace TinyWars.MultiCustomWar.McwModel {
                 viewId  : ConfigManager.getUnitViewId(action.unitType, playerIndex)!,
                 gridX   : gridIndex.x,
                 gridY   : gridIndex.y,
-            }, _war.getConfigVersion());
+            }, war.getConfigVersion());
             unit.setState(UnitState.Actioned);
-            unit.startRunning(_war);
+            unit.startRunning(war);
             unit.startRunningView();
 
             unitMap.addUnitOnMap(unit);
-            _war.getFogMap().updateMapFromUnitsForPlayerOnArriving(playerIndex, gridIndex, unit.getVisionRangeForPlayer(playerIndex, gridIndex));
+            war.getFogMap().updateMapFromUnitsForPlayerOnArriving(playerIndex, gridIndex, unit.getVisionRangeForPlayer(playerIndex, gridIndex));
         }
 
         unitMap.setNextUnitId(unitId + 1);
         playerInTurn.setFund(playerInTurn.getFund() - action.cost);
 
-        McwHelpers.updateTilesAndUnitsOnVisibilityChanged(_war);
+        McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
         actionPlanner.setStateIdle();
     }
 
-    async function _executeMcwUnitAttack(data: ActionContainer): Promise<void> {
-        const actionPlanner = _war.getActionPlanner();
+    async function _executeMcwUnitAttack(war: McwWar, data: ActionContainer): Promise<void> {
+        const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
         const action = data.S_McwUnitAttack;
-        updateTilesAndUnitsBeforeExecutingAction(_war, action);
+        updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path      = action.path as MovePath;
         const pathNodes = path.nodes;
-        const unitMap   = _war.getUnitMap();
+        const unitMap   = war.getUnitMap();
         const attacker  = unitMap.getUnit(pathNodes[0], action.launchUnitId);
-        moveUnit(_war, ActionCodes.S_McwUnitAttack, path, action.launchUnitId, path.fuelConsumption);
+        moveUnit(war, ActionCodes.S_McwUnitAttack, path, action.launchUnitId, path.fuelConsumption);
         attacker.setState(UnitState.Actioned);
 
         if (path.isBlocked) {
             return new Promise<void>(resolve => {
                 attacker.moveViewAlongPath(pathNodes, attacker.getIsDiving(), true, () => {
                     attacker.updateView();
-                    McwHelpers.updateTilesAndUnitsOnVisibilityChanged(_war);
+                    McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                     actionPlanner.setStateIdle();
                     resolve();
@@ -247,7 +251,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         } else {
             const counterDamage     = action.counterDamage;
             const targetGridIndex   = action.targetGridIndex as GridIndex;
-            const tileMap           = _war.getTileMap();
+            const tileMap           = war.getTileMap();
             const attackTarget      = unitMap.getUnitOnMap(targetGridIndex) || tileMap.getTile(targetGridIndex);
             const targetUnit        = attackTarget instanceof McwUnit ? attackTarget : undefined;
 
@@ -274,7 +278,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
 
             const attackerGridIndex = pathNodes[pathNodes.length - 1];
             const lostPlayerIndex   = action.lostPlayerIndex;
-            const gridVisionEffect  = _war.getGridVisionEffect();
+            const gridVisionEffect  = war.getGridVisionEffect();
 
             return new Promise<void>(resolve => {
                 attacker.moveViewAlongPath(pathNodes, attacker.getIsDiving(), false, () => {
@@ -284,7 +288,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
                              gridVisionEffect.showEffectDamage(attackerGridIndex);
                         }
                     } else {
-                        DestructionHelpers.destroyUnitOnMap(_war, attackerGridIndex, false, true);
+                        DestructionHelpers.destroyUnitOnMap(war, attackerGridIndex, false, true);
                     }
 
                     if (targetNewHp > 0) {
@@ -292,7 +296,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
                         gridVisionEffect.showEffectDamage(targetGridIndex);
                     } else {
                         if (targetUnit) {
-                            DestructionHelpers.destroyUnitOnMap(_war, targetGridIndex, false, true);
+                            DestructionHelpers.destroyUnitOnMap(war, targetGridIndex, false, true);
                         } else {
                             if ((attackTarget as McwTile).getType() === TileType.Meteor) {
                                 for (const gridIndex of getAdjacentPlasmas(tileMap, targetGridIndex)) {
@@ -309,11 +313,11 @@ namespace TinyWars.MultiCustomWar.McwModel {
                     }
 
                     if (lostPlayerIndex) {
-                        FloatText.show(Lang.getFormatedText(Lang.Type.F0015, _war.getPlayerManager().getPlayer(lostPlayerIndex).getNickname()));
-                        DestructionHelpers.destroyPlayerForce(_war, lostPlayerIndex, true);
+                        FloatText.show(Lang.getFormatedText(Lang.Type.F0015, war.getPlayerManager().getPlayer(lostPlayerIndex).getNickname()));
+                        DestructionHelpers.destroyPlayerForce(war, lostPlayerIndex, true);
                     }
 
-                    McwHelpers.updateTilesAndUnitsOnVisibilityChanged(_war);
+                    McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                     actionPlanner.setStateIdle();
                     resolve();
@@ -322,19 +326,19 @@ namespace TinyWars.MultiCustomWar.McwModel {
         }
     }
 
-    async function _executeMcwUnitBeLoaded(data: ActionContainer): Promise<void> {
-        const actionPlanner = _war.getActionPlanner();
+    async function _executeMcwUnitBeLoaded(war: McwWar, data: ActionContainer): Promise<void> {
+        const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
         const action = data.S_McwUnitBeLoaded;
-        updateTilesAndUnitsBeforeExecutingAction(_war, action);
+        updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path          = action.path as MovePath;
         const pathNodes     = path.nodes;
-        const unitMap       = _war.getUnitMap();
+        const unitMap       = war.getUnitMap();
         const focusUnit     = unitMap.getUnit(pathNodes[0], action.launchUnitId);
         const loaderUnit    = path.isBlocked ? undefined : unitMap.getUnitOnMap(pathNodes[pathNodes.length - 1]);
-        moveUnit(_war, ActionCodes.S_McwUnitBeLoaded, path, action.launchUnitId, path.fuelConsumption);
+        moveUnit(war, ActionCodes.S_McwUnitBeLoaded, path, action.launchUnitId, path.fuelConsumption);
         focusUnit.setState(UnitState.Actioned);
         (loaderUnit) && (focusUnit.setLoaderUnitId(loaderUnit.getUnitId()));
 
@@ -343,7 +347,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
                 focusUnit.updateView();
                 focusUnit.setViewVisible(false);
                 (loaderUnit) && (loaderUnit.updateView());
-                McwHelpers.updateTilesAndUnitsOnVisibilityChanged(_war);
+                McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                 actionPlanner.setStateIdle();
                 resolve();
@@ -351,24 +355,70 @@ namespace TinyWars.MultiCustomWar.McwModel {
         })
     }
 
-    async function _executeMcwUnitCaptureTile(data: ActionContainer): Promise<void> {
-        const actionPlanner = _war.getActionPlanner();
+    async function _executeMcwUnitBuildTile(war: McwWar, data: ActionContainer): Promise<void> {
+        const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action = data.S_McwUnitCaptureTile;
-        updateTilesAndUnitsBeforeExecutingAction(_war, action);
+        const action = data.S_McwUnitBuildTile;
+        updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path      = action.path as MovePath;
         const pathNodes = path.nodes;
-        const focusUnit = _war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
-        moveUnit(_war, ActionCodes.S_McwUnitCaptureTile, path, action.launchUnitId, path.fuelConsumption);
+        const focusUnit = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
+        moveUnit(war, ActionCodes.S_McwUnitBuildTile, path, action.launchUnitId, path.fuelConsumption);
+        focusUnit.setState(UnitState.Actioned);
+
+        if (!path.isBlocked) {
+            const endingGridIndex   = pathNodes[pathNodes.length - 1];
+            const tile              = war.getTileMap().getTile(endingGridIndex);
+            const buildPoint        = tile.getCurrentBuildPoint() - focusUnit.getBuildAmount();
+            // if (tile.getIsFogEnabled()) {
+            //     tile.setFogDisabled();
+            // }
+            if (buildPoint > 0) {
+                focusUnit.setIsBuildingTile(true);
+                tile.setCurrentBuildPoint(buildPoint);
+            } else {
+                focusUnit.setIsBuildingTile(false);
+                focusUnit.setCurrentBuildMaterial(focusUnit.getCurrentBuildMaterial() - 1);
+                tile.resetByObjectViewIdAndBaseViewId(focusUnit.getBuildTargetTileObjectViewId(tile.getType()));
+
+                const playerIndex = focusUnit.getPlayerIndex();
+                if (war.getPlayerManager().checkIsSameTeam(playerIndex, war.getPlayerIndexLoggedIn())) {
+                    war.getFogMap().updateMapFromTilesForPlayerOnGettingOwnership(playerIndex, endingGridIndex, tile.getVisionRangeForPlayer(playerIndex));
+                }
+            }
+        }
+
+        return new Promise<void>(resolve => {
+            focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
+                focusUnit.updateView();
+                McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+
+                actionPlanner.setStateIdle();
+                resolve();
+            })
+        });
+    }
+
+    async function _executeMcwUnitCaptureTile(war: McwWar, data: ActionContainer): Promise<void> {
+        const actionPlanner = war.getActionPlanner();
+        actionPlanner.setStateExecutingAction();
+
+        const action = data.S_McwUnitCaptureTile;
+        updateTilesAndUnitsBeforeExecutingAction(war, action);
+
+        const path      = action.path as MovePath;
+        const pathNodes = path.nodes;
+        const focusUnit = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
+        moveUnit(war, ActionCodes.S_McwUnitCaptureTile, path, action.launchUnitId, path.fuelConsumption);
         focusUnit.setState(UnitState.Actioned);
 
         if (path.isBlocked) {
             return new Promise<void>(resolve => {
                 focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), true, () => {
                     focusUnit.updateView();
-                    McwHelpers.updateTilesAndUnitsOnVisibilityChanged(_war);
+                    McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                     actionPlanner.setStateIdle();
                     resolve();
@@ -376,7 +426,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
             });
         } else {
             const destination           = pathNodes[pathNodes.length - 1];
-            const tile                  = _war.getTileMap().getTile(destination);
+            const tile                  = war.getTileMap().getTile(destination);
             const restCapturePoint      = tile.getCurrentCapturePoint() - focusUnit.getCaptureAmount();
             const previousPlayerIndex   = tile.getPlayerIndex();
             const lostPlayerIndex       = ((restCapturePoint <= 0) && (tile.checkIsDefeatOnCapture())) ? previousPlayerIndex : undefined;
@@ -385,7 +435,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
                 focusUnit.setIsCapturingTile(true);
                 tile.setCurrentCapturePoint(restCapturePoint);
             } else {
-                const fogMap = _war.getFogMap();
+                const fogMap = war.getFogMap();
                 if (previousPlayerIndex > 0) {
                     fogMap.updateMapFromTilesForPlayerOnLosingOwnership(previousPlayerIndex, destination, tile.getVisionRangeForPlayer(previousPlayerIndex));
                 }
@@ -402,7 +452,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
                     focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false, () => {
                         focusUnit.updateView();
                         tile.updateView();
-                        McwHelpers.updateTilesAndUnitsOnVisibilityChanged(_war);
+                        McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                         actionPlanner.setStateIdle();
                         resolve();
@@ -413,9 +463,9 @@ namespace TinyWars.MultiCustomWar.McwModel {
                     focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false, () => {
                         focusUnit.updateView();
                         tile.updateView();
-                        FloatText.show(Lang.getFormatedText(Lang.Type.F0016, _war.getPlayerManager().getPlayer(lostPlayerIndex).getNickname()));
-                        DestructionHelpers.destroyPlayerForce(_war, lostPlayerIndex, true);
-                        McwHelpers.updateTilesAndUnitsOnVisibilityChanged(_war);
+                        FloatText.show(Lang.getFormatedText(Lang.Type.F0016, war.getPlayerManager().getPlayer(lostPlayerIndex).getNickname()));
+                        DestructionHelpers.destroyPlayerForce(war, lostPlayerIndex, true);
+                        McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                         actionPlanner.setStateIdle();
                         resolve();
@@ -425,24 +475,24 @@ namespace TinyWars.MultiCustomWar.McwModel {
         }
     }
 
-    async function _executeMcwUnitDrop(data: ActionContainer): Promise<void> {
-        const actionPlanner = _war.getActionPlanner();
+    async function _executeMcwUnitDrop(war: McwWar, data: ActionContainer): Promise<void> {
+        const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
         const action = data.S_McwUnitDrop;
-        updateTilesAndUnitsBeforeExecutingAction(_war, action);
+        updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path              = action.path as MovePath;
         const pathNodes         = path.nodes;
-        const unitMap           = _war.getUnitMap();
+        const unitMap           = war.getUnitMap();
         const endingGridIndex   = pathNodes[pathNodes.length - 1];
         const focusUnit         = unitMap.getUnit(pathNodes[0], action.launchUnitId);
-        moveUnit(_war, ActionCodes.S_McwUnitDrop, path, action.launchUnitId, path.fuelConsumption);
+        moveUnit(war, ActionCodes.S_McwUnitDrop, path, action.launchUnitId, path.fuelConsumption);
         focusUnit.setState(UnitState.Actioned);
 
         const playerIndex           = focusUnit.getPlayerIndex();
-        const shouldUpdateFogMap    = _war.getPlayerLoggedIn().getTeamIndex() === focusUnit.getTeamIndex();
-        const fogMap                = _war.getFogMap();
+        const shouldUpdateFogMap    = war.getPlayerLoggedIn().getTeamIndex() === focusUnit.getTeamIndex();
+        const fogMap                = war.getFogMap();
         const unitsForDrop          = [] as McwUnit[];
         for (const { unitId, gridIndex } of (action.dropDestinations || []) as Types.DropDestination[]) {
             const unitForDrop = unitMap.getUnitLoadedById(unitId);
@@ -465,7 +515,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         return new Promise<void>(resolve => {
             focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
                 if (action.isDropBlocked) {
-                    _war.getGridVisionEffect().showEffectBlock(endingGridIndex);
+                    war.getGridVisionEffect().showEffectBlock(endingGridIndex);
                 }
                 focusUnit.updateView();
 
@@ -484,7 +534,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
                     }))
                 }
                 Promise.all(promises).then(() => {
-                    McwHelpers.updateTilesAndUnitsOnVisibilityChanged(_war);
+                    McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
                     actionPlanner.setStateIdle();
                     resolve();
                 });
@@ -492,23 +542,23 @@ namespace TinyWars.MultiCustomWar.McwModel {
         });
     }
 
-    async function _executeMcwUnitWait(data: ActionContainer): Promise<void> {
-        const actionPlanner = _war.getActionPlanner();
+    async function _executeMcwUnitWait(war: McwWar, data: ActionContainer): Promise<void> {
+        const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
         const action = data.S_McwUnitWait;
-        updateTilesAndUnitsBeforeExecutingAction(_war, action);
+        updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path      = action.path as MovePath;
         const pathNodes = path.nodes;
-        const focusUnit = _war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
-        moveUnit(_war, ActionCodes.S_McwUnitWait, path, action.launchUnitId, path.fuelConsumption);
+        const focusUnit = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
+        moveUnit(war, ActionCodes.S_McwUnitWait, path, action.launchUnitId, path.fuelConsumption);
         focusUnit.setState(UnitState.Actioned);
 
         return new Promise<void>(resolve => {
             focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
                 focusUnit.updateView();
-                McwHelpers.updateTilesAndUnitsOnVisibilityChanged(_war);
+                McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                 actionPlanner.setStateIdle();
                 resolve();

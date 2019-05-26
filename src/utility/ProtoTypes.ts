@@ -3912,6 +3912,12 @@ export declare interface IActionContainer {
 
     /** ActionContainer S_McwUnitDrop */
     S_McwUnitDrop?: (IS_McwUnitDrop|null);
+
+    /** ActionContainer C_McwUnitBuildTile */
+    C_McwUnitBuildTile?: (IC_McwUnitBuildTile|null);
+
+    /** ActionContainer S_McwUnitBuildTile */
+    S_McwUnitBuildTile?: (IS_McwUnitBuildTile|null);
 }
 
 /** Represents an ActionContainer. */
@@ -4069,6 +4075,12 @@ export declare class ActionContainer implements IActionContainer {
 
     /** ActionContainer S_McwUnitDrop. */
     public S_McwUnitDrop?: (IS_McwUnitDrop|null);
+
+    /** ActionContainer C_McwUnitBuildTile. */
+    public C_McwUnitBuildTile?: (IC_McwUnitBuildTile|null);
+
+    /** ActionContainer S_McwUnitBuildTile. */
+    public S_McwUnitBuildTile?: (IS_McwUnitBuildTile|null);
 
     /**
      * Creates a new ActionContainer instance using the specified properties.
@@ -9446,6 +9458,252 @@ export declare class S_McwUnitDrop implements IS_McwUnitDrop {
 
     /**
      * Converts this S_McwUnitDrop to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_McwUnitBuildTile. */
+export declare interface IC_McwUnitBuildTile {
+
+    /** C_McwUnitBuildTile warId */
+    warId?: (number|null);
+
+    /** C_McwUnitBuildTile actionId */
+    actionId?: (number|null);
+
+    /** C_McwUnitBuildTile path */
+    path?: (IGridIndex[]|null);
+
+    /** C_McwUnitBuildTile launchUnitId */
+    launchUnitId?: (number|null);
+}
+
+/** Represents a C_McwUnitBuildTile. */
+export declare class C_McwUnitBuildTile implements IC_McwUnitBuildTile {
+
+    /**
+     * Constructs a new C_McwUnitBuildTile.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_McwUnitBuildTile);
+
+    /** C_McwUnitBuildTile warId. */
+    public warId: number;
+
+    /** C_McwUnitBuildTile actionId. */
+    public actionId: number;
+
+    /** C_McwUnitBuildTile path. */
+    public path: IGridIndex[];
+
+    /** C_McwUnitBuildTile launchUnitId. */
+    public launchUnitId: number;
+
+    /**
+     * Creates a new C_McwUnitBuildTile instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_McwUnitBuildTile instance
+     */
+    public static create(properties?: IC_McwUnitBuildTile): C_McwUnitBuildTile;
+
+    /**
+     * Encodes the specified C_McwUnitBuildTile message. Does not implicitly {@link C_McwUnitBuildTile.verify|verify} messages.
+     * @param message C_McwUnitBuildTile message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_McwUnitBuildTile, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_McwUnitBuildTile message, length delimited. Does not implicitly {@link C_McwUnitBuildTile.verify|verify} messages.
+     * @param message C_McwUnitBuildTile message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_McwUnitBuildTile, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_McwUnitBuildTile message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_McwUnitBuildTile
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_McwUnitBuildTile;
+
+    /**
+     * Decodes a C_McwUnitBuildTile message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_McwUnitBuildTile
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_McwUnitBuildTile;
+
+    /**
+     * Verifies a C_McwUnitBuildTile message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_McwUnitBuildTile message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_McwUnitBuildTile
+     */
+    public static fromObject(object: { [k: string]: any }): C_McwUnitBuildTile;
+
+    /**
+     * Creates a plain object from a C_McwUnitBuildTile message. Also converts values to other types if specified.
+     * @param message C_McwUnitBuildTile
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_McwUnitBuildTile, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_McwUnitBuildTile to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_McwUnitBuildTile. */
+export declare interface IS_McwUnitBuildTile {
+
+    /** S_McwUnitBuildTile errorCode */
+    errorCode?: (number|null);
+
+    /** S_McwUnitBuildTile warId */
+    warId?: (number|null);
+
+    /** S_McwUnitBuildTile actionId */
+    actionId?: (number|null);
+
+    /** S_McwUnitBuildTile path */
+    path?: (IMovePath|null);
+
+    /** S_McwUnitBuildTile launchUnitId */
+    launchUnitId?: (number|null);
+
+    /** S_McwUnitBuildTile discoveredUnits */
+    discoveredUnits?: (ISerializedMcwUnit[]|null);
+
+    /** S_McwUnitBuildTile discoveredTiles */
+    discoveredTiles?: (ISerializedMcwTile[]|null);
+
+    /** S_McwUnitBuildTile actingUnits */
+    actingUnits?: (ISerializedMcwUnit[]|null);
+
+    /** S_McwUnitBuildTile actingTiles */
+    actingTiles?: (ISerializedMcwTile[]|null);
+}
+
+/** Represents a S_McwUnitBuildTile. */
+export declare class S_McwUnitBuildTile implements IS_McwUnitBuildTile {
+
+    /**
+     * Constructs a new S_McwUnitBuildTile.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_McwUnitBuildTile);
+
+    /** S_McwUnitBuildTile errorCode. */
+    public errorCode: number;
+
+    /** S_McwUnitBuildTile warId. */
+    public warId: number;
+
+    /** S_McwUnitBuildTile actionId. */
+    public actionId: number;
+
+    /** S_McwUnitBuildTile path. */
+    public path?: (IMovePath|null);
+
+    /** S_McwUnitBuildTile launchUnitId. */
+    public launchUnitId: number;
+
+    /** S_McwUnitBuildTile discoveredUnits. */
+    public discoveredUnits: ISerializedMcwUnit[];
+
+    /** S_McwUnitBuildTile discoveredTiles. */
+    public discoveredTiles: ISerializedMcwTile[];
+
+    /** S_McwUnitBuildTile actingUnits. */
+    public actingUnits: ISerializedMcwUnit[];
+
+    /** S_McwUnitBuildTile actingTiles. */
+    public actingTiles: ISerializedMcwTile[];
+
+    /**
+     * Creates a new S_McwUnitBuildTile instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_McwUnitBuildTile instance
+     */
+    public static create(properties?: IS_McwUnitBuildTile): S_McwUnitBuildTile;
+
+    /**
+     * Encodes the specified S_McwUnitBuildTile message. Does not implicitly {@link S_McwUnitBuildTile.verify|verify} messages.
+     * @param message S_McwUnitBuildTile message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_McwUnitBuildTile, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_McwUnitBuildTile message, length delimited. Does not implicitly {@link S_McwUnitBuildTile.verify|verify} messages.
+     * @param message S_McwUnitBuildTile message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_McwUnitBuildTile, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_McwUnitBuildTile message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_McwUnitBuildTile
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_McwUnitBuildTile;
+
+    /**
+     * Decodes a S_McwUnitBuildTile message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_McwUnitBuildTile
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_McwUnitBuildTile;
+
+    /**
+     * Verifies a S_McwUnitBuildTile message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_McwUnitBuildTile message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_McwUnitBuildTile
+     */
+    public static fromObject(object: { [k: string]: any }): S_McwUnitBuildTile;
+
+    /**
+     * Creates a plain object from a S_McwUnitBuildTile message. Also converts values to other types if specified.
+     * @param message S_McwUnitBuildTile
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_McwUnitBuildTile, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_McwUnitBuildTile to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };

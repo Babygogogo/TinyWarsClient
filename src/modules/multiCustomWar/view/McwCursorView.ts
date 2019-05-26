@@ -43,6 +43,9 @@ namespace TinyWars.MultiCustomWar {
     const _LOWER_RIGHT_CORNER_INNER_X   = _GRID_WIDTH  - 4;
     const _LOWER_RIGHT_CORNER_INNER_Y   = _GRID_HEIGHT - 4;
 
+    const _DAMAGE_CON_WIDTH     = 140;
+    const _DAMAGE_CON_HEIGHT    = 60;
+
     export class McwCursorView extends eui.Group {
         private _cursor                 : McwCursor;
         private _mapSize                : Types.MapSize;
@@ -240,6 +243,9 @@ namespace TinyWars.MultiCustomWar {
                 if (state === ActionPlannerState.Idle) {
                     con.visible = true;
 
+                } else if (state === ActionPlannerState.ExecutingAction) {
+                    con.visible = true;
+
                 } else if (state === ActionPlannerState.MakingMovePath) {
                     con.visible = !actionPlanner.getFocusUnit().checkCanAttackTargetAfterMovePath(actionPlanner.getMovePath(), gridIndex);
 
@@ -252,6 +258,12 @@ namespace TinyWars.MultiCustomWar {
                 } else if (state === ActionPlannerState.ChoosingDropDestination) {
                     con.visible = true;
 
+                } else if (state === ActionPlannerState.ChoosingFlareDestination) {
+                    con.visible = false;
+
+                } else if (state === ActionPlannerState.ChoosingSiloDestination) {
+                    con.visible = false;
+
                 } else if (state === ActionPlannerState.ChoosingProductionTarget) {
                     con.visible = true;
 
@@ -259,9 +271,6 @@ namespace TinyWars.MultiCustomWar {
                     con.visible = true;
 
                 } else if (state === ActionPlannerState.PreviewingMovableArea) {
-                    con.visible = true;
-
-                } else if (state === ActionPlannerState.ExecutingAction) {
                     con.visible = true;
 
                 } else {
@@ -279,6 +288,9 @@ namespace TinyWars.MultiCustomWar {
                 if (state === ActionPlannerState.Idle) {
                     con.visible = false;
 
+                } else if (state === ActionPlannerState.ExecutingAction) {
+                    con.visible = false;
+
                 } else if (state === ActionPlannerState.MakingMovePath) {
                     con.visible = actionPlanner.getFocusUnit().checkCanAttackTargetAfterMovePath(actionPlanner.getMovePath(), gridIndex);
 
@@ -291,6 +303,12 @@ namespace TinyWars.MultiCustomWar {
                 } else if (state === ActionPlannerState.ChoosingDropDestination) {
                     con.visible = false;
 
+                } else if (state === ActionPlannerState.ChoosingFlareDestination) {
+                    con.visible = true;
+
+                } else if (state === ActionPlannerState.ChoosingSiloDestination) {
+                    con.visible = true;
+
                 } else if (state === ActionPlannerState.ChoosingProductionTarget) {
                     con.visible = false;
 
@@ -298,9 +316,6 @@ namespace TinyWars.MultiCustomWar {
                     con.visible = false;
 
                 } else if (state === ActionPlannerState.PreviewingMovableArea) {
-                    con.visible = false;
-
-                } else if (state === ActionPlannerState.ExecutingAction) {
                     con.visible = false;
 
                 } else {
@@ -318,8 +333,26 @@ namespace TinyWars.MultiCustomWar {
                 if (state === ActionPlannerState.Idle) {
                     con.visible = false;
 
+                } else if (state === ActionPlannerState.ExecutingAction) {
+                    con.visible = false;
+
                 } else if (state === ActionPlannerState.MakingMovePath) {
                     con.visible = false;
+
+                } else if (state === ActionPlannerState.ChoosingAction) {
+                    con.visible = false;
+
+                } else if (state === ActionPlannerState.ChoosingAttackTarget) {
+                    con.visible = false;
+
+                } else if (state === ActionPlannerState.ChoosingDropDestination) {
+                    con.visible = false;
+
+                } else if (state === ActionPlannerState.ChoosingFlareDestination) {
+                    con.visible = true;
+
+                } else if (state === ActionPlannerState.ChoosingSiloDestination) {
+                    con.visible = true;
 
                 } else if (state === ActionPlannerState.ChoosingProductionTarget) {
                     con.visible = false;
@@ -328,9 +361,6 @@ namespace TinyWars.MultiCustomWar {
                     con.visible = false;
 
                 } else if (state === ActionPlannerState.PreviewingMovableArea) {
-                    con.visible = false;
-
-                } else if (state === ActionPlannerState.ExecutingAction) {
                     con.visible = false;
 
                 } else {
@@ -341,17 +371,21 @@ namespace TinyWars.MultiCustomWar {
         private _updateConForDamage(): void {
             const actionPlanner = this._actionPlanner;
             if (actionPlanner) {
-                const con           = this._conForDamage;
-                const gridIndex     = this._cursor.getGridIndex();
-                const state         = actionPlanner.getState();
+                const con       = this._conForDamage;
+                const gridIndex = this._cursor.getGridIndex();
+                const state     = actionPlanner.getState();
 
                 if (state === ActionPlannerState.Idle) {
                     con.visible = false;
 
+                } else if (state === ActionPlannerState.ExecutingAction) {
+                    con.visible = false;
+
                 } else if (state === ActionPlannerState.MakingMovePath) {
+                    const war                           = this._cursor.getWar();
                     const focusUnitLoaded               = actionPlanner.getFocusUnitLoaded();
                     const [attackDamage, counterDamage] = DamageCalculator.getEstimatedBattleDamage(
-                        this._cursor.getWar(),
+                        war,
                         actionPlanner.getMovePath(),
                         focusUnitLoaded ? focusUnitLoaded.getUnitId() : undefined,
                         gridIndex
@@ -360,16 +394,18 @@ namespace TinyWars.MultiCustomWar {
                         con.visible = false;
                     } else {
                         con.visible = true;
-                        this._labelDamage.text = `${Lang.getText(Lang.Type.B0077)}: ${attackDamage}%\n${Lang.getText(Lang.Type.B0078)}: ${counterDamage == null ? `---` : counterDamage}%`;
+                        this._labelDamage.text = `${Lang.getText(Lang.Type.B0077)}: ${attackDamage} / ${war.getUnitMap().getUnitOnMap(gridIndex).getCurrentHp()}\n`
+                            + `${Lang.getText(Lang.Type.B0078)}: ${counterDamage == null ? `---` : counterDamage} / ${(actionPlanner.getFocusUnit()).getCurrentHp()}`;
                     }
 
                 } else if (state === ActionPlannerState.ChoosingAction) {
                     con.visible = false;
 
                 } else if (state === ActionPlannerState.ChoosingAttackTarget) {
+                    const war                           = this._cursor.getWar();
                     const focusUnitLoaded               = actionPlanner.getFocusUnitLoaded();
                     const [attackDamage, counterDamage] = DamageCalculator.getEstimatedBattleDamage(
-                        this._cursor.getWar(),
+                        war,
                         actionPlanner.getMovePath(),
                         focusUnitLoaded ? focusUnitLoaded.getUnitId() : undefined,
                         gridIndex
@@ -378,10 +414,17 @@ namespace TinyWars.MultiCustomWar {
                         con.visible = false;
                     } else {
                         con.visible = true;
-                        this._labelDamage.text = `${Lang.getText(Lang.Type.B0077)}: ${attackDamage}%\n${Lang.getText(Lang.Type.B0078)}: ${counterDamage == null ? `---` : counterDamage}%`;
+                        this._labelDamage.text = `${Lang.getText(Lang.Type.B0077)}: ${attackDamage} / ${war.getUnitMap().getUnitOnMap(gridIndex).getCurrentHp()}\n`
+                            + `${Lang.getText(Lang.Type.B0078)}: ${counterDamage == null ? `---` : counterDamage} / ${(actionPlanner.getFocusUnit()).getCurrentHp()}`;
                     }
 
                 } else if (state === ActionPlannerState.ChoosingDropDestination) {
+                    con.visible = false;
+
+                } else if (state === ActionPlannerState.ChoosingFlareDestination) {
+                    con.visible = false;
+
+                } else if (state === ActionPlannerState.ChoosingSiloDestination) {
                     con.visible = false;
 
                 } else if (state === ActionPlannerState.ChoosingProductionTarget) {
@@ -391,9 +434,6 @@ namespace TinyWars.MultiCustomWar {
                     con.visible = false;
 
                 } else if (state === ActionPlannerState.PreviewingMovableArea) {
-                    con.visible = false;
-
-                } else if (state === ActionPlannerState.ExecutingAction) {
                     con.visible = false;
 
                 } else {
@@ -439,26 +479,23 @@ namespace TinyWars.MultiCustomWar {
             this._conForAll.addChild(this._conForSiloArea);
         }
         private _initConForDamage(): void {
-            const width     = 120;
-            const height    = 60;
-
             const imgBg         = new GameUi.UiImage("c04_t01_s02_f01");
             imgBg.scale9Grid    = new egret.Rectangle(9, 9, 2, 2);
-            imgBg.width         = width;
-            imgBg.height        = height;
+            imgBg.width         = _DAMAGE_CON_WIDTH;
+            imgBg.height        = _DAMAGE_CON_HEIGHT;
             imgBg.alpha         = 0.9;
             this._conForDamage.addChild(imgBg);
 
             const labelDamage           = this._labelDamage;
             labelDamage.size            = 18;
-            labelDamage.width           = width;
-            labelDamage.height          = height;
+            labelDamage.width           = _DAMAGE_CON_WIDTH;
+            labelDamage.height          = _DAMAGE_CON_HEIGHT;
             labelDamage.textAlign       = egret.HorizontalAlign.CENTER;
             labelDamage.verticalAlign   = egret.VerticalAlign.MIDDLE;
             this._conForDamage.addChild(labelDamage);
 
-            this._conForDamage.x = (_GRID_WIDTH - width) / 2;
-            this._conForDamage.y = -height;
+            this._conForDamage.x = (_GRID_WIDTH - _DAMAGE_CON_WIDTH) / 2;
+            this._conForDamage.y = -_DAMAGE_CON_HEIGHT;
             this._conForAll.addChild(this._conForDamage);
         }
 
