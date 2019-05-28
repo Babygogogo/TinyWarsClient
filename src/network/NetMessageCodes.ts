@@ -52,4 +52,8 @@ C_McwUnitDrop = 189,
 S_McwUnitDrop = 190,
 C_McwUnitBuildTile = 191,
 S_McwUnitBuildTile = 192,
+C_McwUnitDive = 193,
+S_McwUnitDive = 194,
+C_McwUnitSurface = 195,
+S_McwUnitSurface = 196,
 }}

@@ -19,8 +19,10 @@ namespace TinyWars.MultiCustomWar.McwProxy {
             { actionCode: NetMessageCodes.S_McwUnitBeLoaded,        callback: _onSMcwUnitBeLoaded },
             { actionCode: NetMessageCodes.S_McwUnitBuildTile,       callback: _onSMcwUnitBuildTile },
             { actionCode: NetMessageCodes.S_McwUnitCaptureTile,     callback: _onSMcwUnitCaptureTile },
+            { actionCode: NetMessageCodes.S_McwUnitDive,            callback: _onSMcwUnitDive },
             { actionCode: NetMessageCodes.S_McwUnitDrop,            callback: _onSMcwUnitDrop },
-            { actionCode: NetMessageCodes.S_McwUnitWait,            callback: _onSMcwUnitWait, },
+            { actionCode: NetMessageCodes.S_McwUnitSurface,         callback: _onSMcwUnitSurface },
+            { actionCode: NetMessageCodes.S_McwUnitWait,            callback: _onSMcwUnitWait },
         ], McwProxy);
     }
 
@@ -163,6 +165,24 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         }
     }
 
+    export function reqMcwUnitDive(war: McwWar, path: GridIndex[], launchUnitId: number | undefined): void {
+        NetManager.send({
+            C_McwUnitDive: {
+                warId       : war.getWarId(),
+                actionId    : war.getNextActionId(),
+                path,
+                launchUnitId,
+            },
+        });
+    }
+    function _onSMcwUnitDive(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_McwUnitDive;
+        if (!data.errorCode) {
+            McwModel.updateOnUnitDive(data);
+            Notify.dispatch(Notify.Type.SMcwUnitDive);
+        }
+    }
+
     export function reqMcwUnitDrop(war: McwWar, path: GridIndex[], launchUnitId: number | undefined, dropDestinations: Types.DropDestination[]): void {
         NetManager.send({
             C_McwUnitDrop: {
@@ -179,6 +199,24 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         if (!data.errorCode) {
             McwModel.updateOnUnitDrop(data);
             Notify.dispatch(Notify.Type.SMcwUnitDrop);
+        }
+    }
+
+    export function reqMcwUnitSurface(war: McwWar, path: GridIndex[], launchUnitId: number | undefined): void {
+        NetManager.send({
+            C_McwUnitSurface: {
+                warId       : war.getWarId(),
+                actionId    : war.getNextActionId(),
+                path,
+                launchUnitId,
+            },
+        });
+    }
+    function _onSMcwUnitSurface(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_McwUnitSurface;
+        if (!data.errorCode) {
+            McwModel.updateOnUnitSurface(data);
+            Notify.dispatch(Notify.Type.SMcwUnitSurface);
         }
     }
 

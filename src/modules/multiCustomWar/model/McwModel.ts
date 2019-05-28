@@ -6,6 +6,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
     import Helpers              = Utility.Helpers;
     import DestructionHelpers   = Utility.DestructionHelpers;
     import GridIndexHelpers     = Utility.GridIndexHelpers;
+    import VisibilityHelpers    = Utility.VisibilityHelpers;
     import Lang                 = Utility.Lang;
     import FloatText            = Utility.FloatText;
     import ActionContainer      = ProtoTypes.IActionContainer;
@@ -27,7 +28,9 @@ namespace TinyWars.MultiCustomWar.McwModel {
         [ActionCodes.S_McwUnitBeLoaded,         _executeMcwUnitBeLoaded],
         [ActionCodes.S_McwUnitBuildTile,        _executeMcwUnitBuildTile],
         [ActionCodes.S_McwUnitCaptureTile,      _executeMcwUnitCaptureTile],
+        [ActionCodes.S_McwUnitDive,             _executeMcwUnitDive],
         [ActionCodes.S_McwUnitDrop,             _executeMcwUnitDrop],
+        [ActionCodes.S_McwUnitSurface,          _executeMcwUnitSurface],
         [ActionCodes.S_McwUnitWait,             _executeMcwUnitWait],
     ]);
 
@@ -91,8 +94,14 @@ namespace TinyWars.MultiCustomWar.McwModel {
     export function updateOnUnitCaptureTile(data: ProtoTypes.IS_McwUnitCaptureTile): void {
         _updateByActionContainer({ S_McwUnitCaptureTile: data }, data.warId, data.actionId);
     }
+    export function updateOnUnitDive(data: ProtoTypes.IS_McwUnitDive): void {
+        _updateByActionContainer({ S_McwUnitDive: data }, data.warId, data.actionId);
+    }
     export function updateOnUnitDrop(data: ProtoTypes.IS_McwUnitDrop): void {
         _updateByActionContainer({ S_McwUnitDrop: data }, data.warId, data.actionId);
+    }
+    export function updateOnUnitSurface(data: ProtoTypes.IS_McwUnitSurface): void {
+        _updateByActionContainer({ S_McwUnitSurface: data }, data.warId, data.actionId);
     }
     export function updateOnUnitWait(data: ProtoTypes.IS_McwUnitWait): void {
         _updateByActionContainer({ S_McwUnitWait: data }, data.warId, data.actionId);
@@ -475,6 +484,45 @@ namespace TinyWars.MultiCustomWar.McwModel {
         }
     }
 
+    async function _executeMcwUnitDive(war: McwWar, data: ActionContainer): Promise<void> {
+        const actionPlanner = war.getActionPlanner();
+        actionPlanner.setStateExecutingAction();
+
+        const action = data.S_McwUnitDive;
+        updateTilesAndUnitsBeforeExecutingAction(war, action);
+
+        const path          = action.path as MovePath;
+        const pathNodes     = path.nodes;
+        const focusUnit     = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
+        const isSuccessful  = !path.isBlocked;
+        moveUnit(war, ActionCodes.S_McwUnitDive, path, action.launchUnitId, path.fuelConsumption);
+        focusUnit.setState(UnitState.Actioned);
+        (isSuccessful) && (focusUnit.setIsDiving(true));
+
+        return new Promise<void>(resolve => {
+            focusUnit.moveViewAlongPath(pathNodes, false, path.isBlocked, () => {
+                focusUnit.updateView();
+                if (isSuccessful) {
+                    const endingGridIndex = pathNodes[pathNodes.length - 1];
+                    if (VisibilityHelpers.checkIsUnitOnMapVisibleToPlayer({
+                        war,
+                        unitType            : focusUnit.getType(),
+                        unitPlayerIndex     : focusUnit.getPlayerIndex(),
+                        gridIndex           : endingGridIndex,
+                        observerPlayerIndex : war.getPlayerIndexLoggedIn(),
+                        isDiving            : false,
+                    })) {
+                        war.getGridVisionEffect().showEffectDive(endingGridIndex);
+                    }
+                }
+                McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+
+                actionPlanner.setStateIdle();
+                resolve();
+            });
+        });
+    }
+
     async function _executeMcwUnitDrop(war: McwWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
@@ -538,6 +586,45 @@ namespace TinyWars.MultiCustomWar.McwModel {
                     actionPlanner.setStateIdle();
                     resolve();
                 });
+            });
+        });
+    }
+
+    async function _executeMcwUnitSurface(war: McwWar, data: ActionContainer): Promise<void> {
+        const actionPlanner = war.getActionPlanner();
+        actionPlanner.setStateExecutingAction();
+
+        const action = data.S_McwUnitSurface;
+        updateTilesAndUnitsBeforeExecutingAction(war, action);
+
+        const path          = action.path as MovePath;
+        const pathNodes     = path.nodes;
+        const focusUnit     = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
+        const isSuccessful  = !path.isBlocked;
+        moveUnit(war, ActionCodes.S_McwUnitSurface, path, action.launchUnitId, path.fuelConsumption);
+        focusUnit.setState(UnitState.Actioned);
+        (isSuccessful) && (focusUnit.setIsDiving(false));
+
+        return new Promise<void>(resolve => {
+            focusUnit.moveViewAlongPath(pathNodes, true, path.isBlocked, () => {
+                focusUnit.updateView();
+                if (isSuccessful) {
+                    const endingGridIndex = pathNodes[pathNodes.length - 1];
+                    if (VisibilityHelpers.checkIsUnitOnMapVisibleToPlayer({
+                        war,
+                        unitType            : focusUnit.getType(),
+                        unitPlayerIndex     : focusUnit.getPlayerIndex(),
+                        gridIndex           : endingGridIndex,
+                        observerPlayerIndex : war.getPlayerIndexLoggedIn(),
+                        isDiving            : false,
+                    })) {
+                        war.getGridVisionEffect().showEffectSurface(endingGridIndex);
+                    }
+                }
+                McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+
+                actionPlanner.setStateIdle();
+                resolve();
             });
         });
     }

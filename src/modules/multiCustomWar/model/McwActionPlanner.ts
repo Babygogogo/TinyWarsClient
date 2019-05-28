@@ -904,11 +904,19 @@ namespace TinyWars.MultiCustomWar {
         }
 
         private _setStateRequestingUnitDive(): void {
-            FloatText.show(`Unit dive TODO!!!`);
+            const unit = this.getFocusUnitLoaded();
+            McwProxy.reqMcwUnitDive(this._war, this.getMovePath(), unit ? unit.getUnitId() : undefined);
+
+            this._setState(State.RequestingUnitDive);
+            this._updateView();
         }
 
         private _setStateRequestingUnitSurface(): void {
-            FloatText.show(`Unit surface TODO!!!`);
+            const unit = this.getFocusUnitLoaded();
+            McwProxy.reqMcwUnitSurface(this._war, this.getMovePath(), unit ? unit.getUnitId() : undefined);
+
+            this._setState(State.RequestingUnitSurface);
+            this._updateView();
         }
 
         private _setStateRequestingUnitDropOnTap(gridIndex: GridIndex): void {
