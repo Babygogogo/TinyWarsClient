@@ -12,6 +12,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
     export function init(): void {
         NetManager.addListeners([
             { actionCode: NetMessageCodes.S_McwPlayerBeginTurn,     callback: _onSMcwPlayerBeginTurn, },
+            { actionCode: NetMessageCodes.S_McwPlayerDeleteUnit,    callback: _onSMcwPlayerDeleteUnit },
             { actionCode: NetMessageCodes.S_McwPlayerEndTurn,       callback: _onSMcwPlayerEndTurn, },
             { actionCode: NetMessageCodes.S_McwPlayerSurrender,     callback: _onSMcwPlayerSurrender },
             { actionCode: NetMessageCodes.S_McwPlayerProduceUnit,   callback: _onSMcwPlayerProduceUnit },
@@ -38,8 +39,25 @@ namespace TinyWars.MultiCustomWar.McwProxy {
     function _onSMcwPlayerBeginTurn(e: egret.Event): void {
         const data = e.data as ProtoTypes.IS_McwPlayerBeginTurn;
         if (!data.errorCode) {
-            McwModel.updateOnBeginTurn(data);
+            McwModel.updateOnPlayerBeginTurn(data);
             Notify.dispatch(Notify.Type.SMcwPlayerBeginTurn, data);
+        }
+    }
+
+    export function reqMcwPlayerDeleteUnit(war: McwWar, gridIndex: GridIndex): void {
+        NetManager.send({
+            C_McwPlayerDeleteUnit: {
+                warId   : war.getWarId(),
+                actionId: war.getNextActionId(),
+                gridIndex,
+            },
+        });
+    }
+    function _onSMcwPlayerDeleteUnit(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_McwPlayerDeleteUnit;
+        if (!data.errorCode) {
+            McwModel.updateOnPlayerDeleteUnit(data);
+            Notify.dispatch(Notify.Type.SMcwPlayerDeleteUnit);
         }
     }
 
@@ -54,7 +72,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
     function _onSMcwPlayerEndTurn(e: egret.Event): void {
         const data = e.data as ProtoTypes.IS_McwPlayerEndTurn;
         if (!data.errorCode) {
-            McwModel.updateOnEndTurn(data);
+            McwModel.updateOnPlayerEndTurn(data);
             Notify.dispatch(Notify.Type.SMcwPlayerEndTurn, data);
         }
     }

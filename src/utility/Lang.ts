@@ -20,6 +20,7 @@ namespace TinyWars.Utility.Lang {
         B0050, B0051, B0052, B0053, B0054, B0055, B0056, B0057, B0058, B0059,
         B0060, B0061, B0062, B0063, B0064, B0065, B0066, B0067, B0068, B0069,
         B0070, B0071, B0072, B0073, B0074, B0075, B0076, B0077, B0078, B0079,
+        B0080, B0081, B0082, B0083, B0084, B0085, B0086, B0087, B0088, B0089,
 
         B1000, B1001, B1002, B1003, B1004, B1005, B1006, B1007, B1008, B1009,
         B1010, B1011, B1012, B1013, B1014, B1015, B1016, B1017, B1018, B1019,
@@ -148,6 +149,18 @@ namespace TinyWars.Utility.Lang {
         [Type.A0026, [
             `您确定要投降吗？`,
             `Are you sure to resign?`,
+        ]],
+        [Type.A0027, [
+            `请先选中您想要删除的部队，再进行此操作`,
+            `Please select the unit you want to delete with the cursor before doing this.`,
+        ]],
+        [Type.A0028, [
+            `您只能删除您自己的未行动的部队`,
+            `You can delete your own idle units only.`,
+        ]],
+        [Type.A0029, [
+            `是否确定要删除此部队？`,
+            `Are you sure to delete the selected unit?`,
         ]],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -472,6 +485,14 @@ namespace TinyWars.Utility.Lang {
         [Type.B0079, [
             `费用`,
             `Cost`,
+        ]],
+        [Type.B0080, [
+            `高级`,
+            `Advanced`,
+        ]],
+        [Type.B0081, [
+            `删除部队`,
+            `Delete`,
         ]],
 
         [Type.B1000, [

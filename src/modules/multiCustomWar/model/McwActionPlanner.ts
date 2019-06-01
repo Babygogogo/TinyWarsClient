@@ -986,6 +986,13 @@ namespace TinyWars.MultiCustomWar {
             this._updateView();
         }
 
+        public setStateRequestingPlayerDeleteUnit(): void {
+            McwProxy.reqMcwPlayerDeleteUnit(this._war, this._cursor.getGridIndex());
+
+            this._setState(State.RequestingPlayerDeleteUnit);
+            this._updateView();
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1801,7 +1808,7 @@ namespace TinyWars.MultiCustomWar {
     function _checkIsStateRequesting(state: State): boolean {
         return (state === State.RequestingPlayerActivateSkill)
             || (state === State.RequestingPlayerBeginTurn)
-            || (state === State.RequestingPlayerDestroyUnit)
+            || (state === State.RequestingPlayerDeleteUnit)
             || (state === State.RequestingPlayerEndTurn)
             || (state === State.RequestingPlayerSurrender)
             || (state === State.RequestingPlayerVoteForDraw)

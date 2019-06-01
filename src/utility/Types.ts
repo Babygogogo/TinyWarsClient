@@ -408,7 +408,7 @@ namespace TinyWars.Utility.Types {
 
         RequestingPlayerActivateSkill,
         RequestingPlayerBeginTurn,
-        RequestingPlayerDestroyUnit,
+        RequestingPlayerDeleteUnit,
         RequestingPlayerEndTurn,
         RequestingPlayerSurrender,
         RequestingPlayerVoteForDraw,

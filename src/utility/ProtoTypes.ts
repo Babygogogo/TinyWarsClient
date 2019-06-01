@@ -3883,6 +3883,12 @@ export declare interface IActionContainer {
     /** ActionContainer S_McwPlayerProduceUnit */
     S_McwPlayerProduceUnit?: (IS_McwPlayerProduceUnit|null);
 
+    /** ActionContainer C_McwPlayerDeleteUnit */
+    C_McwPlayerDeleteUnit?: (IC_McwPlayerDeleteUnit|null);
+
+    /** ActionContainer S_McwPlayerDeleteUnit */
+    S_McwPlayerDeleteUnit?: (IS_McwPlayerDeleteUnit|null);
+
     /** ActionContainer C_McwUnitWait */
     C_McwUnitWait?: (IC_McwUnitWait|null);
 
@@ -4063,6 +4069,12 @@ export declare class ActionContainer implements IActionContainer {
 
     /** ActionContainer S_McwPlayerProduceUnit. */
     public S_McwPlayerProduceUnit?: (IS_McwPlayerProduceUnit|null);
+
+    /** ActionContainer C_McwPlayerDeleteUnit. */
+    public C_McwPlayerDeleteUnit?: (IC_McwPlayerDeleteUnit|null);
+
+    /** ActionContainer S_McwPlayerDeleteUnit. */
+    public S_McwPlayerDeleteUnit?: (IS_McwPlayerDeleteUnit|null);
 
     /** ActionContainer C_McwUnitWait. */
     public C_McwUnitWait?: (IC_McwUnitWait|null);
@@ -8216,6 +8228,216 @@ export declare class S_McwPlayerProduceUnit implements IS_McwPlayerProduceUnit {
 
     /**
      * Converts this S_McwPlayerProduceUnit to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_McwPlayerDeleteUnit. */
+export declare interface IC_McwPlayerDeleteUnit {
+
+    /** C_McwPlayerDeleteUnit warId */
+    warId?: (number|null);
+
+    /** C_McwPlayerDeleteUnit actionId */
+    actionId?: (number|null);
+
+    /** C_McwPlayerDeleteUnit gridIndex */
+    gridIndex?: (IGridIndex|null);
+}
+
+/** Represents a C_McwPlayerDeleteUnit. */
+export declare class C_McwPlayerDeleteUnit implements IC_McwPlayerDeleteUnit {
+
+    /**
+     * Constructs a new C_McwPlayerDeleteUnit.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_McwPlayerDeleteUnit);
+
+    /** C_McwPlayerDeleteUnit warId. */
+    public warId: number;
+
+    /** C_McwPlayerDeleteUnit actionId. */
+    public actionId: number;
+
+    /** C_McwPlayerDeleteUnit gridIndex. */
+    public gridIndex?: (IGridIndex|null);
+
+    /**
+     * Creates a new C_McwPlayerDeleteUnit instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_McwPlayerDeleteUnit instance
+     */
+    public static create(properties?: IC_McwPlayerDeleteUnit): C_McwPlayerDeleteUnit;
+
+    /**
+     * Encodes the specified C_McwPlayerDeleteUnit message. Does not implicitly {@link C_McwPlayerDeleteUnit.verify|verify} messages.
+     * @param message C_McwPlayerDeleteUnit message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_McwPlayerDeleteUnit, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_McwPlayerDeleteUnit message, length delimited. Does not implicitly {@link C_McwPlayerDeleteUnit.verify|verify} messages.
+     * @param message C_McwPlayerDeleteUnit message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_McwPlayerDeleteUnit, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_McwPlayerDeleteUnit message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_McwPlayerDeleteUnit
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_McwPlayerDeleteUnit;
+
+    /**
+     * Decodes a C_McwPlayerDeleteUnit message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_McwPlayerDeleteUnit
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_McwPlayerDeleteUnit;
+
+    /**
+     * Verifies a C_McwPlayerDeleteUnit message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_McwPlayerDeleteUnit message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_McwPlayerDeleteUnit
+     */
+    public static fromObject(object: { [k: string]: any }): C_McwPlayerDeleteUnit;
+
+    /**
+     * Creates a plain object from a C_McwPlayerDeleteUnit message. Also converts values to other types if specified.
+     * @param message C_McwPlayerDeleteUnit
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_McwPlayerDeleteUnit, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_McwPlayerDeleteUnit to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_McwPlayerDeleteUnit. */
+export declare interface IS_McwPlayerDeleteUnit {
+
+    /** S_McwPlayerDeleteUnit errorCode */
+    errorCode?: (number|null);
+
+    /** S_McwPlayerDeleteUnit warId */
+    warId?: (number|null);
+
+    /** S_McwPlayerDeleteUnit actionId */
+    actionId?: (number|null);
+
+    /** S_McwPlayerDeleteUnit gridIndex */
+    gridIndex?: (IGridIndex|null);
+}
+
+/** Represents a S_McwPlayerDeleteUnit. */
+export declare class S_McwPlayerDeleteUnit implements IS_McwPlayerDeleteUnit {
+
+    /**
+     * Constructs a new S_McwPlayerDeleteUnit.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_McwPlayerDeleteUnit);
+
+    /** S_McwPlayerDeleteUnit errorCode. */
+    public errorCode: number;
+
+    /** S_McwPlayerDeleteUnit warId. */
+    public warId: number;
+
+    /** S_McwPlayerDeleteUnit actionId. */
+    public actionId: number;
+
+    /** S_McwPlayerDeleteUnit gridIndex. */
+    public gridIndex?: (IGridIndex|null);
+
+    /**
+     * Creates a new S_McwPlayerDeleteUnit instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_McwPlayerDeleteUnit instance
+     */
+    public static create(properties?: IS_McwPlayerDeleteUnit): S_McwPlayerDeleteUnit;
+
+    /**
+     * Encodes the specified S_McwPlayerDeleteUnit message. Does not implicitly {@link S_McwPlayerDeleteUnit.verify|verify} messages.
+     * @param message S_McwPlayerDeleteUnit message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_McwPlayerDeleteUnit, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_McwPlayerDeleteUnit message, length delimited. Does not implicitly {@link S_McwPlayerDeleteUnit.verify|verify} messages.
+     * @param message S_McwPlayerDeleteUnit message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_McwPlayerDeleteUnit, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_McwPlayerDeleteUnit message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_McwPlayerDeleteUnit
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_McwPlayerDeleteUnit;
+
+    /**
+     * Decodes a S_McwPlayerDeleteUnit message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_McwPlayerDeleteUnit
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_McwPlayerDeleteUnit;
+
+    /**
+     * Verifies a S_McwPlayerDeleteUnit message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_McwPlayerDeleteUnit message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_McwPlayerDeleteUnit
+     */
+    public static fromObject(object: { [k: string]: any }): S_McwPlayerDeleteUnit;
+
+    /**
+     * Creates a plain object from a S_McwPlayerDeleteUnit message. Also converts values to other types if specified.
+     * @param message S_McwPlayerDeleteUnit
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_McwPlayerDeleteUnit, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_McwPlayerDeleteUnit to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };

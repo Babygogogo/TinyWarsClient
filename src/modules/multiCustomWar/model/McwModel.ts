@@ -21,6 +21,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
 
     const _EXECUTORS = new Map<ActionCodes, (war: McwWar, data: ActionContainer) => Promise<void>>([
         [ActionCodes.S_McwPlayerBeginTurn,      _executeMcwPlayerBeginTurn],
+        [ActionCodes.S_McwPlayerDeleteUnit,     _executeMcwPlayerDeleteUnit],
         [ActionCodes.S_McwPlayerEndTurn,        _executeMcwPlayerEndTurn],
         [ActionCodes.S_McwPlayerSurrender,      _executeMcwPlayerSurrender],
         [ActionCodes.S_McwPlayerProduceUnit,    _executeMcwPlayerProduceUnit],
@@ -71,10 +72,13 @@ namespace TinyWars.MultiCustomWar.McwModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Handlers for war actions that McwProxy receives.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export function updateOnBeginTurn(data: ProtoTypes.IS_McwPlayerBeginTurn): void {
+    export function updateOnPlayerBeginTurn(data: ProtoTypes.IS_McwPlayerBeginTurn): void {
         _updateByActionContainer({ S_McwPlayerBeginTurn: data }, data.warId, data.actionId);
     }
-    export function updateOnEndTurn(data: ProtoTypes.IS_McwPlayerEndTurn): void {
+    export function updateOnPlayerDeleteUnit(data: ProtoTypes.IS_McwPlayerDeleteUnit): void {
+        _updateByActionContainer({ S_McwPlayerDeleteUnit: data }, data.warId, data.actionId);
+    }
+    export function updateOnPlayerEndTurn(data: ProtoTypes.IS_McwPlayerEndTurn): void {
         _updateByActionContainer({ S_McwPlayerEndTurn: data }, data.warId, data.actionId);
     }
     export function updateOnPlayerSurrender(data: ProtoTypes.IS_McwPlayerSurrender): void {
@@ -173,6 +177,23 @@ namespace TinyWars.MultiCustomWar.McwModel {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
         await war.getTurnManager().endPhaseWaitBeginTurn(data.S_McwPlayerBeginTurn);
+        actionPlanner.setStateIdle();
+    }
+
+    async function _executeMcwPlayerDeleteUnit(war: McwWar, data: ActionContainer): Promise<void> {
+        const actionPlanner = war.getActionPlanner();
+        actionPlanner.setStateExecutingAction();
+
+        const action    = data.S_McwPlayerDeleteUnit;
+        const gridIndex = action.gridIndex as GridIndex;
+        const focusUnit = war.getUnitMap().getUnitOnMap(gridIndex);
+        if (focusUnit) {
+            war.getFogMap().updateMapFromPathsByUnitAndPath(focusUnit, [gridIndex]);
+            DestructionHelpers.destroyUnitOnMap(war, gridIndex, false, true);
+        }
+
+        McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+
         actionPlanner.setStateIdle();
     }
 
