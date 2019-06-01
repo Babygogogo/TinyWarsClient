@@ -868,7 +868,11 @@ namespace TinyWars.MultiCustomWar {
         }
 
         private _setStateRequestingUnitJoin(): void {
-            FloatText.show("Unit join TODO!!!");
+            const unit = this.getFocusUnitLoaded();
+            McwProxy.reqMcwUnitJoin(this._war, this.getMovePath(), unit ? unit.getUnitId() : undefined);
+
+            this._setState(State.RequestingUnitJoin);
+            this._updateView();
         }
 
         private _setStateRequestingUnitWait(): void {
@@ -1345,7 +1349,7 @@ namespace TinyWars.MultiCustomWar {
                         if ((focusUnit === this.getFocusUnitLoaded()) && (GridIndexHelpers.checkIsEqual(gridIndex, focusUnit.getGridIndex()))) {
                             return State.MakingMovePath;
                         } else {
-                            if ((focusUnit === existingUnit) || (existingUnit.checkCanJoinUnit(focusUnit)) || (existingUnit.checkCanLoadUnit(focusUnit))) {
+                            if ((focusUnit === existingUnit) || (focusUnit.checkCanJoinUnit(existingUnit)) || (existingUnit.checkCanLoadUnit(focusUnit))) {
                                 return State.ChoosingAction;
                             } else {
                                 if (existingUnit.getState() === UnitState.Idle) {
@@ -1591,7 +1595,7 @@ namespace TinyWars.MultiCustomWar {
                 return [];
             } else {
                 const target = this._unitMap.getUnitOnMap(destination);
-                return (target) && (target.checkCanJoinUnit(focusUnit))
+                return (target) && (focusUnit.checkCanJoinUnit(target))
                     ? [{ actionType: UnitActionType.Join, callback: () => this._setStateRequestingUnitJoin() }]
                     : [];
             }

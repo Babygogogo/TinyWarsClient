@@ -1,9 +1,6 @@
 
 namespace TinyWars.MultiCustomWar {
-    import Notify       = Utility.Notify;
-    import Types        = Utility.Types;
-    import StageManager = Utility.StageManager;
-    import Helpers      = Utility.Helpers;
+    import Notify   = Utility.Notify;
 
     export class McwWarView extends eui.Group {
         private _fieldContainer     = new GameUi.UiZoomableComponent();

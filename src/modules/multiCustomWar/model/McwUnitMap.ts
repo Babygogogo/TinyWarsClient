@@ -217,10 +217,10 @@ namespace TinyWars.MultiCustomWar {
             this._map[x][y] = unit;
             this.getView().addUnit(unit.getView(), true);
         }
-        public removeUnitOnMap(gridIndex: Types.GridIndex): void {
+        public removeUnitOnMap(gridIndex: Types.GridIndex, removeView: boolean): void {
             const unit = this.getUnitOnMap(gridIndex);
             this._map[gridIndex.x][gridIndex.y] = undefined;
-            this.getView().removeUnit(unit.getView());
+            (removeView) && (this.getView().removeUnit(unit.getView()));
         }
 
         public addUnitLoaded(unit: McwUnit): void {

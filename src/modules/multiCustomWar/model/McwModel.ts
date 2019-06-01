@@ -30,6 +30,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         [ActionCodes.S_McwUnitCaptureTile,      _executeMcwUnitCaptureTile],
         [ActionCodes.S_McwUnitDive,             _executeMcwUnitDive],
         [ActionCodes.S_McwUnitDrop,             _executeMcwUnitDrop],
+        [ActionCodes.S_McwUnitJoin,             _executeMcwUnitJoin],
         [ActionCodes.S_McwUnitSurface,          _executeMcwUnitSurface],
         [ActionCodes.S_McwUnitWait,             _executeMcwUnitWait],
     ]);
@@ -99,6 +100,9 @@ namespace TinyWars.MultiCustomWar.McwModel {
     }
     export function updateOnUnitDrop(data: ProtoTypes.IS_McwUnitDrop): void {
         _updateByActionContainer({ S_McwUnitDrop: data }, data.warId, data.actionId);
+    }
+    export function updateOnUnitJoin(data: ProtoTypes.IS_McwUnitJoin): void {
+        _updateByActionContainer({ S_McwUnitJoin: data }, data.warId, data.actionId);
     }
     export function updateOnUnitSurface(data: ProtoTypes.IS_McwUnitSurface): void {
         _updateByActionContainer({ S_McwUnitSurface: data }, data.warId, data.actionId);
@@ -586,6 +590,86 @@ namespace TinyWars.MultiCustomWar.McwModel {
                     actionPlanner.setStateIdle();
                     resolve();
                 });
+            });
+        });
+    }
+
+    async function _executeMcwUnitJoin(war: McwWar, data: ActionContainer): Promise<void> {
+        const actionPlanner = war.getActionPlanner();
+        actionPlanner.setStateExecutingAction();
+
+        const action = data.S_McwUnitJoin;
+        updateTilesAndUnitsBeforeExecutingAction(war, action);
+
+        const path              = action.path as MovePath;
+        const pathNodes         = path.nodes;
+        const endingGridIndex   = pathNodes[pathNodes.length - 1];
+        const unitMap           = war.getUnitMap();
+        const focusUnit         = unitMap.getUnit(pathNodes[0], action.launchUnitId);
+        const targetUnit        = path.isBlocked ? undefined : unitMap.getUnitOnMap(endingGridIndex);
+        (targetUnit) && (unitMap.removeUnitOnMap(endingGridIndex, false));
+        moveUnit(war, ActionCodes.S_McwUnitJoin, path, action.launchUnitId, path.fuelConsumption);
+        focusUnit.setState(UnitState.Actioned);
+
+        if (targetUnit) {
+            if (focusUnit.checkHasPrimaryWeapon()) {
+                focusUnit.setPrimaryWeaponCurrentAmmo(Math.min(
+                    focusUnit.getPrimaryWeaponMaxAmmo()!,
+                    focusUnit.getPrimaryWeaponCurrentAmmo()! + targetUnit.getPrimaryWeaponCurrentAmmo()!
+                ));
+            }
+
+            const joinIncome = focusUnit.getJoinIncome(targetUnit)!;
+            if (joinIncome !== 0) {
+                const player = war.getPlayer(focusUnit.getPlayerIndex())!;
+                player.setFund(player.getFund() + joinIncome);
+            }
+
+            const joinedNormalizedHp = Math.min(
+                focusUnit.getNormalizedMaxHp(),
+                focusUnit.getNormalizedCurrentHp() + targetUnit.getNormalizedCurrentHp()
+            );
+            focusUnit.setCurrentHp(Math.max(
+                (joinedNormalizedHp - 1) * ConfigManager.UNIT_HP_NORMALIZER + 1,
+                Math.min(focusUnit.getCurrentHp() + targetUnit.getCurrentHp(), focusUnit.getMaxHp())
+            ));
+
+            focusUnit.setCurrentFuel(Math.min(
+                focusUnit.getMaxFuel(),
+                focusUnit.getCurrentFuel() + targetUnit.getCurrentFuel()
+            ));
+
+            const maxBuildMaterial = focusUnit.getMaxBuildMaterial();
+            if (maxBuildMaterial != null) {
+                focusUnit.setCurrentBuildMaterial(Math.min(
+                    maxBuildMaterial,
+                    focusUnit.getCurrentBuildMaterial()! + targetUnit.getCurrentBuildMaterial()!
+                ));
+            }
+
+            const maxProduceMaterial = focusUnit.getMaxProduceMaterial();
+            if (maxProduceMaterial != null) {
+                focusUnit.setCurrentProduceMaterial(Math.min(
+                    maxProduceMaterial,
+                    focusUnit.getCurrentProduceMaterial()! + targetUnit.getCurrentProduceMaterial()!
+                ))
+            }
+
+            focusUnit.setCurrentPromotion(Math.max(focusUnit.getCurrentPromotion(), targetUnit.getCurrentPromotion()));
+
+            focusUnit.setIsCapturingTile(targetUnit.getIsCapturingTile());
+
+            focusUnit.setIsBuildingTile(targetUnit.getIsBuildingTile());
+        }
+
+        return new Promise<void>(resolve => {
+            focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
+                focusUnit.updateView();
+                (targetUnit) && (unitMap.getView().removeUnit(targetUnit.getView()));
+                McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+
+                actionPlanner.setStateIdle();
+                resolve();
             });
         });
     }

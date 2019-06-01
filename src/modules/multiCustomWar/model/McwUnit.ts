@@ -213,6 +213,9 @@ namespace TinyWars.MultiCustomWar {
         public getMaxHp(): number {
             return this._templateCfg.maxHp;
         }
+        public getNormalizedMaxHp(): number {
+            return Helpers.getNormalizedHp(this.getMaxHp());
+        }
 
         public getNormalizedCurrentHp(): number {
             return Helpers.getNormalizedHp(this.getCurrentHp());
@@ -735,17 +738,17 @@ namespace TinyWars.MultiCustomWar {
             if (!this._checkCanRepairLoadedUnit(unit)) {
                 return undefined;
             } else {
-                const maxNormalizedHp       = ConfigManager.MAX_UNIT_NORMALIZED_HP;
+                const normalizedMaxHp       = unit.getNormalizedMaxHp();
                 const productionCost        = unit.getProductionFinalCost();
                 const normalizedCurrentHp   = unit.getNormalizedCurrentHp();
                 const normalizedRepairHp    = Math.min(
-                    maxNormalizedHp - normalizedCurrentHp,
+                    normalizedMaxHp - normalizedCurrentHp,
                     this.getNormalizedRepairHpForLoadedUnit()!,
-                    Math.floor(this._war.getPlayer(unit.getPlayerIndex())!.getFund() * maxNormalizedHp / productionCost)
+                    Math.floor(this._war.getPlayer(unit.getPlayerIndex())!.getFund() * normalizedMaxHp / productionCost)
                 );
                 return {
                     hp  : (normalizedRepairHp + normalizedCurrentHp) * ConfigManager.UNIT_HP_NORMALIZER - unit.getCurrentHp(),
-                    cost: Math.floor(normalizedRepairHp * productionCost / maxNormalizedHp),
+                    cost: Math.floor(normalizedRepairHp * productionCost / normalizedMaxHp),
                 };
             }
         }
@@ -810,8 +813,9 @@ namespace TinyWars.MultiCustomWar {
         // Functions for join.
         ////////////////////////////////////////////////////////////////////////////////
         public checkCanJoinUnit(unit: McwUnit): boolean {
-            return (this.getViewId() === unit.getViewId())
-                && (this.getNormalizedCurrentHp() < ConfigManager.MAX_UNIT_NORMALIZED_HP)
+            return (this !== unit)
+                && (this.getViewId() === unit.getViewId())
+                && (unit.getNormalizedCurrentHp() < unit.getNormalizedMaxHp())
                 && (this.getLoadedUnitsCount() === 0)
                 && (unit.getLoadedUnitsCount() === 0);
         }
@@ -820,7 +824,7 @@ namespace TinyWars.MultiCustomWar {
             if (!this.checkCanJoinUnit(unit)) {
                 return undefined;
             } else {
-                const maxHp     = ConfigManager.MAX_UNIT_NORMALIZED_HP;
+                const maxHp     = this.getNormalizedMaxHp();
                 const joinedHp  = this.getNormalizedCurrentHp() + unit.getNormalizedCurrentHp();
                 return joinedHp <= maxHp
                     ? 0

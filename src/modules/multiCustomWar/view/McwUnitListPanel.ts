@@ -115,7 +115,7 @@ namespace TinyWars.MultiCustomWar {
             let value = 0;
             for (const data of this._dataForList) {
                 const unit = data.unit;
-                value += unit.getProductionBaseCost() * unit.getNormalizedCurrentHp() / ConfigManager.MAX_UNIT_NORMALIZED_HP;
+                value += unit.getProductionBaseCost() * unit.getNormalizedCurrentHp() / unit.getNormalizedMaxHp();
             }
             this._labelValue.text = `${value}`;
         }

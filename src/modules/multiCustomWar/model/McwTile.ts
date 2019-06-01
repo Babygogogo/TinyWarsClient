@@ -381,17 +381,17 @@ namespace TinyWars.MultiCustomWar {
             if (!this._checkCanRepairUnit(unit)) {
                 return undefined;
             } else {
-                const maxNormalizedHp       = ConfigManager.MAX_UNIT_NORMALIZED_HP;
+                const normalizedMaxHp       = unit.getNormalizedMaxHp();
                 const productionCost        = unit.getProductionFinalCost();
                 const normalizedCurrentHp   = unit.getNormalizedCurrentHp();
                 const normalizedRepairHp    = Math.min(
-                    maxNormalizedHp - normalizedCurrentHp,
+                    normalizedMaxHp - normalizedCurrentHp,
                     this.getNormalizedRepairHp()!,
-                    Math.floor(this._war.getPlayer(unit.getPlayerIndex())!.getFund() * maxNormalizedHp / productionCost)
+                    Math.floor(this._war.getPlayer(unit.getPlayerIndex())!.getFund() * normalizedMaxHp / productionCost)
                 );
                 return {
                     hp  : (normalizedRepairHp + normalizedCurrentHp) * ConfigManager.UNIT_HP_NORMALIZER - unit.getCurrentHp(),
-                    cost: Math.floor(normalizedRepairHp * productionCost / maxNormalizedHp),
+                    cost: Math.floor(normalizedRepairHp * productionCost / normalizedMaxHp),
                 };
             }
         }

@@ -56,4 +56,6 @@ C_McwUnitDive = 193,
 S_McwUnitDive = 194,
 C_McwUnitSurface = 195,
 S_McwUnitSurface = 196,
+C_McwUnitJoin = 197,
+S_McwUnitJoin = 198,
 }}

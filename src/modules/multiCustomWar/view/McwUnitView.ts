@@ -83,7 +83,7 @@ namespace TinyWars.MultiCustomWar {
 
         public updateImageHp(): void {
             const normalizedHp = this._unit.getNormalizedCurrentHp();
-            if ((normalizedHp >= ConfigManager.MAX_UNIT_NORMALIZED_HP) || (normalizedHp <= 0)) {
+            if ((normalizedHp >= this._unit.getNormalizedMaxHp()) || (normalizedHp <= 0)) {
                 this._imgHp.visible = false;
             } else {
                 this._imgHp.visible = true;

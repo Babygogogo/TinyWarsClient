@@ -125,6 +125,13 @@ namespace TinyWars.MultiCustomWar {
             Notify.removeEventListeners(this._notifyEvents, this);
         }
 
+        public getContainerForGrids(): egret.DisplayObjectContainer {
+            return this._conForGrids;
+        }
+        public getContainerForUnits(): egret.DisplayObjectContainer {
+            return this._conForUnits;
+        }
+
         private _initConForMovableGrids(): void {
             this._conForMovableGrids.removeChildren();
             this._conForMovableGrids.alpha = 0.5;

@@ -3930,6 +3930,12 @@ export declare interface IActionContainer {
 
     /** ActionContainer S_McwUnitSurface */
     S_McwUnitSurface?: (IS_McwUnitSurface|null);
+
+    /** ActionContainer C_McwUnitJoin */
+    C_McwUnitJoin?: (IC_McwUnitJoin|null);
+
+    /** ActionContainer S_McwUnitJoin */
+    S_McwUnitJoin?: (IS_McwUnitJoin|null);
 }
 
 /** Represents an ActionContainer. */
@@ -4105,6 +4111,12 @@ export declare class ActionContainer implements IActionContainer {
 
     /** ActionContainer S_McwUnitSurface. */
     public S_McwUnitSurface?: (IS_McwUnitSurface|null);
+
+    /** ActionContainer C_McwUnitJoin. */
+    public C_McwUnitJoin?: (IC_McwUnitJoin|null);
+
+    /** ActionContainer S_McwUnitJoin. */
+    public S_McwUnitJoin?: (IS_McwUnitJoin|null);
 
     /**
      * Creates a new ActionContainer instance using the specified properties.
@@ -10220,6 +10232,252 @@ export declare class S_McwUnitSurface implements IS_McwUnitSurface {
 
     /**
      * Converts this S_McwUnitSurface to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_McwUnitJoin. */
+export declare interface IC_McwUnitJoin {
+
+    /** C_McwUnitJoin warId */
+    warId?: (number|null);
+
+    /** C_McwUnitJoin actionId */
+    actionId?: (number|null);
+
+    /** C_McwUnitJoin path */
+    path?: (IGridIndex[]|null);
+
+    /** C_McwUnitJoin launchUnitId */
+    launchUnitId?: (number|null);
+}
+
+/** Represents a C_McwUnitJoin. */
+export declare class C_McwUnitJoin implements IC_McwUnitJoin {
+
+    /**
+     * Constructs a new C_McwUnitJoin.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_McwUnitJoin);
+
+    /** C_McwUnitJoin warId. */
+    public warId: number;
+
+    /** C_McwUnitJoin actionId. */
+    public actionId: number;
+
+    /** C_McwUnitJoin path. */
+    public path: IGridIndex[];
+
+    /** C_McwUnitJoin launchUnitId. */
+    public launchUnitId: number;
+
+    /**
+     * Creates a new C_McwUnitJoin instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_McwUnitJoin instance
+     */
+    public static create(properties?: IC_McwUnitJoin): C_McwUnitJoin;
+
+    /**
+     * Encodes the specified C_McwUnitJoin message. Does not implicitly {@link C_McwUnitJoin.verify|verify} messages.
+     * @param message C_McwUnitJoin message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_McwUnitJoin, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_McwUnitJoin message, length delimited. Does not implicitly {@link C_McwUnitJoin.verify|verify} messages.
+     * @param message C_McwUnitJoin message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_McwUnitJoin, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_McwUnitJoin message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_McwUnitJoin
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_McwUnitJoin;
+
+    /**
+     * Decodes a C_McwUnitJoin message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_McwUnitJoin
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_McwUnitJoin;
+
+    /**
+     * Verifies a C_McwUnitJoin message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_McwUnitJoin message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_McwUnitJoin
+     */
+    public static fromObject(object: { [k: string]: any }): C_McwUnitJoin;
+
+    /**
+     * Creates a plain object from a C_McwUnitJoin message. Also converts values to other types if specified.
+     * @param message C_McwUnitJoin
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_McwUnitJoin, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_McwUnitJoin to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_McwUnitJoin. */
+export declare interface IS_McwUnitJoin {
+
+    /** S_McwUnitJoin errorCode */
+    errorCode?: (number|null);
+
+    /** S_McwUnitJoin warId */
+    warId?: (number|null);
+
+    /** S_McwUnitJoin actionId */
+    actionId?: (number|null);
+
+    /** S_McwUnitJoin path */
+    path?: (IMovePath|null);
+
+    /** S_McwUnitJoin launchUnitId */
+    launchUnitId?: (number|null);
+
+    /** S_McwUnitJoin discoveredUnits */
+    discoveredUnits?: (ISerializedMcwUnit[]|null);
+
+    /** S_McwUnitJoin discoveredTiles */
+    discoveredTiles?: (ISerializedMcwTile[]|null);
+
+    /** S_McwUnitJoin actingUnits */
+    actingUnits?: (ISerializedMcwUnit[]|null);
+
+    /** S_McwUnitJoin actingTiles */
+    actingTiles?: (ISerializedMcwTile[]|null);
+}
+
+/** Represents a S_McwUnitJoin. */
+export declare class S_McwUnitJoin implements IS_McwUnitJoin {
+
+    /**
+     * Constructs a new S_McwUnitJoin.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_McwUnitJoin);
+
+    /** S_McwUnitJoin errorCode. */
+    public errorCode: number;
+
+    /** S_McwUnitJoin warId. */
+    public warId: number;
+
+    /** S_McwUnitJoin actionId. */
+    public actionId: number;
+
+    /** S_McwUnitJoin path. */
+    public path?: (IMovePath|null);
+
+    /** S_McwUnitJoin launchUnitId. */
+    public launchUnitId: number;
+
+    /** S_McwUnitJoin discoveredUnits. */
+    public discoveredUnits: ISerializedMcwUnit[];
+
+    /** S_McwUnitJoin discoveredTiles. */
+    public discoveredTiles: ISerializedMcwTile[];
+
+    /** S_McwUnitJoin actingUnits. */
+    public actingUnits: ISerializedMcwUnit[];
+
+    /** S_McwUnitJoin actingTiles. */
+    public actingTiles: ISerializedMcwTile[];
+
+    /**
+     * Creates a new S_McwUnitJoin instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_McwUnitJoin instance
+     */
+    public static create(properties?: IS_McwUnitJoin): S_McwUnitJoin;
+
+    /**
+     * Encodes the specified S_McwUnitJoin message. Does not implicitly {@link S_McwUnitJoin.verify|verify} messages.
+     * @param message S_McwUnitJoin message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_McwUnitJoin, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_McwUnitJoin message, length delimited. Does not implicitly {@link S_McwUnitJoin.verify|verify} messages.
+     * @param message S_McwUnitJoin message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_McwUnitJoin, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_McwUnitJoin message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_McwUnitJoin
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_McwUnitJoin;
+
+    /**
+     * Decodes a S_McwUnitJoin message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_McwUnitJoin
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_McwUnitJoin;
+
+    /**
+     * Verifies a S_McwUnitJoin message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_McwUnitJoin message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_McwUnitJoin
+     */
+    public static fromObject(object: { [k: string]: any }): S_McwUnitJoin;
+
+    /**
+     * Creates a plain object from a S_McwUnitJoin message. Also converts values to other types if specified.
+     * @param message S_McwUnitJoin
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_McwUnitJoin, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_McwUnitJoin to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };

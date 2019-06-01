@@ -11,7 +11,7 @@ namespace TinyWars.Utility.DestructionHelpers {
         const unit              = unitMap.getUnitOnMap(gridIndex)!;
         const destroyedUnits    = [unit];
 
-        unitMap.removeUnitOnMap(gridIndex);
+        unitMap.removeUnitOnMap(gridIndex, true);
         for (const u of unitMap.getUnitsLoadedByLoader(unit, true)) {
             unitMap.removeUnitLoaded(u.getUnitId());
             destroyedUnits.push(u);
@@ -35,7 +35,7 @@ namespace TinyWars.Utility.DestructionHelpers {
             if (unit.getPlayerIndex() === playerIndex) {
                 const gridIndex = unit.getGridIndex();
                 resetTile(war, gridIndex);
-                unitMap.removeUnitOnMap(gridIndex);
+                unitMap.removeUnitOnMap(gridIndex, true);
                 (gridVisionEffect) && (gridVisionEffect.showEffectExplosion(gridIndex));
             }
         });
