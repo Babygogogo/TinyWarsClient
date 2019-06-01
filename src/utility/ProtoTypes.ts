@@ -3948,6 +3948,12 @@ export declare interface IActionContainer {
 
     /** ActionContainer S_McwUnitLaunchFlare */
     S_McwUnitLaunchFlare?: (IS_McwUnitLaunchFlare|null);
+
+    /** ActionContainer C_McwUnitLaunchSilo */
+    C_McwUnitLaunchSilo?: (IC_McwUnitLaunchSilo|null);
+
+    /** ActionContainer S_McwUnitLaunchSilo */
+    S_McwUnitLaunchSilo?: (IS_McwUnitLaunchSilo|null);
 }
 
 /** Represents an ActionContainer. */
@@ -4141,6 +4147,12 @@ export declare class ActionContainer implements IActionContainer {
 
     /** ActionContainer S_McwUnitLaunchFlare. */
     public S_McwUnitLaunchFlare?: (IS_McwUnitLaunchFlare|null);
+
+    /** ActionContainer C_McwUnitLaunchSilo. */
+    public C_McwUnitLaunchSilo?: (IC_McwUnitLaunchSilo|null);
+
+    /** ActionContainer S_McwUnitLaunchSilo. */
+    public S_McwUnitLaunchSilo?: (IS_McwUnitLaunchSilo|null);
 
     /**
      * Creates a new ActionContainer instance using the specified properties.
@@ -10970,6 +10982,264 @@ export declare class S_McwUnitLaunchFlare implements IS_McwUnitLaunchFlare {
 
     /**
      * Converts this S_McwUnitLaunchFlare to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_McwUnitLaunchSilo. */
+export declare interface IC_McwUnitLaunchSilo {
+
+    /** C_McwUnitLaunchSilo warId */
+    warId?: (number|null);
+
+    /** C_McwUnitLaunchSilo actionId */
+    actionId?: (number|null);
+
+    /** C_McwUnitLaunchSilo path */
+    path?: (IGridIndex[]|null);
+
+    /** C_McwUnitLaunchSilo launchUnitId */
+    launchUnitId?: (number|null);
+
+    /** C_McwUnitLaunchSilo targetGridIndex */
+    targetGridIndex?: (IGridIndex|null);
+}
+
+/** Represents a C_McwUnitLaunchSilo. */
+export declare class C_McwUnitLaunchSilo implements IC_McwUnitLaunchSilo {
+
+    /**
+     * Constructs a new C_McwUnitLaunchSilo.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_McwUnitLaunchSilo);
+
+    /** C_McwUnitLaunchSilo warId. */
+    public warId: number;
+
+    /** C_McwUnitLaunchSilo actionId. */
+    public actionId: number;
+
+    /** C_McwUnitLaunchSilo path. */
+    public path: IGridIndex[];
+
+    /** C_McwUnitLaunchSilo launchUnitId. */
+    public launchUnitId: number;
+
+    /** C_McwUnitLaunchSilo targetGridIndex. */
+    public targetGridIndex?: (IGridIndex|null);
+
+    /**
+     * Creates a new C_McwUnitLaunchSilo instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_McwUnitLaunchSilo instance
+     */
+    public static create(properties?: IC_McwUnitLaunchSilo): C_McwUnitLaunchSilo;
+
+    /**
+     * Encodes the specified C_McwUnitLaunchSilo message. Does not implicitly {@link C_McwUnitLaunchSilo.verify|verify} messages.
+     * @param message C_McwUnitLaunchSilo message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_McwUnitLaunchSilo, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_McwUnitLaunchSilo message, length delimited. Does not implicitly {@link C_McwUnitLaunchSilo.verify|verify} messages.
+     * @param message C_McwUnitLaunchSilo message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_McwUnitLaunchSilo, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_McwUnitLaunchSilo message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_McwUnitLaunchSilo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_McwUnitLaunchSilo;
+
+    /**
+     * Decodes a C_McwUnitLaunchSilo message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_McwUnitLaunchSilo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_McwUnitLaunchSilo;
+
+    /**
+     * Verifies a C_McwUnitLaunchSilo message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_McwUnitLaunchSilo message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_McwUnitLaunchSilo
+     */
+    public static fromObject(object: { [k: string]: any }): C_McwUnitLaunchSilo;
+
+    /**
+     * Creates a plain object from a C_McwUnitLaunchSilo message. Also converts values to other types if specified.
+     * @param message C_McwUnitLaunchSilo
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_McwUnitLaunchSilo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_McwUnitLaunchSilo to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_McwUnitLaunchSilo. */
+export declare interface IS_McwUnitLaunchSilo {
+
+    /** S_McwUnitLaunchSilo errorCode */
+    errorCode?: (number|null);
+
+    /** S_McwUnitLaunchSilo warId */
+    warId?: (number|null);
+
+    /** S_McwUnitLaunchSilo actionId */
+    actionId?: (number|null);
+
+    /** S_McwUnitLaunchSilo path */
+    path?: (IMovePath|null);
+
+    /** S_McwUnitLaunchSilo launchUnitId */
+    launchUnitId?: (number|null);
+
+    /** S_McwUnitLaunchSilo discoveredUnits */
+    discoveredUnits?: (ISerializedMcwUnit[]|null);
+
+    /** S_McwUnitLaunchSilo discoveredTiles */
+    discoveredTiles?: (ISerializedMcwTile[]|null);
+
+    /** S_McwUnitLaunchSilo actingUnits */
+    actingUnits?: (ISerializedMcwUnit[]|null);
+
+    /** S_McwUnitLaunchSilo actingTiles */
+    actingTiles?: (ISerializedMcwTile[]|null);
+
+    /** S_McwUnitLaunchSilo targetGridIndex */
+    targetGridIndex?: (IGridIndex|null);
+}
+
+/** Represents a S_McwUnitLaunchSilo. */
+export declare class S_McwUnitLaunchSilo implements IS_McwUnitLaunchSilo {
+
+    /**
+     * Constructs a new S_McwUnitLaunchSilo.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_McwUnitLaunchSilo);
+
+    /** S_McwUnitLaunchSilo errorCode. */
+    public errorCode: number;
+
+    /** S_McwUnitLaunchSilo warId. */
+    public warId: number;
+
+    /** S_McwUnitLaunchSilo actionId. */
+    public actionId: number;
+
+    /** S_McwUnitLaunchSilo path. */
+    public path?: (IMovePath|null);
+
+    /** S_McwUnitLaunchSilo launchUnitId. */
+    public launchUnitId: number;
+
+    /** S_McwUnitLaunchSilo discoveredUnits. */
+    public discoveredUnits: ISerializedMcwUnit[];
+
+    /** S_McwUnitLaunchSilo discoveredTiles. */
+    public discoveredTiles: ISerializedMcwTile[];
+
+    /** S_McwUnitLaunchSilo actingUnits. */
+    public actingUnits: ISerializedMcwUnit[];
+
+    /** S_McwUnitLaunchSilo actingTiles. */
+    public actingTiles: ISerializedMcwTile[];
+
+    /** S_McwUnitLaunchSilo targetGridIndex. */
+    public targetGridIndex?: (IGridIndex|null);
+
+    /**
+     * Creates a new S_McwUnitLaunchSilo instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_McwUnitLaunchSilo instance
+     */
+    public static create(properties?: IS_McwUnitLaunchSilo): S_McwUnitLaunchSilo;
+
+    /**
+     * Encodes the specified S_McwUnitLaunchSilo message. Does not implicitly {@link S_McwUnitLaunchSilo.verify|verify} messages.
+     * @param message S_McwUnitLaunchSilo message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_McwUnitLaunchSilo, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_McwUnitLaunchSilo message, length delimited. Does not implicitly {@link S_McwUnitLaunchSilo.verify|verify} messages.
+     * @param message S_McwUnitLaunchSilo message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_McwUnitLaunchSilo, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_McwUnitLaunchSilo message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_McwUnitLaunchSilo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_McwUnitLaunchSilo;
+
+    /**
+     * Decodes a S_McwUnitLaunchSilo message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_McwUnitLaunchSilo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_McwUnitLaunchSilo;
+
+    /**
+     * Verifies a S_McwUnitLaunchSilo message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_McwUnitLaunchSilo message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_McwUnitLaunchSilo
+     */
+    public static fromObject(object: { [k: string]: any }): S_McwUnitLaunchSilo;
+
+    /**
+     * Creates a plain object from a S_McwUnitLaunchSilo message. Also converts values to other types if specified.
+     * @param message S_McwUnitLaunchSilo
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_McwUnitLaunchSilo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_McwUnitLaunchSilo to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };

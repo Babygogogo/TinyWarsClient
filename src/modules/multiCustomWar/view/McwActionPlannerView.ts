@@ -71,7 +71,8 @@ namespace TinyWars.MultiCustomWar {
             [Direction.Right,       _PATH_GRID_SOURCE_EMPTY],
         ])],
     ]);
-    const ALPHA_FOR_UNITS = 1;
+    const ALPHA_FOR_ATTACKABLE_GRIDS_NORMAL = 0.5;
+    const ALPHA_FOR_ATTACKABLE_GRIDS_SILO   = 0.15;
 
     export class McwActionPlannerView extends egret.DisplayObjectContainer {
         private _actionPlanner  : McwActionPlanner;
@@ -159,7 +160,7 @@ namespace TinyWars.MultiCustomWar {
         }
         private _initConForAttackableGrids(): void {
             this._conForAttackableGrids.removeChildren();
-            this._conForAttackableGrids.alpha = 0.5;
+            this._conForAttackableGrids.alpha = ALPHA_FOR_ATTACKABLE_GRIDS_NORMAL;
 
             const { width, height } = this._mapSize;
             const images            = Helpers.createEmptyMap<GameUi.UiImage>(width, height);
@@ -228,6 +229,7 @@ namespace TinyWars.MultiCustomWar {
 
             } else if (state === State.MakingMovePath) {
                 con.visible = true;
+                con.alpha   = ALPHA_FOR_ATTACKABLE_GRIDS_NORMAL;
 
                 const movableArea       = actionPlanner.getMovableArea();
                 const attackableArea    = actionPlanner.getAttackableArea();
@@ -244,6 +246,7 @@ namespace TinyWars.MultiCustomWar {
 
             } else if (state === State.ChoosingAttackTarget) {
                 con.visible = true;
+                con.alpha   = ALPHA_FOR_ATTACKABLE_GRIDS_NORMAL;
 
                 const { width, height } = this._mapSize;
                 for (let x = 0; x < width; ++x) {
@@ -260,6 +263,7 @@ namespace TinyWars.MultiCustomWar {
 
             } else if (state === State.ChoosingFlareDestination) {
                 con.visible = true;
+                con.alpha   = ALPHA_FOR_ATTACKABLE_GRIDS_NORMAL;
 
                 const { width, height } = this._mapSize;
                 const imgs              = this._imgsForAttackableGrids;
@@ -273,6 +277,7 @@ namespace TinyWars.MultiCustomWar {
 
             } else if (state === State.ChoosingSiloDestination) {
                 con.visible = true;
+                con.alpha   = ALPHA_FOR_ATTACKABLE_GRIDS_SILO;
 
                 const { width, height } = this._mapSize;
                 const imgs              = this._imgsForAttackableGrids;
@@ -287,6 +292,7 @@ namespace TinyWars.MultiCustomWar {
 
             } else if (state === State.PreviewingAttackableArea) {
                 con.visible = true;
+                con.alpha   = ALPHA_FOR_ATTACKABLE_GRIDS_NORMAL;
 
                 const area              = actionPlanner.getAreaForPreviewingAttack();
                 const { width, height } = this._mapSize;
@@ -528,12 +534,12 @@ namespace TinyWars.MultiCustomWar {
                 }
 
                 for (const data of actionPlanner.getChosenUnitsForDrop()) {
-                    this._addUnitView(data.unit, data.destination, ALPHA_FOR_UNITS);
+                    this._addUnitView(data.unit, data.destination);
                 }
 
                 const cursorGridIndex = this._actionPlanner.getCursor().getGridIndex();
                 if (actionPlanner.getAvailableDropDestinations()!.some(grid => GridIndexHelpers.checkIsEqual(grid, cursorGridIndex))) {
-                    this._addUnitView(actionPlanner.getChoosingUnitForDrop(), cursorGridIndex, ALPHA_FOR_UNITS);
+                    this._addUnitView(actionPlanner.getChoosingUnitForDrop(), cursorGridIndex);
                 }
 
             } else if (state === State.ChoosingFlareDestination) {
@@ -598,7 +604,7 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _addUnitView(unit: McwUnit, gridIndex: GridIndex, alpha = 1): void {
             const view = new McwUnitView().init(unit).startRunningView();
-            view.alpha = alpha;
+            // view.alpha = alpha;
             _resetUnitViewXy(view, gridIndex);
             view.showUnitAnimation(Types.UnitAnimationType.Move);
             this._focusUnitViews.set(unit.getUnitId(), view);

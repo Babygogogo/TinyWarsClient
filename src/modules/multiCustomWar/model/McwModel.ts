@@ -33,6 +33,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         [ActionCodes.S_McwUnitDrop,             _executeMcwUnitDrop],
         [ActionCodes.S_McwUnitJoin,             _executeMcwUnitJoin],
         [ActionCodes.S_McwUnitLaunchFlare,      _executeMcwUnitLaunchFlare],
+        [ActionCodes.S_McwUnitLaunchSilo,       _executeMcwUnitLaunchSilo],
         [ActionCodes.S_McwUnitSurface,          _executeMcwUnitSurface],
         [ActionCodes.S_McwUnitWait,             _executeMcwUnitWait],
     ]);
@@ -111,6 +112,9 @@ namespace TinyWars.MultiCustomWar.McwModel {
     }
     export function updateOnUnitLaunchFlare(data: ProtoTypes.IS_McwUnitLaunchFlare): void {
         _updateByActionContainer({ S_McwUnitLaunchFlare: data }, data.warId, data.actionId);
+    }
+    export function updateOnUnitLaunchSilo(data: ProtoTypes.IS_McwUnitLaunchSilo): void {
+        _updateByActionContainer({ S_McwUnitLaunchSilo: data }, data.warId, data.actionId);
     }
     export function updateOnUnitSurface(data: ProtoTypes.IS_McwUnitSurface): void {
         _updateByActionContainer({ S_McwUnitSurface: data }, data.warId, data.actionId);
@@ -709,7 +713,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         const path      = action.path as MovePath;
         const pathNodes = path.nodes;
         const focusUnit = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
-        moveUnit(war, ActionCodes.S_McwUnitWait, path, action.launchUnitId, path.fuelConsumption);
+        moveUnit(war, ActionCodes.S_McwUnitLaunchFlare, path, action.launchUnitId, path.fuelConsumption);
         focusUnit.setState(UnitState.Actioned);
 
         const isFlareSucceeded  = !path.isBlocked;
@@ -736,6 +740,66 @@ namespace TinyWars.MultiCustomWar.McwModel {
                 resolve();
             });
         });
+    }
+
+    async function _executeMcwUnitLaunchSilo(war: McwWar, data: ActionContainer): Promise<void> {
+        const actionPlanner = war.getActionPlanner();
+        actionPlanner.setStateExecutingAction();
+
+        const action = data.S_McwUnitLaunchSilo;
+        updateTilesAndUnitsBeforeExecutingAction(war, action);
+
+        const path      = action.path as MovePath;
+        const pathNodes = path.nodes;
+        const unitMap   = war.getUnitMap();
+        const focusUnit = unitMap.getUnit(pathNodes[0], action.launchUnitId);
+        moveUnit(war, ActionCodes.S_McwUnitLaunchSilo, path, action.launchUnitId, path.fuelConsumption);
+        focusUnit.setState(UnitState.Actioned);
+
+        if (path.isBlocked) {
+            return new Promise<void>(resolve => {
+                focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
+                    focusUnit.updateView();
+                    McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+
+                    actionPlanner.setStateIdle();
+                    resolve();
+                });
+            });
+        } else {
+            const targetGridIndex   = action.targetGridIndex as GridIndex;
+            const tile              = war.getTileMap().getTile(pathNodes[pathNodes.length - 1]);
+            tile.resetByObjectViewIdAndBaseViewId(focusUnit.getTileObjectViewIdAfterLaunchSilo());
+
+            const targetGrids   = GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, ConfigManager.SILO_RADIUS, unitMap.getMapSize());
+            const targetUnits   = [] as McwUnit[];
+            for (const grid of targetGrids) {
+                const unit = unitMap.getUnitOnMap(grid);
+                if (unit) {
+                    targetUnits.push(unit);
+                    unit.setCurrentHp(Math.max(1, unit.getCurrentHp() - ConfigManager.SILO_DAMAGE));
+                }
+            }
+
+            return new Promise<void>(resolve => {
+                focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
+                    const effect = war.getGridVisionEffect();
+                    for (const grid of targetGrids) {
+                        effect.showEffectSiloExplosion(grid);
+                    }
+                    for (const unit of targetUnits) {
+                        unit.updateView();
+                    }
+
+                    focusUnit.updateView();
+                    tile.updateView();
+                    McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+
+                    actionPlanner.setStateIdle();
+                    resolve();
+                });
+            });
+        }
     }
 
     async function _executeMcwUnitSurface(war: McwWar, data: ActionContainer): Promise<void> {

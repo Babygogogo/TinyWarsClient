@@ -62,4 +62,6 @@ C_McwUnitJoin = 197,
 S_McwUnitJoin = 198,
 C_McwUnitLaunchFlare = 199,
 S_McwUnitLaunchFlare = 200,
+C_McwUnitLaunchSilo = 201,
+S_McwUnitLaunchSilo = 202,
 }}

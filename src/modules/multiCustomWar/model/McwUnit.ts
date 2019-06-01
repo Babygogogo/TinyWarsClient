@@ -597,7 +597,7 @@ namespace TinyWars.MultiCustomWar {
         }
 
         public getTileObjectViewIdAfterLaunchSilo(): number {
-            return ConfigManager.getTileObjectViewId(Types.TileObjectType.Silo, 0);
+            return ConfigManager.getTileObjectViewId(Types.TileObjectType.EmptySilo, 0);
         }
 
         ////////////////////////////////////////////////////////////////////////////////

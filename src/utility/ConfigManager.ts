@@ -1416,7 +1416,9 @@ namespace TinyWars.ConfigManager {
     ////////////////////////////////////////////////////////////////////////////////
     // Exports.
     ////////////////////////////////////////////////////////////////////////////////
-    export const UNIT_HP_NORMALIZER     = 10;
+    export const UNIT_HP_NORMALIZER = 10;
+    export const SILO_RADIUS        = 2;
+    export const SILO_DAMAGE        = 30;
 
     export function init(): void {
         NetManager.addListeners([
