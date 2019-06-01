@@ -3942,6 +3942,12 @@ export declare interface IActionContainer {
 
     /** ActionContainer S_McwUnitJoin */
     S_McwUnitJoin?: (IS_McwUnitJoin|null);
+
+    /** ActionContainer C_McwUnitLaunchFlare */
+    C_McwUnitLaunchFlare?: (IC_McwUnitLaunchFlare|null);
+
+    /** ActionContainer S_McwUnitLaunchFlare */
+    S_McwUnitLaunchFlare?: (IS_McwUnitLaunchFlare|null);
 }
 
 /** Represents an ActionContainer. */
@@ -4129,6 +4135,12 @@ export declare class ActionContainer implements IActionContainer {
 
     /** ActionContainer S_McwUnitJoin. */
     public S_McwUnitJoin?: (IS_McwUnitJoin|null);
+
+    /** ActionContainer C_McwUnitLaunchFlare. */
+    public C_McwUnitLaunchFlare?: (IC_McwUnitLaunchFlare|null);
+
+    /** ActionContainer S_McwUnitLaunchFlare. */
+    public S_McwUnitLaunchFlare?: (IS_McwUnitLaunchFlare|null);
 
     /**
      * Creates a new ActionContainer instance using the specified properties.
@@ -10700,6 +10712,264 @@ export declare class S_McwUnitJoin implements IS_McwUnitJoin {
 
     /**
      * Converts this S_McwUnitJoin to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_McwUnitLaunchFlare. */
+export declare interface IC_McwUnitLaunchFlare {
+
+    /** C_McwUnitLaunchFlare warId */
+    warId?: (number|null);
+
+    /** C_McwUnitLaunchFlare actionId */
+    actionId?: (number|null);
+
+    /** C_McwUnitLaunchFlare path */
+    path?: (IGridIndex[]|null);
+
+    /** C_McwUnitLaunchFlare launchUnitId */
+    launchUnitId?: (number|null);
+
+    /** C_McwUnitLaunchFlare targetGridIndex */
+    targetGridIndex?: (IGridIndex|null);
+}
+
+/** Represents a C_McwUnitLaunchFlare. */
+export declare class C_McwUnitLaunchFlare implements IC_McwUnitLaunchFlare {
+
+    /**
+     * Constructs a new C_McwUnitLaunchFlare.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_McwUnitLaunchFlare);
+
+    /** C_McwUnitLaunchFlare warId. */
+    public warId: number;
+
+    /** C_McwUnitLaunchFlare actionId. */
+    public actionId: number;
+
+    /** C_McwUnitLaunchFlare path. */
+    public path: IGridIndex[];
+
+    /** C_McwUnitLaunchFlare launchUnitId. */
+    public launchUnitId: number;
+
+    /** C_McwUnitLaunchFlare targetGridIndex. */
+    public targetGridIndex?: (IGridIndex|null);
+
+    /**
+     * Creates a new C_McwUnitLaunchFlare instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_McwUnitLaunchFlare instance
+     */
+    public static create(properties?: IC_McwUnitLaunchFlare): C_McwUnitLaunchFlare;
+
+    /**
+     * Encodes the specified C_McwUnitLaunchFlare message. Does not implicitly {@link C_McwUnitLaunchFlare.verify|verify} messages.
+     * @param message C_McwUnitLaunchFlare message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_McwUnitLaunchFlare, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_McwUnitLaunchFlare message, length delimited. Does not implicitly {@link C_McwUnitLaunchFlare.verify|verify} messages.
+     * @param message C_McwUnitLaunchFlare message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_McwUnitLaunchFlare, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_McwUnitLaunchFlare message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_McwUnitLaunchFlare
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_McwUnitLaunchFlare;
+
+    /**
+     * Decodes a C_McwUnitLaunchFlare message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_McwUnitLaunchFlare
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_McwUnitLaunchFlare;
+
+    /**
+     * Verifies a C_McwUnitLaunchFlare message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_McwUnitLaunchFlare message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_McwUnitLaunchFlare
+     */
+    public static fromObject(object: { [k: string]: any }): C_McwUnitLaunchFlare;
+
+    /**
+     * Creates a plain object from a C_McwUnitLaunchFlare message. Also converts values to other types if specified.
+     * @param message C_McwUnitLaunchFlare
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_McwUnitLaunchFlare, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_McwUnitLaunchFlare to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_McwUnitLaunchFlare. */
+export declare interface IS_McwUnitLaunchFlare {
+
+    /** S_McwUnitLaunchFlare errorCode */
+    errorCode?: (number|null);
+
+    /** S_McwUnitLaunchFlare warId */
+    warId?: (number|null);
+
+    /** S_McwUnitLaunchFlare actionId */
+    actionId?: (number|null);
+
+    /** S_McwUnitLaunchFlare path */
+    path?: (IMovePath|null);
+
+    /** S_McwUnitLaunchFlare launchUnitId */
+    launchUnitId?: (number|null);
+
+    /** S_McwUnitLaunchFlare discoveredUnits */
+    discoveredUnits?: (ISerializedMcwUnit[]|null);
+
+    /** S_McwUnitLaunchFlare discoveredTiles */
+    discoveredTiles?: (ISerializedMcwTile[]|null);
+
+    /** S_McwUnitLaunchFlare actingUnits */
+    actingUnits?: (ISerializedMcwUnit[]|null);
+
+    /** S_McwUnitLaunchFlare actingTiles */
+    actingTiles?: (ISerializedMcwTile[]|null);
+
+    /** S_McwUnitLaunchFlare targetGridIndex */
+    targetGridIndex?: (IGridIndex|null);
+}
+
+/** Represents a S_McwUnitLaunchFlare. */
+export declare class S_McwUnitLaunchFlare implements IS_McwUnitLaunchFlare {
+
+    /**
+     * Constructs a new S_McwUnitLaunchFlare.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_McwUnitLaunchFlare);
+
+    /** S_McwUnitLaunchFlare errorCode. */
+    public errorCode: number;
+
+    /** S_McwUnitLaunchFlare warId. */
+    public warId: number;
+
+    /** S_McwUnitLaunchFlare actionId. */
+    public actionId: number;
+
+    /** S_McwUnitLaunchFlare path. */
+    public path?: (IMovePath|null);
+
+    /** S_McwUnitLaunchFlare launchUnitId. */
+    public launchUnitId: number;
+
+    /** S_McwUnitLaunchFlare discoveredUnits. */
+    public discoveredUnits: ISerializedMcwUnit[];
+
+    /** S_McwUnitLaunchFlare discoveredTiles. */
+    public discoveredTiles: ISerializedMcwTile[];
+
+    /** S_McwUnitLaunchFlare actingUnits. */
+    public actingUnits: ISerializedMcwUnit[];
+
+    /** S_McwUnitLaunchFlare actingTiles. */
+    public actingTiles: ISerializedMcwTile[];
+
+    /** S_McwUnitLaunchFlare targetGridIndex. */
+    public targetGridIndex?: (IGridIndex|null);
+
+    /**
+     * Creates a new S_McwUnitLaunchFlare instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_McwUnitLaunchFlare instance
+     */
+    public static create(properties?: IS_McwUnitLaunchFlare): S_McwUnitLaunchFlare;
+
+    /**
+     * Encodes the specified S_McwUnitLaunchFlare message. Does not implicitly {@link S_McwUnitLaunchFlare.verify|verify} messages.
+     * @param message S_McwUnitLaunchFlare message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_McwUnitLaunchFlare, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_McwUnitLaunchFlare message, length delimited. Does not implicitly {@link S_McwUnitLaunchFlare.verify|verify} messages.
+     * @param message S_McwUnitLaunchFlare message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_McwUnitLaunchFlare, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_McwUnitLaunchFlare message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_McwUnitLaunchFlare
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_McwUnitLaunchFlare;
+
+    /**
+     * Decodes a S_McwUnitLaunchFlare message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_McwUnitLaunchFlare
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_McwUnitLaunchFlare;
+
+    /**
+     * Verifies a S_McwUnitLaunchFlare message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_McwUnitLaunchFlare message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_McwUnitLaunchFlare
+     */
+    public static fromObject(object: { [k: string]: any }): S_McwUnitLaunchFlare;
+
+    /**
+     * Creates a plain object from a S_McwUnitLaunchFlare message. Also converts values to other types if specified.
+     * @param message S_McwUnitLaunchFlare
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_McwUnitLaunchFlare, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_McwUnitLaunchFlare to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };

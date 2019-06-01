@@ -954,7 +954,11 @@ namespace TinyWars.MultiCustomWar {
         }
 
         private _setStateRequestingUnitLaunchFlare(gridIndex: GridIndex): void {
-            FloatText.show(`Unit launch flare TODO!!!`);
+            const unit = this.getFocusUnitLoaded();
+            McwProxy.reqMcwUnitLaunchFlare(this._war, this.getMovePath(), unit ? unit.getUnitId() : undefined, gridIndex);
+
+            this._setState(State.RequestingUnitLaunchFlare);
+            this._updateView();
         }
 
         private _setStateRequestingUnitLaunchSilo(gridIndex: GridIndex): void {
