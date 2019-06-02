@@ -101,11 +101,16 @@ namespace TinyWars.MultiCustomWar {
             FloatText.show("TODO");
         }
         private _onTouchedBtnEndTurn(e: egret.TouchEvent): void {
-            ConfirmPanel.show({
-                title   : Lang.getText(Lang.Type.B0036),
-                content : this._getHintForEndTurn(),
-                callback: () => this._war.getActionPlanner().setStateRequestingPlayerEndTurn(),
-            });
+            const war = this._war;
+            if ((war.getRemainingVotesForDraw()) && (!war.getPlayerInTurn().getHasVotedForDraw())) {
+                FloatText.show(Lang.getText(Lang.Type.A0034));
+            } else {
+                ConfirmPanel.show({
+                    title   : Lang.getText(Lang.Type.B0036),
+                    content : this._getHintForEndTurn(),
+                    callback: () => this._war.getActionPlanner().setStateRequestingPlayerEndTurn(),
+                });
+            }
         }
         private _onTouchedBtnCancel(e: egret.TouchEvent): void {
             this._war.getField().getActionPlanner().setStateIdle();

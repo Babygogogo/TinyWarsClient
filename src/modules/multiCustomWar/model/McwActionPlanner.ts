@@ -933,6 +933,13 @@ namespace TinyWars.MultiCustomWar {
             this._updateView();
         }
 
+        public setStateRequestingPlayerVoteForDraw(isAgree: boolean): void {
+            McwProxy.reqMcwPlayerVoteForDraw(this._war, isAgree);
+
+            this._setState(State.RequestingPlayerVoteForDraw);
+            this._updateView();
+        }
+
         private _setStateRequestingUnitProduceUnit(): void {
             const unit = this.getFocusUnitLoaded();
             McwProxy.reqMcwUnitProduceUnit(this._war, this.getMovePath(), unit ? unit.getUnitId() : undefined);

@@ -23,8 +23,9 @@ namespace TinyWars.MultiCustomWar.McwModel {
         [ActionCodes.S_McwPlayerBeginTurn,      _executeMcwPlayerBeginTurn],
         [ActionCodes.S_McwPlayerDeleteUnit,     _executeMcwPlayerDeleteUnit],
         [ActionCodes.S_McwPlayerEndTurn,        _executeMcwPlayerEndTurn],
-        [ActionCodes.S_McwPlayerSurrender,      _executeMcwPlayerSurrender],
         [ActionCodes.S_McwPlayerProduceUnit,    _executeMcwPlayerProduceUnit],
+        [ActionCodes.S_McwPlayerSurrender,      _executeMcwPlayerSurrender],
+        [ActionCodes.S_McwPlayerVoteForDraw,    _executeMcwPlayerVoteForDraw],
         [ActionCodes.S_McwUnitAttack,           _executeMcwUnitAttack],
         [ActionCodes.S_McwUnitBeLoaded,         _executeMcwUnitBeLoaded],
         [ActionCodes.S_McwUnitBuildTile,        _executeMcwUnitBuildTile],
@@ -87,6 +88,9 @@ namespace TinyWars.MultiCustomWar.McwModel {
     }
     export function updateOnPlayerSurrender(data: ProtoTypes.IS_McwPlayerSurrender): void {
         _updateByActionContainer({ S_McwPlayerSurrender: data }, data.warId, data.actionId);
+    }
+    export function updateOnPlayerVoteForDraw(data: ProtoTypes.IS_McwPlayerVoteForDraw): void {
+        _updateByActionContainer({ S_McwPlayerVoteForDraw: data }, data.warId, data.actionId);
     }
     export function updateOnPlayerProduceUnit(data: ProtoTypes.IS_McwPlayerProduceUnit): void {
         _updateByActionContainer({ S_McwPlayerProduceUnit: data }, data.warId, data.actionId);
@@ -162,16 +166,26 @@ namespace TinyWars.MultiCustomWar.McwModel {
                 });
 
             } else {
-                if (_war.getPlayerManager().getAliveTeamsCount(false) <= 1) {
+                if (_war.getRemainingVotesForDraw() === 0) {
                     _war.setIsEnded(true);
                     AlertPanel.show({
-                        title   : Lang.getText(Lang.Type.B0034),
-                        content : Lang.getText(Lang.Type.A0022),
+                        title   : Lang.getText(Lang.Type.B0082),
+                        content : Lang.getText(Lang.Type.A0030),
                         callback: () => Utility.FlowManager.gotoLobby(),
                     });
 
                 } else {
-                    // Do nothing, because the server will tell what to do next.
+                    if (_war.getPlayerManager().getAliveTeamsCount(false) <= 1) {
+                        _war.setIsEnded(true);
+                        AlertPanel.show({
+                            title   : Lang.getText(Lang.Type.B0034),
+                            content : Lang.getText(Lang.Type.A0022),
+                            callback: () => Utility.FlowManager.gotoLobby(),
+                        });
+
+                    } else {
+                        // Do nothing, because the server will tell what to do next.
+                    }
                 }
             }
         }
@@ -225,18 +239,6 @@ namespace TinyWars.MultiCustomWar.McwModel {
         }
     }
 
-    async function _executeMcwPlayerSurrender(war: McwWar, data: ActionContainer): Promise<void> {
-        const actionPlanner = war.getActionPlanner();
-        actionPlanner.setStateExecutingAction();
-
-        const player = war.getPlayerInTurn();
-        DestructionHelpers.destroyPlayerForce(war, player.getPlayerIndex(), true);
-        McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
-        FloatText.show(Lang.getFormatedText(Lang.Type.F0008, player.getNickname()));
-
-        actionPlanner.setStateIdle();
-    }
-
     async function _executeMcwPlayerProduceUnit(war: McwWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
@@ -270,6 +272,40 @@ namespace TinyWars.MultiCustomWar.McwModel {
         playerInTurn.setFund(playerInTurn.getFund() - action.cost);
 
         McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+
+        actionPlanner.setStateIdle();
+    }
+
+    async function _executeMcwPlayerSurrender(war: McwWar, data: ActionContainer): Promise<void> {
+        const actionPlanner = war.getActionPlanner();
+        actionPlanner.setStateExecutingAction();
+
+        const player = war.getPlayerInTurn();
+        DestructionHelpers.destroyPlayerForce(war, player.getPlayerIndex(), true);
+        McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+        FloatText.show(Lang.getFormatedText(Lang.Type.F0008, player.getNickname()));
+
+        actionPlanner.setStateIdle();
+    }
+
+    async function _executeMcwPlayerVoteForDraw(war: McwWar, data: ActionContainer): Promise<void> {
+        const actionPlanner = war.getActionPlanner();
+        actionPlanner.setStateExecutingAction();
+
+        const playerInTurn = war.getPlayerInTurn();
+        playerInTurn.setHasVotedForDraw(true);
+
+        if (!data.S_McwPlayerVoteForDraw.isAgree) {
+            FloatText.show(Lang.getFormatedText(Lang.Type.F0017, playerInTurn.getNickname()));
+            war.setRemainingVotesForDraw(undefined);
+        } else {
+            if (war.getRemainingVotesForDraw()) {
+                FloatText.show(Lang.getFormatedText(Lang.Type.F0018, playerInTurn.getNickname()));
+            } else {
+                FloatText.show(Lang.getFormatedText(Lang.Type.F0019, playerInTurn.getNickname()));
+            }
+            war.setRemainingVotesForDraw((war.getRemainingVotesForDraw() || war.getPlayerManager().getAlivePlayersCount(false)) - 1);
+        }
 
         actionPlanner.setStateIdle();
     }

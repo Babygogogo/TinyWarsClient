@@ -148,6 +148,12 @@ namespace TinyWars.MultiCustomWar {
             const commandPlayerDeleteUnit = this._createCommandPlayerDeleteUnit();
             (commandPlayerDeleteUnit) && (datas.push(commandPlayerDeleteUnit));
 
+            const commandPlayerAgreeDraw = this._createCommandPlayerAgreeDraw();
+            (commandPlayerAgreeDraw) && (datas.push(commandPlayerAgreeDraw));
+
+            const commandPlayerRefuseDraw = this._createCommandPlayerDeclineDraw();
+            (commandPlayerRefuseDraw) && (datas.push(commandPlayerRefuseDraw));
+
             const commandPlayerSurrender = this._createCommandPlayerSurrender();
             (commandPlayerSurrender) && (datas.push(commandPlayerSurrender));
 
@@ -195,6 +201,55 @@ namespace TinyWars.MultiCustomWar {
                         });
                     },
                 }
+            }
+        }
+
+        private _createCommandPlayerAgreeDraw(): DataForCommandRenderer | undefined {
+            const war       = this._war;
+            const player    = war.getPlayerInTurn();
+            if ((player !== war.getPlayerLoggedIn())                                    ||
+                (player.getHasVotedForDraw())                                           ||
+                (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)      ||
+                (war.getActionPlanner().getState() !== Types.ActionPlannerState.Idle)
+            ) {
+                return undefined;
+            } else {
+                const title = war.getRemainingVotesForDraw() == null ? Lang.getText(Lang.Type.B0083) : Lang.getText(Lang.Type.B0084);
+                return {
+                    name    : title,
+                    callback: () => {
+                        ConfirmPanel.show({
+                            title,
+                            content : war.getRemainingVotesForDraw() == null ? Lang.getText(Lang.Type.A0031) : Lang.getText(Lang.Type.A0032),
+                            callback: () => war.getActionPlanner().setStateRequestingPlayerVoteForDraw(true),
+                        });
+                    },
+                };
+            }
+        }
+
+        private _createCommandPlayerDeclineDraw(): DataForCommandRenderer | undefined {
+            const war       = this._war;
+            const player    = war.getPlayerInTurn();
+            if ((player !== war.getPlayerLoggedIn())                                    ||
+                (player.getHasVotedForDraw())                                           ||
+                (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)      ||
+                (war.getActionPlanner().getState() !== Types.ActionPlannerState.Idle)   ||
+                (!war.getRemainingVotesForDraw())
+            ) {
+                return undefined;
+            } else {
+                const title = Lang.getText(Lang.Type.B0085);
+                return {
+                    name    : title,
+                    callback: () => {
+                        ConfirmPanel.show({
+                            title,
+                            content : Lang.getText(Lang.Type.A0033),
+                            callback: () => war.getActionPlanner().setStateRequestingPlayerVoteForDraw(false),
+                        });
+                    },
+                };
             }
         }
 

@@ -162,6 +162,26 @@ namespace TinyWars.Utility.Lang {
             `是否确定要删除此部队？`,
             `Are you sure to delete the selected unit?`,
         ]],
+        [Type.A0030, [
+            `所有玩家都已同意和局，战局结束！\n即将回到大厅...`,
+            `The game ends in draw!`,
+        ]],
+        [Type.A0031, [
+            `您确定要求和吗？`,
+            `Are you sure to request a drawn game?`,
+        ]],
+        [Type.A0032, [
+            `您确定要同意和局吗？`,
+            `Are you sure to agree the request from your opponent for a drawn game?`,
+        ]],
+        [Type.A0033, [
+            `您确定要拒绝和局吗？`,
+            `Are you sure to decline the request from your opponent for a drawn game?`,
+        ]],
+        [Type.A0034, [
+            `已有玩家求和，请先决定是否同意（通过菜单选项操作）`,
+            `There is a request for a drawn game. Please decide whether to agree it before ending your turn.`,
+        ]],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -494,6 +514,22 @@ namespace TinyWars.Utility.Lang {
             `删除部队`,
             `Delete`,
         ]],
+        [Type.B0082, [
+            `和局`,
+            `Drawn Game`,
+        ]],
+        [Type.B0083, [
+            `求和`,
+            `Request Draw`,
+        ]],
+        [Type.B0084, [
+            `同意和局`,
+            `Agree Draw`,
+        ]],
+        [Type.B0085, [
+            `拒绝和局`,
+            `Decline Draw`,
+        ]],
 
         [Type.B1000, [
             `平原`,
@@ -806,6 +842,18 @@ namespace TinyWars.Utility.Lang {
         [Type.F0016, [
             `玩家[%s]的指挥部被占领，因而战败！`,
             `Player [%s] is defeated!`,
+        ]],
+        [Type.F0017, [
+            `玩家[%s]已拒绝和局！`,
+            `Player [%s] declines to end the game in draw!`,
+        ]],
+        [Type.F0018, [
+            `玩家[%s]已同意和局！`,
+            `Player [%s] agrees to end the game in draw!`,
+        ]],
+        [Type.F0019, [
+            `玩家[%s]求和！`,
+            `Player [%s] requests to end the game in draw!`,
         ]],
     ]);
 

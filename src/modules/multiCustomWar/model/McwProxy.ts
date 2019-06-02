@@ -14,8 +14,9 @@ namespace TinyWars.MultiCustomWar.McwProxy {
             { actionCode: NetMessageCodes.S_McwPlayerBeginTurn,     callback: _onSMcwPlayerBeginTurn, },
             { actionCode: NetMessageCodes.S_McwPlayerDeleteUnit,    callback: _onSMcwPlayerDeleteUnit },
             { actionCode: NetMessageCodes.S_McwPlayerEndTurn,       callback: _onSMcwPlayerEndTurn, },
-            { actionCode: NetMessageCodes.S_McwPlayerSurrender,     callback: _onSMcwPlayerSurrender },
             { actionCode: NetMessageCodes.S_McwPlayerProduceUnit,   callback: _onSMcwPlayerProduceUnit },
+            { actionCode: NetMessageCodes.S_McwPlayerSurrender,     callback: _onSMcwPlayerSurrender },
+            { actionCode: NetMessageCodes.S_McwPlayerVoteForDraw,   callback: _onSMcwPlayerVoteForDraw },
             { actionCode: NetMessageCodes.S_McwUnitAttack,          callback: _onSMcwUnitAttack },
             { actionCode: NetMessageCodes.S_McwUnitBeLoaded,        callback: _onSMcwUnitBeLoaded },
             { actionCode: NetMessageCodes.S_McwUnitBuildTile,       callback: _onSMcwUnitBuildTile },
@@ -81,6 +82,24 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         }
     }
 
+    export function reqMcwPlayerProduceUnit(war: McwWar, gridIndex: GridIndex, unitType: UnitType): void {
+        NetManager.send({
+            C_McwPlayerProduceUnit: {
+                warId   : war.getWarId(),
+                actionId: war.getNextActionId(),
+                gridIndex,
+                unitType,
+            },
+        });
+    }
+    function _onSMcwPlayerProduceUnit(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_McwPlayerProduceUnit;
+        if (!data.errorCode) {
+            McwModel.updateOnPlayerProduceUnit(data);
+            Notify.dispatch(Notify.Type.SMcwPlayerProduceUnit);
+        }
+    }
+
     export function reqMcwPlayerSurrender(war: McwWar): void {
         NetManager.send({
             C_McwPlayerSurrender: {
@@ -97,21 +116,20 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         }
     }
 
-    export function reqMcwPlayerProduceUnit(war: McwWar, gridIndex: GridIndex, unitType: UnitType): void {
+    export function reqMcwPlayerVoteForDraw(war: McwWar, isAgree: boolean): void {
         NetManager.send({
-            C_McwPlayerProduceUnit: {
+            C_McwPlayerVoteForDraw: {
                 warId   : war.getWarId(),
                 actionId: war.getNextActionId(),
-                gridIndex,
-                unitType,
+                isAgree,
             },
         });
     }
-    function _onSMcwPlayerProduceUnit(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_McwPlayerProduceUnit;
+    function _onSMcwPlayerVoteForDraw(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_McwPlayerVoteForDraw;
         if (!data.errorCode) {
-            McwModel.updateOnPlayerProduceUnit(data);
-            Notify.dispatch(Notify.Type.SMcwPlayerProduceUnit);
+            McwModel.updateOnPlayerVoteForDraw(data);
+            Notify.dispatch(Notify.Type.SMcwPlayerVoteForDraw);
         }
     }
 

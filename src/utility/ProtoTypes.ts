@@ -3889,6 +3889,12 @@ export declare interface IActionContainer {
     /** ActionContainer S_McwPlayerDeleteUnit */
     S_McwPlayerDeleteUnit?: (IS_McwPlayerDeleteUnit|null);
 
+    /** ActionContainer C_McwPlayerVoteForDraw */
+    C_McwPlayerVoteForDraw?: (IC_McwPlayerVoteForDraw|null);
+
+    /** ActionContainer S_McwPlayerVoteForDraw */
+    S_McwPlayerVoteForDraw?: (IS_McwPlayerVoteForDraw|null);
+
     /** ActionContainer C_McwUnitWait */
     C_McwUnitWait?: (IC_McwUnitWait|null);
 
@@ -4099,6 +4105,12 @@ export declare class ActionContainer implements IActionContainer {
 
     /** ActionContainer S_McwPlayerDeleteUnit. */
     public S_McwPlayerDeleteUnit?: (IS_McwPlayerDeleteUnit|null);
+
+    /** ActionContainer C_McwPlayerVoteForDraw. */
+    public C_McwPlayerVoteForDraw?: (IC_McwPlayerVoteForDraw|null);
+
+    /** ActionContainer S_McwPlayerVoteForDraw. */
+    public S_McwPlayerVoteForDraw?: (IS_McwPlayerVoteForDraw|null);
 
     /** ActionContainer C_McwUnitWait. */
     public C_McwUnitWait?: (IC_McwUnitWait|null);
@@ -8486,6 +8498,216 @@ export declare class S_McwPlayerDeleteUnit implements IS_McwPlayerDeleteUnit {
 
     /**
      * Converts this S_McwPlayerDeleteUnit to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_McwPlayerVoteForDraw. */
+export declare interface IC_McwPlayerVoteForDraw {
+
+    /** C_McwPlayerVoteForDraw warId */
+    warId?: (number|null);
+
+    /** C_McwPlayerVoteForDraw actionId */
+    actionId?: (number|null);
+
+    /** C_McwPlayerVoteForDraw isAgree */
+    isAgree?: (boolean|null);
+}
+
+/** Represents a C_McwPlayerVoteForDraw. */
+export declare class C_McwPlayerVoteForDraw implements IC_McwPlayerVoteForDraw {
+
+    /**
+     * Constructs a new C_McwPlayerVoteForDraw.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_McwPlayerVoteForDraw);
+
+    /** C_McwPlayerVoteForDraw warId. */
+    public warId: number;
+
+    /** C_McwPlayerVoteForDraw actionId. */
+    public actionId: number;
+
+    /** C_McwPlayerVoteForDraw isAgree. */
+    public isAgree: boolean;
+
+    /**
+     * Creates a new C_McwPlayerVoteForDraw instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_McwPlayerVoteForDraw instance
+     */
+    public static create(properties?: IC_McwPlayerVoteForDraw): C_McwPlayerVoteForDraw;
+
+    /**
+     * Encodes the specified C_McwPlayerVoteForDraw message. Does not implicitly {@link C_McwPlayerVoteForDraw.verify|verify} messages.
+     * @param message C_McwPlayerVoteForDraw message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_McwPlayerVoteForDraw, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_McwPlayerVoteForDraw message, length delimited. Does not implicitly {@link C_McwPlayerVoteForDraw.verify|verify} messages.
+     * @param message C_McwPlayerVoteForDraw message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_McwPlayerVoteForDraw, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_McwPlayerVoteForDraw message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_McwPlayerVoteForDraw
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_McwPlayerVoteForDraw;
+
+    /**
+     * Decodes a C_McwPlayerVoteForDraw message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_McwPlayerVoteForDraw
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_McwPlayerVoteForDraw;
+
+    /**
+     * Verifies a C_McwPlayerVoteForDraw message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_McwPlayerVoteForDraw message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_McwPlayerVoteForDraw
+     */
+    public static fromObject(object: { [k: string]: any }): C_McwPlayerVoteForDraw;
+
+    /**
+     * Creates a plain object from a C_McwPlayerVoteForDraw message. Also converts values to other types if specified.
+     * @param message C_McwPlayerVoteForDraw
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_McwPlayerVoteForDraw, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_McwPlayerVoteForDraw to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_McwPlayerVoteForDraw. */
+export declare interface IS_McwPlayerVoteForDraw {
+
+    /** S_McwPlayerVoteForDraw errorCode */
+    errorCode?: (number|null);
+
+    /** S_McwPlayerVoteForDraw warId */
+    warId?: (number|null);
+
+    /** S_McwPlayerVoteForDraw actionId */
+    actionId?: (number|null);
+
+    /** S_McwPlayerVoteForDraw isAgree */
+    isAgree?: (boolean|null);
+}
+
+/** Represents a S_McwPlayerVoteForDraw. */
+export declare class S_McwPlayerVoteForDraw implements IS_McwPlayerVoteForDraw {
+
+    /**
+     * Constructs a new S_McwPlayerVoteForDraw.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_McwPlayerVoteForDraw);
+
+    /** S_McwPlayerVoteForDraw errorCode. */
+    public errorCode: number;
+
+    /** S_McwPlayerVoteForDraw warId. */
+    public warId: number;
+
+    /** S_McwPlayerVoteForDraw actionId. */
+    public actionId: number;
+
+    /** S_McwPlayerVoteForDraw isAgree. */
+    public isAgree: boolean;
+
+    /**
+     * Creates a new S_McwPlayerVoteForDraw instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_McwPlayerVoteForDraw instance
+     */
+    public static create(properties?: IS_McwPlayerVoteForDraw): S_McwPlayerVoteForDraw;
+
+    /**
+     * Encodes the specified S_McwPlayerVoteForDraw message. Does not implicitly {@link S_McwPlayerVoteForDraw.verify|verify} messages.
+     * @param message S_McwPlayerVoteForDraw message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_McwPlayerVoteForDraw, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_McwPlayerVoteForDraw message, length delimited. Does not implicitly {@link S_McwPlayerVoteForDraw.verify|verify} messages.
+     * @param message S_McwPlayerVoteForDraw message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_McwPlayerVoteForDraw, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_McwPlayerVoteForDraw message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_McwPlayerVoteForDraw
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_McwPlayerVoteForDraw;
+
+    /**
+     * Decodes a S_McwPlayerVoteForDraw message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_McwPlayerVoteForDraw
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_McwPlayerVoteForDraw;
+
+    /**
+     * Verifies a S_McwPlayerVoteForDraw message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_McwPlayerVoteForDraw message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_McwPlayerVoteForDraw
+     */
+    public static fromObject(object: { [k: string]: any }): S_McwPlayerVoteForDraw;
+
+    /**
+     * Creates a plain object from a S_McwPlayerVoteForDraw message. Also converts values to other types if specified.
+     * @param message S_McwPlayerVoteForDraw
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_McwPlayerVoteForDraw, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_McwPlayerVoteForDraw to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };
