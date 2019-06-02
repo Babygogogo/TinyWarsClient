@@ -26,6 +26,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
             { actionCode: NetMessageCodes.S_McwUnitLaunchFlare,     callback: _onSMcwUnitLaunchFlare },
             { actionCode: NetMessageCodes.S_McwUnitLaunchSilo,      callback: _onSMcwUnitLaunchSilo },
             { actionCode: NetMessageCodes.S_McwUnitProduceUnit,     callback: _onSMcwUnitProduceUnit },
+            { actionCode: NetMessageCodes.S_McwUnitSupply,          callback: _onSMcwUnitSupply },
             { actionCode: NetMessageCodes.S_McwUnitSurface,         callback: _onSMcwUnitSurface },
             { actionCode: NetMessageCodes.S_McwUnitWait,            callback: _onSMcwUnitWait },
         ], McwProxy);
@@ -295,6 +296,24 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         if (!data.errorCode) {
             McwModel.updateOnUnitProduceUnit(data);
             Notify.dispatch(Notify.Type.SMcwUnitProduceUnit);
+        }
+    }
+
+    export function reqMcwUnitSupply(war: McwWar, path: GridIndex[], launchUnitId: number | undefined): void {
+        NetManager.send({
+            C_McwUnitSupply: {
+                warId       : war.getWarId(),
+                actionId    : war.getNextActionId(),
+                path,
+                launchUnitId,
+            },
+        });
+    }
+    function _onSMcwUnitSupply(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_McwUnitSupply;
+        if (!data.errorCode) {
+            McwModel.updateOnUnitSupply(data);
+            Notify.dispatch(Notify.Type.SMcwUnitSupply);
         }
     }
 

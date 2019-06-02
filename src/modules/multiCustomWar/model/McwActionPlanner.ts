@@ -1052,7 +1052,11 @@ namespace TinyWars.MultiCustomWar {
         }
 
         private _setStateRequestingUnitSupply(): void {
-            FloatText.show(`Unit supply TODO!!!`);
+            const unit = this.getFocusUnitLoaded();
+            McwProxy.reqMcwUnitSupply(this._war, this.getMovePath(), unit ? unit.getUnitId() : undefined);
+
+            this._setState(State.RequestingUnitSupply);
+            this._updateView();
         }
 
         public setStateRequestingPlayerBeginTurn(): void {
@@ -1723,11 +1727,13 @@ namespace TinyWars.MultiCustomWar {
                 : [];
         }
         private _getActionUnitSupply(): DataForMcwUnitAction[] {
-            const focusUnit = this.getFocusUnit();
+            const focusUnit     = this.getFocusUnit();
+            const playerIndex   = focusUnit.getPlayerIndex();
+            const unitMap       = this._unitMap;
             if (focusUnit.checkIsAdjacentUnitSupplier()) {
                 for (const gridIndex of GridIndexHelpers.getAdjacentGrids(this.getMovePathDestination(), this._mapSize)) {
-                    const unit = this._unitMap.getUnitOnMap(gridIndex);
-                    if ((unit) && (unit !== focusUnit) && (focusUnit.checkCanSupplyAdjacentUnit(unit))) {
+                    const unit = unitMap.getUnitOnMap(gridIndex);
+                    if ((unit) && (unit !== focusUnit) && (unit.getPlayerIndex() === playerIndex) && (unit.checkCanBeSupplied())) {
                         return [{ actionType: UnitActionType.Supply, callback: () => this._setStateRequestingUnitSupply() }];
                     }
                 }
