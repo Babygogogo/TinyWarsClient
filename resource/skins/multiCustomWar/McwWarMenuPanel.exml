@@ -80,7 +80,7 @@
         </e:Group>
         <e:Group left="0" right="0" bottom="0" top="170">
             <GameUi:UiLabel text="玩家信息" y="0" bold="true" size="20" textColor="0xFFFFFF" x="359" />
-            <GameUi:UiScrollList id="_listPlayer" bottom="0" top="35" scaleX="1" scaleY="1" horizontalCenter="0">
+            <GameUi:UiScrollList id="_listPlayer" bottom="0" top="25" scaleX="1" scaleY="1" horizontalCenter="0">
                 <e:List>
                     <e:itemRendererSkinName>
                         <e:Skin width="190" height="220" currentState="up" states="down,up">

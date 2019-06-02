@@ -398,7 +398,9 @@ namespace TinyWars.MultiCustomWar {
                 this._groupInfo.visible = true;
 
                 const tilesCountAndIncome   = this._getTilesCountAndIncome(war, playerIndex);
-                this._labelFund.text        = `${player.getFund()}`;
+                this._labelFund.text        = (player.getTeamIndex() === war.getPlayerLoggedIn().getTeamIndex()) || (!war.getFogMap().checkHasFogCurrently())
+                    ? `${player.getFund()}`
+                    : `?`;
                 this._labelIncome.text      = `${tilesCountAndIncome.income}`;
                 this._labelBuildings.text   = `${tilesCountAndIncome.count}`;
 

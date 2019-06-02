@@ -394,7 +394,8 @@ namespace TinyWars.MultiCustomWar {
                         con.visible = false;
                     } else {
                         con.visible = true;
-                        this._labelDamage.text = `${Lang.getText(Lang.Type.B0077)}: ${attackDamage} / ${war.getUnitMap().getUnitOnMap(gridIndex).getCurrentHp()}\n`
+                        const target = war.getUnitMap().getUnitOnMap(gridIndex) || war.getTileMap().getTile(gridIndex);
+                        this._labelDamage.text = `${Lang.getText(Lang.Type.B0077)}: ${attackDamage} / ${target.getCurrentHp()}\n`
                             + `${Lang.getText(Lang.Type.B0078)}: ${counterDamage == null ? `---` : counterDamage} / ${(actionPlanner.getFocusUnit()).getCurrentHp()}`;
                     }
 
@@ -413,8 +414,9 @@ namespace TinyWars.MultiCustomWar {
                     if (attackDamage == null) {
                         con.visible = false;
                     } else {
-                        con.visible = true;
-                        this._labelDamage.text = `${Lang.getText(Lang.Type.B0077)}: ${attackDamage} / ${war.getUnitMap().getUnitOnMap(gridIndex).getCurrentHp()}\n`
+                        con.visible             = true;
+                        const target            = war.getUnitMap().getUnitOnMap(gridIndex) || war.getTileMap().getTile(gridIndex);
+                        this._labelDamage.text  = `${Lang.getText(Lang.Type.B0077)}: ${attackDamage} / ${target.getCurrentHp()}\n`
                             + `${Lang.getText(Lang.Type.B0078)}: ${counterDamage == null ? `---` : counterDamage} / ${(actionPlanner.getFocusUnit()).getCurrentHp()}`;
                     }
 
