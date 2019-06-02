@@ -530,6 +530,10 @@ namespace TinyWars.Utility.Lang {
             `拒绝和局`,
             `Decline Draw`,
         ]],
+        [Type.B0086, [
+            `回合中`,
+            `In Turn`,
+        ]],
 
         [Type.B1000, [
             `平原`,
@@ -1045,6 +1049,27 @@ namespace TinyWars.Utility.Lang {
 
     export function getRichText(richType: RichType): string {
         return RICH_DATA.get(richType)[language];
+    }
+
+    export function getPlayerForceName(playerIndex: number): string {
+        switch (playerIndex) {
+            case 0  : return getText(Type.B0030);
+            case 1  : return getText(Type.B0004);
+            case 2  : return getText(Type.B0005);
+            case 3  : return getText(Type.B0006);
+            case 4  : return getText(Type.B0007);
+            default : return undefined;
+        }
+    }
+
+    export function getPlayerTeamName(teamIndex: number): string {
+        switch (teamIndex) {
+            case 1  : return getText(Type.B0008);
+            case 2  : return getText(Type.B0009);
+            case 3  : return getText(Type.B0010);
+            case 4  : return getText(Type.B0011);
+            default : return undefined;
+        }
     }
 
     export function getTileName(tileType: Types.TileType): string {
