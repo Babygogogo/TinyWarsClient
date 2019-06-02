@@ -64,4 +64,6 @@ C_McwUnitLaunchFlare = 199,
 S_McwUnitLaunchFlare = 200,
 C_McwUnitLaunchSilo = 201,
 S_McwUnitLaunchSilo = 202,
+C_McwUnitProduceUnit = 203,
+S_McwUnitProduceUnit = 204,
 }}

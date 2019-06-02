@@ -34,6 +34,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         [ActionCodes.S_McwUnitJoin,             _executeMcwUnitJoin],
         [ActionCodes.S_McwUnitLaunchFlare,      _executeMcwUnitLaunchFlare],
         [ActionCodes.S_McwUnitLaunchSilo,       _executeMcwUnitLaunchSilo],
+        [ActionCodes.S_McwUnitProduceUnit,      _executeMcwUnitProduceUnit],
         [ActionCodes.S_McwUnitSurface,          _executeMcwUnitSurface],
         [ActionCodes.S_McwUnitWait,             _executeMcwUnitWait],
     ]);
@@ -115,6 +116,9 @@ namespace TinyWars.MultiCustomWar.McwModel {
     }
     export function updateOnUnitLaunchSilo(data: ProtoTypes.IS_McwUnitLaunchSilo): void {
         _updateByActionContainer({ S_McwUnitLaunchSilo: data }, data.warId, data.actionId);
+    }
+    export function updateOnUnitProduceUnit(data: ProtoTypes.IS_McwUnitProduceUnit): void {
+        _updateByActionContainer({ S_McwUnitProduceUnit: data }, data.warId, data.actionId);
     }
     export function updateOnUnitSurface(data: ProtoTypes.IS_McwUnitSurface): void {
         _updateByActionContainer({ S_McwUnitSurface: data }, data.warId, data.actionId);
@@ -793,6 +797,62 @@ namespace TinyWars.MultiCustomWar.McwModel {
 
                     focusUnit.updateView();
                     tile.updateView();
+                    McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+
+                    actionPlanner.setStateIdle();
+                    resolve();
+                });
+            });
+        }
+    }
+
+    async function _executeMcwUnitProduceUnit(war: McwWar, data: ActionContainer): Promise<void> {
+        const actionPlanner = war.getActionPlanner();
+        actionPlanner.setStateExecutingAction();
+
+        const action = data.S_McwUnitProduceUnit;
+        updateTilesAndUnitsBeforeExecutingAction(war, action);
+
+        const path          = action.path as MovePath;
+        const pathNodes     = path.nodes;
+        const unitMap       = war.getUnitMap();
+        const focusUnit     = unitMap.getUnit(pathNodes[0], action.launchUnitId);
+        moveUnit(war, ActionCodes.S_McwUnitProduceUnit, path, action.launchUnitId, path.fuelConsumption);
+        focusUnit.setState(UnitState.Actioned);
+
+        if (path.isBlocked) {
+            return new Promise<void>(resolve => {
+                focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
+                    focusUnit.updateView();
+                    McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+
+                    actionPlanner.setStateIdle();
+                    resolve();
+                });
+            });
+        } else {
+            // TODO: take skills into account.
+            const gridIndex         = focusUnit.getGridIndex();
+            const producedUnitId    = unitMap.getNextUnitId();
+            const producedUnit      = new McwUnit().init({
+                unitId      : producedUnitId,
+                viewId      : ConfigManager.getUnitViewId(focusUnit.getProduceUnitType(), focusUnit.getPlayerIndex())!,
+                gridX       : gridIndex.x,
+                gridY       : gridIndex.y,
+                loaderUnitId: focusUnit.getUnitId(),
+            }, war.getConfigVersion());
+            producedUnit.startRunning(war);
+            producedUnit.setState(Types.UnitState.Actioned);
+
+            const player = war.getPlayerInTurn();
+            player.setFund(player.getFund() - action.cost);
+            unitMap.setNextUnitId(producedUnitId + 1);
+            unitMap.addUnitLoaded(producedUnit);
+            focusUnit.setCurrentProduceMaterial(focusUnit.getCurrentProduceMaterial()! - 1);
+
+            return new Promise<void>(resolve => {
+                focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
+                    focusUnit.updateView();
                     McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                     actionPlanner.setStateIdle();

@@ -3954,6 +3954,12 @@ export declare interface IActionContainer {
 
     /** ActionContainer S_McwUnitLaunchSilo */
     S_McwUnitLaunchSilo?: (IS_McwUnitLaunchSilo|null);
+
+    /** ActionContainer C_McwUnitProduceUnit */
+    C_McwUnitProduceUnit?: (IC_McwUnitProduceUnit|null);
+
+    /** ActionContainer S_McwUnitProduceUnit */
+    S_McwUnitProduceUnit?: (IS_McwUnitProduceUnit|null);
 }
 
 /** Represents an ActionContainer. */
@@ -4153,6 +4159,12 @@ export declare class ActionContainer implements IActionContainer {
 
     /** ActionContainer S_McwUnitLaunchSilo. */
     public S_McwUnitLaunchSilo?: (IS_McwUnitLaunchSilo|null);
+
+    /** ActionContainer C_McwUnitProduceUnit. */
+    public C_McwUnitProduceUnit?: (IC_McwUnitProduceUnit|null);
+
+    /** ActionContainer S_McwUnitProduceUnit. */
+    public S_McwUnitProduceUnit?: (IS_McwUnitProduceUnit|null);
 
     /**
      * Creates a new ActionContainer instance using the specified properties.
@@ -11240,6 +11252,258 @@ export declare class S_McwUnitLaunchSilo implements IS_McwUnitLaunchSilo {
 
     /**
      * Converts this S_McwUnitLaunchSilo to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_McwUnitProduceUnit. */
+export declare interface IC_McwUnitProduceUnit {
+
+    /** C_McwUnitProduceUnit warId */
+    warId?: (number|null);
+
+    /** C_McwUnitProduceUnit actionId */
+    actionId?: (number|null);
+
+    /** C_McwUnitProduceUnit path */
+    path?: (IGridIndex[]|null);
+
+    /** C_McwUnitProduceUnit launchUnitId */
+    launchUnitId?: (number|null);
+}
+
+/** Represents a C_McwUnitProduceUnit. */
+export declare class C_McwUnitProduceUnit implements IC_McwUnitProduceUnit {
+
+    /**
+     * Constructs a new C_McwUnitProduceUnit.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_McwUnitProduceUnit);
+
+    /** C_McwUnitProduceUnit warId. */
+    public warId: number;
+
+    /** C_McwUnitProduceUnit actionId. */
+    public actionId: number;
+
+    /** C_McwUnitProduceUnit path. */
+    public path: IGridIndex[];
+
+    /** C_McwUnitProduceUnit launchUnitId. */
+    public launchUnitId: number;
+
+    /**
+     * Creates a new C_McwUnitProduceUnit instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_McwUnitProduceUnit instance
+     */
+    public static create(properties?: IC_McwUnitProduceUnit): C_McwUnitProduceUnit;
+
+    /**
+     * Encodes the specified C_McwUnitProduceUnit message. Does not implicitly {@link C_McwUnitProduceUnit.verify|verify} messages.
+     * @param message C_McwUnitProduceUnit message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_McwUnitProduceUnit, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_McwUnitProduceUnit message, length delimited. Does not implicitly {@link C_McwUnitProduceUnit.verify|verify} messages.
+     * @param message C_McwUnitProduceUnit message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_McwUnitProduceUnit, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_McwUnitProduceUnit message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_McwUnitProduceUnit
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_McwUnitProduceUnit;
+
+    /**
+     * Decodes a C_McwUnitProduceUnit message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_McwUnitProduceUnit
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_McwUnitProduceUnit;
+
+    /**
+     * Verifies a C_McwUnitProduceUnit message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_McwUnitProduceUnit message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_McwUnitProduceUnit
+     */
+    public static fromObject(object: { [k: string]: any }): C_McwUnitProduceUnit;
+
+    /**
+     * Creates a plain object from a C_McwUnitProduceUnit message. Also converts values to other types if specified.
+     * @param message C_McwUnitProduceUnit
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_McwUnitProduceUnit, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_McwUnitProduceUnit to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_McwUnitProduceUnit. */
+export declare interface IS_McwUnitProduceUnit {
+
+    /** S_McwUnitProduceUnit errorCode */
+    errorCode?: (number|null);
+
+    /** S_McwUnitProduceUnit warId */
+    warId?: (number|null);
+
+    /** S_McwUnitProduceUnit actionId */
+    actionId?: (number|null);
+
+    /** S_McwUnitProduceUnit path */
+    path?: (IMovePath|null);
+
+    /** S_McwUnitProduceUnit launchUnitId */
+    launchUnitId?: (number|null);
+
+    /** S_McwUnitProduceUnit discoveredUnits */
+    discoveredUnits?: (ISerializedMcwUnit[]|null);
+
+    /** S_McwUnitProduceUnit discoveredTiles */
+    discoveredTiles?: (ISerializedMcwTile[]|null);
+
+    /** S_McwUnitProduceUnit actingUnits */
+    actingUnits?: (ISerializedMcwUnit[]|null);
+
+    /** S_McwUnitProduceUnit actingTiles */
+    actingTiles?: (ISerializedMcwTile[]|null);
+
+    /** S_McwUnitProduceUnit cost */
+    cost?: (number|null);
+}
+
+/** Represents a S_McwUnitProduceUnit. */
+export declare class S_McwUnitProduceUnit implements IS_McwUnitProduceUnit {
+
+    /**
+     * Constructs a new S_McwUnitProduceUnit.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_McwUnitProduceUnit);
+
+    /** S_McwUnitProduceUnit errorCode. */
+    public errorCode: number;
+
+    /** S_McwUnitProduceUnit warId. */
+    public warId: number;
+
+    /** S_McwUnitProduceUnit actionId. */
+    public actionId: number;
+
+    /** S_McwUnitProduceUnit path. */
+    public path?: (IMovePath|null);
+
+    /** S_McwUnitProduceUnit launchUnitId. */
+    public launchUnitId: number;
+
+    /** S_McwUnitProduceUnit discoveredUnits. */
+    public discoveredUnits: ISerializedMcwUnit[];
+
+    /** S_McwUnitProduceUnit discoveredTiles. */
+    public discoveredTiles: ISerializedMcwTile[];
+
+    /** S_McwUnitProduceUnit actingUnits. */
+    public actingUnits: ISerializedMcwUnit[];
+
+    /** S_McwUnitProduceUnit actingTiles. */
+    public actingTiles: ISerializedMcwTile[];
+
+    /** S_McwUnitProduceUnit cost. */
+    public cost: number;
+
+    /**
+     * Creates a new S_McwUnitProduceUnit instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_McwUnitProduceUnit instance
+     */
+    public static create(properties?: IS_McwUnitProduceUnit): S_McwUnitProduceUnit;
+
+    /**
+     * Encodes the specified S_McwUnitProduceUnit message. Does not implicitly {@link S_McwUnitProduceUnit.verify|verify} messages.
+     * @param message S_McwUnitProduceUnit message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_McwUnitProduceUnit, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_McwUnitProduceUnit message, length delimited. Does not implicitly {@link S_McwUnitProduceUnit.verify|verify} messages.
+     * @param message S_McwUnitProduceUnit message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_McwUnitProduceUnit, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_McwUnitProduceUnit message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_McwUnitProduceUnit
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_McwUnitProduceUnit;
+
+    /**
+     * Decodes a S_McwUnitProduceUnit message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_McwUnitProduceUnit
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_McwUnitProduceUnit;
+
+    /**
+     * Verifies a S_McwUnitProduceUnit message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_McwUnitProduceUnit message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_McwUnitProduceUnit
+     */
+    public static fromObject(object: { [k: string]: any }): S_McwUnitProduceUnit;
+
+    /**
+     * Creates a plain object from a S_McwUnitProduceUnit message. Also converts values to other types if specified.
+     * @param message S_McwUnitProduceUnit
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_McwUnitProduceUnit, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_McwUnitProduceUnit to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };

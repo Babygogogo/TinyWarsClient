@@ -90,6 +90,7 @@ namespace TinyWars.Utility.Notify {
         SMcwUnitJoin,
         SMcwUnitLaunchFlare,
         SMcwUnitLaunchSilo,
+        SMcwUnitProduceUnit,
         SMcwUnitSurface,
         SMcwUnitWait,
     }

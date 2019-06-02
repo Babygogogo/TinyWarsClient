@@ -779,7 +779,46 @@ namespace TinyWars.MultiCustomWar {
         }
 
         private _setStateChoosingSiloDestinationOnTap(gridIndex: GridIndex): void {
-            Logger.error(`McwActionPlanner._setStateChoosingSiloDestinationOnTap() error 1, currState: ${this.getState()}`);
+            const currState = this.getState();
+            if (currState === State.Idle) {
+                Logger.error(`McwActionPlanner._setStateChoosingSiloDestinationOnTap error 1, currState: ${currState}`);
+
+            } else if (currState === State.ExecutingAction) {
+                Logger.error(`McwActionPlanner._setStateChoosingSiloDestinationOnTap error 2, currState: ${currState}`);
+
+            } else if (currState === State.MakingMovePath) {
+                Logger.error(`McwActionPlanner._setStateChoosingSiloDestinationOnTap error 3, currState: ${currState}`);
+
+            } else if (currState === State.ChoosingAction) {
+                Logger.error(`McwActionPlanner._setStateChoosingSiloDestinationOnTap error 4, currState: ${currState}`);
+
+            } else if (currState === State.ChoosingAttackTarget) {
+                Logger.error(`McwActionPlanner._setStateChoosingSiloDestinationOnTap error 5, currState: ${currState}`);
+
+            } else if (currState === State.ChoosingDropDestination) {
+                Logger.error(`McwActionPlanner._setStateChoosingSiloDestinationOnTap error 6, currState: ${currState}`);
+
+            } else if (currState === State.ChoosingFlareDestination) {
+                Logger.error(`McwActionPlanner._setStateChoosingSiloDestinationOnTap error 7, currState: ${currState}`);
+
+            } else if (currState === State.ChoosingSiloDestination) {
+                // Nothing to do.
+
+            } else if (currState === State.ChoosingProductionTarget) {
+                Logger.error(`McwActionPlanner._setStateChoosingSiloDestinationOnTap error 8, currState: ${currState}`);
+
+            } else if (currState === State.PreviewingAttackableArea) {
+                Logger.error(`McwActionPlanner._setStateChoosingSiloDestinationOnTap error 9, currState: ${currState}`);
+
+            } else if (currState === State.PreviewingMovableArea) {
+                Logger.error(`McwActionPlanner._setStateChoosingSiloDestinationOnTap error 10, currState: ${currState}`);
+
+            } else {
+                Logger.error(`McwActionPlanner._setStateChoosingSiloDestinationOnTap error 11, currState: ${currState}`);
+            }
+
+            this._setState(State.ChoosingSiloDestination);
+            this._updateView();
         }
         private _setStateChoosingSiloDestinationOnDrag(gridIndex: GridIndex): void {
             const currState = this.getState();
@@ -895,7 +934,11 @@ namespace TinyWars.MultiCustomWar {
         }
 
         private _setStateRequestingUnitProduceUnit(): void {
-            FloatText.show(`Unit produce unit TODO!!!`);
+            const unit = this.getFocusUnitLoaded();
+            McwProxy.reqMcwUnitProduceUnit(this._war, this.getMovePath(), unit ? unit.getUnitId() : undefined);
+
+            this._setState(State.RequestingUnitProduceUnit);
+            this._updateView();
         }
 
         private _setStateRequestingUnitBeLoaded(): void {
