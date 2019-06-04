@@ -71,7 +71,8 @@ namespace TinyWars.MultiCustomWar {
             [Direction.Right,       _PATH_GRID_SOURCE_EMPTY],
         ])],
     ]);
-    const ALPHA_FOR_ATTACKABLE_GRIDS_NORMAL = 0.5;
+    const ALPHA_FOR_MOVABLE_GRIDS           = 0.5;
+    const ALPHA_FOR_ATTACKABLE_GRIDS_NORMAL = 0.6;
     const ALPHA_FOR_ATTACKABLE_GRIDS_SILO   = 0.15;
 
     export class McwActionPlannerView extends egret.DisplayObjectContainer {
@@ -135,7 +136,7 @@ namespace TinyWars.MultiCustomWar {
 
         private _initConForMovableGrids(): void {
             this._conForMovableGrids.removeChildren();
-            this._conForMovableGrids.alpha = 0.5;
+            this._conForMovableGrids.alpha = ALPHA_FOR_MOVABLE_GRIDS;
 
             const { width, height } = this._mapSize;
             const images            = Helpers.createEmptyMap<GameUi.UiImage>(width, height);

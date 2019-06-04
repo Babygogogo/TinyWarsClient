@@ -225,7 +225,7 @@ namespace TinyWars.MultiCustomWar {
             return this._templateCfg.defenseAmount;
         }
         public getDefenseAmountForUnit(unit: McwUnit): number {
-            return this.checkCanDefendUnit(unit) ? this.getDefenseAmount() : 0;
+            return this.checkCanDefendUnit(unit) ? this.getDefenseAmount() * unit.getNormalizedCurrentHp() / unit.getNormalizedMaxHp() : 0;
         }
 
         public getDefenseUnitCategory(): Types.UnitCategory {
