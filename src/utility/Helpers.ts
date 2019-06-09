@@ -40,8 +40,7 @@ namespace TinyWars.Utility.Helpers {
     export function checkIsNicknameValid(str: string | undefined | null): boolean {
         return (typeof str === "string")
             && (str.length >= 4)
-            && (str.length <= 20)
-            && (str.search(/\W/) < 0);
+            && (str.length <= 20);
     }
 
     export function formatString(...args: (number | string)[]): string {

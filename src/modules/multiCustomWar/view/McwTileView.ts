@@ -1,18 +1,18 @@
 
 namespace TinyWars.MultiCustomWar {
     import TimeModel    = Time.TimeModel;
-    import Helpers      = Utility.Helpers;
-    import Types        = Utility.Types;
+
+    const { width: GRID_WIDTH, height: GRID_HEIGHT } = ConfigManager.getGridSize();
 
     export class McwTileView {
         private _tile       : McwTile;
-        private _imgBase    = new GameUi.UiImage;
-        private _imgObject  = new GameUi.UiImage;
+        private _imgBase    = new GameUi.UiImage();
+        private _imgObject  = new GameUi.UiImage();
         private _hasFog     = false;
 
         public constructor() {
-            this._imgBase.addEventListener(  eui.UIEvent.RESIZE, () => this._imgBase.anchorOffsetY   = this._imgBase.height,   this);
-            this._imgObject.addEventListener(eui.UIEvent.RESIZE, () => this._imgObject.anchorOffsetY = this._imgObject.height, this);
+            this._imgBase.anchorOffsetY     = GRID_HEIGHT;
+            this._imgObject.anchorOffsetY   = GRID_HEIGHT * 2;
         }
 
         public init(tile: McwTile): McwTileView {

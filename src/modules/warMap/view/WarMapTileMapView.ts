@@ -4,6 +4,8 @@ namespace TinyWars.WarMap {
     import Notify      = Utility.Notify;
     import TimeModel   = Time.TimeModel;
 
+    const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = ConfigManager.getGridSize();
+
     export class WarMapTileMapView extends egret.DisplayObjectContainer {
         private _isInitialized: boolean;
 
@@ -89,11 +91,10 @@ namespace TinyWars.WarMap {
             egret.assert(!this._isInitialized, "TileLayerBase.init() already initialized!");
             this._isInitialized = true;
 
-            const gridSize = ConfigManager.getGridSize();
             this._colCount = colCount;
             this._rowCount = rowCount;
-            this.width     = gridSize.width  * colCount;
-            this.height    = gridSize.height * rowCount;
+            this.width     = _GRID_WIDTH  * colCount;
+            this.height    = _GRID_HEIGHT * rowCount;
 
             this._ids      = new Array(colCount);
             this._images   = new Array(colCount);
@@ -103,11 +104,10 @@ namespace TinyWars.WarMap {
             }
 
             for (let y = 0; y < rowCount; ++y) {
-                const posY = gridSize.height * (y + 1);
+                const posY = this._getImageY(y);
                 for (let x = 0; x < colCount; ++x) {
                     const img = new UiImage();
-                    img.addEventListener(eui.UIEvent.RESIZE, () => img.anchorOffsetY = img.height, img);
-                    img.x               = gridSize.width * x;
+                    img.x               = _GRID_WIDTH * x;
                     img.y               = posY;
                     this._images[x][y]  = img;
                     this.addChild(img);
@@ -156,6 +156,7 @@ namespace TinyWars.WarMap {
         }
 
         protected abstract _getImageSource(id: number, tickCount: number): string;
+        protected abstract _getImageY(gridY: number): number;
     }
 
     class TileBaseLayer extends TileLayerBase {
@@ -164,6 +165,10 @@ namespace TinyWars.WarMap {
                 ? undefined
                 : ConfigManager.getTileBaseImageSource(id, tickCount, false);
         }
+
+        protected _getImageY(gridY: number): number {
+            return _GRID_HEIGHT * gridY;
+        }
     }
 
     class TileObjectLayer extends TileLayerBase {
@@ -171,6 +176,10 @@ namespace TinyWars.WarMap {
             return id == null
             ? undefined
             : ConfigManager.getTileObjectImageSource(id, tickCount, false);
+        }
+
+        protected _getImageY(gridY: number): number {
+            return _GRID_HEIGHT * (gridY - 1);
         }
     }
 }

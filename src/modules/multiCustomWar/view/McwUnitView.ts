@@ -9,10 +9,10 @@ namespace TinyWars.MultiCustomWar {
     import GridIndex            = Types.GridIndex;
 
     const { width: _GRID_WIDTH, height: _GRID_HEIGHT }  = ConfigManager.getGridSize();
-    const _IMG_UNIT_STAND_ANCHOR_OFFSET_X               = _GRID_WIDTH / 2;
-    const _IMG_UNIT_STAND_POS_X                         = _GRID_WIDTH / 2;
-    const _IMG_UNIT_MOVING_ANCHOR_OFFSET_X              = _GRID_WIDTH / 4 * 3;
-    const _IMG_UNIT_MOVING_POS_X                        = _GRID_WIDTH / 2;
+    const _IMG_UNIT_STAND_ANCHOR_OFFSET_X               = _GRID_WIDTH / 4;
+    const _IMG_UNIT_STAND_ANCHOR_OFFSET_Y               = _GRID_HEIGHT / 2;
+    const _IMG_UNIT_STATE_WIDTH                         = 28;
+    const _IMG_UNIT_STATE_HEIGHT                        = 28;
 
     export class McwUnitView extends egret.DisplayObjectContainer {
         private _imgHp      = new GameUi.UiImage();
@@ -27,16 +27,12 @@ namespace TinyWars.MultiCustomWar {
         public constructor() {
             super();
 
-            this._imgUnit.addEventListener( eui.UIEvent.RESIZE, () => this._imgUnit.anchorOffsetY  = this._imgUnit.height,  this);
-            this._imgState.addEventListener(eui.UIEvent.RESIZE, () => this._imgState.anchorOffsetY = this._imgState.height, this);
-            this._imgHp.addEventListener(   eui.UIEvent.RESIZE, () => this._imgHp.anchorOffsetY    = this._imgHp.height,    this);
-            this._imgUnit.x             = _IMG_UNIT_STAND_POS_X;
-            this._imgUnit.y             = _GRID_HEIGHT;
             this._imgUnit.anchorOffsetX = _IMG_UNIT_STAND_ANCHOR_OFFSET_X;
-            this._imgState.x            = 3;
-            this._imgState.y            = _GRID_HEIGHT;
-            this._imgHp.x               = _GRID_WIDTH - 24;
-            this._imgHp.y               = _GRID_HEIGHT;
+            this._imgUnit.anchorOffsetY = _IMG_UNIT_STAND_ANCHOR_OFFSET_Y;
+            this._imgState.x            = 0;
+            this._imgState.y            = _GRID_HEIGHT - _IMG_UNIT_STATE_HEIGHT;
+            this._imgHp.x               = _GRID_WIDTH - _IMG_UNIT_STATE_WIDTH - 3;
+            this._imgHp.y               = _GRID_HEIGHT - _IMG_UNIT_STATE_HEIGHT;
             this.addChild(this._imgUnit);
             this.addChild(this._imgState);
             this.addChild(this._imgHp);
@@ -71,13 +67,9 @@ namespace TinyWars.MultiCustomWar {
         }
         public tickUnitAnimationFrame(): void {
             if (this._animationType === UnitAnimationType.Stand) {
-                this._imgUnit.x             = _IMG_UNIT_STAND_POS_X;
-                this._imgUnit.anchorOffsetX = _IMG_UNIT_STAND_ANCHOR_OFFSET_X;
-                this._imgUnit.source        = ConfigManager.getUnitIdleImageSource(this._unit.getViewId(), Math.floor(TimeModel.getUnitAnimationTickCount() / 2), this._isDark);
+                this._imgUnit.source    = ConfigManager.getUnitIdleImageSource(this._unit.getViewId(), Math.floor(TimeModel.getUnitAnimationTickCount() / 2), this._isDark);
             } else {
-                this._imgUnit.x             = _IMG_UNIT_MOVING_POS_X;
-                this._imgUnit.anchorOffsetX = _IMG_UNIT_MOVING_ANCHOR_OFFSET_X;
-                this._imgUnit.source        = ConfigManager.getUnitMovingImageSource(this._unit.getViewId(), TimeModel.getUnitAnimationTickCount(), this._isDark);
+                this._imgUnit.source    = ConfigManager.getUnitMovingImageSource(this._unit.getViewId(), TimeModel.getUnitAnimationTickCount(), this._isDark);
             }
         }
 

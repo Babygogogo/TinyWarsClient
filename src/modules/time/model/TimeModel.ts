@@ -3,10 +3,10 @@ namespace TinyWars.Time.TimeModel {
     import Notify = Utility.Notify;
     import Lang   = Utility.Lang;
 
-    const TILE_ANIMATION_INTERVAL = 160;        // 0.16s
-    const UNIT_ANIMATION_INTERVAL = 120;        // 0.12s
-    const GRID_ANIMATION_INTERVAL = 100;        // 0.1s
-    const HEARTBEAT_INTERVAL      = 60 * 1000;  // 1min
+    const TILE_ANIMATION_INTERVAL_MS = 350;
+    const UNIT_ANIMATION_INTERVAL_MS = 120;
+    const GRID_ANIMATION_INTERVAL_MS = 100;
+    const HEARTBEAT_INTERVAL_MS      = 60 * 1000;
 
     let _isHeartbeatAnswered: boolean;
     let _heartbeatCounter   : number;
@@ -29,20 +29,20 @@ namespace TinyWars.Time.TimeModel {
             Notify.dispatch(Notify.Type.TimeTick);
         }, TimeModel, 1000);
 
-        // egret.setInterval(() => {
-        //     ++tileAnimationTickCount;
-        //     Notify.dispatch(Notify.Type.TileAnimationTick);
-        // }, TimeModel, TILE_ANIMATION_INTERVAL);
+        egret.setInterval(() => {
+            ++_tileAnimationTickCount;
+            Notify.dispatch(Notify.Type.TileAnimationTick);
+        }, TimeModel, TILE_ANIMATION_INTERVAL_MS);
 
         egret.setInterval(() => {
             ++_gridAnimationTickCount;
             Notify.dispatch(Notify.Type.GridAnimationTick);
-        }, TimeModel, GRID_ANIMATION_INTERVAL);
+        }, TimeModel, GRID_ANIMATION_INTERVAL_MS);
 
         egret.setInterval(() => {
             ++_unitAnimationTickCount;
             Notify.dispatch(Notify.Type.UnitAnimationTick);
-        }, TimeModel, UNIT_ANIMATION_INTERVAL);
+        }, TimeModel, UNIT_ANIMATION_INTERVAL_MS);
     }
 
     export function getServerTimestamp(): number {
@@ -63,7 +63,7 @@ namespace TinyWars.Time.TimeModel {
 
     function _onNotifyNetworkConnected(e: egret.Event): void {
         (_heartbeatIntervalId != null) && (egret.clearInterval(_heartbeatIntervalId));
-        _heartbeatIntervalId = egret.setInterval(heartbeat, TimeModel, HEARTBEAT_INTERVAL);
+        _heartbeatIntervalId = egret.setInterval(heartbeat, TimeModel, HEARTBEAT_INTERVAL_MS);
 
         _isHeartbeatAnswered = true;
         _heartbeatCounter    = 0;
