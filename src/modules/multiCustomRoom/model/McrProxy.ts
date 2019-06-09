@@ -1,119 +1,149 @@
 
-namespace TinyWars.MultiCustomRoom {
+namespace TinyWars.MultiCustomRoom.McrProxy {
     import NetManager = Network.Manager;
     import ActionCode = Network.Codes;
     import Helpers    = Utility.Helpers;
     import ProtoTypes = Utility.ProtoTypes;
     import Notify     = Utility.Notify;
 
-    export namespace McrProxy {
-        export function init(): void {
-            NetManager.addListeners([
-                { actionCode: ActionCode.S_McrCreateWar,                callback: _onSMcrCreateWar },
-                { actionCode: ActionCode.S_McrGetUnjoinedWaitingInfos,  callback: _onSMcrGetUnjoinedWaitingInfos, },
-                { actionCode: ActionCode.S_McrJoinWar,                  callback: _onSMcrJoinWar, },
-                { actionCode: ActionCode.S_McrGetJoinedWaitingInfos,    callback: _onSMcrGetJoinedWaitingInfos, },
-                { actionCode: ActionCode.S_McrExitWar,                  callback: _onSMcrExitWar, },
-                { actionCode: ActionCode.S_McrGetJoinedOngoingInfos,    callback: _onSMcrGetJoinedOngoingInfos, },
-                { actionCode: ActionCode.S_McrContinueWar,              callback: _onSMcrContinueWar, },
-            ], McrProxy);
-        }
+    export function init(): void {
+        NetManager.addListeners([
+            { actionCode: ActionCode.S_McrCreateWar,                callback: _onSMcrCreateWar },
+            { actionCode: ActionCode.S_McrGetUnjoinedWaitingInfos,  callback: _onSMcrGetUnjoinedWaitingInfos, },
+            { actionCode: ActionCode.S_McrJoinWar,                  callback: _onSMcrJoinWar, },
+            { actionCode: ActionCode.S_McrGetJoinedWaitingInfos,    callback: _onSMcrGetJoinedWaitingInfos, },
+            { actionCode: ActionCode.S_McrExitWar,                  callback: _onSMcrExitWar, },
+            { actionCode: ActionCode.S_McrGetJoinedOngoingInfos,    callback: _onSMcrGetJoinedOngoingInfos, },
+            { actionCode: ActionCode.S_McrContinueWar,              callback: _onSMcrContinueWar, },
+            { actionCode: ActionCode.S_McrGetReplayInfos,           callback: _onSMcrGetReplayInfos, },
+            { actionCode: ActionCode.S_McrGetReplayData,            callback: _onSMcrGetReplayData, },
+        ], McrProxy);
+    }
 
-        export function reqCreate(param: DataForCreateWar): void {
-            NetManager.send({
-                C_McrCreateWar: param,
-            });
+    export function reqCreate(param: DataForCreateWar): void {
+        NetManager.send({
+            C_McrCreateWar: param,
+        });
+    }
+    function _onSMcrCreateWar(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_McrCreateWar;
+        if (!data.errorCode) {
+            Notify.dispatch(Notify.Type.SMcrCreateWar, data);
         }
-        function _onSMcrCreateWar(e: egret.Event): void {
-            const data = e.data as ProtoTypes.IS_McrCreateWar;
-            if (!data.errorCode) {
-                Notify.dispatch(Notify.Type.SMcrCreateWar, data);
-            }
-        }
+    }
 
-        export function reqUnjoinedWarInfos(): void {
-            NetManager.send({
-                C_McrGetUnjoinedWaitingInfos: {
-                },
-            });
+    export function reqUnjoinedWarInfos(): void {
+        NetManager.send({
+            C_McrGetUnjoinedWaitingInfos: {
+            },
+        });
+    }
+    function _onSMcrGetUnjoinedWaitingInfos(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_McrGetUnjoinedWaitingInfos;
+        if (!data.errorCode) {
+            McrModel.setUnjoinedWaitingInfos(data.warInfos);
+            Notify.dispatch(Notify.Type.SMcrGetUnjoinedWaitingInfos, data);
         }
-        function _onSMcrGetUnjoinedWaitingInfos(e: egret.Event): void {
-            const data = e.data as ProtoTypes.IS_McrGetUnjoinedWaitingInfos;
-            if (!data.errorCode) {
-                McrModel.setUnjoinedWaitingInfos(data.warInfos);
-                Notify.dispatch(Notify.Type.SMcrGetUnjoinedWaitingInfos, data);
-            }
-        }
+    }
 
-        export function reqJoin(waitingWarId: number, playerIndex: number, teamIndex: number): void {
-            NetManager.send({
-                C_McrJoinWar: {
-                    infoId     : waitingWarId,
-                    playerIndex: playerIndex,
-                    teamIndex  : teamIndex,
-                },
-            });
+    export function reqJoin(waitingWarId: number, playerIndex: number, teamIndex: number): void {
+        NetManager.send({
+            C_McrJoinWar: {
+                infoId     : waitingWarId,
+                playerIndex: playerIndex,
+                teamIndex  : teamIndex,
+            },
+        });
+    }
+    function _onSMcrJoinWar(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_McrJoinWar;
+        if (!data.errorCode) {
+            Notify.dispatch(Notify.Type.SMcrJoinWar, data);
         }
-        function _onSMcrJoinWar(e: egret.Event): void {
-            const data = e.data as ProtoTypes.IS_McrJoinWar;
-            if (!data.errorCode) {
-                Notify.dispatch(Notify.Type.SMcrJoinWar, data);
-            }
-        }
+    }
 
-        export function reqJoinedWaitingCustomOnlineWarInfos(): void {
-            NetManager.send({
-                C_McrGetJoinedWaitingInfos: {
-                },
-            });
+    export function reqJoinedWaitingCustomOnlineWarInfos(): void {
+        NetManager.send({
+            C_McrGetJoinedWaitingInfos: {
+            },
+        });
+    }
+    function _onSMcrGetJoinedWaitingInfos(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_McrGetJoinedWaitingInfos;
+        if (!data.errorCode) {
+            McrModel.setJoinedWaitingInfos(data.warInfos);
+            Notify.dispatch(Notify.Type.SMcrGetJoinedWaitingInfos, data);
         }
-        function _onSMcrGetJoinedWaitingInfos(e: egret.Event): void {
-            const data = e.data as ProtoTypes.IS_McrGetJoinedWaitingInfos;
-            if (!data.errorCode) {
-                McrModel.setJoinedWaitingInfos(data.warInfos);
-                Notify.dispatch(Notify.Type.SMcrGetJoinedWaitingInfos, data);
-            }
-        }
+    }
 
-        export function reqExitCustomOnlineWar(waitingWarId: number): void {
-            NetManager.send({
-                C_McrExitWar: {
-                    infoId    : waitingWarId,
-                },
-            });
+    export function reqExitCustomOnlineWar(waitingWarId: number): void {
+        NetManager.send({
+            C_McrExitWar: {
+                infoId    : waitingWarId,
+            },
+        });
+    }
+    function _onSMcrExitWar(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_McrExitWar;
+        if (!data.errorCode) {
+            Notify.dispatch(Notify.Type.SMcrExitWar, data);
         }
-        function _onSMcrExitWar(e: egret.Event): void {
-            const data = e.data as ProtoTypes.IS_McrExitWar;
-            if (!data.errorCode) {
-                Notify.dispatch(Notify.Type.SMcrExitWar, data);
-            }
-        }
+    }
 
-        export function reqGetJoinedOngoingInfos(): void {
-            NetManager.send({
-                C_McrGetJoinedOngoingInfos: {},
-            });
-        }
-        function _onSMcrGetJoinedOngoingInfos(e: egret.Event): void {
-            const data = e.data as ProtoTypes.IS_McrGetJoinedOngoingInfos;
-            McrModel.setJoinedOngoingInfos(data.infos);
-            Notify.dispatch(Notify.Type.SMcrGetJoinedOngoingInfos, data);
-        }
+    export function reqGetJoinedOngoingInfos(): void {
+        NetManager.send({
+            C_McrGetJoinedOngoingInfos: {},
+        });
+    }
+    function _onSMcrGetJoinedOngoingInfos(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_McrGetJoinedOngoingInfos;
+        McrModel.setJoinedOngoingInfos(data.infos);
+        Notify.dispatch(Notify.Type.SMcrGetJoinedOngoingInfos, data);
+    }
 
-        export function reqContinueWar(warId: number): void {
-            NetManager.send({
-                C_McrContinueWar: {
-                    warId: warId,
-                },
-            });
+    export function reqContinueWar(warId: number): void {
+        NetManager.send({
+            C_McrContinueWar: {
+                warId: warId,
+            },
+        });
+    }
+    function _onSMcrContinueWar(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_McrContinueWar;
+        if (data.errorCode) {
+            Notify.dispatch(Notify.Type.SMcrContinueWarFailed, data);
+        } else {
+            Notify.dispatch(Notify.Type.SMcrContinueWar, data);
         }
-        function _onSMcrContinueWar(e: egret.Event): void {
-            const data = e.data as ProtoTypes.IS_McrContinueWar;
-            if (data.errorCode) {
-                Notify.dispatch(Notify.Type.SMcrContinueWarFailed, data);
-            } else {
-                Notify.dispatch(Notify.Type.SMcrContinueWar, data);
-            }
+    }
+
+    export function reqReplayInfos(replayId?: number): void {
+        NetManager.send({
+            C_McrGetReplayInfos: {
+                replayId,
+            },
+        });
+    }
+    function _onSMcrGetReplayInfos(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_McrGetReplayInfos;
+        if (!data.errorCode) {
+            McrModel.setReplayInfos(data.infos);
+            Notify.dispatch(Notify.Type.SMcrGetReplayInfos);
+        }
+    }
+
+    export function reqReplayData(replayId: number): void {
+        NetManager.send({
+            C_McrGetReplayData: {
+                replayId,
+            },
+        });
+    }
+    function _onSMcrGetReplayData(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_McrGetReplayData;
+        if (!data.errorCode) {
+            McrModel.setReplayData(data as ProtoTypes.S_McrGetReplayData);
+            Notify.dispatch(Notify.Type.SMcrGetReplayData);
         }
     }
 }

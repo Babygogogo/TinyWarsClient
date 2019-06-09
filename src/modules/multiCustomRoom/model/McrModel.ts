@@ -88,6 +88,9 @@ namespace TinyWars.MultiCustomRoom {
         let _joinedWaitingInfos     : ProtoTypes.IMcrWaitingInfo[];
         let _joinedOngoingInfos     : ProtoTypes.IMcwOngoingDetail[];
 
+        let _replayInfos: ProtoTypes.IMcwReplayInfo[];
+        let _replayData : ProtoTypes.S_McrGetReplayData;
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for creating wars.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -358,6 +361,23 @@ namespace TinyWars.MultiCustomRoom {
         }
         export function getJoinedOngoingInfos(): ProtoTypes.IMcwOngoingDetail[] | undefined {
             return _joinedOngoingInfos;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Functions for replays.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        export function setReplayInfos(infos: ProtoTypes.IMcwReplayInfo[]): void {
+            _replayInfos = infos;
+        }
+        export function getReplayInfos(): ProtoTypes.IMcwReplayInfo[] | undefined {
+            return _replayInfos;
+        }
+
+        export function setReplayData(data: ProtoTypes.S_McrGetReplayData): void {
+            _replayData = data;
+        }
+        export function getReplayData(): ProtoTypes.S_McrGetReplayData | undefined {
+            return _replayData;
         }
     }
 }

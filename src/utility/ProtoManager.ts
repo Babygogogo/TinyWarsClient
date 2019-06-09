@@ -33,18 +33,18 @@ namespace TinyWars.Utility.ProtoManager {
         }
     }
     export function decodeAsActionContainer(data: any): ProtoTypes.IActionContainer {
-        return _actionContainerClass.decode(getDataForDecode(data)).toJSON();
+        return _actionContainerClass.toObject(_actionContainerClass.decode(getDataForDecode(data)));
     }
 
     export function decodeAsFullConfig(data: any): Types.FullConfig {
-        return _fullConfigClass.decode(getDataForDecode(data)).toJSON() as any;
+        return _fullConfigClass.toObject(_fullConfigClass.decode(getDataForDecode(data))) as any;
     }
 
     export function encodeAsSerializedMcwWar(data: Types.SerializedMcwWar): Uint8Array {
         return _serializedMcwWarClass.encode(data).finish();
     }
     export function decodeAsSerializedMcwWar(data: any): Types.SerializedMcwWar {
-        return _serializedMcwWarClass.decode(data).toJSON() as any;
+        return _serializedMcwWarClass.toObject(_serializedMcwWarClass.decode(data)) as any;
     }
 
     function getDataForDecode(encodedData: any): Uint8Array | protobuf.Reader {

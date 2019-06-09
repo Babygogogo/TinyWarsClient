@@ -3763,6 +3763,210 @@ export declare class McwRepairData implements IMcwRepairData {
     public toJSON(): { [k: string]: any };
 }
 
+/** Properties of a McwReplayInfo. */
+export declare interface IMcwReplayInfo {
+
+    /** McwReplayInfo replayId */
+    replayId?: (number|null);
+
+    /** McwReplayInfo configVersion */
+    configVersion?: (number|null);
+
+    /** McwReplayInfo mapName */
+    mapName?: (string|null);
+
+    /** McwReplayInfo mapDesigner */
+    mapDesigner?: (string|null);
+
+    /** McwReplayInfo mapVersion */
+    mapVersion?: (number|null);
+
+    /** McwReplayInfo hasFog */
+    hasFog?: (number|null);
+
+    /** McwReplayInfo turnIndex */
+    turnIndex?: (number|null);
+
+    /** McwReplayInfo nextActionId */
+    nextActionId?: (number|null);
+
+    /** McwReplayInfo p1UserId */
+    p1UserId?: (number|null);
+
+    /** McwReplayInfo p1TeamIndex */
+    p1TeamIndex?: (number|null);
+
+    /** McwReplayInfo p1UserNickname */
+    p1UserNickname?: (string|null);
+
+    /** McwReplayInfo p2UserId */
+    p2UserId?: (number|null);
+
+    /** McwReplayInfo p2TeamIndex */
+    p2TeamIndex?: (number|null);
+
+    /** McwReplayInfo p2UserNickname */
+    p2UserNickname?: (string|null);
+
+    /** McwReplayInfo p3UserId */
+    p3UserId?: (number|null);
+
+    /** McwReplayInfo p3TeamIndex */
+    p3TeamIndex?: (number|null);
+
+    /** McwReplayInfo p3UserNickname */
+    p3UserNickname?: (string|null);
+
+    /** McwReplayInfo p4UserId */
+    p4UserId?: (number|null);
+
+    /** McwReplayInfo p4TeamIndex */
+    p4TeamIndex?: (number|null);
+
+    /** McwReplayInfo p4UserNickname */
+    p4UserNickname?: (string|null);
+}
+
+/** Represents a McwReplayInfo. */
+export declare class McwReplayInfo implements IMcwReplayInfo {
+
+    /**
+     * Constructs a new McwReplayInfo.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IMcwReplayInfo);
+
+    /** McwReplayInfo replayId. */
+    public replayId: number;
+
+    /** McwReplayInfo configVersion. */
+    public configVersion: number;
+
+    /** McwReplayInfo mapName. */
+    public mapName: string;
+
+    /** McwReplayInfo mapDesigner. */
+    public mapDesigner: string;
+
+    /** McwReplayInfo mapVersion. */
+    public mapVersion: number;
+
+    /** McwReplayInfo hasFog. */
+    public hasFog: number;
+
+    /** McwReplayInfo turnIndex. */
+    public turnIndex: number;
+
+    /** McwReplayInfo nextActionId. */
+    public nextActionId: number;
+
+    /** McwReplayInfo p1UserId. */
+    public p1UserId: number;
+
+    /** McwReplayInfo p1TeamIndex. */
+    public p1TeamIndex: number;
+
+    /** McwReplayInfo p1UserNickname. */
+    public p1UserNickname: string;
+
+    /** McwReplayInfo p2UserId. */
+    public p2UserId: number;
+
+    /** McwReplayInfo p2TeamIndex. */
+    public p2TeamIndex: number;
+
+    /** McwReplayInfo p2UserNickname. */
+    public p2UserNickname: string;
+
+    /** McwReplayInfo p3UserId. */
+    public p3UserId: number;
+
+    /** McwReplayInfo p3TeamIndex. */
+    public p3TeamIndex: number;
+
+    /** McwReplayInfo p3UserNickname. */
+    public p3UserNickname: string;
+
+    /** McwReplayInfo p4UserId. */
+    public p4UserId: number;
+
+    /** McwReplayInfo p4TeamIndex. */
+    public p4TeamIndex: number;
+
+    /** McwReplayInfo p4UserNickname. */
+    public p4UserNickname: string;
+
+    /**
+     * Creates a new McwReplayInfo instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns McwReplayInfo instance
+     */
+    public static create(properties?: IMcwReplayInfo): McwReplayInfo;
+
+    /**
+     * Encodes the specified McwReplayInfo message. Does not implicitly {@link McwReplayInfo.verify|verify} messages.
+     * @param message McwReplayInfo message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IMcwReplayInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified McwReplayInfo message, length delimited. Does not implicitly {@link McwReplayInfo.verify|verify} messages.
+     * @param message McwReplayInfo message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IMcwReplayInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a McwReplayInfo message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns McwReplayInfo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): McwReplayInfo;
+
+    /**
+     * Decodes a McwReplayInfo message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns McwReplayInfo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): McwReplayInfo;
+
+    /**
+     * Verifies a McwReplayInfo message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a McwReplayInfo message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns McwReplayInfo
+     */
+    public static fromObject(object: { [k: string]: any }): McwReplayInfo;
+
+    /**
+     * Creates a plain object from a McwReplayInfo message. Also converts values to other types if specified.
+     * @param message McwReplayInfo
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: McwReplayInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this McwReplayInfo to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
 /** Properties of an ActionContainer. */
 export declare interface IActionContainer {
 
@@ -3858,6 +4062,18 @@ export declare interface IActionContainer {
 
     /** ActionContainer S_McrContinueWar */
     S_McrContinueWar?: (IS_McrContinueWar|null);
+
+    /** ActionContainer C_McrGetReplayInfos */
+    C_McrGetReplayInfos?: (IC_McrGetReplayInfos|null);
+
+    /** ActionContainer S_McrGetReplayInfos */
+    S_McrGetReplayInfos?: (IS_McrGetReplayInfos|null);
+
+    /** ActionContainer C_McrGetReplayData */
+    C_McrGetReplayData?: (IC_McrGetReplayData|null);
+
+    /** ActionContainer S_McrGetReplayData */
+    S_McrGetReplayData?: (IS_McrGetReplayData|null);
 
     /** ActionContainer C_McwPlayerBeginTurn */
     C_McwPlayerBeginTurn?: (IC_McwPlayerBeginTurn|null);
@@ -4075,6 +4291,18 @@ export declare class ActionContainer implements IActionContainer {
 
     /** ActionContainer S_McrContinueWar. */
     public S_McrContinueWar?: (IS_McrContinueWar|null);
+
+    /** ActionContainer C_McrGetReplayInfos. */
+    public C_McrGetReplayInfos?: (IC_McrGetReplayInfos|null);
+
+    /** ActionContainer S_McrGetReplayInfos. */
+    public S_McrGetReplayInfos?: (IS_McrGetReplayInfos|null);
+
+    /** ActionContainer C_McrGetReplayData. */
+    public C_McrGetReplayData?: (IC_McrGetReplayData|null);
+
+    /** ActionContainer S_McrGetReplayData. */
+    public S_McrGetReplayData?: (IS_McrGetReplayData|null);
 
     /** ActionContainer C_McwPlayerBeginTurn. */
     public C_McwPlayerBeginTurn?: (IC_McwPlayerBeginTurn|null);
@@ -7430,6 +7658,390 @@ export declare class S_McrContinueWar implements IS_McrContinueWar {
 
     /**
      * Converts this S_McrContinueWar to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_McrGetReplayInfos. */
+export declare interface IC_McrGetReplayInfos {
+
+    /** C_McrGetReplayInfos replayId */
+    replayId?: (number|null);
+}
+
+/** Represents a C_McrGetReplayInfos. */
+export declare class C_McrGetReplayInfos implements IC_McrGetReplayInfos {
+
+    /**
+     * Constructs a new C_McrGetReplayInfos.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_McrGetReplayInfos);
+
+    /** C_McrGetReplayInfos replayId. */
+    public replayId: number;
+
+    /**
+     * Creates a new C_McrGetReplayInfos instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_McrGetReplayInfos instance
+     */
+    public static create(properties?: IC_McrGetReplayInfos): C_McrGetReplayInfos;
+
+    /**
+     * Encodes the specified C_McrGetReplayInfos message. Does not implicitly {@link C_McrGetReplayInfos.verify|verify} messages.
+     * @param message C_McrGetReplayInfos message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_McrGetReplayInfos, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_McrGetReplayInfos message, length delimited. Does not implicitly {@link C_McrGetReplayInfos.verify|verify} messages.
+     * @param message C_McrGetReplayInfos message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_McrGetReplayInfos, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_McrGetReplayInfos message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_McrGetReplayInfos
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_McrGetReplayInfos;
+
+    /**
+     * Decodes a C_McrGetReplayInfos message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_McrGetReplayInfos
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_McrGetReplayInfos;
+
+    /**
+     * Verifies a C_McrGetReplayInfos message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_McrGetReplayInfos message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_McrGetReplayInfos
+     */
+    public static fromObject(object: { [k: string]: any }): C_McrGetReplayInfos;
+
+    /**
+     * Creates a plain object from a C_McrGetReplayInfos message. Also converts values to other types if specified.
+     * @param message C_McrGetReplayInfos
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_McrGetReplayInfos, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_McrGetReplayInfos to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_McrGetReplayInfos. */
+export declare interface IS_McrGetReplayInfos {
+
+    /** S_McrGetReplayInfos errorCode */
+    errorCode?: (number|null);
+
+    /** S_McrGetReplayInfos infos */
+    infos?: (IMcwReplayInfo[]|null);
+}
+
+/** Represents a S_McrGetReplayInfos. */
+export declare class S_McrGetReplayInfos implements IS_McrGetReplayInfos {
+
+    /**
+     * Constructs a new S_McrGetReplayInfos.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_McrGetReplayInfos);
+
+    /** S_McrGetReplayInfos errorCode. */
+    public errorCode: number;
+
+    /** S_McrGetReplayInfos infos. */
+    public infos: IMcwReplayInfo[];
+
+    /**
+     * Creates a new S_McrGetReplayInfos instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_McrGetReplayInfos instance
+     */
+    public static create(properties?: IS_McrGetReplayInfos): S_McrGetReplayInfos;
+
+    /**
+     * Encodes the specified S_McrGetReplayInfos message. Does not implicitly {@link S_McrGetReplayInfos.verify|verify} messages.
+     * @param message S_McrGetReplayInfos message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_McrGetReplayInfos, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_McrGetReplayInfos message, length delimited. Does not implicitly {@link S_McrGetReplayInfos.verify|verify} messages.
+     * @param message S_McrGetReplayInfos message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_McrGetReplayInfos, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_McrGetReplayInfos message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_McrGetReplayInfos
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_McrGetReplayInfos;
+
+    /**
+     * Decodes a S_McrGetReplayInfos message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_McrGetReplayInfos
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_McrGetReplayInfos;
+
+    /**
+     * Verifies a S_McrGetReplayInfos message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_McrGetReplayInfos message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_McrGetReplayInfos
+     */
+    public static fromObject(object: { [k: string]: any }): S_McrGetReplayInfos;
+
+    /**
+     * Creates a plain object from a S_McrGetReplayInfos message. Also converts values to other types if specified.
+     * @param message S_McrGetReplayInfos
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_McrGetReplayInfos, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_McrGetReplayInfos to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_McrGetReplayData. */
+export declare interface IC_McrGetReplayData {
+
+    /** C_McrGetReplayData replayId */
+    replayId?: (number|null);
+}
+
+/** Represents a C_McrGetReplayData. */
+export declare class C_McrGetReplayData implements IC_McrGetReplayData {
+
+    /**
+     * Constructs a new C_McrGetReplayData.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_McrGetReplayData);
+
+    /** C_McrGetReplayData replayId. */
+    public replayId: number;
+
+    /**
+     * Creates a new C_McrGetReplayData instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_McrGetReplayData instance
+     */
+    public static create(properties?: IC_McrGetReplayData): C_McrGetReplayData;
+
+    /**
+     * Encodes the specified C_McrGetReplayData message. Does not implicitly {@link C_McrGetReplayData.verify|verify} messages.
+     * @param message C_McrGetReplayData message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_McrGetReplayData, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_McrGetReplayData message, length delimited. Does not implicitly {@link C_McrGetReplayData.verify|verify} messages.
+     * @param message C_McrGetReplayData message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_McrGetReplayData, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_McrGetReplayData message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_McrGetReplayData
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_McrGetReplayData;
+
+    /**
+     * Decodes a C_McrGetReplayData message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_McrGetReplayData
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_McrGetReplayData;
+
+    /**
+     * Verifies a C_McrGetReplayData message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_McrGetReplayData message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_McrGetReplayData
+     */
+    public static fromObject(object: { [k: string]: any }): C_McrGetReplayData;
+
+    /**
+     * Creates a plain object from a C_McrGetReplayData message. Also converts values to other types if specified.
+     * @param message C_McrGetReplayData
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_McrGetReplayData, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_McrGetReplayData to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_McrGetReplayData. */
+export declare interface IS_McrGetReplayData {
+
+    /** S_McrGetReplayData errorCode */
+    errorCode?: (number|null);
+
+    /** S_McrGetReplayData replayId */
+    replayId?: (number|null);
+
+    /** S_McrGetReplayData encodedWar */
+    encodedWar?: (Uint8Array|null);
+
+    /** S_McrGetReplayData userNicknames */
+    userNicknames?: (string[]|null);
+}
+
+/** Represents a S_McrGetReplayData. */
+export declare class S_McrGetReplayData implements IS_McrGetReplayData {
+
+    /**
+     * Constructs a new S_McrGetReplayData.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_McrGetReplayData);
+
+    /** S_McrGetReplayData errorCode. */
+    public errorCode: number;
+
+    /** S_McrGetReplayData replayId. */
+    public replayId: number;
+
+    /** S_McrGetReplayData encodedWar. */
+    public encodedWar: Uint8Array;
+
+    /** S_McrGetReplayData userNicknames. */
+    public userNicknames: string[];
+
+    /**
+     * Creates a new S_McrGetReplayData instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_McrGetReplayData instance
+     */
+    public static create(properties?: IS_McrGetReplayData): S_McrGetReplayData;
+
+    /**
+     * Encodes the specified S_McrGetReplayData message. Does not implicitly {@link S_McrGetReplayData.verify|verify} messages.
+     * @param message S_McrGetReplayData message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_McrGetReplayData, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_McrGetReplayData message, length delimited. Does not implicitly {@link S_McrGetReplayData.verify|verify} messages.
+     * @param message S_McrGetReplayData message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_McrGetReplayData, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_McrGetReplayData message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_McrGetReplayData
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_McrGetReplayData;
+
+    /**
+     * Decodes a S_McrGetReplayData message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_McrGetReplayData
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_McrGetReplayData;
+
+    /**
+     * Verifies a S_McrGetReplayData message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_McrGetReplayData message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_McrGetReplayData
+     */
+    public static fromObject(object: { [k: string]: any }): S_McrGetReplayData;
+
+    /**
+     * Creates a plain object from a S_McrGetReplayData message. Also converts values to other types if specified.
+     * @param message S_McrGetReplayData
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_McrGetReplayData, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_McrGetReplayData to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };
