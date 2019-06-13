@@ -8067,6 +8067,9 @@ export declare interface IC_McwPlayerSyncWar {
 
     /** C_McwPlayerSyncWar nextActionId */
     nextActionId?: (number|null);
+
+    /** C_McwPlayerSyncWar requestType */
+    requestType?: (number|null);
 }
 
 /** Represents a C_McwPlayerSyncWar. */
@@ -8083,6 +8086,9 @@ export declare class C_McwPlayerSyncWar implements IC_McwPlayerSyncWar {
 
     /** C_McwPlayerSyncWar nextActionId. */
     public nextActionId: number;
+
+    /** C_McwPlayerSyncWar requestType. */
+    public requestType: number;
 
     /**
      * Creates a new C_McwPlayerSyncWar instance using the specified properties.
@@ -8169,6 +8175,12 @@ export declare interface IS_McwPlayerSyncWar {
 
     /** S_McwPlayerSyncWar war */
     war?: (ISerializedMcwWar|null);
+
+    /** S_McwPlayerSyncWar status */
+    status?: (number|null);
+
+    /** S_McwPlayerSyncWar requestType */
+    requestType?: (number|null);
 }
 
 /** Represents a S_McwPlayerSyncWar. */
@@ -8191,6 +8203,12 @@ export declare class S_McwPlayerSyncWar implements IS_McwPlayerSyncWar {
 
     /** S_McwPlayerSyncWar war. */
     public war?: (ISerializedMcwWar|null);
+
+    /** S_McwPlayerSyncWar status. */
+    public status: number;
+
+    /** S_McwPlayerSyncWar requestType. */
+    public requestType: number;
 
     /**
      * Creates a new S_McwPlayerSyncWar instance using the specified properties.

@@ -77,6 +77,68 @@ namespace TinyWars.MultiCustomWar.McwModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Handlers for war actions that McwProxy receives.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
+    export function updateOnPlayerSyncWar(data: ProtoTypes.IS_McwPlayerSyncWar): void {
+        if ((_war) && (_war.getWarId() === data.warId)) {
+            const status = data.status as Types.SyncWarStatus;
+            if (status === Types.SyncWarStatus.Defeated) {
+                _war.setIsEnded(true);
+                AlertPanel.show({
+                    title   : Lang.getText(Lang.Type.B0088),
+                    content : Lang.getText(Lang.Type.A0023),
+                    callback: () => Utility.FlowManager.gotoLobby(),
+                });
+
+            } else if (status === Types.SyncWarStatus.EndedOrNotExists) {
+                _war.setIsEnded(true);
+                AlertPanel.show({
+                    title   : Lang.getText(Lang.Type.B0088),
+                    content : Lang.getText(Lang.Type.A0035),
+                    callback: () => Utility.FlowManager.gotoLobby(),
+                });
+
+            } else if (status === Types.SyncWarStatus.NoError) {
+                if (data.nextActionId === _war.getNextActionId() + _cachedActions.length) {
+                    const requestType = data.requestType as Types.SyncWarRequestType;
+                    if (requestType === Types.SyncWarRequestType.PlayerRequest) {
+                        FloatText.show(Lang.getText(Lang.Type.A0038));
+                    } else {
+                        // Nothing to do.
+                    }
+                } else {
+                    _war.setIsEnded(true);
+                    Utility.FlowManager.gotoMultiCustomWar(data.war as Types.SerializedMcwWar),
+                    FloatText.show(Lang.getText(Lang.Type.A0036));
+                }
+
+            } else if (status === Types.SyncWarStatus.NotJoined) {
+                // Something wrong!!
+                _war.setIsEnded(true);
+                AlertPanel.show({
+                    title   : Lang.getText(Lang.Type.B0088),
+                    content : Lang.getText(Lang.Type.A0037),
+                    callback: () => Utility.FlowManager.gotoLobby(),
+                });
+
+            } else if (status === Types.SyncWarStatus.Synchronized) {
+                const requestType = data.requestType as Types.SyncWarRequestType;
+                if (requestType === Types.SyncWarRequestType.PlayerRequest) {
+                    FloatText.show(Lang.getText(Lang.Type.A0038));
+                } else {
+                    // Nothing to do.
+                }
+
+            } else {
+                // Something wrong!!
+                _war.setIsEnded(true);
+                AlertPanel.show({
+                    title   : Lang.getText(Lang.Type.B0088),
+                    content : Lang.getText(Lang.Type.A0037),
+                    callback: () => Utility.FlowManager.gotoLobby(),
+                });
+            }
+        }
+    }
+
     export function updateOnPlayerBeginTurn(data: ProtoTypes.IS_McwPlayerBeginTurn): void {
         _updateByActionContainer({ S_McwPlayerBeginTurn: data }, data.warId, data.actionId);
     }
@@ -141,7 +203,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
     function _updateByActionContainer(container: ActionContainer, warId: number, actionId: number): void {
         if ((_war) && (_war.getWarId() === warId)) {
             if (actionId !== _war.getNextActionId() + _cachedActions.length) {
-                // TODO: refresh the war.
+                McwProxy.reqMcwPlayerSyncWar(_war, Types.SyncWarRequestType.ReconnectionRequest);
             } else {
                 _cachedActions.push(container);
                 _checkAndRunFirstCachedAction();
@@ -184,7 +246,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
                         });
 
                     } else {
-                        // Do nothing, because the server will tell what to do next.
+                        _checkAndRunFirstCachedAction();
                     }
                 }
             }

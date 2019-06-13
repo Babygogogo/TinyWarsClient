@@ -284,6 +284,19 @@ namespace TinyWars.Utility.Types {
         NetworkFailure,
     }
 
+    export const enum SyncWarRequestType {
+        PlayerRequest,
+        ReconnectionRequest,
+    }
+
+    export const enum SyncWarStatus {
+        NoError,
+        NotJoined,
+        Synchronized,
+        Defeated,
+        EndedOrNotExists,
+    }
+
     export const enum MoveType {
         Infantry,  /* 0 */            Mech,      /* 1 */            TireA,     /* 2 */            TireB,     /* 3 */
         Tank,      /* 4 */            Air,       /* 5 */            Ship,      /* 6 */            Transport, /* 7 */

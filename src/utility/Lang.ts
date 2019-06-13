@@ -182,6 +182,22 @@ namespace TinyWars.Utility.Lang {
             `已有玩家求和，请先决定是否同意（通过菜单选项操作）`,
             `There is a request for a drawn game. Please decide whether to agree it before ending your turn.`,
         ]],
+        [Type.A0035, [
+            `战局已结束，即将回到大厅…`,
+            `The war is ended. Going back to the lobby...`,
+        ]],
+        [Type.A0036, [
+            `检测到战局数据错误，已自动与服务器成功同步`,
+            `The war is synchronized successfully.`,
+        ]],
+        [Type.A0037, [
+            `发生未知错误，正在返回大厅...`,
+            `Something wrong happened! Going back to the lobby...`,
+        ]],
+        [Type.A0038, [
+            `战局数据已同步`,
+            `The war is synchronized successfully.`,
+        ]],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -533,6 +549,14 @@ namespace TinyWars.Utility.Lang {
         [Type.B0086, [
             `回合中`,
             `In Turn`,
+        ]],
+        [Type.B0087, [
+            `战局已结束`,
+            `Game Ended`,
+        ]],
+        [Type.B0088, [
+            `提示`,
+            `Message`,
         ]],
 
         [Type.B1000, [

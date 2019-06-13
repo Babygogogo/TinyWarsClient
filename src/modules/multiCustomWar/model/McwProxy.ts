@@ -11,6 +11,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
 
     export function init(): void {
         NetManager.addListeners([
+            { actionCode: NetMessageCodes.S_McwPlayerSyncWar,       callback: _onSMcwPlayerSyncWar, },
             { actionCode: NetMessageCodes.S_McwPlayerBeginTurn,     callback: _onSMcwPlayerBeginTurn, },
             { actionCode: NetMessageCodes.S_McwPlayerDeleteUnit,    callback: _onSMcwPlayerDeleteUnit },
             { actionCode: NetMessageCodes.S_McwPlayerEndTurn,       callback: _onSMcwPlayerEndTurn, },
@@ -31,6 +32,23 @@ namespace TinyWars.MultiCustomWar.McwProxy {
             { actionCode: NetMessageCodes.S_McwUnitSurface,         callback: _onSMcwUnitSurface },
             { actionCode: NetMessageCodes.S_McwUnitWait,            callback: _onSMcwUnitWait },
         ], McwProxy);
+    }
+
+    export function reqMcwPlayerSyncWar(war: McwWar, requestType: Types.SyncWarRequestType): void {
+        NetManager.send({
+            C_McwPlayerSyncWar: {
+                warId       : war.getWarId(),
+                nextActionId: war.getNextActionId(),
+                requestType,
+            },
+        });
+    }
+    function _onSMcwPlayerSyncWar(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_McwPlayerSyncWar;
+        if (!data.errorCode) {
+            McwModel.updateOnPlayerSyncWar(data);
+            Notify.dispatch(Notify.Type.SMcwPlayerSyncWar);
+        }
     }
 
     export function reqMcwPlayerBeginTurn(war: McwWar): void {

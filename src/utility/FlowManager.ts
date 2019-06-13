@@ -95,7 +95,14 @@ namespace TinyWars.Utility.FlowManager {
     }
 
     function _onNotifySLogin(e: egret.Event): void {
-        (_checkCanFirstGoToLobby()) && (gotoLobby());
+        if (_checkCanFirstGoToLobby()) {
+            gotoLobby();
+        } else {
+            const mcwWar = McwModel.getWar();
+            if (mcwWar) {
+                McwProxy.reqMcwPlayerSyncWar(mcwWar, Types.SyncWarRequestType.ReconnectionRequest);
+            }
+        }
     }
 
     function _onNotifySLogout(e: egret.Event): void {
