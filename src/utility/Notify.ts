@@ -76,6 +76,7 @@ namespace TinyWars.Utility.Notify {
         SMcrContinueWar,
         SMcrGetReplayInfos,
         SMcrGetReplayData,
+        SMcrSyncWar,
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         SMcwPlayerBeginTurn,

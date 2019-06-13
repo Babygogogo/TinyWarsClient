@@ -4111,6 +4111,12 @@ export declare interface IActionContainer {
     /** ActionContainer S_McwPlayerVoteForDraw */
     S_McwPlayerVoteForDraw?: (IS_McwPlayerVoteForDraw|null);
 
+    /** ActionContainer C_McwPlayerSyncWar */
+    C_McwPlayerSyncWar?: (IC_McwPlayerSyncWar|null);
+
+    /** ActionContainer S_McwPlayerSyncWar */
+    S_McwPlayerSyncWar?: (IS_McwPlayerSyncWar|null);
+
     /** ActionContainer C_McwUnitWait */
     C_McwUnitWait?: (IC_McwUnitWait|null);
 
@@ -4339,6 +4345,12 @@ export declare class ActionContainer implements IActionContainer {
 
     /** ActionContainer S_McwPlayerVoteForDraw. */
     public S_McwPlayerVoteForDraw?: (IS_McwPlayerVoteForDraw|null);
+
+    /** ActionContainer C_McwPlayerSyncWar. */
+    public C_McwPlayerSyncWar?: (IC_McwPlayerSyncWar|null);
+
+    /** ActionContainer S_McwPlayerSyncWar. */
+    public S_McwPlayerSyncWar?: (IS_McwPlayerSyncWar|null);
 
     /** ActionContainer C_McwUnitWait. */
     public C_McwUnitWait?: (IC_McwUnitWait|null);
@@ -8042,6 +8054,210 @@ export declare class S_McrGetReplayData implements IS_McrGetReplayData {
 
     /**
      * Converts this S_McrGetReplayData to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_McwPlayerSyncWar. */
+export declare interface IC_McwPlayerSyncWar {
+
+    /** C_McwPlayerSyncWar warId */
+    warId?: (number|null);
+
+    /** C_McwPlayerSyncWar nextActionId */
+    nextActionId?: (number|null);
+}
+
+/** Represents a C_McwPlayerSyncWar. */
+export declare class C_McwPlayerSyncWar implements IC_McwPlayerSyncWar {
+
+    /**
+     * Constructs a new C_McwPlayerSyncWar.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_McwPlayerSyncWar);
+
+    /** C_McwPlayerSyncWar warId. */
+    public warId: number;
+
+    /** C_McwPlayerSyncWar nextActionId. */
+    public nextActionId: number;
+
+    /**
+     * Creates a new C_McwPlayerSyncWar instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_McwPlayerSyncWar instance
+     */
+    public static create(properties?: IC_McwPlayerSyncWar): C_McwPlayerSyncWar;
+
+    /**
+     * Encodes the specified C_McwPlayerSyncWar message. Does not implicitly {@link C_McwPlayerSyncWar.verify|verify} messages.
+     * @param message C_McwPlayerSyncWar message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_McwPlayerSyncWar, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_McwPlayerSyncWar message, length delimited. Does not implicitly {@link C_McwPlayerSyncWar.verify|verify} messages.
+     * @param message C_McwPlayerSyncWar message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_McwPlayerSyncWar, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_McwPlayerSyncWar message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_McwPlayerSyncWar
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_McwPlayerSyncWar;
+
+    /**
+     * Decodes a C_McwPlayerSyncWar message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_McwPlayerSyncWar
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_McwPlayerSyncWar;
+
+    /**
+     * Verifies a C_McwPlayerSyncWar message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_McwPlayerSyncWar message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_McwPlayerSyncWar
+     */
+    public static fromObject(object: { [k: string]: any }): C_McwPlayerSyncWar;
+
+    /**
+     * Creates a plain object from a C_McwPlayerSyncWar message. Also converts values to other types if specified.
+     * @param message C_McwPlayerSyncWar
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_McwPlayerSyncWar, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_McwPlayerSyncWar to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_McwPlayerSyncWar. */
+export declare interface IS_McwPlayerSyncWar {
+
+    /** S_McwPlayerSyncWar errorCode */
+    errorCode?: (number|null);
+
+    /** S_McwPlayerSyncWar warId */
+    warId?: (number|null);
+
+    /** S_McwPlayerSyncWar nextActionId */
+    nextActionId?: (number|null);
+
+    /** S_McwPlayerSyncWar war */
+    war?: (ISerializedMcwWar|null);
+}
+
+/** Represents a S_McwPlayerSyncWar. */
+export declare class S_McwPlayerSyncWar implements IS_McwPlayerSyncWar {
+
+    /**
+     * Constructs a new S_McwPlayerSyncWar.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_McwPlayerSyncWar);
+
+    /** S_McwPlayerSyncWar errorCode. */
+    public errorCode: number;
+
+    /** S_McwPlayerSyncWar warId. */
+    public warId: number;
+
+    /** S_McwPlayerSyncWar nextActionId. */
+    public nextActionId: number;
+
+    /** S_McwPlayerSyncWar war. */
+    public war?: (ISerializedMcwWar|null);
+
+    /**
+     * Creates a new S_McwPlayerSyncWar instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_McwPlayerSyncWar instance
+     */
+    public static create(properties?: IS_McwPlayerSyncWar): S_McwPlayerSyncWar;
+
+    /**
+     * Encodes the specified S_McwPlayerSyncWar message. Does not implicitly {@link S_McwPlayerSyncWar.verify|verify} messages.
+     * @param message S_McwPlayerSyncWar message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_McwPlayerSyncWar, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_McwPlayerSyncWar message, length delimited. Does not implicitly {@link S_McwPlayerSyncWar.verify|verify} messages.
+     * @param message S_McwPlayerSyncWar message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_McwPlayerSyncWar, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_McwPlayerSyncWar message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_McwPlayerSyncWar
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_McwPlayerSyncWar;
+
+    /**
+     * Decodes a S_McwPlayerSyncWar message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_McwPlayerSyncWar
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_McwPlayerSyncWar;
+
+    /**
+     * Verifies a S_McwPlayerSyncWar message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_McwPlayerSyncWar message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_McwPlayerSyncWar
+     */
+    public static fromObject(object: { [k: string]: any }): S_McwPlayerSyncWar;
+
+    /**
+     * Creates a plain object from a S_McwPlayerSyncWar message. Also converts values to other types if specified.
+     * @param message S_McwPlayerSyncWar
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_McwPlayerSyncWar, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_McwPlayerSyncWar to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };

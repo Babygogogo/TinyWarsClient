@@ -29,10 +29,10 @@ namespace TinyWars.Time.TimeModel {
             Notify.dispatch(Notify.Type.TimeTick);
         }, TimeModel, 1000);
 
-        egret.setInterval(() => {
-            ++_tileAnimationTickCount;
-            Notify.dispatch(Notify.Type.TileAnimationTick);
-        }, TimeModel, TILE_ANIMATION_INTERVAL_MS);
+        // egret.setInterval(() => {
+        //     ++_tileAnimationTickCount;
+        //     Notify.dispatch(Notify.Type.TileAnimationTick);
+        // }, TimeModel, TILE_ANIMATION_INTERVAL_MS);
 
         egret.setInterval(() => {
             ++_gridAnimationTickCount;
