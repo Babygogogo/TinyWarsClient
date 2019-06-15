@@ -123,7 +123,7 @@
             </e:List>
         </GameUi:UiScrollList>
     </e:Group>
-    <e:Group top="70" bottom="30" width="200" x="725">
+    <e:Group top="40" bottom="0" width="200" right="0">
         <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" />
         <GameUi:UiLabel text="菜单" y="15" textColor="0xffffff" horizontalCenter="0" />

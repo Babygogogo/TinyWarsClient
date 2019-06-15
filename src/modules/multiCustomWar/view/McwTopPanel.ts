@@ -137,8 +137,10 @@ namespace TinyWars.MultiCustomWar {
         }
 
         private _updateLabelPlayer(): void {
-            const player            = this._war.getPlayerInTurn();
-            this._labelPlayer.text  = `${Lang.getText(Lang.Type.B0031)}:${player.getNickname()} (${Helpers.getColorTextForPlayerIndex(player.getPlayerIndex())})`;
+            const war                   = this._war;
+            const player                = war.getPlayerInTurn();
+            this._labelPlayer.text      = `${Lang.getText(Lang.Type.B0031)}:${player.getNickname()} (${Helpers.getColorTextForPlayerIndex(player.getPlayerIndex())})`;
+            this._labelPlayer.textColor = player === war.getPlayerLoggedIn() ? 0x00FF00 : 0xFFFFFF;
         }
 
         private _updateLabelFund(): void {

@@ -2,10 +2,8 @@
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
     <GameUi:UiImage source="bg_jpg" horizontalCenter="0" verticalCenter="0" scaleX="1.5" scaleY="1.5" />
-    <e:Group left="35" top="70" bottom="30" width="660">
-        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
-                        alpha="0.8" left="0" right="0" top="0" bottom="0" />
-        <GameUi:UiZoomableComponent id="_zoomMap" left="4" right="5" top="6" bottom="7" />
+    <e:Group left="0" top="40" bottom="0" right="200">
+        <GameUi:UiZoomableComponent id="_zoomMap" left="20" right="20" top="20" bottom="20" />
         <e:Group id="_groupInfo" y="10" touchThrough="true" touchEnabled="false" touchChildren="false" left="8"
                  right="8">
             <GameUi:UiLabel id="_labelMapName" text="地图名: 未知" y="0" stroke="2" size="20" scaleX="1" scaleY="1" />
@@ -14,8 +12,8 @@
             <GameUi:UiLabel text="附言:" stroke="2" size="20" scaleX="1" scaleY="1" x="0" y="95" />
             <GameUi:UiLabel id="_labelWarComment" text="ASDF" stroke="2" size="20" scaleX="1" scaleY="1" width="320"
                             x="0" height="120" y="120" />
-            <GameUi:UiLabel text="已参战玩家:" stroke="2" size="20" scaleX="1" scaleY="1" x="340" />
-            <GameUi:UiScrollList id="_listPlayer" height="140" y="25" width="280" x="340">
+            <GameUi:UiLabel text="已参战玩家:" stroke="2" size="20" scaleX="1" scaleY="1" left="440" />
+            <GameUi:UiScrollList id="_listPlayer" height="140" y="25" width="280" left="440">
                 <e:List>
                     <e:itemRendererSkinName>
                         <e:Skin width="280" height="26" currentState="up" states="up,down">
@@ -29,9 +27,9 @@
             </GameUi:UiScrollList>
         </e:Group>
     </e:Group>
-    <e:Group top="70" bottom="30" width="200" x="725">
-        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
-                        alpha="0.8" left="0" right="0" top="0" bottom="0" />
+    <e:Group top="40" bottom="0" width="200" right="0">
+        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
+                        left="0" right="0" top="0" bottom="0" />
         <GameUi:UiLabel text="退出房间" y="14" bold="true" size="25" x="50" textColor="0xffffff" />
         <GameUi:UiLabel id="_labelNoWar" text="暂无房间" bold="true" size="26" x="47" verticalCenter="0"
                         textColor="0xffffff" />

@@ -61,7 +61,6 @@ namespace TinyWars.MultiCustomRoom {
             ];
             this._listWar.setItemRenderer(WarRenderer);
             this._listPlayer.setItemRenderer(PlayerRenderer);
-            this._zoomMap.setMaskEnabled(true);
         }
 
         protected _onOpened(): void {

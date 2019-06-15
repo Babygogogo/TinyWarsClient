@@ -558,6 +558,10 @@ namespace TinyWars.Utility.Lang {
             `提示`,
             `Message`,
         ]],
+        [Type.B0089, [
+            `刷新战局`,
+            `Refresh`,
+        ]],
 
         [Type.B1000, [
             `平原`,

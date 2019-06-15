@@ -2,12 +2,12 @@
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
     <GameUi:UiImage source="bg_jpg" horizontalCenter="0" verticalCenter="0" scaleX="1.5" scaleY="1.5" />
-    <e:Group left="35" top="70" bottom="30" right="35">
-        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
-                        alpha="0.8" left="0" top="0" bottom="0" width="660" />
-        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
-                        alpha="0.8" right="0" top="0" bottom="0" width="200" />
-        <GameUi:UiTab id="_tabSettings" left="4" top="6" bottom="7" width="882">
+    <e:Group left="0" top="40" bottom="0" right="0">
+        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
+                        left="0" top="0" bottom="0" right="200" />
+        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
+                        right="0" top="0" bottom="0" width="200" />
+        <GameUi:UiTab id="_tabSettings" left="0" top="0" bottom="0" right="0">
             <e:skinName>
                 <e:Skin width="882">
                     <e:Scroller width="646" top="0" bottom="0">
@@ -31,8 +31,8 @@
                 </e:Skin>
             </e:skinName>
         </GameUi:UiTab>
-        <GameUi:UiLabel text="战局设置" bold="true" size="26" top="14" right="46"  textColor="0xffffff"/>
-        <GameUi:UiButton id="_btnConfirm" label="确定>>" bottom="14" x="800">
+        <GameUi:UiLabel text="战局设置" bold="true" size="26" top="14" right="46" textColor="0xffffff" />
+        <GameUi:UiButton id="_btnConfirm" label="确定>>" bottom="14" right="12">
             <GameUi:skinName>
                 <e:Skin states="up,down,disabled">
                     <e:Image width="100%" height="100%" />
@@ -41,7 +41,7 @@
                 </e:Skin>
             </GameUi:skinName>
         </GameUi:UiButton>
-        <GameUi:UiButton id="_btnBack" label="&lt;&lt;返回" bottom="14" x="700">
+        <GameUi:UiButton id="_btnBack" label="&lt;&lt;返回" bottom="14" right="104">
             <e:skinName>
                 <e:Skin states="up,down,disabled">
                     <e:Image width="100%" height="100%" />

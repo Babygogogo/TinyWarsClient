@@ -54,7 +54,6 @@ namespace TinyWars.MultiCustomRoom {
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
             ];
             this._listMap.setItemRenderer(MapNameRenderer);
-            this._zoomMap.setMaskEnabled(true);
         }
         protected _onOpened(): void {
             this._groupInfo.visible = false;

@@ -4,7 +4,7 @@ namespace TinyWars.Utility {
         import LayerType = Types.LayerType;
         // The game is in landscape mode, which means that its design max height equals its design width, 960.
         export const DESIGN_WIDTH         = 960;
-        export const DESIGN_MIN_HEIGHT    = 480;
+        export const DESIGN_MIN_HEIGHT    = 400;
         export const DESIGN_MAX_HEIGHT    = DESIGN_WIDTH;
         export const RATIO_FOR_MIN_HEIGHT = DESIGN_WIDTH / DESIGN_MIN_HEIGHT;
 
