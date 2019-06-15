@@ -120,11 +120,15 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            McrProxy.reqJoin(
-                this._openData.id,
-                this._availablePlayerIndexes[this._playerIndexIndex],
-                this._availableTeamIndexes[this._teamIndexIndex]
-            );
+            if ((!this._openData) || (!this._availablePlayerIndexes) || (!this._availableTeamIndexes)) {
+                FloatText.show(Lang.getText(Lang.Type.A0039));
+            } else {
+                McrProxy.reqJoin(
+                    this._openData.id,
+                    this._availablePlayerIndexes[this._playerIndexIndex],
+                    this._availableTeamIndexes[this._teamIndexIndex]
+                );
+            }
         }
 
         private _onTouchedBtnPrevPlayerIndex(e: egret.TouchEvent): void {

@@ -102,6 +102,13 @@ namespace TinyWars.Lobby {
                         MultiCustomRoom.McrContinueWarListPanel.show();
                     },
                 },
+                {
+                    name    : Lang.getText(Lang.Type.B0092),
+                    callback: () => {
+                        LobbyPanel.hide();
+                        MultiCustomRoom.McrReplayListPanel.show();
+                    },
+                },
             ];
         }
     }
