@@ -1,10 +1,12 @@
 
 namespace TinyWars.Utility.VisibilityHelpers {
-    import McwWar       = MultiCustomWar.McwWar;
-    import McwUnit      = MultiCustomWar.McwUnit;
-    import McwTile      = MultiCustomWar.McwTile;
-    import McwUnitMap   = MultiCustomWar.McwUnitMap;
-    import GridIndex    = Types.GridIndex;
+    import McwWar           = MultiCustomWar.McwWar;
+    import McwUnit          = MultiCustomWar.McwUnit;
+    import McwTile          = MultiCustomWar.McwTile;
+    import McwUnitMap       = MultiCustomWar.McwUnitMap;
+    import ReplayWar        = Replay.ReplayWar;
+    import ReplayUnitMap    = Replay.ReplayUnitMap;
+    import GridIndex        = Types.GridIndex;
 
     type Discoveries = {
         tiles: Set<McwTile>,
@@ -57,7 +59,7 @@ namespace TinyWars.Utility.VisibilityHelpers {
         }
     }
 
-    export function checkIsTileVisibleToPlayer(war: McwWar, gridIndex: GridIndex, observerPlayerIndex: number): boolean {
+    export function checkIsTileVisibleToPlayer(war: McwWar | ReplayWar, gridIndex: GridIndex, observerPlayerIndex: number): boolean {
         const fogMap = war.getFogMap();
         if (!fogMap.checkHasFogCurrently()) {
             return true;
@@ -237,7 +239,7 @@ namespace TinyWars.Utility.VisibilityHelpers {
         return { tiles: discoveredTiles, units: discoveredUnits };
     }
 
-    function _checkHasUnitWithTeamIndexOnAdjacentGrid(unitMap: McwUnitMap, origin: GridIndex, teamIndex: number): boolean {
+    function _checkHasUnitWithTeamIndexOnAdjacentGrid(unitMap: McwUnitMap | ReplayUnitMap, origin: GridIndex, teamIndex: number): boolean {
         for (const adjacentGrid of GridIndexHelpers.getAdjacentGrids(origin, unitMap.getMapSize())) {
             const unit = unitMap.getUnitOnMap(adjacentGrid);
             if ((unit) && (unit.getTeamIndex() === teamIndex)) {
@@ -247,7 +249,7 @@ namespace TinyWars.Utility.VisibilityHelpers {
         return false;
     }
 
-    function _checkHasUnitWithTeamIndexOnGrid(unitMap: McwUnitMap, gridIndex: GridIndex, teamIndex: number): boolean {
+    function _checkHasUnitWithTeamIndexOnGrid(unitMap: McwUnitMap | ReplayUnitMap, gridIndex: GridIndex, teamIndex: number): boolean {
         const unit = unitMap.getUnitOnMap(gridIndex);
         return (unit != null) && (unit.getTeamIndex() === teamIndex);
     }

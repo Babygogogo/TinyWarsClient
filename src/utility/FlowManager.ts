@@ -3,6 +3,7 @@ namespace TinyWars.Utility.FlowManager {
     import UserModel    = User.UserModel;
     import McwProxy     = MultiCustomWar.McwProxy;
     import McwModel     = MultiCustomWar.McwModel;
+    import ReplayModel  = Replay.ReplayModel;
 
     const _NET_EVENTS = [
         { actionCode: Network.Codes.S_ServerDisconnect,   callback: _onNetSServerDisconnect },
@@ -66,7 +67,13 @@ namespace TinyWars.Utility.FlowManager {
         MultiCustomWar.McwUnitBriefPanel.show();
     }
     export async function gotoReplay(warData: Uint8Array, nicknames: string[]): Promise<void> {
-        FloatText.show("TODO!!!!");
+        await ReplayModel.loadWar(warData, nicknames);
+        StageManager.closeAllPanels();
+        Replay.ReplayBackgroundPanel.show();
+        Replay.ReplayTopPanel.show();
+        Replay.ReplayWarPanel.show();
+        Replay.ReplayTileBriefPanel.show();
+        Replay.ReplayUnitBriefPanel.show();
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
