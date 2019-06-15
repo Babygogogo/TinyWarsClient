@@ -3,7 +3,7 @@ namespace TinyWars.Replay {
     import Types            = Utility.Types;
     import MapIndexKey      = Types.MapIndexKey;
     import Action           = Types.SerializedMcwAction;
-    import SerializedMcWar  = Types.SerializedMcwWar;
+    import SerializedMcwWar = Types.SerializedMcwWar;
 
     export class ReplayWar {
         private _warId                  : number;
@@ -13,6 +13,7 @@ namespace TinyWars.Replay {
         private _configVersion          : number;
         private _mapIndexKey            : MapIndexKey;
         private _nextActionId           : number;
+        private _executedActions        : Action[];
         private _remainingVotesForDraw  : number;
         private _timeLimit              : number;
         private _hasFogByDefault        : boolean;
@@ -37,13 +38,14 @@ namespace TinyWars.Replay {
         public constructor() {
         }
 
-        public async init(data: SerializedMcWar): Promise<ReplayWar> {
+        public async init(data: SerializedMcwWar): Promise<ReplayWar> {
             this._warId                 = data.warId;
             this._warName               = data.warName;
             this._warPassword           = data.warPassword;
             this._warComment            = data.warComment;
             this._configVersion         = data.configVersion;
-            this.setNextActionId(data.nextActionId);
+            this.setNextActionId(data.nextActionId || 0);
+            this._executedActions       = data.executedActions;
             this._remainingVotesForDraw = data.remainingVotesForDraw;
             this._timeLimit             = data.timeLimit;
             this._hasFogByDefault       = data.hasFogByDefault;
@@ -168,6 +170,16 @@ namespace TinyWars.Replay {
         public setNextActionId(actionId: number): void {
             this._nextActionId = actionId;
         }
+        public getTotalActionsCount(): number {
+            return this._executedActions.length;
+        }
+
+        public executeNextAction(): void {
+            if (!this.getIsRunningAction()) {
+                const nextActionId = this.getNextActionId();
+                ReplayModel.updateByActionContainer(this._executedActions[nextActionId], this.getWarId(), nextActionId);
+            }
+        }
 
         public getEnterTurnTime(): number {
             return this.getTurnManager().getEnterTurnTime();
@@ -196,14 +208,8 @@ namespace TinyWars.Replay {
         public getPlayer(playerIndex: number): ReplayPlayer | undefined {
             return this.getPlayerManager().getPlayer(playerIndex);
         }
-        public getPlayerIndexLoggedIn(): number | undefined {
-            return this.getPlayerManager().getPlayerIndexLoggedIn();
-        }
         public getPlayerInTurn(): ReplayPlayer {
             return this.getPlayerManager().getPlayerInTurn();
-        }
-        public getPlayerLoggedIn(): ReplayPlayer {
-            return this.getPlayerManager().getPlayerLoggedIn();
         }
 
         private _setField(field: ReplayField): void {

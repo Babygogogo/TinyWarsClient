@@ -23,14 +23,13 @@ namespace TinyWars.Replay {
     }
 
     export class ReplayActionPlanner {
-        private _view               : ReplayActionPlannerView;
-        private _war                : ReplayWar;
-        private _unitMap            : ReplayUnitMap;
-        private _tileMap            : ReplayTileMap;
-        private _turnManager        : ReplayTurnManager;
-        private _cursor             : ReplayCursor;
-        private _mapSize            : Types.MapSize;
-        private _playerIndexLoggedIn: number;
+        private _view       : ReplayActionPlannerView;
+        private _war        : ReplayWar;
+        private _unitMap    : ReplayUnitMap;
+        private _tileMap    : ReplayTileMap;
+        private _turnManager: ReplayTurnManager;
+        private _cursor     : ReplayCursor;
+        private _mapSize    : Types.MapSize;
 
         private _state      : State;
         private _prevState  : State;
@@ -69,12 +68,11 @@ namespace TinyWars.Replay {
         }
 
         public startRunning(war: ReplayWar): void {
-            this._war                   = war;
-            this._unitMap               = war.getUnitMap();
-            this._tileMap               = war.getTileMap();
-            this._turnManager           = war.getTurnManager();
-            this._cursor                = war.getField().getCursor();
-            this._playerIndexLoggedIn   = war.getPlayerIndexLoggedIn();
+            this._war           = war;
+            this._unitMap       = war.getUnitMap();
+            this._tileMap       = war.getTileMap();
+            this._turnManager   = war.getTurnManager();
+            this._cursor        = war.getField().getCursor();
 
             this.setStateIdle();
 
@@ -131,46 +129,46 @@ namespace TinyWars.Replay {
                     this._setStatePreviewingMovableAreaOnTap(gridIndex);
 
                 } else if (nextState === State.RequestingUnitAttack) {
-                    Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() error 11, nextState: ${nextState}`);
+                    Logger.error(`ReplayActionPlanner._onNotifyMcwCursorTapped() error 11, nextState: ${nextState}`);
 
                 } else if (nextState === State.RequestingUnitBeLoaded) {
-                    Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() error 1, nextState: ${nextState}`);
+                    Logger.error(`ReplayActionPlanner._onNotifyMcwCursorTapped() error 1, nextState: ${nextState}`);
 
                 } else if (nextState === State.RequestingUnitBuildTile) {
-                    Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() error 2, nextState: ${nextState}`);
+                    Logger.error(`ReplayActionPlanner._onNotifyMcwCursorTapped() error 2, nextState: ${nextState}`);
 
                 } else if (nextState === State.RequestingUnitCaptureTile) {
-                    Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() error 3, nextState: ${nextState}`);
+                    Logger.error(`ReplayActionPlanner._onNotifyMcwCursorTapped() error 3, nextState: ${nextState}`);
 
                 } else if (nextState === State.RequestingUnitDive) {
-                    Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() error 4, nextState: ${nextState}`);
+                    Logger.error(`ReplayActionPlanner._onNotifyMcwCursorTapped() error 4, nextState: ${nextState}`);
 
                 } else if (nextState === State.RequestingUnitDrop) {
-                    Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() error 12, nextState: ${nextState}`);
+                    Logger.error(`ReplayActionPlanner._onNotifyMcwCursorTapped() error 12, nextState: ${nextState}`);
 
                 } else if (nextState === State.RequestingUnitJoin) {
-                    Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() error 5, nextState: ${nextState}`);
+                    Logger.error(`ReplayActionPlanner._onNotifyMcwCursorTapped() error 5, nextState: ${nextState}`);
 
                 } else if (nextState === State.RequestingUnitLaunchFlare) {
-                    Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() error 13, nextState: ${nextState}`);
+                    Logger.error(`ReplayActionPlanner._onNotifyMcwCursorTapped() error 13, nextState: ${nextState}`);
 
                 } else if (nextState === State.RequestingUnitLaunchSilo) {
-                    Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() error 14, nextState: ${nextState}`);
+                    Logger.error(`ReplayActionPlanner._onNotifyMcwCursorTapped() error 14, nextState: ${nextState}`);
 
                 } else if (nextState === State.RequestingUnitProduceUnit) {
-                    Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() error 6, nextState: ${nextState}`);
+                    Logger.error(`ReplayActionPlanner._onNotifyMcwCursorTapped() error 6, nextState: ${nextState}`);
 
                 } else if (nextState === State.RequestingUnitSupply) {
-                    Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() error 7, nextState: ${nextState}`);
+                    Logger.error(`ReplayActionPlanner._onNotifyMcwCursorTapped() error 7, nextState: ${nextState}`);
 
                 } else if (nextState === State.RequestingUnitSurface) {
-                    Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() error 8, nextState: ${nextState}`);
+                    Logger.error(`ReplayActionPlanner._onNotifyMcwCursorTapped() error 8, nextState: ${nextState}`);
 
                 } else if (nextState === State.RequestingUnitWait) {
-                    Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() error 9, nextState: ${nextState}`);
+                    Logger.error(`ReplayActionPlanner._onNotifyMcwCursorTapped() error 9, nextState: ${nextState}`);
 
                 } else {
-                    Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() error 10, nextState: ${nextState}`);
+                    Logger.error(`ReplayActionPlanner._onNotifyMcwCursorTapped() error 10, nextState: ${nextState}`);
                 }
             }
         }
@@ -214,7 +212,7 @@ namespace TinyWars.Replay {
                     this._setStatePreviewingMovableAreaOnDrag(gridIndex);
 
                 } else {
-                    Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() invalid nextState!`, nextState);
+                    Logger.error(`ReplayActionPlanner._onNotifyMcwCursorTapped() invalid nextState!`, nextState);
                 }
             }
         }
@@ -231,7 +229,7 @@ namespace TinyWars.Replay {
         private _setState(state: State): void {
             this._prevState = this._state;
             this._state     = state;
-            Logger.log(`McwActionPlanner._setState() ${state}`);
+            Logger.log(`ReplayActionPlanner._setState() ${state}`);
             Notify.dispatch(Notify.Type.McwActionPlannerStateChanged);
         }
 
@@ -270,7 +268,7 @@ namespace TinyWars.Replay {
                 this._resetMovePathAsShortest(gridIndex);
 
             } else if (currState === State.ExecutingAction) {
-                Logger.error(`McwActionPlanner._setStateMakingMovePathOnTap() error 1, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateMakingMovePathOnTap() error 1, currState: ${currState}`);
 
             } else if (currState === State.MakingMovePath) {
                 if (this.getFocusUnit().checkCanAttackTargetAfterMovePath(this.getMovePath(), gridIndex)) {
@@ -280,7 +278,7 @@ namespace TinyWars.Replay {
                     if ((existingUnit === this.getFocusUnitOnMap()) && (this.getFocusUnitLoaded())) {
                         // Nothing to do.
                     } else {
-                        if ((!existingUnit) || (existingUnit.getPlayerIndex() !== this._playerIndexLoggedIn)) {
+                        if ((!existingUnit) || (existingUnit.getPlayerIndex() !== this._war.getPlayerInTurn().getPlayerIndex())) {
                             this._resetMovePathAsShortest(this.getAttackableArea()[gridIndex.x][gridIndex.y].movePathDestination);
                         } else {
                             this._setFocusUnitOnMap(existingUnit);
@@ -296,16 +294,16 @@ namespace TinyWars.Replay {
                 // Do nothing.
 
             } else if (currState === State.ChoosingAttackTarget) {
-                Logger.error(`McwActionPlanner._setStateMakingMovePathOnTap() error 2, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateMakingMovePathOnTap() error 2, currState: ${currState}`);
 
             } else if (currState === State.ChoosingDropDestination) {
-                Logger.error(`McwActionPlanner._setStateMakingMovePathOnTap() error 3, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateMakingMovePathOnTap() error 3, currState: ${currState}`);
 
             } else if (currState === State.ChoosingFlareDestination) {
-                Logger.error(`McwActionPlanner._setStateMakingMovePathOnTap() error 4, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateMakingMovePathOnTap() error 4, currState: ${currState}`);
 
             } else if (currState === State.ChoosingSiloDestination) {
-                Logger.error(`McwActionPlanner._setStateMakingMovePathOnTap() error 5, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateMakingMovePathOnTap() error 5, currState: ${currState}`);
 
             } else if (currState === State.ChoosingProductionTarget) {
                 this._setFocusUnitOnMap(this._unitMap.getUnitOnMap(gridIndex));
@@ -328,7 +326,7 @@ namespace TinyWars.Replay {
                 this._clearDataForPreviewingMovableArea();
 
             } else {
-                Logger.error(`McwActionPlanner._setStateMakingMovePathOnTap() error 6, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateMakingMovePathOnTap() error 6, currState: ${currState}`);
             }
 
             this._setState(State.MakingMovePath);
@@ -337,10 +335,10 @@ namespace TinyWars.Replay {
         private _setStateMakingMovePathOnDrag(gridIndex: GridIndex): void {
             const currState = this.getState();
             if (currState === State.Idle) {
-                Logger.error(`McwActionPlanner._setStateMakingMovePathOnDrag() error 1, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateMakingMovePathOnDrag() error 1, currState: ${currState}`);
 
             } else if (currState === State.ExecutingAction) {
-                Logger.error(`McwActionPlanner._setStateMakingMovePathOnDrag() error 2, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateMakingMovePathOnDrag() error 2, currState: ${currState}`);
 
             } else if (currState === State.MakingMovePath) {
                 const focusUnit = this.getFocusUnit();
@@ -366,31 +364,31 @@ namespace TinyWars.Replay {
                 }
 
             } else if (currState === State.ChoosingAction) {
-                Logger.error(`McwActionPlanner._setStateMakingMovePathOnDrag() error 3, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateMakingMovePathOnDrag() error 3, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAttackTarget) {
-                Logger.error(`McwActionPlanner._setStateMakingMovePathOnDrag() error 4, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateMakingMovePathOnDrag() error 4, currState: ${currState}`);
 
             } else if (currState === State.ChoosingDropDestination) {
-                Logger.error(`McwActionPlanner._setStateMakingMovePathOnDrag() error 5, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateMakingMovePathOnDrag() error 5, currState: ${currState}`);
 
             } else if (currState === State.ChoosingFlareDestination) {
-                Logger.error(`McwActionPlanner._setStateMakingMovePathOnDrag() error 6, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateMakingMovePathOnDrag() error 6, currState: ${currState}`);
 
             } else if (currState === State.ChoosingSiloDestination) {
-                Logger.error(`McwActionPlanner._setStateMakingMovePathOnDrag() error 7, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateMakingMovePathOnDrag() error 7, currState: ${currState}`);
 
             } else if (currState === State.ChoosingProductionTarget) {
-                Logger.error(`McwActionPlanner._setStateMakingMovePathOnDrag() error 8, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateMakingMovePathOnDrag() error 8, currState: ${currState}`);
 
             } else if (currState === State.PreviewingAttackableArea) {
-                Logger.error(`McwActionPlanner._setStateMakingMovePathOnDrag() error 9, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateMakingMovePathOnDrag() error 9, currState: ${currState}`);
 
             } else if (currState === State.PreviewingMovableArea) {
-                Logger.error(`McwActionPlanner._setStateMakingMovePathOnDrag() error 10, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateMakingMovePathOnDrag() error 10, currState: ${currState}`);
 
             } else {
-                Logger.error(`McwActionPlanner._setStateMakingMovePathOnDrag() error 11, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateMakingMovePathOnDrag() error 11, currState: ${currState}`);
             }
 
             this._setState(State.MakingMovePath);
@@ -399,10 +397,10 @@ namespace TinyWars.Replay {
         private _setStateMakingMovePathOnChooseAction(unitForLaunch: ReplayUnit): void {
             const currState = this.getState();
             if (currState !== State.ChoosingAction) {
-                Logger.error(`McwActionPlanner._setStateMakingMovePathOnChooseAction() error 1, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateMakingMovePathOnChooseAction() error 1, currState: ${currState}`);
             } else {
                 if (this.getFocusUnitLoaded()) {
-                    Logger.error(`McwActionPlanner._setStateMakingMovePathOnChooseAction() error 2, currState: ${currState}`);
+                    Logger.error(`ReplayActionPlanner._setStateMakingMovePathOnChooseAction() error 2, currState: ${currState}`);
                 } else {
                     this._setFocusUnitLoaded(unitForLaunch);
                     this._resetMovableArea();
@@ -418,17 +416,17 @@ namespace TinyWars.Replay {
         private _setStateChoosingActionOnTap(gridIndex: GridIndex): void {
             const currState = this.getState();
             if (currState === State.Idle) {
-                Logger.error(`McwActionPlanner._setStateChoosingActionOnTap() error 1, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingActionOnTap() error 1, currState: ${currState}`);
 
             } else if (currState === State.ExecutingAction) {
-                Logger.error(`McwActionPlanner._setStateChoosingActionOnTap() error 2, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingActionOnTap() error 2, currState: ${currState}`);
 
             } else if (currState === State.MakingMovePath) {
                 if (checkAreaHasGrid(this.getMovableArea(), gridIndex)) {
                     this._updateMovePathByDestination(gridIndex);
                 } else {
                     if (!this.getFocusUnitLoaded()) {
-                        Logger.error(`McwActionPlanner._setStateChoosingActionOnTap() error 3, currState: ${currState}`);
+                        Logger.error(`ReplayActionPlanner._setStateChoosingActionOnTap() error 3, currState: ${currState}`);
                     } else {
                         this._clearFocusUnitLoaded();
                         this._resetMovableArea();
@@ -438,7 +436,7 @@ namespace TinyWars.Replay {
                 }
 
             } else if (currState === State.ChoosingAction) {
-                Logger.error(`McwActionPlanner._setStateChoosingActionOnTap() error 4, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingActionOnTap() error 4, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAttackTarget) {
                 // Nothing to do.
@@ -457,19 +455,19 @@ namespace TinyWars.Replay {
                 // Nothing to do.
 
             } else if (currState === State.ChoosingSiloDestination) {
-                Logger.error(`McwActionPlanner._setStateChoosingActionOnTap() error 5, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingActionOnTap() error 5, currState: ${currState}`);
 
             } else if (currState === State.ChoosingProductionTarget) {
-                Logger.error(`McwActionPlanner._setStateChoosingActionOnTap() error 6, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingActionOnTap() error 6, currState: ${currState}`);
 
             } else if (currState === State.PreviewingAttackableArea) {
-                Logger.error(`McwActionPlanner._setStateChoosingActionOnTap() error 7, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingActionOnTap() error 7, currState: ${currState}`);
 
             } else if (currState === State.PreviewingMovableArea) {
-                Logger.error(`McwActionPlanner._setStateChoosingActionOnTap() error 8, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingActionOnTap() error 8, currState: ${currState}`);
 
             } else {
-                Logger.error(`McwActionPlanner._setStateChoosingActionOnTap() error 9, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingActionOnTap() error 9, currState: ${currState}`);
             }
 
             this._setState(State.ChoosingAction);
@@ -478,7 +476,7 @@ namespace TinyWars.Replay {
         private _setStateChoosingActionOnDrag(gridIndex: GridIndex): void {
             const currState = this.getState();
             if (currState !== State.ChoosingAction) {
-                Logger.error(`McwActionPlanner._setStateChoosingActionOnDrag() error 1, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingActionOnDrag() error 1, currState: ${currState}`);
             } else {
                 // Nothing to do.
             }
@@ -490,40 +488,40 @@ namespace TinyWars.Replay {
         private _setStateChoosingAttackTargetOnTap(gridIndex: GridIndex): void {
             const currState = this.getState();
             if (currState === State.Idle) {
-                Logger.error(`McwActionPlanner._setStateChoosingAttackTargetOnTap() error 1, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingAttackTargetOnTap() error 1, currState: ${currState}`);
 
             } else if (currState === State.ExecutingAction) {
-                Logger.error(`McwActionPlanner._setStateChoosingAttackTargetOnTap() error 2, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingAttackTargetOnTap() error 2, currState: ${currState}`);
 
             } else if (currState === State.MakingMovePath) {
-                Logger.error(`McwActionPlanner._setStateChoosingAttackTargetOnTap() error 3, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingAttackTargetOnTap() error 3, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAction) {
-                Logger.error(`McwActionPlanner._setStateChoosingAttackTargetOnTap() error 4, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingAttackTargetOnTap() error 4, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAttackTarget) {
                 // Nothing to do.
 
             } else if (currState === State.ChoosingDropDestination) {
-                Logger.error(`McwActionPlanner._setStateChoosingAttackTargetOnTap() error 5, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingAttackTargetOnTap() error 5, currState: ${currState}`);
 
             } else if (currState === State.ChoosingFlareDestination) {
-                Logger.error(`McwActionPlanner._setStateChoosingAttackTargetOnTap() error 6, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingAttackTargetOnTap() error 6, currState: ${currState}`);
 
             } else if (currState === State.ChoosingSiloDestination) {
-                Logger.error(`McwActionPlanner._setStateChoosingAttackTargetOnTap() error 7, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingAttackTargetOnTap() error 7, currState: ${currState}`);
 
             } else if (currState === State.ChoosingProductionTarget) {
-                Logger.error(`McwActionPlanner._setStateChoosingAttackTargetOnTap() error 8, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingAttackTargetOnTap() error 8, currState: ${currState}`);
 
             } else if (currState === State.PreviewingAttackableArea) {
-                Logger.error(`McwActionPlanner._setStateChoosingAttackTargetOnTap() error 9, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingAttackTargetOnTap() error 9, currState: ${currState}`);
 
             } else if (currState === State.PreviewingMovableArea) {
-                Logger.error(`McwActionPlanner._setStateChoosingAttackTargetOnTap() error 10, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingAttackTargetOnTap() error 10, currState: ${currState}`);
 
             } else {
-                Logger.error(`McwActionPlanner._setStateChoosingAttackTargetOnTap() error 11, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingAttackTargetOnTap() error 11, currState: ${currState}`);
             }
 
             this._setState(State.ChoosingAttackTarget);
@@ -532,40 +530,40 @@ namespace TinyWars.Replay {
         private _setStateChoosingAttackTargetOnDrag(gridIndex: GridIndex): void {
             const currState = this.getState();
             if (currState === State.Idle) {
-                Logger.error(`McwActionPlanner._setStateChoosingAttackTargetOnDrag() error 1, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingAttackTargetOnDrag() error 1, currState: ${currState}`);
 
             } else if (currState === State.ExecutingAction) {
-                Logger.error(`McwActionPlanner._setStateChoosingAttackTargetOnDrag() error 2, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingAttackTargetOnDrag() error 2, currState: ${currState}`);
 
             } else if (currState === State.MakingMovePath) {
-                Logger.error(`McwActionPlanner._setStateChoosingAttackTargetOnDrag() error 3, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingAttackTargetOnDrag() error 3, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAction) {
-                Logger.error(`McwActionPlanner._setStateChoosingAttackTargetOnDrag() error 4, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingAttackTargetOnDrag() error 4, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAttackTarget) {
                 // Nothing to do.
 
             } else if (currState === State.ChoosingDropDestination) {
-                Logger.error(`McwActionPlanner._setStateChoosingAttackTargetOnDrag() error 5, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingAttackTargetOnDrag() error 5, currState: ${currState}`);
 
             } else if (currState === State.ChoosingFlareDestination) {
-                Logger.error(`McwActionPlanner._setStateChoosingAttackTargetOnDrag() error 6, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingAttackTargetOnDrag() error 6, currState: ${currState}`);
 
             } else if (currState === State.ChoosingSiloDestination) {
-                Logger.error(`McwActionPlanner._setStateChoosingAttackTargetOnDrag() error 7, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingAttackTargetOnDrag() error 7, currState: ${currState}`);
 
             } else if (currState === State.ChoosingProductionTarget) {
-                Logger.error(`McwActionPlanner._setStateChoosingAttackTargetOnDrag() error 8, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingAttackTargetOnDrag() error 8, currState: ${currState}`);
 
             } else if (currState === State.PreviewingAttackableArea) {
-                Logger.error(`McwActionPlanner._setStateChoosingAttackTargetOnDrag() error 9, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingAttackTargetOnDrag() error 9, currState: ${currState}`);
 
             } else if (currState === State.PreviewingMovableArea) {
-                Logger.error(`McwActionPlanner._setStateChoosingAttackTargetOnDrag() error 10, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingAttackTargetOnDrag() error 10, currState: ${currState}`);
 
             } else {
-                Logger.error(`McwActionPlanner._setStateChoosingAttackTargetOnDrag() error 11, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingAttackTargetOnDrag() error 11, currState: ${currState}`);
             }
 
             this._setState(State.ChoosingAttackTarget);
@@ -574,7 +572,7 @@ namespace TinyWars.Replay {
         private _setStateChoosingAttackTargetOnChooseAction(): void {
             const currState = this.getState();
             if (currState !== State.ChoosingAction) {
-                Logger.error(`McwActionPlanner._setStateChoosingAttackTargetOnChooseAction() error 1, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingAttackTargetOnChooseAction() error 1, currState: ${currState}`);
             } else {
                 this._setAttackableGridsAfterMove(this._createAttackableGridsAfterMove());
             }
@@ -586,13 +584,13 @@ namespace TinyWars.Replay {
         private _setStateChoosingDropDestinationOnTap(gridIndex: GridIndex): void {
             const currState = this.getState();
             if (currState === State.Idle) {
-                Logger.error(`McwActionPlanner._setStateChoosingDropDestinationOnTap() error 1, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingDropDestinationOnTap() error 1, currState: ${currState}`);
 
             } else if (currState === State.ExecutingAction) {
-                Logger.error(`McwActionPlanner._setStateChoosingDropDestinationOnTap() error 2, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingDropDestinationOnTap() error 2, currState: ${currState}`);
 
             } else if (currState === State.MakingMovePath) {
-                Logger.error(`McwActionPlanner._setStateChoosingDropDestinationOnTap() error 3, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingDropDestinationOnTap() error 3, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAction) {
                 const data = this._popBackChosenUnitForDrop();
@@ -600,28 +598,28 @@ namespace TinyWars.Replay {
                 this._setAvailableDropDestinations(this._calculateAvailableDropDestination(data.unit, this._getChosenDropDestinations()));
 
             } else if (currState === State.ChoosingAttackTarget) {
-                Logger.error(`McwActionPlanner._setStateChoosingDropDestinationOnTap() error 4, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingDropDestinationOnTap() error 4, currState: ${currState}`);
 
             } else if (currState === State.ChoosingDropDestination) {
-                Logger.error(`McwActionPlanner._setStateChoosingDropDestinationOnTap() error 5, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingDropDestinationOnTap() error 5, currState: ${currState}`);
 
             } else if (currState === State.ChoosingFlareDestination) {
-                Logger.error(`McwActionPlanner._setStateChoosingDropDestinationOnTap() error 6, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingDropDestinationOnTap() error 6, currState: ${currState}`);
 
             } else if (currState === State.ChoosingSiloDestination) {
-                Logger.error(`McwActionPlanner._setStateChoosingDropDestinationOnTap() error 7, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingDropDestinationOnTap() error 7, currState: ${currState}`);
 
             } else if (currState === State.ChoosingProductionTarget) {
-                Logger.error(`McwActionPlanner._setStateChoosingDropDestinationOnTap() error 8, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingDropDestinationOnTap() error 8, currState: ${currState}`);
 
             } else if (currState === State.PreviewingAttackableArea) {
-                Logger.error(`McwActionPlanner._setStateChoosingDropDestinationOnTap() error 9, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingDropDestinationOnTap() error 9, currState: ${currState}`);
 
             } else if (currState === State.PreviewingMovableArea) {
-                Logger.error(`McwActionPlanner._setStateChoosingDropDestinationOnTap() error 10, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingDropDestinationOnTap() error 10, currState: ${currState}`);
 
             } else {
-                Logger.error(`McwActionPlanner._setStateChoosingDropDestinationOnTap() error 11, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingDropDestinationOnTap() error 11, currState: ${currState}`);
             }
 
             this._setState(State.ChoosingDropDestination);
@@ -630,40 +628,40 @@ namespace TinyWars.Replay {
         private _setStateChoosingDropDestinationOnDrag(gridIndex: GridIndex): void {
             const currState = this.getState();
             if (currState === State.Idle) {
-                Logger.error(`McwActionPlanner._setStateChoosingDropDestinationOnDrag() error 1, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingDropDestinationOnDrag() error 1, currState: ${currState}`);
 
             } else if (currState === State.ExecutingAction) {
-                Logger.error(`McwActionPlanner._setStateChoosingDropDestinationOnDrag() error 2, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingDropDestinationOnDrag() error 2, currState: ${currState}`);
 
             } else if (currState === State.MakingMovePath) {
-                Logger.error(`McwActionPlanner._setStateChoosingDropDestinationOnDrag() error 3, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingDropDestinationOnDrag() error 3, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAction) {
-                Logger.error(`McwActionPlanner._setStateChoosingDropDestinationOnDrag() error 4, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingDropDestinationOnDrag() error 4, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAttackTarget) {
-                Logger.error(`McwActionPlanner._setStateChoosingDropDestinationOnDrag() error 5, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingDropDestinationOnDrag() error 5, currState: ${currState}`);
 
             } else if (currState === State.ChoosingDropDestination) {
                 // Nothing to do.
 
             } else if (currState === State.ChoosingFlareDestination) {
-                Logger.error(`McwActionPlanner._setStateChoosingDropDestinationOnDrag() error 6, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingDropDestinationOnDrag() error 6, currState: ${currState}`);
 
             } else if (currState === State.ChoosingSiloDestination) {
-                Logger.error(`McwActionPlanner._setStateChoosingDropDestinationOnDrag() error 7, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingDropDestinationOnDrag() error 7, currState: ${currState}`);
 
             } else if (currState === State.ChoosingProductionTarget) {
-                Logger.error(`McwActionPlanner._setStateChoosingDropDestinationOnDrag() error 8, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingDropDestinationOnDrag() error 8, currState: ${currState}`);
 
             } else if (currState === State.PreviewingAttackableArea) {
-                Logger.error(`McwActionPlanner._setStateChoosingDropDestinationOnDrag() error 9, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingDropDestinationOnDrag() error 9, currState: ${currState}`);
 
             } else if (currState === State.PreviewingMovableArea) {
-                Logger.error(`McwActionPlanner._setStateChoosingDropDestinationOnDrag() error 10, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingDropDestinationOnDrag() error 10, currState: ${currState}`);
 
             } else {
-                Logger.error(`McwActionPlanner._setStateChoosingDropDestinationOnDrag() error 11, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingDropDestinationOnDrag() error 11, currState: ${currState}`);
             }
 
             this._setState(State.ChoosingDropDestination);
@@ -672,7 +670,7 @@ namespace TinyWars.Replay {
         private _setStateChoosingDropDestinationOnChooseAction(unitForDrop: ReplayUnit): void {
             const currState = this.getState();
             if (currState !== State.ChoosingAction) {
-                Logger.error(`McwActionPlanner._setStateChoosingDropDestinationOnChooseAction() error 1, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingDropDestinationOnChooseAction() error 1, currState: ${currState}`);
             } else {
                 this._setChoosingUnitForDrop(unitForDrop);
                 this._setAvailableDropDestinations(this._calculateAvailableDropDestination(unitForDrop, this._getChosenDropDestinations()));
@@ -685,40 +683,40 @@ namespace TinyWars.Replay {
         private _setStateChoosingFlareDestinationOnTap(gridIndex: GridIndex): void {
             const currState = this.getState();
             if (currState === State.Idle) {
-                Logger.error(`McwActionPlanner._setStateChoosingFlareDestinationOnTap() error 1, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingFlareDestinationOnTap() error 1, currState: ${currState}`);
 
             } else if (currState === State.ExecutingAction) {
-                Logger.error(`McwActionPlanner._setStateChoosingFlareDestinationOnTap() error 2, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingFlareDestinationOnTap() error 2, currState: ${currState}`);
 
             } else if (currState === State.MakingMovePath) {
-                Logger.error(`McwActionPlanner._setStateChoosingFlareDestinationOnTap() error 3, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingFlareDestinationOnTap() error 3, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAction) {
-                Logger.error(`McwActionPlanner._setStateChoosingFlareDestinationOnTap() error 4, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingFlareDestinationOnTap() error 4, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAttackTarget) {
-                Logger.error(`McwActionPlanner._setStateChoosingFlareDestinationOnTap() error 5, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingFlareDestinationOnTap() error 5, currState: ${currState}`);
 
             } else if (currState === State.ChoosingDropDestination) {
-                Logger.error(`McwActionPlanner._setStateChoosingFlareDestinationOnTap() error 6, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingFlareDestinationOnTap() error 6, currState: ${currState}`);
 
             } else if (currState === State.ChoosingFlareDestination) {
                 // Nothing to do.
 
             } else if (currState === State.ChoosingSiloDestination) {
-                Logger.error(`McwActionPlanner._setStateChoosingFlareDestinationOnTap() error 7, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingFlareDestinationOnTap() error 7, currState: ${currState}`);
 
             } else if (currState === State.ChoosingProductionTarget) {
-                Logger.error(`McwActionPlanner._setStateChoosingFlareDestinationOnTap() error 8, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingFlareDestinationOnTap() error 8, currState: ${currState}`);
 
             } else if (currState === State.PreviewingAttackableArea) {
-                Logger.error(`McwActionPlanner._setStateChoosingFlareDestinationOnTap() error 9, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingFlareDestinationOnTap() error 9, currState: ${currState}`);
 
             } else if (currState === State.PreviewingMovableArea) {
-                Logger.error(`McwActionPlanner._setStateChoosingFlareDestinationOnTap() error 10, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingFlareDestinationOnTap() error 10, currState: ${currState}`);
 
             } else {
-                Logger.error(`McwActionPlanner._setStateChoosingFlareDestinationOnTap() error 11, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingFlareDestinationOnTap() error 11, currState: ${currState}`);
             }
 
             this._setState(State.ChoosingFlareDestination);
@@ -727,40 +725,40 @@ namespace TinyWars.Replay {
         private _setStateChoosingFlareDestinationOnDrag(gridIndex: GridIndex): void {
             const currState = this.getState();
             if (currState === State.Idle) {
-                Logger.error(`McwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 1, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingFlareDestinationOnDrag() error 1, currState: ${currState}`);
 
             } else if (currState === State.ExecutingAction) {
-                Logger.error(`McwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 2, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingFlareDestinationOnDrag() error 2, currState: ${currState}`);
 
             } else if (currState === State.MakingMovePath) {
-                Logger.error(`McwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 3, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingFlareDestinationOnDrag() error 3, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAction) {
-                Logger.error(`McwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 4, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingFlareDestinationOnDrag() error 4, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAttackTarget) {
-                Logger.error(`McwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 5, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingFlareDestinationOnDrag() error 5, currState: ${currState}`);
 
             } else if (currState === State.ChoosingDropDestination) {
-                Logger.error(`McwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 6, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingFlareDestinationOnDrag() error 6, currState: ${currState}`);
 
             } else if (currState === State.ChoosingFlareDestination) {
                 // Nothing to do.
 
             } else if (currState === State.ChoosingSiloDestination) {
-                Logger.error(`McwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 7, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingFlareDestinationOnDrag() error 7, currState: ${currState}`);
 
             } else if (currState === State.ChoosingProductionTarget) {
-                Logger.error(`McwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 8, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingFlareDestinationOnDrag() error 8, currState: ${currState}`);
 
             } else if (currState === State.PreviewingAttackableArea) {
-                Logger.error(`McwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 9, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingFlareDestinationOnDrag() error 9, currState: ${currState}`);
 
             } else if (currState === State.PreviewingMovableArea) {
-                Logger.error(`McwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 10, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingFlareDestinationOnDrag() error 10, currState: ${currState}`);
 
             } else {
-                Logger.error(`McwActionPlanner._setStateChoosingFlareDestinationOnDrag() error 11, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingFlareDestinationOnDrag() error 11, currState: ${currState}`);
             }
 
             this._setState(State.ChoosingFlareDestination);
@@ -769,7 +767,7 @@ namespace TinyWars.Replay {
         private _setStateChoosingFlareDestinationOnChooseAction(): void {
             const currState = this.getState();
             if (currState !== State.ChoosingAction) {
-                Logger.error(`McwActionPlanner._setStateChoosingFlareDestinationOnChooseAction() error 1, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingFlareDestinationOnChooseAction() error 1, currState: ${currState}`);
             } else {
                 // Nothing to do.
             }
@@ -781,40 +779,40 @@ namespace TinyWars.Replay {
         private _setStateChoosingSiloDestinationOnTap(gridIndex: GridIndex): void {
             const currState = this.getState();
             if (currState === State.Idle) {
-                Logger.error(`McwActionPlanner._setStateChoosingSiloDestinationOnTap error 1, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingSiloDestinationOnTap error 1, currState: ${currState}`);
 
             } else if (currState === State.ExecutingAction) {
-                Logger.error(`McwActionPlanner._setStateChoosingSiloDestinationOnTap error 2, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingSiloDestinationOnTap error 2, currState: ${currState}`);
 
             } else if (currState === State.MakingMovePath) {
-                Logger.error(`McwActionPlanner._setStateChoosingSiloDestinationOnTap error 3, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingSiloDestinationOnTap error 3, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAction) {
-                Logger.error(`McwActionPlanner._setStateChoosingSiloDestinationOnTap error 4, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingSiloDestinationOnTap error 4, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAttackTarget) {
-                Logger.error(`McwActionPlanner._setStateChoosingSiloDestinationOnTap error 5, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingSiloDestinationOnTap error 5, currState: ${currState}`);
 
             } else if (currState === State.ChoosingDropDestination) {
-                Logger.error(`McwActionPlanner._setStateChoosingSiloDestinationOnTap error 6, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingSiloDestinationOnTap error 6, currState: ${currState}`);
 
             } else if (currState === State.ChoosingFlareDestination) {
-                Logger.error(`McwActionPlanner._setStateChoosingSiloDestinationOnTap error 7, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingSiloDestinationOnTap error 7, currState: ${currState}`);
 
             } else if (currState === State.ChoosingSiloDestination) {
                 // Nothing to do.
 
             } else if (currState === State.ChoosingProductionTarget) {
-                Logger.error(`McwActionPlanner._setStateChoosingSiloDestinationOnTap error 8, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingSiloDestinationOnTap error 8, currState: ${currState}`);
 
             } else if (currState === State.PreviewingAttackableArea) {
-                Logger.error(`McwActionPlanner._setStateChoosingSiloDestinationOnTap error 9, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingSiloDestinationOnTap error 9, currState: ${currState}`);
 
             } else if (currState === State.PreviewingMovableArea) {
-                Logger.error(`McwActionPlanner._setStateChoosingSiloDestinationOnTap error 10, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingSiloDestinationOnTap error 10, currState: ${currState}`);
 
             } else {
-                Logger.error(`McwActionPlanner._setStateChoosingSiloDestinationOnTap error 11, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingSiloDestinationOnTap error 11, currState: ${currState}`);
             }
 
             this._setState(State.ChoosingSiloDestination);
@@ -823,40 +821,40 @@ namespace TinyWars.Replay {
         private _setStateChoosingSiloDestinationOnDrag(gridIndex: GridIndex): void {
             const currState = this.getState();
             if (currState === State.Idle) {
-                Logger.error(`McwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 1, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingSiloDestinationOnDrag() error 1, currState: ${currState}`);
 
             } else if (currState === State.ExecutingAction) {
-                Logger.error(`McwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 2, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingSiloDestinationOnDrag() error 2, currState: ${currState}`);
 
             } else if (currState === State.MakingMovePath) {
-                Logger.error(`McwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 3, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingSiloDestinationOnDrag() error 3, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAction) {
-                Logger.error(`McwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 4, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingSiloDestinationOnDrag() error 4, currState: ${currState}`);
 
             } else if (currState === State.ChoosingAttackTarget) {
-                Logger.error(`McwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 5, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingSiloDestinationOnDrag() error 5, currState: ${currState}`);
 
             } else if (currState === State.ChoosingDropDestination) {
-                Logger.error(`McwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 6, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingSiloDestinationOnDrag() error 6, currState: ${currState}`);
 
             } else if (currState === State.ChoosingFlareDestination) {
-                Logger.error(`McwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 7, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingSiloDestinationOnDrag() error 7, currState: ${currState}`);
 
             } else if (currState === State.ChoosingSiloDestination) {
                 // Nothing to do.
 
             } else if (currState === State.ChoosingProductionTarget) {
-                Logger.error(`McwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 8, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingSiloDestinationOnDrag() error 8, currState: ${currState}`);
 
             } else if (currState === State.PreviewingAttackableArea) {
-                Logger.error(`McwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 9, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingSiloDestinationOnDrag() error 9, currState: ${currState}`);
 
             } else if (currState === State.PreviewingMovableArea) {
-                Logger.error(`McwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 10, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingSiloDestinationOnDrag() error 10, currState: ${currState}`);
 
             } else {
-                Logger.error(`McwActionPlanner._setStateChoosingSiloDestinationOnDrag() error 11, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingSiloDestinationOnDrag() error 11, currState: ${currState}`);
             }
 
             this._setState(State.ChoosingSiloDestination);
@@ -865,7 +863,7 @@ namespace TinyWars.Replay {
         private _setStateChoosingSiloDestinationOnChooseAction(): void {
             const currState = this.getState();
             if (currState !== State.ChoosingAction) {
-                Logger.error(`McwActionPlanner._setStateChoosingSiloDestinationOnChooseAction() error 1, currState: ${currState}`);
+                Logger.error(`ReplayActionPlanner._setStateChoosingSiloDestinationOnChooseAction() error 1, currState: ${currState}`);
             } else {
                 // Nothing to do.
             }
@@ -875,10 +873,10 @@ namespace TinyWars.Replay {
         }
 
         private _setStateChoosingProductionTargetOnTap(gridIndex: GridIndex): void {
-            Logger.error(`McwActionPlanner._setStateChoosingProductionTargetTap() error 1, currState: ${this.getState()}`);
+            Logger.error(`ReplayActionPlanner._setStateChoosingProductionTargetTap() error 1, currState: ${this.getState()}`);
         }
         private _setStateChoosingProductionTargetOnDrag(gridIndex: GridIndex): void {
-            Logger.error(`McwActionPlanner._setStateChoosingProductionTargetOnDrag() error 1, currState: ${this.getState()}`);
+            Logger.error(`ReplayActionPlanner._setStateChoosingProductionTargetOnDrag() error 1, currState: ${this.getState()}`);
         }
 
         private _setStatePreviewingAttackableAreaOnTap(gridIndex: GridIndex): void {
@@ -1222,7 +1220,7 @@ namespace TinyWars.Replay {
                     case State.PreviewingAttackableArea     : return this._getNextStateOnTapWhenPreviewingAttackableArea(gridIndex);
                     case State.PreviewingMovableArea        : return this._getNextStateOnTapWhenPreviewingMovableArea(gridIndex);
                     default:
-                        Logger.error(`McwActionPlanner._getNextStateOnTap() invalid currState!`);
+                        Logger.error(`ReplayActionPlanner._getNextStateOnTap() invalid currState!`);
                         return State.Idle;
                 }
             }
@@ -1230,17 +1228,17 @@ namespace TinyWars.Replay {
         private _getNextStateOnTapWhenIdle(gridIndex: GridIndex): State {
             const turnManager       = this._turnManager;
             const unit              = this._unitMap.getUnitOnMap(gridIndex);
-            const selfPlayerIndex   = this._playerIndexLoggedIn;
-            const isSelfInTurn      = (turnManager.getPlayerIndexInTurn() === selfPlayerIndex) && (turnManager.getPhaseCode() === TurnPhaseCode.Main);
+            const playerIndexInTurn = this._war.getPlayerInTurn().getPlayerIndex();
+            const isSelfInTurn      = (turnManager.getPlayerIndexInTurn() === playerIndexInTurn) && (turnManager.getPhaseCode() === TurnPhaseCode.Main);
             if (!unit) {
                 const tile = this._tileMap.getTile(gridIndex);
-                if ((isSelfInTurn) && (tile.getPlayerIndex() === selfPlayerIndex) && (tile.checkIsUnitProducer())) {
+                if ((isSelfInTurn) && (tile.getPlayerIndex() === playerIndexInTurn) && (tile.checkIsUnitProducer())) {
                     return State.ChoosingProductionTarget;
                 } else {
                     return State.Idle;
                 }
             } else {
-                if ((isSelfInTurn) && ((unit.getState() === UnitState.Idle) && (unit.getPlayerIndex() === selfPlayerIndex))) {
+                if ((isSelfInTurn) && ((unit.getState() === UnitState.Idle) && (unit.getPlayerIndex() === playerIndexInTurn))) {
                     return State.MakingMovePath;
                 } else {
                     if (unit.checkHasWeapon()) {
@@ -1253,12 +1251,12 @@ namespace TinyWars.Replay {
         }
         private _getNextStateOnTapWhenMakingMovePath(gridIndex: GridIndex): State {
             const existingUnit      = this._unitMap.getUnitOnMap(gridIndex);
-            const selfPlayerIndex   = this._playerIndexLoggedIn;
+            const playerIndexInTurn = this._war.getPlayerInTurn().getPlayerIndex();
             if (checkAreaHasGrid(this.getMovableArea(), gridIndex)) {
                 if (!existingUnit) {
                     return State.ChoosingAction;
                 } else {
-                    if (existingUnit.getPlayerIndex() !== selfPlayerIndex) {
+                    if (existingUnit.getPlayerIndex() !== playerIndexInTurn) {
                         if (existingUnit.checkHasWeapon()) {
                             return State.PreviewingAttackableArea;
                         } else {
@@ -1299,7 +1297,7 @@ namespace TinyWars.Replay {
                         if (!existingUnit) {
                             return State.Idle;
                         } else {
-                            if ((existingUnit.getPlayerIndex() === selfPlayerIndex) && (existingUnit.getState() === UnitState.Idle)) {
+                            if ((existingUnit.getPlayerIndex() === playerIndexInTurn) && (existingUnit.getState() === UnitState.Idle)) {
                                 return State.MakingMovePath;
                             } else {
                                 if (existingUnit.checkHasWeapon()) {
@@ -1376,17 +1374,17 @@ namespace TinyWars.Replay {
             } else {
                 const turnManager       = this._turnManager;
                 const unit              = this._unitMap.getUnitOnMap(gridIndex);
-                const selfPlayerIndex   = this._playerIndexLoggedIn;
-                const isSelfInTurn      = (turnManager.getPlayerIndexInTurn() === selfPlayerIndex) && (turnManager.getPhaseCode() === TurnPhaseCode.Main);
+                const playerIndexInTurn = this._war.getPlayerInTurn().getPlayerIndex();
+                const isSelfInTurn      = (turnManager.getPlayerIndexInTurn() === playerIndexInTurn) && (turnManager.getPhaseCode() === TurnPhaseCode.Main);
                 if (!unit) {
                     const tile = this._tileMap.getTile(gridIndex);
-                    if ((isSelfInTurn) && (tile.getPlayerIndex() === selfPlayerIndex) && (tile.checkIsUnitProducer())) {
+                    if ((isSelfInTurn) && (tile.getPlayerIndex() === playerIndexInTurn) && (tile.checkIsUnitProducer())) {
                         return State.ChoosingProductionTarget;
                     } else {
                         return State.Idle;
                     }
                 } else {
-                    if ((isSelfInTurn) && ((unit.getState() === UnitState.Idle) && (unit.getPlayerIndex() === selfPlayerIndex))) {
+                    if ((isSelfInTurn) && ((unit.getState() === UnitState.Idle) && (unit.getPlayerIndex() === playerIndexInTurn))) {
                         return State.MakingMovePath;
                     } else {
                         if (unit.checkHasWeapon()) {
@@ -1401,17 +1399,17 @@ namespace TinyWars.Replay {
         private _getNextStateOnTapWhenPreviewingAttackableArea(gridIndex: GridIndex): State {
             const turnManager       = this._turnManager;
             const unit              = this._unitMap.getUnitOnMap(gridIndex);
-            const selfPlayerIndex   = this._playerIndexLoggedIn;
-            const isSelfInTurn      = (turnManager.getPlayerIndexInTurn() === selfPlayerIndex) && (turnManager.getPhaseCode() === TurnPhaseCode.Main);
+            const playerIndexInTurn = this._war.getPlayerInTurn().getPlayerIndex();
+            const isSelfInTurn      = (turnManager.getPlayerIndexInTurn() === playerIndexInTurn) && (turnManager.getPhaseCode() === TurnPhaseCode.Main);
             if (!unit) {
                 const tile = this._tileMap.getTile(gridIndex);
-                if ((isSelfInTurn) && (tile.getPlayerIndex() === selfPlayerIndex) && (tile.checkIsUnitProducer())) {
+                if ((isSelfInTurn) && (tile.getPlayerIndex() === playerIndexInTurn) && (tile.checkIsUnitProducer())) {
                     return State.ChoosingProductionTarget;
                 } else {
                     return State.Idle;
                 }
             } else {
-                if ((isSelfInTurn) && ((unit.getState() === UnitState.Idle) && (unit.getPlayerIndex() === selfPlayerIndex))) {
+                if ((isSelfInTurn) && ((unit.getState() === UnitState.Idle) && (unit.getPlayerIndex() === playerIndexInTurn))) {
                     return State.MakingMovePath;
                 } else {
                     if (this.getUnitsForPreviewingAttackableArea().has(unit.getUnitId())) {
@@ -1429,17 +1427,17 @@ namespace TinyWars.Replay {
         private _getNextStateOnTapWhenPreviewingMovableArea(gridIndex: GridIndex): State {
             const turnManager       = this._turnManager;
             const unit              = this._unitMap.getUnitOnMap(gridIndex);
-            const selfPlayerIndex   = this._playerIndexLoggedIn;
-            const isSelfInTurn      = (turnManager.getPlayerIndexInTurn() === selfPlayerIndex) && (turnManager.getPhaseCode() === TurnPhaseCode.Main);
+            const playerIndexInTurn = this._war.getPlayerInTurn().getPlayerIndex();
+            const isSelfInTurn      = (turnManager.getPlayerIndexInTurn() === playerIndexInTurn) && (turnManager.getPhaseCode() === TurnPhaseCode.Main);
             if (!unit) {
                 const tile = this._tileMap.getTile(gridIndex);
-                if ((isSelfInTurn) && (tile.getPlayerIndex() === selfPlayerIndex) && (tile.checkIsUnitProducer())) {
+                if ((isSelfInTurn) && (tile.getPlayerIndex() === playerIndexInTurn) && (tile.checkIsUnitProducer())) {
                     return State.ChoosingProductionTarget;
                 } else {
                     return State.Idle;
                 }
             } else {
-                if ((isSelfInTurn) && ((unit.getState() === UnitState.Idle) && (unit.getPlayerIndex() === selfPlayerIndex))) {
+                if ((isSelfInTurn) && ((unit.getState() === UnitState.Idle) && (unit.getPlayerIndex() === playerIndexInTurn))) {
                     return State.MakingMovePath;
                 } else {
                     if (this.getUnitForPreviewingMovableArea() !== unit) {

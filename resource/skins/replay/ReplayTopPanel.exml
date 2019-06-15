@@ -16,6 +16,14 @@
                 </e:Skin>
             </GameUi:skinName>
         </GameUi:UiButton>
+        <GameUi:UiButton id="_btnPlay" label="播放" x="580" verticalCenter="0" width="28">
+            <GameUi:skinName>
+                <e:Skin states="up,down,disabled">
+                    <e:Image width="100%" height="100%" />
+                    <e:Label id="labelDisplay" size="14" left="0" right="0" top="0" bottom="0" textColor="0x00ff00" />
+                </e:Skin>
+            </GameUi:skinName>
+        </GameUi:UiButton>
         <GameUi:UiButton id="_btnFindBuilding" label="寻找建筑" x="740" verticalCenter="0" width="28">
             <GameUi:skinName>
                 <e:Skin states="up,down,disabled">

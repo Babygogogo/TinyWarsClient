@@ -9,6 +9,7 @@ namespace TinyWars.Replay.ReplayModel {
     import Lang                 = Utility.Lang;
     import FloatText            = Utility.FloatText;
     import ProtoManager         = Utility.ProtoManager;
+    import FlowManager          = Utility.FlowManager;
     import ActionContainer      = ProtoTypes.IActionContainer;
     import ActionCodes          = Network.Codes;
     import AlertPanel           = Common.AlertPanel;
@@ -41,8 +42,7 @@ namespace TinyWars.Replay.ReplayModel {
         [ActionCodes.S_McwUnitWait,             _executeMcwUnitWait],
     ]);
 
-    let _war            : ReplayWar;
-    let _cachedActions  = new Array<ActionContainer>();
+    let _war: ReplayWar;
 
     export function init(): void {
     }
@@ -58,7 +58,7 @@ namespace TinyWars.Replay.ReplayModel {
 
         const warData = ProtoManager.decodeAsSerializedMcwWar(encodedWarData);
         for (let i = 0; i < nicknames.length; ++i) {
-            warData.players[i].nickname = nicknames[i];
+            warData.players[i + 1].nickname = nicknames[i];
         }
 
         _war = (await new ReplayWar().init(warData)).startRunning().startRunningView();
@@ -68,8 +68,7 @@ namespace TinyWars.Replay.ReplayModel {
     export function unloadWar(): void {
         if (_war) {
             _war.stopRunning();
-            _war                    = undefined;
-            _cachedActions.length   = 0;
+            _war = undefined;
         }
     }
 
@@ -77,120 +76,31 @@ namespace TinyWars.Replay.ReplayModel {
         return _war;
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Handlers for war actions that McwProxy receives.
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export function updateOnPlayerBeginTurn(data: ProtoTypes.IS_McwPlayerBeginTurn): void {
-        _updateByActionContainer({ S_McwPlayerBeginTurn: data }, data.warId, data.actionId);
-    }
-    export function updateOnPlayerDeleteUnit(data: ProtoTypes.IS_McwPlayerDeleteUnit): void {
-        _updateByActionContainer({ S_McwPlayerDeleteUnit: data }, data.warId, data.actionId);
-    }
-    export function updateOnPlayerEndTurn(data: ProtoTypes.IS_McwPlayerEndTurn): void {
-        _updateByActionContainer({ S_McwPlayerEndTurn: data }, data.warId, data.actionId);
-    }
-    export function updateOnPlayerSurrender(data: ProtoTypes.IS_McwPlayerSurrender): void {
-        _updateByActionContainer({ S_McwPlayerSurrender: data }, data.warId, data.actionId);
-    }
-    export function updateOnPlayerVoteForDraw(data: ProtoTypes.IS_McwPlayerVoteForDraw): void {
-        _updateByActionContainer({ S_McwPlayerVoteForDraw: data }, data.warId, data.actionId);
-    }
-    export function updateOnPlayerProduceUnit(data: ProtoTypes.IS_McwPlayerProduceUnit): void {
-        _updateByActionContainer({ S_McwPlayerProduceUnit: data }, data.warId, data.actionId);
-    }
-    export function updateOnUnitAttack(data: ProtoTypes.IS_McwUnitAttack): void {
-        _updateByActionContainer({ S_McwUnitAttack: data }, data.warId, data.actionId);
-    }
-    export function updateOnUnitBeLoaded(data: ProtoTypes.IS_McwUnitBeLoaded): void {
-        _updateByActionContainer({ S_McwUnitBeLoaded: data }, data.warId, data.actionId);
-    }
-    export function updateOnUnitBuildTile(data: ProtoTypes.IS_McwUnitBuildTile): void {
-        _updateByActionContainer({ S_McwUnitBuildTile: data }, data.warId, data.actionId);
-    }
-    export function updateOnUnitCaptureTile(data: ProtoTypes.IS_McwUnitCaptureTile): void {
-        _updateByActionContainer({ S_McwUnitCaptureTile: data }, data.warId, data.actionId);
-    }
-    export function updateOnUnitDive(data: ProtoTypes.IS_McwUnitDive): void {
-        _updateByActionContainer({ S_McwUnitDive: data }, data.warId, data.actionId);
-    }
-    export function updateOnUnitDrop(data: ProtoTypes.IS_McwUnitDrop): void {
-        _updateByActionContainer({ S_McwUnitDrop: data }, data.warId, data.actionId);
-    }
-    export function updateOnUnitJoin(data: ProtoTypes.IS_McwUnitJoin): void {
-        _updateByActionContainer({ S_McwUnitJoin: data }, data.warId, data.actionId);
-    }
-    export function updateOnUnitLaunchFlare(data: ProtoTypes.IS_McwUnitLaunchFlare): void {
-        _updateByActionContainer({ S_McwUnitLaunchFlare: data }, data.warId, data.actionId);
-    }
-    export function updateOnUnitLaunchSilo(data: ProtoTypes.IS_McwUnitLaunchSilo): void {
-        _updateByActionContainer({ S_McwUnitLaunchSilo: data }, data.warId, data.actionId);
-    }
-    export function updateOnUnitProduceUnit(data: ProtoTypes.IS_McwUnitProduceUnit): void {
-        _updateByActionContainer({ S_McwUnitProduceUnit: data }, data.warId, data.actionId);
-    }
-    export function updateOnUnitSupply(data: ProtoTypes.IS_McwUnitSupply): void {
-        _updateByActionContainer({ S_McwUnitSupply: data }, data.warId, data.actionId);
-    }
-    export function updateOnUnitSurface(data: ProtoTypes.IS_McwUnitSurface): void {
-        _updateByActionContainer({ S_McwUnitSurface: data }, data.warId, data.actionId);
-    }
-    export function updateOnUnitWait(data: ProtoTypes.IS_McwUnitWait): void {
-        _updateByActionContainer({ S_McwUnitWait: data }, data.warId, data.actionId);
+    export function updateByActionContainer(container: ActionContainer, warId: number, actionId: number): void {
+        if ((_war)                                  &&
+            (container)                             &&
+            (_war.getWarId() === warId)             &&
+            (_war.getNextActionId() === actionId)   &&
+            (_war.getIsRunningWar())                &&
+            (!_war.getIsEnded())                    &&
+            (!_war.getIsRunningAction())
+        ) {
+            _executeAction(_war, container);
+        } else {
+            FloatText.show(Lang.getText(Lang.Type.A0037));
+            FlowManager.gotoLobby();
+        }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Util functions.
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    function _updateByActionContainer(container: ActionContainer, warId: number, actionId: number): void {
-        // if ((_war) && (_war.getWarId() === warId)) {
-        //     if (actionId !== _war.getNextActionId() + _cachedActions.length) {
-        //         ReplayProxy.reqMcwPlayerSyncWar(_war, Types.SyncWarRequestType.ReconnectionRequest);
-        //     } else {
-        //         _cachedActions.push(container);
-        //         _checkAndRunFirstCachedAction();
-        //     }
-        // }
-    }
+    async function _executeAction(war: ReplayWar, container: ActionContainer): Promise<void> {
+        war.setIsRunningAction(true);
+        war.setNextActionId(war.getNextActionId() + 1);
+        await _EXECUTORS.get(Helpers.getActionCode(container))(war, container);
+        war.setIsRunningAction(false);
 
-    async function _checkAndRunFirstCachedAction(): Promise<void> {
-        const container = _cachedActions.length ? _cachedActions.shift() : undefined;
-        if ((container) && (_war.getIsRunningWar()) && (!_war.getIsEnded()) && (!_war.getIsRunningAction())) {
-            _war.setIsRunningAction(true);
-            _war.setNextActionId(_war.getNextActionId() + 1);
-            await _EXECUTORS.get(Helpers.getActionCode(container))(_war, container);
-            _war.setIsRunningAction(false);
-
-            if (!_war.getPlayerLoggedIn().getIsAlive()) {
-                _war.setIsEnded(true);
-                AlertPanel.show({
-                    title   : Lang.getText(Lang.Type.B0035),
-                    content : Lang.getText(Lang.Type.A0023),
-                    callback: () => Utility.FlowManager.gotoLobby(),
-                });
-
-            } else {
-                if (_war.getRemainingVotesForDraw() === 0) {
-                    _war.setIsEnded(true);
-                    AlertPanel.show({
-                        title   : Lang.getText(Lang.Type.B0082),
-                        content : Lang.getText(Lang.Type.A0030),
-                        callback: () => Utility.FlowManager.gotoLobby(),
-                    });
-
-                } else {
-                    if (_war.getPlayerManager().getAliveTeamsCount(false) <= 1) {
-                        _war.setIsEnded(true);
-                        AlertPanel.show({
-                            title   : Lang.getText(Lang.Type.B0034),
-                            content : Lang.getText(Lang.Type.A0022),
-                            callback: () => Utility.FlowManager.gotoLobby(),
-                        });
-
-                    } else {
-                        _checkAndRunFirstCachedAction();
-                    }
-                }
-            }
+        if ((war.getRemainingVotesForDraw() === 0) || (war.getPlayerManager().getAliveTeamsCount(false) <= 1)) {
+            war.setIsEnded(true);
+            FloatText.show(Lang.getText(Lang.Type.B0093));
         }
     }
 
@@ -200,6 +110,8 @@ namespace TinyWars.Replay.ReplayModel {
     async function _executeMcwPlayerBeginTurn(war: ReplayWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
+        FloatText.show(`${war.getPlayerInTurn().getNickname()} ${Lang.getText(Lang.Type.B0094)} (${war.getNextActionId()} / ${war.getTotalActionsCount()})`);
+
         await war.getTurnManager().endPhaseWaitBeginTurn(data.S_McwPlayerBeginTurn);
         actionPlanner.setStateIdle();
     }
@@ -207,6 +119,7 @@ namespace TinyWars.Replay.ReplayModel {
     async function _executeMcwPlayerDeleteUnit(war: ReplayWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
+        FloatText.show(`${Lang.getText(Lang.Type.B0081)} (${war.getNextActionId()} / ${war.getTotalActionsCount()})`);
 
         const action    = data.S_McwPlayerDeleteUnit;
         const gridIndex = action.gridIndex as GridIndex;
@@ -224,14 +137,16 @@ namespace TinyWars.Replay.ReplayModel {
     async function _executeMcwPlayerEndTurn(war: ReplayWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        await war.getTurnManager().endPhaseMain();
+        FloatText.show(`${Lang.getText(Lang.Type.B0036)} (${war.getNextActionId()} / ${war.getTotalActionsCount()})`);
 
+        await war.getTurnManager().endPhaseMain();
         actionPlanner.setStateIdle();
     }
 
     async function _executeMcwPlayerProduceUnit(war: ReplayWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
+        FloatText.show(`${Lang.getText(Lang.Type.B0095)} ${Lang.getUnitName(data.S_McwPlayerProduceUnit.unitType)} (${war.getNextActionId()} / ${war.getTotalActionsCount()})`);
 
         const action = data.S_McwPlayerProduceUnit;
         updateTilesAndUnitsBeforeExecutingAction(war, action);
@@ -269,11 +184,11 @@ namespace TinyWars.Replay.ReplayModel {
     async function _executeMcwPlayerSurrender(war: ReplayWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
+        FloatText.show(`${war.getPlayerInTurn().getNickname()} ${Lang.getText(Lang.Type.B0055)} (${war.getNextActionId()} / ${war.getTotalActionsCount()})`);
 
         const player = war.getPlayerInTurn();
         DestructionHelpers.destroyPlayerForceForReplay(war, player.getPlayerIndex(), true);
         McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
-        FloatText.show(Lang.getFormatedText(Lang.Type.F0008, player.getNickname()));
 
         actionPlanner.setStateIdle();
     }
@@ -281,6 +196,10 @@ namespace TinyWars.Replay.ReplayModel {
     async function _executeMcwPlayerVoteForDraw(war: ReplayWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
+        FloatText.show(
+            `${war.getPlayerInTurn().getNickname()} ${data.S_McwPlayerVoteForDraw.isAgree ? Lang.getText(Lang.Type.B0096) : Lang.getText(Lang.Type.B0085)}` +
+            `(${war.getNextActionId()} / ${war.getTotalActionsCount()})`
+        );
 
         const playerInTurn = war.getPlayerInTurn();
         playerInTurn.setHasVotedForDraw(true);
@@ -303,6 +222,7 @@ namespace TinyWars.Replay.ReplayModel {
     async function _executeMcwUnitAttack(war: ReplayWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
+        FloatText.show(`${Lang.getText(Lang.Type.B0097)} (${war.getNextActionId()} / ${war.getTotalActionsCount()})`);
 
         const action = data.S_McwUnitAttack;
         updateTilesAndUnitsBeforeExecutingAction(war, action);
@@ -405,6 +325,7 @@ namespace TinyWars.Replay.ReplayModel {
     async function _executeMcwUnitBeLoaded(war: ReplayWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
+        FloatText.show(`${Lang.getText(Lang.Type.B0098)} (${war.getNextActionId()} / ${war.getTotalActionsCount()})`);
 
         const action = data.S_McwUnitBeLoaded;
         updateTilesAndUnitsBeforeExecutingAction(war, action);
@@ -434,6 +355,7 @@ namespace TinyWars.Replay.ReplayModel {
     async function _executeMcwUnitBuildTile(war: ReplayWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
+        FloatText.show(`${Lang.getText(Lang.Type.B0099)} (${war.getNextActionId()} / ${war.getTotalActionsCount()})`);
 
         const action = data.S_McwUnitBuildTile;
         updateTilesAndUnitsBeforeExecutingAction(war, action);
@@ -460,9 +382,7 @@ namespace TinyWars.Replay.ReplayModel {
                 tile.resetByObjectViewIdAndBaseViewId(focusUnit.getBuildTargetTileObjectViewId(tile.getType()));
 
                 const playerIndex = focusUnit.getPlayerIndex();
-                if (war.getPlayerManager().checkIsSameTeam(playerIndex, war.getPlayerIndexLoggedIn())) {
-                    war.getFogMap().updateMapFromTilesForPlayerOnGettingOwnership(playerIndex, endingGridIndex, tile.getVisionRangeForPlayer(playerIndex));
-                }
+                war.getFogMap().updateMapFromTilesForPlayerOnGettingOwnership(playerIndex, endingGridIndex, tile.getVisionRangeForPlayer(playerIndex));
             }
         }
 
@@ -480,6 +400,7 @@ namespace TinyWars.Replay.ReplayModel {
     async function _executeMcwUnitCaptureTile(war: ReplayWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
+        FloatText.show(`${Lang.getText(Lang.Type.B0100)} (${war.getNextActionId()} / ${war.getTotalActionsCount()})`);
 
         const action = data.S_McwUnitCaptureTile;
         updateTilesAndUnitsBeforeExecutingAction(war, action);
@@ -554,6 +475,7 @@ namespace TinyWars.Replay.ReplayModel {
     async function _executeMcwUnitDive(war: ReplayWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
+        FloatText.show(`${Lang.getText(Lang.Type.B0101)} (${war.getNextActionId()} / ${war.getTotalActionsCount()})`);
 
         const action = data.S_McwUnitDive;
         updateTilesAndUnitsBeforeExecutingAction(war, action);
@@ -584,6 +506,7 @@ namespace TinyWars.Replay.ReplayModel {
     async function _executeMcwUnitDrop(war: ReplayWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
+        FloatText.show(`${Lang.getText(Lang.Type.B0102)} (${war.getNextActionId()} / ${war.getTotalActionsCount()})`);
 
         const action = data.S_McwUnitDrop;
         updateTilesAndUnitsBeforeExecutingAction(war, action);
@@ -597,7 +520,6 @@ namespace TinyWars.Replay.ReplayModel {
         focusUnit.setState(UnitState.Actioned);
 
         const playerIndex           = focusUnit.getPlayerIndex();
-        const shouldUpdateFogMap    = war.getPlayerLoggedIn().getTeamIndex() === focusUnit.getTeamIndex();
         const fogMap                = war.getFogMap();
         const unitsForDrop          = [] as ReplayUnit[];
         for (const { unitId, gridIndex } of (action.dropDestinations || []) as Types.DropDestination[]) {
@@ -612,10 +534,8 @@ namespace TinyWars.Replay.ReplayModel {
             unitForDrop.setState(UnitState.Actioned);
             unitsForDrop.push(unitForDrop);
 
-            if (shouldUpdateFogMap) {
-                fogMap.updateMapFromPathsByUnitAndPath(unitForDrop, [endingGridIndex, gridIndex]);
-                fogMap.updateMapFromUnitsForPlayerOnArriving(playerIndex, gridIndex, unitForDrop.getVisionRangeForPlayer(playerIndex, gridIndex));
-            }
+            fogMap.updateMapFromPathsByUnitAndPath(unitForDrop, [endingGridIndex, gridIndex]);
+            fogMap.updateMapFromUnitsForPlayerOnArriving(playerIndex, gridIndex, unitForDrop.getVisionRangeForPlayer(playerIndex, gridIndex));
         }
 
         return new Promise<void>(resolve => {
@@ -651,6 +571,7 @@ namespace TinyWars.Replay.ReplayModel {
     async function _executeMcwUnitJoin(war: ReplayWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
+        FloatText.show(`${Lang.getText(Lang.Type.B0103)} (${war.getNextActionId()} / ${war.getTotalActionsCount()})`);
 
         const action = data.S_McwUnitJoin;
         updateTilesAndUnitsBeforeExecutingAction(war, action);
@@ -731,6 +652,7 @@ namespace TinyWars.Replay.ReplayModel {
     async function _executeMcwUnitLaunchFlare(war: ReplayWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
+        FloatText.show(`${Lang.getText(Lang.Type.B0104)} (${war.getNextActionId()} / ${war.getTotalActionsCount()})`);
 
         const action = data.S_McwUnitLaunchFlare;
         updateTilesAndUnitsBeforeExecutingAction(war, action);
@@ -751,7 +673,7 @@ namespace TinyWars.Replay.ReplayModel {
 
         return new Promise<void>(resolve => {
             focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
-                if ((isFlareSucceeded) && (war.getPlayerLoggedIn().getTeamIndex() === focusUnit.getTeamIndex())) {
+                if (isFlareSucceeded) {
                     const effect = war.getGridVisionEffect();
                     for (const grid of GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, flareRadius, war.getTileMap().getMapSize())) {
                         effect.showEffectFlare(grid);
@@ -770,6 +692,7 @@ namespace TinyWars.Replay.ReplayModel {
     async function _executeMcwUnitLaunchSilo(war: ReplayWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
+        FloatText.show(`${Lang.getText(Lang.Type.B0105)} (${war.getNextActionId()} / ${war.getTotalActionsCount()})`);
 
         const action = data.S_McwUnitLaunchSilo;
         updateTilesAndUnitsBeforeExecutingAction(war, action);
@@ -830,6 +753,7 @@ namespace TinyWars.Replay.ReplayModel {
     async function _executeMcwUnitProduceUnit(war: ReplayWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
+        FloatText.show(`${Lang.getText(Lang.Type.B0106)} (${war.getNextActionId()} / ${war.getTotalActionsCount()})`);
 
         const action = data.S_McwUnitProduceUnit;
         updateTilesAndUnitsBeforeExecutingAction(war, action);
@@ -886,6 +810,7 @@ namespace TinyWars.Replay.ReplayModel {
     async function _executeMcwUnitSupply(war: ReplayWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
+        FloatText.show(`${Lang.getText(Lang.Type.B0107)} (${war.getNextActionId()} / ${war.getTotalActionsCount()})`);
 
         const action = data.S_McwUnitSupply;
         updateTilesAndUnitsBeforeExecutingAction(war, action);
@@ -940,6 +865,7 @@ namespace TinyWars.Replay.ReplayModel {
     async function _executeMcwUnitSurface(war: ReplayWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
+        FloatText.show(`${Lang.getText(Lang.Type.B0108)} (${war.getNextActionId()} / ${war.getTotalActionsCount()})`);
 
         const action = data.S_McwUnitSurface;
         updateTilesAndUnitsBeforeExecutingAction(war, action);
@@ -970,6 +896,7 @@ namespace TinyWars.Replay.ReplayModel {
     async function _executeMcwUnitWait(war: ReplayWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
+        FloatText.show(`${Lang.getText(Lang.Type.B0109)} (${war.getNextActionId()} / ${war.getTotalActionsCount()})`);
 
         const action = data.S_McwUnitWait;
         updateTilesAndUnitsBeforeExecutingAction(war, action);
@@ -1060,11 +987,8 @@ namespace TinyWars.Replay.ReplayModel {
         const unitMap               = war.getUnitMap();
         const focusUnit             = unitMap.getUnit(beginningGridIndex, launchUnitId)!;
         const playerIndex           = focusUnit.getPlayerIndex();
-        const shouldUpdateFogMap    = war.getPlayerLoggedIn().getTeamIndex() === focusUnit.getTeamIndex();
         const isUnitBeLoaded        = (actionCode === ActionCodes.S_McwUnitBeLoaded) && (!revisedPath.isBlocked);
-        if (shouldUpdateFogMap) {
-            fogMap.updateMapFromPathsByUnitAndPath(focusUnit, pathNodes);
-        }
+        fogMap.updateMapFromPathsByUnitAndPath(focusUnit, pathNodes);
 
         if (pathNodes.length > 1) {
             const endingGridIndex   = pathNodes[pathNodes.length - 1];
@@ -1077,10 +1001,10 @@ namespace TinyWars.Replay.ReplayModel {
             for (const unit of unitMap.getUnitsLoadedByLoader(focusUnit, true)) {
                 unit.setGridIndex(endingGridIndex);
             }
-            if ((shouldUpdateFogMap) && (!isLaunching)) {
+            if (!isLaunching) {
                 fogMap.updateMapFromUnitsForPlayerOnLeaving(playerIndex, beginningGridIndex, focusUnit.getVisionRangeForPlayer(playerIndex, beginningGridIndex)!);
             }
-            if ((shouldUpdateFogMap) && (!isUnitBeLoaded)) {
+            if (!isUnitBeLoaded) {
                 fogMap.updateMapFromUnitsForPlayerOnArriving(playerIndex, endingGridIndex, focusUnit.getVisionRangeForPlayer(playerIndex, endingGridIndex)!);
             }
 

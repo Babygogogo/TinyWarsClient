@@ -46,6 +46,7 @@ namespace TinyWars.Utility.FlowManager {
 
     export function gotoLogin(): void {
         McwModel.unloadWar();
+        ReplayModel.unloadWar();
         StageManager.closeAllPanels();
         Login.LoginBackgroundPanel.show();
         Login.LoginPanel.show();
@@ -53,11 +54,13 @@ namespace TinyWars.Utility.FlowManager {
     export function gotoLobby(): void {
         _hasOnceWentToLobby = true;
         McwModel.unloadWar();
+        ReplayModel.unloadWar();
         StageManager.closeAllPanels();
         Lobby.LobbyPanel.show();
         Lobby.LobbyTopPanel.show();
     }
     export async function gotoMultiCustomWar(data: Types.SerializedMcwWar): Promise<void> {
+        ReplayModel.unloadWar();
         await McwModel.loadWar(data);
         StageManager.closeAllPanels();
         MultiCustomWar.McwBackgroundPanel.show();
@@ -67,6 +70,7 @@ namespace TinyWars.Utility.FlowManager {
         MultiCustomWar.McwUnitBriefPanel.show();
     }
     export async function gotoReplay(warData: Uint8Array, nicknames: string[]): Promise<void> {
+        McwModel.unloadWar();
         await ReplayModel.loadWar(warData, nicknames);
         StageManager.closeAllPanels();
         Replay.ReplayBackgroundPanel.show();

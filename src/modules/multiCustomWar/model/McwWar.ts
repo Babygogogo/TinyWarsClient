@@ -2,7 +2,6 @@
 namespace TinyWars.MultiCustomWar {
     import Types            = Utility.Types;
     import MapIndexKey      = Types.MapIndexKey;
-    import Action           = Types.SerializedMcwAction;
     import SerializedMcWar  = Types.SerializedMcwWar;
 
     export class McwWar {

@@ -134,11 +134,8 @@ namespace TinyWars.Replay {
                 if (unitOnMap) {
                     unitList.push(unitOnMap);
 
-                    const war = this._war;
-                    if ((!war.getFogMap().checkHasFogCurrently()) || (war.getPlayerLoggedIn().getTeamIndex() === unitOnMap.getTeamIndex())) {
-                        for (const loadedUnit of this._unitMap.getUnitsLoadedByLoader(unitOnMap, true)) {
-                            unitList.push(loadedUnit);
-                        }
+                    for (const loadedUnit of this._unitMap.getUnitsLoadedByLoader(unitOnMap, true)) {
+                        unitList.push(loadedUnit);
                     }
                 }
 

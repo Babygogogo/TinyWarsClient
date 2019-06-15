@@ -4,10 +4,8 @@ namespace TinyWars.Replay {
     import DestructionHelpers   = Utility.DestructionHelpers;
     import VisibilityHelpers    = Utility.VisibilityHelpers;
     import Logger               = Utility.Logger;
-    import Lang                 = Utility.Lang;
     import Notify               = Utility.Notify;
     import ProtoTypes           = Utility.ProtoTypes;
-    import FloatText            = Utility.FloatText;
     import TimeModel            = Time.TimeModel;
     import SerializedMcTurn     = Types.SerializedMcwTurn;
     import TurnPhaseCode        = Types.TurnPhaseCode;
@@ -62,8 +60,6 @@ namespace TinyWars.Replay {
                 this.getPhaseCode() === TurnPhaseCode.WaitBeginTurn,
                 "McTurnManager.endPhaseWaitBeginTurn() invalid current phase code: ", this.getPhaseCode()
             );
-
-            FloatText.show(`${this._war.getPlayerInTurn().getNickname()} p${this.getPlayerIndexInTurn()}回合正式开始！！`);
 
             this._runPhaseGetFund(data);
             this._runPhaseConsumeFuel(data);
@@ -159,7 +155,6 @@ namespace TinyWars.Replay {
         private _runPhaseMain(data: ProtoTypes.IS_McwPlayerBeginTurn): void {
             const playerIndex = this.getPlayerIndexInTurn();
             if (data.isDefeated) {
-                FloatText.show(Lang.getFormatedText(Lang.Type.F0014, this._war.getPlayer(playerIndex).getNickname()));
                 DestructionHelpers.destroyPlayerForceForReplay(this._war, playerIndex, true);
                 McwHelpers.updateTilesAndUnitsOnVisibilityChanged(this._war);
             } else {
@@ -178,15 +173,11 @@ namespace TinyWars.Replay {
             }
         }
         private _runPhaseResetVisionForCurrentPlayer(): void {
-            const playerIndex = this.getPlayerIndexInTurn();
-            if (playerIndex !== 0) {
-                const war = this._war;
-                war.getFogMap().resetMapFromPathsForPlayer(playerIndex);
+            const playerIndex   = this.getPlayerIndexInTurn();
+            const war           = this._war;
+            war.getFogMap().resetMapFromPathsForPlayer(playerIndex);
 
-                if (playerIndex === war.getPlayerIndexLoggedIn()) {
-                    this._resetFogForPlayerLoggedIn();
-                }
-            }
+            this._resetFogForPlayerInTurn();
         }
         private _runPhaseTickTurnAndPlayerIndex(): void {
             const data = this._getNextTurnAndPlayerIndex();
@@ -201,17 +192,13 @@ namespace TinyWars.Replay {
             // }
         }
         private _runPhaseResetVisionForNextPlayer(): void {
-            const playerIndex = this.getPlayerIndexInTurn();
-            if (playerIndex !== 0) {
-                const war       = this._war;
-                const fogMap    = war.getFogMap();
-                fogMap.resetMapFromTilesForPlayer(playerIndex);
-                fogMap.resetMapFromUnitsForPlayer(playerIndex);
+            const playerIndex   = this.getPlayerIndexInTurn();
+            const war           = this._war;
+            const fogMap        = war.getFogMap();
+            fogMap.resetMapFromTilesForPlayer(playerIndex);
+            fogMap.resetMapFromUnitsForPlayer(playerIndex);
 
-                if (playerIndex === war.getPlayerIndexLoggedIn()) {
-                    this._resetFogForPlayerLoggedIn();
-                }
-            }
+            this._resetFogForPlayerInTurn();
         }
         private _runPhaseResetVotesForDraw(): void {
             this._war.getPlayer(this.getPlayerIndexInTurn())!.setHasVotedForDraw(false);
@@ -287,14 +274,16 @@ namespace TinyWars.Replay {
             }
         }
 
-        private _resetFogForPlayerLoggedIn(): void {
+        private _resetFogForPlayerInTurn(): void {
             const war           = this._war;
-            const playerIndex   = war.getPlayerIndexLoggedIn();
+            const playerIndex   = this.getPlayerIndexInTurn();
             war.getTileMap().forEachTile(tile => {
                 if (!VisibilityHelpers.checkIsTileVisibleToPlayer(war, tile.getGridIndex(), playerIndex)) {
                     tile.setFogEnabled();
-                    tile.updateView();
+                } else {
+                    tile.setFogDisabled();
                 }
+                tile.updateView();
             });
         }
     }

@@ -41,7 +41,6 @@ namespace TinyWars.Replay {
         private _unitMap    : ReplayUnitMap;
         private _turnManager: ReplayTurnManager;
         private _dataForList: DataForCommandRenderer[];
-        private _playerIndex: number;
         private _menuType   = MenuType.Main;
 
         public static show(): void {
@@ -82,7 +81,6 @@ namespace TinyWars.Replay {
             this._war           = war;
             this._unitMap       = war.getUnitMap();
             this._turnManager   = war.getTurnManager();
-            this._playerIndex   = war.getPlayerIndexLoggedIn();
             this._menuType      = MenuType.Main;
 
             this._updateView();
@@ -103,12 +101,7 @@ namespace TinyWars.Replay {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onNotifyMcwPlannerStateChanged(e: egret.Event): void {
-            const war = this._war;
-            if (war.getPlayerInTurn() === war.getPlayerLoggedIn()) {
-                this.close();
-            } else {
-                this._updateListPlayer();
-            }
+            this._updateListPlayer();
         }
 
         private _onTouchedBtnBack(e: egret.TouchEvent): void {
@@ -291,7 +284,7 @@ namespace TinyWars.Replay {
                 this._labelLost.visible = false;
                 this._groupInfo.visible = true;
 
-                const isInfoKnown           = (player.getTeamIndex() === war.getPlayerLoggedIn().getTeamIndex()) || (!war.getFogMap().checkHasFogCurrently());
+                const isInfoKnown           = true;
                 const tilesCountAndIncome   = this._getTilesCountAndIncome(war, playerIndex);
                 this._labelFund.text        = isInfoKnown ? `${player.getFund()}` : `?`;
                 this._labelIncome.text      = `${tilesCountAndIncome.income}  ${isInfoKnown ? `` : `?`}`;
@@ -316,20 +309,17 @@ namespace TinyWars.Replay {
         }
 
         private _getUnitsCountAndValue(war: ReplayWar, playerIndex: number): { count: number, value: number } {
-            const teamIndexLoggedIn = war.getPlayerLoggedIn().getTeamIndex();
-            const unitMap           = war.getUnitMap();
-            let count               = 0;
-            let value               = 0;
+            const unitMap   = war.getUnitMap();
+            let count       = 0;
+            let value       = 0;
             unitMap.forEachUnitOnMap(unit => {
                 if (unit.getPlayerIndex() === playerIndex) {
                     ++count;
                     value += Math.floor(unit.getProductionFinalCost() * unit.getNormalizedCurrentHp() / unit.getNormalizedMaxHp());
 
-                    if ((unit.getTeamIndex() === teamIndexLoggedIn) || (!war.getFogMap().checkHasFogCurrently())) {
-                        for (const unitLoaded of unitMap.getUnitsLoadedByLoader(unit, true)) {
-                            ++count;
-                            value += Math.floor(unitLoaded.getProductionFinalCost() * unitLoaded.getNormalizedCurrentHp() / unitLoaded.getNormalizedMaxHp());
-                        }
+                    for (const unitLoaded of unitMap.getUnitsLoadedByLoader(unit, true)) {
+                        ++count;
+                        value += Math.floor(unitLoaded.getProductionFinalCost() * unitLoaded.getNormalizedCurrentHp() / unitLoaded.getNormalizedMaxHp());
                     }
                 }
             });

@@ -53,7 +53,7 @@ namespace TinyWars.Replay {
                 this.resetMapFromUnitsForPlayer(playerIndex);
             }
 
-            const playerIndex = war.getPlayerIndexLoggedIn();
+            const playerIndex = war.getPlayerInTurn().getPlayerIndex();
             war.getTileMap().forEachTile(tile => {
                 if (!VisibilityHelpers.checkIsTileVisibleToPlayer(war, tile.getGridIndex(), playerIndex)) {
                     tile.setFogEnabled();
@@ -262,8 +262,8 @@ namespace TinyWars.Replay {
 
     function createEmptyMaps<T extends (number | VisibilityFromPaths)>(mapSize: MapSize, playersCount: number): Map<number, T[][]> {
         const map = new Map<number, T[][]>();
-        for (let i = 0; i < playersCount; ++i) {
-            map.set(i + 1, Helpers.createEmptyMap<T>(mapSize.width, mapSize.height, 0 as T));
+        for (let i = 0; i < playersCount + 1; ++i) {
+            map.set(i, Helpers.createEmptyMap<T>(mapSize.width, mapSize.height, 0 as T));
         }
         return map;
     }

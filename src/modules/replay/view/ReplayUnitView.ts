@@ -204,19 +204,8 @@ namespace TinyWars.Replay {
             const war   = unit.getWar();
             if ((war) && (unit.getMaxLoadUnitsCount())) {
                 const unitPlayerIndex = unit.getPlayerIndex();
-                if (!war.getFogMap().checkHasFogCurrently()) {
-                    if (unit.getLoadedUnitsCount() > 0) {
-                        this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s06_f${Helpers.getNumText(unitPlayerIndex)}`);
-                    }
-                } else {
-                    const playerManager = war.getPlayerManager();
-                    if (!playerManager.checkIsSameTeam(unitPlayerIndex, playerManager.getPlayerIndexLoggedIn())) {
-                        this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s06_f${Helpers.getNumText(unitPlayerIndex)}`);
-                    } else {
-                        if (unit.getLoadedUnitsCount() > 0) {
-                            this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s06_f${Helpers.getNumText(unitPlayerIndex)}`);
-                        }
-                    }
+                if (unit.getLoadedUnitsCount() > 0) {
+                    this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s06_f${Helpers.getNumText(unitPlayerIndex)}`);
                 }
             }
         }

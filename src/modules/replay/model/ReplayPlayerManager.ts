@@ -51,24 +51,6 @@ namespace TinyWars.Replay {
             return undefined;
         }
 
-        public getPlayerLoggedIn(): ReplayPlayer | undefined {
-            if (!this._loggedInPlayer) {
-                const userId = User.UserModel.getSelfUserId();
-                for (const [, player] of this._players) {
-                    if (player.getUserId() === userId) {
-                        this._loggedInPlayer = player;
-                        break;
-                    }
-                }
-            }
-            return this._loggedInPlayer;
-        }
-
-        public getPlayerIndexLoggedIn(): number | undefined {
-            const player = this.getPlayerLoggedIn();
-            return player ? player.getPlayerIndex() : undefined;
-        }
-
         public getPlayerInTurn(): ReplayPlayer {
             return this.getPlayer(this._war.getTurnManager().getPlayerIndexInTurn());
         }

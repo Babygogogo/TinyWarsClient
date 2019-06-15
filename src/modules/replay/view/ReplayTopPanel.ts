@@ -20,6 +20,7 @@ namespace TinyWars.Replay {
         private _btnUnitList    : GameUi.UiButton;
         private _btnFindBuilding: GameUi.UiButton;
         private _btnCancel      : GameUi.UiButton;
+        private _btnPlay        : GameUi.UiButton;
         private _btnMenu        : GameUi.UiButton;
 
         private _war    : ReplayWar;
@@ -56,6 +57,7 @@ namespace TinyWars.Replay {
                 { ui: this._btnFindBuilding,    callback: this._onTouchedBtnFindBuilding, },
                 { ui: this._btnCancel,          callback: this._onTouchedBtnCancel },
                 { ui: this._btnMenu,            callback: this._onTouchedBtnMenu, },
+                { ui: this._btnPlay,            callback: this._onTouchedBtnPlay, },
             ];
         }
 
@@ -106,6 +108,9 @@ namespace TinyWars.Replay {
             }
             ReplayWarMenuPanel.show();
         }
+        private _onTouchedBtnPlay(e: egret.TouchEvent): void {
+            this._war.executeNextAction();
+        }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for views.
@@ -123,15 +128,12 @@ namespace TinyWars.Replay {
             const war                   = this._war;
             const player                = war.getPlayerInTurn();
             this._labelPlayer.text      = `${Lang.getText(Lang.Type.B0031)}:${player.getNickname()} (${Helpers.getColorTextForPlayerIndex(player.getPlayerIndex())})`;
-            this._labelPlayer.textColor = player === war.getPlayerLoggedIn() ? 0x00FF00 : 0xFFFFFF;
         }
 
         private _updateLabelFund(): void {
             const war               = this._war;
             const playerInTurn      = war.getPlayerInTurn();
-            this._labelFund.text    = (war.getFogMap().checkHasFogCurrently()) && (playerInTurn.getTeamIndex() !== war.getPlayerLoggedIn().getTeamIndex())
-                ? `${Lang.getText(Lang.Type.B0032)}: ????`
-                : `${Lang.getText(Lang.Type.B0032)}: ${playerInTurn.getFund()}`;
+            this._labelFund.text    = `${Lang.getText(Lang.Type.B0032)}: ${playerInTurn.getFund()}`;
         }
 
         private _updateLabelEnergy(): void {
@@ -142,15 +144,13 @@ namespace TinyWars.Replay {
         private _updateBtnFindUnit(): void {
             const war                   = this._war;
             const turnManager           = war.getTurnManager();
-            this._btnUnitList.visible   = (turnManager.getPlayerIndexInTurn() === war.getPlayerIndexLoggedIn())
-                && (turnManager.getPhaseCode() === Types.TurnPhaseCode.Main);
+            this._btnUnitList.visible   = turnManager.getPhaseCode() === Types.TurnPhaseCode.Main;
         }
 
         private _updateBtnFindBuilding(): void {
             const war                       = this._war;
             const turnManager               = war.getTurnManager();
-            this._btnFindBuilding.visible   = (turnManager.getPlayerIndexInTurn() === war.getPlayerIndexLoggedIn())
-                && (turnManager.getPhaseCode() === Types.TurnPhaseCode.Main);
+            this._btnFindBuilding.visible   = turnManager.getPhaseCode() === Types.TurnPhaseCode.Main;
         }
 
         private _updateBtnCancel(): void {
@@ -158,40 +158,10 @@ namespace TinyWars.Replay {
             const turnManager       = war.getTurnManager();
             const actionPlanner     = war.getActionPlanner();
             const state             = actionPlanner.getState();
-            this._btnCancel.visible = (turnManager.getPlayerIndexInTurn() === war.getPlayerIndexLoggedIn())
-                && (turnManager.getPhaseCode() === Types.TurnPhaseCode.Main)
+            this._btnCancel.visible = (turnManager.getPhaseCode() === Types.TurnPhaseCode.Main)
                 && (state !== Types.ActionPlannerState.Idle)
                 && (state !== Types.ActionPlannerState.ExecutingAction)
                 && (!actionPlanner.checkIsStateRequesting());
-        }
-
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Util functions.
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _getHintForEndTurn(): string {
-            const war           = this._war;
-            const playerIndex   = war.getPlayerIndexLoggedIn();
-            const unitMap       = war.getUnitMap();
-            const hints         = new Array<string>();
-
-            let idleUnitsCount = 0;
-            unitMap.forEachUnitOnMap(unit => {
-                if ((unit.getPlayerIndex() === playerIndex) && (unit.getState() === Types.UnitState.Idle)) {
-                    ++idleUnitsCount;
-                }
-            });
-            (idleUnitsCount) && (hints.push(Lang.getFormatedText(Lang.Type.F0006, idleUnitsCount)));
-
-            let idleBuildingsCount = 0;
-            war.getTileMap().forEachTile(tile => {
-                if ((tile.getPlayerIndex() === playerIndex) && (tile.checkIsUnitProducer()) && (!unitMap.getUnitOnMap(tile.getGridIndex()))) {
-                    ++idleBuildingsCount;
-                }
-            });
-            (idleBuildingsCount) && (hints.push(Lang.getFormatedText(Lang.Type.F0007, idleBuildingsCount)));
-
-            hints.push(Lang.getText(Lang.Type.A0024));
-            return hints.join(`\n`);
         }
     }
 }

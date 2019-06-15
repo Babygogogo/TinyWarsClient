@@ -65,7 +65,7 @@ namespace TinyWars.Replay {
             this._unitMap       = war.getUnitMap();
             this._turnManager   = war.getTurnManager();
             this._cursor        = war.getField().getCursor();
-            this._playerIndex = this._war.getPlayerIndexLoggedIn();
+            this._playerIndex   = this._war.getPlayerInTurn().getPlayerIndex();
             this._updateView();
         }
         protected _onClosed(): void {
