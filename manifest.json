@@ -46,7 +46,7 @@
 		"bin-debug/modules/time/model/TimeModel.js",
 		"bin-debug/modules/common/view/ConfirmPanel.js",
 		"bin-debug/utility/FlowManager.js",
-		"bin-debug/modules/common/view/Blockpanel.js",
+		"bin-debug/modules/common/view/BlockPanel.js",
 		"bin-debug/gameui/UiTabPage.js",
 		"bin-debug/utility/NoSleepManager.js",
 		"bin-debug/gameui/UiImage.js",

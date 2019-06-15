@@ -1,10 +1,12 @@
 
 namespace TinyWars.MultiCustomRoom {
+    import BlockPanel       = Common.BlockPanel;
     import Notify           = Utility.Notify;
     import Types            = Utility.Types;
     import Lang             = Utility.Lang;
     import Helpers          = Utility.Helpers;
     import ProtoTypes       = Utility.ProtoTypes;
+    import FlowManager      = Utility.FlowManager;
     import TemplateMapModel = WarMap.WarMapModel;
 
     export class McrReplayListPanel extends GameUi.UiPanel {
@@ -27,7 +29,7 @@ namespace TinyWars.MultiCustomRoom {
         private _labelNextActionId  : GameUi.UiLabel;
         private _listPlayer         : GameUi.UiScrollList;
 
-        private _dataForListReplay        : DataForMapNameRenderer[] = [];
+        private _dataForListReplay  : DataForMapNameRenderer[] = [];
         private _selectedIndex      : number;
 
         public static show(): void {
@@ -51,7 +53,9 @@ namespace TinyWars.MultiCustomRoom {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.SMcrGetReplayInfos, callback: this._onNotifySMcrGetReplayInfos },
+                { type: Notify.Type.SMcrGetReplayInfos,         callback: this._onNotifySMcrGetReplayInfos },
+                { type: Notify.Type.SMcrGetReplayData,          callback: this._onNotifySMcrGetReplayData },
+                { type: Notify.Type.SMcrGetReplayDataFailed,    callback: this._onNotifySMcrGetReplayDataFailed },
             ];
             this._uiListeners = [
                 { ui: this._btnSearch, callback: this._onTouchTapBtnSearch },
@@ -100,6 +104,15 @@ namespace TinyWars.MultiCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////
         private _onNotifySMcrGetReplayInfos(e: egret.Event): void {
             this._updateView();
+        }
+
+        private _onNotifySMcrGetReplayData(e: egret.Event): void {
+            const data = McrModel.getReplayData();
+            FlowManager.gotoReplay(data.encodedWar, data.userNicknames);
+        }
+
+        private _onNotifySMcrGetReplayDataFailed(e: egret.Event): void {
+            BlockPanel.hide();
         }
 
         private _onTouchTapBtnSearch(e: egret.TouchEvent): void {
@@ -294,11 +307,14 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
-            // McrReplayListPanel.hide();
-
-            // McrModel.resetCreateWarData(this.data as DataForMapNameRenderer);
-            // McrCreateSettingsPanel.show();
-            Utility.FloatText.show("TODO aaa");
+            const data = this.data as DataForMapNameRenderer;
+            if (data) {
+                BlockPanel.show({
+                    title   : Lang.getText(Lang.Type.B0088),
+                    content : Lang.getText(Lang.Type.A0040),
+                });
+                McrProxy.reqReplayData(data.info.replayId);
+            }
         }
     }
 

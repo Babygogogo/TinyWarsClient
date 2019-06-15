@@ -141,7 +141,9 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
     }
     function _onSMcrGetReplayData(e: egret.Event): void {
         const data = e.data as ProtoTypes.IS_McrGetReplayData;
-        if (!data.errorCode) {
+        if (data.errorCode) {
+            Notify.dispatch(Notify.Type.SMcrGetReplayDataFailed);
+        } else {
             McrModel.setReplayData(data as ProtoTypes.S_McrGetReplayData);
             Notify.dispatch(Notify.Type.SMcrGetReplayData);
         }

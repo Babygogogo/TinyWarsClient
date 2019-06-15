@@ -65,6 +65,9 @@ namespace TinyWars.Utility.FlowManager {
         MultiCustomWar.McwTileBriefPanel.show();
         MultiCustomWar.McwUnitBriefPanel.show();
     }
+    export async function gotoReplay(warData: Uint8Array, nicknames: string[]): Promise<void> {
+        FloatText.show("TODO!!!!");
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Callbacks.
