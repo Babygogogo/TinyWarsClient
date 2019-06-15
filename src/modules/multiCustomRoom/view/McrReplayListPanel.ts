@@ -147,7 +147,7 @@ namespace TinyWars.MultiCustomRoom {
                 this._labelMapName.text         = Lang.getFormatedText(Lang.Type.F0000, info.mapName);
                 this._labelDesigner.text        = Lang.getFormatedText(Lang.Type.F0001, info.mapDesigner);
                 this._labelHasFog.text          = Lang.getFormatedText(Lang.Type.F0005, Lang.getText(info.hasFog ? Lang.Type.B0012 : Lang.Type.B0013));
-                this._labelTurnIndex.text       = `${Lang.getText(Lang.Type.B0091)}: ${info.turnIndex}`;
+                this._labelTurnIndex.text       = `${Lang.getText(Lang.Type.B0091)}: ${info.turnIndex + 1}`;
                 this._labelNextActionId.text    = `${Lang.getText(Lang.Type.B0090)}: ${info.nextActionId}`;
                 this._listPlayer.bindData(this._createDataForListPlayer(info));
 
@@ -266,9 +266,10 @@ namespace TinyWars.MultiCustomRoom {
     }
 
     class ReplayRenderer extends eui.ItemRenderer {
-        private _btnChoose: GameUi.UiButton;
-        private _btnNext  : GameUi.UiButton;
-        private _labelName: GameUi.UiLabel;
+        private _btnChoose      : GameUi.UiButton;
+        private _btnNext        : GameUi.UiButton;
+        private _labelTurnIndex : GameUi.UiLabel;
+        private _labelName      : GameUi.UiLabel;
 
         protected childrenCreated(): void {
             super.childrenCreated();
@@ -280,9 +281,11 @@ namespace TinyWars.MultiCustomRoom {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data           = this.data as DataForMapNameRenderer;
-            this.currentState    = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
-            this._labelName.text = data.info.mapName;
+            const data                  = this.data as DataForMapNameRenderer;
+            const info                  = data.info;
+            this.currentState           = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
+            this._labelTurnIndex.text   = `${Lang.getText(Lang.Type.B0091)}: ${info.turnIndex + 1}`;
+            this._labelName.text        = info.mapName;
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
