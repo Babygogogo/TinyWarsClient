@@ -32,8 +32,9 @@ namespace TinyWars.Replay {
         private _turnManager    : ReplayTurnManager;
 
         private _view               : ReplayWarView;
-        private _isRunningAction    = false;
+        private _isExecutingAction  = false;
         private _isRunningWar       = false;
+        private _isAutoReplay       = false;
 
         public constructor() {
         }
@@ -98,11 +99,21 @@ namespace TinyWars.Replay {
             return this._view;
         }
 
-        public getIsRunningAction(): boolean {
-            return this._isRunningAction;
+        public getIsExecutingAction(): boolean {
+            return this._isExecutingAction;
         }
-        public setIsRunningAction(isRunning: boolean): void {
-            this._isRunningAction = isRunning;
+        public setIsExecutingAction(isExecuting: boolean): void {
+            this._isExecutingAction = isExecuting;
+        }
+
+        public getIsAutoReplay(): boolean {
+            return this._isAutoReplay;
+        }
+        public setIsAutoReplay(isAuto: boolean): void {
+            this._isAutoReplay = isAuto;
+            if ((isAuto) && (!this.getIsExecutingAction()) && (!this.getIsEnded())) {
+                ReplayModel.executeNextAction(this);
+            }
         }
 
         public getIsRunningWar(): boolean {
@@ -173,12 +184,8 @@ namespace TinyWars.Replay {
         public getTotalActionsCount(): number {
             return this._executedActions.length;
         }
-
-        public executeNextAction(): void {
-            if (!this.getIsRunningAction()) {
-                const nextActionId = this.getNextActionId();
-                ReplayModel.updateByActionContainer(this._executedActions[nextActionId], this.getWarId(), nextActionId);
-            }
+        public getNextAction(): Action {
+            return this._executedActions[this.getNextActionId()];
         }
 
         public getEnterTurnTime(): number {

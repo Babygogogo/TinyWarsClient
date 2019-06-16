@@ -9,7 +9,6 @@ namespace TinyWars.Replay.ReplayModel {
     import Lang                 = Utility.Lang;
     import FloatText            = Utility.FloatText;
     import ProtoManager         = Utility.ProtoManager;
-    import FlowManager          = Utility.FlowManager;
     import ActionContainer      = ProtoTypes.IActionContainer;
     import ActionCodes          = Network.Codes;
     import AlertPanel           = Common.AlertPanel;
@@ -76,31 +75,36 @@ namespace TinyWars.Replay.ReplayModel {
         return _war;
     }
 
-    export function updateByActionContainer(container: ActionContainer, warId: number, actionId: number): void {
-        if ((_war)                                  &&
-            (container)                             &&
-            (_war.getWarId() === warId)             &&
-            (_war.getNextActionId() === actionId)   &&
-            (_war.getIsRunningWar())                &&
-            (!_war.getIsEnded())                    &&
-            (!_war.getIsRunningAction())
+    export function executeNextAction(war: ReplayWar): void {
+        const action = war.getNextAction();
+        if ((action)                    &&
+            (war.getIsRunningWar())     &&
+            (!war.getIsEnded())         &&
+            (!war.getIsExecutingAction())
         ) {
-            _executeAction(_war, container);
+            _executeAction(war, action);
         } else {
-            FloatText.show(Lang.getText(Lang.Type.A0037));
-            FlowManager.gotoLobby();
+            FloatText.show(Lang.getText(Lang.Type.B0110));
         }
     }
 
     async function _executeAction(war: ReplayWar, container: ActionContainer): Promise<void> {
-        war.setIsRunningAction(true);
+        war.setIsExecutingAction(true);
         war.setNextActionId(war.getNextActionId() + 1);
-        await _EXECUTORS.get(Helpers.getActionCode(container))(war, container);
-        war.setIsRunningAction(false);
 
-        if ((war.getRemainingVotesForDraw() === 0) || (war.getPlayerManager().getAliveTeamsCount(false) <= 1)) {
+        await _EXECUTORS.get(Helpers.getActionCode(container))(war, container);
+        if (war.getNextActionId() >= war.getTotalActionsCount()) {
             war.setIsEnded(true);
             FloatText.show(Lang.getText(Lang.Type.B0093));
+        }
+        war.setIsExecutingAction(false);
+
+        if ((!war.getIsEnded()) && (war.getIsAutoReplay()) && (!war.getIsExecutingAction())) {
+            egret.setTimeout(() => {
+                if ((!war.getIsEnded()) && (war.getIsAutoReplay()) && (!war.getIsExecutingAction())) {
+                    _executeAction(war, war.getNextAction());
+                }
+            }, undefined, 1200);
         }
     }
 

@@ -2,7 +2,6 @@
 namespace TinyWars.Replay {
     import ConfirmPanel     = Common.ConfirmPanel;
     import FloatText        = Utility.FloatText;
-    import FlowManager      = Utility.FlowManager;
     import Lang             = Utility.Lang;
     import Helpers          = Utility.Helpers;
     import Notify           = Utility.Notify;
@@ -17,10 +16,11 @@ namespace TinyWars.Replay {
         private _labelPlayer    : GameUi.UiLabel;
         private _labelFund      : GameUi.UiLabel;
         private _labelEnergy    : GameUi.UiLabel;
-        private _btnUnitList    : GameUi.UiButton;
-        private _btnFindBuilding: GameUi.UiButton;
-        private _btnCancel      : GameUi.UiButton;
+        private _btnFastRewind  : GameUi.UiButton;
+        private _btnFastForward : GameUi.UiButton;
         private _btnPlay        : GameUi.UiButton;
+        private _btnPause       : GameUi.UiButton;
+        private _btnUnitList    : GameUi.UiButton;
         private _btnMenu        : GameUi.UiButton;
 
         private _war    : ReplayWar;
@@ -46,18 +46,17 @@ namespace TinyWars.Replay {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.McwTurnPhaseCodeChanged,        callback: this._onNotifyMcwTurnPhaseCodeChanged },
                 { type: Notify.Type.McwPlayerFundChanged,           callback: this._onNotifyMcwPlayerFundChanged },
                 { type: Notify.Type.McwPlayerIndexInTurnChanged,    callback: this._onNotifyMcwPlayerIndexInTurnChanged },
                 { type: Notify.Type.McwPlayerEnergyChanged,         callback: this._onNotifyMcwPlayerEnergyChanged },
-                { type: Notify.Type.McwActionPlannerStateChanged,   callback: this._onNotifyMcwActionPlannerStateChanged },
             ];
             this._uiListeners = [
-                { ui: this._btnUnitList,        callback: this._onTouchedBtnUnitList, },
-                { ui: this._btnFindBuilding,    callback: this._onTouchedBtnFindBuilding, },
-                { ui: this._btnCancel,          callback: this._onTouchedBtnCancel },
-                { ui: this._btnMenu,            callback: this._onTouchedBtnMenu, },
+                { ui: this._btnFastRewind,      callback: this._onTouchedBtnFastRewind },
+                { ui: this._btnFastForward,     callback: this._onTouchedBtnFastForward, },
                 { ui: this._btnPlay,            callback: this._onTouchedBtnPlay, },
+                { ui: this._btnPause,           callback: this._onTouchedBtnPause, },
+                { ui: this._btnUnitList,        callback: this._onTouchedBtnUnitList, },
+                { ui: this._btnMenu,            callback: this._onTouchedBtnMenu, },
             ];
         }
 
@@ -73,11 +72,6 @@ namespace TinyWars.Replay {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyMcwTurnPhaseCodeChanged(e: egret.Event): void {
-            this._updateBtnFindUnit();
-            this._updateBtnFindBuilding();
-            this._updateBtnCancel();
-        }
         private _onNotifyMcwPlayerFundChanged(e: egret.Event): void {
             this._updateLabelFund();
         }
@@ -87,19 +81,24 @@ namespace TinyWars.Replay {
         private _onNotifyMcwPlayerEnergyChanged(e: egret.Event): void {
             this._updateLabelEnergy();
         }
-        private _onNotifyMcwActionPlannerStateChanged(e: egret.Event): void {
-            this._updateBtnCancel();
-        }
 
+        private _onTouchedBtnFastRewind(e: egret.TouchEvent): void {
+            FloatText.show("TODO");
+        }
+        private _onTouchedBtnFastForward(e: egret.TouchEvent): void {
+            FloatText.show("TODO");
+        }
+        private _onTouchedBtnPlay(e: egret.TouchEvent): void {
+            this._war.setIsAutoReplay(true);
+            this._updateView();
+        }
+        private _onTouchedBtnPause(e: egret.TouchEvent): void {
+            this._war.setIsAutoReplay(false);
+            this._updateView();
+        }
         private _onTouchedBtnUnitList(e: egret.TouchEvent): void {
             this._war.getField().getActionPlanner().setStateIdle();
             ReplayUnitListPanel.show();
-        }
-        private _onTouchedBtnFindBuilding(e: egret.TouchEvent): void {
-            FloatText.show("TODO");
-        }
-        private _onTouchedBtnCancel(e: egret.TouchEvent): void {
-            this._war.getField().getActionPlanner().setStateIdle();
         }
         private _onTouchedBtnMenu(e: egret.TouchEvent): void {
             const actionPlanner = this._war.getActionPlanner();
@@ -107,9 +106,6 @@ namespace TinyWars.Replay {
                 actionPlanner.setStateIdle();
             }
             ReplayWarMenuPanel.show();
-        }
-        private _onTouchedBtnPlay(e: egret.TouchEvent): void {
-            this._war.executeNextAction();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -119,9 +115,8 @@ namespace TinyWars.Replay {
             this._updateLabelPlayer();
             this._updateLabelFund();
             this._updateLabelEnergy();
-            this._updateBtnFindUnit();
-            this._updateBtnFindBuilding();
-            this._updateBtnCancel();
+            this._updateBtnPlay();
+            this._updateBtnPause();
         }
 
         private _updateLabelPlayer(): void {
@@ -141,27 +136,12 @@ namespace TinyWars.Replay {
             this._labelEnergy.visible = false;
         }
 
-        private _updateBtnFindUnit(): void {
-            const war                   = this._war;
-            const turnManager           = war.getTurnManager();
-            this._btnUnitList.visible   = turnManager.getPhaseCode() === Types.TurnPhaseCode.Main;
+        private _updateBtnPlay(): void {
+            this._btnPlay.visible = !this._war.getIsAutoReplay();
         }
 
-        private _updateBtnFindBuilding(): void {
-            const war                       = this._war;
-            const turnManager               = war.getTurnManager();
-            this._btnFindBuilding.visible   = turnManager.getPhaseCode() === Types.TurnPhaseCode.Main;
-        }
-
-        private _updateBtnCancel(): void {
-            const war               = this._war;
-            const turnManager       = war.getTurnManager();
-            const actionPlanner     = war.getActionPlanner();
-            const state             = actionPlanner.getState();
-            this._btnCancel.visible = (turnManager.getPhaseCode() === Types.TurnPhaseCode.Main)
-                && (state !== Types.ActionPlannerState.Idle)
-                && (state !== Types.ActionPlannerState.ExecutingAction)
-                && (!actionPlanner.checkIsStateRequesting());
+        private _updateBtnPause(): void {
+            this._btnPause.visible = this._war.getIsAutoReplay();
         }
     }
 }

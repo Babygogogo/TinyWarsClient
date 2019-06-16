@@ -663,6 +663,14 @@ namespace TinyWars.Utility.Lang {
             `部队移动`,
             `Unit move`,
         ]],
+        [Type.B0110, [
+            `发生未知错误`,
+            `Something errors`,
+        ]],
+        [Type.B0111, [
+            `中立玩家`,
+            `Neutral`,
+        ]],
 
         [Type.B1000, [
             `平原`,
