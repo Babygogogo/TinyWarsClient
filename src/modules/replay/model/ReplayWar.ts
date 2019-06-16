@@ -2,6 +2,8 @@
 namespace TinyWars.Replay {
     import Types            = Utility.Types;
     import Notify           = Utility.Notify;
+    import FloatText        = Utility.FloatText;
+    import Lang             = Utility.Lang;
     import MapIndexKey      = Types.MapIndexKey;
     import Action           = Types.SerializedMcwAction;
     import SerializedMcwWar = Types.SerializedMcwWar;
@@ -26,8 +28,6 @@ namespace TinyWars.Replay {
         private _initialFund            : number;
         private _initialEnergy          : number;
 
-        private _isEnded        = false;
-
         private _playerManager  : ReplayPlayerManager;
         private _field          : ReplayField;
         private _turnManager    : ReplayTurnManager;
@@ -36,7 +36,6 @@ namespace TinyWars.Replay {
         private _isExecutingAction              = false;
         private _isRunningWar                   = false;
         private _isAutoReplay                   = false;
-        private _isFastExecute                  = false;
         private _checkPointIdsForNextActionId   = new Map<number, number>();
         private _warDatasForCheckPointId        = new Map<number, SerializedMcwWar>();
 
@@ -144,8 +143,8 @@ namespace TinyWars.Replay {
                 this._isAutoReplay = isAuto;
                 Notify.dispatch(Notify.Type.ReplayAutoReplayChanged);
 
-                if ((isAuto) && (!this.getIsExecutingAction()) && (!this.getIsEnded())) {
-                    ReplayModel.executeNextAction(this);
+                if ((isAuto) && (!this.getIsExecutingAction()) && (!this.checkIsInEnd())) {
+                    ReplayModel.executeNextAction(this, false);
                 }
             }
         }
@@ -167,12 +166,36 @@ namespace TinyWars.Replay {
         public checkIsInEnd(): boolean {
             return this.getNextActionId() >= this.getTotalActionsCount();
         }
-        public loadNextCheckPoint(): void {
+        public async loadNextCheckPoint(): Promise<void> {
+            const nextActionId      = this.getNextActionId();
+            const isWaitBeginTurn   = this.getTurnManager().getPhaseCode() === Types.TurnPhaseCode.WaitBeginTurn;
+            const checkPointId      = isWaitBeginTurn ? this.getCheckPointId(nextActionId) + 1 : this.getCheckPointId(nextActionId);
 
-            // const actionId          = this.getCurrentActionId();
-            // const currentCheckPoint = ;
-            // const nextCheckPoint    = actionId >= 0 ? this._checkPointIdsForActionId.get(actionId) + 1 : undefined;
+            if (this.getWarData(checkPointId)) {
+                this.setIsAutoReplay(false);
+                this.stopRunning();
 
+                await this._loadCheckPoint(checkPointId);
+                this.startRunning().startRunningView();
+                FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()})`);
+
+            } else {
+                this.setIsAutoReplay(false);
+
+                if (!isWaitBeginTurn) {
+                    this.stopRunning();
+                    await this._loadCheckPoint(checkPointId - 1);
+                    this.startRunning();
+                }
+                while (!this.getWarData(checkPointId)) {
+                    await ReplayModel.executeNextAction(this, true);
+                }
+
+                this.stopRunning();
+                await this._loadCheckPoint(checkPointId);
+                this.startRunning().startRunningView();
+                FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()})`);
+            }
         }
         public checkIsInBeginning(): boolean {
             return this.getNextActionId() <= 0;
@@ -182,7 +205,7 @@ namespace TinyWars.Replay {
             this.stopRunning();
 
             await this._loadCheckPoint(this.getCheckPointId(this.getNextActionId()) - 1);
-
+            FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()})`);
             this.startRunning().startRunningView();
         }
         private async _loadCheckPoint(checkPointId: number): Promise<void> {
@@ -278,13 +301,6 @@ namespace TinyWars.Replay {
         }
         public getRemainingVotesForDraw(): number | undefined {
             return this._remainingVotesForDraw;
-        }
-
-        public setIsEnded(ended: boolean): void {
-            this._isEnded = ended;
-        }
-        public getIsEnded(): boolean {
-            return this._isEnded;
         }
 
         private _setPlayerManager(manager: ReplayPlayerManager): void {

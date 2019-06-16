@@ -88,8 +88,12 @@ namespace TinyWars.Replay {
 
         private _onTouchedBtnFastRewind(e: egret.TouchEvent): void {
             const war = this._war;
+            war.setIsAutoReplay(false);
+
             if (!war.getIsRunning()) {
                 FloatText.show(Lang.getText(Lang.Type.A0040));
+            } else if (war.getIsExecutingAction()) {
+                FloatText.show(Lang.getText(Lang.Type.A0044));
             } else if (war.checkIsInBeginning()) {
                 FloatText.show(Lang.getText(Lang.Type.A0042));
             } else {
@@ -97,11 +101,22 @@ namespace TinyWars.Replay {
             }
         }
         private _onTouchedBtnFastForward(e: egret.TouchEvent): void {
-            FloatText.show("TODO");
+            const war = this._war;
+            war.setIsAutoReplay(false);
+
+            if (!war.getIsRunning()) {
+                FloatText.show(Lang.getText(Lang.Type.A0040));
+            } else if (war.getIsExecutingAction()) {
+                FloatText.show(Lang.getText(Lang.Type.A0044));
+            } else if (war.checkIsInEnd()) {
+                FloatText.show(Lang.getText(Lang.Type.A0043));
+            } else {
+                war.loadNextCheckPoint();
+            }
         }
         private _onTouchedBtnPlay(e: egret.TouchEvent): void {
             const war = this._war;
-            if (war.getIsEnded()) {
+            if (war.checkIsInEnd()) {
                 FloatText.show(Lang.getText(Lang.Type.A0041));
             } else {
                 this._war.setIsAutoReplay(true);

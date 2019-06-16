@@ -231,6 +231,14 @@ namespace TinyWars.Utility.Lang {
             `已处于战局结束状态，无法切换到下一回合`,
             `Can't forward because it's the end of the replay.`,
         ]],
+        [Type.A0044, [
+            `当前正在回放玩家动作，请待其结束后重试`,
+            `Now replaying an action. Please wait until it ends.`,
+        ]],
+        [Type.A0045, [
+            `已成功切换回合`,
+            `Turn switched.`,
+        ]],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
