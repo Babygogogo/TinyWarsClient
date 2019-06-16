@@ -87,7 +87,14 @@ namespace TinyWars.Replay {
         }
 
         private _onTouchedBtnFastRewind(e: egret.TouchEvent): void {
-            FloatText.show("TODO");
+            const war = this._war;
+            if (!war.getIsRunning()) {
+                FloatText.show(Lang.getText(Lang.Type.A0040));
+            } else if (war.checkIsInBeginning()) {
+                FloatText.show(Lang.getText(Lang.Type.A0042));
+            } else {
+                war.loadPreviousCheckPoint();
+            }
         }
         private _onTouchedBtnFastForward(e: egret.TouchEvent): void {
             FloatText.show("TODO");
@@ -127,15 +134,19 @@ namespace TinyWars.Replay {
         }
 
         private _updateLabelPlayer(): void {
-            const war                   = this._war;
-            const player                = war.getPlayerInTurn();
-            this._labelPlayer.text      = `${Lang.getText(Lang.Type.B0031)}:${player.getNickname()} (${Helpers.getColorTextForPlayerIndex(player.getPlayerIndex())})`;
+            const war               = this._war;
+            const player            = war.getPlayerInTurn();
+            this._labelPlayer.text  = player
+                ? `${Lang.getText(Lang.Type.B0031)}:${player.getNickname()} (${Helpers.getColorTextForPlayerIndex(player.getPlayerIndex())})`
+                : ``;
         }
 
         private _updateLabelFund(): void {
-            const war               = this._war;
-            const playerInTurn      = war.getPlayerInTurn();
-            this._labelFund.text    = `${Lang.getText(Lang.Type.B0032)}: ${playerInTurn.getFund()}`;
+            const war     = this._war;
+            const player  = war.getPlayerInTurn();
+            this._labelFund.text = player
+                ? `${Lang.getText(Lang.Type.B0032)}: ${player.getFund()}`
+                : ``;
         }
 
         private _updateLabelEnergy(): void {

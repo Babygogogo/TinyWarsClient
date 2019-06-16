@@ -32,10 +32,13 @@ namespace TinyWars.Replay {
         private _field          : ReplayField;
         private _turnManager    : ReplayTurnManager;
 
-        private _view               : ReplayWarView;
-        private _isExecutingAction  = false;
-        private _isRunningWar       = false;
-        private _isAutoReplay       = false;
+        private _view                           : ReplayWarView;
+        private _isExecutingAction              = false;
+        private _isRunningWar                   = false;
+        private _isAutoReplay                   = false;
+        private _isFastExecute                  = false;
+        private _checkPointIdsForNextActionId   = new Map<number, number>();
+        private _warDatasForCheckPointId        = new Map<number, SerializedMcwWar>();
 
         public constructor() {
         }
@@ -46,7 +49,6 @@ namespace TinyWars.Replay {
             this._warPassword           = data.warPassword;
             this._warComment            = data.warComment;
             this._configVersion         = data.configVersion;
-            this.setNextActionId(data.nextActionId || 0);
             this._executedActions       = data.executedActions;
             this._remainingVotesForDraw = data.remainingVotesForDraw;
             this._timeLimit             = data.timeLimit;
@@ -59,12 +61,10 @@ namespace TinyWars.Replay {
             this._initialFund           = data.initialFund;
             this._initialEnergy         = data.initialEnergy;
             this._setMapIndexKey(data);
-            this._setPlayerManager(new ReplayPlayerManager().init(data.players));
-            this._setField(await new ReplayField().init(data.field, this._configVersion, this.getMapIndexKey()));
-            this._setTurnManager(new ReplayTurnManager().init(data.turn));
 
-            this._view = this._view || new ReplayWarView();
-            this._view.init(this);
+            this.setCheckPointId(0, 0);
+            this.setWarData(0, data);
+            await this._loadCheckPoint(0);
 
             return this;
         }
@@ -91,6 +91,35 @@ namespace TinyWars.Replay {
             this._isRunningWar = false;
 
             return this;
+        }
+
+        public serialize(): SerializedMcwWar {
+            const mapIndexKey = this.getMapIndexKey();
+            return {
+                warId                   : this.getWarId(),
+                warName                 : this.getWarName(),
+                warPassword             : this.getWarPassword(),
+                warComment              : this.getWarComment(),
+                configVersion           : this.getConfigVersion(),
+                executedActions         : this._executedActions,
+                nextActionId            : this.getNextActionId(),
+                remainingVotesForDraw   : this.getRemainingVotesForDraw(),
+                timeLimit               : this.getSettingsTimeLimit(),
+                hasFogByDefault         : this.getSettingsHasFog(),
+                incomeModifier          : this.getSettingsIncomeModifier(),
+                energyGrowthModifier    : this.getSettingsEnergyGrowthModifier(),
+                attackPowerModifier     : this.getSettingsAttackPowerModifier(),
+                moveRangeModifier       : this.getSettingsMoveRangeModifier(),
+                visionRangeModifier     : this.getSettingsVisionRangeModifier(),
+                initialFund             : this.getSettingsInitialFund(),
+                initialEnergy           : this.getSettingsInitialEnergy(),
+                mapName                 : mapIndexKey.mapName,
+                mapDesigner             : mapIndexKey.mapDesigner,
+                mapVersion              : mapIndexKey.mapVersion,
+                players                 : this.getPlayerManager().serialize(),
+                field                   : this.getField().serialize(),
+                turn                    : this.getTurnManager().serialize(),
+            };
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -121,7 +150,54 @@ namespace TinyWars.Replay {
             }
         }
 
-        public getIsRunningWar(): boolean {
+        public getCheckPointId(nextActionId: number): number {
+            return this._checkPointIdsForNextActionId.get(nextActionId);
+        }
+        public setCheckPointId(nextActionId: number, checkPointId: number): void {
+            this._checkPointIdsForNextActionId.set(nextActionId, checkPointId);
+        }
+
+        public getWarData(checkPointId: number): SerializedMcwWar {
+            return this._warDatasForCheckPointId.get(checkPointId);
+        }
+        public setWarData(checkPointId: number, warData: SerializedMcwWar): void {
+            this._warDatasForCheckPointId.set(checkPointId, warData);
+        }
+
+        public checkIsInEnd(): boolean {
+            return this.getNextActionId() >= this.getTotalActionsCount();
+        }
+        public loadNextCheckPoint(): void {
+
+            // const actionId          = this.getCurrentActionId();
+            // const currentCheckPoint = ;
+            // const nextCheckPoint    = actionId >= 0 ? this._checkPointIdsForActionId.get(actionId) + 1 : undefined;
+
+        }
+        public checkIsInBeginning(): boolean {
+            return this.getNextActionId() <= 0;
+        }
+        public async loadPreviousCheckPoint(): Promise<void> {
+            this.setIsAutoReplay(false);
+            this.stopRunning();
+
+            await this._loadCheckPoint(this.getCheckPointId(this.getNextActionId()) - 1);
+
+            this.startRunning().startRunningView();
+        }
+        private async _loadCheckPoint(checkPointId: number): Promise<void> {
+            const data = this.getWarData(checkPointId);
+            this.setNextActionId(data.nextActionId || 0);
+
+            this._setPlayerManager((this.getPlayerManager() || new ReplayPlayerManager()).init(data.players));
+            this._setField(await (this.getField() || new ReplayField()).init(data.field, this._configVersion, this.getMapIndexKey()));
+            this._setTurnManager((this.getTurnManager() ||new ReplayTurnManager()).init(data.turn));
+
+            this._view = this._view || new ReplayWarView();
+            this._view.init(this);
+        }
+
+        public getIsRunning(): boolean {
             return this._isRunningWar;
         }
 

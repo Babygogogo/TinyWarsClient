@@ -16,12 +16,12 @@ namespace TinyWars.Replay {
         }
 
         public async init(data: SerializedMcField, configVersion: number, mapIndexKey: Types.MapIndexKey): Promise<ReplayField> {
-            this._setFogMap(await new ReplayFogMap().init(data.fogMap, mapIndexKey));
-            this._setTileMap(await new ReplayTileMap().init(configVersion, mapIndexKey, data.tileMap));
-            this._setUnitMap(await new ReplayUnitMap().init(configVersion, mapIndexKey, data.unitMap));
-            this._setCursor(await new ReplayCursor().init(mapIndexKey));
-            this._setActionPlanner(await new ReplayActionPlanner().init(mapIndexKey));
-            this._setGridVisionEffect(await new ReplayGridVisionEffect().init());
+            this._setFogMap(await (this.getFogMap() || new ReplayFogMap()).init(data.fogMap, mapIndexKey));
+            this._setTileMap(await (this.getTileMap() || new ReplayTileMap()).init(configVersion, mapIndexKey, data.tileMap));
+            this._setUnitMap(await (this.getUnitMap() || new ReplayUnitMap()).init(configVersion, mapIndexKey, data.unitMap));
+            this._setCursor(await (this.getCursor() || new ReplayCursor()).init(mapIndexKey));
+            this._setActionPlanner(await (this.getActionPlanner() || new ReplayActionPlanner()).init(mapIndexKey));
+            this._setGridVisionEffect(await (this.getGridVisionEffect() || new ReplayGridVisionEffect()).init());
 
             this._view = this._view || new ReplayFieldView();
             this._view.init(this);
@@ -51,6 +51,14 @@ namespace TinyWars.Replay {
             this.getCursor().stopRunning();
             this.getActionPlanner().stopRunning();
             this.getGridVisionEffect().stopRunning();
+        }
+
+        public serialize(): Types.SerializedMcwField {
+            return {
+                fogMap  : this.getFogMap().serialize(),
+                unitMap : this.getUnitMap().serialize(),
+                tileMap : this.getTileMap().serialize(),
+            };
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

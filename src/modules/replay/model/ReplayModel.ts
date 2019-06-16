@@ -78,7 +78,7 @@ namespace TinyWars.Replay.ReplayModel {
     export function executeNextAction(war: ReplayWar): void {
         const action = war.getNextAction();
         if ((action)                    &&
-            (war.getIsRunningWar())     &&
+            (war.getIsRunning())        &&
             (!war.getIsEnded())         &&
             (!war.getIsExecutingAction())
         ) {
@@ -92,6 +92,17 @@ namespace TinyWars.Replay.ReplayModel {
         war.setIsExecutingAction(true);
         war.setNextActionId(war.getNextActionId() + 1);
 
+        const actionId = war.getNextActionId();
+        if (war.getTurnManager().getPhaseCode() === Types.TurnPhaseCode.WaitBeginTurn) {
+            if (war.getCheckPointId(actionId) == null) {
+                war.setCheckPointId(actionId, war.getCheckPointId(actionId - 1) + 1);
+            }
+        } else {
+            if (war.getCheckPointId(actionId) == null) {
+                war.setCheckPointId(actionId, war.getCheckPointId(actionId - 1));
+            }
+        }
+
         await _EXECUTORS.get(Helpers.getActionCode(container))(war, container);
         if (war.getNextActionId() >= war.getTotalActionsCount()) {
             war.setIsEnded(true);
@@ -99,6 +110,13 @@ namespace TinyWars.Replay.ReplayModel {
             FloatText.show(Lang.getText(Lang.Type.B0093));
         }
         war.setIsExecutingAction(false);
+
+        if (war.getTurnManager().getPhaseCode() === Types.TurnPhaseCode.WaitBeginTurn) {
+            const checkPointId = war.getCheckPointId(actionId);
+            if (war.getWarData(checkPointId) == null) {
+                war.setWarData(checkPointId, war.serialize());
+            }
+        }
 
         if ((!war.getIsEnded()) && (war.getIsAutoReplay()) && (!war.getIsExecutingAction())) {
             egret.setTimeout(() => {

@@ -57,6 +57,8 @@ namespace TinyWars.Replay {
             war.getTileMap().forEachTile(tile => {
                 if (!VisibilityHelpers.checkIsTileVisibleToPlayer(war, tile.getGridIndex(), playerIndex)) {
                     tile.setFogEnabled();
+                } else {
+                    tile.setFogDisabled();
                 }
             });
         }

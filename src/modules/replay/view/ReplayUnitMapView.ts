@@ -34,6 +34,10 @@ namespace TinyWars.Replay {
         public init(unitMap: ReplayUnitMap): void {
             this._unitMap = unitMap;
 
+            this._layerForAir.removeChildren();
+            this._layerForGround.removeChildren();
+            this._layerForNaval.removeChildren();
+
             unitMap.forEachUnit(unit => this.addUnit(unit.getView(), false));
             this._resetZOrderForAllLayers();
         }

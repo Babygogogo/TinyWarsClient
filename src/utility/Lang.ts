@@ -223,6 +223,14 @@ namespace TinyWars.Utility.Lang {
             `回放已播放完毕`,
             `The replay is completed.`,
         ]],
+        [Type.A0042, [
+            `已处于战局初始状态，无法切换到上一回合`,
+            `Can't rewind because it's the beginning of the replay.`,
+        ]],
+        [Type.A0043, [
+            `已处于战局结束状态，无法切换到下一回合`,
+            `Can't forward because it's the end of the replay.`,
+        ]],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.

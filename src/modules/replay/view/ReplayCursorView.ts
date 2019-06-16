@@ -84,11 +84,15 @@ namespace TinyWars.Replay {
         }
 
         public init(cursor: ReplayCursor): void {
-            egret.assert(!this._cursor, "McwCursorView.init() already initialied!");
-            this._cursor    = cursor;
-            this._mapSize   = cursor.getMapSize();
-            this.width      = this._mapSize.width * _GRID_WIDTH;
-            this.height     = this._mapSize.height * _GRID_HEIGHT;
+            if (!this._cursor) {
+                this._cursor    = cursor;
+                this._mapSize   = cursor.getMapSize();
+                this.width      = this._mapSize.width * _GRID_WIDTH;
+                this.height     = this._mapSize.height * _GRID_HEIGHT;
+
+                this._startNormalAnimation();
+                this._startTargetAnimation();
+            }
         }
 
         public startRunningView(): void {
@@ -96,9 +100,6 @@ namespace TinyWars.Replay {
             this._tileMap       = field.getTileMap();
             this._unitMap       = field.getUnitMap();
             this._actionPlanner = field.getActionPlanner();
-
-            this._startNormalAnimation();
-            this._startTargetAnimation();
 
             this.addEventListener(egret.TouchEvent.TOUCH_BEGIN,             this._onTouchBegin,             this);
             this.addEventListener(egret.TouchEvent.TOUCH_CANCEL,            this._onTouchCancel,            this);
@@ -108,8 +109,8 @@ namespace TinyWars.Replay {
             this.updateView();
         }
         public stopRunningView(): void {
-            this._stopNormalAnimation();
-            this._stopTargetAnimation();
+            // this._stopNormalAnimation();
+            // this._stopTargetAnimation();
 
             this.removeEventListener(egret.TouchEvent.TOUCH_BEGIN,              this._onTouchBegin,             this);
             this.removeEventListener(egret.TouchEvent.TOUCH_CANCEL,             this._onTouchCancel,            this);
@@ -472,6 +473,8 @@ namespace TinyWars.Replay {
         }
 
         private _startNormalAnimation(): void {
+            this._stopNormalAnimation();
+
             egret.Tween.get(this._imgUpperLeftCorner, { loop: true })
                 .to({ x: _UPPER_LEFT_CORNER_INNER_X, y: _UPPER_LEFT_CORNER_INNER_Y }, _PULSE_IN_DURATION)
                 .to({ x: _UPPER_LEFT_CORNER_OUTER_X, y: _UPPER_LEFT_CORNER_OUTER_Y }, _PULSE_OUT_DURATION)
@@ -500,6 +503,8 @@ namespace TinyWars.Replay {
         }
 
         private _startTargetAnimation(): void {
+            this._stopTargetAnimation();
+
             const totalFramesCount = _IMG_SOURCES_FOR_TARGET.length;
             egret.Tween.get(this._imgTarget, { loop: true })
                 .wait(_TARGET_FRAME_DURATION)
