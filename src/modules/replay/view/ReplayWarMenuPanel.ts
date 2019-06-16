@@ -287,12 +287,12 @@ namespace TinyWars.Replay {
                 const isInfoKnown           = true;
                 const tilesCountAndIncome   = this._getTilesCountAndIncome(war, playerIndex);
                 this._labelFund.text        = isInfoKnown ? `${player.getFund()}` : `?`;
-                this._labelIncome.text      = `${tilesCountAndIncome.income}  ${isInfoKnown ? `` : `?`}`;
-                this._labelBuildings.text   = `${tilesCountAndIncome.count}  ${isInfoKnown ? `` : `?`}`;
+                this._labelIncome.text      = `${tilesCountAndIncome.income}${isInfoKnown ? `` : `  ?`}`;
+                this._labelBuildings.text   = `${tilesCountAndIncome.count}${isInfoKnown ? `` : `  ?`}`;
 
                 const unitsCountAndValue    = this._getUnitsCountAndValue(war, playerIndex);
-                this._labelUnits.text       = `${unitsCountAndValue.count}  ${isInfoKnown ? `` : `?`}`;
-                this._labelUnitsValue.text  = `${unitsCountAndValue.value}  ${isInfoKnown ? `` : `?`}`;
+                this._labelUnits.text       = `${unitsCountAndValue.count}${isInfoKnown ? `` : `  ?`}`;
+                this._labelUnitsValue.text  = `${unitsCountAndValue.value}${isInfoKnown ? `` : `  ?`}`;
             }
         }
 

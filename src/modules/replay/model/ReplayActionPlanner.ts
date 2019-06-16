@@ -873,7 +873,17 @@ namespace TinyWars.Replay {
         }
 
         private _setStateChoosingProductionTargetOnTap(gridIndex: GridIndex): void {
-            Logger.error(`ReplayActionPlanner._setStateChoosingProductionTargetTap() error 1, currState: ${this.getState()}`);
+            this._clearFocusUnitOnMap();
+            this._clearFocusUnitLoaded();
+            this._clearChoosingUnitForDrop();
+            this._clearChosenUnitsForDrop();
+            this._clearAvailableDropDestinations();
+            this._clearDataForPreviewingAttackableArea();
+            this._clearDataForPreviewingMovableArea();
+
+            this._setState(State.ChoosingProductionTarget);
+            this._updateView();
+            ReplayProduceUnitPanel.show(gridIndex);
         }
         private _setStateChoosingProductionTargetOnDrag(gridIndex: GridIndex): void {
             Logger.error(`ReplayActionPlanner._setStateChoosingProductionTargetOnDrag() error 1, currState: ${this.getState()}`);
@@ -919,6 +929,13 @@ namespace TinyWars.Replay {
         }
         private _updateView(): void {
             this.getView().updateView();
+
+            const currState = this.getState();
+            if (currState === State.ChoosingAction) {
+                ReplayUnitActionsPanel.show(this._getDataForUnitActionsPanel());
+            } else {
+                ReplayUnitActionsPanel.hide();
+            }
         }
 
         public getCursor(): ReplayCursor {
@@ -1285,11 +1302,7 @@ namespace TinyWars.Replay {
                 }
             } else {
                 if (this._checkCanFocusUnitOnMapAttackTarget(gridIndex)) {
-                    if (GridIndexHelpers.checkIsEqual(gridIndex, this.getCursor().getPreviousGridIndex())) {
-                        return State.RequestingUnitAttack;
-                    } else {
-                        return State.MakingMovePath;
-                    }
+                    return State.MakingMovePath;
                 } else {
                     if (this.getFocusUnitLoaded()) {
                         return State.ChoosingAction;
@@ -1322,11 +1335,7 @@ namespace TinyWars.Replay {
             if (!this.checkHasAttackableGridAfterMove(gridIndex)) {
                 return State.ChoosingAction;
             } else {
-                if (GridIndexHelpers.checkIsEqual(this.getCursor().getPreviousGridIndex(), gridIndex)) {
-                    return State.RequestingUnitAttack;
-                } else {
-                    return State.ChoosingAttackTarget;
-                }
+                return State.ChoosingAttackTarget;
             }
         }
         private _getNextStateOnTapWhenChoosingDropDestination(gridIndex: GridIndex): State {
@@ -1347,26 +1356,18 @@ namespace TinyWars.Replay {
                     }
                 }
 
-                return State.RequestingUnitDrop;
+                return State.ChoosingAction;
             }
         }
         private _getNextStateOnTapWhenChoosingFlareDestination(gridIndex: GridIndex): State {
             if (GridIndexHelpers.getDistance(this.getMovePathDestination(), gridIndex) > this.getFocusUnit().getFlareMaxRange()) {
                 return State.ChoosingAction;
             } else {
-                if (GridIndexHelpers.checkIsEqual(gridIndex, this.getCursor().getPreviousGridIndex())) {
-                    return State.RequestingUnitLaunchFlare;
-                } else {
-                    return State.ChoosingFlareDestination;
-                }
+                return State.ChoosingFlareDestination;
             }
         }
         private _getNextStateOnTapWhenChoosingSiloDestination(gridIndex: GridIndex): State {
-            if (GridIndexHelpers.checkIsEqual(gridIndex, this.getCursor().getPreviousGridIndex())) {
-                return State.RequestingUnitLaunchSilo;
-            } else {
-                return State.ChoosingSiloDestination;
-            }
+            return State.ChoosingSiloDestination;
         }
         private _getNextStateOnTapWhenChoosingProductionTarget(gridIndex: GridIndex): State {
             if (GridIndexHelpers.checkIsEqual(this.getCursor().getPreviousGridIndex(), gridIndex)) {
@@ -1459,6 +1460,203 @@ namespace TinyWars.Replay {
                 return State.Idle;
             } else {
                 return currState;
+            }
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Functions for generating actions for the focused unit.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _getDataForUnitActionsPanel(): OpenDataForMcwUnitActionsPanel {
+            const actionUnitBeLoaded = this._getActionUnitBeLoaded();
+            if (actionUnitBeLoaded.length) {
+                return actionUnitBeLoaded;
+            }
+
+            const actionUnitJoin = this._getActionUnitJoin();
+            if (actionUnitJoin.length) {
+                return actionUnitJoin;
+            }
+
+            const datas = [] as DataForMcwUnitAction[];
+            for (const action of this._getActionUnitAttack())       { datas.push(action); }
+            for (const action of this._getActionUnitCapture())      { datas.push(action); }
+            for (const action of this._getActionUnitDive())         { datas.push(action); }
+            for (const action of this._getActionUnitSurface())      { datas.push(action); }
+            for (const action of this._getActionUnitBuildTile())    { datas.push(action); }
+            for (const action of this._getActionUnitSupply())       { datas.push(action); }
+            for (const action of this._getActionsUnitLaunchUnit())  { datas.push(action); }
+            for (const action of this._getActionsUnitDropUnit())    { datas.push(action); }
+            for (const action of this._getActionUnitLaunchFlare())  { datas.push(action); }
+            for (const action of this._getActionUnitLaunchSilo())   { datas.push(action); }
+            for (const action of this._getActionUnitProduceUnit())  { datas.push(action); }
+            for (const action of this._getActionUnitWait())         { datas.push(action); }
+
+            Logger.assert(datas.length, `McwActionPlanner._getDataForUntiActionsPanel() no actions available?!`);
+            return datas;
+        }
+
+        private _getActionUnitBeLoaded(): DataForMcwUnitAction[] {
+            const destination   = this.getMovePathDestination();
+            const focusUnit     = this.getFocusUnit();
+            if (GridIndexHelpers.checkIsEqual(focusUnit.getGridIndex(), destination)) {
+                return [];
+            } else {
+                const loader = this._unitMap.getUnitOnMap(destination);
+                return (loader) && (loader.checkCanLoadUnit(focusUnit))
+                    ? [{ actionType: UnitActionType.BeLoaded, callback: () => {} }]
+                    : [];
+            }
+        }
+        private _getActionUnitJoin(): DataForMcwUnitAction[] {
+            const destination   = this.getMovePathDestination();
+            const focusUnit     = this.getFocusUnit();
+            if (GridIndexHelpers.checkIsEqual(focusUnit.getGridIndex(), destination)) {
+                return [];
+            } else {
+                const target = this._unitMap.getUnitOnMap(destination);
+                return (target) && (focusUnit.checkCanJoinUnit(target))
+                    ? [{ actionType: UnitActionType.Join, callback: () => {} }]
+                    : [];
+            }
+        }
+        private _getActionUnitAttack(): DataForMcwUnitAction[] {
+            return this._createAttackableGridsAfterMove().length
+                ? [{ actionType: UnitActionType.Attack, callback: () => this._setStateChoosingAttackTargetOnChooseAction() }]
+                : [];
+        }
+        private _getActionUnitCapture(): DataForMcwUnitAction[] {
+            return (this.getFocusUnit().checkCanCaptureTile(this._tileMap.getTile(this.getMovePathDestination())))
+                ? [{ actionType: UnitActionType.Capture, callback: () => {} }]
+                : [];
+        }
+        private _getActionUnitDive(): DataForMcwUnitAction[] {
+            return (this.getFocusUnit().checkCanDive())
+                ? [{ actionType: UnitActionType.Dive, callback: () => {} }]
+                : [];
+        }
+        private _getActionUnitSurface(): DataForMcwUnitAction[] {
+            return (this.getFocusUnit().checkCanSurface())
+                ? [{ actionType: UnitActionType.Surface, callback: () => {} }]
+                : [];
+        }
+        private _getActionUnitBuildTile(): DataForMcwUnitAction[] {
+            return (this.getFocusUnit().checkCanBuildOnTile(this._tileMap.getTile(this.getMovePathDestination())))
+                ? [{ actionType: UnitActionType.BuildTile, callback: () => {} }]
+                : [];
+        }
+        private _getActionUnitSupply(): DataForMcwUnitAction[] {
+            const focusUnit     = this.getFocusUnit();
+            const playerIndex   = focusUnit.getPlayerIndex();
+            const unitMap       = this._unitMap;
+            if (focusUnit.checkIsAdjacentUnitSupplier()) {
+                for (const gridIndex of GridIndexHelpers.getAdjacentGrids(this.getMovePathDestination(), this._mapSize)) {
+                    const unit = unitMap.getUnitOnMap(gridIndex);
+                    if ((unit) && (unit !== focusUnit) && (unit.getPlayerIndex() === playerIndex) && (unit.checkCanBeSupplied())) {
+                        return [{ actionType: UnitActionType.Supply, callback: () => {} }];
+                    }
+                }
+            }
+            return [];
+        }
+        private _getActionsUnitLaunchUnit(): DataForMcwUnitAction[] {
+            const datas     = [] as DataForMcwUnitAction[];
+            const focusUnit = this.getFocusUnit();
+            if ((focusUnit !== this.getFocusUnitLoaded()) && (this.getMovePath().length === 1) && (focusUnit.checkCanLaunchLoadedUnit())) {
+                const tile = this._tileMap.getTile(this.getMovePathDestination());
+                for (const unit of focusUnit.getLoadedUnits()) {
+                    if ((unit.getState() === UnitState.Idle) && (tile.getMoveCostByUnit(unit) != null)) {
+                        datas.push({
+                            actionType      : UnitActionType.LaunchUnit,
+                            callback        : () => this._setStateMakingMovePathOnChooseAction(unit),
+                            unitForLaunch   : unit,
+                        });
+                    }
+                }
+            }
+            return datas;
+        }
+        private _getActionsUnitDropUnit(): DataForMcwUnitAction[] {
+            const focusUnit                 = this.getFocusUnit();
+            const destination               = this.getMovePathDestination();
+            const loadedUnits               = focusUnit.getLoadedUnits();
+            const chosenUnits               = this.getChosenUnitsForDrop();
+            const chosenDropDestinations    = this._getChosenDropDestinations();
+            const actions                   = [] as DataForMcwUnitAction[];
+            if ((loadedUnits.length > chosenUnits.length) && (focusUnit.checkCanDropLoadedUnit(this._tileMap.getTile(destination).getType()))) {
+                for (const unit of loadedUnits) {
+                    if ((chosenUnits.every(value => value.unit !== unit)) && (this._calculateAvailableDropDestination(unit, chosenDropDestinations).length)) {
+                        actions.push({
+                            actionType  : UnitActionType.DropUnit,
+                            callback    : () => this._setStateChoosingDropDestinationOnChooseAction(unit),
+                            unitForDrop : unit,
+                        });
+                    }
+                }
+            }
+            return actions;
+        }
+        private _getActionUnitLaunchFlare(): DataForMcwUnitAction[] {
+            if ((!this._war.getFogMap().checkHasFogCurrently()) ||
+                (this.getMovePath().length !== 1)               ||
+                (!this.getFocusUnit().getFlareCurrentAmmo())
+            ) {
+                return [];
+            } else {
+                return [{ actionType: UnitActionType.LaunchFlare, callback: () => this._setStateChoosingFlareDestinationOnChooseAction() }];
+            }
+        }
+        private _getActionUnitLaunchSilo(): DataForMcwUnitAction[] {
+            return (this.getFocusUnit().checkCanLaunchSiloOnTile(this._tileMap.getTile(this.getMovePathDestination())))
+                ? [{ actionType: UnitActionType.LaunchSilo, callback: () => this._setStateChoosingSiloDestinationOnChooseAction() }]
+                : [];
+        }
+        private _getActionUnitProduceUnit(): DataForMcwUnitAction[] {
+            const focusUnit         = this.getFocusUnit();
+            const produceUnitType   = focusUnit.getProduceUnitType();
+            if ((this.getFocusUnitLoaded()) || (this.getMovePath().length !== 1) || (produceUnitType == null)) {
+                return [];
+            } else {
+                if (focusUnit.getCurrentProduceMaterial() < 1) {
+                    return [{
+                        actionType      : UnitActionType.ProduceUnit,
+                        callback        : () => FloatText.show(Lang.getText(Lang.Type.B0051)),
+                        canProduceUnit  : false,
+                        produceUnitType,
+                    }];
+                } else if (focusUnit.getLoadedUnitsCount() >= focusUnit.getMaxLoadUnitsCount()) {
+                    return [{
+                        actionType      : UnitActionType.ProduceUnit,
+                        callback        : () => FloatText.show(Lang.getText(Lang.Type.B0052)),
+                        canProduceUnit  : false,
+                        produceUnitType,
+                    }];
+                } else if (this._war.getPlayerInTurn().getFund() < focusUnit.getProduceUnitCost()) {
+                    return [{
+                        actionType      : UnitActionType.ProduceUnit,
+                        callback        : () => FloatText.show(Lang.getText(Lang.Type.B0053)),
+                        canProduceUnit  : false,
+                        produceUnitType,
+                    }];
+                } else {
+                    return [{
+                        actionType      : UnitActionType.ProduceUnit,
+                        callback        : () => {},
+                        canProduceUnit  : true,
+                        produceUnitType,
+                    }];
+                }
+            }
+        }
+        private _getActionUnitWait(): DataForMcwUnitAction[] {
+            const existingUnit = this._unitMap.getUnitOnMap(this.getMovePathDestination());
+            if ((existingUnit) && (existingUnit !== this.getFocusUnit())) {
+                return [];
+            } else {
+                if (this.getChosenUnitsForDrop().length) {
+                    return [{ actionType: UnitActionType.Wait, callback: () => {} }];
+                } else {
+                    return [{ actionType: UnitActionType.Wait, callback: () => {} }];
+                }
             }
         }
 

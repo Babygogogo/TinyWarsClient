@@ -49,6 +49,7 @@ namespace TinyWars.Replay {
                 { type: Notify.Type.McwPlayerFundChanged,           callback: this._onNotifyMcwPlayerFundChanged },
                 { type: Notify.Type.McwPlayerIndexInTurnChanged,    callback: this._onNotifyMcwPlayerIndexInTurnChanged },
                 { type: Notify.Type.McwPlayerEnergyChanged,         callback: this._onNotifyMcwPlayerEnergyChanged },
+                { type: Notify.Type.ReplayAutoReplayChanged,        callback: this._onNotifyReplayAutoReplayChanged },
             ];
             this._uiListeners = [
                 { ui: this._btnFastRewind,      callback: this._onTouchedBtnFastRewind },
@@ -81,6 +82,9 @@ namespace TinyWars.Replay {
         private _onNotifyMcwPlayerEnergyChanged(e: egret.Event): void {
             this._updateLabelEnergy();
         }
+        private _onNotifyReplayAutoReplayChanged(e: egret.Event): void {
+            this._updateView();
+        }
 
         private _onTouchedBtnFastRewind(e: egret.TouchEvent): void {
             FloatText.show("TODO");
@@ -89,12 +93,15 @@ namespace TinyWars.Replay {
             FloatText.show("TODO");
         }
         private _onTouchedBtnPlay(e: egret.TouchEvent): void {
-            this._war.setIsAutoReplay(true);
-            this._updateView();
+            const war = this._war;
+            if (war.getIsEnded()) {
+                FloatText.show(Lang.getText(Lang.Type.A0041));
+            } else {
+                this._war.setIsAutoReplay(true);
+            }
         }
         private _onTouchedBtnPause(e: egret.TouchEvent): void {
             this._war.setIsAutoReplay(false);
-            this._updateView();
         }
         private _onTouchedBtnUnitList(e: egret.TouchEvent): void {
             this._war.getField().getActionPlanner().setStateIdle();

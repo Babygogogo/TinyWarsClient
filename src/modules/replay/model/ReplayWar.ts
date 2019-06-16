@@ -1,6 +1,7 @@
 
 namespace TinyWars.Replay {
     import Types            = Utility.Types;
+    import Notify           = Utility.Notify;
     import MapIndexKey      = Types.MapIndexKey;
     import Action           = Types.SerializedMcwAction;
     import SerializedMcwWar = Types.SerializedMcwWar;
@@ -110,9 +111,13 @@ namespace TinyWars.Replay {
             return this._isAutoReplay;
         }
         public setIsAutoReplay(isAuto: boolean): void {
-            this._isAutoReplay = isAuto;
-            if ((isAuto) && (!this.getIsExecutingAction()) && (!this.getIsEnded())) {
-                ReplayModel.executeNextAction(this);
+            if (this.getIsAutoReplay() !== isAuto) {
+                this._isAutoReplay = isAuto;
+                Notify.dispatch(Notify.Type.ReplayAutoReplayChanged);
+
+                if ((isAuto) && (!this.getIsExecutingAction()) && (!this.getIsEnded())) {
+                    ReplayModel.executeNextAction(this);
+                }
             }
         }
 

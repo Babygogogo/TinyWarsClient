@@ -219,6 +219,10 @@ namespace TinyWars.Utility.Lang {
             `数据加载中，请稍候...`,
             `Now loading, please wait...`,
         ]],
+        [Type.A0041, [
+            `回放已播放完毕`,
+            `The replay is completed.`,
+        ]],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.

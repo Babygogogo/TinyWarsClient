@@ -95,6 +95,7 @@ namespace TinyWars.Replay.ReplayModel {
         await _EXECUTORS.get(Helpers.getActionCode(container))(war, container);
         if (war.getNextActionId() >= war.getTotalActionsCount()) {
             war.setIsEnded(true);
+            war.setIsAutoReplay(false);
             FloatText.show(Lang.getText(Lang.Type.B0093));
         }
         war.setIsExecutingAction(false);
@@ -104,7 +105,7 @@ namespace TinyWars.Replay.ReplayModel {
                 if ((!war.getIsEnded()) && (war.getIsAutoReplay()) && (!war.getIsExecutingAction())) {
                     _executeAction(war, war.getNextAction());
                 }
-            }, undefined, 1200);
+            }, undefined, 1000);
         }
     }
 

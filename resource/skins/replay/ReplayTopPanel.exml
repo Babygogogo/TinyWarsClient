@@ -8,15 +8,14 @@
                         verticalCenter="0" />
         <GameUi:UiLabel id="_labelFund" text="金钱:999999" size="16" x="280" textColor="0xffffff" verticalCenter="0" />
         <GameUi:UiLabel id="_labelEnergy" text="能量:99/99/99" size="16" x="390" textColor="0xFFFFFF" verticalCenter="0" />
-			<GameUi:UiButton id="_btnFastRewind" label="上个回合" x="580" verticalCenter="0" width="28">
-				<GameUi:skinName>
-				<e:Skin states="up,down,disabled">
-					<e:Image width="100%" height="100%"/>
-					<e:Label id="labelDisplay" size="14" left="0" right="0" top="0" bottom="0" textColor="0x00ff00"/>
-				</e:Skin>
-				</GameUi:skinName>
-			</GameUi:UiButton>
-
+        <GameUi:UiButton id="_btnFastRewind" label="上个回合" x="580" verticalCenter="0" width="28">
+            <GameUi:skinName>
+                <e:Skin states="up,down,disabled">
+                    <e:Image width="100%" height="100%" />
+                    <e:Label id="labelDisplay" size="14" left="0" right="0" top="0" bottom="0" textColor="0x00ff00" />
+                </e:Skin>
+            </GameUi:skinName>
+        </GameUi:UiButton>
         <GameUi:UiButton id="_btnPlay" label="播放" x="660" verticalCenter="0" width="28">
             <GameUi:skinName>
                 <e:Skin states="up,down,disabled">
@@ -25,14 +24,14 @@
                 </e:Skin>
             </GameUi:skinName>
         </GameUi:UiButton>
-			<GameUi:UiButton id="_btnPause" label="暂停" x="660" verticalCenter="0" width="28">
-				<GameUi:skinName>
-				<e:Skin states="up,down,disabled">
-					<e:Image width="100%" height="100%"/>
-					<e:Label id="labelDisplay" size="14" left="0" right="0" top="0" bottom="0" textColor="0x00ff00"/>
-				</e:Skin>
-				</GameUi:skinName>
-			</GameUi:UiButton>
+        <GameUi:UiButton id="_btnPause" label="暂停" x="660" verticalCenter="0" width="28">
+            <GameUi:skinName>
+                <e:Skin states="up,down,disabled">
+                    <e:Image width="100%" height="100%" />
+                    <e:Label id="labelDisplay" size="14" left="0" right="0" top="0" bottom="0" textColor="0x00ff00" />
+                </e:Skin>
+            </GameUi:skinName>
+        </GameUi:UiButton>
         <GameUi:UiButton id="_btnFastForward" label="下个回合" x="740" verticalCenter="0" width="28">
             <GameUi:skinName>
                 <e:Skin states="up,down,disabled">
@@ -41,15 +40,14 @@
                 </e:Skin>
             </GameUi:skinName>
         </GameUi:UiButton>
-			<GameUi:UiButton id="_btnUnitList" label="部队列表" x="820" verticalCenter="0" width="28" visible="false">
-				<GameUi:skinName>
-				<e:Skin states="up,down,disabled">
-					<e:Image width="100%" height="100%"/>
-					<e:Label id="labelDisplay" size="14" left="0" right="0" top="0" bottom="0" textColor="0x00ff00"/>
-				</e:Skin>
-				</GameUi:skinName>
-			</GameUi:UiButton>
-
+        <GameUi:UiButton id="_btnUnitList" label="部队列表" x="820" verticalCenter="0" width="28" visible="false">
+            <GameUi:skinName>
+                <e:Skin states="up,down,disabled">
+                    <e:Image width="100%" height="100%" />
+                    <e:Label id="labelDisplay" size="14" left="0" right="0" top="0" bottom="0" textColor="0x00ff00" />
+                </e:Skin>
+            </GameUi:skinName>
+        </GameUi:UiButton>
         <GameUi:UiButton id="_btnMenu" label="菜单" x="900" verticalCenter="0" width="28">
             <GameUi:skinName>
                 <e:Skin states="up,down,disabled">
