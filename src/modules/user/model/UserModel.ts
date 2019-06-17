@@ -33,6 +33,7 @@ namespace TinyWars.User {
             _selfRankScore = data.rank2pScore;
 
             LocalStorage.setAccount(data.account);
+            LocalStorage.setPassword(data.password);
         }
 
         export function clearLoginInfo(): void {

@@ -2,6 +2,8 @@
 namespace TinyWars.Login {
     import FloatText        = Utility.FloatText;
     import Lang             = Utility.Lang;
+    import Helpers          = Utility.Helpers;
+    import Types            = Utility.Types;
     import NotifyType       = Utility.Notify.Type;
     import LocalStorage     = Utility.LocalStorage;
     import NoSleepManager   = Utility.NoSleepManager;
@@ -10,10 +12,12 @@ namespace TinyWars.Login {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private _inputAccount : GameUi.UiTextInput;
-        private _inputPassword: GameUi.UiTextInput;
-        private _btnRegister  : GameUi.UiButton;
-        private _btnLogin     : GameUi.UiButton;
+        private _inputAccount           : GameUi.UiTextInput;
+        private _inputPassword          : GameUi.UiTextInput;
+        private _btnRegister            : GameUi.UiButton;
+        private _groupRememberPassword  : eui.Group;
+        private _imgRememberPassword    : GameUi.UiImage;
+        private _btnLogin               : GameUi.UiButton;
 
         private static _instance: LoginPanel;
 
@@ -42,19 +46,17 @@ namespace TinyWars.Login {
                 { type: NotifyType.SLogin, callback: this._onNotifySLogin },
             ];
             this._uiListeners = [
-                { ui: this._btnLogin,    callback: this._onTouchedBtnLogin },
-                { ui: this._btnRegister, callback: this._onTouchedBtnRegister },
+                { ui: this._btnLogin,               callback: this._onTouchedBtnLogin },
+                { ui: this._btnRegister,            callback: this._onTouchedBtnRegister },
+                { ui: this._groupRememberPassword,  callback: this._onTouchedGroupRememberPassword },
             ];
-
-            // let test = new OnlineWar.TileMapView();
-            // test.init(100, 100);
-            // test.scaleX = 0.15;
-            // test.scaleY = 0.15;
-            // this.addChildAt(test, 0);
         }
 
         protected _onOpened(): void {
-            this._inputAccount.text = LocalStorage.getAccount();
+            const isRememberPassword    = LocalStorage.getIsRememberPassword();
+            this._inputAccount.text     = LocalStorage.getAccount();
+            this._inputPassword.text    = isRememberPassword ? LocalStorage.getPasword() : null;
+            Helpers.changeColor(this._imgRememberPassword, isRememberPassword ? Types.ColorType.Origin : Types.ColorType.Gray);
         }
 
         private _onNotifySLogin(e: egret.Event): void {
@@ -86,6 +88,12 @@ namespace TinyWars.Login {
 
             RegisterPanel.show();
             LoginPanel.hide();
+        }
+
+        private _onTouchedGroupRememberPassword(e: egret.TouchEvent): void {
+            const isRemember = LocalStorage.getIsRememberPassword();
+            LocalStorage.setIsRememberPassword(!isRemember);
+            Helpers.changeColor(this._imgRememberPassword, !isRemember ? Types.ColorType.Origin : Types.ColorType.Gray);
         }
     }
 }
