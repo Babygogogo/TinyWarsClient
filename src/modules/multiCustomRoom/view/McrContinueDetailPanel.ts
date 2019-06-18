@@ -106,7 +106,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onNotifySMcrContinueWar(e: egret.Event): void {
-            FlowManager.gotoMultiCustomWar((e.data as ProtoTypes.IS_McrContinueWar).war as Types.SerializedMcwWar);
+            FlowManager.gotoMultiCustomWar((e.data as ProtoTypes.IS_McrContinueWar).war as Types.SerializedBwWar);
         }
         private _onNotifySMcrContinueWarFailed(e: egret.Event): void {
             BlockPanel.hide();

@@ -120,7 +120,7 @@ namespace TinyWars.Utility.Types {
         turnPhaseCode   : TurnPhaseCode;
         enterTurnTime   : number;
     }
-    export interface SerializedMcwWar extends ProtoTypes.ISerializedMcwWar {
+    export interface SerializedBwWar extends ProtoTypes.ISerializedMcwWar {
         warId           : number;
         configVersion   : number;
         mapName         : string;

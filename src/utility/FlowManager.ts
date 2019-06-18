@@ -59,7 +59,7 @@ namespace TinyWars.Utility.FlowManager {
         Lobby.LobbyPanel.show();
         Lobby.LobbyTopPanel.show();
     }
-    export async function gotoMultiCustomWar(data: Types.SerializedMcwWar): Promise<void> {
+    export async function gotoMultiCustomWar(data: Types.SerializedBwWar): Promise<void> {
         ReplayModel.unloadWar();
         await McwModel.loadWar(data);
         StageManager.closeAllPanels();

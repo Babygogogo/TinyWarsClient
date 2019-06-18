@@ -50,7 +50,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for managing war.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export async function loadWar(data: Types.SerializedMcwWar): Promise<McwWar> {
+    export async function loadWar(data: Types.SerializedBwWar): Promise<McwWar> {
         if (_war) {
             Logger.warn(`McwModel.loadWar() another war has been loaded already!`);
             unloadWar();
@@ -106,7 +106,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
                     }
                 } else {
                     _war.setIsEnded(true);
-                    Utility.FlowManager.gotoMultiCustomWar(data.war as Types.SerializedMcwWar),
+                    Utility.FlowManager.gotoMultiCustomWar(data.war as Types.SerializedBwWar),
                     FloatText.show(Lang.getText(Lang.Type.A0036));
                 }
 
