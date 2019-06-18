@@ -546,9 +546,13 @@ namespace TinyWars.MultiCustomWar {
             return this._templateCfg.moveRange;
         }
         public getFinalMoveRange(): number {
-            return Math.min(
-                this.getCfgMoveRange(),
-                this.getCurrentFuel()
+            const modifier = this._war.getSettingsMoveRangeModifier();
+            return Math.max(
+                0,
+                Math.min(
+                    this.getCfgMoveRange(),
+                    this.getCurrentFuel(),
+                ) + modifier,
             );
         }
 

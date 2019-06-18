@@ -144,9 +144,9 @@ namespace TinyWars.Replay.ReplayModel {
             }
         }
 
-        if ((!war.checkIsInEnd()) && (war.getIsAutoReplay()) && (!war.getIsExecutingAction())) {
+        if ((!war.checkIsInEnd()) && (war.getIsAutoReplay()) && (!war.getIsExecutingAction()) && (war.getIsRunning())) {
             egret.setTimeout(() => {
-                if ((!war.checkIsInEnd()) && (war.getIsAutoReplay()) && (!war.getIsExecutingAction())) {
+                if ((!war.checkIsInEnd()) && (war.getIsAutoReplay()) && (!war.getIsExecutingAction()) && (war.getIsRunning())) {
                     _executeAction(war, war.getNextAction(), isFastExecute);
                 }
             }, undefined, 1000);
