@@ -248,7 +248,7 @@ namespace TinyWars.Replay {
 
     type DataForPlayerRenderer = {
         war     : ReplayWar;
-        player  : ReplayPlayer;
+        player  : BaseWar.BwPlayer;
     }
 
     class PlayerRenderer extends eui.ItemRenderer {

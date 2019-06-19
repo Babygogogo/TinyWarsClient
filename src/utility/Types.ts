@@ -94,7 +94,7 @@ namespace TinyWars.Utility.Types {
         units?      : SerializedMcwUnit[];
         nextUnitId  : number;
     }
-    export interface SerializedMcwPlayer extends ProtoTypes.ISerializedMcwPlayer {
+    export interface SerializedBwPlayer extends ProtoTypes.ISerializedMcwPlayer {
         fund            : number;
         hasVotedForDraw : boolean;
         isAlive         : boolean;
@@ -142,7 +142,7 @@ namespace TinyWars.Utility.Types {
 
         remainingVotesForDraw?  : number;
         executedActions         : SerializedMcwAction[];
-        players                 : SerializedMcwPlayer[];
+        players                 : SerializedBwPlayer[];
         turn                    : SerializedMcwTurn;
         field                   : SerializedMcwField;
     }

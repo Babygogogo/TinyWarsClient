@@ -253,7 +253,7 @@ namespace TinyWars.MultiCustomWar {
                         this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s06_f${Helpers.getNumText(unitPlayerIndex)}`);
                     }
                 } else {
-                    const playerManager = war.getPlayerManager();
+                    const playerManager = war.getPlayerManager() as McwPlayerManager;
                     if (!playerManager.checkIsSameTeam(unitPlayerIndex, playerManager.getPlayerIndexLoggedIn())) {
                         this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s06_f${Helpers.getNumText(unitPlayerIndex)}`);
                     } else {

@@ -23,6 +23,7 @@ namespace TinyWars.BaseWar {
 
         private _remainingVotesForDraw  : number;
         private _nextActionId           : number;
+        private _playerManager          : BwPlayerManager;
 
         protected async init(data: SerializedBwWar): Promise<BwWar> {
             this._setWarId(data.warId);
@@ -167,6 +168,19 @@ namespace TinyWars.BaseWar {
         }
         public setNextActionId(actionId: number): void {
             this._nextActionId = actionId;
+        }
+
+        protected _setPlayerManager(manager: BwPlayerManager): void {
+            this._playerManager = manager;
+        }
+        public getPlayerManager(): BwPlayerManager {
+            return this._playerManager;
+        }
+        public getPlayer(playerIndex: number): BwPlayer | undefined {
+            return this.getPlayerManager().getPlayer(playerIndex);
+        }
+        public getPlayerInTurn(): BwPlayer {
+            return this.getPlayerManager().getPlayerInTurn();
         }
     }
 }

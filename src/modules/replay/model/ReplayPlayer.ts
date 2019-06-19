@@ -3,7 +3,7 @@ namespace TinyWars.Replay {
     import Types    = Utility.Types;
 
     export class ReplayPlayer extends BaseWar.BwPlayer {
-        public serialize(): Types.SerializedMcwPlayer {
+        public serialize(): Types.SerializedBwPlayer {
             return {
                 fund            : this.getFund(),
                 hasVotedForDraw : this.getHasVotedForDraw(),

@@ -7,7 +7,6 @@ namespace TinyWars.MultiCustomWar {
     export class McwWar extends BaseWar.BwWar {
         private _isEnded        = false;
 
-        private _playerManager  : McPlayerManager;
         private _field          : McwField;
         private _turnManager    : McwTurnManager;
 
@@ -19,7 +18,7 @@ namespace TinyWars.MultiCustomWar {
             await super.init(data);
 
             this.setNextActionId(data.nextActionId);
-            this._setPlayerManager(new McPlayerManager().init(data.players));
+            this._setPlayerManager(new McwPlayerManager().init(data.players));
             this._setField(await new McwField().init(data.field, this.getConfigVersion(), this.getMapIndexKey()));
             this._setTurnManager(new McwTurnManager().init(data.turn));
 
@@ -82,23 +81,11 @@ namespace TinyWars.MultiCustomWar {
             return this._isEnded;
         }
 
-        private _setPlayerManager(manager: McPlayerManager): void {
-            this._playerManager = manager;
-        }
-        public getPlayerManager(): McPlayerManager {
-            return this._playerManager;
-        }
-        public getPlayer(playerIndex: number): McwPlayer | undefined {
-            return this.getPlayerManager().getPlayer(playerIndex);
-        }
         public getPlayerIndexLoggedIn(): number | undefined {
-            return this.getPlayerManager().getPlayerIndexLoggedIn();
-        }
-        public getPlayerInTurn(): McwPlayer {
-            return this.getPlayerManager().getPlayerInTurn();
+            return (this.getPlayerManager() as McwPlayerManager).getPlayerIndexLoggedIn();
         }
         public getPlayerLoggedIn(): McwPlayer {
-            return this.getPlayerManager().getPlayerLoggedIn();
+            return (this.getPlayerManager() as McwPlayerManager).getPlayerLoggedIn();
         }
 
         private _setField(field: McwField): void {

@@ -11,7 +11,6 @@ namespace TinyWars.Replay {
     export class ReplayWar extends BaseWar.BwWar {
         private _executedActions        : Action[];
 
-        private _playerManager  : ReplayPlayerManager;
         private _field          : ReplayField;
         private _turnManager    : ReplayTurnManager;
 
@@ -81,7 +80,7 @@ namespace TinyWars.Replay {
                 mapName                 : mapIndexKey.mapName,
                 mapDesigner             : mapIndexKey.mapDesigner,
                 mapVersion              : mapIndexKey.mapVersion,
-                players                 : this.getPlayerManager().serialize(),
+                players                 : (this.getPlayerManager() as ReplayPlayerManager).serialize(),
                 field                   : this.getField().serialize(),
                 turn                    : this.getTurnManager().serialize(),
             };
@@ -199,19 +198,6 @@ namespace TinyWars.Replay {
 
         public getEnterTurnTime(): number {
             return this.getTurnManager().getEnterTurnTime();
-        }
-
-        private _setPlayerManager(manager: ReplayPlayerManager): void {
-            this._playerManager = manager;
-        }
-        public getPlayerManager(): ReplayPlayerManager {
-            return this._playerManager;
-        }
-        public getPlayer(playerIndex: number): ReplayPlayer | undefined {
-            return this.getPlayerManager().getPlayer(playerIndex);
-        }
-        public getPlayerInTurn(): ReplayPlayer {
-            return this.getPlayerManager().getPlayerInTurn();
         }
 
         private _setField(field: ReplayField): void {
