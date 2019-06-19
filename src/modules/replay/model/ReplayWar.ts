@@ -9,7 +9,6 @@ namespace TinyWars.Replay {
     import SerializedMcwWar = Types.SerializedBwWar;
 
     export class ReplayWar extends BaseWar.BwWar {
-        private _nextActionId           : number;
         private _executedActions        : Action[];
 
         private _playerManager  : ReplayPlayerManager;
@@ -191,12 +190,6 @@ namespace TinyWars.Replay {
             return this._isRunningWar;
         }
 
-        public getNextActionId(): number {
-            return this._nextActionId;
-        }
-        public setNextActionId(actionId: number): void {
-            this._nextActionId = actionId;
-        }
         public getTotalActionsCount(): number {
             return this._executedActions.length;
         }

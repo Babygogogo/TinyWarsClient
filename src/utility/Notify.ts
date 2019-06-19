@@ -27,7 +27,7 @@ namespace TinyWars.Utility.Notify {
         McwTurnPhaseCodeChanged,
         McwPlayerIndexInTurnChanged,
 
-        McwPlayerFundChanged,
+        BaseWarPlayerFundChanged,
         McwPlayerEnergyChanged,
 
         McwCursorTapped,

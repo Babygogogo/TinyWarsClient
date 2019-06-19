@@ -7,7 +7,6 @@ namespace TinyWars.Replay {
     export class ReplayPlayerManager {
         private _players        = new Map<number, ReplayPlayer>();
         private _war            : ReplayWar;
-        private _loggedInPlayer : ReplayPlayer;
 
         public constructor() {
         }
@@ -15,7 +14,7 @@ namespace TinyWars.Replay {
         public init(datas: Types.SerializedMcwPlayer[]): ReplayPlayerManager {
             this._players.clear();
             for (const data of datas) {
-                this._players.set(data.playerIndex!, new ReplayPlayer().init(data));
+                this._players.set(data.playerIndex!, new ReplayPlayer().init(data) as ReplayPlayer);
             }
             return this;
         }

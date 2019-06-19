@@ -20,14 +20,6 @@ namespace TinyWars.MultiCustomWar {
             return this;
         }
 
-        public serialize(): Types.SerializedMcwPlayer[] {
-            const data: Types.SerializedMcwPlayer[] = [];
-            for (const [, player] of this._players) {
-                data.push(player.serialize());
-            }
-            return data;
-        }
-
         public startRunning(war: McwWar): void {
             this._war = war;
             for (const [, player] of this._players) {

@@ -5,8 +5,6 @@ namespace TinyWars.MultiCustomWar {
     import SerializedMcWar  = Types.SerializedBwWar;
 
     export class McwWar extends BaseWar.BwWar {
-        private _nextActionId           : number;
-
         private _isEnded        = false;
 
         private _playerManager  : McPlayerManager;
@@ -71,13 +69,6 @@ namespace TinyWars.MultiCustomWar {
 
         public getIsRunningWar(): boolean {
             return this._isRunningWar;
-        }
-
-        public getNextActionId(): number {
-            return this._nextActionId;
-        }
-        public setNextActionId(actionId: number): void {
-            this._nextActionId = actionId;
         }
 
         public getEnterTurnTime(): number {

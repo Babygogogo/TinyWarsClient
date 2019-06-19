@@ -4,7 +4,7 @@ namespace TinyWars.BaseWar {
     import MapIndexKey      = Types.MapIndexKey;
     import SerializedBwWar  = Types.SerializedBwWar;
 
-    export class BwWar {
+    export abstract class BwWar {
         private _warId                  : number;
         private _warName                : string;
         private _warPassword            : string;
@@ -22,6 +22,7 @@ namespace TinyWars.BaseWar {
         private _initialEnergy          : number;
 
         private _remainingVotesForDraw  : number;
+        private _nextActionId           : number;
 
         protected async init(data: SerializedBwWar): Promise<BwWar> {
             this._setWarId(data.warId);
@@ -159,6 +160,13 @@ namespace TinyWars.BaseWar {
         }
         public getRemainingVotesForDraw(): number | undefined {
             return this._remainingVotesForDraw;
+        }
+
+        public getNextActionId(): number {
+            return this._nextActionId;
+        }
+        public setNextActionId(actionId: number): void {
+            this._nextActionId = actionId;
         }
     }
 }
