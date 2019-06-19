@@ -182,5 +182,9 @@ namespace TinyWars.BaseWar {
         public getPlayerInTurn(): BwPlayer {
             return this.getPlayerManager().getPlayerInTurn();
         }
+
+        public getPlayerIndexInTurn(): number {
+            return this.getTurnManager().getPlayerIndexInTurn();
+        }
     }
 }

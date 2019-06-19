@@ -23,8 +23,8 @@ namespace TinyWars.Utility.Notify {
         TileModelUpdated,
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        McwTurnIndexChanged,
-        McwTurnPhaseCodeChanged,
+        BwTurnIndexChanged,
+        BwTurnPhaseCodeChanged,
         McwPlayerIndexInTurnChanged,
 
         BaseWarPlayerFundChanged,

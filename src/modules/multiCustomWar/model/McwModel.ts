@@ -268,6 +268,8 @@ namespace TinyWars.MultiCustomWar.McwModel {
     async function _executeMcwPlayerBeginTurn(war: McwWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
+        FloatText.show(`${war.getPlayerInTurn().getNickname()} p${war.getPlayerIndexInTurn()}回合正式开始！！`);
+
         await war.getTurnManager().endPhaseWaitBeginTurn(data.S_McwPlayerBeginTurn);
         actionPlanner.setStateIdle();
     }

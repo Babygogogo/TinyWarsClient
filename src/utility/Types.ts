@@ -114,7 +114,7 @@ namespace TinyWars.Utility.Types {
         unitMap?: SerializedMcwUnitMap;
         tileMap?: SerializedMcwTileMap;
     }
-    export interface SerializedMcwTurn extends ProtoTypes.ISerializedMcwTurn {
+    export interface SerializedBwTurn extends ProtoTypes.ISerializedMcwTurn {
         turnIndex       : number;
         playerIndex     : number;
         turnPhaseCode   : TurnPhaseCode;
@@ -143,7 +143,7 @@ namespace TinyWars.Utility.Types {
         remainingVotesForDraw?  : number;
         executedActions         : SerializedMcwAction[];
         players                 : SerializedBwPlayer[];
-        turn                    : SerializedMcwTurn;
+        turn                    : SerializedBwTurn;
         field                   : SerializedMcwField;
     }
 
