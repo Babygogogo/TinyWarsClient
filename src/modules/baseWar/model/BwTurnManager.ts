@@ -213,7 +213,7 @@ namespace TinyWars.BaseWar {
         private _setPlayerIndexInTurn(index: number): void {
             if (this._playerIndexInTurn !== index) {
                 this._playerIndexInTurn = index;
-                Notify.dispatch(Notify.Type.McwPlayerIndexInTurnChanged);
+                Notify.dispatch(Notify.Type.BwPlayerIndexInTurnChanged);
             }
         }
         public getNextPlayerIndex(playerIndex: number, includeNeutral = false): number {

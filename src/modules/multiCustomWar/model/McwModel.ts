@@ -56,7 +56,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
             unloadWar();
         }
 
-        _war = (await new MultiCustomWar.McwWar().init(data)).startRunning().startRunningView();
+        _war = (await new MultiCustomWar.McwWar().init(data)).startRunning().startRunningView() as McwWar;
         _checkAndRequestBeginTurn();
 
         return _war;
@@ -213,11 +213,11 @@ namespace TinyWars.MultiCustomWar.McwModel {
 
     async function _checkAndRunFirstCachedAction(): Promise<void> {
         const container = _cachedActions.length ? _cachedActions.shift() : undefined;
-        if ((container) && (_war.getIsRunningWar()) && (!_war.getIsEnded()) && (!_war.getIsRunningAction())) {
-            _war.setIsRunningAction(true);
+        if ((container) && (_war.getIsRunning()) && (!_war.getIsEnded()) && (!_war.getIsExecutingAction())) {
+            _war.setIsExecutingAction(true);
             _war.setNextActionId(_war.getNextActionId() + 1);
             await _EXECUTORS.get(Helpers.getActionCode(container))(_war, container);
-            _war.setIsRunningAction(false);
+            _war.setIsExecutingAction(false);
 
             if (!_war.getPlayerLoggedIn().getIsAlive()) {
                 _war.setIsEnded(true);

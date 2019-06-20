@@ -102,7 +102,7 @@ namespace TinyWars.Utility.Types {
         teamIndex       : number;
         userId?         : number;
     }
-    export interface SerializedMcwFogMap extends ProtoTypes.ISerializedMcwFogMap {
+    export interface SerializedBwFogMap extends ProtoTypes.ISerializedMcwFogMap {
         mapsForPath?: SerializedBwFogMapForPath[];
     }
     export interface SerializedBwFogMapForPath extends ProtoTypes.ISerializedMcwFogMapForPath {
@@ -110,7 +110,7 @@ namespace TinyWars.Utility.Types {
         encodedMap  : string;
     }
     export interface SerializedMcwField extends ProtoTypes.ISerializedMcwField {
-        fogMap  : SerializedMcwFogMap;
+        fogMap  : SerializedBwFogMap;
         unitMap?: SerializedMcwUnitMap;
         tileMap?: SerializedMcwTileMap;
     }

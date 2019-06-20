@@ -21,9 +21,13 @@ namespace TinyWars.BaseWar {
         private _initialFund            : number;
         private _initialEnergy          : number;
 
+        private _field                  : BwField;
+        private _playerManager          : BwPlayerManager;
+        private _turnManager            : BwTurnManager;
         private _remainingVotesForDraw  : number;
         private _nextActionId           : number;
-        private _playerManager          : BwPlayerManager;
+        private _isRunning              = false;
+        private _isExecutingAction      = false;
 
         protected async init(data: SerializedBwWar): Promise<BwWar> {
             this._setWarId(data.warId);
@@ -45,6 +49,40 @@ namespace TinyWars.BaseWar {
             this.setRemainingVotesForDraw(data.remainingVotesForDraw);
 
             return this;
+        }
+
+        public startRunning(): BwWar {
+            this.getTurnManager().startRunning(this);
+            this.getPlayerManager().startRunning(this);
+            this.getField().startRunning(this);
+
+            this._isRunning = true;
+
+            return this;
+        }
+        public startRunningView(): BwWar {
+            this.getView().startRunning();
+            this.getField().startRunningView();
+
+            return this;
+        }
+        public stopRunning(): BwWar {
+            this.getField().stopRunning();
+            this.getView().stopRunning();
+
+            this._isRunning = false;
+
+            return this;
+        }
+
+        public getIsRunning(): boolean {
+            return this._isRunning;
+        }
+        public getIsExecutingAction(): boolean {
+            return this._isExecutingAction;
+        }
+        public setIsExecutingAction(isExecuting: boolean): void {
+            this._isExecutingAction = isExecuting;
         }
 
         private _setWarId(warId: number): void {
@@ -182,9 +220,39 @@ namespace TinyWars.BaseWar {
         public getPlayerInTurn(): BwPlayer {
             return this.getPlayerManager().getPlayerInTurn();
         }
-
         public getPlayerIndexInTurn(): number {
             return this.getTurnManager().getPlayerIndexInTurn();
+        }
+
+        protected _setField(field: BwField): void {
+            this._field = field;
+        }
+        public getField(): BwField {
+            return this._field;
+        }
+
+        public getFogMap(): BwFogMap {
+            return this.getField().getFogMap();
+        }
+        public getUnitMap(): BwUnitMap {
+            return this.getField().getUnitMap();
+        }
+        public getTileMap(): BwTileMap {
+            return this.getField().getTileMap();
+        }
+
+        protected _setTurnManager(manager: BwTurnManager): void {
+            this._turnManager = manager;
+        }
+        public getTurnManager(): BwTurnManager {
+            return this._turnManager;
+        }
+        public getEnterTurnTime(): number {
+            return this.getTurnManager().getEnterTurnTime();
+        }
+
+        public getGridVisionEffect(): BwGridVisionEffect {
+            return this.getField().getGridVisionEffect();
         }
     }
 }

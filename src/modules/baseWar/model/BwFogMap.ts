@@ -4,7 +4,7 @@ namespace TinyWars.BaseWar {
     import Types                    = Utility.Types;
     import Helpers                  = Utility.Helpers;
     import GridIndexHelpers         = Utility.GridIndexHelpers;
-    import SerializedMcFogMap       = Types.SerializedMcwFogMap;
+    import SerializedBwFogMap       = Types.SerializedBwFogMap;
     import ForceFogCode             = Types.ForceFogCode;
     import GridIndex                = Types.GridIndex;
     import MapSize                  = Types.MapSize;
@@ -23,7 +23,7 @@ namespace TinyWars.BaseWar {
         private _mapsFromUnits          : Map<number, number[][]>;
         private _war                    : BwWar;
 
-        public async init(data: SerializedMcFogMap, mapIndexKey: Types.MapIndexKey): Promise<BwFogMap> {
+        public async init(data: SerializedBwFogMap, mapIndexKey: Types.MapIndexKey): Promise<BwFogMap> {
             const mapInfo           = await MapManager.getMapData(mapIndexKey);
             const mapSize: MapSize  = { width: mapInfo.mapWidth, height: mapInfo.mapHeight };
             this._mapsFromPaths     = createEmptyMaps<VisibilityFromPaths>(mapSize, mapInfo.playersCount);

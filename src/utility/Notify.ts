@@ -25,7 +25,7 @@ namespace TinyWars.Utility.Notify {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         BwTurnIndexChanged,
         BwTurnPhaseCodeChanged,
-        McwPlayerIndexInTurnChanged,
+        BwPlayerIndexInTurnChanged,
 
         BaseWarPlayerFundChanged,
         McwPlayerEnergyChanged,
@@ -44,15 +44,15 @@ namespace TinyWars.Utility.Notify {
         McwProduceUnitPanelOpened,
         McwProduceUnitPanelClosed,
 
-        McwUnitBeDestroyed,
-        McwUnitBeAttacked,
-        McwUnitBeSupplied,
-        McwUnitBeRepaired,
+        BwUnitBeDestroyed,
+        BwUnitBeAttacked,
+        BwUnitBeSupplied,
+        BwUnitBeRepaired,
 
-        McwTileBeDestroyed,
-        McwTileBeAttacked,
+        BwTileBeDestroyed,
+        BwTileBeAttacked,
 
-        McwSiloExploded,
+        BwSiloExploded,
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         ReplayAutoReplayChanged,

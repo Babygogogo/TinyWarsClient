@@ -4,19 +4,13 @@ namespace TinyWars.Replay {
     import Notify           = Utility.Notify;
     import FloatText        = Utility.FloatText;
     import Lang             = Utility.Lang;
-    import MapIndexKey      = Types.MapIndexKey;
     import Action           = Types.SerializedMcwAction;
     import SerializedMcwWar = Types.SerializedBwWar;
 
     export class ReplayWar extends BaseWar.BwWar {
         private _executedActions        : Action[];
 
-        private _field          : ReplayField;
-        private _turnManager    : ReplayTurnManager;
-
         private _view                           : ReplayWarView;
-        private _isExecutingAction              = false;
-        private _isRunningWar                   = false;
         private _isAutoReplay                   = false;
         private _checkPointIdsForNextActionId   = new Map<number, number>();
         private _warDatasForCheckPointId        = new Map<number, SerializedMcwWar>();
@@ -29,30 +23,6 @@ namespace TinyWars.Replay {
             this.setCheckPointId(0, 0);
             this.setWarData(0, data);
             await this._loadCheckPoint(0);
-
-            return this;
-        }
-
-        public startRunning(): ReplayWar {
-            this.getTurnManager().startRunning(this);
-            this.getPlayerManager().startRunning(this);
-            this.getField().startRunning(this);
-
-            this._isRunningWar = true;
-
-            return this;
-        }
-        public startRunningView(): ReplayWar {
-            this.getView().startRunning();
-            this.getField().startRunningView();
-
-            return this;
-        }
-        public stopRunning(): ReplayWar {
-            this.getField().stopRunning();
-            this.getView().stopRunning();
-
-            this._isRunningWar = false;
 
             return this;
         }
@@ -82,7 +52,7 @@ namespace TinyWars.Replay {
                 mapVersion              : mapIndexKey.mapVersion,
                 players                 : (this.getPlayerManager() as ReplayPlayerManager).serialize(),
                 field                   : this.getField().serialize(),
-                turn                    : this.getTurnManager().serialize(),
+                turn                    : (this.getTurnManager() as ReplayTurnManager).serialize(),
             };
         }
 
@@ -91,13 +61,6 @@ namespace TinyWars.Replay {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         public getView(): ReplayWarView {
             return this._view;
-        }
-
-        public getIsExecutingAction(): boolean {
-            return this._isExecutingAction;
-        }
-        public setIsExecutingAction(isExecuting: boolean): void {
-            this._isExecutingAction = isExecuting;
         }
 
         public getIsAutoReplay(): boolean {
@@ -185,10 +148,6 @@ namespace TinyWars.Replay {
             this._view.init(this);
         }
 
-        public getIsRunning(): boolean {
-            return this._isRunningWar;
-        }
-
         public getTotalActionsCount(): number {
             return this._executedActions.length;
         }
@@ -196,39 +155,8 @@ namespace TinyWars.Replay {
             return this._executedActions[this.getNextActionId()];
         }
 
-        public getEnterTurnTime(): number {
-            return this.getTurnManager().getEnterTurnTime();
-        }
-
-        private _setField(field: ReplayField): void {
-            this._field = field;
-        }
-        public getField(): ReplayField {
-            return this._field;
-        }
-        public getUnitMap(): ReplayUnitMap {
-            return this.getField().getUnitMap();
-        }
-        public getTileMap(): ReplayTileMap {
-            return this.getField().getTileMap();
-        }
-        public getFogMap(): ReplayFogMap {
-            return this.getField().getFogMap();
-        }
-
         public getActionPlanner(): ReplayActionPlanner {
             return this.getField().getActionPlanner();
-        }
-
-        public getGridVisionEffect(): ReplayGridVisionEffect {
-            return this.getField().getGridVisionEffect();
-        }
-
-        private _setTurnManager(manager: ReplayTurnManager): void {
-            this._turnManager = manager;
-        }
-        public getTurnManager(): ReplayTurnManager {
-            return this._turnManager;
         }
     }
 }
