@@ -103,9 +103,9 @@ namespace TinyWars.Utility.Types {
         userId?         : number;
     }
     export interface SerializedMcwFogMap extends ProtoTypes.ISerializedMcwFogMap {
-        mapsForPath?: SerializedMcwFogMapForPath[];
+        mapsForPath?: SerializedBwFogMapForPath[];
     }
-    export interface SerializedMcwFogMapForPath extends ProtoTypes.ISerializedMcwFogMapForPath {
+    export interface SerializedBwFogMapForPath extends ProtoTypes.ISerializedMcwFogMapForPath {
         playerIndex : number;
         encodedMap  : string;
     }
