@@ -6,8 +6,6 @@ namespace TinyWars.MultiCustomWar {
     export class McwWar extends BaseWar.BwWar {
         private _isEnded        = false;
 
-        private _view               : McwWarView;
-
         public async init(data: SerializedMcWar): Promise<McwWar> {
             await super.init(data);
 
@@ -16,19 +14,18 @@ namespace TinyWars.MultiCustomWar {
             this._setField(await new McwField().init(data.field, this.getConfigVersion(), this.getMapIndexKey()));
             this._setTurnManager(new McwTurnManager().init(data.turn));
 
-            this._view = this._view || new McwWarView();
-            this._view.init(this);
+            this._initView();
 
             return this;
+        }
+
+        protected _getViewClass(): new () => McwWarView {
+            return McwWarView;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public getView(): McwWarView {
-            return this._view;
-        }
-
         public setIsEnded(ended: boolean): void {
             this._isEnded = ended;
         }

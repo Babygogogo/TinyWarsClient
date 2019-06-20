@@ -81,7 +81,7 @@ namespace TinyWars.Replay.ReplayModel {
             warData.players[i + 1].nickname = nicknames[i];
         }
 
-        _war = (await new ReplayWar().init(warData)).startRunning().startRunningView();
+        _war = (await new ReplayWar().init(warData)).startRunning().startRunningView() as ReplayWar;
         return _war;
     }
 

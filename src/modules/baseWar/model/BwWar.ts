@@ -21,6 +21,7 @@ namespace TinyWars.BaseWar {
         private _initialFund            : number;
         private _initialEnergy          : number;
 
+        private _view                   : BwWarView;
         private _field                  : BwField;
         private _playerManager          : BwPlayerManager;
         private _turnManager            : BwTurnManager;
@@ -49,6 +50,15 @@ namespace TinyWars.BaseWar {
             this.setRemainingVotesForDraw(data.remainingVotesForDraw);
 
             return this;
+        }
+        protected _initView(): void {
+            this._view = this._view || new (this._getViewClass());
+            this._view.init(this);
+        }
+
+        protected abstract _getViewClass(): new () => BwWarView;
+        public getView(): BwWarView {
+            return this._view;
         }
 
         public startRunning(): BwWar {

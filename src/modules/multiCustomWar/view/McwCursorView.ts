@@ -180,10 +180,10 @@ namespace TinyWars.MultiCustomWar {
             this._currGlobalTouchPoints.set(touchId, currGlobalPoint);
 
             if (this._currGlobalTouchPoints.size > 1) {
-                Notify.dispatch(Notify.Type.McwFieldZoomed, {
+                Notify.dispatch(Notify.Type.BwFieldZoomed, {
                     current : this._currGlobalTouchPoints,
                     previous: this._prevGlobalTouchPoints,
-                } as Notify.Data.McwFieldZoomed);
+                } as Notify.Data.BwFieldZoomed);
             } else {
                 if (this._touchIdForTouchingCursor != null) {
                     const gridIndex     = this._getGridIndexByLocalXY(e.localX, e.localY);
@@ -197,10 +197,10 @@ namespace TinyWars.MultiCustomWar {
                     }
                 } else {
                     if (this._isTouchMovedOrMultiple) {
-                        Notify.dispatch(Notify.Type.McwFieldDragged, {
+                        Notify.dispatch(Notify.Type.BwFieldDragged, {
                             current : this._currGlobalTouchPoints.values().next().value,
                             previous: this._prevGlobalTouchPoints.values().next().value,
-                        } as Notify.Data.McwFieldDragged);
+                        } as Notify.Data.BwFieldDragged);
                     }
                 }
             }

@@ -10,7 +10,6 @@ namespace TinyWars.Replay {
     export class ReplayWar extends BaseWar.BwWar {
         private _executedActions        : Action[];
 
-        private _view                           : ReplayWarView;
         private _isAutoReplay                   = false;
         private _checkPointIdsForNextActionId   = new Map<number, number>();
         private _warDatasForCheckPointId        = new Map<number, SerializedMcwWar>();
@@ -25,6 +24,10 @@ namespace TinyWars.Replay {
             await this._loadCheckPoint(0);
 
             return this;
+        }
+
+        protected _getViewClass(): new () => ReplayWarView {
+            return ReplayWarView;
         }
 
         public serialize(): SerializedMcwWar {
@@ -59,10 +62,6 @@ namespace TinyWars.Replay {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public getView(): ReplayWarView {
-            return this._view;
-        }
-
         public getIsAutoReplay(): boolean {
             return this._isAutoReplay;
         }
@@ -144,8 +143,7 @@ namespace TinyWars.Replay {
             this._setField(await (this.getField() || new ReplayField()).init(data.field, this.getConfigVersion(), this.getMapIndexKey()));
             this._setTurnManager((this.getTurnManager() ||new ReplayTurnManager()).init(data.turn));
 
-            this._view = this._view || new ReplayWarView();
-            this._view.init(this);
+            this._initView();
         }
 
         public getTotalActionsCount(): number {

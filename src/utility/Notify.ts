@@ -34,8 +34,8 @@ namespace TinyWars.Utility.Notify {
         McwCursorDragged,
         McwCursorGridIndexChanged,
 
-        McwFieldZoomed,
-        McwFieldDragged,
+        BwFieldZoomed,
+        BwFieldDragged,
 
         McwActionPlannerStateChanged,
 
@@ -115,8 +115,8 @@ namespace TinyWars.Utility.Notify {
         export type McwPlayerEnergyChanged      = MultiCustomWar.McwPlayer;
         export type McwCursorTapped             = { current: GridIndex, tappedOn: GridIndex };
         export type McwCursorDragged            = { current: GridIndex, draggedTo: GridIndex };
-        export type McwFieldZoomed              = { previous: TouchPoints, current: TouchPoints };
-        export type McwFieldDragged             = { previous: Types.Point, current: Types.Point };
+        export type BwFieldZoomed              = { previous: TouchPoints, current: TouchPoints };
+        export type BwFieldDragged             = { previous: Types.Point, current: Types.Point };
     }
 
     ////////////////////////////////////////////////////////////////////////////////
