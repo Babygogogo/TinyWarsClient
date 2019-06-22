@@ -57,8 +57,8 @@ namespace TinyWars.MultiCustomWar {
             this._notifyListeners = [
                 { type: Notify.Type.GlobalTouchBegin,               callback: this._onNotifyGlobalTouchBegin },
                 { type: Notify.Type.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
-                { type: Notify.Type.McwCursorGridIndexChanged,      callback: this._onNotifyMcwCursorGridIndexChanged },
-                { type: Notify.Type.McwActionPlannerStateChanged,   callback: this._onNotifyMcwActionPlannerStateChanged },
+                { type: Notify.Type.BwCursorGridIndexChanged,      callback: this._onNotifyMcwCursorGridIndexChanged },
+                { type: Notify.Type.BwActionPlannerStateChanged,   callback: this._onNotifyMcwActionPlannerStateChanged },
                 { type: Notify.Type.McwWarMenuPanelOpened,          callback: this._onNotifyMcwWarMenuPanelOpened },
                 { type: Notify.Type.McwWarMenuPanelClosed,          callback: this._onNotifyMcwWarMenuPanelClosed },
                 { type: Notify.Type.McwProduceUnitPanelOpened,      callback: this._onNotifyMcwProduceUnitPanelOpened },
@@ -75,8 +75,8 @@ namespace TinyWars.MultiCustomWar {
         }
         protected _onOpened(): void {
             this._war       = McwModel.getWar();
-            this._tileMap   = this._war.getTileMap();
-            this._cursor    = this._war.getField().getCursor();
+            this._tileMap   = this._war.getTileMap() as McwTileMap;
+            this._cursor    = this._war.getField().getCursor() as McwCursor;
 
             this._updateView();
         }

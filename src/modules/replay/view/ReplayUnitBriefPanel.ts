@@ -47,8 +47,8 @@ namespace TinyWars.Replay {
             this._notifyListeners = [
                 { type: Notify.Type.GlobalTouchBegin,               callback: this._onNotifyGlobalTouchBegin },
                 { type: Notify.Type.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
-                { type: Notify.Type.McwCursorGridIndexChanged,      callback: this._onNotifyMcwCursorGridIndexChanged },
-                { type: Notify.Type.McwActionPlannerStateChanged,   callback: this._onNotifyMcwActionPlannerStateChanged },
+                { type: Notify.Type.BwCursorGridIndexChanged,      callback: this._onNotifyMcwCursorGridIndexChanged },
+                { type: Notify.Type.BwActionPlannerStateChanged,   callback: this._onNotifyMcwActionPlannerStateChanged },
                 { type: Notify.Type.McwWarMenuPanelOpened,          callback: this._onNotifyMcwWarMenuPanelOpened },
                 { type: Notify.Type.McwWarMenuPanelClosed,          callback: this._onNotifyMcwWarMenuPanelClosed },
                 { type: Notify.Type.McwProduceUnitPanelOpened,      callback: this._onNotifyMcwProduceUnitPanelOpened },
@@ -58,8 +58,8 @@ namespace TinyWars.Replay {
         }
         protected _onOpened(): void {
             this._war       = ReplayModel.getWar();
-            this._unitMap   = this._war.getUnitMap();
-            this._cursor    = this._war.getField().getCursor();
+            this._unitMap   = this._war.getUnitMap() as ReplayUnitMap;
+            this._cursor    = this._war.getField().getCursor() as ReplayCursor;
 
             this._updateView();
         }
@@ -130,11 +130,11 @@ namespace TinyWars.Replay {
                 unitList.length = 0;
 
                 const gridIndex = this._cursor.getGridIndex();
-                const unitOnMap = this._unitMap.getUnitOnMap(gridIndex);
+                const unitOnMap = this._unitMap.getUnitOnMap(gridIndex) as ReplayUnit;
                 if (unitOnMap) {
                     unitList.push(unitOnMap);
 
-                    for (const loadedUnit of this._unitMap.getUnitsLoadedByLoader(unitOnMap, true)) {
+                    for (const loadedUnit of this._unitMap.getUnitsLoadedByLoader(unitOnMap, true) as ReplayUnit[]) {
                         unitList.push(loadedUnit);
                     }
                 }

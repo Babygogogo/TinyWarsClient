@@ -68,7 +68,7 @@ namespace TinyWars.Replay {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.McwActionPlannerStateChanged,   callback: this._onNotifyMcwPlannerStateChanged },
+                { type: Notify.Type.BwActionPlannerStateChanged,   callback: this._onNotifyMcwPlannerStateChanged },
             ];
             this._uiListeners = [
                 { ui: this._btnBack, callback: this._onTouchedBtnBack },
@@ -79,8 +79,8 @@ namespace TinyWars.Replay {
         protected _onOpened(): void {
             const war           = ReplayModel.getWar();
             this._war           = war;
-            this._unitMap       = war.getUnitMap();
-            this._turnManager   = war.getTurnManager();
+            this._unitMap       = war.getUnitMap() as ReplayUnitMap;
+            this._turnManager   = war.getTurnManager() as ReplayTurnManager;
             this._menuType      = MenuType.Main;
 
             this._updateView();
@@ -248,7 +248,7 @@ namespace TinyWars.Replay {
 
     type DataForPlayerRenderer = {
         war     : ReplayWar;
-        player  : ReplayPlayer;
+        player  : BaseWar.BwPlayer;
     }
 
     class PlayerRenderer extends eui.ItemRenderer {

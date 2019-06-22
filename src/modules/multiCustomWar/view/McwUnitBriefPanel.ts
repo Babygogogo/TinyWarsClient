@@ -47,8 +47,8 @@ namespace TinyWars.MultiCustomWar {
             this._notifyListeners = [
                 { type: Notify.Type.GlobalTouchBegin,               callback: this._onNotifyGlobalTouchBegin },
                 { type: Notify.Type.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
-                { type: Notify.Type.McwCursorGridIndexChanged,      callback: this._onNotifyMcwCursorGridIndexChanged },
-                { type: Notify.Type.McwActionPlannerStateChanged,   callback: this._onNotifyMcwActionPlannerStateChanged },
+                { type: Notify.Type.BwCursorGridIndexChanged,      callback: this._onNotifyMcwCursorGridIndexChanged },
+                { type: Notify.Type.BwActionPlannerStateChanged,   callback: this._onNotifyMcwActionPlannerStateChanged },
                 { type: Notify.Type.McwWarMenuPanelOpened,          callback: this._onNotifyMcwWarMenuPanelOpened },
                 { type: Notify.Type.McwWarMenuPanelClosed,          callback: this._onNotifyMcwWarMenuPanelClosed },
                 { type: Notify.Type.McwProduceUnitPanelOpened,      callback: this._onNotifyMcwProduceUnitPanelOpened },
@@ -58,8 +58,8 @@ namespace TinyWars.MultiCustomWar {
         }
         protected _onOpened(): void {
             this._war       = McwModel.getWar();
-            this._unitMap   = this._war.getUnitMap();
-            this._cursor    = this._war.getField().getCursor();
+            this._unitMap   = this._war.getUnitMap() as McwUnitMap;
+            this._cursor    = this._war.getField().getCursor() as McwCursor;
 
             this._updateView();
         }
@@ -130,14 +130,14 @@ namespace TinyWars.MultiCustomWar {
                 unitList.length = 0;
 
                 const gridIndex = this._cursor.getGridIndex();
-                const unitOnMap = this._unitMap.getUnitOnMap(gridIndex);
+                const unitOnMap = this._unitMap.getUnitOnMap(gridIndex) as McwUnit;
                 if (unitOnMap) {
                     unitList.push(unitOnMap);
 
                     const war = this._war;
                     if ((!war.getFogMap().checkHasFogCurrently()) || (war.getPlayerLoggedIn().getTeamIndex() === unitOnMap.getTeamIndex())) {
                         for (const loadedUnit of this._unitMap.getUnitsLoadedByLoader(unitOnMap, true)) {
-                            unitList.push(loadedUnit);
+                            unitList.push(loadedUnit as McwUnit);
                         }
                     }
                 }

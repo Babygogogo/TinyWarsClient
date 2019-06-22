@@ -51,7 +51,7 @@ namespace TinyWars.Replay {
                 { type: Notify.Type.GlobalTouchBegin,               callback: this._onNotifyGlobalTouchBegin },
                 { type: Notify.Type.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
-                { type: Notify.Type.McwActionPlannerStateChanged,   callback: this._onNotifyMcwPlannerStateChanged },
+                { type: Notify.Type.BwActionPlannerStateChanged,   callback: this._onNotifyMcwPlannerStateChanged },
                 { type: Notify.Type.McwWarMenuPanelOpened,          callback: this._onNotifyMcwWarMenuPanelOpened },
             ];
             this._uiListeners = [
@@ -62,9 +62,9 @@ namespace TinyWars.Replay {
         protected _onOpened(): void {
             const war           = ReplayModel.getWar();
             this._war           = war;
-            this._unitMap       = war.getUnitMap();
-            this._turnManager   = war.getTurnManager();
-            this._cursor        = war.getField().getCursor();
+            this._unitMap       = war.getUnitMap() as ReplayUnitMap;
+            this._turnManager   = war.getTurnManager() as ReplayTurnManager;
+            this._cursor        = war.getField().getCursor() as ReplayCursor;
             this._playerIndex   = this._war.getPlayerInTurn().getPlayerIndex();
             this._updateView();
         }
@@ -130,7 +130,7 @@ namespace TinyWars.Replay {
                 if (unit.getPlayerIndex() === playerIndex) {
                     datas.push({
                         cursor  : this._cursor,
-                        unit    : unit,
+                        unit    : unit as ReplayUnit,
                     });
                 }
             });

@@ -46,11 +46,11 @@ namespace TinyWars.MultiCustomWar {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.McwTurnPhaseCodeChanged,        callback: this._onNotifyMcwTurnPhaseCodeChanged },
-                { type: Notify.Type.McwPlayerFundChanged,           callback: this._onNotifyMcwPlayerFundChanged },
-                { type: Notify.Type.McwPlayerIndexInTurnChanged,    callback: this._onNotifyMcwPlayerIndexInTurnChanged },
+                { type: Notify.Type.BwTurnPhaseCodeChanged,        callback: this._onNotifyMcwTurnPhaseCodeChanged },
+                { type: Notify.Type.BaseWarPlayerFundChanged,           callback: this._onNotifyMcwPlayerFundChanged },
+                { type: Notify.Type.BwPlayerIndexInTurnChanged,    callback: this._onNotifyMcwPlayerIndexInTurnChanged },
                 { type: Notify.Type.McwPlayerEnergyChanged,         callback: this._onNotifyMcwPlayerEnergyChanged },
-                { type: Notify.Type.McwActionPlannerStateChanged,   callback: this._onNotifyMcwActionPlannerStateChanged },
+                { type: Notify.Type.BwActionPlannerStateChanged,   callback: this._onNotifyMcwActionPlannerStateChanged },
             ];
             this._uiListeners = [
                 { ui: this._btnUnitList,        callback: this._onTouchedBtnUnitList, },
@@ -108,7 +108,7 @@ namespace TinyWars.MultiCustomWar {
                 ConfirmPanel.show({
                     title   : Lang.getText(Lang.Type.B0036),
                     content : this._getHintForEndTurn(),
-                    callback: () => this._war.getActionPlanner().setStateRequestingPlayerEndTurn(),
+                    callback: () => (this._war.getActionPlanner() as McwActionPlanner).setStateRequestingPlayerEndTurn(),
                 });
             }
         }

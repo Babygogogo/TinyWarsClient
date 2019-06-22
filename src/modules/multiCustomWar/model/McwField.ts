@@ -1,106 +1,26 @@
 
 namespace TinyWars.MultiCustomWar {
-    import Types                = Utility.Types;
-    import SerializedMcField    = Types.SerializedMcwField;
-
-    export class McwField {
-        private _unitMap            : McwUnitMap;
-        private _tileMap            : McwTileMap;
-        private _fogMap             : McwFogMap;
-        private _cursor             : McwCursor;
-        private _actionPlanner      : McwActionPlanner;
-        private _gridVisionEffect   : McwGridVisionEffect;
-        private _view               : McwFieldView;
-
-        public constructor() {
+    export class McwField extends BaseWar.BwField {
+        protected _getFogMapClass(): new () => BaseWar.BwFogMap {
+            return McwFogMap;
         }
-
-        public async init(data: SerializedMcField, configVersion: number, mapIndexKey: Types.MapIndexKey): Promise<McwField> {
-            this._setFogMap(await new McwFogMap().init(data.fogMap, mapIndexKey));
-            this._setTileMap(await new McwTileMap().init(configVersion, mapIndexKey, data.tileMap));
-            this._setUnitMap(await new McwUnitMap().init(configVersion, mapIndexKey, data.unitMap));
-            this._setCursor(await new McwCursor().init(mapIndexKey));
-            this._setActionPlanner(await new McwActionPlanner().init(mapIndexKey));
-            this._setGridVisionEffect(await new McwGridVisionEffect().init());
-
-            this._view = this._view || new McwFieldView();
-            this._view.init(this);
-
-            return this;
+        protected _getTileMapClass(): new () => BaseWar.BwTileMap {
+            return McwTileMap;
         }
-
-        public startRunning(war: McwWar): void {
-            this.getTileMap().startRunning(war);
-            this.getUnitMap().startRunning(war);
-            this.getFogMap().startRunning(war);
-            this.getCursor().startRunning(war);
-            this.getActionPlanner().startRunning(war);
-            this.getGridVisionEffect().startRunning(war);
+        protected _getUnitMapClass(): new () => BaseWar.BwUnitMap {
+            return McwUnitMap;
         }
-        public startRunningView(): void {
-            this.getView().startRunning();
-            this.getTileMap().startRunningView();
-            this.getUnitMap().startRunningView();
-            this.getCursor().startRunningView();
-            this.getActionPlanner().startRunningView();
-            this.getGridVisionEffect().startRunningView();
+        protected _getCursorClass(): new () => BaseWar.BwCursor {
+            return McwCursor;
         }
-        public stopRunning(): void {
-            this.getTileMap().stopRunning();
-            this.getUnitMap().stopRunning();
-            this.getCursor().stopRunning();
-            this.getActionPlanner().stopRunning();
-            this.getGridVisionEffect().stopRunning();
+        protected _getActionPlannerClass(): new () => BaseWar.BwActionPlanner {
+            return McwActionPlanner;
         }
-
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        // The other functions.
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public getView(): McwFieldView {
-            return this._view;
+        protected _getGridVisionEffectClass(): new () => BaseWar.BwGridVisionEffect {
+            return McwGridVisionEffect;
         }
-
-        private _setFogMap(map: McwFogMap): void {
-            this._fogMap = map;
-        }
-        public getFogMap(): McwFogMap {
-            return this._fogMap;
-        }
-
-        private _setTileMap(map: McwTileMap): void {
-            this._tileMap = map;
-        }
-        public getTileMap(): McwTileMap {
-            return this._tileMap;
-        }
-
-        private _setUnitMap(map: McwUnitMap): void {
-            this._unitMap = map;
-        }
-        public getUnitMap(): McwUnitMap {
-            return this._unitMap;
-        }
-
-        private _setCursor(cursor: McwCursor): void {
-            this._cursor = cursor;
-        }
-        public getCursor(): McwCursor {
-            return this._cursor;
-        }
-
-        private _setActionPlanner(actionPlanner: McwActionPlanner): void {
-            this._actionPlanner = actionPlanner;
-        }
-        public getActionPlanner(): McwActionPlanner {
-            return this._actionPlanner;
-        }
-
-        private _setGridVisionEffect(gridVisionEffect: McwGridVisionEffect): void {
-            this._gridVisionEffect = gridVisionEffect;
-        }
-        public getGridVisionEffect(): McwGridVisionEffect {
-            return this._gridVisionEffect;
+        protected _getViewClass(): new () => BaseWar.BwFieldView {
+            return McwFieldView;
         }
     }
 }
-

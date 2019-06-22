@@ -54,7 +54,7 @@ namespace TinyWars.MultiCustomWar {
         }
         protected _onOpened(): void {
             this._war           = McwModel.getWar();
-            this._actionPlanner = this._war.getField().getActionPlanner();
+            this._actionPlanner = this._war.getField().getActionPlanner() as McwActionPlanner;
 
             this._updateView();
         }
@@ -117,19 +117,11 @@ namespace TinyWars.MultiCustomWar {
         }
     }
 
-    export type OpenDataForMcwUnitActionsPanel  = DataForMcwUnitAction[];
-    export type DataForMcwUnitAction            = {
+    type OpenDataForMcwUnitActionsPanel = BaseWar.OpenDataForBwUnitActionsPanel;
+    type DataForUnitActionRenderer      = {
         actionType      : UnitActionType;
         callback        : () => void;
-        unitForLaunch?  : McwUnit;
-        unitForDrop?    : McwUnit;
-        produceUnitType?: Types.UnitType;
-        canProduceUnit? : boolean;
-    }
-    type DataForUnitActionRenderer = {
-        actionType      : UnitActionType;
-        callback        : () => void;
-        unit?           : McwUnit;
+        unit?           : BaseWar.BwUnit;
         canProduceUnit? : boolean;
     }
 
