@@ -37,7 +37,7 @@ namespace TinyWars.Utility.Notify {
         BwFieldZoomed,
         BwFieldDragged,
 
-        McwActionPlannerStateChanged,
+        BwActionPlannerStateChanged,
 
         McwWarMenuPanelOpened,
         McwWarMenuPanelClosed,

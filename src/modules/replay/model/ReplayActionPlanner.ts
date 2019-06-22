@@ -230,7 +230,7 @@ namespace TinyWars.Replay {
             this._prevState = this._state;
             this._state     = state;
             Logger.log(`ReplayActionPlanner._setState() ${state}`);
-            Notify.dispatch(Notify.Type.McwActionPlannerStateChanged);
+            Notify.dispatch(Notify.Type.BwActionPlannerStateChanged);
         }
 
         public setStateIdle(): void {

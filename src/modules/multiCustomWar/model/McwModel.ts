@@ -14,7 +14,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
     import AlertPanel           = Common.AlertPanel;
     import GridIndex            = Types.GridIndex;
     import SerializedMcwTile    = Types.SerializedMcwTile;
-    import SerializedMcwUnit    = Types.SerializedMcwUnit;
+    import SerializedMcwUnit    = Types.SerializedBwUnit;
     import UnitState            = Types.UnitState;
     import MovePath             = Types.MovePath;
     import TileType             = Types.TileType;

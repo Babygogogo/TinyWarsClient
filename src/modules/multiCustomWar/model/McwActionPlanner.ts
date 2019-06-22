@@ -232,7 +232,7 @@ namespace TinyWars.MultiCustomWar {
             this._prevState = this._state;
             this._state     = state;
             Logger.log(`McwActionPlanner._setState() ${state}`);
-            Notify.dispatch(Notify.Type.McwActionPlannerStateChanged);
+            Notify.dispatch(Notify.Type.BwActionPlannerStateChanged);
         }
 
         public setStateIdle(): void {

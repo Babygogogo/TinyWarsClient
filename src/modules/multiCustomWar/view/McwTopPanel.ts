@@ -50,7 +50,7 @@ namespace TinyWars.MultiCustomWar {
                 { type: Notify.Type.BaseWarPlayerFundChanged,           callback: this._onNotifyMcwPlayerFundChanged },
                 { type: Notify.Type.BwPlayerIndexInTurnChanged,    callback: this._onNotifyMcwPlayerIndexInTurnChanged },
                 { type: Notify.Type.McwPlayerEnergyChanged,         callback: this._onNotifyMcwPlayerEnergyChanged },
-                { type: Notify.Type.McwActionPlannerStateChanged,   callback: this._onNotifyMcwActionPlannerStateChanged },
+                { type: Notify.Type.BwActionPlannerStateChanged,   callback: this._onNotifyMcwActionPlannerStateChanged },
             ];
             this._uiListeners = [
                 { ui: this._btnUnitList,        callback: this._onTouchedBtnUnitList, },

@@ -49,7 +49,7 @@ namespace TinyWars.MultiCustomWar {
         protected _onFirstOpened(): void {
             this._notifyListeners = [
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
-                { type: Notify.Type.McwActionPlannerStateChanged,   callback: this._onNotifyMcwPlannerStateChanged },
+                { type: Notify.Type.BwActionPlannerStateChanged,   callback: this._onNotifyMcwPlannerStateChanged },
             ];
             this._uiListeners = [
                 { ui: this._btnCancel, callback: this._onTouchedBtnCancel },

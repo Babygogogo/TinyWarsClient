@@ -4,7 +4,7 @@ namespace TinyWars.Replay {
     import Helpers          = Utility.Helpers;
     import Logger           = Utility.Logger;
     import GridIndexHelpers = Utility.GridIndexHelpers;
-    import SerializedMcUnit = Types.SerializedMcwUnit;
+    import SerializedMcUnit = Types.SerializedBwUnit;
     import UnitState        = Types.UnitState;
     import ArmorType        = Types.ArmorType;
     import TileType         = Types.TileType;
@@ -89,6 +89,8 @@ namespace TinyWars.Replay {
         }
         public startRunningView(): void {
             this.getView().startRunningView();
+        }
+        public stopRunning(): void {
         }
 
         public serialize(): SerializedMcUnit {

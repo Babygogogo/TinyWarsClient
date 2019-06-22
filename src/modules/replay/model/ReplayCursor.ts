@@ -18,7 +18,7 @@ namespace TinyWars.Replay {
         private _notifyListeners: Notify.Listener[] = [
             { type: Notify.Type.McwCursorTapped,                callback: this._onNotifyMcwCursorTapped },
             { type: Notify.Type.McwCursorDragged,               callback: this._onNotifyMcwCursorDragged },
-            { type: Notify.Type.McwActionPlannerStateChanged,   callback: this._onNotifyMcwActionPlannerStateChanged },
+            { type: Notify.Type.BwActionPlannerStateChanged,   callback: this._onNotifyMcwActionPlannerStateChanged },
         ];
 
         public constructor() {
