@@ -250,6 +250,9 @@ namespace TinyWars.BaseWar {
         public getTileMap(): BwTileMap {
             return this.getField().getTileMap();
         }
+        public getActionPlanner(): BwActionPlanner {
+            return this.getField().getActionPlanner();
+        }
 
         protected _setTurnManager(manager: BwTurnManager): void {
             this._turnManager = manager;

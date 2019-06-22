@@ -54,7 +54,7 @@ namespace TinyWars.Replay {
                 mapDesigner             : mapIndexKey.mapDesigner,
                 mapVersion              : mapIndexKey.mapVersion,
                 players                 : (this.getPlayerManager() as ReplayPlayerManager).serialize(),
-                field                   : this.getField().serialize(),
+                field                   : (this.getField() as ReplayField).serialize(),
                 turn                    : (this.getTurnManager() as ReplayTurnManager).serialize(),
             };
         }
@@ -151,10 +151,6 @@ namespace TinyWars.Replay {
         }
         public getNextAction(): Action {
             return this._executedActions[this.getNextActionId()];
-        }
-
-        public getActionPlanner(): ReplayActionPlanner {
-            return this.getField().getActionPlanner();
         }
     }
 }

@@ -39,10 +39,5 @@ namespace TinyWars.MultiCustomWar {
         public getPlayerLoggedIn(): McwPlayer {
             return (this.getPlayerManager() as McwPlayerManager).getPlayerLoggedIn();
         }
-
-
-        public getActionPlanner(): McwActionPlanner {
-            return this.getField().getActionPlanner();
-        }
     }
 }
