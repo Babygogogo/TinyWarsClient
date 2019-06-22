@@ -13,7 +13,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
     import ActionCodes          = Network.Codes;
     import AlertPanel           = Common.AlertPanel;
     import GridIndex            = Types.GridIndex;
-    import SerializedMcwTile    = Types.SerializedMcwTile;
+    import SerializedMcwTile    = Types.SerializedBwTile;
     import SerializedMcwUnit    = Types.SerializedBwUnit;
     import UnitState            = Types.UnitState;
     import MovePath             = Types.MovePath;

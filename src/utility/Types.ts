@@ -75,7 +75,7 @@ namespace TinyWars.Utility.Types {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export interface SerializedMcwAction extends ProtoTypes.IActionContainer {
     }
-    export interface SerializedMcwTile extends ProtoTypes.ISerializedMcwTile {
+    export interface SerializedBwTile extends ProtoTypes.ISerializedMcwTile {
         gridX           : number;
         gridY           : number;
         baseViewId      : number;
@@ -87,8 +87,8 @@ namespace TinyWars.Utility.Types {
         unitId  : number;
         viewId  : number;
     }
-    export interface SerializedMcwTileMap extends ProtoTypes.ISerializedMcwTileMap {
-        tiles?: SerializedMcwTile[];
+    export interface SerializedBwTileMap extends ProtoTypes.ISerializedMcwTileMap {
+        tiles?: SerializedBwTile[];
     }
     export interface SerializedBwUnitMap extends ProtoTypes.ISerializedMcwUnitMap {
         units?      : SerializedBwUnit[];
@@ -112,7 +112,7 @@ namespace TinyWars.Utility.Types {
     export interface SerializedBwField extends ProtoTypes.ISerializedMcwField {
         fogMap  : SerializedBwFogMap;
         unitMap?: SerializedBwUnitMap;
-        tileMap?: SerializedMcwTileMap;
+        tileMap?: SerializedBwTileMap;
     }
     export interface SerializedBwTurn extends ProtoTypes.ISerializedMcwTurn {
         turnIndex       : number;

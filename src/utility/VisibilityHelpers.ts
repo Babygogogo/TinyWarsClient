@@ -1,19 +1,17 @@
 
 namespace TinyWars.Utility.VisibilityHelpers {
-    import McwWar           = MultiCustomWar.McwWar;
-    import McwUnit          = MultiCustomWar.McwUnit;
-    import McwTile          = MultiCustomWar.McwTile;
-    import McwUnitMap       = MultiCustomWar.McwUnitMap;
-    import ReplayWar        = Replay.ReplayWar;
-    import ReplayUnitMap    = Replay.ReplayUnitMap;
+    import BwWar            = BaseWar.BwWar;
+    import BwUnit           = BaseWar.BwUnit;
+    import BwTile           = BaseWar.BwTile;
+    import BwUnitMap        = BaseWar.BwUnitMap;
     import GridIndex        = Types.GridIndex;
 
     type Discoveries = {
-        tiles: Set<McwTile>,
-        units: Set<McwUnit>,
+        tiles: Set<BwTile>,
+        units: Set<BwUnit>,
     }
     type ParamsForCheckIsUnitOnMapVisibleToPlayer = {
-        war                 : McwWar;
+        war                 : BwWar;
         gridIndex           : GridIndex;
         unitType            : Types.UnitType;
         isDiving            : boolean;
@@ -59,7 +57,7 @@ namespace TinyWars.Utility.VisibilityHelpers {
         }
     }
 
-    export function checkIsTileVisibleToPlayer(war: McwWar | ReplayWar, gridIndex: GridIndex, observerPlayerIndex: number): boolean {
+    export function checkIsTileVisibleToPlayer(war: BwWar, gridIndex: GridIndex, observerPlayerIndex: number): boolean {
         const fogMap = war.getFogMap();
         if (!fogMap.checkHasFogCurrently()) {
             return true;
@@ -88,14 +86,14 @@ namespace TinyWars.Utility.VisibilityHelpers {
         }
     }
 
-    export function getDiscoveriesByPath(war: McwWar, path: GridIndex[], movingUnit: McwUnit, isUnitDestroyed: boolean): Discoveries {
+    export function getDiscoveriesByPath(war: BwWar, path: GridIndex[], movingUnit: BwUnit, isUnitDestroyed: boolean): Discoveries {
         const tileMap               = war.getTileMap();
         const unitMap               = war.getUnitMap();
         const observerPlayerIndex   = movingUnit.getPlayerIndex();
         const observerTeamIndex     = movingUnit.getTeamIndex()!;
         const visibilityMap         = _createVisibilityMapFromPath(war, path, movingUnit);
-        const discoveredTiles       = new Set<McwTile>();
-        const discoveredUnits       = new Set<McwUnit>();
+        const discoveredTiles       = new Set<BwTile>();
+        const discoveredUnits       = new Set<BwUnit>();
         const destination           = path[path.length - 1];
         const { width: mapWidth, height: mapHeight } = tileMap.getMapSize();
 
@@ -149,7 +147,7 @@ namespace TinyWars.Utility.VisibilityHelpers {
         return { tiles: discoveredTiles, units: discoveredUnits };
     }
 
-    export function getDiscoveriesByBuild(war: McwWar, gridIndex: GridIndex, builder: McwUnit): Discoveries {
+    export function getDiscoveriesByBuild(war: BwWar, gridIndex: GridIndex, builder: BwUnit): Discoveries {
         const vision = _getVisionForBuiltTile(war, gridIndex, builder);
         if (vision == null) {
             return { tiles: new Set(), units: new Set() };
@@ -158,7 +156,7 @@ namespace TinyWars.Utility.VisibilityHelpers {
         }
     }
 
-    export function getDiscoveriesByCapture(war: McwWar, gridIndex: GridIndex, observerPlayerIndex: number): Discoveries {
+    export function getDiscoveriesByCapture(war: BwWar, gridIndex: GridIndex, observerPlayerIndex: number): Discoveries {
         const vision = _getVisionForCapturedTile(war, gridIndex, observerPlayerIndex);
         if (vision == null) {
             return { tiles: new Set(), units: new Set() };
@@ -167,11 +165,11 @@ namespace TinyWars.Utility.VisibilityHelpers {
         }
     }
 
-    export function getDiscoveriesByFlare(war: McwWar, origin: GridIndex, radius: number, observerPlayerIndex: number): Discoveries {
+    export function getDiscoveriesByFlare(war: BwWar, origin: GridIndex, radius: number, observerPlayerIndex: number): Discoveries {
         const tileMap           = war.getTileMap();
         const unitMap           = war.getUnitMap();
-        const discoveredTiles   = new Set<McwTile>();
-        const discoveredUnits   = new Set<McwUnit>();
+        const discoveredTiles   = new Set<BwTile>();
+        const discoveredUnits   = new Set<BwUnit>();
         for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(origin, 0, radius, tileMap.getMapSize())) {
             const tile = tileMap.getTile(gridIndex);
             if (!checkIsTileVisibleToPlayer(war, gridIndex, observerPlayerIndex)) {
@@ -197,7 +195,7 @@ namespace TinyWars.Utility.VisibilityHelpers {
         return { tiles: discoveredTiles, units: discoveredUnits };
     }
 
-    export function getDiscoveriesByPlayerProduceUnit(war: McwWar, producerGridIndex: GridIndex, unitType: Types.UnitType): Discoveries {
+    export function getDiscoveriesByPlayerProduceUnit(war: BwWar, producerGridIndex: GridIndex, unitType: Types.UnitType): Discoveries {
         // TODO: take skills into account.
         const tileMap           = war.getTileMap();
         const unitMap           = war.getUnitMap();
@@ -209,8 +207,8 @@ namespace TinyWars.Utility.VisibilityHelpers {
         const visionRange       = ConfigManager.getUnitTemplateCfg(configVersion, unitType).visionRange
             + (visionBonusCfg && visionBonusCfg[producerTileType] ? visionBonusCfg[producerTileType].visionBonus || 0 : 0);
 
-        const discoveredTiles   = new Set<McwTile>();
-        const discoveredUnits   = new Set<McwUnit>();
+        const discoveredTiles   = new Set<BwTile>();
+        const discoveredUnits   = new Set<BwUnit>();
         for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(producerGridIndex, 1, visionRange, tileMap.getMapSize())) {
             const distance  = GridIndexHelpers.getDistance(gridIndex, producerGridIndex);
             const tile      = tileMap.getTile(gridIndex);
@@ -239,7 +237,7 @@ namespace TinyWars.Utility.VisibilityHelpers {
         return { tiles: discoveredTiles, units: discoveredUnits };
     }
 
-    function _checkHasUnitWithTeamIndexOnAdjacentGrid(unitMap: McwUnitMap | ReplayUnitMap, origin: GridIndex, teamIndex: number): boolean {
+    function _checkHasUnitWithTeamIndexOnAdjacentGrid(unitMap: BwUnitMap, origin: GridIndex, teamIndex: number): boolean {
         for (const adjacentGrid of GridIndexHelpers.getAdjacentGrids(origin, unitMap.getMapSize())) {
             const unit = unitMap.getUnitOnMap(adjacentGrid);
             if ((unit) && (unit.getTeamIndex() === teamIndex)) {
@@ -249,12 +247,12 @@ namespace TinyWars.Utility.VisibilityHelpers {
         return false;
     }
 
-    function _checkHasUnitWithTeamIndexOnGrid(unitMap: McwUnitMap | ReplayUnitMap, gridIndex: GridIndex, teamIndex: number): boolean {
+    function _checkHasUnitWithTeamIndexOnGrid(unitMap: BwUnitMap, gridIndex: GridIndex, teamIndex: number): boolean {
         const unit = unitMap.getUnitOnMap(gridIndex);
         return (unit != null) && (unit.getTeamIndex() === teamIndex);
     }
 
-    function _createVisibilityMapFromPath(war: McwWar, path: GridIndex[], unit: McwUnit): (number | undefined)[][] {
+    function _createVisibilityMapFromPath(war: BwWar, path: GridIndex[], unit: BwUnit): (number | undefined)[][] {
         // TODO: take commander skills into account.
         const playerIndex   = unit.getPlayerIndex();
         const mapSize       = war.getTileMap().getMapSize();
@@ -275,17 +273,17 @@ namespace TinyWars.Utility.VisibilityHelpers {
         return visibilityMap;
     }
 
-    function _checkIsUnitHiddenByTileToTeam(war: McwWar, unit: McwUnit, teamIndex: number): boolean {
+    function _checkIsUnitHiddenByTileToTeam(war: BwWar, unit: BwUnit, teamIndex: number): boolean {
         const tile = war.getTileMap().getTile(unit.getGridIndex());
         return (tile.getTeamIndex() !== teamIndex) && (tile.checkCanHideUnit(unit.getType()));
     }
 
-    function _getDiscoversByGettingBuilding(war: McwWar, origin: GridIndex, vision: number, observerPlayerIndex: number): Discoveries {
+    function _getDiscoversByGettingBuilding(war: BwWar, origin: GridIndex, vision: number, observerPlayerIndex: number): Discoveries {
         // TODO: take commander skills into account.
         const tileMap           = war.getTileMap();
         const unitMap           = war.getUnitMap();
-        const discoveredTiles   = new Set<McwTile>();
-        const discoveredUnits   = new Set<McwUnit>();
+        const discoveredTiles   = new Set<BwTile>();
+        const discoveredUnits   = new Set<BwUnit>();
         for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(origin, 0, vision, tileMap.getMapSize())) {
             const tile = tileMap.getTile(gridIndex);
             if (((!tile.checkIsUnitHider()) || (GridIndexHelpers.checkIsEqual(gridIndex, origin))) &&
@@ -315,14 +313,14 @@ namespace TinyWars.Utility.VisibilityHelpers {
         return { tiles: discoveredTiles, units: discoveredUnits };
     }
 
-    function _getVisionForBuiltTile(war: McwWar, gridIndex: GridIndex, builder: McwUnit): number | undefined | null {
+    function _getVisionForBuiltTile(war: BwWar, gridIndex: GridIndex, builder: BwUnit): number | undefined | null {
         // TODO: take commander skills into account.
         const newTileType   = builder.getBuildTargetTileType(war.getTileMap().getTile(gridIndex).getType())!;
         const cfg           = newTileType != null ? ConfigManager.getTileTemplateCfgByType(war.getConfigVersion(), newTileType) : undefined;
         return cfg ? cfg.visionRange : undefined;
     }
 
-    function _getVisionForCapturedTile(war: McwWar, gridIndex: GridIndex, observerPlayerIndex: number): number | undefined | null {
+    function _getVisionForCapturedTile(war: BwWar, gridIndex: GridIndex, observerPlayerIndex: number): number | undefined | null {
         const oldTileType   = war.getTileMap().getTile(gridIndex).getType();
         const newTileType   = oldTileType === Types.TileType.Headquarters ? Types.TileType.City : oldTileType;
         const cfg           = ConfigManager.getTileTemplateCfgByType(war.getConfigVersion(), newTileType);

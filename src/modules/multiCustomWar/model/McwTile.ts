@@ -5,7 +5,7 @@ namespace TinyWars.MultiCustomWar {
     import Helpers              = Utility.Helpers;
     import Logger               = Utility.Logger;
     // import VisibilityHelpers    = Utility.VisibilityHelpers;
-    import SerializedMcwTile    = Types.SerializedMcwTile;
+    import SerializedMcwTile    = Types.SerializedBwTile;
     import TileType             = Types.TileType;
     import TileObjectType       = Types.TileObjectType;
 
