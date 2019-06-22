@@ -25,7 +25,9 @@ namespace TinyWars.MultiCustomWar {
             this.addChild(this._gridVisionEffectView);
         }
 
-        public startRunning(): void {
+        public startRunningView(): void {
+        }
+        public stopRunningView(): void {
         }
     }
 }

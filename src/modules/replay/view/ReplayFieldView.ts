@@ -26,7 +26,9 @@ namespace TinyWars.Replay {
             }
         }
 
-        public startRunning(): void {
+        public startRunningView(): void {
+        }
+        public stopRunningView(): void {
         }
     }
 }

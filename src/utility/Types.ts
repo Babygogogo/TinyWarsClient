@@ -109,7 +109,7 @@ namespace TinyWars.Utility.Types {
         playerIndex : number;
         encodedMap  : string;
     }
-    export interface SerializedMcwField extends ProtoTypes.ISerializedMcwField {
+    export interface SerializedBwField extends ProtoTypes.ISerializedMcwField {
         fogMap  : SerializedBwFogMap;
         unitMap?: SerializedMcwUnitMap;
         tileMap?: SerializedMcwTileMap;
@@ -144,7 +144,7 @@ namespace TinyWars.Utility.Types {
         executedActions         : SerializedMcwAction[];
         players                 : SerializedBwPlayer[];
         turn                    : SerializedBwTurn;
-        field                   : SerializedMcwField;
+        field                   : SerializedBwField;
     }
 
     ////////////////////////////////////////////////////////////////////////////////
