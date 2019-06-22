@@ -75,7 +75,7 @@ namespace TinyWars.Replay {
         }
         protected _onOpened(): void {
             this._war       = ReplayModel.getWar();
-            this._tileMap   = this._war.getTileMap();
+            this._tileMap   = this._war.getTileMap() as ReplayTileMap;
             this._cursor    = this._war.getField().getCursor();
 
             this._updateView();

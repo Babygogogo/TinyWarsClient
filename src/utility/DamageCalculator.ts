@@ -1,8 +1,8 @@
 
 namespace TinyWars.Utility.DamageCalculator {
-    import McwUnit      = MultiCustomWar.McwUnit;
-    import McwWar       = MultiCustomWar.McwWar;
-    import McwTile      = MultiCustomWar.McwTile;
+    import BwUnit       = BaseWar.BwUnit;
+    import BwWar        = BaseWar.BwWar;
+    import BwTile       = BaseWar.BwTile;
     import GridIndex    = Types.GridIndex;
 
     function checkIsInAttackRange(attackerGridIndex: GridIndex, targetGridIndex: GridIndex, minRange: number | null | undefined, maxRange: number | null | undefined): boolean {
@@ -14,12 +14,12 @@ namespace TinyWars.Utility.DamageCalculator {
         }
     }
 
-    function getLuckValue(war: McwWar, playerIndex: number): number {
+    function getLuckValue(war: BwWar, playerIndex: number): number {
         // TODO: take skill into account.
         return Math.floor(Math.random() * 11);
     }
 
-    function getAttackBonusMultiplier(war: McwWar, attacker: McwUnit, attackerGridIndex: GridIndex, target: McwUnit | McwTile, targetGridIndex: GridIndex): number {
+    function getAttackBonusMultiplier(war: BwWar, attacker: BwUnit, attackerGridIndex: GridIndex, target: BwUnit | BwTile, targetGridIndex: GridIndex): number {
         const playerIndex   = attacker.getPlayerIndex();
         let bonus           = war.getSettingsAttackPowerModifier() + attacker.getPromotionAttackBonus();
         // TODO: take skill into account.
@@ -33,8 +33,8 @@ namespace TinyWars.Utility.DamageCalculator {
         return Math.max(1 + bonus / 100, 0);
     }
 
-    function getDefenseBonusMultiplier(war: McwWar, attacker: McwUnit, attackerGridIndex: GridIndex, target: McwUnit | McwTile, targetGridIndex: GridIndex): number {
-        if (target instanceof McwTile) {
+    function getDefenseBonusMultiplier(war: BwWar, attacker: BwUnit, attackerGridIndex: GridIndex, target: BwUnit | BwTile, targetGridIndex: GridIndex): number {
+        if (target instanceof BwTile) {
             return 1;
         } else {
             const tileMap   = war.getTileMap();
@@ -53,7 +53,7 @@ namespace TinyWars.Utility.DamageCalculator {
         }
     }
 
-    function checkCanAttack(attacker: McwUnit, attackerMovePath: GridIndex[] | undefined, target: McwUnit | McwTile, targetMovePath: GridIndex[] | undefined): boolean {
+    function checkCanAttack(attacker: BwUnit, attackerMovePath: GridIndex[] | undefined, target: BwUnit | BwTile, targetMovePath: GridIndex[] | undefined): boolean {
         if ((!attacker) || (!target) || (attacker.getTeamIndex() === target.getTeamIndex())) {
             return false;
         }
@@ -64,7 +64,7 @@ namespace TinyWars.Utility.DamageCalculator {
         if ((armorType == null)                                                                                                     ||
             ((!attacker.checkCanAttackAfterMove()) && (attackerMovePath) && (attackerMovePath.length > 1))                          ||
             (!checkIsInAttackRange(attackerGridIndex, targetGridIndex, attacker.getMinAttackRange(), attacker.getMaxAttackRange())) ||
-            ((target instanceof McwUnit) && (target.getIsDiving()) && (!attacker.checkCanAttackDivingUnits()))
+            ((target instanceof BwUnit) && (target.getIsDiving()) && (!attacker.checkCanAttackDivingUnits()))
         ) {
             return false;
         }
@@ -72,7 +72,7 @@ namespace TinyWars.Utility.DamageCalculator {
         return attacker.getBaseDamage(armorType) != null;
     }
 
-    function getAttackDamage(war: McwWar, attacker: McwUnit, attackerGridIndex: GridIndex, attackerHp: number, target: McwTile | McwUnit, targetGridIndex: GridIndex, isWithLuck: boolean): number | undefined {
+    function getAttackDamage(war: BwWar, attacker: BwUnit, attackerGridIndex: GridIndex, attackerHp: number, target: BwTile | BwUnit, targetGridIndex: GridIndex, isWithLuck: boolean): number | undefined {
         const baseAttackDamage = attacker.getBaseDamage(target.getArmorType()!);
         if (baseAttackDamage == null) {
             return undefined;
@@ -92,7 +92,7 @@ namespace TinyWars.Utility.DamageCalculator {
         }
     }
 
-    function getBattleDamage(war: McwWar, attackerMovePath: GridIndex[], launchUnitId: number | undefined | null, targetGridIndex: GridIndex, isWithLuck: boolean): (number | undefined)[] {
+    function getBattleDamage(war: BwWar, attackerMovePath: GridIndex[], launchUnitId: number | undefined | null, targetGridIndex: GridIndex, isWithLuck: boolean): (number | undefined)[] {
         const unitMap   = war.getUnitMap();
         const attacker  = unitMap.getUnit(attackerMovePath[0], launchUnitId)!;
         const target    = unitMap.getUnitOnMap(targetGridIndex) || war.getTileMap().getTile(targetGridIndex);
@@ -105,7 +105,7 @@ namespace TinyWars.Utility.DamageCalculator {
                 Logger.error(`DamageCalculator.getBattleDamage() ???`);
                 return [undefined, undefined];
             } else {
-                if ((target instanceof McwTile)                                             ||
+                if ((target instanceof BwTile)                                             ||
                     (GridIndexHelpers.getDistance(attackerGridIndex, targetGridIndex) > 1)  ||
                     (!checkCanAttack(target, undefined, attacker, attackerMovePath))
                 ) {
@@ -120,11 +120,11 @@ namespace TinyWars.Utility.DamageCalculator {
         }
     }
 
-    export function getEstimatedBattleDamage(war: McwWar, attackerMovePath: GridIndex[], launchUnitId: number | undefined | null, targetGridIndex: GridIndex): (number | undefined)[] {
+    export function getEstimatedBattleDamage(war: BwWar, attackerMovePath: GridIndex[], launchUnitId: number | undefined | null, targetGridIndex: GridIndex): (number | undefined)[] {
         return getBattleDamage(war, attackerMovePath, launchUnitId, targetGridIndex, false);
     }
 
-    export function getFinalBattleDamage(war: McwWar, attackerMovePath: GridIndex[], launchUnitId: number | undefined | null, targetGridIndex: GridIndex): (number | undefined)[] {
+    export function getFinalBattleDamage(war: BwWar, attackerMovePath: GridIndex[], launchUnitId: number | undefined | null, targetGridIndex: GridIndex): (number | undefined)[] {
         return getBattleDamage(war, attackerMovePath, launchUnitId, targetGridIndex, true);
     }
 }

@@ -253,6 +253,9 @@ namespace TinyWars.BaseWar {
         public getActionPlanner(): BwActionPlanner {
             return this.getField().getActionPlanner();
         }
+        public getGridVisionEffect(): BwGridVisionEffect {
+            return this.getField().getGridVisionEffect();
+        }
 
         protected _setTurnManager(manager: BwTurnManager): void {
             this._turnManager = manager;
@@ -262,10 +265,6 @@ namespace TinyWars.BaseWar {
         }
         public getEnterTurnTime(): number {
             return this.getTurnManager().getEnterTurnTime();
-        }
-
-        public getGridVisionEffect(): BwGridVisionEffect {
-            return this.getField().getGridVisionEffect();
         }
     }
 }

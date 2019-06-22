@@ -79,7 +79,7 @@ namespace TinyWars.Replay {
         protected _onOpened(): void {
             const war           = ReplayModel.getWar();
             this._war           = war;
-            this._unitMap       = war.getUnitMap();
+            this._unitMap       = war.getUnitMap() as ReplayUnitMap;
             this._turnManager   = war.getTurnManager() as ReplayTurnManager;
             this._menuType      = MenuType.Main;
 

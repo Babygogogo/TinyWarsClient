@@ -62,7 +62,7 @@ namespace TinyWars.Replay {
         protected _onOpened(): void {
             const war           = ReplayModel.getWar();
             this._war           = war;
-            this._unitMap       = war.getUnitMap();
+            this._unitMap       = war.getUnitMap() as ReplayUnitMap;
             this._turnManager   = war.getTurnManager() as ReplayTurnManager;
             this._cursor        = war.getField().getCursor();
             this._playerIndex   = this._war.getPlayerInTurn().getPlayerIndex();
@@ -130,7 +130,7 @@ namespace TinyWars.Replay {
                 if (unit.getPlayerIndex() === playerIndex) {
                     datas.push({
                         cursor  : this._cursor,
-                        unit    : unit,
+                        unit    : unit as ReplayUnit,
                     });
                 }
             });
