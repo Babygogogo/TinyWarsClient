@@ -56,11 +56,13 @@ namespace TinyWars.Login {
             const isRememberPassword    = LocalStorage.getIsRememberPassword();
             this._inputAccount.text     = LocalStorage.getAccount();
             this._inputPassword.text    = isRememberPassword ? LocalStorage.getPasword() : null;
+            this._btnLogin.enabled      = true;
             Helpers.changeColor(this._imgRememberPassword, isRememberPassword ? Types.ColorType.Origin : Types.ColorType.Gray);
         }
 
         private _onNotifySLogin(e: egret.Event): void {
             FloatText.show(Lang.getText(Lang.Type.A0000));
+            this._btnLogin.enabled = false;
         }
 
         private _onTouchedBtnLogin(e: egret.TouchEvent): void {

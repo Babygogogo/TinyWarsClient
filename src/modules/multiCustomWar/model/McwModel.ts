@@ -77,7 +77,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Handlers for war actions that McwProxy receives.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export function updateOnPlayerSyncWar(data: ProtoTypes.IS_McwPlayerSyncWar): void {
+    export async function updateOnPlayerSyncWar(data: ProtoTypes.IS_McwPlayerSyncWar): Promise<void> {
         if ((_war) && (_war.getWarId() === data.warId)) {
             const status = data.status as Types.SyncWarStatus;
             if (status === Types.SyncWarStatus.Defeated) {
@@ -97,17 +97,25 @@ namespace TinyWars.MultiCustomWar.McwModel {
                 });
 
             } else if (status === Types.SyncWarStatus.NoError) {
-                if (data.nextActionId === _war.getNextActionId() + _cachedActions.length) {
+                const cachedActionsCount = _cachedActions.length;
+                if (data.nextActionId !== _war.getNextActionId() + cachedActionsCount) {
+                    _war.setIsEnded(true);
+                    await Utility.FlowManager.gotoMultiCustomWar(data.war as Types.SerializedBwWar),
+                    FloatText.show(Lang.getText(Lang.Type.A0036));
+                } else {
                     const requestType = data.requestType as Types.SyncWarRequestType;
                     if (requestType === Types.SyncWarRequestType.PlayerRequest) {
                         FloatText.show(Lang.getText(Lang.Type.A0038));
                     } else {
                         // Nothing to do.
                     }
-                } else {
-                    _war.setIsEnded(true);
-                    Utility.FlowManager.gotoMultiCustomWar(data.war as Types.SerializedBwWar),
-                    FloatText.show(Lang.getText(Lang.Type.A0036));
+                    if (!_war.getIsExecutingAction()) {
+                        if (cachedActionsCount) {
+                            _checkAndRunFirstCachedAction();
+                        } else {
+                            _checkAndRequestBeginTurn();
+                        }
+                    }
                 }
 
             } else if (status === Types.SyncWarStatus.NotJoined) {
