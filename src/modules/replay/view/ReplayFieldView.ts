@@ -15,7 +15,7 @@ namespace TinyWars.Replay {
                 this._tileMapView           = field.getTileMap().getView();
                 this._actionPlannerView     = field.getActionPlanner().getView();
                 this._unitMapView           = field.getUnitMap().getView();
-                this._cursorView            = field.getCursor().getView();
+                this._cursorView            = field.getCursor().getView() as ReplayCursorView;
                 this._gridVisionEffectView  = field.getGridVisionEffect().getView();
                 this.addChild(this._tileMapView);
                 this.addChild(this._actionPlannerView.getContainerForGrids());

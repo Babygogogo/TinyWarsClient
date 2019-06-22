@@ -50,8 +50,8 @@ namespace TinyWars.Replay {
         private _areaForPreviewMove     : MovableArea;
 
         private _notifyListeners: Notify.Listener[] = [
-            { type: Notify.Type.McwCursorTapped,    callback: this._onNotifyMcwCursorTapped },
-            { type: Notify.Type.McwCursorDragged,   callback: this._onNotifyMcwCursorDragged },
+            { type: Notify.Type.BwCursorTapped,    callback: this._onNotifyMcwCursorTapped },
+            { type: Notify.Type.BwCursorDragged,   callback: this._onNotifyMcwCursorDragged },
         ];
 
         public constructor() {

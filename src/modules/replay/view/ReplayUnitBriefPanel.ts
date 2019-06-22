@@ -47,7 +47,7 @@ namespace TinyWars.Replay {
             this._notifyListeners = [
                 { type: Notify.Type.GlobalTouchBegin,               callback: this._onNotifyGlobalTouchBegin },
                 { type: Notify.Type.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
-                { type: Notify.Type.McwCursorGridIndexChanged,      callback: this._onNotifyMcwCursorGridIndexChanged },
+                { type: Notify.Type.BwCursorGridIndexChanged,      callback: this._onNotifyMcwCursorGridIndexChanged },
                 { type: Notify.Type.BwActionPlannerStateChanged,   callback: this._onNotifyMcwActionPlannerStateChanged },
                 { type: Notify.Type.McwWarMenuPanelOpened,          callback: this._onNotifyMcwWarMenuPanelOpened },
                 { type: Notify.Type.McwWarMenuPanelClosed,          callback: this._onNotifyMcwWarMenuPanelClosed },
@@ -59,7 +59,7 @@ namespace TinyWars.Replay {
         protected _onOpened(): void {
             this._war       = ReplayModel.getWar();
             this._unitMap   = this._war.getUnitMap() as ReplayUnitMap;
-            this._cursor    = this._war.getField().getCursor();
+            this._cursor    = this._war.getField().getCursor() as ReplayCursor;
 
             this._updateView();
         }
