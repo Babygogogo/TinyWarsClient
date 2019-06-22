@@ -4,10 +4,8 @@ namespace TinyWars.BaseWar {
     import DestructionHelpers   = Utility.DestructionHelpers;
     import VisibilityHelpers    = Utility.VisibilityHelpers;
     import Logger               = Utility.Logger;
-    import Lang                 = Utility.Lang;
     import Notify               = Utility.Notify;
     import ProtoTypes           = Utility.ProtoTypes;
-    import FloatText            = Utility.FloatText;
     import TimeModel            = Time.TimeModel;
     import SerializedBwTurn     = Types.SerializedBwTurn;
     import TurnPhaseCode        = Types.TurnPhaseCode;
@@ -138,16 +136,7 @@ namespace TinyWars.BaseWar {
         private _runPhaseActivateMapWeapon(data: ProtoTypes.IS_McwPlayerBeginTurn): void {
             // TODO
         }
-        private _runPhaseMain(data: ProtoTypes.IS_McwPlayerBeginTurn): void {
-            const playerIndex = this.getPlayerIndexInTurn();
-            if (data.isDefeated) {
-                FloatText.show(Lang.getFormatedText(Lang.Type.F0014, this._war.getPlayer(playerIndex).getNickname()));
-                DestructionHelpers.destroyPlayerForce(this._war, playerIndex, true);
-                McwHelpers.updateTilesAndUnitsOnVisibilityChanged(this._war);
-            } else {
-                this._war.getUnitMap().forEachUnitOnMap(unit => (unit.getPlayerIndex() === playerIndex) && (unit.updateView()));
-            }
-        }
+        protected abstract _runPhaseMain(data: ProtoTypes.IS_McwPlayerBeginTurn): void;
         private _runPhaseResetUnitState(): void {
             const playerIndex = this.getPlayerIndexInTurn();
             if (playerIndex !== 0) {

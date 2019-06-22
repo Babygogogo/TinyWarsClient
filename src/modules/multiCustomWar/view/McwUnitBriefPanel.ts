@@ -58,8 +58,8 @@ namespace TinyWars.MultiCustomWar {
         }
         protected _onOpened(): void {
             this._war       = McwModel.getWar();
-            this._unitMap   = this._war.getUnitMap();
-            this._cursor    = this._war.getField().getCursor();
+            this._unitMap   = this._war.getUnitMap() as McwUnitMap;
+            this._cursor    = this._war.getField().getCursor() as McwCursor;
 
             this._updateView();
         }
@@ -130,14 +130,14 @@ namespace TinyWars.MultiCustomWar {
                 unitList.length = 0;
 
                 const gridIndex = this._cursor.getGridIndex();
-                const unitOnMap = this._unitMap.getUnitOnMap(gridIndex);
+                const unitOnMap = this._unitMap.getUnitOnMap(gridIndex) as McwUnit;
                 if (unitOnMap) {
                     unitList.push(unitOnMap);
 
                     const war = this._war;
                     if ((!war.getFogMap().checkHasFogCurrently()) || (war.getPlayerLoggedIn().getTeamIndex() === unitOnMap.getTeamIndex())) {
                         for (const loadedUnit of this._unitMap.getUnitsLoadedByLoader(unitOnMap, true)) {
-                            unitList.push(loadedUnit);
+                            unitList.push(loadedUnit as McwUnit);
                         }
                     }
                 }

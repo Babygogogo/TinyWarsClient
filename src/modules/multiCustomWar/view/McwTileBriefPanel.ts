@@ -75,8 +75,8 @@ namespace TinyWars.MultiCustomWar {
         }
         protected _onOpened(): void {
             this._war       = McwModel.getWar();
-            this._tileMap   = this._war.getTileMap();
-            this._cursor    = this._war.getField().getCursor();
+            this._tileMap   = this._war.getTileMap() as McwTileMap;
+            this._cursor    = this._war.getField().getCursor() as McwCursor;
 
             this._updateView();
         }

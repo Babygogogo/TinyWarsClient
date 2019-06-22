@@ -54,7 +54,7 @@ namespace TinyWars.Replay {
         }
         protected _onOpened(): void {
             this._war           = ReplayModel.getWar();
-            this._actionPlanner = this._war.getField().getActionPlanner();
+            this._actionPlanner = this._war.getField().getActionPlanner() as ReplayActionPlanner;
 
             this._updateView();
         }
@@ -97,7 +97,7 @@ namespace TinyWars.Replay {
                         gridY   : -1,
                         unitId  : -1,
                         viewId  : ConfigManager.getUnitViewId(data.produceUnitType, war.getPlayerInTurn().getPlayerIndex()),
-                    }, war.getConfigVersion());
+                    }, war.getConfigVersion()) as ReplayUnit;
 
                 datasForList.push({
                     actionType      : data.actionType,

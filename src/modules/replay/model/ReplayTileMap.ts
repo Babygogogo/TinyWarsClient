@@ -19,7 +19,7 @@ namespace TinyWars.Replay {
             const tilesData: SerializedBwTile[] = [];
             for (let x = 0; x < width; ++x) {
                 for (let y = 0; y < height; ++y) {
-                    const tileData = map[x][y].serialize();
+                    const tileData = (map[x][y] as ReplayTile).serialize();
                     (checkShouldSerializeTile(tileData, mapData, x + y * width)) && (tilesData.push(tileData));
                 }
             }

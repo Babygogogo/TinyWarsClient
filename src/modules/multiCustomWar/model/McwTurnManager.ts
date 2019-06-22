@@ -2,11 +2,25 @@
 namespace TinyWars.MultiCustomWar {
     import DestructionHelpers   = Utility.DestructionHelpers;
     import VisibilityHelpers    = Utility.VisibilityHelpers;
+    import ProtoTypes           = Utility.ProtoTypes;
+    import Lang                 = Utility.Lang;
+    import FloatText            = Utility.FloatText;
 
     export class McwTurnManager extends BaseWar.BwTurnManager {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The functions for running turn.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        protected _runPhaseMain(data: ProtoTypes.IS_McwPlayerBeginTurn): void {
+            const playerIndex   = this.getPlayerIndexInTurn();
+            const war           = this._getWar() as McwWar;
+            if (data.isDefeated) {
+                FloatText.show(Lang.getFormatedText(Lang.Type.F0014, war.getPlayer(playerIndex).getNickname()));
+                DestructionHelpers.destroyPlayerForce(war, playerIndex, true);
+                McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+            } else {
+                war.getUnitMap().forEachUnitOnMap(unit => (unit.getPlayerIndex() === playerIndex) && (unit.updateView()));
+            }
+        }
         protected _runPhaseResetVisionForCurrentPlayer(): void {
             super._runPhaseResetVisionForCurrentPlayer();
 

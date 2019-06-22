@@ -12,8 +12,8 @@ namespace TinyWars.Replay {
 
         public serialize(): Types.SerializedBwUnitMap {
             const units: Types.SerializedBwUnit[] = [];
-            this.forEachUnitOnMap(unit => units.push(unit.serialize()));
-            this.forEachUnitLoaded(unit => units.push(unit.serialize()));
+            this.forEachUnitOnMap(unit => units.push((unit as ReplayUnit).serialize()));
+            this.forEachUnitLoaded(unit => units.push((unit as ReplayUnit).serialize()));
 
             return {
                 units       : units,

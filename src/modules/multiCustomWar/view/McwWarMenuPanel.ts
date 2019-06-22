@@ -37,12 +37,13 @@ namespace TinyWars.MultiCustomWar {
         private _labelVisionRangeModifier   : GameUi.UiLabel;
         private _listPlayer                 : GameUi.UiScrollList;
 
-        private _war        : McwWar;
-        private _unitMap    : McwUnitMap;
-        private _turnManager: McwTurnManager;
-        private _dataForList: DataForCommandRenderer[];
-        private _playerIndex: number;
-        private _menuType   = MenuType.Main;
+        private _war            : McwWar;
+        private _unitMap        : McwUnitMap;
+        private _turnManager    : McwTurnManager;
+        private _actionPlanner  : McwActionPlanner;
+        private _dataForList    : DataForCommandRenderer[];
+        private _playerIndex    : number;
+        private _menuType       = MenuType.Main;
 
         public static show(): void {
             if (!McwWarMenuPanel._instance) {
@@ -80,8 +81,9 @@ namespace TinyWars.MultiCustomWar {
         protected _onOpened(): void {
             const war           = McwModel.getWar();
             this._war           = war;
-            this._unitMap       = war.getUnitMap();
-            this._turnManager   = war.getTurnManager();
+            this._unitMap       = war.getUnitMap() as McwUnitMap;
+            this._turnManager   = war.getTurnManager() as McwTurnManager;
+            this._actionPlanner = war.getActionPlanner() as McwActionPlanner;
             this._playerIndex   = war.getPlayerIndexLoggedIn();
             this._menuType      = MenuType.Main;
 
@@ -256,7 +258,7 @@ namespace TinyWars.MultiCustomWar {
             const war = this._war;
             if ((war.getPlayerInTurn() !== war.getPlayerLoggedIn())                 ||
                 (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)  ||
-                (war.getActionPlanner().checkIsStateRequesting())
+                (this._actionPlanner.checkIsStateRequesting())
             ) {
                 return undefined;
             } else {
@@ -266,7 +268,7 @@ namespace TinyWars.MultiCustomWar {
                         ConfirmPanel.show({
                             title   : Lang.getText(Lang.Type.B0055),
                             content : Lang.getText(Lang.Type.A0026),
-                            callback: () => war.getActionPlanner().setStateRequestingPlayerSurrender(),
+                            callback: () => this._actionPlanner.setStateRequestingPlayerSurrender(),
                         });
                     },
                 }
@@ -279,7 +281,7 @@ namespace TinyWars.MultiCustomWar {
             if ((player !== war.getPlayerLoggedIn())                                    ||
                 (player.getHasVotedForDraw())                                           ||
                 (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)      ||
-                (war.getActionPlanner().getState() !== Types.ActionPlannerState.Idle)
+                (this._actionPlanner.getState() !== Types.ActionPlannerState.Idle)
             ) {
                 return undefined;
             } else {
@@ -290,7 +292,7 @@ namespace TinyWars.MultiCustomWar {
                         ConfirmPanel.show({
                             title,
                             content : war.getRemainingVotesForDraw() == null ? Lang.getText(Lang.Type.A0031) : Lang.getText(Lang.Type.A0032),
-                            callback: () => war.getActionPlanner().setStateRequestingPlayerVoteForDraw(true),
+                            callback: () => this._actionPlanner.setStateRequestingPlayerVoteForDraw(true),
                         });
                     },
                 };
@@ -303,7 +305,7 @@ namespace TinyWars.MultiCustomWar {
             if ((player !== war.getPlayerLoggedIn())                                    ||
                 (player.getHasVotedForDraw())                                           ||
                 (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)      ||
-                (war.getActionPlanner().getState() !== Types.ActionPlannerState.Idle)   ||
+                (this._actionPlanner.getState() !== Types.ActionPlannerState.Idle)   ||
                 (!war.getRemainingVotesForDraw())
             ) {
                 return undefined;
@@ -315,7 +317,7 @@ namespace TinyWars.MultiCustomWar {
                         ConfirmPanel.show({
                             title,
                             content : Lang.getText(Lang.Type.A0033),
-                            callback: () => war.getActionPlanner().setStateRequestingPlayerVoteForDraw(false),
+                            callback: () => this._actionPlanner.setStateRequestingPlayerVoteForDraw(false),
                         });
                     },
                 };
@@ -326,7 +328,7 @@ namespace TinyWars.MultiCustomWar {
             const war = this._war;
             if ((war.getPlayerInTurn() !== war.getPlayerLoggedIn())                 ||
                 (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)  ||
-                (war.getActionPlanner().getState() !== Types.ActionPlannerState.Idle)
+                (this._actionPlanner.getState() !== Types.ActionPlannerState.Idle)
             ) {
                 return undefined;
             } else {
@@ -342,7 +344,7 @@ namespace TinyWars.MultiCustomWar {
                             ConfirmPanel.show({
                                 title   : Lang.getText(Lang.Type.B0081),
                                 content : Lang.getText(Lang.Type.A0029),
-                                callback: () => war.getActionPlanner().setStateRequestingPlayerDeleteUnit(),
+                                callback: () => this._actionPlanner.setStateRequestingPlayerDeleteUnit(),
                             });
                         }
                     },

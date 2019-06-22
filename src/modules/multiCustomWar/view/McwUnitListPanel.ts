@@ -62,9 +62,9 @@ namespace TinyWars.MultiCustomWar {
         protected _onOpened(): void {
             const war           = McwModel.getWar();
             this._war           = war;
-            this._unitMap       = war.getUnitMap();
-            this._turnManager   = war.getTurnManager();
-            this._cursor        = war.getField().getCursor();
+            this._unitMap       = war.getUnitMap() as McwUnitMap;
+            this._turnManager   = war.getTurnManager() as McwTurnManager;
+            this._cursor        = war.getField().getCursor() as McwCursor;
             this._playerIndex = this._war.getPlayerIndexLoggedIn();
             this._updateView();
         }
@@ -130,7 +130,7 @@ namespace TinyWars.MultiCustomWar {
                 if (unit.getPlayerIndex() === playerIndex) {
                     datas.push({
                         cursor  : this._cursor,
-                        unit    : unit,
+                        unit    : unit as McwUnit,
                     });
                 }
             });

@@ -11,10 +11,9 @@ namespace TinyWars.Replay.ReplayModel {
     import ProtoManager         = Utility.ProtoManager;
     import ActionContainer      = ProtoTypes.IActionContainer;
     import ActionCodes          = Network.Codes;
-    import AlertPanel           = Common.AlertPanel;
     import GridIndex            = Types.GridIndex;
-    import SerializedMcwTile    = Types.SerializedBwTile;
-    import SerializedMcwUnit    = Types.SerializedBwUnit;
+    import SerializedBwTile     = Types.SerializedBwTile;
+    import SerializedBwUnit     = Types.SerializedBwUnit;
     import UnitState            = Types.UnitState;
     import MovePath             = Types.MovePath;
     import TileType             = Types.TileType;
@@ -175,7 +174,7 @@ namespace TinyWars.Replay.ReplayModel {
         const focusUnit = war.getUnitMap().getUnitOnMap(gridIndex);
         if (focusUnit) {
             war.getFogMap().updateMapFromPathsByUnitAndPath(focusUnit, [gridIndex]);
-            DestructionHelpers.destroyUnitOnMapForReplay(war, gridIndex, false, true);
+            DestructionHelpers.destroyUnitOnMap(war, gridIndex, false, true);
         }
 
         McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
@@ -236,7 +235,7 @@ namespace TinyWars.Replay.ReplayModel {
         FloatText.show(`${war.getPlayerInTurn().getNickname()} ${Lang.getText(Lang.Type.B0055)} (${war.getNextActionId()} / ${war.getTotalActionsCount()})`);
 
         const player = war.getPlayerInTurn();
-        DestructionHelpers.destroyPlayerForceForReplay(war, player.getPlayerIndex(), true);
+        DestructionHelpers.destroyPlayerForce(war, player.getPlayerIndex(), true);
         McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
         actionPlanner.setStateIdle();
@@ -296,7 +295,7 @@ namespace TinyWars.Replay.ReplayModel {
         } else {
             const counterDamage     = action.counterDamage;
             const targetGridIndex   = action.targetGridIndex as GridIndex;
-            const tileMap           = war.getTileMap();
+            const tileMap           = war.getTileMap() as ReplayTileMap;
             const attackTarget      = unitMap.getUnitOnMap(targetGridIndex) || tileMap.getTile(targetGridIndex);
             const targetUnit        = attackTarget instanceof ReplayUnit ? attackTarget : undefined;
 
@@ -333,7 +332,7 @@ namespace TinyWars.Replay.ReplayModel {
                              gridVisionEffect.showEffectDamage(attackerGridIndex);
                         }
                     } else {
-                        DestructionHelpers.destroyUnitOnMapForReplay(war, attackerGridIndex, false, true);
+                        DestructionHelpers.destroyUnitOnMap(war, attackerGridIndex, false, true);
                     }
 
                     if (targetNewHp > 0) {
@@ -341,7 +340,7 @@ namespace TinyWars.Replay.ReplayModel {
                         gridVisionEffect.showEffectDamage(targetGridIndex);
                     } else {
                         if (targetUnit) {
-                            DestructionHelpers.destroyUnitOnMapForReplay(war, targetGridIndex, false, true);
+                            DestructionHelpers.destroyUnitOnMap(war, targetGridIndex, false, true);
                         } else {
                             if ((attackTarget as ReplayTile).getType() === TileType.Meteor) {
                                 for (const gridIndex of getAdjacentPlasmas(tileMap, targetGridIndex)) {
@@ -359,7 +358,7 @@ namespace TinyWars.Replay.ReplayModel {
 
                     if (lostPlayerIndex) {
                         FloatText.show(Lang.getFormatedText(Lang.Type.F0015, war.getPlayerManager().getPlayer(lostPlayerIndex).getNickname()));
-                        DestructionHelpers.destroyPlayerForceForReplay(war, lostPlayerIndex, true);
+                        DestructionHelpers.destroyPlayerForce(war, lostPlayerIndex, true);
                     }
 
                     McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
@@ -510,7 +509,7 @@ namespace TinyWars.Replay.ReplayModel {
                         focusUnit.updateView();
                         tile.updateView();
                         FloatText.show(Lang.getFormatedText(Lang.Type.F0016, war.getPlayerManager().getPlayer(lostPlayerIndex).getNickname()));
-                        DestructionHelpers.destroyPlayerForceForReplay(war, lostPlayerIndex, true);
+                        DestructionHelpers.destroyPlayerForce(war, lostPlayerIndex, true);
                         McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                         actionPlanner.setStateIdle();
@@ -572,7 +571,7 @@ namespace TinyWars.Replay.ReplayModel {
         const fogMap                = war.getFogMap();
         const unitsForDrop          = [] as ReplayUnit[];
         for (const { unitId, gridIndex } of (action.dropDestinations || []) as Types.DropDestination[]) {
-            const unitForDrop = unitMap.getUnitLoadedById(unitId);
+            const unitForDrop = unitMap.getUnitLoadedById(unitId) as ReplayUnit;
             unitMap.setUnitUnloaded(unitId, gridIndex);
             for (const unit of unitMap.getUnitsLoadedByLoader(unitForDrop, true)) {
                 unit.setGridIndex(gridIndex);
@@ -771,7 +770,7 @@ namespace TinyWars.Replay.ReplayModel {
             const targetGrids   = GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, ConfigManager.SILO_RADIUS, unitMap.getMapSize());
             const targetUnits   = [] as ReplayUnit[];
             for (const grid of targetGrids) {
-                const unit = unitMap.getUnitOnMap(grid);
+                const unit = unitMap.getUnitOnMap(grid) as ReplayUnit;
                 if (unit) {
                     targetUnits.push(unit);
                     unit.setCurrentHp(Math.max(1, unit.getCurrentHp() - ConfigManager.SILO_DAMAGE));
@@ -885,7 +884,7 @@ namespace TinyWars.Replay.ReplayModel {
             const suppliedUnits = [] as ReplayUnit[];
             const playerIndex   = focusUnit.getPlayerIndex();
             for (const gridIndex of GridIndexHelpers.getAdjacentGrids(pathNodes[pathNodes.length - 1], unitMap.getMapSize())) {
-                const unit = unitMap.getUnitOnMap(gridIndex);
+                const unit = unitMap.getUnitOnMap(gridIndex) as ReplayUnit;
                 if ((unit) && (unit !== focusUnit) && (unit.getPlayerIndex() === playerIndex) && (unit.checkCanBeSupplied())) {
                     unit.updateOnSupplied();
                     suppliedUnits.push(unit);
@@ -980,7 +979,7 @@ namespace TinyWars.Replay.ReplayModel {
         const focusUnit = war.getUnitMap().getUnitOnMap(gridIndex);
         if (focusUnit) {
             war.getFogMap().updateMapFromPathsByUnitAndPath(focusUnit, [gridIndex]);
-            DestructionHelpers.destroyUnitOnMapForReplay(war, gridIndex, false, false);
+            DestructionHelpers.destroyUnitOnMap(war, gridIndex, false, false);
         }
     }
 
@@ -1019,7 +1018,7 @@ namespace TinyWars.Replay.ReplayModel {
 
     async function _fastExecuteMcwPlayerSurrender(war: ReplayWar, data: ActionContainer): Promise<void> {
         const player = war.getPlayerInTurn();
-        DestructionHelpers.destroyPlayerForceForReplay(war, player.getPlayerIndex(), false);
+        DestructionHelpers.destroyPlayerForce(war, player.getPlayerIndex(), false);
     }
 
     async function _fastExecuteMcwPlayerVoteForDraw(war: ReplayWar, data: ActionContainer): Promise<void> {
@@ -1047,7 +1046,7 @@ namespace TinyWars.Replay.ReplayModel {
         } else {
             const counterDamage     = action.counterDamage;
             const targetGridIndex   = action.targetGridIndex as GridIndex;
-            const tileMap           = war.getTileMap();
+            const tileMap           = war.getTileMap() as ReplayTileMap;
             const attackTarget      = unitMap.getUnitOnMap(targetGridIndex) || tileMap.getTile(targetGridIndex);
             const targetUnit        = attackTarget instanceof ReplayUnit ? attackTarget : undefined;
 
@@ -1076,13 +1075,13 @@ namespace TinyWars.Replay.ReplayModel {
             const lostPlayerIndex   = action.lostPlayerIndex;
             if (attackerNewHp > 0) {
             } else {
-                DestructionHelpers.destroyUnitOnMapForReplay(war, attackerGridIndex, false, false);
+                DestructionHelpers.destroyUnitOnMap(war, attackerGridIndex, false, false);
             }
 
             if (targetNewHp > 0) {
             } else {
                 if (targetUnit) {
-                    DestructionHelpers.destroyUnitOnMapForReplay(war, targetGridIndex, false, false);
+                    DestructionHelpers.destroyUnitOnMap(war, targetGridIndex, false, false);
                 } else {
                     if ((attackTarget as ReplayTile).getType() === TileType.Meteor) {
                         for (const gridIndex of getAdjacentPlasmas(tileMap, targetGridIndex)) {
@@ -1095,7 +1094,7 @@ namespace TinyWars.Replay.ReplayModel {
             }
 
             if (lostPlayerIndex) {
-                DestructionHelpers.destroyPlayerForceForReplay(war, lostPlayerIndex, false);
+                DestructionHelpers.destroyPlayerForce(war, lostPlayerIndex, false);
             }
         }
     }
@@ -1178,7 +1177,7 @@ namespace TinyWars.Replay.ReplayModel {
 
             if (!lostPlayerIndex) {
             } else {
-                DestructionHelpers.destroyPlayerForceForReplay(war, lostPlayerIndex, false);
+                DestructionHelpers.destroyPlayerForce(war, lostPlayerIndex, false);
             }
         }
     }
@@ -1210,7 +1209,7 @@ namespace TinyWars.Replay.ReplayModel {
         const fogMap                = war.getFogMap();
         const unitsForDrop          = [] as ReplayUnit[];
         for (const { unitId, gridIndex } of (action.dropDestinations || []) as Types.DropDestination[]) {
-            const unitForDrop = unitMap.getUnitLoadedById(unitId);
+            const unitForDrop = unitMap.getUnitLoadedById(unitId) as ReplayUnit;
             unitMap.setUnitUnloaded(unitId, gridIndex);
             for (const unit of unitMap.getUnitsLoadedByLoader(unitForDrop, true)) {
                 unit.setGridIndex(gridIndex);
@@ -1328,7 +1327,7 @@ namespace TinyWars.Replay.ReplayModel {
             const targetGrids   = GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, ConfigManager.SILO_RADIUS, unitMap.getMapSize());
             const targetUnits   = [] as ReplayUnit[];
             for (const grid of targetGrids) {
-                const unit = unitMap.getUnitOnMap(grid);
+                const unit = unitMap.getUnitOnMap(grid) as ReplayUnit;
                 if (unit) {
                     targetUnits.push(unit);
                     unit.setCurrentHp(Math.max(1, unit.getCurrentHp() - ConfigManager.SILO_DAMAGE));
@@ -1385,7 +1384,7 @@ namespace TinyWars.Replay.ReplayModel {
             const suppliedUnits = [] as ReplayUnit[];
             const playerIndex   = focusUnit.getPlayerIndex();
             for (const gridIndex of GridIndexHelpers.getAdjacentGrids(pathNodes[pathNodes.length - 1], unitMap.getMapSize())) {
-                const unit = unitMap.getUnitOnMap(gridIndex);
+                const unit = unitMap.getUnitOnMap(gridIndex) as ReplayUnit;
                 if ((unit) && (unit !== focusUnit) && (unit.getPlayerIndex() === playerIndex) && (unit.checkCanBeSupplied())) {
                     unit.updateOnSupplied();
                     suppliedUnits.push(unit);
@@ -1419,7 +1418,7 @@ namespace TinyWars.Replay.ReplayModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Helpers for executors.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    function addUnits(war: ReplayWar, unitsData: SerializedMcwUnit[] | undefined | null, isViewVisible: boolean): void {
+    function addUnits(war: ReplayWar, unitsData: SerializedBwUnit[] | undefined | null, isViewVisible: boolean): void {
         if ((unitsData) && (unitsData.length)) {
             const unitMap       = war.getUnitMap();
             const fogMap        = war.getFogMap();
@@ -1445,7 +1444,7 @@ namespace TinyWars.Replay.ReplayModel {
             }
         }
     }
-    function updateTiles(war: ReplayWar, tilesData: SerializedMcwTile[] | undefined | null): void {
+    function updateTiles(war: ReplayWar, tilesData: SerializedBwTile[] | undefined | null): void {
         if ((tilesData) && (tilesData.length)) {
             const tileMap   = war.getTileMap();
             const fogMap    = war.getFogMap();
@@ -1472,10 +1471,10 @@ namespace TinyWars.Replay.ReplayModel {
             discoveredUnits?: ProtoTypes.ISerializedMcwUnit[],
         }
     ): void {
-        addUnits(war, action.actingUnits as SerializedMcwUnit[] | undefined | null, false);
-        addUnits(war, action.discoveredUnits as SerializedMcwUnit[] | undefined | null, false);
-        updateTiles(war, action.actingTiles as SerializedMcwTile[] | undefined | null);
-        updateTiles(war, action.discoveredTiles as SerializedMcwTile[] | undefined | null);
+        addUnits(war, action.actingUnits as SerializedBwUnit[] | undefined | null, false);
+        addUnits(war, action.discoveredUnits as SerializedBwUnit[] | undefined | null, false);
+        updateTiles(war, action.actingTiles as SerializedBwTile[] | undefined | null);
+        updateTiles(war, action.discoveredTiles as SerializedBwTile[] | undefined | null);
     }
 
     function moveUnit(war: ReplayWar, actionCode: ActionCodes, revisedPath: MovePath, launchUnitId: number | null | undefined, fuelConsumption: number): void {

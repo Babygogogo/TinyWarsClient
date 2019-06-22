@@ -108,7 +108,7 @@ namespace TinyWars.MultiCustomWar {
                 ConfirmPanel.show({
                     title   : Lang.getText(Lang.Type.B0036),
                     content : this._getHintForEndTurn(),
-                    callback: () => this._war.getActionPlanner().setStateRequestingPlayerEndTurn(),
+                    callback: () => (this._war.getActionPlanner() as McwActionPlanner).setStateRequestingPlayerEndTurn(),
                 });
             }
         }

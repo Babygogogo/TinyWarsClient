@@ -42,7 +42,7 @@ namespace TinyWars.BaseWar {
             this.getGridVisionEffect().startRunning(war);
         }
         public startRunningView(): void {
-            this.getView().startRunning();
+            this.getView().startRunningView();
             this.getTileMap().startRunningView();
             this.getUnitMap().startRunningView();
             this.getCursor().startRunningView();

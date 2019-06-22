@@ -107,7 +107,7 @@ namespace TinyWars.Replay {
             const currentFund   = player.getFund();
             const playerIndex   = player.getPlayerIndex();
             const configVersion = war.getConfigVersion();
-            const actionPlanner = war.getActionPlanner();
+            const actionPlanner = war.getActionPlanner() as ReplayActionPlanner;
             const gridIndex     = this._gridIndex;
 
             for (const unitType of ConfigManager.getUnitTypesByCategory(war.getConfigVersion(), war.getTileMap().getTile(this._gridIndex).getProduceUnitCategory())) {
@@ -116,7 +116,7 @@ namespace TinyWars.Replay {
                     gridY   : -1,
                     unitId  : -1,
                     viewId  : ConfigManager.getUnitViewId(unitType, playerIndex),
-                }, configVersion);
+                }, configVersion) as ReplayUnit;
                 datas.push({
                     unitType,
                     currentFund,

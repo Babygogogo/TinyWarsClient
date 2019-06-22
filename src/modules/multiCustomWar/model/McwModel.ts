@@ -258,7 +258,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         if ((turnManager.getPhaseCode() === Types.TurnPhaseCode.WaitBeginTurn)      &&
             (_war.getPlayerIndexLoggedIn() ===  turnManager.getPlayerIndexInTurn())
         ) {
-            _war.getActionPlanner().setStateRequestingPlayerBeginTurn();
+            (_war.getActionPlanner() as McwActionPlanner).setStateRequestingPlayerBeginTurn();
         }
     }
 
@@ -297,7 +297,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         await war.getTurnManager().endPhaseMain();
 
         if (war.getPlayerInTurn() === war.getPlayerLoggedIn()) {
-            actionPlanner.setStateRequestingPlayerBeginTurn();
+            (actionPlanner as McwActionPlanner).setStateRequestingPlayerBeginTurn();
         } else {
             actionPlanner.setStateIdle();
         }
@@ -401,7 +401,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         } else {
             const counterDamage     = action.counterDamage;
             const targetGridIndex   = action.targetGridIndex as GridIndex;
-            const tileMap           = war.getTileMap();
+            const tileMap           = war.getTileMap() as McwTileMap;
             const attackTarget      = unitMap.getUnitOnMap(targetGridIndex) || tileMap.getTile(targetGridIndex);
             const targetUnit        = attackTarget instanceof McwUnit ? attackTarget : undefined;
 
@@ -684,7 +684,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         const fogMap                = war.getFogMap();
         const unitsForDrop          = [] as McwUnit[];
         for (const { unitId, gridIndex } of (action.dropDestinations || []) as Types.DropDestination[]) {
-            const unitForDrop = unitMap.getUnitLoadedById(unitId);
+            const unitForDrop = unitMap.getUnitLoadedById(unitId) as McwUnit;
             unitMap.setUnitUnloaded(unitId, gridIndex);
             for (const unit of unitMap.getUnitsLoadedByLoader(unitForDrop, true)) {
                 unit.setGridIndex(gridIndex);
@@ -882,7 +882,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
             const targetGrids   = GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, ConfigManager.SILO_RADIUS, unitMap.getMapSize());
             const targetUnits   = [] as McwUnit[];
             for (const grid of targetGrids) {
-                const unit = unitMap.getUnitOnMap(grid);
+                const unit = unitMap.getUnitOnMap(grid) as McwUnit;
                 if (unit) {
                     targetUnits.push(unit);
                     unit.setCurrentHp(Math.max(1, unit.getCurrentHp() - ConfigManager.SILO_DAMAGE));
@@ -994,7 +994,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
             const suppliedUnits = [] as McwUnit[];
             const playerIndex   = focusUnit.getPlayerIndex();
             for (const gridIndex of GridIndexHelpers.getAdjacentGrids(pathNodes[pathNodes.length - 1], unitMap.getMapSize())) {
-                const unit = unitMap.getUnitOnMap(gridIndex);
+                const unit = unitMap.getUnitOnMap(gridIndex) as McwUnit;
                 if ((unit) && (unit !== focusUnit) && (unit.getPlayerIndex() === playerIndex) && (unit.checkCanBeSupplied())) {
                     unit.updateOnSupplied();
                     suppliedUnits.push(unit);

@@ -28,8 +28,8 @@ namespace TinyWars.Replay {
         public serialize(): Types.SerializedBwField {
             return {
                 fogMap  : (this.getFogMap() as ReplayFogMap).serialize(),
-                unitMap : this.getUnitMap().serialize(),
-                tileMap : this.getTileMap().serialize(),
+                unitMap : (this.getUnitMap() as ReplayUnitMap).serialize(),
+                tileMap : (this.getTileMap() as ReplayTileMap).serialize(),
             };
         }
     }

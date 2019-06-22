@@ -3,11 +3,11 @@ namespace TinyWars.MultiCustomWar.McwProxy {
     import NetManager       = Network.Manager;
     import NetMessageCodes  = Network.Codes;
     import Types            = Utility.Types;
-    import Logger           = Utility.Logger;
     import ProtoTypes       = Utility.ProtoTypes;
     import Notify           = Utility.Notify;
     import GridIndex        = Types.GridIndex;
     import UnitType         = Types.UnitType;
+    import BwWar            = BaseWar.BwWar;
 
     export function init(): void {
         NetManager.addListeners([
@@ -34,7 +34,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         ], McwProxy);
     }
 
-    export function reqMcwPlayerSyncWar(war: McwWar, requestType: Types.SyncWarRequestType): void {
+    export function reqMcwPlayerSyncWar(war: BwWar, requestType: Types.SyncWarRequestType): void {
         NetManager.send({
             C_McwPlayerSyncWar: {
                 warId       : war.getWarId(),
@@ -51,7 +51,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         }
     }
 
-    export function reqMcwPlayerBeginTurn(war: McwWar): void {
+    export function reqMcwPlayerBeginTurn(war: BwWar): void {
         NetManager.send({
             C_McwPlayerBeginTurn: {
                 warId   : war.getWarId(),
@@ -67,7 +67,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         }
     }
 
-    export function reqMcwPlayerDeleteUnit(war: McwWar, gridIndex: GridIndex): void {
+    export function reqMcwPlayerDeleteUnit(war: BwWar, gridIndex: GridIndex): void {
         NetManager.send({
             C_McwPlayerDeleteUnit: {
                 warId   : war.getWarId(),
@@ -84,7 +84,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         }
     }
 
-    export function reqMcwPlayerEndTurn(war: McwWar): void {
+    export function reqMcwPlayerEndTurn(war: BwWar): void {
         NetManager.send({
             C_McwPlayerEndTurn: {
                 warId   : war.getWarId(),
@@ -100,7 +100,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         }
     }
 
-    export function reqMcwPlayerProduceUnit(war: McwWar, gridIndex: GridIndex, unitType: UnitType): void {
+    export function reqMcwPlayerProduceUnit(war: BwWar, gridIndex: GridIndex, unitType: UnitType): void {
         NetManager.send({
             C_McwPlayerProduceUnit: {
                 warId   : war.getWarId(),
@@ -118,7 +118,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         }
     }
 
-    export function reqMcwPlayerSurrender(war: McwWar): void {
+    export function reqMcwPlayerSurrender(war: BwWar): void {
         NetManager.send({
             C_McwPlayerSurrender: {
                 warId   : war.getWarId(),
@@ -134,7 +134,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         }
     }
 
-    export function reqMcwPlayerVoteForDraw(war: McwWar, isAgree: boolean): void {
+    export function reqMcwPlayerVoteForDraw(war: BwWar, isAgree: boolean): void {
         NetManager.send({
             C_McwPlayerVoteForDraw: {
                 warId   : war.getWarId(),
@@ -151,7 +151,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         }
     }
 
-    export function reqMcwUnitAttack(war: McwWar, path: GridIndex[], launchUnitId: number | undefined, targetGridIndex: GridIndex): void {
+    export function reqMcwUnitAttack(war: BwWar, path: GridIndex[], launchUnitId: number | undefined, targetGridIndex: GridIndex): void {
         NetManager.send({
             C_McwUnitAttack: {
                 warId       : war.getWarId(),
@@ -170,7 +170,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         }
     }
 
-    export function reqMcwUnitBeLoaded(war: McwWar, path: GridIndex[], launchUnitId?: number): void {
+    export function reqMcwUnitBeLoaded(war: BwWar, path: GridIndex[], launchUnitId?: number): void {
         NetManager.send({
             C_McwUnitBeLoaded: {
                 warId       : war.getWarId(),
@@ -188,7 +188,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         }
     }
 
-    export function reqMcwUnitBuildTile(war: McwWar, path: GridIndex[], launchUnitId?: number): void {
+    export function reqMcwUnitBuildTile(war: BwWar, path: GridIndex[], launchUnitId?: number): void {
         NetManager.send({
             C_McwUnitBuildTile: {
                 warId       : war.getWarId(),
@@ -206,7 +206,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         }
     }
 
-    export function reqMcwUnitCaptureTile(war: McwWar, path: GridIndex[], launchUnitId?: number): void {
+    export function reqMcwUnitCaptureTile(war: BwWar, path: GridIndex[], launchUnitId?: number): void {
         NetManager.send({
             C_McwUnitCaptureTile: {
                 warId       : war.getWarId(),
@@ -224,7 +224,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         }
     }
 
-    export function reqMcwUnitDive(war: McwWar, path: GridIndex[], launchUnitId: number | undefined): void {
+    export function reqMcwUnitDive(war: BwWar, path: GridIndex[], launchUnitId: number | undefined): void {
         NetManager.send({
             C_McwUnitDive: {
                 warId       : war.getWarId(),
@@ -242,7 +242,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         }
     }
 
-    export function reqMcwUnitDrop(war: McwWar, path: GridIndex[], launchUnitId: number | undefined, dropDestinations: Types.DropDestination[]): void {
+    export function reqMcwUnitDrop(war: BwWar, path: GridIndex[], launchUnitId: number | undefined, dropDestinations: Types.DropDestination[]): void {
         NetManager.send({
             C_McwUnitDrop: {
                 warId   : war.getWarId(),
@@ -261,7 +261,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         }
     }
 
-    export function reqMcwUnitJoin(war: McwWar, path: GridIndex[], launchUnitId: number | undefined): void {
+    export function reqMcwUnitJoin(war: BwWar, path: GridIndex[], launchUnitId: number | undefined): void {
         NetManager.send({
             C_McwUnitJoin: {
                 warId       : war.getWarId(),
@@ -279,7 +279,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         }
     }
 
-    export function reqMcwUnitLaunchFlare(war: McwWar, path: GridIndex[], launchUnitId: number | undefined, targetGridIndex: GridIndex): void {
+    export function reqMcwUnitLaunchFlare(war: BwWar, path: GridIndex[], launchUnitId: number | undefined, targetGridIndex: GridIndex): void {
         NetManager.send({
             C_McwUnitLaunchFlare: {
                 warId       : war.getWarId(),
@@ -298,7 +298,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         }
     }
 
-    export function reqMcwUnitLaunchSilo(war: McwWar, path: GridIndex[], launchUnitId: number | undefined, targetGridIndex: GridIndex): void {
+    export function reqMcwUnitLaunchSilo(war: BwWar, path: GridIndex[], launchUnitId: number | undefined, targetGridIndex: GridIndex): void {
         NetManager.send({
             C_McwUnitLaunchSilo: {
                 warId       : war.getWarId(),
@@ -317,7 +317,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         }
     }
 
-    export function reqMcwUnitProduceUnit(war: McwWar, path: GridIndex[], launchUnitId: number | undefined): void {
+    export function reqMcwUnitProduceUnit(war: BwWar, path: GridIndex[], launchUnitId: number | undefined): void {
         NetManager.send({
             C_McwUnitProduceUnit: {
                 warId       : war.getWarId(),
@@ -335,7 +335,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         }
     }
 
-    export function reqMcwUnitSupply(war: McwWar, path: GridIndex[], launchUnitId: number | undefined): void {
+    export function reqMcwUnitSupply(war: BwWar, path: GridIndex[], launchUnitId: number | undefined): void {
         NetManager.send({
             C_McwUnitSupply: {
                 warId       : war.getWarId(),
@@ -353,7 +353,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         }
     }
 
-    export function reqMcwUnitSurface(war: McwWar, path: GridIndex[], launchUnitId: number | undefined): void {
+    export function reqMcwUnitSurface(war: BwWar, path: GridIndex[], launchUnitId: number | undefined): void {
         NetManager.send({
             C_McwUnitSurface: {
                 warId       : war.getWarId(),
@@ -371,7 +371,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         }
     }
 
-    export function reqMcwUnitWait(war: McwWar, path: GridIndex[], launchUnitId?: number): void {
+    export function reqMcwUnitWait(war: BwWar, path: GridIndex[], launchUnitId?: number): void {
         NetManager.send({
             C_McwUnitWait: {
                 warId       : war.getWarId(),
