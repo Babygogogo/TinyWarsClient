@@ -18,11 +18,11 @@ namespace TinyWars.Replay {
         private _group      : eui.Group;
         private _listAction : GameUi.UiScrollList;
 
-        private _openData       : OpenDataForMcwUnitActionsPanel;
+        private _openData       : OpenDataForReplayUnitActionsPanel;
         private _war            : ReplayWar;
         private _actionPlanner  : ReplayActionPlanner;
 
-        public static show(data: OpenDataForMcwUnitActionsPanel): void {
+        public static show(data: OpenDataForReplayUnitActionsPanel): void {
             if (!ReplayUnitActionsPanel._instance) {
                 ReplayUnitActionsPanel._instance = new ReplayUnitActionsPanel();
             }
@@ -117,19 +117,11 @@ namespace TinyWars.Replay {
         }
     }
 
-    export type OpenDataForMcwUnitActionsPanel  = DataForMcwUnitAction[];
-    export type DataForMcwUnitAction            = {
-        actionType      : UnitActionType;
-        callback        : () => void;
-        unitForLaunch?  : ReplayUnit;
-        unitForDrop?    : ReplayUnit;
-        produceUnitType?: Types.UnitType;
-        canProduceUnit? : boolean;
-    }
+    export type OpenDataForReplayUnitActionsPanel   = BaseWar.OpenDataForBwUnitActionsPanel;
     type DataForUnitActionRenderer = {
         actionType      : UnitActionType;
         callback        : () => void;
-        unit?           : ReplayUnit;
+        unit?           : BaseWar.BwUnit;
         canProduceUnit? : boolean;
     }
 

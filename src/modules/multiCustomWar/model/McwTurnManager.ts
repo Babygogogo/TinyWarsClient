@@ -22,14 +22,20 @@ namespace TinyWars.MultiCustomWar {
             }
         }
         protected _runPhaseResetVisionForCurrentPlayer(): void {
-            super._runPhaseResetVisionForCurrentPlayer();
+            const playerIndex   = this.getPlayerIndexInTurn();
+            const war           = this._getWar() as McwWar;
+            war.getFogMap().resetMapFromPathsForPlayer(playerIndex);
 
-            if (this.getPlayerIndexInTurn() === (this._getWar() as McwWar).getPlayerIndexLoggedIn()) {
+            if (this.getPlayerIndexInTurn() === war.getPlayerIndexLoggedIn()) {
                 this._resetFogForPlayerLoggedIn();
             }
         }
         protected _runPhaseResetVisionForNextPlayer(): void {
-            super._runPhaseResetVisionForNextPlayer();
+            const playerIndex   = this.getPlayerIndexInTurn();
+            const war           = this._getWar();
+            const fogMap        = war.getFogMap();
+            fogMap.resetMapFromTilesForPlayer(playerIndex);
+            fogMap.resetMapFromUnitsForPlayer(playerIndex);
 
             if (this.getPlayerIndexInTurn() === (this._getWar() as McwWar).getPlayerIndexLoggedIn()) {
                 this._resetFogForPlayerLoggedIn();
@@ -54,6 +60,15 @@ namespace TinyWars.MultiCustomWar {
                 })) {
                     DestructionHelpers.destroyUnitOnMap(war, gridIndex, false, false);
                 }
+            });
+
+            war.getTileMap().forEachTile(tile => {
+                if (!VisibilityHelpers.checkIsTileVisibleToPlayer(war, tile.getGridIndex(), playerIndex)) {
+                    tile.setFogEnabled();
+                } else {
+                    tile.setFogDisabled();
+                }
+                tile.updateView();
             });
         }
     }

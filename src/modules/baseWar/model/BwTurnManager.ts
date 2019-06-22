@@ -148,13 +148,7 @@ namespace TinyWars.BaseWar {
                 });
             }
         }
-        protected _runPhaseResetVisionForCurrentPlayer(): void {
-            const playerIndex   = this.getPlayerIndexInTurn();
-            const war           = this._getWar();
-            war.getFogMap().resetMapFromPathsForPlayer(playerIndex);
-
-            this._resetFogForPlayerInTurn();
-        }
+        protected abstract _runPhaseResetVisionForCurrentPlayer(): void;
         private _runPhaseTickTurnAndPlayerIndex(): void {
             const data = this._getNextTurnAndPlayerIndex();
             this._setTurnIndex(data.turnIndex);
@@ -167,15 +161,7 @@ namespace TinyWars.BaseWar {
             // if (playerIndex !== 0) {
             // }
         }
-        protected _runPhaseResetVisionForNextPlayer(): void {
-            const playerIndex   = this.getPlayerIndexInTurn();
-            const war           = this._getWar();
-            const fogMap        = war.getFogMap();
-            fogMap.resetMapFromTilesForPlayer(playerIndex);
-            fogMap.resetMapFromUnitsForPlayer(playerIndex);
-
-            this._resetFogForPlayerInTurn();
-        }
+        protected abstract _runPhaseResetVisionForNextPlayer(): void;
         private _runPhaseResetVotesForDraw(): void {
             this._war.getPlayer(this.getPlayerIndexInTurn())!.setHasVotedForDraw(false);
         }
@@ -248,19 +234,6 @@ namespace TinyWars.BaseWar {
                     ++nextPlayerIndex;
                 }
             }
-        }
-
-        private _resetFogForPlayerInTurn(): void {
-            const war           = this._getWar();
-            const playerIndex   = this.getPlayerIndexInTurn();
-            war.getTileMap().forEachTile(tile => {
-                if (!VisibilityHelpers.checkIsTileVisibleToPlayer(war, tile.getGridIndex(), playerIndex)) {
-                    tile.setFogEnabled();
-                } else {
-                    tile.setFogDisabled();
-                }
-                tile.updateView();
-            });
         }
     }
 }

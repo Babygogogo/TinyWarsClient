@@ -9,9 +9,8 @@ namespace TinyWars.Replay {
     import UnitState        = Types.UnitState;
     import GridIndex        = Types.GridIndex;
     import State            = Types.ActionPlannerState;
-    import MovableArea      = Types.MovableArea;
-    import AttackableArea   = Types.AttackableArea;
     import UnitActionType   = Types.UnitActionType;
+    import BwHelpers        = BaseWar.BwHelpers;
 
     export class ReplayActionPlanner extends BaseWar.BwActionPlanner {
         protected _getViewClass(): new () => BaseWar.BwActionPlannerView {
@@ -25,7 +24,7 @@ namespace TinyWars.Replay {
             const gridIndex = this.getCursor().getGridIndex();
             const nextState = this._getNextStateOnTap(gridIndex);
             if ((nextState === this.getState())                                                 &&
-                ((nextState === State.ExecutingAction) || (_checkIsStateRequesting(nextState)))
+                ((nextState === State.ExecutingAction) || (BwHelpers.checkIsStateRequesting(nextState)))
             ) {
                 // Do noting.
             } else {
@@ -241,7 +240,7 @@ namespace TinyWars.Replay {
         protected _getNextStateOnTapWhenMakingMovePath(gridIndex: GridIndex): State {
             const existingUnit      = this._getUnitMap().getUnitOnMap(gridIndex);
             const playerIndexInTurn = this._getWar().getPlayerInTurn().getPlayerIndex();
-            if (checkAreaHasGrid(this.getMovableArea(), gridIndex)) {
+            if (BwHelpers.checkAreaHasGrid(this.getMovableArea(), gridIndex)) {
                 if (!existingUnit) {
                     return State.ChoosingAction;
                 } else {
@@ -422,7 +421,7 @@ namespace TinyWars.Replay {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for generating actions for the focused unit.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        protected _getActionUnitBeLoaded(): DataForMcwUnitAction[] {
+        protected _getActionUnitBeLoaded(): BaseWar.DataForUnitActionRenderer[] {
             const destination   = this.getMovePathDestination();
             const focusUnit     = this.getFocusUnit();
             if (GridIndexHelpers.checkIsEqual(focusUnit.getGridIndex(), destination)) {
@@ -434,7 +433,7 @@ namespace TinyWars.Replay {
                     : [];
             }
         }
-        protected _getActionUnitJoin(): DataForMcwUnitAction[] {
+        protected _getActionUnitJoin(): BaseWar.DataForUnitActionRenderer[] {
             const destination   = this.getMovePathDestination();
             const focusUnit     = this.getFocusUnit();
             if (GridIndexHelpers.checkIsEqual(focusUnit.getGridIndex(), destination)) {
@@ -446,27 +445,27 @@ namespace TinyWars.Replay {
                     : [];
             }
         }
-        protected _getActionUnitCapture(): DataForMcwUnitAction[] {
+        protected _getActionUnitCapture(): BaseWar.DataForUnitActionRenderer[] {
             return (this.getFocusUnit().checkCanCaptureTile(this._getTileMap().getTile(this.getMovePathDestination())))
                 ? [{ actionType: UnitActionType.Capture, callback: () => {} }]
                 : [];
         }
-        protected _getActionUnitDive(): DataForMcwUnitAction[] {
+        protected _getActionUnitDive(): BaseWar.DataForUnitActionRenderer[] {
             return (this.getFocusUnit().checkCanDive())
                 ? [{ actionType: UnitActionType.Dive, callback: () => {} }]
                 : [];
         }
-        protected _getActionUnitSurface(): DataForMcwUnitAction[] {
+        protected _getActionUnitSurface(): BaseWar.DataForUnitActionRenderer[] {
             return (this.getFocusUnit().checkCanSurface())
                 ? [{ actionType: UnitActionType.Surface, callback: () => {} }]
                 : [];
         }
-        protected _getActionUnitBuildTile(): DataForMcwUnitAction[] {
+        protected _getActionUnitBuildTile(): BaseWar.DataForUnitActionRenderer[] {
             return (this.getFocusUnit().checkCanBuildOnTile(this._getTileMap().getTile(this.getMovePathDestination())))
                 ? [{ actionType: UnitActionType.BuildTile, callback: () => {} }]
                 : [];
         }
-        protected _getActionUnitSupply(): DataForMcwUnitAction[] {
+        protected _getActionUnitSupply(): BaseWar.DataForUnitActionRenderer[] {
             const focusUnit     = this.getFocusUnit();
             const playerIndex   = focusUnit.getPlayerIndex();
             const unitMap       = this._getUnitMap();
@@ -480,7 +479,7 @@ namespace TinyWars.Replay {
             }
             return [];
         }
-        protected _getActionUnitProduceUnit(): DataForMcwUnitAction[] {
+        protected _getActionUnitProduceUnit(): BaseWar.DataForUnitActionRenderer[] {
             const focusUnit         = this.getFocusUnit();
             const produceUnitType   = focusUnit.getProduceUnitType();
             if ((this.getFocusUnitLoaded()) || (this.getMovePath().length !== 1) || (produceUnitType == null)) {
@@ -517,7 +516,7 @@ namespace TinyWars.Replay {
                 }
             }
         }
-        protected _getActionUnitWait(): DataForMcwUnitAction[] {
+        protected _getActionUnitWait(): BaseWar.DataForUnitActionRenderer[] {
             const existingUnit = this._getUnitMap().getUnitOnMap(this.getMovePathDestination());
             if ((existingUnit) && (existingUnit !== this.getFocusUnit())) {
                 return [];
@@ -529,33 +528,5 @@ namespace TinyWars.Replay {
                 }
             }
         }
-    }
-
-    function checkAreaHasGrid(area: AttackableArea | MovableArea, gridIndex: GridIndex): boolean {
-        const { x, y } = gridIndex;
-        return (!!area[x]) && (!!area[x][y]);
-    }
-
-    function _checkIsStateRequesting(state: State): boolean {
-        return (state === State.RequestingPlayerActivateSkill)
-            || (state === State.RequestingPlayerBeginTurn)
-            || (state === State.RequestingPlayerDeleteUnit)
-            || (state === State.RequestingPlayerEndTurn)
-            || (state === State.RequestingPlayerSurrender)
-            || (state === State.RequestingPlayerVoteForDraw)
-            || (state === State.RequestingPlayerProduceUnit)
-            || (state === State.RequestingUnitAttack)
-            || (state === State.RequestingUnitBeLoaded)
-            || (state === State.RequestingUnitBuildTile)
-            || (state === State.RequestingUnitCaptureTile)
-            || (state === State.RequestingUnitDive)
-            || (state === State.RequestingUnitDrop)
-            || (state === State.RequestingUnitJoin)
-            || (state === State.RequestingUnitLaunchFlare)
-            || (state === State.RequestingUnitLaunchSilo)
-            || (state === State.RequestingUnitProduceUnit)
-            || (state === State.RequestingUnitSupply)
-            || (state === State.RequestingUnitSurface)
-            || (state === State.RequestingUnitWait);
     }
 }

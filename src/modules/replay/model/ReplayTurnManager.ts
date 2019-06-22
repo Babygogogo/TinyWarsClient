@@ -6,6 +6,7 @@ namespace TinyWars.Replay {
     import ProtoTypes           = Utility.ProtoTypes;
     import Lang                 = Utility.Lang;
     import FloatText            = Utility.FloatText;
+    import VisibilityHelpers    = Utility.VisibilityHelpers;
 
     export class ReplayTurnManager extends BaseWar.BwTurnManager {
         public serialize(): SerializedBwTurn {
@@ -35,6 +36,35 @@ namespace TinyWars.Replay {
             } else {
                 war.getUnitMap().forEachUnitOnMap(unit => (unit.getPlayerIndex() === playerIndex) && (unit.updateView()));
             }
+        }
+        protected _runPhaseResetVisionForCurrentPlayer(): void {
+            const playerIndex   = this.getPlayerIndexInTurn();
+            const war           = this._getWar();
+            war.getFogMap().resetMapFromPathsForPlayer(playerIndex);
+
+            this._resetFogForPlayerInTurn();
+        }
+        protected _runPhaseResetVisionForNextPlayer(): void {
+            const playerIndex   = this.getPlayerIndexInTurn();
+            const war           = this._getWar();
+            const fogMap        = war.getFogMap();
+            fogMap.resetMapFromTilesForPlayer(playerIndex);
+            fogMap.resetMapFromUnitsForPlayer(playerIndex);
+
+            this._resetFogForPlayerInTurn();
+        }
+
+        private _resetFogForPlayerInTurn(): void {
+            const war           = this._getWar();
+            const playerIndex   = this.getPlayerIndexInTurn();
+            war.getTileMap().forEachTile(tile => {
+                if (!VisibilityHelpers.checkIsTileVisibleToPlayer(war, tile.getGridIndex(), playerIndex)) {
+                    tile.setFogEnabled();
+                } else {
+                    tile.setFogDisabled();
+                }
+                tile.updateView();
+            });
         }
     }
 }

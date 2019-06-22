@@ -116,4 +116,32 @@ namespace TinyWars.BaseWar.BwHelpers {
             return true;
         }
     }
+
+    export function checkAreaHasGrid(area: AttackableArea | MovableArea, gridIndex: GridIndex): boolean {
+        const { x, y } = gridIndex;
+        return (!!area[x]) && (!!area[x][y]);
+    }
+
+    export function checkIsStateRequesting(state: Types.ActionPlannerState): boolean {
+        return (state === Types.ActionPlannerState.RequestingPlayerActivateSkill)
+            || (state === Types.ActionPlannerState.RequestingPlayerBeginTurn)
+            || (state === Types.ActionPlannerState.RequestingPlayerDeleteUnit)
+            || (state === Types.ActionPlannerState.RequestingPlayerEndTurn)
+            || (state === Types.ActionPlannerState.RequestingPlayerSurrender)
+            || (state === Types.ActionPlannerState.RequestingPlayerVoteForDraw)
+            || (state === Types.ActionPlannerState.RequestingPlayerProduceUnit)
+            || (state === Types.ActionPlannerState.RequestingUnitAttack)
+            || (state === Types.ActionPlannerState.RequestingUnitBeLoaded)
+            || (state === Types.ActionPlannerState.RequestingUnitBuildTile)
+            || (state === Types.ActionPlannerState.RequestingUnitCaptureTile)
+            || (state === Types.ActionPlannerState.RequestingUnitDive)
+            || (state === Types.ActionPlannerState.RequestingUnitDrop)
+            || (state === Types.ActionPlannerState.RequestingUnitJoin)
+            || (state === Types.ActionPlannerState.RequestingUnitLaunchFlare)
+            || (state === Types.ActionPlannerState.RequestingUnitLaunchSilo)
+            || (state === Types.ActionPlannerState.RequestingUnitProduceUnit)
+            || (state === Types.ActionPlannerState.RequestingUnitSupply)
+            || (state === Types.ActionPlannerState.RequestingUnitSurface)
+            || (state === Types.ActionPlannerState.RequestingUnitWait);
+    }
 }
