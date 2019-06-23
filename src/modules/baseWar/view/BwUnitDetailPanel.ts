@@ -22,6 +22,7 @@ namespace TinyWars.BaseWar {
         private _conUnitView            : eui.Group;
         private _labelName              : GameUi.UiLabel;
         private _labelHp                : GameUi.UiLabel;
+        private _labelMovement          : GameUi.UiLabel;
         private _labelProductionCost    : GameUi.UiLabel;
         private _labelFuel              : GameUi.UiLabel;
         private _labelFuelConsumption   : GameUi.UiLabel;
@@ -133,6 +134,7 @@ namespace TinyWars.BaseWar {
             const cfg                           = ConfigManager.getUnitTemplateCfg(configVersion, unitType);
             this._labelName.text                = Lang.getUnitName(unitType);
             this._labelHp.text                  = unit ? `${unit.getCurrentHp()} / ${unit.getMaxHp()}` : `${cfg.maxHp} / ${cfg.maxHp}`;
+            this._labelMovement.text            = `${cfg.moveRange} (${Lang.getMoveTypeName(cfg.moveType)})`;
             this._labelProductionCost.text      = `${cfg.productionCost}`;
             this._labelFuel.text                = unit ? `${unit.getCurrentFuel()} / ${unit.getMaxFuel()}` : `${cfg.maxFuel} / ${cfg.maxFuel}`;
             this._labelFuelConsumption.text     = `${cfg.fuelConsumptionPerTurn}${cfg.fuelConsumptionInDiving == null ? `` : ` (${cfg.fuelConsumptionInDiving})`}`;
@@ -191,13 +193,13 @@ namespace TinyWars.BaseWar {
                     playerIndex,
                 });
             }
-            // for (const defendTileType of ConfigManager.getTileTypesByCategory(configVersion, Types.TileCategory.Destroyable)) {
-            //     datas.push({
-            //         configVersion,
-            //         attackUnitType,
-            //         defendTileType,
-            //     });
-            // }
+            for (const targetTileType of ConfigManager.getTileTypesByCategory(configVersion, Types.TileCategory.Destroyable)) {
+                datas.push({
+                    configVersion,
+                    attackUnitType,
+                    targetTileType,
+                });
+            }
 
             return datas.sort(sorterForDataForList);
         }
@@ -210,7 +212,7 @@ namespace TinyWars.BaseWar {
     type DataForDamageRenderer = {
         configVersion   : number;
         attackUnitType  : UnitType;
-        playerIndex     : number;
+        playerIndex?    : number;
         targetUnitType? : UnitType;
         targetTileType? : TileType;
     }
@@ -219,6 +221,7 @@ namespace TinyWars.BaseWar {
         private _group                  : eui.Group;
         private _conView                : eui.Group;
         private _unitView               : WarMap.WarMapUnitView;
+        private _tileView               : GameUi.UiImage;
         private _labelPrimaryAttack     : GameUi.UiLabel;
         private _labelSecondaryAttack   : GameUi.UiLabel;
         private _labelPrimaryDefend     : GameUi.UiLabel;
@@ -252,6 +255,8 @@ namespace TinyWars.BaseWar {
             const attackUnitType    = data.attackUnitType;
             const targetUnitType    = data.targetUnitType;
             if (targetUnitType != null) {
+                this._unitView.visible = true;
+                this._tileView.visible = false;
                 this._unitView.update({
                     configVersion,
                     gridX           : 0,
@@ -274,8 +279,21 @@ namespace TinyWars.BaseWar {
                 this._labelSecondaryDefend.text = secondaryDefendDamage == null ? `--` : `${secondaryDefendDamage}`;
 
             } else {
-                const targetTileType = data.targetTileType;
+                this._unitView.visible = false;
+                this._tileView.visible = true;
 
+                const targetTileType            = data.targetTileType;
+                const attackCfg                 = ConfigManager.getDamageChartCfgs(configVersion, attackUnitType);
+                const targetCfg                 = ConfigManager.getTileTemplateCfgByType(configVersion, targetTileType)
+                const targetArmorType           = targetCfg.armorType;
+                const primaryAttackDamage       = attackCfg[targetArmorType][Types.WeaponType.Primary].damage;
+                const secondaryAttackDamage     = attackCfg[targetArmorType][Types.WeaponType.Secondary].damage;
+                const viewId                    = ConfigManager.getTileObjectViewId(ConfigManager.getTileObjectTypeByTileType(targetTileType), 0);
+                this._tileView.source           = ConfigManager.getTileObjectImageSource(viewId, 0, false);
+                this._labelPrimaryAttack.text   = primaryAttackDamage == null ? `--` : `${primaryAttackDamage}`;
+                this._labelSecondaryAttack.text = secondaryAttackDamage == null ? `--` : `${secondaryAttackDamage}`;
+                this._labelPrimaryDefend.text   = `--`;
+                this._labelSecondaryDefend.text = `--`;
             }
         }
     }

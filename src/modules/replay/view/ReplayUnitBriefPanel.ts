@@ -35,6 +35,9 @@ namespace TinyWars.Replay {
                 ReplayUnitBriefPanel._instance.close();
             }
         }
+        public static getInstance(): ReplayUnitBriefPanel {
+            return ReplayUnitBriefPanel._instance;
+        }
 
         public constructor() {
             super();
@@ -114,7 +117,12 @@ namespace TinyWars.Replay {
         }
 
         private _onCellTouchTap(e: egret.TouchEvent): void {
-            Utility.FloatText.show("TODO");
+            for (let i = 0; i < this._cellList.length; ++i) {
+                if (this._cellList[i] === e.currentTarget) {
+                    BaseWar.BwUnitDetailPanel.show({ unit: this._unitList[i] });
+                    return;
+                }
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -154,12 +162,20 @@ namespace TinyWars.Replay {
         }
 
         private _adjustPositionOnTouch(e: egret.TouchEvent): void {
-            if (e.target !== this._group) {
-                const isLeftSide = e.stageX >= StageManager.getStage().stageWidth / 2;
-                if (this._isLeftSide !== isLeftSide) {
-                    this._isLeftSide = isLeftSide;
-                    this._updatePosition();
+            const tileBriefPanel = ReplayTileBriefPanel.getInstance();
+            const unitBriefPanel = this;
+            let target = e.target as egret.DisplayObject;
+            while (target) {
+                if ((target) && ((target === tileBriefPanel) || (target === unitBriefPanel))) {
+                    return;
                 }
+                target = target.parent;
+            }
+
+            const isLeftSide = e.stageX >= StageManager.getStage().stageWidth / 2;
+            if (this._isLeftSide !== isLeftSide) {
+                this._isLeftSide = isLeftSide;
+                this._updatePosition();
             }
         }
 

@@ -35,6 +35,9 @@ namespace TinyWars.MultiCustomWar {
                 McwUnitBriefPanel._instance.close();
             }
         }
+        public static getInstance(): McwUnitBriefPanel {
+            return McwUnitBriefPanel._instance;
+        }
 
         public constructor() {
             super();
@@ -47,8 +50,8 @@ namespace TinyWars.MultiCustomWar {
             this._notifyListeners = [
                 { type: Notify.Type.GlobalTouchBegin,               callback: this._onNotifyGlobalTouchBegin },
                 { type: Notify.Type.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
-                { type: Notify.Type.BwCursorGridIndexChanged,      callback: this._onNotifyMcwCursorGridIndexChanged },
-                { type: Notify.Type.BwActionPlannerStateChanged,   callback: this._onNotifyMcwActionPlannerStateChanged },
+                { type: Notify.Type.BwCursorGridIndexChanged,       callback: this._onNotifyMcwCursorGridIndexChanged },
+                { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyMcwActionPlannerStateChanged },
                 { type: Notify.Type.McwWarMenuPanelOpened,          callback: this._onNotifyMcwWarMenuPanelOpened },
                 { type: Notify.Type.McwWarMenuPanelClosed,          callback: this._onNotifyMcwWarMenuPanelClosed },
                 { type: Notify.Type.McwProduceUnitPanelOpened,      callback: this._onNotifyMcwProduceUnitPanelOpened },
@@ -114,7 +117,12 @@ namespace TinyWars.MultiCustomWar {
         }
 
         private _onCellTouchTap(e: egret.TouchEvent): void {
-            Utility.FloatText.show("TODO");
+            for (let i = 0; i < this._cellList.length; ++i) {
+                if (this._cellList[i] === e.currentTarget) {
+                    BaseWar.BwUnitDetailPanel.show({ unit: this._unitList[i] });
+                    return;
+                }
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -157,12 +165,20 @@ namespace TinyWars.MultiCustomWar {
         }
 
         private _adjustPositionOnTouch(e: egret.TouchEvent): void {
-            if (e.target !== this._group) {
-                const isLeftSide = e.stageX >= StageManager.getStage().stageWidth / 2;
-                if (this._isLeftSide !== isLeftSide) {
-                    this._isLeftSide = isLeftSide;
-                    this._updatePosition();
+            const tileBriefPanel = McwTileBriefPanel.getInstance();
+            const unitBriefPanel = this;
+            let target = e.target as egret.DisplayObject;
+            while (target) {
+                if ((target) && ((target === tileBriefPanel) || (target === unitBriefPanel))) {
+                    return;
                 }
+                target = target.parent;
+            }
+
+            const isLeftSide = e.stageX >= StageManager.getStage().stageWidth / 2;
+            if (this._isLeftSide !== isLeftSide) {
+                this._isLeftSide = isLeftSide;
+                this._updatePosition();
             }
         }
 

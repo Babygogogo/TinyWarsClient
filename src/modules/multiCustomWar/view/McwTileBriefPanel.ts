@@ -45,6 +45,9 @@ namespace TinyWars.MultiCustomWar {
                 McwTileBriefPanel._instance.close();
             }
         }
+        public static getInstance(): McwTileBriefPanel {
+            return McwTileBriefPanel._instance;
+        }
 
         public constructor() {
             super();
@@ -57,8 +60,8 @@ namespace TinyWars.MultiCustomWar {
             this._notifyListeners = [
                 { type: Notify.Type.GlobalTouchBegin,               callback: this._onNotifyGlobalTouchBegin },
                 { type: Notify.Type.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
-                { type: Notify.Type.BwCursorGridIndexChanged,      callback: this._onNotifyMcwCursorGridIndexChanged },
-                { type: Notify.Type.BwActionPlannerStateChanged,   callback: this._onNotifyMcwActionPlannerStateChanged },
+                { type: Notify.Type.BwCursorGridIndexChanged,       callback: this._onNotifyMcwCursorGridIndexChanged },
+                { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyMcwActionPlannerStateChanged },
                 { type: Notify.Type.McwWarMenuPanelOpened,          callback: this._onNotifyMcwWarMenuPanelOpened },
                 { type: Notify.Type.McwWarMenuPanelClosed,          callback: this._onNotifyMcwWarMenuPanelClosed },
                 { type: Notify.Type.McwProduceUnitPanelOpened,      callback: this._onNotifyMcwProduceUnitPanelOpened },
@@ -163,9 +166,17 @@ namespace TinyWars.MultiCustomWar {
         }
 
         private _adjustPositionOnTouch(e: egret.TouchEvent): void {
-            if (e.target !== this._group) {
-                this._group.x = (e.stageX >= StageManager.getStage().stageWidth / 2) ? _LEFT_X : _RIGHT_X;
+            const tileBriefPanel = this;
+            const unitBriefPanel = McwUnitBriefPanel.getInstance();
+            let target = e.target as egret.DisplayObject;
+            while (target) {
+                if ((target) && ((target === tileBriefPanel) || (target === unitBriefPanel))) {
+                    return;
+                }
+                target = target.parent;
             }
+
+            this._group.x = (e.stageX >= StageManager.getStage().stageWidth / 2) ? _LEFT_X : _RIGHT_X;
         }
     }
 }

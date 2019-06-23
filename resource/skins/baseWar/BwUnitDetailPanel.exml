@@ -14,7 +14,11 @@
                     <GameUi:UiLabel text="HP:" size="18" textColor="0xFFFFFF" y="0" x="0" />
                     <GameUi:UiLabel id="_labelHp" text="100 / 100" size="18" textColor="0xFFFFFF" y="0" x="60" />
                 </e:Group>
-                <e:Group x="440" y="15">
+                <e:Group x="300" y="15">
+                    <GameUi:UiLabel text="移动力:" size="18" textColor="0xFFFFFF" y="0" x="0" />
+                    <GameUi:UiLabel id="_labelMovement" text="9 (步兵)" size="18" textColor="0xFFFFFF" y="0" x="60" />
+                </e:Group>
+                <e:Group x="460" y="15">
                     <GameUi:UiLabel text="造价:" size="18" textColor="0xFFFFFF" y="0" x="0" />
                     <GameUi:UiLabel id="_labelProductionCost" text="10000" size="18" textColor="0xFFFFFF" y="0" x="60" />
                 </e:Group>
@@ -22,11 +26,11 @@
                     <GameUi:UiLabel text="燃料:" size="18" textColor="0xFFFFFF" y="0" x="0" />
                     <GameUi:UiLabel id="_labelFuel" text="100 / 100" size="18" textColor="0xFFFFFF" y="0" x="60" />
                 </e:Group>
-                <e:Group x="290" y="45">
+                <e:Group x="300" y="45">
                     <GameUi:UiLabel text="每回合消耗:" size="18" textColor="0xFFFFFF" y="0" x="0" />
                     <GameUi:UiLabel id="_labelFuelConsumption" text="9" size="18" textColor="0xFFFFFF" y="0" x="100" />
                 </e:Group>
-                <e:Group x="440" y="45">
+                <e:Group x="460" y="45">
                     <GameUi:UiLabel text="耗尽后坠毁:" size="18" textColor="0xFFFFFF" y="0" x="0" />
                     <GameUi:UiLabel id="_labelDestroyOnOutOfFuel" text="是" size="18" textColor="0xFFFFFF" y="0" x="100" />
                 </e:Group>
@@ -43,11 +47,11 @@
                     <GameUi:UiLabel text="建造材料数:" size="18" textColor="0xFFFFFF" y="0" x="0" />
                     <GameUi:UiLabel id="_labelMaterial" text="9 / 9" size="18" textColor="0xFFFFFF" y="0" x="100" />
                 </e:Group>
-                <e:Group x="290" y="75">
+                <e:Group x="300" y="75">
                     <GameUi:UiLabel text="攻击范围:" size="18" textColor="0xFFFFFF" y="0" x="0" />
                     <GameUi:UiLabel id="_labelAttackRange" text="1 - 9" size="18" textColor="0xFFFFFF" y="0" x="90" />
                 </e:Group>
-                <e:Group x="440" y="75">
+                <e:Group x="460" y="75">
                     <GameUi:UiLabel text="移动后攻击:" size="18" textColor="0xFFFFFF" y="0" x="0" />
                     <GameUi:UiLabel id="_labelAttackAfterMove" text="是" size="18" textColor="0xFFFFFF" y="0" x="100" />
                 </e:Group>
@@ -67,12 +71,14 @@
                     </e:Group>
                     <GameUi:UiScrollList id="_listDamageChart" y="40" scaleX="1" scaleY="1" height="180" left="0"
                                          right="0">
-                        <e:List>
+                        <e:List x="-1">
                             <e:itemRendererSkinName>
                                 <e:Skin width="320" height="40">
                                     <e:Group id="_group" left="0" right="0" top="0" bottom="0">
                                         <e:Group id="_conView" y="10" scaleX="0.3" scaleY="0.3" x="20"
-                                                 touchChildren="false" touchEnabled="false" />
+                                                 touchChildren="false" touchEnabled="false">
+                                            <GameUi:UiImage id="_tileView" y="-72" />
+                                        </e:Group>
                                         <GameUi:UiLabel id="_labelPrimaryAttack" text="999" size="18"
                                                         textColor="0xffffff" verticalCenter="0" horizontalCenter="-85" />
                                         <GameUi:UiLabel id="_labelSecondaryAttack" text="999" size="18"

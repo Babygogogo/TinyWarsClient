@@ -45,6 +45,9 @@ namespace TinyWars.Replay {
                 ReplayTileBriefPanel._instance.close();
             }
         }
+        public static getInstance(): ReplayTileBriefPanel {
+            return ReplayTileBriefPanel._instance;
+        }
 
         public constructor() {
             super();
@@ -163,9 +166,17 @@ namespace TinyWars.Replay {
         }
 
         private _adjustPositionOnTouch(e: egret.TouchEvent): void {
-            if (e.target !== this._group) {
-                this._group.x = (e.stageX >= StageManager.getStage().stageWidth / 2) ? _LEFT_X : _RIGHT_X;
+            const tileBriefPanel = this;
+            const unitBriefPanel = ReplayUnitBriefPanel.getInstance();
+            let target = e.target as egret.DisplayObject;
+            while (target) {
+                if ((target) && ((target === tileBriefPanel) || (target === unitBriefPanel))) {
+                    return;
+                }
+                target = target.parent;
             }
+
+            this._group.x = (e.stageX >= StageManager.getStage().stageWidth / 2) ? _LEFT_X : _RIGHT_X;
         }
     }
 }

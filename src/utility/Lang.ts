@@ -691,6 +691,38 @@ namespace TinyWars.Utility.Lang {
             `中立玩家`,
             `Neutral`,
         ]],
+        [Type.B0112, [
+            `步兵`,
+            `Inf`,
+        ]],
+        [Type.B0113, [
+            `反坦克兵`,
+            `Mech`,
+        ]],
+        [Type.B0114, [
+            `履带`,
+            `Tank`,
+        ]],
+        [Type.B0115, [
+            `轮胎A`,
+            `TireA`,
+        ]],
+        [Type.B0116, [
+            `轮胎B`,
+            `TireB`,
+        ]],
+        [Type.B0117, [
+            `飞行`,
+            `Air`,
+        ]],
+        [Type.B0118, [
+            `航行`,
+            `Ship`,
+        ]],
+        [Type.B0119, [
+            `运输`,
+            `Trans`,
+        ]],
 
         [Type.B1000, [
             `平原`,
@@ -1340,6 +1372,20 @@ namespace TinyWars.Utility.Lang {
             case 14 : return getText(Type.B0075);
             case 15 : return getText(Type.B0076);
             default : return undefined;
+        }
+    }
+
+    export function getMoveTypeName(t: Types.MoveType): string {
+        switch (t) {
+            case Types.MoveType.Air         : return getText(Type.B0117);
+            case Types.MoveType.Infantry    : return getText(Type.B0112);
+            case Types.MoveType.Mech        : return getText(Type.B0113);
+            case Types.MoveType.Ship        : return getText(Type.B0118);
+            case Types.MoveType.Tank        : return getText(Type.B0114);
+            case Types.MoveType.TireA       : return getText(Type.B0115);
+            case Types.MoveType.TireB       : return getText(Type.B0116);
+            case Types.MoveType.Transport   : return getText(Type.B0119);
+            default                         : return undefined;
         }
     }
 }
