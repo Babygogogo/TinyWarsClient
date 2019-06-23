@@ -95,6 +95,9 @@ namespace TinyWars.BaseWar {
         public getWar(): BwWar | undefined {
             return this._war;
         }
+        public getConfigVersion(): number {
+            return this._configVersion;
+        }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for view.

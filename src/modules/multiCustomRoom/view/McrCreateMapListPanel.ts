@@ -134,7 +134,6 @@ namespace TinyWars.MultiCustomRoom {
             const datas: Types.UnitViewData[] = [];
 
             let index  = 0;
-            let unitId = 0;
             for (let y = 0; y < mapHeight; ++y) {
                 for (let x = 0; x < mapWidth; ++x) {
                     const viewId = unitViewIds[index];
@@ -145,9 +144,7 @@ namespace TinyWars.MultiCustomRoom {
                             gridX        : x,
                             gridY        : y,
                             viewId       : viewId,
-                            unitId       : unitId,
                         });
-                        ++unitId;
                     }
                 }
             }

@@ -236,8 +236,6 @@ namespace TinyWars.Utility.Types {
         gridY: number;
 
         viewId: number;
-
-        unitId: number;
     }
 
     export type MovableArea = {
@@ -348,7 +346,7 @@ namespace TinyWars.Utility.Types {
     }
 
     export const enum TileCategory {
-        None,              /* 0 */            All,               /* 1 */            LoadableForSeaTransports, /* 2 */
+        None,          /* 0 */              All,               /* 1 */          LoadableForSeaTransports, /* 2 */   Destroyable,    /* 3 */
     }
 
     export const enum ArmorType {

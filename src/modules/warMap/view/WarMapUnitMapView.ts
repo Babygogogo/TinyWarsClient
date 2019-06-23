@@ -54,7 +54,7 @@ namespace TinyWars.WarMap {
             unitViews.sort((a, b): number => {
                 const dataA = a.getData();
                 const dataB = b.getData();
-                return dataA.gridY !== dataB.gridY ? dataA.gridY - dataB.gridY : dataA.unitId - dataB.unitId;
+                return dataA.gridY !== dataB.gridY ? dataA.gridY - dataB.gridY : dataA.gridX - dataB.gridY;
             })
 
             for (let i = 0; i < unitsCount; ++i) {

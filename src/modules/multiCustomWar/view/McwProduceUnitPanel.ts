@@ -89,7 +89,13 @@ namespace TinyWars.MultiCustomWar {
             this._war.getActionPlanner().setStateIdle();
         }
         private _onTouchedBtnDetail(e: egret.TouchEvent): void {
-            Utility.FloatText.show("TODO!!");
+            const selectedIndex = (this._listUnit.viewport as eui.List).selectedIndex;
+            const data          = selectedIndex != null ? this._dataForList[selectedIndex] : null;
+            if (data) {
+                BaseWar.BwUnitDetailPanel.show({
+                    unit  : data.unit,
+                });
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
