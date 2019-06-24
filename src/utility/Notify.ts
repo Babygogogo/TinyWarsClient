@@ -27,8 +27,8 @@ namespace TinyWars.Utility.Notify {
         BwTurnPhaseCodeChanged,
         BwPlayerIndexInTurnChanged,
 
-        BaseWarPlayerFundChanged,
-        McwPlayerEnergyChanged,
+        BwPlayerFundChanged,
+        BwPlayerEnergyChanged,
 
         BwCursorTapped,
         BwCursorDragged,

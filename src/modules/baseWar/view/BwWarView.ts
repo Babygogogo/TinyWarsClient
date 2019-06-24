@@ -41,7 +41,7 @@ namespace TinyWars.BaseWar {
             this._fieldContainer.setContentScale(0, true);
         }
 
-        public startRunning(): void {
+        public startRunningView(): void {
             Notify.addEventListeners(this._notifyListeners, this);
             for (const listener of this._uiListeners) {
                 listener.ui.addEventListener(listener.eventType, listener.callback, this);

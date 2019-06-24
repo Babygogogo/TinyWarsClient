@@ -47,9 +47,9 @@ namespace TinyWars.MultiCustomWar {
         protected _onFirstOpened(): void {
             this._notifyListeners = [
                 { type: Notify.Type.BwTurnPhaseCodeChanged,        callback: this._onNotifyMcwTurnPhaseCodeChanged },
-                { type: Notify.Type.BaseWarPlayerFundChanged,           callback: this._onNotifyMcwPlayerFundChanged },
+                { type: Notify.Type.BwPlayerFundChanged,           callback: this._onNotifyMcwPlayerFundChanged },
                 { type: Notify.Type.BwPlayerIndexInTurnChanged,    callback: this._onNotifyMcwPlayerIndexInTurnChanged },
-                { type: Notify.Type.McwPlayerEnergyChanged,         callback: this._onNotifyMcwPlayerEnergyChanged },
+                { type: Notify.Type.BwPlayerEnergyChanged,         callback: this._onNotifyMcwPlayerEnergyChanged },
                 { type: Notify.Type.BwActionPlannerStateChanged,   callback: this._onNotifyMcwActionPlannerStateChanged },
             ];
             this._uiListeners = [

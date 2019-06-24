@@ -71,7 +71,7 @@ namespace TinyWars.BaseWar {
             return this;
         }
         public startRunningView(): BwWar {
-            this.getView().startRunning();
+            this.getView().startRunningView();
             this.getField().startRunningView();
 
             return this;

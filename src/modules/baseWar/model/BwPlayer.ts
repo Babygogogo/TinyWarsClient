@@ -34,7 +34,7 @@ namespace TinyWars.BaseWar {
         public setFund(fund: number): void {
             if (this._fund !== fund) {
                 this._fund = fund;
-                Notify.dispatch(Notify.Type.BaseWarPlayerFundChanged, this);
+                Notify.dispatch(Notify.Type.BwPlayerFundChanged, this);
             }
         }
         public getFund(): number {

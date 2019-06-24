@@ -46,10 +46,10 @@ namespace TinyWars.Replay {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.BaseWarPlayerFundChanged,           callback: this._onNotifyMcwPlayerFundChanged },
-                { type: Notify.Type.BwPlayerIndexInTurnChanged,    callback: this._onNotifyMcwPlayerIndexInTurnChanged },
-                { type: Notify.Type.McwPlayerEnergyChanged,         callback: this._onNotifyMcwPlayerEnergyChanged },
-                { type: Notify.Type.ReplayAutoReplayChanged,        callback: this._onNotifyReplayAutoReplayChanged },
+                { type: Notify.Type.BwPlayerFundChanged,        callback: this._onNotifyBwPlayerFundChanged },
+                { type: Notify.Type.BwPlayerIndexInTurnChanged, callback: this._onNotifyBwPlayerIndexInTurnChanged },
+                { type: Notify.Type.BwPlayerEnergyChanged,      callback: this._onNotifyBwPlayerEnergyChanged },
+                { type: Notify.Type.ReplayAutoReplayChanged,    callback: this._onNotifyReplayAutoReplayChanged },
             ];
             this._uiListeners = [
                 { ui: this._btnFastRewind,      callback: this._onTouchedBtnFastRewind },
@@ -73,13 +73,13 @@ namespace TinyWars.Replay {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyMcwPlayerFundChanged(e: egret.Event): void {
+        private _onNotifyBwPlayerFundChanged(e: egret.Event): void {
             this._updateLabelFund();
         }
-        private _onNotifyMcwPlayerIndexInTurnChanged(e: egret.Event): void {
+        private _onNotifyBwPlayerIndexInTurnChanged(e: egret.Event): void {
             this._updateView();
         }
-        private _onNotifyMcwPlayerEnergyChanged(e: egret.Event): void {
+        private _onNotifyBwPlayerEnergyChanged(e: egret.Event): void {
             this._updateLabelEnergy();
         }
         private _onNotifyReplayAutoReplayChanged(e: egret.Event): void {

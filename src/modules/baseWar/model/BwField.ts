@@ -13,12 +13,12 @@ namespace TinyWars.BaseWar {
         private _view               : BwFieldView;
 
         public async init(data: SerializedBwField, configVersion: number, mapIndexKey: Types.MapIndexKey): Promise<BwField> {
-            this._setFogMap(await (new (this._getFogMapClass())).init(data.fogMap, mapIndexKey));
-            this._setTileMap(await (new (this._getTileMapClass())).init(configVersion, mapIndexKey, data.tileMap));
-            this._setUnitMap(await (new (this._getUnitMapClass())).init(configVersion, mapIndexKey, data.unitMap));
-            this._setCursor(await (new (this._getCursorClass())).init(mapIndexKey));
-            this._setActionPlanner(await (new (this._getActionPlannerClass())).init(mapIndexKey));
-            this._setGridVisionEffect(await (new (this._getGridVisionEffectClass())).init());
+            this._setFogMap(await (this.getFogMap() || new (this._getFogMapClass())).init(data.fogMap, mapIndexKey));
+            this._setTileMap(await (this.getTileMap() || new (this._getTileMapClass())).init(configVersion, mapIndexKey, data.tileMap));
+            this._setUnitMap(await (this.getUnitMap() || new (this._getUnitMapClass())).init(configVersion, mapIndexKey, data.unitMap));
+            this._setCursor(await (this.getCursor() || new (this._getCursorClass())).init(mapIndexKey));
+            this._setActionPlanner(await (this.getActionPlanner() || new (this._getActionPlannerClass())).init(mapIndexKey));
+            this._setGridVisionEffect(await (this.getGridVisionEffect() || new (this._getGridVisionEffectClass())).init());
 
             this._view = this._view || new (this._getViewClass())();
             this._view.init(this);
