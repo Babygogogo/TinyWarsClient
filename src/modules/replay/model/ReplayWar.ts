@@ -1,20 +1,20 @@
 
 namespace TinyWars.Replay {
-    import Types            = Utility.Types;
-    import Notify           = Utility.Notify;
-    import FloatText        = Utility.FloatText;
-    import Lang             = Utility.Lang;
-    import Action           = Types.SerializedMcwAction;
-    import SerializedMcwWar = Types.SerializedBwWar;
+    import Types                = Utility.Types;
+    import Notify               = Utility.Notify;
+    import FloatText            = Utility.FloatText;
+    import Lang                 = Utility.Lang;
+    import WarActionContainer   = Types.WarActionContainer;
+    import SerializedWar        = Types.SerializedBwWar;
 
     export class ReplayWar extends BaseWar.BwWar {
-        private _executedActions        : Action[];
+        private _executedActions        : WarActionContainer[];
 
         private _isAutoReplay                   = false;
         private _checkPointIdsForNextActionId   = new Map<number, number>();
-        private _warDatasForCheckPointId        = new Map<number, SerializedMcwWar>();
+        private _warDatasForCheckPointId        = new Map<number, SerializedWar>();
 
-        public async init(data: SerializedMcwWar): Promise<ReplayWar> {
+        public async init(data: SerializedWar): Promise<ReplayWar> {
             await super.init(data);
 
             this._executedActions       = data.executedActions;
@@ -30,7 +30,7 @@ namespace TinyWars.Replay {
             return ReplayWarView;
         }
 
-        public serialize(): SerializedMcwWar {
+        public serialize(): SerializedWar {
             const mapIndexKey = this.getMapIndexKey();
             return {
                 warId                   : this.getWarId(),
@@ -83,10 +83,10 @@ namespace TinyWars.Replay {
             this._checkPointIdsForNextActionId.set(nextActionId, checkPointId);
         }
 
-        public getWarData(checkPointId: number): SerializedMcwWar {
+        public getWarData(checkPointId: number): SerializedWar {
             return this._warDatasForCheckPointId.get(checkPointId);
         }
-        public setWarData(checkPointId: number, warData: SerializedMcwWar): void {
+        public setWarData(checkPointId: number, warData: SerializedWar): void {
             this._warDatasForCheckPointId.set(checkPointId, warData);
         }
 
@@ -149,7 +149,7 @@ namespace TinyWars.Replay {
         public getTotalActionsCount(): number {
             return this._executedActions.length;
         }
-        public getNextAction(): Action {
+        public getNextAction(): WarActionContainer {
             return this._executedActions[this.getNextActionId()];
         }
     }

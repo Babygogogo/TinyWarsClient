@@ -9,8 +9,8 @@ namespace TinyWars.MultiCustomWar.McwModel {
     import VisibilityHelpers    = Utility.VisibilityHelpers;
     import Lang                 = Utility.Lang;
     import FloatText            = Utility.FloatText;
-    import ActionContainer      = ProtoTypes.IActionContainer;
-    import ActionCodes          = Network.Codes;
+    import WarActionCodes       = Utility.WarActionCodes;
+    import WarActionContainer   = ProtoTypes.IWarActionContainer;
     import AlertPanel           = Common.AlertPanel;
     import GridIndex            = Types.GridIndex;
     import SerializedMcwTile    = Types.SerializedBwTile;
@@ -19,30 +19,30 @@ namespace TinyWars.MultiCustomWar.McwModel {
     import MovePath             = Types.MovePath;
     import TileType             = Types.TileType;
 
-    const _EXECUTORS = new Map<ActionCodes, (war: McwWar, data: ActionContainer) => Promise<void>>([
-        [ActionCodes.S_McwPlayerBeginTurn,      _executeMcwPlayerBeginTurn],
-        [ActionCodes.S_McwPlayerDeleteUnit,     _executeMcwPlayerDeleteUnit],
-        [ActionCodes.S_McwPlayerEndTurn,        _executeMcwPlayerEndTurn],
-        [ActionCodes.S_McwPlayerProduceUnit,    _executeMcwPlayerProduceUnit],
-        [ActionCodes.S_McwPlayerSurrender,      _executeMcwPlayerSurrender],
-        [ActionCodes.S_McwPlayerVoteForDraw,    _executeMcwPlayerVoteForDraw],
-        [ActionCodes.S_McwUnitAttack,           _executeMcwUnitAttack],
-        [ActionCodes.S_McwUnitBeLoaded,         _executeMcwUnitBeLoaded],
-        [ActionCodes.S_McwUnitBuildTile,        _executeMcwUnitBuildTile],
-        [ActionCodes.S_McwUnitCaptureTile,      _executeMcwUnitCaptureTile],
-        [ActionCodes.S_McwUnitDive,             _executeMcwUnitDive],
-        [ActionCodes.S_McwUnitDrop,             _executeMcwUnitDrop],
-        [ActionCodes.S_McwUnitJoin,             _executeMcwUnitJoin],
-        [ActionCodes.S_McwUnitLaunchFlare,      _executeMcwUnitLaunchFlare],
-        [ActionCodes.S_McwUnitLaunchSilo,       _executeMcwUnitLaunchSilo],
-        [ActionCodes.S_McwUnitProduceUnit,      _executeMcwUnitProduceUnit],
-        [ActionCodes.S_McwUnitSupply,           _executeMcwUnitSupply],
-        [ActionCodes.S_McwUnitSurface,          _executeMcwUnitSurface],
-        [ActionCodes.S_McwUnitWait,             _executeMcwUnitWait],
+    const _EXECUTORS = new Map<WarActionCodes, (war: McwWar, data: WarActionContainer) => Promise<void>>([
+        [WarActionCodes.WarActionPlayerBeginTurn,      _executeMcwPlayerBeginTurn],
+        [WarActionCodes.WarActionPlayerDeleteUnit,     _executeMcwPlayerDeleteUnit],
+        [WarActionCodes.WarActionPlayerEndTurn,        _executeMcwPlayerEndTurn],
+        [WarActionCodes.WarActionPlayerProduceUnit,    _executeMcwPlayerProduceUnit],
+        [WarActionCodes.WarActionPlayerSurrender,      _executeMcwPlayerSurrender],
+        [WarActionCodes.WarActionPlayerVoteForDraw,    _executeMcwPlayerVoteForDraw],
+        [WarActionCodes.WarActionUnitAttack,           _executeMcwUnitAttack],
+        [WarActionCodes.WarActionUnitBeLoaded,         _executeMcwUnitBeLoaded],
+        [WarActionCodes.WarActionUnitBuildTile,        _executeMcwUnitBuildTile],
+        [WarActionCodes.WarActionUnitCaptureTile,      _executeMcwUnitCaptureTile],
+        [WarActionCodes.WarActionUnitDive,             _executeMcwUnitDive],
+        [WarActionCodes.WarActionUnitDrop,             _executeMcwUnitDrop],
+        [WarActionCodes.WarActionUnitJoin,             _executeMcwUnitJoin],
+        [WarActionCodes.WarActionUnitLaunchFlare,      _executeMcwUnitLaunchFlare],
+        [WarActionCodes.WarActionUnitLaunchSilo,       _executeMcwUnitLaunchSilo],
+        [WarActionCodes.WarActionUnitProduceUnit,      _executeMcwUnitProduceUnit],
+        [WarActionCodes.WarActionUnitSupply,           _executeMcwUnitSupply],
+        [WarActionCodes.WarActionUnitSurface,          _executeMcwUnitSurface],
+        [WarActionCodes.WarActionUnitWait,             _executeMcwUnitWait],
     ]);
 
     let _war            : McwWar;
-    let _cachedActions  = new Array<ActionContainer>();
+    let _cachedActions  = new Array<WarActionContainer>();
 
     export function init(): void {
     }
@@ -148,69 +148,69 @@ namespace TinyWars.MultiCustomWar.McwModel {
     }
 
     export function updateOnPlayerBeginTurn(data: ProtoTypes.IS_McwPlayerBeginTurn): void {
-        _updateByActionContainer({ S_McwPlayerBeginTurn: data }, data.warId, data.actionId);
+        _updateByActionContainer(data.actionContainer, data.warId);
     }
     export function updateOnPlayerDeleteUnit(data: ProtoTypes.IS_McwPlayerDeleteUnit): void {
-        _updateByActionContainer({ S_McwPlayerDeleteUnit: data }, data.warId, data.actionId);
+        _updateByActionContainer(data.actionContainer, data.warId);
     }
     export function updateOnPlayerEndTurn(data: ProtoTypes.IS_McwPlayerEndTurn): void {
-        _updateByActionContainer({ S_McwPlayerEndTurn: data }, data.warId, data.actionId);
+        _updateByActionContainer(data.actionContainer, data.warId);
     }
     export function updateOnPlayerSurrender(data: ProtoTypes.IS_McwPlayerSurrender): void {
-        _updateByActionContainer({ S_McwPlayerSurrender: data }, data.warId, data.actionId);
+        _updateByActionContainer(data.actionContainer, data.warId);
     }
     export function updateOnPlayerVoteForDraw(data: ProtoTypes.IS_McwPlayerVoteForDraw): void {
-        _updateByActionContainer({ S_McwPlayerVoteForDraw: data }, data.warId, data.actionId);
+        _updateByActionContainer(data.actionContainer, data.warId);
     }
     export function updateOnPlayerProduceUnit(data: ProtoTypes.IS_McwPlayerProduceUnit): void {
-        _updateByActionContainer({ S_McwPlayerProduceUnit: data }, data.warId, data.actionId);
+        _updateByActionContainer(data.actionContainer, data.warId);
     }
     export function updateOnUnitAttack(data: ProtoTypes.IS_McwUnitAttack): void {
-        _updateByActionContainer({ S_McwUnitAttack: data }, data.warId, data.actionId);
+        _updateByActionContainer(data.actionContainer, data.warId);
     }
     export function updateOnUnitBeLoaded(data: ProtoTypes.IS_McwUnitBeLoaded): void {
-        _updateByActionContainer({ S_McwUnitBeLoaded: data }, data.warId, data.actionId);
+        _updateByActionContainer(data.actionContainer, data.warId);
     }
     export function updateOnUnitBuildTile(data: ProtoTypes.IS_McwUnitBuildTile): void {
-        _updateByActionContainer({ S_McwUnitBuildTile: data }, data.warId, data.actionId);
+        _updateByActionContainer(data.actionContainer, data.warId);
     }
     export function updateOnUnitCaptureTile(data: ProtoTypes.IS_McwUnitCaptureTile): void {
-        _updateByActionContainer({ S_McwUnitCaptureTile: data }, data.warId, data.actionId);
+        _updateByActionContainer(data.actionContainer, data.warId);
     }
     export function updateOnUnitDive(data: ProtoTypes.IS_McwUnitDive): void {
-        _updateByActionContainer({ S_McwUnitDive: data }, data.warId, data.actionId);
+        _updateByActionContainer(data.actionContainer, data.warId);
     }
     export function updateOnUnitDrop(data: ProtoTypes.IS_McwUnitDrop): void {
-        _updateByActionContainer({ S_McwUnitDrop: data }, data.warId, data.actionId);
+        _updateByActionContainer(data.actionContainer, data.warId);
     }
     export function updateOnUnitJoin(data: ProtoTypes.IS_McwUnitJoin): void {
-        _updateByActionContainer({ S_McwUnitJoin: data }, data.warId, data.actionId);
+        _updateByActionContainer(data.actionContainer, data.warId);
     }
     export function updateOnUnitLaunchFlare(data: ProtoTypes.IS_McwUnitLaunchFlare): void {
-        _updateByActionContainer({ S_McwUnitLaunchFlare: data }, data.warId, data.actionId);
+        _updateByActionContainer(data.actionContainer, data.warId);
     }
     export function updateOnUnitLaunchSilo(data: ProtoTypes.IS_McwUnitLaunchSilo): void {
-        _updateByActionContainer({ S_McwUnitLaunchSilo: data }, data.warId, data.actionId);
+        _updateByActionContainer(data.actionContainer, data.warId);
     }
     export function updateOnUnitProduceUnit(data: ProtoTypes.IS_McwUnitProduceUnit): void {
-        _updateByActionContainer({ S_McwUnitProduceUnit: data }, data.warId, data.actionId);
+        _updateByActionContainer(data.actionContainer, data.warId);
     }
     export function updateOnUnitSupply(data: ProtoTypes.IS_McwUnitSupply): void {
-        _updateByActionContainer({ S_McwUnitSupply: data }, data.warId, data.actionId);
+        _updateByActionContainer(data.actionContainer, data.warId);
     }
     export function updateOnUnitSurface(data: ProtoTypes.IS_McwUnitSurface): void {
-        _updateByActionContainer({ S_McwUnitSurface: data }, data.warId, data.actionId);
+        _updateByActionContainer(data.actionContainer, data.warId);
     }
     export function updateOnUnitWait(data: ProtoTypes.IS_McwUnitWait): void {
-        _updateByActionContainer({ S_McwUnitWait: data }, data.warId, data.actionId);
+        _updateByActionContainer(data.actionContainer, data.warId);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Util functions.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    function _updateByActionContainer(container: ActionContainer, warId: number, actionId: number): void {
+    function _updateByActionContainer(container: WarActionContainer, warId: number): void {
         if ((_war) && (_war.getWarId() === warId)) {
-            if (actionId !== _war.getNextActionId() + _cachedActions.length) {
+            if (container.actionId !== _war.getNextActionId() + _cachedActions.length) {
                 McwProxy.reqMcwPlayerSyncWar(_war, Types.SyncWarRequestType.ReconnectionRequest);
             } else {
                 _cachedActions.push(container);
@@ -224,7 +224,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         if ((container) && (_war.getIsRunning()) && (!_war.getIsEnded()) && (!_war.getIsExecutingAction())) {
             _war.setIsExecutingAction(true);
             _war.setNextActionId(_war.getNextActionId() + 1);
-            await _EXECUTORS.get(Helpers.getActionCode(container))(_war, container);
+            await _EXECUTORS.get(Helpers.getWarActionCode(container))(_war, container);
             _war.setIsExecutingAction(false);
 
             if (!_war.getPlayerLoggedIn().getIsAlive()) {
@@ -273,20 +273,20 @@ namespace TinyWars.MultiCustomWar.McwModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // The 'true' executors for war actions.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function _executeMcwPlayerBeginTurn(war: McwWar, data: ActionContainer): Promise<void> {
+    async function _executeMcwPlayerBeginTurn(war: McwWar, data: WarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
         FloatText.show(`${war.getPlayerInTurn().getNickname()} p${war.getPlayerIndexInTurn()}回合正式开始！！`);
 
-        await war.getTurnManager().endPhaseWaitBeginTurn(data.S_McwPlayerBeginTurn);
+        await war.getTurnManager().endPhaseWaitBeginTurn(data);
         actionPlanner.setStateIdle();
     }
 
-    async function _executeMcwPlayerDeleteUnit(war: McwWar, data: ActionContainer): Promise<void> {
+    async function _executeMcwPlayerDeleteUnit(war: McwWar, data: WarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action    = data.S_McwPlayerDeleteUnit;
+        const action    = data.WarActionPlayerDeleteUnit;
         const gridIndex = action.gridIndex as GridIndex;
         const focusUnit = war.getUnitMap().getUnitOnMap(gridIndex);
         if (focusUnit) {
@@ -299,7 +299,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         actionPlanner.setStateIdle();
     }
 
-    async function _executeMcwPlayerEndTurn(war: McwWar, data: ActionContainer): Promise<void> {
+    async function _executeMcwPlayerEndTurn(war: McwWar, data: WarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
         await war.getTurnManager().endPhaseMain();
@@ -311,11 +311,11 @@ namespace TinyWars.MultiCustomWar.McwModel {
         }
     }
 
-    async function _executeMcwPlayerProduceUnit(war: McwWar, data: ActionContainer): Promise<void> {
+    async function _executeMcwPlayerProduceUnit(war: McwWar, data: WarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action = data.S_McwPlayerProduceUnit;
+        const action = data.WarActionPlayerProduceUnit;
         updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const gridIndex     = action.gridIndex as GridIndex;
@@ -348,7 +348,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         actionPlanner.setStateIdle();
     }
 
-    async function _executeMcwPlayerSurrender(war: McwWar, data: ActionContainer): Promise<void> {
+    async function _executeMcwPlayerSurrender(war: McwWar, data: WarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
@@ -360,14 +360,14 @@ namespace TinyWars.MultiCustomWar.McwModel {
         actionPlanner.setStateIdle();
     }
 
-    async function _executeMcwPlayerVoteForDraw(war: McwWar, data: ActionContainer): Promise<void> {
+    async function _executeMcwPlayerVoteForDraw(war: McwWar, data: WarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
         const playerInTurn = war.getPlayerInTurn();
         playerInTurn.setHasVotedForDraw(true);
 
-        if (!data.S_McwPlayerVoteForDraw.isAgree) {
+        if (!data.WarActionPlayerVoteForDraw.isAgree) {
             FloatText.show(Lang.getFormatedText(Lang.Type.F0017, playerInTurn.getNickname()));
             war.setRemainingVotesForDraw(undefined);
         } else {
@@ -382,18 +382,18 @@ namespace TinyWars.MultiCustomWar.McwModel {
         actionPlanner.setStateIdle();
     }
 
-    async function _executeMcwUnitAttack(war: McwWar, data: ActionContainer): Promise<void> {
+    async function _executeMcwUnitAttack(war: McwWar, data: WarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action = data.S_McwUnitAttack;
+        const action = data.WarActionUnitAttack;
         updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path      = action.path as MovePath;
         const pathNodes = path.nodes;
         const unitMap   = war.getUnitMap();
         const attacker  = unitMap.getUnit(pathNodes[0], action.launchUnitId);
-        moveUnit(war, ActionCodes.S_McwUnitAttack, path, action.launchUnitId, path.fuelConsumption);
+        moveUnit(war, WarActionCodes.WarActionUnitAttack, path, action.launchUnitId, path.fuelConsumption);
         attacker.setState(UnitState.Actioned);
 
         if (path.isBlocked) {
@@ -484,11 +484,11 @@ namespace TinyWars.MultiCustomWar.McwModel {
         }
     }
 
-    async function _executeMcwUnitBeLoaded(war: McwWar, data: ActionContainer): Promise<void> {
+    async function _executeMcwUnitBeLoaded(war: McwWar, data: WarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action = data.S_McwUnitBeLoaded;
+        const action = data.WarActionUnitBeLoaded;
         updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path          = action.path as MovePath;
@@ -496,7 +496,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         const unitMap       = war.getUnitMap();
         const focusUnit     = unitMap.getUnit(pathNodes[0], action.launchUnitId);
         const loaderUnit    = path.isBlocked ? undefined : unitMap.getUnitOnMap(pathNodes[pathNodes.length - 1]);
-        moveUnit(war, ActionCodes.S_McwUnitBeLoaded, path, action.launchUnitId, path.fuelConsumption);
+        moveUnit(war, WarActionCodes.WarActionUnitBeLoaded, path, action.launchUnitId, path.fuelConsumption);
         focusUnit.setState(UnitState.Actioned);
         (loaderUnit) && (focusUnit.setLoaderUnitId(loaderUnit.getUnitId()));
 
@@ -513,17 +513,17 @@ namespace TinyWars.MultiCustomWar.McwModel {
         })
     }
 
-    async function _executeMcwUnitBuildTile(war: McwWar, data: ActionContainer): Promise<void> {
+    async function _executeMcwUnitBuildTile(war: McwWar, data: WarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action = data.S_McwUnitBuildTile;
+        const action = data.WarActionUnitBuildTile;
         updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path      = action.path as MovePath;
         const pathNodes = path.nodes;
         const focusUnit = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
-        moveUnit(war, ActionCodes.S_McwUnitBuildTile, path, action.launchUnitId, path.fuelConsumption);
+        moveUnit(war, WarActionCodes.WarActionUnitBuildTile, path, action.launchUnitId, path.fuelConsumption);
         focusUnit.setState(UnitState.Actioned);
 
         if (!path.isBlocked) {
@@ -559,17 +559,17 @@ namespace TinyWars.MultiCustomWar.McwModel {
         });
     }
 
-    async function _executeMcwUnitCaptureTile(war: McwWar, data: ActionContainer): Promise<void> {
+    async function _executeMcwUnitCaptureTile(war: McwWar, data: WarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action = data.S_McwUnitCaptureTile;
+        const action = data.WarActionUnitCaptureTile;
         updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path      = action.path as MovePath;
         const pathNodes = path.nodes;
         const focusUnit = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
-        moveUnit(war, ActionCodes.S_McwUnitCaptureTile, path, action.launchUnitId, path.fuelConsumption);
+        moveUnit(war, WarActionCodes.WarActionUnitCaptureTile, path, action.launchUnitId, path.fuelConsumption);
         focusUnit.setState(UnitState.Actioned);
 
         if (path.isBlocked) {
@@ -633,18 +633,18 @@ namespace TinyWars.MultiCustomWar.McwModel {
         }
     }
 
-    async function _executeMcwUnitDive(war: McwWar, data: ActionContainer): Promise<void> {
+    async function _executeMcwUnitDive(war: McwWar, data: WarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action = data.S_McwUnitDive;
+        const action = data.WarActionUnitDive;
         updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path          = action.path as MovePath;
         const pathNodes     = path.nodes;
         const focusUnit     = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
         const isSuccessful  = !path.isBlocked;
-        moveUnit(war, ActionCodes.S_McwUnitDive, path, action.launchUnitId, path.fuelConsumption);
+        moveUnit(war, WarActionCodes.WarActionUnitDive, path, action.launchUnitId, path.fuelConsumption);
         focusUnit.setState(UnitState.Actioned);
         (isSuccessful) && (focusUnit.setIsDiving(true));
 
@@ -672,11 +672,11 @@ namespace TinyWars.MultiCustomWar.McwModel {
         });
     }
 
-    async function _executeMcwUnitDrop(war: McwWar, data: ActionContainer): Promise<void> {
+    async function _executeMcwUnitDrop(war: McwWar, data: WarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action = data.S_McwUnitDrop;
+        const action = data.WarActionUnitDrop;
         updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path              = action.path as MovePath;
@@ -684,7 +684,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         const unitMap           = war.getUnitMap();
         const endingGridIndex   = pathNodes[pathNodes.length - 1];
         const focusUnit         = unitMap.getUnit(pathNodes[0], action.launchUnitId);
-        moveUnit(war, ActionCodes.S_McwUnitDrop, path, action.launchUnitId, path.fuelConsumption);
+        moveUnit(war, WarActionCodes.WarActionUnitDrop, path, action.launchUnitId, path.fuelConsumption);
         focusUnit.setState(UnitState.Actioned);
 
         const playerIndex           = focusUnit.getPlayerIndex();
@@ -739,11 +739,11 @@ namespace TinyWars.MultiCustomWar.McwModel {
         });
     }
 
-    async function _executeMcwUnitJoin(war: McwWar, data: ActionContainer): Promise<void> {
+    async function _executeMcwUnitJoin(war: McwWar, data: WarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action = data.S_McwUnitJoin;
+        const action = data.WarActionUnitJoin;
         updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path              = action.path as MovePath;
@@ -753,7 +753,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         const focusUnit         = unitMap.getUnit(pathNodes[0], action.launchUnitId);
         const targetUnit        = path.isBlocked ? undefined : unitMap.getUnitOnMap(endingGridIndex);
         (targetUnit) && (unitMap.removeUnitOnMap(endingGridIndex, false));
-        moveUnit(war, ActionCodes.S_McwUnitJoin, path, action.launchUnitId, path.fuelConsumption);
+        moveUnit(war, WarActionCodes.WarActionUnitJoin, path, action.launchUnitId, path.fuelConsumption);
         focusUnit.setState(UnitState.Actioned);
 
         if (targetUnit) {
@@ -819,17 +819,17 @@ namespace TinyWars.MultiCustomWar.McwModel {
         });
     }
 
-    async function _executeMcwUnitLaunchFlare(war: McwWar, data: ActionContainer): Promise<void> {
+    async function _executeMcwUnitLaunchFlare(war: McwWar, data: WarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action = data.S_McwUnitLaunchFlare;
+        const action = data.WarActionUnitLaunchFlare;
         updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path      = action.path as MovePath;
         const pathNodes = path.nodes;
         const focusUnit = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
-        moveUnit(war, ActionCodes.S_McwUnitLaunchFlare, path, action.launchUnitId, path.fuelConsumption);
+        moveUnit(war, WarActionCodes.WarActionUnitLaunchFlare, path, action.launchUnitId, path.fuelConsumption);
         focusUnit.setState(UnitState.Actioned);
 
         const isFlareSucceeded  = !path.isBlocked;
@@ -858,18 +858,18 @@ namespace TinyWars.MultiCustomWar.McwModel {
         });
     }
 
-    async function _executeMcwUnitLaunchSilo(war: McwWar, data: ActionContainer): Promise<void> {
+    async function _executeMcwUnitLaunchSilo(war: McwWar, data: WarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action = data.S_McwUnitLaunchSilo;
+        const action = data.WarActionUnitLaunchSilo;
         updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path      = action.path as MovePath;
         const pathNodes = path.nodes;
         const unitMap   = war.getUnitMap();
         const focusUnit = unitMap.getUnit(pathNodes[0], action.launchUnitId);
-        moveUnit(war, ActionCodes.S_McwUnitLaunchSilo, path, action.launchUnitId, path.fuelConsumption);
+        moveUnit(war, WarActionCodes.WarActionUnitLaunchSilo, path, action.launchUnitId, path.fuelConsumption);
         focusUnit.setState(UnitState.Actioned);
 
         if (path.isBlocked) {
@@ -918,18 +918,18 @@ namespace TinyWars.MultiCustomWar.McwModel {
         }
     }
 
-    async function _executeMcwUnitProduceUnit(war: McwWar, data: ActionContainer): Promise<void> {
+    async function _executeMcwUnitProduceUnit(war: McwWar, data: WarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action = data.S_McwUnitProduceUnit;
+        const action = data.WarActionUnitProduceUnit;
         updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path          = action.path as MovePath;
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
         const focusUnit     = unitMap.getUnit(pathNodes[0], action.launchUnitId);
-        moveUnit(war, ActionCodes.S_McwUnitProduceUnit, path, action.launchUnitId, path.fuelConsumption);
+        moveUnit(war, WarActionCodes.WarActionUnitProduceUnit, path, action.launchUnitId, path.fuelConsumption);
         focusUnit.setState(UnitState.Actioned);
 
         if (path.isBlocked) {
@@ -974,18 +974,18 @@ namespace TinyWars.MultiCustomWar.McwModel {
         }
     }
 
-    async function _executeMcwUnitSupply(war: McwWar, data: ActionContainer): Promise<void> {
+    async function _executeMcwUnitSupply(war: McwWar, data: WarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action = data.S_McwUnitSupply;
+        const action = data.WarActionUnitSupply;
         updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path      = action.path as MovePath;
         const pathNodes = path.nodes;
         const unitMap   = war.getUnitMap();
         const focusUnit = unitMap.getUnit(pathNodes[0], action.launchUnitId);
-        moveUnit(war, ActionCodes.S_McwUnitSupply, path, action.launchUnitId, path.fuelConsumption);
+        moveUnit(war, WarActionCodes.WarActionUnitSupply, path, action.launchUnitId, path.fuelConsumption);
         focusUnit.setState(UnitState.Actioned);
 
         if (path.isBlocked) {
@@ -1028,18 +1028,18 @@ namespace TinyWars.MultiCustomWar.McwModel {
         }
     }
 
-    async function _executeMcwUnitSurface(war: McwWar, data: ActionContainer): Promise<void> {
+    async function _executeMcwUnitSurface(war: McwWar, data: WarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action = data.S_McwUnitSurface;
+        const action = data.WarActionUnitSurface;
         updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path          = action.path as MovePath;
         const pathNodes     = path.nodes;
         const focusUnit     = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
         const isSuccessful  = !path.isBlocked;
-        moveUnit(war, ActionCodes.S_McwUnitSurface, path, action.launchUnitId, path.fuelConsumption);
+        moveUnit(war, WarActionCodes.WarActionUnitSurface, path, action.launchUnitId, path.fuelConsumption);
         focusUnit.setState(UnitState.Actioned);
         (isSuccessful) && (focusUnit.setIsDiving(false));
 
@@ -1067,17 +1067,17 @@ namespace TinyWars.MultiCustomWar.McwModel {
         });
     }
 
-    async function _executeMcwUnitWait(war: McwWar, data: ActionContainer): Promise<void> {
+    async function _executeMcwUnitWait(war: McwWar, data: WarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action = data.S_McwUnitWait;
+        const action = data.WarActionUnitWait;
         updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path      = action.path as MovePath;
         const pathNodes = path.nodes;
         const focusUnit = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
-        moveUnit(war, ActionCodes.S_McwUnitWait, path, action.launchUnitId, path.fuelConsumption);
+        moveUnit(war, WarActionCodes.WarActionUnitWait, path, action.launchUnitId, path.fuelConsumption);
         focusUnit.setState(UnitState.Actioned);
 
         return new Promise<void>(resolve => {
@@ -1141,10 +1141,10 @@ namespace TinyWars.MultiCustomWar.McwModel {
     function updateTilesAndUnitsBeforeExecutingAction(
         war     : McwWar,
         action  : {
-            actingTiles?    : ProtoTypes.ISerializedMcwTile[],
-            actingUnits?    : ProtoTypes.ISerializedMcwUnit[],
-            discoveredTiles?: ProtoTypes.ISerializedMcwTile[],
-            discoveredUnits?: ProtoTypes.ISerializedMcwUnit[],
+            actingTiles?    : ProtoTypes.ISerializedWarTile[],
+            actingUnits?    : ProtoTypes.ISerializedWarUnit[],
+            discoveredTiles?: ProtoTypes.ISerializedWarTile[],
+            discoveredUnits?: ProtoTypes.ISerializedWarUnit[],
         }
     ): void {
         addUnits(war, action.actingUnits as SerializedMcwUnit[] | undefined | null, false);
@@ -1153,7 +1153,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         updateTiles(war, action.discoveredTiles as SerializedMcwTile[] | undefined | null);
     }
 
-    function moveUnit(war: McwWar, actionCode: ActionCodes, revisedPath: MovePath, launchUnitId: number | null | undefined, fuelConsumption: number): void {
+    function moveUnit(war: McwWar, actionCode: WarActionCodes, revisedPath: MovePath, launchUnitId: number | null | undefined, fuelConsumption: number): void {
         const pathNodes             = revisedPath.nodes;
         const beginningGridIndex    = pathNodes[0];
         const fogMap                = war.getFogMap();
@@ -1161,7 +1161,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         const focusUnit             = unitMap.getUnit(beginningGridIndex, launchUnitId)!;
         const playerIndex           = focusUnit.getPlayerIndex();
         const shouldUpdateFogMap    = war.getPlayerLoggedIn().getTeamIndex() === focusUnit.getTeamIndex();
-        const isUnitBeLoaded        = (actionCode === ActionCodes.S_McwUnitBeLoaded) && (!revisedPath.isBlocked);
+        const isUnitBeLoaded        = (actionCode === WarActionCodes.WarActionUnitBeLoaded) && (!revisedPath.isBlocked);
         if (shouldUpdateFogMap) {
             fogMap.updateMapFromPathsByUnitAndPath(focusUnit, pathNodes);
         }

@@ -26,7 +26,7 @@ namespace TinyWars.Replay {
             };
         }
 
-        protected _runPhaseMain(data: ProtoTypes.IS_McwPlayerBeginTurn): void {
+        protected _runPhaseMain(data: ProtoTypes.IWarActionPlayerBeginTurn): void {
             const playerIndex   = this.getPlayerIndexInTurn();
             const war           = this._getWar() as ReplayWar;
             if (data.isDefeated) {

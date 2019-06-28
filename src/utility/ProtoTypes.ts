@@ -1429,1255 +1429,3745 @@ export declare class FullConfig implements IFullConfig {
     public toJSON(): { [k: string]: any };
 }
 
-/** Properties of a SerializedMcwTile. */
-export declare interface ISerializedMcwTile {
+/** Properties of a SerializedWarTile. */
+export declare interface ISerializedWarTile {
 
-    /** SerializedMcwTile gridX */
+    /** SerializedWarTile gridX */
     gridX?: (number|null);
 
-    /** SerializedMcwTile gridY */
+    /** SerializedWarTile gridY */
     gridY?: (number|null);
 
-    /** SerializedMcwTile baseViewId */
+    /** SerializedWarTile baseViewId */
     baseViewId?: (number|null);
 
-    /** SerializedMcwTile objectViewId */
+    /** SerializedWarTile objectViewId */
     objectViewId?: (number|null);
 
-    /** SerializedMcwTile currentHp */
+    /** SerializedWarTile currentHp */
     currentHp?: (number|null);
 
-    /** SerializedMcwTile currentBuildPoint */
+    /** SerializedWarTile currentBuildPoint */
     currentBuildPoint?: (number|null);
 
-    /** SerializedMcwTile currentCapturePoint */
+    /** SerializedWarTile currentCapturePoint */
     currentCapturePoint?: (number|null);
 }
 
-/** Represents a SerializedMcwTile. */
-export declare class SerializedMcwTile implements ISerializedMcwTile {
+/** Represents a SerializedWarTile. */
+export declare class SerializedWarTile implements ISerializedWarTile {
 
     /**
-     * Constructs a new SerializedMcwTile.
+     * Constructs a new SerializedWarTile.
      * @param [properties] Properties to set
      */
-    constructor(properties?: ISerializedMcwTile);
+    constructor(properties?: ISerializedWarTile);
 
-    /** SerializedMcwTile gridX. */
+    /** SerializedWarTile gridX. */
     public gridX: number;
 
-    /** SerializedMcwTile gridY. */
+    /** SerializedWarTile gridY. */
     public gridY: number;
 
-    /** SerializedMcwTile baseViewId. */
+    /** SerializedWarTile baseViewId. */
     public baseViewId: number;
 
-    /** SerializedMcwTile objectViewId. */
+    /** SerializedWarTile objectViewId. */
     public objectViewId: number;
 
-    /** SerializedMcwTile currentHp. */
+    /** SerializedWarTile currentHp. */
     public currentHp: number;
 
-    /** SerializedMcwTile currentBuildPoint. */
+    /** SerializedWarTile currentBuildPoint. */
     public currentBuildPoint: number;
 
-    /** SerializedMcwTile currentCapturePoint. */
+    /** SerializedWarTile currentCapturePoint. */
     public currentCapturePoint: number;
 
     /**
-     * Creates a new SerializedMcwTile instance using the specified properties.
+     * Creates a new SerializedWarTile instance using the specified properties.
      * @param [properties] Properties to set
-     * @returns SerializedMcwTile instance
+     * @returns SerializedWarTile instance
      */
-    public static create(properties?: ISerializedMcwTile): SerializedMcwTile;
+    public static create(properties?: ISerializedWarTile): SerializedWarTile;
 
     /**
-     * Encodes the specified SerializedMcwTile message. Does not implicitly {@link SerializedMcwTile.verify|verify} messages.
-     * @param message SerializedMcwTile message or plain object to encode
+     * Encodes the specified SerializedWarTile message. Does not implicitly {@link SerializedWarTile.verify|verify} messages.
+     * @param message SerializedWarTile message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encode(message: ISerializedMcwTile, writer?: protobuf.Writer): protobuf.Writer;
+    public static encode(message: ISerializedWarTile, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Encodes the specified SerializedMcwTile message, length delimited. Does not implicitly {@link SerializedMcwTile.verify|verify} messages.
-     * @param message SerializedMcwTile message or plain object to encode
+     * Encodes the specified SerializedWarTile message, length delimited. Does not implicitly {@link SerializedWarTile.verify|verify} messages.
+     * @param message SerializedWarTile message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encodeDelimited(message: ISerializedMcwTile, writer?: protobuf.Writer): protobuf.Writer;
+    public static encodeDelimited(message: ISerializedWarTile, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Decodes a SerializedMcwTile message from the specified reader or buffer.
+     * Decodes a SerializedWarTile message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
-     * @returns SerializedMcwTile
+     * @returns SerializedWarTile
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): SerializedMcwTile;
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): SerializedWarTile;
 
     /**
-     * Decodes a SerializedMcwTile message from the specified reader or buffer, length delimited.
+     * Decodes a SerializedWarTile message from the specified reader or buffer, length delimited.
      * @param reader Reader or buffer to decode from
-     * @returns SerializedMcwTile
+     * @returns SerializedWarTile
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): SerializedMcwTile;
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): SerializedWarTile;
 
     /**
-     * Verifies a SerializedMcwTile message.
+     * Verifies a SerializedWarTile message.
      * @param message Plain object to verify
      * @returns `null` if valid, otherwise the reason why it is not
      */
     public static verify(message: { [k: string]: any }): (string|null);
 
     /**
-     * Creates a SerializedMcwTile message from a plain object. Also converts values to their respective internal types.
+     * Creates a SerializedWarTile message from a plain object. Also converts values to their respective internal types.
      * @param object Plain object
-     * @returns SerializedMcwTile
+     * @returns SerializedWarTile
      */
-    public static fromObject(object: { [k: string]: any }): SerializedMcwTile;
+    public static fromObject(object: { [k: string]: any }): SerializedWarTile;
 
     /**
-     * Creates a plain object from a SerializedMcwTile message. Also converts values to other types if specified.
-     * @param message SerializedMcwTile
+     * Creates a plain object from a SerializedWarTile message. Also converts values to other types if specified.
+     * @param message SerializedWarTile
      * @param [options] Conversion options
      * @returns Plain object
      */
-    public static toObject(message: SerializedMcwTile, options?: protobuf.IConversionOptions): { [k: string]: any };
+    public static toObject(message: SerializedWarTile, options?: protobuf.IConversionOptions): { [k: string]: any };
 
     /**
-     * Converts this SerializedMcwTile to JSON.
+     * Converts this SerializedWarTile to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };
 }
 
-/** Properties of a SerializedMcwUnit. */
-export declare interface ISerializedMcwUnit {
+/** Properties of a SerializedWarUnit. */
+export declare interface ISerializedWarUnit {
 
-    /** SerializedMcwUnit gridX */
+    /** SerializedWarUnit gridX */
     gridX?: (number|null);
 
-    /** SerializedMcwUnit gridY */
+    /** SerializedWarUnit gridY */
     gridY?: (number|null);
 
-    /** SerializedMcwUnit viewId */
+    /** SerializedWarUnit viewId */
     viewId?: (number|null);
 
-    /** SerializedMcwUnit unitId */
+    /** SerializedWarUnit unitId */
     unitId?: (number|null);
 
-    /** SerializedMcwUnit state */
+    /** SerializedWarUnit state */
     state?: (number|null);
 
-    /** SerializedMcwUnit primaryWeaponCurrentAmmo */
+    /** SerializedWarUnit primaryWeaponCurrentAmmo */
     primaryWeaponCurrentAmmo?: (number|null);
 
-    /** SerializedMcwUnit currentHp */
+    /** SerializedWarUnit currentHp */
     currentHp?: (number|null);
 
-    /** SerializedMcwUnit isCapturingTile */
+    /** SerializedWarUnit isCapturingTile */
     isCapturingTile?: (boolean|null);
 
-    /** SerializedMcwUnit isDiving */
+    /** SerializedWarUnit isDiving */
     isDiving?: (boolean|null);
 
-    /** SerializedMcwUnit flareCurrentAmmo */
+    /** SerializedWarUnit flareCurrentAmmo */
     flareCurrentAmmo?: (number|null);
 
-    /** SerializedMcwUnit currentFuel */
+    /** SerializedWarUnit currentFuel */
     currentFuel?: (number|null);
 
-    /** SerializedMcwUnit currentBuildMaterial */
+    /** SerializedWarUnit currentBuildMaterial */
     currentBuildMaterial?: (number|null);
 
-    /** SerializedMcwUnit currentProduceMaterial */
+    /** SerializedWarUnit currentProduceMaterial */
     currentProduceMaterial?: (number|null);
 
-    /** SerializedMcwUnit currentPromotion */
+    /** SerializedWarUnit currentPromotion */
     currentPromotion?: (number|null);
 
-    /** SerializedMcwUnit isBuildingTile */
+    /** SerializedWarUnit isBuildingTile */
     isBuildingTile?: (boolean|null);
 
-    /** SerializedMcwUnit loaderUnitId */
+    /** SerializedWarUnit loaderUnitId */
     loaderUnitId?: (number|null);
 }
 
-/** Represents a SerializedMcwUnit. */
-export declare class SerializedMcwUnit implements ISerializedMcwUnit {
+/** Represents a SerializedWarUnit. */
+export declare class SerializedWarUnit implements ISerializedWarUnit {
 
     /**
-     * Constructs a new SerializedMcwUnit.
+     * Constructs a new SerializedWarUnit.
      * @param [properties] Properties to set
      */
-    constructor(properties?: ISerializedMcwUnit);
+    constructor(properties?: ISerializedWarUnit);
 
-    /** SerializedMcwUnit gridX. */
+    /** SerializedWarUnit gridX. */
     public gridX: number;
 
-    /** SerializedMcwUnit gridY. */
+    /** SerializedWarUnit gridY. */
     public gridY: number;
 
-    /** SerializedMcwUnit viewId. */
+    /** SerializedWarUnit viewId. */
     public viewId: number;
 
-    /** SerializedMcwUnit unitId. */
+    /** SerializedWarUnit unitId. */
     public unitId: number;
 
-    /** SerializedMcwUnit state. */
+    /** SerializedWarUnit state. */
     public state: number;
 
-    /** SerializedMcwUnit primaryWeaponCurrentAmmo. */
+    /** SerializedWarUnit primaryWeaponCurrentAmmo. */
     public primaryWeaponCurrentAmmo: number;
 
-    /** SerializedMcwUnit currentHp. */
+    /** SerializedWarUnit currentHp. */
     public currentHp: number;
 
-    /** SerializedMcwUnit isCapturingTile. */
+    /** SerializedWarUnit isCapturingTile. */
     public isCapturingTile: boolean;
 
-    /** SerializedMcwUnit isDiving. */
+    /** SerializedWarUnit isDiving. */
     public isDiving: boolean;
 
-    /** SerializedMcwUnit flareCurrentAmmo. */
+    /** SerializedWarUnit flareCurrentAmmo. */
     public flareCurrentAmmo: number;
 
-    /** SerializedMcwUnit currentFuel. */
+    /** SerializedWarUnit currentFuel. */
     public currentFuel: number;
 
-    /** SerializedMcwUnit currentBuildMaterial. */
+    /** SerializedWarUnit currentBuildMaterial. */
     public currentBuildMaterial: number;
 
-    /** SerializedMcwUnit currentProduceMaterial. */
+    /** SerializedWarUnit currentProduceMaterial. */
     public currentProduceMaterial: number;
 
-    /** SerializedMcwUnit currentPromotion. */
+    /** SerializedWarUnit currentPromotion. */
     public currentPromotion: number;
 
-    /** SerializedMcwUnit isBuildingTile. */
+    /** SerializedWarUnit isBuildingTile. */
     public isBuildingTile: boolean;
 
-    /** SerializedMcwUnit loaderUnitId. */
+    /** SerializedWarUnit loaderUnitId. */
     public loaderUnitId: number;
 
     /**
-     * Creates a new SerializedMcwUnit instance using the specified properties.
+     * Creates a new SerializedWarUnit instance using the specified properties.
      * @param [properties] Properties to set
-     * @returns SerializedMcwUnit instance
+     * @returns SerializedWarUnit instance
      */
-    public static create(properties?: ISerializedMcwUnit): SerializedMcwUnit;
+    public static create(properties?: ISerializedWarUnit): SerializedWarUnit;
 
     /**
-     * Encodes the specified SerializedMcwUnit message. Does not implicitly {@link SerializedMcwUnit.verify|verify} messages.
-     * @param message SerializedMcwUnit message or plain object to encode
+     * Encodes the specified SerializedWarUnit message. Does not implicitly {@link SerializedWarUnit.verify|verify} messages.
+     * @param message SerializedWarUnit message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encode(message: ISerializedMcwUnit, writer?: protobuf.Writer): protobuf.Writer;
+    public static encode(message: ISerializedWarUnit, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Encodes the specified SerializedMcwUnit message, length delimited. Does not implicitly {@link SerializedMcwUnit.verify|verify} messages.
-     * @param message SerializedMcwUnit message or plain object to encode
+     * Encodes the specified SerializedWarUnit message, length delimited. Does not implicitly {@link SerializedWarUnit.verify|verify} messages.
+     * @param message SerializedWarUnit message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encodeDelimited(message: ISerializedMcwUnit, writer?: protobuf.Writer): protobuf.Writer;
+    public static encodeDelimited(message: ISerializedWarUnit, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Decodes a SerializedMcwUnit message from the specified reader or buffer.
+     * Decodes a SerializedWarUnit message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
-     * @returns SerializedMcwUnit
+     * @returns SerializedWarUnit
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): SerializedMcwUnit;
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): SerializedWarUnit;
 
     /**
-     * Decodes a SerializedMcwUnit message from the specified reader or buffer, length delimited.
+     * Decodes a SerializedWarUnit message from the specified reader or buffer, length delimited.
      * @param reader Reader or buffer to decode from
-     * @returns SerializedMcwUnit
+     * @returns SerializedWarUnit
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): SerializedMcwUnit;
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): SerializedWarUnit;
 
     /**
-     * Verifies a SerializedMcwUnit message.
+     * Verifies a SerializedWarUnit message.
      * @param message Plain object to verify
      * @returns `null` if valid, otherwise the reason why it is not
      */
     public static verify(message: { [k: string]: any }): (string|null);
 
     /**
-     * Creates a SerializedMcwUnit message from a plain object. Also converts values to their respective internal types.
+     * Creates a SerializedWarUnit message from a plain object. Also converts values to their respective internal types.
      * @param object Plain object
-     * @returns SerializedMcwUnit
+     * @returns SerializedWarUnit
      */
-    public static fromObject(object: { [k: string]: any }): SerializedMcwUnit;
+    public static fromObject(object: { [k: string]: any }): SerializedWarUnit;
 
     /**
-     * Creates a plain object from a SerializedMcwUnit message. Also converts values to other types if specified.
-     * @param message SerializedMcwUnit
+     * Creates a plain object from a SerializedWarUnit message. Also converts values to other types if specified.
+     * @param message SerializedWarUnit
      * @param [options] Conversion options
      * @returns Plain object
      */
-    public static toObject(message: SerializedMcwUnit, options?: protobuf.IConversionOptions): { [k: string]: any };
+    public static toObject(message: SerializedWarUnit, options?: protobuf.IConversionOptions): { [k: string]: any };
 
     /**
-     * Converts this SerializedMcwUnit to JSON.
+     * Converts this SerializedWarUnit to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };
 }
 
-/** Properties of a SerializedMcwPlayer. */
-export declare interface ISerializedMcwPlayer {
+/** Properties of a SerializedWarPlayer. */
+export declare interface ISerializedWarPlayer {
 
-    /** SerializedMcwPlayer fund */
+    /** SerializedWarPlayer fund */
     fund?: (number|null);
 
-    /** SerializedMcwPlayer hasVotedForDraw */
+    /** SerializedWarPlayer hasVotedForDraw */
     hasVotedForDraw?: (boolean|null);
 
-    /** SerializedMcwPlayer isAlive */
+    /** SerializedWarPlayer isAlive */
     isAlive?: (boolean|null);
 
-    /** SerializedMcwPlayer playerIndex */
+    /** SerializedWarPlayer playerIndex */
     playerIndex?: (number|null);
 
-    /** SerializedMcwPlayer teamIndex */
+    /** SerializedWarPlayer teamIndex */
     teamIndex?: (number|null);
 
-    /** SerializedMcwPlayer userId */
+    /** SerializedWarPlayer userId */
     userId?: (number|null);
 
-    /** SerializedMcwPlayer nickname */
+    /** SerializedWarPlayer nickname */
     nickname?: (string|null);
 }
 
-/** Represents a SerializedMcwPlayer. */
-export declare class SerializedMcwPlayer implements ISerializedMcwPlayer {
+/** Represents a SerializedWarPlayer. */
+export declare class SerializedWarPlayer implements ISerializedWarPlayer {
 
     /**
-     * Constructs a new SerializedMcwPlayer.
+     * Constructs a new SerializedWarPlayer.
      * @param [properties] Properties to set
      */
-    constructor(properties?: ISerializedMcwPlayer);
+    constructor(properties?: ISerializedWarPlayer);
 
-    /** SerializedMcwPlayer fund. */
+    /** SerializedWarPlayer fund. */
     public fund: number;
 
-    /** SerializedMcwPlayer hasVotedForDraw. */
+    /** SerializedWarPlayer hasVotedForDraw. */
     public hasVotedForDraw: boolean;
 
-    /** SerializedMcwPlayer isAlive. */
+    /** SerializedWarPlayer isAlive. */
     public isAlive: boolean;
 
-    /** SerializedMcwPlayer playerIndex. */
+    /** SerializedWarPlayer playerIndex. */
     public playerIndex: number;
 
-    /** SerializedMcwPlayer teamIndex. */
+    /** SerializedWarPlayer teamIndex. */
     public teamIndex: number;
 
-    /** SerializedMcwPlayer userId. */
+    /** SerializedWarPlayer userId. */
     public userId: number;
 
-    /** SerializedMcwPlayer nickname. */
+    /** SerializedWarPlayer nickname. */
     public nickname: string;
 
     /**
-     * Creates a new SerializedMcwPlayer instance using the specified properties.
+     * Creates a new SerializedWarPlayer instance using the specified properties.
      * @param [properties] Properties to set
-     * @returns SerializedMcwPlayer instance
+     * @returns SerializedWarPlayer instance
      */
-    public static create(properties?: ISerializedMcwPlayer): SerializedMcwPlayer;
+    public static create(properties?: ISerializedWarPlayer): SerializedWarPlayer;
 
     /**
-     * Encodes the specified SerializedMcwPlayer message. Does not implicitly {@link SerializedMcwPlayer.verify|verify} messages.
-     * @param message SerializedMcwPlayer message or plain object to encode
+     * Encodes the specified SerializedWarPlayer message. Does not implicitly {@link SerializedWarPlayer.verify|verify} messages.
+     * @param message SerializedWarPlayer message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encode(message: ISerializedMcwPlayer, writer?: protobuf.Writer): protobuf.Writer;
+    public static encode(message: ISerializedWarPlayer, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Encodes the specified SerializedMcwPlayer message, length delimited. Does not implicitly {@link SerializedMcwPlayer.verify|verify} messages.
-     * @param message SerializedMcwPlayer message or plain object to encode
+     * Encodes the specified SerializedWarPlayer message, length delimited. Does not implicitly {@link SerializedWarPlayer.verify|verify} messages.
+     * @param message SerializedWarPlayer message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encodeDelimited(message: ISerializedMcwPlayer, writer?: protobuf.Writer): protobuf.Writer;
+    public static encodeDelimited(message: ISerializedWarPlayer, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Decodes a SerializedMcwPlayer message from the specified reader or buffer.
+     * Decodes a SerializedWarPlayer message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
-     * @returns SerializedMcwPlayer
+     * @returns SerializedWarPlayer
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): SerializedMcwPlayer;
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): SerializedWarPlayer;
 
     /**
-     * Decodes a SerializedMcwPlayer message from the specified reader or buffer, length delimited.
+     * Decodes a SerializedWarPlayer message from the specified reader or buffer, length delimited.
      * @param reader Reader or buffer to decode from
-     * @returns SerializedMcwPlayer
+     * @returns SerializedWarPlayer
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): SerializedMcwPlayer;
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): SerializedWarPlayer;
 
     /**
-     * Verifies a SerializedMcwPlayer message.
+     * Verifies a SerializedWarPlayer message.
      * @param message Plain object to verify
      * @returns `null` if valid, otherwise the reason why it is not
      */
     public static verify(message: { [k: string]: any }): (string|null);
 
     /**
-     * Creates a SerializedMcwPlayer message from a plain object. Also converts values to their respective internal types.
+     * Creates a SerializedWarPlayer message from a plain object. Also converts values to their respective internal types.
      * @param object Plain object
-     * @returns SerializedMcwPlayer
+     * @returns SerializedWarPlayer
      */
-    public static fromObject(object: { [k: string]: any }): SerializedMcwPlayer;
+    public static fromObject(object: { [k: string]: any }): SerializedWarPlayer;
 
     /**
-     * Creates a plain object from a SerializedMcwPlayer message. Also converts values to other types if specified.
-     * @param message SerializedMcwPlayer
+     * Creates a plain object from a SerializedWarPlayer message. Also converts values to other types if specified.
+     * @param message SerializedWarPlayer
      * @param [options] Conversion options
      * @returns Plain object
      */
-    public static toObject(message: SerializedMcwPlayer, options?: protobuf.IConversionOptions): { [k: string]: any };
+    public static toObject(message: SerializedWarPlayer, options?: protobuf.IConversionOptions): { [k: string]: any };
 
     /**
-     * Converts this SerializedMcwPlayer to JSON.
+     * Converts this SerializedWarPlayer to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };
 }
 
-/** Properties of a SerializedMcwTurn. */
-export declare interface ISerializedMcwTurn {
+/** Properties of a SerializedWarTurn. */
+export declare interface ISerializedWarTurn {
 
-    /** SerializedMcwTurn turnIndex */
+    /** SerializedWarTurn turnIndex */
     turnIndex?: (number|null);
 
-    /** SerializedMcwTurn playerIndex */
+    /** SerializedWarTurn playerIndex */
     playerIndex?: (number|null);
 
-    /** SerializedMcwTurn turnPhaseCode */
+    /** SerializedWarTurn turnPhaseCode */
     turnPhaseCode?: (number|null);
 
-    /** SerializedMcwTurn enterTurnTime */
+    /** SerializedWarTurn enterTurnTime */
     enterTurnTime?: (number|null);
 }
 
-/** Represents a SerializedMcwTurn. */
-export declare class SerializedMcwTurn implements ISerializedMcwTurn {
+/** Represents a SerializedWarTurn. */
+export declare class SerializedWarTurn implements ISerializedWarTurn {
 
     /**
-     * Constructs a new SerializedMcwTurn.
+     * Constructs a new SerializedWarTurn.
      * @param [properties] Properties to set
      */
-    constructor(properties?: ISerializedMcwTurn);
+    constructor(properties?: ISerializedWarTurn);
 
-    /** SerializedMcwTurn turnIndex. */
+    /** SerializedWarTurn turnIndex. */
     public turnIndex: number;
 
-    /** SerializedMcwTurn playerIndex. */
+    /** SerializedWarTurn playerIndex. */
     public playerIndex: number;
 
-    /** SerializedMcwTurn turnPhaseCode. */
+    /** SerializedWarTurn turnPhaseCode. */
     public turnPhaseCode: number;
 
-    /** SerializedMcwTurn enterTurnTime. */
+    /** SerializedWarTurn enterTurnTime. */
     public enterTurnTime: number;
 
     /**
-     * Creates a new SerializedMcwTurn instance using the specified properties.
+     * Creates a new SerializedWarTurn instance using the specified properties.
      * @param [properties] Properties to set
-     * @returns SerializedMcwTurn instance
+     * @returns SerializedWarTurn instance
      */
-    public static create(properties?: ISerializedMcwTurn): SerializedMcwTurn;
+    public static create(properties?: ISerializedWarTurn): SerializedWarTurn;
 
     /**
-     * Encodes the specified SerializedMcwTurn message. Does not implicitly {@link SerializedMcwTurn.verify|verify} messages.
-     * @param message SerializedMcwTurn message or plain object to encode
+     * Encodes the specified SerializedWarTurn message. Does not implicitly {@link SerializedWarTurn.verify|verify} messages.
+     * @param message SerializedWarTurn message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encode(message: ISerializedMcwTurn, writer?: protobuf.Writer): protobuf.Writer;
+    public static encode(message: ISerializedWarTurn, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Encodes the specified SerializedMcwTurn message, length delimited. Does not implicitly {@link SerializedMcwTurn.verify|verify} messages.
-     * @param message SerializedMcwTurn message or plain object to encode
+     * Encodes the specified SerializedWarTurn message, length delimited. Does not implicitly {@link SerializedWarTurn.verify|verify} messages.
+     * @param message SerializedWarTurn message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encodeDelimited(message: ISerializedMcwTurn, writer?: protobuf.Writer): protobuf.Writer;
+    public static encodeDelimited(message: ISerializedWarTurn, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Decodes a SerializedMcwTurn message from the specified reader or buffer.
+     * Decodes a SerializedWarTurn message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
-     * @returns SerializedMcwTurn
+     * @returns SerializedWarTurn
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): SerializedMcwTurn;
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): SerializedWarTurn;
 
     /**
-     * Decodes a SerializedMcwTurn message from the specified reader or buffer, length delimited.
+     * Decodes a SerializedWarTurn message from the specified reader or buffer, length delimited.
      * @param reader Reader or buffer to decode from
-     * @returns SerializedMcwTurn
+     * @returns SerializedWarTurn
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): SerializedMcwTurn;
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): SerializedWarTurn;
 
     /**
-     * Verifies a SerializedMcwTurn message.
+     * Verifies a SerializedWarTurn message.
      * @param message Plain object to verify
      * @returns `null` if valid, otherwise the reason why it is not
      */
     public static verify(message: { [k: string]: any }): (string|null);
 
     /**
-     * Creates a SerializedMcwTurn message from a plain object. Also converts values to their respective internal types.
+     * Creates a SerializedWarTurn message from a plain object. Also converts values to their respective internal types.
      * @param object Plain object
-     * @returns SerializedMcwTurn
+     * @returns SerializedWarTurn
      */
-    public static fromObject(object: { [k: string]: any }): SerializedMcwTurn;
+    public static fromObject(object: { [k: string]: any }): SerializedWarTurn;
 
     /**
-     * Creates a plain object from a SerializedMcwTurn message. Also converts values to other types if specified.
-     * @param message SerializedMcwTurn
+     * Creates a plain object from a SerializedWarTurn message. Also converts values to other types if specified.
+     * @param message SerializedWarTurn
      * @param [options] Conversion options
      * @returns Plain object
      */
-    public static toObject(message: SerializedMcwTurn, options?: protobuf.IConversionOptions): { [k: string]: any };
+    public static toObject(message: SerializedWarTurn, options?: protobuf.IConversionOptions): { [k: string]: any };
 
     /**
-     * Converts this SerializedMcwTurn to JSON.
+     * Converts this SerializedWarTurn to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };
 }
 
-/** Properties of a SerializedMcwTileMap. */
-export declare interface ISerializedMcwTileMap {
+/** Properties of a SerializedWarTileMap. */
+export declare interface ISerializedWarTileMap {
 
-    /** SerializedMcwTileMap tiles */
-    tiles?: (ISerializedMcwTile[]|null);
+    /** SerializedWarTileMap tiles */
+    tiles?: (ISerializedWarTile[]|null);
 }
 
-/** Represents a SerializedMcwTileMap. */
-export declare class SerializedMcwTileMap implements ISerializedMcwTileMap {
+/** Represents a SerializedWarTileMap. */
+export declare class SerializedWarTileMap implements ISerializedWarTileMap {
 
     /**
-     * Constructs a new SerializedMcwTileMap.
+     * Constructs a new SerializedWarTileMap.
      * @param [properties] Properties to set
      */
-    constructor(properties?: ISerializedMcwTileMap);
+    constructor(properties?: ISerializedWarTileMap);
 
-    /** SerializedMcwTileMap tiles. */
-    public tiles: ISerializedMcwTile[];
+    /** SerializedWarTileMap tiles. */
+    public tiles: ISerializedWarTile[];
 
     /**
-     * Creates a new SerializedMcwTileMap instance using the specified properties.
+     * Creates a new SerializedWarTileMap instance using the specified properties.
      * @param [properties] Properties to set
-     * @returns SerializedMcwTileMap instance
+     * @returns SerializedWarTileMap instance
      */
-    public static create(properties?: ISerializedMcwTileMap): SerializedMcwTileMap;
+    public static create(properties?: ISerializedWarTileMap): SerializedWarTileMap;
 
     /**
-     * Encodes the specified SerializedMcwTileMap message. Does not implicitly {@link SerializedMcwTileMap.verify|verify} messages.
-     * @param message SerializedMcwTileMap message or plain object to encode
+     * Encodes the specified SerializedWarTileMap message. Does not implicitly {@link SerializedWarTileMap.verify|verify} messages.
+     * @param message SerializedWarTileMap message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encode(message: ISerializedMcwTileMap, writer?: protobuf.Writer): protobuf.Writer;
+    public static encode(message: ISerializedWarTileMap, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Encodes the specified SerializedMcwTileMap message, length delimited. Does not implicitly {@link SerializedMcwTileMap.verify|verify} messages.
-     * @param message SerializedMcwTileMap message or plain object to encode
+     * Encodes the specified SerializedWarTileMap message, length delimited. Does not implicitly {@link SerializedWarTileMap.verify|verify} messages.
+     * @param message SerializedWarTileMap message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encodeDelimited(message: ISerializedMcwTileMap, writer?: protobuf.Writer): protobuf.Writer;
+    public static encodeDelimited(message: ISerializedWarTileMap, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Decodes a SerializedMcwTileMap message from the specified reader or buffer.
+     * Decodes a SerializedWarTileMap message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
-     * @returns SerializedMcwTileMap
+     * @returns SerializedWarTileMap
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): SerializedMcwTileMap;
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): SerializedWarTileMap;
 
     /**
-     * Decodes a SerializedMcwTileMap message from the specified reader or buffer, length delimited.
+     * Decodes a SerializedWarTileMap message from the specified reader or buffer, length delimited.
      * @param reader Reader or buffer to decode from
-     * @returns SerializedMcwTileMap
+     * @returns SerializedWarTileMap
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): SerializedMcwTileMap;
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): SerializedWarTileMap;
 
     /**
-     * Verifies a SerializedMcwTileMap message.
+     * Verifies a SerializedWarTileMap message.
      * @param message Plain object to verify
      * @returns `null` if valid, otherwise the reason why it is not
      */
     public static verify(message: { [k: string]: any }): (string|null);
 
     /**
-     * Creates a SerializedMcwTileMap message from a plain object. Also converts values to their respective internal types.
+     * Creates a SerializedWarTileMap message from a plain object. Also converts values to their respective internal types.
      * @param object Plain object
-     * @returns SerializedMcwTileMap
+     * @returns SerializedWarTileMap
      */
-    public static fromObject(object: { [k: string]: any }): SerializedMcwTileMap;
+    public static fromObject(object: { [k: string]: any }): SerializedWarTileMap;
 
     /**
-     * Creates a plain object from a SerializedMcwTileMap message. Also converts values to other types if specified.
-     * @param message SerializedMcwTileMap
+     * Creates a plain object from a SerializedWarTileMap message. Also converts values to other types if specified.
+     * @param message SerializedWarTileMap
      * @param [options] Conversion options
      * @returns Plain object
      */
-    public static toObject(message: SerializedMcwTileMap, options?: protobuf.IConversionOptions): { [k: string]: any };
+    public static toObject(message: SerializedWarTileMap, options?: protobuf.IConversionOptions): { [k: string]: any };
 
     /**
-     * Converts this SerializedMcwTileMap to JSON.
+     * Converts this SerializedWarTileMap to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };
 }
 
-/** Properties of a SerializedMcwUnitMap. */
-export declare interface ISerializedMcwUnitMap {
+/** Properties of a SerializedWarUnitMap. */
+export declare interface ISerializedWarUnitMap {
 
-    /** SerializedMcwUnitMap nextUnitId */
+    /** SerializedWarUnitMap nextUnitId */
     nextUnitId?: (number|null);
 
-    /** SerializedMcwUnitMap units */
-    units?: (ISerializedMcwUnit[]|null);
+    /** SerializedWarUnitMap units */
+    units?: (ISerializedWarUnit[]|null);
 }
 
-/** Represents a SerializedMcwUnitMap. */
-export declare class SerializedMcwUnitMap implements ISerializedMcwUnitMap {
+/** Represents a SerializedWarUnitMap. */
+export declare class SerializedWarUnitMap implements ISerializedWarUnitMap {
 
     /**
-     * Constructs a new SerializedMcwUnitMap.
+     * Constructs a new SerializedWarUnitMap.
      * @param [properties] Properties to set
      */
-    constructor(properties?: ISerializedMcwUnitMap);
+    constructor(properties?: ISerializedWarUnitMap);
 
-    /** SerializedMcwUnitMap nextUnitId. */
+    /** SerializedWarUnitMap nextUnitId. */
     public nextUnitId: number;
 
-    /** SerializedMcwUnitMap units. */
-    public units: ISerializedMcwUnit[];
+    /** SerializedWarUnitMap units. */
+    public units: ISerializedWarUnit[];
 
     /**
-     * Creates a new SerializedMcwUnitMap instance using the specified properties.
+     * Creates a new SerializedWarUnitMap instance using the specified properties.
      * @param [properties] Properties to set
-     * @returns SerializedMcwUnitMap instance
+     * @returns SerializedWarUnitMap instance
      */
-    public static create(properties?: ISerializedMcwUnitMap): SerializedMcwUnitMap;
+    public static create(properties?: ISerializedWarUnitMap): SerializedWarUnitMap;
 
     /**
-     * Encodes the specified SerializedMcwUnitMap message. Does not implicitly {@link SerializedMcwUnitMap.verify|verify} messages.
-     * @param message SerializedMcwUnitMap message or plain object to encode
+     * Encodes the specified SerializedWarUnitMap message. Does not implicitly {@link SerializedWarUnitMap.verify|verify} messages.
+     * @param message SerializedWarUnitMap message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encode(message: ISerializedMcwUnitMap, writer?: protobuf.Writer): protobuf.Writer;
+    public static encode(message: ISerializedWarUnitMap, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Encodes the specified SerializedMcwUnitMap message, length delimited. Does not implicitly {@link SerializedMcwUnitMap.verify|verify} messages.
-     * @param message SerializedMcwUnitMap message or plain object to encode
+     * Encodes the specified SerializedWarUnitMap message, length delimited. Does not implicitly {@link SerializedWarUnitMap.verify|verify} messages.
+     * @param message SerializedWarUnitMap message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encodeDelimited(message: ISerializedMcwUnitMap, writer?: protobuf.Writer): protobuf.Writer;
+    public static encodeDelimited(message: ISerializedWarUnitMap, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Decodes a SerializedMcwUnitMap message from the specified reader or buffer.
+     * Decodes a SerializedWarUnitMap message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
-     * @returns SerializedMcwUnitMap
+     * @returns SerializedWarUnitMap
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): SerializedMcwUnitMap;
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): SerializedWarUnitMap;
 
     /**
-     * Decodes a SerializedMcwUnitMap message from the specified reader or buffer, length delimited.
+     * Decodes a SerializedWarUnitMap message from the specified reader or buffer, length delimited.
      * @param reader Reader or buffer to decode from
-     * @returns SerializedMcwUnitMap
+     * @returns SerializedWarUnitMap
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): SerializedMcwUnitMap;
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): SerializedWarUnitMap;
 
     /**
-     * Verifies a SerializedMcwUnitMap message.
+     * Verifies a SerializedWarUnitMap message.
      * @param message Plain object to verify
      * @returns `null` if valid, otherwise the reason why it is not
      */
     public static verify(message: { [k: string]: any }): (string|null);
 
     /**
-     * Creates a SerializedMcwUnitMap message from a plain object. Also converts values to their respective internal types.
+     * Creates a SerializedWarUnitMap message from a plain object. Also converts values to their respective internal types.
      * @param object Plain object
-     * @returns SerializedMcwUnitMap
+     * @returns SerializedWarUnitMap
      */
-    public static fromObject(object: { [k: string]: any }): SerializedMcwUnitMap;
+    public static fromObject(object: { [k: string]: any }): SerializedWarUnitMap;
 
     /**
-     * Creates a plain object from a SerializedMcwUnitMap message. Also converts values to other types if specified.
-     * @param message SerializedMcwUnitMap
+     * Creates a plain object from a SerializedWarUnitMap message. Also converts values to other types if specified.
+     * @param message SerializedWarUnitMap
      * @param [options] Conversion options
      * @returns Plain object
      */
-    public static toObject(message: SerializedMcwUnitMap, options?: protobuf.IConversionOptions): { [k: string]: any };
+    public static toObject(message: SerializedWarUnitMap, options?: protobuf.IConversionOptions): { [k: string]: any };
 
     /**
-     * Converts this SerializedMcwUnitMap to JSON.
+     * Converts this SerializedWarUnitMap to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };
 }
 
-/** Properties of a SerializedMcwFogMapForPath. */
-export declare interface ISerializedMcwFogMapForPath {
+/** Properties of a SerializedWarFogMapForPath. */
+export declare interface ISerializedWarFogMapForPath {
 
-    /** SerializedMcwFogMapForPath playerIndex */
+    /** SerializedWarFogMapForPath playerIndex */
     playerIndex?: (number|null);
 
-    /** SerializedMcwFogMapForPath encodedMap */
+    /** SerializedWarFogMapForPath encodedMap */
     encodedMap?: (string|null);
 }
 
-/** Represents a SerializedMcwFogMapForPath. */
-export declare class SerializedMcwFogMapForPath implements ISerializedMcwFogMapForPath {
+/** Represents a SerializedWarFogMapForPath. */
+export declare class SerializedWarFogMapForPath implements ISerializedWarFogMapForPath {
 
     /**
-     * Constructs a new SerializedMcwFogMapForPath.
+     * Constructs a new SerializedWarFogMapForPath.
      * @param [properties] Properties to set
      */
-    constructor(properties?: ISerializedMcwFogMapForPath);
+    constructor(properties?: ISerializedWarFogMapForPath);
 
-    /** SerializedMcwFogMapForPath playerIndex. */
+    /** SerializedWarFogMapForPath playerIndex. */
     public playerIndex: number;
 
-    /** SerializedMcwFogMapForPath encodedMap. */
+    /** SerializedWarFogMapForPath encodedMap. */
     public encodedMap: string;
 
     /**
-     * Creates a new SerializedMcwFogMapForPath instance using the specified properties.
+     * Creates a new SerializedWarFogMapForPath instance using the specified properties.
      * @param [properties] Properties to set
-     * @returns SerializedMcwFogMapForPath instance
+     * @returns SerializedWarFogMapForPath instance
      */
-    public static create(properties?: ISerializedMcwFogMapForPath): SerializedMcwFogMapForPath;
+    public static create(properties?: ISerializedWarFogMapForPath): SerializedWarFogMapForPath;
 
     /**
-     * Encodes the specified SerializedMcwFogMapForPath message. Does not implicitly {@link SerializedMcwFogMapForPath.verify|verify} messages.
-     * @param message SerializedMcwFogMapForPath message or plain object to encode
+     * Encodes the specified SerializedWarFogMapForPath message. Does not implicitly {@link SerializedWarFogMapForPath.verify|verify} messages.
+     * @param message SerializedWarFogMapForPath message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encode(message: ISerializedMcwFogMapForPath, writer?: protobuf.Writer): protobuf.Writer;
+    public static encode(message: ISerializedWarFogMapForPath, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Encodes the specified SerializedMcwFogMapForPath message, length delimited. Does not implicitly {@link SerializedMcwFogMapForPath.verify|verify} messages.
-     * @param message SerializedMcwFogMapForPath message or plain object to encode
+     * Encodes the specified SerializedWarFogMapForPath message, length delimited. Does not implicitly {@link SerializedWarFogMapForPath.verify|verify} messages.
+     * @param message SerializedWarFogMapForPath message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encodeDelimited(message: ISerializedMcwFogMapForPath, writer?: protobuf.Writer): protobuf.Writer;
+    public static encodeDelimited(message: ISerializedWarFogMapForPath, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Decodes a SerializedMcwFogMapForPath message from the specified reader or buffer.
+     * Decodes a SerializedWarFogMapForPath message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
-     * @returns SerializedMcwFogMapForPath
+     * @returns SerializedWarFogMapForPath
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): SerializedMcwFogMapForPath;
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): SerializedWarFogMapForPath;
 
     /**
-     * Decodes a SerializedMcwFogMapForPath message from the specified reader or buffer, length delimited.
+     * Decodes a SerializedWarFogMapForPath message from the specified reader or buffer, length delimited.
      * @param reader Reader or buffer to decode from
-     * @returns SerializedMcwFogMapForPath
+     * @returns SerializedWarFogMapForPath
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): SerializedMcwFogMapForPath;
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): SerializedWarFogMapForPath;
 
     /**
-     * Verifies a SerializedMcwFogMapForPath message.
+     * Verifies a SerializedWarFogMapForPath message.
      * @param message Plain object to verify
      * @returns `null` if valid, otherwise the reason why it is not
      */
     public static verify(message: { [k: string]: any }): (string|null);
 
     /**
-     * Creates a SerializedMcwFogMapForPath message from a plain object. Also converts values to their respective internal types.
+     * Creates a SerializedWarFogMapForPath message from a plain object. Also converts values to their respective internal types.
      * @param object Plain object
-     * @returns SerializedMcwFogMapForPath
+     * @returns SerializedWarFogMapForPath
      */
-    public static fromObject(object: { [k: string]: any }): SerializedMcwFogMapForPath;
+    public static fromObject(object: { [k: string]: any }): SerializedWarFogMapForPath;
 
     /**
-     * Creates a plain object from a SerializedMcwFogMapForPath message. Also converts values to other types if specified.
-     * @param message SerializedMcwFogMapForPath
+     * Creates a plain object from a SerializedWarFogMapForPath message. Also converts values to other types if specified.
+     * @param message SerializedWarFogMapForPath
      * @param [options] Conversion options
      * @returns Plain object
      */
-    public static toObject(message: SerializedMcwFogMapForPath, options?: protobuf.IConversionOptions): { [k: string]: any };
+    public static toObject(message: SerializedWarFogMapForPath, options?: protobuf.IConversionOptions): { [k: string]: any };
 
     /**
-     * Converts this SerializedMcwFogMapForPath to JSON.
+     * Converts this SerializedWarFogMapForPath to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };
 }
 
-/** Properties of a SerializedMcwFogMap. */
-export declare interface ISerializedMcwFogMap {
+/** Properties of a SerializedWarFogMap. */
+export declare interface ISerializedWarFogMap {
 
-    /** SerializedMcwFogMap forceFogCode */
+    /** SerializedWarFogMap forceFogCode */
     forceFogCode?: (number|null);
 
-    /** SerializedMcwFogMap forceExpirePlayerIndex */
+    /** SerializedWarFogMap forceExpirePlayerIndex */
     forceExpirePlayerIndex?: (number|null);
 
-    /** SerializedMcwFogMap forceExpireTurnIndex */
+    /** SerializedWarFogMap forceExpireTurnIndex */
     forceExpireTurnIndex?: (number|null);
 
-    /** SerializedMcwFogMap mapsForPath */
-    mapsForPath?: (ISerializedMcwFogMapForPath[]|null);
+    /** SerializedWarFogMap mapsForPath */
+    mapsForPath?: (ISerializedWarFogMapForPath[]|null);
 }
 
-/** Represents a SerializedMcwFogMap. */
-export declare class SerializedMcwFogMap implements ISerializedMcwFogMap {
+/** Represents a SerializedWarFogMap. */
+export declare class SerializedWarFogMap implements ISerializedWarFogMap {
 
     /**
-     * Constructs a new SerializedMcwFogMap.
+     * Constructs a new SerializedWarFogMap.
      * @param [properties] Properties to set
      */
-    constructor(properties?: ISerializedMcwFogMap);
+    constructor(properties?: ISerializedWarFogMap);
 
-    /** SerializedMcwFogMap forceFogCode. */
+    /** SerializedWarFogMap forceFogCode. */
     public forceFogCode: number;
 
-    /** SerializedMcwFogMap forceExpirePlayerIndex. */
+    /** SerializedWarFogMap forceExpirePlayerIndex. */
     public forceExpirePlayerIndex: number;
 
-    /** SerializedMcwFogMap forceExpireTurnIndex. */
+    /** SerializedWarFogMap forceExpireTurnIndex. */
     public forceExpireTurnIndex: number;
 
-    /** SerializedMcwFogMap mapsForPath. */
-    public mapsForPath: ISerializedMcwFogMapForPath[];
+    /** SerializedWarFogMap mapsForPath. */
+    public mapsForPath: ISerializedWarFogMapForPath[];
 
     /**
-     * Creates a new SerializedMcwFogMap instance using the specified properties.
+     * Creates a new SerializedWarFogMap instance using the specified properties.
      * @param [properties] Properties to set
-     * @returns SerializedMcwFogMap instance
+     * @returns SerializedWarFogMap instance
      */
-    public static create(properties?: ISerializedMcwFogMap): SerializedMcwFogMap;
+    public static create(properties?: ISerializedWarFogMap): SerializedWarFogMap;
 
     /**
-     * Encodes the specified SerializedMcwFogMap message. Does not implicitly {@link SerializedMcwFogMap.verify|verify} messages.
-     * @param message SerializedMcwFogMap message or plain object to encode
+     * Encodes the specified SerializedWarFogMap message. Does not implicitly {@link SerializedWarFogMap.verify|verify} messages.
+     * @param message SerializedWarFogMap message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encode(message: ISerializedMcwFogMap, writer?: protobuf.Writer): protobuf.Writer;
+    public static encode(message: ISerializedWarFogMap, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Encodes the specified SerializedMcwFogMap message, length delimited. Does not implicitly {@link SerializedMcwFogMap.verify|verify} messages.
-     * @param message SerializedMcwFogMap message or plain object to encode
+     * Encodes the specified SerializedWarFogMap message, length delimited. Does not implicitly {@link SerializedWarFogMap.verify|verify} messages.
+     * @param message SerializedWarFogMap message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encodeDelimited(message: ISerializedMcwFogMap, writer?: protobuf.Writer): protobuf.Writer;
+    public static encodeDelimited(message: ISerializedWarFogMap, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Decodes a SerializedMcwFogMap message from the specified reader or buffer.
+     * Decodes a SerializedWarFogMap message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
-     * @returns SerializedMcwFogMap
+     * @returns SerializedWarFogMap
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): SerializedMcwFogMap;
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): SerializedWarFogMap;
 
     /**
-     * Decodes a SerializedMcwFogMap message from the specified reader or buffer, length delimited.
+     * Decodes a SerializedWarFogMap message from the specified reader or buffer, length delimited.
      * @param reader Reader or buffer to decode from
-     * @returns SerializedMcwFogMap
+     * @returns SerializedWarFogMap
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): SerializedMcwFogMap;
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): SerializedWarFogMap;
 
     /**
-     * Verifies a SerializedMcwFogMap message.
+     * Verifies a SerializedWarFogMap message.
      * @param message Plain object to verify
      * @returns `null` if valid, otherwise the reason why it is not
      */
     public static verify(message: { [k: string]: any }): (string|null);
 
     /**
-     * Creates a SerializedMcwFogMap message from a plain object. Also converts values to their respective internal types.
+     * Creates a SerializedWarFogMap message from a plain object. Also converts values to their respective internal types.
      * @param object Plain object
-     * @returns SerializedMcwFogMap
+     * @returns SerializedWarFogMap
      */
-    public static fromObject(object: { [k: string]: any }): SerializedMcwFogMap;
+    public static fromObject(object: { [k: string]: any }): SerializedWarFogMap;
 
     /**
-     * Creates a plain object from a SerializedMcwFogMap message. Also converts values to other types if specified.
-     * @param message SerializedMcwFogMap
+     * Creates a plain object from a SerializedWarFogMap message. Also converts values to other types if specified.
+     * @param message SerializedWarFogMap
      * @param [options] Conversion options
      * @returns Plain object
      */
-    public static toObject(message: SerializedMcwFogMap, options?: protobuf.IConversionOptions): { [k: string]: any };
+    public static toObject(message: SerializedWarFogMap, options?: protobuf.IConversionOptions): { [k: string]: any };
 
     /**
-     * Converts this SerializedMcwFogMap to JSON.
+     * Converts this SerializedWarFogMap to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };
 }
 
-/** Properties of a SerializedMcwField. */
-export declare interface ISerializedMcwField {
+/** Properties of a SerializedWarField. */
+export declare interface ISerializedWarField {
 
-    /** SerializedMcwField fogMap */
-    fogMap?: (ISerializedMcwFogMap|null);
+    /** SerializedWarField fogMap */
+    fogMap?: (ISerializedWarFogMap|null);
 
-    /** SerializedMcwField tileMap */
-    tileMap?: (ISerializedMcwTileMap|null);
+    /** SerializedWarField tileMap */
+    tileMap?: (ISerializedWarTileMap|null);
 
-    /** SerializedMcwField unitMap */
-    unitMap?: (ISerializedMcwUnitMap|null);
+    /** SerializedWarField unitMap */
+    unitMap?: (ISerializedWarUnitMap|null);
 }
 
-/** Represents a SerializedMcwField. */
-export declare class SerializedMcwField implements ISerializedMcwField {
+/** Represents a SerializedWarField. */
+export declare class SerializedWarField implements ISerializedWarField {
 
     /**
-     * Constructs a new SerializedMcwField.
+     * Constructs a new SerializedWarField.
      * @param [properties] Properties to set
      */
-    constructor(properties?: ISerializedMcwField);
+    constructor(properties?: ISerializedWarField);
 
-    /** SerializedMcwField fogMap. */
-    public fogMap?: (ISerializedMcwFogMap|null);
+    /** SerializedWarField fogMap. */
+    public fogMap?: (ISerializedWarFogMap|null);
 
-    /** SerializedMcwField tileMap. */
-    public tileMap?: (ISerializedMcwTileMap|null);
+    /** SerializedWarField tileMap. */
+    public tileMap?: (ISerializedWarTileMap|null);
 
-    /** SerializedMcwField unitMap. */
-    public unitMap?: (ISerializedMcwUnitMap|null);
+    /** SerializedWarField unitMap. */
+    public unitMap?: (ISerializedWarUnitMap|null);
 
     /**
-     * Creates a new SerializedMcwField instance using the specified properties.
+     * Creates a new SerializedWarField instance using the specified properties.
      * @param [properties] Properties to set
-     * @returns SerializedMcwField instance
+     * @returns SerializedWarField instance
      */
-    public static create(properties?: ISerializedMcwField): SerializedMcwField;
+    public static create(properties?: ISerializedWarField): SerializedWarField;
 
     /**
-     * Encodes the specified SerializedMcwField message. Does not implicitly {@link SerializedMcwField.verify|verify} messages.
-     * @param message SerializedMcwField message or plain object to encode
+     * Encodes the specified SerializedWarField message. Does not implicitly {@link SerializedWarField.verify|verify} messages.
+     * @param message SerializedWarField message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encode(message: ISerializedMcwField, writer?: protobuf.Writer): protobuf.Writer;
+    public static encode(message: ISerializedWarField, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Encodes the specified SerializedMcwField message, length delimited. Does not implicitly {@link SerializedMcwField.verify|verify} messages.
-     * @param message SerializedMcwField message or plain object to encode
+     * Encodes the specified SerializedWarField message, length delimited. Does not implicitly {@link SerializedWarField.verify|verify} messages.
+     * @param message SerializedWarField message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encodeDelimited(message: ISerializedMcwField, writer?: protobuf.Writer): protobuf.Writer;
+    public static encodeDelimited(message: ISerializedWarField, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Decodes a SerializedMcwField message from the specified reader or buffer.
+     * Decodes a SerializedWarField message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
-     * @returns SerializedMcwField
+     * @returns SerializedWarField
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): SerializedMcwField;
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): SerializedWarField;
 
     /**
-     * Decodes a SerializedMcwField message from the specified reader or buffer, length delimited.
+     * Decodes a SerializedWarField message from the specified reader or buffer, length delimited.
      * @param reader Reader or buffer to decode from
-     * @returns SerializedMcwField
+     * @returns SerializedWarField
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): SerializedMcwField;
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): SerializedWarField;
 
     /**
-     * Verifies a SerializedMcwField message.
+     * Verifies a SerializedWarField message.
      * @param message Plain object to verify
      * @returns `null` if valid, otherwise the reason why it is not
      */
     public static verify(message: { [k: string]: any }): (string|null);
 
     /**
-     * Creates a SerializedMcwField message from a plain object. Also converts values to their respective internal types.
+     * Creates a SerializedWarField message from a plain object. Also converts values to their respective internal types.
      * @param object Plain object
-     * @returns SerializedMcwField
+     * @returns SerializedWarField
      */
-    public static fromObject(object: { [k: string]: any }): SerializedMcwField;
+    public static fromObject(object: { [k: string]: any }): SerializedWarField;
 
     /**
-     * Creates a plain object from a SerializedMcwField message. Also converts values to other types if specified.
-     * @param message SerializedMcwField
+     * Creates a plain object from a SerializedWarField message. Also converts values to other types if specified.
+     * @param message SerializedWarField
      * @param [options] Conversion options
      * @returns Plain object
      */
-    public static toObject(message: SerializedMcwField, options?: protobuf.IConversionOptions): { [k: string]: any };
+    public static toObject(message: SerializedWarField, options?: protobuf.IConversionOptions): { [k: string]: any };
 
     /**
-     * Converts this SerializedMcwField to JSON.
+     * Converts this SerializedWarField to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };
 }
 
-/** Properties of a SerializedMcwWar. */
-export declare interface ISerializedMcwWar {
+/** Properties of a SerializedWar. */
+export declare interface ISerializedWar {
 
-    /** SerializedMcwWar warId */
+    /** SerializedWar warId */
     warId?: (number|null);
 
-    /** SerializedMcwWar configVersion */
+    /** SerializedWar configVersion */
     configVersion?: (number|null);
 
-    /** SerializedMcwWar mapName */
+    /** SerializedWar mapName */
     mapName?: (string|null);
 
-    /** SerializedMcwWar mapDesigner */
+    /** SerializedWar mapDesigner */
     mapDesigner?: (string|null);
 
-    /** SerializedMcwWar mapVersion */
+    /** SerializedWar mapVersion */
     mapVersion?: (number|null);
 
-    /** SerializedMcwWar warName */
+    /** SerializedWar warName */
     warName?: (string|null);
 
-    /** SerializedMcwWar warPassword */
+    /** SerializedWar warPassword */
     warPassword?: (string|null);
 
-    /** SerializedMcwWar warComment */
+    /** SerializedWar warComment */
     warComment?: (string|null);
 
-    /** SerializedMcwWar hasFogByDefault */
+    /** SerializedWar hasFogByDefault */
     hasFogByDefault?: (boolean|null);
 
-    /** SerializedMcwWar timeLimit */
+    /** SerializedWar timeLimit */
     timeLimit?: (number|null);
 
-    /** SerializedMcwWar initialFund */
+    /** SerializedWar initialFund */
     initialFund?: (number|null);
 
-    /** SerializedMcwWar incomeModifier */
+    /** SerializedWar incomeModifier */
     incomeModifier?: (number|null);
 
-    /** SerializedMcwWar initialEnergy */
+    /** SerializedWar initialEnergy */
     initialEnergy?: (number|null);
 
-    /** SerializedMcwWar energyGrowthModifier */
+    /** SerializedWar energyGrowthModifier */
     energyGrowthModifier?: (number|null);
 
-    /** SerializedMcwWar moveRangeModifier */
+    /** SerializedWar moveRangeModifier */
     moveRangeModifier?: (number|null);
 
-    /** SerializedMcwWar attackPowerModifier */
+    /** SerializedWar attackPowerModifier */
     attackPowerModifier?: (number|null);
 
-    /** SerializedMcwWar visionRangeModifier */
+    /** SerializedWar visionRangeModifier */
     visionRangeModifier?: (number|null);
 
-    /** SerializedMcwWar nextActionId */
+    /** SerializedWar nextActionId */
     nextActionId?: (number|null);
 
-    /** SerializedMcwWar remainingVotesForDraw */
+    /** SerializedWar remainingVotesForDraw */
     remainingVotesForDraw?: (number|null);
 
-    /** SerializedMcwWar executedActions */
-    executedActions?: (IActionContainer[]|null);
+    /** SerializedWar executedActions */
+    executedActions?: (IWarActionContainer[]|null);
 
-    /** SerializedMcwWar players */
-    players?: (ISerializedMcwPlayer[]|null);
+    /** SerializedWar players */
+    players?: (ISerializedWarPlayer[]|null);
 
-    /** SerializedMcwWar turn */
-    turn?: (ISerializedMcwTurn|null);
+    /** SerializedWar turn */
+    turn?: (ISerializedWarTurn|null);
 
-    /** SerializedMcwWar field */
-    field?: (ISerializedMcwField|null);
+    /** SerializedWar field */
+    field?: (ISerializedWarField|null);
 }
 
-/** Represents a SerializedMcwWar. */
-export declare class SerializedMcwWar implements ISerializedMcwWar {
+/** Represents a SerializedWar. */
+export declare class SerializedWar implements ISerializedWar {
 
     /**
-     * Constructs a new SerializedMcwWar.
+     * Constructs a new SerializedWar.
      * @param [properties] Properties to set
      */
-    constructor(properties?: ISerializedMcwWar);
+    constructor(properties?: ISerializedWar);
 
-    /** SerializedMcwWar warId. */
+    /** SerializedWar warId. */
     public warId: number;
 
-    /** SerializedMcwWar configVersion. */
+    /** SerializedWar configVersion. */
     public configVersion: number;
 
-    /** SerializedMcwWar mapName. */
+    /** SerializedWar mapName. */
     public mapName: string;
 
-    /** SerializedMcwWar mapDesigner. */
+    /** SerializedWar mapDesigner. */
     public mapDesigner: string;
 
-    /** SerializedMcwWar mapVersion. */
+    /** SerializedWar mapVersion. */
     public mapVersion: number;
 
-    /** SerializedMcwWar warName. */
+    /** SerializedWar warName. */
     public warName: string;
 
-    /** SerializedMcwWar warPassword. */
+    /** SerializedWar warPassword. */
     public warPassword: string;
 
-    /** SerializedMcwWar warComment. */
+    /** SerializedWar warComment. */
     public warComment: string;
 
-    /** SerializedMcwWar hasFogByDefault. */
+    /** SerializedWar hasFogByDefault. */
     public hasFogByDefault: boolean;
 
-    /** SerializedMcwWar timeLimit. */
+    /** SerializedWar timeLimit. */
     public timeLimit: number;
 
-    /** SerializedMcwWar initialFund. */
+    /** SerializedWar initialFund. */
     public initialFund: number;
 
-    /** SerializedMcwWar incomeModifier. */
+    /** SerializedWar incomeModifier. */
     public incomeModifier: number;
 
-    /** SerializedMcwWar initialEnergy. */
+    /** SerializedWar initialEnergy. */
     public initialEnergy: number;
 
-    /** SerializedMcwWar energyGrowthModifier. */
+    /** SerializedWar energyGrowthModifier. */
     public energyGrowthModifier: number;
 
-    /** SerializedMcwWar moveRangeModifier. */
+    /** SerializedWar moveRangeModifier. */
     public moveRangeModifier: number;
 
-    /** SerializedMcwWar attackPowerModifier. */
+    /** SerializedWar attackPowerModifier. */
     public attackPowerModifier: number;
 
-    /** SerializedMcwWar visionRangeModifier. */
+    /** SerializedWar visionRangeModifier. */
     public visionRangeModifier: number;
 
-    /** SerializedMcwWar nextActionId. */
+    /** SerializedWar nextActionId. */
     public nextActionId: number;
 
-    /** SerializedMcwWar remainingVotesForDraw. */
+    /** SerializedWar remainingVotesForDraw. */
     public remainingVotesForDraw: number;
 
-    /** SerializedMcwWar executedActions. */
-    public executedActions: IActionContainer[];
+    /** SerializedWar executedActions. */
+    public executedActions: IWarActionContainer[];
 
-    /** SerializedMcwWar players. */
-    public players: ISerializedMcwPlayer[];
+    /** SerializedWar players. */
+    public players: ISerializedWarPlayer[];
 
-    /** SerializedMcwWar turn. */
-    public turn?: (ISerializedMcwTurn|null);
+    /** SerializedWar turn. */
+    public turn?: (ISerializedWarTurn|null);
 
-    /** SerializedMcwWar field. */
-    public field?: (ISerializedMcwField|null);
+    /** SerializedWar field. */
+    public field?: (ISerializedWarField|null);
 
     /**
-     * Creates a new SerializedMcwWar instance using the specified properties.
+     * Creates a new SerializedWar instance using the specified properties.
      * @param [properties] Properties to set
-     * @returns SerializedMcwWar instance
+     * @returns SerializedWar instance
      */
-    public static create(properties?: ISerializedMcwWar): SerializedMcwWar;
+    public static create(properties?: ISerializedWar): SerializedWar;
 
     /**
-     * Encodes the specified SerializedMcwWar message. Does not implicitly {@link SerializedMcwWar.verify|verify} messages.
-     * @param message SerializedMcwWar message or plain object to encode
+     * Encodes the specified SerializedWar message. Does not implicitly {@link SerializedWar.verify|verify} messages.
+     * @param message SerializedWar message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encode(message: ISerializedMcwWar, writer?: protobuf.Writer): protobuf.Writer;
+    public static encode(message: ISerializedWar, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Encodes the specified SerializedMcwWar message, length delimited. Does not implicitly {@link SerializedMcwWar.verify|verify} messages.
-     * @param message SerializedMcwWar message or plain object to encode
+     * Encodes the specified SerializedWar message, length delimited. Does not implicitly {@link SerializedWar.verify|verify} messages.
+     * @param message SerializedWar message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encodeDelimited(message: ISerializedMcwWar, writer?: protobuf.Writer): protobuf.Writer;
+    public static encodeDelimited(message: ISerializedWar, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Decodes a SerializedMcwWar message from the specified reader or buffer.
+     * Decodes a SerializedWar message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
-     * @returns SerializedMcwWar
+     * @returns SerializedWar
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): SerializedMcwWar;
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): SerializedWar;
 
     /**
-     * Decodes a SerializedMcwWar message from the specified reader or buffer, length delimited.
+     * Decodes a SerializedWar message from the specified reader or buffer, length delimited.
      * @param reader Reader or buffer to decode from
-     * @returns SerializedMcwWar
+     * @returns SerializedWar
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): SerializedMcwWar;
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): SerializedWar;
 
     /**
-     * Verifies a SerializedMcwWar message.
+     * Verifies a SerializedWar message.
      * @param message Plain object to verify
      * @returns `null` if valid, otherwise the reason why it is not
      */
     public static verify(message: { [k: string]: any }): (string|null);
 
     /**
-     * Creates a SerializedMcwWar message from a plain object. Also converts values to their respective internal types.
+     * Creates a SerializedWar message from a plain object. Also converts values to their respective internal types.
      * @param object Plain object
-     * @returns SerializedMcwWar
+     * @returns SerializedWar
      */
-    public static fromObject(object: { [k: string]: any }): SerializedMcwWar;
+    public static fromObject(object: { [k: string]: any }): SerializedWar;
 
     /**
-     * Creates a plain object from a SerializedMcwWar message. Also converts values to other types if specified.
-     * @param message SerializedMcwWar
+     * Creates a plain object from a SerializedWar message. Also converts values to other types if specified.
+     * @param message SerializedWar
      * @param [options] Conversion options
      * @returns Plain object
      */
-    public static toObject(message: SerializedMcwWar, options?: protobuf.IConversionOptions): { [k: string]: any };
+    public static toObject(message: SerializedWar, options?: protobuf.IConversionOptions): { [k: string]: any };
 
     /**
-     * Converts this SerializedMcwWar to JSON.
+     * Converts this SerializedWar to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a WarUnitRepairData. */
+export declare interface IWarUnitRepairData {
+
+    /** WarUnitRepairData unitId */
+    unitId?: (number|null);
+
+    /** WarUnitRepairData repairAmount */
+    repairAmount?: (number|null);
+
+    /** WarUnitRepairData gridIndex */
+    gridIndex?: (IGridIndex|null);
+}
+
+/** Represents a WarUnitRepairData. */
+export declare class WarUnitRepairData implements IWarUnitRepairData {
+
+    /**
+     * Constructs a new WarUnitRepairData.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IWarUnitRepairData);
+
+    /** WarUnitRepairData unitId. */
+    public unitId: number;
+
+    /** WarUnitRepairData repairAmount. */
+    public repairAmount: number;
+
+    /** WarUnitRepairData gridIndex. */
+    public gridIndex?: (IGridIndex|null);
+
+    /**
+     * Creates a new WarUnitRepairData instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns WarUnitRepairData instance
+     */
+    public static create(properties?: IWarUnitRepairData): WarUnitRepairData;
+
+    /**
+     * Encodes the specified WarUnitRepairData message. Does not implicitly {@link WarUnitRepairData.verify|verify} messages.
+     * @param message WarUnitRepairData message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IWarUnitRepairData, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified WarUnitRepairData message, length delimited. Does not implicitly {@link WarUnitRepairData.verify|verify} messages.
+     * @param message WarUnitRepairData message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IWarUnitRepairData, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a WarUnitRepairData message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns WarUnitRepairData
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarUnitRepairData;
+
+    /**
+     * Decodes a WarUnitRepairData message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns WarUnitRepairData
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarUnitRepairData;
+
+    /**
+     * Verifies a WarUnitRepairData message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a WarUnitRepairData message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns WarUnitRepairData
+     */
+    public static fromObject(object: { [k: string]: any }): WarUnitRepairData;
+
+    /**
+     * Creates a plain object from a WarUnitRepairData message. Also converts values to other types if specified.
+     * @param message WarUnitRepairData
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: WarUnitRepairData, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this WarUnitRepairData to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a WarActionPlayerBeginTurn. */
+export declare interface IWarActionPlayerBeginTurn {
+
+    /** WarActionPlayerBeginTurn remainingFund */
+    remainingFund?: (number|null);
+
+    /** WarActionPlayerBeginTurn isDefeated */
+    isDefeated?: (boolean|null);
+
+    /** WarActionPlayerBeginTurn repairDataByTile */
+    repairDataByTile?: (IWarUnitRepairData[]|null);
+
+    /** WarActionPlayerBeginTurn repairDataByUnit */
+    repairDataByUnit?: (IWarUnitRepairData[]|null);
+}
+
+/** Represents a WarActionPlayerBeginTurn. */
+export declare class WarActionPlayerBeginTurn implements IWarActionPlayerBeginTurn {
+
+    /**
+     * Constructs a new WarActionPlayerBeginTurn.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IWarActionPlayerBeginTurn);
+
+    /** WarActionPlayerBeginTurn remainingFund. */
+    public remainingFund: number;
+
+    /** WarActionPlayerBeginTurn isDefeated. */
+    public isDefeated: boolean;
+
+    /** WarActionPlayerBeginTurn repairDataByTile. */
+    public repairDataByTile: IWarUnitRepairData[];
+
+    /** WarActionPlayerBeginTurn repairDataByUnit. */
+    public repairDataByUnit: IWarUnitRepairData[];
+
+    /**
+     * Creates a new WarActionPlayerBeginTurn instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns WarActionPlayerBeginTurn instance
+     */
+    public static create(properties?: IWarActionPlayerBeginTurn): WarActionPlayerBeginTurn;
+
+    /**
+     * Encodes the specified WarActionPlayerBeginTurn message. Does not implicitly {@link WarActionPlayerBeginTurn.verify|verify} messages.
+     * @param message WarActionPlayerBeginTurn message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IWarActionPlayerBeginTurn, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified WarActionPlayerBeginTurn message, length delimited. Does not implicitly {@link WarActionPlayerBeginTurn.verify|verify} messages.
+     * @param message WarActionPlayerBeginTurn message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IWarActionPlayerBeginTurn, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a WarActionPlayerBeginTurn message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns WarActionPlayerBeginTurn
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarActionPlayerBeginTurn;
+
+    /**
+     * Decodes a WarActionPlayerBeginTurn message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns WarActionPlayerBeginTurn
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarActionPlayerBeginTurn;
+
+    /**
+     * Verifies a WarActionPlayerBeginTurn message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a WarActionPlayerBeginTurn message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns WarActionPlayerBeginTurn
+     */
+    public static fromObject(object: { [k: string]: any }): WarActionPlayerBeginTurn;
+
+    /**
+     * Creates a plain object from a WarActionPlayerBeginTurn message. Also converts values to other types if specified.
+     * @param message WarActionPlayerBeginTurn
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: WarActionPlayerBeginTurn, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this WarActionPlayerBeginTurn to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a WarActionPlayerEndTurn. */
+export declare interface IWarActionPlayerEndTurn {
+}
+
+/** Represents a WarActionPlayerEndTurn. */
+export declare class WarActionPlayerEndTurn implements IWarActionPlayerEndTurn {
+
+    /**
+     * Constructs a new WarActionPlayerEndTurn.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IWarActionPlayerEndTurn);
+
+    /**
+     * Creates a new WarActionPlayerEndTurn instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns WarActionPlayerEndTurn instance
+     */
+    public static create(properties?: IWarActionPlayerEndTurn): WarActionPlayerEndTurn;
+
+    /**
+     * Encodes the specified WarActionPlayerEndTurn message. Does not implicitly {@link WarActionPlayerEndTurn.verify|verify} messages.
+     * @param message WarActionPlayerEndTurn message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IWarActionPlayerEndTurn, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified WarActionPlayerEndTurn message, length delimited. Does not implicitly {@link WarActionPlayerEndTurn.verify|verify} messages.
+     * @param message WarActionPlayerEndTurn message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IWarActionPlayerEndTurn, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a WarActionPlayerEndTurn message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns WarActionPlayerEndTurn
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarActionPlayerEndTurn;
+
+    /**
+     * Decodes a WarActionPlayerEndTurn message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns WarActionPlayerEndTurn
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarActionPlayerEndTurn;
+
+    /**
+     * Verifies a WarActionPlayerEndTurn message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a WarActionPlayerEndTurn message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns WarActionPlayerEndTurn
+     */
+    public static fromObject(object: { [k: string]: any }): WarActionPlayerEndTurn;
+
+    /**
+     * Creates a plain object from a WarActionPlayerEndTurn message. Also converts values to other types if specified.
+     * @param message WarActionPlayerEndTurn
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: WarActionPlayerEndTurn, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this WarActionPlayerEndTurn to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a WarActionPlayerSurrender. */
+export declare interface IWarActionPlayerSurrender {
+}
+
+/** Represents a WarActionPlayerSurrender. */
+export declare class WarActionPlayerSurrender implements IWarActionPlayerSurrender {
+
+    /**
+     * Constructs a new WarActionPlayerSurrender.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IWarActionPlayerSurrender);
+
+    /**
+     * Creates a new WarActionPlayerSurrender instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns WarActionPlayerSurrender instance
+     */
+    public static create(properties?: IWarActionPlayerSurrender): WarActionPlayerSurrender;
+
+    /**
+     * Encodes the specified WarActionPlayerSurrender message. Does not implicitly {@link WarActionPlayerSurrender.verify|verify} messages.
+     * @param message WarActionPlayerSurrender message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IWarActionPlayerSurrender, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified WarActionPlayerSurrender message, length delimited. Does not implicitly {@link WarActionPlayerSurrender.verify|verify} messages.
+     * @param message WarActionPlayerSurrender message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IWarActionPlayerSurrender, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a WarActionPlayerSurrender message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns WarActionPlayerSurrender
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarActionPlayerSurrender;
+
+    /**
+     * Decodes a WarActionPlayerSurrender message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns WarActionPlayerSurrender
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarActionPlayerSurrender;
+
+    /**
+     * Verifies a WarActionPlayerSurrender message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a WarActionPlayerSurrender message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns WarActionPlayerSurrender
+     */
+    public static fromObject(object: { [k: string]: any }): WarActionPlayerSurrender;
+
+    /**
+     * Creates a plain object from a WarActionPlayerSurrender message. Also converts values to other types if specified.
+     * @param message WarActionPlayerSurrender
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: WarActionPlayerSurrender, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this WarActionPlayerSurrender to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a WarActionPlayerProduceUnit. */
+export declare interface IWarActionPlayerProduceUnit {
+
+    /** WarActionPlayerProduceUnit discoveredUnits */
+    discoveredUnits?: (ISerializedWarUnit[]|null);
+
+    /** WarActionPlayerProduceUnit discoveredTiles */
+    discoveredTiles?: (ISerializedWarTile[]|null);
+
+    /** WarActionPlayerProduceUnit gridIndex */
+    gridIndex?: (IGridIndex|null);
+
+    /** WarActionPlayerProduceUnit unitType */
+    unitType?: (number|null);
+
+    /** WarActionPlayerProduceUnit cost */
+    cost?: (number|null);
+}
+
+/** Represents a WarActionPlayerProduceUnit. */
+export declare class WarActionPlayerProduceUnit implements IWarActionPlayerProduceUnit {
+
+    /**
+     * Constructs a new WarActionPlayerProduceUnit.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IWarActionPlayerProduceUnit);
+
+    /** WarActionPlayerProduceUnit discoveredUnits. */
+    public discoveredUnits: ISerializedWarUnit[];
+
+    /** WarActionPlayerProduceUnit discoveredTiles. */
+    public discoveredTiles: ISerializedWarTile[];
+
+    /** WarActionPlayerProduceUnit gridIndex. */
+    public gridIndex?: (IGridIndex|null);
+
+    /** WarActionPlayerProduceUnit unitType. */
+    public unitType: number;
+
+    /** WarActionPlayerProduceUnit cost. */
+    public cost: number;
+
+    /**
+     * Creates a new WarActionPlayerProduceUnit instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns WarActionPlayerProduceUnit instance
+     */
+    public static create(properties?: IWarActionPlayerProduceUnit): WarActionPlayerProduceUnit;
+
+    /**
+     * Encodes the specified WarActionPlayerProduceUnit message. Does not implicitly {@link WarActionPlayerProduceUnit.verify|verify} messages.
+     * @param message WarActionPlayerProduceUnit message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IWarActionPlayerProduceUnit, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified WarActionPlayerProduceUnit message, length delimited. Does not implicitly {@link WarActionPlayerProduceUnit.verify|verify} messages.
+     * @param message WarActionPlayerProduceUnit message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IWarActionPlayerProduceUnit, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a WarActionPlayerProduceUnit message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns WarActionPlayerProduceUnit
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarActionPlayerProduceUnit;
+
+    /**
+     * Decodes a WarActionPlayerProduceUnit message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns WarActionPlayerProduceUnit
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarActionPlayerProduceUnit;
+
+    /**
+     * Verifies a WarActionPlayerProduceUnit message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a WarActionPlayerProduceUnit message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns WarActionPlayerProduceUnit
+     */
+    public static fromObject(object: { [k: string]: any }): WarActionPlayerProduceUnit;
+
+    /**
+     * Creates a plain object from a WarActionPlayerProduceUnit message. Also converts values to other types if specified.
+     * @param message WarActionPlayerProduceUnit
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: WarActionPlayerProduceUnit, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this WarActionPlayerProduceUnit to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a WarActionPlayerDeleteUnit. */
+export declare interface IWarActionPlayerDeleteUnit {
+
+    /** WarActionPlayerDeleteUnit gridIndex */
+    gridIndex?: (IGridIndex|null);
+}
+
+/** Represents a WarActionPlayerDeleteUnit. */
+export declare class WarActionPlayerDeleteUnit implements IWarActionPlayerDeleteUnit {
+
+    /**
+     * Constructs a new WarActionPlayerDeleteUnit.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IWarActionPlayerDeleteUnit);
+
+    /** WarActionPlayerDeleteUnit gridIndex. */
+    public gridIndex?: (IGridIndex|null);
+
+    /**
+     * Creates a new WarActionPlayerDeleteUnit instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns WarActionPlayerDeleteUnit instance
+     */
+    public static create(properties?: IWarActionPlayerDeleteUnit): WarActionPlayerDeleteUnit;
+
+    /**
+     * Encodes the specified WarActionPlayerDeleteUnit message. Does not implicitly {@link WarActionPlayerDeleteUnit.verify|verify} messages.
+     * @param message WarActionPlayerDeleteUnit message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IWarActionPlayerDeleteUnit, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified WarActionPlayerDeleteUnit message, length delimited. Does not implicitly {@link WarActionPlayerDeleteUnit.verify|verify} messages.
+     * @param message WarActionPlayerDeleteUnit message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IWarActionPlayerDeleteUnit, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a WarActionPlayerDeleteUnit message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns WarActionPlayerDeleteUnit
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarActionPlayerDeleteUnit;
+
+    /**
+     * Decodes a WarActionPlayerDeleteUnit message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns WarActionPlayerDeleteUnit
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarActionPlayerDeleteUnit;
+
+    /**
+     * Verifies a WarActionPlayerDeleteUnit message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a WarActionPlayerDeleteUnit message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns WarActionPlayerDeleteUnit
+     */
+    public static fromObject(object: { [k: string]: any }): WarActionPlayerDeleteUnit;
+
+    /**
+     * Creates a plain object from a WarActionPlayerDeleteUnit message. Also converts values to other types if specified.
+     * @param message WarActionPlayerDeleteUnit
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: WarActionPlayerDeleteUnit, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this WarActionPlayerDeleteUnit to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a WarActionPlayerVoteForDraw. */
+export declare interface IWarActionPlayerVoteForDraw {
+
+    /** WarActionPlayerVoteForDraw isAgree */
+    isAgree?: (boolean|null);
+}
+
+/** Represents a WarActionPlayerVoteForDraw. */
+export declare class WarActionPlayerVoteForDraw implements IWarActionPlayerVoteForDraw {
+
+    /**
+     * Constructs a new WarActionPlayerVoteForDraw.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IWarActionPlayerVoteForDraw);
+
+    /** WarActionPlayerVoteForDraw isAgree. */
+    public isAgree: boolean;
+
+    /**
+     * Creates a new WarActionPlayerVoteForDraw instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns WarActionPlayerVoteForDraw instance
+     */
+    public static create(properties?: IWarActionPlayerVoteForDraw): WarActionPlayerVoteForDraw;
+
+    /**
+     * Encodes the specified WarActionPlayerVoteForDraw message. Does not implicitly {@link WarActionPlayerVoteForDraw.verify|verify} messages.
+     * @param message WarActionPlayerVoteForDraw message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IWarActionPlayerVoteForDraw, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified WarActionPlayerVoteForDraw message, length delimited. Does not implicitly {@link WarActionPlayerVoteForDraw.verify|verify} messages.
+     * @param message WarActionPlayerVoteForDraw message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IWarActionPlayerVoteForDraw, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a WarActionPlayerVoteForDraw message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns WarActionPlayerVoteForDraw
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarActionPlayerVoteForDraw;
+
+    /**
+     * Decodes a WarActionPlayerVoteForDraw message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns WarActionPlayerVoteForDraw
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarActionPlayerVoteForDraw;
+
+    /**
+     * Verifies a WarActionPlayerVoteForDraw message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a WarActionPlayerVoteForDraw message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns WarActionPlayerVoteForDraw
+     */
+    public static fromObject(object: { [k: string]: any }): WarActionPlayerVoteForDraw;
+
+    /**
+     * Creates a plain object from a WarActionPlayerVoteForDraw message. Also converts values to other types if specified.
+     * @param message WarActionPlayerVoteForDraw
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: WarActionPlayerVoteForDraw, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this WarActionPlayerVoteForDraw to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a WarActionUnitWait. */
+export declare interface IWarActionUnitWait {
+
+    /** WarActionUnitWait path */
+    path?: (IMovePath|null);
+
+    /** WarActionUnitWait launchUnitId */
+    launchUnitId?: (number|null);
+
+    /** WarActionUnitWait discoveredUnits */
+    discoveredUnits?: (ISerializedWarUnit[]|null);
+
+    /** WarActionUnitWait discoveredTiles */
+    discoveredTiles?: (ISerializedWarTile[]|null);
+
+    /** WarActionUnitWait actingUnits */
+    actingUnits?: (ISerializedWarUnit[]|null);
+
+    /** WarActionUnitWait actingTiles */
+    actingTiles?: (ISerializedWarTile[]|null);
+}
+
+/** Represents a WarActionUnitWait. */
+export declare class WarActionUnitWait implements IWarActionUnitWait {
+
+    /**
+     * Constructs a new WarActionUnitWait.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IWarActionUnitWait);
+
+    /** WarActionUnitWait path. */
+    public path?: (IMovePath|null);
+
+    /** WarActionUnitWait launchUnitId. */
+    public launchUnitId: number;
+
+    /** WarActionUnitWait discoveredUnits. */
+    public discoveredUnits: ISerializedWarUnit[];
+
+    /** WarActionUnitWait discoveredTiles. */
+    public discoveredTiles: ISerializedWarTile[];
+
+    /** WarActionUnitWait actingUnits. */
+    public actingUnits: ISerializedWarUnit[];
+
+    /** WarActionUnitWait actingTiles. */
+    public actingTiles: ISerializedWarTile[];
+
+    /**
+     * Creates a new WarActionUnitWait instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns WarActionUnitWait instance
+     */
+    public static create(properties?: IWarActionUnitWait): WarActionUnitWait;
+
+    /**
+     * Encodes the specified WarActionUnitWait message. Does not implicitly {@link WarActionUnitWait.verify|verify} messages.
+     * @param message WarActionUnitWait message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IWarActionUnitWait, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified WarActionUnitWait message, length delimited. Does not implicitly {@link WarActionUnitWait.verify|verify} messages.
+     * @param message WarActionUnitWait message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IWarActionUnitWait, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a WarActionUnitWait message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns WarActionUnitWait
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarActionUnitWait;
+
+    /**
+     * Decodes a WarActionUnitWait message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns WarActionUnitWait
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarActionUnitWait;
+
+    /**
+     * Verifies a WarActionUnitWait message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a WarActionUnitWait message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns WarActionUnitWait
+     */
+    public static fromObject(object: { [k: string]: any }): WarActionUnitWait;
+
+    /**
+     * Creates a plain object from a WarActionUnitWait message. Also converts values to other types if specified.
+     * @param message WarActionUnitWait
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: WarActionUnitWait, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this WarActionUnitWait to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a WarActionUnitBeLoaded. */
+export declare interface IWarActionUnitBeLoaded {
+
+    /** WarActionUnitBeLoaded path */
+    path?: (IMovePath|null);
+
+    /** WarActionUnitBeLoaded launchUnitId */
+    launchUnitId?: (number|null);
+
+    /** WarActionUnitBeLoaded discoveredUnits */
+    discoveredUnits?: (ISerializedWarUnit[]|null);
+
+    /** WarActionUnitBeLoaded discoveredTiles */
+    discoveredTiles?: (ISerializedWarTile[]|null);
+
+    /** WarActionUnitBeLoaded actingUnits */
+    actingUnits?: (ISerializedWarUnit[]|null);
+
+    /** WarActionUnitBeLoaded actingTiles */
+    actingTiles?: (ISerializedWarTile[]|null);
+}
+
+/** Represents a WarActionUnitBeLoaded. */
+export declare class WarActionUnitBeLoaded implements IWarActionUnitBeLoaded {
+
+    /**
+     * Constructs a new WarActionUnitBeLoaded.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IWarActionUnitBeLoaded);
+
+    /** WarActionUnitBeLoaded path. */
+    public path?: (IMovePath|null);
+
+    /** WarActionUnitBeLoaded launchUnitId. */
+    public launchUnitId: number;
+
+    /** WarActionUnitBeLoaded discoveredUnits. */
+    public discoveredUnits: ISerializedWarUnit[];
+
+    /** WarActionUnitBeLoaded discoveredTiles. */
+    public discoveredTiles: ISerializedWarTile[];
+
+    /** WarActionUnitBeLoaded actingUnits. */
+    public actingUnits: ISerializedWarUnit[];
+
+    /** WarActionUnitBeLoaded actingTiles. */
+    public actingTiles: ISerializedWarTile[];
+
+    /**
+     * Creates a new WarActionUnitBeLoaded instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns WarActionUnitBeLoaded instance
+     */
+    public static create(properties?: IWarActionUnitBeLoaded): WarActionUnitBeLoaded;
+
+    /**
+     * Encodes the specified WarActionUnitBeLoaded message. Does not implicitly {@link WarActionUnitBeLoaded.verify|verify} messages.
+     * @param message WarActionUnitBeLoaded message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IWarActionUnitBeLoaded, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified WarActionUnitBeLoaded message, length delimited. Does not implicitly {@link WarActionUnitBeLoaded.verify|verify} messages.
+     * @param message WarActionUnitBeLoaded message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IWarActionUnitBeLoaded, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a WarActionUnitBeLoaded message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns WarActionUnitBeLoaded
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarActionUnitBeLoaded;
+
+    /**
+     * Decodes a WarActionUnitBeLoaded message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns WarActionUnitBeLoaded
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarActionUnitBeLoaded;
+
+    /**
+     * Verifies a WarActionUnitBeLoaded message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a WarActionUnitBeLoaded message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns WarActionUnitBeLoaded
+     */
+    public static fromObject(object: { [k: string]: any }): WarActionUnitBeLoaded;
+
+    /**
+     * Creates a plain object from a WarActionUnitBeLoaded message. Also converts values to other types if specified.
+     * @param message WarActionUnitBeLoaded
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: WarActionUnitBeLoaded, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this WarActionUnitBeLoaded to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a WarActionUnitCaptureTile. */
+export declare interface IWarActionUnitCaptureTile {
+
+    /** WarActionUnitCaptureTile path */
+    path?: (IMovePath|null);
+
+    /** WarActionUnitCaptureTile launchUnitId */
+    launchUnitId?: (number|null);
+
+    /** WarActionUnitCaptureTile discoveredUnits */
+    discoveredUnits?: (ISerializedWarUnit[]|null);
+
+    /** WarActionUnitCaptureTile discoveredTiles */
+    discoveredTiles?: (ISerializedWarTile[]|null);
+
+    /** WarActionUnitCaptureTile actingUnits */
+    actingUnits?: (ISerializedWarUnit[]|null);
+
+    /** WarActionUnitCaptureTile actingTiles */
+    actingTiles?: (ISerializedWarTile[]|null);
+}
+
+/** Represents a WarActionUnitCaptureTile. */
+export declare class WarActionUnitCaptureTile implements IWarActionUnitCaptureTile {
+
+    /**
+     * Constructs a new WarActionUnitCaptureTile.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IWarActionUnitCaptureTile);
+
+    /** WarActionUnitCaptureTile path. */
+    public path?: (IMovePath|null);
+
+    /** WarActionUnitCaptureTile launchUnitId. */
+    public launchUnitId: number;
+
+    /** WarActionUnitCaptureTile discoveredUnits. */
+    public discoveredUnits: ISerializedWarUnit[];
+
+    /** WarActionUnitCaptureTile discoveredTiles. */
+    public discoveredTiles: ISerializedWarTile[];
+
+    /** WarActionUnitCaptureTile actingUnits. */
+    public actingUnits: ISerializedWarUnit[];
+
+    /** WarActionUnitCaptureTile actingTiles. */
+    public actingTiles: ISerializedWarTile[];
+
+    /**
+     * Creates a new WarActionUnitCaptureTile instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns WarActionUnitCaptureTile instance
+     */
+    public static create(properties?: IWarActionUnitCaptureTile): WarActionUnitCaptureTile;
+
+    /**
+     * Encodes the specified WarActionUnitCaptureTile message. Does not implicitly {@link WarActionUnitCaptureTile.verify|verify} messages.
+     * @param message WarActionUnitCaptureTile message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IWarActionUnitCaptureTile, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified WarActionUnitCaptureTile message, length delimited. Does not implicitly {@link WarActionUnitCaptureTile.verify|verify} messages.
+     * @param message WarActionUnitCaptureTile message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IWarActionUnitCaptureTile, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a WarActionUnitCaptureTile message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns WarActionUnitCaptureTile
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarActionUnitCaptureTile;
+
+    /**
+     * Decodes a WarActionUnitCaptureTile message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns WarActionUnitCaptureTile
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarActionUnitCaptureTile;
+
+    /**
+     * Verifies a WarActionUnitCaptureTile message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a WarActionUnitCaptureTile message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns WarActionUnitCaptureTile
+     */
+    public static fromObject(object: { [k: string]: any }): WarActionUnitCaptureTile;
+
+    /**
+     * Creates a plain object from a WarActionUnitCaptureTile message. Also converts values to other types if specified.
+     * @param message WarActionUnitCaptureTile
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: WarActionUnitCaptureTile, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this WarActionUnitCaptureTile to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a WarActionUnitAttack. */
+export declare interface IWarActionUnitAttack {
+
+    /** WarActionUnitAttack path */
+    path?: (IMovePath|null);
+
+    /** WarActionUnitAttack launchUnitId */
+    launchUnitId?: (number|null);
+
+    /** WarActionUnitAttack discoveredUnits */
+    discoveredUnits?: (ISerializedWarUnit[]|null);
+
+    /** WarActionUnitAttack discoveredTiles */
+    discoveredTiles?: (ISerializedWarTile[]|null);
+
+    /** WarActionUnitAttack actingUnits */
+    actingUnits?: (ISerializedWarUnit[]|null);
+
+    /** WarActionUnitAttack actingTiles */
+    actingTiles?: (ISerializedWarTile[]|null);
+
+    /** WarActionUnitAttack targetGridIndex */
+    targetGridIndex?: (IGridIndex|null);
+
+    /** WarActionUnitAttack attackDamage */
+    attackDamage?: (number|null);
+
+    /** WarActionUnitAttack counterDamage */
+    counterDamage?: (number|null);
+
+    /** WarActionUnitAttack lostPlayerIndex */
+    lostPlayerIndex?: (number|null);
+}
+
+/** Represents a WarActionUnitAttack. */
+export declare class WarActionUnitAttack implements IWarActionUnitAttack {
+
+    /**
+     * Constructs a new WarActionUnitAttack.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IWarActionUnitAttack);
+
+    /** WarActionUnitAttack path. */
+    public path?: (IMovePath|null);
+
+    /** WarActionUnitAttack launchUnitId. */
+    public launchUnitId: number;
+
+    /** WarActionUnitAttack discoveredUnits. */
+    public discoveredUnits: ISerializedWarUnit[];
+
+    /** WarActionUnitAttack discoveredTiles. */
+    public discoveredTiles: ISerializedWarTile[];
+
+    /** WarActionUnitAttack actingUnits. */
+    public actingUnits: ISerializedWarUnit[];
+
+    /** WarActionUnitAttack actingTiles. */
+    public actingTiles: ISerializedWarTile[];
+
+    /** WarActionUnitAttack targetGridIndex. */
+    public targetGridIndex?: (IGridIndex|null);
+
+    /** WarActionUnitAttack attackDamage. */
+    public attackDamage: number;
+
+    /** WarActionUnitAttack counterDamage. */
+    public counterDamage: number;
+
+    /** WarActionUnitAttack lostPlayerIndex. */
+    public lostPlayerIndex: number;
+
+    /**
+     * Creates a new WarActionUnitAttack instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns WarActionUnitAttack instance
+     */
+    public static create(properties?: IWarActionUnitAttack): WarActionUnitAttack;
+
+    /**
+     * Encodes the specified WarActionUnitAttack message. Does not implicitly {@link WarActionUnitAttack.verify|verify} messages.
+     * @param message WarActionUnitAttack message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IWarActionUnitAttack, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified WarActionUnitAttack message, length delimited. Does not implicitly {@link WarActionUnitAttack.verify|verify} messages.
+     * @param message WarActionUnitAttack message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IWarActionUnitAttack, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a WarActionUnitAttack message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns WarActionUnitAttack
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarActionUnitAttack;
+
+    /**
+     * Decodes a WarActionUnitAttack message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns WarActionUnitAttack
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarActionUnitAttack;
+
+    /**
+     * Verifies a WarActionUnitAttack message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a WarActionUnitAttack message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns WarActionUnitAttack
+     */
+    public static fromObject(object: { [k: string]: any }): WarActionUnitAttack;
+
+    /**
+     * Creates a plain object from a WarActionUnitAttack message. Also converts values to other types if specified.
+     * @param message WarActionUnitAttack
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: WarActionUnitAttack, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this WarActionUnitAttack to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a WarActionUnitDrop. */
+export declare interface IWarActionUnitDrop {
+
+    /** WarActionUnitDrop path */
+    path?: (IMovePath|null);
+
+    /** WarActionUnitDrop launchUnitId */
+    launchUnitId?: (number|null);
+
+    /** WarActionUnitDrop discoveredUnits */
+    discoveredUnits?: (ISerializedWarUnit[]|null);
+
+    /** WarActionUnitDrop discoveredTiles */
+    discoveredTiles?: (ISerializedWarTile[]|null);
+
+    /** WarActionUnitDrop actingUnits */
+    actingUnits?: (ISerializedWarUnit[]|null);
+
+    /** WarActionUnitDrop actingTiles */
+    actingTiles?: (ISerializedWarTile[]|null);
+
+    /** WarActionUnitDrop dropDestinations */
+    dropDestinations?: (IDropDestination[]|null);
+
+    /** WarActionUnitDrop isDropBlocked */
+    isDropBlocked?: (boolean|null);
+}
+
+/** Represents a WarActionUnitDrop. */
+export declare class WarActionUnitDrop implements IWarActionUnitDrop {
+
+    /**
+     * Constructs a new WarActionUnitDrop.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IWarActionUnitDrop);
+
+    /** WarActionUnitDrop path. */
+    public path?: (IMovePath|null);
+
+    /** WarActionUnitDrop launchUnitId. */
+    public launchUnitId: number;
+
+    /** WarActionUnitDrop discoveredUnits. */
+    public discoveredUnits: ISerializedWarUnit[];
+
+    /** WarActionUnitDrop discoveredTiles. */
+    public discoveredTiles: ISerializedWarTile[];
+
+    /** WarActionUnitDrop actingUnits. */
+    public actingUnits: ISerializedWarUnit[];
+
+    /** WarActionUnitDrop actingTiles. */
+    public actingTiles: ISerializedWarTile[];
+
+    /** WarActionUnitDrop dropDestinations. */
+    public dropDestinations: IDropDestination[];
+
+    /** WarActionUnitDrop isDropBlocked. */
+    public isDropBlocked: boolean;
+
+    /**
+     * Creates a new WarActionUnitDrop instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns WarActionUnitDrop instance
+     */
+    public static create(properties?: IWarActionUnitDrop): WarActionUnitDrop;
+
+    /**
+     * Encodes the specified WarActionUnitDrop message. Does not implicitly {@link WarActionUnitDrop.verify|verify} messages.
+     * @param message WarActionUnitDrop message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IWarActionUnitDrop, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified WarActionUnitDrop message, length delimited. Does not implicitly {@link WarActionUnitDrop.verify|verify} messages.
+     * @param message WarActionUnitDrop message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IWarActionUnitDrop, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a WarActionUnitDrop message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns WarActionUnitDrop
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarActionUnitDrop;
+
+    /**
+     * Decodes a WarActionUnitDrop message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns WarActionUnitDrop
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarActionUnitDrop;
+
+    /**
+     * Verifies a WarActionUnitDrop message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a WarActionUnitDrop message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns WarActionUnitDrop
+     */
+    public static fromObject(object: { [k: string]: any }): WarActionUnitDrop;
+
+    /**
+     * Creates a plain object from a WarActionUnitDrop message. Also converts values to other types if specified.
+     * @param message WarActionUnitDrop
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: WarActionUnitDrop, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this WarActionUnitDrop to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a WarActionUnitBuildTile. */
+export declare interface IWarActionUnitBuildTile {
+
+    /** WarActionUnitBuildTile path */
+    path?: (IMovePath|null);
+
+    /** WarActionUnitBuildTile launchUnitId */
+    launchUnitId?: (number|null);
+
+    /** WarActionUnitBuildTile discoveredUnits */
+    discoveredUnits?: (ISerializedWarUnit[]|null);
+
+    /** WarActionUnitBuildTile discoveredTiles */
+    discoveredTiles?: (ISerializedWarTile[]|null);
+
+    /** WarActionUnitBuildTile actingUnits */
+    actingUnits?: (ISerializedWarUnit[]|null);
+
+    /** WarActionUnitBuildTile actingTiles */
+    actingTiles?: (ISerializedWarTile[]|null);
+}
+
+/** Represents a WarActionUnitBuildTile. */
+export declare class WarActionUnitBuildTile implements IWarActionUnitBuildTile {
+
+    /**
+     * Constructs a new WarActionUnitBuildTile.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IWarActionUnitBuildTile);
+
+    /** WarActionUnitBuildTile path. */
+    public path?: (IMovePath|null);
+
+    /** WarActionUnitBuildTile launchUnitId. */
+    public launchUnitId: number;
+
+    /** WarActionUnitBuildTile discoveredUnits. */
+    public discoveredUnits: ISerializedWarUnit[];
+
+    /** WarActionUnitBuildTile discoveredTiles. */
+    public discoveredTiles: ISerializedWarTile[];
+
+    /** WarActionUnitBuildTile actingUnits. */
+    public actingUnits: ISerializedWarUnit[];
+
+    /** WarActionUnitBuildTile actingTiles. */
+    public actingTiles: ISerializedWarTile[];
+
+    /**
+     * Creates a new WarActionUnitBuildTile instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns WarActionUnitBuildTile instance
+     */
+    public static create(properties?: IWarActionUnitBuildTile): WarActionUnitBuildTile;
+
+    /**
+     * Encodes the specified WarActionUnitBuildTile message. Does not implicitly {@link WarActionUnitBuildTile.verify|verify} messages.
+     * @param message WarActionUnitBuildTile message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IWarActionUnitBuildTile, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified WarActionUnitBuildTile message, length delimited. Does not implicitly {@link WarActionUnitBuildTile.verify|verify} messages.
+     * @param message WarActionUnitBuildTile message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IWarActionUnitBuildTile, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a WarActionUnitBuildTile message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns WarActionUnitBuildTile
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarActionUnitBuildTile;
+
+    /**
+     * Decodes a WarActionUnitBuildTile message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns WarActionUnitBuildTile
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarActionUnitBuildTile;
+
+    /**
+     * Verifies a WarActionUnitBuildTile message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a WarActionUnitBuildTile message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns WarActionUnitBuildTile
+     */
+    public static fromObject(object: { [k: string]: any }): WarActionUnitBuildTile;
+
+    /**
+     * Creates a plain object from a WarActionUnitBuildTile message. Also converts values to other types if specified.
+     * @param message WarActionUnitBuildTile
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: WarActionUnitBuildTile, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this WarActionUnitBuildTile to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a WarActionUnitDive. */
+export declare interface IWarActionUnitDive {
+
+    /** WarActionUnitDive path */
+    path?: (IMovePath|null);
+
+    /** WarActionUnitDive launchUnitId */
+    launchUnitId?: (number|null);
+
+    /** WarActionUnitDive discoveredUnits */
+    discoveredUnits?: (ISerializedWarUnit[]|null);
+
+    /** WarActionUnitDive discoveredTiles */
+    discoveredTiles?: (ISerializedWarTile[]|null);
+
+    /** WarActionUnitDive actingUnits */
+    actingUnits?: (ISerializedWarUnit[]|null);
+
+    /** WarActionUnitDive actingTiles */
+    actingTiles?: (ISerializedWarTile[]|null);
+}
+
+/** Represents a WarActionUnitDive. */
+export declare class WarActionUnitDive implements IWarActionUnitDive {
+
+    /**
+     * Constructs a new WarActionUnitDive.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IWarActionUnitDive);
+
+    /** WarActionUnitDive path. */
+    public path?: (IMovePath|null);
+
+    /** WarActionUnitDive launchUnitId. */
+    public launchUnitId: number;
+
+    /** WarActionUnitDive discoveredUnits. */
+    public discoveredUnits: ISerializedWarUnit[];
+
+    /** WarActionUnitDive discoveredTiles. */
+    public discoveredTiles: ISerializedWarTile[];
+
+    /** WarActionUnitDive actingUnits. */
+    public actingUnits: ISerializedWarUnit[];
+
+    /** WarActionUnitDive actingTiles. */
+    public actingTiles: ISerializedWarTile[];
+
+    /**
+     * Creates a new WarActionUnitDive instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns WarActionUnitDive instance
+     */
+    public static create(properties?: IWarActionUnitDive): WarActionUnitDive;
+
+    /**
+     * Encodes the specified WarActionUnitDive message. Does not implicitly {@link WarActionUnitDive.verify|verify} messages.
+     * @param message WarActionUnitDive message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IWarActionUnitDive, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified WarActionUnitDive message, length delimited. Does not implicitly {@link WarActionUnitDive.verify|verify} messages.
+     * @param message WarActionUnitDive message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IWarActionUnitDive, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a WarActionUnitDive message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns WarActionUnitDive
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarActionUnitDive;
+
+    /**
+     * Decodes a WarActionUnitDive message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns WarActionUnitDive
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarActionUnitDive;
+
+    /**
+     * Verifies a WarActionUnitDive message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a WarActionUnitDive message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns WarActionUnitDive
+     */
+    public static fromObject(object: { [k: string]: any }): WarActionUnitDive;
+
+    /**
+     * Creates a plain object from a WarActionUnitDive message. Also converts values to other types if specified.
+     * @param message WarActionUnitDive
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: WarActionUnitDive, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this WarActionUnitDive to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a WarActionUnitSurface. */
+export declare interface IWarActionUnitSurface {
+
+    /** WarActionUnitSurface path */
+    path?: (IMovePath|null);
+
+    /** WarActionUnitSurface launchUnitId */
+    launchUnitId?: (number|null);
+
+    /** WarActionUnitSurface discoveredUnits */
+    discoveredUnits?: (ISerializedWarUnit[]|null);
+
+    /** WarActionUnitSurface discoveredTiles */
+    discoveredTiles?: (ISerializedWarTile[]|null);
+
+    /** WarActionUnitSurface actingUnits */
+    actingUnits?: (ISerializedWarUnit[]|null);
+
+    /** WarActionUnitSurface actingTiles */
+    actingTiles?: (ISerializedWarTile[]|null);
+}
+
+/** Represents a WarActionUnitSurface. */
+export declare class WarActionUnitSurface implements IWarActionUnitSurface {
+
+    /**
+     * Constructs a new WarActionUnitSurface.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IWarActionUnitSurface);
+
+    /** WarActionUnitSurface path. */
+    public path?: (IMovePath|null);
+
+    /** WarActionUnitSurface launchUnitId. */
+    public launchUnitId: number;
+
+    /** WarActionUnitSurface discoveredUnits. */
+    public discoveredUnits: ISerializedWarUnit[];
+
+    /** WarActionUnitSurface discoveredTiles. */
+    public discoveredTiles: ISerializedWarTile[];
+
+    /** WarActionUnitSurface actingUnits. */
+    public actingUnits: ISerializedWarUnit[];
+
+    /** WarActionUnitSurface actingTiles. */
+    public actingTiles: ISerializedWarTile[];
+
+    /**
+     * Creates a new WarActionUnitSurface instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns WarActionUnitSurface instance
+     */
+    public static create(properties?: IWarActionUnitSurface): WarActionUnitSurface;
+
+    /**
+     * Encodes the specified WarActionUnitSurface message. Does not implicitly {@link WarActionUnitSurface.verify|verify} messages.
+     * @param message WarActionUnitSurface message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IWarActionUnitSurface, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified WarActionUnitSurface message, length delimited. Does not implicitly {@link WarActionUnitSurface.verify|verify} messages.
+     * @param message WarActionUnitSurface message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IWarActionUnitSurface, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a WarActionUnitSurface message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns WarActionUnitSurface
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarActionUnitSurface;
+
+    /**
+     * Decodes a WarActionUnitSurface message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns WarActionUnitSurface
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarActionUnitSurface;
+
+    /**
+     * Verifies a WarActionUnitSurface message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a WarActionUnitSurface message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns WarActionUnitSurface
+     */
+    public static fromObject(object: { [k: string]: any }): WarActionUnitSurface;
+
+    /**
+     * Creates a plain object from a WarActionUnitSurface message. Also converts values to other types if specified.
+     * @param message WarActionUnitSurface
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: WarActionUnitSurface, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this WarActionUnitSurface to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a WarActionUnitJoin. */
+export declare interface IWarActionUnitJoin {
+
+    /** WarActionUnitJoin path */
+    path?: (IMovePath|null);
+
+    /** WarActionUnitJoin launchUnitId */
+    launchUnitId?: (number|null);
+
+    /** WarActionUnitJoin discoveredUnits */
+    discoveredUnits?: (ISerializedWarUnit[]|null);
+
+    /** WarActionUnitJoin discoveredTiles */
+    discoveredTiles?: (ISerializedWarTile[]|null);
+
+    /** WarActionUnitJoin actingUnits */
+    actingUnits?: (ISerializedWarUnit[]|null);
+
+    /** WarActionUnitJoin actingTiles */
+    actingTiles?: (ISerializedWarTile[]|null);
+}
+
+/** Represents a WarActionUnitJoin. */
+export declare class WarActionUnitJoin implements IWarActionUnitJoin {
+
+    /**
+     * Constructs a new WarActionUnitJoin.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IWarActionUnitJoin);
+
+    /** WarActionUnitJoin path. */
+    public path?: (IMovePath|null);
+
+    /** WarActionUnitJoin launchUnitId. */
+    public launchUnitId: number;
+
+    /** WarActionUnitJoin discoveredUnits. */
+    public discoveredUnits: ISerializedWarUnit[];
+
+    /** WarActionUnitJoin discoveredTiles. */
+    public discoveredTiles: ISerializedWarTile[];
+
+    /** WarActionUnitJoin actingUnits. */
+    public actingUnits: ISerializedWarUnit[];
+
+    /** WarActionUnitJoin actingTiles. */
+    public actingTiles: ISerializedWarTile[];
+
+    /**
+     * Creates a new WarActionUnitJoin instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns WarActionUnitJoin instance
+     */
+    public static create(properties?: IWarActionUnitJoin): WarActionUnitJoin;
+
+    /**
+     * Encodes the specified WarActionUnitJoin message. Does not implicitly {@link WarActionUnitJoin.verify|verify} messages.
+     * @param message WarActionUnitJoin message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IWarActionUnitJoin, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified WarActionUnitJoin message, length delimited. Does not implicitly {@link WarActionUnitJoin.verify|verify} messages.
+     * @param message WarActionUnitJoin message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IWarActionUnitJoin, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a WarActionUnitJoin message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns WarActionUnitJoin
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarActionUnitJoin;
+
+    /**
+     * Decodes a WarActionUnitJoin message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns WarActionUnitJoin
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarActionUnitJoin;
+
+    /**
+     * Verifies a WarActionUnitJoin message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a WarActionUnitJoin message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns WarActionUnitJoin
+     */
+    public static fromObject(object: { [k: string]: any }): WarActionUnitJoin;
+
+    /**
+     * Creates a plain object from a WarActionUnitJoin message. Also converts values to other types if specified.
+     * @param message WarActionUnitJoin
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: WarActionUnitJoin, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this WarActionUnitJoin to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a WarActionUnitLaunchFlare. */
+export declare interface IWarActionUnitLaunchFlare {
+
+    /** WarActionUnitLaunchFlare path */
+    path?: (IMovePath|null);
+
+    /** WarActionUnitLaunchFlare launchUnitId */
+    launchUnitId?: (number|null);
+
+    /** WarActionUnitLaunchFlare discoveredUnits */
+    discoveredUnits?: (ISerializedWarUnit[]|null);
+
+    /** WarActionUnitLaunchFlare discoveredTiles */
+    discoveredTiles?: (ISerializedWarTile[]|null);
+
+    /** WarActionUnitLaunchFlare actingUnits */
+    actingUnits?: (ISerializedWarUnit[]|null);
+
+    /** WarActionUnitLaunchFlare actingTiles */
+    actingTiles?: (ISerializedWarTile[]|null);
+
+    /** WarActionUnitLaunchFlare targetGridIndex */
+    targetGridIndex?: (IGridIndex|null);
+}
+
+/** Represents a WarActionUnitLaunchFlare. */
+export declare class WarActionUnitLaunchFlare implements IWarActionUnitLaunchFlare {
+
+    /**
+     * Constructs a new WarActionUnitLaunchFlare.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IWarActionUnitLaunchFlare);
+
+    /** WarActionUnitLaunchFlare path. */
+    public path?: (IMovePath|null);
+
+    /** WarActionUnitLaunchFlare launchUnitId. */
+    public launchUnitId: number;
+
+    /** WarActionUnitLaunchFlare discoveredUnits. */
+    public discoveredUnits: ISerializedWarUnit[];
+
+    /** WarActionUnitLaunchFlare discoveredTiles. */
+    public discoveredTiles: ISerializedWarTile[];
+
+    /** WarActionUnitLaunchFlare actingUnits. */
+    public actingUnits: ISerializedWarUnit[];
+
+    /** WarActionUnitLaunchFlare actingTiles. */
+    public actingTiles: ISerializedWarTile[];
+
+    /** WarActionUnitLaunchFlare targetGridIndex. */
+    public targetGridIndex?: (IGridIndex|null);
+
+    /**
+     * Creates a new WarActionUnitLaunchFlare instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns WarActionUnitLaunchFlare instance
+     */
+    public static create(properties?: IWarActionUnitLaunchFlare): WarActionUnitLaunchFlare;
+
+    /**
+     * Encodes the specified WarActionUnitLaunchFlare message. Does not implicitly {@link WarActionUnitLaunchFlare.verify|verify} messages.
+     * @param message WarActionUnitLaunchFlare message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IWarActionUnitLaunchFlare, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified WarActionUnitLaunchFlare message, length delimited. Does not implicitly {@link WarActionUnitLaunchFlare.verify|verify} messages.
+     * @param message WarActionUnitLaunchFlare message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IWarActionUnitLaunchFlare, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a WarActionUnitLaunchFlare message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns WarActionUnitLaunchFlare
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarActionUnitLaunchFlare;
+
+    /**
+     * Decodes a WarActionUnitLaunchFlare message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns WarActionUnitLaunchFlare
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarActionUnitLaunchFlare;
+
+    /**
+     * Verifies a WarActionUnitLaunchFlare message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a WarActionUnitLaunchFlare message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns WarActionUnitLaunchFlare
+     */
+    public static fromObject(object: { [k: string]: any }): WarActionUnitLaunchFlare;
+
+    /**
+     * Creates a plain object from a WarActionUnitLaunchFlare message. Also converts values to other types if specified.
+     * @param message WarActionUnitLaunchFlare
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: WarActionUnitLaunchFlare, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this WarActionUnitLaunchFlare to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a WarActionUnitLaunchSilo. */
+export declare interface IWarActionUnitLaunchSilo {
+
+    /** WarActionUnitLaunchSilo path */
+    path?: (IMovePath|null);
+
+    /** WarActionUnitLaunchSilo launchUnitId */
+    launchUnitId?: (number|null);
+
+    /** WarActionUnitLaunchSilo discoveredUnits */
+    discoveredUnits?: (ISerializedWarUnit[]|null);
+
+    /** WarActionUnitLaunchSilo discoveredTiles */
+    discoveredTiles?: (ISerializedWarTile[]|null);
+
+    /** WarActionUnitLaunchSilo actingUnits */
+    actingUnits?: (ISerializedWarUnit[]|null);
+
+    /** WarActionUnitLaunchSilo actingTiles */
+    actingTiles?: (ISerializedWarTile[]|null);
+
+    /** WarActionUnitLaunchSilo targetGridIndex */
+    targetGridIndex?: (IGridIndex|null);
+}
+
+/** Represents a WarActionUnitLaunchSilo. */
+export declare class WarActionUnitLaunchSilo implements IWarActionUnitLaunchSilo {
+
+    /**
+     * Constructs a new WarActionUnitLaunchSilo.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IWarActionUnitLaunchSilo);
+
+    /** WarActionUnitLaunchSilo path. */
+    public path?: (IMovePath|null);
+
+    /** WarActionUnitLaunchSilo launchUnitId. */
+    public launchUnitId: number;
+
+    /** WarActionUnitLaunchSilo discoveredUnits. */
+    public discoveredUnits: ISerializedWarUnit[];
+
+    /** WarActionUnitLaunchSilo discoveredTiles. */
+    public discoveredTiles: ISerializedWarTile[];
+
+    /** WarActionUnitLaunchSilo actingUnits. */
+    public actingUnits: ISerializedWarUnit[];
+
+    /** WarActionUnitLaunchSilo actingTiles. */
+    public actingTiles: ISerializedWarTile[];
+
+    /** WarActionUnitLaunchSilo targetGridIndex. */
+    public targetGridIndex?: (IGridIndex|null);
+
+    /**
+     * Creates a new WarActionUnitLaunchSilo instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns WarActionUnitLaunchSilo instance
+     */
+    public static create(properties?: IWarActionUnitLaunchSilo): WarActionUnitLaunchSilo;
+
+    /**
+     * Encodes the specified WarActionUnitLaunchSilo message. Does not implicitly {@link WarActionUnitLaunchSilo.verify|verify} messages.
+     * @param message WarActionUnitLaunchSilo message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IWarActionUnitLaunchSilo, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified WarActionUnitLaunchSilo message, length delimited. Does not implicitly {@link WarActionUnitLaunchSilo.verify|verify} messages.
+     * @param message WarActionUnitLaunchSilo message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IWarActionUnitLaunchSilo, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a WarActionUnitLaunchSilo message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns WarActionUnitLaunchSilo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarActionUnitLaunchSilo;
+
+    /**
+     * Decodes a WarActionUnitLaunchSilo message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns WarActionUnitLaunchSilo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarActionUnitLaunchSilo;
+
+    /**
+     * Verifies a WarActionUnitLaunchSilo message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a WarActionUnitLaunchSilo message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns WarActionUnitLaunchSilo
+     */
+    public static fromObject(object: { [k: string]: any }): WarActionUnitLaunchSilo;
+
+    /**
+     * Creates a plain object from a WarActionUnitLaunchSilo message. Also converts values to other types if specified.
+     * @param message WarActionUnitLaunchSilo
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: WarActionUnitLaunchSilo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this WarActionUnitLaunchSilo to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a WarActionUnitProduceUnit. */
+export declare interface IWarActionUnitProduceUnit {
+
+    /** WarActionUnitProduceUnit path */
+    path?: (IMovePath|null);
+
+    /** WarActionUnitProduceUnit launchUnitId */
+    launchUnitId?: (number|null);
+
+    /** WarActionUnitProduceUnit discoveredUnits */
+    discoveredUnits?: (ISerializedWarUnit[]|null);
+
+    /** WarActionUnitProduceUnit discoveredTiles */
+    discoveredTiles?: (ISerializedWarTile[]|null);
+
+    /** WarActionUnitProduceUnit actingUnits */
+    actingUnits?: (ISerializedWarUnit[]|null);
+
+    /** WarActionUnitProduceUnit actingTiles */
+    actingTiles?: (ISerializedWarTile[]|null);
+
+    /** WarActionUnitProduceUnit cost */
+    cost?: (number|null);
+}
+
+/** Represents a WarActionUnitProduceUnit. */
+export declare class WarActionUnitProduceUnit implements IWarActionUnitProduceUnit {
+
+    /**
+     * Constructs a new WarActionUnitProduceUnit.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IWarActionUnitProduceUnit);
+
+    /** WarActionUnitProduceUnit path. */
+    public path?: (IMovePath|null);
+
+    /** WarActionUnitProduceUnit launchUnitId. */
+    public launchUnitId: number;
+
+    /** WarActionUnitProduceUnit discoveredUnits. */
+    public discoveredUnits: ISerializedWarUnit[];
+
+    /** WarActionUnitProduceUnit discoveredTiles. */
+    public discoveredTiles: ISerializedWarTile[];
+
+    /** WarActionUnitProduceUnit actingUnits. */
+    public actingUnits: ISerializedWarUnit[];
+
+    /** WarActionUnitProduceUnit actingTiles. */
+    public actingTiles: ISerializedWarTile[];
+
+    /** WarActionUnitProduceUnit cost. */
+    public cost: number;
+
+    /**
+     * Creates a new WarActionUnitProduceUnit instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns WarActionUnitProduceUnit instance
+     */
+    public static create(properties?: IWarActionUnitProduceUnit): WarActionUnitProduceUnit;
+
+    /**
+     * Encodes the specified WarActionUnitProduceUnit message. Does not implicitly {@link WarActionUnitProduceUnit.verify|verify} messages.
+     * @param message WarActionUnitProduceUnit message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IWarActionUnitProduceUnit, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified WarActionUnitProduceUnit message, length delimited. Does not implicitly {@link WarActionUnitProduceUnit.verify|verify} messages.
+     * @param message WarActionUnitProduceUnit message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IWarActionUnitProduceUnit, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a WarActionUnitProduceUnit message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns WarActionUnitProduceUnit
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarActionUnitProduceUnit;
+
+    /**
+     * Decodes a WarActionUnitProduceUnit message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns WarActionUnitProduceUnit
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarActionUnitProduceUnit;
+
+    /**
+     * Verifies a WarActionUnitProduceUnit message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a WarActionUnitProduceUnit message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns WarActionUnitProduceUnit
+     */
+    public static fromObject(object: { [k: string]: any }): WarActionUnitProduceUnit;
+
+    /**
+     * Creates a plain object from a WarActionUnitProduceUnit message. Also converts values to other types if specified.
+     * @param message WarActionUnitProduceUnit
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: WarActionUnitProduceUnit, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this WarActionUnitProduceUnit to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a WarActionUnitSupply. */
+export declare interface IWarActionUnitSupply {
+
+    /** WarActionUnitSupply path */
+    path?: (IMovePath|null);
+
+    /** WarActionUnitSupply launchUnitId */
+    launchUnitId?: (number|null);
+
+    /** WarActionUnitSupply discoveredUnits */
+    discoveredUnits?: (ISerializedWarUnit[]|null);
+
+    /** WarActionUnitSupply discoveredTiles */
+    discoveredTiles?: (ISerializedWarTile[]|null);
+
+    /** WarActionUnitSupply actingUnits */
+    actingUnits?: (ISerializedWarUnit[]|null);
+
+    /** WarActionUnitSupply actingTiles */
+    actingTiles?: (ISerializedWarTile[]|null);
+}
+
+/** Represents a WarActionUnitSupply. */
+export declare class WarActionUnitSupply implements IWarActionUnitSupply {
+
+    /**
+     * Constructs a new WarActionUnitSupply.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IWarActionUnitSupply);
+
+    /** WarActionUnitSupply path. */
+    public path?: (IMovePath|null);
+
+    /** WarActionUnitSupply launchUnitId. */
+    public launchUnitId: number;
+
+    /** WarActionUnitSupply discoveredUnits. */
+    public discoveredUnits: ISerializedWarUnit[];
+
+    /** WarActionUnitSupply discoveredTiles. */
+    public discoveredTiles: ISerializedWarTile[];
+
+    /** WarActionUnitSupply actingUnits. */
+    public actingUnits: ISerializedWarUnit[];
+
+    /** WarActionUnitSupply actingTiles. */
+    public actingTiles: ISerializedWarTile[];
+
+    /**
+     * Creates a new WarActionUnitSupply instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns WarActionUnitSupply instance
+     */
+    public static create(properties?: IWarActionUnitSupply): WarActionUnitSupply;
+
+    /**
+     * Encodes the specified WarActionUnitSupply message. Does not implicitly {@link WarActionUnitSupply.verify|verify} messages.
+     * @param message WarActionUnitSupply message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IWarActionUnitSupply, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified WarActionUnitSupply message, length delimited. Does not implicitly {@link WarActionUnitSupply.verify|verify} messages.
+     * @param message WarActionUnitSupply message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IWarActionUnitSupply, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a WarActionUnitSupply message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns WarActionUnitSupply
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarActionUnitSupply;
+
+    /**
+     * Decodes a WarActionUnitSupply message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns WarActionUnitSupply
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarActionUnitSupply;
+
+    /**
+     * Verifies a WarActionUnitSupply message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a WarActionUnitSupply message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns WarActionUnitSupply
+     */
+    public static fromObject(object: { [k: string]: any }): WarActionUnitSupply;
+
+    /**
+     * Creates a plain object from a WarActionUnitSupply message. Also converts values to other types if specified.
+     * @param message WarActionUnitSupply
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: WarActionUnitSupply, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this WarActionUnitSupply to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a WarActionContainer. */
+export declare interface IWarActionContainer {
+
+    /** WarActionContainer actionId */
+    actionId?: (number|null);
+
+    /** WarActionContainer WarActionPlayerBeginTurn */
+    WarActionPlayerBeginTurn?: (IWarActionPlayerBeginTurn|null);
+
+    /** WarActionContainer WarActionPlayerEndTurn */
+    WarActionPlayerEndTurn?: (IWarActionPlayerEndTurn|null);
+
+    /** WarActionContainer WarActionPlayerSurrender */
+    WarActionPlayerSurrender?: (IWarActionPlayerSurrender|null);
+
+    /** WarActionContainer WarActionPlayerProduceUnit */
+    WarActionPlayerProduceUnit?: (IWarActionPlayerProduceUnit|null);
+
+    /** WarActionContainer WarActionPlayerDeleteUnit */
+    WarActionPlayerDeleteUnit?: (IWarActionPlayerDeleteUnit|null);
+
+    /** WarActionContainer WarActionPlayerVoteForDraw */
+    WarActionPlayerVoteForDraw?: (IWarActionPlayerVoteForDraw|null);
+
+    /** WarActionContainer WarActionUnitWait */
+    WarActionUnitWait?: (IWarActionUnitWait|null);
+
+    /** WarActionContainer WarActionUnitBeLoaded */
+    WarActionUnitBeLoaded?: (IWarActionUnitBeLoaded|null);
+
+    /** WarActionContainer WarActionUnitCaptureTile */
+    WarActionUnitCaptureTile?: (IWarActionUnitCaptureTile|null);
+
+    /** WarActionContainer WarActionUnitAttack */
+    WarActionUnitAttack?: (IWarActionUnitAttack|null);
+
+    /** WarActionContainer WarActionUnitDrop */
+    WarActionUnitDrop?: (IWarActionUnitDrop|null);
+
+    /** WarActionContainer WarActionUnitBuildTile */
+    WarActionUnitBuildTile?: (IWarActionUnitBuildTile|null);
+
+    /** WarActionContainer WarActionUnitDive */
+    WarActionUnitDive?: (IWarActionUnitDive|null);
+
+    /** WarActionContainer WarActionUnitSurface */
+    WarActionUnitSurface?: (IWarActionUnitSurface|null);
+
+    /** WarActionContainer WarActionUnitJoin */
+    WarActionUnitJoin?: (IWarActionUnitJoin|null);
+
+    /** WarActionContainer WarActionUnitLaunchFlare */
+    WarActionUnitLaunchFlare?: (IWarActionUnitLaunchFlare|null);
+
+    /** WarActionContainer WarActionUnitLaunchSilo */
+    WarActionUnitLaunchSilo?: (IWarActionUnitLaunchSilo|null);
+
+    /** WarActionContainer WarActionUnitProduceUnit */
+    WarActionUnitProduceUnit?: (IWarActionUnitProduceUnit|null);
+
+    /** WarActionContainer WarActionUnitSupply */
+    WarActionUnitSupply?: (IWarActionUnitSupply|null);
+}
+
+/** Represents a WarActionContainer. */
+export declare class WarActionContainer implements IWarActionContainer {
+
+    /**
+     * Constructs a new WarActionContainer.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IWarActionContainer);
+
+    /** WarActionContainer actionId. */
+    public actionId: number;
+
+    /** WarActionContainer WarActionPlayerBeginTurn. */
+    public WarActionPlayerBeginTurn?: (IWarActionPlayerBeginTurn|null);
+
+    /** WarActionContainer WarActionPlayerEndTurn. */
+    public WarActionPlayerEndTurn?: (IWarActionPlayerEndTurn|null);
+
+    /** WarActionContainer WarActionPlayerSurrender. */
+    public WarActionPlayerSurrender?: (IWarActionPlayerSurrender|null);
+
+    /** WarActionContainer WarActionPlayerProduceUnit. */
+    public WarActionPlayerProduceUnit?: (IWarActionPlayerProduceUnit|null);
+
+    /** WarActionContainer WarActionPlayerDeleteUnit. */
+    public WarActionPlayerDeleteUnit?: (IWarActionPlayerDeleteUnit|null);
+
+    /** WarActionContainer WarActionPlayerVoteForDraw. */
+    public WarActionPlayerVoteForDraw?: (IWarActionPlayerVoteForDraw|null);
+
+    /** WarActionContainer WarActionUnitWait. */
+    public WarActionUnitWait?: (IWarActionUnitWait|null);
+
+    /** WarActionContainer WarActionUnitBeLoaded. */
+    public WarActionUnitBeLoaded?: (IWarActionUnitBeLoaded|null);
+
+    /** WarActionContainer WarActionUnitCaptureTile. */
+    public WarActionUnitCaptureTile?: (IWarActionUnitCaptureTile|null);
+
+    /** WarActionContainer WarActionUnitAttack. */
+    public WarActionUnitAttack?: (IWarActionUnitAttack|null);
+
+    /** WarActionContainer WarActionUnitDrop. */
+    public WarActionUnitDrop?: (IWarActionUnitDrop|null);
+
+    /** WarActionContainer WarActionUnitBuildTile. */
+    public WarActionUnitBuildTile?: (IWarActionUnitBuildTile|null);
+
+    /** WarActionContainer WarActionUnitDive. */
+    public WarActionUnitDive?: (IWarActionUnitDive|null);
+
+    /** WarActionContainer WarActionUnitSurface. */
+    public WarActionUnitSurface?: (IWarActionUnitSurface|null);
+
+    /** WarActionContainer WarActionUnitJoin. */
+    public WarActionUnitJoin?: (IWarActionUnitJoin|null);
+
+    /** WarActionContainer WarActionUnitLaunchFlare. */
+    public WarActionUnitLaunchFlare?: (IWarActionUnitLaunchFlare|null);
+
+    /** WarActionContainer WarActionUnitLaunchSilo. */
+    public WarActionUnitLaunchSilo?: (IWarActionUnitLaunchSilo|null);
+
+    /** WarActionContainer WarActionUnitProduceUnit. */
+    public WarActionUnitProduceUnit?: (IWarActionUnitProduceUnit|null);
+
+    /** WarActionContainer WarActionUnitSupply. */
+    public WarActionUnitSupply?: (IWarActionUnitSupply|null);
+
+    /**
+     * Creates a new WarActionContainer instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns WarActionContainer instance
+     */
+    public static create(properties?: IWarActionContainer): WarActionContainer;
+
+    /**
+     * Encodes the specified WarActionContainer message. Does not implicitly {@link WarActionContainer.verify|verify} messages.
+     * @param message WarActionContainer message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IWarActionContainer, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified WarActionContainer message, length delimited. Does not implicitly {@link WarActionContainer.verify|verify} messages.
+     * @param message WarActionContainer message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IWarActionContainer, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a WarActionContainer message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns WarActionContainer
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarActionContainer;
+
+    /**
+     * Decodes a WarActionContainer message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns WarActionContainer
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarActionContainer;
+
+    /**
+     * Verifies a WarActionContainer message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a WarActionContainer message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns WarActionContainer
+     */
+    public static fromObject(object: { [k: string]: any }): WarActionContainer;
+
+    /**
+     * Creates a plain object from a WarActionContainer message. Also converts values to other types if specified.
+     * @param message WarActionContainer
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: WarActionContainer, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this WarActionContainer to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };
@@ -3661,108 +6151,6 @@ export declare class McwOngoingDetail implements IMcwOngoingDetail {
     public toJSON(): { [k: string]: any };
 }
 
-/** Properties of a McwRepairData. */
-export declare interface IMcwRepairData {
-
-    /** McwRepairData unitId */
-    unitId?: (number|null);
-
-    /** McwRepairData repairAmount */
-    repairAmount?: (number|null);
-
-    /** McwRepairData gridIndex */
-    gridIndex?: (IGridIndex|null);
-}
-
-/** Represents a McwRepairData. */
-export declare class McwRepairData implements IMcwRepairData {
-
-    /**
-     * Constructs a new McwRepairData.
-     * @param [properties] Properties to set
-     */
-    constructor(properties?: IMcwRepairData);
-
-    /** McwRepairData unitId. */
-    public unitId: number;
-
-    /** McwRepairData repairAmount. */
-    public repairAmount: number;
-
-    /** McwRepairData gridIndex. */
-    public gridIndex?: (IGridIndex|null);
-
-    /**
-     * Creates a new McwRepairData instance using the specified properties.
-     * @param [properties] Properties to set
-     * @returns McwRepairData instance
-     */
-    public static create(properties?: IMcwRepairData): McwRepairData;
-
-    /**
-     * Encodes the specified McwRepairData message. Does not implicitly {@link McwRepairData.verify|verify} messages.
-     * @param message McwRepairData message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encode(message: IMcwRepairData, writer?: protobuf.Writer): protobuf.Writer;
-
-    /**
-     * Encodes the specified McwRepairData message, length delimited. Does not implicitly {@link McwRepairData.verify|verify} messages.
-     * @param message McwRepairData message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encodeDelimited(message: IMcwRepairData, writer?: protobuf.Writer): protobuf.Writer;
-
-    /**
-     * Decodes a McwRepairData message from the specified reader or buffer.
-     * @param reader Reader or buffer to decode from
-     * @param [length] Message length if known beforehand
-     * @returns McwRepairData
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): McwRepairData;
-
-    /**
-     * Decodes a McwRepairData message from the specified reader or buffer, length delimited.
-     * @param reader Reader or buffer to decode from
-     * @returns McwRepairData
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): McwRepairData;
-
-    /**
-     * Verifies a McwRepairData message.
-     * @param message Plain object to verify
-     * @returns `null` if valid, otherwise the reason why it is not
-     */
-    public static verify(message: { [k: string]: any }): (string|null);
-
-    /**
-     * Creates a McwRepairData message from a plain object. Also converts values to their respective internal types.
-     * @param object Plain object
-     * @returns McwRepairData
-     */
-    public static fromObject(object: { [k: string]: any }): McwRepairData;
-
-    /**
-     * Creates a plain object from a McwRepairData message. Also converts values to other types if specified.
-     * @param message McwRepairData
-     * @param [options] Conversion options
-     * @returns Plain object
-     */
-    public static toObject(message: McwRepairData, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-    /**
-     * Converts this McwRepairData to JSON.
-     * @returns JSON object
-     */
-    public toJSON(): { [k: string]: any };
-}
-
 /** Properties of a McwReplayInfo. */
 export declare interface IMcwReplayInfo {
 
@@ -3967,535 +6355,535 @@ export declare class McwReplayInfo implements IMcwReplayInfo {
     public toJSON(): { [k: string]: any };
 }
 
-/** Properties of an ActionContainer. */
-export declare interface IActionContainer {
+/** Properties of a MessageContainer. */
+export declare interface IMessageContainer {
 
-    /** ActionContainer C_Heartbeat */
+    /** MessageContainer C_Heartbeat */
     C_Heartbeat?: (IC_Heartbeat|null);
 
-    /** ActionContainer S_Heartbeat */
+    /** MessageContainer S_Heartbeat */
     S_Heartbeat?: (IS_Heartbeat|null);
 
-    /** ActionContainer C_Register */
+    /** MessageContainer C_Register */
     C_Register?: (IC_Register|null);
 
-    /** ActionContainer S_Register */
+    /** MessageContainer S_Register */
     S_Register?: (IS_Register|null);
 
-    /** ActionContainer C_Login */
+    /** MessageContainer C_Login */
     C_Login?: (IC_Login|null);
 
-    /** ActionContainer S_Login */
+    /** MessageContainer S_Login */
     S_Login?: (IS_Login|null);
 
-    /** ActionContainer C_Logout */
+    /** MessageContainer C_Logout */
     C_Logout?: (IC_Logout|null);
 
-    /** ActionContainer S_Logout */
+    /** MessageContainer S_Logout */
     S_Logout?: (IS_Logout|null);
 
-    /** ActionContainer S_Error */
+    /** MessageContainer S_Error */
     S_Error?: (IS_Error|null);
 
-    /** ActionContainer C_GetNewestMapDynamicInfos */
+    /** MessageContainer C_GetNewestMapDynamicInfos */
     C_GetNewestMapDynamicInfos?: (IC_GetNewestMapDynamicInfos|null);
 
-    /** ActionContainer S_GetNewestMapDynamicInfos */
+    /** MessageContainer S_GetNewestMapDynamicInfos */
     S_GetNewestMapDynamicInfos?: (IS_GetNewestMapDynamicInfos|null);
 
-    /** ActionContainer S_NewestConfigVersion */
+    /** MessageContainer S_NewestConfigVersion */
     S_NewestConfigVersion?: (IS_NewestConfigVersion|null);
 
-    /** ActionContainer C_GetMapDynamicInfo */
+    /** MessageContainer C_GetMapDynamicInfo */
     C_GetMapDynamicInfo?: (IC_GetMapDynamicInfo|null);
 
-    /** ActionContainer S_GetMapDynamicInfo */
+    /** MessageContainer S_GetMapDynamicInfo */
     S_GetMapDynamicInfo?: (IS_GetMapDynamicInfo|null);
 
-    /** ActionContainer S_ServerDisconnect */
+    /** MessageContainer S_ServerDisconnect */
     S_ServerDisconnect?: (IS_ServerDisconnect|null);
 
-    /** ActionContainer C_GetUserPublicInfo */
+    /** MessageContainer C_GetUserPublicInfo */
     C_GetUserPublicInfo?: (IC_GetUserPublicInfo|null);
 
-    /** ActionContainer S_GetUserPublicInfo */
+    /** MessageContainer S_GetUserPublicInfo */
     S_GetUserPublicInfo?: (IS_GetUserPublicInfo|null);
 
-    /** ActionContainer C_McrCreateWar */
+    /** MessageContainer C_McrCreateWar */
     C_McrCreateWar?: (IC_McrCreateWar|null);
 
-    /** ActionContainer S_McrCreateWar */
+    /** MessageContainer S_McrCreateWar */
     S_McrCreateWar?: (IS_McrCreateWar|null);
 
-    /** ActionContainer C_McrExitWar */
+    /** MessageContainer C_McrExitWar */
     C_McrExitWar?: (IC_McrExitWar|null);
 
-    /** ActionContainer S_McrExitWar */
+    /** MessageContainer S_McrExitWar */
     S_McrExitWar?: (IS_McrExitWar|null);
 
-    /** ActionContainer C_McrGetJoinedWaitingInfos */
+    /** MessageContainer C_McrGetJoinedWaitingInfos */
     C_McrGetJoinedWaitingInfos?: (IC_McrGetJoinedWaitingInfos|null);
 
-    /** ActionContainer S_McrGetJoinedWaitingInfos */
+    /** MessageContainer S_McrGetJoinedWaitingInfos */
     S_McrGetJoinedWaitingInfos?: (IS_McrGetJoinedWaitingInfos|null);
 
-    /** ActionContainer C_McrGetUnjoinedWaitingInfos */
+    /** MessageContainer C_McrGetUnjoinedWaitingInfos */
     C_McrGetUnjoinedWaitingInfos?: (IC_McrGetUnjoinedWaitingInfos|null);
 
-    /** ActionContainer S_McrGetUnjoinedWaitingInfos */
+    /** MessageContainer S_McrGetUnjoinedWaitingInfos */
     S_McrGetUnjoinedWaitingInfos?: (IS_McrGetUnjoinedWaitingInfos|null);
 
-    /** ActionContainer C_McrJoinWar */
+    /** MessageContainer C_McrJoinWar */
     C_McrJoinWar?: (IC_McrJoinWar|null);
 
-    /** ActionContainer S_McrJoinWar */
+    /** MessageContainer S_McrJoinWar */
     S_McrJoinWar?: (IS_McrJoinWar|null);
 
-    /** ActionContainer C_McrGetJoinedOngoingInfos */
+    /** MessageContainer C_McrGetJoinedOngoingInfos */
     C_McrGetJoinedOngoingInfos?: (IC_McrGetJoinedOngoingInfos|null);
 
-    /** ActionContainer S_McrGetJoinedOngoingInfos */
+    /** MessageContainer S_McrGetJoinedOngoingInfos */
     S_McrGetJoinedOngoingInfos?: (IS_McrGetJoinedOngoingInfos|null);
 
-    /** ActionContainer C_McrContinueWar */
+    /** MessageContainer C_McrContinueWar */
     C_McrContinueWar?: (IC_McrContinueWar|null);
 
-    /** ActionContainer S_McrContinueWar */
+    /** MessageContainer S_McrContinueWar */
     S_McrContinueWar?: (IS_McrContinueWar|null);
 
-    /** ActionContainer C_McrGetReplayInfos */
+    /** MessageContainer C_McrGetReplayInfos */
     C_McrGetReplayInfos?: (IC_McrGetReplayInfos|null);
 
-    /** ActionContainer S_McrGetReplayInfos */
+    /** MessageContainer S_McrGetReplayInfos */
     S_McrGetReplayInfos?: (IS_McrGetReplayInfos|null);
 
-    /** ActionContainer C_McrGetReplayData */
+    /** MessageContainer C_McrGetReplayData */
     C_McrGetReplayData?: (IC_McrGetReplayData|null);
 
-    /** ActionContainer S_McrGetReplayData */
+    /** MessageContainer S_McrGetReplayData */
     S_McrGetReplayData?: (IS_McrGetReplayData|null);
 
-    /** ActionContainer C_McwPlayerBeginTurn */
+    /** MessageContainer C_McwPlayerBeginTurn */
     C_McwPlayerBeginTurn?: (IC_McwPlayerBeginTurn|null);
 
-    /** ActionContainer S_McwPlayerBeginTurn */
+    /** MessageContainer S_McwPlayerBeginTurn */
     S_McwPlayerBeginTurn?: (IS_McwPlayerBeginTurn|null);
 
-    /** ActionContainer C_McwPlayerEndTurn */
+    /** MessageContainer C_McwPlayerEndTurn */
     C_McwPlayerEndTurn?: (IC_McwPlayerEndTurn|null);
 
-    /** ActionContainer S_McwPlayerEndTurn */
+    /** MessageContainer S_McwPlayerEndTurn */
     S_McwPlayerEndTurn?: (IS_McwPlayerEndTurn|null);
 
-    /** ActionContainer C_McwPlayerSurrender */
+    /** MessageContainer C_McwPlayerSurrender */
     C_McwPlayerSurrender?: (IC_McwPlayerSurrender|null);
 
-    /** ActionContainer S_McwPlayerSurrender */
+    /** MessageContainer S_McwPlayerSurrender */
     S_McwPlayerSurrender?: (IS_McwPlayerSurrender|null);
 
-    /** ActionContainer C_McwPlayerProduceUnit */
+    /** MessageContainer C_McwPlayerProduceUnit */
     C_McwPlayerProduceUnit?: (IC_McwPlayerProduceUnit|null);
 
-    /** ActionContainer S_McwPlayerProduceUnit */
+    /** MessageContainer S_McwPlayerProduceUnit */
     S_McwPlayerProduceUnit?: (IS_McwPlayerProduceUnit|null);
 
-    /** ActionContainer C_McwPlayerDeleteUnit */
+    /** MessageContainer C_McwPlayerDeleteUnit */
     C_McwPlayerDeleteUnit?: (IC_McwPlayerDeleteUnit|null);
 
-    /** ActionContainer S_McwPlayerDeleteUnit */
+    /** MessageContainer S_McwPlayerDeleteUnit */
     S_McwPlayerDeleteUnit?: (IS_McwPlayerDeleteUnit|null);
 
-    /** ActionContainer C_McwPlayerVoteForDraw */
+    /** MessageContainer C_McwPlayerVoteForDraw */
     C_McwPlayerVoteForDraw?: (IC_McwPlayerVoteForDraw|null);
 
-    /** ActionContainer S_McwPlayerVoteForDraw */
+    /** MessageContainer S_McwPlayerVoteForDraw */
     S_McwPlayerVoteForDraw?: (IS_McwPlayerVoteForDraw|null);
 
-    /** ActionContainer C_McwPlayerSyncWar */
+    /** MessageContainer C_McwPlayerSyncWar */
     C_McwPlayerSyncWar?: (IC_McwPlayerSyncWar|null);
 
-    /** ActionContainer S_McwPlayerSyncWar */
+    /** MessageContainer S_McwPlayerSyncWar */
     S_McwPlayerSyncWar?: (IS_McwPlayerSyncWar|null);
 
-    /** ActionContainer C_McwUnitWait */
+    /** MessageContainer C_McwUnitWait */
     C_McwUnitWait?: (IC_McwUnitWait|null);
 
-    /** ActionContainer S_McwUnitWait */
+    /** MessageContainer S_McwUnitWait */
     S_McwUnitWait?: (IS_McwUnitWait|null);
 
-    /** ActionContainer C_McwUnitBeLoaded */
+    /** MessageContainer C_McwUnitBeLoaded */
     C_McwUnitBeLoaded?: (IC_McwUnitBeLoaded|null);
 
-    /** ActionContainer S_McwUnitBeLoaded */
+    /** MessageContainer S_McwUnitBeLoaded */
     S_McwUnitBeLoaded?: (IS_McwUnitBeLoaded|null);
 
-    /** ActionContainer C_McwUnitCaptureTile */
+    /** MessageContainer C_McwUnitCaptureTile */
     C_McwUnitCaptureTile?: (IC_McwUnitCaptureTile|null);
 
-    /** ActionContainer S_McwUnitCaptureTile */
+    /** MessageContainer S_McwUnitCaptureTile */
     S_McwUnitCaptureTile?: (IS_McwUnitCaptureTile|null);
 
-    /** ActionContainer C_McwUnitAttack */
+    /** MessageContainer C_McwUnitAttack */
     C_McwUnitAttack?: (IC_McwUnitAttack|null);
 
-    /** ActionContainer S_McwUnitAttack */
+    /** MessageContainer S_McwUnitAttack */
     S_McwUnitAttack?: (IS_McwUnitAttack|null);
 
-    /** ActionContainer C_McwUnitDrop */
+    /** MessageContainer C_McwUnitDrop */
     C_McwUnitDrop?: (IC_McwUnitDrop|null);
 
-    /** ActionContainer S_McwUnitDrop */
+    /** MessageContainer S_McwUnitDrop */
     S_McwUnitDrop?: (IS_McwUnitDrop|null);
 
-    /** ActionContainer C_McwUnitBuildTile */
+    /** MessageContainer C_McwUnitBuildTile */
     C_McwUnitBuildTile?: (IC_McwUnitBuildTile|null);
 
-    /** ActionContainer S_McwUnitBuildTile */
+    /** MessageContainer S_McwUnitBuildTile */
     S_McwUnitBuildTile?: (IS_McwUnitBuildTile|null);
 
-    /** ActionContainer C_McwUnitDive */
+    /** MessageContainer C_McwUnitDive */
     C_McwUnitDive?: (IC_McwUnitDive|null);
 
-    /** ActionContainer S_McwUnitDive */
+    /** MessageContainer S_McwUnitDive */
     S_McwUnitDive?: (IS_McwUnitDive|null);
 
-    /** ActionContainer C_McwUnitSurface */
+    /** MessageContainer C_McwUnitSurface */
     C_McwUnitSurface?: (IC_McwUnitSurface|null);
 
-    /** ActionContainer S_McwUnitSurface */
+    /** MessageContainer S_McwUnitSurface */
     S_McwUnitSurface?: (IS_McwUnitSurface|null);
 
-    /** ActionContainer C_McwUnitJoin */
+    /** MessageContainer C_McwUnitJoin */
     C_McwUnitJoin?: (IC_McwUnitJoin|null);
 
-    /** ActionContainer S_McwUnitJoin */
+    /** MessageContainer S_McwUnitJoin */
     S_McwUnitJoin?: (IS_McwUnitJoin|null);
 
-    /** ActionContainer C_McwUnitLaunchFlare */
+    /** MessageContainer C_McwUnitLaunchFlare */
     C_McwUnitLaunchFlare?: (IC_McwUnitLaunchFlare|null);
 
-    /** ActionContainer S_McwUnitLaunchFlare */
+    /** MessageContainer S_McwUnitLaunchFlare */
     S_McwUnitLaunchFlare?: (IS_McwUnitLaunchFlare|null);
 
-    /** ActionContainer C_McwUnitLaunchSilo */
+    /** MessageContainer C_McwUnitLaunchSilo */
     C_McwUnitLaunchSilo?: (IC_McwUnitLaunchSilo|null);
 
-    /** ActionContainer S_McwUnitLaunchSilo */
+    /** MessageContainer S_McwUnitLaunchSilo */
     S_McwUnitLaunchSilo?: (IS_McwUnitLaunchSilo|null);
 
-    /** ActionContainer C_McwUnitProduceUnit */
+    /** MessageContainer C_McwUnitProduceUnit */
     C_McwUnitProduceUnit?: (IC_McwUnitProduceUnit|null);
 
-    /** ActionContainer S_McwUnitProduceUnit */
+    /** MessageContainer S_McwUnitProduceUnit */
     S_McwUnitProduceUnit?: (IS_McwUnitProduceUnit|null);
 
-    /** ActionContainer C_McwUnitSupply */
+    /** MessageContainer C_McwUnitSupply */
     C_McwUnitSupply?: (IC_McwUnitSupply|null);
 
-    /** ActionContainer S_McwUnitSupply */
+    /** MessageContainer S_McwUnitSupply */
     S_McwUnitSupply?: (IS_McwUnitSupply|null);
 }
 
-/** Represents an ActionContainer. */
-export declare class ActionContainer implements IActionContainer {
+/** Represents a MessageContainer. */
+export declare class MessageContainer implements IMessageContainer {
 
     /**
-     * Constructs a new ActionContainer.
+     * Constructs a new MessageContainer.
      * @param [properties] Properties to set
      */
-    constructor(properties?: IActionContainer);
+    constructor(properties?: IMessageContainer);
 
-    /** ActionContainer C_Heartbeat. */
+    /** MessageContainer C_Heartbeat. */
     public C_Heartbeat?: (IC_Heartbeat|null);
 
-    /** ActionContainer S_Heartbeat. */
+    /** MessageContainer S_Heartbeat. */
     public S_Heartbeat?: (IS_Heartbeat|null);
 
-    /** ActionContainer C_Register. */
+    /** MessageContainer C_Register. */
     public C_Register?: (IC_Register|null);
 
-    /** ActionContainer S_Register. */
+    /** MessageContainer S_Register. */
     public S_Register?: (IS_Register|null);
 
-    /** ActionContainer C_Login. */
+    /** MessageContainer C_Login. */
     public C_Login?: (IC_Login|null);
 
-    /** ActionContainer S_Login. */
+    /** MessageContainer S_Login. */
     public S_Login?: (IS_Login|null);
 
-    /** ActionContainer C_Logout. */
+    /** MessageContainer C_Logout. */
     public C_Logout?: (IC_Logout|null);
 
-    /** ActionContainer S_Logout. */
+    /** MessageContainer S_Logout. */
     public S_Logout?: (IS_Logout|null);
 
-    /** ActionContainer S_Error. */
+    /** MessageContainer S_Error. */
     public S_Error?: (IS_Error|null);
 
-    /** ActionContainer C_GetNewestMapDynamicInfos. */
+    /** MessageContainer C_GetNewestMapDynamicInfos. */
     public C_GetNewestMapDynamicInfos?: (IC_GetNewestMapDynamicInfos|null);
 
-    /** ActionContainer S_GetNewestMapDynamicInfos. */
+    /** MessageContainer S_GetNewestMapDynamicInfos. */
     public S_GetNewestMapDynamicInfos?: (IS_GetNewestMapDynamicInfos|null);
 
-    /** ActionContainer S_NewestConfigVersion. */
+    /** MessageContainer S_NewestConfigVersion. */
     public S_NewestConfigVersion?: (IS_NewestConfigVersion|null);
 
-    /** ActionContainer C_GetMapDynamicInfo. */
+    /** MessageContainer C_GetMapDynamicInfo. */
     public C_GetMapDynamicInfo?: (IC_GetMapDynamicInfo|null);
 
-    /** ActionContainer S_GetMapDynamicInfo. */
+    /** MessageContainer S_GetMapDynamicInfo. */
     public S_GetMapDynamicInfo?: (IS_GetMapDynamicInfo|null);
 
-    /** ActionContainer S_ServerDisconnect. */
+    /** MessageContainer S_ServerDisconnect. */
     public S_ServerDisconnect?: (IS_ServerDisconnect|null);
 
-    /** ActionContainer C_GetUserPublicInfo. */
+    /** MessageContainer C_GetUserPublicInfo. */
     public C_GetUserPublicInfo?: (IC_GetUserPublicInfo|null);
 
-    /** ActionContainer S_GetUserPublicInfo. */
+    /** MessageContainer S_GetUserPublicInfo. */
     public S_GetUserPublicInfo?: (IS_GetUserPublicInfo|null);
 
-    /** ActionContainer C_McrCreateWar. */
+    /** MessageContainer C_McrCreateWar. */
     public C_McrCreateWar?: (IC_McrCreateWar|null);
 
-    /** ActionContainer S_McrCreateWar. */
+    /** MessageContainer S_McrCreateWar. */
     public S_McrCreateWar?: (IS_McrCreateWar|null);
 
-    /** ActionContainer C_McrExitWar. */
+    /** MessageContainer C_McrExitWar. */
     public C_McrExitWar?: (IC_McrExitWar|null);
 
-    /** ActionContainer S_McrExitWar. */
+    /** MessageContainer S_McrExitWar. */
     public S_McrExitWar?: (IS_McrExitWar|null);
 
-    /** ActionContainer C_McrGetJoinedWaitingInfos. */
+    /** MessageContainer C_McrGetJoinedWaitingInfos. */
     public C_McrGetJoinedWaitingInfos?: (IC_McrGetJoinedWaitingInfos|null);
 
-    /** ActionContainer S_McrGetJoinedWaitingInfos. */
+    /** MessageContainer S_McrGetJoinedWaitingInfos. */
     public S_McrGetJoinedWaitingInfos?: (IS_McrGetJoinedWaitingInfos|null);
 
-    /** ActionContainer C_McrGetUnjoinedWaitingInfos. */
+    /** MessageContainer C_McrGetUnjoinedWaitingInfos. */
     public C_McrGetUnjoinedWaitingInfos?: (IC_McrGetUnjoinedWaitingInfos|null);
 
-    /** ActionContainer S_McrGetUnjoinedWaitingInfos. */
+    /** MessageContainer S_McrGetUnjoinedWaitingInfos. */
     public S_McrGetUnjoinedWaitingInfos?: (IS_McrGetUnjoinedWaitingInfos|null);
 
-    /** ActionContainer C_McrJoinWar. */
+    /** MessageContainer C_McrJoinWar. */
     public C_McrJoinWar?: (IC_McrJoinWar|null);
 
-    /** ActionContainer S_McrJoinWar. */
+    /** MessageContainer S_McrJoinWar. */
     public S_McrJoinWar?: (IS_McrJoinWar|null);
 
-    /** ActionContainer C_McrGetJoinedOngoingInfos. */
+    /** MessageContainer C_McrGetJoinedOngoingInfos. */
     public C_McrGetJoinedOngoingInfos?: (IC_McrGetJoinedOngoingInfos|null);
 
-    /** ActionContainer S_McrGetJoinedOngoingInfos. */
+    /** MessageContainer S_McrGetJoinedOngoingInfos. */
     public S_McrGetJoinedOngoingInfos?: (IS_McrGetJoinedOngoingInfos|null);
 
-    /** ActionContainer C_McrContinueWar. */
+    /** MessageContainer C_McrContinueWar. */
     public C_McrContinueWar?: (IC_McrContinueWar|null);
 
-    /** ActionContainer S_McrContinueWar. */
+    /** MessageContainer S_McrContinueWar. */
     public S_McrContinueWar?: (IS_McrContinueWar|null);
 
-    /** ActionContainer C_McrGetReplayInfos. */
+    /** MessageContainer C_McrGetReplayInfos. */
     public C_McrGetReplayInfos?: (IC_McrGetReplayInfos|null);
 
-    /** ActionContainer S_McrGetReplayInfos. */
+    /** MessageContainer S_McrGetReplayInfos. */
     public S_McrGetReplayInfos?: (IS_McrGetReplayInfos|null);
 
-    /** ActionContainer C_McrGetReplayData. */
+    /** MessageContainer C_McrGetReplayData. */
     public C_McrGetReplayData?: (IC_McrGetReplayData|null);
 
-    /** ActionContainer S_McrGetReplayData. */
+    /** MessageContainer S_McrGetReplayData. */
     public S_McrGetReplayData?: (IS_McrGetReplayData|null);
 
-    /** ActionContainer C_McwPlayerBeginTurn. */
+    /** MessageContainer C_McwPlayerBeginTurn. */
     public C_McwPlayerBeginTurn?: (IC_McwPlayerBeginTurn|null);
 
-    /** ActionContainer S_McwPlayerBeginTurn. */
+    /** MessageContainer S_McwPlayerBeginTurn. */
     public S_McwPlayerBeginTurn?: (IS_McwPlayerBeginTurn|null);
 
-    /** ActionContainer C_McwPlayerEndTurn. */
+    /** MessageContainer C_McwPlayerEndTurn. */
     public C_McwPlayerEndTurn?: (IC_McwPlayerEndTurn|null);
 
-    /** ActionContainer S_McwPlayerEndTurn. */
+    /** MessageContainer S_McwPlayerEndTurn. */
     public S_McwPlayerEndTurn?: (IS_McwPlayerEndTurn|null);
 
-    /** ActionContainer C_McwPlayerSurrender. */
+    /** MessageContainer C_McwPlayerSurrender. */
     public C_McwPlayerSurrender?: (IC_McwPlayerSurrender|null);
 
-    /** ActionContainer S_McwPlayerSurrender. */
+    /** MessageContainer S_McwPlayerSurrender. */
     public S_McwPlayerSurrender?: (IS_McwPlayerSurrender|null);
 
-    /** ActionContainer C_McwPlayerProduceUnit. */
+    /** MessageContainer C_McwPlayerProduceUnit. */
     public C_McwPlayerProduceUnit?: (IC_McwPlayerProduceUnit|null);
 
-    /** ActionContainer S_McwPlayerProduceUnit. */
+    /** MessageContainer S_McwPlayerProduceUnit. */
     public S_McwPlayerProduceUnit?: (IS_McwPlayerProduceUnit|null);
 
-    /** ActionContainer C_McwPlayerDeleteUnit. */
+    /** MessageContainer C_McwPlayerDeleteUnit. */
     public C_McwPlayerDeleteUnit?: (IC_McwPlayerDeleteUnit|null);
 
-    /** ActionContainer S_McwPlayerDeleteUnit. */
+    /** MessageContainer S_McwPlayerDeleteUnit. */
     public S_McwPlayerDeleteUnit?: (IS_McwPlayerDeleteUnit|null);
 
-    /** ActionContainer C_McwPlayerVoteForDraw. */
+    /** MessageContainer C_McwPlayerVoteForDraw. */
     public C_McwPlayerVoteForDraw?: (IC_McwPlayerVoteForDraw|null);
 
-    /** ActionContainer S_McwPlayerVoteForDraw. */
+    /** MessageContainer S_McwPlayerVoteForDraw. */
     public S_McwPlayerVoteForDraw?: (IS_McwPlayerVoteForDraw|null);
 
-    /** ActionContainer C_McwPlayerSyncWar. */
+    /** MessageContainer C_McwPlayerSyncWar. */
     public C_McwPlayerSyncWar?: (IC_McwPlayerSyncWar|null);
 
-    /** ActionContainer S_McwPlayerSyncWar. */
+    /** MessageContainer S_McwPlayerSyncWar. */
     public S_McwPlayerSyncWar?: (IS_McwPlayerSyncWar|null);
 
-    /** ActionContainer C_McwUnitWait. */
+    /** MessageContainer C_McwUnitWait. */
     public C_McwUnitWait?: (IC_McwUnitWait|null);
 
-    /** ActionContainer S_McwUnitWait. */
+    /** MessageContainer S_McwUnitWait. */
     public S_McwUnitWait?: (IS_McwUnitWait|null);
 
-    /** ActionContainer C_McwUnitBeLoaded. */
+    /** MessageContainer C_McwUnitBeLoaded. */
     public C_McwUnitBeLoaded?: (IC_McwUnitBeLoaded|null);
 
-    /** ActionContainer S_McwUnitBeLoaded. */
+    /** MessageContainer S_McwUnitBeLoaded. */
     public S_McwUnitBeLoaded?: (IS_McwUnitBeLoaded|null);
 
-    /** ActionContainer C_McwUnitCaptureTile. */
+    /** MessageContainer C_McwUnitCaptureTile. */
     public C_McwUnitCaptureTile?: (IC_McwUnitCaptureTile|null);
 
-    /** ActionContainer S_McwUnitCaptureTile. */
+    /** MessageContainer S_McwUnitCaptureTile. */
     public S_McwUnitCaptureTile?: (IS_McwUnitCaptureTile|null);
 
-    /** ActionContainer C_McwUnitAttack. */
+    /** MessageContainer C_McwUnitAttack. */
     public C_McwUnitAttack?: (IC_McwUnitAttack|null);
 
-    /** ActionContainer S_McwUnitAttack. */
+    /** MessageContainer S_McwUnitAttack. */
     public S_McwUnitAttack?: (IS_McwUnitAttack|null);
 
-    /** ActionContainer C_McwUnitDrop. */
+    /** MessageContainer C_McwUnitDrop. */
     public C_McwUnitDrop?: (IC_McwUnitDrop|null);
 
-    /** ActionContainer S_McwUnitDrop. */
+    /** MessageContainer S_McwUnitDrop. */
     public S_McwUnitDrop?: (IS_McwUnitDrop|null);
 
-    /** ActionContainer C_McwUnitBuildTile. */
+    /** MessageContainer C_McwUnitBuildTile. */
     public C_McwUnitBuildTile?: (IC_McwUnitBuildTile|null);
 
-    /** ActionContainer S_McwUnitBuildTile. */
+    /** MessageContainer S_McwUnitBuildTile. */
     public S_McwUnitBuildTile?: (IS_McwUnitBuildTile|null);
 
-    /** ActionContainer C_McwUnitDive. */
+    /** MessageContainer C_McwUnitDive. */
     public C_McwUnitDive?: (IC_McwUnitDive|null);
 
-    /** ActionContainer S_McwUnitDive. */
+    /** MessageContainer S_McwUnitDive. */
     public S_McwUnitDive?: (IS_McwUnitDive|null);
 
-    /** ActionContainer C_McwUnitSurface. */
+    /** MessageContainer C_McwUnitSurface. */
     public C_McwUnitSurface?: (IC_McwUnitSurface|null);
 
-    /** ActionContainer S_McwUnitSurface. */
+    /** MessageContainer S_McwUnitSurface. */
     public S_McwUnitSurface?: (IS_McwUnitSurface|null);
 
-    /** ActionContainer C_McwUnitJoin. */
+    /** MessageContainer C_McwUnitJoin. */
     public C_McwUnitJoin?: (IC_McwUnitJoin|null);
 
-    /** ActionContainer S_McwUnitJoin. */
+    /** MessageContainer S_McwUnitJoin. */
     public S_McwUnitJoin?: (IS_McwUnitJoin|null);
 
-    /** ActionContainer C_McwUnitLaunchFlare. */
+    /** MessageContainer C_McwUnitLaunchFlare. */
     public C_McwUnitLaunchFlare?: (IC_McwUnitLaunchFlare|null);
 
-    /** ActionContainer S_McwUnitLaunchFlare. */
+    /** MessageContainer S_McwUnitLaunchFlare. */
     public S_McwUnitLaunchFlare?: (IS_McwUnitLaunchFlare|null);
 
-    /** ActionContainer C_McwUnitLaunchSilo. */
+    /** MessageContainer C_McwUnitLaunchSilo. */
     public C_McwUnitLaunchSilo?: (IC_McwUnitLaunchSilo|null);
 
-    /** ActionContainer S_McwUnitLaunchSilo. */
+    /** MessageContainer S_McwUnitLaunchSilo. */
     public S_McwUnitLaunchSilo?: (IS_McwUnitLaunchSilo|null);
 
-    /** ActionContainer C_McwUnitProduceUnit. */
+    /** MessageContainer C_McwUnitProduceUnit. */
     public C_McwUnitProduceUnit?: (IC_McwUnitProduceUnit|null);
 
-    /** ActionContainer S_McwUnitProduceUnit. */
+    /** MessageContainer S_McwUnitProduceUnit. */
     public S_McwUnitProduceUnit?: (IS_McwUnitProduceUnit|null);
 
-    /** ActionContainer C_McwUnitSupply. */
+    /** MessageContainer C_McwUnitSupply. */
     public C_McwUnitSupply?: (IC_McwUnitSupply|null);
 
-    /** ActionContainer S_McwUnitSupply. */
+    /** MessageContainer S_McwUnitSupply. */
     public S_McwUnitSupply?: (IS_McwUnitSupply|null);
 
     /**
-     * Creates a new ActionContainer instance using the specified properties.
+     * Creates a new MessageContainer instance using the specified properties.
      * @param [properties] Properties to set
-     * @returns ActionContainer instance
+     * @returns MessageContainer instance
      */
-    public static create(properties?: IActionContainer): ActionContainer;
+    public static create(properties?: IMessageContainer): MessageContainer;
 
     /**
-     * Encodes the specified ActionContainer message. Does not implicitly {@link ActionContainer.verify|verify} messages.
-     * @param message ActionContainer message or plain object to encode
+     * Encodes the specified MessageContainer message. Does not implicitly {@link MessageContainer.verify|verify} messages.
+     * @param message MessageContainer message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encode(message: IActionContainer, writer?: protobuf.Writer): protobuf.Writer;
+    public static encode(message: IMessageContainer, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Encodes the specified ActionContainer message, length delimited. Does not implicitly {@link ActionContainer.verify|verify} messages.
-     * @param message ActionContainer message or plain object to encode
+     * Encodes the specified MessageContainer message, length delimited. Does not implicitly {@link MessageContainer.verify|verify} messages.
+     * @param message MessageContainer message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encodeDelimited(message: IActionContainer, writer?: protobuf.Writer): protobuf.Writer;
+    public static encodeDelimited(message: IMessageContainer, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Decodes an ActionContainer message from the specified reader or buffer.
+     * Decodes a MessageContainer message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
-     * @returns ActionContainer
+     * @returns MessageContainer
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): ActionContainer;
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): MessageContainer;
 
     /**
-     * Decodes an ActionContainer message from the specified reader or buffer, length delimited.
+     * Decodes a MessageContainer message from the specified reader or buffer, length delimited.
      * @param reader Reader or buffer to decode from
-     * @returns ActionContainer
+     * @returns MessageContainer
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): ActionContainer;
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): MessageContainer;
 
     /**
-     * Verifies an ActionContainer message.
+     * Verifies a MessageContainer message.
      * @param message Plain object to verify
      * @returns `null` if valid, otherwise the reason why it is not
      */
     public static verify(message: { [k: string]: any }): (string|null);
 
     /**
-     * Creates an ActionContainer message from a plain object. Also converts values to their respective internal types.
+     * Creates a MessageContainer message from a plain object. Also converts values to their respective internal types.
      * @param object Plain object
-     * @returns ActionContainer
+     * @returns MessageContainer
      */
-    public static fromObject(object: { [k: string]: any }): ActionContainer;
+    public static fromObject(object: { [k: string]: any }): MessageContainer;
 
     /**
-     * Creates a plain object from an ActionContainer message. Also converts values to other types if specified.
-     * @param message ActionContainer
+     * Creates a plain object from a MessageContainer message. Also converts values to other types if specified.
+     * @param message MessageContainer
      * @param [options] Conversion options
      * @returns Plain object
      */
-    public static toObject(message: ActionContainer, options?: protobuf.IConversionOptions): { [k: string]: any };
+    public static toObject(message: MessageContainer, options?: protobuf.IConversionOptions): { [k: string]: any };
 
     /**
-     * Converts this ActionContainer to JSON.
+     * Converts this MessageContainer to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };
@@ -7583,7 +9971,7 @@ export declare interface IS_McrContinueWar {
     warId?: (number|null);
 
     /** S_McrContinueWar war */
-    war?: (ISerializedMcwWar|null);
+    war?: (ISerializedWar|null);
 }
 
 /** Represents a S_McrContinueWar. */
@@ -7602,7 +9990,7 @@ export declare class S_McrContinueWar implements IS_McrContinueWar {
     public warId: number;
 
     /** S_McrContinueWar war. */
-    public war?: (ISerializedMcwWar|null);
+    public war?: (ISerializedWar|null);
 
     /**
      * Creates a new S_McrContinueWar instance using the specified properties.
@@ -8174,7 +10562,7 @@ export declare interface IS_McwPlayerSyncWar {
     nextActionId?: (number|null);
 
     /** S_McwPlayerSyncWar war */
-    war?: (ISerializedMcwWar|null);
+    war?: (ISerializedWar|null);
 
     /** S_McwPlayerSyncWar status */
     status?: (number|null);
@@ -8202,7 +10590,7 @@ export declare class S_McwPlayerSyncWar implements IS_McwPlayerSyncWar {
     public nextActionId: number;
 
     /** S_McwPlayerSyncWar war. */
-    public war?: (ISerializedMcwWar|null);
+    public war?: (ISerializedWar|null);
 
     /** S_McwPlayerSyncWar status. */
     public status: number;
@@ -8386,20 +10774,8 @@ export declare interface IS_McwPlayerBeginTurn {
     /** S_McwPlayerBeginTurn warId */
     warId?: (number|null);
 
-    /** S_McwPlayerBeginTurn actionId */
-    actionId?: (number|null);
-
-    /** S_McwPlayerBeginTurn remainingFund */
-    remainingFund?: (number|null);
-
-    /** S_McwPlayerBeginTurn isDefeated */
-    isDefeated?: (boolean|null);
-
-    /** S_McwPlayerBeginTurn repairDataByTile */
-    repairDataByTile?: (IMcwRepairData[]|null);
-
-    /** S_McwPlayerBeginTurn repairDataByUnit */
-    repairDataByUnit?: (IMcwRepairData[]|null);
+    /** S_McwPlayerBeginTurn actionContainer */
+    actionContainer?: (IWarActionContainer|null);
 }
 
 /** Represents a S_McwPlayerBeginTurn. */
@@ -8417,20 +10793,8 @@ export declare class S_McwPlayerBeginTurn implements IS_McwPlayerBeginTurn {
     /** S_McwPlayerBeginTurn warId. */
     public warId: number;
 
-    /** S_McwPlayerBeginTurn actionId. */
-    public actionId: number;
-
-    /** S_McwPlayerBeginTurn remainingFund. */
-    public remainingFund: number;
-
-    /** S_McwPlayerBeginTurn isDefeated. */
-    public isDefeated: boolean;
-
-    /** S_McwPlayerBeginTurn repairDataByTile. */
-    public repairDataByTile: IMcwRepairData[];
-
-    /** S_McwPlayerBeginTurn repairDataByUnit. */
-    public repairDataByUnit: IMcwRepairData[];
+    /** S_McwPlayerBeginTurn actionContainer. */
+    public actionContainer?: (IWarActionContainer|null);
 
     /**
      * Creates a new S_McwPlayerBeginTurn instance using the specified properties.
@@ -8608,8 +10972,8 @@ export declare interface IS_McwPlayerEndTurn {
     /** S_McwPlayerEndTurn warId */
     warId?: (number|null);
 
-    /** S_McwPlayerEndTurn actionId */
-    actionId?: (number|null);
+    /** S_McwPlayerEndTurn actionContainer */
+    actionContainer?: (IWarActionContainer|null);
 }
 
 /** Represents a S_McwPlayerEndTurn. */
@@ -8627,8 +10991,8 @@ export declare class S_McwPlayerEndTurn implements IS_McwPlayerEndTurn {
     /** S_McwPlayerEndTurn warId. */
     public warId: number;
 
-    /** S_McwPlayerEndTurn actionId. */
-    public actionId: number;
+    /** S_McwPlayerEndTurn actionContainer. */
+    public actionContainer?: (IWarActionContainer|null);
 
     /**
      * Creates a new S_McwPlayerEndTurn instance using the specified properties.
@@ -8806,8 +11170,8 @@ export declare interface IS_McwPlayerSurrender {
     /** S_McwPlayerSurrender warId */
     warId?: (number|null);
 
-    /** S_McwPlayerSurrender actionId */
-    actionId?: (number|null);
+    /** S_McwPlayerSurrender actionContainer */
+    actionContainer?: (IWarActionContainer|null);
 }
 
 /** Represents a S_McwPlayerSurrender. */
@@ -8825,8 +11189,8 @@ export declare class S_McwPlayerSurrender implements IS_McwPlayerSurrender {
     /** S_McwPlayerSurrender warId. */
     public warId: number;
 
-    /** S_McwPlayerSurrender actionId. */
-    public actionId: number;
+    /** S_McwPlayerSurrender actionContainer. */
+    public actionContainer?: (IWarActionContainer|null);
 
     /**
      * Creates a new S_McwPlayerSurrender instance using the specified properties.
@@ -9016,23 +11380,8 @@ export declare interface IS_McwPlayerProduceUnit {
     /** S_McwPlayerProduceUnit warId */
     warId?: (number|null);
 
-    /** S_McwPlayerProduceUnit actionId */
-    actionId?: (number|null);
-
-    /** S_McwPlayerProduceUnit discoveredUnits */
-    discoveredUnits?: (ISerializedMcwUnit[]|null);
-
-    /** S_McwPlayerProduceUnit discoveredTiles */
-    discoveredTiles?: (ISerializedMcwTile[]|null);
-
-    /** S_McwPlayerProduceUnit gridIndex */
-    gridIndex?: (IGridIndex|null);
-
-    /** S_McwPlayerProduceUnit unitType */
-    unitType?: (number|null);
-
-    /** S_McwPlayerProduceUnit cost */
-    cost?: (number|null);
+    /** S_McwPlayerProduceUnit actionContainer */
+    actionContainer?: (IWarActionContainer|null);
 }
 
 /** Represents a S_McwPlayerProduceUnit. */
@@ -9050,23 +11399,8 @@ export declare class S_McwPlayerProduceUnit implements IS_McwPlayerProduceUnit {
     /** S_McwPlayerProduceUnit warId. */
     public warId: number;
 
-    /** S_McwPlayerProduceUnit actionId. */
-    public actionId: number;
-
-    /** S_McwPlayerProduceUnit discoveredUnits. */
-    public discoveredUnits: ISerializedMcwUnit[];
-
-    /** S_McwPlayerProduceUnit discoveredTiles. */
-    public discoveredTiles: ISerializedMcwTile[];
-
-    /** S_McwPlayerProduceUnit gridIndex. */
-    public gridIndex?: (IGridIndex|null);
-
-    /** S_McwPlayerProduceUnit unitType. */
-    public unitType: number;
-
-    /** S_McwPlayerProduceUnit cost. */
-    public cost: number;
+    /** S_McwPlayerProduceUnit actionContainer. */
+    public actionContainer?: (IWarActionContainer|null);
 
     /**
      * Creates a new S_McwPlayerProduceUnit instance using the specified properties.
@@ -9250,11 +11584,8 @@ export declare interface IS_McwPlayerDeleteUnit {
     /** S_McwPlayerDeleteUnit warId */
     warId?: (number|null);
 
-    /** S_McwPlayerDeleteUnit actionId */
-    actionId?: (number|null);
-
-    /** S_McwPlayerDeleteUnit gridIndex */
-    gridIndex?: (IGridIndex|null);
+    /** S_McwPlayerDeleteUnit actionContainer */
+    actionContainer?: (IWarActionContainer|null);
 }
 
 /** Represents a S_McwPlayerDeleteUnit. */
@@ -9272,11 +11603,8 @@ export declare class S_McwPlayerDeleteUnit implements IS_McwPlayerDeleteUnit {
     /** S_McwPlayerDeleteUnit warId. */
     public warId: number;
 
-    /** S_McwPlayerDeleteUnit actionId. */
-    public actionId: number;
-
-    /** S_McwPlayerDeleteUnit gridIndex. */
-    public gridIndex?: (IGridIndex|null);
+    /** S_McwPlayerDeleteUnit actionContainer. */
+    public actionContainer?: (IWarActionContainer|null);
 
     /**
      * Creates a new S_McwPlayerDeleteUnit instance using the specified properties.
@@ -9460,11 +11788,8 @@ export declare interface IS_McwPlayerVoteForDraw {
     /** S_McwPlayerVoteForDraw warId */
     warId?: (number|null);
 
-    /** S_McwPlayerVoteForDraw actionId */
-    actionId?: (number|null);
-
-    /** S_McwPlayerVoteForDraw isAgree */
-    isAgree?: (boolean|null);
+    /** S_McwPlayerVoteForDraw actionContainer */
+    actionContainer?: (IWarActionContainer|null);
 }
 
 /** Represents a S_McwPlayerVoteForDraw. */
@@ -9482,11 +11807,8 @@ export declare class S_McwPlayerVoteForDraw implements IS_McwPlayerVoteForDraw {
     /** S_McwPlayerVoteForDraw warId. */
     public warId: number;
 
-    /** S_McwPlayerVoteForDraw actionId. */
-    public actionId: number;
-
-    /** S_McwPlayerVoteForDraw isAgree. */
-    public isAgree: boolean;
+    /** S_McwPlayerVoteForDraw actionContainer. */
+    public actionContainer?: (IWarActionContainer|null);
 
     /**
      * Creates a new S_McwPlayerVoteForDraw instance using the specified properties.
@@ -9676,26 +11998,8 @@ export declare interface IS_McwUnitWait {
     /** S_McwUnitWait warId */
     warId?: (number|null);
 
-    /** S_McwUnitWait actionId */
-    actionId?: (number|null);
-
-    /** S_McwUnitWait path */
-    path?: (IMovePath|null);
-
-    /** S_McwUnitWait launchUnitId */
-    launchUnitId?: (number|null);
-
-    /** S_McwUnitWait discoveredUnits */
-    discoveredUnits?: (ISerializedMcwUnit[]|null);
-
-    /** S_McwUnitWait discoveredTiles */
-    discoveredTiles?: (ISerializedMcwTile[]|null);
-
-    /** S_McwUnitWait actingUnits */
-    actingUnits?: (ISerializedMcwUnit[]|null);
-
-    /** S_McwUnitWait actingTiles */
-    actingTiles?: (ISerializedMcwTile[]|null);
+    /** S_McwUnitWait actionContainer */
+    actionContainer?: (IWarActionContainer|null);
 }
 
 /** Represents a S_McwUnitWait. */
@@ -9713,26 +12017,8 @@ export declare class S_McwUnitWait implements IS_McwUnitWait {
     /** S_McwUnitWait warId. */
     public warId: number;
 
-    /** S_McwUnitWait actionId. */
-    public actionId: number;
-
-    /** S_McwUnitWait path. */
-    public path?: (IMovePath|null);
-
-    /** S_McwUnitWait launchUnitId. */
-    public launchUnitId: number;
-
-    /** S_McwUnitWait discoveredUnits. */
-    public discoveredUnits: ISerializedMcwUnit[];
-
-    /** S_McwUnitWait discoveredTiles. */
-    public discoveredTiles: ISerializedMcwTile[];
-
-    /** S_McwUnitWait actingUnits. */
-    public actingUnits: ISerializedMcwUnit[];
-
-    /** S_McwUnitWait actingTiles. */
-    public actingTiles: ISerializedMcwTile[];
+    /** S_McwUnitWait actionContainer. */
+    public actionContainer?: (IWarActionContainer|null);
 
     /**
      * Creates a new S_McwUnitWait instance using the specified properties.
@@ -9922,26 +12208,8 @@ export declare interface IS_McwUnitBeLoaded {
     /** S_McwUnitBeLoaded warId */
     warId?: (number|null);
 
-    /** S_McwUnitBeLoaded actionId */
-    actionId?: (number|null);
-
-    /** S_McwUnitBeLoaded path */
-    path?: (IMovePath|null);
-
-    /** S_McwUnitBeLoaded launchUnitId */
-    launchUnitId?: (number|null);
-
-    /** S_McwUnitBeLoaded discoveredUnits */
-    discoveredUnits?: (ISerializedMcwUnit[]|null);
-
-    /** S_McwUnitBeLoaded discoveredTiles */
-    discoveredTiles?: (ISerializedMcwTile[]|null);
-
-    /** S_McwUnitBeLoaded actingUnits */
-    actingUnits?: (ISerializedMcwUnit[]|null);
-
-    /** S_McwUnitBeLoaded actingTiles */
-    actingTiles?: (ISerializedMcwTile[]|null);
+    /** S_McwUnitBeLoaded actionContainer */
+    actionContainer?: (IWarActionContainer|null);
 }
 
 /** Represents a S_McwUnitBeLoaded. */
@@ -9959,26 +12227,8 @@ export declare class S_McwUnitBeLoaded implements IS_McwUnitBeLoaded {
     /** S_McwUnitBeLoaded warId. */
     public warId: number;
 
-    /** S_McwUnitBeLoaded actionId. */
-    public actionId: number;
-
-    /** S_McwUnitBeLoaded path. */
-    public path?: (IMovePath|null);
-
-    /** S_McwUnitBeLoaded launchUnitId. */
-    public launchUnitId: number;
-
-    /** S_McwUnitBeLoaded discoveredUnits. */
-    public discoveredUnits: ISerializedMcwUnit[];
-
-    /** S_McwUnitBeLoaded discoveredTiles. */
-    public discoveredTiles: ISerializedMcwTile[];
-
-    /** S_McwUnitBeLoaded actingUnits. */
-    public actingUnits: ISerializedMcwUnit[];
-
-    /** S_McwUnitBeLoaded actingTiles. */
-    public actingTiles: ISerializedMcwTile[];
+    /** S_McwUnitBeLoaded actionContainer. */
+    public actionContainer?: (IWarActionContainer|null);
 
     /**
      * Creates a new S_McwUnitBeLoaded instance using the specified properties.
@@ -10168,26 +12418,8 @@ export declare interface IS_McwUnitCaptureTile {
     /** S_McwUnitCaptureTile warId */
     warId?: (number|null);
 
-    /** S_McwUnitCaptureTile actionId */
-    actionId?: (number|null);
-
-    /** S_McwUnitCaptureTile path */
-    path?: (IMovePath|null);
-
-    /** S_McwUnitCaptureTile launchUnitId */
-    launchUnitId?: (number|null);
-
-    /** S_McwUnitCaptureTile discoveredUnits */
-    discoveredUnits?: (ISerializedMcwUnit[]|null);
-
-    /** S_McwUnitCaptureTile discoveredTiles */
-    discoveredTiles?: (ISerializedMcwTile[]|null);
-
-    /** S_McwUnitCaptureTile actingUnits */
-    actingUnits?: (ISerializedMcwUnit[]|null);
-
-    /** S_McwUnitCaptureTile actingTiles */
-    actingTiles?: (ISerializedMcwTile[]|null);
+    /** S_McwUnitCaptureTile actionContainer */
+    actionContainer?: (IWarActionContainer|null);
 }
 
 /** Represents a S_McwUnitCaptureTile. */
@@ -10205,26 +12437,8 @@ export declare class S_McwUnitCaptureTile implements IS_McwUnitCaptureTile {
     /** S_McwUnitCaptureTile warId. */
     public warId: number;
 
-    /** S_McwUnitCaptureTile actionId. */
-    public actionId: number;
-
-    /** S_McwUnitCaptureTile path. */
-    public path?: (IMovePath|null);
-
-    /** S_McwUnitCaptureTile launchUnitId. */
-    public launchUnitId: number;
-
-    /** S_McwUnitCaptureTile discoveredUnits. */
-    public discoveredUnits: ISerializedMcwUnit[];
-
-    /** S_McwUnitCaptureTile discoveredTiles. */
-    public discoveredTiles: ISerializedMcwTile[];
-
-    /** S_McwUnitCaptureTile actingUnits. */
-    public actingUnits: ISerializedMcwUnit[];
-
-    /** S_McwUnitCaptureTile actingTiles. */
-    public actingTiles: ISerializedMcwTile[];
+    /** S_McwUnitCaptureTile actionContainer. */
+    public actionContainer?: (IWarActionContainer|null);
 
     /**
      * Creates a new S_McwUnitCaptureTile instance using the specified properties.
@@ -10420,38 +12634,8 @@ export declare interface IS_McwUnitAttack {
     /** S_McwUnitAttack warId */
     warId?: (number|null);
 
-    /** S_McwUnitAttack actionId */
-    actionId?: (number|null);
-
-    /** S_McwUnitAttack path */
-    path?: (IMovePath|null);
-
-    /** S_McwUnitAttack launchUnitId */
-    launchUnitId?: (number|null);
-
-    /** S_McwUnitAttack discoveredUnits */
-    discoveredUnits?: (ISerializedMcwUnit[]|null);
-
-    /** S_McwUnitAttack discoveredTiles */
-    discoveredTiles?: (ISerializedMcwTile[]|null);
-
-    /** S_McwUnitAttack actingUnits */
-    actingUnits?: (ISerializedMcwUnit[]|null);
-
-    /** S_McwUnitAttack actingTiles */
-    actingTiles?: (ISerializedMcwTile[]|null);
-
-    /** S_McwUnitAttack targetGridIndex */
-    targetGridIndex?: (IGridIndex|null);
-
-    /** S_McwUnitAttack attackDamage */
-    attackDamage?: (number|null);
-
-    /** S_McwUnitAttack counterDamage */
-    counterDamage?: (number|null);
-
-    /** S_McwUnitAttack lostPlayerIndex */
-    lostPlayerIndex?: (number|null);
+    /** S_McwUnitAttack actionContainer */
+    actionContainer?: (IWarActionContainer|null);
 }
 
 /** Represents a S_McwUnitAttack. */
@@ -10469,38 +12653,8 @@ export declare class S_McwUnitAttack implements IS_McwUnitAttack {
     /** S_McwUnitAttack warId. */
     public warId: number;
 
-    /** S_McwUnitAttack actionId. */
-    public actionId: number;
-
-    /** S_McwUnitAttack path. */
-    public path?: (IMovePath|null);
-
-    /** S_McwUnitAttack launchUnitId. */
-    public launchUnitId: number;
-
-    /** S_McwUnitAttack discoveredUnits. */
-    public discoveredUnits: ISerializedMcwUnit[];
-
-    /** S_McwUnitAttack discoveredTiles. */
-    public discoveredTiles: ISerializedMcwTile[];
-
-    /** S_McwUnitAttack actingUnits. */
-    public actingUnits: ISerializedMcwUnit[];
-
-    /** S_McwUnitAttack actingTiles. */
-    public actingTiles: ISerializedMcwTile[];
-
-    /** S_McwUnitAttack targetGridIndex. */
-    public targetGridIndex?: (IGridIndex|null);
-
-    /** S_McwUnitAttack attackDamage. */
-    public attackDamage: number;
-
-    /** S_McwUnitAttack counterDamage. */
-    public counterDamage: number;
-
-    /** S_McwUnitAttack lostPlayerIndex. */
-    public lostPlayerIndex: number;
+    /** S_McwUnitAttack actionContainer. */
+    public actionContainer?: (IWarActionContainer|null);
 
     /**
      * Creates a new S_McwUnitAttack instance using the specified properties.
@@ -10696,32 +12850,8 @@ export declare interface IS_McwUnitDrop {
     /** S_McwUnitDrop warId */
     warId?: (number|null);
 
-    /** S_McwUnitDrop actionId */
-    actionId?: (number|null);
-
-    /** S_McwUnitDrop path */
-    path?: (IMovePath|null);
-
-    /** S_McwUnitDrop launchUnitId */
-    launchUnitId?: (number|null);
-
-    /** S_McwUnitDrop discoveredUnits */
-    discoveredUnits?: (ISerializedMcwUnit[]|null);
-
-    /** S_McwUnitDrop discoveredTiles */
-    discoveredTiles?: (ISerializedMcwTile[]|null);
-
-    /** S_McwUnitDrop actingUnits */
-    actingUnits?: (ISerializedMcwUnit[]|null);
-
-    /** S_McwUnitDrop actingTiles */
-    actingTiles?: (ISerializedMcwTile[]|null);
-
-    /** S_McwUnitDrop dropDestinations */
-    dropDestinations?: (IDropDestination[]|null);
-
-    /** S_McwUnitDrop isDropBlocked */
-    isDropBlocked?: (boolean|null);
+    /** S_McwUnitDrop actionContainer */
+    actionContainer?: (IWarActionContainer|null);
 }
 
 /** Represents a S_McwUnitDrop. */
@@ -10739,32 +12869,8 @@ export declare class S_McwUnitDrop implements IS_McwUnitDrop {
     /** S_McwUnitDrop warId. */
     public warId: number;
 
-    /** S_McwUnitDrop actionId. */
-    public actionId: number;
-
-    /** S_McwUnitDrop path. */
-    public path?: (IMovePath|null);
-
-    /** S_McwUnitDrop launchUnitId. */
-    public launchUnitId: number;
-
-    /** S_McwUnitDrop discoveredUnits. */
-    public discoveredUnits: ISerializedMcwUnit[];
-
-    /** S_McwUnitDrop discoveredTiles. */
-    public discoveredTiles: ISerializedMcwTile[];
-
-    /** S_McwUnitDrop actingUnits. */
-    public actingUnits: ISerializedMcwUnit[];
-
-    /** S_McwUnitDrop actingTiles. */
-    public actingTiles: ISerializedMcwTile[];
-
-    /** S_McwUnitDrop dropDestinations. */
-    public dropDestinations: IDropDestination[];
-
-    /** S_McwUnitDrop isDropBlocked. */
-    public isDropBlocked: boolean;
+    /** S_McwUnitDrop actionContainer. */
+    public actionContainer?: (IWarActionContainer|null);
 
     /**
      * Creates a new S_McwUnitDrop instance using the specified properties.
@@ -10954,26 +13060,8 @@ export declare interface IS_McwUnitBuildTile {
     /** S_McwUnitBuildTile warId */
     warId?: (number|null);
 
-    /** S_McwUnitBuildTile actionId */
-    actionId?: (number|null);
-
-    /** S_McwUnitBuildTile path */
-    path?: (IMovePath|null);
-
-    /** S_McwUnitBuildTile launchUnitId */
-    launchUnitId?: (number|null);
-
-    /** S_McwUnitBuildTile discoveredUnits */
-    discoveredUnits?: (ISerializedMcwUnit[]|null);
-
-    /** S_McwUnitBuildTile discoveredTiles */
-    discoveredTiles?: (ISerializedMcwTile[]|null);
-
-    /** S_McwUnitBuildTile actingUnits */
-    actingUnits?: (ISerializedMcwUnit[]|null);
-
-    /** S_McwUnitBuildTile actingTiles */
-    actingTiles?: (ISerializedMcwTile[]|null);
+    /** S_McwUnitBuildTile actionContainer */
+    actionContainer?: (IWarActionContainer|null);
 }
 
 /** Represents a S_McwUnitBuildTile. */
@@ -10991,26 +13079,8 @@ export declare class S_McwUnitBuildTile implements IS_McwUnitBuildTile {
     /** S_McwUnitBuildTile warId. */
     public warId: number;
 
-    /** S_McwUnitBuildTile actionId. */
-    public actionId: number;
-
-    /** S_McwUnitBuildTile path. */
-    public path?: (IMovePath|null);
-
-    /** S_McwUnitBuildTile launchUnitId. */
-    public launchUnitId: number;
-
-    /** S_McwUnitBuildTile discoveredUnits. */
-    public discoveredUnits: ISerializedMcwUnit[];
-
-    /** S_McwUnitBuildTile discoveredTiles. */
-    public discoveredTiles: ISerializedMcwTile[];
-
-    /** S_McwUnitBuildTile actingUnits. */
-    public actingUnits: ISerializedMcwUnit[];
-
-    /** S_McwUnitBuildTile actingTiles. */
-    public actingTiles: ISerializedMcwTile[];
+    /** S_McwUnitBuildTile actionContainer. */
+    public actionContainer?: (IWarActionContainer|null);
 
     /**
      * Creates a new S_McwUnitBuildTile instance using the specified properties.
@@ -11200,26 +13270,8 @@ export declare interface IS_McwUnitDive {
     /** S_McwUnitDive warId */
     warId?: (number|null);
 
-    /** S_McwUnitDive actionId */
-    actionId?: (number|null);
-
-    /** S_McwUnitDive path */
-    path?: (IMovePath|null);
-
-    /** S_McwUnitDive launchUnitId */
-    launchUnitId?: (number|null);
-
-    /** S_McwUnitDive discoveredUnits */
-    discoveredUnits?: (ISerializedMcwUnit[]|null);
-
-    /** S_McwUnitDive discoveredTiles */
-    discoveredTiles?: (ISerializedMcwTile[]|null);
-
-    /** S_McwUnitDive actingUnits */
-    actingUnits?: (ISerializedMcwUnit[]|null);
-
-    /** S_McwUnitDive actingTiles */
-    actingTiles?: (ISerializedMcwTile[]|null);
+    /** S_McwUnitDive actionContainer */
+    actionContainer?: (IWarActionContainer|null);
 }
 
 /** Represents a S_McwUnitDive. */
@@ -11237,26 +13289,8 @@ export declare class S_McwUnitDive implements IS_McwUnitDive {
     /** S_McwUnitDive warId. */
     public warId: number;
 
-    /** S_McwUnitDive actionId. */
-    public actionId: number;
-
-    /** S_McwUnitDive path. */
-    public path?: (IMovePath|null);
-
-    /** S_McwUnitDive launchUnitId. */
-    public launchUnitId: number;
-
-    /** S_McwUnitDive discoveredUnits. */
-    public discoveredUnits: ISerializedMcwUnit[];
-
-    /** S_McwUnitDive discoveredTiles. */
-    public discoveredTiles: ISerializedMcwTile[];
-
-    /** S_McwUnitDive actingUnits. */
-    public actingUnits: ISerializedMcwUnit[];
-
-    /** S_McwUnitDive actingTiles. */
-    public actingTiles: ISerializedMcwTile[];
+    /** S_McwUnitDive actionContainer. */
+    public actionContainer?: (IWarActionContainer|null);
 
     /**
      * Creates a new S_McwUnitDive instance using the specified properties.
@@ -11446,26 +13480,8 @@ export declare interface IS_McwUnitSurface {
     /** S_McwUnitSurface warId */
     warId?: (number|null);
 
-    /** S_McwUnitSurface actionId */
-    actionId?: (number|null);
-
-    /** S_McwUnitSurface path */
-    path?: (IMovePath|null);
-
-    /** S_McwUnitSurface launchUnitId */
-    launchUnitId?: (number|null);
-
-    /** S_McwUnitSurface discoveredUnits */
-    discoveredUnits?: (ISerializedMcwUnit[]|null);
-
-    /** S_McwUnitSurface discoveredTiles */
-    discoveredTiles?: (ISerializedMcwTile[]|null);
-
-    /** S_McwUnitSurface actingUnits */
-    actingUnits?: (ISerializedMcwUnit[]|null);
-
-    /** S_McwUnitSurface actingTiles */
-    actingTiles?: (ISerializedMcwTile[]|null);
+    /** S_McwUnitSurface actionContainer */
+    actionContainer?: (IWarActionContainer|null);
 }
 
 /** Represents a S_McwUnitSurface. */
@@ -11483,26 +13499,8 @@ export declare class S_McwUnitSurface implements IS_McwUnitSurface {
     /** S_McwUnitSurface warId. */
     public warId: number;
 
-    /** S_McwUnitSurface actionId. */
-    public actionId: number;
-
-    /** S_McwUnitSurface path. */
-    public path?: (IMovePath|null);
-
-    /** S_McwUnitSurface launchUnitId. */
-    public launchUnitId: number;
-
-    /** S_McwUnitSurface discoveredUnits. */
-    public discoveredUnits: ISerializedMcwUnit[];
-
-    /** S_McwUnitSurface discoveredTiles. */
-    public discoveredTiles: ISerializedMcwTile[];
-
-    /** S_McwUnitSurface actingUnits. */
-    public actingUnits: ISerializedMcwUnit[];
-
-    /** S_McwUnitSurface actingTiles. */
-    public actingTiles: ISerializedMcwTile[];
+    /** S_McwUnitSurface actionContainer. */
+    public actionContainer?: (IWarActionContainer|null);
 
     /**
      * Creates a new S_McwUnitSurface instance using the specified properties.
@@ -11692,26 +13690,8 @@ export declare interface IS_McwUnitJoin {
     /** S_McwUnitJoin warId */
     warId?: (number|null);
 
-    /** S_McwUnitJoin actionId */
-    actionId?: (number|null);
-
-    /** S_McwUnitJoin path */
-    path?: (IMovePath|null);
-
-    /** S_McwUnitJoin launchUnitId */
-    launchUnitId?: (number|null);
-
-    /** S_McwUnitJoin discoveredUnits */
-    discoveredUnits?: (ISerializedMcwUnit[]|null);
-
-    /** S_McwUnitJoin discoveredTiles */
-    discoveredTiles?: (ISerializedMcwTile[]|null);
-
-    /** S_McwUnitJoin actingUnits */
-    actingUnits?: (ISerializedMcwUnit[]|null);
-
-    /** S_McwUnitJoin actingTiles */
-    actingTiles?: (ISerializedMcwTile[]|null);
+    /** S_McwUnitJoin actionContainer */
+    actionContainer?: (IWarActionContainer|null);
 }
 
 /** Represents a S_McwUnitJoin. */
@@ -11729,26 +13709,8 @@ export declare class S_McwUnitJoin implements IS_McwUnitJoin {
     /** S_McwUnitJoin warId. */
     public warId: number;
 
-    /** S_McwUnitJoin actionId. */
-    public actionId: number;
-
-    /** S_McwUnitJoin path. */
-    public path?: (IMovePath|null);
-
-    /** S_McwUnitJoin launchUnitId. */
-    public launchUnitId: number;
-
-    /** S_McwUnitJoin discoveredUnits. */
-    public discoveredUnits: ISerializedMcwUnit[];
-
-    /** S_McwUnitJoin discoveredTiles. */
-    public discoveredTiles: ISerializedMcwTile[];
-
-    /** S_McwUnitJoin actingUnits. */
-    public actingUnits: ISerializedMcwUnit[];
-
-    /** S_McwUnitJoin actingTiles. */
-    public actingTiles: ISerializedMcwTile[];
+    /** S_McwUnitJoin actionContainer. */
+    public actionContainer?: (IWarActionContainer|null);
 
     /**
      * Creates a new S_McwUnitJoin instance using the specified properties.
@@ -11944,29 +13906,8 @@ export declare interface IS_McwUnitLaunchFlare {
     /** S_McwUnitLaunchFlare warId */
     warId?: (number|null);
 
-    /** S_McwUnitLaunchFlare actionId */
-    actionId?: (number|null);
-
-    /** S_McwUnitLaunchFlare path */
-    path?: (IMovePath|null);
-
-    /** S_McwUnitLaunchFlare launchUnitId */
-    launchUnitId?: (number|null);
-
-    /** S_McwUnitLaunchFlare discoveredUnits */
-    discoveredUnits?: (ISerializedMcwUnit[]|null);
-
-    /** S_McwUnitLaunchFlare discoveredTiles */
-    discoveredTiles?: (ISerializedMcwTile[]|null);
-
-    /** S_McwUnitLaunchFlare actingUnits */
-    actingUnits?: (ISerializedMcwUnit[]|null);
-
-    /** S_McwUnitLaunchFlare actingTiles */
-    actingTiles?: (ISerializedMcwTile[]|null);
-
-    /** S_McwUnitLaunchFlare targetGridIndex */
-    targetGridIndex?: (IGridIndex|null);
+    /** S_McwUnitLaunchFlare actionContainer */
+    actionContainer?: (IWarActionContainer|null);
 }
 
 /** Represents a S_McwUnitLaunchFlare. */
@@ -11984,29 +13925,8 @@ export declare class S_McwUnitLaunchFlare implements IS_McwUnitLaunchFlare {
     /** S_McwUnitLaunchFlare warId. */
     public warId: number;
 
-    /** S_McwUnitLaunchFlare actionId. */
-    public actionId: number;
-
-    /** S_McwUnitLaunchFlare path. */
-    public path?: (IMovePath|null);
-
-    /** S_McwUnitLaunchFlare launchUnitId. */
-    public launchUnitId: number;
-
-    /** S_McwUnitLaunchFlare discoveredUnits. */
-    public discoveredUnits: ISerializedMcwUnit[];
-
-    /** S_McwUnitLaunchFlare discoveredTiles. */
-    public discoveredTiles: ISerializedMcwTile[];
-
-    /** S_McwUnitLaunchFlare actingUnits. */
-    public actingUnits: ISerializedMcwUnit[];
-
-    /** S_McwUnitLaunchFlare actingTiles. */
-    public actingTiles: ISerializedMcwTile[];
-
-    /** S_McwUnitLaunchFlare targetGridIndex. */
-    public targetGridIndex?: (IGridIndex|null);
+    /** S_McwUnitLaunchFlare actionContainer. */
+    public actionContainer?: (IWarActionContainer|null);
 
     /**
      * Creates a new S_McwUnitLaunchFlare instance using the specified properties.
@@ -12202,29 +14122,8 @@ export declare interface IS_McwUnitLaunchSilo {
     /** S_McwUnitLaunchSilo warId */
     warId?: (number|null);
 
-    /** S_McwUnitLaunchSilo actionId */
-    actionId?: (number|null);
-
-    /** S_McwUnitLaunchSilo path */
-    path?: (IMovePath|null);
-
-    /** S_McwUnitLaunchSilo launchUnitId */
-    launchUnitId?: (number|null);
-
-    /** S_McwUnitLaunchSilo discoveredUnits */
-    discoveredUnits?: (ISerializedMcwUnit[]|null);
-
-    /** S_McwUnitLaunchSilo discoveredTiles */
-    discoveredTiles?: (ISerializedMcwTile[]|null);
-
-    /** S_McwUnitLaunchSilo actingUnits */
-    actingUnits?: (ISerializedMcwUnit[]|null);
-
-    /** S_McwUnitLaunchSilo actingTiles */
-    actingTiles?: (ISerializedMcwTile[]|null);
-
-    /** S_McwUnitLaunchSilo targetGridIndex */
-    targetGridIndex?: (IGridIndex|null);
+    /** S_McwUnitLaunchSilo actionContainer */
+    actionContainer?: (IWarActionContainer|null);
 }
 
 /** Represents a S_McwUnitLaunchSilo. */
@@ -12242,29 +14141,8 @@ export declare class S_McwUnitLaunchSilo implements IS_McwUnitLaunchSilo {
     /** S_McwUnitLaunchSilo warId. */
     public warId: number;
 
-    /** S_McwUnitLaunchSilo actionId. */
-    public actionId: number;
-
-    /** S_McwUnitLaunchSilo path. */
-    public path?: (IMovePath|null);
-
-    /** S_McwUnitLaunchSilo launchUnitId. */
-    public launchUnitId: number;
-
-    /** S_McwUnitLaunchSilo discoveredUnits. */
-    public discoveredUnits: ISerializedMcwUnit[];
-
-    /** S_McwUnitLaunchSilo discoveredTiles. */
-    public discoveredTiles: ISerializedMcwTile[];
-
-    /** S_McwUnitLaunchSilo actingUnits. */
-    public actingUnits: ISerializedMcwUnit[];
-
-    /** S_McwUnitLaunchSilo actingTiles. */
-    public actingTiles: ISerializedMcwTile[];
-
-    /** S_McwUnitLaunchSilo targetGridIndex. */
-    public targetGridIndex?: (IGridIndex|null);
+    /** S_McwUnitLaunchSilo actionContainer. */
+    public actionContainer?: (IWarActionContainer|null);
 
     /**
      * Creates a new S_McwUnitLaunchSilo instance using the specified properties.
@@ -12454,29 +14332,8 @@ export declare interface IS_McwUnitProduceUnit {
     /** S_McwUnitProduceUnit warId */
     warId?: (number|null);
 
-    /** S_McwUnitProduceUnit actionId */
-    actionId?: (number|null);
-
-    /** S_McwUnitProduceUnit path */
-    path?: (IMovePath|null);
-
-    /** S_McwUnitProduceUnit launchUnitId */
-    launchUnitId?: (number|null);
-
-    /** S_McwUnitProduceUnit discoveredUnits */
-    discoveredUnits?: (ISerializedMcwUnit[]|null);
-
-    /** S_McwUnitProduceUnit discoveredTiles */
-    discoveredTiles?: (ISerializedMcwTile[]|null);
-
-    /** S_McwUnitProduceUnit actingUnits */
-    actingUnits?: (ISerializedMcwUnit[]|null);
-
-    /** S_McwUnitProduceUnit actingTiles */
-    actingTiles?: (ISerializedMcwTile[]|null);
-
-    /** S_McwUnitProduceUnit cost */
-    cost?: (number|null);
+    /** S_McwUnitProduceUnit actionContainer */
+    actionContainer?: (IWarActionContainer|null);
 }
 
 /** Represents a S_McwUnitProduceUnit. */
@@ -12494,29 +14351,8 @@ export declare class S_McwUnitProduceUnit implements IS_McwUnitProduceUnit {
     /** S_McwUnitProduceUnit warId. */
     public warId: number;
 
-    /** S_McwUnitProduceUnit actionId. */
-    public actionId: number;
-
-    /** S_McwUnitProduceUnit path. */
-    public path?: (IMovePath|null);
-
-    /** S_McwUnitProduceUnit launchUnitId. */
-    public launchUnitId: number;
-
-    /** S_McwUnitProduceUnit discoveredUnits. */
-    public discoveredUnits: ISerializedMcwUnit[];
-
-    /** S_McwUnitProduceUnit discoveredTiles. */
-    public discoveredTiles: ISerializedMcwTile[];
-
-    /** S_McwUnitProduceUnit actingUnits. */
-    public actingUnits: ISerializedMcwUnit[];
-
-    /** S_McwUnitProduceUnit actingTiles. */
-    public actingTiles: ISerializedMcwTile[];
-
-    /** S_McwUnitProduceUnit cost. */
-    public cost: number;
+    /** S_McwUnitProduceUnit actionContainer. */
+    public actionContainer?: (IWarActionContainer|null);
 
     /**
      * Creates a new S_McwUnitProduceUnit instance using the specified properties.
@@ -12706,26 +14542,8 @@ export declare interface IS_McwUnitSupply {
     /** S_McwUnitSupply warId */
     warId?: (number|null);
 
-    /** S_McwUnitSupply actionId */
-    actionId?: (number|null);
-
-    /** S_McwUnitSupply path */
-    path?: (IMovePath|null);
-
-    /** S_McwUnitSupply launchUnitId */
-    launchUnitId?: (number|null);
-
-    /** S_McwUnitSupply discoveredUnits */
-    discoveredUnits?: (ISerializedMcwUnit[]|null);
-
-    /** S_McwUnitSupply discoveredTiles */
-    discoveredTiles?: (ISerializedMcwTile[]|null);
-
-    /** S_McwUnitSupply actingUnits */
-    actingUnits?: (ISerializedMcwUnit[]|null);
-
-    /** S_McwUnitSupply actingTiles */
-    actingTiles?: (ISerializedMcwTile[]|null);
+    /** S_McwUnitSupply actionContainer */
+    actionContainer?: (IWarActionContainer|null);
 }
 
 /** Represents a S_McwUnitSupply. */
@@ -12743,26 +14561,8 @@ export declare class S_McwUnitSupply implements IS_McwUnitSupply {
     /** S_McwUnitSupply warId. */
     public warId: number;
 
-    /** S_McwUnitSupply actionId. */
-    public actionId: number;
-
-    /** S_McwUnitSupply path. */
-    public path?: (IMovePath|null);
-
-    /** S_McwUnitSupply launchUnitId. */
-    public launchUnitId: number;
-
-    /** S_McwUnitSupply discoveredUnits. */
-    public discoveredUnits: ISerializedMcwUnit[];
-
-    /** S_McwUnitSupply discoveredTiles. */
-    public discoveredTiles: ISerializedMcwTile[];
-
-    /** S_McwUnitSupply actingUnits. */
-    public actingUnits: ISerializedMcwUnit[];
-
-    /** S_McwUnitSupply actingTiles. */
-    public actingTiles: ISerializedMcwTile[];
+    /** S_McwUnitSupply actionContainer. */
+    public actionContainer?: (IWarActionContainer|null);
 
     /**
      * Creates a new S_McwUnitSupply instance using the specified properties.

@@ -1,7 +1,7 @@
 
 namespace TinyWars.Utility.Helpers {
     import ColorType    = Types.ColorType;
-    import Codes        = Network.Codes;
+    import MessageCodes = Network.Codes;
 
     const COLOR_MATRIX_FILTERS = {
         [ColorType.Gray]: new egret.ColorMatrixFilter([
@@ -104,16 +104,28 @@ namespace TinyWars.Utility.Helpers {
         }
     }
 
-    export function getActionCode(action: ProtoTypes.IActionContainer): Codes | undefined {
-        const name = getActionName(action);
-        return name == null ? undefined : Codes[name as any] as any;
+    export function getMessageCode(container: ProtoTypes.IMessageContainer): MessageCodes | undefined {
+        const name = getMessageName(container);
+        return name == null ? undefined : MessageCodes[name as any] as any;
     }
-
-    export function getActionName(action: ProtoTypes.IActionContainer): string | undefined {
-        for (const k in action) {
+    export function getMessageName(container: ProtoTypes.IMessageContainer): string | undefined {
+        for (const k in container) {
             return k;
         }
         return undefined;
+    }
+
+    export function getWarActionCode(container: ProtoTypes.IWarActionContainer): WarActionCodes | null {
+        const name = getWarActionName(container);
+        return name == null ? null : WarActionCodes[name];
+    }
+    export function getWarActionName(container: ProtoTypes.IWarActionContainer): string | null {
+        for (const k in container) {
+            if (k !== "actionId") {
+                return k;
+            }
+        }
+        return null;
     }
 
     export function cloneObject(obj: { [key: string]: any }): { [key: string]: any } {

@@ -2,9 +2,9 @@
 namespace TinyWars.Utility.ProtoManager {
     const PROTO_FILENAME = "resource/config/NetMessageProto.json";
 
-    let _actionContainerClass   : typeof ProtoTypes.ActionContainer;
+    let _messageContainerClass  : typeof ProtoTypes.MessageContainer;
     let _fullConfigClass        : typeof ProtoTypes.FullConfig;
-    let _serializedMcwWarClass  : typeof ProtoTypes.SerializedMcwWar;
+    let _serializedWarClass     : typeof ProtoTypes.SerializedWar;
 
     export function init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
@@ -13,9 +13,9 @@ namespace TinyWars.Utility.ProtoManager {
                     if (!root) {
                         reject("no root!");
                     } else {
-                        _actionContainerClass   = root.lookupType("ActionContainer") as any;
+                        _messageContainerClass  = root.lookupType("MessageContainer") as any;
                         _fullConfigClass        = root.lookupType("FullConfig") as any;
-                        _serializedMcwWarClass  = root.lookupType("SerializedMcwWar") as any;
+                        _serializedWarClass     = root.lookupType("SerializedWar") as any;
                         resolve();
                     }
                 },
@@ -24,27 +24,27 @@ namespace TinyWars.Utility.ProtoManager {
         });
     }
 
-    export function encodeAsActionContainer(action: ProtoTypes.IActionContainer): Uint8Array | undefined {
-        if (Helpers.getActionCode(action) != null) {
-            return _actionContainerClass.encode(action).finish();
+    export function encodeAsMessageContainer(action: ProtoTypes.IMessageContainer): Uint8Array | undefined {
+        if (Helpers.getMessageCode(action) != null) {
+            return _messageContainerClass.encode(action).finish();
         } else {
-            Logger.assert(false, "ProtoManager.encodeAsContainer() invalid action! ", JSON.stringify(action));
+            Logger.assert(false, "ProtoManager.encodeAsMessageContainer() invalid message! ", JSON.stringify(action));
             return undefined;
         }
     }
-    export function decodeAsActionContainer(data: any): ProtoTypes.IActionContainer {
-        return _actionContainerClass.toObject(_actionContainerClass.decode(getDataForDecode(data)));
+    export function decodeAsMessageContainer(data: any): ProtoTypes.IMessageContainer {
+        return _messageContainerClass.toObject(_messageContainerClass.decode(getDataForDecode(data)));
     }
 
     export function decodeAsFullConfig(data: any): Types.FullConfig {
         return _fullConfigClass.toObject(_fullConfigClass.decode(getDataForDecode(data))) as any;
     }
 
-    export function encodeAsSerializedMcwWar(data: Types.SerializedBwWar): Uint8Array {
-        return _serializedMcwWarClass.encode(data).finish();
+    export function encodeAsSerializedWar(data: Types.SerializedBwWar): Uint8Array {
+        return _serializedWarClass.encode(data).finish();
     }
-    export function decodeAsSerializedMcwWar(data: any): Types.SerializedBwWar {
-        return _serializedMcwWarClass.toObject(_serializedMcwWarClass.decode(data)) as any;
+    export function decodeAsSerializedWar(data: any): Types.SerializedBwWar {
+        return _serializedWarClass.toObject(_serializedWarClass.decode(data)) as any;
     }
 
     function getDataForDecode(encodedData: any): Uint8Array | protobuf.Reader {
