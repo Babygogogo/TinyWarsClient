@@ -73,28 +73,28 @@ namespace TinyWars.Utility.Types {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Serialization data types.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export interface SerializedMcwAction extends ProtoTypes.IActionContainer {
+    export interface WarActionContainer extends ProtoTypes.IWarActionContainer {
     }
-    export interface SerializedBwTile extends ProtoTypes.ISerializedMcwTile {
+    export interface SerializedBwTile extends ProtoTypes.ISerializedWarTile {
         gridX           : number;
         gridY           : number;
         baseViewId      : number;
         objectViewId    : number;
     };
-    export interface SerializedBwUnit extends ProtoTypes.ISerializedMcwUnit {
+    export interface SerializedBwUnit extends ProtoTypes.ISerializedWarUnit {
         gridX   : number;
         gridY   : number;
         unitId  : number;
         viewId  : number;
     }
-    export interface SerializedBwTileMap extends ProtoTypes.ISerializedMcwTileMap {
+    export interface SerializedBwTileMap extends ProtoTypes.ISerializedWarTileMap {
         tiles?: SerializedBwTile[];
     }
-    export interface SerializedBwUnitMap extends ProtoTypes.ISerializedMcwUnitMap {
+    export interface SerializedBwUnitMap extends ProtoTypes.ISerializedWarUnitMap {
         units?      : SerializedBwUnit[];
         nextUnitId  : number;
     }
-    export interface SerializedBwPlayer extends ProtoTypes.ISerializedMcwPlayer {
+    export interface SerializedBwPlayer extends ProtoTypes.ISerializedWarPlayer {
         fund            : number;
         hasVotedForDraw : boolean;
         isAlive         : boolean;
@@ -102,25 +102,25 @@ namespace TinyWars.Utility.Types {
         teamIndex       : number;
         userId?         : number;
     }
-    export interface SerializedBwFogMap extends ProtoTypes.ISerializedMcwFogMap {
+    export interface SerializedBwFogMap extends ProtoTypes.ISerializedWarFogMap {
         mapsForPath?: SerializedBwFogMapForPath[];
     }
-    export interface SerializedBwFogMapForPath extends ProtoTypes.ISerializedMcwFogMapForPath {
+    export interface SerializedBwFogMapForPath extends ProtoTypes.ISerializedWarFogMapForPath {
         playerIndex : number;
         encodedMap  : string;
     }
-    export interface SerializedBwField extends ProtoTypes.ISerializedMcwField {
+    export interface SerializedBwField extends ProtoTypes.ISerializedWarField {
         fogMap  : SerializedBwFogMap;
         unitMap?: SerializedBwUnitMap;
         tileMap?: SerializedBwTileMap;
     }
-    export interface SerializedBwTurn extends ProtoTypes.ISerializedMcwTurn {
+    export interface SerializedBwTurn extends ProtoTypes.ISerializedWarTurn {
         turnIndex       : number;
         playerIndex     : number;
         turnPhaseCode   : TurnPhaseCode;
         enterTurnTime   : number;
     }
-    export interface SerializedBwWar extends ProtoTypes.ISerializedMcwWar {
+    export interface SerializedBwWar extends ProtoTypes.ISerializedWar {
         warId           : number;
         configVersion   : number;
         mapName         : string;
@@ -141,7 +141,7 @@ namespace TinyWars.Utility.Types {
         visionRangeModifier : number;
 
         remainingVotesForDraw?  : number;
-        executedActions         : SerializedMcwAction[];
+        executedActions         : WarActionContainer[];
         players                 : SerializedBwPlayer[];
         turn                    : SerializedBwTurn;
         field                   : SerializedBwField;

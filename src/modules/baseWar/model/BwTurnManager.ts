@@ -39,12 +39,13 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The functions for running turn.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public endPhaseWaitBeginTurn(data: ProtoTypes.IS_McwPlayerBeginTurn): void {
+        public endPhaseWaitBeginTurn(container: ProtoTypes.IWarActionContainer): void {
             Logger.assert(
                 this.getPhaseCode() === TurnPhaseCode.WaitBeginTurn,
                 "BwTurnManager.endPhaseWaitBeginTurn() invalid current phase code: ", this.getPhaseCode()
             );
 
+            const data = container.WarActionPlayerBeginTurn;
             this._runPhaseGetFund(data);
             this._runPhaseConsumeFuel(data);
             this._runPhaseRepairUnitByTile(data);
@@ -72,10 +73,10 @@ namespace TinyWars.BaseWar {
             this._setPhaseCode(TurnPhaseCode.WaitBeginTurn);
         }
 
-        private _runPhaseGetFund(data: ProtoTypes.IS_McwPlayerBeginTurn): void {
+        private _runPhaseGetFund(data: ProtoTypes.IWarActionPlayerBeginTurn): void {
             this._war.getPlayer(this.getPlayerIndexInTurn()).setFund(data.remainingFund);
         }
-        private _runPhaseConsumeFuel(data: ProtoTypes.IS_McwPlayerBeginTurn): void {
+        private _runPhaseConsumeFuel(data: ProtoTypes.IWarActionPlayerBeginTurn): void {
             const playerIndex = this.getPlayerIndexInTurn();
             if ((playerIndex !== 0) && (this.getTurnIndex() > 0)) {
                 this._war.getUnitMap().forEachUnitOnMap(unit => {
@@ -85,7 +86,7 @@ namespace TinyWars.BaseWar {
                 });
             }
         }
-        private _runPhaseRepairUnitByTile(data: ProtoTypes.IS_McwPlayerBeginTurn): void {
+        private _runPhaseRepairUnitByTile(data: ProtoTypes.IWarActionPlayerBeginTurn): void {
             const war               = this._war;
             const unitMap           = war.getUnitMap();
             const gridVisionEffect  = war.getGridVisionEffect();
@@ -102,7 +103,7 @@ namespace TinyWars.BaseWar {
                 unit.updateOnRepaired(repairAmount);
             }
         }
-        private _runPhaseDestroyUnitsOutOfFuel(data: ProtoTypes.IS_McwPlayerBeginTurn): void {
+        private _runPhaseDestroyUnitsOutOfFuel(data: ProtoTypes.IWarActionPlayerBeginTurn): void {
             const playerIndex = this.getPlayerIndexInTurn();
             if (playerIndex !== 0) {
                 const war       = this._war;
@@ -116,7 +117,7 @@ namespace TinyWars.BaseWar {
                 });
             }
         }
-        private _runPhaseRepairUnitByUnit(data: ProtoTypes.IS_McwPlayerBeginTurn): void {
+        private _runPhaseRepairUnitByUnit(data: ProtoTypes.IWarActionPlayerBeginTurn): void {
             const war               = this._war;
             const unitMap           = war.getUnitMap();
             const gridVisionEffect  = war.getGridVisionEffect();
@@ -133,10 +134,10 @@ namespace TinyWars.BaseWar {
                 unit.updateOnRepaired(repairAmount);
             }
         }
-        private _runPhaseActivateMapWeapon(data: ProtoTypes.IS_McwPlayerBeginTurn): void {
+        private _runPhaseActivateMapWeapon(data: ProtoTypes.IWarActionPlayerBeginTurn): void {
             // TODO
         }
-        protected abstract _runPhaseMain(data: ProtoTypes.IS_McwPlayerBeginTurn): void;
+        protected abstract _runPhaseMain(data: ProtoTypes.IWarActionPlayerBeginTurn): void;
         private _runPhaseResetUnitState(): void {
             const playerIndex = this.getPlayerIndexInTurn();
             if (playerIndex !== 0) {

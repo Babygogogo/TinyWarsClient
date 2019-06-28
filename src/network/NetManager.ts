@@ -25,8 +25,8 @@ namespace TinyWars.Network {
         }
 
         class NetMessageDispatcherCls extends egret.EventDispatcher {
-            public dispatchWithContainer(container: ProtoTypes.IActionContainer): void {
-                const name      = Helpers.getActionName(container);
+            public dispatchWithContainer(container: ProtoTypes.IMessageContainer): void {
+                const name      = Helpers.getMessageName(container);
                 const action    = container[name];
                 if (action.errorCode) {
                     FloatText.show(Utility.Lang.getNetErrorText(action.errorCode));
@@ -75,12 +75,12 @@ namespace TinyWars.Network {
             }
         }
 
-        export function send(container: ProtoTypes.IActionContainer): void {
+        export function send(container: ProtoTypes.IMessageContainer): void {
             if ((!socket) || (!socket.connected)) {
                 FloatText.show(Lang.getText(Lang.Type.A0014));
             } else {
-                const name          = Helpers.getActionName(container);
-                const encodedData   = ProtoManager.encodeAsActionContainer(container);
+                const name          = Helpers.getMessageName(container);
+                const encodedData   = ProtoManager.encodeAsMessageContainer(container);
                 Logger.log("%cNetManager send: ", "background:#97FF4F;", name, ", length: ", encodedData.byteLength, "\n", container[name]);
                 socket.emit("message", encodedData);
             }
@@ -119,8 +119,8 @@ namespace TinyWars.Network {
             });
 
             socket.on("message", (data: ArrayBuffer) => {
-                const container = ProtoManager.decodeAsActionContainer(data);
-                const name      = Helpers.getActionName(container);
+                const container = ProtoManager.decodeAsMessageContainer(data);
+                const name      = Helpers.getMessageName(container);
                 Logger.log("%cNetManager receive: ", "background:#FFD777", name, ", length: ", data.byteLength, "\n", container[name]);
 
                 dispatcher.dispatchWithContainer(container);
