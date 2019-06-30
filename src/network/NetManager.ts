@@ -19,7 +19,7 @@ namespace TinyWars.Network {
         ////////////////////////////////////////////////////////////////////////////////
         type ReceivedData = any;
         export type MsgListener = {
-            actionCode   : Codes;
+            msgCode   : Codes;
             callback     : (e: egret.Event) => void;
             thisObject  ?: any;
         }
@@ -65,13 +65,13 @@ namespace TinyWars.Network {
 
         export function addListeners(listeners: MsgListener[], thisObject?: any): void {
             for (const one of listeners) {
-                dispatcher.addEventListener(Codes[one.actionCode], one.callback, one.thisObject || thisObject);
+                dispatcher.addEventListener(Codes[one.msgCode], one.callback, one.thisObject || thisObject);
             }
         }
 
         export function removeListeners(listeners: MsgListener[], thisObject?: any): void {
             for (const one of listeners) {
-                dispatcher.removeEventListener(Codes[one.actionCode], one.callback, one.thisObject || thisObject);
+                dispatcher.removeEventListener(Codes[one.msgCode], one.callback, one.thisObject || thisObject);
             }
         }
 

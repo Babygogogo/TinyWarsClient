@@ -239,6 +239,14 @@ namespace TinyWars.Utility.Lang {
             `已成功切换回合`,
             `Turn switched.`,
         ]],
+        [Type.A0046, [
+            `请求中，请稍候`,
+            `Now requesting, please wait...`,
+        ]],
+        [Type.A0047, [
+            `昵称已更改`,
+            `Your nickname is changed successfully`,
+        ]],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.

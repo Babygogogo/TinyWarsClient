@@ -1422,7 +1422,7 @@ namespace TinyWars.ConfigManager {
 
     export function init(): void {
         NetManager.addListeners([
-            { actionCode: ActionCode.S_NewestConfigVersion, callback: _onSNewestConfigVersion },
+            { msgCode: ActionCode.S_NewestConfigVersion, callback: _onSNewestConfigVersion },
         ], ConfigManager);
 
         _initTileObjectViewIds();

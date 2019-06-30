@@ -8,15 +8,15 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
 
     export function init(): void {
         NetManager.addListeners([
-            { actionCode: ActionCode.S_McrCreateWar,                callback: _onSMcrCreateWar },
-            { actionCode: ActionCode.S_McrGetUnjoinedWaitingInfos,  callback: _onSMcrGetUnjoinedWaitingInfos, },
-            { actionCode: ActionCode.S_McrJoinWar,                  callback: _onSMcrJoinWar, },
-            { actionCode: ActionCode.S_McrGetJoinedWaitingInfos,    callback: _onSMcrGetJoinedWaitingInfos, },
-            { actionCode: ActionCode.S_McrExitWar,                  callback: _onSMcrExitWar, },
-            { actionCode: ActionCode.S_McrGetJoinedOngoingInfos,    callback: _onSMcrGetJoinedOngoingInfos, },
-            { actionCode: ActionCode.S_McrContinueWar,              callback: _onSMcrContinueWar, },
-            { actionCode: ActionCode.S_McrGetReplayInfos,           callback: _onSMcrGetReplayInfos, },
-            { actionCode: ActionCode.S_McrGetReplayData,            callback: _onSMcrGetReplayData, },
+            { msgCode: ActionCode.S_McrCreateWar,                callback: _onSMcrCreateWar },
+            { msgCode: ActionCode.S_McrGetUnjoinedWaitingInfos,  callback: _onSMcrGetUnjoinedWaitingInfos, },
+            { msgCode: ActionCode.S_McrJoinWar,                  callback: _onSMcrJoinWar, },
+            { msgCode: ActionCode.S_McrGetJoinedWaitingInfos,    callback: _onSMcrGetJoinedWaitingInfos, },
+            { msgCode: ActionCode.S_McrExitWar,                  callback: _onSMcrExitWar, },
+            { msgCode: ActionCode.S_McrGetJoinedOngoingInfos,    callback: _onSMcrGetJoinedOngoingInfos, },
+            { msgCode: ActionCode.S_McrContinueWar,              callback: _onSMcrContinueWar, },
+            { msgCode: ActionCode.S_McrGetReplayInfos,           callback: _onSMcrGetReplayInfos, },
+            { msgCode: ActionCode.S_McrGetReplayData,            callback: _onSMcrGetReplayData, },
         ], McrProxy);
     }
 

@@ -9,7 +9,7 @@ namespace TinyWars.Time {
 
         export function init(): void {
             NetManager.addListeners([
-                { actionCode: ActionCode.S_Heartbeat, callback: _onSHeartbeat },
+                { msgCode: ActionCode.S_Heartbeat, callback: _onSHeartbeat },
             ], TimeProxy);
         }
 

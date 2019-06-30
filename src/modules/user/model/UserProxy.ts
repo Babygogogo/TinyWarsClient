@@ -8,8 +8,9 @@ namespace TinyWars.User {
     export namespace UserProxy {
         export function init(): void {
             NetManager.addListeners([
-                { actionCode: NetMessageCodes.S_GetUserPublicInfo,  callback: _onSGetUserPublicInfo, },
-            ])
+                { msgCode: NetMessageCodes.S_GetUserPublicInfo,     callback: _onSGetUserPublicInfo, },
+                { msgCode: NetMessageCodes.S_UserChangeNickname,    callback: _onSUserChangeNickname, },
+            ]);
         }
 
         export function reqGetUserPublicInfo(userId: number): void {
@@ -24,6 +25,23 @@ namespace TinyWars.User {
             if (!data.errorCode) {
                 UserModel.setUserInfo(data);
                 Notify.dispatch(Notify.Type.SGetUserPublicInfo, data);
+            }
+        }
+
+        export function reqChangeNickname(nickname: string): void {
+            NetManager.send({
+                C_UserChangeNickname: {
+                    nickname,
+                },
+            });
+        }
+        function _onSUserChangeNickname(e: egret.Event): void {
+            const data = e.data as ProtoTypes.IS_UserChangeNickname;
+            if (data.errorCode) {
+                Notify.dispatch(Notify.Type.SUserChangeNicknameFailed, data);
+            } else {
+                UserModel.setSelfNickname(data.nickname);
+                Notify.dispatch(Notify.Type.SUserChangeNickname, data);
             }
         }
     }

@@ -9,9 +9,9 @@ namespace TinyWars.Login {
 
         export function init(): void {
             NetManager.addListeners([
-                { actionCode: ActionCode.S_Login,    callback: _onSLogin,    },
-                { actionCode: ActionCode.S_Register, callback: _onSRegister, },
-                { actionCode: ActionCode.S_Logout,   callback: _onSLogout,   },
+                { msgCode: ActionCode.S_Login,    callback: _onSLogin,    },
+                { msgCode: ActionCode.S_Register, callback: _onSRegister, },
+                { msgCode: ActionCode.S_Logout,   callback: _onSLogout,   },
             ], LoginProxy);
         }
 

@@ -17,8 +17,8 @@ namespace TinyWars.WarMap {
 
         export function init(): void {
             NetManager.addListeners([
-                { actionCode: ActionCode.S_GetNewestMapDynamicInfos,    callback: _onSGetNewestMapDynamicInfos },
-                { actionCode: ActionCode.S_GetMapDynamicInfo,           callback: _onSGetMapDynamicInfo },
+                { msgCode: ActionCode.S_GetNewestMapDynamicInfos,    callback: _onSGetNewestMapDynamicInfos },
+                { msgCode: ActionCode.S_GetMapDynamicInfo,           callback: _onSGetMapDynamicInfo },
             ], WarMapProxy);
         }
 

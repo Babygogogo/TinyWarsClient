@@ -6409,6 +6409,12 @@ export declare interface IMessageContainer {
     /** MessageContainer S_GetUserPublicInfo */
     S_GetUserPublicInfo?: (IS_GetUserPublicInfo|null);
 
+    /** MessageContainer C_UserChangeNickname */
+    C_UserChangeNickname?: (IC_UserChangeNickname|null);
+
+    /** MessageContainer S_UserChangeNickname */
+    S_UserChangeNickname?: (IS_UserChangeNickname|null);
+
     /** MessageContainer C_McrCreateWar */
     C_McrCreateWar?: (IC_McrCreateWar|null);
 
@@ -6643,6 +6649,12 @@ export declare class MessageContainer implements IMessageContainer {
 
     /** MessageContainer S_GetUserPublicInfo. */
     public S_GetUserPublicInfo?: (IS_GetUserPublicInfo|null);
+
+    /** MessageContainer C_UserChangeNickname. */
+    public C_UserChangeNickname?: (IC_UserChangeNickname|null);
+
+    /** MessageContainer S_UserChangeNickname. */
+    public S_UserChangeNickname?: (IS_UserChangeNickname|null);
 
     /** MessageContainer C_McrCreateWar. */
     public C_McrCreateWar?: (IC_McrCreateWar|null);
@@ -8672,6 +8684,192 @@ export declare class S_GetUserPublicInfo implements IS_GetUserPublicInfo {
 
     /**
      * Converts this S_GetUserPublicInfo to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_UserChangeNickname. */
+export declare interface IC_UserChangeNickname {
+
+    /** C_UserChangeNickname nickname */
+    nickname?: (string|null);
+}
+
+/** Represents a C_UserChangeNickname. */
+export declare class C_UserChangeNickname implements IC_UserChangeNickname {
+
+    /**
+     * Constructs a new C_UserChangeNickname.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_UserChangeNickname);
+
+    /** C_UserChangeNickname nickname. */
+    public nickname: string;
+
+    /**
+     * Creates a new C_UserChangeNickname instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_UserChangeNickname instance
+     */
+    public static create(properties?: IC_UserChangeNickname): C_UserChangeNickname;
+
+    /**
+     * Encodes the specified C_UserChangeNickname message. Does not implicitly {@link C_UserChangeNickname.verify|verify} messages.
+     * @param message C_UserChangeNickname message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_UserChangeNickname, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_UserChangeNickname message, length delimited. Does not implicitly {@link C_UserChangeNickname.verify|verify} messages.
+     * @param message C_UserChangeNickname message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_UserChangeNickname, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_UserChangeNickname message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_UserChangeNickname
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_UserChangeNickname;
+
+    /**
+     * Decodes a C_UserChangeNickname message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_UserChangeNickname
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_UserChangeNickname;
+
+    /**
+     * Verifies a C_UserChangeNickname message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_UserChangeNickname message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_UserChangeNickname
+     */
+    public static fromObject(object: { [k: string]: any }): C_UserChangeNickname;
+
+    /**
+     * Creates a plain object from a C_UserChangeNickname message. Also converts values to other types if specified.
+     * @param message C_UserChangeNickname
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_UserChangeNickname, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_UserChangeNickname to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_UserChangeNickname. */
+export declare interface IS_UserChangeNickname {
+
+    /** S_UserChangeNickname errorCode */
+    errorCode?: (number|null);
+
+    /** S_UserChangeNickname nickname */
+    nickname?: (string|null);
+}
+
+/** Represents a S_UserChangeNickname. */
+export declare class S_UserChangeNickname implements IS_UserChangeNickname {
+
+    /**
+     * Constructs a new S_UserChangeNickname.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_UserChangeNickname);
+
+    /** S_UserChangeNickname errorCode. */
+    public errorCode: number;
+
+    /** S_UserChangeNickname nickname. */
+    public nickname: string;
+
+    /**
+     * Creates a new S_UserChangeNickname instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_UserChangeNickname instance
+     */
+    public static create(properties?: IS_UserChangeNickname): S_UserChangeNickname;
+
+    /**
+     * Encodes the specified S_UserChangeNickname message. Does not implicitly {@link S_UserChangeNickname.verify|verify} messages.
+     * @param message S_UserChangeNickname message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_UserChangeNickname, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_UserChangeNickname message, length delimited. Does not implicitly {@link S_UserChangeNickname.verify|verify} messages.
+     * @param message S_UserChangeNickname message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_UserChangeNickname, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_UserChangeNickname message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_UserChangeNickname
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_UserChangeNickname;
+
+    /**
+     * Decodes a S_UserChangeNickname message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_UserChangeNickname
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_UserChangeNickname;
+
+    /**
+     * Verifies a S_UserChangeNickname message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_UserChangeNickname message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_UserChangeNickname
+     */
+    public static fromObject(object: { [k: string]: any }): S_UserChangeNickname;
+
+    /**
+     * Creates a plain object from a S_UserChangeNickname message. Also converts values to other types if specified.
+     * @param message S_UserChangeNickname
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_UserChangeNickname, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_UserChangeNickname to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };

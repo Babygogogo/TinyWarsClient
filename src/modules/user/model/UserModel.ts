@@ -60,6 +60,9 @@ namespace TinyWars.User {
         export function getSelfPassword(): string {
             return _selfPassword;
         }
+        export function setSelfNickname(nickname: string): void {
+            _selfNickname = nickname;
+        }
         export function getSelfNickname(): string {
             return _selfNickname;
         }

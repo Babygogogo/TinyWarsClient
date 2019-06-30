@@ -2,10 +2,19 @@
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
     <GameUi:UiImage source="bg_jpg" horizontalCenter="0" verticalCenter="1" scaleX="1.5" scaleY="1.5" />
-    <e:Group left="35" top="70" bottom="30" right="35">
+    <e:Group top="40" bottom="0" left="0" right="0">
         <GameUi:UiImage source="c04_t01_s02_f01" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" left="0" right="0"
                         top="0" bottom="0" scale9Grid="9,9,2,2" />
         <GameUi:UiLabel id="_labelTitle" text="XXX的履历" y="10" horizontalCenter="0" textColor="0xffffff" size="25" />
+        <GameUi:UiButton id="_btnChangeNickname" label="更改昵称&gt;&gt;" right="15" top="10">
+            <GameUi:skinName>
+                <e:Skin states="up,down,disabled">
+                    <e:Image width="100%" height="100%" />
+                    <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="25" bold="true"
+                             textColor="0x00ff00" />
+                </e:Skin>
+            </GameUi:skinName>
+        </GameUi:UiButton>
         <e:Group x="20" y="60">
             <GameUi:UiLabel text="排位战绩:" textColor="0xFFFFFF" size="20" scaleX="1" scaleY="1" y="0" />
             <e:Group x="0" y="25">
@@ -27,7 +36,7 @@
                 <e:VerticalLayout gap="10" />
             </e:layout>
         </e:Group>
-        <e:Group x="440" y="60">
+        <e:Group x="480" y="60">
             <GameUi:UiLabel text="自由对战战绩:" textColor="0xFFFFFF" size="20" scaleX="1" scaleY="1" />
             <e:Group x="0" y="25">
                 <GameUi:UiLabel text="2人局:" textColor="0xFFFFFF" size="20" scaleX="1" scaleY="1" y="0" x="0" />
@@ -66,7 +75,7 @@
                 <GameUi:UiLabel id="_labelRegisterTime" text="2010年10月10日10时10分10秒" textColor="0xFFFFFF" size="20"
                                 scaleX="1" scaleY="1" x="100" />
             </e:Group>
-            <e:Group x="420" y="0">
+            <e:Group x="480" y="0">
                 <GameUi:UiLabel text="上次登陆时间:" textColor="0xFFFFFF" size="20" scaleX="1" scaleY="1" />
                 <GameUi:UiLabel id="_labelLastLoginTime" text="2010年10月10日10时10分10秒" textColor="0xFFFFFF" size="20"
                                 scaleX="1" scaleY="1" x="140" />
@@ -76,7 +85,7 @@
                 <GameUi:UiLabel id="_labelOnlineTime" text="1000时10分10秒" textColor="0xFFFFFF" size="20" scaleX="1"
                                 scaleY="1" x="100" />
             </e:Group>
-            <e:Group x="420" y="35">
+            <e:Group x="480" y="35">
                 <GameUi:UiLabel text="登陆次数:" textColor="0xFFFFFF" size="20" scaleX="1" scaleY="1" />
                 <GameUi:UiLabel id="_labelLoginCount" text="999" textColor="0xFFFFFF" size="20" scaleX="1" scaleY="1"
                                 x="100" />

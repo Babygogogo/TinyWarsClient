@@ -2,6 +2,7 @@
 namespace TinyWars.User {
     import Lang     = Utility.Lang;
     import Helpers  = Utility.Helpers;
+    import Notify   = Utility.Notify;
 
     export class UserPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
@@ -10,6 +11,7 @@ namespace TinyWars.User {
         private static _instance: UserPanel;
 
         private _labelTitle         : TinyWars.GameUi.UiLabel;
+        private _btnChangeNickname  : GameUi.UiButton;
 
         private _labelRankScore     : TinyWars.GameUi.UiLabel;
         private _labelRankName      : TinyWars.GameUi.UiLabel;
@@ -59,10 +61,12 @@ namespace TinyWars.User {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Utility.Notify.Type.SGetUserPublicInfo, callback: this._onNotifySGetUserPublicInfo },
+                { type: Notify.Type.SGetUserPublicInfo,     callback: this._onNotifySGetUserPublicInfo },
+                { type: Notify.Type.SUserChangeNickname,    callback: this._onNotifySUserChangeNickname },
             ];
             this._uiListeners = [
-                { ui: this._btnClose, callback: this.close },
+                { ui: this._btnChangeNickname,  callback: this._onTouchedBtnChangeNickname },
+                { ui: this._btnClose,           callback: this.close },
             ];
         }
 
@@ -75,11 +79,22 @@ namespace TinyWars.User {
         private _onNotifySGetUserPublicInfo(e: egret.Event): void {
             this._updateView();
         }
+        private _onNotifySUserChangeNickname(e: egret.Event): void {
+            const userId = this._userId;
+            if (userId === UserModel.getSelfUserId()) {
+                UserProxy.reqGetUserPublicInfo(this._userId);
+            }
+        }
+        private _onTouchedBtnChangeNickname(e: egret.Event): void {
+            UserChangeNicknamePanel.show();
+        }
 
         private _updateView(): void {
-            const info = this._userId != null ? UserModel.getUserInfo(this._userId) : undefined;
+            const userId    = this._userId;
+            const info      = userId != null ? UserModel.getUserInfo(userId) : undefined;
             if (info) {
-                this._labelTitle.text       = Lang.getFormatedText(Lang.Type.F0009, info.nickname);
+                this._labelTitle.text           = Lang.getFormatedText(Lang.Type.F0009, info.nickname);
+                this._btnChangeNickname.visible = userId === UserModel.getSelfUserId();
 
                 this._labelRankScore.text   = `${info.rank2pScore}`;
                 this._labelRankName.text    = ConfigManager.getRankName(ConfigManager.getNewestConfigVersion(), info.rank2pScore);

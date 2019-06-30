@@ -6,7 +6,7 @@ namespace TinyWars.Utility.FlowManager {
     import ReplayModel  = Replay.ReplayModel;
 
     const _NET_EVENTS = [
-        { actionCode: Network.Codes.S_ServerDisconnect,   callback: _onNetSServerDisconnect },
+        { msgCode: Network.Codes.S_ServerDisconnect,   callback: _onNetSServerDisconnect },
     ];
     const _NOTIFY_EVENTS = [
         { type: Notify.Type.NetworkConnected,   callback: _onNotifyNetworkConnected, },
