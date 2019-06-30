@@ -55,7 +55,7 @@
                     <GameUi:UiLabel text="移动后攻击:" size="18" textColor="0xFFFFFF" y="0" x="0" />
                     <GameUi:UiLabel id="_labelAttackAfterMove" text="是" size="18" textColor="0xFFFFFF" y="0" x="100" />
                 </e:Group>
-                <e:Group y="110" left="0" right="0">
+                <e:Group left="0" right="0" bottom="5" top="110">
                     <GameUi:UiLabel text="基础伤害表" size="20" textColor="0xFFFFFF" y="0" horizontalCenter="0" />
                     <e:Group x="0" y="25" width="320">
                         <GameUi:UiLabel text="攻击(主)" size="12" textColor="0xFFFFFF" y="0" horizontalCenter="-85" />
@@ -69,8 +69,8 @@
                         <GameUi:UiLabel text="受击(主)" size="12" textColor="0xFFFFFF" y="0" horizontalCenter="35" />
                         <GameUi:UiLabel text="受击(副)" size="12" textColor="0xFFFFFF" y="0" horizontalCenter="95" />
                     </e:Group>
-                    <GameUi:UiScrollList id="_listDamageChart" y="40" scaleX="1" scaleY="1" height="180" left="0"
-                                         right="0">
+                    <GameUi:UiScrollList id="_listDamageChart" scaleX="1" scaleY="1" left="0" right="0" top="40"
+                                         bottom="0">
                         <e:List x="-1">
                             <e:itemRendererSkinName>
                                 <e:Skin width="320" height="40">

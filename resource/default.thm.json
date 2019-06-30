@@ -2,6 +2,7 @@
 	"skins": {},
 	"autoGenerateExmlsList": true,
 	"exmls": [
+		"resource/skins/baseWar/BwTileDetailPanel.exml",
 		"resource/skins/baseWar/BwUnitDetailPanel.exml",
 		"resource/skins/common/AlertPanel.exml",
 		"resource/skins/common/BlockPanel.exml",

@@ -124,7 +124,8 @@ namespace TinyWars.MultiCustomWar {
         }
 
         private _onTouchedThis(e: egret.TouchEvent): void {
-            Utility.FloatText.show("TODO");
+            const tile = this._tileMap.getTile(this._cursor.getGridIndex());
+            (tile) && (BaseWar.BwTileDetailPanel.show({ tile }));
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

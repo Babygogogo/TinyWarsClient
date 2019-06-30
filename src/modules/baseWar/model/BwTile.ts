@@ -59,7 +59,7 @@ namespace TinyWars.BaseWar {
             this.getView().startRunningView();
         }
 
-        protected _getConfigVersion(): number {
+        public getConfigVersion(): number {
             return this._configVersion;
         }
         protected _getWar(): BwWar {

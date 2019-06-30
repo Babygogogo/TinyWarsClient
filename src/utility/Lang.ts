@@ -723,6 +723,74 @@ namespace TinyWars.Utility.Lang {
             `运输`,
             `Trans`,
         ]],
+        [Type.B0120, [
+            `全部`,
+            `All`,
+        ]],
+        [Type.B0121, [
+            `陆军`,
+            `Ground`,
+        ]],
+        [Type.B0122, [
+            `海军`,
+            `Naval`,
+        ]],
+        [Type.B0123, [
+            `空军`,
+            `Air`,
+        ]],
+        [Type.B0124, [
+            `陆军&海军`,
+            `G&N`,
+        ]],
+        [Type.B0125, [
+            `陆军&空军`,
+            `G&A`,
+        ]],
+        [Type.B0126, [
+            `近战`,
+            `Direct`,
+        ]],
+        [Type.B0127, [
+            `远程`,
+            `Indirect`,
+        ]],
+        [Type.B0128, [
+            `步行`,
+            `Foot`,
+        ]],
+        [Type.B0129, [
+            `步兵系`,
+            `Inf`,
+        ]],
+        [Type.B0130, [
+            `车辆系`,
+            `Vehicle`,
+        ]],
+        [Type.B0131, [
+            `近战机械`,
+            `DirectMechine`,
+        ]],
+        [Type.B0132, [
+            `运输系`,
+            `Transport`,
+        ]],
+        [Type.B0133, [
+            `大型船只`,
+            `LargeNaval`,
+        ]],
+        [Type.B0134, [
+            `直升机`,
+            `Copter`,
+        ]],
+        [Type.B0135, [
+            `坦克`,
+            `Tank`,
+        ]],
+        [Type.B0136, [
+            `空军除舰载机`,
+            `AirExceptSeaplane`,
+        ]],
 
         [Type.B1000, [
             `平原`,
@@ -1386,6 +1454,29 @@ namespace TinyWars.Utility.Lang {
             case Types.MoveType.TireB       : return getText(Type.B0116);
             case Types.MoveType.Transport   : return getText(Type.B0119);
             default                         : return undefined;
+        }
+    }
+
+    export function getUnitCategoryName(t: Types.UnitCategory): string {
+        switch (t) {
+            case Types.UnitCategory.All                 : return getText(Type.B0120);
+            case Types.UnitCategory.Ground              : return getText(Type.B0121);
+            case Types.UnitCategory.Naval               : return getText(Type.B0122);
+            case Types.UnitCategory.Air                 : return getText(Type.B0123);
+            case Types.UnitCategory.GroundOrNaval       : return getText(Type.B0124);
+            case Types.UnitCategory.GroundOrAir         : return getText(Type.B0125);
+            case Types.UnitCategory.Direct              : return getText(Type.B0126);
+            case Types.UnitCategory.Indirect            : return getText(Type.B0127);
+            case Types.UnitCategory.Foot                : return getText(Type.B0128);
+            case Types.UnitCategory.Infantry            : return getText(Type.B0129);
+            case Types.UnitCategory.Vehicle             : return getText(Type.B0130);
+            case Types.UnitCategory.DirectMachine       : return getText(Type.B0131);
+            case Types.UnitCategory.Transport           : return getText(Type.B0132);
+            case Types.UnitCategory.LargeNaval          : return getText(Type.B0133);
+            case Types.UnitCategory.Copter              : return getText(Type.B0134);
+            case Types.UnitCategory.Tank                : return getText(Type.B0135);
+            case Types.UnitCategory.AirExceptSeaplane   : return getText(Type.B0136);
+            default                                     : return null;
         }
     }
 }

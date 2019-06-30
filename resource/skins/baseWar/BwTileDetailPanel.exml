@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
+        xmlns:w="http://ns.egret.com/wing">
+    <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="semi_transparent" />
+    <e:Group id="_group" top="40" bottom="0" width="640" horizontalCenter="0">
+        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
+                        left="0" right="0" top="0" bottom="0" />
+        <e:Scroller left="0" right="0" top="8" bottom="8">
+            <e:Group>
+                <e:Group y="30" x="20" touchChildren="false" touchEnabled="false">
+                    <GameUi:UiImage id="_imgTileBase" scaleX="1" scaleY="1" />
+                    <GameUi:UiImage id="_imgTileObject" scaleX="1" scaleY="1" />
+                </e:Group>
+                <GameUi:UiLabel id="_labelName" text="地形名五字" size="12" textColor="0xffffff" y="8"
+                                horizontalCenter="-265" />
+                <e:Group x="110" y="15">
+                    <GameUi:UiLabel text="防御加成:" size="18" textColor="0xFFFFFF" y="0" x="0" />
+                    <GameUi:UiLabel id="_labelDefenseBonus" text="30(陆军)" size="18" textColor="0xFFFFFF" y="0" x="85" />
+                </e:Group>
+                <e:Group x="300" y="15">
+                    <GameUi:UiLabel text="收入:" size="18" textColor="0xFFFFFF" y="0" x="0" />
+                    <GameUi:UiLabel id="_labelIncome" text="1000" size="18" textColor="0xFFFFFF" y="0" x="60" />
+                </e:Group>
+                <e:Group x="460" y="15">
+                    <GameUi:UiLabel text="视野范围:" size="18" textColor="0xFFFFFF" y="0" x="0" />
+                    <GameUi:UiLabel id="_labelVisionRange" text="1" size="18" textColor="0xFFFFFF" y="0" x="85" />
+                </e:Group>
+                <e:Group x="110" y="45">
+                    <GameUi:UiLabel text="隐蔽类别:" size="18" textColor="0xFFFFFF" y="0" x="0" />
+                    <GameUi:UiLabel id="_labelHideCategory" text="陆军" size="18" textColor="0xFFFFFF" y="0" x="85" />
+                </e:Group>
+                <e:Group id="_groupCapturePoint" x="300" y="45">
+                    <GameUi:UiLabel text="占领点数:" size="18" textColor="0xFFFFFF" y="0" x="0" />
+                    <GameUi:UiLabel id="_labelCapturePoint" text="20 / 20" size="18" textColor="0xFFFFFF" y="0" x="85" />
+                </e:Group>
+                <e:Group id="_groupHp" x="300" y="45">
+                    <GameUi:UiLabel text="HP:" size="18" textColor="0xFFFFFF" y="0" x="0" />
+                    <GameUi:UiLabel id="_labelHp" text="99 / 99" size="18" textColor="0xFFFFFF" y="0" x="85" />
+                </e:Group>
+                <e:Group id="_groupBuildPoint" x="300" y="45">
+                    <GameUi:UiLabel text="建造点数:" size="18" textColor="0xFFFFFF" y="0" x="0" />
+                    <GameUi:UiLabel id="_labelBuildPoint" text="99 / 99" size="18" textColor="0xFFFFFF" y="0" x="85" />
+                </e:Group>
+                <e:Group x="460" y="45">
+                    <GameUi:UiLabel text="被占即失败:" size="18" textColor="0xFFFFFF" y="0" x="0" />
+                    <GameUi:UiLabel id="_labelLoseOnCapture" text="是" size="18" textColor="0xFFFFFF" y="0" x="100" />
+                </e:Group>
+                <e:Group x="110" y="75">
+                    <GameUi:UiLabel text="修理量:" size="18" textColor="0xFFFFFF" y="0" x="0" />
+                    <GameUi:UiLabel id="_labelRepairAmount" text="2(陆军)" size="18" textColor="0xFFFFFF" y="0" x="85" />
+                </e:Group>
+                <e:Group x="300" y="75">
+                    <GameUi:UiLabel text="生产部队:" size="18" textColor="0xFFFFFF" y="0" x="0" />
+                    <GameUi:UiLabel id="_labelCanProduceUnit" text="是" size="18" textColor="0xFFFFFF" y="0" x="85" />
+                </e:Group>
+                <e:Group x="460" y="75">
+                    <GameUi:UiLabel text="攻防加成:" size="18" textColor="0xFFFFFF" y="0" x="0" />
+                    <GameUi:UiLabel id="_labelAttackDefenseBonus" text="5% / 5%" size="18" textColor="0xFFFFFF" y="0"
+                                    x="85" />
+                </e:Group>
+                <e:Group left="0" right="0" bottom="5" top="110">
+                    <GameUi:UiLabel text="移动基础消耗表" size="20" textColor="0xFFFFFF" y="0" horizontalCenter="0" />
+                    <GameUi:UiScrollList id="_listMoveCost" scaleX="1" scaleY="1" left="0" right="0" top="20" bottom="0">
+                        <e:List x="-1">
+                            <e:itemRendererSkinName>
+                                <e:Skin width="100" height="40">
+                                    <e:Group id="_group" left="0" right="0" top="0" bottom="0">
+                                        <e:Group id="_conView" y="10" scaleX="0.3" scaleY="0.3" x="20" touchChildren="false" touchEnabled="false"></e:Group>
+                                        <GameUi:UiLabel id="_labelMoveCost" text="9" size="18" textColor="0xffffff"
+                                                        x="60" verticalCenter="0" />
+                                    </e:Group>
+                                </e:Skin>
+                            </e:itemRendererSkinName>
+                            <e:layout>
+                                <e:TileLayout orientation="rows" horizontalGap="0" requestedColumnCount="6"
+                                              verticalGap="8" />
+                            </e:layout>
+                        </e:List>
+                    </GameUi:UiScrollList>
+                </e:Group>
+            </e:Group>
+        </e:Scroller>
+    </e:Group>
+</e:Skin>

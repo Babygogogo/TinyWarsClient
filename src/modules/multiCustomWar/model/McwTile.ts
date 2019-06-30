@@ -22,7 +22,7 @@ namespace TinyWars.MultiCustomWar {
                     gridY       : this.getGridY(),
                     objectViewId: this.getType() === TileType.Headquarters ? this.getObjectViewId() : this.getNeutralObjectViewId(),
                     baseViewId  : this.getBaseViewId(),
-                }, this._getConfigVersion());
+                }, this.getConfigVersion());
 
                 this.startRunning(this._getWar());
                 this.setCurrentBuildPoint(this.getMaxBuildPoint());
@@ -36,7 +36,7 @@ namespace TinyWars.MultiCustomWar {
                 this._setIsFogEnabled(false);
 
                 const war           = this._getWar();
-                const configVersion = this._getConfigVersion();
+                const configVersion = this.getConfigVersion();
                 if (data) {
                     this.init(data, configVersion);
                 } else {

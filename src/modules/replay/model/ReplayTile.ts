@@ -44,7 +44,7 @@ namespace TinyWars.Replay {
                 this._setIsFogEnabled(false);
 
                 if (data) {
-                    this.init(data, this._getConfigVersion());
+                    this.init(data, this.getConfigVersion());
                 }
 
                 this.startRunning(this._getWar());

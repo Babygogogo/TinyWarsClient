@@ -1534,6 +1534,9 @@ namespace TinyWars.ConfigManager {
     export function getMoveCostCfg(version: number, baseType: TileBaseType, objectType: TileObjectType): { [moveType: number]: MoveCostCfg } {
         return _ALL_CONFIGS.get(version)!.MoveCost[getTileType(baseType, objectType)];
     }
+    export function getMoveCostCfgByTileTYpe(version: number, tileType: TileType): { [moveType: number]: MoveCostCfg } {
+        return _ALL_CONFIGS.get(version)!.MoveCost[tileType];
+    }
 
     export function getTileBaseType(tileBaseViewId: number): TileBaseType {
         return _TILE_BASE_TYPES.get(tileBaseViewId)!;

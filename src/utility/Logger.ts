@@ -13,7 +13,7 @@ namespace TinyWars.Utility {
         }
 
         const CONSOLE           = window.console;
-        const LOG_LEVEL         = LogLevels.All;
+        const LOG_LEVEL         = window.CLIENT_VERSION === "DEVELOP" ? LogLevels.All : LogLevels.Off;
         const IS_ASSERT_ENABLED = true;
 
         export function trace(...rest: any[]): void {
