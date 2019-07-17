@@ -14832,4 +14832,229 @@ export declare class S_McwUnitSupply implements IS_McwUnitSupply {
      */
     public toJSON(): { [k: string]: any };
 }
+
+/** Properties of a RPCC_SayHello. */
+export declare interface IRPCC_SayHello {
+
+    /** RPCC_SayHello name */
+    name?: (string|null);
+}
+
+/** Represents a RPCC_SayHello. */
+export declare class RPCC_SayHello implements IRPCC_SayHello {
+
+    /**
+     * Constructs a new RPCC_SayHello.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IRPCC_SayHello);
+
+    /** RPCC_SayHello name. */
+    public name: string;
+
+    /**
+     * Creates a new RPCC_SayHello instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns RPCC_SayHello instance
+     */
+    public static create(properties?: IRPCC_SayHello): RPCC_SayHello;
+
+    /**
+     * Encodes the specified RPCC_SayHello message. Does not implicitly {@link RPCC_SayHello.verify|verify} messages.
+     * @param message RPCC_SayHello message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IRPCC_SayHello, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified RPCC_SayHello message, length delimited. Does not implicitly {@link RPCC_SayHello.verify|verify} messages.
+     * @param message RPCC_SayHello message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IRPCC_SayHello, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a RPCC_SayHello message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns RPCC_SayHello
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): RPCC_SayHello;
+
+    /**
+     * Decodes a RPCC_SayHello message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns RPCC_SayHello
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): RPCC_SayHello;
+
+    /**
+     * Verifies a RPCC_SayHello message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a RPCC_SayHello message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns RPCC_SayHello
+     */
+    public static fromObject(object: { [k: string]: any }): RPCC_SayHello;
+
+    /**
+     * Creates a plain object from a RPCC_SayHello message. Also converts values to other types if specified.
+     * @param message RPCC_SayHello
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: RPCC_SayHello, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this RPCC_SayHello to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a RPCS_SayHello. */
+export declare interface IRPCS_SayHello {
+
+    /** RPCS_SayHello message */
+    message?: (string|null);
+}
+
+/** Represents a RPCS_SayHello. */
+export declare class RPCS_SayHello implements IRPCS_SayHello {
+
+    /**
+     * Constructs a new RPCS_SayHello.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IRPCS_SayHello);
+
+    /** RPCS_SayHello message. */
+    public message: string;
+
+    /**
+     * Creates a new RPCS_SayHello instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns RPCS_SayHello instance
+     */
+    public static create(properties?: IRPCS_SayHello): RPCS_SayHello;
+
+    /**
+     * Encodes the specified RPCS_SayHello message. Does not implicitly {@link RPCS_SayHello.verify|verify} messages.
+     * @param message RPCS_SayHello message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IRPCS_SayHello, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified RPCS_SayHello message, length delimited. Does not implicitly {@link RPCS_SayHello.verify|verify} messages.
+     * @param message RPCS_SayHello message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IRPCS_SayHello, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a RPCS_SayHello message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns RPCS_SayHello
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): RPCS_SayHello;
+
+    /**
+     * Decodes a RPCS_SayHello message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns RPCS_SayHello
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): RPCS_SayHello;
+
+    /**
+     * Verifies a RPCS_SayHello message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a RPCS_SayHello message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns RPCS_SayHello
+     */
+    public static fromObject(object: { [k: string]: any }): RPCS_SayHello;
+
+    /**
+     * Creates a plain object from a RPCS_SayHello message. Also converts values to other types if specified.
+     * @param message RPCS_SayHello
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: RPCS_SayHello, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this RPCS_SayHello to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Represents a ReplayValidator */
+export declare class ReplayValidator extends protobuf.rpc.Service {
+
+    /**
+     * Constructs a new ReplayValidator service.
+     * @param rpcImpl RPC implementation
+     * @param [requestDelimited=false] Whether requests are length-delimited
+     * @param [responseDelimited=false] Whether responses are length-delimited
+     */
+    constructor(rpcImpl: protobuf.RPCImpl, requestDelimited?: boolean, responseDelimited?: boolean);
+
+    /**
+     * Creates new ReplayValidator service using the specified rpc implementation.
+     * @param rpcImpl RPC implementation
+     * @param [requestDelimited=false] Whether requests are length-delimited
+     * @param [responseDelimited=false] Whether responses are length-delimited
+     * @returns RPC service. Useful where requests and/or responses are streamed.
+     */
+    public static create(rpcImpl: protobuf.RPCImpl, requestDelimited?: boolean, responseDelimited?: boolean): ReplayValidator;
+
+    /**
+     * Calls sayHello.
+     * @param request RPCC_SayHello message or plain object
+     * @param callback Node-style callback called with the error, if any, and RPCS_SayHello
+     */
+    public sayHello(request: IRPCC_SayHello, callback: ReplayValidator.sayHelloCallback): void;
+
+    /**
+     * Calls sayHello.
+     * @param request RPCC_SayHello message or plain object
+     * @returns Promise
+     */
+    public sayHello(request: IRPCC_SayHello): Promise<RPCS_SayHello>;
+}
+
+export declare namespace ReplayValidator {
+
+    /**
+     * Callback as used by {@link ReplayValidator#sayHello}.
+     * @param error Error, if any
+     * @param [response] RPCS_SayHello
+     */
+    type sayHelloCallback = (error: (Error|null), response?: RPCS_SayHello) => void;
+}
 }}
