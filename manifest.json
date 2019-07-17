@@ -171,6 +171,7 @@
 		"bin-debug/modules/multiCustomRoom/view/McrCreateSettingsPanel.js",
 		"bin-debug/modules/multiCustomRoom/view/McrExitDetailPanel.js",
 		"bin-debug/utility/ResManager.js",
+		"bin-debug/utility/SeedRandom.js",
 		"bin-debug/modules/multiCustomRoom/view/McrExitMapListPanel.js",
 		"bin-debug/modules/multiCustomRoom/view/McrJoinDetailPanel.js",
 		"bin-debug/modules/multiCustomRoom/view/McrJoinMapListPanel.js",
