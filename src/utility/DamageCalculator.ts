@@ -16,7 +16,7 @@ namespace TinyWars.Utility.DamageCalculator {
 
     function getLuckValue(war: BwWar, playerIndex: number): number {
         // TODO: take skill into account.
-        return Math.floor(Math.random() * 11);
+        return Math.floor(war.getRandomNumberGenerator()() * 11);
     }
 
     function getAttackBonusMultiplier(war: BwWar, attacker: BwUnit, attackerGridIndex: GridIndex, target: BwUnit | BwTile, targetGridIndex: GridIndex): number {

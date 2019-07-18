@@ -25,6 +25,7 @@ namespace TinyWars.BaseWar {
         private _field                  : BwField;
         private _playerManager          : BwPlayerManager;
         private _turnManager            : BwTurnManager;
+        private _randomNumberGenerator  : seedrandom.prng;
         private _remainingVotesForDraw  : number;
         private _nextActionId           : number;
         private _isRunning              = false;
@@ -37,6 +38,7 @@ namespace TinyWars.BaseWar {
             this._setWarComment(data.warComment);
             this._setConfigVersion(data.configVersion);
             this._setMapIndexKey(data);
+            this._setRandomNumberGenerator(new Math.seedrandom("", { state: data.seedRandomState || true }));
             this._setSettingsTimeLimit(data.timeLimit);
             this._setSettingsHasFog(data.hasFogByDefault);
             this._setSettingsIncomeModifier(data.incomeModifier);
@@ -139,6 +141,13 @@ namespace TinyWars.BaseWar {
         }
         public getMapIndexKey(): MapIndexKey {
             return this._mapIndexKey;
+        }
+
+        private _setRandomNumberGenerator(generator: seedrandom.prng): void {
+            this._randomNumberGenerator = generator;
+        }
+        public getRandomNumberGenerator(): seedrandom.prng {
+            return this._randomNumberGenerator;
         }
 
         private _setSettingsTimeLimit(timeLimit: number): void {
