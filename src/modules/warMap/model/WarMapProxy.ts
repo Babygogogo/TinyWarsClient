@@ -22,7 +22,7 @@ namespace TinyWars.WarMap {
             ], WarMapProxy);
         }
 
-        export function reqGetNewestMultiPlayerMapInfos(param?: ParamForGetNewestMapInfos): void {
+        export function reqGetNewestMapInfos(isMultiPlayer: boolean, param?: ParamForGetNewestMapInfos): void {
             NetManager.send({
                 C_GetNewestMapDynamicInfos: {
                     mapName         : param && param.mapName,
@@ -30,7 +30,7 @@ namespace TinyWars.WarMap {
                     playersCount    : param && param.playersCount,
                     minRating       : param && param.minRating,
                     minPlayedTimes  : param && param.minPlayedTimes,
-                    isMultiPlayer   : true,
+                    isMultiPlayer,
                 },
             });
         }

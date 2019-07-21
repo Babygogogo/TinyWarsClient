@@ -62,7 +62,7 @@ namespace TinyWars.WarMap {
         }
 
         private _onTouchedBtnReset(e: egret.TouchEvent): void {
-            WarMapProxy.reqGetNewestMultiPlayerMapInfos();
+            WarMapProxy.reqGetNewestMapInfos(true);
             WarMapSearchPanel.hide();
         }
 
@@ -80,7 +80,7 @@ namespace TinyWars.WarMap {
             const playersCount = Number(this._inputPlayersCount.text);
             const playedTimes  = Number(this._inputPlayedTimes.text);
             const minRating    = Number(this._inputMinRating.text);
-            WarMapProxy.reqGetNewestMultiPlayerMapInfos({
+            WarMapProxy.reqGetNewestMapInfos(true, {
                 mapName         : mapName.length                                ? mapName       : undefined,
                 mapDesigner     : mapDesigner.length                            ? mapDesigner   : undefined,
                 playersCount    : (!isNaN(playersCount)) && (playersCount != 0) ? playersCount  : undefined,

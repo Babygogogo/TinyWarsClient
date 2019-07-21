@@ -66,14 +66,14 @@ namespace TinyWars.SingleCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////
         private _createDataForListCommand(): DataForCommandRenderer[] {
             return [
-                // {
-                //     name    : Lang.getText(Lang.Type.B0000),
-                //     callback: (): void => {
-                //         ScrMainMenuPanel.hide();
-                //         WarMap.WarMapProxy.reqGetNewestMapInfos();
-                //         SingleCustomRoom.McrCreateMapListPanel.show();
-                //     },
-                // },
+                {
+                    name    : Lang.getText(Lang.Type.B0000),
+                    callback: (): void => {
+                        ScrMainMenuPanel.hide();
+                        WarMap.WarMapProxy.reqGetNewestMapInfos(false);
+                        SingleCustomRoom.ScrCreateMapListPanel.show();
+                    },
+                },
                 // {
                 //     name    : Lang.getText(Lang.Type.B0023),
                 //     callback: (): void => {

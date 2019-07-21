@@ -1,15 +1,15 @@
 
-namespace TinyWars.MultiCustomRoom {
+namespace TinyWars.SingleCustomRoom {
     import Notify       = Utility.Notify;
     import Types        = Utility.Types;
     import Lang         = Utility.Lang;
     import WarMapModel  = WarMap.WarMapModel;
 
-    export class McrCreateMapListPanel extends GameUi.UiPanel {
+    export class ScrCreateMapListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: McrCreateMapListPanel;
+        private static _instance: ScrCreateMapListPanel;
 
         private _listMap   : GameUi.UiScrollList;
         private _zoomMap   : GameUi.UiZoomableComponent;
@@ -27,14 +27,14 @@ namespace TinyWars.MultiCustomRoom {
         private _selectedIndex      : number;
 
         public static show(): void {
-            if (!McrCreateMapListPanel._instance) {
-                McrCreateMapListPanel._instance = new McrCreateMapListPanel();
+            if (!ScrCreateMapListPanel._instance) {
+                ScrCreateMapListPanel._instance = new ScrCreateMapListPanel();
             }
-            McrCreateMapListPanel._instance.open();
+            ScrCreateMapListPanel._instance.open();
         }
         public static hide(): void {
-            if (McrCreateMapListPanel._instance) {
-                McrCreateMapListPanel._instance.close();
+            if (ScrCreateMapListPanel._instance) {
+                ScrCreateMapListPanel._instance.close();
             }
         }
 
@@ -42,7 +42,7 @@ namespace TinyWars.MultiCustomRoom {
             super();
 
             this._setAutoAdjustHeightEnabled();
-            this.skinName = "resource/skins/multiCustomRoom/McrCreateMapListPanel.exml";
+            this.skinName = "resource/skins/singleCustomRoom/ScrCreateMapListPanel.exml";
         }
 
         protected _onFirstOpened(): void {
@@ -104,7 +104,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
-            McrCreateMapListPanel.hide();
+            ScrCreateMapListPanel.hide();
             Lobby.LobbyPanel.show();
         }
 
@@ -186,7 +186,7 @@ namespace TinyWars.MultiCustomRoom {
         mapDesigner : string;
         mapVersion  : number;
         index       : number;
-        panel       : McrCreateMapListPanel;
+        panel       : ScrCreateMapListPanel;
     }
 
     class MapNameRenderer extends eui.ItemRenderer {
@@ -215,10 +215,10 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
-            McrCreateMapListPanel.hide();
+            ScrCreateMapListPanel.hide();
 
-            McrModel.resetCreateWarData(this.data as DataForMapNameRenderer);
-            McrCreateSettingsPanel.show();
+            // McrModel.resetCreateWarData(this.data as DataForMapNameRenderer);
+            // McrCreateSettingsPanel.show();
         }
     }
 }

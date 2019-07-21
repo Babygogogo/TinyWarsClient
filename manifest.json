@@ -95,8 +95,8 @@
 		"bin-debug/modules/multiCustomWar/view/McwCursorView.js",
 		"bin-debug/modules/multiCustomWar/view/McwFieldView.js",
 		"bin-debug/modules/multiCustomWar/view/McwGridVisionEffectView.js",
+		"bin-debug/modules/multiCustomWar/view/McwProduceUnitPanel.js",
 		"bin-debug/Platform.js",
-		"bin-debug/modules/multiCustomWar/view/McwTileBriefPanel.js",
 		"bin-debug/modules/multiCustomWar/view/McwTileMapView.js",
 		"bin-debug/modules/multiCustomWar/view/McwTileView.js",
 		"bin-debug/modules/multiCustomWar/view/McwTopPanel.js",
@@ -142,6 +142,7 @@
 		"bin-debug/modules/replay/view/ReplayWarMenuPanel.js",
 		"bin-debug/modules/replay/view/ReplayWarPanel.js",
 		"bin-debug/modules/replay/view/ReplayWarView.js",
+		"bin-debug/modules/singleCustomRoom/view/ScrCreateMapListPanel.js",
 		"bin-debug/modules/singleCustomRoom/view/ScrMainMenuPanel.js",
 		"bin-debug/gameui/UiLabel.js",
 		"bin-debug/modules/time/model/TimeProxy.js",
@@ -177,6 +178,6 @@
 		"bin-debug/modules/multiCustomRoom/view/McrExitMapListPanel.js",
 		"bin-debug/modules/multiCustomRoom/view/McrJoinDetailPanel.js",
 		"bin-debug/modules/multiCustomRoom/view/McrJoinMapListPanel.js",
-		"bin-debug/modules/multiCustomWar/view/McwProduceUnitPanel.js"
+		"bin-debug/modules/multiCustomWar/view/McwTileBriefPanel.js"
 	]
 }
