@@ -7914,6 +7914,12 @@ export declare interface IC_GetNewestMapDynamicInfos {
 
     /** C_GetNewestMapDynamicInfos minPlayedTimes */
     minPlayedTimes?: (number|null);
+
+    /** C_GetNewestMapDynamicInfos isSinglePlayer */
+    isSinglePlayer?: (boolean|null);
+
+    /** C_GetNewestMapDynamicInfos isMultiPlayer */
+    isMultiPlayer?: (boolean|null);
 }
 
 /** Represents a C_GetNewestMapDynamicInfos. */
@@ -7939,6 +7945,12 @@ export declare class C_GetNewestMapDynamicInfos implements IC_GetNewestMapDynami
 
     /** C_GetNewestMapDynamicInfos minPlayedTimes. */
     public minPlayedTimes: number;
+
+    /** C_GetNewestMapDynamicInfos isSinglePlayer. */
+    public isSinglePlayer: boolean;
+
+    /** C_GetNewestMapDynamicInfos isMultiPlayer. */
+    public isMultiPlayer: boolean;
 
     /**
      * Creates a new C_GetNewestMapDynamicInfos instance using the specified properties.

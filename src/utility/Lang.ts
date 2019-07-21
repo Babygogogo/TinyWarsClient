@@ -799,6 +799,14 @@ namespace TinyWars.Utility.Lang {
             `空军除舰载机`,
             `AirExceptSeaplane`,
         ]],
+        [Type.B0137, [
+            `多人对战`,
+            `MultiPlayer`,
+        ]],
+        [Type.B0138, [
+            `单人模式`,
+            `SinglePlayer`,
+        ]],
 
         [Type.B1000, [
             `平原`,
