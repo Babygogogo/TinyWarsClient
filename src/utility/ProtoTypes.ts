@@ -6523,6 +6523,12 @@ export declare interface IMessageContainer {
     /** MessageContainer S_UserChangeNickname */
     S_UserChangeNickname?: (IS_UserChangeNickname|null);
 
+    /** MessageContainer C_UserChangeDiscordId */
+    C_UserChangeDiscordId?: (IC_UserChangeDiscordId|null);
+
+    /** MessageContainer S_UserChangeDiscordId */
+    S_UserChangeDiscordId?: (IS_UserChangeDiscordId|null);
+
     /** MessageContainer C_McrCreateWar */
     C_McrCreateWar?: (IC_McrCreateWar|null);
 
@@ -6763,6 +6769,12 @@ export declare class MessageContainer implements IMessageContainer {
 
     /** MessageContainer S_UserChangeNickname. */
     public S_UserChangeNickname?: (IS_UserChangeNickname|null);
+
+    /** MessageContainer C_UserChangeDiscordId. */
+    public C_UserChangeDiscordId?: (IC_UserChangeDiscordId|null);
+
+    /** MessageContainer S_UserChangeDiscordId. */
+    public S_UserChangeDiscordId?: (IS_UserChangeDiscordId|null);
 
     /** MessageContainer C_McrCreateWar. */
     public C_McrCreateWar?: (IC_McrCreateWar|null);
@@ -8623,6 +8635,9 @@ export declare interface IS_GetUserPublicInfo {
     /** S_GetUserPublicInfo onlineTime */
     onlineTime?: (number|null);
 
+    /** S_GetUserPublicInfo discordId */
+    discordId?: (string|null);
+
     /** S_GetUserPublicInfo mcw2pWins */
     mcw2pWins?: (number|null);
 
@@ -8692,6 +8707,9 @@ export declare class S_GetUserPublicInfo implements IS_GetUserPublicInfo {
 
     /** S_GetUserPublicInfo onlineTime. */
     public onlineTime: number;
+
+    /** S_GetUserPublicInfo discordId. */
+    public discordId: string;
 
     /** S_GetUserPublicInfo mcw2pWins. */
     public mcw2pWins: number;
@@ -8984,6 +9002,192 @@ export declare class S_UserChangeNickname implements IS_UserChangeNickname {
 
     /**
      * Converts this S_UserChangeNickname to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_UserChangeDiscordId. */
+export declare interface IC_UserChangeDiscordId {
+
+    /** C_UserChangeDiscordId discordId */
+    discordId?: (string|null);
+}
+
+/** Represents a C_UserChangeDiscordId. */
+export declare class C_UserChangeDiscordId implements IC_UserChangeDiscordId {
+
+    /**
+     * Constructs a new C_UserChangeDiscordId.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_UserChangeDiscordId);
+
+    /** C_UserChangeDiscordId discordId. */
+    public discordId: string;
+
+    /**
+     * Creates a new C_UserChangeDiscordId instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_UserChangeDiscordId instance
+     */
+    public static create(properties?: IC_UserChangeDiscordId): C_UserChangeDiscordId;
+
+    /**
+     * Encodes the specified C_UserChangeDiscordId message. Does not implicitly {@link C_UserChangeDiscordId.verify|verify} messages.
+     * @param message C_UserChangeDiscordId message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_UserChangeDiscordId, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_UserChangeDiscordId message, length delimited. Does not implicitly {@link C_UserChangeDiscordId.verify|verify} messages.
+     * @param message C_UserChangeDiscordId message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_UserChangeDiscordId, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_UserChangeDiscordId message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_UserChangeDiscordId
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_UserChangeDiscordId;
+
+    /**
+     * Decodes a C_UserChangeDiscordId message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_UserChangeDiscordId
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_UserChangeDiscordId;
+
+    /**
+     * Verifies a C_UserChangeDiscordId message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_UserChangeDiscordId message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_UserChangeDiscordId
+     */
+    public static fromObject(object: { [k: string]: any }): C_UserChangeDiscordId;
+
+    /**
+     * Creates a plain object from a C_UserChangeDiscordId message. Also converts values to other types if specified.
+     * @param message C_UserChangeDiscordId
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_UserChangeDiscordId, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_UserChangeDiscordId to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_UserChangeDiscordId. */
+export declare interface IS_UserChangeDiscordId {
+
+    /** S_UserChangeDiscordId errorCode */
+    errorCode?: (number|null);
+
+    /** S_UserChangeDiscordId discordId */
+    discordId?: (string|null);
+}
+
+/** Represents a S_UserChangeDiscordId. */
+export declare class S_UserChangeDiscordId implements IS_UserChangeDiscordId {
+
+    /**
+     * Constructs a new S_UserChangeDiscordId.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_UserChangeDiscordId);
+
+    /** S_UserChangeDiscordId errorCode. */
+    public errorCode: number;
+
+    /** S_UserChangeDiscordId discordId. */
+    public discordId: string;
+
+    /**
+     * Creates a new S_UserChangeDiscordId instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_UserChangeDiscordId instance
+     */
+    public static create(properties?: IS_UserChangeDiscordId): S_UserChangeDiscordId;
+
+    /**
+     * Encodes the specified S_UserChangeDiscordId message. Does not implicitly {@link S_UserChangeDiscordId.verify|verify} messages.
+     * @param message S_UserChangeDiscordId message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_UserChangeDiscordId, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_UserChangeDiscordId message, length delimited. Does not implicitly {@link S_UserChangeDiscordId.verify|verify} messages.
+     * @param message S_UserChangeDiscordId message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_UserChangeDiscordId, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_UserChangeDiscordId message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_UserChangeDiscordId
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_UserChangeDiscordId;
+
+    /**
+     * Decodes a S_UserChangeDiscordId message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_UserChangeDiscordId
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_UserChangeDiscordId;
+
+    /**
+     * Verifies a S_UserChangeDiscordId message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_UserChangeDiscordId message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_UserChangeDiscordId
+     */
+    public static fromObject(object: { [k: string]: any }): S_UserChangeDiscordId;
+
+    /**
+     * Creates a plain object from a S_UserChangeDiscordId message. Also converts values to other types if specified.
+     * @param message S_UserChangeDiscordId
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_UserChangeDiscordId, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_UserChangeDiscordId to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };

@@ -90,6 +90,11 @@
                 <GameUi:UiLabel id="_labelLoginCount" text="999" textColor="0xFFFFFF" size="20" scaleX="1" scaleY="1"
                                 x="100" />
             </e:Group>
+            <e:Group y="70">
+                <GameUi:UiLabel text="Discord ID:" textColor="0xFFFFFF" size="20" scaleX="1" scaleY="1" />
+                <GameUi:UiLabel id="_labelDiscordId" text="123456789987654321" textColor="0xFFFFFF" size="20" scaleX="1"
+                                scaleY="1" x="120" />
+            </e:Group>
         </e:Group>
         <GameUi:UiButton id="_btnClose" label="关闭&gt;&gt;" bottom="15" right="15">
             <e:skinName>

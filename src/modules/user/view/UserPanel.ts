@@ -10,31 +10,32 @@ namespace TinyWars.User {
 
         private static _instance: UserPanel;
 
-        private _labelTitle         : TinyWars.GameUi.UiLabel;
+        private _labelTitle         : GameUi.UiLabel;
         private _btnChangeNickname  : GameUi.UiButton;
 
-        private _labelRankScore     : TinyWars.GameUi.UiLabel;
-        private _labelRankName      : TinyWars.GameUi.UiLabel;
-        private _labelRank2pWins    : TinyWars.GameUi.UiLabel;
-        private _labelRank2pLoses   : TinyWars.GameUi.UiLabel;
-        private _labelRank2pDraws   : TinyWars.GameUi.UiLabel;
+        private _labelRankScore     : GameUi.UiLabel;
+        private _labelRankName      : GameUi.UiLabel;
+        private _labelRank2pWins    : GameUi.UiLabel;
+        private _labelRank2pLoses   : GameUi.UiLabel;
+        private _labelRank2pDraws   : GameUi.UiLabel;
 
-        private _labelMcw2pWins     : TinyWars.GameUi.UiLabel;
-        private _labelMcw2pLoses    : TinyWars.GameUi.UiLabel;
-        private _labelMcw2pDraws    : TinyWars.GameUi.UiLabel;
-        private _labelMcw3pWins     : TinyWars.GameUi.UiLabel;
-        private _labelMcw3pLoses    : TinyWars.GameUi.UiLabel;
-        private _labelMcw3pDraws    : TinyWars.GameUi.UiLabel;
-        private _labelMcw4pWins     : TinyWars.GameUi.UiLabel;
-        private _labelMcw4pLoses    : TinyWars.GameUi.UiLabel;
-        private _labelMcw4pDraws    : TinyWars.GameUi.UiLabel;
+        private _labelMcw2pWins     : GameUi.UiLabel;
+        private _labelMcw2pLoses    : GameUi.UiLabel;
+        private _labelMcw2pDraws    : GameUi.UiLabel;
+        private _labelMcw3pWins     : GameUi.UiLabel;
+        private _labelMcw3pLoses    : GameUi.UiLabel;
+        private _labelMcw3pDraws    : GameUi.UiLabel;
+        private _labelMcw4pWins     : GameUi.UiLabel;
+        private _labelMcw4pLoses    : GameUi.UiLabel;
+        private _labelMcw4pDraws    : GameUi.UiLabel;
 
-        private _labelRegisterTime  : TinyWars.GameUi.UiLabel;
-        private _labelLastLoginTime : TinyWars.GameUi.UiLabel;
-        private _labelOnlineTime    : TinyWars.GameUi.UiLabel;
-        private _labelLoginCount    : TinyWars.GameUi.UiLabel;
+        private _labelRegisterTime  : GameUi.UiLabel;
+        private _labelLastLoginTime : GameUi.UiLabel;
+        private _labelOnlineTime    : GameUi.UiLabel;
+        private _labelLoginCount    : GameUi.UiLabel;
+        private _labelDiscordId     : GameUi.UiLabel;
 
-        private _btnClose           : TinyWars.GameUi.UiButton;
+        private _btnClose           : GameUi.UiButton;
 
         private _userId: number;
 
@@ -116,6 +117,7 @@ namespace TinyWars.User {
                 this._labelLastLoginTime.text   = Helpers.getTimestampText(info.lastLoginTime);
                 this._labelOnlineTime.text      = Helpers.getTimeDurationText(info.onlineTime);
                 this._labelLoginCount.text      = `${info.loginCount}`;
+                this._labelDiscordId.text       = info.discordId || "--";
             }
         }
     }
