@@ -3,6 +3,7 @@ namespace TinyWars.SingleCustomRoom {
     import Notify       = Utility.Notify;
     import Types        = Utility.Types;
     import Lang         = Utility.Lang;
+    import FloatText    = Utility.FloatText;
     import WarMapModel  = WarMap.WarMapModel;
 
     export class ScrCreateMapListPanel extends GameUi.UiPanel {
@@ -105,7 +106,7 @@ namespace TinyWars.SingleCustomRoom {
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
             ScrCreateMapListPanel.hide();
-            Lobby.LobbyPanel.show();
+            ScrMainMenuPanel.show();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -219,6 +220,7 @@ namespace TinyWars.SingleCustomRoom {
 
             // McrModel.resetCreateWarData(this.data as DataForMapNameRenderer);
             // McrCreateSettingsPanel.show();
+            FloatText.show("TODO");
         }
     }
 }

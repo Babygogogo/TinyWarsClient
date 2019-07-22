@@ -1,14 +1,12 @@
 
 namespace TinyWars.MultiCustomRoom {
-    import Notify           = Utility.Notify;
-    import Types            = Utility.Types;
-    import StageManager     = Utility.StageManager;
-    import FloatText        = Utility.FloatText;
-    import Helpers          = Utility.Helpers;
-    import Lang             = Utility.Lang;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import TemplateMapModel = WarMap.WarMapModel;
-    import TemplateMapProxy = WarMap.WarMapProxy;
+    import Notify       = Utility.Notify;
+    import Types        = Utility.Types;
+    import FloatText    = Utility.FloatText;
+    import Helpers      = Utility.Helpers;
+    import Lang         = Utility.Lang;
+    import ProtoTypes   = Utility.ProtoTypes;
+    import WarMapModel  = WarMap.WarMapModel;
 
     export class McrExitMapListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
@@ -29,7 +27,6 @@ namespace TinyWars.MultiCustomRoom {
         private _listPlayer     : GameUi.UiScrollList;
 
         private _dataForListWar     : DataForWarRenderer[] = [];
-        private _dataForListPlayer  : DataForPlayerRenderer[] = [];
         private _selectedWarIndex   : number;
 
         public static show(): void {
@@ -123,7 +120,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
             McrExitMapListPanel.hide();
-            Lobby.LobbyPanel.show();
+            McrMainMenuPanel.show();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -199,7 +196,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private async _showMap(index: number): Promise<void> {
             const warInfo               = this._dataForListWar[index].warInfo;
-            const [mapData, mapInfo]    = await Promise.all([TemplateMapModel.getMapData(warInfo as Types.MapIndexKey), TemplateMapModel.getMapDynamicInfoAsync(warInfo as Types.MapIndexKey)]);
+            const [mapData, mapInfo]    = await Promise.all([WarMapModel.getMapData(warInfo as Types.MapIndexKey), WarMapModel.getMapDynamicInfoAsync(warInfo as Types.MapIndexKey)]);
             this._labelMapName.text     = Lang.getFormatedText(Lang.Type.F0000, mapInfo.mapName);
             this._labelDesigner.text    = Lang.getFormatedText(Lang.Type.F0001, mapInfo.mapDesigner);
             this._labelHasFog.text      = Lang.getFormatedText(Lang.Type.F0005, Lang.getText(warInfo.hasFog ? Lang.Type.B0012 : Lang.Type.B0013));

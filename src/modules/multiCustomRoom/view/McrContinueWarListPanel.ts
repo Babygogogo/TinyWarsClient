@@ -120,7 +120,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
             McrContinueWarListPanel.hide();
-            Lobby.LobbyPanel.show();
+            McrMainMenuPanel.show();
         }
 
         ////////////////////////////////////////////////////////////////////////////////

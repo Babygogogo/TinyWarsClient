@@ -105,7 +105,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
             McrCreateMapListPanel.hide();
-            Lobby.LobbyPanel.show();
+            McrMainMenuPanel.show();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
