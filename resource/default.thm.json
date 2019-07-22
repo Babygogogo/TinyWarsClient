@@ -46,6 +46,7 @@
 		"resource/skins/replay/ReplayUnitListPanel.exml",
 		"resource/skins/replay/ReplayWarMenuPanel.exml",
 		"resource/skins/replay/ReplayWarPanel.exml",
+		"resource/skins/singleCustomRoom/ScrCreateMapListPanel.exml",
 		"resource/skins/singleCustomRoom/ScrMainMenuPanel.exml",
 		"resource/skins/user/UserChangeNicknamePanel.exml",
 		"resource/skins/user/UserPanel.exml",

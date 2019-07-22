@@ -215,7 +215,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
-            ScrCreateMapListPanel.hide();
+            // ScrCreateMapListPanel.hide();
 
             // McrModel.resetCreateWarData(this.data as DataForMapNameRenderer);
             // McrCreateSettingsPanel.show();
