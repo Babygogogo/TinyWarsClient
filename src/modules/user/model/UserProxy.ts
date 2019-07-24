@@ -10,6 +10,7 @@ namespace TinyWars.User {
             NetManager.addListeners([
                 { msgCode: NetMessageCodes.S_GetUserPublicInfo,     callback: _onSGetUserPublicInfo, },
                 { msgCode: NetMessageCodes.S_UserChangeNickname,    callback: _onSUserChangeNickname, },
+                { msgCode: NetMessageCodes.S_UserChangeDiscordId,   callback: _onSUserChangeDiscordId, },
             ]);
         }
 
@@ -42,6 +43,23 @@ namespace TinyWars.User {
             } else {
                 UserModel.setSelfNickname(data.nickname);
                 Notify.dispatch(Notify.Type.SUserChangeNickname, data);
+            }
+        }
+
+        export function reqChangeDiscordId(discordId: string): void {
+            NetManager.send({
+                C_UserChangeDiscordId: {
+                    discordId,
+                },
+            });
+        }
+        function _onSUserChangeDiscordId(e: egret.Event): void {
+            const data = e.data as ProtoTypes.IS_UserChangeDiscordId;
+            if (data.errorCode) {
+                Notify.dispatch(Notify.Type.SUserChangeDiscordIdFailed, data);
+            } else {
+                UserModel.setSelfNickname(data.discordId);
+                Notify.dispatch(Notify.Type.SUserChangeDiscordId, data);
             }
         }
     }

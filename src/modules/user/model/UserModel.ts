@@ -13,6 +13,7 @@ namespace TinyWars.User {
         let _selfAccount    : string;
         let _selfPassword   : string;
         let _selfNickname   : string;
+        let _selfDiscordId  : string;
         let _selfRankScore  : number = 0;
         const _userInfos    = new Map<number, ProtoTypes.IS_GetUserPublicInfo>();
 
@@ -29,7 +30,8 @@ namespace TinyWars.User {
             _selfPrivilege = data.privilege;
             _selfAccount   = data.account;
             _selfPassword  = data.password;
-            _selfNickname  = data.nickname;
+            setSelfNickname(data.nickname);
+            setSelfDiscordId(data.discordId);
             _selfRankScore = data.rank2pScore;
 
             LocalStorage.setAccount(data.account);
@@ -41,7 +43,8 @@ namespace TinyWars.User {
             _selfUserId     = undefined;
             _selfPrivilege  = undefined;
             _selfPassword   = undefined;
-            _selfNickname   = undefined;
+            setSelfNickname(null);
+            setSelfDiscordId(null);
             _selfRankScore  = 0;
         }
 
@@ -65,6 +68,12 @@ namespace TinyWars.User {
         }
         export function getSelfNickname(): string {
             return _selfNickname;
+        }
+        export function setSelfDiscordId(discordId: string | null): void {
+            _selfDiscordId = discordId;
+        }
+        export function getSelfDiscordId(): string | null {
+            return _selfDiscordId;
         }
         export function getSelfRankScore(): number {
             return _selfRankScore;

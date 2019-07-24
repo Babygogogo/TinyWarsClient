@@ -34,6 +34,7 @@ namespace TinyWars.User {
         private _labelOnlineTime    : GameUi.UiLabel;
         private _labelLoginCount    : GameUi.UiLabel;
         private _labelDiscordId     : GameUi.UiLabel;
+        private _btnChangeDiscordId : GameUi.UiButton;
 
         private _btnClose           : GameUi.UiButton;
 
@@ -64,9 +65,11 @@ namespace TinyWars.User {
             this._notifyListeners = [
                 { type: Notify.Type.SGetUserPublicInfo,     callback: this._onNotifySGetUserPublicInfo },
                 { type: Notify.Type.SUserChangeNickname,    callback: this._onNotifySUserChangeNickname },
+                { type: Notify.Type.SUserChangeDiscordId,   callback: this._onNotifySUserChangeDiscordId },
             ];
             this._uiListeners = [
                 { ui: this._btnChangeNickname,  callback: this._onTouchedBtnChangeNickname },
+                { ui: this._btnChangeDiscordId, callback: this._onTouchedBtnChangeDiscordId },
                 { ui: this._btnClose,           callback: this.close },
             ];
         }
@@ -86,16 +89,26 @@ namespace TinyWars.User {
                 UserProxy.reqGetUserPublicInfo(this._userId);
             }
         }
+        private _onNotifySUserChangeDiscordId(e: egret.Event): void {
+            const userId = this._userId;
+            if (userId === UserModel.getSelfUserId()) {
+                UserProxy.reqGetUserPublicInfo(this._userId);
+            }
+        }
         private _onTouchedBtnChangeNickname(e: egret.Event): void {
             UserChangeNicknamePanel.show();
+        }
+        private _onTouchedBtnChangeDiscordId(e: egret.Event): void {
+            UserChangeDiscordIdPanel.show();
         }
 
         private _updateView(): void {
             const userId    = this._userId;
             const info      = userId != null ? UserModel.getUserInfo(userId) : undefined;
             if (info) {
+                const isSelf                    = userId === UserModel.getSelfUserId();
                 this._labelTitle.text           = Lang.getFormatedText(Lang.Type.F0009, info.nickname);
-                this._btnChangeNickname.visible = userId === UserModel.getSelfUserId();
+                this._btnChangeNickname.visible = isSelf;
 
                 this._labelRankScore.text   = `${info.rank2pScore}`;
                 this._labelRankName.text    = ConfigManager.getRankName(ConfigManager.getNewestConfigVersion(), info.rank2pScore);
@@ -113,11 +126,12 @@ namespace TinyWars.User {
                 this._labelMcw4pLoses.text  = Lang.getFormatedText(Lang.Type.F0011, info.mcw4pLoses);
                 this._labelMcw4pDraws.text  = Lang.getFormatedText(Lang.Type.F0012, info.mcw4pDraws);
 
-                this._labelRegisterTime.text    = Helpers.getTimestampText(info.registerTime);
-                this._labelLastLoginTime.text   = Helpers.getTimestampText(info.lastLoginTime);
-                this._labelOnlineTime.text      = Helpers.getTimeDurationText(info.onlineTime);
-                this._labelLoginCount.text      = `${info.loginCount}`;
-                this._labelDiscordId.text       = info.discordId || "--";
+                this._labelRegisterTime.text        = Helpers.getTimestampText(info.registerTime);
+                this._labelLastLoginTime.text       = Helpers.getTimestampText(info.lastLoginTime);
+                this._labelOnlineTime.text          = Helpers.getTimeDurationText(info.onlineTime);
+                this._labelLoginCount.text          = `${info.loginCount}`;
+                this._labelDiscordId.text           = info.discordId || "--";
+                this._btnChangeDiscordId.visible    = isSelf;
             }
         }
     }

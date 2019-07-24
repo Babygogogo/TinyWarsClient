@@ -48,6 +48,7 @@
 		"resource/skins/replay/ReplayWarPanel.exml",
 		"resource/skins/singleCustomRoom/ScrCreateMapListPanel.exml",
 		"resource/skins/singleCustomRoom/ScrMainMenuPanel.exml",
+		"resource/skins/user/UserChangeDiscordIdPanel.exml",
 		"resource/skins/user/UserChangeNicknamePanel.exml",
 		"resource/skins/user/UserPanel.exml",
 		"resource/skins/utility/LoadingUiPanel.exml",

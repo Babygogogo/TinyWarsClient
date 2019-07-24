@@ -7536,6 +7536,9 @@ export declare interface IS_Login {
 
     /** S_Login rank2pScore */
     rank2pScore?: (number|null);
+
+    /** S_Login discordId */
+    discordId?: (string|null);
 }
 
 /** Represents a S_Login. */
@@ -7567,6 +7570,9 @@ export declare class S_Login implements IS_Login {
 
     /** S_Login rank2pScore. */
     public rank2pScore: number;
+
+    /** S_Login discordId. */
+    public discordId: string;
 
     /**
      * Creates a new S_Login instance using the specified properties.

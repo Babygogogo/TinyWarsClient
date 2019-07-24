@@ -148,6 +148,7 @@
 		"bin-debug/modules/time/model/TimeProxy.js",
 		"bin-debug/gameui/UiButton.js",
 		"bin-debug/modules/user/model/UserProxy.js",
+		"bin-debug/modules/user/view/UserChangeDiscordIdPanel.js",
 		"bin-debug/modules/user/view/UserChangeNicknamePanel.js",
 		"bin-debug/modules/user/view/UserPanel.js",
 		"bin-debug/gameui/UiScrollList.js",

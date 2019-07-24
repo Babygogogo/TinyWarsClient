@@ -43,6 +43,10 @@ namespace TinyWars.Utility.Helpers {
             && (str.length <= 20);
     }
 
+    export function checkIsDiscordIdValid(str: string | null): boolean {
+        return (typeof str == "string") && (str.length === 18);
+    }
+
     export function formatString(...args: (number | string)[]): string {
         let i = 0, a, f = args[i++] as string, o = [], m, p, c, x, s = '';
         while (f) {

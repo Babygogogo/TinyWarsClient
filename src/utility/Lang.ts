@@ -247,6 +247,14 @@ namespace TinyWars.Utility.Lang {
             `昵称已更改`,
             `Your nickname is changed successfully`,
         ]],
+        [Type.A0048, [
+            `Discord ID 不正确，请检查后重试`,
+            `Invalid discord ID.`,
+        ]],
+        [Type.A0049, [
+            `Discord ID 已更改`,
+            `Your discord ID is changed successfully`,
+        ]],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.

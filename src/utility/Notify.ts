@@ -69,6 +69,8 @@ namespace TinyWars.Utility.Notify {
         SGetUserPublicInfo,
         SUserChangeNickname,
         SUserChangeNicknameFailed,
+        SUserChangeDiscordId,
+        SUserChangeDiscordIdFailed,
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         SMcrCreateWar,

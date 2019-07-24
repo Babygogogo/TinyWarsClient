@@ -94,6 +94,15 @@
                 <GameUi:UiLabel text="Discord ID:" textColor="0xFFFFFF" size="20" scaleX="1" scaleY="1" />
                 <GameUi:UiLabel id="_labelDiscordId" text="123456789987654321" textColor="0xFFFFFF" size="20" scaleX="1"
                                 scaleY="1" x="120" />
+                <GameUi:UiButton id="_btnChangeDiscordId" label="更改&gt;&gt;" y="0" x="340">
+                    <GameUi:skinName>
+                        <e:Skin states="up,down,disabled">
+                            <e:Image width="100%" height="100%" />
+                            <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="20" bold="true"
+                                     textColor="0x00ff00" />
+                        </e:Skin>
+                    </GameUi:skinName>
+                </GameUi:UiButton>
             </e:Group>
         </e:Group>
         <GameUi:UiButton id="_btnClose" label="关闭&gt;&gt;" bottom="15" right="15">
