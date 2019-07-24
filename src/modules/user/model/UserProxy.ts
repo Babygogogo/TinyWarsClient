@@ -58,7 +58,7 @@ namespace TinyWars.User {
             if (data.errorCode) {
                 Notify.dispatch(Notify.Type.SUserChangeDiscordIdFailed, data);
             } else {
-                UserModel.setSelfNickname(data.discordId);
+                UserModel.setSelfDiscordId(data.discordId);
                 Notify.dispatch(Notify.Type.SUserChangeDiscordId, data);
             }
         }
