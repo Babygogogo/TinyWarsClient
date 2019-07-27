@@ -1,12 +1,9 @@
 
 namespace TinyWars.MultiCustomRoom {
-    import Types            = Utility.Types;
     import ProtoTypes       = Utility.ProtoTypes;
-    import FloatText        = Utility.FloatText;
     import Helpers          = Utility.Helpers;
     import Lang             = Utility.Lang;
     import HelpPanel        = Common.HelpPanel;
-    import TemplateMapModel = WarMap.WarMapModel;
 
     export class McrCreateBasicSettingsPage extends GameUi.UiTabPage {
         private _labelMapName       : GameUi.UiLabel;
@@ -36,6 +33,9 @@ namespace TinyWars.MultiCustomRoom {
         private _labelTimeLimit     : GameUi.UiLabel;
         private _btnHelpTimeLimit   : GameUi.UiButton;
 
+        private _labelCoName    : GameUi.UiLabel;
+        private _btnChangeCo    : GameUi.UiLabel;
+
         protected _mapInfo: ProtoTypes.IMapDynamicInfo;
 
         public constructor() {
@@ -61,6 +61,7 @@ namespace TinyWars.MultiCustomRoom {
                 { ui: this._btnPrevTimeLimit,   callback: this._onTouchedBtnPrevTimeLimit, },
                 { ui: this._btnNextTimeLimit,   callback: this._onTouchedBtnNextTimeLimit, },
                 { ui: this._btnHelpTimeLimit,   callback: this._onTouchedBtnHelpTimeLimit, },
+                { ui: this._btnChangeCo,        callback: this._onTouchedBtnChangeCo, },
             ];
         }
 
@@ -76,6 +77,7 @@ namespace TinyWars.MultiCustomRoom {
             this._updateLabelTeam();
             this._updateLabelFog();
             this._updateLabelTimeLimit();
+            this._updateLabelCoName();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -161,6 +163,11 @@ namespace TinyWars.MultiCustomRoom {
             });
         }
 
+        private _onTouchedBtnChangeCo(e: egret.TouchEvent): void {
+            McrCreateSettingsPanel.hide();
+            McrCreateCoListPanel.show(McrModel.getCreateWarCoId());
+        }
+
         ////////////////////////////////////////////////////////////////////////////////
         // View functions.
         ////////////////////////////////////////////////////////////////////////////////
@@ -199,6 +206,13 @@ namespace TinyWars.MultiCustomRoom {
 
         private _updateLabelTimeLimit(): void {
             this._labelTimeLimit.text = Helpers.getTimeDurationText(McrModel.getCreateWarTimeLimit());
+        }
+
+        private _updateLabelCoName(): void {
+            const coId              = McrModel.getCreateWarCoId();
+            this._labelCoName.text  = coId == null
+                ? `(${Lang.getText(Lang.Type.B0001)})`
+                : ConfigManager.getCoBasicCfg(ConfigManager.getNewestConfigVersion(), coId).name;
         }
     }
 }

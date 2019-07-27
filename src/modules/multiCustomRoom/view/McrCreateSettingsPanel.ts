@@ -3,7 +3,6 @@ namespace TinyWars.MultiCustomRoom {
     import Lang         = Utility.Lang;
     import Notify       = Utility.Notify;
     import FloatText    = Utility.FloatText;
-    import StageManager = Utility.StageManager;
 
     const CONFIRM_INTERVAL_MS = 5000;
 
@@ -17,7 +16,6 @@ namespace TinyWars.MultiCustomRoom {
         private _btnBack    : GameUi.UiButton;
         private _btnConfirm : GameUi.UiButton;
 
-        private _dataForTab            : GameUi.DataForUiTab[];
         private _timeoutIdForBtnConfirm: number;
 
         public static show(): void {

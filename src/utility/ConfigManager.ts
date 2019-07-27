@@ -1427,6 +1427,7 @@ namespace TinyWars.ConfigManager {
     const _ALL_CONFIGS          = new Map<number, ExtendedFullConfig>();
     const _TILE_OBJECT_VIEW_IDS = new Map<TileObjectType, Map<number, number>>();
     const _UNIT_VIEW_IDS        = new Map<UnitType, Map<number, number>>();
+    const _NEWEST_CO_LIST       = new Map<number, CoBasicCfg[]>();
     let _newestConfigVersion: number;
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -1631,5 +1632,29 @@ namespace TinyWars.ConfigManager {
 
     export function getCoSkillCfg(version: number, skillId: number): CoSkillCfg | null {
         return _ALL_CONFIGS.get(version)!.CoSkill[skillId];
+    }
+
+    export function getNewestCoList(version: number): CoBasicCfg[] {
+        if (!_NEWEST_CO_LIST.has(version)) {
+            const dict: { [coType: number]: number } = {};
+            const cfgs = _ALL_CONFIGS.get(version)!.CoBasic;
+            for (const k in cfgs || {}) {
+                const cfg       = cfgs[k];
+                const coId      = cfg.coId;
+                const coType    = Math.floor(coId / 1000);
+                if (!dict[coType]) {
+                    dict[coType] = coId;
+                } else {
+                    dict[coType] = Math.max(coId, dict[coType]);
+                }
+            }
+
+            const list: CoBasicCfg[] = [];
+            for (const k in dict) {
+                list.push(getCoBasicCfg(version, dict[k]));
+            }
+            _NEWEST_CO_LIST.set(version, list);
+        }
+        return _NEWEST_CO_LIST.get(version);
     }
 }

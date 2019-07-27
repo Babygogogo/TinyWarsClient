@@ -9,11 +9,11 @@
                         right="0" top="0" bottom="0" width="200" />
         <GameUi:UiTab id="_tabSettings" left="0" top="0" bottom="0" right="0">
             <e:skinName>
-                <e:Skin width="882">
-                    <e:Scroller width="646" top="0" bottom="0">
+                <e:Skin width="960">
+                    <e:Scroller width="760" top="0" bottom="0">
                         <e:Group id="_page"></e:Group>
                     </e:Scroller>
-                    <e:Scroller width="190" top="50" bottom="50" right="0">
+                    <e:Scroller width="190" top="50" bottom="50" right="5">
                         <e:TabBar id="_bar" anchorOffsetY="0" anchorOffsetX="0">
                             <e:itemRendererSkinName>
                                 <e:Skin states="up,down,disabled" height="50" width="190">

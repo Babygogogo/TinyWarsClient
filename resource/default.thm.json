@@ -17,6 +17,7 @@
 		"resource/skins/multiCustomRoom/McrContinueWarListPanel.exml",
 		"resource/skins/multiCustomRoom/McrCreateAdvancedSettingsPage.exml",
 		"resource/skins/multiCustomRoom/McrCreateBasicSettingsPage.exml",
+		"resource/skins/multiCustomRoom/McrCreateCoListPanel.exml",
 		"resource/skins/multiCustomRoom/McrCreateMapListPanel.exml",
 		"resource/skins/multiCustomRoom/McrCreateSettingsPanel.exml",
 		"resource/skins/multiCustomRoom/McrExitDetailPanel.exml",

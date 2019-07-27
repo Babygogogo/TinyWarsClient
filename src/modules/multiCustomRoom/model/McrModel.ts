@@ -49,6 +49,7 @@ namespace TinyWars.MultiCustomRoom {
 
         playerIndex     : number;
         teamIndex       : number;
+        coId            : number;
 
         hasFog              : number;
         timeLimit           : number;
@@ -73,6 +74,7 @@ namespace TinyWars.MultiCustomRoom {
 
             playerIndex     : 0,
             teamIndex       : 0,
+            coId            : null,
 
             hasFog              : 0,
             timeLimit           : 0,
@@ -108,6 +110,7 @@ namespace TinyWars.MultiCustomRoom {
             setCreateWarComment("");
             setCreateWarPlayerIndex(1);
             setCreateWarTeamIndex(1);
+            setCreateWarCoId(null);
             setCreateWarHasFog(false);
             setCreateWarTimeLimit(DEFAULT_TIME_LIMIT);
 
@@ -176,6 +179,13 @@ namespace TinyWars.MultiCustomRoom {
         }
         export function getCreateWarTeamIndex(): number {
             return _dataForCreateWar.teamIndex;
+        }
+
+        export function setCreateWarCoId(coId: number | null): void {
+            _dataForCreateWar.coId = coId;
+        }
+        export function getCreateWarCoId(): number | null {
+            return _dataForCreateWar.coId;
         }
 
         export function setCreateWarHasFog(has: boolean): void {

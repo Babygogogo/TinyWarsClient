@@ -15,10 +15,10 @@ namespace TinyWars.BaseWar {
         private _userId?            : number;
         private _nickname           : string;
 
-        private _coId!              : number | null | undefined;
-        private _coUnitId!          : number | null | undefined;
-        private _coCurrentEnergy!   : number;
-        private _coIsUsingSkill!    : boolean;
+        private _coId               : number | null | undefined;
+        private _coUnitId           : number | null | undefined;
+        private _coCurrentEnergy    : number;
+        private _coIsUsingSkill     : boolean;
 
         private _war                : BwWar;
 

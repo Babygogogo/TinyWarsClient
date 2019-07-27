@@ -9805,6 +9805,9 @@ export declare interface IC_McrCreateWar {
     /** C_McrCreateWar teamIndex */
     teamIndex?: (number|null);
 
+    /** C_McrCreateWar coId */
+    coId?: (number|null);
+
     /** C_McrCreateWar hasFog */
     hasFog?: (number|null);
 
@@ -9868,6 +9871,9 @@ export declare class C_McrCreateWar implements IC_McrCreateWar {
 
     /** C_McrCreateWar teamIndex. */
     public teamIndex: number;
+
+    /** C_McrCreateWar coId. */
+    public coId: number;
 
     /** C_McrCreateWar hasFog. */
     public hasFog: number;
