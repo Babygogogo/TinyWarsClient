@@ -14,8 +14,6 @@ namespace TinyWars.ConfigManager {
     import UnitType         = Types.UnitType;
     import UnitCategory     = Types.UnitCategory;
     import TileCategory     = Types.TileCategory;
-    import MoveType         = Types.MoveType;
-    import ArmorType        = Types.ArmorType;
     import WeaponType       = Types.WeaponType;
     import TileCategoryCfg  = Types.TileCategoryCfg;
     import UnitCategoryCfg  = Types.UnitCategoryCfg;
@@ -27,6 +25,8 @@ namespace TinyWars.ConfigManager {
     import VisionBonusCfg   = Types.VisionBonusCfg;
     import BuildableTileCfg = Types.BuildableTileCfg;
     import PlayerRankCfg    = Types.PlayerRankCfg;
+    import CoBasicCfg       = Types.CoBasicCfg;
+    import CoSkillCfg       = Types.CoSkillCfg;
 
     ////////////////////////////////////////////////////////////////////////////////
     // Internal types.
@@ -41,7 +41,7 @@ namespace TinyWars.ConfigManager {
         playerIndex: number;
     }
 
-    type FullConfig = {
+    type ExtendedFullConfig = {
         TileCategory            : { [category: number]: TileCategoryCfg };
         UnitCategory            : { [category: number]: UnitCategoryCfg };
         TileTemplate            : { [tileType: number]: TileTemplateCfg };
@@ -52,6 +52,8 @@ namespace TinyWars.ConfigManager {
         VisionBonus             : { [unitType: number]: { [tileType: number]: VisionBonusCfg } };
         BuildableTile           : { [unitType: number]: { [srcTileType: number]: BuildableTileCfg } };
         PlayerRank              : { [minScore: number]: PlayerRankCfg };
+        CoBasic                 : { [coId: number]: CoBasicCfg };
+        CoSkill                 : { [skillId: number]: CoSkillCfg };
         maxUnitPromotion?       : number;
         secondaryWeaponFlag?    : { [unitType: number]: boolean };
     }
@@ -408,10 +410,10 @@ namespace TinyWars.ConfigManager {
         ////////// silo * 1 //////////
         [ 48, ["c02_t013_s01_f01",]],
 
-        ////////// emptysilo * 1 //////////
+        ////////// empty silo * 1 //////////
         [ 49, ["c02_t014_s01_f01",]],
 
-        ////////// headquaters * 4 //////////
+        ////////// headquarters * 4 //////////
         [ 50, ["c02_t015_s01_f01", "c02_t015_s01_f02",]],
         [ 51, ["c02_t015_s02_f01", "c02_t015_s02_f02",]],
         [ 52, ["c02_t015_s03_f01", "c02_t015_s03_f02",]],
@@ -424,7 +426,7 @@ namespace TinyWars.ConfigManager {
         [ 57, ["c02_t016_s04_f01", "c02_t016_s04_f02",]],
         [ 58, ["c02_t016_s05_f01", "c02_t016_s05_f02",]],
 
-        ////////// commandtower * 5 //////////
+        ////////// command tower * 5 //////////
         [ 59, ["c02_t017_s01_f01", "c02_t017_s01_f02",]],
         [ 60, ["c02_t017_s02_f01", "c02_t017_s02_f02",]],
         [ 61, ["c02_t017_s03_f01", "c02_t017_s03_f02",]],
@@ -459,21 +461,21 @@ namespace TinyWars.ConfigManager {
         [ 82, ["c02_t021_s04_f01", "c02_t021_s04_f02",]],
         [ 83, ["c02_t021_s05_f01", "c02_t021_s05_f02",]],
 
-        ////////// tempairport * 5 //////////
+        ////////// temp airport * 5 //////////
         [ 84, ["c02_t022_s01_f01",]],
         [ 85, ["c02_t022_s02_f01",]],
         [ 86, ["c02_t022_s03_f01",]],
         [ 87, ["c02_t022_s04_f01",]],
         [ 88, ["c02_t022_s05_f01",]],
 
-        ////////// tempseaport * 5 //////////
+        ////////// temp seaport * 5 //////////
         [ 89, ["c02_t023_s01_f01",]],
         [ 90, ["c02_t023_s02_f01",]],
         [ 91, ["c02_t023_s03_f01",]],
         [ 92, ["c02_t023_s04_f01",]],
         [ 93, ["c02_t023_s05_f01",]],
 
-        ////////// greenplasma * 16 //////////
+        ////////// green plasma * 16 //////////
         [ 94, ["c02_t024_s01_f01", "c02_t024_s01_f02", "c02_t024_s01_f03",]],
         [ 95, ["c02_t024_s02_f01", "c02_t024_s02_f02", "c02_t024_s02_f03",]],
         [ 96, ["c02_t024_s03_f01", "c02_t024_s03_f02", "c02_t024_s03_f03",]],
@@ -692,10 +694,10 @@ namespace TinyWars.ConfigManager {
         ////////// silo //////////
         [ 48, { tileObjectType: TileObjectType.Silo, playerIndex: 0 }],
 
-        ////////// emptysilo //////////
+        ////////// empty silo //////////
         [ 49, { tileObjectType: TileObjectType.EmptySilo, playerIndex: 0 }],
 
-        ////////// headquaters //////////
+        ////////// headquarters //////////
         [ 50, { tileObjectType: TileObjectType.Headquarters, playerIndex: 1 }],
         [ 51, { tileObjectType: TileObjectType.Headquarters, playerIndex: 2 }],
         [ 52, { tileObjectType: TileObjectType.Headquarters, playerIndex: 3 }],
@@ -708,7 +710,7 @@ namespace TinyWars.ConfigManager {
         [ 57, { tileObjectType: TileObjectType.City, playerIndex: 3 }],
         [ 58, { tileObjectType: TileObjectType.City, playerIndex: 4 }],
 
-        ////////// commandtower //////////
+        ////////// command tower //////////
         [ 59, { tileObjectType: TileObjectType.CommandTower, playerIndex: 0 }],
         [ 60, { tileObjectType: TileObjectType.CommandTower, playerIndex: 1 }],
         [ 61, { tileObjectType: TileObjectType.CommandTower, playerIndex: 2 }],
@@ -743,21 +745,21 @@ namespace TinyWars.ConfigManager {
         [ 82, { tileObjectType: TileObjectType.Seaport, playerIndex: 3 }],
         [ 83, { tileObjectType: TileObjectType.Seaport, playerIndex: 4 }],
 
-        ////////// tempairport //////////
+        ////////// temp airport //////////
         [ 84, { tileObjectType: TileObjectType.TempAirport, playerIndex: 0 }],
         [ 85, { tileObjectType: TileObjectType.TempAirport, playerIndex: 1 }],
         [ 86, { tileObjectType: TileObjectType.TempAirport, playerIndex: 2 }],
         [ 87, { tileObjectType: TileObjectType.TempAirport, playerIndex: 3 }],
         [ 88, { tileObjectType: TileObjectType.TempAirport, playerIndex: 4 }],
 
-        ////////// tempseaport //////////
+        ////////// temp seaport //////////
         [ 89, { tileObjectType: TileObjectType.TempSeaport, playerIndex: 0 }],
         [ 90, { tileObjectType: TileObjectType.TempSeaport, playerIndex: 1 }],
         [ 91, { tileObjectType: TileObjectType.TempSeaport, playerIndex: 2 }],
         [ 92, { tileObjectType: TileObjectType.TempSeaport, playerIndex: 3 }],
         [ 93, { tileObjectType: TileObjectType.TempSeaport, playerIndex: 4 }],
 
-        ////////// greenplasma //////////
+        ////////// green plasma //////////
         [ 94, { tileObjectType: TileObjectType.GreenPlasma, playerIndex: 0 }],
         [ 95, { tileObjectType: TileObjectType.GreenPlasma, playerIndex: 0 }],
         [ 96, { tileObjectType: TileObjectType.GreenPlasma, playerIndex: 0 }],
@@ -807,7 +809,7 @@ namespace TinyWars.ConfigManager {
         [ 19, { unitType: UnitType.Flare, playerIndex: 3 }],
         [ 20, { unitType: UnitType.Flare, playerIndex: 4 }],
 
-        ////////// antiair //////////
+        ////////// anti air //////////
         [ 21, { unitType: UnitType.AntiAir, playerIndex: 1 }],
         [ 22, { unitType: UnitType.AntiAir, playerIndex: 2 }],
         [ 23, { unitType: UnitType.AntiAir, playerIndex: 3 }],
@@ -819,13 +821,13 @@ namespace TinyWars.ConfigManager {
         [ 27, { unitType: UnitType.Tank, playerIndex: 3 }],
         [ 28, { unitType: UnitType.Tank, playerIndex: 4 }],
 
-        ////////// mediumtank //////////
+        ////////// medium tank //////////
         [ 29, { unitType: UnitType.MediumTank, playerIndex: 1 }],
         [ 30, { unitType: UnitType.MediumTank, playerIndex: 2 }],
         [ 31, { unitType: UnitType.MediumTank, playerIndex: 3 }],
         [ 32, { unitType: UnitType.MediumTank, playerIndex: 4 }],
 
-        ////////// wartank //////////
+        ////////// war tank //////////
         [ 33, { unitType: UnitType.WarTank, playerIndex: 1 }],
         [ 34, { unitType: UnitType.WarTank, playerIndex: 2 }],
         [ 35, { unitType: UnitType.WarTank, playerIndex: 3 }],
@@ -879,13 +881,13 @@ namespace TinyWars.ConfigManager {
         [ 67, { unitType: UnitType.Duster, playerIndex: 3 }],
         [ 68, { unitType: UnitType.Duster, playerIndex: 4 }],
 
-        ////////// battlecopter //////////
+        ////////// battle copter //////////
         [ 69, { unitType: UnitType.BattleCopter, playerIndex: 1 }],
         [ 70, { unitType: UnitType.BattleCopter, playerIndex: 2 }],
         [ 71, { unitType: UnitType.BattleCopter, playerIndex: 3 }],
         [ 72, { unitType: UnitType.BattleCopter, playerIndex: 4 }],
 
-        ////////// transportcopter //////////
+        ////////// transport copter //////////
         [ 73, { unitType: UnitType.TransportCopter, playerIndex: 1 }],
         [ 74, { unitType: UnitType.TransportCopter, playerIndex: 2 }],
         [ 75, { unitType: UnitType.TransportCopter, playerIndex: 3 }],
@@ -965,7 +967,7 @@ namespace TinyWars.ConfigManager {
         [ 19, ["c03_t05_s03_f01", "c03_t05_s03_f01", "c03_t05_s03_f02", "c03_t05_s03_f02", "c03_t05_s03_f03", "c03_t05_s03_f03", "c03_t05_s03_f04", "c03_t05_s03_f04",]],
         [ 20, ["c03_t05_s04_f01", "c03_t05_s04_f01", "c03_t05_s04_f02", "c03_t05_s04_f02", "c03_t05_s04_f03", "c03_t05_s04_f03", "c03_t05_s04_f04", "c03_t05_s04_f04",]],
 
-        ////////// antiair //////////
+        ////////// anti air //////////
         [ 21, ["c03_t06_s01_f01", "c03_t06_s01_f01", "c03_t06_s01_f02", "c03_t06_s01_f02", "c03_t06_s01_f03", "c03_t06_s01_f03", "c03_t06_s01_f04", "c03_t06_s01_f04",]],
         [ 22, ["c03_t06_s02_f01", "c03_t06_s02_f01", "c03_t06_s02_f02", "c03_t06_s02_f02", "c03_t06_s02_f03", "c03_t06_s02_f03", "c03_t06_s02_f04", "c03_t06_s02_f04",]],
         [ 23, ["c03_t06_s03_f01", "c03_t06_s03_f01", "c03_t06_s03_f02", "c03_t06_s03_f02", "c03_t06_s03_f03", "c03_t06_s03_f03", "c03_t06_s03_f04", "c03_t06_s03_f04",]],
@@ -977,13 +979,13 @@ namespace TinyWars.ConfigManager {
         [ 27, ["c03_t07_s03_f01", "c03_t07_s03_f01", "c03_t07_s03_f02", "c03_t07_s03_f02", "c03_t07_s03_f03", "c03_t07_s03_f03", "c03_t07_s03_f04", "c03_t07_s03_f04",]],
         [ 28, ["c03_t07_s04_f01", "c03_t07_s04_f01", "c03_t07_s04_f02", "c03_t07_s04_f02", "c03_t07_s04_f03", "c03_t07_s04_f03", "c03_t07_s04_f04", "c03_t07_s04_f04",]],
 
-        ////////// mediumtank //////////
+        ////////// medium tank //////////
         [ 29, ["c03_t08_s01_f01", "c03_t08_s01_f01", "c03_t08_s01_f02", "c03_t08_s01_f02", "c03_t08_s01_f03", "c03_t08_s01_f03", "c03_t08_s01_f04", "c03_t08_s01_f04",]],
         [ 30, ["c03_t08_s02_f01", "c03_t08_s02_f01", "c03_t08_s02_f02", "c03_t08_s02_f02", "c03_t08_s02_f03", "c03_t08_s02_f03", "c03_t08_s02_f04", "c03_t08_s02_f04",]],
         [ 31, ["c03_t08_s03_f01", "c03_t08_s03_f01", "c03_t08_s03_f02", "c03_t08_s03_f02", "c03_t08_s03_f03", "c03_t08_s03_f03", "c03_t08_s03_f04", "c03_t08_s03_f04",]],
         [ 32, ["c03_t08_s04_f01", "c03_t08_s04_f01", "c03_t08_s04_f02", "c03_t08_s04_f02", "c03_t08_s04_f03", "c03_t08_s04_f03", "c03_t08_s04_f04", "c03_t08_s04_f04",]],
 
-        ////////// wartank //////////
+        ////////// wart ank //////////
         [ 33, ["c03_t09_s01_f01", "c03_t09_s01_f01", "c03_t09_s01_f02", "c03_t09_s01_f02", "c03_t09_s01_f03", "c03_t09_s01_f03", "c03_t09_s01_f04", "c03_t09_s01_f04",]],
         [ 34, ["c03_t09_s02_f01", "c03_t09_s02_f01", "c03_t09_s02_f02", "c03_t09_s02_f02", "c03_t09_s02_f03", "c03_t09_s02_f03", "c03_t09_s02_f04", "c03_t09_s02_f04",]],
         [ 35, ["c03_t09_s03_f01", "c03_t09_s03_f01", "c03_t09_s03_f02", "c03_t09_s03_f02", "c03_t09_s03_f03", "c03_t09_s03_f03", "c03_t09_s03_f04", "c03_t09_s03_f04",]],
@@ -1037,13 +1039,13 @@ namespace TinyWars.ConfigManager {
         [ 67, ["c03_t17_s03_f01", "c03_t17_s03_f01", "c03_t17_s03_f02", "c03_t17_s03_f02", "c03_t17_s03_f03", "c03_t17_s03_f03", "c03_t17_s03_f04", "c03_t17_s03_f04",]],
         [ 68, ["c03_t17_s04_f01", "c03_t17_s04_f01", "c03_t17_s04_f02", "c03_t17_s04_f02", "c03_t17_s04_f03", "c03_t17_s04_f03", "c03_t17_s04_f04", "c03_t17_s04_f04",]],
 
-        ////////// battlecopter //////////
+        ////////// battle copter //////////
         [ 69, ["c03_t18_s01_f01", "c03_t18_s01_f01", "c03_t18_s01_f02", "c03_t18_s01_f02", "c03_t18_s01_f03", "c03_t18_s01_f03", "c03_t18_s01_f04", "c03_t18_s01_f04",]],
         [ 70, ["c03_t18_s02_f01", "c03_t18_s02_f01", "c03_t18_s02_f02", "c03_t18_s02_f02", "c03_t18_s02_f03", "c03_t18_s02_f03", "c03_t18_s02_f04", "c03_t18_s02_f04",]],
         [ 71, ["c03_t18_s03_f01", "c03_t18_s03_f01", "c03_t18_s03_f02", "c03_t18_s03_f02", "c03_t18_s03_f03", "c03_t18_s03_f03", "c03_t18_s03_f04", "c03_t18_s03_f04",]],
         [ 72, ["c03_t18_s04_f01", "c03_t18_s04_f01", "c03_t18_s04_f02", "c03_t18_s04_f02", "c03_t18_s04_f03", "c03_t18_s04_f03", "c03_t18_s04_f04", "c03_t18_s04_f04",]],
 
-        ////////// transportcopter //////////
+        ////////// transport copter //////////
         [ 73, ["c03_t19_s01_f01", "c03_t19_s01_f01", "c03_t19_s01_f02", "c03_t19_s01_f02", "c03_t19_s01_f03", "c03_t19_s01_f03", "c03_t19_s01_f04", "c03_t19_s01_f04",]],
         [ 74, ["c03_t19_s02_f01", "c03_t19_s02_f01", "c03_t19_s02_f02", "c03_t19_s02_f02", "c03_t19_s02_f03", "c03_t19_s02_f03", "c03_t19_s02_f04", "c03_t19_s02_f04",]],
         [ 75, ["c03_t19_s03_f01", "c03_t19_s03_f01", "c03_t19_s03_f02", "c03_t19_s03_f02", "c03_t19_s03_f03", "c03_t19_s03_f03", "c03_t19_s03_f04", "c03_t19_s03_f04",]],
@@ -1132,7 +1134,7 @@ namespace TinyWars.ConfigManager {
         [ 19, ["c03_t05_s03_f11", "c03_t05_s03_f12", "c03_t05_s03_f13",]],
         [ 20, ["c03_t05_s04_f11", "c03_t05_s04_f12", "c03_t05_s04_f13",]],
 
-        ////////// antiair //////////
+        ////////// anti air //////////
         [ 21, ["c03_t06_s01_f11", "c03_t06_s01_f12", "c03_t06_s01_f13",]],
         [ 22, ["c03_t06_s02_f11", "c03_t06_s02_f12", "c03_t06_s02_f13",]],
         [ 23, ["c03_t06_s03_f11", "c03_t06_s03_f12", "c03_t06_s03_f13",]],
@@ -1144,13 +1146,13 @@ namespace TinyWars.ConfigManager {
         [ 27, ["c03_t07_s03_f11", "c03_t07_s03_f12", "c03_t07_s03_f13",]],
         [ 28, ["c03_t07_s04_f11", "c03_t07_s04_f12", "c03_t07_s04_f13",]],
 
-        ////////// mediumtank //////////
+        ////////// medium tank //////////
         [ 29, ["c03_t08_s01_f11", "c03_t08_s01_f12", "c03_t08_s01_f13",]],
         [ 30, ["c03_t08_s02_f11", "c03_t08_s02_f12", "c03_t08_s02_f13",]],
         [ 31, ["c03_t08_s03_f11", "c03_t08_s03_f12", "c03_t08_s03_f13",]],
         [ 32, ["c03_t08_s04_f11", "c03_t08_s04_f12", "c03_t08_s04_f13",]],
 
-        ////////// wartank //////////
+        ////////// war tank //////////
         [ 33, ["c03_t09_s01_f11", "c03_t09_s01_f12", "c03_t09_s01_f13",]],
         [ 34, ["c03_t09_s02_f11", "c03_t09_s02_f12", "c03_t09_s02_f13",]],
         [ 35, ["c03_t09_s03_f11", "c03_t09_s03_f12", "c03_t09_s03_f13",]],
@@ -1204,13 +1206,13 @@ namespace TinyWars.ConfigManager {
         [ 67, ["c03_t17_s03_f11", "c03_t17_s03_f12", "c03_t17_s03_f13",]],
         [ 68, ["c03_t17_s04_f11", "c03_t17_s04_f12", "c03_t17_s04_f13",]],
 
-        ////////// battlecopter //////////
+        ////////// battle copter //////////
         [ 69, ["c03_t18_s01_f11", "c03_t18_s01_f12", "c03_t18_s01_f13",]],
         [ 70, ["c03_t18_s02_f11", "c03_t18_s02_f12", "c03_t18_s02_f13",]],
         [ 71, ["c03_t18_s03_f11", "c03_t18_s03_f12", "c03_t18_s03_f13",]],
         [ 72, ["c03_t18_s04_f11", "c03_t18_s04_f12", "c03_t18_s04_f13",]],
 
-        ////////// transportcopter //////////
+        ////////// transport copter //////////
         [ 73, ["c03_t19_s01_f11", "c03_t19_s01_f12", "c03_t19_s01_f13",]],
         [ 74, ["c03_t19_s02_f11", "c03_t19_s02_f12", "c03_t19_s02_f13",]],
         [ 75, ["c03_t19_s03_f11", "c03_t19_s03_f12", "c03_t19_s03_f13",]],
@@ -1351,6 +1353,20 @@ namespace TinyWars.ConfigManager {
         }
         return dst;
     }
+    function _destructCoBasicCfg(data: CoBasicCfg[]): { [coId: number]: CoBasicCfg } {
+        const dst: { [coId: number]: CoBasicCfg } = {};
+        for (const d of data) {
+            dst[d.coId] = d;
+        }
+        return dst;
+    }
+    function _destructCoSkillCfg(data: CoSkillCfg[]): { [skillId: number]: CoSkillCfg } {
+        const dst: { [skillId: number]: CoSkillCfg } = {};
+        for (const d of data) {
+            dst[d.skillId] = d;
+        }
+        return dst;
+    }
     function _getMaxUnitPromotion(cfg: { [promotion: number]: UnitPromotionCfg }): number {
         let maxPromotion = 0;
         for (const p in cfg) {
@@ -1408,7 +1424,7 @@ namespace TinyWars.ConfigManager {
         loadConfig(_newestConfigVersion);
     }
 
-    const _ALL_CONFIGS          = new Map<number, FullConfig>();
+    const _ALL_CONFIGS          = new Map<number, ExtendedFullConfig>();
     const _TILE_OBJECT_VIEW_IDS = new Map<TileObjectType, Map<number, number>>();
     const _UNIT_VIEW_IDS        = new Map<UnitType, Map<number, number>>();
     let _newestConfigVersion: number;
@@ -1437,7 +1453,7 @@ namespace TinyWars.ConfigManager {
         return _ALL_CONFIGS.has(version);
     }
 
-    export async function loadConfig(version: number): Promise<FullConfig> {
+    export async function loadConfig(version: number): Promise<ExtendedFullConfig> {
         if (!checkIsConfigLoaded(version)) {
             const data = Utility.ProtoManager.decodeAsFullConfig(await RES.getResByUrl(
                 `resource/config/FullConfig${Utility.Helpers.getNumText(version, 4)}.bin`,
@@ -1445,7 +1461,7 @@ namespace TinyWars.ConfigManager {
                 undefined,
                 RES.ResourceItem.TYPE_BIN
             ));
-            const cfg: FullConfig = {
+            const cfg: ExtendedFullConfig = {
                 TileCategory        : _destructTileCategoryCfg(data.TileCategory),
                 UnitCategory        : _destructUnitCategoryCfg(data.UnitCategory),
                 TileTemplate        : _destructTileTemplateCfg(data.TileTemplate),
@@ -1456,6 +1472,8 @@ namespace TinyWars.ConfigManager {
                 VisionBonus         : _destructVisionBonusCfg(data.VisionBonus),
                 BuildableTile       : _destructBuildableTileCfg(data.BuildableTile),
                 PlayerRank          : _destructPlayerRankCfg(data.PlayerRank),
+                CoBasic             : _destructCoBasicCfg(data.CoBasic),
+                CoSkill             : _destructCoSkillCfg(data.CoSkill),
             };
             cfg.maxUnitPromotion    = _getMaxUnitPromotion(cfg.UnitPromotion);
             cfg.secondaryWeaponFlag = _getSecondaryWeaponFlags(cfg.DamageChart);
@@ -1605,5 +1623,13 @@ namespace TinyWars.ConfigManager {
             }
         }
         return maxRank;
+    }
+
+    export function getCoBasicCfg(version: number, coId: number): CoBasicCfg | null {
+        return _ALL_CONFIGS.get(version)!.CoBasic[coId];
+    }
+
+    export function getCoSkillCfg(version: number, skillId: number): CoSkillCfg | null {
+        return _ALL_CONFIGS.get(version)!.CoSkill[skillId];
     }
 }

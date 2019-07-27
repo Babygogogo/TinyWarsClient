@@ -12,6 +12,10 @@ namespace TinyWars.Replay {
                 teamIndex       : this.getTeamIndex(),
                 userId          : this.getUserId(),
                 nickname        : this.getNickname(),
+                coId            : this.getCoId(),
+                coUnitId        : this.getCoUnitId(),
+                coCurrentEnergy : this.getCoCurrentEnergy(),
+                coIsUsingSkill  : this.getCoIsUsingSkill(),
             };
         }
     }

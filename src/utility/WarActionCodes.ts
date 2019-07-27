@@ -20,4 +20,6 @@ WarActionUnitLaunchFlare = 26,
 WarActionUnitLaunchSilo = 27,
 WarActionUnitProduceUnit = 28,
 WarActionUnitSupply = 29,
+WarActionUnitLoadCo = 30,
+WarActionUnitUseCoSkill = 31,
 }}

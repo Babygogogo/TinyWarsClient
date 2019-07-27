@@ -133,6 +133,21 @@ namespace TinyWars.BaseWar {
                 ? this.getUnitLoadedById(unitId)
                 : this.getUnitOnMap(gridIndex);
         }
+        public getUnitById(unitId: number): BwUnit | null {
+            const unitLoaded = this.getUnitLoadedById(unitId);
+            if (unitLoaded) {
+                return unitLoaded;
+            } else {
+                for (const column of this._map) {
+                    for (const unit of column) {
+                        if ((unit) && (unit.getUnitId() === unitId)) {
+                            return unit;
+                        }
+                    }
+                }
+                return null;
+            }
+        }
 
         public getUnitOnMap(gridIndex: Types.GridIndex): BwUnit | undefined {
             return this._map[gridIndex.x][gridIndex.y];

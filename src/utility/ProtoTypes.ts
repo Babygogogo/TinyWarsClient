@@ -1285,6 +1285,264 @@ export declare class PlayerRankCfg implements IPlayerRankCfg {
     public toJSON(): { [k: string]: any };
 }
 
+/** Properties of a CoBasicCfg. */
+export declare interface ICoBasicCfg {
+
+    /** CoBasicCfg coId */
+    coId?: (number|null);
+
+    /** CoBasicCfg name */
+    name?: (string|null);
+
+    /** CoBasicCfg zoneRadius */
+    zoneRadius?: (number|null);
+
+    /** CoBasicCfg boardCostPercentage */
+    boardCostPercentage?: (number|null);
+
+    /** CoBasicCfg middleEnergy */
+    middleEnergy?: (number|null);
+
+    /** CoBasicCfg maxEnergy */
+    maxEnergy?: (number|null);
+
+    /** CoBasicCfg passiveSkills */
+    passiveSkills?: (number[]|null);
+
+    /** CoBasicCfg activeSkills */
+    activeSkills?: (number[]|null);
+}
+
+/** Represents a CoBasicCfg. */
+export declare class CoBasicCfg implements ICoBasicCfg {
+
+    /**
+     * Constructs a new CoBasicCfg.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: ICoBasicCfg);
+
+    /** CoBasicCfg coId. */
+    public coId: number;
+
+    /** CoBasicCfg name. */
+    public name: string;
+
+    /** CoBasicCfg zoneRadius. */
+    public zoneRadius: number;
+
+    /** CoBasicCfg boardCostPercentage. */
+    public boardCostPercentage: number;
+
+    /** CoBasicCfg middleEnergy. */
+    public middleEnergy: number;
+
+    /** CoBasicCfg maxEnergy. */
+    public maxEnergy: number;
+
+    /** CoBasicCfg passiveSkills. */
+    public passiveSkills: number[];
+
+    /** CoBasicCfg activeSkills. */
+    public activeSkills: number[];
+
+    /**
+     * Creates a new CoBasicCfg instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns CoBasicCfg instance
+     */
+    public static create(properties?: ICoBasicCfg): CoBasicCfg;
+
+    /**
+     * Encodes the specified CoBasicCfg message. Does not implicitly {@link CoBasicCfg.verify|verify} messages.
+     * @param message CoBasicCfg message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: ICoBasicCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified CoBasicCfg message, length delimited. Does not implicitly {@link CoBasicCfg.verify|verify} messages.
+     * @param message CoBasicCfg message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: ICoBasicCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a CoBasicCfg message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns CoBasicCfg
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CoBasicCfg;
+
+    /**
+     * Decodes a CoBasicCfg message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns CoBasicCfg
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CoBasicCfg;
+
+    /**
+     * Verifies a CoBasicCfg message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a CoBasicCfg message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns CoBasicCfg
+     */
+    public static fromObject(object: { [k: string]: any }): CoBasicCfg;
+
+    /**
+     * Creates a plain object from a CoBasicCfg message. Also converts values to other types if specified.
+     * @param message CoBasicCfg
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: CoBasicCfg, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this CoBasicCfg to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a CoSkillCfg. */
+export declare interface ICoSkillCfg {
+
+    /** CoSkillCfg skillId */
+    skillId?: (number|null);
+
+    /** CoSkillCfg name */
+    name?: (string|null);
+
+    /** CoSkillCfg attackBonus */
+    attackBonus?: (number|null);
+
+    /** CoSkillCfg defenseBonus */
+    defenseBonus?: (number|null);
+
+    /** CoSkillCfg moveRangeBonus */
+    moveRangeBonus?: (number|null);
+
+    /** CoSkillCfg passiveDesc */
+    passiveDesc?: (string|null);
+
+    /** CoSkillCfg activeDesc */
+    activeDesc?: (string|null);
+}
+
+/** Represents a CoSkillCfg. */
+export declare class CoSkillCfg implements ICoSkillCfg {
+
+    /**
+     * Constructs a new CoSkillCfg.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: ICoSkillCfg);
+
+    /** CoSkillCfg skillId. */
+    public skillId: number;
+
+    /** CoSkillCfg name. */
+    public name: string;
+
+    /** CoSkillCfg attackBonus. */
+    public attackBonus: number;
+
+    /** CoSkillCfg defenseBonus. */
+    public defenseBonus: number;
+
+    /** CoSkillCfg moveRangeBonus. */
+    public moveRangeBonus: number;
+
+    /** CoSkillCfg passiveDesc. */
+    public passiveDesc: string;
+
+    /** CoSkillCfg activeDesc. */
+    public activeDesc: string;
+
+    /**
+     * Creates a new CoSkillCfg instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns CoSkillCfg instance
+     */
+    public static create(properties?: ICoSkillCfg): CoSkillCfg;
+
+    /**
+     * Encodes the specified CoSkillCfg message. Does not implicitly {@link CoSkillCfg.verify|verify} messages.
+     * @param message CoSkillCfg message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: ICoSkillCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified CoSkillCfg message, length delimited. Does not implicitly {@link CoSkillCfg.verify|verify} messages.
+     * @param message CoSkillCfg message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: ICoSkillCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a CoSkillCfg message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns CoSkillCfg
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CoSkillCfg;
+
+    /**
+     * Decodes a CoSkillCfg message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns CoSkillCfg
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CoSkillCfg;
+
+    /**
+     * Verifies a CoSkillCfg message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a CoSkillCfg message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns CoSkillCfg
+     */
+    public static fromObject(object: { [k: string]: any }): CoSkillCfg;
+
+    /**
+     * Creates a plain object from a CoSkillCfg message. Also converts values to other types if specified.
+     * @param message CoSkillCfg
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: CoSkillCfg, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this CoSkillCfg to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
 /** Properties of a FullConfig. */
 export declare interface IFullConfig {
 
@@ -1317,6 +1575,12 @@ export declare interface IFullConfig {
 
     /** FullConfig PlayerRank */
     PlayerRank?: (IPlayerRankCfg[]|null);
+
+    /** FullConfig CoBasic */
+    CoBasic?: (ICoBasicCfg[]|null);
+
+    /** FullConfig CoSkill */
+    CoSkill?: (ICoSkillCfg[]|null);
 }
 
 /** Represents a FullConfig. */
@@ -1357,6 +1621,12 @@ export declare class FullConfig implements IFullConfig {
 
     /** FullConfig PlayerRank. */
     public PlayerRank: IPlayerRankCfg[];
+
+    /** FullConfig CoBasic. */
+    public CoBasic: ICoBasicCfg[];
+
+    /** FullConfig CoSkill. */
+    public CoSkill: ICoSkillCfg[];
 
     /**
      * Creates a new FullConfig instance using the specified properties.
@@ -1758,6 +2028,18 @@ export declare interface ISerializedWarPlayer {
 
     /** SerializedWarPlayer nickname */
     nickname?: (string|null);
+
+    /** SerializedWarPlayer coId */
+    coId?: (number|null);
+
+    /** SerializedWarPlayer coUnitId */
+    coUnitId?: (number|null);
+
+    /** SerializedWarPlayer coCurrentEnergy */
+    coCurrentEnergy?: (number|null);
+
+    /** SerializedWarPlayer coIsUsingSkill */
+    coIsUsingSkill?: (boolean|null);
 }
 
 /** Represents a SerializedWarPlayer. */
@@ -1789,6 +2071,18 @@ export declare class SerializedWarPlayer implements ISerializedWarPlayer {
 
     /** SerializedWarPlayer nickname. */
     public nickname: string;
+
+    /** SerializedWarPlayer coId. */
+    public coId: number;
+
+    /** SerializedWarPlayer coUnitId. */
+    public coUnitId: number;
+
+    /** SerializedWarPlayer coCurrentEnergy. */
+    public coCurrentEnergy: number;
+
+    /** SerializedWarPlayer coIsUsingSkill. */
+    public coIsUsingSkill: boolean;
 
     /**
      * Creates a new SerializedWarPlayer instance using the specified properties.
@@ -4975,6 +5269,252 @@ export declare class WarActionUnitSupply implements IWarActionUnitSupply {
     public toJSON(): { [k: string]: any };
 }
 
+/** Properties of a WarActionUnitLoadCo. */
+export declare interface IWarActionUnitLoadCo {
+
+    /** WarActionUnitLoadCo path */
+    path?: (IMovePath|null);
+
+    /** WarActionUnitLoadCo launchUnitId */
+    launchUnitId?: (number|null);
+
+    /** WarActionUnitLoadCo discoveredUnits */
+    discoveredUnits?: (ISerializedWarUnit[]|null);
+
+    /** WarActionUnitLoadCo discoveredTiles */
+    discoveredTiles?: (ISerializedWarTile[]|null);
+
+    /** WarActionUnitLoadCo actingUnits */
+    actingUnits?: (ISerializedWarUnit[]|null);
+
+    /** WarActionUnitLoadCo actingTiles */
+    actingTiles?: (ISerializedWarTile[]|null);
+
+    /** WarActionUnitLoadCo cost */
+    cost?: (number|null);
+}
+
+/** Represents a WarActionUnitLoadCo. */
+export declare class WarActionUnitLoadCo implements IWarActionUnitLoadCo {
+
+    /**
+     * Constructs a new WarActionUnitLoadCo.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IWarActionUnitLoadCo);
+
+    /** WarActionUnitLoadCo path. */
+    public path?: (IMovePath|null);
+
+    /** WarActionUnitLoadCo launchUnitId. */
+    public launchUnitId: number;
+
+    /** WarActionUnitLoadCo discoveredUnits. */
+    public discoveredUnits: ISerializedWarUnit[];
+
+    /** WarActionUnitLoadCo discoveredTiles. */
+    public discoveredTiles: ISerializedWarTile[];
+
+    /** WarActionUnitLoadCo actingUnits. */
+    public actingUnits: ISerializedWarUnit[];
+
+    /** WarActionUnitLoadCo actingTiles. */
+    public actingTiles: ISerializedWarTile[];
+
+    /** WarActionUnitLoadCo cost. */
+    public cost: number;
+
+    /**
+     * Creates a new WarActionUnitLoadCo instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns WarActionUnitLoadCo instance
+     */
+    public static create(properties?: IWarActionUnitLoadCo): WarActionUnitLoadCo;
+
+    /**
+     * Encodes the specified WarActionUnitLoadCo message. Does not implicitly {@link WarActionUnitLoadCo.verify|verify} messages.
+     * @param message WarActionUnitLoadCo message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IWarActionUnitLoadCo, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified WarActionUnitLoadCo message, length delimited. Does not implicitly {@link WarActionUnitLoadCo.verify|verify} messages.
+     * @param message WarActionUnitLoadCo message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IWarActionUnitLoadCo, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a WarActionUnitLoadCo message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns WarActionUnitLoadCo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarActionUnitLoadCo;
+
+    /**
+     * Decodes a WarActionUnitLoadCo message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns WarActionUnitLoadCo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarActionUnitLoadCo;
+
+    /**
+     * Verifies a WarActionUnitLoadCo message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a WarActionUnitLoadCo message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns WarActionUnitLoadCo
+     */
+    public static fromObject(object: { [k: string]: any }): WarActionUnitLoadCo;
+
+    /**
+     * Creates a plain object from a WarActionUnitLoadCo message. Also converts values to other types if specified.
+     * @param message WarActionUnitLoadCo
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: WarActionUnitLoadCo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this WarActionUnitLoadCo to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a WarActionUnitUseCoSkill. */
+export declare interface IWarActionUnitUseCoSkill {
+
+    /** WarActionUnitUseCoSkill path */
+    path?: (IMovePath|null);
+
+    /** WarActionUnitUseCoSkill launchUnitId */
+    launchUnitId?: (number|null);
+
+    /** WarActionUnitUseCoSkill discoveredUnits */
+    discoveredUnits?: (ISerializedWarUnit[]|null);
+
+    /** WarActionUnitUseCoSkill discoveredTiles */
+    discoveredTiles?: (ISerializedWarTile[]|null);
+
+    /** WarActionUnitUseCoSkill actingUnits */
+    actingUnits?: (ISerializedWarUnit[]|null);
+
+    /** WarActionUnitUseCoSkill actingTiles */
+    actingTiles?: (ISerializedWarTile[]|null);
+}
+
+/** Represents a WarActionUnitUseCoSkill. */
+export declare class WarActionUnitUseCoSkill implements IWarActionUnitUseCoSkill {
+
+    /**
+     * Constructs a new WarActionUnitUseCoSkill.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IWarActionUnitUseCoSkill);
+
+    /** WarActionUnitUseCoSkill path. */
+    public path?: (IMovePath|null);
+
+    /** WarActionUnitUseCoSkill launchUnitId. */
+    public launchUnitId: number;
+
+    /** WarActionUnitUseCoSkill discoveredUnits. */
+    public discoveredUnits: ISerializedWarUnit[];
+
+    /** WarActionUnitUseCoSkill discoveredTiles. */
+    public discoveredTiles: ISerializedWarTile[];
+
+    /** WarActionUnitUseCoSkill actingUnits. */
+    public actingUnits: ISerializedWarUnit[];
+
+    /** WarActionUnitUseCoSkill actingTiles. */
+    public actingTiles: ISerializedWarTile[];
+
+    /**
+     * Creates a new WarActionUnitUseCoSkill instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns WarActionUnitUseCoSkill instance
+     */
+    public static create(properties?: IWarActionUnitUseCoSkill): WarActionUnitUseCoSkill;
+
+    /**
+     * Encodes the specified WarActionUnitUseCoSkill message. Does not implicitly {@link WarActionUnitUseCoSkill.verify|verify} messages.
+     * @param message WarActionUnitUseCoSkill message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IWarActionUnitUseCoSkill, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified WarActionUnitUseCoSkill message, length delimited. Does not implicitly {@link WarActionUnitUseCoSkill.verify|verify} messages.
+     * @param message WarActionUnitUseCoSkill message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IWarActionUnitUseCoSkill, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a WarActionUnitUseCoSkill message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns WarActionUnitUseCoSkill
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarActionUnitUseCoSkill;
+
+    /**
+     * Decodes a WarActionUnitUseCoSkill message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns WarActionUnitUseCoSkill
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarActionUnitUseCoSkill;
+
+    /**
+     * Verifies a WarActionUnitUseCoSkill message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a WarActionUnitUseCoSkill message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns WarActionUnitUseCoSkill
+     */
+    public static fromObject(object: { [k: string]: any }): WarActionUnitUseCoSkill;
+
+    /**
+     * Creates a plain object from a WarActionUnitUseCoSkill message. Also converts values to other types if specified.
+     * @param message WarActionUnitUseCoSkill
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: WarActionUnitUseCoSkill, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this WarActionUnitUseCoSkill to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
 /** Properties of a WarActionContainer. */
 export declare interface IWarActionContainer {
 
@@ -5037,6 +5577,12 @@ export declare interface IWarActionContainer {
 
     /** WarActionContainer WarActionUnitSupply */
     WarActionUnitSupply?: (IWarActionUnitSupply|null);
+
+    /** WarActionContainer WarActionUnitLoadCo */
+    WarActionUnitLoadCo?: (IWarActionUnitLoadCo|null);
+
+    /** WarActionContainer WarActionUnitUseCoSkill */
+    WarActionUnitUseCoSkill?: (IWarActionUnitUseCoSkill|null);
 }
 
 /** Represents a WarActionContainer. */
@@ -5107,6 +5653,12 @@ export declare class WarActionContainer implements IWarActionContainer {
 
     /** WarActionContainer WarActionUnitSupply. */
     public WarActionUnitSupply?: (IWarActionUnitSupply|null);
+
+    /** WarActionContainer WarActionUnitLoadCo. */
+    public WarActionUnitLoadCo?: (IWarActionUnitLoadCo|null);
+
+    /** WarActionContainer WarActionUnitUseCoSkill. */
+    public WarActionUnitUseCoSkill?: (IWarActionUnitUseCoSkill|null);
 
     /**
      * Creates a new WarActionContainer instance using the specified properties.
@@ -6702,6 +7254,18 @@ export declare interface IMessageContainer {
 
     /** MessageContainer S_McwUnitSupply */
     S_McwUnitSupply?: (IS_McwUnitSupply|null);
+
+    /** MessageContainer C_McwUnitLoadCo */
+    C_McwUnitLoadCo?: (IC_McwUnitLoadCo|null);
+
+    /** MessageContainer S_McwUnitLoadCo */
+    S_McwUnitLoadCo?: (IS_McwUnitLoadCo|null);
+
+    /** MessageContainer C_McwUnitUseCoSkill */
+    C_McwUnitUseCoSkill?: (IC_McwUnitUseCoSkill|null);
+
+    /** MessageContainer S_McwUnitUseCoSkill */
+    S_McwUnitUseCoSkill?: (IS_McwUnitUseCoSkill|null);
 }
 
 /** Represents a MessageContainer. */
@@ -6949,6 +7513,18 @@ export declare class MessageContainer implements IMessageContainer {
 
     /** MessageContainer S_McwUnitSupply. */
     public S_McwUnitSupply?: (IS_McwUnitSupply|null);
+
+    /** MessageContainer C_McwUnitLoadCo. */
+    public C_McwUnitLoadCo?: (IC_McwUnitLoadCo|null);
+
+    /** MessageContainer S_McwUnitLoadCo. */
+    public S_McwUnitLoadCo?: (IS_McwUnitLoadCo|null);
+
+    /** MessageContainer C_McwUnitUseCoSkill. */
+    public C_McwUnitUseCoSkill?: (IC_McwUnitUseCoSkill|null);
+
+    /** MessageContainer S_McwUnitUseCoSkill. */
+    public S_McwUnitUseCoSkill?: (IS_McwUnitUseCoSkill|null);
 
     /**
      * Creates a new MessageContainer instance using the specified properties.
@@ -15152,6 +15728,426 @@ export declare class S_McwUnitSupply implements IS_McwUnitSupply {
 
     /**
      * Converts this S_McwUnitSupply to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_McwUnitLoadCo. */
+export declare interface IC_McwUnitLoadCo {
+
+    /** C_McwUnitLoadCo warId */
+    warId?: (number|null);
+
+    /** C_McwUnitLoadCo actionId */
+    actionId?: (number|null);
+
+    /** C_McwUnitLoadCo path */
+    path?: (IGridIndex[]|null);
+
+    /** C_McwUnitLoadCo launchUnitId */
+    launchUnitId?: (number|null);
+}
+
+/** Represents a C_McwUnitLoadCo. */
+export declare class C_McwUnitLoadCo implements IC_McwUnitLoadCo {
+
+    /**
+     * Constructs a new C_McwUnitLoadCo.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_McwUnitLoadCo);
+
+    /** C_McwUnitLoadCo warId. */
+    public warId: number;
+
+    /** C_McwUnitLoadCo actionId. */
+    public actionId: number;
+
+    /** C_McwUnitLoadCo path. */
+    public path: IGridIndex[];
+
+    /** C_McwUnitLoadCo launchUnitId. */
+    public launchUnitId: number;
+
+    /**
+     * Creates a new C_McwUnitLoadCo instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_McwUnitLoadCo instance
+     */
+    public static create(properties?: IC_McwUnitLoadCo): C_McwUnitLoadCo;
+
+    /**
+     * Encodes the specified C_McwUnitLoadCo message. Does not implicitly {@link C_McwUnitLoadCo.verify|verify} messages.
+     * @param message C_McwUnitLoadCo message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_McwUnitLoadCo, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_McwUnitLoadCo message, length delimited. Does not implicitly {@link C_McwUnitLoadCo.verify|verify} messages.
+     * @param message C_McwUnitLoadCo message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_McwUnitLoadCo, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_McwUnitLoadCo message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_McwUnitLoadCo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_McwUnitLoadCo;
+
+    /**
+     * Decodes a C_McwUnitLoadCo message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_McwUnitLoadCo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_McwUnitLoadCo;
+
+    /**
+     * Verifies a C_McwUnitLoadCo message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_McwUnitLoadCo message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_McwUnitLoadCo
+     */
+    public static fromObject(object: { [k: string]: any }): C_McwUnitLoadCo;
+
+    /**
+     * Creates a plain object from a C_McwUnitLoadCo message. Also converts values to other types if specified.
+     * @param message C_McwUnitLoadCo
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_McwUnitLoadCo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_McwUnitLoadCo to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_McwUnitLoadCo. */
+export declare interface IS_McwUnitLoadCo {
+
+    /** S_McwUnitLoadCo errorCode */
+    errorCode?: (number|null);
+
+    /** S_McwUnitLoadCo warId */
+    warId?: (number|null);
+
+    /** S_McwUnitLoadCo actionContainer */
+    actionContainer?: (IWarActionContainer|null);
+}
+
+/** Represents a S_McwUnitLoadCo. */
+export declare class S_McwUnitLoadCo implements IS_McwUnitLoadCo {
+
+    /**
+     * Constructs a new S_McwUnitLoadCo.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_McwUnitLoadCo);
+
+    /** S_McwUnitLoadCo errorCode. */
+    public errorCode: number;
+
+    /** S_McwUnitLoadCo warId. */
+    public warId: number;
+
+    /** S_McwUnitLoadCo actionContainer. */
+    public actionContainer?: (IWarActionContainer|null);
+
+    /**
+     * Creates a new S_McwUnitLoadCo instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_McwUnitLoadCo instance
+     */
+    public static create(properties?: IS_McwUnitLoadCo): S_McwUnitLoadCo;
+
+    /**
+     * Encodes the specified S_McwUnitLoadCo message. Does not implicitly {@link S_McwUnitLoadCo.verify|verify} messages.
+     * @param message S_McwUnitLoadCo message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_McwUnitLoadCo, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_McwUnitLoadCo message, length delimited. Does not implicitly {@link S_McwUnitLoadCo.verify|verify} messages.
+     * @param message S_McwUnitLoadCo message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_McwUnitLoadCo, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_McwUnitLoadCo message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_McwUnitLoadCo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_McwUnitLoadCo;
+
+    /**
+     * Decodes a S_McwUnitLoadCo message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_McwUnitLoadCo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_McwUnitLoadCo;
+
+    /**
+     * Verifies a S_McwUnitLoadCo message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_McwUnitLoadCo message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_McwUnitLoadCo
+     */
+    public static fromObject(object: { [k: string]: any }): S_McwUnitLoadCo;
+
+    /**
+     * Creates a plain object from a S_McwUnitLoadCo message. Also converts values to other types if specified.
+     * @param message S_McwUnitLoadCo
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_McwUnitLoadCo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_McwUnitLoadCo to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_McwUnitUseCoSkill. */
+export declare interface IC_McwUnitUseCoSkill {
+
+    /** C_McwUnitUseCoSkill warId */
+    warId?: (number|null);
+
+    /** C_McwUnitUseCoSkill actionId */
+    actionId?: (number|null);
+
+    /** C_McwUnitUseCoSkill path */
+    path?: (IGridIndex[]|null);
+
+    /** C_McwUnitUseCoSkill launchUnitId */
+    launchUnitId?: (number|null);
+}
+
+/** Represents a C_McwUnitUseCoSkill. */
+export declare class C_McwUnitUseCoSkill implements IC_McwUnitUseCoSkill {
+
+    /**
+     * Constructs a new C_McwUnitUseCoSkill.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_McwUnitUseCoSkill);
+
+    /** C_McwUnitUseCoSkill warId. */
+    public warId: number;
+
+    /** C_McwUnitUseCoSkill actionId. */
+    public actionId: number;
+
+    /** C_McwUnitUseCoSkill path. */
+    public path: IGridIndex[];
+
+    /** C_McwUnitUseCoSkill launchUnitId. */
+    public launchUnitId: number;
+
+    /**
+     * Creates a new C_McwUnitUseCoSkill instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_McwUnitUseCoSkill instance
+     */
+    public static create(properties?: IC_McwUnitUseCoSkill): C_McwUnitUseCoSkill;
+
+    /**
+     * Encodes the specified C_McwUnitUseCoSkill message. Does not implicitly {@link C_McwUnitUseCoSkill.verify|verify} messages.
+     * @param message C_McwUnitUseCoSkill message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_McwUnitUseCoSkill, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_McwUnitUseCoSkill message, length delimited. Does not implicitly {@link C_McwUnitUseCoSkill.verify|verify} messages.
+     * @param message C_McwUnitUseCoSkill message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_McwUnitUseCoSkill, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_McwUnitUseCoSkill message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_McwUnitUseCoSkill
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_McwUnitUseCoSkill;
+
+    /**
+     * Decodes a C_McwUnitUseCoSkill message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_McwUnitUseCoSkill
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_McwUnitUseCoSkill;
+
+    /**
+     * Verifies a C_McwUnitUseCoSkill message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_McwUnitUseCoSkill message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_McwUnitUseCoSkill
+     */
+    public static fromObject(object: { [k: string]: any }): C_McwUnitUseCoSkill;
+
+    /**
+     * Creates a plain object from a C_McwUnitUseCoSkill message. Also converts values to other types if specified.
+     * @param message C_McwUnitUseCoSkill
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_McwUnitUseCoSkill, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_McwUnitUseCoSkill to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_McwUnitUseCoSkill. */
+export declare interface IS_McwUnitUseCoSkill {
+
+    /** S_McwUnitUseCoSkill errorCode */
+    errorCode?: (number|null);
+
+    /** S_McwUnitUseCoSkill warId */
+    warId?: (number|null);
+
+    /** S_McwUnitUseCoSkill actionContainer */
+    actionContainer?: (IWarActionContainer|null);
+}
+
+/** Represents a S_McwUnitUseCoSkill. */
+export declare class S_McwUnitUseCoSkill implements IS_McwUnitUseCoSkill {
+
+    /**
+     * Constructs a new S_McwUnitUseCoSkill.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_McwUnitUseCoSkill);
+
+    /** S_McwUnitUseCoSkill errorCode. */
+    public errorCode: number;
+
+    /** S_McwUnitUseCoSkill warId. */
+    public warId: number;
+
+    /** S_McwUnitUseCoSkill actionContainer. */
+    public actionContainer?: (IWarActionContainer|null);
+
+    /**
+     * Creates a new S_McwUnitUseCoSkill instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_McwUnitUseCoSkill instance
+     */
+    public static create(properties?: IS_McwUnitUseCoSkill): S_McwUnitUseCoSkill;
+
+    /**
+     * Encodes the specified S_McwUnitUseCoSkill message. Does not implicitly {@link S_McwUnitUseCoSkill.verify|verify} messages.
+     * @param message S_McwUnitUseCoSkill message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_McwUnitUseCoSkill, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_McwUnitUseCoSkill message, length delimited. Does not implicitly {@link S_McwUnitUseCoSkill.verify|verify} messages.
+     * @param message S_McwUnitUseCoSkill message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_McwUnitUseCoSkill, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_McwUnitUseCoSkill message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_McwUnitUseCoSkill
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_McwUnitUseCoSkill;
+
+    /**
+     * Decodes a S_McwUnitUseCoSkill message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_McwUnitUseCoSkill
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_McwUnitUseCoSkill;
+
+    /**
+     * Verifies a S_McwUnitUseCoSkill message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_McwUnitUseCoSkill message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_McwUnitUseCoSkill
+     */
+    public static fromObject(object: { [k: string]: any }): S_McwUnitUseCoSkill;
+
+    /**
+     * Creates a plain object from a S_McwUnitUseCoSkill message. Also converts values to other types if specified.
+     * @param message S_McwUnitUseCoSkill
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_McwUnitUseCoSkill, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_McwUnitUseCoSkill to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };

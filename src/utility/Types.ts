@@ -16,6 +16,8 @@ namespace TinyWars.Utility.Types {
         VisionBonus     : VisionBonusCfg[];
         BuildableTile   : BuildableTileCfg[];
         PlayerRank      : PlayerRankCfg[];
+        CoBasic         : CoBasicCfg[];
+        CoSkill         : CoSkillCfg[];
     }
     export interface TileCategoryCfg extends ProtoTypes.ITileCategoryCfg {
         category: TileCategory;
@@ -69,6 +71,16 @@ namespace TinyWars.Utility.Types {
         minScore: number;
         rank    : number;
     }
+    export interface CoBasicCfg extends ProtoTypes.ICoBasicCfg {
+        coId                : number;
+        name                : string;
+        zoneRadius          : number;
+        boardCostPercentage : number;
+    }
+    export interface CoSkillCfg extends ProtoTypes.ICoSkillCfg {
+        skillId     : number;
+        name        : string;
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Serialization data types.
@@ -101,6 +113,8 @@ namespace TinyWars.Utility.Types {
         playerIndex     : number;
         teamIndex       : number;
         userId?         : number;
+        coCurrentEnergy : number;
+        coIsUsingSkill  : boolean;
     }
     export interface SerializedBwFogMap extends ProtoTypes.ISerializedWarFogMap {
         mapsForPath?: SerializedBwFogMapForPath[];
