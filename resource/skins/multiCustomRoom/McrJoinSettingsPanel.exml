@@ -31,7 +31,7 @@
                 </e:Skin>
             </e:skinName>
         </GameUi:UiTab>
-        <GameUi:UiLabel text="创建战局" bold="true" size="26" top="14" right="46" textColor="0xffffff" />
+        <GameUi:UiLabel text="加入战局" bold="true" size="26" top="14" right="46" textColor="0xffffff" />
         <GameUi:UiButton id="_btnConfirm" label="确定>>" bottom="14" right="12">
             <GameUi:skinName>
                 <e:Skin states="up,down,disabled">

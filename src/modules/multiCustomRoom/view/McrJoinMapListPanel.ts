@@ -257,12 +257,15 @@ namespace TinyWars.MultiCustomRoom {
             data.panel.setSelectedIndex(data.index);
         }
 
-        private _onTouchTapBtnNext(e: egret.TouchEvent): void {
+        private async _onTouchTapBtnNext(e: egret.TouchEvent): Promise<void> {
             const data = this.data as DataForWarRenderer;
             if (data.warInfo.warPassword) {
                 McrJoinPasswordPanel.show(data.warInfo);
             } else {
-                McrJoinDetailPanel.show(data.warInfo);
+                McrJoinMapListPanel.hide();
+
+                await McrModel.resetJoinWarData(data.warInfo);
+                McrJoinSettingsPanel.show();
             }
         }
     }

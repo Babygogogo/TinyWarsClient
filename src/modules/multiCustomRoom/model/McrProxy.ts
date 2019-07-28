@@ -46,13 +46,9 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
         }
     }
 
-    export function reqJoin(waitingWarId: number, playerIndex: number, teamIndex: number): void {
+    export function reqJoin(data: DataForJoinWar): void {
         NetManager.send({
-            C_McrJoinWar: {
-                infoId     : waitingWarId,
-                playerIndex: playerIndex,
-                teamIndex  : teamIndex,
-            },
+            C_McrJoinWar: data,
         });
     }
     function _onSMcrJoinWar(e: egret.Event): void {

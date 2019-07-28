@@ -72,12 +72,15 @@ namespace TinyWars.MultiCustomRoom {
             McrJoinPasswordPanel.hide();
         }
 
-        private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
+        private async _onTouchedBtnConfirm(e: egret.TouchEvent): Promise<void> {
             if (this._inputWarPassword.text !== this._openData.warPassword) {
                 FloatText.show(Lang.getText(Lang.Type.A0017));
             } else {
                 McrJoinPasswordPanel.hide();
-                McrJoinDetailPanel.show(this._openData);
+                McrJoinMapListPanel.hide();
+
+                await McrModel.resetJoinWarData(this._openData);
+                McrJoinSettingsPanel.show();
             }
         }
 

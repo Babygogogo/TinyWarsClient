@@ -6289,6 +6289,9 @@ export declare interface IMcrWaitingInfo {
     /** McrWaitingInfo p1TeamIndex */
     p1TeamIndex?: (number|null);
 
+    /** McrWaitingInfo p1CoId */
+    p1CoId?: (number|null);
+
     /** McrWaitingInfo p2UserId */
     p2UserId?: (number|null);
 
@@ -6297,6 +6300,9 @@ export declare interface IMcrWaitingInfo {
 
     /** McrWaitingInfo p2TeamIndex */
     p2TeamIndex?: (number|null);
+
+    /** McrWaitingInfo p2CoId */
+    p2CoId?: (number|null);
 
     /** McrWaitingInfo p3UserId */
     p3UserId?: (number|null);
@@ -6307,6 +6313,9 @@ export declare interface IMcrWaitingInfo {
     /** McrWaitingInfo p3TeamIndex */
     p3TeamIndex?: (number|null);
 
+    /** McrWaitingInfo p3CoId */
+    p3CoId?: (number|null);
+
     /** McrWaitingInfo p4UserId */
     p4UserId?: (number|null);
 
@@ -6315,6 +6324,9 @@ export declare interface IMcrWaitingInfo {
 
     /** McrWaitingInfo p4TeamIndex */
     p4TeamIndex?: (number|null);
+
+    /** McrWaitingInfo p4CoId */
+    p4CoId?: (number|null);
 
     /** McrWaitingInfo hasFog */
     hasFog?: (number|null);
@@ -6386,6 +6398,9 @@ export declare class McrWaitingInfo implements IMcrWaitingInfo {
     /** McrWaitingInfo p1TeamIndex. */
     public p1TeamIndex: number;
 
+    /** McrWaitingInfo p1CoId. */
+    public p1CoId: number;
+
     /** McrWaitingInfo p2UserId. */
     public p2UserId: number;
 
@@ -6394,6 +6409,9 @@ export declare class McrWaitingInfo implements IMcrWaitingInfo {
 
     /** McrWaitingInfo p2TeamIndex. */
     public p2TeamIndex: number;
+
+    /** McrWaitingInfo p2CoId. */
+    public p2CoId: number;
 
     /** McrWaitingInfo p3UserId. */
     public p3UserId: number;
@@ -6404,6 +6422,9 @@ export declare class McrWaitingInfo implements IMcrWaitingInfo {
     /** McrWaitingInfo p3TeamIndex. */
     public p3TeamIndex: number;
 
+    /** McrWaitingInfo p3CoId. */
+    public p3CoId: number;
+
     /** McrWaitingInfo p4UserId. */
     public p4UserId: number;
 
@@ -6412,6 +6433,9 @@ export declare class McrWaitingInfo implements IMcrWaitingInfo {
 
     /** McrWaitingInfo p4TeamIndex. */
     public p4TeamIndex: number;
+
+    /** McrWaitingInfo p4CoId. */
+    public p4CoId: number;
 
     /** McrWaitingInfo hasFog. */
     public hasFog: number;
@@ -10614,6 +10638,9 @@ export declare interface IC_McrJoinWar {
 
     /** C_McrJoinWar teamIndex */
     teamIndex?: (number|null);
+
+    /** C_McrJoinWar coId */
+    coId?: (number|null);
 }
 
 /** Represents a C_McrJoinWar. */
@@ -10633,6 +10660,9 @@ export declare class C_McrJoinWar implements IC_McrJoinWar {
 
     /** C_McrJoinWar teamIndex. */
     public teamIndex: number;
+
+    /** C_McrJoinWar coId. */
+    public coId: number;
 
     /**
      * Creates a new C_McrJoinWar instance using the specified properties.

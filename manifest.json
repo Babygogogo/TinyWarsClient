@@ -71,8 +71,10 @@
 		"bin-debug/utility/StageManager.js",
 		"bin-debug/gameui/UiTabPage.js",
 		"bin-debug/modules/common/view/ConfirmPanel.js",
+		"bin-debug/modules/multiCustomRoom/view/McrJoinBasicSettingsPage.js",
 		"bin-debug/modules/multiCustomRoom/view/McrJoinMapListPanel.js",
 		"bin-debug/modules/multiCustomRoom/view/McrJoinPasswordPanel.js",
+		"bin-debug/modules/multiCustomRoom/view/McrJoinSettingsPanel.js",
 		"bin-debug/modules/multiCustomRoom/view/McrMainMenuPanel.js",
 		"bin-debug/modules/multiCustomRoom/view/McrReplayListPanel.js",
 		"bin-debug/modules/multiCustomWar/model/McwActionPlanner.js",
@@ -96,8 +98,8 @@
 		"bin-debug/modules/multiCustomWar/view/McwCursorView.js",
 		"bin-debug/modules/multiCustomWar/view/McwFieldView.js",
 		"bin-debug/modules/multiCustomWar/view/McwGridVisionEffectView.js",
-		"bin-debug/modules/multiCustomWar/view/McwProduceUnitPanel.js",
 		"bin-debug/Platform.js",
+		"bin-debug/modules/multiCustomWar/view/McwTileBriefPanel.js",
 		"bin-debug/modules/multiCustomWar/view/McwTileMapView.js",
 		"bin-debug/modules/multiCustomWar/view/McwTileView.js",
 		"bin-debug/modules/multiCustomWar/view/McwTopPanel.js",
@@ -179,7 +181,7 @@
 		"bin-debug/utility/SeedRandom.js",
 		"bin-debug/modules/multiCustomRoom/view/McrExitDetailPanel.js",
 		"bin-debug/modules/multiCustomRoom/view/McrExitMapListPanel.js",
-		"bin-debug/modules/multiCustomRoom/view/McrJoinDetailPanel.js",
-		"bin-debug/modules/multiCustomWar/view/McwTileBriefPanel.js"
+		"bin-debug/modules/multiCustomRoom/view/McrJoinAdvancedSettingsPage.js",
+		"bin-debug/modules/multiCustomWar/view/McwProduceUnitPanel.js"
 	]
 }
