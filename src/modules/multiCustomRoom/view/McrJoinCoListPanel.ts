@@ -3,11 +3,11 @@ namespace TinyWars.MultiCustomRoom {
     import Types    = Utility.Types;
     import Lang     = Utility.Lang;
 
-    export class McrCreateCoListPanel extends GameUi.UiPanel {
+    export class McrJoinCoListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: McrCreateCoListPanel;
+        private static _instance: McrJoinCoListPanel;
 
         private _openData   : number;
 
@@ -29,16 +29,16 @@ namespace TinyWars.MultiCustomRoom {
         private _selectedIndex      : number;
 
         public static show(coId: number | null): void {
-            if (!McrCreateCoListPanel._instance) {
-                McrCreateCoListPanel._instance = new McrCreateCoListPanel();
+            if (!McrJoinCoListPanel._instance) {
+                McrJoinCoListPanel._instance = new McrJoinCoListPanel();
             }
 
-            McrCreateCoListPanel._instance._openData = coId;
-            McrCreateCoListPanel._instance.open();
+            McrJoinCoListPanel._instance._openData = coId;
+            McrJoinCoListPanel._instance.open();
         }
         public static hide(): void {
-            if (McrCreateCoListPanel._instance) {
-                McrCreateCoListPanel._instance.close();
+            if (McrJoinCoListPanel._instance) {
+                McrJoinCoListPanel._instance.close();
             }
         }
 
@@ -46,7 +46,7 @@ namespace TinyWars.MultiCustomRoom {
             super();
 
             this._setAutoAdjustHeightEnabled();
-            this.skinName = "resource/skins/multiCustomRoom/McrCreateCoListPanel.exml";
+            this.skinName = "resource/skins/multiCustomRoom/McrJoinCoListPanel.exml";
         }
 
         protected _onFirstOpened(): void {
@@ -94,8 +94,8 @@ namespace TinyWars.MultiCustomRoom {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
-            McrCreateCoListPanel.hide();
-            McrCreateSettingsPanel.show();
+            McrJoinCoListPanel.hide();
+            McrJoinSettingsPanel.show();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -175,7 +175,7 @@ namespace TinyWars.MultiCustomRoom {
     type DataForCoRenderer = {
         coBasicCfg  : Types.CoBasicCfg;
         index       : number;
-        panel       : McrCreateCoListPanel;
+        panel       : McrJoinCoListPanel;
     }
 
     class MapNameRenderer extends eui.ItemRenderer {
@@ -205,11 +205,11 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
-            McrCreateCoListPanel.hide();
+            McrJoinCoListPanel.hide();
 
             const cfg = (this.data as DataForCoRenderer).coBasicCfg;
-            McrModel.setCreateWarCoId(cfg ? cfg.coId : null);
-            McrCreateSettingsPanel.show();
+            McrModel.setJoinWarCoId(cfg ? cfg.coId : null);
+            McrJoinSettingsPanel.show();
         }
     }
 

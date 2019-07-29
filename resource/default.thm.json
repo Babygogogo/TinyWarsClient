@@ -24,6 +24,7 @@
 		"resource/skins/multiCustomRoom/McrExitMapListPanel.exml",
 		"resource/skins/multiCustomRoom/McrJoinAdvancedSettingsPage.exml",
 		"resource/skins/multiCustomRoom/McrJoinBasicSettingsPage.exml",
+		"resource/skins/multiCustomRoom/McrJoinCoListPanel.exml",
 		"resource/skins/multiCustomRoom/McrJoinMapListPanel.exml",
 		"resource/skins/multiCustomRoom/McrJoinPasswordPanel.exml",
 		"resource/skins/multiCustomRoom/McrJoinSettingsPanel.exml",

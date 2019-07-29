@@ -3,6 +3,7 @@ namespace TinyWars.MultiCustomRoom {
     import Lang         = Utility.Lang;
     import Notify       = Utility.Notify;
     import FloatText    = Utility.FloatText;
+    import ProtoTypes   = Utility.ProtoTypes;
 
     const CONFIRM_INTERVAL_MS = 5000;
 
@@ -81,7 +82,8 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onNotifySMcrJoinWar(e: egret.Event): void {
-            FloatText.show(Lang.getText(Lang.Type.A0015));
+            const data = e.data as ProtoTypes.IS_McrJoinWar;
+            FloatText.show(Lang.getText(data.isStarted ? Lang.Type.A0019 : Lang.Type.A0018));
             Utility.FlowManager.gotoLobby();
         }
 

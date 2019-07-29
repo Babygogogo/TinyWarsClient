@@ -143,12 +143,14 @@ namespace TinyWars.MultiCustomRoom {
                         playerName  : warInfo.p1UserNickname,
                         teamIndex   : warInfo.p1TeamIndex,
                         isAlive     : warInfo.p1IsAlive,
+                        coId        : warInfo.p1CoId,
                     },
                     {
                         playerIndex : 2,
                         playerName  : warInfo.p2UserNickname,
                         teamIndex   : warInfo.p2TeamIndex,
                         isAlive     : warInfo.p2IsAlive,
+                        coId        : warInfo.p2CoId,
                     },
                 ];
 
@@ -158,6 +160,7 @@ namespace TinyWars.MultiCustomRoom {
                         playerName  : warInfo.p3UserNickname,
                         teamIndex   : warInfo.p3TeamIndex,
                         isAlive     : warInfo.p3IsAlive,
+                        coId        : warInfo.p3CoId,
                     });
                 }
                 if (mapInfo.playersCount >= 4) {
@@ -166,6 +169,7 @@ namespace TinyWars.MultiCustomRoom {
                         playerName  : warInfo.p4UserNickname,
                         teamIndex   : warInfo.p4TeamIndex,
                         isAlive     : warInfo.p4IsAlive,
+                        coId        : warInfo.p4CoId,
                     });
                 }
                 data[warInfo.playerIndexInTurn - 1].defeatTimestamp = warInfo.enterTurnTime + warInfo.timeLimit;
@@ -180,38 +184,44 @@ namespace TinyWars.MultiCustomRoom {
         playerName      : string;
         teamIndex       : number;
         isAlive         : boolean;
+        coId            : number | null;
         defeatTimestamp?: number;
     }
 
     class PlayerRenderer extends eui.ItemRenderer {
-        private _labelName : GameUi.UiLabel;
-        private _labelIndex: GameUi.UiLabel;
-        private _labelTeam : GameUi.UiLabel;
+        private _labelNickname  : GameUi.UiLabel;
+        private _labelIndex     : GameUi.UiLabel;
+        private _labelTeam      : GameUi.UiLabel;
+        private _labelCoName    : GameUi.UiLabel;
 
         protected dataChanged(): void {
             super.dataChanged();
 
             const data = this.data as DataForPlayerRenderer;
             if (data.defeatTimestamp != null) {
-                const leftTime = data.defeatTimestamp - Time.TimeModel.getServerTimestamp();
-                this._labelIndex.text       = Helpers.getColorTextForPlayerIndex(data.playerIndex);
-                this._labelIndex.textColor  = 0x00FF00;
-                this._labelTeam.text        = Helpers.getTeamText(data.teamIndex);
-                this._labelTeam.textColor   = 0x00FF00
-                this._labelName.text        = data.playerName + (leftTime > 0
+                const leftTime                  = data.defeatTimestamp - Time.TimeModel.getServerTimestamp();
+                this.currentState               = "down";
+                this._labelIndex.text           = Helpers.getColorTextForPlayerIndex(data.playerIndex);
+                this._labelTeam.text            = Helpers.getTeamText(data.teamIndex);
+                this._labelNickname.text        = data.playerName;
+                this._labelNickname.textColor   = 0x00FF00;
+                this._labelCoName.text          = this._getCoName(data.coId) + (leftTime > 0
                     ? ` (${Lang.getText(Lang.Type.B0027)}:${Helpers.getTimeDurationText(leftTime)})`
                     : ` (${Lang.getText(Lang.Type.B0028)})`);
-                this._labelName.textColor   = 0x00FF00;
             } else {
-                this._labelIndex.text       = Helpers.getColorTextForPlayerIndex(data.playerIndex);
-                this._labelIndex.textColor  = 0xFFFFFF;
-                this._labelTeam.text        = Helpers.getTeamText(data.teamIndex);
-                this._labelTeam.textColor   = 0xFFFFFF;
-                this._labelName.text        = data.isAlive
-                    ? data.playerName
-                    : `${data.playerName} (${Lang.getText(Lang.Type.B0056)})`;
-                this._labelName.textColor   = 0xFFFFFF;
+                this.currentState               = "up";
+                this._labelIndex.text           = Helpers.getColorTextForPlayerIndex(data.playerIndex);
+                this._labelTeam.text            = Helpers.getTeamText(data.teamIndex);
+                this._labelNickname.text        = data.playerName;
+                this._labelNickname.textColor   = data.isAlive ? 0xFFFFFF : 0x999999;
+                this._labelCoName.text          = this._getCoName(data.coId);
             }
+        }
+
+        private _getCoName(coId: number | null): string {
+            return coId == null
+                ? `(${Lang.getText(Lang.Type.B0001)}CO)`
+                : ConfigManager.getCoBasicCfg(ConfigManager.getNewestConfigVersion(), coId).name;
         }
     }
 }

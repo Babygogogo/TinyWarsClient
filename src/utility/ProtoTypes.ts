@@ -6598,6 +6598,9 @@ export declare interface IMcwOngoingDetail {
     /** McwOngoingDetail p1IsAlive */
     p1IsAlive?: (boolean|null);
 
+    /** McwOngoingDetail p1CoId */
+    p1CoId?: (number|null);
+
     /** McwOngoingDetail p1UserNickname */
     p1UserNickname?: (string|null);
 
@@ -6609,6 +6612,9 @@ export declare interface IMcwOngoingDetail {
 
     /** McwOngoingDetail p2IsAlive */
     p2IsAlive?: (boolean|null);
+
+    /** McwOngoingDetail p2CoId */
+    p2CoId?: (number|null);
 
     /** McwOngoingDetail p2UserNickname */
     p2UserNickname?: (string|null);
@@ -6622,6 +6628,9 @@ export declare interface IMcwOngoingDetail {
     /** McwOngoingDetail p3IsAlive */
     p3IsAlive?: (boolean|null);
 
+    /** McwOngoingDetail p3CoId */
+    p3CoId?: (number|null);
+
     /** McwOngoingDetail p3UserNickname */
     p3UserNickname?: (string|null);
 
@@ -6633,6 +6642,9 @@ export declare interface IMcwOngoingDetail {
 
     /** McwOngoingDetail p4IsAlive */
     p4IsAlive?: (boolean|null);
+
+    /** McwOngoingDetail p4CoId */
+    p4CoId?: (number|null);
 
     /** McwOngoingDetail p4UserNickname */
     p4UserNickname?: (string|null);
@@ -6716,6 +6728,9 @@ export declare class McwOngoingDetail implements IMcwOngoingDetail {
     /** McwOngoingDetail p1IsAlive. */
     public p1IsAlive: boolean;
 
+    /** McwOngoingDetail p1CoId. */
+    public p1CoId: number;
+
     /** McwOngoingDetail p1UserNickname. */
     public p1UserNickname: string;
 
@@ -6727,6 +6742,9 @@ export declare class McwOngoingDetail implements IMcwOngoingDetail {
 
     /** McwOngoingDetail p2IsAlive. */
     public p2IsAlive: boolean;
+
+    /** McwOngoingDetail p2CoId. */
+    public p2CoId: number;
 
     /** McwOngoingDetail p2UserNickname. */
     public p2UserNickname: string;
@@ -6740,6 +6758,9 @@ export declare class McwOngoingDetail implements IMcwOngoingDetail {
     /** McwOngoingDetail p3IsAlive. */
     public p3IsAlive: boolean;
 
+    /** McwOngoingDetail p3CoId. */
+    public p3CoId: number;
+
     /** McwOngoingDetail p3UserNickname. */
     public p3UserNickname: string;
 
@@ -6751,6 +6772,9 @@ export declare class McwOngoingDetail implements IMcwOngoingDetail {
 
     /** McwOngoingDetail p4IsAlive. */
     public p4IsAlive: boolean;
+
+    /** McwOngoingDetail p4CoId. */
+    public p4CoId: number;
 
     /** McwOngoingDetail p4UserNickname. */
     public p4UserNickname: string;

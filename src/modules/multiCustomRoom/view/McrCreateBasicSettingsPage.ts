@@ -211,7 +211,7 @@ namespace TinyWars.MultiCustomRoom {
         private _updateLabelCoName(): void {
             const coId              = McrModel.getCreateWarCoId();
             this._labelCoName.text  = coId == null
-                ? `(${Lang.getText(Lang.Type.B0001)})`
+                ? `(${Lang.getText(Lang.Type.B0001)}CO)`
                 : ConfigManager.getCoBasicCfg(ConfigManager.getNewestConfigVersion(), coId).name;
         }
     }

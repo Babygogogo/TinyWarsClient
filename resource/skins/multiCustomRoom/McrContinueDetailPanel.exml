@@ -2,8 +2,8 @@
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
     <e:Group width="580" horizontalCenter="0" top="80" bottom="80">
-        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
-                        alpha="0.8" left="0" right="0" top="0" bottom="0" />
+        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
+                        left="0" right="0" top="0" bottom="0" />
         <GameUi:UiLabel text="房间设定总览" textColor="0xFFFFFF" y="10" size="22" textAlign="right" scaleX="1" scaleY="1"
                         horizontalCenter="0" />
         <e:Scroller left="5" right="5" top="40" bottom="40">
@@ -92,11 +92,15 @@
                     <GameUi:UiScrollList id="_listPlayer" left="0" right="0" top="25" bottom="0">
                         <e:List>
                             <e:itemRendererSkinName>
-                                <e:Skin width="280" height="22" currentState="up" states="up,down">
-                                    <GameUi:UiLabel id="_labelIndex" text="红方" size="18" verticalCenter="0" x="4" />
-                                    <GameUi:UiLabel id="_labelName" text="玩家名称居然有十个字" x="89" size="18"
-                                                    verticalCenter="0" textColor.down="0x00ff00" />
-                                    <GameUi:UiLabel id="_labelTeam" text="A队" size="18" verticalCenter="0" x="49" />
+                                <e:Skin height="22" currentState="up" states="up,down">
+                                    <GameUi:UiLabel id="_labelIndex" text="红方" size="16" x="4" bottom="0"
+                                                    textColor.down="0x00ff00" />
+                                    <GameUi:UiLabel id="_labelTeam" text="A队" size="16" x="45" bottom="0"
+                                                    textColor.down="0x00ff00" />
+                                    <GameUi:UiLabel id="_labelNickname" text="玩家名称居然有十个字" x="80" size="16"
+                                                    textColor.down="0x00ff00" bottom="0" />
+                                    <GameUi:UiLabel id="_labelCoName" text="CO名称" x="250" size="16" bottom="0"
+                                                    textColor="0xffffff" textColor.down="0x00ff00" />
                                 </e:Skin>
                             </e:itemRendererSkinName>
                             <e:layout>

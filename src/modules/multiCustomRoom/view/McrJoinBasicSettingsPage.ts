@@ -3,7 +3,9 @@ namespace TinyWars.MultiCustomRoom {
     import ProtoTypes   = Utility.ProtoTypes;
     import Helpers      = Utility.Helpers;
     import Lang         = Utility.Lang;
+    import Types        = Utility.Types;
     import HelpPanel    = Common.HelpPanel;
+    import WarMapModel  = WarMap.WarMapModel;
 
     export class McrJoinBasicSettingsPage extends GameUi.UiTabPage {
         private _labelMapName       : GameUi.UiLabel;
@@ -32,6 +34,8 @@ namespace TinyWars.MultiCustomRoom {
         private _labelCoName    : GameUi.UiLabel;
         private _btnChangeCo    : GameUi.UiLabel;
 
+        private _listPlayer     : GameUi.UiScrollList;
+
         private _mapInfo: ProtoTypes.IMapDynamicInfo;
 
         public constructor() {
@@ -52,6 +56,8 @@ namespace TinyWars.MultiCustomRoom {
                 { ui: this._btnHelpTimeLimit,   callback: this._onTouchedBtnHelpTimeLimit, },
                 { ui: this._btnChangeCo,        callback: this._onTouchedBtnChangeCo, },
             ];
+
+            this._listPlayer.setItemRenderer(PlayerRenderer);
         }
 
         protected _onOpened(): void {
@@ -67,6 +73,11 @@ namespace TinyWars.MultiCustomRoom {
             this._updateLabelFog();
             this._updateLabelTimeLimit();
             this._updateLabelCoName();
+            this._updateListPlayer();
+        }
+
+        protected _onClosed(): void {
+            this._listPlayer.clear();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -122,7 +133,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onTouchedBtnChangeCo(e: egret.TouchEvent): void {
             McrJoinSettingsPanel.hide();
-            McrCreateCoListPanel.show(McrModel.getJoinWarCoId());
+            McrJoinCoListPanel.show(McrModel.getJoinWarCoId());
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -168,8 +179,76 @@ namespace TinyWars.MultiCustomRoom {
         private _updateLabelCoName(): void {
             const coId              = McrModel.getJoinWarCoId();
             this._labelCoName.text  = coId == null
-                ? `(${Lang.getText(Lang.Type.B0001)})`
+                ? `(${Lang.getText(Lang.Type.B0001)}CO)`
                 : ConfigManager.getCoBasicCfg(ConfigManager.getNewestConfigVersion(), coId).name;
         }
+
+        private async _updateListPlayer(): Promise<void> {
+            this._listPlayer.bindData(await this._getDataForListPlayer());
+        }
+
+        private async _getDataForListPlayer(): Promise<DataForPlayerRenderer[]> {
+            const warInfo = McrModel.getJoinWarRoomInfo();
+            const data: DataForPlayerRenderer[] = [
+                {
+                    playerIndex : 1,
+                    nickname    : warInfo.p1UserNickname,
+                    teamIndex   : warInfo.p1TeamIndex,
+                    coId        : warInfo.p1CoId,
+                },
+                {
+                    playerIndex : 2,
+                    nickname    : warInfo.p2UserNickname,
+                    teamIndex   : warInfo.p2TeamIndex,
+                    coId        : warInfo.p2CoId,
+                },
+            ];
+
+            const playersCount = (await WarMapModel.getMapDynamicInfoAsync(warInfo as Types.MapIndexKey)).playersCount;
+            if (playersCount >= 3) {
+                data.push({
+                    playerIndex : 3,
+                    nickname    : warInfo.p3UserNickname,
+                    teamIndex   : warInfo.p3TeamIndex,
+                    coId        : warInfo.p3CoId,
+                });
+            }
+            if (playersCount >= 4) {
+                data.push({
+                    playerIndex : 4,
+                    nickname    : warInfo.p4UserNickname,
+                    teamIndex   : warInfo.p4TeamIndex,
+                    coId        : warInfo.p4CoId,
+                });
+            }
+
+            return data;
+        }
+    }
+
+    type DataForPlayerRenderer = {
+        playerIndex : number | null;
+        nickname    : string | null;
+        teamIndex   : number | null;
+        coId        : number | null;
+    }
+
+    class PlayerRenderer extends eui.ItemRenderer {
+        private _labelNickname  : GameUi.UiLabel;
+        private _labelIndex     : GameUi.UiLabel;
+        private _labelTeam      : GameUi.UiLabel;
+        private _labelCoName    : GameUi.UiLabel;
+
+        protected dataChanged(): void {
+            super.dataChanged();
+
+            const data                  = this.data as DataForPlayerRenderer;
+            this._labelIndex.text       = Helpers.getColorTextForPlayerIndex(data.playerIndex);
+            this._labelNickname.text    = data.nickname || "????";
+            this._labelTeam.text        = data.teamIndex != null ? Helpers.getTeamText(data.teamIndex) : "??";
+            this._labelCoName.text      = data.coId == null
+                ? (data.nickname == null ? "????" : `(${Lang.getText(Lang.Type.B0001)}CO)`)
+                : ConfigManager.getCoBasicCfg(ConfigManager.getNewestConfigVersion(), data.coId).name;
+            }
     }
 }
