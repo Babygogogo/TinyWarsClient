@@ -3,10 +3,8 @@ namespace TinyWars.Replay {
     import ConfirmPanel = Common.ConfirmPanel;
     import Notify       = Utility.Notify;
     import Lang         = Utility.Lang;
-    import Types        = Utility.Types;
     import FlowManager  = Utility.FlowManager;
     import Logger       = Utility.Logger;
-    import FloatText    = Utility.FloatText;
 
     const enum MenuType {
         Main,
@@ -261,6 +259,8 @@ namespace TinyWars.Replay {
         private _labelFund      : GameUi.UiLabel;
         private _labelIncome    : GameUi.UiLabel;
         private _labelBuildings : GameUi.UiLabel;
+        private _labelCoName    : GameUi.UiLabel;
+        private _labelEnergy    : GameUi.UiLabel;
         private _labelUnits     : GameUi.UiLabel;
         private _labelUnitsValue: GameUi.UiLabel;
 
@@ -274,8 +274,8 @@ namespace TinyWars.Replay {
             this._labelName.text        = player.getNickname();
             this._labelName.textColor   = player === war.getPlayerInTurn() ? 0x00FF00 : 0xFFFFFF;
             this._labelForce.text       = `${Lang.getPlayerForceName(player.getPlayerIndex())}`
-                + `  ${Lang.getPlayerTeamName(player.getTeamIndex())}`;
-                // + `  ${player === war.getPlayerInTurn() ? Lang.getText(Lang.Type.B0086) : ""}`;
+                + `  ${Lang.getPlayerTeamName(player.getTeamIndex())}`
+                + `  ${player === war.getPlayerInTurn() ? Lang.getText(Lang.Type.B0086) : ""}`;
 
             if (!player.getIsAlive()) {
                 this._labelLost.visible = true;
@@ -289,6 +289,16 @@ namespace TinyWars.Replay {
                 this._labelFund.text        = isInfoKnown ? `${player.getFund()}` : `?`;
                 this._labelIncome.text      = `${tilesCountAndIncome.income}${isInfoKnown ? `` : `  ?`}`;
                 this._labelBuildings.text   = `${tilesCountAndIncome.count}${isInfoKnown ? `` : `  ?`}`;
+
+                const coId              = player.getCoId();
+                this._labelCoName.text  = coId == null
+                    ? `(${Lang.getText(Lang.Type.B0001)}CO)`
+                    : ConfigManager.getCoBasicCfg(ConfigManager.getNewestConfigVersion(), coId).name;
+                const maxEnergy         = player.getCoMaxEnergy();
+                const middleEnergy      = player.getCoMiddleEnergy();
+                this._labelEnergy.text  = `${maxEnergy == null ? "--" : (player.getCoIsUsingSkill() ? "POWER" : player.getCoCurrentEnergy())}`
+                    + ` / ${middleEnergy == null ? "--" : middleEnergy}`
+                    + ` / ${maxEnergy == null ? "--" : maxEnergy}`;
 
                 const unitsCountAndValue    = this._getUnitsCountAndValue(war, playerIndex);
                 this._labelUnits.text       = `${unitsCountAndValue.count}${isInfoKnown ? `` : `  ?`}`;
