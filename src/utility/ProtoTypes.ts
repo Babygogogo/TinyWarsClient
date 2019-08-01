@@ -252,6 +252,9 @@ export declare interface ITileTemplateCfg {
 
     /** TileTemplateCfg isAffectedByLuck */
     isAffectedByLuck?: (number|null);
+
+    /** TileTemplateCfg loadCoUnitCategory */
+    loadCoUnitCategory?: (number|null);
 }
 
 /** Represents a TileTemplateCfg. */
@@ -319,6 +322,9 @@ export declare class TileTemplateCfg implements ITileTemplateCfg {
 
     /** TileTemplateCfg isAffectedByLuck. */
     public isAffectedByLuck: number;
+
+    /** TileTemplateCfg loadCoUnitCategory. */
+    public loadCoUnitCategory: number;
 
     /**
      * Creates a new TileTemplateCfg instance using the specified properties.

@@ -243,6 +243,14 @@ namespace TinyWars.MultiCustomWar {
             this._updateView();
         }
 
+        private _setStateRequestingUnitLoadCo(): void {
+            const unit = this.getFocusUnitLoaded();
+            McwProxy.reqMcwUnitLoadCo(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : null);
+
+            this._setState(State.RequestingUnitLoadCo);
+            this._updateView();
+        }
+
         private _setStateRequestingUnitWait(): void {
             const unit = this.getFocusUnitLoaded();
             McwProxy.reqMcwUnitWait(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined);
@@ -637,6 +645,11 @@ namespace TinyWars.MultiCustomWar {
                     ? [{ actionType: UnitActionType.Join, callback: () => this._setStateRequestingUnitJoin() }]
                     : [];
             }
+        }
+        protected _getActionUnitLoadCo(): BaseWar.DataForUnitActionRenderer[] {
+            return this.getFocusUnit().checkCanLoadCoAfterMovePath(this.getMovePath())
+                ? [{ actionType: UnitActionType.LoadCo, callback: () => this._setStateRequestingUnitLoadCo() }]
+                : [];
         }
         protected _getActionUnitCapture(): BaseWar.DataForUnitActionRenderer[] {
             return (this.getFocusUnit().checkCanCaptureTile(this._getTileMap().getTile(this.getMovePathDestination())))

@@ -815,6 +815,10 @@ namespace TinyWars.Utility.Lang {
             `单人模式`,
             `SinglePlayer`,
         ]],
+        [Type.B0139, [
+            `CO搭乘`,
+            `CO Board`,
+        ]],
 
         [Type.B1000, [
             `平原`,
@@ -1439,6 +1443,7 @@ namespace TinyWars.Utility.Lang {
             case Types.UnitActionType.DropUnit      : return getText(Type.B0046);
             case Types.UnitActionType.LaunchFlare   : return getText(Type.B0047);
             case Types.UnitActionType.LaunchSilo    : return getText(Type.B0048);
+            case Types.UnitActionType.LoadCo        : return getText(Type.B0139);
             case Types.UnitActionType.ProduceUnit   : return getText(Type.B0049);
             case Types.UnitActionType.Wait          : return getText(Type.B0050);
             default                                 : return undefined;

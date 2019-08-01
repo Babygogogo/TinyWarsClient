@@ -11,26 +11,27 @@ namespace TinyWars.MultiCustomWar.McwProxy {
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: NetMessageCodes.S_McwPlayerSyncWar,       callback: _onSMcwPlayerSyncWar, },
-            { msgCode: NetMessageCodes.S_McwPlayerBeginTurn,     callback: _onSMcwPlayerBeginTurn, },
-            { msgCode: NetMessageCodes.S_McwPlayerDeleteUnit,    callback: _onSMcwPlayerDeleteUnit },
-            { msgCode: NetMessageCodes.S_McwPlayerEndTurn,       callback: _onSMcwPlayerEndTurn, },
-            { msgCode: NetMessageCodes.S_McwPlayerProduceUnit,   callback: _onSMcwPlayerProduceUnit },
-            { msgCode: NetMessageCodes.S_McwPlayerSurrender,     callback: _onSMcwPlayerSurrender },
-            { msgCode: NetMessageCodes.S_McwPlayerVoteForDraw,   callback: _onSMcwPlayerVoteForDraw },
-            { msgCode: NetMessageCodes.S_McwUnitAttack,          callback: _onSMcwUnitAttack },
-            { msgCode: NetMessageCodes.S_McwUnitBeLoaded,        callback: _onSMcwUnitBeLoaded },
-            { msgCode: NetMessageCodes.S_McwUnitBuildTile,       callback: _onSMcwUnitBuildTile },
-            { msgCode: NetMessageCodes.S_McwUnitCaptureTile,     callback: _onSMcwUnitCaptureTile },
-            { msgCode: NetMessageCodes.S_McwUnitDive,            callback: _onSMcwUnitDive },
-            { msgCode: NetMessageCodes.S_McwUnitDrop,            callback: _onSMcwUnitDrop },
-            { msgCode: NetMessageCodes.S_McwUnitJoin,            callback: _onSMcwUnitJoin },
-            { msgCode: NetMessageCodes.S_McwUnitLaunchFlare,     callback: _onSMcwUnitLaunchFlare },
-            { msgCode: NetMessageCodes.S_McwUnitLaunchSilo,      callback: _onSMcwUnitLaunchSilo },
-            { msgCode: NetMessageCodes.S_McwUnitProduceUnit,     callback: _onSMcwUnitProduceUnit },
-            { msgCode: NetMessageCodes.S_McwUnitSupply,          callback: _onSMcwUnitSupply },
-            { msgCode: NetMessageCodes.S_McwUnitSurface,         callback: _onSMcwUnitSurface },
-            { msgCode: NetMessageCodes.S_McwUnitWait,            callback: _onSMcwUnitWait },
+            { msgCode: NetMessageCodes.S_McwPlayerSyncWar,      callback: _onSMcwPlayerSyncWar, },
+            { msgCode: NetMessageCodes.S_McwPlayerBeginTurn,    callback: _onSMcwPlayerBeginTurn, },
+            { msgCode: NetMessageCodes.S_McwPlayerDeleteUnit,   callback: _onSMcwPlayerDeleteUnit },
+            { msgCode: NetMessageCodes.S_McwPlayerEndTurn,      callback: _onSMcwPlayerEndTurn, },
+            { msgCode: NetMessageCodes.S_McwPlayerProduceUnit,  callback: _onSMcwPlayerProduceUnit },
+            { msgCode: NetMessageCodes.S_McwPlayerSurrender,    callback: _onSMcwPlayerSurrender },
+            { msgCode: NetMessageCodes.S_McwPlayerVoteForDraw,  callback: _onSMcwPlayerVoteForDraw },
+            { msgCode: NetMessageCodes.S_McwUnitAttack,         callback: _onSMcwUnitAttack },
+            { msgCode: NetMessageCodes.S_McwUnitBeLoaded,       callback: _onSMcwUnitBeLoaded },
+            { msgCode: NetMessageCodes.S_McwUnitBuildTile,      callback: _onSMcwUnitBuildTile },
+            { msgCode: NetMessageCodes.S_McwUnitCaptureTile,    callback: _onSMcwUnitCaptureTile },
+            { msgCode: NetMessageCodes.S_McwUnitDive,           callback: _onSMcwUnitDive },
+            { msgCode: NetMessageCodes.S_McwUnitDrop,           callback: _onSMcwUnitDrop },
+            { msgCode: NetMessageCodes.S_McwUnitJoin,           callback: _onSMcwUnitJoin },
+            { msgCode: NetMessageCodes.S_McwUnitLaunchFlare,    callback: _onSMcwUnitLaunchFlare },
+            { msgCode: NetMessageCodes.S_McwUnitLaunchSilo,     callback: _onSMcwUnitLaunchSilo },
+            { msgCode: NetMessageCodes.S_McwUnitLoadCo,         callback: _onSMcwUnitLoadCo },
+            { msgCode: NetMessageCodes.S_McwUnitProduceUnit,    callback: _onSMcwUnitProduceUnit },
+            { msgCode: NetMessageCodes.S_McwUnitSupply,         callback: _onSMcwUnitSupply },
+            { msgCode: NetMessageCodes.S_McwUnitSurface,        callback: _onSMcwUnitSurface },
+            { msgCode: NetMessageCodes.S_McwUnitWait,           callback: _onSMcwUnitWait },
         ], McwProxy);
     }
 
@@ -314,6 +315,24 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         if (!data.errorCode) {
             McwModel.updateOnUnitLaunchSilo(data);
             Notify.dispatch(Notify.Type.SMcwUnitLaunchSilo);
+        }
+    }
+
+    export function reqMcwUnitLoadCo(war: BwWar, path: GridIndex[], launchUnitId: number | undefined): void {
+        NetManager.send({
+            C_McwUnitLoadCo: {
+                warId       : war.getWarId(),
+                actionId    : war.getNextActionId(),
+                path,
+                launchUnitId,
+            },
+        });
+    }
+    function _onSMcwUnitLoadCo(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_McwUnitLoadCo;
+        if (!data.errorCode) {
+            // TODO
+            Notify.dispatch(Notify.Type.SMcwUnitLoadCo);
         }
     }
 

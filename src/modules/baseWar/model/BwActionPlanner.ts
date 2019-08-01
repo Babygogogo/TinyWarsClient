@@ -1118,26 +1118,28 @@ namespace TinyWars.BaseWar {
                 return actionUnitJoin;
             }
 
-            const datas = [] as DataForUnitActionRenderer[];
-            for (const action of this._getActionUnitAttack())       { datas.push(action); }
-            for (const action of this._getActionUnitCapture())      { datas.push(action); }
-            for (const action of this._getActionUnitDive())         { datas.push(action); }
-            for (const action of this._getActionUnitSurface())      { datas.push(action); }
-            for (const action of this._getActionUnitBuildTile())    { datas.push(action); }
-            for (const action of this._getActionUnitSupply())       { datas.push(action); }
-            for (const action of this._getActionsUnitLaunchUnit())  { datas.push(action); }
-            for (const action of this._getActionsUnitDropUnit())    { datas.push(action); }
-            for (const action of this._getActionUnitLaunchFlare())  { datas.push(action); }
-            for (const action of this._getActionUnitLaunchSilo())   { datas.push(action); }
-            for (const action of this._getActionUnitProduceUnit())  { datas.push(action); }
-            for (const action of this._getActionUnitWait())         { datas.push(action); }
+            const dataList = [] as DataForUnitActionRenderer[];
+            dataList.push(...this._getActionUnitLoadCo());
+            dataList.push(...this._getActionUnitAttack());
+            dataList.push(...this._getActionUnitCapture());
+            dataList.push(...this._getActionUnitDive());
+            dataList.push(...this._getActionUnitSurface());
+            dataList.push(...this._getActionUnitBuildTile());
+            dataList.push(...this._getActionUnitSupply());
+            dataList.push(...this._getActionsUnitLaunchUnit());
+            dataList.push(...this._getActionsUnitDropUnit());
+            dataList.push(...this._getActionUnitLaunchFlare());
+            dataList.push(...this._getActionUnitLaunchSilo());
+            dataList.push(...this._getActionUnitProduceUnit());
+            dataList.push(...this._getActionUnitWait());
 
-            Logger.assert(datas.length, `BwActionPlanner._getDataForUntiActionsPanel() no actions available?!`);
-            return datas;
+            Logger.assert(dataList.length, `BwActionPlanner._getDataForUnitActionsPanel() no actions available?!`);
+            return dataList;
         }
 
         protected abstract _getActionUnitBeLoaded(): DataForUnitActionRenderer[];
         protected abstract _getActionUnitJoin(): DataForUnitActionRenderer[];
+        protected abstract _getActionUnitLoadCo(): DataForUnitActionRenderer[];
         private _getActionUnitAttack(): DataForUnitActionRenderer[] {
             return this._createAttackableGridsAfterMove().length
                 ? [{ actionType: UnitActionType.Attack, callback: () => this._setStateChoosingAttackTargetOnChooseAction() }]
@@ -1149,13 +1151,13 @@ namespace TinyWars.BaseWar {
         protected abstract _getActionUnitBuildTile(): DataForUnitActionRenderer[];
         protected abstract _getActionUnitSupply(): DataForUnitActionRenderer[];
         private _getActionsUnitLaunchUnit(): DataForUnitActionRenderer[] {
-            const datas     = [] as DataForUnitActionRenderer[];
+            const dataList  = [] as DataForUnitActionRenderer[];
             const focusUnit = this.getFocusUnit();
             if ((focusUnit !== this.getFocusUnitLoaded()) && (this.getMovePath().length === 1) && (focusUnit.checkCanLaunchLoadedUnit())) {
                 const tile = this._getTileMap().getTile(this.getMovePathDestination());
                 for (const unit of focusUnit.getLoadedUnits()) {
                     if ((unit.getState() === UnitState.Idle) && (tile.getMoveCostByUnit(unit) != null)) {
-                        datas.push({
+                        dataList.push({
                             actionType      : UnitActionType.LaunchUnit,
                             callback        : () => this._setStateMakingMovePathOnChooseAction(unit),
                             unitForLaunch   : unit,
@@ -1163,7 +1165,7 @@ namespace TinyWars.BaseWar {
                     }
                 }
             }
-            return datas;
+            return dataList;
         }
         private _getActionsUnitDropUnit(): DataForUnitActionRenderer[] {
             const focusUnit                 = this.getFocusUnit();

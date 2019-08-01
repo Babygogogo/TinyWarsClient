@@ -445,6 +445,11 @@ namespace TinyWars.Replay {
                     : [];
             }
         }
+        protected _getActionUnitLoadCo(): BaseWar.DataForUnitActionRenderer[] {
+            return this.getFocusUnit().checkCanLoadCoAfterMovePath(this.getMovePath())
+                ? [{ actionType: UnitActionType.LoadCo, callback: () => {} }]
+                : [];
+        }
         protected _getActionUnitCapture(): BaseWar.DataForUnitActionRenderer[] {
             return (this.getFocusUnit().checkCanCaptureTile(this._getTileMap().getTile(this.getMovePathDestination())))
                 ? [{ actionType: UnitActionType.Capture, callback: () => {} }]

@@ -447,6 +447,7 @@ namespace TinyWars.Utility.Types {
         RequestingUnitJoin,
         RequestingUnitLaunchFlare,
         RequestingUnitLaunchSilo,
+        RequestingUnitLoadCo,
         RequestingUnitProduceUnit,
         RequestingUnitSupply,
         RequestingUnitSurface,
@@ -456,6 +457,7 @@ namespace TinyWars.Utility.Types {
     export const enum UnitActionType {
         BeLoaded,
         Join,
+        LoadCo,
         Attack,
         Capture,
         Dive,

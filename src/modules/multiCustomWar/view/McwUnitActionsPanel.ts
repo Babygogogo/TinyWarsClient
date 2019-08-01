@@ -88,7 +88,7 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
             const war           = McwModel.getWar();
-            const datasForList  = [] as DataForUnitActionRenderer[];
+            const dataForList   = [] as DataForUnitActionRenderer[];
             for (const data of this._openData) {
                 const unitForProduce = data.produceUnitType == null
                     ? undefined
@@ -99,7 +99,7 @@ namespace TinyWars.MultiCustomWar {
                         viewId  : ConfigManager.getUnitViewId(data.produceUnitType, war.getPlayerIndexLoggedIn()),
                     }, war.getConfigVersion());
 
-                datasForList.push({
+                dataForList.push({
                     actionType      : data.actionType,
                     callback        : data.callback,
                     unit            : data.unitForDrop || data.unitForLaunch || unitForProduce,
@@ -107,7 +107,7 @@ namespace TinyWars.MultiCustomWar {
                 });
             }
 
-            this._listAction.bindData(datasForList);
+            this._listAction.bindData(dataForList);
         }
 
         private _adjustPositionOnTouch(e: egret.TouchEvent): void {

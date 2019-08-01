@@ -792,5 +792,40 @@ namespace TinyWars.BaseWar {
                     : Math.floor((joinedHp - maxHp) * this.getProductionFinalCost() / 10);
             }
         }
+
+        ////////////////////////////////////////////////////////////////////////////////
+        // Functions for load co.
+        ////////////////////////////////////////////////////////////////////////////////
+        public checkCanLoadCoAfterMovePath(movePath: MovePathNode[]): boolean {
+            if ((movePath.length !== 1) || (this.getLoaderUnitId() != null)) {
+                return false;
+            } else {
+                const war           = this.getWar();
+                const playerIndex   = this.getPlayerIndex();
+                const player        = war.getPlayer(playerIndex);
+                if ((player.getCoId() == null)                  ||
+                    (player.getCoUnitId() != null)              ||
+                    (this.getLoadCoCost() > player.getFund())
+                ) {
+                    return false;
+                } else {
+                    const tile = war.getTileMap().getTile(movePath[0]);
+                    if (tile.getPlayerIndex() !== playerIndex) {
+                        return false;
+                    } else {
+                        const category = tile.getLoadCoUnitCategory();
+                        return (category != null)
+                            && (ConfigManager.checkIsUnitTypeInCategory(this.getConfigVersion(), this.getType(), category));
+                    }
+                }
+            }
+        }
+
+        public getLoadCoCost(): number | null {
+            const coId = this.getWar().getPlayer(this.getPlayerIndex()).getCoId();
+            return coId == null
+                ? null
+                : Math.floor(ConfigManager.getCoBasicCfg(this.getConfigVersion(), coId).boardCostPercentage * this.getProductionBaseCost() / 100);
+        }
     }
 }
