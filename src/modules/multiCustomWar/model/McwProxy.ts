@@ -331,7 +331,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
     function _onSMcwUnitLoadCo(e: egret.Event): void {
         const data = e.data as ProtoTypes.IS_McwUnitLoadCo;
         if (!data.errorCode) {
-            // TODO
+            McwModel.updateOnUnitLoadCo(data);
             Notify.dispatch(Notify.Type.SMcwUnitLoadCo);
         }
     }

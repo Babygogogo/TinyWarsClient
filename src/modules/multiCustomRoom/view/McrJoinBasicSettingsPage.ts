@@ -96,7 +96,7 @@ namespace TinyWars.MultiCustomRoom {
         private _onTouchedBtnHelpPlayerIndex(e: egret.TouchEvent): void {
             HelpPanel.show({
                 title  : Lang.getText(Lang.Type.B0018),
-                content: Lang.getRichText(Lang.RichType.R000),
+                content: Lang.getRichText(Lang.RichType.R0000),
             });
         }
 
@@ -113,21 +113,21 @@ namespace TinyWars.MultiCustomRoom {
         private _onTouchedBtnHelpTeam(e: egret.TouchEvent): void {
             HelpPanel.show({
                 title  : Lang.getText(Lang.Type.B0019),
-                content: Lang.getRichText(Lang.RichType.R001),
+                content: Lang.getRichText(Lang.RichType.R0001),
             });
         }
 
         private _onTouchedBtnHelpFog(e: egret.TouchEvent): void {
             HelpPanel.show({
                 title  : Lang.getText(Lang.Type.B0020),
-                content: Lang.getRichText(Lang.RichType.R002),
+                content: Lang.getRichText(Lang.RichType.R0002),
             });
         }
 
         private _onTouchedBtnHelpTimeLimit(e: egret.TouchEvent): void {
             HelpPanel.show({
                 title  : Lang.getText(Lang.Type.B0021),
-                content: Lang.getRichText(Lang.RichType.R003),
+                content: Lang.getRichText(Lang.RichType.R0003),
             });
         }
 

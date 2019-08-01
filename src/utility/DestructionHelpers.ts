@@ -8,15 +8,25 @@ namespace TinyWars.Utility.DestructionHelpers {
 
         const unitMap           = war.getUnitMap();
         const unit              = unitMap.getUnitOnMap(gridIndex)!;
+        const destroyedUnits    = [unit];
 
         unitMap.removeUnitOnMap(gridIndex, true);
         for (const u of unitMap.getUnitsLoadedByLoader(unit, true)) {
             unitMap.removeUnitLoaded(u.getUnitId());
+            destroyedUnits.push(u);
         }
 
         if (!retainVisibility) {
             const playerIndex = unit.getPlayerIndex();
             war.getFogMap().updateMapFromUnitsForPlayerOnLeaving(playerIndex, gridIndex, unit.getVisionRangeForPlayer(playerIndex, gridIndex)!);
+        }
+
+        const player    = war.getPlayer(unit.getPlayerIndex())!;
+        const coUnitId  = player.getCoUnitId();
+        if (destroyedUnits.some(u => u.getUnitId() === coUnitId)) {
+            player.setCoIsDestroyedInTurn(true);
+            player.setCoUnitId(null);
+            player.setCoCurrentEnergy(0);
         }
 
         const gridVisionEffect = showExplosionEffect ? war.getGridVisionEffect() : undefined;

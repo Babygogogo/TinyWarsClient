@@ -48,7 +48,7 @@ namespace TinyWars.Utility.Lang {
         F0010, F0011, F0012, F0013, F0014, F0015, F0016, F0017, F0018, F0019,
     }
     export const enum RichType {
-        R000, R001, R002, R003,
+        R0000, R0001, R0002, R0003, R0004, R0005, R0006, R0007, R0008, R0009,
     }
 
     const _LANG_DATA = new Map<Type, string[]>([
@@ -1259,7 +1259,7 @@ namespace TinyWars.Utility.Lang {
     ]);
 
     const RICH_DATA = new Map<RichType, string[]>([
-        [RichType.R000, [
+        [RichType.R0000, [
             [
                 `本选项影响您在回合中的行动顺序。`,
                 ``,
@@ -1277,7 +1277,7 @@ namespace TinyWars.Utility.Lang {
             `Untranslated...`,
         ]],
 
-        [RichType.R001, [
+        [RichType.R0001, [
             [
                 `本选项规定您所属的队伍。`,
                 ``,
@@ -1290,7 +1290,7 @@ namespace TinyWars.Utility.Lang {
             `Untranslated...`,
         ]],
 
-        [RichType.R002, [
+        [RichType.R0002, [
             [
                 `本选项影响战局是明战或雾战。`,
                 ``,
@@ -1303,7 +1303,7 @@ namespace TinyWars.Utility.Lang {
             `Untranslated...`,
         ]],
 
-        [RichType.R003, [
+        [RichType.R0003, [
             [
                 `本选项影响所有玩家的每回合的时限。`,
                 ``,
@@ -1312,6 +1312,31 @@ namespace TinyWars.Utility.Lang {
                 `因此，请仅在已约好对手的情况下才选择“15分”，以免造成不必要的败绩。`,
                 ``,
                 `默认为“3天”。`,
+            ].join("\n"),
+
+            `Untranslated`,
+        ]],
+
+        [RichType.R0004, [
+            [
+                `- co需要上车才能发挥作用，包括d2d和power（如果有的话）`,
+                `- co同一时间只能存在一个`,
+                `- co只能在工厂、机场、海港、大本营上车；上车前目标部队必须是未行动的状态，且正在这些地形上；上车后部队可以再次行动`,
+                `- 若co所在部队被摧毁，则当回合内无法再上车`,
+                `- 上车需要花费目标部队原价的一半的资金`,
+                `- 上车瞬间，目标部队立刻升到满级，且d2d立刻生效`,
+                `- co的d2d能力，通常情况下只对co所在部队的特定距离（以下简称co zone）内的部队生效`,
+                `- 处于co zone内的部队，除了co的d2d能力外，还会享受到固定攻防加成（存疑）`,
+                `- 若co所在部队被装载，则co zone消失，直到该部队被卸载到地图上`,
+                `- 不是所有co都有power和气槽`,
+                `- 气槽长度固定为12；即使发动过power，其累积速度也不变`,
+                `- 处于我方co zone内的我方部队对任意敌方部队发起攻击，造成伤害时会累积我方气槽，每打掉1hp则增加0.2气槽，与部队价值无关；自身受伤时不积累气槽`,
+                `- 处于我方co zone内的敌方部队对任意我方部队发起攻击，我方部队反击造成对方受伤时会累积我方气槽，累积规则同上`,
+                `- 气槽达到6时，co zone范围+1；气槽达到12时，co zone范围再+1；气槽清零（被击毁或使用power结束）后co zone范围恢复为初始值`,
+                `- 若co所在部队被击毁，则气槽清零；此后可以再次上车`,
+                `- 若气槽已满，co所在部队可以在未行动时发动power；发动power需要消耗该部队的行动机会，也就是说不能发动power后再攻击（但是允许移动后发power）`,
+                `- power持续一回合，效果是把co zone扩展到全地图，而且会附带一些额外加成或瞬时效果（如果有的话）`,
+                `- power结束后，气槽清零`,
             ].join("\n"),
 
             `Untranslated`,

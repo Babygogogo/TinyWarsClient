@@ -57,14 +57,14 @@ namespace TinyWars.MultiCustomRoom {
         private _onTouchedBtnHelpFog(e: egret.TouchEvent): void {
             HelpPanel.show({
                 title  : Lang.getText(Lang.Type.B0020),
-                content: Lang.getRichText(Lang.RichType.R002),
+                content: Lang.getRichText(Lang.RichType.R0002),
             });
         }
 
         private _onTouchedBtnHelpTimeLimit(e: egret.TouchEvent): void {
             HelpPanel.show({
                 title  : Lang.getText(Lang.Type.B0021),
-                content: Lang.getRichText(Lang.RichType.R003),
+                content: Lang.getRichText(Lang.RichType.R0003),
             });
         }
 

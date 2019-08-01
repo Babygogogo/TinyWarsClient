@@ -19,6 +19,7 @@ namespace TinyWars.BaseWar {
         private _coUnitId           : number | null | undefined;
         private _coCurrentEnergy    : number;
         private _coIsUsingSkill     : boolean;
+        private _coIsDestroyedInTurn: boolean;
 
         private _war                : BwWar;
 
@@ -34,6 +35,7 @@ namespace TinyWars.BaseWar {
             this.setCoUnitId(data.coUnitId);
             this.setCoCurrentEnergy(data.coCurrentEnergy);
             this.setCoIsUsingSkill(data.coIsUsingSkill);
+            this.setCoIsDestroyedInTurn(data.coIsDestroyedInTurn);
 
             return this;
         }
@@ -171,6 +173,13 @@ namespace TinyWars.BaseWar {
         }
         public setCoIsUsingSkill(isUsing: boolean): void {
             this._coIsUsingSkill = isUsing;
+        }
+
+        public getCoIsDestroyedInTurn(): boolean {
+            return this._coIsDestroyedInTurn;
+        }
+        public setCoIsDestroyedInTurn(isDestroyed: boolean): void {
+            this._coIsDestroyedInTurn = isDestroyed;
         }
 
         private _getCoBasicCfg(): Types.CoBasicCfg | null {

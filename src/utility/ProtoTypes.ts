@@ -2046,6 +2046,9 @@ export declare interface ISerializedWarPlayer {
 
     /** SerializedWarPlayer coIsUsingSkill */
     coIsUsingSkill?: (boolean|null);
+
+    /** SerializedWarPlayer coIsDestroyedInTurn */
+    coIsDestroyedInTurn?: (boolean|null);
 }
 
 /** Represents a SerializedWarPlayer. */
@@ -2089,6 +2092,9 @@ export declare class SerializedWarPlayer implements ISerializedWarPlayer {
 
     /** SerializedWarPlayer coIsUsingSkill. */
     public coIsUsingSkill: boolean;
+
+    /** SerializedWarPlayer coIsDestroyedInTurn. */
+    public coIsDestroyedInTurn: boolean;
 
     /**
      * Creates a new SerializedWarPlayer instance using the specified properties.

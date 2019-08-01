@@ -796,7 +796,7 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for load co.
         ////////////////////////////////////////////////////////////////////////////////
-        public checkCanLoadCoAfterMovePath(movePath: MovePathNode[]): boolean {
+        public checkCanLoadCoAfterMovePath(movePath: GridIndex[]): boolean {
             if ((movePath.length !== 1) || (this.getLoaderUnitId() != null)) {
                 return false;
             } else {
@@ -805,6 +805,7 @@ namespace TinyWars.BaseWar {
                 const player        = war.getPlayer(playerIndex);
                 if ((player.getCoId() == null)                  ||
                     (player.getCoUnitId() != null)              ||
+                    (player.getCoIsDestroyedInTurn())           ||
                     (this.getLoadCoCost() > player.getFund())
                 ) {
                     return false;

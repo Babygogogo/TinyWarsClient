@@ -20,25 +20,26 @@ namespace TinyWars.MultiCustomWar.McwModel {
     import TileType             = Types.TileType;
 
     const _EXECUTORS = new Map<WarActionCodes, (war: McwWar, data: WarActionContainer) => Promise<void>>([
-        [WarActionCodes.WarActionPlayerBeginTurn,      _executeMcwPlayerBeginTurn],
-        [WarActionCodes.WarActionPlayerDeleteUnit,     _executeMcwPlayerDeleteUnit],
-        [WarActionCodes.WarActionPlayerEndTurn,        _executeMcwPlayerEndTurn],
-        [WarActionCodes.WarActionPlayerProduceUnit,    _executeMcwPlayerProduceUnit],
-        [WarActionCodes.WarActionPlayerSurrender,      _executeMcwPlayerSurrender],
-        [WarActionCodes.WarActionPlayerVoteForDraw,    _executeMcwPlayerVoteForDraw],
-        [WarActionCodes.WarActionUnitAttack,           _executeMcwUnitAttack],
-        [WarActionCodes.WarActionUnitBeLoaded,         _executeMcwUnitBeLoaded],
-        [WarActionCodes.WarActionUnitBuildTile,        _executeMcwUnitBuildTile],
-        [WarActionCodes.WarActionUnitCaptureTile,      _executeMcwUnitCaptureTile],
-        [WarActionCodes.WarActionUnitDive,             _executeMcwUnitDive],
-        [WarActionCodes.WarActionUnitDrop,             _executeMcwUnitDrop],
-        [WarActionCodes.WarActionUnitJoin,             _executeMcwUnitJoin],
-        [WarActionCodes.WarActionUnitLaunchFlare,      _executeMcwUnitLaunchFlare],
-        [WarActionCodes.WarActionUnitLaunchSilo,       _executeMcwUnitLaunchSilo],
-        [WarActionCodes.WarActionUnitProduceUnit,      _executeMcwUnitProduceUnit],
-        [WarActionCodes.WarActionUnitSupply,           _executeMcwUnitSupply],
-        [WarActionCodes.WarActionUnitSurface,          _executeMcwUnitSurface],
-        [WarActionCodes.WarActionUnitWait,             _executeMcwUnitWait],
+        [WarActionCodes.WarActionPlayerBeginTurn,       _executeMcwPlayerBeginTurn],
+        [WarActionCodes.WarActionPlayerDeleteUnit,      _executeMcwPlayerDeleteUnit],
+        [WarActionCodes.WarActionPlayerEndTurn,         _executeMcwPlayerEndTurn],
+        [WarActionCodes.WarActionPlayerProduceUnit,     _executeMcwPlayerProduceUnit],
+        [WarActionCodes.WarActionPlayerSurrender,       _executeMcwPlayerSurrender],
+        [WarActionCodes.WarActionPlayerVoteForDraw,     _executeMcwPlayerVoteForDraw],
+        [WarActionCodes.WarActionUnitAttack,            _executeMcwUnitAttack],
+        [WarActionCodes.WarActionUnitBeLoaded,          _executeMcwUnitBeLoaded],
+        [WarActionCodes.WarActionUnitBuildTile,         _executeMcwUnitBuildTile],
+        [WarActionCodes.WarActionUnitCaptureTile,       _executeMcwUnitCaptureTile],
+        [WarActionCodes.WarActionUnitDive,              _executeMcwUnitDive],
+        [WarActionCodes.WarActionUnitDrop,              _executeMcwUnitDrop],
+        [WarActionCodes.WarActionUnitJoin,              _executeMcwUnitJoin],
+        [WarActionCodes.WarActionUnitLaunchFlare,       _executeMcwUnitLaunchFlare],
+        [WarActionCodes.WarActionUnitLaunchSilo,        _executeMcwUnitLaunchSilo],
+        [WarActionCodes.WarActionUnitLoadCo,            _executeMcwUnitLoadCo],
+        [WarActionCodes.WarActionUnitProduceUnit,       _executeMcwUnitProduceUnit],
+        [WarActionCodes.WarActionUnitSupply,            _executeMcwUnitSupply],
+        [WarActionCodes.WarActionUnitSurface,           _executeMcwUnitSurface],
+        [WarActionCodes.WarActionUnitWait,              _executeMcwUnitWait],
     ]);
 
     let _war            : McwWar;
@@ -190,6 +191,9 @@ namespace TinyWars.MultiCustomWar.McwModel {
         _updateByActionContainer(data.actionContainer, data.warId);
     }
     export function updateOnUnitLaunchSilo(data: ProtoTypes.IS_McwUnitLaunchSilo): void {
+        _updateByActionContainer(data.actionContainer, data.warId);
+    }
+    export function updateOnUnitLoadCo(data: ProtoTypes.IS_McwUnitLoadCo): void {
         _updateByActionContainer(data.actionContainer, data.warId);
     }
     export function updateOnUnitProduceUnit(data: ProtoTypes.IS_McwUnitProduceUnit): void {
@@ -916,6 +920,41 @@ namespace TinyWars.MultiCustomWar.McwModel {
                 });
             });
         }
+    }
+
+    async function _executeMcwUnitLoadCo(war: McwWar, data: WarActionContainer): Promise<void> {
+        const actionPlanner = war.getActionPlanner();
+        actionPlanner.setStateExecutingAction();
+
+        const action = data.WarActionUnitLoadCo;
+        updateTilesAndUnitsBeforeExecutingAction(war, action);
+
+        const path      = action.path as MovePath;
+        const pathNodes = path.nodes;
+        const focusUnit = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
+        moveUnit(war, WarActionCodes.WarActionUnitLoadCo, path, action.launchUnitId, path.fuelConsumption);
+
+        if (path.isBlocked) {
+            focusUnit.setState(UnitState.Actioned);
+        } else {
+            focusUnit.setCurrentPromotion(focusUnit.getMaxPromotion());
+
+            const player = war.getPlayer(focusUnit.getPlayerIndex())!;
+            player.setFund(player.getFund() - focusUnit.getLoadCoCost()!);
+            player.setCoUnitId(focusUnit.getUnitId());
+            player.setCoCurrentEnergy(0);
+            player.setCoIsUsingSkill(false);
+        }
+
+        return new Promise<void>(resolve => {
+            focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
+                focusUnit.updateView();
+                McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+
+                actionPlanner.setStateIdle();
+                resolve();
+            });
+        });
     }
 
     async function _executeMcwUnitProduceUnit(war: McwWar, data: WarActionContainer): Promise<void> {
