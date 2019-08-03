@@ -443,5 +443,11 @@
     "c06_t024_s16_f01": {"x":1855,"y":915,"w":62,"h":73,"offX":2,"offY":71,"sourceW":72,"sourceH":144},
     "c06_t024_s16_f02": {"x":1919,"y":915,"w":56,"h":73,"offX":14,"offY":71,"sourceW":72,"sourceH":144},
     "c06_t024_s16_f03": {"x":1093,"y":1099,"w":53,"h":73,"offX":5,"offY":71,"sourceW":72,"sourceH":144}
+  },
+  "meta": {
+    "app": "https://www.codeandweb.com/texturepacker",
+    "exporter": "egret",
+    "sheetsize": "1983x1187",
+    "smartupdate": "$TexturePacker:SmartUpdate:48b9ee149c5c657717be2ffd976c889f:ae9787657bec7f5906f87d832651836c:e29e0fe4b30a0a608892e897f8298f10$"
   }
 }

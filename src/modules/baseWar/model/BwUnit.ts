@@ -98,6 +98,9 @@ namespace TinyWars.BaseWar {
         public getConfigVersion(): number {
             return this._configVersion;
         }
+        public getPlayer(): BwPlayer {
+            return this.getWar().getPlayer(this.getPlayerIndex());
+        }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
