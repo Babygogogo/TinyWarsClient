@@ -96,7 +96,8 @@ namespace TinyWars.Replay.McwHelpers {
         const playerIndexInTurn = war.getPlayerInTurn().getPlayerIndex();
         const fogMap            = war.getFogMap();
 
-        war.getTileMap().forEachTile(tile => {
+        const tileMap = war.getTileMap();
+        tileMap.forEachTile(tile => {
             const gridIndex = tile.getGridIndex();
             if (VisibilityHelpers.checkIsTileVisibleToPlayer(war, gridIndex, playerIndexInTurn)) {
                 if (tile.getIsFogEnabled()) {
@@ -119,6 +120,7 @@ namespace TinyWars.Replay.McwHelpers {
             }
             tile.updateView();
         });
+        tileMap.getView().updateCoZone();
     }
 
     export function getUnitProductionCost(war: ReplayWar, unitType: UnitType): number | undefined {

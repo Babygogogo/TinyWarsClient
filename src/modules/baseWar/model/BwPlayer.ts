@@ -150,8 +150,8 @@ namespace TinyWars.BaseWar {
             if (unitId == null) {
                 return null;
             } else {
-                const unit = this._war.getUnitMap().getUnitById(unitId)!;
-                return unit.getLoaderUnitId() != null
+                const unit = this._war.getUnitMap().getUnitById(unitId);
+                return (!unit) || (unit.getLoaderUnitId() != null)
                     ? null
                     : unit.getGridIndex();
             }

@@ -19,46 +19,48 @@ namespace TinyWars.Replay.ReplayModel {
     import TileType             = Types.TileType;
 
     const _EXECUTORS = new Map<WarActionCodes, (war: ReplayWar, data: WarActionContainer) => Promise<void>>([
-        [WarActionCodes.WarActionPlayerBeginTurn,      _executeMcwPlayerBeginTurn],
-        [WarActionCodes.WarActionPlayerDeleteUnit,     _executeMcwPlayerDeleteUnit],
-        [WarActionCodes.WarActionPlayerEndTurn,        _executeMcwPlayerEndTurn],
-        [WarActionCodes.WarActionPlayerProduceUnit,    _executeMcwPlayerProduceUnit],
-        [WarActionCodes.WarActionPlayerSurrender,      _executeMcwPlayerSurrender],
-        [WarActionCodes.WarActionPlayerVoteForDraw,    _executeMcwPlayerVoteForDraw],
-        [WarActionCodes.WarActionUnitAttack,           _executeMcwUnitAttack],
-        [WarActionCodes.WarActionUnitBeLoaded,         _executeMcwUnitBeLoaded],
-        [WarActionCodes.WarActionUnitBuildTile,        _executeMcwUnitBuildTile],
-        [WarActionCodes.WarActionUnitCaptureTile,      _executeMcwUnitCaptureTile],
-        [WarActionCodes.WarActionUnitDive,             _executeMcwUnitDive],
-        [WarActionCodes.WarActionUnitDrop,             _executeMcwUnitDrop],
-        [WarActionCodes.WarActionUnitJoin,             _executeMcwUnitJoin],
-        [WarActionCodes.WarActionUnitLaunchFlare,      _executeMcwUnitLaunchFlare],
-        [WarActionCodes.WarActionUnitLaunchSilo,       _executeMcwUnitLaunchSilo],
-        [WarActionCodes.WarActionUnitProduceUnit,      _executeMcwUnitProduceUnit],
-        [WarActionCodes.WarActionUnitSupply,           _executeMcwUnitSupply],
-        [WarActionCodes.WarActionUnitSurface,          _executeMcwUnitSurface],
-        [WarActionCodes.WarActionUnitWait,             _executeMcwUnitWait],
+        [WarActionCodes.WarActionPlayerBeginTurn,       _executeMcwPlayerBeginTurn],
+        [WarActionCodes.WarActionPlayerDeleteUnit,      _executeMcwPlayerDeleteUnit],
+        [WarActionCodes.WarActionPlayerEndTurn,         _executeMcwPlayerEndTurn],
+        [WarActionCodes.WarActionPlayerProduceUnit,     _executeMcwPlayerProduceUnit],
+        [WarActionCodes.WarActionPlayerSurrender,       _executeMcwPlayerSurrender],
+        [WarActionCodes.WarActionPlayerVoteForDraw,     _executeMcwPlayerVoteForDraw],
+        [WarActionCodes.WarActionUnitAttack,            _executeMcwUnitAttack],
+        [WarActionCodes.WarActionUnitBeLoaded,          _executeMcwUnitBeLoaded],
+        [WarActionCodes.WarActionUnitBuildTile,         _executeMcwUnitBuildTile],
+        [WarActionCodes.WarActionUnitCaptureTile,       _executeMcwUnitCaptureTile],
+        [WarActionCodes.WarActionUnitDive,              _executeMcwUnitDive],
+        [WarActionCodes.WarActionUnitDrop,              _executeMcwUnitDrop],
+        [WarActionCodes.WarActionUnitJoin,              _executeMcwUnitJoin],
+        [WarActionCodes.WarActionUnitLaunchFlare,       _executeMcwUnitLaunchFlare],
+        [WarActionCodes.WarActionUnitLaunchSilo,        _executeMcwUnitLaunchSilo],
+        [WarActionCodes.WarActionUnitLoadCo,            _executeMcwUnitLoadCo],
+        [WarActionCodes.WarActionUnitProduceUnit,       _executeMcwUnitProduceUnit],
+        [WarActionCodes.WarActionUnitSupply,            _executeMcwUnitSupply],
+        [WarActionCodes.WarActionUnitSurface,           _executeMcwUnitSurface],
+        [WarActionCodes.WarActionUnitWait,              _executeMcwUnitWait],
     ]);
     const _FAST_EXECUTORS = new Map<WarActionCodes, (war: ReplayWar, data: WarActionContainer) => Promise<void>>([
-        [WarActionCodes.WarActionPlayerBeginTurn,      _fastExecuteMcwPlayerBeginTurn],
-        [WarActionCodes.WarActionPlayerDeleteUnit,     _fastExecuteMcwPlayerDeleteUnit],
-        [WarActionCodes.WarActionPlayerEndTurn,        _fastExecuteMcwPlayerEndTurn],
-        [WarActionCodes.WarActionPlayerProduceUnit,    _fastExecuteMcwPlayerProduceUnit],
-        [WarActionCodes.WarActionPlayerSurrender,      _fastExecuteMcwPlayerSurrender],
-        [WarActionCodes.WarActionPlayerVoteForDraw,    _fastExecuteMcwPlayerVoteForDraw],
-        [WarActionCodes.WarActionUnitAttack,           _fastExecuteMcwUnitAttack],
-        [WarActionCodes.WarActionUnitBeLoaded,         _fastExecuteMcwUnitBeLoaded],
-        [WarActionCodes.WarActionUnitBuildTile,        _fastExecuteMcwUnitBuildTile],
-        [WarActionCodes.WarActionUnitCaptureTile,      _fastExecuteMcwUnitCaptureTile],
-        [WarActionCodes.WarActionUnitDive,             _fastExecuteMcwUnitDive],
-        [WarActionCodes.WarActionUnitDrop,             _fastExecuteMcwUnitDrop],
-        [WarActionCodes.WarActionUnitJoin,             _fastExecuteMcwUnitJoin],
-        [WarActionCodes.WarActionUnitLaunchFlare,      _fastExecuteMcwUnitLaunchFlare],
-        [WarActionCodes.WarActionUnitLaunchSilo,       _fastExecuteMcwUnitLaunchSilo],
-        [WarActionCodes.WarActionUnitProduceUnit,      _fastExecuteMcwUnitProduceUnit],
-        [WarActionCodes.WarActionUnitSupply,           _fastExecuteMcwUnitSupply],
-        [WarActionCodes.WarActionUnitSurface,          _fastExecuteMcwUnitSurface],
-        [WarActionCodes.WarActionUnitWait,             _fastExecuteMcwUnitWait],
+        [WarActionCodes.WarActionPlayerBeginTurn,       _fastExecuteMcwPlayerBeginTurn],
+        [WarActionCodes.WarActionPlayerDeleteUnit,      _fastExecuteMcwPlayerDeleteUnit],
+        [WarActionCodes.WarActionPlayerEndTurn,         _fastExecuteMcwPlayerEndTurn],
+        [WarActionCodes.WarActionPlayerProduceUnit,     _fastExecuteMcwPlayerProduceUnit],
+        [WarActionCodes.WarActionPlayerSurrender,       _fastExecuteMcwPlayerSurrender],
+        [WarActionCodes.WarActionPlayerVoteForDraw,     _fastExecuteMcwPlayerVoteForDraw],
+        [WarActionCodes.WarActionUnitAttack,            _fastExecuteMcwUnitAttack],
+        [WarActionCodes.WarActionUnitBeLoaded,          _fastExecuteMcwUnitBeLoaded],
+        [WarActionCodes.WarActionUnitBuildTile,         _fastExecuteMcwUnitBuildTile],
+        [WarActionCodes.WarActionUnitCaptureTile,       _fastExecuteMcwUnitCaptureTile],
+        [WarActionCodes.WarActionUnitDive,              _fastExecuteMcwUnitDive],
+        [WarActionCodes.WarActionUnitDrop,              _fastExecuteMcwUnitDrop],
+        [WarActionCodes.WarActionUnitJoin,              _fastExecuteMcwUnitJoin],
+        [WarActionCodes.WarActionUnitLaunchFlare,       _fastExecuteMcwUnitLaunchFlare],
+        [WarActionCodes.WarActionUnitLaunchSilo,        _fastExecuteMcwUnitLaunchSilo],
+        [WarActionCodes.WarActionUnitLoadCo,            _fastExecuteMcwUnitLoadCo],
+        [WarActionCodes.WarActionUnitProduceUnit,       _fastExecuteMcwUnitProduceUnit],
+        [WarActionCodes.WarActionUnitSupply,            _fastExecuteMcwUnitSupply],
+        [WarActionCodes.WarActionUnitSurface,           _fastExecuteMcwUnitSurface],
+        [WarActionCodes.WarActionUnitWait,              _fastExecuteMcwUnitWait],
     ]);
 
     let _war: ReplayWar;
@@ -798,6 +800,42 @@ namespace TinyWars.Replay.ReplayModel {
         }
     }
 
+    async function _executeMcwUnitLoadCo(war: ReplayWar, data: WarActionContainer): Promise<void> {
+        const actionPlanner = war.getActionPlanner();
+        actionPlanner.setStateExecutingAction();
+        FloatText.show(`${Lang.getText(Lang.Type.B0139)} (${war.getNextActionId()} / ${war.getTotalActionsCount()})`);
+
+        const action = data.WarActionUnitLoadCo;
+        updateTilesAndUnitsBeforeExecutingAction(war, action);
+
+        const path      = action.path as MovePath;
+        const pathNodes = path.nodes;
+        const focusUnit = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
+        moveUnit(war, WarActionCodes.WarActionUnitLoadCo, path, action.launchUnitId, path.fuelConsumption);
+
+        if (path.isBlocked) {
+            focusUnit.setState(UnitState.Actioned);
+        } else {
+            focusUnit.setCurrentPromotion(focusUnit.getMaxPromotion());
+
+            const player = war.getPlayer(focusUnit.getPlayerIndex())!;
+            player.setFund(player.getFund() - focusUnit.getLoadCoCost()!);
+            player.setCoUnitId(focusUnit.getUnitId());
+            player.setCoCurrentEnergy(0);
+            player.setCoIsUsingSkill(false);
+        }
+
+        return new Promise<void>(resolve => {
+            focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
+                focusUnit.updateView();
+                McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+
+                actionPlanner.setStateIdle();
+                resolve();
+            });
+        });
+    }
+
     async function _executeMcwUnitProduceUnit(war: ReplayWar, data: WarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
@@ -1333,6 +1371,27 @@ namespace TinyWars.Replay.ReplayModel {
                     unit.setCurrentHp(Math.max(1, unit.getCurrentHp() - ConfigManager.SILO_DAMAGE));
                 }
             }
+        }
+    }
+
+    async function _fastExecuteMcwUnitLoadCo(war: ReplayWar, data: WarActionContainer): Promise<void> {
+        const action = data.WarActionUnitLoadCo;
+
+        const path      = action.path as MovePath;
+        const pathNodes = path.nodes;
+        const focusUnit = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
+        moveUnit(war, WarActionCodes.WarActionUnitLoadCo, path, action.launchUnitId, path.fuelConsumption);
+
+        if (path.isBlocked) {
+            focusUnit.setState(UnitState.Actioned);
+        } else {
+            focusUnit.setCurrentPromotion(focusUnit.getMaxPromotion());
+
+            const player = war.getPlayer(focusUnit.getPlayerIndex())!;
+            player.setFund(player.getFund() - focusUnit.getLoadCoCost()!);
+            player.setCoUnitId(focusUnit.getUnitId());
+            player.setCoCurrentEnergy(0);
+            player.setCoIsUsingSkill(false);
         }
     }
 

@@ -98,6 +98,9 @@ namespace TinyWars.BaseWar {
             this.getView().stopRunningView();
         }
 
+        public getWar(): BwWar {
+            return this._war;
+        }
         protected _getTemplateMap(): Types.TemplateMap {
             return this._templateMap;
         }

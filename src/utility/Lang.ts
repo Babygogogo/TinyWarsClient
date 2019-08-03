@@ -785,7 +785,7 @@ namespace TinyWars.Utility.Lang {
         ]],
         [Type.B0131, [
             `近战机械`,
-            `DirectMechine`,
+            `DirectMachine`,
         ]],
         [Type.B0132, [
             `运输系`,
