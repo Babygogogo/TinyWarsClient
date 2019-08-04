@@ -1,11 +1,9 @@
 
 namespace TinyWars.Replay {
-    import ConfirmPanel     = Common.ConfirmPanel;
     import FloatText        = Utility.FloatText;
     import Lang             = Utility.Lang;
     import Helpers          = Utility.Helpers;
     import Notify           = Utility.Notify;
-    import Types            = Utility.Types;
 
     export class ReplayTopPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
@@ -15,7 +13,7 @@ namespace TinyWars.Replay {
 
         private _labelPlayer    : GameUi.UiLabel;
         private _labelFund      : GameUi.UiLabel;
-        private _labelEnergy    : GameUi.UiLabel;
+        private _labelCo        : GameUi.UiLabel;
         private _btnFastRewind  : GameUi.UiButton;
         private _btnFastForward : GameUi.UiButton;
         private _btnPlay        : GameUi.UiButton;
@@ -48,7 +46,8 @@ namespace TinyWars.Replay {
             this._notifyListeners = [
                 { type: Notify.Type.BwPlayerFundChanged,        callback: this._onNotifyBwPlayerFundChanged },
                 { type: Notify.Type.BwPlayerIndexInTurnChanged, callback: this._onNotifyBwPlayerIndexInTurnChanged },
-                { type: Notify.Type.BwPlayerEnergyChanged,      callback: this._onNotifyBwPlayerEnergyChanged },
+                { type: Notify.Type.BwCoEnergyChanged,          callback: this._onNotifyBwCoEnergyChanged },
+                { type: Notify.Type.BwCoUsingSkillChanged,      callback: this._onNotifyBwCoUsingSkillChanged },
                 { type: Notify.Type.ReplayAutoReplayChanged,    callback: this._onNotifyReplayAutoReplayChanged },
             ];
             this._uiListeners = [
@@ -79,8 +78,11 @@ namespace TinyWars.Replay {
         private _onNotifyBwPlayerIndexInTurnChanged(e: egret.Event): void {
             this._updateView();
         }
-        private _onNotifyBwPlayerEnergyChanged(e: egret.Event): void {
-            this._updateLabelEnergy();
+        private _onNotifyBwCoEnergyChanged(e: egret.Event): void {
+            this._updateLabelCo();
+        }
+        private _onNotifyBwCoUsingSkillChanged(e: egret.Event): void {
+            this._updateLabelCo();
         }
         private _onNotifyReplayAutoReplayChanged(e: egret.Event): void {
             this._updateView();
@@ -143,7 +145,7 @@ namespace TinyWars.Replay {
         private _updateView(): void {
             this._updateLabelPlayer();
             this._updateLabelFund();
-            this._updateLabelEnergy();
+            this._updateLabelCo();
             this._updateBtnPlay();
             this._updateBtnPause();
         }
@@ -164,9 +166,18 @@ namespace TinyWars.Replay {
                 : ``;
         }
 
-        private _updateLabelEnergy(): void {
-            // TODO
-            this._labelEnergy.visible = false;
+        private _updateLabelCo(): void {
+            const war = this._war;
+            if ((war) && (war.getIsRunning())) {
+                const player    = war.getPlayerInTurn();
+                const coId      = player.getCoId();
+                if (coId == null) {
+                    this._labelCo.text = `CO:----`;
+                } else {
+                    this._labelCo.text = `CO:${ConfigManager.getCoBasicCfg(war.getConfigVersion(), coId).name}`
+                        + ` ${player.getCoIsUsingSkill() ? `POWER` : player.getCoCurrentEnergy()} / ${player.getCoMiddleEnergy() || `--`} / ${player.getCoMaxEnergy() || `--`}`;
+                }
+            }
         }
 
         private _updateBtnPlay(): void {

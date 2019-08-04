@@ -99,7 +99,8 @@ namespace TinyWars.BaseWar {
             return this._configVersion;
         }
         public getPlayer(): BwPlayer {
-            return this.getWar().getPlayer(this.getPlayerIndex());
+            const war = this.getWar();
+            return war ? war.getPlayer(this.getPlayerIndex()) : null;
         }
 
         ////////////////////////////////////////////////////////////////////////////////

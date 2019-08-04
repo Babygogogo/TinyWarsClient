@@ -121,14 +121,16 @@ namespace TinyWars.BaseWar {
         // Other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _addFrameForCoSkill(): void {
-            const unit = this._unit;
-            if (unit.getPlayer().getCoIsUsingSkill()) {
+            const unit      = this._unit;
+            const player    = unit.getPlayer();
+            if ((player) && (player.getCoIsUsingSkill())) {
                 this._framesForStateAnimation.push(`${this._getImageSourcePrefix(this._isDark)}_t99_s08_f${Helpers.getNumText(unit.getPlayerIndex())}`);
             }
         }
         private _addFrameForPromotion(): void {
-            const unit = this._unit;
-            if (unit.getUnitId() === unit.getPlayer().getCoUnitId()) {
+            const unit      = this._unit;
+            const player    = unit.getPlayer();
+            if ((player) && (unit.getUnitId() === player.getCoUnitId())) {
                 this._framesForStateAnimation.push(`${this._getImageSourcePrefix(this._isDark)}_t99_s05_f99`);
             } else {
                 const promotion = unit.getCurrentPromotion();

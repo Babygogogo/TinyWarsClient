@@ -178,21 +178,34 @@ namespace TinyWars.Replay {
         }
 
         private _createDataForMainMenu(): DataForCommandRenderer[] {
-            const datas = [] as DataForCommandRenderer[];
+            const dataList = [] as DataForCommandRenderer[];
+
+            const commandOpenCoInfoMenu = this._createCommandOpenCoInfoMenu();
+            (commandOpenCoInfoMenu) && (dataList.push(commandOpenCoInfoMenu));
 
             const commandOpenAdvancedMenu = this._createCommandOpenAdvancedMenu();
-            (commandOpenAdvancedMenu) && (datas.push(commandOpenAdvancedMenu));
+            (commandOpenAdvancedMenu) && (dataList.push(commandOpenAdvancedMenu));
 
             const commandGotoLobby = this._createCommandGotoLobby();
-            (commandGotoLobby) && (datas.push(commandGotoLobby));
+            (commandGotoLobby) && (dataList.push(commandGotoLobby));
 
-            return datas;
+            return dataList;
+        }
+
+        private _createCommandOpenCoInfoMenu(): DataForCommandRenderer | undefined {
+            return {
+                name    : Lang.getText(Lang.Type.B0140),
+                callback: () => {
+                    ReplayCoListPanel.show(0);
+                    ReplayWarMenuPanel.hide();
+                },
+            };
         }
 
         private _createDataForAdvancedMenu(): DataForCommandRenderer[] {
-            const datas = [] as DataForCommandRenderer[];
+            const dataList = [] as DataForCommandRenderer[];
 
-            return datas;
+            return dataList;
         }
 
         private _createCommandOpenAdvancedMenu(): DataForCommandRenderer | undefined {

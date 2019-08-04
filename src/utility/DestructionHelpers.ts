@@ -27,6 +27,7 @@ namespace TinyWars.Utility.DestructionHelpers {
             player.setCoIsDestroyedInTurn(true);
             player.setCoUnitId(null);
             player.setCoCurrentEnergy(0);
+            player.setCoIsUsingSkill(false);
         }
 
         const gridVisionEffect = showExplosionEffect ? war.getGridVisionEffect() : undefined;

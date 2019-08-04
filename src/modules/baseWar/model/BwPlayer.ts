@@ -112,6 +112,7 @@ namespace TinyWars.BaseWar {
 
         public setCoCurrentEnergy(energy: number): void {
             this._coCurrentEnergy = energy;
+            Notify.dispatch(Notify.Type.BwCoEnergyChanged);
         }
         public getCoCurrentEnergy(): number {
             return this._coCurrentEnergy;
@@ -130,7 +131,7 @@ namespace TinyWars.BaseWar {
                 return Number.MAX_VALUE;
             } else {
                 const cfg = this._getCoBasicCfg();
-                if ((!cfg) || (this.getCoUnitId() == null)) {
+                if (!cfg) {
                     return null;
                 } else {
                     const basicRadius   = cfg.zoneRadius;
@@ -173,6 +174,7 @@ namespace TinyWars.BaseWar {
         }
         public setCoIsUsingSkill(isUsing: boolean): void {
             this._coIsUsingSkill = isUsing;
+            Notify.dispatch(Notify.Type.BwCoUsingSkillChanged);
         }
 
         public getCoIsDestroyedInTurn(): boolean {

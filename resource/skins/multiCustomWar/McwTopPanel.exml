@@ -6,8 +6,8 @@
                         left="0" right="0" top="0" bottom="0" />
         <GameUi:UiLabel id="_labelPlayer" text="玩家:玩家名居然能有十个字(红)" size="16" x="10" textColor="0xffffff"
                         verticalCenter="0" />
-        <GameUi:UiLabel id="_labelFund" text="金钱:999999" size="16" x="280" textColor="0xffffff" verticalCenter="0" />
-        <GameUi:UiLabel id="_labelEnergy" text="能量:99/99/99" size="16" x="390" textColor="0xFFFFFF" verticalCenter="0" />
+        <GameUi:UiLabel id="_labelFund" text="金钱:9999999" size="16" x="240" textColor="0xffffff" verticalCenter="0" />
+        <GameUi:UiLabel id="_labelCo" text="能量:99/99/99" size="16" x="350" textColor="0xFFFFFF" verticalCenter="0" />
         <GameUi:UiButton id="_btnUnitList" label="部队列表" x="650" width="70" top="0" bottom="0">
             <GameUi:skinName>
                 <e:Skin states="up,down,disabled">

@@ -426,19 +426,49 @@ namespace TinyWars.MultiCustomWar.McwModel {
 
             // TODO: deal with skills and energy.
 
-            const attackerNewHp = Math.max(0, attacker.getCurrentHp() - (counterDamage || 0));
+            const attackerOldHp = attacker.getCurrentHp();
+            const attackerNewHp = Math.max(0, attackerOldHp - (counterDamage || 0));
             attacker.setCurrentHp(attackerNewHp);
             if ((attackerNewHp === 0) && (targetUnit)) {
                 targetUnit.setCurrentPromotion(Math.min(targetUnit.getMaxPromotion(), targetUnit.getCurrentPromotion() + 1));
             }
 
-            const targetNewHp = Math.max(0, attackTarget.getCurrentHp()! - action.attackDamage);
+            const targetOldHp = attackTarget.getCurrentHp()!;
+            const targetNewHp = Math.max(0, targetOldHp - action.attackDamage);
             attackTarget.setCurrentHp(targetNewHp);
             if ((targetNewHp === 0) && (targetUnit)) {
                 attacker.setCurrentPromotion(Math.min(attacker.getMaxPromotion(), attacker.getCurrentPromotion() + 1));
             }
 
-            const attackerGridIndex = pathNodes[pathNodes.length - 1];
+            const destination = pathNodes[pathNodes.length - 1];
+            if (targetUnit) {
+                const attackerPlayer    = war.getPlayer(attacker.getPlayerIndex())!;
+                const targetLostHp      = Helpers.getNormalizedHp(targetOldHp) - Helpers.getNormalizedHp(targetNewHp);
+                if ((targetLostHp > 0)                                                                                      &&
+                    (attackerPlayer.getCoId() != null)                                                                      &&
+                    (!attackerPlayer.getCoIsUsingSkill())                                                                   &&
+                    ((attacker.getUnitId() === attackerPlayer.getCoUnitId()) || (attackerPlayer.checkIsInCoZone(destination)))
+                ) {
+                    attackerPlayer.setCoCurrentEnergy(Math.min(
+                        attackerPlayer.getCoMaxEnergy() || 0,
+                        attackerPlayer.getCoCurrentEnergy() + Math.floor(targetLostHp * war.getSettingsEnergyGrowthModifier() / 100)
+                    ));
+                }
+
+                const targetPlayer      = war.getPlayer(targetUnit.getPlayerIndex())!;
+                const attackerLostHp    = Helpers.getNormalizedHp(attackerOldHp) - Helpers.getNormalizedHp(attackerNewHp);
+                if ((attackerLostHp > 0)                    &&
+                    (targetPlayer.getCoId() != null)        &&
+                    (!targetPlayer.getCoIsUsingSkill())     &&
+                    (targetPlayer.checkIsInCoZone(destination))
+                ) {
+                    targetPlayer.setCoCurrentEnergy(Math.min(
+                        targetPlayer.getCoMaxEnergy() || 0,
+                        targetPlayer.getCoCurrentEnergy() + Math.floor(attackerLostHp * war.getSettingsEnergyGrowthModifier() / 100)
+                    ));
+                }
+            }
+
             const lostPlayerIndex   = action.lostPlayerIndex;
             const gridVisionEffect  = war.getGridVisionEffect();
 
@@ -447,10 +477,10 @@ namespace TinyWars.MultiCustomWar.McwModel {
                     if (attackerNewHp > 0) {
                         attacker.updateView();
                         if ((counterDamage != null) && (targetNewHp > 0)) {
-                             gridVisionEffect.showEffectDamage(attackerGridIndex);
+                            gridVisionEffect.showEffectDamage(destination);
                         }
                     } else {
-                        DestructionHelpers.destroyUnitOnMap(war, attackerGridIndex, false, true);
+                        DestructionHelpers.destroyUnitOnMap(war, destination, false, true);
                     }
 
                     if (targetNewHp > 0) {

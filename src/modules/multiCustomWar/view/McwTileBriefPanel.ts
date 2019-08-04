@@ -64,6 +64,8 @@ namespace TinyWars.MultiCustomWar {
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyMcwActionPlannerStateChanged },
                 { type: Notify.Type.McwWarMenuPanelOpened,          callback: this._onNotifyMcwWarMenuPanelOpened },
                 { type: Notify.Type.McwWarMenuPanelClosed,          callback: this._onNotifyMcwWarMenuPanelClosed },
+                { type: Notify.Type.BwCoListPanelOpened,            callback: this._onNotifyMcwCoListPanelOpened },
+                { type: Notify.Type.BwCoListPanelClosed,            callback: this._onNotifyMcwCoListPanelClosed },
                 { type: Notify.Type.McwProduceUnitPanelOpened,      callback: this._onNotifyMcwProduceUnitPanelOpened },
                 { type: Notify.Type.McwProduceUnitPanelClosed,      callback: this._onNotifyMcwProduceUnitPanelClosed },
                 { type: Notify.Type.TileAnimationTick,              callback: this._onNotifyTileAnimationTick },
@@ -113,6 +115,12 @@ namespace TinyWars.MultiCustomWar {
         private _onNotifyMcwWarMenuPanelClosed(e: egret.Event): void {
             this._updateView();
         }
+        private _onNotifyMcwCoListPanelOpened(e: egret.Event): void {
+            this._updateView();
+        }
+        private _onNotifyMcwCoListPanelClosed(e: egret.Event): void {
+            this._updateView();
+        }
         private _onNotifyMcwProduceUnitPanelOpened(e: egret.Event): void {
             this._updateView();
         }
@@ -132,7 +140,7 @@ namespace TinyWars.MultiCustomWar {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            if ((McwWarMenuPanel.getIsOpening()) || (McwProduceUnitPanel.getIsOpening())) {
+            if ((McwWarMenuPanel.getIsOpening()) || (McwProduceUnitPanel.getIsOpening()) || (McwCoListPanel.getIsOpening())) {
                 this.visible = false;
             } else {
                 this.visible = true;

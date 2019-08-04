@@ -189,36 +189,39 @@ namespace TinyWars.MultiCustomWar {
         }
 
         private _createDataForMainMenu(): DataForCommandRenderer[] {
-            const datas = [] as DataForCommandRenderer[];
+            const dataList = [] as DataForCommandRenderer[];
+
+            const commandOpenCoInfoMenu = this._createCommandOpenCoInfoMenu();
+            (commandOpenCoInfoMenu) && (dataList.push(commandOpenCoInfoMenu));
 
             const commandOpenAdvancedMenu = this._createCommandOpenAdvancedMenu();
-            (commandOpenAdvancedMenu) && (datas.push(commandOpenAdvancedMenu));
+            (commandOpenAdvancedMenu) && (dataList.push(commandOpenAdvancedMenu));
 
             const commandSyncWar = this._createCommandSyncWar();
-            (commandSyncWar) && (datas.push(commandSyncWar));
+            (commandSyncWar) && (dataList.push(commandSyncWar));
 
             const commandGotoLobby = this._createCommandGotoLobby();
-            (commandGotoLobby) && (datas.push(commandGotoLobby));
+            (commandGotoLobby) && (dataList.push(commandGotoLobby));
 
-            return datas;
+            return dataList;
         }
 
         private _createDataForAdvancedMenu(): DataForCommandRenderer[] {
-            const datas = [] as DataForCommandRenderer[];
+            const dataList = [] as DataForCommandRenderer[];
 
             const commandPlayerDeleteUnit = this._createCommandPlayerDeleteUnit();
-            (commandPlayerDeleteUnit) && (datas.push(commandPlayerDeleteUnit));
+            (commandPlayerDeleteUnit) && (dataList.push(commandPlayerDeleteUnit));
 
             const commandPlayerAgreeDraw = this._createCommandPlayerAgreeDraw();
-            (commandPlayerAgreeDraw) && (datas.push(commandPlayerAgreeDraw));
+            (commandPlayerAgreeDraw) && (dataList.push(commandPlayerAgreeDraw));
 
             const commandPlayerRefuseDraw = this._createCommandPlayerDeclineDraw();
-            (commandPlayerRefuseDraw) && (datas.push(commandPlayerRefuseDraw));
+            (commandPlayerRefuseDraw) && (dataList.push(commandPlayerRefuseDraw));
 
             const commandPlayerSurrender = this._createCommandPlayerSurrender();
-            (commandPlayerSurrender) && (datas.push(commandPlayerSurrender));
+            (commandPlayerSurrender) && (dataList.push(commandPlayerSurrender));
 
-            return datas;
+            return dataList;
         }
 
         private _createCommandOpenAdvancedMenu(): DataForCommandRenderer | undefined {
@@ -227,6 +230,16 @@ namespace TinyWars.MultiCustomWar {
                 callback: () => {
                     this._menuType = MenuType.Advanced;
                     this._updateListCommand();
+                },
+            };
+        }
+
+        private _createCommandOpenCoInfoMenu(): DataForCommandRenderer | undefined {
+            return {
+                name    : Lang.getText(Lang.Type.B0140),
+                callback: () => {
+                    McwCoListPanel.show(this._war.getPlayerIndexLoggedIn() - 1);
+                    McwWarMenuPanel.hide();
                 },
             };
         }

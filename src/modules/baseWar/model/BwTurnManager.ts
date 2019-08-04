@@ -62,7 +62,6 @@ namespace TinyWars.BaseWar {
                 "BwTurnManager.endPhaseMain() invalid current phase code: ", this.getPhaseCode()
             );
 
-            this._runPhaseResetPlayerState();
             this._runPhaseResetUnitState();
             this._runPhaseResetVisionForCurrentPlayer();
             this._runPhaseTickTurnAndPlayerIndex();
@@ -140,9 +139,6 @@ namespace TinyWars.BaseWar {
         }
         protected abstract _runPhaseMain(data: ProtoTypes.IWarActionPlayerBeginTurn): void;
 
-        private _runPhaseResetPlayerState(): void {
-            this._getWar().getPlayerInTurn().setCoIsDestroyedInTurn(false);
-        }
         private _runPhaseResetUnitState(): void {
             const playerIndex = this.getPlayerIndexInTurn();
             if (playerIndex !== 0) {
@@ -162,10 +158,10 @@ namespace TinyWars.BaseWar {
             this._setEnterTurnTime(TimeModel.getServerTimestamp());
         }
         private _runPhaseResetSkillState(): void {
+            const player = this._getWar().getPlayerInTurn();
+            player.setCoIsDestroyedInTurn(false);
+            player.setCoIsUsingSkill(false);
             // TODO
-            // const playerIndex = this.getPlayerIndexInTurn();
-            // if (playerIndex !== 0) {
-            // }
         }
         protected abstract _runPhaseResetVisionForNextPlayer(): void;
         private _runPhaseResetVotesForDraw(): void {

@@ -819,6 +819,14 @@ namespace TinyWars.Utility.Lang {
             `CO搭乘`,
             `CO Board`,
         ]],
+        [Type.B0140, [
+            `CO信息`,
+            `CO Info`,
+        ]],
+        [Type.B0141, [
+            `无限`,
+            `Infinity`,
+        ]],
 
         [Type.B1000, [
             `平原`,
