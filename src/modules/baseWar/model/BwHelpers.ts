@@ -143,6 +143,7 @@ namespace TinyWars.BaseWar.BwHelpers {
             || (state === Types.ActionPlannerState.RequestingUnitProduceUnit)
             || (state === Types.ActionPlannerState.RequestingUnitSupply)
             || (state === Types.ActionPlannerState.RequestingUnitSurface)
+            || (state === Types.ActionPlannerState.RequestingUnitUseCoSkill)
             || (state === Types.ActionPlannerState.RequestingUnitWait);
     }
 }

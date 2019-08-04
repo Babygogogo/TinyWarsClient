@@ -53,7 +53,12 @@ namespace TinyWars.Utility.DestructionHelpers {
 
         war.getFogMap().resetAllMapsForPlayer(playerIndex);
 
-        war.getPlayer(playerIndex)!.setIsAlive(false);
+        const player = war.getPlayer(playerIndex)!;
+        player.setIsAlive(false);
+        player.setCoIsDestroyedInTurn(true);
+        player.setCoUnitId(null);
+        player.setCoCurrentEnergy(0);
+        player.setCoIsUsingSkill(false);
 
         war.setRemainingVotesForDraw(undefined);
     }

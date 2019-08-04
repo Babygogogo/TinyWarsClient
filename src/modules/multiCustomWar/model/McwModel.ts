@@ -39,6 +39,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         [WarActionCodes.WarActionUnitProduceUnit,       _executeMcwUnitProduceUnit],
         [WarActionCodes.WarActionUnitSupply,            _executeMcwUnitSupply],
         [WarActionCodes.WarActionUnitSurface,           _executeMcwUnitSurface],
+        [WarActionCodes.WarActionUnitUseCoSkill,        _executeMcwUnitUseCoSkill],
         [WarActionCodes.WarActionUnitWait,              _executeMcwUnitWait],
     ]);
 
@@ -203,6 +204,9 @@ namespace TinyWars.MultiCustomWar.McwModel {
         _updateByActionContainer(data.actionContainer, data.warId);
     }
     export function updateOnUnitSurface(data: ProtoTypes.IS_McwUnitSurface): void {
+        _updateByActionContainer(data.actionContainer, data.warId);
+    }
+    export function updateOnUnitUseCoSkill(data: ProtoTypes.IS_McwUnitUseCoSkill): void {
         _updateByActionContainer(data.actionContainer, data.warId);
     }
     export function updateOnUnitWait(data: ProtoTypes.IS_McwUnitWait): void {
@@ -1129,6 +1133,43 @@ namespace TinyWars.MultiCustomWar.McwModel {
                     }
                 }
                 McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+
+                actionPlanner.setStateIdle();
+                resolve();
+            });
+        });
+    }
+
+    async function _executeMcwUnitUseCoSkill(war: McwWar, data: WarActionContainer): Promise<void> {
+        const actionPlanner = war.getActionPlanner();
+        actionPlanner.setStateExecutingAction();
+
+        const action = data.WarActionUnitUseCoSkill;
+        updateTilesAndUnitsBeforeExecutingAction(war, action);
+
+        const path          = action.path as MovePath;
+        const pathNodes     = path.nodes;
+        const focusUnit     = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
+        const isSuccessful  = !path.isBlocked;
+        moveUnit(war, WarActionCodes.WarActionUnitUseCoSkill, path, action.launchUnitId, path.fuelConsumption);
+        focusUnit.setState(UnitState.Actioned);
+        (isSuccessful) && (focusUnit.getPlayer().setCoIsUsingSkill(true));
+
+        return new Promise<void>(resolve => {
+            focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
+                focusUnit.updateView();
+                McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+
+                if (isSuccessful) {
+                    const gridVisionEffect  = war.getGridVisionEffect();
+                    const playerIndex       = focusUnit.getPlayerIndex();
+                    war.getUnitMap().forEachUnitOnMap(unit => {
+                        if (unit.getPlayerIndex() === playerIndex) {
+                            gridVisionEffect.showEffectSkillActivation(unit.getGridIndex());
+                            unit.updateView();
+                        }
+                    });
+                }
 
                 actionPlanner.setStateIdle();
                 resolve();

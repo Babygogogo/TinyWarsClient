@@ -38,6 +38,7 @@ namespace TinyWars.Replay.ReplayModel {
         [WarActionCodes.WarActionUnitProduceUnit,       _executeMcwUnitProduceUnit],
         [WarActionCodes.WarActionUnitSupply,            _executeMcwUnitSupply],
         [WarActionCodes.WarActionUnitSurface,           _executeMcwUnitSurface],
+        [WarActionCodes.WarActionUnitUseCoSkill,        _executeMcwUnitUseCoSkill],
         [WarActionCodes.WarActionUnitWait,              _executeMcwUnitWait],
     ]);
     const _FAST_EXECUTORS = new Map<WarActionCodes, (war: ReplayWar, data: WarActionContainer) => Promise<void>>([
@@ -60,6 +61,7 @@ namespace TinyWars.Replay.ReplayModel {
         [WarActionCodes.WarActionUnitProduceUnit,       _fastExecuteMcwUnitProduceUnit],
         [WarActionCodes.WarActionUnitSupply,            _fastExecuteMcwUnitSupply],
         [WarActionCodes.WarActionUnitSurface,           _fastExecuteMcwUnitSurface],
+        [WarActionCodes.WarActionUnitUseCoSkill,        _fastExecuteMcwUnitUseCoSkill],
         [WarActionCodes.WarActionUnitWait,              _fastExecuteMcwUnitWait],
     ]);
 
@@ -1009,6 +1011,44 @@ namespace TinyWars.Replay.ReplayModel {
         });
     }
 
+    async function _executeMcwUnitUseCoSkill(war: ReplayWar, data: WarActionContainer): Promise<void> {
+        const actionPlanner = war.getActionPlanner();
+        actionPlanner.setStateExecutingAction();
+        FloatText.show(`${Lang.getText(Lang.Type.B0142)} (${war.getNextActionId()} / ${war.getTotalActionsCount()})`);
+
+        const action = data.WarActionUnitUseCoSkill;
+        updateTilesAndUnitsBeforeExecutingAction(war, action);
+
+        const path          = action.path as MovePath;
+        const pathNodes     = path.nodes;
+        const focusUnit     = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
+        const isSuccessful  = !path.isBlocked;
+        moveUnit(war, WarActionCodes.WarActionUnitUseCoSkill, path, action.launchUnitId, path.fuelConsumption);
+        focusUnit.setState(UnitState.Actioned);
+        (isSuccessful) && (focusUnit.getPlayer().setCoIsUsingSkill(true));
+
+        return new Promise<void>(resolve => {
+            focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
+                focusUnit.updateView();
+                McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+
+                if (isSuccessful) {
+                    const gridVisionEffect  = war.getGridVisionEffect();
+                    const playerIndex       = focusUnit.getPlayerIndex();
+                    war.getUnitMap().forEachUnitOnMap(unit => {
+                        if (unit.getPlayerIndex() === playerIndex) {
+                            gridVisionEffect.showEffectSkillActivation(unit.getGridIndex());
+                            unit.updateView();
+                        }
+                    });
+                }
+
+                actionPlanner.setStateIdle();
+                resolve();
+            });
+        });
+    }
+
     async function _executeMcwUnitWait(war: ReplayWar, data: WarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
@@ -1522,6 +1562,18 @@ namespace TinyWars.Replay.ReplayModel {
         moveUnit(war, WarActionCodes.WarActionUnitSurface, path, action.launchUnitId, path.fuelConsumption);
         focusUnit.setState(UnitState.Actioned);
         (isSuccessful) && (focusUnit.setIsDiving(false));
+    }
+
+    async function _fastExecuteMcwUnitUseCoSkill(war: ReplayWar, data: WarActionContainer): Promise<void> {
+        const action = data.WarActionUnitUseCoSkill;
+
+        const path          = action.path as MovePath;
+        const pathNodes     = path.nodes;
+        const focusUnit     = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
+        const isSuccessful  = !path.isBlocked;
+        moveUnit(war, WarActionCodes.WarActionUnitUseCoSkill, path, action.launchUnitId, path.fuelConsumption);
+        focusUnit.setState(UnitState.Actioned);
+        (isSuccessful) && (focusUnit.getPlayer().setCoIsUsingSkill(true));
     }
 
     async function _fastExecuteMcwUnitWait(war: ReplayWar, data: WarActionContainer): Promise<void> {

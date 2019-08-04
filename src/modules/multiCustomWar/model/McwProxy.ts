@@ -31,6 +31,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
             { msgCode: NetMessageCodes.S_McwUnitProduceUnit,    callback: _onSMcwUnitProduceUnit },
             { msgCode: NetMessageCodes.S_McwUnitSupply,         callback: _onSMcwUnitSupply },
             { msgCode: NetMessageCodes.S_McwUnitSurface,        callback: _onSMcwUnitSurface },
+            { msgCode: NetMessageCodes.S_McwUnitUseCoSkill,     callback: _onSMcwUnitUseCoSkill },
             { msgCode: NetMessageCodes.S_McwUnitWait,           callback: _onSMcwUnitWait },
         ], McwProxy);
     }
@@ -387,6 +388,24 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         if (!data.errorCode) {
             McwModel.updateOnUnitSurface(data);
             Notify.dispatch(Notify.Type.SMcwUnitSurface);
+        }
+    }
+
+    export function reqMcwUnitUseCoSkill(war: BwWar, path: GridIndex[], launchUnitId: number | null): void {
+        NetManager.send({
+            C_McwUnitUseCoSkill: {
+                warId       : war.getWarId(),
+                actionId    : war.getNextActionId(),
+                path,
+                launchUnitId,
+            },
+        });
+    }
+    function _onSMcwUnitUseCoSkill(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_McwUnitUseCoSkill;
+        if (!data.errorCode) {
+            McwModel.updateOnUnitUseCoSkill(data);
+            Notify.dispatch(Notify.Type.SMcwUnitUseCoSkill);
         }
     }
 

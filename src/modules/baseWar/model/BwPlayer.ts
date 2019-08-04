@@ -176,6 +176,16 @@ namespace TinyWars.BaseWar {
             this._coIsUsingSkill = isUsing;
             Notify.dispatch(Notify.Type.BwCoUsingSkillChanged);
         }
+        public getCoCurrentSkills(): number[] | null {
+            const cfg = this._getCoBasicCfg();
+            if (!cfg) {
+                return null;
+            } else {
+                return this.getCoIsUsingSkill()
+                    ? cfg.activeSkills
+                    : cfg.passiveSkills;
+            }
+        }
 
         public getCoIsDestroyedInTurn(): boolean {
             return this._coIsDestroyedInTurn;

@@ -1432,20 +1432,23 @@ export declare interface ICoSkillCfg {
     /** CoSkillCfg name */
     name?: (string|null);
 
-    /** CoSkillCfg attackBonus */
-    attackBonus?: (number|null);
-
-    /** CoSkillCfg defenseBonus */
-    defenseBonus?: (number|null);
-
-    /** CoSkillCfg moveRangeBonus */
-    moveRangeBonus?: (number|null);
-
     /** CoSkillCfg passiveDesc */
     passiveDesc?: (string|null);
 
     /** CoSkillCfg activeDesc */
     activeDesc?: (string|null);
+
+    /** CoSkillCfg attackBonus */
+    attackBonus?: (number[]|null);
+
+    /** CoSkillCfg defenseBonus */
+    defenseBonus?: (number[]|null);
+
+    /** CoSkillCfg moveRangeBonus */
+    moveRangeBonus?: (number[]|null);
+
+    /** CoSkillCfg maxAttackRangeBonus */
+    maxAttackRangeBonus?: (number[]|null);
 }
 
 /** Represents a CoSkillCfg. */
@@ -1463,20 +1466,23 @@ export declare class CoSkillCfg implements ICoSkillCfg {
     /** CoSkillCfg name. */
     public name: string;
 
-    /** CoSkillCfg attackBonus. */
-    public attackBonus: number;
-
-    /** CoSkillCfg defenseBonus. */
-    public defenseBonus: number;
-
-    /** CoSkillCfg moveRangeBonus. */
-    public moveRangeBonus: number;
-
     /** CoSkillCfg passiveDesc. */
     public passiveDesc: string;
 
     /** CoSkillCfg activeDesc. */
     public activeDesc: string;
+
+    /** CoSkillCfg attackBonus. */
+    public attackBonus: number[];
+
+    /** CoSkillCfg defenseBonus. */
+    public defenseBonus: number[];
+
+    /** CoSkillCfg moveRangeBonus. */
+    public moveRangeBonus: number[];
+
+    /** CoSkillCfg maxAttackRangeBonus. */
+    public maxAttackRangeBonus: number[];
 
     /**
      * Creates a new CoSkillCfg instance using the specified properties.

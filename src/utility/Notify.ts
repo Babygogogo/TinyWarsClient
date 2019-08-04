@@ -110,6 +110,7 @@ namespace TinyWars.Utility.Notify {
         SMcwUnitProduceUnit,
         SMcwUnitSupply,
         SMcwUnitSurface,
+        SMcwUnitUseCoSkill,
         SMcwUnitWait,
     }
 

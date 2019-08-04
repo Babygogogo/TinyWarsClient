@@ -254,6 +254,39 @@ namespace TinyWars.BaseWar {
                 : undefined;
         }
 
+        public getAttackModifierByCo(selfGridIndex: GridIndex): number {
+            if (!this.checkIsAffectedByCo(selfGridIndex)) {
+                return 0;
+            } else {
+                const configVersion = this.getWar().getConfigVersion();
+                const unitType      = this.getType();
+                let modifier        = 0;
+                for (const skillId of this.getPlayer().getCoCurrentSkills() || []) {
+                    const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId).attackBonus;
+                    if ((cfg) && (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[0]))) {
+                        modifier += cfg[1];
+                    }
+                }
+                return modifier;
+            }
+        }
+        public getDefenseModifierByCo(selfGridIndex: GridIndex): number {
+            if (!this.checkIsAffectedByCo(selfGridIndex)) {
+                return 0;
+            } else {
+                const configVersion = this.getWar().getConfigVersion();
+                const unitType      = this.getType();
+                let modifier        = 0;
+                for (const skillId of this.getPlayer().getCoCurrentSkills() || []) {
+                    const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId).defenseBonus;
+                    if ((cfg) && (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[0]))) {
+                        modifier += cfg[1];
+                    }
+                }
+                return modifier;
+            }
+        }
+
         public checkHasSecondaryWeapon(): boolean {
             return ConfigManager.checkHasSecondaryWeapon(this._configVersion, this.getType());
         }
@@ -281,8 +314,30 @@ namespace TinyWars.BaseWar {
         public getMinAttackRange(): number | undefined {
             return this._templateCfg.minAttackRange;
         }
-        public getMaxAttackRange(): number | undefined {
+        public getCfgMaxAttackRange(): number | undefined {
             return this._templateCfg.maxAttackRange;
+        }
+        public getFinalMaxAttackRange(): number | undefined {
+            const cfgRange = this.getCfgMaxAttackRange();
+            return cfgRange == null
+                ? cfgRange
+                : cfgRange + this._getMaxAttackRangeModifierByCo();
+        }
+        private _getMaxAttackRangeModifierByCo(): number {
+            if (!this.checkIsAffectedByCo()) {
+                return 0;
+            } else {
+                const configVersion = this.getWar().getConfigVersion();
+                const unitType      = this.getType();
+                let modifier        = 0;
+                for (const skillId of this.getPlayer().getCoCurrentSkills() || []) {
+                    const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId).maxAttackRangeBonus;
+                    if ((cfg) && (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[0]))) {
+                        modifier += cfg[1];
+                    }
+                }
+                return modifier;
+            }
         }
 
         public checkCanAttackAfterMove(): boolean {
@@ -302,7 +357,7 @@ namespace TinyWars.BaseWar {
                 ((this.getLoaderUnitId() != null) && (pathLength <= 1))                             ||
                 ((pathLength > 1) && (unitMap.getUnitOnMap(destination)))                           ||
                 ((!primaryAmmo) && (!this.checkHasSecondaryWeapon()))                               ||
-                (!((distance <= this.getMaxAttackRange()!) && (distance >= this.getMinAttackRange()!)))
+                (!((distance <= this.getFinalMaxAttackRange()!) && (distance >= this.getMinAttackRange()!)))
             ) {
                 return false;
             } else {
@@ -507,14 +562,33 @@ namespace TinyWars.BaseWar {
             return this._templateCfg.moveRange;
         }
         public getFinalMoveRange(): number {
-            const modifier = this._war.getSettingsMoveRangeModifier();
-            return Math.max(
-                0,
-                Math.min(
-                    this.getCfgMoveRange(),
-                    this.getCurrentFuel(),
-                ) + modifier,
-            );
+            const currentFuel = this.getCurrentFuel();
+            if (currentFuel <= 0) {
+                return 0;
+            } else {
+                return Math.max(
+                    1,
+                    Math.min(this.getCfgMoveRange(), currentFuel)
+                        + this.getWar().getSettingsMoveRangeModifier()
+                        + this._getMoveRangeModifierByCo(),
+                );
+            }
+        }
+        private _getMoveRangeModifierByCo(): number {
+            if (!this.checkIsAffectedByCo()) {
+                return 0;
+            } else {
+                const configVersion = this.getWar().getConfigVersion();
+                const unitType      = this.getType();
+                let modifier        = 0;
+                for (const skillId of this.getPlayer().getCoCurrentSkills() || []) {
+                    const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId).moveRangeBonus;
+                    if ((cfg) && (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[0]))) {
+                        modifier += cfg[1];
+                    }
+                }
+                return modifier;
+            }
         }
 
         public getMoveType(): MoveType {
@@ -826,11 +900,25 @@ namespace TinyWars.BaseWar {
             }
         }
 
+        public checkCanUseCoSkill(): boolean {
+            const player = this.getPlayer();
+            return (player.getCoUnitId() === this.getUnitId())
+                && (!player.getCoIsUsingSkill())
+                && (player.getCoCurrentEnergy() >= player.getCoMaxEnergy());
+        }
+
         public getLoadCoCost(): number | null {
             const coId = this.getWar().getPlayer(this.getPlayerIndex()).getCoId();
             return coId == null
                 ? null
                 : Math.floor(ConfigManager.getCoBasicCfg(this.getConfigVersion(), coId).boardCostPercentage * this.getProductionBaseCost() / 100);
+        }
+
+        public checkIsAffectedByCo(selfGridIndex = this.getGridIndex()): boolean {
+            const player = this.getPlayer();
+            return (player.getCoIsUsingSkill())
+                || (this.getUnitId() === player.getCoUnitId())
+                || (player.checkIsInCoZone(selfGridIndex));
         }
     }
 }

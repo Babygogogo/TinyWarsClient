@@ -451,12 +451,14 @@ namespace TinyWars.Utility.Types {
         RequestingUnitProduceUnit,
         RequestingUnitSupply,
         RequestingUnitSurface,
+        RequestingUnitUseCoSkill,
         RequestingUnitWait,
     }
 
     export const enum UnitActionType {
         BeLoaded,
         Join,
+        UseCoSkill,
         LoadCo,
         Attack,
         Capture,

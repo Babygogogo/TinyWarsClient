@@ -866,7 +866,7 @@ namespace TinyWars.BaseWar {
 
         protected _resetAttackableArea(): void {
             const unit                  = this.getFocusUnit();
-            const canAttakAfterMove     = unit.checkCanAttackAfterMove();
+            const canAttackAfterMove    = unit.checkCanAttackAfterMove();
             const isLoaded              = unit.getLoaderUnitId() != null;
             const beginningGridIndex    = unit.getGridIndex();
             const hasAmmo               = (unit.getPrimaryWeaponCurrentAmmo() > 0) || (unit.checkHasSecondaryWeapon());
@@ -875,7 +875,7 @@ namespace TinyWars.BaseWar {
                 this.getMovableArea(),
                 this.getMapSize(),
                 unit.getMinAttackRange(),
-                unit.getMaxAttackRange(),
+                unit.getFinalMaxAttackRange(),
                 (moveGridIndex: GridIndex, attackGridIndex: GridIndex): boolean => {
                     const existingUnit = unitMap.getUnitOnMap(moveGridIndex);
                     if ((!hasAmmo) || ((existingUnit) && (existingUnit !== unit))) {
@@ -883,7 +883,7 @@ namespace TinyWars.BaseWar {
                     } else {
                         const hasMoved = !GridIndexHelpers.checkIsEqual(moveGridIndex, beginningGridIndex);
                         return ((!isLoaded) || (hasMoved))
-                            && ((canAttakAfterMove) || (!hasMoved))
+                            && ((canAttackAfterMove) || (!hasMoved))
                     }
                 }
             );
@@ -911,7 +911,7 @@ namespace TinyWars.BaseWar {
             return GridIndexHelpers.getGridsWithinDistance(
                 this.getMovePathDestination(),
                 unit.getMinAttackRange(),
-                unit.getMaxAttackRange(),
+                unit.getFinalMaxAttackRange(),
                 this._mapSize,
                 (gridIndex) => unit.checkCanAttackTargetAfterMovePath(this.getMovePath(), gridIndex)
             );
@@ -990,7 +990,7 @@ namespace TinyWars.BaseWar {
             this._areaForPreviewAttack.length = 0;
         }
         private _addUnitForPreviewAttackableArea(unit: BwUnit): void {
-            const canAttakAfterMove     = unit.checkCanAttackAfterMove();
+            const canAttackAfterMove    = unit.checkCanAttackAfterMove();
             const beginningGridIndex    = unit.getGridIndex();
             const hasAmmo               = (unit.getPrimaryWeaponCurrentAmmo() > 0) || (unit.checkHasSecondaryWeapon());
             const mapSize               = this.getMapSize();
@@ -1003,12 +1003,12 @@ namespace TinyWars.BaseWar {
                 ),
                 mapSize,
                 unit.getMinAttackRange(),
-                unit.getMaxAttackRange(),
+                unit.getFinalMaxAttackRange(),
                 (moveGridIndex, attackGridIndex) => {
                     const existingUnit = unitMap.getUnitOnMap(moveGridIndex);
                     return ((!existingUnit) || (existingUnit === unit))
                         && (hasAmmo)
-                        && ((canAttakAfterMove) || (GridIndexHelpers.checkIsEqual(moveGridIndex, beginningGridIndex)));
+                        && ((canAttackAfterMove) || (GridIndexHelpers.checkIsEqual(moveGridIndex, beginningGridIndex)));
                 }
             );
 
@@ -1119,6 +1119,7 @@ namespace TinyWars.BaseWar {
             }
 
             const dataList = [] as DataForUnitActionRenderer[];
+            dataList.push(...this._getActionUnitUseCoSkill());
             dataList.push(...this._getActionUnitLoadCo());
             dataList.push(...this._getActionUnitAttack());
             dataList.push(...this._getActionUnitCapture());
@@ -1139,6 +1140,7 @@ namespace TinyWars.BaseWar {
 
         protected abstract _getActionUnitBeLoaded(): DataForUnitActionRenderer[];
         protected abstract _getActionUnitJoin(): DataForUnitActionRenderer[];
+        protected abstract _getActionUnitUseCoSkill(): DataForUnitActionRenderer[];
         protected abstract _getActionUnitLoadCo(): DataForUnitActionRenderer[];
         private _getActionUnitAttack(): DataForUnitActionRenderer[] {
             return this._createAttackableGridsAfterMove().length

@@ -827,6 +827,10 @@ namespace TinyWars.Utility.Lang {
             `无限`,
             `Infinity`,
         ]],
+        [Type.B0142, [
+            `发动CO技能`,
+            `CO Power`,
+        ]],
 
         [Type.B1000, [
             `平原`,
@@ -1464,22 +1468,23 @@ namespace TinyWars.Utility.Lang {
 
     export function getUnitActionName(actionType: Types.UnitActionType): string {
         switch (actionType) {
-            case Types.UnitActionType.BeLoaded      : return getText(Type.B0037);
-            case Types.UnitActionType.Join          : return getText(Type.B0038);
-            case Types.UnitActionType.Attack        : return getText(Type.B0039);
-            case Types.UnitActionType.Capture       : return getText(Type.B0040);
-            case Types.UnitActionType.Dive          : return getText(Type.B0041);
-            case Types.UnitActionType.Surface       : return getText(Type.B0042);
-            case Types.UnitActionType.BuildTile     : return getText(Type.B0043);
-            case Types.UnitActionType.Supply        : return getText(Type.B0044);
-            case Types.UnitActionType.LaunchUnit    : return getText(Type.B0045);
-            case Types.UnitActionType.DropUnit      : return getText(Type.B0046);
-            case Types.UnitActionType.LaunchFlare   : return getText(Type.B0047);
-            case Types.UnitActionType.LaunchSilo    : return getText(Type.B0048);
-            case Types.UnitActionType.LoadCo        : return getText(Type.B0139);
-            case Types.UnitActionType.ProduceUnit   : return getText(Type.B0049);
-            case Types.UnitActionType.Wait          : return getText(Type.B0050);
-            default                                 : return undefined;
+            case Types.UnitActionType.BeLoaded          : return getText(Type.B0037);
+            case Types.UnitActionType.Join              : return getText(Type.B0038);
+            case Types.UnitActionType.UseCoSkill        : return getText(Type.B0142);
+            case Types.UnitActionType.Attack            : return getText(Type.B0039);
+            case Types.UnitActionType.Capture           : return getText(Type.B0040);
+            case Types.UnitActionType.Dive              : return getText(Type.B0041);
+            case Types.UnitActionType.Surface           : return getText(Type.B0042);
+            case Types.UnitActionType.BuildTile         : return getText(Type.B0043);
+            case Types.UnitActionType.Supply            : return getText(Type.B0044);
+            case Types.UnitActionType.LaunchUnit        : return getText(Type.B0045);
+            case Types.UnitActionType.DropUnit          : return getText(Type.B0046);
+            case Types.UnitActionType.LaunchFlare       : return getText(Type.B0047);
+            case Types.UnitActionType.LaunchSilo        : return getText(Type.B0048);
+            case Types.UnitActionType.LoadCo            : return getText(Type.B0139);
+            case Types.UnitActionType.ProduceUnit       : return getText(Type.B0049);
+            case Types.UnitActionType.Wait              : return getText(Type.B0050);
+            default                                     : return undefined;
         }
     }
 
