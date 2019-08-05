@@ -28,7 +28,8 @@ namespace TinyWars.Utility.Notify {
         BwPlayerIndexInTurnChanged,
 
         BwPlayerFundChanged,
-        BwPlayerEnergyChanged,
+        BwCoEnergyChanged,
+        BwCoUsingSkillChanged,
 
         BwCursorTapped,
         BwCursorDragged,
@@ -43,6 +44,8 @@ namespace TinyWars.Utility.Notify {
         McwWarMenuPanelClosed,
         McwProduceUnitPanelOpened,
         McwProduceUnitPanelClosed,
+        BwCoListPanelOpened,
+        BwCoListPanelClosed,
 
         BwUnitBeDestroyed,
         BwUnitBeAttacked,
@@ -103,9 +106,11 @@ namespace TinyWars.Utility.Notify {
         SMcwUnitJoin,
         SMcwUnitLaunchFlare,
         SMcwUnitLaunchSilo,
+        SMcwUnitLoadCo,
         SMcwUnitProduceUnit,
         SMcwUnitSupply,
         SMcwUnitSurface,
+        SMcwUnitUseCoSkill,
         SMcwUnitWait,
     }
 

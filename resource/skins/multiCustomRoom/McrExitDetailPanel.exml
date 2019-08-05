@@ -92,11 +92,12 @@
                     <GameUi:UiScrollList id="_listPlayer" left="0" right="0" top="25" bottom="0">
                         <e:List>
                             <e:itemRendererSkinName>
-                                <e:Skin width="280" height="22" currentState="up" states="up,down">
-                                    <GameUi:UiLabel id="_labelIndex" text="红方" size="18" verticalCenter="0" x="4" />
-                                    <GameUi:UiLabel id="_labelName" text="玩家名称居然有十个字" x="89" size="18"
-                                                    verticalCenter="0" textColor.down="0x00ff00" />
-                                    <GameUi:UiLabel id="_labelTeam" text="A队" size="18" verticalCenter="0" x="49" />
+                                <e:Skin height="22" currentState="up" states="up,down">
+                                    <GameUi:UiLabel id="_labelIndex" text="红方" size="18" x="4"  bottom="0"/>
+                                    <GameUi:UiLabel id="_labelTeam" text="A队" size="18" x="50" bottom="0"/>
+                                    <GameUi:UiLabel id="_labelNickname" text="玩家名称居然有十个字" x="90" size="18"
+                                                    textColor.down="0x00ff00"  bottom="0"/>
+                                    <GameUi:UiLabel id="_labelCoName" text="CO名字" x="280" size="18" bottom="0"/>
                                 </e:Skin>
                             </e:itemRendererSkinName>
                             <e:layout>

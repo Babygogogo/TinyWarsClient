@@ -30,7 +30,7 @@ namespace TinyWars.BaseWar {
 
         public init(data: SerializedBwTile, configVersion: number): BwTile {
             const t = ConfigManager.getTileObjectTypeAndPlayerIndex(data.objectViewId!);
-            Logger.assert(t, "TileModel.deserialize() invalid SerializedTile! ", data);
+            Logger.assert(t, "TileModel.init() invalid SerializedTile! ", data);
 
             this._configVersion = configVersion;
             this._setGridX(data.gridX);
@@ -422,6 +422,13 @@ namespace TinyWars.BaseWar {
         }
         public getIsFogEnabled(): boolean {
             return this._isFogEnabled;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+        // Functions for load co.
+        ////////////////////////////////////////////////////////////////////////////////
+        public getLoadCoUnitCategory(): Types.UnitCategory | null {
+            return this._templateCfg.loadCoUnitCategory;
         }
     }
 }

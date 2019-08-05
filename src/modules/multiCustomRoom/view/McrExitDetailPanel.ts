@@ -2,9 +2,7 @@
 namespace TinyWars.MultiCustomRoom {
     import ProtoTypes   = Utility.ProtoTypes;
     import Helpers      = Utility.Helpers;
-    import Notify       = Utility.Notify;
     import Lang         = Utility.Lang;
-    import FloatText    = Utility.FloatText;
     import Types        = Utility.Types;
     import HelpPanel    = Common.HelpPanel;
 
@@ -77,13 +75,13 @@ namespace TinyWars.MultiCustomRoom {
         private _onTouchedBtnHelpFog(e: egret.TouchEvent): void {
             HelpPanel.show({
                 title  : Lang.getText(Lang.Type.B0020),
-                content: Lang.getRichText(Lang.RichType.R002),
+                content: Lang.getRichText(Lang.RichType.R0002),
             });
         }
         private _onTouchedBtnHelpTimeLimit(e: egret.TouchEvent): void {
             HelpPanel.show({
                 title  : Lang.getText(Lang.Type.B0021),
-                content: Lang.getRichText(Lang.RichType.R003),
+                content: Lang.getRichText(Lang.RichType.R0003),
             });
         }
         private _onTouchedBtnCancel(e: egret.TouchEvent): void {
@@ -117,29 +115,33 @@ namespace TinyWars.MultiCustomRoom {
             } else {
                 const data: DataForPlayerRenderer[] = [
                     {
-                        playerIndex: 1,
-                        playerName : warInfo.p1UserNickname,
-                        teamIndex  : warInfo.p1TeamIndex,
+                        playerIndex : 1,
+                        nickname    : warInfo.p1UserNickname,
+                        teamIndex   : warInfo.p1TeamIndex,
+                        coId        : warInfo.p1CoId,
                     },
                     {
-                        playerIndex: 2,
-                        playerName : warInfo.p2UserNickname,
-                        teamIndex  : warInfo.p2TeamIndex,
+                        playerIndex : 2,
+                        nickname    : warInfo.p2UserNickname,
+                        teamIndex   : warInfo.p2TeamIndex,
+                        coId        : warInfo.p2CoId,
                     },
                 ];
 
                 if (mapInfo.playersCount >= 3) {
                     data.push({
-                        playerIndex: 3,
-                        playerName : warInfo.p3UserNickname,
-                        teamIndex  : warInfo.p3TeamIndex,
+                        playerIndex : 3,
+                        nickname    : warInfo.p3UserNickname,
+                        teamIndex   : warInfo.p3TeamIndex,
+                        coId        : warInfo.p3CoId,
                     });
                 }
                 if (mapInfo.playersCount >= 4) {
                     data.push({
-                        playerIndex: 4,
-                        playerName : warInfo.p4UserNickname,
-                        teamIndex  : warInfo.p4TeamIndex,
+                        playerIndex : 4,
+                        nickname    : warInfo.p4UserNickname,
+                        teamIndex   : warInfo.p4TeamIndex,
+                        coId        : warInfo.p4CoId,
                     });
                 }
 
@@ -149,23 +151,28 @@ namespace TinyWars.MultiCustomRoom {
     }
 
     type DataForPlayerRenderer = {
-        playerIndex: number;
-        playerName : string;
-        teamIndex  : number;
+        playerIndex : number;
+        nickname    : string | null;
+        teamIndex   : number | null;
+        coId        : number | null;
     }
 
     class PlayerRenderer extends eui.ItemRenderer {
-        private _labelName : GameUi.UiLabel;
-        private _labelIndex: GameUi.UiLabel;
-        private _labelTeam : GameUi.UiLabel;
+        private _labelNickname  : GameUi.UiLabel;
+        private _labelIndex     : GameUi.UiLabel;
+        private _labelTeam      : GameUi.UiLabel;
+        private _labelCoName    : GameUi.UiLabel;
 
         protected dataChanged(): void {
             super.dataChanged();
 
             const data = this.data as DataForPlayerRenderer;
-            this._labelIndex.text = Helpers.getColorTextForPlayerIndex(data.playerIndex);
-            this._labelName.text  = data.playerName || "????";
-            this._labelTeam.text  = data.teamIndex != null ? Helpers.getTeamText(data.teamIndex) : "??";
+            this._labelIndex.text       = Helpers.getColorTextForPlayerIndex(data.playerIndex);
+            this._labelNickname.text    = data.nickname || "????";
+            this._labelTeam.text        = data.teamIndex != null ? Helpers.getTeamText(data.teamIndex) : "??";
+            this._labelCoName.text      = data.coId == null
+                ? (data.nickname == null ? "????" : `(${Lang.getText(Lang.Type.B0001)}CO)`)
+                : ConfigManager.getCoBasicCfg(ConfigManager.getNewestConfigVersion(), data.coId).name;
         }
     }
 }

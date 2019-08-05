@@ -139,9 +139,11 @@ namespace TinyWars.BaseWar.BwHelpers {
             || (state === Types.ActionPlannerState.RequestingUnitJoin)
             || (state === Types.ActionPlannerState.RequestingUnitLaunchFlare)
             || (state === Types.ActionPlannerState.RequestingUnitLaunchSilo)
+            || (state === Types.ActionPlannerState.RequestingUnitLoadCo)
             || (state === Types.ActionPlannerState.RequestingUnitProduceUnit)
             || (state === Types.ActionPlannerState.RequestingUnitSupply)
             || (state === Types.ActionPlannerState.RequestingUnitSurface)
+            || (state === Types.ActionPlannerState.RequestingUnitUseCoSkill)
             || (state === Types.ActionPlannerState.RequestingUnitWait);
     }
 }

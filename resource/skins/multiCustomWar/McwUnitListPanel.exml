@@ -28,11 +28,11 @@
                                             horizontalCenter="-40" />
                             <GameUi:UiLabel id="_labelGridIndex" text="x99 y99" size="12" textColor="0xFFFFFF" y="6"
                                             x="92" />
-                            <GameUi:UiImage id="_imgHp" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" y="18" x="92"
+                            <GameUi:UiImage id="_imgHp" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" y="10" x="92"
                                             source="c03_t99_s02_f03" scaleX="0.6" scaleY="0.6" />
-                            <GameUi:UiImage id="_imgFuel" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" y="32" x="92"
+                            <GameUi:UiImage id="_imgFuel" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" y="24" x="92"
                                             scaleX="0.6" scaleY="0.6" source="c03_t99_s02_f01" />
-                            <GameUi:UiImage id="_imgState" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" y="46" x="92"
+                            <GameUi:UiImage id="_imgState" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" y="38" x="92"
                                             source="c03_t99_s02_f02" scaleX="0.6" scaleY="0.6" />
                             <GameUi:UiLabel id="_labelHp" text="100" size="12" textColor="0xFFFFFF" y="20" x="116" />
                             <GameUi:UiLabel id="_labelFuel" text="100" size="12" textColor="0xFFFFFF" y="34" x="116" />

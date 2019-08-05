@@ -138,6 +138,7 @@ namespace TinyWars.BaseWar {
             // TODO
         }
         protected abstract _runPhaseMain(data: ProtoTypes.IWarActionPlayerBeginTurn): void;
+
         private _runPhaseResetUnitState(): void {
             const playerIndex = this.getPlayerIndexInTurn();
             if (playerIndex !== 0) {
@@ -157,10 +158,14 @@ namespace TinyWars.BaseWar {
             this._setEnterTurnTime(TimeModel.getServerTimestamp());
         }
         private _runPhaseResetSkillState(): void {
-            // TODO
-            // const playerIndex = this.getPlayerIndexInTurn();
-            // if (playerIndex !== 0) {
-            // }
+            const war       = this._getWar();
+            const player    = war.getPlayerInTurn();
+            player.setCoIsDestroyedInTurn(false);
+            if (player.getCoIsUsingSkill()) {
+                player.setCoIsUsingSkill(false);
+                player.setCoCurrentEnergy(0);
+                war.getTileMap().getView().updateCoZone();
+            }
         }
         protected abstract _runPhaseResetVisionForNextPlayer(): void;
         private _runPhaseResetVotesForDraw(): void {

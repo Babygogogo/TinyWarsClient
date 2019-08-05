@@ -10,8 +10,10 @@
                     <e:Skin width="120" height="50" currentState="withUnit" states="withUnit,withoutUnit">
                         <e:Group id="_conUnitView" width="60" height="100" x="0" y="0" scaleX="0.5" scaleY="0.5"
                                  visible.withoutUnit="false" />
-                        <GameUi:UiLabel id="_labelAction" text="Label" x="30" height="50" size="20"
-                                        verticalAlign="middle" width="90" textAlign="center" y="0" x.withoutUnit="15" />
+                        <GameUi:UiLabel id="_labelAction" text="Label" height="50" size="20" verticalAlign="middle"
+                                        width="90" textAlign="center" y="0" left.withUnit="30" right.withUnit="0"
+                                        top.withUnit="0" bottom.withUnit="0" left.withoutUnit="0" right.withoutUnit="0"
+                                        top.withoutUnit="0" bottom.withoutUnit="0" />
                         <GameUi:UiLabel id="_labelCost" text="费用: 99999" size="12" horizontalCenter="15"
                                         textColor="0x00ff00" />
                     </e:Skin>

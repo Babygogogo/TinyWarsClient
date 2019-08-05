@@ -445,74 +445,116 @@ namespace TinyWars.Replay {
                     : [];
             }
         }
-        protected _getActionUnitCapture(): BaseWar.DataForUnitActionRenderer[] {
-            return (this.getFocusUnit().checkCanCaptureTile(this._getTileMap().getTile(this.getMovePathDestination())))
-                ? [{ actionType: UnitActionType.Capture, callback: () => {} }]
-                : [];
-        }
-        protected _getActionUnitDive(): BaseWar.DataForUnitActionRenderer[] {
-            return (this.getFocusUnit().checkCanDive())
-                ? [{ actionType: UnitActionType.Dive, callback: () => {} }]
-                : [];
-        }
-        protected _getActionUnitSurface(): BaseWar.DataForUnitActionRenderer[] {
-            return (this.getFocusUnit().checkCanSurface())
-                ? [{ actionType: UnitActionType.Surface, callback: () => {} }]
-                : [];
-        }
-        protected _getActionUnitBuildTile(): BaseWar.DataForUnitActionRenderer[] {
-            return (this.getFocusUnit().checkCanBuildOnTile(this._getTileMap().getTile(this.getMovePathDestination())))
-                ? [{ actionType: UnitActionType.BuildTile, callback: () => {} }]
-                : [];
-        }
-        protected _getActionUnitSupply(): BaseWar.DataForUnitActionRenderer[] {
-            const focusUnit     = this.getFocusUnit();
-            const playerIndex   = focusUnit.getPlayerIndex();
-            const unitMap       = this._getUnitMap();
-            if (focusUnit.checkIsAdjacentUnitSupplier()) {
-                for (const gridIndex of GridIndexHelpers.getAdjacentGrids(this.getMovePathDestination(), this._getMapSize())) {
-                    const unit = unitMap.getUnitOnMap(gridIndex);
-                    if ((unit) && (unit !== focusUnit) && (unit.getPlayerIndex() === playerIndex) && (unit.checkCanBeSupplied())) {
-                        return [{ actionType: UnitActionType.Supply, callback: () => {} }];
-                    }
-                }
-            }
-            return [];
-        }
-        protected _getActionUnitProduceUnit(): BaseWar.DataForUnitActionRenderer[] {
-            const focusUnit         = this.getFocusUnit();
-            const produceUnitType   = focusUnit.getProduceUnitType();
-            if ((this.getFocusUnitLoaded()) || (this.getMovePath().length !== 1) || (produceUnitType == null)) {
+        protected _getActionUnitUseCoSkill(): BaseWar.DataForUnitActionRenderer[] {
+            if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
-                if (focusUnit.getCurrentProduceMaterial() < 1) {
-                    return [{
-                        actionType      : UnitActionType.ProduceUnit,
-                        callback        : () => FloatText.show(Lang.getText(Lang.Type.B0051)),
-                        canProduceUnit  : false,
-                        produceUnitType,
-                    }];
-                } else if (focusUnit.getLoadedUnitsCount() >= focusUnit.getMaxLoadUnitsCount()) {
-                    return [{
-                        actionType      : UnitActionType.ProduceUnit,
-                        callback        : () => FloatText.show(Lang.getText(Lang.Type.B0052)),
-                        canProduceUnit  : false,
-                        produceUnitType,
-                    }];
-                } else if (this._getWar().getPlayerInTurn().getFund() < focusUnit.getProduceUnitCost()) {
-                    return [{
-                        actionType      : UnitActionType.ProduceUnit,
-                        callback        : () => FloatText.show(Lang.getText(Lang.Type.B0053)),
-                        canProduceUnit  : false,
-                        produceUnitType,
-                    }];
+                return this.getFocusUnit().checkCanUseCoSkill()
+                    ? [{ actionType: UnitActionType.UseCoSkill, callback: () => {} }]
+                    : [];
+            }
+        }
+        protected _getActionUnitLoadCo(): BaseWar.DataForUnitActionRenderer[] {
+            if (this.getChosenUnitsForDrop().length) {
+                return [];
+            } else {
+                return this.getFocusUnit().checkCanLoadCoAfterMovePath(this.getMovePath())
+                    ? [{ actionType: UnitActionType.LoadCo, callback: () => {} }]
+                    : [];
+            }
+        }
+        protected _getActionUnitCapture(): BaseWar.DataForUnitActionRenderer[] {
+            if (this.getChosenUnitsForDrop().length) {
+                return [];
+            } else {
+                return (this.getFocusUnit().checkCanCaptureTile(this._getTileMap().getTile(this.getMovePathDestination())))
+                    ? [{ actionType: UnitActionType.Capture, callback: () => {} }]
+                    : [];
+            }
+        }
+        protected _getActionUnitDive(): BaseWar.DataForUnitActionRenderer[] {
+            if (this.getChosenUnitsForDrop().length) {
+                return [];
+            } else {
+                return (this.getFocusUnit().checkCanDive())
+                    ? [{ actionType: UnitActionType.Dive, callback: () => {} }]
+                    : [];
+            }
+        }
+        protected _getActionUnitSurface(): BaseWar.DataForUnitActionRenderer[] {
+            if (this.getChosenUnitsForDrop().length) {
+                return [];
+            } else {
+                return (this.getFocusUnit().checkCanSurface())
+                    ? [{ actionType: UnitActionType.Surface, callback: () => {} }]
+                    : [];
+            }
+        }
+        protected _getActionUnitBuildTile(): BaseWar.DataForUnitActionRenderer[] {
+            if (this.getChosenUnitsForDrop().length) {
+                return [];
+            } else {
+                return (this.getFocusUnit().checkCanBuildOnTile(this._getTileMap().getTile(this.getMovePathDestination())))
+                    ? [{ actionType: UnitActionType.BuildTile, callback: () => {} }]
+                    : [];
+            }
+        }
+        protected _getActionUnitSupply(): BaseWar.DataForUnitActionRenderer[] {
+            if (this.getChosenUnitsForDrop().length) {
+                return [];
+            } else {
+                const focusUnit     = this.getFocusUnit();
+                const playerIndex   = focusUnit.getPlayerIndex();
+                const unitMap       = this._getUnitMap();
+                if (focusUnit.checkIsAdjacentUnitSupplier()) {
+                    for (const gridIndex of GridIndexHelpers.getAdjacentGrids(this.getMovePathDestination(), this._getMapSize())) {
+                        const unit = unitMap.getUnitOnMap(gridIndex);
+                        if ((unit) && (unit !== focusUnit) && (unit.getPlayerIndex() === playerIndex) && (unit.checkCanBeSupplied())) {
+                            return [{ actionType: UnitActionType.Supply, callback: () => {} }];
+                        }
+                    }
+                }
+                return [];
+            }
+        }
+        protected _getActionUnitProduceUnit(): BaseWar.DataForUnitActionRenderer[] {
+            if (this.getChosenUnitsForDrop().length) {
+                return [];
+            } else {
+                const focusUnit         = this.getFocusUnit();
+                const produceUnitType   = focusUnit.getProduceUnitType();
+                if ((this.getFocusUnitLoaded()) || (this.getMovePath().length !== 1) || (produceUnitType == null)) {
+                    return [];
                 } else {
-                    return [{
-                        actionType      : UnitActionType.ProduceUnit,
-                        callback        : () => {},
-                        canProduceUnit  : true,
-                        produceUnitType,
-                    }];
+                    if (focusUnit.getCurrentProduceMaterial() < 1) {
+                        return [{
+                            actionType      : UnitActionType.ProduceUnit,
+                            callback        : () => FloatText.show(Lang.getText(Lang.Type.B0051)),
+                            canProduceUnit  : false,
+                            produceUnitType,
+                        }];
+                    } else if (focusUnit.getLoadedUnitsCount() >= focusUnit.getMaxLoadUnitsCount()) {
+                        return [{
+                            actionType      : UnitActionType.ProduceUnit,
+                            callback        : () => FloatText.show(Lang.getText(Lang.Type.B0052)),
+                            canProduceUnit  : false,
+                            produceUnitType,
+                        }];
+                    } else if (this._getWar().getPlayerInTurn().getFund() < focusUnit.getProduceUnitCost()) {
+                        return [{
+                            actionType      : UnitActionType.ProduceUnit,
+                            callback        : () => FloatText.show(Lang.getText(Lang.Type.B0053)),
+                            canProduceUnit  : false,
+                            produceUnitType,
+                        }];
+                    } else {
+                        return [{
+                            actionType      : UnitActionType.ProduceUnit,
+                            callback        : () => {},
+                            canProduceUnit  : true,
+                            produceUnitType,
+                        }];
+                    }
                 }
             }
         }

@@ -11,7 +11,7 @@ namespace TinyWars.BaseWar {
     const _IMG_UNIT_STAND_ANCHOR_OFFSET_Y               = _GRID_HEIGHT / 2;
     const _IMG_UNIT_STAND_X                             = _GRID_WIDTH * 2 / 4;
     const _IMG_UNIT_STATE_WIDTH                         = 28;
-    const _IMG_UNIT_STATE_HEIGHT                        = 28;
+    const _IMG_UNIT_STATE_HEIGHT                        = 36;
 
     export abstract class BwUnitView extends egret.DisplayObjectContainer {
         private _imgHp      = new GameUi.UiImage();
@@ -86,7 +86,7 @@ namespace TinyWars.BaseWar {
         public resetStateAnimationFrames(): void {
             const frames    = this._framesForStateAnimation;
             frames.length   = 0;
-            this._addFrameForPlayerSkill();
+            this._addFrameForCoSkill();
             this._addFrameForPromotion();
             this._addFrameForFuel();
             this._addFrameForAmmo();
@@ -120,13 +120,23 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _addFrameForPlayerSkill(): void {
-            // TODO
+        private _addFrameForCoSkill(): void {
+            const unit      = this._unit;
+            const player    = unit.getPlayer();
+            if ((player) && (player.getCoIsUsingSkill())) {
+                this._framesForStateAnimation.push(`${this._getImageSourcePrefix(this._isDark)}_t99_s08_f${Helpers.getNumText(unit.getPlayerIndex())}`);
+            }
         }
         private _addFrameForPromotion(): void {
-            const promotion = this._unit.getCurrentPromotion();
-            if (promotion > 0) {
-                this._framesForStateAnimation.push(`${this._getImageSourcePrefix(this._isDark)}_t99_s05_f${Helpers.getNumText(promotion)}`);
+            const unit      = this._unit;
+            const player    = unit.getPlayer();
+            if ((player) && (unit.getUnitId() === player.getCoUnitId())) {
+                this._framesForStateAnimation.push(`${this._getImageSourcePrefix(this._isDark)}_t99_s05_f99`);
+            } else {
+                const promotion = unit.getCurrentPromotion();
+                if (promotion > 0) {
+                    this._framesForStateAnimation.push(`${this._getImageSourcePrefix(this._isDark)}_t99_s05_f${Helpers.getNumText(promotion)}`);
+                }
             }
         }
         private _addFrameForFuel(): void {

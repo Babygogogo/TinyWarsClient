@@ -687,9 +687,45 @@ var egret;
             _this.$renderNode = null;
             _this.$renderDirty = false;
             _this.$renderMode = null;
+            /**
+             * inspired by pixi.js
+             */
+            _this._tint = 0;
+            /**
+             * @private
+             */
+            _this.$tintRGB = 0;
+            /**
+             * @private
+             * inspired by pixi.js
+             */
+            _this.$sortDirty = false;
+            /**
+             * @private
+             */
+            _this._zIndex = 0;
+            /**
+             * @private
+             */
+            _this.$lastSortedIndex = 0;
+            /**
+             * Allow objects to use zIndex sorting
+             * @version Egret 5.2.24
+             * @platform Web,Native
+             * @language en_US
+             */
+            /**
+             * 允许对象使用 zIndex 排序
+             * @version Egret 5.2.24
+             * @platform Web,Native
+             * @language zh_CN
+             */
+            _this.sortableChildren = false;
             if (egret.nativeRender) {
                 _this.createNativeDisplayObject();
             }
+            //默认都是纯白
+            _this.tint = 0xFFFFFF;
             return _this;
         }
         DisplayObject.prototype.createNativeDisplayObject = function () {
@@ -2679,6 +2715,57 @@ var egret;
             }
             return false;
         };
+        Object.defineProperty(DisplayObject.prototype, "tint", {
+            /**
+             * Set a tint color for the current object
+             * @version Egret 5.2.24
+             * @platform Web,Native
+             * @language en_US
+             */
+            /**
+             * 给当前对象设置填充色
+             * @version Egret 5.2.24
+             * @platform Web,Native
+             * @language zh_CN
+             */
+            get: function () {
+                return this._tint;
+            },
+            set: function (value) {
+                this._tint = value;
+                this.$tintRGB = (value >> 16) + (value & 0xff00) + ((value & 0xff) << 16);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        DisplayObject.prototype.sortChildren = function () {
+            this.$sortDirty = false;
+        };
+        Object.defineProperty(DisplayObject.prototype, "zIndex", {
+            /**
+             * the z-order (front-to-back order) of the object
+             * @version Egret 5.2.24
+             * @platform Web,Native
+             * @language en_US
+             */
+            /**
+             * 设置对象的 Z 轴顺序（前后顺序）
+             * @version Egret 5.2.24
+             * @platform Web,Native
+             * @language zh_CN
+             */
+            get: function () {
+                return this._zIndex;
+            },
+            set: function (value) {
+                this._zIndex = value;
+                if (this.parent) {
+                    this.parent.$sortDirty = true;
+                }
+            },
+            enumerable: true,
+            configurable: true
+        });
         /**
          * @private
          * The default touchEnabled property of DisplayObject
@@ -5185,6 +5272,32 @@ var egret;
             }
             return _super.prototype.$hitTest.call(this, stageX, stageY);
         };
+        DisplayObjectContainer.prototype._sortChildrenFunc = function (a, b) {
+            if (a.zIndex === b.zIndex) {
+                return a.$lastSortedIndex - b.$lastSortedIndex;
+            }
+            return a.zIndex - b.zIndex;
+        };
+        DisplayObjectContainer.prototype.sortChildren = function () {
+            //关掉脏的标记
+            _super.prototype.sortChildren.call(this);
+            this.$sortDirty = false;
+            //准备重新排序
+            var sortRequired = false;
+            var children = this.$children;
+            var child = null;
+            for (var i = 0, j = children.length; i < j; ++i) {
+                child = children[i];
+                child.$lastSortedIndex = i;
+                if (!sortRequired && child.zIndex !== 0) {
+                    sortRequired = true;
+                }
+            }
+            if (sortRequired && children.length > 1) {
+                //开始排
+                children.sort(this._sortChildrenFunc);
+            }
+        };
         /**
          * @private
          */
@@ -7589,6 +7702,24 @@ var egret;
             }
             */
         };
+        /**
+         * inspired by pixi.js
+         */
+        WebGLUtils.premultiplyTint = function (tint, alpha) {
+            if (alpha === 1.0) {
+                return (alpha * 255 << 24) + tint;
+            }
+            if (alpha === 0.0) {
+                return 0;
+            }
+            var R = ((tint >> 16) & 0xFF);
+            var G = ((tint >> 8) & 0xFF);
+            var B = (tint & 0xFF);
+            R = ((R * alpha) + 0.5) | 0;
+            G = ((G * alpha) + 0.5) | 0;
+            B = ((B * alpha) + 0.5) | 0;
+            return (alpha * 255 << 24) + (R << 16) + (G << 8) + B;
+        };
         return WebGLUtils;
     }());
     egret.WebGLUtils = WebGLUtils;
@@ -8814,6 +8945,7 @@ var egret;
     egret.engine_default_empty_texture = 'engine_default_empty_texture';
     egret.is_compressed_texture = 'is_compressed_texture';
     egret.glContext = 'glContext';
+    egret.UNPACK_PREMULTIPLY_ALPHA_WEBGL = 'UNPACK_PREMULTIPLY_ALPHA_WEBGL';
     /**
      * A BitmapData object contains an array of pixel data. This data can represent either a fully opaque bitmap or a
      * transparent bitmap that contains alpha channel data. Either type of BitmapData object is stored as a buffer of 32-bit
@@ -14614,13 +14746,21 @@ var egret;
         }
         sys.getContext2d = getContext2d;
         /**
-        * 重新设置主canvas的大小
+        * 仅通过bitmapData创建纹理
         */
         function createTexture(renderContext, bitmapData) {
             console.error("empty sys.createTexture = " + bitmapData);
             return null;
         }
         sys.createTexture = createTexture;
+        /**
+        * 通过 width, height, data创建纹理
+        */
+        function _createTexture(renderContext, width, height, data) {
+            console.error("empty sys._createTexture = " + width + ", " + height + ", " + data);
+            return null;
+        }
+        sys._createTexture = _createTexture;
         /**
          * 画texture
          **/
@@ -14629,6 +14769,39 @@ var egret;
             return 0;
         }
         sys.drawTextureElements = drawTextureElements;
+        /**
+         * 测量文本的宽度
+         * @param context
+         * @param text
+         */
+        function measureTextWith(context, text) {
+            console.error("empty sys.measureTextWith = " + context + ", " + text);
+            return 0;
+        }
+        sys.measureTextWith = measureTextWith;
+        /**
+         * 为CanvasRenderBuffer创建一个canvas
+         * @param defaultFunc
+         * @param width
+         * @param height
+         * @param root
+         */
+        function createCanvasRenderBufferSurface(defaultFunc, width, height, root) {
+            console.error("empty sys.createCanvasRenderBufferSurface = " + width + ", " + height);
+            return null;
+        }
+        sys.createCanvasRenderBufferSurface = createCanvasRenderBufferSurface;
+        /**
+         * 改变渲染缓冲的大小并清空缓冲区
+         * @param renderContext
+         * @param width
+         * @param height
+         * @param useMaxSize
+         */
+        function resizeCanvasRenderBuffer(renderContext, width, height, useMaxSize) {
+            console.error("empty sys.resizeContext = " + renderContext + ", " + width + ", " + height + ", " + useMaxSize);
+        }
+        sys.resizeCanvasRenderBuffer = resizeCanvasRenderBuffer;
     })(sys = egret.sys || (egret.sys = {}));
 })(egret || (egret = {}));
 //////////////////////////////////////////////////////////////////////////////////////
@@ -17654,6 +17827,19 @@ var egret;
          */
         RuntimeType.RUNTIME2 = "runtime2";
         /**
+         * Running on Alipay
+         * @version Egret 5.2.23
+         * @platform All
+         * @language en_US
+         */
+        /**
+         * 运行在支付宝小游戏上
+         * @version Egret 5.2.23
+         * @platform All
+         * @language zh_CN
+         */
+        RuntimeType.MYGAME = "mygame";
+        /**
          * Running on WeChat mini game
          * @version Egret 5.1.5
          * @platform All
@@ -17815,7 +18001,7 @@ var egret;
          * @platform Web,Native
          * @language zh_CN
          */
-        Capabilities.engineVersion = "5.2.21";
+        Capabilities.engineVersion = "5.2.24";
         /***
          * current render mode.
          * @type {string}
@@ -24381,6 +24567,18 @@ var egret;
                 value += 360;
             }
             return egret_cos_map[value];
+        };
+        NumberUtils.convertStringToHashCode = function (str) {
+            if (str.length === 0) {
+                return 0;
+            }
+            var hash = 0;
+            for (var i = 0, length_9 = str.length; i < length_9; ++i) {
+                var chr = str.charCodeAt(i);
+                hash = ((hash << 5) - hash) + chr;
+                hash |= 0; // Convert to 32bit integer
+            }
+            return hash;
         };
         return NumberUtils;
     }());

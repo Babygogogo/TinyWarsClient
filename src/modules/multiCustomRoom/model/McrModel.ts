@@ -2,7 +2,7 @@
 namespace TinyWars.MultiCustomRoom {
     import Types        = Utility.Types;
     import ProtoTypes   = Utility.ProtoTypes;
-    import MapModel     = WarMap.WarMapModel;
+    import WarMapModel  = WarMap.WarMapModel;
 
     export const MAX_INITIAL_FUND     = 1000000;
     export const MIN_INITIAL_FUND     = 0;
@@ -38,28 +38,8 @@ namespace TinyWars.MultiCustomRoom {
     const VISION_MODIFIERS        = [-2, -1, 0, 1, 2];
     const DEFAULT_VISION_MODIFIER = 0;
 
-    export type DataForCreateWar = {
-        mapName         : string,
-        mapDesigner     : string,
-        mapVersion      : number,
-        warName        ?: string;
-        warPassword    ?: string;
-        warComment     ?: string;
-        configVersion   : number;
-
-        playerIndex     : number;
-        teamIndex       : number;
-
-        hasFog              : number;
-        timeLimit           : number;
-        initialFund         : number;
-        incomeModifier      : number;
-        initialEnergy       : number;
-        energyGrowthModifier: number;
-        moveRangeModifier   : number;
-        attackPowerModifier : number;
-        visionRangeModifier : number;
-    }
+    export type DataForCreateWar    = ProtoTypes.IC_McrCreateWar;
+    export type DataForJoinWar      = ProtoTypes.IC_McrJoinWar;
 
     export namespace McrModel {
         const _dataForCreateWar: DataForCreateWar = {
@@ -73,6 +53,7 @@ namespace TinyWars.MultiCustomRoom {
 
             playerIndex     : 0,
             teamIndex       : 0,
+            coId            : null,
 
             hasFog              : 0,
             timeLimit           : 0,
@@ -84,6 +65,17 @@ namespace TinyWars.MultiCustomRoom {
             attackPowerModifier : 0,
             visionRangeModifier : 0,
         };
+
+        const _dataForJoinWar: DataForJoinWar = {
+            infoId      : null,
+            playerIndex : null,
+            teamIndex   : null,
+            coId        : null,
+        };
+        let _joinWarAvailablePlayerIndexes  : number[];
+        let _joinWarAvailableTeamIndexes    : number[];
+        let _joinWarRoomInfo                : ProtoTypes.IMcrWaitingInfo;
+
         let _unjoinedWaitingInfos   : ProtoTypes.IMcrWaitingInfo[];
         let _joinedWaitingInfos     : ProtoTypes.IMcrWaitingInfo[];
         let _joinedOngoingInfos     : ProtoTypes.IMcwOngoingDetail[];
@@ -95,7 +87,7 @@ namespace TinyWars.MultiCustomRoom {
         // Functions for creating wars.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         export function getCreateWarMapInfo(): ProtoTypes.IMapDynamicInfo {
-            return MapModel.getMapDynamicInfoSync(_dataForCreateWar);
+            return WarMapModel.getMapDynamicInfoSync(_dataForCreateWar as Types.MapIndexKey);
         }
 
         export function resetCreateWarData(key: Types.MapIndexKey): void {
@@ -108,6 +100,7 @@ namespace TinyWars.MultiCustomRoom {
             setCreateWarComment("");
             setCreateWarPlayerIndex(1);
             setCreateWarTeamIndex(1);
+            setCreateWarCoId(null);
             setCreateWarHasFog(false);
             setCreateWarTimeLimit(DEFAULT_TIME_LIMIT);
 
@@ -176,6 +169,13 @@ namespace TinyWars.MultiCustomRoom {
         }
         export function getCreateWarTeamIndex(): number {
             return _dataForCreateWar.teamIndex;
+        }
+
+        export function setCreateWarCoId(coId: number | null): void {
+            _dataForCreateWar.coId = coId;
+        }
+        export function getCreateWarCoId(): number | null {
+            return _dataForCreateWar.coId;
         }
 
         export function setCreateWarHasFog(has: boolean): void {
@@ -343,6 +343,65 @@ namespace TinyWars.MultiCustomRoom {
             return _unjoinedWaitingInfos;
         }
 
+        export function getJoinWarRoomInfo(): ProtoTypes.IMcrWaitingInfo {
+            return _joinWarRoomInfo;
+        }
+        export function getJoinWarMapInfo(): ProtoTypes.IMapDynamicInfo {
+            return WarMapModel.getMapDynamicInfoSync(getJoinWarRoomInfo() as Types.MapIndexKey);
+        }
+
+        export async function resetJoinWarData(info: ProtoTypes.IMcrWaitingInfo): Promise<void> {
+            _joinWarRoomInfo           = info;
+            _joinWarAvailablePlayerIndexes  = await getAvailablePlayerIndexes(info);
+            _joinWarAvailableTeamIndexes    = await getAvailableTeamIndexes(info);
+            _dataForJoinWar.infoId          = info.id;
+            setJoinWarPlayerIndex(_joinWarAvailablePlayerIndexes[0]);
+            setJoinWarTeamIndex(_joinWarAvailableTeamIndexes[0]);
+            setJoinWarCoId(null);
+        }
+        export function getJoinWarData(): DataForJoinWar {
+            return _dataForJoinWar;
+        }
+
+        function setJoinWarPlayerIndex(playerIndex: number): void {
+            _dataForJoinWar.playerIndex = playerIndex;
+        }
+        export function setJoinWarNextPlayerIndex(): void {
+            const list = _joinWarAvailablePlayerIndexes;
+            setJoinWarPlayerIndex(list[(list.indexOf(getJoinWarPlayerIndex()) + 1) % list.length]);
+        }
+        export function setJoinWarPrevPlayerIndex(): void {
+            const list  = _joinWarAvailablePlayerIndexes;
+            const index = list.indexOf(getJoinWarPlayerIndex()) - 1;
+            setJoinWarPlayerIndex(list[index >= 0 ? index : list.length - 1]);
+        }
+        export function getJoinWarPlayerIndex(): number {
+            return _dataForJoinWar.playerIndex;
+        }
+
+        function setJoinWarTeamIndex(teamIndex: number): void {
+            _dataForJoinWar.teamIndex = teamIndex;
+        }
+        export function setJoinWarNextTeamIndex(): void {
+            const list = _joinWarAvailableTeamIndexes;
+            setJoinWarTeamIndex(list[(list.indexOf(getJoinWarTeamIndex()) + 1) % list.length]);
+        }
+        export function setJoinWarPrevTeamIndex(): void {
+            const list  = _joinWarAvailableTeamIndexes;
+            const index = list.indexOf(getJoinWarTeamIndex()) - 1;
+            setJoinWarTeamIndex(list[index >= 0 ? index : list.length - 1]);
+        }
+        export function getJoinWarTeamIndex(): number {
+            return _dataForJoinWar.teamIndex;
+        }
+
+        export function setJoinWarCoId(coId: number | null): void {
+            _dataForJoinWar.coId = coId;
+        }
+        export function getJoinWarCoId(): number | null {
+            return _dataForJoinWar.coId;
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for exiting joined waiting wars.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -378,6 +437,68 @@ namespace TinyWars.MultiCustomRoom {
         }
         export function getReplayData(): ProtoTypes.S_McrGetReplayData | undefined {
             return _replayData;
+        }
+    }
+
+    async function getAvailablePlayerIndexes(info: ProtoTypes.IMcrWaitingInfo): Promise<number[]> {
+        const playersCount = (await WarMapModel.getMapDynamicInfoAsync(info as Types.MapIndexKey)).playersCount;
+        const indexDict: {[index: number]: boolean} = {};
+        if ((playersCount >= 4) && (info.p4UserId == null)) {
+            indexDict[4] = true;
+        }
+        if ((playersCount >= 3) && (info.p3UserId == null)) {
+            indexDict[3] = true;
+        }
+        if ((playersCount >= 2) && (info.p2UserId == null)) {
+            indexDict[2] = true;
+        }
+        if ((playersCount >= 1) && (info.p1UserId == null)) {
+            indexDict[1] = true;
+        }
+
+        const indexes: number[] = [];
+        for (let i = 1; i <= playersCount; ++i) {
+            if (indexDict[i]) {
+                indexes.push(i);
+            }
+        }
+        return indexes;
+    }
+
+    async function getAvailableTeamIndexes(info: ProtoTypes.IMcrWaitingInfo): Promise<number[]> {
+        const dict: {[index: number]: number} = {};
+        (info.p1TeamIndex != null) && (dict[info.p1TeamIndex] = (dict[info.p1TeamIndex] || 0) + 1);
+        (info.p2TeamIndex != null) && (dict[info.p2TeamIndex] = (dict[info.p2TeamIndex] || 0) + 1);
+        (info.p3TeamIndex != null) && (dict[info.p3TeamIndex] = (dict[info.p3TeamIndex] || 0) + 1);
+        (info.p4TeamIndex != null) && (dict[info.p4TeamIndex] = (dict[info.p4TeamIndex] || 0) + 1);
+
+        let teamsCount  = 0;
+        let currPlayers = 0;
+        for (let i = 1; i <= 4; ++i) {
+            if (dict[i]) {
+                ++teamsCount;
+                currPlayers += dict[i];
+            }
+        }
+
+        const totalPlayers = (await WarMapModel.getMapDynamicInfoAsync(info as Types.MapIndexKey)).playersCount;
+        if ((teamsCount > 1) || (currPlayers < totalPlayers - 1)) {
+            const indexes: number[] = [];
+            for (let i = 1; i <= totalPlayers; ++i) {
+                indexes.push(i);
+            }
+            while (dict[indexes[0]]) {
+                indexes.push(indexes.shift());
+            }
+            return indexes;
+        } else {
+            const indexes: number[] = [];
+            for (let i = 1; i <= totalPlayers; ++i) {
+                if (!dict[i]) {
+                    indexes.push(i);
+                }
+            }
+            return indexes;
         }
     }
 }

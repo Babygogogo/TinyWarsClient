@@ -57,14 +57,14 @@ namespace TinyWars.MultiCustomRoom {
         private _onTouchedBtnHelpFog(e: egret.TouchEvent): void {
             HelpPanel.show({
                 title  : Lang.getText(Lang.Type.B0020),
-                content: Lang.getRichText(Lang.RichType.R002),
+                content: Lang.getRichText(Lang.RichType.R0002),
             });
         }
 
         private _onTouchedBtnHelpTimeLimit(e: egret.TouchEvent): void {
             HelpPanel.show({
                 title  : Lang.getText(Lang.Type.B0021),
-                content: Lang.getRichText(Lang.RichType.R003),
+                content: Lang.getRichText(Lang.RichType.R0003),
             });
         }
 
@@ -72,12 +72,15 @@ namespace TinyWars.MultiCustomRoom {
             McrJoinPasswordPanel.hide();
         }
 
-        private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
+        private async _onTouchedBtnConfirm(e: egret.TouchEvent): Promise<void> {
             if (this._inputWarPassword.text !== this._openData.warPassword) {
                 FloatText.show(Lang.getText(Lang.Type.A0017));
             } else {
                 McrJoinPasswordPanel.hide();
-                McrJoinDetailPanel.show(this._openData);
+                McrJoinMapListPanel.hide();
+
+                await McrModel.resetJoinWarData(this._openData);
+                McrJoinSettingsPanel.show();
             }
         }
 

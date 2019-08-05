@@ -96,7 +96,8 @@ namespace TinyWars.MultiCustomWar.McwHelpers {
         const playerIndexLoggedIn   = war.getPlayerIndexLoggedIn();
         const fogMap                = war.getFogMap();
 
-        war.getTileMap().forEachTile(tile => {
+        const tileMap = war.getTileMap();
+        tileMap.forEachTile(tile => {
             const gridIndex = tile.getGridIndex();
             if (VisibilityHelpers.checkIsTileVisibleToPlayer(war, gridIndex, playerIndexLoggedIn)) {
                 if (tile.getIsFogEnabled()) {
@@ -119,6 +120,7 @@ namespace TinyWars.MultiCustomWar.McwHelpers {
             }
             tile.updateView();
         });
+        tileMap.getView().updateCoZone();
 
         war.getUnitMap().forEachUnitOnMap(unit => {
             const gridIndex = unit.getGridIndex();

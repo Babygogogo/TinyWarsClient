@@ -21,8 +21,9 @@ namespace TinyWars.Utility.DamageCalculator {
 
     function getAttackBonusMultiplier(war: BwWar, attacker: BwUnit, attackerGridIndex: GridIndex, target: BwUnit | BwTile, targetGridIndex: GridIndex): number {
         const playerIndex   = attacker.getPlayerIndex();
-        let bonus           = war.getSettingsAttackPowerModifier() + attacker.getPromotionAttackBonus();
-        // TODO: take skill into account.
+        let bonus           = war.getSettingsAttackPowerModifier()
+            + attacker.getPromotionAttackBonus()
+            + attacker.getAttackModifierByCo(attackerGridIndex);
 
         war.getTileMap().forEachTile(tile => {
             if (tile.getPlayerIndex() === playerIndex) {
@@ -38,8 +39,9 @@ namespace TinyWars.Utility.DamageCalculator {
             return 1;
         } else {
             const tileMap   = war.getTileMap();
-            let bonus       = tileMap.getTile(targetGridIndex).getDefenseAmountForUnit(target) + target.getPromotionDefenseBonus();
-            // TODO: take skill into account.
+            let bonus       = tileMap.getTile(targetGridIndex).getDefenseAmountForUnit(target)
+                + target.getPromotionDefenseBonus()
+                + target.getDefenseModifierByCo(targetGridIndex);
 
             tileMap.forEachTile(tile => {
                 if (tile.getPlayerIndex() === target.getPlayerIndex()) {
@@ -63,7 +65,7 @@ namespace TinyWars.Utility.DamageCalculator {
         const targetGridIndex   = targetMovePath   ? targetMovePath[targetMovePath.length - 1]     : target.getGridIndex();
         if ((armorType == null)                                                                                                     ||
             ((!attacker.checkCanAttackAfterMove()) && (attackerMovePath) && (attackerMovePath.length > 1))                          ||
-            (!checkIsInAttackRange(attackerGridIndex, targetGridIndex, attacker.getMinAttackRange(), attacker.getMaxAttackRange())) ||
+            (!checkIsInAttackRange(attackerGridIndex, targetGridIndex, attacker.getMinAttackRange(), attacker.getFinalMaxAttackRange())) ||
             ((target instanceof BwUnit) && (target.getIsDiving()) && (!attacker.checkCanAttackDivingUnits()))
         ) {
             return false;

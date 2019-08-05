@@ -80,4 +80,8 @@ C_McwUnitProduceUnit = 203,
 S_McwUnitProduceUnit = 204,
 C_McwUnitSupply = 205,
 S_McwUnitSupply = 206,
+C_McwUnitLoadCo = 207,
+S_McwUnitLoadCo = 208,
+C_McwUnitUseCoSkill = 209,
+S_McwUnitUseCoSkill = 210,
 }}

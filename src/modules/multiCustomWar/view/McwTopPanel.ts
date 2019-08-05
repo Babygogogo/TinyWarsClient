@@ -2,7 +2,6 @@
 namespace TinyWars.MultiCustomWar {
     import ConfirmPanel     = Common.ConfirmPanel;
     import FloatText        = Utility.FloatText;
-    import FlowManager      = Utility.FlowManager;
     import Lang             = Utility.Lang;
     import Helpers          = Utility.Helpers;
     import Notify           = Utility.Notify;
@@ -16,7 +15,7 @@ namespace TinyWars.MultiCustomWar {
 
         private _labelPlayer    : GameUi.UiLabel;
         private _labelFund      : GameUi.UiLabel;
-        private _labelEnergy    : GameUi.UiLabel;
+        private _labelCo        : GameUi.UiLabel;
         private _btnUnitList    : GameUi.UiButton;
         private _btnFindBuilding: GameUi.UiButton;
         private _btnEndTurn     : GameUi.UiButton;
@@ -46,11 +45,12 @@ namespace TinyWars.MultiCustomWar {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.BwTurnPhaseCodeChanged,        callback: this._onNotifyMcwTurnPhaseCodeChanged },
-                { type: Notify.Type.BwPlayerFundChanged,           callback: this._onNotifyMcwPlayerFundChanged },
-                { type: Notify.Type.BwPlayerIndexInTurnChanged,    callback: this._onNotifyMcwPlayerIndexInTurnChanged },
-                { type: Notify.Type.BwPlayerEnergyChanged,         callback: this._onNotifyMcwPlayerEnergyChanged },
-                { type: Notify.Type.BwActionPlannerStateChanged,   callback: this._onNotifyMcwActionPlannerStateChanged },
+                { type: Notify.Type.BwTurnPhaseCodeChanged,         callback: this._onNotifyMcwTurnPhaseCodeChanged },
+                { type: Notify.Type.BwPlayerFundChanged,            callback: this._onNotifyMcwPlayerFundChanged },
+                { type: Notify.Type.BwPlayerIndexInTurnChanged,     callback: this._onNotifyMcwPlayerIndexInTurnChanged },
+                { type: Notify.Type.BwCoEnergyChanged,              callback: this._onNotifyMcwCoEnergyChanged },
+                { type: Notify.Type.BwCoUsingSkillChanged,          callback: this._onNotifyMcwCoUsingSkillChanged },
+                { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyMcwActionPlannerStateChanged },
             ];
             this._uiListeners = [
                 { ui: this._btnUnitList,        callback: this._onTouchedBtnUnitList, },
@@ -85,8 +85,11 @@ namespace TinyWars.MultiCustomWar {
         private _onNotifyMcwPlayerIndexInTurnChanged(e: egret.Event): void {
             this._updateView();
         }
-        private _onNotifyMcwPlayerEnergyChanged(e: egret.Event): void {
-            this._updateLabelEnergy();
+        private _onNotifyMcwCoEnergyChanged(e: egret.Event): void {
+            this._updateLabelCo();
+        }
+        private _onNotifyMcwCoUsingSkillChanged(e: egret.Event): void {
+            this._updateLabelCo();
         }
         private _onNotifyMcwActionPlannerStateChanged(e: egret.Event): void {
             this._updateBtnEndTurn();
@@ -129,7 +132,7 @@ namespace TinyWars.MultiCustomWar {
         private _updateView(): void {
             this._updateLabelPlayer();
             this._updateLabelFund();
-            this._updateLabelEnergy();
+            this._updateLabelCo();
             this._updateBtnEndTurn();
             this._updateBtnFindUnit();
             this._updateBtnFindBuilding();
@@ -151,9 +154,18 @@ namespace TinyWars.MultiCustomWar {
                 : `${Lang.getText(Lang.Type.B0032)}: ${playerInTurn.getFund()}`;
         }
 
-        private _updateLabelEnergy(): void {
-            // TODO
-            this._labelEnergy.visible = false;
+        private _updateLabelCo(): void {
+            const war = this._war;
+            if ((war) && (war.getIsRunning())) {
+                const player    = war.getPlayerInTurn();
+                const coId      = player.getCoId();
+                if (coId == null) {
+                    this._labelCo.text = `CO:----`;
+                } else {
+                    this._labelCo.text = `CO:${ConfigManager.getCoBasicCfg(war.getConfigVersion(), coId).name}`
+                        + ` ${player.getCoIsUsingSkill() ? `POWER` : player.getCoCurrentEnergy()} / ${player.getCoMiddleEnergy() || `--`} / ${player.getCoMaxEnergy() || `--`}`;
+                }
+            }
         }
 
         private _updateBtnEndTurn(): void {

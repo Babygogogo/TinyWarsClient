@@ -866,7 +866,7 @@ namespace TinyWars.BaseWar {
 
         protected _resetAttackableArea(): void {
             const unit                  = this.getFocusUnit();
-            const canAttakAfterMove     = unit.checkCanAttackAfterMove();
+            const canAttackAfterMove    = unit.checkCanAttackAfterMove();
             const isLoaded              = unit.getLoaderUnitId() != null;
             const beginningGridIndex    = unit.getGridIndex();
             const hasAmmo               = (unit.getPrimaryWeaponCurrentAmmo() > 0) || (unit.checkHasSecondaryWeapon());
@@ -875,7 +875,7 @@ namespace TinyWars.BaseWar {
                 this.getMovableArea(),
                 this.getMapSize(),
                 unit.getMinAttackRange(),
-                unit.getMaxAttackRange(),
+                unit.getFinalMaxAttackRange(),
                 (moveGridIndex: GridIndex, attackGridIndex: GridIndex): boolean => {
                     const existingUnit = unitMap.getUnitOnMap(moveGridIndex);
                     if ((!hasAmmo) || ((existingUnit) && (existingUnit !== unit))) {
@@ -883,7 +883,7 @@ namespace TinyWars.BaseWar {
                     } else {
                         const hasMoved = !GridIndexHelpers.checkIsEqual(moveGridIndex, beginningGridIndex);
                         return ((!isLoaded) || (hasMoved))
-                            && ((canAttakAfterMove) || (!hasMoved))
+                            && ((canAttackAfterMove) || (!hasMoved))
                     }
                 }
             );
@@ -911,7 +911,7 @@ namespace TinyWars.BaseWar {
             return GridIndexHelpers.getGridsWithinDistance(
                 this.getMovePathDestination(),
                 unit.getMinAttackRange(),
-                unit.getMaxAttackRange(),
+                unit.getFinalMaxAttackRange(),
                 this._mapSize,
                 (gridIndex) => unit.checkCanAttackTargetAfterMovePath(this.getMovePath(), gridIndex)
             );
@@ -990,7 +990,7 @@ namespace TinyWars.BaseWar {
             this._areaForPreviewAttack.length = 0;
         }
         private _addUnitForPreviewAttackableArea(unit: BwUnit): void {
-            const canAttakAfterMove     = unit.checkCanAttackAfterMove();
+            const canAttackAfterMove    = unit.checkCanAttackAfterMove();
             const beginningGridIndex    = unit.getGridIndex();
             const hasAmmo               = (unit.getPrimaryWeaponCurrentAmmo() > 0) || (unit.checkHasSecondaryWeapon());
             const mapSize               = this.getMapSize();
@@ -1003,12 +1003,12 @@ namespace TinyWars.BaseWar {
                 ),
                 mapSize,
                 unit.getMinAttackRange(),
-                unit.getMaxAttackRange(),
+                unit.getFinalMaxAttackRange(),
                 (moveGridIndex, attackGridIndex) => {
                     const existingUnit = unitMap.getUnitOnMap(moveGridIndex);
                     return ((!existingUnit) || (existingUnit === unit))
                         && (hasAmmo)
-                        && ((canAttakAfterMove) || (GridIndexHelpers.checkIsEqual(moveGridIndex, beginningGridIndex)));
+                        && ((canAttackAfterMove) || (GridIndexHelpers.checkIsEqual(moveGridIndex, beginningGridIndex)));
                 }
             );
 
@@ -1118,26 +1118,30 @@ namespace TinyWars.BaseWar {
                 return actionUnitJoin;
             }
 
-            const datas = [] as DataForUnitActionRenderer[];
-            for (const action of this._getActionUnitAttack())       { datas.push(action); }
-            for (const action of this._getActionUnitCapture())      { datas.push(action); }
-            for (const action of this._getActionUnitDive())         { datas.push(action); }
-            for (const action of this._getActionUnitSurface())      { datas.push(action); }
-            for (const action of this._getActionUnitBuildTile())    { datas.push(action); }
-            for (const action of this._getActionUnitSupply())       { datas.push(action); }
-            for (const action of this._getActionsUnitLaunchUnit())  { datas.push(action); }
-            for (const action of this._getActionsUnitDropUnit())    { datas.push(action); }
-            for (const action of this._getActionUnitLaunchFlare())  { datas.push(action); }
-            for (const action of this._getActionUnitLaunchSilo())   { datas.push(action); }
-            for (const action of this._getActionUnitProduceUnit())  { datas.push(action); }
-            for (const action of this._getActionUnitWait())         { datas.push(action); }
+            const dataList = [] as DataForUnitActionRenderer[];
+            dataList.push(...this._getActionUnitUseCoSkill());
+            dataList.push(...this._getActionUnitLoadCo());
+            dataList.push(...this._getActionUnitAttack());
+            dataList.push(...this._getActionUnitCapture());
+            dataList.push(...this._getActionUnitDive());
+            dataList.push(...this._getActionUnitSurface());
+            dataList.push(...this._getActionUnitBuildTile());
+            dataList.push(...this._getActionUnitSupply());
+            dataList.push(...this._getActionsUnitLaunchUnit());
+            dataList.push(...this._getActionsUnitDropUnit());
+            dataList.push(...this._getActionUnitLaunchFlare());
+            dataList.push(...this._getActionUnitLaunchSilo());
+            dataList.push(...this._getActionUnitProduceUnit());
+            dataList.push(...this._getActionUnitWait());
 
-            Logger.assert(datas.length, `BwActionPlanner._getDataForUntiActionsPanel() no actions available?!`);
-            return datas;
+            Logger.assert(dataList.length, `BwActionPlanner._getDataForUnitActionsPanel() no actions available?!`);
+            return dataList;
         }
 
         protected abstract _getActionUnitBeLoaded(): DataForUnitActionRenderer[];
         protected abstract _getActionUnitJoin(): DataForUnitActionRenderer[];
+        protected abstract _getActionUnitUseCoSkill(): DataForUnitActionRenderer[];
+        protected abstract _getActionUnitLoadCo(): DataForUnitActionRenderer[];
         private _getActionUnitAttack(): DataForUnitActionRenderer[] {
             return this._createAttackableGridsAfterMove().length
                 ? [{ actionType: UnitActionType.Attack, callback: () => this._setStateChoosingAttackTargetOnChooseAction() }]
@@ -1149,13 +1153,13 @@ namespace TinyWars.BaseWar {
         protected abstract _getActionUnitBuildTile(): DataForUnitActionRenderer[];
         protected abstract _getActionUnitSupply(): DataForUnitActionRenderer[];
         private _getActionsUnitLaunchUnit(): DataForUnitActionRenderer[] {
-            const datas     = [] as DataForUnitActionRenderer[];
+            const dataList  = [] as DataForUnitActionRenderer[];
             const focusUnit = this.getFocusUnit();
             if ((focusUnit !== this.getFocusUnitLoaded()) && (this.getMovePath().length === 1) && (focusUnit.checkCanLaunchLoadedUnit())) {
                 const tile = this._getTileMap().getTile(this.getMovePathDestination());
                 for (const unit of focusUnit.getLoadedUnits()) {
                     if ((unit.getState() === UnitState.Idle) && (tile.getMoveCostByUnit(unit) != null)) {
-                        datas.push({
+                        dataList.push({
                             actionType      : UnitActionType.LaunchUnit,
                             callback        : () => this._setStateMakingMovePathOnChooseAction(unit),
                             unitForLaunch   : unit,
@@ -1163,7 +1167,7 @@ namespace TinyWars.BaseWar {
                     }
                 }
             }
-            return datas;
+            return dataList;
         }
         private _getActionsUnitDropUnit(): DataForUnitActionRenderer[] {
             const focusUnit                 = this.getFocusUnit();

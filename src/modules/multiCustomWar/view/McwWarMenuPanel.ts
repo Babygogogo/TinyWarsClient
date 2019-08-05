@@ -189,36 +189,39 @@ namespace TinyWars.MultiCustomWar {
         }
 
         private _createDataForMainMenu(): DataForCommandRenderer[] {
-            const datas = [] as DataForCommandRenderer[];
+            const dataList = [] as DataForCommandRenderer[];
+
+            const commandOpenCoInfoMenu = this._createCommandOpenCoInfoMenu();
+            (commandOpenCoInfoMenu) && (dataList.push(commandOpenCoInfoMenu));
 
             const commandOpenAdvancedMenu = this._createCommandOpenAdvancedMenu();
-            (commandOpenAdvancedMenu) && (datas.push(commandOpenAdvancedMenu));
+            (commandOpenAdvancedMenu) && (dataList.push(commandOpenAdvancedMenu));
 
             const commandSyncWar = this._createCommandSyncWar();
-            (commandSyncWar) && (datas.push(commandSyncWar));
+            (commandSyncWar) && (dataList.push(commandSyncWar));
 
             const commandGotoLobby = this._createCommandGotoLobby();
-            (commandGotoLobby) && (datas.push(commandGotoLobby));
+            (commandGotoLobby) && (dataList.push(commandGotoLobby));
 
-            return datas;
+            return dataList;
         }
 
         private _createDataForAdvancedMenu(): DataForCommandRenderer[] {
-            const datas = [] as DataForCommandRenderer[];
+            const dataList = [] as DataForCommandRenderer[];
 
             const commandPlayerDeleteUnit = this._createCommandPlayerDeleteUnit();
-            (commandPlayerDeleteUnit) && (datas.push(commandPlayerDeleteUnit));
+            (commandPlayerDeleteUnit) && (dataList.push(commandPlayerDeleteUnit));
 
             const commandPlayerAgreeDraw = this._createCommandPlayerAgreeDraw();
-            (commandPlayerAgreeDraw) && (datas.push(commandPlayerAgreeDraw));
+            (commandPlayerAgreeDraw) && (dataList.push(commandPlayerAgreeDraw));
 
             const commandPlayerRefuseDraw = this._createCommandPlayerDeclineDraw();
-            (commandPlayerRefuseDraw) && (datas.push(commandPlayerRefuseDraw));
+            (commandPlayerRefuseDraw) && (dataList.push(commandPlayerRefuseDraw));
 
             const commandPlayerSurrender = this._createCommandPlayerSurrender();
-            (commandPlayerSurrender) && (datas.push(commandPlayerSurrender));
+            (commandPlayerSurrender) && (dataList.push(commandPlayerSurrender));
 
-            return datas;
+            return dataList;
         }
 
         private _createCommandOpenAdvancedMenu(): DataForCommandRenderer | undefined {
@@ -227,6 +230,16 @@ namespace TinyWars.MultiCustomWar {
                 callback: () => {
                     this._menuType = MenuType.Advanced;
                     this._updateListCommand();
+                },
+            };
+        }
+
+        private _createCommandOpenCoInfoMenu(): DataForCommandRenderer | undefined {
+            return {
+                name    : Lang.getText(Lang.Type.B0140),
+                callback: () => {
+                    McwCoListPanel.show(this._war.getPlayerIndexLoggedIn() - 1);
+                    McwWarMenuPanel.hide();
                 },
             };
         }
@@ -393,6 +406,8 @@ namespace TinyWars.MultiCustomWar {
         private _labelFund      : GameUi.UiLabel;
         private _labelIncome    : GameUi.UiLabel;
         private _labelBuildings : GameUi.UiLabel;
+        private _labelCoName    : GameUi.UiLabel;
+        private _labelEnergy    : GameUi.UiLabel;
         private _labelUnits     : GameUi.UiLabel;
         private _labelUnitsValue: GameUi.UiLabel;
 
@@ -406,8 +421,8 @@ namespace TinyWars.MultiCustomWar {
             this._labelName.text        = player.getNickname();
             this._labelName.textColor   = player === war.getPlayerInTurn() ? 0x00FF00 : 0xFFFFFF;
             this._labelForce.text       = `${Lang.getPlayerForceName(player.getPlayerIndex())}`
-                + `  ${Lang.getPlayerTeamName(player.getTeamIndex())}`;
-                // + `  ${player === war.getPlayerInTurn() ? Lang.getText(Lang.Type.B0086) : ""}`;
+                + `  ${Lang.getPlayerTeamName(player.getTeamIndex())}`
+                + `  ${player === war.getPlayerInTurn() ? Lang.getText(Lang.Type.B0086) : ""}`;
 
             if (!player.getIsAlive()) {
                 this._labelLost.visible = true;
@@ -421,6 +436,16 @@ namespace TinyWars.MultiCustomWar {
                 this._labelFund.text        = isInfoKnown ? `${player.getFund()}` : `?`;
                 this._labelIncome.text      = `${tilesCountAndIncome.income}${isInfoKnown ? `` : `  ?`}`;
                 this._labelBuildings.text   = `${tilesCountAndIncome.count}${isInfoKnown ? `` : `  ?`}`;
+
+                const coId              = player.getCoId();
+                this._labelCoName.text  = coId == null
+                    ? `(${Lang.getText(Lang.Type.B0001)}CO)`
+                    : ConfigManager.getCoBasicCfg(ConfigManager.getNewestConfigVersion(), coId).name;
+                const maxEnergy         = player.getCoMaxEnergy();
+                const middleEnergy      = player.getCoMiddleEnergy();
+                this._labelEnergy.text  = `${maxEnergy == null ? "--" : (player.getCoIsUsingSkill() ? "POWER" : player.getCoCurrentEnergy())}`
+                    + ` / ${middleEnergy == null ? "--" : middleEnergy}`
+                    + ` / ${maxEnergy == null ? "--" : maxEnergy}`;
 
                 const unitsCountAndValue    = this._getUnitsCountAndValue(war, playerIndex);
                 this._labelUnits.text       = `${unitsCountAndValue.count}${isInfoKnown ? `` : `  ?`}`;
