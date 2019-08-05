@@ -669,6 +669,11 @@ namespace TinyWars.Replay.ReplayModel {
         focusUnit.setState(UnitState.Actioned);
 
         if (targetUnit) {
+            const player = war.getPlayer(focusUnit.getPlayerIndex())!;
+            if (player.getCoUnitId() === targetUnit.getUnitId()) {
+                player.setCoUnitId(focusUnit.getUnitId());
+            }
+
             if (focusUnit.checkHasPrimaryWeapon()) {
                 focusUnit.setPrimaryWeaponCurrentAmmo(Math.min(
                     focusUnit.getPrimaryWeaponMaxAmmo()!,
@@ -678,7 +683,6 @@ namespace TinyWars.Replay.ReplayModel {
 
             const joinIncome = focusUnit.getJoinIncome(targetUnit)!;
             if (joinIncome !== 0) {
-                const player = war.getPlayer(focusUnit.getPlayerIndex())!;
                 player.setFund(player.getFund() + joinIncome);
             }
 
@@ -1377,6 +1381,11 @@ namespace TinyWars.Replay.ReplayModel {
         focusUnit.setState(UnitState.Actioned);
 
         if (targetUnit) {
+            const player = war.getPlayer(focusUnit.getPlayerIndex())!;
+            if (player.getCoUnitId() === targetUnit.getUnitId()) {
+                player.setCoUnitId(focusUnit.getUnitId());
+            }
+
             if (focusUnit.checkHasPrimaryWeapon()) {
                 focusUnit.setPrimaryWeaponCurrentAmmo(Math.min(
                     focusUnit.getPrimaryWeaponMaxAmmo()!,
@@ -1386,7 +1395,6 @@ namespace TinyWars.Replay.ReplayModel {
 
             const joinIncome = focusUnit.getJoinIncome(targetUnit)!;
             if (joinIncome !== 0) {
-                const player = war.getPlayer(focusUnit.getPlayerIndex())!;
                 player.setFund(player.getFund() + joinIncome);
             }
 

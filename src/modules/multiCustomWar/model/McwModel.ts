@@ -795,6 +795,11 @@ namespace TinyWars.MultiCustomWar.McwModel {
         focusUnit.setState(UnitState.Actioned);
 
         if (targetUnit) {
+            const player = war.getPlayer(focusUnit.getPlayerIndex())!;
+            if (player.getCoUnitId() === targetUnit.getUnitId()) {
+                player.setCoUnitId(focusUnit.getUnitId());
+            }
+
             if (focusUnit.checkHasPrimaryWeapon()) {
                 focusUnit.setPrimaryWeaponCurrentAmmo(Math.min(
                     focusUnit.getPrimaryWeaponMaxAmmo()!,
@@ -804,7 +809,6 @@ namespace TinyWars.MultiCustomWar.McwModel {
 
             const joinIncome = focusUnit.getJoinIncome(targetUnit)!;
             if (joinIncome !== 0) {
-                const player = war.getPlayer(focusUnit.getPlayerIndex())!;
                 player.setFund(player.getFund() + joinIncome);
             }
 
