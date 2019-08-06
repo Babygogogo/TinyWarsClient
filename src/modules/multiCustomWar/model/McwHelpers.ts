@@ -120,7 +120,6 @@ namespace TinyWars.MultiCustomWar.McwHelpers {
             }
             tile.updateView();
         });
-        tileMap.getView().updateCoZone();
 
         war.getUnitMap().forEachUnitOnMap(unit => {
             const gridIndex = unit.getGridIndex();
@@ -136,7 +135,9 @@ namespace TinyWars.MultiCustomWar.McwHelpers {
             } else {
                 DestructionHelpers.destroyUnitOnMap(war, gridIndex, false, false);
             }
-        })
+        });
+
+        tileMap.getView().updateCoZone();
     }
 
     export function getUnitProductionCost(war: McwWar, unitType: UnitType): number | undefined {
