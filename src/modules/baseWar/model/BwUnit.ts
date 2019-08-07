@@ -904,7 +904,8 @@ namespace TinyWars.BaseWar {
             const player = this.getPlayer();
             return (player.getCoUnitId() === this.getUnitId())
                 && (!player.getCoIsUsingSkill())
-                && (player.getCoCurrentEnergy() >= player.getCoMaxEnergy());
+                && (player.getCoCurrentEnergy() >= player.getCoMaxEnergy())
+                && (!!player.getCoActiveSkills());
         }
 
         public getLoadCoCost(): number | null {

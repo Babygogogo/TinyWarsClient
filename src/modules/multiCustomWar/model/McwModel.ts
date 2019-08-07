@@ -11,6 +11,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
     import FloatText            = Utility.FloatText;
     import WarActionCodes       = Utility.WarActionCodes;
     import WarActionContainer   = ProtoTypes.IWarActionContainer;
+    import BwHelpers            = BaseWar.BwHelpers;
     import AlertPanel           = Common.AlertPanel;
     import GridIndex            = Types.GridIndex;
     import SerializedMcwTile    = Types.SerializedBwTile;
@@ -1157,7 +1158,15 @@ namespace TinyWars.MultiCustomWar.McwModel {
         const isSuccessful  = !path.isBlocked;
         moveUnit(war, WarActionCodes.WarActionUnitUseCoSkill, path, action.launchUnitId, path.fuelConsumption);
         focusUnit.setState(UnitState.Actioned);
-        (isSuccessful) && (focusUnit.getPlayer().setCoIsUsingSkill(true));
+
+        if (isSuccessful) {
+            const player = focusUnit.getPlayer();
+            player.setCoIsUsingSkill(true);
+
+            for (const skill of player.getCoCurrentSkills() || []) {
+                BwHelpers.exeInstantSkill(war, player, skill);
+            }
+        }
 
         return new Promise<void>(resolve => {
             focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
@@ -1168,9 +1177,9 @@ namespace TinyWars.MultiCustomWar.McwModel {
                     const gridVisionEffect  = war.getGridVisionEffect();
                     const playerIndex       = focusUnit.getPlayerIndex();
                     war.getUnitMap().forEachUnitOnMap(unit => {
+                        unit.updateView();
                         if (unit.getPlayerIndex() === playerIndex) {
                             gridVisionEffect.showEffectSkillActivation(unit.getGridIndex());
-                            unit.updateView();
                         }
                     });
                 }

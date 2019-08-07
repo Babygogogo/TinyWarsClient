@@ -146,4 +146,47 @@ namespace TinyWars.BaseWar.BwHelpers {
             || (state === Types.ActionPlannerState.RequestingUnitUseCoSkill)
             || (state === Types.ActionPlannerState.RequestingUnitWait);
     }
+
+    export function exeInstantSkill(war: BwWar, player: BwPlayer, skillId: number): void {
+        const configVersion = war.getConfigVersion();
+        const cfg           = ConfigManager.getCoSkillCfg(configVersion, skillId)!;
+
+        if (cfg.selfHpGain) {
+            const playerIndex   = player.getPlayerIndex();
+            const category      = cfg.selfHpGain[0];
+            const modifier      = cfg.selfHpGain[1] * ConfigManager.UNIT_HP_NORMALIZER;
+            war.getUnitMap().forEachUnitOnMap(unit => {
+                if ((unit.getPlayerIndex() === playerIndex)                                         &&
+                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
+                ) {
+                    unit.setCurrentHp(Math.max(
+                        1,
+                        Math.min(
+                            unit.getMaxHp(),
+                            unit.getCurrentHp() + modifier
+                        ),
+                    ));
+                }
+            });
+        }
+
+        if (cfg.enemyHpGain) {
+            const playerIndex   = player.getPlayerIndex();
+            const category      = cfg.enemyHpGain[0];
+            const modifier      = cfg.enemyHpGain[1] * ConfigManager.UNIT_HP_NORMALIZER;
+            war.getUnitMap().forEachUnitOnMap(unit => {
+                if ((unit.getPlayerIndex() !== playerIndex)                                         &&
+                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
+                ) {
+                    unit.setCurrentHp(Math.max(
+                        1,
+                        Math.min(
+                            unit.getMaxHp(),
+                            unit.getCurrentHp() + modifier
+                        ),
+                    ));
+                }
+            });
+        }
+    }
 }

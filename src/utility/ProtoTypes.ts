@@ -1312,6 +1312,9 @@ export declare interface ICoBasicCfg {
     /** CoBasicCfg maxEnergy */
     maxEnergy?: (number|null);
 
+    /** CoBasicCfg isEnabled */
+    isEnabled?: (number|null);
+
     /** CoBasicCfg passiveSkills */
     passiveSkills?: (number[]|null);
 
@@ -1345,6 +1348,9 @@ export declare class CoBasicCfg implements ICoBasicCfg {
 
     /** CoBasicCfg maxEnergy. */
     public maxEnergy: number;
+
+    /** CoBasicCfg isEnabled. */
+    public isEnabled: number;
 
     /** CoBasicCfg passiveSkills. */
     public passiveSkills: number[];
@@ -1449,6 +1455,12 @@ export declare interface ICoSkillCfg {
 
     /** CoSkillCfg maxAttackRangeBonus */
     maxAttackRangeBonus?: (number[]|null);
+
+    /** CoSkillCfg selfHpGain */
+    selfHpGain?: (number[]|null);
+
+    /** CoSkillCfg enemyHpGain */
+    enemyHpGain?: (number[]|null);
 }
 
 /** Represents a CoSkillCfg. */
@@ -1483,6 +1495,12 @@ export declare class CoSkillCfg implements ICoSkillCfg {
 
     /** CoSkillCfg maxAttackRangeBonus. */
     public maxAttackRangeBonus: number[];
+
+    /** CoSkillCfg selfHpGain. */
+    public selfHpGain: number[];
+
+    /** CoSkillCfg enemyHpGain. */
+    public enemyHpGain: number[];
 
     /**
      * Creates a new CoSkillCfg instance using the specified properties.

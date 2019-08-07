@@ -1639,13 +1639,15 @@ namespace TinyWars.ConfigManager {
             const dict: { [coType: number]: number } = {};
             const cfgs = _ALL_CONFIGS.get(version)!.CoBasic;
             for (const k in cfgs || {}) {
-                const cfg       = cfgs[k];
-                const coId      = cfg.coId;
-                const coType    = Math.floor(coId / 1000);
-                if (!dict[coType]) {
-                    dict[coType] = coId;
-                } else {
-                    dict[coType] = Math.max(coId, dict[coType]);
+                const cfg = cfgs[k];
+                if (cfg.isEnabled) {
+                    const coId      = cfg.coId;
+                    const coType    = Math.floor(coId / 10000);
+                    if (!dict[coType]) {
+                        dict[coType] = coId;
+                    } else {
+                        dict[coType] = Math.max(coId, dict[coType]);
+                    }
                 }
             }
 
@@ -1653,6 +1655,7 @@ namespace TinyWars.ConfigManager {
             for (const k in dict) {
                 list.push(getCoBasicCfg(version, dict[k]));
             }
+            list.sort((c1, c2) => c1.name < c2.name ? -1 : 1);
             _NEWEST_CO_LIST.set(version, list);
         }
         return _NEWEST_CO_LIST.get(version);

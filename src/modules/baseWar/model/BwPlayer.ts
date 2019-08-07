@@ -134,15 +134,16 @@ namespace TinyWars.BaseWar {
                 if (!cfg) {
                     return null;
                 } else {
-                    const basicRadius   = cfg.zoneRadius;
-                    const energy        = this.getCoCurrentEnergy();
-                    if ((cfg.maxEnergy != null) && (energy >= cfg.maxEnergy)) {
-                        return basicRadius + 2;
-                    } else if ((cfg.middleEnergy != null) && (energy >= cfg.middleEnergy)) {
-                        return basicRadius + 1;
-                    } else {
-                        return basicRadius;
-                    }
+                    const energy    = this.getCoCurrentEnergy();
+                    let radius      = cfg.zoneRadius;
+
+                    const middleEnergy = cfg.middleEnergy;
+                    (middleEnergy != null) && (energy >= middleEnergy) && (++radius);
+
+                    const maxEnergy = cfg.maxEnergy;
+                    (maxEnergy != null) && (energy >= maxEnergy) && (++radius);
+
+                    return radius;
                 }
             }
         }
@@ -185,6 +186,10 @@ namespace TinyWars.BaseWar {
                     ? cfg.activeSkills
                     : cfg.passiveSkills;
             }
+        }
+        public getCoActiveSkills(): number[] | null {
+            const cfg = this._getCoBasicCfg();
+            return cfg ? cfg.activeSkills : null;
         }
 
         public getCoIsDestroyedInTurn(): boolean {
