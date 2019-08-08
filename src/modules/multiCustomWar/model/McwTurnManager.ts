@@ -58,7 +58,7 @@ namespace TinyWars.MultiCustomWar {
                     unitPlayerIndex     : unit.getPlayerIndex(),
                     observerPlayerIndex : playerIndex,
                 })) {
-                    DestructionHelpers.destroyUnitOnMap(war, gridIndex, false, false);
+                    DestructionHelpers.removeUnitOnMap(war, gridIndex);
                 }
             });
 

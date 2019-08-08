@@ -179,7 +179,7 @@ namespace TinyWars.Replay.ReplayModel {
         const focusUnit = war.getUnitMap().getUnitOnMap(gridIndex);
         if (focusUnit) {
             war.getFogMap().updateMapFromPathsByUnitAndPath(focusUnit, [gridIndex]);
-            DestructionHelpers.destroyUnitOnMap(war, gridIndex, false, true);
+            DestructionHelpers.destroyUnitOnMap(war, gridIndex, true);
         }
 
         McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
@@ -367,7 +367,7 @@ namespace TinyWars.Replay.ReplayModel {
                              gridVisionEffect.showEffectDamage(destination);
                         }
                     } else {
-                        DestructionHelpers.destroyUnitOnMap(war, destination, false, true);
+                        DestructionHelpers.destroyUnitOnMap(war, destination, true);
                     }
 
                     if (targetNewHp > 0) {
@@ -375,7 +375,7 @@ namespace TinyWars.Replay.ReplayModel {
                         gridVisionEffect.showEffectDamage(targetGridIndex);
                     } else {
                         if (targetUnit) {
-                            DestructionHelpers.destroyUnitOnMap(war, targetGridIndex, false, true);
+                            DestructionHelpers.destroyUnitOnMap(war, targetGridIndex, true);
                         } else {
                             if ((attackTarget as ReplayTile).getType() === TileType.Meteor) {
                                 for (const gridIndex of getAdjacentPlasmas(tileMap, targetGridIndex)) {
@@ -1100,7 +1100,7 @@ namespace TinyWars.Replay.ReplayModel {
         const focusUnit = war.getUnitMap().getUnitOnMap(gridIndex);
         if (focusUnit) {
             war.getFogMap().updateMapFromPathsByUnitAndPath(focusUnit, [gridIndex]);
-            DestructionHelpers.destroyUnitOnMap(war, gridIndex, false, false);
+            DestructionHelpers.destroyUnitOnMap(war, gridIndex, false);
         }
     }
 
@@ -1226,13 +1226,13 @@ namespace TinyWars.Replay.ReplayModel {
             const lostPlayerIndex   = action.lostPlayerIndex;
             if (attackerNewHp > 0) {
             } else {
-                DestructionHelpers.destroyUnitOnMap(war, destination, false, false);
+                DestructionHelpers.destroyUnitOnMap(war, destination, false);
             }
 
             if (targetNewHp > 0) {
             } else {
                 if (targetUnit) {
-                    DestructionHelpers.destroyUnitOnMap(war, targetGridIndex, false, false);
+                    DestructionHelpers.destroyUnitOnMap(war, targetGridIndex, false);
                 } else {
                     if ((attackTarget as ReplayTile).getType() === TileType.Meteor) {
                         for (const gridIndex of getAdjacentPlasmas(tileMap, targetGridIndex)) {

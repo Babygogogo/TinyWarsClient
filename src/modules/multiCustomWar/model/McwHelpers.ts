@@ -133,7 +133,7 @@ namespace TinyWars.MultiCustomWar.McwHelpers {
             })) {
                 unit.setViewVisible(true);
             } else {
-                DestructionHelpers.destroyUnitOnMap(war, gridIndex, false, false);
+                DestructionHelpers.removeUnitOnMap(war, gridIndex);
             }
         });
 

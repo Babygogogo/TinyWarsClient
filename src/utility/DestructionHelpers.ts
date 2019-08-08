@@ -3,7 +3,7 @@ namespace TinyWars.Utility.DestructionHelpers {
     import GridIndex    = Types.GridIndex;
     import BwWar        = BaseWar.BwWar;
 
-    export function destroyUnitOnMap(war: BwWar, gridIndex: GridIndex, retainVisibility: boolean, showExplosionEffect: boolean): void {
+    export function destroyUnitOnMap(war: BwWar, gridIndex: GridIndex, showExplosionEffect: boolean): void {
         resetTile(war, gridIndex);
 
         const unitMap           = war.getUnitMap();
@@ -16,10 +16,8 @@ namespace TinyWars.Utility.DestructionHelpers {
             destroyedUnits.push(u);
         }
 
-        if (!retainVisibility) {
-            const playerIndex = unit.getPlayerIndex();
-            war.getFogMap().updateMapFromUnitsForPlayerOnLeaving(playerIndex, gridIndex, unit.getVisionRangeForPlayer(playerIndex, gridIndex)!);
-        }
+        const playerIndex = unit.getPlayerIndex();
+        war.getFogMap().updateMapFromUnitsForPlayerOnLeaving(playerIndex, gridIndex, unit.getVisionRangeForPlayer(playerIndex, gridIndex)!);
 
         const player    = war.getPlayer(unit.getPlayerIndex())!;
         const coUnitId  = player.getCoUnitId();
@@ -61,6 +59,21 @@ namespace TinyWars.Utility.DestructionHelpers {
         player.setCoIsUsingSkill(false);
 
         war.setRemainingVotesForDraw(undefined);
+    }
+
+    export function removeUnitOnMap(war: BwWar, gridIndex: GridIndex): void {
+        resetTile(war, gridIndex);
+
+        const unitMap   = war.getUnitMap();
+        const unit      = unitMap.getUnitOnMap(gridIndex)!;
+
+        unitMap.removeUnitOnMap(gridIndex, true);
+        for (const u of unitMap.getUnitsLoadedByLoader(unit, true)) {
+            unitMap.removeUnitLoaded(u.getUnitId());
+        }
+
+        const playerIndex = unit.getPlayerIndex();
+        war.getFogMap().updateMapFromUnitsForPlayerOnLeaving(playerIndex, gridIndex, unit.getVisionRangeForPlayer(playerIndex, gridIndex)!);
     }
 
     function resetTile(war: BwWar, gridIndex: GridIndex): void {

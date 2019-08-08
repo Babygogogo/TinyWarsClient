@@ -300,7 +300,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         const focusUnit = war.getUnitMap().getUnitOnMap(gridIndex);
         if (focusUnit) {
             war.getFogMap().updateMapFromPathsByUnitAndPath(focusUnit, [gridIndex]);
-            DestructionHelpers.destroyUnitOnMap(war, gridIndex, false, true);
+            DestructionHelpers.destroyUnitOnMap(war, gridIndex, true);
         }
 
         McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
@@ -485,7 +485,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
                             gridVisionEffect.showEffectDamage(destination);
                         }
                     } else {
-                        DestructionHelpers.destroyUnitOnMap(war, destination, false, true);
+                        DestructionHelpers.destroyUnitOnMap(war, destination, true);
                     }
 
                     if (targetNewHp > 0) {
@@ -493,7 +493,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
                         gridVisionEffect.showEffectDamage(targetGridIndex);
                     } else {
                         if (targetUnit) {
-                            DestructionHelpers.destroyUnitOnMap(war, targetGridIndex, false, true);
+                            DestructionHelpers.destroyUnitOnMap(war, targetGridIndex, true);
                         } else {
                             if ((attackTarget as McwTile).getType() === TileType.Meteor) {
                                 for (const gridIndex of getAdjacentPlasmas(tileMap, targetGridIndex)) {

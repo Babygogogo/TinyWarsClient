@@ -112,7 +112,7 @@ namespace TinyWars.BaseWar {
                     if ((unit.checkIsDestroyedOnOutOfFuel()) && (unit.getCurrentFuel() <= 0) && (unit.getPlayerIndex() === playerIndex)) {
                         const gridIndex = unit.getGridIndex();
                         fogMap.updateMapFromPathsByUnitAndPath(unit, [gridIndex]);
-                        DestructionHelpers.destroyUnitOnMap(war, gridIndex, false, true);
+                        DestructionHelpers.destroyUnitOnMap(war, gridIndex, true);
                     }
                 });
             }
