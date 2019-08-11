@@ -978,10 +978,11 @@ namespace TinyWars.MultiCustomWar.McwModel {
         } else {
             focusUnit.setCurrentPromotion(focusUnit.getMaxPromotion());
 
-            const player = war.getPlayer(focusUnit.getPlayerIndex())!;
+            const player    = war.getPlayer(focusUnit.getPlayerIndex())!;
+            const maxEnergy = player.getCoMaxEnergy();
             player.setFund(player.getFund() - focusUnit.getLoadCoCost()!);
             player.setCoUnitId(focusUnit.getUnitId());
-            player.setCoCurrentEnergy(0);
+            player.setCoCurrentEnergy(maxEnergy == null ? 0 : Math.floor(maxEnergy * war.getSettingsInitialEnergy() / 100));
             player.setCoIsUsingSkill(false);
         }
 

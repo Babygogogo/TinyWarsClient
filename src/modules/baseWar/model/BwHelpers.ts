@@ -150,9 +150,9 @@ namespace TinyWars.BaseWar.BwHelpers {
     export function exeInstantSkill(war: BwWar, player: BwPlayer, skillId: number): void {
         const configVersion = war.getConfigVersion();
         const cfg           = ConfigManager.getCoSkillCfg(configVersion, skillId)!;
+        const playerIndex   = player.getPlayerIndex();
 
         if (cfg.selfHpGain) {
-            const playerIndex   = player.getPlayerIndex();
             const category      = cfg.selfHpGain[0];
             const modifier      = cfg.selfHpGain[1] * ConfigManager.UNIT_HP_NORMALIZER;
             war.getUnitMap().forEachUnitOnMap(unit => {
@@ -171,7 +171,6 @@ namespace TinyWars.BaseWar.BwHelpers {
         }
 
         if (cfg.enemyHpGain) {
-            const playerIndex   = player.getPlayerIndex();
             const category      = cfg.enemyHpGain[0];
             const modifier      = cfg.enemyHpGain[1] * ConfigManager.UNIT_HP_NORMALIZER;
             war.getUnitMap().forEachUnitOnMap(unit => {
@@ -185,6 +184,186 @@ namespace TinyWars.BaseWar.BwHelpers {
                             unit.getCurrentHp() + modifier
                         ),
                     ));
+                }
+            });
+        }
+
+        if (cfg.selfFuelGain) {
+            const category      = cfg.selfFuelGain[0];
+            const modifier      = cfg.selfFuelGain[1];
+            war.getUnitMap().forEachUnitOnMap(unit => {
+                if ((unit.getPlayerIndex() === playerIndex)                                         &&
+                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
+                ) {
+                    const maxFuel = unit.getMaxFuel();
+                    if (maxFuel != null) {
+                        if (modifier > 0) {
+                            unit.setCurrentFuel(Math.min(
+                                maxFuel,
+                                unit.getCurrentFuel() + Math.floor(maxFuel * modifier / 100)
+                            ));
+                        } else {
+                            unit.setCurrentFuel(Math.max(
+                                0,
+                                Math.floor(unit.getCurrentFuel() * (100 + modifier) / 100)
+                            ));
+                        }
+                    }
+                }
+            });
+        }
+
+        if (cfg.enemyFuelGain) {
+            const category      = cfg.enemyFuelGain[0];
+            const modifier      = cfg.enemyFuelGain[1];
+            war.getUnitMap().forEachUnitOnMap(unit => {
+                if ((unit.getPlayerIndex() !== playerIndex)                                         &&
+                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
+                ) {
+                    const maxFuel = unit.getMaxFuel();
+                    if (maxFuel != null) {
+                        if (modifier > 0) {
+                            unit.setCurrentFuel(Math.min(
+                                maxFuel,
+                                unit.getCurrentFuel() + Math.floor(maxFuel * modifier / 100)
+                            ));
+                        } else {
+                            unit.setCurrentFuel(Math.max(
+                                0,
+                                Math.floor(unit.getCurrentFuel() * (100 + modifier) / 100)
+                            ));
+                        }
+                    }
+                }
+            });
+        }
+
+        if (cfg.selfMaterialGain) {
+            const category      = cfg.selfMaterialGain[0];
+            const modifier      = cfg.selfMaterialGain[1];
+            war.getUnitMap().forEachUnitOnMap(unit => {
+                if ((unit.getPlayerIndex() === playerIndex)                                         &&
+                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
+                ) {
+                    const maxBuildMaterial = unit.getMaxBuildMaterial();
+                    if (maxBuildMaterial != null) {
+                        if (modifier > 0) {
+                            unit.setCurrentBuildMaterial(Math.min(
+                                maxBuildMaterial,
+                                unit.getCurrentBuildMaterial() + Math.floor(maxBuildMaterial * modifier / 100)
+                            ));
+                        } else {
+                            unit.setCurrentBuildMaterial(Math.max(
+                                0,
+                                Math.floor(unit.getCurrentBuildMaterial() * (100 + modifier) / 100)
+                            ));
+                        }
+                    }
+
+                    const maxProduceMaterial = unit.getMaxProduceMaterial();
+                    if (maxProduceMaterial != null) {
+                        if (modifier > 0) {
+                            unit.setCurrentProduceMaterial(Math.min(
+                                maxProduceMaterial,
+                                unit.getCurrentProduceMaterial() + Math.floor(maxProduceMaterial * modifier / 100)
+                            ));
+                        } else {
+                            unit.setCurrentProduceMaterial(Math.max(
+                                0,
+                                Math.floor(unit.getCurrentProduceMaterial() * (100 + modifier) / 100)
+                            ));
+                        }
+                    }
+                }
+            });
+        }
+
+        if (cfg.enemyMaterialGain) {
+            const category      = cfg.enemyMaterialGain[0];
+            const modifier      = cfg.enemyMaterialGain[1];
+            war.getUnitMap().forEachUnitOnMap(unit => {
+                if ((unit.getPlayerIndex() !== playerIndex)                                         &&
+                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
+                ) {
+                    const maxBuildMaterial = unit.getMaxBuildMaterial();
+                    if (maxBuildMaterial != null) {
+                        if (modifier > 0) {
+                            unit.setCurrentBuildMaterial(Math.min(
+                                maxBuildMaterial,
+                                unit.getCurrentBuildMaterial() + Math.floor(maxBuildMaterial * modifier / 100)
+                            ));
+                        } else {
+                            unit.setCurrentBuildMaterial(Math.max(
+                                0,
+                                Math.floor(unit.getCurrentBuildMaterial() * (100 + modifier) / 100)
+                            ));
+                        }
+                    }
+
+                    const maxProduceMaterial = unit.getMaxProduceMaterial();
+                    if (maxProduceMaterial != null) {
+                        if (modifier > 0) {
+                            unit.setCurrentProduceMaterial(Math.min(
+                                maxProduceMaterial,
+                                unit.getCurrentProduceMaterial() + Math.floor(maxProduceMaterial * modifier / 100)
+                            ));
+                        } else {
+                            unit.setCurrentProduceMaterial(Math.max(
+                                0,
+                                Math.floor(unit.getCurrentProduceMaterial() * (100 + modifier) / 100)
+                            ));
+                        }
+                    }
+                }
+            });
+        }
+
+        if (cfg.selfPrimaryAmmoGain) {
+            const category      = cfg.selfPrimaryAmmoGain[0];
+            const modifier      = cfg.selfPrimaryAmmoGain[1];
+            war.getUnitMap().forEachUnitOnMap(unit => {
+                if ((unit.getPlayerIndex() === playerIndex)                                         &&
+                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
+                ) {
+                    const maxAmmo = unit.getPrimaryWeaponMaxAmmo();
+                    if (maxAmmo != null) {
+                        if (modifier > 0) {
+                            unit.setPrimaryWeaponCurrentAmmo(Math.min(
+                                maxAmmo,
+                                unit.getPrimaryWeaponCurrentAmmo() + Math.floor(maxAmmo * modifier / 100)
+                            ));
+                        } else {
+                            unit.setPrimaryWeaponCurrentAmmo(Math.max(
+                                0,
+                                Math.floor(unit.getPrimaryWeaponCurrentAmmo() * (100 + modifier) / 100)
+                            ));
+                        }
+                    }
+                }
+            });
+        }
+
+        if (cfg.enemyPrimaryAmmoGain) {
+            const category      = cfg.enemyPrimaryAmmoGain[0];
+            const modifier      = cfg.enemyPrimaryAmmoGain[1];
+            war.getUnitMap().forEachUnitOnMap(unit => {
+                if ((unit.getPlayerIndex() !== playerIndex)                                         &&
+                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
+                ) {
+                    const maxAmmo = unit.getPrimaryWeaponMaxAmmo();
+                    if (maxAmmo != null) {
+                        if (modifier > 0) {
+                            unit.setPrimaryWeaponCurrentAmmo(Math.min(
+                                maxAmmo,
+                                unit.getPrimaryWeaponCurrentAmmo() + Math.floor(maxAmmo * modifier / 100)
+                            ));
+                        } else {
+                            unit.setPrimaryWeaponCurrentAmmo(Math.max(
+                                0,
+                                Math.floor(unit.getPrimaryWeaponCurrentAmmo() * (100 + modifier) / 100)
+                            ));
+                        }
+                    }
                 }
             });
         }

@@ -1461,6 +1461,24 @@ export declare interface ICoSkillCfg {
 
     /** CoSkillCfg enemyHpGain */
     enemyHpGain?: (number[]|null);
+
+    /** CoSkillCfg selfPrimaryAmmoGain */
+    selfPrimaryAmmoGain?: (number[]|null);
+
+    /** CoSkillCfg enemyPrimaryAmmoGain */
+    enemyPrimaryAmmoGain?: (number[]|null);
+
+    /** CoSkillCfg selfFuelGain */
+    selfFuelGain?: (number[]|null);
+
+    /** CoSkillCfg enemyFuelGain */
+    enemyFuelGain?: (number[]|null);
+
+    /** CoSkillCfg selfMaterialGain */
+    selfMaterialGain?: (number[]|null);
+
+    /** CoSkillCfg enemyMaterialGain */
+    enemyMaterialGain?: (number[]|null);
 }
 
 /** Represents a CoSkillCfg. */
@@ -1501,6 +1519,24 @@ export declare class CoSkillCfg implements ICoSkillCfg {
 
     /** CoSkillCfg enemyHpGain. */
     public enemyHpGain: number[];
+
+    /** CoSkillCfg selfPrimaryAmmoGain. */
+    public selfPrimaryAmmoGain: number[];
+
+    /** CoSkillCfg enemyPrimaryAmmoGain. */
+    public enemyPrimaryAmmoGain: number[];
+
+    /** CoSkillCfg selfFuelGain. */
+    public selfFuelGain: number[];
+
+    /** CoSkillCfg enemyFuelGain. */
+    public enemyFuelGain: number[];
+
+    /** CoSkillCfg selfMaterialGain. */
+    public selfMaterialGain: number[];
+
+    /** CoSkillCfg enemyMaterialGain. */
+    public enemyMaterialGain: number[];
 
     /**
      * Creates a new CoSkillCfg instance using the specified properties.

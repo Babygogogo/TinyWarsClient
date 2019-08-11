@@ -65,6 +65,10 @@
                 <GameUi:UiLabel text="能量增速" y="0" size="16" textColor="0xFFFFFF" x="0" />
                 <GameUi:UiLabel id="_labelEnergyGrowthModifier" text="111%" y="0" size="16" textColor="0xFFFFFF" x="90" />
             </e:Group>
+            <e:Group x="630" y="75">
+                <GameUi:UiLabel text="初始能量" y="0" size="16" textColor="0xFFFFFF" x="0" />
+                <GameUi:UiLabel id="_labelInitialEnergy" text="111%" y="0" size="16" textColor="0xFFFFFF" x="90" />
+            </e:Group>
             <e:Group x="10" y="100">
                 <GameUi:UiLabel text="移动加成" y="0" size="16" textColor="0xFFFFFF" x="0" />
                 <GameUi:UiLabel id="_labelMoveRangeModifier" text="0" y="0" size="16" textColor="0xFFFFFF" x="90" />

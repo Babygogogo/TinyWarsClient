@@ -30,6 +30,7 @@ namespace TinyWars.Replay {
         private _labelActionId              : GameUi.UiLabel;
         private _labelIncomeModifier        : GameUi.UiLabel;
         private _labelEnergyGrowthModifier  : GameUi.UiLabel;
+        private _labelInitialEnergy         : GameUi.UiLabel;
         private _labelMoveRangeModifier     : GameUi.UiLabel;
         private _labelAttackPowerModifier   : GameUi.UiLabel;
         private _labelVisionRangeModifier   : GameUi.UiLabel;
@@ -145,6 +146,7 @@ namespace TinyWars.Replay {
             this._labelActionId.text                = `${war.getNextActionId() - 1}`;
             this._labelIncomeModifier.text          = `${war.getSettingsIncomeModifier()}%`;
             this._labelEnergyGrowthModifier.text    = `${war.getSettingsEnergyGrowthModifier()}%`;
+            this._labelInitialEnergy.text           = `${war.getSettingsInitialEnergy()}%`;
             this._labelMoveRangeModifier.text       = `${war.getSettingsMoveRangeModifier()}`;
             this._labelAttackPowerModifier.text     = `${war.getSettingsAttackPowerModifier()}%`;
             this._labelVisionRangeModifier.text     = `${war.getSettingsVisionRangeModifier()}`;
