@@ -51,6 +51,7 @@ namespace TinyWars.BaseWar {
             this._runPhaseRepairUnitByTile(data);
             this._runPhaseDestroyUnitsOutOfFuel(data);
             this._runPhaseRepairUnitByUnit(data);
+            this._runPhaseRecoverUnitByCo(data);
             this._runPhaseActivateMapWeapon(data);
             this._runPhaseMain(data);
 
@@ -132,6 +133,21 @@ namespace TinyWars.BaseWar {
                     (unit.checkCanBeSupplied()) && (gridVisionEffect.showEffectSupply(gridIndex));
                 }
                 unit.updateOnRepaired(repairAmount);
+            }
+        }
+        private _runPhaseRecoverUnitByCo(data: ProtoTypes.IWarActionPlayerBeginTurn): void {
+            const war               = this._war;
+            const unitMap           = war.getUnitMap();
+            const gridVisionEffect  = war.getGridVisionEffect();
+
+            for (const repairData of data.recoverDataByCo || []) {
+                const repairAmount  = repairData.repairAmount || 0;
+                const gridIndex     = repairData.gridIndex as GridIndex;
+                const unit          = unitMap.getUnitLoadedById(repairData.unitId) || unitMap.getUnitOnMap(gridIndex);
+                if (repairAmount > 0) {
+                    gridVisionEffect.showEffectRepair(gridIndex);
+                    unit.setCurrentHp(unit.getCurrentHp() + repairAmount);
+                }
             }
         }
         private _runPhaseActivateMapWeapon(data: ProtoTypes.IWarActionPlayerBeginTurn): void {

@@ -1479,6 +1479,9 @@ export declare interface ICoSkillCfg {
 
     /** CoSkillCfg enemyMaterialGain */
     enemyMaterialGain?: (number[]|null);
+
+    /** CoSkillCfg selfHpRecovery */
+    selfHpRecovery?: (number[]|null);
 }
 
 /** Represents a CoSkillCfg. */
@@ -1537,6 +1540,9 @@ export declare class CoSkillCfg implements ICoSkillCfg {
 
     /** CoSkillCfg enemyMaterialGain. */
     public enemyMaterialGain: number[];
+
+    /** CoSkillCfg selfHpRecovery. */
+    public selfHpRecovery: number[];
 
     /**
      * Creates a new CoSkillCfg instance using the specified properties.
@@ -3171,6 +3177,9 @@ export declare interface IWarActionPlayerBeginTurn {
 
     /** WarActionPlayerBeginTurn repairDataByUnit */
     repairDataByUnit?: (IWarUnitRepairData[]|null);
+
+    /** WarActionPlayerBeginTurn recoverDataByCo */
+    recoverDataByCo?: (IWarUnitRepairData[]|null);
 }
 
 /** Represents a WarActionPlayerBeginTurn. */
@@ -3193,6 +3202,9 @@ export declare class WarActionPlayerBeginTurn implements IWarActionPlayerBeginTu
 
     /** WarActionPlayerBeginTurn repairDataByUnit. */
     public repairDataByUnit: IWarUnitRepairData[];
+
+    /** WarActionPlayerBeginTurn recoverDataByCo. */
+    public recoverDataByCo: IWarUnitRepairData[];
 
     /**
      * Creates a new WarActionPlayerBeginTurn instance using the specified properties.

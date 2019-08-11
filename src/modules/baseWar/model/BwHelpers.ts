@@ -151,11 +151,12 @@ namespace TinyWars.BaseWar.BwHelpers {
         const configVersion = war.getConfigVersion();
         const cfg           = ConfigManager.getCoSkillCfg(configVersion, skillId)!;
         const playerIndex   = player.getPlayerIndex();
+        const unitMap       = war.getUnitMap();
 
         if (cfg.selfHpGain) {
             const category      = cfg.selfHpGain[0];
             const modifier      = cfg.selfHpGain[1] * ConfigManager.UNIT_HP_NORMALIZER;
-            war.getUnitMap().forEachUnitOnMap(unit => {
+            unitMap.forEachUnit(unit => {
                 if ((unit.getPlayerIndex() === playerIndex)                                         &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
                 ) {
@@ -173,7 +174,7 @@ namespace TinyWars.BaseWar.BwHelpers {
         if (cfg.enemyHpGain) {
             const category      = cfg.enemyHpGain[0];
             const modifier      = cfg.enemyHpGain[1] * ConfigManager.UNIT_HP_NORMALIZER;
-            war.getUnitMap().forEachUnitOnMap(unit => {
+            unitMap.forEachUnit(unit => {
                 if ((unit.getPlayerIndex() !== playerIndex)                                         &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
                 ) {
@@ -191,7 +192,7 @@ namespace TinyWars.BaseWar.BwHelpers {
         if (cfg.selfFuelGain) {
             const category      = cfg.selfFuelGain[0];
             const modifier      = cfg.selfFuelGain[1];
-            war.getUnitMap().forEachUnitOnMap(unit => {
+            unitMap.forEachUnit(unit => {
                 if ((unit.getPlayerIndex() === playerIndex)                                         &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
                 ) {
@@ -216,7 +217,7 @@ namespace TinyWars.BaseWar.BwHelpers {
         if (cfg.enemyFuelGain) {
             const category      = cfg.enemyFuelGain[0];
             const modifier      = cfg.enemyFuelGain[1];
-            war.getUnitMap().forEachUnitOnMap(unit => {
+            unitMap.forEachUnit(unit => {
                 if ((unit.getPlayerIndex() !== playerIndex)                                         &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
                 ) {
@@ -241,7 +242,7 @@ namespace TinyWars.BaseWar.BwHelpers {
         if (cfg.selfMaterialGain) {
             const category      = cfg.selfMaterialGain[0];
             const modifier      = cfg.selfMaterialGain[1];
-            war.getUnitMap().forEachUnitOnMap(unit => {
+            unitMap.forEachUnit(unit => {
                 if ((unit.getPlayerIndex() === playerIndex)                                         &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
                 ) {
@@ -281,7 +282,7 @@ namespace TinyWars.BaseWar.BwHelpers {
         if (cfg.enemyMaterialGain) {
             const category      = cfg.enemyMaterialGain[0];
             const modifier      = cfg.enemyMaterialGain[1];
-            war.getUnitMap().forEachUnitOnMap(unit => {
+            unitMap.forEachUnit(unit => {
                 if ((unit.getPlayerIndex() !== playerIndex)                                         &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
                 ) {
@@ -321,7 +322,7 @@ namespace TinyWars.BaseWar.BwHelpers {
         if (cfg.selfPrimaryAmmoGain) {
             const category      = cfg.selfPrimaryAmmoGain[0];
             const modifier      = cfg.selfPrimaryAmmoGain[1];
-            war.getUnitMap().forEachUnitOnMap(unit => {
+            unitMap.forEachUnit(unit => {
                 if ((unit.getPlayerIndex() === playerIndex)                                         &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
                 ) {
@@ -346,7 +347,7 @@ namespace TinyWars.BaseWar.BwHelpers {
         if (cfg.enemyPrimaryAmmoGain) {
             const category      = cfg.enemyPrimaryAmmoGain[0];
             const modifier      = cfg.enemyPrimaryAmmoGain[1];
-            war.getUnitMap().forEachUnitOnMap(unit => {
+            unitMap.forEachUnit(unit => {
                 if ((unit.getPlayerIndex() !== playerIndex)                                         &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
                 ) {
