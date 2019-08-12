@@ -12,6 +12,7 @@ namespace TinyWars.Utility.Lang {
         A0020, A0021, A0022, A0023, A0024, A0025, A0026, A0027, A0028, A0029,
         A0030, A0031, A0032, A0033, A0034, A0035, A0036, A0037, A0038, A0039,
         A0040, A0041, A0042, A0043, A0044, A0045, A0046, A0047, A0048, A0049,
+        A0050, A0051, A0052, A0053, A0054, A0055, A0056, A0057, A0058, A0059,
 
         B0000, B0001, B0002, B0003, B0004, B0005, B0006, B0007, B0008, B0009,
         B0010, B0011, B0012, B0013, B0014, B0015, B0016, B0017, B0018, B0019,
@@ -137,7 +138,7 @@ namespace TinyWars.Utility.Lang {
         ]],
         [Type.A0020, [
             `服务器维护中，请稍后登陆`,
-            `The server is under maintainance. Please wait and login later.`,
+            `The server is under maintenance. Please wait and login later.`,
         ]],
         [Type.A0021, [
             `正在读取战局数据，请稍候`,
@@ -254,6 +255,18 @@ namespace TinyWars.Utility.Lang {
         [Type.A0049, [
             `Discord ID 已更改`,
             `Your discord ID is changed successfully`,
+        ]],
+        [Type.A0050, [
+            `您尚未选择任何CO。`,
+            `You have chosen no CO.`,
+        ]],
+        [Type.A0051, [
+            `是否确定要创建战局？`,
+            `Are you sure to create the game?`,
+        ]],
+        [Type.A0052, [
+            `是否确定要加入战局？`,
+            `Are you sure to join the game?`,
         ]],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

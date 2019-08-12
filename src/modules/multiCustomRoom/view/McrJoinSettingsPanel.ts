@@ -4,6 +4,7 @@ namespace TinyWars.MultiCustomRoom {
     import Notify       = Utility.Notify;
     import FloatText    = Utility.FloatText;
     import ProtoTypes   = Utility.ProtoTypes;
+    import ConfirmPanel = Common.ConfirmPanel;
 
     const CONFIRM_INTERVAL_MS = 5000;
 
@@ -75,10 +76,23 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            McrProxy.reqJoin(McrModel.getJoinWarData());
+            const data      = McrModel.getJoinWarData();
+            const callback  = () => {
+                McrProxy.reqJoin(data);
 
-            this._btnConfirm.enabled = false;
-            this._resetTimeoutForBtnConfirm();
+                this._btnConfirm.enabled = false;
+                this._resetTimeoutForBtnConfirm();
+            };
+
+            if (data.coId != null) {
+                callback();
+            } else {
+                ConfirmPanel.show({
+                    title   : Lang.getText(Lang.Type.B0088),
+                    content : `${Lang.getText(Lang.Type.A0050)}\n${Lang.getText(Lang.Type.A0052)}`,
+                    callback,
+                });
+            }
         }
 
         private _onNotifySMcrJoinWar(e: egret.Event): void {

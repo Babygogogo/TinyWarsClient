@@ -163,7 +163,7 @@ namespace TinyWars.MultiCustomWar {
                     this._labelCo.text = `CO:----`;
                 } else {
                     this._labelCo.text = `CO:${ConfigManager.getCoBasicCfg(war.getConfigVersion(), coId).name}`
-                        + ` ${player.getCoIsUsingSkill() ? `POWER` : player.getCoCurrentEnergy()} / ${player.getCoMiddleEnergy() || `--`} / ${player.getCoMaxEnergy() || `--`}`;
+                        + ` ${player.getCoIsUsingSkill() ? `POWER` : (player.getCoUnitId() != null ? player.getCoCurrentEnergy() : "--")} / ${player.getCoMiddleEnergy() || `--`} / ${player.getCoMaxEnergy() || `--`}`;
                 }
             }
         }
