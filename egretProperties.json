@@ -34,6 +34,9 @@
 			"name": "promise"
 		},
 		{
+			"name": "socket"
+		},
+		{
 			"name": "SocketIoClient",
 			"path": "../TinyWarsExternals/ClientDependencies/libs/SocketIoClient"
 		},

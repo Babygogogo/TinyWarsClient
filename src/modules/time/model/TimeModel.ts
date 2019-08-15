@@ -1,12 +1,13 @@
 
 namespace TinyWars.Time.TimeModel {
-    import Notify = Utility.Notify;
-    import Lang   = Utility.Lang;
+    import Notify       = Utility.Notify;
+    import Lang         = Utility.Lang;
+    import NetManager   = Network.Manager;
 
     const TILE_ANIMATION_INTERVAL_MS = 350;
     const UNIT_ANIMATION_INTERVAL_MS = 120;
     const GRID_ANIMATION_INTERVAL_MS = 100;
-    const HEARTBEAT_INTERVAL_MS      = 60 * 1000;
+    const HEARTBEAT_INTERVAL_MS      = 10 * 1000;
 
     let _isHeartbeatAnswered: boolean;
     let _heartbeatCounter   : number;
@@ -88,7 +89,12 @@ namespace TinyWars.Time.TimeModel {
 
     function heartbeat(): void {
         if (!_isHeartbeatAnswered) {
-            Utility.FloatText.show(Lang.getText(Lang.Type.A0009));
+            if (!NetManager.checkCanAutoReconnect()) {
+                Utility.FloatText.show(Lang.getText(Lang.Type.A0013));
+            } else {
+                Utility.FloatText.show(Lang.getText(Lang.Type.A0008));
+                NetManager.init();
+            }
         }
         TimeProxy.reqHeartbeat(_heartbeatCounter);
     }
