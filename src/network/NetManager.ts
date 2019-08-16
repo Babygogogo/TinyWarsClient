@@ -20,7 +20,6 @@ namespace TinyWars.Network {
         ////////////////////////////////////////////////////////////////////////////////
         // Type definitions.
         ////////////////////////////////////////////////////////////////////////////////
-        type ReceivedData = any;
         export type MsgListener = {
             msgCode   : Codes;
             callback     : (e: egret.Event) => void;
@@ -58,7 +57,7 @@ namespace TinyWars.Network {
         // Exports.
         ////////////////////////////////////////////////////////////////////////////////
         export function init(): void {
-            _resetSocket();
+            resetSocket();
         }
 
         export function addListeners(listeners: MsgListener[], thisObject?: any): void {
@@ -92,45 +91,59 @@ namespace TinyWars.Network {
             _canAutoReconnect = can;
         }
 
-        function _resetSocket(): void {
+        function resetSocket(): void {
+            destroySocket();
+            initSocket();
+        }
+        function initSocket(): void {
+            if (!_socket) {
+                _socket         = new egret.WebSocket();
+                _socket.type    = egret.WebSocket.TYPE_BINARY;
+                _socket.addEventListener(egret.Event.CONNECT,               onSocketConnect,    Manager);
+                _socket.addEventListener(egret.Event.CLOSE,                 onSocketClose,      Manager);
+                _socket.addEventListener(egret.ProgressEvent.SOCKET_DATA,   onSocketData,       Manager);
+
+                setCanAutoReconnect(true);
+                _socket.connectByUrl(FULL_URL);
+            }
+        }
+        function destroySocket(): void {
             if (_socket) {
+                _socket.removeEventListener(egret.Event.CONNECT,                onSocketConnect,    Manager);
+                _socket.removeEventListener(egret.Event.CLOSE,                  onSocketClose,      Manager);
+                _socket.removeEventListener(egret.ProgressEvent.SOCKET_DATA,    onSocketData,       Manager);
                 _socket.close();
+
+                _socket = null;
+            }
+        }
+
+        function onSocketConnect(e: egret.Event): void {
+            FloatText.show(Lang.getText(Lang.Type.A0007));
+            Notify.dispatch(Notify.Type.NetworkConnected);
+        }
+        function onSocketClose(e: egret.Event): void {
+            Notify.dispatch(Notify.Type.NetworkDisconnected);
+            if (!checkCanAutoReconnect()) {
+                // FloatText.show(Lang.getText(Lang.Type.A0013));
+            } else {
+                FloatText.show(Lang.getText(Lang.Type.A0008));
+                _socket.connectByUrl(FULL_URL);
+            }
+        }
+        function onSocketData(e: egret.Event): void {
+            const data = new egret.ByteArray();
+            _socket.readBytes(data);
+
+            const container = ProtoManager.decodeAsMessageContainer(data.rawBuffer);
+            const name      = Helpers.getMessageName(container);
+            Logger.log("%cNetManager receive: ", "background:#FFD777", name, ", length: ", data.length, "\n", container[name]);
+
+            if (container.S_ServerDisconnect) {
+                setCanAutoReconnect(false);
             }
 
-            _socket         = new egret.WebSocket();
-            _socket.type    = egret.WebSocket.TYPE_BINARY;
-
-            _socket.addEventListener(egret.Event.CONNECT, (e) => {
-                FloatText.show(Lang.getText(Lang.Type.A0007));
-                Notify.dispatch(Notify.Type.NetworkConnected);
-            }, Manager);
-
-            _socket.addEventListener(egret.Event.CLOSE, e => {
-                Notify.dispatch(Notify.Type.NetworkDisconnected);
-                if (!checkCanAutoReconnect()) {
-                    // FloatText.show(Lang.getText(Lang.Type.A0013));
-                } else {
-                    FloatText.show(Lang.getText(Lang.Type.A0008));
-                    _socket.connectByUrl(FULL_URL);
-                }
-            }, Manager);
-
-            _socket.addEventListener(egret.ProgressEvent.SOCKET_DATA, e => {
-                const data      = new egret.ByteArray();
-                _socket.readBytes(data);
-                const container = ProtoManager.decodeAsMessageContainer(data.rawBuffer);
-                const name      = Helpers.getMessageName(container);
-                Logger.log("%cNetManager receive: ", "background:#FFD777", name, ", length: ", data.length, "\n", container[name]);
-
-                if (container.S_ServerDisconnect) {
-                    setCanAutoReconnect(false);
-                }
-
-                dispatcher.dispatchWithContainer(container);
-            }, Manager);
-
-            setCanAutoReconnect(true);
-            _socket.connectByUrl(FULL_URL);
+            dispatcher.dispatchWithContainer(container);
         }
     }
 }

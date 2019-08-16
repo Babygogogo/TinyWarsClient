@@ -268,6 +268,14 @@ namespace TinyWars.Utility.Lang {
             `是否确定要加入战局？`,
             `Are you sure to join the game?`,
         ]],
+        [Type.A0053, [
+            `该功能正在开发中，敬请期待`,
+            `This feature is under development...`,
+        ]],
+        [Type.A0054, [
+            `您确定要发动CO POWER吗？`,
+            `Are you sure to activate the CO POWER?`,
+        ]],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.

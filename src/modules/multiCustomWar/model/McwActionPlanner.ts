@@ -12,6 +12,7 @@ namespace TinyWars.MultiCustomWar {
     import UnitActionType   = Types.UnitActionType;
     import UnitType         = Types.UnitType;
     import BwHelpers        = BaseWar.BwHelpers;
+    import ConfirmPanel     = Common.ConfirmPanel;
 
     export class McwActionPlanner extends BaseWar.BwActionPlanner {
         private _getPlayerIndexLoggedIn(): number {
@@ -658,9 +659,20 @@ namespace TinyWars.MultiCustomWar {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
-                return this.getFocusUnit().checkCanUseCoSkill()
-                    ? [{ actionType: UnitActionType.UseCoSkill, callback: () => this._setStateRequestingUnitUseCoSkill() }]
-                    : [];
+                return !this.getFocusUnit().checkCanUseCoSkill()
+                    ? []
+                    : [{
+                        actionType  : UnitActionType.UseCoSkill,
+                        callback    : () => {
+                            ConfirmPanel.show({
+                                title   : Lang.getText(Lang.Type.B0088),
+                                content : Lang.getText(Lang.Type.A0054),
+                                callback: () => {
+                                    this._setStateRequestingUnitUseCoSkill();
+                                },
+                            });
+                        },
+                    }];
             }
         }
         protected _getActionUnitLoadCo(): BaseWar.DataForUnitActionRenderer[] {
