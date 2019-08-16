@@ -1132,7 +1132,7 @@ namespace TinyWars.BaseWar {
             dataList.push(...this._getActionUnitLaunchFlare());
             dataList.push(...this._getActionUnitLaunchSilo());
             dataList.push(...this._getActionUnitProduceUnit());
-            dataList.push(...this._getActionUnitWait());
+            dataList.push(...this._getActionUnitWait(dataList.length > 0));
 
             Logger.assert(dataList.length, `BwActionPlanner._getDataForUnitActionsPanel() no actions available?!`);
             return dataList;
@@ -1205,7 +1205,7 @@ namespace TinyWars.BaseWar {
                 : [];
         }
         protected abstract _getActionUnitProduceUnit(): DataForUnitActionRenderer[];
-        protected abstract _getActionUnitWait(): DataForUnitActionRenderer[];
+        protected abstract _getActionUnitWait(hasOtherAction: boolean): DataForUnitActionRenderer[];
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other functions.

@@ -558,7 +558,7 @@ namespace TinyWars.Replay {
                 }
             }
         }
-        protected _getActionUnitWait(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitWait(hasOtherAction: boolean): BaseWar.DataForUnitActionRenderer[] {
             const existingUnit = this._getUnitMap().getUnitOnMap(this.getMovePathDestination());
             if ((existingUnit) && (existingUnit !== this.getFocusUnit())) {
                 return [];

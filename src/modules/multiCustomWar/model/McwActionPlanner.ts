@@ -667,9 +667,7 @@ namespace TinyWars.MultiCustomWar {
                             ConfirmPanel.show({
                                 title   : Lang.getText(Lang.Type.B0088),
                                 content : Lang.getText(Lang.Type.A0054),
-                                callback: () => {
-                                    this._setStateRequestingUnitUseCoSkill();
-                                },
+                                callback: () => this._setStateRequestingUnitUseCoSkill(),
                             });
                         },
                     }];
@@ -779,15 +777,33 @@ namespace TinyWars.MultiCustomWar {
                 }
             }
         }
-        protected _getActionUnitWait(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitWait(hasOtherAction: boolean): BaseWar.DataForUnitActionRenderer[] {
             const existingUnit = this._getUnitMap().getUnitOnMap(this.getMovePathDestination());
             if ((existingUnit) && (existingUnit !== this.getFocusUnit())) {
                 return [];
             } else {
                 if (this.getChosenUnitsForDrop().length) {
-                    return [{ actionType: UnitActionType.Wait, callback: () => this._setStateRequestingUnitDropOnChooseAction() }];
+                    return [{
+                        actionType  : UnitActionType.Wait,
+                        callback    : !hasOtherAction
+                            ? () => this._setStateRequestingUnitDropOnChooseAction()
+                            : () => ConfirmPanel.show({
+                                title   : Lang.getText(Lang.Type.B0088),
+                                content : Lang.getText(Lang.Type.A0055),
+                                callback: () => this._setStateRequestingUnitDropOnChooseAction(),
+                            }),
+                    }];
                 } else {
-                    return [{ actionType: UnitActionType.Wait, callback: () => this._setStateRequestingUnitWait() }];
+                    return [{
+                        actionType  : UnitActionType.Wait,
+                        callback    : !hasOtherAction
+                            ? () => this._setStateRequestingUnitWait()
+                            : () => ConfirmPanel.show({
+                                title   : Lang.getText(Lang.Type.B0088),
+                                content : Lang.getText(Lang.Type.A0055),
+                                callback: () => this._setStateRequestingUnitWait(),
+                            }),
+                    }];
                 }
             }
         }

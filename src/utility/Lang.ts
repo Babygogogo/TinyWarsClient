@@ -276,6 +276,10 @@ namespace TinyWars.Utility.Lang {
             `您确定要发动CO POWER吗？`,
             `Are you sure to activate the CO POWER?`,
         ]],
+        [Type.A0055, [
+            `当前有其他操作可选。您确定要直接待机吗？`,
+            `Another action is available. Are you sure to make the unit wait?`,
+        ]],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
