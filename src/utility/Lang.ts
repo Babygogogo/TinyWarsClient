@@ -280,6 +280,10 @@ namespace TinyWars.Utility.Lang {
             `当前有其他操作可选。您确定要直接待机吗？`,
             `Another action is available. Are you sure to make the unit wait?`,
         ]],
+        [Type.A0056, [
+            `未知错误，请拖动截图发给作者，谢谢`,
+            `Error! Please make a screenshot and send it to the game maker`,
+        ]],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.

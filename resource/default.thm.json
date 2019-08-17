@@ -7,6 +7,7 @@
 		"resource/skins/common/AlertPanel.exml",
 		"resource/skins/common/BlockPanel.exml",
 		"resource/skins/common/ConfirmPanel.exml",
+		"resource/skins/common/ErrorPanel.exml",
 		"resource/skins/common/HelpPanel.exml",
 		"resource/skins/lobby/LobbyPanel.exml",
 		"resource/skins/lobby/LobbyTopPanel.exml",

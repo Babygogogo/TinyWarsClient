@@ -19,7 +19,7 @@ namespace TinyWars.Utility {
         export function setPassword(password: string): void {
             localStorage.setItem(KEY_PASSWORD, password);
         }
-        export function getPasword(): string {
+        export function getPassword(): string {
             return localStorage.getItem(KEY_PASSWORD);
         }
 

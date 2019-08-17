@@ -55,7 +55,7 @@ namespace TinyWars.Login {
         protected _onOpened(): void {
             const isRememberPassword    = LocalStorage.getIsRememberPassword();
             this._inputAccount.text     = LocalStorage.getAccount();
-            this._inputPassword.text    = isRememberPassword ? LocalStorage.getPasword() : null;
+            this._inputPassword.text    = isRememberPassword ? LocalStorage.getPassword() : null;
             this._btnLogin.enabled      = true;
             Helpers.changeColor(this._imgRememberPassword, isRememberPassword ? Types.ColorType.Origin : Types.ColorType.Gray);
         }

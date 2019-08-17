@@ -4,6 +4,7 @@ namespace TinyWars.Utility.FlowManager {
     import McwProxy     = MultiCustomWar.McwProxy;
     import McwModel     = MultiCustomWar.McwModel;
     import ReplayModel  = Replay.ReplayModel;
+    import ErrorPanel   = Common.ErrorPanel;
 
     const _NET_EVENTS = [
         { msgCode: Network.Codes.S_ServerDisconnect,   callback: _onNetSServerDisconnect },
@@ -18,6 +19,13 @@ namespace TinyWars.Utility.FlowManager {
     let _hasOnceWentToLobby = false;
 
     export async function startGame(stage: egret.Stage): Promise<void> {
+        window.onerror = (message, filename, row, col, err) => {
+            ErrorPanel.show({
+                content : `${message}\n\n${err ? err.stack : "No stack available."}`,
+            });
+            return true;
+        };
+
         Network.Manager.addListeners(_NET_EVENTS, FlowManager);
         Notify.addEventListeners(_NOTIFY_EVENTS, FlowManager);
         Utility.StageManager.init(stage);
