@@ -53,11 +53,11 @@ namespace TinyWars.Login {
         }
 
         protected _onOpened(): void {
-            const isRememberPassword    = LocalStorage.getIsRememberPassword();
-            this._inputAccount.text     = LocalStorage.getAccount();
-            this._inputPassword.text    = isRememberPassword ? LocalStorage.getPassword() : null;
-            this._btnLogin.enabled      = true;
-            Helpers.changeColor(this._imgRememberPassword, isRememberPassword ? Types.ColorType.Origin : Types.ColorType.Gray);
+            const isRememberPassword            = LocalStorage.getIsRememberPassword();
+            this._inputAccount.text             = LocalStorage.getAccount();
+            this._inputPassword.text            = isRememberPassword ? LocalStorage.getPassword() : null;
+            this._btnLogin.enabled              = true;
+            this._imgRememberPassword.visible   = isRememberPassword;
         }
 
         private _onNotifySLogin(e: egret.Event): void {
@@ -95,7 +95,7 @@ namespace TinyWars.Login {
         private _onTouchedGroupRememberPassword(e: egret.TouchEvent): void {
             const isRemember = LocalStorage.getIsRememberPassword();
             LocalStorage.setIsRememberPassword(!isRemember);
-            Helpers.changeColor(this._imgRememberPassword, !isRemember ? Types.ColorType.Origin : Types.ColorType.Gray);
+            this._imgRememberPassword.visible = !isRemember;
         }
     }
 }
