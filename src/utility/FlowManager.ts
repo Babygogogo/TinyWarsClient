@@ -94,7 +94,7 @@ namespace TinyWars.Utility.FlowManager {
         const account   = UserModel.getSelfAccount();
         const password  = UserModel.getSelfPassword();
         if ((!UserModel.checkIsLoggedIn()) && (account != null) && (password != null)) {
-            Login.LoginProxy.reqLogin(account, password);
+            Login.LoginProxy.reqLogin(account, password, true);
         }
     }
 

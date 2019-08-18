@@ -165,54 +165,61 @@ namespace TinyWars.BaseWar {
             this._removeTouch(e.touchPointID);
         }
         private _onTouchMove(e: egret.TouchEvent): void {
-            const touchId                   = e.touchPointID;
-            const currGlobalPoint           = { x: e.stageX, y: e.stageY };
-            this._isTouchMovedOrMultiple    = (this._isTouchMovedOrMultiple)
-                || (Helpers.getSquaredPointDistance(e.stageX, e.stageY, this._initialGlobalTouchPoint.x, this._initialGlobalTouchPoint.y) > _DRAG_FIELD_SQUARED_TRIGGER_DISTANCE);
-            this._currGlobalTouchPoints.set(touchId, currGlobalPoint);
+            const touchId               = e.touchPointID;
+            const currGlobalTouchPoints = this._currGlobalTouchPoints;
+            if (currGlobalTouchPoints.has(touchId)) {
+                this._isTouchMovedOrMultiple = (this._isTouchMovedOrMultiple)
+                    || (Helpers.getSquaredPointDistance(e.stageX, e.stageY, this._initialGlobalTouchPoint.x, this._initialGlobalTouchPoint.y) > _DRAG_FIELD_SQUARED_TRIGGER_DISTANCE);
+                currGlobalTouchPoints.set(touchId, { x: e.stageX, y: e.stageY });
 
-            if (this._currGlobalTouchPoints.size > 1) {
-                Notify.dispatch(Notify.Type.BwFieldZoomed, {
-                    current : this._currGlobalTouchPoints,
-                    previous: this._prevGlobalTouchPoints,
-                } as Notify.Data.BwFieldZoomed);
-            } else {
-                if (this._touchIdForTouchingCursor != null) {
-                    const gridIndex     = this._getGridIndexByLocalXY(e.localX, e.localY);
-                    const currGridIndex = this._cursor.getGridIndex();
-                    if (!GridIndexHelpers.checkIsEqual(gridIndex, currGridIndex)) {
-                        this._isTouchMovedOrMultiple = true;
-                        Notify.dispatch(Notify.Type.BwCursorDragged, {
-                            current     : currGridIndex,
-                            draggedTo   : gridIndex,
-                        } as Notify.Data.BwCursorDragged);
-                    }
+                if (currGlobalTouchPoints.size > 1) {
+                    Notify.dispatch(Notify.Type.BwFieldZoomed, {
+                        current : currGlobalTouchPoints,
+                        previous: this._prevGlobalTouchPoints,
+                    } as Notify.Data.BwFieldZoomed);
                 } else {
-                    if (this._isTouchMovedOrMultiple) {
-                        Notify.dispatch(Notify.Type.BwFieldDragged, {
-                            current : this._currGlobalTouchPoints.values().next().value,
-                            previous: this._prevGlobalTouchPoints.values().next().value,
-                        } as Notify.Data.BwFieldDragged);
+                    if (this._touchIdForTouchingCursor != null) {
+                        const gridIndex     = this._getGridIndexByLocalXY(e.localX, e.localY);
+                        const currGridIndex = this._cursor.getGridIndex();
+                        if (!GridIndexHelpers.checkIsEqual(gridIndex, currGridIndex)) {
+                            this._isTouchMovedOrMultiple = true;
+                            Notify.dispatch(Notify.Type.BwCursorDragged, {
+                                current     : currGridIndex,
+                                draggedTo   : gridIndex,
+                            } as Notify.Data.BwCursorDragged);
+                        }
+                    } else {
+                        if (this._isTouchMovedOrMultiple) {
+                            Notify.dispatch(Notify.Type.BwFieldDragged, {
+                                current : currGlobalTouchPoints.values().next().value,
+                                previous: this._prevGlobalTouchPoints.values().next().value,
+                            } as Notify.Data.BwFieldDragged);
+                        }
                     }
                 }
-            }
 
-            this._prevGlobalTouchPoints.set(touchId, { x: e.stageX, y: e.stageY });
+                this._prevGlobalTouchPoints.set(touchId, { x: e.stageX, y: e.stageY });
+            }
         }
         private _removeTouch(touchId: number): void {
-            this._currGlobalTouchPoints.delete(touchId);
             this._prevGlobalTouchPoints.delete(touchId);
 
-            if (!this._currGlobalTouchPoints.has(this._touchIdForTouchingCursor)) {
-                delete this._touchIdForTouchingCursor;
-            }
-            if (!this._currGlobalTouchPoints.size) {
-                this.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this._onTouchMove, this);
-                if (!this._isTouchMovedOrMultiple) {
-                    Notify.dispatch(Notify.Type.BwCursorTapped, {
-                        current : this._cursor.getGridIndex(),
-                        tappedOn: this._getGridIndexByGlobalXY(this._initialGlobalTouchPoint.x, this._initialGlobalTouchPoint.y),
-                    } as Notify.Data.BwCursorTapped);
+            const currGlobalTouchPoints = this._currGlobalTouchPoints;
+            if (currGlobalTouchPoints.has(touchId)) {
+                currGlobalTouchPoints.delete(touchId);
+
+                if (!currGlobalTouchPoints.has(this._touchIdForTouchingCursor)) {
+                    delete this._touchIdForTouchingCursor;
+                }
+                if (!currGlobalTouchPoints.size) {
+                    this.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this._onTouchMove, this);
+                    if (!this._isTouchMovedOrMultiple) {
+                        Notify.dispatch(Notify.Type.BwCursorTapped, {
+                            current : this._cursor.getGridIndex(),
+                            tappedOn: this._getGridIndexByGlobalXY(this._initialGlobalTouchPoint.x, this._initialGlobalTouchPoint.y),
+                        } as Notify.Data.BwCursorTapped);
+                    }
+                    delete this._initialGlobalTouchPoint;
                 }
             }
         }

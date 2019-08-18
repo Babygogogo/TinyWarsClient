@@ -55,7 +55,7 @@ namespace TinyWars.Login {
         private _onNotifySRegister(e: egret.Event): void {
             const data = e.data as Utility.ProtoTypes.IS_Register;
             FloatText.show(Lang.getText(Lang.Type.A0004));
-            LoginProxy.reqLogin(data.account, data.password);
+            LoginProxy.reqLogin(data.account, data.password, false);
         }
 
         private _onTouchedBtnLogin(e: egret.TouchEvent): void {

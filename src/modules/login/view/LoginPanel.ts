@@ -74,12 +74,12 @@ namespace TinyWars.Login {
                 FloatText.show(Lang.getText(Lang.Type.A0001));
             } else {
                 if ((!password) || (!password.length)) {
-                    LoginProxy.reqLogin(account, account); // For convenience for testing
+                    LoginProxy.reqLogin(account, account, false); // For convenience for testing
                 } else {
                     if (!Utility.Helpers.checkIsPasswordValid(password)) {
                         FloatText.show(Lang.getText(Lang.Type.A0003));
                     } else {
-                        LoginProxy.reqLogin(account, password);
+                        LoginProxy.reqLogin(account, password, false);
                     }
                 }
             }

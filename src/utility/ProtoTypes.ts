@@ -8133,6 +8133,9 @@ export declare interface IC_Login {
 
     /** C_Login password */
     password?: (string|null);
+
+    /** C_Login isAutoRelogin */
+    isAutoRelogin?: (boolean|null);
 }
 
 /** Represents a C_Login. */
@@ -8149,6 +8152,9 @@ export declare class C_Login implements IC_Login {
 
     /** C_Login password. */
     public password: string;
+
+    /** C_Login isAutoRelogin. */
+    public isAutoRelogin: boolean;
 
     /**
      * Creates a new C_Login instance using the specified properties.

@@ -15,11 +15,12 @@ namespace TinyWars.Login {
             ], LoginProxy);
         }
 
-        export function reqLogin(account: string, password: string): void {
+        export function reqLogin(account: string, password: string, isAutoRelogin: boolean): void {
             NetManager.send({
                 C_Login: {
-                    account   : account,
-                    password  : password,
+                    account,
+                    password,
+                    isAutoRelogin,
                 },
             });
         }
