@@ -3363,6 +3363,9 @@ export declare class WarActionPlayerEndTurn implements IWarActionPlayerEndTurn {
 
 /** Properties of a WarActionPlayerSurrender. */
 export declare interface IWarActionPlayerSurrender {
+
+    /** WarActionPlayerSurrender isBoot */
+    isBoot?: (boolean|null);
 }
 
 /** Represents a WarActionPlayerSurrender. */
@@ -3373,6 +3376,9 @@ export declare class WarActionPlayerSurrender implements IWarActionPlayerSurrend
      * @param [properties] Properties to set
      */
     constructor(properties?: IWarActionPlayerSurrender);
+
+    /** WarActionPlayerSurrender isBoot. */
+    public isBoot: boolean;
 
     /**
      * Creates a new WarActionPlayerSurrender instance using the specified properties.
@@ -12321,6 +12327,9 @@ export declare interface IC_McwPlayerSurrender {
 
     /** C_McwPlayerSurrender actionId */
     actionId?: (number|null);
+
+    /** C_McwPlayerSurrender isBoot */
+    isBoot?: (boolean|null);
 }
 
 /** Represents a C_McwPlayerSurrender. */
@@ -12337,6 +12346,9 @@ export declare class C_McwPlayerSurrender implements IC_McwPlayerSurrender {
 
     /** C_McwPlayerSurrender actionId. */
     public actionId: number;
+
+    /** C_McwPlayerSurrender isBoot. */
+    public isBoot: boolean;
 
     /**
      * Creates a new C_McwPlayerSurrender instance using the specified properties.

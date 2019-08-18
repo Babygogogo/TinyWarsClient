@@ -125,6 +125,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
             C_McwPlayerSurrender: {
                 warId   : war.getWarId(),
                 actionId: war.getNextActionId(),
+                isBoot  : false,
             },
         })
     }
