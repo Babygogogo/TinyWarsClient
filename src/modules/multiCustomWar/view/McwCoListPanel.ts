@@ -15,6 +15,7 @@ namespace TinyWars.MultiCustomWar {
         private _listCo     : GameUi.UiScrollList;
         private _btnBack    : GameUi.UiButton;
 
+        private _scrCoInfo                  : eui.Scroller;
         private _labelName                  : GameUi.UiLabel;
         private _labelForce                 : GameUi.UiLabel;
         private _labelBoardCostPercentage   : GameUi.UiLabel;
@@ -26,6 +27,9 @@ namespace TinyWars.MultiCustomWar {
 
         private _listActiveSkill    : GameUi.UiScrollList;
         private _labelNoActiveSkill : GameUi.UiLabel;
+
+        private _scrHelp    : eui.Scroller;
+        private _labelHelp  : GameUi.UiLabel;
 
         private _war                : McwWar;
         private _dataForListCo      : DataForCoRenderer[] = [];
@@ -86,17 +90,20 @@ namespace TinyWars.MultiCustomWar {
 
         public setSelectedIndex(newIndex: number): void {
             const dataList = this._dataForListCo;
-            if (dataList.length <= 0) {
+            if (!dataList[newIndex]) {
                 this._selectedIndex = undefined;
-                this._showCoInfo(null);
+                this._updateScrCoInfo(null);
+                this._updateScrHelp(true);
 
-            } else if (dataList[newIndex]) {
+            } else {
                 const oldIndex      = this._selectedIndex;
                 this._selectedIndex = newIndex;
                 (dataList[oldIndex])    && (this._listCo.updateSingleData(oldIndex, dataList[oldIndex]));
                 (oldIndex !== newIndex) && (this._listCo.updateSingleData(newIndex, dataList[newIndex]));
 
-                this._showCoInfo(dataList[newIndex]);
+                const data = dataList[newIndex];
+                this._updateScrCoInfo(data);
+                this._updateScrHelp(!data.player);
             }
         }
         public getSelectedIndex(): number {
@@ -138,63 +145,85 @@ namespace TinyWars.MultiCustomWar {
                     panel   : this,
                 });
             }
+            data.push({
+                configVersion   : null,
+                player          : null,
+                index           : data.length,
+                panel           : this,
+            });
+
             return data;
         }
 
-        private _showCoInfo(data: DataForCoRenderer): void {
-            const player    = data.player;
-            const coId      = player.getCoId();
-            const cfg       = coId != null ? ConfigManager.getCoBasicCfg(data.configVersion, coId) : null;
-            if (!cfg) {
-                this._labelName.text                = "--";
-                this._labelForce.text               = "--";
-                this._labelBoardCostPercentage.text = "--";
-                this._labelZoneRadius.text          = "--";
-                this._labelEnergyBar.text           = "--";
-                this._labelNoPassiveSkill.visible   = true;
-                this._labelNoActiveSkill.visible    = true;
-                this._listPassiveSkill.clear();
-                this._listActiveSkill.clear();
-
+        private _updateScrCoInfo(data: DataForCoRenderer): void {
+            if ((!data) || (!data.player)) {
+                this._scrCoInfo.visible = false;
             } else {
-                const isUsingSkill                  = player.getCoIsUsingSkill();
-                this._labelName.text                = cfg.name;
-                this._labelForce.text               = Lang.getPlayerForceName(player.getPlayerIndex());
-                this._labelBoardCostPercentage.text = `${cfg.boardCostPercentage}%`;
-                this._labelZoneRadius.text          = `${isUsingSkill ? Lang.getText(Lang.Type.B0141) : player.getCoZoneRadius()}`;
-                this._labelEnergyBar.text           = `${isUsingSkill ? `POWER` : player.getCoCurrentEnergy()} / ${cfg.middleEnergy != null ? cfg.middleEnergy : "--"} / ${cfg.maxEnergy != null ? cfg.maxEnergy : "--"}`;
+                this._scrCoInfo.visible = true;
 
-                const passiveSkills = cfg.passiveSkills || [];
-                if (!passiveSkills.length) {
-                    this._labelNoPassiveSkill.visible = true;
+                const player    = data.player;
+                const coId      = player.getCoId();
+                const cfg       = coId != null ? ConfigManager.getCoBasicCfg(data.configVersion, coId) : null;
+                if (!cfg) {
+                    this._labelName.text                = "--";
+                    this._labelForce.text               = "--";
+                    this._labelBoardCostPercentage.text = "--";
+                    this._labelZoneRadius.text          = "--";
+                    this._labelEnergyBar.text           = "--";
+                    this._labelNoPassiveSkill.visible   = true;
+                    this._labelNoActiveSkill.visible    = true;
                     this._listPassiveSkill.clear();
-                } else {
-                    this._labelNoPassiveSkill.visible = false;
-                    const data: DataForSkillRenderer[] = [];
-                    for (let i = 0; i < passiveSkills.length; ++i) {
-                        data.push({
-                            index   : i + 1,
-                            skillId : passiveSkills[i],
-                        });
-                    }
-                    this._listPassiveSkill.bindData(data);
-                }
-
-                const activeSkills = cfg.activeSkills || [];
-                if (!activeSkills.length) {
-                    this._labelNoActiveSkill.visible = true;
                     this._listActiveSkill.clear();
+
                 } else {
-                    this._labelNoActiveSkill.visible = false;
-                    const data: DataForSkillRenderer[] = [];
-                    for (let i = 0; i < activeSkills.length; ++i) {
-                        data.push({
-                            index   : i + 1,
-                            skillId : activeSkills[i],
-                        });
+                    const isUsingSkill                  = player.getCoIsUsingSkill();
+                    this._labelName.text                = cfg.name;
+                    this._labelForce.text               = Lang.getPlayerForceName(player.getPlayerIndex());
+                    this._labelBoardCostPercentage.text = `${cfg.boardCostPercentage}%`;
+                    this._labelZoneRadius.text          = `${isUsingSkill ? Lang.getText(Lang.Type.B0141) : player.getCoZoneRadius()}`;
+                    this._labelEnergyBar.text           = `${isUsingSkill ? `POWER` : player.getCoCurrentEnergy()} / ${cfg.middleEnergy != null ? cfg.middleEnergy : "--"} / ${cfg.maxEnergy != null ? cfg.maxEnergy : "--"}`;
+
+                    const passiveSkills = cfg.passiveSkills || [];
+                    if (!passiveSkills.length) {
+                        this._labelNoPassiveSkill.visible = true;
+                        this._listPassiveSkill.clear();
+                    } else {
+                        this._labelNoPassiveSkill.visible = false;
+                        const data: DataForSkillRenderer[] = [];
+                        for (let i = 0; i < passiveSkills.length; ++i) {
+                            data.push({
+                                index   : i + 1,
+                                skillId : passiveSkills[i],
+                            });
+                        }
+                        this._listPassiveSkill.bindData(data);
                     }
-                    this._listActiveSkill.bindData(data);
+
+                    const activeSkills = cfg.activeSkills || [];
+                    if (!activeSkills.length) {
+                        this._labelNoActiveSkill.visible = true;
+                        this._listActiveSkill.clear();
+                    } else {
+                        this._labelNoActiveSkill.visible = false;
+                        const data: DataForSkillRenderer[] = [];
+                        for (let i = 0; i < activeSkills.length; ++i) {
+                            data.push({
+                                index   : i + 1,
+                                skillId : activeSkills[i],
+                            });
+                        }
+                        this._listActiveSkill.bindData(data);
+                    }
                 }
+            }
+        }
+
+        private _updateScrHelp(visible: boolean): void {
+            if (!visible) {
+                this._scrHelp.visible = false;
+            } else {
+                this._scrHelp.visible = true;
+                this._labelHelp.setRichText(Lang.getRichText(Lang.RichType.R0004));
             }
         }
     }
@@ -219,11 +248,17 @@ namespace TinyWars.MultiCustomWar {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data              = this.data as DataForCoRenderer;
-            const coId              = data.player.getCoId();
-            const cfg               = coId != null ? ConfigManager.getCoBasicCfg(data.configVersion, coId) : null;
-            this.currentState       = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
-            this._labelName.text    = cfg ? cfg.name : `(${Lang.getText(Lang.Type.B0001)}CO)`;
+            const data          = this.data as DataForCoRenderer;
+            const player        = data.player;
+            this.currentState   = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
+
+            if (!player) {
+                this._labelName.text    = Lang.getText(Lang.Type.B0143);
+            } else {
+                const coId              = player.getCoId();
+                const cfg               = coId != null ? ConfigManager.getCoBasicCfg(data.configVersion, coId) : null;
+                this._labelName.text    = cfg ? cfg.name : `(${Lang.getText(Lang.Type.B0001)}CO)`;
+            }
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {

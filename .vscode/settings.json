@@ -3,6 +3,7 @@
         "attackable",
         "buildable",
         "relogin",
+        "scroller",
         "tweens"
     ]
 }
