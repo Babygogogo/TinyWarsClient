@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
+        xmlns:w="http://ns.egret.com/wing">
+    <e:Group id="_group" top="40" bottom="0" left="0" right="0">
+        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
+                        left="0" right="0" top="0" bottom="0" />
+        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
+                        left="0" right="0" top="0" bottom="0" />
+        <GameUi:UiLabel text="在线玩家列表" y="10" size="22" horizontalCenter="0" />
+        <GameUi:UiButton id="_btnClose" label="关闭>>" right="20" y="10">
+            <GameUi:skinName>
+                <e:Skin states="up,down,disabled">
+                    <e:Image width="100%" height="100%" />
+                    <e:Label id="labelDisplay" size="22" bold="true" left="0" right="0" top="0" bottom="0"
+                             textColor="0x00ff00" />
+                </e:Skin>
+            </GameUi:skinName>
+        </GameUi:UiButton>
+        <e:Group y="40" horizontalCenter="0">
+            <GameUi:UiLabel text="双击玩家名称，可以查看其详细信息" y="0" size="16" x="0" />
+            <e:Group x="262" y="0">
+                <GameUi:UiLabel text="当前在线人数:" y="0" size="16" x="0" />
+                <GameUi:UiLabel id="_labelUsersCount" text="0" y="0" size="16" x="107" />
+            </e:Group>
+            <e:layout>
+                <e:HorizontalLayout gap="20" />
+            </e:layout>
+        </e:Group>
+        <GameUi:UiLabel id="_labelLoading" text="正在加载数据，请稍候" size="30" horizontalCenter="0" verticalCenter="0" />
+        <GameUi:UiScrollList id="_listUser" left="15" right="15" bottom="5" top="70">
+            <e:List requireSelection="true">
+                <e:itemRendererSkinName>
+                    <e:Skin width="170" height="56" currentState="up" states="down,up">
+                        <e:Group id="_group" left="0" right="0" top="0" bottom="0">
+                            <GameUi:UiImage id="_imgBg" source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0"
+                                            anchorOffsetY="0" alpha="0.8" left="0" right="0" top="0" bottom="0"
+                                            visible.up="false" />
+                            <GameUi:UiLabel id="_labelName" text="部队名五字" size="18" textColor="0xffffff" left="5"
+                                            right="5" top="5" bottom="5" textAlign="center" verticalAlign="middle" />
+                        </e:Group>
+                    </e:Skin>
+                </e:itemRendererSkinName>
+                <e:layout>
+                    <e:TileLayout orientation="rows" horizontalGap="20" verticalGap="30" />
+                </e:layout>
+            </e:List>
+        </GameUi:UiScrollList>
+    </e:Group>
+</e:Skin>

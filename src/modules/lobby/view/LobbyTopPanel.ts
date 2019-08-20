@@ -57,6 +57,7 @@ namespace TinyWars.Lobby {
 
         private _onTouchedBtnMyInfo(e: egret.Event): void {
             User.UserPanel.show(UserModel.getSelfUserId());
+            User.UserOnlineUsersPanel.hide();
         }
 
         private _updateView(): void {

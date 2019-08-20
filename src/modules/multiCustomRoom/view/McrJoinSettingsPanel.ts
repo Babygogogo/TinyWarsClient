@@ -9,7 +9,7 @@ namespace TinyWars.MultiCustomRoom {
     const CONFIRM_INTERVAL_MS = 5000;
 
     export class McrJoinSettingsPanel extends GameUi.UiPanel {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
+        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: McrJoinSettingsPanel;

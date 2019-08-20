@@ -36,6 +36,7 @@ namespace TinyWars.User {
         private _labelDiscordId     : GameUi.UiLabel;
         private _btnChangeDiscordId : GameUi.UiButton;
 
+        private _btnShowOnlineUsers : GameUi.UiButton;
         private _btnClose           : GameUi.UiButton;
 
         private _userId: number;
@@ -70,6 +71,7 @@ namespace TinyWars.User {
             this._uiListeners = [
                 { ui: this._btnChangeNickname,  callback: this._onTouchedBtnChangeNickname },
                 { ui: this._btnChangeDiscordId, callback: this._onTouchedBtnChangeDiscordId },
+                { ui: this._btnShowOnlineUsers, callback: this._onTouchedBtnShowOnlineUsers },
                 { ui: this._btnClose,           callback: this.close },
             ];
         }
@@ -95,11 +97,14 @@ namespace TinyWars.User {
                 UserProxy.reqGetUserPublicInfo(this._userId);
             }
         }
-        private _onTouchedBtnChangeNickname(e: egret.Event): void {
+        private _onTouchedBtnChangeNickname(e: egret.TouchEvent): void {
             UserChangeNicknamePanel.show();
         }
-        private _onTouchedBtnChangeDiscordId(e: egret.Event): void {
+        private _onTouchedBtnChangeDiscordId(e: egret.TouchEvent): void {
             UserChangeDiscordIdPanel.show();
+        }
+        private _onTouchedBtnShowOnlineUsers(e: egret.TouchEvent): void {
+            UserOnlineUsersPanel.show();
         }
 
         private _updateView(): void {

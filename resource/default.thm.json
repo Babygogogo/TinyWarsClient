@@ -57,6 +57,7 @@
 		"resource/skins/singleCustomRoom/ScrMainMenuPanel.exml",
 		"resource/skins/user/UserChangeDiscordIdPanel.exml",
 		"resource/skins/user/UserChangeNicknamePanel.exml",
+		"resource/skins/user/UserOnlineUsersPanel.exml",
 		"resource/skins/user/UserPanel.exml",
 		"resource/skins/utility/LoadingUiPanel.exml",
 		"resource/skins/warMap/WarMapSearchPanel.exml"

@@ -157,6 +157,7 @@
 		"bin-debug/modules/user/model/UserProxy.js",
 		"bin-debug/modules/user/view/UserChangeDiscordIdPanel.js",
 		"bin-debug/modules/user/view/UserChangeNicknamePanel.js",
+		"bin-debug/modules/user/view/UserOnlineUsersPanel.js",
 		"bin-debug/modules/user/view/UserPanel.js",
 		"bin-debug/gameui/UiTab.js",
 		"bin-debug/modules/baseWar/view/BwTileDetailPanel.js",

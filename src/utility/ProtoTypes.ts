@@ -7153,6 +7153,102 @@ export declare class McwReplayInfo implements IMcwReplayInfo {
     public toJSON(): { [k: string]: any };
 }
 
+/** Properties of a UserBriefInfo. */
+export declare interface IUserBriefInfo {
+
+    /** UserBriefInfo userId */
+    userId?: (number|null);
+
+    /** UserBriefInfo nickname */
+    nickname?: (string|null);
+}
+
+/** Represents a UserBriefInfo. */
+export declare class UserBriefInfo implements IUserBriefInfo {
+
+    /**
+     * Constructs a new UserBriefInfo.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IUserBriefInfo);
+
+    /** UserBriefInfo userId. */
+    public userId: number;
+
+    /** UserBriefInfo nickname. */
+    public nickname: string;
+
+    /**
+     * Creates a new UserBriefInfo instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns UserBriefInfo instance
+     */
+    public static create(properties?: IUserBriefInfo): UserBriefInfo;
+
+    /**
+     * Encodes the specified UserBriefInfo message. Does not implicitly {@link UserBriefInfo.verify|verify} messages.
+     * @param message UserBriefInfo message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IUserBriefInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified UserBriefInfo message, length delimited. Does not implicitly {@link UserBriefInfo.verify|verify} messages.
+     * @param message UserBriefInfo message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IUserBriefInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a UserBriefInfo message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns UserBriefInfo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): UserBriefInfo;
+
+    /**
+     * Decodes a UserBriefInfo message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns UserBriefInfo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): UserBriefInfo;
+
+    /**
+     * Verifies a UserBriefInfo message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a UserBriefInfo message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns UserBriefInfo
+     */
+    public static fromObject(object: { [k: string]: any }): UserBriefInfo;
+
+    /**
+     * Creates a plain object from a UserBriefInfo message. Also converts values to other types if specified.
+     * @param message UserBriefInfo
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: UserBriefInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this UserBriefInfo to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
 /** Properties of a MessageContainer. */
 export declare interface IMessageContainer {
 
@@ -7218,6 +7314,12 @@ export declare interface IMessageContainer {
 
     /** MessageContainer S_UserChangeDiscordId */
     S_UserChangeDiscordId?: (IS_UserChangeDiscordId|null);
+
+    /** MessageContainer C_UserGetOnlineUsers */
+    C_UserGetOnlineUsers?: (IC_UserGetOnlineUsers|null);
+
+    /** MessageContainer S_UserGetOnlineUsers */
+    S_UserGetOnlineUsers?: (IS_UserGetOnlineUsers|null);
 
     /** MessageContainer C_McrCreateWar */
     C_McrCreateWar?: (IC_McrCreateWar|null);
@@ -7477,6 +7579,12 @@ export declare class MessageContainer implements IMessageContainer {
 
     /** MessageContainer S_UserChangeDiscordId. */
     public S_UserChangeDiscordId?: (IS_UserChangeDiscordId|null);
+
+    /** MessageContainer C_UserGetOnlineUsers. */
+    public C_UserGetOnlineUsers?: (IC_UserGetOnlineUsers|null);
+
+    /** MessageContainer S_UserGetOnlineUsers. */
+    public S_UserGetOnlineUsers?: (IS_UserGetOnlineUsers|null);
 
     /** MessageContainer C_McrCreateWar. */
     public C_McrCreateWar?: (IC_McrCreateWar|null);
@@ -9914,6 +10022,192 @@ export declare class S_UserChangeDiscordId implements IS_UserChangeDiscordId {
 
     /**
      * Converts this S_UserChangeDiscordId to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_UserGetOnlineUsers. */
+export declare interface IC_UserGetOnlineUsers {
+}
+
+/** Represents a C_UserGetOnlineUsers. */
+export declare class C_UserGetOnlineUsers implements IC_UserGetOnlineUsers {
+
+    /**
+     * Constructs a new C_UserGetOnlineUsers.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_UserGetOnlineUsers);
+
+    /**
+     * Creates a new C_UserGetOnlineUsers instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_UserGetOnlineUsers instance
+     */
+    public static create(properties?: IC_UserGetOnlineUsers): C_UserGetOnlineUsers;
+
+    /**
+     * Encodes the specified C_UserGetOnlineUsers message. Does not implicitly {@link C_UserGetOnlineUsers.verify|verify} messages.
+     * @param message C_UserGetOnlineUsers message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_UserGetOnlineUsers, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_UserGetOnlineUsers message, length delimited. Does not implicitly {@link C_UserGetOnlineUsers.verify|verify} messages.
+     * @param message C_UserGetOnlineUsers message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_UserGetOnlineUsers, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_UserGetOnlineUsers message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_UserGetOnlineUsers
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_UserGetOnlineUsers;
+
+    /**
+     * Decodes a C_UserGetOnlineUsers message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_UserGetOnlineUsers
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_UserGetOnlineUsers;
+
+    /**
+     * Verifies a C_UserGetOnlineUsers message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_UserGetOnlineUsers message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_UserGetOnlineUsers
+     */
+    public static fromObject(object: { [k: string]: any }): C_UserGetOnlineUsers;
+
+    /**
+     * Creates a plain object from a C_UserGetOnlineUsers message. Also converts values to other types if specified.
+     * @param message C_UserGetOnlineUsers
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_UserGetOnlineUsers, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_UserGetOnlineUsers to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_UserGetOnlineUsers. */
+export declare interface IS_UserGetOnlineUsers {
+
+    /** S_UserGetOnlineUsers errorCode */
+    errorCode?: (number|null);
+
+    /** S_UserGetOnlineUsers totalCount */
+    totalCount?: (number|null);
+
+    /** S_UserGetOnlineUsers userInfos */
+    userInfos?: (IUserBriefInfo[]|null);
+}
+
+/** Represents a S_UserGetOnlineUsers. */
+export declare class S_UserGetOnlineUsers implements IS_UserGetOnlineUsers {
+
+    /**
+     * Constructs a new S_UserGetOnlineUsers.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_UserGetOnlineUsers);
+
+    /** S_UserGetOnlineUsers errorCode. */
+    public errorCode: number;
+
+    /** S_UserGetOnlineUsers totalCount. */
+    public totalCount: number;
+
+    /** S_UserGetOnlineUsers userInfos. */
+    public userInfos: IUserBriefInfo[];
+
+    /**
+     * Creates a new S_UserGetOnlineUsers instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_UserGetOnlineUsers instance
+     */
+    public static create(properties?: IS_UserGetOnlineUsers): S_UserGetOnlineUsers;
+
+    /**
+     * Encodes the specified S_UserGetOnlineUsers message. Does not implicitly {@link S_UserGetOnlineUsers.verify|verify} messages.
+     * @param message S_UserGetOnlineUsers message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_UserGetOnlineUsers, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_UserGetOnlineUsers message, length delimited. Does not implicitly {@link S_UserGetOnlineUsers.verify|verify} messages.
+     * @param message S_UserGetOnlineUsers message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_UserGetOnlineUsers, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_UserGetOnlineUsers message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_UserGetOnlineUsers
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_UserGetOnlineUsers;
+
+    /**
+     * Decodes a S_UserGetOnlineUsers message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_UserGetOnlineUsers
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_UserGetOnlineUsers;
+
+    /**
+     * Verifies a S_UserGetOnlineUsers message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_UserGetOnlineUsers message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_UserGetOnlineUsers
+     */
+    public static fromObject(object: { [k: string]: any }): S_UserGetOnlineUsers;
+
+    /**
+     * Creates a plain object from a S_UserGetOnlineUsers message. Also converts values to other types if specified.
+     * @param message S_UserGetOnlineUsers
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_UserGetOnlineUsers, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_UserGetOnlineUsers to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };
