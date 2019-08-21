@@ -90,7 +90,7 @@
                         <e:Skin width="190" height="220" currentState="up" states="down,up">
                             <e:Group id="_group" left="0" right="0" top="0" bottom="0">
                                 <GameUi:UiLabel id="_labelName" text="玩家名居然会有十个字" size="16" textColor="0xffffff"
-                                                horizontalCenter="0" y="0" />
+                                                horizontalCenter="0" y="5" maxTextWidth="190" />
                                 <GameUi:UiLabel id="_labelForce" text="红方 A队" size="16" textColor="0xFFFFFF" y="25"
                                                 horizontalCenter="0" />
                                 <GameUi:UiLabel id="_labelLost" text="已战败" size="18" textColor="0xFFFFFF" y="120"

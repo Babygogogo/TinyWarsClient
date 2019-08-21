@@ -4,10 +4,12 @@
     <e:Group left="0" top="0" right="0" bottom="0">
         <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" />
-        <GameUi:UiLabel id="_labelPlayer" text="玩家:玩家名居然能有十个字(红)" size="16" x="10" textColor="0xffffff"
-                        verticalCenter="0" />
-        <GameUi:UiLabel id="_labelFund" text="金钱:9999999" size="16" x="240" textColor="0xffffff" verticalCenter="0" />
-        <GameUi:UiLabel id="_labelCo" text="能量:99/99/99" size="16" x="350" textColor="0xFFFFFF" verticalCenter="0" />
+        <GameUi:UiLabel id="_labelPlayer" text="玩家:玩家名居然能有十个字(红)" size="16" x="10" textColor="0xffffff" y="12"
+                        maxTextWidth="320" />
+        <GameUi:UiLabel id="_labelFund" text="金钱:9999999" size="16" x="340" textColor="0xffffff" y="12"
+                        maxTextWidth="100" />
+        <GameUi:UiLabel id="_labelCo" text="CO:Greyfield 99/99/99" size="16" x="450" textColor="0xFFFFFF" y="12"
+                        maxTextWidth="200" />
         <GameUi:UiButton id="_btnUnitList" label="部队列表" x="650" width="70" top="0" bottom="0">
             <GameUi:skinName>
                 <e:Skin states="up,down,disabled">

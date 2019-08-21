@@ -2,6 +2,7 @@
 namespace TinyWars.Lobby {
     import UserModel    = User.UserModel;
     import Lang         = Utility.Lang;
+    import Notify       = Utility.Notify;
 
     export class LobbyTopPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
@@ -35,8 +36,9 @@ namespace TinyWars.Lobby {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Utility.Notify.Type.SLogin,  callback: this._onNotifySLogin },
-                { type: Utility.Notify.Type.SLogout, callback: this._onNotifySLogout },
+                { type: Notify.Type.SLogin,                 callback: this._onNotifySLogin },
+                { type: Notify.Type.SLogout,                callback: this._onNotifySLogout },
+                { type: Notify.Type.SUserChangeNickname,    callback: this._onNotifySUserChangeNickname },
             ];
             this._uiListeners = [
                 { ui: this._btnMyInfo, callback: this._onTouchedBtnMyInfo },
@@ -53,6 +55,10 @@ namespace TinyWars.Lobby {
 
         private _onNotifySLogout(e: egret.Event): void {
             LobbyTopPanel.hide();
+        }
+
+        private _onNotifySUserChangeNickname(e: egret.Event): void {
+            this._updateView();
         }
 
         private _onTouchedBtnMyInfo(e: egret.Event): void {

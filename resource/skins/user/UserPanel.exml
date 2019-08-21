@@ -92,6 +92,11 @@
                         <GameUi:UiLabel id="_labelLoginCount" text="999" textColor="0xFFFFFF" size="20" scaleX="1"
                                         scaleY="1" x="140" />
                     </e:Group>
+                    <e:Group y="80" x="10">
+                        <GameUi:UiLabel text="User ID:" textColor="0xFFFFFF" size="20" scaleX="1" scaleY="1" />
+                        <GameUi:UiLabel id="_labelUserId" text="123456789987654321" textColor="0xFFFFFF" size="20"
+                                        scaleX="1" scaleY="1" x="140" />
+                    </e:Group>
                     <e:Group y="70">
                         <GameUi:UiLabel text="Discord ID:" textColor="0xFFFFFF" size="20" scaleX="1" scaleY="1" />
                         <GameUi:UiLabel id="_labelDiscordId" text="123456789987654321" textColor="0xFFFFFF" size="20"

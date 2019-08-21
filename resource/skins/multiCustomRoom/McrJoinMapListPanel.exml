@@ -13,14 +13,14 @@
             <GameUi:UiLabel id="_labelWarComment" text="ASDF" stroke="2" size="20" scaleX="1" scaleY="1" width="320"
                             x="0" height="120" y="120" />
             <GameUi:UiLabel text="已参战玩家:" stroke="2" size="20" scaleX="1" scaleY="1" x="340" />
-            <GameUi:UiScrollList id="_listPlayer" height="140" y="25" width="280" x="340">
+            <GameUi:UiScrollList id="_listPlayer" height="140" y="25" width="400" x="340">
                 <e:List>
                     <e:itemRendererSkinName>
-                        <e:Skin width="280" height="26" currentState="up" states="up,down">
+                        <e:Skin width="400" height="26" currentState="up" states="up,down">
                             <GameUi:UiLabel id="_labelIndex" text="红方" size="18" verticalCenter="0" stroke="2" x="4" />
-                            <GameUi:UiLabel id="_labelName" text="玩家名称居然有十个字" x="89" size="18" verticalCenter="0"
-                                            stroke="2" textColor.down="0x00ff00" />
                             <GameUi:UiLabel id="_labelTeam" text="A队" size="18" verticalCenter="0" stroke="2" x="49" />
+                            <GameUi:UiLabel id="_labelName" text="玩家名称居然有十个字" x="90" size="18" verticalCenter="0"
+                                            stroke="2" textColor.down="0x00ff00" maxTextWidth="310" />
                         </e:Skin>
                     </e:itemRendererSkinName>
                 </e:List>

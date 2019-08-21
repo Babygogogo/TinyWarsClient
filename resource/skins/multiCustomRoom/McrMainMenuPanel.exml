@@ -11,8 +11,8 @@
                 <e:itemRendererSkinName>
                     <e:Skin width="200" height="40">
                         <GameUi:UiLabel id="_labelCommand" anchorOffsetX="0" anchorOffsetY="0" text="氪金"
-                                        textAlign="center" y="7" scaleX="0.7" scaleY="0.7" textColor="0xffffff"
-                                        horizontalCenter="0" />
+                                        textAlign="center" textColor="0xffffff" horizontalCenter="0" verticalCenter="0"
+                                        size="20" />
                     </e:Skin>
                 </e:itemRendererSkinName>
             </e:List>

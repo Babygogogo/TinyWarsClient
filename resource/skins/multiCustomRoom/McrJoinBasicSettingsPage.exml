@@ -39,7 +39,7 @@
                 </e:Skin>
             </GameUi:skinName>
         </GameUi:UiButton>
-        <GameUi:UiButton id="_btnNextPlayerIndex"  label=">>" x="254" y="0" scaleX="1" scaleY="1">
+        <GameUi:UiButton id="_btnNextPlayerIndex" label="&gt;&gt;" x="254" y="0" scaleX="1" scaleY="1">
             <GameUi:skinName>
                 <e:Skin states="up,down,disabled">
                     <e:Image width="100%" height="100%" />
@@ -72,7 +72,7 @@
                 </e:Skin>
             </GameUi:skinName>
         </GameUi:UiButton>
-        <GameUi:UiButton id="_btnNextTeam" label=">>" x="254" y="0">
+        <GameUi:UiButton id="_btnNextTeam" label="&gt;&gt;" x="254" y="0">
             <GameUi:skinName>
                 <e:Skin states="up,down,disabled">
                     <e:Image width="100%" height="100%" />
@@ -143,12 +143,12 @@
         <GameUi:UiScrollList id="_listPlayer" left="0" right="0" top="25" bottom="0">
             <e:List>
                 <e:itemRendererSkinName>
-                    <e:Skin height="22" currentState="up" states="up,down">
+                    <e:Skin height="22" currentState="up" states="up,down" width="400">
                         <GameUi:UiLabel id="_labelIndex" text="红方" size="16" x="4" bottom="0" />
                         <GameUi:UiLabel id="_labelTeam" text="A队" size="16" x="45" bottom="0" />
                         <GameUi:UiLabel id="_labelNickname" text="玩家名称居然有十个字" x="80" size="16" textColor.down="0x00ff00"
-                                        bottom="0" />
-                        <GameUi:UiLabel id="_labelCoName" text="CO名称" x="250" size="16" bottom="0" />
+                                        bottom="0" maxTextWidth="210" />
+                        <GameUi:UiLabel id="_labelCoName" text="CO名称" x="300" size="16" bottom="0" maxTextWidth="100" />
                     </e:Skin>
                 </e:itemRendererSkinName>
                 <e:layout>

@@ -4,9 +4,15 @@
     <e:Group left="0" top="0" right="0" height="40">
         <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" />
-        <GameUi:UiLabel id="_labelNickname" text="babygogogo" y="11" size="16" x="10" textColor="0xffffff" />
-        <GameUi:UiLabel id="_labelRankScore" text="排位积分:-9999" y="11" size="16" x="108" textColor="0xffffff" />
-        <GameUi:UiLabel id="_labelRankName" text="军衔:军士长" y="11" size="16" x="231" textColor="0xffffff" />
+        <e:Group x="10" y="12">
+            <GameUi:UiLabel id="_labelNickname" text="babygogogo" y="0" size="16" x="0" textColor="0xffffff"
+                            maxTextWidth="180" />
+            <GameUi:UiLabel id="_labelRankScore" text="排位积分:-9999" y="0" size="16" x="98" textColor="0xffffff" />
+            <GameUi:UiLabel id="_labelRankName" text="军衔:军士长" y="0" size="16" x="221" textColor="0xffffff" />
+            <e:layout>
+                <e:HorizontalLayout gap="10" />
+            </e:layout>
+        </e:Group>
         <GameUi:UiButton id="_btnMyInfo" label="我的履历" x="610" width="70" top="0" bottom="0">
             <GameUi:skinName>
                 <e:Skin states="up,down,disabled">

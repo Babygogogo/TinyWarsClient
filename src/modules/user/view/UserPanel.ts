@@ -33,6 +33,7 @@ namespace TinyWars.User {
         private _labelLastLoginTime : GameUi.UiLabel;
         private _labelOnlineTime    : GameUi.UiLabel;
         private _labelLoginCount    : GameUi.UiLabel;
+        private _labelUserId        : GameUi.UiLabel;
         private _labelDiscordId     : GameUi.UiLabel;
         private _btnChangeDiscordId : GameUi.UiButton;
 
@@ -135,6 +136,7 @@ namespace TinyWars.User {
                 this._labelLastLoginTime.text       = Helpers.getTimestampText(info.lastLoginTime);
                 this._labelOnlineTime.text          = Helpers.getTimeDurationText(info.onlineTime);
                 this._labelLoginCount.text          = `${info.loginCount}`;
+                this._labelUserId.text              = `${userId}`;
                 this._labelDiscordId.text           = info.discordId || "--";
                 this._btnChangeDiscordId.visible    = isSelf;
             }
