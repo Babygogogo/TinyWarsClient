@@ -17,6 +17,7 @@ namespace TinyWars.MultiCustomWar {
 
         private _scrCoInfo                  : eui.Scroller;
         private _labelName                  : GameUi.UiLabel;
+        private _labelDesigner              : GameUi.UiLabel;
         private _labelForce                 : GameUi.UiLabel;
         private _labelBoardCostPercentage   : GameUi.UiLabel;
         private _labelZoneRadius            : GameUi.UiLabel;
@@ -166,6 +167,7 @@ namespace TinyWars.MultiCustomWar {
                 const cfg       = coId != null ? ConfigManager.getCoBasicCfg(data.configVersion, coId) : null;
                 if (!cfg) {
                     this._labelName.text                = "--";
+                    this._labelDesigner.text            = "--";
                     this._labelForce.text               = "--";
                     this._labelBoardCostPercentage.text = "--";
                     this._labelZoneRadius.text          = "--";
@@ -178,6 +180,7 @@ namespace TinyWars.MultiCustomWar {
                 } else {
                     const isUsingSkill                  = player.getCoIsUsingSkill();
                     this._labelName.text                = cfg.name;
+                    this._labelDesigner.text            = cfg.designer;
                     this._labelForce.text               = Lang.getPlayerForceName(player.getPlayerIndex());
                     this._labelBoardCostPercentage.text = `${cfg.boardCostPercentage}%`;
                     this._labelZoneRadius.text          = `${isUsingSkill ? Lang.getText(Lang.Type.B0141) : player.getCoZoneRadius()}`;

@@ -15,6 +15,7 @@ namespace TinyWars.MultiCustomRoom {
         private _btnBack    : GameUi.UiButton;
 
         private _labelName                  : GameUi.UiLabel;
+        private _labelDesigner              : GameUi.UiLabel;
         private _labelBoardCostPercentage   : GameUi.UiLabel;
         private _labelZoneRadius            : GameUi.UiLabel;
         private _labelEnergyBar             : GameUi.UiLabel;
@@ -124,6 +125,7 @@ namespace TinyWars.MultiCustomRoom {
             const cfg = data.coBasicCfg;
             if (!cfg) {
                 this._labelName.text                = "--";
+                this._labelDesigner.text            = "--";
                 this._labelBoardCostPercentage.text = "--";
                 this._labelZoneRadius.text          = "--";
                 this._labelEnergyBar.text           = "--";
@@ -133,6 +135,7 @@ namespace TinyWars.MultiCustomRoom {
                 this._listActiveSkill.clear();
             } else {
                 this._labelName.text                = cfg.name;
+                this._labelDesigner.text            = cfg.designer;
                 this._labelBoardCostPercentage.text = `${cfg.boardCostPercentage}%`;
                 this._labelZoneRadius.text          = `${cfg.zoneRadius}`;
                 this._labelEnergyBar.text           = `${cfg.middleEnergy != null ? cfg.middleEnergy : "--"} / ${cfg.maxEnergy != null ? cfg.maxEnergy : "--"}`;

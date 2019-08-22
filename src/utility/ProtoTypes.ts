@@ -1315,6 +1315,9 @@ export declare interface ICoBasicCfg {
     /** CoBasicCfg isEnabled */
     isEnabled?: (number|null);
 
+    /** CoBasicCfg designer */
+    designer?: (string|null);
+
     /** CoBasicCfg passiveSkills */
     passiveSkills?: (number[]|null);
 
@@ -1351,6 +1354,9 @@ export declare class CoBasicCfg implements ICoBasicCfg {
 
     /** CoBasicCfg isEnabled. */
     public isEnabled: number;
+
+    /** CoBasicCfg designer. */
+    public designer: string;
 
     /** CoBasicCfg passiveSkills. */
     public passiveSkills: number[];
@@ -1482,6 +1488,9 @@ export declare interface ICoSkillCfg {
 
     /** CoSkillCfg selfHpRecovery */
     selfHpRecovery?: (number[]|null);
+
+    /** CoSkillCfg indiscriminateAreaDamage */
+    indiscriminateAreaDamage?: (number[]|null);
 }
 
 /** Represents a CoSkillCfg. */
@@ -1543,6 +1552,9 @@ export declare class CoSkillCfg implements ICoSkillCfg {
 
     /** CoSkillCfg selfHpRecovery. */
     public selfHpRecovery: number[];
+
+    /** CoSkillCfg indiscriminateAreaDamage. */
+    public indiscriminateAreaDamage: number[];
 
     /**
      * Creates a new CoSkillCfg instance using the specified properties.

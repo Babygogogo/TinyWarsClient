@@ -6,13 +6,13 @@ module TinyWars.GameUi {
 
         public $setText(value: string): boolean {
             const result = super.$setText(value);
-            egret.callLater(() => this.applyMaxTextWidth(), this);
+            this.applyMaxTextWidth();
             return result;
         }
 
         public $setTextColor(color: number): boolean {
             const result = super.$setTextColor(color);
-            egret.callLater(() => this.applyMaxTextWidth(), this);
+            this.applyMaxTextWidth();
             return result;
         }
 
@@ -21,6 +21,12 @@ module TinyWars.GameUi {
         }
 
         public applyMaxTextWidth(): void {
+            if (this.maxWidth > 0) {
+                this.once(egret.Event.ENTER_FRAME, this._onEnterFrameForApplyMaxTextWidth, this);
+            }
+        }
+
+        private _onEnterFrameForApplyMaxTextWidth(e: egret.Event): void {
             const maxWidth = this.maxTextWidth;
             if (maxWidth > 0) {
                 const currWidth = this.textWidth;
