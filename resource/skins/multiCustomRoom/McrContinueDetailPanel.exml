@@ -98,9 +98,9 @@
                                     <GameUi:UiLabel id="_labelTeam" text="A队" size="16" x="45" bottom="0"
                                                     textColor.down="0x00ff00" />
                                     <GameUi:UiLabel id="_labelNickname" text="玩家名称居然有十个字" x="80" size="16"
-                                                    textColor.down="0x00ff00" bottom="0" />
-                                    <GameUi:UiLabel id="_labelCoName" text="CO名称" x="250" size="16" bottom="0"
-                                                    textColor="0xffffff" textColor.down="0x00ff00" />
+                                                    textColor.down="0x00ff00" bottom="0" maxTextWidth="260" />
+                                    <GameUi:UiLabel id="_labelCoName" text="CO名称" x="350" size="16" bottom="0"
+                                                    textColor="0xffffff" textColor.down="0x00ff00" maxTextWidth="210" />
                                 </e:Skin>
                             </e:itemRendererSkinName>
                             <e:layout>

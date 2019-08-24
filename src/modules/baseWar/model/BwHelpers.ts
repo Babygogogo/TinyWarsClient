@@ -2,6 +2,8 @@
 namespace TinyWars.BaseWar.BwHelpers {
     import Types                = Utility.Types;
     import GridIndexHelpers     = Utility.GridIndexHelpers;
+    import ProtoTypes           = Utility.ProtoTypes;
+    import Logger               = Utility.Logger;
     import GridIndex            = Types.GridIndex;
     import MovableArea          = Types.MovableArea;
     import AttackableArea       = Types.AttackableArea;
@@ -147,7 +149,7 @@ namespace TinyWars.BaseWar.BwHelpers {
             || (state === Types.ActionPlannerState.RequestingUnitWait);
     }
 
-    export function exeInstantSkill(war: BwWar, player: BwPlayer, skillId: number): void {
+    export function exeInstantSkill(war: BwWar, player: BwPlayer, skillId: number, extraData: ProtoTypes.IWarUseCoSkillExtraData): void {
         const configVersion = war.getConfigVersion();
         const cfg           = ConfigManager.getCoSkillCfg(configVersion, skillId)!;
         const playerIndex   = player.getPlayerIndex();
@@ -367,6 +369,21 @@ namespace TinyWars.BaseWar.BwHelpers {
                     }
                 }
             });
+        }
+
+        if (cfg.indiscriminateAreaDamage) {
+            const center = extraData ? extraData.indiscriminateAreaDamageCenter : null;
+            if (!center) {
+                Logger.error("BwHelpers.exeInstantSkill() no center for indiscriminateAreaDamage!");
+            } else {
+                const hpDamage = cfg.indiscriminateAreaDamage[2] * ConfigManager.UNIT_HP_NORMALIZER;
+                for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(center as GridIndex, 0, cfg.indiscriminateAreaDamage[1], unitMap.getMapSize())) {
+                    const unit = unitMap.getUnitOnMap(gridIndex);
+                    if (unit) {
+                        unit.setCurrentHp(Math.max(1, unit.getCurrentHp() - hpDamage));
+                    }
+                }
+            }
         }
     }
 }

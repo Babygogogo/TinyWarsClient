@@ -1160,12 +1160,13 @@ namespace TinyWars.MultiCustomWar.McwModel {
         moveUnit(war, WarActionCodes.WarActionUnitUseCoSkill, path, action.launchUnitId, path.fuelConsumption);
         focusUnit.setState(UnitState.Actioned);
 
+        const player    = focusUnit.getPlayer();
+        const skills    = player.getCoActiveSkills() || [];
+        const dataList  = action.extraDataList || [];
         if (isSuccessful) {
-            const player = focusUnit.getPlayer();
             player.setCoIsUsingSkill(true);
-
-            for (const skill of player.getCoCurrentSkills() || []) {
-                BwHelpers.exeInstantSkill(war, player, skill);
+            for (let i = 0; i < skills.length; ++i) {
+                BwHelpers.exeInstantSkill(war, player, skills[i], dataList[i]);
             }
         }
 
@@ -1177,12 +1178,27 @@ namespace TinyWars.MultiCustomWar.McwModel {
                 if (isSuccessful) {
                     const gridVisionEffect  = war.getGridVisionEffect();
                     const playerIndex       = focusUnit.getPlayerIndex();
-                    war.getUnitMap().forEachUnitOnMap(unit => {
+                    const unitMap           = war.getUnitMap();
+                    unitMap.forEachUnitOnMap(unit => {
                         unit.updateView();
                         if (unit.getPlayerIndex() === playerIndex) {
                             gridVisionEffect.showEffectSkillActivation(unit.getGridIndex());
                         }
                     });
+
+                    const configVersion = war.getConfigVersion();
+                    for (let i = 0; i < skills.length; ++i) {
+                        const skillCfg          = ConfigManager.getCoSkillCfg(configVersion, skills[i]);
+                        const indiscriminateCfg = skillCfg ? skillCfg.indiscriminateAreaDamage : null;
+                        if (indiscriminateCfg) {
+                            for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(dataList[i].indiscriminateAreaDamageCenter as GridIndex, 0, indiscriminateCfg[1], unitMap.getMapSize())) {
+                                const unit = unitMap.getUnitOnMap(gridIndex);
+                                (unit) && (unit.updateView());
+
+                                gridVisionEffect.showEffectExplosion(gridIndex);
+                            }
+                        }
+                    }
                 }
 
                 actionPlanner.setStateIdle();

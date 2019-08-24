@@ -3175,6 +3175,96 @@ export declare class WarUnitRepairData implements IWarUnitRepairData {
     public toJSON(): { [k: string]: any };
 }
 
+/** Properties of a WarUseCoSkillExtraData. */
+export declare interface IWarUseCoSkillExtraData {
+
+    /** WarUseCoSkillExtraData indiscriminateAreaDamageCenter */
+    indiscriminateAreaDamageCenter?: (IGridIndex|null);
+}
+
+/** Represents a WarUseCoSkillExtraData. */
+export declare class WarUseCoSkillExtraData implements IWarUseCoSkillExtraData {
+
+    /**
+     * Constructs a new WarUseCoSkillExtraData.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IWarUseCoSkillExtraData);
+
+    /** WarUseCoSkillExtraData indiscriminateAreaDamageCenter. */
+    public indiscriminateAreaDamageCenter?: (IGridIndex|null);
+
+    /**
+     * Creates a new WarUseCoSkillExtraData instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns WarUseCoSkillExtraData instance
+     */
+    public static create(properties?: IWarUseCoSkillExtraData): WarUseCoSkillExtraData;
+
+    /**
+     * Encodes the specified WarUseCoSkillExtraData message. Does not implicitly {@link WarUseCoSkillExtraData.verify|verify} messages.
+     * @param message WarUseCoSkillExtraData message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IWarUseCoSkillExtraData, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified WarUseCoSkillExtraData message, length delimited. Does not implicitly {@link WarUseCoSkillExtraData.verify|verify} messages.
+     * @param message WarUseCoSkillExtraData message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IWarUseCoSkillExtraData, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a WarUseCoSkillExtraData message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns WarUseCoSkillExtraData
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarUseCoSkillExtraData;
+
+    /**
+     * Decodes a WarUseCoSkillExtraData message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns WarUseCoSkillExtraData
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarUseCoSkillExtraData;
+
+    /**
+     * Verifies a WarUseCoSkillExtraData message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a WarUseCoSkillExtraData message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns WarUseCoSkillExtraData
+     */
+    public static fromObject(object: { [k: string]: any }): WarUseCoSkillExtraData;
+
+    /**
+     * Creates a plain object from a WarUseCoSkillExtraData message. Also converts values to other types if specified.
+     * @param message WarUseCoSkillExtraData
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: WarUseCoSkillExtraData, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this WarUseCoSkillExtraData to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
 /** Properties of a WarActionPlayerBeginTurn. */
 export declare interface IWarActionPlayerBeginTurn {
 
@@ -5517,6 +5607,9 @@ export declare interface IWarActionUnitUseCoSkill {
 
     /** WarActionUnitUseCoSkill actingTiles */
     actingTiles?: (ISerializedWarTile[]|null);
+
+    /** WarActionUnitUseCoSkill extraDataList */
+    extraDataList?: (IWarUseCoSkillExtraData[]|null);
 }
 
 /** Represents a WarActionUnitUseCoSkill. */
@@ -5545,6 +5638,9 @@ export declare class WarActionUnitUseCoSkill implements IWarActionUnitUseCoSkill
 
     /** WarActionUnitUseCoSkill actingTiles. */
     public actingTiles: ISerializedWarTile[];
+
+    /** WarActionUnitUseCoSkill extraDataList. */
+    public extraDataList: IWarUseCoSkillExtraData[];
 
     /**
      * Creates a new WarActionUnitUseCoSkill instance using the specified properties.
