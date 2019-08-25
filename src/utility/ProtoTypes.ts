@@ -1318,6 +1318,9 @@ export declare interface ICoBasicCfg {
     /** CoBasicCfg designer */
     designer?: (string|null);
 
+    /** CoBasicCfg fullPortrait */
+    fullPortrait?: (string|null);
+
     /** CoBasicCfg passiveSkills */
     passiveSkills?: (number[]|null);
 
@@ -1357,6 +1360,9 @@ export declare class CoBasicCfg implements ICoBasicCfg {
 
     /** CoBasicCfg designer. */
     public designer: string;
+
+    /** CoBasicCfg fullPortrait. */
+    public fullPortrait: string;
 
     /** CoBasicCfg passiveSkills. */
     public passiveSkills: number[];

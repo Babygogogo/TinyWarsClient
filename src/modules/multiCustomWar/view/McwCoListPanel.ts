@@ -16,6 +16,7 @@ namespace TinyWars.MultiCustomWar {
         private _btnBack    : GameUi.UiButton;
 
         private _scrCoInfo                  : eui.Scroller;
+        private _imgCoPortrait              : GameUi.UiImage;
         private _labelName                  : GameUi.UiLabel;
         private _labelDesigner              : GameUi.UiLabel;
         private _labelForce                 : GameUi.UiLabel;
@@ -166,6 +167,7 @@ namespace TinyWars.MultiCustomWar {
                 const coId      = player.getCoId();
                 const cfg       = coId != null ? ConfigManager.getCoBasicCfg(data.configVersion, coId) : null;
                 if (!cfg) {
+                    this._imgCoPortrait.source          = "";
                     this._labelName.text                = "--";
                     this._labelDesigner.text            = "--";
                     this._labelForce.text               = "--";
@@ -179,6 +181,7 @@ namespace TinyWars.MultiCustomWar {
 
                 } else {
                     const isUsingSkill                  = player.getCoIsUsingSkill();
+                    this._imgCoPortrait.source          = cfg.fullPortrait;
                     this._labelName.text                = cfg.name;
                     this._labelDesigner.text            = cfg.designer;
                     this._labelForce.text               = Lang.getPlayerForceName(player.getPlayerIndex());

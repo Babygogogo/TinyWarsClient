@@ -14,6 +14,7 @@ namespace TinyWars.MultiCustomRoom {
         private _listCo     : GameUi.UiScrollList;
         private _btnBack    : GameUi.UiButton;
 
+        private _imgCoPortrait              : GameUi.UiImage;
         private _labelName                  : GameUi.UiLabel;
         private _labelDesigner              : GameUi.UiLabel;
         private _labelBoardCostPercentage   : GameUi.UiLabel;
@@ -124,6 +125,7 @@ namespace TinyWars.MultiCustomRoom {
         private _showCoInfo(data: DataForCoRenderer): void {
             const cfg = data.coBasicCfg;
             if (!cfg) {
+                this._imgCoPortrait.source          = "";
                 this._labelName.text                = "--";
                 this._labelDesigner.text            = "--";
                 this._labelBoardCostPercentage.text = "--";
@@ -134,6 +136,7 @@ namespace TinyWars.MultiCustomRoom {
                 this._listPassiveSkill.clear();
                 this._listActiveSkill.clear();
             } else {
+                this._imgCoPortrait.source          = cfg.fullPortrait;
                 this._labelName.text                = cfg.name;
                 this._labelDesigner.text            = cfg.designer;
                 this._labelBoardCostPercentage.text = `${cfg.boardCostPercentage}%`;
