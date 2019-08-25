@@ -50,6 +50,7 @@ namespace TinyWars.Replay {
                 visionRangeModifier     : this.getSettingsVisionRangeModifier(),
                 initialFund             : this.getSettingsInitialFund(),
                 initialEnergy           : this.getSettingsInitialEnergy(),
+                bannedCoIdList          : this.getSettingsBannedCoIdList(),
                 mapName                 : mapIndexKey.mapName,
                 mapDesigner             : mapIndexKey.mapDesigner,
                 mapVersion              : mapIndexKey.mapVersion,

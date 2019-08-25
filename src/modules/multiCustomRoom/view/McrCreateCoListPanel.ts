@@ -62,6 +62,7 @@ namespace TinyWars.MultiCustomRoom {
         protected _onOpened(): void {
             this._dataForListCo = this._createDataForListCo();
             this._listCo.bindData(this._dataForListCo);
+            this._listCo.scrollVerticalTo(0);
             this.setSelectedIndex(this._dataForListCo.findIndex(data => {
                 const cfg = data.coBasicCfg;
                 return cfg ? cfg.coId === this._openData : this._openData == null;
@@ -104,19 +105,23 @@ namespace TinyWars.MultiCustomRoom {
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _createDataForListCo(): DataForCoRenderer[] {
-            const data: DataForCoRenderer[] = [];
-            const cfgs = ConfigManager.getNewestCoList(ConfigManager.getNewestConfigVersion());
-            for (let i = 0; i < cfgs.length; ++i) {
-                const cfg = cfgs[i];
-                data.push({
-                    coBasicCfg  : cfg,
-                    index       : i,
-                    panel       : this,
-                });
+            const data              : DataForCoRenderer[] = [];
+            const bannedCoIdList    = McrModel.getCreateWarBannedCoIdList();
+
+            let index = 0;
+            for (const cfg of ConfigManager.getNewestCoList(ConfigManager.getNewestConfigVersion())) {
+                if (bannedCoIdList.indexOf(cfg.coId) < 0) {
+                    data.push({
+                        coBasicCfg  : cfg,
+                        index,
+                        panel       : this,
+                    });
+                    ++index;
+                }
             }
             data.push({
                 coBasicCfg  : null,
-                index       : cfgs.length,
+                index,
                 panel       : this,
             });
             return data;

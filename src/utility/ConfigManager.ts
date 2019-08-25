@@ -1428,6 +1428,8 @@ namespace TinyWars.ConfigManager {
     const _TILE_OBJECT_VIEW_IDS = new Map<TileObjectType, Map<number, number>>();
     const _UNIT_VIEW_IDS        = new Map<UnitType, Map<number, number>>();
     const _NEWEST_CO_LIST       = new Map<number, CoBasicCfg[]>();
+    const _CO_TIERS             = new Map<number, number[]>();
+    const _CO_ID_LIST_IN_TIER   = new Map<number, Map<number, number[]>>();
     let _newestConfigVersion: number;
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -1659,5 +1661,34 @@ namespace TinyWars.ConfigManager {
             _NEWEST_CO_LIST.set(version, list);
         }
         return _NEWEST_CO_LIST.get(version);
+    }
+
+    export function getCoTiers(version: number): number[] {
+        if (!_CO_TIERS.has(version)) {
+            const tiers = new Set<number>();
+            for (const cfg of getNewestCoList(version)) {
+                tiers.add(cfg.tier);
+            }
+            _CO_TIERS.set(version, Array.from(tiers).sort());
+        }
+        return _CO_TIERS.get(version);
+    }
+
+    export function getCoIdListInTier(version: number, tier: number): number[] {
+        if (!_CO_ID_LIST_IN_TIER.has(version)) {
+            _CO_ID_LIST_IN_TIER.set(version, new Map<number, number[]>());
+        }
+
+        const cfgs = _CO_ID_LIST_IN_TIER.get(version);
+        if (!cfgs.get(tier)) {
+            const idList: number[] = [];
+            for (const cfg of getNewestCoList(version)) {
+                if (cfg.tier === tier) {
+                    idList.push(cfg.coId);
+                }
+            }
+            cfgs.set(tier, idList);
+        }
+        return cfgs.get(tier);
     }
 }

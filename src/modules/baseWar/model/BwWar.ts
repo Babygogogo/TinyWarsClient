@@ -20,6 +20,7 @@ namespace TinyWars.BaseWar {
         private _visionRangeModifier    : number;
         private _initialFund            : number;
         private _initialEnergy          : number;
+        private _bannedCoIdList         : number[];
 
         private _view                   : BwWarView;
         private _field                  : BwField;
@@ -48,6 +49,7 @@ namespace TinyWars.BaseWar {
             this._setSettingsVisionRangeModifier(data.visionRangeModifier);
             this._setSettingsInitialFund(data.initialFund);
             this._setSettingsInitialEnergy(data.initialEnergy);
+            this._setSettingsBannedCoIdList(data.bannedCoIdList);
 
             this.setRemainingVotesForDraw(data.remainingVotesForDraw);
 
@@ -211,6 +213,13 @@ namespace TinyWars.BaseWar {
         }
         public getSettingsInitialEnergy(): number {
             return this._initialEnergy;
+        }
+
+        private _setSettingsBannedCoIdList(list: number[] | null): void {
+            this._bannedCoIdList = list || [];
+        }
+        public getSettingsBannedCoIdList(): number[] {
+            return this._bannedCoIdList;
         }
 
         public setRemainingVotesForDraw(votes: number | undefined): void {

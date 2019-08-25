@@ -1321,6 +1321,9 @@ export declare interface ICoBasicCfg {
     /** CoBasicCfg fullPortrait */
     fullPortrait?: (string|null);
 
+    /** CoBasicCfg tier */
+    tier?: (number|null);
+
     /** CoBasicCfg passiveSkills */
     passiveSkills?: (number[]|null);
 
@@ -1363,6 +1366,9 @@ export declare class CoBasicCfg implements ICoBasicCfg {
 
     /** CoBasicCfg fullPortrait. */
     public fullPortrait: string;
+
+    /** CoBasicCfg tier. */
+    public tier: number;
 
     /** CoBasicCfg passiveSkills. */
     public passiveSkills: number[];
@@ -2905,6 +2911,9 @@ export declare interface ISerializedWar {
     /** SerializedWar visionRangeModifier */
     visionRangeModifier?: (number|null);
 
+    /** SerializedWar bannedCoIdList */
+    bannedCoIdList?: (number[]|null);
+
     /** SerializedWar nextActionId */
     nextActionId?: (number|null);
 
@@ -2986,6 +2995,9 @@ export declare class SerializedWar implements ISerializedWar {
 
     /** SerializedWar visionRangeModifier. */
     public visionRangeModifier: number;
+
+    /** SerializedWar bannedCoIdList. */
+    public bannedCoIdList: number[];
 
     /** SerializedWar nextActionId. */
     public nextActionId: number;
@@ -6457,6 +6469,96 @@ export declare class SeedRandomState implements ISeedRandomState {
     public toJSON(): { [k: string]: any };
 }
 
+/** Properties of a BannedCoIdList. */
+export declare interface IBannedCoIdList {
+
+    /** BannedCoIdList bannedCoIdList */
+    bannedCoIdList?: (number[]|null);
+}
+
+/** Represents a BannedCoIdList. */
+export declare class BannedCoIdList implements IBannedCoIdList {
+
+    /**
+     * Constructs a new BannedCoIdList.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IBannedCoIdList);
+
+    /** BannedCoIdList bannedCoIdList. */
+    public bannedCoIdList: number[];
+
+    /**
+     * Creates a new BannedCoIdList instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns BannedCoIdList instance
+     */
+    public static create(properties?: IBannedCoIdList): BannedCoIdList;
+
+    /**
+     * Encodes the specified BannedCoIdList message. Does not implicitly {@link BannedCoIdList.verify|verify} messages.
+     * @param message BannedCoIdList message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IBannedCoIdList, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified BannedCoIdList message, length delimited. Does not implicitly {@link BannedCoIdList.verify|verify} messages.
+     * @param message BannedCoIdList message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IBannedCoIdList, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a BannedCoIdList message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns BannedCoIdList
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): BannedCoIdList;
+
+    /**
+     * Decodes a BannedCoIdList message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns BannedCoIdList
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): BannedCoIdList;
+
+    /**
+     * Verifies a BannedCoIdList message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a BannedCoIdList message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns BannedCoIdList
+     */
+    public static fromObject(object: { [k: string]: any }): BannedCoIdList;
+
+    /**
+     * Creates a plain object from a BannedCoIdList message. Also converts values to other types if specified.
+     * @param message BannedCoIdList
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: BannedCoIdList, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this BannedCoIdList to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
 /** Properties of a McrWaitingInfo. */
 export declare interface IMcrWaitingInfo {
 
@@ -6558,6 +6660,9 @@ export declare interface IMcrWaitingInfo {
 
     /** McrWaitingInfo visionRangeModifier */
     visionRangeModifier?: (number|null);
+
+    /** McrWaitingInfo bannedCoIdList */
+    bannedCoIdList?: (number[]|null);
 }
 
 /** Represents a McrWaitingInfo. */
@@ -6667,6 +6772,9 @@ export declare class McrWaitingInfo implements IMcrWaitingInfo {
 
     /** McrWaitingInfo visionRangeModifier. */
     public visionRangeModifier: number;
+
+    /** McrWaitingInfo bannedCoIdList. */
+    public bannedCoIdList: number[];
 
     /**
      * Creates a new McrWaitingInfo instance using the specified properties.
@@ -10386,6 +10494,9 @@ export declare interface IC_McrCreateWar {
 
     /** C_McrCreateWar visionRangeModifier */
     visionRangeModifier?: (number|null);
+
+    /** C_McrCreateWar bannedCoIdList */
+    bannedCoIdList?: (number[]|null);
 }
 
 /** Represents a C_McrCreateWar. */
@@ -10453,6 +10564,9 @@ export declare class C_McrCreateWar implements IC_McrCreateWar {
 
     /** C_McrCreateWar visionRangeModifier. */
     public visionRangeModifier: number;
+
+    /** C_McrCreateWar bannedCoIdList. */
+    public bannedCoIdList: number[];
 
     /**
      * Creates a new C_McrCreateWar instance using the specified properties.

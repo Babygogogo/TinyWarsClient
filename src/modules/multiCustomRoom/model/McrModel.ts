@@ -64,6 +64,7 @@ namespace TinyWars.MultiCustomRoom {
             moveRangeModifier   : 0,
             attackPowerModifier : 0,
             visionRangeModifier : 0,
+            bannedCoIdList      : [],
         };
 
         const _dataForJoinWar: DataForJoinWar = {
@@ -91,10 +92,11 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         export function resetCreateWarData(key: Types.MapIndexKey): void {
-            _dataForCreateWar.mapName       = key.mapName;
-            _dataForCreateWar.mapDesigner   = key.mapDesigner;
-            _dataForCreateWar.mapVersion    = key.mapVersion;
-            _dataForCreateWar.configVersion = ConfigManager.getNewestConfigVersion();
+            _dataForCreateWar.mapName               = key.mapName;
+            _dataForCreateWar.mapDesigner           = key.mapDesigner;
+            _dataForCreateWar.mapVersion            = key.mapVersion;
+            _dataForCreateWar.configVersion         = ConfigManager.getNewestConfigVersion();
+            _dataForCreateWar.bannedCoIdList.length = 0;
             setCreateWarName("");
             setCreateWarPassword("");
             setCreateWarComment("");
@@ -244,6 +246,19 @@ namespace TinyWars.MultiCustomRoom {
         }
         export function getCreateWarEnergyGrowthModifier(): number {
             return _dataForCreateWar.energyGrowthModifier;
+        }
+
+        export function getCreateWarBannedCoIdList(): number[] {
+            return _dataForCreateWar.bannedCoIdList;
+        }
+        export function addCreateWarBannedCoId(coId: number): void {
+            const list = _dataForCreateWar.bannedCoIdList;
+            (list.indexOf(coId) < 0) && (list.push(coId));
+        }
+        export function removeCreateWarBannedCoId(coId: number): void {
+            const set = new Set<number>(_dataForCreateWar.bannedCoIdList);
+            set.delete(coId);
+            _dataForCreateWar.bannedCoIdList = Array.from(set);
         }
 
         export function setCreateWarMoveRangeModifier(modifier: number): void {

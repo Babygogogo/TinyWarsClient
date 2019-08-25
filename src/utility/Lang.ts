@@ -284,6 +284,10 @@ namespace TinyWars.Utility.Lang {
             `未知错误，请拖动截图发给作者，谢谢`,
             `Error! Please make a screenshot and send it to the game maker`,
         ]],
+        [Type.A0057, [
+            `禁用此项会清空您当前选择的CO（您可以重新选择一个）。确定要禁用吗？`,
+            `You have chosen a CO that is banned by your current selection. Are you sure to continue the ban?`,
+        ]],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.

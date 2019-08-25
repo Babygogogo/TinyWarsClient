@@ -5,6 +5,7 @@ namespace TinyWars.MultiCustomRoom {
     import FloatText        = Utility.FloatText;
     import Helpers          = Utility.Helpers;
     import Lang             = Utility.Lang;
+    import ConfirmPanel     = Common.ConfirmPanel;
     import HelpPanel        = Common.HelpPanel;
     import TemplateMapModel = WarMap.WarMapModel;
 
@@ -26,9 +27,14 @@ namespace TinyWars.MultiCustomRoom {
         private _btnNextAttack    : GameUi.UiButton;
         private _labelAttack      : GameUi.UiLabel;
 
-        private _btnPrevVision : GameUi.UiButton;
-        private _btnNextVision : GameUi.UiButton;
-        private _labelVision   : GameUi.UiLabel;
+        private _btnPrevVision  : GameUi.UiButton;
+        private _btnNextVision  : GameUi.UiButton;
+        private _labelVision    : GameUi.UiLabel;
+
+        private _groupCoTiers       : eui.Group;
+        private _groupCoNames       : eui.Group;
+        private _renderersForCoTiers: RendererForCoTier[] = [];
+        private _renderersForCoNames: RendererForCoName[] = [];
 
         protected _mapInfo: ProtoTypes.IMapDynamicInfo;
 
@@ -56,6 +62,8 @@ namespace TinyWars.MultiCustomRoom {
         protected _onOpened(): void {
             this._mapInfo = McrModel.getCreateWarMapInfo();
 
+            this._initGroupCoTiers();
+            this._initGroupCoNames();
             this._updateLabelMapName();
             this._updateLabelPlayersCount();
             this._updateInputInitialFund();
@@ -65,6 +73,11 @@ namespace TinyWars.MultiCustomRoom {
             this._updateLabelMoveRange();
             this._updateLabelAttack();
             this._updateLabelVision();
+        }
+
+        protected _onClosed(): void {
+            this._clearGroupCoTiers();
+            this._clearGroupCoNames();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -148,6 +161,72 @@ namespace TinyWars.MultiCustomRoom {
             this._updateLabelVision();
         }
 
+        private _onTouchedCoTierRenderer(e: egret.TouchEvent): void {
+            const renderer  = e.currentTarget as RendererForCoTier;
+            const coIdList  = ConfigManager.getCoIdListInTier(ConfigManager.getNewestConfigVersion(), renderer.getCoTier());
+
+            if (!renderer.getIsSelected()) {
+                for (const coId of coIdList) {
+                    McrModel.removeCreateWarBannedCoId(coId);
+                }
+                this._updateGroupCoTiers();
+                this._updateGroupCoNames();
+
+            } else {
+                const selfCoId = McrModel.getCreateWarCoId();
+                if (coIdList.indexOf(selfCoId) < 0) {
+                    for (const coId of coIdList) {
+                        McrModel.addCreateWarBannedCoId(coId);
+                    }
+                    this._updateGroupCoTiers();
+                    this._updateGroupCoNames();
+
+                } else {
+                    ConfirmPanel.show({
+                        title   : Lang.getText(Lang.Type.B0088),
+                        content : Lang.getText(Lang.Type.A0057),
+                        callback: () => {
+                            for (const coId of coIdList) {
+                                McrModel.addCreateWarBannedCoId(coId);
+                            }
+                            McrModel.setCreateWarCoId(null);
+                            this._updateGroupCoTiers();
+                            this._updateGroupCoNames();
+                        },
+                    });
+                }
+            }
+        }
+
+        private _onTouchedCoNameRenderer(e: egret.TouchEvent): void {
+            const renderer  = e.currentTarget as RendererForCoName;
+            const coId      = renderer.getCoId();
+            if (!renderer.getIsSelected()) {
+                McrModel.removeCreateWarBannedCoId(coId);
+                this._updateGroupCoTiers();
+                this._updateGroupCoNames();
+
+            } else {
+                if (McrModel.getCreateWarCoId() !== coId) {
+                    McrModel.addCreateWarBannedCoId(coId);
+                    this._updateGroupCoTiers();
+                    this._updateGroupCoNames();
+
+                } else {
+                    ConfirmPanel.show({
+                        title   : Lang.getText(Lang.Type.B0088),
+                        content : Lang.getText(Lang.Type.A0057),
+                        callback: () => {
+                            McrModel.addCreateWarBannedCoId(coId);
+                            McrModel.setCreateWarCoId(null);
+                            this._updateGroupCoTiers();
+                            this._updateGroupCoNames();
+                        },
+                    });
+                }
+            }
+        }
+
         ////////////////////////////////////////////////////////////////////////////////
         // View functions.
         ////////////////////////////////////////////////////////////////////////////////
@@ -200,6 +279,121 @@ namespace TinyWars.MultiCustomRoom {
             } else {
                 this._labelVision.text = "+" + modifier;
             }
+        }
+
+        private _initGroupCoTiers(): void {
+            for (const tier of ConfigManager.getCoTiers(ConfigManager.getNewestConfigVersion())) {
+                const renderer = new RendererForCoTier();
+                renderer.setCoTier(tier);
+                renderer.setIsSelected(true);
+
+                renderer.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedCoTierRenderer, this);
+                this._renderersForCoTiers.push(renderer);
+                this._groupCoTiers.addChild(renderer);
+            }
+
+            this._updateGroupCoTiers();
+        }
+
+        private _clearGroupCoTiers(): void {
+            this._groupCoTiers.removeChildren();
+            this._renderersForCoTiers.length = 0;
+        }
+
+        private _updateGroupCoTiers(): void {
+            const bannedCoIdList = McrModel.getCreateWarBannedCoIdList();
+            for (const renderer of this._renderersForCoTiers) {
+                const includedCoIdList = ConfigManager.getCoIdListInTier(ConfigManager.getNewestConfigVersion(), renderer.getCoTier());
+                renderer.setIsSelected(includedCoIdList.every(coId => bannedCoIdList.indexOf(coId) < 0));
+            }
+        }
+
+        private _initGroupCoNames(): void {
+            for (const cfg of ConfigManager.getNewestCoList(ConfigManager.getNewestConfigVersion())) {
+                const renderer = new RendererForCoName();
+                renderer.setCoId(cfg.coId);
+                renderer.setIsSelected(true);
+
+                renderer.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedCoNameRenderer, this);
+                this._renderersForCoNames.push(renderer);
+                this._groupCoNames.addChild(renderer);
+            }
+
+            this._updateGroupCoNames();
+        }
+
+        private _clearGroupCoNames(): void {
+            this._groupCoNames.removeChildren();
+            this._renderersForCoNames.length = 0;
+        }
+
+        private _updateGroupCoNames(): void {
+            const bannedCoIdList = McrModel.getCreateWarBannedCoIdList();
+            for (const renderer of this._renderersForCoNames) {
+                renderer.setIsSelected(bannedCoIdList.indexOf(renderer.getCoId()) < 0);
+            }
+        }
+    }
+
+    class RendererForCoTier extends eui.ItemRenderer {
+        private _imgSelected: GameUi.UiImage;
+        private _labelName  : GameUi.UiLabel;
+
+        private _tier       : number;
+        private _isSelected : boolean;
+
+        public constructor() {
+            super();
+
+            this.skinName = "resource/skins/component/CheckBox1.exml";
+        }
+
+        public setCoTier(tier: number): void {
+            this._tier              = tier;
+            this._labelName.text    = `Tier ${tier}`;
+        }
+        public getCoTier(): number {
+            return this._tier;
+        }
+
+        public setIsSelected(isSelected: boolean): void {
+            this._isSelected            = isSelected;
+            this._labelName.textColor   = isSelected ? 0x00ff00 : 0xff0000;
+            Helpers.changeColor(this._imgSelected, isSelected ? Types.ColorType.Origin : Types.ColorType.Gray);
+        }
+        public getIsSelected(): boolean {
+            return this._isSelected;
+        }
+    }
+
+    class RendererForCoName extends eui.ItemRenderer {
+        private _imgSelected: GameUi.UiImage;
+        private _labelName  : GameUi.UiLabel;
+
+        private _coId           : number;
+        private _isSelected     : boolean;
+
+        public constructor() {
+            super();
+
+            this.skinName = "resource/skins/component/CheckBox1.exml";
+        }
+
+        public setCoId(coId: number): void {
+            this._coId              = coId;
+            this._labelName.text    = ConfigManager.getCoBasicCfg(ConfigManager.getNewestConfigVersion(), coId).name;
+        }
+        public getCoId(): number {
+            return this._coId;
+        }
+
+        public setIsSelected(isSelected: boolean): void {
+            this._isSelected            = isSelected;
+            this._labelName.textColor   = isSelected ? 0x00ff00 : 0xff0000;
+            Helpers.changeColor(this._imgSelected, isSelected ? Types.ColorType.Origin : Types.ColorType.Gray);
+        }
+        public getIsSelected(): boolean {
+            return this._isSelected;
         }
     }
 }
