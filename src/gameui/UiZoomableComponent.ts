@@ -202,13 +202,17 @@ namespace TinyWars.GameUi {
             this._removeTouch(e.touchPointID);
         }
         private _onTouchMove(e: egret.TouchEvent): void {
-            const touchId = e.touchPointID;
-            this._currGlobalTouchPoints.set(touchId, { x: e.stageX, y: e.stageY });
+            const touchId               = e.touchPointID;
+            const currGlobalTouchPoints = this._currGlobalTouchPoints;
+            const prevGlobalTouchPoints = this._prevGlobalTouchPoints;
+            currGlobalTouchPoints.set(touchId, { x: e.stageX, y: e.stageY });
 
-            if (this._currGlobalTouchPoints.size > 1) {
-                this.setZoomByTouches(this._currGlobalTouchPoints, this._prevGlobalTouchPoints);
+            if ((currGlobalTouchPoints.size > 1) && (prevGlobalTouchPoints.size > 1)) {
+                this.setZoomByTouches(currGlobalTouchPoints, prevGlobalTouchPoints);
             } else {
-                this.setDragByTouches(this._currGlobalTouchPoints.get(touchId), this._prevGlobalTouchPoints.get(touchId));
+                if (prevGlobalTouchPoints.has(touchId)) {
+                    this.setDragByTouches(currGlobalTouchPoints.get(touchId), prevGlobalTouchPoints.get(touchId));
+                }
             }
 
             this._prevGlobalTouchPoints.set(touchId, { x: e.stageX, y: e.stageY });
