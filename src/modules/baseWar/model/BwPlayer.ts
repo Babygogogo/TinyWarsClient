@@ -18,7 +18,7 @@ namespace TinyWars.BaseWar {
         private _coId               : number | null | undefined;
         private _coUnitId           : number | null | undefined;
         private _coCurrentEnergy    : number;
-        private _coIsUsingSkill     : boolean;
+        private _coUsingSkillType   : Types.CoSkillType;
         private _coIsDestroyedInTurn: boolean;
 
         private _war                : BwWar;
@@ -34,7 +34,7 @@ namespace TinyWars.BaseWar {
             this._setCoId(data.coId);
             this.setCoUnitId(data.coUnitId);
             this.setCoCurrentEnergy(data.coCurrentEnergy);
-            this.setCoIsUsingSkill(data.coIsUsingSkill);
+            this.setCoUsingSkillType(data.coUsingSkillType);
             this.setCoIsDestroyedInTurn(data.coIsDestroyedInTurn);
 
             return this;
@@ -117,17 +117,32 @@ namespace TinyWars.BaseWar {
         public getCoCurrentEnergy(): number {
             return this._coCurrentEnergy;
         }
-        public getCoMiddleEnergy(): number | null | undefined {
-            const cfg = this._getCoBasicCfg();
-            return cfg ? cfg.middleEnergy : null;
-        }
         public getCoMaxEnergy(): number | null | undefined {
+            const energyList = this.getCoZoneExpansionEnergyList();
+            return Math.max(
+                energyList ? energyList[energyList.length - 1] : 0,
+                this.getCoSuperPowerEnergy() || 0,
+            );
+        }
+        public getCoZoneExpansionEnergyList(): number[] | null | undefined {
             const cfg = this._getCoBasicCfg();
-            return cfg ? cfg.maxEnergy : null;
+            return cfg ? cfg.zoneExpansionEnergyList : null;
+        }
+        public getCoPowerEnergy(): number | null {
+            const coBasicCfg    = this._getCoBasicCfg();
+            const energyList    = coBasicCfg ? coBasicCfg.powerEnergyList : null;
+            const energy        = energyList ? energyList[0] : null;
+            return energy! >= 0 ? energy : null;
+        }
+        public getCoSuperPowerEnergy(): number | null {
+            const coBasicCfg    = this._getCoBasicCfg();
+            const energyList    = coBasicCfg ? coBasicCfg.powerEnergyList : null;
+            const energy        = energyList ? energyList[1] : null;
+            return energy! >= 0 ? energy : null;
         }
 
         public getCoZoneRadius(): number | null {
-            if (this.getCoIsUsingSkill()) {
+            if (this.checkCoIsUsingActiveSkill()) {
                 return Number.MAX_VALUE;
             } else {
                 const cfg = this._getCoBasicCfg();
@@ -136,13 +151,11 @@ namespace TinyWars.BaseWar {
                 } else {
                     const energy    = this.getCoCurrentEnergy();
                     let radius      = cfg.zoneRadius;
-
-                    const middleEnergy = cfg.middleEnergy;
-                    (middleEnergy != null) && (energy >= middleEnergy) && (++radius);
-
-                    const maxEnergy = cfg.maxEnergy;
-                    (maxEnergy != null) && (energy >= maxEnergy) && (++radius);
-
+                    for (const e of cfg.zoneExpansionEnergyList || []) {
+                        if (energy >= e) {
+                            ++radius;
+                        }
+                    }
                     return radius;
                 }
             }
@@ -160,7 +173,7 @@ namespace TinyWars.BaseWar {
         }
 
         public checkIsInCoZone(targetGridIndex: GridIndex, coGridIndexOnMap = this.getCoGridIndexOnMap()): boolean {
-            if (this.getCoIsUsingSkill()) {
+            if (this.checkCoIsUsingActiveSkill()) {
                 return true;
             } else {
                 const radius = this.getCoZoneRadius();
@@ -170,26 +183,32 @@ namespace TinyWars.BaseWar {
             }
         }
 
-        public getCoIsUsingSkill(): boolean {
-            return this._coIsUsingSkill;
+        public getCoUsingSkillType(): Types.CoSkillType {
+            return this._coUsingSkillType;
         }
-        public setCoIsUsingSkill(isUsing: boolean): void {
-            this._coIsUsingSkill = isUsing;
-            Notify.dispatch(Notify.Type.BwCoUsingSkillChanged);
+        public setCoUsingSkillType(skillType: Types.CoSkillType): void {
+            this._coUsingSkillType = skillType;
+            Notify.dispatch(Notify.Type.BwCoUsingSkillTypeChanged);
         }
         public getCoCurrentSkills(): number[] | null {
+            return this.getCoSkills(this.getCoUsingSkillType());
+        }
+        public getCoSkills(skillType: Types.CoSkillType): number[] | null {
             const cfg = this._getCoBasicCfg();
             if (!cfg) {
                 return null;
             } else {
-                return this.getCoIsUsingSkill()
-                    ? cfg.activeSkills
-                    : cfg.passiveSkills;
+                switch (skillType) {
+                    case Types.CoSkillType.Passive      : return cfg.passiveSkills;
+                    case Types.CoSkillType.Power        : return cfg.powerSkills;
+                    case Types.CoSkillType.SuperPower   : return cfg.superPowerSkills;
+                    default                             : return null;
+                }
             }
         }
-        public getCoActiveSkills(): number[] | null {
-            const cfg = this._getCoBasicCfg();
-            return cfg ? cfg.activeSkills : null;
+        public checkCoIsUsingActiveSkill(): boolean {
+            const t = this.getCoUsingSkillType();
+            return (t === Types.CoSkillType.Power) || (t === Types.CoSkillType.SuperPower);
         }
 
         public getCoIsDestroyedInTurn(): boolean {

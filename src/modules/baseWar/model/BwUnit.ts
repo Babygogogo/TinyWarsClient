@@ -900,12 +900,23 @@ namespace TinyWars.BaseWar {
             }
         }
 
-        public checkCanUseCoSkill(): boolean {
-            const player = this.getPlayer();
-            return (player.getCoUnitId() === this.getUnitId())
-                && (!player.getCoIsUsingSkill())
-                && (player.getCoCurrentEnergy() >= player.getCoMaxEnergy())
-                && (!!player.getCoActiveSkills());
+        public checkCanUseCoSkill(skillType: Types.CoSkillType): boolean {
+            const player = this.getPlayer()!;
+            if ((player.getCoUnitId() !== this.getUnitId()) ||
+                (player.checkCoIsUsingActiveSkill())        ||
+                (!player.getCoSkills(skillType))
+            ) {
+                return false;
+            } else {
+                const energy = player.getCoCurrentEnergy();
+                if (skillType === Types.CoSkillType.Power) {
+                    return energy >= player.getCoPowerEnergy()!;
+                } else if (skillType === Types.CoSkillType.SuperPower) {
+                    return energy >= player.getCoSuperPowerEnergy()!;
+                } else {
+                    return false;
+                }
+            }
         }
 
         public getLoadCoCost(): number | null {
@@ -917,7 +928,7 @@ namespace TinyWars.BaseWar {
 
         public checkIsAffectedByCo(selfGridIndex = this.getGridIndex()): boolean {
             const player = this.getPlayer();
-            return (player.getCoIsUsingSkill())
+            return (player.checkCoIsUsingActiveSkill())
                 || (this.getUnitId() === player.getCoUnitId())
                 || (player.checkIsInCoZone(selfGridIndex));
         }

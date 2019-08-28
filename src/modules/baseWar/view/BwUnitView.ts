@@ -55,7 +55,7 @@ namespace TinyWars.BaseWar {
         }
 
         public resetAllViews(): void {
-            this._isDark = this._unit.getState() === Types.UnitState.Actioned;
+            this._isDark = this._unit.getState() === Types.UnitState.Acted;
             this.resetStateAnimationFrames();
             this.showUnitAnimation(UnitAnimationType.Stand);
             this.updateImageHp();
@@ -123,8 +123,11 @@ namespace TinyWars.BaseWar {
         private _addFrameForCoSkill(): void {
             const unit      = this._unit;
             const player    = unit.getPlayer();
-            if ((player) && (player.getCoIsUsingSkill())) {
+            const skillType = player ? player.getCoUsingSkillType() : null;
+            if (skillType === Types.CoSkillType.Power) {
                 this._framesForStateAnimation.push(`${this._getImageSourcePrefix(this._isDark)}_t99_s08_f${Helpers.getNumText(unit.getPlayerIndex())}`);
+            } else if (skillType === Types.CoSkillType.SuperPower) {
+                this._framesForStateAnimation.push(`${this._getImageSourcePrefix(this._isDark)}_t99_s07_f${Helpers.getNumText(unit.getPlayerIndex())}`);
             }
         }
         private _addFrameForPromotion(): void {

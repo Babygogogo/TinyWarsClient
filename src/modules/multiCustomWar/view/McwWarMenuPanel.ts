@@ -445,7 +445,7 @@ namespace TinyWars.MultiCustomWar {
                     : ConfigManager.getCoBasicCfg(ConfigManager.getNewestConfigVersion(), coId).name;
                 const maxEnergy         = player.getCoMaxEnergy();
                 const middleEnergy      = player.getCoMiddleEnergy();
-                this._labelEnergy.text  = `${maxEnergy == null ? "--" : (player.getCoIsUsingSkill() ? "POWER" : player.getCoCurrentEnergy())}`
+                this._labelEnergy.text  = `${maxEnergy == null ? "--" : (player.getCoUsingSkillType() ? "POWER" : player.getCoCurrentEnergy())}`
                     + ` / ${middleEnergy == null ? "--" : middleEnergy}`
                     + ` / ${maxEnergy == null ? "--" : maxEnergy}`;
 

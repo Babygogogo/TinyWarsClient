@@ -47,7 +47,7 @@ namespace TinyWars.Replay {
                 { type: Notify.Type.BwPlayerFundChanged,        callback: this._onNotifyBwPlayerFundChanged },
                 { type: Notify.Type.BwPlayerIndexInTurnChanged, callback: this._onNotifyBwPlayerIndexInTurnChanged },
                 { type: Notify.Type.BwCoEnergyChanged,          callback: this._onNotifyBwCoEnergyChanged },
-                { type: Notify.Type.BwCoUsingSkillChanged,      callback: this._onNotifyBwCoUsingSkillChanged },
+                { type: Notify.Type.BwCoUsingSkillTypeChanged,      callback: this._onNotifyBwCoUsingSkillChanged },
                 { type: Notify.Type.ReplayAutoReplayChanged,    callback: this._onNotifyReplayAutoReplayChanged },
             ];
             this._uiListeners = [
@@ -175,7 +175,7 @@ namespace TinyWars.Replay {
                     this._labelCo.text = `CO:----`;
                 } else {
                     this._labelCo.text = `CO:${ConfigManager.getCoBasicCfg(war.getConfigVersion(), coId).name}`
-                        + ` ${player.getCoIsUsingSkill() ? `POWER` : (player.getCoUnitId() != null ? player.getCoCurrentEnergy() : "--")} / ${player.getCoMiddleEnergy() || `--`} / ${player.getCoMaxEnergy() || `--`}`;
+                        + ` ${player.getCoUsingSkillType() ? `POWER` : (player.getCoUnitId() != null ? player.getCoCurrentEnergy() : "--")} / ${player.getCoMiddleEnergy() || `--`} / ${player.getCoMaxEnergy() || `--`}`;
                 }
             }
         }

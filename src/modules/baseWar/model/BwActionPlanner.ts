@@ -1119,7 +1119,8 @@ namespace TinyWars.BaseWar {
             }
 
             const dataList = [] as DataForUnitActionRenderer[];
-            dataList.push(...this._getActionUnitUseCoSkill());
+            dataList.push(...this._getActionUnitUseCoSuperPower());
+            dataList.push(...this._getActionUnitUseCoPower());
             dataList.push(...this._getActionUnitLoadCo());
             dataList.push(...this._getActionUnitAttack());
             dataList.push(...this._getActionUnitCapture());
@@ -1140,7 +1141,8 @@ namespace TinyWars.BaseWar {
 
         protected abstract _getActionUnitBeLoaded(): DataForUnitActionRenderer[];
         protected abstract _getActionUnitJoin(): DataForUnitActionRenderer[];
-        protected abstract _getActionUnitUseCoSkill(): DataForUnitActionRenderer[];
+        protected abstract _getActionUnitUseCoSuperPower(): DataForUnitActionRenderer[];
+        protected abstract _getActionUnitUseCoPower(): DataForUnitActionRenderer[];
         protected abstract _getActionUnitLoadCo(): DataForUnitActionRenderer[];
         private _getActionUnitAttack(): DataForUnitActionRenderer[] {
             return this._createAttackableGridsAfterMove().length

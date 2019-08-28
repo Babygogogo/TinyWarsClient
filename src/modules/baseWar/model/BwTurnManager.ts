@@ -177,9 +177,16 @@ namespace TinyWars.BaseWar {
             const war       = this._getWar();
             const player    = war.getPlayerInTurn();
             player.setCoIsDestroyedInTurn(false);
-            if (player.getCoIsUsingSkill()) {
-                player.setCoIsUsingSkill(false);
-                player.setCoCurrentEnergy(0);
+
+            if (player.checkCoIsUsingActiveSkill()) {
+                const skillType = player.getCoUsingSkillType();
+                if (skillType === Types.CoSkillType.Power) {
+                    player.setCoCurrentEnergy(Math.max(0, player.getCoCurrentEnergy() - player.getCoPowerEnergy()!));
+                } else if (skillType === Types.CoSkillType.SuperPower) {
+                    player.setCoCurrentEnergy(Math.max(0, player.getCoCurrentEnergy() - player.getCoSuperPowerEnergy()!));
+                }
+
+                player.setCoUsingSkillType(Types.CoSkillType.Passive);
                 war.getTileMap().getView().updateCoZone();
             }
         }

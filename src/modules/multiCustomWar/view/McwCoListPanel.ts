@@ -180,7 +180,7 @@ namespace TinyWars.MultiCustomWar {
                     this._listActiveSkill.clear();
 
                 } else {
-                    const isUsingSkill                  = player.getCoIsUsingSkill();
+                    const isUsingSkill                  = player.getCoUsingSkillType();
                     this._imgCoPortrait.source          = cfg.fullPortrait;
                     this._labelName.text                = cfg.name;
                     this._labelDesigner.text            = cfg.designer;

@@ -445,12 +445,21 @@ namespace TinyWars.Replay {
                     : [];
             }
         }
-        protected _getActionUnitUseCoSkill(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitUseCoSuperPower(): BaseWar.DataForUnitActionRenderer[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
-                return this.getFocusUnit().checkCanUseCoSkill()
-                    ? [{ actionType: UnitActionType.UseCoSkill, callback: () => {} }]
+                return this.getFocusUnit().checkCanUseCoSkill(Types.CoSkillType.SuperPower)
+                    ? [{ actionType: UnitActionType.UseCoSuperPower, callback: () => {} }]
+                    : [];
+            }
+        }
+        protected _getActionUnitUseCoPower(): BaseWar.DataForUnitActionRenderer[] {
+            if (this.getChosenUnitsForDrop().length) {
+                return [];
+            } else {
+                return this.getFocusUnit().checkCanUseCoSkill(Types.CoSkillType.Power)
+                    ? [{ actionType: UnitActionType.UseCoPower, callback: () => {} }]
                     : [];
             }
         }

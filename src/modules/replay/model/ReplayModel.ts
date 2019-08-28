@@ -218,7 +218,7 @@ namespace TinyWars.Replay.ReplayModel {
                 gridX   : gridIndex.x,
                 gridY   : gridIndex.y,
             }, war.getConfigVersion());
-            unit.setState(UnitState.Actioned);
+            unit.setState(UnitState.Acted);
             unit.startRunning(war);
             unit.startRunningView();
 
@@ -285,7 +285,7 @@ namespace TinyWars.Replay.ReplayModel {
         const unitMap   = war.getUnitMap();
         const attacker  = unitMap.getUnit(pathNodes[0], action.launchUnitId);
         moveUnit(war, WarActionCodes.WarActionUnitAttack, path, action.launchUnitId, path.fuelConsumption);
-        attacker.setState(UnitState.Actioned);
+        attacker.setState(UnitState.Acted);
 
         if (path.isBlocked) {
             return new Promise<void>(resolve => {
@@ -333,7 +333,7 @@ namespace TinyWars.Replay.ReplayModel {
                 const targetLostHp      = Helpers.getNormalizedHp(targetOldHp) - Helpers.getNormalizedHp(targetNewHp);
                 if ((targetLostHp > 0)                                                                                      &&
                     (attackerPlayer.getCoId() != null)                                                                      &&
-                    (!attackerPlayer.getCoIsUsingSkill())                                                                   &&
+                    (!attackerPlayer.getCoUsingSkillType())                                                                   &&
                     ((attacker.getUnitId() === attackerPlayer.getCoUnitId()) || (attackerPlayer.checkIsInCoZone(destination)))
                 ) {
                     attackerPlayer.setCoCurrentEnergy(Math.min(
@@ -346,7 +346,7 @@ namespace TinyWars.Replay.ReplayModel {
                 const attackerLostHp    = Helpers.getNormalizedHp(attackerOldHp) - Helpers.getNormalizedHp(attackerNewHp);
                 if ((attackerLostHp > 0)                    &&
                     (targetPlayer.getCoId() != null)        &&
-                    (!targetPlayer.getCoIsUsingSkill())     &&
+                    (!targetPlayer.getCoUsingSkillType())     &&
                     (targetPlayer.checkIsInCoZone(destination))
                 ) {
                     targetPlayer.setCoCurrentEnergy(Math.min(
@@ -419,7 +419,7 @@ namespace TinyWars.Replay.ReplayModel {
         const focusUnit     = unitMap.getUnit(pathNodes[0], action.launchUnitId);
         const loaderUnit    = path.isBlocked ? undefined : unitMap.getUnitOnMap(pathNodes[pathNodes.length - 1]);
         moveUnit(war, WarActionCodes.WarActionUnitBeLoaded, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setState(UnitState.Actioned);
+        focusUnit.setState(UnitState.Acted);
         (loaderUnit) && (focusUnit.setLoaderUnitId(loaderUnit.getUnitId()));
 
         return new Promise<void>(resolve => {
@@ -447,7 +447,7 @@ namespace TinyWars.Replay.ReplayModel {
         const pathNodes = path.nodes;
         const focusUnit = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
         moveUnit(war, WarActionCodes.WarActionUnitBuildTile, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setState(UnitState.Actioned);
+        focusUnit.setState(UnitState.Acted);
 
         if (!path.isBlocked) {
             const endingGridIndex   = pathNodes[pathNodes.length - 1];
@@ -492,7 +492,7 @@ namespace TinyWars.Replay.ReplayModel {
         const pathNodes = path.nodes;
         const focusUnit = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
         moveUnit(war, WarActionCodes.WarActionUnitCaptureTile, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setState(UnitState.Actioned);
+        focusUnit.setState(UnitState.Acted);
 
         if (path.isBlocked) {
             return new Promise<void>(resolve => {
@@ -568,7 +568,7 @@ namespace TinyWars.Replay.ReplayModel {
         const focusUnit     = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
         const isSuccessful  = !path.isBlocked;
         moveUnit(war, WarActionCodes.WarActionUnitDive, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setState(UnitState.Actioned);
+        focusUnit.setState(UnitState.Acted);
         (isSuccessful) && (focusUnit.setIsDiving(true));
 
         return new Promise<void>(resolve => {
@@ -600,7 +600,7 @@ namespace TinyWars.Replay.ReplayModel {
         const endingGridIndex   = pathNodes[pathNodes.length - 1];
         const focusUnit         = unitMap.getUnit(pathNodes[0], action.launchUnitId);
         moveUnit(war, WarActionCodes.WarActionUnitDrop, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setState(UnitState.Actioned);
+        focusUnit.setState(UnitState.Acted);
 
         const playerIndex           = focusUnit.getPlayerIndex();
         const fogMap                = war.getFogMap();
@@ -614,7 +614,7 @@ namespace TinyWars.Replay.ReplayModel {
 
             unitForDrop.setLoaderUnitId(undefined);
             unitForDrop.setGridIndex(gridIndex);
-            unitForDrop.setState(UnitState.Actioned);
+            unitForDrop.setState(UnitState.Acted);
             unitsForDrop.push(unitForDrop);
 
             fogMap.updateMapFromPathsByUnitAndPath(unitForDrop, [endingGridIndex, gridIndex]);
@@ -667,7 +667,7 @@ namespace TinyWars.Replay.ReplayModel {
         const targetUnit        = path.isBlocked ? undefined : unitMap.getUnitOnMap(endingGridIndex);
         (targetUnit) && (unitMap.removeUnitOnMap(endingGridIndex, false));
         moveUnit(war, WarActionCodes.WarActionUnitJoin, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setState(UnitState.Actioned);
+        focusUnit.setState(UnitState.Acted);
 
         if (targetUnit) {
             const player = war.getPlayer(focusUnit.getPlayerIndex())!;
@@ -748,7 +748,7 @@ namespace TinyWars.Replay.ReplayModel {
         const pathNodes = path.nodes;
         const focusUnit = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
         moveUnit(war, WarActionCodes.WarActionUnitLaunchFlare, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setState(UnitState.Actioned);
+        focusUnit.setState(UnitState.Acted);
 
         const isFlareSucceeded  = !path.isBlocked;
         const targetGridIndex   = action.targetGridIndex as GridIndex;
@@ -789,7 +789,7 @@ namespace TinyWars.Replay.ReplayModel {
         const unitMap   = war.getUnitMap();
         const focusUnit = unitMap.getUnit(pathNodes[0], action.launchUnitId);
         moveUnit(war, WarActionCodes.WarActionUnitLaunchSilo, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setState(UnitState.Actioned);
+        focusUnit.setState(UnitState.Acted);
 
         if (path.isBlocked) {
             return new Promise<void>(resolve => {
@@ -851,7 +851,7 @@ namespace TinyWars.Replay.ReplayModel {
         moveUnit(war, WarActionCodes.WarActionUnitLoadCo, path, action.launchUnitId, path.fuelConsumption);
 
         if (path.isBlocked) {
-            focusUnit.setState(UnitState.Actioned);
+            focusUnit.setState(UnitState.Acted);
         } else {
             focusUnit.setCurrentPromotion(focusUnit.getMaxPromotion());
 
@@ -860,7 +860,7 @@ namespace TinyWars.Replay.ReplayModel {
             player.setFund(player.getFund() - focusUnit.getLoadCoCost()!);
             player.setCoUnitId(focusUnit.getUnitId());
             player.setCoCurrentEnergy(maxEnergy == null ? 0 : Math.floor(maxEnergy * war.getSettingsInitialEnergy() / 100));
-            player.setCoIsUsingSkill(false);
+            player.setCoUsingSkillType(false);
         }
 
         return new Promise<void>(resolve => {
@@ -887,7 +887,7 @@ namespace TinyWars.Replay.ReplayModel {
         const unitMap       = war.getUnitMap();
         const focusUnit     = unitMap.getUnit(pathNodes[0], action.launchUnitId);
         moveUnit(war, WarActionCodes.WarActionUnitProduceUnit, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setState(UnitState.Actioned);
+        focusUnit.setState(UnitState.Acted);
 
         if (path.isBlocked) {
             return new Promise<void>(resolve => {
@@ -911,7 +911,7 @@ namespace TinyWars.Replay.ReplayModel {
                 loaderUnitId: focusUnit.getUnitId(),
             }, war.getConfigVersion());
             producedUnit.startRunning(war);
-            producedUnit.setState(Types.UnitState.Actioned);
+            producedUnit.setState(Types.UnitState.Acted);
 
             const player = war.getPlayerInTurn();
             player.setFund(player.getFund() - action.cost);
@@ -944,7 +944,7 @@ namespace TinyWars.Replay.ReplayModel {
         const unitMap   = war.getUnitMap();
         const focusUnit = unitMap.getUnit(pathNodes[0], action.launchUnitId);
         moveUnit(war, WarActionCodes.WarActionUnitSupply, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setState(UnitState.Actioned);
+        focusUnit.setState(UnitState.Acted);
 
         if (path.isBlocked) {
             return new Promise<void>(resolve => {
@@ -999,7 +999,7 @@ namespace TinyWars.Replay.ReplayModel {
         const focusUnit     = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
         const isSuccessful  = !path.isBlocked;
         moveUnit(war, WarActionCodes.WarActionUnitSurface, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setState(UnitState.Actioned);
+        focusUnit.setState(UnitState.Acted);
         (isSuccessful) && (focusUnit.setIsDiving(false));
 
         return new Promise<void>(resolve => {
@@ -1030,13 +1030,13 @@ namespace TinyWars.Replay.ReplayModel {
         const focusUnit     = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
         const isSuccessful  = !path.isBlocked;
         moveUnit(war, WarActionCodes.WarActionUnitUseCoSkill, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setState(UnitState.Actioned);
+        focusUnit.setState(UnitState.Acted);
 
         const player    = focusUnit.getPlayer();
-        const skills    = player.getCoActiveSkills() || [];
+        const skills    = player.getCoSkills() || [];
         const dataList  = action.extraDataList || [];
         if (isSuccessful) {
-            player.setCoIsUsingSkill(true);
+            player.setCoUsingSkillType(true);
             for (let i = 0; i < skills.length; ++i) {
                 BwHelpers.exeInstantSkill(war, player, skills[i], dataList[i]);
             }
@@ -1091,7 +1091,7 @@ namespace TinyWars.Replay.ReplayModel {
         const pathNodes = path.nodes;
         const focusUnit = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
         moveUnit(war, WarActionCodes.WarActionUnitWait, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setState(UnitState.Actioned);
+        focusUnit.setState(UnitState.Acted);
 
         return new Promise<void>(resolve => {
             focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
@@ -1142,7 +1142,7 @@ namespace TinyWars.Replay.ReplayModel {
                 gridX   : gridIndex.x,
                 gridY   : gridIndex.y,
             }, war.getConfigVersion());
-            unit.setState(UnitState.Actioned);
+            unit.setState(UnitState.Acted);
             unit.startRunning(war);
             unit.startRunningView();
 
@@ -1178,7 +1178,7 @@ namespace TinyWars.Replay.ReplayModel {
         const unitMap   = war.getUnitMap();
         const attacker  = unitMap.getUnit(pathNodes[0], action.launchUnitId);
         moveUnit(war, WarActionCodes.WarActionUnitAttack, path, action.launchUnitId, path.fuelConsumption);
-        attacker.setState(UnitState.Actioned);
+        attacker.setState(UnitState.Acted);
 
         if (path.isBlocked) {
         } else {
@@ -1217,7 +1217,7 @@ namespace TinyWars.Replay.ReplayModel {
                 const targetLostHp      = Helpers.getNormalizedHp(targetOldHp) - Helpers.getNormalizedHp(targetNewHp);
                 if ((targetLostHp > 0)                                                                                      &&
                     (attackerPlayer.getCoId() != null)                                                                      &&
-                    (!attackerPlayer.getCoIsUsingSkill())                                                                   &&
+                    (!attackerPlayer.getCoUsingSkillType())                                                                   &&
                     ((attacker.getUnitId() === attackerPlayer.getCoUnitId()) || (attackerPlayer.checkIsInCoZone(destination)))
                 ) {
                     attackerPlayer.setCoCurrentEnergy(Math.min(
@@ -1230,7 +1230,7 @@ namespace TinyWars.Replay.ReplayModel {
                 const attackerLostHp    = Helpers.getNormalizedHp(attackerOldHp) - Helpers.getNormalizedHp(attackerNewHp);
                 if ((attackerLostHp > 0)                    &&
                     (targetPlayer.getCoId() != null)        &&
-                    (!targetPlayer.getCoIsUsingSkill())     &&
+                    (!targetPlayer.getCoUsingSkillType())     &&
                     (targetPlayer.checkIsInCoZone(destination))
                 ) {
                     targetPlayer.setCoCurrentEnergy(Math.min(
@@ -1276,7 +1276,7 @@ namespace TinyWars.Replay.ReplayModel {
         const focusUnit     = unitMap.getUnit(pathNodes[0], action.launchUnitId);
         const loaderUnit    = path.isBlocked ? undefined : unitMap.getUnitOnMap(pathNodes[pathNodes.length - 1]);
         moveUnit(war, WarActionCodes.WarActionUnitBeLoaded, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setState(UnitState.Actioned);
+        focusUnit.setState(UnitState.Acted);
         (loaderUnit) && (focusUnit.setLoaderUnitId(loaderUnit.getUnitId()));
     }
 
@@ -1287,7 +1287,7 @@ namespace TinyWars.Replay.ReplayModel {
         const pathNodes = path.nodes;
         const focusUnit = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
         moveUnit(war, WarActionCodes.WarActionUnitBuildTile, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setState(UnitState.Actioned);
+        focusUnit.setState(UnitState.Acted);
 
         if (!path.isBlocked) {
             const endingGridIndex   = pathNodes[pathNodes.length - 1];
@@ -1317,7 +1317,7 @@ namespace TinyWars.Replay.ReplayModel {
         const pathNodes = path.nodes;
         const focusUnit = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
         moveUnit(war, WarActionCodes.WarActionUnitCaptureTile, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setState(UnitState.Actioned);
+        focusUnit.setState(UnitState.Acted);
 
         if (path.isBlocked) {
         } else {
@@ -1358,7 +1358,7 @@ namespace TinyWars.Replay.ReplayModel {
         const focusUnit     = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
         const isSuccessful  = !path.isBlocked;
         moveUnit(war, WarActionCodes.WarActionUnitDive, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setState(UnitState.Actioned);
+        focusUnit.setState(UnitState.Acted);
         (isSuccessful) && (focusUnit.setIsDiving(true));
     }
 
@@ -1371,7 +1371,7 @@ namespace TinyWars.Replay.ReplayModel {
         const endingGridIndex   = pathNodes[pathNodes.length - 1];
         const focusUnit         = unitMap.getUnit(pathNodes[0], action.launchUnitId);
         moveUnit(war, WarActionCodes.WarActionUnitDrop, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setState(UnitState.Actioned);
+        focusUnit.setState(UnitState.Acted);
 
         const playerIndex           = focusUnit.getPlayerIndex();
         const fogMap                = war.getFogMap();
@@ -1385,7 +1385,7 @@ namespace TinyWars.Replay.ReplayModel {
 
             unitForDrop.setLoaderUnitId(undefined);
             unitForDrop.setGridIndex(gridIndex);
-            unitForDrop.setState(UnitState.Actioned);
+            unitForDrop.setState(UnitState.Acted);
             unitsForDrop.push(unitForDrop);
 
             fogMap.updateMapFromPathsByUnitAndPath(unitForDrop, [endingGridIndex, gridIndex]);
@@ -1404,7 +1404,7 @@ namespace TinyWars.Replay.ReplayModel {
         const targetUnit        = path.isBlocked ? undefined : unitMap.getUnitOnMap(endingGridIndex);
         (targetUnit) && (unitMap.removeUnitOnMap(endingGridIndex, false));
         moveUnit(war, WarActionCodes.WarActionUnitJoin, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setState(UnitState.Actioned);
+        focusUnit.setState(UnitState.Acted);
 
         if (targetUnit) {
             const player = war.getPlayer(focusUnit.getPlayerIndex())!;
@@ -1469,7 +1469,7 @@ namespace TinyWars.Replay.ReplayModel {
         const pathNodes = path.nodes;
         const focusUnit = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
         moveUnit(war, WarActionCodes.WarActionUnitLaunchFlare, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setState(UnitState.Actioned);
+        focusUnit.setState(UnitState.Acted);
 
         const isFlareSucceeded  = !path.isBlocked;
         const targetGridIndex   = action.targetGridIndex as GridIndex;
@@ -1488,7 +1488,7 @@ namespace TinyWars.Replay.ReplayModel {
         const unitMap   = war.getUnitMap();
         const focusUnit = unitMap.getUnit(pathNodes[0], action.launchUnitId);
         moveUnit(war, WarActionCodes.WarActionUnitLaunchSilo, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setState(UnitState.Actioned);
+        focusUnit.setState(UnitState.Acted);
 
         if (path.isBlocked) {
         } else {
@@ -1517,7 +1517,7 @@ namespace TinyWars.Replay.ReplayModel {
         moveUnit(war, WarActionCodes.WarActionUnitLoadCo, path, action.launchUnitId, path.fuelConsumption);
 
         if (path.isBlocked) {
-            focusUnit.setState(UnitState.Actioned);
+            focusUnit.setState(UnitState.Acted);
         } else {
             focusUnit.setCurrentPromotion(focusUnit.getMaxPromotion());
 
@@ -1526,7 +1526,7 @@ namespace TinyWars.Replay.ReplayModel {
             player.setFund(player.getFund() - focusUnit.getLoadCoCost()!);
             player.setCoUnitId(focusUnit.getUnitId());
             player.setCoCurrentEnergy(maxEnergy == null ? 0 : Math.floor(maxEnergy * war.getSettingsInitialEnergy() / 100));
-            player.setCoIsUsingSkill(false);
+            player.setCoUsingSkillType(false);
         }
     }
 
@@ -1538,7 +1538,7 @@ namespace TinyWars.Replay.ReplayModel {
         const unitMap       = war.getUnitMap();
         const focusUnit     = unitMap.getUnit(pathNodes[0], action.launchUnitId);
         moveUnit(war, WarActionCodes.WarActionUnitProduceUnit, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setState(UnitState.Actioned);
+        focusUnit.setState(UnitState.Acted);
 
         if (path.isBlocked) {
         } else {
@@ -1553,7 +1553,7 @@ namespace TinyWars.Replay.ReplayModel {
                 loaderUnitId: focusUnit.getUnitId(),
             }, war.getConfigVersion());
             producedUnit.startRunning(war);
-            producedUnit.setState(Types.UnitState.Actioned);
+            producedUnit.setState(Types.UnitState.Acted);
 
             const player = war.getPlayerInTurn();
             player.setFund(player.getFund() - action.cost);
@@ -1571,7 +1571,7 @@ namespace TinyWars.Replay.ReplayModel {
         const unitMap   = war.getUnitMap();
         const focusUnit = unitMap.getUnit(pathNodes[0], action.launchUnitId);
         moveUnit(war, WarActionCodes.WarActionUnitSupply, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setState(UnitState.Actioned);
+        focusUnit.setState(UnitState.Acted);
 
         if (path.isBlocked) {
         } else {
@@ -1595,7 +1595,7 @@ namespace TinyWars.Replay.ReplayModel {
         const focusUnit     = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
         const isSuccessful  = !path.isBlocked;
         moveUnit(war, WarActionCodes.WarActionUnitSurface, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setState(UnitState.Actioned);
+        focusUnit.setState(UnitState.Acted);
         (isSuccessful) && (focusUnit.setIsDiving(false));
     }
 
@@ -1607,13 +1607,13 @@ namespace TinyWars.Replay.ReplayModel {
         const focusUnit     = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
         const isSuccessful  = !path.isBlocked;
         moveUnit(war, WarActionCodes.WarActionUnitUseCoSkill, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setState(UnitState.Actioned);
+        focusUnit.setState(UnitState.Acted);
 
         const player    = focusUnit.getPlayer();
-        const skills    = player.getCoActiveSkills() || [];
+        const skills    = player.getCoSkills() || [];
         const dataList  = action.extraDataList || [];
         if (isSuccessful) {
-            player.setCoIsUsingSkill(true);
+            player.setCoUsingSkillType(true);
             for (let i = 0; i < skills.length; ++i) {
                 BwHelpers.exeInstantSkill(war, player, skills[i], dataList[i]);
             }
@@ -1627,7 +1627,7 @@ namespace TinyWars.Replay.ReplayModel {
         const pathNodes = path.nodes;
         const focusUnit = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
         moveUnit(war, WarActionCodes.WarActionUnitWait, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setState(UnitState.Actioned);
+        focusUnit.setState(UnitState.Acted);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

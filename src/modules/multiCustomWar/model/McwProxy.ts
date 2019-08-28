@@ -392,11 +392,12 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         }
     }
 
-    export function reqMcwUnitUseCoSkill(war: BwWar, path: GridIndex[], launchUnitId: number | null): void {
+    export function reqMcwUnitUseCoSkill(war: BwWar, skillType: Types.CoSkillType, path: GridIndex[], launchUnitId: number | null): void {
         NetManager.send({
             C_McwUnitUseCoSkill: {
                 warId       : war.getWarId(),
                 actionId    : war.getNextActionId(),
+                skillType,
                 path,
                 launchUnitId,
             },

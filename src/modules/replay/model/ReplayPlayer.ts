@@ -15,7 +15,7 @@ namespace TinyWars.Replay {
                 coId                : this.getCoId(),
                 coUnitId            : this.getCoUnitId(),
                 coCurrentEnergy     : this.getCoCurrentEnergy(),
-                coIsUsingSkill      : this.getCoIsUsingSkill(),
+                coUsingSkillType    : this.getCoUsingSkillType(),
                 coIsDestroyedInTurn : this.getCoIsDestroyedInTurn(),
             };
         }

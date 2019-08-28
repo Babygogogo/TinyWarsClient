@@ -288,6 +288,10 @@ namespace TinyWars.Utility.Lang {
             `禁用此项会清空您当前选择的CO（您可以重新选择一个）。确定要禁用吗？`,
             `You have chosen a CO that is banned by your current selection. Are you sure to continue the ban?`,
         ]],
+        [Type.A0058, [
+            `您确定要发动SUPER POWER吗？`,
+            `Are you sure to activate the SUPER POWER?`,
+        ]],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -861,12 +865,16 @@ namespace TinyWars.Utility.Lang {
             `Infinity`,
         ]],
         [Type.B0142, [
-            `发动CO技能`,
-            `CO Power`,
+            `发动COP`,
+            `Power`,
         ]],
         [Type.B0143, [
             `帮助`,
             `Help`,
+        ]],
+        [Type.B0144, [
+            `发动SCOP`,
+            `SCOP`,
         ]],
 
         [Type.B1000, [
@@ -1510,7 +1518,8 @@ namespace TinyWars.Utility.Lang {
         switch (actionType) {
             case Types.UnitActionType.BeLoaded          : return getText(Type.B0037);
             case Types.UnitActionType.Join              : return getText(Type.B0038);
-            case Types.UnitActionType.UseCoSkill        : return getText(Type.B0142);
+            case Types.UnitActionType.UseCoPower        : return getText(Type.B0142);
+            case Types.UnitActionType.UseCoSuperPower   : return getText(Type.B0144);
             case Types.UnitActionType.Attack            : return getText(Type.B0039);
             case Types.UnitActionType.Capture           : return getText(Type.B0040);
             case Types.UnitActionType.Dive              : return getText(Type.B0041);

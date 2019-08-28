@@ -1306,11 +1306,11 @@ export declare interface ICoBasicCfg {
     /** CoBasicCfg boardCostPercentage */
     boardCostPercentage?: (number|null);
 
-    /** CoBasicCfg middleEnergy */
-    middleEnergy?: (number|null);
+    /** CoBasicCfg zoneExpansionEnergyList */
+    zoneExpansionEnergyList?: (number[]|null);
 
-    /** CoBasicCfg maxEnergy */
-    maxEnergy?: (number|null);
+    /** CoBasicCfg powerEnergyList */
+    powerEnergyList?: (number[]|null);
 
     /** CoBasicCfg isEnabled */
     isEnabled?: (number|null);
@@ -1327,8 +1327,11 @@ export declare interface ICoBasicCfg {
     /** CoBasicCfg passiveSkills */
     passiveSkills?: (number[]|null);
 
-    /** CoBasicCfg activeSkills */
-    activeSkills?: (number[]|null);
+    /** CoBasicCfg powerSkills */
+    powerSkills?: (number[]|null);
+
+    /** CoBasicCfg superPowerSkills */
+    superPowerSkills?: (number[]|null);
 }
 
 /** Represents a CoBasicCfg. */
@@ -1352,11 +1355,11 @@ export declare class CoBasicCfg implements ICoBasicCfg {
     /** CoBasicCfg boardCostPercentage. */
     public boardCostPercentage: number;
 
-    /** CoBasicCfg middleEnergy. */
-    public middleEnergy: number;
+    /** CoBasicCfg zoneExpansionEnergyList. */
+    public zoneExpansionEnergyList: number[];
 
-    /** CoBasicCfg maxEnergy. */
-    public maxEnergy: number;
+    /** CoBasicCfg powerEnergyList. */
+    public powerEnergyList: number[];
 
     /** CoBasicCfg isEnabled. */
     public isEnabled: number;
@@ -1373,8 +1376,11 @@ export declare class CoBasicCfg implements ICoBasicCfg {
     /** CoBasicCfg passiveSkills. */
     public passiveSkills: number[];
 
-    /** CoBasicCfg activeSkills. */
-    public activeSkills: number[];
+    /** CoBasicCfg powerSkills. */
+    public powerSkills: number[];
+
+    /** CoBasicCfg superPowerSkills. */
+    public superPowerSkills: number[];
 
     /**
      * Creates a new CoBasicCfg instance using the specified properties.
@@ -2134,8 +2140,8 @@ export declare interface ISerializedWarPlayer {
     /** SerializedWarPlayer coCurrentEnergy */
     coCurrentEnergy?: (number|null);
 
-    /** SerializedWarPlayer coIsUsingSkill */
-    coIsUsingSkill?: (boolean|null);
+    /** SerializedWarPlayer coUsingSkillType */
+    coUsingSkillType?: (number|null);
 
     /** SerializedWarPlayer coIsDestroyedInTurn */
     coIsDestroyedInTurn?: (boolean|null);
@@ -2180,8 +2186,8 @@ export declare class SerializedWarPlayer implements ISerializedWarPlayer {
     /** SerializedWarPlayer coCurrentEnergy. */
     public coCurrentEnergy: number;
 
-    /** SerializedWarPlayer coIsUsingSkill. */
-    public coIsUsingSkill: boolean;
+    /** SerializedWarPlayer coUsingSkillType. */
+    public coUsingSkillType: number;
 
     /** SerializedWarPlayer coIsDestroyedInTurn. */
     public coIsDestroyedInTurn: boolean;
@@ -5614,6 +5620,9 @@ export declare interface IWarActionUnitUseCoSkill {
     /** WarActionUnitUseCoSkill launchUnitId */
     launchUnitId?: (number|null);
 
+    /** WarActionUnitUseCoSkill skillType */
+    skillType?: (number|null);
+
     /** WarActionUnitUseCoSkill discoveredUnits */
     discoveredUnits?: (ISerializedWarUnit[]|null);
 
@@ -5644,6 +5653,9 @@ export declare class WarActionUnitUseCoSkill implements IWarActionUnitUseCoSkill
 
     /** WarActionUnitUseCoSkill launchUnitId. */
     public launchUnitId: number;
+
+    /** WarActionUnitUseCoSkill skillType. */
+    public skillType: number;
 
     /** WarActionUnitUseCoSkill discoveredUnits. */
     public discoveredUnits: ISerializedWarUnit[];
@@ -16641,6 +16653,9 @@ export declare interface IC_McwUnitUseCoSkill {
 
     /** C_McwUnitUseCoSkill launchUnitId */
     launchUnitId?: (number|null);
+
+    /** C_McwUnitUseCoSkill skillType */
+    skillType?: (number|null);
 }
 
 /** Represents a C_McwUnitUseCoSkill. */
@@ -16663,6 +16678,9 @@ export declare class C_McwUnitUseCoSkill implements IC_McwUnitUseCoSkill {
 
     /** C_McwUnitUseCoSkill launchUnitId. */
     public launchUnitId: number;
+
+    /** C_McwUnitUseCoSkill skillType. */
+    public skillType: number;
 
     /**
      * Creates a new C_McwUnitUseCoSkill instance using the specified properties.

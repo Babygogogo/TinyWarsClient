@@ -29,7 +29,7 @@ namespace TinyWars.Utility.Notify {
 
         BwPlayerFundChanged,
         BwCoEnergyChanged,
-        BwCoUsingSkillChanged,
+        BwCoUsingSkillTypeChanged,
 
         BwCursorTapped,
         BwCursorDragged,

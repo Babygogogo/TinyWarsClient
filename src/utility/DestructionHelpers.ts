@@ -25,7 +25,7 @@ namespace TinyWars.Utility.DestructionHelpers {
             player.setCoIsDestroyedInTurn(true);
             player.setCoUnitId(null);
             player.setCoCurrentEnergy(0);
-            player.setCoIsUsingSkill(false);
+            player.setCoUsingSkillType(Types.CoSkillType.Passive);
         }
 
         const gridVisionEffect = showExplosionEffect ? war.getGridVisionEffect() : undefined;
@@ -56,7 +56,7 @@ namespace TinyWars.Utility.DestructionHelpers {
         player.setCoIsDestroyedInTurn(true);
         player.setCoUnitId(null);
         player.setCoCurrentEnergy(0);
-        player.setCoIsUsingSkill(false);
+        player.setCoUsingSkillType(Types.CoSkillType.Passive);
 
         war.setRemainingVotesForDraw(undefined);
     }

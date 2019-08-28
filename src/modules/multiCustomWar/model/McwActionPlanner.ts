@@ -244,11 +244,19 @@ namespace TinyWars.MultiCustomWar {
             this._updateView();
         }
 
-        private _setStateRequestingUnitUseCoSkill(): void {
+        private _setStateRequestingUnitUseCoSuperPower(): void {
             const unit = this.getFocusUnitLoaded();
-            McwProxy.reqMcwUnitUseCoSkill(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : null);
+            McwProxy.reqMcwUnitUseCoSkill(this._getWar(), Types.CoSkillType.SuperPower, this.getMovePath(), unit ? unit.getUnitId() : null);
 
-            this._setState(State.RequestingUnitUseCoSkill);
+            this._setState(State.RequestingUnitUseCoSuperPower);
+            this._updateView();
+        }
+
+        private _setStateRequestingUnitUseCoPower(): void {
+            const unit = this.getFocusUnitLoaded();
+            McwProxy.reqMcwUnitUseCoSkill(this._getWar(), Types.CoSkillType.Power, this.getMovePath(), unit ? unit.getUnitId() : null);
+
+            this._setState(State.RequestingUnitUseCoPower);
             this._updateView();
         }
 
@@ -655,19 +663,37 @@ namespace TinyWars.MultiCustomWar {
                     : [];
             }
         }
-        protected _getActionUnitUseCoSkill(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitUseCoSuperPower(): BaseWar.DataForUnitActionRenderer[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
-                return !this.getFocusUnit().checkCanUseCoSkill()
+                return !this.getFocusUnit().checkCanUseCoSkill(Types.CoSkillType.SuperPower)
                     ? []
                     : [{
-                        actionType  : UnitActionType.UseCoSkill,
+                        actionType  : UnitActionType.UseCoSuperPower,
+                        callback    : () => {
+                            ConfirmPanel.show({
+                                title   : Lang.getText(Lang.Type.B0088),
+                                content : Lang.getText(Lang.Type.A0058),
+                                callback: () => this._setStateRequestingUnitUseCoSuperPower(),
+                            });
+                        },
+                    }];
+            }
+        }
+        protected _getActionUnitUseCoPower(): BaseWar.DataForUnitActionRenderer[] {
+            if (this.getChosenUnitsForDrop().length) {
+                return [];
+            } else {
+                return !this.getFocusUnit().checkCanUseCoSkill(Types.CoSkillType.Power)
+                    ? []
+                    : [{
+                        actionType  : UnitActionType.UseCoPower,
                         callback    : () => {
                             ConfirmPanel.show({
                                 title   : Lang.getText(Lang.Type.B0088),
                                 content : Lang.getText(Lang.Type.A0054),
-                                callback: () => this._setStateRequestingUnitUseCoSkill(),
+                                callback: () => this._setStateRequestingUnitUseCoPower(),
                             });
                         },
                     }];

@@ -114,7 +114,7 @@ namespace TinyWars.Utility.Types {
         teamIndex       : number;
         userId?         : number;
         coCurrentEnergy : number;
-        coIsUsingSkill  : boolean;
+        coUsingSkillType: CoSkillType;
     }
     export interface SerializedBwFogMap extends ProtoTypes.ISerializedWarFogMap {
         mapsForPath?: SerializedBwFogMapForPath[];
@@ -374,7 +374,7 @@ namespace TinyWars.Utility.Types {
     }
 
     export const enum UnitState {
-        Idle,   /* 0 */         Actioned,   /* 1 */
+        Idle,   /* 0 */         Acted,  /* 1 */
     }
 
     export const enum UnitAnimationType {
@@ -451,14 +451,16 @@ namespace TinyWars.Utility.Types {
         RequestingUnitProduceUnit,
         RequestingUnitSupply,
         RequestingUnitSurface,
-        RequestingUnitUseCoSkill,
+        RequestingUnitUseCoPower,
+        RequestingUnitUseCoSuperPower,
         RequestingUnitWait,
     }
 
     export const enum UnitActionType {
         BeLoaded,
         Join,
-        UseCoSkill,
+        UseCoPower,
+        UseCoSuperPower,
         LoadCo,
         Attack,
         Capture,
@@ -472,5 +474,11 @@ namespace TinyWars.Utility.Types {
         LaunchSilo,
         ProduceUnit,
         Wait,
+    }
+
+    export const enum CoSkillType {
+        Passive     = 0,
+        Power       = 1,
+        SuperPower  = 2,
     }
 }
