@@ -27,8 +27,13 @@ namespace TinyWars.MultiCustomWar {
         private _listPassiveSkill   : GameUi.UiScrollList;
         private _labelNoPassiveSkill: GameUi.UiLabel;
 
-        private _listActiveSkill    : GameUi.UiScrollList;
-        private _labelNoActiveSkill : GameUi.UiLabel;
+        private _listCop        : GameUi.UiScrollList;
+        private _labelNoCop     : GameUi.UiLabel;
+        private _labelCopEnergy : GameUi.UiLabel;
+
+        private _listScop       : GameUi.UiScrollList;
+        private _labelNoScop    : GameUi.UiLabel;
+        private _labelScopEnergy: GameUi.UiLabel;
 
         private _scrHelp    : eui.Scroller;
         private _labelHelp  : GameUi.UiLabel;
@@ -71,7 +76,8 @@ namespace TinyWars.MultiCustomWar {
             ];
             this._listCo.setItemRenderer(CoNameRenderer);
             this._listPassiveSkill.setItemRenderer(PassiveSkillRenderer);
-            this._listActiveSkill.setItemRenderer(ActiveSkillRenderer);
+            this._listCop.setItemRenderer(ActiveSkillRenderer);
+            this._listScop.setItemRenderer(ActiveSkillRenderer);
         }
         protected _onOpened(): void {
             this._war           = McwModel.getWar();
@@ -85,7 +91,8 @@ namespace TinyWars.MultiCustomWar {
             delete this._war;
             this._listCo.clear();
             this._listPassiveSkill.clear();
-            this._listActiveSkill.clear();
+            this._listCop.clear();
+            this._listScop.clear();
 
             Notify.dispatch(Notify.Type.BwCoListPanelClosed);
         }
@@ -175,19 +182,22 @@ namespace TinyWars.MultiCustomWar {
                     this._labelZoneRadius.text          = "--";
                     this._labelEnergyBar.text           = "--";
                     this._labelNoPassiveSkill.visible   = true;
-                    this._labelNoActiveSkill.visible    = true;
+                    this._labelNoCop.visible            = true;
+                    this._labelCopEnergy.text           = "--";
+                    this._labelNoScop.visible           = true;
+                    this._labelScopEnergy.text          = "--";
                     this._listPassiveSkill.clear();
-                    this._listActiveSkill.clear();
+                    this._listCop.clear();
+                    this._listScop.clear();
 
                 } else {
-                    const isUsingSkill                  = player.getCoUsingSkillType();
                     this._imgCoPortrait.source          = cfg.fullPortrait;
                     this._labelName.text                = cfg.name;
                     this._labelDesigner.text            = cfg.designer;
                     this._labelForce.text               = Lang.getPlayerForceName(player.getPlayerIndex());
                     this._labelBoardCostPercentage.text = `${cfg.boardCostPercentage}%`;
-                    this._labelZoneRadius.text          = `${isUsingSkill ? Lang.getText(Lang.Type.B0141) : player.getCoZoneRadius()}`;
-                    this._labelEnergyBar.text           = `${isUsingSkill ? `POWER` : player.getCoCurrentEnergy()} / ${cfg.middleEnergy != null ? cfg.middleEnergy : "--"} / ${cfg.maxEnergy != null ? cfg.maxEnergy : "--"}`;
+                    this._labelZoneRadius.text          = `${player.getCoZoneBaseRadius()}`;
+                    this._labelEnergyBar.text           = (player.getCoZoneExpansionEnergyList() || []).join(` / `) || `--`;
 
                     const passiveSkills = cfg.passiveSkills || [];
                     if (!passiveSkills.length) {
@@ -205,20 +215,42 @@ namespace TinyWars.MultiCustomWar {
                         this._listPassiveSkill.bindData(data);
                     }
 
-                    const activeSkills = cfg.activeSkills || [];
-                    if (!activeSkills.length) {
-                        this._labelNoActiveSkill.visible = true;
-                        this._listActiveSkill.clear();
+                    const copSkills = player.getCoSkills(Types.CoSkillType.Power) || [];
+                    if (!copSkills.length) {
+                        this._labelNoCop.visible    = true;
+                        this._labelCopEnergy.text   = "--";
+                        this._listCop.clear();
                     } else {
-                        this._labelNoActiveSkill.visible = false;
+                        this._labelNoCop.visible    = false;
+                        this._labelCopEnergy.text   = `${player.getCoPowerEnergy()}`;
+
                         const data: DataForSkillRenderer[] = [];
-                        for (let i = 0; i < activeSkills.length; ++i) {
+                        for (let i = 0; i < copSkills.length; ++i) {
                             data.push({
                                 index   : i + 1,
-                                skillId : activeSkills[i],
+                                skillId : copSkills[i],
                             });
                         }
-                        this._listActiveSkill.bindData(data);
+                        this._listCop.bindData(data);
+                    }
+
+                    const scopSkills = player.getCoSkills(Types.CoSkillType.SuperPower) || [];
+                    if (!scopSkills.length) {
+                        this._labelNoScop.visible   = true;
+                        this._labelScopEnergy.text  = "--";
+                        this._listScop.clear();
+                    } else {
+                        this._labelNoScop.visible   = false;
+                        this._labelScopEnergy.text  = `${player.getCoSuperPowerEnergy()}`;
+
+                        const data: DataForSkillRenderer[] = [];
+                        for (let i = 0; i < scopSkills.length; ++i) {
+                            data.push({
+                                index   : i + 1,
+                                skillId : scopSkills[i],
+                            });
+                        }
+                        this._listScop.bindData(data);
                     }
                 }
             }

@@ -32,11 +32,13 @@
                     <GameUi:UiLabel id="_labelZoneRadius" text="1" textColor="0xFFFFFF" y="0" size="20" x="120"
                                     textAlign="center" scaleX="1" scaleY="1" />
                 </e:Group>
-                <e:Group y="43" x="500" scaleX="1" scaleY="1">
-                    <GameUi:UiLabel text="气槽长度：" textColor="0xFFFFFF" y="0" size="20" width="120" textAlign="right"
-                                    x="0" scaleX="1" scaleY="1" />
+                <e:Group y="43" x="460" scaleX="1" scaleY="1">
+                    <GameUi:UiLabel text="zone扩张能量值：" textColor="0xFFFFFF" y="0" size="20" x="0" scaleX="1" scaleY="1" />
                     <GameUi:UiLabel id="_labelEnergyBar" text="30 / 80" textColor="0xFFFFFF" y="0" size="20" x="120"
                                     textAlign="center" scaleX="1" scaleY="1" />
+                    <e:layout>
+                        <e:HorizontalLayout/>
+                    </e:layout>
                 </e:Group>
                 <e:Group y="85" left="0" width="500" x="0" scaleX="1" scaleY="1">
                     <e:Group y="0" x="0">
@@ -59,11 +61,48 @@
                         </GameUi:UiScrollList>
                     </e:Group>
                     <e:Group y="0" x="0">
-                        <GameUi:UiLabel text="主动技能：" textColor="0xFFFFFF" y="0" size="20" textAlign="right" x="20"
+                        <GameUi:UiLabel text="COP：" textColor="0xFFFFFF" y="0" size="20" textAlign="right" x="20"
                                         scaleX="1" scaleY="1" />
-                        <GameUi:UiLabel id="_labelNoActiveSkill" text="无" textColor="0xFFFFFF" y="0" size="20"
+                        <GameUi:UiLabel id="_labelNoCop" text="无" textColor="0xFFFFFF" y="0" size="20" textAlign="right"
+                                        x="140" scaleX="1" scaleY="1" />
+                        <e:Group x="240" y="0">
+                            <GameUi:UiLabel text="能量消耗:" textColor="0xFFFFFF" y="0" size="20" textAlign="right" x="0"
+                                            scaleX="1" scaleY="1" />
+                            <GameUi:UiLabel id="_labelCopEnergy" text="无" textColor="0xFFFFFF" y="0" size="20"
+                                            textAlign="right" x="0" scaleX="1" scaleY="1" />
+                            <e:layout>
+                                <e:HorizontalLayout/>
+                            </e:layout>
+                        </e:Group>
+                        <GameUi:UiScrollList id="_listCop" y="25" left="20" right="10">
+                            <e:List>
+                                <e:itemRendererSkinName>
+                                    <e:Skin width="470">
+                                        <GameUi:UiLabel id="_labelIndex" text="1." size="20" width="30" y="5" />
+                                        <GameUi:UiLabel id="_labelDesc" text="技能描述" size="20" left="30" right="0" y="5" />
+                                    </e:Skin>
+                                </e:itemRendererSkinName>
+                                <e:layout>
+                                    <e:VerticalLayout/>
+                                </e:layout>
+                            </e:List>
+                        </GameUi:UiScrollList>
+                    </e:Group>
+                    <e:Group y="0" x="0">
+                        <GameUi:UiLabel text="SCOP：" textColor="0xFFFFFF" y="0" size="20" textAlign="right" x="20"
+                                        scaleX="1" scaleY="1" />
+                        <GameUi:UiLabel id="_labelNoScop" text="无" textColor="0xFFFFFF" y="0" size="20"
                                         textAlign="right" x="140" scaleX="1" scaleY="1" />
-                        <GameUi:UiScrollList id="_listActiveSkill" y="25" left="20" right="10">
+                        <e:Group x="240">
+                            <GameUi:UiLabel text="能量消耗:" textColor="0xFFFFFF" y="0" size="20" textAlign="right" x="0"
+                                            scaleX="1" scaleY="1" />
+                            <GameUi:UiLabel id="_labelScopEnergy" text="无" textColor="0xFFFFFF" y="0" size="20"
+                                            textAlign="right" x="0" scaleX="1" scaleY="1" />
+                            <e:layout>
+                                <e:HorizontalLayout/>
+                            </e:layout>
+                        </e:Group>
+                        <GameUi:UiScrollList id="_listScop" y="25" left="20" right="10">
                             <e:List>
                                 <e:itemRendererSkinName>
                                     <e:Skin width="470">

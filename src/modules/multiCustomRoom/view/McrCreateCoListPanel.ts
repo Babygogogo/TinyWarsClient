@@ -24,8 +24,13 @@ namespace TinyWars.MultiCustomRoom {
         private _listPassiveSkill   : GameUi.UiScrollList;
         private _labelNoPassiveSkill: GameUi.UiLabel;
 
-        private _listActiveSkill    : GameUi.UiScrollList;
-        private _labelNoActiveSkill : GameUi.UiLabel;
+        private _listCop        : GameUi.UiScrollList;
+        private _labelNoCop     : GameUi.UiLabel;
+        private _labelCopEnergy : GameUi.UiLabel;
+
+        private _listScop       : GameUi.UiScrollList;
+        private _labelNoScop    : GameUi.UiLabel;
+        private _labelScopEnergy: GameUi.UiLabel;
 
         private _dataForListCo      : DataForCoRenderer[] = [];
         private _selectedIndex      : number;
@@ -57,7 +62,8 @@ namespace TinyWars.MultiCustomRoom {
             ];
             this._listCo.setItemRenderer(MapNameRenderer);
             this._listPassiveSkill.setItemRenderer(PassiveSkillRenderer);
-            this._listActiveSkill.setItemRenderer(ActiveSkillRenderer);
+            this._listCop.setItemRenderer(ActiveSkillRenderer);
+            this._listScop.setItemRenderer(ActiveSkillRenderer);
         }
         protected _onOpened(): void {
             this._dataForListCo = this._createDataForListCo();
@@ -71,7 +77,8 @@ namespace TinyWars.MultiCustomRoom {
         protected _onClosed(): void {
             this._listCo.clear();
             this._listPassiveSkill.clear();
-            this._listActiveSkill.clear();
+            this._listCop.clear();
+            this._listScop.clear();
         }
 
         public setSelectedIndex(newIndex: number): void {
@@ -137,16 +144,21 @@ namespace TinyWars.MultiCustomRoom {
                 this._labelZoneRadius.text          = "--";
                 this._labelEnergyBar.text           = "--";
                 this._labelNoPassiveSkill.visible   = true;
-                this._labelNoActiveSkill.visible    = true;
+                this._labelNoCop.visible            = true;
+                this._labelCopEnergy.text           = "--";
+                this._labelNoScop.visible           = true;
+                this._labelScopEnergy.text          = "--";
                 this._listPassiveSkill.clear();
-                this._listActiveSkill.clear();
+                this._listCop.clear();
+                this._listScop.clear();
+
             } else {
                 this._imgCoPortrait.source          = cfg.fullPortrait;
                 this._labelName.text                = cfg.name;
                 this._labelDesigner.text            = cfg.designer;
                 this._labelBoardCostPercentage.text = `${cfg.boardCostPercentage}%`;
                 this._labelZoneRadius.text          = `${cfg.zoneRadius}`;
-                this._labelEnergyBar.text           = `${cfg.middleEnergy != null ? cfg.middleEnergy : "--"} / ${cfg.maxEnergy != null ? cfg.maxEnergy : "--"}`;
+                this._labelEnergyBar.text           = (cfg.zoneExpansionEnergyList || []).join(` / `) || `--`;
 
                 const passiveSkills = cfg.passiveSkills || [];
                 if (!passiveSkills.length) {
@@ -164,20 +176,42 @@ namespace TinyWars.MultiCustomRoom {
                     this._listPassiveSkill.bindData(data);
                 }
 
-                const activeSkills = cfg.activeSkills || [];
-                if (!activeSkills.length) {
-                    this._labelNoActiveSkill.visible = true;
-                    this._listActiveSkill.clear();
+                const copSkills = cfg.powerSkills || [];
+                if (!copSkills.length) {
+                    this._labelNoCop.visible    = true;
+                    this._labelCopEnergy.text   = "--";
+                    this._listCop.clear();
                 } else {
-                    this._labelNoActiveSkill.visible = false;
+                    this._labelNoCop.visible    = false;
+                    this._labelCopEnergy.text   = `${cfg.powerEnergyList[0]}`;
+
                     const data: DataForSkillRenderer[] = [];
-                    for (let i = 0; i < activeSkills.length; ++i) {
+                    for (let i = 0; i < copSkills.length; ++i) {
                         data.push({
                             index   : i + 1,
-                            skillId : activeSkills[i],
+                            skillId : copSkills[i],
                         });
                     }
-                    this._listActiveSkill.bindData(data);
+                    this._listCop.bindData(data);
+                }
+
+                const scopSkills = cfg.superPowerSkills || [];
+                if (!scopSkills.length) {
+                    this._labelNoScop.visible   = true;
+                    this._labelScopEnergy.text  = "--";
+                    this._listScop.clear();
+                } else {
+                    this._labelNoScop.visible   = false;
+                    this._labelScopEnergy.text  = `${cfg.powerEnergyList[1]}`;
+
+                    const data: DataForSkillRenderer[] = [];
+                    for (let i = 0; i < scopSkills.length; ++i) {
+                        data.push({
+                            index   : i + 1,
+                            skillId : scopSkills[i],
+                        });
+                    }
+                    this._listScop.bindData(data);
                 }
             }
         }

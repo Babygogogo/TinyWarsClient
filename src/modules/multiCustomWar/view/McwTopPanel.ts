@@ -13,14 +13,17 @@ namespace TinyWars.MultiCustomWar {
 
         private static _instance: McwTopPanel;
 
-        private _labelPlayer    : GameUi.UiLabel;
-        private _labelFund      : GameUi.UiLabel;
-        private _labelCo        : GameUi.UiLabel;
-        private _btnUnitList    : GameUi.UiButton;
-        private _btnFindBuilding: GameUi.UiButton;
-        private _btnEndTurn     : GameUi.UiButton;
-        private _btnCancel      : GameUi.UiButton;
-        private _btnMenu        : GameUi.UiButton;
+        private _labelPlayer        : GameUi.UiLabel;
+        private _labelFund          : GameUi.UiLabel;
+        private _labelCo            : GameUi.UiLabel;
+        private _labelCurrEnergy    : GameUi.UiLabel;
+        private _labelPowerEnergy   : GameUi.UiLabel;
+        private _labelZoneEnergy    : GameUi.UiLabel;
+        private _btnUnitList        : GameUi.UiButton;
+        private _btnFindBuilding    : GameUi.UiButton;
+        private _btnEndTurn         : GameUi.UiButton;
+        private _btnCancel          : GameUi.UiButton;
+        private _btnMenu            : GameUi.UiButton;
 
         private _war    : McwWar;
 
@@ -86,10 +89,10 @@ namespace TinyWars.MultiCustomWar {
             this._updateView();
         }
         private _onNotifyMcwCoEnergyChanged(e: egret.Event): void {
-            this._updateLabelCo();
+            this._updateLabelCoAndEnergy();
         }
         private _onNotifyMcwCoUsingSkillChanged(e: egret.Event): void {
-            this._updateLabelCo();
+            this._updateLabelCoAndEnergy();
         }
         private _onNotifyMcwActionPlannerStateChanged(e: egret.Event): void {
             this._updateBtnEndTurn();
@@ -132,7 +135,7 @@ namespace TinyWars.MultiCustomWar {
         private _updateView(): void {
             this._updateLabelPlayer();
             this._updateLabelFund();
-            this._updateLabelCo();
+            this._updateLabelCoAndEnergy();
             this._updateBtnEndTurn();
             this._updateBtnFindUnit();
             this._updateBtnFindBuilding();
@@ -154,17 +157,28 @@ namespace TinyWars.MultiCustomWar {
                 : `${Lang.getText(Lang.Type.B0032)}: ${playerInTurn.getFund()}`;
         }
 
-        private _updateLabelCo(): void {
+        private _updateLabelCoAndEnergy(): void {
             const war = this._war;
             if ((war) && (war.getIsRunning())) {
-                const player    = war.getPlayerInTurn();
-                const coId      = player.getCoId();
-                if (coId == null) {
-                    this._labelCo.text = `CO:----`;
+                const player        = war.getPlayerInTurn();
+                const coId          = player.getCoId();
+                this._labelCo.text  = `CO: ${coId == null ? "----" : ConfigManager.getCoBasicCfg(war.getConfigVersion(), coId).name}`;
+
+                const skillType = player.getCoUsingSkillType();
+                if (skillType === Types.CoSkillType.Power) {
+                    this._labelCurrEnergy.text = "COP";
+                } else if (skillType === Types.CoSkillType.SuperPower) {
+                    this._labelCurrEnergy.text = "SCOP";
                 } else {
-                    this._labelCo.text = `CO:${ConfigManager.getCoBasicCfg(war.getConfigVersion(), coId).name}`
-                        + ` ${player.getCoUsingSkillType() ? `POWER` : (player.getCoUnitId() != null ? player.getCoCurrentEnergy() : "--")} / ${player.getCoMiddleEnergy() || `--`} / ${player.getCoMaxEnergy() || `--`}`;
+                    this._labelCurrEnergy.text = `${player.getCoUnitId() != null ? player.getCoCurrentEnergy() : `--`}`;
                 }
+
+                const powerEnergy           = player.getCoPowerEnergy();
+                const superPowerEnergy      = player.getCoSuperPowerEnergy();
+                this._labelPowerEnergy.text = `P ${powerEnergy == null ? `--` : powerEnergy} / ${superPowerEnergy == null ? `--` : superPowerEnergy}`;
+
+                const zoneEnergyText        = (player.getCoZoneExpansionEnergyList() || []).join(` / `);
+                this._labelZoneEnergy.text  = `Z ${zoneEnergyText.length ? zoneEnergyText : `--`}`;
             }
         }
 

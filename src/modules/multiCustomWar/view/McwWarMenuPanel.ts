@@ -443,11 +443,14 @@ namespace TinyWars.MultiCustomWar {
                 this._labelCoName.text  = coId == null
                     ? `(${Lang.getText(Lang.Type.B0001)}CO)`
                     : ConfigManager.getCoBasicCfg(ConfigManager.getNewestConfigVersion(), coId).name;
-                const maxEnergy         = player.getCoMaxEnergy();
-                const middleEnergy      = player.getCoMiddleEnergy();
-                this._labelEnergy.text  = `${maxEnergy == null ? "--" : (player.getCoUsingSkillType() ? "POWER" : player.getCoCurrentEnergy())}`
-                    + ` / ${middleEnergy == null ? "--" : middleEnergy}`
-                    + ` / ${maxEnergy == null ? "--" : maxEnergy}`;
+
+                const superPowerEnergy  = player.getCoSuperPowerEnergy();
+                const powerEnergy       = player.getCoPowerEnergy();
+                const skillType         = player.getCoUsingSkillType();
+                const currEnergyText    = skillType === Types.CoSkillType.Passive
+                    ? "" + player.getCoCurrentEnergy()
+                    : skillType === Types.CoSkillType.Power ? "COP" : "SCOP";
+                this._labelEnergy.text  = `${currEnergyText} / ${powerEnergy == null ? "--" : powerEnergy} / ${superPowerEnergy == null ? "--" : superPowerEnergy}`;
 
                 const unitsCountAndValue    = this._getUnitsCountAndValue(war, playerIndex);
                 this._labelUnits.text       = `${unitsCountAndValue.count}${isInfoKnown ? `` : `  ?`}`;

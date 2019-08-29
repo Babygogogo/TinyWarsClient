@@ -860,7 +860,7 @@ namespace TinyWars.Replay.ReplayModel {
             player.setFund(player.getFund() - focusUnit.getLoadCoCost()!);
             player.setCoUnitId(focusUnit.getUnitId());
             player.setCoCurrentEnergy(maxEnergy == null ? 0 : Math.floor(maxEnergy * war.getSettingsInitialEnergy() / 100));
-            player.setCoUsingSkillType(false);
+            player.setCoUsingSkillType(Types.CoSkillType.Passive);
         }
 
         return new Promise<void>(resolve => {
@@ -1033,10 +1033,11 @@ namespace TinyWars.Replay.ReplayModel {
         focusUnit.setState(UnitState.Acted);
 
         const player    = focusUnit.getPlayer();
-        const skills    = player.getCoSkills() || [];
+        const skillType = action.skillType;
+        const skills    = player.getCoSkills(skillType) || [];
         const dataList  = action.extraDataList || [];
         if (isSuccessful) {
-            player.setCoUsingSkillType(true);
+            player.setCoUsingSkillType(skillType);
             for (let i = 0; i < skills.length; ++i) {
                 BwHelpers.exeInstantSkill(war, player, skills[i], dataList[i]);
             }
@@ -1526,7 +1527,7 @@ namespace TinyWars.Replay.ReplayModel {
             player.setFund(player.getFund() - focusUnit.getLoadCoCost()!);
             player.setCoUnitId(focusUnit.getUnitId());
             player.setCoCurrentEnergy(maxEnergy == null ? 0 : Math.floor(maxEnergy * war.getSettingsInitialEnergy() / 100));
-            player.setCoUsingSkillType(false);
+            player.setCoUsingSkillType(Types.CoSkillType.Passive);
         }
     }
 
@@ -1610,10 +1611,11 @@ namespace TinyWars.Replay.ReplayModel {
         focusUnit.setState(UnitState.Acted);
 
         const player    = focusUnit.getPlayer();
-        const skills    = player.getCoSkills() || [];
+        const skillType = action.skillType;
+        const skills    = player.getCoSkills(skillType) || [];
         const dataList  = action.extraDataList || [];
         if (isSuccessful) {
-            player.setCoUsingSkillType(true);
+            player.setCoUsingSkillType(skillType);
             for (let i = 0; i < skills.length; ++i) {
                 BwHelpers.exeInstantSkill(war, player, skills[i], dataList[i]);
             }

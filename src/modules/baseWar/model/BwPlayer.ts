@@ -141,6 +141,10 @@ namespace TinyWars.BaseWar {
             return energy! >= 0 ? energy : null;
         }
 
+        public getCoZoneBaseRadius(): number | null {
+            const cfg = this._getCoBasicCfg();
+            return cfg ? cfg.zoneRadius : null;
+        }
         public getCoZoneRadius(): number | null {
             if (this.checkCoIsUsingActiveSkill()) {
                 return Number.MAX_VALUE;
