@@ -568,9 +568,10 @@ namespace TinyWars.BaseWar {
             } else {
                 return Math.max(
                     1,
-                    Math.min(this.getCfgMoveRange(), currentFuel)
-                        + this.getWar().getSettingsMoveRangeModifier()
-                        + this._getMoveRangeModifierByCo(),
+                    Math.min(
+                        currentFuel,
+                        this.getCfgMoveRange() + this.getWar().getSettingsMoveRangeModifier() + this._getMoveRangeModifierByCo(),
+                    )
                 );
             }
         }
