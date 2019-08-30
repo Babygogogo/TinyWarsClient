@@ -267,7 +267,7 @@ namespace TinyWars.MultiCustomWar {
     }
 
     type DataForCoRenderer = {
-        configVersion   : number;
+        configVersion   : string;
         player          : McwPlayer;
         index           : number;
         panel           : McwCoListPanel;

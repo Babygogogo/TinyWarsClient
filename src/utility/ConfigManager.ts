@@ -1420,17 +1420,17 @@ namespace TinyWars.ConfigManager {
 
     function _onSNewestConfigVersion(e: egret.Event): void {
         const data = e.data as ProtoTypes.IS_NewestConfigVersion;
-        _newestConfigVersion = data.version;
-        loadConfig(_newestConfigVersion);
+        _newestFormalVersion = data.version;
+        loadConfig(_newestFormalVersion);
     }
 
-    const _ALL_CONFIGS          = new Map<number, ExtendedFullConfig>();
+    const _ALL_CONFIGS          = new Map<string, ExtendedFullConfig>();
     const _TILE_OBJECT_VIEW_IDS = new Map<TileObjectType, Map<number, number>>();
     const _UNIT_VIEW_IDS        = new Map<UnitType, Map<number, number>>();
-    const _NEWEST_CO_LIST       = new Map<number, CoBasicCfg[]>();
-    const _CO_TIERS             = new Map<number, number[]>();
-    const _CO_ID_LIST_IN_TIER   = new Map<number, Map<number, number[]>>();
-    let _newestConfigVersion: number;
+    const _NEWEST_CO_LIST       = new Map<string, CoBasicCfg[]>();
+    const _CO_TIERS             = new Map<string, number[]>();
+    const _CO_ID_LIST_IN_TIER   = new Map<string, Map<number, number[]>>();
+    let _newestFormalVersion    : string;
 
     ////////////////////////////////////////////////////////////////////////////////
     // Exports.
@@ -1448,18 +1448,18 @@ namespace TinyWars.ConfigManager {
         _initUnitViewIds();
     }
 
-    export function getNewestConfigVersion(): number {
-        return _newestConfigVersion;
+    export function getNewestConfigVersion(): string {
+        return _newestFormalVersion;
     }
 
-    export function checkIsConfigLoaded(version: number): boolean {
+    export function checkIsConfigLoaded(version: string): boolean {
         return _ALL_CONFIGS.has(version);
     }
 
-    export async function loadConfig(version: number): Promise<ExtendedFullConfig> {
+    export async function loadConfig(version: string): Promise<ExtendedFullConfig> {
         if (!checkIsConfigLoaded(version)) {
             const data = Utility.ProtoManager.decodeAsFullConfig(await RES.getResByUrl(
-                `resource/config/FullConfig${Utility.Helpers.getNumText(version, 4)}.bin`,
+                `resource/config/FullConfig${version}.bin`,
                 undefined,
                 undefined,
                 RES.ResourceItem.TYPE_BIN
@@ -1495,67 +1495,67 @@ namespace TinyWars.ConfigManager {
         return _TILE_TYPE_MAPPING.get(baseType)!.get(objectType)!;
     }
 
-    export function getTileTemplateCfg(version: number, baseType: TileBaseType, objectType: TileObjectType): TileTemplateCfg {
+    export function getTileTemplateCfg(version: string, baseType: TileBaseType, objectType: TileObjectType): TileTemplateCfg {
         return _ALL_CONFIGS.get(version)!.TileTemplate[getTileType(baseType, objectType)];
     }
-    export function getTileTemplateCfgByType(version: number, tileType: TileType): TileTemplateCfg {
+    export function getTileTemplateCfgByType(version: string, tileType: TileType): TileTemplateCfg {
         return _ALL_CONFIGS.get(version)!.TileTemplate[tileType];
     }
 
-    export function getTileTypesByCategory(version: number, category: TileCategory): TileType[] | undefined | null {
+    export function getTileTypesByCategory(version: string, category: TileCategory): TileType[] | undefined | null {
         return _ALL_CONFIGS.get(version)!.TileCategory[category].tileTypes;
     }
 
-    export function getUnitTemplateCfg(version: number, unitType: UnitType): UnitTemplateCfg {
+    export function getUnitTemplateCfg(version: string, unitType: UnitType): UnitTemplateCfg {
         return _ALL_CONFIGS.get(version)!.UnitTemplate[unitType];
     }
 
-    export function getUnitTypesByCategory(version: number, category: UnitCategory): UnitType[] | undefined | null {
+    export function getUnitTypesByCategory(version: string, category: UnitCategory): UnitType[] | undefined | null {
         return _ALL_CONFIGS.get(version)!.UnitCategory[category].unitTypes;
     }
 
-    export function checkIsUnitTypeInCategory(version: number, unitType: UnitType, category: UnitCategory): boolean {
+    export function checkIsUnitTypeInCategory(version: string, unitType: UnitType, category: UnitCategory): boolean {
         const types = getUnitTypesByCategory(version, category);
         return (types != null) && (types.indexOf(unitType) >= 0);
     }
 
-    export function checkIsTileTypeInCategory(version: number, tileType: TileType, category: TileCategory): boolean {
+    export function checkIsTileTypeInCategory(version: string, tileType: TileType, category: TileCategory): boolean {
         const types = getTileTypesByCategory(version, category);
         return (types != null) && (types.indexOf(tileType) >= 0);
     }
 
-    export function getUnitMaxPromotion(version: number): number {
+    export function getUnitMaxPromotion(version: string): number {
         return _ALL_CONFIGS.get(version)!.maxUnitPromotion!;
     }
 
-    export function checkHasSecondaryWeapon(version: number, unitType: UnitType): boolean {
+    export function checkHasSecondaryWeapon(version: string, unitType: UnitType): boolean {
         return _ALL_CONFIGS.get(version)!.secondaryWeaponFlag![unitType];
     }
 
-    export function getUnitPromotionAttackBonus(version: number, promotion: number): number {
+    export function getUnitPromotionAttackBonus(version: string, promotion: number): number {
         return _ALL_CONFIGS.get(version)!.UnitPromotion![promotion].attackBonus!;
     }
 
-    export function getUnitPromotionDefenseBonus(version: number, promotion: number): number {
+    export function getUnitPromotionDefenseBonus(version: string, promotion: number): number {
         return _ALL_CONFIGS.get(version)!.UnitPromotion![promotion].defenseBonus!;
     }
 
-    export function getDamageChartCfgs(version: number, attackerType: UnitType): { [armorType: number]: { [weaponType: number]: DamageChartCfg } } {
+    export function getDamageChartCfgs(version: string, attackerType: UnitType): { [armorType: number]: { [weaponType: number]: DamageChartCfg } } {
         return _ALL_CONFIGS.get(version)!.DamageChart[attackerType];
     }
 
-    export function getBuildableTileCfgs(version: number, unitType: UnitType): { [srcTileType: number]: BuildableTileCfg } | undefined {
+    export function getBuildableTileCfgs(version: string, unitType: UnitType): { [srcTileType: number]: BuildableTileCfg } | undefined {
         return _ALL_CONFIGS.get(version)!.BuildableTile[unitType];
     }
 
-    export function getVisionBonusCfg(version: number, unitType: UnitType): { [tileType: number]: VisionBonusCfg } | undefined {
+    export function getVisionBonusCfg(version: string, unitType: UnitType): { [tileType: number]: VisionBonusCfg } | undefined {
         return _ALL_CONFIGS.get(version)!.VisionBonus[unitType];
     }
 
-    export function getMoveCostCfg(version: number, baseType: TileBaseType, objectType: TileObjectType): { [moveType: number]: MoveCostCfg } {
+    export function getMoveCostCfg(version: string, baseType: TileBaseType, objectType: TileObjectType): { [moveType: number]: MoveCostCfg } {
         return _ALL_CONFIGS.get(version)!.MoveCost[getTileType(baseType, objectType)];
     }
-    export function getMoveCostCfgByTileTYpe(version: number, tileType: TileType): { [moveType: number]: MoveCostCfg } {
+    export function getMoveCostCfgByTileType(version: string, tileType: TileType): { [moveType: number]: MoveCostCfg } {
         return _ALL_CONFIGS.get(version)!.MoveCost[tileType];
     }
 
@@ -1613,10 +1613,10 @@ namespace TinyWars.ConfigManager {
         return sources[tickCount % sources.length];
     }
 
-    export function getRankName(version: number, rankScore: number): string {
+    export function getRankName(version: string, rankScore: number): string {
         return Lang.getRankName(getPlayerRank(version, rankScore));
     }
-    export function getPlayerRank(version: number, rankScore: number): number | undefined {
+    export function getPlayerRank(version: string, rankScore: number): number | undefined {
         const cfgs  = _ALL_CONFIGS.get(version)!.PlayerRank;
         let maxRank = 0;
         for (const i in cfgs) {
@@ -1628,15 +1628,15 @@ namespace TinyWars.ConfigManager {
         return maxRank;
     }
 
-    export function getCoBasicCfg(version: number, coId: number): CoBasicCfg | null {
+    export function getCoBasicCfg(version: string, coId: number): CoBasicCfg | null {
         return _ALL_CONFIGS.get(version)!.CoBasic[coId];
     }
 
-    export function getCoSkillCfg(version: number, skillId: number): CoSkillCfg | null {
+    export function getCoSkillCfg(version: string, skillId: number): CoSkillCfg | null {
         return _ALL_CONFIGS.get(version)!.CoSkill[skillId];
     }
 
-    export function getNewestCoList(version: number): CoBasicCfg[] {
+    export function getNewestCoList(version: string): CoBasicCfg[] {
         if (!_NEWEST_CO_LIST.has(version)) {
             const dict: { [coType: number]: number } = {};
             const cfgs = _ALL_CONFIGS.get(version)!.CoBasic;
@@ -1663,7 +1663,7 @@ namespace TinyWars.ConfigManager {
         return _NEWEST_CO_LIST.get(version);
     }
 
-    export function getCoTiers(version: number): number[] {
+    export function getCoTiers(version: string): number[] {
         if (!_CO_TIERS.has(version)) {
             const tiers = new Set<number>();
             for (const cfg of getNewestCoList(version)) {
@@ -1674,7 +1674,7 @@ namespace TinyWars.ConfigManager {
         return _CO_TIERS.get(version);
     }
 
-    export function getCoIdListInTier(version: number, tier: number): number[] {
+    export function getCoIdListInTier(version: string, tier: number): number[] {
         if (!_CO_ID_LIST_IN_TIER.has(version)) {
             _CO_ID_LIST_IN_TIER.set(version, new Map<number, number[]>());
         }

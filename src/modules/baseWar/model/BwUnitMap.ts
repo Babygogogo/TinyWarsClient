@@ -7,7 +7,7 @@ namespace TinyWars.BaseWar {
 
     export abstract class BwUnitMap {
         private _war            : BwWar;
-        private _configVersion  : number;
+        private _configVersion  : string;
         private _nextUnitId     : number;
         private _map            : (BwUnit | undefined)[][];
         private _mapSize        : Types.MapSize;
@@ -18,7 +18,7 @@ namespace TinyWars.BaseWar {
         protected abstract _getViewClass(): new () => BwUnitMapView;
         protected abstract _getBwUnitClass(): new () => BwUnit;
 
-        public async init(configVersion: number, mapIndexKey: Types.MapIndexKey, data?: Types.SerializedBwUnitMap): Promise<BwUnitMap> {
+        public async init(configVersion: string, mapIndexKey: Types.MapIndexKey, data?: Types.SerializedBwUnitMap): Promise<BwUnitMap> {
             this._configVersion = configVersion;
             if (data) {
                 await this._initWithSerializedData(configVersion, mapIndexKey, data)
@@ -31,7 +31,7 @@ namespace TinyWars.BaseWar {
 
             return this;
         }
-        private async _initWithSerializedData(configVersion: number, mapIndexKey: Types.MapIndexKey, data: Types.SerializedBwUnitMap): Promise<BwUnitMap> {
+        private async _initWithSerializedData(configVersion: string, mapIndexKey: Types.MapIndexKey, data: Types.SerializedBwUnitMap): Promise<BwUnitMap> {
             const { mapWidth, mapHeight }   = await MapModel.getMapData(mapIndexKey);
             const unitDatas                 = data.units;
             const map                       = Helpers.createEmptyMap<BwUnit>(mapWidth);
@@ -54,7 +54,7 @@ namespace TinyWars.BaseWar {
 
             return this;
         }
-        private async _initWithoutSerializedData(configVersion: number, mapIndexKey: Types.MapIndexKey): Promise<BwUnitMap> {
+        private async _initWithoutSerializedData(configVersion: string, mapIndexKey: Types.MapIndexKey): Promise<BwUnitMap> {
             const { mapWidth, mapHeight, units: unitViewIds } = await MapModel.getMapData(mapIndexKey);
             const map       = Helpers.createEmptyMap<BwUnit>(mapWidth);
             let nextUnitId  = 0;
@@ -110,7 +110,7 @@ namespace TinyWars.BaseWar {
             return this._war;
         }
 
-        public getConfigVersion(): number {
+        public getConfigVersion(): string {
             return this._configVersion;
         }
 

@@ -2870,7 +2870,7 @@ export declare interface ISerializedWar {
     warId?: (number|null);
 
     /** SerializedWar configVersion */
-    configVersion?: (number|null);
+    configVersion?: (string|null);
 
     /** SerializedWar mapName */
     mapName?: (string|null);
@@ -2955,7 +2955,7 @@ export declare class SerializedWar implements ISerializedWar {
     public warId: number;
 
     /** SerializedWar configVersion. */
-    public configVersion: number;
+    public configVersion: string;
 
     /** SerializedWar mapName. */
     public mapName: string;
@@ -6596,7 +6596,7 @@ export declare interface IMcrWaitingInfo {
     warComment?: (string|null);
 
     /** McrWaitingInfo configVersion */
-    configVersion?: (number|null);
+    configVersion?: (string|null);
 
     /** McrWaitingInfo p1UserId */
     p1UserId?: (number|null);
@@ -6708,7 +6708,7 @@ export declare class McrWaitingInfo implements IMcrWaitingInfo {
     public warComment: string;
 
     /** McrWaitingInfo configVersion. */
-    public configVersion: number;
+    public configVersion: string;
 
     /** McrWaitingInfo p1UserId. */
     public p1UserId: number;
@@ -6866,7 +6866,7 @@ export declare interface IMcwOngoingDetail {
     id?: (number|null);
 
     /** McwOngoingDetail configVersion */
-    configVersion?: (number|null);
+    configVersion?: (string|null);
 
     /** McwOngoingDetail mapName */
     mapName?: (string|null);
@@ -6996,7 +6996,7 @@ export declare class McwOngoingDetail implements IMcwOngoingDetail {
     public id: number;
 
     /** McwOngoingDetail configVersion. */
-    public configVersion: number;
+    public configVersion: string;
 
     /** McwOngoingDetail mapName. */
     public mapName: string;
@@ -7190,7 +7190,7 @@ export declare interface IMcwReplayInfo {
     replayId?: (number|null);
 
     /** McwReplayInfo configVersion */
-    configVersion?: (number|null);
+    configVersion?: (string|null);
 
     /** McwReplayInfo mapName */
     mapName?: (string|null);
@@ -7260,7 +7260,7 @@ export declare class McwReplayInfo implements IMcwReplayInfo {
     public replayId: number;
 
     /** McwReplayInfo configVersion. */
-    public configVersion: number;
+    public configVersion: string;
 
     /** McwReplayInfo mapName. */
     public mapName: string;
@@ -9197,7 +9197,7 @@ export declare class S_GetNewestMapDynamicInfos implements IS_GetNewestMapDynami
 export declare interface IS_NewestConfigVersion {
 
     /** S_NewestConfigVersion version */
-    version?: (number|null);
+    version?: (string|null);
 }
 
 /** Represents a S_NewestConfigVersion. */
@@ -9210,7 +9210,7 @@ export declare class S_NewestConfigVersion implements IS_NewestConfigVersion {
     constructor(properties?: IS_NewestConfigVersion);
 
     /** S_NewestConfigVersion version. */
-    public version: number;
+    public version: string;
 
     /**
      * Creates a new S_NewestConfigVersion instance using the specified properties.
@@ -10469,7 +10469,7 @@ export declare interface IC_McrCreateWar {
     warComment?: (string|null);
 
     /** C_McrCreateWar configVersion */
-    configVersion?: (number|null);
+    configVersion?: (string|null);
 
     /** C_McrCreateWar playerIndex */
     playerIndex?: (number|null);
@@ -10539,7 +10539,7 @@ export declare class C_McrCreateWar implements IC_McrCreateWar {
     public warComment: string;
 
     /** C_McrCreateWar configVersion. */
-    public configVersion: number;
+    public configVersion: string;
 
     /** C_McrCreateWar playerIndex. */
     public playerIndex: number;

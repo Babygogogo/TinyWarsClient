@@ -7,7 +7,7 @@ namespace TinyWars.BaseWar {
     import TileType     = Types.TileType;
 
     export type OpenDataForBwUnitDetailPanel = {
-        configVersion?  : number;
+        configVersion?  : string;
         viewId?         : number;
         unit?           : BwUnit;
     }
@@ -184,9 +184,9 @@ namespace TinyWars.BaseWar {
             const attackUnitType    = unit ? unit.getType() : ConfigManager.getUnitTypeAndPlayerIndex(openData.viewId).unitType;
             const playerIndex       = unit ? unit.getPlayerIndex() : ConfigManager.getUnitTypeAndPlayerIndex(openData.viewId).playerIndex;
 
-            const datas = [] as DataForDamageRenderer[];
+            const dataList = [] as DataForDamageRenderer[];
             for (const targetUnitType of ConfigManager.getUnitTypesByCategory(configVersion, Types.UnitCategory.All)) {
-                datas.push({
+                dataList.push({
                     configVersion,
                     attackUnitType,
                     targetUnitType,
@@ -194,14 +194,14 @@ namespace TinyWars.BaseWar {
                 });
             }
             for (const targetTileType of ConfigManager.getTileTypesByCategory(configVersion, Types.TileCategory.Destroyable)) {
-                datas.push({
+                dataList.push({
                     configVersion,
                     attackUnitType,
                     targetTileType,
                 });
             }
 
-            return datas.sort(sorterForDataForList);
+            return dataList.sort(sorterForDataForList);
         }
     }
 
@@ -210,7 +210,7 @@ namespace TinyWars.BaseWar {
     }
 
     type DataForDamageRenderer = {
-        configVersion   : number;
+        configVersion   : string;
         attackUnitType  : UnitType;
         playerIndex?    : number;
         targetUnitType? : UnitType;

@@ -136,7 +136,7 @@ namespace TinyWars.Utility.Types {
     }
     export interface SerializedBwWar extends ProtoTypes.ISerializedWar {
         warId           : number;
-        configVersion   : number;
+        configVersion   : string;
         mapName         : string;
         mapDesigner     : string;
         mapVersion      : number;
@@ -244,7 +244,7 @@ namespace TinyWars.Utility.Types {
     }
 
     export type UnitViewData = {
-        configVersion: number;
+        configVersion: string;
 
         gridX: number;
         gridY: number;

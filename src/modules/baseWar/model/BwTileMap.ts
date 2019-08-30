@@ -19,7 +19,7 @@ namespace TinyWars.BaseWar {
         protected abstract _getBwTileClass(): new () => BwTile;
         protected abstract _getViewClass(): new () => BwTileMapView;
 
-        public async init(configVersion: number, mapIndexKey: Types.MapIndexKey, data?: SerializedBwTileMap): Promise<BwTileMap> {
+        public async init(configVersion: string, mapIndexKey: Types.MapIndexKey, data?: SerializedBwTileMap): Promise<BwTileMap> {
             if (data) {
                 await this._initWithSerializedData(configVersion, mapIndexKey, data)
             } else {
@@ -31,7 +31,7 @@ namespace TinyWars.BaseWar {
 
             return this;
         }
-        private async _initWithSerializedData(configVersion: number, mapIndexKey: Types.MapIndexKey, data: SerializedBwTileMap): Promise<BwTileMap> {
+        private async _initWithSerializedData(configVersion: string, mapIndexKey: Types.MapIndexKey, data: SerializedBwTileMap): Promise<BwTileMap> {
             const mapData                   = await WarMapModel.getMapData(mapIndexKey);
             const { mapWidth, mapHeight }   = mapData;
             const map                       = Helpers.createEmptyMap<BwTile>(mapWidth);
@@ -61,7 +61,7 @@ namespace TinyWars.BaseWar {
 
             return this;
         }
-        private async _initWithoutSerializedData(configVersion: number, mapIndexKey: Types.MapIndexKey): Promise<BwTileMap> {
+        private async _initWithoutSerializedData(configVersion: string, mapIndexKey: Types.MapIndexKey): Promise<BwTileMap> {
             const mapData                   = await WarMapModel.getMapData(mapIndexKey);
             const { mapWidth, mapHeight }   = mapData;
             const map                       = Helpers.createEmptyMap<BwTile>(mapWidth);

@@ -175,9 +175,9 @@ namespace TinyWars.BaseWar {
             const tileCfg           = ConfigManager.getTileTemplateCfgByType(configVersion, tile.getType());
             const playerIndex       = tile.getPlayerIndex() || 1;
 
-            const datas = [] as DataForMoveRangeRenderer[];
+            const dataList = [] as DataForMoveRangeRenderer[];
             for (const unitType of ConfigManager.getUnitTypesByCategory(configVersion, Types.UnitCategory.All)) {
-                datas.push({
+                dataList.push({
                     configVersion,
                     unitType,
                     tileCfg,
@@ -185,7 +185,7 @@ namespace TinyWars.BaseWar {
                 });
             }
 
-            return datas.sort(sorterForDataForList);
+            return dataList.sort(sorterForDataForList);
         }
     }
 
@@ -194,7 +194,7 @@ namespace TinyWars.BaseWar {
     }
 
     type DataForMoveRangeRenderer = {
-        configVersion   : number;
+        configVersion   : string;
         unitType        : UnitType;
         tileCfg         : Types.TileTemplateCfg;
         playerIndex     : number;
@@ -232,7 +232,7 @@ namespace TinyWars.BaseWar {
             const data                  = this.data as DataForMoveRangeRenderer;
             const configVersion         = data.configVersion;
             const unitType              = data.unitType;
-            const moveCostCfg           = ConfigManager.getMoveCostCfgByTileTYpe(configVersion, data.tileCfg.type);
+            const moveCostCfg           = ConfigManager.getMoveCostCfgByTileType(configVersion, data.tileCfg.type);
             const moveCost              = moveCostCfg[ConfigManager.getUnitTemplateCfg(configVersion, unitType).moveType].cost;
             this._labelMoveCost.text    = moveCost != null ? `${moveCost}` : `--`;
             this._unitView.update({

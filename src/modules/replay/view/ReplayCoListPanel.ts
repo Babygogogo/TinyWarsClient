@@ -233,7 +233,7 @@ namespace TinyWars.Replay {
     }
 
     type DataForCoRenderer = {
-        configVersion   : number;
+        configVersion   : string;
         player          : BaseWar.BwPlayer;
         index           : number;
         panel           : ReplayCoListPanel;

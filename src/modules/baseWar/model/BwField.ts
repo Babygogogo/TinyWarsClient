@@ -12,7 +12,7 @@ namespace TinyWars.BaseWar {
         private _gridVisionEffect   : BwGridVisionEffect;
         private _view               : BwFieldView;
 
-        public async init(data: SerializedBwField, configVersion: number, mapIndexKey: Types.MapIndexKey): Promise<BwField> {
+        public async init(data: SerializedBwField, configVersion: string, mapIndexKey: Types.MapIndexKey): Promise<BwField> {
             this._setFogMap(await (this.getFogMap() || new (this._getFogMapClass())).init(data.fogMap, mapIndexKey));
             this._setTileMap(await (this.getTileMap() || new (this._getTileMapClass())).init(configVersion, mapIndexKey, data.tileMap));
             this._setUnitMap(await (this.getUnitMap() || new (this._getUnitMapClass())).init(configVersion, mapIndexKey, data.unitMap));

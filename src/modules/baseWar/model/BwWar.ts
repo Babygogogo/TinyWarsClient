@@ -9,7 +9,7 @@ namespace TinyWars.BaseWar {
         private _warName                : string;
         private _warPassword            : string;
         private _warComment             : string;
-        private _configVersion          : number;
+        private _configVersion          : string;
         private _mapIndexKey            : MapIndexKey;
         private _timeLimit              : number;
         private _hasFogByDefault        : boolean;
@@ -127,10 +127,10 @@ namespace TinyWars.BaseWar {
             return this._warComment;
         }
 
-        private _setConfigVersion(configVersion: number): void {
+        private _setConfigVersion(configVersion: string): void {
             this._configVersion = configVersion;
         }
-        public getConfigVersion(): number {
+        public getConfigVersion(): string {
             return this._configVersion;
         }
 

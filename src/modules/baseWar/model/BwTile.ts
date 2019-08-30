@@ -7,7 +7,7 @@ namespace TinyWars.BaseWar {
     import TileObjectType   = Types.TileObjectType;
 
     export abstract class BwTile {
-        private _configVersion  : number;
+        private _configVersion  : string;
         private _templateCfg    : Types.TileTemplateCfg;
         private _moveCostCfg    : { [moveType: number]: Types.MoveCostCfg };
         private _gridX          : number;
@@ -28,7 +28,7 @@ namespace TinyWars.BaseWar {
 
         protected abstract _getViewClass(): new () => BwTileView;
 
-        public init(data: SerializedBwTile, configVersion: number): BwTile {
+        public init(data: SerializedBwTile, configVersion: string): BwTile {
             const t = ConfigManager.getTileObjectTypeAndPlayerIndex(data.objectViewId!);
             Logger.assert(t, "TileModel.init() invalid SerializedTile! ", data);
 
@@ -59,7 +59,7 @@ namespace TinyWars.BaseWar {
             this.getView().startRunningView();
         }
 
-        public getConfigVersion(): number {
+        public getConfigVersion(): string {
             return this._configVersion;
         }
         protected _getWar(): BwWar {

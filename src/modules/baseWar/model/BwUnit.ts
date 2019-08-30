@@ -14,7 +14,7 @@ namespace TinyWars.BaseWar {
     import MovePathNode     = Types.MovePathNode;
 
     export abstract class BwUnit {
-        private _configVersion      : number;
+        private _configVersion      : string;
         private _templateCfg        : Types.UnitTemplateCfg;
         private _damageChartCfg     : { [armorType: number]: { [weaponType: number]: Types.DamageChartCfg } };
         private _buildableTileCfg   : { [srcTileType: number]: Types.BuildableTileCfg };
@@ -47,7 +47,7 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         protected abstract _getViewClass(): new () => BwUnitView;
 
-        public init(data: SerializedBwUnit, configVersion: number): BwUnit {
+        public init(data: SerializedBwUnit, configVersion: string): BwUnit {
             const t = ConfigManager.getUnitTypeAndPlayerIndex(data.viewId);
             Logger.assert(t, "UnitModel.deserialize() invalid SerializedUnit! ", data);
 
@@ -95,7 +95,7 @@ namespace TinyWars.BaseWar {
         public getWar(): BwWar | undefined {
             return this._war;
         }
-        public getConfigVersion(): number {
+        public getConfigVersion(): string {
             return this._configVersion;
         }
         public getPlayer(): BwPlayer {
