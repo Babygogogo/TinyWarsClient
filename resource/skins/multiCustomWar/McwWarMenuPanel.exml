@@ -16,7 +16,7 @@
                                             anchorOffsetY="0" alpha="0.8" left="0" right="0" top="0" bottom="0"
                                             visible.up="false" />
                             <GameUi:UiLabel id="_labelName" text="选项名六个字" size="22" textColor="0xffffff"
-                                            horizontalCenter="0" verticalCenter="0" />
+                                            horizontalCenter="0" verticalCenter="0" maxTextWidth="150"/>
                         </e:Group>
                     </e:Skin>
                 </e:itemRendererSkinName>

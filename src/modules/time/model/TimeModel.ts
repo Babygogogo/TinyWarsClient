@@ -2,6 +2,7 @@
 namespace TinyWars.Time.TimeModel {
     import Notify       = Utility.Notify;
     import Lang         = Utility.Lang;
+    import LocalStorage = Utility.LocalStorage;
     import NetManager   = Network.Manager;
 
     const TILE_ANIMATION_INTERVAL_MS = 350;
@@ -14,9 +15,10 @@ namespace TinyWars.Time.TimeModel {
     let _heartbeatIntervalId: number;
     let _serverTimestamp    : number;
 
-    let _tileAnimationTickCount = 0;
-    let _unitAnimationTickCount = 0;
-    let _gridAnimationTickCount = 0;
+    let _intervalIdForTileAnimation : number;
+    let _tileAnimationTickCount     = 0;
+    let _unitAnimationTickCount     = 0;
+    let _gridAnimationTickCount     = 0;
 
     export function init(): void {
         Notify.addEventListeners([
@@ -30,10 +32,9 @@ namespace TinyWars.Time.TimeModel {
             Notify.dispatch(Notify.Type.TimeTick);
         }, TimeModel, 1000);
 
-        // egret.setInterval(() => {
-        //     ++_tileAnimationTickCount;
-        //     Notify.dispatch(Notify.Type.TileAnimationTick);
-        // }, TimeModel, TILE_ANIMATION_INTERVAL_MS);
+        if (LocalStorage.getShowTileAnimation()) {
+            startTileAnimationTick();
+        }
 
         egret.setInterval(() => {
             ++_gridAnimationTickCount;
@@ -50,6 +51,23 @@ namespace TinyWars.Time.TimeModel {
         return _serverTimestamp;
     }
 
+    export function startTileAnimationTick(): void {
+        stopTileAnimationTick();
+
+        _intervalIdForTileAnimation = egret.setInterval(() => {
+            ++_tileAnimationTickCount;
+            Notify.dispatch(Notify.Type.TileAnimationTick);
+        }, TimeModel, TILE_ANIMATION_INTERVAL_MS);
+    }
+    export function stopTileAnimationTick(): void {
+        if (_intervalIdForTileAnimation != null) {
+            egret.clearInterval(_intervalIdForTileAnimation);
+            _intervalIdForTileAnimation = null;
+        }
+    }
+    export function checkIsTileAnimationTicking(): boolean {
+        return _intervalIdForTileAnimation != null;
+    }
     export function getTileAnimationTickCount(): number {
         return _tileAnimationTickCount;
     }

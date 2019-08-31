@@ -7,6 +7,8 @@ namespace TinyWars.MultiCustomWar {
     import FlowManager  = Utility.FlowManager;
     import Logger       = Utility.Logger;
     import FloatText    = Utility.FloatText;
+    import LocalStorage = Utility.LocalStorage;
+    import TimeModel    = Time.TimeModel;
 
     const enum MenuType {
         Main,
@@ -223,6 +225,12 @@ namespace TinyWars.MultiCustomWar {
             const commandPlayerSurrender = this._createCommandPlayerSurrender();
             (commandPlayerSurrender) && (dataList.push(commandPlayerSurrender));
 
+            const commandShowTileAnimation = this._createCommandShowTileAnimation();
+            (commandShowTileAnimation) && (dataList.push(commandShowTileAnimation));
+
+            const commandStopTileAnimation = this._createCommandStopTileAnimation();
+            (commandStopTileAnimation) && (dataList.push(commandStopTileAnimation));
+
             return dataList;
         }
 
@@ -362,6 +370,35 @@ namespace TinyWars.MultiCustomWar {
                                 callback: () => this._actionPlanner.setStateRequestingPlayerDeleteUnit(),
                             });
                         }
+                    },
+                }
+            }
+        }
+
+        private _createCommandShowTileAnimation(): DataForCommandRenderer | null {
+            if (TimeModel.checkIsTileAnimationTicking()) {
+                return null;
+            } else {
+                return {
+                    name    : Lang.getText(Lang.Type.B0176),
+                    callback: () => {
+                        TimeModel.startTileAnimationTick();
+                        LocalStorage.setShowTileAnimation(true);
+                        this._updateView();
+                    },
+                }
+            }
+        }
+        private _createCommandStopTileAnimation(): DataForCommandRenderer | null {
+            if (!TimeModel.checkIsTileAnimationTicking()) {
+                return null;
+            } else {
+                return {
+                    name    : Lang.getText(Lang.Type.B0177),
+                    callback: () => {
+                        TimeModel.stopTileAnimationTick();
+                        LocalStorage.setShowTileAnimation(false);
+                        this._updateView();
                     },
                 }
             }

@@ -997,6 +997,14 @@ namespace TinyWars.Utility.Lang {
             `昵称`,
             `Nickname`,
         ]],
+        [Type.B0176, [
+            `显示地形动画`,
+            `Show Tile Ani`,
+        ]],
+        [Type.B0177, [
+            `停止地形动画`,
+            `Stop Tile Ani`,
+        ]],
 
         [Type.B1000, [
             `平原`,

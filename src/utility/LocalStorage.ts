@@ -2,13 +2,14 @@
 namespace TinyWars.Utility {
     import localStorage = egret.localStorage;
 
-    const KEY_PREFIX            = "TinyWarsStorage_";
-    const KEY_ACCOUNT           = KEY_PREFIX + "Account";
-    const KEY_PASSWORD          = KEY_PREFIX + "Password";
-    const KEY_REMEMBER_PASSWORD = KEY_PREFIX + "RememberPassword";
-    const KEY_LANGUAGE          = KEY_PREFIX + "Language";
-    const VALUE_TRUE            = "1";
-    const VALUE_FALSE           = "0";
+    const KEY_PREFIX                = "TinyWarsStorage_";
+    const KEY_ACCOUNT               = KEY_PREFIX + "Account";
+    const KEY_PASSWORD              = KEY_PREFIX + "Password";
+    const KEY_REMEMBER_PASSWORD     = KEY_PREFIX + "RememberPassword";
+    const KEY_LANGUAGE              = KEY_PREFIX + "Language";
+    const KEY_SHOW_TILE_ANIMATION   = KEY_PREFIX + "ShowTileAnimation";
+    const VALUE_TRUE                = "1";
+    const VALUE_FALSE               = "0";
 
     export namespace LocalStorage {
         export function setAccount(account: string): void {
@@ -46,6 +47,14 @@ namespace TinyWars.Utility {
         export function getLanguageType(): Types.LanguageType {
             const data = localStorage.getItem(KEY_LANGUAGE);
             return data ? parseInt(data) || Types.LanguageType.Chinese : Types.LanguageType.Chinese;
+        }
+
+        export function setShowTileAnimation(show: boolean): void {
+            localStorage.setItem(KEY_SHOW_TILE_ANIMATION, show ? VALUE_TRUE : VALUE_FALSE);
+        }
+        export function getShowTileAnimation(): boolean {
+            const data = localStorage.getItem(KEY_SHOW_TILE_ANIMATION);
+            return (data == null) || (data === VALUE_TRUE);
         }
     }
 }
