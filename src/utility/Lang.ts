@@ -969,6 +969,34 @@ namespace TinyWars.Utility.Lang {
             `势力`,
             `Force`,
         ]],
+        [Type.B0169, [
+            `我的履历`,
+            `Profile`,
+        ]],
+        [Type.B0170, [
+            `账号`,
+            `Account`,
+        ]],
+        [Type.B0171, [
+            `密码`,
+            `Password`,
+        ]],
+        [Type.B0172, [
+            `记住密码`,
+            `Remember Password`,
+        ]],
+        [Type.B0173, [
+            `登录`,
+            `Login`,
+        ]],
+        [Type.B0174, [
+            `注册`,
+            `Register`,
+        ]],
+        [Type.B0175, [
+            `昵称`,
+            `Nickname`,
+        ]],
 
         [Type.B1000, [
             `平原`,
@@ -1493,7 +1521,44 @@ namespace TinyWars.Utility.Lang {
                 `- 若CO所在部队被击毁，则能量清零；若该CO正在发动COP/SCOP，则该COP/SCOP效果立刻消失`,
             ].join("\n\n"),
 
-            `Untranslated`,
+            [
+                `COs can board onto the troops and provide buffs for troops around. Besides, some COs can charge CO power metre in the battle and use CO power to achieve a bigger advantage. `,
+                `The detailed rules of COs are listed below: `,
+                `01. COs needs to board onto the troops to use their d2d abilities and powers. Powers may include cop and sp. `,
+                `02. There can be only 1 CO for each side. `,
+                `03. COs can board onto troops from bases, airports, ports and HQs. Bases are for land forces. Airports are for air forces. Ports are for navies while COs can board onto any troops from HQs. `,
+                `04. COs can only board onto troops ready to move. Troops can move again after that. `,
+                `05. If unit with CO on board is destroyed in your turn(i.e. killed by counter attack & crash after using up fuels), COs cannot board onto another unit in that turn. `,
+                `06. It takes funds for CO to board onto troops, which equals to a modifier(CO specific) multiplied by the cost of the full HP unit. `,
+                `07. Upon the boarding of CO the unit got veteran status and CO's d2d takes effect at once. `,
+                `08. In usual cases CO's d2d works only on troops within the CO zone. `,
+                `09. If units with CO on board are loaded the CO zone will not appear until it is unloaded again. `,
+                `10. Only certain COs got cop and scop. `,
+                `11. CO power metre is charged when units within CO zone deal damage to enemy units. 1 HP damage is converted to 1 unit of metre charge. `,
+                `12. CO metre can also be charged when units within CO zone deal counterattack damage. The rule is same as above. `,
+                `13. Some COs can expand their CO zone, which is showed in the coz expansion chart. COZ expands by 1 tile for reaching a number in the chart. The coz cannot be expanded if the chart is "--". The coz can be expanded for 3 times if there are 3 numbers in the chart (a/b/c). `,
+                `14. The maximum amount of metre of a CO is the larger number of SCOP cost and the largest COZ expansion cost. `,
+                `15. COP/SCOP takes corresponding amount of power to activate. The power metre cannot be charged when cop/scop is active. `,
+                `16. To activate COP/SCOP the unit with CO on board should be ready to move. You may use power after moving, but it is not possible to do so after attacking. `,
+                `17. COP/SCOP lasts a turn, which means it ends at the beginning of your next turn. It works on all units in the map. `,
+                `18. When COP/SCOP is active d2d does not work. `,
+                `19. After using COP/SCOP the power metre charges at the same rate. `,
+                `20. If units with CO on board are destroyed the power metre is reset to 0. If a COP/SCOP is active the COP/SCOP will also end.`,
+            ].join("\n\n"),
+        ]],
+
+        [RichType.R0005, [
+            [
+                `1.账号和密码都只能使用数字、字母、下划线，长度不小于6位`,
+                `2.昵称可使用任意字符，长度不小于4位`,
+                `3.注册后，账号不可修改，密码和昵称可修改`,
+            ].join("\n"),
+
+            [
+                `1 Usernames and passwords should only consist of numbers, english characters and "_". It should not be shorter than 6 characters. `,
+                `2 You can use any characters for nickname. The length should be no shorter than 4 characters. `,
+                `3 After the registry you cannot change your username, but the password and nickname can be changed.`,
+            ].join("\n"),
         ]],
     ]);
 

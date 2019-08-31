@@ -12,10 +12,13 @@ namespace TinyWars.Login {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = true;
 
+        private _labelAccount           : GameUi.UiLabel;
         private _inputAccount           : GameUi.UiTextInput;
+        private _labelPassword          : GameUi.UiLabel;
         private _inputPassword          : GameUi.UiTextInput;
         private _btnRegister            : GameUi.UiButton;
         private _groupRememberPassword  : eui.Group;
+        private _labelRememberPassword  : GameUi.UiLabel;
         private _imgRememberPassword    : GameUi.UiImage;
         private _btnLogin               : GameUi.UiButton;
 
@@ -43,7 +46,8 @@ namespace TinyWars.Login {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: NotifyType.SLogin, callback: this._onNotifySLogin },
+                { type: NotifyType.SLogin,          callback: this._onNotifySLogin },
+                { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ];
             this._uiListeners = [
                 { ui: this._btnLogin,               callback: this._onTouchedBtnLogin },
@@ -58,11 +62,15 @@ namespace TinyWars.Login {
             this._inputPassword.text            = isRememberPassword ? LocalStorage.getPassword() : null;
             this._btnLogin.enabled              = true;
             this._imgRememberPassword.visible   = isRememberPassword;
+            this._updateViewOnLanguageChanged();
         }
 
         private _onNotifySLogin(e: egret.Event): void {
             FloatText.show(Lang.getText(Lang.Type.A0000));
             this._btnLogin.enabled = false;
+        }
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateViewOnLanguageChanged();
         }
 
         private _onTouchedBtnLogin(e: egret.TouchEvent): void {
@@ -96,6 +104,19 @@ namespace TinyWars.Login {
             const isRemember = LocalStorage.getIsRememberPassword();
             LocalStorage.setIsRememberPassword(!isRemember);
             this._imgRememberPassword.visible = !isRemember;
+        }
+
+        private _updateViewOnLanguageChanged(): void {
+            this._labelAccount.text             = Lang.getText(Lang.Type.B0170);
+            this._labelPassword.text            = Lang.getText(Lang.Type.B0171);
+            this._labelRememberPassword.text    = Lang.getText(Lang.Type.B0172);
+            if (Lang.getLanguageType() === Types.LanguageType.Chinese) {
+                this._btnLogin.label    = "";
+                this._btnRegister.label = "";
+            } else {
+                this._btnLogin.label    = Lang.getText(Lang.Type.B0173);
+                this._btnRegister.label = Lang.getText(Lang.Type.B0174);
+            }
         }
     }
 }

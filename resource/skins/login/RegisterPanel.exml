@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
-    <e:Group width="430" height="300" horizontalCenter="0" verticalCenter="0">
+    <e:Group width="430" horizontalCenter="0" verticalCenter="0">
         <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" />
-        <GameUi:UiLabel text="注册" textColor="0xffffff" y="13" horizontalCenter="0" size="20" />
-        <GameUi:UiButton id="_btnLogin" label="去登陆&gt;&gt;" y="13" right="10">
+        <GameUi:UiLabel id="_labelRegister" text="注册" textColor="0xffffff" y="13" horizontalCenter="0" size="20" />
+        <GameUi:UiButton id="_btnLogin" label="去登陆" y="13" right="10">
             <GameUi:skinName>
                 <e:Skin states="up,down,disabled">
                     <e:Image width="100%" height="100%" />
-                    <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="20" textColor="0xffffff" />
+                    <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="20" textColor="0x00ff00" />
                 </e:Skin>
             </GameUi:skinName>
         </GameUi:UiButton>
-        <GameUi:UiLabel text="账号：" textColor="0xFFFFFF" y="50" size="20" x="61" />
+        <GameUi:UiLabel id="_labelAccount" text="账号：" textColor="0xFFFFFF" y="50" size="20" right="310"
+                        maxTextWidth="100" />
         <GameUi:UiTextInput id="_inputAccount" width="220" x="121" y="47" anchorOffsetX="0" anchorOffsetY="0"
                             restrict="A-Za-z0-9_" maxChars="20">
             <GameUi:skinName>
@@ -25,7 +26,8 @@
                 </e:Skin>
             </GameUi:skinName>
         </GameUi:UiTextInput>
-        <GameUi:UiLabel text="密码：" textColor="0xFFFFFF" y="98" size="20" x="61" />
+        <GameUi:UiLabel id="_labelPassword" text="密码：" textColor="0xFFFFFF" y="98" size="20" right="310"
+                        maxTextWidth="100" />
         <GameUi:UiTextInput id="_inputPassword" width="220" x="121" y="92" anchorOffsetX="0" anchorOffsetY="0"
                             restrict="A-Za-z0-9_" maxChars="20" displayAsPassword="true">
             <GameUi:skinName>
@@ -37,7 +39,8 @@
                 </e:Skin>
             </GameUi:skinName>
         </GameUi:UiTextInput>
-        <GameUi:UiLabel text="昵称：" textColor="0xFFFFFF" y="143" size="20" x="61" />
+        <GameUi:UiLabel id="_labelNickname" text="昵称：" textColor="0xFFFFFF" y="143" size="20" right="310"
+                        maxTextWidth="100" />
         <GameUi:UiTextInput id="_inputNickname" width="220" x="121" y="137" anchorOffsetX="0" anchorOffsetY="0"
                             maxChars="20">
             <GameUi:skinName>
@@ -49,16 +52,22 @@
                 </e:Skin>
             </GameUi:skinName>
         </GameUi:UiTextInput>
-        <GameUi:UiButton id="_btnRegister" label="确认注册&gt;&gt;" y="180" horizontalCenter="0">
+        <GameUi:UiButton id="_btnRegister" label="确认注册" y="180" horizontalCenter="0">
             <e:skinName>
                 <e:Skin states="up,down,disabled">
                     <e:Image width="100%" height="100%" />
                     <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="25" bold="true"
-                             textColor="0xffffff" />
+                             textColor="0x00ff00" />
                 </e:Skin>
             </e:skinName>
         </GameUi:UiButton>
-        <GameUi:UiLabel text="注意:\n1.账号和密码都只能使用数字、字母、下划线，长度不小于6位\n2.昵称可使用任意字符，长度不小于4位\n3.注册后，账号不可修改，密码和昵称可修改"
-                        textColor="0xFFFFFF" y="220" size="15" x="10" lineSpacing="3" />
+        <e:Group x="10" y="210">
+            <GameUi:UiLabel id="_labelHelp"
+                            text="注意:\n1.账号和密码都只能使用数字、字母、下划线，长度不小于6位\n2.昵称可使用任意字符，长度不小于4位\n3.注册后，账号不可修改，密码和昵称可修改"
+                            textColor="0xFFFFFF" size="15" x="0" lineSpacing="3" y="0" width="410" wordWrap="true" />
+            <e:layout>
+                <e:VerticalLayout paddingBottom="10" />
+            </e:layout>
+        </e:Group>
     </e:Group>
 </e:Skin>

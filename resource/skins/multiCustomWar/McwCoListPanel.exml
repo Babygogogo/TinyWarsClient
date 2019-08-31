@@ -192,10 +192,10 @@
                 </e:Group>
             </e:Group>
         </e:Scroller>
-        <e:Scroller id="_scrHelp" top="10" bottom="10" left="0" right="0" visible="false">
+        <e:Scroller id="_scrHelp" top="10" bottom="10" left="0" right="0">
             <e:Group>
                 <GameUi:UiLabel id="_labelHelp" text="测试CO1号" textColor="0xFFFFFF" size="20" scaleX="1" scaleY="1"
-                                left="10" right="10" top="5" />
+                                left="10" right="10" top="5" wordWrap="true" />
             </e:Group>
         </e:Scroller>
     </e:Group>

@@ -39,6 +39,7 @@ namespace TinyWars.Lobby {
                 { type: Notify.Type.SLogin,                 callback: this._onNotifySLogin },
                 { type: Notify.Type.SLogout,                callback: this._onNotifySLogout },
                 { type: Notify.Type.SUserChangeNickname,    callback: this._onNotifySUserChangeNickname },
+                { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
             ];
             this._uiListeners = [
                 { ui: this._btnMyInfo, callback: this._onTouchedBtnMyInfo },
@@ -61,6 +62,10 @@ namespace TinyWars.Lobby {
             this._updateView();
         }
 
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateView();
+        }
+
         private _onTouchedBtnMyInfo(e: egret.Event): void {
             User.UserPanel.show(UserModel.getSelfUserId());
             User.UserOnlineUsersPanel.hide();
@@ -71,6 +76,7 @@ namespace TinyWars.Lobby {
             this._labelNickname.text    = UserModel.getSelfNickname();
             this._labelRankScore.text   = `${Lang.getText(Lang.Type.B0060)}: ${score}`;
             this._labelRankName.text    = ConfigManager.getRankName(ConfigManager.getNewestConfigVersion(), score);
+            this._btnMyInfo.label       = Lang.getText(Lang.Type.B0169);
         }
     }
 }
