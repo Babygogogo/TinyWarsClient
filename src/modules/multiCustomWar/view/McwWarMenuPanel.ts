@@ -404,14 +404,20 @@ namespace TinyWars.MultiCustomWar {
         private _labelForce     : GameUi.UiLabel;
         private _labelLost      : GameUi.UiLabel;
 
-        private _groupInfo      : eui.Group;
-        private _labelFund      : GameUi.UiLabel;
-        private _labelIncome    : GameUi.UiLabel;
-        private _labelBuildings : GameUi.UiLabel;
-        private _labelCoName    : GameUi.UiLabel;
-        private _labelEnergy    : GameUi.UiLabel;
-        private _labelUnits     : GameUi.UiLabel;
-        private _labelUnitsValue: GameUi.UiLabel;
+        private _groupInfo              : eui.Group;
+        private _labelFundTitle         : GameUi.UiLabel;
+        private _labelFund              : GameUi.UiLabel;
+        private _labelIncomeTitle       : GameUi.UiLabel;
+        private _labelIncome            : GameUi.UiLabel;
+        private _labelBuildingsTitle    : GameUi.UiLabel;
+        private _labelBuildings         : GameUi.UiLabel;
+        private _labelCoName            : GameUi.UiLabel;
+        private _labelEnergyTitle       : GameUi.UiLabel;
+        private _labelEnergy            : GameUi.UiLabel;
+        private _labelUnitsTitle        : GameUi.UiLabel;
+        private _labelUnits             : GameUi.UiLabel;
+        private _labelUnitsValueTitle   : GameUi.UiLabel;
+        private _labelUnitsValue        : GameUi.UiLabel;
 
         protected dataChanged(): void {
             super.dataChanged();
@@ -433,11 +439,14 @@ namespace TinyWars.MultiCustomWar {
                 this._labelLost.visible = false;
                 this._groupInfo.visible = true;
 
-                const isInfoKnown           = (player.getTeamIndex() === war.getPlayerLoggedIn().getTeamIndex()) || (!war.getFogMap().checkHasFogCurrently());
-                const tilesCountAndIncome   = this._getTilesCountAndIncome(war, playerIndex);
-                this._labelFund.text        = isInfoKnown ? `${player.getFund()}` : `?`;
-                this._labelIncome.text      = `${tilesCountAndIncome.income}${isInfoKnown ? `` : `  ?`}`;
-                this._labelBuildings.text   = `${tilesCountAndIncome.count}${isInfoKnown ? `` : `  ?`}`;
+                const isInfoKnown               = (player.getTeamIndex() === war.getPlayerLoggedIn().getTeamIndex()) || (!war.getFogMap().checkHasFogCurrently());
+                const tilesCountAndIncome       = this._getTilesCountAndIncome(war, playerIndex);
+                this._labelFundTitle.text       = Lang.getText(Lang.Type.B0156);
+                this._labelFund.text            = isInfoKnown ? `${player.getFund()}` : `?`;
+                this._labelIncomeTitle.text     = Lang.getText(Lang.Type.B0157);
+                this._labelIncome.text          = `${tilesCountAndIncome.income}${isInfoKnown ? `` : `  ?`}`;
+                this._labelBuildingsTitle.text  = Lang.getText(Lang.Type.B0158);
+                this._labelBuildings.text       = `${tilesCountAndIncome.count}${isInfoKnown ? `` : `  ?`}`;
 
                 const coId              = player.getCoId();
                 this._labelCoName.text  = coId == null
@@ -450,11 +459,14 @@ namespace TinyWars.MultiCustomWar {
                 const currEnergyText    = skillType === Types.CoSkillType.Passive
                     ? "" + player.getCoCurrentEnergy()
                     : skillType === Types.CoSkillType.Power ? "COP" : "SCOP";
-                this._labelEnergy.text  = `${currEnergyText} / ${powerEnergy == null ? "--" : powerEnergy} / ${superPowerEnergy == null ? "--" : superPowerEnergy}`;
+                this._labelEnergyTitle.text = Lang.getText(Lang.Type.B0159);
+                this._labelEnergy.text      = `${currEnergyText} / ${powerEnergy == null ? "--" : powerEnergy} / ${superPowerEnergy == null ? "--" : superPowerEnergy}`;
 
-                const unitsCountAndValue    = this._getUnitsCountAndValue(war, playerIndex);
-                this._labelUnits.text       = `${unitsCountAndValue.count}${isInfoKnown ? `` : `  ?`}`;
-                this._labelUnitsValue.text  = `${unitsCountAndValue.value}${isInfoKnown ? `` : `  ?`}`;
+                const unitsCountAndValue        = this._getUnitsCountAndValue(war, playerIndex);
+                this._labelUnitsTitle.text      = Lang.getText(Lang.Type.B0160);
+                this._labelUnits.text           = `${unitsCountAndValue.count}${isInfoKnown ? `` : `  ?`}`;
+                this._labelUnitsValueTitle.text = Lang.getText(Lang.Type.B0161);
+                this._labelUnitsValue.text      = `${unitsCountAndValue.value}${isInfoKnown ? `` : `  ?`}`;
             }
         }
 

@@ -264,6 +264,21 @@ namespace TinyWars.Utility.Helpers {
         const strSecond  = needSecond               ? `${getNumText(d.getSeconds())}` : "";
         return strYear + strMonth + strDate + strHour + sep1 + strMinute + sep2 + strSecond;
     }
+    export function getTimestampShortText(timestamp: number, controller?: TimeTextController): string {
+        const d = new Date(timestamp * 1000);
+        const needHour   = (!controller) || (controller.hour !== false);
+        const needMinute = (!controller) || (controller.minute !== false);
+        const needSecond = (!controller) || (controller.second !== false);
+        const strYear    = (!controller) || (controller.year !== false)  ? `${getNumText(d.getFullYear(), 4)}/`     : ``;
+        const strMonth   = (!controller) || (controller.month !== false) ? `${getNumText(d.getMonth() + 1)}/`    : ``;
+        const strDate    = (!controller) || (controller.date !== false)  ? `${getNumText(d.getDate())} `         : ``;
+        const strHour    = needHour                 ? `${getNumText(d.getHours())}`   : "";
+        const sep1       = needHour   && needMinute ? ":" : "";
+        const strMinute  = needMinute               ? `${getNumText(d.getMinutes())}` : "";
+        const sep2       = needMinute && needSecond ? ":" : "";
+        const strSecond  = needSecond               ? `${getNumText(d.getSeconds())}` : "";
+        return strYear + strMonth + strDate + strHour + sep1 + strMinute + sep2 + strSecond;
+    }
 
     export function createEmptyMap<T>(mapWidth: number, mapHeight?: number, defaultValue?: T): T[][] {
         const map = new Array<T[]>(mapWidth);

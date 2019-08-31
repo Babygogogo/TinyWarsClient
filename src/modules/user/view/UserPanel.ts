@@ -1,8 +1,11 @@
 
 namespace TinyWars.User {
-    import Lang     = Utility.Lang;
-    import Helpers  = Utility.Helpers;
-    import Notify   = Utility.Notify;
+    import Lang         = Utility.Lang;
+    import Helpers      = Utility.Helpers;
+    import Notify       = Utility.Notify;
+    import FlowManager  = Utility.FlowManager;
+    import Types        = Utility.Types;
+    import LocalStorage = Utility.LocalStorage;
 
     export class UserPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
@@ -38,6 +41,7 @@ namespace TinyWars.User {
         private _btnChangeDiscordId : GameUi.UiButton;
 
         private _btnShowOnlineUsers : GameUi.UiButton;
+        private _btnChangeLanguage  : GameUi.UiButton;
         private _btnClose           : GameUi.UiButton;
 
         private _userId: number;
@@ -73,14 +77,17 @@ namespace TinyWars.User {
                 { ui: this._btnChangeNickname,  callback: this._onTouchedBtnChangeNickname },
                 { ui: this._btnChangeDiscordId, callback: this._onTouchedBtnChangeDiscordId },
                 { ui: this._btnShowOnlineUsers, callback: this._onTouchedBtnShowOnlineUsers },
+                { ui: this._btnChangeLanguage,  callback: this._onTouchedBtnChangeLanguage },
                 { ui: this._btnClose,           callback: this.close },
             ];
         }
-
         protected _onOpened(): void {
             UserProxy.reqGetUserPublicInfo(this._userId);
 
             this._updateView();
+        }
+        protected _onClosed(): void {
+            FlowManager.gotoLobby();
         }
 
         private _onNotifySGetUserPublicInfo(e: egret.Event): void {
@@ -107,6 +114,16 @@ namespace TinyWars.User {
         private _onTouchedBtnShowOnlineUsers(e: egret.TouchEvent): void {
             UserOnlineUsersPanel.show();
         }
+        private _onTouchedBtnChangeLanguage(e: egret.TouchEvent): void {
+            const languageType = Lang.getLanguageType() === Types.LanguageType.Chinese
+                ? Types.LanguageType.English
+                : Types.LanguageType.Chinese;
+            Lang.setLanguageType(languageType);
+            LocalStorage.setLanguageType(languageType);
+
+            Notify.dispatch(Notify.Type.LanguageChanged);
+            this._updateView();
+        }
 
         private _updateView(): void {
             const userId    = this._userId;
@@ -132,14 +149,34 @@ namespace TinyWars.User {
                 this._labelMcw4pLoses.text  = Lang.getFormatedText(Lang.Type.F0011, info.mcw4pLoses);
                 this._labelMcw4pDraws.text  = Lang.getFormatedText(Lang.Type.F0012, info.mcw4pDraws);
 
-                this._labelRegisterTime.text        = Helpers.getTimestampText(info.registerTime);
-                this._labelLastLoginTime.text       = Helpers.getTimestampText(info.lastLoginTime);
+                this._labelRegisterTime.text        = Helpers.getTimestampShortText(info.registerTime);
+                this._labelLastLoginTime.text       = Helpers.getTimestampShortText(info.lastLoginTime);
                 this._labelOnlineTime.text          = Helpers.getTimeDurationText(info.onlineTime);
                 this._labelLoginCount.text          = `${info.loginCount}`;
                 this._labelUserId.text              = `${userId}`;
                 this._labelDiscordId.text           = info.discordId || "--";
                 this._btnChangeDiscordId.visible    = isSelf;
             }
+
+            this._updateBtnChangeNickname();
+            this._updateBtnChangeDiscordId();
+            this._updateBtnShowOnlineUsers();
+            this._updateBtnChangeLanguage();
+        }
+
+        private _updateBtnChangeNickname(): void {
+            this._btnChangeNickname.label = Lang.getText(Lang.Type.B0149);
+        }
+        private _updateBtnChangeDiscordId(): void {
+            this._btnChangeDiscordId.label = Lang.getText(Lang.Type.B0150);
+        }
+        private _updateBtnShowOnlineUsers(): void {
+            this._btnShowOnlineUsers.label = Lang.getText(Lang.Type.B0151);
+        }
+        private _updateBtnChangeLanguage(): void {
+            this._btnChangeLanguage.label = Lang.getLanguageType() === Types.LanguageType.Chinese
+                ? Lang.getTextWithLanguage(Lang.Type.B0148, Types.LanguageType.English)
+                : Lang.getTextWithLanguage(Lang.Type.B0148, Types.LanguageType.Chinese);
         }
     }
 }

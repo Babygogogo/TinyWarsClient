@@ -140,6 +140,7 @@ namespace TinyWars.MultiCustomWar {
             this._updateBtnFindUnit();
             this._updateBtnFindBuilding();
             this._updateBtnCancel();
+            this._updateBtnMenu();
         }
 
         private _updateLabelPlayer(): void {
@@ -185,6 +186,7 @@ namespace TinyWars.MultiCustomWar {
         private _updateBtnEndTurn(): void {
             const war                   = this._war;
             const turnManager           = war.getTurnManager();
+            this._btnEndTurn.label      = Lang.getText(Lang.Type.B0036);
             this._btnEndTurn.visible    = (turnManager.getPlayerIndexInTurn() === war.getPlayerIndexLoggedIn())
                 && (turnManager.getPhaseCode() === Types.TurnPhaseCode.Main)
                 && (war.getActionPlanner().getState() === Types.ActionPlannerState.Idle);
@@ -193,6 +195,7 @@ namespace TinyWars.MultiCustomWar {
         private _updateBtnFindUnit(): void {
             const war                   = this._war;
             const turnManager           = war.getTurnManager();
+            this._btnUnitList.label     = Lang.getText(Lang.Type.B0152);
             this._btnUnitList.visible   = (turnManager.getPlayerIndexInTurn() === war.getPlayerIndexLoggedIn())
                 && (turnManager.getPhaseCode() === Types.TurnPhaseCode.Main);
         }
@@ -200,6 +203,7 @@ namespace TinyWars.MultiCustomWar {
         private _updateBtnFindBuilding(): void {
             const war                       = this._war;
             const turnManager               = war.getTurnManager();
+            this._btnFindBuilding.label     = Lang.getText(Lang.Type.B0153);
             this._btnFindBuilding.visible   = (turnManager.getPlayerIndexInTurn() === war.getPlayerIndexLoggedIn())
                 && (turnManager.getPhaseCode() === Types.TurnPhaseCode.Main);
         }
@@ -209,11 +213,16 @@ namespace TinyWars.MultiCustomWar {
             const turnManager       = war.getTurnManager();
             const actionPlanner     = war.getActionPlanner();
             const state             = actionPlanner.getState();
+            this._btnCancel.label   = Lang.getText(Lang.Type.B0154);
             this._btnCancel.visible = (turnManager.getPlayerIndexInTurn() === war.getPlayerIndexLoggedIn())
                 && (turnManager.getPhaseCode() === Types.TurnPhaseCode.Main)
                 && (state !== Types.ActionPlannerState.Idle)
                 && (state !== Types.ActionPlannerState.ExecutingAction)
                 && (!actionPlanner.checkIsStateRequesting());
+        }
+
+        private _updateBtnMenu(): void {
+            this._btnMenu.label = Lang.getText(Lang.Type.B0155);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

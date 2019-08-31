@@ -1,11 +1,8 @@
 
 namespace TinyWars.Utility.Lang {
-    import ErrorCode = Network.NetErrorCode;
+    import ErrorCode    = Network.NetErrorCode;
+    import LanguageType = Types.LanguageType;
 
-    export const enum Language {
-        Chinese,
-        English,
-    }
     export const enum Type {
         A0000, A0001, A0002, A0003, A0004, A0005, A0006, A0007, A0008, A0009,
         A0010, A0011, A0012, A0013, A0014, A0015, A0016, A0017, A0018, A0019,
@@ -876,6 +873,74 @@ namespace TinyWars.Utility.Lang {
             `发动SCOP`,
             `SCOP`,
         ]],
+        [Type.B0145, [
+            `选择CO`,
+            `Choose CO`,
+        ]],
+        [Type.B0146, [
+            `返回`,
+            `Back`,
+        ]],
+        [Type.B0147, [
+            `CO系统规则`,
+            `CO Rules`,
+        ]],
+        [Type.B0148, [
+            `切换语言`,
+            `Change Language`,
+        ]],
+        [Type.B0149, [
+            `更改昵称`,
+            `Change Nickname`,
+        ]],
+        [Type.B0150, [
+            `更改Discord ID`,
+            `Change Discord ID`,
+        ]],
+        [Type.B0151, [
+            `查看在线玩家`,
+            `Online Players`,
+        ]],
+        [Type.B0152, [
+            `部队列表`,
+            `Units`,
+        ]],
+        [Type.B0153, [
+            `寻找建筑`,
+            `Building`,
+        ]],
+        [Type.B0154, [
+            `取消`,
+            `Cancel`,
+        ]],
+        [Type.B0155, [
+            `菜单`,
+            `Menu`,
+        ]],
+        [Type.B0156, [
+            `资金`,
+            `Fund`,
+        ]],
+        [Type.B0157, [
+            `收入`,
+            `Income`,
+        ]],
+        [Type.B0158, [
+            `建筑数`,
+            `Buildings`,
+        ]],
+        [Type.B0159, [
+            `能量`,
+            `Energy`,
+        ]],
+        [Type.B0160, [
+            `部队数`,
+            `Units`,
+        ]],
+        [Type.B0161, [
+            `部队价值`,
+            `Units Value`,
+        ]],
 
         [Type.B1000, [
             `平原`,
@@ -1119,7 +1184,7 @@ namespace TinyWars.Utility.Lang {
             `Gunboat`,
         ]],
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Formater strings.
+        // Format strings.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.F0000, [
             "地图名称: %s",
@@ -1274,7 +1339,7 @@ namespace TinyWars.Utility.Lang {
         ]],
         [ErrorCode.ServerDisconnect_ServerMaintainance, [
             `服务器维护中`,
-            `The server is under maintainance.`,
+            `The server is under maintenance.`,
         ]],
         [ErrorCode.McrContinueWar_NoSuchWar, [
             `战局不存在`,
@@ -1307,7 +1372,7 @@ namespace TinyWars.Utility.Lang {
         ]],
         [ErrorCode.McwEndTurn_NotInTurn, [
             `当前无法结束您的回合`,
-            `Unable to begin turn.`,
+            `Unable to end turn.`,
         ]],
         [ErrorCode.McwEndTurn_NotVotedForDraw, [
             `您尚未完成关于和局的投票`,
@@ -1378,7 +1443,7 @@ namespace TinyWars.Utility.Lang {
             [
                 `CO能够搭乘到部队中，并改变临近区域的部队的战斗能力。此外，部分CO能通过战斗积累能量，并以此释放强大的power，从而进一步制造优势。`,
                 `CO详细规则如下：`,
-                `- CO需要搭乘到部队中才能发挥作用，包括日常能力和power（如果有的话）`,
+                `- CO需要搭乘到部队中才能发挥作用，包括日常能力和power（如果有的话）。power又分为COP和SCOP两种`,
                 `- 同一势力，CO无法同时搭乘到两个或以上的部队中`,
                 `- CO只能在工厂、机场、海港、大本营进行搭乘，其中工厂可搭乘陆军，机场可搭乘空军，海港可搭乘海军，大本营可搭乘任意类型部队`,
                 `- CO搭乘前，目标部队必须是未行动的状态，且正处在可搭乘的地形上；搭乘后部队可以再次行动`,
@@ -1387,25 +1452,39 @@ namespace TinyWars.Utility.Lang {
                 `- 搭乘瞬间，目标部队立刻升到满级，且CO日常能力立刻生效`,
                 `- CO的日常能力，通常情况下只对CO所在部队的特定距离（即CO zone，下称COZ）内的部队生效；若有例外，以CO技能描述为准`,
                 `- 若CO所在部队被装载，则COZ消失，直到该部队被卸载到地图上`,
-                `- 只有部分CO有气槽和power，具体以CO描述为准`,
-                `- 处于我方COZ内的我方部队对任意敌方部队发起攻击，造成伤害时会累积我方气槽，每打掉1HP则增加1气槽，与部队价值无关；自身受伤时不积累气槽`,
-                `- 处于我方COZ内的敌方部队对任意我方部队发起攻击，我方部队反击造成对方受伤时会累积我方气槽，累积规则同上`,
-                `- 部分CO有中段气槽；气槽值达到中段气槽时，COZ范围+1；气槽值达到最大时，COZ范围再+1；其余情况下，COZ范围为CO特定的初始值`,
-                `- 若气槽已满，CO所在部队可以在未行动时发动power；发动power需要消耗该部队的行动机会，也就是说不能发动power后再攻击（但是允许移动后发power）`,
-                `- power持续一回合，直到我方下回合开始时消失；其效果对全地图所有部队都生效（即使在视野外），具体以CO技能描述为准`,
-                `- power生效期间，日常能力失效`,
-                `- 我方发动power后，气槽清零，且直到我方下回合开始之前，我方气槽无法累积`,
-                `- 即使发动过power，气槽累积速度也不变`,
-                `- 若CO所在部队被击毁，则气槽清零；若该CO正在发动power，则该power效果立刻消失`,
+                `- 只有部分CO有能量和COP/SCOP，具体以CO描述为准`,
+                `- 处于我方COZ内的我方部队对任意敌方部队发起攻击，造成伤害时会累积我方能量，每打掉1HP则增加1能量，与部队价值无关；自身受伤时不积累能量`,
+                `- 处于我方COZ内的敌方部队对任意我方部队发起攻击，我方部队反击造成对方受伤时会累积我方能量，累积规则同上`,
+                `- 部分CO可以扩张COZ，以"zone扩张能量值"列表决定；能量每达到列表中的一个值，则COZ+1。也就是说，如果该列表为空，则COZ无法扩张；如果列表有三个数值，则COZ最多可以扩张三次`,
+                `- 有能量的CO，其能量最大值是SCOP所需能量及"zone扩张能量值"中的最大值`,
+                `- COP/SCOP（如果有的话）需要消耗相应的能量才能发动；发动后，直到我方下回合开始之前，我方能量无法累积`,
+                `- 若能量足够，CO所在部队可以在未行动时发动COP/SCOP；发动COP/SCOP需要消耗该部队的行动机会，也就是说不能发动后再攻击（但是允许移动后发COP/SCOP）`,
+                `- COP/SCOP持续一回合，直到我方下回合开始时消失；其效果对全地图所有部队都生效（即使在视野外），具体以CO技能描述为准`,
+                `- COP/SCOP生效期间，日常能力失效`,
+                `- 即使发动过COP/SCOP，能量累积速度也不变`,
+                `- 若CO所在部队被击毁，则能量清零；若该CO正在发动COP/SCOP，则该COP/SCOP效果立刻消失`,
             ].join("\n\n"),
 
             `Untranslated`,
         ]],
     ]);
 
-    let language = Language.Chinese;
+    let _languageType = LanguageType.Chinese;
+    export function init(): void {
+        setLanguageType(LocalStorage.getLanguageType());
+    }
+
+    export function getLanguageType(): LanguageType {
+        return _languageType;
+    }
+    export function setLanguageType(language: LanguageType): void {
+        _languageType = language;
+    }
 
     export function getText(t: Type): string {
+        return getTextWithLanguage(t, _languageType);
+    }
+    export function getTextWithLanguage(t: Type, language: LanguageType): string {
         return _LANG_DATA.get(t)[language];
     }
 
@@ -1414,11 +1493,11 @@ namespace TinyWars.Utility.Lang {
     }
 
     export function getNetErrorText(code: ErrorCode): string {
-        return NET_ERROR_TEXT.get(code)[language];
+        return NET_ERROR_TEXT.get(code)[_languageType];
     }
 
     export function getRichText(richType: RichType): string {
-        return RICH_DATA.get(richType)[language];
+        return RICH_DATA.get(richType)[_languageType];
     }
 
     export function getPlayerForceName(playerIndex: number): string {

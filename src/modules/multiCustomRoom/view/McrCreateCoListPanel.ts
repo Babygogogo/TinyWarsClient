@@ -1,7 +1,8 @@
 
 namespace TinyWars.MultiCustomRoom {
-    import Types    = Utility.Types;
-    import Lang     = Utility.Lang;
+    import Types        = Utility.Types;
+    import Lang         = Utility.Lang;
+    import HelpPanel    = Common.HelpPanel;
 
     export class McrCreateCoListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
@@ -11,8 +12,10 @@ namespace TinyWars.MultiCustomRoom {
 
         private _openData   : number;
 
-        private _listCo     : GameUi.UiScrollList;
-        private _btnBack    : GameUi.UiButton;
+        private _labelChooseCo  : GameUi.UiLabel;
+        private _btnHelp        : GameUi.UiButton;
+        private _listCo         : GameUi.UiScrollList;
+        private _btnBack        : GameUi.UiButton;
 
         private _imgCoPortrait              : GameUi.UiImage;
         private _labelName                  : GameUi.UiLabel;
@@ -58,7 +61,8 @@ namespace TinyWars.MultiCustomRoom {
 
         protected _onFirstOpened(): void {
             this._uiListeners = [
-                { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
+                { ui: this._btnHelp,    callback: this._onTouchedBtnHelp },
+                { ui: this._btnBack,    callback: this._onTouchTapBtnBack },
             ];
             this._listCo.setItemRenderer(MapNameRenderer);
             this._listPassiveSkill.setItemRenderer(PassiveSkillRenderer);
@@ -66,13 +70,8 @@ namespace TinyWars.MultiCustomRoom {
             this._listScop.setItemRenderer(ActiveSkillRenderer);
         }
         protected _onOpened(): void {
-            this._dataForListCo = this._createDataForListCo();
-            this._listCo.bindData(this._dataForListCo);
-            this._listCo.scrollVerticalTo(0);
-            this.setSelectedIndex(this._dataForListCo.findIndex(data => {
-                const cfg = data.coBasicCfg;
-                return cfg ? cfg.coId === this._openData : this._openData == null;
-            }));
+            this._initListCo();
+            this._updateView();
         }
         protected _onClosed(): void {
             this._listCo.clear();
@@ -103,6 +102,13 @@ namespace TinyWars.MultiCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
+        private _onTouchedBtnHelp(e: egret.TouchEvent): void {
+            HelpPanel.show({
+                title   : Lang.getText(Lang.Type.B0147),
+                content : Lang.getRichText(Lang.RichType.R0004),
+            });
+        }
+
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
             McrCreateCoListPanel.hide();
             McrCreateSettingsPanel.show();
@@ -111,6 +117,22 @@ namespace TinyWars.MultiCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
+        private _updateView(): void {
+            this._labelChooseCo.text    = Lang.getText(Lang.Type.B0145);
+            this._btnHelp.label         = Lang.getText(Lang.Type.B0143);
+            this._btnBack.label         = Lang.getText(Lang.Type.B0146);
+        }
+
+        private _initListCo(): void {
+            this._dataForListCo = this._createDataForListCo();
+            this._listCo.bindData(this._dataForListCo);
+            this._listCo.scrollVerticalTo(0);
+            this.setSelectedIndex(this._dataForListCo.findIndex(data => {
+                const cfg = data.coBasicCfg;
+                return cfg ? cfg.coId === this._openData : this._openData == null;
+            }));
+        }
+
         private _createDataForListCo(): DataForCoRenderer[] {
             const data              : DataForCoRenderer[] = [];
             const bannedCoIdList    = McrModel.getCreateWarBannedCoIdList();

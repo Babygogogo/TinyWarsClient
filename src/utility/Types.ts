@@ -481,4 +481,9 @@ namespace TinyWars.Utility.Types {
         Power       = 1,
         SuperPower  = 2,
     }
+
+    export const enum LanguageType {
+        Chinese = 0,
+        English = 1,
+    }
 }

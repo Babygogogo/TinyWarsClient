@@ -2,9 +2,11 @@
 namespace TinyWars.Utility {
     import localStorage = egret.localStorage;
 
-    const KEY_ACCOUNT           = "account";
-    const KEY_PASSWORD          = "password";
-    const KEY_REMEMBER_PASSWORD = "rememberPassword";
+    const KEY_PREFIX            = "TinyWarsStorage_";
+    const KEY_ACCOUNT           = KEY_PREFIX + "Account";
+    const KEY_PASSWORD          = KEY_PREFIX + "Password";
+    const KEY_REMEMBER_PASSWORD = KEY_PREFIX + "RememberPassword";
+    const KEY_LANGUAGE          = KEY_PREFIX + "Language";
     const VALUE_TRUE            = "1";
     const VALUE_FALSE           = "0";
 
@@ -36,6 +38,14 @@ namespace TinyWars.Utility {
         }
         export function getMapData(url: string): string {
             return localStorage.getItem(url);
+        }
+
+        export function setLanguageType(language: Types.LanguageType): void {
+            localStorage.setItem(KEY_LANGUAGE, "" + language);
+        }
+        export function getLanguageType(): Types.LanguageType {
+            const data = localStorage.getItem(KEY_LANGUAGE);
+            return data ? parseInt(data) || Types.LanguageType.Chinese : Types.LanguageType.Chinese;
         }
     }
 }

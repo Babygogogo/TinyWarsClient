@@ -30,6 +30,7 @@ namespace TinyWars.Utility.FlowManager {
         Utility.StageManager.init(stage);
         await Promise.all([ResManager.init(), ProtoManager.init()]);
 
+        Lang.init();
         NoSleepManager.init();
         ConfigManager.init();
         Network.Manager.init();
