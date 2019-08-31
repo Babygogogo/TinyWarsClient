@@ -17,23 +17,30 @@ namespace TinyWars.MultiCustomRoom {
         private _listCo         : GameUi.UiScrollList;
         private _btnBack        : GameUi.UiButton;
 
-        private _imgCoPortrait              : GameUi.UiImage;
-        private _labelName                  : GameUi.UiLabel;
-        private _labelDesigner              : GameUi.UiLabel;
-        private _labelBoardCostPercentage   : GameUi.UiLabel;
-        private _labelZoneRadius            : GameUi.UiLabel;
-        private _labelEnergyBar             : GameUi.UiLabel;
+        private _imgCoPortrait                  : GameUi.UiImage;
+        private _labelNameTitle                 : GameUi.UiLabel;
+        private _labelName                      : GameUi.UiLabel;
+        private _labelDesignerTitle             : GameUi.UiLabel;
+        private _labelDesigner                  : GameUi.UiLabel;
+        private _labelBoardCostPercentageTitle  : GameUi.UiLabel;
+        private _labelBoardCostPercentage       : GameUi.UiLabel;
+        private _labelZoneRadiusTitle           : GameUi.UiLabel;
+        private _labelZoneRadius                : GameUi.UiLabel;
+        private _labelEnergyBarTitle            : GameUi.UiLabel;
+        private _labelEnergyBar                 : GameUi.UiLabel;
 
         private _listPassiveSkill   : GameUi.UiScrollList;
         private _labelNoPassiveSkill: GameUi.UiLabel;
 
-        private _listCop        : GameUi.UiScrollList;
-        private _labelNoCop     : GameUi.UiLabel;
-        private _labelCopEnergy : GameUi.UiLabel;
+        private _listCop            : GameUi.UiScrollList;
+        private _labelNoCop         : GameUi.UiLabel;
+        private _labelCopEnergyTitle: GameUi.UiLabel;
+        private _labelCopEnergy     : GameUi.UiLabel;
 
-        private _listScop       : GameUi.UiScrollList;
-        private _labelNoScop    : GameUi.UiLabel;
-        private _labelScopEnergy: GameUi.UiLabel;
+        private _listScop               : GameUi.UiScrollList;
+        private _labelNoScop            : GameUi.UiLabel;
+        private _labelScopEnergyTitle   : GameUi.UiLabel;
+        private _labelScopEnergy        : GameUi.UiLabel;
 
         private _dataForListCo      : DataForCoRenderer[] = [];
         private _selectedIndex      : number;
@@ -157,6 +164,14 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _showCoInfo(data: DataForCoRenderer): void {
+            this._labelNameTitle.text                   = `${Lang.getText(Lang.Type.B0162)}: `;
+            this._labelDesignerTitle.text               = `${Lang.getText(Lang.Type.B0163)}: `;
+            this._labelBoardCostPercentageTitle.text    = `${Lang.getText(Lang.Type.B0164)}: `;
+            this._labelZoneRadiusTitle.text             = `${Lang.getText(Lang.Type.B0165)}: `;
+            this._labelEnergyBarTitle.text              = `${Lang.getText(Lang.Type.B0166)}: `;
+            this._labelCopEnergyTitle.text              = `${Lang.getText(Lang.Type.B0167)}: `;
+            this._labelScopEnergyTitle.text             = `${Lang.getText(Lang.Type.B0167)}: `;
+
             const cfg = data.coBasicCfg;
             if (!cfg) {
                 this._imgCoPortrait.source          = "";
@@ -165,10 +180,10 @@ namespace TinyWars.MultiCustomRoom {
                 this._labelBoardCostPercentage.text = "--";
                 this._labelZoneRadius.text          = "--";
                 this._labelEnergyBar.text           = "--";
-                this._labelNoPassiveSkill.visible   = true;
-                this._labelNoCop.visible            = true;
+                this._labelNoPassiveSkill.text      = Lang.getText(Lang.Type.B0001);
+                this._labelNoCop.text               = Lang.getText(Lang.Type.B0001);
                 this._labelCopEnergy.text           = "--";
-                this._labelNoScop.visible           = true;
+                this._labelNoScop.text              = Lang.getText(Lang.Type.B0001);
                 this._labelScopEnergy.text          = "--";
                 this._listPassiveSkill.clear();
                 this._listCop.clear();
@@ -184,10 +199,10 @@ namespace TinyWars.MultiCustomRoom {
 
                 const passiveSkills = cfg.passiveSkills || [];
                 if (!passiveSkills.length) {
-                    this._labelNoPassiveSkill.visible = true;
+                    this._labelNoPassiveSkill.text = Lang.getText(Lang.Type.B0001);
                     this._listPassiveSkill.clear();
                 } else {
-                    this._labelNoPassiveSkill.visible = false;
+                    this._labelNoPassiveSkill.text = "";
                     const data: DataForSkillRenderer[] = [];
                     for (let i = 0; i < passiveSkills.length; ++i) {
                         data.push({
@@ -200,11 +215,11 @@ namespace TinyWars.MultiCustomRoom {
 
                 const copSkills = cfg.powerSkills || [];
                 if (!copSkills.length) {
-                    this._labelNoCop.visible    = true;
+                    this._labelNoCop.text       = Lang.getText(Lang.Type.B0001);
                     this._labelCopEnergy.text   = "--";
                     this._listCop.clear();
                 } else {
-                    this._labelNoCop.visible    = false;
+                    this._labelNoCop.text       = "";
                     this._labelCopEnergy.text   = `${cfg.powerEnergyList[0]}`;
 
                     const data: DataForSkillRenderer[] = [];
@@ -219,11 +234,11 @@ namespace TinyWars.MultiCustomRoom {
 
                 const scopSkills = cfg.superPowerSkills || [];
                 if (!scopSkills.length) {
-                    this._labelNoScop.visible   = true;
+                    this._labelNoScop.text      = Lang.getText(Lang.Type.B0001);
                     this._labelScopEnergy.text  = "--";
                     this._listScop.clear();
                 } else {
-                    this._labelNoScop.visible   = false;
+                    this._labelNoScop.text      = "";
                     this._labelScopEnergy.text  = `${cfg.powerEnergyList[1]}`;
 
                     const data: DataForSkillRenderer[] = [];
@@ -294,7 +309,7 @@ namespace TinyWars.MultiCustomRoom {
 
             const data              = this.data as DataForSkillRenderer;
             this._labelIndex.text   = `${data.index}.`;
-            this._labelDesc.text    = ConfigManager.getCoSkillCfg(ConfigManager.getNewestConfigVersion(), data.skillId).passiveDesc;
+            this._labelDesc.text    = ConfigManager.getCoSkillCfg(ConfigManager.getNewestConfigVersion(), data.skillId).passiveDesc[Lang.getLanguageType()];
         }
     }
 
@@ -307,7 +322,7 @@ namespace TinyWars.MultiCustomRoom {
 
             const data              = this.data as DataForSkillRenderer;
             this._labelIndex.text   = `${data.index}.`;
-            this._labelDesc.text    = ConfigManager.getCoSkillCfg(ConfigManager.getNewestConfigVersion(), data.skillId).activeDesc;
+            this._labelDesc.text    = ConfigManager.getCoSkillCfg(ConfigManager.getNewestConfigVersion(), data.skillId).activeDesc[Lang.getLanguageType()];
         }
     }
 }

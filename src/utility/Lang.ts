@@ -311,19 +311,19 @@ namespace TinyWars.Utility.Lang {
         ]],
         [Type.B0004, [
             "红方",
-            "red",
+            "Red",
         ]],
         [Type.B0005, [
             "蓝方",
-            "blue",
+            "Blue",
         ]],
         [Type.B0006, [
             "黄方",
-            "yellow",
+            "Yellow",
         ]],
         [Type.B0007, [
             "黑方",
-            "black",
+            "Black",
         ]],
         [Type.B0008, [
             "A队",
@@ -940,6 +940,34 @@ namespace TinyWars.Utility.Lang {
         [Type.B0161, [
             `部队价值`,
             `Units Value`,
+        ]],
+        [Type.B0162, [
+            `姓名`,
+            `Name`,
+        ]],
+        [Type.B0163, [
+            `设计者`,
+            `Designer`,
+        ]],
+        [Type.B0164, [
+            `搭载费用`,
+            `Boarding Cost`,
+        ]],
+        [Type.B0165, [
+            `Zone范围`,
+            `Zone Radius`,
+        ]],
+        [Type.B0166, [
+            `Zone扩张能量值`,
+            `ZoneExpandingEnergy`,
+        ]],
+        [Type.B0167, [
+            `能量消耗`,
+            `Energy Cost`,
+        ]],
+        [Type.B0168, [
+            `势力`,
+            `Force`,
         ]],
 
         [Type.B1000, [

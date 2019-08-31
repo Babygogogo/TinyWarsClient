@@ -144,8 +144,8 @@
             <e:List>
                 <e:itemRendererSkinName>
                     <e:Skin height="22" currentState="up" states="up,down" width="400">
-                        <GameUi:UiLabel id="_labelIndex" text="红方" size="16" x="4" bottom="0" />
-                        <GameUi:UiLabel id="_labelTeam" text="A队" size="16" x="45" bottom="0" />
+                        <GameUi:UiLabel id="_labelIndex" text="红方" size="16" x="4" bottom="0" maxTextWidth="32"/>
+                        <GameUi:UiLabel id="_labelTeam" text="A队" size="16" x="45" bottom="0" maxTextWidth="30"/>
                         <GameUi:UiLabel id="_labelNickname" text="玩家名称居然有十个字" x="80" size="16" textColor.down="0x00ff00"
                                         bottom="0" maxTextWidth="210" />
                         <GameUi:UiLabel id="_labelCoName" text="CO名称" x="300" size="16" bottom="0" maxTextWidth="100" />
