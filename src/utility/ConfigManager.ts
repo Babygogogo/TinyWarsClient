@@ -1430,6 +1430,7 @@ namespace TinyWars.ConfigManager {
     const _NEWEST_CO_LIST       = new Map<string, CoBasicCfg[]>();
     const _CO_TIERS             = new Map<string, number[]>();
     const _CO_ID_LIST_IN_TIER   = new Map<string, Map<number, number[]>>();
+    const _CUSTOM_CO_ID_LIST    = new Map<string, number[]>();
     let _newestFormalVersion    : string;
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -1690,5 +1691,18 @@ namespace TinyWars.ConfigManager {
             cfgs.set(tier, idList);
         }
         return cfgs.get(tier);
+    }
+
+    export function getCustomCoIdList(version: string): number[] {
+        if (!_CUSTOM_CO_ID_LIST.has(version)) {
+            const idList: number[] = [];
+            for (const cfg of getNewestCoList(version)) {
+                if (cfg.designer !== "Intelligent Systems") {
+                    idList.push(cfg.coId);
+                }
+            }
+            _CUSTOM_CO_ID_LIST.set(version, idList);
+        }
+        return _CUSTOM_CO_ID_LIST.get(version);
     }
 }

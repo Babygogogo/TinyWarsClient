@@ -5,9 +5,9 @@
     <GameUi:UiLabel id="_labelMapName" text="地图名称" textColor="0xFFFFFF" y="10" size="20" x="120" />
     <GameUi:UiLabel text="玩家数量：" textColor="0xFFFFFF" y="10" size="20" width="120" textAlign="right" x="300" />
     <GameUi:UiLabel id="_labelPlayersCount" text="2" textColor="0xFFFFFF" y="10" size="20" x="420" />
-    <e:Group y="60">
-        <GameUi:UiLabel text="战局名称：" textColor="0xFFFFFF" y="3" size="20" scaleX="1" scaleY="1" width="120"
-                        textAlign="right" />
+    <e:Group y="60" x="5">
+        <GameUi:UiLabel id="_labelWarNameTitle" text="战局名称：" textColor="0xFFFFFF" y="3" size="20" scaleX="1" scaleY="1"
+                        textAlign="right" maxTextWidth="120" />
         <GameUi:UiTextInput id="_inputWarName" width="220" x="120" y="0" anchorOffsetX="0" anchorOffsetY="0"
                             maxChars="10" scaleX="1" scaleY="1">
             <GameUi:skinName>
@@ -21,9 +21,9 @@
         </GameUi:UiTextInput>
         <GameUi:UiLabel text="(最多10字,可留空)" textColor="0xFFFFFF" y="3" size="20" scaleX="1" scaleY="1" x="350" />
     </e:Group>
-    <e:Group y="100">
-        <GameUi:UiLabel text="战局密码：" textColor="0xFFFFFF" y="3" size="20" scaleX="1" scaleY="1" width="120"
-                        textAlign="right" />
+    <e:Group y="100" x="5">
+        <GameUi:UiLabel id="_labelWarPasswordTitle" text="战局密码：" textColor="0xFFFFFF" y="3" size="20" scaleX="1"
+                        scaleY="1" textAlign="right" maxTextWidth="120" />
         <GameUi:UiTextInput id="_inputWarPassword" width="220" x="120" y="0" anchorOffsetX="0" anchorOffsetY="0"
                             restrict="0-9" maxChars="4">
             <GameUi:skinName>
@@ -37,9 +37,9 @@
         </GameUi:UiTextInput>
         <GameUi:UiLabel text="(最多4位数字,可留空)" textColor="0xFFFFFF" y="3" size="20" scaleX="1" scaleY="1" x="350" />
     </e:Group>
-    <e:Group y="140">
-        <GameUi:UiLabel text="附言：" textColor="0xFFFFFF" y="3" size="20" scaleX="1" scaleY="1" width="120"
-                        textAlign="right" />
+    <e:Group y="140" x="5">
+        <GameUi:UiLabel id="_labelWarCommentTitle" text="附言：" textColor="0xFFFFFF" y="3" size="20" scaleX="1" scaleY="1"
+                        textAlign="right" maxTextWidth="120" />
         <GameUi:UiTextInput id="_inputWarComment" width="220" x="120" y="0" anchorOffsetX="0" anchorOffsetY="0"
                             maxChars="50">
             <GameUi:skinName>
@@ -53,9 +53,9 @@
         </GameUi:UiTextInput>
         <GameUi:UiLabel text="(最多50字,可留空)" textColor="0xFFFFFF" y="3" size="20" scaleX="1" scaleY="1" x="350" />
     </e:Group>
-    <e:Group y="200">
-        <GameUi:UiLabel text="行动次序：" textColor="0xFFFFFF" y="0" size="20" width="120" textAlign="right" x="0" scaleX="1"
-                        scaleY="1" />
+    <e:Group y="200" x="5">
+        <GameUi:UiLabel id="_labelPlayerIndexTitle" text="行动次序：" textColor="0xFFFFFF" y="0" size="20" textAlign="right"
+                        x="0" scaleX="1" scaleY="1" maxTextWidth="0120" />
         <GameUi:UiButton id="_btnPrevPlayerIndex" label="&lt;&lt;" x="120" y="0" scaleX="1" scaleY="1">
             <GameUi:skinName>
                 <e:Skin states="up,down,disabled">
@@ -65,7 +65,8 @@
                 </e:Skin>
             </GameUi:skinName>
         </GameUi:UiButton>
-        <GameUi:UiButton id="_btnNextPlayerIndex"  label=">>" x="254" y="0" scaleX="1" scaleY="1">
+        <GameUi:UiButton id="_btnNextPlayerIndex"  label=">
+            >" x="254" y="0" scaleX="1" scaleY="1">
             <GameUi:skinName>
                 <e:Skin states="up,down,disabled">
                     <e:Image width="100%" height="100%" />
@@ -86,9 +87,9 @@
             </GameUi:skinName>
         </GameUi:UiButton>
     </e:Group>
-    <e:Group y="235">
-        <GameUi:UiLabel text="队伍：" textColor="0xFFFFFF" y="0" size="20" width="120" textAlign="right" x="0" scaleX="1"
-                        scaleY="1" />
+    <e:Group y="235" x="5">
+        <GameUi:UiLabel id="_labelTeamTitle" text="队伍：" textColor="0xFFFFFF" y="0" size="20" textAlign="right" x="0"
+                        scaleX="1" scaleY="1" maxTextWidth="120" />
         <GameUi:UiButton id="_btnPrevTeam" label="&lt;&lt;" x="120" y="0">
             <GameUi:skinName>
                 <e:Skin states="up,down,disabled">
@@ -119,9 +120,9 @@
             </GameUi:skinName>
         </GameUi:UiButton>
     </e:Group>
-    <e:Group y="270">
-        <GameUi:UiLabel text="战争迷雾：" textColor="0xFFFFFF" y="0" size="20" width="120" textAlign="right" x="0" scaleX="1"
-                        scaleY="1" />
+    <e:Group y="270" x="5">
+        <GameUi:UiLabel id="_labelFogTitle" text="战争迷雾：" textColor="0xFFFFFF" y="0" size="20" textAlign="right" x="0"
+                        scaleX="1" scaleY="1" maxTextWidth="120" />
         <GameUi:UiButton id="_btnPrevFog" label="&lt;&lt;" x="120" y="0">
             <GameUi:skinName>
                 <e:Skin states="up,down,disabled">
@@ -152,9 +153,9 @@
             </GameUi:skinName>
         </GameUi:UiButton>
     </e:Group>
-    <e:Group y="330">
-        <GameUi:UiLabel text="回合限时：" textColor="0xFFFFFF" y="0" size="20" width="120" textAlign="right" x="0" scaleX="1"
-                        scaleY="1" />
+    <e:Group y="330" x="5">
+        <GameUi:UiLabel id="_labelTimeLimitTitle" text="回合限时：" textColor="0xFFFFFF" y="0" size="20" textAlign="right"
+                        x="0" scaleX="1" scaleY="1" maxTextWidth="120" />
         <GameUi:UiButton id="_btnPrevTimeLimit" label="&lt;&lt;" x="120" y="0">
             <GameUi:skinName>
                 <e:Skin states="up,down,disabled">
@@ -186,8 +187,8 @@
         </GameUi:UiButton>
     </e:Group>
     <e:Group y="200" x="400">
-        <GameUi:UiLabel text="指挥官：" textColor="0xFFFFFF" y="0" size="20" width="90" textAlign="right" x="0" scaleX="1"
-                        scaleY="1" />
+        <GameUi:UiLabel text="CO:" textColor="0xFFFFFF" y="0" size="20" textAlign="right" x="0" scaleX="1" scaleY="1"
+                        maxTextWidth="90" />
         <GameUi:UiLabel id="_labelCoName" text="测试CO1号" textColor="0xFFFFFF" y="0" size="20" width="160"
                         textAlign="center" scaleX="1" scaleY="1" x="90" />
         <GameUi:UiButton id="_btnChangeCo" label="更换" x="260">

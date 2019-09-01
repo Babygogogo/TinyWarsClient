@@ -1005,6 +1005,50 @@ namespace TinyWars.Utility.Lang {
             `停止地形动画`,
             `Stop Tile Ani`,
         ]],
+        [Type.B0178, [
+            `初始资金`,
+            `Initial Fund`,
+        ]],
+        [Type.B0179, [
+            `收入倍率`,
+            `Income Multiplier`,
+        ]],
+        [Type.B0180, [
+            `初始能量`,
+            `Initial Energy`,
+        ]],
+        [Type.B0181, [
+            `能量增速`,
+            `Energy Growth Multiplier`,
+        ]],
+        [Type.B0182, [
+            `移动力加成`,
+            `Movement Bonus`,
+        ]],
+        [Type.B0183, [
+            `攻击力加成`,
+            `Offense Bonus`,
+        ]],
+        [Type.B0184, [
+            `视野加成`,
+            `Vision Bonus`,
+        ]],
+        [Type.B0185, [
+            `房间名称`,
+            `Game Name`,
+        ]],
+        [Type.B0186, [
+            `房间密码`,
+            `Game Password`,
+        ]],
+        [Type.B0187, [
+            `附言`,
+            `Comment`,
+        ]],
+        [Type.B0188, [
+            `回合限时`,
+            `Boot Timer`,
+        ]],
 
         [Type.B1000, [
             `平原`,

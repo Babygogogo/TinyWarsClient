@@ -5,6 +5,7 @@ namespace TinyWars.MultiCustomRoom {
     import FloatText        = Utility.FloatText;
     import Helpers          = Utility.Helpers;
     import Lang             = Utility.Lang;
+    import Notify           = Utility.Notify;
     import ConfirmPanel     = Common.ConfirmPanel;
     import HelpPanel        = Common.HelpPanel;
     import TemplateMapModel = WarMap.WarMapModel;
@@ -13,23 +14,32 @@ namespace TinyWars.MultiCustomRoom {
         private _labelMapName       : GameUi.UiLabel;
         private _labelPlayersCount  : GameUi.UiLabel;
 
-        private _inputInitialFund   : GameUi.UiTextInput;
-        private _inputIncomeModifier: GameUi.UiTextInput;
+        private _labelInitialFundTitle  : GameUi.UiLabel;
+        private _inputInitialFund       : GameUi.UiTextInput;
 
-        private _inputInitialEnergy : GameUi.UiTextInput;
-        private _inputEnergyModifier: GameUi.UiTextInput;
+        private _labelIncomeMultiplierTitle : GameUi.UiLabel;
+        private _inputIncomeModifier        : GameUi.UiTextInput;
 
-        private _btnPrevMoveRange : GameUi.UiButton;
-        private _btnNextMoveRange : GameUi.UiButton;
-        private _labelMoveRange   : GameUi.UiLabel;
+        private _labelInitialEnergyTitle    : GameUi.UiLabel;
+        private _inputInitialEnergy         : GameUi.UiTextInput;
 
-        private _btnPrevAttack    : GameUi.UiButton;
-        private _btnNextAttack    : GameUi.UiButton;
-        private _labelAttack      : GameUi.UiLabel;
+        private _labelEnergyGrowthModifierTitle : GameUi.UiLabel;
+        private _inputEnergyModifier            : GameUi.UiTextInput;
 
-        private _btnPrevVision  : GameUi.UiButton;
-        private _btnNextVision  : GameUi.UiButton;
-        private _labelVision    : GameUi.UiLabel;
+        private _labelMoveRangeTitle    : GameUi.UiLabel;
+        private _btnPrevMoveRange       : GameUi.UiButton;
+        private _btnNextMoveRange       : GameUi.UiButton;
+        private _labelMoveRange         : GameUi.UiLabel;
+
+        private _labelAttackTitle   : GameUi.UiLabel;
+        private _btnPrevAttack      : GameUi.UiButton;
+        private _btnNextAttack      : GameUi.UiButton;
+        private _labelAttack        : GameUi.UiLabel;
+
+        private _labelVisionTitle   : GameUi.UiLabel;
+        private _btnPrevVision      : GameUi.UiButton;
+        private _btnNextVision      : GameUi.UiButton;
+        private _labelVision        : GameUi.UiLabel;
 
         private _groupCoTiers       : eui.Group;
         private _groupCoNames       : eui.Group;
@@ -57,11 +67,15 @@ namespace TinyWars.MultiCustomRoom {
                 { ui: this._btnPrevVision,          callback: this._onTouchedBtnPrevVision, },
                 { ui: this._btnNextVision,          callback: this._onTouchedBtnNextVision, },
             ];
+            this._notifyListeners = [
+                { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
+            ];
         }
 
         protected _onOpened(): void {
             this._mapInfo = McrModel.getCreateWarMapInfo();
 
+            this._updateTitles();
             this._initGroupCoTiers();
             this._initGroupCoNames();
             this._updateLabelMapName();
@@ -83,6 +97,10 @@ namespace TinyWars.MultiCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////
         // Event callbacks.
         ////////////////////////////////////////////////////////////////////////////////
+        private _onNotifyLanguageChanged(): void {
+            this._updateTitles();
+        }
+
         private _onFocusOutInputInitialFund(e: egret.Event): void {
             let fund = Number(this._inputInitialFund.text);
             if (isNaN(fund)) {
@@ -163,7 +181,9 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onTouchedCoTierRenderer(e: egret.TouchEvent): void {
             const renderer  = e.currentTarget as RendererForCoTier;
-            const coIdList  = ConfigManager.getCoIdListInTier(ConfigManager.getNewestConfigVersion(), renderer.getCoTier());
+            const coIdList  = renderer.getIsCustomSwitch()
+                ? ConfigManager.getCustomCoIdList(ConfigManager.getNewestConfigVersion())
+                : ConfigManager.getCoIdListInTier(ConfigManager.getNewestConfigVersion(), renderer.getCoTier());
 
             if (!renderer.getIsSelected()) {
                 for (const coId of coIdList) {
@@ -230,6 +250,16 @@ namespace TinyWars.MultiCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////
         // View functions.
         ////////////////////////////////////////////////////////////////////////////////
+        private _updateTitles(): void {
+            this._labelInitialFundTitle.text            = `${Lang.getText(Lang.Type.B0178)}: `;
+            this._labelIncomeMultiplierTitle.text       = `${Lang.getText(Lang.Type.B0179)}: `;
+            this._labelInitialEnergyTitle.text          = `${Lang.getText(Lang.Type.B0180)}: `;
+            this._labelEnergyGrowthModifierTitle.text   = `${Lang.getText(Lang.Type.B0181)}: `;
+            this._labelMoveRangeTitle.text              = `${Lang.getText(Lang.Type.B0182)}: `;
+            this._labelAttackTitle.text                 = `${Lang.getText(Lang.Type.B0183)}: `;
+            this._labelVisionTitle.text                 = `${Lang.getText(Lang.Type.B0184)}: `;
+        }
+
         private _updateInputInitialFund(): void {
             this._inputInitialFund.text = "" + McrModel.getCreateWarInitialFund();
         }
@@ -286,11 +316,17 @@ namespace TinyWars.MultiCustomRoom {
                 const renderer = new RendererForCoTier();
                 renderer.setCoTier(tier);
                 renderer.setIsSelected(true);
-
                 renderer.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedCoTierRenderer, this);
                 this._renderersForCoTiers.push(renderer);
                 this._groupCoTiers.addChild(renderer);
             }
+
+            const rendererForCustomCo = new RendererForCoTier();
+            rendererForCustomCo.setIsCustomSwitch(true);
+            rendererForCustomCo.setIsSelected(true);
+            rendererForCustomCo.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedCoTierRenderer, this);
+            this._renderersForCoTiers.push(rendererForCustomCo);
+            this._groupCoTiers.addChild(rendererForCustomCo);
 
             this._updateGroupCoTiers();
         }
@@ -303,8 +339,13 @@ namespace TinyWars.MultiCustomRoom {
         private _updateGroupCoTiers(): void {
             const bannedCoIdList = McrModel.getCreateWarBannedCoIdList();
             for (const renderer of this._renderersForCoTiers) {
-                const includedCoIdList = ConfigManager.getCoIdListInTier(ConfigManager.getNewestConfigVersion(), renderer.getCoTier());
-                renderer.setIsSelected(includedCoIdList.every(coId => bannedCoIdList.indexOf(coId) < 0));
+                if (renderer.getIsCustomSwitch()) {
+                    const includedCoIdList = ConfigManager.getCustomCoIdList(ConfigManager.getNewestConfigVersion());
+                    renderer.setIsSelected(includedCoIdList.every(coId => bannedCoIdList.indexOf(coId) < 0));
+                } else {
+                    const includedCoIdList = ConfigManager.getCoIdListInTier(ConfigManager.getNewestConfigVersion(), renderer.getCoTier());
+                    renderer.setIsSelected(includedCoIdList.every(coId => bannedCoIdList.indexOf(coId) < 0));
+                }
             }
         }
 
@@ -339,8 +380,9 @@ namespace TinyWars.MultiCustomRoom {
         private _imgSelected: GameUi.UiImage;
         private _labelName  : GameUi.UiLabel;
 
-        private _tier       : number;
-        private _isSelected : boolean;
+        private _tier           : number;
+        private _isCustomSwitch = false;
+        private _isSelected     : boolean;
 
         public constructor() {
             super();
@@ -354,6 +396,14 @@ namespace TinyWars.MultiCustomRoom {
         }
         public getCoTier(): number {
             return this._tier;
+        }
+
+        public setIsCustomSwitch(isCustomSwitch: boolean): void {
+            this._isCustomSwitch    = isCustomSwitch;
+            this._labelName.text    = "Custom";
+        }
+        public getIsCustomSwitch(): boolean {
+            return this._isCustomSwitch;
         }
 
         public setIsSelected(isSelected: boolean): void {

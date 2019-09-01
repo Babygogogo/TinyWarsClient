@@ -278,7 +278,7 @@ namespace TinyWars.MultiCustomRoom {
             const data              = this.data as DataForCoRenderer;
             const cfg               = data.coBasicCfg;
             this.currentState       = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
-            this._labelName.text    = cfg ? cfg.name : `(${Lang.getText(Lang.Type.B0001)}CO)`;
+            this._labelName.text    = cfg ? `${cfg.name}(T${cfg.tier})` : `(${Lang.getText(Lang.Type.B0001)}CO)`;
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {

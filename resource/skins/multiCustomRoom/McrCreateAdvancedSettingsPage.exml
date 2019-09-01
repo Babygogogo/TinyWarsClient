@@ -10,10 +10,10 @@
         <GameUi:UiLabel id="_labelPlayersCount" text="2" textColor="0xFFFFFF" y="0" size="20" x="120" />
     </e:Group>
     <GameUi:UiLabel text="本页设置对战局内所有玩家都有效" textColor="0xFFFFFF" y="10" size="20" x="450" />
-    <e:Group x="0" y="50">
+    <e:Group x="5" y="50">
         <e:Group y="0" x="0">
-            <GameUi:UiLabel text="初始资金：" textColor="0xFFFFFF" y="3" size="20" scaleX="1" scaleY="1" width="120"
-                            textAlign="right" />
+            <GameUi:UiLabel id="_labelInitialFundTitle" text="初始资金：" textColor="0xFFFFFF" y="3" size="20" scaleX="1"
+                            scaleY="1" textAlign="right" maxTextWidth="120" />
             <GameUi:UiTextInput id="_inputInitialFund" width="150" x="120" y="0" anchorOffsetX="0" anchorOffsetY="0"
                                 maxChars="7" scaleX="1" scaleY="1" restrict="0-9">
                 <GameUi:skinName>
@@ -28,8 +28,8 @@
             <GameUi:UiLabel text="(最大100万)" textColor="0xFFFFFF" y="3" size="20" scaleX="1" scaleY="1" x="280" />
         </e:Group>
         <e:Group y="40" x="0">
-            <GameUi:UiLabel text="收入倍率：" textColor="0xFFFFFF" y="3" size="20" scaleX="1" scaleY="1" width="120"
-                            textAlign="right" />
+            <GameUi:UiLabel id="_labelIncomeMultiplierTitle" text="收入倍率：" textColor="0xFFFFFF" y="3" size="20"
+                            scaleX="1" scaleY="1" textAlign="right" maxTextWidth="120" />
             <GameUi:UiLabel text="%" textColor="0xFFFFFF" size="20" scaleX="1" scaleY="1" x="250" y="4" />
             <GameUi:UiTextInput id="_inputIncomeModifier" width="150" x="120" y="0" anchorOffsetX="0" anchorOffsetY="0"
                                 restrict="0-9" maxChars="4">
@@ -45,8 +45,8 @@
             <GameUi:UiLabel text="(最大1000%)" textColor="0xFFFFFF" y="3" size="20" scaleX="1" scaleY="1" x="280" />
         </e:Group>
         <e:Group y="90" x="0">
-            <GameUi:UiLabel text="初始能量：" textColor="0xFFFFFF" y="3" size="20" scaleX="1" scaleY="1" width="120"
-                            textAlign="right" />
+            <GameUi:UiLabel id="_labelInitialEnergyTitle" text="初始能量：" textColor="0xFFFFFF" y="3" size="20" scaleX="1"
+                            scaleY="1" textAlign="right" maxTextWidth="120" />
             <GameUi:UiLabel text="%" textColor="0xFFFFFF" size="20" scaleX="1" scaleY="1" x="250" y="4" />
             <GameUi:UiTextInput id="_inputInitialEnergy" width="150" x="120" y="0" anchorOffsetX="0" anchorOffsetY="0"
                                 restrict="0-9" maxChars="3">
@@ -62,8 +62,8 @@
             <GameUi:UiLabel text="(最大100%)" textColor="0xFFFFFF" y="3" size="20" scaleX="1" scaleY="1" x="280" />
         </e:Group>
         <e:Group y="130" x="0">
-            <GameUi:UiLabel text="能量增速：" textColor="0xFFFFFF" y="3" size="20" scaleX="1" scaleY="1" width="120"
-                            textAlign="right" />
+            <GameUi:UiLabel id="_labelEnergyGrowthModifierTitle" text="能量增速：" textColor="0xFFFFFF" y="3" size="20"
+                            scaleX="1" scaleY="1" textAlign="right" maxTextWidth="120" />
             <GameUi:UiLabel text="%" textColor="0xFFFFFF" size="20" scaleX="1" scaleY="1" x="250" y="4" />
             <GameUi:UiTextInput id="_inputEnergyModifier" width="150" x="120" y="0" anchorOffsetX="0" anchorOffsetY="0"
                                 restrict="0-9" maxChars="4">
@@ -81,8 +81,8 @@
     </e:Group>
     <e:Group x="450" y="50">
         <e:Group y="0" x="0">
-            <GameUi:UiLabel text="移动力加成：" textColor="0xFFFFFF" y="0" size="20" width="120" textAlign="right" x="5"
-                            scaleX="1" scaleY="1" />
+            <GameUi:UiLabel id="_labelMoveRangeTitle" text="移动力加成：" textColor="0xFFFFFF" y="0" size="20"
+                            textAlign="right" x="5" scaleX="1" scaleY="1" maxTextWidth="120" />
             <GameUi:UiButton id="_btnPrevMoveRange" label="&lt;&lt;" x="125" y="0">
                 <GameUi:skinName>
                     <e:Skin states="up,down,disabled">
@@ -105,8 +105,8 @@
                             textAlign="center" scaleX="1" scaleY="1" />
         </e:Group>
         <e:Group y="40" x="0">
-            <GameUi:UiLabel text="攻击力加成：" textColor="0xFFFFFF" y="0" size="20" width="120" textAlign="right" x="5"
-                            scaleX="1" scaleY="1" />
+            <GameUi:UiLabel id="_labelAttackTitle" text="攻击力加成：" textColor="0xFFFFFF" y="0" size="20" textAlign="right"
+                            x="5" scaleX="1" scaleY="1" maxTextWidth="120" />
             <GameUi:UiButton id="_btnPrevAttack" label="&lt;&lt;" x="125" y="0">
                 <GameUi:skinName>
                     <e:Skin states="up,down,disabled">
@@ -129,8 +129,8 @@
                             textAlign="center" scaleX="1" scaleY="1" />
         </e:Group>
         <e:Group y="80" x="0">
-            <GameUi:UiLabel text="视野加成：" textColor="0xFFFFFF" y="0" size="20" width="120" textAlign="right" x="5"
-                            scaleX="1" scaleY="1" />
+            <GameUi:UiLabel id="_labelVisionTitle" text="视野加成：" textColor="0xFFFFFF" y="0" size="20" textAlign="right"
+                            x="5" scaleX="1" scaleY="1" maxTextWidth="120" />
             <GameUi:UiButton id="_btnPrevVision" label="&lt;&lt;" x="125" y="0">
                 <GameUi:skinName>
                     <e:Skin states="up,down,disabled">
