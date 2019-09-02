@@ -1427,7 +1427,7 @@ namespace TinyWars.ConfigManager {
     const _ALL_CONFIGS          = new Map<string, ExtendedFullConfig>();
     const _TILE_OBJECT_VIEW_IDS = new Map<TileObjectType, Map<number, number>>();
     const _UNIT_VIEW_IDS        = new Map<UnitType, Map<number, number>>();
-    const _NEWEST_CO_LIST       = new Map<string, CoBasicCfg[]>();
+    const _AVAILABLE_CO_LIST    = new Map<string, CoBasicCfg[]>();
     const _CO_TIERS             = new Map<string, number[]>();
     const _CO_ID_LIST_IN_TIER   = new Map<string, Map<number, number[]>>();
     const _CUSTOM_CO_ID_LIST    = new Map<string, number[]>();
@@ -1637,37 +1637,33 @@ namespace TinyWars.ConfigManager {
         return _ALL_CONFIGS.get(version)!.CoSkill[skillId];
     }
 
-    export function getNewestCoList(version: string): CoBasicCfg[] {
-        if (!_NEWEST_CO_LIST.has(version)) {
-            const dict: { [coType: number]: number } = {};
+    export function getAvailableCoList(version: string): CoBasicCfg[] {
+        if (!_AVAILABLE_CO_LIST.has(version)) {
+            const list: CoBasicCfg[] = [];
             const cfgs = _ALL_CONFIGS.get(version)!.CoBasic;
             for (const k in cfgs || {}) {
                 const cfg = cfgs[k];
                 if (cfg.isEnabled) {
-                    const coId      = cfg.coId;
-                    const coType    = Math.floor(coId / 10000);
-                    if (!dict[coType]) {
-                        dict[coType] = coId;
-                    } else {
-                        dict[coType] = Math.max(coId, dict[coType]);
-                    }
+                    list.push(cfg);
                 }
             }
 
-            const list: CoBasicCfg[] = [];
-            for (const k in dict) {
-                list.push(getCoBasicCfg(version, dict[k]));
-            }
-            list.sort((c1, c2) => c1.name < c2.name ? -1 : 1);
-            _NEWEST_CO_LIST.set(version, list);
+            list.sort((c1, c2) => {
+                if (c1.name !== c2.name) {
+                    return c1.name < c2.name ? -1 : 1;
+                } else {
+                    return c1.tier - c2.tier;
+                }
+            });
+            _AVAILABLE_CO_LIST.set(version, list);
         }
-        return _NEWEST_CO_LIST.get(version);
+        return _AVAILABLE_CO_LIST.get(version);
     }
 
     export function getCoTiers(version: string): number[] {
         if (!_CO_TIERS.has(version)) {
             const tiers = new Set<number>();
-            for (const cfg of getNewestCoList(version)) {
+            for (const cfg of getAvailableCoList(version)) {
                 tiers.add(cfg.tier);
             }
             _CO_TIERS.set(version, Array.from(tiers).sort());
@@ -1683,7 +1679,7 @@ namespace TinyWars.ConfigManager {
         const cfgs = _CO_ID_LIST_IN_TIER.get(version);
         if (!cfgs.get(tier)) {
             const idList: number[] = [];
-            for (const cfg of getNewestCoList(version)) {
+            for (const cfg of getAvailableCoList(version)) {
                 if (cfg.tier === tier) {
                     idList.push(cfg.coId);
                 }
@@ -1696,7 +1692,7 @@ namespace TinyWars.ConfigManager {
     export function getCustomCoIdList(version: string): number[] {
         if (!_CUSTOM_CO_ID_LIST.has(version)) {
             const idList: number[] = [];
-            for (const cfg of getNewestCoList(version)) {
+            for (const cfg of getAvailableCoList(version)) {
                 if (cfg.designer !== "Intelligent Systems") {
                     idList.push(cfg.coId);
                 }

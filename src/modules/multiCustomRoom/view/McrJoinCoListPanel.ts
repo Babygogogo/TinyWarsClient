@@ -71,7 +71,7 @@ namespace TinyWars.MultiCustomRoom {
                 { ui: this._btnHelp,    callback: this._onTouchedBtnHelp },
                 { ui: this._btnBack,    callback: this._onTouchTapBtnBack },
             ];
-            this._listCo.setItemRenderer(MapNameRenderer);
+            this._listCo.setItemRenderer(CoRenderer);
             this._listPassiveSkill.setItemRenderer(PassiveSkillRenderer);
             this._listCop.setItemRenderer(ActiveSkillRenderer);
             this._listScop.setItemRenderer(ActiveSkillRenderer);
@@ -145,7 +145,7 @@ namespace TinyWars.MultiCustomRoom {
             const bannedCoIdList    = McrModel.getJoinWarRoomInfo().bannedCoIdList || [];
 
             let index = 0;
-            for (const cfg of ConfigManager.getNewestCoList(ConfigManager.getNewestConfigVersion())) {
+            for (const cfg of ConfigManager.getAvailableCoList(ConfigManager.getNewestConfigVersion())) {
                 if (bannedCoIdList.indexOf(cfg.coId) < 0) {
                     data.push({
                         coBasicCfg  : cfg,
@@ -260,7 +260,7 @@ namespace TinyWars.MultiCustomRoom {
         panel       : McrJoinCoListPanel;
     }
 
-    class MapNameRenderer extends eui.ItemRenderer {
+    class CoRenderer extends eui.ItemRenderer {
         private _btnChoose: GameUi.UiButton;
         private _btnNext  : GameUi.UiButton;
         private _labelName: GameUi.UiLabel;
@@ -278,7 +278,7 @@ namespace TinyWars.MultiCustomRoom {
             const data              = this.data as DataForCoRenderer;
             const cfg               = data.coBasicCfg;
             this.currentState       = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
-            this._labelName.text    = cfg ? cfg.name : `(${Lang.getText(Lang.Type.B0001)}CO)`;
+            this._labelName.text    = cfg ? `${cfg.name} (T${cfg.tier})` : `(${Lang.getText(Lang.Type.B0013)} CO)`;
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {

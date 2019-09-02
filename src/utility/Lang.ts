@@ -1587,7 +1587,7 @@ namespace TinyWars.Utility.Lang {
                 `09. If units with CO on board are loaded the CO zone will not appear until it is unloaded again. `,
                 `10. Only certain COs got cop and scop. `,
                 `11. CO power metre is charged when units within CO zone deal damage to enemy units. 1 HP damage is converted to 1 unit of metre charge. `,
-                `12. CO metre can also be charged when units within CO zone deal counterattack damage. The rule is same as above. `,
+                `12. CO metre can also be charged by counterattack if target enemy units are in the COZ. The rule is the same as above. `,
                 `13. Some COs can expand their CO zone, which is showed in the coz expansion chart. COZ expands by 1 tile for reaching a number in the chart. The coz cannot be expanded if the chart is "--". The coz can be expanded for 3 times if there are 3 numbers in the chart (a/b/c). `,
                 `14. The maximum amount of metre of a CO is the larger number of SCOP cost and the largest COZ expansion cost. `,
                 `15. COP/SCOP takes corresponding amount of power to activate. The power metre cannot be charged when cop/scop is active. `,

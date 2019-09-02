@@ -162,7 +162,7 @@
         </e:Group>
         <e:Group id="_groupCoNames" y="40" horizontalCenter="0" width="740">
             <e:layout>
-                <e:TileLayout orientation="rows" requestedColumnCount="5" verticalGap="10" columnAlign="justifyUsingGap" />
+                <e:TileLayout orientation="rows" requestedColumnCount="4" verticalGap="10" columnAlign="justifyUsingGap" />
             </e:layout>
         </e:Group>
         <e:layout>

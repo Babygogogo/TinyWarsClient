@@ -177,10 +177,13 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _updateLabelCoName(): void {
-            const coId              = McrModel.getJoinWarCoId();
-            this._labelCoName.text  = coId == null
-                ? `(${Lang.getText(Lang.Type.B0001)}CO)`
-                : ConfigManager.getCoBasicCfg(ConfigManager.getNewestConfigVersion(), coId).name;
+            const coId = McrModel.getJoinWarCoId();
+            if (coId == null) {
+                this._labelCoName.text = `(${Lang.getText(Lang.Type.B0013)} CO)`;
+            } else {
+                const cfg               = ConfigManager.getCoBasicCfg(ConfigManager.getNewestConfigVersion(), coId);
+                this._labelCoName.text  = `${cfg.name} (T${cfg.tier})`;
+            }
         }
 
         private async _updateListPlayer(): Promise<void> {
@@ -246,9 +249,13 @@ namespace TinyWars.MultiCustomRoom {
             this._labelIndex.text       = Helpers.getColorTextForPlayerIndex(data.playerIndex);
             this._labelNickname.text    = data.nickname || "????";
             this._labelTeam.text        = data.teamIndex != null ? Helpers.getTeamText(data.teamIndex) : "??";
-            this._labelCoName.text      = data.coId == null
-                ? (data.nickname == null ? "????" : `(${Lang.getText(Lang.Type.B0001)}CO)`)
-                : ConfigManager.getCoBasicCfg(ConfigManager.getNewestConfigVersion(), data.coId).name;
+
+            if (data.coId == null) {
+                this._labelCoName.text = data.nickname == null ? "????" : `(${Lang.getText(Lang.Type.B0013)} CO)`;
+            } else {
+                const cfg               = ConfigManager.getCoBasicCfg(ConfigManager.getNewestConfigVersion(), data.coId);
+                this._labelCoName.text  = `${cfg.name} (T${cfg.tier})`;
             }
+        }
     }
 }

@@ -350,7 +350,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _initGroupCoNames(): void {
-            for (const cfg of ConfigManager.getNewestCoList(ConfigManager.getNewestConfigVersion())) {
+            for (const cfg of ConfigManager.getAvailableCoList(ConfigManager.getNewestConfigVersion())) {
                 const renderer = new RendererForCoName();
                 renderer.setCoId(cfg.coId);
                 renderer.setIsSelected(true);
@@ -430,8 +430,10 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         public setCoId(coId: number): void {
-            this._coId              = coId;
-            this._labelName.text    = ConfigManager.getCoBasicCfg(ConfigManager.getNewestConfigVersion(), coId).name;
+            this._coId = coId;
+
+            const cfg               = ConfigManager.getCoBasicCfg(ConfigManager.getNewestConfigVersion(), coId);
+            this._labelName.text    = `${cfg.name} (T${cfg.tier})`;
         }
         public getCoId(): number {
             return this._coId;
