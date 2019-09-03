@@ -386,5 +386,24 @@ namespace TinyWars.BaseWar.BwHelpers {
                 }
             }
         }
+
+        if (cfg.selfPromotionGain) {
+            const category      = cfg.selfPromotionGain[0];
+            const modifier      = cfg.selfPromotionGain[1] * ConfigManager.UNIT_HP_NORMALIZER;
+            const maxPromotion  = ConfigManager.getUnitMaxPromotion(configVersion);
+            unitMap.forEachUnit(unit => {
+                if ((unit.getPlayerIndex() === playerIndex)                                         &&
+                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
+                ) {
+                    unit.setCurrentPromotion(Math.max(
+                        0,
+                        Math.min(
+                            maxPromotion,
+                            unit.getCurrentPromotion() + modifier
+                        ),
+                    ));
+                }
+            });
+        }
     }
 }

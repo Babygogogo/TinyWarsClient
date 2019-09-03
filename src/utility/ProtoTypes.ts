@@ -1509,6 +1509,9 @@ export declare interface ICoSkillCfg {
 
     /** CoSkillCfg indiscriminateAreaDamage */
     indiscriminateAreaDamage?: (number[]|null);
+
+    /** CoSkillCfg selfPromotionGain */
+    selfPromotionGain?: (number[]|null);
 }
 
 /** Represents a CoSkillCfg. */
@@ -1573,6 +1576,9 @@ export declare class CoSkillCfg implements ICoSkillCfg {
 
     /** CoSkillCfg indiscriminateAreaDamage. */
     public indiscriminateAreaDamage: number[];
+
+    /** CoSkillCfg selfPromotionGain. */
+    public selfPromotionGain: number[];
 
     /**
      * Creates a new CoSkillCfg instance using the specified properties.
@@ -7210,6 +7216,9 @@ export declare interface IMcwReplayInfo {
     /** McwReplayInfo nextActionId */
     nextActionId?: (number|null);
 
+    /** McwReplayInfo warEndTime */
+    warEndTime?: (number|null);
+
     /** McwReplayInfo p1UserId */
     p1UserId?: (number|null);
 
@@ -7279,6 +7288,9 @@ export declare class McwReplayInfo implements IMcwReplayInfo {
 
     /** McwReplayInfo nextActionId. */
     public nextActionId: number;
+
+    /** McwReplayInfo warEndTime. */
+    public warEndTime: number;
 
     /** McwReplayInfo p1UserId. */
     public p1UserId: number;
