@@ -185,7 +185,12 @@ namespace TinyWars.MultiCustomWar {
                 target = target.parent;
             }
 
-            this._group.x = (e.stageX >= StageManager.getStage().stageWidth / 2) ? _LEFT_X : _RIGHT_X;
+            const stageWidth = StageManager.getStage().stageWidth;
+            if (e.stageX >= stageWidth / 4 * 3) {
+                this._group.x = _LEFT_X;
+            } else if (e.stageX < stageWidth / 4) {
+                this._group.x = _RIGHT_X;
+            }
         }
     }
 }
