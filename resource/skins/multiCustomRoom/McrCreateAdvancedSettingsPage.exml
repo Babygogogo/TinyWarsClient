@@ -152,6 +152,48 @@
             <GameUi:UiLabel id="_labelVision" text="0" textColor="0xFFFFFF" y="0" size="20" x="155" width="100"
                             textAlign="center" scaleX="1" scaleY="1" />
         </e:Group>
+        <e:layout>
+            <e:VerticalLayout gap="12" />
+        </e:layout>
+    </e:Group>
+    <e:Group x="430" y="144">
+        <e:Group y="90" x="0">
+            <GameUi:UiLabel id="_labelLuckLowerLimitTitle" text="幸运下限：" textColor="0xFFFFFF" y="3" size="20" scaleX="1"
+                            scaleY="1" textAlign="right" maxTextWidth="120" />
+            <GameUi:UiLabel text="%" textColor="0xFFFFFF" size="20" scaleX="1" scaleY="1" x="190" y="4" />
+            <GameUi:UiTextInput id="_inputLuckLowerLimit" width="70" x="120" y="0" anchorOffsetX="0" anchorOffsetY="0"
+                                restrict="0-9\\-" maxChars="4">
+                <GameUi:skinName>
+                    <e:Skin width="100" height="30">
+                        <e:Image source="c08_t06_s01_f01" left="0" right="0" y="27" />
+                        <e:EditableText id="textDisplay" size="24" left="0" right="0" height="30" textColor="0xffffff" />
+                        <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0" right="0" text=""
+                                 height="30" textColor="0x808080" />
+                    </e:Skin>
+                </GameUi:skinName>
+            </GameUi:UiTextInput>
+            <GameUi:UiLabel text="(-100~100)" textColor="0xFFFFFF" y="3" size="20" scaleX="1" scaleY="1" x="220" />
+        </e:Group>
+        <e:Group y="130" x="0">
+            <GameUi:UiLabel id="_labelLuckUpperLimitTitle" text="幸运上限：" textColor="0xFFFFFF" y="3" size="20" scaleX="1"
+                            scaleY="1" textAlign="right" maxTextWidth="120" />
+            <GameUi:UiLabel text="%" textColor="0xFFFFFF" size="20" scaleX="1" scaleY="1" x="190" y="4" />
+            <GameUi:UiTextInput id="_inputLuckUpperLimit" width="70" x="120" y="0" anchorOffsetX="0" anchorOffsetY="0"
+                                restrict="0-9\\-" maxChars="4">
+                <GameUi:skinName>
+                    <e:Skin width="100" height="30">
+                        <e:Image source="c08_t06_s01_f01" left="0" right="0" y="27" />
+                        <e:EditableText id="textDisplay" size="24" left="0" right="0" height="30" textColor="0xffffff" />
+                        <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0" right="0" text=""
+                                 height="30" textColor="0x808080" />
+                    </e:Skin>
+                </GameUi:skinName>
+            </GameUi:UiTextInput>
+            <GameUi:UiLabel text="(-100~100)" textColor="0xFFFFFF" y="3" size="20" scaleX="1" scaleY="1" x="220" />
+        </e:Group>
+        <e:layout>
+            <e:VerticalLayout/>
+        </e:layout>
     </e:Group>
     <GameUi:UiLabel text="可用CO：" textColor="0xFFFFFF" y="230" size="20" x="24" />
     <e:Group y="260" horizontalCenter="0" width="740">

@@ -2,8 +2,10 @@
     "cSpell.words": [
         "attackable",
         "buildable",
+        "prng",
         "relogin",
         "scroller",
+        "seedrandom",
         "tweens"
     ]
 }

@@ -51,6 +51,8 @@ namespace TinyWars.Replay {
                 initialFund             : this.getSettingsInitialFund(),
                 initialEnergy           : this.getSettingsInitialEnergy(),
                 bannedCoIdList          : this.getSettingsBannedCoIdList(),
+                luckLowerLimit          : this.getSettingsLuckLowerLimit(),
+                luckUpperLimit          : this.getSettingsLuckUpperLimit(),
                 mapName                 : mapIndexKey.mapName,
                 mapDesigner             : mapIndexKey.mapDesigner,
                 mapVersion              : mapIndexKey.mapVersion,

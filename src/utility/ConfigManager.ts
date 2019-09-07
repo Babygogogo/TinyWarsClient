@@ -1436,9 +1436,13 @@ namespace TinyWars.ConfigManager {
     ////////////////////////////////////////////////////////////////////////////////
     // Exports.
     ////////////////////////////////////////////////////////////////////////////////
-    export const UNIT_HP_NORMALIZER = 10;
-    export const SILO_RADIUS        = 2;
-    export const SILO_DAMAGE        = 30;
+    export const UNIT_HP_NORMALIZER         = 10;
+    export const SILO_RADIUS                = 2;
+    export const SILO_DAMAGE                = 30;
+    export const DEFAULT_LUCK_LOWER_LIMIT   = 0;
+    export const DEFAULT_LUCK_UPPER_LIMIT   = 10;
+    export const MAX_LUCK_LIMIT             = 100;
+    export const MIN_LUCK_LIMIT             = -100;
 
     export function init(): void {
         NetManager.addListeners([

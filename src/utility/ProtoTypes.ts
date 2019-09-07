@@ -2926,6 +2926,12 @@ export declare interface ISerializedWar {
     /** SerializedWar bannedCoIdList */
     bannedCoIdList?: (number[]|null);
 
+    /** SerializedWar luckLowerLimit */
+    luckLowerLimit?: (number|null);
+
+    /** SerializedWar luckUpperLimit */
+    luckUpperLimit?: (number|null);
+
     /** SerializedWar nextActionId */
     nextActionId?: (number|null);
 
@@ -3010,6 +3016,12 @@ export declare class SerializedWar implements ISerializedWar {
 
     /** SerializedWar bannedCoIdList. */
     public bannedCoIdList: number[];
+
+    /** SerializedWar luckLowerLimit. */
+    public luckLowerLimit: number;
+
+    /** SerializedWar luckUpperLimit. */
+    public luckUpperLimit: number;
 
     /** SerializedWar nextActionId. */
     public nextActionId: number;
@@ -6681,6 +6693,12 @@ export declare interface IMcrWaitingInfo {
 
     /** McrWaitingInfo bannedCoIdList */
     bannedCoIdList?: (number[]|null);
+
+    /** McrWaitingInfo luckLowerLimit */
+    luckLowerLimit?: (number|null);
+
+    /** McrWaitingInfo luckUpperLimit */
+    luckUpperLimit?: (number|null);
 }
 
 /** Represents a McrWaitingInfo. */
@@ -6793,6 +6811,12 @@ export declare class McrWaitingInfo implements IMcrWaitingInfo {
 
     /** McrWaitingInfo bannedCoIdList. */
     public bannedCoIdList: number[];
+
+    /** McrWaitingInfo luckLowerLimit. */
+    public luckLowerLimit: number;
+
+    /** McrWaitingInfo luckUpperLimit. */
+    public luckUpperLimit: number;
 
     /**
      * Creates a new McrWaitingInfo instance using the specified properties.
@@ -10521,6 +10545,12 @@ export declare interface IC_McrCreateWar {
 
     /** C_McrCreateWar bannedCoIdList */
     bannedCoIdList?: (number[]|null);
+
+    /** C_McrCreateWar luckLowerLimit */
+    luckLowerLimit?: (number|null);
+
+    /** C_McrCreateWar luckUpperLimit */
+    luckUpperLimit?: (number|null);
 }
 
 /** Represents a C_McrCreateWar. */
@@ -10591,6 +10621,12 @@ export declare class C_McrCreateWar implements IC_McrCreateWar {
 
     /** C_McrCreateWar bannedCoIdList. */
     public bannedCoIdList: number[];
+
+    /** C_McrCreateWar luckLowerLimit. */
+    public luckLowerLimit: number;
+
+    /** C_McrCreateWar luckUpperLimit. */
+    public luckUpperLimit: number;
 
     /**
      * Creates a new C_McrCreateWar instance using the specified properties.

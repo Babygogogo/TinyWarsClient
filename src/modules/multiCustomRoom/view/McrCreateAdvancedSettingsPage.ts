@@ -26,6 +26,12 @@ namespace TinyWars.MultiCustomRoom {
         private _labelEnergyGrowthModifierTitle : GameUi.UiLabel;
         private _inputEnergyModifier            : GameUi.UiTextInput;
 
+        private _labelLuckLowerLimitTitle   : GameUi.UiLabel;
+        private _inputLuckLowerLimit        : GameUi.UiTextInput;
+
+        private _labelLuckUpperLimitTitle   : GameUi.UiLabel;
+        private _inputLuckUpperLimit        : GameUi.UiTextInput;
+
         private _labelMoveRangeTitle    : GameUi.UiLabel;
         private _btnPrevMoveRange       : GameUi.UiButton;
         private _btnNextMoveRange       : GameUi.UiButton;
@@ -60,6 +66,8 @@ namespace TinyWars.MultiCustomRoom {
                 { ui: this._inputIncomeModifier,    callback: this._onFocusOutInputIncomeModifier,  eventType: egret.Event.FOCUS_OUT, },
                 { ui: this._inputInitialEnergy,     callback: this._onFocusOutInputInitialEnergy,   eventType: egret.Event.FOCUS_OUT, },
                 { ui: this._inputEnergyModifier,    callback: this._onFocusOutInputEnergyModifier,  eventType: egret.Event.FOCUS_OUT, },
+                { ui: this._inputLuckLowerLimit,    callback: this._onFocusOutInputLuckLowerLimit,  eventType: egret.Event.FOCUS_OUT, },
+                { ui: this._inputLuckUpperLimit,    callback: this._onFocusOutInputLuckUpperLimit,  eventType: egret.Event.FOCUS_OUT, },
                 { ui: this._btnPrevMoveRange,       callback: this._onTouchedBtnPrevMoveRange, },
                 { ui: this._btnNextMoveRange,       callback: this._onTouchedBtnNextMoveRange, },
                 { ui: this._btnPrevAttack,          callback: this._onTouchedBtnPrevAttack, },
@@ -84,6 +92,8 @@ namespace TinyWars.MultiCustomRoom {
             this._updateInputIncomeModifier();
             this._updateInputInitialEnergy();
             this._updateInputEnergyModifier();
+            this._updateInputLuckLowerLimit();
+            this._updateInputLuckUpperLimit();
             this._updateLabelMoveRange();
             this._updateLabelAttack();
             this._updateLabelVision();
@@ -147,6 +157,30 @@ namespace TinyWars.MultiCustomRoom {
             }
             McrModel.setCreateWarEnergyGrowthModifier(modifier);
             this._updateInputEnergyModifier();
+        }
+
+        private _onFocusOutInputLuckLowerLimit(e: egret.Event): void {
+            let limit = Number(this._inputLuckLowerLimit.text);
+            if (isNaN(limit)) {
+                limit = ConfigManager.DEFAULT_LUCK_LOWER_LIMIT;
+            } else {
+                limit = Math.min(limit, ConfigManager.MAX_LUCK_LIMIT);
+                limit = Math.max(limit, ConfigManager.MIN_LUCK_LIMIT);
+            }
+            McrModel.setCreateWarLuckLowerLimit(limit);
+            this._updateInputLuckLowerLimit();
+        }
+
+        private _onFocusOutInputLuckUpperLimit(e: egret.Event): void {
+            let limit = Number(this._inputLuckUpperLimit.text);
+            if (isNaN(limit)) {
+                limit = ConfigManager.DEFAULT_LUCK_UPPER_LIMIT;
+            } else {
+                limit = Math.min(limit, ConfigManager.MAX_LUCK_LIMIT);
+                limit = Math.max(limit, ConfigManager.MIN_LUCK_LIMIT);
+            }
+            McrModel.setCreateWarLuckUpperLimit(limit);
+            this._updateInputLuckUpperLimit();
         }
 
         private _onTouchedBtnPrevMoveRange(e: egret.TouchEvent): void {
@@ -258,6 +292,8 @@ namespace TinyWars.MultiCustomRoom {
             this._labelMoveRangeTitle.text              = `${Lang.getText(Lang.Type.B0182)}: `;
             this._labelAttackTitle.text                 = `${Lang.getText(Lang.Type.B0183)}: `;
             this._labelVisionTitle.text                 = `${Lang.getText(Lang.Type.B0184)}: `;
+            this._labelLuckLowerLimitTitle.text         = `${Lang.getText(Lang.Type.B0189)}: `;
+            this._labelLuckUpperLimitTitle.text         = `${Lang.getText(Lang.Type.B0190)}: `;
         }
 
         private _updateInputInitialFund(): void {
@@ -274,6 +310,14 @@ namespace TinyWars.MultiCustomRoom {
 
         private _updateInputEnergyModifier(): void {
             this._inputEnergyModifier.text = "" + McrModel.getCreateWarEnergyGrowthModifier();
+        }
+
+        private _updateInputLuckLowerLimit(): void {
+            this._inputLuckLowerLimit.text = "" + McrModel.getCreateWarLuckLowerLimit();
+        }
+
+        private _updateInputLuckUpperLimit(): void {
+            this._inputLuckUpperLimit.text = "" + McrModel.getCreateWarLuckUpperLimit();
         }
 
         private _updateLabelMapName(): void {
