@@ -12,7 +12,7 @@ namespace TinyWars.Replay {
 
         private _isAutoReplay                   = false;
         private _checkPointIdsForNextActionId   = new Map<number, number>();
-        private _warDatasForCheckPointId        = new Map<number, SerializedWar>();
+        private _warDataListForCheckPointId     = new Map<number, SerializedWar>();
 
         public async init(data: SerializedWar): Promise<ReplayWar> {
             await super.init(data);
@@ -87,10 +87,10 @@ namespace TinyWars.Replay {
         }
 
         public getWarData(checkPointId: number): SerializedWar {
-            return this._warDatasForCheckPointId.get(checkPointId);
+            return this._warDataListForCheckPointId.get(checkPointId);
         }
         public setWarData(checkPointId: number, warData: SerializedWar): void {
-            this._warDatasForCheckPointId.set(checkPointId, warData);
+            this._warDataListForCheckPointId.set(checkPointId, warData);
         }
 
         public checkIsInEnd(): boolean {
@@ -107,7 +107,7 @@ namespace TinyWars.Replay {
 
                 await this._loadCheckPoint(checkPointId);
                 this.startRunning().startRunningView();
-                FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()})`);
+                FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
 
             } else {
                 this.setIsAutoReplay(false);
@@ -124,7 +124,7 @@ namespace TinyWars.Replay {
                 this.stopRunning();
                 await this._loadCheckPoint(checkPointId);
                 this.startRunning().startRunningView();
-                FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()})`);
+                FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
             }
         }
         public checkIsInBeginning(): boolean {
@@ -135,7 +135,7 @@ namespace TinyWars.Replay {
             this.stopRunning();
 
             await this._loadCheckPoint(this.getCheckPointId(this.getNextActionId()) - 1);
-            FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()})`);
+            FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
             this.startRunning().startRunningView();
         }
         private async _loadCheckPoint(checkPointId: number): Promise<void> {

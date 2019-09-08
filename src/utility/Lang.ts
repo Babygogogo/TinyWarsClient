@@ -1057,6 +1057,10 @@ namespace TinyWars.Utility.Lang {
             `幸运上限`,
             `Max Luck`,
         ]],
+        [Type.B0191, [
+            `回合`,
+            `Turn`,
+        ]],
 
         [Type.B1000, [
             `平原`,

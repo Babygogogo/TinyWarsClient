@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
-    <GameUi:UiImage id="_imgBg" source="bg_png"  left="0" right="0" top="0" bottom="0"/>
+    <GameUi:UiImage source="bg_png" left="0" right="0" top="0" bottom="0" />
     <e:Group left="0" top="40" bottom="0" right="200">
         <GameUi:UiZoomableComponent id="_zoomMap" left="20" right="20" top="20" bottom="20" />
         <e:Group id="_groupInfo" x="8" y="10" touchThrough="true" touchEnabled="false" touchChildren="false">
@@ -15,8 +15,8 @@
     <e:Group top="40" bottom="0" width="200" right="0">
         <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" />
-        <GameUi:UiLabel text="选择地图" y="14" bold="true" x="16" size="25" textColor="0xffffff" />
-        <GameUi:UiButton id="_btnSearch" label="查找&gt;&gt;" y="18" x="135">
+        <GameUi:UiLabel text="选择地图" y="14" bold="true" size="25" textColor="0xffffff" horizontalCenter="-30" />
+        <GameUi:UiButton id="_btnSearch" label="查找&gt;&gt;" y="18" right="10">
             <GameUi:skinName>
                 <e:Skin states="up,down,disabled">
                     <e:Image width="100%" height="100%" />
@@ -39,9 +39,9 @@
                                 </e:Skin>
                             </GameUi:skinName>
                         </GameUi:UiButton>
-                        <GameUi:UiLabel id="_labelName" text="地图名称" x="10" size="22" verticalCenter="0"
-                                        textColor.down="0x00ff00" />
-                        <GameUi:UiButton id="_btnNext" label="&gt;&gt;" x="160" verticalCenter="0" visible.up="false">
+                        <GameUi:UiLabel id="_labelName" text="地图名称" size="16" verticalCenter="0"
+                                        textColor.down="0x00ff00" x="10" maxTextWidth="150" />
+                        <GameUi:UiButton id="_btnNext" label="&gt;&gt;" verticalCenter="0" visible.up="false" right="10">
                             <e:skinName>
                                 <e:Skin states="up,down,disabled">
                                     <e:Image width="100%" height="100%" />
