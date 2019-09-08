@@ -16,7 +16,9 @@ namespace TinyWars.Utility.DamageCalculator {
 
     function getLuckValue(war: BwWar, playerIndex: number): number {
         // TODO: take skill into account.
-        return Math.floor(war.getRandomNumberGenerator()() * 11);
+        const lowerLimit    = war.getSettingsLuckLowerLimit();
+        const upperLimit    = war.getSettingsLuckUpperLimit();
+        return Math.floor(war.getRandomNumberGenerator()() * (upperLimit - lowerLimit + 1)) + lowerLimit;
     }
 
     function getAttackBonusMultiplier(war: BwWar, attacker: BwUnit, attackerGridIndex: GridIndex, target: BwUnit | BwTile, targetGridIndex: GridIndex): number {
@@ -85,11 +87,11 @@ namespace TinyWars.Utility.DamageCalculator {
                 const luckValue = ((isWithLuck) && (target.checkIsArmorAffectByLuck()))
                     ? getLuckValue(war, attacker.getPlayerIndex())
                     : 0
-                return Math.floor(
+                return Math.max(0, Math.floor(
                     (baseAttackDamage * getAttackBonusMultiplier(war, attacker, attackerGridIndex, target, targetGridIndex) + luckValue)    *
                     (Helpers.getNormalizedHp(attackerHp) / 10)                                                                              *
                     (getDefenseBonusMultiplier(war, attacker, attackerGridIndex, target, targetGridIndex))
-                );
+                ));
             }
         }
     }

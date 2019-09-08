@@ -26,18 +26,29 @@ namespace TinyWars.MultiCustomWar {
         private _labelNoCommand : GameUi.UiLabel;
         private _btnBack        : GameUi.UiButton;
 
-        private _groupInfo                  : eui.Group;
-        private _labelMapName               : GameUi.UiLabel;
-        private _labelMapDesigner           : GameUi.UiLabel;
-        private _labelWarId                 : GameUi.UiLabel;
-        private _labelTurnIndex             : GameUi.UiLabel;
-        private _labelActionId              : GameUi.UiLabel;
-        private _labelIncomeModifier        : GameUi.UiLabel;
-        private _labelEnergyGrowthModifier  : GameUi.UiLabel;
-        private _labelInitialEnergy         : GameUi.UiLabel;
-        private _labelMoveRangeModifier     : GameUi.UiLabel;
-        private _labelAttackPowerModifier   : GameUi.UiLabel;
-        private _labelVisionRangeModifier   : GameUi.UiLabel;
+        private _groupInfo                      : eui.Group;
+        private _labelMapName                   : GameUi.UiLabel;
+        private _labelMapDesigner               : GameUi.UiLabel;
+        private _labelWarId                     : GameUi.UiLabel;
+        private _labelTurnIndex                 : GameUi.UiLabel;
+        private _labelActionId                  : GameUi.UiLabel;
+        private _labelIncomeModifierTitle       : GameUi.UiLabel;
+        private _labelIncomeModifier            : GameUi.UiLabel;
+        private _labelEnergyGrowthModifierTitle : GameUi.UiLabel;
+        private _labelEnergyGrowthModifier      : GameUi.UiLabel;
+        private _labelInitialEnergyTitle        : GameUi.UiLabel;
+        private _labelInitialEnergy             : GameUi.UiLabel;
+        private _labelMoveRangeModifierTitle    : GameUi.UiLabel;
+        private _labelMoveRangeModifier         : GameUi.UiLabel;
+        private _labelAttackPowerModifierTitle  : GameUi.UiLabel;
+        private _labelAttackPowerModifier       : GameUi.UiLabel;
+        private _labelVisionRangeModifierTitle  : GameUi.UiLabel;
+        private _labelVisionRangeModifier       : GameUi.UiLabel;
+        private _labelLuckLowerLimitTitle       : GameUi.UiLabel;
+        private _labelLuckLowerLimit            : GameUi.UiLabel;
+        private _labelLuckUpperLimitTitle       : GameUi.UiLabel;
+        private _labelLuckUpperLimit            : GameUi.UiLabel;
+
         private _listPlayer                 : GameUi.UiScrollList;
 
         private _war            : McwWar;
@@ -90,6 +101,7 @@ namespace TinyWars.MultiCustomWar {
             this._playerIndex   = war.getPlayerIndexLoggedIn();
             this._menuType      = MenuType.Main;
 
+            this._updateTitles();
             this._updateView();
 
             Notify.dispatch(Notify.Type.McwWarMenuPanelOpened);
@@ -149,6 +161,17 @@ namespace TinyWars.MultiCustomWar {
             }
         }
 
+        private _updateTitles(): void {
+            this._labelIncomeModifierTitle.text         = `${Lang.getText(Lang.Type.B0179)}: `;
+            this._labelInitialEnergyTitle.text          = `${Lang.getText(Lang.Type.B0180)}: `;
+            this._labelEnergyGrowthModifierTitle.text   = `${Lang.getText(Lang.Type.B0181)}: `;
+            this._labelMoveRangeModifierTitle.text      = `${Lang.getText(Lang.Type.B0182)}: `;
+            this._labelAttackPowerModifierTitle.text    = `${Lang.getText(Lang.Type.B0183)}: `;
+            this._labelVisionRangeModifierTitle.text    = `${Lang.getText(Lang.Type.B0184)}: `;
+            this._labelLuckLowerLimitTitle.text         = `${Lang.getText(Lang.Type.B0189)}: `;
+            this._labelLuckUpperLimitTitle.text         = `${Lang.getText(Lang.Type.B0190)}: `;
+        }
+
         private _updateGroupInfo(): void {
             const war                               = this._war;
             const mapIndexKey                       = war.getMapIndexKey();
@@ -163,6 +186,8 @@ namespace TinyWars.MultiCustomWar {
             this._labelMoveRangeModifier.text       = `${war.getSettingsMoveRangeModifier()}`;
             this._labelAttackPowerModifier.text     = `${war.getSettingsAttackPowerModifier()}%`;
             this._labelVisionRangeModifier.text     = `${war.getSettingsVisionRangeModifier()}`;
+            this._labelLuckLowerLimit.text          = `${war.getSettingsLuckLowerLimit()}%`;
+            this._labelLuckUpperLimit.text          = `${war.getSettingsLuckUpperLimit()}%`;
         }
 
         private _updateListPlayer(): void {

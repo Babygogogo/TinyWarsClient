@@ -21,6 +21,8 @@ namespace TinyWars.BaseWar {
         private _initialFund            : number;
         private _initialEnergy          : number;
         private _bannedCoIdList         : number[];
+        private _luckLowerLimit         : number;
+        private _luckUpperLimit         : number;
 
         private _view                   : BwWarView;
         private _field                  : BwField;
@@ -50,6 +52,8 @@ namespace TinyWars.BaseWar {
             this._setSettingsInitialFund(data.initialFund);
             this._setSettingsInitialEnergy(data.initialEnergy);
             this._setSettingsBannedCoIdList(data.bannedCoIdList);
+            this._setSettingsLuckLowerLimit(data.luckLowerLimit);
+            this._setSettingsLuckUpperLimit(data.luckUpperLimit);
 
             this.setRemainingVotesForDraw(data.remainingVotesForDraw);
 
@@ -220,6 +224,20 @@ namespace TinyWars.BaseWar {
         }
         public getSettingsBannedCoIdList(): number[] {
             return this._bannedCoIdList;
+        }
+
+        private _setSettingsLuckLowerLimit(limit: number | null): void {
+            this._luckLowerLimit = limit == null ? ConfigManager.DEFAULT_LUCK_LOWER_LIMIT : limit;
+        }
+        public getSettingsLuckLowerLimit(): number {
+            return this._luckLowerLimit;
+        }
+
+        private _setSettingsLuckUpperLimit(limit: number | null): void {
+            this._luckUpperLimit = limit == null ? ConfigManager.DEFAULT_LUCK_UPPER_LIMIT : limit;
+        }
+        public getSettingsLuckUpperLimit(): number {
+            return this._luckUpperLimit;
         }
 
         public setRemainingVotesForDraw(votes: number | undefined): void {

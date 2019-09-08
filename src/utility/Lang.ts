@@ -1049,6 +1049,14 @@ namespace TinyWars.Utility.Lang {
             `回合限时`,
             `Boot Timer`,
         ]],
+        [Type.B0189, [
+            `幸运下限`,
+            `Min Luck`,
+        ]],
+        [Type.B0190, [
+            `幸运上限`,
+            `Max Luck`,
+        ]],
 
         [Type.B1000, [
             `平原`,

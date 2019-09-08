@@ -65,6 +65,8 @@ namespace TinyWars.MultiCustomRoom {
             attackPowerModifier : 0,
             visionRangeModifier : 0,
             bannedCoIdList      : [],
+            luckLowerLimit      : ConfigManager.DEFAULT_LUCK_LOWER_LIMIT,
+            luckUpperLimit      : ConfigManager.DEFAULT_LUCK_UPPER_LIMIT,
         };
 
         const _dataForJoinWar: DataForJoinWar = {
@@ -110,6 +112,8 @@ namespace TinyWars.MultiCustomRoom {
             setCreateWarIncomeModifier(100);
             setCreateWarInitialEnergy(0);
             setCreateWarEnergyGrowthModifier(100);
+            setCreateWarLuckLowerLimit(ConfigManager.DEFAULT_LUCK_LOWER_LIMIT);
+            setCreateWarLuckUpperLimit(ConfigManager.DEFAULT_LUCK_UPPER_LIMIT);
             setCreateWarMoveRangeModifier(DEFAULT_MOVE_RANGE_MODIFIER);
             setCreateWarAttackPowerModifier(DEFAULT_ATTACK_MODIFIER);
             setCreateWarVisionRangeModifier(DEFAULT_VISION_MODIFIER);
@@ -259,6 +263,20 @@ namespace TinyWars.MultiCustomRoom {
             const set = new Set<number>(_dataForCreateWar.bannedCoIdList);
             set.delete(coId);
             _dataForCreateWar.bannedCoIdList = Array.from(set);
+        }
+
+        export function setCreateWarLuckLowerLimit(limit: number): void {
+            _dataForCreateWar.luckLowerLimit = limit;
+        }
+        export function getCreateWarLuckLowerLimit(): number {
+            return _dataForCreateWar.luckLowerLimit;
+        }
+
+        export function setCreateWarLuckUpperLimit(limit: number): void {
+            _dataForCreateWar.luckUpperLimit = limit;
+        }
+        export function getCreateWarLuckUpperLimit(): number {
+            return _dataForCreateWar.luckUpperLimit;
         }
 
         export function setCreateWarMoveRangeModifier(modifier: number): void {
