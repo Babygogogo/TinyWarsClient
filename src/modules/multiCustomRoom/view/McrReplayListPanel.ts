@@ -177,7 +177,7 @@ namespace TinyWars.MultiCustomRoom {
                 this._zoomMap.visible = true;
 
                 const key           = data.info as Types.MapIndexKey
-                const [mapData]     = await Promise.all([TemplateMapModel.getMapData(key), TemplateMapModel.getMapDynamicInfoAsync(key)]);
+                const [mapData]     = await Promise.all([TemplateMapModel.getMapRawData(key), TemplateMapModel.getMapDynamicInfoAsync(key)]);
                 const tileMapView   = new WarMap.WarMapTileMapView();
                 tileMapView.init(mapData.mapWidth, mapData.mapHeight);
                 tileMapView.updateWithBaseViewIdArray(mapData.tileBases);

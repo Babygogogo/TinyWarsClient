@@ -24,7 +24,7 @@ namespace TinyWars.BaseWar {
         protected abstract _getViewClass(): new () => BwCursorView;
 
         public async init(mapIndexKey: Types.MapIndexKey): Promise<BwCursor> {
-            const mapData = await WarMapModel.getMapData(mapIndexKey);
+            const mapData = await WarMapModel.getMapRawData(mapIndexKey);
             this._setMapSize({ width: mapData.mapWidth, height: mapData.mapHeight });
             this.setGridIndex({ x: 0, y: 0 });
 

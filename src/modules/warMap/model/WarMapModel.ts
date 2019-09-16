@@ -5,34 +5,32 @@ namespace TinyWars.WarMap {
     import ProtoTypes       = Utility.ProtoTypes;
     import LocalStorage     = Utility.LocalStorage;
     import Notify           = Utility.Notify;
-    import MapDynamicInfo   = ProtoTypes.IMapDynamicInfo;
-    import MapIndexKey      = Types.MapIndexKey;
+    import MapMetaData      = Types.MapMetaData;
 
     export namespace WarMapModel {
-        const _ALL_DYNAMIC_INFOS    = new Map<string, MapDynamicInfo>();
-        const _ALL_DATAS            = new Map<string, Types.TemplateMap>();
+        const _META_DATA_DICT   = new Map<string, MapMetaData>();
+        const _RAW_DATA_DICT    = new Map<string, Types.MapRawData>();
 
         let _newestMapDynamicInfos: ProtoTypes.IS_GetNewestMapDynamicInfos;
 
         export function init(): void {
         }
 
-        export function getMapData(key: MapIndexKey): Promise<Types.TemplateMap | undefined> {
-            const mapUrl    = Helpers.getMapUrl(key);
-            const localData = getLocalMapData(mapUrl);
+        export function getMapRawData(mapFileName: string): Promise<Types.MapRawData | undefined> {
+            const localData = getLocalMapRawData(mapFileName);
             if (localData) {
-                return new Promise<Types.TemplateMap>((resolve, reject) => resolve(localData));
+                return new Promise<Types.MapRawData>((resolve, reject) => resolve(localData));
             } else {
-                return new Promise<Types.TemplateMap | undefined>((resolve, reject) => {
+                return new Promise<Types.MapRawData | undefined>((resolve, reject) => {
                     RES.getResByUrl(
                         mapUrl,
-                        (data: Types.TemplateMap, reqUrl: string) => {
-                            if (reqUrl === mapUrl) {
+                        (data: Types.MapRawData, reqMapFileName: string) => {
+                            if (reqMapFileName === mapFileName) {
                                 if (!data) {
                                     reject(data);
                                 } else {
-                                    LocalStorage.setMapData(mapUrl, JSON.stringify(data));
-                                    _ALL_DATAS.set(mapUrl, data);
+                                    LocalStorage.setMapRawData(mapFileName, data);
+                                    _RAW_DATA_DICT.set(mapFileName, data);
                                     resolve(data);
                                 }
                             }
@@ -52,24 +50,24 @@ namespace TinyWars.WarMap {
             return _newestMapDynamicInfos;
         }
 
-        export function updateMapDynamicInfos(infos: MapDynamicInfo[] | undefined): void {
+        export function updateMapDynamicInfos(infos: MapMetaData[] | undefined): void {
             for (const info of infos || []) {
                 updateMapDynamicInfo(info);
             }
         }
-        export function updateMapDynamicInfo(info: MapDynamicInfo): void {
-            _ALL_DYNAMIC_INFOS.set(Helpers.getMapUrl(info as MapIndexKey), info);
+        export function updateMapDynamicInfo(info: MapMetaData): void {
+            _META_DATA_DICT.set(Helpers.getMapUrl(info as MapIndexKey), info);
         }
 
-        export function getMapDynamicInfoSync(key: MapIndexKey): MapDynamicInfo | undefined {
-            return _ALL_DYNAMIC_INFOS.get(Helpers.getMapUrl(key));
+        export function getMapDynamicInfoSync(key: MapIndexKey): MapMetaData | undefined {
+            return _META_DATA_DICT.get(Helpers.getMapUrl(key));
         }
-        export function getMapDynamicInfoAsync(key: MapIndexKey): Promise<MapDynamicInfo | undefined> {
+        export function getMapDynamicInfoAsync(key: MapIndexKey): Promise<MapMetaData | undefined> {
             const info = getMapDynamicInfoSync(key);
             if (info) {
-                return new Promise<MapDynamicInfo>((resolve) => resolve(info));
+                return new Promise<MapMetaData>((resolve) => resolve(info));
             } else {
-                return new Promise<MapDynamicInfo>((resolve, reject) => {
+                return new Promise<MapMetaData>((resolve, reject) => {
                     function callbackOnSucceed(e: egret.Event): void {
                         const data = e.data as ProtoTypes.IS_GetMapDynamicInfo;
                         if (checkIsSameMapIndexKey(key, data as MapIndexKey)) {
@@ -94,18 +92,12 @@ namespace TinyWars.WarMap {
             }
         }
 
-        function getLocalMapData(mapUrl: string): Types.TemplateMap | undefined {
-            if (!_ALL_DATAS.has(mapUrl)) {
-                const data = LocalStorage.getMapData(mapUrl);
-                (data) && (_ALL_DATAS.set(mapUrl, JSON.parse(data)));
+        function getLocalMapRawData(mapFileName: string): Types.MapRawData | undefined {
+            if (!_RAW_DATA_DICT.has(mapFileName)) {
+                const data = LocalStorage.getMapRawData(mapFileName);
+                (data) && (_RAW_DATA_DICT.set(mapFileName, data));
             }
-            return _ALL_DATAS.get(mapUrl);
-        }
-
-        function checkIsSameMapIndexKey(k1: MapIndexKey, k2: MapIndexKey): boolean {
-            return (k1.mapDesigner  === k2.mapDesigner)
-                && (k1.mapName      === k2.mapName)
-                && (k1.mapVersion   === k2.mapVersion);
+            return _RAW_DATA_DICT.get(mapFileName);
         }
     }
 }

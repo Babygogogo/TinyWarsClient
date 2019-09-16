@@ -24,7 +24,7 @@ namespace TinyWars.BaseWar {
         private _war                    : BwWar;
 
         public async init(data: SerializedBwFogMap, mapIndexKey: Types.MapIndexKey): Promise<BwFogMap> {
-            const mapInfo           = await MapManager.getMapData(mapIndexKey);
+            const mapInfo           = await MapManager.getMapRawData(mapIndexKey);
             const mapSize: MapSize  = { width: mapInfo.mapWidth, height: mapInfo.mapHeight };
             this._mapsFromPaths     = createEmptyMaps<VisibilityFromPaths>(mapSize, mapInfo.playersCount);
             this._mapsFromTiles     = createEmptyMaps<number>(mapSize, mapInfo.playersCount);

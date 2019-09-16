@@ -56,7 +56,7 @@ namespace TinyWars.BaseWar {
         ];
 
         public async init(mapIndexKey: Types.MapIndexKey): Promise<BwActionPlanner> {
-            const mapData = await WarMapModel.getMapData(mapIndexKey);
+            const mapData = await WarMapModel.getMapRawData(mapIndexKey);
             this._setMapSize({ width: mapData.mapWidth, height: mapData.mapHeight });
 
             this._view = this._view || new (this._getViewClass())();

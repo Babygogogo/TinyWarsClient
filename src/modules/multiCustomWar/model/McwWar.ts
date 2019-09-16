@@ -11,7 +11,7 @@ namespace TinyWars.MultiCustomWar {
 
             this.setNextActionId(data.nextActionId);
             this._setPlayerManager(new McwPlayerManager().init(data.players));
-            this._setField(await new McwField().init(data.field, this.getConfigVersion(), this.getMapIndexKey()));
+            this._setField(await new McwField().init(data.field, this.getConfigVersion(), this.getMapFileName()));
             this._setTurnManager(new McwTurnManager().init(data.turn));
 
             this._initView();

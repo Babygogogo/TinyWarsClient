@@ -27,7 +27,7 @@ namespace TinyWars.Replay {
         }
     }
 
-    function checkShouldSerializeTile(tileData: SerializedBwTile, mapData: Types.TemplateMap, posIndex: number): boolean {
+    function checkShouldSerializeTile(tileData: SerializedBwTile, mapData: Types.MapRawData, posIndex: number): boolean {
         return (tileData.currentBuildPoint      != null)
             || (tileData.currentCapturePoint    != null)
             || (tileData.currentHp              != null)

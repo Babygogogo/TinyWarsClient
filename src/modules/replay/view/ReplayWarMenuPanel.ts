@@ -139,7 +139,7 @@ namespace TinyWars.Replay {
 
         private _updateGroupInfo(): void {
             const war                               = this._war;
-            const mapIndexKey                       = war.getMapIndexKey();
+            const mapIndexKey                       = war.getMapFileName();
             this._labelMapName.text                 = mapIndexKey.mapName;
             this._labelMapDesigner.text             = mapIndexKey.mapDesigner;
             this._labelWarId.text                   = `${war.getWarId()}`;

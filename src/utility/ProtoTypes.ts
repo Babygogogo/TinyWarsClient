@@ -1807,6 +1807,648 @@ export declare class FullConfig implements IFullConfig {
     public toJSON(): { [k: string]: any };
 }
 
+/** Properties of a MapList. */
+export declare interface IMapList {
+
+    /** MapList fullList */
+    fullList?: (IMapMetaData[]|null);
+}
+
+/** Represents a MapList. */
+export declare class MapList implements IMapList {
+
+    /**
+     * Constructs a new MapList.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IMapList);
+
+    /** MapList fullList. */
+    public fullList: IMapMetaData[];
+
+    /**
+     * Creates a new MapList instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns MapList instance
+     */
+    public static create(properties?: IMapList): MapList;
+
+    /**
+     * Encodes the specified MapList message. Does not implicitly {@link MapList.verify|verify} messages.
+     * @param message MapList message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IMapList, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified MapList message, length delimited. Does not implicitly {@link MapList.verify|verify} messages.
+     * @param message MapList message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IMapList, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a MapList message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns MapList
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): MapList;
+
+    /**
+     * Decodes a MapList message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns MapList
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): MapList;
+
+    /**
+     * Verifies a MapList message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a MapList message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns MapList
+     */
+    public static fromObject(object: { [k: string]: any }): MapList;
+
+    /**
+     * Creates a plain object from a MapList message. Also converts values to other types if specified.
+     * @param message MapList
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: MapList, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this MapList to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a MapRawData. */
+export declare interface IMapRawData {
+
+    /** MapRawData mapDesigner */
+    mapDesigner?: (string|null);
+
+    /** MapRawData mapName */
+    mapName?: (string|null);
+
+    /** MapRawData mapNameEnglish */
+    mapNameEnglish?: (string|null);
+
+    /** MapRawData mapWidth */
+    mapWidth?: (number|null);
+
+    /** MapRawData mapHeight */
+    mapHeight?: (number|null);
+
+    /** MapRawData isMultiPlayer */
+    isMultiPlayer?: (boolean|null);
+
+    /** MapRawData isSinglePlayer */
+    isSinglePlayer?: (boolean|null);
+
+    /** MapRawData playersCount */
+    playersCount?: (number|null);
+
+    /** MapRawData tileBases */
+    tileBases?: (number[]|null);
+
+    /** MapRawData tileObjects */
+    tileObjects?: (number[]|null);
+
+    /** MapRawData units */
+    units?: (number[]|null);
+}
+
+/** Represents a MapRawData. */
+export declare class MapRawData implements IMapRawData {
+
+    /**
+     * Constructs a new MapRawData.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IMapRawData);
+
+    /** MapRawData mapDesigner. */
+    public mapDesigner: string;
+
+    /** MapRawData mapName. */
+    public mapName: string;
+
+    /** MapRawData mapNameEnglish. */
+    public mapNameEnglish: string;
+
+    /** MapRawData mapWidth. */
+    public mapWidth: number;
+
+    /** MapRawData mapHeight. */
+    public mapHeight: number;
+
+    /** MapRawData isMultiPlayer. */
+    public isMultiPlayer: boolean;
+
+    /** MapRawData isSinglePlayer. */
+    public isSinglePlayer: boolean;
+
+    /** MapRawData playersCount. */
+    public playersCount: number;
+
+    /** MapRawData tileBases. */
+    public tileBases: number[];
+
+    /** MapRawData tileObjects. */
+    public tileObjects: number[];
+
+    /** MapRawData units. */
+    public units: number[];
+
+    /**
+     * Creates a new MapRawData instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns MapRawData instance
+     */
+    public static create(properties?: IMapRawData): MapRawData;
+
+    /**
+     * Encodes the specified MapRawData message. Does not implicitly {@link MapRawData.verify|verify} messages.
+     * @param message MapRawData message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IMapRawData, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified MapRawData message, length delimited. Does not implicitly {@link MapRawData.verify|verify} messages.
+     * @param message MapRawData message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IMapRawData, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a MapRawData message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns MapRawData
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): MapRawData;
+
+    /**
+     * Decodes a MapRawData message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns MapRawData
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): MapRawData;
+
+    /**
+     * Verifies a MapRawData message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a MapRawData message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns MapRawData
+     */
+    public static fromObject(object: { [k: string]: any }): MapRawData;
+
+    /**
+     * Creates a plain object from a MapRawData message. Also converts values to other types if specified.
+     * @param message MapRawData
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: MapRawData, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this MapRawData to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a MapMetaData. */
+export declare interface IMapMetaData {
+
+    /** MapMetaData mapFileName */
+    mapFileName?: (string|null);
+
+    /** MapMetaData mapDesigner */
+    mapDesigner?: (string|null);
+
+    /** MapMetaData mapName */
+    mapName?: (string|null);
+
+    /** MapMetaData mapNameEnglish */
+    mapNameEnglish?: (string|null);
+
+    /** MapMetaData mapWidth */
+    mapWidth?: (number|null);
+
+    /** MapMetaData mapHeight */
+    mapHeight?: (number|null);
+
+    /** MapMetaData playersCount */
+    playersCount?: (number|null);
+
+    /** MapMetaData isEnabledForMultiCustomWar */
+    isEnabledForMultiCustomWar?: (boolean|null);
+
+    /** MapMetaData isEnabledForWarRoom */
+    isEnabledForWarRoom?: (boolean|null);
+}
+
+/** Represents a MapMetaData. */
+export declare class MapMetaData implements IMapMetaData {
+
+    /**
+     * Constructs a new MapMetaData.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IMapMetaData);
+
+    /** MapMetaData mapFileName. */
+    public mapFileName: string;
+
+    /** MapMetaData mapDesigner. */
+    public mapDesigner: string;
+
+    /** MapMetaData mapName. */
+    public mapName: string;
+
+    /** MapMetaData mapNameEnglish. */
+    public mapNameEnglish: string;
+
+    /** MapMetaData mapWidth. */
+    public mapWidth: number;
+
+    /** MapMetaData mapHeight. */
+    public mapHeight: number;
+
+    /** MapMetaData playersCount. */
+    public playersCount: number;
+
+    /** MapMetaData isEnabledForMultiCustomWar. */
+    public isEnabledForMultiCustomWar: boolean;
+
+    /** MapMetaData isEnabledForWarRoom. */
+    public isEnabledForWarRoom: boolean;
+
+    /**
+     * Creates a new MapMetaData instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns MapMetaData instance
+     */
+    public static create(properties?: IMapMetaData): MapMetaData;
+
+    /**
+     * Encodes the specified MapMetaData message. Does not implicitly {@link MapMetaData.verify|verify} messages.
+     * @param message MapMetaData message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IMapMetaData, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified MapMetaData message, length delimited. Does not implicitly {@link MapMetaData.verify|verify} messages.
+     * @param message MapMetaData message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IMapMetaData, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a MapMetaData message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns MapMetaData
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): MapMetaData;
+
+    /**
+     * Decodes a MapMetaData message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns MapMetaData
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): MapMetaData;
+
+    /**
+     * Verifies a MapMetaData message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a MapMetaData message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns MapMetaData
+     */
+    public static fromObject(object: { [k: string]: any }): MapMetaData;
+
+    /**
+     * Creates a plain object from a MapMetaData message. Also converts values to other types if specified.
+     * @param message MapMetaData
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: MapMetaData, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this MapMetaData to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a MapStatisticsData. */
+export declare interface IMapStatisticsData {
+
+    /** MapStatisticsData mapFileName */
+    mapFileName?: (string|null);
+
+    /** MapStatisticsData rating */
+    rating?: (number|null);
+
+    /** MapStatisticsData mcwPlayedTimes */
+    mcwPlayedTimes?: (number|null);
+
+    /** MapStatisticsData mcwTotalTurns */
+    mcwTotalTurns?: (number|null);
+
+    /** MapStatisticsData mcwP1Wins */
+    mcwP1Wins?: (number|null);
+
+    /** MapStatisticsData mcwP1Loses */
+    mcwP1Loses?: (number|null);
+
+    /** MapStatisticsData mcwP1Draws */
+    mcwP1Draws?: (number|null);
+
+    /** MapStatisticsData mcwP2Wins */
+    mcwP2Wins?: (number|null);
+
+    /** MapStatisticsData mcwP2Loses */
+    mcwP2Loses?: (number|null);
+
+    /** MapStatisticsData mcwP2Draws */
+    mcwP2Draws?: (number|null);
+
+    /** MapStatisticsData mcwP3Wins */
+    mcwP3Wins?: (number|null);
+
+    /** MapStatisticsData mcwP3Loses */
+    mcwP3Loses?: (number|null);
+
+    /** MapStatisticsData mcwP3Draws */
+    mcwP3Draws?: (number|null);
+
+    /** MapStatisticsData mcwP4Wins */
+    mcwP4Wins?: (number|null);
+
+    /** MapStatisticsData mcwP4Loses */
+    mcwP4Loses?: (number|null);
+
+    /** MapStatisticsData mcwP4Draws */
+    mcwP4Draws?: (number|null);
+
+    /** MapStatisticsData rankPlayedTimes */
+    rankPlayedTimes?: (number|null);
+
+    /** MapStatisticsData rankTotalTurns */
+    rankTotalTurns?: (number|null);
+
+    /** MapStatisticsData rankP1Wins */
+    rankP1Wins?: (number|null);
+
+    /** MapStatisticsData rankP1Loses */
+    rankP1Loses?: (number|null);
+
+    /** MapStatisticsData rankP1Draws */
+    rankP1Draws?: (number|null);
+
+    /** MapStatisticsData rankP2Wins */
+    rankP2Wins?: (number|null);
+
+    /** MapStatisticsData rankP2Loses */
+    rankP2Loses?: (number|null);
+
+    /** MapStatisticsData rankP2Draws */
+    rankP2Draws?: (number|null);
+
+    /** MapStatisticsData rankP3Wins */
+    rankP3Wins?: (number|null);
+
+    /** MapStatisticsData rankP3Loses */
+    rankP3Loses?: (number|null);
+
+    /** MapStatisticsData rankP3Draws */
+    rankP3Draws?: (number|null);
+
+    /** MapStatisticsData rankP4Wins */
+    rankP4Wins?: (number|null);
+
+    /** MapStatisticsData rankP4Loses */
+    rankP4Loses?: (number|null);
+
+    /** MapStatisticsData rankP4Draws */
+    rankP4Draws?: (number|null);
+}
+
+/** Represents a MapStatisticsData. */
+export declare class MapStatisticsData implements IMapStatisticsData {
+
+    /**
+     * Constructs a new MapStatisticsData.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IMapStatisticsData);
+
+    /** MapStatisticsData mapFileName. */
+    public mapFileName: string;
+
+    /** MapStatisticsData rating. */
+    public rating: number;
+
+    /** MapStatisticsData mcwPlayedTimes. */
+    public mcwPlayedTimes: number;
+
+    /** MapStatisticsData mcwTotalTurns. */
+    public mcwTotalTurns: number;
+
+    /** MapStatisticsData mcwP1Wins. */
+    public mcwP1Wins: number;
+
+    /** MapStatisticsData mcwP1Loses. */
+    public mcwP1Loses: number;
+
+    /** MapStatisticsData mcwP1Draws. */
+    public mcwP1Draws: number;
+
+    /** MapStatisticsData mcwP2Wins. */
+    public mcwP2Wins: number;
+
+    /** MapStatisticsData mcwP2Loses. */
+    public mcwP2Loses: number;
+
+    /** MapStatisticsData mcwP2Draws. */
+    public mcwP2Draws: number;
+
+    /** MapStatisticsData mcwP3Wins. */
+    public mcwP3Wins: number;
+
+    /** MapStatisticsData mcwP3Loses. */
+    public mcwP3Loses: number;
+
+    /** MapStatisticsData mcwP3Draws. */
+    public mcwP3Draws: number;
+
+    /** MapStatisticsData mcwP4Wins. */
+    public mcwP4Wins: number;
+
+    /** MapStatisticsData mcwP4Loses. */
+    public mcwP4Loses: number;
+
+    /** MapStatisticsData mcwP4Draws. */
+    public mcwP4Draws: number;
+
+    /** MapStatisticsData rankPlayedTimes. */
+    public rankPlayedTimes: number;
+
+    /** MapStatisticsData rankTotalTurns. */
+    public rankTotalTurns: number;
+
+    /** MapStatisticsData rankP1Wins. */
+    public rankP1Wins: number;
+
+    /** MapStatisticsData rankP1Loses. */
+    public rankP1Loses: number;
+
+    /** MapStatisticsData rankP1Draws. */
+    public rankP1Draws: number;
+
+    /** MapStatisticsData rankP2Wins. */
+    public rankP2Wins: number;
+
+    /** MapStatisticsData rankP2Loses. */
+    public rankP2Loses: number;
+
+    /** MapStatisticsData rankP2Draws. */
+    public rankP2Draws: number;
+
+    /** MapStatisticsData rankP3Wins. */
+    public rankP3Wins: number;
+
+    /** MapStatisticsData rankP3Loses. */
+    public rankP3Loses: number;
+
+    /** MapStatisticsData rankP3Draws. */
+    public rankP3Draws: number;
+
+    /** MapStatisticsData rankP4Wins. */
+    public rankP4Wins: number;
+
+    /** MapStatisticsData rankP4Loses. */
+    public rankP4Loses: number;
+
+    /** MapStatisticsData rankP4Draws. */
+    public rankP4Draws: number;
+
+    /**
+     * Creates a new MapStatisticsData instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns MapStatisticsData instance
+     */
+    public static create(properties?: IMapStatisticsData): MapStatisticsData;
+
+    /**
+     * Encodes the specified MapStatisticsData message. Does not implicitly {@link MapStatisticsData.verify|verify} messages.
+     * @param message MapStatisticsData message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IMapStatisticsData, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified MapStatisticsData message, length delimited. Does not implicitly {@link MapStatisticsData.verify|verify} messages.
+     * @param message MapStatisticsData message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IMapStatisticsData, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a MapStatisticsData message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns MapStatisticsData
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): MapStatisticsData;
+
+    /**
+     * Decodes a MapStatisticsData message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns MapStatisticsData
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): MapStatisticsData;
+
+    /**
+     * Verifies a MapStatisticsData message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a MapStatisticsData message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns MapStatisticsData
+     */
+    public static fromObject(object: { [k: string]: any }): MapStatisticsData;
+
+    /**
+     * Creates a plain object from a MapStatisticsData message. Also converts values to other types if specified.
+     * @param message MapStatisticsData
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: MapStatisticsData, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this MapStatisticsData to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
 /** Properties of a SerializedWarTile. */
 export declare interface ISerializedWarTile {
 
@@ -2878,14 +3520,8 @@ export declare interface ISerializedWar {
     /** SerializedWar configVersion */
     configVersion?: (string|null);
 
-    /** SerializedWar mapName */
-    mapName?: (string|null);
-
-    /** SerializedWar mapDesigner */
-    mapDesigner?: (string|null);
-
-    /** SerializedWar mapVersion */
-    mapVersion?: (number|null);
+    /** SerializedWar mapFileName */
+    mapFileName?: (string|null);
 
     /** SerializedWar warName */
     warName?: (string|null);
@@ -2969,14 +3605,8 @@ export declare class SerializedWar implements ISerializedWar {
     /** SerializedWar configVersion. */
     public configVersion: string;
 
-    /** SerializedWar mapName. */
-    public mapName: string;
-
-    /** SerializedWar mapDesigner. */
-    public mapDesigner: string;
-
-    /** SerializedWar mapVersion. */
-    public mapVersion: number;
+    /** SerializedWar mapFileName. */
+    public mapFileName: string;
 
     /** SerializedWar warName. */
     public warName: string;
@@ -6271,132 +6901,6 @@ export declare class DropDestination implements IDropDestination {
     public toJSON(): { [k: string]: any };
 }
 
-/** Properties of a MapDynamicInfo. */
-export declare interface IMapDynamicInfo {
-
-    /** MapDynamicInfo mapName */
-    mapName?: (string|null);
-
-    /** MapDynamicInfo mapDesigner */
-    mapDesigner?: (string|null);
-
-    /** MapDynamicInfo mapVersion */
-    mapVersion?: (number|null);
-
-    /** MapDynamicInfo playersCount */
-    playersCount?: (number|null);
-
-    /** MapDynamicInfo rating */
-    rating?: (number|null);
-
-    /** MapDynamicInfo mcwPlayedTimes */
-    mcwPlayedTimes?: (number|null);
-
-    /** MapDynamicInfo rankPlayedTimes */
-    rankPlayedTimes?: (number|null);
-}
-
-/** Represents a MapDynamicInfo. */
-export declare class MapDynamicInfo implements IMapDynamicInfo {
-
-    /**
-     * Constructs a new MapDynamicInfo.
-     * @param [properties] Properties to set
-     */
-    constructor(properties?: IMapDynamicInfo);
-
-    /** MapDynamicInfo mapName. */
-    public mapName: string;
-
-    /** MapDynamicInfo mapDesigner. */
-    public mapDesigner: string;
-
-    /** MapDynamicInfo mapVersion. */
-    public mapVersion: number;
-
-    /** MapDynamicInfo playersCount. */
-    public playersCount: number;
-
-    /** MapDynamicInfo rating. */
-    public rating: number;
-
-    /** MapDynamicInfo mcwPlayedTimes. */
-    public mcwPlayedTimes: number;
-
-    /** MapDynamicInfo rankPlayedTimes. */
-    public rankPlayedTimes: number;
-
-    /**
-     * Creates a new MapDynamicInfo instance using the specified properties.
-     * @param [properties] Properties to set
-     * @returns MapDynamicInfo instance
-     */
-    public static create(properties?: IMapDynamicInfo): MapDynamicInfo;
-
-    /**
-     * Encodes the specified MapDynamicInfo message. Does not implicitly {@link MapDynamicInfo.verify|verify} messages.
-     * @param message MapDynamicInfo message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encode(message: IMapDynamicInfo, writer?: protobuf.Writer): protobuf.Writer;
-
-    /**
-     * Encodes the specified MapDynamicInfo message, length delimited. Does not implicitly {@link MapDynamicInfo.verify|verify} messages.
-     * @param message MapDynamicInfo message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encodeDelimited(message: IMapDynamicInfo, writer?: protobuf.Writer): protobuf.Writer;
-
-    /**
-     * Decodes a MapDynamicInfo message from the specified reader or buffer.
-     * @param reader Reader or buffer to decode from
-     * @param [length] Message length if known beforehand
-     * @returns MapDynamicInfo
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): MapDynamicInfo;
-
-    /**
-     * Decodes a MapDynamicInfo message from the specified reader or buffer, length delimited.
-     * @param reader Reader or buffer to decode from
-     * @returns MapDynamicInfo
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): MapDynamicInfo;
-
-    /**
-     * Verifies a MapDynamicInfo message.
-     * @param message Plain object to verify
-     * @returns `null` if valid, otherwise the reason why it is not
-     */
-    public static verify(message: { [k: string]: any }): (string|null);
-
-    /**
-     * Creates a MapDynamicInfo message from a plain object. Also converts values to their respective internal types.
-     * @param object Plain object
-     * @returns MapDynamicInfo
-     */
-    public static fromObject(object: { [k: string]: any }): MapDynamicInfo;
-
-    /**
-     * Creates a plain object from a MapDynamicInfo message. Also converts values to other types if specified.
-     * @param message MapDynamicInfo
-     * @param [options] Conversion options
-     * @returns Plain object
-     */
-    public static toObject(message: MapDynamicInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-    /**
-     * Converts this MapDynamicInfo to JSON.
-     * @returns JSON object
-     */
-    public toJSON(): { [k: string]: any };
-}
-
 /** Properties of a SeedRandomState. */
 export declare interface ISeedRandomState {
 
@@ -6595,14 +7099,8 @@ export declare interface IMcrWaitingInfo {
     /** McrWaitingInfo id */
     id?: (number|null);
 
-    /** McrWaitingInfo mapName */
-    mapName?: (string|null);
-
-    /** McrWaitingInfo mapDesigner */
-    mapDesigner?: (string|null);
-
-    /** McrWaitingInfo mapVersion */
-    mapVersion?: (number|null);
+    /** McrWaitingInfo mapFileName */
+    mapFileName?: (string|null);
 
     /** McrWaitingInfo warName */
     warName?: (string|null);
@@ -6713,14 +7211,8 @@ export declare class McrWaitingInfo implements IMcrWaitingInfo {
     /** McrWaitingInfo id. */
     public id: number;
 
-    /** McrWaitingInfo mapName. */
-    public mapName: string;
-
-    /** McrWaitingInfo mapDesigner. */
-    public mapDesigner: string;
-
-    /** McrWaitingInfo mapVersion. */
-    public mapVersion: number;
+    /** McrWaitingInfo mapFileName. */
+    public mapFileName: string;
 
     /** McrWaitingInfo warName. */
     public warName: string;
@@ -6898,14 +7390,8 @@ export declare interface IMcwOngoingDetail {
     /** McwOngoingDetail configVersion */
     configVersion?: (string|null);
 
-    /** McwOngoingDetail mapName */
-    mapName?: (string|null);
-
-    /** McwOngoingDetail mapDesigner */
-    mapDesigner?: (string|null);
-
-    /** McwOngoingDetail mapVersion */
-    mapVersion?: (number|null);
+    /** McwOngoingDetail mapFileName */
+    mapFileName?: (string|null);
 
     /** McwOngoingDetail warName */
     warName?: (string|null);
@@ -7028,14 +7514,8 @@ export declare class McwOngoingDetail implements IMcwOngoingDetail {
     /** McwOngoingDetail configVersion. */
     public configVersion: string;
 
-    /** McwOngoingDetail mapName. */
-    public mapName: string;
-
-    /** McwOngoingDetail mapDesigner. */
-    public mapDesigner: string;
-
-    /** McwOngoingDetail mapVersion. */
-    public mapVersion: number;
+    /** McwOngoingDetail mapFileName. */
+    public mapFileName: string;
 
     /** McwOngoingDetail warName. */
     public warName: string;
@@ -7222,14 +7702,8 @@ export declare interface IMcwReplayInfo {
     /** McwReplayInfo configVersion */
     configVersion?: (string|null);
 
-    /** McwReplayInfo mapName */
-    mapName?: (string|null);
-
-    /** McwReplayInfo mapDesigner */
-    mapDesigner?: (string|null);
-
-    /** McwReplayInfo mapVersion */
-    mapVersion?: (number|null);
+    /** McwReplayInfo mapFileName */
+    mapFileName?: (string|null);
 
     /** McwReplayInfo hasFog */
     hasFog?: (number|null);
@@ -7295,14 +7769,8 @@ export declare class McwReplayInfo implements IMcwReplayInfo {
     /** McwReplayInfo configVersion. */
     public configVersion: string;
 
-    /** McwReplayInfo mapName. */
-    public mapName: string;
-
-    /** McwReplayInfo mapDesigner. */
-    public mapDesigner: string;
-
-    /** McwReplayInfo mapVersion. */
-    public mapVersion: number;
+    /** McwReplayInfo mapFileName. */
+    public mapFileName: string;
 
     /** McwReplayInfo hasFog. */
     public hasFog: number;
@@ -7549,20 +8017,20 @@ export declare interface IMessageContainer {
     /** MessageContainer S_Error */
     S_Error?: (IS_Error|null);
 
-    /** MessageContainer C_GetNewestMapDynamicInfos */
-    C_GetNewestMapDynamicInfos?: (IC_GetNewestMapDynamicInfos|null);
+    /** MessageContainer C_GetMapList */
+    C_GetMapList?: (IC_GetMapList|null);
 
-    /** MessageContainer S_GetNewestMapDynamicInfos */
-    S_GetNewestMapDynamicInfos?: (IS_GetNewestMapDynamicInfos|null);
+    /** MessageContainer S_GetMapList */
+    S_GetMapList?: (IS_GetMapList|null);
 
     /** MessageContainer S_NewestConfigVersion */
     S_NewestConfigVersion?: (IS_NewestConfigVersion|null);
 
-    /** MessageContainer C_GetMapDynamicInfo */
-    C_GetMapDynamicInfo?: (IC_GetMapDynamicInfo|null);
+    /** MessageContainer C_GetMapStatisticsData */
+    C_GetMapStatisticsData?: (IC_GetMapStatisticsData|null);
 
-    /** MessageContainer S_GetMapDynamicInfo */
-    S_GetMapDynamicInfo?: (IS_GetMapDynamicInfo|null);
+    /** MessageContainer S_GetMapStatisticsData */
+    S_GetMapStatisticsData?: (IS_GetMapStatisticsData|null);
 
     /** MessageContainer S_ServerDisconnect */
     S_ServerDisconnect?: (IS_ServerDisconnect|null);
@@ -7814,20 +8282,20 @@ export declare class MessageContainer implements IMessageContainer {
     /** MessageContainer S_Error. */
     public S_Error?: (IS_Error|null);
 
-    /** MessageContainer C_GetNewestMapDynamicInfos. */
-    public C_GetNewestMapDynamicInfos?: (IC_GetNewestMapDynamicInfos|null);
+    /** MessageContainer C_GetMapList. */
+    public C_GetMapList?: (IC_GetMapList|null);
 
-    /** MessageContainer S_GetNewestMapDynamicInfos. */
-    public S_GetNewestMapDynamicInfos?: (IS_GetNewestMapDynamicInfos|null);
+    /** MessageContainer S_GetMapList. */
+    public S_GetMapList?: (IS_GetMapList|null);
 
     /** MessageContainer S_NewestConfigVersion. */
     public S_NewestConfigVersion?: (IS_NewestConfigVersion|null);
 
-    /** MessageContainer C_GetMapDynamicInfo. */
-    public C_GetMapDynamicInfo?: (IC_GetMapDynamicInfo|null);
+    /** MessageContainer C_GetMapStatisticsData. */
+    public C_GetMapStatisticsData?: (IC_GetMapStatisticsData|null);
 
-    /** MessageContainer S_GetMapDynamicInfo. */
-    public S_GetMapDynamicInfo?: (IS_GetMapDynamicInfo|null);
+    /** MessageContainer S_GetMapStatisticsData. */
+    public S_GetMapStatisticsData?: (IS_GetMapStatisticsData|null);
 
     /** MessageContainer S_ServerDisconnect. */
     public S_ServerDisconnect?: (IS_ServerDisconnect|null);
@@ -9013,217 +9481,181 @@ export declare class S_Error implements IS_Error {
     public toJSON(): { [k: string]: any };
 }
 
-/** Properties of a C_GetNewestMapDynamicInfos. */
-export declare interface IC_GetNewestMapDynamicInfos {
-
-    /** C_GetNewestMapDynamicInfos mapName */
-    mapName?: (string|null);
-
-    /** C_GetNewestMapDynamicInfos mapDesigner */
-    mapDesigner?: (string|null);
-
-    /** C_GetNewestMapDynamicInfos playersCount */
-    playersCount?: (number|null);
-
-    /** C_GetNewestMapDynamicInfos minRating */
-    minRating?: (number|null);
-
-    /** C_GetNewestMapDynamicInfos minPlayedTimes */
-    minPlayedTimes?: (number|null);
-
-    /** C_GetNewestMapDynamicInfos isMultiPlayer */
-    isMultiPlayer?: (boolean|null);
+/** Properties of a C_GetMapList. */
+export declare interface IC_GetMapList {
 }
 
-/** Represents a C_GetNewestMapDynamicInfos. */
-export declare class C_GetNewestMapDynamicInfos implements IC_GetNewestMapDynamicInfos {
+/** Represents a C_GetMapList. */
+export declare class C_GetMapList implements IC_GetMapList {
 
     /**
-     * Constructs a new C_GetNewestMapDynamicInfos.
+     * Constructs a new C_GetMapList.
      * @param [properties] Properties to set
      */
-    constructor(properties?: IC_GetNewestMapDynamicInfos);
-
-    /** C_GetNewestMapDynamicInfos mapName. */
-    public mapName: string;
-
-    /** C_GetNewestMapDynamicInfos mapDesigner. */
-    public mapDesigner: string;
-
-    /** C_GetNewestMapDynamicInfos playersCount. */
-    public playersCount: number;
-
-    /** C_GetNewestMapDynamicInfos minRating. */
-    public minRating: number;
-
-    /** C_GetNewestMapDynamicInfos minPlayedTimes. */
-    public minPlayedTimes: number;
-
-    /** C_GetNewestMapDynamicInfos isMultiPlayer. */
-    public isMultiPlayer: boolean;
+    constructor(properties?: IC_GetMapList);
 
     /**
-     * Creates a new C_GetNewestMapDynamicInfos instance using the specified properties.
+     * Creates a new C_GetMapList instance using the specified properties.
      * @param [properties] Properties to set
-     * @returns C_GetNewestMapDynamicInfos instance
+     * @returns C_GetMapList instance
      */
-    public static create(properties?: IC_GetNewestMapDynamicInfos): C_GetNewestMapDynamicInfos;
+    public static create(properties?: IC_GetMapList): C_GetMapList;
 
     /**
-     * Encodes the specified C_GetNewestMapDynamicInfos message. Does not implicitly {@link C_GetNewestMapDynamicInfos.verify|verify} messages.
-     * @param message C_GetNewestMapDynamicInfos message or plain object to encode
+     * Encodes the specified C_GetMapList message. Does not implicitly {@link C_GetMapList.verify|verify} messages.
+     * @param message C_GetMapList message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encode(message: IC_GetNewestMapDynamicInfos, writer?: protobuf.Writer): protobuf.Writer;
+    public static encode(message: IC_GetMapList, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Encodes the specified C_GetNewestMapDynamicInfos message, length delimited. Does not implicitly {@link C_GetNewestMapDynamicInfos.verify|verify} messages.
-     * @param message C_GetNewestMapDynamicInfos message or plain object to encode
+     * Encodes the specified C_GetMapList message, length delimited. Does not implicitly {@link C_GetMapList.verify|verify} messages.
+     * @param message C_GetMapList message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encodeDelimited(message: IC_GetNewestMapDynamicInfos, writer?: protobuf.Writer): protobuf.Writer;
+    public static encodeDelimited(message: IC_GetMapList, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Decodes a C_GetNewestMapDynamicInfos message from the specified reader or buffer.
+     * Decodes a C_GetMapList message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
-     * @returns C_GetNewestMapDynamicInfos
+     * @returns C_GetMapList
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_GetNewestMapDynamicInfos;
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_GetMapList;
 
     /**
-     * Decodes a C_GetNewestMapDynamicInfos message from the specified reader or buffer, length delimited.
+     * Decodes a C_GetMapList message from the specified reader or buffer, length delimited.
      * @param reader Reader or buffer to decode from
-     * @returns C_GetNewestMapDynamicInfos
+     * @returns C_GetMapList
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_GetNewestMapDynamicInfos;
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_GetMapList;
 
     /**
-     * Verifies a C_GetNewestMapDynamicInfos message.
+     * Verifies a C_GetMapList message.
      * @param message Plain object to verify
      * @returns `null` if valid, otherwise the reason why it is not
      */
     public static verify(message: { [k: string]: any }): (string|null);
 
     /**
-     * Creates a C_GetNewestMapDynamicInfos message from a plain object. Also converts values to their respective internal types.
+     * Creates a C_GetMapList message from a plain object. Also converts values to their respective internal types.
      * @param object Plain object
-     * @returns C_GetNewestMapDynamicInfos
+     * @returns C_GetMapList
      */
-    public static fromObject(object: { [k: string]: any }): C_GetNewestMapDynamicInfos;
+    public static fromObject(object: { [k: string]: any }): C_GetMapList;
 
     /**
-     * Creates a plain object from a C_GetNewestMapDynamicInfos message. Also converts values to other types if specified.
-     * @param message C_GetNewestMapDynamicInfos
+     * Creates a plain object from a C_GetMapList message. Also converts values to other types if specified.
+     * @param message C_GetMapList
      * @param [options] Conversion options
      * @returns Plain object
      */
-    public static toObject(message: C_GetNewestMapDynamicInfos, options?: protobuf.IConversionOptions): { [k: string]: any };
+    public static toObject(message: C_GetMapList, options?: protobuf.IConversionOptions): { [k: string]: any };
 
     /**
-     * Converts this C_GetNewestMapDynamicInfos to JSON.
+     * Converts this C_GetMapList to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };
 }
 
-/** Properties of a S_GetNewestMapDynamicInfos. */
-export declare interface IS_GetNewestMapDynamicInfos {
+/** Properties of a S_GetMapList. */
+export declare interface IS_GetMapList {
 
-    /** S_GetNewestMapDynamicInfos errorCode */
+    /** S_GetMapList errorCode */
     errorCode?: (number|null);
 
-    /** S_GetNewestMapDynamicInfos mapInfos */
-    mapInfos?: (IMapDynamicInfo[]|null);
+    /** S_GetMapList mapList */
+    mapList?: (IMapList|null);
 }
 
-/** Represents a S_GetNewestMapDynamicInfos. */
-export declare class S_GetNewestMapDynamicInfos implements IS_GetNewestMapDynamicInfos {
+/** Represents a S_GetMapList. */
+export declare class S_GetMapList implements IS_GetMapList {
 
     /**
-     * Constructs a new S_GetNewestMapDynamicInfos.
+     * Constructs a new S_GetMapList.
      * @param [properties] Properties to set
      */
-    constructor(properties?: IS_GetNewestMapDynamicInfos);
+    constructor(properties?: IS_GetMapList);
 
-    /** S_GetNewestMapDynamicInfos errorCode. */
+    /** S_GetMapList errorCode. */
     public errorCode: number;
 
-    /** S_GetNewestMapDynamicInfos mapInfos. */
-    public mapInfos: IMapDynamicInfo[];
+    /** S_GetMapList mapList. */
+    public mapList?: (IMapList|null);
 
     /**
-     * Creates a new S_GetNewestMapDynamicInfos instance using the specified properties.
+     * Creates a new S_GetMapList instance using the specified properties.
      * @param [properties] Properties to set
-     * @returns S_GetNewestMapDynamicInfos instance
+     * @returns S_GetMapList instance
      */
-    public static create(properties?: IS_GetNewestMapDynamicInfos): S_GetNewestMapDynamicInfos;
+    public static create(properties?: IS_GetMapList): S_GetMapList;
 
     /**
-     * Encodes the specified S_GetNewestMapDynamicInfos message. Does not implicitly {@link S_GetNewestMapDynamicInfos.verify|verify} messages.
-     * @param message S_GetNewestMapDynamicInfos message or plain object to encode
+     * Encodes the specified S_GetMapList message. Does not implicitly {@link S_GetMapList.verify|verify} messages.
+     * @param message S_GetMapList message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encode(message: IS_GetNewestMapDynamicInfos, writer?: protobuf.Writer): protobuf.Writer;
+    public static encode(message: IS_GetMapList, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Encodes the specified S_GetNewestMapDynamicInfos message, length delimited. Does not implicitly {@link S_GetNewestMapDynamicInfos.verify|verify} messages.
-     * @param message S_GetNewestMapDynamicInfos message or plain object to encode
+     * Encodes the specified S_GetMapList message, length delimited. Does not implicitly {@link S_GetMapList.verify|verify} messages.
+     * @param message S_GetMapList message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encodeDelimited(message: IS_GetNewestMapDynamicInfos, writer?: protobuf.Writer): protobuf.Writer;
+    public static encodeDelimited(message: IS_GetMapList, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Decodes a S_GetNewestMapDynamicInfos message from the specified reader or buffer.
+     * Decodes a S_GetMapList message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
-     * @returns S_GetNewestMapDynamicInfos
+     * @returns S_GetMapList
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_GetNewestMapDynamicInfos;
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_GetMapList;
 
     /**
-     * Decodes a S_GetNewestMapDynamicInfos message from the specified reader or buffer, length delimited.
+     * Decodes a S_GetMapList message from the specified reader or buffer, length delimited.
      * @param reader Reader or buffer to decode from
-     * @returns S_GetNewestMapDynamicInfos
+     * @returns S_GetMapList
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_GetNewestMapDynamicInfos;
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_GetMapList;
 
     /**
-     * Verifies a S_GetNewestMapDynamicInfos message.
+     * Verifies a S_GetMapList message.
      * @param message Plain object to verify
      * @returns `null` if valid, otherwise the reason why it is not
      */
     public static verify(message: { [k: string]: any }): (string|null);
 
     /**
-     * Creates a S_GetNewestMapDynamicInfos message from a plain object. Also converts values to their respective internal types.
+     * Creates a S_GetMapList message from a plain object. Also converts values to their respective internal types.
      * @param object Plain object
-     * @returns S_GetNewestMapDynamicInfos
+     * @returns S_GetMapList
      */
-    public static fromObject(object: { [k: string]: any }): S_GetNewestMapDynamicInfos;
+    public static fromObject(object: { [k: string]: any }): S_GetMapList;
 
     /**
-     * Creates a plain object from a S_GetNewestMapDynamicInfos message. Also converts values to other types if specified.
-     * @param message S_GetNewestMapDynamicInfos
+     * Creates a plain object from a S_GetMapList message. Also converts values to other types if specified.
+     * @param message S_GetMapList
      * @param [options] Conversion options
      * @returns Plain object
      */
-    public static toObject(message: S_GetNewestMapDynamicInfos, options?: protobuf.IConversionOptions): { [k: string]: any };
+    public static toObject(message: S_GetMapList, options?: protobuf.IConversionOptions): { [k: string]: any };
 
     /**
-     * Converts this S_GetNewestMapDynamicInfos to JSON.
+     * Converts this S_GetMapList to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };
@@ -9319,217 +9751,193 @@ export declare class S_NewestConfigVersion implements IS_NewestConfigVersion {
     public toJSON(): { [k: string]: any };
 }
 
-/** Properties of a C_GetMapDynamicInfo. */
-export declare interface IC_GetMapDynamicInfo {
+/** Properties of a C_GetMapStatisticsData. */
+export declare interface IC_GetMapStatisticsData {
 
-    /** C_GetMapDynamicInfo mapName */
-    mapName?: (string|null);
-
-    /** C_GetMapDynamicInfo mapDesigner */
-    mapDesigner?: (string|null);
-
-    /** C_GetMapDynamicInfo mapVersion */
-    mapVersion?: (number|null);
+    /** C_GetMapStatisticsData mapFileName */
+    mapFileName?: (string|null);
 }
 
-/** Represents a C_GetMapDynamicInfo. */
-export declare class C_GetMapDynamicInfo implements IC_GetMapDynamicInfo {
+/** Represents a C_GetMapStatisticsData. */
+export declare class C_GetMapStatisticsData implements IC_GetMapStatisticsData {
 
     /**
-     * Constructs a new C_GetMapDynamicInfo.
+     * Constructs a new C_GetMapStatisticsData.
      * @param [properties] Properties to set
      */
-    constructor(properties?: IC_GetMapDynamicInfo);
+    constructor(properties?: IC_GetMapStatisticsData);
 
-    /** C_GetMapDynamicInfo mapName. */
-    public mapName: string;
-
-    /** C_GetMapDynamicInfo mapDesigner. */
-    public mapDesigner: string;
-
-    /** C_GetMapDynamicInfo mapVersion. */
-    public mapVersion: number;
+    /** C_GetMapStatisticsData mapFileName. */
+    public mapFileName: string;
 
     /**
-     * Creates a new C_GetMapDynamicInfo instance using the specified properties.
+     * Creates a new C_GetMapStatisticsData instance using the specified properties.
      * @param [properties] Properties to set
-     * @returns C_GetMapDynamicInfo instance
+     * @returns C_GetMapStatisticsData instance
      */
-    public static create(properties?: IC_GetMapDynamicInfo): C_GetMapDynamicInfo;
+    public static create(properties?: IC_GetMapStatisticsData): C_GetMapStatisticsData;
 
     /**
-     * Encodes the specified C_GetMapDynamicInfo message. Does not implicitly {@link C_GetMapDynamicInfo.verify|verify} messages.
-     * @param message C_GetMapDynamicInfo message or plain object to encode
+     * Encodes the specified C_GetMapStatisticsData message. Does not implicitly {@link C_GetMapStatisticsData.verify|verify} messages.
+     * @param message C_GetMapStatisticsData message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encode(message: IC_GetMapDynamicInfo, writer?: protobuf.Writer): protobuf.Writer;
+    public static encode(message: IC_GetMapStatisticsData, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Encodes the specified C_GetMapDynamicInfo message, length delimited. Does not implicitly {@link C_GetMapDynamicInfo.verify|verify} messages.
-     * @param message C_GetMapDynamicInfo message or plain object to encode
+     * Encodes the specified C_GetMapStatisticsData message, length delimited. Does not implicitly {@link C_GetMapStatisticsData.verify|verify} messages.
+     * @param message C_GetMapStatisticsData message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encodeDelimited(message: IC_GetMapDynamicInfo, writer?: protobuf.Writer): protobuf.Writer;
+    public static encodeDelimited(message: IC_GetMapStatisticsData, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Decodes a C_GetMapDynamicInfo message from the specified reader or buffer.
+     * Decodes a C_GetMapStatisticsData message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
-     * @returns C_GetMapDynamicInfo
+     * @returns C_GetMapStatisticsData
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_GetMapDynamicInfo;
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_GetMapStatisticsData;
 
     /**
-     * Decodes a C_GetMapDynamicInfo message from the specified reader or buffer, length delimited.
+     * Decodes a C_GetMapStatisticsData message from the specified reader or buffer, length delimited.
      * @param reader Reader or buffer to decode from
-     * @returns C_GetMapDynamicInfo
+     * @returns C_GetMapStatisticsData
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_GetMapDynamicInfo;
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_GetMapStatisticsData;
 
     /**
-     * Verifies a C_GetMapDynamicInfo message.
+     * Verifies a C_GetMapStatisticsData message.
      * @param message Plain object to verify
      * @returns `null` if valid, otherwise the reason why it is not
      */
     public static verify(message: { [k: string]: any }): (string|null);
 
     /**
-     * Creates a C_GetMapDynamicInfo message from a plain object. Also converts values to their respective internal types.
+     * Creates a C_GetMapStatisticsData message from a plain object. Also converts values to their respective internal types.
      * @param object Plain object
-     * @returns C_GetMapDynamicInfo
+     * @returns C_GetMapStatisticsData
      */
-    public static fromObject(object: { [k: string]: any }): C_GetMapDynamicInfo;
+    public static fromObject(object: { [k: string]: any }): C_GetMapStatisticsData;
 
     /**
-     * Creates a plain object from a C_GetMapDynamicInfo message. Also converts values to other types if specified.
-     * @param message C_GetMapDynamicInfo
+     * Creates a plain object from a C_GetMapStatisticsData message. Also converts values to other types if specified.
+     * @param message C_GetMapStatisticsData
      * @param [options] Conversion options
      * @returns Plain object
      */
-    public static toObject(message: C_GetMapDynamicInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
+    public static toObject(message: C_GetMapStatisticsData, options?: protobuf.IConversionOptions): { [k: string]: any };
 
     /**
-     * Converts this C_GetMapDynamicInfo to JSON.
+     * Converts this C_GetMapStatisticsData to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };
 }
 
-/** Properties of a S_GetMapDynamicInfo. */
-export declare interface IS_GetMapDynamicInfo {
+/** Properties of a S_GetMapStatisticsData. */
+export declare interface IS_GetMapStatisticsData {
 
-    /** S_GetMapDynamicInfo errorCode */
+    /** S_GetMapStatisticsData errorCode */
     errorCode?: (number|null);
 
-    /** S_GetMapDynamicInfo mapName */
-    mapName?: (string|null);
+    /** S_GetMapStatisticsData mapFileName */
+    mapFileName?: (string|null);
 
-    /** S_GetMapDynamicInfo mapDesigner */
-    mapDesigner?: (string|null);
-
-    /** S_GetMapDynamicInfo mapVersion */
-    mapVersion?: (number|null);
-
-    /** S_GetMapDynamicInfo mapDynamicInfo */
-    mapDynamicInfo?: (IMapDynamicInfo|null);
+    /** S_GetMapStatisticsData mapStatisticsData */
+    mapStatisticsData?: (IMapStatisticsData|null);
 }
 
-/** Represents a S_GetMapDynamicInfo. */
-export declare class S_GetMapDynamicInfo implements IS_GetMapDynamicInfo {
+/** Represents a S_GetMapStatisticsData. */
+export declare class S_GetMapStatisticsData implements IS_GetMapStatisticsData {
 
     /**
-     * Constructs a new S_GetMapDynamicInfo.
+     * Constructs a new S_GetMapStatisticsData.
      * @param [properties] Properties to set
      */
-    constructor(properties?: IS_GetMapDynamicInfo);
+    constructor(properties?: IS_GetMapStatisticsData);
 
-    /** S_GetMapDynamicInfo errorCode. */
+    /** S_GetMapStatisticsData errorCode. */
     public errorCode: number;
 
-    /** S_GetMapDynamicInfo mapName. */
-    public mapName: string;
+    /** S_GetMapStatisticsData mapFileName. */
+    public mapFileName: string;
 
-    /** S_GetMapDynamicInfo mapDesigner. */
-    public mapDesigner: string;
-
-    /** S_GetMapDynamicInfo mapVersion. */
-    public mapVersion: number;
-
-    /** S_GetMapDynamicInfo mapDynamicInfo. */
-    public mapDynamicInfo?: (IMapDynamicInfo|null);
+    /** S_GetMapStatisticsData mapStatisticsData. */
+    public mapStatisticsData?: (IMapStatisticsData|null);
 
     /**
-     * Creates a new S_GetMapDynamicInfo instance using the specified properties.
+     * Creates a new S_GetMapStatisticsData instance using the specified properties.
      * @param [properties] Properties to set
-     * @returns S_GetMapDynamicInfo instance
+     * @returns S_GetMapStatisticsData instance
      */
-    public static create(properties?: IS_GetMapDynamicInfo): S_GetMapDynamicInfo;
+    public static create(properties?: IS_GetMapStatisticsData): S_GetMapStatisticsData;
 
     /**
-     * Encodes the specified S_GetMapDynamicInfo message. Does not implicitly {@link S_GetMapDynamicInfo.verify|verify} messages.
-     * @param message S_GetMapDynamicInfo message or plain object to encode
+     * Encodes the specified S_GetMapStatisticsData message. Does not implicitly {@link S_GetMapStatisticsData.verify|verify} messages.
+     * @param message S_GetMapStatisticsData message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encode(message: IS_GetMapDynamicInfo, writer?: protobuf.Writer): protobuf.Writer;
+    public static encode(message: IS_GetMapStatisticsData, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Encodes the specified S_GetMapDynamicInfo message, length delimited. Does not implicitly {@link S_GetMapDynamicInfo.verify|verify} messages.
-     * @param message S_GetMapDynamicInfo message or plain object to encode
+     * Encodes the specified S_GetMapStatisticsData message, length delimited. Does not implicitly {@link S_GetMapStatisticsData.verify|verify} messages.
+     * @param message S_GetMapStatisticsData message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encodeDelimited(message: IS_GetMapDynamicInfo, writer?: protobuf.Writer): protobuf.Writer;
+    public static encodeDelimited(message: IS_GetMapStatisticsData, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Decodes a S_GetMapDynamicInfo message from the specified reader or buffer.
+     * Decodes a S_GetMapStatisticsData message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
-     * @returns S_GetMapDynamicInfo
+     * @returns S_GetMapStatisticsData
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_GetMapDynamicInfo;
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_GetMapStatisticsData;
 
     /**
-     * Decodes a S_GetMapDynamicInfo message from the specified reader or buffer, length delimited.
+     * Decodes a S_GetMapStatisticsData message from the specified reader or buffer, length delimited.
      * @param reader Reader or buffer to decode from
-     * @returns S_GetMapDynamicInfo
+     * @returns S_GetMapStatisticsData
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_GetMapDynamicInfo;
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_GetMapStatisticsData;
 
     /**
-     * Verifies a S_GetMapDynamicInfo message.
+     * Verifies a S_GetMapStatisticsData message.
      * @param message Plain object to verify
      * @returns `null` if valid, otherwise the reason why it is not
      */
     public static verify(message: { [k: string]: any }): (string|null);
 
     /**
-     * Creates a S_GetMapDynamicInfo message from a plain object. Also converts values to their respective internal types.
+     * Creates a S_GetMapStatisticsData message from a plain object. Also converts values to their respective internal types.
      * @param object Plain object
-     * @returns S_GetMapDynamicInfo
+     * @returns S_GetMapStatisticsData
      */
-    public static fromObject(object: { [k: string]: any }): S_GetMapDynamicInfo;
+    public static fromObject(object: { [k: string]: any }): S_GetMapStatisticsData;
 
     /**
-     * Creates a plain object from a S_GetMapDynamicInfo message. Also converts values to other types if specified.
-     * @param message S_GetMapDynamicInfo
+     * Creates a plain object from a S_GetMapStatisticsData message. Also converts values to other types if specified.
+     * @param message S_GetMapStatisticsData
      * @param [options] Conversion options
      * @returns Plain object
      */
-    public static toObject(message: S_GetMapDynamicInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
+    public static toObject(message: S_GetMapStatisticsData, options?: protobuf.IConversionOptions): { [k: string]: any };
 
     /**
-     * Converts this S_GetMapDynamicInfo to JSON.
+     * Converts this S_GetMapStatisticsData to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };
@@ -10486,14 +10894,8 @@ export declare class S_UserGetOnlineUsers implements IS_UserGetOnlineUsers {
 /** Properties of a C_McrCreateWar. */
 export declare interface IC_McrCreateWar {
 
-    /** C_McrCreateWar mapName */
-    mapName?: (string|null);
-
-    /** C_McrCreateWar mapDesigner */
-    mapDesigner?: (string|null);
-
-    /** C_McrCreateWar mapVersion */
-    mapVersion?: (number|null);
+    /** C_McrCreateWar mapFileName */
+    mapFileName?: (string|null);
 
     /** C_McrCreateWar warName */
     warName?: (string|null);
@@ -10562,14 +10964,8 @@ export declare class C_McrCreateWar implements IC_McrCreateWar {
      */
     constructor(properties?: IC_McrCreateWar);
 
-    /** C_McrCreateWar mapName. */
-    public mapName: string;
-
-    /** C_McrCreateWar mapDesigner. */
-    public mapDesigner: string;
-
-    /** C_McrCreateWar mapVersion. */
-    public mapVersion: number;
+    /** C_McrCreateWar mapFileName. */
+    public mapFileName: string;
 
     /** C_McrCreateWar warName. */
     public warName: string;

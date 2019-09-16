@@ -1,7 +1,6 @@
 
 namespace TinyWars.BaseWar {
     import Types            = Utility.Types;
-    import MapIndexKey      = Types.MapIndexKey;
     import SerializedBwWar  = Types.SerializedBwWar;
 
     export abstract class BwWar {
@@ -10,7 +9,7 @@ namespace TinyWars.BaseWar {
         private _warPassword            : string;
         private _warComment             : string;
         private _configVersion          : string;
-        private _mapIndexKey            : MapIndexKey;
+        private _mapFileName            : string;
         private _timeLimit              : number;
         private _hasFogByDefault        : boolean;
         private _incomeModifier         : number;
@@ -40,7 +39,7 @@ namespace TinyWars.BaseWar {
             this._setWarPassword(data.warPassword);
             this._setWarComment(data.warComment);
             this._setConfigVersion(data.configVersion);
-            this._setMapIndexKey(data);
+            this._setMapFileName(data.mapFileName);
             this._setRandomNumberGenerator(new Math.seedrandom("", { state: data.seedRandomState || true }));
             this._setSettingsTimeLimit(data.timeLimit);
             this._setSettingsHasFog(data.hasFogByDefault);
@@ -138,15 +137,11 @@ namespace TinyWars.BaseWar {
             return this._configVersion;
         }
 
-        private _setMapIndexKey(key: MapIndexKey): void {
-            this._mapIndexKey = {
-                mapName     : key.mapName,
-                mapDesigner : key.mapDesigner,
-                mapVersion  : key.mapVersion,
-            };
+        private _setMapFileName(mapFileName: string): void {
+            this._mapFileName = mapFileName;
         }
-        public getMapIndexKey(): MapIndexKey {
-            return this._mapIndexKey;
+        public getMapFileName(): string {
+            return this._mapFileName;
         }
 
         private _setRandomNumberGenerator(generator: seedrandom.prng): void {

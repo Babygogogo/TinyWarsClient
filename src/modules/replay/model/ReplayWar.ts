@@ -31,7 +31,6 @@ namespace TinyWars.Replay {
         }
 
         public serialize(): SerializedWar {
-            const mapIndexKey = this.getMapIndexKey();
             return {
                 warId                   : this.getWarId(),
                 warName                 : this.getWarName(),
@@ -53,9 +52,7 @@ namespace TinyWars.Replay {
                 bannedCoIdList          : this.getSettingsBannedCoIdList(),
                 luckLowerLimit          : this.getSettingsLuckLowerLimit(),
                 luckUpperLimit          : this.getSettingsLuckUpperLimit(),
-                mapName                 : mapIndexKey.mapName,
-                mapDesigner             : mapIndexKey.mapDesigner,
-                mapVersion              : mapIndexKey.mapVersion,
+                mapFileName             : this.getMapFileName(),
                 players                 : (this.getPlayerManager() as ReplayPlayerManager).serialize(),
                 field                   : (this.getField() as ReplayField).serialize(),
                 turn                    : (this.getTurnManager() as ReplayTurnManager).serialize(),
@@ -143,7 +140,7 @@ namespace TinyWars.Replay {
             this.setNextActionId(data.nextActionId || 0);
 
             this._setPlayerManager((this.getPlayerManager() || new ReplayPlayerManager()).init(data.players));
-            this._setField(await (this.getField() || new ReplayField()).init(data.field, this.getConfigVersion(), this.getMapIndexKey()));
+            this._setField(await (this.getField() || new ReplayField()).init(data.field, this.getConfigVersion(), this.getMapFileName()));
             this._setTurnManager((this.getTurnManager() ||new ReplayTurnManager()).init(data.turn));
 
             this._initView();

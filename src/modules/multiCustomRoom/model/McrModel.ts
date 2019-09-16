@@ -43,9 +43,7 @@ namespace TinyWars.MultiCustomRoom {
 
     export namespace McrModel {
         const _dataForCreateWar: DataForCreateWar = {
-            mapName         : "",
-            mapDesigner     : "",
-            mapVersion      : 0,
+            mapFileName     : "",
             warName         : "",
             warPassword     : "",
             warComment      : "",
@@ -93,10 +91,8 @@ namespace TinyWars.MultiCustomRoom {
             return WarMapModel.getMapDynamicInfoSync(_dataForCreateWar as Types.MapIndexKey);
         }
 
-        export function resetCreateWarData(key: Types.MapIndexKey): void {
-            _dataForCreateWar.mapName               = key.mapName;
-            _dataForCreateWar.mapDesigner           = key.mapDesigner;
-            _dataForCreateWar.mapVersion            = key.mapVersion;
+        export function resetCreateWarData(mapFileName: string): void {
+            _dataForCreateWar.mapFileName           = mapFileName;
             _dataForCreateWar.configVersion         = ConfigManager.getNewestConfigVersion();
             _dataForCreateWar.bannedCoIdList.length = 0;
             setCreateWarName("");

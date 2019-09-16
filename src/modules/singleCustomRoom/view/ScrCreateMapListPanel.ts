@@ -153,7 +153,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private async _showMap(key: Types.MapIndexKey): Promise<void> {
-            const [mapData, mapInfo]        = await Promise.all([WarMapModel.getMapData(key), WarMapModel.getMapDynamicInfoAsync(key)]);
+            const [mapData, mapInfo]        = await Promise.all([WarMapModel.getMapRawData(key), WarMapModel.getMapDynamicInfoAsync(key)]);
             this._labelMapName.text         = Lang.getFormatedText(Lang.Type.F0000, mapData.mapName);
             this._labelDesigner.text        = Lang.getFormatedText(Lang.Type.F0001, mapData.mapDesigner);
             this._labelPlayersCount.text    = Lang.getFormatedText(Lang.Type.F0002, mapData.playersCount);

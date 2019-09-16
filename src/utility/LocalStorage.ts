@@ -34,11 +34,12 @@ namespace TinyWars.Utility {
             return (value == null) || (value === VALUE_TRUE);
         }
 
-        export function setMapData(url: string, data: string): void {
-            localStorage.setItem(url, data);
+        export function setMapRawData(mapFileName: string, data: Types.MapRawData): void {
+            localStorage.setItem(mapFileName, JSON.stringify(data));
         }
-        export function getMapData(url: string): string {
-            return localStorage.getItem(url);
+        export function getMapRawData(mapFileName: string): Types.MapRawData | null {
+            const data = localStorage.getItem(mapFileName);
+            return data ? JSON.parse(data) : null;
         }
 
         export function setLanguageType(language: Types.LanguageType): void {
