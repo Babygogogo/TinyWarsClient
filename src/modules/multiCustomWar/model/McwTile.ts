@@ -41,7 +41,7 @@ namespace TinyWars.MultiCustomWar {
                     this.init(data, configVersion);
                 } else {
                     const tileMap   = war.getTileMap();
-                    const mapData   = tileMap.getTemplateMap();
+                    const mapData   = tileMap._getMapRawData();
                     const gridX     = this.getGridX();
                     const gridY     = this.getGridY();
                     const index     = gridX + gridY * tileMap.getMapSize().width;

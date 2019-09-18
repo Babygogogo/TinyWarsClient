@@ -109,7 +109,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private async _getDataForListPlayer(): Promise<DataForPlayerRenderer[]> {
             const warInfo = this._openData;
-            const mapInfo = await WarMap.WarMapModel.getMapDynamicInfoAsync(warInfo as Types.MapIndexKey);
+            const mapInfo = await WarMap.WarMapModel.getMapMetaData(warInfo as Types.MapIndexKey);
             if (!mapInfo) {
                 return [];
             } else {

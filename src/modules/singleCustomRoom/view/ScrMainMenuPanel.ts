@@ -70,7 +70,6 @@ namespace TinyWars.SingleCustomRoom {
                     name    : Lang.getText(Lang.Type.B0000),
                     callback: (): void => {
                         ScrMainMenuPanel.hide();
-                        WarMap.WarMapProxy.reqGetNewestMapInfos(false);
                         SingleCustomRoom.ScrCreateMapListPanel.show();
                     },
                 },

@@ -207,7 +207,7 @@ namespace TinyWars.MultiCustomRoom {
                 },
             ];
 
-            const playersCount = (await WarMapModel.getMapDynamicInfoAsync(warInfo as Types.MapIndexKey)).playersCount;
+            const playersCount = (await WarMapModel.getMapMetaData(warInfo as Types.MapIndexKey)).playersCount;
             if (playersCount >= 3) {
                 data.push({
                     playerIndex : 3,

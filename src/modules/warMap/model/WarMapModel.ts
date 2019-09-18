@@ -1,98 +1,112 @@
 
 namespace TinyWars.WarMap {
-    import Types            = Utility.Types;
-    import Helpers          = Utility.Helpers;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import LocalStorage     = Utility.LocalStorage;
-    import Notify           = Utility.Notify;
-    import MapMetaData      = Types.MapMetaData;
+    import Types                = Utility.Types;
+    import Helpers              = Utility.Helpers;
+    import ProtoTypes           = Utility.ProtoTypes;
+    import LocalStorage         = Utility.LocalStorage;
+    import Notify               = Utility.Notify;
+    import MapList              = ProtoTypes.IMapList;
+    import MapRawData           = ProtoTypes.IMapRawData;
+    import MapMetaData          = ProtoTypes.IMapMetaData;
+    import MapStatisticsData    = ProtoTypes.IMapStatisticsData;
 
     export namespace WarMapModel {
-        const _META_DATA_DICT   = new Map<string, MapMetaData>();
-        const _RAW_DATA_DICT    = new Map<string, Types.MapRawData>();
-
-        let _newestMapDynamicInfos: ProtoTypes.IS_GetNewestMapDynamicInfos;
+        const _STATISTICS_DATA_DICT = new Map<string, MapStatisticsData>();
+        const _RAW_DATA_DICT        = new Map<string, MapRawData>();
+        const _MAP_DICT             = new Map<string, MapMetaData>();
 
         export function init(): void {
         }
 
-        export function getMapRawData(mapFileName: string): Promise<Types.MapRawData | undefined> {
+        export function resetMapDict(mapList: MapList): void {
+            _MAP_DICT.clear();
+            for (const data of mapList.fullList) {
+                _MAP_DICT.set(data.mapFileName, data);
+            }
+        }
+        export function getMapDict(): Map<string, MapMetaData> {
+            return _MAP_DICT;
+        }
+
+        export function getMapMetaData(mapFileName: string): MapMetaData | undefined {
+            return _MAP_DICT.get(mapFileName);
+        }
+
+        export function getMapRawData(mapFileName: string): Promise<MapRawData | undefined> {
             const localData = getLocalMapRawData(mapFileName);
             if (localData) {
-                return new Promise<Types.MapRawData>((resolve, reject) => resolve(localData));
+                return new Promise<MapRawData>((resolve, reject) => resolve(localData));
             } else {
-                return new Promise<Types.MapRawData | undefined>((resolve, reject) => {
-                    RES.getResByUrl(
-                        mapUrl,
-                        (data: Types.MapRawData, reqMapFileName: string) => {
-                            if (reqMapFileName === mapFileName) {
-                                if (!data) {
-                                    reject(data);
-                                } else {
-                                    LocalStorage.setMapRawData(mapFileName, data);
-                                    _RAW_DATA_DICT.set(mapFileName, data);
-                                    resolve(data);
-                                }
-                            }
-                        },
-                        undefined,
-                        RES.ResourceItem.TYPE_JSON
-                    );
-                });
-            }
-        }
+                return new Promise<MapRawData | undefined>((resolve, reject) => {
+                    const callbackOnSucceed = (e: egret.Event): void => {
+                        const data = e.data as ProtoTypes.IS_GetMapRawData;
+                        if (data.mapFileName === mapFileName) {
+                            Notify.removeEventListener(Notify.Type.SGetMapRawData,          callbackOnSucceed);
+                            Notify.removeEventListener(Notify.Type.SGetMapRawDataFailed,    callbackOnFailed);
 
-        export function setNewestMapInfos(infos: ProtoTypes.IS_GetNewestMapDynamicInfos): void {
-            _newestMapDynamicInfos = infos;
-            updateMapDynamicInfos(infos.mapInfos);
-        }
-        export function getNewestMapInfos(): ProtoTypes.IS_GetNewestMapDynamicInfos {
-            return _newestMapDynamicInfos;
-        }
-
-        export function updateMapDynamicInfos(infos: MapMetaData[] | undefined): void {
-            for (const info of infos || []) {
-                updateMapDynamicInfo(info);
-            }
-        }
-        export function updateMapDynamicInfo(info: MapMetaData): void {
-            _META_DATA_DICT.set(Helpers.getMapUrl(info as MapIndexKey), info);
-        }
-
-        export function getMapDynamicInfoSync(key: MapIndexKey): MapMetaData | undefined {
-            return _META_DATA_DICT.get(Helpers.getMapUrl(key));
-        }
-        export function getMapDynamicInfoAsync(key: MapIndexKey): Promise<MapMetaData | undefined> {
-            const info = getMapDynamicInfoSync(key);
-            if (info) {
-                return new Promise<MapMetaData>((resolve) => resolve(info));
-            } else {
-                return new Promise<MapMetaData>((resolve, reject) => {
-                    function callbackOnSucceed(e: egret.Event): void {
-                        const data = e.data as ProtoTypes.IS_GetMapDynamicInfo;
-                        if (checkIsSameMapIndexKey(key, data as MapIndexKey)) {
-                            Notify.removeEventListener(Notify.Type.SGetMapDynamicInfo,          callbackOnSucceed);
-                            Notify.removeEventListener(Notify.Type.SGetMapDynamicInfoFailed,    callbackOnFailed);
-                            resolve(getMapDynamicInfoSync(key));
+                            resolve(data.mapRawData);
                         }
                     }
-                    function callbackOnFailed(e: egret.Event): void {
-                        const data = e.data as ProtoTypes.IS_GetMapDynamicInfo;
-                        if (checkIsSameMapIndexKey(key, data as MapIndexKey)) {
-                            Notify.removeEventListener(Notify.Type.SGetMapDynamicInfo,          callbackOnSucceed);
-                            Notify.removeEventListener(Notify.Type.SGetMapDynamicInfoFailed,    callbackOnFailed);
+                    const callbackOnFailed = (e: egret.Event): void => {
+                        const data = e.data as ProtoTypes.IS_GetMapRawData;
+                        if (data.mapFileName === mapFileName) {
+                            Notify.removeEventListener(Notify.Type.SGetMapRawData,          callbackOnSucceed);
+                            Notify.removeEventListener(Notify.Type.SGetMapRawDataFailed,    callbackOnFailed);
+
                             reject(undefined);
                         }
                     }
-                    Notify.addEventListener(Notify.Type.SGetMapDynamicInfo,         callbackOnSucceed);
-                    Notify.addEventListener(Notify.Type.SGetMapDynamicInfoFailed,   callbackOnFailed);
 
-                    WarMapProxy.reqGetMapDynamicInfo(key);
+                    Notify.addEventListener(Notify.Type.SGetMapRawData,         callbackOnSucceed);
+                    Notify.addEventListener(Notify.Type.SGetMapRawDataFailed,   callbackOnFailed);
+
+                    WarMapProxy.reqGetMapRawData(mapFileName);
+                });
+            }
+        }
+        export function setMapRawData(mapFileName: string, mapRawData: MapRawData): void {
+            LocalStorage.setMapRawData(mapFileName, mapRawData);
+            _RAW_DATA_DICT.set(mapFileName, mapRawData);
+        }
+
+        export function setMapStatisticsData(data: MapStatisticsData): void {
+            _STATISTICS_DATA_DICT.set(data.mapFileName, data);
+        }
+        export function getMapStatisticsData(mapFileName: string): Promise<MapStatisticsData | undefined> {
+            const existingData = _STATISTICS_DATA_DICT.get(mapFileName);
+            if (existingData) {
+                return new Promise<MapStatisticsData>((resolve) => resolve(existingData));
+            } else {
+                return new Promise<MapStatisticsData>((resolve, reject) => {
+                    const callbackOnSucceed = (e: egret.Event): void => {
+                        const data = e.data as ProtoTypes.IS_GetMapStatisticsData;
+                        if (data.mapFileName === mapFileName) {
+                            Notify.removeEventListener(Notify.Type.SGetMapStatisticsData,          callbackOnSucceed);
+                            Notify.removeEventListener(Notify.Type.SGetMapStatisticsDataFailed,    callbackOnFailed);
+
+                            setMapStatisticsData(data.mapStatisticsData);
+                            resolve(data.mapStatisticsData);
+                        }
+                    }
+                    const callbackOnFailed = (e: egret.Event): void => {
+                        const data = e.data as ProtoTypes.IS_GetMapStatisticsData;
+                        if (data.mapFileName === mapFileName) {
+                            Notify.removeEventListener(Notify.Type.SGetMapStatisticsData,          callbackOnSucceed);
+                            Notify.removeEventListener(Notify.Type.SGetMapStatisticsDataFailed,    callbackOnFailed);
+
+                            reject(undefined);
+                        }
+                    }
+
+                    Notify.addEventListener(Notify.Type.SGetMapStatisticsData,         callbackOnSucceed);
+                    Notify.addEventListener(Notify.Type.SGetMapStatisticsDataFailed,   callbackOnFailed);
+
+                    WarMapProxy.reqGetMapStatisticsData(mapFileName);
                 });
             }
         }
 
-        function getLocalMapRawData(mapFileName: string): Types.MapRawData | undefined {
+        function getLocalMapRawData(mapFileName: string): MapRawData | undefined {
             if (!_RAW_DATA_DICT.has(mapFileName)) {
                 const data = LocalStorage.getMapRawData(mapFileName);
                 (data) && (_RAW_DATA_DICT.set(mapFileName, data));

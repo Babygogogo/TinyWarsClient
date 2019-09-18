@@ -8,6 +8,7 @@ namespace TinyWars.MultiCustomWar {
     import Logger       = Utility.Logger;
     import FloatText    = Utility.FloatText;
     import LocalStorage = Utility.LocalStorage;
+    import WarMapModel  = WarMap.WarMapModel;
     import TimeModel    = Time.TimeModel;
 
     const enum MenuType {
@@ -174,9 +175,9 @@ namespace TinyWars.MultiCustomWar {
 
         private _updateGroupInfo(): void {
             const war                               = this._war;
-            const mapIndexKey                       = war.getMapFileName();
-            this._labelMapName.text                 = mapIndexKey.mapName;
-            this._labelMapDesigner.text             = mapIndexKey.mapDesigner;
+            const mapMetaData                       = WarMapModel.getMapMetaData(war.getMapFileName());
+            this._labelMapName.text                 = mapMetaData.mapName;
+            this._labelMapDesigner.text             = mapMetaData.mapDesigner;
             this._labelWarId.text                   = `${war.getWarId()}`;
             this._labelTurnIndex.text               = `${war.getTurnManager().getTurnIndex()}`;
             this._labelActionId.text                = `${war.getNextActionId() - 1}`;

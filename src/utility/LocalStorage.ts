@@ -34,10 +34,10 @@ namespace TinyWars.Utility {
             return (value == null) || (value === VALUE_TRUE);
         }
 
-        export function setMapRawData(mapFileName: string, data: Types.MapRawData): void {
+        export function setMapRawData(mapFileName: string, data: ProtoTypes.IMapRawData): void {
             localStorage.setItem(mapFileName, JSON.stringify(data));
         }
-        export function getMapRawData(mapFileName: string): Types.MapRawData | null {
+        export function getMapRawData(mapFileName: string): ProtoTypes.IMapRawData | null {
             const data = localStorage.getItem(mapFileName);
             return data ? JSON.parse(data) : null;
         }

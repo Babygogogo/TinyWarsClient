@@ -8017,23 +8017,11 @@ export declare interface IMessageContainer {
     /** MessageContainer S_Error */
     S_Error?: (IS_Error|null);
 
-    /** MessageContainer C_GetMapList */
-    C_GetMapList?: (IC_GetMapList|null);
-
-    /** MessageContainer S_GetMapList */
-    S_GetMapList?: (IS_GetMapList|null);
+    /** MessageContainer S_ServerDisconnect */
+    S_ServerDisconnect?: (IS_ServerDisconnect|null);
 
     /** MessageContainer S_NewestConfigVersion */
     S_NewestConfigVersion?: (IS_NewestConfigVersion|null);
-
-    /** MessageContainer C_GetMapStatisticsData */
-    C_GetMapStatisticsData?: (IC_GetMapStatisticsData|null);
-
-    /** MessageContainer S_GetMapStatisticsData */
-    S_GetMapStatisticsData?: (IS_GetMapStatisticsData|null);
-
-    /** MessageContainer S_ServerDisconnect */
-    S_ServerDisconnect?: (IS_ServerDisconnect|null);
 
     /** MessageContainer C_GetUserPublicInfo */
     C_GetUserPublicInfo?: (IC_GetUserPublicInfo|null);
@@ -8058,6 +8046,24 @@ export declare interface IMessageContainer {
 
     /** MessageContainer S_UserGetOnlineUsers */
     S_UserGetOnlineUsers?: (IS_UserGetOnlineUsers|null);
+
+    /** MessageContainer C_GetMapList */
+    C_GetMapList?: (IC_GetMapList|null);
+
+    /** MessageContainer S_GetMapList */
+    S_GetMapList?: (IS_GetMapList|null);
+
+    /** MessageContainer C_GetMapRawData */
+    C_GetMapRawData?: (IC_GetMapRawData|null);
+
+    /** MessageContainer S_GetMapRawData */
+    S_GetMapRawData?: (IS_GetMapRawData|null);
+
+    /** MessageContainer C_GetMapStatisticsData */
+    C_GetMapStatisticsData?: (IC_GetMapStatisticsData|null);
+
+    /** MessageContainer S_GetMapStatisticsData */
+    S_GetMapStatisticsData?: (IS_GetMapStatisticsData|null);
 
     /** MessageContainer C_McrCreateWar */
     C_McrCreateWar?: (IC_McrCreateWar|null);
@@ -8282,23 +8288,11 @@ export declare class MessageContainer implements IMessageContainer {
     /** MessageContainer S_Error. */
     public S_Error?: (IS_Error|null);
 
-    /** MessageContainer C_GetMapList. */
-    public C_GetMapList?: (IC_GetMapList|null);
-
-    /** MessageContainer S_GetMapList. */
-    public S_GetMapList?: (IS_GetMapList|null);
+    /** MessageContainer S_ServerDisconnect. */
+    public S_ServerDisconnect?: (IS_ServerDisconnect|null);
 
     /** MessageContainer S_NewestConfigVersion. */
     public S_NewestConfigVersion?: (IS_NewestConfigVersion|null);
-
-    /** MessageContainer C_GetMapStatisticsData. */
-    public C_GetMapStatisticsData?: (IC_GetMapStatisticsData|null);
-
-    /** MessageContainer S_GetMapStatisticsData. */
-    public S_GetMapStatisticsData?: (IS_GetMapStatisticsData|null);
-
-    /** MessageContainer S_ServerDisconnect. */
-    public S_ServerDisconnect?: (IS_ServerDisconnect|null);
 
     /** MessageContainer C_GetUserPublicInfo. */
     public C_GetUserPublicInfo?: (IC_GetUserPublicInfo|null);
@@ -8323,6 +8317,24 @@ export declare class MessageContainer implements IMessageContainer {
 
     /** MessageContainer S_UserGetOnlineUsers. */
     public S_UserGetOnlineUsers?: (IS_UserGetOnlineUsers|null);
+
+    /** MessageContainer C_GetMapList. */
+    public C_GetMapList?: (IC_GetMapList|null);
+
+    /** MessageContainer S_GetMapList. */
+    public S_GetMapList?: (IS_GetMapList|null);
+
+    /** MessageContainer C_GetMapRawData. */
+    public C_GetMapRawData?: (IC_GetMapRawData|null);
+
+    /** MessageContainer S_GetMapRawData. */
+    public S_GetMapRawData?: (IS_GetMapRawData|null);
+
+    /** MessageContainer C_GetMapStatisticsData. */
+    public C_GetMapStatisticsData?: (IC_GetMapStatisticsData|null);
+
+    /** MessageContainer S_GetMapStatisticsData. */
+    public S_GetMapStatisticsData?: (IS_GetMapStatisticsData|null);
 
     /** MessageContainer C_McrCreateWar. */
     public C_McrCreateWar?: (IC_McrCreateWar|null);
@@ -9656,6 +9668,198 @@ export declare class S_GetMapList implements IS_GetMapList {
 
     /**
      * Converts this S_GetMapList to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_GetMapRawData. */
+export declare interface IC_GetMapRawData {
+
+    /** C_GetMapRawData mapFileName */
+    mapFileName?: (string|null);
+}
+
+/** Represents a C_GetMapRawData. */
+export declare class C_GetMapRawData implements IC_GetMapRawData {
+
+    /**
+     * Constructs a new C_GetMapRawData.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_GetMapRawData);
+
+    /** C_GetMapRawData mapFileName. */
+    public mapFileName: string;
+
+    /**
+     * Creates a new C_GetMapRawData instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_GetMapRawData instance
+     */
+    public static create(properties?: IC_GetMapRawData): C_GetMapRawData;
+
+    /**
+     * Encodes the specified C_GetMapRawData message. Does not implicitly {@link C_GetMapRawData.verify|verify} messages.
+     * @param message C_GetMapRawData message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_GetMapRawData, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_GetMapRawData message, length delimited. Does not implicitly {@link C_GetMapRawData.verify|verify} messages.
+     * @param message C_GetMapRawData message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_GetMapRawData, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_GetMapRawData message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_GetMapRawData
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_GetMapRawData;
+
+    /**
+     * Decodes a C_GetMapRawData message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_GetMapRawData
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_GetMapRawData;
+
+    /**
+     * Verifies a C_GetMapRawData message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_GetMapRawData message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_GetMapRawData
+     */
+    public static fromObject(object: { [k: string]: any }): C_GetMapRawData;
+
+    /**
+     * Creates a plain object from a C_GetMapRawData message. Also converts values to other types if specified.
+     * @param message C_GetMapRawData
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_GetMapRawData, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_GetMapRawData to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_GetMapRawData. */
+export declare interface IS_GetMapRawData {
+
+    /** S_GetMapRawData errorCode */
+    errorCode?: (number|null);
+
+    /** S_GetMapRawData mapFileName */
+    mapFileName?: (string|null);
+
+    /** S_GetMapRawData mapRawData */
+    mapRawData?: (IMapRawData|null);
+}
+
+/** Represents a S_GetMapRawData. */
+export declare class S_GetMapRawData implements IS_GetMapRawData {
+
+    /**
+     * Constructs a new S_GetMapRawData.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_GetMapRawData);
+
+    /** S_GetMapRawData errorCode. */
+    public errorCode: number;
+
+    /** S_GetMapRawData mapFileName. */
+    public mapFileName: string;
+
+    /** S_GetMapRawData mapRawData. */
+    public mapRawData?: (IMapRawData|null);
+
+    /**
+     * Creates a new S_GetMapRawData instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_GetMapRawData instance
+     */
+    public static create(properties?: IS_GetMapRawData): S_GetMapRawData;
+
+    /**
+     * Encodes the specified S_GetMapRawData message. Does not implicitly {@link S_GetMapRawData.verify|verify} messages.
+     * @param message S_GetMapRawData message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_GetMapRawData, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_GetMapRawData message, length delimited. Does not implicitly {@link S_GetMapRawData.verify|verify} messages.
+     * @param message S_GetMapRawData message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_GetMapRawData, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_GetMapRawData message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_GetMapRawData
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_GetMapRawData;
+
+    /**
+     * Decodes a S_GetMapRawData message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_GetMapRawData
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_GetMapRawData;
+
+    /**
+     * Verifies a S_GetMapRawData message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_GetMapRawData message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_GetMapRawData
+     */
+    public static fromObject(object: { [k: string]: any }): S_GetMapRawData;
+
+    /**
+     * Creates a plain object from a S_GetMapRawData message. Also converts values to other types if specified.
+     * @param message S_GetMapRawData
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_GetMapRawData, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_GetMapRawData to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };

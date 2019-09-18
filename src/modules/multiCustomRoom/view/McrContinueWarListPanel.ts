@@ -1,12 +1,12 @@
 
 namespace TinyWars.MultiCustomRoom {
-    import Notify           = Utility.Notify;
-    import Types            = Utility.Types;
-    import FloatText        = Utility.FloatText;
-    import Helpers          = Utility.Helpers;
-    import Lang             = Utility.Lang;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import TemplateMapModel = WarMap.WarMapModel;
+    import Notify       = Utility.Notify;
+    import Types        = Utility.Types;
+    import FloatText    = Utility.FloatText;
+    import Helpers      = Utility.Helpers;
+    import Lang         = Utility.Lang;
+    import ProtoTypes   = Utility.ProtoTypes;
+    import WarMapModel  = WarMap.WarMapModel;
 
     export class McrContinueWarListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
@@ -78,15 +78,15 @@ namespace TinyWars.MultiCustomRoom {
 
         public async setSelectedIndex(newIndex: number): Promise<void> {
             const oldIndex         = this._selectedWarIndex;
-            const datas            = this._dataForListWar;
-            this._selectedWarIndex = datas[newIndex] ? newIndex : undefined;
+            const dataList         = this._dataForListWar;
+            this._selectedWarIndex = dataList[newIndex] ? newIndex : undefined;
 
-            if (datas[oldIndex]) {
-                this._listWar.updateSingleData(oldIndex, datas[oldIndex])
+            if (dataList[oldIndex]) {
+                this._listWar.updateSingleData(oldIndex, dataList[oldIndex])
             };
 
-            if (datas[newIndex]) {
-                this._listWar.updateSingleData(newIndex, datas[newIndex]);
+            if (dataList[newIndex]) {
+                this._listWar.updateSingleData(newIndex, dataList[newIndex]);
                 await this._showMap(newIndex);
             } else {
                 this._zoomMap.removeAllContents();
@@ -141,7 +141,7 @@ namespace TinyWars.MultiCustomRoom {
             return data;
         }
 
-        private _createDataForListPlayer(warInfo: ProtoTypes.IMcwOngoingDetail, mapInfo: ProtoTypes.IMapDynamicInfo): DataForPlayerRenderer[] {
+        private _createDataForListPlayer(warInfo: ProtoTypes.IMcwOngoingDetail, mapMetaData: ProtoTypes.IMapMetaData): DataForPlayerRenderer[] {
             const data: DataForPlayerRenderer[] = [
                 {
                     playerIndex : 1,
@@ -156,7 +156,7 @@ namespace TinyWars.MultiCustomRoom {
                     isAlive     : warInfo.p2IsAlive,
                 },
             ];
-            if (mapInfo.playersCount >= 3) {
+            if (mapMetaData.playersCount >= 3) {
                 data.push({
                     playerIndex : 3,
                     playerName  : warInfo.p3UserNickname,
@@ -164,7 +164,7 @@ namespace TinyWars.MultiCustomRoom {
                     isAlive     : warInfo.p3IsAlive,
                 });
             }
-            if (mapInfo.playersCount >= 4) {
+            if (mapMetaData.playersCount >= 4) {
                 data.push({
                     playerIndex : 4,
                     playerName  : warInfo.p4UserNickname,
@@ -177,9 +177,9 @@ namespace TinyWars.MultiCustomRoom {
             return data;
         }
 
-        private _createUnitViewDatas(unitViewIds: number[], mapWidth: number, mapHeight: number): Types.UnitViewData[] {
+        private _createUnitViewDataList(unitViewIds: number[], mapWidth: number, mapHeight: number): Types.UnitViewData[] {
             const configVersion = ConfigManager.getNewestConfigVersion();
-            const datas: Types.UnitViewData[] = [];
+            const dataList: Types.UnitViewData[] = [];
 
             let index  = 0;
             for (let y = 0; y < mapHeight; ++y) {
@@ -187,7 +187,7 @@ namespace TinyWars.MultiCustomRoom {
                     const viewId = unitViewIds[index];
                     ++index;
                     if (viewId > 0) {
-                        datas.push({
+                        dataList.push({
                             configVersion: configVersion,
                             gridX        : x,
                             gridY        : y,
@@ -196,17 +196,19 @@ namespace TinyWars.MultiCustomRoom {
                     }
                 }
             }
-            return datas;
+            return dataList;
         }
 
         private async _showMap(index: number): Promise<void> {
             const warInfo               = this._dataForListWar[index].warInfo;
-            const [mapData, mapInfo]    = await Promise.all([TemplateMapModel.getMapRawData(warInfo as Types.MapIndexKey), TemplateMapModel.getMapDynamicInfoAsync(warInfo as Types.MapIndexKey)]);
-            this._labelMapName.text     = Lang.getFormatedText(Lang.Type.F0000, mapInfo.mapName);
-            this._labelDesigner.text    = Lang.getFormatedText(Lang.Type.F0001, mapInfo.mapDesigner);
+            const mapFileName           = warInfo.mapFileName;
+            const mapData               = await WarMapModel.getMapRawData(mapFileName);
+            const mapMetaData           = WarMapModel.getMapMetaData(mapFileName);
+            this._labelMapName.text     = Lang.getFormatedText(Lang.Type.F0000, mapMetaData.mapName);
+            this._labelDesigner.text    = Lang.getFormatedText(Lang.Type.F0001, mapMetaData.mapDesigner);
             this._labelHasFog.text      = Lang.getFormatedText(Lang.Type.F0005, Lang.getText(warInfo.hasFog ? Lang.Type.B0012 : Lang.Type.B0013));
             this._labelWarComment.text  = warInfo.warComment || "----";
-            this._listPlayer.bindData(this._createDataForListPlayer(warInfo, mapInfo));
+            this._listPlayer.bindData(this._createDataForListPlayer(warInfo, mapMetaData));
 
             this._groupInfo.visible      = true;
             this._groupInfo.alpha        = 1;
@@ -219,7 +221,7 @@ namespace TinyWars.MultiCustomRoom {
             tileMapView.updateWithObjectViewIdArray(mapData.tileObjects);
 
             const unitMapView = new WarMap.WarMapUnitMapView();
-            unitMapView.initWithDatas(this._createUnitViewDatas(mapData.units, mapData.mapWidth, mapData.mapHeight));
+            unitMapView.initWithDataList(this._createUnitViewDataList(mapData.units, mapData.mapWidth, mapData.mapHeight));
 
             const gridSize = ConfigManager.getGridSize();
             this._zoomMap.removeAllContents();

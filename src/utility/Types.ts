@@ -223,7 +223,7 @@ namespace TinyWars.Utility.Types {
         fromUnits   : VisibilityFromUnits,
     }
 
-    export interface MapRawData extends ProtoTypes.MapRawData {
+    export interface MapRawData extends ProtoTypes.IMapRawData {
         mapDesigner     : string;
         mapName         : string;
         mapNameEnglish  : string;

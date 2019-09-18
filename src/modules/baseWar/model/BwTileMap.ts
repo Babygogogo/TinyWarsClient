@@ -3,12 +3,13 @@ namespace TinyWars.BaseWar {
     import WarMapModel          = WarMap.WarMapModel;
     import Types                = Utility.Types;
     import Helpers              = Utility.Helpers;
+    import ProtoTypes           = Utility.ProtoTypes;
     import SerializedBwTileMap  = Types.SerializedBwTileMap;
     import SerializedBwTile     = Types.SerializedBwTile;
     import MapSize              = Types.MapSize;
 
     export abstract class BwTileMap {
-        private _templateMap: Types.MapRawData;
+        private _mapRawData : ProtoTypes.IMapRawData;
         private _mapFileName: string;
         private _map        : BwTile[][];
         private _mapSize    : MapSize;
@@ -54,7 +55,7 @@ namespace TinyWars.BaseWar {
                 }
             }
 
-            this._templateMap   = mapData;
+            this._mapRawData    = mapData;
             this._mapFileName   = mapFileName;
             this._map           = map;
             this._setMapSize(mapWidth, mapHeight);
@@ -78,7 +79,7 @@ namespace TinyWars.BaseWar {
                 }
             }
 
-            this._templateMap   = mapData;
+            this._mapRawData    = mapData;
             this._mapFileName   = mapFileName;
             this._map           = map;
             this._setMapSize(mapWidth, mapHeight);
@@ -100,9 +101,6 @@ namespace TinyWars.BaseWar {
 
         public getWar(): BwWar {
             return this._war;
-        }
-        protected _getTemplateMap(): Types.MapRawData {
-            return this._templateMap;
         }
         protected _getMap(): BwTile[][] {
             return this._map;
@@ -133,8 +131,8 @@ namespace TinyWars.BaseWar {
             return this._mapSize;
         }
 
-        public getTemplateMap(): Types.MapRawData {
-            return this._templateMap;
+        public _getMapRawData(): ProtoTypes.IMapRawData {
+            return this._mapRawData;
         }
 
         public getTilesCount(tileType: Types.TileType, playerIndex: number): number {

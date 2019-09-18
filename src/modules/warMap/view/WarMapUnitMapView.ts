@@ -22,7 +22,7 @@ namespace TinyWars.WarMap {
             ], this);
         }
 
-        public initWithDatas(datas: Types.UnitViewData[]): void {
+        public initWithDataList(datas: Types.UnitViewData[]): void {
             this._clearUnits();
 
             const tickCount = TimeModel.getUnitAnimationTickCount();

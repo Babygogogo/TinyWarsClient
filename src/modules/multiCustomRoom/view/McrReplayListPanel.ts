@@ -177,14 +177,14 @@ namespace TinyWars.MultiCustomRoom {
                 this._zoomMap.visible = true;
 
                 const key           = data.info as Types.MapIndexKey
-                const [mapData]     = await Promise.all([TemplateMapModel.getMapRawData(key), TemplateMapModel.getMapDynamicInfoAsync(key)]);
+                const [mapData]     = await Promise.all([TemplateMapModel.getMapRawData(key), TemplateMapModel.getMapMetaData(key)]);
                 const tileMapView   = new WarMap.WarMapTileMapView();
                 tileMapView.init(mapData.mapWidth, mapData.mapHeight);
                 tileMapView.updateWithBaseViewIdArray(mapData.tileBases);
                 tileMapView.updateWithObjectViewIdArray(mapData.tileObjects);
 
                 const unitMapView = new WarMap.WarMapUnitMapView();
-                unitMapView.initWithDatas(this._createUnitViewDatas(mapData.units, mapData.mapWidth, mapData.mapHeight));
+                unitMapView.initWithDataList(this._createUnitViewDatas(mapData.units, mapData.mapWidth, mapData.mapHeight));
 
                 const gridSize = ConfigManager.getGridSize();
                 this._zoomMap.removeAllContents();

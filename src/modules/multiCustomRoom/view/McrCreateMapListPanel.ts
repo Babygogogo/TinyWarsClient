@@ -47,7 +47,7 @@ namespace TinyWars.MultiCustomRoom {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.SGetNewestMapInfos, callback: this._onNotifySGetNewestMapInfos },
+                { type: Notify.Type.SGetMapList, callback: this._onNotifySGetNewestMapInfos },
             ];
             this._uiListeners = [
                 { ui: this._btnSearch, callback: this._onTouchTapBtnSearch },
@@ -113,7 +113,7 @@ namespace TinyWars.MultiCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////
         private _createDataForListMap(): DataForMapNameRenderer[] {
             const data: DataForMapNameRenderer[] = [];
-            const infos = WarMapModel.getNewestMapInfos();
+            const infos = WarMapModel.getMapDict();
             if (infos.mapInfos) {
                 for (let i = 0; i < infos.mapInfos.length; ++i) {
                     const info = infos.mapInfos[i];
@@ -152,7 +152,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _showMap(key: Types.MapIndexKey): Promise<void> {
-            const [mapData, mapInfo]        = await Promise.all([WarMapModel.getMapRawData(key), WarMapModel.getMapDynamicInfoAsync(key)]);
+            const [mapData, mapInfo]        = await Promise.all([WarMapModel.getMapRawData(key), WarMapModel.getMapMetaData(key)]);
             this._labelMapName.text         = Lang.getFormatedText(Lang.Type.F0000, mapData.mapName);
             this._labelDesigner.text        = Lang.getFormatedText(Lang.Type.F0001, mapData.mapDesigner);
             this._labelPlayersCount.text    = Lang.getFormatedText(Lang.Type.F0002, mapData.playersCount);
@@ -169,7 +169,7 @@ namespace TinyWars.MultiCustomRoom {
             tileMapView.updateWithObjectViewIdArray(mapData.tileObjects);
 
             const unitMapView = new WarMap.WarMapUnitMapView();
-            unitMapView.initWithDatas(this._createUnitViewDatas(mapData.units, mapData.mapWidth, mapData.mapHeight));
+            unitMapView.initWithDataList(this._createUnitViewDatas(mapData.units, mapData.mapWidth, mapData.mapHeight));
 
             const gridSize = ConfigManager.getGridSize();
             this._zoomMap.removeAllContents();

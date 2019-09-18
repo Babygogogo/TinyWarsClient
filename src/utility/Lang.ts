@@ -1457,7 +1457,7 @@ namespace TinyWars.Utility.Lang {
             "您已加入了该房间。",
             "You have already joined the game.",
         ]],
-        [ErrorCode.ServerDisconnect_ServerMaintainance, [
+        [ErrorCode.ServerDisconnect_ServerMaintenance, [
             `服务器维护中`,
             `The server is under maintenance.`,
         ]],

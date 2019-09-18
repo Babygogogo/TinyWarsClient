@@ -55,8 +55,8 @@ namespace TinyWars.BaseWar {
             { type: Notify.Type.BwCursorDragged,   callback: this._onNotifyBwCursorDragged },
         ];
 
-        public async init(mapIndexKey: Types.MapIndexKey): Promise<BwActionPlanner> {
-            const mapData = await WarMapModel.getMapRawData(mapIndexKey);
+        public init(mapFileName: string): BwActionPlanner {
+            const mapData = WarMapModel.getMapMetaData(mapFileName);
             this._setMapSize({ width: mapData.mapWidth, height: mapData.mapHeight });
 
             this._view = this._view || new (this._getViewClass())();

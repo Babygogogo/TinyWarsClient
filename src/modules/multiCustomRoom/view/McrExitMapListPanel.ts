@@ -196,7 +196,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private async _showMap(index: number): Promise<void> {
             const warInfo               = this._dataForListWar[index].warInfo;
-            const [mapData, mapInfo]    = await Promise.all([WarMapModel.getMapRawData(warInfo as Types.MapIndexKey), WarMapModel.getMapDynamicInfoAsync(warInfo as Types.MapIndexKey)]);
+            const [mapData, mapInfo]    = await Promise.all([WarMapModel.getMapRawData(warInfo as Types.MapIndexKey), WarMapModel.getMapMetaData(warInfo as Types.MapIndexKey)]);
             this._labelMapName.text     = Lang.getFormatedText(Lang.Type.F0000, mapInfo.mapName);
             this._labelDesigner.text    = Lang.getFormatedText(Lang.Type.F0001, mapInfo.mapDesigner);
             this._labelHasFog.text      = Lang.getFormatedText(Lang.Type.F0005, Lang.getText(warInfo.hasFog ? Lang.Type.B0012 : Lang.Type.B0013));
@@ -214,7 +214,7 @@ namespace TinyWars.MultiCustomRoom {
             tileMapView.updateWithObjectViewIdArray(mapData.tileObjects);
 
             const unitMapView = new WarMap.WarMapUnitMapView();
-            unitMapView.initWithDatas(this._createUnitViewDatas(mapData.units, mapData.mapWidth, mapData.mapHeight));
+            unitMapView.initWithDataList(this._createUnitViewDatas(mapData.units, mapData.mapWidth, mapData.mapHeight));
 
             const gridSize = ConfigManager.getGridSize();
             this._zoomMap.removeAllContents();

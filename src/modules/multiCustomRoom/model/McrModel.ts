@@ -88,7 +88,7 @@ namespace TinyWars.MultiCustomRoom {
         // Functions for creating wars.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         export function getCreateWarMapInfo(): ProtoTypes.IMapDynamicInfo {
-            return WarMapModel.getMapDynamicInfoSync(_dataForCreateWar as Types.MapIndexKey);
+            return WarMapModel.getMapMetaData(_dataForCreateWar as Types.MapIndexKey);
         }
 
         export function resetCreateWarData(mapFileName: string): void {
@@ -376,7 +376,7 @@ namespace TinyWars.MultiCustomRoom {
             return _joinWarRoomInfo;
         }
         export function getJoinWarMapInfo(): ProtoTypes.IMapDynamicInfo {
-            return WarMapModel.getMapDynamicInfoSync(getJoinWarRoomInfo() as Types.MapIndexKey);
+            return WarMapModel.getMapMetaData(getJoinWarRoomInfo() as Types.MapIndexKey);
         }
 
         export async function resetJoinWarData(info: ProtoTypes.IMcrWaitingInfo): Promise<void> {
@@ -470,7 +470,7 @@ namespace TinyWars.MultiCustomRoom {
     }
 
     async function getAvailablePlayerIndexes(info: ProtoTypes.IMcrWaitingInfo): Promise<number[]> {
-        const playersCount = (await WarMapModel.getMapDynamicInfoAsync(info as Types.MapIndexKey)).playersCount;
+        const playersCount = (await WarMapModel.getMapMetaData(info as Types.MapIndexKey)).playersCount;
         const indexDict: {[index: number]: boolean} = {};
         if ((playersCount >= 4) && (info.p4UserId == null)) {
             indexDict[4] = true;
@@ -510,7 +510,7 @@ namespace TinyWars.MultiCustomRoom {
             }
         }
 
-        const totalPlayers = (await WarMapModel.getMapDynamicInfoAsync(info as Types.MapIndexKey)).playersCount;
+        const totalPlayers = (await WarMapModel.getMapMetaData(info as Types.MapIndexKey)).playersCount;
         if ((teamsCount > 1) || (currPlayers < totalPlayers - 1)) {
             const indexes: number[] = [];
             for (let i = 1; i <= totalPlayers; ++i) {
