@@ -204,7 +204,7 @@ namespace TinyWars.MultiCustomRoom {
             const mapFileName           = warInfo.mapFileName;
             const mapData               = await WarMapModel.getMapRawData(mapFileName);
             const mapMetaData           = WarMapModel.getMapMetaData(mapFileName);
-            this._labelMapName.text     = Lang.getFormatedText(Lang.Type.F0000, mapMetaData.mapName);
+            this._labelMapName.text     = Lang.getFormatedText(Lang.Type.F0000, WarMapModel.getMapNameInLanguage(mapFileName));
             this._labelDesigner.text    = Lang.getFormatedText(Lang.Type.F0001, mapMetaData.mapDesigner);
             this._labelHasFog.text      = Lang.getFormatedText(Lang.Type.F0005, Lang.getText(warInfo.hasFog ? Lang.Type.B0012 : Lang.Type.B0013));
             this._labelWarComment.text  = warInfo.warComment || "----";
@@ -255,10 +255,10 @@ namespace TinyWars.MultiCustomRoom {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data      = this.data as DataForWarRenderer;
-            const warInfo   = data.warInfo;
+            const data                  = this.data as DataForWarRenderer;
+            const warInfo               = data.warInfo;
             this.currentState           = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
-            this._labelName.text        = warInfo.warName || warInfo.mapName;
+            this._labelName.text        = warInfo.warName || WarMapModel.getMapNameInLanguage(warInfo.mapFileName);
             this._labelInTurn.visible   = this._checkIsInTurn(warInfo);
         }
 

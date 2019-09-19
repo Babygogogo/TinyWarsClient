@@ -176,7 +176,7 @@ namespace TinyWars.MultiCustomWar {
         private _updateGroupInfo(): void {
             const war                               = this._war;
             const mapMetaData                       = WarMapModel.getMapMetaData(war.getMapFileName());
-            this._labelMapName.text                 = mapMetaData.mapName;
+            this._labelMapName.text                 = WarMapModel.getMapNameInLanguage(mapMetaData.mapFileName);
             this._labelMapDesigner.text             = mapMetaData.mapDesigner;
             this._labelWarId.text                   = `${war.getWarId()}`;
             this._labelTurnIndex.text               = `${war.getTurnManager().getTurnIndex()}`;

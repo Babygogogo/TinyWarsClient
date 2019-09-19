@@ -5,6 +5,7 @@ namespace TinyWars.WarMap {
     import ProtoTypes           = Utility.ProtoTypes;
     import LocalStorage         = Utility.LocalStorage;
     import Notify               = Utility.Notify;
+    import Lang                 = Utility.Lang;
     import MapList              = ProtoTypes.IMapList;
     import MapRawData           = ProtoTypes.IMapRawData;
     import MapMetaData          = ProtoTypes.IMapMetaData;
@@ -30,6 +31,16 @@ namespace TinyWars.WarMap {
 
         export function getMapMetaData(mapFileName: string): MapMetaData | undefined {
             return _MAP_DICT.get(mapFileName);
+        }
+        export function getMapNameInLanguage(mapFileName: string): string | null {
+            const metaData = getMapMetaData(mapFileName);
+            if (!metaData) {
+                return null;
+            } else {
+                return Lang.getLanguageType() === Types.LanguageType.Chinese
+                    ? metaData.mapName
+                    : metaData.mapNameEnglish;
+            }
         }
 
         export function getMapRawData(mapFileName: string): Promise<MapRawData | undefined> {

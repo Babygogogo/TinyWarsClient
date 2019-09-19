@@ -116,7 +116,7 @@ namespace TinyWars.MultiCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private async _updateView(): Promise<void> {
+        private _updateView(): void {
             const info = this._openData;
             this._labelWarPassword.text             = info.warPassword ? info.warPassword : "----";
             this._labelHasFog.text                  = Lang.getText(info.hasFog ? Lang.Type.B0012 : Lang.Type.B0013);
@@ -128,12 +128,12 @@ namespace TinyWars.MultiCustomRoom {
             this._labelMoveRangeModifier.text       = `${info.moveRangeModifier > 0 ? "+" : ""}${info.moveRangeModifier}`;
             this._labelAttackPowerModifier.text     = `${info.attackPowerModifier > 0 ? "+" : ""}${info.attackPowerModifier}%`;
             this._labelVisionRangeModifier.text     = `${info.visionRangeModifier > 0 ? "+" : ""}${info.visionRangeModifier}`;
-            this._listPlayer.bindData(await this._getDataForListPlayer());
+            this._listPlayer.bindData(this._getDataForListPlayer());
         }
 
-        private async _getDataForListPlayer(): Promise<DataForPlayerRenderer[]> {
+        private _getDataForListPlayer(): DataForPlayerRenderer[] {
             const warInfo = this._openData;
-            const mapInfo = await WarMap.WarMapModel.getMapMetaData(warInfo as Types.MapIndexKey);
+            const mapInfo = WarMap.WarMapModel.getMapMetaData(warInfo.mapFileName);
             if (!mapInfo) {
                 return [];
             } else {

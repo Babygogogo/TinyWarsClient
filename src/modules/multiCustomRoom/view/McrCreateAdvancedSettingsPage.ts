@@ -8,7 +8,7 @@ namespace TinyWars.MultiCustomRoom {
     import Notify           = Utility.Notify;
     import ConfirmPanel     = Common.ConfirmPanel;
     import HelpPanel        = Common.HelpPanel;
-    import TemplateMapModel = WarMap.WarMapModel;
+    import WarMapModel      = WarMap.WarMapModel;
 
     export class McrCreateAdvancedSettingsPage extends GameUi.UiTabPage {
         private _labelMapName       : GameUi.UiLabel;
@@ -52,7 +52,7 @@ namespace TinyWars.MultiCustomRoom {
         private _renderersForCoTiers: RendererForCoTier[] = [];
         private _renderersForCoNames: RendererForCoName[] = [];
 
-        protected _mapInfo: ProtoTypes.IMapDynamicInfo;
+        protected _mapMetaData: ProtoTypes.IMapMetaData;
 
         public constructor() {
             super();
@@ -81,7 +81,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         protected _onOpened(): void {
-            this._mapInfo = McrModel.getCreateWarMapInfo();
+            this._mapMetaData = McrModel.getCreateWarMapMetaData();
 
             this._updateTitles();
             this._initGroupCoTiers();
@@ -321,11 +321,11 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _updateLabelMapName(): void {
-            this._labelMapName.text = this._mapInfo.mapName;
+            this._labelMapName.text = WarMapModel.getMapNameInLanguage(this._mapMetaData.mapFileName);
         }
 
         private _updateLabelPlayersCount(): void {
-            this._labelPlayersCount.text = "" + this._mapInfo.playersCount;
+            this._labelPlayersCount.text = "" + this._mapMetaData.playersCount;
         }
 
         private _updateLabelMoveRange(): void {

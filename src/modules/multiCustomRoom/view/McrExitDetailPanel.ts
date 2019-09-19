@@ -4,6 +4,7 @@ namespace TinyWars.MultiCustomRoom {
     import Helpers      = Utility.Helpers;
     import Lang         = Utility.Lang;
     import Types        = Utility.Types;
+    import WarMapModel  = WarMap.WarMapModel;
     import HelpPanel    = Common.HelpPanel;
 
     export class McrExitDetailPanel extends GameUi.UiPanel {
@@ -92,7 +93,7 @@ namespace TinyWars.MultiCustomRoom {
             McrExitDetailPanel.hide();
         }
 
-        private async _updateView(): Promise<void> {
+        private _updateView(): void {
             const info = this._openData;
             this._labelWarPassword.text             = info.warPassword ? info.warPassword : "----";
             this._labelHasFog.text                  = Lang.getText(info.hasFog ? Lang.Type.B0012 : Lang.Type.B0013);
@@ -104,13 +105,13 @@ namespace TinyWars.MultiCustomRoom {
             this._labelMoveRangeModifier.text       = `${info.moveRangeModifier > 0 ? "+" : ""}${info.moveRangeModifier}`;
             this._labelAttackPowerModifier.text     = `${info.attackPowerModifier > 0 ? "+" : ""}${info.attackPowerModifier}%`;
             this._labelVisionRangeModifier.text     = `${info.visionRangeModifier > 0 ? "+" : ""}${info.visionRangeModifier}`;
-            this._listPlayer.bindData(await this._getDataForListPlayer());
+            this._listPlayer.bindData(this._getDataForListPlayer());
         }
 
-        private async _getDataForListPlayer(): Promise<DataForPlayerRenderer[]> {
-            const warInfo = this._openData;
-            const mapInfo = await WarMap.WarMapModel.getMapMetaData(warInfo as Types.MapIndexKey);
-            if (!mapInfo) {
+        private _getDataForListPlayer(): DataForPlayerRenderer[] {
+            const warInfo       = this._openData;
+            const mapMetaData   = WarMapModel.getMapMetaData(warInfo.mapFileName);
+            if (!mapMetaData) {
                 return [];
             } else {
                 const data: DataForPlayerRenderer[] = [
@@ -128,7 +129,7 @@ namespace TinyWars.MultiCustomRoom {
                     },
                 ];
 
-                if (mapInfo.playersCount >= 3) {
+                if (mapMetaData.playersCount >= 3) {
                     data.push({
                         playerIndex : 3,
                         nickname    : warInfo.p3UserNickname,
@@ -136,7 +137,7 @@ namespace TinyWars.MultiCustomRoom {
                         coId        : warInfo.p3CoId,
                     });
                 }
-                if (mapInfo.playersCount >= 4) {
+                if (mapMetaData.playersCount >= 4) {
                     data.push({
                         playerIndex : 4,
                         nickname    : warInfo.p4UserNickname,
