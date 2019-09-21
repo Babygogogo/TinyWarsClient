@@ -6,31 +6,30 @@ namespace TinyWars.WarMap {
     import LocalStorage         = Utility.LocalStorage;
     import Notify               = Utility.Notify;
     import Lang                 = Utility.Lang;
-    import MapList              = ProtoTypes.IMapList;
     import MapRawData           = ProtoTypes.IMapRawData;
     import MapMetaData          = ProtoTypes.IMapMetaData;
     import MapStatisticsData    = ProtoTypes.IMapStatisticsData;
 
     export namespace WarMapModel {
-        const _STATISTICS_DATA_DICT = new Map<string, MapStatisticsData>();
         const _RAW_DATA_DICT        = new Map<string, MapRawData>();
-        const _MAP_DICT             = new Map<string, MapMetaData>();
+        const _META_DATA_DICT       = new Map<string, MapMetaData>();
+        const _STATISTICS_DATA_DICT = new Map<string, MapStatisticsData>();
 
         export function init(): void {
         }
 
-        export function resetMapDict(mapList: MapList): void {
-            _MAP_DICT.clear();
-            for (const data of mapList.fullList) {
-                _MAP_DICT.set(data.mapFileName, data);
+        export function resetMapMetaDataDict(dataList: MapMetaData[]): void {
+            _META_DATA_DICT.clear();
+            for (const data of dataList) {
+                _META_DATA_DICT.set(data.mapFileName, data);
             }
         }
-        export function getMapDict(): Map<string, MapMetaData> {
-            return _MAP_DICT;
+        export function getMapMetaDataDict(): Map<string, MapMetaData> {
+            return _META_DATA_DICT;
         }
 
         export function getMapMetaData(mapFileName: string): MapMetaData | undefined {
-            return _MAP_DICT.get(mapFileName);
+            return _META_DATA_DICT.get(mapFileName);
         }
         export function getMapNameInLanguage(mapFileName: string): string | null {
             const metaData = getMapMetaData(mapFileName);
@@ -80,41 +79,14 @@ namespace TinyWars.WarMap {
             _RAW_DATA_DICT.set(mapFileName, mapRawData);
         }
 
-        export function setMapStatisticsData(data: MapStatisticsData): void {
-            _STATISTICS_DATA_DICT.set(data.mapFileName, data);
-        }
-        export function getMapStatisticsData(mapFileName: string): Promise<MapStatisticsData | undefined> {
-            const existingData = _STATISTICS_DATA_DICT.get(mapFileName);
-            if (existingData) {
-                return new Promise<MapStatisticsData>((resolve) => resolve(existingData));
-            } else {
-                return new Promise<MapStatisticsData>((resolve, reject) => {
-                    const callbackOnSucceed = (e: egret.Event): void => {
-                        const data = e.data as ProtoTypes.IS_GetMapStatisticsData;
-                        if (data.mapFileName === mapFileName) {
-                            Notify.removeEventListener(Notify.Type.SGetMapStatisticsData,          callbackOnSucceed);
-                            Notify.removeEventListener(Notify.Type.SGetMapStatisticsDataFailed,    callbackOnFailed);
-
-                            setMapStatisticsData(data.mapStatisticsData);
-                            resolve(data.mapStatisticsData);
-                        }
-                    }
-                    const callbackOnFailed = (e: egret.Event): void => {
-                        const data = e.data as ProtoTypes.IS_GetMapStatisticsData;
-                        if (data.mapFileName === mapFileName) {
-                            Notify.removeEventListener(Notify.Type.SGetMapStatisticsData,          callbackOnSucceed);
-                            Notify.removeEventListener(Notify.Type.SGetMapStatisticsDataFailed,    callbackOnFailed);
-
-                            reject(undefined);
-                        }
-                    }
-
-                    Notify.addEventListener(Notify.Type.SGetMapStatisticsData,         callbackOnSucceed);
-                    Notify.addEventListener(Notify.Type.SGetMapStatisticsDataFailed,   callbackOnFailed);
-
-                    WarMapProxy.reqGetMapStatisticsData(mapFileName);
-                });
+        export function resetMapStatisticsDataDict(dataList: MapStatisticsData[]): void {
+            _STATISTICS_DATA_DICT.clear();
+            for (const data of dataList) {
+                _STATISTICS_DATA_DICT.set(data.mapFileName, data);
             }
+        }
+        export function getMapStatisticsData(mapFileName: string): MapStatisticsData | undefined {
+            return _STATISTICS_DATA_DICT.get(mapFileName);
         }
 
         function getLocalMapRawData(mapFileName: string): MapRawData | undefined {

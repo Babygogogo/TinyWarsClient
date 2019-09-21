@@ -245,12 +245,8 @@ namespace TinyWars.Utility.Types {
         mapWidth                    : number;
         mapHeight                   : number;
         playersCount                : number;
-        isEnabledForMultiCustomWar  : boolean;
-        isEnabledForWarRoom         : boolean;
-    }
-
-    export interface MapList extends ProtoTypes.IMapList {
-        fullList    : MapMetaData[];
+        isEnabledForMultiCustomWar  : number;
+        isEnabledForWarRoom         : number;
     }
 
     export type UnitViewData = {

@@ -48,7 +48,7 @@ namespace TinyWars.SingleCustomRoom {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.SGetMapList, callback: this._onNotifySGetNewestMapInfos },
+                { type: Notify.Type.SGetMapMetaDataList, callback: this._onNotifySGetNewestMapInfos },
             ];
             this._uiListeners = [
                 { ui: this._btnSearch, callback: this._onTouchTapBtnSearch },
@@ -101,7 +101,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _onTouchTapBtnSearch(e: egret.TouchEvent): void {
-            WarMap.WarMapSearchPanel.show();
+            // WarMap.WarMapSearchPanel.show();
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
@@ -115,7 +115,7 @@ namespace TinyWars.SingleCustomRoom {
         private _createDataForListMap(): DataForMapNameRenderer[] {
             const data  : DataForMapNameRenderer[] = [];
             let index   = 0;
-            for (const [mapFileName] of WarMapModel.getMapDict()) {
+            for (const [mapFileName] of WarMapModel.getMapMetaDataDict()) {
                 data.push({
                     mapFileName,
                     index,
@@ -149,8 +149,9 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private async _showMap(mapFileName: string): Promise<void> {
-            const [mapRawData, mapStatisticsData]   = await Promise.all([WarMapModel.getMapRawData(mapFileName), WarMapModel.getMapStatisticsData(mapFileName)]);
-            this._labelMapName.text                 = Lang.getFormatedText(Lang.Type.F0000, mapRawData.mapName);
+            const mapRawData                        = await WarMapModel.getMapRawData(mapFileName);
+            const mapStatisticsData                 = WarMapModel.getMapStatisticsData(mapFileName);
+            this._labelMapName.text                 = Lang.getFormatedText(Lang.Type.F0000, WarMapModel.getMapNameInLanguage(mapFileName));
             this._labelDesigner.text                = Lang.getFormatedText(Lang.Type.F0001, mapRawData.mapDesigner);
             this._labelPlayersCount.text            = Lang.getFormatedText(Lang.Type.F0002, mapRawData.playersCount);
             this._labelRating.text                  = Lang.getFormatedText(Lang.Type.F0003, mapStatisticsData.rating != null ? mapStatisticsData.rating.toFixed(2) : Lang.getText(Lang.Type.B0001));
