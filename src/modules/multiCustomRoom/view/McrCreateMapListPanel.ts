@@ -151,6 +151,8 @@ namespace TinyWars.MultiCustomRoom {
                     });
                 }
             }
+
+            data.sort((a, b) => WarMapModel.getMapNameInLanguage(a.mapFileName) <= WarMapModel.getMapNameInLanguage(b.mapFileName) ? -1 : 1);
             return data;
         }
 
