@@ -28,6 +28,8 @@ export const enum NetErrorCode {
 
     GetMapDynamicInfo_NoSuchMap,
 
+    GetMapRawData_NoSuchMap,
+
     GetUserPublicInfo_NoSuchUser,
 
     McrContinueWar_NoSuchWar,
@@ -41,6 +43,6 @@ export const enum NetErrorCode {
     McwEndTurn_NotInTurn,
     McwEndTurn_NotVotedForDraw,
 
-    ServerDisconnect_ServerMaintainance,
+    ServerDisconnect_ServerMaintenance,
 }
 }

@@ -137,9 +137,7 @@ namespace TinyWars.Utility.Types {
     export interface SerializedBwWar extends ProtoTypes.ISerializedWar {
         warId           : number;
         configVersion   : string;
-        mapName         : string;
-        mapDesigner     : string;
-        mapVersion      : number;
+        mapFileName     : string;
         warName         : string;
         warPassword     : string;
         warComment      : string;
@@ -225,22 +223,35 @@ namespace TinyWars.Utility.Types {
         fromUnits   : VisibilityFromUnits,
     }
 
-    export type MapIndexKey = {
-        mapDesigner : string;
-        mapName     : string;
-        mapVersion  : number;
+    export interface MapRawData extends ProtoTypes.IMapRawData {
+        mapDesigner     : string;
+        mapName         : string;
+        mapNameEnglish  : string;
+        mapWidth        : number;
+        mapHeight       : number;
+        isMultiPlayer   : boolean;
+        isSinglePlayer  : boolean;
+        playersCount    : number;
+        tileBases       : number[];
+        tileObjects     : number[];
+        units           : number[];
     }
 
-    export type TemplateMap = {
-        mapDesigner : string;
-        mapName     : string;
-        mapVersion  : number;
-        mapWidth    : number;
-        mapHeight   : number;
-        playersCount: number;
-        tileBases   : number[];
-        tileObjects : number[];
-        units       : number[];
+    export interface MapMetaData extends ProtoTypes.IMapMetaData {
+        mapFileName                 : string;
+        mapDesigner                 : string;
+        mapName                     : string;
+        mapNameEnglish              : string;
+        mapWidth                    : number;
+        mapHeight                   : number;
+        playersCount                : number;
+        isEnabledForMultiCustomWar  : number;
+        isEnabledForWarRoom         : number;
+    }
+
+    export type MapAvailability = {
+        isEnabledForMcw : boolean;
+        isEnabledForWr  : boolean;
     }
 
     export type UnitViewData = {

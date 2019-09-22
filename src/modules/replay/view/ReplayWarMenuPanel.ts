@@ -6,6 +6,7 @@ namespace TinyWars.Replay {
     import FlowManager  = Utility.FlowManager;
     import Logger       = Utility.Logger;
     import Types        = Utility.Types;
+    import WarMapModel  = WarMap.WarMapModel;
 
     const enum MenuType {
         Main,
@@ -139,9 +140,9 @@ namespace TinyWars.Replay {
 
         private _updateGroupInfo(): void {
             const war                               = this._war;
-            const mapIndexKey                       = war.getMapIndexKey();
-            this._labelMapName.text                 = mapIndexKey.mapName;
-            this._labelMapDesigner.text             = mapIndexKey.mapDesigner;
+            const mapMetaData                       = WarMapModel.getMapMetaData(war.getMapFileName());
+            this._labelMapName.text                 = WarMapModel.getMapNameInLanguage(mapMetaData.mapFileName);
+            this._labelMapDesigner.text             = mapMetaData.mapDesigner;
             this._labelWarId.text                   = `${war.getWarId()}`;
             this._labelTurnIndex.text               = `${war.getTurnManager().getTurnIndex()}`;
             this._labelActionId.text                = `${war.getNextActionId() - 1}`;

@@ -5,7 +5,7 @@ namespace TinyWars.MultiCustomRoom {
     import Notify       = Utility.Notify;
     import Lang         = Utility.Lang;
     import FloatText    = Utility.FloatText;
-    import Types        = Utility.Types;
+    import WarMapModel  = WarMap.WarMapModel;
     import HelpPanel    = Common.HelpPanel;
 
     export class McrJoinPasswordPanel extends GameUi.UiPanel {
@@ -85,9 +85,9 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _updateView(): void {
-            const info = this._openData;
+            const info                  = this._openData;
             this._inputWarPassword.text = "";
-            this._labelWarName.text     = info.warName || info.mapName;
+            this._labelWarName.text     = info.warName || WarMapModel.getMapNameInLanguage(info.mapFileName);
         }
     }
 }

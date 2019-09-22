@@ -137,7 +137,7 @@ namespace TinyWars.Replay.ReplayModel {
 
         if (war.getNextActionId() >= war.getTotalActionsCount()) {
             war.setIsAutoReplay(false);
-            FloatText.show(Lang.getText(Lang.Type.B0093));
+            FloatText.show(`${Lang.getText(Lang.Type.B0093)} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()}`);
         }
         war.setIsExecutingAction(false);
 
@@ -163,7 +163,7 @@ namespace TinyWars.Replay.ReplayModel {
     async function _executeMcwPlayerBeginTurn(war: ReplayWar, data: WarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${war.getPlayerInTurn().getNickname()} ${Lang.getText(Lang.Type.B0094)} (${war.getNextActionId()} / ${war.getTotalActionsCount()})`);
+        FloatText.show(`${war.getPlayerInTurn().getNickname()} ${Lang.getText(Lang.Type.B0094)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         await war.getTurnManager().endPhaseWaitBeginTurn(data);
         actionPlanner.setStateIdle();
@@ -172,7 +172,7 @@ namespace TinyWars.Replay.ReplayModel {
     async function _executeMcwPlayerDeleteUnit(war: ReplayWar, data: WarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0081)} (${war.getNextActionId()} / ${war.getTotalActionsCount()})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0081)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action    = data.WarActionPlayerDeleteUnit;
         const gridIndex = action.gridIndex as GridIndex;
@@ -190,7 +190,7 @@ namespace TinyWars.Replay.ReplayModel {
     async function _executeMcwPlayerEndTurn(war: ReplayWar, data: WarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0036)} (${war.getNextActionId()} / ${war.getTotalActionsCount()})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0036)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         await war.getTurnManager().endPhaseMain();
         actionPlanner.setStateIdle();
@@ -199,7 +199,7 @@ namespace TinyWars.Replay.ReplayModel {
     async function _executeMcwPlayerProduceUnit(war: ReplayWar, data: WarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0095)} ${Lang.getUnitName(data.WarActionPlayerProduceUnit.unitType)} (${war.getNextActionId()} / ${war.getTotalActionsCount()})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0095)} ${Lang.getUnitName(data.WarActionPlayerProduceUnit.unitType)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionPlayerProduceUnit;
         updateTilesAndUnitsBeforeExecutingAction(war, action);
@@ -237,7 +237,7 @@ namespace TinyWars.Replay.ReplayModel {
     async function _executeMcwPlayerSurrender(war: ReplayWar, data: WarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${war.getPlayerInTurn().getNickname()} ${Lang.getText(Lang.Type.B0055)} (${war.getNextActionId()} / ${war.getTotalActionsCount()})`);
+        FloatText.show(`${war.getPlayerInTurn().getNickname()} ${Lang.getText(Lang.Type.B0055)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const player = war.getPlayerInTurn();
         DestructionHelpers.destroyPlayerForce(war, player.getPlayerIndex(), true);
@@ -251,7 +251,7 @@ namespace TinyWars.Replay.ReplayModel {
         actionPlanner.setStateExecutingAction();
         FloatText.show(
             `${war.getPlayerInTurn().getNickname()} ${data.WarActionPlayerVoteForDraw.isAgree ? Lang.getText(Lang.Type.B0096) : Lang.getText(Lang.Type.B0085)}` +
-            `(${war.getNextActionId()} / ${war.getTotalActionsCount()})`
+            `(${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`
         );
 
         const playerInTurn = war.getPlayerInTurn();
@@ -275,7 +275,7 @@ namespace TinyWars.Replay.ReplayModel {
     async function _executeMcwUnitAttack(war: ReplayWar, data: WarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0097)} (${war.getNextActionId()} / ${war.getTotalActionsCount()})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0097)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitAttack;
         updateTilesAndUnitsBeforeExecutingAction(war, action);
@@ -408,7 +408,7 @@ namespace TinyWars.Replay.ReplayModel {
     async function _executeMcwUnitBeLoaded(war: ReplayWar, data: WarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0098)} (${war.getNextActionId()} / ${war.getTotalActionsCount()})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0098)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitBeLoaded;
         updateTilesAndUnitsBeforeExecutingAction(war, action);
@@ -438,7 +438,7 @@ namespace TinyWars.Replay.ReplayModel {
     async function _executeMcwUnitBuildTile(war: ReplayWar, data: WarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0099)} (${war.getNextActionId()} / ${war.getTotalActionsCount()})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0099)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitBuildTile;
         updateTilesAndUnitsBeforeExecutingAction(war, action);
@@ -483,7 +483,7 @@ namespace TinyWars.Replay.ReplayModel {
     async function _executeMcwUnitCaptureTile(war: ReplayWar, data: WarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0100)} (${war.getNextActionId()} / ${war.getTotalActionsCount()})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0100)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitCaptureTile;
         updateTilesAndUnitsBeforeExecutingAction(war, action);
@@ -558,7 +558,7 @@ namespace TinyWars.Replay.ReplayModel {
     async function _executeMcwUnitDive(war: ReplayWar, data: WarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0101)} (${war.getNextActionId()} / ${war.getTotalActionsCount()})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0101)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitDive;
         updateTilesAndUnitsBeforeExecutingAction(war, action);
@@ -589,7 +589,7 @@ namespace TinyWars.Replay.ReplayModel {
     async function _executeMcwUnitDrop(war: ReplayWar, data: WarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0102)} (${war.getNextActionId()} / ${war.getTotalActionsCount()})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0102)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitDrop;
         updateTilesAndUnitsBeforeExecutingAction(war, action);
@@ -654,7 +654,7 @@ namespace TinyWars.Replay.ReplayModel {
     async function _executeMcwUnitJoin(war: ReplayWar, data: WarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0103)} (${war.getNextActionId()} / ${war.getTotalActionsCount()})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0103)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitJoin;
         updateTilesAndUnitsBeforeExecutingAction(war, action);
@@ -739,7 +739,7 @@ namespace TinyWars.Replay.ReplayModel {
     async function _executeMcwUnitLaunchFlare(war: ReplayWar, data: WarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0104)} (${war.getNextActionId()} / ${war.getTotalActionsCount()})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0104)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitLaunchFlare;
         updateTilesAndUnitsBeforeExecutingAction(war, action);
@@ -779,7 +779,7 @@ namespace TinyWars.Replay.ReplayModel {
     async function _executeMcwUnitLaunchSilo(war: ReplayWar, data: WarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0105)} (${war.getNextActionId()} / ${war.getTotalActionsCount()})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0105)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitLaunchSilo;
         updateTilesAndUnitsBeforeExecutingAction(war, action);
@@ -840,7 +840,7 @@ namespace TinyWars.Replay.ReplayModel {
     async function _executeMcwUnitLoadCo(war: ReplayWar, data: WarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0139)} (${war.getNextActionId()} / ${war.getTotalActionsCount()})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0139)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitLoadCo;
         updateTilesAndUnitsBeforeExecutingAction(war, action);
@@ -877,7 +877,7 @@ namespace TinyWars.Replay.ReplayModel {
     async function _executeMcwUnitProduceUnit(war: ReplayWar, data: WarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0106)} (${war.getNextActionId()} / ${war.getTotalActionsCount()})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0106)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitProduceUnit;
         updateTilesAndUnitsBeforeExecutingAction(war, action);
@@ -934,7 +934,7 @@ namespace TinyWars.Replay.ReplayModel {
     async function _executeMcwUnitSupply(war: ReplayWar, data: WarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0107)} (${war.getNextActionId()} / ${war.getTotalActionsCount()})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0107)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitSupply;
         updateTilesAndUnitsBeforeExecutingAction(war, action);
@@ -989,7 +989,7 @@ namespace TinyWars.Replay.ReplayModel {
     async function _executeMcwUnitSurface(war: ReplayWar, data: WarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0108)} (${war.getNextActionId()} / ${war.getTotalActionsCount()})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0108)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitSurface;
         updateTilesAndUnitsBeforeExecutingAction(war, action);
@@ -1020,7 +1020,7 @@ namespace TinyWars.Replay.ReplayModel {
     async function _executeMcwUnitUseCoSkill(war: ReplayWar, data: WarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0142)} (${war.getNextActionId()} / ${war.getTotalActionsCount()})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0142)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitUseCoSkill;
         updateTilesAndUnitsBeforeExecutingAction(war, action);
@@ -1083,7 +1083,7 @@ namespace TinyWars.Replay.ReplayModel {
     async function _executeMcwUnitWait(war: ReplayWar, data: WarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0109)} (${war.getNextActionId()} / ${war.getTotalActionsCount()})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0109)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitWait;
         updateTilesAndUnitsBeforeExecutingAction(war, action);

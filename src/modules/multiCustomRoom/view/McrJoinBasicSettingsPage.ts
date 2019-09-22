@@ -36,7 +36,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _listPlayer     : GameUi.UiScrollList;
 
-        private _mapInfo: ProtoTypes.IMapDynamicInfo;
+        private _mapMetaData: ProtoTypes.IMapMetaData;
 
         public constructor() {
             super();
@@ -61,7 +61,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         protected _onOpened(): void {
-            this._mapInfo = McrModel.getJoinWarMapInfo();
+            this._mapMetaData = McrModel.getJoinWarMapMetaData();
 
             this._updateLabelWarName();
             this._updateLabelWarPassword();
@@ -152,11 +152,11 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _updateLabelMapName(): void {
-            this._labelMapName.text = this._mapInfo.mapName;
+            this._labelMapName.text =  WarMapModel.getMapNameInLanguage(this._mapMetaData.mapFileName);
         }
 
         private _updateLabelPlayersCount(): void {
-            this._labelPlayersCount.text = "" + this._mapInfo.playersCount;
+            this._labelPlayersCount.text = "" + this._mapMetaData.playersCount;
         }
 
         private _updateLabelPlayerIndex(): void {
@@ -186,11 +186,11 @@ namespace TinyWars.MultiCustomRoom {
             }
         }
 
-        private async _updateListPlayer(): Promise<void> {
-            this._listPlayer.bindData(await this._getDataForListPlayer());
+        private _updateListPlayer(): void {
+            this._listPlayer.bindData(this._getDataForListPlayer());
         }
 
-        private async _getDataForListPlayer(): Promise<DataForPlayerRenderer[]> {
+        private _getDataForListPlayer(): DataForPlayerRenderer[] {
             const warInfo = McrModel.getJoinWarRoomInfo();
             const data: DataForPlayerRenderer[] = [
                 {
@@ -207,7 +207,7 @@ namespace TinyWars.MultiCustomRoom {
                 },
             ];
 
-            const playersCount = (await WarMapModel.getMapDynamicInfoAsync(warInfo as Types.MapIndexKey)).playersCount;
+            const playersCount = WarMapModel.getMapMetaData(warInfo.mapFileName).playersCount;
             if (playersCount >= 3) {
                 data.push({
                     playerIndex : 3,

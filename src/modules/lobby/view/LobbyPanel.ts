@@ -2,6 +2,7 @@
 namespace TinyWars.Lobby {
     import Lang         = Utility.Lang;
     import FloatText    = Utility.FloatText;
+    import UserModel    = User.UserModel;
 
     export class LobbyPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
@@ -73,7 +74,7 @@ namespace TinyWars.Lobby {
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _createDataForListCommand(): DataForCommandRenderer[] {
-            return [
+            const dataList: DataForCommandRenderer[] = [
                 {
                     name    : Lang.getText(Lang.Type.B0137),
                     callback: (): void => {
@@ -90,6 +91,18 @@ namespace TinyWars.Lobby {
                     },
                 },
             ];
+
+            if (UserModel.getSelfPrivilege() > 1) {
+                dataList.push({
+                    name    : Lang.getText(Lang.Type.B0192),
+                    callback: (): void => {
+                        LobbyPanel.hide();
+                        MapManagement.MmMainMenuPanel.show();
+                    },
+                });
+            }
+
+            return dataList;
         }
     }
 

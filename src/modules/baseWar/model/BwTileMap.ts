@@ -3,13 +3,14 @@ namespace TinyWars.BaseWar {
     import WarMapModel          = WarMap.WarMapModel;
     import Types                = Utility.Types;
     import Helpers              = Utility.Helpers;
+    import ProtoTypes           = Utility.ProtoTypes;
     import SerializedBwTileMap  = Types.SerializedBwTileMap;
     import SerializedBwTile     = Types.SerializedBwTile;
     import MapSize              = Types.MapSize;
 
     export abstract class BwTileMap {
-        private _templateMap: Types.TemplateMap;
-        private _mapIndexKey: Types.MapIndexKey;
+        private _mapRawData : ProtoTypes.IMapRawData;
+        private _mapFileName: string;
         private _map        : BwTile[][];
         private _mapSize    : MapSize;
         private _war        : BwWar;
@@ -19,11 +20,11 @@ namespace TinyWars.BaseWar {
         protected abstract _getBwTileClass(): new () => BwTile;
         protected abstract _getViewClass(): new () => BwTileMapView;
 
-        public async init(configVersion: string, mapIndexKey: Types.MapIndexKey, data?: SerializedBwTileMap): Promise<BwTileMap> {
+        public async init(configVersion: string, mapFileName: string, data?: SerializedBwTileMap): Promise<BwTileMap> {
             if (data) {
-                await this._initWithSerializedData(configVersion, mapIndexKey, data)
+                await this._initWithSerializedData(configVersion, mapFileName, data)
             } else {
-                await this._initWithoutSerializedData(configVersion, mapIndexKey);
+                await this._initWithoutSerializedData(configVersion, mapFileName);
             }
 
             this._view = this._view || new (this._getViewClass())();
@@ -31,8 +32,8 @@ namespace TinyWars.BaseWar {
 
             return this;
         }
-        private async _initWithSerializedData(configVersion: string, mapIndexKey: Types.MapIndexKey, data: SerializedBwTileMap): Promise<BwTileMap> {
-            const mapData                   = await WarMapModel.getMapData(mapIndexKey);
+        private async _initWithSerializedData(configVersion: string, mapFileName: string, data: SerializedBwTileMap): Promise<BwTileMap> {
+            const mapData                   = await WarMapModel.getMapRawData(mapFileName);
             const { mapWidth, mapHeight }   = mapData;
             const map                       = Helpers.createEmptyMap<BwTile>(mapWidth);
 
@@ -54,15 +55,15 @@ namespace TinyWars.BaseWar {
                 }
             }
 
-            this._templateMap   = mapData;
-            this._mapIndexKey   = mapIndexKey;
+            this._mapRawData    = mapData;
+            this._mapFileName   = mapFileName;
             this._map           = map;
             this._setMapSize(mapWidth, mapHeight);
 
             return this;
         }
-        private async _initWithoutSerializedData(configVersion: string, mapIndexKey: Types.MapIndexKey): Promise<BwTileMap> {
-            const mapData                   = await WarMapModel.getMapData(mapIndexKey);
+        private async _initWithoutSerializedData(configVersion: string, mapFileName: string): Promise<BwTileMap> {
+            const mapData                   = await WarMapModel.getMapRawData(mapFileName);
             const { mapWidth, mapHeight }   = mapData;
             const map                       = Helpers.createEmptyMap<BwTile>(mapWidth);
 
@@ -78,8 +79,8 @@ namespace TinyWars.BaseWar {
                 }
             }
 
-            this._templateMap   = mapData;
-            this._mapIndexKey   = mapIndexKey;
+            this._mapRawData    = mapData;
+            this._mapFileName   = mapFileName;
             this._map           = map;
             this._setMapSize(mapWidth, mapHeight);
 
@@ -100,9 +101,6 @@ namespace TinyWars.BaseWar {
 
         public getWar(): BwWar {
             return this._war;
-        }
-        protected _getTemplateMap(): Types.TemplateMap {
-            return this._templateMap;
         }
         protected _getMap(): BwTile[][] {
             return this._map;
@@ -133,8 +131,8 @@ namespace TinyWars.BaseWar {
             return this._mapSize;
         }
 
-        public getTemplateMap(): Types.TemplateMap {
-            return this._templateMap;
+        public _getMapRawData(): ProtoTypes.IMapRawData {
+            return this._mapRawData;
         }
 
         public getTilesCount(tileType: Types.TileType, playerIndex: number): number {
@@ -150,7 +148,7 @@ namespace TinyWars.BaseWar {
         }
     }
 
-    function checkShouldSerializeTile(tileData: SerializedBwTile, mapData: Types.TemplateMap, posIndex: number): boolean {
+    function checkShouldSerializeTile(tileData: SerializedBwTile, mapData: Types.MapRawData, posIndex: number): boolean {
         return (tileData.currentBuildPoint      != null)
             || (tileData.currentCapturePoint    != null)
             || (tileData.currentHp              != null)

@@ -12,7 +12,7 @@ namespace TinyWars.Replay {
 
         private _isAutoReplay                   = false;
         private _checkPointIdsForNextActionId   = new Map<number, number>();
-        private _warDatasForCheckPointId        = new Map<number, SerializedWar>();
+        private _warDataListForCheckPointId     = new Map<number, SerializedWar>();
 
         public async init(data: SerializedWar): Promise<ReplayWar> {
             await super.init(data);
@@ -31,7 +31,6 @@ namespace TinyWars.Replay {
         }
 
         public serialize(): SerializedWar {
-            const mapIndexKey = this.getMapIndexKey();
             return {
                 warId                   : this.getWarId(),
                 warName                 : this.getWarName(),
@@ -53,9 +52,7 @@ namespace TinyWars.Replay {
                 bannedCoIdList          : this.getSettingsBannedCoIdList(),
                 luckLowerLimit          : this.getSettingsLuckLowerLimit(),
                 luckUpperLimit          : this.getSettingsLuckUpperLimit(),
-                mapName                 : mapIndexKey.mapName,
-                mapDesigner             : mapIndexKey.mapDesigner,
-                mapVersion              : mapIndexKey.mapVersion,
+                mapFileName             : this.getMapFileName(),
                 players                 : (this.getPlayerManager() as ReplayPlayerManager).serialize(),
                 field                   : (this.getField() as ReplayField).serialize(),
                 turn                    : (this.getTurnManager() as ReplayTurnManager).serialize(),
@@ -87,10 +84,10 @@ namespace TinyWars.Replay {
         }
 
         public getWarData(checkPointId: number): SerializedWar {
-            return this._warDatasForCheckPointId.get(checkPointId);
+            return this._warDataListForCheckPointId.get(checkPointId);
         }
         public setWarData(checkPointId: number, warData: SerializedWar): void {
-            this._warDatasForCheckPointId.set(checkPointId, warData);
+            this._warDataListForCheckPointId.set(checkPointId, warData);
         }
 
         public checkIsInEnd(): boolean {
@@ -107,7 +104,7 @@ namespace TinyWars.Replay {
 
                 await this._loadCheckPoint(checkPointId);
                 this.startRunning().startRunningView();
-                FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()})`);
+                FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
 
             } else {
                 this.setIsAutoReplay(false);
@@ -124,7 +121,7 @@ namespace TinyWars.Replay {
                 this.stopRunning();
                 await this._loadCheckPoint(checkPointId);
                 this.startRunning().startRunningView();
-                FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()})`);
+                FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
             }
         }
         public checkIsInBeginning(): boolean {
@@ -135,7 +132,7 @@ namespace TinyWars.Replay {
             this.stopRunning();
 
             await this._loadCheckPoint(this.getCheckPointId(this.getNextActionId()) - 1);
-            FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()})`);
+            FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
             this.startRunning().startRunningView();
         }
         private async _loadCheckPoint(checkPointId: number): Promise<void> {
@@ -143,7 +140,7 @@ namespace TinyWars.Replay {
             this.setNextActionId(data.nextActionId || 0);
 
             this._setPlayerManager((this.getPlayerManager() || new ReplayPlayerManager()).init(data.players));
-            this._setField(await (this.getField() || new ReplayField()).init(data.field, this.getConfigVersion(), this.getMapIndexKey()));
+            this._setField(await (this.getField() || new ReplayField()).init(data.field, this.getConfigVersion(), this.getMapFileName()));
             this._setTurnManager((this.getTurnManager() ||new ReplayTurnManager()).init(data.turn));
 
             this._initView();

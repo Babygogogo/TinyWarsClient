@@ -15,12 +15,17 @@
 		"resource/skins/login/LoginBackgroundPanel.exml",
 		"resource/skins/login/LoginPanel.exml",
 		"resource/skins/login/RegisterPanel.exml",
+		"resource/skins/mapManagement/MmAvailabilityChangePanel.exml",
+		"resource/skins/mapManagement/MmAvailabilityListPanel.exml",
+		"resource/skins/mapManagement/MmAvailabilitySearchPanel.exml",
+		"resource/skins/mapManagement/MmMainMenuPanel.exml",
 		"resource/skins/multiCustomRoom/McrContinueDetailPanel.exml",
 		"resource/skins/multiCustomRoom/McrContinueWarListPanel.exml",
 		"resource/skins/multiCustomRoom/McrCreateAdvancedSettingsPage.exml",
 		"resource/skins/multiCustomRoom/McrCreateBasicSettingsPage.exml",
 		"resource/skins/multiCustomRoom/McrCreateCoListPanel.exml",
 		"resource/skins/multiCustomRoom/McrCreateMapListPanel.exml",
+		"resource/skins/multiCustomRoom/McrCreateSearchMapPanel.exml",
 		"resource/skins/multiCustomRoom/McrCreateSettingsPanel.exml",
 		"resource/skins/multiCustomRoom/McrExitDetailPanel.exml",
 		"resource/skins/multiCustomRoom/McrExitMapListPanel.exml",
@@ -60,8 +65,7 @@
 		"resource/skins/user/UserChangeNicknamePanel.exml",
 		"resource/skins/user/UserOnlineUsersPanel.exml",
 		"resource/skins/user/UserPanel.exml",
-		"resource/skins/utility/LoadingUiPanel.exml",
-		"resource/skins/warMap/WarMapSearchPanel.exml"
+		"resource/skins/utility/LoadingUiPanel.exml"
 	],
 	"path": "resource/default.thm.json"
 }

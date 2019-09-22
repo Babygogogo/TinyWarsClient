@@ -289,6 +289,10 @@ namespace TinyWars.Utility.Lang {
             `您确定要发动SUPER POWER吗？`,
             `Are you sure to activate the SUPER POWER?`,
         ]],
+        [Type.A0059, [
+            `已成功修改地图可用性`,
+            `The availability has been changed successfully.`,
+        ]],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -1057,6 +1061,18 @@ namespace TinyWars.Utility.Lang {
             `幸运上限`,
             `Max Luck`,
         ]],
+        [Type.B0191, [
+            `回合`,
+            `Turn`,
+        ]],
+        [Type.B0192, [
+            `管理地图`,
+            `Map Management`,
+        ]],
+        [Type.B0193, [
+            `可用性`,
+            `Availability`,
+        ]],
 
         [Type.B1000, [
             `平原`,
@@ -1453,7 +1469,7 @@ namespace TinyWars.Utility.Lang {
             "您已加入了该房间。",
             "You have already joined the game.",
         ]],
-        [ErrorCode.ServerDisconnect_ServerMaintainance, [
+        [ErrorCode.ServerDisconnect_ServerMaintenance, [
             `服务器维护中`,
             `The server is under maintenance.`,
         ]],

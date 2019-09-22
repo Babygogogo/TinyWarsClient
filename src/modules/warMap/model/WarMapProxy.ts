@@ -3,55 +3,77 @@ namespace TinyWars.WarMap {
     import NetManager   = Network.Manager;
     import ActionCode   = Network.Codes;
     import ProtoTypes   = Utility.ProtoTypes;
-    import Notify       = Utility.Notify;
     import Types        = Utility.Types;
+    import Notify       = Utility.Notify;
 
     export namespace WarMapProxy {
-        type ParamForGetNewestMapInfos = {
-            mapName         ?: string | null,
-            mapDesigner     ?: string | null,
-            playersCount    ?: number | null,
-            minRating       ?: number | null,
-            minPlayedTimes  ?: number | null,
-        }
-
         export function init(): void {
             NetManager.addListeners([
-                { msgCode: ActionCode.S_GetNewestMapDynamicInfos,    callback: _onSGetNewestMapDynamicInfos },
-                { msgCode: ActionCode.S_GetMapDynamicInfo,           callback: _onSGetMapDynamicInfo },
+                { msgCode: ActionCode.S_GetMapMetaDataList,         callback: _onSGetMapMetaDataList },
+                { msgCode: ActionCode.S_GetMapStatisticsDataList,   callback: _onSGetMapStatisticsDataList },
+                { msgCode: ActionCode.S_GetMapRawData,              callback: _onSGetMapRawData },
+                { msgCode: ActionCode.S_MmChangeAvailability,       callback: _onSMmChangeAvailability },
             ], WarMapProxy);
         }
 
-        export function reqGetNewestMapInfos(isMultiPlayer: boolean, param?: ParamForGetNewestMapInfos): void {
+        export function reqGetMapMetaDataList(): void {
             NetManager.send({
-                C_GetNewestMapDynamicInfos: {
-                    mapName         : param && param.mapName,
-                    mapDesigner     : param && param.mapDesigner,
-                    playersCount    : param && param.playersCount,
-                    minRating       : param && param.minRating,
-                    minPlayedTimes  : param && param.minPlayedTimes,
-                    isMultiPlayer,
+                C_GetMapMetaDataList: {
                 },
             });
         }
-        function _onSGetNewestMapDynamicInfos(e: egret.Event): void {
-            const data = e.data as ProtoTypes.IS_GetNewestMapDynamicInfos;
-            WarMapModel.setNewestMapInfos(data);
-            Notify.dispatch(Notify.Type.SGetNewestMapInfos, data);
+        function _onSGetMapMetaDataList(e: egret.Event): void {
+            const data = e.data as ProtoTypes.IS_GetMapMetaDataList;
+            if (!data.errorCode) {
+                WarMapModel.resetMapMetaDataDict(data.dataList);
+                Notify.dispatch(Notify.Type.SGetMapMetaDataList, data);
+            }
         }
 
-        export function reqGetMapDynamicInfo(key: Types.MapIndexKey): void {
+        export function reqGetMapStatisticsDataList(): void {
             NetManager.send({
-                C_GetMapDynamicInfo: key,
+                C_GetMapStatisticsDataList: {
+                },
             });
         }
-        function _onSGetMapDynamicInfo(e: egret.Event): void {
-            const data = e.data as ProtoTypes.IS_GetMapDynamicInfo;
+        function _onSGetMapStatisticsDataList(e: egret.Event): void {
+            const data = e.data as ProtoTypes.IS_GetMapStatisticsDataList;
+            if (!data.errorCode) {
+                WarMapModel.resetMapStatisticsDataDict(data.dataList);
+                Notify.dispatch(Notify.Type.SGetMapStatisticsDataList, data);
+            }
+        }
+
+        export function reqGetMapRawData(mapFileName: string): void {
+            NetManager.send({
+                C_GetMapRawData: {
+                    mapFileName,
+                },
+            });
+        }
+        function _onSGetMapRawData(e: egret.Event): void {
+            const data = e.data as ProtoTypes.IS_GetMapRawData;
             if (data.errorCode) {
-                Notify.dispatch(Notify.Type.SGetMapDynamicInfoFailed, data);
+                Notify.dispatch(Notify.Type.SGetMapRawDataFailed, data);
             } else {
-                (data.mapDynamicInfo) && (WarMapModel.updateMapDynamicInfo(data.mapDynamicInfo));
-                Notify.dispatch(Notify.Type.SGetMapDynamicInfo, data);
+                WarMapModel.setMapRawData(data.mapFileName, data.mapRawData);
+                Notify.dispatch(Notify.Type.SGetMapRawData, data);
+            }
+        }
+
+        export function reqMmChangeAvailability(mapFileName: string, availability: Types.MapAvailability): void {
+            NetManager.send({
+                C_MmChangeAvailability: {
+                    mapFileName,
+                    isEnabledForMultiCustomWar  : availability.isEnabledForMcw,
+                    isEnabledForWarRoom         : availability.isEnabledForWr,
+                },
+            });
+        }
+        function _onSMmChangeAvailability(e: egret.Event): void {
+            const data = e.data as ProtoTypes.IS_MmChangeAvailability;
+            if (!data.errorCode) {
+                Notify.dispatch(Notify.Type.SMmChangeAvailability);
             }
         }
     }

@@ -1,8 +1,9 @@
 
-namespace TinyWars.MultiCustomRoom {
-    import Notify       = Utility.Notify;
+namespace TinyWars.MapManagement {
     import Types        = Utility.Types;
     import Lang         = Utility.Lang;
+    import Notify       = Utility.Notify;
+    import FloatText    = Utility.FloatText;
     import WarMapModel  = WarMap.WarMapModel;
 
     export type FiltersForMapList = {
@@ -13,11 +14,11 @@ namespace TinyWars.MultiCustomRoom {
         minRating?      : number;
     }
 
-    export class McrCreateMapListPanel extends GameUi.UiPanel {
+    export class MmAvailabilityListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: McrCreateMapListPanel;
+        private static _instance: MmAvailabilityListPanel;
 
         private _listMap   : GameUi.UiScrollList;
         private _zoomMap   : GameUi.UiZoomableComponent;
@@ -37,30 +38,33 @@ namespace TinyWars.MultiCustomRoom {
         private _selectedMapFileName: string;
 
         public static show(mapFilters?: FiltersForMapList): void {
-            if (!McrCreateMapListPanel._instance) {
-                McrCreateMapListPanel._instance = new McrCreateMapListPanel();
+            if (!MmAvailabilityListPanel._instance) {
+                MmAvailabilityListPanel._instance = new MmAvailabilityListPanel();
             }
 
-            (mapFilters) && (McrCreateMapListPanel._instance._mapFilters = mapFilters);
-            McrCreateMapListPanel._instance.open();
+            (mapFilters) && (MmAvailabilityListPanel._instance._mapFilters = mapFilters);
+            MmAvailabilityListPanel._instance.open();
         }
         public static hide(): void {
-            if (McrCreateMapListPanel._instance) {
-                McrCreateMapListPanel._instance.close();
+            if (MmAvailabilityListPanel._instance) {
+                MmAvailabilityListPanel._instance.close();
             }
         }
-        public static getInstance(): McrCreateMapListPanel {
-            return McrCreateMapListPanel._instance;
+        public static getInstance(): MmAvailabilityListPanel {
+            return MmAvailabilityListPanel._instance;
         }
 
         public constructor() {
             super();
 
             this._setAutoAdjustHeightEnabled();
-            this.skinName = "resource/skins/multiCustomRoom/McrCreateMapListPanel.exml";
+            this.skinName = "resource/skins/mapManagement/MmAvailabilityListPanel.exml";
         }
 
         protected _onFirstOpened(): void {
+            this._notifyListeners = [
+                { type: Notify.Type.SMmChangeAvailability, callback: this._onNotifySMmChangeAvailability },
+            ];
             this._uiListeners = [
                 { ui: this._btnSearch, callback: this._onTouchTapBtnSearch },
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
@@ -115,13 +119,17 @@ namespace TinyWars.MultiCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
+        private _onNotifySMmChangeAvailability(e: egret.Event): void {
+            FloatText.show(Lang.getText(Lang.Type.A0059));
+        }
+
         private _onTouchTapBtnSearch(e: egret.TouchEvent): void {
-            McrCreateSearchMapPanel.show();
+            MmAvailabilitySearchPanel.show();
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
-            McrCreateMapListPanel.hide();
-            McrMainMenuPanel.show();
+            MmAvailabilityListPanel.hide();
+            MmMainMenuPanel.show();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -137,8 +145,7 @@ namespace TinyWars.MultiCustomRoom {
                 const metaData          = WarMapModel.getMapMetaData(mapFileName);
                 const statisticsData    = WarMapModel.getMapStatisticsData(mapFileName);
 
-                if ((!metaData.isEnabledForMultiCustomWar)                                                              ||
-                    ((mapName) && (WarMapModel.getMapNameInLanguage(mapFileName).toLowerCase().indexOf(mapName) < 0))   ||
+                if (((mapName) && (WarMapModel.getMapNameInLanguage(mapFileName).toLowerCase().indexOf(mapName) < 0))   ||
                     ((mapDesigner) && (metaData.mapDesigner.toLowerCase().indexOf(mapDesigner) < 0))                    ||
                     ((playersCount) && (metaData.playersCount !== playersCount))                                        ||
                     ((playedTimes != null) && (statisticsData.mcwPlayedTimes < playedTimes))                            ||
@@ -212,7 +219,7 @@ namespace TinyWars.MultiCustomRoom {
 
     type DataForMapNameRenderer = {
         mapFileName : string;
-        panel       : McrCreateMapListPanel;
+        panel       : MmAvailabilityListPanel;
     }
 
     class MapNameRenderer extends eui.ItemRenderer {
@@ -241,10 +248,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
-            McrCreateMapListPanel.hide();
-
-            McrModel.resetCreateWarData((this.data as DataForMapNameRenderer).mapFileName);
-            McrCreateSettingsPanel.show();
+            MmAvailabilityChangePanel.show((this.data as DataForMapNameRenderer).mapFileName);
         }
     }
 }
