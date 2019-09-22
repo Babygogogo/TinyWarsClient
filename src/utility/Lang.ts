@@ -289,6 +289,10 @@ namespace TinyWars.Utility.Lang {
             `您确定要发动SUPER POWER吗？`,
             `Are you sure to activate the SUPER POWER?`,
         ]],
+        [Type.A0059, [
+            `已成功修改地图可用性`,
+            `The availability has been changed successfully.`,
+        ]],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -1060,6 +1064,14 @@ namespace TinyWars.Utility.Lang {
         [Type.B0191, [
             `回合`,
             `Turn`,
+        ]],
+        [Type.B0192, [
+            `管理地图`,
+            `Map Management`,
+        ]],
+        [Type.B0193, [
+            `可用性`,
+            `Availability`,
         ]],
 
         [Type.B1000, [

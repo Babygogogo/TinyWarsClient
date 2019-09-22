@@ -1,32 +1,27 @@
 
-namespace TinyWars.Lobby {
+namespace TinyWars.MapManagement {
     import Lang         = Utility.Lang;
-    import FloatText    = Utility.FloatText;
-    import UserModel    = User.UserModel;
+    import FlowManager  = Utility.FlowManager;
 
-    export class LobbyPanel extends GameUi.UiPanel {
+    export class MmMainMenuPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: LobbyPanel;
+        private static _instance: MmMainMenuPanel;
 
-        private _group1: eui.Group;
-        private _group2: eui.Group;
-        private _group3: eui.Group;
-        private _group4: eui.Group;
-
+        private _btnBack    : GameUi.UiButton;
         private _listCommand: GameUi.UiScrollList;
 
         public static show(): void {
-            if (!LobbyPanel._instance) {
-                LobbyPanel._instance = new LobbyPanel();
+            if (!MmMainMenuPanel._instance) {
+                MmMainMenuPanel._instance = new MmMainMenuPanel();
             }
-            LobbyPanel._instance.open();
+            MmMainMenuPanel._instance.open();
         }
 
         public static hide(): void {
-            if (LobbyPanel._instance) {
-                LobbyPanel._instance.close();
+            if (MmMainMenuPanel._instance) {
+                MmMainMenuPanel._instance.close();
             }
         }
 
@@ -34,12 +29,12 @@ namespace TinyWars.Lobby {
             super();
 
             this._setAutoAdjustHeightEnabled();
-            this.skinName = "resource/skins/lobby/LobbyPanel.exml";
+            this.skinName = "resource/skins/mapManagement/MmMainMenuPanel.exml";
         }
 
         protected _onFirstOpened(): void {
             this._uiListeners = [
-                { ui: this, callback: this._onResize, eventType: egret.Event.RESIZE },
+                { ui: this._btnBack, callback: this._onTouchedBtnBack },
             ];
             this._notifyListeners = [
                 { type: Utility.Notify.Type.SLogout, callback: this._onNotifySLogout },
@@ -59,50 +54,26 @@ namespace TinyWars.Lobby {
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onResize(e: egret.Event): void {
-            this._group1.height = (this.height - 40 - 90) / 2;
-            this._group2.height = (this.height - 40 - 90) / 2;
-            this._group3.height = (this.height - 40 - 90) / 2;
-            this._group4.height = (this.height - 40 - 90) / 2;
+        private _onTouchedBtnBack(e: egret.TouchEvent): void {
+            FlowManager.gotoLobby();
         }
-
         private _onNotifySLogout(e: egret.Event): void {
-            LobbyPanel.hide();
+            MmMainMenuPanel.hide();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _createDataForListCommand(): DataForCommandRenderer[] {
-            const dataList: DataForCommandRenderer[] = [
+            return [
                 {
-                    name    : Lang.getText(Lang.Type.B0137),
+                    name    : Lang.getText(Lang.Type.B0193),
                     callback: (): void => {
-                        LobbyPanel.hide();
-                        MultiCustomRoom.McrMainMenuPanel.show();
-                    },
-                },
-                {
-                    name    : Lang.getText(Lang.Type.B0138),
-                    callback: (): void => {
-                        // LobbyPanel.hide();
-                        // SingleCustomRoom.ScrMainMenuPanel.show();
-                        FloatText.show(Lang.getText(Lang.Type.A0053));
+                        MmMainMenuPanel.hide();
+                        MmAvailabilityListPanel.show({});
                     },
                 },
             ];
-
-            if (UserModel.getSelfPrivilege() > 1) {
-                dataList.push({
-                    name    : Lang.getText(Lang.Type.B0192),
-                    callback: (): void => {
-                        LobbyPanel.hide();
-                        MapManagement.MmMainMenuPanel.show();
-                    },
-                });
-            }
-
-            return dataList;
         }
     }
 

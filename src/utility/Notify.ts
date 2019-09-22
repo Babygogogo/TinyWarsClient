@@ -78,6 +78,8 @@ namespace TinyWars.Utility.Notify {
         SUserChangeDiscordIdFailed,
         SUserGetOnlineUsers,
 
+        SMmChangeAvailability,
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         SMcrCreateWar,
         SMcrGetJoinedWaitingInfos,

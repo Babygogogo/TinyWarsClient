@@ -249,6 +249,11 @@ namespace TinyWars.Utility.Types {
         isEnabledForWarRoom         : number;
     }
 
+    export type MapAvailability = {
+        isEnabledForMcw : boolean;
+        isEnabledForWr  : boolean;
+    }
+
     export type UnitViewData = {
         configVersion: string;
 

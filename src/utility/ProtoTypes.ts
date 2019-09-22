@@ -7975,6 +7975,12 @@ export declare interface IMessageContainer {
     /** MessageContainer S_GetMapStatisticsDataList */
     S_GetMapStatisticsDataList?: (IS_GetMapStatisticsDataList|null);
 
+    /** MessageContainer C_MmChangeAvailability */
+    C_MmChangeAvailability?: (IC_MmChangeAvailability|null);
+
+    /** MessageContainer S_MmChangeAvailability */
+    S_MmChangeAvailability?: (IS_MmChangeAvailability|null);
+
     /** MessageContainer C_McrCreateWar */
     C_McrCreateWar?: (IC_McrCreateWar|null);
 
@@ -8245,6 +8251,12 @@ export declare class MessageContainer implements IMessageContainer {
 
     /** MessageContainer S_GetMapStatisticsDataList. */
     public S_GetMapStatisticsDataList?: (IS_GetMapStatisticsDataList|null);
+
+    /** MessageContainer C_MmChangeAvailability. */
+    public C_MmChangeAvailability?: (IC_MmChangeAvailability|null);
+
+    /** MessageContainer S_MmChangeAvailability. */
+    public S_MmChangeAvailability?: (IS_MmChangeAvailability|null);
 
     /** MessageContainer C_McrCreateWar. */
     public C_McrCreateWar?: (IC_McrCreateWar|null);
@@ -10040,6 +10052,216 @@ export declare class S_GetMapStatisticsDataList implements IS_GetMapStatisticsDa
 
     /**
      * Converts this S_GetMapStatisticsDataList to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_MmChangeAvailability. */
+export declare interface IC_MmChangeAvailability {
+
+    /** C_MmChangeAvailability mapFileName */
+    mapFileName?: (string|null);
+
+    /** C_MmChangeAvailability isEnabledForMultiCustomWar */
+    isEnabledForMultiCustomWar?: (boolean|null);
+
+    /** C_MmChangeAvailability isEnabledForWarRoom */
+    isEnabledForWarRoom?: (boolean|null);
+}
+
+/** Represents a C_MmChangeAvailability. */
+export declare class C_MmChangeAvailability implements IC_MmChangeAvailability {
+
+    /**
+     * Constructs a new C_MmChangeAvailability.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_MmChangeAvailability);
+
+    /** C_MmChangeAvailability mapFileName. */
+    public mapFileName: string;
+
+    /** C_MmChangeAvailability isEnabledForMultiCustomWar. */
+    public isEnabledForMultiCustomWar: boolean;
+
+    /** C_MmChangeAvailability isEnabledForWarRoom. */
+    public isEnabledForWarRoom: boolean;
+
+    /**
+     * Creates a new C_MmChangeAvailability instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_MmChangeAvailability instance
+     */
+    public static create(properties?: IC_MmChangeAvailability): C_MmChangeAvailability;
+
+    /**
+     * Encodes the specified C_MmChangeAvailability message. Does not implicitly {@link C_MmChangeAvailability.verify|verify} messages.
+     * @param message C_MmChangeAvailability message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_MmChangeAvailability, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_MmChangeAvailability message, length delimited. Does not implicitly {@link C_MmChangeAvailability.verify|verify} messages.
+     * @param message C_MmChangeAvailability message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_MmChangeAvailability, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_MmChangeAvailability message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_MmChangeAvailability
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_MmChangeAvailability;
+
+    /**
+     * Decodes a C_MmChangeAvailability message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_MmChangeAvailability
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_MmChangeAvailability;
+
+    /**
+     * Verifies a C_MmChangeAvailability message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_MmChangeAvailability message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_MmChangeAvailability
+     */
+    public static fromObject(object: { [k: string]: any }): C_MmChangeAvailability;
+
+    /**
+     * Creates a plain object from a C_MmChangeAvailability message. Also converts values to other types if specified.
+     * @param message C_MmChangeAvailability
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_MmChangeAvailability, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_MmChangeAvailability to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_MmChangeAvailability. */
+export declare interface IS_MmChangeAvailability {
+
+    /** S_MmChangeAvailability errorCode */
+    errorCode?: (number|null);
+
+    /** S_MmChangeAvailability mapFileName */
+    mapFileName?: (string|null);
+
+    /** S_MmChangeAvailability isEnabledForMultiCustomWar */
+    isEnabledForMultiCustomWar?: (boolean|null);
+
+    /** S_MmChangeAvailability isEnabledForWarRoom */
+    isEnabledForWarRoom?: (boolean|null);
+}
+
+/** Represents a S_MmChangeAvailability. */
+export declare class S_MmChangeAvailability implements IS_MmChangeAvailability {
+
+    /**
+     * Constructs a new S_MmChangeAvailability.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_MmChangeAvailability);
+
+    /** S_MmChangeAvailability errorCode. */
+    public errorCode: number;
+
+    /** S_MmChangeAvailability mapFileName. */
+    public mapFileName: string;
+
+    /** S_MmChangeAvailability isEnabledForMultiCustomWar. */
+    public isEnabledForMultiCustomWar: boolean;
+
+    /** S_MmChangeAvailability isEnabledForWarRoom. */
+    public isEnabledForWarRoom: boolean;
+
+    /**
+     * Creates a new S_MmChangeAvailability instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_MmChangeAvailability instance
+     */
+    public static create(properties?: IS_MmChangeAvailability): S_MmChangeAvailability;
+
+    /**
+     * Encodes the specified S_MmChangeAvailability message. Does not implicitly {@link S_MmChangeAvailability.verify|verify} messages.
+     * @param message S_MmChangeAvailability message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_MmChangeAvailability, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_MmChangeAvailability message, length delimited. Does not implicitly {@link S_MmChangeAvailability.verify|verify} messages.
+     * @param message S_MmChangeAvailability message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_MmChangeAvailability, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_MmChangeAvailability message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_MmChangeAvailability
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_MmChangeAvailability;
+
+    /**
+     * Decodes a S_MmChangeAvailability message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_MmChangeAvailability
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_MmChangeAvailability;
+
+    /**
+     * Verifies a S_MmChangeAvailability message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_MmChangeAvailability message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_MmChangeAvailability
+     */
+    public static fromObject(object: { [k: string]: any }): S_MmChangeAvailability;
+
+    /**
+     * Creates a plain object from a S_MmChangeAvailability message. Also converts values to other types if specified.
+     * @param message S_MmChangeAvailability
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_MmChangeAvailability, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_MmChangeAvailability to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };
