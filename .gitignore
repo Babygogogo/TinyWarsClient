@@ -3,3 +3,4 @@ bin-debug/
 bin-release/
 *.lua
 utils/tinify/
+.idea/
