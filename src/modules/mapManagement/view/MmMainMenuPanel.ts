@@ -1,27 +1,27 @@
 
-namespace TinyWars.SingleCustomRoom {
+namespace TinyWars.MapManagement {
     import Lang         = Utility.Lang;
     import FlowManager  = Utility.FlowManager;
 
-    export class ScrMainMenuPanel extends GameUi.UiPanel {
+    export class MmMainMenuPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: ScrMainMenuPanel;
+        private static _instance: MmMainMenuPanel;
 
         private _btnBack    : GameUi.UiButton;
         private _listCommand: GameUi.UiScrollList;
 
         public static show(): void {
-            if (!ScrMainMenuPanel._instance) {
-                ScrMainMenuPanel._instance = new ScrMainMenuPanel();
+            if (!MmMainMenuPanel._instance) {
+                MmMainMenuPanel._instance = new MmMainMenuPanel();
             }
-            ScrMainMenuPanel._instance.open();
+            MmMainMenuPanel._instance.open();
         }
 
         public static hide(): void {
-            if (ScrMainMenuPanel._instance) {
-                ScrMainMenuPanel._instance.close();
+            if (MmMainMenuPanel._instance) {
+                MmMainMenuPanel._instance.close();
             }
         }
 
@@ -29,7 +29,7 @@ namespace TinyWars.SingleCustomRoom {
             super();
 
             this._setAutoAdjustHeightEnabled();
-            this.skinName = "resource/skins/singleCustomRoom/ScrMainMenuPanel.exml";
+            this.skinName = "resource/skins/mapManagement/MmMainMenuPanel.exml";
         }
 
         protected _onFirstOpened(): void {
@@ -58,7 +58,7 @@ namespace TinyWars.SingleCustomRoom {
             FlowManager.gotoLobby();
         }
         private _onNotifySLogout(e: egret.Event): void {
-            ScrMainMenuPanel.hide();
+            MmMainMenuPanel.hide();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -67,40 +67,12 @@ namespace TinyWars.SingleCustomRoom {
         private _createDataForListCommand(): DataForCommandRenderer[] {
             return [
                 {
-                    name    : Lang.getText(Lang.Type.B0000),
+                    name    : Lang.getText(Lang.Type.B0193),
                     callback: (): void => {
-                        ScrMainMenuPanel.hide();
-                        SingleCustomRoom.ScrCreateMapListPanel.show();
+                        MmMainMenuPanel.hide();
+                        MmAvailabilityListPanel.show({});
                     },
                 },
-                // {
-                //     name    : Lang.getText(Lang.Type.B0023),
-                //     callback: (): void => {
-                //         ScrMainMenuPanel.hide();
-                //         SingleCustomRoom.McrJoinMapListPanel.show();
-                //     },
-                // },
-                // {
-                //     name    : Lang.getText(Lang.Type.B0022),
-                //     callback: (): void => {
-                //         ScrMainMenuPanel.hide();
-                //         SingleCustomRoom.McrExitMapListPanel.show();
-                //     },
-                // },
-                // {
-                //     name    : Lang.getText(Lang.Type.B0024),
-                //     callback: () => {
-                //         ScrMainMenuPanel.hide();
-                //         SingleCustomRoom.McrContinueWarListPanel.show();
-                //     },
-                // },
-                // {
-                //     name    : Lang.getText(Lang.Type.B0092),
-                //     callback: () => {
-                //         ScrMainMenuPanel.hide();
-                //         SingleCustomRoom.McrReplayListPanel.show();
-                //     },
-                // },
             ];
         }
     }

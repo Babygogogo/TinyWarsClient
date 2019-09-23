@@ -46,7 +46,8 @@
                                 </e:Skin>
                             </GameUi:skinName>
                         </GameUi:UiButton>
-                        <GameUi:UiLabel id="_labelName" text="地图名称" x="10" size="22" textColor.down="0x00ff00" y="20" />
+                        <GameUi:UiLabel id="_labelName" text="地图名称" x="10" size="16" textColor.down="0x00ff00" y="20"
+                                        maxTextWidth="150" />
                         <GameUi:UiLabel id="_labelInTurn" text="我的回合" x="10" size="10" y="4" textColor="0x00ff00" />
                         <GameUi:UiButton id="_btnNext" label="&gt;&gt;" x="160" visible.up="false" y="20">
                             <e:skinName>

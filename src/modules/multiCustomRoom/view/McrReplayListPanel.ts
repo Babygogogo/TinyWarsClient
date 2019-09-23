@@ -7,7 +7,7 @@ namespace TinyWars.MultiCustomRoom {
     import Helpers          = Utility.Helpers;
     import ProtoTypes       = Utility.ProtoTypes;
     import FlowManager      = Utility.FlowManager;
-    import TemplateMapModel = WarMap.WarMapModel;
+    import WarMapModel      = WarMap.WarMapModel;
 
     export class McrReplayListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
@@ -83,14 +83,14 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         public setSelectedIndex(newIndex: number): void {
-            const datas         = this._dataForListReplay;
-            const maxIndex      = datas ? datas.length - 1 : -1;
+            const dataList      = this._dataForListReplay;
+            const maxIndex      = dataList ? dataList.length - 1 : -1;
             const oldIndex      = this._selectedIndex;
             newIndex            = newIndex <= maxIndex ? newIndex : undefined;
             this._selectedIndex = newIndex;
 
-            (datas[oldIndex]) && (this._listMap.updateSingleData(oldIndex, datas[oldIndex]));
-            (datas[newIndex]) && (this._listMap.updateSingleData(newIndex, datas[newIndex]));
+            (dataList[oldIndex]) && (this._listMap.updateSingleData(oldIndex, dataList[oldIndex]));
+            (dataList[newIndex]) && (this._listMap.updateSingleData(newIndex, dataList[newIndex]));
 
             this._updateGroupInfo();
             this._updateMapView();
@@ -135,19 +135,19 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _updateListReplay(): void {
-            const datas = this._dataForListReplay;
-            if ((!datas) || (!datas.length)) {
+            const dataList = this._dataForListReplay;
+            if ((!dataList) || (!dataList.length)) {
                 this._labelNoReplay.visible = true;
                 this._listMap.clear();
             } else {
                 this._labelNoReplay.visible = false;
-                this._listMap.bindData(datas);
+                this._listMap.bindData(dataList);
             }
         }
 
         private _updateGroupInfo(): void {
-            const datas = this._dataForListReplay;
-            const data  = datas ? datas[this._selectedIndex] : undefined;
+            const dataList  = this._dataForListReplay;
+            const data      = dataList ? dataList[this._selectedIndex] : undefined;
             egret.Tween.removeTweens(this._groupInfo);
 
             if (!data) {
@@ -156,9 +156,10 @@ namespace TinyWars.MultiCustomRoom {
                 this._groupInfo.visible = true;
                 this._groupInfo.alpha   = 1;
 
-                const info = data.info;
-                this._labelMapName.text         = Lang.getFormatedText(Lang.Type.F0000, info.mapName);
-                this._labelDesigner.text        = Lang.getFormatedText(Lang.Type.F0001, info.mapDesigner);
+                const info                      = data.info;
+                const mapMetaData               = WarMapModel.getMapMetaData(info.mapFileName);
+                this._labelMapName.text         = Lang.getFormatedText(Lang.Type.F0000, WarMapModel.getMapNameInLanguage(mapMetaData.mapFileName));
+                this._labelDesigner.text        = Lang.getFormatedText(Lang.Type.F0001, mapMetaData.mapDesigner);
                 this._labelHasFog.text          = Lang.getFormatedText(Lang.Type.F0005, Lang.getText(info.hasFog ? Lang.Type.B0012 : Lang.Type.B0013));
                 this._labelTurnIndex.text       = `${Lang.getText(Lang.Type.B0091)}: ${info.turnIndex + 1}`;
                 this._labelNextActionId.text    = `${Lang.getText(Lang.Type.B0090)}: ${info.nextActionId}`;
@@ -169,27 +170,27 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _updateMapView(): Promise<void> {
-            const datas = this._dataForListReplay;
-            const data  = datas ? datas[this._selectedIndex] : undefined;
+            const dataList  = this._dataForListReplay;
+            const data      = dataList ? dataList[this._selectedIndex] : undefined;
             if (!data) {
                 this._zoomMap.visible = false;
             } else {
                 this._zoomMap.visible = true;
 
-                const key           = data.info as Types.MapIndexKey
-                const [mapData]     = await Promise.all([TemplateMapModel.getMapData(key), TemplateMapModel.getMapDynamicInfoAsync(key)]);
+                const mapFileName   = data.info.mapFileName;
+                const mapRawData    = await WarMapModel.getMapRawData(mapFileName);
                 const tileMapView   = new WarMap.WarMapTileMapView();
-                tileMapView.init(mapData.mapWidth, mapData.mapHeight);
-                tileMapView.updateWithBaseViewIdArray(mapData.tileBases);
-                tileMapView.updateWithObjectViewIdArray(mapData.tileObjects);
+                tileMapView.init(mapRawData.mapWidth, mapRawData.mapHeight);
+                tileMapView.updateWithBaseViewIdArray(mapRawData.tileBases);
+                tileMapView.updateWithObjectViewIdArray(mapRawData.tileObjects);
 
                 const unitMapView = new WarMap.WarMapUnitMapView();
-                unitMapView.initWithDatas(this._createUnitViewDatas(mapData.units, mapData.mapWidth, mapData.mapHeight));
+                unitMapView.initWithDataList(this._createUnitViewDataList(mapRawData.units, mapRawData.mapWidth, mapRawData.mapHeight));
 
                 const gridSize = ConfigManager.getGridSize();
                 this._zoomMap.removeAllContents();
-                this._zoomMap.setContentWidth(mapData.mapWidth * gridSize.width);
-                this._zoomMap.setContentHeight(mapData.mapHeight * gridSize.height);
+                this._zoomMap.setContentWidth(mapRawData.mapWidth * gridSize.width);
+                this._zoomMap.setContentHeight(mapRawData.mapHeight * gridSize.height);
                 this._zoomMap.addContent(tileMapView);
                 this._zoomMap.addContent(unitMapView);
                 this._zoomMap.setContentScale(0, true);
@@ -246,9 +247,9 @@ namespace TinyWars.MultiCustomRoom {
             return data;
         }
 
-        private _createUnitViewDatas(unitViewIds: number[], mapWidth: number, mapHeight: number): Types.UnitViewData[] {
+        private _createUnitViewDataList(unitViewIds: number[], mapWidth: number, mapHeight: number): Types.UnitViewData[] {
             const configVersion = ConfigManager.getNewestConfigVersion();
-            const datas: Types.UnitViewData[] = [];
+            const dataList      : Types.UnitViewData[] = [];
 
             let index  = 0;
             for (let y = 0; y < mapHeight; ++y) {
@@ -256,7 +257,7 @@ namespace TinyWars.MultiCustomRoom {
                     const viewId = unitViewIds[index];
                     ++index;
                     if (viewId > 0) {
-                        datas.push({
+                        dataList.push({
                             configVersion: configVersion,
                             gridX        : x,
                             gridY        : y,
@@ -265,7 +266,7 @@ namespace TinyWars.MultiCustomRoom {
                     }
                 }
             }
-            return datas;
+            return dataList;
         }
     }
 
@@ -295,7 +296,7 @@ namespace TinyWars.MultiCustomRoom {
             const info                  = data.info;
             this.currentState           = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
             this._labelTurnIndex.text   = `${Lang.getText(Lang.Type.B0091)}: ${info.turnIndex + 1}`;
-            this._labelName.text        = info.mapName;
+            this._labelName.text        = WarMapModel.getMapNameInLanguage(info.mapFileName);
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {

@@ -48,7 +48,7 @@ namespace TinyWars.SingleCustomRoom {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.SGetNewestMapInfos, callback: this._onNotifySGetNewestMapInfos },
+                { type: Notify.Type.SGetMapMetaDataList, callback: this._onNotifySGetNewestMapInfos },
             ];
             this._uiListeners = [
                 { ui: this._btnSearch, callback: this._onTouchTapBtnSearch },
@@ -72,16 +72,16 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         public async setSelectedIndex(newIndex: number): Promise<void> {
-            const datas = this._dataForList;
-            if (datas.length <= 0) {
+            const dataList = this._dataForList;
+            if (dataList.length <= 0) {
                 this._selectedIndex = undefined;
-            } else if (datas[newIndex]) {
+            } else if (dataList[newIndex]) {
                 const oldIndex      = this._selectedIndex;
                 this._selectedIndex = newIndex;
-                (datas[oldIndex])       && (this._listMap.updateSingleData(oldIndex, datas[oldIndex]));
-                (oldIndex !== newIndex) && (this._listMap.updateSingleData(newIndex, datas[newIndex]));
+                (dataList[oldIndex])    && (this._listMap.updateSingleData(oldIndex, dataList[oldIndex]));
+                (oldIndex !== newIndex) && (this._listMap.updateSingleData(newIndex, dataList[newIndex]));
 
-                await this._showMap(datas[newIndex]);
+                await this._showMap(dataList[newIndex].mapFileName);
             }
         }
         public getSelectedIndex(): number {
@@ -101,7 +101,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _onTouchTapBtnSearch(e: egret.TouchEvent): void {
-            WarMap.WarMapSearchPanel.show();
+            // WarMap.WarMapSearchPanel.show();
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
@@ -113,26 +113,22 @@ namespace TinyWars.SingleCustomRoom {
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _createDataForListMap(): DataForMapNameRenderer[] {
-            const data: DataForMapNameRenderer[] = [];
-            const infos = WarMapModel.getNewestMapInfos();
-            if (infos.mapInfos) {
-                for (let i = 0; i < infos.mapInfos.length; ++i) {
-                    const info = infos.mapInfos[i];
-                    data.push({
-                        mapName     : info.mapName,
-                        mapDesigner : info.mapDesigner,
-                        mapVersion  : info.mapVersion,
-                        index       : i,
-                        panel       : this,
-                    });
-                }
+            const data  : DataForMapNameRenderer[] = [];
+            let index   = 0;
+            for (const [mapFileName] of WarMapModel.getMapMetaDataDict()) {
+                data.push({
+                    mapFileName,
+                    index,
+                    panel       : this,
+                });
+                ++index;
             }
             return data;
         }
 
-        private _createUnitViewDatas(unitViewIds: number[], mapWidth: number, mapHeight: number): Types.UnitViewData[] {
+        private _createUnitViewDataList(unitViewIds: number[], mapWidth: number, mapHeight: number): Types.UnitViewData[] {
             const configVersion = ConfigManager.getNewestConfigVersion();
-            const datas: Types.UnitViewData[] = [];
+            const dataList      : Types.UnitViewData[] = [];
 
             let index  = 0;
             for (let y = 0; y < mapHeight; ++y) {
@@ -140,7 +136,7 @@ namespace TinyWars.SingleCustomRoom {
                     const viewId = unitViewIds[index];
                     ++index;
                     if (viewId > 0) {
-                        datas.push({
+                        dataList.push({
                             configVersion: configVersion,
                             gridX        : x,
                             gridY        : y,
@@ -149,33 +145,34 @@ namespace TinyWars.SingleCustomRoom {
                     }
                 }
             }
-            return datas;
+            return dataList;
         }
 
-        private async _showMap(key: Types.MapIndexKey): Promise<void> {
-            const [mapData, mapInfo]        = await Promise.all([WarMapModel.getMapData(key), WarMapModel.getMapDynamicInfoAsync(key)]);
-            this._labelMapName.text         = Lang.getFormatedText(Lang.Type.F0000, mapData.mapName);
-            this._labelDesigner.text        = Lang.getFormatedText(Lang.Type.F0001, mapData.mapDesigner);
-            this._labelPlayersCount.text    = Lang.getFormatedText(Lang.Type.F0002, mapData.playersCount);
-            this._labelRating.text          = Lang.getFormatedText(Lang.Type.F0003, mapInfo.rating != null ? mapInfo.rating.toFixed(2) : Lang.getText(Lang.Type.B0001));
-            this._labelPlayedTimes.text     = Lang.getFormatedText(Lang.Type.F0004, mapInfo.mcwPlayedTimes + mapInfo.rankPlayedTimes);
-            this._groupInfo.visible         = true;
-            this._groupInfo.alpha           = 1;
+        private async _showMap(mapFileName: string): Promise<void> {
+            const mapRawData                        = await WarMapModel.getMapRawData(mapFileName);
+            const mapStatisticsData                 = WarMapModel.getMapStatisticsData(mapFileName);
+            this._labelMapName.text                 = Lang.getFormatedText(Lang.Type.F0000, WarMapModel.getMapNameInLanguage(mapFileName));
+            this._labelDesigner.text                = Lang.getFormatedText(Lang.Type.F0001, mapRawData.mapDesigner);
+            this._labelPlayersCount.text            = Lang.getFormatedText(Lang.Type.F0002, mapRawData.playersCount);
+            this._labelRating.text                  = Lang.getFormatedText(Lang.Type.F0003, mapStatisticsData.rating != null ? mapStatisticsData.rating.toFixed(2) : Lang.getText(Lang.Type.B0001));
+            this._labelPlayedTimes.text             = Lang.getFormatedText(Lang.Type.F0004, mapStatisticsData.mcwPlayedTimes + mapStatisticsData.rankPlayedTimes);
+            this._groupInfo.visible                 = true;
+            this._groupInfo.alpha                   = 1;
             egret.Tween.removeTweens(this._groupInfo);
             egret.Tween.get(this._groupInfo).wait(5000).to({alpha: 0}, 1000).call(() => {this._groupInfo.visible = false; this._groupInfo.alpha = 1});
 
             const tileMapView = new WarMap.WarMapTileMapView();
-            tileMapView.init(mapData.mapWidth, mapData.mapHeight);
-            tileMapView.updateWithBaseViewIdArray(mapData.tileBases);
-            tileMapView.updateWithObjectViewIdArray(mapData.tileObjects);
+            tileMapView.init(mapRawData.mapWidth, mapRawData.mapHeight);
+            tileMapView.updateWithBaseViewIdArray(mapRawData.tileBases);
+            tileMapView.updateWithObjectViewIdArray(mapRawData.tileObjects);
 
             const unitMapView = new WarMap.WarMapUnitMapView();
-            unitMapView.initWithDatas(this._createUnitViewDatas(mapData.units, mapData.mapWidth, mapData.mapHeight));
+            unitMapView.initWithDataList(this._createUnitViewDataList(mapRawData.units, mapRawData.mapWidth, mapRawData.mapHeight));
 
             const gridSize = ConfigManager.getGridSize();
             this._zoomMap.removeAllContents();
-            this._zoomMap.setContentWidth(mapData.mapWidth * gridSize.width);
-            this._zoomMap.setContentHeight(mapData.mapHeight * gridSize.height);
+            this._zoomMap.setContentWidth(mapRawData.mapWidth * gridSize.width);
+            this._zoomMap.setContentHeight(mapRawData.mapHeight * gridSize.height);
             this._zoomMap.addContent(tileMapView);
             this._zoomMap.addContent(unitMapView);
             this._zoomMap.setContentScale(0, true);
@@ -183,9 +180,7 @@ namespace TinyWars.SingleCustomRoom {
     }
 
     type DataForMapNameRenderer = {
-        mapName     : string;
-        mapDesigner : string;
-        mapVersion  : number;
+        mapFileName : string;
         index       : number;
         panel       : ScrCreateMapListPanel;
     }
@@ -207,7 +202,7 @@ namespace TinyWars.SingleCustomRoom {
 
             const data = this.data as DataForMapNameRenderer;
             this.currentState    = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
-            this._labelName.text = data.mapName;
+            this._labelName.text = data.mapFileName;
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {

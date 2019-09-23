@@ -1,6 +1,7 @@
 
 namespace TinyWars.Replay {
     import Types                = Utility.Types;
+    import ProtoTypes           = Utility.ProtoTypes;
     import SerializedBwTileMap  = Types.SerializedBwTileMap;
     import SerializedBwTile     = Types.SerializedBwTile;
 
@@ -13,7 +14,7 @@ namespace TinyWars.Replay {
         }
 
         public serialize(): SerializedBwTileMap | undefined {
-            const mapData           = this._getTemplateMap();
+            const mapData           = this._getMapRawData();
             const { width, height } = this.getMapSize();
             const map               = this._getMap();
             const tilesData: SerializedBwTile[] = [];
@@ -27,7 +28,7 @@ namespace TinyWars.Replay {
         }
     }
 
-    function checkShouldSerializeTile(tileData: SerializedBwTile, mapData: Types.TemplateMap, posIndex: number): boolean {
+    function checkShouldSerializeTile(tileData: SerializedBwTile, mapData: ProtoTypes.IMapRawData, posIndex: number): boolean {
         return (tileData.currentBuildPoint      != null)
             || (tileData.currentCapturePoint    != null)
             || (tileData.currentHp              != null)

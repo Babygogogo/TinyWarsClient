@@ -1,111 +1,100 @@
 
 namespace TinyWars.WarMap {
-    import Types            = Utility.Types;
-    import Helpers          = Utility.Helpers;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import LocalStorage     = Utility.LocalStorage;
-    import Notify           = Utility.Notify;
-    import MapDynamicInfo   = ProtoTypes.IMapDynamicInfo;
-    import MapIndexKey      = Types.MapIndexKey;
+    import Types                = Utility.Types;
+    import Helpers              = Utility.Helpers;
+    import ProtoTypes           = Utility.ProtoTypes;
+    import LocalStorage         = Utility.LocalStorage;
+    import Notify               = Utility.Notify;
+    import Lang                 = Utility.Lang;
+    import MapRawData           = ProtoTypes.IMapRawData;
+    import MapMetaData          = ProtoTypes.IMapMetaData;
+    import MapStatisticsData    = ProtoTypes.IMapStatisticsData;
 
     export namespace WarMapModel {
-        const _ALL_DYNAMIC_INFOS    = new Map<string, MapDynamicInfo>();
-        const _ALL_DATAS            = new Map<string, Types.TemplateMap>();
-
-        let _newestMapDynamicInfos: ProtoTypes.IS_GetNewestMapDynamicInfos;
+        const _RAW_DATA_DICT        = new Map<string, MapRawData>();
+        const _META_DATA_DICT       = new Map<string, MapMetaData>();
+        const _STATISTICS_DATA_DICT = new Map<string, MapStatisticsData>();
 
         export function init(): void {
         }
 
-        export function getMapData(key: MapIndexKey): Promise<Types.TemplateMap | undefined> {
-            const mapUrl    = Helpers.getMapUrl(key);
-            const localData = getLocalMapData(mapUrl);
+        export function resetMapMetaDataDict(dataList: MapMetaData[]): void {
+            _META_DATA_DICT.clear();
+            for (const data of dataList) {
+                _META_DATA_DICT.set(data.mapFileName, data);
+            }
+        }
+        export function getMapMetaDataDict(): Map<string, MapMetaData> {
+            return _META_DATA_DICT;
+        }
+
+        export function getMapMetaData(mapFileName: string): MapMetaData | undefined {
+            return _META_DATA_DICT.get(mapFileName);
+        }
+        export function getMapNameInLanguage(mapFileName: string): string | null {
+            const metaData = getMapMetaData(mapFileName);
+            if (!metaData) {
+                return null;
+            } else {
+                return Lang.getLanguageType() === Types.LanguageType.Chinese
+                    ? metaData.mapName
+                    : metaData.mapNameEnglish;
+            }
+        }
+
+        export function getMapRawData(mapFileName: string): Promise<MapRawData | undefined> {
+            const localData = getLocalMapRawData(mapFileName);
             if (localData) {
-                return new Promise<Types.TemplateMap>((resolve, reject) => resolve(localData));
+                return new Promise<MapRawData>((resolve, reject) => resolve(localData));
             } else {
-                return new Promise<Types.TemplateMap | undefined>((resolve, reject) => {
-                    RES.getResByUrl(
-                        mapUrl,
-                        (data: Types.TemplateMap, reqUrl: string) => {
-                            if (reqUrl === mapUrl) {
-                                if (!data) {
-                                    reject(data);
-                                } else {
-                                    LocalStorage.setMapData(mapUrl, JSON.stringify(data));
-                                    _ALL_DATAS.set(mapUrl, data);
-                                    resolve(data);
-                                }
-                            }
-                        },
-                        undefined,
-                        RES.ResourceItem.TYPE_JSON
-                    );
-                });
-            }
-        }
+                return new Promise<MapRawData | undefined>((resolve, reject) => {
+                    const callbackOnSucceed = (e: egret.Event): void => {
+                        const data = e.data as ProtoTypes.IS_GetMapRawData;
+                        if (data.mapFileName === mapFileName) {
+                            Notify.removeEventListener(Notify.Type.SGetMapRawData,          callbackOnSucceed);
+                            Notify.removeEventListener(Notify.Type.SGetMapRawDataFailed,    callbackOnFailed);
 
-        export function setNewestMapInfos(infos: ProtoTypes.IS_GetNewestMapDynamicInfos): void {
-            _newestMapDynamicInfos = infos;
-            updateMapDynamicInfos(infos.mapInfos);
-        }
-        export function getNewestMapInfos(): ProtoTypes.IS_GetNewestMapDynamicInfos {
-            return _newestMapDynamicInfos;
-        }
-
-        export function updateMapDynamicInfos(infos: MapDynamicInfo[] | undefined): void {
-            for (const info of infos || []) {
-                updateMapDynamicInfo(info);
-            }
-        }
-        export function updateMapDynamicInfo(info: MapDynamicInfo): void {
-            _ALL_DYNAMIC_INFOS.set(Helpers.getMapUrl(info as MapIndexKey), info);
-        }
-
-        export function getMapDynamicInfoSync(key: MapIndexKey): MapDynamicInfo | undefined {
-            return _ALL_DYNAMIC_INFOS.get(Helpers.getMapUrl(key));
-        }
-        export function getMapDynamicInfoAsync(key: MapIndexKey): Promise<MapDynamicInfo | undefined> {
-            const info = getMapDynamicInfoSync(key);
-            if (info) {
-                return new Promise<MapDynamicInfo>((resolve) => resolve(info));
-            } else {
-                return new Promise<MapDynamicInfo>((resolve, reject) => {
-                    function callbackOnSucceed(e: egret.Event): void {
-                        const data = e.data as ProtoTypes.IS_GetMapDynamicInfo;
-                        if (checkIsSameMapIndexKey(key, data as MapIndexKey)) {
-                            Notify.removeEventListener(Notify.Type.SGetMapDynamicInfo,          callbackOnSucceed);
-                            Notify.removeEventListener(Notify.Type.SGetMapDynamicInfoFailed,    callbackOnFailed);
-                            resolve(getMapDynamicInfoSync(key));
+                            resolve(data.mapRawData);
                         }
                     }
-                    function callbackOnFailed(e: egret.Event): void {
-                        const data = e.data as ProtoTypes.IS_GetMapDynamicInfo;
-                        if (checkIsSameMapIndexKey(key, data as MapIndexKey)) {
-                            Notify.removeEventListener(Notify.Type.SGetMapDynamicInfo,          callbackOnSucceed);
-                            Notify.removeEventListener(Notify.Type.SGetMapDynamicInfoFailed,    callbackOnFailed);
+                    const callbackOnFailed = (e: egret.Event): void => {
+                        const data = e.data as ProtoTypes.IS_GetMapRawData;
+                        if (data.mapFileName === mapFileName) {
+                            Notify.removeEventListener(Notify.Type.SGetMapRawData,          callbackOnSucceed);
+                            Notify.removeEventListener(Notify.Type.SGetMapRawDataFailed,    callbackOnFailed);
+
                             reject(undefined);
                         }
                     }
-                    Notify.addEventListener(Notify.Type.SGetMapDynamicInfo,         callbackOnSucceed);
-                    Notify.addEventListener(Notify.Type.SGetMapDynamicInfoFailed,   callbackOnFailed);
 
-                    WarMapProxy.reqGetMapDynamicInfo(key);
+                    Notify.addEventListener(Notify.Type.SGetMapRawData,         callbackOnSucceed);
+                    Notify.addEventListener(Notify.Type.SGetMapRawDataFailed,   callbackOnFailed);
+
+                    WarMapProxy.reqGetMapRawData(mapFileName);
                 });
             }
         }
-
-        function getLocalMapData(mapUrl: string): Types.TemplateMap | undefined {
-            if (!_ALL_DATAS.has(mapUrl)) {
-                const data = LocalStorage.getMapData(mapUrl);
-                (data) && (_ALL_DATAS.set(mapUrl, JSON.parse(data)));
-            }
-            return _ALL_DATAS.get(mapUrl);
+        export function setMapRawData(mapFileName: string, mapRawData: MapRawData): void {
+            LocalStorage.setMapRawData(mapFileName, mapRawData);
+            _RAW_DATA_DICT.set(mapFileName, mapRawData);
         }
 
-        function checkIsSameMapIndexKey(k1: MapIndexKey, k2: MapIndexKey): boolean {
-            return (k1.mapDesigner  === k2.mapDesigner)
-                && (k1.mapName      === k2.mapName)
-                && (k1.mapVersion   === k2.mapVersion);
+        export function resetMapStatisticsDataDict(dataList: MapStatisticsData[]): void {
+            _STATISTICS_DATA_DICT.clear();
+            for (const data of dataList) {
+                _STATISTICS_DATA_DICT.set(data.mapFileName, data);
+            }
+        }
+        export function getMapStatisticsData(mapFileName: string): MapStatisticsData | undefined {
+            return _STATISTICS_DATA_DICT.get(mapFileName);
+        }
+
+        function getLocalMapRawData(mapFileName: string): MapRawData | undefined {
+            if (!_RAW_DATA_DICT.has(mapFileName)) {
+                const data = LocalStorage.getMapRawData(mapFileName);
+                (data) && (_RAW_DATA_DICT.set(mapFileName, data));
+            }
+            return _RAW_DATA_DICT.get(mapFileName);
         }
     }
 }

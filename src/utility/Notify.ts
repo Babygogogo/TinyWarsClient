@@ -67,15 +67,18 @@ namespace TinyWars.Utility.Notify {
         SRegister,
         SLogout,
         SHeartbeat,
-        SGetNewestMapInfos,
-        SGetMapDynamicInfo,
-        SGetMapDynamicInfoFailed,
+        SGetMapRawData,
+        SGetMapRawDataFailed,
+        SGetMapMetaDataList,
+        SGetMapStatisticsDataList,
         SGetUserPublicInfo,
         SUserChangeNickname,
         SUserChangeNicknameFailed,
         SUserChangeDiscordId,
         SUserChangeDiscordIdFailed,
         SUserGetOnlineUsers,
+
+        SMmChangeAvailability,
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         SMcrCreateWar,

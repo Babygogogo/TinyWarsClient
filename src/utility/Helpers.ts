@@ -179,14 +179,6 @@ namespace TinyWars.Utility.Helpers {
         return repeatString("0", targetLength - getDigitsCount(num)) + num;
     }
 
-    export function getMapFileName(k: Types.MapIndexKey): string {
-        return `${k.mapName}_${k.mapDesigner}_${k.mapVersion < 10 ? "0" : ""}${k.mapVersion}`;
-    }
-
-    export function getMapUrl(key: Types.MapIndexKey): string {
-        return formatString("resource/assets/map/%s_%s_%s.json", key.mapName, key.mapDesigner, getNumText(key.mapVersion));
-    }
-
     export function getNormalizedHp(hp: number): number {
         return Math.ceil(hp / ConfigManager.UNIT_HP_NORMALIZER);
     }

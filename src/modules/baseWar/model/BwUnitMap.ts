@@ -18,12 +18,12 @@ namespace TinyWars.BaseWar {
         protected abstract _getViewClass(): new () => BwUnitMapView;
         protected abstract _getBwUnitClass(): new () => BwUnit;
 
-        public async init(configVersion: string, mapIndexKey: Types.MapIndexKey, data?: Types.SerializedBwUnitMap): Promise<BwUnitMap> {
+        public async init(configVersion: string, mapFileName: string, data?: Types.SerializedBwUnitMap): Promise<BwUnitMap> {
             this._configVersion = configVersion;
             if (data) {
-                await this._initWithSerializedData(configVersion, mapIndexKey, data)
+                await this._initWithSerializedData(configVersion, mapFileName, data)
             } else {
-                await this._initWithoutSerializedData(configVersion, mapIndexKey);
+                await this._initWithoutSerializedData(configVersion, mapFileName);
             }
 
             this._view = this._view || new (this._getViewClass())();
@@ -31,8 +31,8 @@ namespace TinyWars.BaseWar {
 
             return this;
         }
-        private async _initWithSerializedData(configVersion: string, mapIndexKey: Types.MapIndexKey, data: Types.SerializedBwUnitMap): Promise<BwUnitMap> {
-            const { mapWidth, mapHeight }   = await MapModel.getMapData(mapIndexKey);
+        private async _initWithSerializedData(configVersion: string, mapFileName: string, data: Types.SerializedBwUnitMap): Promise<BwUnitMap> {
+            const { mapWidth, mapHeight }   = await MapModel.getMapRawData(mapFileName);
             const unitDatas                 = data.units;
             const map                       = Helpers.createEmptyMap<BwUnit>(mapWidth);
             const loadedUnits               = new Map<number, BwUnit>();
@@ -54,8 +54,8 @@ namespace TinyWars.BaseWar {
 
             return this;
         }
-        private async _initWithoutSerializedData(configVersion: string, mapIndexKey: Types.MapIndexKey): Promise<BwUnitMap> {
-            const { mapWidth, mapHeight, units: unitViewIds } = await MapModel.getMapData(mapIndexKey);
+        private async _initWithoutSerializedData(configVersion: string, mapFileName: string): Promise<BwUnitMap> {
+            const { mapWidth, mapHeight, units: unitViewIds } = await MapModel.getMapRawData(mapFileName);
             const map       = Helpers.createEmptyMap<BwUnit>(mapWidth);
             let nextUnitId  = 0;
             for (let x = 0; x < mapWidth; ++x) {
