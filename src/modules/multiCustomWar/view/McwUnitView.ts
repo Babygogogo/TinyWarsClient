@@ -20,6 +20,7 @@ namespace TinyWars.MultiCustomWar {
             const playerIndex           = unit.getPlayerIndex();
             const playerIndexMod        = playerIndex % 2;
             const playerIndexLoggedIn   = war.getPlayerIndexLoggedIn();
+            const teamIndexLoggedIn     = war.getPlayerLoggedIn().getTeamIndex();
             const unitType              = unit.getType();
             const isAlwaysVisible       = unit.getTeamIndex() === war.getPlayerLoggedIn().getTeamIndex();
             const tween                 = egret.Tween.get(this);
@@ -38,13 +39,13 @@ namespace TinyWars.MultiCustomWar {
                 if (!isAlwaysVisible) {
                     if (isDiving) {
                         if ((i === path.length - 1)                             &&
-                            (VisibilityHelpers.checkIsUnitOnMapVisibleToPlayer({
+                            (VisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
                                 war,
                                 gridIndex,
                                 unitType,
                                 isDiving,
                                 unitPlayerIndex     : playerIndex,
-                                observerPlayerIndex : playerIndexLoggedIn,
+                                observerTeamIndex   : teamIndexLoggedIn,
                             }))
                         ){
                             tween.call(() => this.visible = true);
@@ -52,21 +53,21 @@ namespace TinyWars.MultiCustomWar {
                             tween.call(() => this.visible = false);
                         }
                     } else {
-                        if ((VisibilityHelpers.checkIsUnitOnMapVisibleToPlayer({
+                        if ((VisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
                                 war,
                                 gridIndex           : path[i - 1],
                                 unitType,
                                 isDiving,
                                 unitPlayerIndex     : playerIndex,
-                                observerPlayerIndex : playerIndexLoggedIn,
+                                observerTeamIndex   : teamIndexLoggedIn,
                             }))                                                     ||
-                            (VisibilityHelpers.checkIsUnitOnMapVisibleToPlayer({
+                            (VisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
                                 war,
                                 gridIndex,
                                 unitType,
                                 isDiving,
                                 unitPlayerIndex     : playerIndex,
-                                observerPlayerIndex : playerIndexLoggedIn,
+                                observerTeamIndex   : teamIndexLoggedIn,
                             }))
                         ) {
                             tween.call(() => this.visible = true);

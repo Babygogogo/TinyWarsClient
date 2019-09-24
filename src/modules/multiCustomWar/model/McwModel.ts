@@ -692,12 +692,12 @@ namespace TinyWars.MultiCustomWar.McwModel {
                 focusUnit.updateView();
                 if (isSuccessful) {
                     const endingGridIndex = pathNodes[pathNodes.length - 1];
-                    if (VisibilityHelpers.checkIsUnitOnMapVisibleToPlayer({
+                    if (VisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
                         war,
                         unitType            : focusUnit.getType(),
                         unitPlayerIndex     : focusUnit.getPlayerIndex(),
                         gridIndex           : endingGridIndex,
-                        observerPlayerIndex : war.getPlayerIndexLoggedIn(),
+                        observerTeamIndex   : war.getPlayerLoggedIn().getTeamIndex(),
                         isDiving            : false,
                     })) {
                         war.getGridVisionEffect().showEffectDive(endingGridIndex);
@@ -1127,12 +1127,12 @@ namespace TinyWars.MultiCustomWar.McwModel {
                 focusUnit.updateView();
                 if (isSuccessful) {
                     const endingGridIndex = pathNodes[pathNodes.length - 1];
-                    if (VisibilityHelpers.checkIsUnitOnMapVisibleToPlayer({
+                    if (VisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
                         war,
                         unitType            : focusUnit.getType(),
                         unitPlayerIndex     : focusUnit.getPlayerIndex(),
                         gridIndex           : endingGridIndex,
-                        observerPlayerIndex : war.getPlayerIndexLoggedIn(),
+                        observerTeamIndex   : war.getPlayerLoggedIn().getTeamIndex(),
                         isDiving            : false,
                     })) {
                         war.getGridVisionEffect().showEffectSurface(endingGridIndex);

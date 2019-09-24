@@ -94,6 +94,7 @@ namespace TinyWars.MultiCustomWar.McwHelpers {
 
     export function updateTilesAndUnitsOnVisibilityChanged(war: McwWar): void {
         const playerIndexLoggedIn   = war.getPlayerIndexLoggedIn();
+        const teamIndexLoggedIn     = war.getPlayerLoggedIn().getTeamIndex();
         const fogMap                = war.getFogMap();
 
         const tileMap = war.getTileMap();
@@ -123,13 +124,13 @@ namespace TinyWars.MultiCustomWar.McwHelpers {
 
         war.getUnitMap().forEachUnitOnMap(unit => {
             const gridIndex = unit.getGridIndex();
-            if (VisibilityHelpers.checkIsUnitOnMapVisibleToPlayer({
+            if (VisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
                 war,
                 gridIndex,
                 unitType            : unit.getType(),
                 isDiving            : unit.getIsDiving(),
                 unitPlayerIndex     : unit.getPlayerIndex(),
-                observerPlayerIndex : playerIndexLoggedIn,
+                observerTeamIndex   : teamIndexLoggedIn,
             })) {
                 unit.setViewVisible(true);
             } else {

@@ -48,15 +48,16 @@ namespace TinyWars.MultiCustomWar {
         private _resetFogForPlayerLoggedIn(): void {
             const war           = this._getWar() as McwWar;
             const playerIndex   = war.getPlayerIndexLoggedIn();
+            const teamIndex     = war.getPlayerLoggedIn().getTeamIndex();
             war.getUnitMap().forEachUnitOnMap(unit => {
                 const gridIndex = unit.getGridIndex();
-                if (!VisibilityHelpers.checkIsUnitOnMapVisibleToPlayer({
+                if (!VisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
                     war,
                     gridIndex,
                     unitType            : unit.getType(),
                     isDiving            : unit.getIsDiving(),
                     unitPlayerIndex     : unit.getPlayerIndex(),
-                    observerPlayerIndex : playerIndex,
+                    observerTeamIndex   : teamIndex,
                 })) {
                     DestructionHelpers.removeUnitOnMap(war, gridIndex);
                 }
