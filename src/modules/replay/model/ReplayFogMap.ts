@@ -9,9 +9,9 @@ namespace TinyWars.Replay {
         public startRunning(war: ReplayWar): void {
             super.startRunning(war);
 
-            const playerIndex = war.getPlayerInTurn().getPlayerIndex();
+            const teamIndex = war.getPlayerInTurn().getTeamIndex();
             war.getTileMap().forEachTile(tile => {
-                if (!VisibilityHelpers.checkIsTileVisibleToPlayer(war, tile.getGridIndex(), playerIndex)) {
+                if (!VisibilityHelpers.checkIsTileVisibleToTeam(war, tile.getGridIndex(), teamIndex)) {
                     tile.setFogEnabled();
                 } else {
                     tile.setFogDisabled();

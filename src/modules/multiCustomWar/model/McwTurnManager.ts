@@ -47,7 +47,6 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _resetFogForPlayerLoggedIn(): void {
             const war           = this._getWar() as McwWar;
-            const playerIndex   = war.getPlayerIndexLoggedIn();
             const teamIndex     = war.getPlayerLoggedIn().getTeamIndex();
             war.getUnitMap().forEachUnitOnMap(unit => {
                 const gridIndex = unit.getGridIndex();
@@ -64,7 +63,7 @@ namespace TinyWars.MultiCustomWar {
             });
 
             war.getTileMap().forEachTile(tile => {
-                if (!VisibilityHelpers.checkIsTileVisibleToPlayer(war, tile.getGridIndex(), playerIndex)) {
+                if (!VisibilityHelpers.checkIsTileVisibleToTeam(war, tile.getGridIndex(), teamIndex)) {
                     tile.setFogEnabled();
                 } else {
                     tile.setFogDisabled();

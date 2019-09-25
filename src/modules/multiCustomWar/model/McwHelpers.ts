@@ -93,14 +93,13 @@ namespace TinyWars.MultiCustomWar.McwHelpers {
     }
 
     export function updateTilesAndUnitsOnVisibilityChanged(war: McwWar): void {
-        const playerIndexLoggedIn   = war.getPlayerIndexLoggedIn();
         const teamIndexLoggedIn     = war.getPlayerLoggedIn().getTeamIndex();
         const fogMap                = war.getFogMap();
 
         const tileMap = war.getTileMap();
         tileMap.forEachTile(tile => {
             const gridIndex = tile.getGridIndex();
-            if (VisibilityHelpers.checkIsTileVisibleToPlayer(war, gridIndex, playerIndexLoggedIn)) {
+            if (VisibilityHelpers.checkIsTileVisibleToTeam(war, gridIndex, teamIndexLoggedIn)) {
                 if (tile.getIsFogEnabled()) {
                     const playerIndex = tile.getPlayerIndex();
                     if (playerIndex > 0) {
