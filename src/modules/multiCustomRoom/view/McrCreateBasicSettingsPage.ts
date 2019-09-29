@@ -240,7 +240,7 @@ namespace TinyWars.MultiCustomRoom {
         private _updateLabelCoName(): void {
             const coId = McrModel.getCreateWarCoId();
             if (coId == null) {
-                this._labelCoName.text = `(${Lang.getText(Lang.Type.B0013)} CO)`;
+                this._labelCoName.text = `(${Lang.getText(Lang.Type.B0001)} CO)`;
             } else {
                 const cfg               = ConfigManager.getCoBasicCfg(ConfigManager.getNewestConfigVersion(), coId);
                 this._labelCoName.text  = `${cfg.name} (T${cfg.tier})`;

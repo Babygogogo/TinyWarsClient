@@ -1462,11 +1462,8 @@ export declare interface ICoSkillCfg {
     /** CoSkillCfg name */
     name?: (string|null);
 
-    /** CoSkillCfg passiveDesc */
-    passiveDesc?: (string[]|null);
-
-    /** CoSkillCfg activeDesc */
-    activeDesc?: (string[]|null);
+    /** CoSkillCfg desc */
+    desc?: (string[]|null);
 
     /** CoSkillCfg attackBonus */
     attackBonus?: (number[]|null);
@@ -1529,11 +1526,8 @@ export declare class CoSkillCfg implements ICoSkillCfg {
     /** CoSkillCfg name. */
     public name: string;
 
-    /** CoSkillCfg passiveDesc. */
-    public passiveDesc: string[];
-
-    /** CoSkillCfg activeDesc. */
-    public activeDesc: string[];
+    /** CoSkillCfg desc. */
+    public desc: string[];
 
     /** CoSkillCfg attackBonus. */
     public attackBonus: number[];

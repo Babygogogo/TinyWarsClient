@@ -179,7 +179,7 @@ namespace TinyWars.MultiCustomRoom {
         private _updateLabelCoName(): void {
             const coId = McrModel.getJoinWarCoId();
             if (coId == null) {
-                this._labelCoName.text = `(${Lang.getText(Lang.Type.B0013)} CO)`;
+                this._labelCoName.text = `(${Lang.getText(Lang.Type.B0001)} CO)`;
             } else {
                 const cfg               = ConfigManager.getCoBasicCfg(ConfigManager.getNewestConfigVersion(), coId);
                 this._labelCoName.text  = `${cfg.name} (T${cfg.tier})`;
@@ -251,7 +251,7 @@ namespace TinyWars.MultiCustomRoom {
             this._labelTeam.text        = data.teamIndex != null ? Helpers.getTeamText(data.teamIndex) : "??";
 
             if (data.coId == null) {
-                this._labelCoName.text = data.nickname == null ? "????" : `(${Lang.getText(Lang.Type.B0013)} CO)`;
+                this._labelCoName.text = data.nickname == null ? "????" : `(${Lang.getText(Lang.Type.B0001)} CO)`;
             } else {
                 const cfg               = ConfigManager.getCoBasicCfg(ConfigManager.getNewestConfigVersion(), data.coId);
                 this._labelCoName.text  = `${cfg.name} (T${cfg.tier})`;
