@@ -186,30 +186,6 @@ namespace TinyWars.BaseWar {
                 };
             }
         }
-        public getVisibilityForTeam(gridIndex: GridIndex, teamIndex: number): Visibility {
-            if (!this.checkHasFogCurrently()) {
-                return {
-                    fromPaths   : 2,
-                    fromTiles   : 1,
-                    fromUnits   : 1,
-                };
-            } else {
-                let [fromPaths, fromTiles, fromUnits] = [0, 0, 0];
-                this._war.getPlayerManager().forEachPlayer(false, (player: BwPlayer) => {
-                    if ((player.getIsAlive()) && (player.getTeamIndex() === teamIndex)) {
-                        const v = this.getVisibilityForPlayer(gridIndex, player.getPlayerIndex());
-                        fromPaths   = Math.max(fromPaths, v.fromPaths);
-                        fromTiles   = Math.max(fromTiles, v.fromTiles);
-                        fromUnits   = Math.max(fromUnits, v.fromUnits);
-                    }
-                });
-                return {
-                    fromPaths   : fromPaths as VisibilityFromPaths,
-                    fromTiles   : fromTiles as VisibilityFromTiles,
-                    fromUnits   : fromUnits as VisibilityFromUnits,
-                };
-            }
-        }
     }
 
     function createEmptyMaps<T extends (number | VisibilityFromPaths)>(mapSize: MapSize, playersCount: number): Map<number, T[][]> {
