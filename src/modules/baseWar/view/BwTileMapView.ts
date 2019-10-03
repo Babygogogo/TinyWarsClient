@@ -110,7 +110,7 @@ namespace TinyWars.BaseWar {
                 const player        = war.getPlayer(playerIndex);
                 const gridIndex     = player.getCoGridIndexOnMap();
                 const radius        = player.getCoZoneRadius();
-                const canShow       = (!!gridIndex) && (!player.checkCoIsUsingActiveSkill()) && (radius != null);
+                const canShow       = (!!gridIndex) && (radius != null);
 
                 for (let x = 0; x < mapWidth; ++x) {
                     for (let y = 0; y < mapHeight; ++y) {

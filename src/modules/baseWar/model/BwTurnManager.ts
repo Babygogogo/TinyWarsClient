@@ -179,13 +179,6 @@ namespace TinyWars.BaseWar {
             player.setCoIsDestroyedInTurn(false);
 
             if (player.checkCoIsUsingActiveSkill()) {
-                const skillType = player.getCoUsingSkillType();
-                if (skillType === Types.CoSkillType.Power) {
-                    player.setCoCurrentEnergy(Math.max(0, player.getCoCurrentEnergy() - player.getCoPowerEnergy()!));
-                } else if (skillType === Types.CoSkillType.SuperPower) {
-                    player.setCoCurrentEnergy(Math.max(0, player.getCoCurrentEnergy() - player.getCoSuperPowerEnergy()!));
-                }
-
                 player.setCoUsingSkillType(Types.CoSkillType.Passive);
                 war.getTileMap().getView().updateCoZone();
             }

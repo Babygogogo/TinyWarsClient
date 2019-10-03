@@ -150,235 +150,276 @@ namespace TinyWars.BaseWar.BwHelpers {
             || (state === Types.ActionPlannerState.RequestingUnitWait);
     }
 
-    export function exeInstantSkill(war: BwWar, player: BwPlayer, skillId: number, extraData: ProtoTypes.IWarUseCoSkillExtraData): void {
+    export function exeInstantSkill(war: BwWar, player: BwPlayer, gridIndex: GridIndex, skillId: number, extraData: ProtoTypes.IWarUseCoSkillExtraData): void {
         const configVersion = war.getConfigVersion();
-        const cfg           = ConfigManager.getCoSkillCfg(configVersion, skillId)!;
+        const skillCfg      = ConfigManager.getCoSkillCfg(configVersion, skillId)!;
         const playerIndex   = player.getPlayerIndex();
         const unitMap       = war.getUnitMap();
+        const zoneRadius    = player.getCoZoneRadius()!;
 
-        if (cfg.selfHpGain) {
-            const category      = cfg.selfHpGain[0];
-            const modifier      = cfg.selfHpGain[1] * ConfigManager.UNIT_HP_NORMALIZER;
+        if (skillCfg.selfHpGain) {
+            const cfg       = skillCfg.selfHpGain;
+            const category  = cfg[1];
+            const modifier  = cfg[2] * ConfigManager.UNIT_HP_NORMALIZER;
             unitMap.forEachUnit(unit => {
                 if ((unit.getPlayerIndex() === playerIndex)                                         &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
                 ) {
-                    unit.setCurrentHp(Math.max(
-                        1,
-                        Math.min(
-                            unit.getMaxHp(),
-                            unit.getCurrentHp() + modifier
-                        ),
-                    ));
+                    if (((cfg[0] === 0) && (GridIndexHelpers.getDistance(unit.getGridIndex(), gridIndex) <= zoneRadius)) ||
+                        (cfg[0] === 1)
+                    ) {
+                        unit.setCurrentHp(Math.max(
+                            1,
+                            Math.min(
+                                unit.getMaxHp(),
+                                unit.getCurrentHp() + modifier
+                            ),
+                        ));
+                    }
                 }
             });
         }
 
-        if (cfg.enemyHpGain) {
-            const category      = cfg.enemyHpGain[0];
-            const modifier      = cfg.enemyHpGain[1] * ConfigManager.UNIT_HP_NORMALIZER;
+        if (skillCfg.enemyHpGain) {
+            const cfg       = skillCfg.enemyHpGain;
+            const category  = cfg[1];
+            const modifier  = cfg[2] * ConfigManager.UNIT_HP_NORMALIZER;
             unitMap.forEachUnit(unit => {
                 if ((unit.getPlayerIndex() !== playerIndex)                                         &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
                 ) {
-                    unit.setCurrentHp(Math.max(
-                        1,
-                        Math.min(
-                            unit.getMaxHp(),
-                            unit.getCurrentHp() + modifier
-                        ),
-                    ));
+                    if (((cfg[0] === 0) && (GridIndexHelpers.getDistance(unit.getGridIndex(), gridIndex) <= zoneRadius)) ||
+                        (cfg[0] === 1)
+                    ) {
+                        unit.setCurrentHp(Math.max(
+                            1,
+                            Math.min(
+                                unit.getMaxHp(),
+                                unit.getCurrentHp() + modifier
+                            ),
+                        ));
+                    }
                 }
             });
         }
 
-        if (cfg.selfFuelGain) {
-            const category      = cfg.selfFuelGain[0];
-            const modifier      = cfg.selfFuelGain[1];
+        if (skillCfg.selfFuelGain) {
+            const cfg       = skillCfg.selfFuelGain;
+            const category  = cfg[1];
+            const modifier  = cfg[2];
             unitMap.forEachUnit(unit => {
                 if ((unit.getPlayerIndex() === playerIndex)                                         &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
                 ) {
-                    const maxFuel = unit.getMaxFuel();
-                    if (maxFuel != null) {
-                        if (modifier > 0) {
-                            unit.setCurrentFuel(Math.min(
-                                maxFuel,
-                                unit.getCurrentFuel() + Math.floor(maxFuel * modifier / 100)
-                            ));
-                        } else {
-                            unit.setCurrentFuel(Math.max(
-                                0,
-                                Math.floor(unit.getCurrentFuel() * (100 + modifier) / 100)
-                            ));
+                    if (((cfg[0] === 0) && (GridIndexHelpers.getDistance(unit.getGridIndex(), gridIndex) <= zoneRadius)) ||
+                        (cfg[0] === 1)
+                    ) {
+                        const maxFuel = unit.getMaxFuel();
+                        if (maxFuel != null) {
+                            if (modifier > 0) {
+                                unit.setCurrentFuel(Math.min(
+                                    maxFuel,
+                                    unit.getCurrentFuel() + Math.floor(maxFuel * modifier / 100)
+                                ));
+                            } else {
+                                unit.setCurrentFuel(Math.max(
+                                    0,
+                                    Math.floor(unit.getCurrentFuel() * (100 + modifier) / 100)
+                                ));
+                            }
                         }
                     }
                 }
             });
         }
 
-        if (cfg.enemyFuelGain) {
-            const category      = cfg.enemyFuelGain[0];
-            const modifier      = cfg.enemyFuelGain[1];
+        if (skillCfg.enemyFuelGain) {
+            const cfg       = skillCfg.enemyFuelGain;
+            const category  = cfg[1];
+            const modifier  = cfg[2];
             unitMap.forEachUnit(unit => {
                 if ((unit.getPlayerIndex() !== playerIndex)                                         &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
                 ) {
-                    const maxFuel = unit.getMaxFuel();
-                    if (maxFuel != null) {
-                        if (modifier > 0) {
-                            unit.setCurrentFuel(Math.min(
-                                maxFuel,
-                                unit.getCurrentFuel() + Math.floor(maxFuel * modifier / 100)
-                            ));
-                        } else {
-                            unit.setCurrentFuel(Math.max(
-                                0,
-                                Math.floor(unit.getCurrentFuel() * (100 + modifier) / 100)
-                            ));
+                    if (((cfg[0] === 0) && (GridIndexHelpers.getDistance(unit.getGridIndex(), gridIndex) <= zoneRadius)) ||
+                        (cfg[0] === 1)
+                    ) {
+                        const maxFuel = unit.getMaxFuel();
+                        if (maxFuel != null) {
+                            if (modifier > 0) {
+                                unit.setCurrentFuel(Math.min(
+                                    maxFuel,
+                                    unit.getCurrentFuel() + Math.floor(maxFuel * modifier / 100)
+                                ));
+                            } else {
+                                unit.setCurrentFuel(Math.max(
+                                    0,
+                                    Math.floor(unit.getCurrentFuel() * (100 + modifier) / 100)
+                                ));
+                            }
                         }
                     }
                 }
             });
         }
 
-        if (cfg.selfMaterialGain) {
-            const category      = cfg.selfMaterialGain[0];
-            const modifier      = cfg.selfMaterialGain[1];
+        if (skillCfg.selfMaterialGain) {
+            const cfg       = skillCfg.selfMaterialGain;
+            const category  = cfg[1];
+            const modifier  = cfg[2];
             unitMap.forEachUnit(unit => {
                 if ((unit.getPlayerIndex() === playerIndex)                                         &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
                 ) {
-                    const maxBuildMaterial = unit.getMaxBuildMaterial();
-                    if (maxBuildMaterial != null) {
-                        if (modifier > 0) {
-                            unit.setCurrentBuildMaterial(Math.min(
-                                maxBuildMaterial,
-                                unit.getCurrentBuildMaterial() + Math.floor(maxBuildMaterial * modifier / 100)
-                            ));
-                        } else {
-                            unit.setCurrentBuildMaterial(Math.max(
-                                0,
-                                Math.floor(unit.getCurrentBuildMaterial() * (100 + modifier) / 100)
-                            ));
+                    if (((cfg[0] === 0) && (GridIndexHelpers.getDistance(unit.getGridIndex(), gridIndex) <= zoneRadius)) ||
+                        (cfg[0] === 1)
+                    ) {
+                        const maxBuildMaterial = unit.getMaxBuildMaterial();
+                        if (maxBuildMaterial != null) {
+                            if (modifier > 0) {
+                                unit.setCurrentBuildMaterial(Math.min(
+                                    maxBuildMaterial,
+                                    unit.getCurrentBuildMaterial()! + Math.floor(maxBuildMaterial * modifier / 100)
+                                ));
+                            } else {
+                                unit.setCurrentBuildMaterial(Math.max(
+                                    0,
+                                    Math.floor(unit.getCurrentBuildMaterial()! * (100 + modifier) / 100)
+                                ));
+                            }
                         }
-                    }
 
-                    const maxProduceMaterial = unit.getMaxProduceMaterial();
-                    if (maxProduceMaterial != null) {
-                        if (modifier > 0) {
-                            unit.setCurrentProduceMaterial(Math.min(
-                                maxProduceMaterial,
-                                unit.getCurrentProduceMaterial() + Math.floor(maxProduceMaterial * modifier / 100)
-                            ));
-                        } else {
-                            unit.setCurrentProduceMaterial(Math.max(
-                                0,
-                                Math.floor(unit.getCurrentProduceMaterial() * (100 + modifier) / 100)
-                            ));
+                        const maxProduceMaterial = unit.getMaxProduceMaterial();
+                        if (maxProduceMaterial != null) {
+                            if (modifier > 0) {
+                                unit.setCurrentProduceMaterial(Math.min(
+                                    maxProduceMaterial,
+                                    unit.getCurrentProduceMaterial()! + Math.floor(maxProduceMaterial * modifier / 100)
+                                ));
+                            } else {
+                                unit.setCurrentProduceMaterial(Math.max(
+                                    0,
+                                    Math.floor(unit.getCurrentProduceMaterial()! * (100 + modifier) / 100)
+                                ));
+                            }
                         }
                     }
                 }
             });
         }
 
-        if (cfg.enemyMaterialGain) {
-            const category      = cfg.enemyMaterialGain[0];
-            const modifier      = cfg.enemyMaterialGain[1];
+        if (skillCfg.enemyMaterialGain) {
+            const cfg       = skillCfg.enemyMaterialGain;
+            const category  = cfg[1];
+            const modifier  = cfg[2];
             unitMap.forEachUnit(unit => {
                 if ((unit.getPlayerIndex() !== playerIndex)                                         &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
                 ) {
-                    const maxBuildMaterial = unit.getMaxBuildMaterial();
-                    if (maxBuildMaterial != null) {
-                        if (modifier > 0) {
-                            unit.setCurrentBuildMaterial(Math.min(
-                                maxBuildMaterial,
-                                unit.getCurrentBuildMaterial() + Math.floor(maxBuildMaterial * modifier / 100)
-                            ));
-                        } else {
-                            unit.setCurrentBuildMaterial(Math.max(
-                                0,
-                                Math.floor(unit.getCurrentBuildMaterial() * (100 + modifier) / 100)
-                            ));
+                    if (((cfg[0] === 0) && (GridIndexHelpers.getDistance(unit.getGridIndex(), gridIndex) <= zoneRadius)) ||
+                        (cfg[0] === 1)
+                    ) {
+                        const maxBuildMaterial = unit.getMaxBuildMaterial();
+                        if (maxBuildMaterial != null) {
+                            if (modifier > 0) {
+                                unit.setCurrentBuildMaterial(Math.min(
+                                    maxBuildMaterial,
+                                    unit.getCurrentBuildMaterial()! + Math.floor(maxBuildMaterial * modifier / 100)
+                                ));
+                            } else {
+                                unit.setCurrentBuildMaterial(Math.max(
+                                    0,
+                                    Math.floor(unit.getCurrentBuildMaterial()! * (100 + modifier) / 100)
+                                ));
+                            }
                         }
-                    }
 
-                    const maxProduceMaterial = unit.getMaxProduceMaterial();
-                    if (maxProduceMaterial != null) {
-                        if (modifier > 0) {
-                            unit.setCurrentProduceMaterial(Math.min(
-                                maxProduceMaterial,
-                                unit.getCurrentProduceMaterial() + Math.floor(maxProduceMaterial * modifier / 100)
-                            ));
-                        } else {
-                            unit.setCurrentProduceMaterial(Math.max(
-                                0,
-                                Math.floor(unit.getCurrentProduceMaterial() * (100 + modifier) / 100)
-                            ));
+                        const maxProduceMaterial = unit.getMaxProduceMaterial();
+                        if (maxProduceMaterial != null) {
+                            if (modifier > 0) {
+                                unit.setCurrentProduceMaterial(Math.min(
+                                    maxProduceMaterial,
+                                    unit.getCurrentProduceMaterial()! + Math.floor(maxProduceMaterial * modifier / 100)
+                                ));
+                            } else {
+                                unit.setCurrentProduceMaterial(Math.max(
+                                    0,
+                                    Math.floor(unit.getCurrentProduceMaterial()! * (100 + modifier) / 100)
+                                ));
+                            }
                         }
                     }
                 }
             });
         }
 
-        if (cfg.selfPrimaryAmmoGain) {
-            const category      = cfg.selfPrimaryAmmoGain[0];
-            const modifier      = cfg.selfPrimaryAmmoGain[1];
+        if (skillCfg.selfPrimaryAmmoGain) {
+            const cfg       = skillCfg.selfPrimaryAmmoGain;
+            const category  = cfg[1];
+            const modifier  = cfg[2];
             unitMap.forEachUnit(unit => {
                 if ((unit.getPlayerIndex() === playerIndex)                                         &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
                 ) {
-                    const maxAmmo = unit.getPrimaryWeaponMaxAmmo();
-                    if (maxAmmo != null) {
-                        if (modifier > 0) {
-                            unit.setPrimaryWeaponCurrentAmmo(Math.min(
-                                maxAmmo,
-                                unit.getPrimaryWeaponCurrentAmmo() + Math.floor(maxAmmo * modifier / 100)
-                            ));
-                        } else {
-                            unit.setPrimaryWeaponCurrentAmmo(Math.max(
-                                0,
-                                Math.floor(unit.getPrimaryWeaponCurrentAmmo() * (100 + modifier) / 100)
-                            ));
+                    if (((cfg[0] === 0) && (GridIndexHelpers.getDistance(unit.getGridIndex(), gridIndex) <= zoneRadius)) ||
+                        (cfg[0] === 1)
+                    ) {
+                        const maxAmmo = unit.getPrimaryWeaponMaxAmmo();
+                        if (maxAmmo != null) {
+                            if (modifier > 0) {
+                                unit.setPrimaryWeaponCurrentAmmo(Math.min(
+                                    maxAmmo,
+                                    unit.getPrimaryWeaponCurrentAmmo()! + Math.floor(maxAmmo * modifier / 100)
+                                ));
+                            } else {
+                                unit.setPrimaryWeaponCurrentAmmo(Math.max(
+                                    0,
+                                    Math.floor(unit.getPrimaryWeaponCurrentAmmo()! * (100 + modifier) / 100)
+                                ));
+                            }
                         }
                     }
                 }
             });
         }
 
-        if (cfg.enemyPrimaryAmmoGain) {
-            const category      = cfg.enemyPrimaryAmmoGain[0];
-            const modifier      = cfg.enemyPrimaryAmmoGain[1];
+        if (skillCfg.enemyPrimaryAmmoGain) {
+            const cfg       = skillCfg.enemyPrimaryAmmoGain;
+            const category  = cfg[1];
+            const modifier  = cfg[2];
             unitMap.forEachUnit(unit => {
                 if ((unit.getPlayerIndex() !== playerIndex)                                         &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
                 ) {
-                    const maxAmmo = unit.getPrimaryWeaponMaxAmmo();
-                    if (maxAmmo != null) {
-                        if (modifier > 0) {
-                            unit.setPrimaryWeaponCurrentAmmo(Math.min(
-                                maxAmmo,
-                                unit.getPrimaryWeaponCurrentAmmo() + Math.floor(maxAmmo * modifier / 100)
-                            ));
-                        } else {
-                            unit.setPrimaryWeaponCurrentAmmo(Math.max(
-                                0,
-                                Math.floor(unit.getPrimaryWeaponCurrentAmmo() * (100 + modifier) / 100)
-                            ));
+                    if (((cfg[0] === 0) && (GridIndexHelpers.getDistance(unit.getGridIndex(), gridIndex) <= zoneRadius)) ||
+                        (cfg[0] === 1)
+                    ) {
+                        const maxAmmo = unit.getPrimaryWeaponMaxAmmo();
+                        if (maxAmmo != null) {
+                            if (modifier > 0) {
+                                unit.setPrimaryWeaponCurrentAmmo(Math.min(
+                                    maxAmmo,
+                                    unit.getPrimaryWeaponCurrentAmmo()! + Math.floor(maxAmmo * modifier / 100)
+                                ));
+                            } else {
+                                unit.setPrimaryWeaponCurrentAmmo(Math.max(
+                                    0,
+                                    Math.floor(unit.getPrimaryWeaponCurrentAmmo()! * (100 + modifier) / 100)
+                                ));
+                            }
                         }
                     }
                 }
             });
         }
 
-        if (cfg.indiscriminateAreaDamage) {
+        if (skillCfg.indiscriminateAreaDamage) {
             const center = extraData ? extraData.indiscriminateAreaDamageCenter : null;
             if (!center) {
                 Logger.error("BwHelpers.exeInstantSkill() no center for indiscriminateAreaDamage!");
             } else {
-                const hpDamage = cfg.indiscriminateAreaDamage[2] * ConfigManager.UNIT_HP_NORMALIZER;
-                for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(center as GridIndex, 0, cfg.indiscriminateAreaDamage[1], unitMap.getMapSize())) {
+                const hpDamage = skillCfg.indiscriminateAreaDamage[2] * ConfigManager.UNIT_HP_NORMALIZER;
+                for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(center as GridIndex, 0, skillCfg.indiscriminateAreaDamage[1], unitMap.getMapSize())) {
                     const unit = unitMap.getUnitOnMap(gridIndex);
                     if (unit) {
                         unit.setCurrentHp(Math.max(1, unit.getCurrentHp() - hpDamage));
@@ -387,21 +428,26 @@ namespace TinyWars.BaseWar.BwHelpers {
             }
         }
 
-        if (cfg.selfPromotionGain) {
-            const category      = cfg.selfPromotionGain[0];
-            const modifier      = cfg.selfPromotionGain[1] * ConfigManager.UNIT_HP_NORMALIZER;
+        if (skillCfg.selfPromotionGain) {
+            const cfg           = skillCfg.selfPromotionGain;
+            const category      = cfg[1];
+            const modifier      = cfg[2] * ConfigManager.UNIT_HP_NORMALIZER;
             const maxPromotion  = ConfigManager.getUnitMaxPromotion(configVersion);
             unitMap.forEachUnit(unit => {
                 if ((unit.getPlayerIndex() === playerIndex)                                         &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
                 ) {
-                    unit.setCurrentPromotion(Math.max(
-                        0,
-                        Math.min(
-                            maxPromotion,
-                            unit.getCurrentPromotion() + modifier
-                        ),
-                    ));
+                    if (((cfg[0] === 0) && (GridIndexHelpers.getDistance(unit.getGridIndex(), gridIndex) <= zoneRadius)) ||
+                        (cfg[0] === 1)
+                    ) {
+                        unit.setCurrentPromotion(Math.max(
+                            0,
+                            Math.min(
+                                maxPromotion,
+                                unit.getCurrentPromotion() + modifier
+                            ),
+                        ));
+                    }
                 }
             });
         }

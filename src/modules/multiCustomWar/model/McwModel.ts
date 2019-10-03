@@ -1167,7 +1167,13 @@ namespace TinyWars.MultiCustomWar.McwModel {
         if (isSuccessful) {
             player.setCoUsingSkillType(skillType);
             for (let i = 0; i < skills.length; ++i) {
-                BwHelpers.exeInstantSkill(war, player, skills[i], dataList[i]);
+                BwHelpers.exeInstantSkill(war, player, pathNodes[pathNodes.length - 1], skills[i], dataList[i]);
+            }
+
+            if (skillType === Types.CoSkillType.Power) {
+                player.setCoCurrentEnergy(Math.max(0, player.getCoCurrentEnergy() - player.getCoPowerEnergy()!));
+            } else if (skillType === Types.CoSkillType.SuperPower) {
+                player.setCoCurrentEnergy(Math.max(0, player.getCoCurrentEnergy() - player.getCoSuperPowerEnergy()!));
             }
         }
 

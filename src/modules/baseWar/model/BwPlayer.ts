@@ -146,22 +146,18 @@ namespace TinyWars.BaseWar {
             return cfg ? cfg.zoneRadius : null;
         }
         public getCoZoneRadius(): number | null {
-            if (this.checkCoIsUsingActiveSkill()) {
-                return Number.MAX_VALUE;
+            const cfg = this._getCoBasicCfg();
+            if (!cfg) {
+                return null;
             } else {
-                const cfg = this._getCoBasicCfg();
-                if (!cfg) {
-                    return null;
-                } else {
-                    const energy    = this.getCoCurrentEnergy();
-                    let radius      = cfg.zoneRadius;
-                    for (const e of cfg.zoneExpansionEnergyList || []) {
-                        if (energy >= e) {
-                            ++radius;
-                        }
+                const energy    = this.getCoCurrentEnergy();
+                let radius      = cfg.zoneRadius;
+                for (const e of cfg.zoneExpansionEnergyList || []) {
+                    if (energy >= e) {
+                        ++radius;
                     }
-                    return radius;
                 }
+                return radius;
             }
         }
         public getCoGridIndexOnMap(): GridIndex | null {
@@ -177,14 +173,10 @@ namespace TinyWars.BaseWar {
         }
 
         public checkIsInCoZone(targetGridIndex: GridIndex, coGridIndexOnMap = this.getCoGridIndexOnMap()): boolean {
-            if (this.checkCoIsUsingActiveSkill()) {
-                return true;
-            } else {
-                const radius = this.getCoZoneRadius();
-                return (coGridIndexOnMap == null) || (radius == null)
-                    ? false
-                    : GridIndexHelpers.getDistance(targetGridIndex, coGridIndexOnMap) <= radius;
-            }
+            const radius = this.getCoZoneRadius();
+            return (coGridIndexOnMap == null) || (radius == null)
+                ? false
+                : GridIndexHelpers.getDistance(targetGridIndex, coGridIndexOnMap) <= radius;
         }
 
         public getCoUsingSkillType(): Types.CoSkillType {
