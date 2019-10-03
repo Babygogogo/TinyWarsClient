@@ -391,12 +391,10 @@ namespace TinyWars.BaseWar {
             if (cfgVision == null) {
                 return undefined;
             } else {
-                const war = this._war;
-                // TODO: take co skills into account.
-                if ((!this.checkIsVisionEnabledForAllPlayers()) && (this.getTeamIndex() !== war.getPlayer(playerIndex).getTeamIndex())) {
+                if ((!this.checkIsVisionEnabledForAllPlayers()) && (this.getPlayerIndex() !== playerIndex)) {
                     return undefined;
                 } else {
-                    return Math.max(0, cfgVision + war.getSettingsVisionRangeModifier());
+                    return Math.max(0, cfgVision + this._getWar().getSettingsVisionRangeModifier());
                 }
             }
         }

@@ -1,10 +1,11 @@
 
 namespace TinyWars.Utility.VisibilityHelpers {
-    import BwWar            = BaseWar.BwWar;
-    import BwUnit           = BaseWar.BwUnit;
-    import BwTile           = BaseWar.BwTile;
-    import BwUnitMap        = BaseWar.BwUnitMap;
-    import GridIndex        = Types.GridIndex;
+    import BwWar        = BaseWar.BwWar;
+    import BwUnit       = BaseWar.BwUnit;
+    import BwTile       = BaseWar.BwTile;
+    import BwUnitMap    = BaseWar.BwUnitMap;
+    import GridIndex    = Types.GridIndex;
+    import Visibility   = Types.Visibility;
 
     type Discoveries = {
         tiles: Set<BwTile>,
@@ -45,21 +46,34 @@ namespace TinyWars.Utility.VisibilityHelpers {
             return true;
         }
 
+        const canTileHideUnit = tile.checkCanHideUnit(unitType);
         for (const playerIndex of playerManager.getPlayerIndexesInTeam(observerTeamIndex)) {
-            const { fromPaths, fromTiles, fromUnits } = fogMap.getVisibilityForPlayer(gridIndex, playerIndex);
-            if (fromPaths === 2) {
+            const visibilityFromPaths = fogMap.getVisibilityFromPathsForPlayer(gridIndex, playerIndex);
+            if (visibilityFromPaths === Visibility.TrueVision) {
                 return true;
+            } else if (visibilityFromPaths === Visibility.InsideVision) {
+                if (!canTileHideUnit) {
+                    return true;
+                }
             }
 
-            if ((fromPaths === 0) && (fromTiles === 0) && (fromUnits === 0)) {
-                continue;
-            }
-
-            if (!tile.checkCanHideUnit(unitType)) {
+            const visibilityFromUnits = fogMap.getVisibilityFromUnitsForPlayer(gridIndex, playerIndex);
+            if (visibilityFromUnits === Visibility.TrueVision) {
                 return true;
+            } else if (visibilityFromUnits === Visibility.InsideVision) {
+                if (!canTileHideUnit) {
+                    return true;
+                }
             }
 
-            // TODO: take commander skills into account.
+            const visibilityFromTiles = fogMap.getVisibilityFromTilesForPlayer(gridIndex, playerIndex);
+            if (visibilityFromTiles === Visibility.TrueVision) {
+                return true;
+            } else if (visibilityFromTiles === Visibility.InsideVision) {
+                if (!canTileHideUnit) {
+                    return true;
+                }
+            }
         }
 
         return false;
@@ -84,21 +98,34 @@ namespace TinyWars.Utility.VisibilityHelpers {
             return true;
         }
 
+        const isUnitHider = tile.checkIsUnitHider();
         for (const playerIndex of war.getPlayerManager().getPlayerIndexesInTeam(observerTeamIndex)) {
-            const { fromPaths, fromTiles, fromUnits } = fogMap.getVisibilityForPlayer(gridIndex, playerIndex);
-            if (fromPaths === 2) {
+            const visibilityFromPaths = fogMap.getVisibilityFromPathsForPlayer(gridIndex, playerIndex);
+            if (visibilityFromPaths === Visibility.TrueVision) {
                 return true;
+            } else if (visibilityFromPaths === Visibility.InsideVision) {
+                if (!isUnitHider) {
+                    return true;
+                }
             }
 
-            if ((fromPaths === 0) && (fromTiles === 0) && (fromUnits === 0)) {
-                continue;
-            }
-
-            if (!tile.checkIsUnitHider()) {
+            const visibilityFromUnits = fogMap.getVisibilityFromUnitsForPlayer(gridIndex, playerIndex);
+            if (visibilityFromUnits === Visibility.TrueVision) {
                 return true;
+            } else if (visibilityFromUnits === Visibility.InsideVision) {
+                if (!isUnitHider) {
+                    return true;
+                }
             }
 
-            // TODO: take commander skills into account.
+            const visibilityFromTiles = fogMap.getVisibilityFromTilesForPlayer(gridIndex, playerIndex);
+            if (visibilityFromTiles === Visibility.TrueVision) {
+                return true;
+            } else if (visibilityFromTiles === Visibility.InsideVision) {
+                if (!isUnitHider) {
+                    return true;
+                }
+            }
         }
 
         return false;

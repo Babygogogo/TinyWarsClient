@@ -223,7 +223,6 @@ namespace TinyWars.Replay.ReplayModel {
             unit.startRunningView();
 
             unitMap.addUnitOnMap(unit);
-            war.getFogMap().updateMapFromUnitsForPlayerOnArriving(playerIndex, gridIndex, unit.getVisionRangeForPlayer(playerIndex, gridIndex));
         }
 
         unitMap.setNextUnitId(unitId + 1);
@@ -465,7 +464,6 @@ namespace TinyWars.Replay.ReplayModel {
                 tile.resetByObjectViewIdAndBaseViewId(focusUnit.getBuildTargetTileObjectViewId(tile.getType()));
 
                 const playerIndex = focusUnit.getPlayerIndex();
-                war.getFogMap().updateMapFromTilesForPlayerOnGettingOwnership(playerIndex, endingGridIndex, tile.getVisionRangeForPlayer(playerIndex));
             }
         }
 
@@ -515,16 +513,10 @@ namespace TinyWars.Replay.ReplayModel {
                 focusUnit.setIsCapturingTile(true);
                 tile.setCurrentCapturePoint(restCapturePoint);
             } else {
-                const fogMap = war.getFogMap();
-                if (previousPlayerIndex > 0) {
-                    fogMap.updateMapFromTilesForPlayerOnLosingOwnership(previousPlayerIndex, destination, tile.getVisionRangeForPlayer(previousPlayerIndex));
-                }
-
                 const playerIndexActing = focusUnit.getPlayerIndex();
                 focusUnit.setIsCapturingTile(false);
                 tile.setCurrentCapturePoint(tile.getMaxCapturePoint());
                 tile.resetByPlayerIndex(playerIndexActing);
-                fogMap.updateMapFromTilesForPlayerOnGettingOwnership(playerIndexActing, destination, tile.getVisionRangeForPlayer(playerIndexActing));
             }
 
             if (!lostPlayerIndex) {
@@ -602,7 +594,6 @@ namespace TinyWars.Replay.ReplayModel {
         moveUnit(war, WarActionCodes.WarActionUnitDrop, path, action.launchUnitId, path.fuelConsumption);
         focusUnit.setState(UnitState.Acted);
 
-        const playerIndex           = focusUnit.getPlayerIndex();
         const fogMap                = war.getFogMap();
         const unitsForDrop          = [] as ReplayUnit[];
         for (const { unitId, gridIndex } of (action.dropDestinations || []) as Types.DropDestination[]) {
@@ -618,7 +609,6 @@ namespace TinyWars.Replay.ReplayModel {
             unitsForDrop.push(unitForDrop);
 
             fogMap.updateMapFromPathsByUnitAndPath(unitForDrop, [endingGridIndex, gridIndex]);
-            fogMap.updateMapFromUnitsForPlayerOnArriving(playerIndex, gridIndex, unitForDrop.getVisionRangeForPlayer(playerIndex, gridIndex));
         }
 
         return new Promise<void>(resolve => {
@@ -1154,7 +1144,6 @@ namespace TinyWars.Replay.ReplayModel {
             unit.startRunningView();
 
             unitMap.addUnitOnMap(unit);
-            war.getFogMap().updateMapFromUnitsForPlayerOnArriving(playerIndex, gridIndex, unit.getVisionRangeForPlayer(playerIndex, gridIndex));
         }
 
         unitMap.setNextUnitId(unitId + 1);
@@ -1312,7 +1301,6 @@ namespace TinyWars.Replay.ReplayModel {
                 tile.resetByObjectViewIdAndBaseViewId(focusUnit.getBuildTargetTileObjectViewId(tile.getType()));
 
                 const playerIndex = focusUnit.getPlayerIndex();
-                war.getFogMap().updateMapFromTilesForPlayerOnGettingOwnership(playerIndex, endingGridIndex, tile.getVisionRangeForPlayer(playerIndex));
             }
         }
     }
@@ -1338,16 +1326,10 @@ namespace TinyWars.Replay.ReplayModel {
                 focusUnit.setIsCapturingTile(true);
                 tile.setCurrentCapturePoint(restCapturePoint);
             } else {
-                const fogMap = war.getFogMap();
-                if (previousPlayerIndex > 0) {
-                    fogMap.updateMapFromTilesForPlayerOnLosingOwnership(previousPlayerIndex, destination, tile.getVisionRangeForPlayer(previousPlayerIndex));
-                }
-
                 const playerIndexActing = focusUnit.getPlayerIndex();
                 focusUnit.setIsCapturingTile(false);
                 tile.setCurrentCapturePoint(tile.getMaxCapturePoint());
                 tile.resetByPlayerIndex(playerIndexActing);
-                fogMap.updateMapFromTilesForPlayerOnGettingOwnership(playerIndexActing, destination, tile.getVisionRangeForPlayer(playerIndexActing));
             }
 
             if (!lostPlayerIndex) {
@@ -1380,7 +1362,6 @@ namespace TinyWars.Replay.ReplayModel {
         moveUnit(war, WarActionCodes.WarActionUnitDrop, path, action.launchUnitId, path.fuelConsumption);
         focusUnit.setState(UnitState.Acted);
 
-        const playerIndex           = focusUnit.getPlayerIndex();
         const fogMap                = war.getFogMap();
         const unitsForDrop          = [] as ReplayUnit[];
         for (const { unitId, gridIndex } of (action.dropDestinations || []) as Types.DropDestination[]) {
@@ -1396,7 +1377,6 @@ namespace TinyWars.Replay.ReplayModel {
             unitsForDrop.push(unitForDrop);
 
             fogMap.updateMapFromPathsByUnitAndPath(unitForDrop, [endingGridIndex, gridIndex]);
-            fogMap.updateMapFromUnitsForPlayerOnArriving(playerIndex, gridIndex, unitForDrop.getVisionRangeForPlayer(playerIndex, gridIndex));
         }
     }
 
@@ -1650,7 +1630,6 @@ namespace TinyWars.Replay.ReplayModel {
     function addUnits(war: ReplayWar, unitsData: SerializedBwUnit[] | undefined | null, isViewVisible: boolean): void {
         if ((unitsData) && (unitsData.length)) {
             const unitMap       = war.getUnitMap();
-            const fogMap        = war.getFogMap();
             const configVersion = war.getConfigVersion();
 
             for (const unitData of unitsData) {
@@ -1664,30 +1643,17 @@ namespace TinyWars.Replay.ReplayModel {
                 unit.startRunning(war);
                 unit.startRunningView();
                 unit.setViewVisible(isViewVisible);
-
-                if (isOnMap) {
-                    const playerIndex   = unit.getPlayerIndex();
-                    const gridIndex     = unit.getGridIndex();
-                    fogMap.updateMapFromUnitsForPlayerOnArriving(playerIndex, gridIndex, unit.getVisionRangeForPlayer(playerIndex, gridIndex));
-                }
             }
         }
     }
     function updateTiles(war: ReplayWar, tilesData: SerializedBwTile[] | undefined | null): void {
         if ((tilesData) && (tilesData.length)) {
             const tileMap   = war.getTileMap();
-            const fogMap    = war.getFogMap();
-
             for (const tileData of tilesData) {
                 const gridIndex = { x: tileData.gridX, y: tileData.gridY };
                 const tile      = tileMap.getTile(gridIndex);
                 egret.assert(tile.getIsFogEnabled(), "ReplayModel.updateTiles() the tile has no fog and therefore should not be updated!");
                 tile.setFogDisabled(tileData);
-
-                const playerIndex = tile.getPlayerIndex();
-                if (playerIndex > 0) {
-                    fogMap.updateMapFromTilesForPlayerOnGettingOwnership(playerIndex, gridIndex, tile.getVisionRangeForPlayer(playerIndex));
-                }
             }
         }
     }
@@ -1712,7 +1678,6 @@ namespace TinyWars.Replay.ReplayModel {
         const fogMap                = war.getFogMap();
         const unitMap               = war.getUnitMap();
         const focusUnit             = unitMap.getUnit(beginningGridIndex, launchUnitId)!;
-        const playerIndex           = focusUnit.getPlayerIndex();
         const isUnitBeLoaded        = (actionCode === WarActionCodes.WarActionUnitBeLoaded) && (!revisedPath.isBlocked);
         fogMap.updateMapFromPathsByUnitAndPath(focusUnit, pathNodes);
 
@@ -1726,12 +1691,6 @@ namespace TinyWars.Replay.ReplayModel {
             focusUnit.setCurrentFuel(focusUnit.getCurrentFuel() - fuelConsumption);
             for (const unit of unitMap.getUnitsLoadedByLoader(focusUnit, true)) {
                 unit.setGridIndex(endingGridIndex);
-            }
-            if (!isLaunching) {
-                fogMap.updateMapFromUnitsForPlayerOnLeaving(playerIndex, beginningGridIndex, focusUnit.getVisionRangeForPlayer(playerIndex, beginningGridIndex)!);
-            }
-            if (!isUnitBeLoaded) {
-                fogMap.updateMapFromUnitsForPlayerOnArriving(playerIndex, endingGridIndex, focusUnit.getVisionRangeForPlayer(playerIndex, endingGridIndex)!);
             }
 
             if (isLaunching) {

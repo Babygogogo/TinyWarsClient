@@ -31,12 +31,6 @@ namespace TinyWars.MultiCustomWar {
             }
         }
         protected _runPhaseResetVisionForNextPlayer(): void {
-            const playerIndex   = this.getPlayerIndexInTurn();
-            const war           = this._getWar();
-            const fogMap        = war.getFogMap();
-            fogMap.resetMapFromTilesForPlayer(playerIndex);
-            fogMap.resetMapFromUnitsForPlayer(playerIndex);
-
             if (this.getPlayerIndexInTurn() === (this._getWar() as McwWar).getPlayerIndexLoggedIn()) {
                 this._resetFogForPlayerLoggedIn();
             }

@@ -878,15 +878,42 @@ namespace TinyWars.BaseWar {
         }
 
         public getVisionRangeForPlayer(playerIndex: number, gridIndex: GridIndex): number | undefined {
-            const war = this._war;
-            if (this.getTeamIndex() !== war.getPlayer(playerIndex)!.getTeamIndex()) {
+            if (this.getPlayerIndex() !== playerIndex) {
                 return undefined;
             } else {
+                const war           = this.getWar()!;
+                const version       = war.getConfigVersion();
+                const unitType      = this.getType();
+                let modifierBySkill = 0;
+                for (const skillId of war.getPlayer(playerIndex)!.getCoCurrentSkills() || []) {
+                    const cfg = ConfigManager.getCoSkillCfg(version, skillId)!.unitVisionRangeBonus;
+                    if (cfg) {
+                        // TODO cfg[0] !== 1
+                        if ((cfg[0] === 1) && (ConfigManager.checkIsUnitTypeInCategory(version, unitType, cfg[1]))) {
+                            modifierBySkill += cfg[2];
+                        }
+                    }
+                }
+
                 return Math.max(
                     1,
-                    this.getCfgVisionRange() + this.getVisionRangeBonusOnTile(war.getTileMap().getTile(gridIndex).getType()) + war.getSettingsVisionRangeModifier()
+                    this.getCfgVisionRange() + modifierBySkill + this.getVisionRangeBonusOnTile(war.getTileMap().getTile(gridIndex).getType()) + war.getSettingsVisionRangeModifier()
                 );
             }
+        }
+        public checkIsTrueVision(): boolean {
+            const version   = this.getWar()!.getConfigVersion();
+            const unitType  = this.getType();
+            for (const skillId of this.getPlayer()!.getCoCurrentSkills() || []) {
+                const cfg = ConfigManager.getCoSkillCfg(version, skillId)!.unitTrueVision;
+                if (cfg) {
+                    // TODO cfg[0] !== 1
+                    if ((cfg[0] === 1) && (ConfigManager.checkIsUnitTypeInCategory(version, unitType, cfg[1]))) {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         ////////////////////////////////////////////////////////////////////////////////

@@ -45,12 +45,6 @@ namespace TinyWars.Replay {
             this._resetFogForPlayerInTurn();
         }
         protected _runPhaseResetVisionForNextPlayer(): void {
-            const playerIndex   = this.getPlayerIndexInTurn();
-            const war           = this._getWar();
-            const fogMap        = war.getFogMap();
-            fogMap.resetMapFromTilesForPlayer(playerIndex);
-            fogMap.resetMapFromUnitsForPlayer(playerIndex);
-
             this._resetFogForPlayerInTurn();
         }
 

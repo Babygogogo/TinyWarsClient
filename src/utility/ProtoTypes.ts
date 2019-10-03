@@ -1509,6 +1509,12 @@ export declare interface ICoSkillCfg {
 
     /** CoSkillCfg selfPromotionGain */
     selfPromotionGain?: (number[]|null);
+
+    /** CoSkillCfg unitVisionRangeBonus */
+    unitVisionRangeBonus?: (number[]|null);
+
+    /** CoSkillCfg unitTrueVision */
+    unitTrueVision?: (number[]|null);
 }
 
 /** Represents a CoSkillCfg. */
@@ -1573,6 +1579,12 @@ export declare class CoSkillCfg implements ICoSkillCfg {
 
     /** CoSkillCfg selfPromotionGain. */
     public selfPromotionGain: number[];
+
+    /** CoSkillCfg unitVisionRangeBonus. */
+    public unitVisionRangeBonus: number[];
+
+    /** CoSkillCfg unitTrueVision. */
+    public unitTrueVision: number[];
 
     /**
      * Creates a new CoSkillCfg instance using the specified properties.

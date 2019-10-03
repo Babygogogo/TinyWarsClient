@@ -94,27 +94,16 @@ namespace TinyWars.Replay.McwHelpers {
 
     export function updateTilesAndUnitsOnVisibilityChanged(war: ReplayWar): void {
         const teamIndexInTurn   = war.getPlayerInTurn().getTeamIndex();
-        const fogMap            = war.getFogMap();
 
         const tileMap = war.getTileMap();
         tileMap.forEachTile(tile => {
             const gridIndex = tile.getGridIndex();
             if (VisibilityHelpers.checkIsTileVisibleToTeam(war, gridIndex, teamIndexInTurn)) {
                 if (tile.getIsFogEnabled()) {
-                    const playerIndex = tile.getPlayerIndex();
-                    if (playerIndex > 0) {
-                        fogMap.updateMapFromTilesForPlayerOnGettingOwnership(playerIndex, gridIndex, tile.getVisionRangeForPlayer(playerIndex));
-                    }
-
                     tile.setFogDisabled();
                 }
             } else {
                 if (!tile.getIsFogEnabled()) {
-                    const playerIndex = tile.getPlayerIndex();
-                    if (playerIndex > 0) {
-                        fogMap.updateMapFromTilesForPlayerOnLosingOwnership(playerIndex, gridIndex, tile.getVisionRangeForPlayer(playerIndex));
-                    }
-
                     tile.setFogEnabled();
                 }
             }

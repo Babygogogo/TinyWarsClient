@@ -346,7 +346,6 @@ namespace TinyWars.MultiCustomWar.McwModel {
             unit.startRunningView();
 
             unitMap.addUnitOnMap(unit);
-            war.getFogMap().updateMapFromUnitsForPlayerOnArriving(playerIndex, gridIndex, unit.getVisionRangeForPlayer(playerIndex, gridIndex));
         }
 
         unitMap.setNextUnitId(unitId + 1);
@@ -579,11 +578,6 @@ namespace TinyWars.MultiCustomWar.McwModel {
                 focusUnit.setIsBuildingTile(false);
                 focusUnit.setCurrentBuildMaterial(focusUnit.getCurrentBuildMaterial() - 1);
                 tile.resetByObjectViewIdAndBaseViewId(focusUnit.getBuildTargetTileObjectViewId(tile.getType()));
-
-                const playerIndex = focusUnit.getPlayerIndex();
-                if (war.getPlayerManager().checkIsSameTeam(playerIndex, war.getPlayerIndexLoggedIn())) {
-                    war.getFogMap().updateMapFromTilesForPlayerOnGettingOwnership(playerIndex, endingGridIndex, tile.getVisionRangeForPlayer(playerIndex));
-                }
             }
         }
 
@@ -632,16 +626,10 @@ namespace TinyWars.MultiCustomWar.McwModel {
                 focusUnit.setIsCapturingTile(true);
                 tile.setCurrentCapturePoint(restCapturePoint);
             } else {
-                const fogMap = war.getFogMap();
-                if (previousPlayerIndex > 0) {
-                    fogMap.updateMapFromTilesForPlayerOnLosingOwnership(previousPlayerIndex, destination, tile.getVisionRangeForPlayer(previousPlayerIndex));
-                }
-
                 const playerIndexActing = focusUnit.getPlayerIndex();
                 focusUnit.setIsCapturingTile(false);
                 tile.setCurrentCapturePoint(tile.getMaxCapturePoint());
                 tile.resetByPlayerIndex(playerIndexActing);
-                fogMap.updateMapFromTilesForPlayerOnGettingOwnership(playerIndexActing, destination, tile.getVisionRangeForPlayer(playerIndexActing));
             }
 
             if (!lostPlayerIndex) {
@@ -726,7 +714,6 @@ namespace TinyWars.MultiCustomWar.McwModel {
         moveUnit(war, WarActionCodes.WarActionUnitDrop, path, action.launchUnitId, path.fuelConsumption);
         focusUnit.setState(UnitState.Acted);
 
-        const playerIndex           = focusUnit.getPlayerIndex();
         const shouldUpdateFogMap    = war.getPlayerLoggedIn().getTeamIndex() === focusUnit.getTeamIndex();
         const fogMap                = war.getFogMap();
         const unitsForDrop          = [] as McwUnit[];
@@ -744,7 +731,6 @@ namespace TinyWars.MultiCustomWar.McwModel {
 
             if (shouldUpdateFogMap) {
                 fogMap.updateMapFromPathsByUnitAndPath(unitForDrop, [endingGridIndex, gridIndex]);
-                fogMap.updateMapFromUnitsForPlayerOnArriving(playerIndex, gridIndex, unitForDrop.getVisionRangeForPlayer(playerIndex, gridIndex));
             }
         }
 
@@ -1244,7 +1230,6 @@ namespace TinyWars.MultiCustomWar.McwModel {
     function addUnits(war: McwWar, unitsData: SerializedMcwUnit[] | undefined | null, isViewVisible: boolean): void {
         if ((unitsData) && (unitsData.length)) {
             const unitMap       = war.getUnitMap();
-            const fogMap        = war.getFogMap();
             const configVersion = war.getConfigVersion();
 
             for (const unitData of unitsData) {
@@ -1258,30 +1243,17 @@ namespace TinyWars.MultiCustomWar.McwModel {
                 unit.startRunning(war);
                 unit.startRunningView();
                 unit.setViewVisible(isViewVisible);
-
-                if (isOnMap) {
-                    const playerIndex   = unit.getPlayerIndex();
-                    const gridIndex     = unit.getGridIndex();
-                    fogMap.updateMapFromUnitsForPlayerOnArriving(playerIndex, gridIndex, unit.getVisionRangeForPlayer(playerIndex, gridIndex));
-                }
             }
         }
     }
     function updateTiles(war: McwWar, tilesData: SerializedMcwTile[] | undefined | null): void {
         if ((tilesData) && (tilesData.length)) {
             const tileMap   = war.getTileMap();
-            const fogMap    = war.getFogMap();
-
             for (const tileData of tilesData) {
                 const gridIndex = { x: tileData.gridX, y: tileData.gridY };
                 const tile      = tileMap.getTile(gridIndex);
                 egret.assert(tile.getIsFogEnabled(), "McwModel.updateTiles() the tile has no fog and therefore should not be updated!");
                 tile.setFogDisabled(tileData);
-
-                const playerIndex = tile.getPlayerIndex();
-                if (playerIndex > 0) {
-                    fogMap.updateMapFromTilesForPlayerOnGettingOwnership(playerIndex, gridIndex, tile.getVisionRangeForPlayer(playerIndex));
-                }
             }
         }
     }
@@ -1306,7 +1278,6 @@ namespace TinyWars.MultiCustomWar.McwModel {
         const fogMap                = war.getFogMap();
         const unitMap               = war.getUnitMap();
         const focusUnit             = unitMap.getUnit(beginningGridIndex, launchUnitId)!;
-        const playerIndex           = focusUnit.getPlayerIndex();
         const shouldUpdateFogMap    = war.getPlayerLoggedIn().getTeamIndex() === focusUnit.getTeamIndex();
         const isUnitBeLoaded        = (actionCode === WarActionCodes.WarActionUnitBeLoaded) && (!revisedPath.isBlocked);
         if (shouldUpdateFogMap) {
@@ -1323,12 +1294,6 @@ namespace TinyWars.MultiCustomWar.McwModel {
             focusUnit.setCurrentFuel(focusUnit.getCurrentFuel() - fuelConsumption);
             for (const unit of unitMap.getUnitsLoadedByLoader(focusUnit, true)) {
                 unit.setGridIndex(endingGridIndex);
-            }
-            if ((shouldUpdateFogMap) && (!isLaunching)) {
-                fogMap.updateMapFromUnitsForPlayerOnLeaving(playerIndex, beginningGridIndex, focusUnit.getVisionRangeForPlayer(playerIndex, beginningGridIndex)!);
-            }
-            if ((shouldUpdateFogMap) && (!isUnitBeLoaded)) {
-                fogMap.updateMapFromUnitsForPlayerOnArriving(playerIndex, endingGridIndex, focusUnit.getVisionRangeForPlayer(playerIndex, endingGridIndex)!);
             }
 
             if (isLaunching) {

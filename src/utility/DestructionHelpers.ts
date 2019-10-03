@@ -16,9 +16,6 @@ namespace TinyWars.Utility.DestructionHelpers {
             destroyedUnits.push(u);
         }
 
-        const playerIndex = unit.getPlayerIndex();
-        war.getFogMap().updateMapFromUnitsForPlayerOnLeaving(playerIndex, gridIndex, unit.getVisionRangeForPlayer(playerIndex, gridIndex)!);
-
         const player    = war.getPlayer(unit.getPlayerIndex())!;
         const coUnitId  = player.getCoUnitId();
         if (destroyedUnits.some(u => u.getUnitId() === coUnitId)) {
@@ -71,9 +68,6 @@ namespace TinyWars.Utility.DestructionHelpers {
         for (const u of unitMap.getUnitsLoadedByLoader(unit, true)) {
             unitMap.removeUnitLoaded(u.getUnitId());
         }
-
-        const playerIndex = unit.getPlayerIndex();
-        war.getFogMap().updateMapFromUnitsForPlayerOnLeaving(playerIndex, gridIndex, unit.getVisionRangeForPlayer(playerIndex, gridIndex)!);
     }
 
     function resetTile(war: BwWar, gridIndex: GridIndex): void {

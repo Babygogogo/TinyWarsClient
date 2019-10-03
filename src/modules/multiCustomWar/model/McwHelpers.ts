@@ -93,28 +93,16 @@ namespace TinyWars.MultiCustomWar.McwHelpers {
     }
 
     export function updateTilesAndUnitsOnVisibilityChanged(war: McwWar): void {
-        const teamIndexLoggedIn     = war.getPlayerLoggedIn().getTeamIndex();
-        const fogMap                = war.getFogMap();
-
-        const tileMap = war.getTileMap();
+        const teamIndexLoggedIn = war.getPlayerLoggedIn().getTeamIndex();
+        const tileMap           = war.getTileMap();
         tileMap.forEachTile(tile => {
             const gridIndex = tile.getGridIndex();
             if (VisibilityHelpers.checkIsTileVisibleToTeam(war, gridIndex, teamIndexLoggedIn)) {
                 if (tile.getIsFogEnabled()) {
-                    const playerIndex = tile.getPlayerIndex();
-                    if (playerIndex > 0) {
-                        fogMap.updateMapFromTilesForPlayerOnGettingOwnership(playerIndex, gridIndex, tile.getVisionRangeForPlayer(playerIndex));
-                    }
-
                     tile.setFogDisabled();
                 }
             } else {
                 if (!tile.getIsFogEnabled()) {
-                    const playerIndex = tile.getPlayerIndex();
-                    if (playerIndex > 0) {
-                        fogMap.updateMapFromTilesForPlayerOnLosingOwnership(playerIndex, gridIndex, tile.getVisionRangeForPlayer(playerIndex));
-                    }
-
                     tile.setFogEnabled();
                 }
             }
