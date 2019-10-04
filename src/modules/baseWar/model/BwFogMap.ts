@@ -106,14 +106,22 @@ namespace TinyWars.BaseWar {
             const playerIndex   = unit.getPlayerIndex();
             const map           = this._mapsFromPaths.get(playerIndex)!;
             const mapSize       = this.getMapSize();
+            const isTrueVision  = unit.checkIsTrueVision();
+
             for (const pathNode of path) {
                 const visionRange = unit.getVisionRangeForPlayer(playerIndex, pathNode);
                 if (visionRange) {
                     for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(pathNode, 0, 1, mapSize)) {
-                        map[gridIndex.x][gridIndex.y] = 2;
+                        map[gridIndex.x][gridIndex.y] = Visibility.TrueVision;
                     }
                     for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(pathNode, 2, visionRange, mapSize)) {
-                        map[gridIndex.x][gridIndex.y] = Math.max(1, map[gridIndex.x][gridIndex.y]) as Visibility;
+                        if (isTrueVision) {
+                            map[gridIndex.x][gridIndex.y] = Visibility.TrueVision;
+                        } else {
+                            if (map[gridIndex.x][gridIndex.y] === Visibility.OutsideVision) {
+                                map[gridIndex.x][gridIndex.y] = Visibility.InsideVision;
+                            }
+                        }
                     }
                 }
             }
@@ -194,14 +202,6 @@ namespace TinyWars.BaseWar {
     function fillMap(map: number[][], data: number): void {
         for (const column of map) {
             column.fill(data);
-        }
-    }
-
-    function updateMap(map: number[][], mapSize: MapSize, origin: GridIndex, vision: number | null | undefined, modifier: -1 | 1) {
-        if (vision) {
-            for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(origin, 0, vision, mapSize)) {
-                map[gridIndex.x][gridIndex.y] += modifier;
-            }
         }
     }
 }

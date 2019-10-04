@@ -884,13 +884,19 @@ namespace TinyWars.BaseWar {
                 const war           = this.getWar()!;
                 const version       = war.getConfigVersion();
                 const unitType      = this.getType();
+                const player        = war.getPlayer(playerIndex)!;
+                const isCoOnMap     = !!player.getCoGridIndexOnMap();
+
                 let modifierBySkill = 0;
-                for (const skillId of war.getPlayer(playerIndex)!.getCoCurrentSkills() || []) {
+                for (const skillId of player.getCoCurrentSkills() || []) {
                     const cfg = ConfigManager.getCoSkillCfg(version, skillId)!.unitVisionRangeBonus;
                     if (cfg) {
-                        // TODO cfg[0] !== 1
-                        if ((cfg[0] === 1) && (ConfigManager.checkIsUnitTypeInCategory(version, unitType, cfg[1]))) {
-                            modifierBySkill += cfg[2];
+                        if (cfg[0] === 1) {
+                            if ((isCoOnMap) && (ConfigManager.checkIsUnitTypeInCategory(version, unitType, cfg[1]))) {
+                                modifierBySkill += cfg[2];
+                            }
+                        } else {
+                            // TODO cfg[0] !== 1
                         }
                     }
                 }
@@ -904,12 +910,18 @@ namespace TinyWars.BaseWar {
         public checkIsTrueVision(): boolean {
             const version   = this.getWar()!.getConfigVersion();
             const unitType  = this.getType();
-            for (const skillId of this.getPlayer()!.getCoCurrentSkills() || []) {
+            const player    = this.getPlayer()!;
+            const isCoOnMap = !!player.getCoGridIndexOnMap();
+
+            for (const skillId of player.getCoCurrentSkills() || []) {
                 const cfg = ConfigManager.getCoSkillCfg(version, skillId)!.unitTrueVision;
                 if (cfg) {
-                    // TODO cfg[0] !== 1
-                    if ((cfg[0] === 1) && (ConfigManager.checkIsUnitTypeInCategory(version, unitType, cfg[1]))) {
-                        return true;
+                    if (cfg[0] === 1) {
+                        if ((isCoOnMap) && (ConfigManager.checkIsUnitTypeInCategory(version, unitType, cfg[1]))) {
+                            return true;
+                        }
+                    } else {
+                        // TODO cfg[0] !== 1
                     }
                 }
             }

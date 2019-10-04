@@ -134,7 +134,6 @@ namespace TinyWars.Utility.VisibilityHelpers {
     export function getDiscoveriesByPath(war: BwWar, path: GridIndex[], movingUnit: BwUnit, isUnitDestroyed: boolean): Discoveries {
         const tileMap               = war.getTileMap();
         const unitMap               = war.getUnitMap();
-        const observerPlayerIndex   = movingUnit.getPlayerIndex();
         const observerTeamIndex     = movingUnit.getTeamIndex()!;
         const visibilityMap         = _createVisibilityMapFromPath(war, path, movingUnit);
         const discoveredTiles       = new Set<BwTile>();
@@ -300,20 +299,27 @@ namespace TinyWars.Utility.VisibilityHelpers {
         return (unit != null) && (unit.getTeamIndex() === teamIndex);
     }
 
-    function _createVisibilityMapFromPath(war: BwWar, path: GridIndex[], unit: BwUnit): (number | undefined)[][] {
-        // TODO: take commander skills into account.
+    function _createVisibilityMapFromPath(war: BwWar, path: GridIndex[], unit: BwUnit): Visibility[][] {
         const playerIndex   = unit.getPlayerIndex();
         const mapSize       = war.getTileMap().getMapSize();
-        const visibilityMap = Helpers.createEmptyMap<number | undefined>(mapSize.width, mapSize.height);
+        const visibilityMap = Helpers.createEmptyMap(mapSize.width, mapSize.height, Visibility.OutsideVision);
+        const isTrueVision  = unit.checkIsTrueVision();
+
         for (const node of path) {
-            const vision = unit.getVisionRangeForPlayer(playerIndex, node);
+            const visionRange = unit.getVisionRangeForPlayer(playerIndex, node);
             for (const grid of GridIndexHelpers.getGridsWithinDistance(node, 0, 1, mapSize)) {
-                visibilityMap[grid.x][grid.y] = 2;
+                visibilityMap[grid.x][grid.y] = Visibility.TrueVision;
             }
 
-            if (vision) {
-                for (const grid of GridIndexHelpers.getGridsWithinDistance(node, 2, vision, mapSize)) {
-                    visibilityMap[grid.x][grid.y] = visibilityMap[grid.x][grid.y] || 1;
+            if (visionRange) {
+                for (const grid of GridIndexHelpers.getGridsWithinDistance(node, 2, visionRange, mapSize)) {
+                    if (isTrueVision) {
+                        visibilityMap[grid.x][grid.y] = Visibility.TrueVision;
+                    } else {
+                        if (visibilityMap[grid.x][grid.y] === Visibility.OutsideVision) {
+                            visibilityMap[grid.x][grid.y] = Visibility.InsideVision;
+                        }
+                    }
                 }
             }
         }

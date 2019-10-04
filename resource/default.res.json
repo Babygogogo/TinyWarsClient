@@ -59,7 +59,7 @@
 			"url": "assets/texture/co/co.json",
 			"type": "sheet",
 			"name": "co_json",
-			"subkeys": "Beast,David,Doctor,Lin,Penny,c09_t01_s01_f01,c09_t02_s01_f01,c09_t03_s01_f01,c09_t04_s01_f01,c09_t05_s01_f01,c09_t06_s01_f01,c09_t07_s01_f01,c09_t08_s01_f01,c09_t11_s01_f01,c09_t12_s01_f01,c09_t13_s01_f01,c09_t19_s01_f01"
+			"subkeys": "Beast,David,Doctor,Penny,c09_t01_s01_f01,c09_t02_s01_f01,c09_t03_s01_f01,c09_t04_s01_f01,c09_t05_s01_f01,c09_t06_s01_f01,c09_t07_s01_f01,c09_t08_s01_f01,c09_t11_s01_f01,c09_t12_s01_f01,c09_t13_s01_f01,c09_t19_s01_f01,c09_t21_s01_f01"
 		}
 	]
 }
