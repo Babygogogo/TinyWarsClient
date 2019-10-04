@@ -202,7 +202,6 @@ namespace TinyWars.Replay.ReplayModel {
         FloatText.show(`${Lang.getText(Lang.Type.B0095)} ${Lang.getUnitName(data.WarActionPlayerProduceUnit.unitType)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionPlayerProduceUnit;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const gridIndex     = action.gridIndex as GridIndex;
         const unitMap       = war.getUnitMap();
@@ -277,7 +276,6 @@ namespace TinyWars.Replay.ReplayModel {
         FloatText.show(`${Lang.getText(Lang.Type.B0097)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitAttack;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path      = action.path as MovePath;
         const pathNodes = path.nodes;
@@ -410,7 +408,6 @@ namespace TinyWars.Replay.ReplayModel {
         FloatText.show(`${Lang.getText(Lang.Type.B0098)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitBeLoaded;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path          = action.path as MovePath;
         const pathNodes     = path.nodes;
@@ -440,7 +437,6 @@ namespace TinyWars.Replay.ReplayModel {
         FloatText.show(`${Lang.getText(Lang.Type.B0099)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitBuildTile;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path      = action.path as MovePath;
         const pathNodes = path.nodes;
@@ -484,7 +480,6 @@ namespace TinyWars.Replay.ReplayModel {
         FloatText.show(`${Lang.getText(Lang.Type.B0100)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitCaptureTile;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path      = action.path as MovePath;
         const pathNodes = path.nodes;
@@ -553,7 +548,6 @@ namespace TinyWars.Replay.ReplayModel {
         FloatText.show(`${Lang.getText(Lang.Type.B0101)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitDive;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path          = action.path as MovePath;
         const pathNodes     = path.nodes;
@@ -584,7 +578,6 @@ namespace TinyWars.Replay.ReplayModel {
         FloatText.show(`${Lang.getText(Lang.Type.B0102)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitDrop;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path              = action.path as MovePath;
         const pathNodes         = path.nodes;
@@ -647,7 +640,6 @@ namespace TinyWars.Replay.ReplayModel {
         FloatText.show(`${Lang.getText(Lang.Type.B0103)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitJoin;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path              = action.path as MovePath;
         const pathNodes         = path.nodes;
@@ -732,7 +724,6 @@ namespace TinyWars.Replay.ReplayModel {
         FloatText.show(`${Lang.getText(Lang.Type.B0104)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitLaunchFlare;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path      = action.path as MovePath;
         const pathNodes = path.nodes;
@@ -772,7 +763,6 @@ namespace TinyWars.Replay.ReplayModel {
         FloatText.show(`${Lang.getText(Lang.Type.B0105)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitLaunchSilo;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path      = action.path as MovePath;
         const pathNodes = path.nodes;
@@ -833,7 +823,6 @@ namespace TinyWars.Replay.ReplayModel {
         FloatText.show(`${Lang.getText(Lang.Type.B0139)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitLoadCo;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path      = action.path as MovePath;
         const pathNodes = path.nodes;
@@ -870,7 +859,6 @@ namespace TinyWars.Replay.ReplayModel {
         FloatText.show(`${Lang.getText(Lang.Type.B0106)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitProduceUnit;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path          = action.path as MovePath;
         const pathNodes     = path.nodes;
@@ -927,7 +915,6 @@ namespace TinyWars.Replay.ReplayModel {
         FloatText.show(`${Lang.getText(Lang.Type.B0107)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitSupply;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path      = action.path as MovePath;
         const pathNodes = path.nodes;
@@ -982,7 +969,6 @@ namespace TinyWars.Replay.ReplayModel {
         FloatText.show(`${Lang.getText(Lang.Type.B0108)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitSurface;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path          = action.path as MovePath;
         const pathNodes     = path.nodes;
@@ -1013,7 +999,6 @@ namespace TinyWars.Replay.ReplayModel {
         FloatText.show(`${Lang.getText(Lang.Type.B0142)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitUseCoSkill;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path          = action.path as MovePath;
         const pathNodes     = path.nodes;
@@ -1082,7 +1067,6 @@ namespace TinyWars.Replay.ReplayModel {
         FloatText.show(`${Lang.getText(Lang.Type.B0109)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitWait;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path      = action.path as MovePath;
         const pathNodes = path.nodes;
@@ -1627,51 +1611,6 @@ namespace TinyWars.Replay.ReplayModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Helpers for executors.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    function addUnits(war: ReplayWar, unitsData: SerializedBwUnit[] | undefined | null, isViewVisible: boolean): void {
-        if ((unitsData) && (unitsData.length)) {
-            const unitMap       = war.getUnitMap();
-            const configVersion = war.getConfigVersion();
-
-            for (const unitData of unitsData) {
-                const unit      = new ReplayUnit().init(unitData, configVersion);
-                const isOnMap   = unit.getLoaderUnitId() == null;
-                if (isOnMap) {
-                    unitMap.addUnitOnMap(unit);
-                } else {
-                    unitMap.addUnitLoaded(unit);
-                }
-                unit.startRunning(war);
-                unit.startRunningView();
-                unit.setViewVisible(isViewVisible);
-            }
-        }
-    }
-    function updateTiles(war: ReplayWar, tilesData: SerializedBwTile[] | undefined | null): void {
-        if ((tilesData) && (tilesData.length)) {
-            const tileMap   = war.getTileMap();
-            for (const tileData of tilesData) {
-                const gridIndex = { x: tileData.gridX, y: tileData.gridY };
-                const tile      = tileMap.getTile(gridIndex);
-                egret.assert(tile.getIsFogEnabled(), "ReplayModel.updateTiles() the tile has no fog and therefore should not be updated!");
-                tile.setFogDisabled(tileData);
-            }
-        }
-    }
-    function updateTilesAndUnitsBeforeExecutingAction(
-        war     : ReplayWar,
-        action  : {
-            actingTiles?    : ProtoTypes.ISerializedWarTile[],
-            actingUnits?    : ProtoTypes.ISerializedWarUnit[],
-            discoveredTiles?: ProtoTypes.ISerializedWarTile[],
-            discoveredUnits?: ProtoTypes.ISerializedWarUnit[],
-        }
-    ): void {
-        addUnits(war, action.actingUnits as SerializedBwUnit[] | undefined | null, false);
-        addUnits(war, action.discoveredUnits as SerializedBwUnit[] | undefined | null, false);
-        updateTiles(war, action.actingTiles as SerializedBwTile[] | undefined | null);
-        updateTiles(war, action.discoveredTiles as SerializedBwTile[] | undefined | null);
-    }
-
     function moveUnit(war: ReplayWar, actionCode: WarActionCodes, revisedPath: MovePath, launchUnitId: number | null | undefined, fuelConsumption: number): void {
         const pathNodes             = revisedPath.nodes;
         const beginningGridIndex    = pathNodes[0];

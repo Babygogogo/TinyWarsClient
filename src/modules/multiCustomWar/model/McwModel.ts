@@ -1233,16 +1233,18 @@ namespace TinyWars.MultiCustomWar.McwModel {
             const configVersion = war.getConfigVersion();
 
             for (const unitData of unitsData) {
-                const unit      = new McwUnit().init(unitData, configVersion);
-                const isOnMap   = unit.getLoaderUnitId() == null;
-                if (isOnMap) {
-                    unitMap.addUnitOnMap(unit);
-                } else {
-                    unitMap.addUnitLoaded(unit);
+                if (!unitMap.getUnitById(unitData.unitId)) {
+                    const unit      = new McwUnit().init(unitData, configVersion);
+                    const isOnMap   = unit.getLoaderUnitId() == null;
+                    if (isOnMap) {
+                        unitMap.addUnitOnMap(unit);
+                    } else {
+                        unitMap.addUnitLoaded(unit);
+                    }
+                    unit.startRunning(war);
+                    unit.startRunningView();
+                    unit.setViewVisible(isViewVisible);
                 }
-                unit.startRunning(war);
-                unit.startRunningView();
-                unit.setViewVisible(isViewVisible);
             }
         }
     }
@@ -1252,8 +1254,9 @@ namespace TinyWars.MultiCustomWar.McwModel {
             for (const tileData of tilesData) {
                 const gridIndex = { x: tileData.gridX, y: tileData.gridY };
                 const tile      = tileMap.getTile(gridIndex);
-                egret.assert(tile.getIsFogEnabled(), "McwModel.updateTiles() the tile has no fog and therefore should not be updated!");
-                tile.setFogDisabled(tileData);
+                if (tile.getIsFogEnabled()) {
+                    tile.setFogDisabled(tileData);
+                }
             }
         }
     }
