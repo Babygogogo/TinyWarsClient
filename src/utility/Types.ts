@@ -494,4 +494,10 @@ namespace TinyWars.Utility.Types {
         Chinese = 0,
         English = 1,
     }
+
+    export const enum CoSkillAreaType {
+        Zone    = 0,
+        OnMap   = 1,
+        Halo    = 2,
+    }
 }

@@ -255,25 +255,40 @@ namespace TinyWars.BaseWar {
         }
 
         public getAttackModifierByCo(selfGridIndex: GridIndex): number {
-            const player        = this.getPlayer();
+            const player        = this.getPlayer()!;
             const coGridIndex   = player.getCoGridIndexOnMap();
             const isCoOnBoard   = player.getCoUnitId() === this.getUnitId();
             if ((coGridIndex == null) && (!isCoOnBoard)) {
                 return 0;
             } else {
-                const configVersion = this.getWar().getConfigVersion();
+                const configVersion = this.getWar()!.getConfigVersion();
                 const unitType      = this.getType();
-                const isInZone      = (isCoOnBoard) || (GridIndexHelpers.getDistance(coGridIndex, selfGridIndex) <= player.getCoZoneRadius());
+                const promotion     = this.getCurrentPromotion();
+                const isInZone      = (isCoOnBoard) || (GridIndexHelpers.getDistance(coGridIndex!, selfGridIndex) <= player.getCoZoneRadius()!);
                 let modifier        = 0;
                 for (const skillId of player.getCoCurrentSkills() || []) {
-                    const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId).attackBonus;
-                    if ((cfg)                                                                   &&
-                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))
+                    const skillCfg = ConfigManager.getCoSkillCfg(configVersion, skillId)!
+
+                    const attackBonusCfg = skillCfg.attackBonus;
+                    if ((attackBonusCfg)                                                                    &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, attackBonusCfg[1]))
                     ) {
-                        if (((cfg[0] === 0) && (isInZone)) ||
-                            (cfg[0] === 1)
+                        if (((attackBonusCfg[0] === 0) && (isInZone)) ||
+                            (attackBonusCfg[0] === 1)
                         ) {
-                            modifier += cfg[2];
+                            modifier += attackBonusCfg[2];
+                        }
+                    }
+
+                    const attackBonusByPromotionCfg = skillCfg.attackBonusByPromotion;
+                    if ((attackBonusByPromotionCfg)                                                                     &&
+                        (attackBonusByPromotionCfg[2] === promotion)                                                    &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, attackBonusByPromotionCfg[1]))
+                    ) {
+                        if (((attackBonusByPromotionCfg[0] === 0) && (isInZone)) ||
+                            (attackBonusByPromotionCfg[0] === 1)
+                        ) {
+                            modifier += attackBonusByPromotionCfg[3];
                         }
                     }
                 }
@@ -281,25 +296,40 @@ namespace TinyWars.BaseWar {
             }
         }
         public getDefenseModifierByCo(selfGridIndex: GridIndex): number {
-            const player        = this.getPlayer();
+            const player        = this.getPlayer()!;
             const coGridIndex   = player.getCoGridIndexOnMap();
             const isCoOnBoard   = player.getCoUnitId() === this.getUnitId();
             if ((coGridIndex == null) && (!isCoOnBoard)) {
                 return 0;
             } else {
-                const configVersion = this.getWar().getConfigVersion();
+                const configVersion = this.getWar()!.getConfigVersion();
                 const unitType      = this.getType();
-                const isInZone      = (isCoOnBoard) || (GridIndexHelpers.getDistance(coGridIndex, selfGridIndex) <= player.getCoZoneRadius());
+                const promotion     = this.getCurrentPromotion();
+                const isInZone      = (isCoOnBoard) || (GridIndexHelpers.getDistance(coGridIndex!, selfGridIndex) <= player.getCoZoneRadius()!);
                 let modifier        = 0;
                 for (const skillId of player.getCoCurrentSkills() || []) {
-                    const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId).defenseBonus;
-                    if ((cfg)                                                                   &&
-                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))
+                    const skillCfg = ConfigManager.getCoSkillCfg(configVersion, skillId)!
+
+                    const defenseBonusCfg = skillCfg.defenseBonus;
+                    if ((defenseBonusCfg)                                                                   &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, defenseBonusCfg[1]))
                     ) {
-                        if (((cfg[0] === 0) && (isInZone)) ||
-                            (cfg[0] === 1)
+                        if (((defenseBonusCfg[0] === 0) && (isInZone)) ||
+                            (defenseBonusCfg[0] === 1)
                         ) {
-                            modifier += cfg[2];
+                            modifier += defenseBonusCfg[2];
+                        }
+                    }
+
+                    const defenseBonusByPromotionCfg = skillCfg.defenseBonusByPromotion;
+                    if ((defenseBonusByPromotionCfg)                                                                    &&
+                        (defenseBonusByPromotionCfg[2] === promotion)                                                   &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, defenseBonusByPromotionCfg[1]))
+                    ) {
+                        if (((defenseBonusByPromotionCfg[0] === 0) && (isInZone)) ||
+                            (defenseBonusByPromotionCfg[0] === 1)
+                        ) {
+                            modifier += defenseBonusByPromotionCfg[3];
                         }
                     }
                 }
@@ -659,6 +689,9 @@ namespace TinyWars.BaseWar {
         public setCurrentPromotion(promotion: number): void {
             Logger.assert((promotion >= 0) && (promotion <= this.getMaxPromotion()), "UnitModel.setCurrentPromotion() error, promotion: ", promotion);
             this._currentPromotion = promotion;
+        }
+        public addPromotion(): void {
+            this.setCurrentPromotion(Math.min(this.getMaxPromotion(), this.getCurrentPromotion() + 1));
         }
 
         public getPromotionAttackBonus(): number {

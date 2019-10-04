@@ -1515,6 +1515,15 @@ export declare interface ICoSkillCfg {
 
     /** CoSkillCfg unitTrueVision */
     unitTrueVision?: (number[]|null);
+
+    /** CoSkillCfg attackBonusByPromotion */
+    attackBonusByPromotion?: (number[]|null);
+
+    /** CoSkillCfg defenseBonusByPromotion */
+    defenseBonusByPromotion?: (number[]|null);
+
+    /** CoSkillCfg promotionBonusByAttack */
+    promotionBonusByAttack?: (number[]|null);
 }
 
 /** Represents a CoSkillCfg. */
@@ -1585,6 +1594,15 @@ export declare class CoSkillCfg implements ICoSkillCfg {
 
     /** CoSkillCfg unitTrueVision. */
     public unitTrueVision: number[];
+
+    /** CoSkillCfg attackBonusByPromotion. */
+    public attackBonusByPromotion: number[];
+
+    /** CoSkillCfg defenseBonusByPromotion. */
+    public defenseBonusByPromotion: number[];
+
+    /** CoSkillCfg promotionBonusByAttack. */
+    public promotionBonusByAttack: number[];
 
     /**
      * Creates a new CoSkillCfg instance using the specified properties.
@@ -4827,6 +4845,18 @@ export declare interface IWarActionUnitAttack {
 
     /** WarActionUnitAttack lostPlayerIndex */
     lostPlayerIndex?: (number|null);
+
+    /** WarActionUnitAttack attackerUnitAfterAction */
+    attackerUnitAfterAction?: (ISerializedWarUnit|null);
+
+    /** WarActionUnitAttack targetUnitAfterAction */
+    targetUnitAfterAction?: (ISerializedWarUnit|null);
+
+    /** WarActionUnitAttack attackerCoEnergy */
+    attackerCoEnergy?: (number|null);
+
+    /** WarActionUnitAttack targetCoEnergy */
+    targetCoEnergy?: (number|null);
 }
 
 /** Represents a WarActionUnitAttack. */
@@ -4867,6 +4897,18 @@ export declare class WarActionUnitAttack implements IWarActionUnitAttack {
 
     /** WarActionUnitAttack lostPlayerIndex. */
     public lostPlayerIndex: number;
+
+    /** WarActionUnitAttack attackerUnitAfterAction. */
+    public attackerUnitAfterAction?: (ISerializedWarUnit|null);
+
+    /** WarActionUnitAttack targetUnitAfterAction. */
+    public targetUnitAfterAction?: (ISerializedWarUnit|null);
+
+    /** WarActionUnitAttack attackerCoEnergy. */
+    public attackerCoEnergy: number;
+
+    /** WarActionUnitAttack targetCoEnergy. */
+    public targetCoEnergy: number;
 
     /**
      * Creates a new WarActionUnitAttack instance using the specified properties.

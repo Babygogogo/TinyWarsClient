@@ -314,42 +314,83 @@ namespace TinyWars.Replay.ReplayModel {
             const attackerNewHp = Math.max(0, attackerOldHp - (counterDamage || 0));
             attacker.setCurrentHp(attackerNewHp);
             if ((attackerNewHp === 0) && (targetUnit)) {
-                targetUnit.setCurrentPromotion(Math.min(targetUnit.getMaxPromotion(), targetUnit.getCurrentPromotion() + 1));
+                targetUnit.addPromotion();
             }
 
             const targetOldHp = attackTarget.getCurrentHp()!;
             const targetNewHp = Math.max(0, targetOldHp - action.attackDamage);
             attackTarget.setCurrentHp(targetNewHp);
             if ((targetNewHp === 0) && (targetUnit)) {
-                attacker.setCurrentPromotion(Math.min(attacker.getMaxPromotion(), attacker.getCurrentPromotion() + 1));
+                attacker.addPromotion();
             }
 
             const destination = pathNodes[pathNodes.length - 1];
             if (targetUnit) {
-                const attackerPlayer    = war.getPlayer(attacker.getPlayerIndex())!;
-                const targetLostHp      = Helpers.getNormalizedHp(targetOldHp) - Helpers.getNormalizedHp(targetNewHp);
-                if ((targetLostHp > 0)                                                                                      &&
-                    (attackerPlayer.getCoId() != null)                                                                      &&
-                    (!attackerPlayer.getCoUsingSkillType())                                                                   &&
-                    ((attacker.getUnitId() === attackerPlayer.getCoUnitId()) || (attackerPlayer.checkIsInCoZone(destination)))
+                const configVersion         = war.getConfigVersion();
+                const attackerPlayer        = war.getPlayer(attacker.getPlayerIndex())!;
+                const targetLostHp          = Helpers.getNormalizedHp(targetOldHp) - Helpers.getNormalizedHp(targetNewHp);
+                const attackerCoGridIndex   = attackerPlayer.getCoGridIndexOnMap();
+                const isAttackerInCoZone    = (attacker.getUnitId() === attackerPlayer.getCoUnitId()) || (attackerPlayer.checkIsInCoZone(destination, attackerCoGridIndex));
+                if ((targetLostHp > 0)                              &&
+                    (attackerPlayer.getCoId() != null)              &&
+                    (!attackerPlayer.checkCoIsUsingActiveSkill())   &&
+                    (isAttackerInCoZone)
                 ) {
                     attackerPlayer.setCoCurrentEnergy(Math.min(
-                        attackerPlayer.getCoMaxEnergy() || 0,
+                        attackerPlayer.getCoMaxEnergy(),
                         attackerPlayer.getCoCurrentEnergy() + Math.floor(targetLostHp * war.getSettingsEnergyGrowthModifier() / 100)
                     ));
                 }
+                const attackerUnitType = attacker.getType();
+                for (const skillId of attackerPlayer.getCoCurrentSkills() || []) {
+                    const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)!.promotionBonusByAttack;
+                    if ((cfg)                                                                           &&
+                        (targetLostHp >= cfg[2])                                                        &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, attackerUnitType, cfg[1]))
+                    ) {
+                        if (cfg[0] === Types.CoSkillAreaType.Zone) {
+                            if (isAttackerInCoZone) {
+                                attacker.addPromotion();
+                            }
+                        } else if (cfg[0] === Types.CoSkillAreaType.OnMap) {
+                            if (!!attackerCoGridIndex) {
+                                attacker.addPromotion();
+                            }
+                        }
+                    }
+                }
 
                 const targetPlayer      = war.getPlayer(targetUnit.getPlayerIndex())!;
+                const targetCoGridIndex = targetPlayer.getCoGridIndexOnMap();
                 const attackerLostHp    = Helpers.getNormalizedHp(attackerOldHp) - Helpers.getNormalizedHp(attackerNewHp);
-                if ((attackerLostHp > 0)                    &&
-                    (targetPlayer.getCoId() != null)        &&
-                    (!targetPlayer.getCoUsingSkillType())     &&
-                    (targetPlayer.checkIsInCoZone(destination))
+                if ((attackerLostHp > 0)                                        &&
+                    (targetPlayer.getCoId() != null)                            &&
+                    (!targetPlayer.checkCoIsUsingActiveSkill())                 &&
+                    (targetPlayer.checkIsInCoZone(destination, targetCoGridIndex))
                 ) {
                     targetPlayer.setCoCurrentEnergy(Math.min(
-                        targetPlayer.getCoMaxEnergy() || 0,
+                        targetPlayer.getCoMaxEnergy(),
                         targetPlayer.getCoCurrentEnergy() + Math.floor(attackerLostHp * war.getSettingsEnergyGrowthModifier() / 100)
                     ));
+                }
+                const isTargetInCoZone  = targetPlayer.checkIsInCoZone(targetGridIndex, targetCoGridIndex);
+                const targetUnitType    = targetUnit.getType();
+                for (const skillId of targetPlayer.getCoCurrentSkills() || []) {
+                    const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)!.promotionBonusByAttack;
+                    if ((cfg)                                                                           &&
+                        (attackerLostHp >= cfg[2])                                                      &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, targetUnitType, cfg[1]))
+                    ) {
+                        if (cfg[0] === Types.CoSkillAreaType.Zone) {
+                            if (isTargetInCoZone) {
+                                targetUnit.addPromotion();
+                            }
+                        } else if (cfg[0] === Types.CoSkillAreaType.OnMap) {
+                            if (!!targetCoGridIndex) {
+                                targetUnit.addPromotion();
+                            }
+                        }
+                    }
                 }
             }
 
@@ -1181,42 +1222,83 @@ namespace TinyWars.Replay.ReplayModel {
             const attackerNewHp = Math.max(0, attackerOldHp - (counterDamage || 0));
             attacker.setCurrentHp(attackerNewHp);
             if ((attackerNewHp === 0) && (targetUnit)) {
-                targetUnit.setCurrentPromotion(Math.min(targetUnit.getMaxPromotion(), targetUnit.getCurrentPromotion() + 1));
+                targetUnit.addPromotion();
             }
 
             const targetOldHp = attackTarget.getCurrentHp()!;
             const targetNewHp = Math.max(0, targetOldHp - action.attackDamage);
             attackTarget.setCurrentHp(targetNewHp);
             if ((targetNewHp === 0) && (targetUnit)) {
-                attacker.setCurrentPromotion(Math.min(attacker.getMaxPromotion(), attacker.getCurrentPromotion() + 1));
+                attacker.addPromotion();
             }
 
             const destination = pathNodes[pathNodes.length - 1];
             if (targetUnit) {
-                const attackerPlayer    = war.getPlayer(attacker.getPlayerIndex())!;
-                const targetLostHp      = Helpers.getNormalizedHp(targetOldHp) - Helpers.getNormalizedHp(targetNewHp);
-                if ((targetLostHp > 0)                                                                                      &&
-                    (attackerPlayer.getCoId() != null)                                                                      &&
-                    (!attackerPlayer.getCoUsingSkillType())                                                                   &&
-                    ((attacker.getUnitId() === attackerPlayer.getCoUnitId()) || (attackerPlayer.checkIsInCoZone(destination)))
+                const configVersion         = war.getConfigVersion();
+                const attackerPlayer        = war.getPlayer(attacker.getPlayerIndex())!;
+                const targetLostHp          = Helpers.getNormalizedHp(targetOldHp) - Helpers.getNormalizedHp(targetNewHp);
+                const attackerCoGridIndex   = attackerPlayer.getCoGridIndexOnMap();
+                const isAttackerInCoZone    = (attacker.getUnitId() === attackerPlayer.getCoUnitId()) || (attackerPlayer.checkIsInCoZone(destination, attackerCoGridIndex));
+                if ((targetLostHp > 0)                              &&
+                    (attackerPlayer.getCoId() != null)              &&
+                    (!attackerPlayer.checkCoIsUsingActiveSkill())   &&
+                    (isAttackerInCoZone)
                 ) {
                     attackerPlayer.setCoCurrentEnergy(Math.min(
-                        attackerPlayer.getCoMaxEnergy() || 0,
+                        attackerPlayer.getCoMaxEnergy(),
                         attackerPlayer.getCoCurrentEnergy() + Math.floor(targetLostHp * war.getSettingsEnergyGrowthModifier() / 100)
                     ));
                 }
+                const attackerUnitType = attacker.getType();
+                for (const skillId of attackerPlayer.getCoCurrentSkills() || []) {
+                    const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)!.promotionBonusByAttack;
+                    if ((cfg)                                                                           &&
+                        (targetLostHp >= cfg[2])                                                        &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, attackerUnitType, cfg[1]))
+                    ) {
+                        if (cfg[0] === Types.CoSkillAreaType.Zone) {
+                            if (isAttackerInCoZone) {
+                                attacker.addPromotion();
+                            }
+                        } else if (cfg[0] === Types.CoSkillAreaType.OnMap) {
+                            if (!!attackerCoGridIndex) {
+                                attacker.addPromotion();
+                            }
+                        }
+                    }
+                }
 
                 const targetPlayer      = war.getPlayer(targetUnit.getPlayerIndex())!;
+                const targetCoGridIndex = targetPlayer.getCoGridIndexOnMap();
                 const attackerLostHp    = Helpers.getNormalizedHp(attackerOldHp) - Helpers.getNormalizedHp(attackerNewHp);
-                if ((attackerLostHp > 0)                    &&
-                    (targetPlayer.getCoId() != null)        &&
-                    (!targetPlayer.getCoUsingSkillType())     &&
-                    (targetPlayer.checkIsInCoZone(destination))
+                if ((attackerLostHp > 0)                                        &&
+                    (targetPlayer.getCoId() != null)                            &&
+                    (!targetPlayer.checkCoIsUsingActiveSkill())                 &&
+                    (targetPlayer.checkIsInCoZone(destination, targetCoGridIndex))
                 ) {
                     targetPlayer.setCoCurrentEnergy(Math.min(
-                        targetPlayer.getCoMaxEnergy() || 0,
+                        targetPlayer.getCoMaxEnergy(),
                         targetPlayer.getCoCurrentEnergy() + Math.floor(attackerLostHp * war.getSettingsEnergyGrowthModifier() / 100)
                     ));
+                }
+                const isTargetInCoZone  = targetPlayer.checkIsInCoZone(targetGridIndex, targetCoGridIndex);
+                const targetUnitType    = targetUnit.getType();
+                for (const skillId of targetPlayer.getCoCurrentSkills() || []) {
+                    const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)!.promotionBonusByAttack;
+                    if ((cfg)                                                                           &&
+                        (attackerLostHp >= cfg[2])                                                      &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, targetUnitType, cfg[1]))
+                    ) {
+                        if (cfg[0] === Types.CoSkillAreaType.Zone) {
+                            if (isTargetInCoZone) {
+                                targetUnit.addPromotion();
+                            }
+                        } else if (cfg[0] === Types.CoSkillAreaType.OnMap) {
+                            if (!!targetCoGridIndex) {
+                                targetUnit.addPromotion();
+                            }
+                        }
+                    }
                 }
             }
 

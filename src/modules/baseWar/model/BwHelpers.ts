@@ -431,7 +431,7 @@ namespace TinyWars.BaseWar.BwHelpers {
         if (skillCfg.selfPromotionGain) {
             const cfg           = skillCfg.selfPromotionGain;
             const category      = cfg[1];
-            const modifier      = cfg[2] * ConfigManager.UNIT_HP_NORMALIZER;
+            const modifier      = cfg[2];
             const maxPromotion  = ConfigManager.getUnitMaxPromotion(configVersion);
             unitMap.forEachUnit(unit => {
                 if ((unit.getPlayerIndex() === playerIndex)                                         &&

@@ -56,7 +56,8 @@ namespace TinyWars.MultiCustomWar {
                 }
             });
 
-            war.getTileMap().forEachTile(tile => {
+            const tileMap = war.getTileMap();
+            tileMap.forEachTile(tile => {
                 if (!VisibilityHelpers.checkIsTileVisibleToTeam(war, tile.getGridIndex(), teamIndex)) {
                     tile.setFogEnabled();
                 } else {
@@ -64,6 +65,7 @@ namespace TinyWars.MultiCustomWar {
                 }
                 tile.updateView();
             });
+            tileMap.getView().updateCoZone();
         }
     }
 }
