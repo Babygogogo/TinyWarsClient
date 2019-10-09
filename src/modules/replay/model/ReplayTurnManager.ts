@@ -32,7 +32,7 @@ namespace TinyWars.Replay {
             if (data.isDefeated) {
                 FloatText.show(Lang.getFormatedText(Lang.Type.F0014, war.getPlayer(playerIndex).getNickname()));
                 DestructionHelpers.destroyPlayerForce(war, playerIndex, true);
-                McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
             } else {
                 war.getUnitMap().forEachUnitOnMap(unit => (unit.getPlayerIndex() === playerIndex) && (unit.updateView()));
             }

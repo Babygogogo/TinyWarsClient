@@ -182,7 +182,7 @@ namespace TinyWars.Replay.ReplayModel {
             DestructionHelpers.destroyUnitOnMap(war, gridIndex, true);
         }
 
-        McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+        ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
         actionPlanner.setStateIdle();
     }
@@ -227,7 +227,7 @@ namespace TinyWars.Replay.ReplayModel {
         unitMap.setNextUnitId(unitId + 1);
         playerInTurn.setFund(playerInTurn.getFund() - action.cost);
 
-        McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+        ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
         actionPlanner.setStateIdle();
     }
@@ -239,7 +239,7 @@ namespace TinyWars.Replay.ReplayModel {
 
         const player = war.getPlayerInTurn();
         DestructionHelpers.destroyPlayerForce(war, player.getPlayerIndex(), true);
-        McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+        ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
         actionPlanner.setStateIdle();
     }
@@ -288,7 +288,7 @@ namespace TinyWars.Replay.ReplayModel {
             return new Promise<void>(resolve => {
                 attacker.moveViewAlongPath(pathNodes, attacker.getIsDiving(), true, () => {
                     attacker.updateView();
-                    McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                    ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                     actionPlanner.setStateIdle();
                     resolve();
@@ -434,7 +434,7 @@ namespace TinyWars.Replay.ReplayModel {
                         DestructionHelpers.destroyPlayerForce(war, lostPlayerIndex, true);
                     }
 
-                    McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                    ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                     actionPlanner.setStateIdle();
                     resolve();
@@ -464,7 +464,7 @@ namespace TinyWars.Replay.ReplayModel {
                 focusUnit.updateView();
                 focusUnit.setViewVisible(false);
                 (loaderUnit) && (loaderUnit.updateView());
-                McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                 actionPlanner.setStateIdle();
                 resolve();
@@ -507,7 +507,7 @@ namespace TinyWars.Replay.ReplayModel {
         return new Promise<void>(resolve => {
             focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
                 focusUnit.updateView();
-                McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                 actionPlanner.setStateIdle();
                 resolve();
@@ -532,7 +532,7 @@ namespace TinyWars.Replay.ReplayModel {
             return new Promise<void>(resolve => {
                 focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), true, () => {
                     focusUnit.updateView();
-                    McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                    ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                     actionPlanner.setStateIdle();
                     resolve();
@@ -560,7 +560,7 @@ namespace TinyWars.Replay.ReplayModel {
                     focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false, () => {
                         focusUnit.updateView();
                         tile.updateView();
-                        McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                        ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                         actionPlanner.setStateIdle();
                         resolve();
@@ -573,7 +573,7 @@ namespace TinyWars.Replay.ReplayModel {
                         tile.updateView();
                         FloatText.show(Lang.getFormatedText(Lang.Type.F0016, war.getPlayerManager().getPlayer(lostPlayerIndex).getNickname()));
                         DestructionHelpers.destroyPlayerForce(war, lostPlayerIndex, true);
-                        McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                        ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                         actionPlanner.setStateIdle();
                         resolve();
@@ -605,7 +605,7 @@ namespace TinyWars.Replay.ReplayModel {
                     const endingGridIndex = pathNodes[pathNodes.length - 1];
                     war.getGridVisionEffect().showEffectDive(endingGridIndex);
                 }
-                McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                 actionPlanner.setStateIdle();
                 resolve();
@@ -667,7 +667,7 @@ namespace TinyWars.Replay.ReplayModel {
                     }))
                 }
                 Promise.all(promises).then(() => {
-                    McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                    ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
                     actionPlanner.setStateIdle();
                     resolve();
                 });
@@ -751,7 +751,7 @@ namespace TinyWars.Replay.ReplayModel {
             focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
                 focusUnit.updateView();
                 (targetUnit) && (unitMap.getView().removeUnit(targetUnit.getView()));
-                McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                 actionPlanner.setStateIdle();
                 resolve();
@@ -790,7 +790,7 @@ namespace TinyWars.Replay.ReplayModel {
                 }
 
                 focusUnit.updateView();
-                McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                 actionPlanner.setStateIdle();
                 resolve();
@@ -816,7 +816,7 @@ namespace TinyWars.Replay.ReplayModel {
             return new Promise<void>(resolve => {
                 focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
                     focusUnit.updateView();
-                    McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                    ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                     actionPlanner.setStateIdle();
                     resolve();
@@ -849,7 +849,7 @@ namespace TinyWars.Replay.ReplayModel {
 
                     focusUnit.updateView();
                     tile.updateView();
-                    McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                    ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                     actionPlanner.setStateIdle();
                     resolve();
@@ -886,7 +886,7 @@ namespace TinyWars.Replay.ReplayModel {
         return new Promise<void>(resolve => {
             focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
                 focusUnit.updateView();
-                McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                 actionPlanner.setStateIdle();
                 resolve();
@@ -912,7 +912,7 @@ namespace TinyWars.Replay.ReplayModel {
             return new Promise<void>(resolve => {
                 focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
                     focusUnit.updateView();
-                    McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                    ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                     actionPlanner.setStateIdle();
                     resolve();
@@ -941,7 +941,7 @@ namespace TinyWars.Replay.ReplayModel {
             return new Promise<void>(resolve => {
                 focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
                     focusUnit.updateView();
-                    McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                    ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                     actionPlanner.setStateIdle();
                     resolve();
@@ -968,7 +968,7 @@ namespace TinyWars.Replay.ReplayModel {
             return new Promise<void>(resolve => {
                 focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
                     focusUnit.updateView();
-                    McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                    ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                     actionPlanner.setStateIdle();
                     resolve();
@@ -995,7 +995,7 @@ namespace TinyWars.Replay.ReplayModel {
                         gridVisionEffect.showEffectSupply(unit.getGridIndex());
                     }
 
-                    McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                    ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                     actionPlanner.setStateIdle();
                     resolve();
@@ -1026,7 +1026,7 @@ namespace TinyWars.Replay.ReplayModel {
                     const endingGridIndex = pathNodes[pathNodes.length - 1];
                     war.getGridVisionEffect().showEffectSurface(endingGridIndex);
                 }
-                McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                 actionPlanner.setStateIdle();
                 resolve();
@@ -1068,7 +1068,7 @@ namespace TinyWars.Replay.ReplayModel {
         return new Promise<void>(resolve => {
             focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
                 focusUnit.updateView();
-                McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                 if (isSuccessful) {
                     const gridVisionEffect  = war.getGridVisionEffect();
@@ -1118,7 +1118,7 @@ namespace TinyWars.Replay.ReplayModel {
         return new Promise<void>(resolve => {
             focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
                 focusUnit.updateView();
-                McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                 actionPlanner.setStateIdle();
                 resolve();

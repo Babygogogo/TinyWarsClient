@@ -69,7 +69,8 @@
                                 <e:itemRendererSkinName>
                                     <e:Skin width="470">
                                         <GameUi:UiLabel id="_labelIndex" text="1." size="20" width="30" y="5" />
-                                        <GameUi:UiLabel id="_labelDesc" text="技能描述" size="20" left="30" right="0" y="5" />
+                                        <GameUi:UiLabel id="_labelDesc" text="技能描述" size="20" left="30" right="0" y="5"
+                                                        wordWrap="true" />
                                     </e:Skin>
                                 </e:itemRendererSkinName>
                                 <e:layout>
@@ -102,7 +103,8 @@
                                 <e:itemRendererSkinName>
                                     <e:Skin width="470">
                                         <GameUi:UiLabel id="_labelIndex" text="1." size="20" width="30" y="5" />
-                                        <GameUi:UiLabel id="_labelDesc" text="技能描述" size="20" left="30" right="0" y="5" />
+                                        <GameUi:UiLabel id="_labelDesc" text="技能描述" size="20" left="30" right="0" y="5"
+                                                        wordWrap="true" />
                                     </e:Skin>
                                 </e:itemRendererSkinName>
                                 <e:layout>
@@ -135,7 +137,8 @@
                                 <e:itemRendererSkinName>
                                     <e:Skin width="470">
                                         <GameUi:UiLabel id="_labelIndex" text="1." size="20" width="30" y="5" />
-                                        <GameUi:UiLabel id="_labelDesc" text="技能描述" size="20" left="30" right="0" y="5" />
+                                        <GameUi:UiLabel id="_labelDesc" text="技能描述" size="20" left="30" right="0" y="5"
+                                                        wordWrap="true" />
                                     </e:Skin>
                                 </e:itemRendererSkinName>
                                 <e:layout>

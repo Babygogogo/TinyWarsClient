@@ -55,6 +55,7 @@ namespace TinyWars.MultiCustomWar {
                     DestructionHelpers.removeUnitOnMap(war, gridIndex);
                 }
             });
+            DestructionHelpers.removeEnemyUnitsLoaded(war, teamIndex);
 
             const tileMap = war.getTileMap();
             tileMap.forEachTile(tile => {

@@ -1,10 +1,9 @@
 
-namespace TinyWars.Replay.McwHelpers {
+namespace TinyWars.Replay.ReplayHelpers {
     import Types                = Utility.Types;
-    import Helpers              = Utility.Helpers;
     import GridIndexHelpers     = Utility.GridIndexHelpers;
     import VisibilityHelpers    = Utility.VisibilityHelpers;
-    import DestructionHelpers   = Utility.DestructionHelpers;
+    import ProtoTypes           = Utility.ProtoTypes;
     import GridIndex            = Types.GridIndex;
     import MovableArea          = Types.MovableArea;
     import AttackableArea       = Types.AttackableArea;
@@ -116,6 +115,19 @@ namespace TinyWars.Replay.McwHelpers {
         // TODO: take skills into account.
         const cfg = ConfigManager.getUnitTemplateCfg(war.getConfigVersion(), unitType);
         return cfg ? cfg.productionCost : undefined;
+    }
+
+    export function checkShouldSerializeTile(tileData: Types.SerializedBwTile, mapRawData: ProtoTypes.IMapRawData): boolean {
+        if ((tileData.currentBuildPoint     != null)   ||
+            (tileData.currentCapturePoint   != null)   ||
+            (tileData.currentHp             != null)
+        ) {
+            return true;
+        } else {
+            const posIndex = tileData.gridX + tileData.gridY * mapRawData.mapWidth;
+            return (tileData.baseViewId     != mapRawData.tileBases[posIndex])
+                || (tileData.objectViewId   != mapRawData.tileObjects[posIndex]);
+        }
     }
 
     function _pushToAvailableMovableGrids(grids: AvailableMovableGrid[], gridIndex: GridIndex, prev: GridIndex, totalMoveCost: number): void {

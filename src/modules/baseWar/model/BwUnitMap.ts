@@ -216,6 +216,16 @@ namespace TinyWars.BaseWar {
                 }
             }
         }
+        public removeEnemyUnitsLoaded(selfTeamIndex: number): void {
+            const units = this._loadedUnits;
+            const view  = this.getView();
+            for (const [unitId, unit] of units) {
+                if (unit.getTeamIndex() !== selfTeamIndex) {
+                    units.delete(unitId);
+                    view.removeUnit(unit.getView());
+                }
+            }
+        }
 
         public forEachUnit(func: (unit: BwUnit) => any): void {
             this.forEachUnitOnMap(func);

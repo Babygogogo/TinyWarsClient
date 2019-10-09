@@ -69,6 +69,9 @@ namespace TinyWars.Utility.DestructionHelpers {
             unitMap.removeUnitLoaded(u.getUnitId());
         }
     }
+    export function removeEnemyUnitsLoaded(war: BwWar, selfTeamIndex: number): void {
+        war.getUnitMap().removeEnemyUnitsLoaded(selfTeamIndex);
+    }
 
     function resetTile(war: BwWar, gridIndex: GridIndex): void {
         const tile = war.getTileMap().getTile(gridIndex);

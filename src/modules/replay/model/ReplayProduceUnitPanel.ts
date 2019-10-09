@@ -123,7 +123,7 @@ namespace TinyWars.Replay {
                     actionPlanner,
                     gridIndex,
                     unit,
-                    cost    : McwHelpers.getUnitProductionCost(war, unitType),
+                    cost    : ReplayHelpers.getUnitProductionCost(war, unitType),
                 });
             }
 

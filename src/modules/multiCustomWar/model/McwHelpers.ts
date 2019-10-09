@@ -124,6 +124,7 @@ namespace TinyWars.MultiCustomWar.McwHelpers {
                 DestructionHelpers.removeUnitOnMap(war, gridIndex);
             }
         });
+        DestructionHelpers.removeEnemyUnitsLoaded(war, teamIndexLoggedIn);
 
         tileMap.getView().updateCoZone();
     }
