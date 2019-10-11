@@ -1524,6 +1524,12 @@ export declare interface ICoSkillCfg {
 
     /** CoSkillCfg promotionBonusByAttack */
     promotionBonusByAttack?: (number[]|null);
+
+    /** CoSkillCfg selfPrimaryAmmoRecovery */
+    selfPrimaryAmmoRecovery?: (number[]|null);
+
+    /** CoSkillCfg selfFuelRecovery */
+    selfFuelRecovery?: (number[]|null);
 }
 
 /** Represents a CoSkillCfg. */
@@ -1603,6 +1609,12 @@ export declare class CoSkillCfg implements ICoSkillCfg {
 
     /** CoSkillCfg promotionBonusByAttack. */
     public promotionBonusByAttack: number[];
+
+    /** CoSkillCfg selfPrimaryAmmoRecovery. */
+    public selfPrimaryAmmoRecovery: number[];
+
+    /** CoSkillCfg selfFuelRecovery. */
+    public selfFuelRecovery: number[];
 
     /**
      * Creates a new CoSkillCfg instance using the specified properties.
@@ -3685,11 +3697,20 @@ export declare interface IWarUnitRepairData {
     /** WarUnitRepairData unitId */
     unitId?: (number|null);
 
-    /** WarUnitRepairData repairAmount */
-    repairAmount?: (number|null);
-
     /** WarUnitRepairData gridIndex */
     gridIndex?: (IGridIndex|null);
+
+    /** WarUnitRepairData deltaHp */
+    deltaHp?: (number|null);
+
+    /** WarUnitRepairData deltaPrimaryWeaponAmmo */
+    deltaPrimaryWeaponAmmo?: (number|null);
+
+    /** WarUnitRepairData deltaFuel */
+    deltaFuel?: (number|null);
+
+    /** WarUnitRepairData deltaFlareAmmo */
+    deltaFlareAmmo?: (number|null);
 }
 
 /** Represents a WarUnitRepairData. */
@@ -3704,11 +3725,20 @@ export declare class WarUnitRepairData implements IWarUnitRepairData {
     /** WarUnitRepairData unitId. */
     public unitId: number;
 
-    /** WarUnitRepairData repairAmount. */
-    public repairAmount: number;
-
     /** WarUnitRepairData gridIndex. */
     public gridIndex?: (IGridIndex|null);
+
+    /** WarUnitRepairData deltaHp. */
+    public deltaHp: number;
+
+    /** WarUnitRepairData deltaPrimaryWeaponAmmo. */
+    public deltaPrimaryWeaponAmmo: number;
+
+    /** WarUnitRepairData deltaFuel. */
+    public deltaFuel: number;
+
+    /** WarUnitRepairData deltaFlareAmmo. */
+    public deltaFlareAmmo: number;
 
     /**
      * Creates a new WarUnitRepairData instance using the specified properties.

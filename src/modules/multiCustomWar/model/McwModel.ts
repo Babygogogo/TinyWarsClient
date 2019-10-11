@@ -1128,7 +1128,13 @@ namespace TinyWars.MultiCustomWar.McwModel {
             for (const gridIndex of GridIndexHelpers.getAdjacentGrids(pathNodes[pathNodes.length - 1], unitMap.getMapSize())) {
                 const unit = unitMap.getUnitOnMap(gridIndex) as McwUnit;
                 if ((unit) && (unit !== focusUnit) && (unit.getPlayerIndex() === playerIndex) && (unit.checkCanBeSupplied())) {
-                    unit.updateOnSupplied();
+                    const maxFlareAmmo          = unit.getFlareMaxAmmo();
+                    const maxPrimaryWeaponAmmo  = unit.getPrimaryWeaponMaxAmmo();
+                    unit.updateByRepairData({
+                        deltaFuel               : unit.getMaxFuel() - unit.getCurrentFuel(),
+                        deltaFlareAmmo          : maxFlareAmmo ? maxFlareAmmo - unit.getFlareCurrentAmmo()! : null,
+                        deltaPrimaryWeaponAmmo  : maxPrimaryWeaponAmmo ? maxPrimaryWeaponAmmo - unit.getPrimaryWeaponCurrentAmmo()! : null,
+                    });
                     suppliedUnits.push(unit);
                 }
             }

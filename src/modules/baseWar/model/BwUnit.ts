@@ -4,6 +4,7 @@ namespace TinyWars.BaseWar {
     import Helpers          = Utility.Helpers;
     import Logger           = Utility.Logger;
     import GridIndexHelpers = Utility.GridIndexHelpers;
+    import ProtoTypes       = Utility.ProtoTypes;
     import SerializedBwUnit = Types.SerializedBwUnit;
     import UnitState        = Types.UnitState;
     import ArmorType        = Types.ArmorType;
@@ -197,16 +198,19 @@ namespace TinyWars.BaseWar {
             return this._templateCfg.isAffectedByLuck === 1;
         }
 
-        public updateOnRepaired(repairHp: number): void {
-            this.setCurrentHp(this.getCurrentHp() + repairHp);
-            this.setCurrentFuel(this.getMaxFuel());
-            this.setPrimaryWeaponCurrentAmmo(this.getPrimaryWeaponMaxAmmo());
-            this.setFlareCurrentAmmo(this.getFlareMaxAmmo());
-        }
-        public updateOnSupplied(): void {
-            this.setCurrentFuel(this.getMaxFuel());
-            this.setPrimaryWeaponCurrentAmmo(this.getPrimaryWeaponMaxAmmo());
-            this.setFlareCurrentAmmo(this.getFlareMaxAmmo());
+        public updateByRepairData(data: ProtoTypes.IWarUnitRepairData): void {
+            if (data.deltaHp) {
+                this.setCurrentHp(this.getCurrentHp() + data.deltaHp);
+            }
+            if (data.deltaFuel) {
+                this.setCurrentFuel(this.getCurrentFuel() + data.deltaFuel);
+            }
+            if (data.deltaPrimaryWeaponAmmo) {
+                this.setPrimaryWeaponCurrentAmmo(this.getPrimaryWeaponCurrentAmmo()! + data.deltaPrimaryWeaponAmmo);
+            }
+            if (data.deltaFlareAmmo) {
+                this.setFlareCurrentAmmo(this.getFlareCurrentAmmo()! + data.deltaFlareAmmo);
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////
