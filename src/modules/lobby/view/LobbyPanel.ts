@@ -92,7 +92,7 @@ namespace TinyWars.Lobby {
                 },
             ];
 
-            if (UserModel.getSelfPrivilege() > 1) {
+            if ((UserModel.checkIsAdmin()) || (UserModel.checkIsMapCommitee())) {
                 dataList.push({
                     name    : Lang.getText(Lang.Type.B0192),
                     callback: (): void => {

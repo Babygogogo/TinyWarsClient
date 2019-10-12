@@ -9100,9 +9100,6 @@ export declare interface IS_Login {
     /** S_Login userId */
     userId?: (number|null);
 
-    /** S_Login privilege */
-    privilege?: (number|null);
-
     /** S_Login account */
     account?: (string|null);
 
@@ -9111,6 +9108,15 @@ export declare interface IS_Login {
 
     /** S_Login nickname */
     nickname?: (string|null);
+
+    /** S_Login isAdmin */
+    isAdmin?: (number|null);
+
+    /** S_Login isCoCommitee */
+    isCoCommitee?: (number|null);
+
+    /** S_Login isMapCommitee */
+    isMapCommitee?: (number|null);
 
     /** S_Login rank2pScore */
     rank2pScore?: (number|null);
@@ -9134,9 +9140,6 @@ export declare class S_Login implements IS_Login {
     /** S_Login userId. */
     public userId: number;
 
-    /** S_Login privilege. */
-    public privilege: number;
-
     /** S_Login account. */
     public account: string;
 
@@ -9145,6 +9148,15 @@ export declare class S_Login implements IS_Login {
 
     /** S_Login nickname. */
     public nickname: string;
+
+    /** S_Login isAdmin. */
+    public isAdmin: number;
+
+    /** S_Login isCoCommitee. */
+    public isCoCommitee: number;
+
+    /** S_Login isMapCommitee. */
+    public isMapCommitee: number;
 
     /** S_Login rank2pScore. */
     public rank2pScore: number;
@@ -10552,6 +10564,15 @@ export declare interface IS_GetUserPublicInfo {
     /** S_GetUserPublicInfo discordId */
     discordId?: (string|null);
 
+    /** S_GetUserPublicInfo isAdmin */
+    isAdmin?: (number|null);
+
+    /** S_GetUserPublicInfo isCoCommitee */
+    isCoCommitee?: (number|null);
+
+    /** S_GetUserPublicInfo isMapCommitee */
+    isMapCommitee?: (number|null);
+
     /** S_GetUserPublicInfo mcw2pWins */
     mcw2pWins?: (number|null);
 
@@ -10624,6 +10645,15 @@ export declare class S_GetUserPublicInfo implements IS_GetUserPublicInfo {
 
     /** S_GetUserPublicInfo discordId. */
     public discordId: string;
+
+    /** S_GetUserPublicInfo isAdmin. */
+    public isAdmin: number;
+
+    /** S_GetUserPublicInfo isCoCommitee. */
+    public isCoCommitee: number;
+
+    /** S_GetUserPublicInfo isMapCommitee. */
+    public isMapCommitee: number;
 
     /** S_GetUserPublicInfo mcw2pWins. */
     public mcw2pWins: number;
