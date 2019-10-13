@@ -8,9 +8,9 @@ namespace TinyWars.BaseWar {
 
         protected abstract _getPlayerClass(): new () => BwPlayer;
 
-        public init(datas: Types.SerializedBwPlayer[]): BwPlayerManager {
+        public init(dataList: Types.SerializedBwPlayer[]): BwPlayerManager {
             this._players.clear();
-            for (const data of datas) {
+            for (const data of dataList) {
                 this._players.set(data.playerIndex!, (new (this._getPlayerClass())).init(data));
             }
             return this;
@@ -48,6 +48,16 @@ namespace TinyWars.BaseWar {
 
         public getTeamIndex(playerIndex: number): number {
             return this.getPlayer(playerIndex)!.getTeamIndex();
+        }
+
+        public getPlayerIndexesInTeam(teamIndex: number): number[] {
+            const playerIndexes: number[] = [];
+            for (const [playerIndex, player] of this._players) {
+                if (player.getTeamIndex() === teamIndex) {
+                    playerIndexes.push(playerIndex);
+                }
+            }
+            return playerIndexes;
         }
 
         public getTotalPlayersCount(includeNeutral: boolean): number {

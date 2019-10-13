@@ -9174,6 +9174,10 @@ declare namespace egret {
         antialias?: boolean;
         canvasScaleFactor?: number;
         calculateCanvasScaleFactor?: (context: CanvasRenderingContext2D) => number;
+        /**
+         * 以下目前仅供小游戏使用
+         * The following are for mini-games only
+         */
         entryClassName?: string;
         scaleMode?: string;
         frameRate?: number;
@@ -9181,6 +9185,9 @@ declare namespace egret {
         contentHeight?: number;
         orientation?: string;
         maxTouches?: number;
+        showFPS?: boolean;
+        showLog?: boolean;
+        fpsStyles?: string;
     };
     /**
      * egret project entry function
@@ -10966,7 +10973,7 @@ declare namespace egret {
          */
         /**
          * 运行在支付宝小游戏上
-         * @version Egret 5.2.23
+         * @version Egret 5.2.26
          * @platform All
          * @language zh_CN
          */
@@ -11011,12 +11018,44 @@ declare namespace egret {
          */
         const QGAME = "qgame";
         /**
+         * Running on OPPO mini game
+         * @version Egret 5.2.14
+         * @platform All
+         * @language en_US
+         */
+        /**
          * 运行在 Oppo 小游戏上
          * @version Egret 5.2.14
          * @platform All
          * @language zh_CN
          */
         const OPPOGAME = "oppogame";
+        /**
+        * Running on QQ mini game
+        * @version Egret 5.2.25
+        * @platform All
+        * @language en_US
+        */
+        /**
+        * 运行在 QQ 小游戏上
+        * @version Egret 5.2.25
+        * @platform All
+        * @language zh_CN
+        */
+        const QQGAME = "qqgame";
+        /**
+         * Running on vivo mini game
+         * @version Egret 5.2.23
+         * @platform All
+         * @language en_US
+         */
+        /**
+        * 运行在 vivo 小游戏上
+        * @version Egret 5.2.23
+        * @platform All
+        * @language zh_CN
+        */
+        const VIVOGAME = "vivogame";
     }
     interface SupportedCompressedTexture {
         pvrtc: boolean;

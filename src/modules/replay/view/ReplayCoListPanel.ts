@@ -79,9 +79,9 @@ namespace TinyWars.Replay {
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
             ];
             this._listCo.setItemRenderer(CoNameRenderer);
-            this._listPassiveSkill.setItemRenderer(PassiveSkillRenderer);
-            this._listCop.setItemRenderer(ActiveSkillRenderer);
-            this._listScop.setItemRenderer(ActiveSkillRenderer);
+            this._listPassiveSkill.setItemRenderer(SkillRenderer);
+            this._listCop.setItemRenderer(SkillRenderer);
+            this._listScop.setItemRenderer(SkillRenderer);
         }
         protected _onOpened(): void {
             this._war           = ReplayModel.getWar();
@@ -287,7 +287,7 @@ namespace TinyWars.Replay {
         skillId : number;
     }
 
-    class PassiveSkillRenderer extends eui.ItemRenderer {
+    class SkillRenderer extends eui.ItemRenderer {
         private _labelIndex : GameUi.UiLabel;
         private _labelDesc  : GameUi.UiLabel;
 
@@ -296,20 +296,7 @@ namespace TinyWars.Replay {
 
             const data              = this.data as DataForSkillRenderer;
             this._labelIndex.text   = `${data.index}.`;
-            this._labelDesc.text    = ConfigManager.getCoSkillCfg(ConfigManager.getNewestConfigVersion(), data.skillId).passiveDesc[Lang.getLanguageType()];
-        }
-    }
-
-    class ActiveSkillRenderer extends eui.ItemRenderer {
-        private _labelIndex : GameUi.UiLabel;
-        private _labelDesc  : GameUi.UiLabel;
-
-        protected dataChanged(): void {
-            super.dataChanged();
-
-            const data              = this.data as DataForSkillRenderer;
-            this._labelIndex.text   = `${data.index}.`;
-            this._labelDesc.text    = ConfigManager.getCoSkillCfg(ConfigManager.getNewestConfigVersion(), data.skillId).activeDesc[Lang.getLanguageType()];
+            this._labelDesc.text    = ConfigManager.getCoSkillCfg(ConfigManager.getNewestConfigVersion(), data.skillId).desc[Lang.getLanguageType()];
         }
     }
 }

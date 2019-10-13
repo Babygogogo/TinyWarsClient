@@ -33,6 +33,17 @@ namespace TinyWars.Utility.Lang {
         B0180, B0181, B0182, B0183, B0184, B0185, B0186, B0187, B0188, B0189,
         B0190, B0191, B0192, B0193, B0194, B0195, B0196, B0197, B0198, B0199,
 
+        B0200, B0201, B0202, B0203, B0204, B0205, B0206, B0207, B0208, B0209,
+        B0210, B0211, B0212, B0213, B0214, B0215, B0216, B0217, B0218, B0219,
+        B0220, B0221, B0222, B0223, B0224, B0225, B0226, B0227, B0228, B0229,
+        B0230, B0231, B0232, B0233, B0234, B0235, B0236, B0237, B0238, B0239,
+        B0240, B0241, B0242, B0243, B0244, B0245, B0246, B0247, B0248, B0249,
+        B0250, B0251, B0252, B0253, B0254, B0255, B0256, B0257, B0258, B0259,
+        B0260, B0261, B0262, B0263, B0264, B0265, B0266, B0267, B0268, B0269,
+        B0270, B0271, B0272, B0273, B0274, B0275, B0276, B0277, B0278, B0279,
+        B0280, B0281, B0282, B0283, B0284, B0285, B0286, B0287, B0288, B0289,
+        B0290, B0291, B0292, B0293, B0294, B0295, B0296, B0297, B0298, B0299,
+
         B1000, B1001, B1002, B1003, B1004, B1005, B1006, B1007, B1008, B1009,
         B1010, B1011, B1012, B1013, B1014, B1015, B1016, B1017, B1018, B1019,
         B1020, B1021, B1022, B1023, B1024, B1025, B1026, B1027, B1028, B1029,
@@ -49,1471 +60,1516 @@ namespace TinyWars.Utility.Lang {
         R0000, R0001, R0002, R0003, R0004, R0005, R0006, R0007, R0008, R0009,
     }
 
-    const _LANG_DATA = new Map<Type, string[]>([
+    const _LANG_DATA = {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Long strings.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        [Type.A0000, [
+        [Type.A0000]: [
             "登陆成功，祝您游戏愉快！",
             "Logged in successfully!",
-        ]],
-        [Type.A0001, [
+        ],
+        [Type.A0001]: [
             "账号不符合要求，请检查后重试",
             "Invalid account.",
-        ]],
-        [Type.A0002, [
+        ],
+        [Type.A0002]: [
             "昵称不符合要求，请检查后重试",
             "Invalid nickname.",
-        ]],
-        [Type.A0003, [
+        ],
+        [Type.A0003]: [
             "密码不符合要求，请检查后重试",
             "Invalid password.",
-        ]],
-        [Type.A0004, [
+        ],
+        [Type.A0004]: [
             "注册成功，正在自动登陆…",
             "Register successfully! Now logging in...",
-        ]],
-        [Type.A0005, [
+        ],
+        [Type.A0005]: [
             "您已成功退出登陆，欢迎再次进入游戏。",
             "Logout successfully.",
-        ]],
-        [Type.A0006, [
+        ],
+        [Type.A0006]: [
             "您的账号被异地登陆，您已自动下线。",
             "Someone logged in with your account!",
-        ]],
-        [Type.A0007, [
+        ],
+        [Type.A0007]: [
             "已成功连接服务器。",
             "Connected to server successfully.",
-        ]],
-        [Type.A0008, [
+        ],
+        [Type.A0008]: [
             "连接服务器失败，正在重新连接…",
             "Failed to connect to server. Now reconnecting...",
-        ]],
-        [Type.A0009, [
+        ],
+        [Type.A0009]: [
             "您的网络连接不稳定，请尝试改善",
             "The network connection is not stable.",
-        ]],
-        [Type.A0010, [
+        ],
+        [Type.A0010]: [
             "没有符合条件的地图，请更换条件再试",
             "No maps found.",
-        ]],
-        [Type.A0011, [
+        ],
+        [Type.A0011]: [
             "正在查找地图",
             "Searching for maps...",
-        ]],
-        [Type.A0012, [
+        ],
+        [Type.A0012]: [
             "已找到符合条件的地图",
             "Maps found.",
-        ]],
-        [Type.A0013, [
+        ],
+        [Type.A0013]: [
             "发生网络错误，请重新登陆。",
             "Network went wrong. Please re-login.",
-        ]],
-        [Type.A0014, [
+        ],
+        [Type.A0014]: [
             "发生网络错误，请稍后再试。",
             "Network went wrong. Please try again later.",
-        ]],
-        [Type.A0015, [
+        ],
+        [Type.A0015]: [
             "已成功创建战局，请等待其他玩家加入",
             "The war is created successfully.",
-        ]],
-        [Type.A0016, [
+        ],
+        [Type.A0016]: [
             "已成功退出房间",
             "Quit successfully.",
-        ]],
-        [Type.A0017, [
+        ],
+        [Type.A0017]: [
             "密码不正确，请检查后重试",
             "Invalid password.",
-        ]],
-        [Type.A0018, [
+        ],
+        [Type.A0018]: [
             "已成功加入房间。战局尚未开始，请继续耐心等候他人加入。",
             "Joined successfully.",
-        ]],
-        [Type.A0019, [
+        ],
+        [Type.A0019]: [
             "已成功加入房间。战局正式开始，请从“继续战斗”入口进入。",
             "Joined successfully.",
-        ]],
-        [Type.A0020, [
+        ],
+        [Type.A0020]: [
             `服务器维护中，请稍后登陆`,
             `The server is under maintenance. Please wait and login later.`,
-        ]],
-        [Type.A0021, [
+        ],
+        [Type.A0021]: [
             `正在读取战局数据，请稍候`,
             `Downloading the war data. Please wait.`,
-        ]],
-        [Type.A0022, [
+        ],
+        [Type.A0022]: [
             `恭喜您获得本局的胜利！\n即将回到大厅…`,
             `Congratulations!`,
-        ]],
-        [Type.A0023, [
+        ],
+        [Type.A0023]: [
             `很遗憾您已战败，请再接再厉！\n即将回到大厅…`,
             `Good luck next war!`,
-        ]],
-        [Type.A0024, [
+        ],
+        [Type.A0024]: [
             `您确定要结束回合吗？`,
             `Are you sure to end your turn?`,
-        ]],
-        [Type.A0025, [
+        ],
+        [Type.A0025]: [
             `您确定要返回大厅吗？`,
             `Are you sure to go to the lobby?`,
-        ]],
-        [Type.A0026, [
+        ],
+        [Type.A0026]: [
             `您确定要投降吗？`,
             `Are you sure to resign?`,
-        ]],
-        [Type.A0027, [
+        ],
+        [Type.A0027]: [
             `请先选中您想要删除的部队，再进行此操作`,
             `Please select the unit you want to delete with the cursor before doing this.`,
-        ]],
-        [Type.A0028, [
+        ],
+        [Type.A0028]: [
             `您只能删除您自己的未行动的部队`,
             `You can delete your own idle units only.`,
-        ]],
-        [Type.A0029, [
+        ],
+        [Type.A0029]: [
             `是否确定要删除此部队？`,
             `Are you sure to delete the selected unit?`,
-        ]],
-        [Type.A0030, [
+        ],
+        [Type.A0030]: [
             `所有玩家都已同意和局，战局结束！\n即将回到大厅...`,
             `The game ends in draw!`,
-        ]],
-        [Type.A0031, [
+        ],
+        [Type.A0031]: [
             `您确定要求和吗？`,
             `Are you sure to request a drawn game?`,
-        ]],
-        [Type.A0032, [
+        ],
+        [Type.A0032]: [
             `您确定要同意和局吗？`,
             `Are you sure to agree the request from your opponent for a drawn game?`,
-        ]],
-        [Type.A0033, [
+        ],
+        [Type.A0033]: [
             `您确定要拒绝和局吗？`,
             `Are you sure to decline the request from your opponent for a drawn game?`,
-        ]],
-        [Type.A0034, [
+        ],
+        [Type.A0034]: [
             `已有玩家求和，请先决定是否同意（通过菜单选项操作）`,
             `There is a request for a drawn game. Please decide whether to agree it before ending your turn.`,
-        ]],
-        [Type.A0035, [
+        ],
+        [Type.A0035]: [
             `战局已结束，即将回到大厅…`,
             `The war is ended. Going back to the lobby...`,
-        ]],
-        [Type.A0036, [
+        ],
+        [Type.A0036]: [
             `检测到战局数据错误，已自动与服务器成功同步`,
             `The war is synchronized successfully.`,
-        ]],
-        [Type.A0037, [
+        ],
+        [Type.A0037]: [
             `发生未知错误，正在返回大厅...`,
             `Something wrong happened! Going back to the lobby...`,
-        ]],
-        [Type.A0038, [
+        ],
+        [Type.A0038]: [
             `战局数据已同步`,
             `The war is synchronized successfully.`,
-        ]],
-        [Type.A0039, [
+        ],
+        [Type.A0039]: [
             `数据加载中，请稍后重试`,
             `Now loading, please wait and retry.`,
-        ]],
-        [Type.A0040, [
+        ],
+        [Type.A0040]: [
             `数据加载中，请稍候...`,
             `Now loading, please wait...`,
-        ]],
-        [Type.A0041, [
+        ],
+        [Type.A0041]: [
             `回放已播放完毕`,
             `The replay is completed.`,
-        ]],
-        [Type.A0042, [
+        ],
+        [Type.A0042]: [
             `已处于战局初始状态，无法切换到上一回合`,
             `Can't rewind because it's the beginning of the replay.`,
-        ]],
-        [Type.A0043, [
+        ],
+        [Type.A0043]: [
             `已处于战局结束状态，无法切换到下一回合`,
             `Can't forward because it's the end of the replay.`,
-        ]],
-        [Type.A0044, [
+        ],
+        [Type.A0044]: [
             `当前正在回放玩家动作，请待其结束后重试`,
             `Now replaying an action. Please wait until it ends.`,
-        ]],
-        [Type.A0045, [
+        ],
+        [Type.A0045]: [
             `已成功切换回合`,
             `Turn switched.`,
-        ]],
-        [Type.A0046, [
+        ],
+        [Type.A0046]: [
             `请求中，请稍候`,
             `Now requesting, please wait...`,
-        ]],
-        [Type.A0047, [
+        ],
+        [Type.A0047]: [
             `昵称已更改`,
             `Your nickname is changed successfully`,
-        ]],
-        [Type.A0048, [
+        ],
+        [Type.A0048]: [
             `Discord ID 不正确，请检查后重试`,
             `Invalid discord ID.`,
-        ]],
-        [Type.A0049, [
+        ],
+        [Type.A0049]: [
             `Discord ID 已更改`,
             `Your discord ID is changed successfully`,
-        ]],
-        [Type.A0050, [
+        ],
+        [Type.A0050]: [
             `您尚未选择任何CO。`,
             `You have chosen no CO.`,
-        ]],
-        [Type.A0051, [
+        ],
+        [Type.A0051]: [
             `是否确定要创建战局？`,
             `Are you sure to create the game?`,
-        ]],
-        [Type.A0052, [
+        ],
+        [Type.A0052]: [
             `是否确定要加入战局？`,
             `Are you sure to join the game?`,
-        ]],
-        [Type.A0053, [
+        ],
+        [Type.A0053]: [
             `该功能正在开发中，敬请期待`,
             `This feature is under development...`,
-        ]],
-        [Type.A0054, [
+        ],
+        [Type.A0054]: [
             `您确定要发动CO POWER吗？`,
             `Are you sure to activate the CO POWER?`,
-        ]],
-        [Type.A0055, [
+        ],
+        [Type.A0055]: [
             `当前有其他操作可选。您确定要直接待机吗？`,
             `Another action is available. Are you sure to make the unit wait?`,
-        ]],
-        [Type.A0056, [
+        ],
+        [Type.A0056]: [
             `未知错误，请拖动截图发给作者，谢谢`,
             `Error! Please make a screenshot and send it to the game maker`,
-        ]],
-        [Type.A0057, [
+        ],
+        [Type.A0057]: [
             `禁用此项会清空您当前选择的CO（您可以重新选择一个）。确定要禁用吗？`,
             `You have chosen a CO that is banned by your current selection. Are you sure to continue the ban?`,
-        ]],
-        [Type.A0058, [
+        ],
+        [Type.A0058]: [
             `您确定要发动SUPER POWER吗？`,
             `Are you sure to activate the SUPER POWER?`,
-        ]],
-        [Type.A0059, [
+        ],
+        [Type.A0059]: [
             `已成功修改地图可用性`,
             `The availability has been changed successfully.`,
-        ]],
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        [Type.B0000, [
+        [Type.B0000]: [
             "创建房间",
             "Create Game",
-        ]],
-        [Type.B0001, [
+        ],
+        [Type.B0001]: [
             "无",
             "None",
-        ]],
-        [Type.B0002, [
+        ],
+        [Type.B0002]: [
             "基本设置",
             "Basic Settings",
-        ]],
-        [Type.B0003, [
+        ],
+        [Type.B0003]: [
             "高级设置",
             "Advanced Settings",
-        ]],
-        [Type.B0004, [
+        ],
+        [Type.B0004]: [
             "红方",
             "Red",
-        ]],
-        [Type.B0005, [
+        ],
+        [Type.B0005]: [
             "蓝方",
             "Blue",
-        ]],
-        [Type.B0006, [
+        ],
+        [Type.B0006]: [
             "黄方",
             "Yellow",
-        ]],
-        [Type.B0007, [
+        ],
+        [Type.B0007]: [
             "黑方",
             "Black",
-        ]],
-        [Type.B0008, [
+        ],
+        [Type.B0008]: [
             "A队",
             "A Team",
-        ]],
-        [Type.B0009, [
+        ],
+        [Type.B0009]: [
             "B队",
             "B Team",
-        ]],
-        [Type.B0010, [
+        ],
+        [Type.B0010]: [
             "C队",
             "C Team",
-        ]],
-        [Type.B0011, [
+        ],
+        [Type.B0011]: [
             "D队",
             "D Team",
-        ]],
-        [Type.B0012, [
+        ],
+        [Type.B0012]: [
             "是",
             "Yes",
-        ]],
-        [Type.B0013, [
+        ],
+        [Type.B0013]: [
             "否",
             "No",
-        ]],
-        [Type.B0014, [
+        ],
+        [Type.B0014]: [
             "天",
             "d",
-        ]],
-        [Type.B0015, [
+        ],
+        [Type.B0015]: [
             "时",
             "h",
-        ]],
-        [Type.B0016, [
+        ],
+        [Type.B0016]: [
             "分",
             "m",
-        ]],
-        [Type.B0017, [
+        ],
+        [Type.B0017]: [
             "秒",
             "s",
-        ]],
-        [Type.B0018, [
+        ],
+        [Type.B0018]: [
             "行动次序",
             "Force",
-        ]],
-        [Type.B0019, [
+        ],
+        [Type.B0019]: [
             "队伍",
             "Team",
-        ]],
-        [Type.B0020, [
+        ],
+        [Type.B0020]: [
             "战争迷雾",
             "Fog",
-        ]],
-        [Type.B0021, [
+        ],
+        [Type.B0021]: [
             "回合显示",
             "Time Limit",
-        ]],
-        [Type.B0022, [
+        ],
+        [Type.B0022]: [
             "退出房间",
             "Exit Game"
-        ]],
-        [Type.B0023, [
+        ],
+        [Type.B0023]: [
             "加入房间",
             "Join Game"
-        ]],
-        [Type.B0024, [
+        ],
+        [Type.B0024]: [
             "继续战斗",
             "Continue",
-        ]],
-        [Type.B0025, [
+        ],
+        [Type.B0025]: [
             `连接已断开`,
             `Disconnected`,
-        ]],
-        [Type.B0026, [
+        ],
+        [Type.B0026]: [
             `确定`,
             `Confirm`,
-        ]],
-        [Type.B0027, [
+        ],
+        [Type.B0027]: [
             `倒计时`,
             `Countdown`,
-        ]],
-        [Type.B0028, [
+        ],
+        [Type.B0028]: [
             `即将超时`,
             `Timeout soon`,
-        ]],
-        [Type.B0029, [
+        ],
+        [Type.B0029]: [
             `读取中`,
             `Now loading`,
-        ]],
-        [Type.B0030, [
+        ],
+        [Type.B0030]: [
             `中立`,
             `Neutral`,
-        ]],
-        [Type.B0031, [
+        ],
+        [Type.B0031]: [
             `玩家`,
             `Player`,
-        ]],
-        [Type.B0032, [
+        ],
+        [Type.B0032]: [
             `金钱`,
             `Fund`,
-        ]],
-        [Type.B0033, [
+        ],
+        [Type.B0033]: [
             `能量`,
             `Energy`,
-        ]],
-        [Type.B0034, [
+        ],
+        [Type.B0034]: [
             `胜利`,
             `Win`,
-        ]],
-        [Type.B0035, [
+        ],
+        [Type.B0035]: [
             `失败`,
             `Defeat`,
-        ]],
-        [Type.B0036, [
+        ],
+        [Type.B0036]: [
             `结束回合`,
             `End Turn`,
-        ]],
-        [Type.B0037, [
+        ],
+        [Type.B0037]: [
             `装载`,
             `load`,
-        ]],
-        [Type.B0038, [
+        ],
+        [Type.B0038]: [
             `合流`,
             `Join`,
-        ]],
-        [Type.B0039, [
+        ],
+        [Type.B0039]: [
             `攻击`,
             `Attack`,
-        ]],
-        [Type.B0040, [
+        ],
+        [Type.B0040]: [
             `占领`,
             `Capture`,
-        ]],
-        [Type.B0041, [
+        ],
+        [Type.B0041]: [
             `下潜`,
             `Dive`,
-        ]],
-        [Type.B0042, [
+        ],
+        [Type.B0042]: [
             `上浮`,
             `Surface`,
-        ]],
-        [Type.B0043, [
+        ],
+        [Type.B0043]: [
             `建造`,
             `Build`,
-        ]],
-        [Type.B0044, [
+        ],
+        [Type.B0044]: [
             `补给`,
             `Supply`,
-        ]],
-        [Type.B0045, [
+        ],
+        [Type.B0045]: [
             `发射`,
             `Launch`,
-        ]],
-        [Type.B0046, [
+        ],
+        [Type.B0046]: [
             `卸载`,
             `Drop`,
-        ]],
-        [Type.B0047, [
+        ],
+        [Type.B0047]: [
             `照明`,
             `Flare`,
-        ]],
-        [Type.B0048, [
+        ],
+        [Type.B0048]: [
             `发射导弹`,
             `Silo`,
-        ]],
-        [Type.B0049, [
+        ],
+        [Type.B0049]: [
             `制造`,
             `Produce`,
-        ]],
-        [Type.B0050, [
+        ],
+        [Type.B0050]: [
             `待机`,
             `Wait`,
-        ]],
-        [Type.B0051, [
+        ],
+        [Type.B0051]: [
             `生产材料已耗尽`,
             `No material`,
-        ]],
-        [Type.B0052, [
+        ],
+        [Type.B0052]: [
             `没有空闲的装载位置`,
             `No empty load slot`,
-        ]],
-        [Type.B0053, [
+        ],
+        [Type.B0053]: [
             `资金不足`,
             `Insufficient fund`,
-        ]],
-        [Type.B0054, [
+        ],
+        [Type.B0054]: [
             `返回大厅`,
             `Go to lobby`,
-        ]],
-        [Type.B0055, [
+        ],
+        [Type.B0055]: [
             `投降`,
             `Resign`,
-        ]],
-        [Type.B0056, [
+        ],
+        [Type.B0056]: [
             `已战败`,
             `Defeat`
-        ]],
-        [Type.B0057, [
+        ],
+        [Type.B0057]: [
             `日`,
             `Day`,
-        ]],
-        [Type.B0058, [
+        ],
+        [Type.B0058]: [
             `月`,
             `Month`,
-        ]],
-        [Type.B0059, [
+        ],
+        [Type.B0059]: [
             `年`,
             `Year`,
-        ]],
-        [Type.B0060, [
+        ],
+        [Type.B0060]: [
             `排位积分`,
             `RankScore`,
-        ]],
-        [Type.B0061, [
+        ],
+        [Type.B0061]: [
             `列兵`,
-            `0`,
-        ]],
-        [Type.B0062, [
+            `Lv.0`,
+        ],
+        [Type.B0062]: [
             `上等兵`,
-            `1`,
-        ]],
-        [Type.B0063, [
+            `Lv.1`,
+        ],
+        [Type.B0063]: [
             `下士`,
-            `2`,
-        ]],
-        [Type.B0064, [
+            `Lv.2`,
+        ],
+        [Type.B0064]: [
             `中士`,
-            `3`,
-        ]],
-        [Type.B0065, [
+            `Lv.3`,
+        ],
+        [Type.B0065]: [
             `上士`,
-            `4`,
-        ]],
-        [Type.B0066, [
+            `Lv.4`,
+        ],
+        [Type.B0066]: [
             `军士长`,
-            `5`,
-        ]],
-        [Type.B0067, [
+            `Lv.5`,
+        ],
+        [Type.B0067]: [
             `少尉`,
-            `6`,
-        ]],
-        [Type.B0068, [
+            `Lv.6`,
+        ],
+        [Type.B0068]: [
             `中尉`,
-            `7`,
-        ]],
-        [Type.B0069, [
+            `Lv.7`,
+        ],
+        [Type.B0069]: [
             `上尉`,
-            `8`,
-        ]],
-        [Type.B0070, [
+            `Lv.8`,
+        ],
+        [Type.B0070]: [
             `少校`,
-            `9`,
-        ]],
-        [Type.B0071, [
+            `Lv.9`,
+        ],
+        [Type.B0071]: [
             `中校`,
-            `10`,
-        ]],
-        [Type.B0072, [
+            `Lv.10`,
+        ],
+        [Type.B0072]: [
             `上校`,
-            `11`,
-        ]],
-        [Type.B0073, [
+            `Lv.11`,
+        ],
+        [Type.B0073]: [
             `大校`,
-            `12`,
-        ]],
-        [Type.B0074, [
+            `Lv.12`,
+        ],
+        [Type.B0074]: [
             `少将`,
-            `13`,
-        ]],
-        [Type.B0075, [
+            `Lv.13`,
+        ],
+        [Type.B0075]: [
             `中将`,
-            `14`,
-        ]],
-        [Type.B0076, [
+            `Lv.14`,
+        ],
+        [Type.B0076]: [
             `上将`,
-            `15`,
-        ]],
-        [Type.B0077, [
+            `Lv.15`,
+        ],
+        [Type.B0077]: [
             `攻`,
             `Deal`,
-        ]],
-        [Type.B0078, [
+        ],
+        [Type.B0078]: [
             `反`,
             `Take`,
-        ]],
-        [Type.B0079, [
+        ],
+        [Type.B0079]: [
             `费用`,
             `Cost`,
-        ]],
-        [Type.B0080, [
+        ],
+        [Type.B0080]: [
             `高级`,
             `Advanced`,
-        ]],
-        [Type.B0081, [
+        ],
+        [Type.B0081]: [
             `删除部队`,
             `Delete`,
-        ]],
-        [Type.B0082, [
+        ],
+        [Type.B0082]: [
             `和局`,
             `Drawn Game`,
-        ]],
-        [Type.B0083, [
+        ],
+        [Type.B0083]: [
             `求和`,
             `Request Draw`,
-        ]],
-        [Type.B0084, [
+        ],
+        [Type.B0084]: [
             `同意和局`,
             `Agree Draw`,
-        ]],
-        [Type.B0085, [
+        ],
+        [Type.B0085]: [
             `拒绝和局`,
             `Decline Draw`,
-        ]],
-        [Type.B0086, [
+        ],
+        [Type.B0086]: [
             `回合中`,
             `In Turn`,
-        ]],
-        [Type.B0087, [
+        ],
+        [Type.B0087]: [
             `战局已结束`,
             `Game Ended`,
-        ]],
-        [Type.B0088, [
+        ],
+        [Type.B0088]: [
             `提示`,
             `Message`,
-        ]],
-        [Type.B0089, [
+        ],
+        [Type.B0089]: [
             `刷新战局`,
             `Refresh`,
-        ]],
-        [Type.B0090, [
+        ],
+        [Type.B0090]: [
             `行动数`,
             `Actions`,
-        ]],
-        [Type.B0091, [
+        ],
+        [Type.B0091]: [
             `回合数`,
             `Turns`,
-        ]],
-        [Type.B0092, [
+        ],
+        [Type.B0092]: [
             `观看回放`,
             `Replays`,
-        ]],
-        [Type.B0093, [
+        ],
+        [Type.B0093]: [
             `回放已结束`,
             `The replay is completed.`,
-        ]],
-        [Type.B0094, [
+        ],
+        [Type.B0094]: [
             `开始回合`,
             `Begin turn`,
-        ]],
-        [Type.B0095, [
+        ],
+        [Type.B0095]: [
             `生产`,
             `Produce`,
-        ]],
-        [Type.B0096, [
+        ],
+        [Type.B0096]: [
             `提议和局`,
             `Propose a draw`,
-        ]],
-        [Type.B0097, [
+        ],
+        [Type.B0097]: [
             `发起攻击`,
             `Launch an attack`,
-        ]],
-        [Type.B0098, [
+        ],
+        [Type.B0098]: [
             `装载部队`,
             `Load a unit`,
-        ]],
-        [Type.B0099, [
+        ],
+        [Type.B0099]: [
             `建造建筑`,
             `Build a building`,
-        ]],
-        [Type.B0100, [
+        ],
+        [Type.B0100]: [
             `占领建筑`,
             `Capture a building`,
-        ]],
-        [Type.B0101, [
+        ],
+        [Type.B0101]: [
             `部队下潜`,
             `Unit dive`,
-        ]],
-        [Type.B0102, [
+        ],
+        [Type.B0102]: [
             `卸载部队`,
             `Drop unit(s)`,
-        ]],
-        [Type.B0103, [
+        ],
+        [Type.B0103]: [
             `部队合流`,
             `Join units`,
-        ]],
-        [Type.B0104, [
+        ],
+        [Type.B0104]: [
             `发射照明弹`,
             `Launch a flare`,
-        ]],
-        [Type.B0105, [
+        ],
+        [Type.B0105]: [
             `发射导弹`,
             `Launch a silo`,
-        ]],
-        [Type.B0106, [
+        ],
+        [Type.B0106]: [
             `生产舰载机`,
             `Produce a seaplane`,
-        ]],
-        [Type.B0107, [
+        ],
+        [Type.B0107]: [
             `补给部队`,
             `Supply unit(s)`,
-        ]],
-        [Type.B0108, [
+        ],
+        [Type.B0108]: [
             `部队上浮`,
             `Unit surface`,
-        ]],
-        [Type.B0109, [
+        ],
+        [Type.B0109]: [
             `部队移动`,
             `Unit move`,
-        ]],
-        [Type.B0110, [
+        ],
+        [Type.B0110]: [
             `发生未知错误`,
             `Something errors`,
-        ]],
-        [Type.B0111, [
+        ],
+        [Type.B0111]: [
             `中立玩家`,
             `Neutral`,
-        ]],
-        [Type.B0112, [
+        ],
+        [Type.B0112]: [
             `步兵`,
             `Inf`,
-        ]],
-        [Type.B0113, [
+        ],
+        [Type.B0113]: [
             `反坦克兵`,
             `Mech`,
-        ]],
-        [Type.B0114, [
+        ],
+        [Type.B0114]: [
             `履带`,
             `Tank`,
-        ]],
-        [Type.B0115, [
+        ],
+        [Type.B0115]: [
             `轮胎A`,
             `TireA`,
-        ]],
-        [Type.B0116, [
+        ],
+        [Type.B0116]: [
             `轮胎B`,
             `TireB`,
-        ]],
-        [Type.B0117, [
+        ],
+        [Type.B0117]: [
             `飞行`,
             `Air`,
-        ]],
-        [Type.B0118, [
+        ],
+        [Type.B0118]: [
             `航行`,
             `Ship`,
-        ]],
-        [Type.B0119, [
+        ],
+        [Type.B0119]: [
             `运输`,
             `Trans`,
-        ]],
-        [Type.B0120, [
+        ],
+        [Type.B0120]: [
             `全部`,
             `All`,
-        ]],
-        [Type.B0121, [
+        ],
+        [Type.B0121]: [
             `陆军`,
             `Ground`,
-        ]],
-        [Type.B0122, [
+        ],
+        [Type.B0122]: [
             `海军`,
             `Naval`,
-        ]],
-        [Type.B0123, [
+        ],
+        [Type.B0123]: [
             `空军`,
             `Air`,
-        ]],
-        [Type.B0124, [
+        ],
+        [Type.B0124]: [
             `陆军&海军`,
             `G&N`,
-        ]],
-        [Type.B0125, [
+        ],
+        [Type.B0125]: [
             `陆军&空军`,
             `G&A`,
-        ]],
-        [Type.B0126, [
+        ],
+        [Type.B0126]: [
             `近战`,
             `Direct`,
-        ]],
-        [Type.B0127, [
+        ],
+        [Type.B0127]: [
             `远程`,
             `Indirect`,
-        ]],
-        [Type.B0128, [
+        ],
+        [Type.B0128]: [
             `步行`,
             `Foot`,
-        ]],
-        [Type.B0129, [
+        ],
+        [Type.B0129]: [
             `步兵系`,
             `Inf`,
-        ]],
-        [Type.B0130, [
+        ],
+        [Type.B0130]: [
             `车辆系`,
             `Vehicle`,
-        ]],
-        [Type.B0131, [
+        ],
+        [Type.B0131]: [
             `近战机械`,
             `DirectMachine`,
-        ]],
-        [Type.B0132, [
+        ],
+        [Type.B0132]: [
             `运输系`,
             `Transport`,
-        ]],
-        [Type.B0133, [
+        ],
+        [Type.B0133]: [
             `大型船只`,
             `LargeNaval`,
-        ]],
-        [Type.B0134, [
+        ],
+        [Type.B0134]: [
             `直升机`,
             `Copter`,
-        ]],
-        [Type.B0135, [
+        ],
+        [Type.B0135]: [
             `坦克`,
             `Tank`,
-        ]],
-        [Type.B0136, [
+        ],
+        [Type.B0136]: [
             `空军除舰载机`,
             `AirExceptSeaplane`,
-        ]],
-        [Type.B0137, [
+        ],
+        [Type.B0137]: [
             `多人对战`,
             `MultiPlayer`,
-        ]],
-        [Type.B0138, [
+        ],
+        [Type.B0138]: [
             `单人模式`,
             `SinglePlayer`,
-        ]],
-        [Type.B0139, [
+        ],
+        [Type.B0139]: [
             `CO搭乘`,
             `CO Board`,
-        ]],
-        [Type.B0140, [
+        ],
+        [Type.B0140]: [
             `CO信息`,
             `CO Info`,
-        ]],
-        [Type.B0141, [
+        ],
+        [Type.B0141]: [
             `无限`,
             `Infinity`,
-        ]],
-        [Type.B0142, [
+        ],
+        [Type.B0142]: [
             `发动COP`,
             `Power`,
-        ]],
-        [Type.B0143, [
+        ],
+        [Type.B0143]: [
             `帮助`,
             `Help`,
-        ]],
-        [Type.B0144, [
+        ],
+        [Type.B0144]: [
             `发动SCOP`,
             `SCOP`,
-        ]],
-        [Type.B0145, [
+        ],
+        [Type.B0145]: [
             `选择CO`,
             `Choose CO`,
-        ]],
-        [Type.B0146, [
+        ],
+        [Type.B0146]: [
             `返回`,
             `Back`,
-        ]],
-        [Type.B0147, [
+        ],
+        [Type.B0147]: [
             `CO系统规则`,
             `CO Rules`,
-        ]],
-        [Type.B0148, [
+        ],
+        [Type.B0148]: [
             `切换语言`,
             `Change Language`,
-        ]],
-        [Type.B0149, [
+        ],
+        [Type.B0149]: [
             `更改昵称`,
             `Change Nickname`,
-        ]],
-        [Type.B0150, [
+        ],
+        [Type.B0150]: [
             `更改Discord ID`,
             `Change Discord ID`,
-        ]],
-        [Type.B0151, [
+        ],
+        [Type.B0151]: [
             `查看在线玩家`,
             `Online Players`,
-        ]],
-        [Type.B0152, [
+        ],
+        [Type.B0152]: [
             `部队列表`,
             `Units`,
-        ]],
-        [Type.B0153, [
+        ],
+        [Type.B0153]: [
             `寻找建筑`,
             `Building`,
-        ]],
-        [Type.B0154, [
+        ],
+        [Type.B0154]: [
             `取消`,
             `Cancel`,
-        ]],
-        [Type.B0155, [
+        ],
+        [Type.B0155]: [
             `菜单`,
             `Menu`,
-        ]],
-        [Type.B0156, [
+        ],
+        [Type.B0156]: [
             `资金`,
             `Fund`,
-        ]],
-        [Type.B0157, [
+        ],
+        [Type.B0157]: [
             `收入`,
             `Income`,
-        ]],
-        [Type.B0158, [
+        ],
+        [Type.B0158]: [
             `建筑数`,
             `Buildings`,
-        ]],
-        [Type.B0159, [
+        ],
+        [Type.B0159]: [
             `能量`,
             `Energy`,
-        ]],
-        [Type.B0160, [
+        ],
+        [Type.B0160]: [
             `部队数`,
             `Units`,
-        ]],
-        [Type.B0161, [
+        ],
+        [Type.B0161]: [
             `部队价值`,
             `Units Value`,
-        ]],
-        [Type.B0162, [
+        ],
+        [Type.B0162]: [
             `姓名`,
             `Name`,
-        ]],
-        [Type.B0163, [
+        ],
+        [Type.B0163]: [
             `设计者`,
             `Designer`,
-        ]],
-        [Type.B0164, [
+        ],
+        [Type.B0164]: [
             `搭载费用`,
             `Boarding Cost`,
-        ]],
-        [Type.B0165, [
+        ],
+        [Type.B0165]: [
             `Zone范围`,
             `Zone Radius`,
-        ]],
-        [Type.B0166, [
+        ],
+        [Type.B0166]: [
             `Zone扩张能量值`,
             `ZoneExpandingEnergy`,
-        ]],
-        [Type.B0167, [
+        ],
+        [Type.B0167]: [
             `能量消耗`,
             `Energy Cost`,
-        ]],
-        [Type.B0168, [
+        ],
+        [Type.B0168]: [
             `势力`,
             `Force`,
-        ]],
-        [Type.B0169, [
+        ],
+        [Type.B0169]: [
             `我的履历`,
             `Profile`,
-        ]],
-        [Type.B0170, [
+        ],
+        [Type.B0170]: [
             `账号`,
             `Account`,
-        ]],
-        [Type.B0171, [
+        ],
+        [Type.B0171]: [
             `密码`,
             `Password`,
-        ]],
-        [Type.B0172, [
+        ],
+        [Type.B0172]: [
             `记住密码`,
             `Remember Password`,
-        ]],
-        [Type.B0173, [
+        ],
+        [Type.B0173]: [
             `登录`,
             `Login`,
-        ]],
-        [Type.B0174, [
+        ],
+        [Type.B0174]: [
             `注册`,
             `Register`,
-        ]],
-        [Type.B0175, [
+        ],
+        [Type.B0175]: [
             `昵称`,
             `Nickname`,
-        ]],
-        [Type.B0176, [
+        ],
+        [Type.B0176]: [
             `显示地形动画`,
             `Show Tile Ani`,
-        ]],
-        [Type.B0177, [
+        ],
+        [Type.B0177]: [
             `停止地形动画`,
             `Stop Tile Ani`,
-        ]],
-        [Type.B0178, [
+        ],
+        [Type.B0178]: [
             `初始资金`,
             `Initial Fund`,
-        ]],
-        [Type.B0179, [
+        ],
+        [Type.B0179]: [
             `收入倍率`,
             `Income Multiplier`,
-        ]],
-        [Type.B0180, [
+        ],
+        [Type.B0180]: [
             `初始能量`,
             `Initial Energy`,
-        ]],
-        [Type.B0181, [
+        ],
+        [Type.B0181]: [
             `能量增速`,
             `Energy Growth Multiplier`,
-        ]],
-        [Type.B0182, [
+        ],
+        [Type.B0182]: [
             `移动力加成`,
             `Movement Bonus`,
-        ]],
-        [Type.B0183, [
+        ],
+        [Type.B0183]: [
             `攻击力加成`,
             `Offense Bonus`,
-        ]],
-        [Type.B0184, [
+        ],
+        [Type.B0184]: [
             `视野加成`,
             `Vision Bonus`,
-        ]],
-        [Type.B0185, [
+        ],
+        [Type.B0185]: [
             `房间名称`,
             `Game Name`,
-        ]],
-        [Type.B0186, [
+        ],
+        [Type.B0186]: [
             `房间密码`,
             `Game Password`,
-        ]],
-        [Type.B0187, [
+        ],
+        [Type.B0187]: [
             `附言`,
             `Comment`,
-        ]],
-        [Type.B0188, [
+        ],
+        [Type.B0188]: [
             `回合限时`,
             `Boot Timer`,
-        ]],
-        [Type.B0189, [
+        ],
+        [Type.B0189]: [
             `幸运下限`,
             `Min Luck`,
-        ]],
-        [Type.B0190, [
+        ],
+        [Type.B0190]: [
             `幸运上限`,
             `Max Luck`,
-        ]],
-        [Type.B0191, [
+        ],
+        [Type.B0191]: [
             `回合`,
             `Turn`,
-        ]],
-        [Type.B0192, [
+        ],
+        [Type.B0192]: [
             `管理地图`,
             `Map Management`,
-        ]],
-        [Type.B0193, [
+        ],
+        [Type.B0193]: [
             `可用性`,
             `Availability`,
-        ]],
+        ],
+        [Type.B0194]: [
+            `注册时间`,
+            `Registration`,
+        ],
+        [Type.B0195]: [
+            `上次登陆时间`,
+            `Last Login`,
+        ],
+        [Type.B0196]: [
+            `在线总时长`,
+            `Online Time`,
+        ],
+        [Type.B0197]: [
+            `登陆次数`,
+            `Login Times`,
+        ],
+        [Type.B0198]: [
+            `排位战绩`,
+            `Ranking Matches`,
+        ],
+        [Type.B0199]: [
+            `积分`,
+            `Score`,
+        ],
+        [Type.B0200]: [
+            `多人自由对战`,
+            `MP Free Games`,
+        ],
+        [Type.B0201]: [
+            `2人局`,
+            `2P`,
+        ],
+        [Type.B0202]: [
+            `3人局`,
+            `3P`,
+        ],
+        [Type.B0203]: [
+            `4人局`,
+            `4P`,
+        ],
+        [Type.B0204]: [
+            `关闭`,
+            `Close`,
+        ],
 
-        [Type.B1000, [
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        [Type.B1000]: [
             `平原`,
             `Plain`,
-        ]],
-        [Type.B1001, [
+        ],
+        [Type.B1001]: [
             `河流`,
             `River`,
-        ]],
-        [Type.B1002, [
+        ],
+        [Type.B1002]: [
             `海洋`,
             `Sea`,
-        ]],
-        [Type.B1003, [
+        ],
+        [Type.B1003]: [
             `沙滩`,
             `Beach`,
-        ]],
-        [Type.B1004, [
+        ],
+        [Type.B1004]: [
             `道路`,
             `Road`,
-        ]],
-        [Type.B1005, [
+        ],
+        [Type.B1005]: [
             `桥梁`,
             `BridgeOnPlain`,
-        ]],
-        [Type.B1006, [
+        ],
+        [Type.B1006]: [
             `桥梁`,
             `BridgeOnRiver`,
-        ]],
-        [Type.B1007, [
+        ],
+        [Type.B1007]: [
             `桥梁`,
             `BridgeOnBeach`,
-        ]],
-        [Type.B1008, [
+        ],
+        [Type.B1008]: [
             `桥梁`,
             `BridgeOnSea`,
-        ]],
-        [Type.B1009, [
+        ],
+        [Type.B1009]: [
             `森林`,
             `Wood`,
-        ]],
-        [Type.B1010, [
+        ],
+        [Type.B1010]: [
             `高山`,
             `Mountain`,
-        ]],
-        [Type.B1011, [
+        ],
+        [Type.B1011]: [
             `荒野`,
             `Wasteland`,
-        ]],
-        [Type.B1012, [
+        ],
+        [Type.B1012]: [
             `废墟`,
             `Ruins`,
-        ]],
-        [Type.B1013, [
+        ],
+        [Type.B1013]: [
             `火堆`,
             `Fire`,
-        ]],
-        [Type.B1014, [
+        ],
+        [Type.B1014]: [
             `巨浪`,
             `Rough`,
-        ]],
-        [Type.B1015, [
+        ],
+        [Type.B1015]: [
             `迷雾`,
             `MistOnSea`,
-        ]],
-        [Type.B1016, [
+        ],
+        [Type.B1016]: [
             `礁石`,
             `Reef`,
-        ]],
-        [Type.B1017, [
+        ],
+        [Type.B1017]: [
             `等离子`,
             `Plasma`,
-        ]],
-        [Type.B1018, [
+        ],
+        [Type.B1018]: [
             `超级等离子`,
             `GreenPlasma`,
-        ]],
-        [Type.B1019, [
+        ],
+        [Type.B1019]: [
             `陨石`,
             `Meteor`,
-        ]],
-        [Type.B1020, [
+        ],
+        [Type.B1020]: [
             `导弹井`,
             `Silo`,
-        ]],
-        [Type.B1021, [
+        ],
+        [Type.B1021]: [
             `空导弹井`,
             `EmptySilo`,
-        ]],
-        [Type.B1022, [
+        ],
+        [Type.B1022]: [
             `指挥部`,
             `Headquarters`,
-        ]],
-        [Type.B1023, [
+        ],
+        [Type.B1023]: [
             `城市`,
             `City`,
-        ]],
-        [Type.B1024, [
+        ],
+        [Type.B1024]: [
             `指挥塔`,
             `CommandTower`,
-        ]],
-        [Type.B1025, [
+        ],
+        [Type.B1025]: [
             `雷达`,
             `Radar`,
-        ]],
-        [Type.B1026, [
+        ],
+        [Type.B1026]: [
             `工厂`,
             `Factory`,
-        ]],
-        [Type.B1027, [
+        ],
+        [Type.B1027]: [
             `机场`,
             `Airport`,
-        ]],
-        [Type.B1028, [
+        ],
+        [Type.B1028]: [
             `海港`,
             `Seaport`,
-        ]],
-        [Type.B1029, [
+        ],
+        [Type.B1029]: [
             `临时机场`,
             `TempAirport`,
-        ]],
-        [Type.B1030, [
+        ],
+        [Type.B1030]: [
             `临时海港`,
-            `TempSeaport`,
-        ]],
-        [Type.B1031, [
+            `TempSeaport:`,
+        ],
+        [Type.B1031]: [
             `迷雾`,
-            `MistOnPlain`,
-        ]],
-        [Type.B1032, [
+            `MistOnPlain:`,
+        ],
+        [Type.B1032]: [
             `迷雾`,
-            `MistOnRiver`,
-        ]],
-        [Type.B1033, [
+            `MistOnRiver:`,
+        ],
+        [Type.B1033]: [
             `迷雾`,
             `MistOnBeach`,
-        ]],
+        ],
 
-        [Type.B1200, [
+        [Type.B1200]: [
             `步兵`,
             `Infantry`,
-        ]],
-        [Type.B1201, [
+        ],
+        [Type.B1201]: [
             `反坦克兵`,
             `Mech`,
-        ]],
-        [Type.B1202, [
+        ],
+        [Type.B1202]: [
             `摩托兵`,
             `Bike`,
-        ]],
-        [Type.B1203, [
+        ],
+        [Type.B1203]: [
             `侦察车`,
             `Recon`,
-        ]],
-        [Type.B1204, [
+        ],
+        [Type.B1204]: [
             `照明车`,
             `Flare`,
-        ]],
-        [Type.B1205, [
+        ],
+        [Type.B1205]: [
             `防空车`,
             `AntiAir`,
-        ]],
-        [Type.B1206, [
+        ],
+        [Type.B1206]: [
             `轻型坦克`,
             `Tank`,
-        ]],
-        [Type.B1207, [
+        ],
+        [Type.B1207]: [
             `中型坦克`,
             `MediumTank`,
-        ]],
-        [Type.B1208, [
+        ],
+        [Type.B1208]: [
             `弩级坦克`,
             `WarTank`,
-        ]],
-        [Type.B1209, [
+        ],
+        [Type.B1209]: [
             `自走炮`,
             `Artillery`,
-        ]],
-        [Type.B1210, [
+        ],
+        [Type.B1210]: [
             `反坦克炮`,
             `AntiTank`,
-        ]],
-        [Type.B1211, [
+        ],
+        [Type.B1211]: [
             `火箭炮`,
             `Rockets`,
-        ]],
-        [Type.B1212, [
+        ],
+        [Type.B1212]: [
             `防空导弹车`,
             `Missiles`,
-        ]],
-        [Type.B1213, [
+        ],
+        [Type.B1213]: [
             `工程车`,
             `Rig`,
-        ]],
-        [Type.B1214, [
+        ],
+        [Type.B1214]: [
             `战斗机`,
             `Fighter`,
-        ]],
-        [Type.B1215, [
+        ],
+        [Type.B1215]: [
             `轰炸机`,
             `Bomber`,
-        ]],
-        [Type.B1216, [
+        ],
+        [Type.B1216]: [
             `攻击机`,
             `Duster`,
-        ]],
-        [Type.B1217, [
+        ],
+        [Type.B1217]: [
             `武装直升机`,
             `BattleCopter`,
-        ]],
-        [Type.B1218, [
+        ],
+        [Type.B1218]: [
             `运输直升机`,
             `TransportCopter`,
-        ]],
-        [Type.B1219, [
+        ],
+        [Type.B1219]: [
             `舰载机`,
             `Seaplane`,
-        ]],
-        [Type.B1220, [
+        ],
+        [Type.B1220]: [
             `战列舰`,
             `Battleship`,
-        ]],
-        [Type.B1221, [
+        ],
+        [Type.B1221]: [
             `航母`,
             `Carrier`,
-        ]],
-        [Type.B1222, [
+        ],
+        [Type.B1222]: [
             `潜艇`,
             `Submarine`,
-        ]],
-        [Type.B1223, [
+        ],
+        [Type.B1223]: [
             `驱逐舰`,
             `Cruiser`,
-        ]],
-        [Type.B1224, [
+        ],
+        [Type.B1224]: [
             `登陆舰`,
             `Lander`,
-        ]],
-        [Type.B1225, [
+        ],
+        [Type.B1225]: [
             `炮舰`,
             `Gunboat`,
-        ]],
+        ],
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Format strings.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        [Type.F0000, [
+        [Type.F0000]: [
             "地图名称: %s",
             "Map name: %s",
-        ]],
-        [Type.F0001, [
+        ],
+        [Type.F0001]: [
             "作者: %s",
             "Designer: %s",
-        ]],
-        [Type.F0002, [
+        ],
+        [Type.F0002]: [
             "人数: %s",
             "Players: %s",
-        ]],
-        [Type.F0003, [
+        ],
+        [Type.F0003]: [
             "全服评分: %s",
             "Rating: %s",
-        ]],
-        [Type.F0004, [
+        ],
+        [Type.F0004]: [
             "全服游玩次数: %s",
             "Games played: %s",
-        ]],
-        [Type.F0005, [
+        ],
+        [Type.F0005]: [
             "战争迷雾: %s",
             "Fog: %s",
-        ]],
-        [Type.F0006, [
+        ],
+        [Type.F0006]: [
             `%d个部队尚未行动。`,
             `%d unit(s) have taken no action yet.`
-        ]],
-        [Type.F0007, [
+        ],
+        [Type.F0007]: [
             `%d个建筑尚未生产部队。`,
             `%d building(s) have built nothing yet.`
-        ]],
-        [Type.F0008, [
+        ],
+        [Type.F0008]: [
             `玩家[%s]已投降！`,
             `Player [%s] has resigned!`,
-        ]],
-        [Type.F0009, [
+        ],
+        [Type.F0009]: [
             `%s 的履历`,
             `%s's Profile`,
-        ]],
-        [Type.F0010, [
+        ],
+        [Type.F0010]: [
             `%d胜`,
             `Win: %d`,
-        ]],
-        [Type.F0011, [
+        ],
+        [Type.F0011]: [
             `%d负`,
             `Lose: %d`,
-        ]],
-        [Type.F0012, [
+        ],
+        [Type.F0012]: [
             `%d平`,
             `Draw: %d`,
-        ]],
-        [Type.F0013, [
+        ],
+        [Type.F0013]: [
             `玩家[%s]已战败！`,
             `Player [%s] is defeated!`,
-        ]],
-        [Type.F0014, [
+        ],
+        [Type.F0014]: [
             `玩家[%s]的最后一个部队耗尽燃料而坠毁，因而战败！`,
             `Player [%s] is defeated!`,
-        ]],
-        [Type.F0015, [
+        ],
+        [Type.F0015]: [
             `玩家[%s]的所有部队均被消灭，因而战败！`,
             `Player [%s] is defeated!`,
-        ]],
-        [Type.F0016, [
+        ],
+        [Type.F0016]: [
             `玩家[%s]的指挥部被占领，因而战败！`,
             `Player [%s] is defeated!`,
-        ]],
-        [Type.F0017, [
+        ],
+        [Type.F0017]: [
             `玩家[%s]已拒绝和局！`,
             `Player [%s] declines to end the game in draw!`,
-        ]],
-        [Type.F0018, [
+        ],
+        [Type.F0018]: [
             `玩家[%s]已同意和局！`,
             `Player [%s] agrees to end the game in draw!`,
-        ]],
-        [Type.F0019, [
+        ],
+        [Type.F0019]: [
             `玩家[%s]求和！`,
             `Player [%s] requests to end the game in draw!`,
-        ]],
-    ]);
+        ],
+    };
 
-    const NET_ERROR_TEXT = new Map<ErrorCode, string[]>([
-        [ErrorCode.IllegalRequest, [
+    const NET_ERROR_TEXT = {
+        [ErrorCode.IllegalRequest]: [
             "非法请求",
             "Illegal request.",
-        ]],
-        [ErrorCode.Login_InvalidAccountOrPassword, [
+        ],
+        [ErrorCode.Login_InvalidAccountOrPassword]: [
             "账号或密码不正确，请检查后重试",
             "Invalid account and/or password.",
-        ]],
-        [ErrorCode.Login_AlreadyLoggedIn, [
+        ],
+        [ErrorCode.Login_AlreadyLoggedIn]: [
             "您已处于登陆状态，不可再次登陆",
             "You have logged in already.",
-        ]],
-        [ErrorCode.Register_InvalidAccount, [
+        ],
+        [ErrorCode.Register_InvalidAccount]: [
             "账号不符合要求，请检查后重试",
             "Invalid account.",
-        ]],
-        [ErrorCode.Register_UsedAccount, [
+        ],
+        [ErrorCode.Register_UsedAccount]: [
             "该账号已被注册，请修改后再试",
             "The account has been registered.",
-        ]],
-        [ErrorCode.Register_AlreadyLoggedIn, [
+        ],
+        [ErrorCode.Register_AlreadyLoggedIn]: [
             "您已处于登陆状态，不可注册账号",
             "You have logged in already.",
-        ]],
-        [ErrorCode.Register_InvalidPassword, [
+        ],
+        [ErrorCode.Register_InvalidPassword]: [
             "密码不符合要求，请检查后重试",
             "Invalid password.",
-        ]],
-        [ErrorCode.Register_InvalidNickname, [
+        ],
+        [ErrorCode.Register_InvalidNickname]: [
             "昵称不符合要求，请检查后重试",
             "Invalid nickname.",
-        ]],
-        [ErrorCode.Register_UsedNickname, [
+        ],
+        [ErrorCode.Register_UsedNickname]: [
             "该昵称已被使用，请修改后再试",
             "The nickname has been used.",
-        ]],
-        [ErrorCode.CreateMultiCustomWar_TooManyJoinedWars, [
+        ],
+        [ErrorCode.CreateMultiCustomWar_TooManyJoinedWars]: [
             "您已参与了许多未开始的战局，请退出部分后重试",
             "You have joined too many wars.",
-        ]],
-        [ErrorCode.CreateMultiCustomWar_InvalidParams, [
+        ],
+        [ErrorCode.CreateMultiCustomWar_InvalidParams]: [
             "部分设定不符合规则，请检查后重试",
             "Invalid settings.",
-        ]],
-        [ErrorCode.ExitMultiCustomWar_WarInfoNotExist, [
+        ],
+        [ErrorCode.ExitMultiCustomWar_WarInfoNotExist]: [
             "战局不存在",
             "The game doesn't exist.",
-        ]],
-        [ErrorCode.ExitMultiCustomWar_NotJoined, [
+        ],
+        [ErrorCode.ExitMultiCustomWar_NotJoined]: [
             "您并未参加该战局",
             "You haven't joined the game.",
-        ]],
-        [ErrorCode.JoinMultiCustomWar_TooManyJoinedWars, [
+        ],
+        [ErrorCode.JoinMultiCustomWar_TooManyJoinedWars]: [
             "您已参与了许多未开始的战局，请退出部分后重试",
             "You have joined too many wars.",
-        ]],
-        [ErrorCode.JoinMultiCustomWar_InvalidParams, [
+        ],
+        [ErrorCode.JoinMultiCustomWar_InvalidParams]: [
             "部分设定不符合规则，请检查后重试",
             "Invalid settings.",
-        ]],
-        [ErrorCode.JoinMultiCustomWar_WarInfoNotExist, [
+        ],
+        [ErrorCode.JoinMultiCustomWar_WarInfoNotExist]: [
             "房间不存在",
             "The game doesn't exist.",
-        ]],
-        [ErrorCode.JoinMultiCustomWar_AlreadyJoined, [
+        ],
+        [ErrorCode.JoinMultiCustomWar_AlreadyJoined]: [
             "您已加入了该房间。",
             "You have already joined the game.",
-        ]],
-        [ErrorCode.ServerDisconnect_ServerMaintenance, [
+        ],
+        [ErrorCode.ServerDisconnect_ServerMaintenance]: [
             `服务器维护中`,
             `The server is under maintenance.`,
-        ]],
-        [ErrorCode.McrContinueWar_NoSuchWar, [
+        ],
+        [ErrorCode.McrContinueWar_NoSuchWar]: [
             `战局不存在`,
             `The game doesn't exist.`,
-        ]],
-        [ErrorCode.McrContinueWar_DefeatedOrNotJoined, [
+        ],
+        [ErrorCode.McrContinueWar_DefeatedOrNotJoined]: [
             `您未参与该战局，或已经被击败`,
             `You have not joined the game, or you have been defeated.`,
-        ]],
-
-        [ErrorCode.McwBeginTurn_InvalidActionId, [
+        ],
+        [ErrorCode.McwBeginTurn_InvalidActionId]: [
             `战局数据不同步，请刷新`,
             `The local data is out of synchronization. Please refresh.`,
-        ]],
-        [ErrorCode.McwBeginTurn_NoSuchWar, [
+        ],
+        [ErrorCode.McwBeginTurn_NoSuchWar]: [
             `战局不存在`,
             `The game doesn't exist.`,
-        ]],
-        [ErrorCode.McwBeginTurn_NotInTurn, [
+        ],
+        [ErrorCode.McwBeginTurn_NotInTurn]: [
             `当前无法开始您的回合`,
             `Unable to begin turn.`,
-        ]],
-        [ErrorCode.McwEndTurn_InvalidActionId, [
+        ],
+        [ErrorCode.McwEndTurn_InvalidActionId]: [
             `战局数据不同步，请刷新`,
             `The local data is out of synchronization. Please refresh.`,
-        ]],
-        [ErrorCode.McwEndTurn_NoSuchWar, [
+        ],
+        [ErrorCode.McwEndTurn_NoSuchWar]: [
             `战局不存在`,
             `The game doesn't exist.`,
-        ]],
-        [ErrorCode.McwEndTurn_NotInTurn, [
+        ],
+        [ErrorCode.McwEndTurn_NotInTurn]: [
             `当前无法结束您的回合`,
             `Unable to end turn.`,
-        ]],
-        [ErrorCode.McwEndTurn_NotVotedForDraw, [
+        ],
+        [ErrorCode.McwEndTurn_NotVotedForDraw]: [
             `您尚未完成关于和局的投票`,
             `You haven't voted for the draw of game.`,
-        ]],
-    ]);
+        ],
+    };
 
-    const RICH_DATA = new Map<RichType, string[]>([
-        [RichType.R0000, [
+    const RICH_DATA = {
+        [RichType.R0000]: [
             [
                 `本选项影响您在回合中的行动顺序。`,
                 ``,
@@ -1529,9 +1585,9 @@ namespace TinyWars.Utility.Lang {
             ].join("\n"),
 
             `Untranslated...`,
-        ]],
+        ],
 
-        [RichType.R0001, [
+        [RichType.R0001]: [
             [
                 `本选项规定您所属的队伍。`,
                 ``,
@@ -1542,9 +1598,9 @@ namespace TinyWars.Utility.Lang {
             ].join("\n"),
 
             `Untranslated...`,
-        ]],
+        ],
 
-        [RichType.R0002, [
+        [RichType.R0002]: [
             [
                 `本选项影响战局是明战或雾战。`,
                 ``,
@@ -1555,9 +1611,9 @@ namespace TinyWars.Utility.Lang {
             ].join("\n"),
 
             `Untranslated...`,
-        ]],
+        ],
 
-        [RichType.R0003, [
+        [RichType.R0003]: [
             [
                 `本选项影响所有玩家的每回合的时限。`,
                 ``,
@@ -1569,9 +1625,9 @@ namespace TinyWars.Utility.Lang {
             ].join("\n"),
 
             `Untranslated`,
-        ]],
+        ],
 
-        [RichType.R0004, [
+        [RichType.R0004]: [
             [
                 `CO能够搭乘到部队中，并改变临近区域的部队的战斗能力。此外，部分CO能通过战斗积累能量，并以此释放强大的power，从而进一步制造优势。`,
                 `CO详细规则如下：`,
@@ -1621,9 +1677,9 @@ namespace TinyWars.Utility.Lang {
                 `19. After using COP/SCOP the power metre charges at the same rate. `,
                 `20. If units with CO on board are destroyed the power metre is reset to 0. If a COP/SCOP is active the COP/SCOP will also end.`,
             ].join("\n\n"),
-        ]],
+        ],
 
-        [RichType.R0005, [
+        [RichType.R0005]: [
             [
                 `1.账号和密码都只能使用数字、字母、下划线，长度不小于6位`,
                 `2.昵称可使用任意字符，长度不小于4位`,
@@ -1635,8 +1691,8 @@ namespace TinyWars.Utility.Lang {
                 `2 You can use any characters for nickname. The length should be no shorter than 4 characters. `,
                 `3 After the registry you cannot change your username, but the password and nickname can be changed.`,
             ].join("\n"),
-        ]],
-    ]);
+        ],
+    };
 
     let _languageType = LanguageType.Chinese;
     export function init(): void {
@@ -1654,7 +1710,7 @@ namespace TinyWars.Utility.Lang {
         return getTextWithLanguage(t, _languageType);
     }
     export function getTextWithLanguage(t: Type, language: LanguageType): string {
-        return _LANG_DATA.get(t)[language];
+        return _LANG_DATA[t][language];
     }
 
     export function getFormatedText(t: Type, ...params: any[]): string {
@@ -1662,11 +1718,11 @@ namespace TinyWars.Utility.Lang {
     }
 
     export function getNetErrorText(code: ErrorCode): string {
-        return NET_ERROR_TEXT.get(code)[_languageType];
+        return NET_ERROR_TEXT[code][_languageType];
     }
 
     export function getRichText(richType: RichType): string {
-        return RICH_DATA.get(richType)[_languageType];
+        return RICH_DATA[richType][_languageType];
     }
 
     export function getPlayerForceName(playerIndex: number): string {

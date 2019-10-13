@@ -346,7 +346,6 @@ namespace TinyWars.MultiCustomWar.McwModel {
             unit.startRunningView();
 
             unitMap.addUnitOnMap(unit);
-            war.getFogMap().updateMapFromUnitsForPlayerOnArriving(playerIndex, gridIndex, unit.getVisionRangeForPlayer(playerIndex, gridIndex));
         }
 
         unitMap.setNextUnitId(unitId + 1);
@@ -435,43 +434,102 @@ namespace TinyWars.MultiCustomWar.McwModel {
             const attackerNewHp = Math.max(0, attackerOldHp - (counterDamage || 0));
             attacker.setCurrentHp(attackerNewHp);
             if ((attackerNewHp === 0) && (targetUnit)) {
-                targetUnit.setCurrentPromotion(Math.min(targetUnit.getMaxPromotion(), targetUnit.getCurrentPromotion() + 1));
+                targetUnit.addPromotion();
             }
 
-            const targetOldHp = attackTarget.getCurrentHp()!;
-            const targetNewHp = Math.max(0, targetOldHp - action.attackDamage);
+            const targetOldHp   = attackTarget.getCurrentHp()!;
+            const targetNewHp   = Math.max(0, targetOldHp - action.attackDamage);
             attackTarget.setCurrentHp(targetNewHp);
             if ((targetNewHp === 0) && (targetUnit)) {
-                attacker.setCurrentPromotion(Math.min(attacker.getMaxPromotion(), attacker.getCurrentPromotion() + 1));
+                attacker.addPromotion();
             }
 
-            const destination = pathNodes[pathNodes.length - 1];
+            const destination       = pathNodes[pathNodes.length - 1];
+            const attackerPlayer    = war.getPlayer(attacker.getPlayerIndex())!;
+            const targetPlayer      = war.getPlayer(targetUnit.getPlayerIndex())!;
             if (targetUnit) {
-                const attackerPlayer    = war.getPlayer(attacker.getPlayerIndex())!;
-                const targetLostHp      = Helpers.getNormalizedHp(targetOldHp) - Helpers.getNormalizedHp(targetNewHp);
-                if ((targetLostHp > 0)                                                                                      &&
-                    (attackerPlayer.getCoId() != null)                                                                      &&
-                    (!attackerPlayer.getCoUsingSkillType())                                                                   &&
-                    ((attacker.getUnitId() === attackerPlayer.getCoUnitId()) || (attackerPlayer.checkIsInCoZone(destination)))
+                const configVersion         = war.getConfigVersion();
+                const targetLostHp          = Helpers.getNormalizedHp(targetOldHp) - Helpers.getNormalizedHp(targetNewHp);
+                const attackerCoGridIndex   = attackerPlayer.getCoGridIndexOnMap();
+                const isAttackerInCoZone    = (attacker.getUnitId() === attackerPlayer.getCoUnitId()) || (attackerPlayer.checkIsInCoZone(destination, attackerCoGridIndex));
+                if ((targetLostHp > 0)                              &&
+                    (attackerPlayer.getCoId() != null)              &&
+                    (!attackerPlayer.checkCoIsUsingActiveSkill())   &&
+                    (isAttackerInCoZone)
                 ) {
                     attackerPlayer.setCoCurrentEnergy(Math.min(
-                        attackerPlayer.getCoMaxEnergy() || 0,
+                        attackerPlayer.getCoMaxEnergy(),
                         attackerPlayer.getCoCurrentEnergy() + Math.floor(targetLostHp * war.getSettingsEnergyGrowthModifier() / 100)
                     ));
                 }
+                const attackerUnitType = attacker.getType();
+                for (const skillId of attackerPlayer.getCoCurrentSkills() || []) {
+                    const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)!.promotionBonusByAttack;
+                    if ((cfg)                                                                           &&
+                        (targetLostHp >= cfg[2])                                                        &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, attackerUnitType, cfg[1]))
+                    ) {
+                        if (cfg[0] === Types.CoSkillAreaType.Zone) {
+                            if (isAttackerInCoZone) {
+                                attacker.addPromotion();
+                            }
+                        } else if (cfg[0] === Types.CoSkillAreaType.OnMap) {
+                            if (!!attackerCoGridIndex) {
+                                attacker.addPromotion();
+                            }
+                        }
+                    }
+                }
 
-                const targetPlayer      = war.getPlayer(targetUnit.getPlayerIndex())!;
+                const targetCoGridIndex = targetPlayer.getCoGridIndexOnMap();
                 const attackerLostHp    = Helpers.getNormalizedHp(attackerOldHp) - Helpers.getNormalizedHp(attackerNewHp);
-                if ((attackerLostHp > 0)                    &&
-                    (targetPlayer.getCoId() != null)        &&
-                    (!targetPlayer.getCoUsingSkillType())     &&
-                    (targetPlayer.checkIsInCoZone(destination))
+                if ((attackerLostHp > 0)                                        &&
+                    (targetPlayer.getCoId() != null)                            &&
+                    (!targetPlayer.checkCoIsUsingActiveSkill())                 &&
+                    (targetPlayer.checkIsInCoZone(destination, targetCoGridIndex))
                 ) {
                     targetPlayer.setCoCurrentEnergy(Math.min(
-                        targetPlayer.getCoMaxEnergy() || 0,
+                        targetPlayer.getCoMaxEnergy(),
                         targetPlayer.getCoCurrentEnergy() + Math.floor(attackerLostHp * war.getSettingsEnergyGrowthModifier() / 100)
                     ));
                 }
+                const isTargetInCoZone  = targetPlayer.checkIsInCoZone(targetGridIndex, targetCoGridIndex);
+                const targetUnitType    = targetUnit.getType();
+                for (const skillId of targetPlayer.getCoCurrentSkills() || []) {
+                    const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)!.promotionBonusByAttack;
+                    if ((cfg)                                                                           &&
+                        (attackerLostHp >= cfg[2])                                                      &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, targetUnitType, cfg[1]))
+                    ) {
+                        if (cfg[0] === Types.CoSkillAreaType.Zone) {
+                            if (isTargetInCoZone) {
+                                targetUnit.addPromotion();
+                            }
+                        } else if (cfg[0] === Types.CoSkillAreaType.OnMap) {
+                            if (!!targetCoGridIndex) {
+                                targetUnit.addPromotion();
+                            }
+                        }
+                    }
+                }
+            }
+
+            const configVersion             = war.getConfigVersion();
+            const attackerUnitAfterAction   = action.attackerUnitAfterAction as Types.SerializedBwUnit;
+            if (attackerUnitAfterAction) {
+                attacker.init(attackerUnitAfterAction, configVersion);
+                attacker.startRunning(war);
+            }
+            const targetUnitAfterAction = action.targetUnitAfterAction as Types.SerializedBwUnit;
+            if (targetUnitAfterAction) {
+                targetUnit.init(targetUnitAfterAction, configVersion);
+                targetUnit.startRunning(war);
+            }
+            if (action.attackerCoEnergy != null) {
+                attackerPlayer.setCoCurrentEnergy(action.attackerCoEnergy);
+            }
+            if (action.targetCoEnergy != null) {
+                targetPlayer.setCoCurrentEnergy(action.targetCoEnergy);
             }
 
             const lostPlayerIndex   = action.lostPlayerIndex;
@@ -579,11 +637,6 @@ namespace TinyWars.MultiCustomWar.McwModel {
                 focusUnit.setIsBuildingTile(false);
                 focusUnit.setCurrentBuildMaterial(focusUnit.getCurrentBuildMaterial() - 1);
                 tile.resetByObjectViewIdAndBaseViewId(focusUnit.getBuildTargetTileObjectViewId(tile.getType()));
-
-                const playerIndex = focusUnit.getPlayerIndex();
-                if (war.getPlayerManager().checkIsSameTeam(playerIndex, war.getPlayerIndexLoggedIn())) {
-                    war.getFogMap().updateMapFromTilesForPlayerOnGettingOwnership(playerIndex, endingGridIndex, tile.getVisionRangeForPlayer(playerIndex));
-                }
             }
         }
 
@@ -632,16 +685,10 @@ namespace TinyWars.MultiCustomWar.McwModel {
                 focusUnit.setIsCapturingTile(true);
                 tile.setCurrentCapturePoint(restCapturePoint);
             } else {
-                const fogMap = war.getFogMap();
-                if (previousPlayerIndex > 0) {
-                    fogMap.updateMapFromTilesForPlayerOnLosingOwnership(previousPlayerIndex, destination, tile.getVisionRangeForPlayer(previousPlayerIndex));
-                }
-
                 const playerIndexActing = focusUnit.getPlayerIndex();
                 focusUnit.setIsCapturingTile(false);
                 tile.setCurrentCapturePoint(tile.getMaxCapturePoint());
                 tile.resetByPlayerIndex(playerIndexActing);
-                fogMap.updateMapFromTilesForPlayerOnGettingOwnership(playerIndexActing, destination, tile.getVisionRangeForPlayer(playerIndexActing));
             }
 
             if (!lostPlayerIndex) {
@@ -692,12 +739,12 @@ namespace TinyWars.MultiCustomWar.McwModel {
                 focusUnit.updateView();
                 if (isSuccessful) {
                     const endingGridIndex = pathNodes[pathNodes.length - 1];
-                    if (VisibilityHelpers.checkIsUnitOnMapVisibleToPlayer({
+                    if (VisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
                         war,
                         unitType            : focusUnit.getType(),
                         unitPlayerIndex     : focusUnit.getPlayerIndex(),
                         gridIndex           : endingGridIndex,
-                        observerPlayerIndex : war.getPlayerIndexLoggedIn(),
+                        observerTeamIndex   : war.getPlayerLoggedIn().getTeamIndex(),
                         isDiving            : false,
                     })) {
                         war.getGridVisionEffect().showEffectDive(endingGridIndex);
@@ -726,7 +773,6 @@ namespace TinyWars.MultiCustomWar.McwModel {
         moveUnit(war, WarActionCodes.WarActionUnitDrop, path, action.launchUnitId, path.fuelConsumption);
         focusUnit.setState(UnitState.Acted);
 
-        const playerIndex           = focusUnit.getPlayerIndex();
         const shouldUpdateFogMap    = war.getPlayerLoggedIn().getTeamIndex() === focusUnit.getTeamIndex();
         const fogMap                = war.getFogMap();
         const unitsForDrop          = [] as McwUnit[];
@@ -744,7 +790,6 @@ namespace TinyWars.MultiCustomWar.McwModel {
 
             if (shouldUpdateFogMap) {
                 fogMap.updateMapFromPathsByUnitAndPath(unitForDrop, [endingGridIndex, gridIndex]);
-                fogMap.updateMapFromUnitsForPlayerOnArriving(playerIndex, gridIndex, unitForDrop.getVisionRangeForPlayer(playerIndex, gridIndex));
             }
         }
 
@@ -1083,7 +1128,13 @@ namespace TinyWars.MultiCustomWar.McwModel {
             for (const gridIndex of GridIndexHelpers.getAdjacentGrids(pathNodes[pathNodes.length - 1], unitMap.getMapSize())) {
                 const unit = unitMap.getUnitOnMap(gridIndex) as McwUnit;
                 if ((unit) && (unit !== focusUnit) && (unit.getPlayerIndex() === playerIndex) && (unit.checkCanBeSupplied())) {
-                    unit.updateOnSupplied();
+                    const maxFlareAmmo          = unit.getFlareMaxAmmo();
+                    const maxPrimaryWeaponAmmo  = unit.getPrimaryWeaponMaxAmmo();
+                    unit.updateByRepairData({
+                        deltaFuel               : unit.getMaxFuel() - unit.getCurrentFuel(),
+                        deltaFlareAmmo          : maxFlareAmmo ? maxFlareAmmo - unit.getFlareCurrentAmmo()! : null,
+                        deltaPrimaryWeaponAmmo  : maxPrimaryWeaponAmmo ? maxPrimaryWeaponAmmo - unit.getPrimaryWeaponCurrentAmmo()! : null,
+                    });
                     suppliedUnits.push(unit);
                 }
             }
@@ -1127,12 +1178,12 @@ namespace TinyWars.MultiCustomWar.McwModel {
                 focusUnit.updateView();
                 if (isSuccessful) {
                     const endingGridIndex = pathNodes[pathNodes.length - 1];
-                    if (VisibilityHelpers.checkIsUnitOnMapVisibleToPlayer({
+                    if (VisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
                         war,
                         unitType            : focusUnit.getType(),
                         unitPlayerIndex     : focusUnit.getPlayerIndex(),
                         gridIndex           : endingGridIndex,
-                        observerPlayerIndex : war.getPlayerIndexLoggedIn(),
+                        observerTeamIndex   : war.getPlayerLoggedIn().getTeamIndex(),
                         isDiving            : false,
                     })) {
                         war.getGridVisionEffect().showEffectSurface(endingGridIndex);
@@ -1167,7 +1218,13 @@ namespace TinyWars.MultiCustomWar.McwModel {
         if (isSuccessful) {
             player.setCoUsingSkillType(skillType);
             for (let i = 0; i < skills.length; ++i) {
-                BwHelpers.exeInstantSkill(war, player, skills[i], dataList[i]);
+                BwHelpers.exeInstantSkill(war, player, pathNodes[pathNodes.length - 1], skills[i], dataList[i]);
+            }
+
+            if (skillType === Types.CoSkillType.Power) {
+                player.setCoCurrentEnergy(Math.max(0, player.getCoCurrentEnergy() - player.getCoPowerEnergy()!));
+            } else if (skillType === Types.CoSkillType.SuperPower) {
+                player.setCoCurrentEnergy(Math.max(0, player.getCoCurrentEnergy() - player.getCoSuperPowerEnergy()!));
             }
         }
 
@@ -1238,25 +1295,20 @@ namespace TinyWars.MultiCustomWar.McwModel {
     function addUnits(war: McwWar, unitsData: SerializedMcwUnit[] | undefined | null, isViewVisible: boolean): void {
         if ((unitsData) && (unitsData.length)) {
             const unitMap       = war.getUnitMap();
-            const fogMap        = war.getFogMap();
             const configVersion = war.getConfigVersion();
 
             for (const unitData of unitsData) {
-                const unit      = new McwUnit().init(unitData, configVersion);
-                const isOnMap   = unit.getLoaderUnitId() == null;
-                if (isOnMap) {
-                    unitMap.addUnitOnMap(unit);
-                } else {
-                    unitMap.addUnitLoaded(unit);
-                }
-                unit.startRunning(war);
-                unit.startRunningView();
-                unit.setViewVisible(isViewVisible);
-
-                if (isOnMap) {
-                    const playerIndex   = unit.getPlayerIndex();
-                    const gridIndex     = unit.getGridIndex();
-                    fogMap.updateMapFromUnitsForPlayerOnArriving(playerIndex, gridIndex, unit.getVisionRangeForPlayer(playerIndex, gridIndex));
+                if (!unitMap.getUnitById(unitData.unitId)) {
+                    const unit      = new McwUnit().init(unitData, configVersion);
+                    const isOnMap   = unit.getLoaderUnitId() == null;
+                    if (isOnMap) {
+                        unitMap.addUnitOnMap(unit);
+                    } else {
+                        unitMap.addUnitLoaded(unit);
+                    }
+                    unit.startRunning(war);
+                    unit.startRunningView();
+                    unit.setViewVisible(isViewVisible);
                 }
             }
         }
@@ -1264,17 +1316,11 @@ namespace TinyWars.MultiCustomWar.McwModel {
     function updateTiles(war: McwWar, tilesData: SerializedMcwTile[] | undefined | null): void {
         if ((tilesData) && (tilesData.length)) {
             const tileMap   = war.getTileMap();
-            const fogMap    = war.getFogMap();
-
             for (const tileData of tilesData) {
                 const gridIndex = { x: tileData.gridX, y: tileData.gridY };
                 const tile      = tileMap.getTile(gridIndex);
-                egret.assert(tile.getIsFogEnabled(), "McwModel.updateTiles() the tile has no fog and therefore should not be updated!");
-                tile.setFogDisabled(tileData);
-
-                const playerIndex = tile.getPlayerIndex();
-                if (playerIndex > 0) {
-                    fogMap.updateMapFromTilesForPlayerOnGettingOwnership(playerIndex, gridIndex, tile.getVisionRangeForPlayer(playerIndex));
+                if (tile.getIsFogEnabled()) {
+                    tile.setFogDisabled(tileData);
                 }
             }
         }
@@ -1300,7 +1346,6 @@ namespace TinyWars.MultiCustomWar.McwModel {
         const fogMap                = war.getFogMap();
         const unitMap               = war.getUnitMap();
         const focusUnit             = unitMap.getUnit(beginningGridIndex, launchUnitId)!;
-        const playerIndex           = focusUnit.getPlayerIndex();
         const shouldUpdateFogMap    = war.getPlayerLoggedIn().getTeamIndex() === focusUnit.getTeamIndex();
         const isUnitBeLoaded        = (actionCode === WarActionCodes.WarActionUnitBeLoaded) && (!revisedPath.isBlocked);
         if (shouldUpdateFogMap) {
@@ -1317,12 +1362,6 @@ namespace TinyWars.MultiCustomWar.McwModel {
             focusUnit.setCurrentFuel(focusUnit.getCurrentFuel() - fuelConsumption);
             for (const unit of unitMap.getUnitsLoadedByLoader(focusUnit, true)) {
                 unit.setGridIndex(endingGridIndex);
-            }
-            if ((shouldUpdateFogMap) && (!isLaunching)) {
-                fogMap.updateMapFromUnitsForPlayerOnLeaving(playerIndex, beginningGridIndex, focusUnit.getVisionRangeForPlayer(playerIndex, beginningGridIndex)!);
-            }
-            if ((shouldUpdateFogMap) && (!isUnitBeLoaded)) {
-                fogMap.updateMapFromUnitsForPlayerOnArriving(playerIndex, endingGridIndex, focusUnit.getVisionRangeForPlayer(playerIndex, endingGridIndex)!);
             }
 
             if (isLaunching) {

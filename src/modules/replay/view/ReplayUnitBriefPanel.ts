@@ -180,10 +180,17 @@ namespace TinyWars.Replay {
                 target = target.parent;
             }
 
-            const isLeftSide = e.stageX >= StageManager.getStage().stageWidth / 2;
-            if (this._isLeftSide !== isLeftSide) {
-                this._isLeftSide = isLeftSide;
-                this._updatePosition();
+            const stageWidth = StageManager.getStage().stageWidth;
+            if (e.stageX >= stageWidth / 4 * 3) {
+                if (!this._isLeftSide) {
+                    this._isLeftSide = true;
+                    this._updatePosition();
+                }
+            } else if (e.stageX < stageWidth / 4) {
+                if (this._isLeftSide) {
+                    this._isLeftSide = false;
+                    this._updatePosition();
+                }
             }
         }
 

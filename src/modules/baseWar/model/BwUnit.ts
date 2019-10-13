@@ -4,6 +4,7 @@ namespace TinyWars.BaseWar {
     import Helpers          = Utility.Helpers;
     import Logger           = Utility.Logger;
     import GridIndexHelpers = Utility.GridIndexHelpers;
+    import ProtoTypes       = Utility.ProtoTypes;
     import SerializedBwUnit = Types.SerializedBwUnit;
     import UnitState        = Types.UnitState;
     import ArmorType        = Types.ArmorType;
@@ -197,16 +198,19 @@ namespace TinyWars.BaseWar {
             return this._templateCfg.isAffectedByLuck === 1;
         }
 
-        public updateOnRepaired(repairHp: number): void {
-            this.setCurrentHp(this.getCurrentHp() + repairHp);
-            this.setCurrentFuel(this.getMaxFuel());
-            this.setPrimaryWeaponCurrentAmmo(this.getPrimaryWeaponMaxAmmo());
-            this.setFlareCurrentAmmo(this.getFlareMaxAmmo());
-        }
-        public updateOnSupplied(): void {
-            this.setCurrentFuel(this.getMaxFuel());
-            this.setPrimaryWeaponCurrentAmmo(this.getPrimaryWeaponMaxAmmo());
-            this.setFlareCurrentAmmo(this.getFlareMaxAmmo());
+        public updateByRepairData(data: ProtoTypes.IWarUnitRepairData): void {
+            if (data.deltaHp) {
+                this.setCurrentHp(this.getCurrentHp() + data.deltaHp);
+            }
+            if (data.deltaFuel) {
+                this.setCurrentFuel(this.getCurrentFuel() + data.deltaFuel);
+            }
+            if (data.deltaPrimaryWeaponAmmo) {
+                this.setPrimaryWeaponCurrentAmmo(this.getPrimaryWeaponCurrentAmmo()! + data.deltaPrimaryWeaponAmmo);
+            }
+            if (data.deltaFlareAmmo) {
+                this.setFlareCurrentAmmo(this.getFlareCurrentAmmo()! + data.deltaFlareAmmo);
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -255,32 +259,82 @@ namespace TinyWars.BaseWar {
         }
 
         public getAttackModifierByCo(selfGridIndex: GridIndex): number {
-            if (!this.checkIsAffectedByCo(selfGridIndex)) {
+            const player        = this.getPlayer()!;
+            const coGridIndex   = player.getCoGridIndexOnMap();
+            const isCoOnBoard   = player.getCoUnitId() === this.getUnitId();
+            if ((coGridIndex == null) && (!isCoOnBoard)) {
                 return 0;
             } else {
-                const configVersion = this.getWar().getConfigVersion();
+                const configVersion = this.getWar()!.getConfigVersion();
                 const unitType      = this.getType();
+                const promotion     = this.getCurrentPromotion();
+                const isInZone      = (isCoOnBoard) || (GridIndexHelpers.getDistance(coGridIndex!, selfGridIndex) <= player.getCoZoneRadius()!);
                 let modifier        = 0;
-                for (const skillId of this.getPlayer().getCoCurrentSkills() || []) {
-                    const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId).attackBonus;
-                    if ((cfg) && (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[0]))) {
-                        modifier += cfg[1];
+                for (const skillId of player.getCoCurrentSkills() || []) {
+                    const skillCfg = ConfigManager.getCoSkillCfg(configVersion, skillId)!
+
+                    const attackBonusCfg = skillCfg.attackBonus;
+                    if ((attackBonusCfg)                                                                    &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, attackBonusCfg[1]))
+                    ) {
+                        if (((attackBonusCfg[0] === 0) && (isInZone)) ||
+                            (attackBonusCfg[0] === 1)
+                        ) {
+                            modifier += attackBonusCfg[2];
+                        }
+                    }
+
+                    const attackBonusByPromotionCfg = skillCfg.attackBonusByPromotion;
+                    if ((attackBonusByPromotionCfg)                                                                     &&
+                        (attackBonusByPromotionCfg[2] === promotion)                                                    &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, attackBonusByPromotionCfg[1]))
+                    ) {
+                        if (((attackBonusByPromotionCfg[0] === 0) && (isInZone)) ||
+                            (attackBonusByPromotionCfg[0] === 1)
+                        ) {
+                            modifier += attackBonusByPromotionCfg[3];
+                        }
                     }
                 }
                 return modifier;
             }
         }
         public getDefenseModifierByCo(selfGridIndex: GridIndex): number {
-            if (!this.checkIsAffectedByCo(selfGridIndex)) {
+            const player        = this.getPlayer()!;
+            const coGridIndex   = player.getCoGridIndexOnMap();
+            const isCoOnBoard   = player.getCoUnitId() === this.getUnitId();
+            if ((coGridIndex == null) && (!isCoOnBoard)) {
                 return 0;
             } else {
-                const configVersion = this.getWar().getConfigVersion();
+                const configVersion = this.getWar()!.getConfigVersion();
                 const unitType      = this.getType();
+                const promotion     = this.getCurrentPromotion();
+                const isInZone      = (isCoOnBoard) || (GridIndexHelpers.getDistance(coGridIndex!, selfGridIndex) <= player.getCoZoneRadius()!);
                 let modifier        = 0;
-                for (const skillId of this.getPlayer().getCoCurrentSkills() || []) {
-                    const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId).defenseBonus;
-                    if ((cfg) && (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[0]))) {
-                        modifier += cfg[1];
+                for (const skillId of player.getCoCurrentSkills() || []) {
+                    const skillCfg = ConfigManager.getCoSkillCfg(configVersion, skillId)!
+
+                    const defenseBonusCfg = skillCfg.defenseBonus;
+                    if ((defenseBonusCfg)                                                                   &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, defenseBonusCfg[1]))
+                    ) {
+                        if (((defenseBonusCfg[0] === 0) && (isInZone)) ||
+                            (defenseBonusCfg[0] === 1)
+                        ) {
+                            modifier += defenseBonusCfg[2];
+                        }
+                    }
+
+                    const defenseBonusByPromotionCfg = skillCfg.defenseBonusByPromotion;
+                    if ((defenseBonusByPromotionCfg)                                                                    &&
+                        (defenseBonusByPromotionCfg[2] === promotion)                                                   &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, defenseBonusByPromotionCfg[1]))
+                    ) {
+                        if (((defenseBonusByPromotionCfg[0] === 0) && (isInZone)) ||
+                            (defenseBonusByPromotionCfg[0] === 1)
+                        ) {
+                            modifier += defenseBonusByPromotionCfg[3];
+                        }
                     }
                 }
                 return modifier;
@@ -324,16 +378,26 @@ namespace TinyWars.BaseWar {
                 : cfgRange + this._getMaxAttackRangeModifierByCo();
         }
         private _getMaxAttackRangeModifierByCo(): number {
-            if (!this.checkIsAffectedByCo()) {
+            const player        = this.getPlayer();
+            const coGridIndex   = player.getCoGridIndexOnMap();
+            const isCoOnBoard   = player.getCoUnitId() === this.getUnitId();
+            if ((coGridIndex == null) && (!isCoOnBoard)) {
                 return 0;
             } else {
                 const configVersion = this.getWar().getConfigVersion();
                 const unitType      = this.getType();
+                const isInZone      = (isCoOnBoard) || (GridIndexHelpers.getDistance(coGridIndex, this.getGridIndex()) <= player.getCoZoneRadius());
                 let modifier        = 0;
-                for (const skillId of this.getPlayer().getCoCurrentSkills() || []) {
+                for (const skillId of player.getCoCurrentSkills() || []) {
                     const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId).maxAttackRangeBonus;
-                    if ((cfg) && (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[0]))) {
-                        modifier += cfg[1];
+                    if ((cfg)                                                                   &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))
+                    ) {
+                        if (((cfg[0] === 0) && (isInZone)) ||
+                            (cfg[0] === 1)
+                        ) {
+                            modifier += cfg[2];
+                        }
                     }
                 }
                 return modifier;
@@ -576,16 +640,26 @@ namespace TinyWars.BaseWar {
             }
         }
         private _getMoveRangeModifierByCo(): number {
-            if (!this.checkIsAffectedByCo()) {
+            const player        = this.getPlayer();
+            const coGridIndex   = player.getCoGridIndexOnMap();
+            const isCoOnBoard   = player.getCoUnitId() === this.getUnitId();
+            if ((coGridIndex == null) && (!isCoOnBoard)) {
                 return 0;
             } else {
                 const configVersion = this.getWar().getConfigVersion();
                 const unitType      = this.getType();
+                const isInZone      = (isCoOnBoard) || (GridIndexHelpers.getDistance(coGridIndex, this.getGridIndex()) <= player.getCoZoneRadius());
                 let modifier        = 0;
-                for (const skillId of this.getPlayer().getCoCurrentSkills() || []) {
+                for (const skillId of player.getCoCurrentSkills() || []) {
                     const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId).moveRangeBonus;
-                    if ((cfg) && (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[0]))) {
-                        modifier += cfg[1];
+                    if ((cfg)                                                                   &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))
+                    ) {
+                        if (((cfg[0] === 0) && (isInZone)) ||
+                            (cfg[0] === 1)
+                        ) {
+                            modifier += cfg[2];
+                        }
                     }
                 }
                 return modifier;
@@ -619,6 +693,9 @@ namespace TinyWars.BaseWar {
         public setCurrentPromotion(promotion: number): void {
             Logger.assert((promotion >= 0) && (promotion <= this.getMaxPromotion()), "UnitModel.setCurrentPromotion() error, promotion: ", promotion);
             this._currentPromotion = promotion;
+        }
+        public addPromotion(): void {
+            this.setCurrentPromotion(Math.min(this.getMaxPromotion(), this.getCurrentPromotion() + 1));
         }
 
         public getPromotionAttackBonus(): number {
@@ -838,15 +915,54 @@ namespace TinyWars.BaseWar {
         }
 
         public getVisionRangeForPlayer(playerIndex: number, gridIndex: GridIndex): number | undefined {
-            const war = this._war;
-            if (this.getTeamIndex() !== war.getPlayer(playerIndex)!.getTeamIndex()) {
+            if (this.getPlayerIndex() !== playerIndex) {
                 return undefined;
             } else {
+                const war           = this.getWar()!;
+                const version       = war.getConfigVersion();
+                const unitType      = this.getType();
+                const player        = war.getPlayer(playerIndex)!;
+                const isCoOnMap     = !!player.getCoGridIndexOnMap();
+
+                let modifierBySkill = 0;
+                for (const skillId of player.getCoCurrentSkills() || []) {
+                    const cfg = ConfigManager.getCoSkillCfg(version, skillId)!.unitVisionRangeBonus;
+                    if (cfg) {
+                        if (cfg[0] === 1) {
+                            if ((isCoOnMap) && (ConfigManager.checkIsUnitTypeInCategory(version, unitType, cfg[1]))) {
+                                modifierBySkill += cfg[2];
+                            }
+                        } else {
+                            // TODO cfg[0] !== 1
+                        }
+                    }
+                }
+
                 return Math.max(
                     1,
-                    this.getCfgVisionRange() + this.getVisionRangeBonusOnTile(war.getTileMap().getTile(gridIndex).getType()) + war.getSettingsVisionRangeModifier()
+                    this.getCfgVisionRange() + modifierBySkill + this.getVisionRangeBonusOnTile(war.getTileMap().getTile(gridIndex).getType()) + war.getSettingsVisionRangeModifier()
                 );
             }
+        }
+        public checkIsTrueVision(): boolean {
+            const version   = this.getWar()!.getConfigVersion();
+            const unitType  = this.getType();
+            const player    = this.getPlayer()!;
+            const isCoOnMap = !!player.getCoGridIndexOnMap();
+
+            for (const skillId of player.getCoCurrentSkills() || []) {
+                const cfg = ConfigManager.getCoSkillCfg(version, skillId)!.unitTrueVision;
+                if (cfg) {
+                    if (cfg[0] === 1) {
+                        if ((isCoOnMap) && (ConfigManager.checkIsUnitTypeInCategory(version, unitType, cfg[1]))) {
+                            return true;
+                        }
+                    } else {
+                        // TODO cfg[0] !== 1
+                    }
+                }
+            }
+            return false;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -925,13 +1041,6 @@ namespace TinyWars.BaseWar {
             return coId == null
                 ? null
                 : Math.floor(ConfigManager.getCoBasicCfg(this.getConfigVersion(), coId).boardCostPercentage * this.getProductionBaseCost() / 100);
-        }
-
-        public checkIsAffectedByCo(selfGridIndex = this.getGridIndex()): boolean {
-            const player = this.getPlayer();
-            return (player.checkCoIsUsingActiveSkill())
-                || (this.getUnitId() === player.getCoUnitId())
-                || (player.checkIsInCoZone(selfGridIndex));
         }
     }
 }

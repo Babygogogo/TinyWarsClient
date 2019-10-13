@@ -1,10 +1,9 @@
 
-namespace TinyWars.Replay.McwHelpers {
+namespace TinyWars.Replay.ReplayHelpers {
     import Types                = Utility.Types;
-    import Helpers              = Utility.Helpers;
     import GridIndexHelpers     = Utility.GridIndexHelpers;
     import VisibilityHelpers    = Utility.VisibilityHelpers;
-    import DestructionHelpers   = Utility.DestructionHelpers;
+    import ProtoTypes           = Utility.ProtoTypes;
     import GridIndex            = Types.GridIndex;
     import MovableArea          = Types.MovableArea;
     import AttackableArea       = Types.AttackableArea;
@@ -93,28 +92,17 @@ namespace TinyWars.Replay.McwHelpers {
     }
 
     export function updateTilesAndUnitsOnVisibilityChanged(war: ReplayWar): void {
-        const playerIndexInTurn = war.getPlayerInTurn().getPlayerIndex();
-        const fogMap            = war.getFogMap();
+        const teamIndexInTurn   = war.getPlayerInTurn().getTeamIndex();
 
         const tileMap = war.getTileMap();
         tileMap.forEachTile(tile => {
             const gridIndex = tile.getGridIndex();
-            if (VisibilityHelpers.checkIsTileVisibleToPlayer(war, gridIndex, playerIndexInTurn)) {
+            if (VisibilityHelpers.checkIsTileVisibleToTeam(war, gridIndex, teamIndexInTurn)) {
                 if (tile.getIsFogEnabled()) {
-                    const playerIndex = tile.getPlayerIndex();
-                    if (playerIndex > 0) {
-                        fogMap.updateMapFromTilesForPlayerOnGettingOwnership(playerIndex, gridIndex, tile.getVisionRangeForPlayer(playerIndex));
-                    }
-
                     tile.setFogDisabled();
                 }
             } else {
                 if (!tile.getIsFogEnabled()) {
-                    const playerIndex = tile.getPlayerIndex();
-                    if (playerIndex > 0) {
-                        fogMap.updateMapFromTilesForPlayerOnLosingOwnership(playerIndex, gridIndex, tile.getVisionRangeForPlayer(playerIndex));
-                    }
-
                     tile.setFogEnabled();
                 }
             }
@@ -127,6 +115,19 @@ namespace TinyWars.Replay.McwHelpers {
         // TODO: take skills into account.
         const cfg = ConfigManager.getUnitTemplateCfg(war.getConfigVersion(), unitType);
         return cfg ? cfg.productionCost : undefined;
+    }
+
+    export function checkShouldSerializeTile(tileData: Types.SerializedBwTile, mapRawData: ProtoTypes.IMapRawData): boolean {
+        if ((tileData.currentBuildPoint     != null)   ||
+            (tileData.currentCapturePoint   != null)   ||
+            (tileData.currentHp             != null)
+        ) {
+            return true;
+        } else {
+            const posIndex = tileData.gridX + tileData.gridY * mapRawData.mapWidth;
+            return (tileData.baseViewId     != mapRawData.tileBases[posIndex])
+                || (tileData.objectViewId   != mapRawData.tileObjects[posIndex]);
+        }
     }
 
     function _pushToAvailableMovableGrids(grids: AvailableMovableGrid[], gridIndex: GridIndex, prev: GridIndex, totalMoveCost: number): void {

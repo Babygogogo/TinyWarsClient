@@ -129,9 +129,21 @@ namespace TinyWars.BaseWar {
         }
 
         public getUnit(gridIndex: Types.GridIndex, unitId: number | undefined | null): BwUnit | undefined {
-            return unitId != null
-                ? this.getUnitLoadedById(unitId)
-                : this.getUnitOnMap(gridIndex);
+            if (unitId == null) {
+                return this.getUnitOnMap(gridIndex);
+            } else {
+                const unitLoaded = this.getUnitLoadedById(unitId);
+                if (unitLoaded) {
+                    return unitLoaded;
+                } else {
+                    const unitOnMap = this.getUnitOnMap(gridIndex);
+                    if (!unitOnMap) {
+                        return null;
+                    } else {
+                        return unitOnMap.getUnitId() === unitId ? unitOnMap : null;
+                    }
+                }
+            }
         }
         public getUnitById(unitId: number): BwUnit | null {
             const unitLoaded = this.getUnitLoadedById(unitId);
@@ -213,6 +225,16 @@ namespace TinyWars.BaseWar {
                 if (unit.getPlayerIndex() === playerIndex) {
                     units.delete(unitId);
                     this.getView().removeUnit(unit.getView());
+                }
+            }
+        }
+        public removeEnemyUnitsLoaded(selfTeamIndex: number): void {
+            const units = this._loadedUnits;
+            const view  = this.getView();
+            for (const [unitId, unit] of units) {
+                if (unit.getTeamIndex() !== selfTeamIndex) {
+                    units.delete(unitId);
+                    view.removeUnit(unit.getView());
                 }
             }
         }

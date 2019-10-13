@@ -1,34 +1,27 @@
 
 namespace TinyWars.BaseWar {
-    import MapManager               = WarMap.WarMapModel;
-    import Types                    = Utility.Types;
-    import Helpers                  = Utility.Helpers;
-    import GridIndexHelpers         = Utility.GridIndexHelpers;
-    import SerializedBwFogMap       = Types.SerializedBwFogMap;
-    import ForceFogCode             = Types.ForceFogCode;
-    import GridIndex                = Types.GridIndex;
-    import MapSize                  = Types.MapSize;
-    import Visibility               = Types.Visibility;
-    import VisibilityFromPaths      = Types.VisibilityFromPaths;
-    import VisibilityFromTiles      = Types.VisibilityFromTiles;
-    import VisibilityFromUnits      = Types.VisibilityFromUnits;
+    import MapManager           = WarMap.WarMapModel;
+    import Types                = Utility.Types;
+    import Helpers              = Utility.Helpers;
+    import GridIndexHelpers     = Utility.GridIndexHelpers;
+    import SerializedBwFogMap   = Types.SerializedBwFogMap;
+    import ForceFogCode         = Types.ForceFogCode;
+    import GridIndex            = Types.GridIndex;
+    import MapSize              = Types.MapSize;
+    import Visibility           = Types.Visibility;
 
     export abstract class BwFogMap {
         private _forceFogCode           : ForceFogCode;
         private _forceExpirePlayerIndex : number | null;
         private _forceExpireTurnIndex   : number | null;
         private _mapSize                : MapSize;
-        private _mapsFromPaths          : Map<number, VisibilityFromPaths[][]>;
-        private _mapsFromTiles          : Map<number, number[][]>;
-        private _mapsFromUnits          : Map<number, number[][]>;
+        private _mapsFromPaths          : Map<number, Visibility[][]>;
         private _war                    : BwWar;
 
         public init(data: SerializedBwFogMap, mapFileName: string): BwFogMap {
             const mapInfo           = MapManager.getMapMetaData(mapFileName);
             const mapSize: MapSize  = { width: mapInfo.mapWidth, height: mapInfo.mapHeight };
-            this._mapsFromPaths     = createEmptyMaps<VisibilityFromPaths>(mapSize, mapInfo.playersCount);
-            this._mapsFromTiles     = createEmptyMaps<number>(mapSize, mapInfo.playersCount);
-            this._mapsFromUnits     = createEmptyMaps<number>(mapSize, mapInfo.playersCount);
+            this._mapsFromPaths     = createEmptyMaps<Visibility>(mapSize, mapInfo.playersCount);
             this._setMapSize(mapInfo.mapWidth, mapInfo.mapHeight);
             this.setForceFogCode(data.forceFogCode || ForceFogCode.None);
             this.setForceExpirePlayerIndex(data.forceExpirePlayerIndex);
@@ -43,17 +36,12 @@ namespace TinyWars.BaseWar {
 
         public startRunning(war: BwWar): void {
             this._war = war;
-
-            for (const [playerIndex, ] of this._mapsFromTiles) {
-                this.resetMapFromTilesForPlayer(playerIndex);
-                this.resetMapFromUnitsForPlayer(playerIndex);
-            }
         }
 
         protected _getWar(): BwWar {
             return this._war;
         }
-        protected _getMapsFromPaths(): Map<number, VisibilityFromPaths[][]> {
+        protected _getMapsFromPaths(): Map<number, Visibility[][]> {
             return this._mapsFromPaths;
         }
 
@@ -99,8 +87,6 @@ namespace TinyWars.BaseWar {
 
         public resetAllMapsForPlayer(playerIndex: number): void {
             this.resetMapFromPathsForPlayer(playerIndex);
-            this.resetMapFromTilesForPlayer(playerIndex);
-            this.resetMapFromUnitsForPlayer(playerIndex);
         }
 
         public resetMapFromPathsForPlayer(playerIndex: number, encodedData?: string): void {
@@ -111,7 +97,7 @@ namespace TinyWars.BaseWar {
                 const { width, height } = this.getMapSize();
                 for (let x = 0; x < width; ++x) {
                     for (let y = 0; y < height; ++y) {
-                        map[x][y] = Number(encodedData[x + y * width]) as VisibilityFromPaths;
+                        map[x][y] = Number(encodedData[x + y * width]) as Visibility;
                     }
                 }
             }
@@ -120,14 +106,22 @@ namespace TinyWars.BaseWar {
             const playerIndex   = unit.getPlayerIndex();
             const map           = this._mapsFromPaths.get(playerIndex)!;
             const mapSize       = this.getMapSize();
+            const isTrueVision  = unit.checkIsTrueVision();
+
             for (const pathNode of path) {
                 const visionRange = unit.getVisionRangeForPlayer(playerIndex, pathNode);
                 if (visionRange) {
                     for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(pathNode, 0, 1, mapSize)) {
-                        map[gridIndex.x][gridIndex.y] = 2;
+                        map[gridIndex.x][gridIndex.y] = Visibility.TrueVision;
                     }
                     for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(pathNode, 2, visionRange, mapSize)) {
-                        map[gridIndex.x][gridIndex.y] = Math.max(1, map[gridIndex.x][gridIndex.y]) as VisibilityFromPaths;
+                        if (isTrueVision) {
+                            map[gridIndex.x][gridIndex.y] = Visibility.TrueVision;
+                        } else {
+                            if (map[gridIndex.x][gridIndex.y] === Visibility.OutsideVision) {
+                                map[gridIndex.x][gridIndex.y] = Visibility.InsideVision;
+                            }
+                        }
                     }
                 }
             }
@@ -139,80 +133,65 @@ namespace TinyWars.BaseWar {
             }
         }
 
-        public resetMapFromTilesForPlayer(playerIndex: number): void {
-            const map       = this._mapsFromTiles.get(playerIndex)!;
-            const mapSize   = this.getMapSize();
-            fillMap(map, 0);
-            this._war.getTileMap().forEachTile(tile => {
-                updateMap(map, mapSize, tile.getGridIndex(), tile.getVisionRangeForPlayer(playerIndex), 1);
-            });
-        }
-        public updateMapFromTilesForPlayerOnGettingOwnership(playerIndex: number, gridIndex: GridIndex, vision: number | null | undefined): void {
-            updateMap(this._mapsFromTiles.get(playerIndex)!, this.getMapSize(), gridIndex, vision, 1);
-        }
-        public updateMapFromTilesForPlayerOnLosingOwnership(playerIndex: number, gridIndex: GridIndex, vision: number | null | undefined): void {
-            updateMap(this._mapsFromTiles.get(playerIndex)!, this.getMapSize(), gridIndex, vision, -1);
-        }
-
-        public resetMapFromUnitsForPlayer(playerIndex: number): void {
-            const map       = this._mapsFromUnits.get(playerIndex)!;
-            const mapSize   = this.getMapSize();
-            fillMap(map, 0);
-            this._war.getUnitMap().forEachUnitOnMap(unit => {
-                const gridIndex = unit.getGridIndex();
-                updateMap(map, mapSize, gridIndex, unit.getVisionRangeForPlayer(playerIndex, gridIndex), 1);
-            });
-        }
-        public updateMapFromUnitsForPlayerOnArriving(playerIndex: number, gridIndex: GridIndex, vision: number | null | undefined): void {
-            updateMap(this._mapsFromUnits.get(playerIndex)!, this.getMapSize(), gridIndex, vision, 1);
-        }
-        public updateMapFromUnitsForPlayerOnLeaving(playerIndex: number, gridIndex: GridIndex, vision: number | null | undefined): void {
-            updateMap(this._mapsFromUnits.get(playerIndex)!, this.getMapSize(), gridIndex, vision, -1);
-        }
-
-        public getVisibilityForPlayer(gridIndex: GridIndex, playerIndex: number): Visibility {
+        public getVisibilityFromPathsForPlayer(gridIndex: GridIndex, playerIndex: number): Visibility {
             if (!this.checkHasFogCurrently()) {
-                return {
-                    fromPaths   : 2,
-                    fromTiles   : 1,
-                    fromUnits   : 1,
-                };
+                return Visibility.TrueVision;
             } else {
-                const { x, y } = gridIndex;
-                return {
-                    fromPaths   : this._mapsFromPaths.get(playerIndex)![x][y],
-                    fromTiles   : this._mapsFromTiles.get(playerIndex)![x][y] > 0 ? 1 : 0,
-                    fromUnits   : this._mapsFromUnits.get(playerIndex)![x][y] > 0 ? 1 : 0,
-                };
+                return this._mapsFromPaths.get(playerIndex)![gridIndex.x][gridIndex.y];
             }
         }
-        public getVisibilityForTeam(gridIndex: GridIndex, teamIndex: number): Visibility {
+        public getVisibilityFromTilesForPlayer(gridIndex: GridIndex, playerIndex: number): Visibility {
             if (!this.checkHasFogCurrently()) {
-                return {
-                    fromPaths   : 2,
-                    fromTiles   : 1,
-                    fromUnits   : 1,
-                };
+                return Visibility.TrueVision;
             } else {
-                let [fromPaths, fromTiles, fromUnits] = [0, 0, 0];
-                this._war.getPlayerManager().forEachPlayer(false, (player: BwPlayer) => {
-                    if ((player.getIsAlive()) && (player.getTeamIndex() === teamIndex)) {
-                        const v = this.getVisibilityForPlayer(gridIndex, player.getPlayerIndex());
-                        fromPaths   = Math.max(fromPaths, v.fromPaths);
-                        fromTiles   = Math.max(fromTiles, v.fromTiles);
-                        fromUnits   = Math.max(fromUnits, v.fromUnits);
+                const tileMap           = this._getWar().getTileMap();
+                const { width, height } = tileMap.getMapSize();
+                for (let x = 0; x < width; ++x) {
+                    for (let y = 0; y < height; ++y) {
+                        const tileGridIndex = { x, y };
+                        const visionRange   = tileMap.getTile(tileGridIndex).getVisionRangeForPlayer(playerIndex);
+                        if ((visionRange != null) && (GridIndexHelpers.getDistance(gridIndex, tileGridIndex) <= visionRange)) {
+                            return Visibility.InsideVision;
+                        }
                     }
-                });
-                return {
-                    fromPaths   : fromPaths as VisibilityFromPaths,
-                    fromTiles   : fromTiles as VisibilityFromTiles,
-                    fromUnits   : fromUnits as VisibilityFromUnits,
-                };
+                }
+                return Visibility.OutsideVision;
+            }
+        }
+        public getVisibilityFromUnitsForPlayer(gridIndex: GridIndex, playerIndex: number): Visibility {
+            if (!this.checkHasFogCurrently()) {
+                return Visibility.TrueVision;
+            } else {
+                const unitMap           = this._getWar().getUnitMap();
+                const { width, height } = unitMap.getMapSize();
+                let isInside            = false;
+                for (let x = 0; x < width; ++x) {
+                    for (let y = 0; y < height; ++y) {
+                        const unitGridIndex = { x, y };
+                        const unit          = unitMap.getUnitOnMap(unitGridIndex);
+                        if (unit) {
+                            const visionRange = unit.getVisionRangeForPlayer(playerIndex, unitGridIndex);
+                            if (visionRange != null) {
+                                const distance = GridIndexHelpers.getDistance(gridIndex, unitGridIndex);
+                                if (distance <= 1) {
+                                    return Visibility.TrueVision;
+                                }
+                                if (visionRange >= distance) {
+                                    if (unit.checkIsTrueVision()) {
+                                        return Visibility.TrueVision;
+                                    }
+                                    isInside = true;
+                                }
+                            }
+                        }
+                    }
+                }
+                return isInside ? Visibility.InsideVision : Visibility.OutsideVision;
             }
         }
     }
 
-    function createEmptyMaps<T extends (number | VisibilityFromPaths)>(mapSize: MapSize, playersCount: number): Map<number, T[][]> {
+    function createEmptyMaps<T extends (number | Visibility)>(mapSize: MapSize, playersCount: number): Map<number, T[][]> {
         const map = new Map<number, T[][]>();
         for (let i = 0; i < playersCount + 1; ++i) {
             map.set(i, Helpers.createEmptyMap<T>(mapSize.width, mapSize.height, 0 as T));
@@ -223,14 +202,6 @@ namespace TinyWars.BaseWar {
     function fillMap(map: number[][], data: number): void {
         for (const column of map) {
             column.fill(data);
-        }
-    }
-
-    function updateMap(map: number[][], mapSize: MapSize, origin: GridIndex, vision: number | null | undefined, modifier: -1 | 1) {
-        if (vision) {
-            for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(origin, 0, vision, mapSize)) {
-                map[gridIndex.x][gridIndex.y] += modifier;
-            }
         }
     }
 }

@@ -7,15 +7,17 @@ namespace TinyWars.User {
     import ProtoTypes   = Utility.ProtoTypes;
 
     export namespace UserModel {
-        let _isLoggedIn     : boolean = false;
-        let _selfUserId     : number;
-        let _selfPrivilege  : number;
-        let _selfAccount    : string;
-        let _selfPassword   : string;
-        let _selfNickname   : string;
-        let _selfDiscordId  : string;
-        let _selfRankScore  : number = 0;
-        const _userInfos    = new Map<number, ProtoTypes.IS_GetUserPublicInfo>();
+        let _isLoggedIn         : boolean = false;
+        let _selfUserId         : number;
+        let _selfIsAdmin        : number;
+        let _selfIsMapCommitee  : number;
+        let _selfIsCoCommitee   : number;
+        let _selfAccount        : string;
+        let _selfPassword       : string;
+        let _selfNickname       : string;
+        let _selfDiscordId      : string;
+        let _selfRankScore      : number = 0;
+        const _userInfos        = new Map<number, ProtoTypes.IS_GetUserPublicInfo>();
 
         export function init(): void {
             Notify.addEventListeners([
@@ -25,11 +27,13 @@ namespace TinyWars.User {
         }
 
         export function updateOnLogin(data: ProtoTypes.IS_Login): void {
-            _isLoggedIn    = true;
-            _selfUserId    = data.userId;
-            _selfPrivilege = data.privilege;
-            _selfAccount   = data.account;
-            _selfPassword  = data.password;
+            _isLoggedIn         = true;
+            _selfUserId         = data.userId;
+            _selfIsAdmin        = data.isAdmin;
+            _selfIsCoCommitee   = data.isCoCommitee;
+            _selfIsMapCommitee  = data.isMapCommitee;
+            _selfAccount        = data.account;
+            _selfPassword       = data.password;
             setSelfNickname(data.nickname);
             setSelfDiscordId(data.discordId);
             _selfRankScore = data.rank2pScore;
@@ -39,10 +43,12 @@ namespace TinyWars.User {
         }
 
         export function clearLoginInfo(): void {
-            _isLoggedIn     = false;
-            _selfUserId     = undefined;
-            _selfPrivilege  = undefined;
-            _selfPassword   = undefined;
+            _isLoggedIn         = false;
+            _selfUserId         = null;
+            _selfIsAdmin        = null;
+            _selfIsCoCommitee   = null;
+            _selfIsMapCommitee  = null;
+            _selfPassword       = null;
             setSelfNickname(null);
             setSelfDiscordId(null);
             _selfRankScore  = 0;
@@ -54,8 +60,14 @@ namespace TinyWars.User {
         export function getSelfUserId(): number {
             return _selfUserId;
         }
-        export function getSelfPrivilege(): number {
-            return _selfPrivilege;
+        export function checkIsAdmin(): boolean {
+            return !!_selfIsAdmin;
+        }
+        export function checkIsMapCommitee(): boolean {
+            return !!_selfIsMapCommitee;
+        }
+        export function checkIsCoCommitee(): boolean {
+            return !!_selfIsCoCommitee;
         }
         export function getSelfAccount(): string {
             return _selfAccount;

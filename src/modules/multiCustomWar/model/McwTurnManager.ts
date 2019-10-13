@@ -31,12 +31,6 @@ namespace TinyWars.MultiCustomWar {
             }
         }
         protected _runPhaseResetVisionForNextPlayer(): void {
-            const playerIndex   = this.getPlayerIndexInTurn();
-            const war           = this._getWar();
-            const fogMap        = war.getFogMap();
-            fogMap.resetMapFromTilesForPlayer(playerIndex);
-            fogMap.resetMapFromUnitsForPlayer(playerIndex);
-
             if (this.getPlayerIndexInTurn() === (this._getWar() as McwWar).getPlayerIndexLoggedIn()) {
                 this._resetFogForPlayerLoggedIn();
             }
@@ -47,29 +41,32 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _resetFogForPlayerLoggedIn(): void {
             const war           = this._getWar() as McwWar;
-            const playerIndex   = war.getPlayerIndexLoggedIn();
+            const teamIndex     = war.getPlayerLoggedIn().getTeamIndex();
             war.getUnitMap().forEachUnitOnMap(unit => {
                 const gridIndex = unit.getGridIndex();
-                if (!VisibilityHelpers.checkIsUnitOnMapVisibleToPlayer({
+                if (!VisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
                     war,
                     gridIndex,
                     unitType            : unit.getType(),
                     isDiving            : unit.getIsDiving(),
                     unitPlayerIndex     : unit.getPlayerIndex(),
-                    observerPlayerIndex : playerIndex,
+                    observerTeamIndex   : teamIndex,
                 })) {
                     DestructionHelpers.removeUnitOnMap(war, gridIndex);
                 }
             });
+            DestructionHelpers.removeEnemyUnitsLoaded(war, teamIndex);
 
-            war.getTileMap().forEachTile(tile => {
-                if (!VisibilityHelpers.checkIsTileVisibleToPlayer(war, tile.getGridIndex(), playerIndex)) {
+            const tileMap = war.getTileMap();
+            tileMap.forEachTile(tile => {
+                if (!VisibilityHelpers.checkIsTileVisibleToTeam(war, tile.getGridIndex(), teamIndex)) {
                     tile.setFogEnabled();
                 } else {
                     tile.setFogDisabled();
                 }
                 tile.updateView();
             });
+            tileMap.getView().updateCoZone();
         }
     }
 }

@@ -214,13 +214,10 @@ namespace TinyWars.Utility.Types {
         gridIndex   : GridIndex;
     }
 
-    export type VisibilityFromPaths = 0 | 1 | 2;
-    export type VisibilityFromTiles = 0 | 1;
-    export type VisibilityFromUnits = 0 | 1;
-    export type Visibility          = {
-        fromPaths   : VisibilityFromPaths,
-        fromTiles   : VisibilityFromTiles,
-        fromUnits   : VisibilityFromUnits,
+    export const enum Visibility {
+        OutsideVision   = 0,
+        InsideVision    = 1,
+        TrueVision      = 2,
     }
 
     export interface MapRawData extends ProtoTypes.IMapRawData {
@@ -496,5 +493,11 @@ namespace TinyWars.Utility.Types {
     export const enum LanguageType {
         Chinese = 0,
         English = 1,
+    }
+
+    export const enum CoSkillAreaType {
+        Zone    = 0,
+        OnMap   = 1,
+        Halo    = 2,
     }
 }

@@ -1995,12 +1995,28 @@ var egret;
              * @private
              *
              */
+            HTML5StageText.prototype.onFocusHandler = function () {
+                //the soft keyboard will cover the input box in some cases
+                var self = this;
+                window.setTimeout(function () {
+                    if (self.inputElement) {
+                        self.inputElement.scrollIntoView();
+                    }
+                }, 200);
+            };
+            /**
+             * @private
+             *
+             */
             HTML5StageText.prototype.executeShow = function () {
                 var self = this;
                 //打开
                 this.inputElement.value = this.$getText();
                 if (this.inputElement.onblur == null) {
                     this.inputElement.onblur = this.onBlurHandler.bind(this);
+                }
+                if (this.inputElement.onfocus == null) {
+                    this.inputElement.onfocus = this.onFocusHandler.bind(this);
                 }
                 this.$resetStageText();
                 if (this.$textfield.maxChars > 0) {
@@ -2369,10 +2385,10 @@ var egret;
              */
             HTMLInput.prototype.disconnectStageText = function (stageText) {
                 if (this._stageText == null || this._stageText == stageText) {
-                    this.clearInputElement();
                     if (this._inputElement) {
                         this._inputElement.blur();
                     }
+                    this.clearInputElement();
                 }
                 this._needShow = false;
             };
@@ -2385,6 +2401,7 @@ var egret;
                 if (self._inputElement) {
                     self._inputElement.value = "";
                     self._inputElement.onblur = null;
+                    self._inputElement.onfocus = null;
                     self._inputElement.style.width = "1px";
                     self._inputElement.style.height = "12px";
                     self._inputElement.style.left = "0px";
@@ -3362,6 +3379,8 @@ var egret;
             //
             texture[egret.glContext] = gl;
             gl.bindTexture(gl.TEXTURE_2D, texture);
+            gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 1);
+            texture[egret.UNPACK_PREMULTIPLY_ALPHA_WEBGL] = true;
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
@@ -4166,6 +4185,7 @@ var egret;
                 return _this;
             }
             WebPlayer.prototype.init = function (container, options) {
+                console.log("Egret Engine Version:", egret.Capabilities.engineVersion);
                 var option = this.readOption(container, options);
                 var stage = new egret.Stage();
                 stage.$screen = this;
@@ -5002,11 +5022,13 @@ var egret;
              * @inheritDoc
              */
             HtmlSound.prototype.close = function () {
-                if (this.loaded == false && this.originAudio)
+                if (this.loaded && this.originAudio) {
                     this.originAudio.src = "";
+                }
                 if (this.originAudio)
                     this.originAudio = null;
                 HtmlSound.$clear(this.url);
+                this.loaded = false;
             };
             HtmlSound.$clear = function (url) {
                 HtmlSound.clearAudios[url] = true;
@@ -5577,7 +5599,7 @@ var egret;
                 * 混入tintcolor => alpha
                 */
                 alpha = Math.min(alpha, 1.0);
-                var globalTintColor = buffer.globalTintColor;
+                var globalTintColor = buffer.globalTintColor || 0xFFFFFF;
                 var currentTexture = buffer.currentTexture;
                 alpha = ((alpha < 1.0 && currentTexture && currentTexture[egret.UNPACK_PREMULTIPLY_ALPHA_WEBGL]) ?
                     egret.WebGLUtils.premultiplyTint(globalTintColor, alpha)
@@ -9757,7 +9779,7 @@ var egret;
             uniform sampler2D uSamplerAlphaMask;
     
             void main(void){
-                float alpha = texture2D(uSamplerAlphaMask, vTextureCoord);
+                float alpha = texture2D(uSamplerAlphaMask, vTextureCoord).r;
                 if (alpha < 0.0039) { discard; }
                 vec4 texColor = texture2D(uSampler, vTextureCoord);
                 if(texColor.a > 0.0) {
@@ -9770,7 +9792,7 @@ var egret;
                 gl_FragColor = v4Color * vColor;
             }"
             */
-            EgretShaderLib.colorTransform_frag_etc_alphamask_frag = "precision mediump float;\r\nvarying vec2 vTextureCoord;\r\nvarying vec4 vColor;\r\nuniform mat4 matrix;\r\nuniform vec4 colorAdd;\r\nuniform sampler2D uSampler;\r\nuniform sampler2D uSamplerAlphaMask;\r\n\r\nvoid main(void){\r\nfloat alpha = texture2D(uSamplerAlphaMask, vTextureCoord);\r\nif (alpha < 0.0039) { discard; }\r\nvec4 texColor = texture2D(uSampler, vTextureCoord);\r\nif(texColor.a > 0.0) {\r\n // 抵消预乘的alpha通道\r\ntexColor = vec4(texColor.rgb / texColor.a, texColor.a);\r\n}\r\nvec4 v4Color = clamp(texColor * matrix + colorAdd, 0.0, 1.0);\r\nv4Color.rgb = v4Color.rgb * alpha;\r\nv4Color.a = alpha;\r\ngl_FragColor = v4Color * vColor;\r\n}";
+            EgretShaderLib.colorTransform_frag_etc_alphamask_frag = "precision mediump float;\r\nvarying vec2 vTextureCoord;\r\nvarying vec4 vColor;\r\nuniform mat4 matrix;\r\nuniform vec4 colorAdd;\r\nuniform sampler2D uSampler;\r\nuniform sampler2D uSamplerAlphaMask;\r\n\r\nvoid main(void){\r\nfloat alpha = texture2D(uSamplerAlphaMask, vTextureCoord).r;\r\nif (alpha < 0.0039) { discard; }\r\nvec4 texColor = texture2D(uSampler, vTextureCoord);\r\nif(texColor.a > 0.0) {\r\n // 抵消预乘的alpha通道\r\ntexColor = vec4(texColor.rgb / texColor.a, texColor.a);\r\n}\r\nvec4 v4Color = clamp(texColor * matrix + colorAdd, 0.0, 1.0);\r\nv4Color.rgb = v4Color.rgb * alpha;\r\nv4Color.a = alpha;\r\ngl_FragColor = v4Color * vColor;\r\n}";
             return EgretShaderLib;
         }());
         web.EgretShaderLib = EgretShaderLib;

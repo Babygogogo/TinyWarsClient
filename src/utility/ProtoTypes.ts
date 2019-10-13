@@ -1462,11 +1462,8 @@ export declare interface ICoSkillCfg {
     /** CoSkillCfg name */
     name?: (string|null);
 
-    /** CoSkillCfg passiveDesc */
-    passiveDesc?: (string[]|null);
-
-    /** CoSkillCfg activeDesc */
-    activeDesc?: (string[]|null);
+    /** CoSkillCfg desc */
+    desc?: (string[]|null);
 
     /** CoSkillCfg attackBonus */
     attackBonus?: (number[]|null);
@@ -1512,6 +1509,27 @@ export declare interface ICoSkillCfg {
 
     /** CoSkillCfg selfPromotionGain */
     selfPromotionGain?: (number[]|null);
+
+    /** CoSkillCfg unitVisionRangeBonus */
+    unitVisionRangeBonus?: (number[]|null);
+
+    /** CoSkillCfg unitTrueVision */
+    unitTrueVision?: (number[]|null);
+
+    /** CoSkillCfg attackBonusByPromotion */
+    attackBonusByPromotion?: (number[]|null);
+
+    /** CoSkillCfg defenseBonusByPromotion */
+    defenseBonusByPromotion?: (number[]|null);
+
+    /** CoSkillCfg promotionBonusByAttack */
+    promotionBonusByAttack?: (number[]|null);
+
+    /** CoSkillCfg selfPrimaryAmmoRecovery */
+    selfPrimaryAmmoRecovery?: (number[]|null);
+
+    /** CoSkillCfg selfFuelRecovery */
+    selfFuelRecovery?: (number[]|null);
 }
 
 /** Represents a CoSkillCfg. */
@@ -1529,11 +1547,8 @@ export declare class CoSkillCfg implements ICoSkillCfg {
     /** CoSkillCfg name. */
     public name: string;
 
-    /** CoSkillCfg passiveDesc. */
-    public passiveDesc: string[];
-
-    /** CoSkillCfg activeDesc. */
-    public activeDesc: string[];
+    /** CoSkillCfg desc. */
+    public desc: string[];
 
     /** CoSkillCfg attackBonus. */
     public attackBonus: number[];
@@ -1579,6 +1594,27 @@ export declare class CoSkillCfg implements ICoSkillCfg {
 
     /** CoSkillCfg selfPromotionGain. */
     public selfPromotionGain: number[];
+
+    /** CoSkillCfg unitVisionRangeBonus. */
+    public unitVisionRangeBonus: number[];
+
+    /** CoSkillCfg unitTrueVision. */
+    public unitTrueVision: number[];
+
+    /** CoSkillCfg attackBonusByPromotion. */
+    public attackBonusByPromotion: number[];
+
+    /** CoSkillCfg defenseBonusByPromotion. */
+    public defenseBonusByPromotion: number[];
+
+    /** CoSkillCfg promotionBonusByAttack. */
+    public promotionBonusByAttack: number[];
+
+    /** CoSkillCfg selfPrimaryAmmoRecovery. */
+    public selfPrimaryAmmoRecovery: number[];
+
+    /** CoSkillCfg selfFuelRecovery. */
+    public selfFuelRecovery: number[];
 
     /**
      * Creates a new CoSkillCfg instance using the specified properties.
@@ -3661,11 +3697,20 @@ export declare interface IWarUnitRepairData {
     /** WarUnitRepairData unitId */
     unitId?: (number|null);
 
-    /** WarUnitRepairData repairAmount */
-    repairAmount?: (number|null);
-
     /** WarUnitRepairData gridIndex */
     gridIndex?: (IGridIndex|null);
+
+    /** WarUnitRepairData deltaHp */
+    deltaHp?: (number|null);
+
+    /** WarUnitRepairData deltaPrimaryWeaponAmmo */
+    deltaPrimaryWeaponAmmo?: (number|null);
+
+    /** WarUnitRepairData deltaFuel */
+    deltaFuel?: (number|null);
+
+    /** WarUnitRepairData deltaFlareAmmo */
+    deltaFlareAmmo?: (number|null);
 }
 
 /** Represents a WarUnitRepairData. */
@@ -3680,11 +3725,20 @@ export declare class WarUnitRepairData implements IWarUnitRepairData {
     /** WarUnitRepairData unitId. */
     public unitId: number;
 
-    /** WarUnitRepairData repairAmount. */
-    public repairAmount: number;
-
     /** WarUnitRepairData gridIndex. */
     public gridIndex?: (IGridIndex|null);
+
+    /** WarUnitRepairData deltaHp. */
+    public deltaHp: number;
+
+    /** WarUnitRepairData deltaPrimaryWeaponAmmo. */
+    public deltaPrimaryWeaponAmmo: number;
+
+    /** WarUnitRepairData deltaFuel. */
+    public deltaFuel: number;
+
+    /** WarUnitRepairData deltaFlareAmmo. */
+    public deltaFlareAmmo: number;
 
     /**
      * Creates a new WarUnitRepairData instance using the specified properties.
@@ -4821,6 +4875,18 @@ export declare interface IWarActionUnitAttack {
 
     /** WarActionUnitAttack lostPlayerIndex */
     lostPlayerIndex?: (number|null);
+
+    /** WarActionUnitAttack attackerUnitAfterAction */
+    attackerUnitAfterAction?: (ISerializedWarUnit|null);
+
+    /** WarActionUnitAttack targetUnitAfterAction */
+    targetUnitAfterAction?: (ISerializedWarUnit|null);
+
+    /** WarActionUnitAttack attackerCoEnergy */
+    attackerCoEnergy?: (number|null);
+
+    /** WarActionUnitAttack targetCoEnergy */
+    targetCoEnergy?: (number|null);
 }
 
 /** Represents a WarActionUnitAttack. */
@@ -4861,6 +4927,18 @@ export declare class WarActionUnitAttack implements IWarActionUnitAttack {
 
     /** WarActionUnitAttack lostPlayerIndex. */
     public lostPlayerIndex: number;
+
+    /** WarActionUnitAttack attackerUnitAfterAction. */
+    public attackerUnitAfterAction?: (ISerializedWarUnit|null);
+
+    /** WarActionUnitAttack targetUnitAfterAction. */
+    public targetUnitAfterAction?: (ISerializedWarUnit|null);
+
+    /** WarActionUnitAttack attackerCoEnergy. */
+    public attackerCoEnergy: number;
+
+    /** WarActionUnitAttack targetCoEnergy. */
+    public targetCoEnergy: number;
 
     /**
      * Creates a new WarActionUnitAttack instance using the specified properties.
@@ -9022,9 +9100,6 @@ export declare interface IS_Login {
     /** S_Login userId */
     userId?: (number|null);
 
-    /** S_Login privilege */
-    privilege?: (number|null);
-
     /** S_Login account */
     account?: (string|null);
 
@@ -9033,6 +9108,15 @@ export declare interface IS_Login {
 
     /** S_Login nickname */
     nickname?: (string|null);
+
+    /** S_Login isAdmin */
+    isAdmin?: (number|null);
+
+    /** S_Login isCoCommitee */
+    isCoCommitee?: (number|null);
+
+    /** S_Login isMapCommitee */
+    isMapCommitee?: (number|null);
 
     /** S_Login rank2pScore */
     rank2pScore?: (number|null);
@@ -9056,9 +9140,6 @@ export declare class S_Login implements IS_Login {
     /** S_Login userId. */
     public userId: number;
 
-    /** S_Login privilege. */
-    public privilege: number;
-
     /** S_Login account. */
     public account: string;
 
@@ -9067,6 +9148,15 @@ export declare class S_Login implements IS_Login {
 
     /** S_Login nickname. */
     public nickname: string;
+
+    /** S_Login isAdmin. */
+    public isAdmin: number;
+
+    /** S_Login isCoCommitee. */
+    public isCoCommitee: number;
+
+    /** S_Login isMapCommitee. */
+    public isMapCommitee: number;
 
     /** S_Login rank2pScore. */
     public rank2pScore: number;
@@ -10474,6 +10564,15 @@ export declare interface IS_GetUserPublicInfo {
     /** S_GetUserPublicInfo discordId */
     discordId?: (string|null);
 
+    /** S_GetUserPublicInfo isAdmin */
+    isAdmin?: (number|null);
+
+    /** S_GetUserPublicInfo isCoCommitee */
+    isCoCommitee?: (number|null);
+
+    /** S_GetUserPublicInfo isMapCommitee */
+    isMapCommitee?: (number|null);
+
     /** S_GetUserPublicInfo mcw2pWins */
     mcw2pWins?: (number|null);
 
@@ -10546,6 +10645,15 @@ export declare class S_GetUserPublicInfo implements IS_GetUserPublicInfo {
 
     /** S_GetUserPublicInfo discordId. */
     public discordId: string;
+
+    /** S_GetUserPublicInfo isAdmin. */
+    public isAdmin: number;
+
+    /** S_GetUserPublicInfo isCoCommitee. */
+    public isCoCommitee: number;
+
+    /** S_GetUserPublicInfo isMapCommitee. */
+    public isMapCommitee: number;
 
     /** S_GetUserPublicInfo mcw2pWins. */
     public mcw2pWins: number;

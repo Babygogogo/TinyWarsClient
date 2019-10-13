@@ -159,9 +159,7 @@ namespace TinyWars.MapManagement {
                     });
                 }
             }
-
-            data.sort((a, b) => WarMapModel.getMapNameInLanguage(a.mapFileName) <= WarMapModel.getMapNameInLanguage(b.mapFileName) ? -1 : 1);
-            return data;
+            return data.sort((a, b) => WarMapModel.getMapNameInLanguage(a.mapFileName).localeCompare(WarMapModel.getMapNameInLanguage(b.mapFileName), "zh"));
         }
 
         private _createUnitViewDataList(unitViewIds: number[], mapWidth: number, mapHeight: number): Types.UnitViewData[] {

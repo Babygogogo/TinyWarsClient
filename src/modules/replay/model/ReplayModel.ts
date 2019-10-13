@@ -182,7 +182,7 @@ namespace TinyWars.Replay.ReplayModel {
             DestructionHelpers.destroyUnitOnMap(war, gridIndex, true);
         }
 
-        McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+        ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
         actionPlanner.setStateIdle();
     }
@@ -202,7 +202,6 @@ namespace TinyWars.Replay.ReplayModel {
         FloatText.show(`${Lang.getText(Lang.Type.B0095)} ${Lang.getUnitName(data.WarActionPlayerProduceUnit.unitType)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionPlayerProduceUnit;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const gridIndex     = action.gridIndex as GridIndex;
         const unitMap       = war.getUnitMap();
@@ -223,13 +222,12 @@ namespace TinyWars.Replay.ReplayModel {
             unit.startRunningView();
 
             unitMap.addUnitOnMap(unit);
-            war.getFogMap().updateMapFromUnitsForPlayerOnArriving(playerIndex, gridIndex, unit.getVisionRangeForPlayer(playerIndex, gridIndex));
         }
 
         unitMap.setNextUnitId(unitId + 1);
         playerInTurn.setFund(playerInTurn.getFund() - action.cost);
 
-        McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+        ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
         actionPlanner.setStateIdle();
     }
@@ -241,7 +239,7 @@ namespace TinyWars.Replay.ReplayModel {
 
         const player = war.getPlayerInTurn();
         DestructionHelpers.destroyPlayerForce(war, player.getPlayerIndex(), true);
-        McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+        ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
         actionPlanner.setStateIdle();
     }
@@ -278,7 +276,6 @@ namespace TinyWars.Replay.ReplayModel {
         FloatText.show(`${Lang.getText(Lang.Type.B0097)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitAttack;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path      = action.path as MovePath;
         const pathNodes = path.nodes;
@@ -291,7 +288,7 @@ namespace TinyWars.Replay.ReplayModel {
             return new Promise<void>(resolve => {
                 attacker.moveViewAlongPath(pathNodes, attacker.getIsDiving(), true, () => {
                     attacker.updateView();
-                    McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                    ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                     actionPlanner.setStateIdle();
                     resolve();
@@ -317,42 +314,83 @@ namespace TinyWars.Replay.ReplayModel {
             const attackerNewHp = Math.max(0, attackerOldHp - (counterDamage || 0));
             attacker.setCurrentHp(attackerNewHp);
             if ((attackerNewHp === 0) && (targetUnit)) {
-                targetUnit.setCurrentPromotion(Math.min(targetUnit.getMaxPromotion(), targetUnit.getCurrentPromotion() + 1));
+                targetUnit.addPromotion();
             }
 
             const targetOldHp = attackTarget.getCurrentHp()!;
             const targetNewHp = Math.max(0, targetOldHp - action.attackDamage);
             attackTarget.setCurrentHp(targetNewHp);
             if ((targetNewHp === 0) && (targetUnit)) {
-                attacker.setCurrentPromotion(Math.min(attacker.getMaxPromotion(), attacker.getCurrentPromotion() + 1));
+                attacker.addPromotion();
             }
 
             const destination = pathNodes[pathNodes.length - 1];
             if (targetUnit) {
-                const attackerPlayer    = war.getPlayer(attacker.getPlayerIndex())!;
-                const targetLostHp      = Helpers.getNormalizedHp(targetOldHp) - Helpers.getNormalizedHp(targetNewHp);
-                if ((targetLostHp > 0)                                                                                      &&
-                    (attackerPlayer.getCoId() != null)                                                                      &&
-                    (!attackerPlayer.getCoUsingSkillType())                                                                   &&
-                    ((attacker.getUnitId() === attackerPlayer.getCoUnitId()) || (attackerPlayer.checkIsInCoZone(destination)))
+                const configVersion         = war.getConfigVersion();
+                const attackerPlayer        = war.getPlayer(attacker.getPlayerIndex())!;
+                const targetLostHp          = Helpers.getNormalizedHp(targetOldHp) - Helpers.getNormalizedHp(targetNewHp);
+                const attackerCoGridIndex   = attackerPlayer.getCoGridIndexOnMap();
+                const isAttackerInCoZone    = (attacker.getUnitId() === attackerPlayer.getCoUnitId()) || (attackerPlayer.checkIsInCoZone(destination, attackerCoGridIndex));
+                if ((targetLostHp > 0)                              &&
+                    (attackerPlayer.getCoId() != null)              &&
+                    (!attackerPlayer.checkCoIsUsingActiveSkill())   &&
+                    (isAttackerInCoZone)
                 ) {
                     attackerPlayer.setCoCurrentEnergy(Math.min(
-                        attackerPlayer.getCoMaxEnergy() || 0,
+                        attackerPlayer.getCoMaxEnergy(),
                         attackerPlayer.getCoCurrentEnergy() + Math.floor(targetLostHp * war.getSettingsEnergyGrowthModifier() / 100)
                     ));
                 }
+                const attackerUnitType = attacker.getType();
+                for (const skillId of attackerPlayer.getCoCurrentSkills() || []) {
+                    const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)!.promotionBonusByAttack;
+                    if ((cfg)                                                                           &&
+                        (targetLostHp >= cfg[2])                                                        &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, attackerUnitType, cfg[1]))
+                    ) {
+                        if (cfg[0] === Types.CoSkillAreaType.Zone) {
+                            if (isAttackerInCoZone) {
+                                attacker.addPromotion();
+                            }
+                        } else if (cfg[0] === Types.CoSkillAreaType.OnMap) {
+                            if (!!attackerCoGridIndex) {
+                                attacker.addPromotion();
+                            }
+                        }
+                    }
+                }
 
                 const targetPlayer      = war.getPlayer(targetUnit.getPlayerIndex())!;
+                const targetCoGridIndex = targetPlayer.getCoGridIndexOnMap();
                 const attackerLostHp    = Helpers.getNormalizedHp(attackerOldHp) - Helpers.getNormalizedHp(attackerNewHp);
-                if ((attackerLostHp > 0)                    &&
-                    (targetPlayer.getCoId() != null)        &&
-                    (!targetPlayer.getCoUsingSkillType())     &&
-                    (targetPlayer.checkIsInCoZone(destination))
+                if ((attackerLostHp > 0)                                        &&
+                    (targetPlayer.getCoId() != null)                            &&
+                    (!targetPlayer.checkCoIsUsingActiveSkill())                 &&
+                    (targetPlayer.checkIsInCoZone(destination, targetCoGridIndex))
                 ) {
                     targetPlayer.setCoCurrentEnergy(Math.min(
-                        targetPlayer.getCoMaxEnergy() || 0,
+                        targetPlayer.getCoMaxEnergy(),
                         targetPlayer.getCoCurrentEnergy() + Math.floor(attackerLostHp * war.getSettingsEnergyGrowthModifier() / 100)
                     ));
+                }
+                const isTargetInCoZone  = targetPlayer.checkIsInCoZone(targetGridIndex, targetCoGridIndex);
+                const targetUnitType    = targetUnit.getType();
+                for (const skillId of targetPlayer.getCoCurrentSkills() || []) {
+                    const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)!.promotionBonusByAttack;
+                    if ((cfg)                                                                           &&
+                        (attackerLostHp >= cfg[2])                                                      &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, targetUnitType, cfg[1]))
+                    ) {
+                        if (cfg[0] === Types.CoSkillAreaType.Zone) {
+                            if (isTargetInCoZone) {
+                                targetUnit.addPromotion();
+                            }
+                        } else if (cfg[0] === Types.CoSkillAreaType.OnMap) {
+                            if (!!targetCoGridIndex) {
+                                targetUnit.addPromotion();
+                            }
+                        }
+                    }
                 }
             }
 
@@ -396,7 +434,7 @@ namespace TinyWars.Replay.ReplayModel {
                         DestructionHelpers.destroyPlayerForce(war, lostPlayerIndex, true);
                     }
 
-                    McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                    ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                     actionPlanner.setStateIdle();
                     resolve();
@@ -411,7 +449,6 @@ namespace TinyWars.Replay.ReplayModel {
         FloatText.show(`${Lang.getText(Lang.Type.B0098)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitBeLoaded;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path          = action.path as MovePath;
         const pathNodes     = path.nodes;
@@ -427,7 +464,7 @@ namespace TinyWars.Replay.ReplayModel {
                 focusUnit.updateView();
                 focusUnit.setViewVisible(false);
                 (loaderUnit) && (loaderUnit.updateView());
-                McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                 actionPlanner.setStateIdle();
                 resolve();
@@ -441,7 +478,6 @@ namespace TinyWars.Replay.ReplayModel {
         FloatText.show(`${Lang.getText(Lang.Type.B0099)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitBuildTile;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path      = action.path as MovePath;
         const pathNodes = path.nodes;
@@ -465,14 +501,13 @@ namespace TinyWars.Replay.ReplayModel {
                 tile.resetByObjectViewIdAndBaseViewId(focusUnit.getBuildTargetTileObjectViewId(tile.getType()));
 
                 const playerIndex = focusUnit.getPlayerIndex();
-                war.getFogMap().updateMapFromTilesForPlayerOnGettingOwnership(playerIndex, endingGridIndex, tile.getVisionRangeForPlayer(playerIndex));
             }
         }
 
         return new Promise<void>(resolve => {
             focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
                 focusUnit.updateView();
-                McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                 actionPlanner.setStateIdle();
                 resolve();
@@ -486,7 +521,6 @@ namespace TinyWars.Replay.ReplayModel {
         FloatText.show(`${Lang.getText(Lang.Type.B0100)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitCaptureTile;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path      = action.path as MovePath;
         const pathNodes = path.nodes;
@@ -498,7 +532,7 @@ namespace TinyWars.Replay.ReplayModel {
             return new Promise<void>(resolve => {
                 focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), true, () => {
                     focusUnit.updateView();
-                    McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                    ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                     actionPlanner.setStateIdle();
                     resolve();
@@ -515,16 +549,10 @@ namespace TinyWars.Replay.ReplayModel {
                 focusUnit.setIsCapturingTile(true);
                 tile.setCurrentCapturePoint(restCapturePoint);
             } else {
-                const fogMap = war.getFogMap();
-                if (previousPlayerIndex > 0) {
-                    fogMap.updateMapFromTilesForPlayerOnLosingOwnership(previousPlayerIndex, destination, tile.getVisionRangeForPlayer(previousPlayerIndex));
-                }
-
                 const playerIndexActing = focusUnit.getPlayerIndex();
                 focusUnit.setIsCapturingTile(false);
                 tile.setCurrentCapturePoint(tile.getMaxCapturePoint());
                 tile.resetByPlayerIndex(playerIndexActing);
-                fogMap.updateMapFromTilesForPlayerOnGettingOwnership(playerIndexActing, destination, tile.getVisionRangeForPlayer(playerIndexActing));
             }
 
             if (!lostPlayerIndex) {
@@ -532,7 +560,7 @@ namespace TinyWars.Replay.ReplayModel {
                     focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false, () => {
                         focusUnit.updateView();
                         tile.updateView();
-                        McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                        ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                         actionPlanner.setStateIdle();
                         resolve();
@@ -545,7 +573,7 @@ namespace TinyWars.Replay.ReplayModel {
                         tile.updateView();
                         FloatText.show(Lang.getFormatedText(Lang.Type.F0016, war.getPlayerManager().getPlayer(lostPlayerIndex).getNickname()));
                         DestructionHelpers.destroyPlayerForce(war, lostPlayerIndex, true);
-                        McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                        ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                         actionPlanner.setStateIdle();
                         resolve();
@@ -561,7 +589,6 @@ namespace TinyWars.Replay.ReplayModel {
         FloatText.show(`${Lang.getText(Lang.Type.B0101)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitDive;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path          = action.path as MovePath;
         const pathNodes     = path.nodes;
@@ -578,7 +605,7 @@ namespace TinyWars.Replay.ReplayModel {
                     const endingGridIndex = pathNodes[pathNodes.length - 1];
                     war.getGridVisionEffect().showEffectDive(endingGridIndex);
                 }
-                McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                 actionPlanner.setStateIdle();
                 resolve();
@@ -592,7 +619,6 @@ namespace TinyWars.Replay.ReplayModel {
         FloatText.show(`${Lang.getText(Lang.Type.B0102)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitDrop;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path              = action.path as MovePath;
         const pathNodes         = path.nodes;
@@ -602,7 +628,6 @@ namespace TinyWars.Replay.ReplayModel {
         moveUnit(war, WarActionCodes.WarActionUnitDrop, path, action.launchUnitId, path.fuelConsumption);
         focusUnit.setState(UnitState.Acted);
 
-        const playerIndex           = focusUnit.getPlayerIndex();
         const fogMap                = war.getFogMap();
         const unitsForDrop          = [] as ReplayUnit[];
         for (const { unitId, gridIndex } of (action.dropDestinations || []) as Types.DropDestination[]) {
@@ -618,7 +643,6 @@ namespace TinyWars.Replay.ReplayModel {
             unitsForDrop.push(unitForDrop);
 
             fogMap.updateMapFromPathsByUnitAndPath(unitForDrop, [endingGridIndex, gridIndex]);
-            fogMap.updateMapFromUnitsForPlayerOnArriving(playerIndex, gridIndex, unitForDrop.getVisionRangeForPlayer(playerIndex, gridIndex));
         }
 
         return new Promise<void>(resolve => {
@@ -643,7 +667,7 @@ namespace TinyWars.Replay.ReplayModel {
                     }))
                 }
                 Promise.all(promises).then(() => {
-                    McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                    ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
                     actionPlanner.setStateIdle();
                     resolve();
                 });
@@ -657,7 +681,6 @@ namespace TinyWars.Replay.ReplayModel {
         FloatText.show(`${Lang.getText(Lang.Type.B0103)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitJoin;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path              = action.path as MovePath;
         const pathNodes         = path.nodes;
@@ -728,7 +751,7 @@ namespace TinyWars.Replay.ReplayModel {
             focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
                 focusUnit.updateView();
                 (targetUnit) && (unitMap.getView().removeUnit(targetUnit.getView()));
-                McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                 actionPlanner.setStateIdle();
                 resolve();
@@ -742,7 +765,6 @@ namespace TinyWars.Replay.ReplayModel {
         FloatText.show(`${Lang.getText(Lang.Type.B0104)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitLaunchFlare;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path      = action.path as MovePath;
         const pathNodes = path.nodes;
@@ -768,7 +790,7 @@ namespace TinyWars.Replay.ReplayModel {
                 }
 
                 focusUnit.updateView();
-                McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                 actionPlanner.setStateIdle();
                 resolve();
@@ -782,7 +804,6 @@ namespace TinyWars.Replay.ReplayModel {
         FloatText.show(`${Lang.getText(Lang.Type.B0105)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitLaunchSilo;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path      = action.path as MovePath;
         const pathNodes = path.nodes;
@@ -795,7 +816,7 @@ namespace TinyWars.Replay.ReplayModel {
             return new Promise<void>(resolve => {
                 focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
                     focusUnit.updateView();
-                    McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                    ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                     actionPlanner.setStateIdle();
                     resolve();
@@ -828,7 +849,7 @@ namespace TinyWars.Replay.ReplayModel {
 
                     focusUnit.updateView();
                     tile.updateView();
-                    McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                    ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                     actionPlanner.setStateIdle();
                     resolve();
@@ -843,7 +864,6 @@ namespace TinyWars.Replay.ReplayModel {
         FloatText.show(`${Lang.getText(Lang.Type.B0139)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitLoadCo;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path      = action.path as MovePath;
         const pathNodes = path.nodes;
@@ -866,7 +886,7 @@ namespace TinyWars.Replay.ReplayModel {
         return new Promise<void>(resolve => {
             focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
                 focusUnit.updateView();
-                McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                 actionPlanner.setStateIdle();
                 resolve();
@@ -880,7 +900,6 @@ namespace TinyWars.Replay.ReplayModel {
         FloatText.show(`${Lang.getText(Lang.Type.B0106)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitProduceUnit;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path          = action.path as MovePath;
         const pathNodes     = path.nodes;
@@ -893,7 +912,7 @@ namespace TinyWars.Replay.ReplayModel {
             return new Promise<void>(resolve => {
                 focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
                     focusUnit.updateView();
-                    McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                    ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                     actionPlanner.setStateIdle();
                     resolve();
@@ -922,7 +941,7 @@ namespace TinyWars.Replay.ReplayModel {
             return new Promise<void>(resolve => {
                 focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
                     focusUnit.updateView();
-                    McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                    ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                     actionPlanner.setStateIdle();
                     resolve();
@@ -937,7 +956,6 @@ namespace TinyWars.Replay.ReplayModel {
         FloatText.show(`${Lang.getText(Lang.Type.B0107)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitSupply;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path      = action.path as MovePath;
         const pathNodes = path.nodes;
@@ -950,7 +968,7 @@ namespace TinyWars.Replay.ReplayModel {
             return new Promise<void>(resolve => {
                 focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
                     focusUnit.updateView();
-                    McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                    ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                     actionPlanner.setStateIdle();
                     resolve();
@@ -962,7 +980,13 @@ namespace TinyWars.Replay.ReplayModel {
             for (const gridIndex of GridIndexHelpers.getAdjacentGrids(pathNodes[pathNodes.length - 1], unitMap.getMapSize())) {
                 const unit = unitMap.getUnitOnMap(gridIndex) as ReplayUnit;
                 if ((unit) && (unit !== focusUnit) && (unit.getPlayerIndex() === playerIndex) && (unit.checkCanBeSupplied())) {
-                    unit.updateOnSupplied();
+                    const maxFlareAmmo          = unit.getFlareMaxAmmo();
+                    const maxPrimaryWeaponAmmo  = unit.getPrimaryWeaponMaxAmmo();
+                    unit.updateByRepairData({
+                        deltaFuel               : unit.getMaxFuel() - unit.getCurrentFuel(),
+                        deltaFlareAmmo          : maxFlareAmmo ? maxFlareAmmo - unit.getFlareCurrentAmmo()! : null,
+                        deltaPrimaryWeaponAmmo  : maxPrimaryWeaponAmmo ? maxPrimaryWeaponAmmo - unit.getPrimaryWeaponCurrentAmmo()! : null,
+                    });
                     suppliedUnits.push(unit);
                 }
             }
@@ -977,7 +1001,7 @@ namespace TinyWars.Replay.ReplayModel {
                         gridVisionEffect.showEffectSupply(unit.getGridIndex());
                     }
 
-                    McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                    ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                     actionPlanner.setStateIdle();
                     resolve();
@@ -992,7 +1016,6 @@ namespace TinyWars.Replay.ReplayModel {
         FloatText.show(`${Lang.getText(Lang.Type.B0108)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitSurface;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path          = action.path as MovePath;
         const pathNodes     = path.nodes;
@@ -1009,7 +1032,7 @@ namespace TinyWars.Replay.ReplayModel {
                     const endingGridIndex = pathNodes[pathNodes.length - 1];
                     war.getGridVisionEffect().showEffectSurface(endingGridIndex);
                 }
-                McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                 actionPlanner.setStateIdle();
                 resolve();
@@ -1023,7 +1046,6 @@ namespace TinyWars.Replay.ReplayModel {
         FloatText.show(`${Lang.getText(Lang.Type.B0142)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitUseCoSkill;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path          = action.path as MovePath;
         const pathNodes     = path.nodes;
@@ -1039,14 +1061,20 @@ namespace TinyWars.Replay.ReplayModel {
         if (isSuccessful) {
             player.setCoUsingSkillType(skillType);
             for (let i = 0; i < skills.length; ++i) {
-                BwHelpers.exeInstantSkill(war, player, skills[i], dataList[i]);
+                BwHelpers.exeInstantSkill(war, player, pathNodes[pathNodes.length - 1], skills[i], dataList[i]);
+            }
+
+            if (skillType === Types.CoSkillType.Power) {
+                player.setCoCurrentEnergy(Math.max(0, player.getCoCurrentEnergy() - player.getCoPowerEnergy()!));
+            } else if (skillType === Types.CoSkillType.SuperPower) {
+                player.setCoCurrentEnergy(Math.max(0, player.getCoCurrentEnergy() - player.getCoSuperPowerEnergy()!));
             }
         }
 
         return new Promise<void>(resolve => {
             focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
                 focusUnit.updateView();
-                McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                 if (isSuccessful) {
                     const gridVisionEffect  = war.getGridVisionEffect();
@@ -1086,7 +1114,6 @@ namespace TinyWars.Replay.ReplayModel {
         FloatText.show(`${Lang.getText(Lang.Type.B0109)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action = data.WarActionUnitWait;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path      = action.path as MovePath;
         const pathNodes = path.nodes;
@@ -1097,7 +1124,7 @@ namespace TinyWars.Replay.ReplayModel {
         return new Promise<void>(resolve => {
             focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
                 focusUnit.updateView();
-                McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                 actionPlanner.setStateIdle();
                 resolve();
@@ -1148,7 +1175,6 @@ namespace TinyWars.Replay.ReplayModel {
             unit.startRunningView();
 
             unitMap.addUnitOnMap(unit);
-            war.getFogMap().updateMapFromUnitsForPlayerOnArriving(playerIndex, gridIndex, unit.getVisionRangeForPlayer(playerIndex, gridIndex));
         }
 
         unitMap.setNextUnitId(unitId + 1);
@@ -1202,42 +1228,83 @@ namespace TinyWars.Replay.ReplayModel {
             const attackerNewHp = Math.max(0, attackerOldHp - (counterDamage || 0));
             attacker.setCurrentHp(attackerNewHp);
             if ((attackerNewHp === 0) && (targetUnit)) {
-                targetUnit.setCurrentPromotion(Math.min(targetUnit.getMaxPromotion(), targetUnit.getCurrentPromotion() + 1));
+                targetUnit.addPromotion();
             }
 
             const targetOldHp = attackTarget.getCurrentHp()!;
             const targetNewHp = Math.max(0, targetOldHp - action.attackDamage);
             attackTarget.setCurrentHp(targetNewHp);
             if ((targetNewHp === 0) && (targetUnit)) {
-                attacker.setCurrentPromotion(Math.min(attacker.getMaxPromotion(), attacker.getCurrentPromotion() + 1));
+                attacker.addPromotion();
             }
 
             const destination = pathNodes[pathNodes.length - 1];
             if (targetUnit) {
-                const attackerPlayer    = war.getPlayer(attacker.getPlayerIndex())!;
-                const targetLostHp      = Helpers.getNormalizedHp(targetOldHp) - Helpers.getNormalizedHp(targetNewHp);
-                if ((targetLostHp > 0)                                                                                      &&
-                    (attackerPlayer.getCoId() != null)                                                                      &&
-                    (!attackerPlayer.getCoUsingSkillType())                                                                   &&
-                    ((attacker.getUnitId() === attackerPlayer.getCoUnitId()) || (attackerPlayer.checkIsInCoZone(destination)))
+                const configVersion         = war.getConfigVersion();
+                const attackerPlayer        = war.getPlayer(attacker.getPlayerIndex())!;
+                const targetLostHp          = Helpers.getNormalizedHp(targetOldHp) - Helpers.getNormalizedHp(targetNewHp);
+                const attackerCoGridIndex   = attackerPlayer.getCoGridIndexOnMap();
+                const isAttackerInCoZone    = (attacker.getUnitId() === attackerPlayer.getCoUnitId()) || (attackerPlayer.checkIsInCoZone(destination, attackerCoGridIndex));
+                if ((targetLostHp > 0)                              &&
+                    (attackerPlayer.getCoId() != null)              &&
+                    (!attackerPlayer.checkCoIsUsingActiveSkill())   &&
+                    (isAttackerInCoZone)
                 ) {
                     attackerPlayer.setCoCurrentEnergy(Math.min(
-                        attackerPlayer.getCoMaxEnergy() || 0,
+                        attackerPlayer.getCoMaxEnergy(),
                         attackerPlayer.getCoCurrentEnergy() + Math.floor(targetLostHp * war.getSettingsEnergyGrowthModifier() / 100)
                     ));
                 }
+                const attackerUnitType = attacker.getType();
+                for (const skillId of attackerPlayer.getCoCurrentSkills() || []) {
+                    const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)!.promotionBonusByAttack;
+                    if ((cfg)                                                                           &&
+                        (targetLostHp >= cfg[2])                                                        &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, attackerUnitType, cfg[1]))
+                    ) {
+                        if (cfg[0] === Types.CoSkillAreaType.Zone) {
+                            if (isAttackerInCoZone) {
+                                attacker.addPromotion();
+                            }
+                        } else if (cfg[0] === Types.CoSkillAreaType.OnMap) {
+                            if (!!attackerCoGridIndex) {
+                                attacker.addPromotion();
+                            }
+                        }
+                    }
+                }
 
                 const targetPlayer      = war.getPlayer(targetUnit.getPlayerIndex())!;
+                const targetCoGridIndex = targetPlayer.getCoGridIndexOnMap();
                 const attackerLostHp    = Helpers.getNormalizedHp(attackerOldHp) - Helpers.getNormalizedHp(attackerNewHp);
-                if ((attackerLostHp > 0)                    &&
-                    (targetPlayer.getCoId() != null)        &&
-                    (!targetPlayer.getCoUsingSkillType())     &&
-                    (targetPlayer.checkIsInCoZone(destination))
+                if ((attackerLostHp > 0)                                        &&
+                    (targetPlayer.getCoId() != null)                            &&
+                    (!targetPlayer.checkCoIsUsingActiveSkill())                 &&
+                    (targetPlayer.checkIsInCoZone(destination, targetCoGridIndex))
                 ) {
                     targetPlayer.setCoCurrentEnergy(Math.min(
-                        targetPlayer.getCoMaxEnergy() || 0,
+                        targetPlayer.getCoMaxEnergy(),
                         targetPlayer.getCoCurrentEnergy() + Math.floor(attackerLostHp * war.getSettingsEnergyGrowthModifier() / 100)
                     ));
+                }
+                const isTargetInCoZone  = targetPlayer.checkIsInCoZone(targetGridIndex, targetCoGridIndex);
+                const targetUnitType    = targetUnit.getType();
+                for (const skillId of targetPlayer.getCoCurrentSkills() || []) {
+                    const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)!.promotionBonusByAttack;
+                    if ((cfg)                                                                           &&
+                        (attackerLostHp >= cfg[2])                                                      &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, targetUnitType, cfg[1]))
+                    ) {
+                        if (cfg[0] === Types.CoSkillAreaType.Zone) {
+                            if (isTargetInCoZone) {
+                                targetUnit.addPromotion();
+                            }
+                        } else if (cfg[0] === Types.CoSkillAreaType.OnMap) {
+                            if (!!targetCoGridIndex) {
+                                targetUnit.addPromotion();
+                            }
+                        }
+                    }
                 }
             }
 
@@ -1306,7 +1373,6 @@ namespace TinyWars.Replay.ReplayModel {
                 tile.resetByObjectViewIdAndBaseViewId(focusUnit.getBuildTargetTileObjectViewId(tile.getType()));
 
                 const playerIndex = focusUnit.getPlayerIndex();
-                war.getFogMap().updateMapFromTilesForPlayerOnGettingOwnership(playerIndex, endingGridIndex, tile.getVisionRangeForPlayer(playerIndex));
             }
         }
     }
@@ -1332,16 +1398,10 @@ namespace TinyWars.Replay.ReplayModel {
                 focusUnit.setIsCapturingTile(true);
                 tile.setCurrentCapturePoint(restCapturePoint);
             } else {
-                const fogMap = war.getFogMap();
-                if (previousPlayerIndex > 0) {
-                    fogMap.updateMapFromTilesForPlayerOnLosingOwnership(previousPlayerIndex, destination, tile.getVisionRangeForPlayer(previousPlayerIndex));
-                }
-
                 const playerIndexActing = focusUnit.getPlayerIndex();
                 focusUnit.setIsCapturingTile(false);
                 tile.setCurrentCapturePoint(tile.getMaxCapturePoint());
                 tile.resetByPlayerIndex(playerIndexActing);
-                fogMap.updateMapFromTilesForPlayerOnGettingOwnership(playerIndexActing, destination, tile.getVisionRangeForPlayer(playerIndexActing));
             }
 
             if (!lostPlayerIndex) {
@@ -1374,7 +1434,6 @@ namespace TinyWars.Replay.ReplayModel {
         moveUnit(war, WarActionCodes.WarActionUnitDrop, path, action.launchUnitId, path.fuelConsumption);
         focusUnit.setState(UnitState.Acted);
 
-        const playerIndex           = focusUnit.getPlayerIndex();
         const fogMap                = war.getFogMap();
         const unitsForDrop          = [] as ReplayUnit[];
         for (const { unitId, gridIndex } of (action.dropDestinations || []) as Types.DropDestination[]) {
@@ -1390,7 +1449,6 @@ namespace TinyWars.Replay.ReplayModel {
             unitsForDrop.push(unitForDrop);
 
             fogMap.updateMapFromPathsByUnitAndPath(unitForDrop, [endingGridIndex, gridIndex]);
-            fogMap.updateMapFromUnitsForPlayerOnArriving(playerIndex, gridIndex, unitForDrop.getVisionRangeForPlayer(playerIndex, gridIndex));
         }
     }
 
@@ -1581,7 +1639,13 @@ namespace TinyWars.Replay.ReplayModel {
             for (const gridIndex of GridIndexHelpers.getAdjacentGrids(pathNodes[pathNodes.length - 1], unitMap.getMapSize())) {
                 const unit = unitMap.getUnitOnMap(gridIndex) as ReplayUnit;
                 if ((unit) && (unit !== focusUnit) && (unit.getPlayerIndex() === playerIndex) && (unit.checkCanBeSupplied())) {
-                    unit.updateOnSupplied();
+                    const maxFlareAmmo          = unit.getFlareMaxAmmo();
+                    const maxPrimaryWeaponAmmo  = unit.getPrimaryWeaponMaxAmmo();
+                    unit.updateByRepairData({
+                        deltaFuel               : unit.getMaxFuel() - unit.getCurrentFuel(),
+                        deltaFlareAmmo          : maxFlareAmmo ? maxFlareAmmo - unit.getFlareCurrentAmmo()! : null,
+                        deltaPrimaryWeaponAmmo  : maxPrimaryWeaponAmmo ? maxPrimaryWeaponAmmo - unit.getPrimaryWeaponCurrentAmmo()! : null,
+                    });
                     suppliedUnits.push(unit);
                 }
             }
@@ -1617,7 +1681,13 @@ namespace TinyWars.Replay.ReplayModel {
         if (isSuccessful) {
             player.setCoUsingSkillType(skillType);
             for (let i = 0; i < skills.length; ++i) {
-                BwHelpers.exeInstantSkill(war, player, skills[i], dataList[i]);
+                BwHelpers.exeInstantSkill(war, player, pathNodes[pathNodes.length - 1], skills[i], dataList[i]);
+            }
+
+            if (skillType === Types.CoSkillType.Power) {
+                player.setCoCurrentEnergy(Math.max(0, player.getCoCurrentEnergy() - player.getCoPowerEnergy()!));
+            } else if (skillType === Types.CoSkillType.SuperPower) {
+                player.setCoCurrentEnergy(Math.max(0, player.getCoCurrentEnergy() - player.getCoSuperPowerEnergy()!));
             }
         }
     }
@@ -1635,72 +1705,12 @@ namespace TinyWars.Replay.ReplayModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Helpers for executors.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    function addUnits(war: ReplayWar, unitsData: SerializedBwUnit[] | undefined | null, isViewVisible: boolean): void {
-        if ((unitsData) && (unitsData.length)) {
-            const unitMap       = war.getUnitMap();
-            const fogMap        = war.getFogMap();
-            const configVersion = war.getConfigVersion();
-
-            for (const unitData of unitsData) {
-                const unit      = new ReplayUnit().init(unitData, configVersion);
-                const isOnMap   = unit.getLoaderUnitId() == null;
-                if (isOnMap) {
-                    unitMap.addUnitOnMap(unit);
-                } else {
-                    unitMap.addUnitLoaded(unit);
-                }
-                unit.startRunning(war);
-                unit.startRunningView();
-                unit.setViewVisible(isViewVisible);
-
-                if (isOnMap) {
-                    const playerIndex   = unit.getPlayerIndex();
-                    const gridIndex     = unit.getGridIndex();
-                    fogMap.updateMapFromUnitsForPlayerOnArriving(playerIndex, gridIndex, unit.getVisionRangeForPlayer(playerIndex, gridIndex));
-                }
-            }
-        }
-    }
-    function updateTiles(war: ReplayWar, tilesData: SerializedBwTile[] | undefined | null): void {
-        if ((tilesData) && (tilesData.length)) {
-            const tileMap   = war.getTileMap();
-            const fogMap    = war.getFogMap();
-
-            for (const tileData of tilesData) {
-                const gridIndex = { x: tileData.gridX, y: tileData.gridY };
-                const tile      = tileMap.getTile(gridIndex);
-                egret.assert(tile.getIsFogEnabled(), "ReplayModel.updateTiles() the tile has no fog and therefore should not be updated!");
-                tile.setFogDisabled(tileData);
-
-                const playerIndex = tile.getPlayerIndex();
-                if (playerIndex > 0) {
-                    fogMap.updateMapFromTilesForPlayerOnGettingOwnership(playerIndex, gridIndex, tile.getVisionRangeForPlayer(playerIndex));
-                }
-            }
-        }
-    }
-    function updateTilesAndUnitsBeforeExecutingAction(
-        war     : ReplayWar,
-        action  : {
-            actingTiles?    : ProtoTypes.ISerializedWarTile[],
-            actingUnits?    : ProtoTypes.ISerializedWarUnit[],
-            discoveredTiles?: ProtoTypes.ISerializedWarTile[],
-            discoveredUnits?: ProtoTypes.ISerializedWarUnit[],
-        }
-    ): void {
-        addUnits(war, action.actingUnits as SerializedBwUnit[] | undefined | null, false);
-        addUnits(war, action.discoveredUnits as SerializedBwUnit[] | undefined | null, false);
-        updateTiles(war, action.actingTiles as SerializedBwTile[] | undefined | null);
-        updateTiles(war, action.discoveredTiles as SerializedBwTile[] | undefined | null);
-    }
-
     function moveUnit(war: ReplayWar, actionCode: WarActionCodes, revisedPath: MovePath, launchUnitId: number | null | undefined, fuelConsumption: number): void {
         const pathNodes             = revisedPath.nodes;
         const beginningGridIndex    = pathNodes[0];
         const fogMap                = war.getFogMap();
         const unitMap               = war.getUnitMap();
         const focusUnit             = unitMap.getUnit(beginningGridIndex, launchUnitId)!;
-        const playerIndex           = focusUnit.getPlayerIndex();
         const isUnitBeLoaded        = (actionCode === WarActionCodes.WarActionUnitBeLoaded) && (!revisedPath.isBlocked);
         fogMap.updateMapFromPathsByUnitAndPath(focusUnit, pathNodes);
 
@@ -1714,12 +1724,6 @@ namespace TinyWars.Replay.ReplayModel {
             focusUnit.setCurrentFuel(focusUnit.getCurrentFuel() - fuelConsumption);
             for (const unit of unitMap.getUnitsLoadedByLoader(focusUnit, true)) {
                 unit.setGridIndex(endingGridIndex);
-            }
-            if (!isLaunching) {
-                fogMap.updateMapFromUnitsForPlayerOnLeaving(playerIndex, beginningGridIndex, focusUnit.getVisionRangeForPlayer(playerIndex, beginningGridIndex)!);
-            }
-            if (!isUnitBeLoaded) {
-                fogMap.updateMapFromUnitsForPlayerOnArriving(playerIndex, endingGridIndex, focusUnit.getVisionRangeForPlayer(playerIndex, endingGridIndex)!);
             }
 
             if (isLaunching) {

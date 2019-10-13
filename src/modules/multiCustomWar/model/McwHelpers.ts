@@ -93,28 +93,16 @@ namespace TinyWars.MultiCustomWar.McwHelpers {
     }
 
     export function updateTilesAndUnitsOnVisibilityChanged(war: McwWar): void {
-        const playerIndexLoggedIn   = war.getPlayerIndexLoggedIn();
-        const fogMap                = war.getFogMap();
-
-        const tileMap = war.getTileMap();
+        const teamIndexLoggedIn = war.getPlayerLoggedIn().getTeamIndex();
+        const tileMap           = war.getTileMap();
         tileMap.forEachTile(tile => {
             const gridIndex = tile.getGridIndex();
-            if (VisibilityHelpers.checkIsTileVisibleToPlayer(war, gridIndex, playerIndexLoggedIn)) {
+            if (VisibilityHelpers.checkIsTileVisibleToTeam(war, gridIndex, teamIndexLoggedIn)) {
                 if (tile.getIsFogEnabled()) {
-                    const playerIndex = tile.getPlayerIndex();
-                    if (playerIndex > 0) {
-                        fogMap.updateMapFromTilesForPlayerOnGettingOwnership(playerIndex, gridIndex, tile.getVisionRangeForPlayer(playerIndex));
-                    }
-
                     tile.setFogDisabled();
                 }
             } else {
                 if (!tile.getIsFogEnabled()) {
-                    const playerIndex = tile.getPlayerIndex();
-                    if (playerIndex > 0) {
-                        fogMap.updateMapFromTilesForPlayerOnLosingOwnership(playerIndex, gridIndex, tile.getVisionRangeForPlayer(playerIndex));
-                    }
-
                     tile.setFogEnabled();
                 }
             }
@@ -123,19 +111,20 @@ namespace TinyWars.MultiCustomWar.McwHelpers {
 
         war.getUnitMap().forEachUnitOnMap(unit => {
             const gridIndex = unit.getGridIndex();
-            if (VisibilityHelpers.checkIsUnitOnMapVisibleToPlayer({
+            if (VisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
                 war,
                 gridIndex,
                 unitType            : unit.getType(),
                 isDiving            : unit.getIsDiving(),
                 unitPlayerIndex     : unit.getPlayerIndex(),
-                observerPlayerIndex : playerIndexLoggedIn,
+                observerTeamIndex   : teamIndexLoggedIn,
             })) {
                 unit.setViewVisible(true);
             } else {
                 DestructionHelpers.removeUnitOnMap(war, gridIndex);
             }
         });
+        DestructionHelpers.removeEnemyUnitsLoaded(war, teamIndexLoggedIn);
 
         tileMap.getView().updateCoZone();
     }

@@ -8,7 +8,7 @@ namespace TinyWars.Replay {
             return ReplayTileView;
         }
 
-        public serialize(): SerializedBwTile {
+        public serialize(): SerializedBwTile | null {
             const data: SerializedBwTile = {
                 gridX         : this.getGridX(),
                 gridY         : this.getGridY(),
@@ -25,7 +25,9 @@ namespace TinyWars.Replay {
             const capturePoint = this.getCurrentCapturePoint();
             (capturePoint !== this.getMaxCapturePoint()) && (data.currentCapturePoint = capturePoint);
 
-            return data;
+            return ReplayHelpers.checkShouldSerializeTile(data, this._getWar().getTileMap().getMapRawData())
+                ? data
+                : null;
         }
 
         ////////////////////////////////////////////////////////////////////////////////

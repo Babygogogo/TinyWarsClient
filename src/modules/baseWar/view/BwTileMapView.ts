@@ -61,7 +61,7 @@ namespace TinyWars.BaseWar {
             const images = this._coZoneImages;
             images.clear();
 
-            const { mapWidth, mapHeight, playersCount } = this._tileMap._getMapRawData();
+            const { mapWidth, mapHeight, playersCount } = this._tileMap.getMapRawData();
             for (let i = 1; i <= playersCount; ++i) {
                 const layer     = new egret.DisplayObjectContainer();
                 const imgSource = `c08_t03_s${Helpers.getNumText(i)}_f01`;
@@ -103,14 +103,14 @@ namespace TinyWars.BaseWar {
         public updateCoZone(): void {
             const tileMap                               = this._tileMap;
             const war                                   = tileMap.getWar();
-            const { mapWidth, mapHeight, playersCount } = tileMap._getMapRawData();
+            const { mapWidth, mapHeight, playersCount } = tileMap.getMapRawData();
 
             for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
                 const matrix        = this._coZoneImages.get(playerIndex);
                 const player        = war.getPlayer(playerIndex);
                 const gridIndex     = player.getCoGridIndexOnMap();
                 const radius        = player.getCoZoneRadius();
-                const canShow       = (!!gridIndex) && (!player.checkCoIsUsingActiveSkill()) && (radius != null);
+                const canShow       = (!!gridIndex) && (radius != null);
 
                 for (let x = 0; x < mapWidth; ++x) {
                     for (let y = 0; y < mapHeight; ++y) {

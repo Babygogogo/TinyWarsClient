@@ -131,7 +131,7 @@ namespace TinyWars.BaseWar {
             return this._mapSize;
         }
 
-        public _getMapRawData(): ProtoTypes.IMapRawData {
+        public getMapRawData(): ProtoTypes.IMapRawData {
             return this._mapRawData;
         }
 

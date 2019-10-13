@@ -93,15 +93,14 @@ namespace TinyWars.BaseWar {
             const gridVisionEffect  = war.getGridVisionEffect();
 
             for (const repairData of data.repairDataByTile || []) {
-                const gridIndex     = repairData.gridIndex as GridIndex;
-                const repairAmount  = repairData.repairAmount || 0;
-                const unit          = unitMap.getUnitOnMap(gridIndex);
-                if (repairAmount > 0) {
+                const gridIndex = repairData.gridIndex as GridIndex;
+                unitMap.getUnit(gridIndex, repairData.unitId).updateByRepairData(repairData);
+
+                if (repairData.deltaHp) {
                     gridVisionEffect.showEffectRepair(gridIndex);
-                } else {
-                    (unit.checkCanBeSupplied()) && (gridVisionEffect.showEffectSupply(gridIndex));
+                } else if ((repairData.deltaFlareAmmo) || (repairData.deltaFuel) || (repairData.deltaPrimaryWeaponAmmo)) {
+                    gridVisionEffect.showEffectSupply(gridIndex);
                 }
-                unit.updateOnRepaired(repairAmount);
             }
         }
         private _runPhaseDestroyUnitsOutOfFuel(data: ProtoTypes.IWarActionPlayerBeginTurn): void {
@@ -124,15 +123,14 @@ namespace TinyWars.BaseWar {
             const gridVisionEffect  = war.getGridVisionEffect();
 
             for (const repairData of data.repairDataByUnit || []) {
-                const repairAmount  = repairData.repairAmount || 0;
-                const gridIndex     = repairData.gridIndex as GridIndex;
-                const unit          = unitMap.getUnitLoadedById(repairData.unitId) || unitMap.getUnitOnMap(gridIndex);
-                if (repairAmount > 0) {
+                const gridIndex = repairData.gridIndex as GridIndex;
+                unitMap.getUnit(gridIndex, repairData.unitId).updateByRepairData(repairData);
+
+                if (repairData.deltaHp) {
                     gridVisionEffect.showEffectRepair(gridIndex);
-                } else {
-                    (unit.checkCanBeSupplied()) && (gridVisionEffect.showEffectSupply(gridIndex));
+                } else if ((repairData.deltaFlareAmmo) || (repairData.deltaFuel) || (repairData.deltaPrimaryWeaponAmmo)) {
+                    gridVisionEffect.showEffectSupply(gridIndex);
                 }
-                unit.updateOnRepaired(repairAmount);
             }
         }
         private _runPhaseRecoverUnitByCo(data: ProtoTypes.IWarActionPlayerBeginTurn): void {
@@ -141,12 +139,13 @@ namespace TinyWars.BaseWar {
             const gridVisionEffect  = war.getGridVisionEffect();
 
             for (const repairData of data.recoverDataByCo || []) {
-                const repairAmount  = repairData.repairAmount || 0;
-                const gridIndex     = repairData.gridIndex as GridIndex;
-                const unit          = unitMap.getUnitLoadedById(repairData.unitId) || unitMap.getUnitOnMap(gridIndex);
-                if (repairAmount > 0) {
+                const gridIndex = repairData.gridIndex as GridIndex;
+                unitMap.getUnit(gridIndex, repairData.unitId).updateByRepairData(repairData);
+
+                if (repairData.deltaHp) {
                     gridVisionEffect.showEffectRepair(gridIndex);
-                    unit.setCurrentHp(unit.getCurrentHp() + repairAmount);
+                } else if ((repairData.deltaFlareAmmo) || (repairData.deltaFuel) || (repairData.deltaPrimaryWeaponAmmo)) {
+                    gridVisionEffect.showEffectSupply(gridIndex);
                 }
             }
         }
@@ -179,13 +178,6 @@ namespace TinyWars.BaseWar {
             player.setCoIsDestroyedInTurn(false);
 
             if (player.checkCoIsUsingActiveSkill()) {
-                const skillType = player.getCoUsingSkillType();
-                if (skillType === Types.CoSkillType.Power) {
-                    player.setCoCurrentEnergy(Math.max(0, player.getCoCurrentEnergy() - player.getCoPowerEnergy()!));
-                } else if (skillType === Types.CoSkillType.SuperPower) {
-                    player.setCoCurrentEnergy(Math.max(0, player.getCoCurrentEnergy() - player.getCoSuperPowerEnergy()!));
-                }
-
                 player.setCoUsingSkillType(Types.CoSkillType.Passive);
                 war.getTileMap().getView().updateCoZone();
             }

@@ -6,7 +6,7 @@
         <GameUi:UiImage source="c04_t01_s02_f01" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" left="0" right="0"
                         top="0" bottom="0" scale9Grid="9,9,2,2" />
         <GameUi:UiLabel id="_labelTitle" text="XXX的履历" y="10" horizontalCenter="0" textColor="0xffffff" size="25" />
-        <GameUi:UiButton id="_btnClose" label="关闭&gt;&gt;" y="10" right="20">
+        <GameUi:UiButton id="_btnClose" label="关闭" y="10" right="20">
             <e:skinName>
                 <e:Skin states="up,down,disabled">
                     <e:Image width="100%" height="100%" />
@@ -18,9 +18,11 @@
         <e:Scroller left="0" right="0" top="40" bottom="5">
             <e:Group x="20" y="0">
                 <e:Group x="20" y="10">
-                    <GameUi:UiLabel text="排位战绩:" textColor="0xFFFFFF" size="20" scaleX="1" scaleY="1" y="0" />
+                    <GameUi:UiLabel id="_labelRankMatchTitle" text="排位战绩:" textColor="0xFFFFFF" size="20" scaleX="1"
+                                    scaleY="1" y="0" />
                     <e:Group x="0" y="25">
-                        <GameUi:UiLabel text="积分:" textColor="0xFFFFFF" size="20" scaleX="1" scaleY="1" x="0" y="0" />
+                        <GameUi:UiLabel id="_labelRankScoreTitle" text="积分:" textColor="0xFFFFFF" size="20" scaleX="1"
+                                        scaleY="1" x="0" y="0" maxTextWidth="50" />
                         <GameUi:UiLabel id="_labelRankScore" text="9999" textColor="0xFFFFFF" size="20" scaleX="1"
                                         scaleY="1" x="60" y="0" />
                         <GameUi:UiLabel id="_labelRankName" text="军士长" textColor="0xFFFFFF" size="20" scaleX="1"
@@ -39,9 +41,11 @@
                     </e:layout>
                 </e:Group>
                 <e:Group x="20" y="100">
-                    <GameUi:UiLabel text="自由对战战绩:" textColor="0xFFFFFF" size="20" scaleX="1" scaleY="1" />
+                    <GameUi:UiLabel id="_labelMcwTitle" text="自由对战战绩:" textColor="0xFFFFFF" size="20" scaleX="1"
+                                    scaleY="1" />
                     <e:Group x="0" y="25">
-                        <GameUi:UiLabel text="2人局:" textColor="0xFFFFFF" size="20" scaleX="1" scaleY="1" y="0" x="0" />
+                        <GameUi:UiLabel id="_labelMcw2pTitle" text="2人局:" textColor="0xFFFFFF" size="20" scaleX="1"
+                                        scaleY="1" y="0" x="0" maxTextWidth="60" />
                         <GameUi:UiLabel id="_labelMcw2pWins" text="9999胜" textColor="0xFFFFFF" size="20" scaleX="1"
                                         scaleY="1" x="70" y="0" />
                         <GameUi:UiLabel id="_labelMcw2pLoses" text="9999负" textColor="0xFFFFFF" size="20" scaleX="1"
@@ -50,7 +54,8 @@
                                         scaleY="1" x="230" y="0" />
                     </e:Group>
                     <e:Group y="50">
-                        <GameUi:UiLabel text="3人局:" textColor="0xFFFFFF" size="20" scaleX="1" scaleY="1" y="0" x="0" />
+                        <GameUi:UiLabel id="_labelMcw3pTitle" text="3人局:" textColor="0xFFFFFF" size="20" scaleX="1"
+                                        scaleY="1" y="0" x="0" maxTextWidth="60" />
                         <GameUi:UiLabel id="_labelMcw3pWins" text="9999胜" textColor="0xFFFFFF" size="20" scaleX="1"
                                         scaleY="1" x="70" y="0" />
                         <GameUi:UiLabel id="_labelMcw3pLoses" text="9999负" textColor="0xFFFFFF" size="20" scaleX="1"
@@ -59,7 +64,8 @@
                                         scaleY="1" x="230" y="0" />
                     </e:Group>
                     <e:Group y="75">
-                        <GameUi:UiLabel text="4人局:" textColor="0xFFFFFF" size="20" scaleX="1" scaleY="1" y="0" x="0" />
+                        <GameUi:UiLabel id="_labelMcw4pTitle" text="4人局:" textColor="0xFFFFFF" size="20" scaleX="1"
+                                        scaleY="1" y="0" x="0" maxTextWidth="60" />
                         <GameUi:UiLabel id="_labelMcw4pWins" text="9999胜" textColor="0xFFFFFF" size="20" scaleX="1"
                                         scaleY="1" x="70" y="0" />
                         <GameUi:UiLabel id="_labelMcw4pLoses" text="9999负" textColor="0xFFFFFF" size="20" scaleX="1"
@@ -73,22 +79,26 @@
                 </e:Group>
                 <e:Group x="360" y="10">
                     <e:Group x="0" y="0">
-                        <GameUi:UiLabel text="注册时间:" textColor="0xFFFFFF" size="20" scaleX="1" scaleY="1" />
+                        <GameUi:UiLabel id="_labelRegisterTimeTitle" text="注册时间:" textColor="0xFFFFFF" size="20"
+                                        scaleX="1" scaleY="1" maxTextWidth="130" />
                         <GameUi:UiLabel id="_labelRegisterTime" text="2010年10月10日10时10分10秒" textColor="0xFFFFFF"
                                         size="20" scaleX="1" scaleY="1" x="140" />
                     </e:Group>
                     <e:Group x="480" y="0">
-                        <GameUi:UiLabel text="上次登陆时间:" textColor="0xFFFFFF" size="20" scaleX="1" scaleY="1" />
+                        <GameUi:UiLabel id="_labelLastLoginTimeTitle" text="上次登陆时间:" textColor="0xFFFFFF" size="20"
+                                        scaleX="1" scaleY="1" maxTextWidth="130" />
                         <GameUi:UiLabel id="_labelLastLoginTime" text="2010年10月10日10时10分10秒" textColor="0xFFFFFF"
                                         size="20" scaleX="1" scaleY="1" x="140" />
                     </e:Group>
                     <e:Group x="0" y="35">
-                        <GameUi:UiLabel text="在线时长:" textColor="0xFFFFFF" size="20" scaleX="1" scaleY="1" />
+                        <GameUi:UiLabel id="_labelOnlineTimeTitle" text="在线时长:" textColor="0xFFFFFF" size="20"
+                                        scaleX="1" scaleY="1" maxTextWidth="130" />
                         <GameUi:UiLabel id="_labelOnlineTime" text="1000时10分10秒" textColor="0xFFFFFF" size="20"
                                         scaleX="1" scaleY="1" x="140" />
                     </e:Group>
                     <e:Group x="480" y="35">
-                        <GameUi:UiLabel text="登陆次数:" textColor="0xFFFFFF" size="20" scaleX="1" scaleY="1" />
+                        <GameUi:UiLabel id="_labelLoginCountTitle" text="登陆次数:" textColor="0xFFFFFF" size="20"
+                                        scaleX="1" scaleY="1" maxTextWidth="130" />
                         <GameUi:UiLabel id="_labelLoginCount" text="999" textColor="0xFFFFFF" size="20" scaleX="1"
                                         scaleY="1" x="140" />
                     </e:Group>

@@ -219,7 +219,7 @@ namespace TinyWars.MultiCustomRoom {
                 ? ConfigManager.getCustomCoIdList(ConfigManager.getNewestConfigVersion())
                 : ConfigManager.getCoIdListInTier(ConfigManager.getNewestConfigVersion(), renderer.getCoTier());
 
-            if (!renderer.getIsSelected()) {
+            if (renderer.getState() === CoTierState.Unavailable) {
                 for (const coId of coIdList) {
                     McrModel.removeCreateWarBannedCoId(coId);
                 }
@@ -359,7 +359,7 @@ namespace TinyWars.MultiCustomRoom {
             for (const tier of ConfigManager.getCoTiers(ConfigManager.getNewestConfigVersion())) {
                 const renderer = new RendererForCoTier();
                 renderer.setCoTier(tier);
-                renderer.setIsSelected(true);
+                renderer.setState(CoTierState.AllAvailable);
                 renderer.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedCoTierRenderer, this);
                 this._renderersForCoTiers.push(renderer);
                 this._groupCoTiers.addChild(renderer);
@@ -367,7 +367,7 @@ namespace TinyWars.MultiCustomRoom {
 
             const rendererForCustomCo = new RendererForCoTier();
             rendererForCustomCo.setIsCustomSwitch(true);
-            rendererForCustomCo.setIsSelected(true);
+            rendererForCustomCo.setState(CoTierState.AllAvailable);
             rendererForCustomCo.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedCoTierRenderer, this);
             this._renderersForCoTiers.push(rendererForCustomCo);
             this._groupCoTiers.addChild(rendererForCustomCo);
@@ -383,12 +383,15 @@ namespace TinyWars.MultiCustomRoom {
         private _updateGroupCoTiers(): void {
             const bannedCoIdList = McrModel.getCreateWarBannedCoIdList();
             for (const renderer of this._renderersForCoTiers) {
-                if (renderer.getIsCustomSwitch()) {
-                    const includedCoIdList = ConfigManager.getCustomCoIdList(ConfigManager.getNewestConfigVersion());
-                    renderer.setIsSelected(includedCoIdList.every(coId => bannedCoIdList.indexOf(coId) < 0));
+                const includedCoIdList = renderer.getIsCustomSwitch()
+                    ? ConfigManager.getCustomCoIdList(ConfigManager.getNewestConfigVersion())
+                    : ConfigManager.getCoIdListInTier(ConfigManager.getNewestConfigVersion(), renderer.getCoTier());
+                if (includedCoIdList.every(coId => bannedCoIdList.indexOf(coId) < 0)) {
+                    renderer.setState(CoTierState.AllAvailable);
+                } else if (includedCoIdList.every(coId => bannedCoIdList.indexOf(coId) >= 0)) {
+                    renderer.setState(CoTierState.Unavailable);
                 } else {
-                    const includedCoIdList = ConfigManager.getCoIdListInTier(ConfigManager.getNewestConfigVersion(), renderer.getCoTier());
-                    renderer.setIsSelected(includedCoIdList.every(coId => bannedCoIdList.indexOf(coId) < 0));
+                    renderer.setState(CoTierState.PartialAvailable);
                 }
             }
         }
@@ -420,13 +423,19 @@ namespace TinyWars.MultiCustomRoom {
         }
     }
 
+    const enum CoTierState {
+        AllAvailable,
+        PartialAvailable,
+        Unavailable,
+    }
+
     class RendererForCoTier extends eui.ItemRenderer {
         private _imgSelected: GameUi.UiImage;
         private _labelName  : GameUi.UiLabel;
 
         private _tier           : number;
         private _isCustomSwitch = false;
-        private _isSelected     : boolean;
+        private _state          : CoTierState;
 
         public constructor() {
             super();
@@ -450,13 +459,19 @@ namespace TinyWars.MultiCustomRoom {
             return this._isCustomSwitch;
         }
 
-        public setIsSelected(isSelected: boolean): void {
-            this._isSelected            = isSelected;
-            this._labelName.textColor   = isSelected ? 0x00ff00 : 0xff0000;
-            Helpers.changeColor(this._imgSelected, isSelected ? Types.ColorType.Origin : Types.ColorType.Gray);
+        public setState(state: CoTierState): void {
+            this._state = state;
+            if (state === CoTierState.AllAvailable) {
+                this._labelName.textColor = 0x00FF00;
+            } else if (state === CoTierState.PartialAvailable) {
+                this._labelName.textColor = 0xFFFF00;
+            } else {
+                this._labelName.textColor = 0xFF0000;
+            }
+            Helpers.changeColor(this._imgSelected, state === CoTierState.AllAvailable ? Types.ColorType.Origin : Types.ColorType.Gray);
         }
-        public getIsSelected(): boolean {
-            return this._isSelected;
+        public getState(): CoTierState {
+            return this._state;
         }
     }
 

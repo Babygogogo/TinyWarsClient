@@ -32,7 +32,7 @@ namespace TinyWars.Replay {
             if (data.isDefeated) {
                 FloatText.show(Lang.getFormatedText(Lang.Type.F0014, war.getPlayer(playerIndex).getNickname()));
                 DestructionHelpers.destroyPlayerForce(war, playerIndex, true);
-                McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
             } else {
                 war.getUnitMap().forEachUnitOnMap(unit => (unit.getPlayerIndex() === playerIndex) && (unit.updateView()));
             }
@@ -45,20 +45,14 @@ namespace TinyWars.Replay {
             this._resetFogForPlayerInTurn();
         }
         protected _runPhaseResetVisionForNextPlayer(): void {
-            const playerIndex   = this.getPlayerIndexInTurn();
-            const war           = this._getWar();
-            const fogMap        = war.getFogMap();
-            fogMap.resetMapFromTilesForPlayer(playerIndex);
-            fogMap.resetMapFromUnitsForPlayer(playerIndex);
-
             this._resetFogForPlayerInTurn();
         }
 
         private _resetFogForPlayerInTurn(): void {
-            const war           = this._getWar();
-            const playerIndex   = this.getPlayerIndexInTurn();
+            const war       = this._getWar();
+            const teamIndex = war.getPlayerInTurn().getTeamIndex();
             war.getTileMap().forEachTile(tile => {
-                if (!VisibilityHelpers.checkIsTileVisibleToPlayer(war, tile.getGridIndex(), playerIndex)) {
+                if (!VisibilityHelpers.checkIsTileVisibleToTeam(war, tile.getGridIndex(), teamIndex)) {
                     tile.setFogEnabled();
                 } else {
                     tile.setFogDisabled();
