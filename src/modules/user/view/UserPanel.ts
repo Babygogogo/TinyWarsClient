@@ -16,12 +16,18 @@ namespace TinyWars.User {
         private _labelTitle         : GameUi.UiLabel;
         private _btnChangeNickname  : GameUi.UiButton;
 
+        private _labelRankMatchTitle: GameUi.UiLabel;
+        private _labelRankScoreTitle: GameUi.UiLabel;
         private _labelRankScore     : GameUi.UiLabel;
         private _labelRankName      : GameUi.UiLabel;
         private _labelRank2pWins    : GameUi.UiLabel;
         private _labelRank2pLoses   : GameUi.UiLabel;
         private _labelRank2pDraws   : GameUi.UiLabel;
 
+        private _labelMcwTitle      : GameUi.UiLabel;
+        private _labelMcw2pTitle    : GameUi.UiLabel;
+        private _labelMcw3pTitle    : GameUi.UiLabel;
+        private _labelMcw4pTitle    : GameUi.UiLabel;
         private _labelMcw2pWins     : GameUi.UiLabel;
         private _labelMcw2pLoses    : GameUi.UiLabel;
         private _labelMcw2pDraws    : GameUi.UiLabel;
@@ -32,13 +38,17 @@ namespace TinyWars.User {
         private _labelMcw4pLoses    : GameUi.UiLabel;
         private _labelMcw4pDraws    : GameUi.UiLabel;
 
-        private _labelRegisterTime  : GameUi.UiLabel;
-        private _labelLastLoginTime : GameUi.UiLabel;
-        private _labelOnlineTime    : GameUi.UiLabel;
-        private _labelLoginCount    : GameUi.UiLabel;
-        private _labelUserId        : GameUi.UiLabel;
-        private _labelDiscordId     : GameUi.UiLabel;
-        private _btnChangeDiscordId : GameUi.UiButton;
+        private _labelRegisterTimeTitle : GameUi.UiLabel;
+        private _labelLastLoginTimeTitle: GameUi.UiLabel;
+        private _labelOnlineTimeTitle   : GameUi.UiLabel;
+        private _labelLoginCountTitle   : GameUi.UiLabel;
+        private _labelRegisterTime      : GameUi.UiLabel;
+        private _labelLastLoginTime     : GameUi.UiLabel;
+        private _labelOnlineTime        : GameUi.UiLabel;
+        private _labelLoginCount        : GameUi.UiLabel;
+        private _labelUserId            : GameUi.UiLabel;
+        private _labelDiscordId         : GameUi.UiLabel;
+        private _btnChangeDiscordId     : GameUi.UiButton;
 
         private _btnShowOnlineUsers : GameUi.UiButton;
         private _btnChangeLanguage  : GameUi.UiButton;
@@ -72,6 +82,7 @@ namespace TinyWars.User {
                 { type: Notify.Type.SGetUserPublicInfo,     callback: this._onNotifySGetUserPublicInfo },
                 { type: Notify.Type.SUserChangeNickname,    callback: this._onNotifySUserChangeNickname },
                 { type: Notify.Type.SUserChangeDiscordId,   callback: this._onNotifySUserChangeDiscordId },
+                { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
             ];
             this._uiListeners = [
                 { ui: this._btnChangeNickname,  callback: this._onTouchedBtnChangeNickname },
@@ -105,6 +116,9 @@ namespace TinyWars.User {
                 UserProxy.reqGetUserPublicInfo(this._userId);
             }
         }
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateOnLanguageChanged();
+        }
         private _onTouchedBtnChangeNickname(e: egret.TouchEvent): void {
             UserChangeNicknamePanel.show();
         }
@@ -122,7 +136,6 @@ namespace TinyWars.User {
             LocalStorage.setLanguageType(languageType);
 
             Notify.dispatch(Notify.Type.LanguageChanged);
-            this._updateView();
         }
 
         private _updateView(): void {
@@ -130,10 +143,45 @@ namespace TinyWars.User {
             const info      = userId != null ? UserModel.getUserInfo(userId) : undefined;
             if (info) {
                 const isSelf                    = userId === UserModel.getSelfUserId();
-                this._labelTitle.text           = Lang.getFormatedText(Lang.Type.F0009, info.nickname);
                 this._btnChangeNickname.visible = isSelf;
 
                 this._labelRankScore.text   = `${info.rank2pScore}`;
+
+                this._labelRegisterTime.text        = Helpers.getTimestampShortText(info.registerTime);
+                this._labelLastLoginTime.text       = Helpers.getTimestampShortText(info.lastLoginTime);
+                this._labelLoginCount.text          = `${info.loginCount}`;
+                this._labelUserId.text              = `${userId}`;
+                this._labelDiscordId.text           = info.discordId || "--";
+                this._btnChangeDiscordId.visible    = isSelf;
+            }
+
+            this._updateOnLanguageChanged();
+        }
+
+        private _updateOnLanguageChanged(): void {
+            this._labelRankMatchTitle.text      = `${Lang.getText(Lang.Type.B0198)}:`;
+            this._labelRankScoreTitle.text      = `${Lang.getText(Lang.Type.B0199)}:`;
+            this._labelRegisterTimeTitle.text   = `${Lang.getText(Lang.Type.B0194)}:`;
+            this._labelLastLoginTimeTitle.text  = `${Lang.getText(Lang.Type.B0195)}:`;
+            this._labelOnlineTimeTitle.text     = `${Lang.getText(Lang.Type.B0196)}:`;
+            this._labelLoginCountTitle.text     = `${Lang.getText(Lang.Type.B0197)}:`;
+            this._labelMcwTitle.text            = `${Lang.getText(Lang.Type.B0200)}:`;
+            this._labelMcw2pTitle.text          = `${Lang.getText(Lang.Type.B0201)}:`;
+            this._labelMcw3pTitle.text          = `${Lang.getText(Lang.Type.B0202)}:`;
+            this._labelMcw4pTitle.text          = `${Lang.getText(Lang.Type.B0203)}:`;
+            this._btnClose.label                = `${Lang.getText(Lang.Type.B0204)}`;
+
+            this._updateLabelsForLanguage();
+            this._updateBtnChangeNickname();
+            this._updateBtnChangeDiscordId();
+            this._updateBtnShowOnlineUsers();
+            this._updateBtnChangeLanguage();
+        }
+        private _updateLabelsForLanguage(): void {
+            const userId    = this._userId;
+            const info      = userId != null ? UserModel.getUserInfo(userId) : undefined;
+            if (info) {
+                this._labelTitle.text       = Lang.getFormatedText(Lang.Type.F0009, info.nickname);
                 this._labelRankName.text    = ConfigManager.getRankName(ConfigManager.getNewestConfigVersion(), info.rank2pScore);
                 this._labelRank2pWins.text  = Lang.getFormatedText(Lang.Type.F0010, info.rank2pWins);
                 this._labelRank2pLoses.text = Lang.getFormatedText(Lang.Type.F0011, info.rank2pLoses);
@@ -148,22 +196,9 @@ namespace TinyWars.User {
                 this._labelMcw4pWins.text   = Lang.getFormatedText(Lang.Type.F0010, info.mcw4pWins);
                 this._labelMcw4pLoses.text  = Lang.getFormatedText(Lang.Type.F0011, info.mcw4pLoses);
                 this._labelMcw4pDraws.text  = Lang.getFormatedText(Lang.Type.F0012, info.mcw4pDraws);
-
-                this._labelRegisterTime.text        = Helpers.getTimestampShortText(info.registerTime);
-                this._labelLastLoginTime.text       = Helpers.getTimestampShortText(info.lastLoginTime);
-                this._labelOnlineTime.text          = Helpers.getTimeDurationText(info.onlineTime);
-                this._labelLoginCount.text          = `${info.loginCount}`;
-                this._labelUserId.text              = `${userId}`;
-                this._labelDiscordId.text           = info.discordId || "--";
-                this._btnChangeDiscordId.visible    = isSelf;
+                this._labelOnlineTime.text  = Helpers.getTimeDurationText(info.onlineTime);
             }
-
-            this._updateBtnChangeNickname();
-            this._updateBtnChangeDiscordId();
-            this._updateBtnShowOnlineUsers();
-            this._updateBtnChangeLanguage();
         }
-
         private _updateBtnChangeNickname(): void {
             this._btnChangeNickname.label = Lang.getText(Lang.Type.B0149);
         }
