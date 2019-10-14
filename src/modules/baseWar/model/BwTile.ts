@@ -277,11 +277,8 @@ namespace TinyWars.BaseWar {
             return this._playerIndex;
         }
 
-        public getTeamIndex(): number | undefined {
-            const playerIndex = this.getPlayerIndex();
-            return playerIndex === 0
-                ? undefined
-                : this._war.getPlayer(playerIndex)!.getTeamIndex();
+        public getTeamIndex(): number {
+            return this._war.getPlayer(this.getPlayerIndex())!.getTeamIndex();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -379,23 +376,18 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for vision.
         ////////////////////////////////////////////////////////////////////////////////
-        public getCfgVisionRange(): number | undefined {
-            return this._templateCfg.visionRange;
+        public getCfgVisionRange(): number {
+            return this._templateCfg.visionRange!;
         }
         public checkIsVisionEnabledForAllPlayers(): boolean {
             return this._templateCfg.isVisionEnabledForAllPlayers === 1;
         }
 
-        public getVisionRangeForPlayer(playerIndex: number): number | null | undefined {
-            const cfgVision = this.getCfgVisionRange();
-            if (cfgVision == null) {
-                return undefined;
+        public getVisionRangeForPlayer(playerIndex: number): number | null {
+            if ((!this.checkIsVisionEnabledForAllPlayers()) && (this.getPlayerIndex() !== playerIndex)) {
+                return null;
             } else {
-                if ((!this.checkIsVisionEnabledForAllPlayers()) && (this.getPlayerIndex() !== playerIndex)) {
-                    return undefined;
-                } else {
-                    return Math.max(0, cfgVision + this._getWar().getSettingsVisionRangeModifier());
-                }
+                return Math.max(0, this.getCfgVisionRange() + this._getWar().getSettingsVisionRangeModifier());
             }
         }
 
