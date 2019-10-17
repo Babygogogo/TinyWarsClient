@@ -43,6 +43,10 @@ export const enum NetErrorCode {
     McwEndTurn_NotInTurn,
     McwEndTurn_NotVotedForDraw,
 
+    McwWatchRequestWatcher_TargetPlayerLost,
+    McwWatchRequestWatcher_AlreadyRequested,
+    McwWatchRequestWatcher_AlreadyAccepted,
+
     ServerDisconnect_ServerMaintenance,
 }
 }

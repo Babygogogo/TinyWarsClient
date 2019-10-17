@@ -2739,6 +2739,12 @@ export declare interface ISerializedWarPlayer {
 
     /** SerializedWarPlayer coIsDestroyedInTurn */
     coIsDestroyedInTurn?: (boolean|null);
+
+    /** SerializedWarPlayer watcherUserIdList */
+    watcherUserIdList?: (number[]|null);
+
+    /** SerializedWarPlayer watcherRequesterIdList */
+    watcherRequesterIdList?: (number[]|null);
 }
 
 /** Represents a SerializedWarPlayer. */
@@ -2785,6 +2791,12 @@ export declare class SerializedWarPlayer implements ISerializedWarPlayer {
 
     /** SerializedWarPlayer coIsDestroyedInTurn. */
     public coIsDestroyedInTurn: boolean;
+
+    /** SerializedWarPlayer watcherUserIdList. */
+    public watcherUserIdList: number[];
+
+    /** SerializedWarPlayer watcherRequesterIdList. */
+    public watcherRequesterIdList: number[];
 
     /**
      * Creates a new SerializedWarPlayer instance using the specified properties.
@@ -8113,6 +8125,42 @@ export declare interface IMessageContainer {
     /** MessageContainer S_McrGetReplayData */
     S_McrGetReplayData?: (IS_McrGetReplayData|null);
 
+    /** MessageContainer C_McwWatchRequestWatcher */
+    C_McwWatchRequestWatcher?: (IC_McwWatchRequestWatcher|null);
+
+    /** MessageContainer S_McwWatchRequestWatcher */
+    S_McwWatchRequestWatcher?: (IS_McwWatchRequestWatcher|null);
+
+    /** MessageContainer C_McwWatchAcceptWatcher */
+    C_McwWatchAcceptWatcher?: (IC_McwWatchAcceptWatcher|null);
+
+    /** MessageContainer S_McwWatchAcceptWatcher */
+    S_McwWatchAcceptWatcher?: (IS_McwWatchAcceptWatcher|null);
+
+    /** MessageContainer C_McwWatchDeclineWatcher */
+    C_McwWatchDeclineWatcher?: (IC_McwWatchDeclineWatcher|null);
+
+    /** MessageContainer S_McwWatchDeclineWatcher */
+    S_McwWatchDeclineWatcher?: (IS_McwWatchDeclineWatcher|null);
+
+    /** MessageContainer C_McwWatchDeleteWatcher */
+    C_McwWatchDeleteWatcher?: (IC_McwWatchDeleteWatcher|null);
+
+    /** MessageContainer S_McwWatchDeleteWatcher */
+    S_McwWatchDeleteWatcher?: (IS_McwWatchDeleteWatcher|null);
+
+    /** MessageContainer C_McwWatchGetOngoingInfos */
+    C_McwWatchGetOngoingInfos?: (IC_McwWatchGetOngoingInfos|null);
+
+    /** MessageContainer S_McwWatchGetOngoingInfos */
+    S_McwWatchGetOngoingInfos?: (IS_McwWatchGetOngoingInfos|null);
+
+    /** MessageContainer C_McwWatchContinueWar */
+    C_McwWatchContinueWar?: (IC_McwWatchContinueWar|null);
+
+    /** MessageContainer S_McwWatchContinueWar */
+    S_McwWatchContinueWar?: (IS_McwWatchContinueWar|null);
+
     /** MessageContainer C_McwPlayerBeginTurn */
     C_McwPlayerBeginTurn?: (IC_McwPlayerBeginTurn|null);
 
@@ -8389,6 +8437,42 @@ export declare class MessageContainer implements IMessageContainer {
 
     /** MessageContainer S_McrGetReplayData. */
     public S_McrGetReplayData?: (IS_McrGetReplayData|null);
+
+    /** MessageContainer C_McwWatchRequestWatcher. */
+    public C_McwWatchRequestWatcher?: (IC_McwWatchRequestWatcher|null);
+
+    /** MessageContainer S_McwWatchRequestWatcher. */
+    public S_McwWatchRequestWatcher?: (IS_McwWatchRequestWatcher|null);
+
+    /** MessageContainer C_McwWatchAcceptWatcher. */
+    public C_McwWatchAcceptWatcher?: (IC_McwWatchAcceptWatcher|null);
+
+    /** MessageContainer S_McwWatchAcceptWatcher. */
+    public S_McwWatchAcceptWatcher?: (IS_McwWatchAcceptWatcher|null);
+
+    /** MessageContainer C_McwWatchDeclineWatcher. */
+    public C_McwWatchDeclineWatcher?: (IC_McwWatchDeclineWatcher|null);
+
+    /** MessageContainer S_McwWatchDeclineWatcher. */
+    public S_McwWatchDeclineWatcher?: (IS_McwWatchDeclineWatcher|null);
+
+    /** MessageContainer C_McwWatchDeleteWatcher. */
+    public C_McwWatchDeleteWatcher?: (IC_McwWatchDeleteWatcher|null);
+
+    /** MessageContainer S_McwWatchDeleteWatcher. */
+    public S_McwWatchDeleteWatcher?: (IS_McwWatchDeleteWatcher|null);
+
+    /** MessageContainer C_McwWatchGetOngoingInfos. */
+    public C_McwWatchGetOngoingInfos?: (IC_McwWatchGetOngoingInfos|null);
+
+    /** MessageContainer S_McwWatchGetOngoingInfos. */
+    public S_McwWatchGetOngoingInfos?: (IS_McwWatchGetOngoingInfos|null);
+
+    /** MessageContainer C_McwWatchContinueWar. */
+    public C_McwWatchContinueWar?: (IC_McwWatchContinueWar|null);
+
+    /** MessageContainer S_McwWatchContinueWar. */
+    public S_McwWatchContinueWar?: (IS_McwWatchContinueWar|null);
 
     /** MessageContainer C_McwPlayerBeginTurn. */
     public C_McwPlayerBeginTurn?: (IC_McwPlayerBeginTurn|null);
@@ -13106,6 +13190,1164 @@ export declare class S_McrGetReplayData implements IS_McrGetReplayData {
 
     /**
      * Converts this S_McrGetReplayData to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_McwWatchRequestWatcher. */
+export declare interface IC_McwWatchRequestWatcher {
+
+    /** C_McwWatchRequestWatcher warId */
+    warId?: (number|null);
+
+    /** C_McwWatchRequestWatcher targetUserId */
+    targetUserId?: (number|null);
+}
+
+/** Represents a C_McwWatchRequestWatcher. */
+export declare class C_McwWatchRequestWatcher implements IC_McwWatchRequestWatcher {
+
+    /**
+     * Constructs a new C_McwWatchRequestWatcher.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_McwWatchRequestWatcher);
+
+    /** C_McwWatchRequestWatcher warId. */
+    public warId: number;
+
+    /** C_McwWatchRequestWatcher targetUserId. */
+    public targetUserId: number;
+
+    /**
+     * Creates a new C_McwWatchRequestWatcher instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_McwWatchRequestWatcher instance
+     */
+    public static create(properties?: IC_McwWatchRequestWatcher): C_McwWatchRequestWatcher;
+
+    /**
+     * Encodes the specified C_McwWatchRequestWatcher message. Does not implicitly {@link C_McwWatchRequestWatcher.verify|verify} messages.
+     * @param message C_McwWatchRequestWatcher message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_McwWatchRequestWatcher, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_McwWatchRequestWatcher message, length delimited. Does not implicitly {@link C_McwWatchRequestWatcher.verify|verify} messages.
+     * @param message C_McwWatchRequestWatcher message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_McwWatchRequestWatcher, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_McwWatchRequestWatcher message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_McwWatchRequestWatcher
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_McwWatchRequestWatcher;
+
+    /**
+     * Decodes a C_McwWatchRequestWatcher message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_McwWatchRequestWatcher
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_McwWatchRequestWatcher;
+
+    /**
+     * Verifies a C_McwWatchRequestWatcher message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_McwWatchRequestWatcher message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_McwWatchRequestWatcher
+     */
+    public static fromObject(object: { [k: string]: any }): C_McwWatchRequestWatcher;
+
+    /**
+     * Creates a plain object from a C_McwWatchRequestWatcher message. Also converts values to other types if specified.
+     * @param message C_McwWatchRequestWatcher
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_McwWatchRequestWatcher, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_McwWatchRequestWatcher to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_McwWatchRequestWatcher. */
+export declare interface IS_McwWatchRequestWatcher {
+
+    /** S_McwWatchRequestWatcher errorCode */
+    errorCode?: (number|null);
+
+    /** S_McwWatchRequestWatcher warId */
+    warId?: (number|null);
+
+    /** S_McwWatchRequestWatcher targetUserId */
+    targetUserId?: (number|null);
+}
+
+/** Represents a S_McwWatchRequestWatcher. */
+export declare class S_McwWatchRequestWatcher implements IS_McwWatchRequestWatcher {
+
+    /**
+     * Constructs a new S_McwWatchRequestWatcher.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_McwWatchRequestWatcher);
+
+    /** S_McwWatchRequestWatcher errorCode. */
+    public errorCode: number;
+
+    /** S_McwWatchRequestWatcher warId. */
+    public warId: number;
+
+    /** S_McwWatchRequestWatcher targetUserId. */
+    public targetUserId: number;
+
+    /**
+     * Creates a new S_McwWatchRequestWatcher instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_McwWatchRequestWatcher instance
+     */
+    public static create(properties?: IS_McwWatchRequestWatcher): S_McwWatchRequestWatcher;
+
+    /**
+     * Encodes the specified S_McwWatchRequestWatcher message. Does not implicitly {@link S_McwWatchRequestWatcher.verify|verify} messages.
+     * @param message S_McwWatchRequestWatcher message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_McwWatchRequestWatcher, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_McwWatchRequestWatcher message, length delimited. Does not implicitly {@link S_McwWatchRequestWatcher.verify|verify} messages.
+     * @param message S_McwWatchRequestWatcher message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_McwWatchRequestWatcher, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_McwWatchRequestWatcher message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_McwWatchRequestWatcher
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_McwWatchRequestWatcher;
+
+    /**
+     * Decodes a S_McwWatchRequestWatcher message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_McwWatchRequestWatcher
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_McwWatchRequestWatcher;
+
+    /**
+     * Verifies a S_McwWatchRequestWatcher message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_McwWatchRequestWatcher message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_McwWatchRequestWatcher
+     */
+    public static fromObject(object: { [k: string]: any }): S_McwWatchRequestWatcher;
+
+    /**
+     * Creates a plain object from a S_McwWatchRequestWatcher message. Also converts values to other types if specified.
+     * @param message S_McwWatchRequestWatcher
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_McwWatchRequestWatcher, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_McwWatchRequestWatcher to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_McwWatchAcceptWatcher. */
+export declare interface IC_McwWatchAcceptWatcher {
+
+    /** C_McwWatchAcceptWatcher warId */
+    warId?: (number|null);
+
+    /** C_McwWatchAcceptWatcher watcherUserId */
+    watcherUserId?: (number|null);
+}
+
+/** Represents a C_McwWatchAcceptWatcher. */
+export declare class C_McwWatchAcceptWatcher implements IC_McwWatchAcceptWatcher {
+
+    /**
+     * Constructs a new C_McwWatchAcceptWatcher.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_McwWatchAcceptWatcher);
+
+    /** C_McwWatchAcceptWatcher warId. */
+    public warId: number;
+
+    /** C_McwWatchAcceptWatcher watcherUserId. */
+    public watcherUserId: number;
+
+    /**
+     * Creates a new C_McwWatchAcceptWatcher instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_McwWatchAcceptWatcher instance
+     */
+    public static create(properties?: IC_McwWatchAcceptWatcher): C_McwWatchAcceptWatcher;
+
+    /**
+     * Encodes the specified C_McwWatchAcceptWatcher message. Does not implicitly {@link C_McwWatchAcceptWatcher.verify|verify} messages.
+     * @param message C_McwWatchAcceptWatcher message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_McwWatchAcceptWatcher, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_McwWatchAcceptWatcher message, length delimited. Does not implicitly {@link C_McwWatchAcceptWatcher.verify|verify} messages.
+     * @param message C_McwWatchAcceptWatcher message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_McwWatchAcceptWatcher, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_McwWatchAcceptWatcher message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_McwWatchAcceptWatcher
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_McwWatchAcceptWatcher;
+
+    /**
+     * Decodes a C_McwWatchAcceptWatcher message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_McwWatchAcceptWatcher
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_McwWatchAcceptWatcher;
+
+    /**
+     * Verifies a C_McwWatchAcceptWatcher message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_McwWatchAcceptWatcher message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_McwWatchAcceptWatcher
+     */
+    public static fromObject(object: { [k: string]: any }): C_McwWatchAcceptWatcher;
+
+    /**
+     * Creates a plain object from a C_McwWatchAcceptWatcher message. Also converts values to other types if specified.
+     * @param message C_McwWatchAcceptWatcher
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_McwWatchAcceptWatcher, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_McwWatchAcceptWatcher to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_McwWatchAcceptWatcher. */
+export declare interface IS_McwWatchAcceptWatcher {
+
+    /** S_McwWatchAcceptWatcher errorCode */
+    errorCode?: (number|null);
+
+    /** S_McwWatchAcceptWatcher warId */
+    warId?: (number|null);
+
+    /** S_McwWatchAcceptWatcher watcherUserId */
+    watcherUserId?: (number|null);
+}
+
+/** Represents a S_McwWatchAcceptWatcher. */
+export declare class S_McwWatchAcceptWatcher implements IS_McwWatchAcceptWatcher {
+
+    /**
+     * Constructs a new S_McwWatchAcceptWatcher.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_McwWatchAcceptWatcher);
+
+    /** S_McwWatchAcceptWatcher errorCode. */
+    public errorCode: number;
+
+    /** S_McwWatchAcceptWatcher warId. */
+    public warId: number;
+
+    /** S_McwWatchAcceptWatcher watcherUserId. */
+    public watcherUserId: number;
+
+    /**
+     * Creates a new S_McwWatchAcceptWatcher instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_McwWatchAcceptWatcher instance
+     */
+    public static create(properties?: IS_McwWatchAcceptWatcher): S_McwWatchAcceptWatcher;
+
+    /**
+     * Encodes the specified S_McwWatchAcceptWatcher message. Does not implicitly {@link S_McwWatchAcceptWatcher.verify|verify} messages.
+     * @param message S_McwWatchAcceptWatcher message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_McwWatchAcceptWatcher, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_McwWatchAcceptWatcher message, length delimited. Does not implicitly {@link S_McwWatchAcceptWatcher.verify|verify} messages.
+     * @param message S_McwWatchAcceptWatcher message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_McwWatchAcceptWatcher, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_McwWatchAcceptWatcher message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_McwWatchAcceptWatcher
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_McwWatchAcceptWatcher;
+
+    /**
+     * Decodes a S_McwWatchAcceptWatcher message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_McwWatchAcceptWatcher
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_McwWatchAcceptWatcher;
+
+    /**
+     * Verifies a S_McwWatchAcceptWatcher message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_McwWatchAcceptWatcher message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_McwWatchAcceptWatcher
+     */
+    public static fromObject(object: { [k: string]: any }): S_McwWatchAcceptWatcher;
+
+    /**
+     * Creates a plain object from a S_McwWatchAcceptWatcher message. Also converts values to other types if specified.
+     * @param message S_McwWatchAcceptWatcher
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_McwWatchAcceptWatcher, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_McwWatchAcceptWatcher to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_McwWatchDeclineWatcher. */
+export declare interface IC_McwWatchDeclineWatcher {
+
+    /** C_McwWatchDeclineWatcher warId */
+    warId?: (number|null);
+
+    /** C_McwWatchDeclineWatcher watcherUserId */
+    watcherUserId?: (number|null);
+}
+
+/** Represents a C_McwWatchDeclineWatcher. */
+export declare class C_McwWatchDeclineWatcher implements IC_McwWatchDeclineWatcher {
+
+    /**
+     * Constructs a new C_McwWatchDeclineWatcher.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_McwWatchDeclineWatcher);
+
+    /** C_McwWatchDeclineWatcher warId. */
+    public warId: number;
+
+    /** C_McwWatchDeclineWatcher watcherUserId. */
+    public watcherUserId: number;
+
+    /**
+     * Creates a new C_McwWatchDeclineWatcher instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_McwWatchDeclineWatcher instance
+     */
+    public static create(properties?: IC_McwWatchDeclineWatcher): C_McwWatchDeclineWatcher;
+
+    /**
+     * Encodes the specified C_McwWatchDeclineWatcher message. Does not implicitly {@link C_McwWatchDeclineWatcher.verify|verify} messages.
+     * @param message C_McwWatchDeclineWatcher message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_McwWatchDeclineWatcher, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_McwWatchDeclineWatcher message, length delimited. Does not implicitly {@link C_McwWatchDeclineWatcher.verify|verify} messages.
+     * @param message C_McwWatchDeclineWatcher message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_McwWatchDeclineWatcher, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_McwWatchDeclineWatcher message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_McwWatchDeclineWatcher
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_McwWatchDeclineWatcher;
+
+    /**
+     * Decodes a C_McwWatchDeclineWatcher message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_McwWatchDeclineWatcher
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_McwWatchDeclineWatcher;
+
+    /**
+     * Verifies a C_McwWatchDeclineWatcher message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_McwWatchDeclineWatcher message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_McwWatchDeclineWatcher
+     */
+    public static fromObject(object: { [k: string]: any }): C_McwWatchDeclineWatcher;
+
+    /**
+     * Creates a plain object from a C_McwWatchDeclineWatcher message. Also converts values to other types if specified.
+     * @param message C_McwWatchDeclineWatcher
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_McwWatchDeclineWatcher, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_McwWatchDeclineWatcher to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_McwWatchDeclineWatcher. */
+export declare interface IS_McwWatchDeclineWatcher {
+
+    /** S_McwWatchDeclineWatcher errorCode */
+    errorCode?: (number|null);
+
+    /** S_McwWatchDeclineWatcher warId */
+    warId?: (number|null);
+
+    /** S_McwWatchDeclineWatcher watcherUserId */
+    watcherUserId?: (number|null);
+}
+
+/** Represents a S_McwWatchDeclineWatcher. */
+export declare class S_McwWatchDeclineWatcher implements IS_McwWatchDeclineWatcher {
+
+    /**
+     * Constructs a new S_McwWatchDeclineWatcher.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_McwWatchDeclineWatcher);
+
+    /** S_McwWatchDeclineWatcher errorCode. */
+    public errorCode: number;
+
+    /** S_McwWatchDeclineWatcher warId. */
+    public warId: number;
+
+    /** S_McwWatchDeclineWatcher watcherUserId. */
+    public watcherUserId: number;
+
+    /**
+     * Creates a new S_McwWatchDeclineWatcher instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_McwWatchDeclineWatcher instance
+     */
+    public static create(properties?: IS_McwWatchDeclineWatcher): S_McwWatchDeclineWatcher;
+
+    /**
+     * Encodes the specified S_McwWatchDeclineWatcher message. Does not implicitly {@link S_McwWatchDeclineWatcher.verify|verify} messages.
+     * @param message S_McwWatchDeclineWatcher message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_McwWatchDeclineWatcher, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_McwWatchDeclineWatcher message, length delimited. Does not implicitly {@link S_McwWatchDeclineWatcher.verify|verify} messages.
+     * @param message S_McwWatchDeclineWatcher message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_McwWatchDeclineWatcher, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_McwWatchDeclineWatcher message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_McwWatchDeclineWatcher
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_McwWatchDeclineWatcher;
+
+    /**
+     * Decodes a S_McwWatchDeclineWatcher message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_McwWatchDeclineWatcher
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_McwWatchDeclineWatcher;
+
+    /**
+     * Verifies a S_McwWatchDeclineWatcher message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_McwWatchDeclineWatcher message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_McwWatchDeclineWatcher
+     */
+    public static fromObject(object: { [k: string]: any }): S_McwWatchDeclineWatcher;
+
+    /**
+     * Creates a plain object from a S_McwWatchDeclineWatcher message. Also converts values to other types if specified.
+     * @param message S_McwWatchDeclineWatcher
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_McwWatchDeclineWatcher, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_McwWatchDeclineWatcher to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_McwWatchDeleteWatcher. */
+export declare interface IC_McwWatchDeleteWatcher {
+
+    /** C_McwWatchDeleteWatcher warId */
+    warId?: (number|null);
+
+    /** C_McwWatchDeleteWatcher watcherUserId */
+    watcherUserId?: (number|null);
+}
+
+/** Represents a C_McwWatchDeleteWatcher. */
+export declare class C_McwWatchDeleteWatcher implements IC_McwWatchDeleteWatcher {
+
+    /**
+     * Constructs a new C_McwWatchDeleteWatcher.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_McwWatchDeleteWatcher);
+
+    /** C_McwWatchDeleteWatcher warId. */
+    public warId: number;
+
+    /** C_McwWatchDeleteWatcher watcherUserId. */
+    public watcherUserId: number;
+
+    /**
+     * Creates a new C_McwWatchDeleteWatcher instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_McwWatchDeleteWatcher instance
+     */
+    public static create(properties?: IC_McwWatchDeleteWatcher): C_McwWatchDeleteWatcher;
+
+    /**
+     * Encodes the specified C_McwWatchDeleteWatcher message. Does not implicitly {@link C_McwWatchDeleteWatcher.verify|verify} messages.
+     * @param message C_McwWatchDeleteWatcher message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_McwWatchDeleteWatcher, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_McwWatchDeleteWatcher message, length delimited. Does not implicitly {@link C_McwWatchDeleteWatcher.verify|verify} messages.
+     * @param message C_McwWatchDeleteWatcher message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_McwWatchDeleteWatcher, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_McwWatchDeleteWatcher message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_McwWatchDeleteWatcher
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_McwWatchDeleteWatcher;
+
+    /**
+     * Decodes a C_McwWatchDeleteWatcher message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_McwWatchDeleteWatcher
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_McwWatchDeleteWatcher;
+
+    /**
+     * Verifies a C_McwWatchDeleteWatcher message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_McwWatchDeleteWatcher message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_McwWatchDeleteWatcher
+     */
+    public static fromObject(object: { [k: string]: any }): C_McwWatchDeleteWatcher;
+
+    /**
+     * Creates a plain object from a C_McwWatchDeleteWatcher message. Also converts values to other types if specified.
+     * @param message C_McwWatchDeleteWatcher
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_McwWatchDeleteWatcher, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_McwWatchDeleteWatcher to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_McwWatchDeleteWatcher. */
+export declare interface IS_McwWatchDeleteWatcher {
+
+    /** S_McwWatchDeleteWatcher errorCode */
+    errorCode?: (number|null);
+
+    /** S_McwWatchDeleteWatcher warId */
+    warId?: (number|null);
+
+    /** S_McwWatchDeleteWatcher watcherUserId */
+    watcherUserId?: (number|null);
+}
+
+/** Represents a S_McwWatchDeleteWatcher. */
+export declare class S_McwWatchDeleteWatcher implements IS_McwWatchDeleteWatcher {
+
+    /**
+     * Constructs a new S_McwWatchDeleteWatcher.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_McwWatchDeleteWatcher);
+
+    /** S_McwWatchDeleteWatcher errorCode. */
+    public errorCode: number;
+
+    /** S_McwWatchDeleteWatcher warId. */
+    public warId: number;
+
+    /** S_McwWatchDeleteWatcher watcherUserId. */
+    public watcherUserId: number;
+
+    /**
+     * Creates a new S_McwWatchDeleteWatcher instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_McwWatchDeleteWatcher instance
+     */
+    public static create(properties?: IS_McwWatchDeleteWatcher): S_McwWatchDeleteWatcher;
+
+    /**
+     * Encodes the specified S_McwWatchDeleteWatcher message. Does not implicitly {@link S_McwWatchDeleteWatcher.verify|verify} messages.
+     * @param message S_McwWatchDeleteWatcher message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_McwWatchDeleteWatcher, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_McwWatchDeleteWatcher message, length delimited. Does not implicitly {@link S_McwWatchDeleteWatcher.verify|verify} messages.
+     * @param message S_McwWatchDeleteWatcher message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_McwWatchDeleteWatcher, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_McwWatchDeleteWatcher message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_McwWatchDeleteWatcher
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_McwWatchDeleteWatcher;
+
+    /**
+     * Decodes a S_McwWatchDeleteWatcher message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_McwWatchDeleteWatcher
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_McwWatchDeleteWatcher;
+
+    /**
+     * Verifies a S_McwWatchDeleteWatcher message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_McwWatchDeleteWatcher message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_McwWatchDeleteWatcher
+     */
+    public static fromObject(object: { [k: string]: any }): S_McwWatchDeleteWatcher;
+
+    /**
+     * Creates a plain object from a S_McwWatchDeleteWatcher message. Also converts values to other types if specified.
+     * @param message S_McwWatchDeleteWatcher
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_McwWatchDeleteWatcher, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_McwWatchDeleteWatcher to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_McwWatchGetOngoingInfos. */
+export declare interface IC_McwWatchGetOngoingInfos {
+}
+
+/** Represents a C_McwWatchGetOngoingInfos. */
+export declare class C_McwWatchGetOngoingInfos implements IC_McwWatchGetOngoingInfos {
+
+    /**
+     * Constructs a new C_McwWatchGetOngoingInfos.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_McwWatchGetOngoingInfos);
+
+    /**
+     * Creates a new C_McwWatchGetOngoingInfos instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_McwWatchGetOngoingInfos instance
+     */
+    public static create(properties?: IC_McwWatchGetOngoingInfos): C_McwWatchGetOngoingInfos;
+
+    /**
+     * Encodes the specified C_McwWatchGetOngoingInfos message. Does not implicitly {@link C_McwWatchGetOngoingInfos.verify|verify} messages.
+     * @param message C_McwWatchGetOngoingInfos message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_McwWatchGetOngoingInfos, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_McwWatchGetOngoingInfos message, length delimited. Does not implicitly {@link C_McwWatchGetOngoingInfos.verify|verify} messages.
+     * @param message C_McwWatchGetOngoingInfos message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_McwWatchGetOngoingInfos, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_McwWatchGetOngoingInfos message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_McwWatchGetOngoingInfos
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_McwWatchGetOngoingInfos;
+
+    /**
+     * Decodes a C_McwWatchGetOngoingInfos message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_McwWatchGetOngoingInfos
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_McwWatchGetOngoingInfos;
+
+    /**
+     * Verifies a C_McwWatchGetOngoingInfos message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_McwWatchGetOngoingInfos message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_McwWatchGetOngoingInfos
+     */
+    public static fromObject(object: { [k: string]: any }): C_McwWatchGetOngoingInfos;
+
+    /**
+     * Creates a plain object from a C_McwWatchGetOngoingInfos message. Also converts values to other types if specified.
+     * @param message C_McwWatchGetOngoingInfos
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_McwWatchGetOngoingInfos, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_McwWatchGetOngoingInfos to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_McwWatchGetOngoingInfos. */
+export declare interface IS_McwWatchGetOngoingInfos {
+
+    /** S_McwWatchGetOngoingInfos infos */
+    infos?: (IMcwOngoingDetail[]|null);
+}
+
+/** Represents a S_McwWatchGetOngoingInfos. */
+export declare class S_McwWatchGetOngoingInfos implements IS_McwWatchGetOngoingInfos {
+
+    /**
+     * Constructs a new S_McwWatchGetOngoingInfos.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_McwWatchGetOngoingInfos);
+
+    /** S_McwWatchGetOngoingInfos infos. */
+    public infos: IMcwOngoingDetail[];
+
+    /**
+     * Creates a new S_McwWatchGetOngoingInfos instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_McwWatchGetOngoingInfos instance
+     */
+    public static create(properties?: IS_McwWatchGetOngoingInfos): S_McwWatchGetOngoingInfos;
+
+    /**
+     * Encodes the specified S_McwWatchGetOngoingInfos message. Does not implicitly {@link S_McwWatchGetOngoingInfos.verify|verify} messages.
+     * @param message S_McwWatchGetOngoingInfos message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_McwWatchGetOngoingInfos, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_McwWatchGetOngoingInfos message, length delimited. Does not implicitly {@link S_McwWatchGetOngoingInfos.verify|verify} messages.
+     * @param message S_McwWatchGetOngoingInfos message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_McwWatchGetOngoingInfos, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_McwWatchGetOngoingInfos message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_McwWatchGetOngoingInfos
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_McwWatchGetOngoingInfos;
+
+    /**
+     * Decodes a S_McwWatchGetOngoingInfos message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_McwWatchGetOngoingInfos
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_McwWatchGetOngoingInfos;
+
+    /**
+     * Verifies a S_McwWatchGetOngoingInfos message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_McwWatchGetOngoingInfos message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_McwWatchGetOngoingInfos
+     */
+    public static fromObject(object: { [k: string]: any }): S_McwWatchGetOngoingInfos;
+
+    /**
+     * Creates a plain object from a S_McwWatchGetOngoingInfos message. Also converts values to other types if specified.
+     * @param message S_McwWatchGetOngoingInfos
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_McwWatchGetOngoingInfos, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_McwWatchGetOngoingInfos to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_McwWatchContinueWar. */
+export declare interface IC_McwWatchContinueWar {
+
+    /** C_McwWatchContinueWar warId */
+    warId?: (number|null);
+}
+
+/** Represents a C_McwWatchContinueWar. */
+export declare class C_McwWatchContinueWar implements IC_McwWatchContinueWar {
+
+    /**
+     * Constructs a new C_McwWatchContinueWar.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_McwWatchContinueWar);
+
+    /** C_McwWatchContinueWar warId. */
+    public warId: number;
+
+    /**
+     * Creates a new C_McwWatchContinueWar instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_McwWatchContinueWar instance
+     */
+    public static create(properties?: IC_McwWatchContinueWar): C_McwWatchContinueWar;
+
+    /**
+     * Encodes the specified C_McwWatchContinueWar message. Does not implicitly {@link C_McwWatchContinueWar.verify|verify} messages.
+     * @param message C_McwWatchContinueWar message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_McwWatchContinueWar, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_McwWatchContinueWar message, length delimited. Does not implicitly {@link C_McwWatchContinueWar.verify|verify} messages.
+     * @param message C_McwWatchContinueWar message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_McwWatchContinueWar, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_McwWatchContinueWar message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_McwWatchContinueWar
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_McwWatchContinueWar;
+
+    /**
+     * Decodes a C_McwWatchContinueWar message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_McwWatchContinueWar
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_McwWatchContinueWar;
+
+    /**
+     * Verifies a C_McwWatchContinueWar message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_McwWatchContinueWar message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_McwWatchContinueWar
+     */
+    public static fromObject(object: { [k: string]: any }): C_McwWatchContinueWar;
+
+    /**
+     * Creates a plain object from a C_McwWatchContinueWar message. Also converts values to other types if specified.
+     * @param message C_McwWatchContinueWar
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_McwWatchContinueWar, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_McwWatchContinueWar to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_McwWatchContinueWar. */
+export declare interface IS_McwWatchContinueWar {
+
+    /** S_McwWatchContinueWar errorCode */
+    errorCode?: (number|null);
+
+    /** S_McwWatchContinueWar warId */
+    warId?: (number|null);
+
+    /** S_McwWatchContinueWar war */
+    war?: (ISerializedWar|null);
+}
+
+/** Represents a S_McwWatchContinueWar. */
+export declare class S_McwWatchContinueWar implements IS_McwWatchContinueWar {
+
+    /**
+     * Constructs a new S_McwWatchContinueWar.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_McwWatchContinueWar);
+
+    /** S_McwWatchContinueWar errorCode. */
+    public errorCode: number;
+
+    /** S_McwWatchContinueWar warId. */
+    public warId: number;
+
+    /** S_McwWatchContinueWar war. */
+    public war?: (ISerializedWar|null);
+
+    /**
+     * Creates a new S_McwWatchContinueWar instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_McwWatchContinueWar instance
+     */
+    public static create(properties?: IS_McwWatchContinueWar): S_McwWatchContinueWar;
+
+    /**
+     * Encodes the specified S_McwWatchContinueWar message. Does not implicitly {@link S_McwWatchContinueWar.verify|verify} messages.
+     * @param message S_McwWatchContinueWar message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_McwWatchContinueWar, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_McwWatchContinueWar message, length delimited. Does not implicitly {@link S_McwWatchContinueWar.verify|verify} messages.
+     * @param message S_McwWatchContinueWar message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_McwWatchContinueWar, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_McwWatchContinueWar message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_McwWatchContinueWar
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_McwWatchContinueWar;
+
+    /**
+     * Decodes a S_McwWatchContinueWar message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_McwWatchContinueWar
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_McwWatchContinueWar;
+
+    /**
+     * Verifies a S_McwWatchContinueWar message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_McwWatchContinueWar message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_McwWatchContinueWar
+     */
+    public static fromObject(object: { [k: string]: any }): S_McwWatchContinueWar;
+
+    /**
+     * Creates a plain object from a S_McwWatchContinueWar message. Also converts values to other types if specified.
+     * @param message S_McwWatchContinueWar
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_McwWatchContinueWar, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_McwWatchContinueWar to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };

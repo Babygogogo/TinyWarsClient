@@ -7,13 +7,15 @@ namespace TinyWars.BaseWar {
     import GridIndexHelpers = Utility.GridIndexHelpers;
 
     export abstract class BwPlayer {
-        private _fund               : number;
-        private _hasVotedForDraw    : boolean;
-        private _isAlive            : boolean;
-        private _playerIndex        : number;
-        private _teamIndex          : number;
-        private _userId?            : number;
-        private _nickname           : string;
+        private _fund                   : number;
+        private _hasVotedForDraw        : boolean;
+        private _isAlive                : boolean;
+        private _playerIndex            : number;
+        private _teamIndex              : number;
+        private _watcherUserIds         : Set<number>;
+        private _watcherRequesterIds    : Set<number>;
+        private _userId?                : number;
+        private _nickname?              : string | null;
 
         private _coId               : number | null | undefined;
         private _coUnitId           : number | null | undefined;
@@ -29,6 +31,8 @@ namespace TinyWars.BaseWar {
             this.setIsAlive(data.isAlive!);
             this._setPlayerIndex(data.playerIndex!);
             this._setTeamIndex(data.teamIndex!);
+            this._setWatcherUserIds(data.watcherUserIdList || []);
+            this._setWatcherRequesterIds(data.watcherRequesterIdList || []);
             this._setUserId(data.userId);
             this._setNickname(data.nickname || Lang.getText(Lang.Type.B0111));
             this._setCoId(data.coId);
@@ -80,6 +84,32 @@ namespace TinyWars.BaseWar {
         }
         public getTeamIndex(): number {
             return this._teamIndex;
+        }
+
+        private _setWatcherUserIds(list: number[]): void {
+            this._watcherUserIds = new Set(list);
+        }
+        public getWatcherUserIds(): Set<number> {
+            return this._watcherUserIds;
+        }
+        public addWatcherUserId(userId: number): void {
+            this.getWatcherUserIds().add(userId);
+        }
+        public removeWatcherUserId(userId: number): void {
+            this.getWatcherUserIds().delete(userId);
+        }
+
+        private _setWatcherRequesterIds(list: number[]): void {
+            this._watcherRequesterIds = new Set(list);
+        }
+        public getWatcherRequesterIds(): Set<number> {
+            return this._watcherRequesterIds;
+        }
+        public addWatcherRequester(userId: number): void {
+            this.getWatcherRequesterIds().add(userId);
+        }
+        public removeWatcherRequester(userId: number): void {
+            this.getWatcherRequesterIds().delete(userId);
         }
 
         private _setUserId(id: number | undefined): void {

@@ -501,4 +501,11 @@ namespace TinyWars.Utility.Types {
         OnMap   = 1,
         Halo    = 2,
     }
+
+    export const enum McwWatchRequestWatcherStatus {
+        Succeed,
+        TargetPlayerLost,
+        AlreadyRequested,
+        AlreadyAccepted,
+    }
 }
