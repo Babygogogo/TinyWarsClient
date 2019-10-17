@@ -306,6 +306,7 @@ namespace TinyWars.Utility.Types {
 
     export const enum SyncWarRequestType {
         PlayerRequest,
+        PlayerForce,
         ReconnectionRequest,
     }
 

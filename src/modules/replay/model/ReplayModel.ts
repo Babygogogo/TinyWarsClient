@@ -688,7 +688,6 @@ namespace TinyWars.Replay.ReplayModel {
         const unitMap           = war.getUnitMap();
         const focusUnit         = unitMap.getUnit(pathNodes[0], action.launchUnitId);
         const targetUnit        = path.isBlocked ? undefined : unitMap.getUnitOnMap(endingGridIndex);
-        (targetUnit) && (unitMap.removeUnitOnMap(endingGridIndex, false));
         moveUnit(war, WarActionCodes.WarActionUnitJoin, path, action.launchUnitId, path.fuelConsumption);
         focusUnit.setState(UnitState.Acted);
 
@@ -1461,7 +1460,6 @@ namespace TinyWars.Replay.ReplayModel {
         const unitMap           = war.getUnitMap();
         const focusUnit         = unitMap.getUnit(pathNodes[0], action.launchUnitId);
         const targetUnit        = path.isBlocked ? undefined : unitMap.getUnitOnMap(endingGridIndex);
-        (targetUnit) && (unitMap.removeUnitOnMap(endingGridIndex, false));
         moveUnit(war, WarActionCodes.WarActionUnitJoin, path, action.launchUnitId, path.fuelConsumption);
         focusUnit.setState(UnitState.Acted);
 
@@ -1724,6 +1722,10 @@ namespace TinyWars.Replay.ReplayModel {
             focusUnit.setCurrentFuel(focusUnit.getCurrentFuel() - fuelConsumption);
             for (const unit of unitMap.getUnitsLoadedByLoader(focusUnit, true)) {
                 unit.setGridIndex(endingGridIndex);
+            }
+
+            if ((actionCode === WarActionCodes.WarActionUnitJoin) && (!revisedPath.isBlocked)) {
+                unitMap.removeUnitOnMap(endingGridIndex, false);
             }
 
             if (isLaunching) {

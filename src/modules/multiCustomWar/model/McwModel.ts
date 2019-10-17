@@ -100,23 +100,31 @@ namespace TinyWars.MultiCustomWar.McwModel {
                 });
 
             } else if (status === Types.SyncWarStatus.NoError) {
-                const cachedActionsCount = _cachedActions.length;
-                if (data.nextActionId !== _war.getNextActionId() + cachedActionsCount) {
+                const requestType = data.requestType as Types.SyncWarRequestType;
+                if (requestType === Types.SyncWarRequestType.PlayerForce) {
                     _war.setIsEnded(true);
                     await Utility.FlowManager.gotoMultiCustomWar(data.war as Types.SerializedBwWar),
-                    FloatText.show(Lang.getText(Lang.Type.A0036));
+                    FloatText.show(Lang.getText(Lang.Type.A0038));
+
                 } else {
-                    const requestType = data.requestType as Types.SyncWarRequestType;
-                    if (requestType === Types.SyncWarRequestType.PlayerRequest) {
-                        FloatText.show(Lang.getText(Lang.Type.A0038));
+                    const cachedActionsCount = _cachedActions.length;
+                    if (data.nextActionId !== _war.getNextActionId() + cachedActionsCount) {
+                        _war.setIsEnded(true);
+                        await Utility.FlowManager.gotoMultiCustomWar(data.war as Types.SerializedBwWar);
+                        FloatText.show(Lang.getText(Lang.Type.A0036));
+
                     } else {
-                        // Nothing to do.
-                    }
-                    if (!_war.getIsExecutingAction()) {
-                        if (cachedActionsCount) {
-                            _checkAndRunFirstCachedAction();
+                        if (requestType === Types.SyncWarRequestType.PlayerRequest) {
+                            FloatText.show(Lang.getText(Lang.Type.A0038));
                         } else {
-                            _checkAndRequestBeginTurn();
+                            // Nothing to do.
+                        }
+                        if (!_war.getIsExecutingAction()) {
+                            if (cachedActionsCount) {
+                                _checkAndRunFirstCachedAction();
+                            } else {
+                                _checkAndRequestBeginTurn();
+                            }
                         }
                     }
                 }
@@ -446,7 +454,6 @@ namespace TinyWars.MultiCustomWar.McwModel {
 
             const destination       = pathNodes[pathNodes.length - 1];
             const attackerPlayer    = war.getPlayer(attacker.getPlayerIndex())!;
-            const targetPlayer      = war.getPlayer(targetUnit.getPlayerIndex())!;
             if (targetUnit) {
                 const configVersion         = war.getConfigVersion();
                 const targetLostHp          = Helpers.getNormalizedHp(targetOldHp) - Helpers.getNormalizedHp(targetNewHp);
@@ -481,6 +488,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
                     }
                 }
 
+                const targetPlayer      = war.getPlayer(targetUnit.getPlayerIndex())!;
                 const targetCoGridIndex = targetPlayer.getCoGridIndexOnMap();
                 const attackerLostHp    = Helpers.getNormalizedHp(attackerOldHp) - Helpers.getNormalizedHp(attackerNewHp);
                 if ((attackerLostHp > 0)                                        &&
@@ -529,7 +537,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
                 attackerPlayer.setCoCurrentEnergy(action.attackerCoEnergy);
             }
             if (action.targetCoEnergy != null) {
-                targetPlayer.setCoCurrentEnergy(action.targetCoEnergy);
+                war.getPlayer(targetUnit.getPlayerIndex())!.setCoCurrentEnergy(action.targetCoEnergy);
             }
 
             const lostPlayerIndex   = action.lostPlayerIndex;
@@ -836,7 +844,6 @@ namespace TinyWars.MultiCustomWar.McwModel {
         const unitMap           = war.getUnitMap();
         const focusUnit         = unitMap.getUnit(pathNodes[0], action.launchUnitId);
         const targetUnit        = path.isBlocked ? undefined : unitMap.getUnitOnMap(endingGridIndex);
-        (targetUnit) && (unitMap.removeUnitOnMap(endingGridIndex, false));
         moveUnit(war, WarActionCodes.WarActionUnitJoin, path, action.launchUnitId, path.fuelConsumption);
         focusUnit.setState(UnitState.Acted);
 
@@ -1362,6 +1369,10 @@ namespace TinyWars.MultiCustomWar.McwModel {
             focusUnit.setCurrentFuel(focusUnit.getCurrentFuel() - fuelConsumption);
             for (const unit of unitMap.getUnitsLoadedByLoader(focusUnit, true)) {
                 unit.setGridIndex(endingGridIndex);
+            }
+
+            if ((actionCode === WarActionCodes.WarActionUnitJoin) && (!revisedPath.isBlocked)) {
+                unitMap.removeUnitOnMap(endingGridIndex, false);
             }
 
             if (isLaunching) {

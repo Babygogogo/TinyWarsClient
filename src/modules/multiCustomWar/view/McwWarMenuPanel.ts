@@ -284,7 +284,13 @@ namespace TinyWars.MultiCustomWar {
             return {
                 name    : Lang.getText(Lang.Type.B0089),
                 callback: () => {
-                    McwProxy.reqMcwPlayerSyncWar(this._war, Types.SyncWarRequestType.PlayerRequest);
+                    const war = this._war;
+                    McwProxy.reqMcwPlayerSyncWar(
+                        war,
+                        war.getActionPlanner().checkIsStateRequesting()
+                            ? Types.SyncWarRequestType.PlayerForce
+                            : Types.SyncWarRequestType.PlayerRequest
+                    );
                     this.close();
                 },
             };

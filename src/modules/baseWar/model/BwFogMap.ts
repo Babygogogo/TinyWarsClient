@@ -144,18 +144,22 @@ namespace TinyWars.BaseWar {
             if (!this.checkHasFogCurrently()) {
                 return Visibility.TrueVision;
             } else {
-                const tileMap           = this._getWar().getTileMap();
-                const { width, height } = tileMap.getMapSize();
-                for (let x = 0; x < width; ++x) {
-                    for (let y = 0; y < height; ++y) {
-                        const tileGridIndex = { x, y };
-                        const visionRange   = tileMap.getTile(tileGridIndex).getVisionRangeForPlayer(playerIndex);
-                        if ((visionRange != null) && (GridIndexHelpers.getDistance(gridIndex, tileGridIndex) <= visionRange)) {
-                            return Visibility.InsideVision;
+                const tileMap = this._getWar().getTileMap();
+                if (tileMap.getTile(gridIndex).getPlayerIndex() === playerIndex) {
+                    return Visibility.TrueVision;
+                } else {
+                    const { width, height } = tileMap.getMapSize();
+                    for (let x = 0; x < width; ++x) {
+                        for (let y = 0; y < height; ++y) {
+                            const tileGridIndex = { x, y };
+                            const visionRange   = tileMap.getTile(tileGridIndex).getVisionRangeForPlayer(playerIndex);
+                            if ((visionRange != null) && (GridIndexHelpers.getDistance(gridIndex, tileGridIndex) <= visionRange)) {
+                                return Visibility.InsideVision;
+                            }
                         }
                     }
+                    return Visibility.OutsideVision;
                 }
-                return Visibility.OutsideVision;
             }
         }
         public getVisibilityFromUnitsForPlayer(gridIndex: GridIndex, playerIndex: number): Visibility {
