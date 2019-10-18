@@ -8,15 +8,16 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: ActionCode.S_McrCreateWar,                callback: _onSMcrCreateWar },
-            { msgCode: ActionCode.S_McrGetUnjoinedWaitingInfos,  callback: _onSMcrGetUnjoinedWaitingInfos, },
-            { msgCode: ActionCode.S_McrJoinWar,                  callback: _onSMcrJoinWar, },
-            { msgCode: ActionCode.S_McrGetJoinedWaitingInfos,    callback: _onSMcrGetJoinedWaitingInfos, },
-            { msgCode: ActionCode.S_McrExitWar,                  callback: _onSMcrExitWar, },
-            { msgCode: ActionCode.S_McrGetJoinedOngoingInfos,    callback: _onSMcrGetJoinedOngoingInfos, },
-            { msgCode: ActionCode.S_McrContinueWar,              callback: _onSMcrContinueWar, },
-            { msgCode: ActionCode.S_McrGetReplayInfos,           callback: _onSMcrGetReplayInfos, },
-            { msgCode: ActionCode.S_McrGetReplayData,            callback: _onSMcrGetReplayData, },
+            { msgCode: ActionCode.S_McrCreateWar,                   callback: _onSMcrCreateWar },
+            { msgCode: ActionCode.S_McrGetUnjoinedWaitingInfos,     callback: _onSMcrGetUnjoinedWaitingInfos, },
+            { msgCode: ActionCode.S_McrJoinWar,                     callback: _onSMcrJoinWar, },
+            { msgCode: ActionCode.S_McrGetJoinedWaitingInfos,       callback: _onSMcrGetJoinedWaitingInfos, },
+            { msgCode: ActionCode.S_McrExitWar,                     callback: _onSMcrExitWar, },
+            { msgCode: ActionCode.S_McrGetJoinedOngoingInfos,       callback: _onSMcrGetJoinedOngoingInfos, },
+            { msgCode: ActionCode.S_McrContinueWar,                 callback: _onSMcrContinueWar, },
+            { msgCode: ActionCode.S_McrGetReplayInfos,              callback: _onSMcrGetReplayInfos, },
+            { msgCode: ActionCode.S_McrGetReplayData,               callback: _onSMcrGetReplayData, },
+            { msgCode: ActionCode.S_McwWatchGetUnwatchedWarInfos,   callback: _onSMcwWatchGetUnwatchedWarInfos, },
         ], McrProxy);
     }
 
@@ -142,6 +143,20 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
         } else {
             McrModel.setReplayData(data as ProtoTypes.S_McrGetReplayData);
             Notify.dispatch(Notify.Type.SMcrGetReplayData);
+        }
+    }
+
+    export function reqUnwatchedWarInfos(): void {
+        NetManager.send({
+            C_McwWatchGetUnwatchedWarInfos: {
+            },
+        });
+    }
+    function _onSMcwWatchGetUnwatchedWarInfos(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_McwWatchGetUnwatchedWarInfos;
+        if (!data.errorCode) {
+            McrModel.setUnwatchedWarInfos(data.infos);
+            Notify.dispatch(Notify.Type.SMcwWatchGetUnwatchedWarInfos, data);
         }
     }
 }

@@ -4,26 +4,26 @@ namespace TinyWars.MultiCustomRoom {
     import FlowManager  = Utility.FlowManager;
     import Notify       = Utility.Notify;
 
-    export class McrMainMenuPanel extends GameUi.UiPanel {
+    export class McrWatchMainMenuPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: McrMainMenuPanel;
+        private static _instance: McrWatchMainMenuPanel;
 
         private _labelMenuTitle : GameUi.UiLabel;
         private _btnBack        : GameUi.UiButton;
         private _listCommand    : GameUi.UiScrollList;
 
         public static show(): void {
-            if (!McrMainMenuPanel._instance) {
-                McrMainMenuPanel._instance = new McrMainMenuPanel();
+            if (!McrWatchMainMenuPanel._instance) {
+                McrWatchMainMenuPanel._instance = new McrWatchMainMenuPanel();
             }
-            McrMainMenuPanel._instance.open();
+            McrWatchMainMenuPanel._instance.open();
         }
 
         public static hide(): void {
-            if (McrMainMenuPanel._instance) {
-                McrMainMenuPanel._instance.close();
+            if (McrWatchMainMenuPanel._instance) {
+                McrWatchMainMenuPanel._instance.close();
             }
         }
 
@@ -31,7 +31,7 @@ namespace TinyWars.MultiCustomRoom {
             super();
 
             this._setAutoAdjustHeightEnabled();
-            this.skinName = "resource/skins/multiCustomRoom/McrMainMenuPanel.exml";
+            this.skinName = "resource/skins/multiCustomRoom/McrWatchMainMenuPanel.exml";
         }
 
         protected _onFirstOpened(): void {
@@ -58,11 +58,12 @@ namespace TinyWars.MultiCustomRoom {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnBack(e: egret.TouchEvent): void {
-            FlowManager.gotoLobby();
+            McrWatchMainMenuPanel.hide();
+            McrMainMenuPanel.show();
         }
 
         private _onNotifySLogout(e: egret.Event): void {
-            McrMainMenuPanel.hide();
+            McrWatchMainMenuPanel.hide();
         }
         private _onNotifyLanguageChanged(e: egret.Event): void {
             this._updateView();
@@ -72,7 +73,7 @@ namespace TinyWars.MultiCustomRoom {
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0205);
+            this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0206);
             this._btnBack.label         = Lang.getText(Lang.Type.B0146);
             this._listCommand.bindData(this._createDataForListCommand());
         }
@@ -80,45 +81,10 @@ namespace TinyWars.MultiCustomRoom {
         private _createDataForListCommand(): DataForCommandRenderer[] {
             return [
                 {
-                    name    : Lang.getText(Lang.Type.B0000),
+                    name    : Lang.getText(Lang.Type.B0207),
                     callback: (): void => {
-                        McrMainMenuPanel.hide();
-                        MultiCustomRoom.McrCreateMapListPanel.show({});
-                    },
-                },
-                {
-                    name    : Lang.getText(Lang.Type.B0023),
-                    callback: (): void => {
-                        McrMainMenuPanel.hide();
-                        MultiCustomRoom.McrJoinMapListPanel.show();
-                    },
-                },
-                {
-                    name    : Lang.getText(Lang.Type.B0022),
-                    callback: (): void => {
-                        McrMainMenuPanel.hide();
-                        MultiCustomRoom.McrExitMapListPanel.show();
-                    },
-                },
-                {
-                    name    : Lang.getText(Lang.Type.B0024),
-                    callback: () => {
-                        McrMainMenuPanel.hide();
-                        MultiCustomRoom.McrContinueWarListPanel.show();
-                    },
-                },
-                {
-                    name    : Lang.getText(Lang.Type.B0206),
-                    callback: () => {
-                        McrMainMenuPanel.hide();
-                        McrWatchMainMenuPanel.show();
-                    },
-                },
-                {
-                    name    : Lang.getText(Lang.Type.B0092),
-                    callback: () => {
-                        McrMainMenuPanel.hide();
-                        MultiCustomRoom.McrReplayListPanel.show();
+                        McrWatchMainMenuPanel.hide();
+                        McrWatchMakeRequestWarsPanel.show();
                     },
                 },
             ];

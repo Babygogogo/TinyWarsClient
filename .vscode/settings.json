@@ -1,12 +1,13 @@
 {
     "cSpell.words": [
-        "zoomable",
         "attackable",
         "buildable",
+        "exml",
         "prng",
         "relogin",
         "scroller",
         "seedrandom",
-        "tweens"
+        "tweens",
+        "zoomable"
     ]
 }

@@ -4,7 +4,7 @@ namespace TinyWars.Utility.FloatText {
     const LOCK_TIME_MS      = 480;
     const START_Y           = 120;
     const END_Y             = 0;
-    const MAX_CACHE_COUNT   = 10;
+    const MAX_CACHE_COUNT   = 6;
 
     const dataList        : string[] = [];
     let   timeoutIdForLock: number;

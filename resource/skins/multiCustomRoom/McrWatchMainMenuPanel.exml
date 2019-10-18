@@ -5,7 +5,7 @@
     <e:Group top="40" bottom="0" width="200" right="0">
         <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" />
-        <GameUi:UiLabel id="_labelMenuTitle" text="多人对战" y="12" textColor="0xffffff" horizontalCenter="0" size="25" />
+        <GameUi:UiLabel id="_labelMenuTitle" text="观战" y="12" textColor="0xffffff" horizontalCenter="0" size="25" />
         <GameUi:UiScrollList id="_listCommand" left="0" right="0" bottom="50" top="50">
             <e:List>
                 <e:itemRendererSkinName>
