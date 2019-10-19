@@ -12,8 +12,8 @@ namespace TinyWars.BaseWar {
         private _isAlive                : boolean;
         private _playerIndex            : number;
         private _teamIndex              : number;
-        private _watcherUserIds         : Set<number>;
-        private _watcherRequesterIds    : Set<number>;
+        private _watchOngoingSrcUserIds : Set<number>;
+        private _watchRequestSrcUserIds : Set<number>;
         private _userId?                : number;
         private _nickname?              : string | null;
 
@@ -31,8 +31,8 @@ namespace TinyWars.BaseWar {
             this.setIsAlive(data.isAlive!);
             this._setPlayerIndex(data.playerIndex!);
             this._setTeamIndex(data.teamIndex!);
-            this._setWatcherUserIds(data.watcherUserIdList || []);
-            this._setWatcherRequesterIds(data.watcherRequesterIdList || []);
+            this._setWatchOngoingSrcUserIds(data.watchOngoingSrcUserIdList || []);
+            this._setWatchRequestSrcUserIds(data.watchRequestSrcUserIdList || []);
             this._setUserId(data.userId);
             this._setNickname(data.nickname || Lang.getText(Lang.Type.B0111));
             this._setCoId(data.coId);
@@ -86,30 +86,36 @@ namespace TinyWars.BaseWar {
             return this._teamIndex;
         }
 
-        private _setWatcherUserIds(list: number[]): void {
-            this._watcherUserIds = new Set(list);
+        private _setWatchOngoingSrcUserIds(list: number[]): void {
+            this._watchOngoingSrcUserIds = new Set(list);
         }
-        public getWatcherUserIds(): Set<number> {
-            return this._watcherUserIds;
+        public getWatchOngoingSrcUserIds(): Set<number> {
+            return this._watchOngoingSrcUserIds;
         }
-        public addWatcherUserId(userId: number): void {
-            this.getWatcherUserIds().add(userId);
+        public addWatchOngoingSrcUserId(userId: number): void {
+            this.getWatchOngoingSrcUserIds().add(userId);
         }
-        public removeWatcherUserId(userId: number): void {
-            this.getWatcherUserIds().delete(userId);
+        public removeWatchOngoingSrcUserId(userId: number): void {
+            this.getWatchOngoingSrcUserIds().delete(userId);
         }
 
-        private _setWatcherRequesterIds(list: number[]): void {
-            this._watcherRequesterIds = new Set(list);
+        private _setWatchRequestSrcUserIds(list: number[]): void {
+            this._watchRequestSrcUserIds = new Set(list);
         }
-        public getWatcherRequesterIds(): Set<number> {
-            return this._watcherRequesterIds;
+        public getWatchRequestSrcUserIds(): Set<number> {
+            return this._watchRequestSrcUserIds;
         }
-        public addWatcherRequester(userId: number): void {
-            this.getWatcherRequesterIds().add(userId);
+        public addWatchRequestSrcUserId(userId: number): void {
+            this.getWatchRequestSrcUserIds().add(userId);
         }
-        public removeWatcherRequester(userId: number): void {
-            this.getWatcherRequesterIds().delete(userId);
+        public removeWatchRequestSrcUserId(userId: number): void {
+            this.getWatchRequestSrcUserIds().delete(userId);
+        }
+        public checkCanAddWatchRequestSrcUserId(userId: number): boolean {
+            return (this.getIsAlive())
+                && (this.getUserId() !== userId)
+                && (!this.getWatchRequestSrcUserIds().has(userId))
+                && (!this.getWatchOngoingSrcUserIds().has(userId));
         }
 
         private _setUserId(id: number | undefined): void {

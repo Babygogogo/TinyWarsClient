@@ -131,7 +131,7 @@ namespace TinyWars.MultiCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
-        private _createDataForListWar(infos: ProtoTypes.S_McwWatchGetUnwatchedWarInfos.IWarInfo[]): DataForWarRenderer[] {
+        private _createDataForListWar(infos: ProtoTypes.IMcwWatchInfo[]): DataForWarRenderer[] {
             const data: DataForWarRenderer[] = [];
             if (infos) {
                 for (let i = 0; i < infos.length; ++i) {
@@ -237,7 +237,7 @@ namespace TinyWars.MultiCustomRoom {
     }
 
     type DataForWarRenderer = {
-        info    : ProtoTypes.S_McwWatchGetUnwatchedWarInfos.IWarInfo;
+        info    : ProtoTypes.IMcwWatchInfo;
         index   : number;
         panel   : McrWatchMakeRequestWarsPanel;
     }
