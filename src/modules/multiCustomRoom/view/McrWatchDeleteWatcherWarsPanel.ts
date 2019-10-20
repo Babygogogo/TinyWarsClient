@@ -8,11 +8,11 @@ namespace TinyWars.MultiCustomRoom {
     import ProtoTypes       = Utility.ProtoTypes;
     import WarMapModel      = WarMap.WarMapModel;
 
-    export class McrWatchHandleRequestWarsPanel extends GameUi.UiPanel {
+    export class McrWatchDeleteWatcherWarsPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: McrWatchHandleRequestWarsPanel;
+        private static _instance: McrWatchDeleteWatcherWarsPanel;
 
         private _labelMenuTitle     : GameUi.UiLabel;
         private _labelPlayersTitle  : GameUi.UiLabel;
@@ -33,14 +33,14 @@ namespace TinyWars.MultiCustomRoom {
         private _selectedWarIndex   : number;
 
         public static show(): void {
-            if (!McrWatchHandleRequestWarsPanel._instance) {
-                McrWatchHandleRequestWarsPanel._instance = new McrWatchHandleRequestWarsPanel();
+            if (!McrWatchDeleteWatcherWarsPanel._instance) {
+                McrWatchDeleteWatcherWarsPanel._instance = new McrWatchDeleteWatcherWarsPanel();
             }
-            McrWatchHandleRequestWarsPanel._instance.open();
+            McrWatchDeleteWatcherWarsPanel._instance.open();
         }
         public static hide(): void {
-            if (McrWatchHandleRequestWarsPanel._instance) {
-                McrWatchHandleRequestWarsPanel._instance.close();
+            if (McrWatchDeleteWatcherWarsPanel._instance) {
+                McrWatchDeleteWatcherWarsPanel._instance.close();
             }
         }
 
@@ -48,14 +48,14 @@ namespace TinyWars.MultiCustomRoom {
             super();
 
             this._setAutoAdjustHeightEnabled();
-            this.skinName = "resource/skins/multiCustomRoom/McrWatchHandleRequestWarsPanel.exml";
+            this.skinName = "resource/skins/multiCustomRoom/McrWatchDeleteWatcherWarsPanel.exml";
         }
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.SMcwWatchGetRequestedWarInfos,  callback: this._onNotifySMcwWatchGetRequestedWarInfos },
-                { type: Notify.Type.SMcwWatchHandleRequest,         callback: this._onNotifySMcwWatchHandleRequest },
+                { type: Notify.Type.SMcwWatchDeleteWatcher,         callback: this._onNotifySMcwWatchDeleteWatcher },
             ];
             this._uiListeners = [
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
@@ -70,7 +70,7 @@ namespace TinyWars.MultiCustomRoom {
             this._zoomMap.setTouchListenerEnabled(true);
             this._updateComponentsForLanguage();
 
-            McrProxy.reqWatchRequestedWarInfos();
+            McrProxy.reqWatchedWarInfos();
         }
 
         protected _onClosed(): void {
@@ -124,14 +124,14 @@ namespace TinyWars.MultiCustomRoom {
             this.setSelectedIndex(0);
         }
 
-        private _onNotifySMcwWatchHandleRequest(e: egret.Event): void {
-            FloatText.show(Lang.getText(Lang.Type.A0061));
-            McrProxy.reqWatchRequestedWarInfos();
+        private _onNotifySMcwWatchDeleteWatcher(e: egret.Event): void {
+            FloatText.show(Lang.getText(Lang.Type.A0062));
+            McrProxy.reqWatchedWarInfos();
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
-            McrWatchHandleRequestWarsPanel.hide();
-            McrWatchMainMenuPanel.show()
+            McrWatchDeleteWatcherWarsPanel.hide();
+            McrWatchMainMenuPanel.show();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -245,8 +245,8 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelMenuTitle.text       = Lang.getText(Lang.Type.B0208);
-            this._labelNoWar.text           = Lang.getText(Lang.Type.B0209);
+            this._labelMenuTitle.text       = Lang.getText(Lang.Type.B0219);
+            this._labelNoWar.text           = Lang.getText(Lang.Type.B0210);
             this._labelPlayersTitle.text    = `${Lang.getText(Lang.Type.B0031)}:`;
             this._labelCommentTitle.text    = `${Lang.getText(Lang.Type.B0187)}:`;
             this._btnBack.label             = Lang.getText(Lang.Type.B0146);
@@ -256,7 +256,7 @@ namespace TinyWars.MultiCustomRoom {
     type DataForWarRenderer = {
         info    : ProtoTypes.IMcwWatchInfo;
         index   : number;
-        panel   : McrWatchHandleRequestWarsPanel;
+        panel   : McrWatchDeleteWatcherWarsPanel;
     }
 
     class WarRenderer extends eui.ItemRenderer {
@@ -286,7 +286,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _onTouchTapBtnNext(e: egret.TouchEvent): Promise<void> {
-            McrWatchHandleRequestDetailPanel.show((this.data as DataForWarRenderer).info);
+            McrWatchDeleteWatcherDetailPanel.show((this.data as DataForWarRenderer).info);
         }
     }
 

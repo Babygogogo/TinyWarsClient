@@ -94,6 +94,13 @@ namespace TinyWars.MultiCustomRoom {
                         McrWatchHandleRequestWarsPanel.show();
                     },
                 },
+                {
+                    name    : Lang.getText(Lang.Type.B0219),
+                    callback: (): void => {
+                        McrWatchMainMenuPanel.hide();
+                        McrWatchDeleteWatcherWarsPanel.show();
+                    },
+                },
             ];
         }
     }

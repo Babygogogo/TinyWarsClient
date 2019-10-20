@@ -6,15 +6,15 @@ namespace TinyWars.MultiCustomRoom {
     import Helpers      = Utility.Helpers;
     import Types        = Utility.Types;
 
-    export class McrWatchHandleRequestDetailPanel extends GameUi.UiPanel {
+    export class McrWatchDeleteWatcherDetailPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = false;
 
-        private static _instance: McrWatchHandleRequestDetailPanel;
+        private static _instance: McrWatchDeleteWatcherDetailPanel;
 
         private _labelMenuTitle         : GameUi.UiLabel;
-        private _labelYes               : GameUi.UiLabel;
-        private _labelNo                : GameUi.UiLabel;
+        private _labelDelete            : GameUi.UiLabel;
+        private _labelKeep              : GameUi.UiLabel;
         private _labelIsOpponent        : GameUi.UiLabel;
         private _labelIsWatchingOthers  : GameUi.UiLabel;
         private _listPlayer             : GameUi.UiScrollList;
@@ -25,15 +25,15 @@ namespace TinyWars.MultiCustomRoom {
         private _dataForListPlayer  : DataForRequesterRenderer[];
 
         public static show(warInfo: ProtoTypes.IMcwWatchInfo): void {
-            if (!McrWatchHandleRequestDetailPanel._instance) {
-                McrWatchHandleRequestDetailPanel._instance = new McrWatchHandleRequestDetailPanel();
+            if (!McrWatchDeleteWatcherDetailPanel._instance) {
+                McrWatchDeleteWatcherDetailPanel._instance = new McrWatchDeleteWatcherDetailPanel();
             }
-            McrWatchHandleRequestDetailPanel._instance._openData = warInfo;
-            McrWatchHandleRequestDetailPanel._instance.open();
+            McrWatchDeleteWatcherDetailPanel._instance._openData = warInfo;
+            McrWatchDeleteWatcherDetailPanel._instance.open();
         }
         public static hide(): void {
-            if (McrWatchHandleRequestDetailPanel._instance) {
-                McrWatchHandleRequestDetailPanel._instance.close();
+            if (McrWatchDeleteWatcherDetailPanel._instance) {
+                McrWatchDeleteWatcherDetailPanel._instance.close();
             }
         }
 
@@ -43,7 +43,7 @@ namespace TinyWars.MultiCustomRoom {
             this._setAutoAdjustHeightEnabled();
             this._setTouchMaskEnabled();
             this._callbackForTouchMask = () => this.close();
-            this.skinName = "resource/skins/multiCustomRoom/McrWatchHandleRequestDetailPanel.exml";
+            this.skinName = "resource/skins/multiCustomRoom/McrWatchDeleteWatcherDetailPanel.exml";
         }
 
         protected _onFirstOpened(): void {
@@ -70,7 +70,7 @@ namespace TinyWars.MultiCustomRoom {
         public setRequesterSelected(index: number, selected: boolean): void {
             const dataList  = this._dataForListPlayer;
             const data      = dataList[index];
-            data.isAccept   = selected;
+            data.isDelete   = selected;
             this._listPlayer.updateSingleData(index, data);
         }
 
@@ -82,16 +82,15 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            const acceptUserIds : number[] = [];
-            const declineUserIds: number[] = [];
+            const deleteUserIds : number[] = [];
             for (const data of this._dataForListPlayer) {
-                if (data.isAccept) {
-                    acceptUserIds.push(data.userId);
-                } else {
-                    declineUserIds.push(data.userId);
+                if (data.isDelete) {
+                    deleteUserIds.push(data.userId);
                 }
             }
-            McrProxy.reqWatchHandleRequest(this._openData.mcwDetail.id, acceptUserIds, declineUserIds);
+            if (deleteUserIds.length) {
+                McrProxy.reqWatchDeleteWatcher(this._openData.mcwDetail.id, deleteUserIds);
+            }
             this.close();
         }
 
@@ -104,9 +103,9 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelMenuTitle.text           = Lang.getText(Lang.Type.B0208);
-            this._labelYes.text                 = Lang.getText(Lang.Type.B0214);
-            this._labelNo.text                  = Lang.getText(Lang.Type.B0215);
+            this._labelMenuTitle.text           = Lang.getText(Lang.Type.B0219);
+            this._labelDelete.text              = Lang.getText(Lang.Type.B0220);
+            this._labelKeep.text                = Lang.getText(Lang.Type.B0221);
             this._labelIsOpponent.text          = Lang.getText(Lang.Type.B0217);
             this._labelIsWatchingOthers.text    = Lang.getText(Lang.Type.B0218);
             this._btnConfirm.label              = Lang.getText(Lang.Type.B0026);
@@ -125,7 +124,7 @@ namespace TinyWars.MultiCustomRoom {
                     userId,
                     isWatchingOthers: !!info.isRequestingOthers || !!info.isWatchingOthers,
                     isOpponent      : (warInfo.p1UserId === userId) || (warInfo.p2UserId === userId) || (warInfo.p3UserId === userId) || (warInfo.p4UserId === userId),
-                    isAccept        : false,
+                    isDelete        : false,
                 });
             }
 
@@ -134,20 +133,20 @@ namespace TinyWars.MultiCustomRoom {
     }
 
     type DataForRequesterRenderer = {
-        panel           : McrWatchHandleRequestDetailPanel;
+        panel           : McrWatchDeleteWatcherDetailPanel;
         nickname        : string;
         userId          : number;
         isWatchingOthers: boolean;
         isOpponent      : boolean;
-        isAccept        : boolean;
+        isDelete        : boolean;
     }
 
     class RequesterRenderer extends eui.ItemRenderer {
         private _labelName              : GameUi.UiLabel;
         private _labelIsOpponent        : GameUi.UiLabel;
         private _labelIsWatchingOthers  : GameUi.UiLabel;
-        private _imgAccept              : GameUi.UiImage;
-        private _imgDecline             : GameUi.UiImage;
+        private _imgDelete              : GameUi.UiImage;
+        private _imgKeep                : GameUi.UiImage;
 
         protected dataChanged(): void {
             super.dataChanged();
@@ -156,14 +155,14 @@ namespace TinyWars.MultiCustomRoom {
             this._labelName.text                = data.nickname;
             this._labelIsOpponent.text          = data.isOpponent ? Lang.getText(Lang.Type.B0012) : "";
             this._labelIsWatchingOthers.text    = data.isWatchingOthers ? Lang.getText(Lang.Type.B0012) : "";
-            this._imgAccept.visible             = data.isAccept;
-            this._imgDecline.visible            = !data.isAccept;
+            this._imgDelete.visible             = data.isDelete;
+            this._imgKeep.visible               = !data.isDelete;
         }
 
         public onItemTapEvent(e: eui.ItemTapEvent): void {
-            if ((this._imgAccept.visible) || (this._imgDecline.visible)) {
+            if ((this._imgDelete.visible) || (this._imgKeep.visible)) {
                 const data = this.data as DataForRequesterRenderer;
-                data.panel.setRequesterSelected(e.itemIndex, !data.isAccept);
+                data.panel.setRequesterSelected(e.itemIndex, !data.isDelete);
             }
         }
     }

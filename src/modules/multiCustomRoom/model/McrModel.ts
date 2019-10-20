@@ -86,6 +86,7 @@ namespace TinyWars.MultiCustomRoom {
 
         let _unwatchedWarInfos  : ProtoTypes.IMcwWatchInfo[];
         let _requestedWarInfos  : ProtoTypes.IMcwWatchInfo[];
+        let _watchedWarInfos    : ProtoTypes.IMcwWatchInfo[];
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for creating wars.
@@ -486,6 +487,13 @@ namespace TinyWars.MultiCustomRoom {
         }
         export function getRequestedWarInfos(): ProtoTypes.IMcwWatchInfo[] | null {
             return _requestedWarInfos;
+        }
+
+        export function setWatchedWarInfos(infos: ProtoTypes.IMcwWatchInfo[]): void {
+            _watchedWarInfos = infos;
+        }
+        export function getWatchedWarInfos(): ProtoTypes.IMcwWatchInfo[] | null {
+            return _watchedWarInfos;
         }
     }
 

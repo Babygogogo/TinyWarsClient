@@ -21,6 +21,7 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
             { msgCode: ActionCode.S_McwWatchGetRequestedWarInfos,   callback: _onSMcwWatchGetRequestedWarInfos, },
             { msgCode: ActionCode.S_McwWatchMakeRequest,            callback: _onSMcwWatchMakeRequest },
             { msgCode: ActionCode.S_McwWatchHandleRequest,          callback: _onSMcwWatchHandleRequest },
+            { msgCode: ActionCode.S_McwWatchDeleteWatcher,          callback: _onSMcwWatchDeleteWatcher },
         ], McrProxy);
     }
 
@@ -177,6 +178,19 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
         }
     }
 
+    export function reqWatchedWarInfos(): void {
+        NetManager.send({
+            C_McwWatchGetWatchedWarInfos: {
+            },
+        });
+    }
+    function _onSMcwWatchGetWatchedWarInfos(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_McwWatchGetWatchedWarInfos;
+        if (!data.errorCode) {
+            Notify.dispatch(Notify.Type.SMcwWatchGetWatchedWarInfos, data);
+        }
+    }
+
     export function reqWatchMakeRequest(warId: number, dstUserIds: number[]): void {
         NetManager.send({
             C_McwWatchMakeRequest: {
@@ -205,6 +219,21 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
         const data = e.data as ProtoTypes.IS_McwWatchHandleRequest;
         if (!data.errorCode) {
             Notify.dispatch(Notify.Type.SMcwWatchHandleRequest, data);
+        }
+    }
+
+    export function reqWatchDeleteWatcher(warId: number, watcherUserIds: number[]): void {
+        NetManager.send({
+            C_McwWatchDeleteWatcher: {
+                warId,
+                watcherUserIds,
+            },
+        });
+    }
+    function _onSMcwWatchDeleteWatcher(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_McwWatchDeleteWatcher;
+        if (!data.errorCode) {
+            Notify.dispatch(Notify.Type.SMcwWatchDeleteWatcher, data);
         }
     }
 }

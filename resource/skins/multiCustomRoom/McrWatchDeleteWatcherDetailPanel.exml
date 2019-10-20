@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
+        xmlns:w="http://ns.egret.com/wing">
+    <e:Group width="600" horizontalCenter="0" height="280" verticalCenter="0">
+        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
+                        left="0" right="0" top="0" bottom="0" />
+        <GameUi:UiLabel id="_labelMenuTitle" text="处理请求" y="10" bold="true" size="25" textColor="0xffffff"
+                        horizontalCenter="0" />
+        <GameUi:UiLabel id="_labelIsOpponent" text="对手" size="12" y="40" maxTextWidth="40" horizontalCenter="84"
+                        width="60" wordWrap="true" textAlign="center" />
+        <GameUi:UiLabel id="_labelIsWatchingOthers" text="已观战他人" size="12" y="40" maxTextWidth="40"
+                        horizontalCenter="149" width="60" wordWrap="true" textAlign="center" />
+        <GameUi:UiLabel id="_labelDelete" text="删除" x="490" size="18" y="40" maxTextWidth="40" />
+        <GameUi:UiLabel id="_labelKeep" text="保留" x="540" size="18" y="40" maxTextWidth="40" />
+        <GameUi:UiScrollList id="_listPlayer" top="70" left="10" right="10" bottom="50">
+            <e:List>
+                <e:itemRendererSkinName>
+                    <e:Skin width="580" height="26">
+                        <e:Group left="0" right="0" top="0" bottom="0">
+                            <GameUi:UiLabel id="_labelName" text="玩家名称居然有十个字" x="0" size="20" verticalCenter="0"
+                                            maxTextWidth="360" y="3" scaleX="1" scaleY="1" />
+                            <GameUi:UiLabel id="_labelIsOpponent" text="是" size="20" verticalCenter="0"
+                                            maxTextWidth="40" y="3" scaleX="1" scaleY="1" textColor="0xff0000"
+                                            horizontalCenter="85" />
+                            <GameUi:UiLabel id="_labelIsWatchingOthers" text="是" maxTextWidth="40" size="20"
+                                            verticalCenter="0" y="3" scaleX="1" scaleY="1" textColor="0xff0000"
+                                            horizontalCenter="149" />
+                            <GameUi:UiImage id="_imgDelete" source="c04_t10_s03_f00" verticalCenter="0" x="490" y="5"
+                                            scaleX="1" scaleY="1" />
+                            <GameUi:UiImage id="_imgKeep" source="c04_t10_s03_f00" verticalCenter="0" x="540" y="5"
+                                            scaleX="1" scaleY="1" />
+                        </e:Group>
+                    </e:Skin>
+                </e:itemRendererSkinName>
+                <e:layout>
+                    <e:VerticalLayout/>
+                </e:layout>
+            </e:List>
+        </GameUi:UiScrollList>
+        <GameUi:UiButton id="_btnConfirm" label="确定" horizontalCenter="-100" bottom="10">
+            <GameUi:skinName>
+                <e:Skin states="up,down,disabled">
+                    <e:Image width="100%" height="100%" />
+                    <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="25" bold="true"
+                             textColor="0x00ff00" />
+                </e:Skin>
+            </GameUi:skinName>
+        </GameUi:UiButton>
+        <GameUi:UiButton id="_btnCancel" label="取消" horizontalCenter="100" bottom="10">
+            <e:skinName>
+                <e:Skin states="up,down,disabled">
+                    <e:Image width="100%" height="100%" />
+                    <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="25" bold="true"
+                             textColor="0xff0000" />
+                </e:Skin>
+            </e:skinName>
+        </GameUi:UiButton>
+    </e:Group>
+</e:Skin>

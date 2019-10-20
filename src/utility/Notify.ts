@@ -95,8 +95,10 @@ namespace TinyWars.Utility.Notify {
         SMcrSyncWar,
         SMcwWatchGetUnwatchedWarInfos,
         SMcwWatchGetRequestedWarInfos,
+        SMcwWatchGetWatchedWarInfos,
         SMcwWatchMakeRequest,
         SMcwWatchHandleRequest,
+        SMcwWatchDeleteWatcher,
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         SMcwPlayerSyncWar,

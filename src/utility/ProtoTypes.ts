@@ -7900,8 +7900,11 @@ export declare interface IMcwWatchRequesterInfo {
     /** McwWatchRequesterInfo nickname */
     nickname?: (string|null);
 
-    /** McwWatchRequesterInfo isRequestOrWatchOthers */
-    isRequestOrWatchOthers?: (boolean|null);
+    /** McwWatchRequesterInfo isRequestingOthers */
+    isRequestingOthers?: (boolean|null);
+
+    /** McwWatchRequesterInfo isWatchingOthers */
+    isWatchingOthers?: (boolean|null);
 }
 
 /** Represents a McwWatchRequesterInfo. */
@@ -7919,8 +7922,11 @@ export declare class McwWatchRequesterInfo implements IMcwWatchRequesterInfo {
     /** McwWatchRequesterInfo nickname. */
     public nickname: string;
 
-    /** McwWatchRequesterInfo isRequestOrWatchOthers. */
-    public isRequestOrWatchOthers: boolean;
+    /** McwWatchRequesterInfo isRequestingOthers. */
+    public isRequestingOthers: boolean;
+
+    /** McwWatchRequesterInfo isWatchingOthers. */
+    public isWatchingOthers: boolean;
 
     /**
      * Creates a new McwWatchRequesterInfo instance using the specified properties.
@@ -13843,8 +13849,8 @@ export declare interface IC_McwWatchDeleteWatcher {
     /** C_McwWatchDeleteWatcher warId */
     warId?: (number|null);
 
-    /** C_McwWatchDeleteWatcher watcherUserId */
-    watcherUserId?: (number|null);
+    /** C_McwWatchDeleteWatcher watcherUserIds */
+    watcherUserIds?: (number[]|null);
 }
 
 /** Represents a C_McwWatchDeleteWatcher. */
@@ -13859,8 +13865,8 @@ export declare class C_McwWatchDeleteWatcher implements IC_McwWatchDeleteWatcher
     /** C_McwWatchDeleteWatcher warId. */
     public warId: number;
 
-    /** C_McwWatchDeleteWatcher watcherUserId. */
-    public watcherUserId: number;
+    /** C_McwWatchDeleteWatcher watcherUserIds. */
+    public watcherUserIds: number[];
 
     /**
      * Creates a new C_McwWatchDeleteWatcher instance using the specified properties.
@@ -13942,8 +13948,8 @@ export declare interface IS_McwWatchDeleteWatcher {
     /** S_McwWatchDeleteWatcher warId */
     warId?: (number|null);
 
-    /** S_McwWatchDeleteWatcher watcherUserId */
-    watcherUserId?: (number|null);
+    /** S_McwWatchDeleteWatcher watcherUserIds */
+    watcherUserIds?: (number[]|null);
 }
 
 /** Represents a S_McwWatchDeleteWatcher. */
@@ -13961,8 +13967,8 @@ export declare class S_McwWatchDeleteWatcher implements IS_McwWatchDeleteWatcher
     /** S_McwWatchDeleteWatcher warId. */
     public warId: number;
 
-    /** S_McwWatchDeleteWatcher watcherUserId. */
-    public watcherUserId: number;
+    /** S_McwWatchDeleteWatcher watcherUserIds. */
+    public watcherUserIds: number[];
 
     /**
      * Creates a new S_McwWatchDeleteWatcher instance using the specified properties.
@@ -14482,8 +14488,11 @@ export declare class C_McwWatchGetWatchedWarInfos implements IC_McwWatchGetWatch
 /** Properties of a S_McwWatchGetWatchedWarInfos. */
 export declare interface IS_McwWatchGetWatchedWarInfos {
 
+    /** S_McwWatchGetWatchedWarInfos errorCode */
+    errorCode?: (number|null);
+
     /** S_McwWatchGetWatchedWarInfos infos */
-    infos?: (IMcwOngoingDetail[]|null);
+    infos?: (IMcwWatchInfo[]|null);
 }
 
 /** Represents a S_McwWatchGetWatchedWarInfos. */
@@ -14495,8 +14504,11 @@ export declare class S_McwWatchGetWatchedWarInfos implements IS_McwWatchGetWatch
      */
     constructor(properties?: IS_McwWatchGetWatchedWarInfos);
 
+    /** S_McwWatchGetWatchedWarInfos errorCode. */
+    public errorCode: number;
+
     /** S_McwWatchGetWatchedWarInfos infos. */
-    public infos: IMcwOngoingDetail[];
+    public infos: IMcwWatchInfo[];
 
     /**
      * Creates a new S_McwWatchGetWatchedWarInfos instance using the specified properties.
