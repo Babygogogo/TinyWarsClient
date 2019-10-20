@@ -2,6 +2,7 @@
 namespace TinyWars.Lobby {
     import Lang         = Utility.Lang;
     import FloatText    = Utility.FloatText;
+    import Notify       = Utility.Notify;
     import UserModel    = User.UserModel;
 
     export class LobbyPanel extends GameUi.UiPanel {
@@ -15,7 +16,8 @@ namespace TinyWars.Lobby {
         private _group3: eui.Group;
         private _group4: eui.Group;
 
-        private _listCommand: GameUi.UiScrollList;
+        private _labelMenuTitle : GameUi.UiLabel;
+        private _listCommand    : GameUi.UiScrollList;
 
         public static show(): void {
             if (!LobbyPanel._instance) {
@@ -42,13 +44,15 @@ namespace TinyWars.Lobby {
                 { ui: this, callback: this._onResize, eventType: egret.Event.RESIZE },
             ];
             this._notifyListeners = [
-                { type: Utility.Notify.Type.SLogout, callback: this._onNotifySLogout },
+                { type: Notify.Type.SLogout,            callback: this._onNotifySLogout },
+                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ];
 
             this._listCommand.setItemRenderer(CommandRenderer);
         }
 
         protected _onOpened(): void {
+            this._updateComponentsForLanguage();
             this._listCommand.bindData(this._createDataForListCommand());
         }
 
@@ -70,9 +74,17 @@ namespace TinyWars.Lobby {
             LobbyPanel.hide();
         }
 
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateComponentsForLanguage();
+        }
+
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
+        private _updateComponentsForLanguage(): void {
+            this._labelMenuTitle.text = Lang.getText(Lang.Type.B0155);
+        }
+
         private _createDataForListCommand(): DataForCommandRenderer[] {
             const dataList: DataForCommandRenderer[] = [
                 {

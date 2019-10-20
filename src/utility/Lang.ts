@@ -312,6 +312,10 @@ namespace TinyWars.Utility.Lang {
             `已发出观战请求，对方同意后即可观战`,
             `Requested. You can watch the game when accepted.`,
         ],
+        [Type.A0061]: [
+            `请求已处理`,
+            `Handled.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -1183,6 +1187,14 @@ namespace TinyWars.Utility.Lang {
         [Type.B0216]: [
             `自己`,
             `Self`,
+        ],
+        [Type.B0217]: [
+            `对手`,
+            `Opponent`,
+        ],
+        [Type.B0218]: [
+            `已观战他人`,
+            `Watching Others`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

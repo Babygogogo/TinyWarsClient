@@ -19,7 +19,8 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
             { msgCode: ActionCode.S_McrGetReplayData,               callback: _onSMcrGetReplayData, },
             { msgCode: ActionCode.S_McwWatchGetUnwatchedWarInfos,   callback: _onSMcwWatchGetUnwatchedWarInfos, },
             { msgCode: ActionCode.S_McwWatchGetRequestedWarInfos,   callback: _onSMcwWatchGetRequestedWarInfos, },
-            { msgCode: ActionCode.S_McwWatchRequestWatcher,         callback: _onSMcwWatchRequestWatcher },
+            { msgCode: ActionCode.S_McwWatchMakeRequest,            callback: _onSMcwWatchMakeRequest },
+            { msgCode: ActionCode.S_McwWatchHandleRequest,          callback: _onSMcwWatchHandleRequest },
         ], McrProxy);
     }
 
@@ -176,18 +177,34 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
         }
     }
 
-    export function reqWatchRequestWatcher(warId: number, dstUserIds: number[]): void {
+    export function reqWatchMakeRequest(warId: number, dstUserIds: number[]): void {
         NetManager.send({
-            C_McwWatchRequestWatcher: {
+            C_McwWatchMakeRequest: {
                 warId,
                 dstUserIds,
             },
         });
     }
-    function _onSMcwWatchRequestWatcher(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_McwWatchRequestWatcher;
+    function _onSMcwWatchMakeRequest(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_McwWatchMakeRequest;
         if (!data.errorCode) {
-            Notify.dispatch(Notify.Type.SMcwWatchRequestWatcher, data);
+            Notify.dispatch(Notify.Type.SMcwWatchMakeRequest, data);
+        }
+    }
+
+    export function reqWatchHandleRequest(warId: number, acceptSrcUserIds: number[], declineSrcUserIds: number[]): void {
+        NetManager.send({
+            C_McwWatchHandleRequest: {
+                warId,
+                acceptSrcUserIds,
+                declineSrcUserIds,
+            },
+        });
+    }
+    function _onSMcwWatchHandleRequest(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_McwWatchHandleRequest;
+        if (!data.errorCode) {
+            Notify.dispatch(Notify.Type.SMcwWatchHandleRequest, data);
         }
     }
 }

@@ -37,6 +37,7 @@
 		"resource/skins/multiCustomRoom/McrJoinSettingsPanel.exml",
 		"resource/skins/multiCustomRoom/McrMainMenuPanel.exml",
 		"resource/skins/multiCustomRoom/McrReplayListPanel.exml",
+		"resource/skins/multiCustomRoom/McrWatchHandleRequestDetailPanel.exml",
 		"resource/skins/multiCustomRoom/McrWatchHandleRequestWarsPanel.exml",
 		"resource/skins/multiCustomRoom/McrWatchMainMenuPanel.exml",
 		"resource/skins/multiCustomRoom/McrWatchMakeRequestDetailPanel.exml",

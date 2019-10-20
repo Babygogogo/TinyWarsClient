@@ -15,11 +15,13 @@ namespace TinyWars.MultiCustomRoom {
 
         private static _instance: McrWatchHandleRequestWarsPanel;
 
-        private _labelMenuTitle : GameUi.UiLabel;
-        private _listWar        : GameUi.UiScrollList;
-        private _labelNoWar     : GameUi.UiLabel;
-        private _zoomMap        : GameUi.UiZoomableComponent;
-        private _btnBack        : GameUi.UiButton;
+        private _labelMenuTitle     : GameUi.UiLabel;
+        private _labelPlayersTitle  : GameUi.UiLabel;
+        private _labelCommentTitle  : GameUi.UiLabel;
+        private _listWar            : GameUi.UiScrollList;
+        private _labelNoWar         : GameUi.UiLabel;
+        private _zoomMap            : GameUi.UiZoomableComponent;
+        private _btnBack            : GameUi.UiButton;
 
         private _groupInfo      : eui.Group;
         private _labelMapName   : GameUi.UiLabel;
@@ -29,7 +31,6 @@ namespace TinyWars.MultiCustomRoom {
         private _listPlayer     : GameUi.UiScrollList;
 
         private _dataForListWar     : DataForWarRenderer[] = [];
-        private _dataForListPlayer  : DataForPlayerRenderer[] = [];
         private _selectedWarIndex   : number;
 
         public static show(): void {
@@ -55,6 +56,7 @@ namespace TinyWars.MultiCustomRoom {
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.SMcwWatchGetRequestedWarInfos,  callback: this._onNotifySMcwWatchGetRequestedWarInfos },
+                { type: Notify.Type.SMcwWatchHandleRequest,         callback: this._onNotifySMcwWatchHandleRequest },
             ];
             this._uiListeners = [
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
@@ -123,6 +125,11 @@ namespace TinyWars.MultiCustomRoom {
             this.setSelectedIndex(0);
         }
 
+        private _onNotifySMcwWatchHandleRequest(e: egret.Event): void {
+            FloatText.show(Lang.getText(Lang.Type.A0061));
+            McrProxy.reqWatchRequestedWarInfos();
+        }
+
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
             McrWatchHandleRequestWarsPanel.hide();
             McrWatchMainMenuPanel.show()
@@ -149,28 +156,36 @@ namespace TinyWars.MultiCustomRoom {
         private _createDataForListPlayer(warInfo: ProtoTypes.IMcrWaitingInfo, mapPlayersCount: number): DataForPlayerRenderer[] {
             const data: DataForPlayerRenderer[] = [
                 {
-                    playerIndex: 1,
-                    playerName : warInfo.p1UserNickname,
-                    teamIndex  : warInfo.p1TeamIndex,
+                    playerIndex     : 1,
+                    playerName      : warInfo.p1UserNickname,
+                    teamIndex       : warInfo.p1TeamIndex,
+                    coId            : warInfo.p1CoId,
+                    configVersion   : warInfo.configVersion,
                 },
                 {
-                    playerIndex: 2,
-                    playerName : warInfo.p2UserNickname,
-                    teamIndex  : warInfo.p2TeamIndex,
+                    playerIndex     : 2,
+                    playerName      : warInfo.p2UserNickname,
+                    teamIndex       : warInfo.p2TeamIndex,
+                    coId            : warInfo.p2CoId,
+                    configVersion   : warInfo.configVersion,
                 },
             ];
             if (mapPlayersCount >= 3) {
                 data.push({
-                    playerIndex: 3,
-                    playerName : warInfo.p3UserNickname,
-                    teamIndex  : warInfo.p3TeamIndex,
+                    playerIndex     : 3,
+                    playerName      : warInfo.p3UserNickname,
+                    teamIndex       : warInfo.p3TeamIndex,
+                    coId            : warInfo.p3CoId,
+                    configVersion   : warInfo.configVersion,
                 });
             }
             if (mapPlayersCount >= 4) {
                 data.push({
-                    playerIndex: 4,
-                    playerName : warInfo.p4UserNickname,
-                    teamIndex  : warInfo.p4TeamIndex,
+                    playerIndex     : 4,
+                    playerName      : warInfo.p4UserNickname,
+                    teamIndex       : warInfo.p4TeamIndex,
+                    coId            : warInfo.p4CoId,
+                    configVersion   : warInfo.configVersion,
                 });
             }
 
@@ -231,9 +246,11 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0208);
-            this._btnBack.label         = Lang.getText(Lang.Type.B0146);
-            this._labelNoWar.text       = Lang.getText(Lang.Type.B0209);
+            this._labelMenuTitle.text       = Lang.getText(Lang.Type.B0208);
+            this._labelNoWar.text           = Lang.getText(Lang.Type.B0209);
+            this._labelPlayersTitle.text    = `${Lang.getText(Lang.Type.B0031)}:`;
+            this._labelCommentTitle.text    = `${Lang.getText(Lang.Type.B0187)}:`;
+            this._btnBack.label             = Lang.getText(Lang.Type.B0146);
         }
     }
 
@@ -270,22 +287,16 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _onTouchTapBtnNext(e: egret.TouchEvent): Promise<void> {
-            // const data = this.data as DataForWarRenderer;
-            // if (data.info.warPassword) {
-            //     McrJoinPasswordPanel.show(data.info);
-            // } else {
-            //     McrWatchHandleRequestWarsPanel.hide();
-
-            //     await McrModel.resetJoinWarData(data.info);
-            //     McrJoinSettingsPanel.show();
-            // }
+            McrWatchHandleRequestDetailPanel.show((this.data as DataForWarRenderer).info);
         }
     }
 
     type DataForPlayerRenderer = {
-        playerIndex: number;
-        playerName : string;
-        teamIndex  : number;
+        playerIndex     : number;
+        playerName      : string;
+        teamIndex       : number;
+        coId            : number | null;
+        configVersion   : string;
     }
 
     class PlayerRenderer extends eui.ItemRenderer {
@@ -298,8 +309,12 @@ namespace TinyWars.MultiCustomRoom {
 
             const data = this.data as DataForPlayerRenderer;
             this._labelIndex.text = Helpers.getColorTextForPlayerIndex(data.playerIndex);
-            this._labelName.text  = data.playerName || "????";
             this._labelTeam.text  = data.teamIndex != null ? Helpers.getTeamText(data.teamIndex) : "??";
+
+            const coConfig = data.coId == null ? null : ConfigManager.getCoBasicCfg(data.configVersion, data.coId);
+            this._labelName.text  = data.playerName + (coConfig
+                ? `(${coConfig.name}(T${coConfig.tier}))`
+                : `(${Lang.getText(Lang.Type.B0211)} CO)`);
         }
     }
 }

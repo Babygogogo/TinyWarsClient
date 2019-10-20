@@ -84,6 +84,7 @@
 		"bin-debug/modules/multiCustomRoom/view/McrJoinSettingsPanel.js",
 		"bin-debug/modules/multiCustomRoom/view/McrMainMenuPanel.js",
 		"bin-debug/modules/multiCustomRoom/view/McrReplayListPanel.js",
+		"bin-debug/modules/multiCustomRoom/view/McrWatchHandleRequestDetailPanel.js",
 		"bin-debug/modules/multiCustomRoom/view/McrWatchHandleRequestWarsPanel.js",
 		"bin-debug/modules/multiCustomRoom/view/McrWatchMainMenuPanel.js",
 		"bin-debug/modules/multiCustomRoom/view/McrWatchMakeRequestDetailPanel.js",

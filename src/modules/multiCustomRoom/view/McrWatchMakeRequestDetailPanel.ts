@@ -88,7 +88,7 @@ namespace TinyWars.MultiCustomRoom {
                 }
             }
             if (userIds.length > 0) {
-                McrProxy.reqWatchRequestWatcher(this._openData.mcwDetail.id, userIds);
+                McrProxy.reqWatchMakeRequest(this._openData.mcwDetail.id, userIds);
             }
             this.close();
         }
