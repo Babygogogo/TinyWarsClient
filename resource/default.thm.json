@@ -44,6 +44,7 @@
 		"resource/skins/multiCustomRoom/McrWatchMainMenuPanel.exml",
 		"resource/skins/multiCustomRoom/McrWatchMakeRequestDetailPanel.exml",
 		"resource/skins/multiCustomRoom/McrWatchMakeRequestWarsPanel.exml",
+		"resource/skins/multiCustomRoom/McrWatchOngoingWarsPanel.exml",
 		"resource/skins/multiCustomWar/McwBackgroundPanel.exml",
 		"resource/skins/multiCustomWar/McwCoListPanel.exml",
 		"resource/skins/multiCustomWar/McwProduceUnitPanel.exml",

@@ -8377,6 +8377,12 @@ export declare interface IMessageContainer {
     /** MessageContainer S_McwWatchGetUnwatchedWarInfos */
     S_McwWatchGetUnwatchedWarInfos?: (IS_McwWatchGetUnwatchedWarInfos|null);
 
+    /** MessageContainer C_McwWatchGetOngoingWarInfos */
+    C_McwWatchGetOngoingWarInfos?: (IC_McwWatchGetOngoingWarInfos|null);
+
+    /** MessageContainer S_McwWatchGetOngoingWarInfos */
+    S_McwWatchGetOngoingWarInfos?: (IS_McwWatchGetOngoingWarInfos|null);
+
     /** MessageContainer C_McwWatchGetRequestedWarInfos */
     C_McwWatchGetRequestedWarInfos?: (IC_McwWatchGetRequestedWarInfos|null);
 
@@ -8695,6 +8701,12 @@ export declare class MessageContainer implements IMessageContainer {
 
     /** MessageContainer S_McwWatchGetUnwatchedWarInfos. */
     public S_McwWatchGetUnwatchedWarInfos?: (IS_McwWatchGetUnwatchedWarInfos|null);
+
+    /** MessageContainer C_McwWatchGetOngoingWarInfos. */
+    public C_McwWatchGetOngoingWarInfos?: (IC_McwWatchGetOngoingWarInfos|null);
+
+    /** MessageContainer S_McwWatchGetOngoingWarInfos. */
+    public S_McwWatchGetOngoingWarInfos?: (IS_McwWatchGetOngoingWarInfos|null);
 
     /** MessageContainer C_McwWatchGetRequestedWarInfos. */
     public C_McwWatchGetRequestedWarInfos?: (IC_McwWatchGetRequestedWarInfos|null);
@@ -14576,6 +14588,186 @@ export declare class S_McwWatchGetWatchedWarInfos implements IS_McwWatchGetWatch
 
     /**
      * Converts this S_McwWatchGetWatchedWarInfos to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_McwWatchGetOngoingWarInfos. */
+export declare interface IC_McwWatchGetOngoingWarInfos {
+}
+
+/** Represents a C_McwWatchGetOngoingWarInfos. */
+export declare class C_McwWatchGetOngoingWarInfos implements IC_McwWatchGetOngoingWarInfos {
+
+    /**
+     * Constructs a new C_McwWatchGetOngoingWarInfos.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_McwWatchGetOngoingWarInfos);
+
+    /**
+     * Creates a new C_McwWatchGetOngoingWarInfos instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_McwWatchGetOngoingWarInfos instance
+     */
+    public static create(properties?: IC_McwWatchGetOngoingWarInfos): C_McwWatchGetOngoingWarInfos;
+
+    /**
+     * Encodes the specified C_McwWatchGetOngoingWarInfos message. Does not implicitly {@link C_McwWatchGetOngoingWarInfos.verify|verify} messages.
+     * @param message C_McwWatchGetOngoingWarInfos message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_McwWatchGetOngoingWarInfos, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_McwWatchGetOngoingWarInfos message, length delimited. Does not implicitly {@link C_McwWatchGetOngoingWarInfos.verify|verify} messages.
+     * @param message C_McwWatchGetOngoingWarInfos message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_McwWatchGetOngoingWarInfos, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_McwWatchGetOngoingWarInfos message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_McwWatchGetOngoingWarInfos
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_McwWatchGetOngoingWarInfos;
+
+    /**
+     * Decodes a C_McwWatchGetOngoingWarInfos message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_McwWatchGetOngoingWarInfos
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_McwWatchGetOngoingWarInfos;
+
+    /**
+     * Verifies a C_McwWatchGetOngoingWarInfos message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_McwWatchGetOngoingWarInfos message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_McwWatchGetOngoingWarInfos
+     */
+    public static fromObject(object: { [k: string]: any }): C_McwWatchGetOngoingWarInfos;
+
+    /**
+     * Creates a plain object from a C_McwWatchGetOngoingWarInfos message. Also converts values to other types if specified.
+     * @param message C_McwWatchGetOngoingWarInfos
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_McwWatchGetOngoingWarInfos, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_McwWatchGetOngoingWarInfos to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_McwWatchGetOngoingWarInfos. */
+export declare interface IS_McwWatchGetOngoingWarInfos {
+
+    /** S_McwWatchGetOngoingWarInfos errorCode */
+    errorCode?: (number|null);
+
+    /** S_McwWatchGetOngoingWarInfos infos */
+    infos?: (IMcwWatchInfo[]|null);
+}
+
+/** Represents a S_McwWatchGetOngoingWarInfos. */
+export declare class S_McwWatchGetOngoingWarInfos implements IS_McwWatchGetOngoingWarInfos {
+
+    /**
+     * Constructs a new S_McwWatchGetOngoingWarInfos.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_McwWatchGetOngoingWarInfos);
+
+    /** S_McwWatchGetOngoingWarInfos errorCode. */
+    public errorCode: number;
+
+    /** S_McwWatchGetOngoingWarInfos infos. */
+    public infos: IMcwWatchInfo[];
+
+    /**
+     * Creates a new S_McwWatchGetOngoingWarInfos instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_McwWatchGetOngoingWarInfos instance
+     */
+    public static create(properties?: IS_McwWatchGetOngoingWarInfos): S_McwWatchGetOngoingWarInfos;
+
+    /**
+     * Encodes the specified S_McwWatchGetOngoingWarInfos message. Does not implicitly {@link S_McwWatchGetOngoingWarInfos.verify|verify} messages.
+     * @param message S_McwWatchGetOngoingWarInfos message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_McwWatchGetOngoingWarInfos, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_McwWatchGetOngoingWarInfos message, length delimited. Does not implicitly {@link S_McwWatchGetOngoingWarInfos.verify|verify} messages.
+     * @param message S_McwWatchGetOngoingWarInfos message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_McwWatchGetOngoingWarInfos, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_McwWatchGetOngoingWarInfos message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_McwWatchGetOngoingWarInfos
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_McwWatchGetOngoingWarInfos;
+
+    /**
+     * Decodes a S_McwWatchGetOngoingWarInfos message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_McwWatchGetOngoingWarInfos
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_McwWatchGetOngoingWarInfos;
+
+    /**
+     * Verifies a S_McwWatchGetOngoingWarInfos message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_McwWatchGetOngoingWarInfos message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_McwWatchGetOngoingWarInfos
+     */
+    public static fromObject(object: { [k: string]: any }): S_McwWatchGetOngoingWarInfos;
+
+    /**
+     * Creates a plain object from a S_McwWatchGetOngoingWarInfos message. Also converts values to other types if specified.
+     * @param message S_McwWatchGetOngoingWarInfos
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_McwWatchGetOngoingWarInfos, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_McwWatchGetOngoingWarInfos to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };

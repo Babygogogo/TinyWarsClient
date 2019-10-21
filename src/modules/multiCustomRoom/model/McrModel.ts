@@ -84,9 +84,10 @@ namespace TinyWars.MultiCustomRoom {
         let _replayInfos: ProtoTypes.IMcwReplayInfo[];
         let _replayData : ProtoTypes.S_McrGetReplayData;
 
-        let _unwatchedWarInfos  : ProtoTypes.IMcwWatchInfo[];
-        let _requestedWarInfos  : ProtoTypes.IMcwWatchInfo[];
-        let _watchedWarInfos    : ProtoTypes.IMcwWatchInfo[];
+        let _unwatchedWarInfos      : ProtoTypes.IMcwWatchInfo[];
+        let _watchOngoingWarInfos   : ProtoTypes.IMcwWatchInfo[];
+        let _watchRequestedWarInfos : ProtoTypes.IMcwWatchInfo[];
+        let _watchedWarInfos        : ProtoTypes.IMcwWatchInfo[];
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for creating wars.
@@ -482,11 +483,18 @@ namespace TinyWars.MultiCustomRoom {
             return _unwatchedWarInfos;
         }
 
-        export function setRequestedWarInfos(infos: ProtoTypes.IMcwWatchInfo[]): void {
-            _requestedWarInfos = infos;
+        export function setWatchOngoingWarInfos(infos: ProtoTypes.IMcwWatchInfo[]): void {
+            _watchOngoingWarInfos = infos;
+        }
+        export function getWatchOngoingWarInfos(): ProtoTypes.IMcwWatchInfo[] | null {
+            return _watchOngoingWarInfos;
+        }
+
+        export function setWatchRequestedWarInfos(infos: ProtoTypes.IMcwWatchInfo[]): void {
+            _watchRequestedWarInfos = infos;
         }
         export function getRequestedWarInfos(): ProtoTypes.IMcwWatchInfo[] | null {
-            return _requestedWarInfos;
+            return _watchRequestedWarInfos;
         }
 
         export function setWatchedWarInfos(infos: ProtoTypes.IMcwWatchInfo[]): void {

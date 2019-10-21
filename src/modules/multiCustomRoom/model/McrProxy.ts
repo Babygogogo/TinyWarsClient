@@ -18,10 +18,13 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
             { msgCode: ActionCode.S_McrGetReplayInfos,              callback: _onSMcrGetReplayInfos, },
             { msgCode: ActionCode.S_McrGetReplayData,               callback: _onSMcrGetReplayData, },
             { msgCode: ActionCode.S_McwWatchGetUnwatchedWarInfos,   callback: _onSMcwWatchGetUnwatchedWarInfos, },
+            { msgCode: ActionCode.S_McwWatchGetOngoingWarInfos,     callback: _onSMcwWatchGetOngoingWarInfos },
             { msgCode: ActionCode.S_McwWatchGetRequestedWarInfos,   callback: _onSMcwWatchGetRequestedWarInfos, },
+            { msgCode: ActionCode.S_McwWatchGetWatchedWarInfos,     callback: _onSMcwWatchGetWatchedWarInfos },
             { msgCode: ActionCode.S_McwWatchMakeRequest,            callback: _onSMcwWatchMakeRequest },
             { msgCode: ActionCode.S_McwWatchHandleRequest,          callback: _onSMcwWatchHandleRequest },
             { msgCode: ActionCode.S_McwWatchDeleteWatcher,          callback: _onSMcwWatchDeleteWatcher },
+            { msgCode: ActionCode.S_McwWatchContinueWar,            callback: _onSMcwWatchContinueWar },
         ], McrProxy);
     }
 
@@ -164,6 +167,20 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
         }
     }
 
+    export function reqWatchGetOngoingWarInfos(): void {
+        NetManager.send({
+            C_McwWatchGetOngoingWarInfos: {
+            },
+        })
+    }
+    function _onSMcwWatchGetOngoingWarInfos(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_McwWatchGetOngoingWarInfos;
+        if (!data.errorCode) {
+            McrModel.setWatchOngoingWarInfos(data.infos);
+            Notify.dispatch(Notify.Type.SMcwWatchGetOngoingWarInfos, data);
+        }
+    }
+
     export function reqWatchRequestedWarInfos(): void {
         NetManager.send({
             C_McwWatchGetRequestedWarInfos: {
@@ -173,7 +190,7 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
     function _onSMcwWatchGetRequestedWarInfos(e: egret.Event): void {
         const data = e.data as ProtoTypes.IS_McwWatchGetRequestedWarInfos;
         if (!data.errorCode) {
-            McrModel.setRequestedWarInfos(data.infos);
+            McrModel.setWatchRequestedWarInfos(data.infos);
             Notify.dispatch(Notify.Type.SMcwWatchGetRequestedWarInfos, data);
         }
     }
@@ -187,6 +204,7 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
     function _onSMcwWatchGetWatchedWarInfos(e: egret.Event): void {
         const data = e.data as ProtoTypes.IS_McwWatchGetWatchedWarInfos;
         if (!data.errorCode) {
+            McrModel.setWatchedWarInfos(data.infos);
             Notify.dispatch(Notify.Type.SMcwWatchGetWatchedWarInfos, data);
         }
     }
@@ -234,6 +252,22 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
         const data = e.data as ProtoTypes.IS_McwWatchDeleteWatcher;
         if (!data.errorCode) {
             Notify.dispatch(Notify.Type.SMcwWatchDeleteWatcher, data);
+        }
+    }
+
+    export function reqWatchContinueWar(warId: number): void {
+        NetManager.send({
+            C_McwWatchContinueWar: {
+                warId,
+            },
+        });
+    }
+    function _onSMcwWatchContinueWar(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_McwWatchContinueWar;
+        if (data.errorCode) {
+            Notify.dispatch(Notify.Type.SMcwWatchContinueWarFailed, data);
+        } else {
+            Notify.dispatch(Notify.Type.SMcwWatchContinueWar, data);
         }
     }
 }
