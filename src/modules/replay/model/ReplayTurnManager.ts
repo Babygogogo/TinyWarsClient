@@ -17,14 +17,6 @@ namespace TinyWars.Replay {
                 enterTurnTime   : this.getEnterTurnTime(),
             };
         }
-        public serializeForPlayer(playerIndex: number): SerializedBwTurn {
-            return {
-                turnIndex       : this.getTurnIndex(),
-                playerIndex     : this.getPlayerIndexInTurn(),
-                turnPhaseCode   : this.getPhaseCode(),
-                enterTurnTime   : this.getEnterTurnTime(),
-            };
-        }
 
         protected _runPhaseMain(data: ProtoTypes.IWarActionPlayerBeginTurn): void {
             const playerIndex   = this.getPlayerIndexInTurn();
