@@ -508,7 +508,7 @@ namespace TinyWars.MultiCustomWar {
                 this._labelLost.visible = false;
                 this._groupInfo.visible = true;
 
-                const isInfoKnown               = (player.getTeamIndex() === war.getPlayerLoggedIn().getTeamIndex()) || (!war.getFogMap().checkHasFogCurrently());
+                const isInfoKnown               = (!war.getFogMap().checkHasFogCurrently()) || (war.getPlayerManager().getWatcherTeamIndexes(User.UserModel.getSelfUserId()).has(player.getTeamIndex()));
                 const tilesCountAndIncome       = this._getTilesCountAndIncome(war, playerIndex);
                 this._labelFundTitle.text       = Lang.getText(Lang.Type.B0156);
                 this._labelFund.text            = isInfoKnown ? `${player.getFund()}` : `?`;
@@ -552,16 +552,16 @@ namespace TinyWars.MultiCustomWar {
         }
 
         private _getUnitsCountAndValue(war: McwWar, playerIndex: number): { count: number, value: number } {
-            const teamIndexLoggedIn = war.getPlayerLoggedIn().getTeamIndex();
-            const unitMap           = war.getUnitMap();
-            let count               = 0;
-            let value               = 0;
+            const teamIndexes   = war.getPlayerManager().getWatcherTeamIndexes(User.UserModel.getSelfUserId());
+            const unitMap       = war.getUnitMap();
+            let count           = 0;
+            let value           = 0;
             unitMap.forEachUnitOnMap(unit => {
                 if (unit.getPlayerIndex() === playerIndex) {
                     ++count;
                     value += Math.floor(unit.getProductionFinalCost() * unit.getNormalizedCurrentHp() / unit.getNormalizedMaxHp());
 
-                    if ((unit.getTeamIndex() === teamIndexLoggedIn) || (!war.getFogMap().checkHasFogCurrently())) {
+                    if ((teamIndexes.has(unit.getTeamIndex())) || (!war.getFogMap().checkHasFogCurrently())) {
                         for (const unitLoaded of unitMap.getUnitsLoadedByLoader(unit, true)) {
                             ++count;
                             value += Math.floor(unitLoaded.getProductionFinalCost() * unitLoaded.getNormalizedCurrentHp() / unitLoaded.getNormalizedMaxHp());

@@ -121,5 +121,15 @@ namespace TinyWars.BaseWar {
             });
             return indexes;
         }
+        public checkHasAliveWatcherTeam(watcherUserId: number): boolean {
+            for (const [playerIndex, player] of this._players) {
+                if ((playerIndex !== 0) && (player.getIsAlive())) {
+                    if ((player.getUserId() === watcherUserId) || (player.getWatchOngoingSrcUserIds().has(watcherUserId))) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
     }
 }

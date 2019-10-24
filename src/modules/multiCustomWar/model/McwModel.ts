@@ -244,7 +244,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
             await _EXECUTORS.get(Helpers.getWarActionCode(container))(_war, container);
             _war.setIsExecutingAction(false);
 
-            if (!_war.getPlayerLoggedIn().getIsAlive()) {
+            if (!_war.checkHasAliveWatcherTeam(User.UserModel.getSelfUserId())) {
                 _war.setIsEnded(true);
                 AlertPanel.show({
                     title   : Lang.getText(Lang.Type.B0035),
@@ -1353,9 +1353,8 @@ namespace TinyWars.MultiCustomWar.McwModel {
         const fogMap                = war.getFogMap();
         const unitMap               = war.getUnitMap();
         const focusUnit             = unitMap.getUnit(beginningGridIndex, launchUnitId)!;
-        const shouldUpdateFogMap    = war.getPlayerLoggedIn().getTeamIndex() === focusUnit.getTeamIndex();
         const isUnitBeLoaded        = (actionCode === WarActionCodes.WarActionUnitBeLoaded) && (!revisedPath.isBlocked);
-        if (shouldUpdateFogMap) {
+        if (war.getWatcherTeamIndexes(User.UserModel.getSelfUserId()).has(focusUnit.getTeamIndex())) {
             fogMap.updateMapFromPathsByUnitAndPath(focusUnit, pathNodes);
         }
 

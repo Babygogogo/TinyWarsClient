@@ -40,26 +40,26 @@ namespace TinyWars.MultiCustomWar {
         // The other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _resetFogForPlayerLoggedIn(): void {
-            const war           = this._getWar() as McwWar;
-            const teamIndex     = war.getPlayerLoggedIn().getTeamIndex();
+            const war       = this._getWar() as McwWar;
+            const userId    = User.UserModel.getSelfUserId();
             war.getUnitMap().forEachUnitOnMap(unit => {
                 const gridIndex = unit.getGridIndex();
-                if (!VisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
+                if (!VisibilityHelpers.checkIsUnitOnMapVisibleToUser({
                     war,
                     gridIndex,
-                    unitType            : unit.getType(),
-                    isDiving            : unit.getIsDiving(),
-                    unitPlayerIndex     : unit.getPlayerIndex(),
-                    observerTeamIndex   : teamIndex,
+                    unitType        : unit.getType(),
+                    isDiving        : unit.getIsDiving(),
+                    unitPlayerIndex : unit.getPlayerIndex(),
+                    observerUserId  : userId,
                 })) {
                     DestructionHelpers.removeUnitOnMap(war, gridIndex);
                 }
             });
-            DestructionHelpers.removeEnemyUnitsLoaded(war, teamIndex);
+            DestructionHelpers.removeInvisibleLoadedUnits(war, userId);
 
             const tileMap = war.getTileMap();
             tileMap.forEachTile(tile => {
-                if (!VisibilityHelpers.checkIsTileVisibleToTeam(war, tile.getGridIndex(), teamIndex)) {
+                if (!VisibilityHelpers.checkIsTileVisibleToUser(war, tile.getGridIndex(), userId)) {
                     tile.setFogEnabled();
                 } else {
                     tile.setFogDisabled();
