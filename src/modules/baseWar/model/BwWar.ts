@@ -297,5 +297,12 @@ namespace TinyWars.BaseWar {
         public getEnterTurnTime(): number {
             return this.getTurnManager().getEnterTurnTime();
         }
+
+        public getWatcherTeamIndexes(watcherUserId: number): Set<number> {
+            return this.getPlayerManager().getWatcherTeamIndexes(watcherUserId);
+        }
+        public checkHasAliveWatcherTeam(watcherUserId: number): boolean {
+            return this.getPlayerManager().checkHasAliveWatcherTeam(watcherUserId);
+        }
     }
 }

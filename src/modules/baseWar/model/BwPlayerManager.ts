@@ -59,6 +59,15 @@ namespace TinyWars.BaseWar {
             }
             return playerIndexes;
         }
+        public getPlayerIndexesInTeams(teamIndexes: Set<number>): Set<number> {
+            const playerIndexes = new Set<number>();
+            for (const [playerIndex, player] of this._players) {
+                if (teamIndexes.has(player.getTeamIndex())) {
+                    playerIndexes.add(playerIndex);
+                }
+            }
+            return playerIndexes;
+        }
 
         public getTotalPlayersCount(includeNeutral: boolean): number {
             return includeNeutral ? this._players.size : this._players.size - 1;
@@ -97,6 +106,30 @@ namespace TinyWars.BaseWar {
             for (const [playerIndex, player] of this._players) {
                 ((includeNeutral) || (playerIndex !== 0)) && (func(player));
             }
+        }
+
+        public getWatcherTeamIndexes(watcherUserId: number): Set<number> {
+            const indexes = new Set<number>();
+            this.forEachPlayer(false, player => {
+                if (player.getIsAlive()) {
+                    if ((player.getUserId() === watcherUserId) ||
+                        (player.getWatchOngoingSrcUserIds().has(watcherUserId))
+                    ) {
+                        indexes.add(player.getTeamIndex());
+                    }
+                }
+            });
+            return indexes;
+        }
+        public checkHasAliveWatcherTeam(watcherUserId: number): boolean {
+            for (const [playerIndex, player] of this._players) {
+                if ((playerIndex !== 0) && (player.getIsAlive())) {
+                    if ((player.getUserId() === watcherUserId) || (player.getWatchOngoingSrcUserIds().has(watcherUserId))) {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
     }
 }

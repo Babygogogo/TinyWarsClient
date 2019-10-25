@@ -38,31 +38,6 @@ namespace TinyWars.Replay {
                 mapsForPath             : mapsForPath.length ? mapsForPath : undefined,
             };
         }
-        public serializeForPlayer(targetPlayerIndex: number): SerializedMcFogMap {
-            const mapSize           = this.getMapSize();
-            const war               = this._getWar() as ReplayWar;
-            const targetTeamIndex   = war.getPlayer(targetPlayerIndex)!.getTeamIndex();
-            const mapsForPath: Types.SerializedBwFogMapForPath[] = [];
-
-            for (const [playerIndex, map] of this._getMapsFromPaths()) {
-                const player = war.getPlayer(playerIndex)!;
-                if ((player.getIsAlive()) && (player.getTeamIndex() === targetTeamIndex)) {
-                    const serializedData = encodeMapForPaths(map, mapSize);
-                    if (serializedData != null) {
-                        mapsForPath.push({
-                            playerIndex : playerIndex,
-                            encodedMap  : serializedData,
-                        });
-                    }
-                }
-            }
-            return {
-                forceFogCode            : this.getForceFogCode(),
-                forceExpirePlayerIndex  : this.getForceExpirePlayerIndex(),
-                forceExpireTurnIndex    : this.getForceExpireTurnIndex(),
-                mapsForPath             : mapsForPath.length ? mapsForPath : undefined,
-            };
-        }
     }
 
     function encodeMapForPaths(map: number[][], mapSize: MapSize): string | undefined {

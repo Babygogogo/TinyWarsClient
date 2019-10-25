@@ -33,11 +33,11 @@ namespace TinyWars.BaseWar {
         }
         private async _initWithSerializedData(configVersion: string, mapFileName: string, data: Types.SerializedBwUnitMap): Promise<BwUnitMap> {
             const { mapWidth, mapHeight }   = await MapModel.getMapRawData(mapFileName);
-            const unitDatas                 = data.units;
+            const unitDataList              = data.units;
             const map                       = Helpers.createEmptyMap<BwUnit>(mapWidth);
             const loadedUnits               = new Map<number, BwUnit>();
-            if (unitDatas) {
-                for (const unitData of unitDatas) {
+            if (unitDataList) {
+                for (const unitData of unitDataList) {
                     const unit = new (this._getBwUnitClass())().init(unitData, configVersion);
                     if (unit.getLoaderUnitId() == null) {
                         map[unit.getGridX()][unit.getGridY()] = unit;
@@ -167,6 +167,9 @@ namespace TinyWars.BaseWar {
         public getUnitLoadedById(unitId: number): BwUnit | undefined {
             return this._loadedUnits.get(unitId);
         }
+        public getUnitsLoaded(): Map<number, BwUnit> {
+            return this._loadedUnits;
+        }
         public getUnitsLoadedByLoader(loader: BwUnit, isRecursive: boolean): BwUnit[] {
             const units: BwUnit[] = [];
             this.forEachUnitLoaded((unit: BwUnit) => {
@@ -225,16 +228,6 @@ namespace TinyWars.BaseWar {
                 if (unit.getPlayerIndex() === playerIndex) {
                     units.delete(unitId);
                     this.getView().removeUnit(unit.getView());
-                }
-            }
-        }
-        public removeEnemyUnitsLoaded(selfTeamIndex: number): void {
-            const units = this._loadedUnits;
-            const view  = this.getView();
-            for (const [unitId, unit] of units) {
-                if (unit.getTeamIndex() !== selfTeamIndex) {
-                    units.delete(unitId);
-                    view.removeUnit(unit.getView());
                 }
             }
         }

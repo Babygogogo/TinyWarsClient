@@ -6,9 +6,9 @@ namespace TinyWars.MultiCustomWar {
         public startRunning(war: McwWar): void {
             super.startRunning(war);
 
-            const teamIndex = war.getPlayerLoggedIn().getTeamIndex();
+            const userId = User.UserModel.getSelfUserId();
             war.getTileMap().forEachTile(tile => {
-                if (!VisibilityHelpers.checkIsTileVisibleToTeam(war, tile.getGridIndex(), teamIndex)) {
+                if (!VisibilityHelpers.checkIsTileVisibleToUser(war, tile.getGridIndex(), userId)) {
                     tile.setFogEnabled();
                 }
             });

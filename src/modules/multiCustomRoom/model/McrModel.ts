@@ -84,6 +84,11 @@ namespace TinyWars.MultiCustomRoom {
         let _replayInfos: ProtoTypes.IMcwReplayInfo[];
         let _replayData : ProtoTypes.S_McrGetReplayData;
 
+        let _unwatchedWarInfos      : ProtoTypes.IMcwWatchInfo[];
+        let _watchOngoingWarInfos   : ProtoTypes.IMcwWatchInfo[];
+        let _watchRequestedWarInfos : ProtoTypes.IMcwWatchInfo[];
+        let _watchedWarInfos        : ProtoTypes.IMcwWatchInfo[];
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for creating wars.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -466,6 +471,37 @@ namespace TinyWars.MultiCustomRoom {
         }
         export function getReplayData(): ProtoTypes.S_McrGetReplayData | undefined {
             return _replayData;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Functions for watch.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        export function setUnwatchedWarInfos(infos: ProtoTypes.IMcwWatchInfo[]): void {
+            _unwatchedWarInfos = infos;
+        }
+        export function getUnwatchedWarInfos(): ProtoTypes.IMcwWatchInfo[] | null {
+            return _unwatchedWarInfos;
+        }
+
+        export function setWatchOngoingWarInfos(infos: ProtoTypes.IMcwWatchInfo[]): void {
+            _watchOngoingWarInfos = infos;
+        }
+        export function getWatchOngoingWarInfos(): ProtoTypes.IMcwWatchInfo[] | null {
+            return _watchOngoingWarInfos;
+        }
+
+        export function setWatchRequestedWarInfos(infos: ProtoTypes.IMcwWatchInfo[]): void {
+            _watchRequestedWarInfos = infos;
+        }
+        export function getRequestedWarInfos(): ProtoTypes.IMcwWatchInfo[] | null {
+            return _watchRequestedWarInfos;
+        }
+
+        export function setWatchedWarInfos(infos: ProtoTypes.IMcwWatchInfo[]): void {
+            _watchedWarInfos = infos;
+        }
+        export function getWatchedWarInfos(): ProtoTypes.IMcwWatchInfo[] | null {
+            return _watchedWarInfos;
         }
     }
 

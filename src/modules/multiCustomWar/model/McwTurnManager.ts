@@ -22,44 +22,45 @@ namespace TinyWars.MultiCustomWar {
             }
         }
         protected _runPhaseResetVisionForCurrentPlayer(): void {
-            const playerIndex   = this.getPlayerIndexInTurn();
-            const war           = this._getWar() as McwWar;
-            war.getFogMap().resetMapFromPathsForPlayer(playerIndex);
+            const war           = this._getWar();
+            const playerInTurn  = war.getPlayerInTurn();
+            war.getFogMap().resetMapFromPathsForPlayer(playerInTurn.getPlayerIndex());
 
-            if (this.getPlayerIndexInTurn() === war.getPlayerIndexLoggedIn()) {
-                this._resetFogForPlayerLoggedIn();
+            if (war.getWatcherTeamIndexes(User.UserModel.getSelfUserId()).has(playerInTurn.getTeamIndex())) {
+                this._resetFogForWatcher();
             }
         }
         protected _runPhaseResetVisionForNextPlayer(): void {
-            if (this.getPlayerIndexInTurn() === (this._getWar() as McwWar).getPlayerIndexLoggedIn()) {
-                this._resetFogForPlayerLoggedIn();
+            const war = this._getWar();
+            if (war.getWatcherTeamIndexes(User.UserModel.getSelfUserId()).has(war.getPlayerInTurn().getTeamIndex())) {
+                this._resetFogForWatcher();
             }
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _resetFogForPlayerLoggedIn(): void {
-            const war           = this._getWar() as McwWar;
-            const teamIndex     = war.getPlayerLoggedIn().getTeamIndex();
+        private _resetFogForWatcher(): void {
+            const war       = this._getWar() as McwWar;
+            const userId    = User.UserModel.getSelfUserId();
             war.getUnitMap().forEachUnitOnMap(unit => {
                 const gridIndex = unit.getGridIndex();
-                if (!VisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
+                if (!VisibilityHelpers.checkIsUnitOnMapVisibleToUser({
                     war,
                     gridIndex,
-                    unitType            : unit.getType(),
-                    isDiving            : unit.getIsDiving(),
-                    unitPlayerIndex     : unit.getPlayerIndex(),
-                    observerTeamIndex   : teamIndex,
+                    unitType        : unit.getType(),
+                    isDiving        : unit.getIsDiving(),
+                    unitPlayerIndex : unit.getPlayerIndex(),
+                    observerUserId  : userId,
                 })) {
                     DestructionHelpers.removeUnitOnMap(war, gridIndex);
                 }
             });
-            DestructionHelpers.removeEnemyUnitsLoaded(war, teamIndex);
+            DestructionHelpers.removeInvisibleLoadedUnits(war, userId);
 
             const tileMap = war.getTileMap();
             tileMap.forEachTile(tile => {
-                if (!VisibilityHelpers.checkIsTileVisibleToTeam(war, tile.getGridIndex(), teamIndex)) {
+                if (!VisibilityHelpers.checkIsTileVisibleToUser(war, tile.getGridIndex(), userId)) {
                     tile.setFogEnabled();
                 } else {
                     tile.setFogDisabled();

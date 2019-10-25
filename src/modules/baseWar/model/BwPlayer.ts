@@ -7,13 +7,15 @@ namespace TinyWars.BaseWar {
     import GridIndexHelpers = Utility.GridIndexHelpers;
 
     export abstract class BwPlayer {
-        private _fund               : number;
-        private _hasVotedForDraw    : boolean;
-        private _isAlive            : boolean;
-        private _playerIndex        : number;
-        private _teamIndex          : number;
-        private _userId?            : number;
-        private _nickname           : string;
+        private _fund                   : number;
+        private _hasVotedForDraw        : boolean;
+        private _isAlive                : boolean;
+        private _playerIndex            : number;
+        private _teamIndex              : number;
+        private _watchOngoingSrcUserIds : Set<number>;
+        private _watchRequestSrcUserIds : Set<number>;
+        private _userId?                : number;
+        private _nickname?              : string | null;
 
         private _coId               : number | null | undefined;
         private _coUnitId           : number | null | undefined;
@@ -29,6 +31,8 @@ namespace TinyWars.BaseWar {
             this.setIsAlive(data.isAlive!);
             this._setPlayerIndex(data.playerIndex!);
             this._setTeamIndex(data.teamIndex!);
+            this._setWatchOngoingSrcUserIds(data.watchOngoingSrcUserIdList || []);
+            this._setWatchRequestSrcUserIds(data.watchRequestSrcUserIdList || []);
             this._setUserId(data.userId);
             this._setNickname(data.nickname || Lang.getText(Lang.Type.B0111));
             this._setCoId(data.coId);
@@ -80,6 +84,38 @@ namespace TinyWars.BaseWar {
         }
         public getTeamIndex(): number {
             return this._teamIndex;
+        }
+
+        private _setWatchOngoingSrcUserIds(list: number[]): void {
+            this._watchOngoingSrcUserIds = new Set(list);
+        }
+        public getWatchOngoingSrcUserIds(): Set<number> {
+            return this._watchOngoingSrcUserIds;
+        }
+        public addWatchOngoingSrcUserId(userId: number): void {
+            this.getWatchOngoingSrcUserIds().add(userId);
+        }
+        public removeWatchOngoingSrcUserId(userId: number): void {
+            this.getWatchOngoingSrcUserIds().delete(userId);
+        }
+
+        private _setWatchRequestSrcUserIds(list: number[]): void {
+            this._watchRequestSrcUserIds = new Set(list);
+        }
+        public getWatchRequestSrcUserIds(): Set<number> {
+            return this._watchRequestSrcUserIds;
+        }
+        public addWatchRequestSrcUserId(userId: number): void {
+            this.getWatchRequestSrcUserIds().add(userId);
+        }
+        public removeWatchRequestSrcUserId(userId: number): void {
+            this.getWatchRequestSrcUserIds().delete(userId);
+        }
+        public checkCanAddWatchRequestSrcUserId(userId: number): boolean {
+            return (this.getIsAlive())
+                && (this.getUserId() !== userId)
+                && (!this.getWatchRequestSrcUserIds().has(userId))
+                && (!this.getWatchOngoingSrcUserIds().has(userId));
         }
 
         private _setUserId(id: number | undefined): void {

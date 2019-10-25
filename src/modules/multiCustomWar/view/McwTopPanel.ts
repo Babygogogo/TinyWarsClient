@@ -153,9 +153,13 @@ namespace TinyWars.MultiCustomWar {
         private _updateLabelFund(): void {
             const war               = this._war;
             const playerInTurn      = war.getPlayerInTurn();
-            this._labelFund.text    = (war.getFogMap().checkHasFogCurrently()) && (playerInTurn.getTeamIndex() !== war.getPlayerLoggedIn().getTeamIndex())
-                ? `${Lang.getText(Lang.Type.B0032)}: ????`
-                : `${Lang.getText(Lang.Type.B0032)}: ${playerInTurn.getFund()}`;
+            if ((war.getFogMap().checkHasFogCurrently())                                                                        &&
+                (!war.getPlayerManager().getWatcherTeamIndexes(User.UserModel.getSelfUserId()).has(playerInTurn.getTeamIndex()))
+            ) {
+                this._labelFund.text = `${Lang.getText(Lang.Type.B0032)}: ????`;
+            } else {
+                this._labelFund.text = `${Lang.getText(Lang.Type.B0032)}: ${playerInTurn.getFund()}`;
+            }
         }
 
         private _updateLabelCoAndEnergy(): void {

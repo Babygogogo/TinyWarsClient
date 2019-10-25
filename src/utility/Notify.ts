@@ -93,6 +93,15 @@ namespace TinyWars.Utility.Notify {
         SMcrGetReplayData,
         SMcrGetReplayDataFailed,
         SMcrSyncWar,
+        SMcwWatchGetUnwatchedWarInfos,
+        SMcwWatchGetOngoingWarInfos,
+        SMcwWatchGetRequestedWarInfos,
+        SMcwWatchGetWatchedWarInfos,
+        SMcwWatchMakeRequest,
+        SMcwWatchHandleRequest,
+        SMcwWatchDeleteWatcher,
+        SMcwWatchContinueWar,
+        SMcwWatchContinueWarFailed,
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         SMcwPlayerSyncWar,

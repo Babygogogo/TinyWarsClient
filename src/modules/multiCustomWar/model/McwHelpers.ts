@@ -93,11 +93,11 @@ namespace TinyWars.MultiCustomWar.McwHelpers {
     }
 
     export function updateTilesAndUnitsOnVisibilityChanged(war: McwWar): void {
-        const teamIndexLoggedIn = war.getPlayerLoggedIn().getTeamIndex();
-        const tileMap           = war.getTileMap();
+        const userId    = User.UserModel.getSelfUserId();
+        const tileMap   = war.getTileMap();
         tileMap.forEachTile(tile => {
             const gridIndex = tile.getGridIndex();
-            if (VisibilityHelpers.checkIsTileVisibleToTeam(war, gridIndex, teamIndexLoggedIn)) {
+            if (VisibilityHelpers.checkIsTileVisibleToUser(war, gridIndex, userId)) {
                 if (tile.getIsFogEnabled()) {
                     tile.setFogDisabled();
                 }
@@ -111,20 +111,20 @@ namespace TinyWars.MultiCustomWar.McwHelpers {
 
         war.getUnitMap().forEachUnitOnMap(unit => {
             const gridIndex = unit.getGridIndex();
-            if (VisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
+            if (VisibilityHelpers.checkIsUnitOnMapVisibleToUser({
                 war,
                 gridIndex,
-                unitType            : unit.getType(),
-                isDiving            : unit.getIsDiving(),
-                unitPlayerIndex     : unit.getPlayerIndex(),
-                observerTeamIndex   : teamIndexLoggedIn,
+                unitType        : unit.getType(),
+                isDiving        : unit.getIsDiving(),
+                unitPlayerIndex : unit.getPlayerIndex(),
+                observerUserId  : userId,
             })) {
                 unit.setViewVisible(true);
             } else {
                 DestructionHelpers.removeUnitOnMap(war, gridIndex);
             }
         });
-        DestructionHelpers.removeEnemyUnitsLoaded(war, teamIndexLoggedIn);
+        DestructionHelpers.removeInvisibleLoadedUnits(war, userId);
 
         tileMap.getView().updateCoZone();
     }

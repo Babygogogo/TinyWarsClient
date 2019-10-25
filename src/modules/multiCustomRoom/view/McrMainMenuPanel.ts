@@ -2,6 +2,7 @@
 namespace TinyWars.MultiCustomRoom {
     import Lang         = Utility.Lang;
     import FlowManager  = Utility.FlowManager;
+    import Notify       = Utility.Notify;
 
     export class McrMainMenuPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
@@ -9,8 +10,9 @@ namespace TinyWars.MultiCustomRoom {
 
         private static _instance: McrMainMenuPanel;
 
-        private _btnBack    : GameUi.UiButton;
-        private _listCommand: GameUi.UiScrollList;
+        private _labelMenuTitle : GameUi.UiLabel;
+        private _btnBack        : GameUi.UiButton;
+        private _listCommand    : GameUi.UiScrollList;
 
         public static show(): void {
             if (!McrMainMenuPanel._instance) {
@@ -37,14 +39,15 @@ namespace TinyWars.MultiCustomRoom {
                 { ui: this._btnBack, callback: this._onTouchedBtnBack },
             ];
             this._notifyListeners = [
-                { type: Utility.Notify.Type.SLogout, callback: this._onNotifySLogout },
+                { type: Notify.Type.SLogout,            callback: this._onNotifySLogout },
+                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ];
 
             this._listCommand.setItemRenderer(CommandRenderer);
         }
 
         protected _onOpened(): void {
-            this._listCommand.bindData(this._createDataForListCommand());
+            this._updateView();
         }
 
         protected _onClosed(): void {
@@ -57,13 +60,23 @@ namespace TinyWars.MultiCustomRoom {
         private _onTouchedBtnBack(e: egret.TouchEvent): void {
             FlowManager.gotoLobby();
         }
+
         private _onNotifySLogout(e: egret.Event): void {
             McrMainMenuPanel.hide();
+        }
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateView();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
+        private _updateView(): void {
+            this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0205);
+            this._btnBack.label         = Lang.getText(Lang.Type.B0146);
+            this._listCommand.bindData(this._createDataForListCommand());
+        }
+
         private _createDataForListCommand(): DataForCommandRenderer[] {
             return [
                 {
@@ -92,6 +105,13 @@ namespace TinyWars.MultiCustomRoom {
                     callback: () => {
                         McrMainMenuPanel.hide();
                         MultiCustomRoom.McrContinueWarListPanel.show();
+                    },
+                },
+                {
+                    name    : Lang.getText(Lang.Type.B0206),
+                    callback: () => {
+                        McrMainMenuPanel.hide();
+                        McrWatchMainMenuPanel.show();
                     },
                 },
                 {

@@ -84,6 +84,14 @@
 		"bin-debug/modules/multiCustomRoom/view/McrJoinSettingsPanel.js",
 		"bin-debug/modules/multiCustomRoom/view/McrMainMenuPanel.js",
 		"bin-debug/modules/multiCustomRoom/view/McrReplayListPanel.js",
+		"bin-debug/modules/multiCustomRoom/view/McrWatchDeleteWatcherDetailPanel.js",
+		"bin-debug/modules/multiCustomRoom/view/McrWatchDeleteWatcherWarsPanel.js",
+		"bin-debug/modules/multiCustomRoom/view/McrWatchHandleRequestDetailPanel.js",
+		"bin-debug/modules/multiCustomRoom/view/McrWatchHandleRequestWarsPanel.js",
+		"bin-debug/modules/multiCustomRoom/view/McrWatchMainMenuPanel.js",
+		"bin-debug/modules/multiCustomRoom/view/McrWatchMakeRequestDetailPanel.js",
+		"bin-debug/modules/multiCustomRoom/view/McrWatchMakeRequestWarsPanel.js",
+		"bin-debug/modules/multiCustomRoom/view/McrWatchOngoingWarsPanel.js",
 		"bin-debug/modules/multiCustomWar/model/McwActionPlanner.js",
 		"bin-debug/modules/multiCustomWar/model/McwCursor.js",
 		"bin-debug/modules/multiCustomWar/model/McwField.js",
@@ -98,11 +106,11 @@
 		"bin-debug/modules/multiCustomWar/model/McwTileMap.js",
 		"bin-debug/modules/multiCustomWar/model/McwTurnManager.js",
 		"bin-debug/modules/multiCustomWar/model/McwUnit.js",
-		"bin-debug/modules/multiCustomWar/model/McwUnitMap.js",
+		"bin-debug/Platform.js",
 		"bin-debug/modules/multiCustomWar/model/McwWar.js",
 		"bin-debug/modules/multiCustomWar/view/McwActionPlannerView.js",
 		"bin-debug/modules/multiCustomWar/view/McwBackgroundPanel.js",
-		"bin-debug/Platform.js",
+		"bin-debug/modules/multiCustomWar/view/McwCoListPanel.js",
 		"bin-debug/modules/multiCustomWar/view/McwCursorView.js",
 		"bin-debug/modules/multiCustomWar/view/McwFieldView.js",
 		"bin-debug/modules/multiCustomWar/view/McwGridVisionEffectView.js",
@@ -191,6 +199,6 @@
 		"bin-debug/modules/multiCustomRoom/view/McrCreateBasicSettingsPage.js",
 		"bin-debug/modules/multiCustomRoom/view/McrCreateCoListPanel.js",
 		"bin-debug/modules/multiCustomRoom/view/McrCreateMapListPanel.js",
-		"bin-debug/modules/multiCustomWar/view/McwCoListPanel.js"
+		"bin-debug/modules/multiCustomWar/model/McwUnitMap.js"
 	]
 }

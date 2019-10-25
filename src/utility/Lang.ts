@@ -10,6 +10,10 @@ namespace TinyWars.Utility.Lang {
         A0030, A0031, A0032, A0033, A0034, A0035, A0036, A0037, A0038, A0039,
         A0040, A0041, A0042, A0043, A0044, A0045, A0046, A0047, A0048, A0049,
         A0050, A0051, A0052, A0053, A0054, A0055, A0056, A0057, A0058, A0059,
+        A0060, A0061, A0062, A0063, A0064, A0065, A0066, A0067, A0068, A0069,
+        A0070, A0071, A0072, A0073, A0074, A0075, A0076, A0077, A0078, A0079,
+        A0080, A0081, A0082, A0083, A0084, A0085, A0086, A0087, A0088, A0089,
+        A0090, A0091, A0092, A0093, A0094, A0095, A0096, A0097, A0098, A0099,
 
         B0000, B0001, B0002, B0003, B0004, B0005, B0006, B0007, B0008, B0009,
         B0010, B0011, B0012, B0013, B0014, B0015, B0016, B0017, B0018, B0019,
@@ -303,6 +307,18 @@ namespace TinyWars.Utility.Lang {
         [Type.A0059]: [
             `已成功修改地图可用性`,
             `The availability has been changed successfully.`,
+        ],
+        [Type.A0060]: [
+            `已发出观战请求，对方同意后即可观战`,
+            `Requested. You can watch the game when accepted.`,
+        ],
+        [Type.A0061]: [
+            `请求已处理`,
+            `Handled.`,
+        ],
+        [Type.A0062]: [
+            `已删除指定观战者`,
+            `The selected watcher is removed`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1127,6 +1143,114 @@ namespace TinyWars.Utility.Lang {
         [Type.B0204]: [
             `关闭`,
             `Close`,
+        ],
+        [Type.B0205]: [
+            `多人游戏`,
+            `Multi Player`,
+        ],
+        [Type.B0206]: [
+            `观战`,
+            `Watch`,
+        ],
+        [Type.B0207]: [
+            `发起请求`,
+            `Make Request`,
+        ],
+        [Type.B0208]: [
+            `处理请求`,
+            `Handle Request`,
+        ],
+        [Type.B0209]: [
+            `暂无请求`,
+            `No Requests`,
+        ],
+        [Type.B0210]: [
+            `暂无战局`,
+            `No Wars`,
+        ],
+        [Type.B0211]: [
+            `无`,
+            `No`,
+        ],
+        [Type.B0212]: [
+            `已请求`,
+            `Requested`,
+        ],
+        [Type.B0213]: [
+            `正在观战`,
+            `Watching`,
+        ],
+        [Type.B0214]: [
+            `同意`,
+            `Accept`,
+        ],
+        [Type.B0215]: [
+            `拒绝`,
+            `Decline`,
+        ],
+        [Type.B0216]: [
+            `自己`,
+            `Self`,
+        ],
+        [Type.B0217]: [
+            `对手`,
+            `Opponent`,
+        ],
+        [Type.B0218]: [
+            `已观战他人`,
+            `Watching Others`,
+        ],
+        [Type.B0219]: [
+            `删除观战者`,
+            `Delete Watcher`,
+        ],
+        [Type.B0220]: [
+            `删除`,
+            `Delete`,
+        ],
+        [Type.B0221]: [
+            `保留`,
+            `Keep`,
+        ],
+        [Type.B0222]: [
+            `继续观战`,
+            `Continue`,
+        ],
+        [Type.B0223]: [
+            `战局信息`,
+            `War Info`,
+        ],
+        [Type.B0224]: [
+            `玩家信息`,
+            `Player Info`,
+        ],
+        [Type.B0225]: [
+            `地图名称`,
+            `Map name`,
+        ],
+        [Type.B0226]: [
+            `战局ID`,
+            `War ID`,
+        ],
+        [Type.B0227]: [
+            `选择地图`,
+            `Select Map`,
+        ],
+        [Type.B0228]: [
+            `查找`,
+            `Search`,
+        ],
+        [Type.B0229]: [
+            `玩家数量`,
+            `Players`,
+        ],
+        [Type.B0230]: [
+            `更换`,
+            `Change`,
+        ],
+        [Type.B0231]: [
+            `我的回合`,
+            `My Turn`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

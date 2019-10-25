@@ -244,7 +244,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
             await _EXECUTORS.get(Helpers.getWarActionCode(container))(_war, container);
             _war.setIsExecutingAction(false);
 
-            if (!_war.getPlayerLoggedIn().getIsAlive()) {
+            if (!_war.checkHasAliveWatcherTeam(User.UserModel.getSelfUserId())) {
                 _war.setIsEnded(true);
                 AlertPanel.show({
                     title   : Lang.getText(Lang.Type.B0035),
@@ -747,12 +747,12 @@ namespace TinyWars.MultiCustomWar.McwModel {
                 focusUnit.updateView();
                 if (isSuccessful) {
                     const endingGridIndex = pathNodes[pathNodes.length - 1];
-                    if (VisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
+                    if (VisibilityHelpers.checkIsUnitOnMapVisibleToUser({
                         war,
                         unitType            : focusUnit.getType(),
                         unitPlayerIndex     : focusUnit.getPlayerIndex(),
                         gridIndex           : endingGridIndex,
-                        observerTeamIndex   : war.getPlayerLoggedIn().getTeamIndex(),
+                        observerUserId      : User.UserModel.getSelfUserId(),
                         isDiving            : false,
                     })) {
                         war.getGridVisionEffect().showEffectDive(endingGridIndex);
@@ -781,7 +781,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         moveUnit(war, WarActionCodes.WarActionUnitDrop, path, action.launchUnitId, path.fuelConsumption);
         focusUnit.setState(UnitState.Acted);
 
-        const shouldUpdateFogMap    = war.getPlayerLoggedIn().getTeamIndex() === focusUnit.getTeamIndex();
+        const shouldUpdateFogMap    = war.getWatcherTeamIndexes(User.UserModel.getSelfUserId()).has(focusUnit.getTeamIndex());
         const fogMap                = war.getFogMap();
         const unitsForDrop          = [] as McwUnit[];
         for (const { unitId, gridIndex } of (action.dropDestinations || []) as Types.DropDestination[]) {
@@ -937,7 +937,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
 
         return new Promise<void>(resolve => {
             focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
-                if ((isFlareSucceeded) && (war.getPlayerLoggedIn().getTeamIndex() === focusUnit.getTeamIndex())) {
+                if ((isFlareSucceeded) && (war.getWatcherTeamIndexes(User.UserModel.getSelfUserId()).has(focusUnit.getTeamIndex()))) {
                     const effect = war.getGridVisionEffect();
                     for (const grid of GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, flareRadius, war.getTileMap().getMapSize())) {
                         effect.showEffectFlare(grid);
@@ -1185,12 +1185,12 @@ namespace TinyWars.MultiCustomWar.McwModel {
                 focusUnit.updateView();
                 if (isSuccessful) {
                     const endingGridIndex = pathNodes[pathNodes.length - 1];
-                    if (VisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
+                    if (VisibilityHelpers.checkIsUnitOnMapVisibleToUser({
                         war,
                         unitType            : focusUnit.getType(),
                         unitPlayerIndex     : focusUnit.getPlayerIndex(),
                         gridIndex           : endingGridIndex,
-                        observerTeamIndex   : war.getPlayerLoggedIn().getTeamIndex(),
+                        observerUserId      : User.UserModel.getSelfUserId(),
                         isDiving            : false,
                     })) {
                         war.getGridVisionEffect().showEffectSurface(endingGridIndex);
@@ -1353,9 +1353,8 @@ namespace TinyWars.MultiCustomWar.McwModel {
         const fogMap                = war.getFogMap();
         const unitMap               = war.getUnitMap();
         const focusUnit             = unitMap.getUnit(beginningGridIndex, launchUnitId)!;
-        const shouldUpdateFogMap    = war.getPlayerLoggedIn().getTeamIndex() === focusUnit.getTeamIndex();
         const isUnitBeLoaded        = (actionCode === WarActionCodes.WarActionUnitBeLoaded) && (!revisedPath.isBlocked);
-        if (shouldUpdateFogMap) {
+        if (war.getWatcherTeamIndexes(User.UserModel.getSelfUserId()).has(focusUnit.getTeamIndex())) {
             fogMap.updateMapFromPathsByUnitAndPath(focusUnit, pathNodes);
         }
 

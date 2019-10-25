@@ -8,15 +8,23 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: ActionCode.S_McrCreateWar,                callback: _onSMcrCreateWar },
-            { msgCode: ActionCode.S_McrGetUnjoinedWaitingInfos,  callback: _onSMcrGetUnjoinedWaitingInfos, },
-            { msgCode: ActionCode.S_McrJoinWar,                  callback: _onSMcrJoinWar, },
-            { msgCode: ActionCode.S_McrGetJoinedWaitingInfos,    callback: _onSMcrGetJoinedWaitingInfos, },
-            { msgCode: ActionCode.S_McrExitWar,                  callback: _onSMcrExitWar, },
-            { msgCode: ActionCode.S_McrGetJoinedOngoingInfos,    callback: _onSMcrGetJoinedOngoingInfos, },
-            { msgCode: ActionCode.S_McrContinueWar,              callback: _onSMcrContinueWar, },
-            { msgCode: ActionCode.S_McrGetReplayInfos,           callback: _onSMcrGetReplayInfos, },
-            { msgCode: ActionCode.S_McrGetReplayData,            callback: _onSMcrGetReplayData, },
+            { msgCode: ActionCode.S_McrCreateWar,                   callback: _onSMcrCreateWar },
+            { msgCode: ActionCode.S_McrGetUnjoinedWaitingInfos,     callback: _onSMcrGetUnjoinedWaitingInfos, },
+            { msgCode: ActionCode.S_McrJoinWar,                     callback: _onSMcrJoinWar, },
+            { msgCode: ActionCode.S_McrGetJoinedWaitingInfos,       callback: _onSMcrGetJoinedWaitingInfos, },
+            { msgCode: ActionCode.S_McrExitWar,                     callback: _onSMcrExitWar, },
+            { msgCode: ActionCode.S_McrGetJoinedOngoingInfos,       callback: _onSMcrGetJoinedOngoingInfos, },
+            { msgCode: ActionCode.S_McrContinueWar,                 callback: _onSMcrContinueWar, },
+            { msgCode: ActionCode.S_McrGetReplayInfos,              callback: _onSMcrGetReplayInfos, },
+            { msgCode: ActionCode.S_McrGetReplayData,               callback: _onSMcrGetReplayData, },
+            { msgCode: ActionCode.S_McwWatchGetUnwatchedWarInfos,   callback: _onSMcwWatchGetUnwatchedWarInfos, },
+            { msgCode: ActionCode.S_McwWatchGetOngoingWarInfos,     callback: _onSMcwWatchGetOngoingWarInfos },
+            { msgCode: ActionCode.S_McwWatchGetRequestedWarInfos,   callback: _onSMcwWatchGetRequestedWarInfos, },
+            { msgCode: ActionCode.S_McwWatchGetWatchedWarInfos,     callback: _onSMcwWatchGetWatchedWarInfos },
+            { msgCode: ActionCode.S_McwWatchMakeRequest,            callback: _onSMcwWatchMakeRequest },
+            { msgCode: ActionCode.S_McwWatchHandleRequest,          callback: _onSMcwWatchHandleRequest },
+            { msgCode: ActionCode.S_McwWatchDeleteWatcher,          callback: _onSMcwWatchDeleteWatcher },
+            { msgCode: ActionCode.S_McwWatchContinueWar,            callback: _onSMcwWatchContinueWar },
         ], McrProxy);
     }
 
@@ -142,6 +150,124 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
         } else {
             McrModel.setReplayData(data as ProtoTypes.S_McrGetReplayData);
             Notify.dispatch(Notify.Type.SMcrGetReplayData);
+        }
+    }
+
+    export function reqUnwatchedWarInfos(): void {
+        NetManager.send({
+            C_McwWatchGetUnwatchedWarInfos: {
+            },
+        });
+    }
+    function _onSMcwWatchGetUnwatchedWarInfos(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_McwWatchGetUnwatchedWarInfos;
+        if (!data.errorCode) {
+            McrModel.setUnwatchedWarInfos(data.infos);
+            Notify.dispatch(Notify.Type.SMcwWatchGetUnwatchedWarInfos, data);
+        }
+    }
+
+    export function reqWatchGetOngoingWarInfos(): void {
+        NetManager.send({
+            C_McwWatchGetOngoingWarInfos: {
+            },
+        })
+    }
+    function _onSMcwWatchGetOngoingWarInfos(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_McwWatchGetOngoingWarInfos;
+        if (!data.errorCode) {
+            McrModel.setWatchOngoingWarInfos(data.infos);
+            Notify.dispatch(Notify.Type.SMcwWatchGetOngoingWarInfos, data);
+        }
+    }
+
+    export function reqWatchRequestedWarInfos(): void {
+        NetManager.send({
+            C_McwWatchGetRequestedWarInfos: {
+            },
+        });
+    }
+    function _onSMcwWatchGetRequestedWarInfos(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_McwWatchGetRequestedWarInfos;
+        if (!data.errorCode) {
+            McrModel.setWatchRequestedWarInfos(data.infos);
+            Notify.dispatch(Notify.Type.SMcwWatchGetRequestedWarInfos, data);
+        }
+    }
+
+    export function reqWatchedWarInfos(): void {
+        NetManager.send({
+            C_McwWatchGetWatchedWarInfos: {
+            },
+        });
+    }
+    function _onSMcwWatchGetWatchedWarInfos(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_McwWatchGetWatchedWarInfos;
+        if (!data.errorCode) {
+            McrModel.setWatchedWarInfos(data.infos);
+            Notify.dispatch(Notify.Type.SMcwWatchGetWatchedWarInfos, data);
+        }
+    }
+
+    export function reqWatchMakeRequest(warId: number, dstUserIds: number[]): void {
+        NetManager.send({
+            C_McwWatchMakeRequest: {
+                warId,
+                dstUserIds,
+            },
+        });
+    }
+    function _onSMcwWatchMakeRequest(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_McwWatchMakeRequest;
+        if (!data.errorCode) {
+            Notify.dispatch(Notify.Type.SMcwWatchMakeRequest, data);
+        }
+    }
+
+    export function reqWatchHandleRequest(warId: number, acceptSrcUserIds: number[], declineSrcUserIds: number[]): void {
+        NetManager.send({
+            C_McwWatchHandleRequest: {
+                warId,
+                acceptSrcUserIds,
+                declineSrcUserIds,
+            },
+        });
+    }
+    function _onSMcwWatchHandleRequest(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_McwWatchHandleRequest;
+        if (!data.errorCode) {
+            Notify.dispatch(Notify.Type.SMcwWatchHandleRequest, data);
+        }
+    }
+
+    export function reqWatchDeleteWatcher(warId: number, watcherUserIds: number[]): void {
+        NetManager.send({
+            C_McwWatchDeleteWatcher: {
+                warId,
+                watcherUserIds,
+            },
+        });
+    }
+    function _onSMcwWatchDeleteWatcher(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_McwWatchDeleteWatcher;
+        if (!data.errorCode) {
+            Notify.dispatch(Notify.Type.SMcwWatchDeleteWatcher, data);
+        }
+    }
+
+    export function reqWatchContinueWar(warId: number): void {
+        NetManager.send({
+            C_McwWatchContinueWar: {
+                warId,
+            },
+        });
+    }
+    function _onSMcwWatchContinueWar(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_McwWatchContinueWar;
+        if (data.errorCode) {
+            Notify.dispatch(Notify.Type.SMcwWatchContinueWarFailed, data);
+        } else {
+            Notify.dispatch(Notify.Type.SMcwWatchContinueWar, data);
         }
     }
 }

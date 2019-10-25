@@ -19,16 +19,55 @@ namespace TinyWars.Utility.VisibilityHelpers {
         unitPlayerIndex     : number;
         observerTeamIndex   : number;
     }
+    type ParamsForCheckIsUnitOnMapVisibleToUser = {
+        war                 : BwWar;
+        gridIndex           : GridIndex;
+        unitType            : Types.UnitType;
+        isDiving            : boolean;
+        unitPlayerIndex     : number;
+        observerUserId      : number;
+    }
 
     export function checkIsUnitOnMapVisibleToTeam(params: ParamsForCheckIsUnitOnMapVisibleToTeam): boolean {
-        const { war, gridIndex, unitType, isDiving, unitPlayerIndex, observerTeamIndex } = params;
+        return checkIsUnitOnMapVisibleToTeams(
+            params.war,
+            params.gridIndex,
+            params.unitType,
+            params.isDiving,
+            params.unitPlayerIndex,
+            new Set<number>([params.observerTeamIndex])
+        );
+    }
+    export function checkIsUnitOnMapVisibleToUser(params: ParamsForCheckIsUnitOnMapVisibleToUser): boolean {
+        return checkIsUnitOnMapVisibleToTeams(
+            params.war,
+            params.gridIndex,
+            params.unitType,
+            params.isDiving,
+            params.unitPlayerIndex,
+            params.war.getPlayerManager().getWatcherTeamIndexes(params.observerUserId)
+        );
+    }
+    function checkIsUnitOnMapVisibleToTeams(
+        war                 : BwWar,
+        gridIndex           : GridIndex,
+        unitType            : Types.UnitType,
+        isDiving            : boolean,
+        unitPlayerIndex     : number,
+        observerTeamIndexes : Set<number>,
+    ): boolean {
         const playerManager = war.getPlayerManager();
-        if (playerManager.getTeamIndex(unitPlayerIndex) === observerTeamIndex) {
+        if (observerTeamIndexes.has(playerManager.getTeamIndex(unitPlayerIndex))) {
             return true;
         }
 
         const unitMap = war.getUnitMap();
-        if (_checkHasUnitWithTeamIndexOnAdjacentGrids(unitMap, gridIndex, observerTeamIndex)) {
+        if (_checkHasUnitWithTeamIndexesOnAdjacentGrids(unitMap, gridIndex, observerTeamIndexes)) {
+            return true;
+        }
+
+        const tile = war.getTileMap().getTile(gridIndex);
+        if (observerTeamIndexes.has(tile.getTeamIndex())) {
             return true;
         }
 
@@ -41,13 +80,8 @@ namespace TinyWars.Utility.VisibilityHelpers {
             return true;
         }
 
-        const tile = war.getTileMap().getTile(gridIndex);
-        if (tile.getTeamIndex() === observerTeamIndex) {
-            return true;
-        }
-
         const canTileHideUnit = tile.checkCanHideUnit(unitType);
-        for (const playerIndex of playerManager.getPlayerIndexesInTeam(observerTeamIndex)) {
+        for (const playerIndex of playerManager.getPlayerIndexesInTeams(observerTeamIndexes)) {
             const visibilityFromPaths = fogMap.getVisibilityFromPathsForPlayer(gridIndex, playerIndex);
             if (visibilityFromPaths === Visibility.TrueVision) {
                 return true;
@@ -80,26 +114,33 @@ namespace TinyWars.Utility.VisibilityHelpers {
     }
 
     export function checkIsTileVisibleToTeam(war: BwWar, gridIndex: GridIndex, observerTeamIndex: number): boolean {
+        return checkIsTileVisibleToTeams(war, gridIndex, new Set<number>([observerTeamIndex]));
+    }
+    export function checkIsTileVisibleToUser(war: BwWar, gridIndex: GridIndex, observerUserId: number): boolean {
+        return checkIsTileVisibleToTeams(war, gridIndex, war.getPlayerManager().getWatcherTeamIndexes(observerUserId));
+    }
+    function checkIsTileVisibleToTeams(war: BwWar, gridIndex: GridIndex, observerTeamIndexes: Set<number>): boolean {
         const fogMap = war.getFogMap();
         if (!fogMap.checkHasFogCurrently()) {
             return true;
         }
 
-        const tile = war.getTileMap().getTile(gridIndex);
-        if (tile.getTeamIndex() === observerTeamIndex) {
+        const playerManager = war.getPlayerManager();
+        const tile          = war.getTileMap().getTile(gridIndex);
+        if (observerTeamIndexes.has(tile.getTeamIndex())) {
             return true;
         }
 
         const unitMap = war.getUnitMap();
-        if (_checkHasUnitWithTeamIndexOnGrid(unitMap, gridIndex, observerTeamIndex)) {
+        if (_checkHasUnitWithTeamIndexesOnGrid(unitMap, gridIndex, observerTeamIndexes)) {
             return true;
         }
-        if (_checkHasUnitWithTeamIndexOnAdjacentGrids(unitMap, gridIndex, observerTeamIndex)) {
+        if (_checkHasUnitWithTeamIndexesOnAdjacentGrids(unitMap, gridIndex, observerTeamIndexes)) {
             return true;
         }
 
         const isUnitHider = tile.checkIsUnitHider();
-        for (const playerIndex of war.getPlayerManager().getPlayerIndexesInTeam(observerTeamIndex)) {
+        for (const playerIndex of playerManager.getPlayerIndexesInTeams(observerTeamIndexes)) {
             const visibilityFromPaths = fogMap.getVisibilityFromPathsForPlayer(gridIndex, playerIndex);
             if (visibilityFromPaths === Visibility.TrueVision) {
                 return true;
@@ -284,19 +325,19 @@ namespace TinyWars.Utility.VisibilityHelpers {
         return { tiles: discoveredTiles, units: discoveredUnits };
     }
 
-    function _checkHasUnitWithTeamIndexOnAdjacentGrids(unitMap: BwUnitMap, origin: GridIndex, teamIndex: number): boolean {
+    function _checkHasUnitWithTeamIndexesOnAdjacentGrids(unitMap: BwUnitMap, origin: GridIndex, teamIndexes: Set<number>): boolean {
         for (const adjacentGrid of GridIndexHelpers.getAdjacentGrids(origin, unitMap.getMapSize())) {
             const unit = unitMap.getUnitOnMap(adjacentGrid);
-            if ((unit) && (unit.getTeamIndex() === teamIndex)) {
+            if ((unit) && (teamIndexes.has(unit.getTeamIndex()!))) {
                 return true;
             }
         }
         return false;
     }
 
-    function _checkHasUnitWithTeamIndexOnGrid(unitMap: BwUnitMap, gridIndex: GridIndex, teamIndex: number): boolean {
+    function _checkHasUnitWithTeamIndexesOnGrid(unitMap: BwUnitMap, gridIndex: GridIndex, teamIndexes: Set<number>): boolean {
         const unit = unitMap.getUnitOnMap(gridIndex);
-        return (unit != null) && (unit.getTeamIndex() === teamIndex);
+        return (unit != null) && (teamIndexes.has(unit.getTeamIndex()!));
     }
 
     function _createVisibilityMapFromPath(war: BwWar, path: GridIndex[], unit: BwUnit): Visibility[][] {

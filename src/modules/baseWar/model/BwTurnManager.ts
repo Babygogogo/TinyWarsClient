@@ -94,12 +94,15 @@ namespace TinyWars.BaseWar {
 
             for (const repairData of data.repairDataByTile || []) {
                 const gridIndex = repairData.gridIndex as GridIndex;
-                unitMap.getUnit(gridIndex, repairData.unitId).updateByRepairData(repairData);
+                const unit      = unitMap.getUnit(gridIndex, repairData.unitId);
+                if (unit) {
+                    unit.updateByRepairData(repairData);
 
-                if (repairData.deltaHp) {
-                    gridVisionEffect.showEffectRepair(gridIndex);
-                } else if ((repairData.deltaFlareAmmo) || (repairData.deltaFuel) || (repairData.deltaPrimaryWeaponAmmo)) {
-                    gridVisionEffect.showEffectSupply(gridIndex);
+                    if (repairData.deltaHp) {
+                        gridVisionEffect.showEffectRepair(gridIndex);
+                    } else if ((repairData.deltaFlareAmmo) || (repairData.deltaFuel) || (repairData.deltaPrimaryWeaponAmmo)) {
+                        gridVisionEffect.showEffectSupply(gridIndex);
+                    }
                 }
             }
         }
@@ -124,12 +127,15 @@ namespace TinyWars.BaseWar {
 
             for (const repairData of data.repairDataByUnit || []) {
                 const gridIndex = repairData.gridIndex as GridIndex;
-                unitMap.getUnit(gridIndex, repairData.unitId).updateByRepairData(repairData);
+                const unit      = unitMap.getUnit(gridIndex, repairData.unitId)
+                if (unit) {
+                    unit.updateByRepairData(repairData);
 
-                if (repairData.deltaHp) {
-                    gridVisionEffect.showEffectRepair(gridIndex);
-                } else if ((repairData.deltaFlareAmmo) || (repairData.deltaFuel) || (repairData.deltaPrimaryWeaponAmmo)) {
-                    gridVisionEffect.showEffectSupply(gridIndex);
+                    if (repairData.deltaHp) {
+                        gridVisionEffect.showEffectRepair(gridIndex);
+                    } else if ((repairData.deltaFlareAmmo) || (repairData.deltaFuel) || (repairData.deltaPrimaryWeaponAmmo)) {
+                        gridVisionEffect.showEffectSupply(gridIndex);
+                    }
                 }
             }
         }
@@ -140,12 +146,15 @@ namespace TinyWars.BaseWar {
 
             for (const repairData of data.recoverDataByCo || []) {
                 const gridIndex = repairData.gridIndex as GridIndex;
-                unitMap.getUnit(gridIndex, repairData.unitId).updateByRepairData(repairData);
+                const unit      = unitMap.getUnit(gridIndex, repairData.unitId);
+                if (unit) {
+                    unit.updateByRepairData(repairData);
 
-                if (repairData.deltaHp) {
-                    gridVisionEffect.showEffectRepair(gridIndex);
-                } else if ((repairData.deltaFlareAmmo) || (repairData.deltaFuel) || (repairData.deltaPrimaryWeaponAmmo)) {
-                    gridVisionEffect.showEffectSupply(gridIndex);
+                    if (repairData.deltaHp) {
+                        gridVisionEffect.showEffectRepair(gridIndex);
+                    } else if ((repairData.deltaFlareAmmo) || (repairData.deltaFuel) || (repairData.deltaPrimaryWeaponAmmo)) {
+                        gridVisionEffect.showEffectSupply(gridIndex);
+                    }
                 }
             }
         }
