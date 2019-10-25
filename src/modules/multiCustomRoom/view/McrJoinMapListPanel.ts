@@ -15,10 +15,11 @@ namespace TinyWars.MultiCustomRoom {
 
         private static _instance: McrJoinMapListPanel;
 
-        private _listWar   : GameUi.UiScrollList;
-        private _labelNoWar: GameUi.UiLabel;
-        private _zoomMap   : GameUi.UiZoomableComponent;
-        private _btnBack   : GameUi.UiButton;
+        private _labelMenuTitle : GameUi.UiLabel;
+        private _listWar        : GameUi.UiScrollList;
+        private _labelNoWar     : GameUi.UiLabel;
+        private _zoomMap        : GameUi.UiZoomableComponent;
+        private _btnBack        : GameUi.UiButton;
 
         private _groupInfo      : eui.Group;
         private _labelMapName   : GameUi.UiLabel;
@@ -53,6 +54,7 @@ namespace TinyWars.MultiCustomRoom {
         protected _onFirstOpened(): void {
             this._notifyListeners = [
                 { type: Notify.Type.SMcrGetUnjoinedWaitingInfos,    callback: this._onNotifySMcrGetUnjoinedWaitingInfos },
+                { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
             ];
             this._uiListeners = [
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
@@ -65,6 +67,8 @@ namespace TinyWars.MultiCustomRoom {
             this._groupInfo.visible = false;
             this._zoomMap.setMouseWheelListenerEnabled(true);
             this._zoomMap.setTouchListenerEnabled(true);
+            this._updateComponentsForLanguage();
+
             McrProxy.reqUnjoinedWarInfos();
         }
 
@@ -114,6 +118,9 @@ namespace TinyWars.MultiCustomRoom {
             }
             this.setSelectedIndex(0);
         }
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateComponentsForLanguage();
+        }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
             McrJoinMapListPanel.hide();
@@ -123,6 +130,11 @@ namespace TinyWars.MultiCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
+        private _updateComponentsForLanguage(): void {
+            this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0023);
+            this._btnBack.label         = Lang.getText(Lang.Type.B0146);
+        }
+
         private _createDataForListWar(infos: ProtoTypes.IMcrWaitingInfo[]): DataForWarRenderer[] {
             const data: DataForWarRenderer[] = [];
             if (infos) {

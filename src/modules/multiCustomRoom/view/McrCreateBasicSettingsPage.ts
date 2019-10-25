@@ -8,8 +8,10 @@ namespace TinyWars.MultiCustomRoom {
     import HelpPanel        = Common.HelpPanel;
 
     export class McrCreateBasicSettingsPage extends GameUi.UiTabPage {
-        private _labelMapName       : GameUi.UiLabel;
-        private _labelPlayersCount  : GameUi.UiLabel;
+        private _labelMapNameTitle      : GameUi.UiLabel;
+        private _labelMapName           : GameUi.UiLabel;
+        private _labelPlayersCountTitle : GameUi.UiLabel;
+        private _labelPlayersCount      : GameUi.UiLabel;
 
         private _labelWarNameTitle  : GameUi.UiLabel;
         private _inputWarName       : GameUi.UiTextInput;
@@ -45,7 +47,7 @@ namespace TinyWars.MultiCustomRoom {
         private _btnHelpTimeLimit   : GameUi.UiButton;
 
         private _labelCoName        : GameUi.UiLabel;
-        private _btnChangeCo        : GameUi.UiLabel;
+        private _btnChangeCo        : GameUi.UiButton;
 
         protected _mapMetaData: ProtoTypes.IMapMetaData;
 
@@ -82,7 +84,7 @@ namespace TinyWars.MultiCustomRoom {
         protected _onOpened(): void {
             this._mapMetaData = McrModel.getCreateWarMapMetaData();
 
-            this._updateTitles();
+            this._updateComponentsForLanguage();
             this._updateInputWarName();
             this._updateInputWarPassword();
             this._updateInputWarComment();
@@ -99,7 +101,7 @@ namespace TinyWars.MultiCustomRoom {
         // Event callbacks.
         ////////////////////////////////////////////////////////////////////////////////
         private _onNotifyLanguageChanged(e: egret.Event): void {
-            this._updateTitles();
+            this._updateComponentsForLanguage();
         }
 
         private _onFocusOutInputWarName(e: egret.Event): void {
@@ -190,7 +192,9 @@ namespace TinyWars.MultiCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////
         // View functions.
         ////////////////////////////////////////////////////////////////////////////////
-        private _updateTitles(): void {
+        private _updateComponentsForLanguage(): void {
+            this._labelMapNameTitle.text        = `${Lang.getText(Lang.Type.B0225)}: `;
+            this._labelPlayersCountTitle.text   = `${Lang.getText(Lang.Type.B0229)}: `;
             this._labelWarNameTitle.text        = `${Lang.getText(Lang.Type.B0185)}: `;
             this._labelWarPasswordTitle.text    = `${Lang.getText(Lang.Type.B0186)}: `;
             this._labelWarCommentTitle.text     = `${Lang.getText(Lang.Type.B0187)}: `;
@@ -198,6 +202,7 @@ namespace TinyWars.MultiCustomRoom {
             this._labelTeamTitle.text           = `${Lang.getText(Lang.Type.B0019)}: `;
             this._labelFogTitle.text            = `${Lang.getText(Lang.Type.B0020)}: `;
             this._labelTimeLimitTitle.text      = `${Lang.getText(Lang.Type.B0188)}: `;
+            this._btnChangeCo.label             = Lang.getText(Lang.Type.B0230);
         }
 
         private _updateInputWarName(): void {

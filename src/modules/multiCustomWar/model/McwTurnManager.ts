@@ -22,24 +22,25 @@ namespace TinyWars.MultiCustomWar {
             }
         }
         protected _runPhaseResetVisionForCurrentPlayer(): void {
-            const playerIndex   = this.getPlayerIndexInTurn();
-            const war           = this._getWar() as McwWar;
-            war.getFogMap().resetMapFromPathsForPlayer(playerIndex);
+            const war           = this._getWar();
+            const playerInTurn  = war.getPlayerInTurn();
+            war.getFogMap().resetMapFromPathsForPlayer(playerInTurn.getPlayerIndex());
 
-            if (this.getPlayerIndexInTurn() === war.getPlayerIndexLoggedIn()) {
-                this._resetFogForPlayerLoggedIn();
+            if (war.getWatcherTeamIndexes(User.UserModel.getSelfUserId()).has(playerInTurn.getTeamIndex())) {
+                this._resetFogForWatcher();
             }
         }
         protected _runPhaseResetVisionForNextPlayer(): void {
-            if (this.getPlayerIndexInTurn() === (this._getWar() as McwWar).getPlayerIndexLoggedIn()) {
-                this._resetFogForPlayerLoggedIn();
+            const war = this._getWar();
+            if (war.getWatcherTeamIndexes(User.UserModel.getSelfUserId()).has(war.getPlayerInTurn().getTeamIndex())) {
+                this._resetFogForWatcher();
             }
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _resetFogForPlayerLoggedIn(): void {
+        private _resetFogForWatcher(): void {
             const war       = this._getWar() as McwWar;
             const userId    = User.UserModel.getSelfUserId();
             war.getUnitMap().forEachUnitOnMap(unit => {

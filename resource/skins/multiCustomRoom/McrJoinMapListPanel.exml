@@ -32,7 +32,8 @@
     <e:Group top="40" bottom="0" width="200" right="0">
         <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" />
-        <GameUi:UiLabel text="加入房间" y="14" bold="true" size="25" x="50" textColor="0xffffff" />
+        <GameUi:UiLabel id="_labelMenuTitle" text="加入房间" y="14" bold="true" size="25" textColor="0xffffff"
+                        horizontalCenter="0" />
         <GameUi:UiLabel id="_labelNoWar" text="暂无房间" bold="true" size="26" x="47" verticalCenter="0"
                         textColor="0xffffff" />
         <GameUi:UiScrollList id="_listWar" left="0" right="0" bottom="50" top="50">
@@ -49,7 +50,7 @@
                             </GameUi:skinName>
                         </GameUi:UiButton>
                         <GameUi:UiLabel id="_labelName" text="地图名称" x="10" size="16" verticalCenter="0"
-                                        textColor.down="0x00ff00" maxTextWidth="150"/>
+                                        textColor.down="0x00ff00" maxTextWidth="150" />
                         <GameUi:UiLabel id="_labelPassword" text="密码" x="5" size="10" y="0" textColor="0xff0000" />
                         <GameUi:UiButton id="_btnNext" label="&gt;&gt;" x="160" verticalCenter="0" visible.up="false">
                             <e:skinName>

@@ -120,8 +120,7 @@ namespace TinyWars.MultiCustomWar {
                         this._getFramesForStateAnimation().push(`${this._getImageSourcePrefix(this._getIsDark())}_t99_s06_f${Helpers.getNumText(unitPlayerIndex)}`);
                     }
                 } else {
-                    const playerManager = war.getPlayerManager() as McwPlayerManager;
-                    if (!playerManager.checkIsSameTeam(unitPlayerIndex, playerManager.getPlayerIndexLoggedIn())) {
+                    if (!war.getWatcherTeamIndexes(User.UserModel.getSelfUserId()).has(unit.getTeamIndex())) {
                         this._getFramesForStateAnimation().push(`${this._getImageSourcePrefix(this._getIsDark())}_t99_s06_f${Helpers.getNumText(unitPlayerIndex)}`);
                     } else {
                         if (unit.getLoadedUnitsCount() > 0) {

@@ -14,10 +14,11 @@ namespace TinyWars.MultiCustomRoom {
 
         private static _instance: McrContinueWarListPanel;
 
-        private _listWar   : GameUi.UiScrollList;
-        private _labelNoWar: GameUi.UiLabel;
-        private _zoomMap   : GameUi.UiZoomableComponent;
-        private _btnBack   : GameUi.UiButton;
+        private _labelMenuTitle : GameUi.UiLabel;
+        private _listWar        : GameUi.UiScrollList;
+        private _labelNoWar     : GameUi.UiLabel;
+        private _zoomMap        : GameUi.UiZoomableComponent;
+        private _btnBack        : GameUi.UiButton;
 
         private _groupInfo      : eui.Group;
         private _labelMapName   : GameUi.UiLabel;
@@ -52,6 +53,7 @@ namespace TinyWars.MultiCustomRoom {
             this._notifyListeners = [
                 { type: Notify.Type.SMcrGetJoinedOngoingInfos,  callback: this._onNotifySMcrGetJoinedOngoingInfos },
                 { type: Notify.Type.SMcrExitWar,                callback: this._onNotifySMcrExitWar },
+                { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
             ];
             this._uiListeners = [
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
@@ -64,6 +66,8 @@ namespace TinyWars.MultiCustomRoom {
             this._groupInfo.visible = false;
             this._zoomMap.setMouseWheelListenerEnabled(true);
             this._zoomMap.setTouchListenerEnabled(true);
+            this._updateComponentsForLanguage();
+
             McrProxy.reqGetJoinedOngoingInfos();
         }
 
@@ -118,6 +122,10 @@ namespace TinyWars.MultiCustomRoom {
             FloatText.show(Lang.getText(Lang.Type.A0016));
         }
 
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateComponentsForLanguage();
+        }
+
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
             McrContinueWarListPanel.hide();
             McrMainMenuPanel.show();
@@ -126,6 +134,11 @@ namespace TinyWars.MultiCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
+        private _updateComponentsForLanguage(): void {
+            this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0024);
+            this._btnBack.label         = Lang.getText(Lang.Type.B0146);
+        }
+
         private _createDataForListWar(infos: ProtoTypes.IMcwOngoingDetail[]): DataForWarRenderer[] {
             const data: DataForWarRenderer[] = [];
             if (infos) {
@@ -255,11 +268,11 @@ namespace TinyWars.MultiCustomRoom {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data                  = this.data as DataForWarRenderer;
-            const warInfo               = data.warInfo;
-            this.currentState           = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
-            this._labelName.text        = warInfo.warName || WarMapModel.getMapNameInLanguage(warInfo.mapFileName);
-            this._labelInTurn.visible   = this._checkIsInTurn(warInfo);
+            const data              = this.data as DataForWarRenderer;
+            const warInfo           = data.warInfo;
+            this.currentState       = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
+            this._labelName.text    = warInfo.warName || WarMapModel.getMapNameInLanguage(warInfo.mapFileName);
+            this._labelInTurn.text  = this._checkIsInTurn(warInfo) ? Lang.getText(Lang.Type.B0231) : "";
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {

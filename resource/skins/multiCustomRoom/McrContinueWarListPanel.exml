@@ -30,7 +30,8 @@
     <e:Group top="40" bottom="0" width="200" right="0">
         <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" />
-        <GameUi:UiLabel text="继续战斗" y="14" bold="true" size="25" x="50" textColor="0xffffff" />
+        <GameUi:UiLabel id="_labelMenuTitle" text="继续战斗" y="14" bold="true" size="25" textColor="0xffffff"
+                        horizontalCenter="0" />
         <GameUi:UiLabel id="_labelNoWar" text="暂无战局" bold="true" size="26" x="47" verticalCenter="0"
                         textColor="0xffffff" />
         <GameUi:UiScrollList id="_listWar" left="0" right="0" bottom="50" top="50">

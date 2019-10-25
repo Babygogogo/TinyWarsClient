@@ -13,9 +13,10 @@ namespace TinyWars.MultiCustomRoom {
 
         private static _instance: McrCreateSettingsPanel;
 
-        private _tabSettings: GameUi.UiTab;
-        private _btnBack    : GameUi.UiButton;
-        private _btnConfirm : GameUi.UiButton;
+        private _tabSettings    : GameUi.UiTab;
+        private _labelMenuTitle : GameUi.UiLabel;
+        private _btnBack        : GameUi.UiButton;
+        private _btnConfirm     : GameUi.UiButton;
 
         private _timeoutIdForBtnConfirm: number;
 
@@ -44,7 +45,8 @@ namespace TinyWars.MultiCustomRoom {
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
             ];
             this._notifyListeners = [
-                { type: Notify.Type.SMcrCreateWar, callback: this._onNotifySCreateCustomOnlineWar },
+                { type: Notify.Type.SMcrCreateWar,      callback: this._onNotifySCreateCustomOnlineWar },
+                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ];
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
         }
@@ -61,6 +63,7 @@ namespace TinyWars.MultiCustomRoom {
                 },
             ]);
 
+            this._updateComponentsForLanguage();
             this._btnConfirm.enabled = true;
         }
 
@@ -99,6 +102,10 @@ namespace TinyWars.MultiCustomRoom {
             Utility.FlowManager.gotoLobby();
         }
 
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateComponentsForLanguage();
+        }
+
         private _resetTimeoutForBtnConfirm(): void {
             this._clearTimeoutForBtnConfirm();
             this._timeoutIdForBtnConfirm = egret.setTimeout(() => {
@@ -112,6 +119,12 @@ namespace TinyWars.MultiCustomRoom {
                 egret.clearTimeout(this._timeoutIdForBtnConfirm);
                 this._timeoutIdForBtnConfirm = undefined;
             }
+        }
+
+        private _updateComponentsForLanguage(): void {
+            this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0155);
+            this._btnBack.label         = Lang.getText(Lang.Type.B0146);
+            this._btnConfirm.label      = Lang.getText(Lang.Type.B0026);
         }
     }
 

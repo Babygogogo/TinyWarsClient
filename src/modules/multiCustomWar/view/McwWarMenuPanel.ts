@@ -28,10 +28,18 @@ namespace TinyWars.MultiCustomWar {
         private _btnBack        : GameUi.UiButton;
 
         private _groupInfo                      : eui.Group;
+        private _labelMenuTitle                 : GameUi.UiLabel;
+        private _labelWarInfoTitle              : GameUi.UiLabel;
+        private _labelPlayerInfoTitle           : GameUi.UiLabel;
+        private _labelMapNameTitle              : GameUi.UiLabel;
         private _labelMapName                   : GameUi.UiLabel;
+        private _labelMapDesignerTitle          : GameUi.UiLabel;
         private _labelMapDesigner               : GameUi.UiLabel;
+        private _labelWarIdTitle                : GameUi.UiLabel;
         private _labelWarId                     : GameUi.UiLabel;
+        private _labelTurnIndexTitle            : GameUi.UiLabel;
         private _labelTurnIndex                 : GameUi.UiLabel;
+        private _labelActionIdTitle             : GameUi.UiLabel;
         private _labelActionId                  : GameUi.UiLabel;
         private _labelIncomeModifierTitle       : GameUi.UiLabel;
         private _labelIncomeModifier            : GameUi.UiLabel;
@@ -54,10 +62,8 @@ namespace TinyWars.MultiCustomWar {
 
         private _war            : McwWar;
         private _unitMap        : McwUnitMap;
-        private _turnManager    : McwTurnManager;
         private _actionPlanner  : McwActionPlanner;
         private _dataForList    : DataForCommandRenderer[];
-        private _playerIndex    : number;
         private _menuType       = MenuType.Main;
 
         public static show(): void {
@@ -85,7 +91,8 @@ namespace TinyWars.MultiCustomWar {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.BwActionPlannerStateChanged,   callback: this._onNotifyMcwPlannerStateChanged },
+                { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyMcwPlannerStateChanged },
+                { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
             ];
             this._uiListeners = [
                 { ui: this._btnBack, callback: this._onTouchedBtnBack },
@@ -97,12 +104,10 @@ namespace TinyWars.MultiCustomWar {
             const war           = McwModel.getWar();
             this._war           = war;
             this._unitMap       = war.getUnitMap() as McwUnitMap;
-            this._turnManager   = war.getTurnManager() as McwTurnManager;
             this._actionPlanner = war.getActionPlanner() as McwActionPlanner;
-            this._playerIndex   = war.getPlayerIndexLoggedIn();
             this._menuType      = MenuType.Main;
 
-            this._updateTitles();
+            this._updateComponentsForLanguage();
             this._updateView();
 
             Notify.dispatch(Notify.Type.McwWarMenuPanelOpened);
@@ -127,6 +132,9 @@ namespace TinyWars.MultiCustomWar {
             } else {
                 this._updateListPlayer();
             }
+        }
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateComponentsForLanguage();
         }
 
         private _onTouchedBtnBack(e: egret.TouchEvent): void {
@@ -162,7 +170,15 @@ namespace TinyWars.MultiCustomWar {
             }
         }
 
-        private _updateTitles(): void {
+        private _updateComponentsForLanguage(): void {
+            this._labelMenuTitle.text                   = Lang.getText(Lang.Type.B0155);
+            this._labelWarInfoTitle.text                = Lang.getText(Lang.Type.B0223);
+            this._labelPlayerInfoTitle.text             = Lang.getText(Lang.Type.B0224);
+            this._labelMapNameTitle.text                = `${Lang.getText(Lang.Type.B0225)}: `;
+            this._labelMapDesignerTitle.text            = `${Lang.getText(Lang.Type.B0163)}: `;
+            this._labelWarIdTitle.text                  = `${Lang.getText(Lang.Type.B0226)}: `;
+            this._labelTurnIndexTitle.text              = `${Lang.getText(Lang.Type.B0091)}: `;
+            this._labelActionIdTitle.text               = `${Lang.getText(Lang.Type.B0090)}: `;
             this._labelIncomeModifierTitle.text         = `${Lang.getText(Lang.Type.B0179)}: `;
             this._labelInitialEnergyTitle.text          = `${Lang.getText(Lang.Type.B0180)}: `;
             this._labelEnergyGrowthModifierTitle.text   = `${Lang.getText(Lang.Type.B0181)}: `;
@@ -171,6 +187,7 @@ namespace TinyWars.MultiCustomWar {
             this._labelVisionRangeModifierTitle.text    = `${Lang.getText(Lang.Type.B0184)}: `;
             this._labelLuckLowerLimitTitle.text         = `${Lang.getText(Lang.Type.B0189)}: `;
             this._labelLuckUpperLimitTitle.text         = `${Lang.getText(Lang.Type.B0190)}: `;
+            this._btnBack.label                         = Lang.getText(Lang.Type.B0146);
         }
 
         private _updateGroupInfo(): void {

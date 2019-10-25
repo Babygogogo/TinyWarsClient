@@ -15,6 +15,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private static _instance: McrReplayListPanel;
 
+        private _labelMenuTitle : GameUi.UiLabel;
         private _labelNoReplay  : GameUi.UiLabel;
         private _listMap        : GameUi.UiScrollList;
         private _zoomMap        : GameUi.UiZoomableComponent;
@@ -56,6 +57,7 @@ namespace TinyWars.MultiCustomRoom {
                 { type: Notify.Type.SMcrGetReplayInfos,         callback: this._onNotifySMcrGetReplayInfos },
                 { type: Notify.Type.SMcrGetReplayData,          callback: this._onNotifySMcrGetReplayData },
                 { type: Notify.Type.SMcrGetReplayDataFailed,    callback: this._onNotifySMcrGetReplayDataFailed },
+                { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
             ];
             this._uiListeners = [
                 { ui: this._btnSearch, callback: this._onTouchTapBtnSearch },
@@ -115,6 +117,10 @@ namespace TinyWars.MultiCustomRoom {
             BlockPanel.hide();
         }
 
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateComponentsForLanguage();
+        }
+
         private _onTouchTapBtnSearch(e: egret.TouchEvent): void {
             // WarMap.WarMapSearchPanel.show();
             Utility.FloatText.show("TODO!!");
@@ -129,9 +135,16 @@ namespace TinyWars.MultiCustomRoom {
         // Functions for updating view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
+            this._updateComponentsForLanguage();
             this._dataForListReplay = this._createDataForListReplay();
             this._updateListReplay();
             this.setSelectedIndex(Math.floor(Math.random() * this._dataForListReplay.length));
+        }
+
+        private _updateComponentsForLanguage(): void {
+            this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0092);
+            this._btnBack.label         = Lang.getText(Lang.Type.B0146);
+            this._btnSearch.label       = Lang.getText(Lang.Type.B0228);
         }
 
         private _updateListReplay(): void {

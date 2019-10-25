@@ -26,6 +26,7 @@ namespace TinyWars.MultiCustomRoom {
         private _labelNoMap: GameUi.UiLabel;
 
         private _groupInfo          : eui.Group;
+        private _labelMenuTitle     : GameUi.UiLabel;
         private _labelMapName       : GameUi.UiLabel;
         private _labelDesigner      : GameUi.UiLabel;
         private _labelRating        : GameUi.UiLabel;
@@ -65,12 +66,16 @@ namespace TinyWars.MultiCustomRoom {
                 { ui: this._btnSearch, callback: this._onTouchTapBtnSearch },
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
             ];
+            this._notifyListeners = [
+                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            ];
             this._listMap.setItemRenderer(MapNameRenderer);
         }
         protected _onOpened(): void {
             this._groupInfo.visible = false;
             this._zoomMap.setMouseWheelListenerEnabled(true);
             this._zoomMap.setTouchListenerEnabled(true);
+            this._updateComponentsForLanguage();
 
             this.setMapFilters(this._mapFilters);
         }
@@ -124,9 +129,19 @@ namespace TinyWars.MultiCustomRoom {
             McrMainMenuPanel.show();
         }
 
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateComponentsForLanguage();
+        }
+
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
+        private _updateComponentsForLanguage(): void {
+            this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0227);
+            this._btnBack.label         = Lang.getText(Lang.Type.B0146);
+            this._btnSearch.label       = Lang.getText(Lang.Type.B0228);
+        }
+
         private _createDataForListMap(): DataForMapNameRenderer[] {
             const data: DataForMapNameRenderer[] = [];
             let { mapName, mapDesigner, playersCount, playedTimes, minRating } = this._mapFilters;
