@@ -1462,6 +1462,9 @@ export declare interface ICoSkillCfg {
     /** CoSkillCfg name */
     name?: (string|null);
 
+    /** CoSkillCfg showZone */
+    showZone?: (number|null);
+
     /** CoSkillCfg desc */
     desc?: (string[]|null);
 
@@ -1546,6 +1549,9 @@ export declare class CoSkillCfg implements ICoSkillCfg {
 
     /** CoSkillCfg name. */
     public name: string;
+
+    /** CoSkillCfg showZone. */
+    public showZone: number;
 
     /** CoSkillCfg desc. */
     public desc: string[];

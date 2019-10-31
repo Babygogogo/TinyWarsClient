@@ -242,6 +242,15 @@ namespace TinyWars.BaseWar {
             const t = this.getCoUsingSkillType();
             return (t === Types.CoSkillType.Power) || (t === Types.CoSkillType.SuperPower);
         }
+        public checkHasZoneSkillForCurrentSkills(): boolean {
+            const version = this._war.getConfigVersion();
+            for (const skillId of this.getCoCurrentSkills() || []) {
+                if (ConfigManager.getCoSkillCfg(version, skillId).showZone) {
+                    return true;
+                }
+            }
+            return false;
+        }
 
         public getCoIsDestroyedInTurn(): boolean {
             return this._coIsDestroyedInTurn;
