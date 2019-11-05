@@ -114,7 +114,15 @@ namespace TinyWars.MultiCustomRoom {
             this._labelNoMap.visible    = length <= 0;
             this._listMap.bindData(this._dataForList);
             this.setSelectedMapFileName(this._selectedMapFileName);
-            (length) && (this._listMap.scrollVerticalTo((this._dataForList.findIndex(data => data.mapFileName === this._selectedMapFileName) + 1) / length * 100));
+
+            if (length) {
+                for (let index = 0; index < length; ++index) {
+                    if (this._dataForList[index].mapFileName === this._selectedMapFileName) {
+                        this._listMap.scrollVerticalTo((index + 1) / length * 100);
+                        break;
+                    }
+                }
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////

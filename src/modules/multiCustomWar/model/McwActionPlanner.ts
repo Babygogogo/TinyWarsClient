@@ -475,10 +475,14 @@ namespace TinyWars.MultiCustomWar {
                 }
             } else {
                 if (this._checkCanFocusUnitOnMapAttackTarget(gridIndex)) {
-                    if (GridIndexHelpers.checkIsEqual(gridIndex, this.getCursor().getPreviousGridIndex())) {
-                        return State.RequestingUnitAttack;
-                    } else {
+                    if (!GridIndexHelpers.checkIsEqual(gridIndex, this.getCursor().getPreviousGridIndex())) {
                         return State.MakingMovePath;
+                    } else {
+                        if (this.getFocusUnit().checkCanAttackTargetAfterMovePath(this.getMovePath(), gridIndex)) {
+                            return State.RequestingUnitAttack;
+                        } else {
+                            return State.MakingMovePath;
+                        }
                     }
                 } else {
                     if (this.getFocusUnitLoaded()) {
