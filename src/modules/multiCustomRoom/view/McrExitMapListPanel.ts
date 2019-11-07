@@ -14,17 +14,20 @@ namespace TinyWars.MultiCustomRoom {
 
         private static _instance: McrExitMapListPanel;
 
-        private _listWar   : GameUi.UiScrollList;
-        private _labelNoWar: GameUi.UiLabel;
-        private _zoomMap   : GameUi.UiZoomableComponent;
-        private _btnBack   : GameUi.UiButton;
+        private _labelMenuTitle : GameUi.UiLabel;
+        private _listWar        : GameUi.UiScrollList;
+        private _labelNoWar     : GameUi.UiLabel;
+        private _zoomMap        : GameUi.UiZoomableComponent;
+        private _btnBack        : GameUi.UiButton;
 
-        private _groupInfo      : eui.Group;
-        private _labelMapName   : GameUi.UiLabel;
-        private _labelDesigner  : GameUi.UiLabel;
-        private _labelHasFog    : GameUi.UiLabel;
-        private _labelWarComment: GameUi.UiLabel;
-        private _listPlayer     : GameUi.UiScrollList;
+        private _groupInfo          : eui.Group;
+        private _labelMapName       : GameUi.UiLabel;
+        private _labelDesigner      : GameUi.UiLabel;
+        private _labelHasFog        : GameUi.UiLabel;
+        private _labelWarComment    : GameUi.UiLabel;
+        private _listPlayer         : GameUi.UiScrollList;
+        private _labelCommentTitle  : GameUi.UiLabel;
+        private _labelPlayersTitle  : GameUi.UiLabel;
 
         private _dataForListWar     : DataForWarRenderer[] = [];
         private _selectedWarIndex   : number;
@@ -50,6 +53,7 @@ namespace TinyWars.MultiCustomRoom {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
+                { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.SMcrGetJoinedWaitingInfos,  callback: this._onNotifySMcrGetJoinedWaitingInfos },
                 { type: Notify.Type.SMcrExitWar,                callback: this._onNotifySMcrExitWar },
             ];
@@ -61,6 +65,8 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         protected _onOpened(): void {
+            this._updateComponentsForLanguage();
+
             this._groupInfo.visible = false;
             this._zoomMap.setMouseWheelListenerEnabled(true);
             this._zoomMap.setTouchListenerEnabled(true);
@@ -100,6 +106,10 @@ namespace TinyWars.MultiCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateComponentsForLanguage();
+        }
+
         private _onNotifySMcrGetJoinedWaitingInfos(e: egret.Event): void {
             const newData        = this._createDataForListWar(McrModel.getJoinedWaitingInfos());
             this._dataForListWar = newData;
@@ -224,6 +234,14 @@ namespace TinyWars.MultiCustomRoom {
             this._zoomMap.addContent(tileMapView);
             this._zoomMap.addContent(unitMapView);
             this._zoomMap.setContentScale(0, true);
+        }
+
+        private _updateComponentsForLanguage(): void {
+            this._btnBack.label             = Lang.getText(Lang.Type.B0146);
+            this._labelMenuTitle.text       = Lang.getText(Lang.Type.B0022);
+            this._labelNoWar.text           = Lang.getText(Lang.Type.B0210);
+            this._labelCommentTitle.text    = `${Lang.getText(Lang.Type.B0187)}:`;
+            this._labelPlayersTitle.text    = `${Lang.getText(Lang.Type.B0232)}:`;
         }
     }
 

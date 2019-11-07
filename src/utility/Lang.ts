@@ -125,8 +125,8 @@ namespace TinyWars.Utility.Lang {
             "Network went wrong. Please re-login.",
         ],
         [Type.A0014]: [
-            "发生网络错误，请稍后再试。",
-            "Network went wrong. Please try again later.",
+            "发生网络错误，请稍后再试。亦可尝试刷新浏览器。",
+            "Network went wrong. Please try again later or refresh the browser.",
         ],
         [Type.A0015]: [
             "已成功创建战局，请等待其他玩家加入",
@@ -1251,6 +1251,10 @@ namespace TinyWars.Utility.Lang {
         [Type.B0231]: [
             `我的回合`,
             `My Turn`,
+        ],
+        [Type.B0232]: [
+            `玩家`,
+            `Players`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

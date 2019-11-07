@@ -3,6 +3,7 @@ namespace TinyWars.MultiCustomRoom {
     import ProtoTypes   = Utility.ProtoTypes;
     import Helpers      = Utility.Helpers;
     import Lang         = Utility.Lang;
+    import Notify       = Utility.Notify;
     import Types        = Utility.Types;
     import WarMapModel  = WarMap.WarMapModel;
     import HelpPanel    = Common.HelpPanel;
@@ -61,6 +62,9 @@ namespace TinyWars.MultiCustomRoom {
                 { ui: this._btnCancel,        callback: this._onTouchedBtnCancel },
                 { ui: this._btnConfirm,       callback: this._onTouchedBtnConfirm },
             ];
+            this._notifyListeners = [
+                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            ];
 
             this._listPlayer.setItemRenderer(PlayerRenderer);
         }
@@ -92,8 +96,13 @@ namespace TinyWars.MultiCustomRoom {
             McrProxy.reqExitCustomOnlineWar(this._openData.id);
             McrExitDetailPanel.hide();
         }
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateComponentsForLanguage();
+        }
 
         private _updateView(): void {
+            this._updateComponentsForLanguage();
+
             const info = this._openData;
             this._labelWarPassword.text             = info.warPassword ? info.warPassword : "----";
             this._labelHasFog.text                  = Lang.getText(info.hasFog ? Lang.Type.B0012 : Lang.Type.B0013);
@@ -148,6 +157,11 @@ namespace TinyWars.MultiCustomRoom {
 
                 return data;
             }
+        }
+
+        private _updateComponentsForLanguage(): void {
+            this._btnConfirm.label  = Lang.getText(Lang.Type.B0022);
+            this._btnCancel.label   = Lang.getText(Lang.Type.B0146);
         }
     }
 

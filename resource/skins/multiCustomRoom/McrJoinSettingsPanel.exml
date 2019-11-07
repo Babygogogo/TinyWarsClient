@@ -31,8 +31,9 @@
                 </e:Skin>
             </e:skinName>
         </GameUi:UiTab>
-        <GameUi:UiLabel text="加入战局" bold="true" size="26" top="14" right="46" textColor="0xffffff" />
-        <GameUi:UiButton id="_btnConfirm" label="确定>>" bottom="14" right="12">
+        <GameUi:UiLabel id="_labelMenuTitle" text="加入战局" bold="true" size="26" top="14" textColor="0xffffff"
+                        horizontalCenter="380" />
+        <GameUi:UiButton id="_btnConfirm" label="确定&gt;&gt;" bottom="14" right="12">
             <GameUi:skinName>
                 <e:Skin states="up,down,disabled">
                     <e:Image width="100%" height="100%" />
@@ -41,7 +42,7 @@
                 </e:Skin>
             </GameUi:skinName>
         </GameUi:UiButton>
-        <GameUi:UiButton id="_btnBack" label="&lt;&lt;返回" bottom="14" right="104">
+        <GameUi:UiButton id="_btnBack" label="&lt;&lt;返回" bottom="14" left="775">
             <e:skinName>
                 <e:Skin states="up,down,disabled">
                     <e:Image width="100%" height="100%" />
