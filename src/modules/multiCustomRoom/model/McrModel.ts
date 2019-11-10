@@ -493,7 +493,7 @@ namespace TinyWars.MultiCustomRoom {
         export function setWatchRequestedWarInfos(infos: ProtoTypes.IMcwWatchInfo[]): void {
             _watchRequestedWarInfos = infos;
         }
-        export function getRequestedWarInfos(): ProtoTypes.IMcwWatchInfo[] | null {
+        export function getWatchRequestedWarInfos(): ProtoTypes.IMcwWatchInfo[] | null {
             return _watchRequestedWarInfos;
         }
 

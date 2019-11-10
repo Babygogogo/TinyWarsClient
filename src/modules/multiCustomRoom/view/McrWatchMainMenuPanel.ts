@@ -93,6 +93,10 @@ namespace TinyWars.MultiCustomRoom {
                         McrWatchMainMenuPanel.hide();
                         McrWatchHandleRequestWarsPanel.show();
                     },
+                    redChecker  : () => {
+                        const watchInfos = McrModel.getWatchRequestedWarInfos();
+                        return (!!watchInfos) && (watchInfos.length > 0);
+                    },
                 },
                 {
                     name    : Lang.getText(Lang.Type.B0219),
@@ -113,18 +117,21 @@ namespace TinyWars.MultiCustomRoom {
     }
 
     type DataForCommandRenderer = {
-        name    : string;
-        callback: () => void;
+        name        : string;
+        callback    : () => void;
+        redChecker? : () => boolean;
     }
 
     class CommandRenderer extends eui.ItemRenderer {
-        private _labelCommand: GameUi.UiLabel;
+        private _labelCommand   : GameUi.UiLabel;
+        private _imgRed         : GameUi.UiImage;
 
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data = this.data as DataForCommandRenderer;
+            const data              = this.data as DataForCommandRenderer;
             this._labelCommand.text = data.name;
+            this._imgRed.visible    = (!!data.redChecker) && (data.redChecker());
         }
 
         public onItemTapEvent(e: eui.ItemTapEvent): void {

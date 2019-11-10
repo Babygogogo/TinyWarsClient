@@ -293,6 +293,7 @@ namespace TinyWars.MultiCustomRoom {
         private _btnChoose      : GameUi.UiButton;
         private _btnNext        : GameUi.UiButton;
         private _labelTurnIndex : GameUi.UiLabel;
+        private _labelReplayId  : GameUi.UiLabel;
         private _labelName      : GameUi.UiLabel;
 
         protected childrenCreated(): void {
@@ -309,6 +310,7 @@ namespace TinyWars.MultiCustomRoom {
             const info                  = data.info;
             this.currentState           = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
             this._labelTurnIndex.text   = `${Lang.getText(Lang.Type.B0091)}: ${info.turnIndex + 1}`;
+            this._labelReplayId.text    = `ID: ${info.replayId}`;
             this._labelName.text        = WarMapModel.getMapNameInLanguage(info.mapFileName);
         }
 

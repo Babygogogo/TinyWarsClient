@@ -111,7 +111,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onNotifySMcwWatchGetRequestedWarInfos(e: egret.Event): void {
-            const newData        = this._createDataForListWar(McrModel.getRequestedWarInfos());
+            const newData        = this._createDataForListWar(McrModel.getWatchRequestedWarInfos());
             this._dataForListWar = newData;
 
             if (newData.length > 0) {

@@ -7,6 +7,8 @@ namespace TinyWars.GameUi {
         thisObject?: any,
     }
 
+    import Logger = Utility.Logger;
+
     export abstract class UiPanel extends eui.Component {
         protected abstract readonly _LAYER_TYPE  : Utility.Types.LayerType;
         protected abstract readonly _IS_EXCLUSIVE: boolean;
@@ -75,6 +77,7 @@ namespace TinyWars.GameUi {
 
         private _doOpen(): void {
             if (this._checkIsReadyForOpen()) {
+                Logger.warn("Panel opened: " + this.skinName);
                 this._isCalledOpen = false;
 
                 this._setAutoAdjustHeightEnabled(this._isAutoAdjustHeight);

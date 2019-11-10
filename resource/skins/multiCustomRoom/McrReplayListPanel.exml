@@ -50,6 +50,17 @@
             <e:List>
                 <e:itemRendererSkinName>
                     <e:Skin width="200" height="46" currentState="up" states="up,down">
+                        <e:Group x="10" y="6">
+                            <GameUi:UiLabel id="_labelTurnIndex" text="回合数: 0" x="-17" size="12" verticalCenter="-12"
+                                            textColor.down="0x00ff00" y="-6" scaleX="1" scaleY="1" />
+                            <GameUi:UiLabel id="_labelReplayId" text="回合数: 0" x="-17" size="12" verticalCenter="-12"
+                                            y="-6" scaleX="1" scaleY="1" textColor.down="0x00ff00" />
+                            <e:layout>
+                                <e:HorizontalLayout/>
+                            </e:layout>
+                        </e:Group>
+                        <GameUi:UiLabel id="_labelName" text="地图名称" x="10" size="16" verticalCenter="6"
+                                        textColor.down="0x00ff00" maxTextWidth="150" />
                         <GameUi:UiButton id="_btnChoose" label="" left="0" right="0" top="0" bottom="0">
                             <GameUi:skinName>
                                 <e:Skin states="up,down,disabled">
@@ -59,10 +70,6 @@
                                 </e:Skin>
                             </GameUi:skinName>
                         </GameUi:UiButton>
-                        <GameUi:UiLabel id="_labelTurnIndex" text="回合数: 0" x="10" size="12" verticalCenter="-12"
-                                        textColor.down="0x00ff00" />
-                        <GameUi:UiLabel id="_labelName" text="地图名称" x="10" size="16" verticalCenter="6"
-                                        textColor.down="0x00ff00" maxTextWidth="150" />
                         <GameUi:UiButton id="_btnNext" label="&gt;&gt;" x="160" verticalCenter="0" visible.up="false">
                             <e:skinName>
                                 <e:Skin states="up,down,disabled">

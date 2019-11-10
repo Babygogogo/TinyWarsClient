@@ -106,12 +106,27 @@ namespace TinyWars.MultiCustomRoom {
                         McrMainMenuPanel.hide();
                         MultiCustomRoom.McrContinueWarListPanel.show();
                     },
+                    redChecker  : () => {
+                        const warInfos  = McrModel.getJoinedOngoingInfos();
+                        const userId    = User.UserModel.getSelfUserId();
+                        return (!!warInfos) && (warInfos.some(info => {
+                            const playerIndex = info.playerIndexInTurn!;
+                            return ((playerIndex === 1) && (info.p1UserId === userId))
+                                || ((playerIndex === 2) && (info.p2UserId === userId))
+                                || ((playerIndex === 3) && (info.p3UserId === userId))
+                                || ((playerIndex === 4) && (info.p4UserId === userId));
+                        }));
+                    },
                 },
                 {
                     name    : Lang.getText(Lang.Type.B0206),
                     callback: () => {
                         McrMainMenuPanel.hide();
                         McrWatchMainMenuPanel.show();
+                    },
+                    redChecker  : () => {
+                        const watchInfos = McrModel.getWatchRequestedWarInfos();
+                        return (!!watchInfos) && (watchInfos.length > 0);
                     },
                 },
                 {
@@ -126,18 +141,21 @@ namespace TinyWars.MultiCustomRoom {
     }
 
     type DataForCommandRenderer = {
-        name    : string;
-        callback: () => void;
+        name        : string;
+        callback    : () => void;
+        redChecker? : () => boolean;
     }
 
     class CommandRenderer extends eui.ItemRenderer {
-        private _labelCommand: GameUi.UiLabel;
+        private _labelCommand   : GameUi.UiLabel;
+        private _imgRed         : GameUi.UiImage;
 
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data = this.data as DataForCommandRenderer;
+            const data              = this.data as DataForCommandRenderer;
             this._labelCommand.text = data.name;
+            this._imgRed.visible    = (!!data.redChecker) && (data.redChecker());
         }
 
         public onItemTapEvent(e: eui.ItemTapEvent): void {
