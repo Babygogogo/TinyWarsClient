@@ -6,7 +6,7 @@
                         left="0" right="0" top="0" bottom="0" />
         <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" />
-        <GameUi:UiLabel text="在线玩家列表" y="10" size="22" horizontalCenter="0" />
+        <GameUi:UiLabel id="_labelTitle" text="在线玩家列表" y="10" size="22" horizontalCenter="0" />
         <GameUi:UiButton id="_btnClose" label="关闭&gt;&gt;" right="20" y="10">
             <GameUi:skinName>
                 <e:Skin states="up,down,disabled">
@@ -17,9 +17,9 @@
             </GameUi:skinName>
         </GameUi:UiButton>
         <e:Group y="40" horizontalCenter="0">
-            <GameUi:UiLabel text="双击玩家名称，可以查看其详细信息" y="0" size="16" x="0" />
+            <GameUi:UiLabel id="_labelTips" text="双击玩家名称，可以查看其详细信息" y="0" size="16" x="0" />
             <e:Group x="262" y="0">
-                <GameUi:UiLabel text="当前在线人数:" y="0" size="16" x="0" />
+                <GameUi:UiLabel id="_labelUsersCountTitle" text="当前在线人数:" y="0" size="16" x="0" />
                 <GameUi:UiLabel id="_labelUsersCount" text="0" y="0" size="16" x="107" />
             </e:Group>
             <e:layout>
@@ -36,12 +36,13 @@
                                             anchorOffsetY="0" alpha="0.8" left="0" right="0" top="0" bottom="0"
                                             visible.up="false" />
                             <GameUi:UiLabel id="_labelName" text="部队名五字" size="18" textColor="0xffffff" left="5"
-                                            right="5" top="5" bottom="5" textAlign="center" verticalAlign="middle" />
+                                            right="5" top="5" bottom="5" textAlign="center" verticalAlign="middle"
+                                            maxTextWidth="160" />
                         </e:Group>
                     </e:Skin>
                 </e:itemRendererSkinName>
                 <e:layout>
-                    <e:TileLayout orientation="rows" horizontalGap="20" verticalGap="30" />
+                    <e:TileLayout orientation="rows" horizontalGap="20" verticalGap="20" />
                 </e:layout>
             </e:List>
         </GameUi:UiScrollList>

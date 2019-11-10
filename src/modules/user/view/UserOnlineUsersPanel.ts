@@ -4,14 +4,16 @@ namespace TinyWars.User {
     import Lang         = Utility.Lang;
     import Types        = Utility.Types;
     import ProtoTypes   = Utility.ProtoTypes;
-    import UnitType     = Types.UnitType;
-    import GridIndex    = Types.GridIndex;
 
     export class UserOnlineUsersPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: UserOnlineUsersPanel;
+
+        private _labelTitle             : GameUi.UiLabel;
+        private _labelTips              : GameUi.UiLabel;
+        private _labelUsersCountTitle   : GameUi.UiLabel;
 
         private _group          : eui.Group;
         private _listUser       : GameUi.UiScrollList;
@@ -47,7 +49,8 @@ namespace TinyWars.User {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.SUserGetOnlineUsers,   callback: this._onNotifySUserGetOnlineUsers },
+                { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.SUserGetOnlineUsers,    callback: this._onNotifySUserGetOnlineUsers },
             ];
             this._uiListeners = [
                 { ui: this._btnClose, callback: this.close },
@@ -58,6 +61,7 @@ namespace TinyWars.User {
             UserProxy.reqUserGetOnlineUsers();
 
             this._updateView();
+            this._updateComponentsForLanguage();
         }
         protected _onClosed(): void {
             delete this._msg;
@@ -68,6 +72,10 @@ namespace TinyWars.User {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateComponentsForLanguage();
+        }
+
         private _onNotifySUserGetOnlineUsers(e: egret.Event): void {
             this._msg = e.data;
             this._updateView();
@@ -103,6 +111,13 @@ namespace TinyWars.User {
             }
 
             return dataList;
+        }
+
+        private _updateComponentsForLanguage(): void {
+            this._labelTitle.text           = Lang.getText(Lang.Type.B0236);
+            this._btnClose.label            = Lang.getText(Lang.Type.B0146);
+            this._labelTips.text            = Lang.getText(Lang.Type.A0064);
+            this._labelUsersCountTitle.text = `${Lang.getText(Lang.Type.B0237)}: `;
         }
     }
 

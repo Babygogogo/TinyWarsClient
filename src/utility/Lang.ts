@@ -324,6 +324,10 @@ namespace TinyWars.Utility.Lang {
             `注:任意条件均可留空,等同于忽略该查找条件`,
             `Tips: You can leave any of the filters blank. Those filters will be ignored.`,
         ],
+        [Type.A0064]: [
+            `双击玩家名称，可以查看其详细信息`,
+            `Touch a name to see the player's profile.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -1271,6 +1275,14 @@ namespace TinyWars.Utility.Lang {
         [Type.B0235]: [
             `回放ID`,
             `Replay ID`,
+        ],
+        [Type.B0236]: [
+            `在线玩家列表`,
+            `Online Players List`,
+        ],
+        [Type.B0237]: [
+            `当前在线人数`,
+            `Online Players`
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
