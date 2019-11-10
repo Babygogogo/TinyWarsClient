@@ -320,6 +320,10 @@ namespace TinyWars.Utility.Lang {
             `已删除指定观战者`,
             `The selected watcher is removed`,
         ],
+        [Type.A0063]: [
+            `注:任意条件均可留空,等同于忽略该查找条件`,
+            `Tips: You can leave any of the filters blank. Those filters will be ignored.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -1255,6 +1259,18 @@ namespace TinyWars.Utility.Lang {
         [Type.B0232]: [
             `玩家`,
             `Players`,
+        ],
+        [Type.B0233]: [
+            `全部显示`,
+            `Show All`,
+        ],
+        [Type.B0234]: [
+            `查找回放`,
+            `Search Replay`,
+        ],
+        [Type.B0235]: [
+            `回放ID`,
+            `Replay ID`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

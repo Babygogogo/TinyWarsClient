@@ -147,6 +147,10 @@ namespace TinyWars.Utility.Helpers {
         return true;
     }
 
+    export function checkIsNumber(value: any): boolean {
+        return value === +value;
+    }
+
     export function getObjectKeysCount(obj: { [key: string]: any }): number {
         let count = 0;
         for (const k in obj) {

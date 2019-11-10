@@ -122,8 +122,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onTouchTapBtnSearch(e: egret.TouchEvent): void {
-            // WarMap.WarMapSearchPanel.show();
-            Utility.FloatText.show("TODO!!");
+            McrReplaySearchPanel.show();
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {

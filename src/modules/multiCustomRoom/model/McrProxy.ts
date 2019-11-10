@@ -6,6 +6,11 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
     import ProtoTypes = Utility.ProtoTypes;
     import Notify     = Utility.Notify;
 
+    type DataForReqReplayInfos = {
+        replayId?   : number;
+        mapName?    : string;
+    }
+
     export function init(): void {
         NetManager.addListeners([
             { msgCode: ActionCode.S_McrCreateWar,                   callback: _onSMcrCreateWar },
@@ -121,11 +126,9 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
         }
     }
 
-    export function reqReplayInfos(replayId?: number): void {
+    export function reqReplayInfos(params?: DataForReqReplayInfos): void {
         NetManager.send({
-            C_McrGetReplayInfos: {
-                replayId,
-            },
+            C_McrGetReplayInfos: params || {},
         });
     }
     function _onSMcrGetReplayInfos(e: egret.Event): void {

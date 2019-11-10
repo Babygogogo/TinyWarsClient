@@ -13074,6 +13074,9 @@ export declare interface IC_McrGetReplayInfos {
 
     /** C_McrGetReplayInfos replayId */
     replayId?: (number|null);
+
+    /** C_McrGetReplayInfos mapName */
+    mapName?: (string|null);
 }
 
 /** Represents a C_McrGetReplayInfos. */
@@ -13087,6 +13090,9 @@ export declare class C_McrGetReplayInfos implements IC_McrGetReplayInfos {
 
     /** C_McrGetReplayInfos replayId. */
     public replayId: number;
+
+    /** C_McrGetReplayInfos mapName. */
+    public mapName: string;
 
     /**
      * Creates a new C_McrGetReplayInfos instance using the specified properties.
@@ -13165,6 +13171,12 @@ export declare interface IS_McrGetReplayInfos {
     /** S_McrGetReplayInfos errorCode */
     errorCode?: (number|null);
 
+    /** S_McrGetReplayInfos replayId */
+    replayId?: (number|null);
+
+    /** S_McrGetReplayInfos mapName */
+    mapName?: (string|null);
+
     /** S_McrGetReplayInfos infos */
     infos?: (IMcwReplayInfo[]|null);
 }
@@ -13180,6 +13192,12 @@ export declare class S_McrGetReplayInfos implements IS_McrGetReplayInfos {
 
     /** S_McrGetReplayInfos errorCode. */
     public errorCode: number;
+
+    /** S_McrGetReplayInfos replayId. */
+    public replayId: number;
+
+    /** S_McrGetReplayInfos mapName. */
+    public mapName: string;
 
     /** S_McrGetReplayInfos infos. */
     public infos: IMcwReplayInfo[];
