@@ -19,8 +19,11 @@
         <e:Group y="40" horizontalCenter="0">
             <GameUi:UiLabel id="_labelTips" text="双击玩家名称，可以查看其详细信息" y="0" size="16" x="0" />
             <e:Group x="262" y="0">
-                <GameUi:UiLabel id="_labelUsersCountTitle" text="当前在线人数:" y="0" size="16" x="0" />
-                <GameUi:UiLabel id="_labelUsersCount" text="0" y="0" size="16" x="107" />
+                <GameUi:UiLabel id="_labelUsersCountTitle" text="当前在线人数 :" y="0" size="16" x="0" />
+                <GameUi:UiLabel id="_labelUsersCount" text="0" y="0" size="16" x="108" />
+				<e:layout>
+					<e:HorizontalLayout/>
+				</e:layout>
             </e:Group>
             <e:layout>
                 <e:HorizontalLayout gap="20" />
