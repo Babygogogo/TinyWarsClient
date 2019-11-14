@@ -5,8 +5,11 @@ namespace TinyWars.MultiCustomRoom {
     import WarMapModel  = WarMap.WarMapModel;
 
     export class McrJoinAdvancedSettingsPage extends GameUi.UiTabPage {
-        private _labelMapName       : GameUi.UiLabel;
-        private _labelPlayersCount  : GameUi.UiLabel;
+        private _labelMapNameTitle      : GameUi.UiLabel;
+        private _labelMapName           : GameUi.UiLabel;
+        private _labelPlayersCountTitle : GameUi.UiLabel;
+        private _labelPlayersCount      : GameUi.UiLabel;
+        private _labelTips              : GameUi.UiLabel;
 
         private _labelInitialFundTitle      : GameUi.UiLabel;
         private _labelInitialFund           : GameUi.UiLabel;
@@ -46,7 +49,7 @@ namespace TinyWars.MultiCustomRoom {
         protected _onOpened(): void {
             this._mapMetaData = McrModel.getJoinWarMapMetaData();
 
-            this._updateTitles();
+            this._updateComponentsForLanguage();
             this._updateLabelMapName();
             this._updateLabelPlayersCount();
             this._updateLabelInitialFund();
@@ -63,7 +66,10 @@ namespace TinyWars.MultiCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////
         // View functions.
         ////////////////////////////////////////////////////////////////////////////////
-        private _updateTitles(): void {
+        private _updateComponentsForLanguage(): void {
+            this._labelMapNameTitle.text                = `${Lang.getText(Lang.Type.B0225)}:`;
+            this._labelPlayersCountTitle.text           = `${Lang.getText(Lang.Type.B0229)}:`;
+            this._labelTips.text                        = Lang.getText(Lang.Type.A0065);
             this._labelInitialFundTitle.text            = `${Lang.getText(Lang.Type.B0178)}: `;
             this._labelIncomeModifierTitle.text         = `${Lang.getText(Lang.Type.B0179)}: `;
             this._labelInitialEnergyTitle.text          = `${Lang.getText(Lang.Type.B0180)}: `;

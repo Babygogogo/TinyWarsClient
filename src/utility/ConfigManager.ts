@@ -1443,6 +1443,9 @@ namespace TinyWars.ConfigManager {
     export const DEFAULT_LUCK_UPPER_LIMIT   = 10;
     export const MAX_LUCK_LIMIT             = 100;
     export const MIN_LUCK_LIMIT             = -100;
+    export const MAX_WAR_NAME_LENGTH        = 20;
+    export const MAX_WAR_PASSWORD_LENGTH    = 4;
+    export const MAX_WAR_COMMENT_LENGTH     = 50;
 
     export function init(): void {
         NetManager.addListeners([

@@ -4,37 +4,48 @@ namespace TinyWars.MultiCustomRoom {
     import Helpers      = Utility.Helpers;
     import Lang         = Utility.Lang;
     import Types        = Utility.Types;
+    import Notify       = Utility.Notify;
     import HelpPanel    = Common.HelpPanel;
     import WarMapModel  = WarMap.WarMapModel;
 
     export class McrJoinBasicSettingsPage extends GameUi.UiTabPage {
-        private _labelMapName       : GameUi.UiLabel;
-        private _labelPlayersCount  : GameUi.UiLabel;
+        private _labelMapNameTitle      : GameUi.UiLabel;
+        private _labelMapName           : GameUi.UiLabel;
+        private _labelPlayersCountTitle : GameUi.UiLabel;
+        private _labelPlayersCount      : GameUi.UiLabel;
 
-        private _labelWarName       : GameUi.UiTextInput;
-        private _labelWarPassword   : GameUi.UiTextInput;
-        private _labelWarComment    : GameUi.UiTextInput;
+        private _labelWarNameTitle      : GameUi.UiLabel;
+        private _labelWarName           : GameUi.UiLabel;
+        private _labelWarPasswordTitle  : GameUi.UiLabel;
+        private _labelWarPassword       : GameUi.UiLabel;
+        private _labelWarCommentTitle   : GameUi.UiLabel;
+        private _labelWarComment        : GameUi.UiLabel;
 
-        private _btnPrevPlayerIndex : GameUi.UiButton;
-        private _btnNextPlayerIndex : GameUi.UiButton;
-        private _labelPlayerIndex   : GameUi.UiLabel;
-        private _btnHelpPlayerIndex : GameUi.UiButton;
+        private _labelPlayerIndexTitle  : GameUi.UiLabel;
+        private _btnPrevPlayerIndex     : GameUi.UiButton;
+        private _btnNextPlayerIndex     : GameUi.UiButton;
+        private _labelPlayerIndex       : GameUi.UiLabel;
+        private _btnHelpPlayerIndex     : GameUi.UiButton;
 
+        private _labelTeamTitle : GameUi.UiLabel;
         private _btnPrevTeam    : GameUi.UiButton;
         private _btnNextTeam    : GameUi.UiButton;
         private _labelTeam      : GameUi.UiLabel;
         private _btnHelpTeam    : GameUi.UiButton;
 
-        private _labelFog   : GameUi.UiLabel;
-        private _btnHelpFog : GameUi.UiButton;
+        private _labelFogTitle  : GameUi.UiLabel;
+        private _labelFog       : GameUi.UiLabel;
+        private _btnHelpFog     : GameUi.UiButton;
 
+        private _labelTimeLimitTitle: GameUi.UiLabel;
         private _labelTimeLimit     : GameUi.UiLabel;
         private _btnHelpTimeLimit   : GameUi.UiButton;
 
         private _labelCoName    : GameUi.UiLabel;
-        private _btnChangeCo    : GameUi.UiLabel;
+        private _btnChangeCo    : GameUi.UiButton;
 
-        private _listPlayer     : GameUi.UiScrollList;
+        private _labelPlayersTitle  : GameUi.UiLabel;
+        private _listPlayer         : GameUi.UiScrollList;
 
         private _mapMetaData: ProtoTypes.IMapMetaData;
 
@@ -56,6 +67,9 @@ namespace TinyWars.MultiCustomRoom {
                 { ui: this._btnHelpTimeLimit,   callback: this._onTouchedBtnHelpTimeLimit, },
                 { ui: this._btnChangeCo,        callback: this._onTouchedBtnChangeCo, },
             ];
+            this._notifyListeners = [
+                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            ];
 
             this._listPlayer.setItemRenderer(PlayerRenderer);
         }
@@ -63,6 +77,7 @@ namespace TinyWars.MultiCustomRoom {
         protected _onOpened(): void {
             this._mapMetaData = McrModel.getJoinWarMapMetaData();
 
+            this._updateComponentsForLanguage();
             this._updateLabelWarName();
             this._updateLabelWarPassword();
             this._updateLabelWarComment();
@@ -83,6 +98,10 @@ namespace TinyWars.MultiCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////
         // Event callbacks.
         ////////////////////////////////////////////////////////////////////////////////
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateComponentsForLanguage();
+        }
+
         private _onTouchedBtnPrevPlayerIndex(e: egret.TouchEvent): void {
             McrModel.setJoinWarPrevPlayerIndex();
             this._updateLabelPlayerIndex();
@@ -139,6 +158,20 @@ namespace TinyWars.MultiCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////
         // View functions.
         ////////////////////////////////////////////////////////////////////////////////
+        private _updateComponentsForLanguage(): void {
+            this._labelMapNameTitle.text        = `${Lang.getText(Lang.Type.B0225)}:`;
+            this._labelPlayersCountTitle.text   = `${Lang.getText(Lang.Type.B0229)}:`;
+            this._labelWarNameTitle.text        = `${Lang.getText(Lang.Type.B0185)}:`;
+            this._labelWarPasswordTitle.text    = `${Lang.getText(Lang.Type.B0186)}:`;
+            this._labelWarCommentTitle.text     = `${Lang.getText(Lang.Type.B0187)}:`;
+            this._labelPlayerIndexTitle.text    = `${Lang.getText(Lang.Type.B0018)}:`;
+            this._labelTeamTitle.text           = `${Lang.getText(Lang.Type.B0019)}:`;
+            this._labelFogTitle.text            = `${Lang.getText(Lang.Type.B0020)}:`;
+            this._labelTimeLimitTitle.text      = `${Lang.getText(Lang.Type.B0188)}:`;
+            this._labelPlayersTitle.text        = `${Lang.getText(Lang.Type.B0188)}:`;
+            this._btnChangeCo.label             = `${Lang.getText(Lang.Type.B0232)}:`;
+        }
+
         private _updateLabelWarName(): void {
             this._labelWarName.text = McrModel.getJoinWarRoomInfo().warName || "--";
         }

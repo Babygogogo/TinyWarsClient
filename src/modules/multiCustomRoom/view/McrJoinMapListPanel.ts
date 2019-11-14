@@ -135,6 +135,7 @@ namespace TinyWars.MultiCustomRoom {
         private _updateComponentsForLanguage(): void {
             this._labelMenuTitle.text       = Lang.getText(Lang.Type.B0023);
             this._btnBack.label             = Lang.getText(Lang.Type.B0146);
+            this._labelNoWar.text           = Lang.getText(Lang.Type.B0210);
             this._labelCommentTitle.text    = `${Lang.getText(Lang.Type.B0187)}:`;
             this._labelPlayersTitle.text    = `${Lang.getText(Lang.Type.B0232)}:`;
         }

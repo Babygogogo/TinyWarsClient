@@ -117,7 +117,7 @@ namespace TinyWars.User {
             this._labelTitle.text           = Lang.getText(Lang.Type.B0236);
             this._btnClose.label            = Lang.getText(Lang.Type.B0146);
             this._labelTips.text            = Lang.getText(Lang.Type.A0064);
-            this._labelUsersCountTitle.text = `${Lang.getText(Lang.Type.B0237)} : `;
+            this._labelUsersCountTitle.text = `${Lang.getText(Lang.Type.B0237)}:`;
         }
     }
 

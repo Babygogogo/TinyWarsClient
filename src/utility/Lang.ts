@@ -59,6 +59,14 @@ namespace TinyWars.Utility.Lang {
 
         F0000, F0001, F0002, F0003, F0004, F0005, F0006, F0007, F0008, F0009,
         F0010, F0011, F0012, F0013, F0014, F0015, F0016, F0017, F0018, F0019,
+        F0020, F0021, F0022, F0023, F0024, F0025, F0026, F0027, F0028, F0029,
+        F0030, F0031, F0032, F0033, F0034, F0035, F0036, F0037, F0038, F0039,
+        F0040, F0041, F0042, F0043, F0044, F0045, F0046, F0047, F0048, F0049,
+        F0050, F0051, F0052, F0053, F0054, F0055, F0056, F0057, F0058, F0059,
+        F0060, F0061, F0062, F0063, F0064, F0065, F0066, F0067, F0068, F0069,
+        F0070, F0071, F0072, F0073, F0074, F0075, F0076, F0077, F0078, F0079,
+        F0080, F0081, F0082, F0083, F0084, F0085, F0086, F0087, F0088, F0089,
+        F0090, F0091, F0092, F0093, F0094, F0095, F0096, F0097, F0098, F0099,
     }
     export const enum RichType {
         R0000, R0001, R0002, R0003, R0004, R0005, R0006, R0007, R0008, R0009,
@@ -327,6 +335,10 @@ namespace TinyWars.Utility.Lang {
         [Type.A0064]: [
             `双击玩家名称，可以查看其详细信息`,
             `Touch a name to see the player's profile.`,
+        ],
+        [Type.A0065]: [
+            `本页设置对局内所有玩家都生效`,
+            `The settings affect all players in the game.`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1284,6 +1296,14 @@ namespace TinyWars.Utility.Lang {
             `当前在线人数`,
             `Online Players`
         ],
+        [Type.B0238]: [
+            `可用CO`,
+            `Available COs`,
+        ],
+        [Type.B0239]: [
+            `最大`,
+            `Max.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -1610,6 +1630,14 @@ namespace TinyWars.Utility.Lang {
         [Type.F0019]: [
             `玩家[%s]求和！`,
             `Player [%s] requests to end the game in draw!`,
+        ],
+        [Type.F0020]: [
+            `最多%d字，可留空`,
+            `%d characters for maximum, optional`,
+        ],
+        [Type.F0021]: [
+            `最多%d位数字，可留空`,
+            `%d digits for maximum, optional`,
         ],
     };
 

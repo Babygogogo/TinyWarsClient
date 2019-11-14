@@ -1,15 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin width="760" height="360" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
-    <e:Group x="0" y="10">
-        <GameUi:UiLabel text="地图名称：" textColor="0xFFFFFF" y="0" size="20" width="120" textAlign="right" x="0" />
+    <e:Group x="10" y="10">
+        <GameUi:UiLabel id="_labelMapNameTitle" text="地图名称：" textColor="0xFFFFFF" y="0" size="20" textAlign="right"
+                        x="0" />
         <GameUi:UiLabel id="_labelMapName" text="地图名称" textColor="0xFFFFFF" y="0" size="20" x="120" />
+        <e:layout>
+            <e:HorizontalLayout/>
+        </e:layout>
     </e:Group>
-    <e:Group x="300" y="10">
-        <GameUi:UiLabel text="玩家数量：" textColor="0xFFFFFF" y="0" size="20" width="120" textAlign="right" x="0" />
+    <e:Group x="540" y="10">
+        <GameUi:UiLabel id="_labelPlayersCountTitle" text="玩家数量：" textColor="0xFFFFFF" y="0" size="20" textAlign="right"
+                        x="0" />
         <GameUi:UiLabel id="_labelPlayersCount" text="2" textColor="0xFFFFFF" y="0" size="20" x="120" />
+        <e:layout>
+            <e:HorizontalLayout/>
+        </e:layout>
     </e:Group>
-    <e:Group x="10" y="60">
+    <GameUi:UiLabel id="_labelTips" text="本页设置对战局内所有玩家都有效" textColor="0xFFFFFF" y="40" size="20" x="10" />
+    <e:Group x="10" y="80">
         <e:Group y="0" x="0">
             <GameUi:UiLabel id="_labelInitialFundTitle" text="初始资金：" textColor="0xFFFFFF" y="3" size="20" scaleX="1"
                             scaleY="1" textAlign="right" maxTextWidth="120" />
@@ -26,7 +35,7 @@
             <e:VerticalLayout/>
         </e:layout>
     </e:Group>
-    <e:Group x="10" y="130">
+    <e:Group x="10" y="150">
         <e:Group y="0" x="0">
             <GameUi:UiLabel id="_labelInitialEnergyTitle" text="初始能量：" textColor="0xFFFFFF" y="3" size="20" scaleX="1"
                             scaleY="1" textAlign="right" maxTextWidth="120" />
@@ -43,7 +52,7 @@
             <e:VerticalLayout/>
         </e:layout>
     </e:Group>
-    <e:Group x="10" y="200">
+    <e:Group x="10" y="220">
         <e:Group y="0" x="0">
             <GameUi:UiLabel id="_labelLuckLowerLimitTitle" text="幸运下限：" textColor="0xFFFFFF" y="3" size="20" scaleX="1"
                             scaleY="1" textAlign="right" maxTextWidth="120" />
@@ -60,7 +69,7 @@
             <e:VerticalLayout/>
         </e:layout>
     </e:Group>
-    <e:Group x="370" y="60">
+    <e:Group x="370" y="80">
         <e:Group y="0" x="0">
             <GameUi:UiLabel id="_labelMoveRangeTitle" text="移动力加成：" textColor="0xFFFFFF" y="0" size="20"
                             textAlign="right" x="5" scaleX="1" scaleY="1" maxTextWidth="120" />
@@ -83,5 +92,4 @@
             <e:VerticalLayout gap="12" />
         </e:layout>
     </e:Group>
-    <GameUi:UiLabel text="注：\n本页设置对战局内所有玩家都有效" textColor="0xFFFFFF" y="190" size="20" width="170" x="370" />
 </e:Skin>

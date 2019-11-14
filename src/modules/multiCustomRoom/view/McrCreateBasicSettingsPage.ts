@@ -14,12 +14,15 @@ namespace TinyWars.MultiCustomRoom {
         private _labelPlayersCount      : GameUi.UiLabel;
 
         private _labelWarNameTitle  : GameUi.UiLabel;
+        private _labelWarNameTips   : GameUi.UiLabel;
         private _inputWarName       : GameUi.UiTextInput;
 
         private _labelWarPasswordTitle  : GameUi.UiLabel;
+        private _labelWarPasswordTips   : GameUi.UiLabel;
         private _inputWarPassword       : GameUi.UiTextInput;
 
         private _labelWarCommentTitle   : GameUi.UiLabel;
+        private _labelWarCommentTips    : GameUi.UiLabel;
         private _inputWarComment        : GameUi.UiTextInput;
 
         private _labelPlayerIndexTitle  : GameUi.UiLabel;
@@ -196,8 +199,11 @@ namespace TinyWars.MultiCustomRoom {
             this._labelMapNameTitle.text        = `${Lang.getText(Lang.Type.B0225)}: `;
             this._labelPlayersCountTitle.text   = `${Lang.getText(Lang.Type.B0229)}: `;
             this._labelWarNameTitle.text        = `${Lang.getText(Lang.Type.B0185)}: `;
+            this._labelWarNameTips.text         = `(${Lang.getFormatedText(Lang.Type.F0020, ConfigManager.MAX_WAR_NAME_LENGTH)})`;
             this._labelWarPasswordTitle.text    = `${Lang.getText(Lang.Type.B0186)}: `;
+            this._labelWarPasswordTips.text     = `(${Lang.getFormatedText(Lang.Type.F0021, ConfigManager.MAX_WAR_PASSWORD_LENGTH)})`;
             this._labelWarCommentTitle.text     = `${Lang.getText(Lang.Type.B0187)}: `;
+            this._labelWarCommentTips.text      = `(${Lang.getFormatedText(Lang.Type.F0020, ConfigManager.MAX_WAR_COMMENT_LENGTH)})`;
             this._labelPlayerIndexTitle.text    = `${Lang.getText(Lang.Type.B0018)}: `;
             this._labelTeamTitle.text           = `${Lang.getText(Lang.Type.B0019)}: `;
             this._labelFogTitle.text            = `${Lang.getText(Lang.Type.B0020)}: `;

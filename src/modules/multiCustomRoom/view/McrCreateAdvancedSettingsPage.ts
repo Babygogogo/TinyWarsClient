@@ -11,19 +11,26 @@ namespace TinyWars.MultiCustomRoom {
     import WarMapModel      = WarMap.WarMapModel;
 
     export class McrCreateAdvancedSettingsPage extends GameUi.UiTabPage {
-        private _labelMapName       : GameUi.UiLabel;
-        private _labelPlayersCount  : GameUi.UiLabel;
+        private _labelMapNameTitle      : GameUi.UiLabel;
+        private _labelMapName           : GameUi.UiLabel;
+        private _labelPlayersCountTitle : GameUi.UiLabel;
+        private _labelPlayersCount      : GameUi.UiLabel;
+        private _labelTips              : GameUi.UiLabel;
 
         private _labelInitialFundTitle  : GameUi.UiLabel;
+        private _labelInitialFundTips   : GameUi.UiLabel;
         private _inputInitialFund       : GameUi.UiTextInput;
 
         private _labelIncomeMultiplierTitle : GameUi.UiLabel;
+        private _labelIncomeMultiplierTips  : GameUi.UiLabel;
         private _inputIncomeModifier        : GameUi.UiTextInput;
 
         private _labelInitialEnergyTitle    : GameUi.UiLabel;
+        private _labelInitialEnergyTips     : GameUi.UiLabel;
         private _inputInitialEnergy         : GameUi.UiTextInput;
 
         private _labelEnergyGrowthModifierTitle : GameUi.UiLabel;
+        private _labelEnergyGrowthModifierTips  : GameUi.UiLabel;
         private _inputEnergyModifier            : GameUi.UiTextInput;
 
         private _labelLuckLowerLimitTitle   : GameUi.UiLabel;
@@ -47,10 +54,11 @@ namespace TinyWars.MultiCustomRoom {
         private _btnNextVision      : GameUi.UiButton;
         private _labelVision        : GameUi.UiLabel;
 
-        private _groupCoTiers       : eui.Group;
-        private _groupCoNames       : eui.Group;
-        private _renderersForCoTiers: RendererForCoTier[] = [];
-        private _renderersForCoNames: RendererForCoName[] = [];
+        private _labelAvailableCoTitle  : GameUi.UiLabel;
+        private _groupCoTiers           : eui.Group;
+        private _groupCoNames           : eui.Group;
+        private _renderersForCoTiers    : RendererForCoTier[] = [];
+        private _renderersForCoNames    : RendererForCoName[] = [];
 
         protected _mapMetaData: ProtoTypes.IMapMetaData;
 
@@ -83,7 +91,7 @@ namespace TinyWars.MultiCustomRoom {
         protected _onOpened(): void {
             this._mapMetaData = McrModel.getCreateWarMapMetaData();
 
-            this._updateTitles();
+            this._updateComponentsForLanguage();
             this._initGroupCoTiers();
             this._initGroupCoNames();
             this._updateLabelMapName();
@@ -108,7 +116,7 @@ namespace TinyWars.MultiCustomRoom {
         // Event callbacks.
         ////////////////////////////////////////////////////////////////////////////////
         private _onNotifyLanguageChanged(): void {
-            this._updateTitles();
+            this._updateComponentsForLanguage();
         }
 
         private _onFocusOutInputInitialFund(e: egret.Event): void {
@@ -284,11 +292,19 @@ namespace TinyWars.MultiCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////
         // View functions.
         ////////////////////////////////////////////////////////////////////////////////
-        private _updateTitles(): void {
+        private _updateComponentsForLanguage(): void {
+            this._labelMapNameTitle.text                = `${Lang.getText(Lang.Type.B0225)}:`;
+            this._labelPlayersCountTitle.text           = `${Lang.getText(Lang.Type.B0229)}:`;
+            this._labelTips.text                        = Lang.getText(Lang.Type.A0065);
+            this._labelAvailableCoTitle.text            = `${Lang.getText(Lang.Type.B0238)}:`;
             this._labelInitialFundTitle.text            = `${Lang.getText(Lang.Type.B0178)}: `;
+            this._labelInitialFundTips.text             = `(${Lang.getText(Lang.Type.B0239)} 1000000)`;
             this._labelIncomeMultiplierTitle.text       = `${Lang.getText(Lang.Type.B0179)}: `;
+            this._labelIncomeMultiplierTips.text        = `(${Lang.getText(Lang.Type.B0239)} 1000%)`;
             this._labelInitialEnergyTitle.text          = `${Lang.getText(Lang.Type.B0180)}: `;
+            this._labelInitialEnergyTips.text           = `(${Lang.getText(Lang.Type.B0239)} 100%)`;
             this._labelEnergyGrowthModifierTitle.text   = `${Lang.getText(Lang.Type.B0181)}: `;
+            this._labelEnergyGrowthModifierTips.text    = `(${Lang.getText(Lang.Type.B0239)} 1000%)`;
             this._labelMoveRangeTitle.text              = `${Lang.getText(Lang.Type.B0182)}: `;
             this._labelAttackTitle.text                 = `${Lang.getText(Lang.Type.B0183)}: `;
             this._labelVisionTitle.text                 = `${Lang.getText(Lang.Type.B0184)}: `;
