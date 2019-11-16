@@ -9,10 +9,11 @@
             <GameUi:UiLabel id="_labelMapName" text="地图名: 未知" y="0" stroke="2" size="20" scaleX="1" scaleY="1" />
             <GameUi:UiLabel id="_labelDesigner" text="作者: 未知" y="25" stroke="2" size="20" scaleX="1" scaleY="1" />
             <GameUi:UiLabel id="_labelHasFog" text="战争迷雾: 否" y="60" stroke="2" size="20" scaleX="1" scaleY="1" />
-            <GameUi:UiLabel text="附言:" stroke="2" size="20" scaleX="1" scaleY="1" x="0" y="95" />
+            <GameUi:UiLabel id="_labelWarCommentTitle" text="附言:" stroke="2" size="20" scaleX="1" scaleY="1" x="0"
+                            y="95" />
             <GameUi:UiLabel id="_labelWarComment" text="ASDF" stroke="2" size="20" scaleX="1" scaleY="1" height="50"
                             y="120" left="0" right="0" />
-            <GameUi:UiLabel text="已参战玩家:" stroke="2" size="20" scaleX="1" scaleY="1" y="180" />
+            <GameUi:UiLabel id="_labelPlayers" text="已参战玩家:" stroke="2" size="20" scaleX="1" scaleY="1" y="180" />
             <GameUi:UiScrollList id="_listPlayer" height="140" y="205" width="740" x="0">
                 <e:List>
                     <e:itemRendererSkinName>

@@ -20,12 +20,14 @@ namespace TinyWars.MultiCustomRoom {
         private _zoomMap        : GameUi.UiZoomableComponent;
         private _btnBack        : GameUi.UiButton;
 
-        private _groupInfo      : eui.Group;
-        private _labelMapName   : GameUi.UiLabel;
-        private _labelDesigner  : GameUi.UiLabel;
-        private _labelHasFog    : GameUi.UiLabel;
-        private _labelWarComment: GameUi.UiLabel;
-        private _listPlayer     : GameUi.UiScrollList;
+        private _groupInfo              : eui.Group;
+        private _labelMapName           : GameUi.UiLabel;
+        private _labelDesigner          : GameUi.UiLabel;
+        private _labelHasFog            : GameUi.UiLabel;
+        private _labelWarCommentTitle   : GameUi.UiLabel;
+        private _labelWarComment        : GameUi.UiLabel;
+        private _labelPlayers           : GameUi.UiLabel;
+        private _listPlayer             : GameUi.UiScrollList;
 
         private _dataForListWar     : DataForWarRenderer[] = [];
         private _selectedWarIndex   : number;
@@ -135,8 +137,11 @@ namespace TinyWars.MultiCustomRoom {
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0024);
-            this._btnBack.label         = Lang.getText(Lang.Type.B0146);
+            this._labelMenuTitle.text       = Lang.getText(Lang.Type.B0024);
+            this._labelNoWar.text           = Lang.getText(Lang.Type.B0210);
+            this._labelWarCommentTitle.text = `${Lang.getText(Lang.Type.B0187)}:`;
+            this._labelPlayers.text         = `${Lang.getText(Lang.Type.B0232)}:`;
+            this._btnBack.label             = Lang.getText(Lang.Type.B0146);
         }
 
         private _createDataForListWar(infos: ProtoTypes.IMcwOngoingDetail[]): DataForWarRenderer[] {

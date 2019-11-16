@@ -168,8 +168,8 @@ namespace TinyWars.MultiCustomRoom {
             this._labelTeamTitle.text           = `${Lang.getText(Lang.Type.B0019)}:`;
             this._labelFogTitle.text            = `${Lang.getText(Lang.Type.B0020)}:`;
             this._labelTimeLimitTitle.text      = `${Lang.getText(Lang.Type.B0188)}:`;
-            this._labelPlayersTitle.text        = `${Lang.getText(Lang.Type.B0188)}:`;
-            this._btnChangeCo.label             = `${Lang.getText(Lang.Type.B0232)}:`;
+            this._labelPlayersTitle.text        = `${Lang.getText(Lang.Type.B0232)}:`;
+            this._btnChangeCo.label             = Lang.getText(Lang.Type.B0230);
         }
 
         private _updateLabelWarName(): void {

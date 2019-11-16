@@ -135,7 +135,11 @@ namespace TinyWars.GameUi {
             this._contents.scaleX = scale;
             this._contents.scaleY = scale;
 
-            (needRevise) && (this._reviseContentScaleAndPosition());
+            if (needRevise) {
+                if ((this._getBoundaryHeight()) && (this._getBoundaryWidth())) {
+                    this._reviseContentScaleAndPosition();
+                }
+            }
         }
         public getContentScale(): number {
             return this._contents.scaleX;
