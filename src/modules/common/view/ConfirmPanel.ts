@@ -51,7 +51,8 @@ namespace TinyWars.Common {
         }
 
         protected _onOpened(): void {
-            this._btnConfirm.label    = Lang.getText(Lang.Type.B0026);
+            this._btnConfirm.label  = Lang.getText(Lang.Type.B0026);
+            this._btnCancel.label   = Lang.getText(Lang.Type.B0154);
             this._labelTitle.text   = this._openData.title;
             this._labelContent.setRichText(this._openData.content);
         }
