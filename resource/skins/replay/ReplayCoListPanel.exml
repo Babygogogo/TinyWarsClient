@@ -4,7 +4,7 @@
     <e:Group top="40" bottom="0" width="160" left="0">
         <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" />
-        <GameUi:UiLabel text="指挥官信息" y="10" bold="true" size="20" textColor="0xffffff" horizontalCenter="0" />
+        <GameUi:UiLabel id="_labelCommanderInfo" text="指挥官信息" y="10" bold="true" size="20" textColor="0xffffff" horizontalCenter="0" />
         <GameUi:UiScrollList id="_listCo" left="0" right="0" bottom="35" top="35">
             <e:List>
                 <e:itemRendererSkinName>

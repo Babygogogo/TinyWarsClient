@@ -16,6 +16,7 @@ namespace TinyWars.Replay {
         private _btnBack    : GameUi.UiButton;
 
         private _imgCoPortrait                  : GameUi.UiImage;
+        private _labelCommanderInfo             : GameUi.UiLabel;
         private _labelNameTitle                 : GameUi.UiLabel;
         private _labelName                      : GameUi.UiLabel;
         private _labelForceTitle                : GameUi.UiLabel;
@@ -154,6 +155,8 @@ namespace TinyWars.Replay {
         }
 
         private _showCoInfo(data: DataForCoRenderer): void {
+            this._labelCommanderInfo.text               = Lang.getText(Lang.Type.B0240);
+            this._btnBack.label                         = Lang.getText(Lang.Type.B0146);
             this._labelNameTitle.text                   = `${Lang.getText(Lang.Type.B0162)}: `;
             this._labelForceTitle.text                  = `${Lang.getText(Lang.Type.B0168)}: `;
             this._labelDesignerTitle.text               = `${Lang.getText(Lang.Type.B0163)}: `;
