@@ -1428,15 +1428,15 @@ namespace TinyWars.Utility.Lang {
         ],
         [Type.B1030]: [
             `临时海港`,
-            `TempSeaport:`,
+            `TempSeaport`,
         ],
         [Type.B1031]: [
             `迷雾`,
-            `MistOnPlain:`,
+            `MistOnPlain`,
         ],
         [Type.B1032]: [
             `迷雾`,
-            `MistOnRiver:`,
+            `MistOnRiver`,
         ],
         [Type.B1033]: [
             `迷雾`,
