@@ -126,6 +126,7 @@ namespace TinyWars.MultiCustomWar {
             if (!actionPlanner.checkIsStateRequesting()) {
                 actionPlanner.setStateIdle();
             }
+            McwCoListPanel.hide();
             McwWarMenuPanel.show();
         }
 
