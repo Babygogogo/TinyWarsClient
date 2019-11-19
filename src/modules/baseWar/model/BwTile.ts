@@ -313,7 +313,7 @@ namespace TinyWars.BaseWar {
             return this._templateCfg.repairAmount;
         }
 
-        private _checkCanRepairUnit(unit: BwUnit): boolean {
+        public checkCanRepairUnit(unit: BwUnit): boolean {
             const category = this.getRepairUnitCategory();
             return (category != null)
                 && ((unit.getCurrentHp() < unit.getMaxHp()) || (unit.checkCanBeSupplied()))
@@ -329,7 +329,7 @@ namespace TinyWars.BaseWar {
         }
 
         public getRepairHpAndCostForUnit(unit: BwUnit): Types.RepairHpAndCost | undefined {
-            if (!this._checkCanRepairUnit(unit)) {
+            if (!this.checkCanRepairUnit(unit)) {
                 return undefined;
             } else {
                 const normalizedMaxHp       = unit.getNormalizedMaxHp();
