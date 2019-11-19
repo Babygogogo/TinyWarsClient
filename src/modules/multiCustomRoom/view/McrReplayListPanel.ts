@@ -25,6 +25,7 @@ namespace TinyWars.MultiCustomRoom {
         private _groupInfo          : eui.Group;
         private _labelMapName       : GameUi.UiLabel;
         private _labelDesigner      : GameUi.UiLabel;
+        private _labelPlayers       : GameUi.UiLabel;
         private _labelHasFog        : GameUi.UiLabel;
         private _labelTurnIndex     : GameUi.UiLabel;
         private _labelNextActionId  : GameUi.UiLabel;
@@ -142,6 +143,8 @@ namespace TinyWars.MultiCustomRoom {
 
         private _updateComponentsForLanguage(): void {
             this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0092);
+            this._labelPlayers.text     = `${Lang.getText(Lang.Type.B0232)}:`;
+            this._labelNoReplay.text    = Lang.getText(Lang.Type.B0241);
             this._btnBack.label         = Lang.getText(Lang.Type.B0146);
             this._btnSearch.label       = Lang.getText(Lang.Type.B0228);
         }

@@ -1308,6 +1308,10 @@ namespace TinyWars.Utility.Lang {
             `指挥官信息`,
             `CO Info`,
         ],
+        [Type.B0241]: [
+            `暂无回放`,
+            `No Replays`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -1642,6 +1646,10 @@ namespace TinyWars.Utility.Lang {
         [Type.F0021]: [
             `最多%d位数字，可留空`,
             `%d digits for maximum, optional`,
+        ],
+        [Type.F0022]: [
+            `%s p%d 回合正式开始！！`,
+            `%s p%d's turn have been start!!`,
         ],
     };
 

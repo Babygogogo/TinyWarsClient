@@ -14,15 +14,15 @@
             <GameUi:UiLabel id="_labelNextActionId" text="行动数: 未知" stroke="2" size="20" scaleX="1" scaleY="1" y="30"
                             x="360" />
             <e:Group x="0" y="60">
-                <GameUi:UiLabel text="已参战玩家:" stroke="2" size="20" scaleX="1" scaleY="1" y="0" x="0" />
+                <GameUi:UiLabel id="_labelPlayers" text="已参战玩家:" stroke="2" size="20" scaleX="1" scaleY="1" y="0" x="0" />
                 <GameUi:UiScrollList id="_listPlayer" height="140" y="25" width="500" x="0">
                     <e:List>
                         <e:itemRendererSkinName>
                             <e:Skin width="500" height="26" currentState="up" states="up,down">
-                                <GameUi:UiLabel id="_labelIndex" text="红方" size="18" verticalCenter="0" stroke="2" x="4" />
-                                <GameUi:UiLabel id="_labelTeam" text="A队" size="18" verticalCenter="0" stroke="2" x="49" />
+                                <GameUi:UiLabel id="_labelIndex" text="红方" size="18" verticalCenter="0" stroke="2" x="4" maxTextWidth="36" />
+                                <GameUi:UiLabel id="_labelTeam" text="A队" size="18" verticalCenter="0" stroke="2" x="49" maxTextWidth="32" />
                                 <GameUi:UiLabel id="_labelName" text="玩家名称居然有十个字" x="89" size="18" verticalCenter="0"
-                                                stroke="2" textColor.down="0x00ff00" />
+                                                stroke="2" textColor.down="0x00ff00" maxTextWidth="310"  />
                             </e:Skin>
                         </e:itemRendererSkinName>
                     </e:List>
