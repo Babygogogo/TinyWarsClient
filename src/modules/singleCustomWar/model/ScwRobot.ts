@@ -4,11 +4,14 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
     import Types            = Utility.Types;
     import GridIndexHelpers = Utility.GridIndexHelpers;
     import Helpers          = Utility.Helpers;
+    import DamageCalculator = Utility.DamageCalculator;
     import BwHelpers        = BaseWar.BwHelpers;
+    import BwUnit           = BaseWar.BwUnit;
     import WarAction        = ProtoTypes.IWarActionContainer;
     import GridIndex        = Types.GridIndex;
     import MovableArea      = Types.MovableArea;
     import MovePathNode     = Types.MovePathNode;
+    import TileType         = Types.TileType;
 
     const enum PhaseCode {
         Phase0,
@@ -33,6 +36,7 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
         action  : WarAction;
     }
 
+    let _frameBeginTime         : number;
     let _war                    : ScwWar;
     let _turnManager            : ScwTurnManager;
     let _playerManager          : ScwPlayerManager;
@@ -49,6 +53,7 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
     // Helpers.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     function _clearVariables(): void {
+        _frameBeginTime         = null;
         _war                    = null;
         _turnManager            = null;
         _playerManager          = null;
@@ -60,6 +65,19 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
         _unitValues             = null;
         _unitValueRatio         = null;
         _candidateUnits         = null;
+    }
+
+    function _checkAndCallLater(): Promise<void> {
+        if (Date.now() - _frameBeginTime <= 10) {
+            return;
+        } else {
+            return new Promise<void>((resolve, reject) => {
+                egret.callLater(() => {
+                    _frameBeginTime = Date.now();
+                    resolve();
+                }, null);
+            });
+        }
     }
 
     function _getUnitValues(): Map<number, number> {    // DONE
@@ -91,6 +109,10 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
         } else {
             return !_unitMap.getUnitOnMap(gridIndex);
         }
+    }
+
+    function _checkIsCoUnit(unit: BwUnit): boolean {
+        return _playerManager.getPlayer(unit.getPlayerIndex()).getCoUnitId() === unit.getUnitId();
     }
 
     function _getBetterScoreAndAction(data1: ScoreAndAction | null, data2: ScoreAndAction | null): ScoreAndAction | null {  // DONE
@@ -156,6 +178,8 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
     // Generators for score map for distance to the nearest capturable tile.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function _createScoreMapForDistance(unit: ScwUnit): Promise<number[][] | null> {
+        await _checkAndCallLater();
+
         const nearestCapturableTile = BwHelpers.findNearestCapturableTile(_tileMap, _unitMap, unit);
         if (!nearestCapturableTile) {
             return null;
@@ -281,12 +305,16 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
     }
 
     async function _createDamageMap(targetUnit: ScwUnit, isDiving: boolean): Promise<number[][]> { // DONE
+        await _checkAndCallLater();
+
         const map               = Helpers.createEmptyMap<number>(_mapSize.width);
         const attackBonuses     = _getAttackBonusForAllPlayers();
         const defenseBonus      = _getDefenseBonusForTargetUnit(targetUnit);
         const targetTeamIndex   = targetUnit.getTeamIndex();
         const luckValue         = (_war.getSettingsLuckLowerLimit() + _war.getSettingsLuckUpperLimit()) / 2;
-        _unitMap.forEachUnit((attacker: ScwUnit) => {
+        _unitMap.forEachUnit(async (attacker: ScwUnit) => {
+            await _checkAndCallLater();
+
             const minAttackRange    = attacker.getMinAttackRange();
             const maxAttackRange    = attacker.getFinalMaxAttackRange();
             if ((!minAttackRange)                                       ||
@@ -357,6 +385,8 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
     // Candidate units generators.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function _getCandidateUnitsForPhase1(): Promise<ScwUnit[]> { // DONE
+        await _checkAndCallLater();
+
         const units             : ScwUnit[] = [];
         const playerIndexInturn = _turnManager.getPlayerIndexInTurn();
         _unitMap.forEachUnitOnMap((unit: ScwUnit) => {
@@ -376,10 +406,12 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
     function _getScoreForThreat(unit: ScwUnit, gridIndex: GridIndex, damageMap: number[][]): number {   // DONE
         const hp        = unit.getCurrentHp();
         const damage    = Math.min(damageMap[gridIndex.x][gridIndex.y] || 0, hp);
-        return - (damage + (damage >= hp ? 20 : 0) * unit.getProductionFinalCost() / 3000 / Math.max(1, _unitValueRatio));  // ADJUSTABLE
+        return - (damage + (damage >= hp ? 20 : 0) * unit.getProductionFinalCost() / 3000 / Math.max(1, _unitValueRatio)) * (_checkIsCoUnit(unit) ? 2 : 1); // ADJUSTABLE
     }
 
     async function _getScoreForPosition(unit: ScwUnit, gridIndex: GridIndex, damageMap: number[][], scoreMapForDistance: number[][] | null): Promise<number> {  // DONE
+        await _checkAndCallLater();
+
         let score = _getScoreForThreat(unit, gridIndex, damageMap);
         if (scoreMapForDistance) {
             score += scoreMapForDistance[gridIndex.x][gridIndex.y];                     // ADJUSTABLE
@@ -433,7 +465,9 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
         return score;
     }
 
-    async function _getScoreForUnitBeLoaded(unit: ScwUnit, gridIndex: GridIndex): Promise<number> { // DONE
+    async function _getScoreForActionUnitBeLoaded(unit: ScwUnit, gridIndex: GridIndex): Promise<number> { // DONE
+        await _checkAndCallLater();
+
         const loader = _unitMap.getUnitOnMap(gridIndex);
         if (!loader.checkCanLaunchLoadedUnit()) {
             return -1000;                                                                   // ADJUSTABLE
@@ -446,7 +480,9 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
         }
     }
 
-    async function _getScoreForUnitJoin(unit: ScwUnit, gridIndex: GridIndex): Promise<number> { // DONE
+    async function _getScoreForActionUnitJoin(unit: ScwUnit, gridIndex: GridIndex): Promise<number> { // DONE
+        await _checkAndCallLater();
+
         const targetUnit = _unitMap.getUnitOnMap(gridIndex);
         if (targetUnit.getState() === Types.UnitState.Idle) {
             return -9999;                                                                       // ADJUSTABLE
@@ -468,10 +504,61 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
         }
     }
 
+    async function _getScoreForActionUnitAttack(    // DONE
+        unit            : ScwUnit,
+        gridIndex       : GridIndex,
+        targetGridIndex : GridIndex,
+        pathNodes       : MovePathNode[],
+        attackDamage    : number | null,
+        counterDamage   : number | null,
+    ): Promise<number | null> {
+        await _checkAndCallLater();
+
+        if (attackDamage == null) {
+            return null;
+        }
+
+        const targetTile    = _tileMap.getTile(targetGridIndex);
+        const tileType      = targetTile.getType();
+        if (tileType === TileType.Meteor) {
+            return Math.min(attackDamage, targetTile.getCurrentHp());                                   // ADJUSTABLE
+        }
+
+        const targetUnit    = _unitMap.getUnitOnMap(targetGridIndex);
+        const targetHp      = targetUnit.getCurrentHp();
+        attackDamage        = Math.min(attackDamage, targetHp);
+        let score           = (attackDamage + (attackDamage >= targetHp ? 20 : 0))
+            * targetUnit.getProductionFinalCost() / 3000 * Math.max(1, _unitValueRatio)
+            * (_checkIsCoUnit(targetUnit) ? 2 : 1);                                                     // ADJUSTABLE
+
+        if (targetUnit.getIsCapturingTile()) {
+            score += targetTile.getCurrentCapturePoint() > targetUnit.getCaptureAmount() ? 20 : 200;    // ADJUSTABLE
+            if ((tileType === TileType.Headquarters)    ||
+                (tileType === TileType.Factory)         ||
+                (tileType === TileType.Airport)         ||
+                (tileType === TileType.Seaport)
+            ) {
+                score += 99999;                                                                         // ADJUSTABLE
+            }
+        }
+
+        if (counterDamage) {
+            const attackerHp    = unit.getCurrentHp();
+            counterDamage       = Math.min(counterDamage, attackerHp);
+            score               += - (counterDamage + (counterDamage >= attackerHp ? 20 : 0))
+                * unit.getProductionFinalCost() / 3000 / Math.max(1, _unitValueRatio)
+                * (_checkIsCoUnit(unit) ? 2 : 1);                                                       // ADJUSTABLE
+        }
+
+        return score;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // The available action generators for units.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function _getScoreAndActionUnitBeLoaded(unit: ScwUnit, gridIndex: GridIndex, pathNodes: MovePathNode[]): Promise<ScoreAndAction | null> { // DONE
+        await _checkAndCallLater();
+
         if (GridIndexHelpers.checkIsEqual(gridIndex, unit.getGridIndex())) {
             return null;
         }
@@ -482,7 +569,7 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
         }
 
         return {
-            score   : await _getScoreForUnitBeLoaded(unit, gridIndex),
+            score   : await _getScoreForActionUnitBeLoaded(unit, gridIndex),
             action  : { WarActionUnitBeLoaded: {
                 path        : { nodes: pathNodes },
                 launchUnitId: unit.getLoaderUnitId() == null ? null : unit.getUnitId(),
@@ -491,6 +578,8 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
     }
 
     async function _getScoreAndActionUnitJoin(unit: ScwUnit, gridIndex: GridIndex, pathNodes: MovePathNode[]): Promise<ScoreAndAction | null> { // DONE
+        await _checkAndCallLater();
+
         if (GridIndexHelpers.checkIsEqual(gridIndex, unit.getGridIndex())) {
             return null;
         }
@@ -501,7 +590,7 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
         }
 
         return {
-            score   : await _getScoreForUnitJoin(unit, gridIndex),
+            score   : await _getScoreForActionUnitJoin(unit, gridIndex),
             action  : { WarActionUnitJoin: {
                 path        : { nodes: pathNodes },
                 launchUnitId: unit.getLoaderUnitId() == null ? null : unit.getUnitId(),
@@ -509,7 +598,41 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
         };
     }
 
+    async function _getScoreAndActionUnitAttack(unit: ScwUnit, gridIndex: GridIndex, pathNodes: MovePathNode[]): Promise<ScoreAndAction | null> {   // DONE
+        await _checkAndCallLater();
+
+        const minRange  = unit.getMinAttackRange();
+        const maxRange  = unit.getFinalMaxAttackRange();
+        if ((minRange == null) ||
+            (maxRange == null) ||
+            ((!unit.checkCanAttackAfterMove()) && (!GridIndexHelpers.checkIsEqual(gridIndex, unit.getGridIndex())))
+        ) {
+            return null;
+        }
+
+        const launchUnitId  = unit.getLoaderUnitId() == null ? null : unit.getUnitId();
+        let data            : ScoreAndAction;
+        for (const targetGridIndex of GridIndexHelpers.getGridsWithinDistance(gridIndex, minRange, maxRange, _mapSize)) {
+            const damages = DamageCalculator.getEstimatedBattleDamage(_war, pathNodes, launchUnitId, targetGridIndex);
+            data = _getBetterScoreAndAction(
+                data,
+                {
+                    score   : await _getScoreForActionUnitAttack(unit, gridIndex, targetGridIndex, pathNodes, damages[0], damages[1]),
+                    action  : { WarActionUnitAttack: {
+                        path    : { nodes: pathNodes },
+                        targetGridIndex,
+                        launchUnitId,
+                    } },
+                }
+            );
+        }
+
+        return data;
+    }
+
     async function _getMaxScoreAndAction(unit: ScwUnit, gridIndex: GridIndex, pathNodes: MovePathNode[]): Promise<ScoreAndAction | null> {
+        await _checkAndCallLater();
+
         const dataForUnitBeLoaded = await _getScoreAndActionUnitBeLoaded(unit, gridIndex, pathNodes);
         if (dataForUnitBeLoaded) {
             return dataForUnitBeLoaded;
@@ -526,10 +649,19 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
 
         // TODO
         let data: ScoreAndAction;
+        data = _getBetterScoreAndAction(data, await _getScoreAndActionUnitAttack(unit, gridIndex, pathNodes));
+        data = _getBetterScoreAndAction(data, await _getScoreAndActionUnitCaptureTile(unit, gridIndex, pathNodes));
+        data = _getBetterScoreAndAction(data, await _getScoreAndActionUnitDive(unit, gridIndex, pathNodes));
+        data = _getBetterScoreAndAction(data, await _getScoreAndActionUnitLaunchSilo(unit, gridIndex, pathNodes));
+        data = _getBetterScoreAndAction(data, await _getScoreAndActionUnitSurface(unit, gridIndex, pathNodes));
+        data = _getBetterScoreAndAction(data, await _getScoreAndActionUnitWait(unit, gridIndex, pathNodes));
 
+        return data;
     }
 
     async function _getActionForMaxScoreWithCandidateUnit(candidateUnit: ScwUnit): Promise<WarAction | null> {  // DONE
+        await _checkAndCallLater();
+
         const reachableArea         = _getReachableArea(candidateUnit, null, null);
         const damageMapForSurface   = await _createDamageMap(candidateUnit, false);
         const damageMapForDive      = candidateUnit.checkIsDiver() ? await _createDamageMap(candidateUnit, true) : null;
@@ -550,7 +682,6 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
                                 bestScoreAndAction,
                                 {
                                     action  : scoreAndAction.action,
-                                    // TODO
                                     score   : (action.WarActionUnitDive) || ((candidateUnit.getIsDiving()) && (!action.WarActionUnitSurface))
                                         ? scoreAndAction.score + await _getScoreForPosition(candidateUnit, gridIndex, damageMapForDive, scoreMapForDistance)
                                         : scoreAndAction.score + await _getScoreForPosition(candidateUnit, gridIndex, damageMapForSurface, scoreMapForDistance)
@@ -569,7 +700,9 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
     // Phases.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Phase 0: begin turn.
-    async function _getActionForPhase0(): Promise<WarAction | null> {
+    async function _getActionForPhase0(): Promise<WarAction | null> {   // DONE
+        await _checkAndCallLater();
+
         if (_turnManager.getPhaseCode() === Types.TurnPhaseCode.WaitBeginTurn) {
             return { WarActionPlayerBeginTurn: { } };
         } else {
@@ -579,7 +712,9 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
     }
 
     // Phase 1: make the ranged units to attack enemies.
-    async function _getActionForPhase1(): Promise<WarAction | null> {
+    async function _getActionForPhase1(): Promise<WarAction | null> {   // DONE
+        await _checkAndCallLater();
+
         _candidateUnits = _candidateUnits || await _getCandidateUnitsForPhase1();
 
         let action: WarAction;
@@ -591,10 +726,10 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
                 return null;
             }
 
-            // action = _getActionForMaxScoreWithCandidateUnit(unit);
+            action = await _getActionForMaxScoreWithCandidateUnit(unit);
         }
 
-        return null;
+        return action;
     }
 
     async function _getActionForPhase2(): Promise<WarAction | null> {
@@ -635,6 +770,7 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
 
     export async function getNextAction(war: ScwWar): Promise<WarAction> {
         if (!_war) {
+            _frameBeginTime = Date.now();
             _war            = war;
             _turnManager    = war.getTurnManager() as ScwTurnManager;
             _playerManager  = war.getPlayerManager() as ScwPlayerManager;
