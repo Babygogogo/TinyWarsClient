@@ -35,6 +35,15 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
         score   : number;
         action  : WarAction;
     }
+    const _TILE_VALUE: { [tileType: number]: number } = {           // ADJUSTABLE
+        [TileType.Headquarters] : 10,
+        [TileType.Factory]      : 15,
+        [TileType.Airport]      : 12,
+        [TileType.Seaport]      : 12,
+        [TileType.City]         : 10,
+        [TileType.CommandTower] : 15,
+        [TileType.Radar]        : 10,
+    };
 
     let _frameBeginTime         : number;
     let _war                    : ScwWar;
@@ -67,7 +76,7 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
         _candidateUnits         = null;
     }
 
-    function _checkAndCallLater(): Promise<void> {
+    function _checkAndCallLater(): Promise<void> {  // DONE
         if (Date.now() - _frameBeginTime <= 10) {
             return;
         } else {
@@ -89,7 +98,7 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
         return values;
     }
 
-    function _getUnitValueRatio(): number {
+    function _getUnitValueRatio(): number { // DONE
         let selfValue       = 0;
         let enemyValue      = 0;
         const selfTeamIndex = _playerManager.getPlayerInTurn().getTeamIndex();
@@ -111,7 +120,7 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
         }
     }
 
-    function _checkIsCoUnit(unit: BwUnit): boolean {
+    function _checkIsCoUnit(unit: BwUnit): boolean {    // DONE
         return _playerManager.getPlayer(unit.getPlayerIndex()).getCoUnitId() === unit.getUnitId();
     }
 
@@ -125,7 +134,7 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
         }
     }
 
-    function _popRandomElement<T>(arr: T[]): T {
+    function _popRandomElement<T>(arr: T[]): T {    // DONE
         const length = arr.length;
         if (!length) {
             return null;
@@ -436,16 +445,16 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
         const teamIndex = unit.getTeamIndex();
         if (tile.getTeamIndex() === teamIndex) {
             switch (tile.getType()) {
-                case Types.TileType.Factory : score += -500; break;         // ADJUSTABLE
-                case Types.TileType.Airport : score += -200; break;         // ADJUSTABLE
-                case Types.TileType.Seaport : score += -150; break;         // ADJUSTABLE
+                case TileType.Factory : score += -500; break;                                                               // ADJUSTABLE
+                case TileType.Airport : score += -200; break;                                                               // ADJUSTABLE
+                case TileType.Seaport : score += -150; break;                                                               // ADJUSTABLE
                 default                     : break;
             }
         } else if (tile.getTeamIndex() !== 0) {
             switch (tile.getType()) {
-                case Types.TileType.Factory : score += 50; break;           // ADJUSTABLE
-                case Types.TileType.Airport : score += 20; break;           // ADJUSTABLE
-                case Types.TileType.Seaport : score += 15; break;           // ADJUSTABLE
+                case TileType.Factory : score += 50; break;                                                                 // ADJUSTABLE
+                case TileType.Airport : score += 20; break;                                                                 // ADJUSTABLE
+                case TileType.Seaport : score += 15; break;                                                                 // ADJUSTABLE
                 default                     : break;
             }
         }
@@ -553,6 +562,55 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
         return score;
     }
 
+    async function _getScoreForActionUnitCaptureTile(unit: ScwUnit, gridIndex: GridIndex): Promise<number> {    // DONE
+        await _checkAndCallLater();
+
+        const tile                  = _tileMap.getTile(gridIndex);
+        const currentCapturePoint   = tile.getCurrentCapturePoint();
+        const captureAmount         = unit.getCaptureAmount();
+        if (captureAmount >= currentCapturePoint) {
+            return 10000;                                                                       // ADJUSTABLE
+        } else if (captureAmount < currentCapturePoint / 3) {
+            return 1;                                                                           // ADJUSTABLE
+        } else {
+            const value = _TILE_VALUE[tile.getType()] || 5;                                     // ADJUSTABLE
+            return captureAmount >= currentCapturePoint / 2 ? value : value / 2;                // ADJUSTABLE
+        }
+    }
+
+    async function _getScoreForActionUnitDive(unit: ScwUnit, gridIndex: GridIndex): Promise<number> {   // DONE
+        await _checkAndCallLater();
+
+        return unit.getCurrentFuel() <= 35 ? -10 : 10;
+    }
+
+    async function _getScoreForActionUnitLaunchSilo(unitValueMap: number[][], targetGridIndex: GridIndex): Promise<number> {    // DONE
+        await _checkAndCallLater();
+
+        let score = 10000;                                                                                                          // ADJUSTABLE
+        for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, ConfigManager.SILO_RADIUS, _mapSize)) {
+            score += unitValueMap[gridIndex.x][gridIndex.y] || 0;                                                                   // ADJUSTABLE
+        }
+        return score;
+    }
+
+    async function _getScoreForActionUnitSurface(unit: ScwUnit, gridIndex: GridIndex): Promise<number> {    // DONE
+        await _checkAndCallLater();
+
+        return (unit.getCurrentFuel() <= 35) ? 10 : -10;
+    }
+
+    async function _getScoreForActionUnitWait(unit: ScwUnit, gridIndex: GridIndex): Promise<number> {   // DONE
+        await _checkAndCallLater();
+
+        const tile = _tileMap.getTile(gridIndex);
+        if ((tile.getMaxCapturePoint()) && (tile.getTeamIndex() !== unit.getTeamIndex())) {
+            return -20;                                                                     // ADJUSTABLE
+        } else {
+            return 0;                                                                       // ADJUSTABLE
+        }
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // The available action generators for units.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -630,7 +688,114 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
         return data;
     }
 
-    async function _getMaxScoreAndAction(unit: ScwUnit, gridIndex: GridIndex, pathNodes: MovePathNode[]): Promise<ScoreAndAction | null> {
+    async function _getScoreAndActionUnitCaptureTile(unit: ScwUnit, gridIndex: GridIndex, pathNodes: MovePathNode[]): Promise<ScoreAndAction | null> {  // DONE
+        await _checkAndCallLater();
+
+        const tile = _tileMap.getTile(gridIndex);
+        if (!unit.checkCanCaptureTile(tile)) {
+            return null;
+        } else {
+            return {
+                score   : await _getScoreForActionUnitCaptureTile(unit, gridIndex),
+                action  : { WarActionUnitCaptureTile: {
+                    path            : { nodes: pathNodes },
+                    launchUnitId    : unit.getLoaderUnitId() == null ? null : unit.getUnitId(),
+                } },
+            }
+        }
+    }
+
+    async function _getScoreAndActionUnitDive(unit: ScwUnit, gridIndex: GridIndex, pathNodes: MovePathNode[]): Promise<ScoreAndAction | null> { // DONE
+        await _checkAndCallLater();
+
+        if (!unit.checkCanDive()) {
+            return null;
+        } else {
+            return {
+                score   : await _getScoreForActionUnitDive(unit, gridIndex),
+                action  : { WarActionUnitDive: {
+                    path            : { nodes: pathNodes },
+                    launchUnitId    : unit.getLoaderUnitId() == null ? null : unit.getUnitId(),
+                } },
+            }
+        }
+    }
+
+    async function _getScoreAndActionUnitLaunchSilo(unit: ScwUnit, gridIndex: GridIndex, pathNodes: MovePathNode[]): Promise<ScoreAndAction | null> {   // DONE
+        await _checkAndCallLater();
+
+        if (!unit.checkCanLaunchSiloOnTile(_tileMap.getTile(gridIndex))) {
+            return null;
+        }
+
+        const { width, height } = _mapSize;
+        const unitValueMap      = Helpers.createEmptyMap<number>(width, height);
+        const teamIndex         = unit.getTeamIndex();
+        for (let x = 0; x < width; ++x) {
+            for (let y = 0; y < height; ++y) {
+                const targetUnit = _unitMap.getUnitOnMap({ x, y });
+                if ((!targetUnit) || (targetUnit === unit)) {
+                    unitValueMap[x][y] = 0;
+                } else {
+                    const value         = Math.min(30, targetUnit.getCurrentHp() - 1) * targetUnit.getProductionFinalCost() / 10;
+                    unitValueMap[x][y]  = targetUnit.getTeamIndex() === teamIndex ? -value : value;                                 // ADJUSTABLE
+                }
+            }
+        }
+        unitValueMap[gridIndex.x][gridIndex.y] = -Math.min(30, unit.getCurrentHp() - 1) * unit.getProductionFinalCost() / 10;       // ADJUSTABLE
+
+        let maxScore        : number;
+        let targetGridIndex : GridIndex;
+        for (let x = 0; x < width; ++x) {
+            for (let y = 0; y < height; ++y) {
+                const newTargetGridIndex    = { x, y };
+                const newMaxScore           = await _getScoreForActionUnitLaunchSilo(unitValueMap, newTargetGridIndex);
+                if ((maxScore == null) || (newMaxScore > maxScore)) {
+                    maxScore        = newMaxScore;
+                    targetGridIndex = newTargetGridIndex;
+                }
+            }
+        }
+
+        return {
+            score   : maxScore,
+            action  : { WarActionUnitLaunchSilo: {
+                path            : { nodes: pathNodes },
+                launchUnitId    : unit.getLoaderUnitId() == null ? null : unit.getUnitId(),
+                targetGridIndex,
+            } },
+        };
+    }
+
+    async function _getScoreAndActionUnitSurface(unit: ScwUnit, gridIndex: GridIndex, pathNodes: MovePathNode[]): Promise<ScoreAndAction | null> {  // DONE
+        await _checkAndCallLater();
+
+        if (!unit.checkCanSurface()) {
+            return null;
+        } else {
+            return {
+                score   : await _getScoreForActionUnitSurface(unit, gridIndex),
+                action  : { WarActionUnitSurface: {
+                    path            : { nodes: pathNodes },
+                    launchUnitId    : unit.getLoaderUnitId() == null ? null : unit.getUnitId(),
+                } },
+            }
+        }
+    }
+
+    async function _getScoreAndActionUnitWait(unit: ScwUnit, gridIndex: GridIndex, pathNodes: MovePathNode[]): Promise<ScoreAndAction | null> { // DONE
+        await _checkAndCallLater();
+
+        return {
+            score   : await _getScoreForActionUnitWait(unit, gridIndex),
+            action  : { WarActionUnitWait: {
+                path            : { nodes: pathNodes },
+                launchUnitId    : unit.getLoaderUnitId() == null ? null : unit.getUnitId(),
+            } },
+        }
+    }
+
+    async function _getMaxScoreAndAction(unit: ScwUnit, gridIndex: GridIndex, pathNodes: MovePathNode[]): Promise<ScoreAndAction | null> {  // DONE
         await _checkAndCallLater();
 
         const dataForUnitBeLoaded = await _getScoreAndActionUnitBeLoaded(unit, gridIndex, pathNodes);
@@ -647,7 +812,6 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
             return null;
         }
 
-        // TODO
         let data: ScoreAndAction;
         data = _getBetterScoreAndAction(data, await _getScoreAndActionUnitAttack(unit, gridIndex, pathNodes));
         data = _getBetterScoreAndAction(data, await _getScoreAndActionUnitCaptureTile(unit, gridIndex, pathNodes));
