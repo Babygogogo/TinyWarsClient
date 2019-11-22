@@ -12,6 +12,7 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
     import MovableArea      = Types.MovableArea;
     import MovePathNode     = Types.MovePathNode;
     import TileType         = Types.TileType;
+    import UnitType         = Types.UnitType;
     import UnitState        = Types.UnitState;
 
     const enum PhaseCode {
@@ -25,7 +26,6 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
         Phase7,
         Phase8,
         Phase9,
-        Phase10,
     }
     type AttackInfo = {
         baseDamage      : number;
@@ -45,6 +45,39 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
         [TileType.CommandTower] : 15,
         [TileType.Radar]        : 10,
     };
+    const _PRODUCTION_CANDIDATES: { [tileType: number]: { [unitType: number]: number } } = {    // ADJUSTABLE
+        [TileType.Factory]: {
+            [UnitType.Infantry]     : 500,
+            [UnitType.Mech]         : 0,
+            [UnitType.Bike]         : 400,
+            [UnitType.Recon]        : 0,
+            [UnitType.Flare]        : null,
+            [UnitType.AntiAir]      : 150,
+            [UnitType.Tank]         : 650,
+            [UnitType.MediumTank]   : 600,
+            [UnitType.WarTank]      : 550,
+            [UnitType.Artillery]    : 450,
+            [UnitType.AntiTank]     : 400,
+            [UnitType.Rockets]      : 300,
+            [UnitType.Missiles]     : null,
+            [UnitType.Rig]          : null,
+        },
+        [TileType.Airport]: {
+            [UnitType.Fighter]          : 200,
+            [UnitType.Bomber]           : 200,
+            [UnitType.Duster]           : 400,
+            [UnitType.BattleCopter]     : 600,
+            [UnitType.TransportCopter]  : null,
+        },
+        [TileType.Seaport]: {
+            [UnitType.Battleship]   : 300,
+            [UnitType.Carrier]      : null,
+            [UnitType.Submarine]    : 300,
+            [UnitType.Cruiser]      : 300,
+            [UnitType.Lander]       : null,
+            [UnitType.Gunboat]      : 300,
+        },
+    };
 
     let _frameBeginTime         : number;
     let _war                    : ScwWar;
@@ -54,7 +87,6 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
     let _unitMap                : ScwUnitMap;
     let _tileMap                : ScwTileMap;
     let _mapSize                : Types.MapSize;
-    let _playerIndexForHuman    : number;
     let _phaseCode              : PhaseCode;
     let _unitValues             : Map<number, number>;
     let _unitValueRatio         : number;
@@ -72,7 +104,6 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
         _unitMap                = null;
         _tileMap                = null;
         _mapSize                = null;
-        _playerIndexForHuman    = null;
         _phaseCode              = null;
         _unitValues             = null;
         _unitValueRatio         = null;
@@ -714,6 +745,55 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
         }
     }
 
+    async function _getScoreForActionPlayerProduceUnit(gridIndex: GridIndex, unitType: UnitType, idleFactoriesCount: number): Promise<number | null> { // DONE
+        await _checkAndCallLater();
+
+        const playerIndexInTurn = _turnManager.getPlayerIndexInTurn();
+        const unit              = new ScwUnit();
+        unit.init({
+            viewId  : ConfigManager.getUnitViewId(unitType, playerIndexInTurn),
+            unitId  : 0,
+            gridX   : gridIndex.x,
+            gridY   : gridIndex.y,
+        }, _configVersion);
+        unit.startRunning(_war);
+
+        const productionCost    = unit.getProductionFinalCost();
+        const restFund          = _playerManager.getPlayer(playerIndexInTurn).getFund() - productionCost;
+        if (restFund < 0) {
+            return null;
+        }
+
+        const tileType  = _tileMap.getTile(gridIndex).getType();
+        let score       = _PRODUCTION_CANDIDATES[tileType][unitType];
+        if (unitType !== UnitType.Infantry) {
+            const restFactoriesCount = tileType === TileType.Factory ? idleFactoriesCount - 1 : idleFactoriesCount;
+            if (restFactoriesCount * ConfigManager.getUnitTemplateCfg(_configVersion, UnitType.Infantry).productionCost > restFund) {
+                score += -999999;                                                                                                       // ADJUSTABLE
+            }
+        }
+
+        const teamIndex = unit.getTeamIndex();
+        _unitMap.forEachUnitOnMap(unitOnMap => {
+            if (unitOnMap.getTeamIndex() === teamIndex) {
+                if (unitOnMap.getType() === unitType) {
+                    score += -unitOnMap.getCurrentHp() * productionCost / 3000;                                                         // ADJUSTABLE
+                }
+            } else {
+                if (unit.getMinAttackRange()) {
+                    const damage = Math.min(unit.getBaseDamage(unitOnMap.getArmorType()) || 0, unitOnMap.getCurrentHp());
+                    score += damage * unitOnMap.getProductionFinalCost() / 3000;                                                        // ADJUSTABLE
+                }
+                if (unitOnMap.getMinAttackRange()) {
+                    const damage = Math.min((unitOnMap.getBaseDamage(unit.getArmorType()) || 0) * unitOnMap.getNormalizedCurrentHp() / unitOnMap.getNormalizedMaxHp(), unit.getCurrentHp());    // ADJUSTABLE
+                    score += -damage * productionCost / 3000;                                                                           // ADJUSTABLE
+                }
+            }
+        });
+
+        return score;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // The available action generators for units.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -964,6 +1044,64 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
+    // The available action generators for production.
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    async function _getMaxScoreAndActionPlayerProduceUnitWithGridIndex(gridIndex: GridIndex, idleFactoriesCount: number): Promise<ScoreAndAction | null> {  // DONE
+        await _checkAndCallLater();
+
+        let maxScore        : number;
+        let targetUnitType  : number;
+        for (const t in _PRODUCTION_CANDIDATES[_tileMap.getTile(gridIndex).getType()]) {
+            const unitType  = Number(t);
+            const score     = await _getScoreForActionPlayerProduceUnit(gridIndex, unitType, idleFactoriesCount);
+            if ((maxScore == null) || (score > maxScore)) {
+                maxScore        = score;
+                targetUnitType  = unitType;
+            }
+        }
+
+        if (maxScore == null) {
+            return null;
+        } else {
+            return {
+                score   : maxScore,
+                action  : { WarActionPlayerProduceUnit: {
+                    unitType    : targetUnitType,
+                    gridIndex,
+                } },
+            }
+        }
+    }
+
+    async function _getActionPlayerProduceUnitForMaxScore(): Promise<WarAction | null> {    // DONE
+        await _checkAndCallLater();
+
+        const playerIndexInturn     = _turnManager.getPlayerIndexInTurn();
+        const idleBuildingPosList   : GridIndex[] = [];
+        let idleFactoriesCount      = 0;
+
+        _tileMap.forEachTile(tile => {
+            const gridIndex = tile.getGridIndex();
+            if ((tile.getPlayerIndex() === playerIndexInturn)   &&
+                (!_unitMap.getUnitOnMap(gridIndex))             &&
+                (tile.getProduceUnitCategory() != null)
+            ) {
+                idleBuildingPosList.push(gridIndex);
+                if (tile.getType() === TileType.Factory) {
+                    ++idleFactoriesCount;
+                }
+            }
+        });
+
+        let data: ScoreAndAction;
+        for (const gridIndex of idleBuildingPosList) {
+            data = _getBetterScoreAndAction(data, await _getMaxScoreAndActionPlayerProduceUnitWithGridIndex(gridIndex, idleFactoriesCount));
+        }
+
+        return data ? data.action : null;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Phases.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Phase 0: begin turn.
@@ -1088,16 +1226,24 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
         return await _getActionForMaxScoreWithCandidateUnit(candidateUnit);
     }
 
-    async function _getActionForPhase8(): Promise<WarAction | null> {
-        return null;
+    // Phase 8: build units.
+    async function _getActionForPhase8(): Promise<WarAction | null> {   // DONE
+        await _checkAndCallLater();
+
+        const action = await _getActionPlayerProduceUnitForMaxScore();
+        if (!action) {
+            _phaseCode = PhaseCode.Phase9;
+            return null;
+        }
+
+        return action;
     }
 
-    async function _getActionForPhase9(): Promise<WarAction | null> {
-        return null;
-    }
+    // Phase 9: end turn.
+    async function _getActionForPhase9(): Promise<WarAction | null> {   // DONE
+        await _checkAndCallLater();
 
-    async function _getActionForPhase10(): Promise<WarAction | null> {
-        return null;
+        return { WarActionPlayerEndTurn: {} };
     }
 
     export async function getNextAction(war: ScwWar): Promise<WarAction> {
@@ -1126,7 +1272,6 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
         if ((!action) && (_phaseCode === PhaseCode.Phase7))     { action = await _getActionForPhase7(); }
         if ((!action) && (_phaseCode === PhaseCode.Phase8))     { action = await _getActionForPhase8(); }
         if ((!action) && (_phaseCode === PhaseCode.Phase9))     { action = await _getActionForPhase9(); }
-        if ((!action) && (_phaseCode === PhaseCode.Phase10))    { action = await _getActionForPhase10(); }
 
         _clearVariables();
         return action;
