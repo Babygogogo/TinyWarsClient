@@ -201,6 +201,7 @@
 		"bin-debug/modules/singleCustomWar/view/ScwWarMenuPanel.js",
 		"bin-debug/modules/singleCustomWar/view/ScwWarPanel.js",
 		"bin-debug/modules/singleCustomWar/view/ScwWarView.js",
+		"bin-debug/modules/singlePlayerLobby/view/SinglePlayerLobbyPanel.js",
 		"bin-debug/gameui/UiButton.js",
 		"bin-debug/modules/time/model/TimeProxy.js",
 		"bin-debug/gameui/UiScrollList.js",
