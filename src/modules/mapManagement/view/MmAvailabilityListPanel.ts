@@ -20,11 +20,12 @@ namespace TinyWars.MapManagement {
 
         private static _instance: MmAvailabilityListPanel;
 
-        private _listMap   : GameUi.UiScrollList;
-        private _zoomMap   : GameUi.UiZoomableComponent;
-        private _btnSearch : GameUi.UiButton;
-        private _btnBack   : GameUi.UiButton;
-        private _labelNoMap: GameUi.UiLabel;
+        private _listMap        : GameUi.UiScrollList;
+        private _zoomMap        : GameUi.UiZoomableComponent;
+        private _labelMenuTitle : GameUi.UiLabel;
+        private _btnSearch      : GameUi.UiButton;
+        private _btnBack        : GameUi.UiButton;
+        private _labelNoMap     : GameUi.UiLabel;
 
         private _groupInfo          : eui.Group;
         private _labelMapName       : GameUi.UiLabel;
@@ -64,6 +65,7 @@ namespace TinyWars.MapManagement {
         protected _onFirstOpened(): void {
             this._notifyListeners = [
                 { type: Notify.Type.SMmChangeAvailability, callback: this._onNotifySMmChangeAvailability },
+                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ];
             this._uiListeners = [
                 { ui: this._btnSearch, callback: this._onTouchTapBtnSearch },
@@ -75,6 +77,7 @@ namespace TinyWars.MapManagement {
             this._groupInfo.visible = false;
             this._zoomMap.setMouseWheelListenerEnabled(true);
             this._zoomMap.setTouchListenerEnabled(true);
+            this._updateComponentsForLanguage();
 
             this.setMapFilters(this._mapFilters);
         }
@@ -132,9 +135,19 @@ namespace TinyWars.MapManagement {
             MmMainMenuPanel.show();
         }
 
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateComponentsForLanguage();
+        }
+
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
+        private _updateComponentsForLanguage(): void {
+            this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0227);
+            this._btnBack.label         = Lang.getText(Lang.Type.B0146);
+            this._btnSearch.label       = Lang.getText(Lang.Type.B0228);
+        }
+
         private _createDataForListMap(): DataForMapNameRenderer[] {
             const data: DataForMapNameRenderer[] = [];
             let { mapName, mapDesigner, playersCount, playedTimes, minRating } = this._mapFilters;

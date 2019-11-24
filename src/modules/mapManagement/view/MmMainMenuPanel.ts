@@ -9,8 +9,9 @@ namespace TinyWars.MapManagement {
 
         private static _instance: MmMainMenuPanel;
 
-        private _btnBack    : GameUi.UiButton;
-        private _listCommand: GameUi.UiScrollList;
+        private _labelMenuTitle : GameUi.UiLabel;
+        private _btnBack        : GameUi.UiButton;
+        private _listCommand    : GameUi.UiScrollList;
 
         public static show(): void {
             if (!MmMainMenuPanel._instance) {
@@ -38,12 +39,14 @@ namespace TinyWars.MapManagement {
             ];
             this._notifyListeners = [
                 { type: Utility.Notify.Type.SLogout, callback: this._onNotifySLogout },
+                { type: Utility.Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ];
 
             this._listCommand.setItemRenderer(CommandRenderer);
         }
 
         protected _onOpened(): void {
+            this._updateView();
             this._listCommand.bindData(this._createDataForListCommand());
         }
 
@@ -60,10 +63,19 @@ namespace TinyWars.MapManagement {
         private _onNotifySLogout(e: egret.Event): void {
             MmMainMenuPanel.hide();
         }
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateView();
+        }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
+        private _updateView(): void {
+            this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0192);
+            this._btnBack.label         = Lang.getText(Lang.Type.B0146);
+            this._listCommand.bindData(this._createDataForListCommand());
+        }
+
         private _createDataForListCommand(): DataForCommandRenderer[] {
             return [
                 {
