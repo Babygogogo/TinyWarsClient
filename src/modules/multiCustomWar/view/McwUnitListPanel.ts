@@ -111,10 +111,10 @@ namespace TinyWars.MultiCustomWar {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._labelCountName.text = Lang.getText(Lang.Type.B0160);
-            this._labelValueName.text = Lang.getText(Lang.Type.B0161);
+            this._labelCountName.text = `${Lang.getText(Lang.Type.B0160)}:`;
+            this._labelValueName.text = `${Lang.getText(Lang.Type.B0161)}:`;
             this._labelName.text = Lang.getText(Lang.Type.B0152);
-            this._btnSwitch.label = Lang.getText(Lang.Type.B0168);
+            this._btnSwitch.label = Lang.getText(Lang.Type.B0244);
         }
 
         private _updateView(): void {
