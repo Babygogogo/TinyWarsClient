@@ -340,6 +340,15 @@ namespace TinyWars.Utility.Lang {
             `本页设置对局内所有玩家都生效`,
             `The settings affect all players in the game.`,
         ],
+        [Type.A0066]: [
+            `注意:\n昵称可使用任意字符，长度不小于4位`,
+            `Note:\n You can use any character for the nickname, \n and the nickname should consist of at least 4 characters.`,
+        ],
+        [Type.A0067]: [
+            `输入正确的Discord ID，并加入以下游戏频道（可点击链接复制）\n 即可实时收到游戏相关消息，如回合轮转等。`,
+            `By entering your correct discord ID \n and joining the following discord server (the link can be copied)\n you can receive tinywars-related information, including turn notification.`,
+        ],
+
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -378,19 +387,19 @@ namespace TinyWars.Utility.Lang {
         ],
         [Type.B0008]: [
             "A队",
-            "A Team",
+            "Team A",
         ],
         [Type.B0009]: [
             "B队",
-            "B Team",
+            "Team B",
         ],
         [Type.B0010]: [
             "C队",
-            "C Team",
+            "Team C",
         ],
         [Type.B0011]: [
             "D队",
-            "D Team",
+            "Team D",
         ],
         [Type.B0012]: [
             "是",
@@ -1311,6 +1320,14 @@ namespace TinyWars.Utility.Lang {
         [Type.B0241]: [
             `暂无回放`,
             `No Replays`,
+        ],
+        [Type.B0242]: [
+            `新昵称`,
+            `New nickname`,
+        ],
+        [Type.B0243]: [
+            `新ID`,
+            `New ID`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
