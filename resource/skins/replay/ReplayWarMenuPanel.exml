@@ -4,7 +4,8 @@
     <e:Group id="_group" top="40" bottom="0" width="160" x="0">
         <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" />
-        <GameUi:UiLabel text="菜单" y="10" bold="true" size="20" textColor="0xffffff" horizontalCenter="0" />
+        <GameUi:UiLabel id="_labelMenuTitle" text="菜单" y="10" bold="true" size="20" textColor="0xffffff"
+                        horizontalCenter="0" />
         <GameUi:UiLabel id="_labelNoCommand" text="(暂无可用选项)" bold="true" size="20" textColor="0xFFFFFF"
                         horizontalCenter="0" verticalCenter="0" />
         <GameUi:UiScrollList id="_listCommand" left="0" right="0" bottom="35" top="35">
@@ -22,7 +23,7 @@
                 </e:itemRendererSkinName>
             </e:List>
         </GameUi:UiScrollList>
-        <GameUi:UiButton id="_btnBack" label="返回&gt;&gt;" horizontalCenter="0" bottom="10">
+        <GameUi:UiButton id="_btnBack" label="返回" horizontalCenter="0" bottom="10">
             <GameUi:skinName>
                 <e:Skin states="up,down,disabled">
                     <e:Image width="100%" height="100%" />
@@ -36,54 +37,64 @@
         <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" />
         <e:Group left="0" right="0" y="10">
-            <GameUi:UiLabel text="战场信息" y="0" bold="true" size="20" textColor="0xFFFFFF" horizontalCenter="0" />
+            <GameUi:UiLabel id="_labelWarInfoTitle" text="战场信息" y="0" bold="true" size="20" textColor="0xFFFFFF" horizontalCenter="0" />
             <e:Group x="10" y="25">
-                <GameUi:UiLabel text="地图" y="0" size="16" textColor="0xFFFFFF" x="0" />
-                <GameUi:UiLabel id="_labelMapName" text="地图名称" y="0" size="16" textColor="0xFFFFFF" x="90" />
+                <GameUi:UiLabel id="_labelMapNameTitle" text="地图" y="0" size="16" textColor="0xFFFFFF" x="0" maxTextWidth="120"/>
+                <GameUi:UiLabel id="_labelMapName" text="地图名称" y="0" size="16" textColor="0xFFFFFF" x="130" />
             </e:Group>
-            <e:Group x="320" y="25">
-                <GameUi:UiLabel text="地图作者" y="0" size="16" textColor="0xFFFFFF" x="0" />
-                <GameUi:UiLabel id="_labelMapDesigner" text="地图名称" y="0" size="16" textColor="0xFFFFFF" x="90" />
+            <e:Group x="310" y="25">
+                <GameUi:UiLabel id="_labelMapDesignerTitle" text="地图作者" y="0" size="16" textColor="0xFFFFFF" x="0" />
+                <GameUi:UiLabel id="_labelMapDesigner" text="地图名称" y="0" size="16" textColor="0xFFFFFF" x="130" />
             </e:Group>
             <e:Group x="10" y="50">
-                <GameUi:UiLabel text="战局编号" y="0" size="16" textColor="0xFFFFFF" x="0" />
-                <GameUi:UiLabel id="_labelWarId" text="111" y="0" size="16" textColor="0xFFFFFF" x="90" />
+                <GameUi:UiLabel id="_labelWarIdTitle" text="战局编号" y="0" size="16" textColor="0xFFFFFF" x="0" maxTextWidth="120"/>
+                <GameUi:UiLabel id="_labelWarId" text="111" y="0" size="16" textColor="0xFFFFFF" x="130" />
             </e:Group>
-            <e:Group x="320" y="50">
-                <GameUi:UiLabel text="回合数" y="0" size="16" textColor="0xFFFFFF" x="0" />
-                <GameUi:UiLabel id="_labelTurnIndex" text="111" y="0" size="16" textColor="0xFFFFFF" x="90" />
+            <e:Group x="310" y="50">
+                <GameUi:UiLabel id="_labelTurnIndexTitle" text="回合数" y="0" size="16" textColor="0xFFFFFF" x="0" maxTextWidth="120"/>
+                <GameUi:UiLabel id="_labelTurnIndex" text="111" y="0" size="16" textColor="0xFFFFFF" x="130" />
             </e:Group>
-            <e:Group x="630" y="50">
-                <GameUi:UiLabel text="行动数" y="0" size="16" textColor="0xFFFFFF" x="0" />
-                <GameUi:UiLabel id="_labelActionId" text="111" y="0" size="16" textColor="0xFFFFFF" x="90" />
+            <e:Group x="610" y="50">
+                <GameUi:UiLabel id="_labelActionIdTitle" text="行动数" y="0" size="16" textColor="0xFFFFFF" x="0" maxTextWidth="120"/>
+                <GameUi:UiLabel id="_labelActionId" text="111" y="0" size="16" textColor="0xFFFFFF" x="130" />
             </e:Group>
             <e:Group x="10" y="75">
-                <GameUi:UiLabel text="收入倍率" y="0" size="16" textColor="0xFFFFFF" x="0" />
-                <GameUi:UiLabel id="_labelIncomeModifier" text="111%" y="0" size="16" textColor="0xFFFFFF" x="90" />
+                <GameUi:UiLabel id="_labelIncomeModifierTitle" text="收入倍率" y="0" size="16" textColor="0xFFFFFF" x="0" maxTextWidth="120"/>
+                <GameUi:UiLabel id="_labelIncomeModifier" text="111%" y="0" size="16" textColor="0xFFFFFF" x="130" />
             </e:Group>
-            <e:Group x="320" y="75">
-                <GameUi:UiLabel text="能量增速" y="0" size="16" textColor="0xFFFFFF" x="0" />
-                <GameUi:UiLabel id="_labelEnergyGrowthModifier" text="111%" y="0" size="16" textColor="0xFFFFFF" x="90" />
+            <e:Group x="310" y="75">
+                <GameUi:UiLabel id="_labelEnergyGrowthModifierTitle" text="能量增速" y="0" size="16" textColor="0xFFFFFF" x="0" maxTextWidth="120"/>
+                <GameUi:UiLabel id="_labelEnergyGrowthModifier" text="111%" y="0" size="16" textColor="0xFFFFFF" x="130" />
             </e:Group>
-            <e:Group x="630" y="75">
-                <GameUi:UiLabel text="初始能量" y="0" size="16" textColor="0xFFFFFF" x="0" />
-                <GameUi:UiLabel id="_labelInitialEnergy" text="111%" y="0" size="16" textColor="0xFFFFFF" x="90" />
+            <e:Group x="610" y="75">
+                <GameUi:UiLabel id="_labelInitialEnergyTitle" text="初始能量" y="0" size="16" textColor="0xFFFFFF" x="0" maxTextWidth="120"/>
+                <GameUi:UiLabel id="_labelInitialEnergy" text="111%" y="0" size="16" textColor="0xFFFFFF" x="130" />
             </e:Group>
             <e:Group x="10" y="100">
-                <GameUi:UiLabel text="移动加成" y="0" size="16" textColor="0xFFFFFF" x="0" />
-                <GameUi:UiLabel id="_labelMoveRangeModifier" text="0" y="0" size="16" textColor="0xFFFFFF" x="90" />
+                <GameUi:UiLabel id="_labelMoveRangeModifierTitle" text="移动加成" y="0" size="16" textColor="0xFFFFFF" x="0" maxTextWidth="120"/>
+                <GameUi:UiLabel id="_labelMoveRangeModifier" text="0" y="0" size="16" textColor="0xFFFFFF" x="130" />
             </e:Group>
-            <e:Group x="320" y="100">
-                <GameUi:UiLabel text="攻击加成" y="0" size="16" textColor="0xFFFFFF" x="0" />
-                <GameUi:UiLabel id="_labelAttackPowerModifier" text="0" y="0" size="16" textColor="0xFFFFFF" x="90" />
+            <e:Group x="310" y="100">
+                <GameUi:UiLabel  id="_labelAttackPowerModifierTitle" text="攻击加成" y="0" size="16" textColor="0xFFFFFF" x="0" maxTextWidth="120"/>
+                <GameUi:UiLabel id="_labelAttackPowerModifier" text="0" y="0" size="16" textColor="0xFFFFFF" x="130" />
             </e:Group>
-            <e:Group x="630" y="100">
-                <GameUi:UiLabel text="视野加成" y="0" size="16" textColor="0xFFFFFF" x="0" />
-                <GameUi:UiLabel id="_labelVisionRangeModifier" text="0" y="0" size="16" textColor="0xFFFFFF" x="90" />
+            <e:Group x="610" y="100">
+                <GameUi:UiLabel id="_labelVisionRangeModifierTitle"  text="视野加成" y="0" size="16" textColor="0xFFFFFF" x="0" maxTextWidth="120"/>
+                <GameUi:UiLabel id="_labelVisionRangeModifier" text="0" y="0" size="16" textColor="0xFFFFFF" x="130" />
+            </e:Group>
+            <e:Group x="10" y="125">
+                <GameUi:UiLabel id="_labelLuckLowerLimitTitle" text="幸运下限" y="0" size="16" textColor="0xFFFFFF"
+                                x="0" maxTextWidth="120" />
+                <GameUi:UiLabel id="_labelLuckLowerLimit" text="0" y="0" size="16" textColor="0xFFFFFF" x="130" />
+            </e:Group>
+            <e:Group x="310" y="125">
+                <GameUi:UiLabel id="_labelLuckUpperLimitTitle" text="幸运上限" y="0" size="16" textColor="0xFFFFFF"
+                                x="0" maxTextWidth="120" />
+                <GameUi:UiLabel id="_labelLuckUpperLimit" text="0" y="0" size="16" textColor="0xFFFFFF" x="130" />
             </e:Group>
         </e:Group>
         <e:Group left="0" right="0" bottom="0" top="170">
-            <GameUi:UiLabel text="玩家信息" y="0" bold="true" size="20" textColor="0xFFFFFF" horizontalCenter="0" />
+            <GameUi:UiLabel id="_labelPlayerInfoTitle" text="玩家信息" y="0" bold="true" size="20" textColor="0xFFFFFF" horizontalCenter="0" maxTextWidth="120"/>
             <GameUi:UiScrollList id="_listPlayer" bottom="0" top="25" scaleX="1" scaleY="1" horizontalCenter="0">
                 <e:List>
                     <e:itemRendererSkinName>
@@ -97,14 +108,14 @@
                                                 horizontalCenter="0" />
                                 <e:Group id="_groupInfo" y="50" horizontalCenter="0">
                                     <e:Group y="0" width="170" scaleX="1" scaleY="1" x="0">
-                                        <GameUi:UiLabel text="资金" size="16" textColor="0xFFFFFF" y="0" x="0" scaleX="1"
-                                                        scaleY="1" />
+                                        <GameUi:UiLabel id="_labelFundTitle" text="资金" size="16" textColor="0xFFFFFF" y="0" x="0" scaleX="1"
+                                                        scaleY="1"  maxTextWidth="65"/>
                                         <GameUi:UiLabel id="_labelFund" text="10000000" size="16" textColor="0xFFFFFF"
                                                         y="0" scaleX="1" scaleY="1" right="0" />
                                     </e:Group>
                                     <e:Group x="0" y="30" width="170" scaleX="1" scaleY="1">
-                                        <GameUi:UiLabel text="收入" size="16" textColor="0xFFFFFF" y="0" x="0" scaleX="1"
-                                                        scaleY="1" />
+                                        <GameUi:UiLabel id="_labelIncomeTitle" text="收入" size="16" textColor="0xFFFFFF" y="0" x="0" scaleX="1"
+                                                        scaleY="1" maxTextWidth="65" />
                                         <GameUi:UiLabel id="_labelIncome" text="10000000" size="16" textColor="0xFFFFFF"
                                                         y="0" scaleX="1" scaleY="1" right="0" />
                                     </e:Group>
@@ -115,26 +126,26 @@
                                                         y="0" scaleX="1" scaleY="1" right="0" />
                                     </e:Group>
                                     <e:Group x="20" y="50" width="170" scaleX="1" scaleY="1">
-                                        <GameUi:UiLabel text="能量" size="16" textColor="0xFFFFFF" y="0" x="0" scaleX="1"
-                                                        scaleY="1" />
+                                        <GameUi:UiLabel id="_labelEnergyTitle" text="能量" size="16" textColor="0xFFFFFF" y="0" x="0" scaleX="1"
+                                                        scaleY="1"  maxTextWidth="65"/>
                                         <GameUi:UiLabel id="_labelEnergy" text="10 / 10 / 10" size="16"
                                                         textColor="0xFFFFFF" y="0" scaleX="1" scaleY="1" right="0" />
                                     </e:Group>
                                     <e:Group x="0" y="60" width="170" scaleX="1" scaleY="1">
-                                        <GameUi:UiLabel text="据点数" size="16" textColor="0xFFFFFF" y="0" x="0" scaleX="1"
-                                                        scaleY="1" />
+                                        <GameUi:UiLabel id="_labelBuildingsTitle" text="据点数" size="16" textColor="0xFFFFFF" y="0" x="0" scaleX="1"
+                                                        scaleY="1" maxTextWidth="65" />
                                         <GameUi:UiLabel id="_labelBuildings" text="10000000" size="16"
                                                         textColor="0xFFFFFF" y="0" scaleX="1" scaleY="1" right="0" />
                                     </e:Group>
                                     <e:Group x="0" y="90" width="170" scaleX="1" scaleY="1">
-                                        <GameUi:UiLabel text="部队数" size="16" textColor="0xFFFFFF" y="0" x="0" scaleX="1"
-                                                        scaleY="1" />
+                                        <GameUi:UiLabel  id="_labelUnitsTitle" text="部队数" size="16" textColor="0xFFFFFF" y="0" x="0" scaleX="1"
+                                                        scaleY="1" maxTextWidth="65" />
                                         <GameUi:UiLabel id="_labelUnits" text="10000000" size="16" textColor="0xFFFFFF"
                                                         y="0" scaleX="1" scaleY="1" right="0" />
                                     </e:Group>
                                     <e:Group x="0" y="120" width="170" scaleX="1" scaleY="1">
-                                        <GameUi:UiLabel text="部队价值" size="16" textColor="0xFFFFFF" y="0" x="0"
-                                                        scaleX="1" scaleY="1" />
+                                        <GameUi:UiLabel id="_labelUnitsValueTitle" text="部队价值" size="16" textColor="0xFFFFFF" y="0" x="0"
+                                                        scaleX="1" scaleY="1" maxTextWidth="65" />
                                         <GameUi:UiLabel id="_labelUnitsValue" text="10000000" size="16"
                                                         textColor="0xFFFFFF" y="0" scaleX="1" scaleY="1" right="0" />
                                     </e:Group>
