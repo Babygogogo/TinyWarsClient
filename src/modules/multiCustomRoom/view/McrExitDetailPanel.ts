@@ -16,6 +16,18 @@ namespace TinyWars.MultiCustomRoom {
 
         private _btnHelpFog                 : GameUi.UiButton;
         private _btnHelpTimeLimit           : GameUi.UiButton;
+        private _labelName                      : GameUi.UiLabel;
+        private _labelNameWarPassword           : GameUi.UiLabel;
+        private _labelNameHasFog                : GameUi.UiLabel;
+        private _labelNameTimeLimit             : GameUi.UiLabel;
+        private _labelNameInitialFund           : GameUi.UiLabel;
+        private _labelNameIncomeModifier        : GameUi.UiLabel;
+        private _labelNameInitialEnergy         : GameUi.UiLabel;
+        private _labelNameEnergyGrowthModifier  : GameUi.UiLabel;
+        private _labelNameMoveRangeModifier     : GameUi.UiLabel;
+        private _labelNameAttackPowerModifier   : GameUi.UiLabel;
+        private _labelNameVisionRangeModifier   : GameUi.UiLabel;
+        private _labelNamelistPlayer            : GameUi.UiLabel;
         private _labelWarPassword           : GameUi.UiLabel;
         private _labelHasFog                : GameUi.UiLabel;
         private _labelTimeLimit             : GameUi.UiLabel;
@@ -100,6 +112,10 @@ namespace TinyWars.MultiCustomRoom {
             this._updateComponentsForLanguage();
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Other functions.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+
         private _updateView(): void {
             this._updateComponentsForLanguage();
 
@@ -160,8 +176,20 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._btnConfirm.label  = Lang.getText(Lang.Type.B0022);
-            this._btnCancel.label   = Lang.getText(Lang.Type.B0146);
+            this._labelName.text                        = Lang.getText(Lang.Type.B0245);
+            this._labelNameWarPassword.text             = `${Lang.getText(Lang.Type.B0186)}:`;
+            this._labelNameHasFog.text                  = `${Lang.getText(Lang.Type.B0020)}:`;
+            this._labelNameTimeLimit.text               = `${Lang.getText(Lang.Type.B0188)}:`;
+            this._labelNameInitialFund.text             = `${Lang.getText(Lang.Type.B0178)}:`;
+            this._labelNameIncomeModifier.text          = `${Lang.getText(Lang.Type.B0179)}:`;
+            this._labelNameInitialEnergy.text           = `${Lang.getText(Lang.Type.B0180)}:`;
+            this._labelNameEnergyGrowthModifier.text    = `${Lang.getText(Lang.Type.B0181)}:`;
+            this._labelNameMoveRangeModifier.text       = `${Lang.getText(Lang.Type.B0182)}:`;
+            this._labelNameAttackPowerModifier.text     = `${Lang.getText(Lang.Type.B0183)}:`;
+            this._labelNameVisionRangeModifier.text     = `${Lang.getText(Lang.Type.B0184)}:`;
+            this._labelNamelistPlayer.text              = `${Lang.getText(Lang.Type.B0232)}:`;
+            this._btnConfirm.label                      = Lang.getText(Lang.Type.B0022);
+            this._btnCancel.label                       = Lang.getText(Lang.Type.B0146);
         }
     }
 

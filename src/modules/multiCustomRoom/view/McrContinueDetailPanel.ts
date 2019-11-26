@@ -78,6 +78,7 @@ namespace TinyWars.MultiCustomRoom {
             this._notifyListeners = [
                 { type: Notify.Type.SMcrContinueWar,        callback: this._onNotifySMcrContinueWar },
                 { type: Notify.Type.SMcrContinueWarFailed,  callback: this._onNotifySMcrContinueWarFailed },
+                { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
             ];
 
             this._listPlayer.setItemRenderer(PlayerRenderer);
@@ -124,6 +125,9 @@ namespace TinyWars.MultiCustomRoom {
         private _onNotifySMcrContinueWarFailed(e: egret.Event): void {
             BlockPanel.hide();
             McrContinueDetailPanel.hide();
+        }
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateComponentsForLanguage();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
