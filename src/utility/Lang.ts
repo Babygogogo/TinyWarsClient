@@ -1059,11 +1059,11 @@ namespace TinyWars.Utility.Lang {
         ],
         [Type.B0176]: [
             `显示地形动画`,
-            `Show Tile Ani`,
+            `Show Tile Animation`,
         ],
         [Type.B0177]: [
             `停止地形动画`,
-            `Stop Tile Ani`,
+            `Stop Tile Animation`,
         ],
         [Type.B0178]: [
             `初始资金`,
