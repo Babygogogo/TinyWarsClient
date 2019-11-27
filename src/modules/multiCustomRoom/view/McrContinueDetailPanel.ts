@@ -28,7 +28,7 @@ namespace TinyWars.MultiCustomRoom {
         private _labelMoveRangeModifierTitle    : GameUi.UiLabel;
         private _labelAttackPowerModifierTitle  : GameUi.UiLabel;
         private _labelVisionRangeModifierTitle  : GameUi.UiLabel;
-        private _labellistPlayerTitle           : GameUi.UiLabel;
+        private _labelListPlayerTitle           : GameUi.UiLabel;
         private _labelWarPassword               : GameUi.UiLabel;
         private _labelHasFog                    : GameUi.UiLabel;
         private _labelTimeLimit                 : GameUi.UiLabel;
@@ -145,7 +145,7 @@ namespace TinyWars.MultiCustomRoom {
             this._labelMoveRangeModifierTitle.text      = `${Lang.getText(Lang.Type.B0182)}:`;
             this._labelAttackPowerModifierTitle.text    = `${Lang.getText(Lang.Type.B0183)}:`;
             this._labelVisionRangeModifierTitle.text    = `${Lang.getText(Lang.Type.B0184)}:`;
-            this._labellistPlayerTitle.text             = `${Lang.getText(Lang.Type.B0232)}:`;
+            this._labelListPlayerTitle.text             = `${Lang.getText(Lang.Type.B0232)}:`;
             this._btnCancel.label                       = Lang.getText(Lang.Type.B0146);
             this._btnConfirm.label                      = Lang.getText(Lang.Type.B0246);
         }

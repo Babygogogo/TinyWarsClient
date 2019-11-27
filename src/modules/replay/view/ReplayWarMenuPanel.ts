@@ -54,8 +54,7 @@ namespace TinyWars.Replay {
         private _labelLuckLowerLimit            : GameUi.UiLabel;
         private _labelLuckUpperLimitTitle       : GameUi.UiLabel;
         private _labelLuckUpperLimit            : GameUi.UiLabel;
-
-        private _listPlayer                 : GameUi.UiScrollList;
+        private _listPlayer                     : GameUi.UiScrollList;
 
         private _war        : ReplayWar;
         private _unitMap    : ReplayUnitMap;
@@ -88,7 +87,7 @@ namespace TinyWars.Replay {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.BwActionPlannerStateChanged,   callback: this._onNotifyMcwPlannerStateChanged },
+                { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyMcwPlannerStateChanged },
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
             ];
             this._uiListeners = [
@@ -104,7 +103,6 @@ namespace TinyWars.Replay {
             this._turnManager   = war.getTurnManager() as ReplayTurnManager;
             this._menuType      = MenuType.Main;
 
-            this._updateComponentsForLanguage();
             this._updateView();
 
             Notify.dispatch(Notify.Type.McwWarMenuPanelOpened);
@@ -147,6 +145,7 @@ namespace TinyWars.Replay {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
+            this._updateComponentsForLanguage();
             this._updateListCommand();
             this._updateGroupInfo();
             this._updateListPlayer();
@@ -354,34 +353,34 @@ namespace TinyWars.Replay {
                 this._labelLost.visible = false;
                 this._groupInfo.visible = true;
 
-                const isInfoKnown           = true;
-                const tilesCountAndIncome   = this._getTilesCountAndIncome(war, playerIndex);
+                const isInfoKnown               = true;
+                const tilesCountAndIncome       = this._getTilesCountAndIncome(war, playerIndex);
                 this._labelFundTitle.text       = Lang.getText(Lang.Type.B0156);
-                this._labelFund.text        = isInfoKnown ? `${player.getFund()}` : `?`;
+                this._labelFund.text            = isInfoKnown ? `${player.getFund()}` : `?`;
                 this._labelIncomeTitle.text     = Lang.getText(Lang.Type.B0157);
-                this._labelIncome.text      = `${tilesCountAndIncome.income}${isInfoKnown ? `` : `  ?`}`;
+                this._labelIncome.text          = `${tilesCountAndIncome.income}${isInfoKnown ? `` : `  ?`}`;
                 this._labelBuildingsTitle.text  = Lang.getText(Lang.Type.B0158);
-                this._labelBuildings.text   = `${tilesCountAndIncome.count}${isInfoKnown ? `` : `  ?`}`;
+                this._labelBuildings.text       = `${tilesCountAndIncome.count}${isInfoKnown ? `` : `  ?`}`;
 
                 const coId              = player.getCoId();
                 this._labelCoName.text  = coId == null
                     ? `(${Lang.getText(Lang.Type.B0001)}CO)`
                     : ConfigManager.getCoBasicCfg(ConfigManager.getNewestConfigVersion(), coId).name;
 
-                const superPowerEnergy  = player.getCoSuperPowerEnergy();
-                const powerEnergy       = player.getCoPowerEnergy();
-                const skillType         = player.getCoUsingSkillType();
-                const currEnergyText    = skillType === Types.CoSkillType.Passive
+                const superPowerEnergy      = player.getCoSuperPowerEnergy();
+                const powerEnergy           = player.getCoPowerEnergy();
+                const skillType             = player.getCoUsingSkillType();
+                const currEnergyText        = skillType === Types.CoSkillType.Passive
                     ? "" + player.getCoCurrentEnergy()
                     : skillType === Types.CoSkillType.Power ? "COP" : "SCOP";
                 this._labelEnergyTitle.text = Lang.getText(Lang.Type.B0159);
-                this._labelEnergy.text  = `${currEnergyText} / ${powerEnergy == null ? "--" : powerEnergy} / ${superPowerEnergy == null ? "--" : superPowerEnergy}`;
+                this._labelEnergy.text      = `${currEnergyText} / ${powerEnergy == null ? "--" : powerEnergy} / ${superPowerEnergy == null ? "--" : superPowerEnergy}`;
 
-                const unitsCountAndValue    = this._getUnitsCountAndValue(war, playerIndex);
+                const unitsCountAndValue        = this._getUnitsCountAndValue(war, playerIndex);
                 this._labelUnitsTitle.text      = Lang.getText(Lang.Type.B0160);
-                this._labelUnits.text       = `${unitsCountAndValue.count}${isInfoKnown ? `` : `  ?`}`;
+                this._labelUnits.text           = `${unitsCountAndValue.count}${isInfoKnown ? `` : `  ?`}`;
                 this._labelUnitsValueTitle.text = Lang.getText(Lang.Type.B0161);
-                this._labelUnitsValue.text  = `${unitsCountAndValue.value}${isInfoKnown ? `` : `  ?`}`;
+                this._labelUnitsValue.text      = `${unitsCountAndValue.value}${isInfoKnown ? `` : `  ?`}`;
             }
         }
 

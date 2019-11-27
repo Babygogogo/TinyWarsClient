@@ -4,19 +4,19 @@
     <e:Group width="600" horizontalCenter="0" top="80" bottom="80">
         <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" />
-        <GameUi:UiLabel id="_labelName" text="房间设定总览" textColor="0xFFFFFF" y="10" size="22" textAlign="right" scaleX="1" scaleY="1"
-                        horizontalCenter="0" />
+        <GameUi:UiLabel id="_labelName" text="房间设定总览" textColor="0xFFFFFF" y="10" size="22" textAlign="right" scaleX="1"
+                        scaleY="1" horizontalCenter="0" />
         <e:Scroller left="10" right="10" top="40" bottom="40">
             <e:Group>
                 <e:Group id="_groupWarPassword" y="5" x="5">
-                    <GameUi:UiLabel id="_labelWarPasswordTitle" text="房间密码：" textColor="0xFFFFFF" y="0" size="20" maxTextWidth="120" textAlign="right"
-                                    x="0" scaleX="1" scaleY="1" />
+                    <GameUi:UiLabel id="_labelWarPasswordTitle" text="房间密码：" textColor="0xFFFFFF" y="0" size="20"
+                                    maxTextWidth="120" textAlign="right" x="0" scaleX="1" scaleY="1" />
                     <GameUi:UiLabel id="_labelWarPassword" text="0000" textColor="0xFFFFFF" y="0" size="20" x="120"
                                     width="100" textAlign="center" scaleX="1" scaleY="1" />
                 </e:Group>
                 <e:Group id="_groupHasFog" y="40" x="5">
-                    <GameUi:UiLabel id="_labelHasFogTitle" text="战争迷雾：" textColor="0xFFFFFF" y="0" size="20"  maxTextWidth="120" textAlign="right"
-                                    x="0" scaleX="1" scaleY="1" />
+                    <GameUi:UiLabel id="_labelHasFogTitle" text="战争迷雾：" textColor="0xFFFFFF" y="0" size="20"
+                                    maxTextWidth="120" textAlign="right" x="0" scaleX="1" scaleY="1" />
                     <GameUi:UiLabel id="_labelHasFog" text="否" textColor="0xFFFFFF" y="0" size="20" x="120" width="100"
                                     textAlign="center" scaleX="1" scaleY="1" />
                     <GameUi:UiButton id="_btnHelpFog" label="(?)" x="230">
@@ -30,8 +30,8 @@
                     </GameUi:UiButton>
                 </e:Group>
                 <e:Group id="_groupTimeLimit" y="40" x="297">
-                    <GameUi:UiLabel id="_labelTimeLimitTitle" text="回合限时：" textColor="0xFFFFFF" y="0" size="20"  maxTextWidth="120" textAlign="right"
-                                    x="0" scaleX="1" scaleY="1" />
+                    <GameUi:UiLabel id="_labelTimeLimitTitle" text="回合限时：" textColor="0xFFFFFF" y="0" size="20"
+                                    maxTextWidth="120" textAlign="right" x="0" scaleX="1" scaleY="1" />
                     <GameUi:UiLabel id="_labelTimeLimit" text="3天" textColor="0xFFFFFF" y="0" size="20" x="120"
                                     width="100" textAlign="center" scaleX="1" scaleY="1" />
                     <GameUi:UiButton id="_btnHelpTimeLimit" label="(?)" x="230">
@@ -45,56 +45,58 @@
                     </GameUi:UiButton>
                 </e:Group>
                 <e:Group id="_groupInitialFund" y="75" x="5">
-                    <GameUi:UiLabel id="_labelInitialFundTitle"  text="初始资金：" textColor="0xFFFFFF" y="0" size="20"  maxTextWidth="120" textAlign="right"
-                                    scaleX="1" scaleY="1" />
+                    <GameUi:UiLabel id="_labelInitialFundTitle" text="初始资金：" textColor="0xFFFFFF" y="0" size="20"
+                                    maxTextWidth="120" textAlign="right" scaleX="1" scaleY="1" />
                     <GameUi:UiLabel id="_labelInitialFund" text="0" textColor="0xFFFFFF" y="0" size="20" x="120"
                                     width="100" textAlign="center" scaleX="1" scaleY="1" />
                 </e:Group>
                 <e:Group id="_groupIncomeModifier" y="75" x="297">
-                    <GameUi:UiLabel id="_labelIncomeModifierTitle"  text="收入倍率：" textColor="0xFFFFFF" y="0" size="20"  maxTextWidth="120" textAlign="right"
-                                    scaleX="1" scaleY="1" />
+                    <GameUi:UiLabel id="_labelIncomeModifierTitle" text="收入倍率：" textColor="0xFFFFFF" y="0" size="20"
+                                    maxTextWidth="120" textAlign="right" scaleX="1" scaleY="1" />
                     <GameUi:UiLabel id="_labelIncomeModifier" text="0" textColor="0xFFFFFF" y="0" size="20" x="120"
                                     width="100" textAlign="center" scaleX="1" scaleY="1" />
                 </e:Group>
                 <e:Group id="_groupInitialEnergy" y="100" x="5">
-                    <GameUi:UiLabel id="_labelInitialEnergyTitle" text="初始能量：" textColor="0xFFFFFF" y="0" size="20"  maxTextWidth="120" textAlign="right"
-                                    scaleX="1" scaleY="1" />
+                    <GameUi:UiLabel id="_labelInitialEnergyTitle" text="初始能量：" textColor="0xFFFFFF" y="0" size="20"
+                                    maxTextWidth="120" textAlign="right" scaleX="1" scaleY="1" />
                     <GameUi:UiLabel id="_labelInitialEnergy" text="0" textColor="0xFFFFFF" y="0" size="20" x="120"
                                     width="100" textAlign="center" scaleX="1" scaleY="1" />
                 </e:Group>
                 <e:Group id="_groupEnergyGrowthModifier" y="100" x="297">
-                    <GameUi:UiLabel id="_labelEnergyGrowthModifierTitle" text="能量增速：" textColor="0xFFFFFF" y="0" size="20"  maxTextWidth="120" textAlign="right"
-                                    scaleX="1" scaleY="1" />
+                    <GameUi:UiLabel id="_labelEnergyGrowthModifierTitle" text="能量增速：" textColor="0xFFFFFF" y="0"
+                                    size="20" maxTextWidth="120" textAlign="right" scaleX="1" scaleY="1" />
                     <GameUi:UiLabel id="_labelEnergyGrowthModifier" text="0" textColor="0xFFFFFF" y="0" size="20"
                                     x="120" width="100" textAlign="center" scaleX="1" scaleY="1" />
                 </e:Group>
                 <e:Group id="_groupMoveRangeModifier" y="135" x="5">
-                    <GameUi:UiLabel id="_labelMoveRangeModifierTitle" text="移动力加成：" textColor="0xFFFFFF" y="0" size="20"  maxTextWidth="120" textAlign="right"
-                                    scaleX="1" scaleY="1" />
+                    <GameUi:UiLabel id="_labelMoveRangeModifierTitle" text="移动力加成：" textColor="0xFFFFFF" y="0" size="20"
+                                    maxTextWidth="120" textAlign="right" scaleX="1" scaleY="1" />
                     <GameUi:UiLabel id="_labelMoveRangeModifier" text="0" textColor="0xFFFFFF" y="0" size="20" x="120"
                                     width="100" textAlign="center" scaleX="1" scaleY="1" />
                 </e:Group>
                 <e:Group id="_groupAttackPowerModifier" y="135" x="298">
-                    <GameUi:UiLabel id="_labelAttackPowerModifierTitle" text="攻击力加成：" textColor="0xFFFFFF" y="0" size="20"  maxTextWidth="120" textAlign="right"
-                                    scaleX="1" scaleY="1" />
+                    <GameUi:UiLabel id="_labelAttackPowerModifierTitle" text="攻击力加成：" textColor="0xFFFFFF" y="0"
+                                    size="20" maxTextWidth="120" textAlign="right" scaleX="1" scaleY="1" />
                     <GameUi:UiLabel id="_labelAttackPowerModifier" text="0" textColor="0xFFFFFF" y="0" size="20" x="120"
                                     width="100" textAlign="center" scaleX="1" scaleY="1" />
                 </e:Group>
                 <e:Group id="_groupVisionRangeModifier" y="160" x="5">
-                    <GameUi:UiLabel id="_labelVisionRangeModifierTitle" text="视野加成：" textColor="0xFFFFFF" y="0" size="20"  maxTextWidth="120" textAlign="right"
-                                    scaleX="1" scaleY="1" />
+                    <GameUi:UiLabel id="_labelVisionRangeModifierTitle" text="视野加成：" textColor="0xFFFFFF" y="0"
+                                    size="20" maxTextWidth="120" textAlign="right" scaleX="1" scaleY="1" />
                     <GameUi:UiLabel id="_labelVisionRangeModifier" text="0" textColor="0xFFFFFF" y="0" size="20" x="120"
                                     width="100" textAlign="center" scaleX="1" scaleY="1" />
                 </e:Group>
                 <e:Group id="_groupPlayers" y="195" touchThrough="true" touchEnabled="false" touchChildren="false"
                          left="5" right="5" height="145">
-                    <GameUi:UiLabel id="_labellistPlayerTitle" text="已参战玩家：" size="20" scaleX="1" scaleY="1" />
+                    <GameUi:UiLabel id="_labelListPlayerTitle" text="已参战玩家：" size="20" scaleX="1" scaleY="1" />
                     <GameUi:UiScrollList id="_listPlayer" left="0" right="0" top="25" bottom="0">
                         <e:List>
                             <e:itemRendererSkinName>
                                 <e:Skin height="22" currentState="up" states="up,down">
-                                    <GameUi:UiLabel id="_labelIndex" text="红方" size="18" x="4" bottom="0"  maxTextWidth="36"/>
-                                    <GameUi:UiLabel id="_labelTeam" text="A队" size="18" x="50" bottom="0"  maxTextWidth="32"/>
+                                    <GameUi:UiLabel id="_labelIndex" text="红方" size="18" x="4" bottom="0"
+                                                    maxTextWidth="36" />
+                                    <GameUi:UiLabel id="_labelTeam" text="A队" size="18" x="50" bottom="0"
+                                                    maxTextWidth="32" />
                                     <GameUi:UiLabel id="_labelNickname" text="玩家名称居然有十个字" x="90" size="18"
                                                     textColor.down="0x00ff00" bottom="0" maxTextWidth="300" />
                                     <GameUi:UiLabel id="_labelCoName" text="CO名字" x="400" size="18" bottom="0"

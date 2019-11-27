@@ -48,10 +48,11 @@ namespace TinyWars.Replay {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
+                { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.BwPlayerFundChanged,        callback: this._onNotifyBwPlayerFundChanged },
                 { type: Notify.Type.BwPlayerIndexInTurnChanged, callback: this._onNotifyBwPlayerIndexInTurnChanged },
                 { type: Notify.Type.BwCoEnergyChanged,          callback: this._onNotifyBwCoEnergyChanged },
-                { type: Notify.Type.BwCoUsingSkillTypeChanged,      callback: this._onNotifyBwCoUsingSkillChanged },
+                { type: Notify.Type.BwCoUsingSkillTypeChanged,  callback: this._onNotifyBwCoUsingSkillChanged },
                 { type: Notify.Type.ReplayAutoReplayChanged,    callback: this._onNotifyReplayAutoReplayChanged },
             ];
             this._uiListeners = [
@@ -66,7 +67,6 @@ namespace TinyWars.Replay {
 
         protected _onOpened(): void {
             this._war = ReplayModel.getWar();
-            this._updateComponentsForLanguage();
             this._updateView();
         }
 
@@ -77,6 +77,9 @@ namespace TinyWars.Replay {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateComponentsForLanguage();
+        }
         private _onNotifyBwPlayerFundChanged(e: egret.Event): void {
             this._updateLabelFund();
         }
@@ -157,6 +160,7 @@ namespace TinyWars.Replay {
         }
 
         private _updateView(): void {
+            this._updateComponentsForLanguage();
             this._updateLabelPlayer();
             this._updateLabelFund();
             this._updateLabelCo();

@@ -1851,7 +1851,7 @@ namespace TinyWars.Utility.Lang {
             ].join("\n"),
 
              [
-                `You can choose your team with this option. `
+                `You can choose your team with this option. `,
                 ``,
                 `In the game players in the same team share the vision. Their troops will not block and attack each other. It is not possible to supply your allies' troops with Rigs or load into allies' transports. `,
                 `You may use allies' properties to repair (use your own funds) and supply your troops and you cannot capture allies' properties`,
@@ -1875,7 +1875,7 @@ namespace TinyWars.Utility.Lang {
                 ``,
                 `When FOW is off you have the view of the whole battlefield. When FOW is on you can only see the battlefield within the vision of your troops. `,
                 `FOW is relatively difficult and it is recommended that new players should start from no FOW to learn the basics of the game before advancing to FOW mode. `,
-                ``
+                ``,
                 `By default this option is disabled (no FOW). `,
             ].join("\n"),
         ],
@@ -1899,7 +1899,7 @@ namespace TinyWars.Utility.Lang {
                 `Therefore, please choose "15min" only when you have made an agreement with your opponent to avoid unnecessary boots. `,
                 ``,
                 `By default this option is selected as "3 days". `,
-            ].join("\n"),    
+            ].join("\n"),
         ],
 
         [RichType.R0004]: [

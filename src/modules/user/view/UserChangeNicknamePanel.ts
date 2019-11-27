@@ -86,10 +86,10 @@ namespace TinyWars.User {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._labelName.text = Lang.getText(Lang.Type.B0149);
-            this._labelNickname.text = `${Lang.getText(Lang.Type.B0242)}:`;
-            this._labelNote.text = Lang.getText(Lang.Type.A0066);
-            this._btnConfirm.label = Lang.getText(Lang.Type.B0026);
+            this._labelName.text        = Lang.getText(Lang.Type.B0149);
+            this._labelNickname.text    = `${Lang.getText(Lang.Type.B0242)}:`;
+            this._labelNote.text        = Lang.getText(Lang.Type.A0066);
+            this._btnConfirm.label      = Lang.getText(Lang.Type.B0026);
         }
     }
 }
