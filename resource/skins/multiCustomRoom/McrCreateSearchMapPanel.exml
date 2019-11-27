@@ -5,7 +5,7 @@
     <e:Group width="430" height="320" horizontalCenter="0" verticalCenter="0">
         <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
                         alpha="0.8" left="0" right="0" top="0" bottom="0" />
-        <GameUi:UiLabel text="查找地图" textColor="0xffffff" y="13" horizontalCenter="0" size="20" />
+        <GameUi:UiLabel id="_labelName" text="查找地图" textColor="0xffffff" y="13" horizontalCenter="0" size="20" />
         <GameUi:UiButton id="_btnClose" label="&lt;&lt;关闭" y="12" right="10">
             <GameUi:skinName>
                 <e:Skin states="up,down,disabled">
@@ -15,7 +15,7 @@
                 </e:Skin>
             </GameUi:skinName>
         </GameUi:UiButton>
-        <GameUi:UiLabel text="名称：" textColor="0xFFFFFF" y="50" size="20" right="310" />
+        <GameUi:UiLabel id="_labelMapNameTitle" text="名称：" textColor="0xFFFFFF" y="50" size="20" right="310" maxTextWidth="100"/>
         <GameUi:UiTextInput id="_inputMapName" width="220" x="120" y="47" anchorOffsetX="0" anchorOffsetY="0"
                             maxChars="20">
             <GameUi:skinName>
@@ -27,7 +27,7 @@
                 </e:Skin>
             </GameUi:skinName>
         </GameUi:UiTextInput>
-        <GameUi:UiLabel text="作者：" textColor="0xFFFFFF" y="94" size="20" right="310" />
+        <GameUi:UiLabel id="_labelDesignerTitle" text="作者：" textColor="0xFFFFFF" y="94" size="20" right="310" maxTextWidth="100"/>
         <GameUi:UiTextInput id="_inputDesigner" width="220" x="120" y="91" anchorOffsetX="0" anchorOffsetY="0"
                             maxChars="20">
             <GameUi:skinName>
@@ -39,7 +39,7 @@
                 </e:Skin>
             </GameUi:skinName>
         </GameUi:UiTextInput>
-        <GameUi:UiLabel text="玩家数量：" textColor="0xFFFFFF" y="138" size="20" right="310" />
+        <GameUi:UiLabel id="_labelPlayersCountTitle" text="玩家数量：" textColor="0xFFFFFF" y="138" size="20" right="310" maxTextWidth="100"/>
         <GameUi:UiTextInput id="_inputPlayersCount" width="220" x="120" y="135" anchorOffsetX="0" anchorOffsetY="0"
                             restrict="2-4" maxChars="1">
             <GameUi:skinName>
@@ -51,7 +51,7 @@
                 </e:Skin>
             </GameUi:skinName>
         </GameUi:UiTextInput>
-        <GameUi:UiLabel text="游玩次数：" textColor="0xFFFFFF" y="182" size="20" right="310" />
+        <GameUi:UiLabel id="_labelPlayedTimesTitle" text="游玩次数：" textColor="0xFFFFFF" y="182" size="20" right="310" maxTextWidth="100"/>
         <GameUi:UiTextInput id="_inputPlayedTimes" width="220" x="120" y="179" anchorOffsetX="0" anchorOffsetY="0"
                             restrict="0-9" maxChars="9">
             <GameUi:skinName>
@@ -63,7 +63,7 @@
                 </e:Skin>
             </GameUi:skinName>
         </GameUi:UiTextInput>
-        <GameUi:UiLabel text="评分：" textColor="0xFFFFFF" y="226" size="20" right="310" />
+        <GameUi:UiLabel id="_labelMinRatingTitle"  text="评分：" textColor="0xFFFFFF" y="226" size="20" right="310" maxTextWidth="100"/>
         <GameUi:UiTextInput id="_inputMinRating" width="220" x="120" y="223" anchorOffsetX="0" anchorOffsetY="0"
                             restrict="0-9." maxChars="4">
             <GameUi:skinName>
@@ -75,7 +75,7 @@
                 </e:Skin>
             </GameUi:skinName>
         </GameUi:UiTextInput>
-        <GameUi:UiLabel text="注:\n任意条件均可留空,等同于不限查找结果" textColor="0xFFFFFF" size="15" lineSpacing="3" width="66" x="352"
+        <GameUi:UiLabel id="_labelDesc" text="注:\n任意条件均可留空,等同于不限查找结果" textColor="0xFFFFFF" size="15" lineSpacing="3" width="66" x="352"
                         y="95" />
         <GameUi:UiButton id="_btnReset" label="全部显示&gt;&gt;" bottom="14" horizontalCenter="-90">
             <GameUi:skinName>
