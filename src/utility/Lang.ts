@@ -1793,7 +1793,14 @@ namespace TinyWars.Utility.Lang {
                 `默认为当前未被其他玩家选用的队伍中最靠前的一项。`,
             ].join("\n"),
 
-            `Untranslated...`,
+             [
+                `You can choose your team with this option. `
+                ``,
+                `In the game players in the same team share the vision. Their troops will not block and attack each other. It is not possible to supply your allies' troops with Rigs or load into allies' transports. `,
+                `You may use allies' properties to repair (use your own funds) and supply your troops and you cannot capture allies' properties`,
+                ``,
+                `By default you got the 1st team with no other members. `,
+            ].join("\n"),
         ],
 
         [RichType.R0002]: [
@@ -1806,7 +1813,14 @@ namespace TinyWars.Utility.Lang {
                 `默认为“否”（即明战）。`,
             ].join("\n"),
 
-            `Untranslated...`,
+            [
+                `This option determines whether this game is FOW or not. `,
+                ``,
+                `When FOW is off you have the view of the whole battlefield. When FOW is on you can only see the battlefield within the vision of your troops. `,
+                `FOW is relatively difficult and it is recommended that new players should start from no FOW to learn the basics of the game before advancing to FOW mode. `,
+                ``
+                `By default this option is disabled (no FOW). `,
+            ].join("\n"),
         ],
 
         [RichType.R0003]: [
@@ -1820,7 +1834,15 @@ namespace TinyWars.Utility.Lang {
                 `默认为“3天”。`,
             ].join("\n"),
 
-            `Untranslated`,
+            [
+                `This option determines the boot timer, aka time available for each turn. `,
+                ``,
+                `If a player hit the boot timer, the player will resign automatically. `,
+                `When the game is full, or a player ends his turn, the timer of the next player will start to countdown, no matter that player is online or not. `,
+                `Therefore, please choose "15min" only when you have made an agreement with your opponent to avoid unnecessary boots. `,
+                ``,
+                `By default this option is selected as "3 days". `,
+            ].join("\n"),    
         ],
 
         [RichType.R0004]: [
