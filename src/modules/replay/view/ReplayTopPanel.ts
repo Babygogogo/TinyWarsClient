@@ -66,6 +66,7 @@ namespace TinyWars.Replay {
 
         protected _onOpened(): void {
             this._war = ReplayModel.getWar();
+            this._updateComponentsForLanguage();
             this._updateView();
         }
 
@@ -146,6 +147,15 @@ namespace TinyWars.Replay {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for views.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _updateComponentsForLanguage(): void {
+            this._btnMenu.label         = Lang.getText(Lang.Type.B0155);
+            this._btnFastRewind.label   = Lang.getText(Lang.Type.B0247);
+            this._btnFastForward.label  = Lang.getText(Lang.Type.B0248);
+            this._btnPlay.label         = Lang.getText(Lang.Type.B0249);
+            this._btnPause.label        = Lang.getText(Lang.Type.B0250);
+            this._btnUnitList.label     = Lang.getText(Lang.Type.B0152);
+        }
+
         private _updateView(): void {
             this._updateLabelPlayer();
             this._updateLabelFund();

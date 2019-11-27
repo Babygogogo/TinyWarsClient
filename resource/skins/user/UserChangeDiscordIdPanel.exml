@@ -2,14 +2,14 @@
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
     <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="semi_transparent" />
-    <e:Group width="460" height="230" horizontalCenter="0" verticalCenter="0">
+    <e:Group width="460" height="250" horizontalCenter="0" verticalCenter="0">
         <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
-                        left="0" right="0" top="0" bottom="0" />
-        <GameUi:UiLabel text="更改Discord ID" textColor="0xffffff" y="13" horizontalCenter="0" size="20" />
+                        left="0" right="0" top="0" bottom="2" />
+        <GameUi:UiLabel id="_labelName" text="更改Discord ID" textColor="0xffffff" y="13" horizontalCenter="0" size="20" />
         <e:Group y="54" horizontalCenter="0">
-            <GameUi:UiLabel text="新ID：" textColor="0xFFFFFF" y="6" size="20" x="0" />
-            <GameUi:UiTextInput id="_inputDiscordId" width="260" y="0" anchorOffsetX="0" anchorOffsetY="0" maxChars="18"
-                                x="60">
+            <GameUi:UiLabel id="_labelDiscordId" text="新ID：" textColor="0xFFFFFF" size="20"  verticalCenter="1" horizontalCenter="-150" textAlign="center"/>
+            <GameUi:UiTextInput id="_inputDiscordId" width="260" anchorOffsetX="0" anchorOffsetY="0" maxChars="18"
+                                horizontalCenter="30" verticalCenter="0">
                 <GameUi:skinName>
                     <e:Skin width="100" height="30">
                         <e:Image source="c08_t06_s01_f01" left="0" right="0" y="27" />
@@ -29,9 +29,9 @@
                 </e:Skin>
             </e:skinName>
         </GameUi:UiButton>
-        <GameUi:UiLabel text="输入正确的Discord ID，并加入以下游戏频道（可点击链接复制）\n即可实时收到游戏相关消息，如回合轮转等。" textColor="0xFFFFFF" y="150"
-                        size="15" lineSpacing="3" horizontalCenter="0" textAlign="center" />
-        <GameUi:UiTextInput y="190" anchorOffsetX="0" anchorOffsetY="0" maxChars="20" horizontalCenter="0.5" width="333">
+        <GameUi:UiLabel id="_labelNote" text="输入正确的Discord ID，并加入以下游戏频道（可点击链接复制）\n即可实时收到游戏相关消息，如回合轮转等。" textColor="0xFFFFFF"
+                        size="15" lineSpacing="3" horizontalCenter="0"  textAlign="center" y="150" maxTextWidth="430"/>
+        <GameUi:UiTextInput y="210" anchorOffsetX="0" anchorOffsetY="0" maxChars="20" horizontalCenter="0.5" width="333">
             <GameUi:skinName>
                 <e:Skin width="100" height="30">
                     <e:Image source="c08_t06_s01_f01" left="0" right="0" y="27" />

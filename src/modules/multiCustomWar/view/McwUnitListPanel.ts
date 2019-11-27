@@ -13,11 +13,14 @@ namespace TinyWars.MultiCustomWar {
 
         private static _instance: McwUnitListPanel;
 
-        private _group      : eui.Group;
-        private _listUnit   : GameUi.UiScrollList;
-        private _labelCount : GameUi.UiLabel;
-        private _labelValue : GameUi.UiLabel;
-        private _btnSwitch  : GameUi.UiButton;
+        private _group          : eui.Group;
+        private _labelName      : GameUi.UiLabel;
+        private _labelCountName : GameUi.UiLabel;
+        private _labelValueName : GameUi.UiLabel;
+        private _listUnit       : GameUi.UiScrollList;
+        private _labelCount     : GameUi.UiLabel;
+        private _labelValue     : GameUi.UiLabel;
+        private _btnSwitch      : GameUi.UiButton;
 
         private _war        : McwWar;
         private _cursor     : McwCursor;
@@ -107,6 +110,13 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _updateComponentsForLanguage(): void {
+            this._labelCountName.text = `${Lang.getText(Lang.Type.B0160)}:`;
+            this._labelValueName.text = `${Lang.getText(Lang.Type.B0161)}:`;
+            this._labelName.text = Lang.getText(Lang.Type.B0152);
+            this._btnSwitch.label = Lang.getText(Lang.Type.B0244);
+        }
+
         private _updateView(): void {
             this._dataForList = this._createDataForList();
             this._listUnit.bindData(this._dataForList);
@@ -118,6 +128,7 @@ namespace TinyWars.MultiCustomWar {
                 value += unit.getProductionBaseCost() * unit.getNormalizedCurrentHp() / unit.getNormalizedMaxHp();
             }
             this._labelValue.text = `${value}`;
+            this._updateComponentsForLanguage();
         }
 
         private _adjustPositionOnTouch(e: egret.TouchEvent): void {

@@ -340,6 +340,15 @@ namespace TinyWars.Utility.Lang {
             `本页设置对局内所有玩家都生效`,
             `The settings affect all players in the game.`,
         ],
+        [Type.A0066]: [
+            `注意:\n昵称可使用任意字符，长度不小于4位`,
+            `Note:\n You can use any character for the nickname, \n and the nickname should consist of at least 4 characters.`,
+        ],
+        [Type.A0067]: [
+            `输入正确的Discord ID，并加入以下游戏频道（可点击链接复制）\n 即可实时收到游戏相关消息，如回合轮转等。`,
+            `By entering your correct discord ID \n and joining the following discord server (the link can be copied)\n you can receive tinywars-related information, including turn notification.`,
+        ],
+
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -378,19 +387,19 @@ namespace TinyWars.Utility.Lang {
         ],
         [Type.B0008]: [
             "A队",
-            "A Team",
+            "Team A",
         ],
         [Type.B0009]: [
             "B队",
-            "B Team",
+            "Team B",
         ],
         [Type.B0010]: [
             "C队",
-            "C Team",
+            "Team C",
         ],
         [Type.B0011]: [
             "D队",
-            "D Team",
+            "Team D",
         ],
         [Type.B0012]: [
             "是",
@@ -1050,11 +1059,11 @@ namespace TinyWars.Utility.Lang {
         ],
         [Type.B0176]: [
             `显示地形动画`,
-            `Show Tile Ani`,
+            `Show Tile Animation`,
         ],
         [Type.B0177]: [
             `停止地形动画`,
-            `Stop Tile Ani`,
+            `Stop Tile Animation`,
         ],
         [Type.B0178]: [
             `初始资金`,
@@ -1311,6 +1320,54 @@ namespace TinyWars.Utility.Lang {
         [Type.B0241]: [
             `暂无回放`,
             `No Replays`,
+        ],
+        [Type.B0242]: [
+            `新昵称`,
+            `New nickname`,
+        ],
+        [Type.B0243]: [
+            `新ID`,
+            `New ID`,
+        ],
+        [Type.B0244]: [
+            `切换玩家`,
+            `Next Player`,
+        ],
+        [Type.B0245]: [
+            `房间设定总览`,
+            `Overview Room Settings`,
+        ],
+        [Type.B0246]: [
+            `进入战局`,
+            `Enter Game`,
+        ],
+        [Type.B0247]: [
+            `上个回合`,
+            `Prev. Turn`,
+        ],
+        [Type.B0248]: [
+            `下个回合`,
+            `Next Turn`,
+        ],
+        [Type.B0249]: [
+            `开始回放`,
+            `Start Replays`,
+        ],
+        [Type.B0250]: [
+            `暂停回放`,
+            `Pause Replays`,
+        ],
+        [Type.B0251]: [
+            `作者`,
+            `Designer`,
+        ],
+        [Type.B0252]: [
+            `游玩次数`,
+            `Games Played`,
+        ],
+        [Type.B0253]: [
+            `评分`,
+            `Rating`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

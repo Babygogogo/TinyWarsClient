@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
+	<w:Config id="16ea1cd8a3e"/>
     <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="semi_transparent" />
-    <e:Group width="430" height="190" horizontalCenter="0" verticalCenter="0">
+    <e:Group width="450" height="210" horizontalCenter="0" verticalCenter="0">
         <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" />
-        <GameUi:UiLabel text="更改昵称" textColor="0xffffff" y="13" horizontalCenter="0" size="20" />
-        <GameUi:UiLabel text="新昵称：" textColor="0xFFFFFF" y="60" size="20" x="40" />
-        <GameUi:UiTextInput id="_inputNickname" width="220" x="121" y="54" anchorOffsetX="0" anchorOffsetY="0"
+        <GameUi:UiLabel id="_labelName" text="更改昵称" textColor="0xffffff" y="13" horizontalCenter="0" size="20" />
+        <GameUi:UiLabel id="_labelNickname" text="新昵称：" textColor="0xFFFFFF" y="60" size="20" textAlign="center" maxTextWidth="120" horizontalCenter="-140"/>
+        <GameUi:UiTextInput id="_inputNickname" width="220" x="161" y="54" anchorOffsetX="0" anchorOffsetY="0"
                             maxChars="20">
             <GameUi:skinName>
                 <e:Skin width="100" height="30">
@@ -27,6 +28,6 @@
                 </e:Skin>
             </e:skinName>
         </GameUi:UiButton>
-        <GameUi:UiLabel text="注意:\n昵称可使用任意字符，长度不小于4位" textColor="0xFFFFFF" y="137" size="15" x="10" lineSpacing="3" />
+        <GameUi:UiLabel id="_labelNote" text="注意:\n昵称可使用任意字符，长度不小于4位" textColor="0xFFFFFF" size="15" x="10" lineSpacing="3"  height="54" bottom="10" anchorOffsetY="0"/>
     </e:Group>
 </e:Skin>
