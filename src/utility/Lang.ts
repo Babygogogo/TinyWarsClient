@@ -1369,6 +1369,38 @@ namespace TinyWars.Utility.Lang {
             `评分`,
             `Rating`,
         ],
+        [Type.B0254]: [
+            `行动数`,
+            `Actions`,
+        ],
+        [Type.B0255]: [
+            `录像控制台`,
+            `Replay Console`,
+        ],
+        [Type.B0256]: [
+            `回放速率`,
+            `Playback Rate`,
+        ],
+        [Type.B0257]: [
+            `跳转回合`,
+            `Set Turns`,
+        ],
+        [Type.B0258]: [
+            `跳转行动`,
+            `Set Actions`,
+        ],
+        [Type.B0259]: [
+            `隐藏消息`,
+            `Hide Notifys`,
+        ],
+        [Type.B0260]: [
+            `显示消息`,
+            `Show Notify`,
+        ],
+        [Type.B0261]: [
+            `隐藏面板`,
+            `Hide Panel`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [

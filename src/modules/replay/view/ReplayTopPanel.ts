@@ -22,6 +22,7 @@ namespace TinyWars.Replay {
         private _btnFastForward     : GameUi.UiButton;
         private _btnPlay            : GameUi.UiButton;
         private _btnPause           : GameUi.UiButton;
+        private _btnReplayConsole   : GameUi.UiButton;
         private _btnUnitList        : GameUi.UiButton;
         private _btnMenu            : GameUi.UiButton;
 
@@ -62,6 +63,7 @@ namespace TinyWars.Replay {
                 { ui: this._btnPause,           callback: this._onTouchedBtnPause, },
                 { ui: this._btnUnitList,        callback: this._onTouchedBtnUnitList, },
                 { ui: this._btnMenu,            callback: this._onTouchedBtnMenu, },
+                { ui: this._btnReplayConsole,   callback: this._onTouchedBtnReplayConsole, },
             ];
         }
 
@@ -147,6 +149,15 @@ namespace TinyWars.Replay {
             ReplayWarMenuPanel.show();
         }
 
+        private _onTouchedBtnReplayConsole(e: egret.TouchEvent): void {
+            if (ReplaConsolePanel.getInstance())
+            {
+                ReplaConsolePanel.hide();
+            }
+            ReplaConsolePanel.show();
+        }
+
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for views.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -157,6 +168,7 @@ namespace TinyWars.Replay {
             this._btnPlay.label         = Lang.getText(Lang.Type.B0249);
             this._btnPause.label        = Lang.getText(Lang.Type.B0250);
             this._btnUnitList.label     = Lang.getText(Lang.Type.B0152);
+            this._btnReplayConsole.label= Lang.getText(Lang.Type.B0255);
         }
 
         private _updateView(): void {

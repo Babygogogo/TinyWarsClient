@@ -26,6 +26,14 @@
                 <e:HorizontalLayout verticalAlign="middle" />
             </e:layout>
         </e:Group>
+			<GameUi:UiButton id="_btnReplayConsole" label="录像控制台" x="610" width="70" top="0" bottom="0">
+				<GameUi:skinName>
+				<e:Skin states="up,down,disabled">
+					<e:Image width="100%" height="100%" source="c04_t01_s02_f01" scale9Grid="9,9,2,2"/>
+					<GameUi:UiLabel id="labelDisplay" size="14" textColor="0x00ff00" verticalCenter="0" horizontalCenter="0" maxTextWidth="60"/>
+				</e:Skin>
+				</GameUi:skinName>
+			</GameUi:UiButton>
         <GameUi:UiButton id="_btnFastRewind" label="上个回合" x="680" width="70" top="0" bottom="0">
             <GameUi:skinName>
                 <e:Skin states="up,down,disabled">
