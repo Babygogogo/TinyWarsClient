@@ -5,8 +5,8 @@
         <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" />
 			<e:Group height="40" anchorOffsetX="0" anchorOffsetY="0" top="110" horizontalCenter="0">
-				<GameUi:UiLabel text="播放速率：" size="20" verticalCenter="0" left="10"/>
-				<GameUi:UiButton label="&lt;" scaleX="1" scaleY="1" verticalCenter="0" left="145">
+				<GameUi:UiLabel id="_labelPlayRateTitle" text="播放速率：" size="20" verticalCenter="0" left="10"/>
+				<GameUi:UiButton id="_btnDecreasePlayRate" label="&lt;" scaleX="1" scaleY="1" verticalCenter="0" left="145">
 				<GameUi:skinName>
 					<e:Skin states="up,down,disabled">
 					<e:Image width="100%" height="100%"/>
@@ -14,7 +14,7 @@
 					</e:Skin>
 				</GameUi:skinName>
 				</GameUi:UiButton>
-				<GameUi:UiButton label=">" scaleX="1" scaleY="1" verticalCenter="0" left="240">
+				<GameUi:UiButton id="_btnIncreasePlayRate" label=">" scaleX="1" scaleY="1" verticalCenter="0" left="240">
 				<GameUi:skinName>
 					<e:Skin states="up,down,disabled">
 					<e:Image width="100%" height="100%"/>
@@ -22,9 +22,9 @@
 					</e:Skin>
 				</GameUi:skinName>
 				</GameUi:UiButton>
-				<GameUi:UiLabel text="x9.9" size="22" verticalCenter="0" left="181"/>
+				<GameUi:UiLabel id="_labelPlayRate" text="x9.9" size="22" verticalCenter="0" left="181"/>
 			</e:Group>
-			<GameUi:UiButton label="隐藏面板" scaleX="1" scaleY="1" right="20" top="10">
+			<GameUi:UiButton id="_btnHideConsole" label="隐藏面板" scaleX="1" scaleY="1" right="20" top="10">
 				<GameUi:skinName>
 				<e:Skin states="up,down,disabled">
 					<e:Image width="100%" height="100%"/>
@@ -32,9 +32,9 @@
 				</e:Skin>
 				</GameUi:skinName>
 			</GameUi:UiButton>
-			<e:Group height="40" anchorOffsetX="0" anchorOffsetY="0" top="30" horizontalCenter="0">
-				<GameUi:UiLabel text="当前回合：" size="20" verticalCenter="0" left="10"/>
-				<GameUi:UiButton label="|&lt;" scaleX="1" scaleY="1" verticalCenter="0" left="120">
+			<e:Group id="_groupTurnEditon" height="40" anchorOffsetX="0" anchorOffsetY="0" top="30" horizontalCenter="0">
+				<GameUi:UiLabel id="_labelCurrentTurnTitle" text="当前回合：" size="20" verticalCenter="0" left="10"/>
+				<GameUi:UiButton id="_btnFirstTurn" label="|&lt;" scaleX="1" scaleY="1" verticalCenter="0" left="115">
 				<GameUi:skinName>
 					<e:Skin states="up,down,disabled">
 					<e:Image width="100%" height="100%"/>
@@ -42,7 +42,7 @@
 					</e:Skin>
 				</GameUi:skinName>
 				</GameUi:UiButton>
-				<GameUi:UiButton label="&lt;" scaleX="1" scaleY="1" verticalCenter="0" left="145">
+				<GameUi:UiButton id="_btnPrevTurn" label="&lt;  " scaleX="1" scaleY="1" verticalCenter="0" left="145">
 				<GameUi:skinName>
 					<e:Skin states="up,down,disabled">
 					<e:Image width="100%" height="100%"/>
@@ -50,7 +50,7 @@
 					</e:Skin>
 				</GameUi:skinName>
 				</GameUi:UiButton>
-				<GameUi:UiButton label="&gt;" scaleX="1" scaleY="1" verticalCenter="0" left="240">
+				<GameUi:UiButton id="_btnNextTurn" label="  &gt;" scaleX="1" scaleY="1" verticalCenter="0" left="230">
 				<GameUi:skinName>
 					<e:Skin states="up,down,disabled">
 					<e:Image width="100%" height="100%"/>
@@ -58,7 +58,7 @@
 					</e:Skin>
 				</GameUi:skinName>
 				</GameUi:UiButton>
-				<GameUi:UiTextInput id="_inputMapName" width="30" anchorOffsetX="0" anchorOffsetY="0" maxChars="20" verticalCenter="0" left="170">
+				<GameUi:UiTextInput id="_inputCurrentTurn" width="60" anchorOffsetX="0" anchorOffsetY="0" maxChars="20" verticalCenter="0" left="170">
 				<GameUi:skinName>
 					<e:Skin width="100" height="30">
 					<e:Image source="c08_t06_s01_f01" left="0" right="0" y="27"/>
@@ -67,7 +67,7 @@
 					</e:Skin>
 				</GameUi:skinName>
 				</GameUi:UiTextInput>
-				<GameUi:UiButton label=">|" scaleX="1" scaleY="1" left="265" verticalCenter="0">
+				<GameUi:UiButton id="_btnLastTurn" label=">|" scaleX="1" scaleY="1" left="265" verticalCenter="0">
 				<GameUi:skinName>
 					<e:Skin states="up,down,disabled">
 					<e:Image width="100%" height="100%"/>
@@ -75,7 +75,7 @@
 					</e:Skin>
 				</GameUi:skinName>
 				</GameUi:UiButton>
-				<GameUi:UiButton label="跳转回合" scaleX="1" scaleY="1" left="300" verticalCenter="0">
+				<GameUi:UiButton id="_btnJumpCurrentTurn" label="跳转回合" scaleX="1" scaleY="1" left="300" verticalCenter="0">
 				<GameUi:skinName>
 					<e:Skin states="up,down,disabled">
 					<e:Image width="100%" height="100%"/>
@@ -84,9 +84,9 @@
 				</GameUi:skinName>
 				</GameUi:UiButton>
 			</e:Group>
-			<e:Group height="40" anchorOffsetX="0" anchorOffsetY="0" top="70" horizontalCenter="0">
-				<GameUi:UiLabel text="当前行动：" size="20" verticalCenter="0" left="10"/>
-				<GameUi:UiButton label="|&lt;" scaleX="1" scaleY="1" verticalCenter="0" left="120">
+			<e:Group id="_groupActionEditon" height="40" anchorOffsetX="0" anchorOffsetY="0" top="70" horizontalCenter="0">
+				<GameUi:UiLabel id="_labelCurrentActionTitle" text="当前行动：" size="20" verticalCenter="0" left="10"/>
+				<GameUi:UiButton id="_btnFirstAction" label="|&lt;" scaleX="1" scaleY="1" verticalCenter="0" left="115">
 				<GameUi:skinName>
 					<e:Skin states="up,down,disabled">
 					<e:Image width="100%" height="100%"/>
@@ -94,7 +94,7 @@
 					</e:Skin>
 				</GameUi:skinName>
 				</GameUi:UiButton>
-				<GameUi:UiButton label="&lt;" scaleX="1" scaleY="1" verticalCenter="0" left="145">
+				<GameUi:UiButton id="_btnPrevAction" label="&lt;  " scaleX="1" scaleY="1" verticalCenter="0" left="145">
 				<GameUi:skinName>
 					<e:Skin states="up,down,disabled">
 					<e:Image width="100%" height="100%"/>
@@ -102,15 +102,8 @@
 					</e:Skin>
 				</GameUi:skinName>
 				</GameUi:UiButton>
-				<GameUi:UiButton label="&gt;" scaleX="1" scaleY="1" verticalCenter="0" left="240">
-				<GameUi:skinName>
-					<e:Skin states="up,down,disabled">
-					<e:Image width="100%" height="100%"/>
-					<GameUi:UiLabel id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="20" bold="true" textColor="0x00ff00"/>
-					</e:Skin>
-				</GameUi:skinName>
-				</GameUi:UiButton>
-				<GameUi:UiTextInput id="_inputMapName0" width="60" anchorOffsetX="0" anchorOffsetY="0" maxChars="20" verticalCenter="0" left="170">
+
+				<GameUi:UiTextInput id="_inputCurrentAction" width="60" anchorOffsetX="0" anchorOffsetY="0" maxChars="20" verticalCenter="0" left="170">
 				<GameUi:skinName>
 					<e:Skin width="100" height="30">
 					<e:Image source="c08_t06_s01_f01" left="0" right="0" y="27"/>
@@ -119,7 +112,15 @@
 					</e:Skin>
 				</GameUi:skinName>
 				</GameUi:UiTextInput>
-				<GameUi:UiButton label=">|" scaleX="1" scaleY="1" left="265" verticalCenter="0">
+				<GameUi:UiButton id="_btnNextAction" label=" >" scaleX="1" scaleY="1" verticalCenter="0" left="230">
+					<GameUi:skinName>
+					<e:Skin states="up,down,disabled">
+						<e:Image width="100%" height="100%"/>
+						<GameUi:UiLabel id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="20" bold="true" textColor="0x00ff00"/>
+					</e:Skin>
+					</GameUi:skinName>
+				</GameUi:UiButton>
+				<GameUi:UiButton id="_btnLastAction" label=">|" scaleX="1" scaleY="1" left="265" verticalCenter="0">
 				<GameUi:skinName>
 					<e:Skin states="up,down,disabled">
 					<e:Image width="100%" height="100%"/>
@@ -127,7 +128,7 @@
 					</e:Skin>
 				</GameUi:skinName>
 				</GameUi:UiButton>
-				<GameUi:UiButton label="跳转行动" scaleX="1" scaleY="1" left="300" verticalCenter="0">
+				<GameUi:UiButton id="_btnJumpCurrentAction" label="跳转行动" scaleX="1" scaleY="1" left="300" verticalCenter="0">
 					<GameUi:skinName>
 					<e:Skin states="up,down,disabled">
 						<e:Image width="100%" height="100%"/>
@@ -136,9 +137,9 @@
 					</GameUi:skinName>
 				</GameUi:UiButton>
 			</e:Group>
-			<GameUi:UiLabel text="录像控制台" size="20" bold="true" horizontalCenter="0" top="10"/>
-			<e:Group height="40" anchorOffsetX="0" anchorOffsetY="0" top="150" horizontalCenter="0">
-				<GameUi:UiButton label="开始回放" scaleX="1" scaleY="1" verticalCenter="0" left="10">
+			<GameUi:UiLabel id="_labelName" text="录像控制台" size="20" bold="true" horizontalCenter="0" top="10"/>
+			<e:Group id="_groupControlEdtion" height="40" anchorOffsetX="0" anchorOffsetY="0" top="150" horizontalCenter="0">
+				<GameUi:UiButton id="_btnStartReplay" label="开始回放" scaleX="1" scaleY="1" verticalCenter="0" left="10">
 					<GameUi:skinName>
 					<e:Skin states="up,down,disabled">
 						<e:Image width="100%" height="100%"/>
@@ -146,7 +147,23 @@
 					</e:Skin>
 					</GameUi:skinName>
 				</GameUi:UiButton>
-				<GameUi:UiButton label="隐藏消息" scaleX="1" scaleY="1" verticalCenter="0" left="100">
+				<GameUi:UiButton id="_btnPauseReplay" label="结束回放" scaleX="1" scaleY="1" verticalCenter="0" left="10">
+					<GameUi:skinName>
+					<e:Skin states="up,down,disabled">
+						<e:Image width="100%" height="100%"/>
+						<GameUi:UiLabel id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="20" bold="true" textColor="0x00ff00"/>
+					</e:Skin>
+					</GameUi:skinName>
+				</GameUi:UiButton>
+				<GameUi:UiButton id="_bthHideNotify" label="隐藏消息" scaleX="1" scaleY="1" verticalCenter="0" left="100">
+					<GameUi:skinName>
+					<e:Skin states="up,down,disabled">
+						<e:Image width="100%" height="100%"/>
+						<GameUi:UiLabel id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="20" bold="true" textColor="0x00ff00"/>
+					</e:Skin>
+					</GameUi:skinName>
+				</GameUi:UiButton>
+				<GameUi:UiButton id="_btnShowNotify" label="显示消息" scaleX="1" scaleY="1" verticalCenter="0" left="100">
 					<GameUi:skinName>
 					<e:Skin states="up,down,disabled">
 						<e:Image width="100%" height="100%"/>
