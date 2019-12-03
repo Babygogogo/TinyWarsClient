@@ -14,6 +14,9 @@ namespace TinyWars.Replay {
         private _checkPointIdsForNextActionId   = new Map<number, number>();
         private _warDataListForCheckPointId     = new Map<number, SerializedWar>();
 
+        private _replayPlaybackRate      = 0.5;
+        private static _avaliableRepPlayRate    = [0.1,0.5,1.0];
+
         public async init(data: SerializedWar): Promise<ReplayWar> {
             await super.init(data);
 
@@ -151,6 +154,19 @@ namespace TinyWars.Replay {
         }
         public getNextAction(): WarActionContainer {
             return this._executedActions[this.getNextActionId()];
+        }
+
+        static getAvaliableRepPlayRate(): number[] {
+            return this._avaliableRepPlayRate;
+        }
+
+        public getReplayPlaybackRate(): number {
+            return this._replayPlaybackRate;
+        }
+
+        public setReplayPlaybackRate(value: number) {
+            this._replayPlaybackRate = value;
+            Notify.dispatch(Notify.Type.ReplayPlaybackRateChanged);
         }
     }
 }

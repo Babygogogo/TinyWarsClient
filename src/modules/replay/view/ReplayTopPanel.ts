@@ -25,6 +25,7 @@ namespace TinyWars.Replay {
         private _btnReplayConsole   : GameUi.UiButton;
         private _btnUnitList        : GameUi.UiButton;
         private _btnMenu            : GameUi.UiButton;
+        private _panelReplayConsole : GameUi.UiPanel;
 
         private _war    : ReplayWar;
 
@@ -150,11 +151,8 @@ namespace TinyWars.Replay {
         }
 
         private _onTouchedBtnReplayConsole(e: egret.TouchEvent): void {
-            if (ReplaConsolePanel.getInstance())
-            {
-                ReplaConsolePanel.hide();
-            }
-            ReplaConsolePanel.show();
+            (ReplayConsolePanel.getIsOpening()) ? ReplayConsolePanel.getInstance().close()
+                                                : ReplayConsolePanel.show();
         }
 
 

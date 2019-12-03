@@ -4,15 +4,11 @@ namespace TinyWars.Replay {
     import Notify       = Utility.Notify;
     import Lang         = Utility.Lang;
 
-    const _CELL_WIDTH            = 80;
-    const _LEFT_X               = 80;
-    const _RIGHT_X              = 880;
-
-    export class ReplaConsolePanel extends GameUi.UiPanel {
+    export class ReplayConsolePanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
-        private static _instance: ReplaConsolePanel;
+        private static _instance: ReplayConsolePanel;
 
         private _group                      : eui.Group;
         private _labelPlayRateTitle         : GameUi.UiLabel;
@@ -43,24 +39,29 @@ namespace TinyWars.Replay {
         private _bthHideNotify              : GameUi.UiButton;
         private _btnShowNotify              : GameUi.UiButton;
 
-        private _war    : ReplayWar;
+        private _war                        : ReplayWar;
 
 
         public static show(): void {
-            if (!ReplaConsolePanel._instance) {
-                ReplaConsolePanel._instance = new ReplaConsolePanel();
+            if (!ReplayConsolePanel._instance) {
+                ReplayConsolePanel._instance = new ReplayConsolePanel();
             }
-            ReplaConsolePanel._instance.open();
+            ReplayConsolePanel._instance.open();
         }
 
         public static hide(): void {
-            if (ReplaConsolePanel._instance) {
-                ReplaConsolePanel._instance.close();
+            if (ReplayConsolePanel._instance) {
+                ReplayConsolePanel._instance.close();
             }
         }
 
-        public static getInstance(): ReplaConsolePanel {
-            return ReplaConsolePanel._instance;
+        public static getInstance(): ReplayConsolePanel {
+            return ReplayConsolePanel._instance;
+        }
+
+        public static getIsOpening(): boolean {
+            const instance = ReplayConsolePanel._instance;
+            return instance ? instance.getIsOpening() : false;
         }
 
         public constructor() {
@@ -74,11 +75,14 @@ namespace TinyWars.Replay {
             this._notifyListeners = [
                 { type: Notify.Type.ReplayAutoReplayChanged,    callback: this._onNotifyReplayAutoReplayChanged },
                 { type: Notify.Type.BwTurnIndexChanged,         callback: this._onNotifyBwTurnIndexChanged },
+                { type: Notify.Type.ActionIDChanged,            callback: this._onNotifyActionIDChanged },
             ];
             this._uiListeners = [
                 { ui: this._btnHideConsole,      callback: this._onTouchedBtnHideConsole },
                 { ui: this._btnHideConsole,      callback: this._onTouchedBtnHideConsole },
                 { ui: this._btnJumpCurrentTurn,  callback: this._onTouchedJumpCurrentTurn },
+                { ui: this._btnStartReplay,      callback: this._onTouchedStartReplay },
+                { ui: this._btnPauseReplay,      callback: this._onTouchedPauseReplay },
             ];
             this._updateComponentsForLanguage();
         }
@@ -93,6 +97,7 @@ namespace TinyWars.Replay {
 
         }
 
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -103,6 +108,10 @@ namespace TinyWars.Replay {
 
         private _onNotifyBwTurnIndexChanged(e: egret.Event): void {
             this._inputCurrentTurn.textDisplay.text = `${this._war.getTurnManager().getTurnIndex()}`
+        }
+
+        private _onNotifyActionIDChanged(e: egret.Event): void {
+            this._inputCurrentAction.textDisplay.text = `${this._war.getNextActionId()}`
         }
 
         private _onTouchedBtnHideConsole(e: egret.Event): void {
@@ -117,9 +126,23 @@ namespace TinyWars.Replay {
             FloatText.show("TODO");
         }
 
+        private _onTouchedStartReplay(e: egret.Event): void {
+            const war = this._war;
+            if (war.checkIsInEnd()) {
+                FloatText.show(Lang.getText(Lang.Type.A0041));
+            } else {
+                this._war.setIsAutoReplay(true);
+            }
+        }
+
+        private _onTouchedPauseReplay(e: egret.Event): void {
+            this._war.setIsAutoReplay(false);
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+
         private _updateView(): void {
             // this._updateComponentsForLanguage();
         }
@@ -151,7 +174,8 @@ namespace TinyWars.Replay {
         }
 
         private _updateDisplay(): void{
-            this._inputCurrentTurn.textDisplay.text = `${this._war.getTurnManager().getTurnIndex()}`
+            this._inputCurrentTurn.textDisplay.text     = `${this._war.getTurnManager().getTurnIndex()}`
+            this._inputCurrentAction.textDisplay.text   = `${this._war.getNextActionId()}`
         }
     }
 }
