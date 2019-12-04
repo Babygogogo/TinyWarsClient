@@ -1844,7 +1844,7 @@ namespace TinyWars.Utility.Lang {
                 `1st: Red`, 
                 `2nd: Blue`, 
                 `3rd: Yellow`, 
-                `4th Black`, 
+                `4th: Black`, 
                 `Yellow and Black is not available for games with 2 players, while Black is not available for ones with 3 players. `.
                 ``,
                 `By default you will be given the first choice among available ones`,
