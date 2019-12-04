@@ -1843,7 +1843,7 @@ namespace TinyWars.Utility.Lang {
                 `The turn order this game is listed as below. `,
                 `1st: Red`, 
                 `2nd: Blue`, 
-                `3rd Yellow`, 
+                `3rd: Yellow`, 
                 `4th Black`, 
                 `Yellow and Black is not available for games with 2 players, while Black is not available for ones with 3 players. `.
                 ``,
