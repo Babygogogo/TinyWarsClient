@@ -348,6 +348,14 @@ namespace TinyWars.Utility.Lang {
             `输入正确的Discord ID，并加入以下游戏频道（可点击链接复制）\n 即可实时收到游戏相关消息，如回合轮转等。`,
             `By entering your correct discord ID \n and joining the following discord server (the link can be copied)\n you can receive tinywars-related information, including turn notification.`,
         ],
+        [Type.A0068]: [
+            `已开启悬浮式录像信息显示`,
+            `Floattext Replay info Display have been enabled.`,
+        ],
+        [Type.A0069]: [
+            `已关闭悬浮式录像信息显示`,
+            `Floattext Replay info Display have been disabled.`,
+        ],
 
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

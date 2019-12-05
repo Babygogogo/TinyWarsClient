@@ -132,7 +132,7 @@ namespace TinyWars.Replay {
             if (war.checkIsInEnd()) {
                 FloatText.show(Lang.getText(Lang.Type.A0041));
             } else {
-                this._war.setIsAutoReplay(true);
+                war.setIsAutoReplay(true);
             }
         }
         private _onTouchedBtnPause(e: egret.TouchEvent): void {

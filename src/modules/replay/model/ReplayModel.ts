@@ -153,7 +153,7 @@ namespace TinyWars.Replay.ReplayModel {
                 if ((!war.checkIsInEnd()) && (war.getIsAutoReplay()) && (!war.getIsExecutingAction()) && (war.getIsRunning())) {
                     _executeAction(war, war.getNextAction(), isFastExecute);
                 }
-            }, undefined, 1000);
+            }, undefined, 1000 / war.getReplayPlaybackRate());
         }
     }
 

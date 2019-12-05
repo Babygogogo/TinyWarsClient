@@ -7,15 +7,17 @@ namespace TinyWars.Replay {
     import WarActionContainer   = Types.WarActionContainer;
     import SerializedWar        = Types.SerializedBwWar;
 
+    const  avaliableRepPlayRate    = [0,0.2,1,5];
+
     export class ReplayWar extends BaseWar.BwWar {
         private _executedActions        : WarActionContainer[];
 
         private _isAutoReplay                   = false;
+        private _isInfoDisplay                  = true;
         private _checkPointIdsForNextActionId   = new Map<number, number>();
         private _warDataListForCheckPointId     = new Map<number, SerializedWar>();
 
-        private _replayPlaybackRate      = 0.5;
-        private static _avaliableRepPlayRate    = [0.1,0.5,1.0];
+        private _replayPlaybackRateIndex        = 2; // a multiplicator for default interval
 
         public async init(data: SerializedWar): Promise<ReplayWar> {
             await super.init(data);
@@ -79,6 +81,16 @@ namespace TinyWars.Replay {
             }
         }
 
+        public getIsInfoDisplay(): boolean {
+            return this._isInfoDisplay;
+        }
+
+        public setIsInfoDisplay(isDisplay: boolean) {
+            this._isInfoDisplay = isDisplay;
+            Notify.dispatch(Notify.Type.ReplayInfoDisplayChanged)
+            FloatText.show((isDisplay)?`${Lang.getText(Lang.Type.A0068)}`:`${Lang.getText(Lang.Type.A0069)}`);
+        }
+
         public getCheckPointId(nextActionId: number): number {
             return this._checkPointIdsForNextActionId.get(nextActionId);
         }
@@ -107,7 +119,9 @@ namespace TinyWars.Replay {
 
                 await this._loadCheckPoint(checkPointId);
                 this.startRunning().startRunningView();
-                FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
+                console.error(`load loadNextCheckPoint() _isInfoDisplay = ${this._isInfoDisplay}`)
+                if (this._isInfoDisplay)
+                    FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
 
             } else {
                 this.setIsAutoReplay(false);
@@ -124,7 +138,9 @@ namespace TinyWars.Replay {
                 this.stopRunning();
                 await this._loadCheckPoint(checkPointId);
                 this.startRunning().startRunningView();
-                FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
+                console.error(`load loadNextCheckPoint() _isInfoDisplay = ${this._isInfoDisplay}`)
+                if (this._isInfoDisplay)
+                    FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
             }
         }
         public checkIsInBeginning(): boolean {
@@ -135,7 +151,9 @@ namespace TinyWars.Replay {
             this.stopRunning();
 
             await this._loadCheckPoint(this.getCheckPointId(this.getNextActionId()) - 1);
-            FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
+            console.error(`load loadNextCheckPoint() _isInfoDisplay = ${this._isInfoDisplay}`)
+            if (this._isInfoDisplay)
+                FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
             this.startRunning().startRunningView();
         }
         private async _loadCheckPoint(checkPointId: number): Promise<void> {
@@ -156,16 +174,16 @@ namespace TinyWars.Replay {
             return this._executedActions[this.getNextActionId()];
         }
 
-        static getAvaliableRepPlayRate(): number[] {
-            return this._avaliableRepPlayRate;
+        public getReplayPlaybackRateIndex(): number {
+            return this._replayPlaybackRateIndex;
         }
 
         public getReplayPlaybackRate(): number {
-            return this._replayPlaybackRate;
+            return avaliableRepPlayRate[this._replayPlaybackRateIndex];
         }
 
-        public setReplayPlaybackRate(value: number) {
-            this._replayPlaybackRate = value;
+        public setReplayPlaybackRateIndex(index: number) {
+            this._replayPlaybackRateIndex = index;
             Notify.dispatch(Notify.Type.ReplayPlaybackRateChanged);
         }
     }
