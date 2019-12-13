@@ -356,6 +356,18 @@ namespace TinyWars.Utility.Lang {
             `已关闭悬浮式录像信息显示`,
             `Floattext Replay info Display have been disabled.`,
         ],
+        [Type.A0070]: [
+            `已经到达最低回放速率，不能继续降低`,
+            `Can't decrease playback rate because it's already lowest.`,
+        ],
+        [Type.A0071]: [
+            `已经到达最高回放速率，不能继续提升`,
+            `Can't increase playback rate because it's already highest.`,
+        ],
+        [Type.A0072]: [
+            `在录像第一次到达结束部分前无法获取总回合`,
+            `Can't get total turns before replay completed for first time`,
+        ],
 
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
