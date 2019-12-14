@@ -48,10 +48,11 @@ namespace TinyWars.Replay {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
+                { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.BwPlayerFundChanged,        callback: this._onNotifyBwPlayerFundChanged },
                 { type: Notify.Type.BwPlayerIndexInTurnChanged, callback: this._onNotifyBwPlayerIndexInTurnChanged },
                 { type: Notify.Type.BwCoEnergyChanged,          callback: this._onNotifyBwCoEnergyChanged },
-                { type: Notify.Type.BwCoUsingSkillTypeChanged,      callback: this._onNotifyBwCoUsingSkillChanged },
+                { type: Notify.Type.BwCoUsingSkillTypeChanged,  callback: this._onNotifyBwCoUsingSkillChanged },
                 { type: Notify.Type.ReplayAutoReplayChanged,    callback: this._onNotifyReplayAutoReplayChanged },
             ];
             this._uiListeners = [
@@ -76,6 +77,9 @@ namespace TinyWars.Replay {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateComponentsForLanguage();
+        }
         private _onNotifyBwPlayerFundChanged(e: egret.Event): void {
             this._updateLabelFund();
         }
@@ -146,7 +150,17 @@ namespace TinyWars.Replay {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for views.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _updateComponentsForLanguage(): void {
+            this._btnMenu.label         = Lang.getText(Lang.Type.B0155);
+            this._btnFastRewind.label   = Lang.getText(Lang.Type.B0247);
+            this._btnFastForward.label  = Lang.getText(Lang.Type.B0248);
+            this._btnPlay.label         = Lang.getText(Lang.Type.B0249);
+            this._btnPause.label        = Lang.getText(Lang.Type.B0250);
+            this._btnUnitList.label     = Lang.getText(Lang.Type.B0152);
+        }
+
         private _updateView(): void {
+            this._updateComponentsForLanguage();
             this._updateLabelPlayer();
             this._updateLabelFund();
             this._updateLabelCo();

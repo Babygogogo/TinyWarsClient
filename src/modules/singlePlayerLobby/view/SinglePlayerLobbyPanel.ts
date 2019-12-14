@@ -81,7 +81,7 @@ namespace TinyWars.SinglePlayerLobby {
         private _createDataForListCommand(): DataForCommandRenderer[] {
             return [
                 {
-                    name    : Lang.getText(Lang.Type.B0242),
+                    name    : Lang.getText(Lang.Type.B0254),
                     callback: (): void => {
                         this.close();
                         SingleCustomRoom.ScrCreateMapListPanel.show();

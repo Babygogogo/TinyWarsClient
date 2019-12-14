@@ -13,11 +13,14 @@ namespace TinyWars.MultiCustomWar {
 
         private static _instance: McwUnitListPanel;
 
-        private _group      : eui.Group;
-        private _listUnit   : GameUi.UiScrollList;
-        private _labelCount : GameUi.UiLabel;
-        private _labelValue : GameUi.UiLabel;
-        private _btnSwitch  : GameUi.UiButton;
+        private _group          : eui.Group;
+        private _labelName      : GameUi.UiLabel;
+        private _labelCountName : GameUi.UiLabel;
+        private _labelValueName : GameUi.UiLabel;
+        private _listUnit       : GameUi.UiScrollList;
+        private _labelCount     : GameUi.UiLabel;
+        private _labelValue     : GameUi.UiLabel;
+        private _btnSwitch      : GameUi.UiButton;
 
         private _war        : McwWar;
         private _cursor     : McwCursor;
@@ -48,6 +51,7 @@ namespace TinyWars.MultiCustomWar {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
+                { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.GlobalTouchBegin,               callback: this._onNotifyGlobalTouchBegin },
                 { type: Notify.Type.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
@@ -79,6 +83,9 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateComponentsForLanguage();
+        }
         private _onNotifyGlobalTouchBegin(e: egret.Event): void {
             this._adjustPositionOnTouch(e.data);
         }
@@ -107,7 +114,16 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _updateComponentsForLanguage(): void {
+            this._labelCountName.text   = `${Lang.getText(Lang.Type.B0160)}:`;
+            this._labelValueName.text   = `${Lang.getText(Lang.Type.B0161)}:`;
+            this._labelName.text        = Lang.getText(Lang.Type.B0152);
+            this._btnSwitch.label       = Lang.getText(Lang.Type.B0244);
+        }
+
         private _updateView(): void {
+            this._updateComponentsForLanguage();
+
             this._dataForList = this._createDataForList();
             this._listUnit.bindData(this._dataForList);
             this._labelCount.text = `${this._dataForList.length}`;

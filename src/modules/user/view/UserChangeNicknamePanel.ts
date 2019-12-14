@@ -8,6 +8,9 @@ namespace TinyWars.User {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
+        private _labelName      : GameUi.UiLabel;
+        private _labelNickname  : GameUi.UiLabel;
+        private _labelNote      : GameUi.UiLabel;
         private _inputNickname  : GameUi.UiTextInput;
         private _btnConfirm     : GameUi.UiButton;
 
@@ -41,6 +44,7 @@ namespace TinyWars.User {
             this._notifyListeners = [
                 { type: NotifyType.SUserChangeNickname,         callback: this._onSUserChangeNickname },
                 { type: NotifyType.SUserChangeNicknameFailed,   callback: this._onSUserChangeNicknameFailed },
+                { type: NotifyType.LanguageChanged,             callback: this._onNotifyLanguageChanged },
             ];
             this._uiListeners = [
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
@@ -49,6 +53,7 @@ namespace TinyWars.User {
         protected _onOpened(): void {
             this._isRequesting          = false;
             this._inputNickname.text    = UserModel.getSelfNickname();
+            this._updateComponentsForLanguage();
         }
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
@@ -71,6 +76,20 @@ namespace TinyWars.User {
         }
         private _onSUserChangeNicknameFailed(e: egret.Event): void {
             this._isRequesting = false;
+        }
+
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateComponentsForLanguage();
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Functions for view.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _updateComponentsForLanguage(): void {
+            this._labelName.text        = Lang.getText(Lang.Type.B0149);
+            this._labelNickname.text    = `${Lang.getText(Lang.Type.B0242)}:`;
+            this._labelNote.text        = Lang.getText(Lang.Type.A0066);
+            this._btnConfirm.label      = Lang.getText(Lang.Type.B0026);
         }
     }
 }

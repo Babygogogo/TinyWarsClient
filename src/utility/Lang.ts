@@ -340,6 +340,15 @@ namespace TinyWars.Utility.Lang {
             `本页设置对局内所有玩家都生效`,
             `The settings affect all players in the game.`,
         ],
+        [Type.A0066]: [
+            `注意:\n昵称可使用任意字符，长度不小于4位`,
+            `Note:\n You can use any character for the nickname, \n and the nickname should consist of at least 4 characters.`,
+        ],
+        [Type.A0067]: [
+            `输入正确的Discord ID，并加入以下游戏频道（可点击链接复制）\n 即可实时收到游戏相关消息，如回合轮转等。`,
+            `By entering your correct discord ID \n and joining the following discord server (the link can be copied)\n you can receive tinywars-related information, including turn notification.`,
+        ],
+
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -378,19 +387,19 @@ namespace TinyWars.Utility.Lang {
         ],
         [Type.B0008]: [
             "A队",
-            "A Team",
+            "Team A",
         ],
         [Type.B0009]: [
             "B队",
-            "B Team",
+            "Team B",
         ],
         [Type.B0010]: [
             "C队",
-            "C Team",
+            "Team C",
         ],
         [Type.B0011]: [
             "D队",
-            "D Team",
+            "Team D",
         ],
         [Type.B0012]: [
             "是",
@@ -1050,11 +1059,11 @@ namespace TinyWars.Utility.Lang {
         ],
         [Type.B0176]: [
             `显示地形动画`,
-            `Show Tile Ani`,
+            `Show Tile Animation`,
         ],
         [Type.B0177]: [
             `停止地形动画`,
-            `Stop Tile Ani`,
+            `Stop Tile Animation`,
         ],
         [Type.B0178]: [
             `初始资金`,
@@ -1313,7 +1322,55 @@ namespace TinyWars.Utility.Lang {
             `No Replays`,
         ],
         [Type.B0242]: [
-            `自定义模式`,
+            `新昵称`,
+            `New nickname`,
+        ],
+        [Type.B0243]: [
+            `新ID`,
+            `New ID`,
+        ],
+        [Type.B0244]: [
+            `切换玩家`,
+            `Next Player`,
+        ],
+        [Type.B0245]: [
+            `房间设定总览`,
+            `Overview Room Settings`,
+        ],
+        [Type.B0246]: [
+            `进入战局`,
+            `Enter Game`,
+        ],
+        [Type.B0247]: [
+            `上个回合`,
+            `Prev. Turn`,
+        ],
+        [Type.B0248]: [
+            `下个回合`,
+            `Next Turn`,
+        ],
+        [Type.B0249]: [
+            `开始回放`,
+            `Start Replays`,
+        ],
+        [Type.B0250]: [
+            `暂停回放`,
+            `Pause Replays`,
+        ],
+        [Type.B0251]: [
+            `作者`,
+            `Designer`,
+        ],
+        [Type.B0252]: [
+            `游玩次数`,
+            `Games Played`,
+        ],
+        [Type.B0253]: [
+            `评分`,
+            `Rating`,
+        ],
+        [Type.B0254]: [
+            `自由战斗`,
             `Free Battle`,
         ],
 
@@ -1784,7 +1841,18 @@ namespace TinyWars.Utility.Lang {
                 `默认为当前可用选项中最靠前的一项。`,
             ].join("\n"),
 
-            `Untranslated...`,
+            [
+                `This option determines your turn order. `,
+                ``,
+                `The turn order this game is listed as below. `,
+                `1st: Red`,
+                `2nd: Blue`,
+                `3rd: Yellow`,
+                `4th: Black`,
+                `Yellow and Black is not available for games with 2 players, while Black is not available for ones with 3 players. `,
+                ``,
+                `By default you will be given the first choice among available ones`,
+            ].join("\n"),
         ],
 
         [RichType.R0001]: [
@@ -1797,7 +1865,14 @@ namespace TinyWars.Utility.Lang {
                 `默认为当前未被其他玩家选用的队伍中最靠前的一项。`,
             ].join("\n"),
 
-            `Untranslated...`,
+             [
+                `You can choose your team with this option. `,
+                ``,
+                `In the game players in the same team share the vision. Their troops will not block and attack each other. It is not possible to supply your allies' troops with Rigs or load into allies' transports. `,
+                `You may use allies' properties to repair (use your own funds) and supply your troops and you cannot capture allies' properties`,
+                ``,
+                `By default you got the 1st team with no other members. `,
+            ].join("\n"),
         ],
 
         [RichType.R0002]: [
@@ -1810,7 +1885,14 @@ namespace TinyWars.Utility.Lang {
                 `默认为“否”（即明战）。`,
             ].join("\n"),
 
-            `Untranslated...`,
+            [
+                `This option determines whether this game is FOW or not. `,
+                ``,
+                `When FOW is off you have the view of the whole battlefield. When FOW is on you can only see the battlefield within the vision of your troops. `,
+                `FOW is relatively difficult and it is recommended that new players should start from no FOW to learn the basics of the game before advancing to FOW mode. `,
+                ``,
+                `By default this option is disabled (no FOW). `,
+            ].join("\n"),
         ],
 
         [RichType.R0003]: [
@@ -1824,7 +1906,15 @@ namespace TinyWars.Utility.Lang {
                 `默认为“3天”。`,
             ].join("\n"),
 
-            `Untranslated`,
+            [
+                `This option determines the boot timer, aka time available for each turn. `,
+                ``,
+                `If a player hit the boot timer, the player will resign automatically. `,
+                `When the game is full, or a player ends his turn, the timer of the next player will start to countdown, no matter that player is online or not. `,
+                `Therefore, please choose "15min" only when you have made an agreement with your opponent to avoid unnecessary boots. `,
+                ``,
+                `By default this option is selected as "3 days". `,
+            ].join("\n"),
         ],
 
         [RichType.R0004]: [

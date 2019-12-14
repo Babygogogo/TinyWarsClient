@@ -25,18 +25,36 @@ namespace TinyWars.Replay {
         private _btnBack        : GameUi.UiButton;
 
         private _groupInfo                  : eui.Group;
-        private _labelMapName               : GameUi.UiLabel;
-        private _labelMapDesigner           : GameUi.UiLabel;
-        private _labelWarId                 : GameUi.UiLabel;
-        private _labelTurnIndex             : GameUi.UiLabel;
-        private _labelActionId              : GameUi.UiLabel;
-        private _labelIncomeModifier        : GameUi.UiLabel;
-        private _labelEnergyGrowthModifier  : GameUi.UiLabel;
-        private _labelInitialEnergy         : GameUi.UiLabel;
-        private _labelMoveRangeModifier     : GameUi.UiLabel;
-        private _labelAttackPowerModifier   : GameUi.UiLabel;
-        private _labelVisionRangeModifier   : GameUi.UiLabel;
-        private _listPlayer                 : GameUi.UiScrollList;
+        private _labelMenuTitle                 : GameUi.UiLabel;
+        private _labelWarInfoTitle              : GameUi.UiLabel;
+        private _labelPlayerInfoTitle           : GameUi.UiLabel;
+        private _labelMapNameTitle              : GameUi.UiLabel;
+        private _labelMapName                   : GameUi.UiLabel;
+        private _labelMapDesignerTitle          : GameUi.UiLabel;
+        private _labelMapDesigner               : GameUi.UiLabel;
+        private _labelWarIdTitle                : GameUi.UiLabel;
+        private _labelWarId                     : GameUi.UiLabel;
+        private _labelTurnIndexTitle            : GameUi.UiLabel;
+        private _labelTurnIndex                 : GameUi.UiLabel;
+        private _labelActionIdTitle             : GameUi.UiLabel;
+        private _labelActionId                  : GameUi.UiLabel;
+        private _labelIncomeModifierTitle       : GameUi.UiLabel;
+        private _labelIncomeModifier            : GameUi.UiLabel;
+        private _labelEnergyGrowthModifierTitle : GameUi.UiLabel;
+        private _labelEnergyGrowthModifier      : GameUi.UiLabel;
+        private _labelInitialEnergyTitle        : GameUi.UiLabel;
+        private _labelInitialEnergy             : GameUi.UiLabel;
+        private _labelMoveRangeModifierTitle    : GameUi.UiLabel;
+        private _labelMoveRangeModifier         : GameUi.UiLabel;
+        private _labelAttackPowerModifierTitle  : GameUi.UiLabel;
+        private _labelAttackPowerModifier       : GameUi.UiLabel;
+        private _labelVisionRangeModifierTitle  : GameUi.UiLabel;
+        private _labelVisionRangeModifier       : GameUi.UiLabel;
+        private _labelLuckLowerLimitTitle       : GameUi.UiLabel;
+        private _labelLuckLowerLimit            : GameUi.UiLabel;
+        private _labelLuckUpperLimitTitle       : GameUi.UiLabel;
+        private _labelLuckUpperLimit            : GameUi.UiLabel;
+        private _listPlayer                     : GameUi.UiScrollList;
 
         private _war        : ReplayWar;
         private _unitMap    : ReplayUnitMap;
@@ -69,7 +87,8 @@ namespace TinyWars.Replay {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.BwActionPlannerStateChanged,   callback: this._onNotifyMcwPlannerStateChanged },
+                { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyMcwPlannerStateChanged },
+                { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
             ];
             this._uiListeners = [
                 { ui: this._btnBack, callback: this._onTouchedBtnBack },
@@ -105,6 +124,10 @@ namespace TinyWars.Replay {
             this._updateListPlayer();
         }
 
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateComponentsForLanguage();
+        }
+
         private _onTouchedBtnBack(e: egret.TouchEvent): void {
             const type = this._menuType;
             if (type === MenuType.Main) {
@@ -122,6 +145,7 @@ namespace TinyWars.Replay {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
+            this._updateComponentsForLanguage();
             this._updateListCommand();
             this._updateGroupInfo();
             this._updateListPlayer();
@@ -138,6 +162,26 @@ namespace TinyWars.Replay {
             }
         }
 
+        private _updateComponentsForLanguage(): void {
+            this._labelMenuTitle.text                   = Lang.getText(Lang.Type.B0155);
+            this._labelWarInfoTitle.text                = Lang.getText(Lang.Type.B0223);
+            this._labelPlayerInfoTitle.text             = Lang.getText(Lang.Type.B0224);
+            this._labelMapNameTitle.text                = `${Lang.getText(Lang.Type.B0225)}: `;
+            this._labelMapDesignerTitle.text            = `${Lang.getText(Lang.Type.B0163)}: `;
+            this._labelWarIdTitle.text                  = `${Lang.getText(Lang.Type.B0226)}: `;
+            this._labelTurnIndexTitle.text              = `${Lang.getText(Lang.Type.B0091)}: `;
+            this._labelActionIdTitle.text               = `${Lang.getText(Lang.Type.B0090)}: `;
+            this._labelIncomeModifierTitle.text         = `${Lang.getText(Lang.Type.B0179)}: `;
+            this._labelInitialEnergyTitle.text          = `${Lang.getText(Lang.Type.B0180)}: `;
+            this._labelEnergyGrowthModifierTitle.text   = `${Lang.getText(Lang.Type.B0181)}: `;
+            this._labelMoveRangeModifierTitle.text      = `${Lang.getText(Lang.Type.B0182)}: `;
+            this._labelAttackPowerModifierTitle.text    = `${Lang.getText(Lang.Type.B0183)}: `;
+            this._labelVisionRangeModifierTitle.text    = `${Lang.getText(Lang.Type.B0184)}: `;
+            this._labelLuckLowerLimitTitle.text         = `${Lang.getText(Lang.Type.B0189)}: `;
+            this._labelLuckUpperLimitTitle.text         = `${Lang.getText(Lang.Type.B0190)}: `;
+            this._btnBack.label                         = Lang.getText(Lang.Type.B0146);
+        }
+
         private _updateGroupInfo(): void {
             const war                               = this._war;
             const mapMetaData                       = WarMapModel.getMapMetaData(war.getMapFileName());
@@ -152,6 +196,8 @@ namespace TinyWars.Replay {
             this._labelMoveRangeModifier.text       = `${war.getSettingsMoveRangeModifier()}`;
             this._labelAttackPowerModifier.text     = `${war.getSettingsAttackPowerModifier()}%`;
             this._labelVisionRangeModifier.text     = `${war.getSettingsVisionRangeModifier()}`;
+            this._labelLuckLowerLimit.text          = `${war.getSettingsLuckLowerLimit()}%`;
+            this._labelLuckUpperLimit.text          = `${war.getSettingsLuckUpperLimit()}%`;
         }
 
         private _updateListPlayer(): void {
@@ -272,14 +318,20 @@ namespace TinyWars.Replay {
         private _labelForce     : GameUi.UiLabel;
         private _labelLost      : GameUi.UiLabel;
 
-        private _groupInfo      : eui.Group;
-        private _labelFund      : GameUi.UiLabel;
-        private _labelIncome    : GameUi.UiLabel;
-        private _labelBuildings : GameUi.UiLabel;
-        private _labelCoName    : GameUi.UiLabel;
-        private _labelEnergy    : GameUi.UiLabel;
-        private _labelUnits     : GameUi.UiLabel;
-        private _labelUnitsValue: GameUi.UiLabel;
+        private _groupInfo              : eui.Group;
+        private _labelFundTitle         : GameUi.UiLabel;
+        private _labelFund              : GameUi.UiLabel;
+        private _labelIncomeTitle       : GameUi.UiLabel;
+        private _labelIncome            : GameUi.UiLabel;
+        private _labelBuildingsTitle    : GameUi.UiLabel;
+        private _labelBuildings         : GameUi.UiLabel;
+        private _labelCoName            : GameUi.UiLabel;
+        private _labelEnergyTitle       : GameUi.UiLabel;
+        private _labelEnergy            : GameUi.UiLabel;
+        private _labelUnitsTitle        : GameUi.UiLabel;
+        private _labelUnits             : GameUi.UiLabel;
+        private _labelUnitsValueTitle   : GameUi.UiLabel;
+        private _labelUnitsValue        : GameUi.UiLabel;
 
         protected dataChanged(): void {
             super.dataChanged();
@@ -301,28 +353,34 @@ namespace TinyWars.Replay {
                 this._labelLost.visible = false;
                 this._groupInfo.visible = true;
 
-                const isInfoKnown           = true;
-                const tilesCountAndIncome   = this._getTilesCountAndIncome(war, playerIndex);
-                this._labelFund.text        = isInfoKnown ? `${player.getFund()}` : `?`;
-                this._labelIncome.text      = `${tilesCountAndIncome.income}${isInfoKnown ? `` : `  ?`}`;
-                this._labelBuildings.text   = `${tilesCountAndIncome.count}${isInfoKnown ? `` : `  ?`}`;
+                const isInfoKnown               = true;
+                const tilesCountAndIncome       = this._getTilesCountAndIncome(war, playerIndex);
+                this._labelFundTitle.text       = Lang.getText(Lang.Type.B0156);
+                this._labelFund.text            = isInfoKnown ? `${player.getFund()}` : `?`;
+                this._labelIncomeTitle.text     = Lang.getText(Lang.Type.B0157);
+                this._labelIncome.text          = `${tilesCountAndIncome.income}${isInfoKnown ? `` : `  ?`}`;
+                this._labelBuildingsTitle.text  = Lang.getText(Lang.Type.B0158);
+                this._labelBuildings.text       = `${tilesCountAndIncome.count}${isInfoKnown ? `` : `  ?`}`;
 
                 const coId              = player.getCoId();
                 this._labelCoName.text  = coId == null
                     ? `(${Lang.getText(Lang.Type.B0001)}CO)`
                     : ConfigManager.getCoBasicCfg(ConfigManager.getNewestConfigVersion(), coId).name;
 
-                const superPowerEnergy  = player.getCoSuperPowerEnergy();
-                const powerEnergy       = player.getCoPowerEnergy();
-                const skillType         = player.getCoUsingSkillType();
-                const currEnergyText    = skillType === Types.CoSkillType.Passive
+                const superPowerEnergy      = player.getCoSuperPowerEnergy();
+                const powerEnergy           = player.getCoPowerEnergy();
+                const skillType             = player.getCoUsingSkillType();
+                const currEnergyText        = skillType === Types.CoSkillType.Passive
                     ? "" + player.getCoCurrentEnergy()
                     : skillType === Types.CoSkillType.Power ? "COP" : "SCOP";
-                this._labelEnergy.text  = `${currEnergyText} / ${powerEnergy == null ? "--" : powerEnergy} / ${superPowerEnergy == null ? "--" : superPowerEnergy}`;
+                this._labelEnergyTitle.text = Lang.getText(Lang.Type.B0159);
+                this._labelEnergy.text      = `${currEnergyText} / ${powerEnergy == null ? "--" : powerEnergy} / ${superPowerEnergy == null ? "--" : superPowerEnergy}`;
 
-                const unitsCountAndValue    = this._getUnitsCountAndValue(war, playerIndex);
-                this._labelUnits.text       = `${unitsCountAndValue.count}${isInfoKnown ? `` : `  ?`}`;
-                this._labelUnitsValue.text  = `${unitsCountAndValue.value}${isInfoKnown ? `` : `  ?`}`;
+                const unitsCountAndValue        = this._getUnitsCountAndValue(war, playerIndex);
+                this._labelUnitsTitle.text      = Lang.getText(Lang.Type.B0160);
+                this._labelUnits.text           = `${unitsCountAndValue.count}${isInfoKnown ? `` : `  ?`}`;
+                this._labelUnitsValueTitle.text = Lang.getText(Lang.Type.B0161);
+                this._labelUnitsValue.text      = `${unitsCountAndValue.value}${isInfoKnown ? `` : `  ?`}`;
             }
         }
 

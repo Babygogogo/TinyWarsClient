@@ -15,19 +15,31 @@ namespace TinyWars.MultiCustomRoom {
 
         private static _instance: McrContinueDetailPanel;
 
-        private _btnHelpFog                 : GameUi.UiButton;
-        private _btnHelpTimeLimit           : GameUi.UiButton;
-        private _labelWarPassword           : GameUi.UiLabel;
-        private _labelHasFog                : GameUi.UiLabel;
-        private _labelTimeLimit             : GameUi.UiLabel;
-        private _labelInitialFund           : GameUi.UiLabel;
-        private _labelIncomeModifier        : GameUi.UiLabel;
-        private _labelInitialEnergy         : GameUi.UiLabel;
-        private _labelEnergyGrowthModifier  : GameUi.UiLabel;
-        private _labelMoveRangeModifier     : GameUi.UiLabel;
-        private _labelAttackPowerModifier   : GameUi.UiLabel;
-        private _labelVisionRangeModifier   : GameUi.UiLabel;
-        private _listPlayer                 : GameUi.UiScrollList;
+        private _btnHelpFog                     : GameUi.UiButton;
+        private _btnHelpTimeLimit               : GameUi.UiButton;
+        private _labelName                      : GameUi.UiLabel;
+        private _labelWarPasswordTitle          : GameUi.UiLabel;
+        private _labelHasFogTitle               : GameUi.UiLabel;
+        private _labelTimeLimitTitle            : GameUi.UiLabel;
+        private _labelInitialFundTitle          : GameUi.UiLabel;
+        private _labelIncomeModifierTitle       : GameUi.UiLabel;
+        private _labelInitialEnergyTitle        : GameUi.UiLabel;
+        private _labelEnergyGrowthModifierTitle : GameUi.UiLabel;
+        private _labelMoveRangeModifierTitle    : GameUi.UiLabel;
+        private _labelAttackPowerModifierTitle  : GameUi.UiLabel;
+        private _labelVisionRangeModifierTitle  : GameUi.UiLabel;
+        private _labelListPlayerTitle           : GameUi.UiLabel;
+        private _labelWarPassword               : GameUi.UiLabel;
+        private _labelHasFog                    : GameUi.UiLabel;
+        private _labelTimeLimit                 : GameUi.UiLabel;
+        private _labelInitialFund               : GameUi.UiLabel;
+        private _labelIncomeModifier            : GameUi.UiLabel;
+        private _labelInitialEnergy             : GameUi.UiLabel;
+        private _labelEnergyGrowthModifier      : GameUi.UiLabel;
+        private _labelMoveRangeModifier         : GameUi.UiLabel;
+        private _labelAttackPowerModifier       : GameUi.UiLabel;
+        private _labelVisionRangeModifier       : GameUi.UiLabel;
+        private _listPlayer                     : GameUi.UiScrollList;
 
         private _btnConfirm: GameUi.UiButton;
         private _btnCancel : GameUi.UiButton;
@@ -66,12 +78,14 @@ namespace TinyWars.MultiCustomRoom {
             this._notifyListeners = [
                 { type: Notify.Type.SMcrContinueWar,        callback: this._onNotifySMcrContinueWar },
                 { type: Notify.Type.SMcrContinueWarFailed,  callback: this._onNotifySMcrContinueWarFailed },
+                { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
             ];
 
             this._listPlayer.setItemRenderer(PlayerRenderer);
         }
 
         protected _onOpened(): void {
+            this._updateComponentsForLanguage();
             this._updateView();
         }
 
@@ -112,10 +126,30 @@ namespace TinyWars.MultiCustomRoom {
             BlockPanel.hide();
             McrContinueDetailPanel.hide();
         }
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateComponentsForLanguage();
+        }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _updateComponentsForLanguage(): void {
+            this._labelName.text                        = Lang.getText(Lang.Type.B0245);
+            this._labelWarPasswordTitle.text            = `${Lang.getText(Lang.Type.B0186)}:`;
+            this._labelHasFogTitle.text                 = `${Lang.getText(Lang.Type.B0020)}:`;
+            this._labelTimeLimitTitle.text              = `${Lang.getText(Lang.Type.B0188)}:`;
+            this._labelInitialFundTitle.text            = `${Lang.getText(Lang.Type.B0178)}:`;
+            this._labelIncomeModifierTitle.text         = `${Lang.getText(Lang.Type.B0179)}:`;
+            this._labelInitialEnergyTitle.text          = `${Lang.getText(Lang.Type.B0180)}:`;
+            this._labelEnergyGrowthModifierTitle.text   = `${Lang.getText(Lang.Type.B0181)}:`;
+            this._labelMoveRangeModifierTitle.text      = `${Lang.getText(Lang.Type.B0182)}:`;
+            this._labelAttackPowerModifierTitle.text    = `${Lang.getText(Lang.Type.B0183)}:`;
+            this._labelVisionRangeModifierTitle.text    = `${Lang.getText(Lang.Type.B0184)}:`;
+            this._labelListPlayerTitle.text             = `${Lang.getText(Lang.Type.B0232)}:`;
+            this._btnCancel.label                       = Lang.getText(Lang.Type.B0146);
+            this._btnConfirm.label                      = Lang.getText(Lang.Type.B0246);
+        }
+
         private _updateView(): void {
             const info = this._openData;
             this._labelWarPassword.text             = info.warPassword ? info.warPassword : "----";
