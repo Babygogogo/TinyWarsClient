@@ -108,4 +108,6 @@ C_McwUnitUseCoSkill = 1179,
 S_McwUnitUseCoSkill = 1180,
 C_ScrCreateWar = 1501,
 S_ScrCreateWar = 1502,
+C_ScrGetSaveSlotInfoList = 1503,
+S_ScrGetSaveSlotInfoList = 1504,
 }}

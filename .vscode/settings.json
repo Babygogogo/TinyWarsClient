@@ -3,11 +3,13 @@
         "attackable",
         "buildable",
         "capturable",
+        "cfgs",
         "exml",
         "prng",
         "relogin",
         "scroller",
         "seedrandom",
+        "tinywars",
         "tweens",
         "zoomable"
     ]

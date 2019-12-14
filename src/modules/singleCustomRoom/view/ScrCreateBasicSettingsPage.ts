@@ -108,6 +108,7 @@ namespace TinyWars.SingleCustomRoom {
             this._labelSaveSlotTitle.text       = `${Lang.getText(Lang.Type.B0255)}: `;
             this._labelPlayerListTitle.text     = `${Lang.getText(Lang.Type.B0232)}: `;
             this._labelPlayerListTips.text      = `(${Lang.getText(Lang.Type.A0068)})`;
+            this._btnChangeSaveSlot.label       = `${Lang.getText(Lang.Type.B0230)}`;
         }
 
         private _updateLabelMapName(): void {
@@ -168,7 +169,12 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _onTouchedLabelCoName(e: egret.TouchEvent): void {
-            // TODO
+            const data = this.data as DataForPlayerRenderer;
+            ScrCreateSettingsPanel.hide();
+            ScrCreateCoListPanel.show({
+                dataIndex   : data.playerIndex - 1,
+                coId        : data.coId,
+            });
         }
 
         private _updateLabelCoName(): void {

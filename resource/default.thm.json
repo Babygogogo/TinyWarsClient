@@ -69,6 +69,7 @@
 		"resource/skins/replay/ReplayWarMenuPanel.exml",
 		"resource/skins/replay/ReplayWarPanel.exml",
 		"resource/skins/singleCustomRoom/ScrCreateBasicSettingsPage.exml",
+		"resource/skins/singleCustomRoom/ScrCreateCoListPanel.exml",
 		"resource/skins/singleCustomRoom/ScrCreateMapListPanel.exml",
 		"resource/skins/singleCustomRoom/ScrCreateSearchMapPanel.exml",
 		"resource/skins/singleCustomRoom/ScrCreateSettingsPanel.exml",

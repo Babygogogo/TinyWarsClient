@@ -61,7 +61,7 @@ namespace TinyWars.SingleCustomRoom {
             luckUpperLimit      : ConfigManager.DEFAULT_LUCK_UPPER_LIMIT,
         };
 
-        let _joinedOngoingInfos     : ProtoTypes.IMcwOngoingDetail[];
+        let _saveSlotInfoList   : ProtoTypes.ISaveSlotInfo[];
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for creating wars.
@@ -74,7 +74,7 @@ namespace TinyWars.SingleCustomRoom {
             _dataForCreateWar.mapFileName       = mapFileName;
             _dataForCreateWar.configVersion     = ConfigManager.getNewestConfigVersion();
             _dataForCreateWar.playerInfoList    = generateCreateWarPlayerInfoList(mapFileName);
-            setCreateWarSaveSlot(0);
+            setCreateWarSaveSlot(getAvailableSaveSlot(this.getSaveSlotInfoList()));
             setCreateWarHasFog(false);
 
             setCreateWarInitialFund(0);
@@ -261,13 +261,13 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Functions for continuing joined ongoing wars.
+        // Functions for save slots.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        export function setJoinedOngoingInfos(infos: ProtoTypes.IMcwOngoingDetail[]): void {
-            _joinedOngoingInfos = infos;
+        export function setSaveSlotInfoList(infoList: ProtoTypes.ISaveSlotInfo[]): void {
+            _saveSlotInfoList = infoList;
         }
-        export function getJoinedOngoingInfos(): ProtoTypes.IMcwOngoingDetail[] | undefined {
-            return _joinedOngoingInfos;
+        export function getSaveSlotInfoList(): ProtoTypes.ISaveSlotInfo[] | null {
+            return _saveSlotInfoList;
         }
     }
 
@@ -290,65 +290,16 @@ namespace TinyWars.SingleCustomRoom {
         return list;
     }
 
-    function getAvailablePlayerIndexes(info: ProtoTypes.IMcrWaitingInfo): number[] {
-        const playersCount = WarMapModel.getMapMetaData(info.mapFileName).playersCount;
-        const indexDict: {[index: number]: boolean} = {};
-        if ((playersCount >= 4) && (info.p4UserId == null)) {
-            indexDict[4] = true;
-        }
-        if ((playersCount >= 3) && (info.p3UserId == null)) {
-            indexDict[3] = true;
-        }
-        if ((playersCount >= 2) && (info.p2UserId == null)) {
-            indexDict[2] = true;
-        }
-        if ((playersCount >= 1) && (info.p1UserId == null)) {
-            indexDict[1] = true;
-        }
-
-        const indexes: number[] = [];
-        for (let i = 1; i <= playersCount; ++i) {
-            if (indexDict[i]) {
-                indexes.push(i);
-            }
-        }
-        return indexes;
-    }
-
-    function getAvailableTeamIndexes(info: ProtoTypes.IMcrWaitingInfo): number[] {
-        const dict: {[index: number]: number} = {};
-        (info.p1TeamIndex != null) && (dict[info.p1TeamIndex] = (dict[info.p1TeamIndex] || 0) + 1);
-        (info.p2TeamIndex != null) && (dict[info.p2TeamIndex] = (dict[info.p2TeamIndex] || 0) + 1);
-        (info.p3TeamIndex != null) && (dict[info.p3TeamIndex] = (dict[info.p3TeamIndex] || 0) + 1);
-        (info.p4TeamIndex != null) && (dict[info.p4TeamIndex] = (dict[info.p4TeamIndex] || 0) + 1);
-
-        let teamsCount  = 0;
-        let currPlayers = 0;
-        for (let i = 1; i <= 4; ++i) {
-            if (dict[i]) {
-                ++teamsCount;
-                currPlayers += dict[i];
-            }
-        }
-
-        const totalPlayers = WarMapModel.getMapMetaData(info.mapFileName).playersCount;
-        if ((teamsCount > 1) || (currPlayers < totalPlayers - 1)) {
-            const indexes: number[] = [];
-            for (let i = 1; i <= totalPlayers; ++i) {
-                indexes.push(i);
-            }
-            while (dict[indexes[0]]) {
-                indexes.push(indexes.shift());
-            }
-            return indexes;
+    function getAvailableSaveSlot(infoList: ProtoTypes.ISaveSlotInfo[] | null): number {
+        if (!infoList) {
+            return 0;
         } else {
-            const indexes: number[] = [];
-            for (let i = 1; i <= totalPlayers; ++i) {
-                if (!dict[i]) {
-                    indexes.push(i);
+            for (let i = 0; i < ConfigManager.MAX_SAVE_SLOT_COUNT; ++i) {
+                if (!infoList.every(info => info.slot !== i)) {
+                    return i;
                 }
             }
-            return indexes;
+            return 0;
         }
     }
 }

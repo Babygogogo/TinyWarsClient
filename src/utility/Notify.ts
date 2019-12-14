@@ -132,6 +132,7 @@ namespace TinyWars.Utility.Notify {
         ScrCreateWarPlayerInfoListChanged,
 
         SScrCreateWar,
+        SScrGetSaveInfoList,
     }
 
     ////////////////////////////////////////////////////////////////////////////////
