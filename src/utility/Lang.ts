@@ -348,7 +348,10 @@ namespace TinyWars.Utility.Lang {
             `输入正确的Discord ID，并加入以下游戏频道（可点击链接复制）\n 即可实时收到游戏相关消息，如回合轮转等。`,
             `By entering your correct discord ID \n and joining the following discord server (the link can be copied)\n you can receive tinywars-related information, including turn notification.`,
         ],
-
+        [Type.A0068]: [
+            `可点击以下各个文字以更改设置`,
+            `Touch texts below to change the settings.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -1372,6 +1375,14 @@ namespace TinyWars.Utility.Lang {
         [Type.B0254]: [
             `自由战斗`,
             `Free Battle`,
+        ],
+        [Type.B0255]: [
+            `存档编号`,
+            `Save Slot`,
+        ],
+        [Type.B0256]: [
+            `电脑`,
+            `COM`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

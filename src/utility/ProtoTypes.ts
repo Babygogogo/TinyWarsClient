@@ -2028,6 +2028,9 @@ export declare interface IMapMetaData {
 
     /** MapMetaData isEnabledForWarRoom */
     isEnabledForWarRoom?: (number|null);
+
+    /** MapMetaData isEnabledForSingleCustomWar */
+    isEnabledForSingleCustomWar?: (number|null);
 }
 
 /** Represents a MapMetaData. */
@@ -2065,6 +2068,9 @@ export declare class MapMetaData implements IMapMetaData {
 
     /** MapMetaData isEnabledForWarRoom. */
     public isEnabledForWarRoom: number;
+
+    /** MapMetaData isEnabledForSingleCustomWar. */
+    public isEnabledForSingleCustomWar: number;
 
     /**
      * Creates a new MapMetaData instance using the specified properties.
@@ -8221,6 +8227,114 @@ export declare class UserBriefInfo implements IUserBriefInfo {
     public toJSON(): { [k: string]: any };
 }
 
+/** Properties of a CreateWarPlayerInfo. */
+export declare interface ICreateWarPlayerInfo {
+
+    /** CreateWarPlayerInfo playerIndex */
+    playerIndex?: (number|null);
+
+    /** CreateWarPlayerInfo userId */
+    userId?: (number|null);
+
+    /** CreateWarPlayerInfo teamIndex */
+    teamIndex?: (number|null);
+
+    /** CreateWarPlayerInfo coId */
+    coId?: (number|null);
+}
+
+/** Represents a CreateWarPlayerInfo. */
+export declare class CreateWarPlayerInfo implements ICreateWarPlayerInfo {
+
+    /**
+     * Constructs a new CreateWarPlayerInfo.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: ICreateWarPlayerInfo);
+
+    /** CreateWarPlayerInfo playerIndex. */
+    public playerIndex: number;
+
+    /** CreateWarPlayerInfo userId. */
+    public userId: number;
+
+    /** CreateWarPlayerInfo teamIndex. */
+    public teamIndex: number;
+
+    /** CreateWarPlayerInfo coId. */
+    public coId: number;
+
+    /**
+     * Creates a new CreateWarPlayerInfo instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns CreateWarPlayerInfo instance
+     */
+    public static create(properties?: ICreateWarPlayerInfo): CreateWarPlayerInfo;
+
+    /**
+     * Encodes the specified CreateWarPlayerInfo message. Does not implicitly {@link CreateWarPlayerInfo.verify|verify} messages.
+     * @param message CreateWarPlayerInfo message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: ICreateWarPlayerInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified CreateWarPlayerInfo message, length delimited. Does not implicitly {@link CreateWarPlayerInfo.verify|verify} messages.
+     * @param message CreateWarPlayerInfo message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: ICreateWarPlayerInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a CreateWarPlayerInfo message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns CreateWarPlayerInfo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CreateWarPlayerInfo;
+
+    /**
+     * Decodes a CreateWarPlayerInfo message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns CreateWarPlayerInfo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CreateWarPlayerInfo;
+
+    /**
+     * Verifies a CreateWarPlayerInfo message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a CreateWarPlayerInfo message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns CreateWarPlayerInfo
+     */
+    public static fromObject(object: { [k: string]: any }): CreateWarPlayerInfo;
+
+    /**
+     * Creates a plain object from a CreateWarPlayerInfo message. Also converts values to other types if specified.
+     * @param message CreateWarPlayerInfo
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: CreateWarPlayerInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this CreateWarPlayerInfo to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
 /** Properties of a MessageContainer. */
 export declare interface IMessageContainer {
 
@@ -8538,6 +8652,12 @@ export declare interface IMessageContainer {
 
     /** MessageContainer S_McwUnitUseCoSkill */
     S_McwUnitUseCoSkill?: (IS_McwUnitUseCoSkill|null);
+
+    /** MessageContainer C_ScrCreateWar */
+    C_ScrCreateWar?: (IC_ScrCreateWar|null);
+
+    /** MessageContainer S_ScrCreateWar */
+    S_ScrCreateWar?: (IS_ScrCreateWar|null);
 }
 
 /** Represents a MessageContainer. */
@@ -8863,6 +8983,12 @@ export declare class MessageContainer implements IMessageContainer {
 
     /** MessageContainer S_McwUnitUseCoSkill. */
     public S_McwUnitUseCoSkill?: (IS_McwUnitUseCoSkill|null);
+
+    /** MessageContainer C_ScrCreateWar. */
+    public C_ScrCreateWar?: (IC_ScrCreateWar|null);
+
+    /** MessageContainer S_ScrCreateWar. */
+    public S_ScrCreateWar?: (IS_ScrCreateWar|null);
 
     /**
      * Creates a new MessageContainer instance using the specified properties.
@@ -10500,6 +10626,9 @@ export declare interface IC_MmChangeAvailability {
 
     /** C_MmChangeAvailability isEnabledForWarRoom */
     isEnabledForWarRoom?: (boolean|null);
+
+    /** C_MmChangeAvailability isEnabledForSingleCustomWar */
+    isEnabledForSingleCustomWar?: (boolean|null);
 }
 
 /** Represents a C_MmChangeAvailability. */
@@ -10519,6 +10648,9 @@ export declare class C_MmChangeAvailability implements IC_MmChangeAvailability {
 
     /** C_MmChangeAvailability isEnabledForWarRoom. */
     public isEnabledForWarRoom: boolean;
+
+    /** C_MmChangeAvailability isEnabledForSingleCustomWar. */
+    public isEnabledForSingleCustomWar: boolean;
 
     /**
      * Creates a new C_MmChangeAvailability instance using the specified properties.
@@ -10605,6 +10737,9 @@ export declare interface IS_MmChangeAvailability {
 
     /** S_MmChangeAvailability isEnabledForWarRoom */
     isEnabledForWarRoom?: (boolean|null);
+
+    /** S_MmChangeAvailability isEnabledForSingleCustomWar */
+    isEnabledForSingleCustomWar?: (boolean|null);
 }
 
 /** Represents a S_MmChangeAvailability. */
@@ -10627,6 +10762,9 @@ export declare class S_MmChangeAvailability implements IS_MmChangeAvailability {
 
     /** S_MmChangeAvailability isEnabledForWarRoom. */
     public isEnabledForWarRoom: boolean;
+
+    /** S_MmChangeAvailability isEnabledForSingleCustomWar. */
+    public isEnabledForSingleCustomWar: boolean;
 
     /**
      * Creates a new S_MmChangeAvailability instance using the specified properties.
@@ -19604,6 +19742,270 @@ export declare class S_McwUnitUseCoSkill implements IS_McwUnitUseCoSkill {
 
     /**
      * Converts this S_McwUnitUseCoSkill to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_ScrCreateWar. */
+export declare interface IC_ScrCreateWar {
+
+    /** C_ScrCreateWar mapFileName */
+    mapFileName?: (string|null);
+
+    /** C_ScrCreateWar saveSlot */
+    saveSlot?: (number|null);
+
+    /** C_ScrCreateWar configVersion */
+    configVersion?: (string|null);
+
+    /** C_ScrCreateWar playerInfoList */
+    playerInfoList?: (ICreateWarPlayerInfo[]|null);
+
+    /** C_ScrCreateWar hasFog */
+    hasFog?: (number|null);
+
+    /** C_ScrCreateWar initialFund */
+    initialFund?: (number|null);
+
+    /** C_ScrCreateWar incomeModifier */
+    incomeModifier?: (number|null);
+
+    /** C_ScrCreateWar initialEnergy */
+    initialEnergy?: (number|null);
+
+    /** C_ScrCreateWar energyGrowthModifier */
+    energyGrowthModifier?: (number|null);
+
+    /** C_ScrCreateWar moveRangeModifier */
+    moveRangeModifier?: (number|null);
+
+    /** C_ScrCreateWar attackPowerModifier */
+    attackPowerModifier?: (number|null);
+
+    /** C_ScrCreateWar visionRangeModifier */
+    visionRangeModifier?: (number|null);
+
+    /** C_ScrCreateWar luckLowerLimit */
+    luckLowerLimit?: (number|null);
+
+    /** C_ScrCreateWar luckUpperLimit */
+    luckUpperLimit?: (number|null);
+}
+
+/** Represents a C_ScrCreateWar. */
+export declare class C_ScrCreateWar implements IC_ScrCreateWar {
+
+    /**
+     * Constructs a new C_ScrCreateWar.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_ScrCreateWar);
+
+    /** C_ScrCreateWar mapFileName. */
+    public mapFileName: string;
+
+    /** C_ScrCreateWar saveSlot. */
+    public saveSlot: number;
+
+    /** C_ScrCreateWar configVersion. */
+    public configVersion: string;
+
+    /** C_ScrCreateWar playerInfoList. */
+    public playerInfoList: ICreateWarPlayerInfo[];
+
+    /** C_ScrCreateWar hasFog. */
+    public hasFog: number;
+
+    /** C_ScrCreateWar initialFund. */
+    public initialFund: number;
+
+    /** C_ScrCreateWar incomeModifier. */
+    public incomeModifier: number;
+
+    /** C_ScrCreateWar initialEnergy. */
+    public initialEnergy: number;
+
+    /** C_ScrCreateWar energyGrowthModifier. */
+    public energyGrowthModifier: number;
+
+    /** C_ScrCreateWar moveRangeModifier. */
+    public moveRangeModifier: number;
+
+    /** C_ScrCreateWar attackPowerModifier. */
+    public attackPowerModifier: number;
+
+    /** C_ScrCreateWar visionRangeModifier. */
+    public visionRangeModifier: number;
+
+    /** C_ScrCreateWar luckLowerLimit. */
+    public luckLowerLimit: number;
+
+    /** C_ScrCreateWar luckUpperLimit. */
+    public luckUpperLimit: number;
+
+    /**
+     * Creates a new C_ScrCreateWar instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_ScrCreateWar instance
+     */
+    public static create(properties?: IC_ScrCreateWar): C_ScrCreateWar;
+
+    /**
+     * Encodes the specified C_ScrCreateWar message. Does not implicitly {@link C_ScrCreateWar.verify|verify} messages.
+     * @param message C_ScrCreateWar message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_ScrCreateWar, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_ScrCreateWar message, length delimited. Does not implicitly {@link C_ScrCreateWar.verify|verify} messages.
+     * @param message C_ScrCreateWar message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_ScrCreateWar, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_ScrCreateWar message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_ScrCreateWar
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_ScrCreateWar;
+
+    /**
+     * Decodes a C_ScrCreateWar message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_ScrCreateWar
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_ScrCreateWar;
+
+    /**
+     * Verifies a C_ScrCreateWar message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_ScrCreateWar message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_ScrCreateWar
+     */
+    public static fromObject(object: { [k: string]: any }): C_ScrCreateWar;
+
+    /**
+     * Creates a plain object from a C_ScrCreateWar message. Also converts values to other types if specified.
+     * @param message C_ScrCreateWar
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_ScrCreateWar, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_ScrCreateWar to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_ScrCreateWar. */
+export declare interface IS_ScrCreateWar {
+
+    /** S_ScrCreateWar errorCode */
+    errorCode?: (number|null);
+
+    /** S_ScrCreateWar saveSlot */
+    saveSlot?: (number|null);
+}
+
+/** Represents a S_ScrCreateWar. */
+export declare class S_ScrCreateWar implements IS_ScrCreateWar {
+
+    /**
+     * Constructs a new S_ScrCreateWar.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_ScrCreateWar);
+
+    /** S_ScrCreateWar errorCode. */
+    public errorCode: number;
+
+    /** S_ScrCreateWar saveSlot. */
+    public saveSlot: number;
+
+    /**
+     * Creates a new S_ScrCreateWar instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_ScrCreateWar instance
+     */
+    public static create(properties?: IS_ScrCreateWar): S_ScrCreateWar;
+
+    /**
+     * Encodes the specified S_ScrCreateWar message. Does not implicitly {@link S_ScrCreateWar.verify|verify} messages.
+     * @param message S_ScrCreateWar message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_ScrCreateWar, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_ScrCreateWar message, length delimited. Does not implicitly {@link S_ScrCreateWar.verify|verify} messages.
+     * @param message S_ScrCreateWar message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_ScrCreateWar, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_ScrCreateWar message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_ScrCreateWar
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_ScrCreateWar;
+
+    /**
+     * Decodes a S_ScrCreateWar message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_ScrCreateWar
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_ScrCreateWar;
+
+    /**
+     * Verifies a S_ScrCreateWar message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_ScrCreateWar message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_ScrCreateWar
+     */
+    public static fromObject(object: { [k: string]: any }): S_ScrCreateWar;
+
+    /**
+     * Creates a plain object from a S_ScrCreateWar message. Also converts values to other types if specified.
+     * @param message S_ScrCreateWar
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_ScrCreateWar, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_ScrCreateWar to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };

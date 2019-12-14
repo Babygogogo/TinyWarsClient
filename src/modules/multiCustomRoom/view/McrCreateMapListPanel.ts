@@ -5,7 +5,7 @@ namespace TinyWars.MultiCustomRoom {
     import Lang         = Utility.Lang;
     import WarMapModel  = WarMap.WarMapModel;
 
-    export type FiltersForMapList = {
+    type FiltersForMapList = {
         mapName?        : string;
         mapDesigner?    : string;
         playersCount?   : number;

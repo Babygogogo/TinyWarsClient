@@ -106,4 +106,6 @@ C_McwUnitLoadCo = 1177,
 S_McwUnitLoadCo = 1178,
 C_McwUnitUseCoSkill = 1179,
 S_McwUnitUseCoSkill = 1180,
+C_ScrCreateWar = 1501,
+S_ScrCreateWar = 1502,
 }}
