@@ -80,84 +80,6 @@ namespace TinyWars.SingleCustomWar.ScwModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Handlers for war actions that McwProxy receives.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export async function updateOnPlayerSyncWar(data: ProtoTypes.IS_McwPlayerSyncWar): Promise<void> {
-        if ((_war) && (_war.getWarId() === data.warId)) {
-            const status = data.status as Types.SyncWarStatus;
-            if (status === Types.SyncWarStatus.Defeated) {
-                _war.setIsEnded(true);
-                AlertPanel.show({
-                    title   : Lang.getText(Lang.Type.B0088),
-                    content : Lang.getText(Lang.Type.A0023),
-                    callback: () => Utility.FlowManager.gotoLobby(),
-                });
-
-            } else if (status === Types.SyncWarStatus.EndedOrNotExists) {
-                _war.setIsEnded(true);
-                AlertPanel.show({
-                    title   : Lang.getText(Lang.Type.B0088),
-                    content : Lang.getText(Lang.Type.A0035),
-                    callback: () => Utility.FlowManager.gotoLobby(),
-                });
-
-            } else if (status === Types.SyncWarStatus.NoError) {
-                const requestType = data.requestType as Types.SyncWarRequestType;
-                if (requestType === Types.SyncWarRequestType.PlayerForce) {
-                    _war.setIsEnded(true);
-                    await Utility.FlowManager.gotoMultiCustomWar(data.war as Types.SerializedWar),
-                    FloatText.show(Lang.getText(Lang.Type.A0038));
-
-                } else {
-                    const cachedActionsCount = _cachedActions.length;
-                    if (data.nextActionId !== _war.getNextActionId() + cachedActionsCount) {
-                        _war.setIsEnded(true);
-                        await Utility.FlowManager.gotoMultiCustomWar(data.war as Types.SerializedWar);
-                        FloatText.show(Lang.getText(Lang.Type.A0036));
-
-                    } else {
-                        if (requestType === Types.SyncWarRequestType.PlayerRequest) {
-                            FloatText.show(Lang.getText(Lang.Type.A0038));
-                        } else {
-                            // Nothing to do.
-                        }
-                        if (!_war.getIsExecutingAction()) {
-                            if (cachedActionsCount) {
-                                _checkAndRunFirstCachedAction();
-                            } else {
-                                _checkAndRequestBeginTurn();
-                            }
-                        }
-                    }
-                }
-
-            } else if (status === Types.SyncWarStatus.NotJoined) {
-                // Something wrong!!
-                _war.setIsEnded(true);
-                AlertPanel.show({
-                    title   : Lang.getText(Lang.Type.B0088),
-                    content : Lang.getText(Lang.Type.A0037),
-                    callback: () => Utility.FlowManager.gotoLobby(),
-                });
-
-            } else if (status === Types.SyncWarStatus.Synchronized) {
-                const requestType = data.requestType as Types.SyncWarRequestType;
-                if (requestType === Types.SyncWarRequestType.PlayerRequest) {
-                    FloatText.show(Lang.getText(Lang.Type.A0038));
-                } else {
-                    // Nothing to do.
-                }
-
-            } else {
-                // Something wrong!!
-                _war.setIsEnded(true);
-                AlertPanel.show({
-                    title   : Lang.getText(Lang.Type.B0088),
-                    content : Lang.getText(Lang.Type.A0037),
-                    callback: () => Utility.FlowManager.gotoLobby(),
-                });
-            }
-        }
-    }
-
     export function updateOnPlayerBeginTurn(data: ProtoTypes.IS_McwPlayerBeginTurn): void {
         _updateByActionContainer(data.actionContainer, data.warId);
     }
@@ -228,7 +150,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
     function _updateByActionContainer(container: WarActionContainer, warId: number): void {
         if ((_war) && (_war.getWarId() === warId)) {
             if (container.actionId !== _war.getNextActionId() + _cachedActions.length) {
-                ScwProxy.reqScwPlayerSyncWar(_war, Types.SyncWarRequestType.ReconnectionRequest);
+                Logger.error(`ScwModel._updateByActionContainer() invalid action id: ${container.actionId}`);
             } else {
                 _cachedActions.push(container);
                 _checkAndRunFirstCachedAction();

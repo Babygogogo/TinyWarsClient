@@ -244,9 +244,6 @@ namespace TinyWars.SingleCustomWar {
             const commandOpenAdvancedMenu = this._createCommandOpenAdvancedMenu();
             (commandOpenAdvancedMenu) && (dataList.push(commandOpenAdvancedMenu));
 
-            const commandSyncWar = this._createCommandSyncWar();
-            (commandSyncWar) && (dataList.push(commandSyncWar));
-
             const commandGotoLobby = this._createCommandGotoLobby();
             (commandGotoLobby) && (dataList.push(commandGotoLobby));
 
@@ -284,22 +281,6 @@ namespace TinyWars.SingleCustomWar {
                 callback: () => {
                     ScwCoListPanel.show(this._war.getPlayerIndexInTurn() - 1);
                     ScwWarMenuPanel.hide();
-                },
-            };
-        }
-
-        private _createCommandSyncWar(): DataForCommandRenderer | undefined {
-            return {
-                name    : Lang.getText(Lang.Type.B0089),
-                callback: () => {
-                    const war = this._war;
-                    ScwProxy.reqScwPlayerSyncWar(
-                        war,
-                        war.getActionPlanner().checkIsStateRequesting()
-                            ? Types.SyncWarRequestType.PlayerForce
-                            : Types.SyncWarRequestType.PlayerRequest
-                    );
-                    this.close();
                 },
             };
         }

@@ -11,7 +11,6 @@ namespace TinyWars.SingleCustomWar.ScwProxy {
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: NetMessageCodes.S_McwPlayerSyncWar,      callback: _onSMcwPlayerSyncWar, },
             { msgCode: NetMessageCodes.S_McwPlayerBeginTurn,    callback: _onSMcwPlayerBeginTurn, },
             { msgCode: NetMessageCodes.S_McwPlayerDeleteUnit,   callback: _onSMcwPlayerDeleteUnit },
             { msgCode: NetMessageCodes.S_McwPlayerEndTurn,      callback: _onSMcwPlayerEndTurn, },
@@ -34,23 +33,6 @@ namespace TinyWars.SingleCustomWar.ScwProxy {
             { msgCode: NetMessageCodes.S_McwUnitUseCoSkill,     callback: _onSMcwUnitUseCoSkill },
             { msgCode: NetMessageCodes.S_McwUnitWait,           callback: _onSMcwUnitWait },
         ], ScwProxy);
-    }
-
-    export function reqScwPlayerSyncWar(war: BwWar, requestType: Types.SyncWarRequestType): void {
-        NetManager.send({
-            C_McwPlayerSyncWar: {
-                warId       : war.getWarId(),
-                nextActionId: war.getNextActionId(),
-                requestType,
-            },
-        });
-    }
-    function _onSMcwPlayerSyncWar(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_McwPlayerSyncWar;
-        if (!data.errorCode) {
-            ScwModel.updateOnPlayerSyncWar(data);
-            Notify.dispatch(Notify.Type.SMcwPlayerSyncWar);
-        }
     }
 
     export function reqScwPlayerBeginTurn(war: BwWar): void {
