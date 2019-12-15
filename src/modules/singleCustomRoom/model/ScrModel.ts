@@ -44,7 +44,7 @@ namespace TinyWars.SingleCustomRoom {
     export namespace ScrModel {
         const _dataForCreateWar: DataForCreateWar = {
             mapFileName     : "",
-            saveSlot        : 0,
+            saveSlotIndex   : 0,
             configVersion   : ConfigManager.getNewestConfigVersion(),
 
             playerInfoList  : [],
@@ -74,7 +74,7 @@ namespace TinyWars.SingleCustomRoom {
             _dataForCreateWar.mapFileName       = mapFileName;
             _dataForCreateWar.configVersion     = ConfigManager.getNewestConfigVersion();
             _dataForCreateWar.playerInfoList    = generateCreateWarPlayerInfoList(mapFileName);
-            setCreateWarSaveSlot(getAvailableSaveSlot(this.getSaveSlotInfoList()));
+            setCreateWarSaveSlotIndex(getAvailableSaveSlot(this.getSaveSlotInfoList()));
             setCreateWarHasFog(false);
 
             setCreateWarInitialFund(0);
@@ -91,14 +91,14 @@ namespace TinyWars.SingleCustomRoom {
             return _dataForCreateWar;
         }
 
-        export function setCreateWarSaveSlot(slot: number): void {
-            if (_dataForCreateWar.saveSlot !== slot) {
-                _dataForCreateWar.saveSlot = slot;
+        export function setCreateWarSaveSlotIndex(slot: number): void {
+            if (_dataForCreateWar.saveSlotIndex !== slot) {
+                _dataForCreateWar.saveSlotIndex = slot;
                 Notify.dispatch(Notify.Type.ScrCreateWarSaveSlotChanged);
             }
         }
-        export function getCreateWarSaveSlot(): number {
-            return _dataForCreateWar.saveSlot;
+        export function getCreateWarSaveSlotIndex(): number {
+            return _dataForCreateWar.saveSlotIndex;
         }
 
         export function tickCreateWarUserId(dataIndex: number): void {
@@ -295,7 +295,7 @@ namespace TinyWars.SingleCustomRoom {
             return 0;
         } else {
             for (let i = 0; i < ConfigManager.MAX_SAVE_SLOT_COUNT; ++i) {
-                if (!infoList.every(info => info.slot !== i)) {
+                if (!infoList.every(info => info.slotIndex !== i)) {
                     return i;
                 }
             }

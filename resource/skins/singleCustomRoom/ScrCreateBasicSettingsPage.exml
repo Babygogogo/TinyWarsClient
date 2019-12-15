@@ -69,6 +69,9 @@
                 </e:Skin>
             </GameUi:skinName>
         </GameUi:UiButton>
+        <e:layout>
+            <e:HorizontalLayout/>
+        </e:layout>
     </e:Group>
     <e:Group x="10" y="100">
         <GameUi:UiLabel id="_labelPlayerListTitle" text="玩家列表:" textColor="0xFFFFFF" size="20" textAlign="right" x="0"

@@ -78,7 +78,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _onTouchedBtnChangeSaveSlot(e: egret.TouchEvent): void {
-            // TODO
+            ScrCreateSaveSlotsPanel.show();
         }
 
         private _onTouchedBtnPrevFog(e: egret.TouchEvent): void {
@@ -120,7 +120,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _updateLabelSaveSlot(): void {
-            this._labelSaveSlot.text = "" + ScrModel.getCreateWarSaveSlot();
+            this._labelSaveSlot.text = "" + ScrModel.getCreateWarSaveSlotIndex();
         }
 
         private _updateLabelFog(): void {

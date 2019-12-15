@@ -508,4 +508,9 @@ namespace TinyWars.Utility.Types {
         AlreadyRequested,
         AlreadyAccepted,
     }
+
+    export const enum SinglePlayerWarType {
+        Custom  = 0,
+        WarRoom = 1,
+    }
 }

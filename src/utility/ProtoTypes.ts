@@ -8338,8 +8338,8 @@ export declare class CreateWarPlayerInfo implements ICreateWarPlayerInfo {
 /** Properties of a SaveSlotInfo. */
 export declare interface ISaveSlotInfo {
 
-    /** SaveSlotInfo slot */
-    slot?: (number|null);
+    /** SaveSlotInfo slotIndex */
+    slotIndex?: (number|null);
 
     /** SaveSlotInfo mapFileName */
     mapFileName?: (string|null);
@@ -8360,8 +8360,8 @@ export declare class SaveSlotInfo implements ISaveSlotInfo {
      */
     constructor(properties?: ISaveSlotInfo);
 
-    /** SaveSlotInfo slot. */
-    public slot: number;
+    /** SaveSlotInfo slotIndex. */
+    public slotIndex: number;
 
     /** SaveSlotInfo mapFileName. */
     public mapFileName: string;
@@ -19873,8 +19873,8 @@ export declare interface IC_ScrCreateWar {
     /** C_ScrCreateWar mapFileName */
     mapFileName?: (string|null);
 
-    /** C_ScrCreateWar saveSlot */
-    saveSlot?: (number|null);
+    /** C_ScrCreateWar saveSlotIndex */
+    saveSlotIndex?: (number|null);
 
     /** C_ScrCreateWar configVersion */
     configVersion?: (string|null);
@@ -19925,8 +19925,8 @@ export declare class C_ScrCreateWar implements IC_ScrCreateWar {
     /** C_ScrCreateWar mapFileName. */
     public mapFileName: string;
 
-    /** C_ScrCreateWar saveSlot. */
-    public saveSlot: number;
+    /** C_ScrCreateWar saveSlotIndex. */
+    public saveSlotIndex: number;
 
     /** C_ScrCreateWar configVersion. */
     public configVersion: string;
@@ -20041,8 +20041,8 @@ export declare interface IS_ScrCreateWar {
     /** S_ScrCreateWar errorCode */
     errorCode?: (number|null);
 
-    /** S_ScrCreateWar saveSlot */
-    saveSlot?: (number|null);
+    /** S_ScrCreateWar saveSlotIndex */
+    saveSlotIndex?: (number|null);
 }
 
 /** Represents a S_ScrCreateWar. */
@@ -20057,8 +20057,8 @@ export declare class S_ScrCreateWar implements IS_ScrCreateWar {
     /** S_ScrCreateWar errorCode. */
     public errorCode: number;
 
-    /** S_ScrCreateWar saveSlot. */
-    public saveSlot: number;
+    /** S_ScrCreateWar saveSlotIndex. */
+    public saveSlotIndex: number;
 
     /**
      * Creates a new S_ScrCreateWar instance using the specified properties.

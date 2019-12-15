@@ -1384,6 +1384,14 @@ namespace TinyWars.Utility.Lang {
             `电脑`,
             `COM`,
         ],
+        [Type.B0257]: [
+            `War Room`,
+            `War Room`,
+        ],
+        [Type.B0258]: [
+            `选择`,
+            `Choose`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -2198,6 +2206,14 @@ namespace TinyWars.Utility.Lang {
             case Types.UnitCategory.Tank                : return getText(Type.B0135);
             case Types.UnitCategory.AirExceptSeaplane   : return getText(Type.B0136);
             default                                     : return null;
+        }
+    }
+
+    export function getSinglePlayerWarTypeName(type: Types.SinglePlayerWarType): string {
+        switch (type) {
+            case Types.SinglePlayerWarType.Custom   : return getText(Type.B0254);
+            case Types.SinglePlayerWarType.WarRoom  : return getText(Type.B0257);
+            default                                 : return null;
         }
     }
 }

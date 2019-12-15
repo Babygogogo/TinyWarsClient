@@ -44,6 +44,7 @@ namespace TinyWars.Utility.FlowManager {
         WarMap.WarMapModel.init();
         Login.LoginProxy.init();
         MultiCustomRoom.McrProxy.init();
+        SingleCustomRoom.ScrProxy.init();
 
         _removeLoadingDom();
         gotoLogin();
