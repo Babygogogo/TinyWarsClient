@@ -165,6 +165,7 @@
 		"bin-debug/modules/replay/view/ReplayWarView.js",
 		"bin-debug/modules/singleCustomRoom/model/ScrModel.js",
 		"bin-debug/modules/singleCustomRoom/model/ScrProxy.js",
+		"bin-debug/modules/singleCustomRoom/view/ScrCreateAdvancedSettingsPage.js",
 		"bin-debug/modules/singleCustomRoom/view/ScrCreateBasicSettingsPage.js",
 		"bin-debug/modules/singleCustomRoom/view/ScrCreateCoListPanel.js",
 		"bin-debug/modules/singleCustomRoom/view/ScrCreateMapListPanel.js",

@@ -352,6 +352,14 @@ namespace TinyWars.Utility.Lang {
             `可点击以下各个文字以更改设置`,
             `Touch texts below to change the settings.`,
         ],
+        [Type.A0069]: [
+            `请为参赛玩家设置至少两个队伍`,
+            `Please set at least two teams for players.`,
+        ],
+        [Type.A0070]: [
+            `您选择的存档位置非空，其内容将被覆盖。确定要继续创建战局吗？`,
+            `The save slot is not empty and will be overwritten. Are you sure to create the game?`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -1390,7 +1398,11 @@ namespace TinyWars.Utility.Lang {
         ],
         [Type.B0258]: [
             `选择`,
-            `Choose`,
+            `Select`,
+        ],
+        [Type.B0259]: [
+            `选择存档位置`,
+            `Select Save Slot`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

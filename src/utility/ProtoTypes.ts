@@ -3493,6 +3493,12 @@ export declare interface ISerializedWar {
     /** SerializedWar mapFileName */
     mapFileName?: (string|null);
 
+    /** SerializedWar singlePlayerWarType */
+    singlePlayerWarType?: (number|null);
+
+    /** SerializedWar saveSlotIndex */
+    saveSlotIndex?: (number|null);
+
     /** SerializedWar warName */
     warName?: (string|null);
 
@@ -3558,6 +3564,9 @@ export declare interface ISerializedWar {
 
     /** SerializedWar seedRandomState */
     seedRandomState?: (ISeedRandomState|null);
+
+    /** SerializedWar seedRandomInitState */
+    seedRandomInitState?: (ISeedRandomState|null);
 }
 
 /** Represents a SerializedWar. */
@@ -3577,6 +3586,12 @@ export declare class SerializedWar implements ISerializedWar {
 
     /** SerializedWar mapFileName. */
     public mapFileName: string;
+
+    /** SerializedWar singlePlayerWarType. */
+    public singlePlayerWarType: number;
+
+    /** SerializedWar saveSlotIndex. */
+    public saveSlotIndex: number;
 
     /** SerializedWar warName. */
     public warName: string;
@@ -3643,6 +3658,9 @@ export declare class SerializedWar implements ISerializedWar {
 
     /** SerializedWar seedRandomState. */
     public seedRandomState?: (ISeedRandomState|null);
+
+    /** SerializedWar seedRandomInitState. */
+    public seedRandomInitState?: (ISeedRandomState|null);
 
     /**
      * Creates a new SerializedWar instance using the specified properties.

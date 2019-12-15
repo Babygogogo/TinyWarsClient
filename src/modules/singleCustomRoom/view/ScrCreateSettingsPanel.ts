@@ -57,10 +57,10 @@ namespace TinyWars.SingleCustomRoom {
                     tabItemData: { name: Lang.getText(Lang.Type.B0002) },
                     pageClass  : ScrCreateBasicSettingsPage,
                 },
-                // {
-                //     tabItemData: { name: Lang.getText(Lang.Type.B0003) },
-                //     pageClass  : McrCreateAdvancedSettingsPage,
-                // },
+                {
+                    tabItemData: { name: Lang.getText(Lang.Type.B0003) },
+                    pageClass  : ScrCreateAdvancedSettingsPage,
+                },
             ]);
 
             this._updateComponentsForLanguage();
@@ -78,12 +78,28 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            const data = ScrModel.getCreateWarData();
-            // TODO
-            // ScrProxy.reqCreate(data);
+            const tips = ScrModel.getCreateWarInvalidParamTips();
+            if (tips) {
+                FloatText.show(tips);
+            } else {
+                const data  = ScrModel.getCreateWarData();
+                const func  = () => {
+                    ScrProxy.reqScrCreateWar(ScrModel.getCreateWarData());
 
-            // this._btnConfirm.enabled = false;
-            // this._resetTimeoutForBtnConfirm();
+                    this._btnConfirm.enabled = false;
+                    this._resetTimeoutForBtnConfirm();
+                }
+
+                if (ScrModel.checkIsSaveSlotEmpty(data.saveSlotIndex)) {
+                    func();
+                } else {
+                    ConfirmPanel.show({
+                        title   : Lang.getText(Lang.Type.B0088),
+                        content : Lang.getText(Lang.Type.A0070),
+                        callback: func,
+                    });
+                }
+            }
         }
 
         private _onNotifySScrCreateWar(e: egret.Event): void {

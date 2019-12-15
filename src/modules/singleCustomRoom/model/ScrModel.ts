@@ -1,6 +1,7 @@
 
 namespace TinyWars.SingleCustomRoom {
     import Types        = Utility.Types;
+    import Lang         = Utility.Lang;
     import ProtoTypes   = Utility.ProtoTypes;
     import Notify       = Utility.Notify;
     import WarMapModel  = WarMap.WarMapModel;
@@ -20,15 +21,6 @@ namespace TinyWars.SingleCustomRoom {
     export const MAX_ENERGY_MODIFIER     = 1000;
     export const MIN_ENERGY_MODIFIER     = 0;
     export const DEFAULT_ENERGY_MODIFIER = 0;
-
-    const TIME_LIMITS = [
-        60 * 15,            // 15 min
-        60 * 60 * 24 * 1,   // 1 day
-        60 * 60 * 24 * 2,   // 2 days
-        60 * 60 * 24 * 3,   // 3 days
-        60 * 60 * 24 * 7,   // 7 days
-    ];
-    const DEFAULT_TIME_LIMIT = TIME_LIMITS[3];
 
     const MOVE_RANGE_MODIFIERS        = [-2, -1, 0, 1, 2];
     const DEFAULT_MOVE_RANGE_MODIFIER = 0;
@@ -260,6 +252,19 @@ namespace TinyWars.SingleCustomRoom {
             return _dataForCreateWar.visionRangeModifier;
         }
 
+        export function getCreateWarInvalidParamTips(): string | null{
+            const warData           = getCreateWarData();
+            const teamSet           = new Set<number>();
+            for (const playerInfo of warData.playerInfoList) {
+                teamSet.add(playerInfo.teamIndex);
+            }
+            if (teamSet.size <= 1) {
+                return Lang.getText(Lang.Type.A0069);
+            }
+
+            return null;
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for save slots.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -268,6 +273,13 @@ namespace TinyWars.SingleCustomRoom {
         }
         export function getSaveSlotInfoList(): ProtoTypes.ISaveSlotInfo[] | null {
             return _saveSlotInfoList;
+        }
+        export function checkIsSaveSlotEmpty(slotIndex: number): boolean {
+            if (!_saveSlotInfoList) {
+                return true;
+            } else {
+                return _saveSlotInfoList.every(v => v.slotIndex !== slotIndex);
+            }
         }
     }
 
@@ -295,7 +307,7 @@ namespace TinyWars.SingleCustomRoom {
             return 0;
         } else {
             for (let i = 0; i < ConfigManager.MAX_SAVE_SLOT_COUNT; ++i) {
-                if (!infoList.every(info => info.slotIndex !== i)) {
+                if (infoList.every(info => info.slotIndex !== i)) {
                     return i;
                 }
             }

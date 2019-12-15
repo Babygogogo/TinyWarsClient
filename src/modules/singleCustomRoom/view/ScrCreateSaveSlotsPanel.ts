@@ -5,12 +5,13 @@ namespace TinyWars.SingleCustomRoom {
     import ProtoTypes   = Utility.ProtoTypes;
 
     export class ScrCreateSaveSlotsPanel extends GameUi.UiPanel {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
+        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: ScrCreateSaveSlotsPanel;
 
         private _group          : eui.Group;
+        private _labelPanelTitle: GameUi.UiLabel;
         private _srlSaveSlot    : GameUi.UiScrollList;
         private _listSaveSlot   : eui.List;
         private _btnCancel      : GameUi.UiButton;
@@ -49,7 +50,6 @@ namespace TinyWars.SingleCustomRoom {
         }
         protected _onOpened(): void {
             this._updateView();
-
         }
         protected _onClosed(): void {
             delete this._dataForList;
@@ -79,7 +79,8 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._btnCancel.label = Lang.getText(Lang.Type.B0154);
+            this._labelPanelTitle.text  = Lang.getText(Lang.Type.B0259);
+            this._btnCancel.label       = Lang.getText(Lang.Type.B0154);
         }
 
         private _createDataForList(): DataForSlotRenderer[] {
