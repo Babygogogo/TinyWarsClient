@@ -110,4 +110,6 @@ C_ScrCreateWar = 1501,
 S_ScrCreateWar = 1502,
 C_ScrGetSaveSlotInfoList = 1503,
 S_ScrGetSaveSlotInfoList = 1504,
+C_ScrContinueWar = 1505,
+S_ScrContinueWar = 1506,
 }}

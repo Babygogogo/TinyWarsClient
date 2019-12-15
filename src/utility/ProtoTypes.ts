@@ -8790,6 +8790,12 @@ export declare interface IMessageContainer {
 
     /** MessageContainer S_ScrGetSaveSlotInfoList */
     S_ScrGetSaveSlotInfoList?: (IS_ScrGetSaveSlotInfoList|null);
+
+    /** MessageContainer C_ScrContinueWar */
+    C_ScrContinueWar?: (IC_ScrContinueWar|null);
+
+    /** MessageContainer S_ScrContinueWar */
+    S_ScrContinueWar?: (IS_ScrContinueWar|null);
 }
 
 /** Represents a MessageContainer. */
@@ -9127,6 +9133,12 @@ export declare class MessageContainer implements IMessageContainer {
 
     /** MessageContainer S_ScrGetSaveSlotInfoList. */
     public S_ScrGetSaveSlotInfoList?: (IS_ScrGetSaveSlotInfoList|null);
+
+    /** MessageContainer C_ScrContinueWar. */
+    public C_ScrContinueWar?: (IC_ScrContinueWar|null);
+
+    /** MessageContainer S_ScrContinueWar. */
+    public S_ScrContinueWar?: (IS_ScrContinueWar|null);
 
     /**
      * Creates a new MessageContainer instance using the specified properties.
@@ -20059,8 +20071,8 @@ export declare interface IS_ScrCreateWar {
     /** S_ScrCreateWar errorCode */
     errorCode?: (number|null);
 
-    /** S_ScrCreateWar saveSlotIndex */
-    saveSlotIndex?: (number|null);
+    /** S_ScrCreateWar warData */
+    warData?: (ISerializedWar|null);
 }
 
 /** Represents a S_ScrCreateWar. */
@@ -20075,8 +20087,8 @@ export declare class S_ScrCreateWar implements IS_ScrCreateWar {
     /** S_ScrCreateWar errorCode. */
     public errorCode: number;
 
-    /** S_ScrCreateWar saveSlotIndex. */
-    public saveSlotIndex: number;
+    /** S_ScrCreateWar warData. */
+    public warData?: (ISerializedWar|null);
 
     /**
      * Creates a new S_ScrCreateWar instance using the specified properties.
@@ -20324,6 +20336,198 @@ export declare class S_ScrGetSaveSlotInfoList implements IS_ScrGetSaveSlotInfoLi
 
     /**
      * Converts this S_ScrGetSaveSlotInfoList to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_ScrContinueWar. */
+export declare interface IC_ScrContinueWar {
+
+    /** C_ScrContinueWar slotIndex */
+    slotIndex?: (number|null);
+}
+
+/** Represents a C_ScrContinueWar. */
+export declare class C_ScrContinueWar implements IC_ScrContinueWar {
+
+    /**
+     * Constructs a new C_ScrContinueWar.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_ScrContinueWar);
+
+    /** C_ScrContinueWar slotIndex. */
+    public slotIndex: number;
+
+    /**
+     * Creates a new C_ScrContinueWar instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_ScrContinueWar instance
+     */
+    public static create(properties?: IC_ScrContinueWar): C_ScrContinueWar;
+
+    /**
+     * Encodes the specified C_ScrContinueWar message. Does not implicitly {@link C_ScrContinueWar.verify|verify} messages.
+     * @param message C_ScrContinueWar message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_ScrContinueWar, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_ScrContinueWar message, length delimited. Does not implicitly {@link C_ScrContinueWar.verify|verify} messages.
+     * @param message C_ScrContinueWar message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_ScrContinueWar, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_ScrContinueWar message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_ScrContinueWar
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_ScrContinueWar;
+
+    /**
+     * Decodes a C_ScrContinueWar message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_ScrContinueWar
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_ScrContinueWar;
+
+    /**
+     * Verifies a C_ScrContinueWar message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_ScrContinueWar message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_ScrContinueWar
+     */
+    public static fromObject(object: { [k: string]: any }): C_ScrContinueWar;
+
+    /**
+     * Creates a plain object from a C_ScrContinueWar message. Also converts values to other types if specified.
+     * @param message C_ScrContinueWar
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_ScrContinueWar, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_ScrContinueWar to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_ScrContinueWar. */
+export declare interface IS_ScrContinueWar {
+
+    /** S_ScrContinueWar errorCode */
+    errorCode?: (number|null);
+
+    /** S_ScrContinueWar slotIndex */
+    slotIndex?: (number|null);
+
+    /** S_ScrContinueWar encodedWar */
+    encodedWar?: (Uint8Array|null);
+}
+
+/** Represents a S_ScrContinueWar. */
+export declare class S_ScrContinueWar implements IS_ScrContinueWar {
+
+    /**
+     * Constructs a new S_ScrContinueWar.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_ScrContinueWar);
+
+    /** S_ScrContinueWar errorCode. */
+    public errorCode: number;
+
+    /** S_ScrContinueWar slotIndex. */
+    public slotIndex: number;
+
+    /** S_ScrContinueWar encodedWar. */
+    public encodedWar: Uint8Array;
+
+    /**
+     * Creates a new S_ScrContinueWar instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_ScrContinueWar instance
+     */
+    public static create(properties?: IS_ScrContinueWar): S_ScrContinueWar;
+
+    /**
+     * Encodes the specified S_ScrContinueWar message. Does not implicitly {@link S_ScrContinueWar.verify|verify} messages.
+     * @param message S_ScrContinueWar message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_ScrContinueWar, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_ScrContinueWar message, length delimited. Does not implicitly {@link S_ScrContinueWar.verify|verify} messages.
+     * @param message S_ScrContinueWar message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_ScrContinueWar, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_ScrContinueWar message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_ScrContinueWar
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_ScrContinueWar;
+
+    /**
+     * Decodes a S_ScrContinueWar message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_ScrContinueWar
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_ScrContinueWar;
+
+    /**
+     * Verifies a S_ScrContinueWar message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_ScrContinueWar message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_ScrContinueWar
+     */
+    public static fromObject(object: { [k: string]: any }): S_ScrContinueWar;
+
+    /**
+     * Creates a plain object from a S_ScrContinueWar message. Also converts values to other types if specified.
+     * @param message S_ScrContinueWar
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_ScrContinueWar, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_ScrContinueWar to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };

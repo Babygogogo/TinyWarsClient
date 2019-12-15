@@ -90,7 +90,8 @@ namespace TinyWars.SinglePlayerLobby {
                 {
                     name    : Lang.getText(Lang.Type.B0024),
                     callback: (): void => {
-                        FloatText.show("TODO");
+                        this.close();
+                        SingleCustomRoom.ScrContinueWarListPanel.show();
                     },
                 },
             ];

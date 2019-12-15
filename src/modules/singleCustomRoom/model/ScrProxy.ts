@@ -9,7 +9,7 @@ namespace TinyWars.SingleCustomRoom.ScrProxy {
         NetManager.addListeners([
             { msgCode: ActionCode.S_ScrCreateWar,                   callback: _onSScrCreateWar, },
             { msgCode: ActionCode.S_ScrGetSaveSlotInfoList,         callback: _onSScrGetSaveSlotInfoList, },
-            // { msgCode: ActionCode.S_McrContinueWar,                 callback: _onSMcrContinueWar, },
+            { msgCode: ActionCode.S_ScrContinueWar,                 callback: _onSScrContinueWar, },
         ], ScrProxy);
     }
 
@@ -38,19 +38,19 @@ namespace TinyWars.SingleCustomRoom.ScrProxy {
         }
     }
 
-    // export function reqContinueWar(warId: number): void {
-    //     NetManager.send({
-    //         C_McrContinueWar: {
-    //             warId: warId,
-    //         },
-    //     });
-    // }
-    // function _onSMcrContinueWar(e: egret.Event): void {
-    //     const data = e.data as ProtoTypes.IS_McrContinueWar;
-    //     if (data.errorCode) {
-    //         Notify.dispatch(Notify.Type.SMcrContinueWarFailed, data);
-    //     } else {
-    //         Notify.dispatch(Notify.Type.SMcrContinueWar, data);
-    //     }
-    // }
+    export function reqContinueWar(slotIndex: number): void {
+        NetManager.send({
+            C_ScrContinueWar: {
+                slotIndex,
+            },
+        });
+    }
+    function _onSScrContinueWar(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_ScrContinueWar;
+        if (data.errorCode) {
+            Notify.dispatch(Notify.Type.SScrContinueWarFailed, data);
+        } else {
+            Notify.dispatch(Notify.Type.SScrContinueWar, data);
+        }
+    }
 }

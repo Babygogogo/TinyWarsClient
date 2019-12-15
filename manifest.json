@@ -129,8 +129,8 @@
 		"bin-debug/modules/multiCustomWar/view/McwWarPanel.js",
 		"bin-debug/modules/multiCustomWar/view/McwWarView.js",
 		"bin-debug/modules/replay/model/ReplayActionPlanner.js",
+		"bin-debug/modules/replay/model/ReplayCursor.js",
 		"bin-debug/Platform.js",
-		"bin-debug/modules/replay/model/ReplayField.js",
 		"bin-debug/modules/replay/model/ReplayFogMap.js",
 		"bin-debug/modules/replay/model/ReplayGridVisionEffect.js",
 		"bin-debug/modules/replay/model/ReplayHelpers.js",
@@ -165,6 +165,7 @@
 		"bin-debug/modules/replay/view/ReplayWarView.js",
 		"bin-debug/modules/singleCustomRoom/model/ScrModel.js",
 		"bin-debug/modules/singleCustomRoom/model/ScrProxy.js",
+		"bin-debug/modules/singleCustomRoom/view/ScrContinueWarListPanel.js",
 		"bin-debug/modules/singleCustomRoom/view/ScrCreateAdvancedSettingsPage.js",
 		"bin-debug/modules/singleCustomRoom/view/ScrCreateBasicSettingsPage.js",
 		"bin-debug/modules/singleCustomRoom/view/ScrCreateCoListPanel.js",
@@ -245,6 +246,6 @@
 		"bin-debug/modules/multiCustomRoom/view/McrCreateBasicSettingsPage.js",
 		"bin-debug/modules/multiCustomRoom/view/McrCreateCoListPanel.js",
 		"bin-debug/modules/multiCustomRoom/view/McrCreateMapListPanel.js",
-		"bin-debug/modules/replay/model/ReplayCursor.js"
+		"bin-debug/modules/replay/model/ReplayField.js"
 	]
 }
