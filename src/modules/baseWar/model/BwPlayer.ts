@@ -25,7 +25,7 @@ namespace TinyWars.BaseWar {
 
         private _war                : BwWar;
 
-        public init(data: Types.SerializedBwPlayer): BwPlayer {
+        public init(data: Types.SerializedPlayer): BwPlayer {
             this.setFund(data.fund!);
             this.setHasVotedForDraw(data.hasVotedForDraw!);
             this.setIsAlive(data.isAlive!);

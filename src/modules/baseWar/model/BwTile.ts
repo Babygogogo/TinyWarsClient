@@ -2,7 +2,7 @@
 namespace TinyWars.BaseWar {
     import Types            = Utility.Types;
     import Logger           = Utility.Logger;
-    import SerializedBwTile = Types.SerializedBwTile;
+    import SerializedBwTile = Types.SerializedTile;
     import TileType         = Types.TileType;
     import TileObjectType   = Types.TileObjectType;
 

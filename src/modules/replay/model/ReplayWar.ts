@@ -5,7 +5,7 @@ namespace TinyWars.Replay {
     import FloatText            = Utility.FloatText;
     import Lang                 = Utility.Lang;
     import WarActionContainer   = Types.WarActionContainer;
-    import SerializedWar        = Types.SerializedBwWar;
+    import SerializedWar        = Types.SerializedWar;
 
     export class ReplayWar extends BaseWar.BwWar {
         private _executedActions        : WarActionContainer[];

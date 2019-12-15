@@ -65,7 +65,7 @@ namespace TinyWars.SingleCustomWar {
             this._unitMap       = war.getUnitMap() as ScwUnitMap;
             this._turnManager   = war.getTurnManager() as ScwTurnManager;
             this._cursor        = war.getField().getCursor() as ScwCursor;
-            this._playerIndex = this._war.getPlayerIndexLoggedIn();
+            this._playerIndex   = this._war.getPlayerIndexInTurn();
             this._updateView();
         }
         protected _onClosed(): void {

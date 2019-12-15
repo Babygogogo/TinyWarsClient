@@ -109,7 +109,7 @@ namespace TinyWars.SingleCustomRoom {
         private _onNotifySScrContinueWar(e: egret.Event): void {
             const data      = e.data as ProtoTypes.IS_ScrContinueWar;
             const warData   = ProtoManager.decodeAsSerializedWar(data.encodedWar);
-            console.warn(warData);
+            Utility.FlowManager.gotoSingleCustomWar(warData);
         }
 
         private _onTouchTapBtnBack(): void {

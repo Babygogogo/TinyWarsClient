@@ -3,10 +3,20 @@ namespace TinyWars.SingleCustomWar {
     import DestructionHelpers   = Utility.DestructionHelpers;
     import VisibilityHelpers    = Utility.VisibilityHelpers;
     import ProtoTypes           = Utility.ProtoTypes;
+    import Types                = Utility.Types;
     import Lang                 = Utility.Lang;
     import FloatText            = Utility.FloatText;
 
     export class ScwTurnManager extends BaseWar.BwTurnManager {
+        public serialize(): Types.SerializedTurn {
+            return {
+                turnIndex       : this.getTurnIndex(),
+                playerIndex     : this.getPlayerIndexInTurn(),
+                turnPhaseCode   : this.getPhaseCode(),
+                enterTurnTime   : this.getEnterTurnTime(),
+            };
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The functions for running turn.
         ////////////////////////////////////////////////////////////////////////////////////////////////////

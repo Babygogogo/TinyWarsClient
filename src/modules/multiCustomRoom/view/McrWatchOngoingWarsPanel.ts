@@ -128,7 +128,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onNotifySMcwWatchContinueWar(e: egret.Event): void {
-            FlowManager.gotoMultiCustomWar((e.data as ProtoTypes.IS_McrContinueWar).war as Types.SerializedBwWar);
+            FlowManager.gotoMultiCustomWar((e.data as ProtoTypes.IS_McrContinueWar).war as Types.SerializedWar);
         }
 
         private _onNotifySMcwWatchContinueWarFailed(e: egret.Event): void {

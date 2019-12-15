@@ -13,8 +13,8 @@ namespace TinyWars.Replay.ReplayModel {
     import WarActionContainer   = ProtoTypes.IWarActionContainer;
     import BwHelpers            = BaseWar.BwHelpers;
     import GridIndex            = Types.GridIndex;
-    import SerializedBwTile     = Types.SerializedBwTile;
-    import SerializedBwUnit     = Types.SerializedBwUnit;
+    import SerializedBwTile     = Types.SerializedTile;
+    import SerializedBwUnit     = Types.SerializedUnit;
     import UnitState            = Types.UnitState;
     import MovePath             = Types.MovePath;
     import TileType             = Types.TileType;

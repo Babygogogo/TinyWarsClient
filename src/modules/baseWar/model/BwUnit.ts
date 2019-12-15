@@ -5,7 +5,7 @@ namespace TinyWars.BaseWar {
     import Logger           = Utility.Logger;
     import GridIndexHelpers = Utility.GridIndexHelpers;
     import ProtoTypes       = Utility.ProtoTypes;
-    import SerializedBwUnit = Types.SerializedBwUnit;
+    import SerializedBwUnit = Types.SerializedUnit;
     import UnitState        = Types.UnitState;
     import ArmorType        = Types.ArmorType;
     import TileType         = Types.TileType;

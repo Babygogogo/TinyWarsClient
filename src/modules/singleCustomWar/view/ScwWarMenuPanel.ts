@@ -127,7 +127,7 @@ namespace TinyWars.SingleCustomWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onNotifyBwPlannerStateChanged(e: egret.Event): void {
             const war = this._war;
-            if (war.getPlayerInTurn() === war.getPlayerLoggedIn()) {
+            if (war.checkIsHumanInTurn()) {
                 this.close();
             } else {
                 this._updateListPlayer();
@@ -211,7 +211,7 @@ namespace TinyWars.SingleCustomWar {
         private _updateListPlayer(): void {
             const war   = this._war;
             const data  = [] as DataForPlayerRenderer[];
-            war.getPlayerManager().forEachPlayer(false, player => {
+            war.getPlayerManager().forEachPlayer(false, (player: ScwPlayer) => {
                 data.push({
                     war,
                     player,
@@ -259,15 +259,6 @@ namespace TinyWars.SingleCustomWar {
             const commandPlayerDeleteUnit = this._createCommandPlayerDeleteUnit();
             (commandPlayerDeleteUnit) && (dataList.push(commandPlayerDeleteUnit));
 
-            const commandPlayerAgreeDraw = this._createCommandPlayerAgreeDraw();
-            (commandPlayerAgreeDraw) && (dataList.push(commandPlayerAgreeDraw));
-
-            const commandPlayerRefuseDraw = this._createCommandPlayerDeclineDraw();
-            (commandPlayerRefuseDraw) && (dataList.push(commandPlayerRefuseDraw));
-
-            const commandPlayerSurrender = this._createCommandPlayerSurrender();
-            (commandPlayerSurrender) && (dataList.push(commandPlayerSurrender));
-
             const commandShowTileAnimation = this._createCommandShowTileAnimation();
             (commandShowTileAnimation) && (dataList.push(commandShowTileAnimation));
 
@@ -291,7 +282,7 @@ namespace TinyWars.SingleCustomWar {
             return {
                 name    : Lang.getText(Lang.Type.B0140),
                 callback: () => {
-                    ScwCoListPanel.show(this._war.getPlayerIndexLoggedIn() - 1);
+                    ScwCoListPanel.show(this._war.getPlayerIndexInTurn() - 1);
                     ScwWarMenuPanel.hide();
                 },
             };
@@ -326,79 +317,9 @@ namespace TinyWars.SingleCustomWar {
             }
         }
 
-        private _createCommandPlayerSurrender(): DataForCommandRenderer | undefined {
-            const war = this._war;
-            if ((war.getPlayerInTurn() !== war.getPlayerLoggedIn())                 ||
-                (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)  ||
-                (this._actionPlanner.checkIsStateRequesting())
-            ) {
-                return undefined;
-            } else {
-                return {
-                    name    : Lang.getText(Lang.Type.B0055),
-                    callback: () => {
-                        ConfirmPanel.show({
-                            title   : Lang.getText(Lang.Type.B0055),
-                            content : Lang.getText(Lang.Type.A0026),
-                            callback: () => this._actionPlanner.setStateRequestingPlayerSurrender(),
-                        });
-                    },
-                }
-            }
-        }
-
-        private _createCommandPlayerAgreeDraw(): DataForCommandRenderer | undefined {
-            const war       = this._war;
-            const player    = war.getPlayerInTurn();
-            if ((player !== war.getPlayerLoggedIn())                                    ||
-                (player.getHasVotedForDraw())                                           ||
-                (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)      ||
-                (this._actionPlanner.getState() !== Types.ActionPlannerState.Idle)
-            ) {
-                return undefined;
-            } else {
-                const title = war.getRemainingVotesForDraw() == null ? Lang.getText(Lang.Type.B0083) : Lang.getText(Lang.Type.B0084);
-                return {
-                    name    : title,
-                    callback: () => {
-                        ConfirmPanel.show({
-                            title,
-                            content : war.getRemainingVotesForDraw() == null ? Lang.getText(Lang.Type.A0031) : Lang.getText(Lang.Type.A0032),
-                            callback: () => this._actionPlanner.setStateRequestingPlayerVoteForDraw(true),
-                        });
-                    },
-                };
-            }
-        }
-
-        private _createCommandPlayerDeclineDraw(): DataForCommandRenderer | undefined {
-            const war       = this._war;
-            const player    = war.getPlayerInTurn();
-            if ((player !== war.getPlayerLoggedIn())                                    ||
-                (player.getHasVotedForDraw())                                           ||
-                (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)      ||
-                (this._actionPlanner.getState() !== Types.ActionPlannerState.Idle)   ||
-                (!war.getRemainingVotesForDraw())
-            ) {
-                return undefined;
-            } else {
-                const title = Lang.getText(Lang.Type.B0085);
-                return {
-                    name    : title,
-                    callback: () => {
-                        ConfirmPanel.show({
-                            title,
-                            content : Lang.getText(Lang.Type.A0033),
-                            callback: () => this._actionPlanner.setStateRequestingPlayerVoteForDraw(false),
-                        });
-                    },
-                };
-            }
-        }
-
         private _createCommandPlayerDeleteUnit(): DataForCommandRenderer | undefined {
             const war = this._war;
-            if ((war.getPlayerInTurn() !== war.getPlayerLoggedIn())                 ||
+            if ((!war.checkIsHumanInTurn())                                         ||
                 (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)  ||
                 (this._actionPlanner.getState() !== Types.ActionPlannerState.Idle)
             ) {
@@ -410,7 +331,7 @@ namespace TinyWars.SingleCustomWar {
                         const unit = war.getUnitMap().getUnitOnMap(war.getField().getCursor().getGridIndex());
                         if (!unit) {
                             FloatText.show(Lang.getText(Lang.Type.A0027));
-                        } else if ((unit.getPlayerIndex() !== war.getPlayerIndexLoggedIn()) || (unit.getState() !== Types.UnitState.Idle)) {
+                        } else if ((unit.getPlayerIndex() !== war.getPlayerIndexInTurn()) || (unit.getState() !== Types.UnitState.Idle)) {
                             FloatText.show(Lang.getText(Lang.Type.A0028));
                         } else {
                             ConfirmPanel.show({

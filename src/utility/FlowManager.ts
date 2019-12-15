@@ -4,6 +4,7 @@ namespace TinyWars.Utility.FlowManager {
     import McwProxy     = MultiCustomWar.McwProxy;
     import McwModel     = MultiCustomWar.McwModel;
     import ReplayModel  = Replay.ReplayModel;
+    import ScwModel     = SingleCustomWar.ScwModel;
     import ErrorPanel   = Common.ErrorPanel;
 
     const _NET_EVENTS = [
@@ -68,8 +69,9 @@ namespace TinyWars.Utility.FlowManager {
         Lobby.LobbyPanel.show();
         Lobby.LobbyTopPanel.show();
     }
-    export async function gotoMultiCustomWar(data: Types.SerializedBwWar): Promise<void> {
+    export async function gotoMultiCustomWar(data: Types.SerializedWar): Promise<void> {
         ReplayModel.unloadWar();
+        ScwModel.unloadWar();
         await McwModel.loadWar(data);
         StageManager.closeAllPanels();
         MultiCustomWar.McwBackgroundPanel.show();
@@ -80,6 +82,7 @@ namespace TinyWars.Utility.FlowManager {
     }
     export async function gotoReplay(warData: Uint8Array, nicknames: string[]): Promise<void> {
         McwModel.unloadWar();
+        ScwModel.unloadWar();
         await ReplayModel.loadWar(warData, nicknames);
         StageManager.closeAllPanels();
         Replay.ReplayBackgroundPanel.show();
@@ -87,6 +90,17 @@ namespace TinyWars.Utility.FlowManager {
         Replay.ReplayWarPanel.show();
         Replay.ReplayTileBriefPanel.show();
         Replay.ReplayUnitBriefPanel.show();
+    }
+    export async function gotoSingleCustomWar(data: Types.SerializedWar): Promise<void> {
+        McwModel.unloadWar();
+        ReplayModel.unloadWar();
+        await ScwModel.loadWar(data);
+        StageManager.closeAllPanels();
+        SingleCustomWar.ScwBackgroundPanel.show();
+        SingleCustomWar.ScwTopPanel.show();
+        SingleCustomWar.ScwWarPanel.show();
+        SingleCustomWar.ScwTileBriefPanel.show();
+        SingleCustomWar.ScwUnitBriefPanel.show();
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

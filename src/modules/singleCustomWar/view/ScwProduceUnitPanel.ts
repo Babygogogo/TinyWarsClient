@@ -107,9 +107,9 @@ namespace TinyWars.SingleCustomWar {
         }
 
         private _createDataForList(): DataForUnitRenderer[] {
-            const datas         = [] as DataForUnitRenderer[];
+            const dataList      = [] as DataForUnitRenderer[];
             const war           = this._war;
-            const player        = war.getPlayerLoggedIn();
+            const player        = war.getPlayerInTurn();
             const currentFund   = player.getFund();
             const playerIndex   = player.getPlayerIndex();
             const configVersion = war.getConfigVersion();
@@ -123,7 +123,7 @@ namespace TinyWars.SingleCustomWar {
                     unitId  : -1,
                     viewId  : ConfigManager.getUnitViewId(unitType, playerIndex),
                 }, configVersion) as ScwUnit;
-                datas.push({
+                dataList.push({
                     unitType,
                     currentFund,
                     actionPlanner,
@@ -133,7 +133,7 @@ namespace TinyWars.SingleCustomWar {
                 });
             }
 
-            return datas.sort(sorterForDataForList);
+            return dataList.sort(sorterForDataForList);
         }
     }
 

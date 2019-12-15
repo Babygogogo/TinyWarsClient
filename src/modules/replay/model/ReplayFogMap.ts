@@ -2,7 +2,7 @@
 namespace TinyWars.Replay {
     import Types                    = Utility.Types;
     import VisibilityHelpers        = Utility.VisibilityHelpers;
-    import SerializedMcFogMap       = Types.SerializedBwFogMap;
+    import SerializedMcFogMap       = Types.SerializedFogMap;
     import MapSize                  = Types.MapSize;
 
     export class ReplayFogMap extends BaseWar.BwFogMap {

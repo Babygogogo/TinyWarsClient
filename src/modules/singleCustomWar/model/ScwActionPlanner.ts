@@ -15,8 +15,11 @@ namespace TinyWars.SingleCustomWar {
     import ConfirmPanel     = Common.ConfirmPanel;
 
     export class ScwActionPlanner extends BaseWar.BwActionPlanner {
-        private _getPlayerIndexLoggedIn(): number {
-            return (this._getWar() as ScwWar).getPlayerIndexLoggedIn();
+        // private _getPlayerIndexLoggedIn(): number {
+        //     return (this._getWar() as ScwWar).getHumanPlayerIndexes();
+        // }
+        private _getPlayerIndexInTurn(): number {
+            return (this._getWar() as ScwWar).getPlayerIndexInTurn();
         }
 
         protected _getViewClass(): new () => BaseWar.BwActionPlannerView {
@@ -133,7 +136,7 @@ namespace TinyWars.SingleCustomWar {
                     if ((existingUnit === this.getFocusUnitOnMap()) && (this.getFocusUnitLoaded())) {
                         // Nothing to do.
                     } else {
-                        if ((!existingUnit) || (existingUnit.getPlayerIndex() !== this._getPlayerIndexLoggedIn())) {
+                        if ((!existingUnit) || (existingUnit.getPlayerIndex() !== this._getPlayerIndexInTurn())) {
                             this._resetMovePathAsShortest(this.getAttackableArea()[gridIndex.x][gridIndex.y].movePathDestination);
                         } else {
                             this._setFocusUnitOnMap(existingUnit);
@@ -418,7 +421,7 @@ namespace TinyWars.SingleCustomWar {
         protected _getNextStateOnTapWhenIdle(gridIndex: GridIndex): State {
             const turnManager       = this._getTurnManager();
             const unit              = this._getUnitMap().getUnitOnMap(gridIndex);
-            const selfPlayerIndex   = this._getPlayerIndexLoggedIn();
+            const selfPlayerIndex   = this._getPlayerIndexInTurn();
             const isSelfInTurn      = (turnManager.getPlayerIndexInTurn() === selfPlayerIndex) && (turnManager.getPhaseCode() === TurnPhaseCode.Main);
             if (!unit) {
                 const tile = this._getTileMap().getTile(gridIndex);
@@ -441,7 +444,7 @@ namespace TinyWars.SingleCustomWar {
         }
         protected _getNextStateOnTapWhenMakingMovePath(gridIndex: GridIndex): State {
             const existingUnit      = this._getUnitMap().getUnitOnMap(gridIndex);
-            const selfPlayerIndex   = this._getPlayerIndexLoggedIn();
+            const selfPlayerIndex   = this._getPlayerIndexInTurn();
             if (BwHelpers.checkAreaHasGrid(this.getMovableArea(), gridIndex)) {
                 if (!existingUnit) {
                     return State.ChoosingAction;
@@ -561,7 +564,7 @@ namespace TinyWars.SingleCustomWar {
             } else {
                 const turnManager       = this._getTurnManager();
                 const unit              = this._getUnitMap().getUnitOnMap(gridIndex);
-                const selfPlayerIndex   = this._getPlayerIndexLoggedIn();
+                const selfPlayerIndex   = this._getPlayerIndexInTurn();
                 const isSelfInTurn      = (turnManager.getPlayerIndexInTurn() === selfPlayerIndex) && (turnManager.getPhaseCode() === TurnPhaseCode.Main);
                 if (!unit) {
                     const tile = this._getTileMap().getTile(gridIndex);
@@ -586,7 +589,7 @@ namespace TinyWars.SingleCustomWar {
         protected _getNextStateOnTapWhenPreviewingAttackableArea(gridIndex: GridIndex): State {
             const turnManager       = this._getTurnManager();
             const unit              = this._getUnitMap().getUnitOnMap(gridIndex);
-            const selfPlayerIndex   = this._getPlayerIndexLoggedIn();
+            const selfPlayerIndex   = this._getPlayerIndexInTurn();
             const isSelfInTurn      = (turnManager.getPlayerIndexInTurn() === selfPlayerIndex) && (turnManager.getPhaseCode() === TurnPhaseCode.Main);
             if (!unit) {
                 const tile = this._getTileMap().getTile(gridIndex);
@@ -614,7 +617,7 @@ namespace TinyWars.SingleCustomWar {
         protected _getNextStateOnTapWhenPreviewingMovableArea(gridIndex: GridIndex): State {
             const turnManager       = this._getTurnManager();
             const unit              = this._getUnitMap().getUnitOnMap(gridIndex);
-            const selfPlayerIndex   = this._getPlayerIndexLoggedIn();
+            const selfPlayerIndex   = this._getPlayerIndexInTurn();
             const isSelfInTurn      = (turnManager.getPlayerIndexInTurn() === selfPlayerIndex) && (turnManager.getPhaseCode() === TurnPhaseCode.Main);
             if (!unit) {
                 const tile = this._getTileMap().getTile(gridIndex);
@@ -789,7 +792,7 @@ namespace TinyWars.SingleCustomWar {
                             canProduceUnit  : false,
                             produceUnitType,
                         }];
-                    } else if ((this._getWar() as ScwWar).getPlayerLoggedIn().getFund() < focusUnit.getProduceUnitCost()) {
+                    } else if ((this._getWar() as ScwWar).getPlayerInTurn().getFund() < focusUnit.getProduceUnitCost()) {
                         return [{
                             actionType      : UnitActionType.ProduceUnit,
                             callback        : () => FloatText.show(Lang.getText(Lang.Type.B0053)),

@@ -7,8 +7,8 @@ namespace TinyWars.Replay {
             return ReplayPlayer;
         }
 
-        public serialize(): Types.SerializedBwPlayer[] {
-            const data: Types.SerializedBwPlayer[] = [];
+        public serialize(): Types.SerializedPlayer[] {
+            const data: Types.SerializedPlayer[] = [];
             this.forEachPlayer(true, (player: ReplayPlayer) => {
                 data.push(player.serialize());
             });

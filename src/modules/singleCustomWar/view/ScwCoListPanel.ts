@@ -132,7 +132,7 @@ namespace TinyWars.SingleCustomWar {
         ////////////////////////////////////////////////////////////////////////////////
         private _onNotifyScwPlannerStateChanged(e: egret.Event): void {
             const war = this._war;
-            if (war.getPlayerInTurn() === war.getPlayerLoggedIn()) {
+            if (war.checkIsHumanInTurn()) {
                 this.close();
             } else {
                 this.setSelectedIndex(this._selectedIndex);
@@ -154,7 +154,7 @@ namespace TinyWars.SingleCustomWar {
             const configVersion = war.getConfigVersion();
 
             for (let i = 1; i <= playerManager.getTotalPlayersCount(false); ++i) {
-                const player = playerManager.getPlayer(i);
+                const player = playerManager.getPlayer(i) as ScwPlayer;
                 data.push({
                     configVersion,
                     player,

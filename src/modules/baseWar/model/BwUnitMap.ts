@@ -18,7 +18,7 @@ namespace TinyWars.BaseWar {
         protected abstract _getViewClass(): new () => BwUnitMapView;
         protected abstract _getBwUnitClass(): new () => BwUnit;
 
-        public async init(configVersion: string, mapFileName: string, data?: Types.SerializedBwUnitMap): Promise<BwUnitMap> {
+        public async init(configVersion: string, mapFileName: string, data?: Types.SerializedUnitMap): Promise<BwUnitMap> {
             this._configVersion = configVersion;
             if (data) {
                 await this._initWithSerializedData(configVersion, mapFileName, data)
@@ -31,7 +31,7 @@ namespace TinyWars.BaseWar {
 
             return this;
         }
-        private async _initWithSerializedData(configVersion: string, mapFileName: string, data: Types.SerializedBwUnitMap): Promise<BwUnitMap> {
+        private async _initWithSerializedData(configVersion: string, mapFileName: string, data: Types.SerializedUnitMap): Promise<BwUnitMap> {
             const { mapWidth, mapHeight }   = await MapModel.getMapRawData(mapFileName);
             const unitDataList              = data.units;
             const map                       = Helpers.createEmptyMap<BwUnit>(mapWidth);

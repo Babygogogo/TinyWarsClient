@@ -1,7 +1,7 @@
 
 namespace TinyWars.BaseWar {
     import Types            = Utility.Types;
-    import SerializedBwWar  = Types.SerializedBwWar;
+    import SerializedBwWar  = Types.SerializedWar;
 
     export abstract class BwWar {
         private _warId                  : number;

@@ -3,6 +3,8 @@ namespace TinyWars.SingleCustomRoom {
     import Lang         = Utility.Lang;
     import Notify       = Utility.Notify;
     import FloatText    = Utility.FloatText;
+    import ProtoTypes   = Utility.ProtoTypes;
+    import Types        = Utility.Types;
     import ConfirmPanel = Common.ConfirmPanel;
 
     const CONFIRM_INTERVAL_MS = 5000;
@@ -103,8 +105,8 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _onNotifySScrCreateWar(e: egret.Event): void {
-            FloatText.show(Lang.getText(Lang.Type.A0015));
-            Utility.FlowManager.gotoLobby();
+            const data = e.data as ProtoTypes.IS_ScrCreateWar;
+            Utility.FlowManager.gotoSingleCustomWar(data.warData as Types.SerializedWar);
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {

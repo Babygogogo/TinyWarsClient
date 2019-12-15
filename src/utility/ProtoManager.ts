@@ -40,10 +40,10 @@ namespace TinyWars.Utility.ProtoManager {
         return _fullConfigClass.toObject(_fullConfigClass.decode(getDataForDecode(data))) as any;
     }
 
-    export function encodeAsSerializedWar(data: Types.SerializedBwWar): Uint8Array {
+    export function encodeAsSerializedWar(data: Types.SerializedWar): Uint8Array {
         return _serializedWarClass.encode(data).finish();
     }
-    export function decodeAsSerializedWar(data: any): Types.SerializedBwWar {
+    export function decodeAsSerializedWar(data: any): Types.SerializedWar {
         return _serializedWarClass.toObject(_serializedWarClass.decode(data)) as any;
     }
 

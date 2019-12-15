@@ -14,8 +14,8 @@ namespace TinyWars.SingleCustomWar.ScwModel {
     import BwHelpers            = BaseWar.BwHelpers;
     import AlertPanel           = Common.AlertPanel;
     import GridIndex            = Types.GridIndex;
-    import SerializedBwTile     = Types.SerializedBwTile;
-    import SerializedBwUnit     = Types.SerializedBwUnit;
+    import SerializedBwTile     = Types.SerializedTile;
+    import SerializedBwUnit     = Types.SerializedUnit;
     import UnitState            = Types.UnitState;
     import MovePath             = Types.MovePath;
     import TileType             = Types.TileType;
@@ -53,7 +53,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for managing war.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export async function loadWar(data: Types.SerializedBwWar): Promise<ScwWar> {
+    export async function loadWar(data: Types.SerializedWar): Promise<ScwWar> {
         if (_war) {
             Logger.warn(`McwModel.loadWar() another war has been loaded already!`);
             unloadWar();
@@ -103,14 +103,14 @@ namespace TinyWars.SingleCustomWar.ScwModel {
                 const requestType = data.requestType as Types.SyncWarRequestType;
                 if (requestType === Types.SyncWarRequestType.PlayerForce) {
                     _war.setIsEnded(true);
-                    await Utility.FlowManager.gotoMultiCustomWar(data.war as Types.SerializedBwWar),
+                    await Utility.FlowManager.gotoMultiCustomWar(data.war as Types.SerializedWar),
                     FloatText.show(Lang.getText(Lang.Type.A0038));
 
                 } else {
                     const cachedActionsCount = _cachedActions.length;
                     if (data.nextActionId !== _war.getNextActionId() + cachedActionsCount) {
                         _war.setIsEnded(true);
-                        await Utility.FlowManager.gotoMultiCustomWar(data.war as Types.SerializedBwWar);
+                        await Utility.FlowManager.gotoMultiCustomWar(data.war as Types.SerializedWar);
                         FloatText.show(Lang.getText(Lang.Type.A0036));
 
                     } else {
@@ -280,8 +280,8 @@ namespace TinyWars.SingleCustomWar.ScwModel {
 
     function _checkAndRequestBeginTurn(): void {
         const turnManager = _war.getTurnManager();
-        if ((turnManager.getPhaseCode() === Types.TurnPhaseCode.WaitBeginTurn)      &&
-            (_war.getPlayerIndexLoggedIn() ===  turnManager.getPlayerIndexInTurn())
+        if ((turnManager.getPhaseCode() === Types.TurnPhaseCode.WaitBeginTurn) &&
+            (_war.checkIsHumanInTurn())
         ) {
             (_war.getActionPlanner() as ScwActionPlanner).setStateRequestingPlayerBeginTurn();
         }
@@ -321,7 +321,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         actionPlanner.setStateExecutingAction();
         await war.getTurnManager().endPhaseMain();
 
-        if (war.getPlayerInTurn() === war.getPlayerLoggedIn()) {
+        if (war.checkIsHumanInTurn()) {
             (actionPlanner as ScwActionPlanner).setStateRequestingPlayerBeginTurn();
         } else {
             actionPlanner.setStateIdle();
@@ -523,12 +523,12 @@ namespace TinyWars.SingleCustomWar.ScwModel {
             }
 
             const configVersion             = war.getConfigVersion();
-            const attackerUnitAfterAction   = action.attackerUnitAfterAction as Types.SerializedBwUnit;
+            const attackerUnitAfterAction   = action.attackerUnitAfterAction as Types.SerializedUnit;
             if (attackerUnitAfterAction) {
                 attacker.init(attackerUnitAfterAction, configVersion);
                 attacker.startRunning(war);
             }
-            const targetUnitAfterAction = action.targetUnitAfterAction as Types.SerializedBwUnit;
+            const targetUnitAfterAction = action.targetUnitAfterAction as Types.SerializedUnit;
             if (targetUnitAfterAction) {
                 targetUnit.init(targetUnitAfterAction, configVersion);
                 targetUnit.startRunning(war);

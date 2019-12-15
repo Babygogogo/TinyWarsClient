@@ -1,6 +1,7 @@
 
 namespace TinyWars.SingleCustomWar.ScwHelpers {
     import Types                = Utility.Types;
+    import ProtoTypes           = Utility.ProtoTypes;
     import Helpers              = Utility.Helpers;
     import GridIndexHelpers     = Utility.GridIndexHelpers;
     import VisibilityHelpers    = Utility.VisibilityHelpers;
@@ -133,6 +134,19 @@ namespace TinyWars.SingleCustomWar.ScwHelpers {
         // TODO: take skills into account.
         const cfg = ConfigManager.getUnitTemplateCfg(war.getConfigVersion(), unitType);
         return cfg ? cfg.productionCost : undefined;
+    }
+
+    export function checkShouldSerializeTile(tileData: Types.SerializedTile, mapRawData: ProtoTypes.IMapRawData): boolean {
+        if ((tileData.currentBuildPoint     != null)   ||
+            (tileData.currentCapturePoint   != null)   ||
+            (tileData.currentHp             != null)
+        ) {
+            return true;
+        } else {
+            const posIndex = tileData.gridX + tileData.gridY * mapRawData.mapWidth;
+            return (tileData.baseViewId     != mapRawData.tileBases[posIndex])
+                || (tileData.objectViewId   != mapRawData.tileObjects[posIndex]);
+        }
     }
 
     function _pushToAvailableMovableGrids(grids: AvailableMovableGrid[], gridIndex: GridIndex, prev: GridIndex, totalMoveCost: number): void {

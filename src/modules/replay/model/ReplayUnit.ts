@@ -1,7 +1,7 @@
 
 namespace TinyWars.Replay {
     import Types            = Utility.Types;
-    import SerializedMcUnit = Types.SerializedBwUnit;
+    import SerializedMcUnit = Types.SerializedUnit;
     import UnitState        = Types.UnitState;
     import UnitType         = Types.UnitType;
 

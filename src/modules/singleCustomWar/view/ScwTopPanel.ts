@@ -147,7 +147,7 @@ namespace TinyWars.SingleCustomWar {
             const war                   = this._war;
             const player                = war.getPlayerInTurn();
             this._labelPlayer.text      = `${Lang.getText(Lang.Type.B0031)}:${player.getNickname()} (${Helpers.getColorTextForPlayerIndex(player.getPlayerIndex())})`;
-            this._labelPlayer.textColor = player === war.getPlayerLoggedIn() ? 0x00FF00 : 0xFFFFFF;
+            this._labelPlayer.textColor = 0xFFFFFF;
         }
 
         private _updateLabelFund(): void {
@@ -191,7 +191,7 @@ namespace TinyWars.SingleCustomWar {
             const war                   = this._war;
             const turnManager           = war.getTurnManager();
             this._btnEndTurn.label      = Lang.getText(Lang.Type.B0036);
-            this._btnEndTurn.visible    = (turnManager.getPlayerIndexInTurn() === war.getPlayerIndexLoggedIn())
+            this._btnEndTurn.visible    = (war.checkIsHumanInTurn())
                 && (turnManager.getPhaseCode() === Types.TurnPhaseCode.Main)
                 && (war.getActionPlanner().getState() === Types.ActionPlannerState.Idle);
         }
@@ -200,7 +200,7 @@ namespace TinyWars.SingleCustomWar {
             const war                   = this._war;
             const turnManager           = war.getTurnManager();
             this._btnUnitList.label     = Lang.getText(Lang.Type.B0152);
-            this._btnUnitList.visible   = (turnManager.getPlayerIndexInTurn() === war.getPlayerIndexLoggedIn())
+            this._btnUnitList.visible   = (war.checkIsHumanInTurn())
                 && (turnManager.getPhaseCode() === Types.TurnPhaseCode.Main);
         }
 
@@ -208,7 +208,7 @@ namespace TinyWars.SingleCustomWar {
             const war                       = this._war;
             const turnManager               = war.getTurnManager();
             this._btnFindBuilding.label     = Lang.getText(Lang.Type.B0153);
-            this._btnFindBuilding.visible   = (turnManager.getPlayerIndexInTurn() === war.getPlayerIndexLoggedIn())
+            this._btnFindBuilding.visible   = (war.checkIsHumanInTurn())
                 && (turnManager.getPhaseCode() === Types.TurnPhaseCode.Main);
         }
 
@@ -218,7 +218,7 @@ namespace TinyWars.SingleCustomWar {
             const actionPlanner     = war.getActionPlanner();
             const state             = actionPlanner.getState();
             this._btnCancel.label   = Lang.getText(Lang.Type.B0154);
-            this._btnCancel.visible = (turnManager.getPlayerIndexInTurn() === war.getPlayerIndexLoggedIn())
+            this._btnCancel.visible = (war.checkIsHumanInTurn())
                 && (turnManager.getPhaseCode() === Types.TurnPhaseCode.Main)
                 && (state !== Types.ActionPlannerState.Idle)
                 && (state !== Types.ActionPlannerState.ExecutingAction)
@@ -234,7 +234,7 @@ namespace TinyWars.SingleCustomWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _getHintForEndTurn(): string {
             const war           = this._war;
-            const playerIndex   = war.getPlayerIndexLoggedIn();
+            const playerIndex   = war.getPlayerIndexInTurn();
             const unitMap       = war.getUnitMap();
             const hints         = new Array<string>();
 
