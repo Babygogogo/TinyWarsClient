@@ -78,77 +78,10 @@ namespace TinyWars.SingleCustomWar.ScwModel {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Handlers for war actions that McwProxy receives.
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export function updateOnPlayerBeginTurn(data: ProtoTypes.IS_McwPlayerBeginTurn): void {
-        _updateByActionContainer(data.actionContainer, data.warId);
-    }
-    export function updateOnPlayerDeleteUnit(data: ProtoTypes.IS_McwPlayerDeleteUnit): void {
-        _updateByActionContainer(data.actionContainer, data.warId);
-    }
-    export function updateOnPlayerEndTurn(data: ProtoTypes.IS_McwPlayerEndTurn): void {
-        _updateByActionContainer(data.actionContainer, data.warId);
-    }
-    export function updateOnPlayerSurrender(data: ProtoTypes.IS_McwPlayerSurrender): void {
-        _updateByActionContainer(data.actionContainer, data.warId);
-    }
-    export function updateOnPlayerVoteForDraw(data: ProtoTypes.IS_McwPlayerVoteForDraw): void {
-        _updateByActionContainer(data.actionContainer, data.warId);
-    }
-    export function updateOnPlayerProduceUnit(data: ProtoTypes.IS_McwPlayerProduceUnit): void {
-        _updateByActionContainer(data.actionContainer, data.warId);
-    }
-    export function updateOnUnitAttack(data: ProtoTypes.IS_McwUnitAttack): void {
-        _updateByActionContainer(data.actionContainer, data.warId);
-    }
-    export function updateOnUnitBeLoaded(data: ProtoTypes.IS_McwUnitBeLoaded): void {
-        _updateByActionContainer(data.actionContainer, data.warId);
-    }
-    export function updateOnUnitBuildTile(data: ProtoTypes.IS_McwUnitBuildTile): void {
-        _updateByActionContainer(data.actionContainer, data.warId);
-    }
-    export function updateOnUnitCaptureTile(data: ProtoTypes.IS_McwUnitCaptureTile): void {
-        _updateByActionContainer(data.actionContainer, data.warId);
-    }
-    export function updateOnUnitDive(data: ProtoTypes.IS_McwUnitDive): void {
-        _updateByActionContainer(data.actionContainer, data.warId);
-    }
-    export function updateOnUnitDrop(data: ProtoTypes.IS_McwUnitDrop): void {
-        _updateByActionContainer(data.actionContainer, data.warId);
-    }
-    export function updateOnUnitJoin(data: ProtoTypes.IS_McwUnitJoin): void {
-        _updateByActionContainer(data.actionContainer, data.warId);
-    }
-    export function updateOnUnitLaunchFlare(data: ProtoTypes.IS_McwUnitLaunchFlare): void {
-        _updateByActionContainer(data.actionContainer, data.warId);
-    }
-    export function updateOnUnitLaunchSilo(data: ProtoTypes.IS_McwUnitLaunchSilo): void {
-        _updateByActionContainer(data.actionContainer, data.warId);
-    }
-    export function updateOnUnitLoadCo(data: ProtoTypes.IS_McwUnitLoadCo): void {
-        _updateByActionContainer(data.actionContainer, data.warId);
-    }
-    export function updateOnUnitProduceUnit(data: ProtoTypes.IS_McwUnitProduceUnit): void {
-        _updateByActionContainer(data.actionContainer, data.warId);
-    }
-    export function updateOnUnitSupply(data: ProtoTypes.IS_McwUnitSupply): void {
-        _updateByActionContainer(data.actionContainer, data.warId);
-    }
-    export function updateOnUnitSurface(data: ProtoTypes.IS_McwUnitSurface): void {
-        _updateByActionContainer(data.actionContainer, data.warId);
-    }
-    export function updateOnUnitUseCoSkill(data: ProtoTypes.IS_McwUnitUseCoSkill): void {
-        _updateByActionContainer(data.actionContainer, data.warId);
-    }
-    export function updateOnUnitWait(data: ProtoTypes.IS_McwUnitWait): void {
-        _updateByActionContainer(data.actionContainer, data.warId);
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Util functions.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    function _updateByActionContainer(container: WarActionContainer, warId: number): void {
-        if ((_war) && (_war.getWarId() === warId)) {
+    export function updateByWarAction(container: WarActionContainer): void {
+        if (_war) {
             if (container.actionId !== _war.getNextActionId() + _cachedActions.length) {
                 Logger.error(`ScwModel._updateByActionContainer() invalid action id: ${container.actionId}`);
             } else {

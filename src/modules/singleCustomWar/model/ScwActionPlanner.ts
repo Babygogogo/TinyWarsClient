@@ -210,22 +210,15 @@ namespace TinyWars.SingleCustomWar {
         // Functions for setting requesting state.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         public setStateRequestingPlayerProduceUnit(gridIndex: GridIndex, unitType: UnitType): void {
-            ScwProxy.reqScwPlayerProduceUnit(this._getWar(), gridIndex, unitType);
+            ScwLocalProxy.reqPlayerProduceUnit(this._getWar(), gridIndex, unitType);
 
             this._setState(State.RequestingPlayerProduceUnit);
             this._updateView();
         }
 
-        public setStateRequestingPlayerVoteForDraw(isAgree: boolean): void {
-            ScwProxy.reqScwPlayerVoteForDraw(this._getWar(), isAgree);
-
-            this._setState(State.RequestingPlayerVoteForDraw);
-            this._updateView();
-        }
-
         private _setStateRequestingUnitProduceUnit(): void {
             const unit = this.getFocusUnitLoaded();
-            ScwProxy.reqScwUnitProduceUnit(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined);
+            ScwLocalProxy.reqUnitProduceUnit(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined);
 
             this._setState(State.RequestingUnitProduceUnit);
             this._updateView();
@@ -233,7 +226,7 @@ namespace TinyWars.SingleCustomWar {
 
         private _setStateRequestingUnitBeLoaded(): void {
             const unit = this.getFocusUnitLoaded();
-            ScwProxy.reqScwUnitBeLoaded(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined);
+            ScwLocalProxy.reqUnitBeLoaded(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined);
 
             this._setState(State.RequestingUnitBeLoaded);
             this._updateView();
@@ -241,7 +234,7 @@ namespace TinyWars.SingleCustomWar {
 
         private _setStateRequestingUnitJoin(): void {
             const unit = this.getFocusUnitLoaded();
-            ScwProxy.reqScwUnitJoin(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined);
+            ScwLocalProxy.reqUnitJoin(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined);
 
             this._setState(State.RequestingUnitJoin);
             this._updateView();
@@ -249,7 +242,7 @@ namespace TinyWars.SingleCustomWar {
 
         private _setStateRequestingUnitUseCoSuperPower(): void {
             const unit = this.getFocusUnitLoaded();
-            ScwProxy.reqScwUnitUseCoSkill(this._getWar(), Types.CoSkillType.SuperPower, this.getMovePath(), unit ? unit.getUnitId() : null);
+            ScwLocalProxy.reqUnitUseCoSkill(this._getWar(), Types.CoSkillType.SuperPower, this.getMovePath(), unit ? unit.getUnitId() : null);
 
             this._setState(State.RequestingUnitUseCoSuperPower);
             this._updateView();
@@ -257,7 +250,7 @@ namespace TinyWars.SingleCustomWar {
 
         private _setStateRequestingUnitUseCoPower(): void {
             const unit = this.getFocusUnitLoaded();
-            ScwProxy.reqScwUnitUseCoSkill(this._getWar(), Types.CoSkillType.Power, this.getMovePath(), unit ? unit.getUnitId() : null);
+            ScwLocalProxy.reqUnitUseCoSkill(this._getWar(), Types.CoSkillType.Power, this.getMovePath(), unit ? unit.getUnitId() : null);
 
             this._setState(State.RequestingUnitUseCoPower);
             this._updateView();
@@ -265,7 +258,7 @@ namespace TinyWars.SingleCustomWar {
 
         private _setStateRequestingUnitLoadCo(): void {
             const unit = this.getFocusUnitLoaded();
-            ScwProxy.reqScwUnitLoadCo(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : null);
+            ScwLocalProxy.reqUnitLoadCo(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : null);
 
             this._setState(State.RequestingUnitLoadCo);
             this._updateView();
@@ -273,7 +266,7 @@ namespace TinyWars.SingleCustomWar {
 
         private _setStateRequestingUnitWait(): void {
             const unit = this.getFocusUnitLoaded();
-            ScwProxy.reqScwUnitWait(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined);
+            ScwLocalProxy.reqUnitWait(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined);
 
             this._setState(State.RequestingUnitWait);
             this._updateView();
@@ -281,7 +274,7 @@ namespace TinyWars.SingleCustomWar {
 
         private _setStateRequestingUnitAttack(targetGridIndex: GridIndex): void {
             const unit = this.getFocusUnitLoaded();
-            ScwProxy.reqScwUnitAttack(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined, targetGridIndex);
+            ScwLocalProxy.reqUnitAttack(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined, targetGridIndex);
 
             this._setState(State.RequestingUnitAttack);
             this._updateView();
@@ -289,7 +282,7 @@ namespace TinyWars.SingleCustomWar {
 
         private _setStateRequestingUnitBuildTile(): void {
             const unit = this.getFocusUnitLoaded();
-            ScwProxy.reqScwUnitBuildTile(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined);
+            ScwLocalProxy.reqUnitBuildTile(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined);
 
             this._setState(State.RequestingUnitBuildTile);
             this._updateView();
@@ -297,7 +290,7 @@ namespace TinyWars.SingleCustomWar {
 
         private _setStateRequestingUnitCaptureTile(): void {
             const unit = this.getFocusUnitLoaded();
-            ScwProxy.reqScwUnitCaptureTile(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined);
+            ScwLocalProxy.reqUnitCaptureTile(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined);
 
             this._setState(State.RequestingUnitCaptureTile);
             this._updateView();
@@ -305,7 +298,7 @@ namespace TinyWars.SingleCustomWar {
 
         private _setStateRequestingUnitDive(): void {
             const unit = this.getFocusUnitLoaded();
-            ScwProxy.reqScwUnitDive(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined);
+            ScwLocalProxy.reqUnitDive(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined);
 
             this._setState(State.RequestingUnitDive);
             this._updateView();
@@ -313,7 +306,7 @@ namespace TinyWars.SingleCustomWar {
 
         private _setStateRequestingUnitSurface(): void {
             const unit = this.getFocusUnitLoaded();
-            ScwProxy.reqScwUnitSurface(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined);
+            ScwLocalProxy.reqUnitSurface(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined);
 
             this._setState(State.RequestingUnitSurface);
             this._updateView();
@@ -331,7 +324,7 @@ namespace TinyWars.SingleCustomWar {
             }
 
             const unit = this.getFocusUnitLoaded();
-            ScwProxy.reqScwUnitDrop(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined, destinations);
+            ScwLocalProxy.reqUnitDrop(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined, destinations);
 
             this._setState(State.RequestingUnitDrop);
             this._updateView();
@@ -343,7 +336,7 @@ namespace TinyWars.SingleCustomWar {
             }
 
             const unit = this.getFocusUnitLoaded();
-            ScwProxy.reqScwUnitDrop(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined, destinations);
+            ScwLocalProxy.reqUnitDrop(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined, destinations);
 
             this._setState(State.RequestingUnitDrop);
             this._updateView();
@@ -351,7 +344,7 @@ namespace TinyWars.SingleCustomWar {
 
         private _setStateRequestingUnitLaunchFlare(gridIndex: GridIndex): void {
             const unit = this.getFocusUnitLoaded();
-            ScwProxy.reqScwUnitLaunchFlare(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined, gridIndex);
+            ScwLocalProxy.reqUnitLaunchFlare(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined, gridIndex);
 
             this._setState(State.RequestingUnitLaunchFlare);
             this._updateView();
@@ -359,7 +352,7 @@ namespace TinyWars.SingleCustomWar {
 
         private _setStateRequestingUnitLaunchSilo(gridIndex: GridIndex): void {
             const unit = this.getFocusUnitLoaded();
-            ScwProxy.reqScwUnitLaunchSilo(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined, gridIndex);
+            ScwLocalProxy.reqUnitLaunchSilo(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined, gridIndex);
 
             this._setState(State.RequestingUnitLaunchSilo);
             this._updateView();
@@ -367,35 +360,28 @@ namespace TinyWars.SingleCustomWar {
 
         private _setStateRequestingUnitSupply(): void {
             const unit = this.getFocusUnitLoaded();
-            ScwProxy.reqScwUnitSupply(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined);
+            ScwLocalProxy.reqUnitSupply(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined);
 
             this._setState(State.RequestingUnitSupply);
             this._updateView();
         }
 
         public setStateRequestingPlayerBeginTurn(): void {
-            ScwProxy.reqScwPlayerBeginTurn(this._getWar());
+            ScwLocalProxy.reqPlayerBeginTurn(this._getWar());
 
             this._setState(State.RequestingPlayerBeginTurn);
             this._updateView();
         }
 
         public setStateRequestingPlayerEndTurn(): void {
-            ScwProxy.reqScwPlayerEndTurn(this._getWar());
+            ScwLocalProxy.reqPlayerEndTurn(this._getWar());
 
             this._setState(State.RequestingPlayerEndTurn);
             this._updateView();
         }
 
-        public setStateRequestingPlayerSurrender(): void {
-            ScwProxy.reqScwPlayerSurrender(this._getWar());
-
-            this._setState(State.RequestingPlayerSurrender);
-            this._updateView();
-        }
-
         public setStateRequestingPlayerDeleteUnit(): void {
-            ScwProxy.reqScwPlayerDeleteUnit(this._getWar(), this.getCursor().getGridIndex());
+            ScwLocalProxy.reqPlayerDeleteUnit(this._getWar(), this.getCursor().getGridIndex());
 
             this._setState(State.RequestingPlayerDeleteUnit);
             this._updateView();
