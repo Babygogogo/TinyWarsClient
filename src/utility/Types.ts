@@ -159,7 +159,108 @@ namespace TinyWars.Utility.Types {
     }
 
     ////////////////////////////////////////////////////////////////////////////////
-    // Types.
+    // Raw war action types.
+    ////////////////////////////////////////////////////////////////////////////////
+    export type RawWarActionContainer = {
+        PlayerBeginTurn?    : RawWarActionPlayerBeginTurn;
+        PlayerDeleteUnit?   : RawWarActionPlayerDeleteUnit;
+        PlayerEndTurn?      : RawWarActionPlayerEndTurn;
+        PlayerProduceUnit?  : RawWarActionPlayerProduceUnit;
+        UnitAttack?         : RawWarActionUnitAttack;
+        UnitBeLoaded?       : RawWarActionUnitBeLoaded;
+        UnitBuildTile?      : RawWarActionUnitBuildTile;
+        UnitCaptureTile?    : RawWarActionUnitCaptureTile;
+        UnitDive?           : RawWarActionUnitDive;
+        UnitDrop?           : RawWarActionUnitDrop;
+        UnitJoin?           : RawWarActionUnitJoin;
+        UnitLaunchFlare?    : RawWarActionUnitLaunchFlare;
+        UnitLaunchSilo?     : RawWarActionUnitLaunchSilo;
+        UnitLoadCo?         : RawWarActionUnitLoadCo;
+        UnitProduceUnit?    : RawWarActionUnitProduceUnit;
+        UnitSupply?         : RawWarActionUnitSupply;
+        UnitSurface?        : RawWarActionUnitSurface;
+        UnitUseCoSkill?     : RawWarActionUnitUseCoSkill;
+        UnitWait?           : RawWarActionUnitWait;
+    }
+    export type RawWarActionPlayerBeginTurn = {
+    }
+    export type RawWarActionPlayerDeleteUnit = {
+        gridIndex: GridIndex;
+    }
+    export type RawWarActionPlayerEndTurn = {
+    }
+    export type RawWarActionPlayerProduceUnit = {
+        gridIndex   : GridIndex;
+        unitType    : UnitType;
+    }
+    export type RawWarActionUnitAttack = {
+        path            : GridIndex[];
+        launchUnitId    : number | null;
+        targetGridIndex : GridIndex;
+    }
+    export type RawWarActionUnitBeLoaded = {
+        path            : GridIndex[];
+        launchUnitId    : number | null;
+    }
+    export type RawWarActionUnitBuildTile = {
+        path            : GridIndex[];
+        launchUnitId    : number | null;
+    }
+    export type RawWarActionUnitCaptureTile = {
+        path            : GridIndex[];
+        launchUnitId    : number | null;
+    }
+    export type RawWarActionUnitDive = {
+        path            : GridIndex[];
+        launchUnitId    : number | null;
+    }
+    export type RawWarActionUnitDrop = {
+        path            : GridIndex[];
+        launchUnitId    : number | null;
+        dropDestinations: DropDestination[];
+    }
+    export type RawWarActionUnitJoin = {
+        path            : GridIndex[];
+        launchUnitId    : number | null;
+    }
+    export type RawWarActionUnitLaunchFlare = {
+        path            : GridIndex[];
+        launchUnitId    : number | null;
+        targetGridIndex : GridIndex;
+    }
+    export type RawWarActionUnitLaunchSilo = {
+        path            : GridIndex[];
+        launchUnitId    : number | null;
+        targetGridIndex : GridIndex;
+    }
+    export type RawWarActionUnitLoadCo = {
+        path            : GridIndex[];
+        launchUnitId    : number | null;
+    }
+    export type RawWarActionUnitProduceUnit = {
+        path            : GridIndex[];
+        launchUnitId    : number | null;
+    }
+    export type RawWarActionUnitSupply = {
+        path            : GridIndex[];
+        launchUnitId    : number | null;
+    }
+    export type RawWarActionUnitSurface = {
+        path            : GridIndex[];
+        launchUnitId    : number | null;
+    }
+    export type RawWarActionUnitUseCoSkill = {
+        path            : GridIndex[];
+        launchUnitId    : number | null;
+        skillType       : CoSkillType;
+    }
+    export type RawWarActionUnitWait = {
+        path            : GridIndex[];
+        launchUnitId    : number | null;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    // Other types.
     ////////////////////////////////////////////////////////////////////////////////
     export type Size = {
         width : number;

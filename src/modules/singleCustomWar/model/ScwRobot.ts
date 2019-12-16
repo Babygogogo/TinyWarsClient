@@ -1,13 +1,12 @@
 
 namespace TinyWars.SingleCustomWar.ScrRobot {
-    import ProtoTypes       = Utility.ProtoTypes;
     import Types            = Utility.Types;
     import GridIndexHelpers = Utility.GridIndexHelpers;
     import Helpers          = Utility.Helpers;
     import DamageCalculator = Utility.DamageCalculator;
     import BwHelpers        = BaseWar.BwHelpers;
     import BwUnit           = BaseWar.BwUnit;
-    import WarAction        = ProtoTypes.IWarActionContainer;
+    import WarAction        = Types.RawWarActionContainer;
     import GridIndex        = Types.GridIndex;
     import MovableArea      = Types.MovableArea;
     import MovePathNode     = Types.MovePathNode;
@@ -811,8 +810,8 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
 
         return {
             score   : await _getScoreForActionUnitBeLoaded(unit, gridIndex),
-            action  : { WarActionUnitBeLoaded: {
-                path        : { nodes: pathNodes },
+            action  : { UnitBeLoaded: {
+                path        : pathNodes,
                 launchUnitId: unit.getLoaderUnitId() == null ? null : unit.getUnitId(),
             } },
         };
@@ -832,8 +831,8 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
 
         return {
             score   : await _getScoreForActionUnitJoin(unit, gridIndex),
-            action  : { WarActionUnitJoin: {
-                path        : { nodes: pathNodes },
+            action  : { UnitJoin: {
+                path        : pathNodes,
                 launchUnitId: unit.getLoaderUnitId() == null ? null : unit.getUnitId(),
             } },
         };
@@ -859,8 +858,8 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
                 data,
                 {
                     score   : await _getScoreForActionUnitAttack(unit, gridIndex, targetGridIndex, pathNodes, damages[0], damages[1]),
-                    action  : { WarActionUnitAttack: {
-                        path    : { nodes: pathNodes },
+                    action  : { UnitAttack: {
+                        path    : pathNodes,
                         targetGridIndex,
                         launchUnitId,
                     } },
@@ -880,8 +879,8 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
         } else {
             return {
                 score   : await _getScoreForActionUnitCaptureTile(unit, gridIndex),
-                action  : { WarActionUnitCaptureTile: {
-                    path            : { nodes: pathNodes },
+                action  : { UnitCaptureTile: {
+                    path            : pathNodes,
                     launchUnitId    : unit.getLoaderUnitId() == null ? null : unit.getUnitId(),
                 } },
             }
@@ -896,8 +895,8 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
         } else {
             return {
                 score   : await _getScoreForActionUnitDive(unit, gridIndex),
-                action  : { WarActionUnitDive: {
-                    path            : { nodes: pathNodes },
+                action  : { UnitDive: {
+                    path            : pathNodes,
                     launchUnitId    : unit.getLoaderUnitId() == null ? null : unit.getUnitId(),
                 } },
             }
@@ -942,8 +941,8 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
 
         return {
             score   : maxScore,
-            action  : { WarActionUnitLaunchSilo: {
-                path            : { nodes: pathNodes },
+            action  : { UnitLaunchSilo: {
+                path            : pathNodes,
                 launchUnitId    : unit.getLoaderUnitId() == null ? null : unit.getUnitId(),
                 targetGridIndex,
             } },
@@ -958,8 +957,8 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
         } else {
             return {
                 score   : await _getScoreForActionUnitSurface(unit, gridIndex),
-                action  : { WarActionUnitSurface: {
-                    path            : { nodes: pathNodes },
+                action  : { UnitSurface: {
+                    path            : pathNodes,
                     launchUnitId    : unit.getLoaderUnitId() == null ? null : unit.getUnitId(),
                 } },
             }
@@ -971,8 +970,8 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
 
         return {
             score   : await _getScoreForActionUnitWait(unit, gridIndex),
-            action  : { WarActionUnitWait: {
-                path            : { nodes: pathNodes },
+            action  : { UnitWait: {
+                path            : pathNodes,
                 launchUnitId    : unit.getLoaderUnitId() == null ? null : unit.getUnitId(),
             } },
         }
@@ -1029,7 +1028,7 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
                                 bestScoreAndAction,
                                 {
                                     action  : scoreAndAction.action,
-                                    score   : (action.WarActionUnitDive) || ((candidateUnit.getIsDiving()) && (!action.WarActionUnitSurface))
+                                    score   : (action.UnitDive) || ((candidateUnit.getIsDiving()) && (!action.UnitSurface))
                                         ? scoreAndAction.score + await _getScoreForPosition(candidateUnit, gridIndex, damageMapForDive, scoreMapForDistance)
                                         : scoreAndAction.score + await _getScoreForPosition(candidateUnit, gridIndex, damageMapForSurface, scoreMapForDistance)
                                 },
@@ -1065,7 +1064,7 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
         } else {
             return {
                 score   : maxScore,
-                action  : { WarActionPlayerProduceUnit: {
+                action  : { PlayerProduceUnit: {
                     unitType    : targetUnitType,
                     gridIndex,
                 } },
@@ -1109,7 +1108,7 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
         await _checkAndCallLater();
 
         if (_turnManager.getPhaseCode() === Types.TurnPhaseCode.WaitBeginTurn) {
-            return { WarActionPlayerBeginTurn: { } };
+            return { PlayerBeginTurn: { } };
         } else {
             _phaseCode = PhaseCode.Phase1;
             return null;
@@ -1122,7 +1121,7 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
 
         _candidateUnits = await _getCandidateUnitsForPhase1();
         let action      : WarAction;
-        while ((!action) || (!action.WarActionUnitAttack)) {
+        while ((!action) || (!action.UnitAttack)) {
             const unit = _popRandomCandidateUnit(_candidateUnits);
             if (!unit) {
                 _candidateUnits = null;
@@ -1243,7 +1242,7 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
     async function _getActionForPhase9(): Promise<WarAction | null> {   // DONE
         await _checkAndCallLater();
 
-        return { WarActionPlayerEndTurn: {} };
+        return { PlayerEndTurn: {} };
     }
 
     export async function getNextAction(war: ScwWar): Promise<WarAction> {
