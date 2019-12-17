@@ -328,7 +328,7 @@ namespace TinyWars.BaseWar {
                 && (ConfigManager.checkIsUnitTypeInCategory(this._configVersion, unit.getType(), category));
         }
 
-        public getRepairHpAndCostForUnit(unit: BwUnit): Types.RepairHpAndCost | undefined {
+        public getRepairHpAndCostForUnit(unit: BwUnit, fund = this._war.getPlayer(unit.getPlayerIndex())!.getFund()): Types.RepairHpAndCost | undefined {
             if (!this.checkCanRepairUnit(unit)) {
                 return undefined;
             } else {
@@ -338,7 +338,7 @@ namespace TinyWars.BaseWar {
                 const normalizedRepairHp    = Math.min(
                     normalizedMaxHp - normalizedCurrentHp,
                     this.getNormalizedRepairHp()!,
-                    Math.floor(this._war.getPlayer(unit.getPlayerIndex())!.getFund() * normalizedMaxHp / productionCost)
+                    Math.floor(fund * normalizedMaxHp / productionCost)
                 );
                 return {
                     hp  : (normalizedRepairHp + normalizedCurrentHp) * ConfigManager.UNIT_HP_NORMALIZER - unit.getCurrentHp(),

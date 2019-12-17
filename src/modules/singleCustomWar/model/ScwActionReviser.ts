@@ -2,7 +2,10 @@
 namespace TinyWars.SingleCustomWar.ScwActionReviser {
     import Types            = Utility.Types;
     import Logger           = Utility.Logger;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import GridIndexHelpers = Utility.GridIndexHelpers;
     import BwWar            = BaseWar.BwWar;
+    import BwUnit           = BaseWar.BwUnit;
     import TurnPhaseCode    = Types.TurnPhaseCode;
     import WarAction        = Types.WarActionContainer;
     import GridIndex        = Types.GridIndex;
@@ -34,7 +37,192 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
     }
 
     export function revisePlayerBeginTurn(war: BwWar, rawAction: Types.RawWarActionPlayerBeginTurn): WarAction {
-        // TODO
+        const turnManager   = war.getTurnManager();
+        const currPhaseCode = turnManager.getPhaseCode();
+        Logger.assert(
+            currPhaseCode === TurnPhaseCode.WaitBeginTurn,
+            `ScwActionReviser.revisePlayerBeginTurn() invalid turn phase code: ${currPhaseCode}`
+        );
+
+        const action: WarAction = {
+            actionId                : war.getNextActionId(),
+            WarActionPlayerBeginTurn: {},
+        }
+
+        // PhaseGetFund
+        const playerIndexInTurn         = turnManager.getPlayerIndexInTurn();
+        const turnIndex                 = turnManager.getTurnIndex();
+        const tileMap                   = war.getTileMap();
+        const unitMap                   = war.getUnitMap();
+        const hasUnitOnBeginningTurn    = unitMap.checkHasUnit(playerIndexInTurn);
+        let totalIncome                 = 0;
+        if (playerIndexInTurn !== 0) {
+            totalIncome += turnIndex === 0 ? war.getSettingsInitialFund() : 0;
+            tileMap.forEachTile(tile => totalIncome += tile.getIncomeForPlayer(playerIndexInTurn));
+        }
+
+        // PhaseConsumeFuel
+        const newFuelMap    = new Map<BwUnit, number>();
+        const newHpMap      = new Map<BwUnit, number>();
+        if (playerIndexInTurn !== 0) {
+            const shouldConsumeFuel = turnIndex > 0;
+            unitMap.forEachUnitOnMap(unit => {
+                if (unit.getPlayerIndex() === playerIndexInTurn) {
+                    newFuelMap.set(
+                        unit,
+                        shouldConsumeFuel ? Math.max(0, unit.getCurrentFuel() - unit.getFuelConsumptionPerTurn()) : unit.getCurrentFuel()
+                    );
+                    newHpMap.set(unit, unit.getCurrentHp());
+                }
+            });
+            unitMap.forEachUnitLoaded(unit => {
+                if (unit.getPlayerIndex() === playerIndexInTurn) {
+                    newFuelMap.set(unit, unit.getCurrentFuel());
+                    newHpMap.set(unit, unit.getCurrentHp());
+                }
+            });
+        }
+
+        // PhaseRepairUnitByTile
+        const playerInTurn  = war.getPlayer(playerIndexInTurn);
+        const suppliedUnits = new Set<BwUnit>();
+        let newFund         = playerInTurn.getFund() + totalIncome;
+        if (playerIndexInTurn !== 0) {
+            const allUnitsOnMap: BwUnit[] = [];
+            unitMap.forEachUnitOnMap(unit => {
+                (unit.getPlayerIndex() === playerIndexInTurn) && (allUnitsOnMap.push(unit));
+            });
+
+            const repairDataByTile  : ProtoTypes.IWarUnitRepairData[] = [];
+            for (const unit of allUnitsOnMap.sort(sorterForRepairUnits)) {
+                const gridIndex     = unit.getGridIndex();
+                const repairData    = tileMap.getTile(gridIndex).getRepairHpAndCostForUnit(unit, newFund);
+                if (repairData) {
+                    const maxPrimaryAmmo    = unit.getPrimaryWeaponMaxAmmo();
+                    const maxFlareAmmo      = unit.getFlareMaxAmmo();
+                    const data              : ProtoTypes.IWarUnitRepairData = {
+                        gridIndex,
+                        unitId                  : unit.getUnitId(),
+                        deltaHp                 : repairData.hp > 0 ? repairData.hp : undefined,
+                        deltaFuel               : unit.getMaxFuel() - unit.getCurrentFuel(),
+                        deltaPrimaryWeaponAmmo  : maxPrimaryAmmo ? maxPrimaryAmmo - unit.getPrimaryWeaponCurrentAmmo()! : null,
+                        deltaFlareAmmo          : maxFlareAmmo ? maxFlareAmmo - unit.getFlareCurrentAmmo()! : null,
+                    };
+                    repairDataByTile.push(data);
+                    suppliedUnits.add(unit);
+                    newFund -= repairData.cost;
+                    newFuelMap.set(unit, unit.getMaxFuel());
+                    newHpMap.set(unit, unit.getCurrentHp() + (repairData.hp || 0));
+                }
+            }
+
+            if (repairDataByTile.length) {
+                action.WarActionPlayerBeginTurn.repairDataByTile = repairDataByTile;
+            }
+        }
+
+        // PhaseDestroyUnitsOutOfFuel
+        const destroyedUnits = new Set<BwUnit>();
+        if (playerIndexInTurn !== 0) {
+            unitMap.forEachUnitOnMap(unit => {
+                if ((unit.checkIsDestroyedOnOutOfFuel())        &&
+                    (newFuelMap.get(unit) <= 0)                 &&
+                    (unit.getPlayerIndex() === playerIndexInTurn)
+                ) {
+                    destroyedUnits.add(unit);
+                    for (const u of unitMap.getUnitsLoadedByLoader(unit, true)) {
+                        destroyedUnits.add(u);
+                    }
+                }
+            });
+        }
+
+        // PhaseRepairUnitByUnit
+        const mapSize = unitMap.getMapSize();
+        if (playerIndexInTurn !== 0) {
+            const repairDataByUnit  : ProtoTypes.IWarUnitRepairData[] = [];
+            const allUnitsLoaded    : BwUnit[] = [];
+            unitMap.forEachUnitLoaded(unit => {
+                if ((unit.getPlayerIndex() === playerIndexInTurn) && (!destroyedUnits.has(unit))) {
+                    allUnitsLoaded.push(unit);
+                }
+            });
+
+            for (const unit of allUnitsLoaded.sort(sorterForRepairUnits)) {
+                const loader        = unit.getLoaderUnit();
+                const repairData    = loader.getRepairHpAndCostForLoadedUnit(unit, newFund);
+                if (repairData) {
+                    const maxPrimaryAmmo    = unit.getPrimaryWeaponMaxAmmo();
+                    const maxFlareAmmo      = unit.getFlareMaxAmmo();
+                    const data              : ProtoTypes.IWarUnitRepairData = {
+                        gridIndex               : unit.getGridIndex(),
+                        unitId                  : unit.getUnitId(),
+                        deltaHp                 : repairData.hp > 0 ? repairData.hp : undefined,
+                        deltaFuel               : unit.getMaxFuel() - unit.getCurrentFuel(),
+                        deltaPrimaryWeaponAmmo  : maxPrimaryAmmo ? maxPrimaryAmmo - unit.getPrimaryWeaponCurrentAmmo()! : null,
+                        deltaFlareAmmo          : maxFlareAmmo ? maxFlareAmmo - unit.getFlareCurrentAmmo()! : null,
+                    };
+                    repairDataByUnit.push(data);
+                    suppliedUnits.add(unit);
+                    newFund -= repairData.cost;
+                    newFuelMap.set(unit, unit.getMaxFuel());
+
+                } else if (loader.checkCanSupplyLoadedUnit()) {
+                    const maxPrimaryAmmo    = unit.getPrimaryWeaponMaxAmmo();
+                    const maxFlareAmmo      = unit.getFlareMaxAmmo();
+                    const data              : ProtoTypes.IWarUnitRepairData = {
+                        gridIndex               : unit.getGridIndex(),
+                        unitId                  : unit.getUnitId(),
+                        deltaHp                 : null,
+                        deltaFuel               : unit.getMaxFuel() - unit.getCurrentFuel(),
+                        deltaPrimaryWeaponAmmo  : maxPrimaryAmmo ? maxPrimaryAmmo - unit.getPrimaryWeaponCurrentAmmo()! : null,
+                        deltaFlareAmmo          : maxFlareAmmo ? maxFlareAmmo - unit.getFlareCurrentAmmo()! : null,
+                    };
+                    repairDataByUnit.push(data);
+                    suppliedUnits.add(unit);
+                    newFuelMap.set(unit, unit.getMaxFuel());
+                }
+            }
+
+            unitMap.forEachUnitOnMap(supplier => {
+                if ((supplier.checkIsAdjacentUnitSupplier())            &&
+                    (!destroyedUnits.has(supplier))                     &&
+                    (supplier.getPlayerIndex() === playerIndexInTurn)
+                ) {
+                    for (const gridIndex of GridIndexHelpers.getAdjacentGrids(supplier.getGridIndex(), mapSize)) {
+                        const unit      = unitMap.getUnitOnMap(gridIndex);
+                        const unitId    = unit ? unit.getUnitId() : null;
+                        if ((unitId != null)                            &&
+                            (!destroyedUnits.has(unit))                 &&
+                            (!suppliedUnits.has(unit))                  &&
+                            (supplier.checkCanSupplyAdjacentUnit(unit))
+                        ) {
+                            const maxPrimaryAmmo    = unit.getPrimaryWeaponMaxAmmo();
+                            const maxFlareAmmo      = unit.getFlareMaxAmmo();
+                            const data              : ProtoTypes.IWarUnitRepairData = {
+                                gridIndex,
+                                unitId,
+                                deltaHp                 : null,
+                                deltaFuel               : unit.getMaxFuel() - unit.getCurrentFuel(),
+                                deltaPrimaryWeaponAmmo  : maxPrimaryAmmo ? maxPrimaryAmmo - unit.getPrimaryWeaponCurrentAmmo()! : null,
+                                deltaFlareAmmo          : maxFlareAmmo ? maxFlareAmmo - unit.getFlareCurrentAmmo()! : null,
+                            };
+                            repairDataByUnit.push(data);
+                            suppliedUnits.add(unit);
+                            newFuelMap.set(unit, unit.getMaxFuel());
+                        }
+                    }
+                }
+            });
+
+            if (repairDataByUnit.length > 0) {
+                action.WarActionPlayerBeginTurn.repairDataByUnit = repairDataByUnit;
+            }
+        }
+
+        // PhaseRecoverUnitByCo
+
+
         return null;
     }
 
@@ -47,7 +235,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
-            `ScwActionReviser.reviseScwPlayerEndTurn() invalid turn phase code: ${currPhaseCode}`
+            `ScwActionReviser.revisePlayerEndTurn() invalid turn phase code: ${currPhaseCode}`
         );
 
         return {
@@ -134,5 +322,15 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
     export function reviseUnitWait(war: BwWar, rawAction: Types.RawWarActionUnitWait): WarAction {
         // TODO
         return null;
+    }
+
+    function sorterForRepairUnits(unit1: BwUnit, unit2: BwUnit): number {
+        const cost1 = unit1.getProductionFinalCost();
+        const cost2 = unit2.getProductionFinalCost();
+        if (cost1 !== cost2) {
+            return cost2 - cost1;
+        } else {
+            return unit1.getUnitId() - unit2.getUnitId();
+        }
     }
 }
