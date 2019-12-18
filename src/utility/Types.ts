@@ -369,6 +369,13 @@ namespace TinyWars.Utility.Types {
         movePathDestination: GridIndex;
     }[][];
 
+    export type UnitAttributes = {
+        hp          : number;
+        fuel        : number;
+        primaryAmmo : number | null;
+        flareAmmo   : number | null;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////
     // Enums.
     ////////////////////////////////////////////////////////////////////////////////
@@ -482,7 +489,7 @@ namespace TinyWars.Utility.Types {
         Lander,          /* 24 */           Gunboat,         /* 25 */           Meteor,          /* 26 */
     }
 
-    export const enum UnitState {
+    export const enum UnitActionState {
         Idle,   /* 0 */         Acted,  /* 1 */
     }
 

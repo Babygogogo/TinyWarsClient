@@ -312,7 +312,7 @@ namespace TinyWars.SingleCustomWar {
                         const unit = war.getUnitMap().getUnitOnMap(war.getField().getCursor().getGridIndex());
                         if (!unit) {
                             FloatText.show(Lang.getText(Lang.Type.A0027));
-                        } else if ((unit.getPlayerIndex() !== war.getPlayerIndexInTurn()) || (unit.getState() !== Types.UnitState.Idle)) {
+                        } else if ((unit.getPlayerIndex() !== war.getPlayerIndexInTurn()) || (unit.getState() !== Types.UnitActionState.Idle)) {
                             FloatText.show(Lang.getText(Lang.Type.A0028));
                         } else {
                             ConfirmPanel.show({

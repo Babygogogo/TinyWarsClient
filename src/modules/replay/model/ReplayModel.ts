@@ -15,7 +15,7 @@ namespace TinyWars.Replay.ReplayModel {
     import GridIndex            = Types.GridIndex;
     import SerializedBwTile     = Types.SerializedTile;
     import SerializedBwUnit     = Types.SerializedUnit;
-    import UnitState            = Types.UnitState;
+    import UnitState            = Types.UnitActionState;
     import MovePath             = Types.MovePath;
     import TileType             = Types.TileType;
 
@@ -929,7 +929,7 @@ namespace TinyWars.Replay.ReplayModel {
                 loaderUnitId: focusUnit.getUnitId(),
             }, war.getConfigVersion());
             producedUnit.startRunning(war);
-            producedUnit.setState(Types.UnitState.Acted);
+            producedUnit.setState(Types.UnitActionState.Acted);
 
             const player = war.getPlayerInTurn();
             player.setFund(player.getFund() - action.cost);
@@ -1610,7 +1610,7 @@ namespace TinyWars.Replay.ReplayModel {
                 loaderUnitId: focusUnit.getUnitId(),
             }, war.getConfigVersion());
             producedUnit.startRunning(war);
-            producedUnit.setState(Types.UnitState.Acted);
+            producedUnit.setState(Types.UnitActionState.Acted);
 
             const player = war.getPlayerInTurn();
             player.setFund(player.getFund() - action.cost);

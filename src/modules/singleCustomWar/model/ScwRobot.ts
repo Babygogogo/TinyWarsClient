@@ -12,7 +12,7 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
     import MovePathNode     = Types.MovePathNode;
     import TileType         = Types.TileType;
     import UnitType         = Types.UnitType;
-    import UnitState        = Types.UnitState;
+    import UnitState        = Types.UnitActionState;
 
     const enum PhaseCode {
         Phase0,

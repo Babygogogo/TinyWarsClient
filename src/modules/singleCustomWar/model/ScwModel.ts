@@ -16,7 +16,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
     import GridIndex            = Types.GridIndex;
     import SerializedBwTile     = Types.SerializedTile;
     import SerializedBwUnit     = Types.SerializedUnit;
-    import UnitState            = Types.UnitState;
+    import UnitState            = Types.UnitActionState;
     import MovePath             = Types.MovePath;
     import TileType             = Types.TileType;
 
@@ -940,7 +940,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
                 loaderUnitId: focusUnit.getUnitId(),
             }, war.getConfigVersion());
             producedUnit.startRunning(war);
-            producedUnit.setState(Types.UnitState.Acted);
+            producedUnit.setState(Types.UnitActionState.Acted);
 
             const player = war.getPlayerInTurn();
             player.setFund(player.getFund() - action.cost);

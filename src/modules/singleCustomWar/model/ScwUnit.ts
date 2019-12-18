@@ -16,7 +16,7 @@ namespace TinyWars.SingleCustomWar {
             };
 
             const state = this.getState();
-            (state !== Types.UnitState.Idle) && (data.state = state);
+            (state !== Types.UnitActionState.Idle) && (data.state = state);
 
             const currentHp = this.getCurrentHp();
             (currentHp !== this.getMaxHp()) && (data.currentHp = currentHp);

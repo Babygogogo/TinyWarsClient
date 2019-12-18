@@ -6,7 +6,7 @@ namespace TinyWars.BaseWar {
     import GridIndexHelpers = Utility.GridIndexHelpers;
     import ProtoTypes       = Utility.ProtoTypes;
     import SerializedBwUnit = Types.SerializedUnit;
-    import UnitState        = Types.UnitState;
+    import UnitState        = Types.UnitActionState;
     import ArmorType        = Types.ArmorType;
     import TileType         = Types.TileType;
     import UnitType         = Types.UnitType;
@@ -140,6 +140,15 @@ namespace TinyWars.BaseWar {
 
         public getType(): UnitType {
             return this._templateCfg.type;
+        }
+
+        public getAttributes(): Types.UnitAttributes {
+            return {
+                hp          : this.getCurrentHp(),
+                fuel        : this.getCurrentFuel(),
+                primaryAmmo : this.getPrimaryWeaponCurrentAmmo(),
+                flareAmmo   : this.getFlareCurrentAmmo(),
+            };
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -826,10 +835,10 @@ namespace TinyWars.BaseWar {
         public checkCanSupplyLoadedUnit(): boolean {
             return this._templateCfg.canSupplyLoadedUnits === 1;
         }
-        private _checkCanRepairLoadedUnit(unit: BwUnit): boolean {
+        private _checkCanRepairLoadedUnit(unit: BwUnit, attributes: Types.UnitAttributes): boolean {
             return (this.getNormalizedRepairHpForLoadedUnit() != null)
                 && (unit.getLoaderUnitId() === this.getUnitId())
-                && ((unit.getCurrentHp() < unit.getMaxHp()) || (unit.checkCanBeSupplied()));
+                && ((attributes.hp < unit.getMaxHp()) || (unit.checkCanBeSupplied(attributes)));
         }
         public getNormalizedRepairHpForLoadedUnit(): number | undefined | null {
             return this._templateCfg.repairAmountForLoadedUnits;
@@ -851,20 +860,25 @@ namespace TinyWars.BaseWar {
             }
         }
 
-        public getRepairHpAndCostForLoadedUnit(unit: BwUnit, fund = this._war.getPlayer(unit.getPlayerIndex())!.getFund()): Types.RepairHpAndCost | undefined {
-            if (!this._checkCanRepairLoadedUnit(unit)) {
+        public getRepairHpAndCostForLoadedUnit(
+            unit        : BwUnit,
+            fund        = this._war.getPlayer(unit.getPlayerIndex())!.getFund(),
+            attributes  = unit.getAttributes()
+        ): Types.RepairHpAndCost | undefined {
+            if (!this._checkCanRepairLoadedUnit(unit, attributes)) {
                 return undefined;
             } else {
+                const currentHp             = attributes.hp;
                 const normalizedMaxHp       = unit.getNormalizedMaxHp();
                 const productionCost        = unit.getProductionFinalCost();
-                const normalizedCurrentHp   = unit.getNormalizedCurrentHp();
+                const normalizedCurrentHp   = Helpers.getNormalizedHp(currentHp);
                 const normalizedRepairHp    = Math.min(
                     normalizedMaxHp - normalizedCurrentHp,
                     this.getNormalizedRepairHpForLoadedUnit()!,
                     Math.floor(fund * normalizedMaxHp / productionCost)
                 );
                 return {
-                    hp  : (normalizedRepairHp + normalizedCurrentHp) * ConfigManager.UNIT_HP_NORMALIZER - unit.getCurrentHp(),
+                    hp  : (normalizedRepairHp + normalizedCurrentHp) * ConfigManager.UNIT_HP_NORMALIZER - currentHp,
                     cost: Math.floor(normalizedRepairHp * productionCost / normalizedMaxHp),
                 };
             }
@@ -876,30 +890,30 @@ namespace TinyWars.BaseWar {
         public checkIsAdjacentUnitSupplier(): boolean {
             return this._templateCfg.canSupplyAdjacentUnits === 1;
         }
-        public checkCanSupplyAdjacentUnit(unit: BwUnit): boolean {
+        public checkCanSupplyAdjacentUnit(unit: BwUnit, attributes = unit.getAttributes()): boolean {
             return (this.checkIsAdjacentUnitSupplier())
                 && (this.getLoaderUnitId() == null)
                 && (unit.getLoaderUnitId() == null)
                 && (this.getPlayerIndex() === unit.getPlayerIndex())
                 && (GridIndexHelpers.getDistance(this.getGridIndex(), unit.getGridIndex()) === 1)
-                && (unit.checkCanBeSupplied());
+                && (unit.checkCanBeSupplied(attributes));
         }
 
-        public checkCanBeSuppliedWithFuel(): boolean {
-            return this.getCurrentFuel() < this.getMaxFuel();
+        public checkCanBeSuppliedWithFuel(attributes = this.getAttributes()): boolean {
+            return attributes.fuel < this.getMaxFuel();
         }
-        public checkCanBeSuppliedWithPrimaryWeaponAmmo(): boolean {
+        public checkCanBeSuppliedWithPrimaryWeaponAmmo(attributes = this.getAttributes()): boolean {
             const maxAmmo = this.getPrimaryWeaponMaxAmmo();
-            return (maxAmmo != null) && (this.getPrimaryWeaponCurrentAmmo()! < maxAmmo);
+            return (maxAmmo != null) && (attributes.primaryAmmo < maxAmmo);
         }
-        public checkCanBeSuppliedWithFlareAmmo(): boolean {
+        public checkCanBeSuppliedWithFlareAmmo(attributes = this.getAttributes()): boolean {
             const maxAmmo = this.getFlareMaxAmmo();
-            return (maxAmmo != null) && (this.getFlareCurrentAmmo()! < maxAmmo);
+            return (maxAmmo != null) && (attributes.flareAmmo < maxAmmo);
         }
-        public checkCanBeSupplied(): boolean {
-            return (this.checkCanBeSuppliedWithFuel())
-                || (this.checkCanBeSuppliedWithPrimaryWeaponAmmo())
-                || (this.checkCanBeSuppliedWithFlareAmmo());
+        public checkCanBeSupplied(attributes = this.getAttributes()): boolean {
+            return (this.checkCanBeSuppliedWithFuel(attributes))
+                || (this.checkCanBeSuppliedWithPrimaryWeaponAmmo(attributes))
+                || (this.checkCanBeSuppliedWithFlareAmmo(attributes));
         }
 
         ////////////////////////////////////////////////////////////////////////////////

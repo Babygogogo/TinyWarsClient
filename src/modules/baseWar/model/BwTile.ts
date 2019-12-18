@@ -2,6 +2,7 @@
 namespace TinyWars.BaseWar {
     import Types            = Utility.Types;
     import Logger           = Utility.Logger;
+    import Helpers          = Utility.Helpers;
     import SerializedBwTile = Types.SerializedTile;
     import TileType         = Types.TileType;
     import TileObjectType   = Types.TileObjectType;
@@ -313,10 +314,10 @@ namespace TinyWars.BaseWar {
             return this._templateCfg.repairAmount;
         }
 
-        public checkCanRepairUnit(unit: BwUnit): boolean {
+        public checkCanRepairUnit(unit: BwUnit, attributes = unit.getAttributes()): boolean {
             const category = this.getRepairUnitCategory();
             return (category != null)
-                && ((unit.getCurrentHp() < unit.getMaxHp()) || (unit.checkCanBeSupplied()))
+                && ((attributes.hp < unit.getMaxHp()) || (unit.checkCanBeSupplied(attributes)))
                 && (unit.getTeamIndex() === this.getTeamIndex())
                 && (ConfigManager.checkIsUnitTypeInCategory(this._configVersion, unit.getType(), category));
         }
@@ -328,20 +329,25 @@ namespace TinyWars.BaseWar {
                 && (ConfigManager.checkIsUnitTypeInCategory(this._configVersion, unit.getType(), category));
         }
 
-        public getRepairHpAndCostForUnit(unit: BwUnit, fund = this._war.getPlayer(unit.getPlayerIndex())!.getFund()): Types.RepairHpAndCost | undefined {
-            if (!this.checkCanRepairUnit(unit)) {
+        public getRepairHpAndCostForUnit(
+            unit        : BwUnit,
+            fund        = this._war.getPlayer(unit.getPlayerIndex())!.getFund(),
+            attributes  = unit.getAttributes()
+        ): Types.RepairHpAndCost | undefined {
+            if (!this.checkCanRepairUnit(unit, attributes)) {
                 return undefined;
             } else {
+                const currentHp             = attributes.hp;
                 const normalizedMaxHp       = unit.getNormalizedMaxHp();
                 const productionCost        = unit.getProductionFinalCost();
-                const normalizedCurrentHp   = unit.getNormalizedCurrentHp();
+                const normalizedCurrentHp   = Helpers.getNormalizedHp(currentHp);
                 const normalizedRepairHp    = Math.min(
                     normalizedMaxHp - normalizedCurrentHp,
                     this.getNormalizedRepairHp()!,
                     Math.floor(fund * normalizedMaxHp / productionCost)
                 );
                 return {
-                    hp  : (normalizedRepairHp + normalizedCurrentHp) * ConfigManager.UNIT_HP_NORMALIZER - unit.getCurrentHp(),
+                    hp  : (normalizedRepairHp + normalizedCurrentHp) * ConfigManager.UNIT_HP_NORMALIZER - currentHp,
                     cost: Math.floor(normalizedRepairHp * productionCost / normalizedMaxHp),
                 };
             }
