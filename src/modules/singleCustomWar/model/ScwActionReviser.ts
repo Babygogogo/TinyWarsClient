@@ -8,6 +8,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
     import BwWar            = BaseWar.BwWar;
     import BwUnit           = BaseWar.BwUnit;
     import TurnPhaseCode    = Types.TurnPhaseCode;
+    import RawWarAction     = Types.RawWarActionContainer;
     import WarAction        = Types.WarActionContainer;
     import GridIndex        = Types.GridIndex;
     import UnitType         = Types.UnitType;
@@ -15,30 +16,30 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
     import CoSkillType      = Types.CoSkillType;
     import UnitAttributes   = Types.UnitAttributes;
 
-    export function revise(war: BwWar, container: Types.RawWarActionContainer): WarAction {
-        if      (container.PlayerBeginTurn)     { return revisePlayerBeginTurn(war, container.PlayerBeginTurn); }
-        else if (container.PlayerDeleteUnit)    { return revisePlayerDeleteUnit(war, container.PlayerDeleteUnit); }
-        else if (container.PlayerEndTurn)       { return revisePlayerEndTurn(war, container.PlayerEndTurn); }
-        else if (container.PlayerProduceUnit)   { return revisePlayerProduceUnit(war, container.PlayerProduceUnit); }
-        else if (container.UnitAttack)          { return reviseUnitAttack(war, container.UnitAttack); }
-        else if (container.UnitBeLoaded)        { return reviseUnitBeLoaded(war, container.UnitBeLoaded); }
-        else if (container.UnitBuildTile)       { return reviseUnitBuildTile(war, container.UnitBuildTile); }
-        else if (container.UnitCaptureTile)     { return reviseUnitCaptureTile(war, container.UnitCaptureTile); }
-        else if (container.UnitDive)            { return reviseUnitDive(war, container.UnitDive); }
-        else if (container.UnitDrop)            { return reviseUnitDrop(war, container.UnitDrop); }
-        else if (container.UnitJoin)            { return reviseUnitJoin(war, container.UnitJoin); }
-        else if (container.UnitLaunchFlare)     { return reviseUnitLaunchFlare(war, container.UnitLaunchFlare); }
-        else if (container.UnitLaunchSilo)      { return reviseUnitLaunchSilo(war, container.UnitLaunchSilo); }
-        else if (container.UnitLoadCo)          { return reviseUnitLoadCo(war, container.UnitLoadCo); }
-        else if (container.UnitProduceUnit)     { return reviseUnitProduceUnit(war, container.UnitProduceUnit); }
-        else if (container.UnitSupply)          { return reviseUnitSupply(war, container.UnitSupply); }
-        else if (container.UnitSurface)         { return reviseUnitSurface(war, container.UnitSurface); }
-        else if (container.UnitUseCoSkill)      { return reviseUnitUseCoSkill(war, container.UnitUseCoSkill); }
-        else if (container.UnitWait)            { return reviseUnitWait(war, container.UnitWait); }
+    export function revise(war: BwWar, container: RawWarAction): WarAction {
+        if      (container.PlayerBeginTurn)     { return revisePlayerBeginTurn(war, container); }
+        else if (container.PlayerDeleteUnit)    { return revisePlayerDeleteUnit(war, container); }
+        else if (container.PlayerEndTurn)       { return revisePlayerEndTurn(war, container); }
+        else if (container.PlayerProduceUnit)   { return revisePlayerProduceUnit(war, container); }
+        else if (container.UnitAttack)          { return reviseUnitAttack(war, container); }
+        else if (container.UnitBeLoaded)        { return reviseUnitBeLoaded(war, container); }
+        else if (container.UnitBuildTile)       { return reviseUnitBuildTile(war, container); }
+        else if (container.UnitCaptureTile)     { return reviseUnitCaptureTile(war, container); }
+        else if (container.UnitDive)            { return reviseUnitDive(war, container); }
+        else if (container.UnitDrop)            { return reviseUnitDrop(war, container); }
+        else if (container.UnitJoin)            { return reviseUnitJoin(war, container); }
+        else if (container.UnitLaunchFlare)     { return reviseUnitLaunchFlare(war, container); }
+        else if (container.UnitLaunchSilo)      { return reviseUnitLaunchSilo(war, container); }
+        else if (container.UnitLoadCo)          { return reviseUnitLoadCo(war, container); }
+        else if (container.UnitProduceUnit)     { return reviseUnitProduceUnit(war, container); }
+        else if (container.UnitSupply)          { return reviseUnitSupply(war, container); }
+        else if (container.UnitSurface)         { return reviseUnitSurface(war, container); }
+        else if (container.UnitUseCoSkill)      { return reviseUnitUseCoSkill(war, container); }
+        else if (container.UnitWait)            { return reviseUnitWait(war, container); }
         else                                    { return null; }
     }
 
-    export function revisePlayerBeginTurn(war: BwWar, rawAction: Types.RawWarActionPlayerBeginTurn): WarAction {    // DONE
+    function revisePlayerBeginTurn(war: BwWar, rawAction: RawWarAction): WarAction {    // DONE
         const turnManager   = war.getTurnManager();
         const currPhaseCode = turnManager.getPhaseCode();
         Logger.assert(
@@ -366,18 +367,19 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         // Nothing to do for now.
 
         // PhaseMain
+        const unitsCount                                = unitAttributesMap.size;
         action.WarActionPlayerBeginTurn.remainingFund   = newFund;
-        action.WarActionPlayerBeginTurn.isDefeated      = (playerIndexInTurn !== 0) && (unitAttributesMap.size === destroyedUnits.size);
-
+        action.WarActionPlayerBeginTurn.isDefeated      = (playerIndexInTurn !== 0) && (unitsCount > 0) && (unitsCount === destroyedUnits.size);
+        action.actionId                                 = rawAction.actionId;
         return action;
     }
 
-    export function revisePlayerDeleteUnit(war: BwWar, rawAction: Types.RawWarActionPlayerDeleteUnit): WarAction {
+    function revisePlayerDeleteUnit(war: BwWar, rawAction: RawWarAction): WarAction {
         // TODO
         return null;
     }
 
-    export function revisePlayerEndTurn(war: BwWar, rawAction: Types.RawWarActionPlayerEndTurn): WarAction { // DONE
+    function revisePlayerEndTurn(war: BwWar, rawAction: RawWarAction): WarAction { // DONE
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
@@ -390,82 +392,86 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         };
     }
 
-    export function revisePlayerProduceUnit(war: BwWar, rawAction: Types.RawWarActionPlayerProduceUnit): WarAction {
+    function revisePlayerProduceUnit(war: BwWar, rawAction: RawWarAction): WarAction {
         // TODO
         return null;
     }
 
-    export function reviseUnitAttack(war: BwWar, rawAction: Types.RawWarActionUnitAttack): WarAction {
+    function reviseUnitAttack(war: BwWar, rawAction: RawWarAction): WarAction {
         // TODO
         return null;
     }
 
-    export function reviseUnitBeLoaded(war: BwWar, rawAction: Types.RawWarActionUnitBeLoaded): WarAction {
+    function reviseUnitBeLoaded(war: BwWar, rawAction: RawWarAction): WarAction {
         // TODO
         return null;
     }
 
-    export function reviseUnitBuildTile(war: BwWar, rawAction: Types.RawWarActionUnitBuildTile): WarAction {
+    function reviseUnitBuildTile(war: BwWar, rawAction: RawWarAction): WarAction {
         // TODO
         return null;
     }
 
-    export function reviseUnitCaptureTile(war: BwWar, rawAction: Types.RawWarActionUnitCaptureTile): WarAction {
+    function reviseUnitCaptureTile(war: BwWar, rawAction: RawWarAction): WarAction {
+        // TODO
+        // return null;
+        return {
+            actionId                : rawAction.actionId,
+            WarActionPlayerEndTurn  : {},
+        }
+    }
+
+    function reviseUnitDive(war: BwWar, rawAction: RawWarAction): WarAction {
         // TODO
         return null;
     }
 
-    export function reviseUnitDive(war: BwWar, rawAction: Types.RawWarActionUnitDive): WarAction {
+    function reviseUnitDrop(war: BwWar, rawAction: RawWarAction): WarAction {
         // TODO
         return null;
     }
 
-    export function reviseUnitDrop(war: BwWar, rawAction: Types.RawWarActionUnitDrop): WarAction {
+    function reviseUnitJoin(war: BwWar, rawAction: RawWarAction): WarAction {
         // TODO
         return null;
     }
 
-    export function reviseUnitJoin(war: BwWar, rawAction: Types.RawWarActionUnitJoin): WarAction {
+    function reviseUnitLaunchFlare(war: BwWar, rawAction: RawWarAction): WarAction {
         // TODO
         return null;
     }
 
-    export function reviseUnitLaunchFlare(war: BwWar, rawAction: Types.RawWarActionUnitLaunchFlare): WarAction {
+    function reviseUnitLaunchSilo(war: BwWar, rawAction: RawWarAction): WarAction {
         // TODO
         return null;
     }
 
-    export function reviseUnitLaunchSilo(war: BwWar, rawAction: Types.RawWarActionUnitLaunchSilo): WarAction {
+    function reviseUnitLoadCo(war: BwWar, rawAction: RawWarAction): WarAction {
         // TODO
         return null;
     }
 
-    export function reviseUnitLoadCo(war: BwWar, rawAction: Types.RawWarActionUnitLoadCo): WarAction {
+    function reviseUnitProduceUnit(war: BwWar, rawAction: RawWarAction): WarAction {
         // TODO
         return null;
     }
 
-    export function reviseUnitProduceUnit(war: BwWar, rawAction: Types.RawWarActionUnitProduceUnit): WarAction {
+    function reviseUnitSupply(war: BwWar, rawAction: RawWarAction): WarAction {
         // TODO
         return null;
     }
 
-    export function reviseUnitSupply(war: BwWar, rawAction: Types.RawWarActionUnitSupply): WarAction {
+    function reviseUnitSurface(war: BwWar, rawAction: RawWarAction): WarAction {
         // TODO
         return null;
     }
 
-    export function reviseUnitSurface(war: BwWar, rawAction: Types.RawWarActionUnitSurface): WarAction {
+    function reviseUnitUseCoSkill(war: BwWar, rawAction: RawWarAction): WarAction {
         // TODO
         return null;
     }
 
-    export function reviseUnitUseCoSkill(war: BwWar, rawAction: Types.RawWarActionUnitUseCoSkill): WarAction {
-        // TODO
-        return null;
-    }
-
-    export function reviseUnitWait(war: BwWar, rawAction: Types.RawWarActionUnitWait): WarAction {
+    function reviseUnitWait(war: BwWar, rawAction: RawWarAction): WarAction {
         // TODO
         return null;
     }

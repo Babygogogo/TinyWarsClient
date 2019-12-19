@@ -60,7 +60,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         }
 
         _war = (await new SingleCustomWar.ScwWar().init(data)).startRunning().startRunningView() as ScwWar;
-        _checkAndRequestBeginTurn();
+        _checkAndRequestBeginTurnOrRunRobot();
 
         return _war;
     }
@@ -126,19 +126,24 @@ namespace TinyWars.SingleCustomWar.ScwModel {
                         });
 
                     } else {
-                        _checkAndRunFirstCachedAction();
+                        if (_cachedActions.length) {
+                            _checkAndRunFirstCachedAction();
+                        } else {
+                            _checkAndRequestBeginTurnOrRunRobot();
+                        }
                     }
                 }
             }
         }
     }
 
-    function _checkAndRequestBeginTurn(): void {
-        const turnManager = _war.getTurnManager();
-        if ((turnManager.getPhaseCode() === Types.TurnPhaseCode.WaitBeginTurn) &&
-            (_war.checkIsHumanInTurn())
-        ) {
-            (_war.getActionPlanner() as ScwActionPlanner).setStateRequestingPlayerBeginTurn();
+    async function _checkAndRequestBeginTurnOrRunRobot(): Promise<void> {
+        if (!_war.checkIsHumanInTurn()) {
+            updateByWarAction(ScwActionReviser.revise(_war, await ScwRobot.getNextAction(_war)))
+        } else {
+            if (_war.getTurnManager().getPhaseCode() === Types.TurnPhaseCode.WaitBeginTurn) {
+                (_war.getActionPlanner() as ScwActionPlanner).setStateRequestingPlayerBeginTurn();
+            }
         }
     }
 
@@ -148,7 +153,17 @@ namespace TinyWars.SingleCustomWar.ScwModel {
     async function _executeScwPlayerBeginTurn(war: ScwWar, data: WarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${war.getPlayerInTurn().getNickname()} p${war.getPlayerIndexInTurn()}回合正式开始！！`);
+
+        const playerIndex = war.getPlayerIndexInTurn();
+        if (playerIndex === 0) {
+            FloatText.show(Lang.getFormatedText(Lang.Type.F0022, Lang.getText(Lang.Type.B0111), playerIndex));
+        } else {
+            FloatText.show(Lang.getFormatedText(
+                Lang.Type.F0022,
+                war.checkIsHumanInTurn() ? Lang.getText(Lang.Type.B0031) : Lang.getText(Lang.Type.B0256),
+                playerIndex
+            ))
+        }
 
         await war.getTurnManager().endPhaseWaitBeginTurn(data);
         actionPlanner.setStateIdle();
@@ -176,11 +191,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         actionPlanner.setStateExecutingAction();
         await war.getTurnManager().endPhaseMain();
 
-        if (war.checkIsHumanInTurn()) {
-            (actionPlanner as ScwActionPlanner).setStateRequestingPlayerBeginTurn();
-        } else {
-            actionPlanner.setStateIdle();
-        }
+        actionPlanner.setStateIdle();
     }
 
     async function _executeScwPlayerProduceUnit(war: ScwWar, data: WarActionContainer): Promise<void> {

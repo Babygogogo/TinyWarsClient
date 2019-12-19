@@ -1741,7 +1741,7 @@ namespace TinyWars.Utility.Lang {
         ],
         [Type.F0022]: [
             `%s p%d 回合正式开始！！`,
-            `%s p%d's turn have been start!!`,
+            `It's %s (p%d)'s turn!!`,
         ],
     };
 

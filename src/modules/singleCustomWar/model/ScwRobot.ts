@@ -1,5 +1,5 @@
 
-namespace TinyWars.SingleCustomWar.ScrRobot {
+namespace TinyWars.SingleCustomWar.ScwRobot {
     import Types            = Utility.Types;
     import GridIndexHelpers = Utility.GridIndexHelpers;
     import Helpers          = Utility.Helpers;
@@ -1075,7 +1075,11 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
     async function _getActionPlayerProduceUnitForMaxScore(): Promise<WarAction | null> {    // DONE
         await _checkAndCallLater();
 
-        const playerIndexInturn     = _turnManager.getPlayerIndexInTurn();
+        const playerIndexInturn = _turnManager.getPlayerIndexInTurn();
+        if (playerIndexInturn === 0) {
+            return null;
+        }
+
         const idleBuildingPosList   : GridIndex[] = [];
         let idleFactoriesCount      = 0;
 
@@ -1272,6 +1276,7 @@ namespace TinyWars.SingleCustomWar.ScrRobot {
         if ((!action) && (_phaseCode === PhaseCode.Phase8))     { action = await _getActionForPhase8(); }
         if ((!action) && (_phaseCode === PhaseCode.Phase9))     { action = await _getActionForPhase9(); }
 
+        action.actionId = _war.getNextActionId();
         _clearVariables();
         return action;
     }

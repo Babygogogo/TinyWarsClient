@@ -162,6 +162,7 @@ namespace TinyWars.Utility.Types {
     // Raw war action types.
     ////////////////////////////////////////////////////////////////////////////////
     export type RawWarActionContainer = {
+        actionId?           : number;
         PlayerBeginTurn?    : RawWarActionPlayerBeginTurn;
         PlayerDeleteUnit?   : RawWarActionPlayerDeleteUnit;
         PlayerEndTurn?      : RawWarActionPlayerEndTurn;
