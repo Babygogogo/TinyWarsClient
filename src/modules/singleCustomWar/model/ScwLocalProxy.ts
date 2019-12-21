@@ -95,7 +95,7 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
             war,
             {
                 actionId        : war.getNextActionId(),
-                UnitBuildTile   : {
+                UnitCaptureTile : {
                     path,
                     launchUnitId,
                 },

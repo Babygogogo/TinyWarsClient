@@ -1740,7 +1740,7 @@ namespace TinyWars.Utility.Lang {
             `%d digits for maximum, optional`,
         ],
         [Type.F0022]: [
-            `%s p%d 回合正式开始！！`,
+            `%s (p%d) 回合正式开始！！`,
             `It's %s (p%d)'s turn!!`,
         ],
     };

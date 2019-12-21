@@ -100,12 +100,30 @@ namespace TinyWars.SingleCustomWar.ScwModel {
             _war.setIsExecutingAction(false);
 
             if (!_war.checkHasAliveWatcherTeam(User.UserModel.getSelfUserId())) {
-                _war.setIsEnded(true);
-                AlertPanel.show({
-                    title   : Lang.getText(Lang.Type.B0035),
-                    content : Lang.getText(Lang.Type.A0023),
-                    callback: () => Utility.FlowManager.gotoLobby(),
-                });
+                if (_war.getHumanPlayers().length > 0) {
+                    _war.setIsEnded(true);
+                    AlertPanel.show({
+                        title   : Lang.getText(Lang.Type.B0035),
+                        content : Lang.getText(Lang.Type.A0023),
+                        callback: () => Utility.FlowManager.gotoLobby(),
+                    });
+                } else {
+                    if (_war.getPlayerManager().getAliveTeamsCount(false) <= 1) {
+                        _war.setIsEnded(true);
+                        AlertPanel.show({
+                            title   : Lang.getText(Lang.Type.B0034),
+                            content : Lang.getText(Lang.Type.A0022),
+                            callback: () => Utility.FlowManager.gotoLobby(),
+                        });
+
+                    } else {
+                        if (_cachedActions.length) {
+                            _checkAndRunFirstCachedAction();
+                        } else {
+                            _checkAndRequestBeginTurnOrRunRobot();
+                        }
+                    }
+                }
 
             } else {
                 if (_war.getRemainingVotesForDraw() === 0) {

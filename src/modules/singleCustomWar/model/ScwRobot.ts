@@ -74,7 +74,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
             [UnitType.Submarine]    : 300,
             [UnitType.Cruiser]      : 300,
             [UnitType.Lander]       : null,
-            [UnitType.Gunboat]      : 300,
+            [UnitType.Gunboat]      : -4500,
         },
     };
 
@@ -110,7 +110,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
     }
 
     function _checkAndCallLater(): Promise<void> {  // DONE
-        if (Date.now() - _frameBeginTime <= 10) {
+        if (Date.now() - _frameBeginTime <= 13) {
             return;
         } else {
             return new Promise<void>((resolve, reject) => {
@@ -228,10 +228,10 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         }
 
         const { distanceMap, maxDistance }  = BwHelpers.createDistanceMap(_tileMap, unit, nearestCapturableTile.getGridIndex());
-        const scoreForUnmovableGrid = -20 * (maxDistance + 1);                                                      // ADJUSTABLE
+        const scoreForUnmovableGrid = -10 * (maxDistance + 1);                                                      // ADJUSTABLE
         for (let x = 0; x < _mapSize.width; ++x) {
             for (let y = 0; y < _mapSize.height; ++y) {
-                distanceMap[x][y] = distanceMap[x][y] != null ? distanceMap[x][y] * -20 : scoreForUnmovableGrid;    // ADJUSTABLE
+                distanceMap[x][y] = distanceMap[x][y] != null ? distanceMap[x][y] * -10 : scoreForUnmovableGrid;    // ADJUSTABLE
             }
         }
 
@@ -441,6 +441,20 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         });
         return units;
     }
+    async function _getCandidateUnitsForPhase1a(): Promise<ScwUnit[]> { // DONE
+        await _checkAndCallLater();
+
+        const units             : ScwUnit[] = [];
+        const playerIndexInturn = _turnManager.getPlayerIndexInTurn();
+        _unitMap.forEachUnit((unit: ScwUnit) => {
+            if ((unit.getPlayerIndex() === playerIndexInturn)   &&
+                (unit.getState() === UnitState.Idle)
+            ) {
+                units.push(unit);
+            }
+        });
+        return units;
+    }
 
     async function _getCandidateUnitsForPhase2(): Promise<ScwUnit[]> {  // DONE
         await _checkAndCallLater();
@@ -548,7 +562,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
     function _getScoreForThreat(unit: ScwUnit, gridIndex: GridIndex, damageMap: number[][]): number {   // DONE
         const hp        = unit.getCurrentHp();
         const damage    = Math.min(damageMap[gridIndex.x][gridIndex.y] || 0, hp);
-        return - (damage + (damage >= hp ? 20 : 0) * unit.getProductionFinalCost() / 3000 / Math.max(1, _unitValueRatio)) * (_checkIsCoUnit(unit) ? 2 : 1); // ADJUSTABLE
+        return - (damage + (damage >= hp ? 20 : 0)) * unit.getProductionFinalCost() / 3000 / Math.max(1, _unitValueRatio) * 1.3 * (_checkIsCoUnit(unit) ? 2 : 1); // ADJUSTABLE
     }
 
     async function _getScoreForPosition(unit: ScwUnit, gridIndex: GridIndex, damageMap: number[][], scoreMapForDistance: number[][] | null): Promise<number> {  // DONE
@@ -689,6 +703,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
             counterDamage       = Math.min(counterDamage, attackerHp);
             score               += - (counterDamage + (counterDamage >= attackerHp ? 20 : 0))
                 * unit.getProductionFinalCost() / 3000 / Math.max(1, _unitValueRatio)
+                * 1.3
                 * (_checkIsCoUnit(unit) ? 2 : 1);                                                       // ADJUSTABLE
         }
 
@@ -747,24 +762,28 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
     async function _getScoreForActionPlayerProduceUnit(gridIndex: GridIndex, unitType: UnitType, idleFactoriesCount: number): Promise<number | null> { // DONE
         await _checkAndCallLater();
 
+        const tileType  = _tileMap.getTile(gridIndex).getType();
+        let score       = _PRODUCTION_CANDIDATES[tileType][unitType];
+        if (score == null) {
+            return null;
+        }
+
         const playerIndexInTurn = _turnManager.getPlayerIndexInTurn();
-        const unit              = new ScwUnit();
-        unit.init({
+        const targetUnit        = new ScwUnit();
+        targetUnit.init({
             viewId  : ConfigManager.getUnitViewId(unitType, playerIndexInTurn),
             unitId  : 0,
             gridX   : gridIndex.x,
             gridY   : gridIndex.y,
         }, _configVersion);
-        unit.startRunning(_war);
+        targetUnit.startRunning(_war);
 
-        const productionCost    = unit.getProductionFinalCost();
+        const productionCost    = targetUnit.getProductionFinalCost();
         const restFund          = _playerManager.getPlayer(playerIndexInTurn).getFund() - productionCost;
         if (restFund < 0) {
             return null;
         }
 
-        const tileType  = _tileMap.getTile(gridIndex).getType();
-        let score       = _PRODUCTION_CANDIDATES[tileType][unitType];
         if (unitType !== UnitType.Infantry) {
             const restFactoriesCount = tileType === TileType.Factory ? idleFactoriesCount - 1 : idleFactoriesCount;
             if (restFactoriesCount * ConfigManager.getUnitTemplateCfg(_configVersion, UnitType.Infantry).productionCost > restFund) {
@@ -772,20 +791,20 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
             }
         }
 
-        const teamIndex = unit.getTeamIndex();
-        _unitMap.forEachUnitOnMap(unitOnMap => {
-            if (unitOnMap.getTeamIndex() === teamIndex) {
-                if (unitOnMap.getType() === unitType) {
-                    score += -unitOnMap.getCurrentHp() * productionCost / 3000;                                                         // ADJUSTABLE
+        const teamIndex = targetUnit.getTeamIndex();
+        _unitMap.forEachUnit(unit => {
+            if (unit.getTeamIndex() === teamIndex) {
+                if (unit.getType() === unitType) {
+                    score += -unit.getCurrentHp() * productionCost / 3000 / Math.max(1, _unitValueRatio);                                                         // ADJUSTABLE
                 }
             } else {
-                if (unit.getMinAttackRange()) {
-                    const damage = Math.min(unit.getBaseDamage(unitOnMap.getArmorType()) || 0, unitOnMap.getCurrentHp());
-                    score += damage * unitOnMap.getProductionFinalCost() / 3000;                                                        // ADJUSTABLE
+                if (targetUnit.getMinAttackRange()) {
+                    const damage = Math.min(targetUnit.getBaseDamage(unit.getArmorType()) || 0, unit.getCurrentHp());
+                    score += damage * unit.getProductionFinalCost() / 3000 * 1.3 * Math.max(1, _unitValueRatio);                                                        // ADJUSTABLE
                 }
-                if (unitOnMap.getMinAttackRange()) {
-                    const damage = Math.min((unitOnMap.getBaseDamage(unit.getArmorType()) || 0) * unitOnMap.getNormalizedCurrentHp() / unitOnMap.getNormalizedMaxHp(), unit.getCurrentHp());    // ADJUSTABLE
-                    score += -damage * productionCost / 3000;                                                                           // ADJUSTABLE
+                if (unit.getMinAttackRange()) {
+                    const damage = Math.min((unit.getBaseDamage(targetUnit.getArmorType()) || 0) * unit.getNormalizedCurrentHp() / unit.getNormalizedMaxHp(), targetUnit.getCurrentHp());    // ADJUSTABLE
+                    score += -damage * productionCost / 3000 * 1.3 / Math.max(1, _unitValueRatio);                                                                           // ADJUSTABLE
                 }
             }
         });
@@ -854,8 +873,9 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         let data            : ScoreAndAction;
         for (const targetGridIndex of GridIndexHelpers.getGridsWithinDistance(gridIndex, minRange, maxRange, _mapSize)) {
             const damages = DamageCalculator.getEstimatedBattleDamage(_war, pathNodes, launchUnitId, targetGridIndex);
-            data = _getBetterScoreAndAction(
-                data,
+            if (damages[0] != null) {
+                data = _getBetterScoreAndAction(
+                    data,
                 {
                     score   : await _getScoreForActionUnitAttack(unit, gridIndex, targetGridIndex, pathNodes, damages[0], damages[1]),
                     action  : { UnitAttack: {
@@ -864,7 +884,8 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
                         launchUnitId,
                     } },
                 }
-            );
+                );
+            }
         }
 
         return data;
@@ -1139,6 +1160,26 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         return action;
     }
 
+    // Phase 1a: make the ranged units to attack enemies.
+    async function _getActionForPhase1a(): Promise<WarAction | null> {   // DONE
+        await _checkAndCallLater();
+
+        _candidateUnits = await _getCandidateUnitsForPhase1a();
+        let action      : WarAction;
+        while ((!action) || (!action.UnitAttack)) {
+            const unit = _popRandomCandidateUnit(_candidateUnits);
+            if (!unit) {
+                _candidateUnits = null;
+                _phaseCode      = PhaseCode.Phase2;
+                return null;
+            }
+
+            action = await _getActionForMaxScoreWithCandidateUnit(unit);
+        }
+
+        return action;
+    }
+
     // Phase 2: move the infantries, mech and bikes that are capturing buildings.
     async function _getActionForPhase2(): Promise<WarAction | null> {   // DONE
         await _checkAndCallLater();
@@ -1266,7 +1307,8 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
 
         let action: WarAction;
         if ((!action) && (_phaseCode === PhaseCode.Phase0))     { action = await _getActionForPhase0(); }
-        if ((!action) && (_phaseCode === PhaseCode.Phase1))     { action = await _getActionForPhase1(); }
+        // if ((!action) && (_phaseCode === PhaseCode.Phase1))     { action = await _getActionForPhase1(); }
+        if ((!action) && (_phaseCode === PhaseCode.Phase1))     { action = await _getActionForPhase1a(); }
         if ((!action) && (_phaseCode === PhaseCode.Phase2))     { action = await _getActionForPhase2(); }
         if ((!action) && (_phaseCode === PhaseCode.Phase3))     { action = await _getActionForPhase3(); }
         if ((!action) && (_phaseCode === PhaseCode.Phase4))     { action = await _getActionForPhase4(); }
