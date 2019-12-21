@@ -35,6 +35,10 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         score   : number;
         action  : WarAction;
     }
+    type DamageMapData = {
+        max     : number;
+        total   : number;
+    }
     const _TILE_VALUE: { [tileType: number]: number } = {           // ADJUSTABLE
         [TileType.Headquarters] : 10,
         [TileType.Factory]      : 15,
@@ -48,10 +52,10 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         [TileType.Factory]: {
             [UnitType.Infantry]     : 500,
             [UnitType.Mech]         : 0,
-            [UnitType.Bike]         : 400,
+            [UnitType.Bike]         : 520,
             [UnitType.Recon]        : 0,
             [UnitType.Flare]        : null,
-            [UnitType.AntiAir]      : 150,
+            [UnitType.AntiAir]      : 450,
             [UnitType.Tank]         : 650,
             [UnitType.MediumTank]   : 600,
             [UnitType.WarTank]      : 550,
@@ -74,7 +78,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
             [UnitType.Submarine]    : 300,
             [UnitType.Cruiser]      : 300,
             [UnitType.Lander]       : null,
-            [UnitType.Gunboat]      : -4500,
+            [UnitType.Gunboat]      : 0,
         },
     };
 
@@ -228,10 +232,10 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         }
 
         const { distanceMap, maxDistance }  = BwHelpers.createDistanceMap(_tileMap, unit, nearestCapturableTile.getGridIndex());
-        const scoreForUnmovableGrid = -10 * (maxDistance + 1);                                                      // ADJUSTABLE
+        const scoreForUnmovableGrid = -20 * (maxDistance + 1);                                                      // ADJUSTABLE
         for (let x = 0; x < _mapSize.width; ++x) {
             for (let y = 0; y < _mapSize.height; ++y) {
-                distanceMap[x][y] = distanceMap[x][y] != null ? distanceMap[x][y] * -10 : scoreForUnmovableGrid;    // ADJUSTABLE
+                distanceMap[x][y] = distanceMap[x][y] != null ? distanceMap[x][y] * -20 : scoreForUnmovableGrid;    // ADJUSTABLE
             }
         }
 
@@ -346,10 +350,10 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
             : 1 - bonus / 100;
     }
 
-    async function _createDamageMap(targetUnit: ScwUnit, isDiving: boolean): Promise<number[][]> { // DONE
+    async function _createDamageMap(targetUnit: ScwUnit, isDiving: boolean): Promise<DamageMapData[][]> { // DONE
         await _checkAndCallLater();
 
-        const map               = Helpers.createEmptyMap<number>(_mapSize.width);
+        const map               = Helpers.createEmptyMap<DamageMapData>(_mapSize.width);
         const attackBonuses     = _getAttackBonusForAllPlayers();
         const defenseBonus      = _getDefenseBonusForTargetUnit(targetUnit);
         const targetTeamIndex   = targetUnit.getTeamIndex();
@@ -406,15 +410,21 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
                 if (column) {
                     for (let y = 0; y < _mapSize.height; ++y) {
                         if (column[y]) {
-                            map[x][y] = Math.max(
-                                map[x][y] || 0,
-                                Math.floor(
-                                    (baseDamage * Math.max(0, 1 + attackBonus / 100) + luckValue)
-                                    * normalizedHp
-                                    * _getDefenseMultiplierWithBonus(defenseBonus + _tileMap.getTile({ x, y }).getDefenseAmountForUnit(targetUnit))
-                                    / ConfigManager.UNIT_HP_NORMALIZER
-                                ),
+                            const damage = Math.floor(
+                                (baseDamage * Math.max(0, 1 + attackBonus / 100) + luckValue)
+                                * normalizedHp
+                                * _getDefenseMultiplierWithBonus(defenseBonus + _tileMap.getTile({ x, y }).getDefenseAmountForUnit(targetUnit))
+                                / ConfigManager.UNIT_HP_NORMALIZER
                             );
+                            if (!map[x][y]) {
+                                map[x][y] = {
+                                    max     : damage,
+                                    total   : damage,
+                                };
+                            } else {
+                                map[x][y].max   = Math.max(map[x][y].max, damage);
+                                map[x][y].total += damage;
+                            }
                         }
                     }
                 }
@@ -559,13 +569,16 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Score calculators.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    function _getScoreForThreat(unit: ScwUnit, gridIndex: GridIndex, damageMap: number[][]): number {   // DONE
-        const hp        = unit.getCurrentHp();
-        const damage    = Math.min(damageMap[gridIndex.x][gridIndex.y] || 0, hp);
-        return - (damage + (damage >= hp ? 20 : 0)) * unit.getProductionFinalCost() / 3000 / Math.max(1, _unitValueRatio) * 1.3 * (_checkIsCoUnit(unit) ? 2 : 1); // ADJUSTABLE
+    function _getScoreForThreat(unit: ScwUnit, gridIndex: GridIndex, damageMap: DamageMapData[][]): number {   // DONE
+        const hp            = unit.getCurrentHp();
+        const data          = damageMap[gridIndex.x][gridIndex.y];
+        const maxDamage     = Math.min(data ? data.max : 0, hp);
+        const totalDamage   = Math.min(data ? data.total : 0, hp);
+        return - ((maxDamage + (maxDamage >= hp ? 20 : 0)) + (totalDamage + (totalDamage >= hp ? 20 : 0)))
+            * unit.getProductionFinalCost() / 3000 / Math.max(1, _unitValueRatio) * (_checkIsCoUnit(unit) ? 2 : 1); // ADJUSTABLE
     }
 
-    async function _getScoreForPosition(unit: ScwUnit, gridIndex: GridIndex, damageMap: number[][], scoreMapForDistance: number[][] | null): Promise<number> {  // DONE
+    async function _getScoreForPosition(unit: ScwUnit, gridIndex: GridIndex, damageMap: DamageMapData[][], scoreMapForDistance: number[][] | null): Promise<number> {  // DONE
         await _checkAndCallLater();
 
         let score = _getScoreForThreat(unit, gridIndex, damageMap);
@@ -615,7 +628,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
             }
         });
         if (enemyUnitsCount > 0) {
-            score += - (distanceToEnemyUnits / enemyUnitsCount) * 10;                           // ADJUSTABLE
+            score += - (distanceToEnemyUnits / enemyUnitsCount) * 20;                           // ADJUSTABLE
         }
 
         return score;
@@ -703,7 +716,6 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
             counterDamage       = Math.min(counterDamage, attackerHp);
             score               += - (counterDamage + (counterDamage >= attackerHp ? 20 : 0))
                 * unit.getProductionFinalCost() / 3000 / Math.max(1, _unitValueRatio)
-                * 1.3
                 * (_checkIsCoUnit(unit) ? 2 : 1);                                                       // ADJUSTABLE
         }
 
@@ -794,17 +806,17 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         const teamIndex = targetUnit.getTeamIndex();
         _unitMap.forEachUnit(unit => {
             if (unit.getTeamIndex() === teamIndex) {
-                if (unit.getType() === unitType) {
-                    score += -unit.getCurrentHp() * productionCost / 3000 / Math.max(1, _unitValueRatio);                                                         // ADJUSTABLE
-                }
+                // if (unit.getType() === unitType) {
+                //     score += -unit.getCurrentHp() * productionCost / 3000 / Math.max(1, _unitValueRatio);                                                         // ADJUSTABLE
+                // }
             } else {
                 if (targetUnit.getMinAttackRange()) {
                     const damage = Math.min(targetUnit.getBaseDamage(unit.getArmorType()) || 0, unit.getCurrentHp());
-                    score += damage * unit.getProductionFinalCost() / 3000 * 1.3 * Math.max(1, _unitValueRatio);                                                        // ADJUSTABLE
+                    score += damage * unit.getProductionFinalCost() / 3000 * Math.max(1, _unitValueRatio);                                                        // ADJUSTABLE
                 }
                 if (unit.getMinAttackRange()) {
                     const damage = Math.min((unit.getBaseDamage(targetUnit.getArmorType()) || 0) * unit.getNormalizedCurrentHp() / unit.getNormalizedMaxHp(), targetUnit.getCurrentHp());    // ADJUSTABLE
-                    score += -damage * productionCost / 3000 * 1.3 / Math.max(1, _unitValueRatio);                                                                           // ADJUSTABLE
+                    score += -damage * productionCost / 3000 / Math.max(1, _unitValueRatio);                                                                           // ADJUSTABLE
                 }
             }
         });

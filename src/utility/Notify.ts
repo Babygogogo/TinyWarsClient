@@ -135,6 +135,7 @@ namespace TinyWars.Utility.Notify {
         SScrGetSaveInfoList,
         SScrContinueWarFailed,
         SScrContinueWar,
+        SScrSaveWar,
     }
 
     ////////////////////////////////////////////////////////////////////////////////

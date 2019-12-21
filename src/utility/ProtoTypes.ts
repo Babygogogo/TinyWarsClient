@@ -8796,6 +8796,12 @@ export declare interface IMessageContainer {
 
     /** MessageContainer S_ScrContinueWar */
     S_ScrContinueWar?: (IS_ScrContinueWar|null);
+
+    /** MessageContainer C_ScrSaveWar */
+    C_ScrSaveWar?: (IC_ScrSaveWar|null);
+
+    /** MessageContainer S_ScrSaveWar */
+    S_ScrSaveWar?: (IS_ScrSaveWar|null);
 }
 
 /** Represents a MessageContainer. */
@@ -9139,6 +9145,12 @@ export declare class MessageContainer implements IMessageContainer {
 
     /** MessageContainer S_ScrContinueWar. */
     public S_ScrContinueWar?: (IS_ScrContinueWar|null);
+
+    /** MessageContainer C_ScrSaveWar. */
+    public C_ScrSaveWar?: (IC_ScrSaveWar|null);
+
+    /** MessageContainer S_ScrSaveWar. */
+    public S_ScrSaveWar?: (IS_ScrSaveWar|null);
 
     /**
      * Creates a new MessageContainer instance using the specified properties.
@@ -20528,6 +20540,198 @@ export declare class S_ScrContinueWar implements IS_ScrContinueWar {
 
     /**
      * Converts this S_ScrContinueWar to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_ScrSaveWar. */
+export declare interface IC_ScrSaveWar {
+
+    /** C_ScrSaveWar slotIndex */
+    slotIndex?: (number|null);
+
+    /** C_ScrSaveWar warData */
+    warData?: (ISerializedWar|null);
+}
+
+/** Represents a C_ScrSaveWar. */
+export declare class C_ScrSaveWar implements IC_ScrSaveWar {
+
+    /**
+     * Constructs a new C_ScrSaveWar.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_ScrSaveWar);
+
+    /** C_ScrSaveWar slotIndex. */
+    public slotIndex: number;
+
+    /** C_ScrSaveWar warData. */
+    public warData?: (ISerializedWar|null);
+
+    /**
+     * Creates a new C_ScrSaveWar instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_ScrSaveWar instance
+     */
+    public static create(properties?: IC_ScrSaveWar): C_ScrSaveWar;
+
+    /**
+     * Encodes the specified C_ScrSaveWar message. Does not implicitly {@link C_ScrSaveWar.verify|verify} messages.
+     * @param message C_ScrSaveWar message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_ScrSaveWar, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_ScrSaveWar message, length delimited. Does not implicitly {@link C_ScrSaveWar.verify|verify} messages.
+     * @param message C_ScrSaveWar message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_ScrSaveWar, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_ScrSaveWar message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_ScrSaveWar
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_ScrSaveWar;
+
+    /**
+     * Decodes a C_ScrSaveWar message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_ScrSaveWar
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_ScrSaveWar;
+
+    /**
+     * Verifies a C_ScrSaveWar message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_ScrSaveWar message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_ScrSaveWar
+     */
+    public static fromObject(object: { [k: string]: any }): C_ScrSaveWar;
+
+    /**
+     * Creates a plain object from a C_ScrSaveWar message. Also converts values to other types if specified.
+     * @param message C_ScrSaveWar
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_ScrSaveWar, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_ScrSaveWar to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_ScrSaveWar. */
+export declare interface IS_ScrSaveWar {
+
+    /** S_ScrSaveWar errorCode */
+    errorCode?: (number|null);
+
+    /** S_ScrSaveWar slotIndex */
+    slotIndex?: (number|null);
+}
+
+/** Represents a S_ScrSaveWar. */
+export declare class S_ScrSaveWar implements IS_ScrSaveWar {
+
+    /**
+     * Constructs a new S_ScrSaveWar.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_ScrSaveWar);
+
+    /** S_ScrSaveWar errorCode. */
+    public errorCode: number;
+
+    /** S_ScrSaveWar slotIndex. */
+    public slotIndex: number;
+
+    /**
+     * Creates a new S_ScrSaveWar instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_ScrSaveWar instance
+     */
+    public static create(properties?: IS_ScrSaveWar): S_ScrSaveWar;
+
+    /**
+     * Encodes the specified S_ScrSaveWar message. Does not implicitly {@link S_ScrSaveWar.verify|verify} messages.
+     * @param message S_ScrSaveWar message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_ScrSaveWar, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_ScrSaveWar message, length delimited. Does not implicitly {@link S_ScrSaveWar.verify|verify} messages.
+     * @param message S_ScrSaveWar message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_ScrSaveWar, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_ScrSaveWar message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_ScrSaveWar
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_ScrSaveWar;
+
+    /**
+     * Decodes a S_ScrSaveWar message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_ScrSaveWar
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_ScrSaveWar;
+
+    /**
+     * Verifies a S_ScrSaveWar message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_ScrSaveWar message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_ScrSaveWar
+     */
+    public static fromObject(object: { [k: string]: any }): S_ScrSaveWar;
+
+    /**
+     * Creates a plain object from a S_ScrSaveWar message. Also converts values to other types if specified.
+     * @param message S_ScrSaveWar
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_ScrSaveWar, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_ScrSaveWar to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };

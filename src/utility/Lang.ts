@@ -360,6 +360,18 @@ namespace TinyWars.Utility.Lang {
             `您选择的存档位置非空，其内容将被覆盖。确定要继续创建战局吗？`,
             `The save slot is not empty and will be overwritten. Are you sure to create the game?`,
         ],
+        [Type.A0071]: [
+            `您的存档将被覆盖。确定要存档吗？`,
+            `Your save slot will be overwritten. Are you sure to continue?`,
+        ],
+        [Type.A0072]: [
+            `您当前的进度将会丢失。确定要读档吗？`,
+            `Your current progress will be lost. Are you sure to continue?`,
+        ],
+        [Type.A0073]: [
+            `已成功存档`,
+            `Game saved successfully.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -1403,6 +1415,14 @@ namespace TinyWars.Utility.Lang {
         [Type.B0259]: [
             `选择存档位置`,
             `Select Save Slot`,
+        ],
+        [Type.B0260]: [
+            `存档`,
+            `Save Game`,
+        ],
+        [Type.B0261]: [
+            `读档`,
+            `Load Game`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -8,6 +8,8 @@ namespace TinyWars.SingleCustomWar {
     import Logger       = Utility.Logger;
     import FloatText    = Utility.FloatText;
     import LocalStorage = Utility.LocalStorage;
+    import ProtoManager = Utility.ProtoManager;
+    import ProtoTypes   = Utility.ProtoTypes;
     import WarMapModel  = WarMap.WarMapModel;
     import TimeModel    = Time.TimeModel;
 
@@ -91,8 +93,10 @@ namespace TinyWars.SingleCustomWar {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
+                { type: Notify.Type.SScrContinueWar,                callback: this._onNotifySScrContinueWar },
+                { type: Notify.Type.SScrSaveWar,                    callback: this._onNotifySScrSaveWar },
             ];
             this._uiListeners = [
                 { ui: this._btnBack, callback: this._onTouchedBtnBack },
@@ -133,6 +137,17 @@ namespace TinyWars.SingleCustomWar {
                 this._updateListPlayer();
             }
         }
+
+        private _onNotifySScrContinueWar(e: egret.Event): void {
+            const data      = e.data as ProtoTypes.IS_ScrContinueWar;
+            const warData   = ProtoManager.decodeAsSerializedWar(data.encodedWar);
+            Utility.FlowManager.gotoSingleCustomWar(warData);
+        }
+
+        private _onNotifySScrSaveWar(e: egret.Event): void {
+            FloatText.show(Lang.getText(Lang.Type.A0073));
+        }
+
         private _onNotifyLanguageChanged(e: egret.Event): void {
             this._updateComponentsForLanguage();
         }
@@ -241,6 +256,12 @@ namespace TinyWars.SingleCustomWar {
             const commandOpenCoInfoMenu = this._createCommandOpenCoInfoMenu();
             (commandOpenCoInfoMenu) && (dataList.push(commandOpenCoInfoMenu));
 
+            const commandSaveGame = this._createCommandSaveGame();
+            (commandSaveGame) && (dataList.push(commandSaveGame));
+
+            const commandLoadGame = this._createCommandLoadGame();
+            (commandLoadGame) && (dataList.push(commandLoadGame));
+
             const commandOpenAdvancedMenu = this._createCommandOpenAdvancedMenu();
             (commandOpenAdvancedMenu) && (dataList.push(commandOpenAdvancedMenu));
 
@@ -283,6 +304,54 @@ namespace TinyWars.SingleCustomWar {
                     ScwWarMenuPanel.hide();
                 },
             };
+        }
+
+        private _createCommandSaveGame(): DataForCommandRenderer | null {
+            const war = this._war;
+            if ((!war)                                                              ||
+                (!war.checkIsHumanInTurn())                                         ||
+                (!war.getTurnManager().getPhaseCode())                              ||
+                (war.getActionPlanner().getState() !== Types.ActionPlannerState.Idle)
+            ) {
+                return null;
+            } else {
+                return {
+                    name    : Lang.getText(Lang.Type.B0260),
+                    callback: () => {
+                        Common.ConfirmPanel.show({
+                            title   : Lang.getText(Lang.Type.B0088),
+                            content : Lang.getText(Lang.Type.A0071),
+                            callback: () => {
+                                SingleCustomRoom.ScrProxy.reqSaveWar(war);
+                            },
+                        })
+                    },
+                };
+            }
+        }
+
+        private _createCommandLoadGame(): DataForCommandRenderer | null {
+            const war = this._war;
+            if ((!war)                                                              ||
+                (!war.checkIsHumanInTurn())                                         ||
+                (!war.getTurnManager().getPhaseCode())                              ||
+                (war.getActionPlanner().getState() !== Types.ActionPlannerState.Idle)
+            ) {
+                return null;
+            } else {
+                return {
+                    name    : Lang.getText(Lang.Type.B0261),
+                    callback: () => {
+                        Common.ConfirmPanel.show({
+                            title   : Lang.getText(Lang.Type.B0088),
+                            content : Lang.getText(Lang.Type.A0072),
+                            callback: () => {
+                                SingleCustomRoom.ScrProxy.reqContinueWar(war.getSaveSlotIndex());
+                            },
+                        })
+                    },
+                };
+            }
         }
 
         private _createCommandGotoLobby(): DataForCommandRenderer | undefined {
