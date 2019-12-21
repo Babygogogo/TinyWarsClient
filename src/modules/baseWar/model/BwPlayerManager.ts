@@ -8,7 +8,7 @@ namespace TinyWars.BaseWar {
 
         protected abstract _getPlayerClass(): new () => BwPlayer;
 
-        public init(dataList: Types.SerializedBwPlayer[]): BwPlayerManager {
+        public init(dataList: Types.SerializedPlayer[]): BwPlayerManager {
             this._players.clear();
             for (const data of dataList) {
                 this._players.set(data.playerIndex!, (new (this._getPlayerClass())).init(data));

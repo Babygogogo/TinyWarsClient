@@ -14,9 +14,9 @@ namespace TinyWars.MultiCustomWar.McwModel {
     import BwHelpers            = BaseWar.BwHelpers;
     import AlertPanel           = Common.AlertPanel;
     import GridIndex            = Types.GridIndex;
-    import SerializedMcwTile    = Types.SerializedBwTile;
-    import SerializedMcwUnit    = Types.SerializedBwUnit;
-    import UnitState            = Types.UnitState;
+    import SerializedMcwTile    = Types.SerializedTile;
+    import SerializedMcwUnit    = Types.SerializedUnit;
+    import UnitState            = Types.UnitActionState;
     import MovePath             = Types.MovePath;
     import TileType             = Types.TileType;
 
@@ -53,7 +53,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for managing war.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export async function loadWar(data: Types.SerializedBwWar): Promise<McwWar> {
+    export async function loadWar(data: Types.SerializedWar): Promise<McwWar> {
         if (_war) {
             Logger.warn(`McwModel.loadWar() another war has been loaded already!`);
             unloadWar();
@@ -103,14 +103,14 @@ namespace TinyWars.MultiCustomWar.McwModel {
                 const requestType = data.requestType as Types.SyncWarRequestType;
                 if (requestType === Types.SyncWarRequestType.PlayerForce) {
                     _war.setIsEnded(true);
-                    await Utility.FlowManager.gotoMultiCustomWar(data.war as Types.SerializedBwWar),
+                    await Utility.FlowManager.gotoMultiCustomWar(data.war as Types.SerializedWar),
                     FloatText.show(Lang.getText(Lang.Type.A0038));
 
                 } else {
                     const cachedActionsCount = _cachedActions.length;
                     if (data.nextActionId !== _war.getNextActionId() + cachedActionsCount) {
                         _war.setIsEnded(true);
-                        await Utility.FlowManager.gotoMultiCustomWar(data.war as Types.SerializedBwWar);
+                        await Utility.FlowManager.gotoMultiCustomWar(data.war as Types.SerializedWar);
                         FloatText.show(Lang.getText(Lang.Type.A0036));
 
                     } else {
@@ -523,12 +523,12 @@ namespace TinyWars.MultiCustomWar.McwModel {
             }
 
             const configVersion             = war.getConfigVersion();
-            const attackerUnitAfterAction   = action.attackerUnitAfterAction as Types.SerializedBwUnit;
+            const attackerUnitAfterAction   = action.attackerUnitAfterAction as Types.SerializedUnit;
             if (attackerUnitAfterAction) {
                 attacker.init(attackerUnitAfterAction, configVersion);
                 attacker.startRunning(war);
             }
-            const targetUnitAfterAction = action.targetUnitAfterAction as Types.SerializedBwUnit;
+            const targetUnitAfterAction = action.targetUnitAfterAction as Types.SerializedUnit;
             if (targetUnitAfterAction) {
                 targetUnit.init(targetUnitAfterAction, configVersion);
                 targetUnit.startRunning(war);
@@ -1085,7 +1085,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
                 loaderUnitId: focusUnit.getUnitId(),
             }, war.getConfigVersion());
             producedUnit.startRunning(war);
-            producedUnit.setState(Types.UnitState.Acted);
+            producedUnit.setState(Types.UnitActionState.Acted);
 
             const player = war.getPlayerInTurn();
             player.setFund(player.getFund() - action.cost);

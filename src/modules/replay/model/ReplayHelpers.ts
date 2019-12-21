@@ -117,7 +117,7 @@ namespace TinyWars.Replay.ReplayHelpers {
         return cfg ? cfg.productionCost : undefined;
     }
 
-    export function checkShouldSerializeTile(tileData: Types.SerializedBwTile, mapRawData: ProtoTypes.IMapRawData): boolean {
+    export function checkShouldSerializeTile(tileData: Types.SerializedTile, mapRawData: ProtoTypes.IMapRawData): boolean {
         if ((tileData.currentBuildPoint     != null)   ||
             (tileData.currentCapturePoint   != null)   ||
             (tileData.currentHp             != null)

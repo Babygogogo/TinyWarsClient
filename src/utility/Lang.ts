@@ -348,7 +348,30 @@ namespace TinyWars.Utility.Lang {
             `输入正确的Discord ID，并加入以下游戏频道（可点击链接复制）\n 即可实时收到游戏相关消息，如回合轮转等。`,
             `By entering your correct discord ID \n and joining the following discord server (the link can be copied)\n you can receive tinywars-related information, including turn notification.`,
         ],
-
+        [Type.A0068]: [
+            `可点击以下各个文字以更改设置`,
+            `Touch texts below to change the settings.`,
+        ],
+        [Type.A0069]: [
+            `请为参赛玩家设置至少两个队伍`,
+            `Please set at least two teams for players.`,
+        ],
+        [Type.A0070]: [
+            `您选择的存档位置非空，其内容将被覆盖。确定要继续创建战局吗？`,
+            `The save slot is not empty and will be overwritten. Are you sure to create the game?`,
+        ],
+        [Type.A0071]: [
+            `您的存档将被覆盖。确定要存档吗？`,
+            `Your save slot will be overwritten. Are you sure to continue?`,
+        ],
+        [Type.A0072]: [
+            `您当前的进度将会丢失。确定要读档吗？`,
+            `Your current progress will be lost. Are you sure to continue?`,
+        ],
+        [Type.A0073]: [
+            `已成功存档`,
+            `Game saved successfully.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -1369,6 +1392,38 @@ namespace TinyWars.Utility.Lang {
             `评分`,
             `Rating`,
         ],
+        [Type.B0254]: [
+            `自由战斗`,
+            `Free Battle`,
+        ],
+        [Type.B0255]: [
+            `存档编号`,
+            `Save Slot`,
+        ],
+        [Type.B0256]: [
+            `电脑`,
+            `COM`,
+        ],
+        [Type.B0257]: [
+            `War Room`,
+            `War Room`,
+        ],
+        [Type.B0258]: [
+            `选择`,
+            `Select`,
+        ],
+        [Type.B0259]: [
+            `选择存档位置`,
+            `Select Save Slot`,
+        ],
+        [Type.B0260]: [
+            `存档`,
+            `Save Game`,
+        ],
+        [Type.B0261]: [
+            `读档`,
+            `Load Game`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -1705,8 +1760,8 @@ namespace TinyWars.Utility.Lang {
             `%d digits for maximum, optional`,
         ],
         [Type.F0022]: [
-            `%s p%d 回合正式开始！！`,
-            `%s p%d's turn have been start!!`,
+            `%s (p%d) 回合正式开始！！`,
+            `It's %s (p%d)'s turn!!`,
         ],
     };
 
@@ -2183,6 +2238,14 @@ namespace TinyWars.Utility.Lang {
             case Types.UnitCategory.Tank                : return getText(Type.B0135);
             case Types.UnitCategory.AirExceptSeaplane   : return getText(Type.B0136);
             default                                     : return null;
+        }
+    }
+
+    export function getSinglePlayerWarTypeName(type: Types.SinglePlayerWarType): string {
+        switch (type) {
+            case Types.SinglePlayerWarType.Custom   : return getText(Type.B0254);
+            case Types.SinglePlayerWarType.WarRoom  : return getText(Type.B0257);
+            default                                 : return null;
         }
     }
 }

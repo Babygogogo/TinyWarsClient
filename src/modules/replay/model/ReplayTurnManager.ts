@@ -1,6 +1,6 @@
 
 namespace TinyWars.Replay {
-    import SerializedBwTurn     = Types.SerializedBwTurn;
+    import SerializedBwTurn     = Types.SerializedTurn;
     import DestructionHelpers   = Utility.DestructionHelpers;
     import Types                = Utility.Types;
     import ProtoTypes           = Utility.ProtoTypes;

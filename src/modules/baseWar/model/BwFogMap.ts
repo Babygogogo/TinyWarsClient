@@ -4,7 +4,7 @@ namespace TinyWars.BaseWar {
     import Types                = Utility.Types;
     import Helpers              = Utility.Helpers;
     import GridIndexHelpers     = Utility.GridIndexHelpers;
-    import SerializedBwFogMap   = Types.SerializedBwFogMap;
+    import SerializedBwFogMap   = Types.SerializedFogMap;
     import ForceFogCode         = Types.ForceFogCode;
     import GridIndex            = Types.GridIndex;
     import MapSize              = Types.MapSize;

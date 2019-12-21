@@ -55,7 +55,7 @@ namespace TinyWars.BaseWar {
         }
 
         public resetAllViews(): void {
-            this._isDark = this._unit.getState() === Types.UnitState.Acted;
+            this._isDark = this._unit.getState() === Types.UnitActionState.Acted;
             this.resetStateAnimationFrames();
             this.showUnitAnimation(UnitAnimationType.Stand);
             this.updateImageHp();

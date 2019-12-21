@@ -1,7 +1,7 @@
 
 namespace TinyWars.MultiCustomWar {
     import Types            = Utility.Types;
-    import SerializedMcWar  = Types.SerializedBwWar;
+    import SerializedMcWar  = Types.SerializedWar;
 
     export class McwWar extends BaseWar.BwWar {
         private _isEnded        = false;

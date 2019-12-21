@@ -1,7 +1,7 @@
 
 namespace TinyWars.MultiCustomWar {
     import Types            = Utility.Types;
-    import SerializedBwTile = Types.SerializedBwTile;
+    import SerializedBwTile = Types.SerializedTile;
     import TileType         = Types.TileType;
 
     export class McwTile extends BaseWar.BwTile {

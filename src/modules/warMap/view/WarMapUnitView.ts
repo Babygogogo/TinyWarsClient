@@ -10,7 +10,7 @@ namespace TinyWars.WarMap {
         private _unitImage: UiImage;
 
         private _data : Types.UnitViewData;
-        private _state: Types.UnitState = Types.UnitState.Idle;
+        private _state: Types.UnitActionState = Types.UnitActionState.Idle;
 
         public constructor(data?: Types.UnitViewData, tickCount?: number) {
             super();
@@ -34,14 +34,14 @@ namespace TinyWars.WarMap {
             return this._data;
         }
 
-        public setState(state: Types.UnitState, tickCount?: number): void {
+        public setState(state: Types.UnitActionState, tickCount?: number): void {
             this._state = state;
             this.updateOnAnimationTick(tickCount || TimeModel.getUnitAnimationTickCount());
         }
 
         public updateOnAnimationTick(tickCount: number): void {
             if (this._data) {
-                if (this._state === Types.UnitState.Idle) {
+                if (this._state === Types.UnitActionState.Idle) {
                     this._unitImage.source = ConfigManager.getUnitIdleImageSource(this._data.viewId, tickCount, false);
                 } else {
                     this._unitImage.source = ConfigManager.getUnitMovingImageSource(this._data.viewId, tickCount, false);

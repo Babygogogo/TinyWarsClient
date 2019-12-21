@@ -4,6 +4,7 @@ namespace TinyWars.BaseWar.BwHelpers {
     import GridIndexHelpers     = Utility.GridIndexHelpers;
     import ProtoTypes           = Utility.ProtoTypes;
     import Logger               = Utility.Logger;
+    import Helpers              = Utility.Helpers;
     import GridIndex            = Types.GridIndex;
     import MovableArea          = Types.MovableArea;
     import AttackableArea       = Types.AttackableArea;
@@ -20,17 +21,17 @@ namespace TinyWars.BaseWar.BwHelpers {
     export function createMovableArea(origin: GridIndex, maxMoveCost: number, moveCostGetter: (g: GridIndex) => number | undefined): MovableArea {
         const area              = [] as MovableArea;
         const availableGrids    = [] as AvailableMovableGrid[];
-        _pushToAvailableMovableGrids(availableGrids, origin, undefined, 0);
+        _updateAvailableGrids(availableGrids, 0, origin, undefined, 0);
 
         let index = 0;
         while (index < availableGrids.length) {
-            const availableGrid = availableGrids[index];
-            const { currGridIndex, totalMoveCost } = availableGrid;
+            const availableGrid                     = _sortAvailableMovableGrids(availableGrids, index);
+            const { currGridIndex, totalMoveCost }  = availableGrid;
             if (_checkAndUpdateMovableArea(area, currGridIndex, availableGrid.prevGridIndex, totalMoveCost)) {
                 for (const nextGridIndex of GridIndexHelpers.getAdjacentGrids(currGridIndex)) {
                     const nextMoveCost = moveCostGetter(nextGridIndex);
                     if ((nextMoveCost != null) && (nextMoveCost + totalMoveCost <= maxMoveCost)) {
-                        _pushToAvailableMovableGrids(availableGrids, nextGridIndex, currGridIndex, nextMoveCost + totalMoveCost);
+                        _updateAvailableGrids(availableGrids, index + 1, nextGridIndex, currGridIndex, nextMoveCost + totalMoveCost);
                     }
                 }
             }
@@ -91,18 +92,96 @@ namespace TinyWars.BaseWar.BwHelpers {
         }
     }
 
-    export function getUnitProductionCost(war: BwWar, unitType: UnitType): number | undefined {
-        // TODO: take skills into account.
-        const cfg = ConfigManager.getUnitTemplateCfg(war.getConfigVersion(), unitType);
-        return cfg ? cfg.productionCost : undefined;
+    export function createDistanceMap(tileMap: BwTileMap, unit: BwUnit, destination: GridIndex): { distanceMap: (number | null)[][], maxDistance: number } {
+        const area          : MovableArea = [];
+        const availableGrids: AvailableMovableGrid[] = [];
+        _updateAvailableGrids(availableGrids, 0, destination, null, 0);
+
+        const mapSize   = tileMap.getMapSize();
+        let index       = 0;
+        while (index < availableGrids.length) {
+            const availableGrid     = _sortAvailableMovableGrids(availableGrids, index);
+            const currentGridIndex  = availableGrid.currGridIndex;
+            const totalMoveCost     = availableGrid.totalMoveCost;
+            if (_checkAndUpdateMovableArea(area, currentGridIndex, availableGrid.prevGridIndex, totalMoveCost)) {
+                const nextMoveCost = tileMap.getTile(currentGridIndex).getMoveCostByUnit(unit);
+                if (nextMoveCost != null) {
+                    for (const nextGridIndex of GridIndexHelpers.getAdjacentGrids(currentGridIndex, mapSize)) {
+                        _updateAvailableGrids(availableGrids, index, nextGridIndex, currentGridIndex, totalMoveCost + nextMoveCost);
+                    }
+                }
+            }
+
+            ++index;
+        }
+
+        const distanceMap   = Helpers.createEmptyMap<number>(mapSize.width);
+        let maxDistance     = 0;
+        for (let x = 0; x < mapSize.width; ++x) {
+            for (let y = 0; y < mapSize.height; ++y) {
+                if (area[x][y]) {
+                    distanceMap[x][y]   = area[x][y].totalMoveCost;
+                    maxDistance         = Math.max(maxDistance, distanceMap[x][y]);
+                }
+            }
+        }
+        return { distanceMap, maxDistance};
     }
 
-    function _pushToAvailableMovableGrids(grids: AvailableMovableGrid[], gridIndex: GridIndex, prev: GridIndex, totalMoveCost: number): void {
-        grids.push({
+    export function findNearestCapturableTile(tileMap: BwTileMap, unitMap: BwUnitMap, unit: BwUnit): BwTile | null {
+        const area          : MovableArea = [];
+        const availableGrids: AvailableMovableGrid[] = [];
+        _updateAvailableGrids(availableGrids, 0, unit.getGridIndex(), null, 0);
+
+        const teamIndex = unit.getTeamIndex();
+        const mapSize   = tileMap.getMapSize();
+        let index   = 0;
+        while (index < availableGrids.length) {
+            const availableGrid     = _sortAvailableMovableGrids(availableGrids, index);
+            const currentGridIndex  = availableGrid.currGridIndex;
+            const totalMoveCost     = availableGrid.totalMoveCost;
+            const tile              = tileMap.getTile(currentGridIndex);
+            const existingUnit      = unitMap.getUnitOnMap(currentGridIndex);
+
+            if ((tile.getMaxCapturePoint())                                                                 &&
+                (tile.getTeamIndex() !== teamIndex)                                                         &&
+                ((!existingUnit) || (existingUnit === unit) || (existingUnit.getTeamIndex() !== teamIndex))
+            ) {
+                return tile;
+            } else {
+                if (_checkAndUpdateMovableArea(area, currentGridIndex, availableGrid.prevGridIndex, totalMoveCost)) {
+                    for (const nextGridIndex of GridIndexHelpers.getAdjacentGrids(currentGridIndex, mapSize)) {
+                        const nextMoveCost = tileMap.getTile(nextGridIndex).getMoveCostByUnit(unit);
+                        if (nextMoveCost != null) {
+                            _updateAvailableGrids(availableGrids, index, nextGridIndex, currentGridIndex, totalMoveCost + nextMoveCost);
+                        }
+                    }
+                }
+            }
+
+            ++index;
+        }
+
+        return null;
+    }
+
+    function _updateAvailableGrids(grids: AvailableMovableGrid[], index: number, gridIndex: GridIndex, prev: GridIndex, totalMoveCost: number): void {
+        const newNode: AvailableMovableGrid = {
             currGridIndex: gridIndex,
             prevGridIndex: prev ? { x: prev.x, y: prev.y } : undefined,
             totalMoveCost,
-        });
+        };
+
+        for (let i = index; i < grids.length; ++i) {
+            if (GridIndexHelpers.checkIsEqual(grids[i].currGridIndex, gridIndex)) {
+                if (grids[i].totalMoveCost > totalMoveCost) {
+                    grids[i] = newNode;
+                }
+                return;
+            }
+        }
+
+        grids.push(newNode);
     }
     function _checkAndUpdateMovableArea(area: MovableArea, gridIndex: GridIndex, prev: GridIndex, totalMoveCost: number): boolean {
         const { x, y } = gridIndex;
@@ -118,10 +197,31 @@ namespace TinyWars.BaseWar.BwHelpers {
             return true;
         }
     }
+    function _sortAvailableMovableGrids(list: AvailableMovableGrid[], startingIndex: number): AvailableMovableGrid {
+        let indexForMinMoveCost = startingIndex;
+        let minMoveCost         = list[indexForMinMoveCost].totalMoveCost;
+        for (let i = startingIndex + 1; i < list.length; ++i) {
+            if (list[i].totalMoveCost < minMoveCost) {
+                indexForMinMoveCost = i;
+                minMoveCost         = list[i].totalMoveCost;
+            }
+        }
+
+        if (indexForMinMoveCost !== startingIndex) {
+            [list[indexForMinMoveCost], list[startingIndex]] = [list[startingIndex], list[indexForMinMoveCost]];
+        }
+        return list[startingIndex];
+    }
 
     export function checkAreaHasGrid(area: AttackableArea | MovableArea, gridIndex: GridIndex): boolean {
         const { x, y } = gridIndex;
         return (!!area[x]) && (!!area[x][y]);
+    }
+
+    export function getUnitProductionCost(war: BwWar, unitType: UnitType): number | undefined {
+        // TODO: take skills into account.
+        const cfg = ConfigManager.getUnitTemplateCfg(war.getConfigVersion(), unitType);
+        return cfg ? cfg.productionCost : undefined;
     }
 
     export function checkIsStateRequesting(state: Types.ActionPlannerState): boolean {
