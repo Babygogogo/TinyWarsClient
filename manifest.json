@@ -149,6 +149,7 @@
 		"bin-debug/modules/replay/view/ReplayActionPlannerView.js",
 		"bin-debug/modules/replay/view/ReplayBackgroundPanel.js",
 		"bin-debug/modules/replay/view/ReplayCoListPanel.js",
+		"bin-debug/modules/replay/view/ReplayConsolePanel.js",
 		"bin-debug/modules/replay/view/ReplayCursorView.js",
 		"bin-debug/modules/replay/view/ReplayFieldView.js",
 		"bin-debug/modules/replay/view/ReplayGridVisionEffectView.js",

@@ -7,7 +7,7 @@ namespace TinyWars.Replay {
     import WarActionContainer   = Types.WarActionContainer;
     import SerializedWar        = Types.SerializedBwWar;
 
-    const  avaliableRepPlayRate    = [0,0.2,1,5];
+    const  avaliableRepPlayRate    = [0.5,1,2,10];
 
     export class ReplayWar extends BaseWar.BwWar {
         private _executedActions        : WarActionContainer[];
@@ -119,7 +119,6 @@ namespace TinyWars.Replay {
 
                 await this._loadCheckPoint(checkPointId);
                 this.startRunning().startRunningView();
-                console.error(`load loadNextCheckPoint() _isInfoDisplay = ${this._isInfoDisplay}`)
                 if (this._isInfoDisplay)
                     FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
 
@@ -138,7 +137,6 @@ namespace TinyWars.Replay {
                 this.stopRunning();
                 await this._loadCheckPoint(checkPointId);
                 this.startRunning().startRunningView();
-                console.error(`load loadNextCheckPoint() _isInfoDisplay = ${this._isInfoDisplay}`)
                 if (this._isInfoDisplay)
                     FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
             }
@@ -166,6 +164,15 @@ namespace TinyWars.Replay {
 
             this._initView();
         }
+        public getTotalTurnsCount(): number{
+            //TODO:WIP Funciton
+            const last_turndata = this.getWarData(this.getCheckPointId(this.getTotalActionsCount()));
+            if (last_turndata)
+                return new ReplayTurnManager().init(last_turndata.turn).getTurnIndex();
+            else
+                FloatText.show(Lang.getText(Lang.Type.A0072));
+                return -1;
+        }
 
         public getTotalActionsCount(): number {
             return this._executedActions.length;
@@ -183,8 +190,16 @@ namespace TinyWars.Replay {
         }
 
         public setReplayPlaybackRateIndex(index: number) {
-            this._replayPlaybackRateIndex = index;
-            Notify.dispatch(Notify.Type.ReplayPlaybackRateChanged);
+            if (index < 0) {
+                FloatText.show(Lang.getText(Lang.Type.A0070));
+            }
+            else if (index < avaliableRepPlayRate.length) {
+                this._replayPlaybackRateIndex = index;
+                Notify.dispatch(Notify.Type.ReplayPlaybackRateChanged);
+            }
+            else{
+                FloatText.show(Lang.getText(Lang.Type.A0071));
+            }
         }
     }
 }

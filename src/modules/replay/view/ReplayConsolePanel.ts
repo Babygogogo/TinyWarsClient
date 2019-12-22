@@ -98,11 +98,14 @@ namespace TinyWars.Replay {
 
         protected _onOpened(): void {
             this._war = ReplayModel.getWar();
+            const totalturns                            = this._war.getTotalTurnsCount();
             this._updatebtnvvisible();
             this._updateNotifyButton();
-            this._inputCurrentTurn.textDisplay.text     = `${this._war.getTurnManager().getTurnIndex()}`
-            this._inputCurrentAction.textDisplay.text   = `${this._war.getNextActionId()}`
-            this._labelPlayRate.text                    = `x${this._war.getReplayPlaybackRate().toFixed(1)}`
+            this._inputCurrentTurn.textDisplay.text     = `${this._war.getTurnManager().getTurnIndex()}`;
+            this._inputCurrentAction.textDisplay.text   = `${this._war.getNextActionId()}`;
+            this._labelPlayRate.text                    = `x${this._war.getReplayPlaybackRate().toFixed(1)}`;
+            this._labelMaxAction.text                   = `/ ${this._war.getTotalActionsCount()}`;
+            this._labelMaxTurn.text                     = `/ ${(totalturns > 0) ? totalturns : `?`}`
         }
 
         protected _onClosed(): void {
@@ -204,9 +207,6 @@ namespace TinyWars.Replay {
                 war.loadNextCheckPoint();
             }
         }
-
-
-
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
