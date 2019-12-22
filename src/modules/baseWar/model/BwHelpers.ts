@@ -118,10 +118,12 @@ namespace TinyWars.BaseWar.BwHelpers {
         const distanceMap   = Helpers.createEmptyMap<number>(mapSize.width);
         let maxDistance     = 0;
         for (let x = 0; x < mapSize.width; ++x) {
-            for (let y = 0; y < mapSize.height; ++y) {
-                if (area[x][y]) {
-                    distanceMap[x][y]   = area[x][y].totalMoveCost;
-                    maxDistance         = Math.max(maxDistance, distanceMap[x][y]);
+            if (area[x]) {
+                for (let y = 0; y < mapSize.height; ++y) {
+                    if (area[x][y]) {
+                        distanceMap[x][y]   = area[x][y].totalMoveCost;
+                        maxDistance         = Math.max(maxDistance, distanceMap[x][y]);
+                    }
                 }
             }
         }

@@ -122,10 +122,9 @@ namespace TinyWars.SingleCustomWar.ScwHelpers {
             })) {
                 unit.setViewVisible(true);
             } else {
-                DestructionHelpers.removeUnitOnMap(war, gridIndex);
+                unit.setViewVisible(false);
             }
         });
-        DestructionHelpers.removeInvisibleLoadedUnits(war, userId);
 
         tileMap.getView().updateCoZone();
     }

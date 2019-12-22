@@ -1,17 +1,18 @@
 
 namespace TinyWars.BaseWar {
-    import WarMapModel      = WarMap.WarMapModel;
-    import Types            = Utility.Types;
-    import Notify           = Utility.Notify;
-    import GridIndexHelpers = Utility.GridIndexHelpers;
-    import Logger           = Utility.Logger;
-    import UnitState        = Types.UnitActionState;
-    import GridIndex        = Types.GridIndex;
-    import State            = Types.ActionPlannerState;
-    import MovableArea      = Types.MovableArea;
-    import AttackableArea   = Types.AttackableArea;
-    import MovePathNode     = Types.MovePathNode;
-    import UnitActionType   = Types.UnitActionType;
+    import WarMapModel          = WarMap.WarMapModel;
+    import Types                = Utility.Types;
+    import Notify               = Utility.Notify;
+    import GridIndexHelpers     = Utility.GridIndexHelpers;
+    import Logger               = Utility.Logger;
+    import VisibilityHelpers    = Utility.VisibilityHelpers;
+    import UnitState            = Types.UnitActionState;
+    import GridIndex            = Types.GridIndex;
+    import State                = Types.ActionPlannerState;
+    import MovableArea          = Types.MovableArea;
+    import AttackableArea       = Types.AttackableArea;
+    import MovePathNode         = Types.MovePathNode;
+    import UnitActionType       = Types.UnitActionType;
 
     type ChosenUnitForDrop = {
         unit        : BwUnit;
@@ -1216,8 +1217,19 @@ namespace TinyWars.BaseWar {
             if (!GridIndexHelpers.checkIsInsideMap(targetGridIndex, this.getMapSize())) {
                 return undefined;
             } else {
-                const existingUnit = this._getUnitMap().getUnitOnMap(targetGridIndex);
-                if ((existingUnit) && (existingUnit.getTeamIndex() !== movingUnit.getTeamIndex())) {
+                const existingUnit  = this._getUnitMap().getUnitOnMap(targetGridIndex);
+                const teamIndex     = movingUnit.getTeamIndex();
+                if ((existingUnit)                                      &&
+                    (existingUnit.getTeamIndex() !== teamIndex)         &&
+                    (VisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
+                        war                 : this._war,
+                        gridIndex           : targetGridIndex,
+                        unitType            : existingUnit.getType(),
+                        isDiving            : existingUnit.getIsDiving(),
+                        unitPlayerIndex     : existingUnit.getPlayerIndex(),
+                        observerTeamIndex   : teamIndex,
+                    }))
+                ) {
                     return undefined;
                 } else {
                     return this._getTileMap().getTile(targetGridIndex).getMoveCostByUnit(movingUnit);

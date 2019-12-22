@@ -50,6 +50,10 @@ namespace TinyWars.BaseWar {
             Notify.removeEventListeners(this._notifyListeners, this);
         }
 
+        protected _getUnitMap(): BwUnitMap {
+            return this._unitMap;
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other public functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -87,58 +91,58 @@ namespace TinyWars.BaseWar {
             const state         = actionPlanner.getState();
 
             if (state === ActionPlannerState.Idle) {
-                this._setAllUnitsOnMapVisible(true);
+                this._resetVisibleForAllUnitsOnMap();
 
             } else if (state === ActionPlannerState.ExecutingAction) {
-                this._setAllUnitsOnMapVisible(true);
+                this._resetVisibleForAllUnitsOnMap();
 
             } else if (state === ActionPlannerState.MakingMovePath) {
-                this._setAllUnitsOnMapVisible(true);
+                this._resetVisibleForAllUnitsOnMap();
                 actionPlanner.getFocusUnitOnMap().setViewVisible(false);
                 const focusUnitLoaded = actionPlanner.getFocusUnitLoaded();
                 (focusUnitLoaded) && (focusUnitLoaded.setViewVisible(false));
 
             } else if (state === ActionPlannerState.ChoosingAction) {
-                this._setAllUnitsOnMapVisible(true);
+                this._resetVisibleForAllUnitsOnMap();
                 actionPlanner.getFocusUnitOnMap().setViewVisible(false);
                 const focusUnitLoaded = actionPlanner.getFocusUnitLoaded();
                 (focusUnitLoaded) && (focusUnitLoaded.setViewVisible(false));
 
             } else if (state === ActionPlannerState.ChoosingAttackTarget) {
-                this._setAllUnitsOnMapVisible(true);
+                this._resetVisibleForAllUnitsOnMap();
                 actionPlanner.getFocusUnitOnMap().setViewVisible(false);
                 const focusUnitLoaded = actionPlanner.getFocusUnitLoaded();
                 (focusUnitLoaded) && (focusUnitLoaded.setViewVisible(false));
 
             } else if (state === ActionPlannerState.ChoosingDropDestination) {
-                this._setAllUnitsOnMapVisible(true);
+                this._resetVisibleForAllUnitsOnMap();
                 actionPlanner.getFocusUnitOnMap().setViewVisible(false);
                 const focusUnitLoaded = actionPlanner.getFocusUnitLoaded();
                 (focusUnitLoaded) && (focusUnitLoaded.setViewVisible(false));
 
             } else if (state === ActionPlannerState.ChoosingFlareDestination) {
-                this._setAllUnitsOnMapVisible(true);
+                this._resetVisibleForAllUnitsOnMap();
                 actionPlanner.getFocusUnitOnMap().setViewVisible(false);
                 const focusUnitLoaded = actionPlanner.getFocusUnitLoaded();
                 (focusUnitLoaded) && (focusUnitLoaded.setViewVisible(false));
 
             } else if (state === ActionPlannerState.ChoosingSiloDestination) {
-                this._setAllUnitsOnMapVisible(true);
+                this._resetVisibleForAllUnitsOnMap();
                 actionPlanner.getFocusUnitOnMap().setViewVisible(false);
                 const focusUnitLoaded = actionPlanner.getFocusUnitLoaded();
                 (focusUnitLoaded) && (focusUnitLoaded.setViewVisible(false));
 
             } else if (state === ActionPlannerState.ChoosingProductionTarget) {
-                this._setAllUnitsOnMapVisible(true);
+                this._resetVisibleForAllUnitsOnMap();
 
             } else if (state === ActionPlannerState.PreviewingAttackableArea) {
-                this._setAllUnitsOnMapVisible(true);
+                this._resetVisibleForAllUnitsOnMap();
                 for (const [, unit] of actionPlanner.getUnitsForPreviewingAttackableArea()) {
                     unit.setViewVisible(false);
                 }
 
             } else if (state === ActionPlannerState.PreviewingMovableArea) {
-                this._setAllUnitsOnMapVisible(true);
+                this._resetVisibleForAllUnitsOnMap();
                 actionPlanner.getUnitForPreviewingMovableArea().setViewVisible(false);
 
             } else {
@@ -188,8 +192,8 @@ namespace TinyWars.BaseWar {
             }
         }
 
-        private _setAllUnitsOnMapVisible(visible: boolean): void {
-            this._unitMap.forEachUnitOnMap(unit => unit.setViewVisible(visible));
+        protected _resetVisibleForAllUnitsOnMap(): void {
+            this._unitMap.forEachUnitOnMap(unit => unit.setViewVisible(true));
         }
     }
 }

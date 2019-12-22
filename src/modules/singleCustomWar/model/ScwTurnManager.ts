@@ -63,10 +63,9 @@ namespace TinyWars.SingleCustomWar {
                     unitPlayerIndex : unit.getPlayerIndex(),
                     observerUserId  : userId,
                 })) {
-                    DestructionHelpers.removeUnitOnMap(war, gridIndex);
+                    unit.setViewVisible(false);
                 }
             });
-            DestructionHelpers.removeInvisibleLoadedUnits(war, userId);
 
             const tileMap = war.getTileMap();
             tileMap.forEachTile(tile => {

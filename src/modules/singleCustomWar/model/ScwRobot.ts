@@ -232,10 +232,10 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         }
 
         const { distanceMap, maxDistance }  = BwHelpers.createDistanceMap(_tileMap, unit, nearestCapturableTile.getGridIndex());
-        const scoreForUnmovableGrid = -20 * (maxDistance + 1);                                                      // ADJUSTABLE
+        const scoreForUnmovableGrid = -10 * (maxDistance + 1);                                                      // ADJUSTABLE
         for (let x = 0; x < _mapSize.width; ++x) {
             for (let y = 0; y < _mapSize.height; ++y) {
-                distanceMap[x][y] = distanceMap[x][y] != null ? distanceMap[x][y] * -20 : scoreForUnmovableGrid;    // ADJUSTABLE
+                distanceMap[x][y] = distanceMap[x][y] != null ? distanceMap[x][y] * -10 : scoreForUnmovableGrid;    // ADJUSTABLE
             }
         }
 

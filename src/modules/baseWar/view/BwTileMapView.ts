@@ -100,6 +100,13 @@ namespace TinyWars.BaseWar {
             egret.Tween.removeTweens(this._coZoneContainer);
         }
 
+        protected _getTileMap(): BwTileMap {
+            return this._tileMap;
+        }
+        protected _getCoZoneImages(): Map<number, GameUi.UiImage[][]> {
+            return this._coZoneImages;
+        }
+
         public updateCoZone(): void {
             const tileMap                               = this._tileMap;
             const war                                   = tileMap.getWar();
