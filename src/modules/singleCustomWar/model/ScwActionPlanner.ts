@@ -405,19 +405,19 @@ namespace TinyWars.SingleCustomWar {
         // Functions for getting the next state when the player inputs.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         protected _getNextStateOnTapWhenIdle(gridIndex: GridIndex): State {
-            const turnManager       = this._getTurnManager();
-            const unit              = this._getUnitMap().getUnitOnMap(gridIndex);
-            const selfPlayerIndex   = this._getPlayerIndexInTurn();
-            const isSelfInTurn      = (turnManager.getPlayerIndexInTurn() === selfPlayerIndex) && (turnManager.getPhaseCode() === TurnPhaseCode.Main);
+            const turnManager           = this._getTurnManager();
+            const unit                  = this._getUnitMap().getUnitOnMap(gridIndex);
+            const humanPlayerIndexes    = (this._getWar() as ScwWar).getHumanPlayerIndexes();
+            const isHumanInTurn         = (humanPlayerIndexes.indexOf(turnManager.getPlayerIndexInTurn()) >= 0) && (turnManager.getPhaseCode() === TurnPhaseCode.Main);
             if (!unit) {
                 const tile = this._getTileMap().getTile(gridIndex);
-                if ((isSelfInTurn) && (tile.getPlayerIndex() === selfPlayerIndex) && (tile.checkIsUnitProducer())) {
+                if ((isHumanInTurn) && (humanPlayerIndexes.indexOf(tile.getPlayerIndex()) >= 0) && (tile.checkIsUnitProducer())) {
                     return State.ChoosingProductionTarget;
                 } else {
                     return State.Idle;
                 }
             } else {
-                if ((isSelfInTurn) && ((unit.getState() === UnitState.Idle) && (unit.getPlayerIndex() === selfPlayerIndex))) {
+                if ((isHumanInTurn) && ((unit.getState() === UnitState.Idle) && (humanPlayerIndexes.indexOf(unit.getPlayerIndex()) >= 0))) {
                     return State.MakingMovePath;
                 } else {
                     if (unit.checkHasWeapon()) {

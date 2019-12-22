@@ -350,6 +350,7 @@ namespace TinyWars.Utility.Types {
     export type MapAvailability = {
         isEnabledForMcw : boolean;
         isEnabledForWr  : boolean;
+        isEnabledForScw : boolean;
     }
 
     export type UnitViewData = {

@@ -67,6 +67,7 @@ namespace TinyWars.WarMap {
                     mapFileName,
                     isEnabledForMultiCustomWar  : availability.isEnabledForMcw,
                     isEnabledForWarRoom         : availability.isEnabledForWr,
+                    isEnabledForSingleCustomWar : availability.isEnabledForScw,
                 },
             });
         }
