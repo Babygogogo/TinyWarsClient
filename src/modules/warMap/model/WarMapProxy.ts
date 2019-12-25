@@ -13,6 +13,7 @@ namespace TinyWars.WarMap {
                 { msgCode: ActionCode.S_GetMapStatisticsDataList,   callback: _onSGetMapStatisticsDataList },
                 { msgCode: ActionCode.S_GetMapRawData,              callback: _onSGetMapRawData },
                 { msgCode: ActionCode.S_MmChangeAvailability,       callback: _onSMmChangeAvailability },
+                { msgCode: ActionCode.S_MmReloadAllMaps,            callback: _onSMmReloadAllMaps },
             ], WarMapProxy);
         }
 
@@ -75,6 +76,18 @@ namespace TinyWars.WarMap {
             const data = e.data as ProtoTypes.IS_MmChangeAvailability;
             if (!data.errorCode) {
                 Notify.dispatch(Notify.Type.SMmChangeAvailability);
+            }
+        }
+
+        export function reqReloadAllMaps(): void {
+            NetManager.send({
+                C_MmReloadAllMaps: {},
+            });
+        }
+        function _onSMmReloadAllMaps(e: egret.Event): void {
+            const data = e.data as ProtoTypes.IS_MmReloadAllMaps;
+            if (!data.errorCode) {
+                Notify.dispatch(Notify.Type.SMmReloadAllMaps);
             }
         }
     }

@@ -40,13 +40,13 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         total   : number;
     }
     const _TILE_VALUE: { [tileType: number]: number } = {           // ADJUSTABLE
-        [TileType.Headquarters] : 10,
-        [TileType.Factory]      : 15,
-        [TileType.Airport]      : 12,
-        [TileType.Seaport]      : 12,
-        [TileType.City]         : 10,
-        [TileType.CommandTower] : 15,
-        [TileType.Radar]        : 10,
+        [TileType.Headquarters] : 50,
+        [TileType.Factory]      : 75,
+        [TileType.Airport]      : 60,
+        [TileType.Seaport]      : 60,
+        [TileType.City]         : 50,
+        [TileType.CommandTower] : 75,
+        [TileType.Radar]        : 50,
     };
     const _PRODUCTION_CANDIDATES: { [tileType: number]: { [unitType: number]: number } } = {    // ADJUSTABLE
         [TileType.Factory]: {
@@ -733,7 +733,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         } else if (captureAmount < currentCapturePoint / 3) {
             return 1;                                                                           // ADJUSTABLE
         } else {
-            const value = _TILE_VALUE[tile.getType()] || 5;                                     // ADJUSTABLE
+            const value = _TILE_VALUE[tile.getType()] || 25;                                    // ADJUSTABLE
             return captureAmount >= currentCapturePoint / 2 ? value : value / 2;                // ADJUSTABLE
         }
     }
@@ -806,9 +806,9 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         const teamIndex = targetUnit.getTeamIndex();
         _unitMap.forEachUnit(unit => {
             if (unit.getTeamIndex() === teamIndex) {
-                // if (unit.getType() === unitType) {
-                //     score += -unit.getCurrentHp() * productionCost / 3000 / Math.max(1, _unitValueRatio);                                                         // ADJUSTABLE
-                // }
+                if (unit.getType() === unitType) {
+                    score += -unit.getCurrentHp() * productionCost / 3000 / 1.5;                                                        // ADJUSTABLE
+                }
             } else {
                 if (targetUnit.getMinAttackRange()) {
                     const damage = Math.min(targetUnit.getBaseDamage(unit.getArmorType()) || 0, unit.getCurrentHp());
@@ -1075,6 +1075,43 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         return bestScoreAndAction ? bestScoreAndAction.action : null;
     }
 
+    async function _getActionForMaxScoreWithCandidateUnit1(candidateUnit: ScwUnit): Promise<ScoreAndAction | null> {  // DONE
+        await _checkAndCallLater();
+
+        const reachableArea         = _getReachableArea(candidateUnit, null, null);
+        const damageMapForSurface   = await _createDamageMap(candidateUnit, false);
+        const damageMapForDive      = candidateUnit.checkIsDiver() ? await _createDamageMap(candidateUnit, true) : null;
+        const scoreMapForDistance   = await _createScoreMapForDistance(candidateUnit);
+        let bestScoreAndAction      : ScoreAndAction;
+
+        for (let x = 0; x < _mapSize.width; ++x) {
+            if (reachableArea[x]) {
+                for (let y = 0; y < _mapSize.height; ++y) {
+                    if (reachableArea[x][y]) {
+                        const gridIndex     = { x, y };
+                        const pathNodes     = BwHelpers.createShortestMovePath(reachableArea, gridIndex);
+                        let scoreAndAction  = await _getMaxScoreAndAction(candidateUnit, gridIndex, pathNodes);
+
+                        if (scoreAndAction) {
+                            const action        = scoreAndAction.action;
+                            bestScoreAndAction  = _getBetterScoreAndAction(
+                                bestScoreAndAction,
+                                {
+                                    action  : scoreAndAction.action,
+                                    score   : (action.UnitDive) || ((candidateUnit.getIsDiving()) && (!action.UnitSurface))
+                                        ? scoreAndAction.score + await _getScoreForPosition(candidateUnit, gridIndex, damageMapForDive, scoreMapForDistance)
+                                        : scoreAndAction.score + await _getScoreForPosition(candidateUnit, gridIndex, damageMapForSurface, scoreMapForDistance)
+                                },
+                            );
+                        }
+                    }
+                }
+            }
+        }
+
+        return bestScoreAndAction;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // The available action generators for production.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1172,24 +1209,22 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         return action;
     }
 
-    // Phase 1a: make the ranged units to attack enemies.
+    // Phase 1a: search for the best action for all units.
     async function _getActionForPhase1a(): Promise<WarAction | null> {   // DONE
         await _checkAndCallLater();
 
         _candidateUnits = await _getCandidateUnitsForPhase1a();
-        let action      : WarAction;
-        while ((!action) || (!action.UnitAttack)) {
-            const unit = _popRandomCandidateUnit(_candidateUnits);
-            if (!unit) {
-                _candidateUnits = null;
-                _phaseCode      = PhaseCode.Phase2;
-                return null;
-            }
-
-            action = await _getActionForMaxScoreWithCandidateUnit(unit);
+        let scoreAndAction      : ScoreAndAction;
+        for (const unit of _candidateUnits) {
+            scoreAndAction = _getBetterScoreAndAction(scoreAndAction, await _getActionForMaxScoreWithCandidateUnit1(unit));
         }
-
-        return action;
+        if (scoreAndAction) {
+            return scoreAndAction.action;
+        } else {
+            _candidateUnits = null;
+            _phaseCode      = PhaseCode.Phase2;
+            return null;
+        }
     }
 
     // Phase 2: move the infantries, mech and bikes that are capturing buildings.
