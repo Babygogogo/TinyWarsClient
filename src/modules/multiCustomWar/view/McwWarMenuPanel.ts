@@ -407,11 +407,15 @@ namespace TinyWars.MultiCustomWar {
                 return {
                     name    : Lang.getText(Lang.Type.B0081),
                     callback: () => {
-                        const unit = war.getUnitMap().getUnitOnMap(war.getField().getCursor().getGridIndex());
+                        const unitMap       = war.getUnitMap();
+                        const unit          = unitMap.getUnitOnMap(war.getField().getCursor().getGridIndex());
+                        const playerIndex   = war.getPlayerIndexLoggedIn();
                         if (!unit) {
                             FloatText.show(Lang.getText(Lang.Type.A0027));
-                        } else if ((unit.getPlayerIndex() !== war.getPlayerIndexLoggedIn()) || (unit.getState() !== Types.UnitActionState.Idle)) {
+                        } else if ((unit.getPlayerIndex() !== playerIndex) || (unit.getState() !== Types.UnitActionState.Idle)) {
                             FloatText.show(Lang.getText(Lang.Type.A0028));
+                        } else if (unitMap.countUnitsOnMapForPlayer(playerIndex) <= 1) {
+                            FloatText.show(Lang.getText(Lang.Type.A0076));
                         } else {
                             ConfirmPanel.show({
                                 title   : Lang.getText(Lang.Type.B0081),

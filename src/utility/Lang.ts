@@ -380,6 +380,10 @@ namespace TinyWars.Utility.Lang {
             `地图重载成功`,
             `Successfully reloaded all maps.`,
         ],
+        [Type.A0076]: [
+            `您无法删除最后一个部队`,
+            `You can't delete your last unit.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
