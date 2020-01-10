@@ -384,6 +384,10 @@ namespace TinyWars.Utility.Lang {
             `您无法删除最后一个部队`,
             `You can't delete your last unit.`,
         ],
+        [Type.A0077]: [
+            `您没有可用于建造部队的建筑。`,
+            `You don't have any buildings that can produce units.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.

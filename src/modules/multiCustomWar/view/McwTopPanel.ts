@@ -52,7 +52,7 @@ namespace TinyWars.MultiCustomWar {
                 { type: Notify.Type.BwPlayerFundChanged,            callback: this._onNotifyMcwPlayerFundChanged },
                 { type: Notify.Type.BwPlayerIndexInTurnChanged,     callback: this._onNotifyMcwPlayerIndexInTurnChanged },
                 { type: Notify.Type.BwCoEnergyChanged,              callback: this._onNotifyMcwCoEnergyChanged },
-                { type: Notify.Type.BwCoUsingSkillTypeChanged,          callback: this._onNotifyMcwCoUsingSkillChanged },
+                { type: Notify.Type.BwCoUsingSkillTypeChanged,      callback: this._onNotifyMcwCoUsingSkillChanged },
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyMcwActionPlannerStateChanged },
             ];
             this._uiListeners = [
@@ -100,11 +100,29 @@ namespace TinyWars.MultiCustomWar {
         }
 
         private _onTouchedBtnUnitList(e: egret.TouchEvent): void {
-            this._war.getField().getActionPlanner().setStateIdle();
-            McwUnitListPanel.show();
+            const actionPlanner = this._war.getField().getActionPlanner();
+            if ((!actionPlanner.checkIsStateRequesting()) && (actionPlanner.getState() !== Types.ActionPlannerState.ExecutingAction)) {
+                actionPlanner.setStateIdle();
+                McwUnitListPanel.show();
+            }
         }
         private _onTouchedBtnFindBuilding(e: egret.TouchEvent): void {
-            FloatText.show("TODO");
+            const war           = this._war;
+            const field         = war.getField();
+            const actionPlanner = field.getActionPlanner();
+            if ((!actionPlanner.checkIsStateRequesting()) && (actionPlanner.getState() !== Types.ActionPlannerState.ExecutingAction)) {
+                actionPlanner.setStateIdle();
+
+                const gridIndex = this._getIdleBuildingGridIndex();
+                if (!gridIndex) {
+                    FloatText.show(Lang.getText(Lang.Type.A0077));
+                } else {
+                    const cursor = field.getCursor();
+                    cursor.setGridIndex(gridIndex);
+                    cursor.updateView();
+                    war.getView().moveGridToCenter(gridIndex);
+                }
+            }
         }
         private _onTouchedBtnEndTurn(e: egret.TouchEvent): void {
             const war = this._war;
@@ -257,6 +275,52 @@ namespace TinyWars.MultiCustomWar {
 
             hints.push(Lang.getText(Lang.Type.A0024));
             return hints.join(`\n`);
+        }
+
+        private _getIdleBuildingGridIndex(): Types.GridIndex | null {
+            const war                       = this._war;
+            const field                     = war.getField();
+            const tileMap                   = field.getTileMap();
+            const unitMap                   = field.getUnitMap();
+            const { x: currX, y: currY }    = field.getCursor().getGridIndex();
+            const { width, height}          = tileMap.getMapSize();
+            const playerIndex               = war.getPlayerIndexInTurn();
+            const checkIsIdle               = (gridIndex: Types.GridIndex): boolean => {
+                const tile = tileMap.getTile(gridIndex);
+                if ((tile.getPlayerIndex() === playerIndex) && (tile.getProduceUnitCategory() != null)) {
+                    const unit = unitMap.getUnitOnMap(gridIndex);
+                    if ((!unit)                                                                                     ||
+                        ((unit.getState() === Types.UnitActionState.Idle) && (unit.getPlayerIndex() === playerIndex))
+                    ) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            for (let y = currY; y < height; ++y) {
+                for (let x = 0; x < width; ++x) {
+                    if ((y > currY) || (x > currX)) {
+                        const gridIndex = { x, y };
+                        if (checkIsIdle(gridIndex)) {
+                            return gridIndex;
+                        }
+                    }
+                }
+            }
+
+            for (let y = 0; y <= currY; ++y) {
+                for (let x = 0; x < width; ++x) {
+                    if ((y < currY) || (x <= currX)) {
+                        const gridIndex = { x, y };
+                        if (checkIsIdle(gridIndex)) {
+                            return gridIndex;
+                        }
+                    }
+                }
+            }
+
+            return null;
         }
     }
 }

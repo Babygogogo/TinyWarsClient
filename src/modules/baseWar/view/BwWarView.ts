@@ -1,6 +1,7 @@
 
 namespace TinyWars.BaseWar {
     import Notify   = Utility.Notify;
+    import Types    = Utility.Types;
 
     export abstract class BwWarView extends eui.Group {
         private _fieldContainer     = new GameUi.UiZoomableComponent();
@@ -56,6 +57,20 @@ namespace TinyWars.BaseWar {
             }
 
             this._fieldContainer.setMouseWheelListenerEnabled(false);
+        }
+
+        public moveGridToCenter(gridIndex: Types.GridIndex): void {
+            const gridSize  = ConfigManager.getGridSize();
+            const stage     = Utility.StageManager.getStage();
+            const container = this._fieldContainer;
+            const contents  = container.getContents();
+            const point1    = contents.localToGlobal(
+                (gridIndex.x + 0.5) * gridSize.width,
+                (gridIndex.y + 0.5) * gridSize.height,
+            );
+            const point2    = contents.localToGlobal(0, 0);
+            container.setContentX(- point1.x + point2.x + stage.stageWidth / 2, true);
+            container.setContentY(- point1.y + point2.y + stage.stageHeight / 2, true);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
