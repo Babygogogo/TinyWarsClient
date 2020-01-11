@@ -78,7 +78,6 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onNotifyMcwTurnPhaseCodeChanged(e: egret.Event): void {
             this._updateBtnEndTurn();
-            this._updateBtnFindUnit();
             this._updateBtnFindBuilding();
             this._updateBtnCancel();
         }
@@ -95,6 +94,7 @@ namespace TinyWars.MultiCustomWar {
             this._updateLabelCoAndEnergy();
         }
         private _onNotifyMcwActionPlannerStateChanged(e: egret.Event): void {
+            this._updateBtnUnitList();
             this._updateBtnEndTurn();
             this._updateBtnCancel();
         }
@@ -156,7 +156,7 @@ namespace TinyWars.MultiCustomWar {
             this._updateLabelFund();
             this._updateLabelCoAndEnergy();
             this._updateBtnEndTurn();
-            this._updateBtnFindUnit();
+            this._updateBtnUnitList();
             this._updateBtnFindBuilding();
             this._updateBtnCancel();
             this._updateBtnMenu();
@@ -215,12 +215,11 @@ namespace TinyWars.MultiCustomWar {
                 && (war.getActionPlanner().getState() === Types.ActionPlannerState.Idle);
         }
 
-        private _updateBtnFindUnit(): void {
+        private _updateBtnUnitList(): void {
             const war                   = this._war;
-            const turnManager           = war.getTurnManager();
+            const actionPlanner         = war.getActionPlanner();
             this._btnUnitList.label     = Lang.getText(Lang.Type.B0152);
-            this._btnUnitList.visible   = (turnManager.getPlayerIndexInTurn() === war.getPlayerIndexLoggedIn())
-                && (turnManager.getPhaseCode() === Types.TurnPhaseCode.Main);
+            this._btnUnitList.visible   = (!actionPlanner.checkIsStateRequesting()) && (actionPlanner.getState() !== Types.ActionPlannerState.ExecutingAction);
         }
 
         private _updateBtnFindBuilding(): void {

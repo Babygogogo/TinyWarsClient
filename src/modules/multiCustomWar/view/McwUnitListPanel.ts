@@ -28,7 +28,6 @@ namespace TinyWars.MultiCustomWar {
         private _turnManager: McwTurnManager;
         private _dataForList: DataForUnitRenderer[];
         private _playerIndex: number;
-        private _isLeftSide = false;
 
         public static show(): void {
             if (!McwUnitListPanel._instance) {
@@ -69,7 +68,7 @@ namespace TinyWars.MultiCustomWar {
             this._unitMap       = war.getUnitMap() as McwUnitMap;
             this._turnManager   = war.getTurnManager() as McwTurnManager;
             this._cursor        = war.getField().getCursor() as McwCursor;
-            this._playerIndex = this._war.getPlayerIndexLoggedIn();
+            this._playerIndex   = war.getPlayerIndexLoggedIn() || this._turnManager.getNextPlayerIndex(0);
             this._updateView();
         }
         protected _onClosed(): void {
