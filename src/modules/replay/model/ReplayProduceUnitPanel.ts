@@ -48,6 +48,7 @@ namespace TinyWars.Replay {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
+                { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
                 { type: Notify.Type.BwActionPlannerStateChanged,   callback: this._onNotifyMcwPlannerStateChanged },
             ];
@@ -74,6 +75,9 @@ namespace TinyWars.Replay {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateComponentsForLanguage();
+        }
         private _onNotifyUnitAnimationTick(e: egret.Event): void {
             const viewList = this._listUnit.getViewList();
             for (let i = 0; i < viewList.numChildren; ++i) {
@@ -89,19 +93,38 @@ namespace TinyWars.Replay {
             this._war.getActionPlanner().setStateIdle();
         }
         private _onTouchedBtnDetail(e: egret.TouchEvent): void {
-            Utility.FloatText.show("TODO!!");
+            const selectedIndex = (this._listUnit.viewport as eui.List).selectedIndex;
+            const data          = selectedIndex != null ? this._dataForList[selectedIndex] : null;
+            if (data) {
+                BaseWar.BwUnitDetailPanel.show({
+                    unit  : data.unit,
+                });
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
+            this._updateComponentsForLanguage();
+
             this._dataForList = this._createDataForList();
             this._listUnit.bindData(this._dataForList);
         }
 
+        private _updateComponentsForLanguage(): void {
+            this._btnCancel.label = Lang.getText(Lang.Type.B0154);
+            this._btnDetail.label = Lang.getText(Lang.Type.B0267);
+
+            const viewList = this._listUnit.getViewList();
+            for (let i = 0; i < viewList.numChildren; ++i) {
+                const child = viewList.getChildAt(i);
+                (child instanceof UnitRenderer) && (child.updateOnLanguageChanged());
+            }
+        }
+
         private _createDataForList(): DataForUnitRenderer[] {
-            const datas         = [] as DataForUnitRenderer[];
+            const dataList      = [] as DataForUnitRenderer[];
             const war           = this._war;
             const player        = war.getPlayerInTurn();
             const currentFund   = player.getFund();
@@ -117,7 +140,7 @@ namespace TinyWars.Replay {
                     unitId  : -1,
                     viewId  : ConfigManager.getUnitViewId(unitType, playerIndex),
                 }, configVersion) as ReplayUnit;
-                datas.push({
+                dataList.push({
                     unitType,
                     currentFund,
                     actionPlanner,
@@ -127,7 +150,7 @@ namespace TinyWars.Replay {
                 });
             }
 
-            return datas.sort(sorterForDataForList);
+            return dataList.sort(sorterForDataForList);
         }
     }
 
@@ -168,6 +191,10 @@ namespace TinyWars.Replay {
                 this._unitView.tickUnitAnimationFrame();
                 this._unitView.tickStateAnimationFrame();
             }
+        }
+
+        public updateOnLanguageChanged(): void {
+            (this.data) && (this._updateView());
         }
 
         protected dataChanged(): void {
