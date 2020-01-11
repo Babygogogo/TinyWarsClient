@@ -6,6 +6,8 @@ namespace TinyWars.Replay {
     import FlowManager  = Utility.FlowManager;
     import Logger       = Utility.Logger;
     import Types        = Utility.Types;
+    import LocalStorage = Utility.LocalStorage;
+    import TimeModel    = Time.TimeModel;
     import WarMapModel  = WarMap.WarMapModel;
 
     const enum MenuType {
@@ -255,6 +257,12 @@ namespace TinyWars.Replay {
         private _createDataForAdvancedMenu(): DataForCommandRenderer[] {
             const dataList = [] as DataForCommandRenderer[];
 
+            const commandShowTileAnimation = this._createCommandShowTileAnimation();
+            (commandShowTileAnimation) && (dataList.push(commandShowTileAnimation));
+
+            const commandStopTileAnimation = this._createCommandStopTileAnimation();
+            (commandStopTileAnimation) && (dataList.push(commandStopTileAnimation));
+
             return dataList;
         }
 
@@ -278,6 +286,35 @@ namespace TinyWars.Replay {
                         callback: () => FlowManager.gotoLobby(),
                     });
                 },
+            }
+        }
+
+        private _createCommandShowTileAnimation(): DataForCommandRenderer | null {
+            if (TimeModel.checkIsTileAnimationTicking()) {
+                return null;
+            } else {
+                return {
+                    name    : Lang.getText(Lang.Type.B0176),
+                    callback: () => {
+                        TimeModel.startTileAnimationTick();
+                        LocalStorage.setShowTileAnimation(true);
+                        this._updateView();
+                    },
+                }
+            }
+        }
+        private _createCommandStopTileAnimation(): DataForCommandRenderer | null {
+            if (!TimeModel.checkIsTileAnimationTicking()) {
+                return null;
+            } else {
+                return {
+                    name    : Lang.getText(Lang.Type.B0177),
+                    callback: () => {
+                        TimeModel.stopTileAnimationTick();
+                        LocalStorage.setShowTileAnimation(false);
+                        this._updateView();
+                    },
+                }
             }
         }
     }
