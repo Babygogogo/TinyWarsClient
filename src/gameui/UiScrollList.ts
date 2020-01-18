@@ -1,11 +1,15 @@
 
 namespace TinyWars.GameUi {
+    import Notify       = Utility.Notify;
+    import StageManager = Utility.StageManager;
+
     export class UiScrollList extends eui.Scroller {
         private _itemRenderer : any;
         private _dataProvider : eui.ArrayCollection;
 
         private _scrollVerticalPercentage   : number;
         private _scrollHorizontalPercentage : number;
+        private _mousePoint                 = new egret.Point();
 
         public constructor() {
             super();
@@ -13,6 +17,7 @@ namespace TinyWars.GameUi {
             this._dataProvider = new eui.ArrayCollection();
 
             this.addEventListener(egret.Event.COMPLETE, this._onAllSkinPartsAdded, this);
+            this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
         }
 
         public setItemRenderer(itemRenderer: any): void {
@@ -97,6 +102,20 @@ namespace TinyWars.GameUi {
             }
         }
 
+        private _onAddedToStage(e: egret.Event): void {
+            this.removeEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
+            this.addEventListener(egret.Event.REMOVED_FROM_STAGE, this._onRemovedFromStage, this);
+
+            Notify.addEventListener(Notify.Type.MouseWheel, this._onNotifyMouseWheel, this);
+        }
+
+        private _onRemovedFromStage(e: egret.Event): void {
+            this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
+            this.removeEventListener(egret.Event.REMOVED_FROM_STAGE, this._onRemovedFromStage, this);
+
+            Notify.removeEventListener(Notify.Type.MouseWheel, this._onNotifyMouseWheel, this);
+        }
+
         private _onTouchedListItem(e : eui.ItemTapEvent) : void {
             const item: any = (this.viewport as eui.List).getElementAt(e.itemIndex);
             (item) && (item.onItemTapEvent) && item.onItemTapEvent(e);
@@ -114,6 +133,18 @@ namespace TinyWars.GameUi {
 
             const viewport = this.viewport;
             viewport.scrollH = this._scrollHorizontalPercentage / 100  * Math.max(0, viewport.contentWidth - viewport.width);
+        }
+
+        private _onNotifyMouseWheel(e: egret.Event): void {
+            const { x, y } = this.globalToLocal(StageManager.getMouseX(), StageManager.getMouseY(), this._mousePoint);
+            if ((x >= 0) && (x <= this.width) && (y >= 0) && (y <= this.height)) {
+                this.stopAnimation();
+
+                const value         = - e.data / 2;
+                const viewport      = this.viewport as eui.List;
+                viewport.scrollV    = Math.max(0, Math.min(viewport.scrollV + value, viewport.contentHeight - viewport.height));
+                viewport.scrollH    = Math.max(0, Math.min(viewport.scrollH + value, viewport.contentWidth - viewport.width));
+            }
         }
     }
 }
