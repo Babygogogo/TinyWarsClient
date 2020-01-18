@@ -554,4 +554,49 @@ namespace TinyWars.BaseWar.BwHelpers {
             });
         }
     }
+
+    export function getIdleBuildingGridIndex(war: BwWar): Types.GridIndex | null {
+        const field                     = war.getField();
+        const tileMap                   = field.getTileMap();
+        const unitMap                   = field.getUnitMap();
+        const { x: currX, y: currY }    = field.getCursor().getGridIndex();
+        const { width, height}          = tileMap.getMapSize();
+        const playerIndex               = war.getPlayerIndexInTurn();
+        const checkIsIdle               = (gridIndex: Types.GridIndex): boolean => {
+            const tile = tileMap.getTile(gridIndex);
+            if ((tile.getPlayerIndex() === playerIndex) && (tile.getProduceUnitCategory() != null)) {
+                const unit = unitMap.getUnitOnMap(gridIndex);
+                if ((!unit)                                                                                     ||
+                    ((unit.getState() === Types.UnitActionState.Idle) && (unit.getPlayerIndex() === playerIndex))
+                ) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        for (let y = currY; y < height; ++y) {
+            for (let x = 0; x < width; ++x) {
+                if ((y > currY) || (x > currX)) {
+                    const gridIndex = { x, y };
+                    if (checkIsIdle(gridIndex)) {
+                        return gridIndex;
+                    }
+                }
+            }
+        }
+
+        for (let y = 0; y <= currY; ++y) {
+            for (let x = 0; x < width; ++x) {
+                if ((y < currY) || (x <= currX)) {
+                    const gridIndex = { x, y };
+                    if (checkIsIdle(gridIndex)) {
+                        return gridIndex;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
 }

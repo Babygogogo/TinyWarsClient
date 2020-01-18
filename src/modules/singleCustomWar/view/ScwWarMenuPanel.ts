@@ -483,7 +483,7 @@ namespace TinyWars.SingleCustomWar {
             const war                   = data.war;
             const player                = data.player;
             const playerIndex           = player.getPlayerIndex();
-            this._labelName.text        = player.getNickname();
+            this._labelName.text        = player.getUserId() != null ? Lang.getText(Lang.Type.B0031) : Lang.getText(Lang.Type.B0256);
             this._labelName.textColor   = player === war.getPlayerInTurn() ? 0x00FF00 : 0xFFFFFF;
             this._labelForce.text       = `${Lang.getPlayerForceName(player.getPlayerIndex())}`
                 + `  ${Lang.getPlayerTeamName(player.getTeamIndex())}`

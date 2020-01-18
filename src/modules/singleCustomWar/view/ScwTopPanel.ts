@@ -1,6 +1,7 @@
 
 namespace TinyWars.SingleCustomWar {
     import ConfirmPanel     = Common.ConfirmPanel;
+    import BwHelpers        = BaseWar.BwHelpers;
     import FloatText        = Utility.FloatText;
     import Lang             = Utility.Lang;
     import Helpers          = Utility.Helpers;
@@ -104,7 +105,22 @@ namespace TinyWars.SingleCustomWar {
             BwUnitListPanel.show();
         }
         private _onTouchedBtnFindBuilding(e: egret.TouchEvent): void {
-            FloatText.show("TODO");
+            const war           = this._war;
+            const field         = war.getField();
+            const actionPlanner = field.getActionPlanner();
+            if ((!actionPlanner.checkIsStateRequesting()) && (actionPlanner.getState() !== Types.ActionPlannerState.ExecutingAction)) {
+                actionPlanner.setStateIdle();
+
+                const gridIndex = BwHelpers.getIdleBuildingGridIndex(war);
+                if (!gridIndex) {
+                    FloatText.show(Lang.getText(Lang.Type.A0077));
+                } else {
+                    const cursor = field.getCursor();
+                    cursor.setGridIndex(gridIndex);
+                    cursor.updateView();
+                    war.getView().moveGridToCenter(gridIndex);
+                }
+            }
         }
         private _onTouchedBtnEndTurn(e: egret.TouchEvent): void {
             const war = this._war;
@@ -146,7 +162,8 @@ namespace TinyWars.SingleCustomWar {
         private _updateLabelPlayer(): void {
             const war                   = this._war;
             const player                = war.getPlayerInTurn();
-            this._labelPlayer.text      = `${Lang.getText(Lang.Type.B0031)}:${player.getNickname()} (${Helpers.getColorTextForPlayerIndex(player.getPlayerIndex())})`;
+            const name                  = player.getUserId() != null ? Lang.getText(Lang.Type.B0031) : Lang.getText(Lang.Type.B0256);
+            this._labelPlayer.text      = `${Lang.getText(Lang.Type.B0031)}:${name} (${Helpers.getColorTextForPlayerIndex(player.getPlayerIndex())})`;
             this._labelPlayer.textColor = 0xFFFFFF;
         }
 

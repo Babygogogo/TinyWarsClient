@@ -48,7 +48,7 @@ namespace TinyWars.Utility.VisibilityHelpers {
             params.war.getPlayerManager().getWatcherTeamIndexes(params.observerUserId)
         );
     }
-    function checkIsUnitOnMapVisibleToTeams(
+    export function checkIsUnitOnMapVisibleToTeams(
         war                 : BwWar,
         gridIndex           : GridIndex,
         unitType            : Types.UnitType,
@@ -119,7 +119,7 @@ namespace TinyWars.Utility.VisibilityHelpers {
     export function checkIsTileVisibleToUser(war: BwWar, gridIndex: GridIndex, observerUserId: number): boolean {
         return checkIsTileVisibleToTeams(war, gridIndex, war.getPlayerManager().getWatcherTeamIndexes(observerUserId));
     }
-    function checkIsTileVisibleToTeams(war: BwWar, gridIndex: GridIndex, observerTeamIndexes: Set<number>): boolean {
+    export function checkIsTileVisibleToTeams(war: BwWar, gridIndex: GridIndex, observerTeamIndexes: Set<number>): boolean {
         const fogMap = war.getFogMap();
         if (!fogMap.checkHasFogCurrently()) {
             return true;

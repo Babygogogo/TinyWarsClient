@@ -94,38 +94,31 @@ namespace TinyWars.SingleCustomWar.ScwHelpers {
     }
 
     export function updateTilesAndUnitsOnVisibilityChanged(war: ScwWar): void {
-        const userId    = User.UserModel.getSelfUserId();
-        const tileMap   = war.getTileMap();
-        tileMap.forEachTile(tile => {
-            const gridIndex = tile.getGridIndex();
-            if (VisibilityHelpers.checkIsTileVisibleToUser(war, gridIndex, userId)) {
-                if (tile.getIsFogEnabled()) {
-                    tile.setFogDisabled();
-                }
+        const teamIndexes = (war.getPlayerManager() as ScwPlayerManager).getWatcherTeamIndexesForScw();
+        war.getUnitMap().forEachUnitOnMap(unit => {
+            if (!VisibilityHelpers.checkIsUnitOnMapVisibleToTeams(
+                war,
+                unit.getGridIndex(),
+                unit.getType(),
+                unit.getIsDiving(),
+                unit.getPlayerIndex(),
+                teamIndexes
+            )) {
+                unit.setViewVisible(false);
             } else {
-                if (!tile.getIsFogEnabled()) {
-                    tile.setFogEnabled();
-                }
+                unit.setViewVisible(true);
+            }
+        });
+
+        const tileMap = war.getTileMap();
+        tileMap.forEachTile(tile => {
+            if (!VisibilityHelpers.checkIsTileVisibleToTeams(war, tile.getGridIndex(), teamIndexes)) {
+                tile.setFogEnabled();
+            } else {
+                tile.setFogDisabled();
             }
             tile.updateView();
         });
-
-        war.getUnitMap().forEachUnitOnMap(unit => {
-            const gridIndex = unit.getGridIndex();
-            if (VisibilityHelpers.checkIsUnitOnMapVisibleToUser({
-                war,
-                gridIndex,
-                unitType        : unit.getType(),
-                isDiving        : unit.getIsDiving(),
-                unitPlayerIndex : unit.getPlayerIndex(),
-                observerUserId  : userId,
-            })) {
-                unit.setViewVisible(true);
-            } else {
-                unit.setViewVisible(false);
-            }
-        });
-
         tileMap.getView().updateCoZone();
     }
 

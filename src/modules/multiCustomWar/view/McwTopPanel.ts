@@ -1,6 +1,7 @@
 
 namespace TinyWars.MultiCustomWar {
     import ConfirmPanel     = Common.ConfirmPanel;
+    import BwHelpers        = BaseWar.BwHelpers;
     import FloatText        = Utility.FloatText;
     import Lang             = Utility.Lang;
     import Helpers          = Utility.Helpers;
@@ -113,7 +114,7 @@ namespace TinyWars.MultiCustomWar {
             if ((!actionPlanner.checkIsStateRequesting()) && (actionPlanner.getState() !== Types.ActionPlannerState.ExecutingAction)) {
                 actionPlanner.setStateIdle();
 
-                const gridIndex = this._getIdleBuildingGridIndex();
+                const gridIndex = BwHelpers.getIdleBuildingGridIndex(war);
                 if (!gridIndex) {
                     FloatText.show(Lang.getText(Lang.Type.A0077));
                 } else {
@@ -274,52 +275,6 @@ namespace TinyWars.MultiCustomWar {
 
             hints.push(Lang.getText(Lang.Type.A0024));
             return hints.join(`\n`);
-        }
-
-        private _getIdleBuildingGridIndex(): Types.GridIndex | null {
-            const war                       = this._war;
-            const field                     = war.getField();
-            const tileMap                   = field.getTileMap();
-            const unitMap                   = field.getUnitMap();
-            const { x: currX, y: currY }    = field.getCursor().getGridIndex();
-            const { width, height}          = tileMap.getMapSize();
-            const playerIndex               = war.getPlayerIndexInTurn();
-            const checkIsIdle               = (gridIndex: Types.GridIndex): boolean => {
-                const tile = tileMap.getTile(gridIndex);
-                if ((tile.getPlayerIndex() === playerIndex) && (tile.getProduceUnitCategory() != null)) {
-                    const unit = unitMap.getUnitOnMap(gridIndex);
-                    if ((!unit)                                                                                     ||
-                        ((unit.getState() === Types.UnitActionState.Idle) && (unit.getPlayerIndex() === playerIndex))
-                    ) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            for (let y = currY; y < height; ++y) {
-                for (let x = 0; x < width; ++x) {
-                    if ((y > currY) || (x > currX)) {
-                        const gridIndex = { x, y };
-                        if (checkIsIdle(gridIndex)) {
-                            return gridIndex;
-                        }
-                    }
-                }
-            }
-
-            for (let y = 0; y <= currY; ++y) {
-                for (let x = 0; x < width; ++x) {
-                    if ((y < currY) || (x <= currX)) {
-                        const gridIndex = { x, y };
-                        if (checkIsIdle(gridIndex)) {
-                            return gridIndex;
-                        }
-                    }
-                }
-            }
-
-            return null;
         }
     }
 }
