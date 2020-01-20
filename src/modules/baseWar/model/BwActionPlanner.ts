@@ -872,7 +872,7 @@ namespace TinyWars.BaseWar {
             const beginningGridIndex    = unit.getGridIndex();
             const hasAmmo               = (unit.getPrimaryWeaponCurrentAmmo() > 0) || (unit.checkHasSecondaryWeapon());
             const unitMap               = this._getUnitMap();
-            this._attackableArea        = BwHelpers.createAttackableArea(
+            this._setAttackableArea(BwHelpers.createAttackableArea(
                 this.getMovableArea(),
                 this.getMapSize(),
                 unit.getMinAttackRange(),
@@ -887,7 +887,10 @@ namespace TinyWars.BaseWar {
                             && ((canAttackAfterMove) || (!hasMoved))
                     }
                 }
-            );
+            ));
+        }
+        protected _setAttackableArea(area: AttackableArea): void {
+            this._attackableArea = area;
         }
         public getAttackableArea(): AttackableArea {
             return this._attackableArea;
@@ -986,11 +989,14 @@ namespace TinyWars.BaseWar {
         public getAreaForPreviewingAttack(): AttackableArea {
             return this._areaForPreviewAttack;
         }
+        protected _setAreaForPreviewingAttack(area: AttackableArea): void {
+            this._areaForPreviewAttack = area;
+        }
         protected _clearDataForPreviewingAttackableArea(): void {
             this._unitsForPreviewAttack.clear();
             this._areaForPreviewAttack.length = 0;
         }
-        private _addUnitForPreviewAttackableArea(unit: BwUnit): void {
+        protected _addUnitForPreviewAttackableArea(unit: BwUnit): void {
             const canAttackAfterMove    = unit.checkCanAttackAfterMove();
             const beginningGridIndex    = unit.getGridIndex();
             const hasAmmo               = (unit.getPrimaryWeaponCurrentAmmo() > 0) || (unit.checkHasSecondaryWeapon());
@@ -1213,7 +1219,7 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _getMoveCost(targetGridIndex: GridIndex, movingUnit: BwUnit): number | undefined {
+        protected _getMoveCost(targetGridIndex: GridIndex, movingUnit: BwUnit): number | undefined {
             if (!GridIndexHelpers.checkIsInsideMap(targetGridIndex, this.getMapSize())) {
                 return undefined;
             } else {

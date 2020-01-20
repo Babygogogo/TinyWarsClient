@@ -16,9 +16,6 @@ namespace TinyWars.SingleCustomWar {
     import ConfirmPanel         = Common.ConfirmPanel;
 
     export class ScwActionPlanner extends BaseWar.BwActionPlanner {
-        // private _getPlayerIndexLoggedIn(): number {
-        //     return (this._getWar() as ScwWar).getHumanPlayerIndexes();
-        // }
         private _getPlayerIndexInTurn(): number {
             return (this._getWar() as ScwWar).getPlayerIndexInTurn();
         }
@@ -205,7 +202,6 @@ namespace TinyWars.SingleCustomWar {
             this._updateView();
             ScwProduceUnitPanel.show(gridIndex);
         }
-
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for setting requesting state.
@@ -843,6 +839,121 @@ namespace TinyWars.SingleCustomWar {
                                 callback: () => this._setStateRequestingUnitWait(),
                             }),
                     }];
+                }
+            }
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Other functions.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        protected _getMoveCost(targetGridIndex: GridIndex, movingUnit: BaseWar.BwUnit): number | undefined {
+            if (!GridIndexHelpers.checkIsInsideMap(targetGridIndex, this.getMapSize())) {
+                return undefined;
+            } else {
+                const war           = this._getWar();
+                const existingUnit  = this._getUnitMap().getUnitOnMap(targetGridIndex);
+                if ((existingUnit)                                              &&
+                    (existingUnit.getTeamIndex() !== movingUnit.getTeamIndex()) &&
+                    (VisibilityHelpers.checkIsUnitOnMapVisibleToTeams(
+                        war,
+                        targetGridIndex,
+                        existingUnit.getType(),
+                        existingUnit.getIsDiving(),
+                        existingUnit.getPlayerIndex(),
+                        (war.getPlayerManager() as ScwPlayerManager).getWatcherTeamIndexesForScw()
+                    ))
+                ) {
+                    return undefined;
+                } else {
+                    return this._getTileMap().getTile(targetGridIndex).getMoveCostByUnit(movingUnit);
+                }
+            }
+        }
+
+        protected _resetAttackableArea(): void {
+            const focusUnit             = this.getFocusUnit();
+            const canAttackAfterMove    = focusUnit.checkCanAttackAfterMove();
+            const isLoaded              = focusUnit.getLoaderUnitId() != null;
+            const beginningGridIndex    = focusUnit.getGridIndex();
+            const hasAmmo               = (focusUnit.getPrimaryWeaponCurrentAmmo() > 0) || (focusUnit.checkHasSecondaryWeapon());
+            const unitMap               = this._getUnitMap();
+            const war                   = this._getWar();
+            const teamIndexes           = (war.getPlayerManager() as ScwPlayerManager).getWatcherTeamIndexesForScw();
+            this._setAttackableArea(BwHelpers.createAttackableArea(
+                this.getMovableArea(),
+                this.getMapSize(),
+                focusUnit.getMinAttackRange(),
+                focusUnit.getFinalMaxAttackRange(),
+                (moveGridIndex: GridIndex, attackGridIndex: GridIndex): boolean => {
+                    if (!hasAmmo) {
+                        return false;
+                    } else {
+                        const existingUnit = unitMap.getUnitOnMap(moveGridIndex);
+                        if ((existingUnit)                                      &&
+                            (existingUnit !== focusUnit)                        &&
+                            (VisibilityHelpers.checkIsUnitOnMapVisibleToTeams(
+                                war,
+                                moveGridIndex,
+                                existingUnit.getType(),
+                                existingUnit.getIsDiving(),
+                                existingUnit.getPlayerIndex(),
+                                teamIndexes
+                            ))
+                        ) {
+                            return false;
+                        } else {
+                            const hasMoved = !GridIndexHelpers.checkIsEqual(moveGridIndex, beginningGridIndex);
+                            return ((!isLoaded) || (hasMoved))
+                                && ((canAttackAfterMove) || (!hasMoved))
+                        }
+                    }
+                }
+            ));
+        }
+
+        protected _addUnitForPreviewAttackableArea(unit: BaseWar.BwUnit): void {
+            const canAttackAfterMove    = unit.checkCanAttackAfterMove();
+            const beginningGridIndex    = unit.getGridIndex();
+            const hasAmmo               = (unit.getPrimaryWeaponCurrentAmmo() > 0) || (unit.checkHasSecondaryWeapon());
+            const mapSize               = this.getMapSize();
+            const unitMap               = this._getUnitMap();
+            const war                   = this._getWar();
+            const teamIndexes           = (war.getPlayerManager() as ScwPlayerManager).getWatcherTeamIndexesForScw();
+            const newArea               = BwHelpers.createAttackableArea(
+                BwHelpers.createMovableArea(
+                    unit.getGridIndex(),
+                    unit.getFinalMoveRange(),
+                    gridIndex => this._getMoveCost(gridIndex, unit)
+                ),
+                mapSize,
+                unit.getMinAttackRange(),
+                unit.getFinalMaxAttackRange(),
+                (moveGridIndex, attackGridIndex) => {
+                    const existingUnit = unitMap.getUnitOnMap(moveGridIndex);
+                    return ((!existingUnit) || (existingUnit === unit) || (!VisibilityHelpers.checkIsUnitOnMapVisibleToTeams(war, moveGridIndex, existingUnit.getType(), existingUnit.getIsDiving(), existingUnit.getPlayerIndex(), teamIndexes)))
+                        && (hasAmmo)
+                        && ((canAttackAfterMove) || (GridIndexHelpers.checkIsEqual(moveGridIndex, beginningGridIndex)));
+                }
+            );
+
+            const unitsForPreviewAttack = this.getUnitsForPreviewingAttackableArea();
+            unitsForPreviewAttack.set(unit.getUnitId(), unit);
+
+            const areaForPreviewAttack = this.getAreaForPreviewingAttack();
+            if (!areaForPreviewAttack.length) {
+                this._setAreaForPreviewingAttack(newArea);
+            } else {
+                const { width, height } = mapSize;
+                for (let x = 0; x < width; ++x) {
+                    if (newArea[x]) {
+                        if (!areaForPreviewAttack[x]) {
+                            areaForPreviewAttack[x] = newArea[x];
+                        } else {
+                            for (let y = 0; y < height; ++y) {
+                                areaForPreviewAttack[x][y] = areaForPreviewAttack[x][y] || newArea[x][y];
+                            }
+                        }
+                    }
                 }
             }
         }
