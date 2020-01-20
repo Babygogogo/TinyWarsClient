@@ -1,9 +1,10 @@
 
 namespace TinyWars.SingleCustomWar {
-    import Notify       = Utility.Notify;
-    import Lang         = Utility.Lang;
-    import StageManager = Utility.StageManager;
-    import Types        = Utility.Types;
+    import Notify               = Utility.Notify;
+    import Lang                 = Utility.Lang;
+    import StageManager         = Utility.StageManager;
+    import Types                = Utility.Types;
+    import VisibilityHelpers    = Utility.VisibilityHelpers;
 
     const _CELL_WIDTH           = 80;
     const _LEFT_X               = 80;
@@ -145,14 +146,25 @@ namespace TinyWars.SingleCustomWar {
                 const unitList  = this._unitList;
                 unitList.length = 0;
 
-                const gridIndex = this._cursor.getGridIndex();
-                const unitOnMap = this._unitMap.getUnitOnMap(gridIndex) as ScwUnit;
-                if (unitOnMap) {
+                const gridIndex     = this._cursor.getGridIndex();
+                const unitOnMap     = this._unitMap.getUnitOnMap(gridIndex) as ScwUnit;
+                const war           = this._war;
+                const teamIndexes   = (war.getPlayerManager() as ScwPlayerManager).getWatcherTeamIndexesForScw();
+
+                if ((unitOnMap)                                         &&
+                    (VisibilityHelpers.checkIsUnitOnMapVisibleToTeams(
+                        war,
+                        gridIndex,
+                        unitOnMap.getType(),
+                        unitOnMap.getIsDiving(),
+                        unitOnMap.getPlayerIndex(),
+                        teamIndexes
+                    ))
+                ) {
                     unitList.push(unitOnMap);
 
-                    const war = this._war;
-                    if ((!war.getFogMap().checkHasFogCurrently()) ||
-                        (war.getWatcherTeamIndexes(User.UserModel.getSelfUserId()).has(unitOnMap.getTeamIndex()))
+                    if ((!war.getFogMap().checkHasFogCurrently())   ||
+                        (teamIndexes.has(unitOnMap.getTeamIndex()))
                     ) {
                         for (const loadedUnit of this._unitMap.getUnitsLoadedByLoader(unitOnMap, true)) {
                             unitList.push(loadedUnit as ScwUnit);

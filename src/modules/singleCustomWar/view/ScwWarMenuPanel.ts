@@ -496,7 +496,7 @@ namespace TinyWars.SingleCustomWar {
                 this._labelLost.visible = false;
                 this._groupInfo.visible = true;
 
-                const isInfoKnown               = (!war.getFogMap().checkHasFogCurrently()) || (war.getPlayerManager().getWatcherTeamIndexes(User.UserModel.getSelfUserId()).has(player.getTeamIndex()));
+                const isInfoKnown               = (!war.getFogMap().checkHasFogCurrently()) || ((war.getPlayerManager() as ScwPlayerManager).getWatcherTeamIndexesForScw().has(player.getTeamIndex()));
                 const tilesCountAndIncome       = this._getTilesCountAndIncome(war, playerIndex);
                 this._labelFundTitle.text       = Lang.getText(Lang.Type.B0156);
                 this._labelFund.text            = isInfoKnown ? `${player.getFund()}` : `?`;

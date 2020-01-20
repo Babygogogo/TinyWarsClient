@@ -1,18 +1,19 @@
 
 namespace TinyWars.SingleCustomWar {
-    import Types            = Utility.Types;
-    import GridIndexHelpers = Utility.GridIndexHelpers;
-    import Logger           = Utility.Logger;
-    import FloatText        = Utility.FloatText;
-    import Lang             = Utility.Lang;
-    import TurnPhaseCode    = Types.TurnPhaseCode;
-    import UnitState        = Types.UnitActionState;
-    import GridIndex        = Types.GridIndex;
-    import State            = Types.ActionPlannerState;
-    import UnitActionType   = Types.UnitActionType;
-    import UnitType         = Types.UnitType;
-    import BwHelpers        = BaseWar.BwHelpers;
-    import ConfirmPanel     = Common.ConfirmPanel;
+    import Types                = Utility.Types;
+    import GridIndexHelpers     = Utility.GridIndexHelpers;
+    import Logger               = Utility.Logger;
+    import FloatText            = Utility.FloatText;
+    import Lang                 = Utility.Lang;
+    import VisibilityHelpers    = Utility.VisibilityHelpers;
+    import TurnPhaseCode        = Types.TurnPhaseCode;
+    import UnitState            = Types.UnitActionState;
+    import GridIndex            = Types.GridIndex;
+    import State                = Types.ActionPlannerState;
+    import UnitActionType       = Types.UnitActionType;
+    import UnitType             = Types.UnitType;
+    import BwHelpers            = BaseWar.BwHelpers;
+    import ConfirmPanel         = Common.ConfirmPanel;
 
     export class ScwActionPlanner extends BaseWar.BwActionPlanner {
         // private _getPlayerIndexLoggedIn(): number {
@@ -405,25 +406,44 @@ namespace TinyWars.SingleCustomWar {
         // Functions for getting the next state when the player inputs.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         protected _getNextStateOnTapWhenIdle(gridIndex: GridIndex): State {
-            const turnManager           = this._getTurnManager();
-            const unit                  = this._getUnitMap().getUnitOnMap(gridIndex);
-            const humanPlayerIndexes    = (this._getWar() as ScwWar).getHumanPlayerIndexes();
-            const isHumanInTurn         = (humanPlayerIndexes.indexOf(turnManager.getPlayerIndexInTurn()) >= 0) && (turnManager.getPhaseCode() === TurnPhaseCode.Main);
-            if (!unit) {
-                const tile = this._getTileMap().getTile(gridIndex);
-                if ((isHumanInTurn) && (humanPlayerIndexes.indexOf(tile.getPlayerIndex()) >= 0) && (tile.checkIsUnitProducer())) {
-                    return State.ChoosingProductionTarget;
-                } else {
-                    return State.Idle;
-                }
+            const war               = this._getWar() as ScwWar;
+            const turnManager       = this._getTurnManager();
+            const playerIndexInTurn = turnManager.getPlayerIndexInTurn();
+
+            if ((war.getHumanPlayerIndexes().indexOf(playerIndexInTurn) < 0) ||
+                (turnManager.getPhaseCode() !== TurnPhaseCode.Main)
+            ) {
+                return State.Idle;
             } else {
-                if ((isHumanInTurn) && ((unit.getState() === UnitState.Idle) && (humanPlayerIndexes.indexOf(unit.getPlayerIndex()) >= 0))) {
-                    return State.MakingMovePath;
-                } else {
-                    if (unit.checkHasWeapon()) {
-                        return State.PreviewingAttackableArea;
+                const unit = this._getUnitMap().getUnitOnMap(gridIndex);
+                if (!unit) {
+                    const tile = this._getTileMap().getTile(gridIndex);
+                    if ((playerIndexInTurn === tile.getPlayerIndex()) && (tile.checkIsUnitProducer())) {
+                        return State.ChoosingProductionTarget;
                     } else {
-                        return State.PreviewingMovableArea;
+                        return State.Idle;
+                    }
+                } else {
+                    const unitPlayerIndex = unit.getPlayerIndex();
+                    if (!VisibilityHelpers.checkIsUnitOnMapVisibleToTeams(
+                        war,
+                        gridIndex,
+                        unit.getType(),
+                        unit.getIsDiving(),
+                        unitPlayerIndex,
+                        (war.getPlayerManager() as ScwPlayerManager).getWatcherTeamIndexesForScw()
+                    )) {
+                        return State.Idle;
+                    } else {
+                        if ((unit.getState() === UnitState.Idle) && (playerIndexInTurn === unitPlayerIndex)) {
+                            return State.MakingMovePath;
+                        } else {
+                            if (unit.checkHasWeapon()) {
+                                return State.PreviewingAttackableArea;
+                            } else {
+                                return State.PreviewingMovableArea;
+                            }
+                        }
                     }
                 }
             }

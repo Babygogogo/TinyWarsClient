@@ -171,7 +171,7 @@ namespace TinyWars.SingleCustomWar {
             const war               = this._war;
             const playerInTurn      = war.getPlayerInTurn();
             if ((war.getFogMap().checkHasFogCurrently())                                                                        &&
-                (!war.getPlayerManager().getWatcherTeamIndexes(User.UserModel.getSelfUserId()).has(playerInTurn.getTeamIndex()))
+                (!(war.getPlayerManager() as ScwPlayerManager).getWatcherTeamIndexesForScw().has(playerInTurn.getTeamIndex()))
             ) {
                 this._labelFund.text = `${Lang.getText(Lang.Type.B0032)}: ????`;
             } else {
