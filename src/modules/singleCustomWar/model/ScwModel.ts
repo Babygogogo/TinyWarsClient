@@ -60,7 +60,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         }
 
         _war = (await new SingleCustomWar.ScwWar().init(data)).startRunning().startRunningView() as ScwWar;
-        _checkAndRequestBeginTurnOrRunRobot();
+        _checkAndRequestBeginTurnOrRunRobot(_war);
 
         return _war;
     }
@@ -81,8 +81,9 @@ namespace TinyWars.SingleCustomWar.ScwModel {
     // Util functions.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export function updateByWarAction(container: WarActionContainer): void {
-        if (_war) {
-            if (container.actionId !== _war.getNextActionId() + _cachedActions.length) {
+        const war = getWar();
+        if (war) {
+            if (container.actionId !== war.getNextActionId() + _cachedActions.length) {
                 Logger.error(`ScwModel._updateByActionContainer() invalid action id: ${container.actionId}`);
             } else {
                 _cachedActions.push(container);
@@ -92,62 +93,65 @@ namespace TinyWars.SingleCustomWar.ScwModel {
     }
 
     async function _checkAndRunFirstCachedAction(): Promise<void> {
+        const war       = getWar();
         const container = _cachedActions.length ? _cachedActions.shift() : undefined;
-        if ((container) && (_war.getIsRunning()) && (!_war.getIsEnded()) && (!_war.getIsExecutingAction())) {
-            _war.setIsExecutingAction(true);
-            _war.setNextActionId(_war.getNextActionId() + 1);
-            await _EXECUTORS.get(Helpers.getWarActionCode(container))(_war, container);
-            _war.setIsExecutingAction(false);
+        if ((container) && (war.getIsRunning()) && (!war.getIsEnded()) && (!war.getIsExecutingAction())) {
+            war.setIsExecutingAction(true);
+            war.setNextActionId(war.getNextActionId() + 1);
+            await _EXECUTORS.get(Helpers.getWarActionCode(container))(war, container);
+            war.setIsExecutingAction(false);
 
-            if (!_war.checkHasAliveWatcherTeam(User.UserModel.getSelfUserId())) {
-                if (_war.getHumanPlayers().length > 0) {
-                    _war.setIsEnded(true);
-                    AlertPanel.show({
-                        title   : Lang.getText(Lang.Type.B0035),
-                        content : Lang.getText(Lang.Type.A0023),
-                        callback: () => Utility.FlowManager.gotoLobby(),
-                    });
-                } else {
-                    if (_war.getPlayerManager().getAliveTeamsCount(false) <= 1) {
-                        _war.setIsEnded(true);
+            if (war.getIsRunning()) {
+                if (!war.checkHasAliveWatcherTeam(User.UserModel.getSelfUserId())) {
+                    if (war.getHumanPlayers().length > 0) {
+                        war.setIsEnded(true);
                         AlertPanel.show({
-                            title   : Lang.getText(Lang.Type.B0034),
-                            content : Lang.getText(Lang.Type.A0022),
+                            title   : Lang.getText(Lang.Type.B0035),
+                            content : Lang.getText(Lang.Type.A0023),
                             callback: () => Utility.FlowManager.gotoLobby(),
                         });
-
                     } else {
-                        if (_cachedActions.length) {
-                            _checkAndRunFirstCachedAction();
+                        if (war.getPlayerManager().getAliveTeamsCount(false) <= 1) {
+                            war.setIsEnded(true);
+                            AlertPanel.show({
+                                title   : Lang.getText(Lang.Type.B0034),
+                                content : Lang.getText(Lang.Type.A0022),
+                                callback: () => Utility.FlowManager.gotoLobby(),
+                            });
+
                         } else {
-                            _checkAndRequestBeginTurnOrRunRobot();
+                            if (_cachedActions.length) {
+                                _checkAndRunFirstCachedAction();
+                            } else {
+                                _checkAndRequestBeginTurnOrRunRobot(war);
+                            }
                         }
                     }
-                }
-
-            } else {
-                if (_war.getRemainingVotesForDraw() === 0) {
-                    _war.setIsEnded(true);
-                    AlertPanel.show({
-                        title   : Lang.getText(Lang.Type.B0082),
-                        content : Lang.getText(Lang.Type.A0030),
-                        callback: () => Utility.FlowManager.gotoLobby(),
-                    });
 
                 } else {
-                    if (_war.getPlayerManager().getAliveTeamsCount(false) <= 1) {
-                        _war.setIsEnded(true);
+                    if (war.getRemainingVotesForDraw() === 0) {
+                        war.setIsEnded(true);
                         AlertPanel.show({
-                            title   : Lang.getText(Lang.Type.B0034),
-                            content : Lang.getText(Lang.Type.A0022),
+                            title   : Lang.getText(Lang.Type.B0082),
+                            content : Lang.getText(Lang.Type.A0030),
                             callback: () => Utility.FlowManager.gotoLobby(),
                         });
 
                     } else {
-                        if (_cachedActions.length) {
-                            _checkAndRunFirstCachedAction();
+                        if (war.getPlayerManager().getAliveTeamsCount(false) <= 1) {
+                            war.setIsEnded(true);
+                            AlertPanel.show({
+                                title   : Lang.getText(Lang.Type.B0034),
+                                content : Lang.getText(Lang.Type.A0022),
+                                callback: () => Utility.FlowManager.gotoLobby(),
+                            });
+
                         } else {
-                            _checkAndRequestBeginTurnOrRunRobot();
+                            if (_cachedActions.length) {
+                                _checkAndRunFirstCachedAction();
+                            } else {
+                                _checkAndRequestBeginTurnOrRunRobot(war);
+                            }
                         }
                     }
                 }
@@ -155,12 +159,12 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         }
     }
 
-    async function _checkAndRequestBeginTurnOrRunRobot(): Promise<void> {
-        if (!_war.checkIsHumanInTurn()) {
-            updateByWarAction(ScwActionReviser.revise(_war, await ScwRobot.getNextAction(_war)))
+    async function _checkAndRequestBeginTurnOrRunRobot(war: ScwWar): Promise<void> {
+        if (!war.checkIsHumanInTurn()) {
+            updateByWarAction(ScwActionReviser.revise(war, await ScwRobot.getNextAction(war)))
         } else {
-            if (_war.getTurnManager().getPhaseCode() === Types.TurnPhaseCode.WaitBeginTurn) {
-                (_war.getActionPlanner() as ScwActionPlanner).setStateRequestingPlayerBeginTurn();
+            if (war.getTurnManager().getPhaseCode() === Types.TurnPhaseCode.WaitBeginTurn) {
+                (war.getActionPlanner() as ScwActionPlanner).setStateRequestingPlayerBeginTurn();
             }
         }
     }

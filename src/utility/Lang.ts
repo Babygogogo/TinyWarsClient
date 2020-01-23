@@ -372,6 +372,22 @@ namespace TinyWars.Utility.Lang {
             `已成功存档`,
             `Game saved successfully.`,
         ],
+        [Type.A0074]: [
+            `确定要重新载入所有地图吗？`,
+            `Are you sure to reload all maps?`,
+        ],
+        [Type.A0075]: [
+            `地图重载成功`,
+            `Successfully reloaded all maps.`,
+        ],
+        [Type.A0076]: [
+            `您无法删除最后一个部队`,
+            `You can't delete your last unit.`,
+        ],
+        [Type.A0077]: [
+            `您没有可用于建造部队的建筑。`,
+            `You don't have any buildings that can produce units.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -1423,6 +1439,14 @@ namespace TinyWars.Utility.Lang {
         [Type.B0261]: [
             `读档`,
             `Load Game`,
+        ],
+        [Type.B0262]: [
+            `重载所有地图`,
+            `Reload Maps`,
+        ],
+        [Type.B0267]: [
+            `详细信息`,
+            `Detailed Info`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

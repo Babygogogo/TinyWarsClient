@@ -1,6 +1,7 @@
 
 namespace TinyWars.MultiCustomWar {
     import ConfirmPanel     = Common.ConfirmPanel;
+    import BwHelpers        = BaseWar.BwHelpers;
     import FloatText        = Utility.FloatText;
     import Lang             = Utility.Lang;
     import Helpers          = Utility.Helpers;
@@ -52,7 +53,7 @@ namespace TinyWars.MultiCustomWar {
                 { type: Notify.Type.BwPlayerFundChanged,            callback: this._onNotifyMcwPlayerFundChanged },
                 { type: Notify.Type.BwPlayerIndexInTurnChanged,     callback: this._onNotifyMcwPlayerIndexInTurnChanged },
                 { type: Notify.Type.BwCoEnergyChanged,              callback: this._onNotifyMcwCoEnergyChanged },
-                { type: Notify.Type.BwCoUsingSkillTypeChanged,          callback: this._onNotifyMcwCoUsingSkillChanged },
+                { type: Notify.Type.BwCoUsingSkillTypeChanged,      callback: this._onNotifyMcwCoUsingSkillChanged },
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyMcwActionPlannerStateChanged },
             ];
             this._uiListeners = [
@@ -78,7 +79,6 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onNotifyMcwTurnPhaseCodeChanged(e: egret.Event): void {
             this._updateBtnEndTurn();
-            this._updateBtnFindUnit();
             this._updateBtnFindBuilding();
             this._updateBtnCancel();
         }
@@ -95,16 +95,35 @@ namespace TinyWars.MultiCustomWar {
             this._updateLabelCoAndEnergy();
         }
         private _onNotifyMcwActionPlannerStateChanged(e: egret.Event): void {
+            this._updateBtnUnitList();
             this._updateBtnEndTurn();
             this._updateBtnCancel();
         }
 
         private _onTouchedBtnUnitList(e: egret.TouchEvent): void {
-            this._war.getField().getActionPlanner().setStateIdle();
-            McwUnitListPanel.show();
+            const actionPlanner = this._war.getField().getActionPlanner();
+            if ((!actionPlanner.checkIsStateRequesting()) && (actionPlanner.getState() !== Types.ActionPlannerState.ExecutingAction)) {
+                actionPlanner.setStateIdle();
+                McwUnitListPanel.show();
+            }
         }
         private _onTouchedBtnFindBuilding(e: egret.TouchEvent): void {
-            FloatText.show("TODO");
+            const war           = this._war;
+            const field         = war.getField();
+            const actionPlanner = field.getActionPlanner();
+            if ((!actionPlanner.checkIsStateRequesting()) && (actionPlanner.getState() !== Types.ActionPlannerState.ExecutingAction)) {
+                actionPlanner.setStateIdle();
+
+                const gridIndex = BwHelpers.getIdleBuildingGridIndex(war);
+                if (!gridIndex) {
+                    FloatText.show(Lang.getText(Lang.Type.A0077));
+                } else {
+                    const cursor = field.getCursor();
+                    cursor.setGridIndex(gridIndex);
+                    cursor.updateView();
+                    war.getView().moveGridToCenter(gridIndex);
+                }
+            }
         }
         private _onTouchedBtnEndTurn(e: egret.TouchEvent): void {
             const war = this._war;
@@ -138,7 +157,7 @@ namespace TinyWars.MultiCustomWar {
             this._updateLabelFund();
             this._updateLabelCoAndEnergy();
             this._updateBtnEndTurn();
-            this._updateBtnFindUnit();
+            this._updateBtnUnitList();
             this._updateBtnFindBuilding();
             this._updateBtnCancel();
             this._updateBtnMenu();
@@ -197,12 +216,11 @@ namespace TinyWars.MultiCustomWar {
                 && (war.getActionPlanner().getState() === Types.ActionPlannerState.Idle);
         }
 
-        private _updateBtnFindUnit(): void {
+        private _updateBtnUnitList(): void {
             const war                   = this._war;
-            const turnManager           = war.getTurnManager();
+            const actionPlanner         = war.getActionPlanner();
             this._btnUnitList.label     = Lang.getText(Lang.Type.B0152);
-            this._btnUnitList.visible   = (turnManager.getPlayerIndexInTurn() === war.getPlayerIndexLoggedIn())
-                && (turnManager.getPhaseCode() === Types.TurnPhaseCode.Main);
+            this._btnUnitList.visible   = (!actionPlanner.checkIsStateRequesting()) && (actionPlanner.getState() !== Types.ActionPlannerState.ExecutingAction);
         }
 
         private _updateBtnFindBuilding(): void {

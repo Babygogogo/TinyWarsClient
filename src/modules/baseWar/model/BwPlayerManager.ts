@@ -85,15 +85,20 @@ namespace TinyWars.BaseWar {
         }
 
         public getAliveTeamsCount(includeNeutral: boolean, ignoredPlayerIndex?: number): number {
-            const aliveTeams = new Map<number, boolean>();
+            return this.getAliveTeamIndexes(includeNeutral, ignoredPlayerIndex).size;
+        }
+
+        public getAliveTeamIndexes(includeNeutral: boolean, ignoredPlayerIndex?: number): Set<number> {
+            const indexes = new Set<number>();
             for (const [playerIndex, player] of this._players) {
                 if ((player.getIsAlive())                   &&
                     (playerIndex !== ignoredPlayerIndex)    &&
-                    ((includeNeutral) || (playerIndex !== 0))) {
-                    aliveTeams.set(player.getTeamIndex(), true);
+                    ((includeNeutral) || (playerIndex !== 0))
+                ) {
+                    indexes.add(player.getTeamIndex());
                 }
             }
-            return aliveTeams.size;
+            return indexes;
         }
 
         public checkIsSameTeam(playerIndex1: number, playerIndex2: number): boolean {

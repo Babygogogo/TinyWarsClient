@@ -1,17 +1,18 @@
 
 namespace TinyWars.BaseWar {
-    import WarMapModel      = WarMap.WarMapModel;
-    import Types            = Utility.Types;
-    import Notify           = Utility.Notify;
-    import GridIndexHelpers = Utility.GridIndexHelpers;
-    import Logger           = Utility.Logger;
-    import UnitState        = Types.UnitActionState;
-    import GridIndex        = Types.GridIndex;
-    import State            = Types.ActionPlannerState;
-    import MovableArea      = Types.MovableArea;
-    import AttackableArea   = Types.AttackableArea;
-    import MovePathNode     = Types.MovePathNode;
-    import UnitActionType   = Types.UnitActionType;
+    import WarMapModel          = WarMap.WarMapModel;
+    import Types                = Utility.Types;
+    import Notify               = Utility.Notify;
+    import GridIndexHelpers     = Utility.GridIndexHelpers;
+    import Logger               = Utility.Logger;
+    import VisibilityHelpers    = Utility.VisibilityHelpers;
+    import UnitState            = Types.UnitActionState;
+    import GridIndex            = Types.GridIndex;
+    import State                = Types.ActionPlannerState;
+    import MovableArea          = Types.MovableArea;
+    import AttackableArea       = Types.AttackableArea;
+    import MovePathNode         = Types.MovePathNode;
+    import UnitActionType       = Types.UnitActionType;
 
     type ChosenUnitForDrop = {
         unit        : BwUnit;
@@ -871,7 +872,7 @@ namespace TinyWars.BaseWar {
             const beginningGridIndex    = unit.getGridIndex();
             const hasAmmo               = (unit.getPrimaryWeaponCurrentAmmo() > 0) || (unit.checkHasSecondaryWeapon());
             const unitMap               = this._getUnitMap();
-            this._attackableArea        = BwHelpers.createAttackableArea(
+            this._setAttackableArea(BwHelpers.createAttackableArea(
                 this.getMovableArea(),
                 this.getMapSize(),
                 unit.getMinAttackRange(),
@@ -886,7 +887,10 @@ namespace TinyWars.BaseWar {
                             && ((canAttackAfterMove) || (!hasMoved))
                     }
                 }
-            );
+            ));
+        }
+        protected _setAttackableArea(area: AttackableArea): void {
+            this._attackableArea = area;
         }
         public getAttackableArea(): AttackableArea {
             return this._attackableArea;
@@ -985,11 +989,14 @@ namespace TinyWars.BaseWar {
         public getAreaForPreviewingAttack(): AttackableArea {
             return this._areaForPreviewAttack;
         }
+        protected _setAreaForPreviewingAttack(area: AttackableArea): void {
+            this._areaForPreviewAttack = area;
+        }
         protected _clearDataForPreviewingAttackableArea(): void {
             this._unitsForPreviewAttack.clear();
             this._areaForPreviewAttack.length = 0;
         }
-        private _addUnitForPreviewAttackableArea(unit: BwUnit): void {
+        protected _addUnitForPreviewAttackableArea(unit: BwUnit): void {
             const canAttackAfterMove    = unit.checkCanAttackAfterMove();
             const beginningGridIndex    = unit.getGridIndex();
             const hasAmmo               = (unit.getPrimaryWeaponCurrentAmmo() > 0) || (unit.checkHasSecondaryWeapon());
@@ -1212,12 +1219,23 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _getMoveCost(targetGridIndex: GridIndex, movingUnit: BwUnit): number | undefined {
+        protected _getMoveCost(targetGridIndex: GridIndex, movingUnit: BwUnit): number | undefined {
             if (!GridIndexHelpers.checkIsInsideMap(targetGridIndex, this.getMapSize())) {
                 return undefined;
             } else {
-                const existingUnit = this._getUnitMap().getUnitOnMap(targetGridIndex);
-                if ((existingUnit) && (existingUnit.getTeamIndex() !== movingUnit.getTeamIndex())) {
+                const existingUnit  = this._getUnitMap().getUnitOnMap(targetGridIndex);
+                const teamIndex     = movingUnit.getTeamIndex();
+                if ((existingUnit)                                      &&
+                    (existingUnit.getTeamIndex() !== teamIndex)         &&
+                    (VisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
+                        war                 : this._war,
+                        gridIndex           : targetGridIndex,
+                        unitType            : existingUnit.getType(),
+                        isDiving            : existingUnit.getIsDiving(),
+                        unitPlayerIndex     : existingUnit.getPlayerIndex(),
+                        observerTeamIndex   : teamIndex,
+                    }))
+                ) {
                     return undefined;
                 } else {
                     return this._getTileMap().getTile(targetGridIndex).getMoveCostByUnit(movingUnit);

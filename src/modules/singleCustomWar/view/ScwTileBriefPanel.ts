@@ -1,9 +1,10 @@
 
 namespace TinyWars.SingleCustomWar {
-    import Notify       = Utility.Notify;
-    import Lang         = Utility.Lang;
-    import StageManager = Utility.StageManager;
-    import Types        = Utility.Types;
+    import Notify               = Utility.Notify;
+    import Lang                 = Utility.Lang;
+    import StageManager         = Utility.StageManager;
+    import Types                = Utility.Types;
+    import VisibilityHelpers    = Utility.VisibilityHelpers;
 
     const _IMAGE_SOURCE_HP      = `c04_t10_s00_f00`;
     const _IMAGE_SOURCE_FUEL    = `c04_t10_s01_f00`;
@@ -146,7 +147,7 @@ namespace TinyWars.SingleCustomWar {
                 this.visible = true;
 
                 const gridIndex = this._cursor.getGridIndex();
-                const tile      = this._tileMap.getTile(gridIndex);
+                const tile      = this._getScwTileForShow(gridIndex);
                 this._tileView.init(tile).startRunningView();
                 this._labelDefense.text     = `${Math.floor(tile.getDefenseAmount() / 10)}`;
                 this._labelName.text        = Lang.getTileName(tile.getType());
@@ -190,6 +191,30 @@ namespace TinyWars.SingleCustomWar {
                 this._group.x = _LEFT_X;
             } else if (e.stageX < stageWidth / 4) {
                 this._group.x = _RIGHT_X;
+            }
+        }
+
+        private _getScwTileForShow(gridIndex: Types.GridIndex): ScwTile {
+            const war       = this._war;
+            const rawTile   = this._tileMap.getTile(gridIndex) as ScwTile;
+            if (VisibilityHelpers.checkIsTileVisibleToTeams(war, gridIndex, (war.getPlayerManager() as ScwPlayerManager).getWatcherTeamIndexesForScw())) {
+                return rawTile;
+            } else {
+                const tile      = new ScwTile();
+                const currentHp = rawTile.getCurrentHp();
+                tile.init({
+                    gridX       : gridIndex.x,
+                    gridY       : gridIndex.y,
+                    objectViewId: rawTile.getType() === Types.TileType.Headquarters ? rawTile.getObjectViewId() : rawTile.getNeutralObjectViewId(),
+                    baseViewId  : rawTile.getBaseViewId(),
+                }, war.getConfigVersion());
+
+                tile.startRunning(war);
+                tile.setCurrentBuildPoint(tile.getMaxBuildPoint());
+                tile.setCurrentCapturePoint(tile.getMaxCapturePoint());
+                tile.setCurrentHp(currentHp);
+
+                return tile;
             }
         }
     }

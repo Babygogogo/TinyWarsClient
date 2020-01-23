@@ -28,7 +28,6 @@ namespace TinyWars.MultiCustomWar {
         private _turnManager: McwTurnManager;
         private _dataForList: DataForUnitRenderer[];
         private _playerIndex: number;
-        private _isLeftSide = false;
 
         public static show(): void {
             if (!McwUnitListPanel._instance) {
@@ -69,7 +68,7 @@ namespace TinyWars.MultiCustomWar {
             this._unitMap       = war.getUnitMap() as McwUnitMap;
             this._turnManager   = war.getTurnManager() as McwTurnManager;
             this._cursor        = war.getField().getCursor() as McwCursor;
-            this._playerIndex = this._war.getPlayerIndexLoggedIn();
+            this._playerIndex   = war.getPlayerIndexLoggedIn() || this._turnManager.getNextPlayerIndex(0);
             this._updateView();
         }
         protected _onClosed(): void {
@@ -140,17 +139,17 @@ namespace TinyWars.MultiCustomWar {
         }
 
         private _createDataForList(): DataForUnitRenderer[] {
-            const datas         = [] as DataForUnitRenderer[];
+            const dataList      : DataForUnitRenderer[]= [];
             const playerIndex   = this._playerIndex;
             this._unitMap.forEachUnit(unit => {
                 if (unit.getPlayerIndex() === playerIndex) {
-                    datas.push({
+                    dataList.push({
                         cursor  : this._cursor,
                         unit    : unit as McwUnit,
                     });
                 }
             });
-            return datas.sort(sorterForDataForList);
+            return dataList.sort(sorterForDataForList);
         }
     }
 
@@ -213,9 +212,12 @@ namespace TinyWars.MultiCustomWar {
         }
 
         public onItemTapEvent(e: eui.ItemTapEvent): void {
-            const data = this.data as DataForUnitRenderer;
-            data.cursor.setGridIndex(data.unit.getGridIndex());
-            data.cursor.updateView();
+            const data      = this.data as DataForUnitRenderer;
+            const cursor    = data.cursor;
+            const gridIndex = data.unit.getGridIndex();
+            cursor.setGridIndex(gridIndex);
+            cursor.updateView();
+            cursor.getWar().getView().moveGridToCenter(gridIndex);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

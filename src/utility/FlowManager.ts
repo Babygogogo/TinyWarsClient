@@ -57,6 +57,7 @@ namespace TinyWars.Utility.FlowManager {
     export function gotoLogin(): void {
         McwModel.unloadWar();
         ReplayModel.unloadWar();
+        ScwModel.unloadWar();
         StageManager.closeAllPanels();
         Login.LoginBackgroundPanel.show();
         Login.LoginPanel.show();
@@ -65,6 +66,7 @@ namespace TinyWars.Utility.FlowManager {
         _hasOnceWentToLobby = true;
         McwModel.unloadWar();
         ReplayModel.unloadWar();
+        ScwModel.unloadWar();
         StageManager.closeAllPanels();
         Lobby.LobbyPanel.show();
         Lobby.LobbyTopPanel.show();

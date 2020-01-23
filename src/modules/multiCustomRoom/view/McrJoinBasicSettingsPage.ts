@@ -202,7 +202,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _updateLabelFog(): void {
-            this._labelFog.text = Lang.getText(McrModel.getJoinWarRoomInfo() ? Lang.Type.B0012 : Lang.Type.B0013);
+            this._labelFog.text = Lang.getText(McrModel.getJoinWarRoomInfo().hasFog ? Lang.Type.B0012 : Lang.Type.B0013);
         }
 
         private _updateLabelTimeLimit(): void {

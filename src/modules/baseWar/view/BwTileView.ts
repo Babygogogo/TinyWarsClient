@@ -33,6 +33,9 @@ namespace TinyWars.BaseWar {
             this._hasFog = hasFog;
             this._updateImages();
         }
+        protected _getHasFog(): boolean {
+            return this._hasFog;
+        }
 
         public getImgObject(): GameUi.UiImage {
             return this._imgObject;
@@ -41,11 +44,15 @@ namespace TinyWars.BaseWar {
             return this._imgBase;
         }
 
+        protected _getTile(): BwTile {
+            return this._tile;
+        }
+
         public updateOnAnimationTick(): void {
             this._updateImages();
         }
 
-        private _updateImages(): void {
+        protected _updateImages(): void {
             const tile      = this._tile;
             const tickCount = TimeModel.getTileAnimationTickCount();
 

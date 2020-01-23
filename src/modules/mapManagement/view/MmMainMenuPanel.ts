@@ -2,6 +2,8 @@
 namespace TinyWars.MapManagement {
     import Lang         = Utility.Lang;
     import FlowManager  = Utility.FlowManager;
+    import Notify       = Utility.Notify;
+    import FloatText    = Utility.FloatText;
 
     export class MmMainMenuPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
@@ -38,8 +40,9 @@ namespace TinyWars.MapManagement {
                 { ui: this._btnBack, callback: this._onTouchedBtnBack },
             ];
             this._notifyListeners = [
-                { type: Utility.Notify.Type.SLogout, callback: this._onNotifySLogout },
-                { type: Utility.Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.SLogout,            callback: this._onNotifySLogout },
+                { type: Notify.Type.SMmReloadAllMaps,   callback: this._onNotifySMmReloadAllMaps },
             ];
 
             this._listCommand.setItemRenderer(CommandRenderer);
@@ -63,6 +66,9 @@ namespace TinyWars.MapManagement {
         private _onNotifySLogout(e: egret.Event): void {
             MmMainMenuPanel.hide();
         }
+        private _onNotifySMmReloadAllMaps(e: egret.Event): void {
+            FloatText.show(Lang.getText(Lang.Type.A0075));
+        }
         private _onNotifyLanguageChanged(e: egret.Event): void {
             this._updateView();
         }
@@ -77,7 +83,7 @@ namespace TinyWars.MapManagement {
         }
 
         private _createDataForListCommand(): DataForCommandRenderer[] {
-            return [
+            const dataList: DataForCommandRenderer[] = [
                 {
                     name    : Lang.getText(Lang.Type.B0193),
                     callback: (): void => {
@@ -86,6 +92,20 @@ namespace TinyWars.MapManagement {
                     },
                 },
             ];
+            if (User.UserModel.checkIsAdmin()) {
+                dataList.push({
+                    name    : Lang.getText(Lang.Type.B0262),
+                    callback: () => {
+                        Common.ConfirmPanel.show({
+                            title   : Lang.getText(Lang.Type.B0088),
+                            content : Lang.getText(Lang.Type.A0074),
+                            callback: () => WarMap.WarMapProxy.reqReloadAllMaps(),
+                        })
+                    },
+                });
+            }
+
+            return dataList;
         }
     }
 

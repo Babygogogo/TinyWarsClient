@@ -15,4 +15,9 @@
     </GameUi:UiButton>
     <GameUi:UiLabel id="_labelVersion" text="TinyWars  v19.0118.0149" stroke="2" bottom="2" right="2" italic="true"
                     size="20" />
+    <e:Group id="_groupUnits" width="4000" x="0" scaleX="0.25" scaleY="0.25" height="100">
+        <e:layout>
+            <e:HorizontalLayout gap="0"/>
+        </e:layout>
+    </e:Group>
 </e:Skin>

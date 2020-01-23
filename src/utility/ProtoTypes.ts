@@ -8545,6 +8545,12 @@ export declare interface IMessageContainer {
     /** MessageContainer S_MmChangeAvailability */
     S_MmChangeAvailability?: (IS_MmChangeAvailability|null);
 
+    /** MessageContainer C_MmReloadAllMaps */
+    C_MmReloadAllMaps?: (IC_MmReloadAllMaps|null);
+
+    /** MessageContainer S_MmReloadAllMaps */
+    S_MmReloadAllMaps?: (IS_MmReloadAllMaps|null);
+
     /** MessageContainer C_McrCreateWar */
     C_McrCreateWar?: (IC_McrCreateWar|null);
 
@@ -8893,6 +8899,12 @@ export declare class MessageContainer implements IMessageContainer {
 
     /** MessageContainer S_MmChangeAvailability. */
     public S_MmChangeAvailability?: (IS_MmChangeAvailability|null);
+
+    /** MessageContainer C_MmReloadAllMaps. */
+    public C_MmReloadAllMaps?: (IC_MmReloadAllMaps|null);
+
+    /** MessageContainer S_MmReloadAllMaps. */
+    public S_MmReloadAllMaps?: (IS_MmReloadAllMaps|null);
 
     /** MessageContainer C_McrCreateWar. */
     public C_McrCreateWar?: (IC_McrCreateWar|null);
@@ -10994,6 +11006,180 @@ export declare class S_MmChangeAvailability implements IS_MmChangeAvailability {
 
     /**
      * Converts this S_MmChangeAvailability to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_MmReloadAllMaps. */
+export declare interface IC_MmReloadAllMaps {
+}
+
+/** Represents a C_MmReloadAllMaps. */
+export declare class C_MmReloadAllMaps implements IC_MmReloadAllMaps {
+
+    /**
+     * Constructs a new C_MmReloadAllMaps.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_MmReloadAllMaps);
+
+    /**
+     * Creates a new C_MmReloadAllMaps instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_MmReloadAllMaps instance
+     */
+    public static create(properties?: IC_MmReloadAllMaps): C_MmReloadAllMaps;
+
+    /**
+     * Encodes the specified C_MmReloadAllMaps message. Does not implicitly {@link C_MmReloadAllMaps.verify|verify} messages.
+     * @param message C_MmReloadAllMaps message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_MmReloadAllMaps, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_MmReloadAllMaps message, length delimited. Does not implicitly {@link C_MmReloadAllMaps.verify|verify} messages.
+     * @param message C_MmReloadAllMaps message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_MmReloadAllMaps, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_MmReloadAllMaps message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_MmReloadAllMaps
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_MmReloadAllMaps;
+
+    /**
+     * Decodes a C_MmReloadAllMaps message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_MmReloadAllMaps
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_MmReloadAllMaps;
+
+    /**
+     * Verifies a C_MmReloadAllMaps message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_MmReloadAllMaps message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_MmReloadAllMaps
+     */
+    public static fromObject(object: { [k: string]: any }): C_MmReloadAllMaps;
+
+    /**
+     * Creates a plain object from a C_MmReloadAllMaps message. Also converts values to other types if specified.
+     * @param message C_MmReloadAllMaps
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_MmReloadAllMaps, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_MmReloadAllMaps to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_MmReloadAllMaps. */
+export declare interface IS_MmReloadAllMaps {
+
+    /** S_MmReloadAllMaps errorCode */
+    errorCode?: (number|null);
+}
+
+/** Represents a S_MmReloadAllMaps. */
+export declare class S_MmReloadAllMaps implements IS_MmReloadAllMaps {
+
+    /**
+     * Constructs a new S_MmReloadAllMaps.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_MmReloadAllMaps);
+
+    /** S_MmReloadAllMaps errorCode. */
+    public errorCode: number;
+
+    /**
+     * Creates a new S_MmReloadAllMaps instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_MmReloadAllMaps instance
+     */
+    public static create(properties?: IS_MmReloadAllMaps): S_MmReloadAllMaps;
+
+    /**
+     * Encodes the specified S_MmReloadAllMaps message. Does not implicitly {@link S_MmReloadAllMaps.verify|verify} messages.
+     * @param message S_MmReloadAllMaps message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_MmReloadAllMaps, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_MmReloadAllMaps message, length delimited. Does not implicitly {@link S_MmReloadAllMaps.verify|verify} messages.
+     * @param message S_MmReloadAllMaps message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_MmReloadAllMaps, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_MmReloadAllMaps message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_MmReloadAllMaps
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_MmReloadAllMaps;
+
+    /**
+     * Decodes a S_MmReloadAllMaps message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_MmReloadAllMaps
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_MmReloadAllMaps;
+
+    /**
+     * Verifies a S_MmReloadAllMaps message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_MmReloadAllMaps message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_MmReloadAllMaps
+     */
+    public static fromObject(object: { [k: string]: any }): S_MmReloadAllMaps;
+
+    /**
+     * Creates a plain object from a S_MmReloadAllMaps message. Also converts values to other types if specified.
+     * @param message S_MmReloadAllMaps
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_MmReloadAllMaps, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_MmReloadAllMaps to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };

@@ -48,8 +48,9 @@ namespace TinyWars.MultiCustomWar {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
+                { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
-                { type: Notify.Type.BwActionPlannerStateChanged,   callback: this._onNotifyMcwPlannerStateChanged },
+                { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyMcwPlannerStateChanged },
             ];
             this._uiListeners = [
                 { ui: this._btnCancel, callback: this._onTouchedBtnCancel },
@@ -74,6 +75,10 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateComponentsForLanguage();
+        }
+
         private _onNotifyUnitAnimationTick(e: egret.Event): void {
             const viewList = this._listUnit.getViewList();
             for (let i = 0; i < viewList.numChildren; ++i) {
@@ -102,12 +107,25 @@ namespace TinyWars.MultiCustomWar {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
+            this._updateComponentsForLanguage();
+
             this._dataForList = this._createDataForList();
             this._listUnit.bindData(this._dataForList);
         }
 
+        private _updateComponentsForLanguage(): void {
+            this._btnCancel.label = Lang.getText(Lang.Type.B0154);
+            this._btnDetail.label = Lang.getText(Lang.Type.B0267);
+
+            const viewList = this._listUnit.getViewList();
+            for (let i = 0; i < viewList.numChildren; ++i) {
+                const child = viewList.getChildAt(i);
+                (child instanceof UnitRenderer) && (child.updateOnLanguageChanged());
+            }
+        }
+
         private _createDataForList(): DataForUnitRenderer[] {
-            const datas         = [] as DataForUnitRenderer[];
+            const dataList      = [] as DataForUnitRenderer[];
             const war           = this._war;
             const player        = war.getPlayerLoggedIn();
             const currentFund   = player.getFund();
@@ -123,7 +141,7 @@ namespace TinyWars.MultiCustomWar {
                     unitId  : -1,
                     viewId  : ConfigManager.getUnitViewId(unitType, playerIndex),
                 }, configVersion) as McwUnit;
-                datas.push({
+                dataList.push({
                     unitType,
                     currentFund,
                     actionPlanner,
@@ -133,7 +151,7 @@ namespace TinyWars.MultiCustomWar {
                 });
             }
 
-            return datas.sort(sorterForDataForList);
+            return dataList.sort(sorterForDataForList);
         }
     }
 
@@ -176,6 +194,10 @@ namespace TinyWars.MultiCustomWar {
             }
         }
 
+        public updateOnLanguageChanged(): void {
+            (this.data) && (this._updateView());
+        }
+
         protected dataChanged(): void {
             super.dataChanged();
 
@@ -203,6 +225,7 @@ namespace TinyWars.MultiCustomWar {
             this._labelCost.textColor       = isFundEnough ? 0x00FF00 : 0xFF0000;
             this._labelName.text            = Lang.getUnitName(unitType);
             this._labelProduce.textColor    = isFundEnough ? 0x00FF00 : 0xFF0000;
+            this._labelProduce.text         = Lang.getText(Lang.Type.B0095);
 
             this._unitView.init(data.unit).startRunningView();
         }

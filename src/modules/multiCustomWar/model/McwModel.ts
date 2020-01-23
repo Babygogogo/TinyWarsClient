@@ -81,10 +81,11 @@ namespace TinyWars.MultiCustomWar.McwModel {
     // Handlers for war actions that McwProxy receives.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export async function updateOnPlayerSyncWar(data: ProtoTypes.IS_McwPlayerSyncWar): Promise<void> {
-        if ((_war) && (_war.getWarId() === data.warId)) {
+        const war = getWar();
+        if ((war) && (war.getWarId() === data.warId)) {
             const status = data.status as Types.SyncWarStatus;
             if (status === Types.SyncWarStatus.Defeated) {
-                _war.setIsEnded(true);
+                war.setIsEnded(true);
                 AlertPanel.show({
                     title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getText(Lang.Type.A0023),
@@ -92,7 +93,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
                 });
 
             } else if (status === Types.SyncWarStatus.EndedOrNotExists) {
-                _war.setIsEnded(true);
+                war.setIsEnded(true);
                 AlertPanel.show({
                     title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getText(Lang.Type.A0035),
@@ -102,14 +103,14 @@ namespace TinyWars.MultiCustomWar.McwModel {
             } else if (status === Types.SyncWarStatus.NoError) {
                 const requestType = data.requestType as Types.SyncWarRequestType;
                 if (requestType === Types.SyncWarRequestType.PlayerForce) {
-                    _war.setIsEnded(true);
+                    war.setIsEnded(true);
                     await Utility.FlowManager.gotoMultiCustomWar(data.war as Types.SerializedWar),
                     FloatText.show(Lang.getText(Lang.Type.A0038));
 
                 } else {
                     const cachedActionsCount = _cachedActions.length;
-                    if (data.nextActionId !== _war.getNextActionId() + cachedActionsCount) {
-                        _war.setIsEnded(true);
+                    if (data.nextActionId !== war.getNextActionId() + cachedActionsCount) {
+                        war.setIsEnded(true);
                         await Utility.FlowManager.gotoMultiCustomWar(data.war as Types.SerializedWar);
                         FloatText.show(Lang.getText(Lang.Type.A0036));
 
@@ -119,7 +120,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
                         } else {
                             // Nothing to do.
                         }
-                        if (!_war.getIsExecutingAction()) {
+                        if (!war.getIsExecutingAction()) {
                             if (cachedActionsCount) {
                                 _checkAndRunFirstCachedAction();
                             } else {
@@ -131,7 +132,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
 
             } else if (status === Types.SyncWarStatus.NotJoined) {
                 // Something wrong!!
-                _war.setIsEnded(true);
+                war.setIsEnded(true);
                 AlertPanel.show({
                     title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getText(Lang.Type.A0037),
@@ -148,7 +149,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
 
             } else {
                 // Something wrong!!
-                _war.setIsEnded(true);
+                war.setIsEnded(true);
                 AlertPanel.show({
                     title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getText(Lang.Type.A0037),
@@ -226,9 +227,10 @@ namespace TinyWars.MultiCustomWar.McwModel {
     // Util functions.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     function _updateByActionContainer(container: WarActionContainer, warId: number): void {
-        if ((_war) && (_war.getWarId() === warId)) {
-            if (container.actionId !== _war.getNextActionId() + _cachedActions.length) {
-                McwProxy.reqMcwPlayerSyncWar(_war, Types.SyncWarRequestType.ReconnectionRequest);
+        const war = getWar();
+        if ((war) && (war.getWarId() === warId)) {
+            if (container.actionId !== war.getNextActionId() + _cachedActions.length) {
+                McwProxy.reqMcwPlayerSyncWar(war, Types.SyncWarRequestType.ReconnectionRequest);
             } else {
                 _cachedActions.push(container);
                 _checkAndRunFirstCachedAction();
@@ -237,41 +239,44 @@ namespace TinyWars.MultiCustomWar.McwModel {
     }
 
     async function _checkAndRunFirstCachedAction(): Promise<void> {
+        const war       = getWar();
         const container = _cachedActions.length ? _cachedActions.shift() : undefined;
-        if ((container) && (_war.getIsRunning()) && (!_war.getIsEnded()) && (!_war.getIsExecutingAction())) {
-            _war.setIsExecutingAction(true);
-            _war.setNextActionId(_war.getNextActionId() + 1);
-            await _EXECUTORS.get(Helpers.getWarActionCode(container))(_war, container);
-            _war.setIsExecutingAction(false);
+        if ((container) && (war.getIsRunning()) && (!war.getIsEnded()) && (!war.getIsExecutingAction())) {
+            war.setIsExecutingAction(true);
+            war.setNextActionId(war.getNextActionId() + 1);
+            await _EXECUTORS.get(Helpers.getWarActionCode(container))(war, container);
+            war.setIsExecutingAction(false);
 
-            if (!_war.checkHasAliveWatcherTeam(User.UserModel.getSelfUserId())) {
-                _war.setIsEnded(true);
-                AlertPanel.show({
-                    title   : Lang.getText(Lang.Type.B0035),
-                    content : Lang.getText(Lang.Type.A0023),
-                    callback: () => Utility.FlowManager.gotoLobby(),
-                });
-
-            } else {
-                if (_war.getRemainingVotesForDraw() === 0) {
-                    _war.setIsEnded(true);
+            if (war.getIsRunning()) {
+                if (!war.checkHasAliveWatcherTeam(User.UserModel.getSelfUserId())) {
+                    war.setIsEnded(true);
                     AlertPanel.show({
-                        title   : Lang.getText(Lang.Type.B0082),
-                        content : Lang.getText(Lang.Type.A0030),
+                        title   : Lang.getText(Lang.Type.B0035),
+                        content : Lang.getText(Lang.Type.A0023),
                         callback: () => Utility.FlowManager.gotoLobby(),
                     });
 
                 } else {
-                    if (_war.getPlayerManager().getAliveTeamsCount(false) <= 1) {
-                        _war.setIsEnded(true);
+                    if (war.getRemainingVotesForDraw() === 0) {
+                        war.setIsEnded(true);
                         AlertPanel.show({
-                            title   : Lang.getText(Lang.Type.B0034),
-                            content : Lang.getText(Lang.Type.A0022),
+                            title   : Lang.getText(Lang.Type.B0082),
+                            content : Lang.getText(Lang.Type.A0030),
                             callback: () => Utility.FlowManager.gotoLobby(),
                         });
 
                     } else {
-                        _checkAndRunFirstCachedAction();
+                        if (war.getPlayerManager().getAliveTeamsCount(false) <= 1) {
+                            war.setIsEnded(true);
+                            AlertPanel.show({
+                                title   : Lang.getText(Lang.Type.B0034),
+                                content : Lang.getText(Lang.Type.A0022),
+                                callback: () => Utility.FlowManager.gotoLobby(),
+                            });
+
+                        } else {
+                            _checkAndRunFirstCachedAction();
+                        }
                     }
                 }
             }
@@ -279,11 +284,12 @@ namespace TinyWars.MultiCustomWar.McwModel {
     }
 
     function _checkAndRequestBeginTurn(): void {
-        const turnManager = _war.getTurnManager();
+        const war           = getWar();
+        const turnManager   = war.getTurnManager();
         if ((turnManager.getPhaseCode() === Types.TurnPhaseCode.WaitBeginTurn)      &&
-            (_war.getPlayerIndexLoggedIn() ===  turnManager.getPlayerIndexInTurn())
+            (war.getPlayerIndexLoggedIn() ===  turnManager.getPlayerIndexInTurn())
         ) {
-            (_war.getActionPlanner() as McwActionPlanner).setStateRequestingPlayerBeginTurn();
+            (war.getActionPlanner() as McwActionPlanner).setStateRequestingPlayerBeginTurn();
         }
     }
 

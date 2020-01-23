@@ -89,6 +89,9 @@ namespace TinyWars.GameUi {
         public removeAllContents(): void {
             this._contents.removeChildren();
         }
+        public getContents(): egret.DisplayObjectContainer {
+            return this._contents;
+        }
 
         public setContentWidth(width: number): void {
             this._contentWidth = width;

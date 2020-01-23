@@ -483,7 +483,7 @@ namespace TinyWars.SingleCustomWar {
             const war                   = data.war;
             const player                = data.player;
             const playerIndex           = player.getPlayerIndex();
-            this._labelName.text        = player.getNickname();
+            this._labelName.text        = player.getUserId() != null ? Lang.getText(Lang.Type.B0031) : Lang.getText(Lang.Type.B0256);
             this._labelName.textColor   = player === war.getPlayerInTurn() ? 0x00FF00 : 0xFFFFFF;
             this._labelForce.text       = `${Lang.getPlayerForceName(player.getPlayerIndex())}`
                 + `  ${Lang.getPlayerTeamName(player.getTeamIndex())}`
@@ -496,7 +496,7 @@ namespace TinyWars.SingleCustomWar {
                 this._labelLost.visible = false;
                 this._groupInfo.visible = true;
 
-                const isInfoKnown               = (!war.getFogMap().checkHasFogCurrently()) || (war.getPlayerManager().getWatcherTeamIndexes(User.UserModel.getSelfUserId()).has(player.getTeamIndex()));
+                const isInfoKnown               = (!war.getFogMap().checkHasFogCurrently()) || ((war.getPlayerManager() as ScwPlayerManager).getWatcherTeamIndexesForScw().has(player.getTeamIndex()));
                 const tilesCountAndIncome       = this._getTilesCountAndIncome(war, playerIndex);
                 this._labelFundTitle.text       = Lang.getText(Lang.Type.B0156);
                 this._labelFund.text            = isInfoKnown ? `${player.getFund()}` : `?`;

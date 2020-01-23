@@ -15,6 +15,10 @@ namespace TinyWars.MapManagement {
         private _labelMcw   : GameUi.UiLabel;
         private _imgMcw     : GameUi.UiImage;
 
+        private _groupScw   : eui.Group;
+        private _labelScw   : GameUi.UiLabel;
+        private _imgScw     : GameUi.UiImage;
+
         private _btnCancel   : GameUi.UiButton;
         private _btnConfirm : GameUi.UiButton;
 
@@ -50,6 +54,7 @@ namespace TinyWars.MapManagement {
                 { ui: this._btnConfirm,     callback: this._onTouchedBtnConfirm },
                 { ui: this._btnCancel,      callback: this._onTouchedBtnCancel },
                 { ui: this._groupMcw,       callback: this._onTouchedGroupMcw },
+                { ui: this._groupScw,       callback: this._onTouchedGroupScw },
             ];
         }
 
@@ -58,6 +63,7 @@ namespace TinyWars.MapManagement {
 
             const mapMetaData       = WarMapModel.getMapMetaData(this._mapFileName);
             this._imgMcw.visible    = !!mapMetaData.isEnabledForMultiCustomWar;
+            this._imgScw.visible    = !!mapMetaData.isEnabledForSingleCustomWar;
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
@@ -68,6 +74,7 @@ namespace TinyWars.MapManagement {
             WarMapProxy.reqMmChangeAvailability(this._mapFileName, {
                 isEnabledForMcw : this._imgMcw.visible,
                 isEnabledForWr  : false,
+                isEnabledForScw : this._imgScw.visible,
             });
             MmAvailabilityChangePanel.hide();
         }
@@ -78,6 +85,10 @@ namespace TinyWars.MapManagement {
 
         private _onTouchedGroupMcw(e: egret.TouchEvent): void {
             this._imgMcw.visible = !this._imgMcw.visible;
+        }
+
+        private _onTouchedGroupScw(e: egret.TouchEvent): void {
+            this._imgScw.visible = !this._imgScw.visible;
         }
 
         private _updateViewOnLanguageChanged(): void {
