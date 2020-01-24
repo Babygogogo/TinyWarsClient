@@ -182,9 +182,9 @@ namespace TinyWars.SingleCustomRoom {
             const slotInfo              = this._dataForListWar[index].slotInfo;
             const mapFileName           = slotInfo.mapFileName;
             const mapData               = await WarMapModel.getMapRawData(mapFileName);
-            const mapMetaData           = WarMapModel.getMapMetaData(mapFileName);
+            const mapExtraData          = WarMapModel.getExtraData(mapFileName);
             this._labelMapName.text     = Lang.getFormatedText(Lang.Type.F0000, WarMapModel.getMapNameInLanguage(mapFileName));
-            this._labelDesigner.text    = Lang.getFormatedText(Lang.Type.F0001, mapMetaData.mapDesigner);
+            this._labelDesigner.text    = Lang.getFormatedText(Lang.Type.F0001, mapExtraData.mapDesigner);
 
             this._groupInfo.visible      = true;
             this._groupInfo.alpha        = 1;

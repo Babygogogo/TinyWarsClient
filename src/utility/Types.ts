@@ -335,22 +335,10 @@ namespace TinyWars.Utility.Types {
         units           : number[];
     }
 
-    export interface MapMetaData extends ProtoTypes.IMapMetaData {
-        mapFileName                 : string;
-        mapDesigner                 : string;
-        mapName                     : string;
-        mapNameEnglish              : string;
-        mapWidth                    : number;
-        mapHeight                   : number;
-        playersCount                : number;
-        isEnabledForMultiCustomWar  : number;
-        isEnabledForWarRoom         : number;
-    }
-
     export type MapAvailability = {
-        isEnabledForMcw : boolean;
-        isEnabledForWr  : boolean;
-        isEnabledForScw : boolean;
+        canMcw : boolean;
+        canWr  : boolean;
+        canScw : boolean;
     }
 
     export type UnitViewData = {

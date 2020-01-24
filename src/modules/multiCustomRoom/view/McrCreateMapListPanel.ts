@@ -156,16 +156,14 @@ namespace TinyWars.MultiCustomRoom {
             (mapName)       && (mapName     = mapName.toLowerCase());
             (mapDesigner)   && (mapDesigner = mapDesigner.toLowerCase());
 
-            for (const [mapFileName] of WarMapModel.getMapMetaDataDict()) {
-                const metaData          = WarMapModel.getMapMetaData(mapFileName);
-                const statisticsData    = WarMapModel.getMapStatisticsData(mapFileName);
-
-                if ((!metaData.isEnabledForMultiCustomWar)                                                              ||
+            for (const [mapFileName] of WarMapModel.getExtraDataDict()) {
+                const extraData = WarMapModel.getExtraData(mapFileName);
+                if ((!extraData.canMcw)                                                                                 ||
                     ((mapName) && (WarMapModel.getMapNameInLanguage(mapFileName).toLowerCase().indexOf(mapName) < 0))   ||
-                    ((mapDesigner) && (metaData.mapDesigner.toLowerCase().indexOf(mapDesigner) < 0))                    ||
-                    ((playersCount) && (metaData.playersCount !== playersCount))                                        ||
-                    ((playedTimes != null) && (statisticsData.mcwPlayedTimes < playedTimes))                            ||
-                    ((minRating != null) && (statisticsData.rating < minRating))
+                    ((mapDesigner) && (extraData.mapDesigner.toLowerCase().indexOf(mapDesigner) < 0))                   ||
+                    ((playersCount) && (extraData.playersCount !== playersCount))                                       ||
+                    ((playedTimes != null) && (extraData.mcwPlayedTimes < playedTimes))                                 ||
+                    ((minRating != null) && (extraData.rating < minRating))
                 ) {
                     continue;
                 } else {
@@ -204,12 +202,12 @@ namespace TinyWars.MultiCustomRoom {
 
         private async _showMap(mapFileName: string): Promise<void> {
             const mapRawData                = await WarMapModel.getMapRawData(mapFileName);
-            const mapStatisticsData         = WarMapModel.getMapStatisticsData(mapFileName);
+            const mapExtraData              = WarMapModel.getExtraData(mapFileName);
             this._labelMapName.text         = Lang.getFormatedText(Lang.Type.F0000, WarMapModel.getMapNameInLanguage(mapFileName));
             this._labelDesigner.text        = Lang.getFormatedText(Lang.Type.F0001, mapRawData.mapDesigner);
             this._labelPlayersCount.text    = Lang.getFormatedText(Lang.Type.F0002, mapRawData.playersCount);
-            this._labelRating.text          = Lang.getFormatedText(Lang.Type.F0003, mapStatisticsData.rating != null ? mapStatisticsData.rating.toFixed(2) : Lang.getText(Lang.Type.B0001));
-            this._labelPlayedTimes.text     = Lang.getFormatedText(Lang.Type.F0004, mapStatisticsData.mcwPlayedTimes + mapStatisticsData.rankPlayedTimes);
+            this._labelRating.text          = Lang.getFormatedText(Lang.Type.F0003, mapExtraData.rating != null ? mapExtraData.rating.toFixed(2) : Lang.getText(Lang.Type.B0001));
+            this._labelPlayedTimes.text     = Lang.getFormatedText(Lang.Type.F0004, mapExtraData.mcwPlayedTimes + mapExtraData.rankPlayedTimes);
             this._groupInfo.visible         = true;
             this._groupInfo.alpha           = 1;
             egret.Tween.removeTweens(this._groupInfo);

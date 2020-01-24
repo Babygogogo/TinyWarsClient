@@ -151,7 +151,7 @@ namespace TinyWars.MultiCustomRoom {
             return data;
         }
 
-        private _createDataForListPlayer(warInfo: ProtoTypes.IMcrWaitingInfo, mapMetaData: ProtoTypes.IMapMetaData): DataForPlayerRenderer[] {
+        private _createDataForListPlayer(warInfo: ProtoTypes.IMcrWaitingInfo, mapExtraData: ProtoTypes.IMapExtraData): DataForPlayerRenderer[] {
             const data: DataForPlayerRenderer[] = [
                 {
                     playerIndex: 1,
@@ -164,14 +164,14 @@ namespace TinyWars.MultiCustomRoom {
                     teamIndex  : warInfo.p2TeamIndex,
                 },
             ];
-            if (mapMetaData.playersCount >= 3) {
+            if (mapExtraData.playersCount >= 3) {
                 data.push({
                     playerIndex: 3,
                     playerName : warInfo.p3UserNickname,
                     teamIndex  : warInfo.p3TeamIndex,
                 });
             }
-            if (mapMetaData.playersCount >= 4) {
+            if (mapExtraData.playersCount >= 4) {
                 data.push({
                     playerIndex: 4,
                     playerName : warInfo.p4UserNickname,
@@ -207,7 +207,7 @@ namespace TinyWars.MultiCustomRoom {
         private async _showMap(index: number): Promise<void> {
             const warInfo               = this._dataForListWar[index].warInfo;
             const mapRawData            = await WarMapModel.getMapRawData(warInfo.mapFileName);
-            const mapMetaData           = WarMapModel.getMapMetaData(warInfo.mapFileName);
+            const mapMetaData           = WarMapModel.getExtraData(warInfo.mapFileName);
             this._labelMapName.text     = Lang.getFormatedText(Lang.Type.F0000, WarMapModel.getMapNameInLanguage(warInfo.mapFileName));
             this._labelDesigner.text    = Lang.getFormatedText(Lang.Type.F0001, mapMetaData.mapDesigner);
             this._labelHasFog.text      = Lang.getFormatedText(Lang.Type.F0005, Lang.getText(warInfo.hasFog ? Lang.Type.B0012 : Lang.Type.B0013));

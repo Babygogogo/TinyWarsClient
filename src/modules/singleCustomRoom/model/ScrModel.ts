@@ -58,8 +58,8 @@ namespace TinyWars.SingleCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for creating wars.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        export function getCreateWarMapMetaData(): ProtoTypes.IMapMetaData {
-            return WarMapModel.getMapMetaData(_dataForCreateWar.mapFileName);
+        export function getCreateWarMapExtraData(): ProtoTypes.IMapExtraData {
+            return WarMapModel.getExtraData(_dataForCreateWar.mapFileName);
         }
 
         export function resetCreateWarData(mapFileName: string): void {
@@ -102,7 +102,7 @@ namespace TinyWars.SingleCustomRoom {
         export function tickCreateWarTeamIndex(dataIndex: number): void {
             const data          = _dataForCreateWar.playerInfoList[dataIndex];
             const currTeamIndex = data.teamIndex;
-            data.teamIndex      = currTeamIndex < getCreateWarMapMetaData().playersCount ? currTeamIndex + 1 : 1;
+            data.teamIndex      = currTeamIndex < getCreateWarMapExtraData().playersCount ? currTeamIndex + 1 : 1;
             Notify.dispatch(Notify.Type.ScrCreateWarPlayerInfoListChanged);
         }
         export function setCreateWarCoId(dataIndex: number, coId: number | null): void {
@@ -284,7 +284,7 @@ namespace TinyWars.SingleCustomRoom {
     }
 
     function generateCreateWarPlayerInfoList(mapFileName: string): ProtoTypes.ICreateWarPlayerInfo[] {
-        const playersCount  = WarMapModel.getMapMetaData(mapFileName).playersCount;
+        const playersCount  = WarMapModel.getExtraData(mapFileName).playersCount;
         const list          : ProtoTypes.ICreateWarPlayerInfo[] = [{
             playerIndex : 1,
             userId      : User.UserModel.getSelfUserId(),

@@ -167,7 +167,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _getDataForListPlayer(): DataForPlayerRenderer[] {
             const warInfo = this._openData;
-            const mapInfo = WarMap.WarMapModel.getMapMetaData(warInfo.mapFileName);
+            const mapInfo = WarMap.WarMapModel.getExtraData(warInfo.mapFileName);
             if (!mapInfo) {
                 return [];
             } else {

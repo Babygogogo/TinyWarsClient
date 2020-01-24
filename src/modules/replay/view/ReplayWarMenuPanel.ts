@@ -186,7 +186,7 @@ namespace TinyWars.Replay {
 
         private _updateGroupInfo(): void {
             const war                               = this._war;
-            const mapMetaData                       = WarMapModel.getMapMetaData(war.getMapFileName());
+            const mapMetaData                       = WarMapModel.getExtraData(war.getMapFileName());
             this._labelMapName.text                 = WarMapModel.getMapNameInLanguage(mapMetaData.mapFileName);
             this._labelMapDesigner.text             = mapMetaData.mapDesigner;
             this._labelWarId.text                   = `${war.getWarId()}`;

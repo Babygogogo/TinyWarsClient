@@ -135,8 +135,8 @@ namespace TinyWars.MultiCustomRoom {
 
         private _getDataForListPlayer(): DataForPlayerRenderer[] {
             const warInfo       = this._openData;
-            const mapMetaData   = WarMapModel.getMapMetaData(warInfo.mapFileName);
-            if (!mapMetaData) {
+            const mapExtraData  = WarMapModel.getExtraData(warInfo.mapFileName);
+            if (!mapExtraData) {
                 return [];
             } else {
                 const data: DataForPlayerRenderer[] = [
@@ -154,7 +154,7 @@ namespace TinyWars.MultiCustomRoom {
                     },
                 ];
 
-                if (mapMetaData.playersCount >= 3) {
+                if (mapExtraData.playersCount >= 3) {
                     data.push({
                         playerIndex : 3,
                         nickname    : warInfo.p3UserNickname,
@@ -162,7 +162,7 @@ namespace TinyWars.MultiCustomRoom {
                         coId        : warInfo.p3CoId,
                     });
                 }
-                if (mapMetaData.playersCount >= 4) {
+                if (mapExtraData.playersCount >= 4) {
                     data.push({
                         playerIndex : 4,
                         nickname    : warInfo.p4UserNickname,

@@ -57,7 +57,7 @@ namespace TinyWars.BaseWar {
         ];
 
         public init(mapFileName: string): BwActionPlanner {
-            const mapData = WarMapModel.getMapMetaData(mapFileName);
+            const mapData = WarMapModel.getExtraData(mapFileName);
             this._setMapSize({ width: mapData.mapWidth, height: mapData.mapHeight });
 
             this._view = this._view || new (this._getViewClass())();

@@ -172,9 +172,9 @@ namespace TinyWars.MultiCustomRoom {
                 this._groupInfo.alpha   = 1;
 
                 const info                      = data.info;
-                const mapMetaData               = WarMapModel.getMapMetaData(info.mapFileName);
-                this._labelMapName.text         = Lang.getFormatedText(Lang.Type.F0000, WarMapModel.getMapNameInLanguage(mapMetaData.mapFileName));
-                this._labelDesigner.text        = Lang.getFormatedText(Lang.Type.F0001, mapMetaData.mapDesigner);
+                const mapExtraData              = WarMapModel.getExtraData(info.mapFileName);
+                this._labelMapName.text         = Lang.getFormatedText(Lang.Type.F0000, WarMapModel.getMapNameInLanguage(mapExtraData.mapFileName));
+                this._labelDesigner.text        = Lang.getFormatedText(Lang.Type.F0001, mapExtraData.mapDesigner);
                 this._labelHasFog.text          = Lang.getFormatedText(Lang.Type.F0005, Lang.getText(info.hasFog ? Lang.Type.B0012 : Lang.Type.B0001));
                 this._labelTurnIndex.text       = `${Lang.getText(Lang.Type.B0091)}: ${info.turnIndex + 1}`;
                 this._labelNextActionId.text    = `${Lang.getText(Lang.Type.B0090)}: ${info.nextActionId}`;

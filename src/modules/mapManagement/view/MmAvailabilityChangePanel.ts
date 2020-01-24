@@ -61,9 +61,9 @@ namespace TinyWars.MapManagement {
         protected _onOpened(): void {
             this._updateViewOnLanguageChanged();
 
-            const mapMetaData       = WarMapModel.getMapMetaData(this._mapFileName);
-            this._imgMcw.visible    = !!mapMetaData.isEnabledForMultiCustomWar;
-            this._imgScw.visible    = !!mapMetaData.isEnabledForSingleCustomWar;
+            const mapExtraData       = WarMapModel.getExtraData(this._mapFileName);
+            this._imgMcw.visible    = !!mapExtraData.canMcw;
+            this._imgScw.visible    = !!mapExtraData.canScw;
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
@@ -72,9 +72,9 @@ namespace TinyWars.MapManagement {
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
             WarMapProxy.reqMmChangeAvailability(this._mapFileName, {
-                isEnabledForMcw : this._imgMcw.visible,
-                isEnabledForWr  : false,
-                isEnabledForScw : this._imgScw.visible,
+                canMcw : this._imgMcw.visible,
+                canWr  : false,
+                canScw : this._imgScw.visible,
             });
             MmAvailabilityChangePanel.hide();
         }

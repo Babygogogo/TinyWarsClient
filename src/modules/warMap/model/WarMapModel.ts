@@ -7,32 +7,37 @@ namespace TinyWars.WarMap {
     import Notify               = Utility.Notify;
     import Lang                 = Utility.Lang;
     import MapRawData           = ProtoTypes.IMapRawData;
-    import MapMetaData          = ProtoTypes.IMapMetaData;
-    import MapStatisticsData    = ProtoTypes.IMapStatisticsData;
+    import MapExtraData         = ProtoTypes.IMapExtraData;
 
     export namespace WarMapModel {
         const _RAW_DATA_DICT        = new Map<string, MapRawData>();
-        const _META_DATA_DICT       = new Map<string, MapMetaData>();
-        const _STATISTICS_DATA_DICT = new Map<string, MapStatisticsData>();
+        const _EXTRA_DATA_DICT      = new Map<string, MapExtraData>();
 
         export function init(): void {
         }
 
-        export function resetMapMetaDataDict(dataList: MapMetaData[]): void {
-            _META_DATA_DICT.clear();
+        export function resetExtraDataDict(dataList: MapExtraData[]): void {
+            _EXTRA_DATA_DICT.clear();
             for (const data of dataList) {
-                _META_DATA_DICT.set(data.mapFileName, data);
+                _EXTRA_DATA_DICT.set(data.mapFileName, data);
             }
         }
-        export function getMapMetaDataDict(): Map<string, MapMetaData> {
-            return _META_DATA_DICT;
+        export function getExtraDataDict(): Map<string, MapExtraData> {
+            return _EXTRA_DATA_DICT;
         }
 
-        export function getMapMetaData(mapFileName: string): MapMetaData | undefined {
-            return _META_DATA_DICT.get(mapFileName);
+        export function setExtraData(data: MapExtraData): void {
+            _EXTRA_DATA_DICT.set(data.mapFileName, data);
         }
+        export function getExtraData(mapFileName: string): MapExtraData | undefined {
+            return _EXTRA_DATA_DICT.get(mapFileName);
+        }
+        export function deleteExtraData(mapFileName: string): void {
+            _EXTRA_DATA_DICT.delete(mapFileName);
+        }
+
         export function getMapNameInLanguage(mapFileName: string): string | null {
-            const metaData = getMapMetaData(mapFileName);
+            const metaData = getExtraData(mapFileName);
             if (!metaData) {
                 return null;
             } else {
@@ -77,16 +82,6 @@ namespace TinyWars.WarMap {
         export function setMapRawData(mapFileName: string, mapRawData: MapRawData): void {
             LocalStorage.setMapRawData(mapFileName, mapRawData);
             _RAW_DATA_DICT.set(mapFileName, mapRawData);
-        }
-
-        export function resetMapStatisticsDataDict(dataList: MapStatisticsData[]): void {
-            _STATISTICS_DATA_DICT.clear();
-            for (const data of dataList) {
-                _STATISTICS_DATA_DICT.set(data.mapFileName, data);
-            }
-        }
-        export function getMapStatisticsData(mapFileName: string): MapStatisticsData | undefined {
-            return _STATISTICS_DATA_DICT.get(mapFileName);
         }
 
         function getLocalMapRawData(mapFileName: string): MapRawData | undefined {
