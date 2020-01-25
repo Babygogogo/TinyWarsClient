@@ -10,11 +10,10 @@ namespace TinyWars.Replay.ReplayModel {
     import FloatText            = Utility.FloatText;
     import ProtoManager         = Utility.ProtoManager;
     import WarActionCodes       = Utility.WarActionCodes;
+    import Notify               = Utility.Notify;
     import WarActionContainer   = ProtoTypes.IWarActionContainer;
     import BwHelpers            = BaseWar.BwHelpers;
     import GridIndex            = Types.GridIndex;
-    import SerializedBwTile     = Types.SerializedTile;
-    import SerializedBwUnit     = Types.SerializedUnit;
     import UnitState            = Types.UnitActionState;
     import MovePath             = Types.MovePath;
     import TileType             = Types.TileType;
@@ -69,6 +68,17 @@ namespace TinyWars.Replay.ReplayModel {
     let _war: ReplayWar;
 
     export function init(): void {
+        Notify.addEventListeners([
+            { type: Notify.Type.SMmMergeMap, callback: _onNotifySMmMergeMap, thisObject: ReplayModel },
+        ]);
+    }
+
+    function _onNotifySMmMergeMap(e: egret.Event): void {
+        const data  = e.data as ProtoTypes.IS_MmMergeMap;
+        const war   = getWar();
+        if ((war) && (war.getMapFileName() === data.srcMapFileName)) {
+            war.setMapFileName(data.dstMapFileName);
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

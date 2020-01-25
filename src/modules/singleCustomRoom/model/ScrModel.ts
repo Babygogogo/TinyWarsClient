@@ -55,6 +55,21 @@ namespace TinyWars.SingleCustomRoom {
 
         let _saveSlotInfoList   : ProtoTypes.ISaveSlotInfo[];
 
+        export function init(): void {
+            Notify.addEventListeners([
+                { type: Notify.Type.SMmMergeMap, callback: _onNotifySMmMergeMap, thisObject: ScrModel },
+            ]);
+        }
+
+        function _onNotifySMmMergeMap(e: egret.Event): void {
+            const data = e.data as ProtoTypes.IS_MmMergeMap;
+            for (const slot of _saveSlotInfoList || []) {
+                if (slot.mapFileName === data.srcMapFileName) {
+                    slot.mapFileName = data.dstMapFileName;
+                }
+            }
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for creating wars.
         ////////////////////////////////////////////////////////////////////////////////////////////////////

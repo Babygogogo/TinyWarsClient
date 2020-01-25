@@ -10,6 +10,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
     import Lang                 = Utility.Lang;
     import FloatText            = Utility.FloatText;
     import WarActionCodes       = Utility.WarActionCodes;
+    import Notify               = Utility.Notify;
     import WarActionContainer   = ProtoTypes.IWarActionContainer;
     import BwHelpers            = BaseWar.BwHelpers;
     import AlertPanel           = Common.AlertPanel;
@@ -48,6 +49,17 @@ namespace TinyWars.SingleCustomWar.ScwModel {
     let _cachedActions  = new Array<WarActionContainer>();
 
     export function init(): void {
+        Notify.addEventListeners([
+            { type: Notify.Type.SMmMergeMap, callback: _onNotifySMmMergeMap, thisObject: ScwModel },
+        ]);
+    }
+
+    function _onNotifySMmMergeMap(e: egret.Event): void {
+        const data  = e.data as ProtoTypes.IS_MmMergeMap;
+        const war   = getWar();
+        if ((war) && (war.getMapFileName() === data.srcMapFileName)) {
+            war.setMapFileName(data.dstMapFileName);
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

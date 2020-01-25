@@ -2023,8 +2023,8 @@ export declare interface IMapExtraData {
     /** MapExtraData playersCount */
     playersCount?: (number|null);
 
-    /** MapExtraData isMerged */
-    isMerged?: (number|null);
+    /** MapExtraData isDeleted */
+    isDeleted?: (number|null);
 
     /** MapExtraData rating */
     rating?: (number|null);
@@ -2153,8 +2153,8 @@ export declare class MapExtraData implements IMapExtraData {
     /** MapExtraData playersCount. */
     public playersCount: number;
 
-    /** MapExtraData isMerged. */
-    public isMerged: number;
+    /** MapExtraData isDeleted. */
+    public isDeleted: number;
 
     /** MapExtraData rating. */
     public rating: number;

@@ -73,6 +73,7 @@
 		"bin-debug/utility/StageManager.js",
 		"bin-debug/gameui/UiTabPage.js",
 		"bin-debug/modules/baseWar/view/BwFieldView.js",
+		"bin-debug/modules/multiCustomRoom/view/McrCreateSearchMapPanel.js",
 		"bin-debug/modules/multiCustomRoom/view/McrCreateSettingsPanel.js",
 		"bin-debug/modules/multiCustomRoom/view/McrExitDetailPanel.js",
 		"bin-debug/modules/multiCustomRoom/view/McrExitMapListPanel.js",
@@ -236,17 +237,17 @@
 		"bin-debug/modules/mapManagement/view/MmAvailabilityListPanel.js",
 		"bin-debug/modules/mapManagement/view/MmAvailabilitySearchPanel.js",
 		"bin-debug/modules/mapManagement/view/MmMainMenuPanel.js",
+		"bin-debug/modules/mapManagement/view/MmMergeListPanel.js",
 		"bin-debug/modules/multiCustomRoom/model/McrModel.js",
 		"bin-debug/modules/multiCustomRoom/model/McrProxy.js",
 		"bin-debug/modules/multiCustomRoom/view/McrContinueDetailPanel.js",
 		"bin-debug/modules/multiCustomRoom/view/McrContinueWarListPanel.js",
 		"bin-debug/modules/multiCustomRoom/view/McrCreateAdvancedSettingsPage.js",
-		"bin-debug/modules/multiCustomRoom/view/McrCreateBasicSettingsPage.js",
 		"bin-debug/utility/ResManager.js",
 		"bin-debug/utility/SeedRandom.js",
+		"bin-debug/modules/multiCustomRoom/view/McrCreateBasicSettingsPage.js",
 		"bin-debug/modules/multiCustomRoom/view/McrCreateCoListPanel.js",
 		"bin-debug/modules/multiCustomRoom/view/McrCreateMapListPanel.js",
-		"bin-debug/modules/multiCustomRoom/view/McrCreateSearchMapPanel.js",
 		"bin-debug/modules/replay/model/ReplayField.js"
 	]
 }

@@ -39,7 +39,7 @@ namespace TinyWars.BaseWar {
             this._setWarPassword(data.warPassword);
             this._setWarComment(data.warComment);
             this._setConfigVersion(data.configVersion);
-            this._setMapFileName(data.mapFileName);
+            this.setMapFileName(data.mapFileName);
             this._setRandomNumberGenerator(new Math.seedrandom("", { state: data.seedRandomState || true }));
             this._setSettingsTimeLimit(data.timeLimit);
             this._setSettingsHasFog(data.hasFogByDefault);
@@ -137,7 +137,7 @@ namespace TinyWars.BaseWar {
             return this._configVersion;
         }
 
-        private _setMapFileName(mapFileName: string): void {
+        public setMapFileName(mapFileName: string): void {
             this._mapFileName = mapFileName;
         }
         public getMapFileName(): string {
