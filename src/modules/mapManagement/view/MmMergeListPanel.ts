@@ -143,17 +143,19 @@ namespace TinyWars.MapManagement {
 
         private async _createDataForListMap(): Promise<DataForMapNameRenderer[]> {
             const dict = new Map<string, DataForMapNameRenderer[]>();
-            for (const [mapFileName] of WarMapModel.getExtraDataDict()) {
-                const signature = getSignatureForMap((await WarMapModel.getMapRawData(mapFileName)) as Types.MapRawData);
-                const data      : DataForMapNameRenderer = {
-                    mapFileName,
-                    signature,
-                    panel       : this,
-                };
-                if (dict.has(signature)) {
-                    dict.get(signature).push(data);
-                } else {
-                    dict.set(signature, [data]);
+            for (const [mapFileName, extraData] of WarMapModel.getExtraDataDict()) {
+                if (!extraData.isDeleted) {
+                    const signature = getSignatureForMap((await WarMapModel.getMapRawData(mapFileName)) as Types.MapRawData);
+                    const data      : DataForMapNameRenderer = {
+                        mapFileName,
+                        signature,
+                        panel       : this,
+                    };
+                    if (dict.has(signature)) {
+                        dict.get(signature).push(data);
+                    } else {
+                        dict.set(signature, [data]);
+                    }
                 }
             }
 
