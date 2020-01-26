@@ -69,8 +69,9 @@ namespace TinyWars.Utility.Notify {
         SHeartbeat,
         SGetMapRawData,
         SGetMapRawDataFailed,
-        SGetMapMetaDataList,
-        SGetMapStatisticsDataList,
+        SGetMapEnabledExtraDataList,
+        SGetMapExtraData,
+        SGetMapExtraDataFailed,
         SGetUserPublicInfo,
         SUserChangeNickname,
         SUserChangeNicknameFailed,
@@ -80,6 +81,8 @@ namespace TinyWars.Utility.Notify {
 
         SMmChangeAvailability,
         SMmReloadAllMaps,
+        SMmMergeMap,
+        SMmDeleteMap,
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         SMcrCreateWar,

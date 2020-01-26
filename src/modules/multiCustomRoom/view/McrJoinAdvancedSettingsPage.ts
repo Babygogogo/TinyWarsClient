@@ -38,7 +38,7 @@ namespace TinyWars.MultiCustomRoom {
         private _labelVisionTitle   : GameUi.UiLabel;
         private _labelVision        : GameUi.UiLabel;
 
-        protected _mapMetaData: ProtoTypes.IMapMetaData;
+        protected _mapExtraData: ProtoTypes.IMapExtraData;
 
         public constructor() {
             super();
@@ -46,8 +46,8 @@ namespace TinyWars.MultiCustomRoom {
             this.skinName = "resource/skins/multiCustomRoom/McrJoinAdvancedSettingsPage.exml";
         }
 
-        protected _onOpened(): void {
-            this._mapMetaData = McrModel.getJoinWarMapMetaData();
+        protected async _onOpened(): Promise<void> {
+            this._mapExtraData = await McrModel.getJoinWarMapExtraData();
 
             this._updateComponentsForLanguage();
             this._updateLabelMapName();
@@ -106,11 +106,11 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _updateLabelMapName(): void {
-            this._labelMapName.text = WarMapModel.getMapNameInLanguage(this._mapMetaData.mapFileName);
+            WarMapModel.getMapNameInLanguage(this._mapExtraData.mapFileName).then(v => this._labelMapName.text = v);
         }
 
         private _updateLabelPlayersCount(): void {
-            this._labelPlayersCount.text = "" + this._mapMetaData.playersCount;
+            this._labelPlayersCount.text = "" + this._mapExtraData.playersCount;
         }
 
         private _updateLabelMoveRange(): void {

@@ -1,83 +1,78 @@
 
-namespace TinyWars.SingleCustomRoom {
-    import Notify       = Utility.Notify;
+namespace TinyWars.MapManagement {
     import Types        = Utility.Types;
     import Lang         = Utility.Lang;
+    import Notify       = Utility.Notify;
+    import FloatText    = Utility.FloatText;
     import WarMapModel  = WarMap.WarMapModel;
 
-    type FiltersForMapList = {
-        mapName?        : string;
-        mapDesigner?    : string;
-        playersCount?   : number;
-        playedTimes?    : number;
-        minRating?      : number;
-    }
-
-    export class ScrCreateMapListPanel extends GameUi.UiPanel {
+    export class MmMergeListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: ScrCreateMapListPanel;
+        private static _instance: MmMergeListPanel;
 
-        private _listMap   : GameUi.UiScrollList;
-        private _zoomMap   : GameUi.UiZoomableComponent;
-        private _btnSearch : GameUi.UiButton;
-        private _btnBack   : GameUi.UiButton;
-        private _labelNoMap: GameUi.UiLabel;
+        private _listMap        : GameUi.UiScrollList;
+        private _zoomMap        : GameUi.UiZoomableComponent;
+        private _labelMenuTitle : GameUi.UiLabel;
+        private _btnBack        : GameUi.UiButton;
+        private _labelNoMap     : GameUi.UiLabel;
 
         private _groupInfo          : eui.Group;
-        private _labelMenuTitle     : GameUi.UiLabel;
         private _labelMapName       : GameUi.UiLabel;
+        private _labelMapNameEnglish: GameUi.UiLabel;
         private _labelDesigner      : GameUi.UiLabel;
         private _labelRating        : GameUi.UiLabel;
         private _labelPlayedTimes   : GameUi.UiLabel;
         private _labelPlayersCount  : GameUi.UiLabel;
 
-        private _mapFilters         : FiltersForMapList = {};
         private _dataForList        : DataForMapNameRenderer[] = [];
         private _selectedMapFileName: string;
 
-        public static show(mapFilters?: FiltersForMapList): void {
-            if (!ScrCreateMapListPanel._instance) {
-                ScrCreateMapListPanel._instance = new ScrCreateMapListPanel();
+        public static show(): void {
+            if (!MmMergeListPanel._instance) {
+                MmMergeListPanel._instance = new MmMergeListPanel();
             }
 
-            (mapFilters) && (ScrCreateMapListPanel._instance.setMapFilters(mapFilters));
-            ScrCreateMapListPanel._instance.open();
+            MmMergeListPanel._instance.open();
         }
         public static hide(): void {
-            if (ScrCreateMapListPanel._instance) {
-                ScrCreateMapListPanel._instance.close();
+            if (MmMergeListPanel._instance) {
+                MmMergeListPanel._instance.close();
             }
         }
-        public static getInstance(): ScrCreateMapListPanel {
-            return ScrCreateMapListPanel._instance;
+        public static getInstance(): MmMergeListPanel {
+            return MmMergeListPanel._instance;
         }
 
         public constructor() {
             super();
 
             this._setAutoAdjustHeightEnabled();
-            this.skinName = "resource/skins/singleCustomRoom/ScrCreateMapListPanel.exml";
+            this.skinName = "resource/skins/mapManagement/MmMergeListPanel.exml";
         }
 
         protected _onFirstOpened(): void {
-            this._uiListeners = [
-                { ui: this._btnSearch, callback: this._onTouchTapBtnSearch },
-                { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
-            ];
             this._notifyListeners = [
+                { type: Notify.Type.SMmMergeMap,        callback: this._onNotifySMmMergeMap },
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            ];
+            this._uiListeners = [
+                { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
             ];
             this._listMap.setItemRenderer(MapNameRenderer);
         }
-        protected _onOpened(): void {
-            this._groupInfo.visible = false;
+        protected async _onOpened(): Promise<void> {
             this._zoomMap.setMouseWheelListenerEnabled(true);
             this._zoomMap.setTouchListenerEnabled(true);
-            this._updateComponentsForLanguage();
 
-            this.setMapFilters(this._mapFilters);
+            this._groupInfo.visible     = false;
+            this._labelNoMap.visible    = true;
+            this._labelNoMap.text       = Lang.getText(Lang.Type.A0078);
+
+            this._dataForList           = await this._createDataForListMap();
+            this._labelNoMap.text       = Lang.getText(Lang.Type.B0269);
+            this._updateView();
         }
         protected _onClosed(): void {
             this._zoomMap.removeAllContents();
@@ -106,35 +101,22 @@ namespace TinyWars.SingleCustomRoom {
             return this._selectedMapFileName;
         }
 
-        public setMapFilters(mapFilters: FiltersForMapList): void {
-            this._mapFilters            = mapFilters;
-            this._dataForList           = this._createDataForListMap();
-
-            const length                = this._dataForList.length;
-            this._labelNoMap.visible    = length <= 0;
-            this._listMap.bindData(this._dataForList);
-            this.setSelectedMapFileName(this._selectedMapFileName);
-
-            if (length) {
-                for (let index = 0; index < length; ++index) {
-                    if (this._dataForList[index].mapFileName === this._selectedMapFileName) {
-                        this._listMap.scrollVerticalTo((index + 1) / length * 100);
-                        break;
-                    }
-                }
-            }
+        public getDataForList(): DataForMapNameRenderer[] {
+            return this._dataForList;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onTouchTapBtnSearch(e: egret.TouchEvent): void {
-            ScrCreateSearchMapPanel.show();
+        private async _onNotifySMmMergeMap(e: egret.Event): Promise<void> {
+            this._dataForList       = await this._createDataForListMap();
+            this._labelNoMap.text   = Lang.getText(Lang.Type.B0269);
+            this._updateView();
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
-            this.close();
-            SinglePlayerLobby.SinglePlayerLobbyPanel.show();
+            MmMergeListPanel.hide();
+            MmMainMenuPanel.show();
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
@@ -144,40 +126,44 @@ namespace TinyWars.SingleCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
+        private _updateView(): void {
+            this._updateComponentsForLanguage();
+
+            const length                = this._dataForList.length;
+            this._labelNoMap.visible    = length <= 0;
+            this._listMap.bindData(this._dataForList);
+            this.setSelectedMapFileName(this._selectedMapFileName);
+            (length) && (this._listMap.scrollVerticalTo((this._dataForList.findIndex(data => data.mapFileName === this._selectedMapFileName) + 1) / length * 100));
+        }
+
         private _updateComponentsForLanguage(): void {
             this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0227);
             this._btnBack.label         = Lang.getText(Lang.Type.B0146);
-            this._btnSearch.label       = Lang.getText(Lang.Type.B0228);
         }
 
-        private _createDataForListMap(): DataForMapNameRenderer[] {
-            const data: DataForMapNameRenderer[] = [];
-            let { mapName, mapDesigner, playersCount, playedTimes, minRating } = this._mapFilters;
-            (mapName)       && (mapName     = mapName.toLowerCase());
-            (mapDesigner)   && (mapDesigner = mapDesigner.toLowerCase());
-
-            for (const [mapFileName, extraData] of WarMapModel.getExtraDataDict()) {
-                const name = Lang.getLanguageType() === Types.LanguageType.Chinese ? extraData.mapName : extraData.mapNameEnglish;
-                if ((extraData.isDeleted)                                                               ||
-                    (!extraData.canScw)                                                                 ||
-                    ((mapName) && (name.toLowerCase().indexOf(mapName) < 0))                            ||
-                    ((mapDesigner) && (extraData.mapDesigner.toLowerCase().indexOf(mapDesigner) < 0))   ||
-                    ((playersCount) && (extraData.playersCount !== playersCount))                       ||
-                    ((playedTimes != null) && (extraData.mcwPlayedTimes < playedTimes))                 ||
-                    ((minRating != null) && (extraData.rating < minRating))
-                ) {
-                    continue;
+        private async _createDataForListMap(): Promise<DataForMapNameRenderer[]> {
+            const dict = new Map<string, DataForMapNameRenderer[]>();
+            for (const [mapFileName] of WarMapModel.getExtraDataDict()) {
+                const signature = getSignatureForMap((await WarMapModel.getMapRawData(mapFileName)) as Types.MapRawData);
+                const data      : DataForMapNameRenderer = {
+                    mapFileName,
+                    signature,
+                    panel       : this,
+                };
+                if (dict.has(signature)) {
+                    dict.get(signature).push(data);
                 } else {
-                    data.push({
-                        mapFileName,
-                        mapName : name,
-                        panel   : this,
-                    });
+                    dict.set(signature, [data]);
                 }
             }
 
-            data.sort((a, b) => a.mapName.localeCompare(b.mapName, "zh"));
-            return data;
+            const dataList: DataForMapNameRenderer[] = [];
+            for (const [k, v] of dict) {
+                if (v.length > 1) {
+                    dataList.push(...v);
+                }
+            }
+            return dataList;
         }
 
         private _createUnitViewDataList(unitViewIds: number[], mapWidth: number, mapHeight: number): Types.UnitViewData[] {
@@ -205,7 +191,8 @@ namespace TinyWars.SingleCustomRoom {
         private async _showMap(mapFileName: string): Promise<void> {
             const mapRawData                = await WarMapModel.getMapRawData(mapFileName);
             const mapExtraData              = await WarMapModel.getExtraData(mapFileName);
-            this._labelMapName.text         = Lang.getFormatedText(Lang.Type.F0000, await WarMapModel.getMapNameInLanguage(mapFileName));
+            this._labelMapName.text         = Lang.getFormatedText(Lang.Type.F0000, mapExtraData.mapName);
+            this._labelMapNameEnglish.text  = Lang.getFormatedText(Lang.Type.F0000, mapExtraData.mapNameEnglish);
             this._labelDesigner.text        = Lang.getFormatedText(Lang.Type.F0001, mapRawData.mapDesigner);
             this._labelPlayersCount.text    = Lang.getFormatedText(Lang.Type.F0002, mapRawData.playersCount);
             this._labelRating.text          = Lang.getFormatedText(Lang.Type.F0003, mapExtraData.rating != null ? mapExtraData.rating.toFixed(2) : Lang.getText(Lang.Type.B0001));
@@ -233,10 +220,27 @@ namespace TinyWars.SingleCustomRoom {
         }
     }
 
+    function getSignatureForMap(mapRawData: Types.MapRawData): string {
+        const strList: string[] = [];
+        for (const tileBase of mapRawData.tileBases) {
+            strList.push("" + ConfigManager.getTileBaseType(tileBase));
+        }
+        for (const tileObject of mapRawData.tileObjects) {
+            const data = ConfigManager.getTileObjectTypeAndPlayerIndex(tileObject);
+            strList.push("" + data.playerIndex + data.tileObjectType);
+        }
+        for (const unit of mapRawData.units) {
+            const data = ConfigManager.getUnitTypeAndPlayerIndex(unit);
+            strList.push(data ? "" + data.playerIndex + data.unitType : "0");
+        }
+
+        return strList.join("");
+    }
+
     type DataForMapNameRenderer = {
         mapFileName : string;
-        mapName     : string;
-        panel       : ScrCreateMapListPanel;
+        signature   : string;
+        panel       : MmMergeListPanel;
     }
 
     class MapNameRenderer extends eui.ItemRenderer {
@@ -265,10 +269,22 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
-            ScrCreateMapListPanel.hide();
-
-            ScrModel.resetCreateWarData((this.data as DataForMapNameRenderer).mapFileName);
-            ScrCreateSettingsPanel.show();
+            const data = this.data as DataForMapNameRenderer;
+            if (data) {
+                const dataList  = data.panel.getDataForList();
+                const srcData   = dataList ? dataList.find(d => (d.signature === data.signature) && (d.mapFileName !== data.mapFileName)) : null;
+                if (!srcData) {
+                    FloatText.show(Lang.getText(Lang.Type.B0269));
+                } else {
+                    Common.ConfirmPanel.show({
+                        title   : Lang.getText(Lang.Type.B0088),
+                        content : Lang.getText(Lang.Type.A0079),
+                        callback: () => {
+                            WarMap.WarMapProxy.reqMergeMap(srcData.mapFileName, data.mapFileName);
+                        },
+                    });
+                }
+            }
         }
     }
 }

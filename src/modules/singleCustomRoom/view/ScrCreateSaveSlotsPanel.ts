@@ -136,8 +136,12 @@ namespace TinyWars.SingleCustomRoom {
             const slotInfo              = data.slotInfo;
             this._labelSlotIndex.text   = "" + data.slotIndex;
             this._labelType.text        = slotInfo ? Lang.getSinglePlayerWarTypeName(slotInfo.warType) : "----";
-            this._labelMapName.text     = slotInfo ? WarMap.WarMapModel.getMapNameInLanguage(slotInfo.mapFileName) : "----";
             this._labelChoose.text      = Lang.getText(Lang.Type.B0258);
+            if (slotInfo) {
+                WarMap.WarMapModel.getMapNameInLanguage(slotInfo.mapFileName).then(value => this._labelMapName.text = value);
+            } else {
+                this._labelMapName.text = "----";
+            }
         }
     }
 }

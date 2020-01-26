@@ -15,6 +15,10 @@ export const enum NetErrorCode {
     Register_InvalidNickname,
     Register_UsedNickname,
 
+    MmMergeMap_SameSrcAndDst,
+    MmMergeMap_NoSrcStatisticsData,
+    MmMergeMap_NoDstStatisticsData,
+
     CreateMultiCustomWar_TooManyJoinedWars,
     CreateMultiCustomWar_InvalidParams,
 

@@ -116,7 +116,7 @@ namespace TinyWars.MultiCustomRoom {
         // Other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        private _updateView(): void {
+        private async _updateView(): Promise<void> {
             this._updateComponentsForLanguage();
 
             const info = this._openData;
@@ -130,13 +130,13 @@ namespace TinyWars.MultiCustomRoom {
             this._labelMoveRangeModifier.text       = `${info.moveRangeModifier > 0 ? "+" : ""}${info.moveRangeModifier}`;
             this._labelAttackPowerModifier.text     = `${info.attackPowerModifier > 0 ? "+" : ""}${info.attackPowerModifier}%`;
             this._labelVisionRangeModifier.text     = `${info.visionRangeModifier > 0 ? "+" : ""}${info.visionRangeModifier}`;
-            this._listPlayer.bindData(this._getDataForListPlayer());
+            this._listPlayer.bindData(await this._getDataForListPlayer());
         }
 
-        private _getDataForListPlayer(): DataForPlayerRenderer[] {
+        private async _getDataForListPlayer(): Promise<DataForPlayerRenderer[]> {
             const warInfo       = this._openData;
-            const mapMetaData   = WarMapModel.getMapMetaData(warInfo.mapFileName);
-            if (!mapMetaData) {
+            const mapExtraData  = await WarMapModel.getExtraData(warInfo.mapFileName);
+            if (!mapExtraData) {
                 return [];
             } else {
                 const data: DataForPlayerRenderer[] = [
@@ -154,7 +154,7 @@ namespace TinyWars.MultiCustomRoom {
                     },
                 ];
 
-                if (mapMetaData.playersCount >= 3) {
+                if (mapExtraData.playersCount >= 3) {
                     data.push({
                         playerIndex : 3,
                         nickname    : warInfo.p3UserNickname,
@@ -162,7 +162,7 @@ namespace TinyWars.MultiCustomRoom {
                         coId        : warInfo.p3CoId,
                     });
                 }
-                if (mapMetaData.playersCount >= 4) {
+                if (mapExtraData.playersCount >= 4) {
                     data.push({
                         playerIndex : 4,
                         nickname    : warInfo.p4UserNickname,

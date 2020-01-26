@@ -216,7 +216,7 @@ namespace TinyWars.MultiCustomRoom {
         private async _showMap(index: number): Promise<void> {
             const warInfo               = this._dataForListWar[index].info.mcwDetail;
             const mapRawData            = await WarMapModel.getMapRawData(warInfo.mapFileName);
-            this._labelMapName.text     = Lang.getFormatedText(Lang.Type.F0000, WarMapModel.getMapNameInLanguage(warInfo.mapFileName));
+            this._labelMapName.text     = Lang.getFormatedText(Lang.Type.F0000, await WarMapModel.getMapNameInLanguage(warInfo.mapFileName));
             this._labelDesigner.text    = Lang.getFormatedText(Lang.Type.F0001, mapRawData.mapDesigner);
             this._labelHasFog.text      = Lang.getFormatedText(Lang.Type.F0005, Lang.getText(warInfo.hasFog ? Lang.Type.B0012 : Lang.Type.B0001));
             this._labelWarComment.text  = warInfo.warComment || "----";
@@ -274,10 +274,14 @@ namespace TinyWars.MultiCustomRoom {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data                  = this.data as DataForWarRenderer;
-            const warInfo               = data.info.mcwDetail;
-            this.currentState           = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
-            this._labelName.text        = warInfo.warName || WarMapModel.getMapNameInLanguage(warInfo.mapFileName);
+            const data          = this.data as DataForWarRenderer;
+            const warInfo       = data.info.mcwDetail;
+            this.currentState   = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
+            if (warInfo.warName) {
+                this._labelName.text = warInfo.warName;
+            } else {
+                WarMapModel.getMapNameInLanguage(warInfo.mapFileName).then(v => this._labelName.text = v);
+            }
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {

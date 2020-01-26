@@ -7,38 +7,72 @@ namespace TinyWars.WarMap {
     import Notify               = Utility.Notify;
     import Lang                 = Utility.Lang;
     import MapRawData           = ProtoTypes.IMapRawData;
-    import MapMetaData          = ProtoTypes.IMapMetaData;
-    import MapStatisticsData    = ProtoTypes.IMapStatisticsData;
+    import MapExtraData         = ProtoTypes.IMapExtraData;
 
     export namespace WarMapModel {
         const _RAW_DATA_DICT        = new Map<string, MapRawData>();
-        const _META_DATA_DICT       = new Map<string, MapMetaData>();
-        const _STATISTICS_DATA_DICT = new Map<string, MapStatisticsData>();
+        const _EXTRA_DATA_DICT      = new Map<string, MapExtraData>();
 
         export function init(): void {
         }
 
-        export function resetMapMetaDataDict(dataList: MapMetaData[]): void {
-            _META_DATA_DICT.clear();
+        export function resetExtraDataDict(dataList: MapExtraData[]): void {
+            _EXTRA_DATA_DICT.clear();
             for (const data of dataList) {
-                _META_DATA_DICT.set(data.mapFileName, data);
+                _EXTRA_DATA_DICT.set(data.mapFileName, data);
             }
         }
-        export function getMapMetaDataDict(): Map<string, MapMetaData> {
-            return _META_DATA_DICT;
+        export function getExtraDataDict(): Map<string, MapExtraData> {
+            return _EXTRA_DATA_DICT;
         }
 
-        export function getMapMetaData(mapFileName: string): MapMetaData | undefined {
-            return _META_DATA_DICT.get(mapFileName);
+        export function setExtraData(data: MapExtraData): void {
+            _EXTRA_DATA_DICT.set(data.mapFileName, data);
         }
-        export function getMapNameInLanguage(mapFileName: string): string | null {
-            const metaData = getMapMetaData(mapFileName);
-            if (!metaData) {
-                return null;
+        export function getExtraData(mapFileName: string): Promise<MapExtraData | undefined> {
+            const localData = _EXTRA_DATA_DICT.get(mapFileName);
+            if (localData) {
+                return new Promise(resolve => resolve(localData));
             } else {
+                return new Promise((resolve, reject) => {
+                    const callbackOnSucceed = (e: egret.Event): void => {
+                        const data = e.data as ProtoTypes.IS_GetMapExtraData;
+                        if (data.mapFileName === mapFileName) {
+                            Notify.removeEventListener(Notify.Type.SGetMapExtraData,        callbackOnSucceed);
+                            Notify.removeEventListener(Notify.Type.SGetMapExtraDataFailed,  callbackOnFailed);
+
+                            resolve(data.mapExtraData);
+                        }
+                    };
+                    const callbackOnFailed = (e: egret.Event): void => {
+                        const data = e.data as ProtoTypes.IS_GetMapExtraData;
+                        if (data.mapFileName === mapFileName) {
+                            Notify.removeEventListener(Notify.Type.SGetMapExtraData,        callbackOnSucceed);
+                            Notify.removeEventListener(Notify.Type.SGetMapExtraDataFailed,  callbackOnFailed);
+
+                            reject(null);
+                        }
+                    };
+
+                    Notify.addEventListener(Notify.Type.SGetMapExtraData,       callbackOnSucceed);
+                    Notify.addEventListener(Notify.Type.SGetMapExtraDataFailed, callbackOnFailed);
+
+                    WarMapProxy.reqGetMapExtraData(mapFileName);
+                });
+            }
+        }
+        export function deleteExtraData(mapFileName: string): void {
+            _EXTRA_DATA_DICT.delete(mapFileName);
+        }
+
+        export async function getMapNameInLanguage(mapFileName: string): Promise<string | null> {
+            const extraData = await getExtraData(mapFileName);
+            if (extraData) {
                 return Lang.getLanguageType() === Types.LanguageType.Chinese
-                    ? metaData.mapName
-                    : metaData.mapNameEnglish;
+                    ? extraData.mapName
+                    : extraData.mapNameEnglish;
+            } else {
+                return null;
             }
         }
 
@@ -77,16 +111,6 @@ namespace TinyWars.WarMap {
         export function setMapRawData(mapFileName: string, mapRawData: MapRawData): void {
             LocalStorage.setMapRawData(mapFileName, mapRawData);
             _RAW_DATA_DICT.set(mapFileName, mapRawData);
-        }
-
-        export function resetMapStatisticsDataDict(dataList: MapStatisticsData[]): void {
-            _STATISTICS_DATA_DICT.clear();
-            for (const data of dataList) {
-                _STATISTICS_DATA_DICT.set(data.mapFileName, data);
-            }
-        }
-        export function getMapStatisticsData(mapFileName: string): MapStatisticsData | undefined {
-            return _STATISTICS_DATA_DICT.get(mapFileName);
         }
 
         function getLocalMapRawData(mapFileName: string): MapRawData | undefined {

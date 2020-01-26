@@ -19,7 +19,8 @@ namespace TinyWars.MapManagement {
         private _labelScw   : GameUi.UiLabel;
         private _imgScw     : GameUi.UiImage;
 
-        private _btnCancel   : GameUi.UiButton;
+        private _btnCancel  : GameUi.UiButton;
+        private _btnDelete  : GameUi.UiButton;
         private _btnConfirm : GameUi.UiButton;
 
         private static _instance: MmAvailabilityChangePanel;
@@ -51,32 +52,44 @@ namespace TinyWars.MapManagement {
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ];
             this._uiListeners = [
-                { ui: this._btnConfirm,     callback: this._onTouchedBtnConfirm },
-                { ui: this._btnCancel,      callback: this._onTouchedBtnCancel },
-                { ui: this._groupMcw,       callback: this._onTouchedGroupMcw },
-                { ui: this._groupScw,       callback: this._onTouchedGroupScw },
+                { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
+                { ui: this._btnDelete,  callback: this._onTouchedBtnDelete },
+                { ui: this._btnCancel,  callback: this._onTouchedBtnCancel },
+                { ui: this._groupMcw,   callback: this._onTouchedGroupMcw },
+                { ui: this._groupScw,   callback: this._onTouchedGroupScw },
             ];
         }
 
-        protected _onOpened(): void {
-            this._updateViewOnLanguageChanged();
+        protected async _onOpened(): Promise<void> {
+            this._updateComponentsForLanguage();
 
-            const mapMetaData       = WarMapModel.getMapMetaData(this._mapFileName);
-            this._imgMcw.visible    = !!mapMetaData.isEnabledForMultiCustomWar;
-            this._imgScw.visible    = !!mapMetaData.isEnabledForSingleCustomWar;
+            const mapExtraData      = await WarMapModel.getExtraData(this._mapFileName);
+            this._imgMcw.visible    = !!mapExtraData.canMcw;
+            this._imgScw.visible    = !!mapExtraData.canScw;
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
-            this._updateViewOnLanguageChanged();
+            this._updateComponentsForLanguage();
         }
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
             WarMapProxy.reqMmChangeAvailability(this._mapFileName, {
-                isEnabledForMcw : this._imgMcw.visible,
-                isEnabledForWr  : false,
-                isEnabledForScw : this._imgScw.visible,
+                canMcw : this._imgMcw.visible,
+                canWr  : false,
+                canScw : this._imgScw.visible,
             });
             MmAvailabilityChangePanel.hide();
+        }
+
+        private _onTouchedBtnDelete(e: egret.TouchEvent): void {
+            Common.ConfirmPanel.show({
+                title   : Lang.getText(Lang.Type.B0088),
+                content : Lang.getText(Lang.Type.A0080),
+                callback: () => {
+                    WarMapProxy.reqMmDeleteMap(this._mapFileName);
+                    this.close();
+                },
+            });
         }
 
         private _onTouchedBtnCancel(e: egret.TouchEvent): void {
@@ -91,8 +104,11 @@ namespace TinyWars.MapManagement {
             this._imgScw.visible = !this._imgScw.visible;
         }
 
-        private _updateViewOnLanguageChanged(): void {
+        private _updateComponentsForLanguage(): void {
             // TODO
+            this._btnCancel.label   = Lang.getText(Lang.Type.B0154);
+            this._btnConfirm.label  = Lang.getText(Lang.Type.B0026);
+            this._btnDelete.label   = Lang.getText(Lang.Type.B0270);
         }
     }
 }

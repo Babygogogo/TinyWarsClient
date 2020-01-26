@@ -91,6 +91,13 @@ namespace TinyWars.MapManagement {
                         MmAvailabilityListPanel.show({});
                     },
                 },
+                {
+                    name    : Lang.getText(Lang.Type.B0268),
+                    callback: (): void => {
+                        MmMainMenuPanel.hide();
+                        MmMergeListPanel.show();
+                    },
+                },
             ];
             if (User.UserModel.checkIsAdmin()) {
                 dataList.push({

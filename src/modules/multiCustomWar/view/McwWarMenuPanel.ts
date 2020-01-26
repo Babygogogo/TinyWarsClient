@@ -190,11 +190,11 @@ namespace TinyWars.MultiCustomWar {
             this._btnBack.label                         = Lang.getText(Lang.Type.B0146);
         }
 
-        private _updateGroupInfo(): void {
+        private async _updateGroupInfo(): Promise<void> {
             const war                               = this._war;
-            const mapMetaData                       = WarMapModel.getMapMetaData(war.getMapFileName());
-            this._labelMapName.text                 = WarMapModel.getMapNameInLanguage(mapMetaData.mapFileName);
-            this._labelMapDesigner.text             = mapMetaData.mapDesigner;
+            const mapExtraData                      = await WarMapModel.getExtraData(war.getMapFileName());
+            this._labelMapName.text                 = await WarMapModel.getMapNameInLanguage(mapExtraData.mapFileName);
+            this._labelMapDesigner.text             = mapExtraData.mapDesigner;
             this._labelWarId.text                   = `${war.getWarId()}`;
             this._labelTurnIndex.text               = `${war.getTurnManager().getTurnIndex()}`;
             this._labelActionId.text                = `${war.getNextActionId() - 1}`;

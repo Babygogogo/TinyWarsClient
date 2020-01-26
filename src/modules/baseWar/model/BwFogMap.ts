@@ -18,8 +18,8 @@ namespace TinyWars.BaseWar {
         private _mapsFromPaths          : Map<number, Visibility[][]>;
         private _war                    : BwWar;
 
-        public init(data: SerializedBwFogMap, mapFileName: string): BwFogMap {
-            const mapInfo           = MapManager.getMapMetaData(mapFileName);
+        public async init(data: SerializedBwFogMap, mapFileName: string): Promise<BwFogMap> {
+            const mapInfo           = await MapManager.getExtraData(mapFileName);
             const mapSize: MapSize  = { width: mapInfo.mapWidth, height: mapInfo.mapHeight };
             this._mapsFromPaths     = createEmptyMaps<Visibility>(mapSize, mapInfo.playersCount);
             this._setMapSize(mapInfo.mapWidth, mapInfo.mapHeight);

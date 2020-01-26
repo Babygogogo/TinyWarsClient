@@ -27,7 +27,7 @@ namespace TinyWars.SingleCustomRoom {
         private _labelPlayerListTips    : GameUi.UiLabel;
         private _listPlayer             : GameUi.UiScrollList;
 
-        private _mapMetaData: ProtoTypes.IMapMetaData;
+        private _mapExtraData: ProtoTypes.IMapExtraData;
 
         public constructor() {
             super();
@@ -51,8 +51,8 @@ namespace TinyWars.SingleCustomRoom {
             this._listPlayer.setItemRenderer(PlayerRenderer);
         }
 
-        protected _onOpened(): void {
-            this._mapMetaData = ScrModel.getCreateWarMapMetaData();
+        protected async _onOpened(): Promise<void> {
+            this._mapExtraData = await ScrModel.getCreateWarMapExtraData();
 
             this._updateComponentsForLanguage();
             this._updateLabelMapName();
@@ -112,11 +112,11 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _updateLabelMapName(): void {
-            this._labelMapName.text = WarMapModel.getMapNameInLanguage(this._mapMetaData.mapFileName);
+            WarMapModel.getMapNameInLanguage(this._mapExtraData.mapFileName).then(v => this._labelMapName.text = v);
         }
 
         private _updateLabelPlayersCount(): void {
-            this._labelPlayersCount.text = "" + this._mapMetaData.playersCount;
+            this._labelPlayersCount.text = "" + this._mapExtraData.playersCount;
         }
 
         private _updateLabelSaveSlot(): void {

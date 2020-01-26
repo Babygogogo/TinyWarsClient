@@ -55,17 +55,32 @@ namespace TinyWars.SingleCustomRoom {
 
         let _saveSlotInfoList   : ProtoTypes.ISaveSlotInfo[];
 
+        export function init(): void {
+            Notify.addEventListeners([
+                { type: Notify.Type.SMmMergeMap, callback: _onNotifySMmMergeMap, thisObject: ScrModel },
+            ]);
+        }
+
+        function _onNotifySMmMergeMap(e: egret.Event): void {
+            const data = e.data as ProtoTypes.IS_MmMergeMap;
+            for (const slot of _saveSlotInfoList || []) {
+                if (slot.mapFileName === data.srcMapFileName) {
+                    slot.mapFileName = data.dstMapFileName;
+                }
+            }
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for creating wars.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        export function getCreateWarMapMetaData(): ProtoTypes.IMapMetaData {
-            return WarMapModel.getMapMetaData(_dataForCreateWar.mapFileName);
+        export function getCreateWarMapExtraData(): Promise<ProtoTypes.IMapExtraData> {
+            return WarMapModel.getExtraData(_dataForCreateWar.mapFileName);
         }
 
-        export function resetCreateWarData(mapFileName: string): void {
+        export async function resetCreateWarData(mapFileName: string): Promise<void> {
             _dataForCreateWar.mapFileName       = mapFileName;
             _dataForCreateWar.configVersion     = ConfigManager.getNewestConfigVersion();
-            _dataForCreateWar.playerInfoList    = generateCreateWarPlayerInfoList(mapFileName);
+            _dataForCreateWar.playerInfoList    = await generateCreateWarPlayerInfoList(mapFileName);
             setCreateWarSaveSlotIndex(getAvailableSaveSlot(this.getSaveSlotInfoList()));
             setCreateWarHasFog(false);
 
@@ -99,10 +114,10 @@ namespace TinyWars.SingleCustomRoom {
             data.userId         = currUserId ? null : User.UserModel.getSelfUserId();
             Notify.dispatch(Notify.Type.ScrCreateWarPlayerInfoListChanged);
         }
-        export function tickCreateWarTeamIndex(dataIndex: number): void {
+        export async function tickCreateWarTeamIndex(dataIndex: number): Promise<void> {
             const data          = _dataForCreateWar.playerInfoList[dataIndex];
             const currTeamIndex = data.teamIndex;
-            data.teamIndex      = currTeamIndex < getCreateWarMapMetaData().playersCount ? currTeamIndex + 1 : 1;
+            data.teamIndex      = currTeamIndex < (await getCreateWarMapExtraData()).playersCount ? currTeamIndex + 1 : 1;
             Notify.dispatch(Notify.Type.ScrCreateWarPlayerInfoListChanged);
         }
         export function setCreateWarCoId(dataIndex: number, coId: number | null): void {
@@ -283,8 +298,8 @@ namespace TinyWars.SingleCustomRoom {
         }
     }
 
-    function generateCreateWarPlayerInfoList(mapFileName: string): ProtoTypes.ICreateWarPlayerInfo[] {
-        const playersCount  = WarMapModel.getMapMetaData(mapFileName).playersCount;
+    async function generateCreateWarPlayerInfoList(mapFileName: string): Promise<ProtoTypes.ICreateWarPlayerInfo[]> {
+        const playersCount  = (await WarMapModel.getExtraData(mapFileName)).playersCount;
         const list          : ProtoTypes.ICreateWarPlayerInfo[] = [{
             playerIndex : 1,
             userId      : User.UserModel.getSelfUserId(),

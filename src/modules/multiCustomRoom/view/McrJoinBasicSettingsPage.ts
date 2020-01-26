@@ -47,7 +47,7 @@ namespace TinyWars.MultiCustomRoom {
         private _labelPlayersTitle  : GameUi.UiLabel;
         private _listPlayer         : GameUi.UiScrollList;
 
-        private _mapMetaData: ProtoTypes.IMapMetaData;
+        private _mapExtraData: ProtoTypes.IMapExtraData;
 
         public constructor() {
             super();
@@ -74,8 +74,8 @@ namespace TinyWars.MultiCustomRoom {
             this._listPlayer.setItemRenderer(PlayerRenderer);
         }
 
-        protected _onOpened(): void {
-            this._mapMetaData = McrModel.getJoinWarMapMetaData();
+        protected async _onOpened(): Promise<void> {
+            this._mapExtraData = await McrModel.getJoinWarMapExtraData();
 
             this._updateComponentsForLanguage();
             this._updateLabelWarName();
@@ -185,11 +185,11 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _updateLabelMapName(): void {
-            this._labelMapName.text =  WarMapModel.getMapNameInLanguage(this._mapMetaData.mapFileName);
+            WarMapModel.getMapNameInLanguage(this._mapExtraData.mapFileName).then(v => this._labelMapName.text = v);
         }
 
         private _updateLabelPlayersCount(): void {
-            this._labelPlayersCount.text = "" + this._mapMetaData.playersCount;
+            this._labelPlayersCount.text = "" + this._mapExtraData.playersCount;
         }
 
         private _updateLabelPlayerIndex(): void {
@@ -219,11 +219,11 @@ namespace TinyWars.MultiCustomRoom {
             }
         }
 
-        private _updateListPlayer(): void {
-            this._listPlayer.bindData(this._getDataForListPlayer());
+        private async _updateListPlayer(): Promise<void> {
+            this._listPlayer.bindData(await this._getDataForListPlayer());
         }
 
-        private _getDataForListPlayer(): DataForPlayerRenderer[] {
+        private async _getDataForListPlayer(): Promise<DataForPlayerRenderer[]> {
             const warInfo = McrModel.getJoinWarRoomInfo();
             const data: DataForPlayerRenderer[] = [
                 {
@@ -240,7 +240,7 @@ namespace TinyWars.MultiCustomRoom {
                 },
             ];
 
-            const playersCount = WarMapModel.getMapMetaData(warInfo.mapFileName).playersCount;
+            const playersCount = (await WarMapModel.getExtraData(warInfo.mapFileName)).playersCount;
             if (playersCount >= 3) {
                 data.push({
                     playerIndex : 3,
