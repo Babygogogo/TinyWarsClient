@@ -29,21 +29,50 @@ namespace TinyWars.WarMap {
         export function setExtraData(data: MapExtraData): void {
             _EXTRA_DATA_DICT.set(data.mapFileName, data);
         }
-        export function getExtraData(mapFileName: string): MapExtraData | undefined {
-            return _EXTRA_DATA_DICT.get(mapFileName);
+        export function getExtraData(mapFileName: string): Promise<MapExtraData | undefined> {
+            const localData = _EXTRA_DATA_DICT.get(mapFileName);
+            if (localData) {
+                return new Promise(resolve => resolve(localData));
+            } else {
+                return new Promise((resolve, reject) => {
+                    const callbackOnSucceed = (e: egret.Event): void => {
+                        const data = e.data as ProtoTypes.IS_GetMapExtraData;
+                        if (data.mapFileName === mapFileName) {
+                            Notify.removeEventListener(Notify.Type.SGetMapExtraData,        callbackOnSucceed);
+                            Notify.removeEventListener(Notify.Type.SGetMapExtraDataFailed,  callbackOnFailed);
+
+                            resolve(data.mapExtraData);
+                        }
+                    };
+                    const callbackOnFailed = (e: egret.Event): void => {
+                        const data = e.data as ProtoTypes.IS_GetMapExtraData;
+                        if (data.mapFileName === mapFileName) {
+                            Notify.removeEventListener(Notify.Type.SGetMapExtraData,        callbackOnSucceed);
+                            Notify.removeEventListener(Notify.Type.SGetMapExtraDataFailed,  callbackOnFailed);
+
+                            reject(null);
+                        }
+                    };
+
+                    Notify.addEventListener(Notify.Type.SGetMapExtraData,       callbackOnSucceed);
+                    Notify.addEventListener(Notify.Type.SGetMapExtraDataFailed, callbackOnFailed);
+
+                    WarMapProxy.reqGetMapExtraData(mapFileName);
+                });
+            }
         }
         export function deleteExtraData(mapFileName: string): void {
             _EXTRA_DATA_DICT.delete(mapFileName);
         }
 
-        export function getMapNameInLanguage(mapFileName: string): string | null {
-            const metaData = getExtraData(mapFileName);
-            if (!metaData) {
-                return null;
-            } else {
+        export async function getMapNameInLanguage(mapFileName: string): Promise<string | null> {
+            const extraData = await getExtraData(mapFileName);
+            if (extraData) {
                 return Lang.getLanguageType() === Types.LanguageType.Chinese
-                    ? metaData.mapName
-                    : metaData.mapNameEnglish;
+                    ? extraData.mapName
+                    : extraData.mapNameEnglish;
+            } else {
+                return null;
             }
         }
 

@@ -1,7 +1,7 @@
 
 namespace TinyWars.WarMap.WarMapProxy {
     import NetManager   = Network.Manager;
-    import MsgCode   = Network.Codes;
+    import MsgCode      = Network.Codes;
     import ProtoTypes   = Utility.ProtoTypes;
     import Types        = Utility.Types;
     import Notify       = Utility.Notify;
@@ -14,6 +14,7 @@ namespace TinyWars.WarMap.WarMapProxy {
             { msgCode: MsgCode.S_MmChangeAvailability,          callback: _onSMmChangeAvailability },
             { msgCode: MsgCode.S_MmReloadAllMaps,               callback: _onSMmReloadAllMaps },
             { msgCode: MsgCode.S_MmMergeMap,                    callback: _onSMmMergeMap },
+            { msgCode: MsgCode.S_MmDeleteMap,                   callback: _onSMmDeleteMap },
         ], WarMapProxy);
     }
 
@@ -31,9 +32,18 @@ namespace TinyWars.WarMap.WarMapProxy {
         }
     }
 
+    export function reqGetMapExtraData(mapFileName: string): void {
+        NetManager.send({
+            C_GetMapExtraData: {
+                mapFileName,
+            },
+        });
+    }
     function _onSGetMapExtraData(e: egret.Event): void {
         const data = e.data as ProtoTypes.IS_GetMapExtraData;
-        if (!data.errorCode) {
+        if (data.errorCode) {
+            Notify.dispatch(Notify.Type.SGetMapExtraDataFailed, data);
+        } else {
             WarMapModel.setExtraData(data.mapExtraData);
             Notify.dispatch(Notify.Type.SGetMapExtraData, data);
         }
@@ -100,6 +110,21 @@ namespace TinyWars.WarMap.WarMapProxy {
             WarMapModel.setExtraData(data.dstMapExtraData);
             WarMapModel.deleteExtraData(data.srcMapFileName);
             Notify.dispatch(Notify.Type.SMmMergeMap, data);
+        }
+    }
+
+    export function reqMmDeleteMap(mapFileName: string): void {
+        NetManager.send({
+            C_MmDeleteMap: {
+                mapFileName,
+            },
+        });
+    }
+    function _onSMmDeleteMap(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_MmDeleteMap;
+        if (!data.errorCode) {
+            WarMapModel.deleteExtraData(data.mapFileName);
+            Notify.dispatch(Notify.Type.SMmDeleteMap, data);
         }
     }
 }

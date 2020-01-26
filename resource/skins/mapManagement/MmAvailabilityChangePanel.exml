@@ -29,7 +29,7 @@
                 </e:layout>
             </e:Group>
         </e:Scroller>
-        <GameUi:UiButton id="_btnCancel" label="&lt;&lt;返回" bottom="12" x="140">
+        <GameUi:UiButton id="_btnCancel" label="取消" bottom="12" left="100">
             <GameUi:skinName>
                 <e:Skin states="up,down,disabled">
                     <e:Image width="100%" height="100%" />
@@ -38,7 +38,16 @@
                 </e:Skin>
             </GameUi:skinName>
         </GameUi:UiButton>
-        <GameUi:UiButton id="_btnConfirm" label="确定&gt;&gt;" bottom="12" right="140">
+        <GameUi:UiButton id="_btnDelete" label="删除地图" bottom="12" horizontalCenter="0">
+            <GameUi:skinName>
+                <e:Skin states="up,down,disabled">
+                    <e:Image width="100%" height="100%" />
+                    <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="20" bold="true"
+                             textColor="0xff0000" />
+                </e:Skin>
+            </GameUi:skinName>
+        </GameUi:UiButton>
+        <GameUi:UiButton id="_btnConfirm" label="确定" bottom="12" right="100">
             <GameUi:skinName>
                 <e:Skin states="up,down,disabled">
                     <e:Image width="100%" height="100%" />

@@ -71,6 +71,7 @@ namespace TinyWars.Utility.Notify {
         SGetMapRawDataFailed,
         SGetMapEnabledExtraDataList,
         SGetMapExtraData,
+        SGetMapExtraDataFailed,
         SGetUserPublicInfo,
         SUserChangeNickname,
         SUserChangeNicknameFailed,
@@ -81,6 +82,7 @@ namespace TinyWars.Utility.Notify {
         SMmChangeAvailability,
         SMmReloadAllMaps,
         SMmMergeMap,
+        SMmDeleteMap,
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         SMcrCreateWar,

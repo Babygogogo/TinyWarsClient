@@ -21,16 +21,7 @@
         <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" />
         <GameUi:UiLabel id="_labelMenuTitle" text="选择地图" y="14" bold="true" size="25" textColor="0xffffff"
-                        horizontalCenter="-30" maxTextWidth="110" />
-        <GameUi:UiButton id="_btnSearch" label="查找&gt;&gt;" y="18" right="10">
-            <GameUi:skinName>
-                <e:Skin states="up,down,disabled">
-                    <e:Image width="100%" height="100%" />
-                    <e:Label id="labelDisplay" size="18" bold="true" left="0" right="0" top="0" bottom="0"
-                             textColor="0x00ff00" />
-                </e:Skin>
-            </GameUi:skinName>
-        </GameUi:UiButton>
+                        maxTextWidth="110" horizontalCenter="0" />
         <GameUi:UiLabel id="_labelNoMap" text="没有符合条件的地图" bold="true" size="20" textColor="0xFFFFFF"
                         horizontalCenter="0" width="160" textAlign="center" verticalCenter="0" />
         <GameUi:UiScrollList id="_listMap" left="0" right="0" bottom="50" top="50">

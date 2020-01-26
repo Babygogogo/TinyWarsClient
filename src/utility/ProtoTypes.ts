@@ -8473,6 +8473,12 @@ export declare interface IMessageContainer {
     /** MessageContainer S_MmMergeMap */
     S_MmMergeMap?: (IS_MmMergeMap|null);
 
+    /** MessageContainer C_MmDeleteMap */
+    C_MmDeleteMap?: (IC_MmDeleteMap|null);
+
+    /** MessageContainer S_MmDeleteMap */
+    S_MmDeleteMap?: (IS_MmDeleteMap|null);
+
     /** MessageContainer C_McrCreateWar */
     C_McrCreateWar?: (IC_McrCreateWar|null);
 
@@ -8833,6 +8839,12 @@ export declare class MessageContainer implements IMessageContainer {
 
     /** MessageContainer S_MmMergeMap. */
     public S_MmMergeMap?: (IS_MmMergeMap|null);
+
+    /** MessageContainer C_MmDeleteMap. */
+    public C_MmDeleteMap?: (IC_MmDeleteMap|null);
+
+    /** MessageContainer S_MmDeleteMap. */
+    public S_MmDeleteMap?: (IS_MmDeleteMap|null);
 
     /** MessageContainer C_McrCreateWar. */
     public C_McrCreateWar?: (IC_McrCreateWar|null);
@@ -11330,6 +11342,192 @@ export declare class S_MmMergeMap implements IS_MmMergeMap {
 
     /**
      * Converts this S_MmMergeMap to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_MmDeleteMap. */
+export declare interface IC_MmDeleteMap {
+
+    /** C_MmDeleteMap mapFileName */
+    mapFileName?: (string|null);
+}
+
+/** Represents a C_MmDeleteMap. */
+export declare class C_MmDeleteMap implements IC_MmDeleteMap {
+
+    /**
+     * Constructs a new C_MmDeleteMap.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_MmDeleteMap);
+
+    /** C_MmDeleteMap mapFileName. */
+    public mapFileName: string;
+
+    /**
+     * Creates a new C_MmDeleteMap instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_MmDeleteMap instance
+     */
+    public static create(properties?: IC_MmDeleteMap): C_MmDeleteMap;
+
+    /**
+     * Encodes the specified C_MmDeleteMap message. Does not implicitly {@link C_MmDeleteMap.verify|verify} messages.
+     * @param message C_MmDeleteMap message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_MmDeleteMap, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_MmDeleteMap message, length delimited. Does not implicitly {@link C_MmDeleteMap.verify|verify} messages.
+     * @param message C_MmDeleteMap message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_MmDeleteMap, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_MmDeleteMap message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_MmDeleteMap
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_MmDeleteMap;
+
+    /**
+     * Decodes a C_MmDeleteMap message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_MmDeleteMap
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_MmDeleteMap;
+
+    /**
+     * Verifies a C_MmDeleteMap message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_MmDeleteMap message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_MmDeleteMap
+     */
+    public static fromObject(object: { [k: string]: any }): C_MmDeleteMap;
+
+    /**
+     * Creates a plain object from a C_MmDeleteMap message. Also converts values to other types if specified.
+     * @param message C_MmDeleteMap
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_MmDeleteMap, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_MmDeleteMap to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_MmDeleteMap. */
+export declare interface IS_MmDeleteMap {
+
+    /** S_MmDeleteMap errorCode */
+    errorCode?: (number|null);
+
+    /** S_MmDeleteMap mapFileName */
+    mapFileName?: (string|null);
+}
+
+/** Represents a S_MmDeleteMap. */
+export declare class S_MmDeleteMap implements IS_MmDeleteMap {
+
+    /**
+     * Constructs a new S_MmDeleteMap.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_MmDeleteMap);
+
+    /** S_MmDeleteMap errorCode. */
+    public errorCode: number;
+
+    /** S_MmDeleteMap mapFileName. */
+    public mapFileName: string;
+
+    /**
+     * Creates a new S_MmDeleteMap instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_MmDeleteMap instance
+     */
+    public static create(properties?: IS_MmDeleteMap): S_MmDeleteMap;
+
+    /**
+     * Encodes the specified S_MmDeleteMap message. Does not implicitly {@link S_MmDeleteMap.verify|verify} messages.
+     * @param message S_MmDeleteMap message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_MmDeleteMap, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_MmDeleteMap message, length delimited. Does not implicitly {@link S_MmDeleteMap.verify|verify} messages.
+     * @param message S_MmDeleteMap message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_MmDeleteMap, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_MmDeleteMap message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_MmDeleteMap
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_MmDeleteMap;
+
+    /**
+     * Decodes a S_MmDeleteMap message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_MmDeleteMap
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_MmDeleteMap;
+
+    /**
+     * Verifies a S_MmDeleteMap message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_MmDeleteMap message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_MmDeleteMap
+     */
+    public static fromObject(object: { [k: string]: any }): S_MmDeleteMap;
+
+    /**
+     * Creates a plain object from a S_MmDeleteMap message. Also converts values to other types if specified.
+     * @param message S_MmDeleteMap
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_MmDeleteMap, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_MmDeleteMap to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };

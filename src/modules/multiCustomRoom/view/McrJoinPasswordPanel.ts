@@ -87,7 +87,11 @@ namespace TinyWars.MultiCustomRoom {
         private _updateView(): void {
             const info                  = this._openData;
             this._inputWarPassword.text = "";
-            this._labelWarName.text     = info.warName || WarMapModel.getMapNameInLanguage(info.mapFileName);
+            if (info.warName) {
+                this._labelWarName.text = info.warName;
+            } else {
+                WarMapModel.getMapNameInLanguage(info.mapFileName).then(v => this._labelWarName.text = v);
+            }
         }
     }
 }

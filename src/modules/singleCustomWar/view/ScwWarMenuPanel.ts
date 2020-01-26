@@ -207,9 +207,7 @@ namespace TinyWars.SingleCustomWar {
 
         private _updateGroupInfo(): void {
             const war                               = this._war;
-            const mapExtraData                      = WarMapModel.getExtraData(war.getMapFileName());
-            this._labelMapName.text                 = WarMapModel.getMapNameInLanguage(mapExtraData.mapFileName);
-            this._labelMapDesigner.text             = mapExtraData.mapDesigner;
+            const mapFileName                       = war.getMapFileName();
             this._labelWarId.text                   = `${war.getWarId()}`;
             this._labelTurnIndex.text               = `${war.getTurnManager().getTurnIndex()}`;
             this._labelActionId.text                = `${war.getNextActionId() - 1}`;
@@ -221,6 +219,8 @@ namespace TinyWars.SingleCustomWar {
             this._labelVisionRangeModifier.text     = `${war.getSettingsVisionRangeModifier()}`;
             this._labelLuckLowerLimit.text          = `${war.getSettingsLuckLowerLimit()}%`;
             this._labelLuckUpperLimit.text          = `${war.getSettingsLuckUpperLimit()}%`;
+            WarMapModel.getMapNameInLanguage(mapFileName).then(value => this._labelMapName.text = value);
+            WarMapModel.getExtraData(mapFileName).then(value => this._labelMapDesigner.text = value.mapDesigner);
         }
 
         private _updateListPlayer(): void {

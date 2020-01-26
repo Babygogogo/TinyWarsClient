@@ -15,7 +15,6 @@ namespace TinyWars.MapManagement {
         private _listMap        : GameUi.UiScrollList;
         private _zoomMap        : GameUi.UiZoomableComponent;
         private _labelMenuTitle : GameUi.UiLabel;
-        private _btnSearch      : GameUi.UiButton;
         private _btnBack        : GameUi.UiButton;
         private _labelNoMap     : GameUi.UiLabel;
 
@@ -59,7 +58,6 @@ namespace TinyWars.MapManagement {
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ];
             this._uiListeners = [
-                { ui: this._btnSearch, callback: this._onTouchTapBtnSearch },
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
             ];
             this._listMap.setItemRenderer(MapNameRenderer);
@@ -116,10 +114,6 @@ namespace TinyWars.MapManagement {
             this._updateView();
         }
 
-        private _onTouchTapBtnSearch(e: egret.TouchEvent): void {
-            MmAvailabilitySearchPanel.show();
-        }
-
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
             MmMergeListPanel.hide();
             MmMainMenuPanel.show();
@@ -145,7 +139,6 @@ namespace TinyWars.MapManagement {
         private _updateComponentsForLanguage(): void {
             this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0227);
             this._btnBack.label         = Lang.getText(Lang.Type.B0146);
-            this._btnSearch.label       = Lang.getText(Lang.Type.B0228);
         }
 
         private async _createDataForListMap(): Promise<DataForMapNameRenderer[]> {
@@ -197,7 +190,7 @@ namespace TinyWars.MapManagement {
 
         private async _showMap(mapFileName: string): Promise<void> {
             const mapRawData                = await WarMapModel.getMapRawData(mapFileName);
-            const mapExtraData              = WarMapModel.getExtraData(mapFileName);
+            const mapExtraData              = await WarMapModel.getExtraData(mapFileName);
             this._labelMapName.text         = Lang.getFormatedText(Lang.Type.F0000, mapExtraData.mapName);
             this._labelMapNameEnglish.text  = Lang.getFormatedText(Lang.Type.F0000, mapExtraData.mapNameEnglish);
             this._labelDesigner.text        = Lang.getFormatedText(Lang.Type.F0001, mapRawData.mapDesigner);
@@ -265,9 +258,9 @@ namespace TinyWars.MapManagement {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data = this.data as DataForMapNameRenderer;
-            this.currentState    = data.mapFileName === data.panel.getSelectedMapFileName() ? Types.UiState.Down : Types.UiState.Up;
-            this._labelName.text = WarMapModel.getMapNameInLanguage(data.mapFileName);
+            const data          = this.data as DataForMapNameRenderer;
+            this.currentState   = data.mapFileName === data.panel.getSelectedMapFileName() ? Types.UiState.Down : Types.UiState.Up;
+            WarMapModel.getMapNameInLanguage(data.mapFileName).then(v => this._labelName.text = v);
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {

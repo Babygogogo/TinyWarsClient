@@ -221,12 +221,12 @@ namespace TinyWars.MultiCustomRoom {
             const warInfo               = this._dataForListWar[index].warInfo;
             const mapFileName           = warInfo.mapFileName;
             const mapData               = await WarMapModel.getMapRawData(mapFileName);
-            const mapMetaData           = WarMapModel.getExtraData(mapFileName);
-            this._labelMapName.text     = Lang.getFormatedText(Lang.Type.F0000, WarMapModel.getMapNameInLanguage(mapFileName));
-            this._labelDesigner.text    = Lang.getFormatedText(Lang.Type.F0001, mapMetaData.mapDesigner);
+            const mapExtraData          = await WarMapModel.getExtraData(mapFileName);
+            this._labelMapName.text     = Lang.getFormatedText(Lang.Type.F0000, await WarMapModel.getMapNameInLanguage(mapFileName));
+            this._labelDesigner.text    = Lang.getFormatedText(Lang.Type.F0001, mapExtraData.mapDesigner);
             this._labelHasFog.text      = Lang.getFormatedText(Lang.Type.F0005, Lang.getText(warInfo.hasFog ? Lang.Type.B0012 : Lang.Type.B0013));
             this._labelWarComment.text  = warInfo.warComment || "----";
-            this._listPlayer.bindData(this._createDataForListPlayer(warInfo, mapMetaData));
+            this._listPlayer.bindData(this._createDataForListPlayer(warInfo, mapExtraData));
 
             this._groupInfo.visible      = true;
             this._groupInfo.alpha        = 1;
@@ -276,8 +276,12 @@ namespace TinyWars.MultiCustomRoom {
             const data              = this.data as DataForWarRenderer;
             const warInfo           = data.warInfo;
             this.currentState       = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
-            this._labelName.text    = warInfo.warName || WarMapModel.getMapNameInLanguage(warInfo.mapFileName);
             this._labelInTurn.text  = this._checkIsInTurn(warInfo) ? Lang.getText(Lang.Type.B0231) : "";
+            if (warInfo.warName) {
+                this._labelName.text = warInfo.warName;
+            } else {
+                WarMapModel.getMapNameInLanguage(warInfo.mapFileName).then(v => this._labelName.text = v);
+            }
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {

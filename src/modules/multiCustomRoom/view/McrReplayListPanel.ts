@@ -160,7 +160,7 @@ namespace TinyWars.MultiCustomRoom {
             }
         }
 
-        private _updateGroupInfo(): void {
+        private async _updateGroupInfo(): Promise<void> {
             const dataList  = this._dataForListReplay;
             const data      = dataList ? dataList[this._selectedIndex] : undefined;
             egret.Tween.removeTweens(this._groupInfo);
@@ -172,8 +172,8 @@ namespace TinyWars.MultiCustomRoom {
                 this._groupInfo.alpha   = 1;
 
                 const info                      = data.info;
-                const mapExtraData              = WarMapModel.getExtraData(info.mapFileName);
-                this._labelMapName.text         = Lang.getFormatedText(Lang.Type.F0000, WarMapModel.getMapNameInLanguage(mapExtraData.mapFileName));
+                const mapExtraData              = await WarMapModel.getExtraData(info.mapFileName);
+                this._labelMapName.text         = Lang.getFormatedText(Lang.Type.F0000, await WarMapModel.getMapNameInLanguage(mapExtraData.mapFileName));
                 this._labelDesigner.text        = Lang.getFormatedText(Lang.Type.F0001, mapExtraData.mapDesigner);
                 this._labelHasFog.text          = Lang.getFormatedText(Lang.Type.F0005, Lang.getText(info.hasFog ? Lang.Type.B0012 : Lang.Type.B0001));
                 this._labelTurnIndex.text       = `${Lang.getText(Lang.Type.B0091)}: ${info.turnIndex + 1}`;
@@ -313,7 +313,7 @@ namespace TinyWars.MultiCustomRoom {
             this.currentState           = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
             this._labelTurnIndex.text   = `${Lang.getText(Lang.Type.B0091)}: ${info.turnIndex + 1}`;
             this._labelReplayId.text    = `ID: ${info.replayId}`;
-            this._labelName.text        = WarMapModel.getMapNameInLanguage(info.mapFileName);
+            WarMapModel.getMapNameInLanguage(info.mapFileName).then(v => this._labelName.text = v);
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {

@@ -92,7 +92,7 @@ namespace TinyWars.MultiCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for creating wars.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        export function getCreateWarMapExtraData(): ProtoTypes.IMapExtraData {
+        export function getCreateWarMapExtraData(): Promise<ProtoTypes.IMapExtraData> {
             return WarMapModel.getExtraData(_dataForCreateWar.mapFileName);
         }
 
@@ -147,13 +147,13 @@ namespace TinyWars.MultiCustomRoom {
         export function setCreateWarPlayerIndex(index: number): void {
             _dataForCreateWar.playerIndex = index;
         }
-        export function setCreateWarPrevPlayerIndex(): void {
-            const mapInfo   = getCreateWarMapExtraData();
+        export async function setCreateWarPrevPlayerIndex(): Promise<void> {
+            const mapInfo   = await getCreateWarMapExtraData();
             const index     = getCreateWarPlayerIndex() - 1;
             setCreateWarPlayerIndex(index > 0 ? index : mapInfo.playersCount);
         }
-        export function setCreateWarNextPlayerIndex(): void {
-            const mapInfo   = getCreateWarMapExtraData();
+        export async function setCreateWarNextPlayerIndex(): Promise<void> {
+            const mapInfo   = await getCreateWarMapExtraData();
             const index     = getCreateWarPlayerIndex() + 1;
             setCreateWarPlayerIndex(index > mapInfo.playersCount ? 1 : index);
         }
@@ -164,13 +164,13 @@ namespace TinyWars.MultiCustomRoom {
         export function setCreateWarTeamIndex(index: number): void {
             _dataForCreateWar.teamIndex = index;
         }
-        export function setCreateWarPrevTeamIndex(): void {
-            const mapInfo   = getCreateWarMapExtraData();
+        export async function setCreateWarPrevTeamIndex(): Promise<void> {
+            const mapInfo   = await getCreateWarMapExtraData();
             const index     = getCreateWarTeamIndex() - 1;
             setCreateWarTeamIndex(index > 0 ? index : mapInfo.playersCount);
         }
-        export function setCreateWarNextTeamIndex(): void {
-            const mapInfo   = getCreateWarMapExtraData();
+        export async function setCreateWarNextTeamIndex(): Promise<void> {
+            const mapInfo   = await getCreateWarMapExtraData();
             const index     = getCreateWarTeamIndex() + 1;
             setCreateWarTeamIndex(index > mapInfo.playersCount ? 1 : index);
         }
@@ -380,14 +380,14 @@ namespace TinyWars.MultiCustomRoom {
         export function getJoinWarRoomInfo(): ProtoTypes.IMcrWaitingInfo {
             return _joinWarRoomInfo;
         }
-        export function getJoinWarMapExtraData(): ProtoTypes.IMapExtraData {
+        export function getJoinWarMapExtraData(): Promise<ProtoTypes.IMapExtraData> {
             return WarMapModel.getExtraData(getJoinWarRoomInfo().mapFileName);
         }
 
-        export function resetJoinWarData(info: ProtoTypes.IMcrWaitingInfo): void {
+        export async function resetJoinWarData(info: ProtoTypes.IMcrWaitingInfo): Promise<void> {
             _joinWarRoomInfo                = info;
-            _joinWarAvailablePlayerIndexes  = getAvailablePlayerIndexes(info);
-            _joinWarAvailableTeamIndexes    = getAvailableTeamIndexes(info);
+            _joinWarAvailablePlayerIndexes  = await getAvailablePlayerIndexes(info);
+            _joinWarAvailableTeamIndexes    = await getAvailableTeamIndexes(info);
             _dataForJoinWar.infoId          = info.id;
             setJoinWarPlayerIndex(_joinWarAvailablePlayerIndexes[0]);
             setJoinWarTeamIndex(_joinWarAvailableTeamIndexes[0]);
@@ -505,9 +505,9 @@ namespace TinyWars.MultiCustomRoom {
         }
     }
 
-    function getAvailablePlayerIndexes(info: ProtoTypes.IMcrWaitingInfo): number[] {
-        const playersCount = WarMapModel.getExtraData(info.mapFileName).playersCount;
-        const indexDict: {[index: number]: boolean} = {};
+    async function getAvailablePlayerIndexes(info: ProtoTypes.IMcrWaitingInfo): Promise<number[]> {
+        const playersCount  = (await WarMapModel.getExtraData(info.mapFileName)).playersCount;
+        const indexDict     : {[index: number]: boolean} = {};
         if ((playersCount >= 4) && (info.p4UserId == null)) {
             indexDict[4] = true;
         }
@@ -530,7 +530,7 @@ namespace TinyWars.MultiCustomRoom {
         return indexes;
     }
 
-    function getAvailableTeamIndexes(info: ProtoTypes.IMcrWaitingInfo): number[] {
+    async function getAvailableTeamIndexes(info: ProtoTypes.IMcrWaitingInfo): Promise<number[]> {
         const dict: {[index: number]: number} = {};
         (info.p1TeamIndex != null) && (dict[info.p1TeamIndex] = (dict[info.p1TeamIndex] || 0) + 1);
         (info.p2TeamIndex != null) && (dict[info.p2TeamIndex] = (dict[info.p2TeamIndex] || 0) + 1);
@@ -546,7 +546,7 @@ namespace TinyWars.MultiCustomRoom {
             }
         }
 
-        const totalPlayers = WarMapModel.getExtraData(info.mapFileName).playersCount;
+        const totalPlayers = (await WarMapModel.getExtraData(info.mapFileName)).playersCount;
         if ((teamsCount > 1) || (currPlayers < totalPlayers - 1)) {
             const indexes: number[] = [];
             for (let i = 1; i <= totalPlayers; ++i) {

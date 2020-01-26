@@ -150,7 +150,7 @@ namespace TinyWars.MultiCustomRoom {
             this._btnConfirm.label                      = Lang.getText(Lang.Type.B0246);
         }
 
-        private _updateView(): void {
+        private async _updateView(): Promise<void> {
             const info = this._openData;
             this._labelWarPassword.text             = info.warPassword ? info.warPassword : "----";
             this._labelHasFog.text                  = Lang.getText(info.hasFog ? Lang.Type.B0012 : Lang.Type.B0013);
@@ -162,12 +162,12 @@ namespace TinyWars.MultiCustomRoom {
             this._labelMoveRangeModifier.text       = `${info.moveRangeModifier > 0 ? "+" : ""}${info.moveRangeModifier}`;
             this._labelAttackPowerModifier.text     = `${info.attackPowerModifier > 0 ? "+" : ""}${info.attackPowerModifier}%`;
             this._labelVisionRangeModifier.text     = `${info.visionRangeModifier > 0 ? "+" : ""}${info.visionRangeModifier}`;
-            this._listPlayer.bindData(this._getDataForListPlayer());
+            this._listPlayer.bindData(await this._getDataForListPlayer());
         }
 
-        private _getDataForListPlayer(): DataForPlayerRenderer[] {
+        private async _getDataForListPlayer(): Promise<DataForPlayerRenderer[]> {
             const warInfo = this._openData;
-            const mapInfo = WarMap.WarMapModel.getExtraData(warInfo.mapFileName);
+            const mapInfo = await WarMap.WarMapModel.getExtraData(warInfo.mapFileName);
             if (!mapInfo) {
                 return [];
             } else {

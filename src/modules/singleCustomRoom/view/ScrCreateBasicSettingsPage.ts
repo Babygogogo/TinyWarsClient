@@ -51,8 +51,8 @@ namespace TinyWars.SingleCustomRoom {
             this._listPlayer.setItemRenderer(PlayerRenderer);
         }
 
-        protected _onOpened(): void {
-            this._mapExtraData = ScrModel.getCreateWarMapExtraData();
+        protected async _onOpened(): Promise<void> {
+            this._mapExtraData = await ScrModel.getCreateWarMapExtraData();
 
             this._updateComponentsForLanguage();
             this._updateLabelMapName();
@@ -112,7 +112,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _updateLabelMapName(): void {
-            this._labelMapName.text = WarMapModel.getMapNameInLanguage(this._mapExtraData.mapFileName);
+            WarMapModel.getMapNameInLanguage(this._mapExtraData.mapFileName).then(v => this._labelMapName.text = v);
         }
 
         private _updateLabelPlayersCount(): void {

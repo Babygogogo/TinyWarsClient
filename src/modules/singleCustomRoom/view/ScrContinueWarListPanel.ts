@@ -182,8 +182,8 @@ namespace TinyWars.SingleCustomRoom {
             const slotInfo              = this._dataForListWar[index].slotInfo;
             const mapFileName           = slotInfo.mapFileName;
             const mapData               = await WarMapModel.getMapRawData(mapFileName);
-            const mapExtraData          = WarMapModel.getExtraData(mapFileName);
-            this._labelMapName.text     = Lang.getFormatedText(Lang.Type.F0000, WarMapModel.getMapNameInLanguage(mapFileName));
+            const mapExtraData          = await WarMapModel.getExtraData(mapFileName);
+            this._labelMapName.text     = Lang.getFormatedText(Lang.Type.F0000, await WarMapModel.getMapNameInLanguage(mapFileName));
             this._labelDesigner.text    = Lang.getFormatedText(Lang.Type.F0001, mapExtraData.mapDesigner);
 
             this._groupInfo.visible      = true;
@@ -236,8 +236,8 @@ namespace TinyWars.SingleCustomRoom {
             const slotInfo              = data.slotInfo;
             this.currentState           = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
             this._labelSlotIndex.text   = "" + slotInfo.slotIndex;
-            this._labelName.text        = WarMapModel.getMapNameInLanguage(slotInfo.mapFileName);
             this._labelWarType.text     = Lang.getSinglePlayerWarTypeName(slotInfo.warType);
+            WarMapModel.getMapNameInLanguage(slotInfo.mapFileName).then(v => this._labelName.text = v);
         }
 
         private _onTouchTapBtnChoose(): void {
