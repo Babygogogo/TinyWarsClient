@@ -366,6 +366,13 @@ namespace TinyWars.Utility.Types {
         flareAmmo   : number | null;
     }
 
+    export type MeMapData = {
+        slotIndex   : number;
+        reviewStatus: MapReviewStatus;
+        encodedMap  : Uint8Array | null;
+        mapRawData  : ProtoTypes.IMapRawData | null;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////
     // Enums.
     ////////////////////////////////////////////////////////////////////////////////

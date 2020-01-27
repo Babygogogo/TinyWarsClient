@@ -90,7 +90,7 @@ namespace TinyWars.Lobby {
                 {
                     name    : Lang.getText(Lang.Type.B0137),
                     callback: (): void => {
-                        LobbyPanel.hide();
+                        this.close();
                         MultiCustomRoom.McrMainMenuPanel.show();
                     },
                 },
@@ -104,7 +104,8 @@ namespace TinyWars.Lobby {
                 {
                     name    : Lang.getText(Lang.Type.B0271),
                     callback: (): void => {
-
+                        this.close();
+                        MapEditor.MeMapListPanel.show();
                     },
                 }
             ];

@@ -1500,6 +1500,34 @@ namespace TinyWars.Utility.Lang {
             `地图编辑器`,
             `Map Editor`,
         ],
+        [Type.B0272]: [
+            `地图列表`,
+            `Map List`,
+        ],
+        [Type.B0273]: [
+            `未提审`,
+            `Not Reviewed`,
+        ],
+        [Type.B0274]: [
+            `审核中`,
+            `Reviewing`,
+        ],
+        [Type.B0275]: [
+            `被拒审`,
+            `Rejected`,
+        ],
+        [Type.B0276]: [
+            `已过审`,
+            `Accepted`,
+        ],
+        [Type.B0277]: [
+            `未命名`,
+            `Unnamed`,
+        ],
+        [Type.B0278]: [
+            `无数据`,
+            `No Data`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -2321,6 +2349,16 @@ namespace TinyWars.Utility.Lang {
         switch (type) {
             case Types.SinglePlayerWarType.Custom   : return getText(Type.B0254);
             case Types.SinglePlayerWarType.WarRoom  : return getText(Type.B0257);
+            default                                 : return null;
+        }
+    }
+
+    export function getMapReviewStatusText(status: Types.MapReviewStatus): string {
+        switch (status) {
+            case Types.MapReviewStatus.None         : return getText(Type.B0273);
+            case Types.MapReviewStatus.Reviewing    : return getText(Type.B0274);
+            case Types.MapReviewStatus.Rejected     : return getText(Type.B0275);
+            case Types.MapReviewStatus.Accepted     : return getText(Type.B0276);
             default                                 : return null;
         }
     }

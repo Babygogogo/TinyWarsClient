@@ -73,6 +73,7 @@
 		"bin-debug/utility/StageManager.js",
 		"bin-debug/gameui/UiTabPage.js",
 		"bin-debug/modules/baseWar/view/BwFieldView.js",
+		"bin-debug/modules/multiCustomRoom/view/McrCreateBasicSettingsPage.js",
 		"bin-debug/modules/multiCustomRoom/view/McrCreateCoListPanel.js",
 		"bin-debug/modules/multiCustomRoom/view/McrCreateMapListPanel.js",
 		"bin-debug/modules/multiCustomRoom/view/McrCreateSearchMapPanel.js",
@@ -131,8 +132,8 @@
 		"bin-debug/modules/multiCustomWar/view/McwWarMenuPanel.js",
 		"bin-debug/modules/multiCustomWar/view/McwWarPanel.js",
 		"bin-debug/modules/multiCustomWar/view/McwWarView.js",
-		"bin-debug/modules/replay/model/ReplayActionPlanner.js",
 		"bin-debug/Platform.js",
+		"bin-debug/modules/replay/model/ReplayCursor.js",
 		"bin-debug/modules/replay/model/ReplayField.js",
 		"bin-debug/modules/replay/model/ReplayFogMap.js",
 		"bin-debug/modules/replay/model/ReplayGridVisionEffect.js",
@@ -237,6 +238,7 @@
 		"bin-debug/modules/login/view/RegisterPanel.js",
 		"bin-debug/modules/mapEditor/model/MeModel.js",
 		"bin-debug/modules/mapEditor/model/MeProxy.js",
+		"bin-debug/modules/mapEditor/view/MeMapListPanel.js",
 		"bin-debug/modules/mapManagement/view/MmAvailabilityChangePanel.js",
 		"bin-debug/modules/mapManagement/view/MmAvailabilityListPanel.js",
 		"bin-debug/modules/mapManagement/view/MmAvailabilitySearchPanel.js",
@@ -244,12 +246,11 @@
 		"bin-debug/modules/mapManagement/view/MmMergeListPanel.js",
 		"bin-debug/modules/multiCustomRoom/model/McrModel.js",
 		"bin-debug/modules/multiCustomRoom/model/McrProxy.js",
-		"bin-debug/modules/multiCustomRoom/view/McrContinueDetailPanel.js",
 		"bin-debug/utility/ResManager.js",
 		"bin-debug/utility/SeedRandom.js",
+		"bin-debug/modules/multiCustomRoom/view/McrContinueDetailPanel.js",
 		"bin-debug/modules/multiCustomRoom/view/McrContinueWarListPanel.js",
 		"bin-debug/modules/multiCustomRoom/view/McrCreateAdvancedSettingsPage.js",
-		"bin-debug/modules/multiCustomRoom/view/McrCreateBasicSettingsPage.js",
-		"bin-debug/modules/replay/model/ReplayCursor.js"
+		"bin-debug/modules/replay/model/ReplayActionPlanner.js"
 	]
 }

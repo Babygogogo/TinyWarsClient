@@ -4,22 +4,16 @@ namespace TinyWars.MapEditor.MeModel {
     import Types            = Utility.Types;
     import ProtoManager     = Utility.ProtoManager;
     import MapReviewStatus  = Types.MapReviewStatus;
+    import MeMapData        = Types.MeMapData;
 
-    export type MapEditorData = {
-        slotIndex   : number;
-        reviewStatus: MapReviewStatus;
-        encodedMap  : Uint8Array | null;
-        mapRawData  : ProtoTypes.IMapRawData | null;
-    }
-
-    const MAP_DICT = new Map<number, MapEditorData>();
+    const MAP_DICT = new Map<number, MeMapData>();
 
     export function init(): void {
     }
 
     export function resetDataList(rawDataList: ProtoTypes.IMapEditorData[]): void {
         MAP_DICT.clear();
-        for (const data of rawDataList) {
+        for (const data of rawDataList || []) {
             const slotIndex     = data.slotIndex;
             const encodedMap    = data.encodedMap;
             MAP_DICT.set(slotIndex, {
@@ -35,11 +29,11 @@ namespace TinyWars.MapEditor.MeModel {
             }
         }
     }
-    export function getDataDict(): Map<number, MapEditorData> {
+    export function getDataDict(): Map<number, MeMapData> {
         return MAP_DICT;
     }
 
-    function createEmptyData(slotIndex: number): MapEditorData {
+    function createEmptyData(slotIndex: number): MeMapData {
         return {
             slotIndex,
             reviewStatus: MapReviewStatus.None,

@@ -15,6 +15,7 @@
 		"resource/skins/login/LoginBackgroundPanel.exml",
 		"resource/skins/login/LoginPanel.exml",
 		"resource/skins/login/RegisterPanel.exml",
+		"resource/skins/mapEditor/MeMapListPanel.exml",
 		"resource/skins/mapManagement/MmAvailabilityChangePanel.exml",
 		"resource/skins/mapManagement/MmAvailabilityListPanel.exml",
 		"resource/skins/mapManagement/MmAvailabilitySearchPanel.exml",
