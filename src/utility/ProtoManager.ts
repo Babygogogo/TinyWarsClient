@@ -5,6 +5,7 @@ namespace TinyWars.Utility.ProtoManager {
     let _messageContainerClass  : typeof ProtoTypes.MessageContainer;
     let _fullConfigClass        : typeof ProtoTypes.FullConfig;
     let _serializedWarClass     : typeof ProtoTypes.SerializedWar;
+    let _mapRawDataClass        : typeof ProtoTypes.MapRawData;
 
     export function init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
@@ -16,6 +17,7 @@ namespace TinyWars.Utility.ProtoManager {
                         _messageContainerClass  = root.lookupType("MessageContainer") as any;
                         _fullConfigClass        = root.lookupType("FullConfig") as any;
                         _serializedWarClass     = root.lookupType("SerializedWar") as any;
+                        _mapRawDataClass        = root.lookupType("MapRawData") as any;
                         resolve();
                     }
                 },
@@ -45,6 +47,13 @@ namespace TinyWars.Utility.ProtoManager {
     }
     export function decodeAsSerializedWar(data: any): Types.SerializedWar {
         return _serializedWarClass.toObject(_serializedWarClass.decode(data)) as any;
+    }
+
+    export function encodeAsMapRawData(data: Types.MapRawData): Uint8Array {
+        return _mapRawDataClass.encode(data).finish();
+    }
+    export function decodeAsMapRawData(data: any): ProtoTypes.IMapRawData {
+        return _mapRawDataClass.toObject(_mapRawDataClass.decode(data));
     }
 
     function getDataForDecode(encodedData: any): Uint8Array | protobuf.Reader {

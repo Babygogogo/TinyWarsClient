@@ -1446,6 +1446,7 @@ namespace TinyWars.ConfigManager {
     export const MAX_WAR_NAME_LENGTH        = 20;
     export const MAX_WAR_PASSWORD_LENGTH    = 4;
     export const MAX_WAR_COMMENT_LENGTH     = 50;
+    export const MAX_MAP_EDITOR_SLOT_COUNT  = 3;
 
     export const MAX_SAVE_SLOT_COUNT        = 10;
 

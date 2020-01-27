@@ -36,26 +36,26 @@ namespace TinyWars.WarMap {
             } else {
                 return new Promise((resolve, reject) => {
                     const callbackOnSucceed = (e: egret.Event): void => {
-                        const data = e.data as ProtoTypes.IS_GetMapExtraData;
+                        const data = e.data as ProtoTypes.IS_MapGetExtraData;
                         if (data.mapFileName === mapFileName) {
-                            Notify.removeEventListener(Notify.Type.SGetMapExtraData,        callbackOnSucceed);
-                            Notify.removeEventListener(Notify.Type.SGetMapExtraDataFailed,  callbackOnFailed);
+                            Notify.removeEventListener(Notify.Type.SMapGetExtraData,        callbackOnSucceed);
+                            Notify.removeEventListener(Notify.Type.SMapGetExtraDataFailed,  callbackOnFailed);
 
                             resolve(data.mapExtraData);
                         }
                     };
                     const callbackOnFailed = (e: egret.Event): void => {
-                        const data = e.data as ProtoTypes.IS_GetMapExtraData;
+                        const data = e.data as ProtoTypes.IS_MapGetExtraData;
                         if (data.mapFileName === mapFileName) {
-                            Notify.removeEventListener(Notify.Type.SGetMapExtraData,        callbackOnSucceed);
-                            Notify.removeEventListener(Notify.Type.SGetMapExtraDataFailed,  callbackOnFailed);
+                            Notify.removeEventListener(Notify.Type.SMapGetExtraData,        callbackOnSucceed);
+                            Notify.removeEventListener(Notify.Type.SMapGetExtraDataFailed,  callbackOnFailed);
 
                             reject(null);
                         }
                     };
 
-                    Notify.addEventListener(Notify.Type.SGetMapExtraData,       callbackOnSucceed);
-                    Notify.addEventListener(Notify.Type.SGetMapExtraDataFailed, callbackOnFailed);
+                    Notify.addEventListener(Notify.Type.SMapGetExtraData,       callbackOnSucceed);
+                    Notify.addEventListener(Notify.Type.SMapGetExtraDataFailed, callbackOnFailed);
 
                     WarMapProxy.reqGetMapExtraData(mapFileName);
                 });
@@ -83,26 +83,26 @@ namespace TinyWars.WarMap {
             } else {
                 return new Promise<MapRawData | undefined>((resolve, reject) => {
                     const callbackOnSucceed = (e: egret.Event): void => {
-                        const data = e.data as ProtoTypes.IS_GetMapRawData;
+                        const data = e.data as ProtoTypes.IS_MapGetRawData;
                         if (data.mapFileName === mapFileName) {
-                            Notify.removeEventListener(Notify.Type.SGetMapRawData,          callbackOnSucceed);
-                            Notify.removeEventListener(Notify.Type.SGetMapRawDataFailed,    callbackOnFailed);
+                            Notify.removeEventListener(Notify.Type.SMapGetRawData,          callbackOnSucceed);
+                            Notify.removeEventListener(Notify.Type.SMapGetRawDataFailed,    callbackOnFailed);
 
                             resolve(data.mapRawData);
                         }
                     }
                     const callbackOnFailed = (e: egret.Event): void => {
-                        const data = e.data as ProtoTypes.IS_GetMapRawData;
+                        const data = e.data as ProtoTypes.IS_MapGetRawData;
                         if (data.mapFileName === mapFileName) {
-                            Notify.removeEventListener(Notify.Type.SGetMapRawData,          callbackOnSucceed);
-                            Notify.removeEventListener(Notify.Type.SGetMapRawDataFailed,    callbackOnFailed);
+                            Notify.removeEventListener(Notify.Type.SMapGetRawData,          callbackOnSucceed);
+                            Notify.removeEventListener(Notify.Type.SMapGetRawDataFailed,    callbackOnFailed);
 
                             reject(undefined);
                         }
                     }
 
-                    Notify.addEventListener(Notify.Type.SGetMapRawData,         callbackOnSucceed);
-                    Notify.addEventListener(Notify.Type.SGetMapRawDataFailed,   callbackOnFailed);
+                    Notify.addEventListener(Notify.Type.SMapGetRawData,         callbackOnSucceed);
+                    Notify.addEventListener(Notify.Type.SMapGetRawDataFailed,   callbackOnFailed);
 
                     WarMapProxy.reqGetMapRawData(mapFileName);
                 });

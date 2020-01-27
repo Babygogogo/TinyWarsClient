@@ -610,4 +610,11 @@ namespace TinyWars.Utility.Types {
         Custom  = 0,
         WarRoom = 1,
     }
+
+    export const enum MapReviewStatus {
+        None        = 0,
+        Reviewing   = 1,
+        Rejected    = 2,
+        Accepted    = 3,
+    }
 }

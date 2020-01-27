@@ -101,6 +101,12 @@ namespace TinyWars.Lobby {
                         SinglePlayerLobby.SinglePlayerLobbyPanel.show();
                     },
                 },
+                {
+                    name    : Lang.getText(Lang.Type.B0271),
+                    callback: (): void => {
+
+                    },
+                }
             ];
 
             if ((UserModel.checkIsAdmin()) || (UserModel.checkIsMapCommittee())) {
