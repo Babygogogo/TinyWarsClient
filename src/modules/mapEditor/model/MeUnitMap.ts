@@ -1,64 +1,33 @@
 
-namespace TinyWars.BaseWar {
+namespace TinyWars.MapEditor {
     import Types            = Utility.Types;
     import Helpers          = Utility.Helpers;
     import GridIndexHelpers = Utility.GridIndexHelpers;
     import MapModel         = WarMap.WarMapModel;
 
-    export abstract class BwUnitMap {
-        private _war            : BwWar;
+    export class MeUnitMap {
+        private _war            : MeWar;
         private _configVersion  : string;
         private _nextUnitId     : number;
-        private _map            : (BwUnit | undefined)[][];
+        private _map            : (MeUnit | undefined)[][];
         private _mapSize        : Types.MapSize;
-        private _loadedUnits    : Map<number, BwUnit>;
+        private _loadedUnits    : Map<number, MeUnit>;
 
-        private _view   : BwUnitMapView;
+        private _view   : MeUnitMapView;
 
-        protected abstract _getViewClass(): new () => BwUnitMapView;
-        protected abstract _getBwUnitClass(): new () => BwUnit;
-
-        public async init(configVersion: string, mapFileName: string, data?: Types.SerializedUnitMap): Promise<BwUnitMap> {
+        public init(configVersion: string, mapRawData: Types.MapRawData): MeUnitMap {
             this._configVersion = configVersion;
-            if (data) {
-                await this._initWithSerializedData(configVersion, mapFileName, data)
-            } else {
-                await this._initWithoutSerializedData(configVersion, mapFileName);
-            }
+            this._initWithMapRawData(configVersion, mapRawData);
 
-            this._view = this._view || new (this._getViewClass())();
+            this._view = this._view || new MeUnitMapView();
             this._view.init(this);
 
             return this;
         }
-        private async _initWithSerializedData(configVersion: string, mapFileName: string, data: Types.SerializedUnitMap): Promise<BwUnitMap> {
-            const { mapWidth, mapHeight }   = await MapModel.getMapRawData(mapFileName);
-            const unitDataList              = data.units;
-            const map                       = Helpers.createEmptyMap<BwUnit>(mapWidth);
-            const loadedUnits               = new Map<number, BwUnit>();
-            if (unitDataList) {
-                for (const unitData of unitDataList) {
-                    const unit = new (this._getBwUnitClass())().init(unitData, configVersion);
-                    if (unit.getLoaderUnitId() == null) {
-                        map[unit.getGridX()][unit.getGridY()] = unit;
-                    } else {
-                        loadedUnits.set(unit.getUnitId(), unit);
-                    }
-                }
-            }
-
-            this._map           = map;
-            this._loadedUnits   = loadedUnits;
-            this._setMapSize(mapWidth, mapHeight);
-            this.setNextUnitId(data.nextUnitId!);
-
-            return this;
-        }
-        private async _initWithoutSerializedData(configVersion: string, mapFileName: string): Promise<BwUnitMap> {
-            const mapRawData                = await WarMap.WarMapModel.getMapRawData(mapFileName);
+        private _initWithMapRawData(configVersion: string, mapRawData: Types.MapRawData): MeUnitMap {
             const { mapWidth, mapHeight }   = mapRawData;
-            const map                       = Helpers.createEmptyMap<BwUnit>(mapWidth);
-            const loadedUnits               = new Map<number, BwUnit>();
+            const map                       = Helpers.createEmptyMap<MeUnit>(mapWidth);
+            const loadedUnits               = new Map<number, MeUnit>();
 
             const unitViewIds = mapRawData.units;
             if (unitViewIds) {
@@ -67,7 +36,7 @@ namespace TinyWars.BaseWar {
                     for (let y = 0; y < mapHeight; ++y) {
                         const viewId = unitViewIds[x + y * mapWidth];
                         if (viewId !== 0) {
-                            map[x][y] = new (this._getBwUnitClass())().init({
+                            map[x][y] = new MeUnit().init({
                                 gridX   : x,
                                 gridY   : y,
                                 viewId  : viewId,
@@ -84,8 +53,8 @@ namespace TinyWars.BaseWar {
                 if (unitDataList) {
                     let nextUnitId = 0;
                     for (const unitData of unitDataList) {
-                        const unit  = new (this._getBwUnitClass())().init(unitData as Types.SerializedUnit, configVersion);
-                        nextUnitId  = Math.max(nextUnitId, unitData.unitId! + 1);
+                        const unit  = new MeUnit().init(unitData, configVersion);
+                        nextUnitId  = Math.max(nextUnitId, unitData.unitId + 1);
                         if (unit.getLoaderUnitId() == null) {
                             map[unit.getGridX()][unit.getGridY()] = unit;
                         } else {
@@ -106,7 +75,7 @@ namespace TinyWars.BaseWar {
             return this;
         }
 
-        public startRunning(war: BwWar): void {
+        public startRunning(war: MeWar): void {
             this._setWar(war);
             this.forEachUnitOnMap(unit => unit.startRunning(war));
             this.forEachUnitLoaded(unit => unit.startRunning(war));
@@ -124,14 +93,14 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other public functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public getView(): BwUnitMapView {
+        public getView(): MeUnitMapView {
             return this._view;
         }
 
-        private _setWar(war: BwWar): void {
+        private _setWar(war: MeWar): void {
             this._war = war;
         }
-        public getWar(): BwWar {
+        public getWar(): MeWar {
             return this._war;
         }
 
@@ -153,7 +122,7 @@ namespace TinyWars.BaseWar {
             this._nextUnitId = id;
         }
 
-        public getUnit(gridIndex: Types.GridIndex, unitId: number | undefined | null): BwUnit | undefined {
+        public getUnit(gridIndex: Types.GridIndex, unitId: number | undefined | null): MeUnit | undefined {
             if (unitId == null) {
                 return this.getUnitOnMap(gridIndex);
             } else {
@@ -170,7 +139,7 @@ namespace TinyWars.BaseWar {
                 }
             }
         }
-        public getUnitById(unitId: number): BwUnit | null {
+        public getUnitById(unitId: number): MeUnit | null {
             const unitLoaded = this.getUnitLoadedById(unitId);
             if (unitLoaded) {
                 return unitLoaded;
@@ -186,18 +155,18 @@ namespace TinyWars.BaseWar {
             }
         }
 
-        public getUnitOnMap(gridIndex: Types.GridIndex): BwUnit | undefined {
+        public getUnitOnMap(gridIndex: Types.GridIndex): MeUnit | undefined {
             return this._map[gridIndex.x][gridIndex.y];
         }
-        public getUnitLoadedById(unitId: number): BwUnit | undefined {
+        public getUnitLoadedById(unitId: number): MeUnit | undefined {
             return this._loadedUnits.get(unitId);
         }
-        public getUnitsLoaded(): Map<number, BwUnit> {
+        public getUnitsLoaded(): Map<number, MeUnit> {
             return this._loadedUnits;
         }
-        public getUnitsLoadedByLoader(loader: BwUnit, isRecursive: boolean): BwUnit[] {
-            const units: BwUnit[] = [];
-            this.forEachUnitLoaded((unit: BwUnit) => {
+        public getUnitsLoadedByLoader(loader: MeUnit, isRecursive: boolean): MeUnit[] {
+            const units: MeUnit[] = [];
+            this.forEachUnitLoaded((unit: MeUnit) => {
                 if (unit.getLoaderUnitId() === loader.getUnitId()) {
                     units.push(unit);
                     (isRecursive) && (units.push(...this.getUnitsLoadedByLoader(unit, isRecursive)));
@@ -226,7 +195,7 @@ namespace TinyWars.BaseWar {
             this._loadedUnits.delete(unitId);
         }
 
-        public addUnitOnMap(unit: BwUnit): void {
+        public addUnitOnMap(unit: MeUnit): void {
             const x = unit.getGridX();
             const y = unit.getGridY();
             this._map[x][y] = unit;
@@ -238,7 +207,7 @@ namespace TinyWars.BaseWar {
             (removeView) && (this.getView().removeUnit(unit.getView()));
         }
 
-        public addUnitLoaded(unit: BwUnit): void {
+        public addUnitLoaded(unit: MeUnit): void {
             this._loadedUnits.set(unit.getUnitId(), unit);
             this.getView().addUnit(unit.getView(), true);
         }
@@ -257,18 +226,18 @@ namespace TinyWars.BaseWar {
             }
         }
 
-        public forEachUnit(func: (unit: BwUnit) => any): void {
+        public forEachUnit(func: (unit: MeUnit) => any): void {
             this.forEachUnitOnMap(func);
             this.forEachUnitLoaded(func);
         }
-        public forEachUnitOnMap(func: (unit: BwUnit) => any): void {
+        public forEachUnitOnMap(func: (unit: MeUnit) => any): void {
             for (const column of this._map) {
                 for (const unit of column) {
                     (unit) && (func(unit));
                 }
             }
         }
-        public forEachUnitLoaded(func: (unit: BwUnit) => any): void {
+        public forEachUnitLoaded(func: (unit: MeUnit) => any): void {
             for (const [, unit] of this._loadedUnits) {
                 func(unit);
             }

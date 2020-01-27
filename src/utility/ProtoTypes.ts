@@ -1884,6 +1884,12 @@ export declare interface IMapRawData {
 
     /** MapRawData units */
     units?: (number[]|null);
+
+    /** MapRawData unitDataList */
+    unitDataList?: (ISerializedWarUnit[]|null);
+
+    /** MapRawData tileDataList */
+    tileDataList?: (ISerializedWarTile[]|null);
 }
 
 /** Represents a MapRawData. */
@@ -1927,6 +1933,12 @@ export declare class MapRawData implements IMapRawData {
 
     /** MapRawData units. */
     public units: number[];
+
+    /** MapRawData unitDataList. */
+    public unitDataList: ISerializedWarUnit[];
+
+    /** MapRawData tileDataList. */
+    public tileDataList: ISerializedWarTile[];
 
     /**
      * Creates a new MapRawData instance using the specified properties.
