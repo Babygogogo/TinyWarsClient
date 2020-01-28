@@ -17,7 +17,6 @@ namespace TinyWars.MapEditor {
         private _notifyListeners: Notify.Listener[] = [
             { type: Notify.Type.BwCursorTapped,                 callback: this._onNotifyBwCursorTapped },
             { type: Notify.Type.BwCursorDragged,                callback: this._onNotifyBwCursorDragged },
-            { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
         ];
 
         public init(mapRawData: Types.MapRawData): MeCursor {
@@ -60,9 +59,6 @@ namespace TinyWars.MapEditor {
                 this.setGridIndex(data.draggedTo);
                 this.updateView();
             }
-        }
-        private _onNotifyBwActionPlannerStateChanged(e: egret.Event): void {
-            this.updateView();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

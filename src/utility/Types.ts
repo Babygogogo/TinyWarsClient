@@ -625,4 +625,13 @@ namespace TinyWars.Utility.Types {
         Rejected    = 2,
         Accepted    = 3,
     }
+
+    export const enum MapEditorDrawerMode {
+        Preview,
+        DrawUnit,
+        DrawTileBase,
+        DrawTileObject,
+        DeleteUnit,
+        DeleteTileObject,
+    }
 }

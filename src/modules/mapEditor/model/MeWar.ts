@@ -10,6 +10,7 @@ namespace TinyWars.MapEditor {
 
         private _view           : MeWarView;
         private _field          : MeField;
+        private _drawer         : MeDrawer;
 
         public init(data: Types.MapRawData, slotIndex: number, configVersion: string, isReview: boolean): MeWar {
             this._setSlotIndex(slotIndex);
@@ -17,11 +18,12 @@ namespace TinyWars.MapEditor {
             this._setIsReview(isReview);
 
             this._setField(new MeField().init(data, configVersion));
+            this._setDrawer(new MeDrawer().init(data));
             this._initView();
 
             return this;
         }
-        protected _initView(): void {
+        private _initView(): void {
             this._view = this._view || new MeWarView();
             this._view.init(this);
         }
@@ -32,6 +34,7 @@ namespace TinyWars.MapEditor {
 
         public startRunning(): MeWar {
             this.getField().startRunning(this);
+            this.getDrawer().startRunning(this);
 
             this._isRunning = true;
 
@@ -76,11 +79,18 @@ namespace TinyWars.MapEditor {
             return this._configVersion;
         }
 
-        protected _setField(field: MeField): void {
+        private _setField(field: MeField): void {
             this._field = field;
         }
         public getField(): MeField {
             return this._field;
+        }
+
+        private _setDrawer(drawer: MeDrawer): void {
+            this._drawer = drawer;
+        }
+        public getDrawer(): MeDrawer {
+            return this._drawer;
         }
 
         public getUnitMap(): MeUnitMap {

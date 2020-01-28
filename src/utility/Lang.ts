@@ -1532,6 +1532,34 @@ namespace TinyWars.Utility.Lang {
             `新地图`,
             `New Map`,
         ],
+        [Type.B0280]: [
+            `模式`,
+            `Mode`,
+        ],
+        [Type.B0281]: [
+            `绘制部队`,
+            `Draw Unit`,
+        ],
+        [Type.B0282]: [
+            `绘制地形基底`,
+            `Draw Tile Base`,
+        ],
+        [Type.B0283]: [
+            `绘制地形物体`,
+            `Draw Tile Object`,
+        ],
+        [Type.B0284]: [
+            `删除部队`,
+            `Del Unit`,
+        ],
+        [Type.B0285]: [
+            `删除地形物体`,
+            `Del Tile Object`,
+        ],
+        [Type.B0286]: [
+            `预览`,
+            `Preview`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -2364,6 +2392,18 @@ namespace TinyWars.Utility.Lang {
             case Types.MapReviewStatus.Rejected     : return getText(Type.B0275);
             case Types.MapReviewStatus.Accepted     : return getText(Type.B0276);
             default                                 : return null;
+        }
+    }
+
+    export function getMapEditorDrawerModeText(mode: Types.MapEditorDrawerMode): string {
+        switch (mode) {
+            case Types.MapEditorDrawerMode.Preview          : return getText(Type.B0286);
+            case Types.MapEditorDrawerMode.DrawUnit         : return getText(Type.B0281);
+            case Types.MapEditorDrawerMode.DrawTileBase     : return getText(Type.B0282);
+            case Types.MapEditorDrawerMode.DrawTileObject   : return getText(Type.B0283);
+            case Types.MapEditorDrawerMode.DeleteUnit       : return getText(Type.B0284);
+            case Types.MapEditorDrawerMode.DeleteTileObject : return getText(Type.B0285);
+            default                                         : return null;
         }
     }
 }
