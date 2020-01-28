@@ -1405,6 +1405,14 @@ namespace TinyWars.ConfigManager {
         Logger.log("[ConfigManager init] _initTileObjectViewIds() finished.");
     }
 
+    function _initTileBaseViewIds(): void {
+        for (const [viewId, type] of _TILE_BASE_TYPES) {
+            if (!_TILE_BASE_VIEW_IDS.has(type)) {
+                _TILE_BASE_VIEW_IDS.set(type, viewId);
+            }
+        }
+    }
+
     function _initUnitViewIds(): void {
         for (const [unitViewId, unitTypeAndPlayerIndex] of _UNIT_TYPES_AND_PLAYER_INDEX) {
             const type = unitTypeAndPlayerIndex.unitType;
@@ -1426,6 +1434,7 @@ namespace TinyWars.ConfigManager {
 
     const _ALL_CONFIGS          = new Map<string, ExtendedFullConfig>();
     const _TILE_OBJECT_VIEW_IDS = new Map<TileObjectType, Map<number, number>>();
+    const _TILE_BASE_VIEW_IDS   = new Map<TileBaseType, number>();
     const _UNIT_VIEW_IDS        = new Map<UnitType, Map<number, number>>();
     const _AVAILABLE_CO_LIST    = new Map<string, CoBasicCfg[]>();
     const _CO_TIERS             = new Map<string, number[]>();
@@ -1456,6 +1465,7 @@ namespace TinyWars.ConfigManager {
         ], ConfigManager);
 
         _initTileObjectViewIds();
+        _initTileBaseViewIds();
         _initUnitViewIds();
     }
 
@@ -1572,6 +1582,10 @@ namespace TinyWars.ConfigManager {
 
     export function getTileBaseType(tileBaseViewId: number): TileBaseType {
         return _TILE_BASE_TYPES.get(tileBaseViewId)!;
+    }
+
+    export function getTileBaseViewId(type: TileBaseType): number {
+        return _TILE_BASE_VIEW_IDS.get(type);
     }
 
     export function getTileObjectTypeAndPlayerIndex(tileObjectViewId: number): TileObjectTypeAndPlayerIndex {

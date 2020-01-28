@@ -231,8 +231,8 @@ namespace TinyWars.MapEditor {
         }
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
-            const data = this.data as DataForMapRenderer;
-            FloatText.show("TODO!");
+            const data = (this.data as DataForMapRenderer).mapData;
+            Utility.FlowManager.gotoMapEditor(data.mapRawData as Types.MapRawData, data.slotIndex, false);
         }
 
         private _checkIsInTurn(info: ProtoTypes.IMcwOngoingDetail): boolean {

@@ -115,6 +115,7 @@ namespace TinyWars.MapEditor {
             this._updateConForNormal();
             this._updateConForTarget();
             this._updateConForSiloArea();
+            this._conForDamage.visible = false;
         }
 
         public setVisibleForConForNormal(visible: boolean): void {
