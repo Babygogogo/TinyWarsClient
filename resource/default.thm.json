@@ -16,6 +16,7 @@
 		"resource/skins/login/LoginPanel.exml",
 		"resource/skins/login/RegisterPanel.exml",
 		"resource/skins/mapEditor/MeBackgroundPanel.exml",
+		"resource/skins/mapEditor/MeChooseTileObjectPanel.exml",
 		"resource/skins/mapEditor/MeMapListPanel.exml",
 		"resource/skins/mapEditor/MeTileBriefPanel.exml",
 		"resource/skins/mapEditor/MeTopPanel.exml",

@@ -1446,6 +1446,7 @@ namespace TinyWars.ConfigManager {
     // Exports.
     ////////////////////////////////////////////////////////////////////////////////
     export const UNIT_HP_NORMALIZER         = 10;
+    export const MAX_PLAYER_INDEX           = 4;
     export const SILO_RADIUS                = 2;
     export const SILO_DAMAGE                = 30;
     export const DEFAULT_LUCK_LOWER_LIMIT   = 0;
@@ -1724,5 +1725,9 @@ namespace TinyWars.ConfigManager {
             _CUSTOM_CO_ID_LIST.set(version, idList);
         }
         return _CUSTOM_CO_ID_LIST.get(version);
+    }
+
+    export function forEachTileObjectTypeAndPlayerIndex(func: (value: TileObjectTypeAndPlayerIndex, tileObjectViewId: number) => void): void {
+        _TILE_OBJECT_TYPES_AND_PLAYER_INDEX.forEach(func);
     }
 }

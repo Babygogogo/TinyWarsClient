@@ -73,6 +73,7 @@
 		"bin-debug/utility/StageManager.js",
 		"bin-debug/gameui/UiTabPage.js",
 		"bin-debug/modules/common/view/HelpPanel.js",
+		"bin-debug/modules/mapEditor/view/MeChooseTileObjectPanel.js",
 		"bin-debug/modules/mapEditor/view/MeCursorView.js",
 		"bin-debug/modules/mapEditor/view/MeFieldView.js",
 		"bin-debug/modules/mapEditor/view/MeGridVisionEffectView.js",
@@ -144,8 +145,8 @@
 		"bin-debug/modules/multiCustomWar/view/McwCursorView.js",
 		"bin-debug/modules/multiCustomWar/view/McwFieldView.js",
 		"bin-debug/modules/multiCustomWar/view/McwGridVisionEffectView.js",
-		"bin-debug/modules/multiCustomWar/view/McwProduceUnitPanel.js",
 		"bin-debug/Platform.js",
+		"bin-debug/modules/multiCustomWar/view/McwTileBriefPanel.js",
 		"bin-debug/modules/multiCustomWar/view/McwTileMapView.js",
 		"bin-debug/modules/multiCustomWar/view/McwTileView.js",
 		"bin-debug/modules/multiCustomWar/view/McwTopPanel.js",
@@ -276,6 +277,6 @@
 		"bin-debug/modules/mapEditor/model/MeUnitMap.js",
 		"bin-debug/modules/mapEditor/model/MeWar.js",
 		"bin-debug/modules/mapEditor/view/MeBackgroundpanel.js",
-		"bin-debug/modules/multiCustomWar/view/McwTileBriefPanel.js"
+		"bin-debug/modules/multiCustomWar/view/McwProduceUnitPanel.js"
 	]
 }
