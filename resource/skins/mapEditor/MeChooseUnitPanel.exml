@@ -4,21 +4,21 @@
     <e:Group id="_group" top="40" bottom="0" right="0" left="0">
         <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" />
-        <GameUi:UiScrollList id="_listTileObject" left="10" right="10" bottom="60" top="10">
-            <e:List requireSelection="true" scaleX="0.65" scaleY="0.65">
+        <GameUi:UiScrollList id="_listUnit" left="10" right="10" bottom="60" top="10">
+            <e:List requireSelection="true" x="-1" y="1">
                 <e:itemRendererSkinName>
                     <e:Skin width="80" height="80">
                         <e:Group id="_group" left="0" right="0" top="0" bottom="0">
                             <GameUi:UiLabel id="_labelName" text="部队名五字" size="12" textColor="0xffffff"
                                             horizontalCenter="0" />
-                            <e:Group id="_conTileView" scaleX="0.6" scaleY="0.6" x="20" touchChildren="false"
-                                     touchEnabled="false" bottom="10" />
+                            <e:Group id="_conUnitView" scaleX="0.6" scaleY="0.6" x="20" touchChildren="false"
+                                     touchEnabled="false" y="20" />
                         </e:Group>
                     </e:Skin>
                 </e:itemRendererSkinName>
                 <e:layout>
                     <e:TileLayout orientation="rows" verticalGap="10" columnAlign="justifyUsingGap"
-                                  requestedColumnCount="16" paddingTop="4" />
+                                  requestedColumnCount="11" paddingTop="4" />
                 </e:layout>
             </e:List>
         </GameUi:UiScrollList>

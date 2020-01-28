@@ -147,15 +147,13 @@ namespace TinyWars.MapEditor {
             this._drawer.setModePreview();
         }
         private _onTouchedBtnModeDrawTileBase(e: egret.TouchEvent): void {
-            // TODO
-            this._drawer.setModeDrawTileBase(Math.floor(Math.random() * 20) + 1);
+            MeChooseTileBasePanel.show();
         }
         private _onTouchedBtnModeDrawTileObject(e: egret.TouchEvent): void {
             MeChooseTileObjectPanel.show();
         }
         private _onTouchedBtnModeDrawUnit(e: egret.TouchEvent): void {
-            // TODO
-            this._drawer.setModeDrawUnit(Math.floor(Math.random() * 100) + 1);
+            MeChooseUnitPanel.show();
         }
         private _onTouchedBtnModeDeleteTileObject(e: egret.TouchEvent): void {
             this._drawer.setModeDeleteTileObject();

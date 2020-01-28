@@ -1730,4 +1730,10 @@ namespace TinyWars.ConfigManager {
     export function forEachTileObjectTypeAndPlayerIndex(func: (value: TileObjectTypeAndPlayerIndex, tileObjectViewId: number) => void): void {
         _TILE_OBJECT_TYPES_AND_PLAYER_INDEX.forEach(func);
     }
+    export function forEachTileBaseType(func: (value: TileBaseType, tileBaseViewId: number) => void): void {
+        _TILE_BASE_TYPES.forEach(func);
+    }
+    export function forEachUnitTypeAndPlayerIndex(func: (value: UnitTypeAndPlayerIndex, unitViewId: number) => void): void {
+        _UNIT_TYPES_AND_PLAYER_INDEX.forEach(func);
+    }
 }
