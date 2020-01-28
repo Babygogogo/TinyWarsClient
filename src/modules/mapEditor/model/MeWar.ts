@@ -48,6 +48,7 @@ namespace TinyWars.MapEditor {
         }
         public stopRunning(): MeWar {
             this.getField().stopRunning();
+            this.getDrawer().stopRunning();
             this.getView().stopRunning();
 
             this._isRunning = false;

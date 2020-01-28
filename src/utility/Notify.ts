@@ -63,6 +63,8 @@ namespace TinyWars.Utility.Notify {
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         MeDrawerModeChanged,
+        MeUnitChanged,
+        MeTileChanged,
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         SNewestConfigVersion,
@@ -155,10 +157,12 @@ namespace TinyWars.Utility.Notify {
         export type McwPlayerIndexInTurnChanged = number;
         export type McwPlayerFundChanged        = MultiCustomWar.McwPlayer;
         export type McwPlayerEnergyChanged      = MultiCustomWar.McwPlayer;
-        export type BwCursorTapped             = { current: GridIndex, tappedOn: GridIndex };
-        export type BwCursorDragged            = { current: GridIndex, draggedTo: GridIndex };
-        export type BwFieldZoomed              = { previous: TouchPoints, current: TouchPoints };
-        export type BwFieldDragged             = { previous: Types.Point, current: Types.Point };
+        export type BwCursorTapped              = { current: GridIndex, tappedOn: GridIndex };
+        export type BwCursorDragged             = { current: GridIndex, draggedTo: GridIndex };
+        export type BwFieldZoomed               = { previous: TouchPoints, current: TouchPoints };
+        export type BwFieldDragged              = { previous: Types.Point, current: Types.Point };
+        export type MeUnitChanged               = { gridIndex: GridIndex };
+        export type MeTileChanged               = { gridIndex: GridIndex };
     }
 
     ////////////////////////////////////////////////////////////////////////////////

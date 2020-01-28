@@ -1,9 +1,10 @@
 
 namespace TinyWars.MapEditor {
-    import Notify       = Utility.Notify;
-    import Lang         = Utility.Lang;
-    import StageManager = Utility.StageManager;
-    import Types        = Utility.Types;
+    import Notify           = Utility.Notify;
+    import Lang             = Utility.Lang;
+    import StageManager     = Utility.StageManager;
+    import GridIndexHelpers = Utility.GridIndexHelpers;
+    import Types            = Utility.Types;
 
     const _CELL_WIDTH           = 80;
     const _LEFT_X               = 80;
@@ -57,6 +58,7 @@ namespace TinyWars.MapEditor {
                 { type: Notify.Type.BwCoListPanelClosed,            callback: this._onNotifyMcwCoListPanelClosed },
                 { type: Notify.Type.McwProduceUnitPanelOpened,      callback: this._onNotifyMcwProduceUnitPanelOpened },
                 { type: Notify.Type.McwProduceUnitPanelClosed,      callback: this._onNotifyMcwProduceUnitPanelClosed },
+                { type: Notify.Type.MeUnitChanged,                  callback: this._onNotifyMeUnitChanged },
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
             ];
         }
@@ -108,6 +110,12 @@ namespace TinyWars.MapEditor {
         }
         private _onNotifyMcwProduceUnitPanelClosed(e: egret.Event): void {
             this._updateView();
+        }
+        private _onNotifyMeUnitChanged(e: egret.Event): void {
+            const data = e.data as Notify.Data.MeUnitChanged;
+            if (GridIndexHelpers.checkIsEqual(data.gridIndex, this._cursor.getGridIndex())) {
+                this._updateView();
+            }
         }
         private _onNotifyUnitAnimationTick(e: egret.Event): void {
             for (const cell of this._cellList) {

@@ -16,59 +16,93 @@
                 <e:HorizontalLayout verticalAlign="middle" gap="2" />
             </e:layout>
         </e:Group>
-        <GameUi:UiLabel id="_labelFund" text="金钱:999999" size="16" x="340" textColor="0xffffff" y="12"
-                        maxTextWidth="100" />
-        <GameUi:UiLabel id="_labelCo" text="CO:Greyfield" size="16" x="440" textColor="0xFFFFFF" y="12"
-                        maxTextWidth="100" />
-        <e:Group x="545" verticalCenter="0">
-            <GameUi:UiLabel id="_labelCurrEnergy" text="99" size="22" x="0" textColor="0xFFFFFF" y="6"
-                            maxTextWidth="200" />
-            <e:Group x="20" y="0">
-                <GameUi:UiLabel id="_labelPowerEnergy" text="P 99 / 99" size="12" x="0" textColor="0xFFFFFF" y="0"
-                                maxTextWidth="200" />
-                <GameUi:UiLabel id="_labelZoneEnergy" text="Z 99 / 99" size="12" x="0" textColor="0xFFFFFF" y="14"
-                                maxTextWidth="200" />
-                <e:layout>
-                    <e:VerticalLayout gap="2" />
-                </e:layout>
-            </e:Group>
-            <e:layout>
-                <e:HorizontalLayout verticalAlign="middle" />
-            </e:layout>
-        </e:Group>
-        <GameUi:UiButton id="_btnUnitList" label="部队列表" x="680" width="70" top="0" bottom="0">
+        <GameUi:UiButton id="_btnModePreview" label="预览" x="330" width="70" top="0" bottom="0">
             <GameUi:skinName>
                 <e:Skin states="up,down,disabled">
                     <e:Image width="100%" height="100%" source="c04_t01_s02_f01" scale9Grid="9,9,2,2" />
-                    <GameUi:UiLabel id="labelDisplay" size="14" textColor="0x00ff00" verticalCenter="0"
-                                    horizontalCenter="0" maxTextWidth="70" />
+                    <GameUi:UiLabel id="labelDisplay" size="14" verticalCenter="0" horizontalCenter="0"
+                                    maxTextWidth="60" textColor="0xffffff" />
                 </e:Skin>
             </GameUi:skinName>
         </GameUi:UiButton>
-        <GameUi:UiButton id="_btnFindBuilding" label="寻找建筑" x="750" width="70" top="0" bottom="0">
+        <GameUi:UiButton id="_btnModeDrawTileBase" label="绘制地形基底" x="400" width="70" top="0" bottom="0">
             <GameUi:skinName>
                 <e:Skin states="up,down,disabled">
                     <e:Image width="100%" height="100%" source="c04_t01_s02_f01" scale9Grid="9,9,2,2" />
                     <GameUi:UiLabel id="labelDisplay" size="14" textColor="0x00ff00" verticalCenter="0"
-                                    horizontalCenter="0" maxTextWidth="70" />
+                                    horizontalCenter="0" maxTextWidth="60" />
                 </e:Skin>
             </GameUi:skinName>
         </GameUi:UiButton>
-        <GameUi:UiButton id="_btnEndTurn" label="结束回合" x="820" width="70" top="0" bottom="0">
+        <GameUi:UiButton id="_btnModeDrawTileObject" label="绘制地形物体" x="470" width="70" top="0" bottom="0">
             <GameUi:skinName>
                 <e:Skin states="up,down,disabled">
                     <e:Image width="100%" height="100%" source="c04_t01_s02_f01" scale9Grid="9,9,2,2" />
                     <GameUi:UiLabel id="labelDisplay" size="14" textColor="0x00ff00" verticalCenter="0"
-                                    horizontalCenter="0" maxTextWidth="70" />
+                                    horizontalCenter="0" maxTextWidth="60" />
                 </e:Skin>
             </GameUi:skinName>
         </GameUi:UiButton>
-        <GameUi:UiButton id="_btnCancel" label="取消" x="820" width="70" top="0" bottom="0">
+        <GameUi:UiButton id="_btnModeDrawUnit" label="绘制部队" x="540" width="70" top="0" bottom="0">
             <GameUi:skinName>
                 <e:Skin states="up,down,disabled">
                     <e:Image width="100%" height="100%" source="c04_t01_s02_f01" scale9Grid="9,9,2,2" />
                     <GameUi:UiLabel id="labelDisplay" size="14" textColor="0x00ff00" verticalCenter="0"
-                                    horizontalCenter="0" maxTextWidth="70" />
+                                    horizontalCenter="0" maxTextWidth="60" />
+                </e:Skin>
+            </GameUi:skinName>
+        </GameUi:UiButton>
+        <GameUi:UiButton id="_btnModeDeleteTileObject" label="删除地形物体" x="610" width="70" top="0" bottom="0">
+            <GameUi:skinName>
+                <e:Skin states="up,down,disabled">
+                    <e:Image width="100%" height="100%" source="c04_t01_s02_f01" scale9Grid="9,9,2,2" />
+                    <GameUi:UiLabel id="labelDisplay" size="14" verticalCenter="0" horizontalCenter="0"
+                                    maxTextWidth="60" textColor="0xff0000" />
+                </e:Skin>
+            </GameUi:skinName>
+        </GameUi:UiButton>
+        <GameUi:UiButton id="_btnModeDeleteUnit" label="删除部队" x="680" width="70" top="0" bottom="0">
+            <GameUi:skinName>
+                <e:Skin states="up,down,disabled">
+                    <e:Image width="100%" height="100%" source="c04_t01_s02_f01" scale9Grid="9,9,2,2" />
+                    <GameUi:UiLabel id="labelDisplay" size="14" verticalCenter="0" horizontalCenter="0"
+                                    maxTextWidth="60" textColor="0xff0000" />
+                </e:Skin>
+            </GameUi:skinName>
+        </GameUi:UiButton>
+        <GameUi:UiButton id="_btnUnitList" label="部队列表" x="750" width="70" top="0" bottom="0" visible="false">
+            <GameUi:skinName>
+                <e:Skin states="up,down,disabled">
+                    <e:Image width="100%" height="100%" source="c04_t01_s02_f01" scale9Grid="9,9,2,2" />
+                    <GameUi:UiLabel id="labelDisplay" size="14" textColor="0x00ff00" verticalCenter="0"
+                                    horizontalCenter="0" maxTextWidth="60" />
+                </e:Skin>
+            </GameUi:skinName>
+        </GameUi:UiButton>
+        <GameUi:UiButton id="_btnFindBuilding" label="寻找建筑" x="750" width="70" top="0" bottom="0" visible="false">
+            <GameUi:skinName>
+                <e:Skin states="up,down,disabled">
+                    <e:Image width="100%" height="100%" source="c04_t01_s02_f01" scale9Grid="9,9,2,2" />
+                    <GameUi:UiLabel id="labelDisplay" size="14" textColor="0x00ff00" verticalCenter="0"
+                                    horizontalCenter="0" maxTextWidth="60" />
+                </e:Skin>
+            </GameUi:skinName>
+        </GameUi:UiButton>
+        <GameUi:UiButton id="_btnEndTurn" label="结束回合" x="820" width="70" top="0" bottom="0" visible="false">
+            <GameUi:skinName>
+                <e:Skin states="up,down,disabled">
+                    <e:Image width="100%" height="100%" source="c04_t01_s02_f01" scale9Grid="9,9,2,2" />
+                    <GameUi:UiLabel id="labelDisplay" size="14" textColor="0x00ff00" verticalCenter="0"
+                                    horizontalCenter="0" maxTextWidth="60" />
+                </e:Skin>
+            </GameUi:skinName>
+        </GameUi:UiButton>
+        <GameUi:UiButton id="_btnCancel" label="取消" x="820" width="70" top="0" bottom="0" visible="false">
+            <GameUi:skinName>
+                <e:Skin states="up,down,disabled">
+                    <e:Image width="100%" height="100%" source="c04_t01_s02_f01" scale9Grid="9,9,2,2" />
+                    <GameUi:UiLabel id="labelDisplay" size="14" textColor="0x00ff00" verticalCenter="0"
+                                    horizontalCenter="0" maxTextWidth="60" />
                 </e:Skin>
             </GameUi:skinName>
         </GameUi:UiButton>
@@ -77,7 +111,7 @@
                 <e:Skin states="up,down,disabled">
                     <e:Image width="100%" height="100%" source="c04_t01_s02_f01" scale9Grid="9,9,2,2" />
                     <GameUi:UiLabel id="labelDisplay" size="14" textColor="0x00ff00" verticalCenter="0"
-                                    horizontalCenter="0" maxTextWidth="70" />
+                                    horizontalCenter="0" maxTextWidth="60" />
                 </e:Skin>
             </GameUi:skinName>
         </GameUi:UiButton>

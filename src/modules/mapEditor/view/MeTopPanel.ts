@@ -21,11 +21,13 @@ namespace TinyWars.MapEditor {
         private _conUnitView        : eui.Group;
         private _conTileView        : eui.Group;
 
-        private _labelFund          : GameUi.UiLabel;
-        private _labelCo            : GameUi.UiLabel;
-        private _labelCurrEnergy    : GameUi.UiLabel;
-        private _labelPowerEnergy   : GameUi.UiLabel;
-        private _labelZoneEnergy    : GameUi.UiLabel;
+        private _btnModePreview         : GameUi.UiButton;
+        private _btnModeDrawTileBase    : GameUi.UiButton;
+        private _btnModeDrawTileObject  : GameUi.UiButton;
+        private _btnModeDrawUnit        : GameUi.UiButton;
+        private _btnModeDeleteTileObject: GameUi.UiButton;
+        private _btnModeDeleteUnit      : GameUi.UiButton;
+
         private _btnUnitList        : GameUi.UiButton;
         private _btnFindBuilding    : GameUi.UiButton;
         private _btnEndTurn         : GameUi.UiButton;
@@ -33,7 +35,7 @@ namespace TinyWars.MapEditor {
         private _btnMenu            : GameUi.UiButton;
 
         private _unitView   = new MeUnitView();
-        private _tileView   = new MeTileView();
+        private _tileView   = new MeTileSimpleView();
 
         private _war    : MeWar;
         private _drawer : MeDrawer;
@@ -71,11 +73,17 @@ namespace TinyWars.MapEditor {
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
             ];
             this._uiListeners = [
-                { ui: this._btnUnitList,        callback: this._onTouchedBtnUnitList, },
-                { ui: this._btnFindBuilding,    callback: this._onTouchedBtnFindBuilding, },
-                { ui: this._btnEndTurn,         callback: this._onTouchedBtnEndTurn, },
-                { ui: this._btnCancel,          callback: this._onTouchedBtnCancel },
-                { ui: this._btnMenu,            callback: this._onTouchedBtnMenu, },
+                { ui: this._btnModePreview,             callback: this._onTouchedBtnModePreview },
+                { ui: this._btnModeDrawTileBase,        callback: this._onTouchedBtnModeDrawTileBase },
+                { ui: this._btnModeDrawTileObject,      callback: this._onTouchedBtnModeDrawTileObject },
+                { ui: this._btnModeDrawUnit,            callback: this._onTouchedBtnModeDrawUnit },
+                { ui: this._btnModeDeleteTileObject,    callback: this._onTouchedBtnModeDeleteTileObject },
+                { ui: this._btnModeDeleteUnit,          callback: this._onTouchedBtnModeDeleteUnit },
+                { ui: this._btnUnitList,                callback: this._onTouchedBtnUnitList, },
+                { ui: this._btnFindBuilding,            callback: this._onTouchedBtnFindBuilding, },
+                { ui: this._btnEndTurn,                 callback: this._onTouchedBtnEndTurn, },
+                { ui: this._btnCancel,                  callback: this._onTouchedBtnCancel },
+                { ui: this._btnMenu,                    callback: this._onTouchedBtnMenu, },
             ];
             this._conTileView.addChild(this._tileView.getImgBase());
             this._conTileView.addChild(this._tileView.getImgObject());
@@ -135,6 +143,28 @@ namespace TinyWars.MapEditor {
             this._updateBtnCancel();
         }
 
+        private _onTouchedBtnModePreview(e: egret.TouchEvent): void {
+            this._drawer.setModePreview();
+        }
+        private _onTouchedBtnModeDrawTileBase(e: egret.TouchEvent): void {
+            // TODO
+            this._drawer.setModeDrawTileBase(Math.floor(Math.random() * 20) + 1);
+        }
+        private _onTouchedBtnModeDrawTileObject(e: egret.TouchEvent): void {
+            // TODO
+            this._drawer.setModeDrawTileObject(Math.floor(Math.random() * 20) + 1);
+        }
+        private _onTouchedBtnModeDrawUnit(e: egret.TouchEvent): void {
+            // TODO
+            this._drawer.setModeDrawUnit(Math.floor(Math.random() * 100) + 1);
+        }
+        private _onTouchedBtnModeDeleteTileObject(e: egret.TouchEvent): void {
+            this._drawer.setModeDeleteTileObject();
+        }
+        private _onTouchedBtnModeDeleteUnit(e: egret.TouchEvent): void {
+            this._drawer.setModeDeleteUnit();
+        }
+
         private _onTouchedBtnUnitList(e: egret.TouchEvent): void {
         }
         private _onTouchedBtnFindBuilding(e: egret.TouchEvent): void {
@@ -144,6 +174,7 @@ namespace TinyWars.MapEditor {
         private _onTouchedBtnCancel(e: egret.TouchEvent): void {
         }
         private _onTouchedBtnMenu(e: egret.TouchEvent): void {
+            MeWarMenuPanel.show();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -194,7 +225,8 @@ namespace TinyWars.MapEditor {
             const tileView  = this._tileView;
             if ((mode === DrawerMode.DrawTileBase) || (mode === DrawerMode.DrawTileObject)) {
                 con.visible = true;
-                tileView.init(drawer.getDrawTargetTile());
+                tileView.init(drawer.getDrawTargetTileBaseViewId(), drawer.getDrawTargetTileObjectViewId());
+                tileView.updateView();
             } else {
                 con.visible = false;
             }
@@ -207,6 +239,8 @@ namespace TinyWars.MapEditor {
             if (drawer.getMode() === DrawerMode.DrawUnit) {
                 con.visible = true;
                 unitView.init(drawer.getDrawTargetUnit());
+                unitView.tickStateAnimationFrame();
+                unitView.tickUnitAnimationFrame();
             } else {
                 con.visible = false;
             }
@@ -239,12 +273,7 @@ namespace TinyWars.MapEditor {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _initTileView(): void {
             const tileView = this._tileView;
-            tileView.init(new MeTile().init({
-                gridX       : 0,
-                gridY       : 0,
-                baseViewId  : ConfigManager.getTileBaseViewId(Types.TileBaseType.Plain),
-                objectViewId: 0,
-            }, this._war.getConfigVersion()));
+            tileView.init(null, null);
             tileView.startRunningView();
         }
         private _initUnitView(): void {

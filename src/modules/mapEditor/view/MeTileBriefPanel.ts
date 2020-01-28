@@ -1,9 +1,10 @@
 
 namespace TinyWars.MapEditor {
-    import Notify       = Utility.Notify;
-    import Lang         = Utility.Lang;
-    import StageManager = Utility.StageManager;
-    import Types        = Utility.Types;
+    import Notify           = Utility.Notify;
+    import Lang             = Utility.Lang;
+    import StageManager     = Utility.StageManager;
+    import GridIndexHelpers = Utility.GridIndexHelpers;
+    import Types            = Utility.Types;
 
     const _IMAGE_SOURCE_HP      = `c04_t10_s00_f00`;
     const _IMAGE_SOURCE_FUEL    = `c04_t10_s01_f00`;
@@ -67,6 +68,7 @@ namespace TinyWars.MapEditor {
                 { type: Notify.Type.BwCoListPanelClosed,            callback: this._onNotifyMcwCoListPanelClosed },
                 { type: Notify.Type.McwProduceUnitPanelOpened,      callback: this._onNotifyMcwProduceUnitPanelOpened },
                 { type: Notify.Type.McwProduceUnitPanelClosed,      callback: this._onNotifyMcwProduceUnitPanelClosed },
+                { type: Notify.Type.MeTileChanged,                  callback: this._onNotifyMeTileChanged },
                 { type: Notify.Type.TileAnimationTick,              callback: this._onNotifyTileAnimationTick },
             ];
             this._uiListeners = [
@@ -117,6 +119,12 @@ namespace TinyWars.MapEditor {
         }
         private _onNotifyMcwProduceUnitPanelClosed(e: egret.Event): void {
             this._updateView();
+        }
+        private _onNotifyMeTileChanged(e: egret.Event): void {
+            const data = e.data as Notify.Data.MeTileChanged;
+            if (GridIndexHelpers.checkIsEqual(data.gridIndex, this._cursor.getGridIndex())) {
+                this._updateView();
+            }
         }
         private _onNotifyTileAnimationTick(e: egret.Event): void {
             this._tileView.updateOnAnimationTick();

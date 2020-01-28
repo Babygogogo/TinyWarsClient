@@ -79,6 +79,7 @@
 		"bin-debug/modules/mapEditor/view/MeMapListPanel.js",
 		"bin-debug/modules/mapEditor/view/MeTileBriefPanel.js",
 		"bin-debug/modules/mapEditor/view/MeTileMapView.js",
+		"bin-debug/modules/mapEditor/view/MeTileSimpleView.js",
 		"bin-debug/modules/mapEditor/view/MeTileView.js",
 		"bin-debug/modules/mapEditor/view/MeTopPanel.js",
 		"bin-debug/modules/mapEditor/view/MeUnitBriefPanel.js",
