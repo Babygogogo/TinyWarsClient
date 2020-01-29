@@ -58,6 +58,7 @@ namespace TinyWars.MapEditor.MeManager {
             mapNameEnglish  : `${Lang.getText(Lang.Type.B0279)} - ${slotIndex}`,
             mapWidth,
             mapHeight,
+            designerUserId  : User.UserModel.getSelfUserId(),
             isMultiPlayer   : true,
             isSinglePlayer  : true,
             playersCount    : 2,

@@ -44,9 +44,7 @@ namespace TinyWars.MapEditor {
         private _onNotifyBwCursorTapped(e: egret.Event): void {
             const data      = e.data as Notify.Data.BwCursorTapped;
             const gridIndex = data.tappedOn;
-            if (GridIndexHelpers.checkIsEqual(gridIndex, data.current)) {
-                this._handleAction(gridIndex);
-            }
+            this._handleAction(gridIndex);
         }
         private _onNotifyBwCursorDragged(e: egret.Event): void {
             const data = e.data as Notify.Data.BwCursorDragged;

@@ -370,8 +370,7 @@ namespace TinyWars.Utility.Types {
     export type MeMapData = {
         slotIndex   : number;
         reviewStatus: MapReviewStatus;
-        encodedMap  : Uint8Array | null;
-        mapRawData  : ProtoTypes.IMapRawData | null;
+        mapRawData  : ProtoTypes.IMapRawData | null | undefined;
     }
 
     ////////////////////////////////////////////////////////////////////////////////

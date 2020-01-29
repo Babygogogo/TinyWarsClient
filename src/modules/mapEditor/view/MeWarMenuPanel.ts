@@ -93,8 +93,7 @@ namespace TinyWars.MapEditor {
         protected _onFirstOpened(): void {
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.SScrContinueWar,                callback: this._onNotifySScrContinueWar },
-                { type: Notify.Type.SScrSaveWar,                    callback: this._onNotifySScrSaveWar },
+                { type: Notify.Type.SMeSaveMap,                     callback: this._onNotifySMeSaveMap },
             ];
             this._uiListeners = [
                 { ui: this._btnBack, callback: this._onTouchedBtnBack },
@@ -126,14 +125,9 @@ namespace TinyWars.MapEditor {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _onNotifySScrContinueWar(e: egret.Event): void {
-            const data      = e.data as ProtoTypes.IS_ScrContinueWar;
-            const warData   = ProtoManager.decodeAsSerializedWar(data.encodedWar);
-            Utility.FlowManager.gotoSingleCustomWar(warData);
-        }
-
-        private _onNotifySScrSaveWar(e: egret.Event): void {
-            FloatText.show(Lang.getText(Lang.Type.A0073));
+        private _onNotifySMeSaveMap(e: egret.Event): void {
+            FloatText.show(Lang.getText(Lang.Type.A0085));
+            this.close();
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
@@ -241,11 +235,11 @@ namespace TinyWars.MapEditor {
         private _createDataForMainMenu(): DataForCommandRenderer[] {
             const dataList = [] as DataForCommandRenderer[];
 
-            const commandSaveGame = this._createCommandSaveGame();
-            (commandSaveGame) && (dataList.push(commandSaveGame));
+            const commandSaveMap = this._createCommandSaveMap();
+            (commandSaveMap) && (dataList.push(commandSaveMap));
 
-            const commandLoadGame = this._createCommandLoadGame();
-            (commandLoadGame) && (dataList.push(commandLoadGame));
+            const commandLoadMap = this._createCommandLoadMap();
+            (commandLoadMap) && (dataList.push(commandLoadMap));
 
             const commandOpenAdvancedMenu = this._createCommandOpenAdvancedMenu();
             (commandOpenAdvancedMenu) && (dataList.push(commandOpenAdvancedMenu));
@@ -278,54 +272,30 @@ namespace TinyWars.MapEditor {
             };
         }
 
-        private _createCommandSaveGame(): DataForCommandRenderer | null {
-            return null;
-            // const war = this._war;
-            // if ((!war)                                                              ||
-            //     (!war.checkIsHumanInTurn())                                         ||
-            //     (!war.getTurnManager().getPhaseCode())                              ||
-            //     (war.getActionPlanner().getState() !== Types.ActionPlannerState.Idle)
-            // ) {
-            //     return null;
-            // } else {
-            //     return {
-            //         name    : Lang.getText(Lang.Type.B0260),
-            //         callback: () => {
-            //             Common.ConfirmPanel.show({
-            //                 title   : Lang.getText(Lang.Type.B0088),
-            //                 content : Lang.getText(Lang.Type.A0071),
-            //                 callback: () => {
-            //                     SingleCustomRoom.ScrProxy.reqSaveWar(war);
-            //                 },
-            //             })
-            //         },
-            //     };
-            // }
+        private _createCommandSaveMap(): DataForCommandRenderer | null {
+            return {
+                name    : Lang.getText(Lang.Type.B0287),
+                callback: () => {
+                    MeConfirmSaveMapPanel.show();
+                },
+            };
         }
 
-        private _createCommandLoadGame(): DataForCommandRenderer | null {
-            return null;
-            // const war = this._war;
-            // if ((!war)                                                              ||
-            //     (!war.checkIsHumanInTurn())                                         ||
-            //     (!war.getTurnManager().getPhaseCode())                              ||
-            //     (war.getActionPlanner().getState() !== Types.ActionPlannerState.Idle)
-            // ) {
-            //     return null;
-            // } else {
-            //     return {
-            //         name    : Lang.getText(Lang.Type.B0261),
-            //         callback: () => {
-            //             Common.ConfirmPanel.show({
-            //                 title   : Lang.getText(Lang.Type.B0088),
-            //                 content : Lang.getText(Lang.Type.A0072),
-            //                 callback: () => {
-            //                     SingleCustomRoom.ScrProxy.reqContinueWar(war.getSaveSlotIndex());
-            //                 },
-            //             })
-            //         },
-            //     };
-            // }
+        private _createCommandLoadMap(): DataForCommandRenderer | null {
+            return {
+                name    : Lang.getText(Lang.Type.B0288),
+                callback: () => {
+                    Common.ConfirmPanel.show({
+                        title   : Lang.getText(Lang.Type.B0088),
+                        content : Lang.getText(Lang.Type.A0072),
+                        callback: () => {
+                            const war       = this._war;
+                            const slotIndex = war.getSlotIndex();
+                            Utility.FlowManager.gotoMapEditor(MeModel.getData(slotIndex).mapRawData as Types.MapRawData, slotIndex, war.getIsReview());
+                        },
+                    })
+                },
+            };
         }
 
         private _createCommandGotoLobby(): DataForCommandRenderer | undefined {

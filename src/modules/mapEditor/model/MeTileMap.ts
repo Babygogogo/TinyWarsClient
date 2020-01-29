@@ -5,8 +5,14 @@ namespace TinyWars.MapEditor {
     import Helpers              = Utility.Helpers;
     import ProtoTypes           = Utility.ProtoTypes;
     import SerializedBwTileMap  = Types.SerializedTileMap;
-    import SerializedBwTile     = Types.SerializedTile;
+    import SerializedTile     = Types.SerializedTile;
     import MapSize              = Types.MapSize;
+
+    type SerializedMeTileMap = {
+        tileObjects : number[];
+        tileBases   : number[];
+        tileDataList: SerializedTile[];
+    };
 
     export class MeTileMap {
         private _mapRawData : ProtoTypes.IMapRawData;
@@ -67,6 +73,29 @@ namespace TinyWars.MapEditor {
             this.getView().stopRunningView();
         }
 
+        public serialize(): SerializedMeTileMap {
+            const { width, height } = this.getMapSize();
+            const gridsCount        = width * height;
+            const tileBases         = new Array(gridsCount).fill(0);
+            const tileObjects       = new Array(gridsCount).fill(0);
+            const tileDataList      : SerializedTile[] = [];
+            this.forEachTile(tile => {
+                const { x, y }      = tile.getGridIndex();
+                const index         = x + y * width;
+                tileBases[index]    = tile.getBaseViewId() || 0;
+                tileObjects[index]  = tile.getObjectViewId() || 0;
+
+                const data = tile.serialize();
+                (data) && (tileDataList.push(data));
+            });
+
+            return {
+                tileBases,
+                tileObjects,
+                tileDataList,
+            };
+        }
+
         public getWar(): MeWar {
             return this._war;
         }
@@ -116,7 +145,7 @@ namespace TinyWars.MapEditor {
         }
     }
 
-    function checkShouldSerializeTile(tileData: SerializedBwTile, mapData: Types.MapRawData, posIndex: number): boolean {
+    function checkShouldSerializeTile(tileData: SerializedTile, mapData: Types.MapRawData, posIndex: number): boolean {
         return (tileData.currentBuildPoint      != null)
             || (tileData.currentCapturePoint    != null)
             || (tileData.currentHp              != null)

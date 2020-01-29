@@ -52,7 +52,7 @@ namespace TinyWars.MapEditor {
             this.setGridX(data.gridX);
             this.setGridY(data.gridY);
             this._setViewId(data.viewId);
-            this._setUnitId(data.unitId);
+            this.setUnitId(data.unitId);
             this._setPlayerIndex(t.playerIndex);
             this._templateCfg       = ConfigManager.getUnitTemplateCfg(this._configVersion, unitType);
             this._damageChartCfg    = ConfigManager.getDamageChartCfgs(this._configVersion, unitType);
@@ -93,6 +93,53 @@ namespace TinyWars.MapEditor {
             return this._configVersion;
         }
 
+        public serialize(): Types.SerializedUnit {
+            const data: Types.SerializedUnit = {
+                gridX   : this.getGridX(),
+                gridY   : this.getGridY(),
+                viewId  : this.getViewId(),
+                unitId  : this.getUnitId(),
+            };
+
+            const state = this.getState();
+            (state !== Types.UnitActionState.Idle) && (data.state = state);
+
+            const currentHp = this.getCurrentHp();
+            (currentHp !== this.getMaxHp()) && (data.currentHp = currentHp);
+
+            const currentAmmo = this.getPrimaryWeaponCurrentAmmo();
+            (currentAmmo !== this.getPrimaryWeaponMaxAmmo()) && (data.primaryWeaponCurrentAmmo = currentAmmo);
+
+            const isCapturing = this.getIsCapturingTile();
+            (isCapturing) && (data.isCapturingTile = isCapturing);
+
+            const isDiving = this.getIsDiving();
+            ((isDiving) || (this.getType() === Types.UnitType.Submarine)) && (data.isDiving = isDiving);
+
+            const currentFuel = this.getCurrentFuel();
+            (currentFuel !== this.getMaxFuel()) && (data.currentFuel = currentFuel);
+
+            const flareAmmo = this.getFlareCurrentAmmo();
+            (flareAmmo !== this.getFlareMaxAmmo()) && (data.flareCurrentAmmo = flareAmmo);
+
+            const produceMaterial = this.getCurrentProduceMaterial();
+            (produceMaterial !== this.getMaxProduceMaterial()) && (data.currentProduceMaterial = produceMaterial);
+
+            const currentPromotion = this.getCurrentPromotion();
+            (currentPromotion !== 0) && (data.currentPromotion = currentPromotion);
+
+            const isBuildingTile = this.getIsBuildingTile();
+            (isBuildingTile) && (data.isBuildingTile = isBuildingTile);
+
+            const buildMaterial = this.getCurrentBuildMaterial();
+            (buildMaterial !== this.getMaxBuildMaterial()) && (data.currentBuildMaterial = buildMaterial);
+
+            const loaderUnitId = this.getLoaderUnitId();
+            (loaderUnitId != null) && (data.loaderUnitId = loaderUnitId);
+
+            return data;
+        }
+
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////
@@ -119,7 +166,7 @@ namespace TinyWars.MapEditor {
         public getUnitId(): number {
             return this._unitId;
         }
-        private _setUnitId(id: number): void {
+        public setUnitId(id: number): void {
             this._unitId = id;
         }
 

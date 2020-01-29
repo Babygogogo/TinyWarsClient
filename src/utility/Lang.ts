@@ -424,6 +424,22 @@ namespace TinyWars.Utility.Lang {
             `已成功删除地图`,
             `The map has been deleted successfully`,
         ],
+        [Type.A0082]: [
+            `确定要保存此地图吗？`,
+            `Are you sure to save the map?`,
+        ],
+        [Type.A0083]: [
+            `此地图存在问题，暂不能提审`,
+            `This map is not playable.`,
+        ],
+        [Type.A0084]: [
+            `您已提审过其他地图。若提审此地图，则其他地图将被自动撤销提审。确定要继续吗？`,
+            `You have submitted some other maps for review. If you submit this map, the submitted maps will not be reviewed. Are you sure to continue?`,
+        ],
+        [Type.A0085]: [
+            `已成功保存地图`,
+            `The map has been saved.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -1559,6 +1575,18 @@ namespace TinyWars.Utility.Lang {
         [Type.B0286]: [
             `预览`,
             `Preview`,
+        ],
+        [Type.B0287]: [
+            `保存地图`,
+            `Save Map`,
+        ],
+        [Type.B0288]: [
+            `读取地图`,
+            `Load Map`,
+        ],
+        [Type.B0289]: [
+            `提审`,
+            `Submit for review`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

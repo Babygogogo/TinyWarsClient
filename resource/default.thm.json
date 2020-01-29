@@ -19,6 +19,7 @@
 		"resource/skins/mapEditor/MeChooseTileBasePanel.exml",
 		"resource/skins/mapEditor/MeChooseTileObjectPanel.exml",
 		"resource/skins/mapEditor/MeChooseUnitPanel.exml",
+		"resource/skins/mapEditor/MeConfirmSaveMapPanel.exml",
 		"resource/skins/mapEditor/MeMapListPanel.exml",
 		"resource/skins/mapEditor/MeTileBriefPanel.exml",
 		"resource/skins/mapEditor/MeTopPanel.exml",

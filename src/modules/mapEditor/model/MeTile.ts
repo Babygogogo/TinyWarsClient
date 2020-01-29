@@ -58,6 +58,36 @@ namespace TinyWars.MapEditor {
             this.getView().startRunningView();
         }
 
+        public serialize(): Types.SerializedTile | null {
+            const data: Types.SerializedTile = {
+                gridX         : this.getGridX(),
+                gridY         : this.getGridY(),
+                baseViewId    : this.getBaseViewId(),
+                objectViewId  : this.getObjectViewId(),
+            };
+
+            let needSerialize   = false;
+            const currentHp     = this.getCurrentHp();
+            if (currentHp !== this.getMaxHp()) {
+                needSerialize   = true;
+                data.currentHp  = currentHp;
+            }
+
+            const buildPoint = this.getCurrentBuildPoint();
+            if (buildPoint !== this.getMaxBuildPoint()) {
+                needSerialize           = true;
+                data.currentBuildPoint  = buildPoint;
+            }
+
+            const capturePoint = this.getCurrentCapturePoint();
+            if (capturePoint !== this.getMaxCapturePoint()) {
+                needSerialize               = true;
+                data.currentCapturePoint    = capturePoint;
+            }
+
+            return needSerialize ? data : null;
+        }
+
         public getConfigVersion(): string {
             return this._configVersion;
         }

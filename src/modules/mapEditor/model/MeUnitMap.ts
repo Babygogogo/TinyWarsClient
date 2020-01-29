@@ -90,6 +90,14 @@ namespace TinyWars.MapEditor {
             this.getView().stopRunningView();
         }
 
+        public serialize(): Types.SerializedUnit[] {
+            const dataList: Types.SerializedUnit[] = [];
+            this.forEachUnit(unit => {
+                dataList.push(unit.serialize());
+            });
+            return dataList;
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other public functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -153,6 +161,25 @@ namespace TinyWars.MapEditor {
                 }
                 return null;
             }
+        }
+
+        public reviseAllUnitIds(): void {
+            const allUnits  = new Map<number, { unit: MeUnit, newUnitId: number }>();
+            let nextUnitId  = 0;
+            this.forEachUnit(unit => {
+                allUnits.set(unit.getUnitId(), { unit, newUnitId: nextUnitId } );
+                ++nextUnitId;
+            });
+            for (const [, value] of allUnits) {
+                const unit = value.unit;
+                unit.setUnitId(value.newUnitId);
+
+                const loaderUnitId = unit.getLoaderUnitId();
+                if (loaderUnitId != null) {
+                    unit.setLoaderUnitId(allUnits.get(loaderUnitId).newUnitId);
+                }
+            }
+            this.setNextUnitId(nextUnitId);
         }
 
         public getUnitOnMap(gridIndex: Types.GridIndex): MeUnit | undefined {

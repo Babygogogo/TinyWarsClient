@@ -193,6 +193,12 @@ namespace TinyWars.MapEditor {
         private _updateComponentsForLanguage(): void {
             this._updateLabelModeTitle();
             this._updateLabelMode();
+            this._btnModePreview.label          = Lang.getText(Lang.Type.B0286);
+            this._btnModeDrawUnit.label         = Lang.getText(Lang.Type.B0281);
+            this._btnModeDrawTileObject.label   = Lang.getText(Lang.Type.B0283);
+            this._btnModeDrawTileBase.label     = Lang.getText(Lang.Type.B0282);
+            this._btnModeDeleteUnit.label       = Lang.getText(Lang.Type.B0284);
+            this._btnModeDeleteTileObject.label = Lang.getText(Lang.Type.B0285);
         }
 
         private _updateGroupMode(): void {

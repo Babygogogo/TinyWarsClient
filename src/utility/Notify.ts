@@ -85,6 +85,8 @@ namespace TinyWars.Utility.Notify {
         SUserGetOnlineUsers,
 
         SMeGetDataList,
+        SMeGetData,
+        SMeSaveMap,
 
         SMmChangeAvailability,
         SMmReloadAllMaps,

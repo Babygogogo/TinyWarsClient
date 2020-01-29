@@ -180,7 +180,7 @@ namespace TinyWars.MapEditor {
                 tileMapView.updateWithObjectViewIdArray(mapData.tileObjects);
 
                 const unitMapView = new WarMap.WarMapUnitMapView();
-                unitMapView.initWithDataList(this._createUnitViewDataList(mapData.units, mapData.mapWidth, mapData.mapHeight));
+                unitMapView.initWithDataList(this._createUnitViewDataList(mapData.units || [], mapData.mapWidth, mapData.mapHeight));
 
                 const gridSize = ConfigManager.getGridSize();
                 this._zoomMap.removeAllContents();
@@ -233,15 +233,6 @@ namespace TinyWars.MapEditor {
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
             const data = (this.data as DataForMapRenderer).mapData;
             Utility.FlowManager.gotoMapEditor(data.mapRawData as Types.MapRawData, data.slotIndex, false);
-        }
-
-        private _checkIsInTurn(info: ProtoTypes.IMcwOngoingDetail): boolean {
-            const userId        = User.UserModel.getSelfUserId();
-            const playerIndex   = info.playerIndexInTurn;
-            return ((playerIndex === 1) && (userId === info.p1UserId))
-                || ((playerIndex === 2) && (userId === info.p2UserId))
-                || ((playerIndex === 3) && (userId === info.p3UserId))
-                || ((playerIndex === 4) && (userId === info.p4UserId));
         }
     }
 

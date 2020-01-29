@@ -1459,6 +1459,12 @@ namespace TinyWars.ConfigManager {
     export const MAX_MAP_EDITOR_SLOT_COUNT  = 3;
 
     export const MAX_SAVE_SLOT_COUNT        = 10;
+    export const MAP_CONSTANTS              = {
+        MaxGridsCount           : 1000,
+        MaxMapNameLength        : 30,
+        MaxMapNameEnglishLength : 30,
+        MaxDesignerLength       : 30,
+    };
 
     export function init(): void {
         NetManager.addListeners([
