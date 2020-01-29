@@ -440,6 +440,14 @@ namespace TinyWars.Utility.Lang {
             `已成功保存地图`,
             `The map has been saved.`,
         ],
+        [Type.A0086]: [
+            `注：若新的宽高小于当前宽高，则超出的图块会被裁剪掉（以左上角为原点）`,
+            `Warning: Data that out of the new map will be dismissed!`,
+        ],
+        [Type.A0087]: [
+            `您输入的宽高不合法，请检查`,
+            `The W/H is not valid.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -1588,6 +1596,18 @@ namespace TinyWars.Utility.Lang {
             `提审`,
             `Submit for review`,
         ],
+        [Type.B0290]: [
+            `调整大小`,
+            `Resize`,
+        ],
+        [Type.B0291]: [
+            `当前宽高`,
+            `Current W/H`,
+        ],
+        [Type.B0292]: [
+            `新的宽高`,
+            `New W/H`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -1926,6 +1946,10 @@ namespace TinyWars.Utility.Lang {
         [Type.F0022]: [
             `%s (p%d) 回合正式开始！！`,
             `It's %s (p%d)'s turn!!`,
+        ],
+        [Type.F0023]: [
+            `地图的总格子数不能大于%d`,
+            `The number of the tiles must be less than %d`,
         ],
     };
 

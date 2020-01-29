@@ -334,6 +334,7 @@ namespace TinyWars.Utility.Types {
         tileObjects     : number[];
         units           : number[];
         unitDataList    : SerializedUnit[];
+        tileDataList    : SerializedTile[];
     }
 
     export type MapAvailability = {

@@ -143,25 +143,39 @@ namespace TinyWars.MapEditor {
             return dataList;
         }
 
-        private _createUnitViewDataList(unitViewIds: number[], mapWidth: number, mapHeight: number): Types.UnitViewData[] {
+        private _createUnitViewDataList(unitViewIds: number[], unitDataList: ProtoTypes.ISerializedWarUnit[], mapWidth: number, mapHeight: number): Types.UnitViewData[] {
             const configVersion = ConfigManager.getNewestConfigVersion();
-            const dataList: Types.UnitViewData[] = [];
+            const dataList      : Types.UnitViewData[] = [];
 
-            let index  = 0;
-            for (let y = 0; y < mapHeight; ++y) {
-                for (let x = 0; x < mapWidth; ++x) {
-                    const viewId = unitViewIds[index];
-                    ++index;
-                    if (viewId > 0) {
+            if (unitViewIds) {
+                let index = 0;
+                for (let y = 0; y < mapHeight; ++y) {
+                    for (let x = 0; x < mapWidth; ++x) {
+                        const viewId = unitViewIds[index];
+                        ++index;
+                        if (viewId > 0) {
+                            dataList.push({
+                                configVersion: configVersion,
+                                gridX        : x,
+                                gridY        : y,
+                                viewId       : viewId,
+                            });
+                        }
+                    }
+                }
+            } else if (unitDataList) {
+                for (const unitData of unitDataList) {
+                    if (unitData.loaderUnitId == null) {
                         dataList.push({
-                            configVersion: configVersion,
-                            gridX        : x,
-                            gridY        : y,
-                            viewId       : viewId,
+                            configVersion,
+                            gridX   : unitData.gridX,
+                            gridY   : unitData.gridY,
+                            viewId  : unitData.viewId,
                         });
                     }
                 }
             }
+
             return dataList;
         }
 
@@ -180,7 +194,7 @@ namespace TinyWars.MapEditor {
                 tileMapView.updateWithObjectViewIdArray(mapData.tileObjects);
 
                 const unitMapView = new WarMap.WarMapUnitMapView();
-                unitMapView.initWithDataList(this._createUnitViewDataList(mapData.units || [], mapData.mapWidth, mapData.mapHeight));
+                unitMapView.initWithDataList(this._createUnitViewDataList(mapData.units, mapData.unitDataList, mapData.mapWidth, mapData.mapHeight));
 
                 const gridSize = ConfigManager.getGridSize();
                 this._zoomMap.removeAllContents();

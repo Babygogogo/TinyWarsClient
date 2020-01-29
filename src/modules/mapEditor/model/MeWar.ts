@@ -17,8 +17,8 @@ namespace TinyWars.MapEditor {
             this._setConfigVersion(configVersion);
             this._setIsReview(isReview);
 
-            this._setField(new MeField().init(data, configVersion));
-            this._setDrawer(new MeDrawer().init(data));
+            this._setField((this.getField() || new MeField()).init(data, configVersion));
+            this._setDrawer((this.getDrawer() || new MeDrawer()).init(data));
             this._initView();
 
             return this;

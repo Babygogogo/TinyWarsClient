@@ -259,6 +259,9 @@ namespace TinyWars.MapEditor {
             const commandStopTileAnimation = this._createCommandStopTileAnimation();
             (commandStopTileAnimation) && (dataList.push(commandStopTileAnimation));
 
+            const commandResize = this._createCommandResize();
+            (commandResize) && (dataList.push(commandResize));
+
             return dataList;
         }
 
@@ -291,7 +294,11 @@ namespace TinyWars.MapEditor {
                         callback: () => {
                             const war       = this._war;
                             const slotIndex = war.getSlotIndex();
-                            Utility.FlowManager.gotoMapEditor(MeModel.getData(slotIndex).mapRawData as Types.MapRawData, slotIndex, war.getIsReview());
+                            war.stopRunning()
+                                .init(MeModel.getData(slotIndex).mapRawData as Types.MapRawData, slotIndex, war.getConfigVersion(), war.getIsReview())
+                                .startRunning()
+                                .startRunningView();
+                            this.close();
                         },
                     })
                 },
@@ -338,6 +345,14 @@ namespace TinyWars.MapEditor {
                     },
                 }
             }
+        }
+        private _createCommandResize(): DataForCommandRenderer | null {
+            return {
+                name    : Lang.getText(Lang.Type.B0290),
+                callback: () => {
+                    MeResizePanel.show();
+                },
+            };
         }
     }
 

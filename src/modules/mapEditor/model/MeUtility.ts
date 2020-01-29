@@ -1,7 +1,9 @@
 
 namespace TinyWars.MapEditor.MeUtility {
     import ProtoTypes   = Utility.ProtoTypes;
+    import Types        = Utility.Types;
     import mapConstants = ConfigManager.MAP_CONSTANTS;
+    import MapRawData   = Types.MapRawData;
 
     export function checkIsValidMap(mapRawData: ProtoTypes.IMapRawData, userId: number): boolean {
         if (mapRawData.designerUserId !== userId) {
@@ -305,4 +307,76 @@ namespace TinyWars.MapEditor.MeUtility {
         return true;
     }
 
+    export function resizeMap(mapRawData: MapRawData, newWidth: number, newHeight: number): MapRawData {
+        return {
+            isMultiPlayer   : mapRawData.isMultiPlayer,
+            isSinglePlayer  : mapRawData.isSinglePlayer,
+            mapDesigner     : mapRawData.mapDesigner,
+            mapName         : mapRawData.mapName,
+            mapNameEnglish  : mapRawData.mapNameEnglish,
+            designerUserId  : mapRawData.designerUserId,
+            playersCount    : mapRawData.playersCount,
+            mapHeight       : newHeight,
+            mapWidth        : newWidth,
+            tileBases       : getNewTileBaseViewIdsForResize(mapRawData, newWidth, newHeight),
+            tileObjects     : getNewTileObjectIdsForResize(mapRawData, newWidth, newHeight),
+            tileDataList    : getNewTileDataListForResize(mapRawData, newWidth, newHeight),
+            unitDataList    : getNewUnitDataListForResize(mapRawData, newWidth, newHeight),
+            units           : null,
+        }
+    }
+    function getNewTileBaseViewIdsForResize(mapRawData: MapRawData, newWidth: number, newHeight: number): number[] {
+        const oldWidth      = mapRawData.mapWidth;
+        const oldHeight     = mapRawData.mapHeight;
+        const oldViewIds    = mapRawData.tileBases || [];
+        const defaultId     = ConfigManager.getTileBaseViewId(Types.TileBaseType.Plain);
+        const newViewIds    : number[] = [];
+        for (let x = 0; x < newWidth; ++x) {
+            for (let y = 0; y < newHeight; ++y) {
+                const newIndex = x + y * newWidth;
+                if ((x >= oldWidth) || (y >= oldHeight)) {
+                    newViewIds[newIndex] = defaultId;
+                } else {
+                    newViewIds[newIndex] = oldViewIds[x + y * oldWidth] || defaultId;
+                }
+            }
+        }
+        return newViewIds;
+    }
+    function getNewTileObjectIdsForResize(mapRawData: MapRawData, newWidth: number, newHeight: number): number[] {
+        const oldWidth      = mapRawData.mapWidth;
+        const oldHeight     = mapRawData.mapHeight;
+        const oldViewIds    = mapRawData.tileObjects || [];
+        const defaultId     = 0;
+        const newViewIds    : number[] = [];
+        for (let x = 0; x < newWidth; ++x) {
+            for (let y = 0; y < newHeight; ++y) {
+                const newIndex = x + y * newWidth;
+                if ((x >= oldWidth) || (y >= oldHeight)) {
+                    newViewIds[newIndex] = defaultId;
+                } else {
+                    newViewIds[newIndex] = oldViewIds[x + y * oldWidth] || defaultId;
+                }
+            }
+        }
+        return newViewIds;
+    }
+    function getNewTileDataListForResize(mapRawData: MapRawData, newWidth: number, newHeight: number): Types.SerializedTile[] {
+        const tileList: Types.SerializedTile[] = [];
+        for (const tileData of mapRawData.tileDataList || []) {
+            if ((tileData.gridX < newWidth) && (tileData.gridY < newHeight)) {
+                tileList.push(tileData);
+            }
+        }
+        return tileList;
+    }
+    function getNewUnitDataListForResize(mapRawData: MapRawData, newWidth: number, newHeight: number): Types.SerializedUnit[] {
+        const unitList: Types.SerializedUnit[] = [];
+        for (const unitData of mapRawData.unitDataList || []) {
+            if ((unitData.gridX < newWidth) && (unitData.gridY < newHeight)) {
+                unitList.push(unitData);
+            }
+        }
+        return unitList;
+    }
 }

@@ -82,6 +82,7 @@
 		"bin-debug/modules/mapEditor/view/MeFieldView.js",
 		"bin-debug/modules/mapEditor/view/MeGridVisionEffectView.js",
 		"bin-debug/modules/mapEditor/view/MeMapListPanel.js",
+		"bin-debug/modules/mapEditor/view/MeResizePanel.js",
 		"bin-debug/modules/mapEditor/view/MeTileBriefPanel.js",
 		"bin-debug/modules/mapEditor/view/MeTileMapView.js",
 		"bin-debug/modules/mapEditor/view/MeTileSimpleView.js",

@@ -76,14 +76,13 @@ namespace TinyWars.MapEditor {
 
         public init(cursor: MeCursor): void {
             if (!this._cursor) {
-                this._cursor    = cursor;
-                this._mapSize   = cursor.getMapSize();
-                this.width      = this._mapSize.width * _GRID_WIDTH;
-                this.height     = this._mapSize.height * _GRID_HEIGHT;
-
                 this._startNormalAnimation();
                 this._startTargetAnimation();
             }
+            this._cursor    = cursor;
+            this._mapSize   = cursor.getMapSize();
+            this.width      = this._mapSize.width * _GRID_WIDTH;
+            this.height     = this._mapSize.height * _GRID_HEIGHT;
         }
 
         public startRunningView(): void {
