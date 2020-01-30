@@ -430,8 +430,14 @@ namespace TinyWars.MapEditor.MeUtility {
         const defaultId     = ConfigManager.getTileBaseViewId(Types.TileBaseType.Plain);
         for (let newX = 0; newX < width; ++newX) {
             for (let newY = 0; newY < height; ++newY) {
-                const oldId                         = oldViewIds[(newX - offsetX) + (newY - offsetY) * width];
-                baseViewIds[newX + newY * width]    = oldId != null ? oldId : defaultId;
+                const oldX      = newX - offsetX;
+                const oldY      = newY - offsetY
+                const newIndex  = newX + newY * width;
+                if ((oldX >= 0) && (oldX < width) && (oldY >= 0) && (oldY < height)) {
+                    baseViewIds[newIndex] = oldViewIds[oldX + oldY * width] || defaultId;
+                } else {
+                    baseViewIds[newIndex] = defaultId;
+                }
             }
         }
 
@@ -445,8 +451,14 @@ namespace TinyWars.MapEditor.MeUtility {
         const defaultId     = 0;
         for (let newX = 0; newX < width; ++newX) {
             for (let newY = 0; newY < height; ++newY) {
-                const oldId                         = oldViewIds[(newX - offsetX) + (newY - offsetY) * width];
-                objectViewIds[newX + newY * width]  = oldId != null ? oldId : defaultId;
+                const oldX      = newX - offsetX;
+                const oldY      = newY - offsetY
+                const newIndex  = newX + newY * width;
+                if ((oldX >= 0) && (oldX < width) && (oldY >= 0) && (oldY < height)) {
+                    objectViewIds[newIndex] = oldViewIds[oldX + oldY * width] || defaultId;
+                } else {
+                    objectViewIds[newIndex] = defaultId;
+                }
             }
         }
 

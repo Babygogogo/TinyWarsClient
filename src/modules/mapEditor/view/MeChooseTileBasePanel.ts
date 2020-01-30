@@ -12,6 +12,11 @@ namespace TinyWars.MapEditor {
 
         private _listTileObject : GameUi.UiScrollList;
         private _btnCancel      : GameUi.UiButton;
+        private _groupFill      : eui.Group;
+        private _imgFill        : GameUi.UiImage;
+        private _labelFill      : GameUi.UiLabel;
+
+        private _needFill   : boolean;
 
         public static show(): void {
             if (!MeChooseTileBasePanel._instance) {
@@ -41,6 +46,7 @@ namespace TinyWars.MapEditor {
             ];
             this._uiListeners = [
                 { ui: this._btnCancel,  callback: this.close },
+                { ui: this._groupFill,  callback: this._onTouchedGroupFill },
             ];
             this._listTileObject.setItemRenderer(TileBaseRenderer);
             this._listTileObject.scrollPolicyH = eui.ScrollPolicy.OFF;
@@ -49,11 +55,17 @@ namespace TinyWars.MapEditor {
         protected _onOpened(): void {
             this._updateComponentsForLanguage();
 
+            this._needFill = false;
+            this._updateImgFill();
             this._updateListTileObject();
         }
 
         protected _onClosed(): void {
             this._listTileObject.clear();
+        }
+
+        public getNeedFill(): boolean {
+            return this._needFill;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -71,11 +83,21 @@ namespace TinyWars.MapEditor {
             }
         }
 
+        private _onTouchedGroupFill(e: egret.Event): void {
+            this._needFill = !this._needFill;
+            this._updateImgFill();
+        }
+
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._btnCancel.label = Lang.getText(Lang.Type.B0154);
+            this._btnCancel.label   = Lang.getText(Lang.Type.B0154);
+            this._labelFill.text    = Lang.getText(Lang.Type.B0294);
+        }
+
+        private _updateImgFill(): void {
+            this._imgFill.visible = this._needFill;
         }
 
         private _createDataForListTileObject(): DataForTileBaseRenderer[] {
@@ -83,7 +105,8 @@ namespace TinyWars.MapEditor {
             ConfigManager.forEachTileBaseType((value, baseViewId) => {
                 if (baseViewId !== 0) {
                     dataList.push({
-                        baseViewId: baseViewId,
+                        baseViewId  : baseViewId,
+                        panel       : this,
                     });
                 }
             });
@@ -98,7 +121,8 @@ namespace TinyWars.MapEditor {
     }
 
     type DataForTileBaseRenderer = {
-        baseViewId: number;
+        baseViewId  : number;
+        panel       : MeChooseTileBasePanel;
     }
 
     class TileBaseRenderer extends eui.ItemRenderer {
@@ -130,9 +154,34 @@ namespace TinyWars.MapEditor {
         }
 
         public onItemTapEvent(): void {
-            const data = this.data as DataForTileBaseRenderer;
-            MeChooseTileBasePanel.hide();
-            MeManager.getWar().getDrawer().setModeDrawTileBase(data.baseViewId);
+            const data  = this.data as DataForTileBaseRenderer;
+            const panel = data.panel;
+            if (!panel.getNeedFill()) {
+                panel.close();
+                MeManager.getWar().getDrawer().setModeDrawTileBase(data.baseViewId);
+            } else {
+                Common.ConfirmPanel.show({
+                    title   : Lang.getText(Lang.Type.B0088),
+                    content : Lang.getText(Lang.Type.A0089),
+                    callback: () => {
+                        const war           = MeManager.getWar();
+                        const configVersion = war.getConfigVersion();
+                        war.getTileMap().forEachTile(tile => {
+                            tile.init({
+                                gridX       : tile.getGridX(),
+                                gridY       : tile.getGridY(),
+                                objectViewId: tile.getObjectViewId(),
+                                baseViewId  : data.baseViewId,
+                            }, configVersion);
+                            tile.startRunning(war);
+                            tile.updateView();
+                        });
+
+                        panel.close();
+                        Notify.dispatch(Notify.Type.MeTileChanged, { gridIndex: war.getField().getCursor().getGridIndex() } as Notify.Data.MeTileChanged);
+                    },
+                });
+            }
         }
     }
 }

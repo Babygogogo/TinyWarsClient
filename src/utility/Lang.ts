@@ -442,7 +442,7 @@ namespace TinyWars.Utility.Lang {
         ],
         [Type.A0086]: [
             `注：若新的宽高小于当前宽高，则超出的图块会被裁剪掉（以左上角为原点）`,
-            `Warning: Data that out of the new map will be dismissed!`,
+            `Warning: If width/height is set lower than the current value, right & bottom map area exceeding the limit will be deleted.`,
         ],
         [Type.A0087]: [
             `您输入的宽高不合法，请检查`,
@@ -451,6 +451,10 @@ namespace TinyWars.Utility.Lang {
         [Type.A0088]: [
             `注：偏移后超出范围的图块会被裁剪（以左上角为原点）`,
             `Warning: Data that out of range will be dismissed! The origin point is at the upper left corner.`,
+        ],
+        [Type.A0089]: [
+            `您确定要填充整个地图吗？`,
+            `Are you sure to fill the map?`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1615,6 +1619,10 @@ namespace TinyWars.Utility.Lang {
         [Type.B0293]: [
             `地图偏移`,
             `Map Offset`,
+        ],
+        [Type.B0294]: [
+            `全图填充`,
+            `Fill Map`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
