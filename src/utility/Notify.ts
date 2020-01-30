@@ -92,6 +92,8 @@ namespace TinyWars.Utility.Notify {
         SMmReloadAllMaps,
         SMmMergeMap,
         SMmDeleteMap,
+        SMmGetReviewingMaps,
+        SMmReviewMap,
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         SMcrCreateWar,

@@ -279,39 +279,47 @@ namespace TinyWars.MapEditor {
         }
 
         private _createCommandSaveMap(): DataForCommandRenderer | null {
-            return {
-                name    : Lang.getText(Lang.Type.B0287),
-                callback: () => {
-                    MeConfirmSaveMapPanel.show();
-                },
-            };
+            if (this._war.getIsReview()) {
+                return null;
+            } else {
+                return {
+                    name    : Lang.getText(Lang.Type.B0287),
+                    callback: () => {
+                        MeConfirmSaveMapPanel.show();
+                    },
+                };
+            }
         }
 
         private _createCommandLoadMap(): DataForCommandRenderer | null {
-            return {
-                name    : Lang.getText(Lang.Type.B0288),
-                callback: () => {
-                    Common.ConfirmPanel.show({
-                        title   : Lang.getText(Lang.Type.B0088),
-                        content : Lang.getText(Lang.Type.A0072),
-                        callback: () => {
-                            const war       = this._war;
-                            const slotIndex = war.getSlotIndex();
-                            const data      = MeModel.getData(slotIndex);
-                            war.stopRunning()
-                                .init(
-                                    (data ? data.mapRawData as Types.MapRawData : null) || MeUtility.createDefaultMapRawData(slotIndex),
-                                    slotIndex,
-                                    war.getConfigVersion(),
-                                    war.getIsReview()
-                                )
-                                .startRunning()
-                                .startRunningView();
-                            this.close();
-                        },
-                    })
-                },
-            };
+            if (this._war.getIsReview()) {
+                return null;
+            } else {
+                return {
+                    name    : Lang.getText(Lang.Type.B0288),
+                    callback: () => {
+                        Common.ConfirmPanel.show({
+                            title   : Lang.getText(Lang.Type.B0088),
+                            content : Lang.getText(Lang.Type.A0072),
+                            callback: () => {
+                                const war       = this._war;
+                                const slotIndex = war.getSlotIndex();
+                                const data      = MeModel.getData(slotIndex);
+                                war.stopRunning()
+                                    .init(
+                                        (data ? data.mapRawData as Types.MapRawData : null) || MeUtility.createDefaultMapRawData(slotIndex),
+                                        slotIndex,
+                                        war.getConfigVersion(),
+                                        war.getIsReview()
+                                    )
+                                    .startRunning()
+                                    .startRunningView();
+                                this.close();
+                            },
+                        })
+                    },
+                };
+            }
         }
 
         private _createCommandGotoLobby(): DataForCommandRenderer | undefined {
@@ -356,20 +364,28 @@ namespace TinyWars.MapEditor {
             }
         }
         private _createCommandResize(): DataForCommandRenderer | null {
-            return {
-                name    : Lang.getText(Lang.Type.B0290),
-                callback: () => {
-                    MeResizePanel.show();
-                },
-            };
+            if (this._war.getIsReview()) {
+                return null;
+            } else {
+                return {
+                    name    : Lang.getText(Lang.Type.B0290),
+                    callback: () => {
+                        MeResizePanel.show();
+                    },
+                };
+            }
         }
         private _createCommandOffset(): DataForCommandRenderer | null {
-            return {
-                name    : Lang.getText(Lang.Type.B0293),
-                callback: () => {
-                    MeOffsetPanel.show();
-                },
-            };
+            if (this._war.getIsReview()) {
+                return null;
+            } else {
+                return {
+                    name    : Lang.getText(Lang.Type.B0293),
+                    callback: () => {
+                        MeOffsetPanel.show();
+                    },
+                };
+            }
         }
     }
 

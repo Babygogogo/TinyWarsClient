@@ -13,6 +13,8 @@ namespace TinyWars.WarMap {
         const _RAW_DATA_DICT        = new Map<string, MapRawData>();
         const _EXTRA_DATA_DICT      = new Map<string, MapExtraData>();
 
+        let _reviewingMaps  : ProtoTypes.IMapEditorData[];
+
         export function init(): void {
         }
 
@@ -119,6 +121,13 @@ namespace TinyWars.WarMap {
                 (data) && (_RAW_DATA_DICT.set(mapFileName, data));
             }
             return _RAW_DATA_DICT.get(mapFileName);
+        }
+
+        export function setMmReviewingMaps(maps: ProtoTypes.IMapEditorData[]): void {
+            _reviewingMaps = maps;
+        }
+        export function getMmReviewingMaps(): ProtoTypes.IMapEditorData[] {
+            return _reviewingMaps;
         }
     }
 }

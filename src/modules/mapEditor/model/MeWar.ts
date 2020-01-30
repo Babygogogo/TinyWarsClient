@@ -5,6 +5,8 @@ namespace TinyWars.MapEditor {
     export class MeWar {
         private _slotIndex      : number;
         private _configVersion  : string;
+        private _designerUserId : number;
+        private _modifiedTime   : number;
         private _isReview       : boolean;
         private _isRunning      = false;
 
@@ -16,6 +18,8 @@ namespace TinyWars.MapEditor {
             this._setSlotIndex(slotIndex);
             this._setConfigVersion(configVersion);
             this._setIsReview(isReview);
+            this._setDesignerUserId(data.designerUserId);
+            this._setModifiedTime(data.modifiedTime);
 
             this._setField((this.getField() || new MeField()).init(data, configVersion));
             this._setDrawer((this.getDrawer() || new MeDrawer()).init(data));
@@ -78,6 +82,20 @@ namespace TinyWars.MapEditor {
         }
         public getConfigVersion(): string {
             return this._configVersion;
+        }
+
+        private _setDesignerUserId(id: number): void {
+            this._designerUserId = id;
+        }
+        public getDesignerUserId(): number {
+            return this._designerUserId;
+        }
+
+        private _setModifiedTime(time: number): void {
+            this._modifiedTime = time;
+        }
+        public getModifiedTime(): number {
+            return this._modifiedTime;
         }
 
         private _setField(field: MeField): void {

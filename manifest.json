@@ -100,6 +100,7 @@
 		"bin-debug/modules/mapManagement/view/MmAvailabilitySearchPanel.js",
 		"bin-debug/modules/mapManagement/view/MmMainMenuPanel.js",
 		"bin-debug/modules/mapManagement/view/MmMergeListPanel.js",
+		"bin-debug/modules/mapManagement/view/MmReviewListPanel.js",
 		"bin-debug/modules/multiCustomRoom/model/McrModel.js",
 		"bin-debug/modules/multiCustomRoom/model/McrProxy.js",
 		"bin-debug/modules/multiCustomRoom/view/McrContinueDetailPanel.js",

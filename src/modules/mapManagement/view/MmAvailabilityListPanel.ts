@@ -181,28 +181,6 @@ namespace TinyWars.MapManagement {
             return data.sort((a, b) => a.mapName.localeCompare(b.mapName, "zh"));
         }
 
-        private _createUnitViewDataList(unitViewIds: number[], mapWidth: number, mapHeight: number): Types.UnitViewData[] {
-            const configVersion = ConfigManager.getNewestConfigVersion();
-            const dataList      : Types.UnitViewData[] = [];
-
-            let index  = 0;
-            for (let y = 0; y < mapHeight; ++y) {
-                for (let x = 0; x < mapWidth; ++x) {
-                    const viewId = unitViewIds[index];
-                    ++index;
-                    if (viewId > 0) {
-                        dataList.push({
-                            configVersion: configVersion,
-                            gridX        : x,
-                            gridY        : y,
-                            viewId       : viewId,
-                        });
-                    }
-                }
-            }
-            return dataList;
-        }
-
         private async _showMap(mapFileName: string): Promise<void> {
             const mapRawData                = await WarMapModel.getMapRawData(mapFileName);
             const mapExtraData              = await WarMapModel.getExtraData(mapFileName);
@@ -222,7 +200,7 @@ namespace TinyWars.MapManagement {
             tileMapView.updateWithObjectViewIdArray(mapRawData.tileObjects);
 
             const unitMapView = new WarMap.WarMapUnitMapView();
-            unitMapView.initWithDataList(this._createUnitViewDataList(mapRawData.units, mapRawData.mapWidth, mapRawData.mapHeight));
+            unitMapView.initWithMapRawData(mapRawData);
 
             const gridSize = ConfigManager.getGridSize();
             this._zoomMap.removeAllContents();

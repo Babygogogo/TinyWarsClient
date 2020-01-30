@@ -456,6 +456,22 @@ namespace TinyWars.Utility.Lang {
             `您确定要填充整个地图吗？`,
             `Are you sure to fill the map?`,
         ],
+        [Type.A0090]: [
+            `您确定要让过审此地图吗？`,
+            `Are you sure to accept the map?`,
+        ],
+        [Type.A0091]: [
+            `您确定要拒审此地图吗？`,
+            `Are you sure to reject the map?`,
+        ],
+        [Type.A0092]: [
+            `您已成功过审该地图。`,
+            `You have accepted the map successfully.`,
+        ],
+        [Type.A0093]: [
+            `您已成功拒审该地图。`,
+            `You have rejected the map successfully.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -1623,6 +1639,18 @@ namespace TinyWars.Utility.Lang {
         [Type.B0294]: [
             `全图填充`,
             `Fill Map`,
+        ],
+        [Type.B0295]: [
+            `审核地图`,
+            `Review Maps`,
+        ],
+        [Type.B0296]: [
+            `过审`,
+            `Accept`,
+        ],
+        [Type.B0297]: [
+            `拒审`,
+            `Reject`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

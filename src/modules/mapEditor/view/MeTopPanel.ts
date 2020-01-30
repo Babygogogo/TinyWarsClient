@@ -1,10 +1,8 @@
 
 namespace TinyWars.MapEditor {
-    import ConfirmPanel     = Common.ConfirmPanel;
-    import BwHelpers        = BaseWar.BwHelpers;
     import FloatText        = Utility.FloatText;
     import Lang             = Utility.Lang;
-    import Helpers          = Utility.Helpers;
+    import ProtoTypes       = Utility.ProtoTypes;
     import Notify           = Utility.Notify;
     import Types            = Utility.Types;
     import DrawerMode       = Types.MapEditorDrawerMode;
@@ -27,12 +25,9 @@ namespace TinyWars.MapEditor {
         private _btnModeDrawUnit        : GameUi.UiButton;
         private _btnModeDeleteTileObject: GameUi.UiButton;
         private _btnModeDeleteUnit      : GameUi.UiButton;
-
-        private _btnUnitList        : GameUi.UiButton;
-        private _btnFindBuilding    : GameUi.UiButton;
-        private _btnEndTurn         : GameUi.UiButton;
-        private _btnCancel          : GameUi.UiButton;
-        private _btnMenu            : GameUi.UiButton;
+        private _btnReviewAccept        : GameUi.UiButton;
+        private _btnReviewReject        : GameUi.UiButton;
+        private _btnMenu                : GameUi.UiButton;
 
         private _unitView   = new MeUnitView();
         private _tileView   = new MeTileSimpleView();
@@ -71,6 +66,7 @@ namespace TinyWars.MapEditor {
                 { type: Notify.Type.BwCoEnergyChanged,              callback: this._onNotifyBwCoEnergyChanged },
                 { type: Notify.Type.BwCoUsingSkillTypeChanged,      callback: this._onNotifyBwCoUsingSkillChanged },
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
+                { type: Notify.Type.SMmReviewMap,                   callback: this._onNotifySMmReviewMap },
             ];
             this._uiListeners = [
                 { ui: this._btnModePreview,             callback: this._onTouchedBtnModePreview },
@@ -79,10 +75,8 @@ namespace TinyWars.MapEditor {
                 { ui: this._btnModeDrawUnit,            callback: this._onTouchedBtnModeDrawUnit },
                 { ui: this._btnModeDeleteTileObject,    callback: this._onTouchedBtnModeDeleteTileObject },
                 { ui: this._btnModeDeleteUnit,          callback: this._onTouchedBtnModeDeleteUnit },
-                { ui: this._btnUnitList,                callback: this._onTouchedBtnUnitList, },
-                { ui: this._btnFindBuilding,            callback: this._onTouchedBtnFindBuilding, },
-                { ui: this._btnEndTurn,                 callback: this._onTouchedBtnEndTurn, },
-                { ui: this._btnCancel,                  callback: this._onTouchedBtnCancel },
+                { ui: this._btnReviewAccept,            callback: this._onTouchedBtnReviewAccept },
+                { ui: this._btnReviewReject,            callback: this._onTouchedBtnReviewReject },
                 { ui: this._btnMenu,                    callback: this._onTouchedBtnMenu, },
             ];
             this._conTileView.addChild(this._tileView.getImgBase());
@@ -121,26 +115,35 @@ namespace TinyWars.MapEditor {
             this._updateGroupMode();
         }
         private _onNotifyBwTurnPhaseCodeChanged(e: egret.Event): void {
-            this._updateBtnEndTurn();
-            this._updateBtnFindUnit();
-            this._updateBtnFindBuilding();
-            this._updateBtnCancel();
+            this._updateBtnModePreview();
+            this._updateBtnDrawTileBase();
+            this._updateBtnDeleteUnit();
+            this._updateBtnDeleteTileObject();
         }
         private _onNotifyBwPlayerFundChanged(e: egret.Event): void {
-            this._updateLabelFund();
+            this._updateBtnModeDrawUnit();
         }
         private _onNotifyBwPlayerIndexInTurnChanged(e: egret.Event): void {
             this._updateView();
         }
         private _onNotifyBwCoEnergyChanged(e: egret.Event): void {
-            this._updateLabelCoAndEnergy();
+            this._updateBtnModeDrawTileObject();
         }
         private _onNotifyBwCoUsingSkillChanged(e: egret.Event): void {
-            this._updateLabelCoAndEnergy();
+            this._updateBtnModeDrawTileObject();
         }
         private _onNotifyBwActionPlannerStateChanged(e: egret.Event): void {
-            this._updateBtnEndTurn();
-            this._updateBtnCancel();
+            this._updateBtnModePreview();
+            this._updateBtnDeleteTileObject();
+        }
+        private _onNotifySMmReviewMap(e: egret.Event): void {
+            const data = e.data as ProtoTypes.IS_MmReviewMap;
+            if (data.isAccept) {
+                FloatText.show(Lang.getText(Lang.Type.A0092));
+            } else {
+                FloatText.show(Lang.getText(Lang.Type.A0093));
+            }
+            Utility.FlowManager.gotoLobby();
         }
 
         private _onTouchedBtnModePreview(e: egret.TouchEvent): void {
@@ -161,15 +164,27 @@ namespace TinyWars.MapEditor {
         private _onTouchedBtnModeDeleteUnit(e: egret.TouchEvent): void {
             this._drawer.setModeDeleteUnit();
         }
+        private _onTouchedBtnReviewAccept(e: egret.TouchEvent): void {
+            Common.ConfirmPanel.show({
+                title   : Lang.getText(Lang.Type.B0088),
+                content : Lang.getText(Lang.Type.A0090),
+                callback: () => {
+                    const war = this._war;
+                    WarMap.WarMapProxy.reqReviewMap(war.getDesignerUserId(), war.getSlotIndex(), war.getModifiedTime(), true);
+                },
+            });
+        }
+        private _onTouchedBtnReviewReject(e: egret.TouchEvent): void {
+            Common.ConfirmPanel.show({
+                title   : Lang.getText(Lang.Type.B0088),
+                content : Lang.getText(Lang.Type.A0091),
+                callback: () => {
+                    const war = this._war;
+                    WarMap.WarMapProxy.reqReviewMap(war.getDesignerUserId(), war.getSlotIndex(), war.getModifiedTime(), false);
+                },
+            });
+        }
 
-        private _onTouchedBtnUnitList(e: egret.TouchEvent): void {
-        }
-        private _onTouchedBtnFindBuilding(e: egret.TouchEvent): void {
-        }
-        private _onTouchedBtnEndTurn(e: egret.TouchEvent): void {
-        }
-        private _onTouchedBtnCancel(e: egret.TouchEvent): void {
-        }
         private _onTouchedBtnMenu(e: egret.TouchEvent): void {
             MeWarMenuPanel.show();
         }
@@ -181,12 +196,14 @@ namespace TinyWars.MapEditor {
             this._updateComponentsForLanguage();
 
             this._updateGroupMode();
-            this._updateLabelFund();
-            this._updateLabelCoAndEnergy();
-            this._updateBtnEndTurn();
-            this._updateBtnFindUnit();
-            this._updateBtnFindBuilding();
-            this._updateBtnCancel();
+            this._updateBtnModePreview();
+            this._updateBtnModeDrawUnit();
+            this._updateBtnModeDrawTileObject();
+            this._updateBtnDrawTileBase();
+            this._updateBtnDeleteUnit();
+            this._updateBtnDeleteTileObject();
+            this._updateBtnReviewAccept();
+            this._updateBtnReviewReject();
             this._updateBtnMenu();
         }
 
@@ -199,6 +216,8 @@ namespace TinyWars.MapEditor {
             this._btnModeDrawTileBase.label     = Lang.getText(Lang.Type.B0282);
             this._btnModeDeleteUnit.label       = Lang.getText(Lang.Type.B0284);
             this._btnModeDeleteTileObject.label = Lang.getText(Lang.Type.B0285);
+            this._btnReviewAccept.label         = Lang.getText(Lang.Type.B0296);
+            this._btnReviewReject.label         = Lang.getText(Lang.Type.B0297);
         }
 
         private _updateGroupMode(): void {
@@ -249,22 +268,36 @@ namespace TinyWars.MapEditor {
             }
         }
 
-        private _updateLabelFund(): void {
+        private _updateBtnModeDrawUnit(): void {
+            this._btnModeDrawUnit.visible = !this._war.getIsReview();
         }
 
-        private _updateLabelCoAndEnergy(): void {
+        private _updateBtnModeDrawTileObject(): void {
+            this._btnModeDrawTileObject.visible = !this._war.getIsReview();
         }
 
-        private _updateBtnEndTurn(): void {
+        private _updateBtnModePreview(): void {
+            this._btnModePreview.visible = !this._war.getIsReview();
         }
 
-        private _updateBtnFindUnit(): void {
+        private _updateBtnDrawTileBase(): void {
+            this._btnModeDrawTileBase.visible = !this._war.getIsReview();
         }
 
-        private _updateBtnFindBuilding(): void {
+        private _updateBtnDeleteUnit(): void {
+            this._btnModeDeleteUnit.visible = !this._war.getIsReview();
         }
 
-        private _updateBtnCancel(): void {
+        private _updateBtnDeleteTileObject(): void {
+            this._btnModeDeleteTileObject.visible = !this._war.getIsReview();
+        }
+
+        private _updateBtnReviewAccept(): void {
+            this._btnReviewAccept.visible = this._war.getIsReview();
+        }
+
+        private _updateBtnReviewReject(): void {
+            this._btnReviewReject.visible = this._war.getIsReview();
         }
 
         private _updateBtnMenu(): void {

@@ -1893,6 +1893,9 @@ export declare interface IMapRawData {
 
     /** MapRawData designerUserId */
     designerUserId?: (number|null);
+
+    /** MapRawData modifiedTime */
+    modifiedTime?: (number|null);
 }
 
 /** Represents a MapRawData. */
@@ -1945,6 +1948,9 @@ export declare class MapRawData implements IMapRawData {
 
     /** MapRawData designerUserId. */
     public designerUserId: number;
+
+    /** MapRawData modifiedTime. */
+    public modifiedTime: number;
 
     /**
      * Creates a new MapRawData instance using the specified properties.
@@ -2043,6 +2049,9 @@ export declare interface IMapExtraData {
 
     /** MapExtraData designerUserId */
     designerUserId?: (number|null);
+
+    /** MapExtraData modifiedTime */
+    modifiedTime?: (number|null);
 
     /** MapExtraData isDeleted */
     isDeleted?: (number|null);
@@ -2176,6 +2185,9 @@ export declare class MapExtraData implements IMapExtraData {
 
     /** MapExtraData designerUserId. */
     public designerUserId: number;
+
+    /** MapExtraData modifiedTime. */
+    public modifiedTime: number;
 
     /** MapExtraData isDeleted. */
     public isDeleted: number;
@@ -2350,6 +2362,9 @@ export declare class MapExtraData implements IMapExtraData {
 /** Properties of a MapEditorData. */
 export declare interface IMapEditorData {
 
+    /** MapEditorData designerUserId */
+    designerUserId?: (number|null);
+
     /** MapEditorData slotIndex */
     slotIndex?: (number|null);
 
@@ -2368,6 +2383,9 @@ export declare class MapEditorData implements IMapEditorData {
      * @param [properties] Properties to set
      */
     constructor(properties?: IMapEditorData);
+
+    /** MapEditorData designerUserId. */
+    public designerUserId: number;
 
     /** MapEditorData slotIndex. */
     public slotIndex: number;
@@ -8623,6 +8641,18 @@ export declare interface IMessageContainer {
     /** MessageContainer S_MmDeleteMap */
     S_MmDeleteMap?: (IS_MmDeleteMap|null);
 
+    /** MessageContainer C_MmGetReviewingMaps */
+    C_MmGetReviewingMaps?: (IC_MmGetReviewingMaps|null);
+
+    /** MessageContainer S_MmGetReviewingMaps */
+    S_MmGetReviewingMaps?: (IS_MmGetReviewingMaps|null);
+
+    /** MessageContainer C_MmReviewMap */
+    C_MmReviewMap?: (IC_MmReviewMap|null);
+
+    /** MessageContainer S_MmReviewMap */
+    S_MmReviewMap?: (IS_MmReviewMap|null);
+
     /** MessageContainer C_McrCreateWar */
     C_McrCreateWar?: (IC_McrCreateWar|null);
 
@@ -9007,6 +9037,18 @@ export declare class MessageContainer implements IMessageContainer {
 
     /** MessageContainer S_MmDeleteMap. */
     public S_MmDeleteMap?: (IS_MmDeleteMap|null);
+
+    /** MessageContainer C_MmGetReviewingMaps. */
+    public C_MmGetReviewingMaps?: (IC_MmGetReviewingMaps|null);
+
+    /** MessageContainer S_MmGetReviewingMaps. */
+    public S_MmGetReviewingMaps?: (IS_MmGetReviewingMaps|null);
+
+    /** MessageContainer C_MmReviewMap. */
+    public C_MmReviewMap?: (IC_MmReviewMap|null);
+
+    /** MessageContainer S_MmReviewMap. */
+    public S_MmReviewMap?: (IS_MmReviewMap|null);
 
     /** MessageContainer C_McrCreateWar. */
     public C_McrCreateWar?: (IC_McrCreateWar|null);
@@ -12260,6 +12302,390 @@ export declare class S_MmDeleteMap implements IS_MmDeleteMap {
 
     /**
      * Converts this S_MmDeleteMap to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_MmGetReviewingMaps. */
+export declare interface IC_MmGetReviewingMaps {
+}
+
+/** Represents a C_MmGetReviewingMaps. */
+export declare class C_MmGetReviewingMaps implements IC_MmGetReviewingMaps {
+
+    /**
+     * Constructs a new C_MmGetReviewingMaps.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_MmGetReviewingMaps);
+
+    /**
+     * Creates a new C_MmGetReviewingMaps instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_MmGetReviewingMaps instance
+     */
+    public static create(properties?: IC_MmGetReviewingMaps): C_MmGetReviewingMaps;
+
+    /**
+     * Encodes the specified C_MmGetReviewingMaps message. Does not implicitly {@link C_MmGetReviewingMaps.verify|verify} messages.
+     * @param message C_MmGetReviewingMaps message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_MmGetReviewingMaps, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_MmGetReviewingMaps message, length delimited. Does not implicitly {@link C_MmGetReviewingMaps.verify|verify} messages.
+     * @param message C_MmGetReviewingMaps message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_MmGetReviewingMaps, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_MmGetReviewingMaps message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_MmGetReviewingMaps
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_MmGetReviewingMaps;
+
+    /**
+     * Decodes a C_MmGetReviewingMaps message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_MmGetReviewingMaps
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_MmGetReviewingMaps;
+
+    /**
+     * Verifies a C_MmGetReviewingMaps message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_MmGetReviewingMaps message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_MmGetReviewingMaps
+     */
+    public static fromObject(object: { [k: string]: any }): C_MmGetReviewingMaps;
+
+    /**
+     * Creates a plain object from a C_MmGetReviewingMaps message. Also converts values to other types if specified.
+     * @param message C_MmGetReviewingMaps
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_MmGetReviewingMaps, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_MmGetReviewingMaps to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_MmGetReviewingMaps. */
+export declare interface IS_MmGetReviewingMaps {
+
+    /** S_MmGetReviewingMaps errorCode */
+    errorCode?: (number|null);
+
+    /** S_MmGetReviewingMaps maps */
+    maps?: (IMapEditorData[]|null);
+}
+
+/** Represents a S_MmGetReviewingMaps. */
+export declare class S_MmGetReviewingMaps implements IS_MmGetReviewingMaps {
+
+    /**
+     * Constructs a new S_MmGetReviewingMaps.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_MmGetReviewingMaps);
+
+    /** S_MmGetReviewingMaps errorCode. */
+    public errorCode: number;
+
+    /** S_MmGetReviewingMaps maps. */
+    public maps: IMapEditorData[];
+
+    /**
+     * Creates a new S_MmGetReviewingMaps instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_MmGetReviewingMaps instance
+     */
+    public static create(properties?: IS_MmGetReviewingMaps): S_MmGetReviewingMaps;
+
+    /**
+     * Encodes the specified S_MmGetReviewingMaps message. Does not implicitly {@link S_MmGetReviewingMaps.verify|verify} messages.
+     * @param message S_MmGetReviewingMaps message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_MmGetReviewingMaps, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_MmGetReviewingMaps message, length delimited. Does not implicitly {@link S_MmGetReviewingMaps.verify|verify} messages.
+     * @param message S_MmGetReviewingMaps message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_MmGetReviewingMaps, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_MmGetReviewingMaps message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_MmGetReviewingMaps
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_MmGetReviewingMaps;
+
+    /**
+     * Decodes a S_MmGetReviewingMaps message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_MmGetReviewingMaps
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_MmGetReviewingMaps;
+
+    /**
+     * Verifies a S_MmGetReviewingMaps message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_MmGetReviewingMaps message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_MmGetReviewingMaps
+     */
+    public static fromObject(object: { [k: string]: any }): S_MmGetReviewingMaps;
+
+    /**
+     * Creates a plain object from a S_MmGetReviewingMaps message. Also converts values to other types if specified.
+     * @param message S_MmGetReviewingMaps
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_MmGetReviewingMaps, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_MmGetReviewingMaps to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_MmReviewMap. */
+export declare interface IC_MmReviewMap {
+
+    /** C_MmReviewMap designerUserId */
+    designerUserId?: (number|null);
+
+    /** C_MmReviewMap slotIndex */
+    slotIndex?: (number|null);
+
+    /** C_MmReviewMap modifiedTime */
+    modifiedTime?: (number|null);
+
+    /** C_MmReviewMap isAccept */
+    isAccept?: (boolean|null);
+}
+
+/** Represents a C_MmReviewMap. */
+export declare class C_MmReviewMap implements IC_MmReviewMap {
+
+    /**
+     * Constructs a new C_MmReviewMap.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_MmReviewMap);
+
+    /** C_MmReviewMap designerUserId. */
+    public designerUserId: number;
+
+    /** C_MmReviewMap slotIndex. */
+    public slotIndex: number;
+
+    /** C_MmReviewMap modifiedTime. */
+    public modifiedTime: number;
+
+    /** C_MmReviewMap isAccept. */
+    public isAccept: boolean;
+
+    /**
+     * Creates a new C_MmReviewMap instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_MmReviewMap instance
+     */
+    public static create(properties?: IC_MmReviewMap): C_MmReviewMap;
+
+    /**
+     * Encodes the specified C_MmReviewMap message. Does not implicitly {@link C_MmReviewMap.verify|verify} messages.
+     * @param message C_MmReviewMap message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_MmReviewMap, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_MmReviewMap message, length delimited. Does not implicitly {@link C_MmReviewMap.verify|verify} messages.
+     * @param message C_MmReviewMap message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_MmReviewMap, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_MmReviewMap message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_MmReviewMap
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_MmReviewMap;
+
+    /**
+     * Decodes a C_MmReviewMap message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_MmReviewMap
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_MmReviewMap;
+
+    /**
+     * Verifies a C_MmReviewMap message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_MmReviewMap message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_MmReviewMap
+     */
+    public static fromObject(object: { [k: string]: any }): C_MmReviewMap;
+
+    /**
+     * Creates a plain object from a C_MmReviewMap message. Also converts values to other types if specified.
+     * @param message C_MmReviewMap
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_MmReviewMap, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_MmReviewMap to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_MmReviewMap. */
+export declare interface IS_MmReviewMap {
+
+    /** S_MmReviewMap errorCode */
+    errorCode?: (number|null);
+
+    /** S_MmReviewMap isAccept */
+    isAccept?: (boolean|null);
+}
+
+/** Represents a S_MmReviewMap. */
+export declare class S_MmReviewMap implements IS_MmReviewMap {
+
+    /**
+     * Constructs a new S_MmReviewMap.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_MmReviewMap);
+
+    /** S_MmReviewMap errorCode. */
+    public errorCode: number;
+
+    /** S_MmReviewMap isAccept. */
+    public isAccept: boolean;
+
+    /**
+     * Creates a new S_MmReviewMap instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_MmReviewMap instance
+     */
+    public static create(properties?: IS_MmReviewMap): S_MmReviewMap;
+
+    /**
+     * Encodes the specified S_MmReviewMap message. Does not implicitly {@link S_MmReviewMap.verify|verify} messages.
+     * @param message S_MmReviewMap message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_MmReviewMap, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_MmReviewMap message, length delimited. Does not implicitly {@link S_MmReviewMap.verify|verify} messages.
+     * @param message S_MmReviewMap message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_MmReviewMap, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_MmReviewMap message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_MmReviewMap
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_MmReviewMap;
+
+    /**
+     * Decodes a S_MmReviewMap message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_MmReviewMap
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_MmReviewMap;
+
+    /**
+     * Verifies a S_MmReviewMap message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_MmReviewMap message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_MmReviewMap
+     */
+    public static fromObject(object: { [k: string]: any }): S_MmReviewMap;
+
+    /**
+     * Creates a plain object from a S_MmReviewMap message. Also converts values to other types if specified.
+     * @param message S_MmReviewMap
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_MmReviewMap, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_MmReviewMap to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };

@@ -57,14 +57,14 @@ namespace TinyWars.MapEditor {
 
         protected _onOpened(): void {
             this._updateComponentsForLanguage();
-            this._needReview            = false;
-            this._imgNeedReview.visible = false;
+            this._needReview = false;
+            this._updateImgNeedReview();
 
             const war = MeManager.getWar();
             war.getUnitMap().reviseAllUnitIds();
 
             const mapRawData                = war.getField().serialize();
-            const isValidMap                = MeUtility.checkIsValidMap(mapRawData, User.UserModel.getSelfUserId());
+            const isValidMap                = MeUtility.checkIsValidMap(mapRawData);
             this._mapRawData                = mapRawData;
             this._slotIndex                 = war.getSlotIndex();
             this._labelReviewDesc.visible   = !isValidMap;
@@ -76,29 +76,25 @@ namespace TinyWars.MapEditor {
         }
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            MeProxy.reqSaveMap(this._slotIndex, this._mapRawData, this._needReview);
-            this.close();
+            const needReview = this._needReview;
+            if ((!needReview) || (!MeModel.checkHasReviewingMap())) {
+                MeProxy.reqSaveMap(this._slotIndex, this._mapRawData, needReview);
+                this.close();
+            } else {
+                Common.ConfirmPanel.show({
+                    title   : Lang.getText(Lang.Type.B0088),
+                    content : Lang.getText(Lang.Type.A0084),
+                    callback: () => {
+                        MeProxy.reqSaveMap(this._slotIndex, this._mapRawData, needReview);
+                        this.close();
+                    },
+                });
+            }
         }
 
         private _onTouchedGroupNeedReview(e: egret.TouchEvent): void {
-            if (this._needReview) {
-                this._needReview            = false;
-                this._imgNeedReview.visible = false;
-            } else {
-                if (!MeModel.checkHasReviewingMap()) {
-                    this._needReview            = true;
-                    this._imgNeedReview.visible = true;
-                } else {
-                    Common.ConfirmPanel.show({
-                        title   : Lang.getText(Lang.Type.B0088),
-                        content : Lang.getText(Lang.Type.A0084),
-                        callback: () => {
-                            this._needReview            = true;
-                            this._imgNeedReview.visible = true;
-                        },
-                    });
-                }
-            }
+            this._needReview = !this._needReview;
+            this._updateImgNeedReview();
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
@@ -112,6 +108,10 @@ namespace TinyWars.MapEditor {
             this._labelReviewDesc.text  = Lang.getText(Lang.Type.A0083);
             this._labelNeedReview.text  = Lang.getText(Lang.Type.B0289);
             this._labelContent.setRichText(Lang.getText(Lang.Type.A0082));
+        }
+
+        private _updateImgNeedReview(): void {
+            this._imgNeedReview.visible = this._needReview;
         }
     }
 }

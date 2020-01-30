@@ -29,11 +29,7 @@ namespace TinyWars.MapEditor.MeUtility {
         }
     }
 
-    export function checkIsValidMap(mapRawData: ProtoTypes.IMapRawData, userId: number): boolean {
-        if (mapRawData.designerUserId !== userId) {
-            return false;
-        }
-
+    export function checkIsValidMap(mapRawData: ProtoTypes.IMapRawData): boolean {
         return (checkIsMapDesignerValid(mapRawData.mapDesigner))
             && (checkIsMapNameValid(mapRawData.mapName))
             && (checkIsMapNameEnglishValid(mapRawData.mapNameEnglish))

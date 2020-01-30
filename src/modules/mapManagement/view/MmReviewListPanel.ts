@@ -1,5 +1,5 @@
 
-namespace TinyWars.MapEditor {
+namespace TinyWars.MapManagement {
     import Notify       = Utility.Notify;
     import Types        = Utility.Types;
     import FloatText    = Utility.FloatText;
@@ -7,12 +7,13 @@ namespace TinyWars.MapEditor {
     import Lang         = Utility.Lang;
     import ProtoTypes   = Utility.ProtoTypes;
     import WarMapModel  = WarMap.WarMapModel;
+    import WarMapProxy  = WarMap.WarMapProxy;
 
-    export class MeMapListPanel extends GameUi.UiPanel {
+    export class MmReviewListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: MeMapListPanel;
+        private static _instance: MmReviewListPanel;
 
         private _zoomMap        : GameUi.UiZoomableComponent;
         private _labelNoData    : GameUi.UiLabel;
@@ -25,14 +26,14 @@ namespace TinyWars.MapEditor {
         private _selectedWarIndex   : number;
 
         public static show(): void {
-            if (!MeMapListPanel._instance) {
-                MeMapListPanel._instance = new MeMapListPanel();
+            if (!MmReviewListPanel._instance) {
+                MmReviewListPanel._instance = new MmReviewListPanel();
             }
-            MeMapListPanel._instance.open();
+            MmReviewListPanel._instance.open();
         }
         public static hide(): void {
-            if (MeMapListPanel._instance) {
-                MeMapListPanel._instance.close();
+            if (MmReviewListPanel._instance) {
+                MmReviewListPanel._instance.close();
             }
         }
 
@@ -40,13 +41,13 @@ namespace TinyWars.MapEditor {
             super();
 
             this._setAutoAdjustHeightEnabled();
-            this.skinName = "resource/skins/mapEditor/MeMapListPanel.exml";
+            this.skinName = "resource/skins/mapManagement/MmReviewListPanel.exml";
         }
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.SMeGetDataList,     callback: this._onNotifySMeGetDataList },
+                { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.SMmGetReviewingMaps,    callback: this._onNotifySMmGetReviewingMaps },
             ];
             this._uiListeners = [
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
@@ -59,9 +60,10 @@ namespace TinyWars.MapEditor {
             this._zoomMap.setTouchListenerEnabled(true);
 
             this._updateComponentsForLanguage();
-            this._labelLoading.visible = true;
+            this._labelLoading.visible  = true;
+            this._labelNoData.visible   = false;
 
-            MeProxy.reqGetDataList();
+            WarMapProxy.reqMmGetReviewingMaps();
         }
 
         protected _onClosed(): void {
@@ -95,14 +97,16 @@ namespace TinyWars.MapEditor {
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onNotifySMeGetDataList(e: egret.Event): void {
-            const newData               = this._createDataForListMap(MeModel.getDataDict());
+        private _onNotifySMmGetReviewingMaps(e: egret.Event): void {
+            const newData               = this._createDataForListMap(WarMapModel.getMmReviewingMaps());
             this._dataForListMap        = newData;
             this._labelLoading.visible  = false;
 
             if (newData.length > 0) {
+                this._labelNoData.visible = false;
                 this._listMap.bindData(newData);
             } else {
+                this._labelNoData.visible = true;
                 this._listMap.clear();
             }
             this.setSelectedIndex(0);
@@ -114,7 +118,7 @@ namespace TinyWars.MapEditor {
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
             this.close();
-            Utility.FlowManager.gotoLobby();
+            MmMainMenuPanel.show();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -127,15 +131,15 @@ namespace TinyWars.MapEditor {
             this._btnBack.label         = Lang.getText(Lang.Type.B0146);
         }
 
-        private _createDataForListMap(dict: Map<number, Types.MeMapData>): DataForMapRenderer[] {
+        private _createDataForListMap(rawDataList: ProtoTypes.IMapEditorData[] | null): DataForMapRenderer[] {
             const dataList: DataForMapRenderer[] = [];
 
             let index = 0;
-            for (const [slotIndex, info] of dict) {
+            for (const data of rawDataList || []) {
                 dataList.push({
                     index,
                     panel   : this,
-                    mapData : info,
+                    mapData : data,
                 });
                 ++index;
             }
@@ -146,12 +150,9 @@ namespace TinyWars.MapEditor {
         private async _showMap(index: number): Promise<void> {
             const mapData = this._dataForListMap[index].mapData.mapRawData;
             if (!mapData) {
-                this._labelNoData.visible = true;
                 this._zoomMap.removeAllContents();
 
             } else {
-                this._labelNoData.visible = false;
-
                 const tileMapView = new WarMap.WarMapTileMapView();
                 tileMapView.init(mapData.mapWidth, mapData.mapHeight);
                 tileMapView.updateWithBaseViewIdArray(mapData.tileBases);
@@ -173,8 +174,8 @@ namespace TinyWars.MapEditor {
 
     type DataForMapRenderer = {
         index   : number;
-        mapData : Types.MeMapData;
-        panel   : MeMapListPanel;
+        mapData : ProtoTypes.IMapEditorData;
+        panel   : MmReviewListPanel;
     }
 
     class MapRenderer extends eui.ItemRenderer {
@@ -210,7 +211,7 @@ namespace TinyWars.MapEditor {
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
             const data = (this.data as DataForMapRenderer).mapData;
-            Utility.FlowManager.gotoMapEditor(data.mapRawData as Types.MapRawData, data.slotIndex, false);
+            Utility.FlowManager.gotoMapEditor(data.mapRawData as Types.MapRawData, data.slotIndex, true);
         }
     }
 

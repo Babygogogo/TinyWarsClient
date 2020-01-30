@@ -15,6 +15,8 @@ namespace TinyWars.WarMap.WarMapProxy {
             { msgCode: MsgCode.S_MmReloadAllMaps,               callback: _onSMmReloadAllMaps },
             { msgCode: MsgCode.S_MmMergeMap,                    callback: _onSMmMergeMap },
             { msgCode: MsgCode.S_MmDeleteMap,                   callback: _onSMmDeleteMap },
+            { msgCode: MsgCode.S_MmGetReviewingMaps,            callback: _onSMmGetReviewingMaps },
+            { msgCode: MsgCode.S_MmReviewMap,                   callback: _onSMmReviewMap },
         ], WarMapProxy);
     }
 
@@ -125,6 +127,36 @@ namespace TinyWars.WarMap.WarMapProxy {
         if (!data.errorCode) {
             WarMapModel.deleteExtraData(data.mapFileName);
             Notify.dispatch(Notify.Type.SMmDeleteMap, data);
+        }
+    }
+
+    export function reqMmGetReviewingMaps(): void {
+        NetManager.send({
+            C_MmGetReviewingMaps: {},
+        });
+    }
+    function _onSMmGetReviewingMaps(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_MmGetReviewingMaps;
+        if (!data.errorCode) {
+            WarMapModel.setMmReviewingMaps(data.maps);
+            Notify.dispatch(Notify.Type.SMmGetReviewingMaps, data);
+        }
+    }
+
+    export function reqReviewMap(designerUserId: number, slotIndex: number, modifiedTime: number, isAccept: boolean): void {
+        NetManager.send({
+            C_MmReviewMap: {
+                designerUserId,
+                slotIndex,
+                modifiedTime,
+                isAccept,
+            },
+        });
+    }
+    function _onSMmReviewMap(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_MmReviewMap;
+        if (!data.errorCode) {
+            Notify.dispatch(Notify.Type.SMmReviewMap, data);
         }
     }
 }
