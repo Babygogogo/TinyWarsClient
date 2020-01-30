@@ -32,7 +32,7 @@ namespace TinyWars.MapEditor.MeManager {
             unloadWar();
         }
 
-        mapRawData = mapRawData || createDefaultMapRawData(slotIndex);
+        mapRawData = mapRawData || MeUtility.createDefaultMapRawData(slotIndex);
         _war = new MeWar().init(mapRawData, slotIndex, ConfigManager.getNewestConfigVersion(), isReview).startRunning().startRunningView();
         return _war;
     }
@@ -46,27 +46,5 @@ namespace TinyWars.MapEditor.MeManager {
 
     export function getWar(): MeWar | undefined {
         return _war;
-    }
-
-    function createDefaultMapRawData(slotIndex: number): Types.MapRawData {
-        const mapWidth      = 20;
-        const mapHeight     = 15;
-        const gridsCount    = mapWidth * mapHeight;
-        return {
-            mapDesigner     : User.UserModel.getSelfNickname(),
-            mapName         : `${Lang.getText(Lang.Type.B0279)} - ${slotIndex}`,
-            mapNameEnglish  : `${Lang.getText(Lang.Type.B0279)} - ${slotIndex}`,
-            mapWidth,
-            mapHeight,
-            designerUserId  : User.UserModel.getSelfUserId(),
-            isMultiPlayer   : true,
-            isSinglePlayer  : true,
-            playersCount    : 2,
-            tileBases       : (new Array(gridsCount)).fill(ConfigManager.getTileBaseViewId(Types.TileBaseType.Plain)),
-            tileObjects     : (new Array(gridsCount)).fill(0),
-            units           : null,
-            unitDataList    : null,
-            tileDataList    : null,
-        }
     }
 }

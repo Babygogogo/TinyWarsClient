@@ -2,8 +2,32 @@
 namespace TinyWars.MapEditor.MeUtility {
     import ProtoTypes   = Utility.ProtoTypes;
     import Types        = Utility.Types;
+    import Lang         = Utility.Lang;
+    import Helpers      = Utility.Helpers;
     import mapConstants = ConfigManager.MAP_CONSTANTS;
     import MapRawData   = Types.MapRawData;
+
+    export function createDefaultMapRawData(slotIndex: number): Types.MapRawData {
+        const mapWidth      = 20;
+        const mapHeight     = 15;
+        const gridsCount    = mapWidth * mapHeight;
+        return {
+            mapDesigner     : User.UserModel.getSelfNickname(),
+            mapName         : `${Lang.getText(Lang.Type.B0279)} - ${slotIndex}`,
+            mapNameEnglish  : `${Lang.getText(Lang.Type.B0279)} - ${slotIndex}`,
+            mapWidth,
+            mapHeight,
+            designerUserId  : User.UserModel.getSelfUserId(),
+            isMultiPlayer   : true,
+            isSinglePlayer  : true,
+            playersCount    : 2,
+            tileBases       : (new Array(gridsCount)).fill(ConfigManager.getTileBaseViewId(Types.TileBaseType.Plain)),
+            tileObjects     : (new Array(gridsCount)).fill(0),
+            units           : null,
+            unitDataList    : null,
+            tileDataList    : null,
+        }
+    }
 
     export function checkIsValidMap(mapRawData: ProtoTypes.IMapRawData, userId: number): boolean {
         if (mapRawData.designerUserId !== userId) {
@@ -319,11 +343,11 @@ namespace TinyWars.MapEditor.MeUtility {
             mapHeight       : newHeight,
             mapWidth        : newWidth,
             tileBases       : getNewTileBaseViewIdsForResize(mapRawData, newWidth, newHeight),
-            tileObjects     : getNewTileObjectIdsForResize(mapRawData, newWidth, newHeight),
+            tileObjects     : getNewTileObjectViewIdsForResize(mapRawData, newWidth, newHeight),
             tileDataList    : getNewTileDataListForResize(mapRawData, newWidth, newHeight),
             unitDataList    : getNewUnitDataListForResize(mapRawData, newWidth, newHeight),
             units           : null,
-        }
+        };
     }
     function getNewTileBaseViewIdsForResize(mapRawData: MapRawData, newWidth: number, newHeight: number): number[] {
         const oldWidth      = mapRawData.mapWidth;
@@ -343,7 +367,7 @@ namespace TinyWars.MapEditor.MeUtility {
         }
         return newViewIds;
     }
-    function getNewTileObjectIdsForResize(mapRawData: MapRawData, newWidth: number, newHeight: number): number[] {
+    function getNewTileObjectViewIdsForResize(mapRawData: MapRawData, newWidth: number, newHeight: number): number[] {
         const oldWidth      = mapRawData.mapWidth;
         const oldHeight     = mapRawData.mapHeight;
         const oldViewIds    = mapRawData.tileObjects || [];
@@ -378,5 +402,88 @@ namespace TinyWars.MapEditor.MeUtility {
             }
         }
         return unitList;
+    }
+
+    export function addOffset(mapRawData: MapRawData, offsetX: number, offsetY: number): MapRawData {
+        return {
+            isMultiPlayer   : mapRawData.isMultiPlayer,
+            isSinglePlayer  : mapRawData.isSinglePlayer,
+            mapDesigner     : mapRawData.mapDesigner,
+            mapName         : mapRawData.mapName,
+            mapNameEnglish  : mapRawData.mapNameEnglish,
+            designerUserId  : mapRawData.designerUserId,
+            playersCount    : mapRawData.playersCount,
+            mapHeight       : mapRawData.mapHeight,
+            mapWidth        : mapRawData.mapWidth,
+            tileBases       : getNewTileBaseViewIdsForOffset(mapRawData, offsetX, offsetY),
+            tileObjects     : getNewTileObjectViewIdsForOffset(mapRawData, offsetX, offsetY),
+            tileDataList    : getNewTileDataListForOffset(mapRawData, offsetX, offsetY),
+            unitDataList    : getNewUnitDataListForOffset(mapRawData, offsetX, offsetY),
+            units           : null,
+        }
+    }
+    function getNewTileBaseViewIdsForOffset(mapRawData: MapRawData, offsetX: number, offsetY: number): number[] {
+        const width         = mapRawData.mapWidth;
+        const height        = mapRawData.mapHeight;
+        const oldViewIds    = mapRawData.tileBases || [];
+        const baseViewIds   : number[] = [];
+        const defaultId     = ConfigManager.getTileBaseViewId(Types.TileBaseType.Plain);
+        for (let newX = 0; newX < width; ++newX) {
+            for (let newY = 0; newY < height; ++newY) {
+                const oldId                         = oldViewIds[(newX - offsetX) + (newY - offsetY) * width];
+                baseViewIds[newX + newY * width]    = oldId != null ? oldId : defaultId;
+            }
+        }
+
+        return baseViewIds;
+    }
+    function getNewTileObjectViewIdsForOffset(mapRawData: MapRawData, offsetX: number, offsetY: number): number[] {
+        const width         = mapRawData.mapWidth;
+        const height        = mapRawData.mapHeight;
+        const oldViewIds    = mapRawData.tileObjects || [];
+        const objectViewIds : number[] = [];
+        const defaultId     = 0;
+        for (let newX = 0; newX < width; ++newX) {
+            for (let newY = 0; newY < height; ++newY) {
+                const oldId                         = oldViewIds[(newX - offsetX) + (newY - offsetY) * width];
+                objectViewIds[newX + newY * width]  = oldId != null ? oldId : defaultId;
+            }
+        }
+
+        return objectViewIds;
+    }
+    function getNewTileDataListForOffset(mapRawData: MapRawData, offsetX: number, offsetY: number): Types.SerializedTile[] {
+        const width         = mapRawData.mapWidth;
+        const height        = mapRawData.mapHeight;
+        const tileDataList  : Types.SerializedTile[] = [];
+        for (const tileData of mapRawData.tileDataList || []) {
+            const newX = tileData.gridX + offsetX;
+            const newY = tileData.gridY + offsetY;
+            if ((newX >= 0) && (newX < width) && (newY >= 0) && (newY < height)) {
+                const newData   = Helpers.deepClone(tileData);
+                newData.gridX   = newX;
+                newData.gridY   = newY;
+                tileDataList.push(newData);
+            }
+        }
+
+        return tileDataList;
+    }
+    function getNewUnitDataListForOffset(mapRawData: MapRawData, offsetX: number, offsetY: number): Types.SerializedUnit[] {
+        const width         = mapRawData.mapWidth;
+        const height        = mapRawData.mapHeight;
+        const unitDataList  : Types.SerializedUnit[] = [];
+        for (const unitData of mapRawData.unitDataList || []) {
+            const newX = unitData.gridX + offsetX;
+            const newY = unitData.gridY + offsetY;
+            if ((newX >= 0) && (newX < width) && (newY >= 0) && (newY < height)) {
+                const newData   = Helpers.deepClone(unitData);
+                newData.gridX   = newX;
+                newData.gridY   = newY;
+                unitDataList.push(newData);
+            }
+        }
+
+        return unitDataList;
     }
 }

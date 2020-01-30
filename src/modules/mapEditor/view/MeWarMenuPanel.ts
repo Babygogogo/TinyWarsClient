@@ -262,6 +262,9 @@ namespace TinyWars.MapEditor {
             const commandResize = this._createCommandResize();
             (commandResize) && (dataList.push(commandResize));
 
+            const commandOffset = this._createCommandOffset();
+            (commandOffset) && (dataList.push(commandOffset));
+
             return dataList;
         }
 
@@ -294,8 +297,14 @@ namespace TinyWars.MapEditor {
                         callback: () => {
                             const war       = this._war;
                             const slotIndex = war.getSlotIndex();
+                            const data      = MeModel.getData(slotIndex);
                             war.stopRunning()
-                                .init(MeModel.getData(slotIndex).mapRawData as Types.MapRawData, slotIndex, war.getConfigVersion(), war.getIsReview())
+                                .init(
+                                    (data ? data.mapRawData as Types.MapRawData : null) || MeUtility.createDefaultMapRawData(slotIndex),
+                                    slotIndex,
+                                    war.getConfigVersion(),
+                                    war.getIsReview()
+                                )
                                 .startRunning()
                                 .startRunningView();
                             this.close();
@@ -351,6 +360,14 @@ namespace TinyWars.MapEditor {
                 name    : Lang.getText(Lang.Type.B0290),
                 callback: () => {
                     MeResizePanel.show();
+                },
+            };
+        }
+        private _createCommandOffset(): DataForCommandRenderer | null {
+            return {
+                name    : Lang.getText(Lang.Type.B0293),
+                callback: () => {
+                    MeOffsetPanel.show();
                 },
             };
         }

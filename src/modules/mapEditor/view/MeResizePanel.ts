@@ -18,7 +18,8 @@ namespace TinyWars.MapEditor {
         private _labelNewSizeTitle  : GameUi.UiLabel;
         private _inputNewWidth      : GameUi.UiTextInput;
         private _inputNewHeight     : GameUi.UiTextInput;
-        private _labelTips          : GameUi.UiLabel;
+        private _labelTips1         : GameUi.UiLabel;
+        private _labelTips2         : GameUi.UiLabel;
         private _btnCancel          : GameUi.UiButton;
         private _btnConfirm         : GameUi.UiButton;
 
@@ -43,8 +44,7 @@ namespace TinyWars.MapEditor {
 
             this._setAutoAdjustHeightEnabled();
             this._setTouchMaskEnabled();
-            this._callbackForTouchMask  = () => this.close();
-            this.skinName               = "resource/skins/mapEditor/MeResizePanel.exml";
+            this.skinName = "resource/skins/mapEditor/MeResizePanel.exml";
         }
 
         protected _onFirstOpened(): void {
@@ -80,11 +80,8 @@ namespace TinyWars.MapEditor {
             const width         = this._newWidth;
             const height        = this._newHeight;
             const gridsCount    = width * height;
-            const maxGridsCount = ConfigManager.MAP_CONSTANTS.MaxGridsCount;
             if ((!gridsCount) || (gridsCount <= 0)) {
                 FloatText.show(Lang.getText(Lang.Type.A0087));
-            } else if (gridsCount > maxGridsCount) {
-                FloatText.show(Lang.getFormatedText(Lang.Type.F0023, maxGridsCount));
             } else {
                 const war       = MeManager.getWar();
                 const currSize  = war.getTileMap().getMapSize();
@@ -130,7 +127,8 @@ namespace TinyWars.MapEditor {
             this._labelTitle.text           = Lang.getText(Lang.Type.B0290);
             this._labelCurrSizeTitle.text   = Lang.getText(Lang.Type.B0291);
             this._labelNewSizeTitle.text    = Lang.getText(Lang.Type.B0292);
-            this._labelTips.text            = Lang.getText(Lang.Type.A0086);
+            this._labelTips1.text           = Lang.getText(Lang.Type.A0086);
+            this._labelTips2.text           = Lang.getFormatedText(Lang.Type.F0023, ConfigManager.MAP_CONSTANTS.MaxGridsCount);
         }
     }
 }

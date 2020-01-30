@@ -448,6 +448,10 @@ namespace TinyWars.Utility.Lang {
             `您输入的宽高不合法，请检查`,
             `The W/H is not valid.`,
         ],
+        [Type.A0088]: [
+            `注：偏移后超出范围的图块会被裁剪（以左上角为原点）`,
+            `Warning: Data that out of range will be dismissed! The origin point is at the upper left corner.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -1608,6 +1612,10 @@ namespace TinyWars.Utility.Lang {
             `新的宽高`,
             `New W/H`,
         ],
+        [Type.B0293]: [
+            `地图偏移`,
+            `Map Offset`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -1948,8 +1956,8 @@ namespace TinyWars.Utility.Lang {
             `It's %s (p%d)'s turn!!`,
         ],
         [Type.F0023]: [
-            `地图的总格子数不能大于%d`,
-            `The number of the tiles must be less than %d`,
+            `地图的总格子数必须小于%d，否则不能提审`,
+            `The number of the tiles must be less than %d, or the map can't be submitted for review.`,
         ],
     };
 
