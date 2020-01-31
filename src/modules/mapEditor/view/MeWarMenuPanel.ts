@@ -507,7 +507,7 @@ namespace TinyWars.MapEditor {
                             content : Lang.getText(Lang.Type.A0090),
                             callback: () => {
                                 const war = this._war;
-                                WarMap.WarMapProxy.reqReviewMap(war.getDesignerUserId(), war.getSlotIndex(), war.getModifiedTime(), true);
+                                WarMap.WarMapProxy.reqReviewMap(war.getDesignerUserId(), war.getSlotIndex(), war.getModifiedTime(), true, null);
                             },
                         });
                     },
@@ -522,14 +522,7 @@ namespace TinyWars.MapEditor {
                 return {
                     name    : Lang.getText(Lang.Type.B0297),
                     callback: () => {
-                        Common.ConfirmPanel.show({
-                            title   : Lang.getText(Lang.Type.B0088),
-                            content : Lang.getText(Lang.Type.A0091),
-                            callback: () => {
-                                const war = this._war;
-                                WarMap.WarMapProxy.reqReviewMap(war.getDesignerUserId(), war.getSlotIndex(), war.getModifiedTime(), false);
-                            },
-                        });
+                        MapManagement.MmRejectMapPanel.show();
                     },
                 };
             }

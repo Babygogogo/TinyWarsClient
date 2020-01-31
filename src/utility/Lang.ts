@@ -483,6 +483,10 @@ namespace TinyWars.Utility.Lang {
             `您已成功拒审该地图。`,
             `You have rejected the map successfully.`,
         ],
+        [Type.A0094]: [
+            `请输入拒审理由`,
+            `Please write down the reason for the rejection`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -1690,6 +1694,10 @@ namespace TinyWars.Utility.Lang {
         [Type.B0304]: [
             `部队`,
             `Units`,
+        ],
+        [Type.B0305]: [
+            `拒审理由`,
+            `Reason for Rejection`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

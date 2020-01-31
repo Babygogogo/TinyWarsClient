@@ -102,6 +102,7 @@
 		"bin-debug/modules/mapManagement/view/MmAvailabilitySearchPanel.js",
 		"bin-debug/modules/mapManagement/view/MmMainMenuPanel.js",
 		"bin-debug/modules/mapManagement/view/MmMergeListPanel.js",
+		"bin-debug/modules/mapManagement/view/MmRejectMapPanel.js",
 		"bin-debug/modules/mapManagement/view/MmReviewListPanel.js",
 		"bin-debug/modules/multiCustomRoom/model/McrModel.js",
 		"bin-debug/modules/multiCustomRoom/model/McrProxy.js",
@@ -149,8 +150,8 @@
 		"bin-debug/modules/multiCustomWar/model/McwUnitMap.js",
 		"bin-debug/modules/multiCustomWar/model/McwWar.js",
 		"bin-debug/modules/multiCustomWar/view/McwActionPlannerView.js",
-		"bin-debug/modules/multiCustomWar/view/McwBackgroundPanel.js",
 		"bin-debug/Platform.js",
+		"bin-debug/modules/multiCustomWar/view/McwCoListPanel.js",
 		"bin-debug/modules/multiCustomWar/view/McwCursorView.js",
 		"bin-debug/modules/multiCustomWar/view/McwFieldView.js",
 		"bin-debug/modules/multiCustomWar/view/McwGridVisionEffectView.js",
@@ -286,6 +287,6 @@
 		"bin-debug/modules/mapEditor/model/MeUnit.js",
 		"bin-debug/modules/mapEditor/model/MeUnitMap.js",
 		"bin-debug/modules/mapEditor/model/MeUtility.js",
-		"bin-debug/modules/multiCustomWar/view/McwCoListPanel.js"
+		"bin-debug/modules/multiCustomWar/view/McwBackgroundPanel.js"
 	]
 }

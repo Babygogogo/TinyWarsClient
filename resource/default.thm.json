@@ -36,6 +36,7 @@
 		"resource/skins/mapManagement/MmAvailabilitySearchPanel.exml",
 		"resource/skins/mapManagement/MmMainMenuPanel.exml",
 		"resource/skins/mapManagement/MmMergeListPanel.exml",
+		"resource/skins/mapManagement/MmRejectMapPanel.exml",
 		"resource/skins/mapManagement/MmReviewListPanel.exml",
 		"resource/skins/multiCustomRoom/McrContinueDetailPanel.exml",
 		"resource/skins/multiCustomRoom/McrContinueWarListPanel.exml",

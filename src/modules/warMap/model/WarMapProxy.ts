@@ -143,13 +143,14 @@ namespace TinyWars.WarMap.WarMapProxy {
         }
     }
 
-    export function reqReviewMap(designerUserId: number, slotIndex: number, modifiedTime: number, isAccept: boolean): void {
+    export function reqReviewMap(designerUserId: number, slotIndex: number, modifiedTime: number, isAccept: boolean, rejectReason: string | null): void {
         NetManager.send({
             C_MmReviewMap: {
                 designerUserId,
                 slotIndex,
                 modifiedTime,
                 isAccept,
+                rejectReason,
             },
         });
     }

@@ -140,6 +140,6 @@
             </e:List>
         </GameUi:UiScrollList>
     </e:Group>
-    <GameUi:UiLabel text="诸多功能正在开发中，如有不便还请谅解。\n若有任何建议，欢迎联系QQ101599838，谢谢！" textColor="0xffffff" horizontalCenter="-110"
+    <GameUi:UiLabel text="Thank you for playing Tiny Wars!\nTo start, touch the scroll list to the right." textColor="0xffffff" horizontalCenter="-110"
                     verticalCenter="0" verticalAlign="middle" textAlign="center" size="25" />
 </e:Skin>

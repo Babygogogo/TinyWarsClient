@@ -18,6 +18,7 @@ namespace TinyWars.MapEditor.MeModel {
                 slotIndex,
                 reviewStatus: data.reviewStatus,
                 mapRawData  : data.mapRawData,
+                rejectReason: data.rejectReason,
             });
         }
         for (let i = 0; i < ConfigManager.MAX_MAP_EDITOR_SLOT_COUNT; ++i) {

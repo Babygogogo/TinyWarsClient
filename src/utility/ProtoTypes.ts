@@ -2373,6 +2373,9 @@ export declare interface IMapEditorData {
 
     /** MapEditorData mapRawData */
     mapRawData?: (IMapRawData|null);
+
+    /** MapEditorData rejectReason */
+    rejectReason?: (string|null);
 }
 
 /** Represents a MapEditorData. */
@@ -2395,6 +2398,9 @@ export declare class MapEditorData implements IMapEditorData {
 
     /** MapEditorData mapRawData. */
     public mapRawData?: (IMapRawData|null);
+
+    /** MapEditorData rejectReason. */
+    public rejectReason: string;
 
     /**
      * Creates a new MapEditorData instance using the specified properties.
@@ -12501,6 +12507,9 @@ export declare interface IC_MmReviewMap {
 
     /** C_MmReviewMap isAccept */
     isAccept?: (boolean|null);
+
+    /** C_MmReviewMap rejectReason */
+    rejectReason?: (string|null);
 }
 
 /** Represents a C_MmReviewMap. */
@@ -12523,6 +12532,9 @@ export declare class C_MmReviewMap implements IC_MmReviewMap {
 
     /** C_MmReviewMap isAccept. */
     public isAccept: boolean;
+
+    /** C_MmReviewMap rejectReason. */
+    public rejectReason: string;
 
     /**
      * Creates a new C_MmReviewMap instance using the specified properties.

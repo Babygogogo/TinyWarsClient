@@ -368,7 +368,7 @@ namespace TinyWars.Utility.Types {
         flareAmmo   : number | null;
     }
 
-    export type MeMapData = {
+    export interface MeMapData extends ProtoTypes.IMapEditorData {
         slotIndex   : number;
         reviewStatus: MapReviewStatus;
         mapRawData  : ProtoTypes.IMapRawData | null | undefined;
