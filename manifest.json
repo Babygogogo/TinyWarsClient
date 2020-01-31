@@ -73,6 +73,7 @@
 		"bin-debug/utility/StageManager.js",
 		"bin-debug/gameui/UiTabPage.js",
 		"bin-debug/modules/common/view/HelpPanel.js",
+		"bin-debug/modules/mapEditor/model/MeWar.js",
 		"bin-debug/modules/mapEditor/view/MeBackgroundpanel.js",
 		"bin-debug/modules/mapEditor/view/MeChooseTileBasePanel.js",
 		"bin-debug/modules/mapEditor/view/MeChooseTileObjectPanel.js",
@@ -148,8 +149,8 @@
 		"bin-debug/modules/multiCustomWar/model/McwWar.js",
 		"bin-debug/modules/multiCustomWar/view/McwActionPlannerView.js",
 		"bin-debug/modules/multiCustomWar/view/McwBackgroundPanel.js",
-		"bin-debug/modules/multiCustomWar/view/McwCoListPanel.js",
 		"bin-debug/Platform.js",
+		"bin-debug/modules/multiCustomWar/view/McwCursorView.js",
 		"bin-debug/modules/multiCustomWar/view/McwFieldView.js",
 		"bin-debug/modules/multiCustomWar/view/McwGridVisionEffectView.js",
 		"bin-debug/modules/multiCustomWar/view/McwProduceUnitPanel.js",
@@ -263,6 +264,7 @@
 		"bin-debug/modules/warMap/view/WarMapUnitMapView.js",
 		"bin-debug/modules/warMap/view/WarMapUnitView.js",
 		"bin-debug/Main.js",
+		"bin-debug/modules/common/view/InputPanel.js",
 		"bin-debug/modules/lobby/view/LobbyPanel.js",
 		"bin-debug/modules/lobby/view/LobbyTopPanel.js",
 		"bin-debug/modules/login/model/LoginProxy.js",
@@ -278,12 +280,11 @@
 		"bin-debug/modules/mapEditor/model/MeProxy.js",
 		"bin-debug/modules/mapEditor/model/MeTile.js",
 		"bin-debug/modules/mapEditor/model/MeTileMap.js",
-		"bin-debug/modules/mapEditor/model/MeUnit.js",
 		"bin-debug/utility/ResManager.js",
 		"bin-debug/utility/SeedRandom.js",
+		"bin-debug/modules/mapEditor/model/MeUnit.js",
 		"bin-debug/modules/mapEditor/model/MeUnitMap.js",
 		"bin-debug/modules/mapEditor/model/MeUtility.js",
-		"bin-debug/modules/mapEditor/model/MeWar.js",
-		"bin-debug/modules/multiCustomWar/view/McwCursorView.js"
+		"bin-debug/modules/multiCustomWar/view/McwCoListPanel.js"
 	]
 }

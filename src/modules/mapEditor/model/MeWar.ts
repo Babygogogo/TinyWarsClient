@@ -5,8 +5,6 @@ namespace TinyWars.MapEditor {
     export class MeWar {
         private _slotIndex      : number;
         private _configVersion  : string;
-        private _designerUserId : number;
-        private _modifiedTime   : number;
         private _isReview       : boolean;
         private _isRunning      = false;
 
@@ -18,8 +16,6 @@ namespace TinyWars.MapEditor {
             this._setSlotIndex(slotIndex);
             this._setConfigVersion(configVersion);
             this._setIsReview(isReview);
-            this._setDesignerUserId(data.designerUserId);
-            this._setModifiedTime(data.modifiedTime);
 
             this._setField((this.getField() || new MeField()).init(data, configVersion));
             this._setDrawer((this.getDrawer() || new MeDrawer()).init(data));
@@ -84,18 +80,22 @@ namespace TinyWars.MapEditor {
             return this._configVersion;
         }
 
-        private _setDesignerUserId(id: number): void {
-            this._designerUserId = id;
+        public setMapDesigner(designer: string): void {
+            this.getField().setMapDesigner(designer);
         }
-        public getDesignerUserId(): number {
-            return this._designerUserId;
+        public getMapDesigner(): string {
+            return this.getField().getMapDesigner();
         }
 
-        private _setModifiedTime(time: number): void {
-            this._modifiedTime = time;
+        public setDesignerUserId(id: number): void {
+            this.getField().setDesignerUserId(id);
         }
+        public getDesignerUserId(): number {
+            return this.getField().getDesignerUserId();
+        }
+
         public getModifiedTime(): number {
-            return this._modifiedTime;
+            return this.getField().getModifiedTime();
         }
 
         private _setField(field: MeField): void {
@@ -120,6 +120,34 @@ namespace TinyWars.MapEditor {
         }
         public getGridVisionEffect(): MeGridVisionEffect {
             return this.getField().getGridVisionEffect();
+        }
+
+        public setMapName(name: string): void {
+            this.getField().setMapName(name);
+        }
+        public getMapName(): string {
+            return this.getField().getMapName();
+        }
+
+        public setMapNameEnglish(name: string): void {
+            this.getField().setMapNameEnglish(name);
+        }
+        public getMapNameEnglish(): string {
+            return this.getField().getMapNameEnglish();
+        }
+
+        public setIsMultiPlayer(isMultiPlayer: boolean): void {
+            this.getField().setIsMultiPlayer(isMultiPlayer);
+        }
+        public getIsMultiPlayer(): boolean {
+            return this.getField().getIsMultiPlayer();
+        }
+
+        public setIsSinglePlayer(isSinglePlayer: boolean): void {
+            this.getField().setIsSinglePlayer(isSinglePlayer);
+        }
+        public getIsSinglePlayer(): boolean {
+            return this.getField().getIsSinglePlayer();
         }
     }
 }

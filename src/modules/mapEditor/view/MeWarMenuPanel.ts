@@ -28,39 +28,33 @@ namespace TinyWars.MapEditor {
         private _listCommand    : GameUi.UiScrollList;
         private _labelNoCommand : GameUi.UiLabel;
         private _btnBack        : GameUi.UiButton;
+        private _labelMenuTitle : GameUi.UiLabel;
 
-        private _groupInfo                      : eui.Group;
-        private _labelMenuTitle                 : GameUi.UiLabel;
-        private _labelWarInfoTitle              : GameUi.UiLabel;
-        private _labelPlayerInfoTitle           : GameUi.UiLabel;
-        private _labelMapNameTitle              : GameUi.UiLabel;
-        private _labelMapName                   : GameUi.UiLabel;
-        private _labelMapDesignerTitle          : GameUi.UiLabel;
-        private _labelMapDesigner               : GameUi.UiLabel;
-        private _labelWarIdTitle                : GameUi.UiLabel;
-        private _labelWarId                     : GameUi.UiLabel;
-        private _labelTurnIndexTitle            : GameUi.UiLabel;
-        private _labelTurnIndex                 : GameUi.UiLabel;
-        private _labelActionIdTitle             : GameUi.UiLabel;
-        private _labelActionId                  : GameUi.UiLabel;
-        private _labelIncomeModifierTitle       : GameUi.UiLabel;
-        private _labelIncomeModifier            : GameUi.UiLabel;
-        private _labelEnergyGrowthModifierTitle : GameUi.UiLabel;
-        private _labelEnergyGrowthModifier      : GameUi.UiLabel;
-        private _labelInitialEnergyTitle        : GameUi.UiLabel;
-        private _labelInitialEnergy             : GameUi.UiLabel;
-        private _labelMoveRangeModifierTitle    : GameUi.UiLabel;
-        private _labelMoveRangeModifier         : GameUi.UiLabel;
-        private _labelAttackPowerModifierTitle  : GameUi.UiLabel;
-        private _labelAttackPowerModifier       : GameUi.UiLabel;
-        private _labelVisionRangeModifierTitle  : GameUi.UiLabel;
-        private _labelVisionRangeModifier       : GameUi.UiLabel;
-        private _labelLuckLowerLimitTitle       : GameUi.UiLabel;
-        private _labelLuckLowerLimit            : GameUi.UiLabel;
-        private _labelLuckUpperLimitTitle       : GameUi.UiLabel;
-        private _labelLuckUpperLimit            : GameUi.UiLabel;
-
-        private _listPlayer                 : GameUi.UiScrollList;
+        private _groupInfo                  : eui.Group;
+        private _labelMapInfoTitle          : TinyWars.GameUi.UiLabel;
+        private _groupMapName               : eui.Group;
+        private _labelMapNameTitle          : TinyWars.GameUi.UiLabel;
+        private _labelMapName               : TinyWars.GameUi.UiLabel;
+        private _btnModifyMapName           : TinyWars.GameUi.UiButton;
+        private _groupMapNameEnglish        : eui.Group;
+        private _labelMapNameEnglishTitle   : TinyWars.GameUi.UiLabel;
+        private _labelMapNameEnglish        : TinyWars.GameUi.UiLabel;
+        private _btnModifyMapNameEnglish    : TinyWars.GameUi.UiButton;
+        private _groupMapDesigner           : eui.Group;
+        private _labelMapDesignerTitle      : TinyWars.GameUi.UiLabel;
+        private _labelMapDesigner           : TinyWars.GameUi.UiLabel;
+        private _btnModifyMapDesigner       : TinyWars.GameUi.UiButton;
+        private _groupMapSize               : eui.Group;
+        private _labelMapSizeTitle          : TinyWars.GameUi.UiLabel;
+        private _labelMapSize               : TinyWars.GameUi.UiLabel;
+        private _groupIsMultiPlayer         : eui.Group;
+        private _labelIsMultiPlayerTitle    : TinyWars.GameUi.UiLabel;
+        private _groupIsMultiPlayerBox      : eui.Group;
+        private _imgIsMultiPlayer           : TinyWars.GameUi.UiImage;
+        private _groupIsSinglePlayer        : eui.Group;
+        private _labelIsSinglePlayerTitle   : TinyWars.GameUi.UiLabel;
+        private _groupIsSinglePlayerBox     : eui.Group;
+        private _imgIsSinglePlayer          : TinyWars.GameUi.UiImage;
 
         private _war            : MeWar;
         private _unitMap        : MeUnitMap;
@@ -92,14 +86,19 @@ namespace TinyWars.MapEditor {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.SMeSaveMap,                     callback: this._onNotifySMeSaveMap },
+                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.SMeSaveMap,         callback: this._onNotifySMeSaveMap },
+                { type: Notify.Type.SMmReviewMap,       callback: this._onNotifySMmReviewMap },
             ];
             this._uiListeners = [
-                { ui: this._btnBack, callback: this._onTouchedBtnBack },
+                { ui: this._btnBack,                    callback: this._onTouchedBtnBack },
+                { ui: this._btnModifyMapDesigner,       callback: this._onTouchedBtnModifyMapDesigner },
+                { ui: this._btnModifyMapName,           callback: this._onTouchedBtnModifyMapName },
+                { ui: this._btnModifyMapNameEnglish,    callback: this._onTouchedBtnModifyMapNameEnglish },
+                { ui: this._groupIsMultiPlayerBox,      callback: this._onTouchedGroupIsMultiPlayerBox },
+                { ui: this._groupIsSinglePlayerBox,     callback: this._onTouchedGroupIsSinglePlayerBox },
             ];
             this._listCommand.setItemRenderer(CommandRenderer);
-            this._listPlayer.setItemRenderer(PlayerRenderer);
         }
         protected _onOpened(): void {
             const war           = MeManager.getWar();
@@ -117,7 +116,6 @@ namespace TinyWars.MapEditor {
             delete this._unitMap;
             delete this._dataForList;
             this._listCommand.clear();
-            this._listPlayer.clear();
 
             Notify.dispatch(Notify.Type.McwWarMenuPanelClosed);
         }
@@ -128,6 +126,16 @@ namespace TinyWars.MapEditor {
         private _onNotifySMeSaveMap(e: egret.Event): void {
             FloatText.show(Lang.getText(Lang.Type.A0085));
             this.close();
+        }
+
+        private _onNotifySMmReviewMap(e: egret.Event): void {
+            const data = e.data as ProtoTypes.IS_MmReviewMap;
+            if (data.isAccept) {
+                FloatText.show(Lang.getText(Lang.Type.A0092));
+            } else {
+                FloatText.show(Lang.getText(Lang.Type.A0093));
+            }
+            Utility.FlowManager.gotoLobby();
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
@@ -147,12 +155,72 @@ namespace TinyWars.MapEditor {
             }
         }
 
+        private _onTouchedBtnModifyMapName(e: egret.TouchEvent): void {
+            const war = this._war;
+            Common.InputPanel.show({
+                title           : Lang.getText(Lang.Type.B0225),
+                currentValue    : war.getMapName(),
+                maxChars        : ConfigManager.MAP_CONSTANTS.MaxMapNameLength,
+                callback        : (panel) => {
+                    war.setMapName(panel.getInputText());
+                    this._updateGroupMapName();
+                },
+            });
+        }
+
+        private _onTouchedBtnModifyMapNameEnglish(e: egret.TouchEvent): void {
+            const war = this._war;
+            Common.InputPanel.show({
+                title           : Lang.getText(Lang.Type.B0299),
+                currentValue    : war.getMapNameEnglish(),
+                maxChars        : ConfigManager.MAP_CONSTANTS.MaxMapNameEnglishLength,
+                callback        : (panel) => {
+                    war.setMapNameEnglish(panel.getInputText());
+                    this._updateGroupMapNameEnglish();
+                },
+            });
+        }
+
+        private _onTouchedBtnModifyMapDesigner(e: egret.TouchEvent): void {
+            const war = this._war;
+            Common.InputPanel.show({
+                title           : Lang.getText(Lang.Type.B0163),
+                currentValue    : war.getMapDesigner(),
+                maxChars        : ConfigManager.MAP_CONSTANTS.MaxDesignerLength,
+                callback        : (panel) => {
+                    war.setMapDesigner(panel.getInputText());
+                    this._updateGroupMapDesigner();
+                },
+            });
+        }
+
+        private _onTouchedGroupIsMultiPlayerBox(e: egret.TouchEvent): void {
+            const war = this._war;
+            if (!war.getIsReview()) {
+                war.setIsMultiPlayer(!war.getIsMultiPlayer());
+                this._updateGroupIsMultiPlayer();
+            }
+        }
+
+        private _onTouchedGroupIsSinglePlayerBox(e: egret.TouchEvent): void {
+            const war = this._war;
+            if (!war.getIsReview()) {
+                war.setIsSinglePlayer(!war.getIsSinglePlayer());
+                this._updateGroupIsSinglePlayer();
+            }
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
             this._updateListCommand();
-            this._updateGroupInfo();
+            this._updateGroupMapName();
+            this._updateGroupMapNameEnglish();
+            this._updateGroupMapDesigner();
+            this._updateGroupMapSize();
+            this._updateGroupIsMultiPlayer();
+            this._updateGroupIsSinglePlayer();
             this._updateListPlayer();
         }
 
@@ -169,40 +237,45 @@ namespace TinyWars.MapEditor {
 
         private _updateComponentsForLanguage(): void {
             this._labelMenuTitle.text                   = Lang.getText(Lang.Type.B0155);
-            this._labelWarInfoTitle.text                = Lang.getText(Lang.Type.B0223);
-            this._labelPlayerInfoTitle.text             = Lang.getText(Lang.Type.B0224);
-            this._labelMapNameTitle.text                = `${Lang.getText(Lang.Type.B0225)}: `;
-            this._labelMapDesignerTitle.text            = `${Lang.getText(Lang.Type.B0163)}: `;
-            this._labelWarIdTitle.text                  = `${Lang.getText(Lang.Type.B0226)}: `;
-            this._labelTurnIndexTitle.text              = `${Lang.getText(Lang.Type.B0091)}: `;
-            this._labelActionIdTitle.text               = `${Lang.getText(Lang.Type.B0090)}: `;
-            this._labelIncomeModifierTitle.text         = `${Lang.getText(Lang.Type.B0179)}: `;
-            this._labelInitialEnergyTitle.text          = `${Lang.getText(Lang.Type.B0180)}: `;
-            this._labelEnergyGrowthModifierTitle.text   = `${Lang.getText(Lang.Type.B0181)}: `;
-            this._labelMoveRangeModifierTitle.text      = `${Lang.getText(Lang.Type.B0182)}: `;
-            this._labelAttackPowerModifierTitle.text    = `${Lang.getText(Lang.Type.B0183)}: `;
-            this._labelVisionRangeModifierTitle.text    = `${Lang.getText(Lang.Type.B0184)}: `;
-            this._labelLuckLowerLimitTitle.text         = `${Lang.getText(Lang.Type.B0189)}: `;
-            this._labelLuckUpperLimitTitle.text         = `${Lang.getText(Lang.Type.B0190)}: `;
+            this._labelMapInfoTitle.text                = Lang.getText(Lang.Type.B0298);
+            this._labelMapNameTitle.text                = Lang.getText(Lang.Type.B0225);
+            this._labelMapNameEnglishTitle.text         = Lang.getText(Lang.Type.B0299);
+            this._labelMapDesignerTitle.text            = Lang.getText(Lang.Type.B0163);
+            this._labelMapSizeTitle.text                = Lang.getText(Lang.Type.B0300);
+            this._labelIsMultiPlayerTitle.text          = Lang.getText(Lang.Type.B0137);
+            this._labelIsSinglePlayerTitle.text         = Lang.getText(Lang.Type.B0138);
             this._btnBack.label                         = Lang.getText(Lang.Type.B0146);
         }
 
-        private _updateGroupInfo(): void {
-            // const war                               = this._war;
-            // const mapFileName                       = war.getMapFileName();
-            // this._labelWarId.text                   = `${war.getWarId()}`;
-            // this._labelTurnIndex.text               = `${war.getTurnManager().getTurnIndex()}`;
-            // this._labelActionId.text                = `${war.getNextActionId() - 1}`;
-            // this._labelIncomeModifier.text          = `${war.getSettingsIncomeModifier()}%`;
-            // this._labelEnergyGrowthModifier.text    = `${war.getSettingsEnergyGrowthModifier()}%`;
-            // this._labelInitialEnergy.text           = `${war.getSettingsInitialEnergy()}%`;
-            // this._labelMoveRangeModifier.text       = `${war.getSettingsMoveRangeModifier()}`;
-            // this._labelAttackPowerModifier.text     = `${war.getSettingsAttackPowerModifier()}%`;
-            // this._labelVisionRangeModifier.text     = `${war.getSettingsVisionRangeModifier()}`;
-            // this._labelLuckLowerLimit.text          = `${war.getSettingsLuckLowerLimit()}%`;
-            // this._labelLuckUpperLimit.text          = `${war.getSettingsLuckUpperLimit()}%`;
-            // WarMapModel.getMapNameInLanguage(mapFileName).then(value => this._labelMapName.text = value);
-            // WarMapModel.getExtraData(mapFileName).then(value => this._labelMapDesigner.text = value.mapDesigner);
+        private _updateGroupMapName(): void {
+            const war                       = this._war;
+            this._labelMapName.text         = war.getMapName();
+            this._btnModifyMapName.visible  = !war.getIsReview();
+        }
+
+        private _updateGroupMapNameEnglish(): void {
+            const war                               = this._war;
+            this._labelMapNameEnglish.text          = war.getMapNameEnglish();
+            this._btnModifyMapNameEnglish.visible   = !war.getIsReview();
+        }
+
+        private _updateGroupMapDesigner(): void {
+            const war                           = this._war;
+            this._labelMapDesigner.text         = war.getMapDesigner();
+            this._btnModifyMapDesigner.visible  = !war.getIsReview();
+        }
+
+        private _updateGroupMapSize(): void {
+            const size              = this._war.getTileMap().getMapSize();
+            this._labelMapSize.text = `${size.width} * ${size.height}`;
+        }
+
+        private _updateGroupIsMultiPlayer(): void {
+            this._imgIsMultiPlayer.visible = this._war.getIsMultiPlayer();
+        }
+
+        private _updateGroupIsSinglePlayer(): void {
+            this._imgIsSinglePlayer.visible = this._war.getIsSinglePlayer();
         }
 
         private _updateListPlayer(): void {
@@ -240,6 +313,12 @@ namespace TinyWars.MapEditor {
 
             const commandLoadMap = this._createCommandLoadMap();
             (commandLoadMap) && (dataList.push(commandLoadMap));
+
+            const commandReviewAccept = this._createCommandReviewAccept();
+            (commandReviewAccept) && (dataList.push(commandReviewAccept));
+
+            const commandReviewReject = this._createCommandReviewReject();
+            (commandReviewReject) && (dataList.push(commandReviewReject));
 
             const commandOpenAdvancedMenu = this._createCommandOpenAdvancedMenu();
             (commandOpenAdvancedMenu) && (dataList.push(commandOpenAdvancedMenu));
@@ -317,6 +396,46 @@ namespace TinyWars.MapEditor {
                                 this.close();
                             },
                         })
+                    },
+                };
+            }
+        }
+
+        private _createCommandReviewAccept(): DataForCommandRenderer | null {
+            if (!this._war.getIsReview()) {
+                return null;
+            } else {
+                return {
+                    name    : Lang.getText(Lang.Type.B0296),
+                    callback: () => {
+                        Common.ConfirmPanel.show({
+                            title   : Lang.getText(Lang.Type.B0088),
+                            content : Lang.getText(Lang.Type.A0090),
+                            callback: () => {
+                                const war = this._war;
+                                WarMap.WarMapProxy.reqReviewMap(war.getDesignerUserId(), war.getSlotIndex(), war.getModifiedTime(), true);
+                            },
+                        });
+                    },
+                };
+            }
+        }
+
+        private _createCommandReviewReject(): DataForCommandRenderer | null {
+            if (!this._war.getIsReview()) {
+                return null;
+            } else {
+                return {
+                    name    : Lang.getText(Lang.Type.B0297),
+                    callback: () => {
+                        Common.ConfirmPanel.show({
+                            title   : Lang.getText(Lang.Type.B0088),
+                            content : Lang.getText(Lang.Type.A0091),
+                            callback: () => {
+                                const war = this._war;
+                                WarMap.WarMapProxy.reqReviewMap(war.getDesignerUserId(), war.getSlotIndex(), war.getModifiedTime(), false);
+                            },
+                        });
                     },
                 };
             }
@@ -411,83 +530,6 @@ namespace TinyWars.MapEditor {
         private _updateView(): void {
             const data = this.data as DataForCommandRenderer;
             this._labelName.text    = data.name;
-        }
-    }
-
-    type DataForPlayerRenderer = {
-        war     : MeWar;
-    }
-
-    class PlayerRenderer extends eui.ItemRenderer {
-        private _group          : eui.Group;
-        private _labelName      : GameUi.UiLabel;
-        private _labelForce     : GameUi.UiLabel;
-        private _labelLost      : GameUi.UiLabel;
-
-        private _groupInfo              : eui.Group;
-        private _labelFundTitle         : GameUi.UiLabel;
-        private _labelFund              : GameUi.UiLabel;
-        private _labelIncomeTitle       : GameUi.UiLabel;
-        private _labelIncome            : GameUi.UiLabel;
-        private _labelBuildingsTitle    : GameUi.UiLabel;
-        private _labelBuildings         : GameUi.UiLabel;
-        private _labelCoName            : GameUi.UiLabel;
-        private _labelEnergyTitle       : GameUi.UiLabel;
-        private _labelEnergy            : GameUi.UiLabel;
-        private _labelUnitsTitle        : GameUi.UiLabel;
-        private _labelUnits             : GameUi.UiLabel;
-        private _labelUnitsValueTitle   : GameUi.UiLabel;
-        private _labelUnitsValue        : GameUi.UiLabel;
-
-        protected dataChanged(): void {
-            super.dataChanged();
-
-            // const data                  = this.data as DataForPlayerRenderer;
-            // const war                   = data.war;
-            // const player                = data.player;
-            // const playerIndex           = player.getPlayerIndex();
-            // this._labelName.text        = player.getUserId() != null ? Lang.getText(Lang.Type.B0031) : Lang.getText(Lang.Type.B0256);
-            // this._labelName.textColor   = player === war.getPlayerInTurn() ? 0x00FF00 : 0xFFFFFF;
-            // this._labelForce.text       = `${Lang.getPlayerForceName(player.getPlayerIndex())}`
-            //     + `  ${Lang.getPlayerTeamName(player.getTeamIndex())}`
-            //     + `  ${player === war.getPlayerInTurn() ? Lang.getText(Lang.Type.B0086) : ""}`;
-
-            // if (!player.getIsAlive()) {
-            //     this._labelLost.visible = true;
-            //     this._groupInfo.visible = false;
-            // } else {
-            //     this._labelLost.visible = false;
-            //     this._groupInfo.visible = true;
-
-            //     const isInfoKnown               = (!war.getFogMap().checkHasFogCurrently()) || ((war.getPlayerManager() as ScwPlayerManager).getWatcherTeamIndexesForScw().has(player.getTeamIndex()));
-            //     const tilesCountAndIncome       = this._getTilesCountAndIncome(war, playerIndex);
-            //     this._labelFundTitle.text       = Lang.getText(Lang.Type.B0156);
-            //     this._labelFund.text            = isInfoKnown ? `${player.getFund()}` : `?`;
-            //     this._labelIncomeTitle.text     = Lang.getText(Lang.Type.B0157);
-            //     this._labelIncome.text          = `${tilesCountAndIncome.income}${isInfoKnown ? `` : `  ?`}`;
-            //     this._labelBuildingsTitle.text  = Lang.getText(Lang.Type.B0158);
-            //     this._labelBuildings.text       = `${tilesCountAndIncome.count}${isInfoKnown ? `` : `  ?`}`;
-
-            //     const coId              = player.getCoId();
-            //     this._labelCoName.text  = coId == null
-            //         ? `(${Lang.getText(Lang.Type.B0001)}CO)`
-            //         : ConfigManager.getCoBasicCfg(ConfigManager.getNewestConfigVersion(), coId).name;
-
-            //     const superPowerEnergy  = player.getCoSuperPowerEnergy();
-            //     const powerEnergy       = player.getCoPowerEnergy();
-            //     const skillType         = player.getCoUsingSkillType();
-            //     const currEnergyText    = skillType === Types.CoSkillType.Passive
-            //         ? "" + player.getCoCurrentEnergy()
-            //         : skillType === Types.CoSkillType.Power ? "COP" : "SCOP";
-            //     this._labelEnergyTitle.text = Lang.getText(Lang.Type.B0159);
-            //     this._labelEnergy.text      = `${currEnergyText} / ${powerEnergy == null ? "--" : powerEnergy} / ${superPowerEnergy == null ? "--" : superPowerEnergy}`;
-
-            //     const unitsCountAndValue        = this._getUnitsCountAndValue(war, playerIndex);
-            //     this._labelUnitsTitle.text      = Lang.getText(Lang.Type.B0160);
-            //     this._labelUnits.text           = `${unitsCountAndValue.count}${isInfoKnown ? `` : `  ?`}`;
-            //     this._labelUnitsValueTitle.text = Lang.getText(Lang.Type.B0161);
-            //     this._labelUnitsValue.text      = `${unitsCountAndValue.value}${isInfoKnown ? `` : `  ?`}`;
-            // }
         }
     }
 }

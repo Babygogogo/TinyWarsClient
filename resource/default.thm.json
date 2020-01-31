@@ -9,6 +9,7 @@
 		"resource/skins/common/ConfirmPanel.exml",
 		"resource/skins/common/ErrorPanel.exml",
 		"resource/skins/common/HelpPanel.exml",
+		"resource/skins/common/InputPanel.exml",
 		"resource/skins/component/CheckBox1.exml",
 		"resource/skins/lobby/LobbyPanel.exml",
 		"resource/skins/lobby/LobbyTopPanel.exml",

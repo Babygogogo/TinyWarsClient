@@ -25,8 +25,6 @@ namespace TinyWars.MapEditor {
         private _btnModeDrawUnit        : GameUi.UiButton;
         private _btnModeDeleteTileObject: GameUi.UiButton;
         private _btnModeDeleteUnit      : GameUi.UiButton;
-        private _btnReviewAccept        : GameUi.UiButton;
-        private _btnReviewReject        : GameUi.UiButton;
         private _btnMenu                : GameUi.UiButton;
 
         private _unitView   = new MeUnitView();
@@ -66,7 +64,6 @@ namespace TinyWars.MapEditor {
                 { type: Notify.Type.BwCoEnergyChanged,              callback: this._onNotifyBwCoEnergyChanged },
                 { type: Notify.Type.BwCoUsingSkillTypeChanged,      callback: this._onNotifyBwCoUsingSkillChanged },
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
-                { type: Notify.Type.SMmReviewMap,                   callback: this._onNotifySMmReviewMap },
             ];
             this._uiListeners = [
                 { ui: this._btnModePreview,             callback: this._onTouchedBtnModePreview },
@@ -75,8 +72,6 @@ namespace TinyWars.MapEditor {
                 { ui: this._btnModeDrawUnit,            callback: this._onTouchedBtnModeDrawUnit },
                 { ui: this._btnModeDeleteTileObject,    callback: this._onTouchedBtnModeDeleteTileObject },
                 { ui: this._btnModeDeleteUnit,          callback: this._onTouchedBtnModeDeleteUnit },
-                { ui: this._btnReviewAccept,            callback: this._onTouchedBtnReviewAccept },
-                { ui: this._btnReviewReject,            callback: this._onTouchedBtnReviewReject },
                 { ui: this._btnMenu,                    callback: this._onTouchedBtnMenu, },
             ];
             this._conTileView.addChild(this._tileView.getImgBase());
@@ -136,15 +131,6 @@ namespace TinyWars.MapEditor {
             this._updateBtnModePreview();
             this._updateBtnDeleteTileObject();
         }
-        private _onNotifySMmReviewMap(e: egret.Event): void {
-            const data = e.data as ProtoTypes.IS_MmReviewMap;
-            if (data.isAccept) {
-                FloatText.show(Lang.getText(Lang.Type.A0092));
-            } else {
-                FloatText.show(Lang.getText(Lang.Type.A0093));
-            }
-            Utility.FlowManager.gotoLobby();
-        }
 
         private _onTouchedBtnModePreview(e: egret.TouchEvent): void {
             this._drawer.setModePreview();
@@ -164,26 +150,6 @@ namespace TinyWars.MapEditor {
         private _onTouchedBtnModeDeleteUnit(e: egret.TouchEvent): void {
             this._drawer.setModeDeleteUnit();
         }
-        private _onTouchedBtnReviewAccept(e: egret.TouchEvent): void {
-            Common.ConfirmPanel.show({
-                title   : Lang.getText(Lang.Type.B0088),
-                content : Lang.getText(Lang.Type.A0090),
-                callback: () => {
-                    const war = this._war;
-                    WarMap.WarMapProxy.reqReviewMap(war.getDesignerUserId(), war.getSlotIndex(), war.getModifiedTime(), true);
-                },
-            });
-        }
-        private _onTouchedBtnReviewReject(e: egret.TouchEvent): void {
-            Common.ConfirmPanel.show({
-                title   : Lang.getText(Lang.Type.B0088),
-                content : Lang.getText(Lang.Type.A0091),
-                callback: () => {
-                    const war = this._war;
-                    WarMap.WarMapProxy.reqReviewMap(war.getDesignerUserId(), war.getSlotIndex(), war.getModifiedTime(), false);
-                },
-            });
-        }
 
         private _onTouchedBtnMenu(e: egret.TouchEvent): void {
             MeWarMenuPanel.show();
@@ -202,8 +168,6 @@ namespace TinyWars.MapEditor {
             this._updateBtnDrawTileBase();
             this._updateBtnDeleteUnit();
             this._updateBtnDeleteTileObject();
-            this._updateBtnReviewAccept();
-            this._updateBtnReviewReject();
             this._updateBtnMenu();
         }
 
@@ -216,8 +180,6 @@ namespace TinyWars.MapEditor {
             this._btnModeDrawTileBase.label     = Lang.getText(Lang.Type.B0282);
             this._btnModeDeleteUnit.label       = Lang.getText(Lang.Type.B0284);
             this._btnModeDeleteTileObject.label = Lang.getText(Lang.Type.B0285);
-            this._btnReviewAccept.label         = Lang.getText(Lang.Type.B0296);
-            this._btnReviewReject.label         = Lang.getText(Lang.Type.B0297);
         }
 
         private _updateGroupMode(): void {
@@ -290,14 +252,6 @@ namespace TinyWars.MapEditor {
 
         private _updateBtnDeleteTileObject(): void {
             this._btnModeDeleteTileObject.visible = !this._war.getIsReview();
-        }
-
-        private _updateBtnReviewAccept(): void {
-            this._btnReviewAccept.visible = this._war.getIsReview();
-        }
-
-        private _updateBtnReviewReject(): void {
-            this._btnReviewReject.visible = this._war.getIsReview();
         }
 
         private _updateBtnMenu(): void {

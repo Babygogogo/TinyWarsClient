@@ -12,6 +12,8 @@ namespace TinyWars.MapEditor {
         private _mapDesigner    : string;
         private _mapName        : string;
         private _mapNameEnglish : string;
+        private _designerUserId : number;
+        private _modifiedTime   : number;
         private _isMultiPlayer  : boolean;
         private _isSinglePlayer : boolean;
 
@@ -24,6 +26,8 @@ namespace TinyWars.MapEditor {
             this.setMapDesigner(data.mapDesigner);
             this.setMapName(data.mapName);
             this.setMapNameEnglish(data.mapNameEnglish);
+            this.setDesignerUserId(data.designerUserId);
+            this.setModifiedTime(data.modifiedTime);
             this.setIsMultiPlayer(data.isMultiPlayer);
             this.setIsSinglePlayer(data.isSinglePlayer);
 
@@ -64,7 +68,7 @@ namespace TinyWars.MapEditor {
                 mapNameEnglish  : this.getMapNameEnglish(),
                 mapWidth        : mapSize.width,
                 mapHeight       : mapSize.height,
-                designerUserId  : User.UserModel.getSelfUserId(),
+                designerUserId  : this.getDesignerUserId(),
                 isMultiPlayer   : this.getIsMultiPlayer(),
                 isSinglePlayer  : this.getIsSinglePlayer(),
                 playersCount    : this.getPlayersCount(),
@@ -116,6 +120,20 @@ namespace TinyWars.MapEditor {
         }
         public getMapDesigner(): string {
             return this._mapDesigner;
+        }
+
+        public setDesignerUserId(id: number): void {
+            this._designerUserId = id;
+        }
+        public getDesignerUserId(): number {
+            return this._designerUserId;
+        }
+
+        public setModifiedTime(time: number): void {
+            this._modifiedTime = time;
+        }
+        public getModifiedTime(): number {
+            return this._modifiedTime;
         }
 
         public setMapName(mapName: string): void {
