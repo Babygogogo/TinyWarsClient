@@ -63,5 +63,19 @@ namespace TinyWars.MapEditor {
                 view.updateOnAnimationTick();
             }
         }
+
+        public setBaseLayerVisible(visible: boolean): void {
+            this._baseLayer.visible = visible;
+        }
+        public getBaseLayerVisible(): boolean {
+            return this._baseLayer.visible;
+        }
+
+        public setObjectLayerVisible(visible: boolean): void {
+            this._objectLayer.visible = visible;
+        }
+        public getObjectLayerVisible(): boolean {
+            return this._objectLayer.visible;
+        }
     }
 }

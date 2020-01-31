@@ -48,7 +48,7 @@ namespace TinyWars.MapEditor {
                 { ui: this._btnCancel,  callback: this.close },
             ];
             this._listForce.setItemRenderer(ForceRenderer);
-            this._listUnit.setItemRenderer(TileObjectRenderer);
+            this._listUnit.setItemRenderer(UnitRenderer);
             this._listUnit.scrollPolicyH = eui.ScrollPolicy.OFF;
         }
 
@@ -96,7 +96,7 @@ namespace TinyWars.MapEditor {
             const viewList = this._listUnit.getViewList();
             for (let i = 0; i < viewList.numChildren; ++i) {
                 const child = viewList.getChildAt(i);
-                (child instanceof TileObjectRenderer) && (child.updateOnTileAnimationTick());
+                (child instanceof UnitRenderer) && (child.updateOnTileAnimationTick());
             }
         }
 
@@ -124,8 +124,8 @@ namespace TinyWars.MapEditor {
             return dataList;
         }
 
-        private _createDataForListUnit(playerIndex: number): DataForTileObjectRenderer[] {
-            const dataList: DataForTileObjectRenderer[] = [];
+        private _createDataForListUnit(playerIndex: number): DataForUnitRenderer[] {
+            const dataList: DataForUnitRenderer[] = [];
             ConfigManager.forEachUnitTypeAndPlayerIndex((value, unitViewId) => {
                 if ((value.playerIndex === playerIndex) && (unitViewId !== 0)) {
                     dataList.push({
@@ -166,11 +166,11 @@ namespace TinyWars.MapEditor {
         }
     }
 
-    type DataForTileObjectRenderer = {
+    type DataForUnitRenderer = {
         unitViewId: number;
     }
 
-    class TileObjectRenderer extends eui.ItemRenderer {
+    class UnitRenderer extends eui.ItemRenderer {
         private _group          : eui.Group;
         private _labelName      : GameUi.UiLabel;
         private _conUnitView    : eui.Group;
@@ -190,7 +190,7 @@ namespace TinyWars.MapEditor {
         }
 
         protected dataChanged(): void {
-            const data              = this.data as DataForTileObjectRenderer;
+            const data              = this.data as DataForUnitRenderer;
             this._labelName.text    = Lang.getUnitName(ConfigManager.getUnitTypeAndPlayerIndex(data.unitViewId).unitType);
             this._unitView.init(new MeUnit().init({
                 gridX   : 0,
@@ -202,7 +202,7 @@ namespace TinyWars.MapEditor {
         }
 
         public onItemTapEvent(): void {
-            const data = this.data as DataForTileObjectRenderer;
+            const data = this.data as DataForUnitRenderer;
             MeChooseUnitPanel.hide();
             MeManager.getWar().getDrawer().setModeDrawUnit(data.unitViewId);
         }

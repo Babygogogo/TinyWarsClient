@@ -56,6 +56,9 @@ namespace TinyWars.MapEditor {
         private _groupIsSinglePlayerBox     : eui.Group;
         private _imgIsSinglePlayer          : TinyWars.GameUi.UiImage;
 
+        private _listTile   : GameUi.UiScrollList;
+        private _listUnit   : GameUi.UiScrollList;
+
         private _war            : MeWar;
         private _unitMap        : MeUnitMap;
         private _dataForList    : DataForCommandRenderer[];
@@ -87,6 +90,8 @@ namespace TinyWars.MapEditor {
         protected _onFirstOpened(): void {
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
+                { type: Notify.Type.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
                 { type: Notify.Type.SMeSaveMap,         callback: this._onNotifySMeSaveMap },
                 { type: Notify.Type.SMmReviewMap,       callback: this._onNotifySMmReviewMap },
             ];
@@ -99,6 +104,8 @@ namespace TinyWars.MapEditor {
                 { ui: this._groupIsSinglePlayerBox,     callback: this._onTouchedGroupIsSinglePlayerBox },
             ];
             this._listCommand.setItemRenderer(CommandRenderer);
+            this._listTile.setItemRenderer(TileRenderer);
+            this._listUnit.setItemRenderer(UnitRenderer);
         }
         protected _onOpened(): void {
             const war           = MeManager.getWar();
@@ -140,6 +147,22 @@ namespace TinyWars.MapEditor {
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
             this._updateComponentsForLanguage();
+        }
+
+        private _onNotifyTileAnimationTick(e: egret.Event): void {
+            const viewList = this._listTile.getViewList();
+            for (let i = 0; i < viewList.numChildren; ++i) {
+                const child = viewList.getChildAt(i);
+                (child instanceof TileRenderer) && (child.updateOnTileAnimationTick());
+            }
+        }
+
+        private _onNotifyUnitAnimationTick(e: egret.Event): void {
+            const viewList = this._listUnit.getViewList();
+            for (let i = 0; i < viewList.numChildren; ++i) {
+                const child = viewList.getChildAt(i);
+                (child instanceof UnitRenderer) && (child.updateOnUnitAnimationTick());
+            }
         }
 
         private _onTouchedBtnBack(e: egret.TouchEvent): void {
@@ -221,7 +244,8 @@ namespace TinyWars.MapEditor {
             this._updateGroupMapSize();
             this._updateGroupIsMultiPlayer();
             this._updateGroupIsSinglePlayer();
-            this._updateListPlayer();
+            this._updateListTile();
+            this._updateListUnit();
         }
 
         private _updateListCommand(): void {
@@ -278,16 +302,86 @@ namespace TinyWars.MapEditor {
             this._imgIsSinglePlayer.visible = this._war.getIsSinglePlayer();
         }
 
-        private _updateListPlayer(): void {
-            // const war   = this._war;
-            // const data  = [] as DataForPlayerRenderer[];
-            // war.getPlayerManager().forEachPlayer(false, (player: ScwPlayer) => {
-            //     data.push({
-            //         war,
-            //         player,
-            //     });
-            // });
-            // this._listPlayer.bindData(data);
+        private _updateListTile(): void {
+            const dictForTileBases      = new Map<number, DataForTileRenderer>();
+            const dictForTileObjects    = new Map<number, DataForTileRenderer>();
+            this._war.getTileMap().forEachTile(tile => {
+                if (!tile.getObjectViewId()) {
+                    const tileType      = tile.getType();
+                    const playerIndex   = tile.getPlayerIndex();
+                    const baseViewId    = ConfigManager.getTileBaseViewId(ConfigManager.getTileBaseType(tile.getBaseViewId()));
+                    if (dictForTileBases.has(baseViewId)) {
+                        ++dictForTileBases.get(baseViewId).count;
+                    } else {
+                        dictForTileBases.set(baseViewId, {
+                            baseViewId,
+                            objectViewId: null,
+                            count       : 1,
+                            tileType,
+                            playerIndex,
+                        });
+                    }
+                } else {
+                    const tileType      = tile.getType();
+                    const playerIndex   = tile.getPlayerIndex();
+                    const objectViewId  = ConfigManager.getTileObjectViewId(ConfigManager.getTileObjectTypeByTileType(tileType), playerIndex);
+                    if (dictForTileObjects.has(objectViewId)) {
+                        ++dictForTileObjects.get(objectViewId).count;
+                    } else {
+                        dictForTileObjects.set(objectViewId, {
+                            baseViewId  : null,
+                            objectViewId,
+                            count       : 1,
+                            tileType,
+                            playerIndex,
+                        });
+                    }
+                }
+            });
+
+            const dataList : DataForTileRenderer[] = [];
+            for (const [k, v] of dictForTileBases) {
+                dataList.push(v);
+            }
+            for (const [k, v] of dictForTileObjects) {
+                dataList.push(v);
+            }
+            this._listTile.bindData(dataList.sort((v1, v2) => {
+                if (v1.tileType !== v2.tileType) {
+                    return v1.tileType - v2.tileType;
+                } else {
+                    return v1.playerIndex - v2.playerIndex;
+                }
+            }));
+        }
+
+        private _updateListUnit(): void {
+            const dict = new Map<number, DataForUnitRenderer>();
+            this._war.getUnitMap().forEachUnit(unit => {
+                const unitViewId = unit.getViewId();
+                if (dict.has(unitViewId)) {
+                    ++dict.get(unitViewId).count;
+                } else {
+                    dict.set(unitViewId, {
+                        unitViewId,
+                        playerIndex : unit.getPlayerIndex(),
+                        unitType    : unit.getType(),
+                        count       : 1,
+                    });
+                }
+            });
+
+            const dataList: DataForUnitRenderer[] = [];
+            for (const [k, v] of dict) {
+                dataList.push(v);
+            }
+            this._listUnit.bindData(dataList.sort((v1, v2) => {
+                if (v1.unitType !== v2.unitType) {
+                    return v1.unitType - v2.unitType;
+                } else {
+                    return v1.playerIndex - v2.playerIndex;
+                }
+            }));
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -463,7 +557,7 @@ namespace TinyWars.MapEditor {
                     callback: () => {
                         TimeModel.startTileAnimationTick();
                         LocalStorage.setShowTileAnimation(true);
-                        this._updateView();
+                        this._updateListCommand();
                     },
                 }
             }
@@ -477,7 +571,7 @@ namespace TinyWars.MapEditor {
                     callback: () => {
                         TimeModel.stopTileAnimationTick();
                         LocalStorage.setShowTileAnimation(false);
-                        this._updateView();
+                        this._updateListCommand();
                     },
                 }
             }
@@ -530,6 +624,87 @@ namespace TinyWars.MapEditor {
         private _updateView(): void {
             const data = this.data as DataForCommandRenderer;
             this._labelName.text    = data.name;
+        }
+    }
+
+    type DataForTileRenderer = {
+        baseViewId  : number;
+        objectViewId: number;
+        count       : number;
+        tileType    : Types.TileType;
+        playerIndex : number;
+    }
+
+    class TileRenderer extends eui.ItemRenderer {
+        private _group          : eui.Group;
+        private _labelNum       : GameUi.UiLabel;
+        private _conTileView    : eui.Group;
+
+        private _tileView   = new MeTileSimpleView();
+
+        protected childrenCreated(): void {
+            super.childrenCreated();
+
+            const tileView = this._tileView;
+            this._conTileView.addChild(tileView.getImgBase());
+            this._conTileView.addChild(tileView.getImgObject());
+            tileView.startRunningView();
+        }
+
+        public updateOnTileAnimationTick(): void {
+            this._tileView.updateOnAnimationTick();
+        }
+
+        protected dataChanged(): void {
+            const data              = this.data as DataForTileRenderer;
+            this._labelNum.text     = "" + data.count;
+            this._tileView.init(data.baseViewId, data.objectViewId);
+            this._tileView.updateView();
+        }
+    }
+
+    type DataForUnitRenderer = {
+        unitViewId  : number;
+        count       : number;
+        unitType    : Types.UnitType;
+        playerIndex : number;
+    }
+
+    class UnitRenderer extends eui.ItemRenderer {
+        private _group          : eui.Group;
+        private _labelNum       : GameUi.UiLabel;
+        private _conUnitView    : eui.Group;
+
+        private _unitView   = new MeUnitView();
+
+        protected childrenCreated(): void {
+            super.childrenCreated();
+
+            this._conUnitView.addChild(this._unitView);
+        }
+
+        public updateOnUnitAnimationTick(): void {
+            const unitView = this._unitView;
+            unitView.tickStateAnimationFrame();
+            unitView.tickUnitAnimationFrame();
+        }
+
+        protected dataChanged(): void {
+            const data              = this.data as DataForUnitRenderer;
+            this._labelNum.text    = "" + data.count;
+            this._unitView.init(new MeUnit().init({
+                gridX   : 0,
+                gridY   : 0,
+                viewId  : data.unitViewId,
+                unitId  : 0,
+            }, MeManager.getWar().getConfigVersion()));
+            this._unitView.startRunningView();
+        }
+
+        public onItemTapEvent(): void {
+            const data = this.data as DataForUnitRenderer;
+            MeChooseUnitPanel.hide();
+            MeManager.getWar().getDrawer().setModeDrawUnit(data.unitViewId);
         }
     }
 }

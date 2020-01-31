@@ -25,6 +25,7 @@ namespace TinyWars.MapEditor {
         private _btnModeDrawUnit        : GameUi.UiButton;
         private _btnModeDeleteTileObject: GameUi.UiButton;
         private _btnModeDeleteUnit      : GameUi.UiButton;
+        private _btnVisibility          : GameUi.UiButton;
         private _btnMenu                : GameUi.UiButton;
 
         private _unitView   = new MeUnitView();
@@ -72,6 +73,7 @@ namespace TinyWars.MapEditor {
                 { ui: this._btnModeDrawUnit,            callback: this._onTouchedBtnModeDrawUnit },
                 { ui: this._btnModeDeleteTileObject,    callback: this._onTouchedBtnModeDeleteTileObject },
                 { ui: this._btnModeDeleteUnit,          callback: this._onTouchedBtnModeDeleteUnit },
+                { ui: this._btnVisibility,              callback: this._onTouchedBtnVisibility },
                 { ui: this._btnMenu,                    callback: this._onTouchedBtnMenu, },
             ];
             this._conTileView.addChild(this._tileView.getImgBase());
@@ -150,6 +152,9 @@ namespace TinyWars.MapEditor {
         private _onTouchedBtnModeDeleteUnit(e: egret.TouchEvent): void {
             this._drawer.setModeDeleteUnit();
         }
+        private _onTouchedBtnVisibility(e: egret.TouchEvent): void {
+            MeVisibilityPanel.show();
+        }
 
         private _onTouchedBtnMenu(e: egret.TouchEvent): void {
             MeWarMenuPanel.show();
@@ -180,6 +185,7 @@ namespace TinyWars.MapEditor {
             this._btnModeDrawTileBase.label     = Lang.getText(Lang.Type.B0282);
             this._btnModeDeleteUnit.label       = Lang.getText(Lang.Type.B0284);
             this._btnModeDeleteTileObject.label = Lang.getText(Lang.Type.B0285);
+            this._btnVisibility.label           = Lang.getText(Lang.Type.B0301);
         }
 
         private _updateGroupMode(): void {

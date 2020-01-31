@@ -26,5 +26,26 @@ namespace TinyWars.MapEditor {
         }
         public stopRunningView(): void {
         }
+
+        public setUnitsVisible(visible: boolean): void {
+            this._unitMapView.visible = visible;
+        }
+        public getUnitsVisible(): boolean {
+            return this._unitMapView.visible;
+        }
+
+        public setTileObjectsVisible(visible: boolean): void {
+            this._tileMapView.setObjectLayerVisible(visible);
+        }
+        public getTileObjectsVisible(): boolean {
+            return this._tileMapView.getObjectLayerVisible();
+        }
+
+        public setTileBasesVisible(visible: boolean): void {
+            this._tileMapView.setBaseLayerVisible(visible);
+        }
+        public getTileBasesVisible(): boolean {
+            return this._tileMapView.getBaseLayerVisible();
+        }
     }
 }

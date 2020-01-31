@@ -28,6 +28,7 @@
 		"resource/skins/mapEditor/MeTopPanel.exml",
 		"resource/skins/mapEditor/MeUnitBriefCell.exml",
 		"resource/skins/mapEditor/MeUnitBriefPanel.exml",
+		"resource/skins/mapEditor/MeVisibilityPanel.exml",
 		"resource/skins/mapEditor/MeWarMenuPanel.exml",
 		"resource/skins/mapEditor/MeWarPanel.exml",
 		"resource/skins/mapManagement/MmAvailabilityChangePanel.exml",

@@ -93,6 +93,7 @@
 		"bin-debug/modules/mapEditor/view/MeUnitBriefPanel.js",
 		"bin-debug/modules/mapEditor/view/MeUnitMapView.js",
 		"bin-debug/modules/mapEditor/view/MeUnitView.js",
+		"bin-debug/modules/mapEditor/view/MeVisibilityPanel.js",
 		"bin-debug/modules/mapEditor/view/MeWarMenuPanel.js",
 		"bin-debug/modules/mapEditor/view/MeWarPanel.js",
 		"bin-debug/modules/mapEditor/view/MeWarView.js",
