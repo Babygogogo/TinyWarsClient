@@ -24,6 +24,7 @@
 		"resource/skins/mapEditor/MeMapListPanel.exml",
 		"resource/skins/mapEditor/MeOffsetPanel.exml",
 		"resource/skins/mapEditor/MeResizePanel.exml",
+		"resource/skins/mapEditor/MeSymmetryPanel.exml",
 		"resource/skins/mapEditor/MeTileBriefPanel.exml",
 		"resource/skins/mapEditor/MeTopPanel.exml",
 		"resource/skins/mapEditor/MeUnitBriefCell.exml",

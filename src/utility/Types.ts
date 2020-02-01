@@ -634,4 +634,13 @@ namespace TinyWars.Utility.Types {
         DeleteUnit,
         DeleteTileObject,
     }
+
+    export const enum SymmetryType {
+        None                = -1,
+        UpToDown            = 0,
+        UpRightToDownLeft   = 1,
+        LeftToRight         = 2,
+        UpLeftToDownRight   = 3,
+        Rotation            = 4,
+    }
 }

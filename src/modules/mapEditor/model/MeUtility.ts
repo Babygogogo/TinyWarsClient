@@ -6,6 +6,16 @@ namespace TinyWars.MapEditor.MeUtility {
     import Helpers      = Utility.Helpers;
     import mapConstants = ConfigManager.MAP_CONSTANTS;
     import MapRawData   = Types.MapRawData;
+    import GridIndex    = Types.GridIndex;
+    import SymmetryType = Types.SymmetryType;
+
+    export type AsymmetricalCounters = {
+        UpToDown            : number | null;
+        UpRightToDownLeft   : number | null;
+        LeftToRight         : number | null;
+        UpLeftToDownRight   : number | null;
+        Rotation            : number | null;
+    }
 
     export function createDefaultMapRawData(slotIndex: number): Types.MapRawData {
         const mapWidth      = 20;
@@ -493,5 +503,100 @@ namespace TinyWars.MapEditor.MeUtility {
         }
 
         return unitDataList;
+    }
+
+    export function getAsymmetricalCounters(war: MeWar): AsymmetricalCounters {
+        const tileMap               = war.getTileMap();
+        const mapSize               = tileMap.getMapSize();
+        const { width, height }     = mapSize;
+        const isSquare              = width === height;
+        let countLeftRight          = 0;
+        let countUpDown             = 0;
+        let countRotational         = 0;
+        let countUpLeftDownRight    = 0;
+        let countUpRightDownLeft    = 0;
+
+        for (let x = 0; x < width; ++x) {
+            for (let y = 0; y < height; ++y) {
+                const gridIndex = { x, y };
+                const tile      = tileMap.getTile(gridIndex);
+                if (checkIsSymmetrical(tile, tileMap.getTile(getSymmetricalGridIndex(gridIndex, SymmetryType.LeftToRight, mapSize)), SymmetryType.LeftToRight)) {
+                    ++countLeftRight;
+                }
+                if (checkIsSymmetrical(tile, tileMap.getTile(getSymmetricalGridIndex(gridIndex, SymmetryType.UpToDown, mapSize)), SymmetryType.UpToDown)) {
+                    ++countUpDown;
+                }
+                if (checkIsSymmetrical(tile, tileMap.getTile(getSymmetricalGridIndex(gridIndex, SymmetryType.Rotation, mapSize)), SymmetryType.Rotation)) {
+                    ++countRotational;
+                }
+                if (isSquare) {
+                    if (checkIsSymmetrical(tile, tileMap.getTile(getSymmetricalGridIndex(gridIndex, SymmetryType.UpLeftToDownRight, mapSize)), SymmetryType.UpLeftToDownRight)) {
+                        ++countUpLeftDownRight;
+                    }
+                    if (checkIsSymmetrical(tile, tileMap.getTile(getSymmetricalGridIndex(gridIndex, SymmetryType.UpRightToDownLeft, mapSize)), SymmetryType.UpRightToDownLeft)) {
+                        ++countUpRightDownLeft;
+                    }
+                }
+            }
+        }
+
+        const totalGrids = width * height;
+        return {
+            LeftToRight         : totalGrids - countLeftRight,
+            UpToDown            : totalGrids - countUpDown,
+            Rotation            : totalGrids - countRotational,
+            UpLeftToDownRight   : isSquare ? totalGrids - countUpLeftDownRight : null,
+            UpRightToDownLeft   : isSquare ? totalGrids - countUpRightDownLeft : null,
+        }
+    }
+    export function getSymmetricalGridIndex(gridIndex: GridIndex, symmetryType: SymmetryType, mapSize: Types.MapSize): GridIndex {
+        const { width, height } = mapSize;
+        if (symmetryType === SymmetryType.LeftToRight) {
+            return {
+                x   : width - gridIndex.x - 1,
+                y   : gridIndex.y,
+            };
+        } else if (symmetryType === SymmetryType.UpToDown) {
+            return {
+                x   : gridIndex.x,
+                y   : height - gridIndex.y - 1,
+            };
+        } else if (symmetryType === SymmetryType.Rotation) {
+            return {
+                x   : width - gridIndex.x - 1,
+                y   : height - gridIndex.y - 1,
+            };
+        } else if (symmetryType === SymmetryType.UpLeftToDownRight) {
+            if (width !== height) {
+                return null;
+            } else {
+                return {
+                    x   : width - 1 - gridIndex.y,
+                    y   : width - 1 - gridIndex.x,
+                };
+            }
+        } else if (symmetryType === SymmetryType.UpRightToDownLeft) {
+            if (mapSize.width !== mapSize.height) {
+                return null;
+            } else {
+                return {
+                    x   : gridIndex.y,
+                    y   : gridIndex.x,
+                };
+            }
+        } else {
+            return null;
+        }
+    }
+    function checkIsSymmetrical(tile1: MeTile, tile2: MeTile, symmetryType: SymmetryType): boolean {
+        if (tile1.getBaseViewId() !== ConfigManager.getSymmetricalTileBaseViewId(tile2.getBaseViewId(), symmetryType)) {
+            return false;
+        } else {
+            if ((tile1.getPlayerIndex() !== 0) || (tile2.getPlayerIndex() !== 0)) {
+                return tile1.getType() === tile2.getType();
+            } else {
+                return (tile1.getObjectViewId() === ConfigManager.getSymmetricalTileObjectViewId(tile2.getObjectViewId(), symmetryType));
+            }
+        }
     }
 }
