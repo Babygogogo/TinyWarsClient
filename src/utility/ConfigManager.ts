@@ -1447,6 +1447,8 @@ namespace TinyWars.ConfigManager {
     export const MAX_WAR_PASSWORD_LENGTH    = 4;
     export const MAX_WAR_COMMENT_LENGTH     = 50;
 
+    export const MAX_SAVE_SLOT_COUNT        = 10;
+
     export function init(): void {
         NetManager.addListeners([
             { msgCode: ActionCode.S_NewestConfigVersion, callback: _onSNewestConfigVersion },

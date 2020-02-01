@@ -63,7 +63,7 @@ namespace TinyWars.User {
         export function checkIsAdmin(): boolean {
             return !!_selfIsAdmin;
         }
-        export function checkIsMapCommitee(): boolean {
+        export function checkIsMapCommittee(): boolean {
             return !!_selfIsMapCommitee;
         }
         export function checkIsCoCommitee(): boolean {

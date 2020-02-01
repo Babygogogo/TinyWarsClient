@@ -129,6 +129,16 @@ namespace TinyWars.Utility.Notify {
         SMcwUnitSurface,
         SMcwUnitUseCoSkill,
         SMcwUnitWait,
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        ScrCreateWarSaveSlotChanged,
+        ScrCreateWarPlayerInfoListChanged,
+
+        SScrCreateWar,
+        SScrGetSaveInfoList,
+        SScrContinueWarFailed,
+        SScrContinueWar,
+        SScrSaveWar,
     }
 
     ////////////////////////////////////////////////////////////////////////////////

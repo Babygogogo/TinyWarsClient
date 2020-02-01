@@ -139,6 +139,17 @@ namespace TinyWars.Utility.Helpers {
         }
         return o;
     }
+    export function deepClone<T>(src: T): T {
+        if ((src == null) || (typeof src != "object")) {
+            return src;
+        } else {
+            const dst: any = (src instanceof Array) ? [] : {};
+            for (const i in src) {
+                dst[i] = deepClone(src[i]);
+            }
+            return dst;
+        }
+    }
 
     export function checkIsEmptyObject(obj: { [key: string]: any }): boolean {
         for (const k in obj) {

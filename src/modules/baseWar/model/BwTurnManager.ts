@@ -7,7 +7,7 @@ namespace TinyWars.BaseWar {
     import Notify               = Utility.Notify;
     import ProtoTypes           = Utility.ProtoTypes;
     import TimeModel            = Time.TimeModel;
-    import SerializedBwTurn     = Types.SerializedBwTurn;
+    import SerializedBwTurn     = Types.SerializedTurn;
     import TurnPhaseCode        = Types.TurnPhaseCode;
     import GridIndex            = Types.GridIndex;
 
@@ -168,7 +168,7 @@ namespace TinyWars.BaseWar {
             if (playerIndex !== 0) {
                 this._war.getUnitMap().forEachUnit(unit => {
                     if (unit.getPlayerIndex() === playerIndex) {
-                        unit.setState(Types.UnitState.Idle);
+                        unit.setState(Types.UnitActionState.Idle);
                         unit.updateView();
                     }
                 });

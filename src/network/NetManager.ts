@@ -12,8 +12,10 @@ namespace TinyWars.Network {
         ////////////////////////////////////////////////////////////////////////////////
         // Constants.
         ////////////////////////////////////////////////////////////////////////////////
-        const PROTOCOL  = window.location.protocol.indexOf("http:") === 0 ? "ws" : "wss";
-        const HOST_NAME = window.location.hostname;
+        // const PROTOCOL  = window.location.protocol.indexOf("http:") === 0 ? "ws" : "wss";
+        const PROTOCOL  =  "wss";
+        // const HOST_NAME = window.location.hostname;
+        const HOST_NAME = "tinywars.online"
         const PORT      = 3000;
         const FULL_URL  = `${PROTOCOL}://${HOST_NAME}:${PORT}`;
 

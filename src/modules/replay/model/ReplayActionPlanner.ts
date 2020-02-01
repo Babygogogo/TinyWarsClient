@@ -6,7 +6,7 @@ namespace TinyWars.Replay {
     import FloatText        = Utility.FloatText;
     import Lang             = Utility.Lang;
     import TurnPhaseCode    = Types.TurnPhaseCode;
-    import UnitState        = Types.UnitState;
+    import UnitState        = Types.UnitActionState;
     import GridIndex        = Types.GridIndex;
     import State            = Types.ActionPlannerState;
     import UnitActionType   = Types.UnitActionType;

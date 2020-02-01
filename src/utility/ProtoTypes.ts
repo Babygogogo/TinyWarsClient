@@ -2028,6 +2028,9 @@ export declare interface IMapMetaData {
 
     /** MapMetaData isEnabledForWarRoom */
     isEnabledForWarRoom?: (number|null);
+
+    /** MapMetaData isEnabledForSingleCustomWar */
+    isEnabledForSingleCustomWar?: (number|null);
 }
 
 /** Represents a MapMetaData. */
@@ -2065,6 +2068,9 @@ export declare class MapMetaData implements IMapMetaData {
 
     /** MapMetaData isEnabledForWarRoom. */
     public isEnabledForWarRoom: number;
+
+    /** MapMetaData isEnabledForSingleCustomWar. */
+    public isEnabledForSingleCustomWar: number;
 
     /**
      * Creates a new MapMetaData instance using the specified properties.
@@ -3487,6 +3493,12 @@ export declare interface ISerializedWar {
     /** SerializedWar mapFileName */
     mapFileName?: (string|null);
 
+    /** SerializedWar singlePlayerWarType */
+    singlePlayerWarType?: (number|null);
+
+    /** SerializedWar saveSlotIndex */
+    saveSlotIndex?: (number|null);
+
     /** SerializedWar warName */
     warName?: (string|null);
 
@@ -3552,6 +3564,9 @@ export declare interface ISerializedWar {
 
     /** SerializedWar seedRandomState */
     seedRandomState?: (ISeedRandomState|null);
+
+    /** SerializedWar seedRandomInitState */
+    seedRandomInitState?: (ISeedRandomState|null);
 }
 
 /** Represents a SerializedWar. */
@@ -3571,6 +3586,12 @@ export declare class SerializedWar implements ISerializedWar {
 
     /** SerializedWar mapFileName. */
     public mapFileName: string;
+
+    /** SerializedWar singlePlayerWarType. */
+    public singlePlayerWarType: number;
+
+    /** SerializedWar saveSlotIndex. */
+    public saveSlotIndex: number;
 
     /** SerializedWar warName. */
     public warName: string;
@@ -3637,6 +3658,9 @@ export declare class SerializedWar implements ISerializedWar {
 
     /** SerializedWar seedRandomState. */
     public seedRandomState?: (ISeedRandomState|null);
+
+    /** SerializedWar seedRandomInitState. */
+    public seedRandomInitState?: (ISeedRandomState|null);
 
     /**
      * Creates a new SerializedWar instance using the specified properties.
@@ -8221,6 +8245,222 @@ export declare class UserBriefInfo implements IUserBriefInfo {
     public toJSON(): { [k: string]: any };
 }
 
+/** Properties of a CreateWarPlayerInfo. */
+export declare interface ICreateWarPlayerInfo {
+
+    /** CreateWarPlayerInfo playerIndex */
+    playerIndex?: (number|null);
+
+    /** CreateWarPlayerInfo userId */
+    userId?: (number|null);
+
+    /** CreateWarPlayerInfo teamIndex */
+    teamIndex?: (number|null);
+
+    /** CreateWarPlayerInfo coId */
+    coId?: (number|null);
+}
+
+/** Represents a CreateWarPlayerInfo. */
+export declare class CreateWarPlayerInfo implements ICreateWarPlayerInfo {
+
+    /**
+     * Constructs a new CreateWarPlayerInfo.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: ICreateWarPlayerInfo);
+
+    /** CreateWarPlayerInfo playerIndex. */
+    public playerIndex: number;
+
+    /** CreateWarPlayerInfo userId. */
+    public userId: number;
+
+    /** CreateWarPlayerInfo teamIndex. */
+    public teamIndex: number;
+
+    /** CreateWarPlayerInfo coId. */
+    public coId: number;
+
+    /**
+     * Creates a new CreateWarPlayerInfo instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns CreateWarPlayerInfo instance
+     */
+    public static create(properties?: ICreateWarPlayerInfo): CreateWarPlayerInfo;
+
+    /**
+     * Encodes the specified CreateWarPlayerInfo message. Does not implicitly {@link CreateWarPlayerInfo.verify|verify} messages.
+     * @param message CreateWarPlayerInfo message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: ICreateWarPlayerInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified CreateWarPlayerInfo message, length delimited. Does not implicitly {@link CreateWarPlayerInfo.verify|verify} messages.
+     * @param message CreateWarPlayerInfo message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: ICreateWarPlayerInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a CreateWarPlayerInfo message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns CreateWarPlayerInfo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CreateWarPlayerInfo;
+
+    /**
+     * Decodes a CreateWarPlayerInfo message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns CreateWarPlayerInfo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CreateWarPlayerInfo;
+
+    /**
+     * Verifies a CreateWarPlayerInfo message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a CreateWarPlayerInfo message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns CreateWarPlayerInfo
+     */
+    public static fromObject(object: { [k: string]: any }): CreateWarPlayerInfo;
+
+    /**
+     * Creates a plain object from a CreateWarPlayerInfo message. Also converts values to other types if specified.
+     * @param message CreateWarPlayerInfo
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: CreateWarPlayerInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this CreateWarPlayerInfo to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a SaveSlotInfo. */
+export declare interface ISaveSlotInfo {
+
+    /** SaveSlotInfo slotIndex */
+    slotIndex?: (number|null);
+
+    /** SaveSlotInfo mapFileName */
+    mapFileName?: (string|null);
+
+    /** SaveSlotInfo warType */
+    warType?: (number|null);
+
+    /** SaveSlotInfo configVersion */
+    configVersion?: (string|null);
+}
+
+/** Represents a SaveSlotInfo. */
+export declare class SaveSlotInfo implements ISaveSlotInfo {
+
+    /**
+     * Constructs a new SaveSlotInfo.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: ISaveSlotInfo);
+
+    /** SaveSlotInfo slotIndex. */
+    public slotIndex: number;
+
+    /** SaveSlotInfo mapFileName. */
+    public mapFileName: string;
+
+    /** SaveSlotInfo warType. */
+    public warType: number;
+
+    /** SaveSlotInfo configVersion. */
+    public configVersion: string;
+
+    /**
+     * Creates a new SaveSlotInfo instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns SaveSlotInfo instance
+     */
+    public static create(properties?: ISaveSlotInfo): SaveSlotInfo;
+
+    /**
+     * Encodes the specified SaveSlotInfo message. Does not implicitly {@link SaveSlotInfo.verify|verify} messages.
+     * @param message SaveSlotInfo message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: ISaveSlotInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified SaveSlotInfo message, length delimited. Does not implicitly {@link SaveSlotInfo.verify|verify} messages.
+     * @param message SaveSlotInfo message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: ISaveSlotInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a SaveSlotInfo message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns SaveSlotInfo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): SaveSlotInfo;
+
+    /**
+     * Decodes a SaveSlotInfo message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns SaveSlotInfo
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): SaveSlotInfo;
+
+    /**
+     * Verifies a SaveSlotInfo message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a SaveSlotInfo message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns SaveSlotInfo
+     */
+    public static fromObject(object: { [k: string]: any }): SaveSlotInfo;
+
+    /**
+     * Creates a plain object from a SaveSlotInfo message. Also converts values to other types if specified.
+     * @param message SaveSlotInfo
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: SaveSlotInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this SaveSlotInfo to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
 /** Properties of a MessageContainer. */
 export declare interface IMessageContainer {
 
@@ -8538,6 +8778,30 @@ export declare interface IMessageContainer {
 
     /** MessageContainer S_McwUnitUseCoSkill */
     S_McwUnitUseCoSkill?: (IS_McwUnitUseCoSkill|null);
+
+    /** MessageContainer C_ScrCreateWar */
+    C_ScrCreateWar?: (IC_ScrCreateWar|null);
+
+    /** MessageContainer S_ScrCreateWar */
+    S_ScrCreateWar?: (IS_ScrCreateWar|null);
+
+    /** MessageContainer C_ScrGetSaveSlotInfoList */
+    C_ScrGetSaveSlotInfoList?: (IC_ScrGetSaveSlotInfoList|null);
+
+    /** MessageContainer S_ScrGetSaveSlotInfoList */
+    S_ScrGetSaveSlotInfoList?: (IS_ScrGetSaveSlotInfoList|null);
+
+    /** MessageContainer C_ScrContinueWar */
+    C_ScrContinueWar?: (IC_ScrContinueWar|null);
+
+    /** MessageContainer S_ScrContinueWar */
+    S_ScrContinueWar?: (IS_ScrContinueWar|null);
+
+    /** MessageContainer C_ScrSaveWar */
+    C_ScrSaveWar?: (IC_ScrSaveWar|null);
+
+    /** MessageContainer S_ScrSaveWar */
+    S_ScrSaveWar?: (IS_ScrSaveWar|null);
 }
 
 /** Represents a MessageContainer. */
@@ -8863,6 +9127,30 @@ export declare class MessageContainer implements IMessageContainer {
 
     /** MessageContainer S_McwUnitUseCoSkill. */
     public S_McwUnitUseCoSkill?: (IS_McwUnitUseCoSkill|null);
+
+    /** MessageContainer C_ScrCreateWar. */
+    public C_ScrCreateWar?: (IC_ScrCreateWar|null);
+
+    /** MessageContainer S_ScrCreateWar. */
+    public S_ScrCreateWar?: (IS_ScrCreateWar|null);
+
+    /** MessageContainer C_ScrGetSaveSlotInfoList. */
+    public C_ScrGetSaveSlotInfoList?: (IC_ScrGetSaveSlotInfoList|null);
+
+    /** MessageContainer S_ScrGetSaveSlotInfoList. */
+    public S_ScrGetSaveSlotInfoList?: (IS_ScrGetSaveSlotInfoList|null);
+
+    /** MessageContainer C_ScrContinueWar. */
+    public C_ScrContinueWar?: (IC_ScrContinueWar|null);
+
+    /** MessageContainer S_ScrContinueWar. */
+    public S_ScrContinueWar?: (IS_ScrContinueWar|null);
+
+    /** MessageContainer C_ScrSaveWar. */
+    public C_ScrSaveWar?: (IC_ScrSaveWar|null);
+
+    /** MessageContainer S_ScrSaveWar. */
+    public S_ScrSaveWar?: (IS_ScrSaveWar|null);
 
     /**
      * Creates a new MessageContainer instance using the specified properties.
@@ -10500,6 +10788,9 @@ export declare interface IC_MmChangeAvailability {
 
     /** C_MmChangeAvailability isEnabledForWarRoom */
     isEnabledForWarRoom?: (boolean|null);
+
+    /** C_MmChangeAvailability isEnabledForSingleCustomWar */
+    isEnabledForSingleCustomWar?: (boolean|null);
 }
 
 /** Represents a C_MmChangeAvailability. */
@@ -10519,6 +10810,9 @@ export declare class C_MmChangeAvailability implements IC_MmChangeAvailability {
 
     /** C_MmChangeAvailability isEnabledForWarRoom. */
     public isEnabledForWarRoom: boolean;
+
+    /** C_MmChangeAvailability isEnabledForSingleCustomWar. */
+    public isEnabledForSingleCustomWar: boolean;
 
     /**
      * Creates a new C_MmChangeAvailability instance using the specified properties.
@@ -10605,6 +10899,9 @@ export declare interface IS_MmChangeAvailability {
 
     /** S_MmChangeAvailability isEnabledForWarRoom */
     isEnabledForWarRoom?: (boolean|null);
+
+    /** S_MmChangeAvailability isEnabledForSingleCustomWar */
+    isEnabledForSingleCustomWar?: (boolean|null);
 }
 
 /** Represents a S_MmChangeAvailability. */
@@ -10627,6 +10924,9 @@ export declare class S_MmChangeAvailability implements IS_MmChangeAvailability {
 
     /** S_MmChangeAvailability isEnabledForWarRoom. */
     public isEnabledForWarRoom: boolean;
+
+    /** S_MmChangeAvailability isEnabledForSingleCustomWar. */
+    public isEnabledForSingleCustomWar: boolean;
 
     /**
      * Creates a new S_MmChangeAvailability instance using the specified properties.
@@ -19604,6 +19904,834 @@ export declare class S_McwUnitUseCoSkill implements IS_McwUnitUseCoSkill {
 
     /**
      * Converts this S_McwUnitUseCoSkill to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_ScrCreateWar. */
+export declare interface IC_ScrCreateWar {
+
+    /** C_ScrCreateWar mapFileName */
+    mapFileName?: (string|null);
+
+    /** C_ScrCreateWar saveSlotIndex */
+    saveSlotIndex?: (number|null);
+
+    /** C_ScrCreateWar configVersion */
+    configVersion?: (string|null);
+
+    /** C_ScrCreateWar playerInfoList */
+    playerInfoList?: (ICreateWarPlayerInfo[]|null);
+
+    /** C_ScrCreateWar hasFog */
+    hasFog?: (number|null);
+
+    /** C_ScrCreateWar initialFund */
+    initialFund?: (number|null);
+
+    /** C_ScrCreateWar incomeModifier */
+    incomeModifier?: (number|null);
+
+    /** C_ScrCreateWar initialEnergy */
+    initialEnergy?: (number|null);
+
+    /** C_ScrCreateWar energyGrowthModifier */
+    energyGrowthModifier?: (number|null);
+
+    /** C_ScrCreateWar moveRangeModifier */
+    moveRangeModifier?: (number|null);
+
+    /** C_ScrCreateWar attackPowerModifier */
+    attackPowerModifier?: (number|null);
+
+    /** C_ScrCreateWar visionRangeModifier */
+    visionRangeModifier?: (number|null);
+
+    /** C_ScrCreateWar luckLowerLimit */
+    luckLowerLimit?: (number|null);
+
+    /** C_ScrCreateWar luckUpperLimit */
+    luckUpperLimit?: (number|null);
+}
+
+/** Represents a C_ScrCreateWar. */
+export declare class C_ScrCreateWar implements IC_ScrCreateWar {
+
+    /**
+     * Constructs a new C_ScrCreateWar.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_ScrCreateWar);
+
+    /** C_ScrCreateWar mapFileName. */
+    public mapFileName: string;
+
+    /** C_ScrCreateWar saveSlotIndex. */
+    public saveSlotIndex: number;
+
+    /** C_ScrCreateWar configVersion. */
+    public configVersion: string;
+
+    /** C_ScrCreateWar playerInfoList. */
+    public playerInfoList: ICreateWarPlayerInfo[];
+
+    /** C_ScrCreateWar hasFog. */
+    public hasFog: number;
+
+    /** C_ScrCreateWar initialFund. */
+    public initialFund: number;
+
+    /** C_ScrCreateWar incomeModifier. */
+    public incomeModifier: number;
+
+    /** C_ScrCreateWar initialEnergy. */
+    public initialEnergy: number;
+
+    /** C_ScrCreateWar energyGrowthModifier. */
+    public energyGrowthModifier: number;
+
+    /** C_ScrCreateWar moveRangeModifier. */
+    public moveRangeModifier: number;
+
+    /** C_ScrCreateWar attackPowerModifier. */
+    public attackPowerModifier: number;
+
+    /** C_ScrCreateWar visionRangeModifier. */
+    public visionRangeModifier: number;
+
+    /** C_ScrCreateWar luckLowerLimit. */
+    public luckLowerLimit: number;
+
+    /** C_ScrCreateWar luckUpperLimit. */
+    public luckUpperLimit: number;
+
+    /**
+     * Creates a new C_ScrCreateWar instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_ScrCreateWar instance
+     */
+    public static create(properties?: IC_ScrCreateWar): C_ScrCreateWar;
+
+    /**
+     * Encodes the specified C_ScrCreateWar message. Does not implicitly {@link C_ScrCreateWar.verify|verify} messages.
+     * @param message C_ScrCreateWar message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_ScrCreateWar, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_ScrCreateWar message, length delimited. Does not implicitly {@link C_ScrCreateWar.verify|verify} messages.
+     * @param message C_ScrCreateWar message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_ScrCreateWar, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_ScrCreateWar message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_ScrCreateWar
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_ScrCreateWar;
+
+    /**
+     * Decodes a C_ScrCreateWar message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_ScrCreateWar
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_ScrCreateWar;
+
+    /**
+     * Verifies a C_ScrCreateWar message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_ScrCreateWar message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_ScrCreateWar
+     */
+    public static fromObject(object: { [k: string]: any }): C_ScrCreateWar;
+
+    /**
+     * Creates a plain object from a C_ScrCreateWar message. Also converts values to other types if specified.
+     * @param message C_ScrCreateWar
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_ScrCreateWar, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_ScrCreateWar to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_ScrCreateWar. */
+export declare interface IS_ScrCreateWar {
+
+    /** S_ScrCreateWar errorCode */
+    errorCode?: (number|null);
+
+    /** S_ScrCreateWar warData */
+    warData?: (ISerializedWar|null);
+}
+
+/** Represents a S_ScrCreateWar. */
+export declare class S_ScrCreateWar implements IS_ScrCreateWar {
+
+    /**
+     * Constructs a new S_ScrCreateWar.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_ScrCreateWar);
+
+    /** S_ScrCreateWar errorCode. */
+    public errorCode: number;
+
+    /** S_ScrCreateWar warData. */
+    public warData?: (ISerializedWar|null);
+
+    /**
+     * Creates a new S_ScrCreateWar instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_ScrCreateWar instance
+     */
+    public static create(properties?: IS_ScrCreateWar): S_ScrCreateWar;
+
+    /**
+     * Encodes the specified S_ScrCreateWar message. Does not implicitly {@link S_ScrCreateWar.verify|verify} messages.
+     * @param message S_ScrCreateWar message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_ScrCreateWar, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_ScrCreateWar message, length delimited. Does not implicitly {@link S_ScrCreateWar.verify|verify} messages.
+     * @param message S_ScrCreateWar message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_ScrCreateWar, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_ScrCreateWar message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_ScrCreateWar
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_ScrCreateWar;
+
+    /**
+     * Decodes a S_ScrCreateWar message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_ScrCreateWar
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_ScrCreateWar;
+
+    /**
+     * Verifies a S_ScrCreateWar message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_ScrCreateWar message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_ScrCreateWar
+     */
+    public static fromObject(object: { [k: string]: any }): S_ScrCreateWar;
+
+    /**
+     * Creates a plain object from a S_ScrCreateWar message. Also converts values to other types if specified.
+     * @param message S_ScrCreateWar
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_ScrCreateWar, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_ScrCreateWar to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_ScrGetSaveSlotInfoList. */
+export declare interface IC_ScrGetSaveSlotInfoList {
+}
+
+/** Represents a C_ScrGetSaveSlotInfoList. */
+export declare class C_ScrGetSaveSlotInfoList implements IC_ScrGetSaveSlotInfoList {
+
+    /**
+     * Constructs a new C_ScrGetSaveSlotInfoList.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_ScrGetSaveSlotInfoList);
+
+    /**
+     * Creates a new C_ScrGetSaveSlotInfoList instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_ScrGetSaveSlotInfoList instance
+     */
+    public static create(properties?: IC_ScrGetSaveSlotInfoList): C_ScrGetSaveSlotInfoList;
+
+    /**
+     * Encodes the specified C_ScrGetSaveSlotInfoList message. Does not implicitly {@link C_ScrGetSaveSlotInfoList.verify|verify} messages.
+     * @param message C_ScrGetSaveSlotInfoList message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_ScrGetSaveSlotInfoList, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_ScrGetSaveSlotInfoList message, length delimited. Does not implicitly {@link C_ScrGetSaveSlotInfoList.verify|verify} messages.
+     * @param message C_ScrGetSaveSlotInfoList message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_ScrGetSaveSlotInfoList, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_ScrGetSaveSlotInfoList message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_ScrGetSaveSlotInfoList
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_ScrGetSaveSlotInfoList;
+
+    /**
+     * Decodes a C_ScrGetSaveSlotInfoList message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_ScrGetSaveSlotInfoList
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_ScrGetSaveSlotInfoList;
+
+    /**
+     * Verifies a C_ScrGetSaveSlotInfoList message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_ScrGetSaveSlotInfoList message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_ScrGetSaveSlotInfoList
+     */
+    public static fromObject(object: { [k: string]: any }): C_ScrGetSaveSlotInfoList;
+
+    /**
+     * Creates a plain object from a C_ScrGetSaveSlotInfoList message. Also converts values to other types if specified.
+     * @param message C_ScrGetSaveSlotInfoList
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_ScrGetSaveSlotInfoList, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_ScrGetSaveSlotInfoList to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_ScrGetSaveSlotInfoList. */
+export declare interface IS_ScrGetSaveSlotInfoList {
+
+    /** S_ScrGetSaveSlotInfoList errorCode */
+    errorCode?: (number|null);
+
+    /** S_ScrGetSaveSlotInfoList infoList */
+    infoList?: (ISaveSlotInfo[]|null);
+}
+
+/** Represents a S_ScrGetSaveSlotInfoList. */
+export declare class S_ScrGetSaveSlotInfoList implements IS_ScrGetSaveSlotInfoList {
+
+    /**
+     * Constructs a new S_ScrGetSaveSlotInfoList.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_ScrGetSaveSlotInfoList);
+
+    /** S_ScrGetSaveSlotInfoList errorCode. */
+    public errorCode: number;
+
+    /** S_ScrGetSaveSlotInfoList infoList. */
+    public infoList: ISaveSlotInfo[];
+
+    /**
+     * Creates a new S_ScrGetSaveSlotInfoList instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_ScrGetSaveSlotInfoList instance
+     */
+    public static create(properties?: IS_ScrGetSaveSlotInfoList): S_ScrGetSaveSlotInfoList;
+
+    /**
+     * Encodes the specified S_ScrGetSaveSlotInfoList message. Does not implicitly {@link S_ScrGetSaveSlotInfoList.verify|verify} messages.
+     * @param message S_ScrGetSaveSlotInfoList message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_ScrGetSaveSlotInfoList, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_ScrGetSaveSlotInfoList message, length delimited. Does not implicitly {@link S_ScrGetSaveSlotInfoList.verify|verify} messages.
+     * @param message S_ScrGetSaveSlotInfoList message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_ScrGetSaveSlotInfoList, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_ScrGetSaveSlotInfoList message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_ScrGetSaveSlotInfoList
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_ScrGetSaveSlotInfoList;
+
+    /**
+     * Decodes a S_ScrGetSaveSlotInfoList message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_ScrGetSaveSlotInfoList
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_ScrGetSaveSlotInfoList;
+
+    /**
+     * Verifies a S_ScrGetSaveSlotInfoList message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_ScrGetSaveSlotInfoList message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_ScrGetSaveSlotInfoList
+     */
+    public static fromObject(object: { [k: string]: any }): S_ScrGetSaveSlotInfoList;
+
+    /**
+     * Creates a plain object from a S_ScrGetSaveSlotInfoList message. Also converts values to other types if specified.
+     * @param message S_ScrGetSaveSlotInfoList
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_ScrGetSaveSlotInfoList, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_ScrGetSaveSlotInfoList to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_ScrContinueWar. */
+export declare interface IC_ScrContinueWar {
+
+    /** C_ScrContinueWar slotIndex */
+    slotIndex?: (number|null);
+}
+
+/** Represents a C_ScrContinueWar. */
+export declare class C_ScrContinueWar implements IC_ScrContinueWar {
+
+    /**
+     * Constructs a new C_ScrContinueWar.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_ScrContinueWar);
+
+    /** C_ScrContinueWar slotIndex. */
+    public slotIndex: number;
+
+    /**
+     * Creates a new C_ScrContinueWar instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_ScrContinueWar instance
+     */
+    public static create(properties?: IC_ScrContinueWar): C_ScrContinueWar;
+
+    /**
+     * Encodes the specified C_ScrContinueWar message. Does not implicitly {@link C_ScrContinueWar.verify|verify} messages.
+     * @param message C_ScrContinueWar message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_ScrContinueWar, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_ScrContinueWar message, length delimited. Does not implicitly {@link C_ScrContinueWar.verify|verify} messages.
+     * @param message C_ScrContinueWar message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_ScrContinueWar, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_ScrContinueWar message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_ScrContinueWar
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_ScrContinueWar;
+
+    /**
+     * Decodes a C_ScrContinueWar message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_ScrContinueWar
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_ScrContinueWar;
+
+    /**
+     * Verifies a C_ScrContinueWar message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_ScrContinueWar message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_ScrContinueWar
+     */
+    public static fromObject(object: { [k: string]: any }): C_ScrContinueWar;
+
+    /**
+     * Creates a plain object from a C_ScrContinueWar message. Also converts values to other types if specified.
+     * @param message C_ScrContinueWar
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_ScrContinueWar, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_ScrContinueWar to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_ScrContinueWar. */
+export declare interface IS_ScrContinueWar {
+
+    /** S_ScrContinueWar errorCode */
+    errorCode?: (number|null);
+
+    /** S_ScrContinueWar slotIndex */
+    slotIndex?: (number|null);
+
+    /** S_ScrContinueWar encodedWar */
+    encodedWar?: (Uint8Array|null);
+}
+
+/** Represents a S_ScrContinueWar. */
+export declare class S_ScrContinueWar implements IS_ScrContinueWar {
+
+    /**
+     * Constructs a new S_ScrContinueWar.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_ScrContinueWar);
+
+    /** S_ScrContinueWar errorCode. */
+    public errorCode: number;
+
+    /** S_ScrContinueWar slotIndex. */
+    public slotIndex: number;
+
+    /** S_ScrContinueWar encodedWar. */
+    public encodedWar: Uint8Array;
+
+    /**
+     * Creates a new S_ScrContinueWar instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_ScrContinueWar instance
+     */
+    public static create(properties?: IS_ScrContinueWar): S_ScrContinueWar;
+
+    /**
+     * Encodes the specified S_ScrContinueWar message. Does not implicitly {@link S_ScrContinueWar.verify|verify} messages.
+     * @param message S_ScrContinueWar message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_ScrContinueWar, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_ScrContinueWar message, length delimited. Does not implicitly {@link S_ScrContinueWar.verify|verify} messages.
+     * @param message S_ScrContinueWar message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_ScrContinueWar, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_ScrContinueWar message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_ScrContinueWar
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_ScrContinueWar;
+
+    /**
+     * Decodes a S_ScrContinueWar message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_ScrContinueWar
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_ScrContinueWar;
+
+    /**
+     * Verifies a S_ScrContinueWar message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_ScrContinueWar message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_ScrContinueWar
+     */
+    public static fromObject(object: { [k: string]: any }): S_ScrContinueWar;
+
+    /**
+     * Creates a plain object from a S_ScrContinueWar message. Also converts values to other types if specified.
+     * @param message S_ScrContinueWar
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_ScrContinueWar, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_ScrContinueWar to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_ScrSaveWar. */
+export declare interface IC_ScrSaveWar {
+
+    /** C_ScrSaveWar slotIndex */
+    slotIndex?: (number|null);
+
+    /** C_ScrSaveWar warData */
+    warData?: (ISerializedWar|null);
+}
+
+/** Represents a C_ScrSaveWar. */
+export declare class C_ScrSaveWar implements IC_ScrSaveWar {
+
+    /**
+     * Constructs a new C_ScrSaveWar.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_ScrSaveWar);
+
+    /** C_ScrSaveWar slotIndex. */
+    public slotIndex: number;
+
+    /** C_ScrSaveWar warData. */
+    public warData?: (ISerializedWar|null);
+
+    /**
+     * Creates a new C_ScrSaveWar instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_ScrSaveWar instance
+     */
+    public static create(properties?: IC_ScrSaveWar): C_ScrSaveWar;
+
+    /**
+     * Encodes the specified C_ScrSaveWar message. Does not implicitly {@link C_ScrSaveWar.verify|verify} messages.
+     * @param message C_ScrSaveWar message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_ScrSaveWar, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_ScrSaveWar message, length delimited. Does not implicitly {@link C_ScrSaveWar.verify|verify} messages.
+     * @param message C_ScrSaveWar message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_ScrSaveWar, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_ScrSaveWar message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_ScrSaveWar
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_ScrSaveWar;
+
+    /**
+     * Decodes a C_ScrSaveWar message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_ScrSaveWar
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_ScrSaveWar;
+
+    /**
+     * Verifies a C_ScrSaveWar message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_ScrSaveWar message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_ScrSaveWar
+     */
+    public static fromObject(object: { [k: string]: any }): C_ScrSaveWar;
+
+    /**
+     * Creates a plain object from a C_ScrSaveWar message. Also converts values to other types if specified.
+     * @param message C_ScrSaveWar
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_ScrSaveWar, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_ScrSaveWar to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_ScrSaveWar. */
+export declare interface IS_ScrSaveWar {
+
+    /** S_ScrSaveWar errorCode */
+    errorCode?: (number|null);
+
+    /** S_ScrSaveWar slotIndex */
+    slotIndex?: (number|null);
+}
+
+/** Represents a S_ScrSaveWar. */
+export declare class S_ScrSaveWar implements IS_ScrSaveWar {
+
+    /**
+     * Constructs a new S_ScrSaveWar.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_ScrSaveWar);
+
+    /** S_ScrSaveWar errorCode. */
+    public errorCode: number;
+
+    /** S_ScrSaveWar slotIndex. */
+    public slotIndex: number;
+
+    /**
+     * Creates a new S_ScrSaveWar instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_ScrSaveWar instance
+     */
+    public static create(properties?: IS_ScrSaveWar): S_ScrSaveWar;
+
+    /**
+     * Encodes the specified S_ScrSaveWar message. Does not implicitly {@link S_ScrSaveWar.verify|verify} messages.
+     * @param message S_ScrSaveWar message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_ScrSaveWar, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_ScrSaveWar message, length delimited. Does not implicitly {@link S_ScrSaveWar.verify|verify} messages.
+     * @param message S_ScrSaveWar message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_ScrSaveWar, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_ScrSaveWar message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_ScrSaveWar
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_ScrSaveWar;
+
+    /**
+     * Decodes a S_ScrSaveWar message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_ScrSaveWar
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_ScrSaveWar;
+
+    /**
+     * Verifies a S_ScrSaveWar message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_ScrSaveWar message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_ScrSaveWar
+     */
+    public static fromObject(object: { [k: string]: any }): S_ScrSaveWar;
+
+    /**
+     * Creates a plain object from a S_ScrSaveWar message. Also converts values to other types if specified.
+     * @param message S_ScrSaveWar
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_ScrSaveWar, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_ScrSaveWar to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };

@@ -97,14 +97,13 @@ namespace TinyWars.Lobby {
                 {
                     name    : Lang.getText(Lang.Type.B0138),
                     callback: (): void => {
-                        // LobbyPanel.hide();
-                        // SingleCustomRoom.ScrMainMenuPanel.show();
-                        FloatText.show(Lang.getText(Lang.Type.A0053));
+                        this.close();
+                        SinglePlayerLobby.SinglePlayerLobbyPanel.show();
                     },
                 },
             ];
 
-            if ((UserModel.checkIsAdmin()) || (UserModel.checkIsMapCommitee())) {
+            if ((UserModel.checkIsAdmin()) || (UserModel.checkIsMapCommittee())) {
                 dataList.push({
                     name    : Lang.getText(Lang.Type.B0192),
                     callback: (): void => {

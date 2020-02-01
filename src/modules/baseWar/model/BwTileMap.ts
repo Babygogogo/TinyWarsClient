@@ -4,8 +4,8 @@ namespace TinyWars.BaseWar {
     import Types                = Utility.Types;
     import Helpers              = Utility.Helpers;
     import ProtoTypes           = Utility.ProtoTypes;
-    import SerializedBwTileMap  = Types.SerializedBwTileMap;
-    import SerializedBwTile     = Types.SerializedBwTile;
+    import SerializedBwTileMap  = Types.SerializedTileMap;
+    import SerializedBwTile     = Types.SerializedTile;
     import MapSize              = Types.MapSize;
 
     export abstract class BwTileMap {

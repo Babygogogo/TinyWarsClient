@@ -25,7 +25,7 @@ namespace TinyWars.Replay {
             return ReplayFieldView;
         }
 
-        public serialize(): Types.SerializedBwField {
+        public serialize(): Types.SerializedField {
             return {
                 fogMap  : (this.getFogMap() as ReplayFogMap).serialize(),
                 unitMap : (this.getUnitMap() as ReplayUnitMap).serialize(),

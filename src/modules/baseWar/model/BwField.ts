@@ -1,7 +1,7 @@
 
 namespace TinyWars.BaseWar {
     import Types                = Utility.Types;
-    import SerializedBwField    = Types.SerializedBwField;
+    import SerializedBwField    = Types.SerializedField;
 
     export abstract class BwField {
         private _unitMap            : BwUnitMap;

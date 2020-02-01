@@ -87,26 +87,26 @@ namespace TinyWars.Utility.Types {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export interface WarActionContainer extends ProtoTypes.IWarActionContainer {
     }
-    export interface SerializedBwTile extends ProtoTypes.ISerializedWarTile {
+    export interface SerializedTile extends ProtoTypes.ISerializedWarTile {
         gridX           : number;
         gridY           : number;
         baseViewId      : number;
         objectViewId    : number;
     };
-    export interface SerializedBwUnit extends ProtoTypes.ISerializedWarUnit {
+    export interface SerializedUnit extends ProtoTypes.ISerializedWarUnit {
         gridX   : number;
         gridY   : number;
         unitId  : number;
         viewId  : number;
     }
-    export interface SerializedBwTileMap extends ProtoTypes.ISerializedWarTileMap {
-        tiles?: SerializedBwTile[];
+    export interface SerializedTileMap extends ProtoTypes.ISerializedWarTileMap {
+        tiles?: SerializedTile[];
     }
-    export interface SerializedBwUnitMap extends ProtoTypes.ISerializedWarUnitMap {
-        units?      : SerializedBwUnit[];
+    export interface SerializedUnitMap extends ProtoTypes.ISerializedWarUnitMap {
+        units?      : SerializedUnit[];
         nextUnitId  : number;
     }
-    export interface SerializedBwPlayer extends ProtoTypes.ISerializedWarPlayer {
+    export interface SerializedPlayer extends ProtoTypes.ISerializedWarPlayer {
         fund            : number;
         hasVotedForDraw : boolean;
         isAlive         : boolean;
@@ -116,25 +116,25 @@ namespace TinyWars.Utility.Types {
         coCurrentEnergy : number;
         coUsingSkillType: CoSkillType;
     }
-    export interface SerializedBwFogMap extends ProtoTypes.ISerializedWarFogMap {
+    export interface SerializedFogMap extends ProtoTypes.ISerializedWarFogMap {
         mapsForPath?: SerializedBwFogMapForPath[];
     }
     export interface SerializedBwFogMapForPath extends ProtoTypes.ISerializedWarFogMapForPath {
         playerIndex : number;
         encodedMap  : string;
     }
-    export interface SerializedBwField extends ProtoTypes.ISerializedWarField {
-        fogMap  : SerializedBwFogMap;
-        unitMap?: SerializedBwUnitMap;
-        tileMap?: SerializedBwTileMap;
+    export interface SerializedField extends ProtoTypes.ISerializedWarField {
+        fogMap  : SerializedFogMap;
+        unitMap?: SerializedUnitMap;
+        tileMap?: SerializedTileMap;
     }
-    export interface SerializedBwTurn extends ProtoTypes.ISerializedWarTurn {
+    export interface SerializedTurn extends ProtoTypes.ISerializedWarTurn {
         turnIndex       : number;
         playerIndex     : number;
         turnPhaseCode   : TurnPhaseCode;
         enterTurnTime   : number;
     }
-    export interface SerializedBwWar extends ProtoTypes.ISerializedWar {
+    export interface SerializedWar extends ProtoTypes.ISerializedWar {
         warId           : number;
         configVersion   : string;
         mapFileName     : string;
@@ -143,7 +143,6 @@ namespace TinyWars.Utility.Types {
         warComment      : string;
 
         hasFogByDefault     : boolean;
-        timeLimit           : number;
         initialFund         : number;
         incomeModifier      : number;
         initialEnergy       : number;
@@ -154,13 +153,115 @@ namespace TinyWars.Utility.Types {
 
         remainingVotesForDraw?  : number;
         executedActions         : WarActionContainer[];
-        players                 : SerializedBwPlayer[];
-        turn                    : SerializedBwTurn;
-        field                   : SerializedBwField;
+        players                 : SerializedPlayer[];
+        turn                    : SerializedTurn;
+        field                   : SerializedField;
     }
 
     ////////////////////////////////////////////////////////////////////////////////
-    // Types.
+    // Raw war action types.
+    ////////////////////////////////////////////////////////////////////////////////
+    export type RawWarActionContainer = {
+        actionId?           : number;
+        PlayerBeginTurn?    : RawWarActionPlayerBeginTurn;
+        PlayerDeleteUnit?   : RawWarActionPlayerDeleteUnit;
+        PlayerEndTurn?      : RawWarActionPlayerEndTurn;
+        PlayerProduceUnit?  : RawWarActionPlayerProduceUnit;
+        UnitAttack?         : RawWarActionUnitAttack;
+        UnitBeLoaded?       : RawWarActionUnitBeLoaded;
+        UnitBuildTile?      : RawWarActionUnitBuildTile;
+        UnitCaptureTile?    : RawWarActionUnitCaptureTile;
+        UnitDive?           : RawWarActionUnitDive;
+        UnitDrop?           : RawWarActionUnitDrop;
+        UnitJoin?           : RawWarActionUnitJoin;
+        UnitLaunchFlare?    : RawWarActionUnitLaunchFlare;
+        UnitLaunchSilo?     : RawWarActionUnitLaunchSilo;
+        UnitLoadCo?         : RawWarActionUnitLoadCo;
+        UnitProduceUnit?    : RawWarActionUnitProduceUnit;
+        UnitSupply?         : RawWarActionUnitSupply;
+        UnitSurface?        : RawWarActionUnitSurface;
+        UnitUseCoSkill?     : RawWarActionUnitUseCoSkill;
+        UnitWait?           : RawWarActionUnitWait;
+    }
+    export type RawWarActionPlayerBeginTurn = {
+    }
+    export type RawWarActionPlayerDeleteUnit = {
+        gridIndex: GridIndex;
+    }
+    export type RawWarActionPlayerEndTurn = {
+    }
+    export type RawWarActionPlayerProduceUnit = {
+        gridIndex   : GridIndex;
+        unitType    : UnitType;
+    }
+    export type RawWarActionUnitAttack = {
+        path            : GridIndex[];
+        launchUnitId    : number | null;
+        targetGridIndex : GridIndex;
+    }
+    export type RawWarActionUnitBeLoaded = {
+        path            : GridIndex[];
+        launchUnitId    : number | null;
+    }
+    export type RawWarActionUnitBuildTile = {
+        path            : GridIndex[];
+        launchUnitId    : number | null;
+    }
+    export type RawWarActionUnitCaptureTile = {
+        path            : GridIndex[];
+        launchUnitId    : number | null;
+    }
+    export type RawWarActionUnitDive = {
+        path            : GridIndex[];
+        launchUnitId    : number | null;
+    }
+    export type RawWarActionUnitDrop = {
+        path            : GridIndex[];
+        launchUnitId    : number | null;
+        dropDestinations: DropDestination[];
+    }
+    export type RawWarActionUnitJoin = {
+        path            : GridIndex[];
+        launchUnitId    : number | null;
+    }
+    export type RawWarActionUnitLaunchFlare = {
+        path            : GridIndex[];
+        launchUnitId    : number | null;
+        targetGridIndex : GridIndex;
+    }
+    export type RawWarActionUnitLaunchSilo = {
+        path            : GridIndex[];
+        launchUnitId    : number | null;
+        targetGridIndex : GridIndex;
+    }
+    export type RawWarActionUnitLoadCo = {
+        path            : GridIndex[];
+        launchUnitId    : number | null;
+    }
+    export type RawWarActionUnitProduceUnit = {
+        path            : GridIndex[];
+        launchUnitId    : number | null;
+    }
+    export type RawWarActionUnitSupply = {
+        path            : GridIndex[];
+        launchUnitId    : number | null;
+    }
+    export type RawWarActionUnitSurface = {
+        path            : GridIndex[];
+        launchUnitId    : number | null;
+    }
+    export type RawWarActionUnitUseCoSkill = {
+        path            : GridIndex[];
+        launchUnitId    : number | null;
+        skillType       : CoSkillType;
+    }
+    export type RawWarActionUnitWait = {
+        path            : GridIndex[];
+        launchUnitId    : number | null;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    // Other types.
     ////////////////////////////////////////////////////////////////////////////////
     export type Size = {
         width : number;
@@ -268,6 +369,13 @@ namespace TinyWars.Utility.Types {
     export type AttackableArea = {
         movePathDestination: GridIndex;
     }[][];
+
+    export type UnitAttributes = {
+        hp          : number;
+        fuel        : number;
+        primaryAmmo : number | null;
+        flareAmmo   : number | null;
+    }
 
     ////////////////////////////////////////////////////////////////////////////////
     // Enums.
@@ -382,7 +490,7 @@ namespace TinyWars.Utility.Types {
         Lander,          /* 24 */           Gunboat,         /* 25 */           Meteor,          /* 26 */
     }
 
-    export const enum UnitState {
+    export const enum UnitActionState {
         Idle,   /* 0 */         Acted,  /* 1 */
     }
 
@@ -507,5 +615,10 @@ namespace TinyWars.Utility.Types {
         TargetPlayerLost,
         AlreadyRequested,
         AlreadyAccepted,
+    }
+
+    export const enum SinglePlayerWarType {
+        Custom  = 0,
+        WarRoom = 1,
     }
 }

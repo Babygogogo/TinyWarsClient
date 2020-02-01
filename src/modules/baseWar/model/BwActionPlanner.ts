@@ -5,7 +5,7 @@ namespace TinyWars.BaseWar {
     import Notify           = Utility.Notify;
     import GridIndexHelpers = Utility.GridIndexHelpers;
     import Logger           = Utility.Logger;
-    import UnitState        = Types.UnitState;
+    import UnitState        = Types.UnitActionState;
     import GridIndex        = Types.GridIndex;
     import State            = Types.ActionPlannerState;
     import MovableArea      = Types.MovableArea;

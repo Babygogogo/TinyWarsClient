@@ -1,8 +1,7 @@
 
 namespace TinyWars.BaseWar {
     import Types            = Utility.Types;
-    import Notify           = Utility.Notify;
-    import SerializedBwWar  = Types.SerializedBwWar;
+    import SerializedBwWar  = Types.SerializedWar;
 
     export abstract class BwWar {
         private _warId                  : number;
@@ -248,7 +247,6 @@ namespace TinyWars.BaseWar {
         }
         public setNextActionId(actionId: number): void {
             this._nextActionId = actionId;
-            Notify.dispatch(Notify.Type.ActionIDChanged);
         }
 
         protected _setPlayerManager(manager: BwPlayerManager): void {

@@ -159,9 +159,9 @@ namespace TinyWars.MultiCustomWar {
         const unitB     = b.unit;
         const stateA    = unitA.getState();
         const stateB    = unitB.getState();
-        if ((stateA === Types.UnitState.Idle) && (stateB !== Types.UnitState.Idle)) {
+        if ((stateA === Types.UnitActionState.Idle) && (stateB !== Types.UnitActionState.Idle)) {
             return -1;
-        } else if ((stateA !== Types.UnitState.Idle) && (stateB === Types.UnitState.Idle)) {
+        } else if ((stateA !== Types.UnitActionState.Idle) && (stateB === Types.UnitActionState.Idle)) {
             return 1;
         } else {
             return unitA.getViewId() - unitB.getViewId();

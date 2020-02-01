@@ -1,7 +1,7 @@
 
 namespace TinyWars.Replay {
     import Types                = Utility.Types;
-    import SerializedBwTile     = Types.SerializedBwTile;
+    import SerializedBwTile     = Types.SerializedTile;
 
     export class ReplayTile extends BaseWar.BwTile {
         protected _getViewClass(): new () => BaseWar.BwTileView {

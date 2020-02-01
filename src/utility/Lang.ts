@@ -349,26 +349,49 @@ namespace TinyWars.Utility.Lang {
             `By entering your correct discord ID \n and joining the following discord server (the link can be copied)\n you can receive tinywars-related information, including turn notification.`,
         ],
         [Type.A0068]: [
+            `可点击以下各个文字以更改设置`,
+            `Touch texts below to change the settings.`,
+        ],
+        [Type.A0069]: [
+            `请为参赛玩家设置至少两个队伍`,
+            `Please set at least two teams for players.`,
+        ],
+        [Type.A0070]: [
+            `您选择的存档位置非空，其内容将被覆盖。确定要继续创建战局吗？`,
+            `The save slot is not empty and will be overwritten. Are you sure to create the game?`,
+        ],
+        [Type.A0071]: [
+            `您的存档将被覆盖。确定要存档吗？`,
+            `Your save slot will be overwritten. Are you sure to continue?`,
+        ],
+        [Type.A0072]: [
+            `您当前的进度将会丢失。确定要读档吗？`,
+            `Your current progress will be lost. Are you sure to continue?`,
+        ],
+        [Type.A0073]: [
+            `已成功存档`,
+            `Game saved successfully.`,
+        ],
+        [Type.A0074]: [
             `已开启悬浮式录像信息显示`,
             `Floattext Replay info Display have been enabled.`,
         ],
-        [Type.A0069]: [
+        [Type.A0075]: [
             `已关闭悬浮式录像信息显示`,
             `Floattext Replay info Display have been disabled.`,
         ],
-        [Type.A0070]: [
+        [Type.A0076]: [
             `已经到达最低回放速率，不能继续降低`,
             `Can't decrease playback rate because it's already lowest.`,
         ],
-        [Type.A0071]: [
+        [Type.A0077]: [
             `已经到达最高回放速率，不能继续提升`,
             `Can't increase playback rate because it's already highest.`,
         ],
-        [Type.A0072]: [
+        [Type.A0078]: [
             `在录像第一次到达结束部分前无法获取总回合`,
             `Can't get total turns before replay completed for first time`,
         ],
-
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -1388,38 +1411,6 @@ namespace TinyWars.Utility.Lang {
         [Type.B0253]: [
             `评分`,
             `Rating`,
-        ],
-        [Type.B0254]: [
-            `行动数`,
-            `Actions`,
-        ],
-        [Type.B0255]: [
-            `录像控制台`,
-            `Replay Console`,
-        ],
-        [Type.B0256]: [
-            `回放速率`,
-            `Playback Rate`,
-        ],
-        [Type.B0257]: [
-            `跳转回合`,
-            `Set Turns`,
-        ],
-        [Type.B0258]: [
-            `跳转行动`,
-            `Set Actions`,
-        ],
-        [Type.B0259]: [
-            `隐藏消息`,
-            `Hide Notifys`,
-        ],
-        [Type.B0260]: [
-            `显示消息`,
-            `Show Notify`,
-        ],
-        [Type.B0261]: [
-            `隐藏面板`,
-            `Hide Panel`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

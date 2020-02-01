@@ -1,8 +1,8 @@
 
 namespace TinyWars.Replay {
     import Types                = Utility.Types;
-    import SerializedBwTileMap  = Types.SerializedBwTileMap;
-    import SerializedBwTile     = Types.SerializedBwTile;
+    import SerializedBwTileMap  = Types.SerializedTileMap;
+    import SerializedBwTile     = Types.SerializedTile;
 
     export class ReplayTileMap extends BaseWar.BwTileMap {
         protected _getBwTileClass(): new () => BaseWar.BwTile {
