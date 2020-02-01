@@ -98,23 +98,48 @@ namespace TinyWars.MapEditor {
         }
 
         private _onTouchedGroupLeftRightBox(e: egret.TouchEvent): void {
-            this._war.getDrawer().setSymmetricalDrawType(SymmetryType.LeftToRight);
+            const drawer = this._war.getDrawer();
+            if (drawer.getSymmetricalDrawType() !== SymmetryType.LeftToRight) {
+                drawer.setSymmetricalDrawType(SymmetryType.LeftToRight);
+            } else {
+                drawer.setSymmetricalDrawType(SymmetryType.None);
+            }
             this._updateGroupBoxes();
         }
         private _onTouchedGroupUpDownBox(e: egret.TouchEvent): void {
-            this._war.getDrawer().setSymmetricalDrawType(SymmetryType.UpToDown);
+            const drawer = this._war.getDrawer();
+            if (drawer.getSymmetricalDrawType() !== SymmetryType.UpToDown) {
+                drawer.setSymmetricalDrawType(SymmetryType.UpToDown);
+            } else {
+                drawer.setSymmetricalDrawType(SymmetryType.None);
+            }
             this._updateGroupBoxes();
         }
         private _onTouchedGroupRotationalBox(e: egret.TouchEvent): void {
-            this._war.getDrawer().setSymmetricalDrawType(SymmetryType.Rotation);
+            const drawer = this._war.getDrawer();
+            if (drawer.getSymmetricalDrawType() !== SymmetryType.Rotation) {
+                drawer.setSymmetricalDrawType(SymmetryType.Rotation);
+            } else {
+                drawer.setSymmetricalDrawType(SymmetryType.None);
+            }
             this._updateGroupBoxes();
         }
         private _onTouchedGroupUpLeftDownRightBox(e: egret.TouchEvent): void {
-            this._war.getDrawer().setSymmetricalDrawType(SymmetryType.UpLeftToDownRight);
+            const drawer = this._war.getDrawer();
+            if (drawer.getSymmetricalDrawType() !== SymmetryType.UpLeftToDownRight) {
+                drawer.setSymmetricalDrawType(SymmetryType.UpLeftToDownRight);
+            } else {
+                drawer.setSymmetricalDrawType(SymmetryType.None);
+            }
             this._updateGroupBoxes();
         }
         private _onTouchedGroupUpRightDownLeftBox(e: egret.TouchEvent): void {
-            this._war.getDrawer().setSymmetricalDrawType(SymmetryType.UpRightToDownLeft);
+            const drawer = this._war.getDrawer();
+            if (drawer.getSymmetricalDrawType() !== SymmetryType.UpRightToDownLeft) {
+                drawer.setSymmetricalDrawType(SymmetryType.UpRightToDownLeft);
+            } else {
+                drawer.setSymmetricalDrawType(SymmetryType.None);
+            }
             this._updateGroupBoxes();
         }
 
