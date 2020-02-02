@@ -242,10 +242,10 @@ namespace TinyWars.SingleCustomRoom {
             data.panel.setSelectedMapFileName(data.mapFileName);
         }
 
-        private _onTouchTapBtnNext(e: egret.TouchEvent): void {
+        private async _onTouchTapBtnNext(e: egret.TouchEvent): Promise<void> {
             ScrCreateMapListPanel.hide();
 
-            ScrModel.resetCreateWarData((this.data as DataForMapNameRenderer).mapFileName);
+            await ScrModel.resetCreateWarData((this.data as DataForMapNameRenderer).mapFileName);
             ScrCreateSettingsPanel.show();
         }
     }
