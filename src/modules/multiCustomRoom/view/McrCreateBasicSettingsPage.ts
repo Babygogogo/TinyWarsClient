@@ -119,13 +119,13 @@ namespace TinyWars.MultiCustomRoom {
             McrModel.setCreateWarComment(this._inputWarComment.text);
         }
 
-        private _onTouchedBtnPrevPlayerIndex(e: egret.TouchEvent): void {
-            McrModel.setCreateWarPrevPlayerIndex();
+        private async _onTouchedBtnPrevPlayerIndex(e: egret.TouchEvent): Promise<void> {
+            await McrModel.setCreateWarPrevPlayerIndex();
             this._updateLabelPlayerIndex();
         }
 
-        private _onTouchedBtnNextPlayerIndex(e: egret.TouchEvent): void {
-            McrModel.setCreateWarNextPlayerIndex();
+        private async _onTouchedBtnNextPlayerIndex(e: egret.TouchEvent): Promise<void> {
+            await McrModel.setCreateWarNextPlayerIndex();
             this._updateLabelPlayerIndex();
         }
 
@@ -136,13 +136,13 @@ namespace TinyWars.MultiCustomRoom {
             });
         }
 
-        private _onTouchedBtnPrevTeam(e: egret.TouchEvent): void {
-            McrModel.setCreateWarPrevTeamIndex();
+        private async _onTouchedBtnPrevTeam(e: egret.TouchEvent): Promise<void> {
+            await McrModel.setCreateWarPrevTeamIndex();
             this._updateLabelTeam();
         }
 
-        private _onTouchedBtnNextTeam(e: egret.TouchEvent): void {
-            McrModel.setCreateWarNextTeamIndex();
+        private async _onTouchedBtnNextTeam(e: egret.TouchEvent): Promise<void> {
+            await McrModel.setCreateWarNextTeamIndex();
             this._updateLabelTeam();
         }
 

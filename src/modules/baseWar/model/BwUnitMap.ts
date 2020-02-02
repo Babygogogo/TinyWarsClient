@@ -55,28 +55,53 @@ namespace TinyWars.BaseWar {
             return this;
         }
         private async _initWithoutSerializedData(configVersion: string, mapFileName: string): Promise<BwUnitMap> {
-            const { mapWidth, mapHeight, units: unitViewIds } = await MapModel.getMapRawData(mapFileName);
-            const map       = Helpers.createEmptyMap<BwUnit>(mapWidth);
-            let nextUnitId  = 0;
-            for (let x = 0; x < mapWidth; ++x) {
-                for (let y = 0; y < mapHeight; ++y) {
-                    const viewId = unitViewIds[x + y * mapWidth];
-                    if (viewId !== 0) {
-                        map[x][y] = new (this._getBwUnitClass())().init({
-                            gridX   : x,
-                            gridY   : y,
-                            viewId  : viewId,
-                            unitId  : nextUnitId,
-                        }, configVersion);
-                        ++nextUnitId;
+            const mapRawData                = await WarMap.WarMapModel.getMapRawData(mapFileName);
+            const { mapWidth, mapHeight }   = mapRawData;
+            const map                       = Helpers.createEmptyMap<BwUnit>(mapWidth);
+            const loadedUnits               = new Map<number, BwUnit>();
+
+            const unitViewIds = mapRawData.units;
+            if (unitViewIds) {
+                let nextUnitId = 0;
+                for (let x = 0; x < mapWidth; ++x) {
+                    for (let y = 0; y < mapHeight; ++y) {
+                        const viewId = unitViewIds[x + y * mapWidth];
+                        if (viewId !== 0) {
+                            map[x][y] = new (this._getBwUnitClass())().init({
+                                gridX   : x,
+                                gridY   : y,
+                                viewId  : viewId,
+                                unitId  : nextUnitId,
+                            }, configVersion);
+                            ++nextUnitId;
+                        }
                     }
+                }
+                this.setNextUnitId(nextUnitId);
+
+            } else {
+                const unitDataList = mapRawData.unitDataList;
+                if (unitDataList) {
+                    let nextUnitId = 0;
+                    for (const unitData of unitDataList) {
+                        const unit  = new (this._getBwUnitClass())().init(unitData as Types.SerializedUnit, configVersion);
+                        nextUnitId  = Math.max(nextUnitId, unitData.unitId! + 1);
+                        if (unit.getLoaderUnitId() == null) {
+                            map[unit.getGridX()][unit.getGridY()] = unit;
+                        } else {
+                            loadedUnits.set(unit.getUnitId(), unit);
+                        }
+                    }
+                    this.setNextUnitId(nextUnitId);
+
+                } else {
+                    this.setNextUnitId(0);
                 }
             }
 
             this._map           = map;
-            this._loadedUnits   = new Map<number, BwUnit>();
+            this._loadedUnits   = loadedUnits;
             this._setMapSize(mapWidth, mapHeight);
-            this.setNextUnitId(nextUnitId);
 
             return this;
         }

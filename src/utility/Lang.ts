@@ -48,6 +48,17 @@ namespace TinyWars.Utility.Lang {
         B0280, B0281, B0282, B0283, B0284, B0285, B0286, B0287, B0288, B0289,
         B0290, B0291, B0292, B0293, B0294, B0295, B0296, B0297, B0298, B0299,
 
+        B0300, B0301, B0302, B0303, B0304, B0305, B0306, B0307, B0308, B0309,
+        B0310, B0311, B0312, B0313, B0314, B0315, B0316, B0317, B0318, B0319,
+        B0320, B0321, B0322, B0323, B0324, B0325, B0326, B0327, B0328, B0329,
+        B0330, B0331, B0332, B0333, B0334, B0335, B0336, B0337, B0338, B0339,
+        B0340, B0341, B0342, B0343, B0344, B0345, B0346, B0347, B0348, B0349,
+        B0350, B0351, B0352, B0353, B0354, B0355, B0356, B0357, B0358, B0359,
+        B0360, B0361, B0362, B0363, B0364, B0365, B0366, B0367, B0368, B0369,
+        B0370, B0371, B0372, B0373, B0374, B0375, B0376, B0377, B0378, B0379,
+        B0380, B0381, B0382, B0383, B0384, B0385, B0386, B0387, B0388, B0389,
+        B0390, B0391, B0392, B0393, B0394, B0395, B0396, B0397, B0398, B0399,
+
         B1000, B1001, B1002, B1003, B1004, B1005, B1006, B1007, B1008, B1009,
         B1010, B1011, B1012, B1013, B1014, B1015, B1016, B1017, B1018, B1019,
         B1020, B1021, B1022, B1023, B1024, B1025, B1026, B1027, B1028, B1029,
@@ -423,6 +434,62 @@ namespace TinyWars.Utility.Lang {
         [Type.A0081]: [
             `已成功删除地图`,
             `The map has been deleted successfully`,
+        ],
+        [Type.A0082]: [
+            `确定要保存此地图吗？`,
+            `Are you sure to save the map?`,
+        ],
+        [Type.A0083]: [
+            `此地图存在问题，暂不能提审`,
+            `This map is not playable.`,
+        ],
+        [Type.A0084]: [
+            `您已提审过其他地图。若提审此地图，则其他地图将被自动撤销提审。确定要继续吗？`,
+            `You have submitted some other maps for review. If you submit this map, the submitted maps will not be reviewed. Are you sure to continue?`,
+        ],
+        [Type.A0085]: [
+            `已成功保存地图`,
+            `The map has been saved.`,
+        ],
+        [Type.A0086]: [
+            `注：若新的宽高小于当前宽高，则超出的图块会被裁剪掉（以左上角为原点）`,
+            `Warning: If width/height is set lower than the current value, right & bottom map area exceeding the limit will be deleted.`,
+        ],
+        [Type.A0087]: [
+            `您输入的宽高不合法，请检查`,
+            `The W/H is not valid.`,
+        ],
+        [Type.A0088]: [
+            `注：偏移后超出范围的图块会被裁剪（以左上角为原点）`,
+            `Warning: Data that out of range will be dismissed! The origin point is at the upper left corner.`,
+        ],
+        [Type.A0089]: [
+            `您确定要填充整个地图吗？`,
+            `Are you sure to fill the map?`,
+        ],
+        [Type.A0090]: [
+            `您确定要让过审此地图吗？`,
+            `Are you sure to accept the map?`,
+        ],
+        [Type.A0091]: [
+            `您确定要拒审此地图吗？`,
+            `Are you sure to reject the map?`,
+        ],
+        [Type.A0092]: [
+            `您已成功过审该地图。`,
+            `You have accepted the map successfully.`,
+        ],
+        [Type.A0093]: [
+            `您已成功拒审该地图。`,
+            `You have rejected the map successfully.`,
+        ],
+        [Type.A0094]: [
+            `请输入拒审理由`,
+            `Please write down the reason for the rejection`,
+        ],
+        [Type.A0095]: [
+            `您确定要导入此地图吗？`,
+            `Are you sure to import this map?`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -978,11 +1045,11 @@ namespace TinyWars.Utility.Lang {
         ],
         [Type.B0137]: [
             `多人对战`,
-            `MultiPlayer`,
+            `Multi Player`,
         ],
         [Type.B0138]: [
             `单人模式`,
-            `SinglePlayer`,
+            `Single Player`,
         ],
         [Type.B0139]: [
             `CO搭乘`,
@@ -1496,6 +1563,178 @@ namespace TinyWars.Utility.Lang {
             `删除地图`,
             `Delete Map`,
         ],
+        [Type.B0271]: [
+            `地图编辑器`,
+            `Map Editor`,
+        ],
+        [Type.B0272]: [
+            `地图列表`,
+            `Map List`,
+        ],
+        [Type.B0273]: [
+            `未提审`,
+            `Not Reviewed`,
+        ],
+        [Type.B0274]: [
+            `审核中`,
+            `Reviewing`,
+        ],
+        [Type.B0275]: [
+            `被拒审`,
+            `Rejected`,
+        ],
+        [Type.B0276]: [
+            `已过审`,
+            `Accepted`,
+        ],
+        [Type.B0277]: [
+            `未命名`,
+            `Unnamed`,
+        ],
+        [Type.B0278]: [
+            `无数据`,
+            `No Data`,
+        ],
+        [Type.B0279]: [
+            `新地图`,
+            `New Map`,
+        ],
+        [Type.B0280]: [
+            `模式`,
+            `Mode`,
+        ],
+        [Type.B0281]: [
+            `绘制部队`,
+            `Draw Unit`,
+        ],
+        [Type.B0282]: [
+            `绘制地形基底`,
+            `Draw Tile Base`,
+        ],
+        [Type.B0283]: [
+            `绘制地形物体`,
+            `Draw Tile Object`,
+        ],
+        [Type.B0284]: [
+            `删除部队`,
+            `Del Unit`,
+        ],
+        [Type.B0285]: [
+            `删除地形物体`,
+            `Del Tile Object`,
+        ],
+        [Type.B0286]: [
+            `预览`,
+            `Preview`,
+        ],
+        [Type.B0287]: [
+            `保存地图`,
+            `Save Map`,
+        ],
+        [Type.B0288]: [
+            `读取地图`,
+            `Load Map`,
+        ],
+        [Type.B0289]: [
+            `提审`,
+            `Submit for review`,
+        ],
+        [Type.B0290]: [
+            `调整大小`,
+            `Resize`,
+        ],
+        [Type.B0291]: [
+            `当前宽高`,
+            `Current W/H`,
+        ],
+        [Type.B0292]: [
+            `新的宽高`,
+            `New W/H`,
+        ],
+        [Type.B0293]: [
+            `地图偏移`,
+            `Map Offset`,
+        ],
+        [Type.B0294]: [
+            `全图填充`,
+            `Fill Map`,
+        ],
+        [Type.B0295]: [
+            `审核地图`,
+            `Review Maps`,
+        ],
+        [Type.B0296]: [
+            `过审`,
+            `Accept`,
+        ],
+        [Type.B0297]: [
+            `拒审`,
+            `Reject`,
+        ],
+        [Type.B0298]: [
+            `地图信息`,
+            `Map Info`,
+        ],
+        [Type.B0299]: [
+            `地图英文名称`,
+            `Map English Name`,
+        ],
+        [Type.B0300]: [
+            `地图尺寸`,
+            `Map Size`,
+        ],
+        [Type.B0301]: [
+            `可见性`,
+            `Visibility`,
+        ],
+        [Type.B0302]: [
+            `地形基底`,
+            `Tile Bases`,
+        ],
+        [Type.B0303]: [
+            `地形物体`,
+            `Tile Objects`,
+        ],
+        [Type.B0304]: [
+            `部队`,
+            `Units`,
+        ],
+        [Type.B0305]: [
+            `拒审理由`,
+            `Reason for Rejection`,
+        ],
+        [Type.B0306]: [
+            `对称性`,
+            `Symmetry`,
+        ],
+        [Type.B0307]: [
+            `自动绘制地形`,
+            `Auto Draw Tile`,
+        ],
+        [Type.B0308]: [
+            `上下对称`,
+            `U to D`,
+        ],
+        [Type.B0309]: [
+            `左右对称`,
+            `L to R`,
+        ],
+        [Type.B0310]: [
+            `旋转对称`,
+            `Rotational`,
+        ],
+        [Type.B0311]: [
+            `左上右下对称`,
+            `UL to DR`,
+        ],
+        [Type.B0312]: [
+            `右上左下对称`,
+            `UR to DL`,
+        ],
+        [Type.B0313]: [
+            `导入`,
+            `Import`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -1834,6 +2073,10 @@ namespace TinyWars.Utility.Lang {
         [Type.F0022]: [
             `%s (p%d) 回合正式开始！！`,
             `It's %s (p%d)'s turn!!`,
+        ],
+        [Type.F0023]: [
+            `地图的总格子数必须小于%d，否则不能提审`,
+            `The number of the tiles must be less than %d, or the map can't be submitted for review.`,
         ],
     };
 
@@ -2318,6 +2561,28 @@ namespace TinyWars.Utility.Lang {
             case Types.SinglePlayerWarType.Custom   : return getText(Type.B0254);
             case Types.SinglePlayerWarType.WarRoom  : return getText(Type.B0257);
             default                                 : return null;
+        }
+    }
+
+    export function getMapReviewStatusText(status: Types.MapReviewStatus): string {
+        switch (status) {
+            case Types.MapReviewStatus.None         : return getText(Type.B0273);
+            case Types.MapReviewStatus.Reviewing    : return getText(Type.B0274);
+            case Types.MapReviewStatus.Rejected     : return getText(Type.B0275);
+            case Types.MapReviewStatus.Accepted     : return getText(Type.B0276);
+            default                                 : return null;
+        }
+    }
+
+    export function getMapEditorDrawerModeText(mode: Types.MapEditorDrawerMode): string {
+        switch (mode) {
+            case Types.MapEditorDrawerMode.Preview          : return getText(Type.B0286);
+            case Types.MapEditorDrawerMode.DrawUnit         : return getText(Type.B0281);
+            case Types.MapEditorDrawerMode.DrawTileBase     : return getText(Type.B0282);
+            case Types.MapEditorDrawerMode.DrawTileObject   : return getText(Type.B0283);
+            case Types.MapEditorDrawerMode.DeleteUnit       : return getText(Type.B0284);
+            case Types.MapEditorDrawerMode.DeleteTileObject : return getText(Type.B0285);
+            default                                         : return null;
         }
     }
 }

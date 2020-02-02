@@ -87,15 +87,22 @@ namespace TinyWars.MapManagement {
                 {
                     name    : Lang.getText(Lang.Type.B0193),
                     callback: (): void => {
-                        MmMainMenuPanel.hide();
+                        this.close();
                         MmAvailabilityListPanel.show({});
                     },
                 },
                 {
                     name    : Lang.getText(Lang.Type.B0268),
                     callback: (): void => {
-                        MmMainMenuPanel.hide();
+                        this.close();
                         MmMergeListPanel.show();
+                    },
+                },
+                {
+                    name    : Lang.getText(Lang.Type.B0295),
+                    callback: (): void => {
+                        this.close();
+                        MmReviewListPanel.show();
                     },
                 },
             ];

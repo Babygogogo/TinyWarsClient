@@ -778,6 +778,239 @@ namespace TinyWars.ConfigManager {
         [109, { tileObjectType: TileObjectType.GreenPlasma, playerIndex: 0 }],
     ]);
 
+    const _TILE_BASE_SYMMETRY = new Map<number, number[]>([
+        //          上下对称 左下右上 左右对称 左上右下 旋转对称    // 对称方式
+        // 原图     上下翻转 左下右上 左右翻转 左上右下 逆时针180  // 图块变换
+        ////////// plain: 1 (1 total) //////////
+        [ 1,    [   1,      1,      1,      1,      1]],
+
+        ////////// river: 2 - 17 (16 total) //////////
+        [ 2,    [   2,      2,      2,      2,      2]],
+        [ 3,    [   3,      5,      4,      6,      4]],
+        [ 4,    [   4,      6,      3,      5,      3]],
+        [ 5,    [   6,      3,      5,      4,      6]],
+        [ 6,    [   5,      4,      6,      3,      5]],
+        [ 7,    [   7,      12,     7,      12,     7]],
+        [ 8,    [   10,     8,      9,      11,     11]],
+        [ 9,    [   11,     10,     8,      9,      10]],
+        [ 10,   [   8,      9,      11,     10,     9]],
+        [ 11,   [   9,      11,     10,     8,      8]],
+        [ 12,   [   12,     7,      12,     7,      12]],
+        [ 13,   [   14,     15,     13,     16,     14]],
+        [ 14,   [   13,     16,     14,     15,     13]],
+        [ 15,   [   15,     13,     16,     14,     16]],
+        [ 16,   [   16,     14,     15,     13,     15]],
+        [ 17,   [   17,     17,     17,     17,     17]],
+
+        ////////// sea: 18 - 64 (47 total) //////////
+        [ 18,   [   18,     18,     18,     18,     18]],
+        [ 19,   [   20,     19,     22,     26,     26]],
+        [ 20,   [   19,     22,     26,     20,     22]],
+        [ 21,   [   21,     23,     30,     28,     30]],
+        [ 22,   [   26,     20,     19,     22,     20]],
+        [ 23,   [   28,     21,     23,     30,     28]],
+        [ 24,   [   27,     24,     27,     24,     24]],
+        [ 25,   [   29,     25,     31,     32,     32]],
+        [ 26,   [   22,     26,     20,     19,     19]],
+        [ 27,   [   24,     27,     24,     27,     27]],
+        [ 28,   [   23,     30,     28,     21,     23]],
+        [ 29,   [   25,     31,     32,     29,     31]],
+        [ 30,   [   30,     28,     21,     23,     21]],
+        [ 31,   [   32,     29,     25,     31,     29]],
+        [ 32,   [   31,     32,     29,     25,     25]],
+        [ 33,   [   33,     33,     33,     33,     33]],
+        [ 34,   [   34,     43,     38,     52,     38]],
+        [ 35,   [   36,     44,     39,     54,     40]],
+        [ 36,   [   35,     45,     40,     53,     39]],
+        [ 37,   [   37,     46,     41,     55,     41]],
+        [ 38,   [   38,     52,     34,     43,     34]],
+        [ 39,   [   40,     53,     35,     45,     36]],
+        [ 40,   [   39,     54,     36,     44,     35]],
+        [ 41,   [   41,     55,     37,     46,     37]],
+        [ 42,   [   42,     61,     42,     61,     42]],
+        [ 43,   [   52,     34,     43,     38,     52]],
+        [ 44,   [   53,     35,     45,     40,     54]],
+        [ 45,   [   54,     36,     44,     39,     53]],
+        [ 46,   [   55,     37,     46,     41,     55]],
+        [ 47,   [   56,     47,     49,     58,     58]],
+        [ 48,   [   57,     48,     50,     59,     59]],
+        [ 49,   [   58,     56,     47,     49,     56]],
+        [ 50,   [   59,     57,     48,     50,     57]],
+        [ 51,   [   60,     62,     51,     63,     60]],
+        [ 52,   [   43,     38,     52,     34,     43]],
+        [ 53,   [   44,     39,     54,     36,     45]],
+        [ 54,   [   45,     40,     53,     35,     44]],
+        [ 55,   [   46,     41,     55,     37,     46]],
+        [ 56,   [   47,     49,     58,     56,     49]],
+        [ 57,   [   48,     50,     59,     57,     50]],
+        [ 58,   [   49,     58,     56,     47,     47]],
+        [ 59,   [   50,     59,     57,     48,     48]],
+        [ 60,   [   51,     63,     60,     62,     51]],
+        [ 61,   [   61,     42,     61,     42,     61]],
+        [ 62,   [   62,     51,     63,     60,     63]],
+        [ 63,   [   63,     60,     62,     51,     62]],
+        [ 64,   [   64,     64,     64,     64,     64]],
+
+        ////////// beach: 65 - 100 (36 total) //////////
+        [ 65,   [   66,     67,     65,     68,     66]],
+        [ 66,   [   65,     68,     66,     67,     65]],
+        [ 67,   [   67,     65,     68,     66,     68]],
+        [ 68,   [   68,     66,     67,     65,     67]],
+        [ 69,   [   70,     71,     69,     72,     70]],
+        [ 70,   [   69,     72,     70,     71,     69]],
+        [ 71,   [   71,     69,     72,     70,     72]],
+        [ 72,   [   72,     70,     71,     69,     71]],
+        [ 73,   [   78,     79,     77,     80,     74]],
+        [ 74,   [   77,     80,     78,     79,     73]],
+        [ 75,   [   79,     77,     80,     78,     76]],
+        [ 76,   [   80,     78,     79,     77,     75]],
+        [ 77,   [   74,     75,     73,     76,     78]],
+        [ 78,   [   73,     76,     74,     75,     77]],
+        [ 79,   [   75,     73,     76,     74,     80]],
+        [ 80,   [   76,     74,     75,     73,     79]],
+        [ 81,   [   84,     81,     82,     83,     83]],
+        [ 82,   [   83,     84,     81,     82,     84]],
+        [ 83,   [   82,     83,     84,     81,     81]],
+        [ 84,   [   81,     82,     83,     84,     82]],
+        [ 85,   [   88,     85,     86,     87,     87]],
+        [ 86,   [   87,     88,     85,     86,     88]],
+        [ 87,   [   86,     87,     88,     85,     85]],
+        [ 88,   [   85,     86,     87,     88,     86]],
+        [ 89,   [   96,     93,     94,     95,     91]],
+        [ 90,   [   95,     96,     93,     94,     92]],
+        [ 91,   [   94,     95,     96,     93,     89]],
+        [ 92,   [   93,     94,     95,     96,     90]],
+        [ 93,   [   92,     89,     90,     91,     95]],
+        [ 94,   [   91,     92,     89,     90,     96]],
+        [ 95,   [   90,     91,     92,     89,     93]],
+        [ 96,   [   89,     90,     91,     92,     94]],
+        [ 97,   [   98,     99,     97,     100,    98]],
+        [ 98,   [   97,     100,    98,     99,     97]],
+        [ 99,   [   99,     97,     100,    98,     100]],
+        [ 100,  [   100,    98,     99,     97,     99]],
+    ]);
+
+    const _TILE_OBJECT_SYMMETRY = new Map<number, number[]>([
+        // 原图     上下翻转 左下右上 左右翻转 左上右下 逆时针180  // 图块变换
+        [ 0,    [   0,      0,      0,      0,      0]],
+        [ 1,    [   1,      2,      1,      2,      1]],
+        [ 2,    [   2,      1,      2,      1,      2]],
+        [ 3,    [   5,      3,      4,      6,      6]],
+        [ 4,    [   6,      5,      3,      4,      5]],
+        [ 5,    [   3,      4,      6,      5,      4]],
+        [ 6,    [   4,      6,      5,      3,      3]],
+        [ 7,    [   8,      9,      7,      10,     8]],
+        [ 8,    [   7,      10,     8,      9,      7]],
+        [ 9,    [   9,      7,      10,     8,      10]],
+        [ 10,   [   10,     8,      9,      7,      9]],
+        [ 11,   [   11,     11,     11,     11,     11]],
+
+        [ 12,   [   12,     13,     12,     13,     12]],
+        [ 13,   [   13,     12,     13,     12,     13]],
+        [ 14,   [   16,     14,     15,     17,     17]],
+        [ 15,   [   17,     16,     14,     15,     16]],
+        [ 16,   [   14,     15,     17,     16,     15]],
+        [ 17,   [   15,     17,     16,     14,     14]],
+        [ 18,   [   19,     20,     18,     21,     19]],
+        [ 19,   [   18,     21,     19,     20,     18]],
+        [ 20,   [   20,     18,     21,     19,     21]],
+        [ 21,   [   21,     19,     20,     18,     20]],
+        [ 22,   [   22,     22,     22,     22,     22]],
+
+        [ 23,   [   23,     23,     23,     23,     23]],
+        [ 24,   [   24,     24,     24,     24,     24]],
+        [ 25,   [   25,     25,     25,     25,     25]],
+        [ 26,   [   26,     26,     26,     26,     26]],
+        [ 27,   [   27,     27,     27,     27,     27]],
+        [ 28,   [   28,     28,     28,     28,     28]],
+        [ 29,   [   29,     29,     29,     29,     29]],
+        [ 30,   [   30,     30,     30,     30,     30]],
+
+        // 原图     上下翻转 左下右上 左右翻转 左上右下 逆时针180  // 图块变换
+        [ 31,   [   31,     31,     31,     31,     31]],
+        [ 32,   [   34,     33,     32,     35,     34]],
+        [ 33,   [   33,     32,     35,     34,     35]],
+        [ 34,   [   32,     35,     34,     33,     32]],
+        [ 35,   [   35,     34,     33,     32,     33]],
+        [ 36,   [   38,     37,     36,     39,     38]],
+        [ 37,   [   37,     36,     39,     38,     39]],
+        [ 38,   [   36,     39,     38,     37,     36]],
+        [ 39,   [   39,     38,     37,     36,     37]],
+        [ 40,   [   41,     40,     43,     42,     42]],
+        [ 41,   [   40,     43,     42,     41,     43]],
+        [ 42,   [   43,     42,     41,     40,     40]],
+        [ 43,   [   42,     41,     40,     43,     41]],
+        [ 44,   [   44,     44,     44,     44,     44]],
+        [ 45,   [   45,     46,     45,     46,     45]],
+        [ 46,   [   46,     45,     46,     45,     46]],
+
+        [ 47,   [   47,     47,     47,     47,     47]],
+        [ 48,   [   48,     48,     48,     48,     48]],
+        [ 49,   [   49,     49,     49,     49,     49]],
+
+        [ 50,   [   51,     51,     51,     51,     51]],
+        [ 51,   [   50,     50,     50,     50,     50]],
+        [ 52,   [   53,     53,     53,     53,     53]],
+        [ 53,   [   52,     52,     52,     52,     52]],
+        [ 54,   [   54,     54,     54,     54,     54]],
+        [ 55,   [   56,     56,     56,     56,     56]],
+        [ 56,   [   55,     55,     55,     55,     55]],
+        [ 57,   [   58,     58,     58,     58,     58]],
+        [ 58,   [   57,     57,     57,     57,     57]],
+        [ 59,   [   59,     59,     59,     59,     59]],
+        [ 60,   [   61,     61,     61,     61,     61]],
+        [ 61,   [   60,     60,     60,     60,     60]],
+        [ 62,   [   63,     63,     63,     63,     63]],
+        [ 63,   [   62,     62,     62,     62,     62]],
+        [ 64,   [   64,     64,     64,     64,     64]],
+        [ 65,   [   66,     66,     66,     66,     66]],
+        [ 66,   [   65,     65,     65,     65,     65]],
+        [ 67,   [   68,     68,     68,     68,     68]],
+        [ 68,   [   67,     67,     67,     67,     67]],
+        [ 69,   [   69,     69,     69,     69,     69]],
+        [ 70,   [   71,     71,     71,     71,     71]],
+        [ 71,   [   70,     70,     70,     70,     70]],
+        [ 72,   [   73,     73,     73,     73,     73]],
+        [ 73,   [   72,     72,     72,     72,     72]],
+        [ 74,   [   74,     74,     74,     74,     74]],
+        [ 75,   [   76,     76,     76,     76,     76]],
+        [ 76,   [   75,     75,     75,     75,     75]],
+        [ 77,   [   78,     78,     78,     78,     78]],
+        [ 78,   [   77,     77,     77,     77,     77]],
+        [ 79,   [   79,     79,     79,     79,     79]],
+        [ 80,   [   81,     81,     81,     81,     81]],
+        [ 81,   [   80,     80,     80,     80,     80]],
+        [ 82,   [   83,     83,     83,     83,     83]],
+        [ 83,   [   82,     82,     82,     82,     82]],
+        [ 84,   [   84,     84,     84,     84,     84]],
+        [ 85,   [   86,     86,     86,     86,     86]],
+        [ 86,   [   85,     85,     85,     85,     85]],
+        [ 87,   [   88,     88,     88,     88,     88]],
+        [ 88,   [   87,     87,     87,     87,     87]],
+        [ 89,   [   89,     89,     89,     89,     89]],
+        [ 90,   [   91,     91,     91,     91,     91]],
+        [ 91,   [   90,     90,     90,     90,     90]],
+        [ 92,   [   93,     93,     93,     93,     93]],
+        [ 93,   [   92,     92,     92,     92,     92]],
+
+        [ 94,   [   94,     94,     94,     94,     94]],
+        [ 95,   [   97,     96,     95,     98,     97]],
+        [ 96,   [   96,     95,     98,     97,     98]],
+        [ 97,   [   95,     98,     97,     96,     95]],
+        [ 98,   [   98,     97,     96,     95,     96]],
+        [ 99,   [   101,    100,    99,     102,    101]],
+        [ 100,  [   100,    99,     102,    101,    102]],
+        [ 101,  [   99,     102,    101,    100,    99]],
+        [ 102,  [   102,    101,    100,    99,     100]],
+        [ 103,  [   104,    103,    106,    105,    105]],
+        [ 104,  [   103,    106,    105,    104,    106]],
+        [ 105,  [   106,    105,    104,    103,    103]],
+        [ 106,  [   105,    104,    103,    106,    104]],
+        [ 107,  [   107,    107,    107,    107,    107]],
+        [ 108,  [   108,    109,    108,    109,    108]],
+        [ 109,  [   109,    108,    109,    108,    109]],
+    ]);
+
     const _UNIT_TYPES_AND_PLAYER_INDEX = new Map<number, UnitTypeAndPlayerIndex>([
         ////////// infantry //////////
         [  1, { unitType: UnitType.Infantry, playerIndex: 1 }],
@@ -1405,6 +1638,14 @@ namespace TinyWars.ConfigManager {
         Logger.log("[ConfigManager init] _initTileObjectViewIds() finished.");
     }
 
+    function _initTileBaseViewIds(): void {
+        for (const [viewId, type] of _TILE_BASE_TYPES) {
+            if (!_TILE_BASE_VIEW_IDS.has(type)) {
+                _TILE_BASE_VIEW_IDS.set(type, viewId);
+            }
+        }
+    }
+
     function _initUnitViewIds(): void {
         for (const [unitViewId, unitTypeAndPlayerIndex] of _UNIT_TYPES_AND_PLAYER_INDEX) {
             const type = unitTypeAndPlayerIndex.unitType;
@@ -1426,6 +1667,7 @@ namespace TinyWars.ConfigManager {
 
     const _ALL_CONFIGS          = new Map<string, ExtendedFullConfig>();
     const _TILE_OBJECT_VIEW_IDS = new Map<TileObjectType, Map<number, number>>();
+    const _TILE_BASE_VIEW_IDS   = new Map<TileBaseType, number>();
     const _UNIT_VIEW_IDS        = new Map<UnitType, Map<number, number>>();
     const _AVAILABLE_CO_LIST    = new Map<string, CoBasicCfg[]>();
     const _CO_TIERS             = new Map<string, number[]>();
@@ -1437,6 +1679,7 @@ namespace TinyWars.ConfigManager {
     // Exports.
     ////////////////////////////////////////////////////////////////////////////////
     export const UNIT_HP_NORMALIZER         = 10;
+    export const MAX_PLAYER_INDEX           = 4;
     export const SILO_RADIUS                = 2;
     export const SILO_DAMAGE                = 30;
     export const DEFAULT_LUCK_LOWER_LIMIT   = 0;
@@ -1446,8 +1689,15 @@ namespace TinyWars.ConfigManager {
     export const MAX_WAR_NAME_LENGTH        = 20;
     export const MAX_WAR_PASSWORD_LENGTH    = 4;
     export const MAX_WAR_COMMENT_LENGTH     = 50;
+    export const MAX_MAP_EDITOR_SLOT_COUNT  = 3;
 
     export const MAX_SAVE_SLOT_COUNT        = 10;
+    export const MAP_CONSTANTS              = {
+        MaxGridsCount           : 1000,
+        MaxMapNameLength        : 30,
+        MaxMapNameEnglishLength : 30,
+        MaxDesignerLength       : 30,
+    };
 
     export function init(): void {
         NetManager.addListeners([
@@ -1455,6 +1705,7 @@ namespace TinyWars.ConfigManager {
         ], ConfigManager);
 
         _initTileObjectViewIds();
+        _initTileBaseViewIds();
         _initUnitViewIds();
     }
 
@@ -1571,6 +1822,10 @@ namespace TinyWars.ConfigManager {
 
     export function getTileBaseType(tileBaseViewId: number): TileBaseType {
         return _TILE_BASE_TYPES.get(tileBaseViewId)!;
+    }
+
+    export function getTileBaseViewId(type: TileBaseType): number {
+        return _TILE_BASE_VIEW_IDS.get(type);
     }
 
     export function getTileObjectTypeAndPlayerIndex(tileObjectViewId: number): TileObjectTypeAndPlayerIndex {
@@ -1709,5 +1964,24 @@ namespace TinyWars.ConfigManager {
             _CUSTOM_CO_ID_LIST.set(version, idList);
         }
         return _CUSTOM_CO_ID_LIST.get(version);
+    }
+
+    export function forEachTileObjectTypeAndPlayerIndex(func: (value: TileObjectTypeAndPlayerIndex, tileObjectViewId: number) => void): void {
+        _TILE_OBJECT_TYPES_AND_PLAYER_INDEX.forEach(func);
+    }
+    export function forEachTileBaseType(func: (value: TileBaseType, tileBaseViewId: number) => void): void {
+        _TILE_BASE_TYPES.forEach(func);
+    }
+    export function forEachUnitTypeAndPlayerIndex(func: (value: UnitTypeAndPlayerIndex, unitViewId: number) => void): void {
+        _UNIT_TYPES_AND_PLAYER_INDEX.forEach(func);
+    }
+
+    export function getSymmetricalTileBaseViewId(tileBaseViewId: number, symmetryType: Types.SymmetryType): number | null {
+        const cfg = _TILE_BASE_SYMMETRY.get(tileBaseViewId);
+        return cfg ? cfg[symmetryType] : null;
+    }
+    export function getSymmetricalTileObjectViewId(tileObjectViewId: number, symmetryType: Types.SymmetryType): number | null {
+        const cfg = _TILE_OBJECT_SYMMETRY.get(tileObjectViewId);
+        return cfg ? cfg[symmetryType] : null;
     }
 }

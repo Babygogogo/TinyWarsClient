@@ -3,9 +3,9 @@ namespace TinyWars.Utility.FlowManager {
     import UserModel    = User.UserModel;
     import McwProxy     = MultiCustomWar.McwProxy;
     import McwModel     = MultiCustomWar.McwModel;
-    import ReplayModel  = Replay.ReplayModel;
     import ScwModel     = SingleCustomWar.ScwModel;
-    import ErrorPanel   = Common.ErrorPanel;
+    import ReplayModel  = Replay.ReplayModel;
+    import MeManager    = MapEditor.MeManager;
 
     const _NET_EVENTS = [
         { msgCode: Network.Codes.S_ServerDisconnect,   callback: _onNetSServerDisconnect },
@@ -21,7 +21,7 @@ namespace TinyWars.Utility.FlowManager {
 
     export async function startGame(stage: egret.Stage): Promise<void> {
         window.onerror = (message, filename, row, col, err) => {
-            ErrorPanel.show({
+            Common.ErrorPanel.show({
                 content : `${message}\n\n${err ? err.stack : "No available call stack."}`,
             });
         };
@@ -49,6 +49,9 @@ namespace TinyWars.Utility.FlowManager {
         SingleCustomRoom.ScrProxy.init();
         SingleCustomRoom.ScrModel.init();
         ScwModel.init();
+        MapEditor.MeProxy.init();
+        MapEditor.MeModel.init();
+        MeManager.init();
 
         _removeLoadingDom();
         gotoLogin();
@@ -61,15 +64,18 @@ namespace TinyWars.Utility.FlowManager {
         McwModel.unloadWar();
         ReplayModel.unloadWar();
         ScwModel.unloadWar();
+        MeManager.unloadWar();
         StageManager.closeAllPanels();
         Login.LoginBackgroundPanel.show();
         Login.LoginPanel.show();
     }
     export function gotoLobby(): void {
         _hasOnceWentToLobby = true;
+
         McwModel.unloadWar();
         ReplayModel.unloadWar();
         ScwModel.unloadWar();
+        MeManager.unloadWar();
         StageManager.closeAllPanels();
         Lobby.LobbyPanel.show();
         Lobby.LobbyTopPanel.show();
@@ -77,7 +83,9 @@ namespace TinyWars.Utility.FlowManager {
     export async function gotoMultiCustomWar(data: Types.SerializedWar): Promise<void> {
         ReplayModel.unloadWar();
         ScwModel.unloadWar();
+        MeManager.unloadWar();
         await McwModel.loadWar(data);
+
         StageManager.closeAllPanels();
         MultiCustomWar.McwBackgroundPanel.show();
         MultiCustomWar.McwTopPanel.show();
@@ -88,7 +96,9 @@ namespace TinyWars.Utility.FlowManager {
     export async function gotoReplay(warData: Uint8Array, nicknames: string[]): Promise<void> {
         McwModel.unloadWar();
         ScwModel.unloadWar();
+        MeManager.unloadWar();
         await ReplayModel.loadWar(warData, nicknames);
+
         StageManager.closeAllPanels();
         Replay.ReplayBackgroundPanel.show();
         Replay.ReplayTopPanel.show();
@@ -99,13 +109,28 @@ namespace TinyWars.Utility.FlowManager {
     export async function gotoSingleCustomWar(data: Types.SerializedWar): Promise<void> {
         McwModel.unloadWar();
         ReplayModel.unloadWar();
+        MeManager.unloadWar();
         await ScwModel.loadWar(data);
+
         StageManager.closeAllPanels();
         SingleCustomWar.ScwBackgroundPanel.show();
         SingleCustomWar.ScwTopPanel.show();
         SingleCustomWar.ScwWarPanel.show();
         SingleCustomWar.ScwTileBriefPanel.show();
         SingleCustomWar.ScwUnitBriefPanel.show();
+    }
+    export function gotoMapEditor(mapRawData: Types.MapRawData, slotIndex: number, isReview: boolean): void {
+        McwModel.unloadWar();
+        ScwModel.unloadWar();
+        ReplayModel.unloadWar();
+        MeManager.loadWar(mapRawData, slotIndex, isReview);
+
+        StageManager.closeAllPanels();
+        MapEditor.MeBackgroundPanel.show();
+        MapEditor.MeTopPanel.show();
+        MapEditor.MeWarPanel.show();
+        MapEditor.MeTileBriefPanel.show();
+        MapEditor.MeUnitBriefPanel.show();
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -333,6 +333,8 @@ namespace TinyWars.Utility.Types {
         tileBases       : number[];
         tileObjects     : number[];
         units           : number[];
+        unitDataList    : SerializedUnit[];
+        tileDataList    : SerializedTile[];
     }
 
     export type MapAvailability = {
@@ -364,6 +366,12 @@ namespace TinyWars.Utility.Types {
         fuel        : number;
         primaryAmmo : number | null;
         flareAmmo   : number | null;
+    }
+
+    export interface MeMapData extends ProtoTypes.IMapEditorData {
+        slotIndex   : number;
+        reviewStatus: MapReviewStatus;
+        mapRawData  : ProtoTypes.IMapRawData | null | undefined;
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -609,5 +617,30 @@ namespace TinyWars.Utility.Types {
     export const enum SinglePlayerWarType {
         Custom  = 0,
         WarRoom = 1,
+    }
+
+    export const enum MapReviewStatus {
+        None        = 0,
+        Reviewing   = 1,
+        Rejected    = 2,
+        Accepted    = 3,
+    }
+
+    export const enum MapEditorDrawerMode {
+        Preview,
+        DrawUnit,
+        DrawTileBase,
+        DrawTileObject,
+        DeleteUnit,
+        DeleteTileObject,
+    }
+
+    export const enum SymmetryType {
+        None                = -1,
+        UpToDown            = 0,
+        UpRightToDownLeft   = 1,
+        LeftToRight         = 2,
+        UpLeftToDownRight   = 3,
+        Rotation            = 4,
     }
 }

@@ -62,16 +62,21 @@ namespace TinyWars.Utility.Notify {
         ReplayAutoReplayChanged,
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        MeDrawerModeChanged,
+        MeUnitChanged,
+        MeTileChanged,
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         SNewestConfigVersion,
         SLogin,
         SRegister,
         SLogout,
         SHeartbeat,
-        SGetMapRawData,
-        SGetMapRawDataFailed,
-        SGetMapEnabledExtraDataList,
-        SGetMapExtraData,
-        SGetMapExtraDataFailed,
+        SMapGetRawData,
+        SMapGetRawDataFailed,
+        SMapGetEnabledExtraDataList,
+        SMapGetExtraData,
+        SMapGetExtraDataFailed,
         SGetUserPublicInfo,
         SUserChangeNickname,
         SUserChangeNicknameFailed,
@@ -79,10 +84,16 @@ namespace TinyWars.Utility.Notify {
         SUserChangeDiscordIdFailed,
         SUserGetOnlineUsers,
 
+        SMeGetDataList,
+        SMeGetData,
+        SMeSaveMap,
+
         SMmChangeAvailability,
         SMmReloadAllMaps,
         SMmMergeMap,
         SMmDeleteMap,
+        SMmGetReviewingMaps,
+        SMmReviewMap,
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         SMcrCreateWar,
@@ -150,10 +161,12 @@ namespace TinyWars.Utility.Notify {
         export type McwPlayerIndexInTurnChanged = number;
         export type McwPlayerFundChanged        = MultiCustomWar.McwPlayer;
         export type McwPlayerEnergyChanged      = MultiCustomWar.McwPlayer;
-        export type BwCursorTapped             = { current: GridIndex, tappedOn: GridIndex };
-        export type BwCursorDragged            = { current: GridIndex, draggedTo: GridIndex };
-        export type BwFieldZoomed              = { previous: TouchPoints, current: TouchPoints };
-        export type BwFieldDragged             = { previous: Types.Point, current: Types.Point };
+        export type BwCursorTapped              = { current: GridIndex, tappedOn: GridIndex };
+        export type BwCursorDragged             = { current: GridIndex, draggedTo: GridIndex };
+        export type BwFieldZoomed               = { previous: TouchPoints, current: TouchPoints };
+        export type BwFieldDragged              = { previous: Types.Point, current: Types.Point };
+        export type MeUnitChanged               = { gridIndex: GridIndex };
+        export type MeTileChanged               = { gridIndex: GridIndex };
     }
 
     ////////////////////////////////////////////////////////////////////////////////

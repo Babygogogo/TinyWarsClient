@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
+        xmlns:w="http://ns.egret.com/wing">
+    <e:Group id="_group" top="40" bottom="0" right="0" left="0">
+        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
+                        left="0" right="0" top="0" bottom="0" />
+        <GameUi:UiScrollList id="_listMap" left="10" right="10" bottom="60" top="10">
+            <e:List requireSelection="true">
+                <e:itemRendererSkinName>
+                    <e:Skin width="220" height="80">
+                        <e:Group id="_group" left="0" right="0" top="0" bottom="0">
+                            <GameUi:UiLabel id="_labelName" text="部队名五字" size="16" textColor="0xffffff"
+                                            textAlign="center" verticalCenter="0" left="5" right="5" wordWrap="true" />
+                        </e:Group>
+                    </e:Skin>
+                </e:itemRendererSkinName>
+                <e:layout>
+                    <e:TileLayout orientation="rows" columnAlign="justifyUsingGap"
+                                  requestedColumnCount="4" paddingTop="4" />
+                </e:layout>
+            </e:List>
+        </GameUi:UiScrollList>
+        <GameUi:UiButton id="_btnCancel" label="取消" bottom="10" height="40" x="850" width="90">
+            <GameUi:skinName>
+                <e:Skin states="up,down,disabled">
+                    <GameUi:UiLabel id="labelDisplay" size="22" verticalCenter="0" horizontalCenter="0"
+                                    maxTextWidth="60" textColor="0xff0000" bold="true" />
+                </e:Skin>
+            </GameUi:skinName>
+        </GameUi:UiButton>
+    </e:Group>
+</e:Skin>

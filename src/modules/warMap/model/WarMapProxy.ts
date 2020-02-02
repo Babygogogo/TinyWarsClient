@@ -8,61 +8,63 @@ namespace TinyWars.WarMap.WarMapProxy {
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: MsgCode.S_GetMapEnabledExtraDataList,    callback: _onSGetMapEnabledExtraDataList },
-            { msgCode: MsgCode.S_GetMapExtraData,               callback: _onSGetMapExtraData },
-            { msgCode: MsgCode.S_GetMapRawData,                 callback: _onSGetMapRawData },
+            { msgCode: MsgCode.S_MapGetEnabledExtraDataList,    callback: _onSMapGetEnabledExtraDataList },
+            { msgCode: MsgCode.S_MapGetExtraData,               callback: _onSMapGetExtraData },
+            { msgCode: MsgCode.S_MapGetRawData,                 callback: _onSMapGetRawData },
             { msgCode: MsgCode.S_MmChangeAvailability,          callback: _onSMmChangeAvailability },
             { msgCode: MsgCode.S_MmReloadAllMaps,               callback: _onSMmReloadAllMaps },
             { msgCode: MsgCode.S_MmMergeMap,                    callback: _onSMmMergeMap },
             { msgCode: MsgCode.S_MmDeleteMap,                   callback: _onSMmDeleteMap },
+            { msgCode: MsgCode.S_MmGetReviewingMaps,            callback: _onSMmGetReviewingMaps },
+            { msgCode: MsgCode.S_MmReviewMap,                   callback: _onSMmReviewMap },
         ], WarMapProxy);
     }
 
     export function reqGetMapEnabledExtraDataList(): void {
         NetManager.send({
-            C_GetMapEnabledExtraDataList: {
+            C_MapGetEnabledExtraDataList: {
             },
         });
     }
-    function _onSGetMapEnabledExtraDataList(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_GetMapEnabledExtraDataList;
+    function _onSMapGetEnabledExtraDataList(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_MapGetEnabledExtraDataList;
         if (!data.errorCode) {
             WarMapModel.resetExtraDataDict(data.dataList);
-            Notify.dispatch(Notify.Type.SGetMapEnabledExtraDataList, data);
+            Notify.dispatch(Notify.Type.SMapGetEnabledExtraDataList, data);
         }
     }
 
     export function reqGetMapExtraData(mapFileName: string): void {
         NetManager.send({
-            C_GetMapExtraData: {
+            C_MapGetExtraData: {
                 mapFileName,
             },
         });
     }
-    function _onSGetMapExtraData(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_GetMapExtraData;
+    function _onSMapGetExtraData(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_MapGetExtraData;
         if (data.errorCode) {
-            Notify.dispatch(Notify.Type.SGetMapExtraDataFailed, data);
+            Notify.dispatch(Notify.Type.SMapGetExtraDataFailed, data);
         } else {
             WarMapModel.setExtraData(data.mapExtraData);
-            Notify.dispatch(Notify.Type.SGetMapExtraData, data);
+            Notify.dispatch(Notify.Type.SMapGetExtraData, data);
         }
     }
 
     export function reqGetMapRawData(mapFileName: string): void {
         NetManager.send({
-            C_GetMapRawData: {
+            C_MapGetRawData: {
                 mapFileName,
             },
         });
     }
-    function _onSGetMapRawData(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_GetMapRawData;
+    function _onSMapGetRawData(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_MapGetRawData;
         if (data.errorCode) {
-            Notify.dispatch(Notify.Type.SGetMapRawDataFailed, data);
+            Notify.dispatch(Notify.Type.SMapGetRawDataFailed, data);
         } else {
             WarMapModel.setMapRawData(data.mapFileName, data.mapRawData);
-            Notify.dispatch(Notify.Type.SGetMapRawData, data);
+            Notify.dispatch(Notify.Type.SMapGetRawData, data);
         }
     }
 
@@ -125,6 +127,37 @@ namespace TinyWars.WarMap.WarMapProxy {
         if (!data.errorCode) {
             WarMapModel.deleteExtraData(data.mapFileName);
             Notify.dispatch(Notify.Type.SMmDeleteMap, data);
+        }
+    }
+
+    export function reqMmGetReviewingMaps(): void {
+        NetManager.send({
+            C_MmGetReviewingMaps: {},
+        });
+    }
+    function _onSMmGetReviewingMaps(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_MmGetReviewingMaps;
+        if (!data.errorCode) {
+            WarMapModel.setMmReviewingMaps(data.maps);
+            Notify.dispatch(Notify.Type.SMmGetReviewingMaps, data);
+        }
+    }
+
+    export function reqReviewMap(designerUserId: number, slotIndex: number, modifiedTime: number, isAccept: boolean, rejectReason: string | null): void {
+        NetManager.send({
+            C_MmReviewMap: {
+                designerUserId,
+                slotIndex,
+                modifiedTime,
+                isAccept,
+                rejectReason,
+            },
+        });
+    }
+    function _onSMmReviewMap(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_MmReviewMap;
+        if (!data.errorCode) {
+            Notify.dispatch(Notify.Type.SMmReviewMap, data);
         }
     }
 }

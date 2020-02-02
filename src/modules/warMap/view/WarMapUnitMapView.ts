@@ -1,8 +1,9 @@
 
 namespace TinyWars.WarMap {
-    import Notify      = Utility.Notify;
-    import Types       = Utility.Types
-    import TimeModel   = Time.TimeModel;
+    import Notify       = Utility.Notify;
+    import Types        = Utility.Types
+    import ProtoTypes   = Utility.ProtoTypes;
+    import TimeModel    = Time.TimeModel;
 
     export class WarMapUnitMapView extends egret.DisplayObjectContainer {
         private _unitViews  : WarMapUnitView[] = [];
@@ -22,14 +23,17 @@ namespace TinyWars.WarMap {
             ], this);
         }
 
-        public initWithDataList(datas: Types.UnitViewData[]): void {
+        public initWithDataList(dataList: Types.UnitViewData[]): void {
             this._clearUnits();
 
             const tickCount = TimeModel.getUnitAnimationTickCount();
-            for (const data of datas) {
+            for (const data of dataList) {
                 this._addUnit(data, tickCount);
             }
             this._reviseZOrderForAllUnits();
+        }
+        public initWithMapRawData(mapRawData: ProtoTypes.IMapRawData): void {
+            this.initWithDataList(_createUnitViewDataList(mapRawData.units, mapRawData.unitDataList, mapRawData.mapWidth, mapRawData.mapHeight));
         }
 
         private _onNotifyUnitAnimationTick(e: egret.Event): void {
@@ -82,5 +86,41 @@ namespace TinyWars.WarMap {
             }
             this._unitViews.length = 0;
         }
+    }
+
+    function _createUnitViewDataList(unitViewIds: number[], unitDataList: ProtoTypes.ISerializedWarUnit[], mapWidth: number, mapHeight: number): Types.UnitViewData[] {
+        const configVersion = ConfigManager.getNewestConfigVersion();
+        const dataList      : Types.UnitViewData[] = [];
+
+        if (unitViewIds) {
+            let index = 0;
+            for (let y = 0; y < mapHeight; ++y) {
+                for (let x = 0; x < mapWidth; ++x) {
+                    const viewId = unitViewIds[index];
+                    ++index;
+                    if (viewId > 0) {
+                        dataList.push({
+                            configVersion: configVersion,
+                            gridX        : x,
+                            gridY        : y,
+                            viewId       : viewId,
+                        });
+                    }
+                }
+            }
+        } else if (unitDataList) {
+            for (const unitData of unitDataList) {
+                if (unitData.loaderUnitId == null) {
+                    dataList.push({
+                        configVersion,
+                        gridX   : unitData.gridX,
+                        gridY   : unitData.gridY,
+                        viewId  : unitData.viewId,
+                    });
+                }
+            }
+        }
+
+        return dataList;
     }
 }

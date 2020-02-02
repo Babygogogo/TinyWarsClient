@@ -1884,6 +1884,18 @@ export declare interface IMapRawData {
 
     /** MapRawData units */
     units?: (number[]|null);
+
+    /** MapRawData unitDataList */
+    unitDataList?: (ISerializedWarUnit[]|null);
+
+    /** MapRawData tileDataList */
+    tileDataList?: (ISerializedWarTile[]|null);
+
+    /** MapRawData designerUserId */
+    designerUserId?: (number|null);
+
+    /** MapRawData modifiedTime */
+    modifiedTime?: (number|null);
 }
 
 /** Represents a MapRawData. */
@@ -1927,6 +1939,18 @@ export declare class MapRawData implements IMapRawData {
 
     /** MapRawData units. */
     public units: number[];
+
+    /** MapRawData unitDataList. */
+    public unitDataList: ISerializedWarUnit[];
+
+    /** MapRawData tileDataList. */
+    public tileDataList: ISerializedWarTile[];
+
+    /** MapRawData designerUserId. */
+    public designerUserId: number;
+
+    /** MapRawData modifiedTime. */
+    public modifiedTime: number;
 
     /**
      * Creates a new MapRawData instance using the specified properties.
@@ -2022,6 +2046,12 @@ export declare interface IMapExtraData {
 
     /** MapExtraData playersCount */
     playersCount?: (number|null);
+
+    /** MapExtraData designerUserId */
+    designerUserId?: (number|null);
+
+    /** MapExtraData modifiedTime */
+    modifiedTime?: (number|null);
 
     /** MapExtraData isDeleted */
     isDeleted?: (number|null);
@@ -2152,6 +2182,12 @@ export declare class MapExtraData implements IMapExtraData {
 
     /** MapExtraData playersCount. */
     public playersCount: number;
+
+    /** MapExtraData designerUserId. */
+    public designerUserId: number;
+
+    /** MapExtraData modifiedTime. */
+    public modifiedTime: number;
 
     /** MapExtraData isDeleted. */
     public isDeleted: number;
@@ -2318,6 +2354,120 @@ export declare class MapExtraData implements IMapExtraData {
 
     /**
      * Converts this MapExtraData to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a MapEditorData. */
+export declare interface IMapEditorData {
+
+    /** MapEditorData designerUserId */
+    designerUserId?: (number|null);
+
+    /** MapEditorData slotIndex */
+    slotIndex?: (number|null);
+
+    /** MapEditorData reviewStatus */
+    reviewStatus?: (number|null);
+
+    /** MapEditorData mapRawData */
+    mapRawData?: (IMapRawData|null);
+
+    /** MapEditorData rejectReason */
+    rejectReason?: (string|null);
+}
+
+/** Represents a MapEditorData. */
+export declare class MapEditorData implements IMapEditorData {
+
+    /**
+     * Constructs a new MapEditorData.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IMapEditorData);
+
+    /** MapEditorData designerUserId. */
+    public designerUserId: number;
+
+    /** MapEditorData slotIndex. */
+    public slotIndex: number;
+
+    /** MapEditorData reviewStatus. */
+    public reviewStatus: number;
+
+    /** MapEditorData mapRawData. */
+    public mapRawData?: (IMapRawData|null);
+
+    /** MapEditorData rejectReason. */
+    public rejectReason: string;
+
+    /**
+     * Creates a new MapEditorData instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns MapEditorData instance
+     */
+    public static create(properties?: IMapEditorData): MapEditorData;
+
+    /**
+     * Encodes the specified MapEditorData message. Does not implicitly {@link MapEditorData.verify|verify} messages.
+     * @param message MapEditorData message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IMapEditorData, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified MapEditorData message, length delimited. Does not implicitly {@link MapEditorData.verify|verify} messages.
+     * @param message MapEditorData message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IMapEditorData, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a MapEditorData message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns MapEditorData
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): MapEditorData;
+
+    /**
+     * Decodes a MapEditorData message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns MapEditorData
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): MapEditorData;
+
+    /**
+     * Verifies a MapEditorData message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a MapEditorData message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns MapEditorData
+     */
+    public static fromObject(object: { [k: string]: any }): MapEditorData;
+
+    /**
+     * Creates a plain object from a MapEditorData message. Also converts values to other types if specified.
+     * @param message MapEditorData
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: MapEditorData, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this MapEditorData to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };
@@ -8437,23 +8587,41 @@ export declare interface IMessageContainer {
     /** MessageContainer S_UserGetOnlineUsers */
     S_UserGetOnlineUsers?: (IS_UserGetOnlineUsers|null);
 
-    /** MessageContainer C_GetMapEnabledExtraDataList */
-    C_GetMapEnabledExtraDataList?: (IC_GetMapEnabledExtraDataList|null);
+    /** MessageContainer C_MapGetEnabledExtraDataList */
+    C_MapGetEnabledExtraDataList?: (IC_MapGetEnabledExtraDataList|null);
 
-    /** MessageContainer S_GetMapEnabledExtraDataList */
-    S_GetMapEnabledExtraDataList?: (IS_GetMapEnabledExtraDataList|null);
+    /** MessageContainer S_MapGetEnabledExtraDataList */
+    S_MapGetEnabledExtraDataList?: (IS_MapGetEnabledExtraDataList|null);
 
-    /** MessageContainer C_GetMapExtraData */
-    C_GetMapExtraData?: (IC_GetMapExtraData|null);
+    /** MessageContainer C_MapGetExtraData */
+    C_MapGetExtraData?: (IC_MapGetExtraData|null);
 
-    /** MessageContainer S_GetMapExtraData */
-    S_GetMapExtraData?: (IS_GetMapExtraData|null);
+    /** MessageContainer S_MapGetExtraData */
+    S_MapGetExtraData?: (IS_MapGetExtraData|null);
 
-    /** MessageContainer C_GetMapRawData */
-    C_GetMapRawData?: (IC_GetMapRawData|null);
+    /** MessageContainer C_MapGetRawData */
+    C_MapGetRawData?: (IC_MapGetRawData|null);
 
-    /** MessageContainer S_GetMapRawData */
-    S_GetMapRawData?: (IS_GetMapRawData|null);
+    /** MessageContainer S_MapGetRawData */
+    S_MapGetRawData?: (IS_MapGetRawData|null);
+
+    /** MessageContainer C_MeGetDataList */
+    C_MeGetDataList?: (IC_MeGetDataList|null);
+
+    /** MessageContainer S_MeGetDataList */
+    S_MeGetDataList?: (IS_MeGetDataList|null);
+
+    /** MessageContainer C_MeGetData */
+    C_MeGetData?: (IC_MeGetData|null);
+
+    /** MessageContainer S_MeGetData */
+    S_MeGetData?: (IS_MeGetData|null);
+
+    /** MessageContainer C_MeSaveMap */
+    C_MeSaveMap?: (IC_MeSaveMap|null);
+
+    /** MessageContainer S_MeSaveMap */
+    S_MeSaveMap?: (IS_MeSaveMap|null);
 
     /** MessageContainer C_MmChangeAvailability */
     C_MmChangeAvailability?: (IC_MmChangeAvailability|null);
@@ -8478,6 +8646,18 @@ export declare interface IMessageContainer {
 
     /** MessageContainer S_MmDeleteMap */
     S_MmDeleteMap?: (IS_MmDeleteMap|null);
+
+    /** MessageContainer C_MmGetReviewingMaps */
+    C_MmGetReviewingMaps?: (IC_MmGetReviewingMaps|null);
+
+    /** MessageContainer S_MmGetReviewingMaps */
+    S_MmGetReviewingMaps?: (IS_MmGetReviewingMaps|null);
+
+    /** MessageContainer C_MmReviewMap */
+    C_MmReviewMap?: (IC_MmReviewMap|null);
+
+    /** MessageContainer S_MmReviewMap */
+    S_MmReviewMap?: (IS_MmReviewMap|null);
 
     /** MessageContainer C_McrCreateWar */
     C_McrCreateWar?: (IC_McrCreateWar|null);
@@ -8804,23 +8984,41 @@ export declare class MessageContainer implements IMessageContainer {
     /** MessageContainer S_UserGetOnlineUsers. */
     public S_UserGetOnlineUsers?: (IS_UserGetOnlineUsers|null);
 
-    /** MessageContainer C_GetMapEnabledExtraDataList. */
-    public C_GetMapEnabledExtraDataList?: (IC_GetMapEnabledExtraDataList|null);
+    /** MessageContainer C_MapGetEnabledExtraDataList. */
+    public C_MapGetEnabledExtraDataList?: (IC_MapGetEnabledExtraDataList|null);
 
-    /** MessageContainer S_GetMapEnabledExtraDataList. */
-    public S_GetMapEnabledExtraDataList?: (IS_GetMapEnabledExtraDataList|null);
+    /** MessageContainer S_MapGetEnabledExtraDataList. */
+    public S_MapGetEnabledExtraDataList?: (IS_MapGetEnabledExtraDataList|null);
 
-    /** MessageContainer C_GetMapExtraData. */
-    public C_GetMapExtraData?: (IC_GetMapExtraData|null);
+    /** MessageContainer C_MapGetExtraData. */
+    public C_MapGetExtraData?: (IC_MapGetExtraData|null);
 
-    /** MessageContainer S_GetMapExtraData. */
-    public S_GetMapExtraData?: (IS_GetMapExtraData|null);
+    /** MessageContainer S_MapGetExtraData. */
+    public S_MapGetExtraData?: (IS_MapGetExtraData|null);
 
-    /** MessageContainer C_GetMapRawData. */
-    public C_GetMapRawData?: (IC_GetMapRawData|null);
+    /** MessageContainer C_MapGetRawData. */
+    public C_MapGetRawData?: (IC_MapGetRawData|null);
 
-    /** MessageContainer S_GetMapRawData. */
-    public S_GetMapRawData?: (IS_GetMapRawData|null);
+    /** MessageContainer S_MapGetRawData. */
+    public S_MapGetRawData?: (IS_MapGetRawData|null);
+
+    /** MessageContainer C_MeGetDataList. */
+    public C_MeGetDataList?: (IC_MeGetDataList|null);
+
+    /** MessageContainer S_MeGetDataList. */
+    public S_MeGetDataList?: (IS_MeGetDataList|null);
+
+    /** MessageContainer C_MeGetData. */
+    public C_MeGetData?: (IC_MeGetData|null);
+
+    /** MessageContainer S_MeGetData. */
+    public S_MeGetData?: (IS_MeGetData|null);
+
+    /** MessageContainer C_MeSaveMap. */
+    public C_MeSaveMap?: (IC_MeSaveMap|null);
+
+    /** MessageContainer S_MeSaveMap. */
+    public S_MeSaveMap?: (IS_MeSaveMap|null);
 
     /** MessageContainer C_MmChangeAvailability. */
     public C_MmChangeAvailability?: (IC_MmChangeAvailability|null);
@@ -8845,6 +9043,18 @@ export declare class MessageContainer implements IMessageContainer {
 
     /** MessageContainer S_MmDeleteMap. */
     public S_MmDeleteMap?: (IS_MmDeleteMap|null);
+
+    /** MessageContainer C_MmGetReviewingMaps. */
+    public C_MmGetReviewingMaps?: (IC_MmGetReviewingMaps|null);
+
+    /** MessageContainer S_MmGetReviewingMaps. */
+    public S_MmGetReviewingMaps?: (IS_MmGetReviewingMaps|null);
+
+    /** MessageContainer C_MmReviewMap. */
+    public C_MmReviewMap?: (IC_MmReviewMap|null);
+
+    /** MessageContainer S_MmReviewMap. */
+    public S_MmReviewMap?: (IS_MmReviewMap|null);
 
     /** MessageContainer C_McrCreateWar. */
     public C_McrCreateWar?: (IC_McrCreateWar|null);
@@ -10087,565 +10297,1135 @@ export declare class S_Error implements IS_Error {
     public toJSON(): { [k: string]: any };
 }
 
-/** Properties of a C_GetMapEnabledExtraDataList. */
-export declare interface IC_GetMapEnabledExtraDataList {
+/** Properties of a C_MapGetEnabledExtraDataList. */
+export declare interface IC_MapGetEnabledExtraDataList {
 }
 
-/** Represents a C_GetMapEnabledExtraDataList. */
-export declare class C_GetMapEnabledExtraDataList implements IC_GetMapEnabledExtraDataList {
+/** Represents a C_MapGetEnabledExtraDataList. */
+export declare class C_MapGetEnabledExtraDataList implements IC_MapGetEnabledExtraDataList {
 
     /**
-     * Constructs a new C_GetMapEnabledExtraDataList.
+     * Constructs a new C_MapGetEnabledExtraDataList.
      * @param [properties] Properties to set
      */
-    constructor(properties?: IC_GetMapEnabledExtraDataList);
+    constructor(properties?: IC_MapGetEnabledExtraDataList);
 
     /**
-     * Creates a new C_GetMapEnabledExtraDataList instance using the specified properties.
+     * Creates a new C_MapGetEnabledExtraDataList instance using the specified properties.
      * @param [properties] Properties to set
-     * @returns C_GetMapEnabledExtraDataList instance
+     * @returns C_MapGetEnabledExtraDataList instance
      */
-    public static create(properties?: IC_GetMapEnabledExtraDataList): C_GetMapEnabledExtraDataList;
+    public static create(properties?: IC_MapGetEnabledExtraDataList): C_MapGetEnabledExtraDataList;
 
     /**
-     * Encodes the specified C_GetMapEnabledExtraDataList message. Does not implicitly {@link C_GetMapEnabledExtraDataList.verify|verify} messages.
-     * @param message C_GetMapEnabledExtraDataList message or plain object to encode
+     * Encodes the specified C_MapGetEnabledExtraDataList message. Does not implicitly {@link C_MapGetEnabledExtraDataList.verify|verify} messages.
+     * @param message C_MapGetEnabledExtraDataList message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encode(message: IC_GetMapEnabledExtraDataList, writer?: protobuf.Writer): protobuf.Writer;
+    public static encode(message: IC_MapGetEnabledExtraDataList, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Encodes the specified C_GetMapEnabledExtraDataList message, length delimited. Does not implicitly {@link C_GetMapEnabledExtraDataList.verify|verify} messages.
-     * @param message C_GetMapEnabledExtraDataList message or plain object to encode
+     * Encodes the specified C_MapGetEnabledExtraDataList message, length delimited. Does not implicitly {@link C_MapGetEnabledExtraDataList.verify|verify} messages.
+     * @param message C_MapGetEnabledExtraDataList message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encodeDelimited(message: IC_GetMapEnabledExtraDataList, writer?: protobuf.Writer): protobuf.Writer;
+    public static encodeDelimited(message: IC_MapGetEnabledExtraDataList, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Decodes a C_GetMapEnabledExtraDataList message from the specified reader or buffer.
+     * Decodes a C_MapGetEnabledExtraDataList message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
-     * @returns C_GetMapEnabledExtraDataList
+     * @returns C_MapGetEnabledExtraDataList
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_GetMapEnabledExtraDataList;
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_MapGetEnabledExtraDataList;
 
     /**
-     * Decodes a C_GetMapEnabledExtraDataList message from the specified reader or buffer, length delimited.
+     * Decodes a C_MapGetEnabledExtraDataList message from the specified reader or buffer, length delimited.
      * @param reader Reader or buffer to decode from
-     * @returns C_GetMapEnabledExtraDataList
+     * @returns C_MapGetEnabledExtraDataList
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_GetMapEnabledExtraDataList;
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_MapGetEnabledExtraDataList;
 
     /**
-     * Verifies a C_GetMapEnabledExtraDataList message.
+     * Verifies a C_MapGetEnabledExtraDataList message.
      * @param message Plain object to verify
      * @returns `null` if valid, otherwise the reason why it is not
      */
     public static verify(message: { [k: string]: any }): (string|null);
 
     /**
-     * Creates a C_GetMapEnabledExtraDataList message from a plain object. Also converts values to their respective internal types.
+     * Creates a C_MapGetEnabledExtraDataList message from a plain object. Also converts values to their respective internal types.
      * @param object Plain object
-     * @returns C_GetMapEnabledExtraDataList
+     * @returns C_MapGetEnabledExtraDataList
      */
-    public static fromObject(object: { [k: string]: any }): C_GetMapEnabledExtraDataList;
+    public static fromObject(object: { [k: string]: any }): C_MapGetEnabledExtraDataList;
 
     /**
-     * Creates a plain object from a C_GetMapEnabledExtraDataList message. Also converts values to other types if specified.
-     * @param message C_GetMapEnabledExtraDataList
+     * Creates a plain object from a C_MapGetEnabledExtraDataList message. Also converts values to other types if specified.
+     * @param message C_MapGetEnabledExtraDataList
      * @param [options] Conversion options
      * @returns Plain object
      */
-    public static toObject(message: C_GetMapEnabledExtraDataList, options?: protobuf.IConversionOptions): { [k: string]: any };
+    public static toObject(message: C_MapGetEnabledExtraDataList, options?: protobuf.IConversionOptions): { [k: string]: any };
 
     /**
-     * Converts this C_GetMapEnabledExtraDataList to JSON.
+     * Converts this C_MapGetEnabledExtraDataList to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };
 }
 
-/** Properties of a S_GetMapEnabledExtraDataList. */
-export declare interface IS_GetMapEnabledExtraDataList {
+/** Properties of a S_MapGetEnabledExtraDataList. */
+export declare interface IS_MapGetEnabledExtraDataList {
 
-    /** S_GetMapEnabledExtraDataList errorCode */
+    /** S_MapGetEnabledExtraDataList errorCode */
     errorCode?: (number|null);
 
-    /** S_GetMapEnabledExtraDataList dataList */
+    /** S_MapGetEnabledExtraDataList dataList */
     dataList?: (IMapExtraData[]|null);
 }
 
-/** Represents a S_GetMapEnabledExtraDataList. */
-export declare class S_GetMapEnabledExtraDataList implements IS_GetMapEnabledExtraDataList {
+/** Represents a S_MapGetEnabledExtraDataList. */
+export declare class S_MapGetEnabledExtraDataList implements IS_MapGetEnabledExtraDataList {
 
     /**
-     * Constructs a new S_GetMapEnabledExtraDataList.
+     * Constructs a new S_MapGetEnabledExtraDataList.
      * @param [properties] Properties to set
      */
-    constructor(properties?: IS_GetMapEnabledExtraDataList);
+    constructor(properties?: IS_MapGetEnabledExtraDataList);
 
-    /** S_GetMapEnabledExtraDataList errorCode. */
+    /** S_MapGetEnabledExtraDataList errorCode. */
     public errorCode: number;
 
-    /** S_GetMapEnabledExtraDataList dataList. */
+    /** S_MapGetEnabledExtraDataList dataList. */
     public dataList: IMapExtraData[];
 
     /**
-     * Creates a new S_GetMapEnabledExtraDataList instance using the specified properties.
+     * Creates a new S_MapGetEnabledExtraDataList instance using the specified properties.
      * @param [properties] Properties to set
-     * @returns S_GetMapEnabledExtraDataList instance
+     * @returns S_MapGetEnabledExtraDataList instance
      */
-    public static create(properties?: IS_GetMapEnabledExtraDataList): S_GetMapEnabledExtraDataList;
+    public static create(properties?: IS_MapGetEnabledExtraDataList): S_MapGetEnabledExtraDataList;
 
     /**
-     * Encodes the specified S_GetMapEnabledExtraDataList message. Does not implicitly {@link S_GetMapEnabledExtraDataList.verify|verify} messages.
-     * @param message S_GetMapEnabledExtraDataList message or plain object to encode
+     * Encodes the specified S_MapGetEnabledExtraDataList message. Does not implicitly {@link S_MapGetEnabledExtraDataList.verify|verify} messages.
+     * @param message S_MapGetEnabledExtraDataList message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encode(message: IS_GetMapEnabledExtraDataList, writer?: protobuf.Writer): protobuf.Writer;
+    public static encode(message: IS_MapGetEnabledExtraDataList, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Encodes the specified S_GetMapEnabledExtraDataList message, length delimited. Does not implicitly {@link S_GetMapEnabledExtraDataList.verify|verify} messages.
-     * @param message S_GetMapEnabledExtraDataList message or plain object to encode
+     * Encodes the specified S_MapGetEnabledExtraDataList message, length delimited. Does not implicitly {@link S_MapGetEnabledExtraDataList.verify|verify} messages.
+     * @param message S_MapGetEnabledExtraDataList message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encodeDelimited(message: IS_GetMapEnabledExtraDataList, writer?: protobuf.Writer): protobuf.Writer;
+    public static encodeDelimited(message: IS_MapGetEnabledExtraDataList, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Decodes a S_GetMapEnabledExtraDataList message from the specified reader or buffer.
+     * Decodes a S_MapGetEnabledExtraDataList message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
-     * @returns S_GetMapEnabledExtraDataList
+     * @returns S_MapGetEnabledExtraDataList
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_GetMapEnabledExtraDataList;
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_MapGetEnabledExtraDataList;
 
     /**
-     * Decodes a S_GetMapEnabledExtraDataList message from the specified reader or buffer, length delimited.
+     * Decodes a S_MapGetEnabledExtraDataList message from the specified reader or buffer, length delimited.
      * @param reader Reader or buffer to decode from
-     * @returns S_GetMapEnabledExtraDataList
+     * @returns S_MapGetEnabledExtraDataList
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_GetMapEnabledExtraDataList;
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_MapGetEnabledExtraDataList;
 
     /**
-     * Verifies a S_GetMapEnabledExtraDataList message.
+     * Verifies a S_MapGetEnabledExtraDataList message.
      * @param message Plain object to verify
      * @returns `null` if valid, otherwise the reason why it is not
      */
     public static verify(message: { [k: string]: any }): (string|null);
 
     /**
-     * Creates a S_GetMapEnabledExtraDataList message from a plain object. Also converts values to their respective internal types.
+     * Creates a S_MapGetEnabledExtraDataList message from a plain object. Also converts values to their respective internal types.
      * @param object Plain object
-     * @returns S_GetMapEnabledExtraDataList
+     * @returns S_MapGetEnabledExtraDataList
      */
-    public static fromObject(object: { [k: string]: any }): S_GetMapEnabledExtraDataList;
+    public static fromObject(object: { [k: string]: any }): S_MapGetEnabledExtraDataList;
 
     /**
-     * Creates a plain object from a S_GetMapEnabledExtraDataList message. Also converts values to other types if specified.
-     * @param message S_GetMapEnabledExtraDataList
+     * Creates a plain object from a S_MapGetEnabledExtraDataList message. Also converts values to other types if specified.
+     * @param message S_MapGetEnabledExtraDataList
      * @param [options] Conversion options
      * @returns Plain object
      */
-    public static toObject(message: S_GetMapEnabledExtraDataList, options?: protobuf.IConversionOptions): { [k: string]: any };
+    public static toObject(message: S_MapGetEnabledExtraDataList, options?: protobuf.IConversionOptions): { [k: string]: any };
 
     /**
-     * Converts this S_GetMapEnabledExtraDataList to JSON.
+     * Converts this S_MapGetEnabledExtraDataList to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };
 }
 
-/** Properties of a C_GetMapExtraData. */
-export declare interface IC_GetMapExtraData {
+/** Properties of a C_MapGetExtraData. */
+export declare interface IC_MapGetExtraData {
 
-    /** C_GetMapExtraData mapFileName */
+    /** C_MapGetExtraData mapFileName */
     mapFileName?: (string|null);
 }
 
-/** Represents a C_GetMapExtraData. */
-export declare class C_GetMapExtraData implements IC_GetMapExtraData {
+/** Represents a C_MapGetExtraData. */
+export declare class C_MapGetExtraData implements IC_MapGetExtraData {
 
     /**
-     * Constructs a new C_GetMapExtraData.
+     * Constructs a new C_MapGetExtraData.
      * @param [properties] Properties to set
      */
-    constructor(properties?: IC_GetMapExtraData);
+    constructor(properties?: IC_MapGetExtraData);
 
-    /** C_GetMapExtraData mapFileName. */
+    /** C_MapGetExtraData mapFileName. */
     public mapFileName: string;
 
     /**
-     * Creates a new C_GetMapExtraData instance using the specified properties.
+     * Creates a new C_MapGetExtraData instance using the specified properties.
      * @param [properties] Properties to set
-     * @returns C_GetMapExtraData instance
+     * @returns C_MapGetExtraData instance
      */
-    public static create(properties?: IC_GetMapExtraData): C_GetMapExtraData;
+    public static create(properties?: IC_MapGetExtraData): C_MapGetExtraData;
 
     /**
-     * Encodes the specified C_GetMapExtraData message. Does not implicitly {@link C_GetMapExtraData.verify|verify} messages.
-     * @param message C_GetMapExtraData message or plain object to encode
+     * Encodes the specified C_MapGetExtraData message. Does not implicitly {@link C_MapGetExtraData.verify|verify} messages.
+     * @param message C_MapGetExtraData message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encode(message: IC_GetMapExtraData, writer?: protobuf.Writer): protobuf.Writer;
+    public static encode(message: IC_MapGetExtraData, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Encodes the specified C_GetMapExtraData message, length delimited. Does not implicitly {@link C_GetMapExtraData.verify|verify} messages.
-     * @param message C_GetMapExtraData message or plain object to encode
+     * Encodes the specified C_MapGetExtraData message, length delimited. Does not implicitly {@link C_MapGetExtraData.verify|verify} messages.
+     * @param message C_MapGetExtraData message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encodeDelimited(message: IC_GetMapExtraData, writer?: protobuf.Writer): protobuf.Writer;
+    public static encodeDelimited(message: IC_MapGetExtraData, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Decodes a C_GetMapExtraData message from the specified reader or buffer.
+     * Decodes a C_MapGetExtraData message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
-     * @returns C_GetMapExtraData
+     * @returns C_MapGetExtraData
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_GetMapExtraData;
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_MapGetExtraData;
 
     /**
-     * Decodes a C_GetMapExtraData message from the specified reader or buffer, length delimited.
+     * Decodes a C_MapGetExtraData message from the specified reader or buffer, length delimited.
      * @param reader Reader or buffer to decode from
-     * @returns C_GetMapExtraData
+     * @returns C_MapGetExtraData
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_GetMapExtraData;
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_MapGetExtraData;
 
     /**
-     * Verifies a C_GetMapExtraData message.
+     * Verifies a C_MapGetExtraData message.
      * @param message Plain object to verify
      * @returns `null` if valid, otherwise the reason why it is not
      */
     public static verify(message: { [k: string]: any }): (string|null);
 
     /**
-     * Creates a C_GetMapExtraData message from a plain object. Also converts values to their respective internal types.
+     * Creates a C_MapGetExtraData message from a plain object. Also converts values to their respective internal types.
      * @param object Plain object
-     * @returns C_GetMapExtraData
+     * @returns C_MapGetExtraData
      */
-    public static fromObject(object: { [k: string]: any }): C_GetMapExtraData;
+    public static fromObject(object: { [k: string]: any }): C_MapGetExtraData;
 
     /**
-     * Creates a plain object from a C_GetMapExtraData message. Also converts values to other types if specified.
-     * @param message C_GetMapExtraData
+     * Creates a plain object from a C_MapGetExtraData message. Also converts values to other types if specified.
+     * @param message C_MapGetExtraData
      * @param [options] Conversion options
      * @returns Plain object
      */
-    public static toObject(message: C_GetMapExtraData, options?: protobuf.IConversionOptions): { [k: string]: any };
+    public static toObject(message: C_MapGetExtraData, options?: protobuf.IConversionOptions): { [k: string]: any };
 
     /**
-     * Converts this C_GetMapExtraData to JSON.
+     * Converts this C_MapGetExtraData to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };
 }
 
-/** Properties of a S_GetMapExtraData. */
-export declare interface IS_GetMapExtraData {
+/** Properties of a S_MapGetExtraData. */
+export declare interface IS_MapGetExtraData {
 
-    /** S_GetMapExtraData errorCode */
+    /** S_MapGetExtraData errorCode */
     errorCode?: (number|null);
 
-    /** S_GetMapExtraData mapFileName */
+    /** S_MapGetExtraData mapFileName */
     mapFileName?: (string|null);
 
-    /** S_GetMapExtraData mapExtraData */
+    /** S_MapGetExtraData mapExtraData */
     mapExtraData?: (IMapExtraData|null);
 }
 
-/** Represents a S_GetMapExtraData. */
-export declare class S_GetMapExtraData implements IS_GetMapExtraData {
+/** Represents a S_MapGetExtraData. */
+export declare class S_MapGetExtraData implements IS_MapGetExtraData {
 
     /**
-     * Constructs a new S_GetMapExtraData.
+     * Constructs a new S_MapGetExtraData.
      * @param [properties] Properties to set
      */
-    constructor(properties?: IS_GetMapExtraData);
+    constructor(properties?: IS_MapGetExtraData);
 
-    /** S_GetMapExtraData errorCode. */
+    /** S_MapGetExtraData errorCode. */
     public errorCode: number;
 
-    /** S_GetMapExtraData mapFileName. */
+    /** S_MapGetExtraData mapFileName. */
     public mapFileName: string;
 
-    /** S_GetMapExtraData mapExtraData. */
+    /** S_MapGetExtraData mapExtraData. */
     public mapExtraData?: (IMapExtraData|null);
 
     /**
-     * Creates a new S_GetMapExtraData instance using the specified properties.
+     * Creates a new S_MapGetExtraData instance using the specified properties.
      * @param [properties] Properties to set
-     * @returns S_GetMapExtraData instance
+     * @returns S_MapGetExtraData instance
      */
-    public static create(properties?: IS_GetMapExtraData): S_GetMapExtraData;
+    public static create(properties?: IS_MapGetExtraData): S_MapGetExtraData;
 
     /**
-     * Encodes the specified S_GetMapExtraData message. Does not implicitly {@link S_GetMapExtraData.verify|verify} messages.
-     * @param message S_GetMapExtraData message or plain object to encode
+     * Encodes the specified S_MapGetExtraData message. Does not implicitly {@link S_MapGetExtraData.verify|verify} messages.
+     * @param message S_MapGetExtraData message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encode(message: IS_GetMapExtraData, writer?: protobuf.Writer): protobuf.Writer;
+    public static encode(message: IS_MapGetExtraData, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Encodes the specified S_GetMapExtraData message, length delimited. Does not implicitly {@link S_GetMapExtraData.verify|verify} messages.
-     * @param message S_GetMapExtraData message or plain object to encode
+     * Encodes the specified S_MapGetExtraData message, length delimited. Does not implicitly {@link S_MapGetExtraData.verify|verify} messages.
+     * @param message S_MapGetExtraData message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encodeDelimited(message: IS_GetMapExtraData, writer?: protobuf.Writer): protobuf.Writer;
+    public static encodeDelimited(message: IS_MapGetExtraData, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Decodes a S_GetMapExtraData message from the specified reader or buffer.
+     * Decodes a S_MapGetExtraData message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
-     * @returns S_GetMapExtraData
+     * @returns S_MapGetExtraData
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_GetMapExtraData;
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_MapGetExtraData;
 
     /**
-     * Decodes a S_GetMapExtraData message from the specified reader or buffer, length delimited.
+     * Decodes a S_MapGetExtraData message from the specified reader or buffer, length delimited.
      * @param reader Reader or buffer to decode from
-     * @returns S_GetMapExtraData
+     * @returns S_MapGetExtraData
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_GetMapExtraData;
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_MapGetExtraData;
 
     /**
-     * Verifies a S_GetMapExtraData message.
+     * Verifies a S_MapGetExtraData message.
      * @param message Plain object to verify
      * @returns `null` if valid, otherwise the reason why it is not
      */
     public static verify(message: { [k: string]: any }): (string|null);
 
     /**
-     * Creates a S_GetMapExtraData message from a plain object. Also converts values to their respective internal types.
+     * Creates a S_MapGetExtraData message from a plain object. Also converts values to their respective internal types.
      * @param object Plain object
-     * @returns S_GetMapExtraData
+     * @returns S_MapGetExtraData
      */
-    public static fromObject(object: { [k: string]: any }): S_GetMapExtraData;
+    public static fromObject(object: { [k: string]: any }): S_MapGetExtraData;
 
     /**
-     * Creates a plain object from a S_GetMapExtraData message. Also converts values to other types if specified.
-     * @param message S_GetMapExtraData
+     * Creates a plain object from a S_MapGetExtraData message. Also converts values to other types if specified.
+     * @param message S_MapGetExtraData
      * @param [options] Conversion options
      * @returns Plain object
      */
-    public static toObject(message: S_GetMapExtraData, options?: protobuf.IConversionOptions): { [k: string]: any };
+    public static toObject(message: S_MapGetExtraData, options?: protobuf.IConversionOptions): { [k: string]: any };
 
     /**
-     * Converts this S_GetMapExtraData to JSON.
+     * Converts this S_MapGetExtraData to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };
 }
 
-/** Properties of a C_GetMapRawData. */
-export declare interface IC_GetMapRawData {
+/** Properties of a C_MapGetRawData. */
+export declare interface IC_MapGetRawData {
 
-    /** C_GetMapRawData mapFileName */
+    /** C_MapGetRawData mapFileName */
     mapFileName?: (string|null);
 }
 
-/** Represents a C_GetMapRawData. */
-export declare class C_GetMapRawData implements IC_GetMapRawData {
+/** Represents a C_MapGetRawData. */
+export declare class C_MapGetRawData implements IC_MapGetRawData {
 
     /**
-     * Constructs a new C_GetMapRawData.
+     * Constructs a new C_MapGetRawData.
      * @param [properties] Properties to set
      */
-    constructor(properties?: IC_GetMapRawData);
+    constructor(properties?: IC_MapGetRawData);
 
-    /** C_GetMapRawData mapFileName. */
+    /** C_MapGetRawData mapFileName. */
     public mapFileName: string;
 
     /**
-     * Creates a new C_GetMapRawData instance using the specified properties.
+     * Creates a new C_MapGetRawData instance using the specified properties.
      * @param [properties] Properties to set
-     * @returns C_GetMapRawData instance
+     * @returns C_MapGetRawData instance
      */
-    public static create(properties?: IC_GetMapRawData): C_GetMapRawData;
+    public static create(properties?: IC_MapGetRawData): C_MapGetRawData;
 
     /**
-     * Encodes the specified C_GetMapRawData message. Does not implicitly {@link C_GetMapRawData.verify|verify} messages.
-     * @param message C_GetMapRawData message or plain object to encode
+     * Encodes the specified C_MapGetRawData message. Does not implicitly {@link C_MapGetRawData.verify|verify} messages.
+     * @param message C_MapGetRawData message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encode(message: IC_GetMapRawData, writer?: protobuf.Writer): protobuf.Writer;
+    public static encode(message: IC_MapGetRawData, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Encodes the specified C_GetMapRawData message, length delimited. Does not implicitly {@link C_GetMapRawData.verify|verify} messages.
-     * @param message C_GetMapRawData message or plain object to encode
+     * Encodes the specified C_MapGetRawData message, length delimited. Does not implicitly {@link C_MapGetRawData.verify|verify} messages.
+     * @param message C_MapGetRawData message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encodeDelimited(message: IC_GetMapRawData, writer?: protobuf.Writer): protobuf.Writer;
+    public static encodeDelimited(message: IC_MapGetRawData, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Decodes a C_GetMapRawData message from the specified reader or buffer.
+     * Decodes a C_MapGetRawData message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
-     * @returns C_GetMapRawData
+     * @returns C_MapGetRawData
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_GetMapRawData;
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_MapGetRawData;
 
     /**
-     * Decodes a C_GetMapRawData message from the specified reader or buffer, length delimited.
+     * Decodes a C_MapGetRawData message from the specified reader or buffer, length delimited.
      * @param reader Reader or buffer to decode from
-     * @returns C_GetMapRawData
+     * @returns C_MapGetRawData
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_GetMapRawData;
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_MapGetRawData;
 
     /**
-     * Verifies a C_GetMapRawData message.
+     * Verifies a C_MapGetRawData message.
      * @param message Plain object to verify
      * @returns `null` if valid, otherwise the reason why it is not
      */
     public static verify(message: { [k: string]: any }): (string|null);
 
     /**
-     * Creates a C_GetMapRawData message from a plain object. Also converts values to their respective internal types.
+     * Creates a C_MapGetRawData message from a plain object. Also converts values to their respective internal types.
      * @param object Plain object
-     * @returns C_GetMapRawData
+     * @returns C_MapGetRawData
      */
-    public static fromObject(object: { [k: string]: any }): C_GetMapRawData;
+    public static fromObject(object: { [k: string]: any }): C_MapGetRawData;
 
     /**
-     * Creates a plain object from a C_GetMapRawData message. Also converts values to other types if specified.
-     * @param message C_GetMapRawData
+     * Creates a plain object from a C_MapGetRawData message. Also converts values to other types if specified.
+     * @param message C_MapGetRawData
      * @param [options] Conversion options
      * @returns Plain object
      */
-    public static toObject(message: C_GetMapRawData, options?: protobuf.IConversionOptions): { [k: string]: any };
+    public static toObject(message: C_MapGetRawData, options?: protobuf.IConversionOptions): { [k: string]: any };
 
     /**
-     * Converts this C_GetMapRawData to JSON.
+     * Converts this C_MapGetRawData to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };
 }
 
-/** Properties of a S_GetMapRawData. */
-export declare interface IS_GetMapRawData {
+/** Properties of a S_MapGetRawData. */
+export declare interface IS_MapGetRawData {
 
-    /** S_GetMapRawData errorCode */
+    /** S_MapGetRawData errorCode */
     errorCode?: (number|null);
 
-    /** S_GetMapRawData mapFileName */
+    /** S_MapGetRawData mapFileName */
     mapFileName?: (string|null);
 
-    /** S_GetMapRawData mapRawData */
+    /** S_MapGetRawData mapRawData */
     mapRawData?: (IMapRawData|null);
 }
 
-/** Represents a S_GetMapRawData. */
-export declare class S_GetMapRawData implements IS_GetMapRawData {
+/** Represents a S_MapGetRawData. */
+export declare class S_MapGetRawData implements IS_MapGetRawData {
 
     /**
-     * Constructs a new S_GetMapRawData.
+     * Constructs a new S_MapGetRawData.
      * @param [properties] Properties to set
      */
-    constructor(properties?: IS_GetMapRawData);
+    constructor(properties?: IS_MapGetRawData);
 
-    /** S_GetMapRawData errorCode. */
+    /** S_MapGetRawData errorCode. */
     public errorCode: number;
 
-    /** S_GetMapRawData mapFileName. */
+    /** S_MapGetRawData mapFileName. */
     public mapFileName: string;
 
-    /** S_GetMapRawData mapRawData. */
+    /** S_MapGetRawData mapRawData. */
     public mapRawData?: (IMapRawData|null);
 
     /**
-     * Creates a new S_GetMapRawData instance using the specified properties.
+     * Creates a new S_MapGetRawData instance using the specified properties.
      * @param [properties] Properties to set
-     * @returns S_GetMapRawData instance
+     * @returns S_MapGetRawData instance
      */
-    public static create(properties?: IS_GetMapRawData): S_GetMapRawData;
+    public static create(properties?: IS_MapGetRawData): S_MapGetRawData;
 
     /**
-     * Encodes the specified S_GetMapRawData message. Does not implicitly {@link S_GetMapRawData.verify|verify} messages.
-     * @param message S_GetMapRawData message or plain object to encode
+     * Encodes the specified S_MapGetRawData message. Does not implicitly {@link S_MapGetRawData.verify|verify} messages.
+     * @param message S_MapGetRawData message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encode(message: IS_GetMapRawData, writer?: protobuf.Writer): protobuf.Writer;
+    public static encode(message: IS_MapGetRawData, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Encodes the specified S_GetMapRawData message, length delimited. Does not implicitly {@link S_GetMapRawData.verify|verify} messages.
-     * @param message S_GetMapRawData message or plain object to encode
+     * Encodes the specified S_MapGetRawData message, length delimited. Does not implicitly {@link S_MapGetRawData.verify|verify} messages.
+     * @param message S_MapGetRawData message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encodeDelimited(message: IS_GetMapRawData, writer?: protobuf.Writer): protobuf.Writer;
+    public static encodeDelimited(message: IS_MapGetRawData, writer?: protobuf.Writer): protobuf.Writer;
 
     /**
-     * Decodes a S_GetMapRawData message from the specified reader or buffer.
+     * Decodes a S_MapGetRawData message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
-     * @returns S_GetMapRawData
+     * @returns S_MapGetRawData
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_GetMapRawData;
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_MapGetRawData;
 
     /**
-     * Decodes a S_GetMapRawData message from the specified reader or buffer, length delimited.
+     * Decodes a S_MapGetRawData message from the specified reader or buffer, length delimited.
      * @param reader Reader or buffer to decode from
-     * @returns S_GetMapRawData
+     * @returns S_MapGetRawData
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_GetMapRawData;
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_MapGetRawData;
 
     /**
-     * Verifies a S_GetMapRawData message.
+     * Verifies a S_MapGetRawData message.
      * @param message Plain object to verify
      * @returns `null` if valid, otherwise the reason why it is not
      */
     public static verify(message: { [k: string]: any }): (string|null);
 
     /**
-     * Creates a S_GetMapRawData message from a plain object. Also converts values to their respective internal types.
+     * Creates a S_MapGetRawData message from a plain object. Also converts values to their respective internal types.
      * @param object Plain object
-     * @returns S_GetMapRawData
+     * @returns S_MapGetRawData
      */
-    public static fromObject(object: { [k: string]: any }): S_GetMapRawData;
+    public static fromObject(object: { [k: string]: any }): S_MapGetRawData;
 
     /**
-     * Creates a plain object from a S_GetMapRawData message. Also converts values to other types if specified.
-     * @param message S_GetMapRawData
+     * Creates a plain object from a S_MapGetRawData message. Also converts values to other types if specified.
+     * @param message S_MapGetRawData
      * @param [options] Conversion options
      * @returns Plain object
      */
-    public static toObject(message: S_GetMapRawData, options?: protobuf.IConversionOptions): { [k: string]: any };
+    public static toObject(message: S_MapGetRawData, options?: protobuf.IConversionOptions): { [k: string]: any };
 
     /**
-     * Converts this S_GetMapRawData to JSON.
+     * Converts this S_MapGetRawData to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_MeGetDataList. */
+export declare interface IC_MeGetDataList {
+}
+
+/** Represents a C_MeGetDataList. */
+export declare class C_MeGetDataList implements IC_MeGetDataList {
+
+    /**
+     * Constructs a new C_MeGetDataList.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_MeGetDataList);
+
+    /**
+     * Creates a new C_MeGetDataList instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_MeGetDataList instance
+     */
+    public static create(properties?: IC_MeGetDataList): C_MeGetDataList;
+
+    /**
+     * Encodes the specified C_MeGetDataList message. Does not implicitly {@link C_MeGetDataList.verify|verify} messages.
+     * @param message C_MeGetDataList message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_MeGetDataList, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_MeGetDataList message, length delimited. Does not implicitly {@link C_MeGetDataList.verify|verify} messages.
+     * @param message C_MeGetDataList message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_MeGetDataList, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_MeGetDataList message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_MeGetDataList
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_MeGetDataList;
+
+    /**
+     * Decodes a C_MeGetDataList message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_MeGetDataList
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_MeGetDataList;
+
+    /**
+     * Verifies a C_MeGetDataList message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_MeGetDataList message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_MeGetDataList
+     */
+    public static fromObject(object: { [k: string]: any }): C_MeGetDataList;
+
+    /**
+     * Creates a plain object from a C_MeGetDataList message. Also converts values to other types if specified.
+     * @param message C_MeGetDataList
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_MeGetDataList, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_MeGetDataList to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_MeGetDataList. */
+export declare interface IS_MeGetDataList {
+
+    /** S_MeGetDataList errorCode */
+    errorCode?: (number|null);
+
+    /** S_MeGetDataList dataList */
+    dataList?: (IMapEditorData[]|null);
+}
+
+/** Represents a S_MeGetDataList. */
+export declare class S_MeGetDataList implements IS_MeGetDataList {
+
+    /**
+     * Constructs a new S_MeGetDataList.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_MeGetDataList);
+
+    /** S_MeGetDataList errorCode. */
+    public errorCode: number;
+
+    /** S_MeGetDataList dataList. */
+    public dataList: IMapEditorData[];
+
+    /**
+     * Creates a new S_MeGetDataList instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_MeGetDataList instance
+     */
+    public static create(properties?: IS_MeGetDataList): S_MeGetDataList;
+
+    /**
+     * Encodes the specified S_MeGetDataList message. Does not implicitly {@link S_MeGetDataList.verify|verify} messages.
+     * @param message S_MeGetDataList message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_MeGetDataList, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_MeGetDataList message, length delimited. Does not implicitly {@link S_MeGetDataList.verify|verify} messages.
+     * @param message S_MeGetDataList message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_MeGetDataList, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_MeGetDataList message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_MeGetDataList
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_MeGetDataList;
+
+    /**
+     * Decodes a S_MeGetDataList message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_MeGetDataList
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_MeGetDataList;
+
+    /**
+     * Verifies a S_MeGetDataList message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_MeGetDataList message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_MeGetDataList
+     */
+    public static fromObject(object: { [k: string]: any }): S_MeGetDataList;
+
+    /**
+     * Creates a plain object from a S_MeGetDataList message. Also converts values to other types if specified.
+     * @param message S_MeGetDataList
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_MeGetDataList, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_MeGetDataList to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_MeGetData. */
+export declare interface IC_MeGetData {
+
+    /** C_MeGetData slotIndex */
+    slotIndex?: (number|null);
+}
+
+/** Represents a C_MeGetData. */
+export declare class C_MeGetData implements IC_MeGetData {
+
+    /**
+     * Constructs a new C_MeGetData.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_MeGetData);
+
+    /** C_MeGetData slotIndex. */
+    public slotIndex: number;
+
+    /**
+     * Creates a new C_MeGetData instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_MeGetData instance
+     */
+    public static create(properties?: IC_MeGetData): C_MeGetData;
+
+    /**
+     * Encodes the specified C_MeGetData message. Does not implicitly {@link C_MeGetData.verify|verify} messages.
+     * @param message C_MeGetData message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_MeGetData, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_MeGetData message, length delimited. Does not implicitly {@link C_MeGetData.verify|verify} messages.
+     * @param message C_MeGetData message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_MeGetData, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_MeGetData message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_MeGetData
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_MeGetData;
+
+    /**
+     * Decodes a C_MeGetData message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_MeGetData
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_MeGetData;
+
+    /**
+     * Verifies a C_MeGetData message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_MeGetData message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_MeGetData
+     */
+    public static fromObject(object: { [k: string]: any }): C_MeGetData;
+
+    /**
+     * Creates a plain object from a C_MeGetData message. Also converts values to other types if specified.
+     * @param message C_MeGetData
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_MeGetData, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_MeGetData to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_MeGetData. */
+export declare interface IS_MeGetData {
+
+    /** S_MeGetData errorCode */
+    errorCode?: (number|null);
+
+    /** S_MeGetData slotIndex */
+    slotIndex?: (number|null);
+
+    /** S_MeGetData data */
+    data?: (IMapEditorData|null);
+}
+
+/** Represents a S_MeGetData. */
+export declare class S_MeGetData implements IS_MeGetData {
+
+    /**
+     * Constructs a new S_MeGetData.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_MeGetData);
+
+    /** S_MeGetData errorCode. */
+    public errorCode: number;
+
+    /** S_MeGetData slotIndex. */
+    public slotIndex: number;
+
+    /** S_MeGetData data. */
+    public data?: (IMapEditorData|null);
+
+    /**
+     * Creates a new S_MeGetData instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_MeGetData instance
+     */
+    public static create(properties?: IS_MeGetData): S_MeGetData;
+
+    /**
+     * Encodes the specified S_MeGetData message. Does not implicitly {@link S_MeGetData.verify|verify} messages.
+     * @param message S_MeGetData message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_MeGetData, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_MeGetData message, length delimited. Does not implicitly {@link S_MeGetData.verify|verify} messages.
+     * @param message S_MeGetData message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_MeGetData, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_MeGetData message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_MeGetData
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_MeGetData;
+
+    /**
+     * Decodes a S_MeGetData message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_MeGetData
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_MeGetData;
+
+    /**
+     * Verifies a S_MeGetData message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_MeGetData message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_MeGetData
+     */
+    public static fromObject(object: { [k: string]: any }): S_MeGetData;
+
+    /**
+     * Creates a plain object from a S_MeGetData message. Also converts values to other types if specified.
+     * @param message S_MeGetData
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_MeGetData, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_MeGetData to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_MeSaveMap. */
+export declare interface IC_MeSaveMap {
+
+    /** C_MeSaveMap slotIndex */
+    slotIndex?: (number|null);
+
+    /** C_MeSaveMap mapRawData */
+    mapRawData?: (IMapRawData|null);
+
+    /** C_MeSaveMap needReview */
+    needReview?: (boolean|null);
+}
+
+/** Represents a C_MeSaveMap. */
+export declare class C_MeSaveMap implements IC_MeSaveMap {
+
+    /**
+     * Constructs a new C_MeSaveMap.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_MeSaveMap);
+
+    /** C_MeSaveMap slotIndex. */
+    public slotIndex: number;
+
+    /** C_MeSaveMap mapRawData. */
+    public mapRawData?: (IMapRawData|null);
+
+    /** C_MeSaveMap needReview. */
+    public needReview: boolean;
+
+    /**
+     * Creates a new C_MeSaveMap instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_MeSaveMap instance
+     */
+    public static create(properties?: IC_MeSaveMap): C_MeSaveMap;
+
+    /**
+     * Encodes the specified C_MeSaveMap message. Does not implicitly {@link C_MeSaveMap.verify|verify} messages.
+     * @param message C_MeSaveMap message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_MeSaveMap, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_MeSaveMap message, length delimited. Does not implicitly {@link C_MeSaveMap.verify|verify} messages.
+     * @param message C_MeSaveMap message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_MeSaveMap, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_MeSaveMap message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_MeSaveMap
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_MeSaveMap;
+
+    /**
+     * Decodes a C_MeSaveMap message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_MeSaveMap
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_MeSaveMap;
+
+    /**
+     * Verifies a C_MeSaveMap message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_MeSaveMap message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_MeSaveMap
+     */
+    public static fromObject(object: { [k: string]: any }): C_MeSaveMap;
+
+    /**
+     * Creates a plain object from a C_MeSaveMap message. Also converts values to other types if specified.
+     * @param message C_MeSaveMap
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_MeSaveMap, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_MeSaveMap to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_MeSaveMap. */
+export declare interface IS_MeSaveMap {
+
+    /** S_MeSaveMap errorCode */
+    errorCode?: (number|null);
+
+    /** S_MeSaveMap isValidForReview */
+    isValidForReview?: (boolean|null);
+}
+
+/** Represents a S_MeSaveMap. */
+export declare class S_MeSaveMap implements IS_MeSaveMap {
+
+    /**
+     * Constructs a new S_MeSaveMap.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_MeSaveMap);
+
+    /** S_MeSaveMap errorCode. */
+    public errorCode: number;
+
+    /** S_MeSaveMap isValidForReview. */
+    public isValidForReview: boolean;
+
+    /**
+     * Creates a new S_MeSaveMap instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_MeSaveMap instance
+     */
+    public static create(properties?: IS_MeSaveMap): S_MeSaveMap;
+
+    /**
+     * Encodes the specified S_MeSaveMap message. Does not implicitly {@link S_MeSaveMap.verify|verify} messages.
+     * @param message S_MeSaveMap message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_MeSaveMap, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_MeSaveMap message, length delimited. Does not implicitly {@link S_MeSaveMap.verify|verify} messages.
+     * @param message S_MeSaveMap message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_MeSaveMap, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_MeSaveMap message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_MeSaveMap
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_MeSaveMap;
+
+    /**
+     * Decodes a S_MeSaveMap message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_MeSaveMap
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_MeSaveMap;
+
+    /**
+     * Verifies a S_MeSaveMap message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_MeSaveMap message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_MeSaveMap
+     */
+    public static fromObject(object: { [k: string]: any }): S_MeSaveMap;
+
+    /**
+     * Creates a plain object from a S_MeSaveMap message. Also converts values to other types if specified.
+     * @param message S_MeSaveMap
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_MeSaveMap, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_MeSaveMap to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };
@@ -11528,6 +12308,396 @@ export declare class S_MmDeleteMap implements IS_MmDeleteMap {
 
     /**
      * Converts this S_MmDeleteMap to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_MmGetReviewingMaps. */
+export declare interface IC_MmGetReviewingMaps {
+}
+
+/** Represents a C_MmGetReviewingMaps. */
+export declare class C_MmGetReviewingMaps implements IC_MmGetReviewingMaps {
+
+    /**
+     * Constructs a new C_MmGetReviewingMaps.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_MmGetReviewingMaps);
+
+    /**
+     * Creates a new C_MmGetReviewingMaps instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_MmGetReviewingMaps instance
+     */
+    public static create(properties?: IC_MmGetReviewingMaps): C_MmGetReviewingMaps;
+
+    /**
+     * Encodes the specified C_MmGetReviewingMaps message. Does not implicitly {@link C_MmGetReviewingMaps.verify|verify} messages.
+     * @param message C_MmGetReviewingMaps message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_MmGetReviewingMaps, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_MmGetReviewingMaps message, length delimited. Does not implicitly {@link C_MmGetReviewingMaps.verify|verify} messages.
+     * @param message C_MmGetReviewingMaps message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_MmGetReviewingMaps, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_MmGetReviewingMaps message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_MmGetReviewingMaps
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_MmGetReviewingMaps;
+
+    /**
+     * Decodes a C_MmGetReviewingMaps message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_MmGetReviewingMaps
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_MmGetReviewingMaps;
+
+    /**
+     * Verifies a C_MmGetReviewingMaps message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_MmGetReviewingMaps message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_MmGetReviewingMaps
+     */
+    public static fromObject(object: { [k: string]: any }): C_MmGetReviewingMaps;
+
+    /**
+     * Creates a plain object from a C_MmGetReviewingMaps message. Also converts values to other types if specified.
+     * @param message C_MmGetReviewingMaps
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_MmGetReviewingMaps, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_MmGetReviewingMaps to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_MmGetReviewingMaps. */
+export declare interface IS_MmGetReviewingMaps {
+
+    /** S_MmGetReviewingMaps errorCode */
+    errorCode?: (number|null);
+
+    /** S_MmGetReviewingMaps maps */
+    maps?: (IMapEditorData[]|null);
+}
+
+/** Represents a S_MmGetReviewingMaps. */
+export declare class S_MmGetReviewingMaps implements IS_MmGetReviewingMaps {
+
+    /**
+     * Constructs a new S_MmGetReviewingMaps.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_MmGetReviewingMaps);
+
+    /** S_MmGetReviewingMaps errorCode. */
+    public errorCode: number;
+
+    /** S_MmGetReviewingMaps maps. */
+    public maps: IMapEditorData[];
+
+    /**
+     * Creates a new S_MmGetReviewingMaps instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_MmGetReviewingMaps instance
+     */
+    public static create(properties?: IS_MmGetReviewingMaps): S_MmGetReviewingMaps;
+
+    /**
+     * Encodes the specified S_MmGetReviewingMaps message. Does not implicitly {@link S_MmGetReviewingMaps.verify|verify} messages.
+     * @param message S_MmGetReviewingMaps message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_MmGetReviewingMaps, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_MmGetReviewingMaps message, length delimited. Does not implicitly {@link S_MmGetReviewingMaps.verify|verify} messages.
+     * @param message S_MmGetReviewingMaps message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_MmGetReviewingMaps, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_MmGetReviewingMaps message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_MmGetReviewingMaps
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_MmGetReviewingMaps;
+
+    /**
+     * Decodes a S_MmGetReviewingMaps message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_MmGetReviewingMaps
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_MmGetReviewingMaps;
+
+    /**
+     * Verifies a S_MmGetReviewingMaps message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_MmGetReviewingMaps message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_MmGetReviewingMaps
+     */
+    public static fromObject(object: { [k: string]: any }): S_MmGetReviewingMaps;
+
+    /**
+     * Creates a plain object from a S_MmGetReviewingMaps message. Also converts values to other types if specified.
+     * @param message S_MmGetReviewingMaps
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_MmGetReviewingMaps, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_MmGetReviewingMaps to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_MmReviewMap. */
+export declare interface IC_MmReviewMap {
+
+    /** C_MmReviewMap designerUserId */
+    designerUserId?: (number|null);
+
+    /** C_MmReviewMap slotIndex */
+    slotIndex?: (number|null);
+
+    /** C_MmReviewMap modifiedTime */
+    modifiedTime?: (number|null);
+
+    /** C_MmReviewMap isAccept */
+    isAccept?: (boolean|null);
+
+    /** C_MmReviewMap rejectReason */
+    rejectReason?: (string|null);
+}
+
+/** Represents a C_MmReviewMap. */
+export declare class C_MmReviewMap implements IC_MmReviewMap {
+
+    /**
+     * Constructs a new C_MmReviewMap.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_MmReviewMap);
+
+    /** C_MmReviewMap designerUserId. */
+    public designerUserId: number;
+
+    /** C_MmReviewMap slotIndex. */
+    public slotIndex: number;
+
+    /** C_MmReviewMap modifiedTime. */
+    public modifiedTime: number;
+
+    /** C_MmReviewMap isAccept. */
+    public isAccept: boolean;
+
+    /** C_MmReviewMap rejectReason. */
+    public rejectReason: string;
+
+    /**
+     * Creates a new C_MmReviewMap instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_MmReviewMap instance
+     */
+    public static create(properties?: IC_MmReviewMap): C_MmReviewMap;
+
+    /**
+     * Encodes the specified C_MmReviewMap message. Does not implicitly {@link C_MmReviewMap.verify|verify} messages.
+     * @param message C_MmReviewMap message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_MmReviewMap, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_MmReviewMap message, length delimited. Does not implicitly {@link C_MmReviewMap.verify|verify} messages.
+     * @param message C_MmReviewMap message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_MmReviewMap, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_MmReviewMap message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_MmReviewMap
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_MmReviewMap;
+
+    /**
+     * Decodes a C_MmReviewMap message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_MmReviewMap
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_MmReviewMap;
+
+    /**
+     * Verifies a C_MmReviewMap message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_MmReviewMap message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_MmReviewMap
+     */
+    public static fromObject(object: { [k: string]: any }): C_MmReviewMap;
+
+    /**
+     * Creates a plain object from a C_MmReviewMap message. Also converts values to other types if specified.
+     * @param message C_MmReviewMap
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_MmReviewMap, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_MmReviewMap to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_MmReviewMap. */
+export declare interface IS_MmReviewMap {
+
+    /** S_MmReviewMap errorCode */
+    errorCode?: (number|null);
+
+    /** S_MmReviewMap isAccept */
+    isAccept?: (boolean|null);
+}
+
+/** Represents a S_MmReviewMap. */
+export declare class S_MmReviewMap implements IS_MmReviewMap {
+
+    /**
+     * Constructs a new S_MmReviewMap.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_MmReviewMap);
+
+    /** S_MmReviewMap errorCode. */
+    public errorCode: number;
+
+    /** S_MmReviewMap isAccept. */
+    public isAccept: boolean;
+
+    /**
+     * Creates a new S_MmReviewMap instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_MmReviewMap instance
+     */
+    public static create(properties?: IS_MmReviewMap): S_MmReviewMap;
+
+    /**
+     * Encodes the specified S_MmReviewMap message. Does not implicitly {@link S_MmReviewMap.verify|verify} messages.
+     * @param message S_MmReviewMap message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_MmReviewMap, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_MmReviewMap message, length delimited. Does not implicitly {@link S_MmReviewMap.verify|verify} messages.
+     * @param message S_MmReviewMap message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_MmReviewMap, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_MmReviewMap message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_MmReviewMap
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_MmReviewMap;
+
+    /**
+     * Decodes a S_MmReviewMap message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_MmReviewMap
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_MmReviewMap;
+
+    /**
+     * Verifies a S_MmReviewMap message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_MmReviewMap message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_MmReviewMap
+     */
+    public static fromObject(object: { [k: string]: any }): S_MmReviewMap;
+
+    /**
+     * Creates a plain object from a S_MmReviewMap message. Also converts values to other types if specified.
+     * @param message S_MmReviewMap
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_MmReviewMap, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_MmReviewMap to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };

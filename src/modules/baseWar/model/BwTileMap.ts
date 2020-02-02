@@ -41,6 +41,14 @@ namespace TinyWars.BaseWar {
                 map[tileData.gridX!][tileData.gridY!] = new (this._getBwTileClass())().init(tileData, configVersion);
             }
 
+            for (const tileData of mapData.tileDataList || []) {
+                const x = tileData.gridX!;
+                const y = tileData.gridY!;
+                if (!map[x][y]) {
+                    map[x][y] = new (this._getBwTileClass())().init(tileData as Types.SerializedTile, configVersion);
+                }
+            }
+
             for (let x = 0; x < mapWidth; ++x) {
                 for (let y = 0; y < mapHeight; ++y) {
                     if (!map[x][y]) {
@@ -66,6 +74,14 @@ namespace TinyWars.BaseWar {
             const mapData                   = await WarMapModel.getMapRawData(mapFileName);
             const { mapWidth, mapHeight }   = mapData;
             const map                       = Helpers.createEmptyMap<BwTile>(mapWidth);
+
+            for (const tileData of mapData.tileDataList || []) {
+                const x = tileData.gridX!;
+                const y = tileData.gridY!;
+                if (!map[x][y]) {
+                    map[x][y] = new (this._getBwTileClass())().init(tileData as Types.SerializedTile, configVersion);
+                }
+            }
 
             for (let x = 0; x < mapWidth; ++x) {
                 for (let y = 0; y < mapHeight; ++y) {

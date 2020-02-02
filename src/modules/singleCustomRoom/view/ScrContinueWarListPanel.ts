@@ -156,32 +156,10 @@ namespace TinyWars.SingleCustomRoom {
             return data;
         }
 
-        private _createUnitViewDataList(unitViewIds: number[], mapWidth: number, mapHeight: number): Types.UnitViewData[] {
-            const configVersion = ConfigManager.getNewestConfigVersion();
-            const dataList: Types.UnitViewData[] = [];
-
-            let index  = 0;
-            for (let y = 0; y < mapHeight; ++y) {
-                for (let x = 0; x < mapWidth; ++x) {
-                    const viewId = unitViewIds[index];
-                    ++index;
-                    if (viewId > 0) {
-                        dataList.push({
-                            configVersion: configVersion,
-                            gridX        : x,
-                            gridY        : y,
-                            viewId       : viewId,
-                        });
-                    }
-                }
-            }
-            return dataList;
-        }
-
         private async _showMap(index: number): Promise<void> {
             const slotInfo              = this._dataForListWar[index].slotInfo;
             const mapFileName           = slotInfo.mapFileName;
-            const mapData               = await WarMapModel.getMapRawData(mapFileName);
+            const mapRawData            = await WarMapModel.getMapRawData(mapFileName);
             const mapExtraData          = await WarMapModel.getExtraData(mapFileName);
             this._labelMapName.text     = Lang.getFormatedText(Lang.Type.F0000, await WarMapModel.getMapNameInLanguage(mapFileName));
             this._labelDesigner.text    = Lang.getFormatedText(Lang.Type.F0001, mapExtraData.mapDesigner);
@@ -192,17 +170,17 @@ namespace TinyWars.SingleCustomRoom {
             egret.Tween.get(this._groupInfo).wait(8000).to({alpha: 0}, 1000).call(() => {this._groupInfo.visible = false; this._groupInfo.alpha = 1});
 
             const tileMapView = new WarMap.WarMapTileMapView();
-            tileMapView.init(mapData.mapWidth, mapData.mapHeight);
-            tileMapView.updateWithBaseViewIdArray(mapData.tileBases);
-            tileMapView.updateWithObjectViewIdArray(mapData.tileObjects);
+            tileMapView.init(mapRawData.mapWidth, mapRawData.mapHeight);
+            tileMapView.updateWithBaseViewIdArray(mapRawData.tileBases);
+            tileMapView.updateWithObjectViewIdArray(mapRawData.tileObjects);
 
             const unitMapView = new WarMap.WarMapUnitMapView();
-            unitMapView.initWithDataList(this._createUnitViewDataList(mapData.units, mapData.mapWidth, mapData.mapHeight));
+            unitMapView.initWithMapRawData(mapRawData);
 
             const gridSize = ConfigManager.getGridSize();
             this._zoomMap.removeAllContents();
-            this._zoomMap.setContentWidth(mapData.mapWidth * gridSize.width);
-            this._zoomMap.setContentHeight(mapData.mapHeight * gridSize.height);
+            this._zoomMap.setContentWidth(mapRawData.mapWidth * gridSize.width);
+            this._zoomMap.setContentHeight(mapRawData.mapHeight * gridSize.height);
             this._zoomMap.addContent(tileMapView);
             this._zoomMap.addContent(unitMapView);
             this._zoomMap.setContentScale(0, true);
