@@ -438,6 +438,9 @@ namespace TinyWars.MapEditor {
             const commandOffset = this._createCommandOffset();
             (commandOffset) && (dataList.push(commandOffset));
 
+            const commandImport = this._createCommandImport();
+            (commandImport) && (dataList.push(commandImport));
+
             return dataList;
         }
 
@@ -589,6 +592,19 @@ namespace TinyWars.MapEditor {
                     name    : Lang.getText(Lang.Type.B0293),
                     callback: () => {
                         MeOffsetPanel.show();
+                    },
+                };
+            }
+        }
+        private _createCommandImport(): DataForCommandRenderer | null {
+            if (this._war.getIsReview()) {
+                return null;
+            } else {
+                return {
+                    name    : Lang.getText(Lang.Type.B0313),
+                    callback: () => {
+                        this.close();
+                        MeImportPanel.show();
                     },
                 };
             }

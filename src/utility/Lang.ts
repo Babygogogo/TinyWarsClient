@@ -487,6 +487,10 @@ namespace TinyWars.Utility.Lang {
             `请输入拒审理由`,
             `Please write down the reason for the rejection`,
         ],
+        [Type.A0095]: [
+            `您确定要导入此地图吗？`,
+            `Are you sure to import this map?`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -1726,6 +1730,10 @@ namespace TinyWars.Utility.Lang {
         [Type.B0312]: [
             `右上左下对称`,
             `UR to DL`,
+        ],
+        [Type.B0313]: [
+            `导入`,
+            `Import`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
