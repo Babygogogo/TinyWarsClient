@@ -202,16 +202,32 @@ namespace TinyWars.MapManagement {
 
     function getSignatureForMap(mapRawData: Types.MapRawData): string {
         const strList: string[] = [];
-        for (const tileBase of mapRawData.tileBases) {
-            strList.push("" + ConfigManager.getTileBaseType(tileBase));
+        for (const tileBaseViewId of mapRawData.tileBases) {
+            strList.push("" + ConfigManager.getTileBaseType(tileBaseViewId));
         }
-        for (const tileObject of mapRawData.tileObjects) {
-            const data = ConfigManager.getTileObjectTypeAndPlayerIndex(tileObject);
-            strList.push("" + data.playerIndex + data.tileObjectType);
+        for (const tileObjectViewId of mapRawData.tileObjects) {
+            const cfg = ConfigManager.getTileObjectTypeAndPlayerIndex(tileObjectViewId);
+            strList.push("" + cfg.playerIndex + cfg.tileObjectType);
         }
-        for (const unit of mapRawData.units) {
-            const data = ConfigManager.getUnitTypeAndPlayerIndex(unit);
-            strList.push(data ? "" + data.playerIndex + data.unitType : "0");
+        for (const tileData of mapRawData.tileDataList || []) {
+            const cfg = ConfigManager.getTileObjectTypeAndPlayerIndex(tileData.objectViewId);
+            strList.push(
+                `${tileData.gridX}${tileData.gridY}`                                                +
+                `${ConfigManager.getTileBaseType(tileData.baseViewId)}`                             +
+                `${cfg.playerIndex}${cfg.tileObjectType}`                                           +
+                `${tileData.currentBuildPoint}${tileData.currentCapturePoint}${tileData.currentHp}`
+            );
+        }
+        for (const unitViewId of mapRawData.units || []) {
+            strList.push("" + unitViewId);
+        }
+        for (const unitData of mapRawData.unitDataList || []) {
+            strList.push(
+                `${unitData.gridX}${unitData.gridY}${unitData.viewId}${unitData.unitId}`                                            +
+                `${unitData.currentBuildMaterial}${unitData.currentFuel}${unitData.currentHp}${unitData.currentProduceMaterial}`    +
+                `${unitData.currentPromotion}${unitData.flareCurrentAmmo}${unitData.isBuildingTile}${unitData.isCapturingTile}`     +
+                `${unitData.isDiving}${unitData.loaderUnitId}${unitData.primaryWeaponCurrentAmmo}${unitData.state}`
+            );
         }
 
         return strList.join("");
