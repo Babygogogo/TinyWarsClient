@@ -1896,6 +1896,9 @@ export declare interface IMapRawData {
 
     /** MapRawData modifiedTime */
     modifiedTime?: (number|null);
+
+    /** MapRawData warRuleList */
+    warRuleList?: (IRuleForWar[]|null);
 }
 
 /** Represents a MapRawData. */
@@ -1951,6 +1954,9 @@ export declare class MapRawData implements IMapRawData {
 
     /** MapRawData modifiedTime. */
     public modifiedTime: number;
+
+    /** MapRawData warRuleList. */
+    public warRuleList: IRuleForWar[];
 
     /**
      * Creates a new MapRawData instance using the specified properties.
@@ -2468,6 +2474,270 @@ export declare class MapEditorData implements IMapEditorData {
 
     /**
      * Converts this MapEditorData to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a RuleForPlayer. */
+export declare interface IRuleForPlayer {
+
+    /** RuleForPlayer playerIndex */
+    playerIndex?: (number|null);
+
+    /** RuleForPlayer teamIndex */
+    teamIndex?: (number|null);
+}
+
+/** Represents a RuleForPlayer. */
+export declare class RuleForPlayer implements IRuleForPlayer {
+
+    /**
+     * Constructs a new RuleForPlayer.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IRuleForPlayer);
+
+    /** RuleForPlayer playerIndex. */
+    public playerIndex: number;
+
+    /** RuleForPlayer teamIndex. */
+    public teamIndex: number;
+
+    /**
+     * Creates a new RuleForPlayer instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns RuleForPlayer instance
+     */
+    public static create(properties?: IRuleForPlayer): RuleForPlayer;
+
+    /**
+     * Encodes the specified RuleForPlayer message. Does not implicitly {@link RuleForPlayer.verify|verify} messages.
+     * @param message RuleForPlayer message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IRuleForPlayer, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified RuleForPlayer message, length delimited. Does not implicitly {@link RuleForPlayer.verify|verify} messages.
+     * @param message RuleForPlayer message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IRuleForPlayer, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a RuleForPlayer message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns RuleForPlayer
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): RuleForPlayer;
+
+    /**
+     * Decodes a RuleForPlayer message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns RuleForPlayer
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): RuleForPlayer;
+
+    /**
+     * Verifies a RuleForPlayer message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a RuleForPlayer message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns RuleForPlayer
+     */
+    public static fromObject(object: { [k: string]: any }): RuleForPlayer;
+
+    /**
+     * Creates a plain object from a RuleForPlayer message. Also converts values to other types if specified.
+     * @param message RuleForPlayer
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: RuleForPlayer, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this RuleForPlayer to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a RuleForWar. */
+export declare interface IRuleForWar {
+
+    /** RuleForWar ruleName */
+    ruleName?: (string|null);
+
+    /** RuleForWar ruleNameEnglish */
+    ruleNameEnglish?: (string|null);
+
+    /** RuleForWar hasFog */
+    hasFog?: (number|null);
+
+    /** RuleForWar initialFund */
+    initialFund?: (number|null);
+
+    /** RuleForWar incomeModifier */
+    incomeModifier?: (number|null);
+
+    /** RuleForWar initialEnergy */
+    initialEnergy?: (number|null);
+
+    /** RuleForWar energyGrowthModifier */
+    energyGrowthModifier?: (number|null);
+
+    /** RuleForWar moveRangeModifier */
+    moveRangeModifier?: (number|null);
+
+    /** RuleForWar attackPowerModifier */
+    attackPowerModifier?: (number|null);
+
+    /** RuleForWar visionRangeModifier */
+    visionRangeModifier?: (number|null);
+
+    /** RuleForWar bannedCoIdList */
+    bannedCoIdList?: (number[]|null);
+
+    /** RuleForWar luckLowerLimit */
+    luckLowerLimit?: (number|null);
+
+    /** RuleForWar luckUpperLimit */
+    luckUpperLimit?: (number|null);
+
+    /** RuleForWar playerRuleList */
+    playerRuleList?: (IRuleForPlayer[]|null);
+}
+
+/** Represents a RuleForWar. */
+export declare class RuleForWar implements IRuleForWar {
+
+    /**
+     * Constructs a new RuleForWar.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IRuleForWar);
+
+    /** RuleForWar ruleName. */
+    public ruleName: string;
+
+    /** RuleForWar ruleNameEnglish. */
+    public ruleNameEnglish: string;
+
+    /** RuleForWar hasFog. */
+    public hasFog: number;
+
+    /** RuleForWar initialFund. */
+    public initialFund: number;
+
+    /** RuleForWar incomeModifier. */
+    public incomeModifier: number;
+
+    /** RuleForWar initialEnergy. */
+    public initialEnergy: number;
+
+    /** RuleForWar energyGrowthModifier. */
+    public energyGrowthModifier: number;
+
+    /** RuleForWar moveRangeModifier. */
+    public moveRangeModifier: number;
+
+    /** RuleForWar attackPowerModifier. */
+    public attackPowerModifier: number;
+
+    /** RuleForWar visionRangeModifier. */
+    public visionRangeModifier: number;
+
+    /** RuleForWar bannedCoIdList. */
+    public bannedCoIdList: number[];
+
+    /** RuleForWar luckLowerLimit. */
+    public luckLowerLimit: number;
+
+    /** RuleForWar luckUpperLimit. */
+    public luckUpperLimit: number;
+
+    /** RuleForWar playerRuleList. */
+    public playerRuleList: IRuleForPlayer[];
+
+    /**
+     * Creates a new RuleForWar instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns RuleForWar instance
+     */
+    public static create(properties?: IRuleForWar): RuleForWar;
+
+    /**
+     * Encodes the specified RuleForWar message. Does not implicitly {@link RuleForWar.verify|verify} messages.
+     * @param message RuleForWar message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IRuleForWar, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified RuleForWar message, length delimited. Does not implicitly {@link RuleForWar.verify|verify} messages.
+     * @param message RuleForWar message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IRuleForWar, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a RuleForWar message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns RuleForWar
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): RuleForWar;
+
+    /**
+     * Decodes a RuleForWar message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns RuleForWar
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): RuleForWar;
+
+    /**
+     * Verifies a RuleForWar message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a RuleForWar message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns RuleForWar
+     */
+    public static fromObject(object: { [k: string]: any }): RuleForWar;
+
+    /**
+     * Creates a plain object from a RuleForWar message. Also converts values to other types if specified.
+     * @param message RuleForWar
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: RuleForWar, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this RuleForWar to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };

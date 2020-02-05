@@ -63,8 +63,8 @@ namespace TinyWars.MultiCustomRoom {
             attackPowerModifier : 0,
             visionRangeModifier : 0,
             bannedCoIdList      : [],
-            luckLowerLimit      : ConfigManager.DEFAULT_LUCK_LOWER_LIMIT,
-            luckUpperLimit      : ConfigManager.DEFAULT_LUCK_UPPER_LIMIT,
+            luckLowerLimit      : ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultLowerLimit,
+            luckUpperLimit      : ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultUpperLimit,
         };
 
         const _dataForJoinWar: DataForJoinWar = {
@@ -113,8 +113,8 @@ namespace TinyWars.MultiCustomRoom {
             setCreateWarIncomeModifier(100);
             setCreateWarInitialEnergy(0);
             setCreateWarEnergyGrowthModifier(100);
-            setCreateWarLuckLowerLimit(ConfigManager.DEFAULT_LUCK_LOWER_LIMIT);
-            setCreateWarLuckUpperLimit(ConfigManager.DEFAULT_LUCK_UPPER_LIMIT);
+            setCreateWarLuckLowerLimit(ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultLowerLimit);
+            setCreateWarLuckUpperLimit(ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultUpperLimit);
             setCreateWarMoveRangeModifier(DEFAULT_MOVE_RANGE_MODIFIER);
             setCreateWarAttackPowerModifier(DEFAULT_ATTACK_MODIFIER);
             setCreateWarVisionRangeModifier(DEFAULT_VISION_MODIFIER);

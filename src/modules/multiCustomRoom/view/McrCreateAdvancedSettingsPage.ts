@@ -170,10 +170,10 @@ namespace TinyWars.MultiCustomRoom {
         private _onFocusOutInputLuckLowerLimit(e: egret.Event): void {
             let limit = Number(this._inputLuckLowerLimit.text);
             if (isNaN(limit)) {
-                limit = ConfigManager.DEFAULT_LUCK_LOWER_LIMIT;
+                limit = ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultLowerLimit;
             } else {
-                limit = Math.min(limit, ConfigManager.MAX_LUCK_LIMIT);
-                limit = Math.max(limit, ConfigManager.MIN_LUCK_LIMIT);
+                limit = Math.min(limit, ConfigManager.COMMON_CONSTANTS.WarRuleLuckMaxLimit);
+                limit = Math.max(limit, ConfigManager.COMMON_CONSTANTS.WarRuleLuckMinLimit);
             }
             McrModel.setCreateWarLuckLowerLimit(limit);
             this._updateInputLuckLowerLimit();
@@ -182,10 +182,10 @@ namespace TinyWars.MultiCustomRoom {
         private _onFocusOutInputLuckUpperLimit(e: egret.Event): void {
             let limit = Number(this._inputLuckUpperLimit.text);
             if (isNaN(limit)) {
-                limit = ConfigManager.DEFAULT_LUCK_UPPER_LIMIT;
+                limit = ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultUpperLimit;
             } else {
-                limit = Math.min(limit, ConfigManager.MAX_LUCK_LIMIT);
-                limit = Math.max(limit, ConfigManager.MIN_LUCK_LIMIT);
+                limit = Math.min(limit, ConfigManager.COMMON_CONSTANTS.WarRuleLuckMaxLimit);
+                limit = Math.max(limit, ConfigManager.COMMON_CONSTANTS.WarRuleLuckMinLimit);
             }
             McrModel.setCreateWarLuckUpperLimit(limit);
             this._updateInputLuckUpperLimit();

@@ -49,8 +49,8 @@ namespace TinyWars.SingleCustomRoom {
             moveRangeModifier   : 0,
             attackPowerModifier : 0,
             visionRangeModifier : 0,
-            luckLowerLimit      : ConfigManager.DEFAULT_LUCK_LOWER_LIMIT,
-            luckUpperLimit      : ConfigManager.DEFAULT_LUCK_UPPER_LIMIT,
+            luckLowerLimit      : ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultLowerLimit,
+            luckUpperLimit      : ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultUpperLimit,
         };
 
         let _saveSlotInfoList   : ProtoTypes.ISaveSlotInfo[];
@@ -88,8 +88,8 @@ namespace TinyWars.SingleCustomRoom {
             setCreateWarIncomeModifier(100);
             setCreateWarInitialEnergy(0);
             setCreateWarEnergyGrowthModifier(100);
-            setCreateWarLuckLowerLimit(ConfigManager.DEFAULT_LUCK_LOWER_LIMIT);
-            setCreateWarLuckUpperLimit(ConfigManager.DEFAULT_LUCK_UPPER_LIMIT);
+            setCreateWarLuckLowerLimit(ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultLowerLimit);
+            setCreateWarLuckUpperLimit(ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultUpperLimit);
             setCreateWarMoveRangeModifier(DEFAULT_MOVE_RANGE_MODIFIER);
             setCreateWarAttackPowerModifier(DEFAULT_ATTACK_MODIFIER);
             setCreateWarVisionRangeModifier(DEFAULT_VISION_MODIFIER);
@@ -321,7 +321,7 @@ namespace TinyWars.SingleCustomRoom {
         if (!infoList) {
             return 0;
         } else {
-            for (let i = 0; i < ConfigManager.MAX_SAVE_SLOT_COUNT; ++i) {
+            for (let i = 0; i < ConfigManager.COMMON_CONSTANTS.ScwSaveSlotMaxCount; ++i) {
                 if (infoList.every(info => info.slotIndex !== i)) {
                     return i;
                 }

@@ -182,6 +182,7 @@ namespace TinyWars.MapEditor {
             const war = this._war;
             Common.InputPanel.show({
                 title           : Lang.getText(Lang.Type.B0225),
+                tips            : null,
                 currentValue    : war.getMapName(),
                 maxChars        : ConfigManager.MAP_CONSTANTS.MaxMapNameLength,
                 callback        : (panel) => {
@@ -195,6 +196,7 @@ namespace TinyWars.MapEditor {
             const war = this._war;
             Common.InputPanel.show({
                 title           : Lang.getText(Lang.Type.B0299),
+                tips            : null,
                 currentValue    : war.getMapNameEnglish(),
                 maxChars        : ConfigManager.MAP_CONSTANTS.MaxMapNameEnglishLength,
                 callback        : (panel) => {
@@ -208,6 +210,7 @@ namespace TinyWars.MapEditor {
             const war = this._war;
             Common.InputPanel.show({
                 title           : Lang.getText(Lang.Type.B0163),
+                tips            : null,
                 currentValue    : war.getMapDesigner(),
                 maxChars        : ConfigManager.MAP_CONSTANTS.MaxDesignerLength,
                 callback        : (panel) => {
@@ -269,6 +272,9 @@ namespace TinyWars.MapEditor {
             this._labelIsMultiPlayerTitle.text          = Lang.getText(Lang.Type.B0137);
             this._labelIsSinglePlayerTitle.text         = Lang.getText(Lang.Type.B0138);
             this._btnBack.label                         = Lang.getText(Lang.Type.B0146);
+            this._btnModifyMapDesigner.label            = Lang.getText(Lang.Type.B0317);
+            this._btnModifyMapName.label                = Lang.getText(Lang.Type.B0317);
+            this._btnModifyMapNameEnglish.label         = Lang.getText(Lang.Type.B0317);
         }
 
         private _updateGroupMapName(): void {
@@ -408,6 +414,9 @@ namespace TinyWars.MapEditor {
             const commandLoadMap = this._createCommandLoadMap();
             (commandLoadMap) && (dataList.push(commandLoadMap));
 
+            const commandWarRule = this._createCommandWarRule();
+            (commandWarRule) && (dataList.push(commandWarRule));
+
             const commandReviewAccept = this._createCommandReviewAccept();
             (commandReviewAccept) && (dataList.push(commandReviewAccept));
 
@@ -495,6 +504,17 @@ namespace TinyWars.MapEditor {
                         })
                     },
                 };
+            }
+        }
+
+        private _createCommandWarRule(): DataForCommandRenderer | null {
+            return {
+                name    : Lang.getText(Lang.Type.B0314),
+                callback: () => {
+                    this._war.getField().reviseWarRuleList();
+                    MeWarRulePanel.show();
+                    this.close();
+                },
             }
         }
 

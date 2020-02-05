@@ -222,14 +222,14 @@ namespace TinyWars.BaseWar {
         }
 
         private _setSettingsLuckLowerLimit(limit: number | null): void {
-            this._luckLowerLimit = limit == null ? ConfigManager.DEFAULT_LUCK_LOWER_LIMIT : limit;
+            this._luckLowerLimit = limit == null ? ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultLowerLimit : limit;
         }
         public getSettingsLuckLowerLimit(): number {
             return this._luckLowerLimit;
         }
 
         private _setSettingsLuckUpperLimit(limit: number | null): void {
-            this._luckUpperLimit = limit == null ? ConfigManager.DEFAULT_LUCK_UPPER_LIMIT : limit;
+            this._luckUpperLimit = limit == null ? ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultUpperLimit : limit;
         }
         public getSettingsLuckUpperLimit(): number {
             return this._luckUpperLimit;

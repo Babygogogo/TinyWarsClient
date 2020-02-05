@@ -6,7 +6,8 @@ namespace TinyWars.Common {
     export type OpenDataForInputPanel = {
         title           : string;
         currentValue    : string;
-        maxChars        : number;
+        tips            : string | null;
+        maxChars        : number | null;
         callback        : (panel: InputPanel) => any;
     }
 
@@ -17,6 +18,7 @@ namespace TinyWars.Common {
         private static _instance: InputPanel;
 
         private _labelTitle     : GameUi.UiLabel;
+        private _labelTips      : GameUi.UiLabel;
         private _input          : GameUi.UiTextInput;
         private _btnCancel      : GameUi.UiButton;
         private _btnConfirm     : GameUi.UiButton;
@@ -61,6 +63,7 @@ namespace TinyWars.Common {
 
             const openData          = this._openData;
             this._labelTitle.text   = openData.title;
+            this._labelTips.text    = openData.tips;
             this._input.text        = openData.currentValue;
             this._input.maxChars    = openData.maxChars;
         }

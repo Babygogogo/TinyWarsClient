@@ -491,6 +491,18 @@ namespace TinyWars.Utility.Lang {
             `您确定要导入此地图吗？`,
             `Are you sure to import this map?`,
         ],
+        [Type.A0096]: [
+            `至少需要保留一个预设规则`,
+            `There must be at least one preset rule.`,
+        ],
+        [Type.A0097]: [
+            `确定要删除这个预设规则吗？`,
+            `Are you sure to delete this preset rule?`,
+        ],
+        [Type.A0098]: [
+            `输入的值无效，请重试`,
+            `Invalid value. Please retry.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -1734,6 +1746,30 @@ namespace TinyWars.Utility.Lang {
         [Type.B0313]: [
             `导入`,
             `Import`,
+        ],
+        [Type.B0314]: [
+            `预设规则`,
+            `Preset Rules`,
+        ],
+        [Type.B0315]: [
+            `规则名称`,
+            `Rule Name`,
+        ],
+        [Type.B0316]: [
+            `规则英文名`,
+            `Rule English Name`,
+        ],
+        [Type.B0317]: [
+            `修改`,
+            `Modify`,
+        ],
+        [Type.B0318]: [
+            `规则`,
+            `Rule`,
+        ],
+        [Type.B0319]: [
+            `值域`,
+            `Range`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
