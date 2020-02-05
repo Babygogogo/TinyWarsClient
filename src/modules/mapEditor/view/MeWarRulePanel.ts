@@ -16,6 +16,7 @@ namespace TinyWars.MapEditor {
         private _listWarRule: GameUi.UiScrollList;
         private _btnBack    : GameUi.UiButton;
         private _btnDelete  : GameUi.UiButton;
+        private _btnAddRule : GameUi.UiButton;
 
         private _labelMenuTitle                 : TinyWars.GameUi.UiLabel;
         private _groupRuleName                  : eui.Group;
@@ -104,9 +105,18 @@ namespace TinyWars.MapEditor {
             this._uiListeners = [
                 { ui: this._btnBack,                        callback: this._onTouchTapBtnBack },
                 { ui: this._btnDelete,                      callback: this._onTouchedBtnDelete },
+                { ui: this._btnAddRule,                     callback: this._onTouchedBtnAddRule },
                 { ui: this._btnModifyAttackPower,           callback: this._onTouchedBtnModifyAttackPower },
                 { ui: this._btnModifyEnergyGrowthModifier,  callback: this._onTouchedBtnModifyEnergyGrowthModifier },
                 { ui: this._btnModifyIncomeMultiplier,      callback: this._onTouchedBtnModifyIncomeMultiplier },
+                { ui: this._btnModifyInitialEnergy,         callback: this._onTouchedBtnModifyInitialEnergy },
+                { ui: this._btnModifyInitialFund,           callback: this._onTouchedBtnModifyInitialFund },
+                { ui: this._btnModifyLuckLowerLimit,        callback: this._onTouchedBtnModifyLuckLowerLimit },
+                { ui: this._btnModifyLuckUpperLimit,        callback: this._onTouchedBtnModifyLuckUpperLimit },
+                { ui: this._btnModifyMoveRange,             callback: this._onTouchedBtnModifyMoveRange },
+                { ui: this._btnModifyVisionRange,           callback: this._onTouchedBtnModifyVisionRange },
+                { ui: this._btnModifyRuleName,              callback: this._onTouchedBtnModifyRuleName },
+                { ui: this._btnModifyRuleNameEnglish,       callback: this._onTouchedBtnModifyRuleNameEnglish },
                 { ui: this._groupHasFogBox,                 callback: this._onTouchedGroupHasFogBox },
             ];
             this._listWarRule.setItemRenderer(WarRuleNameRenderer);
@@ -178,6 +188,16 @@ namespace TinyWars.MapEditor {
             }
         }
 
+        private _onTouchedBtnAddRule(e: egret.TouchEvent): void {
+            const field = this._war.getField();
+            if (field.getWarRuleList().length >= CommonConstants.WarRuleMaxCount) {
+                FloatText.show(Lang.getText(Lang.Type.A0099));
+            } else {
+                field.addWarRule();
+                this._resetView();
+            }
+        }
+
         private _onTouchedBtnModifyAttackPower(e: egret.TouchEvent): void {
             const rule = this._selectedRule;
             if (rule) {
@@ -186,7 +206,7 @@ namespace TinyWars.MapEditor {
                 Common.InputPanel.show({
                     title           : Lang.getText(Lang.Type.B0183),
                     currentValue    : "" + rule.getAttackPowerModifier(),
-                    maxChars        : 4,
+                    maxChars        : 5,
                     tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
                     callback        : panel => {
                         const value = Number(panel.getInputText());
@@ -247,11 +267,193 @@ namespace TinyWars.MapEditor {
             }
         }
 
-        private _onTouchedGroupHasFogBox(e: egret.TouchEvent): void {
+        private _onTouchedBtnModifyInitialEnergy(e: egret.TouchEvent): void {
             const rule = this._selectedRule;
             if (rule) {
-                rule.setHasFog(!rule.getHasFog());
-                this._updateImgHasFog(rule);
+                const maxValue = CommonConstants.WarRuleInitialEnergyMaxLimit;
+                const minValue = CommonConstants.WarRuleInitialEnergyMinLimit;
+                Common.InputPanel.show({
+                    title           : Lang.getText(Lang.Type.B0180),
+                    currentValue    : "" + rule.getInitialEnergy(),
+                    maxChars        : 5,
+                    tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                    callback        : panel => {
+                        const value = Number(panel.getInputText());
+                        if (isNaN(value)) {
+                            FloatText.show(Lang.getText(Lang.Type.A0098));
+                        } else {
+                            rule.setInitialEnergy(Math.min(maxValue, Math.max(minValue, value)));
+                            this._updateLabelInitialEnergy(rule);
+                        }
+                    },
+                });
+            }
+        }
+
+        private _onTouchedBtnModifyInitialFund(e: egret.TouchEvent): void {
+            const rule = this._selectedRule;
+            if (rule) {
+                const maxValue = CommonConstants.WarRuleInitialFundMaxLimit;
+                const minValue = CommonConstants.WarRuleInitialFundMinLimit;
+                Common.InputPanel.show({
+                    title           : Lang.getText(Lang.Type.B0178),
+                    currentValue    : "" + rule.getInitialFund(),
+                    maxChars        : 7,
+                    tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                    callback        : panel => {
+                        const value = Number(panel.getInputText());
+                        if (isNaN(value)) {
+                            FloatText.show(Lang.getText(Lang.Type.A0098));
+                        } else {
+                            rule.setInitialFund(Math.min(maxValue, Math.max(minValue, value)));
+                            this._updateLabelInitialFund(rule);
+                        }
+                    },
+                });
+            }
+        }
+
+        private _onTouchedBtnModifyLuckLowerLimit(e: egret.TouchEvent): void {
+            const rule = this._selectedRule;
+            if (rule) {
+                const maxValue = CommonConstants.WarRuleLuckMaxLimit;
+                const minValue = CommonConstants.WarRuleLuckMinLimit;
+                Common.InputPanel.show({
+                    title           : Lang.getText(Lang.Type.B0189),
+                    currentValue    : "" + rule.getLuckLowerLimit(),
+                    maxChars        : 5,
+                    tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                    callback        : panel => {
+                        const value = Number(panel.getInputText());
+                        if (isNaN(value)) {
+                            FloatText.show(Lang.getText(Lang.Type.A0098));
+                        } else {
+                            rule.setLuckLowerLimit(Math.min(maxValue, Math.max(minValue, value)));
+                            this._updateLabelLuckLowerLimit(rule);
+                        }
+                    },
+                });
+            }
+        }
+
+        private _onTouchedBtnModifyLuckUpperLimit(e: egret.TouchEvent): void {
+            const rule = this._selectedRule;
+            if (rule) {
+                const maxValue = CommonConstants.WarRuleLuckMaxLimit;
+                const minValue = CommonConstants.WarRuleLuckMinLimit;
+                Common.InputPanel.show({
+                    title           : Lang.getText(Lang.Type.B0189),
+                    currentValue    : "" + rule.getLuckUpperLimit(),
+                    maxChars        : 5,
+                    tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                    callback        : panel => {
+                        const value = Number(panel.getInputText());
+                        if (isNaN(value)) {
+                            FloatText.show(Lang.getText(Lang.Type.A0098));
+                        } else {
+                            rule.setLuckUpperLimit(Math.min(maxValue, Math.max(minValue, value)));
+                            this._updateLabelLuckUpperLimit(rule);
+                        }
+                    },
+                });
+            }
+        }
+
+        private _onTouchedBtnModifyMoveRange(e: egret.TouchEvent): void {
+            const rule = this._selectedRule;
+            if (rule) {
+                const maxValue = CommonConstants.WarRuleMoveRangeModifierMaxLimit;
+                const minValue = CommonConstants.WarRuleMoveRangeModifierMinLimit;
+                Common.InputPanel.show({
+                    title           : Lang.getText(Lang.Type.B0182),
+                    currentValue    : "" + rule.getMoveRangeModifier(),
+                    maxChars        : 5,
+                    tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                    callback        : panel => {
+                        const value = Number(panel.getInputText());
+                        if (isNaN(value)) {
+                            FloatText.show(Lang.getText(Lang.Type.A0098));
+                        } else {
+                            rule.setMoveRangeModifier(Math.min(maxValue, Math.max(minValue, value)));
+                            this._updateLabelMoveRange(rule);
+                        }
+                    },
+                });
+            }
+        }
+
+        private _onTouchedBtnModifyVisionRange(e: egret.TouchEvent): void {
+            const rule = this._selectedRule;
+            if (rule) {
+                const maxValue = CommonConstants.WarRuleVisionRangeModifierMaxLimit;
+                const minValue = CommonConstants.WarRuleVisionRangeModifierMinLimit;
+                Common.InputPanel.show({
+                    title           : Lang.getText(Lang.Type.B0184),
+                    currentValue    : "" + rule.getVisionRangeModifier(),
+                    maxChars        : 5,
+                    tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                    callback        : panel => {
+                        const value = Number(panel.getInputText());
+                        if (isNaN(value)) {
+                            FloatText.show(Lang.getText(Lang.Type.A0098));
+                        } else {
+                            rule.setVisionRangeModifier(Math.min(maxValue, Math.max(minValue, value)));
+                            this._updateLabelVisionRange(rule);
+                        }
+                    },
+                });
+            }
+        }
+
+        private _onTouchedBtnModifyRuleName(e: egret.TouchEvent): void {
+            const rule = this._selectedRule;
+            if (rule) {
+                Common.InputPanel.show({
+                    title           : Lang.getText(Lang.Type.B0315),
+                    currentValue    : rule.getRuleName(),
+                    maxChars        : CommonConstants.WarRuleNameMaxLength,
+                    tips            : null,
+                    callback        : panel => {
+                        const value = panel.getInputText();
+                        if (!value) {
+                            FloatText.show(Lang.getText(Lang.Type.A0098));
+                        } else {
+                            rule.setRuleName(value);
+                            this._updateLabelRuleName(rule);
+                        }
+                    },
+                });
+            }
+        }
+
+        private _onTouchedBtnModifyRuleNameEnglish(e: egret.TouchEvent): void {
+            const rule = this._selectedRule;
+            if (rule) {
+                Common.InputPanel.show({
+                    title           : Lang.getText(Lang.Type.B0316),
+                    currentValue    : rule.getRuleNameEnglish(),
+                    maxChars        : CommonConstants.WarRuleNameMaxLength,
+                    tips            : null,
+                    callback        : panel => {
+                        const value = panel.getInputText();
+                        if (!value) {
+                            FloatText.show(Lang.getText(Lang.Type.A0098));
+                        } else {
+                            rule.setRuleNameEnglish(value);
+                            this._updateLabelRuleNameEnglish(rule);
+                        }
+                    },
+                });
+            }
+        }
+
+        private _onTouchedGroupHasFogBox(e: egret.TouchEvent): void {
+            if (!this._war.getIsReview()) {
+                const rule = this._selectedRule;
+                if (rule) {
+                    rule.setHasFog(!rule.getHasFog());
+                    this._updateImgHasFog(rule);
+                }
             }
         }
 
@@ -259,6 +461,21 @@ namespace TinyWars.MapEditor {
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _resetView(): void {
+            const canShow                               = !this._war.getIsReview();
+            this._btnAddRule.visible                    = canShow;
+            this._btnDelete.visible                     = canShow;
+            this._btnModifyAttackPower.visible          = canShow;
+            this._btnModifyEnergyGrowthModifier.visible = canShow;
+            this._btnModifyIncomeMultiplier.visible     = canShow;
+            this._btnModifyInitialEnergy.visible        = canShow;
+            this._btnModifyInitialFund.visible          = canShow;
+            this._btnModifyLuckLowerLimit.visible       = canShow;
+            this._btnModifyLuckUpperLimit.visible       = canShow;
+            this._btnModifyMoveRange.visible            = canShow;
+            this._btnModifyRuleName.visible             = canShow;
+            this._btnModifyRuleNameEnglish.visible      = canShow;
+            this._btnModifyVisionRange.visible          = canShow;
+
             this._dataForListWarRule = this._createDataForListWarRule();
             this._listWarRule.bindData(this._dataForListWarRule);
             this.setSelectedIndex(0);
@@ -280,6 +497,7 @@ namespace TinyWars.MapEditor {
             this._labelHasFogTitle.text                 = Lang.getText(Lang.Type.B0020);
             this._btnBack.label                         = Lang.getText(Lang.Type.B0146);
             this._btnDelete.label                       = Lang.getText(Lang.Type.B0220);
+            this._btnAddRule.label                      = Lang.getText(Lang.Type.B0320);
             this._btnModifyAttackPower.label            = Lang.getText(Lang.Type.B0317);
             this._btnModifyEnergyGrowthModifier.label   = Lang.getText(Lang.Type.B0317);
             this._btnModifyIncomeMultiplier.label       = Lang.getText(Lang.Type.B0317);

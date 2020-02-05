@@ -9,7 +9,7 @@ namespace TinyWars.MapEditor {
         private _ruleNameEnglish        = Lang.getText(Lang.Type.B0277);
         private _hasFog                 = false;
         private _initialFund            = 0;
-        private _incomeModifier         = 100;
+        private _incomeMultiplier       = 100;
         private _initialEnergy          = 0;
         private _energyGrowthModifier   = 100;
         private _moveRangeModifier      = 0;
@@ -20,6 +20,40 @@ namespace TinyWars.MapEditor {
         // private _bannedCoIdList         : number[] = []; // TODO
 
         private _playerRuleList : ProtoTypes.IRuleForPlayer[] = [];
+
+        public init(data: ProtoTypes.IRuleForWar | null): MeWarRule {
+            if (data) {
+                this.setRuleName(data.ruleName);
+                this.setRuleNameEnglish(data.ruleNameEnglish);
+                this.setHasFog(!!data.hasFog);
+                this.setInitialFund(data.initialFund);
+                this.setIncomeMultiplier(data.incomeModifier);
+                this.setInitialEnergy(data.initialEnergy);
+                this.setEnergyGrowthModifier(data.energyGrowthModifier);
+                this.setMoveRangeModifier(data.moveRangeModifier);
+                this.setAttackPowerModifier(data.attackPowerModifier);
+                this.setVisionRangeModifier(data.visionRangeModifier);
+                this.setLuckLowerLimit(data.luckLowerLimit);
+                this.setLuckUpperLimit(data.luckUpperLimit);
+                this._initPlayerRules(data.playerRuleList);
+            } else {
+                this.setRuleName(Lang.getText(Lang.Type.B0277));
+                this.setRuleNameEnglish(Lang.getText(Lang.Type.B0277));
+                this.setHasFog(false);
+                this.setInitialFund(0);
+                this.setIncomeMultiplier(100);
+                this.setInitialEnergy(0);
+                this.setEnergyGrowthModifier(100);
+                this.setMoveRangeModifier(0);
+                this.setAttackPowerModifier(0);
+                this.setVisionRangeModifier(0);
+                this.setLuckLowerLimit(ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultLowerLimit);
+                this.setLuckUpperLimit(ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultUpperLimit);
+                this.reviseForPlayersCount(0);
+            }
+
+            return this;
+        }
 
         public serialize(): ProtoTypes.IRuleForWar {
             return {
@@ -75,10 +109,10 @@ namespace TinyWars.MapEditor {
         }
 
         public getIncomeMultiplier(): number {
-            return this._incomeModifier;
+            return this._incomeMultiplier;
         }
         public setIncomeMultiplier(modifier: number): void {
-            this._incomeModifier = modifier;
+            this._incomeMultiplier = modifier;
         }
 
         public getInitialEnergy(): number {
@@ -130,6 +164,22 @@ namespace TinyWars.MapEditor {
             this._luckUpperLimit = limit;
         }
 
+        private _initPlayerRules(dataList: ProtoTypes.IRuleForPlayer[] | null): void {
+            if ((!dataList) || (!dataList.length)) {
+                this.reviseForPlayersCount(0);
+            } else {
+                const list = this._playerRuleList;
+                list.length = 0;
+
+                for (const data of dataList) {
+                    list.push({
+                        playerIndex : data.playerIndex,
+                        teamIndex   : data.teamIndex,
+                    });
+                }
+                list.sort((a, b) => a.playerIndex - b.playerIndex);
+            }
+        }
         public reviseForPlayersCount(playersCount: number): void {
             const list = this._playerRuleList;
             if (list.length > playersCount) {

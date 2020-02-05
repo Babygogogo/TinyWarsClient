@@ -33,6 +33,7 @@ namespace TinyWars.MapEditor {
             this.setModifiedTime(data.modifiedTime);
             this.setIsMultiPlayer(data.isMultiPlayer);
             this.setIsSinglePlayer(data.isSinglePlayer);
+            this._initWarRuleList(data.warRuleList);
 
             this._view = this._view || new MeFieldView();
             this._view.init(this);
@@ -186,6 +187,15 @@ namespace TinyWars.MapEditor {
             return playersCount;
         }
 
+        private _initWarRuleList(dataList: ProtoTypes.IRuleForWar[] | null): void {
+            const list  = this.getWarRuleList();
+            list.length = 0;
+            if (dataList) {
+                for (const data of dataList) {
+                    list.push(new MeWarRule().init(data));
+                }
+            }
+        }
         public reviseWarRuleList(): void {
             const list = this.getWarRuleList();
             if (!list.length) {
@@ -205,6 +215,11 @@ namespace TinyWars.MapEditor {
         }
         public deleteWarRule(index: number): void {
             this.getWarRuleList().splice(index, 1);
+        }
+        public addWarRule(): void {
+            const newRule = new MeWarRule();
+            newRule.reviseForPlayersCount(this.getPlayersCount());
+            this.getWarRuleList().push(newRule);
         }
     }
 }
