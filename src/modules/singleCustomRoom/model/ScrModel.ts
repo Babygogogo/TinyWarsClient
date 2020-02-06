@@ -85,9 +85,9 @@ namespace TinyWars.SingleCustomRoom {
             setCreateWarHasFog(false);
 
             setCreateWarInitialFund(0);
-            setCreateWarIncomeModifier(100);
+            setCreateWarIncomeMultiplier(100);
             setCreateWarInitialEnergy(0);
-            setCreateWarEnergyGrowthModifier(100);
+            setCreateWarEnergyGrowthMultiplier(100);
             setCreateWarLuckLowerLimit(ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultLowerLimit);
             setCreateWarLuckUpperLimit(ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultUpperLimit);
             setCreateWarMoveRangeModifier(DEFAULT_MOVE_RANGE_MODIFIER);
@@ -145,10 +145,10 @@ namespace TinyWars.SingleCustomRoom {
             return _dataForCreateWar.initialFund;
         }
 
-        export function setCreateWarIncomeModifier(modifier: number): void {
+        export function setCreateWarIncomeMultiplier(modifier: number): void {
             _dataForCreateWar.incomeModifier = modifier;
         }
-        export function getCreateWarIncomeModifier(): number {
+        export function getCreateWarIncomeMultiplier(): number {
             return _dataForCreateWar.incomeModifier;
         }
 
@@ -159,10 +159,10 @@ namespace TinyWars.SingleCustomRoom {
             return _dataForCreateWar.initialEnergy;
         }
 
-        export function setCreateWarEnergyGrowthModifier(modifier: number): void {
+        export function setCreateWarEnergyGrowthMultiplier(modifier: number): void {
             _dataForCreateWar.energyGrowthModifier = modifier;
         }
-        export function getCreateWarEnergyGrowthModifier(): number {
+        export function getCreateWarEnergyGrowthMultiplier(): number {
             return _dataForCreateWar.energyGrowthModifier;
         }
 

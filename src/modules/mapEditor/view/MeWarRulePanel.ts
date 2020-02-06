@@ -18,56 +18,56 @@ namespace TinyWars.MapEditor {
         private _btnDelete  : GameUi.UiButton;
         private _btnAddRule : GameUi.UiButton;
 
-        private _labelMenuTitle                 : TinyWars.GameUi.UiLabel;
-        private _groupRuleName                  : eui.Group;
-        private _labelRuleNameTitle             : TinyWars.GameUi.UiLabel;
-        private _labelRuleName                  : TinyWars.GameUi.UiLabel;
-        private _btnModifyRuleName              : TinyWars.GameUi.UiButton;
-        private _groupRuleNameEnglish           : eui.Group;
-        private _labelRuleNameEnglishTitle      : TinyWars.GameUi.UiLabel;
-        private _labelRuleNameEnglish           : TinyWars.GameUi.UiLabel;
-        private _btnModifyRuleNameEnglish       : TinyWars.GameUi.UiButton;
-        private _groupInitialFund               : eui.Group;
-        private _labelInitialFundTitle          : TinyWars.GameUi.UiLabel;
-        private _labelInitialFund               : TinyWars.GameUi.UiLabel;
-        private _btnModifyInitialFund           : TinyWars.GameUi.UiButton;
-        private _groupIncomeMultiplier          : eui.Group;
-        private _labelIncomeMultiplierTitle     : TinyWars.GameUi.UiLabel;
-        private _labelIncomeMultiplier          : TinyWars.GameUi.UiLabel;
-        private _btnModifyIncomeMultiplier      : TinyWars.GameUi.UiButton;
-        private _groupInitialEnergy             : eui.Group;
-        private _labelInitialEnergyTitle        : TinyWars.GameUi.UiLabel;
-        private _labelInitialEnergy             : TinyWars.GameUi.UiLabel;
-        private _btnModifyInitialEnergy         : TinyWars.GameUi.UiButton;
-        private _groupEnergyGrowthModifier      : eui.Group;
-        private _labelEnergyGrowthModifierTitle : TinyWars.GameUi.UiLabel;
-        private _labelEnergyGrowthModifier      : TinyWars.GameUi.UiLabel;
-        private _btnModifyEnergyGrowthModifier  : TinyWars.GameUi.UiButton;
-        private _groupLuckLowerLimit            : eui.Group;
-        private _labelLuckLowerLimitTitle       : TinyWars.GameUi.UiLabel;
-        private _labelLuckLowerLimit            : TinyWars.GameUi.UiLabel;
-        private _btnModifyLuckLowerLimit        : TinyWars.GameUi.UiButton;
-        private _groupLuckUpperLimit            : eui.Group;
-        private _labelLuckUpperLimitTitle       : TinyWars.GameUi.UiLabel;
-        private _labelLuckUpperLimit            : TinyWars.GameUi.UiLabel;
-        private _btnModifyLuckUpperLimit        : TinyWars.GameUi.UiButton;
-        private _groupMoveRange                 : eui.Group;
-        private _labelMoveRangeTitle            : TinyWars.GameUi.UiLabel;
-        private _labelMoveRange                 : TinyWars.GameUi.UiLabel;
-        private _btnModifyMoveRange             : TinyWars.GameUi.UiButton;
-        private _groupAttackPower               : eui.Group;
-        private _labelAttackPowerTitle          : TinyWars.GameUi.UiLabel;
-        private _labelAttackPower               : TinyWars.GameUi.UiLabel;
-        private _btnModifyAttackPower           : TinyWars.GameUi.UiButton;
-        private _groupVisionRange               : eui.Group;
-        private _labelVisionRangeTitle          : TinyWars.GameUi.UiLabel;
-        private _labelVisionRange               : TinyWars.GameUi.UiLabel;
-        private _btnModifyVisionRange           : TinyWars.GameUi.UiButton;
-        private _groupHasFog                    : eui.Group;
-        private _labelHasFogTitle               : TinyWars.GameUi.UiLabel;
-        private _groupHasFogBox                 : eui.Group;
-        private _imgHasFog                      : TinyWars.GameUi.UiImage;
-        private _listPlayerRule                 : GameUi.UiScrollList;
+        private _labelMenuTitle                     : TinyWars.GameUi.UiLabel;
+        private _groupRuleName                      : eui.Group;
+        private _labelRuleNameTitle                 : TinyWars.GameUi.UiLabel;
+        private _labelRuleName                      : TinyWars.GameUi.UiLabel;
+        private _btnModifyRuleName                  : TinyWars.GameUi.UiButton;
+        private _groupRuleNameEnglish               : eui.Group;
+        private _labelRuleNameEnglishTitle          : TinyWars.GameUi.UiLabel;
+        private _labelRuleNameEnglish               : TinyWars.GameUi.UiLabel;
+        private _btnModifyRuleNameEnglish           : TinyWars.GameUi.UiButton;
+        private _groupInitialFund                   : eui.Group;
+        private _labelInitialFundTitle              : TinyWars.GameUi.UiLabel;
+        private _labelInitialFund                   : TinyWars.GameUi.UiLabel;
+        private _btnModifyInitialFund               : TinyWars.GameUi.UiButton;
+        private _groupIncomeMultiplier              : eui.Group;
+        private _labelIncomeMultiplierTitle         : TinyWars.GameUi.UiLabel;
+        private _labelIncomeMultiplier              : TinyWars.GameUi.UiLabel;
+        private _btnModifyIncomeMultiplier          : TinyWars.GameUi.UiButton;
+        private _groupInitialEnergy                 : eui.Group;
+        private _labelInitialEnergyTitle            : TinyWars.GameUi.UiLabel;
+        private _labelInitialEnergy                 : TinyWars.GameUi.UiLabel;
+        private _btnModifyInitialEnergy             : TinyWars.GameUi.UiButton;
+        private _groupEnergyGrowthMultiplier        : eui.Group;
+        private _labelEnergyGrowthMultiplierTitle   : TinyWars.GameUi.UiLabel;
+        private _labelEnergyGrowthMultiplier        : TinyWars.GameUi.UiLabel;
+        private _btnModifyEnergyGrowthMultiplier    : TinyWars.GameUi.UiButton;
+        private _groupLuckLowerLimit                : eui.Group;
+        private _labelLuckLowerLimitTitle           : TinyWars.GameUi.UiLabel;
+        private _labelLuckLowerLimit                : TinyWars.GameUi.UiLabel;
+        private _btnModifyLuckLowerLimit            : TinyWars.GameUi.UiButton;
+        private _groupLuckUpperLimit                : eui.Group;
+        private _labelLuckUpperLimitTitle           : TinyWars.GameUi.UiLabel;
+        private _labelLuckUpperLimit                : TinyWars.GameUi.UiLabel;
+        private _btnModifyLuckUpperLimit            : TinyWars.GameUi.UiButton;
+        private _groupMoveRange                     : eui.Group;
+        private _labelMoveRangeTitle                : TinyWars.GameUi.UiLabel;
+        private _labelMoveRange                     : TinyWars.GameUi.UiLabel;
+        private _btnModifyMoveRange                 : TinyWars.GameUi.UiButton;
+        private _groupAttackPower                   : eui.Group;
+        private _labelAttackPowerTitle              : TinyWars.GameUi.UiLabel;
+        private _labelAttackPower                   : TinyWars.GameUi.UiLabel;
+        private _btnModifyAttackPower               : TinyWars.GameUi.UiButton;
+        private _groupVisionRange                   : eui.Group;
+        private _labelVisionRangeTitle              : TinyWars.GameUi.UiLabel;
+        private _labelVisionRange                   : TinyWars.GameUi.UiLabel;
+        private _btnModifyVisionRange               : TinyWars.GameUi.UiButton;
+        private _groupHasFog                        : eui.Group;
+        private _labelHasFogTitle                   : TinyWars.GameUi.UiLabel;
+        private _groupHasFogBox                     : eui.Group;
+        private _imgHasFog                          : TinyWars.GameUi.UiImage;
+        private _listPlayerRule                     : GameUi.UiScrollList;
 
         private _war                : MeWar;
         private _dataForListWarRule : DataForWarRuleNameRenderer[] = [];
@@ -103,21 +103,21 @@ namespace TinyWars.MapEditor {
                 { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
             ];
             this._uiListeners = [
-                { ui: this._btnBack,                        callback: this._onTouchTapBtnBack },
-                { ui: this._btnDelete,                      callback: this._onTouchedBtnDelete },
-                { ui: this._btnAddRule,                     callback: this._onTouchedBtnAddRule },
-                { ui: this._btnModifyAttackPower,           callback: this._onTouchedBtnModifyAttackPower },
-                { ui: this._btnModifyEnergyGrowthModifier,  callback: this._onTouchedBtnModifyEnergyGrowthModifier },
-                { ui: this._btnModifyIncomeMultiplier,      callback: this._onTouchedBtnModifyIncomeMultiplier },
-                { ui: this._btnModifyInitialEnergy,         callback: this._onTouchedBtnModifyInitialEnergy },
-                { ui: this._btnModifyInitialFund,           callback: this._onTouchedBtnModifyInitialFund },
-                { ui: this._btnModifyLuckLowerLimit,        callback: this._onTouchedBtnModifyLuckLowerLimit },
-                { ui: this._btnModifyLuckUpperLimit,        callback: this._onTouchedBtnModifyLuckUpperLimit },
-                { ui: this._btnModifyMoveRange,             callback: this._onTouchedBtnModifyMoveRange },
-                { ui: this._btnModifyVisionRange,           callback: this._onTouchedBtnModifyVisionRange },
-                { ui: this._btnModifyRuleName,              callback: this._onTouchedBtnModifyRuleName },
-                { ui: this._btnModifyRuleNameEnglish,       callback: this._onTouchedBtnModifyRuleNameEnglish },
-                { ui: this._groupHasFogBox,                 callback: this._onTouchedGroupHasFogBox },
+                { ui: this._btnBack,                            callback: this._onTouchTapBtnBack },
+                { ui: this._btnDelete,                          callback: this._onTouchedBtnDelete },
+                { ui: this._btnAddRule,                         callback: this._onTouchedBtnAddRule },
+                { ui: this._btnModifyAttackPower,               callback: this._onTouchedBtnModifyAttackPower },
+                { ui: this._btnModifyEnergyGrowthMultiplier,    callback: this._onTouchedBtnModifyEnergyGrowthMultiplier },
+                { ui: this._btnModifyIncomeMultiplier,          callback: this._onTouchedBtnModifyIncomeMultiplier },
+                { ui: this._btnModifyInitialEnergy,             callback: this._onTouchedBtnModifyInitialEnergy },
+                { ui: this._btnModifyInitialFund,               callback: this._onTouchedBtnModifyInitialFund },
+                { ui: this._btnModifyLuckLowerLimit,            callback: this._onTouchedBtnModifyLuckLowerLimit },
+                { ui: this._btnModifyLuckUpperLimit,            callback: this._onTouchedBtnModifyLuckUpperLimit },
+                { ui: this._btnModifyMoveRange,                 callback: this._onTouchedBtnModifyMoveRange },
+                { ui: this._btnModifyVisionRange,               callback: this._onTouchedBtnModifyVisionRange },
+                { ui: this._btnModifyRuleName,                  callback: this._onTouchedBtnModifyRuleName },
+                { ui: this._btnModifyRuleNameEnglish,           callback: this._onTouchedBtnModifyRuleNameEnglish },
+                { ui: this._groupHasFogBox,                     callback: this._onTouchedGroupHasFogBox },
             ];
             this._listWarRule.setItemRenderer(WarRuleNameRenderer);
             this._listPlayerRule.setItemRenderer(PlayerRuleRenderer);
@@ -221,14 +221,14 @@ namespace TinyWars.MapEditor {
             }
         }
 
-        private _onTouchedBtnModifyEnergyGrowthModifier(e: egret.TouchEvent): void {
+        private _onTouchedBtnModifyEnergyGrowthMultiplier(e: egret.TouchEvent): void {
             const rule = this._selectedRule;
             if (rule) {
                 const maxValue = CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit;
                 const minValue = CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit;
                 Common.InputPanel.show({
                     title           : Lang.getText(Lang.Type.B0181),
-                    currentValue    : "" + rule.getEnergyGrowthModifier(),
+                    currentValue    : "" + rule.getEnergyGrowthMultiplier(),
                     maxChars        : 5,
                     tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
                     callback        : panel => {
@@ -236,8 +236,8 @@ namespace TinyWars.MapEditor {
                         if (isNaN(value)) {
                             FloatText.show(Lang.getText(Lang.Type.A0098));
                         } else {
-                            rule.setEnergyGrowthModifier(Math.min(maxValue, Math.max(minValue, value)));
-                            this._updateLabelEnergyGrowthModifier(rule);
+                            rule.setEnergyGrowthMultiplier(Math.min(maxValue, Math.max(minValue, value)));
+                            this._updateLabelEnergyGrowthMultiplier(rule);
                         }
                     },
                 });
@@ -461,20 +461,20 @@ namespace TinyWars.MapEditor {
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _resetView(): void {
-            const canShow                               = !this._war.getIsReview();
-            this._btnAddRule.visible                    = canShow;
-            this._btnDelete.visible                     = canShow;
-            this._btnModifyAttackPower.visible          = canShow;
-            this._btnModifyEnergyGrowthModifier.visible = canShow;
-            this._btnModifyIncomeMultiplier.visible     = canShow;
-            this._btnModifyInitialEnergy.visible        = canShow;
-            this._btnModifyInitialFund.visible          = canShow;
-            this._btnModifyLuckLowerLimit.visible       = canShow;
-            this._btnModifyLuckUpperLimit.visible       = canShow;
-            this._btnModifyMoveRange.visible            = canShow;
-            this._btnModifyRuleName.visible             = canShow;
-            this._btnModifyRuleNameEnglish.visible      = canShow;
-            this._btnModifyVisionRange.visible          = canShow;
+            const canShow                                   = !this._war.getIsReview();
+            this._btnAddRule.visible                        = canShow;
+            this._btnDelete.visible                         = canShow;
+            this._btnModifyAttackPower.visible              = canShow;
+            this._btnModifyEnergyGrowthMultiplier.visible   = canShow;
+            this._btnModifyIncomeMultiplier.visible         = canShow;
+            this._btnModifyInitialEnergy.visible            = canShow;
+            this._btnModifyInitialFund.visible              = canShow;
+            this._btnModifyLuckLowerLimit.visible           = canShow;
+            this._btnModifyLuckUpperLimit.visible           = canShow;
+            this._btnModifyMoveRange.visible                = canShow;
+            this._btnModifyRuleName.visible                 = canShow;
+            this._btnModifyRuleNameEnglish.visible          = canShow;
+            this._btnModifyVisionRange.visible              = canShow;
 
             this._dataForListWarRule = this._createDataForListWarRule();
             this._listWarRule.bindData(this._dataForListWarRule);
@@ -488,7 +488,7 @@ namespace TinyWars.MapEditor {
             this._labelInitialFundTitle.text            = Lang.getText(Lang.Type.B0178);
             this._labelIncomeMultiplierTitle.text       = Lang.getText(Lang.Type.B0179);
             this._labelInitialEnergyTitle.text          = Lang.getText(Lang.Type.B0180);
-            this._labelEnergyGrowthModifierTitle.text   = Lang.getText(Lang.Type.B0181);
+            this._labelEnergyGrowthMultiplierTitle.text = Lang.getText(Lang.Type.B0181);
             this._labelMoveRangeTitle.text              = Lang.getText(Lang.Type.B0182);
             this._labelAttackPowerTitle.text            = Lang.getText(Lang.Type.B0183);
             this._labelVisionRangeTitle.text            = Lang.getText(Lang.Type.B0184);
@@ -499,7 +499,7 @@ namespace TinyWars.MapEditor {
             this._btnDelete.label                       = Lang.getText(Lang.Type.B0220);
             this._btnAddRule.label                      = Lang.getText(Lang.Type.B0320);
             this._btnModifyAttackPower.label            = Lang.getText(Lang.Type.B0317);
-            this._btnModifyEnergyGrowthModifier.label   = Lang.getText(Lang.Type.B0317);
+            this._btnModifyEnergyGrowthMultiplier.label = Lang.getText(Lang.Type.B0317);
             this._btnModifyIncomeMultiplier.label       = Lang.getText(Lang.Type.B0317);
             this._btnModifyInitialEnergy.label          = Lang.getText(Lang.Type.B0317);
             this._btnModifyInitialFund.label            = Lang.getText(Lang.Type.B0317);
@@ -531,7 +531,7 @@ namespace TinyWars.MapEditor {
             this._updateLabelRuleName(rule);
             this._updateLabelRuleNameEnglish(rule);
             this._updateLabelAttackPower(rule);
-            this._updateLabelEnergyGrowthModifier(rule);
+            this._updateLabelEnergyGrowthMultiplier(rule);
             this._updateLabelIncomeMultiplier(rule);
             this._updateLabelInitialEnergy(rule);
             this._updateLabelInitialFund(rule);
@@ -552,8 +552,8 @@ namespace TinyWars.MapEditor {
         private _updateLabelAttackPower(rule: MeWarRule): void {
             this._labelAttackPower.text = rule ? `${rule.getAttackPowerModifier()}%` : null;
         }
-        private _updateLabelEnergyGrowthModifier(rule: MeWarRule): void {
-            this._labelEnergyGrowthModifier.text = rule ? `${rule.getEnergyGrowthModifier()}%` : null;
+        private _updateLabelEnergyGrowthMultiplier(rule: MeWarRule): void {
+            this._labelEnergyGrowthMultiplier.text = rule ? `${rule.getEnergyGrowthMultiplier()}%` : null;
         }
         private _updateLabelIncomeMultiplier(rule: MeWarRule): void {
             this._labelIncomeMultiplier.text = rule ? `${rule.getIncomeMultiplier()}%` : null;
@@ -657,6 +657,7 @@ namespace TinyWars.MapEditor {
             const rule              = data.playerRule;
             this._labelForce.text   = Lang.getPlayerForceName(rule.playerIndex);
             this._labelTeam.text    = Lang.getPlayerTeamName(rule.teamIndex);
+            this._btnModify.visible = !MeManager.getWar().getIsReview();
         }
 
         private _onTouchedBtnModify(): void {

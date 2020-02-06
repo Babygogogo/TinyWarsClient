@@ -511,9 +511,20 @@ namespace TinyWars.MapEditor {
             return {
                 name    : Lang.getText(Lang.Type.B0314),
                 callback: () => {
-                    this._war.getField().reviseWarRuleList();
-                    MeWarRulePanel.show();
-                    this.close();
+                    const war   = this._war;
+                    const field = war.getField();
+                    if (!war.getIsReview()) {
+                        field.reviseWarRuleList();
+                        MeWarRulePanel.show();
+                        this.close();
+                    } else {
+                        if (field.getWarRuleList().length) {
+                            MeWarRulePanel.show();
+                            this.close();
+                        } else {
+                            FloatText.show(Lang.getText(Lang.Type.A0100));
+                        }
+                    }
                 },
             }
         }
