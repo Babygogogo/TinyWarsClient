@@ -224,8 +224,8 @@ namespace TinyWars.MultiCustomRoom {
         // View functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._labelMapNameTitle.text        = `${Lang.getText(Lang.Type.B0225)}: `;
-            this._labelPlayersCountTitle.text   = `${Lang.getText(Lang.Type.B0229)}: `;
+            this._labelMapNameTitle.text        = `${Lang.getText(Lang.Type.B0225)}:`;
+            this._labelPlayersCountTitle.text   = `${Lang.getText(Lang.Type.B0229)}:`;
             this._btnModifyWarPassword.label    = Lang.getText(Lang.Type.B0186);
             this._btnModifyWarComment.label     = Lang.getText(Lang.Type.B0187);
             this._btnModifyHasFog.label         = Lang.getText(Lang.Type.B0020);

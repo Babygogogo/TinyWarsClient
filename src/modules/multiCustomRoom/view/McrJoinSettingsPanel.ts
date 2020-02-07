@@ -80,20 +80,31 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
             const data      = McrModel.getJoinWarData();
-            const callback  = () => {
+            const callback1 = () => {
                 McrProxy.reqJoin(data);
 
                 this._btnConfirm.enabled = false;
                 this._resetTimeoutForBtnConfirm();
             };
+            const callback2 = () => {
+                if (data.coId != null) {
+                    callback1();
+                } else {
+                    ConfirmPanel.show({
+                        title   : Lang.getText(Lang.Type.B0088),
+                        content : `${Lang.getText(Lang.Type.A0050)}\n${Lang.getText(Lang.Type.A0052)}`,
+                        callback: callback1,
+                    });
+                }
+            }
 
-            if (data.coId != null) {
-                callback();
+            if (McrModel.getJoinWarWarRuleIndex() != null) {
+                callback2();
             } else {
                 ConfirmPanel.show({
                     title   : Lang.getText(Lang.Type.B0088),
-                    content : `${Lang.getText(Lang.Type.A0050)}\n${Lang.getText(Lang.Type.A0052)}`,
-                    callback,
+                    content : Lang.getText(Lang.Type.A0102),
+                    callback: callback2,
                 });
             }
         }

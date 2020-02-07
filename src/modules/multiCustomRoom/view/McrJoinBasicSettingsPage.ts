@@ -5,6 +5,7 @@ namespace TinyWars.MultiCustomRoom {
     import Lang         = Utility.Lang;
     import Types        = Utility.Types;
     import Notify       = Utility.Notify;
+    import FloatText    = Utility.FloatText;
     import HelpPanel    = Common.HelpPanel;
     import WarMapModel  = WarMap.WarMapModel;
 
@@ -14,30 +15,29 @@ namespace TinyWars.MultiCustomRoom {
         private _labelPlayersCountTitle : GameUi.UiLabel;
         private _labelPlayersCount      : GameUi.UiLabel;
 
-        private _labelWarNameTitle      : GameUi.UiLabel;
+        private _btnModifyWarName       : GameUi.UiButton;
         private _labelWarName           : GameUi.UiLabel;
-        private _labelWarPasswordTitle  : GameUi.UiLabel;
+        private _btnModifyWarPassword   : GameUi.UiButton;
         private _labelWarPassword       : GameUi.UiLabel;
-        private _labelWarCommentTitle   : GameUi.UiLabel;
+        private _btnModifyWarComment    : GameUi.UiButton;
         private _labelWarComment        : GameUi.UiLabel;
 
-        private _labelPlayerIndexTitle  : GameUi.UiLabel;
-        private _btnPrevPlayerIndex     : GameUi.UiButton;
-        private _btnNextPlayerIndex     : GameUi.UiButton;
+        private _btnModifyWarRule       : GameUi.UiButton;
+        private _labelWarRule           : GameUi.UiLabel;
+
+        private _btnModifyPlayerIndex   : GameUi.UiButton;
         private _labelPlayerIndex       : GameUi.UiLabel;
         private _btnHelpPlayerIndex     : GameUi.UiButton;
 
-        private _labelTeamTitle : GameUi.UiLabel;
-        private _btnPrevTeam    : GameUi.UiButton;
-        private _btnNextTeam    : GameUi.UiButton;
+        private _btnModifyTeam  : GameUi.UiButton;
         private _labelTeam      : GameUi.UiLabel;
         private _btnHelpTeam    : GameUi.UiButton;
 
-        private _labelFogTitle  : GameUi.UiLabel;
-        private _labelFog       : GameUi.UiLabel;
-        private _btnHelpFog     : GameUi.UiButton;
+        private _btnModifyHasFog    : GameUi.UiButton;
+        private _imgHasFog          : GameUi.UiImage;
+        private _btnHelpHasFog      : GameUi.UiButton;
 
-        private _labelTimeLimitTitle: GameUi.UiLabel;
+        private _btnModifyTimeLimit : GameUi.UiButton;
         private _labelTimeLimit     : GameUi.UiLabel;
         private _btnHelpTimeLimit   : GameUi.UiButton;
 
@@ -57,15 +57,13 @@ namespace TinyWars.MultiCustomRoom {
 
         protected _onFirstOpened(): void {
             this._uiListeners = [
-                { ui: this._btnPrevPlayerIndex, callback: this._onTouchedBtnPrevPlayerIndex, },
-                { ui: this._btnNextPlayerIndex, callback: this._onTouchedBtnNextPlayerIndex, },
-                { ui: this._btnHelpPlayerIndex, callback: this._onTouchedBtnHelpPlayerIndex, },
-                { ui: this._btnPrevTeam,        callback: this._onTouchedBtnPrevTeam, },
-                { ui: this._btnNextTeam,        callback: this._onTouchedBtnNextTeam, },
-                { ui: this._btnHelpTeam,        callback: this._onTouchedBtnHelpTeam, },
-                { ui: this._btnHelpFog,         callback: this._onTouchedBtnHelpFog, },
-                { ui: this._btnHelpTimeLimit,   callback: this._onTouchedBtnHelpTimeLimit, },
-                { ui: this._btnChangeCo,        callback: this._onTouchedBtnChangeCo, },
+                { ui: this._btnModifyPlayerIndex,   callback: this._onTouchedBtnModifyPlayerIndex, },
+                { ui: this._btnHelpPlayerIndex,     callback: this._onTouchedBtnHelpPlayerIndex, },
+                { ui: this._btnModifyTeam,          callback: this._onTouchedBtnModifyTeam, },
+                { ui: this._btnHelpTeam,            callback: this._onTouchedBtnHelpTeam, },
+                { ui: this._btnHelpHasFog,          callback: this._onTouchedBtnHelpHasFog, },
+                { ui: this._btnHelpTimeLimit,       callback: this._onTouchedBtnHelpTimeLimit, },
+                { ui: this._btnChangeCo,            callback: this._onTouchedBtnChangeCo, },
             ];
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
@@ -83,9 +81,10 @@ namespace TinyWars.MultiCustomRoom {
             this._updateLabelWarComment();
             this._updateLabelMapName();
             this._updateLabelPlayersCount();
+            this._updateLabelWarRule();
             this._updateLabelPlayerIndex();
             this._updateLabelTeam();
-            this._updateLabelFog();
+            this._updateImgHasFog();
             this._updateLabelTimeLimit();
             this._updateLabelCoName();
             this._updateListPlayer();
@@ -102,14 +101,15 @@ namespace TinyWars.MultiCustomRoom {
             this._updateComponentsForLanguage();
         }
 
-        private _onTouchedBtnPrevPlayerIndex(e: egret.TouchEvent): void {
-            McrModel.setJoinWarPrevPlayerIndex();
-            this._updateLabelPlayerIndex();
-        }
-
-        private _onTouchedBtnNextPlayerIndex(e: egret.TouchEvent): void {
+        private async _onTouchedBtnModifyPlayerIndex(e: egret.TouchEvent): Promise<void> {
             McrModel.setJoinWarNextPlayerIndex();
             this._updateLabelPlayerIndex();
+
+            const index = McrModel.getJoinWarWarRuleIndex();
+            if (index != null) {
+                McrModel.setJoinWarTeamIndex((await WarMapModel.getPlayerRule(McrModel.getJoinWarMapFileName(), index, McrModel.getJoinWarPlayerIndex())).teamIndex);
+                this._updateLabelTeam();
+            }
         }
 
         private _onTouchedBtnHelpPlayerIndex(e: egret.TouchEvent): void {
@@ -119,14 +119,13 @@ namespace TinyWars.MultiCustomRoom {
             });
         }
 
-        private _onTouchedBtnPrevTeam(e: egret.TouchEvent): void {
-            McrModel.setJoinWarPrevTeamIndex();
-            this._updateLabelTeam();
-        }
-
-        private _onTouchedBtnNextTeam(e: egret.TouchEvent): void {
-            McrModel.setJoinWarNextTeamIndex();
-            this._updateLabelTeam();
+        private _onTouchedBtnModifyTeam(e: egret.TouchEvent): void {
+            if (McrModel.getJoinWarWarRuleIndex() != null) {
+                FloatText.show(Lang.getText(Lang.Type.A0101));
+            } else {
+                McrModel.setJoinWarNextTeamIndex();
+                this._updateLabelTeam();
+            }
         }
 
         private _onTouchedBtnHelpTeam(e: egret.TouchEvent): void {
@@ -136,7 +135,7 @@ namespace TinyWars.MultiCustomRoom {
             });
         }
 
-        private _onTouchedBtnHelpFog(e: egret.TouchEvent): void {
+        private _onTouchedBtnHelpHasFog(e: egret.TouchEvent): void {
             HelpPanel.show({
                 title  : Lang.getText(Lang.Type.B0020),
                 content: Lang.getRichText(Lang.RichType.R0002),
@@ -161,13 +160,14 @@ namespace TinyWars.MultiCustomRoom {
         private _updateComponentsForLanguage(): void {
             this._labelMapNameTitle.text        = `${Lang.getText(Lang.Type.B0225)}:`;
             this._labelPlayersCountTitle.text   = `${Lang.getText(Lang.Type.B0229)}:`;
-            this._labelWarNameTitle.text        = `${Lang.getText(Lang.Type.B0185)}:`;
-            this._labelWarPasswordTitle.text    = `${Lang.getText(Lang.Type.B0186)}:`;
-            this._labelWarCommentTitle.text     = `${Lang.getText(Lang.Type.B0187)}:`;
-            this._labelPlayerIndexTitle.text    = `${Lang.getText(Lang.Type.B0018)}:`;
-            this._labelTeamTitle.text           = `${Lang.getText(Lang.Type.B0019)}:`;
-            this._labelFogTitle.text            = `${Lang.getText(Lang.Type.B0020)}:`;
-            this._labelTimeLimitTitle.text      = `${Lang.getText(Lang.Type.B0188)}:`;
+            this._btnModifyWarName.label        = Lang.getText(Lang.Type.B0185);
+            this._btnModifyWarPassword.label    = Lang.getText(Lang.Type.B0186);
+            this._btnModifyWarComment.label     = Lang.getText(Lang.Type.B0187);
+            this._btnModifyWarRule.label        = Lang.getText(Lang.Type.B0318);
+            this._btnModifyPlayerIndex.label    = Lang.getText(Lang.Type.B0018);
+            this._btnModifyTeam.label           = Lang.getText(Lang.Type.B0019);
+            this._btnModifyHasFog.label         = Lang.getText(Lang.Type.B0020);
+            this._btnModifyTimeLimit.label      = Lang.getText(Lang.Type.B0188);
             this._labelPlayersTitle.text        = `${Lang.getText(Lang.Type.B0232)}:`;
             this._btnChangeCo.label             = Lang.getText(Lang.Type.B0230);
         }
@@ -192,6 +192,19 @@ namespace TinyWars.MultiCustomRoom {
             this._labelPlayersCount.text = "" + this._mapExtraData.playersCount;
         }
 
+        private async _updateLabelWarRule(): Promise<void> {
+            const index = McrModel.getJoinWarWarRuleIndex();
+            const label = this._labelWarRule;
+            if (index == null) {
+                label.text = Lang.getText(Lang.Type.B0321);
+            } else {
+                const rule  = (await McrModel.getJoinWarMapRawData()).warRuleList[index];
+                label.text  = Lang.getLanguageType() === Types.LanguageType.Chinese
+                    ? rule.ruleName
+                    : rule.ruleNameEnglish;
+            }
+        }
+
         private _updateLabelPlayerIndex(): void {
             const index = McrModel.getJoinWarPlayerIndex();
             this._labelPlayerIndex.text = `${index} (${Helpers.getColorTextForPlayerIndex(index)})`;
@@ -201,8 +214,8 @@ namespace TinyWars.MultiCustomRoom {
             this._labelTeam.text = Helpers.getTeamText(McrModel.getJoinWarTeamIndex());
         }
 
-        private _updateLabelFog(): void {
-            this._labelFog.text = Lang.getText(McrModel.getJoinWarRoomInfo().hasFog ? Lang.Type.B0012 : Lang.Type.B0013);
+        private _updateImgHasFog(): void {
+            this._imgHasFog.visible = !!McrModel.getJoinWarRoomInfo().hasFog;
         }
 
         private _updateLabelTimeLimit(): void {

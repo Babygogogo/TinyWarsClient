@@ -40,6 +40,7 @@ namespace TinyWars.Replay {
                 executedActions         : this._executedActions,
                 nextActionId            : this.getNextActionId(),
                 remainingVotesForDraw   : this.getRemainingVotesForDraw(),
+                warRuleIndex            : this.getWarRuleIndex(),
                 timeLimit               : this.getSettingsTimeLimit(),
                 hasFogByDefault         : this.getSettingsHasFog(),
                 incomeModifier          : this.getSettingsIncomeModifier(),

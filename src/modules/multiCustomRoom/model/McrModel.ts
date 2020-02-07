@@ -421,8 +421,17 @@ namespace TinyWars.MultiCustomRoom {
         export function getJoinWarRoomInfo(): ProtoTypes.IMcrWaitingInfo {
             return _joinWarRoomInfo;
         }
+        export function getJoinWarMapFileName(): string {
+            return getJoinWarRoomInfo().mapFileName;
+        }
         export function getJoinWarMapExtraData(): Promise<ProtoTypes.IMapExtraData> {
-            return WarMapModel.getExtraData(getJoinWarRoomInfo().mapFileName);
+            return WarMapModel.getExtraData(getJoinWarMapFileName());
+        }
+        export function getJoinWarMapRawData(): Promise<ProtoTypes.IMapRawData> {
+            return WarMapModel.getMapRawData(getJoinWarMapFileName());
+        }
+        export function getJoinWarWarRuleIndex(): number | null {
+            return _joinWarRoomInfo.warRuleIndex;
         }
 
         export async function resetJoinWarData(info: ProtoTypes.IMcrWaitingInfo): Promise<void> {
@@ -454,7 +463,7 @@ namespace TinyWars.MultiCustomRoom {
             return _dataForJoinWar.playerIndex;
         }
 
-        function setJoinWarTeamIndex(teamIndex: number): void {
+        export function setJoinWarTeamIndex(teamIndex: number): void {
             _dataForJoinWar.teamIndex = teamIndex;
         }
         export function setJoinWarNextTeamIndex(): void {

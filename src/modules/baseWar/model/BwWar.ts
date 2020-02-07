@@ -10,6 +10,7 @@ namespace TinyWars.BaseWar {
         private _warComment             : string;
         private _configVersion          : string;
         private _mapFileName            : string;
+        private _warRuleIndex           : number | null | undefined;
         private _timeLimit              : number;
         private _hasFogByDefault        : boolean;
         private _incomeModifier         : number;
@@ -41,6 +42,7 @@ namespace TinyWars.BaseWar {
             this._setConfigVersion(data.configVersion);
             this.setMapFileName(data.mapFileName);
             this._setRandomNumberGenerator(new Math.seedrandom("", { state: data.seedRandomState || true }));
+            this._setWarRuleIndex(data.warRuleIndex);
             this._setSettingsTimeLimit(data.timeLimit);
             this._setSettingsHasFog(data.hasFogByDefault);
             this._setSettingsIncomeModifier(data.incomeModifier);
@@ -156,6 +158,13 @@ namespace TinyWars.BaseWar {
         }
         public getSettingsTimeLimit(): number {
             return this._timeLimit;
+        }
+
+        private _setWarRuleIndex(index: number | null | undefined): void {
+            this._warRuleIndex = index;
+        }
+        public getWarRuleIndex(): number | null | undefined {
+            return this._warRuleIndex;
         }
 
         private _setSettingsHasFog(hasFog: boolean): void {

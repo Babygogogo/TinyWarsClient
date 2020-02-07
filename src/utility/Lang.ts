@@ -526,6 +526,10 @@ namespace TinyWars.Utility.Lang {
             `此选项已被预设规则锁定，无法修改`,
             `This setting is locked because a preset rule is chosen.`,
         ],
+        [Type.A0102]: [
+            `这是一局自定义规则的游戏，请确保您已经理解了所有的规则设定。\n确定要加入这局游戏吗？`,
+            `Please make sure that you have recognized all the custom rules before joining this game.\nAre you sure to continue?`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.

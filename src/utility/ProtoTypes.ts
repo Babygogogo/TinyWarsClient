@@ -3880,6 +3880,9 @@ export declare interface ISerializedWar {
     /** SerializedWar luckUpperLimit */
     luckUpperLimit?: (number|null);
 
+    /** SerializedWar warRuleIndex */
+    warRuleIndex?: (number|null);
+
     /** SerializedWar nextActionId */
     nextActionId?: (number|null);
 
@@ -3973,6 +3976,9 @@ export declare class SerializedWar implements ISerializedWar {
 
     /** SerializedWar luckUpperLimit. */
     public luckUpperLimit: number;
+
+    /** SerializedWar warRuleIndex. */
+    public warRuleIndex: number;
 
     /** SerializedWar nextActionId. */
     public nextActionId: number;
@@ -7563,6 +7569,9 @@ export declare interface IMcrWaitingInfo {
 
     /** McrWaitingInfo luckUpperLimit */
     luckUpperLimit?: (number|null);
+
+    /** McrWaitingInfo warRuleIndex */
+    warRuleIndex?: (number|null);
 }
 
 /** Represents a McrWaitingInfo. */
@@ -7675,6 +7684,9 @@ export declare class McrWaitingInfo implements IMcrWaitingInfo {
 
     /** McrWaitingInfo luckUpperLimit. */
     public luckUpperLimit: number;
+
+    /** McrWaitingInfo warRuleIndex. */
+    public warRuleIndex: number;
 
     /**
      * Creates a new McrWaitingInfo instance using the specified properties.
