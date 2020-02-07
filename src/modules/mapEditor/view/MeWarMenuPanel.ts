@@ -185,6 +185,7 @@ namespace TinyWars.MapEditor {
                 tips            : null,
                 currentValue    : war.getMapName(),
                 maxChars        : ConfigManager.MAP_CONSTANTS.MaxMapNameLength,
+                charRestrict    : null,
                 callback        : (panel) => {
                     war.setMapName(panel.getInputText());
                     this._updateGroupMapName();
@@ -199,6 +200,7 @@ namespace TinyWars.MapEditor {
                 tips            : null,
                 currentValue    : war.getMapNameEnglish(),
                 maxChars        : ConfigManager.MAP_CONSTANTS.MaxMapNameEnglishLength,
+                charRestrict    : null,
                 callback        : (panel) => {
                     war.setMapNameEnglish(panel.getInputText());
                     this._updateGroupMapNameEnglish();
@@ -213,6 +215,7 @@ namespace TinyWars.MapEditor {
                 tips            : null,
                 currentValue    : war.getMapDesigner(),
                 maxChars        : ConfigManager.MAP_CONSTANTS.MaxDesignerLength,
+                charRestrict    : null,
                 callback        : (panel) => {
                     war.setMapDesigner(panel.getInputText());
                     this._updateGroupMapDesigner();

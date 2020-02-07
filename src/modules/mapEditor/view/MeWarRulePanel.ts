@@ -207,6 +207,7 @@ namespace TinyWars.MapEditor {
                     title           : Lang.getText(Lang.Type.B0183),
                     currentValue    : "" + rule.getAttackPowerModifier(),
                     maxChars        : 5,
+                    charRestrict    : null,
                     tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
                     callback        : panel => {
                         const value = Number(panel.getInputText());
@@ -230,6 +231,7 @@ namespace TinyWars.MapEditor {
                     title           : Lang.getText(Lang.Type.B0181),
                     currentValue    : "" + rule.getEnergyGrowthMultiplier(),
                     maxChars        : 5,
+                    charRestrict    : null,
                     tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
                     callback        : panel => {
                         const value = Number(panel.getInputText());
@@ -253,6 +255,7 @@ namespace TinyWars.MapEditor {
                     title           : Lang.getText(Lang.Type.B0179),
                     currentValue    : "" + rule.getIncomeMultiplier(),
                     maxChars        : 5,
+                    charRestrict    : null,
                     tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
                     callback        : panel => {
                         const value = Number(panel.getInputText());
@@ -276,6 +279,7 @@ namespace TinyWars.MapEditor {
                     title           : Lang.getText(Lang.Type.B0180),
                     currentValue    : "" + rule.getInitialEnergy(),
                     maxChars        : 5,
+                    charRestrict    : null,
                     tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
                     callback        : panel => {
                         const value = Number(panel.getInputText());
@@ -299,6 +303,7 @@ namespace TinyWars.MapEditor {
                     title           : Lang.getText(Lang.Type.B0178),
                     currentValue    : "" + rule.getInitialFund(),
                     maxChars        : 7,
+                    charRestrict    : null,
                     tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
                     callback        : panel => {
                         const value = Number(panel.getInputText());
@@ -322,6 +327,7 @@ namespace TinyWars.MapEditor {
                     title           : Lang.getText(Lang.Type.B0189),
                     currentValue    : "" + rule.getLuckLowerLimit(),
                     maxChars        : 5,
+                    charRestrict    : null,
                     tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
                     callback        : panel => {
                         const value = Number(panel.getInputText());
@@ -345,6 +351,7 @@ namespace TinyWars.MapEditor {
                     title           : Lang.getText(Lang.Type.B0189),
                     currentValue    : "" + rule.getLuckUpperLimit(),
                     maxChars        : 5,
+                    charRestrict    : null,
                     tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
                     callback        : panel => {
                         const value = Number(panel.getInputText());
@@ -368,6 +375,7 @@ namespace TinyWars.MapEditor {
                     title           : Lang.getText(Lang.Type.B0182),
                     currentValue    : "" + rule.getMoveRangeModifier(),
                     maxChars        : 5,
+                    charRestrict    : null,
                     tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
                     callback        : panel => {
                         const value = Number(panel.getInputText());
@@ -391,6 +399,7 @@ namespace TinyWars.MapEditor {
                     title           : Lang.getText(Lang.Type.B0184),
                     currentValue    : "" + rule.getVisionRangeModifier(),
                     maxChars        : 5,
+                    charRestrict    : null,
                     tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
                     callback        : panel => {
                         const value = Number(panel.getInputText());
@@ -412,6 +421,7 @@ namespace TinyWars.MapEditor {
                     title           : Lang.getText(Lang.Type.B0315),
                     currentValue    : rule.getRuleName(),
                     maxChars        : CommonConstants.WarRuleNameMaxLength,
+                    charRestrict    : null,
                     tips            : null,
                     callback        : panel => {
                         const value = panel.getInputText();
@@ -433,6 +443,7 @@ namespace TinyWars.MapEditor {
                     title           : Lang.getText(Lang.Type.B0316),
                     currentValue    : rule.getRuleNameEnglish(),
                     maxChars        : CommonConstants.WarRuleNameMaxLength,
+                    charRestrict    : null,
                     tips            : null,
                     callback        : panel => {
                         const value = panel.getInputText();

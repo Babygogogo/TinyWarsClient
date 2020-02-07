@@ -522,6 +522,10 @@ namespace TinyWars.Utility.Lang {
             `此地图没有预设规则`,
             `This map has no preset rules.`,
         ],
+        [Type.A0101]: [
+            `此选项已被预设规则锁定，无法修改`,
+            `This setting is locked because a preset rule is chosen.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -1793,6 +1797,18 @@ namespace TinyWars.Utility.Lang {
         [Type.B0320]: [
             `新增`,
             `Add`,
+        ],
+        [Type.B0321]: [
+            `自定义`,
+            `Custom`,
+        ],
+        [Type.B0322]: [
+            `无`,
+            `Empty`,
+        ],
+        [Type.B0323]: [
+            `只能使用数字`,
+            `Digits only`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

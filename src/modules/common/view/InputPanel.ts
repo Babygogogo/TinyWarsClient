@@ -8,6 +8,7 @@ namespace TinyWars.Common {
         currentValue    : string;
         tips            : string | null;
         maxChars        : number | null;
+        charRestrict   : string | null;
         callback        : (panel: InputPanel) => any;
     }
 
@@ -66,6 +67,7 @@ namespace TinyWars.Common {
             this._labelTips.text    = openData.tips;
             this._input.text        = openData.currentValue;
             this._input.maxChars    = openData.maxChars;
+            this._input.restrict    = openData.charRestrict;
         }
 
         public getInputText(): string {

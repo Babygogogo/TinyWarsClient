@@ -49,6 +49,7 @@ namespace TinyWars.MultiCustomRoom {
             warComment      : "",
             configVersion   : ConfigManager.getNewestConfigVersion(),
 
+            warRuleIndex    : null,
             playerIndex     : 0,
             teamIndex       : 0,
             coId            : null,
@@ -93,34 +94,67 @@ namespace TinyWars.MultiCustomRoom {
         // Functions for creating wars.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         export function getCreateWarMapExtraData(): Promise<ProtoTypes.IMapExtraData> {
-            return WarMapModel.getExtraData(_dataForCreateWar.mapFileName);
+            return WarMapModel.getExtraData(getCreateWarMapFileName());
+        }
+        export function getCreateWarMapRawData(): Promise<ProtoTypes.IMapRawData> {
+            return WarMapModel.getMapRawData(getCreateWarMapFileName());
+        }
+        export function getCreateWarMapFileName(): string {
+            return _dataForCreateWar.mapFileName;
         }
 
-        export function resetCreateWarData(mapFileName: string): void {
+        export async function resetCreateWarData(mapFileName: string): Promise<void> {
+            const mapRawData                        = await WarMapModel.getMapRawData(mapFileName);
             _dataForCreateWar.mapFileName           = mapFileName;
             _dataForCreateWar.configVersion         = ConfigManager.getNewestConfigVersion();
             _dataForCreateWar.bannedCoIdList.length = 0;
             setCreateWarName("");
             setCreateWarPassword("");
             setCreateWarComment("");
-            setCreateWarPlayerIndex(1);
-            setCreateWarTeamIndex(1);
-            setCreateWarCoId(null);
-            setCreateWarHasFog(false);
-            setCreateWarTimeLimit(DEFAULT_TIME_LIMIT);
-
-            setCreateWarInitialFund(0);
-            setCreateWarIncomeMultiplier(100);
-            setCreateWarInitialEnergy(0);
-            setCreateWarEnergyGrowthMultiplier(100);
-            setCreateWarLuckLowerLimit(ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultLowerLimit);
-            setCreateWarLuckUpperLimit(ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultUpperLimit);
-            setCreateWarMoveRangeModifier(DEFAULT_MOVE_RANGE_MODIFIER);
-            setCreateWarAttackPowerModifier(DEFAULT_ATTACK_MODIFIER);
-            setCreateWarVisionRangeModifier(DEFAULT_VISION_MODIFIER);
+            setCreateWarWarRuleIndex(mapRawData.warRuleList ? 0 : null);
+            await resetCreateWarDataForSelectedRule();
         }
         export function getCreateWarData(): DataForCreateWar {
             return _dataForCreateWar;
+        }
+        export async function resetCreateWarDataForSelectedRule(): Promise<void> {
+            const warRuleIndex = getCreateWarWarRuleIndex();
+            if (warRuleIndex == null) {
+                setCreateWarTimeLimit(DEFAULT_TIME_LIMIT);
+                setCreateWarPlayerIndex(1);
+                setCreateWarTeamIndex(1);
+                setCreateWarCoId(null);
+                setCreateWarHasFog(false);
+
+                setCreateWarInitialFund(0);
+                setCreateWarIncomeMultiplier(100);
+                setCreateWarInitialEnergy(0);
+                setCreateWarEnergyGrowthMultiplier(100);
+                setCreateWarLuckLowerLimit(ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultLowerLimit);
+                setCreateWarLuckUpperLimit(ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultUpperLimit);
+                setCreateWarMoveRangeModifier(DEFAULT_MOVE_RANGE_MODIFIER);
+                setCreateWarAttackPowerModifier(DEFAULT_ATTACK_MODIFIER);
+                setCreateWarVisionRangeModifier(DEFAULT_VISION_MODIFIER);
+            } else {
+                const mapFileName   = getCreateWarMapFileName();
+                const playerIndex   = 1;
+                const warRule       = (await WarMapModel.getMapRawData(mapFileName)).warRuleList[warRuleIndex];
+                setCreateWarTimeLimit(DEFAULT_TIME_LIMIT);
+                setCreateWarPlayerIndex(playerIndex);
+                setCreateWarTeamIndex((await WarMapModel.getPlayerRule(mapFileName, warRuleIndex, playerIndex)).teamIndex);
+                setCreateWarCoId(null);
+                setCreateWarHasFog(!!warRule.hasFog);
+
+                setCreateWarInitialFund(warRule.initialFund);
+                setCreateWarIncomeMultiplier(warRule.incomeModifier);
+                setCreateWarInitialEnergy(warRule.initialEnergy);
+                setCreateWarEnergyGrowthMultiplier(warRule.energyGrowthModifier);
+                setCreateWarLuckLowerLimit(warRule.luckLowerLimit);
+                setCreateWarLuckUpperLimit(warRule.luckUpperLimit);
+                setCreateWarMoveRangeModifier(warRule.moveRangeModifier);
+                setCreateWarAttackPowerModifier(warRule.attackPowerModifier);
+                setCreateWarVisionRangeModifier(warRule.visionRangeModifier);
+            }
         }
 
         export function setCreateWarName(name: string): void {
@@ -142,6 +176,13 @@ namespace TinyWars.MultiCustomRoom {
         }
         export function getCreateWarComment(): string {
             return _dataForCreateWar.warComment;
+        }
+
+        export function setCreateWarWarRuleIndex(index: number): void {
+            _dataForCreateWar.warRuleIndex = index;
+        }
+        export function getCreateWarWarRuleIndex(): number | null {
+            return _dataForCreateWar.warRuleIndex;
         }
 
         export function setCreateWarPlayerIndex(index: number): void {

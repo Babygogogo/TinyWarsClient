@@ -13966,6 +13966,9 @@ export declare interface IC_McrCreateWar {
     /** C_McrCreateWar coId */
     coId?: (number|null);
 
+    /** C_McrCreateWar warRuleIndex */
+    warRuleIndex?: (number|null);
+
     /** C_McrCreateWar hasFog */
     hasFog?: (number|null);
 
@@ -14035,6 +14038,9 @@ export declare class C_McrCreateWar implements IC_McrCreateWar {
 
     /** C_McrCreateWar coId. */
     public coId: number;
+
+    /** C_McrCreateWar warRuleIndex. */
+    public warRuleIndex: number;
 
     /** C_McrCreateWar hasFog. */
     public hasFog: number;

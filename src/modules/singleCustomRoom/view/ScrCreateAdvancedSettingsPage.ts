@@ -19,39 +19,30 @@ namespace TinyWars.SingleCustomRoom {
         private _labelTips              : GameUi.UiLabel;
 
         private _groupInitialFund                   : eui.Group;
-        private _labelInitialFundTitle              : TinyWars.GameUi.UiLabel;
         private _labelInitialFund                   : TinyWars.GameUi.UiLabel;
         private _btnModifyInitialFund               : TinyWars.GameUi.UiButton;
         private _groupIncomeMultiplier              : eui.Group;
-        private _labelIncomeMultiplierTitle         : TinyWars.GameUi.UiLabel;
         private _labelIncomeMultiplier              : TinyWars.GameUi.UiLabel;
         private _btnModifyIncomeMultiplier          : TinyWars.GameUi.UiButton;
         private _groupInitialEnergy                 : eui.Group;
-        private _labelInitialEnergyTitle            : TinyWars.GameUi.UiLabel;
         private _labelInitialEnergy                 : TinyWars.GameUi.UiLabel;
         private _btnModifyInitialEnergy             : TinyWars.GameUi.UiButton;
         private _groupEnergyGrowthMultiplier        : eui.Group;
-        private _labelEnergyGrowthMultiplierTitle   : TinyWars.GameUi.UiLabel;
         private _labelEnergyGrowthMultiplier        : TinyWars.GameUi.UiLabel;
         private _btnModifyEnergyGrowthMultiplier    : TinyWars.GameUi.UiButton;
         private _groupLuckLowerLimit                : eui.Group;
-        private _labelLuckLowerLimitTitle           : TinyWars.GameUi.UiLabel;
         private _labelLuckLowerLimit                : TinyWars.GameUi.UiLabel;
         private _btnModifyLuckLowerLimit            : TinyWars.GameUi.UiButton;
         private _groupLuckUpperLimit                : eui.Group;
-        private _labelLuckUpperLimitTitle           : TinyWars.GameUi.UiLabel;
         private _labelLuckUpperLimit                : TinyWars.GameUi.UiLabel;
         private _btnModifyLuckUpperLimit            : TinyWars.GameUi.UiButton;
         private _groupMoveRange                     : eui.Group;
-        private _labelMoveRangeTitle                : TinyWars.GameUi.UiLabel;
         private _labelMoveRange                     : TinyWars.GameUi.UiLabel;
         private _btnModifyMoveRange                 : TinyWars.GameUi.UiButton;
         private _groupAttackPower                   : eui.Group;
-        private _labelAttackPowerTitle              : TinyWars.GameUi.UiLabel;
         private _labelAttackPower                   : TinyWars.GameUi.UiLabel;
         private _btnModifyAttackPower               : TinyWars.GameUi.UiButton;
         private _groupVisionRange                   : eui.Group;
-        private _labelVisionRangeTitle              : TinyWars.GameUi.UiLabel;
         private _labelVisionRange                   : TinyWars.GameUi.UiLabel;
         private _btnModifyVisionRange               : TinyWars.GameUi.UiButton;
 
@@ -111,6 +102,7 @@ namespace TinyWars.SingleCustomRoom {
                 title           : Lang.getText(Lang.Type.B0178),
                 currentValue    : "" + ScrModel.getCreateWarInitialFund(),
                 maxChars        : 7,
+                charRestrict    : null,
                 tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
                     const value = Number(panel.getInputText());
@@ -131,6 +123,7 @@ namespace TinyWars.SingleCustomRoom {
                 title           : Lang.getText(Lang.Type.B0179),
                 currentValue    : "" + ScrModel.getCreateWarIncomeMultiplier(),
                 maxChars        : 5,
+                charRestrict    : null,
                 tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
                     const value = Number(panel.getInputText());
@@ -151,6 +144,7 @@ namespace TinyWars.SingleCustomRoom {
                 title           : Lang.getText(Lang.Type.B0180),
                 currentValue    : "" + ScrModel.getCreateWarInitialEnergy(),
                 maxChars        : 5,
+                charRestrict    : null,
                 tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
                     const value = Number(panel.getInputText());
@@ -171,6 +165,7 @@ namespace TinyWars.SingleCustomRoom {
                 title           : Lang.getText(Lang.Type.B0181),
                 currentValue    : "" + ScrModel.getCreateWarEnergyGrowthMultiplier(),
                 maxChars        : 5,
+                charRestrict    : null,
                 tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
                     const value = Number(panel.getInputText());
@@ -191,6 +186,7 @@ namespace TinyWars.SingleCustomRoom {
                 title           : Lang.getText(Lang.Type.B0189),
                 currentValue    : "" + ScrModel.getCreateWarLuckLowerLimit(),
                 maxChars        : 5,
+                charRestrict    : null,
                 tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
                     const value = Number(panel.getInputText());
@@ -211,6 +207,7 @@ namespace TinyWars.SingleCustomRoom {
                 title           : Lang.getText(Lang.Type.B0189),
                 currentValue    : "" + ScrModel.getCreateWarLuckUpperLimit(),
                 maxChars        : 5,
+                charRestrict    : null,
                 tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
                     const value = Number(panel.getInputText());
@@ -231,6 +228,7 @@ namespace TinyWars.SingleCustomRoom {
                 title           : Lang.getText(Lang.Type.B0182),
                 currentValue    : "" + ScrModel.getCreateWarMoveRangeModifier(),
                 maxChars        : 5,
+                charRestrict    : null,
                 tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
                     const value = Number(panel.getInputText());
@@ -251,6 +249,7 @@ namespace TinyWars.SingleCustomRoom {
                 title           : Lang.getText(Lang.Type.B0183),
                 currentValue    : "" + ScrModel.getCreateWarAttackPowerModifier(),
                 maxChars        : 5,
+                charRestrict    : null,
                 tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
                     const value = Number(panel.getInputText());
@@ -271,6 +270,7 @@ namespace TinyWars.SingleCustomRoom {
                 title           : Lang.getText(Lang.Type.B0184),
                 currentValue    : "" + ScrModel.getCreateWarVisionRangeModifier(),
                 maxChars        : 5,
+                charRestrict    : null,
                 tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
                     const value = Number(panel.getInputText());
@@ -291,24 +291,15 @@ namespace TinyWars.SingleCustomRoom {
             this._labelMapNameTitle.text                = `${Lang.getText(Lang.Type.B0225)}:`;
             this._labelPlayersCountTitle.text           = `${Lang.getText(Lang.Type.B0229)}:`;
             this._labelTips.text                        = Lang.getText(Lang.Type.A0065);
-            this._labelInitialFundTitle.text            = Lang.getText(Lang.Type.B0178);
-            this._labelIncomeMultiplierTitle.text       = Lang.getText(Lang.Type.B0179);
-            this._labelInitialEnergyTitle.text          = Lang.getText(Lang.Type.B0180);
-            this._labelEnergyGrowthMultiplierTitle.text = Lang.getText(Lang.Type.B0181);
-            this._labelMoveRangeTitle.text              = Lang.getText(Lang.Type.B0182);
-            this._labelAttackPowerTitle.text            = Lang.getText(Lang.Type.B0183);
-            this._labelVisionRangeTitle.text            = Lang.getText(Lang.Type.B0184);
-            this._labelLuckLowerLimitTitle.text         = Lang.getText(Lang.Type.B0189);
-            this._labelLuckUpperLimitTitle.text         = Lang.getText(Lang.Type.B0190);
-            this._btnModifyAttackPower.label            = Lang.getText(Lang.Type.B0317);
-            this._btnModifyEnergyGrowthMultiplier.label = Lang.getText(Lang.Type.B0317);
-            this._btnModifyIncomeMultiplier.label       = Lang.getText(Lang.Type.B0317);
-            this._btnModifyInitialEnergy.label          = Lang.getText(Lang.Type.B0317);
-            this._btnModifyInitialFund.label            = Lang.getText(Lang.Type.B0317);
-            this._btnModifyLuckLowerLimit.label         = Lang.getText(Lang.Type.B0317);
-            this._btnModifyLuckUpperLimit.label         = Lang.getText(Lang.Type.B0317);
-            this._btnModifyMoveRange.label              = Lang.getText(Lang.Type.B0317);
-            this._btnModifyVisionRange.label            = Lang.getText(Lang.Type.B0317);
+            this._btnModifyInitialFund.label            = Lang.getText(Lang.Type.B0178);
+            this._btnModifyIncomeMultiplier.label       = Lang.getText(Lang.Type.B0179);
+            this._btnModifyInitialEnergy.label          = Lang.getText(Lang.Type.B0180);
+            this._btnModifyEnergyGrowthMultiplier.label = Lang.getText(Lang.Type.B0181);
+            this._btnModifyMoveRange.label              = Lang.getText(Lang.Type.B0182);
+            this._btnModifyAttackPower.label            = Lang.getText(Lang.Type.B0183);
+            this._btnModifyVisionRange.label            = Lang.getText(Lang.Type.B0184);
+            this._btnModifyLuckLowerLimit.label         = Lang.getText(Lang.Type.B0189);
+            this._btnModifyLuckUpperLimit.label         = Lang.getText(Lang.Type.B0190);
         }
 
         private _updateLabelInitialFund(): void {

@@ -242,10 +242,10 @@ namespace TinyWars.MultiCustomRoom {
             data.panel.setSelectedMapFileName(data.mapFileName);
         }
 
-        private _onTouchTapBtnNext(e: egret.TouchEvent): void {
+        private async _onTouchTapBtnNext(e: egret.TouchEvent): Promise<void> {
             McrCreateMapListPanel.hide();
 
-            McrModel.resetCreateWarData((this.data as DataForMapNameRenderer).mapFileName);
+            await McrModel.resetCreateWarData((this.data as DataForMapNameRenderer).mapFileName);
             McrCreateSettingsPanel.show();
         }
     }
