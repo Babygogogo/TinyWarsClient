@@ -298,9 +298,9 @@ namespace TinyWars.SingleCustomRoom {
         }
     }
 
-    async function generateCreateWarPlayerInfoList(mapFileName: string): Promise<ProtoTypes.ICreateWarPlayerInfo[]> {
+    async function generateCreateWarPlayerInfoList(mapFileName: string): Promise<ProtoTypes.IWarPlayerInfo[]> {
         const playersCount  = (await WarMapModel.getExtraData(mapFileName)).playersCount;
-        const list          : ProtoTypes.ICreateWarPlayerInfo[] = [{
+        const list          : ProtoTypes.IWarPlayerInfo[] = [{
             playerIndex : 1,
             userId      : User.UserModel.getSelfUserId(),
             teamIndex   : 1,

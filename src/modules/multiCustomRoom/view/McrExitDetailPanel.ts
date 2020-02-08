@@ -105,7 +105,7 @@ namespace TinyWars.MultiCustomRoom {
             McrExitDetailPanel.hide();
         }
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            McrProxy.reqExitCustomOnlineWar(this._openData.id);
+            McrProxy.reqExitCustomOnlineWar(this._openData.infoId);
             McrExitDetailPanel.hide();
         }
         private _onNotifyLanguageChanged(e: egret.Event): void {
@@ -119,7 +119,7 @@ namespace TinyWars.MultiCustomRoom {
         private async _updateView(): Promise<void> {
             this._updateComponentsForLanguage();
 
-            const info = this._openData;
+            const info                              = this._openData;
             this._labelWarPassword.text             = info.warPassword ? info.warPassword : "----";
             this._labelHasFog.text                  = Lang.getText(info.hasFog ? Lang.Type.B0012 : Lang.Type.B0013);
             this._labelTimeLimit.text               = Helpers.getTimeDurationText(info.timeLimit);
@@ -134,40 +134,45 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _getDataForListPlayer(): Promise<DataForPlayerRenderer[]> {
-            const warInfo       = this._openData;
-            const mapExtraData  = await WarMapModel.getExtraData(warInfo.mapFileName);
+            const waitingInfo   = this._openData;
+            const mapExtraData  = await WarMapModel.getExtraData(waitingInfo.mapFileName);
             if (!mapExtraData) {
                 return [];
             } else {
-                const data: DataForPlayerRenderer[] = [
+                const playerInfoList    = waitingInfo.playerInfoList;
+                const info1             = getPlayerInfo(playerInfoList, 1);
+                const info2             = getPlayerInfo(playerInfoList, 2);
+                const data              : DataForPlayerRenderer[] = [
                     {
-                        playerIndex : 1,
-                        nickname    : warInfo.p1UserNickname,
-                        teamIndex   : warInfo.p1TeamIndex,
-                        coId        : warInfo.p1CoId,
+                        playerIndex     : 1,
+                        nickname        : info1 ? info1.nickname : null,
+                        teamIndex       : info1 ? info1.teamIndex : null,
+                        coId            : info1 ? info1.coId : null,
                     },
                     {
-                        playerIndex : 2,
-                        nickname    : warInfo.p2UserNickname,
-                        teamIndex   : warInfo.p2TeamIndex,
-                        coId        : warInfo.p2CoId,
+                        playerIndex     : 2,
+                        nickname        : info2 ? info2.nickname : null,
+                        teamIndex       : info2 ? info2.teamIndex : null,
+                        coId            : info2 ? info2.coId : null,
                     },
                 ];
 
                 if (mapExtraData.playersCount >= 3) {
+                    const info = getPlayerInfo(playerInfoList, 3);
                     data.push({
-                        playerIndex : 3,
-                        nickname    : warInfo.p3UserNickname,
-                        teamIndex   : warInfo.p3TeamIndex,
-                        coId        : warInfo.p3CoId,
+                        playerIndex     : 3,
+                        nickname        : info ? info.nickname : null,
+                        teamIndex       : info ? info.teamIndex : null,
+                        coId            : info ? info.coId : null,
                     });
                 }
                 if (mapExtraData.playersCount >= 4) {
+                    const info = getPlayerInfo(playerInfoList, 4);
                     data.push({
-                        playerIndex : 4,
-                        nickname    : warInfo.p4UserNickname,
-                        teamIndex   : warInfo.p4TeamIndex,
-                        coId        : warInfo.p4CoId,
+                        playerIndex     : 4,
+                        nickname        : info ? info.nickname : null,
+                        teamIndex       : info ? info.teamIndex : null,
+                        coId            : info ? info.coId : null,
                     });
                 }
 
@@ -217,5 +222,9 @@ namespace TinyWars.MultiCustomRoom {
                 ? (data.nickname == null ? "????" : `(${Lang.getText(Lang.Type.B0001)}CO)`)
                 : ConfigManager.getCoBasicCfg(ConfigManager.getNewestConfigVersion(), data.coId).name;
         }
+    }
+
+    function getPlayerInfo(playerInfoList: ProtoTypes.IWarPlayerInfo[], playerIndex: number): ProtoTypes.IWarPlayerInfo | null {
+        return playerInfoList.find(v => v.playerIndex === playerIndex);
     }
 }

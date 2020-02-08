@@ -438,10 +438,16 @@ namespace TinyWars.MultiCustomRoom {
             _joinWarRoomInfo                = info;
             _joinWarAvailablePlayerIndexes  = await getAvailablePlayerIndexes(info);
             _joinWarAvailableTeamIndexes    = await getAvailableTeamIndexes(info);
-            _dataForJoinWar.infoId          = info.id;
+            _dataForJoinWar.infoId          = info.infoId;
             setJoinWarPlayerIndex(_joinWarAvailablePlayerIndexes[0]);
-            setJoinWarTeamIndex(_joinWarAvailableTeamIndexes[0]);
             setJoinWarCoId(null);
+
+            const warRuleIndex = getJoinWarWarRuleIndex();
+            if (warRuleIndex == null) {
+                setJoinWarTeamIndex(_joinWarAvailableTeamIndexes[0]);
+            } else {
+                setJoinWarTeamIndex((await WarMapModel.getPlayerRule(getJoinWarMapFileName(), warRuleIndex, getJoinWarPlayerIndex())).teamIndex);
+            }
         }
         export function getJoinWarData(): DataForJoinWar {
             return _dataForJoinWar;
@@ -556,24 +562,11 @@ namespace TinyWars.MultiCustomRoom {
     }
 
     async function getAvailablePlayerIndexes(info: ProtoTypes.IMcrWaitingInfo): Promise<number[]> {
-        const playersCount  = (await WarMapModel.getExtraData(info.mapFileName)).playersCount;
-        const indexDict     : {[index: number]: boolean} = {};
-        if ((playersCount >= 4) && (info.p4UserId == null)) {
-            indexDict[4] = true;
-        }
-        if ((playersCount >= 3) && (info.p3UserId == null)) {
-            indexDict[3] = true;
-        }
-        if ((playersCount >= 2) && (info.p2UserId == null)) {
-            indexDict[2] = true;
-        }
-        if ((playersCount >= 1) && (info.p1UserId == null)) {
-            indexDict[1] = true;
-        }
-
-        const indexes: number[] = [];
+        const playersCount      = (await WarMapModel.getExtraData(info.mapFileName)).playersCount;
+        const playerInfoList    = info.playerInfoList;
+        const indexes           : number[] = [];
         for (let i = 1; i <= playersCount; ++i) {
-            if (indexDict[i]) {
+            if (playerInfoList.every(v => v.playerIndex !== i)) {
                 indexes.push(i);
             }
         }
@@ -582,10 +575,10 @@ namespace TinyWars.MultiCustomRoom {
 
     async function getAvailableTeamIndexes(info: ProtoTypes.IMcrWaitingInfo): Promise<number[]> {
         const dict: {[index: number]: number} = {};
-        (info.p1TeamIndex != null) && (dict[info.p1TeamIndex] = (dict[info.p1TeamIndex] || 0) + 1);
-        (info.p2TeamIndex != null) && (dict[info.p2TeamIndex] = (dict[info.p2TeamIndex] || 0) + 1);
-        (info.p3TeamIndex != null) && (dict[info.p3TeamIndex] = (dict[info.p3TeamIndex] || 0) + 1);
-        (info.p4TeamIndex != null) && (dict[info.p4TeamIndex] = (dict[info.p4TeamIndex] || 0) + 1);
+        for (const playerInfo of info.playerInfoList) {
+            const teamIndex = playerInfo.teamIndex;
+            dict[teamIndex] = (dict[teamIndex] || 0) + 1;
+        }
 
         let teamsCount  = 0;
         let currPlayers = 0;

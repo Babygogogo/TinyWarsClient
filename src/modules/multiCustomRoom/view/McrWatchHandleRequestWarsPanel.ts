@@ -152,39 +152,45 @@ namespace TinyWars.MultiCustomRoom {
             return data;
         }
 
-        private _createDataForListPlayer(warInfo: ProtoTypes.IMcrWaitingInfo, mapPlayersCount: number): DataForPlayerRenderer[] {
-            const data: DataForPlayerRenderer[] = [
+        private _createDataForListPlayer(waitingInfo: ProtoTypes.IMcrWaitingInfo, mapPlayersCount: number): DataForPlayerRenderer[] {
+            const playerInfoList    = waitingInfo.playerInfoList;
+            const configVersion     = waitingInfo.configVersion;
+            const info1             = getPlayerInfo(playerInfoList, 1);
+            const info2             = getPlayerInfo(playerInfoList, 2);
+            const data              : DataForPlayerRenderer[] = [
                 {
                     playerIndex     : 1,
-                    playerName      : warInfo.p1UserNickname,
-                    teamIndex       : warInfo.p1TeamIndex,
-                    coId            : warInfo.p1CoId,
-                    configVersion   : warInfo.configVersion,
+                    playerName      : info1 ? info1.nickname : null,
+                    teamIndex       : info1 ? info1.teamIndex : null,
+                    coId            : info1 ? info1.coId : null,
+                    configVersion,
                 },
                 {
                     playerIndex     : 2,
-                    playerName      : warInfo.p2UserNickname,
-                    teamIndex       : warInfo.p2TeamIndex,
-                    coId            : warInfo.p2CoId,
-                    configVersion   : warInfo.configVersion,
+                    playerName      : info2 ? info2.nickname : null,
+                    teamIndex       : info2 ? info2.teamIndex : null,
+                    coId            : info2 ? info2.coId : null,
+                    configVersion,
                 },
             ];
             if (mapPlayersCount >= 3) {
+                const info = getPlayerInfo(playerInfoList, 3);
                 data.push({
                     playerIndex     : 3,
-                    playerName      : warInfo.p3UserNickname,
-                    teamIndex       : warInfo.p3TeamIndex,
-                    coId            : warInfo.p3CoId,
-                    configVersion   : warInfo.configVersion,
+                    playerName      : info ? info.nickname : null,
+                    teamIndex       : info ? info.teamIndex : null,
+                    coId            : info ? info.coId : null,
+                    configVersion,
                 });
             }
             if (mapPlayersCount >= 4) {
+                const info = getPlayerInfo(playerInfoList, 4);
                 data.push({
                     playerIndex     : 4,
-                    playerName      : warInfo.p4UserNickname,
-                    teamIndex       : warInfo.p4TeamIndex,
-                    coId            : warInfo.p4CoId,
-                    configVersion   : warInfo.configVersion,
+                    playerName      : info ? info.nickname : null,
+                    teamIndex       : info ? info.teamIndex : null,
+                    coId            : info ? info.coId : null,
+                    configVersion,
                 });
             }
 
@@ -297,5 +303,9 @@ namespace TinyWars.MultiCustomRoom {
                 ? `(${coConfig.name}(T${coConfig.tier}))`
                 : `(${Lang.getText(Lang.Type.B0211)} CO)`);
         }
+    }
+
+    function getPlayerInfo(playerInfoList: ProtoTypes.IWarPlayerInfo[], playerIndex: number): ProtoTypes.IWarPlayerInfo | null {
+        return playerInfoList.find(v => v.playerIndex === playerIndex);
     }
 }

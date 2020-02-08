@@ -169,7 +169,6 @@ namespace TinyWars.MultiCustomRoom {
             this._btnModifyHasFog.label         = Lang.getText(Lang.Type.B0020);
             this._btnModifyTimeLimit.label      = Lang.getText(Lang.Type.B0188);
             this._labelPlayersTitle.text        = `${Lang.getText(Lang.Type.B0232)}:`;
-            this._btnChangeCo.label             = Lang.getText(Lang.Type.B0230);
         }
 
         private _updateLabelWarName(): void {
@@ -237,37 +236,42 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _getDataForListPlayer(): Promise<DataForPlayerRenderer[]> {
-            const warInfo = McrModel.getJoinWarRoomInfo();
+            const waitingInfo       = McrModel.getJoinWarRoomInfo();
+            const playerInfoList    = waitingInfo.playerInfoList;
+            const info1             = getPlayerInfo(playerInfoList, 1);
+            const info2             = getPlayerInfo(playerInfoList, 2);
             const data: DataForPlayerRenderer[] = [
                 {
-                    playerIndex : 1,
-                    nickname    : warInfo.p1UserNickname,
-                    teamIndex   : warInfo.p1TeamIndex,
-                    coId        : warInfo.p1CoId,
+                    playerIndex     : 1,
+                    nickname        : info1 ? info1.nickname : null,
+                    teamIndex       : info1 ? info1.teamIndex : null,
+                    coId            : info1 ? info1.coId : null,
                 },
                 {
-                    playerIndex : 2,
-                    nickname    : warInfo.p2UserNickname,
-                    teamIndex   : warInfo.p2TeamIndex,
-                    coId        : warInfo.p2CoId,
+                    playerIndex     : 2,
+                    nickname        : info2 ? info2.nickname : null,
+                    teamIndex       : info2 ? info2.teamIndex : null,
+                    coId            : info2 ? info2.coId : null,
                 },
             ];
 
-            const playersCount = (await WarMapModel.getExtraData(warInfo.mapFileName)).playersCount;
+            const playersCount = (await WarMapModel.getExtraData(waitingInfo.mapFileName)).playersCount;
             if (playersCount >= 3) {
+                const info = getPlayerInfo(playerInfoList, 3);
                 data.push({
-                    playerIndex : 3,
-                    nickname    : warInfo.p3UserNickname,
-                    teamIndex   : warInfo.p3TeamIndex,
-                    coId        : warInfo.p3CoId,
+                    playerIndex     : 3,
+                    nickname        : info ? info.nickname : null,
+                    teamIndex       : info ? info.teamIndex : null,
+                    coId            : info ? info.coId : null,
                 });
             }
             if (playersCount >= 4) {
+                const info = getPlayerInfo(playerInfoList, 4);
                 data.push({
-                    playerIndex : 4,
-                    nickname    : warInfo.p4UserNickname,
-                    teamIndex   : warInfo.p4TeamIndex,
-                    coId        : warInfo.p4CoId,
+                    playerIndex     : 4,
+                    nickname        : info ? info.nickname : null,
+                    teamIndex       : info ? info.teamIndex : null,
+                    coId            : info ? info.coId : null,
                 });
             }
 
@@ -303,5 +307,9 @@ namespace TinyWars.MultiCustomRoom {
                 this._labelCoName.text  = `${cfg.name} (T${cfg.tier})`;
             }
         }
+    }
+
+    function getPlayerInfo(playerInfoList: ProtoTypes.IWarPlayerInfo[], playerIndex: number): ProtoTypes.IWarPlayerInfo | null {
+        return playerInfoList.find(v => v.playerIndex === playerIndex);
     }
 }
