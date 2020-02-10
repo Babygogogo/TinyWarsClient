@@ -2157,6 +2157,10 @@ namespace TinyWars.Utility.Lang {
             `地图的总格子数必须小于%d，否则不能提审`,
             `The number of the tiles must be less than %d, or the map can't be submitted for review.`,
         ],
+        [Type.F0024]: [
+            `修改时间: %s`,
+            `Modify Time: %s`,
+        ],
     };
 
     const NET_ERROR_TEXT = {
