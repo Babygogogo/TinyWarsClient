@@ -1682,16 +1682,37 @@ namespace TinyWars.ConfigManager {
     export const MAX_PLAYER_INDEX           = 4;
     export const SILO_RADIUS                = 2;
     export const SILO_DAMAGE                = 30;
-    export const DEFAULT_LUCK_LOWER_LIMIT   = 0;
-    export const DEFAULT_LUCK_UPPER_LIMIT   = 10;
-    export const MAX_LUCK_LIMIT             = 100;
-    export const MIN_LUCK_LIMIT             = -100;
-    export const MAX_WAR_NAME_LENGTH        = 20;
-    export const MAX_WAR_PASSWORD_LENGTH    = 4;
-    export const MAX_WAR_COMMENT_LENGTH     = 50;
-    export const MAX_MAP_EDITOR_SLOT_COUNT  = 3;
 
-    export const MAX_SAVE_SLOT_COUNT        = 10;
+    export const COMMON_CONSTANTS           = {
+        MapEditorSlotMaxCount           : 3,
+        ScwSaveSlotMaxCount             : 10,
+
+        WarNameMaxLength                : 20,
+        WarCommentMaxLength             : 50,
+        WarPasswordMaxLength            : 4,
+
+        WarRuleNameMaxLength                    : 15,
+        WarRuleOffenseBonusMinLimit             : -100,
+        WarRuleOffenseBonusMaxLimit             : 10000,
+        WarRuleEnergyGrowthMultiplierMinLimit   : 0,
+        WarRuleEnergyGrowthMultiplierMaxLimit   : 10000,
+        WarRuleIncomeMultiplierMinLimit         : 0,
+        WarRuleIncomeMultiplierMaxLimit         : 10000,
+        WarRuleInitialEnergyMinLimit            : 0,
+        WarRuleInitialEnergyMaxLimit            : 100,
+        WarRuleInitialFundMinLimit              : 0,
+        WarRuleInitialFundMaxLimit              : 1000000,
+        WarRuleLuckMinLimit                     : -100,
+        WarRuleLuckMaxLimit                     : 100,
+        WarRuleMoveRangeModifierMinLimit        : -10,
+        WarRuleMoveRangeModifierMaxLimit        : 10,
+        WarRuleVisionRangeModifierMinLimit      : -10,
+        WarRuleVisionRangeModifierMaxLimit      : 10,
+        WarRuleLuckDefaultLowerLimit            : 0,
+        WarRuleLuckDefaultUpperLimit            : 10,
+        WarRuleMaxCount                         : 5,
+    };
+
     export const MAP_CONSTANTS              = {
         MaxGridsCount           : 1000,
         MaxMapNameLength        : 30,

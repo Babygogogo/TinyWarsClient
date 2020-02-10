@@ -15,6 +15,17 @@ namespace TinyWars.Utility.Lang {
         A0080, A0081, A0082, A0083, A0084, A0085, A0086, A0087, A0088, A0089,
         A0090, A0091, A0092, A0093, A0094, A0095, A0096, A0097, A0098, A0099,
 
+        A0100, A0101, A0102, A0103, A0104, A0105, A0106, A0107, A0108, A0109,
+        A0110, A0111, A0112, A0113, A0114, A0115, A0116, A0117, A0118, A0119,
+        A0120, A0121, A0122, A0123, A0124, A0125, A0126, A0127, A0128, A0129,
+        A0130, A0131, A0132, A0133, A0134, A0135, A0136, A0137, A0138, A0139,
+        A0140, A0141, A0142, A0143, A0144, A0145, A0146, A0147, A0148, A0149,
+        A0150, A0151, A0152, A0153, A0154, A0155, A0156, A0157, A0158, A0159,
+        A0160, A0161, A0162, A0163, A0164, A0165, A0166, A0167, A0168, A0169,
+        A0170, A0171, A0172, A0173, A0174, A0175, A0176, A0177, A0178, A0179,
+        A0180, A0181, A0182, A0183, A0184, A0185, A0186, A0187, A0188, A0189,
+        A0190, A0191, A0192, A0193, A0194, A0195, A0196, A0197, A0198, A0199,
+
         B0000, B0001, B0002, B0003, B0004, B0005, B0006, B0007, B0008, B0009,
         B0010, B0011, B0012, B0013, B0014, B0015, B0016, B0017, B0018, B0019,
         B0020, B0021, B0022, B0023, B0024, B0025, B0026, B0027, B0028, B0029,
@@ -490,6 +501,34 @@ namespace TinyWars.Utility.Lang {
         [Type.A0095]: [
             `您确定要导入此地图吗？`,
             `Are you sure to import this map?`,
+        ],
+        [Type.A0096]: [
+            `至少需要保留一个预设规则`,
+            `There must be at least one preset rule.`,
+        ],
+        [Type.A0097]: [
+            `确定要删除这个预设规则吗？`,
+            `Are you sure to delete this preset rule?`,
+        ],
+        [Type.A0098]: [
+            `输入的值无效，请重试`,
+            `Invalid value. Please retry.`,
+        ],
+        [Type.A0099]: [
+            `无法创建更多的预设规则`,
+            `You can't create more rules. `,
+        ],
+        [Type.A0100]: [
+            `此地图没有预设规则`,
+            `This map has no preset rules.`,
+        ],
+        [Type.A0101]: [
+            `此选项已被预设规则锁定，无法修改`,
+            `This setting is locked because a preset rule is chosen.`,
+        ],
+        [Type.A0102]: [
+            `这是一局自定义规则的游戏，请确保您已经理解了所有的规则设定。\n确定要加入这局游戏吗？`,
+            `Please make sure that you have recognized all the custom rules before joining this game.\nAre you sure to continue?`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1735,6 +1774,46 @@ namespace TinyWars.Utility.Lang {
             `导入`,
             `Import`,
         ],
+        [Type.B0314]: [
+            `预设规则`,
+            `Preset Rules`,
+        ],
+        [Type.B0315]: [
+            `规则名称`,
+            `Rule Name`,
+        ],
+        [Type.B0316]: [
+            `规则英文名`,
+            `Rule English Name`,
+        ],
+        [Type.B0317]: [
+            `修改`,
+            `Modify`,
+        ],
+        [Type.B0318]: [
+            `规则`,
+            `Rule`,
+        ],
+        [Type.B0319]: [
+            `值域`,
+            `Range`,
+        ],
+        [Type.B0320]: [
+            `新增`,
+            `Add`,
+        ],
+        [Type.B0321]: [
+            `自定义`,
+            `Custom`,
+        ],
+        [Type.B0322]: [
+            `无`,
+            `Empty`,
+        ],
+        [Type.B0323]: [
+            `只能使用数字`,
+            `Digits only`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -2077,6 +2156,10 @@ namespace TinyWars.Utility.Lang {
         [Type.F0023]: [
             `地图的总格子数必须小于%d，否则不能提审`,
             `The number of the tiles must be less than %d, or the map can't be submitted for review.`,
+        ],
+        [Type.F0024]: [
+            `修改时间: %s`,
+            `Modify Time: %s`,
         ],
     };
 

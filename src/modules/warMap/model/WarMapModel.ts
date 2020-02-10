@@ -77,6 +77,15 @@ namespace TinyWars.WarMap {
                 return null;
             }
         }
+        export async function getPlayerRule(mapFileName: string, warRuleIndex: number, playerIndex: number): Promise<ProtoTypes.IRuleForPlayer | null> {
+            const warRule = (await getMapRawData(mapFileName)).warRuleList[warRuleIndex];
+            for (const playerRule of warRule.playerRuleList) {
+                if (playerRule.playerIndex === playerIndex) {
+                    return playerRule;
+                }
+            }
+            return null;
+        }
 
         export function getMapRawData(mapFileName: string): Promise<MapRawData | undefined> {
             const localData = getLocalMapRawData(mapFileName);

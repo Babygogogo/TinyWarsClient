@@ -1,6 +1,8 @@
 
 namespace TinyWars.MapEditor {
-    import Types = Utility.Types;
+    import Types        = Utility.Types;
+    import ProtoTypes   = Utility.ProtoTypes;
+    import Lang         = Utility.Lang;
 
     export class MeField {
         private _unitMap            : MeUnitMap;
@@ -16,6 +18,7 @@ namespace TinyWars.MapEditor {
         private _modifiedTime   : number;
         private _isMultiPlayer  : boolean;
         private _isSinglePlayer : boolean;
+        private _warRuleList    : MeWarRule[] = [];
 
         public init(data: Types.MapRawData, configVersion: string): MeField {
             this._setTileMap((this.getTileMap() || new MeTileMap()).init(configVersion, data));
@@ -30,6 +33,7 @@ namespace TinyWars.MapEditor {
             this.setModifiedTime(data.modifiedTime);
             this.setIsMultiPlayer(data.isMultiPlayer);
             this.setIsSinglePlayer(data.isSinglePlayer);
+            this._initWarRuleList(data.warRuleList);
 
             this._view = this._view || new MeFieldView();
             this._view.init(this);
@@ -77,7 +81,15 @@ namespace TinyWars.MapEditor {
                 units           : null,
                 unitDataList    : this.getUnitMap().serialize(),
                 tileDataList    : serializedTileMap.tileDataList,
+                warRuleList     : this._serializeWarRuleList(),
             }
+        }
+        private _serializeWarRuleList(): ProtoTypes.IRuleForWar[] {
+            const list: ProtoTypes.IRuleForWar[] = [];
+            for (const data of this.getWarRuleList()) {
+                list.push(data.serialize());
+            }
+            return list;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -173,6 +185,41 @@ namespace TinyWars.MapEditor {
                 playersCount = Math.max(playersCount, unit.getPlayerIndex());
             });
             return playersCount;
+        }
+
+        private _initWarRuleList(dataList: ProtoTypes.IRuleForWar[] | null): void {
+            const list  = this.getWarRuleList();
+            list.length = 0;
+            if (dataList) {
+                for (const data of dataList) {
+                    list.push(new MeWarRule().init(data));
+                }
+            }
+        }
+        public reviseWarRuleList(): void {
+            const list = this.getWarRuleList();
+            if (!list.length) {
+                list.push(new MeWarRule());
+            }
+
+            const playersCount = this.getPlayersCount();
+            for (const rule of list) {
+                rule.reviseForPlayersCount(playersCount);
+            }
+        }
+        public getWarRuleList(): MeWarRule[] {
+            return this._warRuleList;
+        }
+        public getWarRule(index: number): MeWarRule {
+            return this.getWarRuleList()[index];
+        }
+        public deleteWarRule(index: number): void {
+            this.getWarRuleList().splice(index, 1);
+        }
+        public addWarRule(): void {
+            const newRule = new MeWarRule();
+            newRule.reviseForPlayersCount(this.getPlayersCount());
+            this.getWarRuleList().push(newRule);
         }
     }
 }

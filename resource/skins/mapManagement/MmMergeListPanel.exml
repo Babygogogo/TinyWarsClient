@@ -12,6 +12,8 @@
             <GameUi:UiLabel id="_labelPlayersCount" text="玩家数: 未知" y="50" stroke="2" size="20" scaleX="1" scaleY="1" />
             <GameUi:UiLabel id="_labelRating" text="评分: 未知" y="75" stroke="2" size="20" scaleX="1" scaleY="1" />
             <GameUi:UiLabel id="_labelPlayedTimes" text="全服游戏次数: 未知" y="100" stroke="2" size="20" scaleX="1" scaleY="1" />
+            <GameUi:UiLabel id="_labelModifyTime" text="修改时间: 未知" y="110" stroke="2" size="20" scaleX="1" scaleY="1"
+                            x="10" />
             <e:layout>
                 <e:VerticalLayout gap="2" />
             </e:layout>

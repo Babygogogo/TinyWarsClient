@@ -9,6 +9,7 @@ namespace TinyWars.SingleCustomRoom {
     import ConfirmPanel     = Common.ConfirmPanel;
     import HelpPanel        = Common.HelpPanel;
     import WarMapModel      = WarMap.WarMapModel;
+    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
     export class ScrCreateAdvancedSettingsPage extends GameUi.UiTabPage {
         private _labelMapNameTitle      : GameUi.UiLabel;
@@ -17,42 +18,33 @@ namespace TinyWars.SingleCustomRoom {
         private _labelPlayersCount      : GameUi.UiLabel;
         private _labelTips              : GameUi.UiLabel;
 
-        private _labelInitialFundTitle  : GameUi.UiLabel;
-        private _labelInitialFundTips   : GameUi.UiLabel;
-        private _inputInitialFund       : GameUi.UiTextInput;
-
-        private _labelIncomeMultiplierTitle : GameUi.UiLabel;
-        private _labelIncomeMultiplierTips  : GameUi.UiLabel;
-        private _inputIncomeModifier        : GameUi.UiTextInput;
-
-        private _labelInitialEnergyTitle    : GameUi.UiLabel;
-        private _labelInitialEnergyTips     : GameUi.UiLabel;
-        private _inputInitialEnergy         : GameUi.UiTextInput;
-
-        private _labelEnergyGrowthModifierTitle : GameUi.UiLabel;
-        private _labelEnergyGrowthModifierTips  : GameUi.UiLabel;
-        private _inputEnergyModifier            : GameUi.UiTextInput;
-
-        private _labelLuckLowerLimitTitle   : GameUi.UiLabel;
-        private _inputLuckLowerLimit        : GameUi.UiTextInput;
-
-        private _labelLuckUpperLimitTitle   : GameUi.UiLabel;
-        private _inputLuckUpperLimit        : GameUi.UiTextInput;
-
-        private _labelMoveRangeTitle    : GameUi.UiLabel;
-        private _btnPrevMoveRange       : GameUi.UiButton;
-        private _btnNextMoveRange       : GameUi.UiButton;
-        private _labelMoveRange         : GameUi.UiLabel;
-
-        private _labelAttackTitle   : GameUi.UiLabel;
-        private _btnPrevAttack      : GameUi.UiButton;
-        private _btnNextAttack      : GameUi.UiButton;
-        private _labelAttack        : GameUi.UiLabel;
-
-        private _labelVisionTitle   : GameUi.UiLabel;
-        private _btnPrevVision      : GameUi.UiButton;
-        private _btnNextVision      : GameUi.UiButton;
-        private _labelVision        : GameUi.UiLabel;
+        private _groupInitialFund                   : eui.Group;
+        private _labelInitialFund                   : TinyWars.GameUi.UiLabel;
+        private _btnModifyInitialFund               : TinyWars.GameUi.UiButton;
+        private _groupIncomeMultiplier              : eui.Group;
+        private _labelIncomeMultiplier              : TinyWars.GameUi.UiLabel;
+        private _btnModifyIncomeMultiplier          : TinyWars.GameUi.UiButton;
+        private _groupInitialEnergy                 : eui.Group;
+        private _labelInitialEnergy                 : TinyWars.GameUi.UiLabel;
+        private _btnModifyInitialEnergy             : TinyWars.GameUi.UiButton;
+        private _groupEnergyGrowthMultiplier        : eui.Group;
+        private _labelEnergyGrowthMultiplier        : TinyWars.GameUi.UiLabel;
+        private _btnModifyEnergyGrowthMultiplier    : TinyWars.GameUi.UiButton;
+        private _groupLuckLowerLimit                : eui.Group;
+        private _labelLuckLowerLimit                : TinyWars.GameUi.UiLabel;
+        private _btnModifyLuckLowerLimit            : TinyWars.GameUi.UiButton;
+        private _groupLuckUpperLimit                : eui.Group;
+        private _labelLuckUpperLimit                : TinyWars.GameUi.UiLabel;
+        private _btnModifyLuckUpperLimit            : TinyWars.GameUi.UiButton;
+        private _groupMoveRange                     : eui.Group;
+        private _labelMoveRange                     : TinyWars.GameUi.UiLabel;
+        private _btnModifyMoveRange                 : TinyWars.GameUi.UiButton;
+        private _groupAttackPower                   : eui.Group;
+        private _labelAttackPower                   : TinyWars.GameUi.UiLabel;
+        private _btnModifyAttackPower               : TinyWars.GameUi.UiButton;
+        private _groupVisionRange                   : eui.Group;
+        private _labelVisionRange                   : TinyWars.GameUi.UiLabel;
+        private _btnModifyVisionRange               : TinyWars.GameUi.UiButton;
 
         protected _mapExtraData: ProtoTypes.IMapExtraData;
 
@@ -64,18 +56,15 @@ namespace TinyWars.SingleCustomRoom {
 
         protected _onFirstOpened(): void {
             this._uiListeners = [
-                { ui: this._inputInitialFund,       callback: this._onFocusOutInputInitialFund,     eventType: egret.Event.FOCUS_OUT, },
-                { ui: this._inputIncomeModifier,    callback: this._onFocusOutInputIncomeModifier,  eventType: egret.Event.FOCUS_OUT, },
-                { ui: this._inputInitialEnergy,     callback: this._onFocusOutInputInitialEnergy,   eventType: egret.Event.FOCUS_OUT, },
-                { ui: this._inputEnergyModifier,    callback: this._onFocusOutInputEnergyModifier,  eventType: egret.Event.FOCUS_OUT, },
-                { ui: this._inputLuckLowerLimit,    callback: this._onFocusOutInputLuckLowerLimit,  eventType: egret.Event.FOCUS_OUT, },
-                { ui: this._inputLuckUpperLimit,    callback: this._onFocusOutInputLuckUpperLimit,  eventType: egret.Event.FOCUS_OUT, },
-                { ui: this._btnPrevMoveRange,       callback: this._onTouchedBtnPrevMoveRange, },
-                { ui: this._btnNextMoveRange,       callback: this._onTouchedBtnNextMoveRange, },
-                { ui: this._btnPrevAttack,          callback: this._onTouchedBtnPrevAttack, },
-                { ui: this._btnNextAttack,          callback: this._onTouchedBtnNextAttack, },
-                { ui: this._btnPrevVision,          callback: this._onTouchedBtnPrevVision, },
-                { ui: this._btnNextVision,          callback: this._onTouchedBtnNextVision, },
+                { ui: this._btnModifyAttackPower,               callback: this._onTouchedBtnModifyAttackPower },
+                { ui: this._btnModifyEnergyGrowthMultiplier,    callback: this._onTouchedBtnModifyEnergyGrowthMultiplier },
+                { ui: this._btnModifyIncomeMultiplier,          callback: this._onTouchedBtnModifyIncomeMultiplier },
+                { ui: this._btnModifyInitialEnergy,             callback: this._onTouchedBtnModifyInitialEnergy },
+                { ui: this._btnModifyInitialFund,               callback: this._onTouchedBtnModifyInitialFund },
+                { ui: this._btnModifyLuckLowerLimit,            callback: this._onTouchedBtnModifyLuckLowerLimit },
+                { ui: this._btnModifyLuckUpperLimit,            callback: this._onTouchedBtnModifyLuckUpperLimit },
+                { ui: this._btnModifyMoveRange,                 callback: this._onTouchedBtnModifyMoveRange },
+                { ui: this._btnModifyVisionRange,               callback: this._onTouchedBtnModifyVisionRange },
             ];
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
@@ -88,15 +77,15 @@ namespace TinyWars.SingleCustomRoom {
             this._updateComponentsForLanguage();
             this._updateLabelMapName();
             this._updateLabelPlayersCount();
-            this._updateInputInitialFund();
-            this._updateInputIncomeModifier();
-            this._updateInputInitialEnergy();
-            this._updateInputEnergyModifier();
-            this._updateInputLuckLowerLimit();
-            this._updateInputLuckUpperLimit();
+            this._updateLabelInitialFund();
+            this._updateLabelIncomeMultiplier();
+            this._updateLabelInitialEnergy();
+            this._updateLabelEnergyGrowthMultiplier();
+            this._updateLabelLuckLowerLimit();
+            this._updateLabelLuckUpperLimit();
             this._updateLabelMoveRange();
-            this._updateLabelAttack();
-            this._updateLabelVision();
+            this._updateLabelAttackPower();
+            this._updateLabelVisionRange();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -106,106 +95,193 @@ namespace TinyWars.SingleCustomRoom {
             this._updateComponentsForLanguage();
         }
 
-        private _onFocusOutInputInitialFund(e: egret.Event): void {
-            let fund = Number(this._inputInitialFund.text);
-            if (isNaN(fund)) {
-                fund = DEFAULT_INITIAL_FUND;
-            } else {
-                fund = Math.min(fund, MAX_INITIAL_FUND);
-                fund = Math.max(fund, MIN_INITIAL_FUND);
-            }
-            ScrModel.setCreateWarInitialFund(fund);
-            this._updateInputInitialFund();
+        private _onTouchedBtnModifyInitialFund(e: egret.TouchEvent): void {
+            const maxValue = CommonConstants.WarRuleInitialFundMaxLimit;
+            const minValue = CommonConstants.WarRuleInitialFundMinLimit;
+            Common.InputPanel.show({
+                title           : Lang.getText(Lang.Type.B0178),
+                currentValue    : "" + ScrModel.getCreateWarInitialFund(),
+                maxChars        : 7,
+                charRestrict    : null,
+                tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                callback        : panel => {
+                    const value = Number(panel.getInputText());
+                    if (isNaN(value)) {
+                        FloatText.show(Lang.getText(Lang.Type.A0098));
+                    } else {
+                        ScrModel.setCreateWarInitialFund(Math.min(maxValue, Math.max(minValue, value)));
+                        this._updateLabelInitialFund();
+                    }
+                },
+            });
         }
 
-        private _onFocusOutInputIncomeModifier(e: egret.Event): void {
-            let modifier = Number(this._inputIncomeModifier.text);
-            if (isNaN(modifier)) {
-                modifier = DEFAULT_INCOME_MODIFIER;
-            } else {
-                modifier = Math.min(modifier, MAX_INCOME_MODIFIER);
-                modifier = Math.max(modifier, MIN_INCOME_MODIFIER);
-            }
-            ScrModel.setCreateWarIncomeModifier(modifier);
-            this._updateInputIncomeModifier();
+        private _onTouchedBtnModifyIncomeMultiplier(e: egret.TouchEvent): void {
+            const maxValue = CommonConstants.WarRuleIncomeMultiplierMaxLimit;
+            const minValue = CommonConstants.WarRuleIncomeMultiplierMinLimit;
+            Common.InputPanel.show({
+                title           : Lang.getText(Lang.Type.B0179),
+                currentValue    : "" + ScrModel.getCreateWarIncomeMultiplier(),
+                maxChars        : 5,
+                charRestrict    : null,
+                tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                callback        : panel => {
+                    const value = Number(panel.getInputText());
+                    if (isNaN(value)) {
+                        FloatText.show(Lang.getText(Lang.Type.A0098));
+                    } else {
+                        ScrModel.setCreateWarIncomeMultiplier(Math.min(maxValue, Math.max(minValue, value)));
+                        this._updateLabelIncomeMultiplier();
+                    }
+                },
+            });
         }
 
-        private _onFocusOutInputInitialEnergy(e: egret.Event): void {
-            let energy = Number(this._inputInitialEnergy.text);
-            if (isNaN(energy)) {
-                energy = DEFAULT_INITIAL_ENERGY;
-            } else {
-                energy = Math.min(energy, MAX_INITIAL_ENERGY);
-                energy = Math.max(energy, MIN_INITIAL_ENERGY);
-            }
-            ScrModel.setCreateWarInitialEnergy(energy);
-            this._updateInputInitialEnergy();
+        private _onTouchedBtnModifyInitialEnergy(e: egret.TouchEvent): void {
+            const maxValue = CommonConstants.WarRuleInitialEnergyMaxLimit;
+            const minValue = CommonConstants.WarRuleInitialEnergyMinLimit;
+            Common.InputPanel.show({
+                title           : Lang.getText(Lang.Type.B0180),
+                currentValue    : "" + ScrModel.getCreateWarInitialEnergy(),
+                maxChars        : 5,
+                charRestrict    : null,
+                tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                callback        : panel => {
+                    const value = Number(panel.getInputText());
+                    if (isNaN(value)) {
+                        FloatText.show(Lang.getText(Lang.Type.A0098));
+                    } else {
+                        ScrModel.setCreateWarInitialEnergy(Math.min(maxValue, Math.max(minValue, value)));
+                        this._updateLabelInitialEnergy();
+                    }
+                },
+            });
         }
 
-        private _onFocusOutInputEnergyModifier(e: egret.Event): void {
-            let modifier = Number(this._inputEnergyModifier.text);
-            if (isNaN(modifier)) {
-                modifier = DEFAULT_ENERGY_MODIFIER;
-            } else {
-                modifier = Math.min(modifier, MAX_ENERGY_MODIFIER);
-                modifier = Math.max(modifier, MIN_ENERGY_MODIFIER);
-            }
-            ScrModel.setCreateWarEnergyGrowthModifier(modifier);
-            this._updateInputEnergyModifier();
+        private _onTouchedBtnModifyEnergyGrowthMultiplier(e: egret.TouchEvent): void {
+            const maxValue = CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit;
+            const minValue = CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit;
+            Common.InputPanel.show({
+                title           : Lang.getText(Lang.Type.B0181),
+                currentValue    : "" + ScrModel.getCreateWarEnergyGrowthMultiplier(),
+                maxChars        : 5,
+                charRestrict    : null,
+                tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                callback        : panel => {
+                    const value = Number(panel.getInputText());
+                    if (isNaN(value)) {
+                        FloatText.show(Lang.getText(Lang.Type.A0098));
+                    } else {
+                        ScrModel.setCreateWarEnergyGrowthMultiplier(Math.min(maxValue, Math.max(minValue, value)));
+                        this._updateLabelEnergyGrowthMultiplier();
+                    }
+                },
+            });
         }
 
-        private _onFocusOutInputLuckLowerLimit(e: egret.Event): void {
-            let limit = Number(this._inputLuckLowerLimit.text);
-            if (isNaN(limit)) {
-                limit = ConfigManager.DEFAULT_LUCK_LOWER_LIMIT;
-            } else {
-                limit = Math.min(limit, ConfigManager.MAX_LUCK_LIMIT);
-                limit = Math.max(limit, ConfigManager.MIN_LUCK_LIMIT);
-            }
-            ScrModel.setCreateWarLuckLowerLimit(limit);
-            this._updateInputLuckLowerLimit();
+        private _onTouchedBtnModifyLuckLowerLimit(e: egret.TouchEvent): void {
+            const maxValue = CommonConstants.WarRuleLuckMaxLimit;
+            const minValue = CommonConstants.WarRuleLuckMinLimit;
+            Common.InputPanel.show({
+                title           : Lang.getText(Lang.Type.B0189),
+                currentValue    : "" + ScrModel.getCreateWarLuckLowerLimit(),
+                maxChars        : 5,
+                charRestrict    : null,
+                tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                callback        : panel => {
+                    const value = Number(panel.getInputText());
+                    if (isNaN(value)) {
+                        FloatText.show(Lang.getText(Lang.Type.A0098));
+                    } else {
+                        ScrModel.setCreateWarLuckLowerLimit(Math.min(maxValue, Math.max(minValue, value)));
+                        this._updateLabelLuckLowerLimit();
+                    }
+                },
+            });
         }
 
-        private _onFocusOutInputLuckUpperLimit(e: egret.Event): void {
-            let limit = Number(this._inputLuckUpperLimit.text);
-            if (isNaN(limit)) {
-                limit = ConfigManager.DEFAULT_LUCK_UPPER_LIMIT;
-            } else {
-                limit = Math.min(limit, ConfigManager.MAX_LUCK_LIMIT);
-                limit = Math.max(limit, ConfigManager.MIN_LUCK_LIMIT);
-            }
-            ScrModel.setCreateWarLuckUpperLimit(limit);
-            this._updateInputLuckUpperLimit();
+        private _onTouchedBtnModifyLuckUpperLimit(e: egret.TouchEvent): void {
+            const maxValue = CommonConstants.WarRuleLuckMaxLimit;
+            const minValue = CommonConstants.WarRuleLuckMinLimit;
+            Common.InputPanel.show({
+                title           : Lang.getText(Lang.Type.B0189),
+                currentValue    : "" + ScrModel.getCreateWarLuckUpperLimit(),
+                maxChars        : 5,
+                charRestrict    : null,
+                tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                callback        : panel => {
+                    const value = Number(panel.getInputText());
+                    if (isNaN(value)) {
+                        FloatText.show(Lang.getText(Lang.Type.A0098));
+                    } else {
+                        ScrModel.setCreateWarLuckUpperLimit(Math.min(maxValue, Math.max(minValue, value)));
+                        this._updateLabelLuckUpperLimit();
+                    }
+                },
+            });
         }
 
-        private _onTouchedBtnPrevMoveRange(e: egret.TouchEvent): void {
-            ScrModel.setCreateWarPrevMoveRangeModifier();
-            this._updateLabelMoveRange();
+        private _onTouchedBtnModifyMoveRange(e: egret.TouchEvent): void {
+            const maxValue = CommonConstants.WarRuleMoveRangeModifierMaxLimit;
+            const minValue = CommonConstants.WarRuleMoveRangeModifierMinLimit;
+            Common.InputPanel.show({
+                title           : Lang.getText(Lang.Type.B0182),
+                currentValue    : "" + ScrModel.getCreateWarMoveRangeModifier(),
+                maxChars        : 5,
+                charRestrict    : null,
+                tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                callback        : panel => {
+                    const value = Number(panel.getInputText());
+                    if (isNaN(value)) {
+                        FloatText.show(Lang.getText(Lang.Type.A0098));
+                    } else {
+                        ScrModel.setCreateWarMoveRangeModifier(Math.min(maxValue, Math.max(minValue, value)));
+                        this._updateLabelMoveRange();
+                    }
+                },
+            });
         }
 
-        private _onTouchedBtnNextMoveRange(e: egret.TouchEvent): void {
-            ScrModel.setCreateWarNextMoveRangeModifier();
-            this._updateLabelMoveRange();
+        private _onTouchedBtnModifyAttackPower(e: egret.TouchEvent): void {
+            const maxValue = CommonConstants.WarRuleOffenseBonusMaxLimit;
+            const minValue = CommonConstants.WarRuleOffenseBonusMinLimit;
+            Common.InputPanel.show({
+                title           : Lang.getText(Lang.Type.B0183),
+                currentValue    : "" + ScrModel.getCreateWarAttackPowerModifier(),
+                maxChars        : 5,
+                charRestrict    : null,
+                tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                callback        : panel => {
+                    const value = Number(panel.getInputText());
+                    if (isNaN(value)) {
+                        FloatText.show(Lang.getText(Lang.Type.A0098));
+                    } else {
+                        ScrModel.setCreateWarAttackPowerModifier(Math.min(maxValue, Math.max(minValue, value)));
+                        this._updateLabelAttackPower();
+                    }
+                },
+            });
         }
 
-        private _onTouchedBtnPrevAttack(e: egret.TouchEvent): void {
-            ScrModel.setCreateWarPrevAttackPowerModifier();
-            this._updateLabelAttack();
-        }
-
-        private _onTouchedBtnNextAttack(e: egret.TouchEvent): void {
-            ScrModel.setCreateWarNextAttackPowerModifier();
-            this._updateLabelAttack();
-        }
-
-        private _onTouchedBtnPrevVision(e: egret.TouchEvent): void {
-            ScrModel.setCreateWarPrevVisionRangeModifier();
-            this._updateLabelVision();
-        }
-
-        private _onTouchedBtnNextVision(e: egret.TouchEvent): void {
-            ScrModel.setNextVisionRangeModifier();
-            this._updateLabelVision();
+        private _onTouchedBtnModifyVisionRange(e: egret.TouchEvent): void {
+            const maxValue = CommonConstants.WarRuleVisionRangeModifierMaxLimit;
+            const minValue = CommonConstants.WarRuleVisionRangeModifierMinLimit;
+            Common.InputPanel.show({
+                title           : Lang.getText(Lang.Type.B0184),
+                currentValue    : "" + ScrModel.getCreateWarVisionRangeModifier(),
+                maxChars        : 5,
+                charRestrict    : null,
+                tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                callback        : panel => {
+                    const value = Number(panel.getInputText());
+                    if (isNaN(value)) {
+                        FloatText.show(Lang.getText(Lang.Type.A0098));
+                    } else {
+                        ScrModel.setCreateWarVisionRangeModifier(Math.min(maxValue, Math.max(minValue, value)));
+                        this._updateLabelVisionRange();
+                    }
+                },
+            });
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -215,43 +291,39 @@ namespace TinyWars.SingleCustomRoom {
             this._labelMapNameTitle.text                = `${Lang.getText(Lang.Type.B0225)}:`;
             this._labelPlayersCountTitle.text           = `${Lang.getText(Lang.Type.B0229)}:`;
             this._labelTips.text                        = Lang.getText(Lang.Type.A0065);
-            this._labelInitialFundTitle.text            = `${Lang.getText(Lang.Type.B0178)}: `;
-            this._labelInitialFundTips.text             = `(${Lang.getText(Lang.Type.B0239)} 1000000)`;
-            this._labelIncomeMultiplierTitle.text       = `${Lang.getText(Lang.Type.B0179)}: `;
-            this._labelIncomeMultiplierTips.text        = `(${Lang.getText(Lang.Type.B0239)} 1000%)`;
-            this._labelInitialEnergyTitle.text          = `${Lang.getText(Lang.Type.B0180)}: `;
-            this._labelInitialEnergyTips.text           = `(${Lang.getText(Lang.Type.B0239)} 100%)`;
-            this._labelEnergyGrowthModifierTitle.text   = `${Lang.getText(Lang.Type.B0181)}: `;
-            this._labelEnergyGrowthModifierTips.text    = `(${Lang.getText(Lang.Type.B0239)} 1000%)`;
-            this._labelMoveRangeTitle.text              = `${Lang.getText(Lang.Type.B0182)}: `;
-            this._labelAttackTitle.text                 = `${Lang.getText(Lang.Type.B0183)}: `;
-            this._labelVisionTitle.text                 = `${Lang.getText(Lang.Type.B0184)}: `;
-            this._labelLuckLowerLimitTitle.text         = `${Lang.getText(Lang.Type.B0189)}: `;
-            this._labelLuckUpperLimitTitle.text         = `${Lang.getText(Lang.Type.B0190)}: `;
+            this._btnModifyInitialFund.label            = Lang.getText(Lang.Type.B0178);
+            this._btnModifyIncomeMultiplier.label       = Lang.getText(Lang.Type.B0179);
+            this._btnModifyInitialEnergy.label          = Lang.getText(Lang.Type.B0180);
+            this._btnModifyEnergyGrowthMultiplier.label = Lang.getText(Lang.Type.B0181);
+            this._btnModifyMoveRange.label              = Lang.getText(Lang.Type.B0182);
+            this._btnModifyAttackPower.label            = Lang.getText(Lang.Type.B0183);
+            this._btnModifyVisionRange.label            = Lang.getText(Lang.Type.B0184);
+            this._btnModifyLuckLowerLimit.label         = Lang.getText(Lang.Type.B0189);
+            this._btnModifyLuckUpperLimit.label         = Lang.getText(Lang.Type.B0190);
         }
 
-        private _updateInputInitialFund(): void {
-            this._inputInitialFund.text = "" + ScrModel.getCreateWarInitialFund();
+        private _updateLabelInitialFund(): void {
+            this._labelInitialFund.text = "" + ScrModel.getCreateWarInitialFund();
         }
 
-        private _updateInputIncomeModifier(): void {
-            this._inputIncomeModifier.text = "" + ScrModel.getCreateWarIncomeModifier();
+        private _updateLabelIncomeMultiplier(): void {
+            this._labelIncomeMultiplier.text = `${ScrModel.getCreateWarIncomeMultiplier()}%`;
         }
 
-        private _updateInputInitialEnergy(): void {
-            this._inputInitialEnergy.text = "" + ScrModel.getCreateWarInitialEnergy();
+        private _updateLabelInitialEnergy(): void {
+            this._labelInitialEnergy.text = `${ScrModel.getCreateWarInitialEnergy()}%`;
         }
 
-        private _updateInputEnergyModifier(): void {
-            this._inputEnergyModifier.text = "" + ScrModel.getCreateWarEnergyGrowthModifier();
+        private _updateLabelEnergyGrowthMultiplier(): void {
+            this._labelEnergyGrowthMultiplier.text = `${ScrModel.getCreateWarEnergyGrowthMultiplier()}%`;
         }
 
-        private _updateInputLuckLowerLimit(): void {
-            this._inputLuckLowerLimit.text = "" + ScrModel.getCreateWarLuckLowerLimit();
+        private _updateLabelLuckLowerLimit(): void {
+            this._labelLuckLowerLimit.text = "" + ScrModel.getCreateWarLuckLowerLimit();
         }
 
-        private _updateInputLuckUpperLimit(): void {
-            this._inputLuckUpperLimit.text = "" + ScrModel.getCreateWarLuckUpperLimit();
+        private _updateLabelLuckUpperLimit(): void {
+            this._labelLuckUpperLimit.text = "" + ScrModel.getCreateWarLuckUpperLimit();
         }
 
         private _updateLabelMapName(): void {
@@ -271,22 +343,16 @@ namespace TinyWars.SingleCustomRoom {
             }
         }
 
-        private _updateLabelAttack(): void {
-            const modifier = ScrModel.getCreateWarAttackPowerModifier();
-            if (modifier <= 0) {
-                this._labelAttack.text = "" + modifier;
-            } else {
-                this._labelAttack.text = "+" + modifier;
-            }
+        private _updateLabelAttackPower(): void {
+            const modifier              = ScrModel.getCreateWarAttackPowerModifier();
+            this._labelAttackPower.text = modifier <= 0 ? `${modifier}%` : `+${modifier}%`;
         }
 
-        private _updateLabelVision(): void {
-            const modifier = ScrModel.getCreateWarVisionRangeModifier();
-            if (modifier <= 0) {
-                this._labelVision.text = "" + modifier;
-            } else {
-                this._labelVision.text = "+" + modifier;
-            }
+        private _updateLabelVisionRange(): void {
+            const modifier              = ScrModel.getCreateWarVisionRangeModifier();
+            this._labelVisionRange.text = modifier <= 0
+                ? "" + modifier
+                : "+" + modifier;
         }
     }
 }

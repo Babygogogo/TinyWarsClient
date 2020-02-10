@@ -10,6 +10,7 @@ namespace TinyWars.BaseWar {
         private _warComment             : string;
         private _configVersion          : string;
         private _mapFileName            : string;
+        private _warRuleIndex           : number | null | undefined;
         private _timeLimit              : number;
         private _hasFogByDefault        : boolean;
         private _incomeModifier         : number;
@@ -41,6 +42,7 @@ namespace TinyWars.BaseWar {
             this._setConfigVersion(data.configVersion);
             this.setMapFileName(data.mapFileName);
             this._setRandomNumberGenerator(new Math.seedrandom("", { state: data.seedRandomState || true }));
+            this._setWarRuleIndex(data.warRuleIndex);
             this._setSettingsTimeLimit(data.timeLimit);
             this._setSettingsHasFog(data.hasFogByDefault);
             this._setSettingsIncomeModifier(data.incomeModifier);
@@ -158,6 +160,13 @@ namespace TinyWars.BaseWar {
             return this._timeLimit;
         }
 
+        private _setWarRuleIndex(index: number | null | undefined): void {
+            this._warRuleIndex = index;
+        }
+        public getWarRuleIndex(): number | null | undefined {
+            return this._warRuleIndex;
+        }
+
         private _setSettingsHasFog(hasFog: boolean): void {
             this._hasFogByDefault = hasFog;
         }
@@ -222,14 +231,14 @@ namespace TinyWars.BaseWar {
         }
 
         private _setSettingsLuckLowerLimit(limit: number | null): void {
-            this._luckLowerLimit = limit == null ? ConfigManager.DEFAULT_LUCK_LOWER_LIMIT : limit;
+            this._luckLowerLimit = limit == null ? ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultLowerLimit : limit;
         }
         public getSettingsLuckLowerLimit(): number {
             return this._luckLowerLimit;
         }
 
         private _setSettingsLuckUpperLimit(limit: number | null): void {
-            this._luckUpperLimit = limit == null ? ConfigManager.DEFAULT_LUCK_UPPER_LIMIT : limit;
+            this._luckUpperLimit = limit == null ? ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultUpperLimit : limit;
         }
         public getSettingsLuckUpperLimit(): number {
             return this._luckUpperLimit;

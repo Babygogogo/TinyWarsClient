@@ -37,6 +37,7 @@ namespace TinyWars.SingleCustomWar {
                 executedActions         : this._getExecutedActions(),
                 nextActionId            : this.getNextActionId(),
                 remainingVotesForDraw   : this.getRemainingVotesForDraw(),
+                warRuleIndex            : this.getWarRuleIndex(),
                 hasFogByDefault         : this.getSettingsHasFog(),
                 incomeModifier          : this.getSettingsIncomeModifier(),
                 energyGrowthModifier    : this.getSettingsEnergyGrowthModifier(),

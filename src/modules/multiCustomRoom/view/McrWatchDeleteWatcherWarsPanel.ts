@@ -152,43 +152,44 @@ namespace TinyWars.MultiCustomRoom {
             return data;
         }
 
-        private _createDataForListPlayer(warInfo: ProtoTypes.IMcrWaitingInfo, mapPlayersCount: number): DataForPlayerRenderer[] {
-            const data: DataForPlayerRenderer[] = [
+        private _createDataForListPlayer(warInfo: ProtoTypes.IMcwOngoingDetail, mapPlayersCount: number): DataForPlayerRenderer[] {
+            const configVersion = warInfo.configVersion;
+            const dataList      : DataForPlayerRenderer[] = [
                 {
                     playerIndex     : 1,
                     playerName      : warInfo.p1UserNickname,
                     teamIndex       : warInfo.p1TeamIndex,
                     coId            : warInfo.p1CoId,
-                    configVersion   : warInfo.configVersion,
+                    configVersion,
                 },
                 {
                     playerIndex     : 2,
                     playerName      : warInfo.p2UserNickname,
                     teamIndex       : warInfo.p2TeamIndex,
                     coId            : warInfo.p2CoId,
-                    configVersion   : warInfo.configVersion,
+                    configVersion,
                 },
             ];
             if (mapPlayersCount >= 3) {
-                data.push({
+                dataList.push({
                     playerIndex     : 3,
                     playerName      : warInfo.p3UserNickname,
                     teamIndex       : warInfo.p3TeamIndex,
                     coId            : warInfo.p3CoId,
-                    configVersion   : warInfo.configVersion,
+                    configVersion,
                 });
             }
             if (mapPlayersCount >= 4) {
-                data.push({
+                dataList.push({
                     playerIndex     : 4,
                     playerName      : warInfo.p4UserNickname,
                     teamIndex       : warInfo.p4TeamIndex,
                     coId            : warInfo.p4CoId,
-                    configVersion   : warInfo.configVersion,
+                    configVersion,
                 });
             }
 
-            return data;
+            return dataList;
         }
 
         private async _showMap(index: number): Promise<void> {

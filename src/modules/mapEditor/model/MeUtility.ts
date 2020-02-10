@@ -1,13 +1,14 @@
 
 namespace TinyWars.MapEditor.MeUtility {
-    import ProtoTypes   = Utility.ProtoTypes;
-    import Types        = Utility.Types;
-    import Lang         = Utility.Lang;
-    import Helpers      = Utility.Helpers;
-    import mapConstants = ConfigManager.MAP_CONSTANTS;
-    import MapRawData   = Types.MapRawData;
-    import GridIndex    = Types.GridIndex;
-    import SymmetryType = Types.SymmetryType;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import Types            = Utility.Types;
+    import Lang             = Utility.Lang;
+    import Helpers          = Utility.Helpers;
+    import MapConstants     = ConfigManager.MAP_CONSTANTS;
+    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import MapRawData       = Types.MapRawData;
+    import GridIndex        = Types.GridIndex;
+    import SymmetryType     = Types.SymmetryType;
 
     export type AsymmetricalCounters = {
         UpToDown            : number | null;
@@ -45,22 +46,23 @@ namespace TinyWars.MapEditor.MeUtility {
             && (checkIsMapNameEnglishValid(mapRawData.mapNameEnglish))
             && (checkIsPlayersCountValid(mapRawData))
             && (checkIsUnitsValid(mapRawData))
-            && (checkIsTilesValid(mapRawData));
+            && (checkIsTilesValid(mapRawData))
+            && (checkIsWarRuleListValid(mapRawData.warRuleList, mapRawData.playersCount!));
     }
     function checkIsMapDesignerValid(mapDesigner: string | null | undefined): boolean {
         return (mapDesigner != null)
             && (mapDesigner.length > 0)
-            && (mapDesigner.length <= mapConstants.MaxDesignerLength);
+            && (mapDesigner.length <= MapConstants.MaxDesignerLength);
     }
     function checkIsMapNameValid(mapName: string | null | undefined): boolean {
         return (mapName != null)
             && (mapName.length > 0)
-            && (mapName.length <= mapConstants.MaxMapNameLength);
+            && (mapName.length <= MapConstants.MaxMapNameLength);
     }
     function checkIsMapNameEnglishValid(mapNameEnglish: string | null | undefined): boolean {
         return (mapNameEnglish != null)
             && (mapNameEnglish.length > 0)
-            && (mapNameEnglish.length <= mapConstants.MaxMapNameEnglishLength);
+            && (mapNameEnglish.length <= MapConstants.MaxMapNameEnglishLength);
     }
     function checkIsPlayersCountValid(mapRawData: ProtoTypes.IMapRawData): boolean {
         const playersCount = mapRawData.playersCount;
@@ -123,7 +125,7 @@ namespace TinyWars.MapEditor.MeUtility {
             return false;
         }
         const gridsCount = mapWidth * mapHeight;
-        if (gridsCount > mapConstants.MaxGridsCount) {
+        if (gridsCount > MapConstants.MaxGridsCount) {
             return false;
         }
 
@@ -261,7 +263,7 @@ namespace TinyWars.MapEditor.MeUtility {
             return false;
         }
         const gridsCount = mapWidth * mapHeight;
-        if (gridsCount > mapConstants.MaxGridsCount) {
+        if (gridsCount > MapConstants.MaxGridsCount) {
             return false;
         }
 
@@ -336,6 +338,113 @@ namespace TinyWars.MapEditor.MeUtility {
 
         return true;
     }
+    function checkIsWarRuleListValid(ruleList: ProtoTypes.IRuleForWar[] | null | undefined, playersCount: number): boolean {
+        if ((!ruleList) || (!ruleList.length) || (ruleList.length > CommonConstants.WarRuleMaxCount)) {
+            return false;
+        }
+        for (const rule of ruleList) {
+            if (!checkIsWarRuleValid(rule, playersCount)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    function checkIsWarRuleValid(rule: ProtoTypes.IRuleForWar, playersCount: number): boolean {
+        const {
+            attackPowerModifier,    energyGrowthModifier,   incomeModifier,     initialEnergy,      initialFund,
+            luckLowerLimit,         luckUpperLimit,         moveRangeModifier,  ruleName,           ruleNameEnglish,
+            visionRangeModifier
+        } = rule;
+        if ((rule.hasFog            == null)                                                    ||
+            (attackPowerModifier    == null)                                                    ||
+            (attackPowerModifier    > CommonConstants.WarRuleOffenseBonusMaxLimit)              ||
+            (attackPowerModifier    < CommonConstants.WarRuleOffenseBonusMinLimit)              ||
+            (energyGrowthModifier   == null)                                                    ||
+            (energyGrowthModifier   > CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit)    ||
+            (energyGrowthModifier   < CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit)    ||
+            (incomeModifier         == null)                                                    ||
+            (incomeModifier         > CommonConstants.WarRuleIncomeMultiplierMaxLimit)          ||
+            (incomeModifier         < CommonConstants.WarRuleIncomeMultiplierMinLimit)          ||
+            (initialEnergy          == null)                                                    ||
+            (initialEnergy          > CommonConstants.WarRuleInitialEnergyMaxLimit)             ||
+            (initialEnergy          < CommonConstants.WarRuleInitialEnergyMinLimit)             ||
+            (initialFund            == null)                                                    ||
+            (initialFund            > CommonConstants.WarRuleInitialFundMaxLimit)               ||
+            (initialFund            < CommonConstants.WarRuleInitialFundMinLimit)               ||
+            (luckLowerLimit         == null)                                                    ||
+            (luckLowerLimit         > CommonConstants.WarRuleLuckMaxLimit)                      ||
+            (luckLowerLimit         < CommonConstants.WarRuleLuckMinLimit)                      ||
+            (luckUpperLimit         == null)                                                    ||
+            (luckUpperLimit         > CommonConstants.WarRuleLuckMaxLimit)                      ||
+            (luckUpperLimit         < CommonConstants.WarRuleLuckMinLimit)                      ||
+            (luckUpperLimit         < luckLowerLimit)                                           ||
+            (moveRangeModifier      == null)                                                    ||
+            (moveRangeModifier      > CommonConstants.WarRuleMoveRangeModifierMaxLimit)         ||
+            (moveRangeModifier      < CommonConstants.WarRuleMoveRangeModifierMinLimit)         ||
+            (ruleName               == null)                                                    ||
+            (ruleName.length        > CommonConstants.WarRuleNameMaxLength)                     ||
+            (ruleName.length        <= 0)                                                       ||
+            (ruleNameEnglish        == null)                                                    ||
+            (ruleNameEnglish.length > CommonConstants.WarRuleNameMaxLength)                     ||
+            (ruleNameEnglish.length <= 0)                                                       ||
+            (visionRangeModifier    == null)                                                    ||
+            (visionRangeModifier    > CommonConstants.WarRuleVisionRangeModifierMaxLimit)       ||
+            (visionRangeModifier    < CommonConstants.WarRuleVisionRangeModifierMinLimit)
+        ) {
+            return false;
+        }
+        if (!checkIsPlayerRuleListValid(rule.playerRuleList, playersCount)) {
+            return false;
+        }
+        if (!checkIsBannedCoIdListValid(rule.bannedCoIdList)) {
+            return false;
+        }
+
+        return true;
+    }
+    function checkIsPlayerRuleListValid(ruleList: ProtoTypes.IRuleForPlayer[] | null | undefined, playersCount: number): boolean {
+        if ((!ruleList) || (ruleList.length !== playersCount)) {
+            return false;
+        }
+
+        const playerIndexes = new Set<number>();
+        const teamIndexes   = new Set<number>();
+        for (const rule of ruleList) {
+            const playerIndex = rule.playerIndex;
+            if ((playerIndex == null)           ||
+                (playerIndex <= 0)              ||
+                (playerIndex > playersCount)    ||
+                (playerIndexes.has(playerIndex))
+            ) {
+                return false;
+            }
+            playerIndexes.add(playerIndex);
+
+            const teamIndex = rule.teamIndex;
+            if ((teamIndex == null)         ||
+                (teamIndex <= 0)            ||
+                (teamIndex > playersCount)
+            ) {
+                return false;
+            }
+            teamIndexes.add(teamIndex);
+        }
+
+        if (playerIndexes.size !== playersCount) {
+            return false;
+        }
+        if (teamIndexes.size <= 1) {
+            return false;
+        }
+
+        return true;
+    }
+    function checkIsBannedCoIdListValid(list: number[] | null | undefined): boolean {
+        // TODO
+        return true;
+    }
+
 
     export function resizeMap(mapRawData: MapRawData, newWidth: number, newHeight: number): MapRawData {
         return {

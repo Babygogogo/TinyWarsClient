@@ -81,7 +81,7 @@ namespace TinyWars.Login {
             if (!Utility.Helpers.checkIsAccountValid(account)) {
                 FloatText.show(Lang.getText(Lang.Type.A0001));
             } else {
-                if ((!password) || (!password.length)) {
+                if ((isTestAccount(account)) && ((!password) || (!password.length))) {
                     LoginProxy.reqLogin(account, account, false); // For convenience for testing
                 } else {
                     if (!Utility.Helpers.checkIsPasswordValid(password)) {
@@ -118,5 +118,12 @@ namespace TinyWars.Login {
                 this._btnRegister.label = Lang.getText(Lang.Type.B0174);
             }
         }
+    }
+
+    function isTestAccount(account: string): boolean {
+        return (account === "babytest1")
+            || (account === "babytest2")
+            || (account === "babytest3")
+            || (account === "babytest4");
     }
 }

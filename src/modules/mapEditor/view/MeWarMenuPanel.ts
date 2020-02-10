@@ -182,8 +182,10 @@ namespace TinyWars.MapEditor {
             const war = this._war;
             Common.InputPanel.show({
                 title           : Lang.getText(Lang.Type.B0225),
+                tips            : null,
                 currentValue    : war.getMapName(),
                 maxChars        : ConfigManager.MAP_CONSTANTS.MaxMapNameLength,
+                charRestrict    : null,
                 callback        : (panel) => {
                     war.setMapName(panel.getInputText());
                     this._updateGroupMapName();
@@ -195,8 +197,10 @@ namespace TinyWars.MapEditor {
             const war = this._war;
             Common.InputPanel.show({
                 title           : Lang.getText(Lang.Type.B0299),
+                tips            : null,
                 currentValue    : war.getMapNameEnglish(),
                 maxChars        : ConfigManager.MAP_CONSTANTS.MaxMapNameEnglishLength,
+                charRestrict    : null,
                 callback        : (panel) => {
                     war.setMapNameEnglish(panel.getInputText());
                     this._updateGroupMapNameEnglish();
@@ -208,8 +212,10 @@ namespace TinyWars.MapEditor {
             const war = this._war;
             Common.InputPanel.show({
                 title           : Lang.getText(Lang.Type.B0163),
+                tips            : null,
                 currentValue    : war.getMapDesigner(),
                 maxChars        : ConfigManager.MAP_CONSTANTS.MaxDesignerLength,
+                charRestrict    : null,
                 callback        : (panel) => {
                     war.setMapDesigner(panel.getInputText());
                     this._updateGroupMapDesigner();
@@ -269,6 +275,9 @@ namespace TinyWars.MapEditor {
             this._labelIsMultiPlayerTitle.text          = Lang.getText(Lang.Type.B0137);
             this._labelIsSinglePlayerTitle.text         = Lang.getText(Lang.Type.B0138);
             this._btnBack.label                         = Lang.getText(Lang.Type.B0146);
+            this._btnModifyMapDesigner.label            = Lang.getText(Lang.Type.B0317);
+            this._btnModifyMapName.label                = Lang.getText(Lang.Type.B0317);
+            this._btnModifyMapNameEnglish.label         = Lang.getText(Lang.Type.B0317);
         }
 
         private _updateGroupMapName(): void {
@@ -408,6 +417,9 @@ namespace TinyWars.MapEditor {
             const commandLoadMap = this._createCommandLoadMap();
             (commandLoadMap) && (dataList.push(commandLoadMap));
 
+            const commandWarRule = this._createCommandWarRule();
+            (commandWarRule) && (dataList.push(commandWarRule));
+
             const commandReviewAccept = this._createCommandReviewAccept();
             (commandReviewAccept) && (dataList.push(commandReviewAccept));
 
@@ -495,6 +507,28 @@ namespace TinyWars.MapEditor {
                         })
                     },
                 };
+            }
+        }
+
+        private _createCommandWarRule(): DataForCommandRenderer | null {
+            return {
+                name    : Lang.getText(Lang.Type.B0314),
+                callback: () => {
+                    const war   = this._war;
+                    const field = war.getField();
+                    if (!war.getIsReview()) {
+                        field.reviseWarRuleList();
+                        MeWarRulePanel.show();
+                        this.close();
+                    } else {
+                        if (field.getWarRuleList().length) {
+                            MeWarRulePanel.show();
+                            this.close();
+                        } else {
+                            FloatText.show(Lang.getText(Lang.Type.A0100));
+                        }
+                    }
+                },
             }
         }
 
