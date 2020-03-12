@@ -5,11 +5,13 @@ namespace TinyWars.SingleCustomWar {
 
     export class ScwTileMapView extends BaseWar.BwTileMapView {
         public updateCoZone(): void {
-            const tileMap                               = this._getTileMap();
-            const war                                   = tileMap.getWar();
-            const coZoneImages                          = this._getCoZoneImages();
-            const teamIndexes                           = (war.getPlayerManager() as ScwPlayerManager).getWatcherTeamIndexesForScw();
-            const { mapWidth, mapHeight, playersCount } = tileMap.getMapRawData();
+            const tileMap                                   = this._getTileMap();
+            const war                                       = tileMap.getWar();
+            const coZoneImages                              = this._getCoZoneImages();
+            const playerManager                             = war.getPlayerManager() as ScwPlayerManager;
+            const teamIndexes                               = playerManager.getWatcherTeamIndexesForScw();
+            const playersCount                              = playerManager.getTotalPlayersCount(false);
+            const { width: mapWidth, height: mapHeight }    = tileMap.getMapSize();
 
             for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
                 const matrix    = coZoneImages.get(playerIndex);

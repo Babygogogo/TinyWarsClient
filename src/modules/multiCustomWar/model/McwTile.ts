@@ -41,15 +41,12 @@ namespace TinyWars.MultiCustomWar {
                     this.init(data, configVersion);
                 } else {
                     const tileMap   = war.getTileMap();
-                    const mapData   = tileMap.getMapRawData();
-                    const gridX     = this.getGridX();
-                    const gridY     = this.getGridY();
-                    const index     = gridX + gridY * tileMap.getMapSize().width;
+                    const gridIndex = this.getGridIndex();
                     this.init({
-                        objectViewId: mapData.tileObjects[index],
-                        baseViewId  : mapData.tileBases[index],
-                        gridX,
-                        gridY,
+                        objectViewId        : tileMap.getInitialObjectViewId(gridIndex),
+                        baseViewId          : tileMap.getInitialBaseViewId(gridIndex),
+                        gridX               : gridIndex.x,
+                        gridY               : gridIndex.y,
                         currentHp           : this.getCurrentHp(),
                         currentBuildPoint   : this.getCurrentBuildPoint(),
                         currentCapturePoint : this.getCurrentCapturePoint(),

@@ -25,7 +25,7 @@ namespace TinyWars.Replay {
             const capturePoint = this.getCurrentCapturePoint();
             (capturePoint !== this.getMaxCapturePoint()) && (data.currentCapturePoint = capturePoint);
 
-            return ReplayHelpers.checkShouldSerializeTile(data, this._getWar().getTileMap().getMapRawData())
+            return ReplayHelpers.checkShouldSerializeTile(data, this.getInitialBaseViewId(), this.getInitialObjectViewId())
                 ? data
                 : null;
         }

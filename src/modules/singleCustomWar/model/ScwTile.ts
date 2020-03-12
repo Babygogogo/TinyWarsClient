@@ -25,7 +25,7 @@ namespace TinyWars.SingleCustomWar {
             const capturePoint = this.getCurrentCapturePoint();
             (capturePoint !== this.getMaxCapturePoint()) && (data.currentCapturePoint = capturePoint);
 
-            return ScwHelpers.checkShouldSerializeTile(data, this._getWar().getTileMap().getMapRawData())
+            return ScwHelpers.checkShouldSerializeTile(data, this.getInitialBaseViewId(), this.getInitialObjectViewId())
                 ? data
                 : null;
         }
