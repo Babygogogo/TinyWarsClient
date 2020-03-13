@@ -130,4 +130,6 @@ C_ScrContinueWar = 1505,
 S_ScrContinueWar = 1506,
 C_ScrSaveWar = 1507,
 S_ScrSaveWar = 1508,
+C_ScrCreateCustomWar = 1509,
+S_ScrCreateCustomWar = 1510,
 }}
