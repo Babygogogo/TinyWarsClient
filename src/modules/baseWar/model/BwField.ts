@@ -141,7 +141,7 @@ namespace TinyWars.BaseWar {
         }
 
         private async _initGridVisionEffect(): Promise<void> {
-            const effect = this.getGridVisionEffect();
+            const effect = this.getGridVisionEffect() || new (this._getGridVisionEffectClass())();
             await effect.init();
             this._setGridVisionEffect(effect);
         }

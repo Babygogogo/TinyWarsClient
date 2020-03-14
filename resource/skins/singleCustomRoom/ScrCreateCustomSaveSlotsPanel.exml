@@ -5,6 +5,15 @@
     <e:Group id="_group" top="60" bottom="60" width="640" horizontalCenter="0">
         <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" />
+        <GameUi:UiButton id="_btnHelp" label="帮助" top="10" left="10">
+            <GameUi:skinName>
+                <e:Skin states="up,down,disabled">
+                    <e:Image width="100%" height="100%" />
+                    <e:Label id="labelDisplay" size="20" bold="true" left="0" right="0" top="0" bottom="0"
+                             textColor="0x00ff00" />
+                </e:Skin>
+            </GameUi:skinName>
+        </GameUi:UiButton>
         <GameUi:UiLabel id="_labelPanelTitle" text="选择存档位置" y="10" size="20" horizontalCenter="0" />
         <GameUi:UiButton id="_btnCancel" label="取消" right="10" top="10">
             <GameUi:skinName>

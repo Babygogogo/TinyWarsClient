@@ -266,13 +266,13 @@ namespace TinyWars.Replay.ReplayModel {
         playerInTurn.setHasVotedForDraw(true);
 
         if (!data.WarActionPlayerVoteForDraw.isAgree) {
-            FloatText.show(Lang.getFormatedText(Lang.Type.F0017, playerInTurn.getNickname()));
+            FloatText.show(Lang.getFormattedText(Lang.Type.F0017, playerInTurn.getNickname()));
             war.setRemainingVotesForDraw(undefined);
         } else {
             if (war.getRemainingVotesForDraw()) {
-                FloatText.show(Lang.getFormatedText(Lang.Type.F0018, playerInTurn.getNickname()));
+                FloatText.show(Lang.getFormattedText(Lang.Type.F0018, playerInTurn.getNickname()));
             } else {
-                FloatText.show(Lang.getFormatedText(Lang.Type.F0019, playerInTurn.getNickname()));
+                FloatText.show(Lang.getFormattedText(Lang.Type.F0019, playerInTurn.getNickname()));
             }
             war.setRemainingVotesForDraw((war.getRemainingVotesForDraw() || war.getPlayerManager().getAlivePlayersCount(false)) - 1);
         }
@@ -440,7 +440,7 @@ namespace TinyWars.Replay.ReplayModel {
                     }
 
                     if (lostPlayerIndex) {
-                        FloatText.show(Lang.getFormatedText(Lang.Type.F0015, war.getPlayerManager().getPlayer(lostPlayerIndex).getNickname()));
+                        FloatText.show(Lang.getFormattedText(Lang.Type.F0015, war.getPlayerManager().getPlayer(lostPlayerIndex).getNickname()));
                         DestructionHelpers.destroyPlayerForce(war, lostPlayerIndex, true);
                     }
 
@@ -581,7 +581,7 @@ namespace TinyWars.Replay.ReplayModel {
                     focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false, () => {
                         focusUnit.updateView();
                         tile.updateView();
-                        FloatText.show(Lang.getFormatedText(Lang.Type.F0016, war.getPlayerManager().getPlayer(lostPlayerIndex).getNickname()));
+                        FloatText.show(Lang.getFormattedText(Lang.Type.F0016, war.getPlayerManager().getPlayer(lostPlayerIndex).getNickname()));
                         DestructionHelpers.destroyPlayerForce(war, lostPlayerIndex, true);
                         ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 

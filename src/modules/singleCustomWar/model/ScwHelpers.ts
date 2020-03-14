@@ -128,20 +128,6 @@ namespace TinyWars.SingleCustomWar.ScwHelpers {
         return cfg ? cfg.productionCost : undefined;
     }
 
-    export function checkShouldSerializeTile(
-        tileData            : Types.SerializedTile,
-        initialBaseViewId   : number | null,
-        initialObjectViewId : number | null,
-    ): boolean {
-        return (tileData.currentBuildPoint      != null)
-            || (tileData.currentCapturePoint    != null)
-            || (tileData.currentHp              != null)
-            || (tileData.baseViewId             != initialBaseViewId)
-            || (tileData.objectViewId           != initialObjectViewId)
-            || (initialBaseViewId               == null)
-            || (initialObjectViewId             == null);
-    }
-
     function _pushToAvailableMovableGrids(grids: AvailableMovableGrid[], gridIndex: GridIndex, prev: GridIndex, totalMoveCost: number): void {
         grids.push({
             currGridIndex: gridIndex,

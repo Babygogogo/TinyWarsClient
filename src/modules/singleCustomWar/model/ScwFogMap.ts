@@ -2,13 +2,14 @@
 namespace TinyWars.SingleCustomWar {
     import VisibilityHelpers    = Utility.VisibilityHelpers;
     import Types                = Utility.Types;
+    import BwHelpers            = BaseWar.BwHelpers;
 
     export class ScwFogMap extends BaseWar.BwFogMap {
         public serialize(): Types.SerializedFogMap {
             const mapSize       = this.getMapSize();
             const mapsForPath   : Types.SerializedBwFogMapForPath[] = [];
             for (const [playerIndex, map] of this._getMapsFromPaths()) {
-                const serializedData = encodeMapForPaths(map, mapSize);
+                const serializedData = BwHelpers.encodeFogMapForPaths(map, mapSize);
                 if (serializedData != null) {
                     mapsForPath.push({
                         playerIndex : playerIndex,
@@ -34,20 +35,5 @@ namespace TinyWars.SingleCustomWar {
                 }
             });
         }
-    }
-
-    function encodeMapForPaths(map: number[][], mapSize: Types.MapSize): string | undefined {
-        const { width, height } = mapSize;
-        const data              = new Array(width * height);
-        let needSerialize       = false;
-
-        for (let x = 0; x < width; ++x) {
-            for (let y = 0; y < height; ++y) {
-                data[x + y * width] = map[x][y];
-                (!needSerialize) && (map[x][y] > 0) && (needSerialize = true);
-            }
-        }
-
-        return needSerialize ? data.join(``) : undefined;
     }
 }

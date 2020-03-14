@@ -93,6 +93,7 @@ namespace TinyWars.MultiCustomWar {
             this._notifyListeners = [
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyMcwPlannerStateChanged },
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.SScrCreateCustomWar,            callback: this._onNotifySScrCreateCustomWar },
             ];
             this._uiListeners = [
                 { ui: this._btnBack, callback: this._onTouchedBtnBack },
@@ -135,6 +136,9 @@ namespace TinyWars.MultiCustomWar {
         }
         private _onNotifyLanguageChanged(e: egret.Event): void {
             this._updateComponentsForLanguage();
+        }
+        private _onNotifySScrCreateCustomWar(e: egret.Event): void {
+            FloatText.show(Lang.getText(Lang.Type.A0104));
         }
 
         private _onTouchedBtnBack(e: egret.TouchEvent): void {
@@ -211,7 +215,7 @@ namespace TinyWars.MultiCustomWar {
         private _updateListPlayer(): void {
             const war   = this._war;
             const data  = [] as DataForPlayerRenderer[];
-            war.getPlayerManager().forEachPlayer(false, player => {
+            war.getPlayerManager().forEachPlayer(false, (player: McwPlayer) => {
                 data.push({
                     war,
                     player,
@@ -267,6 +271,9 @@ namespace TinyWars.MultiCustomWar {
 
             const commandPlayerSurrender = this._createCommandPlayerSurrender();
             (commandPlayerSurrender) && (dataList.push(commandPlayerSurrender));
+
+            const commandSimulation = this._createCommandSimulation();
+            (commandSimulation) && (dataList.push(commandSimulation));
 
             const commandShowTileAnimation = this._createCommandShowTileAnimation();
             (commandShowTileAnimation) && (dataList.push(commandShowTileAnimation));
@@ -345,6 +352,20 @@ namespace TinyWars.MultiCustomWar {
                     },
                 }
             }
+        }
+
+        private _createCommandSimulation(): DataForCommandRenderer | null {
+            const war = this._war;
+            return {
+                name    : Lang.getText(Lang.Type.B0325),
+                callback: () => {
+                    if (war.getIsExecutingAction()) {
+                        FloatText.show(Lang.getText(Lang.Type.A0103));
+                    } else {
+                        SingleCustomRoom.ScrCreateCustomSaveSlotsPanel.show(war.serializeForSimulation());
+                    }
+                },
+            };
         }
 
         private _createCommandPlayerAgreeDraw(): DataForCommandRenderer | undefined {

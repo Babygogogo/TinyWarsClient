@@ -1,7 +1,7 @@
 
 namespace TinyWars.SingleCustomWar {
-    import Types            = Utility.Types;
-    import TileType         = Types.TileType;
+    import Types        = Utility.Types;
+    import BwHelpers    = BaseWar.BwHelpers;
 
     export class ScwTile extends BaseWar.BwTile {
         protected _getViewClass(): new () => BaseWar.BwTileView {
@@ -25,7 +25,7 @@ namespace TinyWars.SingleCustomWar {
             const capturePoint = this.getCurrentCapturePoint();
             (capturePoint !== this.getMaxCapturePoint()) && (data.currentCapturePoint = capturePoint);
 
-            return ScwHelpers.checkShouldSerializeTile(data, this.getInitialBaseViewId(), this.getInitialObjectViewId())
+            return BwHelpers.checkShouldSerializeTile(data, this.getInitialBaseViewId(), this.getInitialObjectViewId())
                 ? data
                 : null;
         }

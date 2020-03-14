@@ -629,4 +629,33 @@ namespace TinyWars.BaseWar.BwHelpers {
             }
         }
     }
+
+    export function encodeFogMapForPaths(map: number[][], mapSize: MapSize): string | undefined {
+        const { width, height } = mapSize;
+        const data              = new Array(width * height);
+        let needSerialize       = false;
+
+        for (let x = 0; x < width; ++x) {
+            for (let y = 0; y < height; ++y) {
+                data[x + y * width] = map[x][y];
+                (!needSerialize) && (map[x][y] > 0) && (needSerialize = true);
+            }
+        }
+
+        return needSerialize ? data.join(``) : undefined;
+    }
+
+    export function checkShouldSerializeTile(
+        tileData            : Types.SerializedTile,
+        initialBaseViewId   : number | null,
+        initialObjectViewId : number | null,
+    ): boolean {
+        return (tileData.currentBuildPoint      != null)
+            || (tileData.currentCapturePoint    != null)
+            || (tileData.currentHp              != null)
+            || (tileData.baseViewId             != initialBaseViewId)
+            || (tileData.objectViewId           != initialObjectViewId)
+            || (initialBaseViewId               == null)
+            || (initialObjectViewId             == null);
+    }
 }

@@ -4,6 +4,7 @@ namespace TinyWars.Replay {
     import VisibilityHelpers        = Utility.VisibilityHelpers;
     import SerializedMcFogMap       = Types.SerializedFogMap;
     import MapSize                  = Types.MapSize;
+    import BwHelpers                = BaseWar.BwHelpers;
 
     export class ReplayFogMap extends BaseWar.BwFogMap {
         public startRunning(war: ReplayWar): void {
@@ -23,7 +24,7 @@ namespace TinyWars.Replay {
             const mapSize = this.getMapSize();
             const mapsForPath: Types.SerializedBwFogMapForPath[] = [];
             for (const [playerIndex, map] of this._getMapsFromPaths()) {
-                const serializedData = encodeMapForPaths(map, mapSize);
+                const serializedData = BaseWar.BwHelpers.encodeFogMapForPaths(map, mapSize);
                 if (serializedData != null) {
                     mapsForPath.push({
                         playerIndex : playerIndex,
@@ -38,20 +39,5 @@ namespace TinyWars.Replay {
                 mapsForPath             : mapsForPath.length ? mapsForPath : undefined,
             };
         }
-    }
-
-    function encodeMapForPaths(map: number[][], mapSize: MapSize): string | undefined {
-        const { width, height } = mapSize;
-        const data              = new Array(width * height);
-        let needSerialize       = false;
-
-        for (let x = 0; x < width; ++x) {
-            for (let y = 0; y < height; ++y) {
-                data[x + y * width] = map[x][y];
-                (!needSerialize) && (map[x][y] > 0) && (needSerialize = true);
-            }
-        }
-
-        return needSerialize ? data.join(``) : undefined;
     }
 }

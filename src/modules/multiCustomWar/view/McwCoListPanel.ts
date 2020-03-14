@@ -155,7 +155,7 @@ namespace TinyWars.MultiCustomWar {
             const configVersion = war.getConfigVersion();
 
             for (let i = 1; i <= playerManager.getTotalPlayersCount(false); ++i) {
-                const player = playerManager.getPlayer(i);
+                const player = playerManager.getPlayer(i) as McwPlayer;
                 data.push({
                     configVersion,
                     player,

@@ -530,6 +530,14 @@ namespace TinyWars.Utility.Lang {
             `这是一局自定义规则的游戏，请确保您已经理解了所有的规则设定。\n确定要加入这局游戏吗？`,
             `Please make sure that you have recognized all the custom rules before joining this game.\nAre you sure to continue?`,
         ],
+        [Type.A0103]: [
+            `有玩家正在进行操作，请等待该操作结束后重试`,
+            `A player is taking a move. Please retry when the move ends`,
+        ],
+        [Type.A0104]: [
+            `模拟战已成功创建。您可以通过单人模式进入该战局。`,
+            `The simulation war is created successfully.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -1814,6 +1822,14 @@ namespace TinyWars.Utility.Lang {
             `只能使用数字`,
             `Digits only`,
         ],
+        [Type.B0324]: [
+            `暂无预览`,
+            `No Preview`,
+        ],
+        [Type.B0325]: [
+            `模拟战`,
+            `Simulation`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -2431,6 +2447,18 @@ namespace TinyWars.Utility.Lang {
                 `3 After the registry you cannot change your username, but the password and nickname can be changed.`,
             ].join("\n"),
         ],
+
+        [RichType.R0006]: [
+            [
+                `模拟战是一种辅助您进行战局规划/地图测试的工具。`,
+                `该工具允许您把当前所见到的战局信息原样复制到单人战局中。您可以在该单人战局中随意操作，还可以无限制地存档、读档，直到您找到最好的走法为止。`,
+                `在该模式下，游戏规则仍然正常生效。换言之，您可以结束回合，游戏会为您正常结算相关数据。`,
+                `另：上帝模式开发中，敬请期待！`,
+            ].join("\n"),
+            [
+                `Untranslated...`,
+            ].join("\n"),
+        ],
     };
 
     let _languageType = LanguageType.Chinese;
@@ -2452,7 +2480,7 @@ namespace TinyWars.Utility.Lang {
         return _LANG_DATA[t][language];
     }
 
-    export function getFormatedText(t: Type, ...params: any[]): string {
+    export function getFormattedText(t: Type, ...params: any[]): string {
         return Helpers.formatString(getText(t), ...params);
     }
 
