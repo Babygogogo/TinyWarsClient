@@ -18,11 +18,10 @@ namespace TinyWars.BaseWar {
         private _mapsFromPaths          : Map<number, Visibility[][]>;
         private _war                    : BwWar;
 
-        public async init(data: SerializedBwFogMap, mapFileName: string): Promise<BwFogMap> {
-            const mapInfo           = await MapManager.getExtraData(mapFileName);
-            const mapSize: MapSize  = { width: mapInfo.mapWidth, height: mapInfo.mapHeight };
-            this._mapsFromPaths     = createEmptyMaps<Visibility>(mapSize, mapInfo.playersCount);
-            this._setMapSize(mapInfo.mapWidth, mapInfo.mapHeight);
+        public async init(data: SerializedBwFogMap, mapSizeAndMaxPlayerIndex: Types.MapSizeAndMaxPlayerIndex): Promise<BwFogMap> {
+            const mapSize       : MapSize = { width: mapSizeAndMaxPlayerIndex.mapWidth, height: mapSizeAndMaxPlayerIndex.mapHeight };
+            this._mapsFromPaths = createEmptyMaps<Visibility>(mapSize, mapSizeAndMaxPlayerIndex.maxPlayerIndex);
+            this._setMapSize(mapSize);
             this.setForceFogCode(data.forceFogCode || ForceFogCode.None);
             this.setForceExpirePlayerIndex(data.forceExpirePlayerIndex);
             this.setForceExpireTurnIndex(data.forceExpireTurnIndex);
@@ -48,8 +47,8 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other public functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _setMapSize(width: number, height: number): void {
-            this._mapSize = { width: width, height: height };
+        private _setMapSize(mapSize: MapSize): void {
+            this._mapSize = mapSize;
         }
         public getMapSize(): MapSize {
             return this._mapSize;
@@ -195,9 +194,9 @@ namespace TinyWars.BaseWar {
         }
     }
 
-    function createEmptyMaps<T extends (number | Visibility)>(mapSize: MapSize, playersCount: number): Map<number, T[][]> {
+    function createEmptyMaps<T extends (number | Visibility)>(mapSize: MapSize, maxPlayerIndex: number): Map<number, T[][]> {
         const map = new Map<number, T[][]>();
-        for (let i = 0; i < playersCount + 1; ++i) {
+        for (let i = 0; i <= maxPlayerIndex; ++i) {
             map.set(i, Helpers.createEmptyMap<T>(mapSize.width, mapSize.height, 0 as T));
         }
         return map;

@@ -374,6 +374,12 @@ namespace TinyWars.Utility.Types {
         mapRawData  : ProtoTypes.IMapRawData | null | undefined;
     }
 
+    export type MapSizeAndMaxPlayerIndex = {
+        mapWidth        : number;
+        mapHeight       : number;
+        maxPlayerIndex  : number;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////
     // Enums.
     ////////////////////////////////////////////////////////////////////////////////

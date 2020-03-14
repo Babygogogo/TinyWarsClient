@@ -1,18 +1,24 @@
 
 namespace TinyWars.MultiCustomWar {
-    import Types            = Utility.Types;
-    import SerializedMcWar  = Types.SerializedWar;
+    import Types    = Utility.Types;
+    import Logger   = Utility.Logger;
 
     export class McwWar extends BaseWar.BwWar {
-        private _isEnded        = false;
+        private _isEnded = false;
 
-        public async init(data: SerializedMcWar): Promise<McwWar> {
-            await super.init(data);
+        public async init(data: Types.SerializedWar): Promise<McwWar> {
+            this._baseInit(data);
+
+            this._initPlayerManager(data.players);
+            await this._initField(
+                data.field,
+                data.configVersion,
+                data.mapFileName,
+                await BaseWar.BwHelpers.getMapSizeAndMaxPlayerIndex(data)
+            );
+            this._initTurnManager(data.turn);
 
             this.setNextActionId(data.nextActionId);
-            this._setPlayerManager(new McwPlayerManager().init(data.players));
-            this._setField(await new McwField().init(data.field, this.getConfigVersion(), this.getMapFileName()));
-            this._setTurnManager(new McwTurnManager().init(data.turn));
 
             this._initView();
 
@@ -21,6 +27,15 @@ namespace TinyWars.MultiCustomWar {
 
         protected _getViewClass(): new () => McwWarView {
             return McwWarView;
+        }
+        protected _getFieldClass(): new () => McwField {
+            return McwField;
+        }
+        protected _getPlayerManagerClass(): new () => McwPlayerManager {
+            return McwPlayerManager;
+        }
+        protected _getTurnManagerClass(): new () => McwTurnManager {
+            return McwTurnManager;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

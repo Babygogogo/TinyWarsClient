@@ -599,4 +599,34 @@ namespace TinyWars.BaseWar.BwHelpers {
 
         return null;
     }
+
+    export async function getMapSizeAndMaxPlayerIndex(data: Types.SerializedWar): Promise<Types.MapSizeAndMaxPlayerIndex | null> {
+        const mapFileName = data.mapFileName;
+        if (mapFileName) {
+            const mapExtraData = await WarMap.WarMapModel.getExtraData(mapFileName);
+            return !mapExtraData
+                ? null
+                : {
+                    mapWidth        : mapExtraData.mapWidth,
+                    mapHeight       : mapExtraData.mapHeight,
+                    maxPlayerIndex  : mapExtraData.playersCount,
+                };
+        } else {
+            const tiles             = data.field.tileMap.tiles;
+            const maxPlayerIndex    = data.players.length - 1;
+            if ((!tiles) || (!tiles.length) || (!maxPlayerIndex)) {
+                return null;
+            } else {
+                let mapWidth   = 0;
+                let mapHeight  = 0;
+                for (const tile of tiles) {
+                    mapWidth   = Math.max(mapWidth, tile.gridX || 0);
+                    mapHeight  = Math.max(mapHeight, tile.gridY || 0);
+                }
+                return ((mapWidth > 0) && (mapHeight > 0))
+                    ? { mapWidth, mapHeight, maxPlayerIndex }
+                    : null;
+            }
+        }
+    }
 }

@@ -4,7 +4,6 @@ namespace TinyWars.BaseWar {
     import Types                = Utility.Types;
     import Helpers              = Utility.Helpers;
     import ProtoTypes           = Utility.ProtoTypes;
-    import Logger               = Utility.Logger;
     import SerializedBwTileMap  = Types.SerializedTileMap;
     import MapSize              = Types.MapSize;
     import GridIndex            = Types.GridIndex;
@@ -20,11 +19,16 @@ namespace TinyWars.BaseWar {
         protected abstract _getBwTileClass(): new () => BwTile;
         protected abstract _getViewClass(): new () => BwTileMapView;
 
-        public async init(configVersion: string, mapFileName: string, data?: SerializedBwTileMap): Promise<BwTileMap> {
+        public async init(
+            data                    : SerializedBwTileMap | null | undefined,
+            configVersion           : string,
+            mapFileName             : string | null | undefined,
+            mapSizeAndMaxPlayerIndex: Types.MapSizeAndMaxPlayerIndex,
+        ): Promise<BwTileMap> {
             if (mapFileName) {
                 await this._initWithMapFileName(configVersion, mapFileName, data);
             } else {
-                await this._initWithoutMapFileName(configVersion, data);
+                await this._initWithoutMapFileName(configVersion, mapSizeAndMaxPlayerIndex, data);
             }
 
             this._view = this._view || new (this._getViewClass())();
@@ -69,21 +73,20 @@ namespace TinyWars.BaseWar {
 
             return this;
         }
-        private async _initWithoutMapFileName(configVersion: string, data?: SerializedBwTileMap): Promise<BwTileMap> {
-            const mapSize = getMapSizeWithSerializedMap(data);
-            if (!mapSize) {
-                Logger.error("BwTileMap._initWithoutMapFileName() invalid data!!");
-            } else {
-                const { width: mapWidth, height: mapHeight }    = mapSize;
-                const map                                       = Helpers.createEmptyMap<BwTile>(mapWidth);
+        private async _initWithoutMapFileName(
+            configVersion               : string,
+            mapSizeAndMaxPlayerIndex    : Types.MapSizeAndMaxPlayerIndex,
+            data                        : SerializedBwTileMap | null | undefined,
+        ): Promise<BwTileMap> {
+            const { mapWidth, mapHeight }   = mapSizeAndMaxPlayerIndex;
+            const map                       = Helpers.createEmptyMap<BwTile>(mapWidth);
 
-                for (const tileData of data ? data.tiles || [] : []) {
-                    map[tileData.gridX!][tileData.gridY!] = new (this._getBwTileClass())().init(tileData, configVersion);
-                }
-
-                this._map = map;
-                this._setMapSize(mapWidth, mapHeight);
+            for (const tileData of data ? data.tiles || [] : []) {
+                map[tileData.gridX!][tileData.gridY!] = new (this._getBwTileClass())().init(tileData, configVersion);
             }
+
+            this._map = map;
+            this._setMapSize(mapWidth, mapHeight);
 
             return this;
         }
@@ -159,23 +162,6 @@ namespace TinyWars.BaseWar {
                 }
             }
             return count;
-        }
-    }
-
-    function getMapSizeWithSerializedMap(data: SerializedBwTileMap | null | undefined): MapSize | null {
-        const tiles = data ? data.tiles : null;
-        if ((!tiles) || (!tiles.length)) {
-            return null;
-        } else {
-            let width   = 0;
-            let height  = 0;
-            for (const tile of tiles) {
-                width   = Math.max(width, tile.gridX || 0);
-                height  = Math.max(height, tile.gridY || 0);
-            }
-            return ((width > 0) && (height > 0))
-                ? { width, height }
-                : null;
         }
     }
 }

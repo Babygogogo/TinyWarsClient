@@ -205,9 +205,11 @@ namespace TinyWars.SingleCustomWar {
             this._btnBack.label                         = Lang.getText(Lang.Type.B0146);
         }
 
-        private _updateGroupInfo(): void {
+        private async _updateGroupInfo(): Promise<void> {
             const war                               = this._war;
             const mapFileName                       = war.getMapFileName();
+            this._labelMapName.text                 = await WarMapModel.getMapNameInLanguage(mapFileName) || "----";
+            this._labelMapDesigner.text             = await WarMapModel.getMapDesigner(mapFileName) || "----";
             this._labelWarId.text                   = `${war.getWarId()}`;
             this._labelTurnIndex.text               = `${war.getTurnManager().getTurnIndex()}`;
             this._labelActionId.text                = `${war.getNextActionId() - 1}`;
@@ -219,8 +221,6 @@ namespace TinyWars.SingleCustomWar {
             this._labelVisionRangeModifier.text     = `${war.getSettingsVisionRangeModifier()}`;
             this._labelLuckLowerLimit.text          = `${war.getSettingsLuckLowerLimit()}%`;
             this._labelLuckUpperLimit.text          = `${war.getSettingsLuckUpperLimit()}%`;
-            WarMapModel.getMapNameInLanguage(mapFileName).then(value => this._labelMapName.text = value);
-            WarMapModel.getExtraData(mapFileName).then(value => this._labelMapDesigner.text = value.mapDesigner);
         }
 
         private _updateListPlayer(): void {

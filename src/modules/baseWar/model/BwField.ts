@@ -1,7 +1,7 @@
 
 namespace TinyWars.BaseWar {
-    import Types                = Utility.Types;
-    import SerializedBwField    = Types.SerializedField;
+    import Types                    = Utility.Types;
+    import MapSizeAndMaxPlayerIndex = Types.MapSizeAndMaxPlayerIndex;
 
     export abstract class BwField {
         private _unitMap            : BwUnitMap;
@@ -12,13 +12,18 @@ namespace TinyWars.BaseWar {
         private _gridVisionEffect   : BwGridVisionEffect;
         private _view               : BwFieldView;
 
-        public async init(data: SerializedBwField, configVersion: string, mapFileName: string): Promise<BwField> {
-            this._setFogMap(await (this.getFogMap() || new (this._getFogMapClass())).init(data.fogMap, mapFileName));
-            this._setTileMap(await (this.getTileMap() || new (this._getTileMapClass())).init(configVersion, mapFileName, data.tileMap));
-            this._setUnitMap(await (this.getUnitMap() || new (this._getUnitMapClass())).init(configVersion, mapFileName, data.unitMap));
-            this._setCursor(await (this.getCursor() || new (this._getCursorClass())).init(mapFileName));
-            this._setActionPlanner(await (this.getActionPlanner() || new (this._getActionPlannerClass())).init(mapFileName));
-            this._setGridVisionEffect(await (this.getGridVisionEffect() || new (this._getGridVisionEffectClass())).init());
+        public async init(
+            data                    : Types.SerializedField,
+            configVersion           : string,
+            mapFileName             : string | null | undefined,
+            mapSizeAndMaxPlayerIndex: MapSizeAndMaxPlayerIndex
+        ): Promise<BwField> {
+            await this._initFogMap(data.fogMap, mapSizeAndMaxPlayerIndex);
+            await this._initTileMap(data.tileMap, configVersion, mapFileName, mapSizeAndMaxPlayerIndex);
+            await this._initUnitMap(data.unitMap, configVersion, mapFileName, mapSizeAndMaxPlayerIndex);
+            await this._initCursor(mapSizeAndMaxPlayerIndex);
+            await this._initActionPlanner(mapSizeAndMaxPlayerIndex);
+            await this._initGridVisionEffect();
 
             this._view = this._view || new (this._getViewClass())();
             this._view.init(this);
@@ -65,6 +70,11 @@ namespace TinyWars.BaseWar {
             return this._view;
         }
 
+        private async _initFogMap(data: Types.SerializedFogMap, mapSizeAndMaxPlayerIndex: MapSizeAndMaxPlayerIndex): Promise<void> {
+            const fogMap = this.getFogMap() || new (this._getFogMapClass())();
+            await fogMap.init(data, mapSizeAndMaxPlayerIndex);
+            this._setFogMap(fogMap);
+        }
         private _setFogMap(map: BwFogMap): void {
             this._fogMap = map;
         }
@@ -72,6 +82,16 @@ namespace TinyWars.BaseWar {
             return this._fogMap;
         }
 
+        private async _initTileMap(
+            data                    : Types.SerializedTileMap | null | undefined,
+            configVersion           : string,
+            mapFileName             : string | null | undefined,
+            mapSizeAndMaxPlayerIndex: MapSizeAndMaxPlayerIndex
+        ): Promise<void> {
+            const tileMap = this.getTileMap() || new (this._getTileMapClass())();
+            await tileMap.init(data, configVersion, mapFileName, mapSizeAndMaxPlayerIndex);
+            this._setTileMap(tileMap);
+        }
         private _setTileMap(map: BwTileMap): void {
             this._tileMap = map;
         }
@@ -79,6 +99,16 @@ namespace TinyWars.BaseWar {
             return this._tileMap;
         }
 
+        private async _initUnitMap(
+            data                    : Types.SerializedUnitMap | null | undefined,
+            configVersion           : string,
+            mapFileName             : string | null | undefined,
+            mapSizeAndMaxPlayerIndex: MapSizeAndMaxPlayerIndex
+        ): Promise<void> {
+            const unitMap = this.getUnitMap() || new (this._getUnitMapClass())();
+            await unitMap.init(data, configVersion, mapFileName, mapSizeAndMaxPlayerIndex);
+            this._setUnitMap(unitMap);
+        }
         private _setUnitMap(map: BwUnitMap): void {
             this._unitMap = map;
         }
@@ -86,6 +116,11 @@ namespace TinyWars.BaseWar {
             return this._unitMap;
         }
 
+        private async _initCursor(mapSizeAndMaxPlayerIndex: MapSizeAndMaxPlayerIndex): Promise<void> {
+            const cursor = this.getCursor() || new (this._getCursorClass())();
+            await cursor.init(mapSizeAndMaxPlayerIndex);
+            this._setCursor(cursor);
+        }
         private _setCursor(cursor: BwCursor): void {
             this._cursor = cursor;
         }
@@ -93,6 +128,11 @@ namespace TinyWars.BaseWar {
             return this._cursor;
         }
 
+        private async _initActionPlanner(mapSizeAndMaxPlayerIndex: MapSizeAndMaxPlayerIndex): Promise<void> {
+            const actionPlanner = this.getActionPlanner() || new (this._getActionPlannerClass())();
+            await actionPlanner.init(mapSizeAndMaxPlayerIndex);
+            this._setActionPlanner(actionPlanner);
+        }
         private _setActionPlanner(actionPlanner: BwActionPlanner): void {
             this._actionPlanner = actionPlanner;
         }
@@ -100,6 +140,11 @@ namespace TinyWars.BaseWar {
             return this._actionPlanner;
         }
 
+        private async _initGridVisionEffect(): Promise<void> {
+            const effect = this.getGridVisionEffect();
+            await effect.init();
+            this._setGridVisionEffect(effect);
+        }
         private _setGridVisionEffect(gridVisionEffect: BwGridVisionEffect): void {
             this._gridVisionEffect = gridVisionEffect;
         }
