@@ -3883,6 +3883,9 @@ export declare interface ISerializedWar {
     /** SerializedWar warRuleIndex */
     warRuleIndex?: (number|null);
 
+    /** SerializedWar isSinglePlayerCheating */
+    isSinglePlayerCheating?: (boolean|null);
+
     /** SerializedWar nextActionId */
     nextActionId?: (number|null);
 
@@ -3979,6 +3982,9 @@ export declare class SerializedWar implements ISerializedWar {
 
     /** SerializedWar warRuleIndex. */
     public warRuleIndex: number;
+
+    /** SerializedWar isSinglePlayerCheating. */
+    public isSinglePlayerCheating: boolean;
 
     /** SerializedWar nextActionId. */
     public nextActionId: number;
@@ -9120,6 +9126,12 @@ export declare interface IMessageContainer {
 
     /** MessageContainer S_ScrSaveWar */
     S_ScrSaveWar?: (IS_ScrSaveWar|null);
+
+    /** MessageContainer C_ScrCreateCustomWar */
+    C_ScrCreateCustomWar?: (IC_ScrCreateCustomWar|null);
+
+    /** MessageContainer S_ScrCreateCustomWar */
+    S_ScrCreateCustomWar?: (IS_ScrCreateCustomWar|null);
 }
 
 /** Represents a MessageContainer. */
@@ -9517,6 +9529,12 @@ export declare class MessageContainer implements IMessageContainer {
 
     /** MessageContainer S_ScrSaveWar. */
     public S_ScrSaveWar?: (IS_ScrSaveWar|null);
+
+    /** MessageContainer C_ScrCreateCustomWar. */
+    public C_ScrCreateCustomWar?: (IC_ScrCreateCustomWar|null);
+
+    /** MessageContainer S_ScrCreateCustomWar. */
+    public S_ScrCreateCustomWar?: (IS_ScrCreateCustomWar|null);
 
     /**
      * Creates a new MessageContainer instance using the specified properties.
@@ -22646,6 +22664,192 @@ export declare class S_ScrSaveWar implements IS_ScrSaveWar {
 
     /**
      * Converts this S_ScrSaveWar to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_ScrCreateCustomWar. */
+export declare interface IC_ScrCreateCustomWar {
+
+    /** C_ScrCreateCustomWar warData */
+    warData?: (ISerializedWar|null);
+}
+
+/** Represents a C_ScrCreateCustomWar. */
+export declare class C_ScrCreateCustomWar implements IC_ScrCreateCustomWar {
+
+    /**
+     * Constructs a new C_ScrCreateCustomWar.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_ScrCreateCustomWar);
+
+    /** C_ScrCreateCustomWar warData. */
+    public warData?: (ISerializedWar|null);
+
+    /**
+     * Creates a new C_ScrCreateCustomWar instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_ScrCreateCustomWar instance
+     */
+    public static create(properties?: IC_ScrCreateCustomWar): C_ScrCreateCustomWar;
+
+    /**
+     * Encodes the specified C_ScrCreateCustomWar message. Does not implicitly {@link C_ScrCreateCustomWar.verify|verify} messages.
+     * @param message C_ScrCreateCustomWar message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_ScrCreateCustomWar, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_ScrCreateCustomWar message, length delimited. Does not implicitly {@link C_ScrCreateCustomWar.verify|verify} messages.
+     * @param message C_ScrCreateCustomWar message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_ScrCreateCustomWar, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_ScrCreateCustomWar message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_ScrCreateCustomWar
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_ScrCreateCustomWar;
+
+    /**
+     * Decodes a C_ScrCreateCustomWar message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_ScrCreateCustomWar
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_ScrCreateCustomWar;
+
+    /**
+     * Verifies a C_ScrCreateCustomWar message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_ScrCreateCustomWar message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_ScrCreateCustomWar
+     */
+    public static fromObject(object: { [k: string]: any }): C_ScrCreateCustomWar;
+
+    /**
+     * Creates a plain object from a C_ScrCreateCustomWar message. Also converts values to other types if specified.
+     * @param message C_ScrCreateCustomWar
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_ScrCreateCustomWar, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_ScrCreateCustomWar to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_ScrCreateCustomWar. */
+export declare interface IS_ScrCreateCustomWar {
+
+    /** S_ScrCreateCustomWar errorCode */
+    errorCode?: (number|null);
+
+    /** S_ScrCreateCustomWar warData */
+    warData?: (ISerializedWar|null);
+}
+
+/** Represents a S_ScrCreateCustomWar. */
+export declare class S_ScrCreateCustomWar implements IS_ScrCreateCustomWar {
+
+    /**
+     * Constructs a new S_ScrCreateCustomWar.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_ScrCreateCustomWar);
+
+    /** S_ScrCreateCustomWar errorCode. */
+    public errorCode: number;
+
+    /** S_ScrCreateCustomWar warData. */
+    public warData?: (ISerializedWar|null);
+
+    /**
+     * Creates a new S_ScrCreateCustomWar instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_ScrCreateCustomWar instance
+     */
+    public static create(properties?: IS_ScrCreateCustomWar): S_ScrCreateCustomWar;
+
+    /**
+     * Encodes the specified S_ScrCreateCustomWar message. Does not implicitly {@link S_ScrCreateCustomWar.verify|verify} messages.
+     * @param message S_ScrCreateCustomWar message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_ScrCreateCustomWar, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_ScrCreateCustomWar message, length delimited. Does not implicitly {@link S_ScrCreateCustomWar.verify|verify} messages.
+     * @param message S_ScrCreateCustomWar message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_ScrCreateCustomWar, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_ScrCreateCustomWar message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_ScrCreateCustomWar
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_ScrCreateCustomWar;
+
+    /**
+     * Decodes a S_ScrCreateCustomWar message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_ScrCreateCustomWar
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_ScrCreateCustomWar;
+
+    /**
+     * Verifies a S_ScrCreateCustomWar message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_ScrCreateCustomWar message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_ScrCreateCustomWar
+     */
+    public static fromObject(object: { [k: string]: any }): S_ScrCreateCustomWar;
+
+    /**
+     * Creates a plain object from a S_ScrCreateCustomWar message. Also converts values to other types if specified.
+     * @param message S_ScrCreateCustomWar
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_ScrCreateCustomWar, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_ScrCreateCustomWar to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };

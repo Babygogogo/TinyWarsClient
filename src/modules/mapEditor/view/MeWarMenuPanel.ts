@@ -89,11 +89,12 @@ namespace TinyWars.MapEditor {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
-                { type: Notify.Type.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
-                { type: Notify.Type.SMeSaveMap,         callback: this._onNotifySMeSaveMap },
-                { type: Notify.Type.SMmReviewMap,       callback: this._onNotifySMmReviewMap },
+                { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.TileAnimationTick,      callback: this._onNotifyTileAnimationTick },
+                { type: Notify.Type.UnitAnimationTick,      callback: this._onNotifyUnitAnimationTick },
+                { type: Notify.Type.SMeSaveMap,             callback: this._onNotifySMeSaveMap },
+                { type: Notify.Type.SMmReviewMap,           callback: this._onNotifySMmReviewMap },
+                { type: Notify.Type.SScrCreateCustomWar,    callback: this._onNotifySScrCreateCustomWar },
             ];
             this._uiListeners = [
                 { ui: this._btnBack,                    callback: this._onTouchedBtnBack },
@@ -143,6 +144,10 @@ namespace TinyWars.MapEditor {
                 FloatText.show(Lang.getText(Lang.Type.A0093));
             }
             Utility.FlowManager.gotoLobby();
+        }
+
+        private _onNotifySScrCreateCustomWar(e: egret.Event): void {
+            FloatText.show(Lang.getText(Lang.Type.A0104));
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
@@ -438,6 +443,9 @@ namespace TinyWars.MapEditor {
         private _createDataForAdvancedMenu(): DataForCommandRenderer[] {
             const dataList = [] as DataForCommandRenderer[];
 
+            const commandSimulation = this._createCommandSimulation();
+            (commandSimulation) && (dataList.push(commandSimulation));
+
             const commandShowTileAnimation = this._createCommandShowTileAnimation();
             (commandShowTileAnimation) && (dataList.push(commandShowTileAnimation));
 
@@ -576,6 +584,16 @@ namespace TinyWars.MapEditor {
                     });
                 },
             }
+        }
+
+        private _createCommandSimulation(): DataForCommandRenderer | null {
+            const war = this._war;
+            return {
+                name    : Lang.getText(Lang.Type.B0325),
+                callback: () => {
+                    SingleCustomRoom.ScrCreateCustomSaveSlotsPanel.show(war.serializeForSimulation());
+                },
+            };
         }
 
         private _createCommandShowTileAnimation(): DataForCommandRenderer | null {

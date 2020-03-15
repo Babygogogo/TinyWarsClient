@@ -1,16 +1,18 @@
 
 namespace TinyWars.SingleCustomRoom.ScrProxy {
-    import NetManager = Network.Manager;
-    import ActionCode = Network.Codes;
-    import ProtoTypes = Utility.ProtoTypes;
-    import Notify     = Utility.Notify;
+    import NetManager   = Network.Manager;
+    import ActionCode   = Network.Codes;
+    import ProtoTypes   = Utility.ProtoTypes;
+    import Notify       = Utility.Notify;
+    import Types        = Utility.Types;
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: ActionCode.S_ScrCreateWar,                   callback: _onSScrCreateWar, },
-            { msgCode: ActionCode.S_ScrGetSaveSlotInfoList,         callback: _onSScrGetSaveSlotInfoList, },
-            { msgCode: ActionCode.S_ScrContinueWar,                 callback: _onSScrContinueWar, },
-            { msgCode: ActionCode.S_ScrSaveWar,                     callback: _onSScrSaveWar, },
+            { msgCode: ActionCode.S_ScrCreateWar,           callback: _onSScrCreateWar, },
+            { msgCode: ActionCode.S_ScrGetSaveSlotInfoList, callback: _onSScrGetSaveSlotInfoList, },
+            { msgCode: ActionCode.S_ScrContinueWar,         callback: _onSScrContinueWar, },
+            { msgCode: ActionCode.S_ScrSaveWar,             callback: _onSScrSaveWar, },
+            { msgCode: ActionCode.S_ScrCreateCustomWar,     callback: _onSScrCreateCustomWar },
         ], ScrProxy);
     }
 
@@ -67,6 +69,20 @@ namespace TinyWars.SingleCustomRoom.ScrProxy {
         const data = e.data as ProtoTypes.IS_ScrSaveWar;
         if (!data.errorCode) {
             Notify.dispatch(Notify.Type.SScrSaveWar, data);
+        }
+    }
+
+    export function reqScrCreateCustomWar(warData: Types.SerializedWar): void {
+        NetManager.send({
+            C_ScrCreateCustomWar: {
+                warData,
+            },
+        });
+    }
+    function _onSScrCreateCustomWar(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_ScrCreateCustomWar;
+        if (!data.errorCode) {
+            Notify.dispatch(Notify.Type.SScrCreateCustomWar, data);
         }
     }
 }

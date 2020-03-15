@@ -75,7 +75,7 @@ namespace TinyWars.MapEditor {
                 designerUserId  : this.getDesignerUserId(),
                 isMultiPlayer   : this.getIsMultiPlayer(),
                 isSinglePlayer  : this.getIsSinglePlayer(),
-                playersCount    : this.getPlayersCount(),
+                playersCount    : this.getMaxPlayerIndex(),
                 tileBases       : serializedTileMap.tileBases,
                 tileObjects     : serializedTileMap.tileObjects,
                 units           : null,
@@ -90,6 +90,14 @@ namespace TinyWars.MapEditor {
                 list.push(data.serialize());
             }
             return list;
+        }
+
+        public serializeForSimulation(): Types.SerializedField {
+            return {
+                fogMap  : this._generateSimulationDataForFogMap(),
+                unitMap : this.getUnitMap().serializeForSimulation(),
+                tileMap : this.getTileMap().serializeForSimulation(),
+            };
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -176,7 +184,7 @@ namespace TinyWars.MapEditor {
             return this._isSinglePlayer;
         }
 
-        public getPlayersCount(): number {
+        public getMaxPlayerIndex(): number {
             let playersCount = 0;
             this.getTileMap().forEachTile(tile => {
                 playersCount = Math.max(playersCount, tile.getPlayerIndex());
@@ -202,7 +210,7 @@ namespace TinyWars.MapEditor {
                 list.push(new MeWarRule());
             }
 
-            const playersCount = this.getPlayersCount();
+            const playersCount = this.getMaxPlayerIndex();
             for (const rule of list) {
                 rule.reviseForPlayersCount(playersCount);
             }
@@ -218,8 +226,17 @@ namespace TinyWars.MapEditor {
         }
         public addWarRule(): void {
             const newRule = new MeWarRule();
-            newRule.reviseForPlayersCount(this.getPlayersCount());
+            newRule.reviseForPlayersCount(this.getMaxPlayerIndex());
             this.getWarRuleList().push(newRule);
+        }
+
+        private _generateSimulationDataForFogMap(): Types.SerializedFogMap {
+            return {
+                forceFogCode            : Types.ForceFogCode.None,
+                forceExpirePlayerIndex  : null,
+                forceExpireTurnIndex    : null,
+                mapsForPath             : null,
+            };
         }
     }
 }

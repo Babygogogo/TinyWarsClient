@@ -1,10 +1,19 @@
 
 namespace TinyWars.MultiCustomWar {
+    import Types = Utility.Types;
+
     export class McwPlayerManager extends BaseWar.BwPlayerManager {
         private _loggedInPlayer : McwPlayer;
 
         protected _getPlayerClass(): new () => BaseWar.BwPlayer {
             return McwPlayer;
+        }
+
+        public serializeForSimulation(): Types.SerializedPlayer[] {
+            const dataList: Types.SerializedPlayer[] = [];
+            this.forEachPlayer(true, (player: McwPlayer) => dataList.push(player.serializeForSimulation()));
+
+            return dataList;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -15,7 +24,7 @@ namespace TinyWars.MultiCustomWar {
                 const userId = User.UserModel.getSelfUserId();
                 for (const [, player] of this.getAllPlayers()) {
                     if (player.getUserId() === userId) {
-                        this._loggedInPlayer = player;
+                        this._loggedInPlayer = player as McwPlayer;
                         break;
                     }
                 }

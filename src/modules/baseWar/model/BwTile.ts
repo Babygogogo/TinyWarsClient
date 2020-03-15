@@ -84,12 +84,22 @@ namespace TinyWars.BaseWar {
         public getBaseViewId(): number {
             return this._baseViewId;
         }
+        public getInitialBaseViewId(): number | null {
+            const war       = this._getWar();
+            const tileMap   = war ? war.getTileMap() : null;
+            return tileMap ? tileMap.getInitialBaseViewId(this.getGridIndex()) : null;
+        }
 
         private _setObjectViewId(id: number): void {
             this._objectViewId = id;
         }
         public getObjectViewId(): number {
             return this._objectViewId;
+        }
+        public getInitialObjectViewId(): number | null {
+            const war       = this._getWar();
+            const tileMap   = war ? war.getTileMap() : null;
+            return tileMap ? tileMap.getInitialObjectViewId(this.getGridIndex()) : null;
         }
         public getNeutralObjectViewId(): number {
             return this.getObjectViewId() - this.getPlayerIndex();

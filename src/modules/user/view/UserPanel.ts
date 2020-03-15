@@ -181,21 +181,21 @@ namespace TinyWars.User {
             const userId    = this._userId;
             const info      = userId != null ? UserModel.getUserInfo(userId) : undefined;
             if (info) {
-                this._labelTitle.text       = Lang.getFormatedText(Lang.Type.F0009, info.nickname);
+                this._labelTitle.text       = Lang.getFormattedText(Lang.Type.F0009, info.nickname);
                 this._labelRankName.text    = ConfigManager.getRankName(ConfigManager.getNewestConfigVersion(), info.rank2pScore);
-                this._labelRank2pWins.text  = Lang.getFormatedText(Lang.Type.F0010, info.rank2pWins);
-                this._labelRank2pLoses.text = Lang.getFormatedText(Lang.Type.F0011, info.rank2pLoses);
-                this._labelRank2pDraws.text = Lang.getFormatedText(Lang.Type.F0012, info.rank2pDraws);
+                this._labelRank2pWins.text  = Lang.getFormattedText(Lang.Type.F0010, info.rank2pWins);
+                this._labelRank2pLoses.text = Lang.getFormattedText(Lang.Type.F0011, info.rank2pLoses);
+                this._labelRank2pDraws.text = Lang.getFormattedText(Lang.Type.F0012, info.rank2pDraws);
 
-                this._labelMcw2pWins.text   = Lang.getFormatedText(Lang.Type.F0010, info.mcw2pWins);
-                this._labelMcw2pLoses.text  = Lang.getFormatedText(Lang.Type.F0011, info.mcw2pLoses);
-                this._labelMcw2pDraws.text  = Lang.getFormatedText(Lang.Type.F0012, info.mcw2pDraws);
-                this._labelMcw3pWins.text   = Lang.getFormatedText(Lang.Type.F0010, info.mcw3pWins);
-                this._labelMcw3pLoses.text  = Lang.getFormatedText(Lang.Type.F0011, info.mcw3pLoses);
-                this._labelMcw3pDraws.text  = Lang.getFormatedText(Lang.Type.F0012, info.mcw3pDraws);
-                this._labelMcw4pWins.text   = Lang.getFormatedText(Lang.Type.F0010, info.mcw4pWins);
-                this._labelMcw4pLoses.text  = Lang.getFormatedText(Lang.Type.F0011, info.mcw4pLoses);
-                this._labelMcw4pDraws.text  = Lang.getFormatedText(Lang.Type.F0012, info.mcw4pDraws);
+                this._labelMcw2pWins.text   = Lang.getFormattedText(Lang.Type.F0010, info.mcw2pWins);
+                this._labelMcw2pLoses.text  = Lang.getFormattedText(Lang.Type.F0011, info.mcw2pLoses);
+                this._labelMcw2pDraws.text  = Lang.getFormattedText(Lang.Type.F0012, info.mcw2pDraws);
+                this._labelMcw3pWins.text   = Lang.getFormattedText(Lang.Type.F0010, info.mcw3pWins);
+                this._labelMcw3pLoses.text  = Lang.getFormattedText(Lang.Type.F0011, info.mcw3pLoses);
+                this._labelMcw3pDraws.text  = Lang.getFormattedText(Lang.Type.F0012, info.mcw3pDraws);
+                this._labelMcw4pWins.text   = Lang.getFormattedText(Lang.Type.F0010, info.mcw4pWins);
+                this._labelMcw4pLoses.text  = Lang.getFormattedText(Lang.Type.F0011, info.mcw4pLoses);
+                this._labelMcw4pDraws.text  = Lang.getFormattedText(Lang.Type.F0012, info.mcw4pDraws);
                 this._labelOnlineTime.text  = Helpers.getTimeDurationText(info.onlineTime);
             }
         }

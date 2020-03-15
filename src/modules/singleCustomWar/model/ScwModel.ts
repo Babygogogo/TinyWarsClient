@@ -190,9 +190,9 @@ namespace TinyWars.SingleCustomWar.ScwModel {
 
         const playerIndex = war.getPlayerIndexInTurn();
         if (playerIndex === 0) {
-            FloatText.show(Lang.getFormatedText(Lang.Type.F0022, Lang.getText(Lang.Type.B0111), playerIndex));
+            FloatText.show(Lang.getFormattedText(Lang.Type.F0022, Lang.getText(Lang.Type.B0111), playerIndex));
         } else {
-            FloatText.show(Lang.getFormatedText(
+            FloatText.show(Lang.getFormattedText(
                 Lang.Type.F0022,
                 war.checkIsHumanInTurn() ? Lang.getText(Lang.Type.B0031) : Lang.getText(Lang.Type.B0256),
                 playerIndex
@@ -271,7 +271,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         const player = war.getPlayerInTurn();
         DestructionHelpers.destroyPlayerForce(war, player.getPlayerIndex(), true);
         ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
-        FloatText.show(Lang.getFormatedText(Lang.Type.F0008, player.getNickname()));
+        FloatText.show(Lang.getFormattedText(Lang.Type.F0008, player.getNickname()));
 
         actionPlanner.setStateIdle();
     }
@@ -284,13 +284,13 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         playerInTurn.setHasVotedForDraw(true);
 
         if (!data.WarActionPlayerVoteForDraw.isAgree) {
-            FloatText.show(Lang.getFormatedText(Lang.Type.F0017, playerInTurn.getNickname()));
+            FloatText.show(Lang.getFormattedText(Lang.Type.F0017, playerInTurn.getNickname()));
             war.setRemainingVotesForDraw(undefined);
         } else {
             if (war.getRemainingVotesForDraw()) {
-                FloatText.show(Lang.getFormatedText(Lang.Type.F0018, playerInTurn.getNickname()));
+                FloatText.show(Lang.getFormattedText(Lang.Type.F0018, playerInTurn.getNickname()));
             } else {
-                FloatText.show(Lang.getFormatedText(Lang.Type.F0019, playerInTurn.getNickname()));
+                FloatText.show(Lang.getFormattedText(Lang.Type.F0019, playerInTurn.getNickname()));
             }
             war.setRemainingVotesForDraw((war.getRemainingVotesForDraw() || war.getPlayerManager().getAlivePlayersCount(false)) - 1);
         }
@@ -476,7 +476,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
                     }
 
                     if (lostPlayerIndex) {
-                        FloatText.show(Lang.getFormatedText(Lang.Type.F0015, war.getPlayerManager().getPlayer(lostPlayerIndex).getNickname()));
+                        FloatText.show(Lang.getFormattedText(Lang.Type.F0015, war.getPlayerManager().getPlayer(lostPlayerIndex).getNickname()));
                         DestructionHelpers.destroyPlayerForce(war, lostPlayerIndex, true);
                     }
 
@@ -615,7 +615,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
                     focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false, () => {
                         focusUnit.updateView();
                         tile.updateView();
-                        FloatText.show(Lang.getFormatedText(Lang.Type.F0016, war.getPlayerManager().getPlayer(lostPlayerIndex).getNickname()));
+                        FloatText.show(Lang.getFormattedText(Lang.Type.F0016, war.getPlayerManager().getPlayer(lostPlayerIndex).getNickname()));
                         DestructionHelpers.destroyPlayerForce(war, lostPlayerIndex, true);
                         ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 

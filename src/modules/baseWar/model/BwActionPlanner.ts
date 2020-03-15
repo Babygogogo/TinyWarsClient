@@ -56,9 +56,8 @@ namespace TinyWars.BaseWar {
             { type: Notify.Type.BwCursorDragged,   callback: this._onNotifyBwCursorDragged },
         ];
 
-        public async init(mapFileName: string): Promise<BwActionPlanner> {
-            const mapData = await WarMapModel.getExtraData(mapFileName);
-            this._setMapSize({ width: mapData.mapWidth, height: mapData.mapHeight });
+        public async init(mapSizeAndMaxPlayerIndex: Types.MapSizeAndMaxPlayerIndex): Promise<BwActionPlanner> {
+            this._setMapSize({ width: mapSizeAndMaxPlayerIndex.mapWidth, height: mapSizeAndMaxPlayerIndex.mapHeight });
 
             this._view = this._view || new (this._getViewClass())();
             this._view.init(this);

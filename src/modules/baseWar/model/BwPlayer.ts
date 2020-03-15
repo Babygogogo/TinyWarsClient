@@ -48,6 +48,10 @@ namespace TinyWars.BaseWar {
             this._war = war;
         }
 
+        protected _getWar(): BwWar {
+            return this._war;
+        }
+
         public setFund(fund: number): void {
             if (this._fund !== fund) {
                 this._fund = fund;

@@ -599,4 +599,63 @@ namespace TinyWars.BaseWar.BwHelpers {
 
         return null;
     }
+
+    export async function getMapSizeAndMaxPlayerIndex(data: Types.SerializedWar): Promise<Types.MapSizeAndMaxPlayerIndex | null> {
+        const mapFileName = data.mapFileName;
+        if (mapFileName) {
+            const mapExtraData = await WarMap.WarMapModel.getExtraData(mapFileName);
+            return !mapExtraData
+                ? null
+                : {
+                    mapWidth        : mapExtraData.mapWidth,
+                    mapHeight       : mapExtraData.mapHeight,
+                    maxPlayerIndex  : mapExtraData.playersCount,
+                };
+        } else {
+            const tiles             = data.field.tileMap.tiles;
+            const maxPlayerIndex    = data.players.length - 1;
+            if ((!tiles) || (!tiles.length) || (!maxPlayerIndex)) {
+                return null;
+            } else {
+                let mapWidth   = 0;
+                let mapHeight  = 0;
+                for (const tile of tiles) {
+                    mapWidth   = Math.max(mapWidth, (tile.gridX || 0) + 1);
+                    mapHeight  = Math.max(mapHeight, (tile.gridY || 0) + 1);
+                }
+                return ((mapWidth > 0) && (mapHeight > 0))
+                    ? { mapWidth, mapHeight, maxPlayerIndex }
+                    : null;
+            }
+        }
+    }
+
+    export function encodeFogMapForPaths(map: number[][], mapSize: MapSize): string | undefined {
+        const { width, height } = mapSize;
+        const data              = new Array(width * height);
+        let needSerialize       = false;
+
+        for (let x = 0; x < width; ++x) {
+            for (let y = 0; y < height; ++y) {
+                data[x + y * width] = map[x][y];
+                (!needSerialize) && (map[x][y] > 0) && (needSerialize = true);
+            }
+        }
+
+        return needSerialize ? data.join(``) : undefined;
+    }
+
+    export function checkShouldSerializeTile(
+        tileData            : Types.SerializedTile,
+        initialBaseViewId   : number | null,
+        initialObjectViewId : number | null,
+    ): boolean {
+        return (tileData.currentBuildPoint      != null)
+            || (tileData.currentCapturePoint    != null)
+            || (tileData.currentHp              != null)
+            || (tileData.baseViewId             != initialBaseViewId)
+            || (tileData.objectViewId           != initialObjectViewId)
+            || (initialBaseViewId               == null)
+            || (initialObjectViewId             == null);
+    }
 }

@@ -20,9 +20,10 @@ namespace TinyWars.SingleCustomRoom {
         private _zoomMap        : GameUi.UiZoomableComponent;
         private _btnBack        : GameUi.UiButton;
 
-        private _groupInfo              : eui.Group;
-        private _labelMapName           : GameUi.UiLabel;
-        private _labelDesigner          : GameUi.UiLabel;
+        private _groupInfo          : eui.Group;
+        private _labelMapName       : GameUi.UiLabel;
+        private _labelDesigner      : GameUi.UiLabel;
+        private _labelNoPreview     : GameUi.UiLabel;
 
         private _dataForListWar     : DataForWarRenderer[] = [];
         private _selectedWarIndex   : number;
@@ -157,33 +158,42 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private async _showMap(index: number): Promise<void> {
-            const slotInfo              = this._dataForListWar[index].slotInfo;
-            const mapFileName           = slotInfo.mapFileName;
-            const mapRawData            = await WarMapModel.getMapRawData(mapFileName);
-            const mapExtraData          = await WarMapModel.getExtraData(mapFileName);
-            this._labelMapName.text     = Lang.getFormatedText(Lang.Type.F0000, await WarMapModel.getMapNameInLanguage(mapFileName));
-            this._labelDesigner.text    = Lang.getFormatedText(Lang.Type.F0001, mapExtraData.mapDesigner);
+            const slotInfo      = this._dataForListWar[index].slotInfo;
+            const mapFileName   = slotInfo.mapFileName;
+            const zoomMap       = this._zoomMap;
+            const groupInfo     = this._groupInfo;
+            zoomMap.removeAllContents();
 
-            this._groupInfo.visible      = true;
-            this._groupInfo.alpha        = 1;
-            egret.Tween.removeTweens(this._groupInfo);
-            egret.Tween.get(this._groupInfo).wait(8000).to({alpha: 0}, 1000).call(() => {this._groupInfo.visible = false; this._groupInfo.alpha = 1});
+            if (!mapFileName) {
+                this._labelNoPreview.text   = Lang.getText(Lang.Type.B0324);
+                groupInfo.visible           = false;
+            } else {
+                const mapRawData            = await WarMapModel.getMapRawData(mapFileName);
+                const mapExtraData          = await WarMapModel.getExtraData(mapFileName);
+                this._labelMapName.text     = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInLanguage(mapFileName));
+                this._labelDesigner.text    = Lang.getFormattedText(Lang.Type.F0001, mapExtraData.mapDesigner);
+                this._labelNoPreview.text   = "";
 
-            const tileMapView = new WarMap.WarMapTileMapView();
-            tileMapView.init(mapRawData.mapWidth, mapRawData.mapHeight);
-            tileMapView.updateWithBaseViewIdArray(mapRawData.tileBases);
-            tileMapView.updateWithObjectViewIdArray(mapRawData.tileObjects);
+                groupInfo.visible   = true;
+                groupInfo.alpha     = 1;
+                egret.Tween.removeTweens(groupInfo);
+                egret.Tween.get(groupInfo).wait(8000).to({alpha: 0}, 1000).call(() => {groupInfo.visible = false; groupInfo.alpha = 1});
 
-            const unitMapView = new WarMap.WarMapUnitMapView();
-            unitMapView.initWithMapRawData(mapRawData);
+                const tileMapView = new WarMap.WarMapTileMapView();
+                tileMapView.init(mapRawData.mapWidth, mapRawData.mapHeight);
+                tileMapView.updateWithBaseViewIdArray(mapRawData.tileBases);
+                tileMapView.updateWithObjectViewIdArray(mapRawData.tileObjects);
 
-            const gridSize = ConfigManager.getGridSize();
-            this._zoomMap.removeAllContents();
-            this._zoomMap.setContentWidth(mapRawData.mapWidth * gridSize.width);
-            this._zoomMap.setContentHeight(mapRawData.mapHeight * gridSize.height);
-            this._zoomMap.addContent(tileMapView);
-            this._zoomMap.addContent(unitMapView);
-            this._zoomMap.setContentScale(0, true);
+                const unitMapView = new WarMap.WarMapUnitMapView();
+                unitMapView.initWithMapRawData(mapRawData);
+
+                const gridSize = ConfigManager.getGridSize();
+                zoomMap.setContentWidth(mapRawData.mapWidth * gridSize.width);
+                zoomMap.setContentHeight(mapRawData.mapHeight * gridSize.height);
+                zoomMap.addContent(tileMapView);
+                zoomMap.addContent(unitMapView);
+                zoomMap.setContentScale(0, true);
+            }
         }
     }
 
@@ -215,7 +225,13 @@ namespace TinyWars.SingleCustomRoom {
             this.currentState           = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
             this._labelSlotIndex.text   = "" + slotInfo.slotIndex;
             this._labelWarType.text     = Lang.getSinglePlayerWarTypeName(slotInfo.warType);
-            WarMapModel.getMapNameInLanguage(slotInfo.mapFileName).then(v => this._labelName.text = v);
+
+            const mapFileName = slotInfo.mapFileName;
+            if (!mapFileName) {
+                this._labelName.text = `(${Lang.getText(Lang.Type.B0321)})`;
+            } else {
+                WarMapModel.getMapNameInLanguage(mapFileName).then(v => this._labelName.text = v);
+            }
         }
 
         private _onTouchTapBtnChoose(): void {

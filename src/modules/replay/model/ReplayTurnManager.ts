@@ -18,11 +18,15 @@ namespace TinyWars.Replay {
             };
         }
 
+        public serializeForSimulation(): Types.SerializedTurn {
+            return this.serialize();
+        }
+
         protected _runPhaseMain(data: ProtoTypes.IWarActionPlayerBeginTurn): void {
             const playerIndex   = this.getPlayerIndexInTurn();
             const war           = this._getWar() as ReplayWar;
             if (data.isDefeated) {
-                FloatText.show(Lang.getFormatedText(Lang.Type.F0014, war.getPlayer(playerIndex).getNickname()));
+                FloatText.show(Lang.getFormattedText(Lang.Type.F0014, war.getPlayer(playerIndex).getNickname()));
                 DestructionHelpers.destroyPlayerForce(war, playerIndex, true);
                 ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
             } else {

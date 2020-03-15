@@ -261,7 +261,7 @@ namespace TinyWars.SingleCustomWar {
                     ++idleUnitsCount;
                 }
             });
-            (idleUnitsCount) && (hints.push(Lang.getFormatedText(Lang.Type.F0006, idleUnitsCount)));
+            (idleUnitsCount) && (hints.push(Lang.getFormattedText(Lang.Type.F0006, idleUnitsCount)));
 
             let idleBuildingsCount = 0;
             war.getTileMap().forEachTile(tile => {
@@ -269,7 +269,7 @@ namespace TinyWars.SingleCustomWar {
                     ++idleBuildingsCount;
                 }
             });
-            (idleBuildingsCount) && (hints.push(Lang.getFormatedText(Lang.Type.F0007, idleBuildingsCount)));
+            (idleBuildingsCount) && (hints.push(Lang.getFormattedText(Lang.Type.F0007, idleBuildingsCount)));
 
             hints.push(Lang.getText(Lang.Type.A0024));
             return hints.join(`\n`);

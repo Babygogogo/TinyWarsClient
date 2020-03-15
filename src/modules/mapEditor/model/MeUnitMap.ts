@@ -98,6 +98,22 @@ namespace TinyWars.MapEditor {
             return dataList;
         }
 
+        public serializeForSimulation(): Types.SerializedUnitMap {
+            const units: Types.SerializedUnit[] = [];
+            this.forEachUnitOnMap(unit => {
+                units.push(unit.serializeForSimulation());
+
+                for (const loadedUnit of this.getUnitsLoadedByLoader(unit, true)) {
+                    units.push(loadedUnit.serializeForSimulation());
+                }
+            });
+
+            return {
+                units       : units.length ? units : undefined,
+                nextUnitId  : this.getNextUnitId(),
+            }
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other public functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////

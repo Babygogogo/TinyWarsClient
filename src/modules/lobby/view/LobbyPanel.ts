@@ -16,6 +16,7 @@ namespace TinyWars.Lobby {
         private _group3: eui.Group;
         private _group4: eui.Group;
 
+        private _labelTips      : GameUi.UiLabel;
         private _labelMenuTitle : GameUi.UiLabel;
         private _listCommand    : GameUi.UiScrollList;
 
@@ -82,7 +83,8 @@ namespace TinyWars.Lobby {
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._labelMenuTitle.text = Lang.getText(Lang.Type.B0155);
+            this._labelTips.text        = Lang.getRichText(Lang.RichType.R0007),
+            this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0155);
         }
 
         private _createDataForListCommand(): DataForCommandRenderer[] {

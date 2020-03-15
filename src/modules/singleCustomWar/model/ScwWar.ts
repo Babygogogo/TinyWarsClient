@@ -2,25 +2,34 @@
 namespace TinyWars.SingleCustomWar {
     import Types        = Utility.Types;
     import ProtoTypes   = Utility.ProtoTypes;
+    import Logger       = Utility.Logger;
 
     export class ScwWar extends BaseWar.BwWar {
-        private _isEnded            = false;
-        private _warType            : Types.SinglePlayerWarType;
-        private _saveSlotIndex      : number;
-        private _seedRandomInitState: ProtoTypes.ISeedRandomState;
-        private _executedActions    : Types.WarActionContainer[];
+        private _isEnded                = false;
+        private _warType                : Types.SinglePlayerWarType;
+        private _saveSlotIndex          : number;
+        private _seedRandomInitState    : ProtoTypes.ISeedRandomState;
+        private _isSinglePlayerCheating : boolean;
+        private _executedActions        : Types.WarActionContainer[];
 
         public async init(data: Types.SerializedWar): Promise<ScwWar> {
-            await super.init(data);
+            this._baseInit(data);
+
+            this._initPlayerManager(data.players);
+            await this._initField(
+                data.field,
+                data.configVersion,
+                data.mapFileName,
+                await BaseWar.BwHelpers.getMapSizeAndMaxPlayerIndex(data)
+            );
+            this._initTurnManager(data.turn);
 
             this.setNextActionId(data.nextActionId);
             this._setSaveSlotIndex(data.saveSlotIndex);
             this._setWarType(data.singlePlayerWarType);
             this._setSeedRandomInitState(data.seedRandomInitState);
             this._setExecutedActions(data.executedActions);
-            this._setPlayerManager(new ScwPlayerManager().init(data.players));
-            this._setField(await new ScwField().init(data.field, this.getConfigVersion(), this.getMapFileName()));
-            this._setTurnManager(new ScwTurnManager().init(data.turn));
+            this.setIsSinglePlayerCheating(data.isSinglePlayerCheating);
 
             this._initView();
 
@@ -52,6 +61,7 @@ namespace TinyWars.SingleCustomWar {
                 mapFileName             : this.getMapFileName(),
                 saveSlotIndex           : this.getSaveSlotIndex(),
                 singlePlayerWarType     : this.getWarType(),
+                isSinglePlayerCheating  : this.getIsSinglePlayerCheating(),
                 seedRandomInitState     : this._getSeedRandomInitState(),
                 seedRandomState         : this.getRandomNumberGenerator().state(),
                 players                 : (this.getPlayerManager() as ScwPlayerManager).serialize(),
@@ -62,6 +72,15 @@ namespace TinyWars.SingleCustomWar {
 
         protected _getViewClass(): new () => ScwWarView {
             return ScwWarView;
+        }
+        protected _getFieldClass(): new () => ScwField {
+            return ScwField;
+        }
+        protected _getPlayerManagerClass(): new () => ScwPlayerManager {
+            return ScwPlayerManager;
+        }
+        protected _getTurnManagerClass(): new () => ScwTurnManager {
+            return ScwTurnManager;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -93,6 +112,13 @@ namespace TinyWars.SingleCustomWar {
         }
         private _getSeedRandomInitState(): ProtoTypes.ISeedRandomState {
             return this._seedRandomInitState;
+        }
+
+        public setIsSinglePlayerCheating(isCheating: boolean): void {
+            this._isSinglePlayerCheating = isCheating;
+        }
+        public getIsSinglePlayerCheating(): boolean {
+            return this._isSinglePlayerCheating;
         }
 
         private _setExecutedActions(actions: Types.WarActionContainer[]): void {

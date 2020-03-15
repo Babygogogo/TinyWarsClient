@@ -5,12 +5,11 @@ namespace TinyWars.BaseWar {
     import Helpers              = Utility.Helpers;
     import ProtoTypes           = Utility.ProtoTypes;
     import SerializedBwTileMap  = Types.SerializedTileMap;
-    import SerializedBwTile     = Types.SerializedTile;
     import MapSize              = Types.MapSize;
+    import GridIndex            = Types.GridIndex;
 
     export abstract class BwTileMap {
         private _mapRawData : ProtoTypes.IMapRawData;
-        private _mapFileName: string;
         private _map        : BwTile[][];
         private _mapSize    : MapSize;
         private _war        : BwWar;
@@ -20,11 +19,16 @@ namespace TinyWars.BaseWar {
         protected abstract _getBwTileClass(): new () => BwTile;
         protected abstract _getViewClass(): new () => BwTileMapView;
 
-        public async init(configVersion: string, mapFileName: string, data?: SerializedBwTileMap): Promise<BwTileMap> {
-            if (data) {
-                await this._initWithSerializedData(configVersion, mapFileName, data)
+        public async init(
+            data                    : SerializedBwTileMap | null | undefined,
+            configVersion           : string,
+            mapFileName             : string | null | undefined,
+            mapSizeAndMaxPlayerIndex: Types.MapSizeAndMaxPlayerIndex,
+        ): Promise<BwTileMap> {
+            if (mapFileName) {
+                await this._initWithMapFileName(configVersion, mapFileName, data);
             } else {
-                await this._initWithoutSerializedData(configVersion, mapFileName);
+                await this._initWithoutMapFileName(configVersion, mapSizeAndMaxPlayerIndex, data);
             }
 
             this._view = this._view || new (this._getViewClass())();
@@ -32,12 +36,12 @@ namespace TinyWars.BaseWar {
 
             return this;
         }
-        private async _initWithSerializedData(configVersion: string, mapFileName: string, data: SerializedBwTileMap): Promise<BwTileMap> {
+        private async _initWithMapFileName(configVersion: string, mapFileName: string, data?: SerializedBwTileMap): Promise<BwTileMap> {
             const mapData                   = await WarMapModel.getMapRawData(mapFileName);
             const { mapWidth, mapHeight }   = mapData;
             const map                       = Helpers.createEmptyMap<BwTile>(mapWidth);
 
-            for (const tileData of data.tiles || []) {
+            for (const tileData of data ? data.tiles || [] : []) {
                 map[tileData.gridX!][tileData.gridY!] = new (this._getBwTileClass())().init(tileData, configVersion);
             }
 
@@ -64,40 +68,24 @@ namespace TinyWars.BaseWar {
             }
 
             this._mapRawData    = mapData;
-            this._mapFileName   = mapFileName;
             this._map           = map;
             this._setMapSize(mapWidth, mapHeight);
 
             return this;
         }
-        private async _initWithoutSerializedData(configVersion: string, mapFileName: string): Promise<BwTileMap> {
-            const mapData                   = await WarMapModel.getMapRawData(mapFileName);
-            const { mapWidth, mapHeight }   = mapData;
+        private _initWithoutMapFileName(
+            configVersion               : string,
+            mapSizeAndMaxPlayerIndex    : Types.MapSizeAndMaxPlayerIndex,
+            data                        : SerializedBwTileMap | null | undefined,
+        ): BwTileMap {
+            const { mapWidth, mapHeight }   = mapSizeAndMaxPlayerIndex;
             const map                       = Helpers.createEmptyMap<BwTile>(mapWidth);
 
-            for (const tileData of mapData.tileDataList || []) {
-                const x = tileData.gridX!;
-                const y = tileData.gridY!;
-                if (!map[x][y]) {
-                    map[x][y] = new (this._getBwTileClass())().init(tileData as Types.SerializedTile, configVersion);
-                }
+            for (const tileData of data ? data.tiles || [] : []) {
+                map[tileData.gridX!][tileData.gridY!] = new (this._getBwTileClass())().init(tileData, configVersion);
             }
 
-            for (let x = 0; x < mapWidth; ++x) {
-                for (let y = 0; y < mapHeight; ++y) {
-                    const index = x + y * mapWidth;
-                    map[x][y] = new (this._getBwTileClass())().init({
-                        baseViewId  : mapData.tileBases[index],
-                        objectViewId: mapData.tileObjects[index],
-                        gridX       : x,
-                        gridY       : y,
-                    }, configVersion);
-                }
-            }
-
-            this._mapRawData    = mapData;
-            this._mapFileName   = mapFileName;
-            this._map           = map;
+            this._map = map;
             this._setMapSize(mapWidth, mapHeight);
 
             return this;
@@ -147,8 +135,21 @@ namespace TinyWars.BaseWar {
             return this._mapSize;
         }
 
-        public getMapRawData(): ProtoTypes.IMapRawData {
+        private _getMapRawData(): ProtoTypes.IMapRawData {
             return this._mapRawData;
+        }
+
+        public getInitialObjectViewId(gridIndex: GridIndex): number | null {
+            const mapRawData = this._getMapRawData();
+            return mapRawData
+                ? mapRawData.tileObjects[gridIndex.x + gridIndex.y * this.getMapSize().width]
+                : null;
+        }
+        public getInitialBaseViewId(gridIndex: GridIndex): number | null {
+            const mapRawData = this._getMapRawData();
+            return mapRawData
+                ? mapRawData.tileBases[gridIndex.x + gridIndex.y * this.getMapSize().width]
+                : null;
         }
 
         public getTilesCount(tileType: Types.TileType, playerIndex: number): number {
@@ -162,13 +163,5 @@ namespace TinyWars.BaseWar {
             }
             return count;
         }
-    }
-
-    function checkShouldSerializeTile(tileData: SerializedBwTile, mapData: Types.MapRawData, posIndex: number): boolean {
-        return (tileData.currentBuildPoint      != null)
-            || (tileData.currentCapturePoint    != null)
-            || (tileData.currentHp              != null)
-            || (tileData.baseViewId             != mapData.tileBases[posIndex])
-            || (tileData.objectViewId           != mapData.tileObjects[posIndex]);
     }
 }

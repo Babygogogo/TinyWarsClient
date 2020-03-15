@@ -96,7 +96,7 @@ namespace TinyWars.Replay {
             this._updateView();
         }
 
-        private _onTouchedBtnFastRewind(e: egret.TouchEvent): void {
+        private async _onTouchedBtnFastRewind(e: egret.TouchEvent): Promise<void> {
             const war = this._war;
             war.setIsAutoReplay(false);
 
@@ -107,10 +107,11 @@ namespace TinyWars.Replay {
             } else if (war.checkIsInBeginning()) {
                 FloatText.show(Lang.getText(Lang.Type.A0042));
             } else {
-                war.loadPreviousCheckPoint();
+                await war.loadPreviousCheckPoint();
+                this._updateView();
             }
         }
-        private _onTouchedBtnFastForward(e: egret.TouchEvent): void {
+        private async _onTouchedBtnFastForward(e: egret.TouchEvent): Promise<void> {
             const war = this._war;
             war.setIsAutoReplay(false);
 
@@ -121,7 +122,8 @@ namespace TinyWars.Replay {
             } else if (war.checkIsInEnd()) {
                 FloatText.show(Lang.getText(Lang.Type.A0043));
             } else {
-                war.loadNextCheckPoint();
+                await war.loadNextCheckPoint();
+                this._updateView();
             }
         }
         private _onTouchedBtnPlay(e: egret.TouchEvent): void {

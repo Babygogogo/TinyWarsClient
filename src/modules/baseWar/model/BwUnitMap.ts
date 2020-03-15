@@ -1,9 +1,9 @@
 
 namespace TinyWars.BaseWar {
-    import Types            = Utility.Types;
-    import Helpers          = Utility.Helpers;
-    import GridIndexHelpers = Utility.GridIndexHelpers;
-    import MapModel         = WarMap.WarMapModel;
+    import Types                    = Utility.Types;
+    import Helpers                  = Utility.Helpers;
+    import GridIndexHelpers         = Utility.GridIndexHelpers;
+    import MapSizeAndMaxPlayerIndex = Types.MapSizeAndMaxPlayerIndex;
 
     export abstract class BwUnitMap {
         private _war            : BwWar;
@@ -18,12 +18,17 @@ namespace TinyWars.BaseWar {
         protected abstract _getViewClass(): new () => BwUnitMapView;
         protected abstract _getBwUnitClass(): new () => BwUnit;
 
-        public async init(configVersion: string, mapFileName: string, data?: Types.SerializedUnitMap): Promise<BwUnitMap> {
+        public async init(
+            data                    : Types.SerializedUnitMap | null | undefined,
+            configVersion           : string,
+            mapFileName             : string | null | undefined,
+            mapSizeAndMaxPlayerIndex: MapSizeAndMaxPlayerIndex,
+        ): Promise<BwUnitMap> {
             this._configVersion = configVersion;
             if (data) {
-                await this._initWithSerializedData(configVersion, mapFileName, data)
+                await this._initWithSerializedData(configVersion, mapSizeAndMaxPlayerIndex, data);
             } else {
-                await this._initWithoutSerializedData(configVersion, mapFileName);
+                await this._initWithoutSerializedData(configVersion, mapSizeAndMaxPlayerIndex, mapFileName);
             }
 
             this._view = this._view || new (this._getViewClass())();
@@ -31,8 +36,12 @@ namespace TinyWars.BaseWar {
 
             return this;
         }
-        private async _initWithSerializedData(configVersion: string, mapFileName: string, data: Types.SerializedUnitMap): Promise<BwUnitMap> {
-            const { mapWidth, mapHeight }   = await MapModel.getMapRawData(mapFileName);
+        private async _initWithSerializedData(
+            configVersion           : string,
+            mapSizeAndMaxPlayerIndex: MapSizeAndMaxPlayerIndex,
+            data                    : Types.SerializedUnitMap
+        ): Promise<BwUnitMap> {
+            const { mapWidth, mapHeight }   = mapSizeAndMaxPlayerIndex;
             const unitDataList              = data.units;
             const map                       = Helpers.createEmptyMap<BwUnit>(mapWidth);
             const loadedUnits               = new Map<number, BwUnit>();
@@ -54,9 +63,13 @@ namespace TinyWars.BaseWar {
 
             return this;
         }
-        private async _initWithoutSerializedData(configVersion: string, mapFileName: string): Promise<BwUnitMap> {
+        private async _initWithoutSerializedData(
+            configVersion           : string,
+            mapSizeAndMaxPlayerIndex: MapSizeAndMaxPlayerIndex,
+            mapFileName             : string
+        ): Promise<BwUnitMap> {
             const mapRawData                = await WarMap.WarMapModel.getMapRawData(mapFileName);
-            const { mapWidth, mapHeight }   = mapRawData;
+            const { mapWidth, mapHeight }   = mapSizeAndMaxPlayerIndex;
             const map                       = Helpers.createEmptyMap<BwUnit>(mapWidth);
             const loadedUnits               = new Map<number, BwUnit>();
 

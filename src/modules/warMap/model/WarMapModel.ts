@@ -31,36 +31,40 @@ namespace TinyWars.WarMap {
         export function setExtraData(data: MapExtraData): void {
             _EXTRA_DATA_DICT.set(data.mapFileName, data);
         }
-        export function getExtraData(mapFileName: string): Promise<MapExtraData | undefined> {
-            const localData = _EXTRA_DATA_DICT.get(mapFileName);
-            if (localData) {
-                return new Promise(resolve => resolve(localData));
+        export function getExtraData(mapFileName: string | null): Promise<MapExtraData | undefined | null> {
+            if (!mapFileName) {
+                return null;
             } else {
-                return new Promise((resolve, reject) => {
-                    const callbackOnSucceed = (e: egret.Event): void => {
-                        const data = e.data as ProtoTypes.IS_MapGetExtraData;
-                        if (data.mapFileName === mapFileName) {
-                            Notify.removeEventListener(Notify.Type.SMapGetExtraData,        callbackOnSucceed);
-                            Notify.removeEventListener(Notify.Type.SMapGetExtraDataFailed,  callbackOnFailed);
+                const localData = _EXTRA_DATA_DICT.get(mapFileName);
+                if (localData) {
+                    return new Promise(resolve => resolve(localData));
+                } else {
+                    return new Promise((resolve, reject) => {
+                        const callbackOnSucceed = (e: egret.Event): void => {
+                            const data = e.data as ProtoTypes.IS_MapGetExtraData;
+                            if (data.mapFileName === mapFileName) {
+                                Notify.removeEventListener(Notify.Type.SMapGetExtraData,        callbackOnSucceed);
+                                Notify.removeEventListener(Notify.Type.SMapGetExtraDataFailed,  callbackOnFailed);
 
-                            resolve(data.mapExtraData);
-                        }
-                    };
-                    const callbackOnFailed = (e: egret.Event): void => {
-                        const data = e.data as ProtoTypes.IS_MapGetExtraData;
-                        if (data.mapFileName === mapFileName) {
-                            Notify.removeEventListener(Notify.Type.SMapGetExtraData,        callbackOnSucceed);
-                            Notify.removeEventListener(Notify.Type.SMapGetExtraDataFailed,  callbackOnFailed);
+                                resolve(data.mapExtraData);
+                            }
+                        };
+                        const callbackOnFailed = (e: egret.Event): void => {
+                            const data = e.data as ProtoTypes.IS_MapGetExtraData;
+                            if (data.mapFileName === mapFileName) {
+                                Notify.removeEventListener(Notify.Type.SMapGetExtraData,        callbackOnSucceed);
+                                Notify.removeEventListener(Notify.Type.SMapGetExtraDataFailed,  callbackOnFailed);
 
-                            reject(null);
-                        }
-                    };
+                                reject(null);
+                            }
+                        };
 
-                    Notify.addEventListener(Notify.Type.SMapGetExtraData,       callbackOnSucceed);
-                    Notify.addEventListener(Notify.Type.SMapGetExtraDataFailed, callbackOnFailed);
+                        Notify.addEventListener(Notify.Type.SMapGetExtraData,       callbackOnSucceed);
+                        Notify.addEventListener(Notify.Type.SMapGetExtraDataFailed, callbackOnFailed);
 
-                    WarMapProxy.reqGetMapExtraData(mapFileName);
-                });
+                        WarMapProxy.reqGetMapExtraData(mapFileName);
+                    });
+                }
             }
         }
         export function deleteExtraData(mapFileName: string): void {
@@ -69,13 +73,17 @@ namespace TinyWars.WarMap {
 
         export async function getMapNameInLanguage(mapFileName: string): Promise<string | null> {
             const extraData = await getExtraData(mapFileName);
-            if (extraData) {
+            if (!extraData) {
+                return null;
+            } else {
                 return Lang.getLanguageType() === Types.LanguageType.Chinese
                     ? extraData.mapName
                     : extraData.mapNameEnglish;
-            } else {
-                return null;
             }
+        }
+        export async function getMapDesigner(mapFileName: string): Promise<string | null> {
+            const extraData = await getExtraData(mapFileName);
+            return extraData ? extraData.mapDesigner : null;
         }
         export async function getPlayerRule(mapFileName: string, warRuleIndex: number, playerIndex: number): Promise<ProtoTypes.IRuleForPlayer | null> {
             const warRule = (await getMapRawData(mapFileName)).warRuleList[warRuleIndex];

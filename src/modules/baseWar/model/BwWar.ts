@@ -1,6 +1,7 @@
 
 namespace TinyWars.BaseWar {
     import Types            = Utility.Types;
+    import Logger           = Utility.Logger;
     import SerializedBwWar  = Types.SerializedWar;
 
     export abstract class BwWar {
@@ -34,7 +35,13 @@ namespace TinyWars.BaseWar {
         private _isRunning              = false;
         private _isExecutingAction      = false;
 
-        protected async init(data: SerializedBwWar): Promise<BwWar> {
+        public async abstract init(data: SerializedBwWar): Promise<BwWar>;
+        protected abstract _getPlayerManagerClass(): new () => BwPlayerManager;
+        protected abstract _getTurnManagerClass(): new () => BwTurnManager;
+        protected abstract _getFieldClass(): new () => BwField;
+        protected abstract _getViewClass(): new () => BwWarView;
+
+        protected _baseInit(data: SerializedBwWar): BwWar {
             this._setWarId(data.warId);
             this._setWarName(data.warName);
             this._setWarPassword(data.warPassword);
@@ -65,7 +72,6 @@ namespace TinyWars.BaseWar {
             this._view.init(this);
         }
 
-        protected abstract _getViewClass(): new () => BwWarView;
         public getView(): BwWarView {
             return this._view;
         }
@@ -258,7 +264,12 @@ namespace TinyWars.BaseWar {
             this._nextActionId = actionId;
         }
 
-        protected _setPlayerManager(manager: BwPlayerManager): void {
+        protected _initPlayerManager(data: Types.SerializedPlayer[]): void {
+            const playerManager = this.getPlayerManager() || new (this._getPlayerManagerClass())();
+            playerManager.init(data);
+            this._setPlayerManager(playerManager);
+        }
+        private _setPlayerManager(manager: BwPlayerManager): void {
             this._playerManager = manager;
         }
         public getPlayerManager(): BwPlayerManager {
@@ -274,7 +285,20 @@ namespace TinyWars.BaseWar {
             return this.getTurnManager().getPlayerIndexInTurn();
         }
 
-        protected _setField(field: BwField): void {
+        protected async _initField(
+            data                        : Types.SerializedField,
+            configVersion               : string,
+            mapFileName                 : string | null | undefined,
+            mapSizeAndMaxPlayerIndex    : Types.MapSizeAndMaxPlayerIndex,
+        ): Promise<void> {
+            if (!mapSizeAndMaxPlayerIndex) {
+                Logger.error("BwWar._initField() empty mapSizeAndMaxPlayerIndex!");
+            }
+            const field = this.getField() || new (this._getFieldClass())();
+            await field.init(data, configVersion, mapFileName, mapSizeAndMaxPlayerIndex);
+            this._setField(field);
+        }
+        private _setField(field: BwField): void {
             this._field = field;
         }
         public getField(): BwField {
@@ -297,7 +321,12 @@ namespace TinyWars.BaseWar {
             return this.getField().getGridVisionEffect();
         }
 
-        protected _setTurnManager(manager: BwTurnManager): void {
+        protected _initTurnManager(data: Types.SerializedTurn): void {
+            const turnManager = this.getTurnManager() || new (this._getTurnManagerClass())();
+            turnManager.init(data);
+            this._setTurnManager(turnManager);
+        }
+        private _setTurnManager(manager: BwTurnManager): void {
             this._turnManager = manager;
         }
         public getTurnManager(): BwTurnManager {

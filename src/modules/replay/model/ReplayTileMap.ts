@@ -24,5 +24,18 @@ namespace TinyWars.Replay {
             }
             return tilesData.length ? { tiles: tilesData } : undefined;
         }
+
+        public serializeForSimulation(): Types.SerializedTileMap | undefined {
+            const { width, height } = this.getMapSize();
+            const map               = this._getMap() as ReplayTile[][];
+            const tilesData         : Types.SerializedTile[] = [];
+            for (let x = 0; x < width; ++x) {
+                for (let y = 0; y < height; ++y) {
+                    const tileData = map[x][y].serializeForSimulation();
+                    (tileData) && (tilesData.push(tileData));
+                }
+            }
+            return tilesData.length ? { tiles: tilesData } : undefined;
+        }
     }
 }

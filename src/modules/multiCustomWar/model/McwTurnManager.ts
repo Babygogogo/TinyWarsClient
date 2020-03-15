@@ -5,8 +5,18 @@ namespace TinyWars.MultiCustomWar {
     import ProtoTypes           = Utility.ProtoTypes;
     import Lang                 = Utility.Lang;
     import FloatText            = Utility.FloatText;
+    import Types                = Utility.Types;
 
     export class McwTurnManager extends BaseWar.BwTurnManager {
+        public serializeForSimulation(): Types.SerializedTurn {
+            return {
+                turnIndex       : this.getTurnIndex(),
+                playerIndex     : this.getPlayerIndexInTurn(),
+                turnPhaseCode   : this.getPhaseCode(),
+                enterTurnTime   : this.getEnterTurnTime(),
+            };
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The functions for running turn.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -14,7 +24,7 @@ namespace TinyWars.MultiCustomWar {
             const playerIndex   = this.getPlayerIndexInTurn();
             const war           = this._getWar() as McwWar;
             if (data.isDefeated) {
-                FloatText.show(Lang.getFormatedText(Lang.Type.F0014, war.getPlayer(playerIndex).getNickname()));
+                FloatText.show(Lang.getFormattedText(Lang.Type.F0014, war.getPlayer(playerIndex).getNickname()));
                 DestructionHelpers.destroyPlayerForce(war, playerIndex, true);
                 McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
             } else {

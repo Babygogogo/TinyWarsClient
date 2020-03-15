@@ -3,30 +3,37 @@ namespace TinyWars.SingleCustomRoom {
     import Notify       = Utility.Notify;
     import Lang         = Utility.Lang;
     import ProtoTypes   = Utility.ProtoTypes;
+    import Types        = Utility.Types;
 
-    export class ScrCreateSaveSlotsPanel extends GameUi.UiPanel {
+    export type OpenDataForScrCreateCustomSaveSlotsPanel = Types.SerializedWar;
+
+    export class ScrCreateCustomSaveSlotsPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
-        private static _instance: ScrCreateSaveSlotsPanel;
+        private static _instance: ScrCreateCustomSaveSlotsPanel;
 
         private _group          : eui.Group;
         private _labelPanelTitle: GameUi.UiLabel;
         private _srlSaveSlot    : GameUi.UiScrollList;
         private _listSaveSlot   : eui.List;
+        private _btnHelp        : GameUi.UiButton;
         private _btnCancel      : GameUi.UiButton;
 
+        private _openData   : OpenDataForScrCreateCustomSaveSlotsPanel;
         private _dataForList: DataForSlotRenderer[];
 
-        public static show(): void {
-            if (!ScrCreateSaveSlotsPanel._instance) {
-                ScrCreateSaveSlotsPanel._instance = new ScrCreateSaveSlotsPanel();
+        public static show(openData: OpenDataForScrCreateCustomSaveSlotsPanel): void {
+            if (!ScrCreateCustomSaveSlotsPanel._instance) {
+                ScrCreateCustomSaveSlotsPanel._instance = new ScrCreateCustomSaveSlotsPanel();
             }
-            ScrCreateSaveSlotsPanel._instance.open();
+
+            ScrCreateCustomSaveSlotsPanel._instance._openData = openData;
+            ScrCreateCustomSaveSlotsPanel._instance.open();
         }
         public static hide(): void {
-            if (ScrCreateSaveSlotsPanel._instance) {
-                ScrCreateSaveSlotsPanel._instance.close();
+            if (ScrCreateCustomSaveSlotsPanel._instance) {
+                ScrCreateCustomSaveSlotsPanel._instance.close();
             }
         }
 
@@ -36,12 +43,13 @@ namespace TinyWars.SingleCustomRoom {
             this._setAutoAdjustHeightEnabled();
             this._setTouchMaskEnabled();
             this._callbackForTouchMask = () => this.close();
-            this.skinName = `resource/skins/singleCustomRoom/ScrCreateSaveSlotsPanel.exml`;
+            this.skinName = `resource/skins/singleCustomRoom/ScrCreateCustomSaveSlotsPanel.exml`;
         }
 
         protected _onFirstOpened(): void {
             this._uiListeners = [
-                { ui: this._btnCancel, callback: this._onTouchedBtnCancel },
+                { ui: this._btnCancel,  callback: this._onTouchedBtnCancel },
+                { ui: this._btnHelp,    callback: this._onTouchedBtnHelp },
             ];
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
@@ -63,6 +71,13 @@ namespace TinyWars.SingleCustomRoom {
             this.close();
         }
 
+        private _onTouchedBtnHelp(e: egret.TouchEvent): void {
+            Common.HelpPanel.show({
+                title   : Lang.getText(Lang.Type.B0325),
+                content : Lang.getRichText(Lang.RichType.R0006),
+            });
+        }
+
         private _onNotifyLanguageChanged(e: egret.Event): void {
             this._updateComponentsForLanguage();
         }
@@ -81,16 +96,19 @@ namespace TinyWars.SingleCustomRoom {
         private _updateComponentsForLanguage(): void {
             this._labelPanelTitle.text  = Lang.getText(Lang.Type.B0259);
             this._btnCancel.label       = Lang.getText(Lang.Type.B0154);
+            this._btnHelp.label         = Lang.getText(Lang.Type.B0143);
         }
 
         private _createDataForList(): DataForSlotRenderer[] {
             const dataList  : DataForSlotRenderer[] = [];
+            const warData   = this._openData;
             const slotList  = ScrModel.getSaveSlotInfoList() || [];
             for (let i = 0; i < ConfigManager.COMMON_CONSTANTS.ScwSaveSlotMaxCount; ++i) {
                 dataList.push({
                     slotIndex   : i,
                     slotInfo    : slotList.find(v => v.slotIndex === i),
-                })
+                    warData,
+                });
             }
 
             return dataList;
@@ -100,6 +118,7 @@ namespace TinyWars.SingleCustomRoom {
     type DataForSlotRenderer = {
         slotIndex   : number;
         slotInfo    : ProtoTypes.ISaveSlotInfo | null;
+        warData     : Types.SerializedWar;
     }
 
     class SlotRenderer extends eui.ItemRenderer {
@@ -124,8 +143,22 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _onTouchedImgBg(e: egret.TouchEvent): void {
-            ScrModel.setCreateWarSaveSlotIndex((this.data as DataForSlotRenderer).slotIndex);
-            ScrCreateSaveSlotsPanel.hide();
+            const data              = this.data as DataForSlotRenderer;
+            const warData           = data.warData;
+            warData.saveSlotIndex   = data.slotIndex;
+            if (!data.slotInfo) {
+                ScrProxy.reqScrCreateCustomWar(warData);
+                ScrCreateCustomSaveSlotsPanel.hide();
+            } else {
+                Common.ConfirmPanel.show({
+                    title   : Lang.getText(Lang.Type.B0088),
+                    content : Lang.getText(Lang.Type.A0070),
+                    callback: () => {
+                        ScrProxy.reqScrCreateCustomWar(warData);
+                        ScrCreateCustomSaveSlotsPanel.hide();
+                    },
+                });
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

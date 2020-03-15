@@ -128,19 +128,6 @@ namespace TinyWars.SingleCustomWar.ScwHelpers {
         return cfg ? cfg.productionCost : undefined;
     }
 
-    export function checkShouldSerializeTile(tileData: Types.SerializedTile, mapRawData: ProtoTypes.IMapRawData): boolean {
-        if ((tileData.currentBuildPoint     != null)   ||
-            (tileData.currentCapturePoint   != null)   ||
-            (tileData.currentHp             != null)
-        ) {
-            return true;
-        } else {
-            const posIndex = tileData.gridX + tileData.gridY * mapRawData.mapWidth;
-            return (tileData.baseViewId     != mapRawData.tileBases[posIndex])
-                || (tileData.objectViewId   != mapRawData.tileObjects[posIndex]);
-        }
-    }
-
     function _pushToAvailableMovableGrids(grids: AvailableMovableGrid[], gridIndex: GridIndex, prev: GridIndex, totalMoveCost: number): void {
         grids.push({
             currGridIndex: gridIndex,

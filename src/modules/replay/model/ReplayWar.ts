@@ -4,20 +4,21 @@ namespace TinyWars.Replay {
     import Notify               = Utility.Notify;
     import FloatText            = Utility.FloatText;
     import Lang                 = Utility.Lang;
+    import Logger               = Utility.Logger;
     import WarActionContainer   = Types.WarActionContainer;
     import SerializedWar        = Types.SerializedWar;
 
     export class ReplayWar extends BaseWar.BwWar {
-        private _executedActions        : WarActionContainer[];
+        private _executedActions                : WarActionContainer[];
 
         private _isAutoReplay                   = false;
         private _checkPointIdsForNextActionId   = new Map<number, number>();
         private _warDataListForCheckPointId     = new Map<number, SerializedWar>();
 
         public async init(data: SerializedWar): Promise<ReplayWar> {
-            await super.init(data);
+            this._baseInit(data);
 
-            this._executedActions       = data.executedActions;
+            this._executedActions = data.executedActions;
 
             this.setCheckPointId(0, 0);
             this.setWarData(0, data);
@@ -28,6 +29,15 @@ namespace TinyWars.Replay {
 
         protected _getViewClass(): new () => ReplayWarView {
             return ReplayWarView;
+        }
+        protected _getFieldClass(): new () => ReplayField {
+            return ReplayField;
+        }
+        protected _getPlayerManagerClass(): new () => ReplayPlayerManager {
+            return ReplayPlayerManager;
+        }
+        protected _getTurnManagerClass(): new () => ReplayTurnManager {
+            return ReplayTurnManager;
         }
 
         public serialize(): SerializedWar {
@@ -57,6 +67,39 @@ namespace TinyWars.Replay {
                 players                 : (this.getPlayerManager() as ReplayPlayerManager).serialize(),
                 field                   : (this.getField() as ReplayField).serialize(),
                 turn                    : (this.getTurnManager() as ReplayTurnManager).serialize(),
+            };
+        }
+
+        public serializeForSimulation(): Types.SerializedWar {
+            return {
+                warId                   : this.getWarId(),
+                warName                 : this.getWarName(),
+                warPassword             : this.getWarPassword(),
+                warComment              : this.getWarComment(),
+                configVersion           : this.getConfigVersion(),
+                executedActions         : [],
+                nextActionId            : this.getNextActionId(),
+                remainingVotesForDraw   : this.getRemainingVotesForDraw(),
+                warRuleIndex            : this.getWarRuleIndex(),
+                timeLimit               : this.getSettingsTimeLimit(),
+                hasFogByDefault         : this.getSettingsHasFog(),
+                incomeModifier          : this.getSettingsIncomeModifier(),
+                energyGrowthModifier    : this.getSettingsEnergyGrowthModifier(),
+                attackPowerModifier     : this.getSettingsAttackPowerModifier(),
+                moveRangeModifier       : this.getSettingsMoveRangeModifier(),
+                visionRangeModifier     : this.getSettingsVisionRangeModifier(),
+                initialFund             : this.getSettingsInitialFund(),
+                initialEnergy           : this.getSettingsInitialEnergy(),
+                bannedCoIdList          : this.getSettingsBannedCoIdList(),
+                luckLowerLimit          : this.getSettingsLuckLowerLimit(),
+                luckUpperLimit          : this.getSettingsLuckUpperLimit(),
+                singlePlayerWarType     : Types.SinglePlayerWarType.Custom,
+                isSinglePlayerCheating  : true,
+                mapFileName             : this.getMapFileName(),
+                players                 : (this.getPlayerManager() as ReplayPlayerManager).serializeForSimulation(),
+                field                   : (this.getField() as ReplayField).serializeForSimulation(),
+                turn                    : (this.getTurnManager() as ReplayTurnManager).serializeForSimulation(),
+                seedRandomState         : null,
             };
         }
 
@@ -140,9 +183,14 @@ namespace TinyWars.Replay {
             const data = this.getWarData(checkPointId);
             this.setNextActionId(data.nextActionId || 0);
 
-            this._setPlayerManager((this.getPlayerManager() || new ReplayPlayerManager()).init(data.players));
-            this._setField(await (this.getField() || new ReplayField()).init(data.field, this.getConfigVersion(), this.getMapFileName()));
-            this._setTurnManager((this.getTurnManager() ||new ReplayTurnManager()).init(data.turn));
+            this._initPlayerManager(data.players);
+            await this._initField(
+                data.field,
+                data.configVersion,
+                data.mapFileName,
+                await BaseWar.BwHelpers.getMapSizeAndMaxPlayerIndex(data)
+            );
+            this._initTurnManager(data.turn);
 
             this._initView();
         }

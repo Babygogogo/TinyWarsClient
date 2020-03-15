@@ -13,7 +13,8 @@ namespace TinyWars.BaseWar {
         private _coZoneContainer    = new egret.DisplayObjectContainer();
         private _coZoneImages       = new Map<number, GameUi.UiImage[][]>();
 
-        private _tileMap    : BwTileMap;
+        private _tileMap                : BwTileMap;
+        private _isCoZoneInitialized    = false;
 
         private _notifyListeners = [
             { type: Notify.Type.TileAnimationTick, callback: this._onNotifyTileAnimationTick },
@@ -50,41 +51,12 @@ namespace TinyWars.BaseWar {
                 imgObject.y = y;
                 this._objectLayer.addChild(imgObject);
             });
-
-            this._initCoZoneContainer();
-        }
-
-        private _initCoZoneContainer(): void {
-            const container = this._coZoneContainer;
-            container.removeChildren();
-
-            const images = this._coZoneImages;
-            images.clear();
-
-            const { mapWidth, mapHeight, playersCount } = this._tileMap.getMapRawData();
-            for (let i = 1; i <= playersCount; ++i) {
-                const layer     = new egret.DisplayObjectContainer();
-                const imgSource = `c08_t03_s${Helpers.getNumText(i)}_f01`;
-                const matrix: GameUi.UiImage[][] = [];
-                for (let x = 0; x < mapWidth; ++x) {
-                    matrix[x] = [];
-                    for (let y = 0; y < mapHeight; ++y) {
-                        const img   = new GameUi.UiImage(imgSource);
-                        img.x       = GRID_WIDTH * x;
-                        img.y       = GRID_HEIGHT * y;
-                        layer.addChild(img);
-                        matrix[x].push(img);
-                    }
-                }
-
-                images.set(i, matrix);
-                container.addChild(layer);
-            }
         }
 
         public startRunningView(): void {
             Notify.addEventListeners(this._notifyListeners, this);
 
+            this._initCoZoneContainer();
             const coZoneContainer = this._coZoneContainer;
             egret.Tween.removeTweens(coZoneContainer);
             coZoneContainer.alpha = 0;
@@ -107,10 +79,44 @@ namespace TinyWars.BaseWar {
             return this._coZoneImages;
         }
 
+        private _initCoZoneContainer(): void {
+            if (!this._isCoZoneInitialized) {
+                this._isCoZoneInitialized = true;
+
+                const container = this._coZoneContainer;
+                container.removeChildren();
+
+                const images = this._coZoneImages;
+                images.clear();
+
+                const tileMap                                   = this._tileMap;
+                const { width: mapWidth, height: mapHeight }    = tileMap.getMapSize();
+                const playersCount                              = tileMap.getWar().getPlayerManager().getTotalPlayersCount(false);
+                for (let i = 1; i <= playersCount; ++i) {
+                    const layer     = new egret.DisplayObjectContainer();
+                    const imgSource = `c08_t03_s${Helpers.getNumText(i)}_f01`;
+                    const matrix: GameUi.UiImage[][] = [];
+                    for (let x = 0; x < mapWidth; ++x) {
+                        matrix[x] = [];
+                        for (let y = 0; y < mapHeight; ++y) {
+                            const img   = new GameUi.UiImage(imgSource);
+                            img.x       = GRID_WIDTH * x;
+                            img.y       = GRID_HEIGHT * y;
+                            layer.addChild(img);
+                            matrix[x].push(img);
+                        }
+                    }
+
+                    images.set(i, matrix);
+                    container.addChild(layer);
+                }
+            }
+        }
         public updateCoZone(): void {
-            const tileMap                               = this._tileMap;
-            const war                                   = tileMap.getWar();
-            const { mapWidth, mapHeight, playersCount } = tileMap.getMapRawData();
+            const tileMap                                   = this._tileMap;
+            const war                                       = tileMap.getWar();
+            const { width: mapWidth, height: mapHeight }    = tileMap.getMapSize();
+            const playersCount                              = war.getPlayerManager().getTotalPlayersCount(false);
 
             for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
                 const matrix        = this._coZoneImages.get(playerIndex);

@@ -20,5 +20,21 @@ namespace TinyWars.Replay {
                 nextUnitId  : this.getNextUnitId(),
             };
         }
+
+        public serializeForSimulation(): Types.SerializedUnitMap {
+            const units: Types.SerializedUnit[] = [];
+            this.forEachUnitOnMap((unit: ReplayUnit) => {
+                units.push(unit.serializeForSimulation());
+
+                for (const loadedUnit of this.getUnitsLoadedByLoader(unit, true)) {
+                    units.push((loadedUnit as ReplayUnit).serializeForSimulation());
+                }
+            });
+
+            return {
+                units       : units.length ? units : undefined,
+                nextUnitId  : this.getNextUnitId(),
+            }
+        }
     }
 }

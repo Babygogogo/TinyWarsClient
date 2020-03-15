@@ -1,6 +1,7 @@
 
 namespace TinyWars.Replay {
     import Types                = Utility.Types;
+    import BwHelpers            = BaseWar.BwHelpers;
     import SerializedBwTile     = Types.SerializedTile;
 
     export class ReplayTile extends BaseWar.BwTile {
@@ -25,9 +26,13 @@ namespace TinyWars.Replay {
             const capturePoint = this.getCurrentCapturePoint();
             (capturePoint !== this.getMaxCapturePoint()) && (data.currentCapturePoint = capturePoint);
 
-            return ReplayHelpers.checkShouldSerializeTile(data, this._getWar().getTileMap().getMapRawData())
+            return BwHelpers.checkShouldSerializeTile(data, this.getInitialBaseViewId(), this.getInitialObjectViewId())
                 ? data
                 : null;
+        }
+
+        public serializeForSimulation(): SerializedBwTile | null {
+            return this.serialize();
         }
 
         ////////////////////////////////////////////////////////////////////////////////

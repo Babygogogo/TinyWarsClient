@@ -1,12 +1,80 @@
 
 namespace TinyWars.MultiCustomWar {
-    import Types            = Utility.Types;
-    import SerializedBwTile = Types.SerializedTile;
-    import TileType         = Types.TileType;
+    import Types                = Utility.Types;
+    import VisibilityHelpers    = Utility.VisibilityHelpers;
+    import SerializedBwTile     = Types.SerializedTile;
+    import TileType             = Types.TileType;
+    import BwHelpers            = BaseWar.BwHelpers;
 
     export class McwTile extends BaseWar.BwTile {
         protected _getViewClass(): new () => BaseWar.BwTileView {
             return McwTileView;
+        }
+
+        private _serialize(): SerializedBwTile | null {
+            const data: SerializedBwTile = {
+                gridX         : this.getGridX(),
+                gridY         : this.getGridY(),
+                baseViewId    : this.getBaseViewId(),
+                objectViewId  : this.getObjectViewId(),
+            };
+
+            const currentHp = this.getCurrentHp();
+            (currentHp !== this.getMaxHp()) && (data.currentHp = currentHp);
+
+            const buildPoint = this.getCurrentBuildPoint();
+            (buildPoint !== this.getMaxBuildPoint()) && (data.currentBuildPoint = buildPoint);
+
+            const capturePoint = this.getCurrentCapturePoint();
+            (capturePoint !== this.getMaxCapturePoint()) && (data.currentCapturePoint = capturePoint);
+
+            return BwHelpers.checkShouldSerializeTile(data, this.getInitialBaseViewId(), this.getInitialObjectViewId())
+                ? data
+                : null;
+        }
+        public serializeForSimulation(): SerializedBwTile | null {
+            const userId = User.UserModel.getSelfUserId();
+            if (VisibilityHelpers.checkIsTileVisibleToUser(this._getWar(), this.getGridIndex(), userId)) {
+                return this._serialize();
+            } else {
+                if (this.getType() === TileType.Headquarters) {
+                    const data: SerializedBwTile = {
+                        gridX       : this.getGridX(),
+                        gridY       : this.getGridY(),
+                        baseViewId  : this.getBaseViewId(),
+                        objectViewId: this.getObjectViewId(),
+                    };
+                    return BwHelpers.checkShouldSerializeTile(data, this.getInitialBaseViewId(), this.getInitialObjectViewId())
+                        ? data
+                        : null;
+
+                } else {
+                    if (this.getPlayerIndex() !== 0) {
+                        const data: SerializedBwTile = {
+                            gridX       : this.getGridX(),
+                            gridY       : this.getGridY(),
+                            baseViewId  : this.getBaseViewId(),
+                            objectViewId: this.getNeutralObjectViewId(),
+                        };
+                        return BwHelpers.checkShouldSerializeTile(data, this.getInitialBaseViewId(), this.getInitialObjectViewId())
+                            ? data
+                            : null;
+
+                    } else {
+                        const currentHp = this.getCurrentHp();
+                        const data      : SerializedBwTile = {
+                            gridX       : this.getGridX(),
+                            gridY       : this.getGridY(),
+                            baseViewId  : this.getBaseViewId(),
+                            objectViewId: this.getObjectViewId(),
+                            currentHp   : currentHp == this.getMaxHp() ? undefined : currentHp,
+                        };
+                        return BwHelpers.checkShouldSerializeTile(data, this.getInitialBaseViewId(), this.getInitialObjectViewId())
+                            ? data
+                            : null;
+                    }
+                }
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -41,15 +109,12 @@ namespace TinyWars.MultiCustomWar {
                     this.init(data, configVersion);
                 } else {
                     const tileMap   = war.getTileMap();
-                    const mapData   = tileMap.getMapRawData();
-                    const gridX     = this.getGridX();
-                    const gridY     = this.getGridY();
-                    const index     = gridX + gridY * tileMap.getMapSize().width;
+                    const gridIndex = this.getGridIndex();
                     this.init({
-                        objectViewId: mapData.tileObjects[index],
-                        baseViewId  : mapData.tileBases[index],
-                        gridX,
-                        gridY,
+                        objectViewId        : tileMap.getInitialObjectViewId(gridIndex),
+                        baseViewId          : tileMap.getInitialBaseViewId(gridIndex),
+                        gridX               : gridIndex.x,
+                        gridY               : gridIndex.y,
                         currentHp           : this.getCurrentHp(),
                         currentBuildPoint   : this.getCurrentBuildPoint(),
                         currentCapturePoint : this.getCurrentCapturePoint(),
