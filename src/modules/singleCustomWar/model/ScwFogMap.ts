@@ -28,9 +28,9 @@ namespace TinyWars.SingleCustomWar {
         public startRunning(war: ScwWar): void {
             super.startRunning(war);
 
-            const userId = User.UserModel.getSelfUserId();
+            const teamIndexes = (war.getPlayerManager() as ScwPlayerManager).getWatcherTeamIndexesForScw();
             war.getTileMap().forEachTile(tile => {
-                if (!VisibilityHelpers.checkIsTileVisibleToUser(war, tile.getGridIndex(), userId)) {
+                if (!VisibilityHelpers.checkIsTileVisibleToTeams(war, tile.getGridIndex(), teamIndexes)) {
                     tile.setFogEnabled();
                 }
             });

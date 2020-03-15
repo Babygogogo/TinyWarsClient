@@ -2452,11 +2452,28 @@ namespace TinyWars.Utility.Lang {
             [
                 `模拟战是一种辅助您进行战局规划/地图测试的工具。`,
                 `该工具允许您把当前所见到的战局信息原样复制到单人战局中。您可以在该单人战局中随意操作，还可以无限制地存档、读档，直到您找到最好的走法为止。`,
-                `在该模式下，游戏规则仍然正常生效。换言之，您可以结束回合，游戏会为您正常结算相关数据。`,
+                `在该模式下，游戏规则仍然正常生效。换言之，您可以结束回合，或者做其他任何常规操作，游戏会为您正常结算相关数据。`,
                 `另：上帝模式开发中，敬请期待！`,
             ].join("\n"),
             [
                 `Untranslated...`,
+            ].join("\n"),
+        ],
+
+        [RichType.R0007]: [
+            [
+                `感谢您游玩Tiny Wars!`,
+                `请点击/触摸右方的滚动列表以开始游戏。`,
+                ``,
+                `QQ群: 368142455`,
+                `Discord: https://discord.gg/jdtRpY9`,
+            ].join("\n"),
+            [
+                `Thank you for playing Tiny Wars!`,
+                `To start, touch the scroll list to the right.`,
+                ``,
+                `Discord: https://discord.gg/jdtRpY9`,
+                `QQ group: 368142455`,
             ].join("\n"),
         ],
     };

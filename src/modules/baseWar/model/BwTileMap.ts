@@ -73,11 +73,11 @@ namespace TinyWars.BaseWar {
 
             return this;
         }
-        private async _initWithoutMapFileName(
+        private _initWithoutMapFileName(
             configVersion               : string,
             mapSizeAndMaxPlayerIndex    : Types.MapSizeAndMaxPlayerIndex,
             data                        : SerializedBwTileMap | null | undefined,
-        ): Promise<BwTileMap> {
+        ): BwTileMap {
             const { mapWidth, mapHeight }   = mapSizeAndMaxPlayerIndex;
             const map                       = Helpers.createEmptyMap<BwTile>(mapWidth);
 

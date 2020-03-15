@@ -161,10 +161,12 @@ namespace TinyWars.SingleCustomRoom {
             const slotInfo      = this._dataForListWar[index].slotInfo;
             const mapFileName   = slotInfo.mapFileName;
             const zoomMap       = this._zoomMap;
+            const groupInfo     = this._groupInfo;
             zoomMap.removeAllContents();
 
             if (!mapFileName) {
                 this._labelNoPreview.text   = Lang.getText(Lang.Type.B0324);
+                groupInfo.visible           = false;
             } else {
                 const mapRawData            = await WarMapModel.getMapRawData(mapFileName);
                 const mapExtraData          = await WarMapModel.getExtraData(mapFileName);
@@ -172,7 +174,6 @@ namespace TinyWars.SingleCustomRoom {
                 this._labelDesigner.text    = Lang.getFormattedText(Lang.Type.F0001, mapExtraData.mapDesigner);
                 this._labelNoPreview.text   = "";
 
-                const groupInfo     = this._groupInfo;
                 groupInfo.visible   = true;
                 groupInfo.alpha     = 1;
                 egret.Tween.removeTweens(groupInfo);

@@ -39,6 +39,17 @@ namespace TinyWars.MultiCustomWar {
         }
 
         public serializeForSimulation(): Types.SerializedWar {
+            const playerDataList    = (this.getPlayerManager() as McwPlayerManager).serializeForSimulation();
+            const fieldData         = (this.getField() as McwField).serializeForSimulation();
+            // const unitMapData       = fieldData ? fieldData.unitMap : null;
+            // const unitDataList      = unitMapData ? unitMapData.units || []: [];
+            // for (const playerData of playerDataList || []) {
+            //     const unitId = playerData.coUnitId;
+            //     if ((unitId != null) && (unitDataList.every(u => u.unitId !== unitId))) {
+            //         playerData.coUnitId = null;
+            //     }
+            // }
+
             return {
                 warId                   : this.getWarId(),
                 warName                 : this.getWarName(),
@@ -64,8 +75,8 @@ namespace TinyWars.MultiCustomWar {
                 singlePlayerWarType     : Types.SinglePlayerWarType.Custom,
                 isSinglePlayerCheating  : true,
                 mapFileName             : this.getMapFileName(),
-                players                 : (this.getPlayerManager() as McwPlayerManager).serializeForSimulation(),
-                field                   : (this.getField() as McwField).serializeForSimulation(),
+                players                 : playerDataList,
+                field                   : fieldData,
                 turn                    : (this.getTurnManager() as McwTurnManager).serializeForSimulation(),
                 seedRandomState         : null,
             };

@@ -28,6 +28,39 @@ namespace TinyWars.MapEditor {
             this._view.init(this);
         }
 
+        public serializeForSimulation(): Types.SerializedWar {
+            return {
+                warId                   : null,
+                warName                 : null,
+                warPassword             : null,
+                warComment              : null,
+                configVersion           : this.getConfigVersion(),
+                executedActions         : [],
+                nextActionId            : 0,
+                remainingVotesForDraw   : null,
+                warRuleIndex            : null,
+                timeLimit               : null,
+                hasFogByDefault         : false,
+                incomeModifier          : 100,
+                energyGrowthModifier    : 100,
+                attackPowerModifier     : 0,
+                moveRangeModifier       : 0,
+                visionRangeModifier     : 0,
+                initialFund             : 0,
+                initialEnergy           : 0,
+                bannedCoIdList          : [],
+                luckLowerLimit          : 0,
+                luckUpperLimit          : 10,
+                singlePlayerWarType     : Types.SinglePlayerWarType.Custom,
+                isSinglePlayerCheating  : true,
+                mapFileName             : null,
+                players                 : this._generateSimulationDataForPlayerManager(),
+                field                   : this.getField().serializeForSimulation(),
+                turn                    : this._generateSimulationDataForTurnManager(),
+                seedRandomState         : null,
+            };
+        }
+
         public getView(): MeWarView {
             return this._view;
         }
@@ -148,6 +181,40 @@ namespace TinyWars.MapEditor {
         }
         public getIsSinglePlayer(): boolean {
             return this.getField().getIsSinglePlayer();
+        }
+
+        private _generateSimulationDataForPlayerManager(): Types.SerializedPlayer[] {
+            const maxPlayerIndex    = this.getField().getMaxPlayerIndex();
+            const selfUserId        = User.UserModel.getSelfUserId();
+            const dataList          : Types.SerializedPlayer[] = [];
+            for (let playerIndex = 0; playerIndex <= maxPlayerIndex; ++playerIndex) {
+                dataList.push({
+                    fund                        : 0,
+                    hasVotedForDraw             : false,
+                    isAlive                     : true,
+                    playerIndex,
+                    teamIndex                   : playerIndex,
+                    watchRequestSrcUserIdList   : [],
+                    watchOngoingSrcUserIdList   : [],
+                    userId                      : playerIndex > 0 ? selfUserId : null,
+                    coId                        : null,
+                    coUnitId                    : null,
+                    coCurrentEnergy             : null,
+                    coUsingSkillType            : Types.CoSkillType.Passive,
+                    coIsDestroyedInTurn         : false,
+                });
+            }
+
+            return dataList;
+        }
+
+        private _generateSimulationDataForTurnManager(): Types.SerializedTurn {
+            return {
+                turnIndex       : 0,
+                playerIndex     : 0,
+                turnPhaseCode   : Types.TurnPhaseCode.WaitBeginTurn,
+                enterTurnTime   : null,
+            };
         }
     }
 }

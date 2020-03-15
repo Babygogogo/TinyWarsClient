@@ -140,6 +140,10 @@ namespace TinyWars.MapEditor {
             return data;
         }
 
+        public serializeForSimulation(): Types.SerializedUnit {
+            return this.serialize();
+        }
+
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////

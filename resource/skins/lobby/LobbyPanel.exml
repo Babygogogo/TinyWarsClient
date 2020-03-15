@@ -140,6 +140,8 @@
             </e:List>
         </GameUi:UiScrollList>
     </e:Group>
-    <GameUi:UiLabel text="Thank you for playing Tiny Wars!\nTo start, touch the scroll list to the right." textColor="0xffffff" horizontalCenter="-110"
-                    verticalCenter="0" verticalAlign="middle" textAlign="center" size="25" />
+    <GameUi:UiLabel id="_labelTips"
+                    text="Thank you for playing Tiny Wars!\nTo start, touch the scroll list to the right."
+                    textColor="0xffffff" horizontalCenter="-110" verticalCenter="0" verticalAlign="middle"
+                    textAlign="center" size="25" />
 </e:Skin>

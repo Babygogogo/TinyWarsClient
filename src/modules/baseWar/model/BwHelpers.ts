@@ -620,8 +620,8 @@ namespace TinyWars.BaseWar.BwHelpers {
                 let mapWidth   = 0;
                 let mapHeight  = 0;
                 for (const tile of tiles) {
-                    mapWidth   = Math.max(mapWidth, tile.gridX || 0);
-                    mapHeight  = Math.max(mapHeight, tile.gridY || 0);
+                    mapWidth   = Math.max(mapWidth, (tile.gridX || 0) + 1);
+                    mapHeight  = Math.max(mapHeight, (tile.gridY || 0) + 1);
                 }
                 return ((mapWidth > 0) && (mapHeight > 0))
                     ? { mapWidth, mapHeight, maxPlayerIndex }
