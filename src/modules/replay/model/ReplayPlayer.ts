@@ -21,5 +21,26 @@ namespace TinyWars.Replay {
                 coIsDestroyedInTurn     : this.getCoIsDestroyedInTurn(),
             };
         }
+
+        public serializeForSimulation(): Types.SerializedPlayer {
+            const playerIndex   = this.getPlayerIndex();
+            const selfUserId    = User.UserModel.getSelfUserId();
+
+            return {
+                fund                        : this.getFund(),
+                hasVotedForDraw             : this.getHasVotedForDraw(),
+                isAlive                     : this.getIsAlive(),
+                playerIndex,
+                teamIndex                   : this.getTeamIndex(),
+                watchRequestSrcUserIdList   : [],
+                watchOngoingSrcUserIdList   : [],
+                userId                      : playerIndex > 0 ? selfUserId : null,
+                coId                        : this.getCoId(),
+                coUnitId                    : this.getCoUnitId(),
+                coCurrentEnergy             : this.getCoCurrentEnergy(),
+                coUsingSkillType            : this.getCoUsingSkillType(),
+                coIsDestroyedInTurn         : this.getCoIsDestroyedInTurn(),
+            };
+        }
     }
 }

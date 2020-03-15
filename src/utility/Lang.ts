@@ -2453,10 +2453,15 @@ namespace TinyWars.Utility.Lang {
                 `模拟战是一种辅助您进行战局规划/地图测试的工具。`,
                 `该工具允许您把当前所见到的战局信息原样复制到单人战局中。您可以在该单人战局中随意操作，还可以无限制地存档、读档，直到您找到最好的走法为止。`,
                 `在该模式下，游戏规则仍然正常生效。换言之，您可以结束回合，或者做其他任何常规操作，游戏会为您正常结算相关数据。`,
+                ``,
                 `另：上帝模式开发中，敬请期待！`,
             ].join("\n"),
             [
-                `Untranslated...`,
+                `Simulation (or Move Planner) is a tool to plan game moves and test maps.`,
+                `It enables you to copy the game screen to a single player game. You may move any unit and save/load for unlimited times till you're satisfied with the move.`,
+                `In this mode the game rule works normally. For example, you may end your turn and the fund will be added as usual.`,
+                ``,
+                `Sandbox Mode (where you can set unit HP for a better planning purpose) is now under development, and it may be online SOOOON.`,
             ].join("\n"),
         ],
 

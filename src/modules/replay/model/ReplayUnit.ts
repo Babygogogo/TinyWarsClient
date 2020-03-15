@@ -56,5 +56,9 @@ namespace TinyWars.Replay {
 
             return data;
         }
+
+        public serializeForSimulation(): SerializedMcUnit {
+            return this.serialize();
+        }
     }
 }

@@ -31,6 +31,10 @@ namespace TinyWars.Replay {
                 : null;
         }
 
+        public serializeForSimulation(): SerializedBwTile | null {
+            return this.serialize();
+        }
+
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for fog.
         ////////////////////////////////////////////////////////////////////////////////

@@ -32,5 +32,12 @@ namespace TinyWars.Replay {
                 tileMap : (this.getTileMap() as ReplayTileMap).serialize(),
             };
         }
+        public serializeForSimulation(): Types.SerializedField {
+            return {
+                fogMap  : (this.getFogMap() as ReplayFogMap).serializeForSimulation(),
+                unitMap : (this.getUnitMap() as ReplayUnitMap).serializeForSimulation(),
+                tileMap : (this.getTileMap() as ReplayTileMap).serializeForSimulation(),
+            };
+        }
     }
 }

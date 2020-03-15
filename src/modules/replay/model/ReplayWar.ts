@@ -70,6 +70,39 @@ namespace TinyWars.Replay {
             };
         }
 
+        public serializeForSimulation(): Types.SerializedWar {
+            return {
+                warId                   : this.getWarId(),
+                warName                 : this.getWarName(),
+                warPassword             : this.getWarPassword(),
+                warComment              : this.getWarComment(),
+                configVersion           : this.getConfigVersion(),
+                executedActions         : [],
+                nextActionId            : this.getNextActionId(),
+                remainingVotesForDraw   : this.getRemainingVotesForDraw(),
+                warRuleIndex            : this.getWarRuleIndex(),
+                timeLimit               : this.getSettingsTimeLimit(),
+                hasFogByDefault         : this.getSettingsHasFog(),
+                incomeModifier          : this.getSettingsIncomeModifier(),
+                energyGrowthModifier    : this.getSettingsEnergyGrowthModifier(),
+                attackPowerModifier     : this.getSettingsAttackPowerModifier(),
+                moveRangeModifier       : this.getSettingsMoveRangeModifier(),
+                visionRangeModifier     : this.getSettingsVisionRangeModifier(),
+                initialFund             : this.getSettingsInitialFund(),
+                initialEnergy           : this.getSettingsInitialEnergy(),
+                bannedCoIdList          : this.getSettingsBannedCoIdList(),
+                luckLowerLimit          : this.getSettingsLuckLowerLimit(),
+                luckUpperLimit          : this.getSettingsLuckUpperLimit(),
+                singlePlayerWarType     : Types.SinglePlayerWarType.Custom,
+                isSinglePlayerCheating  : true,
+                mapFileName             : this.getMapFileName(),
+                players                 : (this.getPlayerManager() as ReplayPlayerManager).serializeForSimulation(),
+                field                   : (this.getField() as ReplayField).serializeForSimulation(),
+                turn                    : (this.getTurnManager() as ReplayTurnManager).serializeForSimulation(),
+                seedRandomState         : null,
+            };
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////

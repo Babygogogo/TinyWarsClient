@@ -18,6 +18,10 @@ namespace TinyWars.Replay {
             };
         }
 
+        public serializeForSimulation(): Types.SerializedTurn {
+            return this.serialize();
+        }
+
         protected _runPhaseMain(data: ProtoTypes.IWarActionPlayerBeginTurn): void {
             const playerIndex   = this.getPlayerIndexInTurn();
             const war           = this._getWar() as ReplayWar;
