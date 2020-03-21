@@ -821,7 +821,16 @@ namespace TinyWars.MultiCustomWar.McwModel {
 
         return new Promise<void>(resolve => {
             focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
-                if (action.isDropBlocked) {
+                if ((action.isDropBlocked)                              &&
+                    (VisibilityHelpers.checkIsUnitOnMapVisibleToUser({
+                        war,
+                        gridIndex       : endingGridIndex,
+                        unitType        : focusUnit.getType(),
+                        isDiving        : focusUnit.getIsDiving(),
+                        unitPlayerIndex : focusUnit.getPlayerIndex(),
+                        observerUserId  : User.UserModel.getSelfUserId(),
+                    }))
+                ) {
                     war.getGridVisionEffect().showEffectBlock(endingGridIndex);
                 }
                 focusUnit.updateView();
@@ -838,7 +847,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
                                 r();
                             }
                         );
-                    }))
+                    }));
                 }
                 Promise.all(promises).then(() => {
                     McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
