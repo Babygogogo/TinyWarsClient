@@ -200,7 +200,7 @@ namespace TinyWars.MultiCustomWar {
             this._labelMapName.text                 = await WarMapModel.getMapNameInLanguage(mapFileName) || "----";
             this._labelMapDesigner.text             = await WarMapModel.getMapDesigner(mapFileName) || "----";
             this._labelWarId.text                   = `${war.getWarId()}`;
-            this._labelTurnIndex.text               = `${war.getTurnManager().getTurnIndex()}`;
+            this._labelTurnIndex.text               = `${war.getTurnManager().getTurnIndex() + 1}`;
             this._labelActionId.text                = `${war.getNextActionId() - 1}`;
             this._labelIncomeModifier.text          = `${war.getSettingsIncomeModifier()}%`;
             this._labelEnergyGrowthModifier.text    = `${war.getSettingsEnergyGrowthModifier()}%`;

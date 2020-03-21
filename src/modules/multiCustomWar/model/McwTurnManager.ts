@@ -51,29 +51,23 @@ namespace TinyWars.MultiCustomWar {
         // The other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _resetFogForWatcher(): void {
-            const war       = this._getWar() as McwWar;
-            const userId    = User.UserModel.getSelfUserId();
+            const war               = this._getWar() as McwWar;
+            const userId            = User.UserModel.getSelfUserId();
+            const visibleUnitsOnMap = VisibilityHelpers.getAllUnitsOnMapVisibleToUser(war, userId);
             war.getUnitMap().forEachUnitOnMap(unit => {
-                const gridIndex = unit.getGridIndex();
-                if (!VisibilityHelpers.checkIsUnitOnMapVisibleToUser({
-                    war,
-                    gridIndex,
-                    unitType        : unit.getType(),
-                    isDiving        : unit.getIsDiving(),
-                    unitPlayerIndex : unit.getPlayerIndex(),
-                    observerUserId  : userId,
-                })) {
-                    DestructionHelpers.removeUnitOnMap(war, gridIndex);
+                if (!visibleUnitsOnMap.has(unit)) {
+                    DestructionHelpers.removeUnitOnMap(war, unit.getGridIndex());
                 }
             });
             DestructionHelpers.removeInvisibleLoadedUnits(war, userId);
 
-            const tileMap = war.getTileMap();
+            const tileMap       = war.getTileMap();
+            const visibleTiles  = VisibilityHelpers.getAllTilesVisibleToUser(war, userId);
             tileMap.forEachTile(tile => {
-                if (!VisibilityHelpers.checkIsTileVisibleToUser(war, tile.getGridIndex(), userId)) {
-                    tile.setFogEnabled();
-                } else {
+                if (visibleTiles.has(tile)) {
                     tile.setFogDisabled();
+                } else {
+                    tile.setFogEnabled();
                 }
                 tile.updateView();
             });

@@ -148,7 +148,7 @@ namespace TinyWars.Replay {
 
                 await this._loadCheckPoint(checkPointId);
                 this.startRunning().startRunningView();
-                FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
+                FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex() + 1})`);
 
             } else {
                 this.setIsAutoReplay(false);
@@ -165,7 +165,7 @@ namespace TinyWars.Replay {
                 this.stopRunning();
                 await this._loadCheckPoint(checkPointId);
                 this.startRunning().startRunningView();
-                FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
+                FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex() + 1})`);
             }
         }
         public checkIsInBeginning(): boolean {
@@ -176,7 +176,7 @@ namespace TinyWars.Replay {
             this.stopRunning();
 
             await this._loadCheckPoint(this.getCheckPointId(this.getNextActionId()) - 1);
-            FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
+            FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex() + 1})`);
             this.startRunning().startRunningView();
         }
         private async _loadCheckPoint(checkPointId: number): Promise<void> {

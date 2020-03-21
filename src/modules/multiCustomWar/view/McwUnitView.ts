@@ -79,10 +79,22 @@ namespace TinyWars.MultiCustomWar {
                 tween.to(GridIndexHelpers.createPointByGridIndex(gridIndex), 200);
             }
 
+            const endingGridIndex = path[path.length - 1];
             if (!aiming) {
                 tween.call(() => {
                     this._setImgUnitFlippedX(false);
-                    (isBlocked) && (war.getGridVisionEffect().showEffectBlock(path[path.length - 1]));
+                    if ((isBlocked)                                         &&
+                        (VisibilityHelpers.checkIsUnitOnMapVisibleToUser({
+                            war,
+                            unitType,
+                            isDiving,
+                            gridIndex       : endingGridIndex,
+                            unitPlayerIndex : playerIndex,
+                            observerUserId  : userId,
+                        }))
+                    ) {
+                        war.getGridVisionEffect().showEffectBlock(endingGridIndex);
+                    }
 
                     (callback) && (callback());
                 });
@@ -100,7 +112,18 @@ namespace TinyWars.MultiCustomWar {
                     cursor.setIsMovableByTouches(true);
                     cursor.updateView();
                     this._setImgUnitFlippedX(false);
-                    (isBlocked) && (war.getGridVisionEffect().showEffectBlock(path[path.length - 1]));
+                    if ((isBlocked)                                         &&
+                        (VisibilityHelpers.checkIsUnitOnMapVisibleToUser({
+                            war,
+                            unitType,
+                            isDiving,
+                            gridIndex       : endingGridIndex,
+                            unitPlayerIndex : playerIndex,
+                            observerUserId  : userId,
+                        }))
+                    ) {
+                        war.getGridVisionEffect().showEffectBlock(endingGridIndex);
+                    }
 
                     (callback) && (callback());
                 });

@@ -45,13 +45,14 @@ namespace TinyWars.Replay {
         }
 
         private _resetFogForPlayerInTurn(): void {
-            const war       = this._getWar();
-            const teamIndex = war.getPlayerInTurn().getTeamIndex();
+            const war           = this._getWar();
+            const visibleTiles  = VisibilityHelpers.getAllTilesVisibleToTeam(war, war.getPlayerInTurn().getTeamIndex());
+
             war.getTileMap().forEachTile(tile => {
-                if (!VisibilityHelpers.checkIsTileVisibleToTeam(war, tile.getGridIndex(), teamIndex)) {
-                    tile.setFogEnabled();
-                } else {
+                if (visibleTiles.has(tile)) {
                     tile.setFogDisabled();
+                } else {
+                    tile.setFogEnabled();
                 }
                 tile.updateView();
             });

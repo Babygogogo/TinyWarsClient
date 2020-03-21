@@ -958,6 +958,17 @@ namespace TinyWars.BaseWar {
                 );
             }
         }
+        public getVisionRangeForTeamIndexes(teamIndexes: Set<number>, gridIndex: GridIndex): number | undefined {
+            let vision = null;
+            for (const playerIndex of this.getWar().getPlayerManager().getPlayerIndexesInTeams(teamIndexes)) {
+                const v = this.getVisionRangeForPlayer(playerIndex, gridIndex);
+                if ((vision == null) || (v > vision)) {
+                    vision = v;
+                }
+            }
+            return vision;
+        }
+
         public checkIsTrueVision(): boolean {
             const version   = this.getWar()!.getConfigVersion();
             const unitType  = this.getType();

@@ -209,18 +209,28 @@ namespace TinyWars.MapEditor {
         }
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
-            const data      = this.data as DataForMapRenderer;
-            const mapData   = data.mapData;
-            if (mapData.reviewStatus !== Types.MapReviewStatus.Rejected) {
-                Utility.FlowManager.gotoMapEditor(mapData.mapRawData as Types.MapRawData, mapData.slotIndex, false);
-            } else {
+            const data          = this.data as DataForMapRenderer;
+            const mapData       = data.mapData;
+            const reviewStatus  = mapData.reviewStatus;
+
+            if (reviewStatus === Types.MapReviewStatus.Rejected) {
                 Common.AlertPanel.show({
                     title   : Lang.getText(Lang.Type.B0305),
-                    content : mapData.rejectReason || Lang.getText(Lang.Type.B0001),
+                    content : mapData.reviewComment || Lang.getText(Lang.Type.B0001),
                     callback: () => {
                         Utility.FlowManager.gotoMapEditor(mapData.mapRawData as Types.MapRawData, mapData.slotIndex, false);
                     },
                 });
+            } else if (reviewStatus === Types.MapReviewStatus.Accepted) {
+                Common.AlertPanel.show({
+                    title   : Lang.getText(Lang.Type.B0326),
+                    content : mapData.reviewComment || Lang.getText(Lang.Type.B0001),
+                    callback: () => {
+                        Utility.FlowManager.gotoMapEditor(mapData.mapRawData as Types.MapRawData, mapData.slotIndex, false);
+                    },
+                });
+            } else {
+                Utility.FlowManager.gotoMapEditor(mapData.mapRawData as Types.MapRawData, mapData.slotIndex, false);
             }
         }
     }

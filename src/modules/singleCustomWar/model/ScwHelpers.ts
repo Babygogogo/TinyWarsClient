@@ -94,28 +94,19 @@ namespace TinyWars.SingleCustomWar.ScwHelpers {
     }
 
     export function updateTilesAndUnitsOnVisibilityChanged(war: ScwWar): void {
-        const teamIndexes = (war.getPlayerManager() as ScwPlayerManager).getWatcherTeamIndexesForScw();
+        const teamIndexes   = (war.getPlayerManager() as ScwPlayerManager).getWatcherTeamIndexesForScw();
+        const visibleUnits  = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes);
         war.getUnitMap().forEachUnitOnMap(unit => {
-            if (!VisibilityHelpers.checkIsUnitOnMapVisibleToTeams(
-                war,
-                unit.getGridIndex(),
-                unit.getType(),
-                unit.getIsDiving(),
-                unit.getPlayerIndex(),
-                teamIndexes
-            )) {
-                unit.setViewVisible(false);
-            } else {
-                unit.setViewVisible(true);
-            }
+            unit.setViewVisible(visibleUnits.has(unit));
         });
 
-        const tileMap = war.getTileMap();
+        const tileMap       = war.getTileMap();
+        const visibleTiles  = VisibilityHelpers.getAllTilesVisibleToTeams(war, teamIndexes);
         tileMap.forEachTile(tile => {
-            if (!VisibilityHelpers.checkIsTileVisibleToTeams(war, tile.getGridIndex(), teamIndexes)) {
-                tile.setFogEnabled();
-            } else {
+            if (visibleTiles.has(tile)) {
                 tile.setFogDisabled();
+            } else {
+                tile.setFogEnabled();
             }
             tile.updateView();
         });
