@@ -538,6 +538,10 @@ namespace TinyWars.Utility.Lang {
             `模拟战已成功创建。您可以通过单人模式进入该战局。`,
             `The simulation war is created successfully.`,
         ],
+        [Type.A0105]: [
+            `请输入您对此地图的评价以及改进建议，可留空`,
+            `Please leave your comment here if any.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -1830,6 +1834,10 @@ namespace TinyWars.Utility.Lang {
             `模拟战`,
             `Simulation`,
         ],
+        [Type.B0326]: [
+            `评审意见`,
+            `Comments`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -2472,6 +2480,8 @@ namespace TinyWars.Utility.Lang {
                 ``,
                 `QQ群: 368142455`,
                 `Discord: https://discord.gg/jdtRpY9`,
+                ``,
+                `GitHub: https://github.com/Babygogogo/TinyWarsClient`,
             ].join("\n"),
             [
                 `Thank you for playing Tiny Wars!`,
@@ -2479,6 +2489,8 @@ namespace TinyWars.Utility.Lang {
                 ``,
                 `Discord: https://discord.gg/jdtRpY9`,
                 `QQ group: 368142455`,
+                ``,
+                `GitHub: https://github.com/Babygogogo/TinyWarsClient`,
             ].join("\n"),
         ],
     };

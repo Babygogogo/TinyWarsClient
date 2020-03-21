@@ -16,9 +16,9 @@ namespace TinyWars.MapEditor.MeModel {
             const slotIndex     = data.slotIndex;
             MAP_DICT.set(slotIndex, {
                 slotIndex,
-                reviewStatus: data.reviewStatus,
-                mapRawData  : data.mapRawData,
-                rejectReason: data.rejectReason,
+                reviewStatus    : data.reviewStatus,
+                mapRawData      : data.mapRawData,
+                reviewComment   : data.reviewComment,
             });
         }
         for (let i = 0; i < ConfigManager.COMMON_CONSTANTS.MapEditorSlotMaxCount; ++i) {

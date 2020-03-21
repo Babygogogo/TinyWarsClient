@@ -547,14 +547,7 @@ namespace TinyWars.MapEditor {
                 return {
                     name    : Lang.getText(Lang.Type.B0296),
                     callback: () => {
-                        Common.ConfirmPanel.show({
-                            title   : Lang.getText(Lang.Type.B0088),
-                            content : Lang.getText(Lang.Type.A0090),
-                            callback: () => {
-                                const war = this._war;
-                                WarMap.WarMapProxy.reqReviewMap(war.getDesignerUserId(), war.getSlotIndex(), war.getModifiedTime(), true, null);
-                            },
-                        });
+                        MapManagement.MmAcceptMapPanel.show();
                     },
                 };
             }
