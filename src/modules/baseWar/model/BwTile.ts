@@ -406,6 +406,13 @@ namespace TinyWars.BaseWar {
                 return Math.max(0, this.getCfgVisionRange() + this._getWar().getSettingsVisionRangeModifier());
             }
         }
+        public getVisionRangeForTeamIndexes(teamIndexes: Set<number>): number | null {
+            if ((!this.checkIsVisionEnabledForAllPlayers()) && (!teamIndexes.has(this.getTeamIndex()))) {
+                return null;
+            } else {
+                return Math.max(0, this.getCfgVisionRange() + this._getWar().getSettingsVisionRangeModifier());
+            }
+        }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for global attack/defense bonus.

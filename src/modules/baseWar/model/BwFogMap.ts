@@ -139,6 +139,34 @@ namespace TinyWars.BaseWar {
                 return this._mapsFromPaths.get(playerIndex)![gridIndex.x][gridIndex.y];
             }
         }
+        public getVisibilityMapFromPathsForTeam(teamIndex: number): Visibility[][] {
+            return this.getVisibilityMapFromPathsForTeams(new Set([teamIndex]));
+        }
+        public getVisibilityMapFromPathsForTeams(teamIndexes: Set<number>): Visibility[][] {
+            const { width, height } = this.getMapSize();
+            const resultMap         = Helpers.createEmptyMap<Visibility>(width, height, Visibility.OutsideVision);
+            if (!this.checkHasFogCurrently()) {
+                resultMap.forEach(column => column.fill(Visibility.TrueVision));
+            } else {
+                const mapFromPaths  = this._mapsFromPaths;
+                const playerIndexes = this._getWar().getPlayerManager().getPlayerIndexesInTeams(teamIndexes);
+                for (let x = 0; x < width; ++x) {
+                    for (let y = 0; y < height; ++y) {
+                        for (const playerIndex of playerIndexes) {
+                            resultMap[x][y] = Math.max(
+                                resultMap[x][y],
+                                mapFromPaths.get(playerIndex)[x][y] || Visibility.OutsideVision
+                            );
+                        }
+                    }
+                }
+            }
+            return resultMap;
+        }
+        public getVisibilityMapFromPathsForUser(userId: number): Visibility[][] {
+            return this.getVisibilityMapFromPathsForTeams(this._getWar().getWatcherTeamIndexes(userId));
+        }
+
         public getVisibilityFromTilesForPlayer(gridIndex: GridIndex, playerIndex: number): Visibility {
             if (!this.checkHasFogCurrently()) {
                 return Visibility.TrueVision;
@@ -161,6 +189,42 @@ namespace TinyWars.BaseWar {
                 }
             }
         }
+        public getVisibilityMapFromTilesForTeam(teamIndex: number): Visibility[][] {
+            return this.getVisibilityMapFromTilesForTeams(new Set([teamIndex]));
+        }
+        public getVisibilityMapFromTilesForTeams(teamIndexes: Set<number>): Visibility[][] {
+            const mapSize           = this.getMapSize();
+            const { width, height } = mapSize;
+            const resultMap         = Helpers.createEmptyMap<Visibility>(width, height, Visibility.OutsideVision);
+            if (!this.checkHasFogCurrently()) {
+                resultMap.forEach(column => column.fill(Visibility.TrueVision));
+            } else {
+                const tileMap = this._getWar().getTileMap();
+                for (let x = 0; x < width; ++x) {
+                    for (let y = 0; y < height; ++y) {
+                        const tileGridIndex : GridIndex = { x, y };
+                        const tile          = tileMap.getTile(tileGridIndex);
+                        if (teamIndexes.has(tile.getTeamIndex())) {
+                            resultMap[x][y] = Visibility.TrueVision;
+                        }
+
+                        const visionRange = tile.getVisionRangeForTeamIndexes(teamIndexes);
+                        if (visionRange != null) {
+                            for (const g of GridIndexHelpers.getGridsWithinDistance(tileGridIndex, 0, visionRange, mapSize)) {
+                                if (resultMap[g.x][g.y] === Visibility.OutsideVision) {
+                                    resultMap[g.x][g.y] = Visibility.InsideVision;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return resultMap;
+        }
+        public getVisibilityMapFromTilesForUser(userId: number): Visibility[][] {
+            return this.getVisibilityMapFromTilesForTeams(this._getWar().getWatcherTeamIndexes(userId));
+        }
+
         public getVisibilityFromUnitsForPlayer(gridIndex: GridIndex, playerIndex: number): Visibility {
             if (!this.checkHasFogCurrently()) {
                 return Visibility.TrueVision;
@@ -191,6 +255,48 @@ namespace TinyWars.BaseWar {
                 }
                 return isInside ? Visibility.InsideVision : Visibility.OutsideVision;
             }
+        }
+        public getVisibilityMapFromUnitsForTeam(teamIndex: number): Visibility[][] {
+            return this.getVisibilityMapFromUnitsForTeams(new Set([teamIndex]));
+        }
+        public getVisibilityMapFromUnitsForTeams(teamIndexes: Set<number>): Visibility[][] {
+            const mapSize           = this.getMapSize();
+            const { width, height } = mapSize;
+            const resultMap         = Helpers.createEmptyMap<Visibility>(width, height, Visibility.OutsideVision);
+            if (!this.checkHasFogCurrently()) {
+                resultMap.forEach(column => column.fill(Visibility.TrueVision));
+            } else {
+                const unitMap = this._getWar().getUnitMap();
+                for (let x = 0; x < width; ++x) {
+                    for (let y = 0; y < height; ++y) {
+                        const unitGridIndex : GridIndex = { x, y };
+                        const unit          = unitMap.getUnitOnMap(unitGridIndex);
+                        if (unit) {
+                            const visionRange = unit.getVisionRangeForTeamIndexes(teamIndexes, unitGridIndex);
+                            if (visionRange != null) {
+                                for (const g of GridIndexHelpers.getGridsWithinDistance(unitGridIndex, 0, 1, mapSize)) {
+                                    resultMap[g.x][g.y] = Visibility.TrueVision;
+                                }
+
+                                const isTrueVision = unit.checkIsTrueVision();
+                                for (const g of GridIndexHelpers.getGridsWithinDistance(unitGridIndex, 2, visionRange, mapSize)) {
+                                    if (isTrueVision) {
+                                        resultMap[g.x][g.y] = Visibility.TrueVision;
+                                    } else {
+                                        if (resultMap[g.x][g.y] === Visibility.OutsideVision) {
+                                            resultMap[g.x][g.y] = Visibility.InsideVision;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return resultMap;
+        }
+        public getVisibilityMapFromUnitsForUser(userId: number): Visibility[][] {
+            return this.getVisibilityMapFromUnitsForTeams(this._getWar().getWatcherTeamIndexes(userId));
         }
     }
 

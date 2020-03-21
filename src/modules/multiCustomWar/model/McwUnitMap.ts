@@ -12,20 +12,14 @@ namespace TinyWars.MultiCustomWar {
         }
 
         public serializeForSimulation(): Types.SerializedUnitMap {
-            const war           = this.getWar();
-            const userId        = User.UserModel.getSelfUserId();
-            const units         : Types.SerializedUnit[] = [];
-            const teamIndexes   = war.getWatcherTeamIndexes(userId);
+            const war               = this.getWar();
+            const userId            = User.UserModel.getSelfUserId();
+            const units             : Types.SerializedUnit[] = [];
+            const teamIndexes       = war.getWatcherTeamIndexes(userId);
+            const visibleUnitsOnMap = VisibilityHelpers.getAllUnitsOnMapVisibleToUser(war, userId);
 
             this.forEachUnitOnMap((unit: McwUnit) => {
-                if (VisibilityHelpers.checkIsUnitOnMapVisibleToUser({
-                    war,
-                    gridIndex           : unit.getGridIndex(),
-                    unitType            : unit.getType(),
-                    isDiving            : unit.getIsDiving(),
-                    unitPlayerIndex     : unit.getPlayerIndex(),
-                    observerUserId      : userId,
-                })) {
+                if (visibleUnitsOnMap.has(unit)) {
                     units.push(unit.serializeForSimulation());
 
                     if (teamIndexes.has(unit.getTeamIndex())) {
