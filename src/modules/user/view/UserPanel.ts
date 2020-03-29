@@ -14,7 +14,6 @@ namespace TinyWars.User {
         private static _instance: UserPanel;
 
         private _labelTitle         : GameUi.UiLabel;
-        private _btnChangeNickname  : GameUi.UiButton;
 
         private _labelRankMatchTitle: GameUi.UiLabel;
         private _labelRankScoreTitle: GameUi.UiLabel;
@@ -48,10 +47,13 @@ namespace TinyWars.User {
         private _labelLoginCount        : GameUi.UiLabel;
         private _labelUserId            : GameUi.UiLabel;
         private _labelDiscordId         : GameUi.UiLabel;
-        private _btnChangeDiscordId     : GameUi.UiButton;
 
+        private _groupButtons       : eui.Group;
+        private _btnChangeDiscordId : GameUi.UiButton;
+        private _btnChangeNickname  : GameUi.UiButton;
         private _btnShowOnlineUsers : GameUi.UiButton;
         private _btnChangeLanguage  : GameUi.UiButton;
+        private _btnServerStatus    : GameUi.UiButton;
         private _btnClose           : GameUi.UiButton;
 
         private _userId: number;
@@ -89,6 +91,7 @@ namespace TinyWars.User {
                 { ui: this._btnChangeDiscordId, callback: this._onTouchedBtnChangeDiscordId },
                 { ui: this._btnShowOnlineUsers, callback: this._onTouchedBtnShowOnlineUsers },
                 { ui: this._btnChangeLanguage,  callback: this._onTouchedBtnChangeLanguage },
+                { ui: this._btnServerStatus,    callback: this._onTouchedBtnServerStatus },
                 { ui: this._btnClose,           callback: this.close },
             ];
         }
@@ -117,7 +120,7 @@ namespace TinyWars.User {
             }
         }
         private _onNotifyLanguageChanged(e: egret.Event): void {
-            this._updateOnLanguageChanged();
+            this._updateComponentsForLanguage();
         }
         private _onTouchedBtnChangeNickname(e: egret.TouchEvent): void {
             UserChangeNicknamePanel.show();
@@ -137,28 +140,41 @@ namespace TinyWars.User {
 
             Notify.dispatch(Notify.Type.LanguageChanged);
         }
+        private _onTouchedBtnServerStatus(e: egret.TouchEvent): void {
+            Common.CommonServerStatusPanel.show();
+        }
 
         private _updateView(): void {
             const userId    = this._userId;
             const info      = userId != null ? UserModel.getUserInfo(userId) : undefined;
             if (info) {
-                const isSelf                    = userId === UserModel.getSelfUserId();
-                this._btnChangeNickname.visible = isSelf;
-
-                this._labelRankScore.text   = `${info.rank2pScore}`;
-
-                this._labelRegisterTime.text        = Helpers.getTimestampShortText(info.registerTime);
-                this._labelLastLoginTime.text       = Helpers.getTimestampShortText(info.lastLoginTime);
-                this._labelLoginCount.text          = `${info.loginCount}`;
-                this._labelUserId.text              = `${userId}`;
-                this._labelDiscordId.text           = info.discordId || "--";
-                this._btnChangeDiscordId.visible    = isSelf;
+                this._labelRankScore.text       = `${info.rank2pScore}`;
+                this._labelRegisterTime.text    = Helpers.getTimestampShortText(info.registerTime);
+                this._labelLastLoginTime.text   = Helpers.getTimestampShortText(info.lastLoginTime);
+                this._labelLoginCount.text      = `${info.loginCount}`;
+                this._labelUserId.text          = `${userId}`;
+                this._labelDiscordId.text       = info.discordId || "--";
             }
 
-            this._updateOnLanguageChanged();
+            this._updateComponentsForLanguage();
+            this._updateGroupButtons();
         }
 
-        private _updateOnLanguageChanged(): void {
+        private _updateGroupButtons(): void {
+            const group = this._groupButtons;
+            group.removeChildren();
+            if (this._userId === UserModel.getSelfUserId()) {
+                group.addChild(this._btnChangeNickname);
+                group.addChild(this._btnChangeDiscordId);
+            }
+            group.addChild(this._btnShowOnlineUsers);
+            group.addChild(this._btnChangeLanguage);
+            if (UserModel.checkIsAdmin()) {
+                group.addChild(this._btnServerStatus);
+            }
+        }
+
+        private _updateComponentsForLanguage(): void {
             this._labelRankMatchTitle.text      = `${Lang.getText(Lang.Type.B0198)}:`;
             this._labelRankScoreTitle.text      = `${Lang.getText(Lang.Type.B0199)}:`;
             this._labelRegisterTimeTitle.text   = `${Lang.getText(Lang.Type.B0194)}:`;
@@ -176,6 +192,7 @@ namespace TinyWars.User {
             this._updateBtnChangeDiscordId();
             this._updateBtnShowOnlineUsers();
             this._updateBtnChangeLanguage();
+            this._updateBtnServerStatus();
         }
         private _updateLabelsForLanguage(): void {
             const userId    = this._userId;
@@ -212,6 +229,9 @@ namespace TinyWars.User {
             this._btnChangeLanguage.label = Lang.getLanguageType() === Types.LanguageType.Chinese
                 ? Lang.getTextWithLanguage(Lang.Type.B0148, Types.LanguageType.English)
                 : Lang.getTextWithLanguage(Lang.Type.B0148, Types.LanguageType.Chinese);
+        }
+        private _updateBtnServerStatus(): void {
+            this._btnServerStatus.label = Lang.getText(Lang.Type.B0327);
         }
     }
 }

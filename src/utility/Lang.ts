@@ -1838,6 +1838,26 @@ namespace TinyWars.Utility.Lang {
             `评审意见`,
             `Comments`,
         ],
+        [Type.B0327]: [
+            `服务器状态`,
+            `Server Status`,
+        ],
+        [Type.B0328]: [
+            `账号总数`,
+            `Accounts`,
+        ],
+        [Type.B0329]: [
+            `在线总时长`,
+            `Online Time`,
+        ],
+        [Type.B0330]: [
+            `新增账号数`,
+            `New Accounts`,
+        ],
+        [Type.B0331]: [
+            `活跃账号数`,
+            `Active Accounts`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
