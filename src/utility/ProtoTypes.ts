@@ -8875,6 +8875,12 @@ export declare interface IMessageContainer {
     /** MessageContainer S_MmReviewMap */
     S_MmReviewMap?: (IS_MmReviewMap|null);
 
+    /** MessageContainer C_CommonGetServerStatus */
+    C_CommonGetServerStatus?: (IC_CommonGetServerStatus|null);
+
+    /** MessageContainer S_CommonGetServerStatus */
+    S_CommonGetServerStatus?: (IS_CommonGetServerStatus|null);
+
     /** MessageContainer C_McrCreateWar */
     C_McrCreateWar?: (IC_McrCreateWar|null);
 
@@ -9277,6 +9283,12 @@ export declare class MessageContainer implements IMessageContainer {
 
     /** MessageContainer S_MmReviewMap. */
     public S_MmReviewMap?: (IS_MmReviewMap|null);
+
+    /** MessageContainer C_CommonGetServerStatus. */
+    public C_CommonGetServerStatus?: (IC_CommonGetServerStatus|null);
+
+    /** MessageContainer S_CommonGetServerStatus. */
+    public S_CommonGetServerStatus?: (IS_CommonGetServerStatus|null);
 
     /** MessageContainer C_McrCreateWar. */
     public C_McrCreateWar?: (IC_McrCreateWar|null);
@@ -12926,6 +12938,204 @@ export declare class S_MmReviewMap implements IS_MmReviewMap {
 
     /**
      * Converts this S_MmReviewMap to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_CommonGetServerStatus. */
+export declare interface IC_CommonGetServerStatus {
+}
+
+/** Represents a C_CommonGetServerStatus. */
+export declare class C_CommonGetServerStatus implements IC_CommonGetServerStatus {
+
+    /**
+     * Constructs a new C_CommonGetServerStatus.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_CommonGetServerStatus);
+
+    /**
+     * Creates a new C_CommonGetServerStatus instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_CommonGetServerStatus instance
+     */
+    public static create(properties?: IC_CommonGetServerStatus): C_CommonGetServerStatus;
+
+    /**
+     * Encodes the specified C_CommonGetServerStatus message. Does not implicitly {@link C_CommonGetServerStatus.verify|verify} messages.
+     * @param message C_CommonGetServerStatus message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_CommonGetServerStatus, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_CommonGetServerStatus message, length delimited. Does not implicitly {@link C_CommonGetServerStatus.verify|verify} messages.
+     * @param message C_CommonGetServerStatus message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_CommonGetServerStatus, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_CommonGetServerStatus message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_CommonGetServerStatus
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_CommonGetServerStatus;
+
+    /**
+     * Decodes a C_CommonGetServerStatus message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_CommonGetServerStatus
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_CommonGetServerStatus;
+
+    /**
+     * Verifies a C_CommonGetServerStatus message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_CommonGetServerStatus message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_CommonGetServerStatus
+     */
+    public static fromObject(object: { [k: string]: any }): C_CommonGetServerStatus;
+
+    /**
+     * Creates a plain object from a C_CommonGetServerStatus message. Also converts values to other types if specified.
+     * @param message C_CommonGetServerStatus
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_CommonGetServerStatus, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_CommonGetServerStatus to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_CommonGetServerStatus. */
+export declare interface IS_CommonGetServerStatus {
+
+    /** S_CommonGetServerStatus errorCode */
+    errorCode?: (number|null);
+
+    /** S_CommonGetServerStatus totalAccounts */
+    totalAccounts?: (number|null);
+
+    /** S_CommonGetServerStatus totalOnlineTime */
+    totalOnlineTime?: (number|null);
+
+    /** S_CommonGetServerStatus activeAccounts */
+    activeAccounts?: (number[]|null);
+
+    /** S_CommonGetServerStatus newAccounts */
+    newAccounts?: (number[]|null);
+}
+
+/** Represents a S_CommonGetServerStatus. */
+export declare class S_CommonGetServerStatus implements IS_CommonGetServerStatus {
+
+    /**
+     * Constructs a new S_CommonGetServerStatus.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_CommonGetServerStatus);
+
+    /** S_CommonGetServerStatus errorCode. */
+    public errorCode: number;
+
+    /** S_CommonGetServerStatus totalAccounts. */
+    public totalAccounts: number;
+
+    /** S_CommonGetServerStatus totalOnlineTime. */
+    public totalOnlineTime: number;
+
+    /** S_CommonGetServerStatus activeAccounts. */
+    public activeAccounts: number[];
+
+    /** S_CommonGetServerStatus newAccounts. */
+    public newAccounts: number[];
+
+    /**
+     * Creates a new S_CommonGetServerStatus instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_CommonGetServerStatus instance
+     */
+    public static create(properties?: IS_CommonGetServerStatus): S_CommonGetServerStatus;
+
+    /**
+     * Encodes the specified S_CommonGetServerStatus message. Does not implicitly {@link S_CommonGetServerStatus.verify|verify} messages.
+     * @param message S_CommonGetServerStatus message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_CommonGetServerStatus, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_CommonGetServerStatus message, length delimited. Does not implicitly {@link S_CommonGetServerStatus.verify|verify} messages.
+     * @param message S_CommonGetServerStatus message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_CommonGetServerStatus, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_CommonGetServerStatus message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_CommonGetServerStatus
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_CommonGetServerStatus;
+
+    /**
+     * Decodes a S_CommonGetServerStatus message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_CommonGetServerStatus
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_CommonGetServerStatus;
+
+    /**
+     * Verifies a S_CommonGetServerStatus message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_CommonGetServerStatus message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_CommonGetServerStatus
+     */
+    public static fromObject(object: { [k: string]: any }): S_CommonGetServerStatus;
+
+    /**
+     * Creates a plain object from a S_CommonGetServerStatus message. Also converts values to other types if specified.
+     * @param message S_CommonGetServerStatus
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_CommonGetServerStatus, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_CommonGetServerStatus to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };

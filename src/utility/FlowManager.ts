@@ -35,6 +35,7 @@ namespace TinyWars.Utility.FlowManager {
         NoSleepManager.init();
         ConfigManager.init();
         Network.Manager.init();
+        Common.CommonProxy.init();
         McwProxy.init();
         McwModel.init();
         Time.TimeProxy.init();
