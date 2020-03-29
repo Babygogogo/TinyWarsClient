@@ -12,20 +12,8 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
     import MovePathNode     = Types.MovePathNode;
     import TileType         = Types.TileType;
     import UnitType         = Types.UnitType;
-    import UnitState        = Types.UnitActionState;
+    import UnitActionState  = Types.UnitActionState;
 
-    const enum PhaseCode {
-        Phase0,
-        Phase1,
-        Phase2,
-        Phase3,
-        Phase4,
-        Phase5,
-        Phase6,
-        Phase7,
-        Phase8,
-        Phase9,
-    }
     type AttackInfo = {
         baseDamage      : number;
         normalizedHp    : number;
@@ -40,13 +28,15 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         total   : number;
     }
     const _TILE_VALUE: { [tileType: number]: number } = {           // ADJUSTABLE
-        [TileType.Headquarters] : 50,
-        [TileType.Factory]      : 75,
-        [TileType.Airport]      : 60,
-        [TileType.Seaport]      : 60,
-        [TileType.City]         : 50,
-        [TileType.CommandTower] : 75,
-        [TileType.Radar]        : 50,
+        [TileType.Headquarters] : 20, //50,
+        [TileType.Factory]      : 30, //75,
+        [TileType.Airport]      : 25, //60,
+        [TileType.Seaport]      : 25, //60,
+        [TileType.City]         : 20, //50,
+        [TileType.CommandTower] : 30, //75,
+        [TileType.Radar]        : 20, //50,
+        [TileType.TempSeaport]  : 10,
+        [TileType.TempAirport]  : 10,
     };
     const _PRODUCTION_CANDIDATES: { [tileType: number]: { [unitType: number]: number } } = {    // ADJUSTABLE
         [TileType.Factory]: {
@@ -90,14 +80,25 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
     let _unitMap                : ScwUnitMap;
     let _tileMap                : ScwTileMap;
     let _mapSize                : Types.MapSize;
-    let _phaseCode              : PhaseCode;
     let _unitValues             : Map<number, number>;
     let _unitValueRatio         : number;
-    let _candidateUnits         : ScwUnit[];
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Helpers.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
+    function _initVariables(war: ScwWar): void {
+        _frameBeginTime = Date.now();
+        _war            = war;
+        _configVersion  = war.getConfigVersion();
+        _turnManager    = war.getTurnManager() as ScwTurnManager;
+        _playerManager  = war.getPlayerManager() as ScwPlayerManager;
+        _unitMap        = war.getUnitMap() as ScwUnitMap;
+        _tileMap        = war.getTileMap() as ScwTileMap;
+        _mapSize        = _tileMap.getMapSize();
+        _unitValues     = _getUnitValues();
+        _unitValueRatio = _getUnitValueRatio();
+    }
+
     function _clearVariables(): void {
         _frameBeginTime         = null;
         _war                    = null;
@@ -107,10 +108,8 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         _unitMap                = null;
         _tileMap                = null;
         _mapSize                = null;
-        _phaseCode              = null;
         _unitValues             = null;
         _unitValueRatio         = null;
-        _candidateUnits         = null;
     }
 
     function _checkAndCallLater(): Promise<void> {  // DONE
@@ -443,7 +442,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         const playerIndexInturn = _turnManager.getPlayerIndexInTurn();
         _unitMap.forEachUnitOnMap((unit: ScwUnit) => {
             if ((unit.getPlayerIndex() === playerIndexInturn)   &&
-                (unit.getState() === UnitState.Idle)            &&
+                (unit.getState() === UnitActionState.Idle)            &&
                 (unit.getFinalMaxAttackRange() > 1)
             ) {
                 units.push(unit);
@@ -458,7 +457,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         const playerIndexInturn = _turnManager.getPlayerIndexInTurn();
         _unitMap.forEachUnit((unit: ScwUnit) => {
             if ((unit.getPlayerIndex() === playerIndexInturn)   &&
-                (unit.getState() === UnitState.Idle)
+                (unit.getState() === UnitActionState.Idle)
             ) {
                 units.push(unit);
             }
@@ -473,7 +472,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         const playerIndexInturn = _turnManager.getPlayerIndexInTurn();
         _unitMap.forEachUnitOnMap((unit: ScwUnit) => {
             if ((unit.getPlayerIndex() === playerIndexInturn)   &&
-                (unit.getState() === UnitState.Idle)            &&
+                (unit.getState() === UnitActionState.Idle)            &&
                 (unit.getIsCapturingTile())
             ) {
                 units.push(unit);
@@ -490,7 +489,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         const playerIndexInturn = _turnManager.getPlayerIndexInTurn();
         _unitMap.forEachUnitOnMap((unit: ScwUnit) => {
             if ((unit.getPlayerIndex() === playerIndexInturn)   &&
-                (unit.getState() === UnitState.Idle)            &&
+                (unit.getState() === UnitActionState.Idle)            &&
                 (unit.checkCanCapture())
             ) {
                 units.push(unit);
@@ -507,7 +506,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         const playerIndexInturn = _turnManager.getPlayerIndexInTurn();
         _unitMap.forEachUnitOnMap((unit: ScwUnit) => {
             if ((unit.getPlayerIndex() === playerIndexInturn)                                                   &&
-                (unit.getState() === UnitState.Idle)                                                            &&
+                (unit.getState() === UnitActionState.Idle)                                                            &&
                 (unit.getMinAttackRange())                                                                      &&
                 (ConfigManager.checkIsUnitTypeInCategory(_configVersion, unit.getType(), Types.UnitCategory.Air))
             ) {
@@ -525,7 +524,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         const playerIndexInturn = _turnManager.getPlayerIndexInTurn();
         _unitMap.forEachUnitOnMap((unit: ScwUnit) => {
             if ((unit.getPlayerIndex() === playerIndexInturn)   &&
-                (unit.getState() === UnitState.Idle)            &&
+                (unit.getState() === UnitActionState.Idle)            &&
                 (unit.getFinalMaxAttackRange() === 1)
             ) {
                 units.push(unit);
@@ -541,7 +540,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         const units             : ScwUnit[] = [];
         const playerIndexInturn = _turnManager.getPlayerIndexInTurn();
         _unitMap.forEachUnitOnMap((unit: ScwUnit) => {
-            if ((unit.getPlayerIndex() === playerIndexInturn) && (unit.getState() === UnitState.Idle)) {
+            if ((unit.getPlayerIndex() === playerIndexInturn) && (unit.getState() === UnitActionState.Idle)) {
                 const maxRange = unit.getFinalMaxAttackRange();
                 if ((!maxRange) || (maxRange === 1)) {
                     units.push(unit);
@@ -558,7 +557,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         const units             : ScwUnit[] = [];
         const playerIndexInturn = _turnManager.getPlayerIndexInTurn();
         _unitMap.forEachUnitOnMap((unit: ScwUnit) => {
-            if ((unit.getPlayerIndex() === playerIndexInturn) && (unit.getState() === UnitState.Idle)) {
+            if ((unit.getPlayerIndex() === playerIndexInturn) && (unit.getState() === UnitActionState.Idle)) {
                 units.push(unit);
             }
         });
@@ -574,7 +573,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         const data          = damageMap[gridIndex.x][gridIndex.y];
         const maxDamage     = Math.min(data ? data.max : 0, hp);
         const totalDamage   = Math.min(data ? data.total : 0, hp);
-        return - ((maxDamage + (maxDamage >= hp ? 20 : 0)) + (totalDamage + (totalDamage >= hp ? 20 : 0)))
+        return - ((maxDamage + (maxDamage >= hp ? 30 : 0)) )
             * unit.getProductionFinalCost() / 3000 / Math.max(1, _unitValueRatio) * (_checkIsCoUnit(unit) ? 2 : 1); // ADJUSTABLE
     }
 
@@ -628,7 +627,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
             }
         });
         if (enemyUnitsCount > 0) {
-            score += - (distanceToEnemyUnits / enemyUnitsCount) * 20;                           // ADJUSTABLE
+            score += - (distanceToEnemyUnits / enemyUnitsCount) * 10;                           // ADJUSTABLE
         }
 
         return score;
@@ -653,7 +652,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         await _checkAndCallLater();
 
         const targetUnit = _unitMap.getUnitOnMap(gridIndex);
-        if (targetUnit.getState() === UnitState.Idle) {
+        if (targetUnit.getState() === UnitActionState.Idle) {
             return -9999;                                                                       // ADJUSTABLE
         } else {
             if (!targetUnit.getIsCapturingTile()) {
@@ -733,7 +732,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         } else if (captureAmount < currentCapturePoint / 3) {
             return 1;                                                                           // ADJUSTABLE
         } else {
-            const value = _TILE_VALUE[tile.getType()] || 25;                                    // ADJUSTABLE
+            const value = _TILE_VALUE[tile.getType()] || 0;                                     // ADJUSTABLE
             return captureAmount >= currentCapturePoint / 2 ? value : value / 2;                // ADJUSTABLE
         }
     }
@@ -1038,44 +1037,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         return data;
     }
 
-    async function _getActionForMaxScoreWithCandidateUnit(candidateUnit: ScwUnit): Promise<WarAction | null> {  // DONE
-        await _checkAndCallLater();
-
-        const reachableArea         = _getReachableArea(candidateUnit, null, null);
-        const damageMapForSurface   = await _createDamageMap(candidateUnit, false);
-        const damageMapForDive      = candidateUnit.checkIsDiver() ? await _createDamageMap(candidateUnit, true) : null;
-        const scoreMapForDistance   = await _createScoreMapForDistance(candidateUnit);
-        let bestScoreAndAction      : ScoreAndAction;
-
-        for (let x = 0; x < _mapSize.width; ++x) {
-            if (reachableArea[x]) {
-                for (let y = 0; y < _mapSize.height; ++y) {
-                    if (reachableArea[x][y]) {
-                        const gridIndex     = { x, y };
-                        const pathNodes     = BwHelpers.createShortestMovePath(reachableArea, gridIndex);
-                        let scoreAndAction  = await _getMaxScoreAndAction(candidateUnit, gridIndex, pathNodes);
-
-                        if (scoreAndAction) {
-                            const action        = scoreAndAction.action;
-                            bestScoreAndAction  = _getBetterScoreAndAction(
-                                bestScoreAndAction,
-                                {
-                                    action  : scoreAndAction.action,
-                                    score   : (action.UnitDive) || ((candidateUnit.getIsDiving()) && (!action.UnitSurface))
-                                        ? scoreAndAction.score + await _getScoreForPosition(candidateUnit, gridIndex, damageMapForDive, scoreMapForDistance)
-                                        : scoreAndAction.score + await _getScoreForPosition(candidateUnit, gridIndex, damageMapForSurface, scoreMapForDistance)
-                                },
-                            );
-                        }
-                    }
-                }
-            }
-        }
-
-        return bestScoreAndAction ? bestScoreAndAction.action : null;
-    }
-
-    async function _getActionForMaxScoreWithCandidateUnit1(candidateUnit: ScwUnit): Promise<ScoreAndAction | null> {  // DONE
+    async function _getActionForMaxScoreWithCandidateUnit(candidateUnit: ScwUnit): Promise<ScoreAndAction | null> {  // DONE
         await _checkAndCallLater();
 
         const reachableArea         = _getReachableArea(candidateUnit, null, null);
@@ -1184,45 +1146,36 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         if (_turnManager.getPhaseCode() === Types.TurnPhaseCode.WaitBeginTurn) {
             return { PlayerBeginTurn: { } };
         } else {
-            _phaseCode = PhaseCode.Phase1;
             return null;
         }
     }
+
+    // Phase 1a: search for the best action for all units.
+    // async function _getActionForPhase1a(): Promise<WarAction | null> {   // DONE
+    //     await _checkAndCallLater();
+
+    //     let scoreAndAction : ScoreAndAction;
+    //     for (const unit of await _getCandidateUnitsForPhase1a()) {
+    //         scoreAndAction = _getBetterScoreAndAction(scoreAndAction, await _getActionForMaxScoreWithCandidateUnit1(unit));
+    //     }
+    //     if (scoreAndAction) {
+    //         return scoreAndAction.action;
+    //     } else {
+    //         return null;
+    //     }
+    // }
 
     // Phase 1: make the ranged units to attack enemies.
     async function _getActionForPhase1(): Promise<WarAction | null> {   // DONE
         await _checkAndCallLater();
 
-        _candidateUnits = await _getCandidateUnitsForPhase1();
-        let action      : WarAction;
-        while ((!action) || (!action.UnitAttack)) {
-            const unit = _popRandomCandidateUnit(_candidateUnits);
-            if (!unit) {
-                _candidateUnits = null;
-                _phaseCode      = PhaseCode.Phase2;
-                return null;
-            }
-
-            action = await _getActionForMaxScoreWithCandidateUnit(unit);
-        }
-
-        return action;
-    }
-
-    // Phase 1a: search for the best action for all units.
-    async function _getActionForPhase1a(): Promise<WarAction | null> {   // DONE
-        await _checkAndCallLater();
-
-        _candidateUnits = await _getCandidateUnitsForPhase1a();
-        let scoreAndAction      : ScoreAndAction;
-        for (const unit of _candidateUnits) {
-            scoreAndAction = _getBetterScoreAndAction(scoreAndAction, await _getActionForMaxScoreWithCandidateUnit1(unit));
+        let scoreAndAction : ScoreAndAction;
+        for (const unit of await _getCandidateUnitsForPhase1()) {
+            scoreAndAction = _getBetterScoreAndAction(scoreAndAction, await _getActionForMaxScoreWithCandidateUnit(unit));
         }
         if (scoreAndAction) {
             return scoreAndAction.action;
         } else {
-            _candidateUnits = null;
-            _phaseCode      = PhaseCode.Phase2;
             return null;
         }
     }
@@ -1231,90 +1184,90 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
     async function _getActionForPhase2(): Promise<WarAction | null> {   // DONE
         await _checkAndCallLater();
 
-        _candidateUnits     = await _getCandidateUnitsForPhase2();
-        const candidateUnit = _popRandomCandidateUnit(_candidateUnits);
-        if (!candidateUnit) {
-            _candidateUnits = null;
-            _phaseCode      = PhaseCode.Phase3;
+        let scoreAndAction : ScoreAndAction;
+        for (const unit of await _getCandidateUnitsForPhase2()) {
+            scoreAndAction = _getBetterScoreAndAction(scoreAndAction, await _getActionForMaxScoreWithCandidateUnit(unit));
+        }
+        if (scoreAndAction) {
+            return scoreAndAction.action;
+        } else {
             return null;
         }
-
-        return await _getActionForMaxScoreWithCandidateUnit(candidateUnit);
     }
 
     //  Phase 3: move the other infantries, mech and bikes.
     async function _getActionForPhase3(): Promise<WarAction | null> {   // DONE
         await _checkAndCallLater();
 
-        _candidateUnits     = await _getCandidateUnitsForPhase3();
-        const candidateUnit = _popRandomCandidateUnit(_candidateUnits);
-        if (!candidateUnit) {
-            _candidateUnits = null;
-            _phaseCode      = PhaseCode.Phase4;
+        let scoreAndAction : ScoreAndAction;
+        for (const unit of await _getCandidateUnitsForPhase3()) {
+            scoreAndAction = _getBetterScoreAndAction(scoreAndAction, await _getActionForMaxScoreWithCandidateUnit(unit));
+        }
+        if (scoreAndAction) {
+            return scoreAndAction.action;
+        } else {
             return null;
         }
-
-        return await _getActionForMaxScoreWithCandidateUnit(candidateUnit);
     }
 
     // Phase 4: move the air combat units.
     async function _getActionForPhase4(): Promise<WarAction | null> {   // DONE
         await _checkAndCallLater();
 
-        _candidateUnits     = await _getCandidateUnitsForPhase4();
-        const candidateUnit = _popRandomCandidateUnit(_candidateUnits);
-        if (!candidateUnit) {
-            _candidateUnits = null;
-            _phaseCode      = PhaseCode.Phase5;
+        let scoreAndAction : ScoreAndAction;
+        for (const unit of await _getCandidateUnitsForPhase4()) {
+            scoreAndAction = _getBetterScoreAndAction(scoreAndAction, await _getActionForMaxScoreWithCandidateUnit(unit));
+        }
+        if (scoreAndAction) {
+            return scoreAndAction.action;
+        } else {
             return null;
         }
-
-        return await _getActionForMaxScoreWithCandidateUnit(candidateUnit);
     }
 
     // Phase 5: move the remaining direct units.
     async function _getActionForPhase5(): Promise<WarAction | null> {   // DONE
         await _checkAndCallLater();
 
-        _candidateUnits     = await _getCandidateUnitsForPhase5();
-        const candidateUnit = _popRandomCandidateUnit(_candidateUnits);
-        if (!candidateUnit) {
-            _candidateUnits = null;
-            _phaseCode      = PhaseCode.Phase6;
+        let scoreAndAction : ScoreAndAction;
+        for (const unit of await _getCandidateUnitsForPhase5()) {
+            scoreAndAction = _getBetterScoreAndAction(scoreAndAction, await _getActionForMaxScoreWithCandidateUnit(unit));
+        }
+        if (scoreAndAction) {
+            return scoreAndAction.action;
+        } else {
             return null;
         }
-
-        return await _getActionForMaxScoreWithCandidateUnit(candidateUnit);
     }
 
     // Phase 6: move the other units except the remaining ranged units.
     async function _getActionForPhase6(): Promise<WarAction | null> {   // DONE
         await _checkAndCallLater();
 
-        _candidateUnits     = await _getCandidateUnitsForPhase6();
-        const candidateUnit = _popRandomCandidateUnit(_candidateUnits);
-        if (!candidateUnit) {
-            _candidateUnits = null;
-            _phaseCode      = PhaseCode.Phase7;
+        let scoreAndAction : ScoreAndAction;
+        for (const unit of await _getCandidateUnitsForPhase6()) {
+            scoreAndAction = _getBetterScoreAndAction(scoreAndAction, await _getActionForMaxScoreWithCandidateUnit(unit));
+        }
+        if (scoreAndAction) {
+            return scoreAndAction.action;
+        } else {
             return null;
         }
-
-        return await _getActionForMaxScoreWithCandidateUnit(candidateUnit);
     }
 
     // Phase 7: move the remaining units.
     async function _getActionForPhase7(): Promise<WarAction | null> {   // DONE
         await _checkAndCallLater();
 
-        _candidateUnits     = await _getCandidateUnitsForPhase7();
-        const candidateUnit = _popRandomCandidateUnit(_candidateUnits);
-        if (!candidateUnit) {
-            _candidateUnits = null;
-            _phaseCode      = PhaseCode.Phase8;
+        let scoreAndAction : ScoreAndAction;
+        for (const unit of await _getCandidateUnitsForPhase7()) {
+            scoreAndAction = _getBetterScoreAndAction(scoreAndAction, await _getActionForMaxScoreWithCandidateUnit(unit));
+        }
+        if (scoreAndAction) {
+            return scoreAndAction.action;
+        } else {
             return null;
         }
-
-        return await _getActionForMaxScoreWithCandidateUnit(candidateUnit);
     }
 
     // Phase 8: build units.
@@ -1323,7 +1276,6 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
 
         const action = await _getActionPlayerProduceUnitForMaxScore();
         if (!action) {
-            _phaseCode = PhaseCode.Phase9;
             return null;
         }
 
@@ -1338,35 +1290,25 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
     }
 
     export async function getNextAction(war: ScwWar): Promise<WarAction> {
-        if (!_war) {
-            _frameBeginTime = Date.now();
-            _war            = war;
-            _configVersion  = war.getConfigVersion();
-            _turnManager    = war.getTurnManager() as ScwTurnManager;
-            _playerManager  = war.getPlayerManager() as ScwPlayerManager;
-            _unitMap        = war.getUnitMap() as ScwUnitMap;
-            _tileMap        = war.getTileMap() as ScwTileMap;
-            _mapSize        = _tileMap.getMapSize();
-            _phaseCode      = PhaseCode.Phase0;
-            _unitValues     = _getUnitValues();
-            _unitValueRatio = _getUnitValueRatio();
-        }
+        _initVariables(war);
 
-        let action: WarAction;
-        if ((!action) && (_phaseCode === PhaseCode.Phase0))     { action = await _getActionForPhase0(); }
-        // if ((!action) && (_phaseCode === PhaseCode.Phase1))     { action = await _getActionForPhase1(); }
-        if ((!action) && (_phaseCode === PhaseCode.Phase1))     { action = await _getActionForPhase1a(); }
-        if ((!action) && (_phaseCode === PhaseCode.Phase2))     { action = await _getActionForPhase2(); }
-        if ((!action) && (_phaseCode === PhaseCode.Phase3))     { action = await _getActionForPhase3(); }
-        if ((!action) && (_phaseCode === PhaseCode.Phase4))     { action = await _getActionForPhase4(); }
-        if ((!action) && (_phaseCode === PhaseCode.Phase5))     { action = await _getActionForPhase5(); }
-        if ((!action) && (_phaseCode === PhaseCode.Phase6))     { action = await _getActionForPhase6(); }
-        if ((!action) && (_phaseCode === PhaseCode.Phase7))     { action = await _getActionForPhase7(); }
-        if ((!action) && (_phaseCode === PhaseCode.Phase8))     { action = await _getActionForPhase8(); }
-        if ((!action) && (_phaseCode === PhaseCode.Phase9))     { action = await _getActionForPhase9(); }
-
+        let action = await _getActionForPhase0();
+        // (!action) && (action = await _getActionForPhase1a());
+        (!action) && (action = await _getActionForPhase1());
+        (!action) && (action = await _getActionForPhase2());
+        (!action) && (action = await _getActionForPhase3());
+        (!action) && (action = await _getActionForPhase4());
+        (!action) && (action = await _getActionForPhase5());
+        (!action) && (action = await _getActionForPhase6());
+        (!action) && (action = await _getActionForPhase7());
+        (!action) && (action = await _getActionForPhase8());
+        (!action) && (action = await _getActionForPhase9());
         action.actionId = _war.getNextActionId();
+
         _clearVariables();
+
+        await new Promise<void>(resolve => egret.setTimeout(() => resolve(), null, 500));
+
         return action;
     }
 }

@@ -146,8 +146,8 @@ namespace TinyWars.BaseWar.BwHelpers {
             const existingUnit      = unitMap.getUnitOnMap(currentGridIndex);
 
             if ((tile.getMaxCapturePoint())                                                                 &&
-                (tile.getTeamIndex() !== teamIndex)                                                         &&
-                ((!existingUnit) || (existingUnit === unit) || (existingUnit.getTeamIndex() !== teamIndex))
+                (tile.getTeamIndex() !== teamIndex)    //                                                     &&
+                // ((!existingUnit) || (existingUnit === unit) || (existingUnit.getTeamIndex() !== teamIndex))
             ) {
                 return tile;
             } else {
