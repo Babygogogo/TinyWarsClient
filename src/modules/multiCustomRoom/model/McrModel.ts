@@ -118,12 +118,13 @@ namespace TinyWars.MultiCustomRoom {
             return _dataForCreateWar;
         }
         export async function resetCreateWarDataForSelectedRule(): Promise<void> {
-            const warRuleIndex = getCreateWarWarRuleIndex();
+            const warRuleIndex      = getCreateWarWarRuleIndex();
+            const dataForCreateWar  = getCreateWarData();
             if (warRuleIndex == null) {
                 setCreateWarTimeLimit(DEFAULT_TIME_LIMIT);
                 setCreateWarPlayerIndex(1);
                 setCreateWarTeamIndex(1);
-                setCreateWarCoId(null);
+                setCreateWarCoId(getRandomCoId(dataForCreateWar.configVersion, dataForCreateWar.bannedCoIdList));
                 setCreateWarHasFog(false);
 
                 setCreateWarInitialFund(0);
@@ -142,7 +143,7 @@ namespace TinyWars.MultiCustomRoom {
                 setCreateWarTimeLimit(DEFAULT_TIME_LIMIT);
                 setCreateWarPlayerIndex(playerIndex);
                 setCreateWarTeamIndex((await WarMapModel.getPlayerRule(mapFileName, warRuleIndex, playerIndex)).teamIndex);
-                setCreateWarCoId(null);
+                setCreateWarCoId(getRandomCoId(dataForCreateWar.configVersion, dataForCreateWar.bannedCoIdList));
                 setCreateWarHasFog(!!warRule.hasFog);
 
                 setCreateWarInitialFund(warRule.initialFund);
@@ -440,7 +441,7 @@ namespace TinyWars.MultiCustomRoom {
             _joinWarAvailableTeamIndexes    = await getAvailableTeamIndexes(info);
             _dataForJoinWar.infoId          = info.infoId;
             setJoinWarPlayerIndex(_joinWarAvailablePlayerIndexes[0]);
-            setJoinWarCoId(null);
+            setJoinWarCoId(getRandomCoId(info.configVersion, info.bannedCoIdList));
 
             const warRuleIndex = getJoinWarWarRuleIndex();
             if (warRuleIndex == null) {
@@ -559,6 +560,26 @@ namespace TinyWars.MultiCustomRoom {
         export function getWatchedWarInfos(): ProtoTypes.IMcwWatchInfo[] | null {
             return _watchedWarInfos;
         }
+    }
+
+    function getRandomCoId(configVersion: string, bannedCoIdList: number[] | null): number | undefined {
+        let highestTier         : number = null;
+        let candidateCoIdList   : number[] = [];
+        for (const cfg of ConfigManager.getAvailableCoList(configVersion)) {
+            const coId = cfg.coId;
+            if ((!bannedCoIdList) || (bannedCoIdList.indexOf(coId) < 0)) {
+                const tier = cfg ? cfg.tier : null;
+                if (tier >= 1) {
+                    if ((highestTier > tier) || (highestTier == null)) {
+                        highestTier         = tier;
+                        candidateCoIdList   = [coId];
+                    } else if (highestTier === tier) {
+                        candidateCoIdList.push(coId);
+                    }
+                }
+            }
+        }
+        return Utility.Helpers.pickRandomElement(candidateCoIdList);
     }
 
     async function getAvailablePlayerIndexes(info: ProtoTypes.IMcrWaitingInfo): Promise<number[]> {
