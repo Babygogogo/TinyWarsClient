@@ -424,13 +424,28 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
             `ScwActionReviser.revisePlayerProduceUnit() invalid turn phase code: ${currPhaseCode}`
         );
 
-        const action = container.PlayerProduceUnit;
+        const action        = container.PlayerProduceUnit;
+        const unitType      = action.unitType;
+        const playerIndex   = war.getPlayerInTurn().getPlayerIndex();
+        const gridIndex     = action.gridIndex;
+        const unitHp        = action.unitHp;
+        const skillCfg      = war.getTileMap().getTile(gridIndex).getEffectiveSelfUnitProductionSkillCfg(playerIndex);
+        const cfgCost       = ConfigManager.getUnitTemplateCfg(war.getConfigVersion(), unitType).productionCost;
+
         return {
             actionId                    : war.getNextActionId(),
             WarActionPlayerProduceUnit  : {
-                gridIndex   : action.gridIndex,
-                unitType    : action.unitType,
-                cost        : BwHelpers.getUnitProductionCost(war, action.unitType),
+                cost: cfgCost == null
+                    ? null
+                    : Math.floor(cfgCost * (skillCfg ? skillCfg[5] : 100) / 100 * Helpers.getNormalizedHp(unitHp) / ConfigManager.UNIT_HP_NORMALIZER),
+                unitData    : {
+                    unitId      : war.getUnitMap().getNextUnitId(),
+                    viewId      : ConfigManager.getUnitViewId(unitType, playerIndex)!,
+                    gridX       : gridIndex.x,
+                    gridY       : gridIndex.y,
+                    currentHp   : unitHp,
+                    state       : ((skillCfg) && (skillCfg[6] === 1)) ? Types.UnitActionState.Idle : Types.UnitActionState.Acted,
+                },
             },
         };
     }

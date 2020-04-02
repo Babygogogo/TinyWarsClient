@@ -206,8 +206,8 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for setting requesting state.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public setStateRequestingPlayerProduceUnit(gridIndex: GridIndex, unitType: UnitType): void {
-            McwProxy.reqMcwPlayerProduceUnit(this._getWar(), gridIndex, unitType);
+        public setStateRequestingPlayerProduceUnit(gridIndex: GridIndex, unitType: UnitType, unitHp: number): void {
+            McwProxy.reqMcwPlayerProduceUnit(this._getWar(), gridIndex, unitType, unitHp);
 
             this._setState(State.RequestingPlayerProduceUnit);
             this._updateView();
@@ -422,7 +422,7 @@ namespace TinyWars.MultiCustomWar {
             const isSelfInTurn      = (turnManager.getPlayerIndexInTurn() === selfPlayerIndex) && (turnManager.getPhaseCode() === TurnPhaseCode.Main);
             if (!unit) {
                 const tile = this._getTileMap().getTile(gridIndex);
-                if ((isSelfInTurn) && (tile.getPlayerIndex() === selfPlayerIndex) && (tile.checkIsUnitProducer())) {
+                if ((isSelfInTurn) && (tile.checkIsUnitProducerForPlayer(selfPlayerIndex))) {
                     return State.ChoosingProductionTarget;
                 } else {
                     return State.Idle;
@@ -565,7 +565,7 @@ namespace TinyWars.MultiCustomWar {
                 const isSelfInTurn      = (turnManager.getPlayerIndexInTurn() === selfPlayerIndex) && (turnManager.getPhaseCode() === TurnPhaseCode.Main);
                 if (!unit) {
                     const tile = this._getTileMap().getTile(gridIndex);
-                    if ((isSelfInTurn) && (tile.getPlayerIndex() === selfPlayerIndex) && (tile.checkIsUnitProducer())) {
+                    if ((isSelfInTurn) && (tile.checkIsUnitProducerForPlayer(selfPlayerIndex))) {
                         return State.ChoosingProductionTarget;
                     } else {
                         return State.Idle;
@@ -590,7 +590,7 @@ namespace TinyWars.MultiCustomWar {
             const isSelfInTurn      = (turnManager.getPlayerIndexInTurn() === selfPlayerIndex) && (turnManager.getPhaseCode() === TurnPhaseCode.Main);
             if (!unit) {
                 const tile = this._getTileMap().getTile(gridIndex);
-                if ((isSelfInTurn) && (tile.getPlayerIndex() === selfPlayerIndex) && (tile.checkIsUnitProducer())) {
+                if ((isSelfInTurn) && (tile.checkIsUnitProducerForPlayer(selfPlayerIndex))) {
                     return State.ChoosingProductionTarget;
                 } else {
                     return State.Idle;
@@ -618,7 +618,7 @@ namespace TinyWars.MultiCustomWar {
             const isSelfInTurn      = (turnManager.getPlayerIndexInTurn() === selfPlayerIndex) && (turnManager.getPhaseCode() === TurnPhaseCode.Main);
             if (!unit) {
                 const tile = this._getTileMap().getTile(gridIndex);
-                if ((isSelfInTurn) && (tile.getPlayerIndex() === selfPlayerIndex) && (tile.checkIsUnitProducer())) {
+                if ((isSelfInTurn) && (tile.checkIsUnitProducerForPlayer(selfPlayerIndex))) {
                     return State.ChoosingProductionTarget;
                 } else {
                     return State.Idle;

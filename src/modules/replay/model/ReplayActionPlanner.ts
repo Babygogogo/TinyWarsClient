@@ -220,7 +220,7 @@ namespace TinyWars.Replay {
             const isSelfInTurn      = (turnManager.getPlayerIndexInTurn() === playerIndexInTurn) && (turnManager.getPhaseCode() === TurnPhaseCode.Main);
             if (!unit) {
                 const tile = this._getTileMap().getTile(gridIndex);
-                if ((isSelfInTurn) && (tile.getPlayerIndex() === playerIndexInTurn) && (tile.checkIsUnitProducer())) {
+                if ((isSelfInTurn) && (tile.checkIsUnitProducerForPlayer(playerIndexInTurn))) {
                     return State.ChoosingProductionTarget;
                 } else {
                     return State.Idle;
@@ -343,7 +343,7 @@ namespace TinyWars.Replay {
                 const isSelfInTurn      = (turnManager.getPlayerIndexInTurn() === playerIndexInTurn) && (turnManager.getPhaseCode() === TurnPhaseCode.Main);
                 if (!unit) {
                     const tile = this._getTileMap().getTile(gridIndex);
-                    if ((isSelfInTurn) && (tile.getPlayerIndex() === playerIndexInTurn) && (tile.checkIsUnitProducer())) {
+                    if ((isSelfInTurn) && (tile.checkIsUnitProducerForPlayer(playerIndexInTurn))) {
                         return State.ChoosingProductionTarget;
                     } else {
                         return State.Idle;
@@ -368,7 +368,7 @@ namespace TinyWars.Replay {
             const isSelfInTurn      = (turnManager.getPlayerIndexInTurn() === playerIndexInTurn) && (turnManager.getPhaseCode() === TurnPhaseCode.Main);
             if (!unit) {
                 const tile = this._getTileMap().getTile(gridIndex);
-                if ((isSelfInTurn) && (tile.getPlayerIndex() === playerIndexInTurn) && (tile.checkIsUnitProducer())) {
+                if ((isSelfInTurn) && (tile.checkIsUnitProducerForPlayer(playerIndexInTurn))) {
                     return State.ChoosingProductionTarget;
                 } else {
                     return State.Idle;
@@ -396,7 +396,7 @@ namespace TinyWars.Replay {
             const isSelfInTurn      = (turnManager.getPlayerIndexInTurn() === playerIndexInTurn) && (turnManager.getPhaseCode() === TurnPhaseCode.Main);
             if (!unit) {
                 const tile = this._getTileMap().getTile(gridIndex);
-                if ((isSelfInTurn) && (tile.getPlayerIndex() === playerIndexInTurn) && (tile.checkIsUnitProducer())) {
+                if ((isSelfInTurn) && (tile.checkIsUnitProducerForPlayer(playerIndexInTurn))) {
                     return State.ChoosingProductionTarget;
                 } else {
                     return State.Idle;

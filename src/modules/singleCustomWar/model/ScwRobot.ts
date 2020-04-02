@@ -1080,6 +1080,8 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
     async function _getMaxScoreAndActionPlayerProduceUnitWithGridIndex(gridIndex: GridIndex, idleFactoriesCount: number): Promise<ScoreAndAction | null> {  // DONE
         await _checkAndCallLater();
 
+        // TODO: take the unit production skills into account.
+
         let maxScore        : number;
         let targetUnitType  : number;
         for (const t in _PRODUCTION_CANDIDATES[_tileMap.getTile(gridIndex).getType()]) {
@@ -1098,6 +1100,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
                 score   : maxScore,
                 action  : { PlayerProduceUnit: {
                     unitType    : targetUnitType,
+                    unitHp      : ConfigManager.UNIT_MAX_HP,
                     gridIndex,
                 } },
             }
@@ -1107,8 +1110,8 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
     async function _getActionPlayerProduceUnitForMaxScore(): Promise<WarAction | null> {    // DONE
         await _checkAndCallLater();
 
-        const playerIndexInturn = _turnManager.getPlayerIndexInTurn();
-        if (playerIndexInturn === 0) {
+        const playerIndexInTurn = _turnManager.getPlayerIndexInTurn();
+        if (playerIndexInTurn === 0) {
             return null;
         }
 
@@ -1117,10 +1120,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
 
         _tileMap.forEachTile(tile => {
             const gridIndex = tile.getGridIndex();
-            if ((tile.getPlayerIndex() === playerIndexInturn)   &&
-                (!_unitMap.getUnitOnMap(gridIndex))             &&
-                (tile.getProduceUnitCategory() != null)
-            ) {
+            if ((!_unitMap.getUnitOnMap(gridIndex)) && (tile.checkIsUnitProducerForPlayer(playerIndexInTurn))) {
                 idleBuildingPosList.push(gridIndex);
                 if (tile.getType() === TileType.Factory) {
                     ++idleFactoriesCount;
@@ -1290,6 +1290,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
     }
 
     export async function getNextAction(war: ScwWar): Promise<WarAction> {
+        const startTime = Date.now();
         _initVariables(war);
 
         let action = await _getActionForPhase0();
@@ -1307,7 +1308,10 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
 
         _clearVariables();
 
-        await new Promise<void>(resolve => egret.setTimeout(() => resolve(), null, 500));
+        const elapsedTime = Date.now() - startTime;
+        if (elapsedTime < 500) {
+            await new Promise<void>(resolve => egret.setTimeout(() => resolve(), null, 500 - elapsedTime));
+        }
 
         return action;
     }

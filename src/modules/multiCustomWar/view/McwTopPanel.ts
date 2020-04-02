@@ -267,7 +267,7 @@ namespace TinyWars.MultiCustomWar {
 
             let idleBuildingsCount = 0;
             war.getTileMap().forEachTile(tile => {
-                if ((tile.getPlayerIndex() === playerIndex) && (tile.checkIsUnitProducer()) && (!unitMap.getUnitOnMap(tile.getGridIndex()))) {
+                if ((tile.checkIsUnitProducerForPlayer(playerIndex)) && (!unitMap.getUnitOnMap(tile.getGridIndex()))) {
                     ++idleBuildingsCount;
                 }
             });
