@@ -1533,6 +1533,9 @@ export declare interface ICoSkillCfg {
 
     /** CoSkillCfg selfFuelRecovery */
     selfFuelRecovery?: (number[]|null);
+
+    /** CoSkillCfg selfUnitProduction */
+    selfUnitProduction?: (number[]|null);
 }
 
 /** Represents a CoSkillCfg. */
@@ -1621,6 +1624,9 @@ export declare class CoSkillCfg implements ICoSkillCfg {
 
     /** CoSkillCfg selfFuelRecovery. */
     public selfFuelRecovery: number[];
+
+    /** CoSkillCfg selfUnitProduction. */
+    public selfUnitProduction: number[];
 
     /**
      * Creates a new CoSkillCfg instance using the specified properties.
@@ -4602,6 +4608,9 @@ export declare interface IWarActionPlayerProduceUnit {
 
     /** WarActionPlayerProduceUnit cost */
     cost?: (number|null);
+
+    /** WarActionPlayerProduceUnit unitData */
+    unitData?: (ISerializedWarUnit|null);
 }
 
 /** Represents a WarActionPlayerProduceUnit. */
@@ -4627,6 +4636,9 @@ export declare class WarActionPlayerProduceUnit implements IWarActionPlayerProdu
 
     /** WarActionPlayerProduceUnit cost. */
     public cost: number;
+
+    /** WarActionPlayerProduceUnit unitData. */
+    public unitData?: (ISerializedWarUnit|null);
 
     /**
      * Creates a new WarActionPlayerProduceUnit instance using the specified properties.
@@ -18273,6 +18285,9 @@ export declare interface IC_McwPlayerProduceUnit {
 
     /** C_McwPlayerProduceUnit unitType */
     unitType?: (number|null);
+
+    /** C_McwPlayerProduceUnit unitHp */
+    unitHp?: (number|null);
 }
 
 /** Represents a C_McwPlayerProduceUnit. */
@@ -18295,6 +18310,9 @@ export declare class C_McwPlayerProduceUnit implements IC_McwPlayerProduceUnit {
 
     /** C_McwPlayerProduceUnit unitType. */
     public unitType: number;
+
+    /** C_McwPlayerProduceUnit unitHp. */
+    public unitHp: number;
 
     /**
      * Creates a new C_McwPlayerProduceUnit instance using the specified properties.

@@ -193,6 +193,7 @@ namespace TinyWars.Utility.Types {
     export type RawWarActionPlayerProduceUnit = {
         gridIndex   : GridIndex;
         unitType    : UnitType;
+        unitHp      : number;
     }
     export type RawWarActionUnitAttack = {
         path            : GridIndex[];
