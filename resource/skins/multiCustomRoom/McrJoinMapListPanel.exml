@@ -8,20 +8,27 @@
                  right="8">
             <GameUi:UiLabel id="_labelMapName" text="地图名: 未知" y="0" stroke="2" size="20" scaleX="1" scaleY="1" />
             <GameUi:UiLabel id="_labelDesigner" text="作者: 未知" y="25" stroke="2" size="20" scaleX="1" scaleY="1" />
-            <GameUi:UiLabel id="_labelHasFog" text="战争迷雾: 否" y="60" stroke="2" size="20" scaleX="1" scaleY="1" />
+            <e:Group x="0" y="60">
+                <GameUi:UiLabel id="_labelHasFogTitle" text="战争迷雾: " y="0" stroke="2" size="20" scaleX="1" scaleY="1"
+                                x="0" />
+                <GameUi:UiLabel id="_labelHasFog" text="否" y="10" stroke="2" size="20" scaleX="1" scaleY="1" x="10" />
+                <e:layout>
+                    <e:HorizontalLayout/>
+                </e:layout>
+            </e:Group>
             <GameUi:UiLabel id="_labelCommentTitle" text="附言:" stroke="2" size="20" scaleX="1" scaleY="1" x="0" y="95" />
             <GameUi:UiLabel id="_labelWarComment" text="ASDF" stroke="2" size="20" scaleX="1" scaleY="1" width="320"
-                            x="0" height="120" y="120" />
+                            x="0" height="120" y="120" wordWrap="true" />
             <GameUi:UiLabel id="_labelPlayersTitle" text="已参战玩家:" stroke="2" size="20" scaleX="1" scaleY="1" x="340" />
-            <GameUi:UiScrollList id="_listPlayer" height="140" y="25" width="400" x="340">
+            <GameUi:UiScrollList id="_listPlayer" y="25" width="400" x="340">
                 <e:List>
                     <e:itemRendererSkinName>
                         <e:Skin width="400" height="26" currentState="up" states="up,down">
-                            <GameUi:UiLabel id="_labelIndex" text="红方" size="18" verticalCenter="0" stroke="2" x="4"
+                            <GameUi:UiLabel id="_labelIndex" text="红方" size="16" verticalCenter="0" stroke="2" x="0"
                                             maxTextWidth="36" />
-                            <GameUi:UiLabel id="_labelTeam" text="A队" maxTextWidth="32" size="18" verticalCenter="0"
-                                            stroke="2" x="49" />
-                            <GameUi:UiLabel id="_labelName" text="玩家名称居然有十个字" x="90" size="18" verticalCenter="0"
+                            <GameUi:UiLabel id="_labelTeam" text="A队" maxTextWidth="32" size="16" verticalCenter="0"
+                                            stroke="2" x="46" />
+                            <GameUi:UiLabel id="_labelName" text="玩家名称居然有十个字" x="90" size="16" verticalCenter="0"
                                             stroke="2" textColor.down="0x00ff00" maxTextWidth="310" />
                         </e:Skin>
                     </e:itemRendererSkinName>

@@ -169,9 +169,7 @@ namespace TinyWars.User {
             }
             group.addChild(this._btnShowOnlineUsers);
             group.addChild(this._btnChangeLanguage);
-            if (UserModel.checkIsAdmin()) {
-                group.addChild(this._btnServerStatus);
-            }
+            group.addChild(this._btnServerStatus);
         }
 
         private _updateComponentsForLanguage(): void {

@@ -10,7 +10,7 @@
         <GameUi:UiTab id="_tabSettings" left="0" top="0" bottom="0" right="0">
             <e:skinName>
                 <e:Skin width="960">
-                    <e:Scroller width="760" top="0" bottom="0">
+                    <e:Scroller width="760" top="10" bottom="10">
                         <e:Group id="_page"></e:Group>
                     </e:Scroller>
                     <e:Scroller width="190" top="50" bottom="50" right="5">
