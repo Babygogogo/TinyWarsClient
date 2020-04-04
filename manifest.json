@@ -154,10 +154,11 @@
 		"bin-debug/modules/multiCustomWar/model/McwTileMap.js",
 		"bin-debug/modules/multiCustomWar/model/McwTurnManager.js",
 		"bin-debug/modules/multiCustomWar/model/McwUnit.js",
+		"bin-debug/modules/multiCustomWar/model/McwUnitMap.js",
 		"bin-debug/Platform.js",
-		"bin-debug/modules/multiCustomWar/model/McwWar.js",
 		"bin-debug/modules/multiCustomWar/view/McwActionPlannerView.js",
 		"bin-debug/modules/multiCustomWar/view/McwBackgroundPanel.js",
+		"bin-debug/modules/multiCustomWar/view/McwBuildingListPanel.js",
 		"bin-debug/modules/multiCustomWar/view/McwCoListPanel.js",
 		"bin-debug/modules/multiCustomWar/view/McwCursorView.js",
 		"bin-debug/modules/multiCustomWar/view/McwFieldView.js",
@@ -295,6 +296,6 @@
 		"bin-debug/modules/mapEditor/model/MeTile.js",
 		"bin-debug/modules/mapEditor/model/MeTileMap.js",
 		"bin-debug/modules/mapEditor/model/MeUnit.js",
-		"bin-debug/modules/multiCustomWar/model/McwUnitMap.js"
+		"bin-debug/modules/multiCustomWar/model/McwWar.js"
 	]
 }

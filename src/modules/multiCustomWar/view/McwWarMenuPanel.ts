@@ -54,8 +54,8 @@ namespace TinyWars.MultiCustomWar {
         private _labelLuckLowerLimit            : GameUi.UiLabel;
         private _btnLuckUpperLimitTitle         : GameUi.UiButton;
         private _labelLuckUpperLimit            : GameUi.UiLabel;
-
-        private _listPlayer                 : GameUi.UiScrollList;
+        private _btnBuildings                   : GameUi.UiButton;
+        private _listPlayer                     : GameUi.UiScrollList;
 
         private _war            : McwWar;
         private _unitMap        : McwUnitMap;
@@ -93,7 +93,8 @@ namespace TinyWars.MultiCustomWar {
                 { type: Notify.Type.SScrCreateCustomWar,            callback: this._onNotifySScrCreateCustomWar },
             ];
             this._uiListeners = [
-                { ui: this._btnBack, callback: this._onTouchedBtnBack },
+                { ui: this._btnBack,        callback: this._onTouchedBtnBack },
+                { ui: this._btnBuildings,   callback: this._onTouchedBtnBuildings },
             ];
             this._listCommand.setItemRenderer(CommandRenderer);
             this._listPlayer.setItemRenderer(PlayerRenderer);
@@ -151,6 +152,10 @@ namespace TinyWars.MultiCustomWar {
             }
         }
 
+        private _onTouchedBtnBuildings(e: egret.TouchEvent): void {
+            McwBuildingListPanel.show();
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -186,6 +191,7 @@ namespace TinyWars.MultiCustomWar {
             this._btnVisionRangeModifierTitle.label     = Lang.getText(Lang.Type.B0184);
             this._btnLuckLowerLimitTitle.label          = Lang.getText(Lang.Type.B0189);
             this._btnLuckUpperLimitTitle.label          = Lang.getText(Lang.Type.B0190);
+            this._btnBuildings.label                    = Lang.getText(Lang.Type.B0333);
             this._btnBack.label                         = Lang.getText(Lang.Type.B0146);
         }
 
