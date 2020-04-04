@@ -8,7 +8,7 @@ namespace TinyWars.Common {
         currentValue    : string;
         tips            : string | null;
         maxChars        : number | null;
-        charRestrict   : string | null;
+        charRestrict    : string | null;
         callback        : (panel: InputPanel) => any;
     }
 

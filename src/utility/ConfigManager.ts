@@ -1679,6 +1679,7 @@ namespace TinyWars.ConfigManager {
     // Exports.
     ////////////////////////////////////////////////////////////////////////////////
     export const UNIT_HP_NORMALIZER         = 10;
+    export const UNIT_MAX_HP                = 100;
     export const MAX_PLAYER_INDEX           = 4;
     export const SILO_RADIUS                = 2;
     export const SILO_DAMAGE                = 30;

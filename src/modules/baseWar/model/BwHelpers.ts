@@ -563,8 +563,7 @@ namespace TinyWars.BaseWar.BwHelpers {
         const { width, height}          = tileMap.getMapSize();
         const playerIndex               = war.getPlayerIndexInTurn();
         const checkIsIdle               = (gridIndex: Types.GridIndex): boolean => {
-            const tile = tileMap.getTile(gridIndex);
-            if ((tile.getPlayerIndex() === playerIndex) && (tile.getProduceUnitCategory() != null)) {
+            if (tileMap.getTile(gridIndex).checkIsUnitProducerForPlayer(playerIndex)) {
                 const unit = unitMap.getUnitOnMap(gridIndex);
                 if ((!unit)                                                                                     ||
                     ((unit.getState() === Types.UnitActionState.Idle) && (unit.getPlayerIndex() === playerIndex))

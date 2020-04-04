@@ -37,7 +37,7 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ));
     }
 
-    export function reqPlayerProduceUnit(war: BwWar, gridIndex: GridIndex, unitType: UnitType): void {
+    export function reqPlayerProduceUnit(war: BwWar, gridIndex: GridIndex, unitType: UnitType, unitHp: number): void {
         ScwModel.updateByWarAction(ScwActionReviser.revise(
             war,
             {
@@ -45,6 +45,7 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
                 PlayerProduceUnit   : {
                     gridIndex,
                     unitType,
+                    unitHp,
                 },
             }
         ));

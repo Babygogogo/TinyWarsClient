@@ -102,13 +102,14 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         }
     }
 
-    export function reqMcwPlayerProduceUnit(war: BwWar, gridIndex: GridIndex, unitType: UnitType): void {
+    export function reqMcwPlayerProduceUnit(war: BwWar, gridIndex: GridIndex, unitType: UnitType, unitHp: number): void {
         NetManager.send({
             C_McwPlayerProduceUnit: {
                 warId   : war.getWarId(),
                 actionId: war.getNextActionId(),
                 gridIndex,
                 unitType,
+                unitHp,
             },
         });
     }

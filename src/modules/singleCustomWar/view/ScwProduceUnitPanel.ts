@@ -4,6 +4,7 @@ namespace TinyWars.SingleCustomWar {
     import Lang         = Utility.Lang;
     import Types        = Utility.Types;
     import FloatText    = Utility.FloatText;
+    import Helpers      = Utility.Helpers;
     import UnitType     = Types.UnitType;
     import GridIndex    = Types.GridIndex;
 
@@ -107,29 +108,38 @@ namespace TinyWars.SingleCustomWar {
         }
 
         private _createDataForList(): DataForUnitRenderer[] {
-            const dataList      = [] as DataForUnitRenderer[];
-            const war           = this._war;
-            const player        = war.getPlayerInTurn();
-            const currentFund   = player.getFund();
-            const playerIndex   = player.getPlayerIndex();
-            const configVersion = war.getConfigVersion();
-            const actionPlanner = war.getActionPlanner() as ScwActionPlanner;
-            const gridIndex     = this._gridIndex;
+            const dataList          = [] as DataForUnitRenderer[];
+            const war               = this._war;
+            const player            = war.getPlayerInTurn();
+            const currentFund       = player.getFund();
+            const playerIndex       = player.getPlayerIndex();
+            const configVersion     = war.getConfigVersion();
+            const actionPlanner     = war.getActionPlanner() as ScwActionPlanner;
+            const gridIndex         = this._gridIndex;
+            const tile              = war.getTileMap().getTile(gridIndex);
+            const skillCfg          = tile.getEffectiveSelfUnitProductionSkillCfg(playerIndex);
+            const unitCategory      = skillCfg ? skillCfg[1] : tile.getCfgProduceUnitCategory();
+            const minNormalizedHp   = skillCfg ? Helpers.getNormalizedHp(skillCfg[3]) : Helpers.getNormalizedHp(ConfigManager.UNIT_MAX_HP);
 
-            for (const unitType of ConfigManager.getUnitTypesByCategory(war.getConfigVersion(), war.getTileMap().getTile(this._gridIndex).getProduceUnitCategory())) {
+            for (const unitType of ConfigManager.getUnitTypesByCategory(configVersion, unitCategory)) {
                 const unit = new ScwUnit().init({
                     gridX   : -1,
                     gridY   : -1,
                     unitId  : -1,
                     viewId  : ConfigManager.getUnitViewId(unitType, playerIndex),
                 }, configVersion) as ScwUnit;
+                const cfgCost = ConfigManager.getUnitTemplateCfg(configVersion, unitType).productionCost;
                 dataList.push({
                     unitType,
                     currentFund,
                     actionPlanner,
                     gridIndex,
                     unit,
-                    cost    : ScwHelpers.getUnitProductionCost(war, unitType),
+                    cfgCost,
+                    unitProductionSkillCfg  : skillCfg,
+                    minCost                 : skillCfg
+                        ? Math.floor(cfgCost * minNormalizedHp * skillCfg[5] / ConfigManager.UNIT_HP_NORMALIZER / 100)
+                        : cfgCost,
                 });
             }
 
@@ -142,12 +152,14 @@ namespace TinyWars.SingleCustomWar {
     }
 
     type DataForUnitRenderer = {
-        unitType        : UnitType;
-        unit            : ScwUnit;
-        cost            : number;
-        currentFund     : number;
-        actionPlanner   : ScwActionPlanner;
-        gridIndex       : GridIndex;
+        unitType                : UnitType;
+        unit                    : ScwUnit;
+        cfgCost                 : number;
+        minCost                 : number;
+        currentFund             : number;
+        actionPlanner           : ScwActionPlanner;
+        gridIndex               : GridIndex;
+        unitProductionSkillCfg  : number[] | null;
     }
 
     class UnitRenderer extends eui.ItemRenderer {
@@ -184,10 +196,44 @@ namespace TinyWars.SingleCustomWar {
 
         private _onTouchedImgBg(e: egret.TouchEvent): void {
             const data = this.data as DataForUnitRenderer;
-            if (data.currentFund < data.cost) {
+            if (data.currentFund < data.minCost) {
                 FloatText.show(Lang.getText(Lang.Type.B0053));
             } else {
-                data.actionPlanner.setStateRequestingPlayerProduceUnit(data.gridIndex, data.unitType);
+                const skillCfg      = data.unitProductionSkillCfg;
+                const unitType      = data.unitType;
+                const gridIndex     = data.gridIndex;
+                const actionPlanner = data.actionPlanner;
+                if (!skillCfg) {
+                    actionPlanner.setStateRequestingPlayerProduceUnit(gridIndex, unitType, ConfigManager.UNIT_MAX_HP);
+                } else {
+                    const rawMinHp = skillCfg[3];
+                    const rawMaxHp = skillCfg[4];
+                    if (rawMinHp === rawMaxHp) {
+                        actionPlanner.setStateRequestingPlayerProduceUnit(gridIndex, unitType, rawMinHp);
+                    } else {
+                        const normalizer    = ConfigManager.UNIT_HP_NORMALIZER;
+                        const minHp         = rawMinHp;
+                        const maxHp         = Math.min(
+                            rawMaxHp,
+                            Math.floor(data.currentFund * ConfigManager.UNIT_MAX_HP / (data.cfgCost * skillCfg[5] / 100) / normalizer) * normalizer
+                        );
+                        Common.InputPanel.show({
+                            title           : `${Lang.getUnitName(unitType)} HP`,
+                            currentValue    : "" + maxHp,
+                            maxChars        : 3,
+                            charRestrict    : "0-9",
+                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minHp}, ${maxHp}]`,
+                            callback        : panel => {
+                                const value = Number(panel.getInputText());
+                                if ((isNaN(value)) || (value > maxHp) || (value < minHp)) {
+                                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                                } else {
+                                    actionPlanner.setStateRequestingPlayerProduceUnit(gridIndex, unitType, value);
+                                }
+                            },
+                        });
+                    }
+                }
             }
         }
 
@@ -198,8 +244,8 @@ namespace TinyWars.SingleCustomWar {
             const data = this.data as DataForUnitRenderer;
 
             const unitType                  = data.unitType;
-            const isFundEnough              = data.currentFund >= data.cost;
-            this._labelCost.text            = `${Lang.getText(Lang.Type.B0079)}: ${data.cost}`;
+            const isFundEnough              = data.currentFund >= data.minCost;
+            this._labelCost.text            = `${Lang.getText(Lang.Type.B0079)}: ${data.minCost}`;
             this._labelCost.textColor       = isFundEnough ? 0x00FF00 : 0xFF0000;
             this._labelName.text            = Lang.getUnitName(unitType);
             this._labelProduce.textColor    = isFundEnough ? 0x00FF00 : 0xFF0000;

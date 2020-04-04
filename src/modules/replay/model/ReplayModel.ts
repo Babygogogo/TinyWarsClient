@@ -209,16 +209,28 @@ namespace TinyWars.Replay.ReplayModel {
     async function _executeMcwPlayerProduceUnit(war: ReplayWar, data: WarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0095)} ${Lang.getUnitName(data.WarActionPlayerProduceUnit.unitType)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
 
-        const action = data.WarActionPlayerProduceUnit;
+        const action        = data.WarActionPlayerProduceUnit;
+        const configVersion = war.getConfigVersion();
+        const unitData      = action.unitData as Types.SerializedUnit;
+        const unitType      = unitData
+            ? ConfigManager.getUnitTypeAndPlayerIndex(unitData.viewId).unitType
+            : action.unitType;
+        FloatText.show(`${Lang.getText(Lang.Type.B0095)} ${Lang.getUnitName(unitType)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
 
         const gridIndex     = action.gridIndex as GridIndex;
         const unitMap       = war.getUnitMap();
         const unitId        = unitMap.getNextUnitId();
         const playerInTurn  = war.getPlayerInTurn();
 
-        if ((gridIndex) && (action.unitType != null)) {
+        if (unitData) {
+            const unit = new ReplayUnit().init(unitData, configVersion);
+            unit.startRunning(war);
+            unit.startRunningView();
+
+            unitMap.addUnitOnMap(unit);
+
+        } else if ((gridIndex) && (action.unitType != null)) {
             // TODO: take skills into account.
             const playerIndex   = playerInTurn.getPlayerIndex();
             const unit          = new ReplayUnit().init({
@@ -226,7 +238,7 @@ namespace TinyWars.Replay.ReplayModel {
                 viewId  : ConfigManager.getUnitViewId(action.unitType, playerIndex)!,
                 gridX   : gridIndex.x,
                 gridY   : gridIndex.y,
-            }, war.getConfigVersion());
+            }, configVersion);
             unit.setState(UnitState.Acted);
             unit.startRunning(war);
             unit.startRunningView();
@@ -1169,8 +1181,16 @@ namespace TinyWars.Replay.ReplayModel {
         const unitMap       = war.getUnitMap();
         const unitId        = unitMap.getNextUnitId();
         const playerInTurn  = war.getPlayerInTurn();
+        const unitData      = action.unitData as Types.SerializedUnit;
 
-        if ((gridIndex) && (action.unitType != null)) {
+        if (unitData) {
+            const unit = new ReplayUnit().init(unitData, war.getConfigVersion());
+            unit.startRunning(war);
+            unit.startRunningView();
+
+            unitMap.addUnitOnMap(unit);
+
+        } else if ((gridIndex) && (action.unitType != null)) {
             // TODO: take skills into account.
             const playerIndex   = playerInTurn.getPlayerIndex();
             const unit          = new ReplayUnit().init({

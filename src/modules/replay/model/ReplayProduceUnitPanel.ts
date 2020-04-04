@@ -4,6 +4,7 @@ namespace TinyWars.Replay {
     import Lang         = Utility.Lang;
     import Types        = Utility.Types;
     import FloatText    = Utility.FloatText;
+    import Helpers      = Utility.Helpers;
     import UnitType     = Types.UnitType;
     import GridIndex    = Types.GridIndex;
 
@@ -124,29 +125,38 @@ namespace TinyWars.Replay {
         }
 
         private _createDataForList(): DataForUnitRenderer[] {
-            const dataList      = [] as DataForUnitRenderer[];
-            const war           = this._war;
-            const player        = war.getPlayerInTurn();
-            const currentFund   = player.getFund();
-            const playerIndex   = player.getPlayerIndex();
-            const configVersion = war.getConfigVersion();
-            const actionPlanner = war.getActionPlanner() as ReplayActionPlanner;
-            const gridIndex     = this._gridIndex;
+            const dataList          = [] as DataForUnitRenderer[];
+            const war               = this._war;
+            const player            = war.getPlayerInTurn();
+            const currentFund       = player.getFund();
+            const playerIndex       = player.getPlayerIndex();
+            const configVersion     = war.getConfigVersion();
+            const actionPlanner     = war.getActionPlanner() as ReplayActionPlanner;
+            const gridIndex         = this._gridIndex;
+            const tile              = war.getTileMap().getTile(gridIndex);
+            const skillCfg          = tile.getEffectiveSelfUnitProductionSkillCfg(playerIndex);
+            const unitCategory      = skillCfg ? skillCfg[1] : tile.getCfgProduceUnitCategory();
+            const minNormalizedHp   = skillCfg ? Helpers.getNormalizedHp(skillCfg[3]) : Helpers.getNormalizedHp(ConfigManager.UNIT_MAX_HP);
 
-            for (const unitType of ConfigManager.getUnitTypesByCategory(war.getConfigVersion(), war.getTileMap().getTile(this._gridIndex).getProduceUnitCategory())) {
+            for (const unitType of ConfigManager.getUnitTypesByCategory(configVersion, unitCategory)) {
                 const unit = new ReplayUnit().init({
                     gridX   : -1,
                     gridY   : -1,
                     unitId  : -1,
                     viewId  : ConfigManager.getUnitViewId(unitType, playerIndex),
                 }, configVersion) as ReplayUnit;
+                const cfgCost = ConfigManager.getUnitTemplateCfg(configVersion, unitType).productionCost;
                 dataList.push({
                     unitType,
                     currentFund,
                     actionPlanner,
                     gridIndex,
                     unit,
-                    cost    : ReplayHelpers.getUnitProductionCost(war, unitType),
+                    cfgCost,
+                    unitProductionSkillCfg  : skillCfg,
+                    minCost                 : skillCfg
+                        ? Math.floor(cfgCost * minNormalizedHp * skillCfg[5] / ConfigManager.UNIT_HP_NORMALIZER / 100)
+                        : cfgCost,
                 });
             }
 
@@ -159,12 +169,14 @@ namespace TinyWars.Replay {
     }
 
     type DataForUnitRenderer = {
-        unitType        : UnitType;
-        unit            : ReplayUnit;
-        cost            : number;
-        currentFund     : number;
-        actionPlanner   : ReplayActionPlanner;
-        gridIndex       : GridIndex;
+        unitType                : UnitType;
+        unit                    : ReplayUnit;
+        cfgCost                 : number;
+        minCost                 : number;
+        currentFund             : number;
+        actionPlanner           : ReplayActionPlanner;
+        gridIndex               : GridIndex;
+        unitProductionSkillCfg  : number[];
     }
 
     class UnitRenderer extends eui.ItemRenderer {
@@ -213,8 +225,8 @@ namespace TinyWars.Replay {
             const data = this.data as DataForUnitRenderer;
 
             const unitType                  = data.unitType;
-            const isFundEnough              = data.currentFund >= data.cost;
-            this._labelCost.text            = `${Lang.getText(Lang.Type.B0079)}: ${data.cost}`;
+            const isFundEnough              = data.currentFund >= data.minCost;
+            this._labelCost.text            = `${Lang.getText(Lang.Type.B0079)}: ${data.minCost}`;
             this._labelCost.textColor       = isFundEnough ? 0x00FF00 : 0xFF0000;
             this._labelName.text            = Lang.getUnitName(unitType);
             this._labelProduce.textColor    = isFundEnough ? 0x00FF00 : 0xFF0000;

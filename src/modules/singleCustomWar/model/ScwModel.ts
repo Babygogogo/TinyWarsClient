@@ -239,8 +239,16 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         const unitMap       = war.getUnitMap();
         const unitId        = unitMap.getNextUnitId();
         const playerInTurn  = war.getPlayerInTurn();
+        const unitData      = action.unitData as Types.SerializedUnit;
 
-        if ((gridIndex) && (action.unitType != null)) {
+        if (unitData) {
+            const unit = new ScwUnit().init(unitData, war.getConfigVersion());
+            unit.startRunning(war);
+            unit.startRunningView();
+
+            unitMap.addUnitOnMap(unit);
+
+        } else if ((gridIndex) && (action.unitType != null)) {
             // TODO: take skills into account.
             const playerIndex   = playerInTurn.getPlayerIndex();
             const unit          = new ScwUnit().init({

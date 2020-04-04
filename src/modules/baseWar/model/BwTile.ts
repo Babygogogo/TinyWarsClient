@@ -381,11 +381,53 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for produce unit.
         ////////////////////////////////////////////////////////////////////////////////
-        public getProduceUnitCategory(): Types.UnitCategory | undefined {
+        public getCfgProduceUnitCategory(): Types.UnitCategory | undefined {
             return this._templateCfg.produceUnitCategory;
         }
-        public checkIsUnitProducer(): boolean {
-            const category = this.getProduceUnitCategory();
+        public getProduceUnitCategoryForPlayer(playerIndex: number): Types.UnitCategory | undefined | null {
+            if (this.getPlayerIndex() !== playerIndex) {
+                return null;
+            } else {
+                const skillCfg = this.getEffectiveSelfUnitProductionSkillCfg(playerIndex);
+                return skillCfg ? skillCfg[1] : this.getCfgProduceUnitCategory();
+            }
+        }
+
+        public getEffectiveSelfUnitProductionSkillCfg(playerIndex: number): number[] | null {
+            if (this.getPlayerIndex() === playerIndex) {
+                const player        = this._getWar().getPlayerManager().getPlayer(playerIndex);
+                const isInCoZone    = player ? player.checkIsInCoZone(this.getGridIndex()) : false;
+                const isCoOnMap     = player ? !!player.getCoGridIndexOnMap() : false;
+                const tileType      = this.getType();
+                const configVersion = this._configVersion;
+                for (const skillId of player ? player.getCoCurrentSkills() || [] : []) {
+                    const cfg       = ConfigManager.getCoSkillCfg(configVersion, skillId);
+                    const skillCfg  = cfg ? cfg.selfUnitProduction : null;
+                    if (skillCfg) {
+                        const areaType = skillCfg[0] as Types.CoSkillAreaType;
+                        if (((areaType === Types.CoSkillAreaType.Zone) && (isInCoZone)) ||
+                            ((areaType === Types.CoSkillAreaType.OnMap) && (isCoOnMap)) ||
+                            (areaType === Types.CoSkillAreaType.Halo)
+                        ) {
+                            const tileCategory = skillCfg[2];
+                            if ((tileCategory != null)                                                          &&
+                                (ConfigManager.checkIsTileTypeInCategory(configVersion, tileType, tileCategory))
+                            ) {
+                                return skillCfg;
+                            }
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+        public checkIsCfgUnitProducer(): boolean {
+            const category = this.getCfgProduceUnitCategory();
+            return (category != null) && (category !== Types.UnitCategory.None);
+        }
+        public checkIsUnitProducerForPlayer(playerIndex: number): boolean {
+            const category = this.getProduceUnitCategoryForPlayer(playerIndex);
             return (category != null) && (category !== Types.UnitCategory.None);
         }
 
