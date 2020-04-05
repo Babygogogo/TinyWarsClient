@@ -88,7 +88,7 @@ namespace TinyWars.SingleCustomWar {
             super();
 
             this._setAutoAdjustHeightEnabled();
-            this.skinName = `resource/skins/multiCustomWar/McwWarMenuPanel.exml`;
+            this.skinName = `resource/skins/singleCustomWar/ScwWarMenuPanel.exml`;
         }
 
         protected _onFirstOpened(): void {

@@ -11,11 +11,10 @@ namespace TinyWars.MultiCustomRoom {
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
     export class McrCreateAdvancedSettingsPage extends GameUi.UiTabPage {
-        private _labelMapNameTitle      : GameUi.UiLabel;
-        private _labelMapName           : GameUi.UiLabel;
-        private _labelPlayersCountTitle : GameUi.UiLabel;
-        private _labelPlayersCount      : GameUi.UiLabel;
-        private _labelTips              : GameUi.UiLabel;
+        private _btnMapNameTitle    : GameUi.UiButton;
+        private _labelMapName       : GameUi.UiLabel;
+        private _btnBuildings       : GameUi.UiButton;
+        private _labelTips          : GameUi.UiLabel;
 
         private _groupInitialFund                   : eui.Group;
         private _labelInitialFund                   : TinyWars.GameUi.UiLabel;
@@ -70,6 +69,7 @@ namespace TinyWars.MultiCustomRoom {
                 { ui: this._btnModifyLuckUpperLimit,            callback: this._onTouchedBtnModifyLuckUpperLimit },
                 { ui: this._btnModifyMoveRange,                 callback: this._onTouchedBtnModifyMoveRange },
                 { ui: this._btnModifyVisionRange,               callback: this._onTouchedBtnModifyVisionRange },
+                { ui: this._btnBuildings,                       callback: this._onTouchedBtnBuildings },
             ];
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
@@ -83,7 +83,6 @@ namespace TinyWars.MultiCustomRoom {
             this._initGroupCoTiers();
             this._initGroupCoNames();
             this._updateLabelMapName();
-            this._updateLabelPlayersCount();
             this._updateLabelInitialFund();
             this._updateLabelIncomeMultiplier();
             this._updateLabelInitialEnergy();
@@ -332,6 +331,13 @@ namespace TinyWars.MultiCustomRoom {
             }
         }
 
+        private async _onTouchedBtnBuildings(e: egret.TouchEvent): Promise<void> {
+            McrBuildingListPanel.show({
+                configVersion   : McrModel.getCreateWarData().configVersion,
+                mapRawData      : await WarMapModel.getMapRawData(McrModel.getCreateWarMapFileName()) as Types.MapRawData,
+            });
+        }
+
         private _onTouchedCoTierRenderer(e: egret.TouchEvent): void {
             const renderer  = e.currentTarget as RendererForCoTier;
             const coIdList  = renderer.getIsCustomSwitch()
@@ -404,8 +410,7 @@ namespace TinyWars.MultiCustomRoom {
         // View functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._labelMapNameTitle.text                = `${Lang.getText(Lang.Type.B0225)}:`;
-            this._labelPlayersCountTitle.text           = `${Lang.getText(Lang.Type.B0229)}:`;
+            this._btnMapNameTitle.label                 = Lang.getText(Lang.Type.B0225);
             this._labelTips.text                        = Lang.getText(Lang.Type.A0065);
             this._labelAvailableCoTitle.text            = `${Lang.getText(Lang.Type.B0238)}:`;
             this._btnModifyInitialEnergy.label          = Lang.getText(Lang.Type.B0180);
@@ -417,6 +422,7 @@ namespace TinyWars.MultiCustomRoom {
             this._btnModifyLuckUpperLimit.label         = Lang.getText(Lang.Type.B0190);
             this._btnModifyIncomeMultiplier.label       = Lang.getText(Lang.Type.B0179);
             this._btnModifyInitialFund.label            = Lang.getText(Lang.Type.B0178);
+            this._btnBuildings.label                    = Lang.getText(Lang.Type.B0333);
         }
 
         private _updateLabelInitialFund(): void {
@@ -444,11 +450,9 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _updateLabelMapName(): void {
-            WarMapModel.getMapNameInLanguage(this._mapExtraData.mapFileName).then(v => this._labelMapName.text = v);
-        }
-
-        private _updateLabelPlayersCount(): void {
-            this._labelPlayersCount.text = "" + this._mapExtraData.playersCount;
+            WarMapModel.getMapNameInLanguage(this._mapExtraData.mapFileName).then(v =>
+                this._labelMapName.text = `${v} (${this._mapExtraData.playersCount}P)`
+            );
         }
 
         private _updateLabelMoveRange(): void {
