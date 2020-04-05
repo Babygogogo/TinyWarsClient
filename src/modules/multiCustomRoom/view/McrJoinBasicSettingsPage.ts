@@ -45,6 +45,8 @@ namespace TinyWars.MultiCustomRoom {
         private _labelPlayersTitle  : GameUi.UiLabel;
         private _listPlayer         : GameUi.UiScrollList;
 
+        private _btnBuildings: GameUi.UiButton;
+
         private _mapExtraData: ProtoTypes.IMapExtraData;
 
         public constructor() {
@@ -62,6 +64,7 @@ namespace TinyWars.MultiCustomRoom {
                 { ui: this._btnHelpHasFog,          callback: this._onTouchedBtnHelpHasFog, },
                 { ui: this._btnHelpTimeLimit,       callback: this._onTouchedBtnHelpTimeLimit, },
                 { ui: this._btnChangeCo,            callback: this._onTouchedBtnChangeCo, },
+                { ui: this._btnBuildings,           callback: this._onTouchedBtnBuildings },
             ];
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
@@ -161,6 +164,14 @@ namespace TinyWars.MultiCustomRoom {
             McrJoinCoListPanel.show(McrModel.getJoinWarCoId());
         }
 
+        private async _onTouchedBtnBuildings(e: egret.TouchEvent): Promise<void> {
+            const info = McrModel.getJoinWarRoomInfo();
+            McrBuildingListPanel.show({
+                configVersion   : info.configVersion,
+                mapRawData      : await WarMapModel.getMapRawData(info.mapFileName) as Types.MapRawData,
+            });
+        }
+
         ////////////////////////////////////////////////////////////////////////////////
         // View functions.
         ////////////////////////////////////////////////////////////////////////////////
@@ -174,6 +185,7 @@ namespace TinyWars.MultiCustomRoom {
             this._btnModifyTeam.label           = Lang.getText(Lang.Type.B0019);
             this._btnModifyHasFog.label         = Lang.getText(Lang.Type.B0020);
             this._btnModifyTimeLimit.label      = Lang.getText(Lang.Type.B0188);
+            this._btnBuildings.label            = Lang.getText(Lang.Type.B0333);
             this._labelPlayersTitle.text        = `${Lang.getText(Lang.Type.B0232)}:`;
         }
 
