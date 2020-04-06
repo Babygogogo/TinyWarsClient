@@ -104,6 +104,7 @@
 		"resource/skins/singleCustomRoom/ScrCreateSearchMapPanel.exml",
 		"resource/skins/singleCustomRoom/ScrCreateSettingsPanel.exml",
 		"resource/skins/singleCustomRoom/ScrMainMenuPanel.exml",
+		"resource/skins/singleCustomWar/ScwTopPanel.exml",
 		"resource/skins/singleCustomWar/ScwWarMenuPanel.exml",
 		"resource/skins/singlePlayerLobby/SinglePlayerLobbyPanel.exml",
 		"resource/skins/user/UserChangeDiscordIdPanel.exml",

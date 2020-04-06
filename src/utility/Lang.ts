@@ -1866,6 +1866,74 @@ namespace TinyWars.Utility.Lang {
             `建筑统计`,
             `Buildings`,
         ],
+        [Type.B0334]: [
+            `基础伤害表`,
+            `Base Damage Chart`,
+        ],
+        [Type.B0335]: [
+            `攻击(主)`,
+            `ATK(main)`,
+        ],
+        [Type.B0336]: [
+            `攻击(副)`,
+            `ATK(sub)`,
+        ],
+        [Type.B0337]: [
+            `受击(主)`,
+            `DEF(main)`,
+        ],
+        [Type.B0338]: [
+            `受击(副)`,
+            `DEF(sub)`,
+        ],
+        [Type.B0339]: [
+            `HP`,
+            `HP`,
+        ],
+        [Type.B0340]: [
+            `移动力`,
+            `Movement`,
+        ],
+        [Type.B0341]: [
+            `造价`,
+            `Production Cost`,
+        ],
+        [Type.B0342]: [
+            `燃料`,
+            `Fuel`,
+        ],
+        [Type.B0343]: [
+            `燃料消耗量`,
+            `Fuel Consumption`,
+        ],
+        [Type.B0344]: [
+            `耗尽燃料时自毁`,
+            `Explodes without fuel`,
+        ],
+        [Type.B0345]: [
+            `攻击距离`,
+            `Attack Range`,
+        ],
+        [Type.B0346]: [
+            `移动后攻击`,
+            `Run & hit`,
+        ],
+        [Type.B0347]: [
+            `建筑材料`,
+            `Build Material`,
+        ],
+        [Type.B0348]: [
+            `生产材料`,
+            `Production Material`,
+        ],
+        [Type.B0349]: [
+            `照明弹`,
+            `Flare Ammo`,
+        ],
+        [Type.B0350]: [
+            `主武器弹药`,
+            `Primary Weapon Ammo`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [

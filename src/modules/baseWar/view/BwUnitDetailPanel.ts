@@ -21,25 +21,36 @@ namespace TinyWars.BaseWar {
         private _group                  : eui.Group;
         private _conUnitView            : eui.Group;
         private _labelName              : GameUi.UiLabel;
-        private _labelHp                : GameUi.UiLabel;
-        private _labelMovement          : GameUi.UiLabel;
-        private _labelProductionCost    : GameUi.UiLabel;
-        private _labelFuel              : GameUi.UiLabel;
-        private _labelFuelConsumption   : GameUi.UiLabel;
-        private _labelDestroyOnOutOfFuel: GameUi.UiLabel;
-        private _labelAttackRange       : GameUi.UiLabel;
-        private _labelAttackAfterMove   : GameUi.UiLabel;
 
-        private _groupPrimaryWeaponAmmo : eui.Group;
-        private _labelPrimaryWeaponAmmo : GameUi.UiLabel;
+        // private _labelHp                : GameUi.UiLabel;
+        // private _labelMovement          : GameUi.UiLabel;
+        // private _labelProductionCost    : GameUi.UiLabel;
+        // private _labelFuel              : GameUi.UiLabel;
+        // private _labelFuelConsumption   : GameUi.UiLabel;
+        // private _labelDestroyOnOutOfFuel: GameUi.UiLabel;
+        // private _labelAttackRange       : GameUi.UiLabel;
+        // private _labelAttackAfterMove   : GameUi.UiLabel;
 
-        private _groupFlareAmmo : eui.Group;
-        private _labelFlareAmmo : GameUi.UiLabel;
+        // private _groupPrimaryWeaponAmmo : eui.Group;
+        // private _labelPrimaryWeaponAmmo : GameUi.UiLabel;
 
-        private _groupMaterial  : eui.Group;
-        private _labelMaterial  : GameUi.UiLabel;
+        // private _groupFlareAmmo : eui.Group;
+        // private _labelFlareAmmo : GameUi.UiLabel;
 
-        private _listDamageChart        : GameUi.UiScrollList;
+        // private _groupMaterial  : eui.Group;
+        // private _labelMaterial  : GameUi.UiLabel;
+
+        private _listInfo           : GameUi.UiScrollList;
+        private _listDamageChart    : GameUi.UiScrollList;
+        private _labelDamageChart   : GameUi.UiLabel;
+        private _labelOffenseMain1  : GameUi.UiLabel;
+        private _labelOffenseSub1   : GameUi.UiLabel;
+        private _labelDefenseMain1  : GameUi.UiLabel;
+        private _labelDefenseSub1   : GameUi.UiLabel;
+        private _labelOffenseMain2  : GameUi.UiLabel;
+        private _labelOffenseSub2   : GameUi.UiLabel;
+        private _labelDefenseMain2  : GameUi.UiLabel;
+        private _labelDefenseSub2   : GameUi.UiLabel;
 
         private _openData   : OpenDataForBwUnitDetailPanel;
         private _dataForList: DataForDamageRenderer[];
@@ -73,13 +84,13 @@ namespace TinyWars.BaseWar {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
+                { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
             ];
-            this._uiListeners = [
-            ];
 
             this._listDamageChart.setItemRenderer(DamageRenderer);
+            this._listInfo.setItemRenderer(InfoRenderer);
             this._unitView = new WarMap.WarMapUnitView();
             this._conUnitView.addChild(this._unitView);
         }
@@ -87,12 +98,18 @@ namespace TinyWars.BaseWar {
             this._updateView();
         }
         protected _onClosed(): void {
-            delete this._dataForList;
+            this._listDamageChart.clear();
+            this._listInfo.clear();
+            this._dataForList = null;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateComponentsForLanguage();
+        }
+
         private _onNotifyUnitAnimationTick(e: egret.Event): void {
             const viewList = this._listDamageChart.getViewList();
             for (let i = 0; i < viewList.numChildren; ++i) {
@@ -110,66 +127,124 @@ namespace TinyWars.BaseWar {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            this._updateUnitView();
-            this._updateLabels();
+            this._updateComponentsForLanguage();
+            this._updateUnitViewAndLabelName();
             this._updateListDamageChart();
         }
 
-        private _updateUnitView(): void {
-            const data  = this._openData;
-            const unit  = data.unit;
+        private _updateComponentsForLanguage(): void {
+            this._labelDamageChart.text     = Lang.getText(Lang.Type.B0334);
+            this._labelOffenseMain1.text    = Lang.getText(Lang.Type.B0335);
+            this._labelOffenseSub1.text     = Lang.getText(Lang.Type.B0336);
+            this._labelDefenseMain1.text    = Lang.getText(Lang.Type.B0337);
+            this._labelDefenseSub1.text     = Lang.getText(Lang.Type.B0338);
+            this._labelOffenseMain2.text    = Lang.getText(Lang.Type.B0335);
+            this._labelOffenseSub2.text     = Lang.getText(Lang.Type.B0336);
+            this._labelDefenseMain2.text    = Lang.getText(Lang.Type.B0337);
+            this._labelDefenseSub2.text     = Lang.getText(Lang.Type.B0338);
+            this._updateListInfo();
+        }
+
+        private _updateUnitViewAndLabelName(): void {
+            const data              = this._openData;
+            const unit              = data.unit;
+            const viewId            = unit ? unit.getViewId() : data.viewId;
+            const unitType          = unit ? unit.getType() : ConfigManager.getUnitTypeAndPlayerIndex(viewId).unitType;
+            this._labelName.text    = Lang.getUnitName(unitType);
             this._unitView.update({
                 configVersion   : unit ? unit.getConfigVersion() : data.configVersion,
-                viewId          : unit ? unit.getViewId() : data.viewId,
+                viewId,
                 gridX           : 0,
                 gridY           : 0,
             }, Time.TimeModel.getUnitAnimationTickCount());
         }
 
-        private _updateLabels(): void {
-            const data                          = this._openData;
-            const unit                          = data.unit;
-            const configVersion                 = unit ? unit.getConfigVersion() : data.configVersion;
-            const unitType                      = unit ? unit.getType() : ConfigManager.getUnitTypeAndPlayerIndex(data.viewId).unitType;
-            const cfg                           = ConfigManager.getUnitTemplateCfg(configVersion, unitType);
-            this._labelName.text                = Lang.getUnitName(unitType);
-            this._labelHp.text                  = unit ? `${unit.getCurrentHp()} / ${unit.getMaxHp()}` : `${cfg.maxHp} / ${cfg.maxHp}`;
-            this._labelMovement.text            = `${cfg.moveRange} (${Lang.getMoveTypeName(cfg.moveType)})`;
-            this._labelProductionCost.text      = `${cfg.productionCost}`;
-            this._labelFuel.text                = unit ? `${unit.getCurrentFuel()} / ${unit.getMaxFuel()}` : `${cfg.maxFuel} / ${cfg.maxFuel}`;
-            this._labelFuelConsumption.text     = `${cfg.fuelConsumptionPerTurn}${cfg.fuelConsumptionInDiving == null ? `` : ` (${cfg.fuelConsumptionInDiving})`}`;
-            this._labelDestroyOnOutOfFuel.text  = (unit && unit.checkIsDestroyedOnOutOfFuel()) || (cfg.isDestroyedOnOutOfFuel)
-                ? Lang.getText(Lang.Type.B0012)
-                : Lang.getText(Lang.Type.B0013);
-            this._labelAttackRange.text         = cfg.minAttackRange == null ? Lang.getText(Lang.Type.B0001) : `${cfg.minAttackRange} - ${cfg.maxAttackRange}`;
-            this._labelAttackAfterMove.text     = cfg.canAttackAfterMove ? Lang.getText(Lang.Type.B0012) : Lang.getText(Lang.Type.B0013);
+        private _updateListInfo(): void {
+            const data          = this._openData;
+            const unit          = data.unit;
+            const configVersion = unit ? unit.getConfigVersion() : data.configVersion;
+            const unitType      = unit ? unit.getType() : ConfigManager.getUnitTypeAndPlayerIndex(data.viewId).unitType;
+            const cfg           = ConfigManager.getUnitTemplateCfg(configVersion, unitType);
 
-            if (((unit) && (unit.getMaxBuildMaterial() != null)) || (cfg.maxBuildMaterial != null)) {
-                this._groupMaterial.visible             = true;
-                this._groupFlareAmmo.visible            = false;
-                this._groupPrimaryWeaponAmmo.visible    = false;
-                this._labelMaterial.text                = unit ? `${unit.getCurrentBuildMaterial()} / ${unit.getMaxBuildMaterial()}` : `${cfg.maxBuildMaterial} / ${cfg.maxBuildMaterial}`;
-            } else if (((unit) && (unit.getMaxProduceMaterial() != null)) || (cfg.maxProduceMaterial != null)) {
-                this._groupMaterial.visible             = true;
-                this._groupFlareAmmo.visible            = false;
-                this._groupPrimaryWeaponAmmo.visible    = false;
-                this._labelMaterial.text                = unit ? `${unit.getCurrentProduceMaterial()} / ${unit.getMaxProduceMaterial()}` : `${cfg.maxProduceMaterial} / ${cfg.maxProduceMaterial}`;
-            } else if (((unit) && (unit.getFlareMaxAmmo() != null)) || (cfg.flareMaxAmmo != null)) {
-                this._groupMaterial.visible             = false;
-                this._groupFlareAmmo.visible            = true;
-                this._groupPrimaryWeaponAmmo.visible    = false;
-                this._labelFlareAmmo.text               = unit ? `${unit.getFlareCurrentAmmo()} / ${unit.getFlareMaxAmmo()}` : `${cfg.flareMaxAmmo} / ${cfg.flareMaxAmmo}`;
-            } else if (((unit) && (unit.getPrimaryWeaponMaxAmmo() != null)) || (cfg.primaryWeaponMaxAmmo != null)) {
-                this._groupMaterial.visible             = false;
-                this._groupFlareAmmo.visible            = false;
-                this._groupPrimaryWeaponAmmo.visible    = true;
-                this._labelPrimaryWeaponAmmo.text       = unit ? `${unit.getPrimaryWeaponCurrentAmmo()} / ${unit.getPrimaryWeaponMaxAmmo()}` : `${cfg.primaryWeaponMaxAmmo} / ${cfg.primaryWeaponMaxAmmo}`;
-            } else {
-                this._groupMaterial.visible             = false;
-                this._groupFlareAmmo.visible            = false;
-                this._groupPrimaryWeaponAmmo.visible    = true;
-                this._labelPrimaryWeaponAmmo.text       = Lang.getText(Lang.Type.B0001);
+            const dataList: DataForInfoRenderer[] = [];
+            dataList.push(
+                {
+                    // HP
+                    titleText   : Lang.getText(Lang.Type.B0339),
+                    valueText   : unit ? `${unit.getCurrentHp()} / ${unit.getMaxHp()}` : `${cfg.maxHp} / ${cfg.maxHp}`,
+                },
+                {
+                    // Production Cost
+                    titleText   : Lang.getText(Lang.Type.B0341),
+                    valueText   : `${cfg.productionCost}`,
+                },
+                {
+                    // Movement
+                    titleText   : Lang.getText(Lang.Type.B0340),
+                    valueText   : `${cfg.moveRange} (${Lang.getMoveTypeName(cfg.moveType)})`,
+                },
+                {
+                    // Fuel
+                    titleText   : Lang.getText(Lang.Type.B0342),
+                    valueText   : unit ? `${unit.getCurrentFuel()} / ${unit.getMaxFuel()}` : `${cfg.maxFuel} / ${cfg.maxFuel}`,
+                },
+                {
+                    // Fuel consumption
+                    titleText   : Lang.getText(Lang.Type.B0343),
+                    valueText   : `${cfg.fuelConsumptionPerTurn}${cfg.fuelConsumptionInDiving == null ? `` : ` (${cfg.fuelConsumptionInDiving})`}`,
+                },
+                {
+                    // Destroy on out of fuel
+                    titleText   : Lang.getText(Lang.Type.B0344),
+                    valueText   : (unit && unit.checkIsDestroyedOnOutOfFuel()) || (cfg.isDestroyedOnOutOfFuel)
+                        ? Lang.getText(Lang.Type.B0012)
+                        : Lang.getText(Lang.Type.B0013),
+                },
+                {
+                    // Attack range
+                    titleText   : Lang.getText(Lang.Type.B0345),
+                    valueText   : cfg.minAttackRange == null ? Lang.getText(Lang.Type.B0001) : `${cfg.minAttackRange} - ${cfg.maxAttackRange}`,
+                },
+                {
+                    // Attack after move
+                    titleText   : Lang.getText(Lang.Type.B0346),
+                    valueText   : cfg.canAttackAfterMove ? Lang.getText(Lang.Type.B0012) : Lang.getText(Lang.Type.B0013),
+                }
+            );
+            if (((unit) && (unit.getPrimaryWeaponMaxAmmo() != null)) || (cfg.primaryWeaponMaxAmmo != null)) {
+                dataList.push({
+                    titleText   : Lang.getText(Lang.Type.B0350),
+                    valueText   : unit
+                        ? `${unit.getPrimaryWeaponCurrentAmmo()} / ${unit.getPrimaryWeaponMaxAmmo()}`
+                        : `${cfg.primaryWeaponMaxAmmo} / ${cfg.primaryWeaponMaxAmmo}`,
+                });
             }
+            if (((unit) && (unit.getMaxBuildMaterial() != null)) || (cfg.maxBuildMaterial != null)) {
+                dataList.push({
+                    titleText   : Lang.getText(Lang.Type.B0347),
+                    valueText   : unit
+                        ? `${unit.getCurrentBuildMaterial()} / ${unit.getMaxBuildMaterial()}`
+                        : `${cfg.maxBuildMaterial} / ${cfg.maxBuildMaterial}`,
+                });
+            }
+            if (((unit) && (unit.getMaxProduceMaterial() != null)) || (cfg.maxProduceMaterial != null)) {
+                dataList.push({
+                    titleText   : Lang.getText(Lang.Type.B0348),
+                    valueText   : unit
+                        ? `${unit.getCurrentProduceMaterial()} / ${unit.getMaxProduceMaterial()}`
+                        : `${cfg.maxProduceMaterial} / ${cfg.maxProduceMaterial}`,
+                });
+            }
+            if (((unit) && (unit.getFlareMaxAmmo() != null)) || (cfg.flareMaxAmmo != null)) {
+                dataList.push({
+                    titleText   : Lang.getText(Lang.Type.B0349),
+                    valueText   : unit
+                        ? `${unit.getFlareCurrentAmmo()} / ${unit.getFlareMaxAmmo()}`
+                        : `${cfg.flareMaxAmmo} / ${cfg.flareMaxAmmo}`,
+                });
+            }
+
+            this._listInfo.bindData(dataList);
         }
 
         private _updateListDamageChart(): void {
@@ -207,6 +282,32 @@ namespace TinyWars.BaseWar {
 
     function sorterForDataForList(a: DataForDamageRenderer, b: DataForDamageRenderer): number {
         return a.attackUnitType - b.attackUnitType;
+    }
+
+    type DataForInfoRenderer = {
+        titleText   : string;
+        valueText   : string;
+    }
+
+    class InfoRenderer extends eui.ItemRenderer {
+        private _btnTitle   : GameUi.UiButton;
+        private _labelValue : GameUi.UiLabel;
+
+        protected childrenCreated(): void {
+            super.childrenCreated();
+
+            this._btnTitle.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedBtnTitle, this);
+        }
+
+        protected dataChanged(): void {
+            const data              = this.data as DataForInfoRenderer;
+            this._btnTitle.label    = data.titleText;
+            this._labelValue.text   = data.valueText;
+        }
+
+        private _onTouchedBtnTitle(e: egret.TouchEvent): void {
+
+        }
     }
 
     type DataForDamageRenderer = {

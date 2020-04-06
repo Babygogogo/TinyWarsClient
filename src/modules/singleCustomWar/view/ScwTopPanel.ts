@@ -15,6 +15,7 @@ namespace TinyWars.SingleCustomWar {
         private static _instance: ScwTopPanel;
 
         private _labelPlayer        : GameUi.UiLabel;
+        private _labelSinglePlayer  : GameUi.UiLabel;
         private _labelFund          : GameUi.UiLabel;
         private _labelCo            : GameUi.UiLabel;
         private _labelCurrEnergy    : GameUi.UiLabel;
@@ -44,11 +45,12 @@ namespace TinyWars.SingleCustomWar {
         private constructor() {
             super();
 
-            this.skinName = "resource/skins/multiCustomWar/McwTopPanel.exml";
+            this.skinName = "resource/skins/singleCustomWar/ScwTopPanel.exml";
         }
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
+                { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.BwTurnPhaseCodeChanged,         callback: this._onNotifyBwTurnPhaseCodeChanged },
                 { type: Notify.Type.BwPlayerFundChanged,            callback: this._onNotifyBwPlayerFundChanged },
                 { type: Notify.Type.BwPlayerIndexInTurnChanged,     callback: this._onNotifyBwPlayerIndexInTurnChanged },
@@ -77,6 +79,9 @@ namespace TinyWars.SingleCustomWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateComponentsForLanguage();
+        }
         private _onNotifyBwTurnPhaseCodeChanged(e: egret.Event): void {
             this._updateBtnEndTurn();
             this._updateBtnFindUnit();
@@ -149,6 +154,8 @@ namespace TinyWars.SingleCustomWar {
         // Functions for views.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
+            this._updateComponentsForLanguage();
+
             this._updateLabelPlayer();
             this._updateLabelFund();
             this._updateLabelCoAndEnergy();
@@ -157,6 +164,10 @@ namespace TinyWars.SingleCustomWar {
             this._updateBtnFindBuilding();
             this._updateBtnCancel();
             this._updateBtnMenu();
+        }
+
+        private _updateComponentsForLanguage(): void {
+            this._labelSinglePlayer.text = Lang.getText(Lang.Type.B0138);
         }
 
         private _updateLabelPlayer(): void {
