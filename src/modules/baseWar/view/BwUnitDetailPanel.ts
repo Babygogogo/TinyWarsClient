@@ -166,8 +166,7 @@ namespace TinyWars.BaseWar {
             const unitType      = unit ? unit.getType() : ConfigManager.getUnitTypeAndPlayerIndex(data.viewId).unitType;
             const cfg           = ConfigManager.getUnitTemplateCfg(configVersion, unitType);
 
-            const dataList: DataForInfoRenderer[] = [];
-            dataList.push(
+            const dataList: DataForInfoRenderer[] = [
                 {
                     // HP
                     titleText   : Lang.getText(Lang.Type.B0339),
@@ -209,8 +208,13 @@ namespace TinyWars.BaseWar {
                     // Attack after move
                     titleText   : Lang.getText(Lang.Type.B0346),
                     valueText   : cfg.canAttackAfterMove ? Lang.getText(Lang.Type.B0012) : Lang.getText(Lang.Type.B0013),
-                }
-            );
+                },
+                {
+                    // Vision range
+                    titleText   : Lang.getText(Lang.Type.B0354),
+                    valueText   : unit ? `${unit.getCfgVisionRange()}` : `${cfg.visionRange}`,
+                },
+            ];
             if (((unit) && (unit.getPrimaryWeaponMaxAmmo() != null)) || (cfg.primaryWeaponMaxAmmo != null)) {
                 dataList.push({
                     titleText   : Lang.getText(Lang.Type.B0350),

@@ -1044,11 +1044,11 @@ namespace TinyWars.Utility.Lang {
         ],
         [Type.B0124]: [
             `陆军&海军`,
-            `G&N`,
+            `Ground & Naval`,
         ],
         [Type.B0125]: [
             `陆军&空军`,
-            `G&A`,
+            `Ground & Air`,
         ],
         [Type.B0126]: [
             `近战`,
@@ -1933,6 +1933,54 @@ namespace TinyWars.Utility.Lang {
         [Type.B0350]: [
             `主武器弹药`,
             `Primary Weapon Ammo`,
+        ],
+        [Type.B0351]: [
+            `移动基础消耗表`,
+            `Base Move Cost Chart`,
+        ],
+        [Type.B0352]: [
+            `防御加成`,
+            `Defense Bonus`,
+        ],
+        [Type.B0353]: [
+            `资金收入`,
+            `Income`,
+        ],
+        [Type.B0354]: [
+            `视野范围`,
+            `Vision Range`,
+        ],
+        [Type.B0355]: [
+            `对全体玩家生效`,
+            `For all players`,
+        ],
+        [Type.B0356]: [
+            `雾战中隐蔽部队`,
+            `Hide units in FoW`,
+        ],
+        [Type.B0357]: [
+            `被占领即失败`,
+            `Defeat if captured`,
+        ],
+        [Type.B0358]: [
+            `生产部队`,
+            `Produce Unit`,
+        ],
+        [Type.B0359]: [
+            `全局攻防加成`,
+            `Global ATK/DEF Bonus`,
+        ],
+        [Type.B0360]: [
+            `部队维修量`,
+            `Repair Amount`,
+        ],
+        [Type.B0361]: [
+            `占领点数`,
+            `Capture Point`,
+        ],
+        [Type.B0362]: [
+            `建筑点数`,
+            `Build Point`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
