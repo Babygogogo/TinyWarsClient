@@ -28,34 +28,15 @@ namespace TinyWars.MultiCustomWar {
         private _labelNoCommand : GameUi.UiLabel;
         private _btnBack        : GameUi.UiButton;
 
-        private _groupInfo                      : eui.Group;
-        private _labelMenuTitle                 : GameUi.UiLabel;
-        private _labelWarInfoTitle              : GameUi.UiLabel;
-        private _labelPlayerInfoTitle           : GameUi.UiLabel;
-        private _btnMapNameTitle                : GameUi.UiButton;
-        private _labelMapName                   : GameUi.UiLabel;
-        private _btnWarIdTitle                  : GameUi.UiButton;
-        private _labelWarId                     : GameUi.UiLabel;
-        private _btnTurnIndexTitle              : GameUi.UiButton;
-        private _labelTurnIndex                 : GameUi.UiLabel;
-        private _btnIncomeModifierTitle         : GameUi.UiButton;
-        private _labelIncomeModifier            : GameUi.UiLabel;
-        private _btnEnergyGrowthModifierTitle   : GameUi.UiButton;
-        private _labelEnergyGrowthModifier      : GameUi.UiLabel;
-        private _btnInitialEnergyTitle          : GameUi.UiButton;
-        private _labelInitialEnergy             : GameUi.UiLabel;
-        private _btnMoveRangeModifierTitle      : GameUi.UiButton;
-        private _labelMoveRangeModifier         : GameUi.UiLabel;
-        private _btnAttackPowerModifierTitle    : GameUi.UiButton;
-        private _labelAttackPowerModifier       : GameUi.UiLabel;
-        private _btnVisionRangeModifierTitle    : GameUi.UiButton;
-        private _labelVisionRangeModifier       : GameUi.UiLabel;
-        private _btnLuckLowerLimitTitle         : GameUi.UiButton;
-        private _labelLuckLowerLimit            : GameUi.UiLabel;
-        private _btnLuckUpperLimitTitle         : GameUi.UiButton;
-        private _labelLuckUpperLimit            : GameUi.UiLabel;
-        private _btnBuildings                   : GameUi.UiButton;
-        private _listPlayer                     : GameUi.UiScrollList;
+        private _groupInfo              : eui.Group;
+        private _labelMenuTitle         : GameUi.UiLabel;
+        private _labelWarInfoTitle      : GameUi.UiLabel;
+        private _labelPlayerInfoTitle   : GameUi.UiLabel;
+        private _btnMapNameTitle        : GameUi.UiButton;
+        private _labelMapName           : GameUi.UiLabel;
+        private _listWarInfo            : GameUi.UiScrollList;
+        private _btnBuildings           : GameUi.UiButton;
+        private _listPlayer             : GameUi.UiScrollList;
 
         private _war            : McwWar;
         private _unitMap        : McwUnitMap;
@@ -98,6 +79,7 @@ namespace TinyWars.MultiCustomWar {
             ];
             this._listCommand.setItemRenderer(CommandRenderer);
             this._listPlayer.setItemRenderer(PlayerRenderer);
+            this._listWarInfo.setItemRenderer(WarInfoRenderer);
         }
         protected _onOpened(): void {
             const war           = McwModel.getWar();
@@ -106,17 +88,17 @@ namespace TinyWars.MultiCustomWar {
             this._actionPlanner = war.getActionPlanner() as McwActionPlanner;
             this._menuType      = MenuType.Main;
 
-            this._updateComponentsForLanguage();
             this._updateView();
 
             Notify.dispatch(Notify.Type.McwWarMenuPanelOpened);
         }
         protected _onClosed(): void {
-            delete this._war;
-            delete this._unitMap;
-            delete this._dataForList;
+            this._war           = null;
+            this._unitMap       = null;
+            this._dataForList   = null;
             this._listCommand.clear();
             this._listPlayer.clear();
+            this._listWarInfo.clear();
 
             Notify.dispatch(Notify.Type.McwWarMenuPanelClosed);
         }
@@ -160,6 +142,7 @@ namespace TinyWars.MultiCustomWar {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
+            this._updateComponentsForLanguage();
             this._updateListCommand();
             this._updateGroupInfo();
             this._updateListPlayer();
@@ -181,58 +164,80 @@ namespace TinyWars.MultiCustomWar {
             this._labelWarInfoTitle.text                = Lang.getText(Lang.Type.B0223);
             this._labelPlayerInfoTitle.text             = Lang.getText(Lang.Type.B0224);
             this._btnMapNameTitle.label                 = Lang.getText(Lang.Type.B0225);
-            this._btnWarIdTitle.label                   = Lang.getText(Lang.Type.B0226);
-            this._btnTurnIndexTitle.label               = Lang.getText(Lang.Type.B0091);
-            this._btnIncomeModifierTitle.label          = Lang.getText(Lang.Type.B0179);
-            this._btnInitialEnergyTitle.label           = Lang.getText(Lang.Type.B0180);
-            this._btnEnergyGrowthModifierTitle.label    = Lang.getText(Lang.Type.B0181);
-            this._btnMoveRangeModifierTitle.label       = Lang.getText(Lang.Type.B0182);
-            this._btnAttackPowerModifierTitle.label     = Lang.getText(Lang.Type.B0183);
-            this._btnVisionRangeModifierTitle.label     = Lang.getText(Lang.Type.B0184);
-            this._btnLuckLowerLimitTitle.label          = Lang.getText(Lang.Type.B0189);
-            this._btnLuckUpperLimitTitle.label          = Lang.getText(Lang.Type.B0190);
             this._btnBuildings.label                    = Lang.getText(Lang.Type.B0333);
             this._btnBack.label                         = Lang.getText(Lang.Type.B0146);
+            this._updateListWarInfo();
         }
 
         private async _updateGroupInfo(): Promise<void> {
             const war                   = this._war;
             const mapFileName           = war.getMapFileName();
             this._labelMapName.text     = `${await WarMapModel.getMapNameInLanguage(mapFileName) || "----"} (${Lang.getText(Lang.Type.B0163)}: ${await WarMapModel.getMapDesigner(mapFileName) || "----"})`;
-            this._labelWarId.text       = `${war.getWarId()}`;
-            this._labelTurnIndex.text   = `${war.getTurnManager().getTurnIndex() + 1} (${Lang.getText(Lang.Type.B0090)}: ${war.getNextActionId() + 1})`;
+        }
 
-            const incomeModifier                = war.getSettingsIncomeModifier();
-            this._labelIncomeModifier.text      = `${incomeModifier}%`;
-            this._labelIncomeModifier.textColor = getTextColor(incomeModifier, CommonConstants.WarRuleIncomeMultiplierDefault);
-
-            const energyGrowthModifier                  = war.getSettingsEnergyGrowthModifier();
-            this._labelEnergyGrowthModifier.text        = `${energyGrowthModifier}%`;
-            this._labelEnergyGrowthModifier.textColor   = getTextColor(energyGrowthModifier, CommonConstants.WarRuleEnergyGrowthMultiplierDefault);
-
-            const initialEnergy                 = war.getSettingsInitialEnergy();
-            this._labelInitialEnergy.text       = `${initialEnergy}%`;
-            this._labelInitialEnergy.textColor  = getTextColor(initialEnergy, CommonConstants.WarRuleInitialEnergyDefault);
-
-            const moveRangeModifier                 = war.getSettingsMoveRangeModifier();
-            this._labelMoveRangeModifier.text       = `${moveRangeModifier}`;
-            this._labelMoveRangeModifier.textColor  = getTextColor(moveRangeModifier, CommonConstants.WarRuleMoveRangeModifierDefault);
-
-            const attackPowerModifier                   = war.getSettingsAttackPowerModifier();
-            this._labelAttackPowerModifier.text         = `${attackPowerModifier}%`;
-            this._labelAttackPowerModifier.textColor    = getTextColor(attackPowerModifier, CommonConstants.WarRuleOffenseBonusDefault);
-
-            const visionRangeModifier                   = war.getSettingsVisionRangeModifier();
-            this._labelVisionRangeModifier.text         = `${visionRangeModifier}`;
-            this._labelVisionRangeModifier.textColor    = getTextColor(visionRangeModifier, CommonConstants.WarRuleVisionRangeModifierDefault);
-
-            const luckLowerLimit                = war.getSettingsLuckLowerLimit();
-            this._labelLuckLowerLimit.text      = `${luckLowerLimit}%`;
-            this._labelLuckLowerLimit.textColor = getTextColor(luckLowerLimit, CommonConstants.WarRuleLuckDefaultLowerLimit);
-
-            const luckUpperLimit                = war.getSettingsLuckUpperLimit();
-            this._labelLuckUpperLimit.text      = `${luckUpperLimit}%`;
-            this._labelLuckUpperLimit.textColor = getTextColor(luckUpperLimit, CommonConstants.WarRuleLuckDefaultUpperLimit);
+        private _updateListWarInfo(): void {
+            const war                   = this._war;
+            const incomeModifier        = war.getSettingsIncomeModifier();
+            const energyGrowthModifier  = war.getSettingsEnergyGrowthModifier();
+            const initialEnergy         = war.getSettingsInitialEnergy();
+            const moveRangeModifier     = war.getSettingsMoveRangeModifier();
+            const attackPowerModifier   = war.getSettingsAttackPowerModifier();
+            const visionRangeModifier   = war.getSettingsVisionRangeModifier();
+            const luckLowerLimit        = war.getSettingsLuckLowerLimit();
+            const luckUpperLimit        = war.getSettingsLuckUpperLimit();
+            const dataList              : DataForWarInfoRenderer[] = [
+                {
+                    titleText   : Lang.getText(Lang.Type.B0226),
+                    infoText    : `${war.getWarId()}`,
+                    infoColor   : 0xFFFFFF,
+                },
+                {
+                    titleText   : Lang.getText(Lang.Type.B0091),
+                    infoText    : `${war.getTurnManager().getTurnIndex() + 1} (${Lang.getText(Lang.Type.B0090)}: ${war.getNextActionId() + 1})`,
+                    infoColor   : 0xFFFFFF,
+                },
+                {
+                    titleText   : Lang.getText(Lang.Type.B0179),
+                    infoText    : `${incomeModifier}%`,
+                    infoColor   : getTextColor(incomeModifier, CommonConstants.WarRuleIncomeMultiplierDefault),
+                },
+                {
+                    titleText   : Lang.getText(Lang.Type.B0180),
+                    infoText    : `${initialEnergy}%`,
+                    infoColor   : getTextColor(initialEnergy, CommonConstants.WarRuleInitialEnergyDefault),
+                },
+                {
+                    titleText   : Lang.getText(Lang.Type.B0181),
+                    infoText    : `${energyGrowthModifier}%`,
+                    infoColor   : getTextColor(energyGrowthModifier, CommonConstants.WarRuleEnergyGrowthMultiplierDefault),
+                },
+                {
+                    titleText   : Lang.getText(Lang.Type.B0182),
+                    infoText    : `${moveRangeModifier}`,
+                    infoColor   : getTextColor(moveRangeModifier, CommonConstants.WarRuleMoveRangeModifierDefault),
+                },
+                {
+                    titleText   : Lang.getText(Lang.Type.B0183),
+                    infoText    : `${attackPowerModifier}%`,
+                    infoColor   : getTextColor(attackPowerModifier, CommonConstants.WarRuleOffenseBonusDefault),
+                },
+                {
+                    titleText   : Lang.getText(Lang.Type.B0184),
+                    infoText    : `${visionRangeModifier}`,
+                    infoColor   : getTextColor(visionRangeModifier, CommonConstants.WarRuleVisionRangeModifierDefault),
+                },
+                {
+                    titleText   : Lang.getText(Lang.Type.B0189),
+                    infoText    : `${luckLowerLimit}%`,
+                    infoColor   : getTextColor(luckLowerLimit, CommonConstants.WarRuleLuckDefaultLowerLimit),
+                },
+                {
+                    titleText   : Lang.getText(Lang.Type.B0190),
+                    infoText    : `${luckUpperLimit}%`,
+                    infoColor   : getTextColor(luckUpperLimit, CommonConstants.WarRuleLuckDefaultUpperLimit),
+                },
+            ];
+            this._listWarInfo.bindData(dataList);
         }
 
         private _updateListPlayer(): void {
@@ -646,6 +651,26 @@ namespace TinyWars.MultiCustomWar {
                 }
             });
             return { count, value };
+        }
+    }
+
+    type DataForWarInfoRenderer = {
+        titleText   : string;
+        infoText    : string;
+        infoColor   : number;
+    }
+
+    class WarInfoRenderer extends eui.ItemRenderer {
+        private _btnTitle   : GameUi.UiButton;
+        private _labelValue : GameUi.UiLabel;
+
+        protected dataChanged(): void {
+            super.dataChanged();
+
+            const data                  = this.data as DataForWarInfoRenderer;
+            this._btnTitle.label        = data.titleText;
+            this._labelValue.text       = data.infoText;
+            this._labelValue.textColor  = data.infoColor;
         }
     }
 }

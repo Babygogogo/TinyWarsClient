@@ -4,7 +4,7 @@ namespace TinyWars.GameUi {
     import StageManager = Utility.StageManager;
 
     export class UiScrollList extends eui.Scroller {
-        private _itemRenderer : any;
+        private _itemRenderer : new () => eui.ItemRenderer;
         private _dataProvider : eui.ArrayCollection;
 
         private _scrollVerticalPercentage   : number;
@@ -20,7 +20,7 @@ namespace TinyWars.GameUi {
             this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
         }
 
-        public setItemRenderer(itemRenderer: any): void {
+        public setItemRenderer(itemRenderer: new () => eui.ItemRenderer): void {
             this._itemRenderer = itemRenderer;
             if ((this.viewport) && (this.viewport instanceof eui.List)) {
                 this.viewport.addEventListener(eui.ItemTapEvent.ITEM_TAP, this._onTouchedListItem, this);

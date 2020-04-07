@@ -38,10 +38,10 @@
                         left="0" right="0" top="0" bottom="0" />
         <e:Scroller left="0" right="0" top="8" bottom="8">
             <e:Group>
-                <e:Group left="0" right="0" y="4" x="0" scaleX="1" scaleY="1">
-                    <GameUi:UiLabel id="_labelWarInfoTitle" text="战场信息" y="0" bold="true" size="20" textColor="0xFFFFFF"
+                <e:Group y="4" x="0" scaleX="1" scaleY="1" width="800">
+                    <GameUi:UiLabel id="_labelWarInfoTitle" text="战场信息" y="4" bold="true" size="20" textColor="0xFFFFFF"
                                     horizontalCenter="0" />
-                    <e:Group y="22" horizontalCenter="0">
+                    <e:Group y="26" horizontalCenter="0">
                         <e:Group x="0" y="25" width="780">
                             <e:Group x="0" y="0">
                                 <e:Group x="0" y="0" width="160">
@@ -75,317 +75,56 @@
                                 <e:HorizontalLayout horizontalAlign="left" gap="100" />
                             </e:layout>
                         </e:Group>
-                        <e:Group x="0" y="25" width="780">
-                            <e:Group x="0" y="0">
-                                <e:Group x="0" y="0" width="160">
-                                    <GameUi:UiButton id="_btnWarIdTitle" label="战局ID" y="0" right="0">
-                                        <GameUi:skinName>
-                                            <e:Skin states="up,down,disabled">
-                                                <e:Group y="0" x="0">
-                                                    <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2" scaleX="1"
-                                                             scaleY="1" left="0" right="0" top="0" bottom="0" />
-                                                    <e:Group>
-                                                        <GameUi:UiLabel id="labelDisplay" size="12" verticalCenter="0"
-                                                                        horizontalCenter="0" textColor="0xffffff" x="98"
-                                                                        y="97" scaleX="1" scaleY="1" text="" />
-                                                        <e:layout>
-                                                            <e:HorizontalLayout paddingTop="8" paddingBottom="8"
-                                                                                paddingLeft="10" paddingRight="10" />
-                                                        </e:layout>
-                                                    </e:Group>
-                                                </e:Group>
-                                            </e:Skin>
-                                        </GameUi:skinName>
-                                    </GameUi:UiButton>
-                                </e:Group>
-                                <GameUi:UiLabel id="_labelWarId" text="(Empty)" size="16" textColor="0xFFFFFF" x="98"
-                                                y="26" width="210" />
+                        <GameUi:UiScrollList id="_listWarInfo" x="95" y="62">
+                            <e:List>
+                                <e:itemRendererSkinName>
+                                    <e:Skin>
+                                        <e:Group scaleX="1" scaleY="1">
+                                            <e:Group x="0" y="0" width="160">
+                                                <GameUi:UiButton id="_btnTitle" label="初始资金" y="0" right="0">
+                                                    <GameUi:skinName>
+                                                        <e:Skin states="up,down,disabled">
+                                                            <e:Group y="0" x="0">
+                                                                <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2"
+                                                                         scaleX="1" scaleY="1" left="0" right="0"
+                                                                         top="0" bottom="0" />
+                                                                <e:Group>
+                                                                    <GameUi:UiLabel id="labelDisplay" size="12"
+                                                                                    verticalCenter="0"
+                                                                                    horizontalCenter="0"
+                                                                                    textColor="0xffffff" x="98" y="97"
+                                                                                    scaleX="1" scaleY="1" text="" />
+                                                                    <e:layout>
+                                                                        <e:HorizontalLayout paddingTop="8"
+                                                                                            paddingBottom="8"
+                                                                                            paddingLeft="10"
+                                                                                            paddingRight="10" />
+                                                                    </e:layout>
+                                                                </e:Group>
+                                                            </e:Group>
+                                                        </e:Skin>
+                                                    </GameUi:skinName>
+                                                </GameUi:UiButton>
+                                            </e:Group>
+                                            <GameUi:UiLabel id="_labelValue" text="(Empty)" size="16"
+                                                            textColor="0xFFFFFF" x="98" y="26" width="210" />
+                                            <e:layout>
+                                                <e:HorizontalLayout verticalAlign="middle" />
+                                            </e:layout>
+                                        </e:Group>
+                                    </e:Skin>
+                                </e:itemRendererSkinName>
                                 <e:layout>
-                                    <e:HorizontalLayout verticalAlign="middle" />
+                                    <e:TileLayout orientation="rows" requestedColumnCount="2" verticalGap="0" />
                                 </e:layout>
-                            </e:Group>
-                            <e:Group x="386" y="-28" scaleX="1" scaleY="1">
-                                <e:Group x="0" y="0" width="160">
-                                    <GameUi:UiButton id="_btnTurnIndexTitle" label="回合数" y="0" right="0">
-                                        <GameUi:skinName>
-                                            <e:Skin states="up,down,disabled">
-                                                <e:Group y="0" x="0">
-                                                    <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2" scaleX="1"
-                                                             scaleY="1" left="0" right="0" top="0" bottom="0" />
-                                                    <e:Group>
-                                                        <GameUi:UiLabel id="labelDisplay" size="12" verticalCenter="0"
-                                                                        horizontalCenter="0" textColor="0xffffff" x="98"
-                                                                        y="97" scaleX="1" scaleY="1" text="" />
-                                                        <e:layout>
-                                                            <e:HorizontalLayout paddingTop="8" paddingBottom="8"
-                                                                                paddingLeft="10" paddingRight="10" />
-                                                        </e:layout>
-                                                    </e:Group>
-                                                </e:Group>
-                                            </e:Skin>
-                                        </GameUi:skinName>
-                                    </GameUi:UiButton>
-                                </e:Group>
-                                <GameUi:UiLabel id="_labelTurnIndex" text="(Empty)" size="16" textColor="0xFFFFFF"
-                                                x="98" y="26" width="210" />
-                                <e:layout>
-                                    <e:HorizontalLayout verticalAlign="middle" />
-                                </e:layout>
-                            </e:Group>
-                            <e:layout>
-                                <e:HorizontalLayout horizontalAlign="left" />
-                            </e:layout>
-                        </e:Group>
-                        <e:Group width="780" x="368" y="12">
-                            <e:Group x="386" y="-28" scaleX="1" scaleY="1">
-                                <e:Group x="0" y="0" width="160">
-                                    <GameUi:UiButton id="_btnIncomeModifierTitle" label="收入倍率" y="0" right="0">
-                                        <GameUi:skinName>
-                                            <e:Skin states="up,down,disabled">
-                                                <e:Group y="0" x="0">
-                                                    <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2" scaleX="1"
-                                                             scaleY="1" left="0" right="0" top="0" bottom="0" />
-                                                    <e:Group>
-                                                        <GameUi:UiLabel id="labelDisplay" size="12" verticalCenter="0"
-                                                                        horizontalCenter="0" textColor="0xffffff" x="98"
-                                                                        y="97" scaleX="1" scaleY="1" text="" />
-                                                        <e:layout>
-                                                            <e:HorizontalLayout paddingTop="8" paddingBottom="8"
-                                                                                paddingLeft="10" paddingRight="10" />
-                                                        </e:layout>
-                                                    </e:Group>
-                                                </e:Group>
-                                            </e:Skin>
-                                        </GameUi:skinName>
-                                    </GameUi:UiButton>
-                                </e:Group>
-                                <GameUi:UiLabel id="_labelIncomeModifier" text="(Empty)" size="16" textColor="0xFFFFFF"
-                                                x="98" y="26" width="210" />
-                                <e:layout>
-                                    <e:HorizontalLayout verticalAlign="middle" />
-                                </e:layout>
-                            </e:Group>
-                            <e:Group x="386" y="-28" scaleX="1" scaleY="1">
-                                <e:Group x="0" y="0" width="160">
-                                    <GameUi:UiButton id="_btnEnergyGrowthModifierTitle" label="能量积累倍率" y="0" right="0">
-                                        <GameUi:skinName>
-                                            <e:Skin states="up,down,disabled">
-                                                <e:Group y="0" x="0">
-                                                    <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2" scaleX="1"
-                                                             scaleY="1" left="0" right="0" top="0" bottom="0" />
-                                                    <e:Group>
-                                                        <GameUi:UiLabel id="labelDisplay" size="12" verticalCenter="0"
-                                                                        horizontalCenter="0" textColor="0xffffff" x="98"
-                                                                        y="97" scaleX="1" scaleY="1" text="" />
-                                                        <e:layout>
-                                                            <e:HorizontalLayout paddingTop="8" paddingBottom="8"
-                                                                                paddingLeft="10" paddingRight="10" />
-                                                        </e:layout>
-                                                    </e:Group>
-                                                </e:Group>
-                                            </e:Skin>
-                                        </GameUi:skinName>
-                                    </GameUi:UiButton>
-                                </e:Group>
-                                <GameUi:UiLabel id="_labelEnergyGrowthModifier" text="(Empty)" size="16"
-                                                textColor="0xFFFFFF" x="98" y="26" width="210" />
-                                <e:layout>
-                                    <e:HorizontalLayout verticalAlign="middle" />
-                                </e:layout>
-                            </e:Group>
-                            <e:layout>
-                                <e:HorizontalLayout/>
-                            </e:layout>
-                        </e:Group>
-                        <e:Group width="780" x="368" y="12">
-                            <e:Group x="386" y="-28" scaleX="1" scaleY="1">
-                                <e:Group x="0" y="0" width="160">
-                                    <GameUi:UiButton id="_btnInitialEnergyTitle" label="初始能量" y="0" right="0">
-                                        <GameUi:skinName>
-                                            <e:Skin states="up,down,disabled">
-                                                <e:Group y="0" x="0">
-                                                    <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2" scaleX="1"
-                                                             scaleY="1" left="0" right="0" top="0" bottom="0" />
-                                                    <e:Group>
-                                                        <GameUi:UiLabel id="labelDisplay" size="12" verticalCenter="0"
-                                                                        horizontalCenter="0" textColor="0xffffff" x="98"
-                                                                        y="97" scaleX="1" scaleY="1" text="" />
-                                                        <e:layout>
-                                                            <e:HorizontalLayout paddingTop="8" paddingBottom="8"
-                                                                                paddingLeft="10" paddingRight="10" />
-                                                        </e:layout>
-                                                    </e:Group>
-                                                </e:Group>
-                                            </e:Skin>
-                                        </GameUi:skinName>
-                                    </GameUi:UiButton>
-                                </e:Group>
-                                <GameUi:UiLabel id="_labelInitialEnergy" text="(Empty)" size="16" textColor="0xFFFFFF"
-                                                x="98" y="26" width="210" />
-                                <e:layout>
-                                    <e:HorizontalLayout verticalAlign="middle" />
-                                </e:layout>
-                            </e:Group>
-                            <e:Group x="386" y="-28" scaleX="1" scaleY="1">
-                                <e:Group x="0" y="0" width="160">
-                                    <GameUi:UiButton id="_btnMoveRangeModifierTitle" label="移动力" y="0" right="0">
-                                        <GameUi:skinName>
-                                            <e:Skin states="up,down,disabled">
-                                                <e:Group y="0" x="0">
-                                                    <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2" scaleX="1"
-                                                             scaleY="1" left="0" right="0" top="0" bottom="0" />
-                                                    <e:Group>
-                                                        <GameUi:UiLabel id="labelDisplay" size="12" verticalCenter="0"
-                                                                        horizontalCenter="0" textColor="0xffffff" x="98"
-                                                                        y="97" scaleX="1" scaleY="1" text="" />
-                                                        <e:layout>
-                                                            <e:HorizontalLayout paddingTop="8" paddingBottom="8"
-                                                                                paddingLeft="10" paddingRight="10" />
-                                                        </e:layout>
-                                                    </e:Group>
-                                                </e:Group>
-                                            </e:Skin>
-                                        </GameUi:skinName>
-                                    </GameUi:UiButton>
-                                </e:Group>
-                                <GameUi:UiLabel id="_labelMoveRangeModifier" text="(Empty)" size="16"
-                                                textColor="0xFFFFFF" x="98" y="26" width="210" />
-                                <e:layout>
-                                    <e:HorizontalLayout verticalAlign="middle" />
-                                </e:layout>
-                            </e:Group>
-                            <e:layout>
-                                <e:HorizontalLayout/>
-                            </e:layout>
-                        </e:Group>
-                        <e:Group width="780" x="368" y="12">
-                            <e:Group x="386" y="-28" scaleX="1" scaleY="1">
-                                <e:Group x="0" y="0" width="160">
-                                    <GameUi:UiButton id="_btnAttackPowerModifierTitle" label="攻击加成" y="0" right="0">
-                                        <GameUi:skinName>
-                                            <e:Skin states="up,down,disabled">
-                                                <e:Group y="0" x="0">
-                                                    <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2" scaleX="1"
-                                                             scaleY="1" left="0" right="0" top="0" bottom="0" />
-                                                    <e:Group>
-                                                        <GameUi:UiLabel id="labelDisplay" size="12" verticalCenter="0"
-                                                                        horizontalCenter="0" textColor="0xffffff" x="98"
-                                                                        y="97" scaleX="1" scaleY="1" text="" />
-                                                        <e:layout>
-                                                            <e:HorizontalLayout paddingTop="8" paddingBottom="8"
-                                                                                paddingLeft="10" paddingRight="10" />
-                                                        </e:layout>
-                                                    </e:Group>
-                                                </e:Group>
-                                            </e:Skin>
-                                        </GameUi:skinName>
-                                    </GameUi:UiButton>
-                                </e:Group>
-                                <GameUi:UiLabel id="_labelAttackPowerModifier" text="(Empty)" size="16"
-                                                textColor="0xFFFFFF" x="98" y="26" width="210" />
-                                <e:layout>
-                                    <e:HorizontalLayout verticalAlign="middle" />
-                                </e:layout>
-                            </e:Group>
-                            <e:Group x="386" y="-28" scaleX="1" scaleY="1">
-                                <e:Group x="0" y="0" width="160">
-                                    <GameUi:UiButton id="_btnVisionRangeModifierTitle" label="视野加成" y="0" right="0">
-                                        <GameUi:skinName>
-                                            <e:Skin states="up,down,disabled">
-                                                <e:Group y="0" x="0">
-                                                    <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2" scaleX="1"
-                                                             scaleY="1" left="0" right="0" top="0" bottom="0" />
-                                                    <e:Group>
-                                                        <GameUi:UiLabel id="labelDisplay" size="12" verticalCenter="0"
-                                                                        horizontalCenter="0" textColor="0xffffff" x="98"
-                                                                        y="97" scaleX="1" scaleY="1" text="" />
-                                                        <e:layout>
-                                                            <e:HorizontalLayout paddingTop="8" paddingBottom="8"
-                                                                                paddingLeft="10" paddingRight="10" />
-                                                        </e:layout>
-                                                    </e:Group>
-                                                </e:Group>
-                                            </e:Skin>
-                                        </GameUi:skinName>
-                                    </GameUi:UiButton>
-                                </e:Group>
-                                <GameUi:UiLabel id="_labelVisionRangeModifier" text="(Empty)" size="16"
-                                                textColor="0xFFFFFF" x="98" y="26" width="210" />
-                                <e:layout>
-                                    <e:HorizontalLayout verticalAlign="middle" />
-                                </e:layout>
-                            </e:Group>
-                            <e:layout>
-                                <e:HorizontalLayout/>
-                            </e:layout>
-                        </e:Group>
-                        <e:Group width="780" x="368" y="12">
-                            <e:Group x="386" y="-28" scaleX="1" scaleY="1">
-                                <e:Group x="0" y="0" width="160">
-                                    <GameUi:UiButton id="_btnLuckLowerLimitTitle" label="幸运下限" y="0" right="0">
-                                        <GameUi:skinName>
-                                            <e:Skin states="up,down,disabled">
-                                                <e:Group y="0" x="0">
-                                                    <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2" scaleX="1"
-                                                             scaleY="1" left="0" right="0" top="0" bottom="0" />
-                                                    <e:Group>
-                                                        <GameUi:UiLabel id="labelDisplay" size="12" verticalCenter="0"
-                                                                        horizontalCenter="0" textColor="0xffffff" x="98"
-                                                                        y="97" scaleX="1" scaleY="1" text="" />
-                                                        <e:layout>
-                                                            <e:HorizontalLayout paddingTop="8" paddingBottom="8"
-                                                                                paddingLeft="10" paddingRight="10" />
-                                                        </e:layout>
-                                                    </e:Group>
-                                                </e:Group>
-                                            </e:Skin>
-                                        </GameUi:skinName>
-                                    </GameUi:UiButton>
-                                </e:Group>
-                                <GameUi:UiLabel id="_labelLuckLowerLimit" text="(Empty)" size="16" textColor="0xFFFFFF"
-                                                x="98" y="26" width="210" />
-                                <e:layout>
-                                    <e:HorizontalLayout verticalAlign="middle" />
-                                </e:layout>
-                            </e:Group>
-                            <e:Group x="386" y="-28" scaleX="1" scaleY="1">
-                                <e:Group x="0" y="0" width="160">
-                                    <GameUi:UiButton id="_btnLuckUpperLimitTitle" label="幸运上限" y="0" right="0">
-                                        <GameUi:skinName>
-                                            <e:Skin states="up,down,disabled">
-                                                <e:Group y="0" x="0">
-                                                    <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2" scaleX="1"
-                                                             scaleY="1" left="0" right="0" top="0" bottom="0" />
-                                                    <e:Group>
-                                                        <GameUi:UiLabel id="labelDisplay" size="12" verticalCenter="0"
-                                                                        horizontalCenter="0" textColor="0xffffff" x="98"
-                                                                        y="97" scaleX="1" scaleY="1" text="" />
-                                                        <e:layout>
-                                                            <e:HorizontalLayout paddingTop="8" paddingBottom="8"
-                                                                                paddingLeft="10" paddingRight="10" />
-                                                        </e:layout>
-                                                    </e:Group>
-                                                </e:Group>
-                                            </e:Skin>
-                                        </GameUi:skinName>
-                                    </GameUi:UiButton>
-                                </e:Group>
-                                <GameUi:UiLabel id="_labelLuckUpperLimit" text="(Empty)" size="16" textColor="0xFFFFFF"
-                                                x="98" y="26" width="210" />
-                                <e:layout>
-                                    <e:HorizontalLayout verticalAlign="middle" />
-                                </e:layout>
-                            </e:Group>
-                            <e:layout>
-                                <e:HorizontalLayout/>
-                            </e:layout>
-                        </e:Group>
+                            </e:List>
+                        </GameUi:UiScrollList>
                         <e:layout>
-                            <e:VerticalLayout gap="0" />
+                            <e:VerticalLayout horizontalAlign="center" />
                         </e:layout>
                     </e:Group>
                 </e:Group>
-                <e:Group left="0" right="0" y="204">
+                <e:Group y="204" width="800" x="0">
                     <GameUi:UiLabel id="_labelPlayerInfoTitle" text="玩家信息" y="0" bold="true" size="20"
                                     textColor="0xFFFFFF" horizontalCenter="0" />
                     <GameUi:UiButton id="_btnBuildings" label="建筑信息" y="0" right="0">
@@ -487,6 +226,9 @@
                         </e:List>
                     </GameUi:UiScrollList>
                 </e:Group>
+                <e:layout>
+                    <e:VerticalLayout/>
+                </e:layout>
             </e:Group>
         </e:Scroller>
     </e:Group>
