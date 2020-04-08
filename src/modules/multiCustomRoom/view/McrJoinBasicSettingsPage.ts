@@ -10,10 +10,8 @@ namespace TinyWars.MultiCustomRoom {
     import WarMapModel  = WarMap.WarMapModel;
 
     export class McrJoinBasicSettingsPage extends GameUi.UiTabPage {
-        private _labelMapNameTitle      : GameUi.UiLabel;
+        private _btnMapNameTitle        : GameUi.UiButton;
         private _labelMapName           : GameUi.UiLabel;
-        private _labelPlayersCountTitle : GameUi.UiLabel;
-        private _labelPlayersCount      : GameUi.UiLabel;
 
         private _btnModifyWarName       : GameUi.UiButton;
         private _labelWarName           : GameUi.UiLabel;
@@ -47,6 +45,8 @@ namespace TinyWars.MultiCustomRoom {
         private _labelPlayersTitle  : GameUi.UiLabel;
         private _listPlayer         : GameUi.UiScrollList;
 
+        private _btnBuildings: GameUi.UiButton;
+
         private _mapExtraData: ProtoTypes.IMapExtraData;
 
         public constructor() {
@@ -64,6 +64,7 @@ namespace TinyWars.MultiCustomRoom {
                 { ui: this._btnHelpHasFog,          callback: this._onTouchedBtnHelpHasFog, },
                 { ui: this._btnHelpTimeLimit,       callback: this._onTouchedBtnHelpTimeLimit, },
                 { ui: this._btnChangeCo,            callback: this._onTouchedBtnChangeCo, },
+                { ui: this._btnBuildings,           callback: this._onTouchedBtnBuildings },
             ];
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
@@ -80,7 +81,6 @@ namespace TinyWars.MultiCustomRoom {
             this._updateLabelWarPassword();
             this._updateLabelWarComment();
             this._updateLabelMapName();
-            this._updateLabelPlayersCount();
             this._updateLabelWarRule();
             this._updateLabelPlayerIndex();
             this._updateLabelTeam();
@@ -102,13 +102,18 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _onTouchedBtnModifyPlayerIndex(e: egret.TouchEvent): Promise<void> {
+            const playerIndex = McrModel.getJoinWarPlayerIndex();
             McrModel.setJoinWarNextPlayerIndex();
-            this._updateLabelPlayerIndex();
+            if (playerIndex === McrModel.getJoinWarPlayerIndex()) {
+                FloatText.show(Lang.getText(Lang.Type.B0332));
+            } else {
+                this._updateLabelPlayerIndex();
 
-            const index = McrModel.getJoinWarWarRuleIndex();
-            if (index != null) {
-                McrModel.setJoinWarTeamIndex((await WarMapModel.getPlayerRule(McrModel.getJoinWarMapFileName(), index, McrModel.getJoinWarPlayerIndex())).teamIndex);
-                this._updateLabelTeam();
+                const index = McrModel.getJoinWarWarRuleIndex();
+                if (index != null) {
+                    McrModel.setJoinWarTeamIndex((await WarMapModel.getPlayerRule(McrModel.getJoinWarMapFileName(), index, McrModel.getJoinWarPlayerIndex())).teamIndex);
+                    this._updateLabelTeam();
+                }
             }
         }
 
@@ -123,8 +128,13 @@ namespace TinyWars.MultiCustomRoom {
             if (McrModel.getJoinWarWarRuleIndex() != null) {
                 FloatText.show(Lang.getText(Lang.Type.A0101));
             } else {
+                const teamIndex = McrModel.getJoinWarTeamIndex();
                 McrModel.setJoinWarNextTeamIndex();
-                this._updateLabelTeam();
+                if (teamIndex === McrModel.getJoinWarTeamIndex()) {
+                    FloatText.show(Lang.getText(Lang.Type.B0332));
+                } else {
+                    this._updateLabelTeam();
+                }
             }
         }
 
@@ -154,12 +164,19 @@ namespace TinyWars.MultiCustomRoom {
             McrJoinCoListPanel.show(McrModel.getJoinWarCoId());
         }
 
+        private async _onTouchedBtnBuildings(e: egret.TouchEvent): Promise<void> {
+            const info = McrModel.getJoinWarRoomInfo();
+            McrBuildingListPanel.show({
+                configVersion   : info.configVersion,
+                mapRawData      : await WarMapModel.getMapRawData(info.mapFileName) as Types.MapRawData,
+            });
+        }
+
         ////////////////////////////////////////////////////////////////////////////////
         // View functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._labelMapNameTitle.text        = `${Lang.getText(Lang.Type.B0225)}:`;
-            this._labelPlayersCountTitle.text   = `${Lang.getText(Lang.Type.B0229)}:`;
+            this._btnMapNameTitle.label         = Lang.getText(Lang.Type.B0225);
             this._btnModifyWarName.label        = Lang.getText(Lang.Type.B0185);
             this._btnModifyWarPassword.label    = Lang.getText(Lang.Type.B0186);
             this._btnModifyWarComment.label     = Lang.getText(Lang.Type.B0187);
@@ -168,6 +185,7 @@ namespace TinyWars.MultiCustomRoom {
             this._btnModifyTeam.label           = Lang.getText(Lang.Type.B0019);
             this._btnModifyHasFog.label         = Lang.getText(Lang.Type.B0020);
             this._btnModifyTimeLimit.label      = Lang.getText(Lang.Type.B0188);
+            this._btnBuildings.label            = Lang.getText(Lang.Type.B0333);
             this._labelPlayersTitle.text        = `${Lang.getText(Lang.Type.B0232)}:`;
         }
 
@@ -184,11 +202,9 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _updateLabelMapName(): void {
-            WarMapModel.getMapNameInLanguage(this._mapExtraData.mapFileName).then(v => this._labelMapName.text = v);
-        }
-
-        private _updateLabelPlayersCount(): void {
-            this._labelPlayersCount.text = "" + this._mapExtraData.playersCount;
+            WarMapModel.getMapNameInLanguage(this._mapExtraData.mapFileName).then(v =>
+                this._labelMapName.text = `${v} (${this._mapExtraData.playersCount}P)`
+            );
         }
 
         private async _updateLabelWarRule(): Promise<void> {

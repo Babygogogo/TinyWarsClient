@@ -21,24 +21,9 @@ namespace TinyWars.BaseWar {
         private _labelName                  : GameUi.UiLabel;
         private _imgTileBase                : GameUi.UiImage;
         private _imgTileObject              : GameUi.UiImage;
-        private _labelDefenseBonus          : GameUi.UiLabel;
-        private _labelIncome                : GameUi.UiLabel;
-        private _labelVisionRange           : GameUi.UiLabel;
-        private _labelHideCategory          : GameUi.UiLabel;
-        private _labelLoseOnCapture         : GameUi.UiLabel;
-        private _labelCanProduceUnit        : GameUi.UiLabel;
-        private _labelAttackDefenseBonus    : GameUi.UiLabel;
-        private _labelRepairAmount          : GameUi.UiLabel;
+        private _listInfo                   : GameUi.UiScrollList;
+        private _labelMoveCost              : GameUi.UiLabel;
         private _listMoveCost               : GameUi.UiScrollList;
-
-        private _groupCapturePoint          : eui.Group;
-        private _labelCapturePoint          : GameUi.UiLabel;
-
-        private _groupHp                    : eui.Group;
-        private _labelHp                    : GameUi.UiLabel;
-
-        private _groupBuildPoint            : eui.Group;
-        private _labelBuildPoint            : GameUi.UiLabel;
 
         private _openData   : OpenDataForBwTileDetailPanel;
         private _dataForList: DataForMoveRangeRenderer[];
@@ -71,25 +56,30 @@ namespace TinyWars.BaseWar {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
+                { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
             ];
-            this._uiListeners = [
-            ];
 
             this._imgTileObject.anchorOffsetY = GRID_HEIGHT;
+            this._listInfo.setItemRenderer(InfoRenderer);
             this._listMoveCost.setItemRenderer(MoveCostRenderer);
         }
         protected _onOpened(): void {
             this._updateView();
         }
         protected _onClosed(): void {
-            delete this._dataForList;
+            this._dataForList = null;
+            this._listInfo.clear();
+            this._listMoveCost.clear();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateComponentsForLanguage();
+        }
         private _onNotifyUnitAnimationTick(e: egret.Event): void {
             const viewList = this._listMoveCost.getViewList();
             for (let i = 0; i < viewList.numChildren; ++i) {
@@ -105,65 +95,100 @@ namespace TinyWars.BaseWar {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            this._updateTileView();
-            this._updateLabels();
-            this._updateListDamageChart();
+            this._updateComponentsForLanguage();
+            this._updateTileViewAndLabelName();
+            this._updateListInfo();
         }
 
-        private _updateTileView(): void {
-            const data      = this._openData;
-            const tile      = data.tile;
-            const tickCount = Time.TimeModel.getTileAnimationTickCount();
-            this._imgTileBase.source      = ConfigManager.getTileBaseImageSource(tile.getBaseViewId(), tickCount, false);
-            this._imgTileObject.source    = ConfigManager.getTileObjectImageSource(tile.getObjectViewId(), tickCount, false);
+        private _updateComponentsForLanguage(): void {
+            this._labelMoveCost.text = Lang.getText(Lang.Type.B0351);
+            this._updateListMoveCost();
         }
 
-        private _updateLabels(): void {
-            const data                          = this._openData;
-            const tile                          = data.tile;
-            const configVersion                 = tile.getConfigVersion();
-            const tileType                      = tile.getType();
-            const cfg                           = ConfigManager.getTileTemplateCfgByType(configVersion, tileType);
-            const defenseBonus                  = cfg.defenseAmount;
-            const income                        = cfg.incomePerTurn;
-            const visionRange                   = cfg.visionRange;
-            const hideCategory                  = cfg.hideUnitCategory;
-            const globalAttackBonus             = cfg.globalAttackBonus;
-            const globalDefenseBonus            = cfg.globalDefenseBonus;
-            const repairAmount                  = cfg.repairAmount;
-            this._labelName.text                = Lang.getTileName(tileType);
-            this._labelDefenseBonus.text        = defenseBonus ? `${defenseBonus}(${Lang.getUnitCategoryName(cfg.defenseUnitCategory)})` : `--`;
-            this._labelIncome.text              = `${income != null ? income : `--`}`;
-            this._labelVisionRange.text         = `${visionRange != null ? visionRange : `--`}`;
-            this._labelHideCategory.text        = `${hideCategory != null ? Lang.getUnitCategoryName(hideCategory) : `--`}`;
-            this._labelLoseOnCapture.text       = cfg.isDefeatedOnCapture ? Lang.getText(Lang.Type.B0012) : Lang.getText(Lang.Type.B0013);
-            this._labelCanProduceUnit.text      = cfg.produceUnitCategory ? Lang.getText(Lang.Type.B0012) : Lang.getText(Lang.Type.B0013);
-            this._labelAttackDefenseBonus.text  = `${globalAttackBonus == null ? `--` : globalAttackBonus + "%"} / ${globalDefenseBonus == null ? `--` : globalDefenseBonus + "%"}`;
-            this._labelRepairAmount.text        = repairAmount != null ? `${repairAmount}(${Lang.getUnitCategoryName(cfg.repairUnitCategory)})` : `--`;
+        private _updateTileViewAndLabelName(): void {
+            const data                  = this._openData;
+            const tile                  = data.tile;
+            const tickCount             = Time.TimeModel.getTileAnimationTickCount();
+            this._imgTileBase.source    = ConfigManager.getTileBaseImageSource(tile.getBaseViewId(), tickCount, false);
+            this._imgTileObject.source  = ConfigManager.getTileObjectImageSource(tile.getObjectViewId(), tickCount, false);
+            this._labelName.text        = Lang.getTileName(tile.getType());
+        }
 
+        private _updateListInfo(): void {
+            const data                  = this._openData;
+            const tile                  = data.tile;
+            const configVersion         = tile.getConfigVersion();
+            const tileType              = tile.getType();
+            const cfg                   = ConfigManager.getTileTemplateCfgByType(configVersion, tileType);
+            const defenseBonus          = cfg.defenseAmount;
+            const income                = cfg.incomePerTurn;
+            const visionRange           = cfg.visionRange;
+            const hideCategory          = cfg.hideUnitCategory;
+            const globalAttackBonus     = cfg.globalAttackBonus;
+            const globalDefenseBonus    = cfg.globalDefenseBonus;
+            const repairAmount          = cfg.repairAmount;
+
+            const dataList: DataForInfoRenderer[] = [
+                {
+                    titleText   : Lang.getText(Lang.Type.B0352),
+                    valueText   : defenseBonus ? `${defenseBonus}(${Lang.getUnitCategoryName(cfg.defenseUnitCategory)})` : `--`,
+                },
+                {
+                    titleText   : Lang.getText(Lang.Type.B0353),
+                    valueText   : `${income != null ? income : `--`}`,
+                },
+                {
+                    titleText   : Lang.getText(Lang.Type.B0354),
+                    valueText   : visionRange != null
+                        ? `${visionRange}${cfg.isVisionEnabledForAllPlayers ? `(${Lang.getText(Lang.Type.B0355)})`: ``}`
+                        : `--`,
+                },
+                {
+                    titleText   : Lang.getText(Lang.Type.B0356),
+                    valueText   : `${hideCategory != null ? Lang.getUnitCategoryName(hideCategory) : `--`}`,
+                },
+                {
+                    titleText   : Lang.getText(Lang.Type.B0357),
+                    valueText   : cfg.isDefeatedOnCapture ? Lang.getText(Lang.Type.B0012) : Lang.getText(Lang.Type.B0013),
+                },
+                {
+                    titleText   : Lang.getText(Lang.Type.B0358),
+                    valueText   : cfg.produceUnitCategory
+                        ? Lang.getUnitCategoryName(cfg.produceUnitCategory)
+                        : Lang.getText(Lang.Type.B0013),
+                },
+                {
+                    titleText   : Lang.getText(Lang.Type.B0359),
+                    valueText   : `${globalAttackBonus == null ? `--` : globalAttackBonus + "%"} / ${globalDefenseBonus == null ? `--` : globalDefenseBonus + "%"}`,
+                },
+                {
+                    titleText   : Lang.getText(Lang.Type.B0360),
+                    valueText   : repairAmount != null ? `${repairAmount}(${Lang.getUnitCategoryName(cfg.repairUnitCategory)})` : `--`,
+                },
+            ];
             if (tile.getCurrentHp() != null) {
-                this._groupCapturePoint.visible = false;
-                this._groupHp.visible           = true;
-                this._groupBuildPoint.visible   = false;
-                this._labelHp.text              = `${tile.getCurrentHp()} / ${tile.getMaxHp()}`;
-            } else if (tile.getCurrentCapturePoint() != null) {
-                this._groupCapturePoint.visible = true;
-                this._groupHp.visible           = false;
-                this._groupBuildPoint.visible   = false;
-                this._labelCapturePoint.text    = `${tile.getCurrentCapturePoint()} / ${tile.getMaxCapturePoint()}`;
-            } else if (tile.getCurrentBuildPoint() != null) {
-                this._groupCapturePoint.visible = false;
-                this._groupHp.visible           = false;
-                this._groupBuildPoint.visible   = true;
-                this._labelBuildPoint.text      = `${tile.getCurrentBuildPoint()} / ${tile.getMaxBuildPoint()}`;
-            } else {
-                this._groupCapturePoint.visible = false;
-                this._groupHp.visible           = false;
-                this._groupBuildPoint.visible   = false;
+                dataList.push({
+                    titleText   : Lang.getText(Lang.Type.B0339),
+                    valueText   : `${tile.getCurrentHp()} / ${tile.getMaxHp()}`,
+                });
             }
+            if (tile.getCurrentCapturePoint() != null) {
+                dataList.push({
+                    titleText   : Lang.getText(Lang.Type.B0361),
+                    valueText   : `${tile.getCurrentCapturePoint()} / ${tile.getMaxCapturePoint()}`,
+                });
+            }
+            if (tile.getCurrentBuildPoint() != null) {
+                dataList.push({
+                    titleText   : Lang.getText(Lang.Type.B0362),
+                    valueText   : `${tile.getCurrentBuildPoint()} / ${tile.getMaxBuildPoint()}`,
+                });
+            }
+
+            this._listInfo.bindData(dataList);
         }
 
-        private _updateListDamageChart(): void {
+        private _updateListMoveCost(): void {
             this._dataForList = this._createDataForList();
             this._listMoveCost.bindData(this._dataForList);
         }
@@ -191,6 +216,32 @@ namespace TinyWars.BaseWar {
 
     function sorterForDataForList(a: DataForMoveRangeRenderer, b: DataForMoveRangeRenderer): number {
         return a.unitType - b.unitType;
+    }
+
+    type DataForInfoRenderer = {
+        titleText   : string;
+        valueText   : string;
+    }
+
+    class InfoRenderer extends eui.ItemRenderer {
+        private _btnTitle   : GameUi.UiButton;
+        private _labelValue : GameUi.UiLabel;
+
+        protected childrenCreated(): void {
+            super.childrenCreated();
+
+            this._btnTitle.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedBtnTitle, this);
+        }
+
+        protected dataChanged(): void {
+            const data              = this.data as DataForInfoRenderer;
+            this._btnTitle.label    = data.titleText;
+            this._labelValue.text   = data.valueText;
+        }
+
+        private _onTouchedBtnTitle(e: egret.TouchEvent): void {
+
+        }
     }
 
     type DataForMoveRangeRenderer = {

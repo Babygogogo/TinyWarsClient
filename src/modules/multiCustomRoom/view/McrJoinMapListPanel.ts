@@ -24,6 +24,7 @@ namespace TinyWars.MultiCustomRoom {
         private _groupInfo          : eui.Group;
         private _labelMapName       : GameUi.UiLabel;
         private _labelDesigner      : GameUi.UiLabel;
+        private _labelHasFogTitle   : GameUi.UiLabel;
         private _labelHasFog        : GameUi.UiLabel;
         private _labelWarComment    : GameUi.UiLabel;
         private _labelPlayersTitle  : GameUi.UiLabel;
@@ -138,6 +139,7 @@ namespace TinyWars.MultiCustomRoom {
             this._labelNoWar.text           = Lang.getText(Lang.Type.B0210);
             this._labelCommentTitle.text    = `${Lang.getText(Lang.Type.B0187)}:`;
             this._labelPlayersTitle.text    = `${Lang.getText(Lang.Type.B0232)}:`;
+            this._labelHasFogTitle.text     = `${Lang.getText(Lang.Type.B0020)}:`;
         }
 
         private _createDataForListWar(infos: ProtoTypes.IMcrWaitingInfo[]): DataForWarRenderer[] {
@@ -157,6 +159,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _createDataForListPlayer(waitingInfo: ProtoTypes.IMcrWaitingInfo, mapPlayersCount: number): DataForPlayerRenderer[] {
             const playerInfoList    = waitingInfo.playerInfoList;
+            const configVersion     = waitingInfo.configVersion;
             const info1             = getPlayerInfo(playerInfoList, 1);
             const info2             = getPlayerInfo(playerInfoList, 2);
             const data              : DataForPlayerRenderer[] = [
@@ -164,11 +167,15 @@ namespace TinyWars.MultiCustomRoom {
                     playerIndex     : 1,
                     playerName      : info1 ? info1.nickname : null,
                     teamIndex       : info1 ? info1.teamIndex : null,
+                    coId            : info1 ? info1.coId : null,
+                    configVersion,
                 },
                 {
                     playerIndex     : 2,
                     playerName      : info2 ? info2.nickname : null,
                     teamIndex       : info2 ? info2.teamIndex : null,
+                    coId            : info2 ? info2.coId : null,
+                    configVersion,
                 },
             ];
             if (mapPlayersCount >= 3) {
@@ -177,6 +184,8 @@ namespace TinyWars.MultiCustomRoom {
                     playerIndex     : 3,
                     playerName      : info ? info.nickname : null,
                     teamIndex       : info ? info.teamIndex : null,
+                    coId            : info ? info.coId : null,
+                    configVersion,
                 });
             }
             if (mapPlayersCount >= 4) {
@@ -185,6 +194,8 @@ namespace TinyWars.MultiCustomRoom {
                     playerIndex     : 4,
                     playerName      : info ? info.nickname : null,
                     teamIndex       : info ? info.teamIndex : null,
+                    coId            : info ? info.coId : null,
+                    configVersion,
                 });
             }
 
@@ -196,7 +207,8 @@ namespace TinyWars.MultiCustomRoom {
             const mapRawData            = await WarMapModel.getMapRawData(warInfo.mapFileName);
             this._labelMapName.text     = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInLanguage(warInfo.mapFileName));
             this._labelDesigner.text    = Lang.getFormattedText(Lang.Type.F0001, mapRawData.mapDesigner);
-            this._labelHasFog.text      = Lang.getFormattedText(Lang.Type.F0005, Lang.getText(warInfo.hasFog ? Lang.Type.B0012 : Lang.Type.B0001));
+            this._labelHasFog.text      = Lang.getText(warInfo.hasFog ? Lang.Type.B0012 : Lang.Type.B0001);
+            this._labelHasFog.textColor = warInfo.hasFog ? 0xFF0000 : 0x00FF00;
             this._labelWarComment.text  = warInfo.warComment || "----";
             this._listPlayer.bindData(this._createDataForListPlayer(warInfo, mapRawData.playersCount));
 
@@ -275,9 +287,11 @@ namespace TinyWars.MultiCustomRoom {
     }
 
     type DataForPlayerRenderer = {
-        playerIndex: number;
-        playerName : string;
-        teamIndex  : number;
+        playerIndex     : number;
+        playerName      : string;
+        teamIndex       : number;
+        coId            : number;
+        configVersion   : string;
     }
 
     class PlayerRenderer extends eui.ItemRenderer {
@@ -288,10 +302,15 @@ namespace TinyWars.MultiCustomRoom {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data = this.data as DataForPlayerRenderer;
-            this._labelIndex.text = Helpers.getColorTextForPlayerIndex(data.playerIndex);
-            this._labelName.text  = data.playerName || "????";
-            this._labelTeam.text  = data.teamIndex != null ? Helpers.getTeamText(data.teamIndex) : "??";
+            const data              = this.data as DataForPlayerRenderer;
+            const playerName        = data.playerName;
+            const coId              = data.coId;
+            const coConfig          = coId == null ? null : ConfigManager.getCoBasicCfg(data.configVersion, coId);
+            this._labelIndex.text   = Helpers.getColorTextForPlayerIndex(data.playerIndex);
+            this._labelTeam.text    = data.teamIndex != null ? Helpers.getTeamText(data.teamIndex) : "??";
+            this._labelName.text    = playerName
+                ? `${playerName}${coConfig ? ` (${coConfig.name}(T${coConfig.tier}))` : ``}`
+                : "????";
         }
     }
 

@@ -315,7 +315,9 @@ namespace TinyWars.MultiCustomWar {
             } else {
                 const coId              = player.getCoId();
                 const cfg               = coId != null ? ConfigManager.getCoBasicCfg(data.configVersion, coId) : null;
-                this._labelName.text    = cfg ? cfg.name : `(${Lang.getText(Lang.Type.B0001)}CO)`;
+                this._labelName.text    = cfg
+                    ? `${cfg.name}(T${cfg.tier})`
+                    : `(${Lang.getText(Lang.Type.B0001)}CO)`;
             }
         }
 

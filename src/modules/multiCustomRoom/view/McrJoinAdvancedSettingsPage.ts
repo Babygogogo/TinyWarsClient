@@ -1,42 +1,17 @@
 
 namespace TinyWars.MultiCustomRoom {
-    import ProtoTypes   = Utility.ProtoTypes;
-    import Lang         = Utility.Lang;
-    import WarMapModel  = WarMap.WarMapModel;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import Lang             = Utility.Lang;
+    import Types            = Utility.Types;
+    import WarMapModel      = WarMap.WarMapModel;
+    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
     export class McrJoinAdvancedSettingsPage extends GameUi.UiTabPage {
-        private _labelMapNameTitle      : GameUi.UiLabel;
-        private _labelMapName           : GameUi.UiLabel;
-        private _labelPlayersCountTitle : GameUi.UiLabel;
-        private _labelPlayersCount      : GameUi.UiLabel;
-        private _labelTips              : GameUi.UiLabel;
-
-        private _labelInitialFundTitle      : GameUi.UiLabel;
-        private _labelInitialFund           : GameUi.UiLabel;
-
-        private _labelIncomeModifierTitle   : GameUi.UiLabel;
-        private _labelIncomeModifier        : GameUi.UiLabel;
-
-        private _labelInitialEnergyTitle    : GameUi.UiLabel;
-        private _labelInitialEnergy         : GameUi.UiLabel;
-
-        private _labelEnergyModifierTitle   : GameUi.UiLabel;
-        private _labelEnergyModifier        : GameUi.UiLabel;
-
-        private _labelLuckLowerLimitTitle   : GameUi.UiLabel;
-        private _labelLuckLowerLimit        : GameUi.UiLabel;
-
-        private _labelLuckUpperLimitTitle   : GameUi.UiLabel;
-        private _labelLuckUpperLimit        : GameUi.UiLabel;
-
-        private _labelMoveRangeTitle: GameUi.UiLabel;
-        private _labelMoveRange     : GameUi.UiLabel;
-
-        private _labelAttackTitle   : GameUi.UiLabel;
-        private _labelAttack        : GameUi.UiLabel;
-
-        private _labelVisionTitle   : GameUi.UiLabel;
-        private _labelVision        : GameUi.UiLabel;
+        private _labelTips          : GameUi.UiLabel;
+        private _btnMapNameTitle    : GameUi.UiButton;
+        private _labelMapName       : GameUi.UiLabel;
+        private _listInfo           : GameUi.UiScrollList;
+        private _btnBuildings       : GameUi.UiButton;
 
         protected _mapExtraData: ProtoTypes.IMapExtraData;
 
@@ -46,98 +21,136 @@ namespace TinyWars.MultiCustomRoom {
             this.skinName = "resource/skins/multiCustomRoom/McrJoinAdvancedSettingsPage.exml";
         }
 
+        public _onFirstOpened(): void {
+            this._uiListeners = [
+                { ui: this._btnBuildings,   callback: this._onTouchedBtnBuildings },
+            ];
+            this._listInfo.setItemRenderer(InfoRenderer);
+        }
+
         protected async _onOpened(): Promise<void> {
             this._mapExtraData = await McrModel.getJoinWarMapExtraData();
 
             this._updateComponentsForLanguage();
-            this._updateLabelMapName();
-            this._updateLabelPlayersCount();
-            this._updateLabelInitialFund();
-            this._updateLabelIncomeModifier();
-            this._updateLabelInitialEnergy();
-            this._updateLabelEnergyModifier();
-            this._updateLabelLuckLowerLimit();
-            this._updateLabelLuckUpperLimit();
-            this._updateLabelMoveRange();
-            this._updateLabelAttack();
-            this._updateLabelVision();
+        }
+
+        protected _onClosed(): void {
+            this._listInfo.clear();
+        }
+
+        private async _onTouchedBtnBuildings(e: egret.TouchEvent): Promise<void> {
+            const info = McrModel.getJoinWarRoomInfo();
+            McrBuildingListPanel.show({
+                configVersion   : info.configVersion,
+                mapRawData      : await WarMapModel.getMapRawData(info.mapFileName) as Types.MapRawData,
+            });
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // View functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._labelMapNameTitle.text                = `${Lang.getText(Lang.Type.B0225)}:`;
-            this._labelPlayersCountTitle.text           = `${Lang.getText(Lang.Type.B0229)}:`;
-            this._labelTips.text                        = Lang.getText(Lang.Type.A0065);
-            this._labelInitialFundTitle.text            = `${Lang.getText(Lang.Type.B0178)}: `;
-            this._labelIncomeModifierTitle.text         = `${Lang.getText(Lang.Type.B0179)}: `;
-            this._labelInitialEnergyTitle.text          = `${Lang.getText(Lang.Type.B0180)}: `;
-            this._labelEnergyModifierTitle.text         = `${Lang.getText(Lang.Type.B0181)}: `;
-            this._labelMoveRangeTitle.text              = `${Lang.getText(Lang.Type.B0182)}: `;
-            this._labelAttackTitle.text                 = `${Lang.getText(Lang.Type.B0183)}: `;
-            this._labelVisionTitle.text                 = `${Lang.getText(Lang.Type.B0184)}: `;
-            this._labelLuckLowerLimitTitle.text         = `${Lang.getText(Lang.Type.B0189)}: `;
-            this._labelLuckUpperLimitTitle.text         = `${Lang.getText(Lang.Type.B0190)}: `;
+            this._labelTips.text        = Lang.getText(Lang.Type.A0065);
+            this._btnMapNameTitle.label = Lang.getText(Lang.Type.B0225);
+            this._btnBuildings.label    = Lang.getText(Lang.Type.B0333);
+            this._updateLabelMapName();
+            this._updateListInfo();
         }
 
-        private _updateLabelInitialFund(): void {
-            this._labelInitialFund.text = "" + McrModel.getJoinWarRoomInfo().initialFund;
+        private _updateListInfo(): void {
+            const info                  = McrModel.getJoinWarRoomInfo();
+            const initialFund           = info.initialFund;
+            const incomeModifier        = info.incomeModifier;
+            const initialEnergy         = info.initialEnergy;
+            const energyGrowthModifier  = info.energyGrowthModifier;
+            const luckLowerLimit        = info.luckLowerLimit;
+            const luckUpperLimit        = info.luckUpperLimit;
+            const moveRangeModifier     = info.moveRangeModifier;
+            const attackPowerModifier   = info.attackPowerModifier;
+            const visionRangeModifier   = info.visionRangeModifier;
+            const dataList              : DataForInfoRenderer[] = [
+                {
+                    titleText   : Lang.getText(Lang.Type.B0178),
+                    infoText    : `${initialFund}`,
+                    infoColor   : getTextColor(initialFund, CommonConstants.WarRuleInitialFundDefault),
+                },
+                {
+                    titleText   : Lang.getText(Lang.Type.B0179),
+                    infoText    : `${incomeModifier}`,
+                    infoColor   : getTextColor(incomeModifier, CommonConstants.WarRuleIncomeMultiplierDefault),
+                },
+                {
+                    titleText   : Lang.getText(Lang.Type.B0180),
+                    infoText    : `${initialEnergy}`,
+                    infoColor   : getTextColor(initialEnergy, CommonConstants.WarRuleInitialEnergyDefault),
+                },
+                {
+                    titleText   : Lang.getText(Lang.Type.B0181),
+                    infoText    : `${energyGrowthModifier}%`,
+                    infoColor   : getTextColor(energyGrowthModifier, CommonConstants.WarRuleEnergyGrowthMultiplierDefault),
+                },
+                {
+                    titleText   : Lang.getText(Lang.Type.B0182),
+                    infoText    : `${moveRangeModifier}`,
+                    infoColor   : getTextColor(moveRangeModifier, CommonConstants.WarRuleMoveRangeModifierDefault),
+                },
+                {
+                    titleText   : Lang.getText(Lang.Type.B0183),
+                    infoText    : `${attackPowerModifier}%`,
+                    infoColor   : getTextColor(attackPowerModifier, CommonConstants.WarRuleOffenseBonusDefault),
+                },
+                {
+                    titleText   : Lang.getText(Lang.Type.B0184),
+                    infoText    : `${visionRangeModifier}`,
+                    infoColor   : getTextColor(visionRangeModifier, CommonConstants.WarRuleVisionRangeModifierDefault),
+                },
+                {
+                    titleText   : Lang.getText(Lang.Type.B0189),
+                    infoText    : `${luckLowerLimit}%`,
+                    infoColor   : getTextColor(luckLowerLimit, CommonConstants.WarRuleLuckDefaultLowerLimit),
+                },
+                {
+                    titleText   : Lang.getText(Lang.Type.B0190),
+                    infoText    : `${luckUpperLimit}%`,
+                    infoColor   : getTextColor(luckUpperLimit, CommonConstants.WarRuleLuckDefaultUpperLimit),
+                },
+            ];
+            this._listInfo.bindData(dataList);
         }
 
-        private _updateLabelIncomeModifier(): void {
-            this._labelIncomeModifier.text = "" + McrModel.getJoinWarRoomInfo().incomeModifier + "%";
+        private async _updateLabelMapName(): Promise<void> {
+            const mapFileName       = this._mapExtraData.mapFileName;
+            this._labelMapName.text = `${await WarMapModel.getMapNameInLanguage(mapFileName) || "----"} (${Lang.getText(Lang.Type.B0163)}: ${await WarMapModel.getMapDesigner(mapFileName) || "----"})`;
         }
+    }
 
-        private _updateLabelInitialEnergy(): void {
-            this._labelInitialEnergy.text = "" + McrModel.getJoinWarRoomInfo().initialEnergy + "%";
+    function getTextColor(value: number, defaultValue: number): number {
+        if (value > defaultValue) {
+            return 0x00FF00;
+        } else if (value < defaultValue) {
+            return 0xFF0000;
+        } else {
+            return 0xFFFFFF;
         }
+    }
 
-        private _updateLabelEnergyModifier(): void {
-            this._labelEnergyModifier.text = "" + McrModel.getJoinWarRoomInfo().energyGrowthModifier + "%";
-        }
+    type DataForInfoRenderer = {
+        titleText   : string;
+        infoText    : string;
+        infoColor   : number;
+    }
 
-        private _updateLabelLuckLowerLimit(): void {
-            this._labelLuckLowerLimit.text = "" + McrModel.getJoinWarRoomInfo().luckLowerLimit + "%";
-        }
+    class InfoRenderer extends eui.ItemRenderer {
+        private _btnTitle   : GameUi.UiButton;
+        private _labelValue : GameUi.UiLabel;
 
-        private _updateLabelLuckUpperLimit(): void {
-            this._labelLuckUpperLimit.text = "" + McrModel.getJoinWarRoomInfo().luckUpperLimit + "%";
-        }
+        protected dataChanged(): void {
+            super.dataChanged();
 
-        private _updateLabelMapName(): void {
-            WarMapModel.getMapNameInLanguage(this._mapExtraData.mapFileName).then(v => this._labelMapName.text = v);
-        }
-
-        private _updateLabelPlayersCount(): void {
-            this._labelPlayersCount.text = "" + this._mapExtraData.playersCount;
-        }
-
-        private _updateLabelMoveRange(): void {
-            const modifier = McrModel.getJoinWarRoomInfo().moveRangeModifier;
-            if (modifier <= 0) {
-                this._labelMoveRange.text = "" + modifier;
-            } else {
-                this._labelMoveRange.text = "+" + modifier;
-            }
-        }
-
-        private _updateLabelAttack(): void {
-            const modifier = McrModel.getJoinWarRoomInfo().attackPowerModifier;
-            if (modifier <= 0) {
-                this._labelAttack.text = "" + modifier;
-            } else {
-                this._labelAttack.text = "+" + modifier;
-            }
-        }
-
-        private _updateLabelVision(): void {
-            const modifier = McrModel.getJoinWarRoomInfo().visionRangeModifier;
-            if (modifier <= 0) {
-                this._labelVision.text = "" + modifier;
-            } else {
-                this._labelVision.text = "+" + modifier;
-            }
+            const data                  = this.data as DataForInfoRenderer;
+            this._btnTitle.label        = data.titleText;
+            this._labelValue.text       = data.infoText;
+            this._labelValue.textColor  = data.infoColor;
         }
     }
 }

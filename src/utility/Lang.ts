@@ -1044,11 +1044,11 @@ namespace TinyWars.Utility.Lang {
         ],
         [Type.B0124]: [
             `陆军&海军`,
-            `G&N`,
+            `Ground & Naval`,
         ],
         [Type.B0125]: [
             `陆军&空军`,
-            `G&A`,
+            `Ground & Air`,
         ],
         [Type.B0126]: [
             `近战`,
@@ -1857,6 +1857,130 @@ namespace TinyWars.Utility.Lang {
         [Type.B0331]: [
             `活跃账号数`,
             `Active Accounts`,
+        ],
+        [Type.B0332]: [
+            `无可用选项`,
+            `No available options`,
+        ],
+        [Type.B0333]: [
+            `建筑统计`,
+            `Buildings`,
+        ],
+        [Type.B0334]: [
+            `基础伤害表`,
+            `Base Damage Chart`,
+        ],
+        [Type.B0335]: [
+            `攻击(主)`,
+            `ATK(main)`,
+        ],
+        [Type.B0336]: [
+            `攻击(副)`,
+            `ATK(sub)`,
+        ],
+        [Type.B0337]: [
+            `受击(主)`,
+            `DEF(main)`,
+        ],
+        [Type.B0338]: [
+            `受击(副)`,
+            `DEF(sub)`,
+        ],
+        [Type.B0339]: [
+            `HP`,
+            `HP`,
+        ],
+        [Type.B0340]: [
+            `移动力`,
+            `Movement`,
+        ],
+        [Type.B0341]: [
+            `造价`,
+            `Production Cost`,
+        ],
+        [Type.B0342]: [
+            `燃料`,
+            `Fuel`,
+        ],
+        [Type.B0343]: [
+            `燃料消耗量`,
+            `Fuel Consumption`,
+        ],
+        [Type.B0344]: [
+            `耗尽燃料时自毁`,
+            `Explodes without fuel`,
+        ],
+        [Type.B0345]: [
+            `攻击距离`,
+            `Attack Range`,
+        ],
+        [Type.B0346]: [
+            `移动后攻击`,
+            `Run & hit`,
+        ],
+        [Type.B0347]: [
+            `建筑材料`,
+            `Build Material`,
+        ],
+        [Type.B0348]: [
+            `生产材料`,
+            `Production Material`,
+        ],
+        [Type.B0349]: [
+            `照明弹`,
+            `Flare Ammo`,
+        ],
+        [Type.B0350]: [
+            `主武器弹药`,
+            `Primary Weapon Ammo`,
+        ],
+        [Type.B0351]: [
+            `移动基础消耗表`,
+            `Base Move Cost Chart`,
+        ],
+        [Type.B0352]: [
+            `防御加成`,
+            `Defense Bonus`,
+        ],
+        [Type.B0353]: [
+            `资金收入`,
+            `Income`,
+        ],
+        [Type.B0354]: [
+            `视野范围`,
+            `Vision Range`,
+        ],
+        [Type.B0355]: [
+            `对全体玩家生效`,
+            `For all players`,
+        ],
+        [Type.B0356]: [
+            `雾战中隐蔽部队`,
+            `Hide units in FoW`,
+        ],
+        [Type.B0357]: [
+            `被占领即失败`,
+            `Defeat if captured`,
+        ],
+        [Type.B0358]: [
+            `生产部队`,
+            `Produce Unit`,
+        ],
+        [Type.B0359]: [
+            `全局攻防加成`,
+            `Global ATK/DEF Bonus`,
+        ],
+        [Type.B0360]: [
+            `部队维修量`,
+            `Repair Amount`,
+        ],
+        [Type.B0361]: [
+            `占领点数`,
+            `Capture Point`,
+        ],
+        [Type.B0362]: [
+            `建筑点数`,
+            `Build Point`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
