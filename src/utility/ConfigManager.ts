@@ -1688,6 +1688,9 @@ namespace TinyWars.ConfigManager {
         MapEditorSlotMaxCount           : 3,
         ScwSaveSlotMaxCount             : 10,
 
+        ReplayMaxRating : 10,
+        ReplayMinRating : 0,
+
         WarNameMaxLength                : 20,
         WarCommentMaxLength             : 50,
         WarPasswordMaxLength            : 4,

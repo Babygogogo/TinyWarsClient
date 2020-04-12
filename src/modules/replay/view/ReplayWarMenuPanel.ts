@@ -1,15 +1,16 @@
 
 namespace TinyWars.Replay {
-    import ConfirmPanel = Common.ConfirmPanel;
-    import Notify       = Utility.Notify;
-    import Lang         = Utility.Lang;
-    import FlowManager  = Utility.FlowManager;
-    import Logger       = Utility.Logger;
-    import Types        = Utility.Types;
-    import LocalStorage = Utility.LocalStorage;
-    import FloatText    = Utility.FloatText;
-    import TimeModel    = Time.TimeModel;
-    import WarMapModel  = WarMap.WarMapModel;
+    import ConfirmPanel     = Common.ConfirmPanel;
+    import Notify           = Utility.Notify;
+    import Lang             = Utility.Lang;
+    import FlowManager      = Utility.FlowManager;
+    import Logger           = Utility.Logger;
+    import Types            = Utility.Types;
+    import LocalStorage     = Utility.LocalStorage;
+    import FloatText        = Utility.FloatText;
+    import TimeModel        = Time.TimeModel;
+    import WarMapModel      = WarMap.WarMapModel;
+    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
     const enum MenuType {
         Main,
@@ -90,9 +91,10 @@ namespace TinyWars.Replay {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyMcwPlannerStateChanged },
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyMcwPlannerStateChanged },
                 { type: Notify.Type.SScrCreateCustomWar,            callback: this._onNotifySScrCreateCustomWar },
+                { type: Notify.Type.SCommonRateMultiPlayerReplay,   callback: this._onNotifySCommonRateMultiPlayerReplay },
             ];
             this._uiListeners = [
                 { ui: this._btnBack, callback: this._onTouchedBtnBack },
@@ -134,6 +136,10 @@ namespace TinyWars.Replay {
 
         private _onNotifySScrCreateCustomWar(e: egret.Event): void {
             FloatText.show(Lang.getText(Lang.Type.A0104));
+        }
+
+        private _onNotifySCommonRateMultiPlayerReplay(e: egret.Event): void {
+            FloatText.show(Lang.getText(Lang.Type.A0106));
         }
 
         private _onTouchedBtnBack(e: egret.TouchEvent): void {
@@ -244,6 +250,9 @@ namespace TinyWars.Replay {
             const commandOpenAdvancedMenu = this._createCommandOpenAdvancedMenu();
             (commandOpenAdvancedMenu) && (dataList.push(commandOpenAdvancedMenu));
 
+            const commandRate = this._createCommandRate();
+            (commandRate) && (dataList.push(commandRate));
+
             const commandGotoLobby = this._createCommandGotoLobby();
             (commandGotoLobby) && (dataList.push(commandGotoLobby));
 
@@ -281,6 +290,30 @@ namespace TinyWars.Replay {
                 callback: () => {
                     this._menuType = MenuType.Advanced;
                     this._updateListCommand();
+                },
+            };
+        }
+
+        private _createCommandRate(): DataForCommandRenderer | null {
+            return {
+                name    : Lang.getText(Lang.Type.B0365),
+                callback: () => {
+                    Common.InputPanel.show({
+                        title           : `${Lang.getText(Lang.Type.B0365)}`,
+                        currentValue    : "",
+                        maxChars        : 2,
+                        charRestrict    : "0-9",
+                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${CommonConstants.ReplayMinRating}, ${CommonConstants.ReplayMaxRating}]`,
+                        callback        : panel => {
+                            const text  = panel.getInputText();
+                            const value = Number(text);
+                            if ((!text) || (isNaN(value)) || (value > CommonConstants.ReplayMaxRating) || (value < CommonConstants.ReplayMinRating)) {
+                                FloatText.show(Lang.getText(Lang.Type.A0098));
+                            } else {
+                                Common.CommonProxy.reqCommonRateMultiPlayerReplay(this._war.getWarId(), value);
+                            }
+                        },
+                    });
                 },
             };
         }

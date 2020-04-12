@@ -79,6 +79,7 @@ namespace TinyWars.Utility.Notify {
         SMapGetExtraDataFailed,
 
         SCommonGetServerStatus,
+        SCommonRateMultiPlayerReplay,
 
         SGetUserPublicInfo,
         SUserChangeNickname,

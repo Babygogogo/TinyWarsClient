@@ -8035,6 +8035,15 @@ export declare interface IMcwReplayInfo {
     /** McwReplayInfo warEndTime */
     warEndTime?: (number|null);
 
+    /** McwReplayInfo totalRating */
+    totalRating?: (number|null);
+
+    /** McwReplayInfo totalRaters */
+    totalRaters?: (number|null);
+
+    /** McwReplayInfo myRating */
+    myRating?: (number|null);
+
     /** McwReplayInfo p1UserId */
     p1UserId?: (number|null);
 
@@ -8101,6 +8110,15 @@ export declare class McwReplayInfo implements IMcwReplayInfo {
 
     /** McwReplayInfo warEndTime. */
     public warEndTime: number;
+
+    /** McwReplayInfo totalRating. */
+    public totalRating: number;
+
+    /** McwReplayInfo totalRaters. */
+    public totalRaters: number;
+
+    /** McwReplayInfo myRating. */
+    public myRating: number;
 
     /** McwReplayInfo p1UserId. */
     public p1UserId: number;
@@ -8893,6 +8911,12 @@ export declare interface IMessageContainer {
     /** MessageContainer S_CommonGetServerStatus */
     S_CommonGetServerStatus?: (IS_CommonGetServerStatus|null);
 
+    /** MessageContainer C_CommonRateMultiPlayerReplay */
+    C_CommonRateMultiPlayerReplay?: (IC_CommonRateMultiPlayerReplay|null);
+
+    /** MessageContainer S_CommonRateMultiPlayerReplay */
+    S_CommonRateMultiPlayerReplay?: (IS_CommonRateMultiPlayerReplay|null);
+
     /** MessageContainer C_McrCreateWar */
     C_McrCreateWar?: (IC_McrCreateWar|null);
 
@@ -9301,6 +9325,12 @@ export declare class MessageContainer implements IMessageContainer {
 
     /** MessageContainer S_CommonGetServerStatus. */
     public S_CommonGetServerStatus?: (IS_CommonGetServerStatus|null);
+
+    /** MessageContainer C_CommonRateMultiPlayerReplay. */
+    public C_CommonRateMultiPlayerReplay?: (IC_CommonRateMultiPlayerReplay|null);
+
+    /** MessageContainer S_CommonRateMultiPlayerReplay. */
+    public S_CommonRateMultiPlayerReplay?: (IS_CommonRateMultiPlayerReplay|null);
 
     /** MessageContainer C_McrCreateWar. */
     public C_McrCreateWar?: (IC_McrCreateWar|null);
@@ -13148,6 +13178,192 @@ export declare class S_CommonGetServerStatus implements IS_CommonGetServerStatus
 
     /**
      * Converts this S_CommonGetServerStatus to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_CommonRateMultiPlayerReplay. */
+export declare interface IC_CommonRateMultiPlayerReplay {
+
+    /** C_CommonRateMultiPlayerReplay replayId */
+    replayId?: (number|null);
+
+    /** C_CommonRateMultiPlayerReplay rating */
+    rating?: (number|null);
+}
+
+/** Represents a C_CommonRateMultiPlayerReplay. */
+export declare class C_CommonRateMultiPlayerReplay implements IC_CommonRateMultiPlayerReplay {
+
+    /**
+     * Constructs a new C_CommonRateMultiPlayerReplay.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_CommonRateMultiPlayerReplay);
+
+    /** C_CommonRateMultiPlayerReplay replayId. */
+    public replayId: number;
+
+    /** C_CommonRateMultiPlayerReplay rating. */
+    public rating: number;
+
+    /**
+     * Creates a new C_CommonRateMultiPlayerReplay instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_CommonRateMultiPlayerReplay instance
+     */
+    public static create(properties?: IC_CommonRateMultiPlayerReplay): C_CommonRateMultiPlayerReplay;
+
+    /**
+     * Encodes the specified C_CommonRateMultiPlayerReplay message. Does not implicitly {@link C_CommonRateMultiPlayerReplay.verify|verify} messages.
+     * @param message C_CommonRateMultiPlayerReplay message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_CommonRateMultiPlayerReplay, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_CommonRateMultiPlayerReplay message, length delimited. Does not implicitly {@link C_CommonRateMultiPlayerReplay.verify|verify} messages.
+     * @param message C_CommonRateMultiPlayerReplay message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_CommonRateMultiPlayerReplay, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_CommonRateMultiPlayerReplay message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_CommonRateMultiPlayerReplay
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_CommonRateMultiPlayerReplay;
+
+    /**
+     * Decodes a C_CommonRateMultiPlayerReplay message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_CommonRateMultiPlayerReplay
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_CommonRateMultiPlayerReplay;
+
+    /**
+     * Verifies a C_CommonRateMultiPlayerReplay message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_CommonRateMultiPlayerReplay message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_CommonRateMultiPlayerReplay
+     */
+    public static fromObject(object: { [k: string]: any }): C_CommonRateMultiPlayerReplay;
+
+    /**
+     * Creates a plain object from a C_CommonRateMultiPlayerReplay message. Also converts values to other types if specified.
+     * @param message C_CommonRateMultiPlayerReplay
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_CommonRateMultiPlayerReplay, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_CommonRateMultiPlayerReplay to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_CommonRateMultiPlayerReplay. */
+export declare interface IS_CommonRateMultiPlayerReplay {
+
+    /** S_CommonRateMultiPlayerReplay errorCode */
+    errorCode?: (number|null);
+}
+
+/** Represents a S_CommonRateMultiPlayerReplay. */
+export declare class S_CommonRateMultiPlayerReplay implements IS_CommonRateMultiPlayerReplay {
+
+    /**
+     * Constructs a new S_CommonRateMultiPlayerReplay.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_CommonRateMultiPlayerReplay);
+
+    /** S_CommonRateMultiPlayerReplay errorCode. */
+    public errorCode: number;
+
+    /**
+     * Creates a new S_CommonRateMultiPlayerReplay instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_CommonRateMultiPlayerReplay instance
+     */
+    public static create(properties?: IS_CommonRateMultiPlayerReplay): S_CommonRateMultiPlayerReplay;
+
+    /**
+     * Encodes the specified S_CommonRateMultiPlayerReplay message. Does not implicitly {@link S_CommonRateMultiPlayerReplay.verify|verify} messages.
+     * @param message S_CommonRateMultiPlayerReplay message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_CommonRateMultiPlayerReplay, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_CommonRateMultiPlayerReplay message, length delimited. Does not implicitly {@link S_CommonRateMultiPlayerReplay.verify|verify} messages.
+     * @param message S_CommonRateMultiPlayerReplay message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_CommonRateMultiPlayerReplay, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_CommonRateMultiPlayerReplay message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_CommonRateMultiPlayerReplay
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_CommonRateMultiPlayerReplay;
+
+    /**
+     * Decodes a S_CommonRateMultiPlayerReplay message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_CommonRateMultiPlayerReplay
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_CommonRateMultiPlayerReplay;
+
+    /**
+     * Verifies a S_CommonRateMultiPlayerReplay message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_CommonRateMultiPlayerReplay message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_CommonRateMultiPlayerReplay
+     */
+    public static fromObject(object: { [k: string]: any }): S_CommonRateMultiPlayerReplay;
+
+    /**
+     * Creates a plain object from a S_CommonRateMultiPlayerReplay message. Also converts values to other types if specified.
+     * @param message S_CommonRateMultiPlayerReplay
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_CommonRateMultiPlayerReplay, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_CommonRateMultiPlayerReplay to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };

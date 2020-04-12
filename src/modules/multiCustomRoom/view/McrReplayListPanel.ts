@@ -22,14 +22,18 @@ namespace TinyWars.MultiCustomRoom {
         private _btnSearch      : GameUi.UiButton;
         private _btnBack        : GameUi.UiButton;
 
-        private _groupInfo          : eui.Group;
-        private _labelMapName       : GameUi.UiLabel;
-        private _labelDesigner      : GameUi.UiLabel;
-        private _labelPlayers       : GameUi.UiLabel;
-        private _labelHasFog        : GameUi.UiLabel;
-        private _labelTurnIndex     : GameUi.UiLabel;
-        private _labelNextActionId  : GameUi.UiLabel;
-        private _listPlayer         : GameUi.UiScrollList;
+        private _groupInfo              : eui.Group;
+        private _labelMapName           : GameUi.UiLabel;
+        private _labelDesigner          : GameUi.UiLabel;
+        private _labelPlayers           : GameUi.UiLabel;
+        private _labelHasFog            : GameUi.UiLabel;
+        private _labelTurnIndex         : GameUi.UiLabel;
+        private _labelNextActionId      : GameUi.UiLabel;
+        private _labelGlobalRatingTitle : GameUi.UiLabel;
+        private _labelGlobalRating      : GameUi.UiLabel;
+        private _labelMyRatingTitle     : GameUi.UiLabel;
+        private _labelMyRating          : GameUi.UiLabel;
+        private _listPlayer             : GameUi.UiScrollList;
 
         private _dataForListReplay  : DataForMapNameRenderer[] = [];
         private _selectedIndex      : number;
@@ -142,11 +146,13 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0092);
-            this._labelPlayers.text     = `${Lang.getText(Lang.Type.B0232)}:`;
-            this._labelNoReplay.text    = Lang.getText(Lang.Type.B0241);
-            this._btnBack.label         = Lang.getText(Lang.Type.B0146);
-            this._btnSearch.label       = Lang.getText(Lang.Type.B0228);
+            this._labelMenuTitle.text           = Lang.getText(Lang.Type.B0092);
+            this._labelPlayers.text             = `${Lang.getText(Lang.Type.B0232)}:`;
+            this._labelNoReplay.text            = Lang.getText(Lang.Type.B0241);
+            this._labelMyRatingTitle.text       = `${Lang.getText(Lang.Type.B0363)}:`;
+            this._labelGlobalRatingTitle.text   = `${Lang.getText(Lang.Type.B0364)}:`;
+            this._btnBack.label                 = Lang.getText(Lang.Type.B0146);
+            this._btnSearch.label               = Lang.getText(Lang.Type.B0228);
         }
 
         private _updateListReplay(): void {
@@ -173,10 +179,13 @@ namespace TinyWars.MultiCustomRoom {
 
                 const info                      = data.info;
                 const mapExtraData              = await WarMapModel.getExtraData(info.mapFileName);
+                const totalRaters               = info.totalRaters;
                 this._labelMapName.text         = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInLanguage(mapExtraData.mapFileName));
                 this._labelDesigner.text        = Lang.getFormattedText(Lang.Type.F0001, mapExtraData.mapDesigner);
                 this._labelHasFog.text          = Lang.getFormattedText(Lang.Type.F0005, Lang.getText(info.hasFog ? Lang.Type.B0012 : Lang.Type.B0001));
                 this._labelTurnIndex.text       = `${Lang.getText(Lang.Type.B0091)}: ${info.turnIndex + 1}`;
+                this._labelGlobalRating.text    = totalRaters ? Helpers.formatString("%.2f(%d)", info.totalRating / totalRaters, totalRaters) : `--`;
+                this._labelMyRating.text        = info.myRating == null ? `--` : `${info.myRating}`;
                 this._labelNextActionId.text    = `${Lang.getText(Lang.Type.B0090)}: ${info.nextActionId}`;
                 this._listPlayer.bindData(this._createDataForListPlayer(info));
 

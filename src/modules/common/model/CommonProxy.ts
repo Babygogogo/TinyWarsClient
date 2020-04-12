@@ -8,7 +8,8 @@ namespace TinyWars.Common.CommonProxy {
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: ActionCode.S_CommonGetServerStatus,    callback: _onSCommonGetServerStatus,    },
+            { msgCode: ActionCode.S_CommonGetServerStatus,          callback: _onSCommonGetServerStatus,    },
+            { msgCode: ActionCode.S_CommonRateMultiPlayerReplay,    callback: _onSCommonRateMultiPlayerReplay },
         ], CommonProxy);
     }
 
@@ -19,6 +20,21 @@ namespace TinyWars.Common.CommonProxy {
         const data = e.data as ProtoTypes.IS_CommonGetServerStatus;
         if (!data.errorCode) {
             Notify.dispatch(NotifyType.SCommonGetServerStatus, data);
+        }
+    }
+
+    export function reqCommonRateMultiPlayerReplay(replayId: number, rating: number): void {
+        NetManager.send({
+            C_CommonRateMultiPlayerReplay: {
+                replayId,
+                rating,
+            },
+        });
+    }
+    function _onSCommonRateMultiPlayerReplay(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_CommonRateMultiPlayerReplay;
+        if (!data.errorCode) {
+            Notify.dispatch(NotifyType.SCommonRateMultiPlayerReplay, data);
         }
     }
 }

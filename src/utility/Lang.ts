@@ -542,6 +542,10 @@ namespace TinyWars.Utility.Lang {
             `请输入您对此地图的评价以及改进建议，可留空`,
             `Please leave your comment here if any.`,
         ],
+        [Type.A0106]: [
+            `已成功评分`,
+            `Rated successfully.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -1981,6 +1985,18 @@ namespace TinyWars.Utility.Lang {
         [Type.B0362]: [
             `建筑点数`,
             `Build Point`,
+        ],
+        [Type.B0363]: [
+            `我的评分`,
+            `My Rating`,
+        ],
+        [Type.B0364]: [
+            `全服评分`,
+            `Global Rating`,
+        ],
+        [Type.B0365]: [
+            `评分`,
+            `Set Rating`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
