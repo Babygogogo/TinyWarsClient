@@ -7,8 +7,10 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
     import Notify     = Utility.Notify;
 
     type DataForReqReplayInfos = {
-        replayId?   : number;
-        mapName?    : string;
+        replayId?           : number;
+        mapName?            : string;
+        minMyRating?        : number;
+        minGlobalRating?    : number;
     }
 
     export function init(): void {

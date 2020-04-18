@@ -15753,6 +15753,12 @@ export declare interface IC_McrGetReplayInfos {
 
     /** C_McrGetReplayInfos mapName */
     mapName?: (string|null);
+
+    /** C_McrGetReplayInfos minMyRating */
+    minMyRating?: (number|null);
+
+    /** C_McrGetReplayInfos minGlobalRating */
+    minGlobalRating?: (number|null);
 }
 
 /** Represents a C_McrGetReplayInfos. */
@@ -15769,6 +15775,12 @@ export declare class C_McrGetReplayInfos implements IC_McrGetReplayInfos {
 
     /** C_McrGetReplayInfos mapName. */
     public mapName: string;
+
+    /** C_McrGetReplayInfos minMyRating. */
+    public minMyRating: number;
+
+    /** C_McrGetReplayInfos minGlobalRating. */
+    public minGlobalRating: number;
 
     /**
      * Creates a new C_McrGetReplayInfos instance using the specified properties.
