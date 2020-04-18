@@ -11,6 +11,14 @@ namespace TinyWars.SingleCustomWar {
             };
         }
 
+        public serializeForSimulation(): Types.SerializedField {
+            return {
+                fogMap  : (this.getFogMap() as ScwFogMap).serializeForSimulation(),
+                unitMap : (this.getUnitMap() as ScwUnitMap).serializeForSimulation(),
+                tileMap : (this.getTileMap() as ScwTileMap).serializeForSimulation(),
+            };
+        }
+
         protected _getFogMapClass(): new () => BaseWar.BwFogMap {
             return ScwFogMap;
         }

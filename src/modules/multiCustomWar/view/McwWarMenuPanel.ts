@@ -8,6 +8,7 @@ namespace TinyWars.MultiCustomWar {
     import Logger           = Utility.Logger;
     import FloatText        = Utility.FloatText;
     import LocalStorage     = Utility.LocalStorage;
+    import ProtoTypes       = Utility.ProtoTypes;
     import WarMapModel      = WarMap.WarMapModel;
     import TimeModel        = Time.TimeModel;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
@@ -118,7 +119,14 @@ namespace TinyWars.MultiCustomWar {
             this._updateComponentsForLanguage();
         }
         private _onNotifySScrCreateCustomWar(e: egret.Event): void {
-            FloatText.show(Lang.getText(Lang.Type.A0104));
+            const data = e.data as ProtoTypes.IS_ScrCreateCustomWar;
+            Common.ConfirmPanel.show({
+                title   : Lang.getText(Lang.Type.B0088),
+                content : Lang.getText(Lang.Type.A0107),
+                callback: () => {
+                    FlowManager.gotoSingleCustomWar(data.warData as Types.SerializedWar);
+                },
+            });
         }
 
         private _onTouchedBtnBack(e: egret.TouchEvent): void {

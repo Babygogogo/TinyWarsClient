@@ -546,6 +546,10 @@ namespace TinyWars.Utility.Lang {
             `已成功评分`,
             `Rated successfully.`,
         ],
+        [Type.A0107]: [
+            `已成功创建模拟战。您想现在就开始游玩吗？`,
+            `The simulation war has been created successfully. Do you want to play it now?`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
