@@ -14,6 +14,13 @@ namespace TinyWars.SingleCustomWar {
             return data;
         }
 
+        public serializeForSimulation(): Types.SerializedPlayer[] {
+            const dataList: Types.SerializedPlayer[] = [];
+            this.forEachPlayer(true, (player: ScwPlayer) => dataList.push(player.serializeForSimulation()));
+
+            return dataList;
+        }
+
         protected _getPlayerClass(): new () => BaseWar.BwPlayer {
             return ScwPlayer;
         }

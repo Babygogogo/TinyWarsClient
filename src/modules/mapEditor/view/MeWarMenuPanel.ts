@@ -147,7 +147,14 @@ namespace TinyWars.MapEditor {
         }
 
         private _onNotifySScrCreateCustomWar(e: egret.Event): void {
-            FloatText.show(Lang.getText(Lang.Type.A0104));
+            const data = e.data as ProtoTypes.IS_ScrCreateCustomWar;
+            Common.ConfirmPanel.show({
+                title   : Lang.getText(Lang.Type.B0088),
+                content : Lang.getText(Lang.Type.A0107),
+                callback: () => {
+                    FlowManager.gotoSingleCustomWar(data.warData as Types.SerializedWar);
+                },
+            });
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {

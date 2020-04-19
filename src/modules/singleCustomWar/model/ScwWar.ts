@@ -70,6 +70,50 @@ namespace TinyWars.SingleCustomWar {
             };
         }
 
+        public serializeForSimulation(): Types.SerializedWar {
+            const playerDataList    = (this.getPlayerManager() as ScwPlayerManager).serializeForSimulation();
+            const fieldData         = (this.getField() as ScwField).serializeForSimulation();
+            // const unitMapData       = fieldData ? fieldData.unitMap : null;
+            // const unitDataList      = unitMapData ? unitMapData.units || []: [];
+            // for (const playerData of playerDataList || []) {
+            //     const unitId = playerData.coUnitId;
+            //     if ((unitId != null) && (unitDataList.every(u => u.unitId !== unitId))) {
+            //         playerData.coUnitId = null;
+            //     }
+            // }
+
+            return {
+                warId                   : this.getWarId(),
+                warName                 : this.getWarName(),
+                warPassword             : this.getWarPassword(),
+                warComment              : this.getWarComment(),
+                configVersion           : this.getConfigVersion(),
+                executedActions         : [],
+                nextActionId            : this.getNextActionId(),
+                remainingVotesForDraw   : this.getRemainingVotesForDraw(),
+                warRuleIndex            : this.getWarRuleIndex(),
+                timeLimit               : this.getSettingsTimeLimit(),
+                hasFogByDefault         : this.getSettingsHasFog(),
+                incomeModifier          : this.getSettingsIncomeModifier(),
+                energyGrowthModifier    : this.getSettingsEnergyGrowthModifier(),
+                attackPowerModifier     : this.getSettingsAttackPowerModifier(),
+                moveRangeModifier       : this.getSettingsMoveRangeModifier(),
+                visionRangeModifier     : this.getSettingsVisionRangeModifier(),
+                initialFund             : this.getSettingsInitialFund(),
+                initialEnergy           : this.getSettingsInitialEnergy(),
+                bannedCoIdList          : this.getSettingsBannedCoIdList(),
+                luckLowerLimit          : this.getSettingsLuckLowerLimit(),
+                luckUpperLimit          : this.getSettingsLuckUpperLimit(),
+                singlePlayerWarType     : Types.SinglePlayerWarType.Custom,
+                isSinglePlayerCheating  : true,
+                mapFileName             : this.getMapFileName(),
+                players                 : playerDataList,
+                field                   : fieldData,
+                turn                    : (this.getTurnManager() as ScwTurnManager).serializeForSimulation(),
+                seedRandomState         : null,
+            };
+        }
+
         protected _getViewClass(): new () => ScwWarView {
             return ScwWarView;
         }

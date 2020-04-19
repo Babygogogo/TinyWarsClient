@@ -17,6 +17,15 @@ namespace TinyWars.SingleCustomWar {
             };
         }
 
+        public serializeForSimulation(): Types.SerializedTurn {
+            return {
+                turnIndex       : this.getTurnIndex(),
+                playerIndex     : this.getPlayerIndexInTurn(),
+                turnPhaseCode   : this.getPhaseCode(),
+                enterTurnTime   : this.getEnterTurnTime(),
+            };
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The functions for running turn.
         ////////////////////////////////////////////////////////////////////////////////////////////////////

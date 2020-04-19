@@ -97,6 +97,7 @@ namespace TinyWars.SingleCustomWar {
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
                 { type: Notify.Type.SScrContinueWar,                callback: this._onNotifySScrContinueWar },
                 { type: Notify.Type.SScrSaveWar,                    callback: this._onNotifySScrSaveWar },
+                { type: Notify.Type.SScrCreateCustomWar,            callback: this._onNotifySScrCreateCustomWar },
             ];
             this._uiListeners = [
                 { ui: this._btnBack, callback: this._onTouchedBtnBack },
@@ -146,6 +147,17 @@ namespace TinyWars.SingleCustomWar {
 
         private _onNotifySScrSaveWar(e: egret.Event): void {
             FloatText.show(Lang.getText(Lang.Type.A0073));
+        }
+
+        private _onNotifySScrCreateCustomWar(e: egret.Event): void {
+            const data = e.data as ProtoTypes.IS_ScrCreateCustomWar;
+            Common.ConfirmPanel.show({
+                title   : Lang.getText(Lang.Type.B0088),
+                content : Lang.getText(Lang.Type.A0107),
+                callback: () => {
+                    FlowManager.gotoSingleCustomWar(data.warData as Types.SerializedWar);
+                },
+            });
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
@@ -277,6 +289,9 @@ namespace TinyWars.SingleCustomWar {
             const commandPlayerDeleteUnit = this._createCommandPlayerDeleteUnit();
             (commandPlayerDeleteUnit) && (dataList.push(commandPlayerDeleteUnit));
 
+            const commandSimulation = this._createCommandSimulation();
+            (commandSimulation) && (dataList.push(commandSimulation));
+
             const commandShowTileAnimation = this._createCommandShowTileAnimation();
             (commandShowTileAnimation) && (dataList.push(commandShowTileAnimation));
 
@@ -393,6 +408,20 @@ namespace TinyWars.SingleCustomWar {
                     },
                 }
             }
+        }
+
+        private _createCommandSimulation(): DataForCommandRenderer | null {
+            const war = this._war;
+            return {
+                name    : Lang.getText(Lang.Type.B0325),
+                callback: () => {
+                    if (war.getIsExecutingAction()) {
+                        FloatText.show(Lang.getText(Lang.Type.A0103));
+                    } else {
+                        SingleCustomRoom.ScrCreateCustomSaveSlotsPanel.show(war.serializeForSimulation());
+                    }
+                },
+            };
         }
 
         private _createCommandShowTileAnimation(): DataForCommandRenderer | null {
