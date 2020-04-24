@@ -374,7 +374,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
                 ) {
                     attackerPlayer.setCoCurrentEnergy(Math.min(
                         attackerPlayer.getCoMaxEnergy(),
-                        attackerPlayer.getCoCurrentEnergy() + Math.floor(targetLostHp * war.getSettingsEnergyGrowthModifier() / 100)
+                        attackerPlayer.getCoCurrentEnergy() + Math.floor(targetLostHp * war.getSettingsEnergyGrowthMultiplier() / 100)
                     ));
                 }
                 const attackerUnitType = attacker.getType();
@@ -406,7 +406,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
                 ) {
                     targetPlayer.setCoCurrentEnergy(Math.min(
                         targetPlayer.getCoMaxEnergy(),
-                        targetPlayer.getCoCurrentEnergy() + Math.floor(attackerLostHp * war.getSettingsEnergyGrowthModifier() / 100)
+                        targetPlayer.getCoCurrentEnergy() + Math.floor(attackerLostHp * war.getSettingsEnergyGrowthMultiplier() / 100)
                     ));
                 }
                 const isTargetInCoZone  = targetPlayer.checkIsInCoZone(targetGridIndex, targetCoGridIndex);

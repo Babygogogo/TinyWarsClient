@@ -550,6 +550,10 @@ namespace TinyWars.Utility.Lang {
             `已成功创建模拟战。您想现在就开始游玩吗？`,
             `The simulation war has been created successfully. Do you want to play it now?`,
         ],
+        [Type.A0108]: [
+            `开启作弊模式后，您可以随意修改战局上的各种数据。确定要开启吗？`,
+            `You can modify most of the game data when cheating is enabled. Are you sure to enable it?`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -2001,6 +2005,10 @@ namespace TinyWars.Utility.Lang {
         [Type.B0365]: [
             `评分`,
             `Set Rating`,
+        ],
+        [Type.B0366]: [
+            `开启作弊模式`,
+            `Cheating`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

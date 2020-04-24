@@ -197,9 +197,12 @@ namespace TinyWars.SingleCustomWar {
         }
 
         public onItemTapEvent(e: eui.ItemTapEvent): void {
-            const data = this.data as DataForUnitRenderer;
-            data.cursor.setGridIndex(data.unit.getGridIndex());
-            data.cursor.updateView();
+            const data      = this.data as DataForUnitRenderer;
+            const cursor    = data.cursor;
+            const gridIndex = data.unit.getGridIndex();
+            cursor.setGridIndex(gridIndex);
+            cursor.updateView();
+            cursor.getWar().getView().moveGridToCenter(gridIndex);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
