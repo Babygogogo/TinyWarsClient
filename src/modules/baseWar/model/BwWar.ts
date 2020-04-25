@@ -57,7 +57,7 @@ namespace TinyWars.BaseWar {
             this.setSettingsAttackPowerModifier(data.attackPowerModifier);
             this.setSettingsMoveRangeModifier(data.moveRangeModifier);
             this.setSettingsVisionRangeModifier(data.visionRangeModifier);
-            this._setSettingsInitialFund(data.initialFund);
+            this.setSettingsInitialFund(data.initialFund);
             this.setSettingsInitialEnergy(data.initialEnergy);
             this._setSettingsBannedCoIdList(data.bannedCoIdList);
             this.setSettingsLuckLowerLimit(data.luckLowerLimit);
@@ -215,7 +215,7 @@ namespace TinyWars.BaseWar {
             return this._visionRangeModifier;
         }
 
-        private _setSettingsInitialFund(initialFund: number): void {
+        public setSettingsInitialFund(initialFund: number): void {
             this._initialFund = initialFund;
         }
         public getSettingsInitialFund(): number {

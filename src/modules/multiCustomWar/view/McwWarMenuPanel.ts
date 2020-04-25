@@ -80,7 +80,7 @@ namespace TinyWars.MultiCustomWar {
             ];
             this._listCommand.setItemRenderer(CommandRenderer);
             this._listPlayer.setItemRenderer(PlayerRenderer);
-            this._listWarInfo.setItemRenderer(WarInfoRenderer);
+            this._listWarInfo.setItemRenderer(InfoRenderer);
         }
         protected _onOpened(): void {
             const war           = McwModel.getWar();
@@ -193,7 +193,7 @@ namespace TinyWars.MultiCustomWar {
             const visionRangeModifier   = war.getSettingsVisionRangeModifier();
             const luckLowerLimit        = war.getSettingsLuckLowerLimit();
             const luckUpperLimit        = war.getSettingsLuckUpperLimit();
-            const dataList              : DataForWarInfoRenderer[] = [
+            const dataList              : DataForInfoRenderer[] = [
                 {
                     titleText   : Lang.getText(Lang.Type.B0226),
                     infoText    : `${war.getWarId()}`,
@@ -560,21 +560,13 @@ namespace TinyWars.MultiCustomWar {
         private _labelName      : GameUi.UiLabel;
         private _labelForce     : GameUi.UiLabel;
         private _labelLost      : GameUi.UiLabel;
+        private _listInfo       : GameUi.UiScrollList;
 
-        private _groupInfo              : eui.Group;
-        private _labelFundTitle         : GameUi.UiLabel;
-        private _labelFund              : GameUi.UiLabel;
-        private _labelIncomeTitle       : GameUi.UiLabel;
-        private _labelIncome            : GameUi.UiLabel;
-        private _labelBuildingsTitle    : GameUi.UiLabel;
-        private _labelBuildings         : GameUi.UiLabel;
-        private _labelCoName            : GameUi.UiLabel;
-        private _labelEnergyTitle       : GameUi.UiLabel;
-        private _labelEnergy            : GameUi.UiLabel;
-        private _labelUnitsTitle        : GameUi.UiLabel;
-        private _labelUnits             : GameUi.UiLabel;
-        private _labelUnitsValueTitle   : GameUi.UiLabel;
-        private _labelUnitsValue        : GameUi.UiLabel;
+        protected childrenCreated(): void {
+            super.childrenCreated();
+
+            this._listInfo.setItemRenderer(InfoRenderer);
+        }
 
         protected dataChanged(): void {
             super.dataChanged();
@@ -582,7 +574,6 @@ namespace TinyWars.MultiCustomWar {
             const data                  = this.data as DataForPlayerRenderer;
             const war                   = data.war;
             const player                = data.player;
-            const playerIndex           = player.getPlayerIndex();
             this._labelName.text        = player.getNickname();
             this._labelName.textColor   = player === war.getPlayerInTurn() ? 0x00FF00 : 0xFFFFFF;
             this._labelForce.text       = `${Lang.getPlayerForceName(player.getPlayerIndex())}`
@@ -591,41 +582,95 @@ namespace TinyWars.MultiCustomWar {
 
             if (!player.getIsAlive()) {
                 this._labelLost.visible = true;
-                this._groupInfo.visible = false;
+                this._listInfo.visible  = false;
             } else {
                 this._labelLost.visible = false;
-                this._groupInfo.visible = true;
-
-                const isInfoKnown               = (!war.getFogMap().checkHasFogCurrently()) || (war.getPlayerManager().getWatcherTeamIndexes(User.UserModel.getSelfUserId()).has(player.getTeamIndex()));
-                const tilesCountAndIncome       = this._getTilesCountAndIncome(war, playerIndex);
-                this._labelFundTitle.text       = Lang.getText(Lang.Type.B0156);
-                this._labelFund.text            = isInfoKnown ? `${player.getFund()}` : `?`;
-                this._labelIncomeTitle.text     = Lang.getText(Lang.Type.B0157);
-                this._labelIncome.text          = `${tilesCountAndIncome.income}${isInfoKnown ? `` : `  ?`}`;
-                this._labelBuildingsTitle.text  = Lang.getText(Lang.Type.B0158);
-                this._labelBuildings.text       = `${tilesCountAndIncome.count}${isInfoKnown ? `` : `  ?`}`;
-
-                const coId              = player.getCoId();
-                const coBasicCfg        = coId == null ? null : ConfigManager.getCoBasicCfg(war.getConfigVersion(), coId);
-                this._labelCoName.text  = coBasicCfg
-                    ? `${coBasicCfg.name}(T${coBasicCfg.tier})`
-                    : `(${Lang.getText(Lang.Type.B0001)}CO)`;
-
-                const superPowerEnergy  = player.getCoSuperPowerEnergy();
-                const powerEnergy       = player.getCoPowerEnergy();
-                const skillType         = player.getCoUsingSkillType();
-                const currEnergyText    = skillType === Types.CoSkillType.Passive
-                    ? "" + player.getCoCurrentEnergy()
-                    : skillType === Types.CoSkillType.Power ? "COP" : "SCOP";
-                this._labelEnergyTitle.text = Lang.getText(Lang.Type.B0159);
-                this._labelEnergy.text      = `${currEnergyText} / ${powerEnergy == null ? "--" : powerEnergy} / ${superPowerEnergy == null ? "--" : superPowerEnergy}`;
-
-                const unitsCountAndValue        = this._getUnitsCountAndValue(war, playerIndex);
-                this._labelUnitsTitle.text      = Lang.getText(Lang.Type.B0160);
-                this._labelUnits.text           = `${unitsCountAndValue.count}${isInfoKnown ? `` : `  ?`}`;
-                this._labelUnitsValueTitle.text = Lang.getText(Lang.Type.B0161);
-                this._labelUnitsValue.text      = `${unitsCountAndValue.value}${isInfoKnown ? `` : `  ?`}`;
+                this._listInfo.visible  = true;
+                this._listInfo.bindData(this._createDataForListInfo());
             }
+        }
+
+        private _createDataForListInfo(): DataForInfoRenderer[] {
+            const data          = this.data as DataForPlayerRenderer;
+            const war           = data.war;
+            const player        = data.player;
+            const isInfoKnown   = (!war.getFogMap().checkHasFogCurrently())
+                || (war.getPlayerManager().getWatcherTeamIndexes(User.UserModel.getSelfUserId()).has(player.getTeamIndex()));
+            return [
+                this._createDataFund(war, player, isInfoKnown),
+                this._createDataBuildings(war, player, isInfoKnown),
+                this._createDataCoName(war, player, isInfoKnown),
+                this._createDataEnergy(war, player, isInfoKnown),
+                this._createDataUnitAndValue(war, player, isInfoKnown),
+            ];
+        }
+        private _createDataFund(
+            war         : McwWar,
+            player      : McwPlayer,
+            isInfoKnown : boolean,
+        ): DataForInfoRenderer {
+            return {
+                titleText   : Lang.getText(Lang.Type.B0032),
+                infoText    : isInfoKnown ? `${player.getFund()}` : `?`,
+                infoColor   : 0xFFFFFF,
+            };
+        }
+        private _createDataBuildings(
+            war         : McwWar,
+            player      : McwPlayer,
+            isInfoKnown : boolean,
+        ): DataForInfoRenderer {
+            const info = this._getTilesCountAndIncome(war, player.getPlayerIndex());
+            return {
+                titleText   : Lang.getText(Lang.Type.B0158),
+                infoText    : `${info.count} / +${info.income}${isInfoKnown ? `` : `  ?`}`,
+                infoColor   : 0xFFFFFF,
+            };
+        }
+        private _createDataCoName(
+            war         : McwWar,
+            player      : McwPlayer,
+            isInfoKnown : boolean,
+        ): DataForInfoRenderer {
+            const coId  = player.getCoId();
+            const cfg   = coId == null ? null : ConfigManager.getCoBasicCfg(ConfigManager.getNewestConfigVersion(), coId);
+            return {
+                titleText               : `CO`,
+                infoText                : !cfg
+                    ? `(${Lang.getText(Lang.Type.B0001)})`
+                    : `${cfg.name}(T${cfg.tier})`,
+                infoColor               : 0xFFFFFF,
+            };
+        }
+        private _createDataEnergy(
+            war         : McwWar,
+            player      : McwPlayer,
+            isInfoKnown : boolean,
+        ): DataForInfoRenderer {
+            const currValue         = player.getCoCurrentEnergy();
+            const powerEnergy       = player.getCoPowerEnergy();
+            const superPowerEnergy  = player.getCoSuperPowerEnergy();
+            const skillType         = player.getCoUsingSkillType();
+            const currEnergyText    = skillType === Types.CoSkillType.Passive
+                ? "" + currValue
+                : skillType === Types.CoSkillType.Power ? "COP" : "SCOP";
+            return {
+                titleText               : Lang.getText(Lang.Type.B0159),
+                infoText                : `${currEnergyText} / ${powerEnergy == null ? "--" : powerEnergy} / ${superPowerEnergy == null ? "--" : superPowerEnergy}`,
+                infoColor               : 0xFFFFFF,
+            };
+        }
+        private _createDataUnitAndValue(
+            war         : McwWar,
+            player      : McwPlayer,
+            isInfoKnown : boolean,
+        ): DataForInfoRenderer {
+            const unitsCountAndValue = this._getUnitsCountAndValue(war, player.getPlayerIndex());
+            return {
+                titleText               : Lang.getText(Lang.Type.B0160),
+                infoText                : `${unitsCountAndValue.count} / ${unitsCountAndValue.value}${isInfoKnown ? `` : `  ?`}`,
+                infoColor               : 0xFFFFFF,
+            };
         }
 
         private _getTilesCountAndIncome(war: McwWar, playerIndex: number): { count: number, income: number } {
@@ -662,20 +707,20 @@ namespace TinyWars.MultiCustomWar {
         }
     }
 
-    type DataForWarInfoRenderer = {
+    type DataForInfoRenderer = {
         titleText   : string;
         infoText    : string;
         infoColor   : number;
     }
 
-    class WarInfoRenderer extends eui.ItemRenderer {
+    class InfoRenderer extends eui.ItemRenderer {
         private _btnTitle   : GameUi.UiButton;
         private _labelValue : GameUi.UiLabel;
 
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data                  = this.data as DataForWarInfoRenderer;
+            const data                  = this.data as DataForInfoRenderer;
             this._btnTitle.label        = data.titleText;
             this._labelValue.text       = data.infoText;
             this._labelValue.textColor  = data.infoColor;

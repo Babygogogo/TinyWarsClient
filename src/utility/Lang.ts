@@ -554,6 +554,10 @@ namespace TinyWars.Utility.Lang {
             `开启作弊模式后，您可以随意修改战局上的各种数据。确定要开启吗？`,
             `You can modify most of the game data when cheating is enabled. Are you sure to enable it?`,
         ],
+        [Type.A0109]: [
+            `请先把CO搭载到部队上`,
+            `Please board your CO first.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
