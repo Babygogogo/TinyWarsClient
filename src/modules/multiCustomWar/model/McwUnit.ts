@@ -15,7 +15,7 @@ namespace TinyWars.MultiCustomWar {
                 unitId  : this.getUnitId(),
             };
 
-            const state = this.getState();
+            const state = this.getActionState();
             (state !== Types.UnitActionState.Idle) && (data.state = state);
 
             const currentHp = this.getCurrentHp();

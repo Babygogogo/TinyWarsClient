@@ -132,13 +132,32 @@
                             <e:itemRendererSkinName>
                                 <e:Skin width="190" currentState="up" states="down,up">
                                     <e:Group id="_group" left="0" right="0" top="0" bottom="0">
-                                        <GameUi:UiLabel id="_labelName" text="玩家名居然会有十个字" size="16" textColor="0xffffff"
-                                                        horizontalCenter="0" y="5" maxTextWidth="190" />
+                                        <GameUi:UiButton id="_btnName" label="Name" horizontalCenter="0">
+                                            <GameUi:skinName>
+                                                <e:Skin states="up,down,disabled">
+                                                    <e:Group y="0" x="0">
+                                                        <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2"
+                                                                 scaleX="1" scaleY="1" left="0" right="0" top="0"
+                                                                 bottom="0" />
+                                                        <e:Group>
+                                                            <GameUi:UiLabel id="labelDisplay" size="12"
+                                                                            verticalCenter="0" horizontalCenter="0"
+                                                                            textColor="0xffffff" x="98" y="97"
+                                                                            scaleX="1" scaleY="1" text="" />
+                                                            <e:layout>
+                                                                <e:HorizontalLayout paddingTop="8" paddingBottom="8"
+                                                                                    paddingLeft="10" paddingRight="10" />
+                                                            </e:layout>
+                                                        </e:Group>
+                                                    </e:Group>
+                                                </e:Skin>
+                                            </GameUi:skinName>
+                                        </GameUi:UiButton>
                                         <GameUi:UiLabel id="_labelForce" text="红方 A队" size="16" textColor="0xFFFFFF"
-                                                        y="25" horizontalCenter="0" />
+                                                        y="28" horizontalCenter="0" />
                                         <GameUi:UiLabel id="_labelLost" text="已战败" size="18" textColor="0xFFFFFF"
                                                         horizontalCenter="0" verticalCenter="10" />
-                                        <GameUi:UiScrollList id="_listInfo" y="40" horizontalCenter="0">
+                                        <GameUi:UiScrollList id="_listInfo" y="42" horizontalCenter="0">
                                             <e:List>
                                                 <e:itemRendererSkinName>
                                                     <e:Skin width="190" height="28">

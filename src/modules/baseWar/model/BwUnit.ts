@@ -154,7 +154,7 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for state.
         ////////////////////////////////////////////////////////////////////////////////
-        public getState(): UnitState {
+        public getActionState(): UnitState {
             return this._state;
         }
         public setState(state: UnitState): void {

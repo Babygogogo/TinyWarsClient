@@ -559,45 +559,23 @@ namespace TinyWars.SingleCustomWar {
         }
 
         private _createDataForMainMenu(): DataForCommandRenderer[] {
-            const dataList = [] as DataForCommandRenderer[];
-
-            const commandOpenCoInfoMenu = this._createCommandOpenCoInfoMenu();
-            (commandOpenCoInfoMenu) && (dataList.push(commandOpenCoInfoMenu));
-
-            const commandSaveGame = this._createCommandSaveGame();
-            (commandSaveGame) && (dataList.push(commandSaveGame));
-
-            const commandLoadGame = this._createCommandLoadGame();
-            (commandLoadGame) && (dataList.push(commandLoadGame));
-
-            const commandEnableGodMode = this._createCommandEnableCheating();
-            (commandEnableGodMode) && (dataList.push(commandEnableGodMode));
-
-            const commandOpenAdvancedMenu = this._createCommandOpenAdvancedMenu();
-            (commandOpenAdvancedMenu) && (dataList.push(commandOpenAdvancedMenu));
-
-            const commandGotoLobby = this._createCommandGotoLobby();
-            (commandGotoLobby) && (dataList.push(commandGotoLobby));
-
-            return dataList;
+            return [
+                this._createCommandOpenCoInfoMenu(),
+                this._createCommandSaveGame(),
+                this._createCommandLoadGame(),
+                this._createCommandEnableCheating(),
+                this._createCommandOpenAdvancedMenu(),
+                this._createCommandGotoLobby(),
+            ].filter(v => !!v);
         }
 
         private _createDataForAdvancedMenu(): DataForCommandRenderer[] {
-            const dataList = [] as DataForCommandRenderer[];
-
-            const commandPlayerDeleteUnit = this._createCommandPlayerDeleteUnit();
-            (commandPlayerDeleteUnit) && (dataList.push(commandPlayerDeleteUnit));
-
-            const commandSimulation = this._createCommandSimulation();
-            (commandSimulation) && (dataList.push(commandSimulation));
-
-            const commandShowTileAnimation = this._createCommandShowTileAnimation();
-            (commandShowTileAnimation) && (dataList.push(commandShowTileAnimation));
-
-            const commandStopTileAnimation = this._createCommandStopTileAnimation();
-            (commandStopTileAnimation) && (dataList.push(commandStopTileAnimation));
-
-            return dataList;
+            return [
+                this._createCommandPlayerDeleteUnit(),
+                this._createCommandSimulation(),
+                this._createCommandShowTileAnimation(),
+                this._createCommandStopTileAnimation(),
+            ].filter(v => !!v);
         }
 
         private _createCommandOpenAdvancedMenu(): DataForCommandRenderer | undefined {
@@ -716,7 +694,7 @@ namespace TinyWars.SingleCustomWar {
                         const unit = war.getUnitMap().getUnitOnMap(war.getField().getCursor().getGridIndex());
                         if (!unit) {
                             FloatText.show(Lang.getText(Lang.Type.A0027));
-                        } else if ((unit.getPlayerIndex() !== war.getPlayerIndexInTurn()) || (unit.getState() !== Types.UnitActionState.Idle)) {
+                        } else if ((unit.getPlayerIndex() !== war.getPlayerIndexInTurn()) || (unit.getActionState() !== Types.UnitActionState.Idle)) {
                             FloatText.show(Lang.getText(Lang.Type.A0028));
                         } else {
                             ConfirmPanel.show({
@@ -817,7 +795,7 @@ namespace TinyWars.SingleCustomWar {
 
     class PlayerRenderer extends eui.ItemRenderer {
         private _group          : eui.Group;
-        private _labelName      : GameUi.UiLabel;
+        private _btnName        : GameUi.UiButton;
         private _labelForce     : GameUi.UiLabel;
         private _labelLost      : GameUi.UiLabel;
         private _listInfo       : GameUi.UiScrollList;
@@ -826,6 +804,7 @@ namespace TinyWars.SingleCustomWar {
             super.childrenCreated();
 
             this._listInfo.setItemRenderer(InfoRenderer);
+            this._btnName.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedBtnName, this);
         }
 
         protected dataChanged(): void {
@@ -834,11 +813,12 @@ namespace TinyWars.SingleCustomWar {
             const data                  = this.data as DataForPlayerRenderer;
             const war                   = data.war;
             const player                = data.player;
-            this._labelName.text        = player.getUserId() != null ? Lang.getText(Lang.Type.B0031) : Lang.getText(Lang.Type.B0256);
-            this._labelName.textColor   = player === war.getPlayerInTurn() ? 0x00FF00 : 0xFFFFFF;
+            this._btnName.label         = player.getUserId() != null ? Lang.getText(Lang.Type.B0031) : Lang.getText(Lang.Type.B0256);
             this._labelForce.text       = `${Lang.getPlayerForceName(player.getPlayerIndex())}`
                 + `  ${Lang.getPlayerTeamName(player.getTeamIndex())}`
                 + `  ${player === war.getPlayerInTurn() ? Lang.getText(Lang.Type.B0086) : ""}`;
+            this._labelForce.textColor  = player === war.getPlayerInTurn() ? 0x00FF00 : 0xFFFFFF;
+            (this._btnName.labelDisplay as GameUi.UiLabel).textColor = war.getIsSinglePlayerCheating() ? 0x00FF00 : 0xFFFFFF;
 
             if (!player.getIsAlive()) {
                 this._labelLost.visible = true;
@@ -847,6 +827,28 @@ namespace TinyWars.SingleCustomWar {
                 this._labelLost.visible = false;
                 this._listInfo.visible  = true;
                 this._listInfo.bindData(this._createDataForListInfo());
+            }
+        }
+
+        private _onTouchedBtnName(e: egret.TouchEvent): void {
+            const data  = this.data as DataForPlayerRenderer;
+            const war   = data.war;
+            if (war.getIsSinglePlayerCheating()) {
+                const player    = data.player;
+                const isHuman   = player.getUserId() != null;
+                Common.ConfirmPanel.show({
+                    title   : Lang.getText(Lang.Type.B0088),
+                    content : isHuman ? Lang.getText(Lang.Type.A0110) : Lang.getText(Lang.Type.A0111),
+                    callback: () => {
+                        if (!isHuman) {
+                            player.setUserId(User.UserModel.getSelfUserId());
+                        } else {
+                            player.setUserId(null);
+                            ScwModel.checkAndRequestBeginTurnOrRunRobot(war);
+                        }
+                        data.panel.updateListPlayer();
+                    },
+                });
             }
         }
 
@@ -954,7 +956,7 @@ namespace TinyWars.SingleCustomWar {
 
             return {
                 titleText               : Lang.getText(Lang.Type.B0159),
-                infoText                : `${currEnergyText} / ${powerEnergy == null ? "--" : powerEnergy} / ${superPowerEnergy == null ? "--" : superPowerEnergy}`,
+                infoText                : `${player.getCoUnitId() == null ? `--` : currEnergyText} / ${powerEnergy == null ? "--" : powerEnergy} / ${superPowerEnergy == null ? "--" : superPowerEnergy}`,
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : ((!isCheating) || (!maxValue))
                     ? null

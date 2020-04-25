@@ -226,7 +226,7 @@ namespace TinyWars.Replay {
                     return State.Idle;
                 }
             } else {
-                if ((isSelfInTurn) && ((unit.getState() === UnitState.Idle) && (unit.getPlayerIndex() === playerIndexInTurn))) {
+                if ((isSelfInTurn) && ((unit.getActionState() === UnitState.Idle) && (unit.getPlayerIndex() === playerIndexInTurn))) {
                     return State.MakingMovePath;
                 } else {
                     if (unit.checkHasWeapon()) {
@@ -258,7 +258,7 @@ namespace TinyWars.Replay {
                             if ((focusUnit === existingUnit) || (focusUnit.checkCanJoinUnit(existingUnit)) || (existingUnit.checkCanLoadUnit(focusUnit))) {
                                 return State.ChoosingAction;
                             } else {
-                                if (existingUnit.getState() === UnitState.Idle) {
+                                if (existingUnit.getActionState() === UnitState.Idle) {
                                     return State.MakingMovePath;
                                 } else {
                                     if (existingUnit.checkHasWeapon()) {
@@ -281,7 +281,7 @@ namespace TinyWars.Replay {
                         if (!existingUnit) {
                             return State.Idle;
                         } else {
-                            if ((existingUnit.getPlayerIndex() === playerIndexInTurn) && (existingUnit.getState() === UnitState.Idle)) {
+                            if ((existingUnit.getPlayerIndex() === playerIndexInTurn) && (existingUnit.getActionState() === UnitState.Idle)) {
                                 return State.MakingMovePath;
                             } else {
                                 if (existingUnit.checkHasWeapon()) {
@@ -349,7 +349,7 @@ namespace TinyWars.Replay {
                         return State.Idle;
                     }
                 } else {
-                    if ((isSelfInTurn) && ((unit.getState() === UnitState.Idle) && (unit.getPlayerIndex() === playerIndexInTurn))) {
+                    if ((isSelfInTurn) && ((unit.getActionState() === UnitState.Idle) && (unit.getPlayerIndex() === playerIndexInTurn))) {
                         return State.MakingMovePath;
                     } else {
                         if (unit.checkHasWeapon()) {
@@ -374,7 +374,7 @@ namespace TinyWars.Replay {
                     return State.Idle;
                 }
             } else {
-                if ((isSelfInTurn) && ((unit.getState() === UnitState.Idle) && (unit.getPlayerIndex() === playerIndexInTurn))) {
+                if ((isSelfInTurn) && ((unit.getActionState() === UnitState.Idle) && (unit.getPlayerIndex() === playerIndexInTurn))) {
                     return State.MakingMovePath;
                 } else {
                     if (this.getUnitsForPreviewingAttackableArea().has(unit.getUnitId())) {
@@ -402,7 +402,7 @@ namespace TinyWars.Replay {
                     return State.Idle;
                 }
             } else {
-                if ((isSelfInTurn) && ((unit.getState() === UnitState.Idle) && (unit.getPlayerIndex() === playerIndexInTurn))) {
+                if ((isSelfInTurn) && ((unit.getActionState() === UnitState.Idle) && (unit.getPlayerIndex() === playerIndexInTurn))) {
                     return State.MakingMovePath;
                 } else {
                     if (this.getUnitForPreviewingMovableArea() !== unit) {

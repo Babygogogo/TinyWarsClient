@@ -469,7 +469,7 @@ namespace TinyWars.MultiCustomWar {
                         const playerIndex   = war.getPlayerIndexLoggedIn();
                         if (!unit) {
                             FloatText.show(Lang.getText(Lang.Type.A0027));
-                        } else if ((unit.getPlayerIndex() !== playerIndex) || (unit.getState() !== Types.UnitActionState.Idle)) {
+                        } else if ((unit.getPlayerIndex() !== playerIndex) || (unit.getActionState() !== Types.UnitActionState.Idle)) {
                             FloatText.show(Lang.getText(Lang.Type.A0028));
                         } else if (unitMap.countUnitsOnMapForPlayer(playerIndex) <= 1) {
                             FloatText.show(Lang.getText(Lang.Type.A0076));
@@ -656,7 +656,7 @@ namespace TinyWars.MultiCustomWar {
                 : skillType === Types.CoSkillType.Power ? "COP" : "SCOP";
             return {
                 titleText               : Lang.getText(Lang.Type.B0159),
-                infoText                : `${currEnergyText} / ${powerEnergy == null ? "--" : powerEnergy} / ${superPowerEnergy == null ? "--" : superPowerEnergy}`,
+                infoText                : `${player.getCoUnitId() == null ? `--` : currEnergyText} / ${powerEnergy == null ? "--" : powerEnergy} / ${superPowerEnergy == null ? "--" : superPowerEnergy}`,
                 infoColor               : 0xFFFFFF,
             };
         }

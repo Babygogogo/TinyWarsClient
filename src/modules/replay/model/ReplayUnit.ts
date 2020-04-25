@@ -18,7 +18,7 @@ namespace TinyWars.Replay {
                 unitId  : this.getUnitId(),
             };
 
-            const state = this.getState();
+            const state = this.getActionState();
             (state !== UnitState.Idle) && (data.state = state);
 
             const currentHp = this.getCurrentHp();

@@ -72,7 +72,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         }
 
         _war = (await new SingleCustomWar.ScwWar().init(data)).startRunning().startRunningView() as ScwWar;
-        _checkAndRequestBeginTurnOrRunRobot(_war);
+        checkAndRequestBeginTurnOrRunRobot(_war);
 
         return _war;
     }
@@ -135,7 +135,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
                             if (_cachedActions.length) {
                                 _checkAndRunFirstCachedAction();
                             } else {
-                                _checkAndRequestBeginTurnOrRunRobot(war);
+                                checkAndRequestBeginTurnOrRunRobot(war);
                             }
                         }
                     }
@@ -162,7 +162,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
                             if (_cachedActions.length) {
                                 _checkAndRunFirstCachedAction();
                             } else {
-                                _checkAndRequestBeginTurnOrRunRobot(war);
+                                checkAndRequestBeginTurnOrRunRobot(war);
                             }
                         }
                     }
@@ -171,7 +171,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         }
     }
 
-    async function _checkAndRequestBeginTurnOrRunRobot(war: ScwWar): Promise<void> {
+    export async function checkAndRequestBeginTurnOrRunRobot(war: ScwWar): Promise<void> {
         if (!war.checkIsHumanInTurn()) {
             updateByWarAction(ScwActionReviser.revise(war, await ScwRobot.getNextAction(war)))
         } else {

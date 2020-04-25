@@ -442,7 +442,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         const playerIndexInturn = _turnManager.getPlayerIndexInTurn();
         _unitMap.forEachUnitOnMap((unit: ScwUnit) => {
             if ((unit.getPlayerIndex() === playerIndexInturn)   &&
-                (unit.getState() === UnitActionState.Idle)            &&
+                (unit.getActionState() === UnitActionState.Idle)            &&
                 (unit.getFinalMaxAttackRange() > 1)
             ) {
                 units.push(unit);
@@ -457,7 +457,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         const playerIndexInturn = _turnManager.getPlayerIndexInTurn();
         _unitMap.forEachUnit((unit: ScwUnit) => {
             if ((unit.getPlayerIndex() === playerIndexInturn)   &&
-                (unit.getState() === UnitActionState.Idle)
+                (unit.getActionState() === UnitActionState.Idle)
             ) {
                 units.push(unit);
             }
@@ -472,7 +472,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         const playerIndexInturn = _turnManager.getPlayerIndexInTurn();
         _unitMap.forEachUnitOnMap((unit: ScwUnit) => {
             if ((unit.getPlayerIndex() === playerIndexInturn)   &&
-                (unit.getState() === UnitActionState.Idle)            &&
+                (unit.getActionState() === UnitActionState.Idle)            &&
                 (unit.getIsCapturingTile())
             ) {
                 units.push(unit);
@@ -489,7 +489,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         const playerIndexInturn = _turnManager.getPlayerIndexInTurn();
         _unitMap.forEachUnitOnMap((unit: ScwUnit) => {
             if ((unit.getPlayerIndex() === playerIndexInturn)   &&
-                (unit.getState() === UnitActionState.Idle)            &&
+                (unit.getActionState() === UnitActionState.Idle)            &&
                 (unit.checkCanCapture())
             ) {
                 units.push(unit);
@@ -506,7 +506,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         const playerIndexInturn = _turnManager.getPlayerIndexInTurn();
         _unitMap.forEachUnitOnMap((unit: ScwUnit) => {
             if ((unit.getPlayerIndex() === playerIndexInturn)                                                   &&
-                (unit.getState() === UnitActionState.Idle)                                                            &&
+                (unit.getActionState() === UnitActionState.Idle)                                                            &&
                 (unit.getMinAttackRange())                                                                      &&
                 (ConfigManager.checkIsUnitTypeInCategory(_configVersion, unit.getType(), Types.UnitCategory.Air))
             ) {
@@ -524,7 +524,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         const playerIndexInturn = _turnManager.getPlayerIndexInTurn();
         _unitMap.forEachUnitOnMap((unit: ScwUnit) => {
             if ((unit.getPlayerIndex() === playerIndexInturn)   &&
-                (unit.getState() === UnitActionState.Idle)            &&
+                (unit.getActionState() === UnitActionState.Idle)            &&
                 (unit.getFinalMaxAttackRange() === 1)
             ) {
                 units.push(unit);
@@ -540,7 +540,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         const units             : ScwUnit[] = [];
         const playerIndexInturn = _turnManager.getPlayerIndexInTurn();
         _unitMap.forEachUnitOnMap((unit: ScwUnit) => {
-            if ((unit.getPlayerIndex() === playerIndexInturn) && (unit.getState() === UnitActionState.Idle)) {
+            if ((unit.getPlayerIndex() === playerIndexInturn) && (unit.getActionState() === UnitActionState.Idle)) {
                 const maxRange = unit.getFinalMaxAttackRange();
                 if ((!maxRange) || (maxRange === 1)) {
                     units.push(unit);
@@ -557,7 +557,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         const units             : ScwUnit[] = [];
         const playerIndexInturn = _turnManager.getPlayerIndexInTurn();
         _unitMap.forEachUnitOnMap((unit: ScwUnit) => {
-            if ((unit.getPlayerIndex() === playerIndexInturn) && (unit.getState() === UnitActionState.Idle)) {
+            if ((unit.getPlayerIndex() === playerIndexInturn) && (unit.getActionState() === UnitActionState.Idle)) {
                 units.push(unit);
             }
         });
@@ -652,7 +652,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         await _checkAndCallLater();
 
         const targetUnit = _unitMap.getUnitOnMap(gridIndex);
-        if (targetUnit.getState() === UnitActionState.Idle) {
+        if (targetUnit.getActionState() === UnitActionState.Idle) {
             return -9999;                                                                       // ADJUSTABLE
         } else {
             if (!targetUnit.getIsCapturingTile()) {

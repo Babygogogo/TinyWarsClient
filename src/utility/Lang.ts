@@ -551,12 +551,28 @@ namespace TinyWars.Utility.Lang {
             `The simulation war has been created successfully. Do you want to play it now?`,
         ],
         [Type.A0108]: [
-            `开启作弊模式后，您可以随意修改战局上的各种数据。确定要开启吗？`,
-            `You can modify most of the game data when cheating is enabled. Are you sure to enable it?`,
+            `开启作弊模式后，您可以随意修改战局上的各种数据。开启作弊模式后，将无法再取消。\n确定要开启吗？`,
+            `You can modify most of the game data if cheating is enabled. However, you can't disable it after enabling it.\nAre you sure to continue?`,
         ],
         [Type.A0109]: [
             `请先把CO搭载到部队上`,
             `Please board your CO first.`,
+        ],
+        [Type.A0110]: [
+            `您确定要让AI来控制这个势力吗？`,
+            `Are you sure to make the A.I. to take control of the force?`,
+        ],
+        [Type.A0111]: [
+            `您确定要自行控制这个势力吗？`,
+            `Are you sure to take control of the force?`,
+        ],
+        [Type.A0112]: [
+            `有棋子正在移动中，请稍候再试`,
+            `A unit is moving. Please retry later.`,
+        ],
+        [Type.A0113]: [
+            `您确定要切换该部队的行动状态吗？`,
+            `Are you sure to switch the unit's action state?`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2014,6 +2030,22 @@ namespace TinyWars.Utility.Lang {
             `开启作弊模式`,
             `Cheating`,
         ],
+        [Type.B0367]: [
+            `状态`,
+            `Status`,
+        ],
+        [Type.B0368]: [
+            `已行动`,
+            `Waiting`,
+        ],
+        [Type.B0369]: [
+            `空闲`,
+            `Idle`,
+        ],
+        [Type.B0370]: [
+            `晋升等级`,
+            `Promotion`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -2904,6 +2936,14 @@ namespace TinyWars.Utility.Lang {
             case Types.MapEditorDrawerMode.DeleteUnit       : return getText(Type.B0284);
             case Types.MapEditorDrawerMode.DeleteTileObject : return getText(Type.B0285);
             default                                         : return null;
+        }
+    }
+
+    export function getUnitActionStateText(state: Types.UnitActionState): string {
+        switch (state) {
+            case Types.UnitActionState.Acted    : return getText(Type.B0368);
+            case Types.UnitActionState.Idle     : return getText(Type.B0369);
+            default                             : return null;
         }
     }
 }

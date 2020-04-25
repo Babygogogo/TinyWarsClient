@@ -1166,7 +1166,7 @@ namespace TinyWars.BaseWar {
             if ((focusUnit !== this.getFocusUnitLoaded()) && (this.getMovePath().length === 1) && (focusUnit.checkCanLaunchLoadedUnit())) {
                 const tile = this._getTileMap().getTile(this.getMovePathDestination());
                 for (const unit of focusUnit.getLoadedUnits()) {
-                    if ((unit.getState() === UnitState.Idle) && (tile.getMoveCostByUnit(unit) != null)) {
+                    if ((unit.getActionState() === UnitState.Idle) && (tile.getMoveCostByUnit(unit) != null)) {
                         dataList.push({
                             actionType      : UnitActionType.LaunchUnit,
                             callback        : () => this._setStateMakingMovePathOnChooseAction(unit),

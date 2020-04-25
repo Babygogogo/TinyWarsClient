@@ -141,8 +141,8 @@ namespace TinyWars.SingleCustomWar {
     function sorterForDataForList(a: DataForUnitRenderer, b: DataForUnitRenderer): number {
         const unitA     = a.unit;
         const unitB     = b.unit;
-        const stateA    = unitA.getState();
-        const stateB    = unitB.getState();
+        const stateA    = unitA.getActionState();
+        const stateB    = unitB.getActionState();
         if ((stateA === Types.UnitActionState.Idle) && (stateB !== Types.UnitActionState.Idle)) {
             return -1;
         } else if ((stateA !== Types.UnitActionState.Idle) && (stateB === Types.UnitActionState.Idle)) {
