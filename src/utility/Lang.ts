@@ -574,6 +574,10 @@ namespace TinyWars.Utility.Lang {
             `您确定要切换该部队的行动状态吗？`,
             `Are you sure to switch the unit's action state?`,
         ],
+        [Type.A0114]: [
+            `您确定要切换该部队的下潜状态吗？`,
+            `Are you sure to switch the unit's diving state?`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -2045,6 +2049,14 @@ namespace TinyWars.Utility.Lang {
         [Type.B0370]: [
             `晋升等级`,
             `Promotion`,
+        ],
+        [Type.B0371]: [
+            `下潜中`,
+            `Diving`,
+        ],
+        [Type.B0372]: [
+            `最近`,
+            `Recent`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -198,6 +198,7 @@ namespace TinyWars.BaseWar {
                 this._createInfoProduceMaterial(unit, cfg, isCheating),
                 this._createInfoFlareAmmo(unit, cfg, isCheating),
                 this._createInfoActionState(unit, cfg, isCheating),
+                this._createInfoDiving(unit, cfg, isCheating),
             ].filter(v => !!v);
 
             this._listInfo.bindData(dataList);
@@ -465,6 +466,31 @@ namespace TinyWars.BaseWar {
                                 this._updateListInfo();
                             }
                         });
+                    },
+                };
+            }
+        }
+
+        private _createInfoDiving(unit: BwUnit, cfg: Types.UnitTemplateCfg, isCheating: boolean): DataForInfoRenderer | null {
+            if (!unit.checkIsDiver()) {
+                return null;
+            } else {
+                const isDiving = unit.getIsDiving();
+                return {
+                    titleText               : Lang.getText(Lang.Type.B0371),
+                    valueText               : isDiving ? Lang.getText(Lang.Type.B0012) : Lang.getText(Lang.Type.B0013),
+                    callbackOnTouchedTitle  : !isCheating
+                        ? null
+                        : () => {
+                            Common.ConfirmPanel.show({
+                                title       : Lang.getText(Lang.Type.B0371),
+                                content     : Lang.getText(Lang.Type.A0114),
+                                callback    : () => {
+                                    unit.setIsDiving(!isDiving);
+                                    unit.updateView();
+                                    this._updateListInfo();
+                                }
+                            });
                     },
                 };
             }
