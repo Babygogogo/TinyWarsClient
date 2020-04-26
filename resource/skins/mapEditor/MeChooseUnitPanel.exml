@@ -3,43 +3,63 @@
         xmlns:w="http://ns.egret.com/wing">
     <e:Group id="_group" top="40" bottom="0" right="0" left="0">
         <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
-                        left="0" right="0" top="0" bottom="0" />
-        <GameUi:UiScrollList id="_listUnit" left="10" right="10" bottom="60" top="10">
-            <e:List requireSelection="true" x="-1" y="1">
+                        left="0" right="0" top="0" bottom="0" locked="true" />
+        <GameUi:UiScrollList id="_listCategory" left="0" right="0" top="10" bottom="60">
+            <e:List>
                 <e:itemRendererSkinName>
-                    <e:Skin width="80" height="80">
+                    <e:Skin width="940">
                         <e:Group id="_group" left="0" right="0" top="0" bottom="0">
-                            <GameUi:UiLabel id="_labelName" text="部队名五字" size="12" textColor="0xffffff"
-                                            horizontalCenter="0" />
-                            <e:Group id="_conUnitView" scaleX="0.6" scaleY="0.6" x="20" touchChildren="false"
-                                     touchEnabled="false" y="20" />
+                            <GameUi:UiScrollList id="_listUnit" left="0" right="0" y="0">
+                                <e:List requireSelection="true" x="-1" y="1" scaleX="0.8" scaleY="0.8">
+                                    <e:itemRendererSkinName>
+                                        <e:Skin width="80" height="80">
+                                            <e:Group id="_group" left="0" right="0" top="0" bottom="0">
+                                                <GameUi:UiLabel id="_labelName" text="部队名五字" size="12"
+                                                                textColor="0xffffff" horizontalCenter="0" />
+                                                <e:Group id="_conUnitView" scaleX="0.6" scaleY="0.6" x="20"
+                                                         touchChildren="false" touchEnabled="false" y="20" />
+                                            </e:Group>
+                                        </e:Skin>
+                                    </e:itemRendererSkinName>
+                                    <e:layout>
+                                        <e:TileLayout orientation="rows" verticalGap="10" columnAlign="justifyUsingGap"
+                                                      requestedColumnCount="13" paddingTop="4" />
+                                    </e:layout>
+                                </e:List>
+                            </GameUi:UiScrollList>
                         </e:Group>
                     </e:Skin>
                 </e:itemRendererSkinName>
                 <e:layout>
-                    <e:TileLayout orientation="rows" verticalGap="10" columnAlign="justifyUsingGap"
-                                  requestedColumnCount="11" paddingTop="4" />
+                    <e:VerticalLayout horizontalAlign="center" gap="20" />
                 </e:layout>
             </e:List>
         </GameUi:UiScrollList>
-        <GameUi:UiLabel id="_labelForceTitle" size="22" bold="true" x="10" text="Force:" textColor="0xffffff"
-                        bottom="10" height="40" verticalAlign="middle" />
-        <GameUi:UiScrollList id="_listForce" bottom="10" left="90" right="130" height="40">
-            <e:List requireSelection="true">
-                <e:itemRendererSkinName>
-                    <e:Skin width="100" height="40">
-                        <e:Group id="_group" left="0" right="0" top="0" bottom="0">
-                            <GameUi:UiLabel id="_labelName" text="Neutral" size="20" textColor="0xffffff" left="0"
-                                            right="0" top="0" bottom="0" verticalAlign="middle" textAlign="center" />
-                        </e:Group>
-                    </e:Skin>
-                </e:itemRendererSkinName>
-                <e:layout>
-                    <e:HorizontalLayout/>
-                </e:layout>
-            </e:List>
-        </GameUi:UiScrollList>
-        <GameUi:UiButton id="_btnCancel" label="取消" bottom="10" height="40" x="850" width="90">
+        <e:Group x="10" bottom="10">
+            <GameUi:UiLabel id="_labelRecentTitle" size="18" x="0" text="Recent:" textColor="0xffffff" height="40"
+                            verticalAlign="middle" y="0" />
+            <GameUi:UiScrollList id="_listRecent" height="40" x="80" y="0">
+                <e:List requireSelection="true" scaleX="0.5" scaleY="0.5">
+                    <e:itemRendererSkinName>
+                        <e:Skin width="80" height="80">
+                            <e:Group id="_group" left="0" right="0" top="0" bottom="0">
+                                <GameUi:UiLabel id="_labelName" text="部队名五字" size="12" textColor="0xffffff"
+                                                horizontalCenter="0" />
+                                <e:Group id="_conUnitView" scaleX="0.6" scaleY="0.6" x="20" touchChildren="false"
+                                         touchEnabled="false" y="20" />
+                            </e:Group>
+                        </e:Skin>
+                    </e:itemRendererSkinName>
+                    <e:layout>
+                        <e:HorizontalLayout/>
+                    </e:layout>
+                </e:List>
+            </GameUi:UiScrollList>
+            <e:layout>
+                <e:HorizontalLayout verticalAlign="middle" />
+            </e:layout>
+        </e:Group>
+        <GameUi:UiButton id="_btnCancel" label="取消" bottom="10" height="40" width="90" right="10" locked="true">
             <GameUi:skinName>
                 <e:Skin states="up,down,disabled">
                     <GameUi:UiLabel id="labelDisplay" size="22" verticalCenter="0" horizontalCenter="0"
