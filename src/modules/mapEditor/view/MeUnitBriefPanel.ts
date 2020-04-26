@@ -124,12 +124,12 @@ namespace TinyWars.MapEditor {
         }
 
         private _onCellTouchTap(e: egret.TouchEvent): void {
-            // for (let i = 0; i < this._cellList.length; ++i) {
-            //     if (this._cellList[i] === e.currentTarget) {
-            //         BaseWar.BwUnitDetailPanel.show({ unit: this._unitList[i] });
-            //         return;
-            //     }
-            // }
+            for (let i = 0; i < this._cellList.length; ++i) {
+                if (this._cellList[i] === e.currentTarget) {
+                    BaseWar.BwUnitDetailPanel.show({ unit: this._unitList[i] });
+                    return;
+                }
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

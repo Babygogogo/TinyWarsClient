@@ -7,7 +7,7 @@ namespace TinyWars.BaseWar {
     import UnitType     = Types.UnitType;
 
     export type OpenDataForBwTileDetailPanel = {
-        tile    : BwTile;
+        tile    : BwTile | MapEditor.MeTile;
     }
 
     const { width: GRID_WIDTH, height: GRID_HEIGHT } = ConfigManager.getGridSize();
@@ -129,7 +129,8 @@ namespace TinyWars.BaseWar {
             const globalDefenseBonus    = cfg.globalDefenseBonus;
             const repairAmount          = cfg.repairAmount;
             const war                   = tile.getWar();
-            const isCheating            = (war instanceof SingleCustomWar.ScwWar) ? war.getIsSinglePlayerCheating() : false;
+            const isCheating            = (tile instanceof MapEditor.MeTile) ||
+                ((war instanceof SingleCustomWar.ScwWar) ? war.getIsSinglePlayerCheating() : false);
 
             const dataList: DataForInfoRenderer[] = [
                 {
@@ -184,7 +185,7 @@ namespace TinyWars.BaseWar {
             this._listInfo.bindData(dataList);
         }
 
-        private _createInfoHp(tile: BwTile, isCheating: boolean): DataForInfoRenderer | null {
+        private _createInfoHp(tile: BwTile | MapEditor.MeTile, isCheating: boolean): DataForInfoRenderer | null {
             const maxValue  = tile.getMaxHp();
             if (maxValue == null) {
                 return null;
@@ -220,7 +221,7 @@ namespace TinyWars.BaseWar {
             }
         }
 
-        private _createInfoCapturePoint(tile: BwTile, isCheating: boolean): DataForInfoRenderer | null {
+        private _createInfoCapturePoint(tile: BwTile | MapEditor.MeTile, isCheating: boolean): DataForInfoRenderer | null {
             const maxValue  = tile.getMaxCapturePoint();
             if (maxValue == null) {
                 return null;
@@ -256,7 +257,7 @@ namespace TinyWars.BaseWar {
             }
         }
 
-        private _createInfoBuildPoint(tile: BwTile, isCheating: boolean): DataForInfoRenderer | null {
+        private _createInfoBuildPoint(tile: BwTile | MapEditor.MeTile, isCheating: boolean): DataForInfoRenderer | null {
             const maxValue  = tile.getMaxBuildPoint();
             if (maxValue == null) {
                 return null;

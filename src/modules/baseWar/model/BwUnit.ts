@@ -6,7 +6,7 @@ namespace TinyWars.BaseWar {
     import GridIndexHelpers = Utility.GridIndexHelpers;
     import ProtoTypes       = Utility.ProtoTypes;
     import SerializedBwUnit = Types.SerializedUnit;
-    import UnitState        = Types.UnitActionState;
+    import UnitActionState        = Types.UnitActionState;
     import ArmorType        = Types.ArmorType;
     import TileType         = Types.TileType;
     import UnitType         = Types.UnitType;
@@ -27,7 +27,7 @@ namespace TinyWars.BaseWar {
         private _playerIndex        : number;
         private _teamIndex          : number;
 
-        private _state                      : UnitState;
+        private _state                      : UnitActionState;
         private _currentHp                  : number;
         private _currentFuel                : number;
         private _currentPromotion           : number;
@@ -64,7 +64,7 @@ namespace TinyWars.BaseWar {
             this._damageChartCfg    = ConfigManager.getDamageChartCfgs(this._configVersion, unitType);
             this._buildableTileCfg  = ConfigManager.getBuildableTileCfgs(this._configVersion, unitType);
             this._visionBonusCfg    = ConfigManager.getVisionBonusCfg(this._configVersion, unitType);
-            this.setState(                   data.state                    != null ? data.state                    : UnitState.Idle);
+            this.setActionState(                   data.state                    != null ? data.state                    : UnitActionState.Idle);
             this.setCurrentHp(               data.currentHp                != null ? data.currentHp                : this.getMaxHp());
             this.setPrimaryWeaponCurrentAmmo(data.primaryWeaponCurrentAmmo != null ? data.primaryWeaponCurrentAmmo : this.getPrimaryWeaponMaxAmmo());
             this.setIsCapturingTile(         data.isCapturingTile          != null ? data.isCapturingTile          : false);
@@ -154,10 +154,10 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for state.
         ////////////////////////////////////////////////////////////////////////////////
-        public getActionState(): UnitState {
+        public getActionState(): UnitActionState {
             return this._state;
         }
-        public setState(state: UnitState): void {
+        public setActionState(state: UnitActionState): void {
             this._state = state;
         }
 
