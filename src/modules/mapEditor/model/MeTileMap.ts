@@ -44,13 +44,15 @@ namespace TinyWars.MapEditor {
 
             for (let x = 0; x < mapWidth; ++x) {
                 for (let y = 0; y < mapHeight; ++y) {
-                    const index = x + y * mapWidth;
-                    map[x][y] = new MeTile().init({
-                        baseViewId  : mapRawData.tileBases[index],
-                        objectViewId: mapRawData.tileObjects[index],
-                        gridX       : x,
-                        gridY       : y,
-                    }, configVersion);
+                    if (!map[x][y]) {
+                        const index = x + y * mapWidth;
+                        map[x][y] = new MeTile().init({
+                            baseViewId  : mapRawData.tileBases[index],
+                            objectViewId: mapRawData.tileObjects[index],
+                            gridX       : x,
+                            gridY       : y,
+                        }, configVersion);
+                    }
                 }
             }
 

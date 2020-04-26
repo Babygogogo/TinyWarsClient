@@ -42,7 +42,7 @@ namespace TinyWars.Replay {
             if (!this.getIsFogEnabled()) {
                 this._setIsFogEnabled(true);
 
-                this.startRunning(this._getWar());
+                this.startRunning(this.getWar());
             }
         }
 
@@ -54,7 +54,7 @@ namespace TinyWars.Replay {
                     this.init(data, this.getConfigVersion());
                 }
 
-                this.startRunning(this._getWar());
+                this.startRunning(this.getWar());
             }
         }
     }

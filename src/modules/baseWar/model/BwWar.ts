@@ -52,16 +52,16 @@ namespace TinyWars.BaseWar {
             this._setWarRuleIndex(data.warRuleIndex);
             this._setSettingsTimeLimit(data.timeLimit);
             this._setSettingsHasFog(data.hasFogByDefault);
-            this._setSettingsIncomeModifier(data.incomeModifier);
-            this._setSettingsEnergyGrowthModifier(data.energyGrowthModifier);
-            this._setSettingsAttackPowerModifier(data.attackPowerModifier);
-            this._setSettingsMoveRangeModifier(data.moveRangeModifier);
-            this._setSettingsVisionRangeModifier(data.visionRangeModifier);
-            this._setSettingsInitialFund(data.initialFund);
-            this._setSettingsInitialEnergy(data.initialEnergy);
+            this.setSettingsIncomeModifier(data.incomeModifier);
+            this.setSettingsEnergyGrowthMultiplier(data.energyGrowthModifier);
+            this.setSettingsAttackPowerModifier(data.attackPowerModifier);
+            this.setSettingsMoveRangeModifier(data.moveRangeModifier);
+            this.setSettingsVisionRangeModifier(data.visionRangeModifier);
+            this.setSettingsInitialFund(data.initialFund);
+            this.setSettingsInitialEnergy(data.initialEnergy);
             this._setSettingsBannedCoIdList(data.bannedCoIdList);
-            this._setSettingsLuckLowerLimit(data.luckLowerLimit);
-            this._setSettingsLuckUpperLimit(data.luckUpperLimit);
+            this.setSettingsLuckLowerLimit(data.luckLowerLimit);
+            this.setSettingsLuckUpperLimit(data.luckUpperLimit);
 
             this.setRemainingVotesForDraw(data.remainingVotesForDraw);
 
@@ -180,49 +180,49 @@ namespace TinyWars.BaseWar {
             return this._hasFogByDefault;
         }
 
-        private _setSettingsIncomeModifier(incomeModifier: number): void {
+        public setSettingsIncomeModifier(incomeModifier: number): void {
             this._incomeModifier = incomeModifier;
         }
         public getSettingsIncomeModifier(): number {
             return this._incomeModifier;
         }
 
-        private _setSettingsEnergyGrowthModifier(energyGrowthModifier: number): void {
+        public setSettingsEnergyGrowthMultiplier(energyGrowthModifier: number): void {
             this._energyGrowthModifier = energyGrowthModifier;
         }
-        public getSettingsEnergyGrowthModifier(): number {
+        public getSettingsEnergyGrowthMultiplier(): number {
             return this._energyGrowthModifier;
         }
 
-        private _setSettingsAttackPowerModifier(attackPowerModifier: number): void {
+        public setSettingsAttackPowerModifier(attackPowerModifier: number): void {
             this._attackPowerModifier = attackPowerModifier;
         }
         public getSettingsAttackPowerModifier(): number {
             return this._attackPowerModifier;
         }
 
-        private _setSettingsMoveRangeModifier(moveRangeModifier: number): void {
+        public setSettingsMoveRangeModifier(moveRangeModifier: number): void {
             this._moveRangeModifier = moveRangeModifier;
         }
         public getSettingsMoveRangeModifier(): number {
             return this._moveRangeModifier;
         }
 
-        private _setSettingsVisionRangeModifier(visionRangeModifier: number): void {
+        public setSettingsVisionRangeModifier(visionRangeModifier: number): void {
             this._visionRangeModifier = visionRangeModifier;
         }
         public getSettingsVisionRangeModifier(): number {
             return this._visionRangeModifier;
         }
 
-        private _setSettingsInitialFund(initialFund: number): void {
+        public setSettingsInitialFund(initialFund: number): void {
             this._initialFund = initialFund;
         }
         public getSettingsInitialFund(): number {
             return this._initialFund;
         }
 
-        private _setSettingsInitialEnergy(initialEnergy: number): void {
+        public setSettingsInitialEnergy(initialEnergy: number): void {
             this._initialEnergy = initialEnergy;
         }
         public getSettingsInitialEnergy(): number {
@@ -236,14 +236,14 @@ namespace TinyWars.BaseWar {
             return this._bannedCoIdList;
         }
 
-        private _setSettingsLuckLowerLimit(limit: number | null): void {
+        public setSettingsLuckLowerLimit(limit: number | null): void {
             this._luckLowerLimit = limit == null ? ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultLowerLimit : limit;
         }
         public getSettingsLuckLowerLimit(): number {
             return this._luckLowerLimit;
         }
 
-        private _setSettingsLuckUpperLimit(limit: number | null): void {
+        public setSettingsLuckUpperLimit(limit: number | null): void {
             this._luckUpperLimit = limit == null ? ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultUpperLimit : limit;
         }
         public getSettingsLuckUpperLimit(): number {

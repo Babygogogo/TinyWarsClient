@@ -34,7 +34,7 @@ namespace TinyWars.MultiCustomWar {
         }
         public serializeForSimulation(): SerializedBwTile | null {
             const userId = User.UserModel.getSelfUserId();
-            if (VisibilityHelpers.checkIsTileVisibleToUser(this._getWar(), this.getGridIndex(), userId)) {
+            if (VisibilityHelpers.checkIsTileVisibleToUser(this.getWar(), this.getGridIndex(), userId)) {
                 return this._serialize();
             } else {
                 if (this.getType() === TileType.Headquarters) {
@@ -92,7 +92,7 @@ namespace TinyWars.MultiCustomWar {
                     baseViewId  : this.getBaseViewId(),
                 }, this.getConfigVersion());
 
-                this.startRunning(this._getWar());
+                this.startRunning(this.getWar());
                 this.setCurrentBuildPoint(this.getMaxBuildPoint());
                 this.setCurrentCapturePoint(this.getMaxCapturePoint());
                 this.setCurrentHp(currentHp);
@@ -103,7 +103,7 @@ namespace TinyWars.MultiCustomWar {
             if (this.getIsFogEnabled()) {
                 this._setIsFogEnabled(false);
 
-                const war           = this._getWar();
+                const war           = this.getWar();
                 const configVersion = this.getConfigVersion();
                 if (data) {
                     this.init(data, configVersion);

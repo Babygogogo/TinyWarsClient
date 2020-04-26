@@ -33,7 +33,7 @@ namespace TinyWars.BaseWar {
             this._setTeamIndex(data.teamIndex!);
             this._setWatchOngoingSrcUserIds(data.watchOngoingSrcUserIdList || []);
             this._setWatchRequestSrcUserIds(data.watchRequestSrcUserIdList || []);
-            this._setUserId(data.userId);
+            this.setUserId(data.userId);
             this._setNickname(data.nickname || Lang.getText(Lang.Type.B0111));
             this._setCoId(data.coId);
             this.setCoUnitId(data.coUnitId);
@@ -122,10 +122,10 @@ namespace TinyWars.BaseWar {
                 && (!this.getWatchOngoingSrcUserIds().has(userId));
         }
 
-        private _setUserId(id: number | undefined): void {
+        public setUserId(id: number | undefined | null): void {
             this._userId = id;
         }
-        public getUserId(): number | undefined {
+        public getUserId(): number | undefined | null {
             return this._userId;
         }
 

@@ -3,13 +3,12 @@ namespace TinyWars.BaseWar {
     import Notify       = Utility.Notify;
     import Lang         = Utility.Lang;
     import Types        = Utility.Types;
+    import FloatText    = Utility.FloatText;
     import UnitType     = Types.UnitType;
     import TileType     = Types.TileType;
 
     export type OpenDataForBwUnitDetailPanel = {
-        configVersion?  : string;
-        viewId?         : number;
-        unit?           : BwUnit;
+        unit: BwUnit | MapEditor.MeUnit;
     }
 
     export class BwUnitDetailPanel extends GameUi.UiPanel {
@@ -21,24 +20,6 @@ namespace TinyWars.BaseWar {
         private _group                  : eui.Group;
         private _conUnitView            : eui.Group;
         private _labelName              : GameUi.UiLabel;
-
-        // private _labelHp                : GameUi.UiLabel;
-        // private _labelMovement          : GameUi.UiLabel;
-        // private _labelProductionCost    : GameUi.UiLabel;
-        // private _labelFuel              : GameUi.UiLabel;
-        // private _labelFuelConsumption   : GameUi.UiLabel;
-        // private _labelDestroyOnOutOfFuel: GameUi.UiLabel;
-        // private _labelAttackRange       : GameUi.UiLabel;
-        // private _labelAttackAfterMove   : GameUi.UiLabel;
-
-        // private _groupPrimaryWeaponAmmo : eui.Group;
-        // private _labelPrimaryWeaponAmmo : GameUi.UiLabel;
-
-        // private _groupFlareAmmo : eui.Group;
-        // private _labelFlareAmmo : GameUi.UiLabel;
-
-        // private _groupMaterial  : eui.Group;
-        // private _labelMaterial  : GameUi.UiLabel;
 
         private _listInfo           : GameUi.UiScrollList;
         private _listDamageChart    : GameUi.UiScrollList;
@@ -146,122 +127,386 @@ namespace TinyWars.BaseWar {
         }
 
         private _updateUnitViewAndLabelName(): void {
-            const data              = this._openData;
-            const unit              = data.unit;
-            const viewId            = unit ? unit.getViewId() : data.viewId;
-            const unitType          = unit ? unit.getType() : ConfigManager.getUnitTypeAndPlayerIndex(viewId).unitType;
-            this._labelName.text    = Lang.getUnitName(unitType);
+            const unit              = this._openData.unit;
+            this._labelName.text    = Lang.getUnitName(unit.getType());
             this._unitView.update({
-                configVersion   : unit ? unit.getConfigVersion() : data.configVersion,
-                viewId,
+                configVersion   : unit.getConfigVersion(),
+                viewId          : unit.getViewId(),
                 gridX           : 0,
                 gridY           : 0,
             }, Time.TimeModel.getUnitAnimationTickCount());
         }
 
         private _updateListInfo(): void {
-            const data          = this._openData;
-            const unit          = data.unit;
-            const configVersion = unit ? unit.getConfigVersion() : data.configVersion;
-            const unitType      = unit ? unit.getType() : ConfigManager.getUnitTypeAndPlayerIndex(data.viewId).unitType;
+            const unit          = this._openData.unit;
+            const configVersion = unit.getConfigVersion();
+            const unitType      = unit.getType();
             const cfg           = ConfigManager.getUnitTemplateCfg(configVersion, unitType);
+            const war           = unit.getWar();
+            const isCheating    = (unit instanceof MapEditor.MeUnit)
+                || ((war instanceof SingleCustomWar.ScwWar) && (war.getIsSinglePlayerCheating()));
 
             const dataList: DataForInfoRenderer[] = [
-                {
-                    // HP
-                    titleText   : Lang.getText(Lang.Type.B0339),
-                    valueText   : unit ? `${unit.getCurrentHp()} / ${unit.getMaxHp()}` : `${cfg.maxHp} / ${cfg.maxHp}`,
-                },
+                this._createInfoHp(unit, cfg, isCheating),
                 {
                     // Production Cost
-                    titleText   : Lang.getText(Lang.Type.B0341),
-                    valueText   : `${cfg.productionCost}`,
+                    titleText               : Lang.getText(Lang.Type.B0341),
+                    valueText               : `${cfg.productionCost}`,
+                    callbackOnTouchedTitle  : null,
                 },
                 {
                     // Movement
-                    titleText   : Lang.getText(Lang.Type.B0340),
-                    valueText   : `${cfg.moveRange} (${Lang.getMoveTypeName(cfg.moveType)})`,
+                    titleText               : Lang.getText(Lang.Type.B0340),
+                    valueText               : `${cfg.moveRange} (${Lang.getMoveTypeName(cfg.moveType)})`,
+                    callbackOnTouchedTitle  : null,
                 },
-                {
-                    // Fuel
-                    titleText   : Lang.getText(Lang.Type.B0342),
-                    valueText   : unit ? `${unit.getCurrentFuel()} / ${unit.getMaxFuel()}` : `${cfg.maxFuel} / ${cfg.maxFuel}`,
-                },
+                this._createInfoFuel(unit, cfg, isCheating),
                 {
                     // Fuel consumption
-                    titleText   : Lang.getText(Lang.Type.B0343),
-                    valueText   : `${cfg.fuelConsumptionPerTurn}${cfg.fuelConsumptionInDiving == null ? `` : ` (${cfg.fuelConsumptionInDiving})`}`,
+                    titleText               : Lang.getText(Lang.Type.B0343),
+                    valueText               : `${cfg.fuelConsumptionPerTurn}${cfg.fuelConsumptionInDiving == null ? `` : ` (${cfg.fuelConsumptionInDiving})`}`,
+                    callbackOnTouchedTitle  : null,
                 },
                 {
                     // Destroy on out of fuel
-                    titleText   : Lang.getText(Lang.Type.B0344),
-                    valueText   : (unit && unit.checkIsDestroyedOnOutOfFuel()) || (cfg.isDestroyedOnOutOfFuel)
+                    titleText               : Lang.getText(Lang.Type.B0344),
+                    valueText               : (unit && unit.checkIsDestroyedOnOutOfFuel()) || (cfg.isDestroyedOnOutOfFuel)
                         ? Lang.getText(Lang.Type.B0012)
                         : Lang.getText(Lang.Type.B0013),
+                    callbackOnTouchedTitle  : null,
                 },
+                this._createInfoPromotion(unit, cfg, isCheating),
                 {
                     // Attack range
-                    titleText   : Lang.getText(Lang.Type.B0345),
-                    valueText   : cfg.minAttackRange == null ? Lang.getText(Lang.Type.B0001) : `${cfg.minAttackRange} - ${cfg.maxAttackRange}`,
+                    titleText               : Lang.getText(Lang.Type.B0345),
+                    valueText               : cfg.minAttackRange == null ? Lang.getText(Lang.Type.B0001) : `${cfg.minAttackRange} - ${cfg.maxAttackRange}`,
+                    callbackOnTouchedTitle  : null,
                 },
                 {
                     // Attack after move
-                    titleText   : Lang.getText(Lang.Type.B0346),
-                    valueText   : cfg.canAttackAfterMove ? Lang.getText(Lang.Type.B0012) : Lang.getText(Lang.Type.B0013),
+                    titleText               : Lang.getText(Lang.Type.B0346),
+                    valueText               : cfg.canAttackAfterMove ? Lang.getText(Lang.Type.B0012) : Lang.getText(Lang.Type.B0013),
+                    callbackOnTouchedTitle  : null,
                 },
                 {
                     // Vision range
-                    titleText   : Lang.getText(Lang.Type.B0354),
-                    valueText   : unit ? `${unit.getCfgVisionRange()}` : `${cfg.visionRange}`,
+                    titleText               : Lang.getText(Lang.Type.B0354),
+                    valueText               : unit ? `${unit.getCfgVisionRange()}` : `${cfg.visionRange}`,
+                    callbackOnTouchedTitle  : null,
                 },
-            ];
-            if (((unit) && (unit.getPrimaryWeaponMaxAmmo() != null)) || (cfg.primaryWeaponMaxAmmo != null)) {
-                dataList.push({
-                    titleText   : Lang.getText(Lang.Type.B0350),
-                    valueText   : unit
-                        ? `${unit.getPrimaryWeaponCurrentAmmo()} / ${unit.getPrimaryWeaponMaxAmmo()}`
-                        : `${cfg.primaryWeaponMaxAmmo} / ${cfg.primaryWeaponMaxAmmo}`,
-                });
-            }
-            if (((unit) && (unit.getMaxBuildMaterial() != null)) || (cfg.maxBuildMaterial != null)) {
-                dataList.push({
-                    titleText   : Lang.getText(Lang.Type.B0347),
-                    valueText   : unit
-                        ? `${unit.getCurrentBuildMaterial()} / ${unit.getMaxBuildMaterial()}`
-                        : `${cfg.maxBuildMaterial} / ${cfg.maxBuildMaterial}`,
-                });
-            }
-            if (((unit) && (unit.getMaxProduceMaterial() != null)) || (cfg.maxProduceMaterial != null)) {
-                dataList.push({
-                    titleText   : Lang.getText(Lang.Type.B0348),
-                    valueText   : unit
-                        ? `${unit.getCurrentProduceMaterial()} / ${unit.getMaxProduceMaterial()}`
-                        : `${cfg.maxProduceMaterial} / ${cfg.maxProduceMaterial}`,
-                });
-            }
-            if (((unit) && (unit.getFlareMaxAmmo() != null)) || (cfg.flareMaxAmmo != null)) {
-                dataList.push({
-                    titleText   : Lang.getText(Lang.Type.B0349),
-                    valueText   : unit
-                        ? `${unit.getFlareCurrentAmmo()} / ${unit.getFlareMaxAmmo()}`
-                        : `${cfg.flareMaxAmmo} / ${cfg.flareMaxAmmo}`,
-                });
-            }
+                this._createInfoPrimaryWeaponAmmo(unit, cfg, isCheating),
+                this._createInfoBuildMaterial(unit, cfg, isCheating),
+                this._createInfoProduceMaterial(unit, cfg, isCheating),
+                this._createInfoFlareAmmo(unit, cfg, isCheating),
+                this._createInfoActionState(unit, cfg, isCheating),
+                this._createInfoDiving(unit, cfg, isCheating),
+            ].filter(v => !!v);
 
             this._listInfo.bindData(dataList);
         }
 
+        private _createInfoHp(unit: BwUnit | MapEditor.MeUnit, cfg: Types.UnitTemplateCfg, isCheating: boolean): DataForInfoRenderer {
+            const currValue = unit.getCurrentHp();
+            const maxValue  = unit.getMaxHp();
+            const minValue  = 1;
+            return {
+                titleText               : Lang.getText(Lang.Type.B0339),
+                valueText               : `${currValue} / ${maxValue}`,
+                callbackOnTouchedTitle  : !isCheating
+                    ? null
+                    : () => {
+                        Common.InputPanel.show({
+                            title           : Lang.getText(Lang.Type.B0339),
+                            currentValue    : "" + currValue,
+                            maxChars        : 3,
+                            charRestrict    : "0-9",
+                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                            callback        : panel => {
+                                const text  = panel.getInputText();
+                                const value = text ? Number(text) : NaN;
+                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                                } else {
+                                    unit.setCurrentHp(value);
+                                    unit.updateView();
+                                    this._updateListInfo();
+                                }
+                            },
+                        });
+                    },
+            };
+        }
+
+        private _createInfoFuel(unit: BwUnit | MapEditor.MeUnit, cfg: Types.UnitTemplateCfg, isCheating: boolean): DataForInfoRenderer {
+            const currValue = unit.getCurrentFuel();
+            const maxValue  = unit.getMaxFuel();
+            const minValue  = 0;
+            return {
+                titleText               : Lang.getText(Lang.Type.B0342),
+                valueText               : `${currValue} / ${maxValue}`,
+                callbackOnTouchedTitle  : !isCheating
+                    ? null
+                    : () => {
+                        Common.InputPanel.show({
+                            title           : Lang.getText(Lang.Type.B0342),
+                            currentValue    : "" + currValue,
+                            maxChars        : 2,
+                            charRestrict    : "0-9",
+                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                            callback        : panel => {
+                                const text  = panel.getInputText();
+                                const value = text ? Number(text) : NaN;
+                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                                } else {
+                                    unit.setCurrentFuel(value);
+                                    unit.updateView();
+                                    this._updateListInfo();
+                                }
+                            },
+                        });
+                    },
+            };
+        }
+
+        private _createInfoPromotion(unit: BwUnit | MapEditor.MeUnit, cfg: Types.UnitTemplateCfg, isCheating: boolean): DataForInfoRenderer | null {
+            const maxValue = unit.getMaxPromotion();
+            if (maxValue == null) {
+                return null;
+            } else {
+                const currValue = unit.getCurrentPromotion();
+                const minValue  = 0;
+                return {
+                    titleText               : Lang.getText(Lang.Type.B0370),
+                    valueText               : `${currValue} / ${maxValue}`,
+                    callbackOnTouchedTitle  : !isCheating
+                        ? null
+                        : () => {
+                            Common.InputPanel.show({
+                                title           : Lang.getText(Lang.Type.B0370),
+                                currentValue    : "" + currValue,
+                                maxChars        : 1,
+                                charRestrict    : "0-9",
+                                tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                                callback        : panel => {
+                                    const text  = panel.getInputText();
+                                    const value = text ? Number(text) : NaN;
+                                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                        FloatText.show(Lang.getText(Lang.Type.A0098));
+                                    } else {
+                                        unit.setCurrentPromotion(value);
+                                        unit.updateView();
+                                        this._updateListInfo();
+                                    }
+                                },
+                            });
+                        },
+                };
+            }
+        }
+
+        private _createInfoPrimaryWeaponAmmo(unit: BwUnit | MapEditor.MeUnit, cfg: Types.UnitTemplateCfg, isCheating: boolean): DataForInfoRenderer | null {
+            const maxValue = unit.getPrimaryWeaponMaxAmmo();
+            if (maxValue == null) {
+                return null;
+            } else {
+                const currValue = unit.getPrimaryWeaponCurrentAmmo();
+                const minValue  = 0;
+                return {
+                    titleText               : Lang.getText(Lang.Type.B0350),
+                    valueText               : `${currValue} / ${maxValue}`,
+                    callbackOnTouchedTitle  : !isCheating
+                        ? null
+                        : () => {
+                            Common.InputPanel.show({
+                                title           : Lang.getText(Lang.Type.B0350),
+                                currentValue    : "" + currValue,
+                                maxChars        : 2,
+                                charRestrict    : "0-9",
+                                tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                                callback        : panel => {
+                                    const text  = panel.getInputText();
+                                    const value = text ? Number(text) : NaN;
+                                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                        FloatText.show(Lang.getText(Lang.Type.A0098));
+                                    } else {
+                                        unit.setPrimaryWeaponCurrentAmmo(value);
+                                        unit.updateView();
+                                        this._updateListInfo();
+                                    }
+                                },
+                            });
+                        },
+                };
+            }
+        }
+
+        private _createInfoBuildMaterial(unit: BwUnit | MapEditor.MeUnit, cfg: Types.UnitTemplateCfg, isCheating: boolean): DataForInfoRenderer | null {
+            const maxValue = unit.getMaxBuildMaterial();
+            if (maxValue == null) {
+                return null;
+            } else {
+                const currValue = unit.getCurrentBuildMaterial();
+                const minValue  = 0;
+                return {
+                    titleText               : Lang.getText(Lang.Type.B0347),
+                    valueText               : `${currValue} / ${maxValue}`,
+                    callbackOnTouchedTitle  : !isCheating
+                        ? null
+                        : () => {
+                            Common.InputPanel.show({
+                                title           : Lang.getText(Lang.Type.B0347),
+                                currentValue    : "" + currValue,
+                                maxChars        : 2,
+                                charRestrict    : "0-9",
+                                tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                                callback        : panel => {
+                                    const text  = panel.getInputText();
+                                    const value = text ? Number(text) : NaN;
+                                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                        FloatText.show(Lang.getText(Lang.Type.A0098));
+                                    } else {
+                                        unit.setCurrentBuildMaterial(value);
+                                        unit.updateView();
+                                        this._updateListInfo();
+                                    }
+                                },
+                            });
+                        },
+                };
+            }
+        }
+
+        private _createInfoProduceMaterial(unit: BwUnit | MapEditor.MeUnit, cfg: Types.UnitTemplateCfg, isCheating: boolean): DataForInfoRenderer | null {
+            const maxValue = unit.getMaxProduceMaterial();
+            if (maxValue == null) {
+                return null;
+            } else {
+                const currValue = unit.getCurrentProduceMaterial();
+                const minValue  = 0;
+                return {
+                    titleText               : Lang.getText(Lang.Type.B0348),
+                    valueText               : `${currValue} / ${maxValue}`,
+                    callbackOnTouchedTitle  : !isCheating
+                        ? null
+                        : () => {
+                            Common.InputPanel.show({
+                                title           : Lang.getText(Lang.Type.B0348),
+                                currentValue    : "" + currValue,
+                                maxChars        : 2,
+                                charRestrict    : "0-9",
+                                tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                                callback        : panel => {
+                                    const text  = panel.getInputText();
+                                    const value = text ? Number(text) : NaN;
+                                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                        FloatText.show(Lang.getText(Lang.Type.A0098));
+                                    } else {
+                                        unit.setCurrentProduceMaterial(value);
+                                        unit.updateView();
+                                        this._updateListInfo();
+                                    }
+                                },
+                            });
+                        },
+                };
+            }
+        }
+
+        private _createInfoFlareAmmo(unit: BwUnit | MapEditor.MeUnit, cfg: Types.UnitTemplateCfg, isCheating: boolean): DataForInfoRenderer | null {
+            const maxValue = unit.getFlareMaxAmmo();
+            if (maxValue == null) {
+                return null;
+            } else {
+                const currValue = unit.getFlareCurrentAmmo();
+                const minValue  = 0;
+                return {
+                    titleText               : Lang.getText(Lang.Type.B0349),
+                    valueText               : `${currValue} / ${maxValue}`,
+                    callbackOnTouchedTitle  : !isCheating
+                        ? null
+                        : () => {
+                            Common.InputPanel.show({
+                                title           : Lang.getText(Lang.Type.B0349),
+                                currentValue    : "" + currValue,
+                                maxChars        : 2,
+                                charRestrict    : "0-9",
+                                tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                                callback        : panel => {
+                                    const text  = panel.getInputText();
+                                    const value = text ? Number(text) : NaN;
+                                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                        FloatText.show(Lang.getText(Lang.Type.A0098));
+                                    } else {
+                                        unit.setFlareCurrentAmmo(value);
+                                        unit.updateView();
+                                        this._updateListInfo();
+                                    }
+                                },
+                            });
+                        },
+                };
+            }
+        }
+
+        private _createInfoActionState(unit: BwUnit | MapEditor.MeUnit, cfg: Types.UnitTemplateCfg, isCheating: boolean): DataForInfoRenderer | null {
+            if (!isCheating) {
+                return null;
+            } else {
+                const state = unit.getActionState();
+                return {
+                    titleText               : Lang.getText(Lang.Type.B0367),
+                    valueText               : Lang.getUnitActionStateText(state),
+                    callbackOnTouchedTitle  : () => {
+                        Common.ConfirmPanel.show({
+                            title       : Lang.getText(Lang.Type.B0349),
+                            content     : Lang.getText(Lang.Type.A0113),
+                            callback    : () => {
+                                unit.setActionState(state === Types.UnitActionState.Acted ? Types.UnitActionState.Idle : Types.UnitActionState.Acted);
+                                unit.updateView();
+                                this._updateListInfo();
+                            }
+                        });
+                    },
+                };
+            }
+        }
+
+        private _createInfoDiving(unit: BwUnit | MapEditor.MeUnit, cfg: Types.UnitTemplateCfg, isCheating: boolean): DataForInfoRenderer | null {
+            if (!unit.checkIsDiver()) {
+                return null;
+            } else {
+                const isDiving = unit.getIsDiving();
+                return {
+                    titleText               : Lang.getText(Lang.Type.B0371),
+                    valueText               : isDiving ? Lang.getText(Lang.Type.B0012) : Lang.getText(Lang.Type.B0013),
+                    callbackOnTouchedTitle  : !isCheating
+                        ? null
+                        : () => {
+                            Common.ConfirmPanel.show({
+                                title       : Lang.getText(Lang.Type.B0371),
+                                content     : Lang.getText(Lang.Type.A0114),
+                                callback    : () => {
+                                    unit.setIsDiving(!isDiving);
+                                    unit.updateView();
+                                    this._updateListInfo();
+                                }
+                            });
+                    },
+                };
+            }
+        }
+
         private _updateListDamageChart(): void {
-            this._dataForList = this._createDataForList();
+            this._dataForList = this._createDataForListDamageChart();
             this._listDamageChart.bindData(this._dataForList);
         }
 
-        private _createDataForList(): DataForDamageRenderer[] {
-            const openData          = this._openData;
-            const unit              = openData.unit;
-            const configVersion     = unit ? unit.getConfigVersion() : openData.configVersion;
-            const attackUnitType    = unit ? unit.getType() : ConfigManager.getUnitTypeAndPlayerIndex(openData.viewId).unitType;
-            const playerIndex       = unit ? unit.getPlayerIndex() : ConfigManager.getUnitTypeAndPlayerIndex(openData.viewId).playerIndex;
+        private _createDataForListDamageChart(): DataForDamageRenderer[] {
+            const unit              = this._openData.unit;
+            const configVersion     = unit.getConfigVersion();
+            const attackUnitType    = unit.getType();
+            const playerIndex       = unit.getPlayerIndex();
 
             const dataList = [] as DataForDamageRenderer[];
             for (const targetUnitType of ConfigManager.getUnitTypesByCategory(configVersion, Types.UnitCategory.All)) {
@@ -289,8 +534,9 @@ namespace TinyWars.BaseWar {
     }
 
     type DataForInfoRenderer = {
-        titleText   : string;
-        valueText   : string;
+        titleText               : string;
+        valueText               : string;
+        callbackOnTouchedTitle  : (() => void) | null;
     }
 
     class InfoRenderer extends eui.ItemRenderer {
@@ -305,12 +551,15 @@ namespace TinyWars.BaseWar {
 
         protected dataChanged(): void {
             const data              = this.data as DataForInfoRenderer;
-            this._btnTitle.label    = data.titleText;
             this._labelValue.text   = data.valueText;
+            this._btnTitle.label    = data.titleText;
+            (this._btnTitle.labelDisplay as GameUi.UiLabel).textColor = data.callbackOnTouchedTitle ? 0x00FF00 : 0xFFFFFF;
         }
 
         private _onTouchedBtnTitle(e: egret.TouchEvent): void {
-
+            const data      = this.data as DataForInfoRenderer;
+            const callback  = data ? data.callbackOnTouchedTitle : null;
+            (callback) && (callback());
         }
     }
 

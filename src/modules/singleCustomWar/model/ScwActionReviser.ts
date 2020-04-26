@@ -785,7 +785,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
             const focusUnit         = isLaunch ? unitMap.getUnitLoadedById(launchUnitId!) : unitMap.getUnitOnMap(beginningGridIndex);
             if ((!focusUnit)                                                                                    ||
                 (focusUnit.getPlayerIndex() !== playerIndexInTurn)                                              ||
-                (focusUnit.getState() !== UnitActionState.Idle)                                                 ||
+                (focusUnit.getActionState() !== UnitActionState.Idle)                                                 ||
                 (war.getTurnManager().getPhaseCode() !== TurnPhaseCode.Main)                                    ||
                 ((isLaunch) && (!GridIndexHelpers.checkIsEqual(focusUnit.getGridIndex(), beginningGridIndex)))
             ) {

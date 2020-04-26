@@ -2,7 +2,8 @@
 namespace TinyWars.MapEditor {
     import Notify   = Utility.Notify;
     import Lang     = Utility.Lang;
-    import Types    = Utility.Types;
+
+    const MAX_RECENT_COUNT = 10;
 
     export class MeChooseUnitPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
@@ -10,13 +11,12 @@ namespace TinyWars.MapEditor {
 
         private static _instance: MeChooseUnitPanel;
 
-        private _labelForceTitle: GameUi.UiLabel;
-        private _listForce      : GameUi.UiScrollList;
-        private _listUnit       : GameUi.UiScrollList;
-        private _btnCancel      : GameUi.UiButton;
+        private _labelRecentTitle   : GameUi.UiLabel;
+        private _listRecent         : GameUi.UiScrollList;
+        private _listCategory       : GameUi.UiScrollList;
+        private _btnCancel          : GameUi.UiButton;
 
-        private _dataForListForce   : DataForForceRenderer[] = [];
-        private _selectForceIndex   : number;
+        private _dataListForRecent   : DataForUnitRenderer[] = [];
 
         public static show(): void {
             if (!MeChooseUnitPanel._instance) {
@@ -42,47 +42,43 @@ namespace TinyWars.MapEditor {
         protected _onFirstOpened(): void {
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
+                { type: Notify.Type.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
             ];
             this._uiListeners = [
                 { ui: this._btnCancel,  callback: this.close },
             ];
-            this._listForce.setItemRenderer(ForceRenderer);
-            this._listUnit.setItemRenderer(UnitRenderer);
-            this._listUnit.scrollPolicyH = eui.ScrollPolicy.OFF;
+            this._listRecent.setItemRenderer(UnitRenderer);
+            this._listCategory.setItemRenderer(CategoryRenderer);
         }
 
         protected _onOpened(): void {
             this._updateComponentsForLanguage();
 
-            this._dataForListForce = this._createDataForListForce();
-            this._listForce.bindData(this._dataForListForce);
-            this.setSelectedForceIndex(0);
+            this._updateListCategory();
+            this._updateListRecent();
         }
 
         protected _onClosed(): void {
-            this._listUnit.clear();
-            this._listForce.clear();
+            this._listCategory.clear();
+            this._listRecent.clear();
         }
 
-        public setSelectedForceIndex(newIndex: number): void {
-            const oldIndex         = this._selectForceIndex;
-            const dataList         = this._dataForListForce;
-            this._selectForceIndex = dataList[newIndex] ? newIndex : undefined;
-
-            if (dataList[oldIndex]) {
-                this._listForce.updateSingleData(oldIndex, dataList[oldIndex])
+        public updateOnChooseUnit(unitViewId: number): void {
+            const dataList      = this._dataListForRecent;
+            const filteredList  = dataList.filter(v => v.unitViewId !== unitViewId);
+            dataList.length     = 0;
+            dataList[0]         = {
+                unitViewId,
+                panel   : this,
+            };
+            for (const v of filteredList) {
+                if (dataList.length < MAX_RECENT_COUNT) {
+                    dataList.push(v);
+                } else {
+                    break;
+                }
             }
-
-            if (dataList[newIndex]) {
-                this._listForce.updateSingleData(newIndex, dataList[newIndex]);
-                this._updateListUnit(newIndex);
-            } else {
-                this._listUnit.clear();
-            }
-        }
-        public getSelectedForceIndex(): number {
-            return this._selectForceIndex;
+            this._updateListRecent();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -92,11 +88,11 @@ namespace TinyWars.MapEditor {
             this._updateComponentsForLanguage();
         }
 
-        private _onNotifyTileAnimationTick(e: egret.Event): void {
-            const viewList = this._listUnit.getViewList();
-            for (let i = 0; i < viewList.numChildren; ++i) {
-                const child = viewList.getChildAt(i);
-                (child instanceof UnitRenderer) && (child.updateOnTileAnimationTick());
+        private _onNotifyUnitAnimationTick(e: egret.Event): void {
+            const viewListForCategory = this._listCategory.getViewList();
+            for (let i = 0; i < viewListForCategory.numChildren; ++i) {
+                const child = viewListForCategory.getChildAt(i);
+                (child instanceof CategoryRenderer) && (child.updateOnUnitAnimationTick());
             }
         }
 
@@ -105,69 +101,87 @@ namespace TinyWars.MapEditor {
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
             this._btnCancel.label       = Lang.getText(Lang.Type.B0154);
-            this._labelForceTitle.text  = `${Lang.getText(Lang.Type.B0168)}:`;
+            this._labelRecentTitle.text = `${Lang.getText(Lang.Type.B0372)}:`
         }
 
-        private _createDataForListForce(): DataForForceRenderer[] {
-            const dataList: DataForForceRenderer[] = [];
-
-            let index = 0;
-            for (let playerIndex = 1; playerIndex <= ConfigManager.MAX_PLAYER_INDEX; ++playerIndex) {
+        private _createDataForListUnit(): DataForCategoryRenderer[] {
+            const mapping = new Map<number, number[]>();
+            ConfigManager.forEachUnitTypeAndPlayerIndex((value, unitViewId) => {
+                const playerIndex = value.playerIndex;
+                if (unitViewId !== 0) {
+                    if (mapping.has(playerIndex)) {
+                        mapping.get(playerIndex).push(unitViewId);
+                    } else {
+                        mapping.set(playerIndex, [unitViewId]);
+                    }
+                }
+            });
+            const dataList: DataForCategoryRenderer[] = [];
+            for (const [, unitViewIdList] of mapping) {
                 dataList.push({
-                    index,
-                    playerIndex,
-                    panel: this,
+                    unitViewIdList,
+                    panel   : this,
                 });
-                ++index;
             }
 
             return dataList;
         }
 
-        private _createDataForListUnit(playerIndex: number): DataForUnitRenderer[] {
-            const dataList: DataForUnitRenderer[] = [];
-            ConfigManager.forEachUnitTypeAndPlayerIndex((value, unitViewId) => {
-                if ((value.playerIndex === playerIndex) && (unitViewId !== 0)) {
-                    dataList.push({
-                        unitViewId,
-                    });
-                }
-            });
-            return dataList;
+        private _updateListCategory(): void {
+            const dataList = this._createDataForListUnit();
+            this._listCategory.bindData(dataList);
+            this._listCategory.scrollVerticalTo(0);
         }
 
-        private _updateListUnit(index: number): void {
-            const dataList = this._createDataForListUnit(this._dataForListForce[index].playerIndex);
-            this._listUnit.bindData(dataList);
-            this._listUnit.scrollVerticalTo(0);
+        private _updateListRecent(): void {
+            this._listRecent.bindData(this._dataListForRecent);
+            this._listRecent.scrollHorizontalTo(0);
         }
     }
 
-    type DataForForceRenderer = {
-        index       : number;
-        playerIndex : number;
-        panel       : MeChooseUnitPanel;
+    type DataForCategoryRenderer = {
+        unitViewIdList  : number[];
+        panel           : MeChooseUnitPanel;
     }
 
-    class ForceRenderer extends eui.ItemRenderer {
-        private _labelName: GameUi.UiLabel;
+    class CategoryRenderer extends eui.ItemRenderer {
+        private _listUnit: GameUi.UiScrollList;
+
+        protected childrenCreated(): void {
+            super.childrenCreated();
+
+            this._listUnit.setItemRenderer(UnitRenderer);
+            this._listUnit.scrollPolicyH = eui.ScrollPolicy.OFF;
+        }
 
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data                  = this.data as DataForForceRenderer;
-            this._labelName.text        = Lang.getPlayerForceName(data.playerIndex);
-            this._labelName.textColor   = data.index === data.panel.getSelectedForceIndex() ? 0x00ff00 : 0xffffff;
+            const data              = this.data as DataForCategoryRenderer;
+            const unitViewIdList    = data.unitViewIdList;
+            const dataListForUnit   : DataForUnitRenderer[] = [];
+            const panel             = data.panel;
+            for (const unitViewId of unitViewIdList) {
+                dataListForUnit.push({
+                    panel,
+                    unitViewId,
+                });
+            }
+            this._listUnit.bindData(dataListForUnit);
         }
 
-        public onItemTapEvent(e: eui.ItemTapEvent): void {
-            const data = this.data as DataForForceRenderer;
-            data.panel.setSelectedForceIndex(data.index);
+        public updateOnUnitAnimationTick(): void {
+            const viewList = this._listUnit.getViewList();
+            for (let i = 0; i < viewList.numChildren; ++i) {
+                const child = viewList.getChildAt(i);
+                (child instanceof UnitRenderer) && (child.updateOnUnitAnimationTick());
+            }
         }
     }
 
     type DataForUnitRenderer = {
-        unitViewId: number;
+        unitViewId  : number;
+        panel       : MeChooseUnitPanel;
     }
 
     class UnitRenderer extends eui.ItemRenderer {
@@ -183,7 +197,7 @@ namespace TinyWars.MapEditor {
             this._conUnitView.addChild(this._unitView);
         }
 
-        public updateOnTileAnimationTick(): void {
+        public updateOnUnitAnimationTick(): void {
             const unitView = this._unitView;
             unitView.tickStateAnimationFrame();
             unitView.tickUnitAnimationFrame();
@@ -202,9 +216,12 @@ namespace TinyWars.MapEditor {
         }
 
         public onItemTapEvent(): void {
-            const data = this.data as DataForUnitRenderer;
-            MeChooseUnitPanel.hide();
-            MeManager.getWar().getDrawer().setModeDrawUnit(data.unitViewId);
+            const data          = this.data as DataForUnitRenderer;
+            const panel         = data.panel;
+            const unitViewId    = data.unitViewId;
+            panel.updateOnChooseUnit(unitViewId);
+            panel.close();
+            MeManager.getWar().getDrawer().setModeDrawUnit(unitViewId);
         }
     }
 }

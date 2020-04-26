@@ -141,8 +141,8 @@ namespace TinyWars.SingleCustomWar {
     function sorterForDataForList(a: DataForUnitRenderer, b: DataForUnitRenderer): number {
         const unitA     = a.unit;
         const unitB     = b.unit;
-        const stateA    = unitA.getState();
-        const stateB    = unitB.getState();
+        const stateA    = unitA.getActionState();
+        const stateB    = unitB.getActionState();
         if ((stateA === Types.UnitActionState.Idle) && (stateB !== Types.UnitActionState.Idle)) {
             return -1;
         } else if ((stateA !== Types.UnitActionState.Idle) && (stateB === Types.UnitActionState.Idle)) {
@@ -197,9 +197,12 @@ namespace TinyWars.SingleCustomWar {
         }
 
         public onItemTapEvent(e: eui.ItemTapEvent): void {
-            const data = this.data as DataForUnitRenderer;
-            data.cursor.setGridIndex(data.unit.getGridIndex());
-            data.cursor.updateView();
+            const data      = this.data as DataForUnitRenderer;
+            const cursor    = data.cursor;
+            const gridIndex = data.unit.getGridIndex();
+            cursor.setGridIndex(gridIndex);
+            cursor.updateView();
+            cursor.getWar().getView().moveGridToCenter(gridIndex);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

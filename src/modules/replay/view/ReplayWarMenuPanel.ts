@@ -213,7 +213,7 @@ namespace TinyWars.Replay {
             this._labelTurnIndex.text               = `${war.getTurnManager().getTurnIndex() + 1}`;
             this._labelActionId.text                = `${war.getNextActionId() - 1}`;
             this._labelIncomeModifier.text          = `${war.getSettingsIncomeModifier()}%`;
-            this._labelEnergyGrowthModifier.text    = `${war.getSettingsEnergyGrowthModifier()}%`;
+            this._labelEnergyGrowthModifier.text    = `${war.getSettingsEnergyGrowthMultiplier()}%`;
             this._labelInitialEnergy.text           = `${war.getSettingsInitialEnergy()}%`;
             this._labelMoveRangeModifier.text       = `${war.getSettingsMoveRangeModifier()}`;
             this._labelAttackPowerModifier.text     = `${war.getSettingsAttackPowerModifier()}%`;

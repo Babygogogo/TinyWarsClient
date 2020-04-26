@@ -268,7 +268,7 @@ namespace TinyWars.SingleCustomWar {
 
             let idleUnitsCount = 0;
             unitMap.forEachUnitOnMap(unit => {
-                if ((unit.getPlayerIndex() === playerIndex) && (unit.getState() === Types.UnitActionState.Idle)) {
+                if ((unit.getPlayerIndex() === playerIndex) && (unit.getActionState() === Types.UnitActionState.Idle)) {
                     ++idleUnitsCount;
                 }
             });

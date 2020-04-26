@@ -375,7 +375,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
                 gridX   : gridIndex.x,
                 gridY   : gridIndex.y,
             }, war.getConfigVersion());
-            unit.setState(UnitState.Acted);
+            unit.setActionState(UnitState.Acted);
             unit.startRunning(war);
             unit.startRunningView();
 
@@ -436,7 +436,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         const unitMap   = war.getUnitMap();
         const attacker  = unitMap.getUnit(pathNodes[0], action.launchUnitId);
         moveUnit(war, WarActionCodes.WarActionUnitAttack, path, action.launchUnitId, path.fuelConsumption);
-        attacker.setState(UnitState.Acted);
+        attacker.setActionState(UnitState.Acted);
 
         if (path.isBlocked) {
             return new Promise<void>(resolve => {
@@ -492,7 +492,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
                 ) {
                     attackerPlayer.setCoCurrentEnergy(Math.min(
                         attackerPlayer.getCoMaxEnergy(),
-                        attackerPlayer.getCoCurrentEnergy() + Math.floor(targetLostHp * war.getSettingsEnergyGrowthModifier() / 100)
+                        attackerPlayer.getCoCurrentEnergy() + Math.floor(targetLostHp * war.getSettingsEnergyGrowthMultiplier() / 100)
                     ));
                 }
                 const attackerUnitType = attacker.getType();
@@ -524,7 +524,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
                 ) {
                     targetPlayer.setCoCurrentEnergy(Math.min(
                         targetPlayer.getCoMaxEnergy(),
-                        targetPlayer.getCoCurrentEnergy() + Math.floor(attackerLostHp * war.getSettingsEnergyGrowthModifier() / 100)
+                        targetPlayer.getCoCurrentEnergy() + Math.floor(attackerLostHp * war.getSettingsEnergyGrowthMultiplier() / 100)
                     ));
                 }
                 const isTargetInCoZone  = targetPlayer.checkIsInCoZone(targetGridIndex, targetCoGridIndex);
@@ -628,7 +628,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         const focusUnit     = unitMap.getUnit(pathNodes[0], action.launchUnitId);
         const loaderUnit    = path.isBlocked ? undefined : unitMap.getUnitOnMap(pathNodes[pathNodes.length - 1]);
         moveUnit(war, WarActionCodes.WarActionUnitBeLoaded, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setState(UnitState.Acted);
+        focusUnit.setActionState(UnitState.Acted);
         (loaderUnit) && (focusUnit.setLoaderUnitId(loaderUnit.getUnitId()));
 
         return new Promise<void>(resolve => {
@@ -655,7 +655,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         const pathNodes = path.nodes;
         const focusUnit = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
         moveUnit(war, WarActionCodes.WarActionUnitBuildTile, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setState(UnitState.Acted);
+        focusUnit.setActionState(UnitState.Acted);
 
         if (!path.isBlocked) {
             const endingGridIndex   = pathNodes[pathNodes.length - 1];
@@ -696,7 +696,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         const pathNodes = path.nodes;
         const focusUnit = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
         moveUnit(war, WarActionCodes.WarActionUnitCaptureTile, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setState(UnitState.Acted);
+        focusUnit.setActionState(UnitState.Acted);
 
         if (path.isBlocked) {
             return new Promise<void>(resolve => {
@@ -765,7 +765,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         const focusUnit     = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
         const isSuccessful  = !path.isBlocked;
         moveUnit(war, WarActionCodes.WarActionUnitDive, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setState(UnitState.Acted);
+        focusUnit.setActionState(UnitState.Acted);
         (isSuccessful) && (focusUnit.setIsDiving(true));
 
         return new Promise<void>(resolve => {
@@ -805,7 +805,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         const endingGridIndex   = pathNodes[pathNodes.length - 1];
         const focusUnit         = unitMap.getUnit(pathNodes[0], action.launchUnitId);
         moveUnit(war, WarActionCodes.WarActionUnitDrop, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setState(UnitState.Acted);
+        focusUnit.setActionState(UnitState.Acted);
 
         const shouldUpdateFogMap    = war.getWatcherTeamIndexes(User.UserModel.getSelfUserId()).has(focusUnit.getTeamIndex());
         const fogMap                = war.getFogMap();
@@ -819,7 +819,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
 
             unitForDrop.setLoaderUnitId(undefined);
             unitForDrop.setGridIndex(gridIndex);
-            unitForDrop.setState(UnitState.Acted);
+            unitForDrop.setActionState(UnitState.Acted);
             unitsForDrop.push(unitForDrop);
 
             if (shouldUpdateFogMap) {
@@ -880,7 +880,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         const focusUnit         = unitMap.getUnit(pathNodes[0], action.launchUnitId);
         const targetUnit        = path.isBlocked ? undefined : unitMap.getUnitOnMap(endingGridIndex);
         moveUnit(war, WarActionCodes.WarActionUnitJoin, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setState(UnitState.Acted);
+        focusUnit.setActionState(UnitState.Acted);
 
         if (targetUnit) {
             const player = war.getPlayer(focusUnit.getPlayerIndex())!;
@@ -960,7 +960,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         const pathNodes = path.nodes;
         const focusUnit = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
         moveUnit(war, WarActionCodes.WarActionUnitLaunchFlare, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setState(UnitState.Acted);
+        focusUnit.setActionState(UnitState.Acted);
 
         const isFlareSucceeded  = !path.isBlocked;
         const targetGridIndex   = action.targetGridIndex as GridIndex;
@@ -1000,7 +1000,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         const unitMap   = war.getUnitMap();
         const focusUnit = unitMap.getUnit(pathNodes[0], action.launchUnitId);
         moveUnit(war, WarActionCodes.WarActionUnitLaunchSilo, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setState(UnitState.Acted);
+        focusUnit.setActionState(UnitState.Acted);
 
         if (path.isBlocked) {
             return new Promise<void>(resolve => {
@@ -1061,7 +1061,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         moveUnit(war, WarActionCodes.WarActionUnitLoadCo, path, action.launchUnitId, path.fuelConsumption);
 
         if (path.isBlocked) {
-            focusUnit.setState(UnitState.Acted);
+            focusUnit.setActionState(UnitState.Acted);
         } else {
             focusUnit.setCurrentPromotion(focusUnit.getMaxPromotion());
 
@@ -1096,7 +1096,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         const unitMap       = war.getUnitMap();
         const focusUnit     = unitMap.getUnit(pathNodes[0], action.launchUnitId);
         moveUnit(war, WarActionCodes.WarActionUnitProduceUnit, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setState(UnitState.Acted);
+        focusUnit.setActionState(UnitState.Acted);
 
         if (path.isBlocked) {
             return new Promise<void>(resolve => {
@@ -1120,7 +1120,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
                 loaderUnitId: focusUnit.getUnitId(),
             }, war.getConfigVersion());
             producedUnit.startRunning(war);
-            producedUnit.setState(Types.UnitActionState.Acted);
+            producedUnit.setActionState(Types.UnitActionState.Acted);
 
             const player = war.getPlayerInTurn();
             player.setFund(player.getFund() - action.cost);
@@ -1152,7 +1152,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         const unitMap   = war.getUnitMap();
         const focusUnit = unitMap.getUnit(pathNodes[0], action.launchUnitId);
         moveUnit(war, WarActionCodes.WarActionUnitSupply, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setState(UnitState.Acted);
+        focusUnit.setActionState(UnitState.Acted);
 
         if (path.isBlocked) {
             return new Promise<void>(resolve => {
@@ -1212,7 +1212,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         const focusUnit     = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
         const isSuccessful  = !path.isBlocked;
         moveUnit(war, WarActionCodes.WarActionUnitSurface, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setState(UnitState.Acted);
+        focusUnit.setActionState(UnitState.Acted);
         (isSuccessful) && (focusUnit.setIsDiving(false));
 
         return new Promise<void>(resolve => {
@@ -1251,7 +1251,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         const focusUnit     = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
         const isSuccessful  = !path.isBlocked;
         moveUnit(war, WarActionCodes.WarActionUnitUseCoSkill, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setState(UnitState.Acted);
+        focusUnit.setActionState(UnitState.Acted);
 
         const player    = focusUnit.getPlayer();
         const skillType = action.skillType;
@@ -1318,7 +1318,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         const pathNodes = path.nodes;
         const focusUnit = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
         moveUnit(war, WarActionCodes.WarActionUnitWait, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setState(UnitState.Acted);
+        focusUnit.setActionState(UnitState.Acted);
 
         return new Promise<void>(resolve => {
             focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {

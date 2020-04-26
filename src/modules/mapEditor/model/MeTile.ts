@@ -117,7 +117,7 @@ namespace TinyWars.MapEditor {
         public getConfigVersion(): string {
             return this._configVersion;
         }
-        protected _getWar(): MeWar {
+        public getWar(): MeWar {
             return this._war;
         }
 

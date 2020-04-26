@@ -63,7 +63,7 @@ namespace TinyWars.BaseWar {
         public getConfigVersion(): string {
             return this._configVersion;
         }
-        protected _getWar(): BwWar {
+        public getWar(): BwWar {
             return this._war;
         }
 
@@ -85,7 +85,7 @@ namespace TinyWars.BaseWar {
             return this._baseViewId;
         }
         public getInitialBaseViewId(): number | null {
-            const war       = this._getWar();
+            const war       = this.getWar();
             const tileMap   = war ? war.getTileMap() : null;
             return tileMap ? tileMap.getInitialBaseViewId(this.getGridIndex()) : null;
         }
@@ -97,7 +97,7 @@ namespace TinyWars.BaseWar {
             return this._objectViewId;
         }
         public getInitialObjectViewId(): number | null {
-            const war       = this._getWar();
+            const war       = this.getWar();
             const tileMap   = war ? war.getTileMap() : null;
             return tileMap ? tileMap.getInitialObjectViewId(this.getGridIndex()) : null;
         }
@@ -395,7 +395,7 @@ namespace TinyWars.BaseWar {
 
         public getEffectiveSelfUnitProductionSkillCfg(playerIndex: number): number[] | null {
             if (this.getPlayerIndex() === playerIndex) {
-                const player        = this._getWar().getPlayerManager().getPlayer(playerIndex);
+                const player        = this.getWar().getPlayerManager().getPlayer(playerIndex);
                 const isInCoZone    = player ? player.checkIsInCoZone(this.getGridIndex()) : false;
                 const isCoOnMap     = player ? !!player.getCoGridIndexOnMap() : false;
                 const tileType      = this.getType();
@@ -445,14 +445,14 @@ namespace TinyWars.BaseWar {
             if ((!this.checkIsVisionEnabledForAllPlayers()) && (this.getPlayerIndex() !== playerIndex)) {
                 return null;
             } else {
-                return Math.max(0, this.getCfgVisionRange() + this._getWar().getSettingsVisionRangeModifier());
+                return Math.max(0, this.getCfgVisionRange() + this.getWar().getSettingsVisionRangeModifier());
             }
         }
         public getVisionRangeForTeamIndexes(teamIndexes: Set<number>): number | null {
             if ((!this.checkIsVisionEnabledForAllPlayers()) && (!teamIndexes.has(this.getTeamIndex()))) {
                 return null;
             } else {
-                return Math.max(0, this.getCfgVisionRange() + this._getWar().getSettingsVisionRangeModifier());
+                return Math.max(0, this.getCfgVisionRange() + this.getWar().getSettingsVisionRangeModifier());
             }
         }
 

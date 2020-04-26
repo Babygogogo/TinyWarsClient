@@ -3,10 +3,11 @@ namespace TinyWars.BaseWar {
     import Notify       = Utility.Notify;
     import Lang         = Utility.Lang;
     import Types        = Utility.Types;
+    import FloatText    = Utility.FloatText;
     import UnitType     = Types.UnitType;
 
     export type OpenDataForBwTileDetailPanel = {
-        tile    : BwTile;
+        tile    : BwTile | MapEditor.MeTile;
     }
 
     const { width: GRID_WIDTH, height: GRID_HEIGHT } = ConfigManager.getGridSize();
@@ -26,7 +27,7 @@ namespace TinyWars.BaseWar {
         private _listMoveCost               : GameUi.UiScrollList;
 
         private _openData   : OpenDataForBwTileDetailPanel;
-        private _dataForList: DataForMoveRangeRenderer[];
+        private _dataForListMoveCost: DataForMoveRangeRenderer[];
 
         public static show(data: OpenDataForBwTileDetailPanel): void {
             if (!BwTileDetailPanel._instance) {
@@ -69,7 +70,7 @@ namespace TinyWars.BaseWar {
             this._updateView();
         }
         protected _onClosed(): void {
-            this._dataForList = null;
+            this._dataForListMoveCost = null;
             this._listInfo.clear();
             this._listMoveCost.clear();
         }
@@ -127,73 +128,177 @@ namespace TinyWars.BaseWar {
             const globalAttackBonus     = cfg.globalAttackBonus;
             const globalDefenseBonus    = cfg.globalDefenseBonus;
             const repairAmount          = cfg.repairAmount;
+            const war                   = tile.getWar();
+            const isCheating            = (tile instanceof MapEditor.MeTile) ||
+                ((war instanceof SingleCustomWar.ScwWar) ? war.getIsSinglePlayerCheating() : false);
 
             const dataList: DataForInfoRenderer[] = [
                 {
-                    titleText   : Lang.getText(Lang.Type.B0352),
-                    valueText   : defenseBonus ? `${defenseBonus}(${Lang.getUnitCategoryName(cfg.defenseUnitCategory)})` : `--`,
+                    titleText               : Lang.getText(Lang.Type.B0352),
+                    valueText               : defenseBonus ? `${defenseBonus}(${Lang.getUnitCategoryName(cfg.defenseUnitCategory)})` : `--`,
+                    callbackOnTouchedTitle  : null,
                 },
                 {
-                    titleText   : Lang.getText(Lang.Type.B0353),
-                    valueText   : `${income != null ? income : `--`}`,
+                    titleText               : Lang.getText(Lang.Type.B0353),
+                    valueText               : `${income != null ? income : `--`}`,
+                    callbackOnTouchedTitle  : null,
                 },
                 {
-                    titleText   : Lang.getText(Lang.Type.B0354),
-                    valueText   : visionRange != null
+                    titleText               : Lang.getText(Lang.Type.B0354),
+                    valueText               : visionRange != null
                         ? `${visionRange}${cfg.isVisionEnabledForAllPlayers ? `(${Lang.getText(Lang.Type.B0355)})`: ``}`
                         : `--`,
+                    callbackOnTouchedTitle  : null,
                 },
                 {
-                    titleText   : Lang.getText(Lang.Type.B0356),
-                    valueText   : `${hideCategory != null ? Lang.getUnitCategoryName(hideCategory) : `--`}`,
+                    titleText               : Lang.getText(Lang.Type.B0356),
+                    valueText               : `${hideCategory != null ? Lang.getUnitCategoryName(hideCategory) : `--`}`,
+                    callbackOnTouchedTitle  : null,
                 },
                 {
-                    titleText   : Lang.getText(Lang.Type.B0357),
-                    valueText   : cfg.isDefeatedOnCapture ? Lang.getText(Lang.Type.B0012) : Lang.getText(Lang.Type.B0013),
+                    titleText               : Lang.getText(Lang.Type.B0357),
+                    valueText               : cfg.isDefeatedOnCapture ? Lang.getText(Lang.Type.B0012) : Lang.getText(Lang.Type.B0013),
+                    callbackOnTouchedTitle  : null,
                 },
                 {
-                    titleText   : Lang.getText(Lang.Type.B0358),
-                    valueText   : cfg.produceUnitCategory
+                    titleText               : Lang.getText(Lang.Type.B0358),
+                    valueText               : cfg.produceUnitCategory
                         ? Lang.getUnitCategoryName(cfg.produceUnitCategory)
                         : Lang.getText(Lang.Type.B0013),
+                    callbackOnTouchedTitle  : null,
                 },
                 {
-                    titleText   : Lang.getText(Lang.Type.B0359),
-                    valueText   : `${globalAttackBonus == null ? `--` : globalAttackBonus + "%"} / ${globalDefenseBonus == null ? `--` : globalDefenseBonus + "%"}`,
+                    titleText               : Lang.getText(Lang.Type.B0359),
+                    valueText               : `${globalAttackBonus == null ? `--` : globalAttackBonus + "%"} / ${globalDefenseBonus == null ? `--` : globalDefenseBonus + "%"}`,
+                    callbackOnTouchedTitle  : null,
                 },
                 {
-                    titleText   : Lang.getText(Lang.Type.B0360),
-                    valueText   : repairAmount != null ? `${repairAmount}(${Lang.getUnitCategoryName(cfg.repairUnitCategory)})` : `--`,
+                    titleText               : Lang.getText(Lang.Type.B0360),
+                    valueText               : repairAmount != null ? `${repairAmount}(${Lang.getUnitCategoryName(cfg.repairUnitCategory)})` : `--`,
+                    callbackOnTouchedTitle  : null,
                 },
-            ];
-            if (tile.getCurrentHp() != null) {
-                dataList.push({
-                    titleText   : Lang.getText(Lang.Type.B0339),
-                    valueText   : `${tile.getCurrentHp()} / ${tile.getMaxHp()}`,
-                });
-            }
-            if (tile.getCurrentCapturePoint() != null) {
-                dataList.push({
-                    titleText   : Lang.getText(Lang.Type.B0361),
-                    valueText   : `${tile.getCurrentCapturePoint()} / ${tile.getMaxCapturePoint()}`,
-                });
-            }
-            if (tile.getCurrentBuildPoint() != null) {
-                dataList.push({
-                    titleText   : Lang.getText(Lang.Type.B0362),
-                    valueText   : `${tile.getCurrentBuildPoint()} / ${tile.getMaxBuildPoint()}`,
-                });
-            }
+                this._createInfoHp(tile, isCheating),
+                this._createInfoCapturePoint(tile, isCheating),
+                this._createInfoBuildPoint(tile, isCheating),
+            ].filter(v => !!v);
 
             this._listInfo.bindData(dataList);
         }
 
-        private _updateListMoveCost(): void {
-            this._dataForList = this._createDataForList();
-            this._listMoveCost.bindData(this._dataForList);
+        private _createInfoHp(tile: BwTile | MapEditor.MeTile, isCheating: boolean): DataForInfoRenderer | null {
+            const maxValue  = tile.getMaxHp();
+            if (maxValue == null) {
+                return null;
+            } else {
+                const currValue = tile.getCurrentHp();
+                const minValue  = 1;
+                return {
+                    titleText               : Lang.getText(Lang.Type.B0339),
+                    valueText               : `${currValue} / ${maxValue}`,
+                    callbackOnTouchedTitle  : !isCheating
+                        ? null
+                        : () => {
+                            Common.InputPanel.show({
+                                title           : Lang.getText(Lang.Type.B0339),
+                                currentValue    : "" + currValue,
+                                maxChars        : 3,
+                                charRestrict    : "0-9",
+                                tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                                callback        : panel => {
+                                    const text  = panel.getInputText();
+                                    const value = text ? Number(text) : NaN;
+                                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                        FloatText.show(Lang.getText(Lang.Type.A0098));
+                                    } else {
+                                        tile.setCurrentHp(value);
+                                        tile.updateView();
+                                        this._updateListInfo();
+                                    }
+                                },
+                            });
+                        },
+                };
+            }
         }
 
-        private _createDataForList(): DataForMoveRangeRenderer[] {
+        private _createInfoCapturePoint(tile: BwTile | MapEditor.MeTile, isCheating: boolean): DataForInfoRenderer | null {
+            const maxValue  = tile.getMaxCapturePoint();
+            if (maxValue == null) {
+                return null;
+            } else {
+                const currValue = tile.getCurrentCapturePoint();
+                const minValue  = 1;
+                return {
+                    titleText               : Lang.getText(Lang.Type.B0361),
+                    valueText               : `${currValue} / ${maxValue}`,
+                    callbackOnTouchedTitle  : !isCheating
+                        ? null
+                        : () => {
+                            Common.InputPanel.show({
+                                title           : Lang.getText(Lang.Type.B0361),
+                                currentValue    : "" + currValue,
+                                maxChars        : 3,
+                                charRestrict    : "0-9",
+                                tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                                callback        : panel => {
+                                    const text  = panel.getInputText();
+                                    const value = text ? Number(text) : NaN;
+                                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                        FloatText.show(Lang.getText(Lang.Type.A0098));
+                                    } else {
+                                        tile.setCurrentCapturePoint(value);
+                                        tile.updateView();
+                                        this._updateListInfo();
+                                    }
+                                },
+                            });
+                        },
+                };
+            }
+        }
+
+        private _createInfoBuildPoint(tile: BwTile | MapEditor.MeTile, isCheating: boolean): DataForInfoRenderer | null {
+            const maxValue  = tile.getMaxBuildPoint();
+            if (maxValue == null) {
+                return null;
+            } else {
+                const currValue = tile.getCurrentBuildPoint();
+                const minValue  = 1;
+                return {
+                    titleText               : Lang.getText(Lang.Type.B0362),
+                    valueText               : `${currValue} / ${maxValue}`,
+                    callbackOnTouchedTitle  : !isCheating
+                        ? null
+                        : () => {
+                            Common.InputPanel.show({
+                                title           : Lang.getText(Lang.Type.B0362),
+                                currentValue    : "" + currValue,
+                                maxChars        : 3,
+                                charRestrict    : "0-9",
+                                tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                                callback        : panel => {
+                                    const text  = panel.getInputText();
+                                    const value = text ? Number(text) : NaN;
+                                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                        FloatText.show(Lang.getText(Lang.Type.A0098));
+                                    } else {
+                                        tile.setCurrentBuildPoint(value);
+                                        tile.updateView();
+                                        this._updateListInfo();
+                                    }
+                                },
+                            });
+                        },
+                };
+            }
+        }
+
+        private _updateListMoveCost(): void {
+            this._dataForListMoveCost = this._createDataForListMoveCost();
+            this._listMoveCost.bindData(this._dataForListMoveCost);
+        }
+
+        private _createDataForListMoveCost(): DataForMoveRangeRenderer[] {
             const openData          = this._openData;
             const tile              = openData.tile;
             const configVersion     = tile.getConfigVersion();
@@ -219,8 +324,9 @@ namespace TinyWars.BaseWar {
     }
 
     type DataForInfoRenderer = {
-        titleText   : string;
-        valueText   : string;
+        titleText               : string;
+        valueText               : string;
+        callbackOnTouchedTitle  : (() => void) | null;
     }
 
     class InfoRenderer extends eui.ItemRenderer {
@@ -237,10 +343,13 @@ namespace TinyWars.BaseWar {
             const data              = this.data as DataForInfoRenderer;
             this._btnTitle.label    = data.titleText;
             this._labelValue.text   = data.valueText;
+            (this._btnTitle.labelDisplay as GameUi.UiLabel).textColor = data.callbackOnTouchedTitle ? 0x00FF00 : 0xFFFFFF;
         }
 
         private _onTouchedBtnTitle(e: egret.TouchEvent): void {
-
+            const data      = this.data as DataForInfoRenderer;
+            const callback  = data ? data.callbackOnTouchedTitle : null;
+            (callback) && (callback());
         }
     }
 

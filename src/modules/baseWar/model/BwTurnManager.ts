@@ -168,7 +168,7 @@ namespace TinyWars.BaseWar {
             if (playerIndex !== 0) {
                 this._war.getUnitMap().forEachUnit(unit => {
                     if (unit.getPlayerIndex() === playerIndex) {
-                        unit.setState(Types.UnitActionState.Idle);
+                        unit.setActionState(Types.UnitActionState.Idle);
                         unit.updateView();
                     }
                 });

@@ -63,7 +63,7 @@ namespace TinyWars.MultiCustomWar {
                 timeLimit               : this.getSettingsTimeLimit(),
                 hasFogByDefault         : this.getSettingsHasFog(),
                 incomeModifier          : this.getSettingsIncomeModifier(),
-                energyGrowthModifier    : this.getSettingsEnergyGrowthModifier(),
+                energyGrowthModifier    : this.getSettingsEnergyGrowthMultiplier(),
                 attackPowerModifier     : this.getSettingsAttackPowerModifier(),
                 moveRangeModifier       : this.getSettingsMoveRangeModifier(),
                 visionRangeModifier     : this.getSettingsVisionRangeModifier(),

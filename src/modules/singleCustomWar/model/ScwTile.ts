@@ -34,7 +34,7 @@ namespace TinyWars.SingleCustomWar {
 
         public serializeForSimulation(): SerializedBwTile | null {
             const userId = User.UserModel.getSelfUserId();
-            if (VisibilityHelpers.checkIsTileVisibleToUser(this._getWar(), this.getGridIndex(), userId)) {
+            if (VisibilityHelpers.checkIsTileVisibleToUser(this.getWar(), this.getGridIndex(), userId)) {
                 return this.serialize();
             } else {
                 if (this.getType() === Types.TileType.Headquarters) {

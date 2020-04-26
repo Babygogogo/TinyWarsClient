@@ -131,6 +131,8 @@ namespace TinyWars.MapEditor {
         }
 
         private _onTouchedThis(e: egret.TouchEvent): void {
+            const tile = this._tileMap.getTile(this._cursor.getGridIndex());
+            (tile) && (BaseWar.BwTileDetailPanel.show({ tile }));
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
