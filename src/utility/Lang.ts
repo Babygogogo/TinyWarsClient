@@ -2058,6 +2058,46 @@ namespace TinyWars.Utility.Lang {
             `最近`,
             `Recent`,
         ],
+        [Type.B0373]: [
+            `公共频道`,
+            `Public`,
+        ],
+        [Type.B0374]: [
+            `系统频道`,
+            `System`,
+        ],
+        [Type.B0375]: [
+            `字数太多`,
+            `Too many characters`,
+        ],
+        [Type.B0376]: [
+            `频道`,
+            `Channel`,
+        ],
+        [Type.B0377]: [
+            `组队`,
+            `Team`,
+        ],
+        [Type.B0378]: [
+            `私聊`,
+            `Private`,
+        ],
+        [Type.B0379]: [
+            `全局`,
+            `Global`,
+        ],
+        [Type.B0380]: [
+            `聊天列表`,
+            `Chat List`,
+        ],
+        [Type.B0381]: [
+            `暂无消息`,
+            `No Message`,
+        ],
+        [Type.B0382]: [
+            `发送`,
+            `Send`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -2956,6 +2996,14 @@ namespace TinyWars.Utility.Lang {
             case Types.UnitActionState.Acted    : return getText(Type.B0368);
             case Types.UnitActionState.Idle     : return getText(Type.B0369);
             default                             : return null;
+        }
+    }
+
+    export function getChatChannelName(channel: Types.ChatChannel): string {
+        switch (channel) {
+            case Types.ChatChannel.Public   : return getText(Type.B0373);
+            case Types.ChatChannel.System   : return getText(Type.B0374);
+            default                         : return null;
         }
     }
 }

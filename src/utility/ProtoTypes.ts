@@ -8773,6 +8773,126 @@ export declare class SaveSlotInfo implements ISaveSlotInfo {
     public toJSON(): { [k: string]: any };
 }
 
+/** Properties of a ChatMessage. */
+export declare interface IChatMessage {
+
+    /** ChatMessage fromUserId */
+    fromUserId?: (number|null);
+
+    /** ChatMessage toChannelId */
+    toChannelId?: (number|null);
+
+    /** ChatMessage toUserId */
+    toUserId?: (number|null);
+
+    /** ChatMessage toWarAndTeam */
+    toWarAndTeam?: (number|null);
+
+    /** ChatMessage content */
+    content?: (string|null);
+
+    /** ChatMessage timestamp */
+    timestamp?: (number|null);
+}
+
+/** Represents a ChatMessage. */
+export declare class ChatMessage implements IChatMessage {
+
+    /**
+     * Constructs a new ChatMessage.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IChatMessage);
+
+    /** ChatMessage fromUserId. */
+    public fromUserId: number;
+
+    /** ChatMessage toChannelId. */
+    public toChannelId: number;
+
+    /** ChatMessage toUserId. */
+    public toUserId: number;
+
+    /** ChatMessage toWarAndTeam. */
+    public toWarAndTeam: number;
+
+    /** ChatMessage content. */
+    public content: string;
+
+    /** ChatMessage timestamp. */
+    public timestamp: number;
+
+    /**
+     * Creates a new ChatMessage instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns ChatMessage instance
+     */
+    public static create(properties?: IChatMessage): ChatMessage;
+
+    /**
+     * Encodes the specified ChatMessage message. Does not implicitly {@link ChatMessage.verify|verify} messages.
+     * @param message ChatMessage message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IChatMessage, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified ChatMessage message, length delimited. Does not implicitly {@link ChatMessage.verify|verify} messages.
+     * @param message ChatMessage message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IChatMessage, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a ChatMessage message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns ChatMessage
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): ChatMessage;
+
+    /**
+     * Decodes a ChatMessage message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns ChatMessage
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): ChatMessage;
+
+    /**
+     * Verifies a ChatMessage message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a ChatMessage message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns ChatMessage
+     */
+    public static fromObject(object: { [k: string]: any }): ChatMessage;
+
+    /**
+     * Creates a plain object from a ChatMessage message. Also converts values to other types if specified.
+     * @param message ChatMessage
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: ChatMessage, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this ChatMessage to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
 /** Properties of a MessageContainer. */
 export declare interface IMessageContainer {
 
@@ -8868,6 +8988,18 @@ export declare interface IMessageContainer {
 
     /** MessageContainer S_MeSaveMap */
     S_MeSaveMap?: (IS_MeSaveMap|null);
+
+    /** MessageContainer C_ChatAddMessage */
+    C_ChatAddMessage?: (IC_ChatAddMessage|null);
+
+    /** MessageContainer S_ChatAddMessage */
+    S_ChatAddMessage?: (IS_ChatAddMessage|null);
+
+    /** MessageContainer C_ChatGetAllMessages */
+    C_ChatGetAllMessages?: (IC_ChatGetAllMessages|null);
+
+    /** MessageContainer S_ChatGetAllMessages */
+    S_ChatGetAllMessages?: (IS_ChatGetAllMessages|null);
 
     /** MessageContainer C_MmChangeAvailability */
     C_MmChangeAvailability?: (IC_MmChangeAvailability|null);
@@ -9283,6 +9415,18 @@ export declare class MessageContainer implements IMessageContainer {
 
     /** MessageContainer S_MeSaveMap. */
     public S_MeSaveMap?: (IS_MeSaveMap|null);
+
+    /** MessageContainer C_ChatAddMessage. */
+    public C_ChatAddMessage?: (IC_ChatAddMessage|null);
+
+    /** MessageContainer S_ChatAddMessage. */
+    public S_ChatAddMessage?: (IS_ChatAddMessage|null);
+
+    /** MessageContainer C_ChatGetAllMessages. */
+    public C_ChatGetAllMessages?: (IC_ChatGetAllMessages|null);
+
+    /** MessageContainer S_ChatGetAllMessages. */
+    public S_ChatGetAllMessages?: (IS_ChatGetAllMessages|null);
 
     /** MessageContainer C_MmChangeAvailability. */
     public C_MmChangeAvailability?: (IC_MmChangeAvailability|null);
@@ -11708,6 +11852,390 @@ export declare class S_MeSaveMap implements IS_MeSaveMap {
 
     /**
      * Converts this S_MeSaveMap to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_ChatAddMessage. */
+export declare interface IC_ChatAddMessage {
+
+    /** C_ChatAddMessage toChannelId */
+    toChannelId?: (number|null);
+
+    /** C_ChatAddMessage toUserId */
+    toUserId?: (number|null);
+
+    /** C_ChatAddMessage toWarAndTeam */
+    toWarAndTeam?: (number|null);
+
+    /** C_ChatAddMessage content */
+    content?: (string|null);
+}
+
+/** Represents a C_ChatAddMessage. */
+export declare class C_ChatAddMessage implements IC_ChatAddMessage {
+
+    /**
+     * Constructs a new C_ChatAddMessage.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_ChatAddMessage);
+
+    /** C_ChatAddMessage toChannelId. */
+    public toChannelId: number;
+
+    /** C_ChatAddMessage toUserId. */
+    public toUserId: number;
+
+    /** C_ChatAddMessage toWarAndTeam. */
+    public toWarAndTeam: number;
+
+    /** C_ChatAddMessage content. */
+    public content: string;
+
+    /**
+     * Creates a new C_ChatAddMessage instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_ChatAddMessage instance
+     */
+    public static create(properties?: IC_ChatAddMessage): C_ChatAddMessage;
+
+    /**
+     * Encodes the specified C_ChatAddMessage message. Does not implicitly {@link C_ChatAddMessage.verify|verify} messages.
+     * @param message C_ChatAddMessage message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_ChatAddMessage, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_ChatAddMessage message, length delimited. Does not implicitly {@link C_ChatAddMessage.verify|verify} messages.
+     * @param message C_ChatAddMessage message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_ChatAddMessage, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_ChatAddMessage message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_ChatAddMessage
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_ChatAddMessage;
+
+    /**
+     * Decodes a C_ChatAddMessage message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_ChatAddMessage
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_ChatAddMessage;
+
+    /**
+     * Verifies a C_ChatAddMessage message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_ChatAddMessage message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_ChatAddMessage
+     */
+    public static fromObject(object: { [k: string]: any }): C_ChatAddMessage;
+
+    /**
+     * Creates a plain object from a C_ChatAddMessage message. Also converts values to other types if specified.
+     * @param message C_ChatAddMessage
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_ChatAddMessage, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_ChatAddMessage to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_ChatAddMessage. */
+export declare interface IS_ChatAddMessage {
+
+    /** S_ChatAddMessage errorCode */
+    errorCode?: (number|null);
+
+    /** S_ChatAddMessage message */
+    message?: (IChatMessage|null);
+}
+
+/** Represents a S_ChatAddMessage. */
+export declare class S_ChatAddMessage implements IS_ChatAddMessage {
+
+    /**
+     * Constructs a new S_ChatAddMessage.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_ChatAddMessage);
+
+    /** S_ChatAddMessage errorCode. */
+    public errorCode: number;
+
+    /** S_ChatAddMessage message. */
+    public message?: (IChatMessage|null);
+
+    /**
+     * Creates a new S_ChatAddMessage instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_ChatAddMessage instance
+     */
+    public static create(properties?: IS_ChatAddMessage): S_ChatAddMessage;
+
+    /**
+     * Encodes the specified S_ChatAddMessage message. Does not implicitly {@link S_ChatAddMessage.verify|verify} messages.
+     * @param message S_ChatAddMessage message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_ChatAddMessage, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_ChatAddMessage message, length delimited. Does not implicitly {@link S_ChatAddMessage.verify|verify} messages.
+     * @param message S_ChatAddMessage message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_ChatAddMessage, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_ChatAddMessage message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_ChatAddMessage
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_ChatAddMessage;
+
+    /**
+     * Decodes a S_ChatAddMessage message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_ChatAddMessage
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_ChatAddMessage;
+
+    /**
+     * Verifies a S_ChatAddMessage message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_ChatAddMessage message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_ChatAddMessage
+     */
+    public static fromObject(object: { [k: string]: any }): S_ChatAddMessage;
+
+    /**
+     * Creates a plain object from a S_ChatAddMessage message. Also converts values to other types if specified.
+     * @param message S_ChatAddMessage
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_ChatAddMessage, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_ChatAddMessage to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_ChatGetAllMessages. */
+export declare interface IC_ChatGetAllMessages {
+}
+
+/** Represents a C_ChatGetAllMessages. */
+export declare class C_ChatGetAllMessages implements IC_ChatGetAllMessages {
+
+    /**
+     * Constructs a new C_ChatGetAllMessages.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_ChatGetAllMessages);
+
+    /**
+     * Creates a new C_ChatGetAllMessages instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_ChatGetAllMessages instance
+     */
+    public static create(properties?: IC_ChatGetAllMessages): C_ChatGetAllMessages;
+
+    /**
+     * Encodes the specified C_ChatGetAllMessages message. Does not implicitly {@link C_ChatGetAllMessages.verify|verify} messages.
+     * @param message C_ChatGetAllMessages message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_ChatGetAllMessages, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_ChatGetAllMessages message, length delimited. Does not implicitly {@link C_ChatGetAllMessages.verify|verify} messages.
+     * @param message C_ChatGetAllMessages message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_ChatGetAllMessages, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_ChatGetAllMessages message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_ChatGetAllMessages
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_ChatGetAllMessages;
+
+    /**
+     * Decodes a C_ChatGetAllMessages message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_ChatGetAllMessages
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_ChatGetAllMessages;
+
+    /**
+     * Verifies a C_ChatGetAllMessages message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_ChatGetAllMessages message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_ChatGetAllMessages
+     */
+    public static fromObject(object: { [k: string]: any }): C_ChatGetAllMessages;
+
+    /**
+     * Creates a plain object from a C_ChatGetAllMessages message. Also converts values to other types if specified.
+     * @param message C_ChatGetAllMessages
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_ChatGetAllMessages, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_ChatGetAllMessages to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_ChatGetAllMessages. */
+export declare interface IS_ChatGetAllMessages {
+
+    /** S_ChatGetAllMessages errorCode */
+    errorCode?: (number|null);
+
+    /** S_ChatGetAllMessages messageList */
+    messageList?: (IChatMessage[]|null);
+}
+
+/** Represents a S_ChatGetAllMessages. */
+export declare class S_ChatGetAllMessages implements IS_ChatGetAllMessages {
+
+    /**
+     * Constructs a new S_ChatGetAllMessages.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_ChatGetAllMessages);
+
+    /** S_ChatGetAllMessages errorCode. */
+    public errorCode: number;
+
+    /** S_ChatGetAllMessages messageList. */
+    public messageList: IChatMessage[];
+
+    /**
+     * Creates a new S_ChatGetAllMessages instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_ChatGetAllMessages instance
+     */
+    public static create(properties?: IS_ChatGetAllMessages): S_ChatGetAllMessages;
+
+    /**
+     * Encodes the specified S_ChatGetAllMessages message. Does not implicitly {@link S_ChatGetAllMessages.verify|verify} messages.
+     * @param message S_ChatGetAllMessages message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_ChatGetAllMessages, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_ChatGetAllMessages message, length delimited. Does not implicitly {@link S_ChatGetAllMessages.verify|verify} messages.
+     * @param message S_ChatGetAllMessages message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_ChatGetAllMessages, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_ChatGetAllMessages message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_ChatGetAllMessages
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_ChatGetAllMessages;
+
+    /**
+     * Decodes a S_ChatGetAllMessages message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_ChatGetAllMessages
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_ChatGetAllMessages;
+
+    /**
+     * Verifies a S_ChatGetAllMessages message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_ChatGetAllMessages message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_ChatGetAllMessages
+     */
+    public static fromObject(object: { [k: string]: any }): S_ChatGetAllMessages;
+
+    /**
+     * Creates a plain object from a S_ChatGetAllMessages message. Also converts values to other types if specified.
+     * @param message S_ChatGetAllMessages
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_ChatGetAllMessages, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_ChatGetAllMessages to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };

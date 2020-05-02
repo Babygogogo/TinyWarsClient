@@ -144,9 +144,9 @@ namespace TinyWars.User {
             Common.CommonServerStatusPanel.show();
         }
 
-        private _updateView(): void {
+        private async _updateView(): Promise<void> {
             const userId    = this._userId;
-            const info      = userId != null ? UserModel.getUserInfo(userId) : undefined;
+            const info      = userId != null ? await UserModel.getUserPublicInfo(userId) : undefined;
             if (info) {
                 this._labelRankScore.text       = `${info.rank2pScore}`;
                 this._labelRegisterTime.text    = Helpers.getTimestampShortText(info.registerTime);
@@ -192,9 +192,9 @@ namespace TinyWars.User {
             this._updateBtnChangeLanguage();
             this._updateBtnServerStatus();
         }
-        private _updateLabelsForLanguage(): void {
+        private async _updateLabelsForLanguage(): Promise<void> {
             const userId    = this._userId;
-            const info      = userId != null ? UserModel.getUserInfo(userId) : undefined;
+            const info      = userId != null ? await UserModel.getUserPublicInfo(userId) : undefined;
             if (info) {
                 this._labelTitle.text       = Lang.getFormattedText(Lang.Type.F0009, info.nickname);
                 this._labelRankName.text    = ConfigManager.getRankName(ConfigManager.getNewestConfigVersion(), info.rank2pScore);

@@ -7,17 +7,17 @@ namespace TinyWars.User {
     import ProtoTypes   = Utility.ProtoTypes;
 
     export namespace UserModel {
-        let _isLoggedIn         : boolean = false;
-        let _selfUserId         : number;
-        let _selfIsAdmin        : number;
-        let _selfIsMapCommitee  : number;
-        let _selfIsCoCommitee   : number;
-        let _selfAccount        : string;
-        let _selfPassword       : string;
-        let _selfNickname       : string;
-        let _selfDiscordId      : string;
-        let _selfRankScore      : number = 0;
-        const _userInfos        = new Map<number, ProtoTypes.IS_GetUserPublicInfo>();
+        let _isLoggedIn             = false;
+        let _selfUserId             : number;
+        let _selfIsAdmin            : number;
+        let _selfIsMapCommittee     : number;
+        let _selfIsCoCommittee      : number;
+        let _selfAccount            : string;
+        let _selfPassword           : string;
+        let _selfNickname           : string;
+        let _selfDiscordId          : string;
+        let _selfRankScore          : number = 0;
+        const _userPublicInfoDict   = new Map<number, ProtoTypes.IS_GetUserPublicInfo>();
 
         export function init(): void {
             Notify.addEventListeners([
@@ -30,8 +30,8 @@ namespace TinyWars.User {
             _isLoggedIn         = true;
             _selfUserId         = data.userId;
             _selfIsAdmin        = data.isAdmin;
-            _selfIsCoCommitee   = data.isCoCommitee;
-            _selfIsMapCommitee  = data.isMapCommitee;
+            _selfIsCoCommittee  = data.isCoCommitee;
+            _selfIsMapCommittee = data.isMapCommitee;
             _selfAccount        = data.account;
             _selfPassword       = data.password;
             setSelfNickname(data.nickname);
@@ -46,8 +46,8 @@ namespace TinyWars.User {
             _isLoggedIn         = false;
             _selfUserId         = null;
             _selfIsAdmin        = null;
-            _selfIsCoCommitee   = null;
-            _selfIsMapCommitee  = null;
+            _selfIsCoCommittee   = null;
+            _selfIsMapCommittee  = null;
             _selfPassword       = null;
             setSelfNickname(null);
             setSelfDiscordId(null);
@@ -64,10 +64,10 @@ namespace TinyWars.User {
             return !!_selfIsAdmin;
         }
         export function checkIsMapCommittee(): boolean {
-            return !!_selfIsMapCommitee;
+            return !!_selfIsMapCommittee;
         }
         export function checkIsCoCommitee(): boolean {
-            return !!_selfIsCoCommitee;
+            return !!_selfIsCoCommittee;
         }
         export function getSelfAccount(): string {
             return _selfAccount;
@@ -91,11 +91,44 @@ namespace TinyWars.User {
             return _selfRankScore;
         }
 
-        export function getUserInfo(userId: number): ProtoTypes.IS_GetUserPublicInfo | undefined {
-            return _userInfos.get(userId);
+        export function getUserPublicInfo(userId: number): Promise<ProtoTypes.IS_GetUserPublicInfo | undefined | null> {
+            if (userId == null) {
+                return null;
+            } else {
+                const localData = _userPublicInfoDict.get(userId);
+                if (localData) {
+                    return new Promise(resolve => resolve(localData));
+                } else {
+                    return new Promise((resolve, reject) => {
+                        const callbackOnSucceed = (e: egret.Event): void => {
+                            const data = e.data as ProtoTypes.IS_GetUserPublicInfo;
+                            if (data.id === userId) {
+                                Notify.removeEventListener(Notify.Type.SGetUserPublicInfo,        callbackOnSucceed);
+                                Notify.removeEventListener(Notify.Type.SGetUserPublicInfoFailed,  callbackOnFailed);
+
+                                resolve(data);
+                            }
+                        };
+                        const callbackOnFailed = (e: egret.Event): void => {
+                            const data = e.data as ProtoTypes.IS_GetUserPublicInfo;
+                            if (data.id === userId) {
+                                Notify.removeEventListener(Notify.Type.SGetUserPublicInfo,        callbackOnSucceed);
+                                Notify.removeEventListener(Notify.Type.SGetUserPublicInfoFailed,  callbackOnFailed);
+
+                                resolve(null);
+                            }
+                        };
+
+                        Notify.addEventListener(Notify.Type.SGetUserPublicInfo,       callbackOnSucceed);
+                        Notify.addEventListener(Notify.Type.SGetUserPublicInfoFailed, callbackOnFailed);
+
+                        UserProxy.reqGetUserPublicInfo(userId);
+                    });
+                }
+            }
         }
-        export function setUserInfo(info: ProtoTypes.IS_GetUserPublicInfo): void {
-            _userInfos.set(info.id, info);
+        export function setUserPublicInfo(info: ProtoTypes.IS_GetUserPublicInfo): void {
+            _userPublicInfoDict.set(info.id, info);
         }
 
         function _onNotifyNetworkDisconnected(e: egret.Event): void {

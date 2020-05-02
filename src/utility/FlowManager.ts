@@ -53,6 +53,7 @@ namespace TinyWars.Utility.FlowManager {
         MapEditor.MeProxy.init();
         MapEditor.MeModel.init();
         MeManager.init();
+        Chat.ChatProxy.init();
 
         _removeLoadingDom();
         gotoLogin();
