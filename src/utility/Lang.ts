@@ -2059,8 +2059,8 @@ namespace TinyWars.Utility.Lang {
             `Recent`,
         ],
         [Type.B0373]: [
-            `公共频道`,
-            `Public`,
+            `公共(英语)`,
+            `Public(EN)`,
         ],
         [Type.B0374]: [
             `系统频道`,
@@ -2101,6 +2101,10 @@ namespace TinyWars.Utility.Lang {
         [Type.B0383]: [
             `聊天`,
             `Chat`
+        ],
+        [Type.B0384]: [
+            `公共(中文)`,
+            `Public(CN)`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3009,8 +3013,9 @@ namespace TinyWars.Utility.Lang {
 
     export function getChatChannelName(channel: Types.ChatChannel): string {
         switch (channel) {
-            case Types.ChatChannel.Public   : return getText(Type.B0373);
             case Types.ChatChannel.System   : return getText(Type.B0374);
+            case Types.ChatChannel.PublicEn : return getText(Type.B0373);
+            case Types.ChatChannel.PublicCn : return getText(Type.B0384);
             default                         : return null;
         }
     }

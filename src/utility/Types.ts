@@ -653,6 +653,7 @@ namespace TinyWars.Utility.Types {
 
     export const enum ChatChannel {
         System      = 1,
-        Public      = 2,
+        PublicEn    = 2,
+        PublicCn    = 3,
     }
 }

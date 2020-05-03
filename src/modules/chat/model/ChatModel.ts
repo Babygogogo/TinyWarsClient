@@ -18,7 +18,7 @@ namespace TinyWars.Chat.ChatModel {
         _warMessages.clear();
         _privateMessages.clear();
 
-        for (const msg of msgList) {
+        for (const msg of msgList || []) {
            updateOnAddMessage(msg);
         }
     }

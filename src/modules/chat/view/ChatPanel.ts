@@ -270,15 +270,26 @@ namespace TinyWars.Chat {
                 ++index;
             }
 
-            return dataList.length
-                ? dataList
-                : [{
-                    index       : 0,
+            if (dataList.every(d => d.toChannelId !== Types.ChatChannel.PublicCn)) {
+                dataList.push({
+                    index       : dataList.length,
                     panel       : this,
-                    toChannelId : Types.ChatChannel.Public,
+                    toChannelId : Types.ChatChannel.PublicCn,
                     toUserId    : null,
                     toWarAndTeam: null,
-                }];
+                });
+            }
+            if (dataList.every(d => d.toChannelId !== Types.ChatChannel.PublicEn)) {
+                dataList.push({
+                    index       : dataList.length,
+                    panel       : this,
+                    toChannelId : Types.ChatChannel.PublicEn,
+                    toUserId    : null,
+                    toWarAndTeam: null,
+                });
+            }
+
+            return dataList;
         }
 
         private _getDefaultSelectedIndex(): number {
