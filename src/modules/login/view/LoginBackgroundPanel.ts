@@ -49,7 +49,7 @@ namespace TinyWars.Login {
                 { msgCode: Network.Codes.S_NewestConfigVersion, callback: this._onSNewestConfigVersion },
             ], this);
 
-            this._labelVersion.text = `TinyWars v.${window.CLIENT_VERSION}`;
+            this._labelVersion.text = `v.${window.CLIENT_VERSION}`;
             this._updateBtnChangeLanguage();
 
             if (ConfigManager.getNewestConfigVersion()) {
@@ -76,7 +76,7 @@ namespace TinyWars.Login {
             }
         }
         private _onSNewestConfigVersion(e: egret.Event): void {
-            this._initGroupUnits();
+            // this._initGroupUnits();
         }
         private _onTouchedBtnChangeLanguage(e: egret.TouchEvent): void {
             Lang.setLanguageType(Lang.getLanguageType() === Types.LanguageType.Chinese

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin width="960" height="400" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
-    <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" scale9Grid="9,9,2,2" source="Title0001"
-                    horizontalCenter="0" scaleX="0.7" scaleY="0.7" verticalCenter="-110" />
+    <GameUi:UiImage scale9Grid="9,9,2,2" source="resource/assets/texture/login/login_title_001.png" horizontalCenter="0"
+                    verticalCenter="-130" />
     <e:Group horizontalCenter="0" verticalCenter="80" scaleX="0.7" scaleY="0.7">
         <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" left="0" right="0" top="0" bottom="0"
                         scale9Grid="9,9,2,2" source="Common0003" />
