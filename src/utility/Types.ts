@@ -650,4 +650,10 @@ namespace TinyWars.Utility.Types {
         UpLeftToDownRight   = 3,
         Rotation            = 4,
     }
+
+    export const enum ChatChannel {
+        System      = 1,
+        PublicEn    = 2,
+        PublicCn    = 3,
+    }
 }

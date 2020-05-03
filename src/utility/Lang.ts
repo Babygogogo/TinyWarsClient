@@ -2058,6 +2058,54 @@ namespace TinyWars.Utility.Lang {
             `最近`,
             `Recent`,
         ],
+        [Type.B0373]: [
+            `公共(英语)`,
+            `Public(EN)`,
+        ],
+        [Type.B0374]: [
+            `系统频道`,
+            `System`,
+        ],
+        [Type.B0375]: [
+            `字数太多`,
+            `Too many characters`,
+        ],
+        [Type.B0376]: [
+            `频道`,
+            `Channel`,
+        ],
+        [Type.B0377]: [
+            `组队`,
+            `Team`,
+        ],
+        [Type.B0378]: [
+            `私聊`,
+            `Private`,
+        ],
+        [Type.B0379]: [
+            `全局`,
+            `Global`,
+        ],
+        [Type.B0380]: [
+            `聊天列表`,
+            `Chat List`,
+        ],
+        [Type.B0381]: [
+            `暂无消息`,
+            `No Message`,
+        ],
+        [Type.B0382]: [
+            `发送`,
+            `Send`,
+        ],
+        [Type.B0383]: [
+            `聊天`,
+            `Chat`
+        ],
+        [Type.B0384]: [
+            `公共(中文)`,
+            `Public(CN)`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -2404,6 +2452,10 @@ namespace TinyWars.Utility.Lang {
         [Type.F0024]: [
             `修改时间: %s`,
             `Modify Time: %s`,
+        ],
+        [Type.F0025]: [
+            `要和玩家"%s"私聊吗？`,
+            `Do you want to make a private chat with %s?`,
         ],
     };
 
@@ -2956,6 +3008,15 @@ namespace TinyWars.Utility.Lang {
             case Types.UnitActionState.Acted    : return getText(Type.B0368);
             case Types.UnitActionState.Idle     : return getText(Type.B0369);
             default                             : return null;
+        }
+    }
+
+    export function getChatChannelName(channel: Types.ChatChannel): string {
+        switch (channel) {
+            case Types.ChatChannel.System   : return getText(Type.B0374);
+            case Types.ChatChannel.PublicEn : return getText(Type.B0373);
+            case Types.ChatChannel.PublicCn : return getText(Type.B0384);
+            default                         : return null;
         }
     }
 }

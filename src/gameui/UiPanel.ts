@@ -121,7 +121,9 @@ namespace TinyWars.GameUi {
         // Functions for close self.
         ////////////////////////////////////////////////////////////////////////////////
         public close(): void {
-            this._doClose();
+            if (this.getIsOpening()) {
+                this._doClose();
+            }
         }
 
         private _doClose(): void {

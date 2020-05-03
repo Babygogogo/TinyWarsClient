@@ -23,6 +23,9 @@ namespace TinyWars.Utility.Notify {
         TileModelUpdated,
         LanguageChanged,
 
+        ChatPanelOpened,
+        ChatPanelClosed,
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         BwTurnIndexChanged,
         BwTurnPhaseCodeChanged,
@@ -81,7 +84,11 @@ namespace TinyWars.Utility.Notify {
         SCommonGetServerStatus,
         SCommonRateMultiPlayerReplay,
 
+        SChatGetAllMessages,
+        SChatAddMessage,
+
         SGetUserPublicInfo,
+        SGetUserPublicInfoFailed,
         SUserChangeNickname,
         SUserChangeNicknameFailed,
         SUserChangeDiscordId,

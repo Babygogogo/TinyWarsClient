@@ -565,6 +565,7 @@ namespace TinyWars.SingleCustomWar {
                 this._createCommandLoadGame(),
                 this._createCommandEnableCheating(),
                 this._createCommandOpenAdvancedMenu(),
+                this._createCommandChat(),
                 this._createCommandGotoLobby(),
             ].filter(v => !!v);
         }
@@ -586,6 +587,16 @@ namespace TinyWars.SingleCustomWar {
                     this._updateListCommand();
                 },
             };
+        }
+
+        private _createCommandChat(): DataForCommandRenderer | null {
+            return {
+                name    : Lang.getText(Lang.Type.B0383),
+                callback: () => {
+                    this.close();
+                    Chat.ChatPanel.show({});
+                },
+            }
         }
 
         private _createCommandOpenCoInfoMenu(): DataForCommandRenderer | undefined {

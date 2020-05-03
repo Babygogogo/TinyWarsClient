@@ -14,6 +14,7 @@ namespace TinyWars.Lobby {
         private _labelRankScore : GameUi.UiLabel;
         private _labelRankName  : GameUi.UiLabel;
         private _btnMyInfo      : GameUi.UiButton;
+        private _btnChat        : GameUi.UiButton;
 
         public static show(): void {
             if (!LobbyTopPanel._instance) {
@@ -42,7 +43,8 @@ namespace TinyWars.Lobby {
                 { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
             ];
             this._uiListeners = [
-                { ui: this._btnMyInfo, callback: this._onTouchedBtnMyInfo },
+                { ui: this._btnMyInfo,  callback: this._onTouchedBtnMyInfo },
+                { ui: this._btnChat,    callback: this._onTouchedBtnChat },
             ];
         }
 
@@ -59,24 +61,42 @@ namespace TinyWars.Lobby {
         }
 
         private _onNotifySUserChangeNickname(e: egret.Event): void {
-            this._updateView();
+            this._updateLabelNickname();
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
-            this._updateView();
+            this._updateComponentsForLanguage();
         }
 
         private _onTouchedBtnMyInfo(e: egret.Event): void {
-            User.UserPanel.show(UserModel.getSelfUserId());
             User.UserOnlineUsersPanel.hide();
+            Chat.ChatPanel.hide();
+            User.UserPanel.show(UserModel.getSelfUserId());
+        }
+
+        private _onTouchedBtnChat(e: egret.TouchEvent): void {
+            User.UserOnlineUsersPanel.hide();
+            User.UserPanel.hide();
+            if (!Chat.ChatPanel.getIsOpening()) {
+                Chat.ChatPanel.show({ toUserId: null });
+            }
         }
 
         private _updateView(): void {
+            this._updateComponentsForLanguage();
+            this._updateLabelNickname();
+        }
+
+        private _updateComponentsForLanguage(): void {
             const score                 = UserModel.getSelfRankScore();
-            this._labelNickname.text    = UserModel.getSelfNickname();
             this._labelRankScore.text   = `${Lang.getText(Lang.Type.B0060)}: ${score}`;
             this._labelRankName.text    = ConfigManager.getRankName(ConfigManager.getNewestConfigVersion(), score);
             this._btnMyInfo.label       = Lang.getText(Lang.Type.B0169);
+            this._btnChat.label         = Lang.getText(Lang.Type.B0383);
+        }
+
+        private _updateLabelNickname(): void {
+            this._labelNickname.text    = UserModel.getSelfNickname();
         }
     }
 }

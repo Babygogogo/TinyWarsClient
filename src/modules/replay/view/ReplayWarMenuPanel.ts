@@ -250,21 +250,21 @@ namespace TinyWars.Replay {
         }
 
         private _createDataForMainMenu(): DataForCommandRenderer[] {
-            const dataList = [] as DataForCommandRenderer[];
+            return [
+                this._createCommandOpenCoInfoMenu(),
+                this._createCommandOpenAdvancedMenu(),
+                this._createCommandRate(),
+                this._createCommandChat(),
+                this._createCommandGotoLobby(),
+            ].filter(v => !!v);
+        }
 
-            const commandOpenCoInfoMenu = this._createCommandOpenCoInfoMenu();
-            (commandOpenCoInfoMenu) && (dataList.push(commandOpenCoInfoMenu));
-
-            const commandOpenAdvancedMenu = this._createCommandOpenAdvancedMenu();
-            (commandOpenAdvancedMenu) && (dataList.push(commandOpenAdvancedMenu));
-
-            const commandRate = this._createCommandRate();
-            (commandRate) && (dataList.push(commandRate));
-
-            const commandGotoLobby = this._createCommandGotoLobby();
-            (commandGotoLobby) && (dataList.push(commandGotoLobby));
-
-            return dataList;
+        private _createDataForAdvancedMenu(): DataForCommandRenderer[] {
+            return [
+                this._createCommandSimulation(),
+                this._createCommandShowTileAnimation(),
+                this._createCommandStopTileAnimation(),
+            ].filter(v => !!v);
         }
 
         private _createCommandOpenCoInfoMenu(): DataForCommandRenderer | undefined {
@@ -275,21 +275,6 @@ namespace TinyWars.Replay {
                     ReplayWarMenuPanel.hide();
                 },
             };
-        }
-
-        private _createDataForAdvancedMenu(): DataForCommandRenderer[] {
-            const dataList = [] as DataForCommandRenderer[];
-
-            const commandSimulation = this._createCommandSimulation();
-            (commandSimulation) && (dataList.push(commandSimulation));
-
-            const commandShowTileAnimation = this._createCommandShowTileAnimation();
-            (commandShowTileAnimation) && (dataList.push(commandShowTileAnimation));
-
-            const commandStopTileAnimation = this._createCommandStopTileAnimation();
-            (commandStopTileAnimation) && (dataList.push(commandStopTileAnimation));
-
-            return dataList;
         }
 
         private _createCommandOpenAdvancedMenu(): DataForCommandRenderer | undefined {
@@ -324,6 +309,16 @@ namespace TinyWars.Replay {
                     });
                 },
             };
+        }
+
+        private _createCommandChat(): DataForCommandRenderer | null {
+            return {
+                name    : Lang.getText(Lang.Type.B0383),
+                callback: () => {
+                    this.close();
+                    Chat.ChatPanel.show({});
+                },
+            }
         }
 
         private _createCommandGotoLobby(): DataForCommandRenderer | undefined {

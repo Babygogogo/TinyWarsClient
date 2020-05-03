@@ -23,8 +23,10 @@ namespace TinyWars.User.UserProxy {
     }
     function _onSGetUserPublicInfo(e: egret.Event): void {
         const data = e.data as ProtoTypes.IS_GetUserPublicInfo;
-        if (!data.errorCode) {
-            UserModel.setUserInfo(data);
+        if (data.errorCode) {
+            Notify.dispatch(Notify.Type.SGetUserPublicInfoFailed, data);
+        } else {
+            UserModel.setUserPublicInfo(data);
             Notify.dispatch(Notify.Type.SGetUserPublicInfo, data);
         }
     }
