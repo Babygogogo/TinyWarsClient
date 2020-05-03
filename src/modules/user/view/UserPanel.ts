@@ -54,6 +54,7 @@ namespace TinyWars.User {
         private _btnShowOnlineUsers : GameUi.UiButton;
         private _btnChangeLanguage  : GameUi.UiButton;
         private _btnServerStatus    : GameUi.UiButton;
+        private _btnChat            : GameUi.UiButton;
         private _btnClose           : GameUi.UiButton;
 
         private _userId: number;
@@ -92,6 +93,7 @@ namespace TinyWars.User {
                 { ui: this._btnShowOnlineUsers, callback: this._onTouchedBtnShowOnlineUsers },
                 { ui: this._btnChangeLanguage,  callback: this._onTouchedBtnChangeLanguage },
                 { ui: this._btnServerStatus,    callback: this._onTouchedBtnServerStatus },
+                { ui: this._btnChat,            callback: this._onTouchedBtnChat },
                 { ui: this._btnClose,           callback: this.close },
             ];
         }
@@ -143,6 +145,11 @@ namespace TinyWars.User {
         private _onTouchedBtnServerStatus(e: egret.TouchEvent): void {
             Common.CommonServerStatusPanel.show();
         }
+        private _onTouchedBtnChat(e: egret.TouchEvent): void {
+            const userId = this._userId;
+            this.close();
+            Chat.ChatPanel.show({ toUserId: userId });
+        }
 
         private async _updateView(): Promise<void> {
             const userId    = this._userId;
@@ -166,6 +173,8 @@ namespace TinyWars.User {
             if (this._userId === UserModel.getSelfUserId()) {
                 group.addChild(this._btnChangeNickname);
                 group.addChild(this._btnChangeDiscordId);
+            } else {
+                group.addChild(this._btnChat);
             }
             group.addChild(this._btnShowOnlineUsers);
             group.addChild(this._btnChangeLanguage);
@@ -191,6 +200,7 @@ namespace TinyWars.User {
             this._updateBtnShowOnlineUsers();
             this._updateBtnChangeLanguage();
             this._updateBtnServerStatus();
+            this._updateBtnChat();
         }
         private async _updateLabelsForLanguage(): Promise<void> {
             const userId    = this._userId;
@@ -230,6 +240,9 @@ namespace TinyWars.User {
         }
         private _updateBtnServerStatus(): void {
             this._btnServerStatus.label = Lang.getText(Lang.Type.B0327);
+        }
+        private _updateBtnChat(): void {
+            this._btnChat.label = Lang.getText(Lang.Type.B0383);
         }
     }
 }

@@ -276,48 +276,25 @@ namespace TinyWars.MultiCustomWar {
         }
 
         private _createDataForMainMenu(): DataForCommandRenderer[] {
-            const dataList = [] as DataForCommandRenderer[];
-
-            const commandOpenCoInfoMenu = this._createCommandOpenCoInfoMenu();
-            (commandOpenCoInfoMenu) && (dataList.push(commandOpenCoInfoMenu));
-
-            const commandOpenAdvancedMenu = this._createCommandOpenAdvancedMenu();
-            (commandOpenAdvancedMenu) && (dataList.push(commandOpenAdvancedMenu));
-
-            const commandSyncWar = this._createCommandSyncWar();
-            (commandSyncWar) && (dataList.push(commandSyncWar));
-
-            const commandGotoLobby = this._createCommandGotoLobby();
-            (commandGotoLobby) && (dataList.push(commandGotoLobby));
-
-            return dataList;
+            return [
+                this._createCommandOpenCoInfoMenu(),
+                this._createCommandOpenAdvancedMenu(),
+                this._createCommandSyncWar(),
+                this._createCommandChat(),
+                this._createCommandGotoLobby(),
+            ].filter(c => !!c);
         }
 
         private _createDataForAdvancedMenu(): DataForCommandRenderer[] {
-            const dataList = [] as DataForCommandRenderer[];
-
-            const commandPlayerDeleteUnit = this._createCommandPlayerDeleteUnit();
-            (commandPlayerDeleteUnit) && (dataList.push(commandPlayerDeleteUnit));
-
-            const commandPlayerAgreeDraw = this._createCommandPlayerAgreeDraw();
-            (commandPlayerAgreeDraw) && (dataList.push(commandPlayerAgreeDraw));
-
-            const commandPlayerRefuseDraw = this._createCommandPlayerDeclineDraw();
-            (commandPlayerRefuseDraw) && (dataList.push(commandPlayerRefuseDraw));
-
-            const commandPlayerSurrender = this._createCommandPlayerSurrender();
-            (commandPlayerSurrender) && (dataList.push(commandPlayerSurrender));
-
-            const commandSimulation = this._createCommandSimulation();
-            (commandSimulation) && (dataList.push(commandSimulation));
-
-            const commandShowTileAnimation = this._createCommandShowTileAnimation();
-            (commandShowTileAnimation) && (dataList.push(commandShowTileAnimation));
-
-            const commandStopTileAnimation = this._createCommandStopTileAnimation();
-            (commandStopTileAnimation) && (dataList.push(commandStopTileAnimation));
-
-            return dataList;
+            return [
+                this._createCommandPlayerDeleteUnit(),
+                this._createCommandPlayerAgreeDraw(),
+                this._createCommandPlayerDeclineDraw(),
+                this._createCommandPlayerSurrender(),
+                this._createCommandSimulation(),
+                this._createCommandShowTileAnimation(),
+                this._createCommandStopTileAnimation(),
+            ].filter(c => !!c);
         }
 
         private _createCommandOpenAdvancedMenu(): DataForCommandRenderer | undefined {
@@ -354,6 +331,16 @@ namespace TinyWars.MultiCustomWar {
                     this.close();
                 },
             };
+        }
+
+        private _createCommandChat(): DataForCommandRenderer | null {
+            return {
+                name    : Lang.getText(Lang.Type.B0383),
+                callback: () => {
+                    this.close();
+                    Chat.ChatPanel.show({});
+                },
+            }
         }
 
         private _createCommandGotoLobby(): DataForCommandRenderer | undefined {

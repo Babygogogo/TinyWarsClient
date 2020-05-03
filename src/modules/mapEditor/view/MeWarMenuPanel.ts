@@ -421,54 +421,27 @@ namespace TinyWars.MapEditor {
         }
 
         private _createDataForMainMenu(): DataForCommandRenderer[] {
-            const dataList = [] as DataForCommandRenderer[];
-
-            const commandSaveMap = this._createCommandSaveMap();
-            (commandSaveMap) && (dataList.push(commandSaveMap));
-
-            const commandLoadMap = this._createCommandLoadMap();
-            (commandLoadMap) && (dataList.push(commandLoadMap));
-
-            const commandWarRule = this._createCommandWarRule();
-            (commandWarRule) && (dataList.push(commandWarRule));
-
-            const commandReviewAccept = this._createCommandReviewAccept();
-            (commandReviewAccept) && (dataList.push(commandReviewAccept));
-
-            const commandReviewReject = this._createCommandReviewReject();
-            (commandReviewReject) && (dataList.push(commandReviewReject));
-
-            const commandOpenAdvancedMenu = this._createCommandOpenAdvancedMenu();
-            (commandOpenAdvancedMenu) && (dataList.push(commandOpenAdvancedMenu));
-
-            const commandGotoLobby = this._createCommandGotoLobby();
-            (commandGotoLobby) && (dataList.push(commandGotoLobby));
-
-            return dataList;
+            return [
+                this._createCommandSaveMap(),
+                this._createCommandLoadMap(),
+                this._createCommandWarRule(),
+                this._createCommandReviewAccept(),
+                this._createCommandReviewReject(),
+                this._createCommandOpenAdvancedMenu(),
+                this._createCommandChat(),
+                this._createCommandGotoLobby(),
+            ].filter(v => !!v);
         }
 
         private _createDataForAdvancedMenu(): DataForCommandRenderer[] {
-            const dataList = [] as DataForCommandRenderer[];
-
-            const commandSimulation = this._createCommandSimulation();
-            (commandSimulation) && (dataList.push(commandSimulation));
-
-            const commandShowTileAnimation = this._createCommandShowTileAnimation();
-            (commandShowTileAnimation) && (dataList.push(commandShowTileAnimation));
-
-            const commandStopTileAnimation = this._createCommandStopTileAnimation();
-            (commandStopTileAnimation) && (dataList.push(commandStopTileAnimation));
-
-            const commandResize = this._createCommandResize();
-            (commandResize) && (dataList.push(commandResize));
-
-            const commandOffset = this._createCommandOffset();
-            (commandOffset) && (dataList.push(commandOffset));
-
-            const commandImport = this._createCommandImport();
-            (commandImport) && (dataList.push(commandImport));
-
-            return dataList;
+            return [
+                this._createCommandSimulation(),
+                this._createCommandShowTileAnimation(),
+                this._createCommandStopTileAnimation(),
+                this._createCommandResize(),
+                this._createCommandOffset(),
+                this._createCommandImport(),
+            ].filter(v => !!v);
         }
 
         private _createCommandOpenAdvancedMenu(): DataForCommandRenderer | undefined {
@@ -570,6 +543,16 @@ namespace TinyWars.MapEditor {
                         MapManagement.MmRejectMapPanel.show();
                     },
                 };
+            }
+        }
+
+        private _createCommandChat(): DataForCommandRenderer | null {
+            return {
+                name    : Lang.getText(Lang.Type.B0383),
+                callback: () => {
+                    this.close();
+                    Chat.ChatPanel.show({});
+                },
             }
         }
 

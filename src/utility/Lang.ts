@@ -2098,6 +2098,10 @@ namespace TinyWars.Utility.Lang {
             `发送`,
             `Send`,
         ],
+        [Type.B0383]: [
+            `聊天`,
+            `Chat`
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -2444,6 +2448,10 @@ namespace TinyWars.Utility.Lang {
         [Type.F0024]: [
             `修改时间: %s`,
             `Modify Time: %s`,
+        ],
+        [Type.F0025]: [
+            `要和玩家"%s"私聊吗？`,
+            `Do you want to make a private chat with %s?`,
         ],
     };
 

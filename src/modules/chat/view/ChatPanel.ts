@@ -9,7 +9,7 @@ namespace TinyWars.Chat {
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
     type OpenDataForChatPanel = {
-        toUserId: number | null;
+        toUserId?: number;
     }
 
     export class ChatPanel extends GameUi.UiPanel {
@@ -147,12 +147,14 @@ namespace TinyWars.Chat {
 
         private _onTouchedBtnSend(e: egret.TouchEvent): void {
             const content = this._inputMessage.text;
-            if ((!content) || (content.length > CommonConstants.ChatContentMaxLength)) {
-                FloatText.show(Lang.getText(Lang.Type.B0375));
-            } else {
-                const data = this._dataForListChat[this.getSelectedIndex()];
-                if (data) {
-                    ChatProxy.reqChatAddMessage(content, data.toChannelId, data.toUserId, data.toWarAndTeam);
+            if (content) {
+                if (content.length > CommonConstants.ChatContentMaxLength) {
+                    FloatText.show(Lang.getText(Lang.Type.B0375));
+                } else {
+                    const data = this._dataForListChat[this.getSelectedIndex()];
+                    if (data) {
+                        ChatProxy.reqChatAddMessage(content, data.toChannelId, data.toUserId, data.toWarAndTeam);
+                    }
                 }
             }
         }
@@ -398,6 +400,25 @@ namespace TinyWars.Chat {
             this._labelName.textColor   = (userInfo) && (userInfo.id === User.UserModel.getSelfUserId()) ? 0x00FF00 : 0xFFFFFF;
             this._labelName.text        = `${userInfo ? userInfo.nickname : `???`}    (${Helpers.getTimestampShortText(data.timestamp)})`;
             this._labelContent.text     = data.content;
+        }
+
+        public async onItemTapEvent(e: eui.ItemTapEvent): Promise<void> {
+            const data = this.data as DataForMessageRenderer;
+            if (data.toUserId == null) {
+                const userId = data.fromUserId;
+                if (userId !== User.UserModel.getSelfUserId()) {
+                    const info = await User.UserModel.getUserPublicInfo(userId);
+                    if (info) {
+                        Common.ConfirmPanel.show({
+                            title   : Lang.getText(Lang.Type.B0088),
+                            content : Lang.getFormattedText(Lang.Type.F0025, info.nickname),
+                            callback: () => {
+                                ChatPanel.show({ toUserId: userId });
+                            },
+                        });
+                    }
+                }
+            }
         }
     }
 }
