@@ -219,7 +219,7 @@ namespace TinyWars.MultiCustomRoom {
             const unitMapView = new WarMap.WarMapUnitMapView();
             unitMapView.initWithMapRawData(mapRawData);
 
-            const gridSize = ConfigManager.getGridSize();
+            const gridSize = Utility.ConfigManager.getGridSize();
             this._zoomMap.removeAllContents();
             this._zoomMap.setContentWidth(mapRawData.mapWidth * gridSize.width);
             this._zoomMap.setContentHeight(mapRawData.mapHeight * gridSize.height);

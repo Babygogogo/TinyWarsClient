@@ -46,7 +46,7 @@ namespace TinyWars.MapEditor {
         // Initializers and serializers.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         public init(data: SerializedBwUnit, configVersion: string): MeUnit {
-            const t                 = ConfigManager.getUnitTypeAndPlayerIndex(data.viewId);
+            const t                 = Utility.ConfigManager.getUnitTypeAndPlayerIndex(data.viewId);
             const unitType          = t.unitType;
             this._configVersion     = configVersion;
             this.setGridX(data.gridX);
@@ -54,10 +54,10 @@ namespace TinyWars.MapEditor {
             this._setViewId(data.viewId);
             this.setUnitId(data.unitId);
             this._setPlayerIndex(t.playerIndex);
-            this._templateCfg       = ConfigManager.getUnitTemplateCfg(this._configVersion, unitType);
-            this._damageChartCfg    = ConfigManager.getDamageChartCfgs(this._configVersion, unitType);
-            this._buildableTileCfg  = ConfigManager.getBuildableTileCfgs(this._configVersion, unitType);
-            this._visionBonusCfg    = ConfigManager.getVisionBonusCfg(this._configVersion, unitType);
+            this._templateCfg       = Utility.ConfigManager.getUnitTemplateCfg(this._configVersion, unitType);
+            this._damageChartCfg    = Utility.ConfigManager.getDamageChartCfgs(this._configVersion, unitType);
+            this._buildableTileCfg  = Utility.ConfigManager.getBuildableTileCfgs(this._configVersion, unitType);
+            this._visionBonusCfg    = Utility.ConfigManager.getVisionBonusCfg(this._configVersion, unitType);
             this.setActionState(                   data.state                    != null ? data.state                    : UnitActionState.Idle);
             this.setCurrentHp(               data.currentHp                != null ? data.currentHp                : this.getMaxHp());
             this.setPrimaryWeaponCurrentAmmo(data.primaryWeaponCurrentAmmo != null ? data.primaryWeaponCurrentAmmo : this.getPrimaryWeaponMaxAmmo());
@@ -297,7 +297,7 @@ namespace TinyWars.MapEditor {
         }
 
         public checkHasSecondaryWeapon(): boolean {
-            return ConfigManager.checkHasSecondaryWeapon(this._configVersion, this.getType());
+            return Utility.ConfigManager.checkHasSecondaryWeapon(this._configVersion, this.getType());
         }
 
         public getCfgSecondaryWeaponBaseDamage(armorType: ArmorType | null | undefined): number | undefined | null {
@@ -481,7 +481,7 @@ namespace TinyWars.MapEditor {
             if (type == null) {
                 return undefined;
             } else {
-                return ConfigManager.getUnitTemplateCfg(this._configVersion, type).productionCost;
+                return Utility.ConfigManager.getUnitTemplateCfg(this._configVersion, type).productionCost;
             }
         }
 
@@ -549,7 +549,7 @@ namespace TinyWars.MapEditor {
         // Functions for promotion.
         ////////////////////////////////////////////////////////////////////////////////
         public getMaxPromotion(): number {
-            return ConfigManager.getUnitMaxPromotion(this._configVersion);
+            return Utility.ConfigManager.getUnitMaxPromotion(this._configVersion);
         }
 
         public getCurrentPromotion(): number {
@@ -564,11 +564,11 @@ namespace TinyWars.MapEditor {
         }
 
         public getPromotionAttackBonus(): number {
-            return ConfigManager.getUnitPromotionAttackBonus(this._configVersion, this.getCurrentPromotion());
+            return Utility.ConfigManager.getUnitPromotionAttackBonus(this._configVersion, this.getCurrentPromotion());
         }
 
         public getPromotionDefenseBonus(): number {
-            return ConfigManager.getUnitPromotionDefenseBonus(this._configVersion, this.getCurrentPromotion());
+            return Utility.ConfigManager.getUnitPromotionDefenseBonus(this._configVersion, this.getCurrentPromotion());
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -579,7 +579,7 @@ namespace TinyWars.MapEditor {
         }
 
         public getTileObjectViewIdAfterLaunchSilo(): number {
-            return ConfigManager.getTileObjectViewId(Types.TileObjectType.EmptySilo, 0);
+            return Utility.ConfigManager.getTileObjectViewId(Types.TileObjectType.EmptySilo, 0);
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -611,7 +611,7 @@ namespace TinyWars.MapEditor {
             const dstType = this.getBuildTargetTileType(srcType);
             return dstType == null
                 ? undefined
-                : ConfigManager.getTileObjectViewId(ConfigManager.getTileObjectTypeByTileType(dstType), this.getPlayerIndex());
+                : Utility.ConfigManager.getTileObjectViewId(Utility.ConfigManager.getTileObjectTypeByTileType(dstType), this.getPlayerIndex());
         }
 
         public getBuildAmount(): number | undefined {
@@ -673,8 +673,8 @@ namespace TinyWars.MapEditor {
             return (loadUnitCategory != null)
                 && (loadableTileCategory != null)
                 && (maxLoadUnitsCount != null)
-                && (ConfigManager.checkIsTileTypeInCategory(this._configVersion, this._war.getTileMap().getTile(this.getGridIndex()).getType(), loadableTileCategory))
-                && (ConfigManager.checkIsUnitTypeInCategory(this._configVersion, unit.getType(), loadUnitCategory))
+                && (Utility.ConfigManager.checkIsTileTypeInCategory(this._configVersion, this._war.getTileMap().getTile(this.getGridIndex()).getType(), loadableTileCategory))
+                && (Utility.ConfigManager.checkIsUnitTypeInCategory(this._configVersion, unit.getType(), loadUnitCategory))
                 && (this.getPlayerIndex() === unit.getPlayerIndex())
                 && (this.getLoadedUnitsCount() < maxLoadUnitsCount);
         }
@@ -683,7 +683,7 @@ namespace TinyWars.MapEditor {
             const category  = cfg.loadableTileCategory;
             return (cfg.canDropLoadedUnits === 1)
                 && (category != null)
-                && (ConfigManager.checkIsTileTypeInCategory(this._configVersion, tileType, category));
+                && (Utility.ConfigManager.checkIsTileTypeInCategory(this._configVersion, tileType, category));
         }
         public checkCanLaunchLoadedUnit(): boolean {
             return this._templateCfg.canLaunchLoadedUnits === 1;

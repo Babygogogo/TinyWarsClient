@@ -237,14 +237,14 @@ namespace TinyWars.BaseWar {
         }
 
         public setSettingsLuckLowerLimit(limit: number | null): void {
-            this._luckLowerLimit = limit == null ? ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultLowerLimit : limit;
+            this._luckLowerLimit = limit == null ? Utility.ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultLowerLimit : limit;
         }
         public getSettingsLuckLowerLimit(): number {
             return this._luckLowerLimit;
         }
 
         public setSettingsLuckUpperLimit(limit: number | null): void {
-            this._luckUpperLimit = limit == null ? ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultUpperLimit : limit;
+            this._luckUpperLimit = limit == null ? Utility.ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultUpperLimit : limit;
         }
         public getSettingsLuckUpperLimit(): number {
             return this._luckUpperLimit;

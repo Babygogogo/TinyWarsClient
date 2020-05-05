@@ -96,7 +96,7 @@ namespace TinyWars.Replay {
                         gridX   : -1,
                         gridY   : -1,
                         unitId  : -1,
-                        viewId  : ConfigManager.getUnitViewId(data.produceUnitType, war.getPlayerInTurn().getPlayerIndex()),
+                        viewId  : Utility.ConfigManager.getUnitViewId(data.produceUnitType, war.getPlayerInTurn().getPlayerIndex()),
                     }, war.getConfigVersion()) as ReplayUnit;
 
                 datasForList.push({

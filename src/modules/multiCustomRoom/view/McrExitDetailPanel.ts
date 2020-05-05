@@ -220,7 +220,7 @@ namespace TinyWars.MultiCustomRoom {
             this._labelTeam.text        = data.teamIndex != null ? Helpers.getTeamText(data.teamIndex) : "??";
             this._labelCoName.text      = data.coId == null
                 ? (data.nickname == null ? "????" : `(${Lang.getText(Lang.Type.B0001)}CO)`)
-                : ConfigManager.getCoBasicCfg(ConfigManager.getNewestConfigVersion(), data.coId).name;
+                : Utility.ConfigManager.getCoBasicCfg(Utility.ConfigManager.getNewestConfigVersion(), data.coId).name;
         }
     }
 

@@ -2,7 +2,7 @@
 namespace TinyWars.MapEditor {
     import Notify = Utility.Notify;
 
-    const { width: GRID_WIDTH, height: GRID_HEIGHT } = ConfigManager.getGridSize();
+    const { width: GRID_WIDTH, height: GRID_HEIGHT } = Utility.ConfigManager.getGridSize();
 
     export class MeTileMapView extends egret.DisplayObjectContainer {
         private _tileViews          = new Array<MeTileView>();

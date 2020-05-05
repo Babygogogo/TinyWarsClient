@@ -28,7 +28,7 @@ namespace TinyWars.MapEditor {
         private _isFogEnabled   : boolean;
 
         public init(data: SerializedBwTile, configVersion: string): MeTile {
-            const t = ConfigManager.getTileObjectTypeAndPlayerIndex(data.objectViewId!);
+            const t = Utility.ConfigManager.getTileObjectTypeAndPlayerIndex(data.objectViewId!);
             Logger.assert(t, "TileModel.init() invalid SerializedTile! ", data);
 
             this._configVersion = configVersion;
@@ -36,11 +36,11 @@ namespace TinyWars.MapEditor {
             this._setGridY(data.gridY);
             this._setBaseViewId(data.baseViewId);
             this._setObjectViewId(data.objectViewId);
-            this._baseType      = ConfigManager.getTileBaseType(data.baseViewId);
+            this._baseType      = Utility.ConfigManager.getTileBaseType(data.baseViewId);
             this._objectType    = t.tileObjectType;
             this._setPlayerIndex(t.playerIndex);
-            this._templateCfg   = ConfigManager.getTileTemplateCfg(configVersion, this._baseType, this._objectType);
-            this._moveCostCfg   = ConfigManager.getMoveCostCfg(configVersion, this._baseType, this._objectType);
+            this._templateCfg   = Utility.ConfigManager.getTileTemplateCfg(configVersion, this._baseType, this._objectType);
+            this._moveCostCfg   = Utility.ConfigManager.getMoveCostCfg(configVersion, this._baseType, this._objectType);
             this.setCurrentHp(          data.currentHp           != null ? data.currentHp           : this.getMaxHp());
             this.setCurrentBuildPoint(  data.currentBuildPoint   != null ? data.currentBuildPoint   : this.getMaxBuildPoint());
             this.setCurrentCapturePoint(data.currentCapturePoint != null ? data.currentCapturePoint : this.getMaxCapturePoint());
@@ -241,7 +241,7 @@ namespace TinyWars.MapEditor {
             return this._templateCfg.defenseUnitCategory;
         }
         public checkCanDefendUnit(unit: MeUnit): boolean {
-            return ConfigManager.checkIsUnitTypeInCategory(this._configVersion, unit.getType(), this.getDefenseUnitCategory());
+            return Utility.ConfigManager.checkIsUnitTypeInCategory(this._configVersion, unit.getType(), this.getDefenseUnitCategory());
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -288,7 +288,7 @@ namespace TinyWars.MapEditor {
                 this.init({
                     gridX       : this.getGridX(),
                     gridY       : this.getGridY(),
-                    objectViewId: ConfigManager.getTileObjectViewId(TileObjectType.City, playerIndex)!,
+                    objectViewId: Utility.ConfigManager.getTileObjectViewId(TileObjectType.City, playerIndex)!,
                     baseViewId  : this.getBaseViewId(),
                 }, this._configVersion);
             } else {
@@ -353,7 +353,7 @@ namespace TinyWars.MapEditor {
             const category = this._templateCfg.hideUnitCategory;
             return category == null
                 ? false
-                : ConfigManager.getUnitTypesByCategory(this._configVersion, category).indexOf(unitType) >= 0;
+                : Utility.ConfigManager.getUnitTypesByCategory(this._configVersion, category).indexOf(unitType) >= 0;
         }
 
         public checkIsUnitHider(): boolean {

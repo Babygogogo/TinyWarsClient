@@ -106,7 +106,7 @@ namespace TinyWars.MapEditor {
 
         private _createDataForListUnit(): DataForCategoryRenderer[] {
             const mapping = new Map<number, number[]>();
-            ConfigManager.forEachUnitTypeAndPlayerIndex((value, unitViewId) => {
+            Utility.ConfigManager.forEachUnitTypeAndPlayerIndex((value, unitViewId) => {
                 const playerIndex = value.playerIndex;
                 if (unitViewId !== 0) {
                     if (mapping.has(playerIndex)) {
@@ -205,7 +205,7 @@ namespace TinyWars.MapEditor {
 
         protected dataChanged(): void {
             const data              = this.data as DataForUnitRenderer;
-            this._labelName.text    = Lang.getUnitName(ConfigManager.getUnitTypeAndPlayerIndex(data.unitViewId).unitType);
+            this._labelName.text    = Lang.getUnitName(Utility.ConfigManager.getUnitTypeAndPlayerIndex(data.unitViewId).unitType);
             this._unitView.init(new MeUnit().init({
                 gridX   : 0,
                 gridY   : 0,

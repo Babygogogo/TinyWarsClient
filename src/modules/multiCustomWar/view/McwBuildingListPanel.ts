@@ -138,17 +138,17 @@ namespace TinyWars.MultiCustomWar {
             const dict              = data.dict;
             const playerManager     = data.playerManager;
             let totalNum            = 0;
-            for (let playerIndex = 0; playerIndex <= ConfigManager.MAX_PLAYER_INDEX; ++playerIndex) {
+            for (let playerIndex = 0; playerIndex <= Utility.ConfigManager.MAX_PLAYER_INDEX; ++playerIndex) {
                 const num                               = dict.get(playerIndex) || 0;
                 totalNum                                += num;
                 this._labelNumList[playerIndex].text    = playerManager.getPlayer(playerIndex) ? `${num}` : `--`;
             }
             this._labelTotalNum.text = `${totalNum}`;
 
-            const tileObjectType = ConfigManager.getTileObjectTypeByTileType(data.tileType);
+            const tileObjectType = Utility.ConfigManager.getTileObjectTypeByTileType(data.tileType);
             this._tileView.init(
                 null,
-                ConfigManager.getTileObjectViewId(tileObjectType, tileObjectType === Types.TileObjectType.Headquarters ? 1 : 0)
+                Utility.ConfigManager.getTileObjectViewId(tileObjectType, tileObjectType === Types.TileObjectType.Headquarters ? 1 : 0)
             );
             this._tileView.updateView();
         }

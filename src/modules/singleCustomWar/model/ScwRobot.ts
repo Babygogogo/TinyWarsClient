@@ -281,7 +281,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
             if (repairInfo) {
                 return {
                     baseDamage  : attacker.getCfgBaseDamage(target.getArmorType()),
-                    normalizedHp: Math.floor((attacker.getCurrentHp() + repairInfo.hp) / ConfigManager.UNIT_HP_NORMALIZER),
+                    normalizedHp: Math.floor((attacker.getCurrentHp() + repairInfo.hp) / Utility.ConfigManager.UNIT_HP_NORMALIZER),
                     fuel        : attacker.getMaxFuel(),
                 };
             } else {
@@ -321,7 +321,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
                 if (repairInfo) {
                     return {
                         baseDamage  : attacker.getCfgBaseDamage(target.getArmorType()),
-                        normalizedHp: Math.floor((attacker.getCurrentHp() + repairInfo.hp) / ConfigManager.UNIT_HP_NORMALIZER),
+                        normalizedHp: Math.floor((attacker.getCurrentHp() + repairInfo.hp) / Utility.ConfigManager.UNIT_HP_NORMALIZER),
                         fuel        : attacker.getMaxFuel(),
                     };
                 } else {
@@ -413,7 +413,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
                                 (baseDamage * Math.max(0, 1 + attackBonus / 100) + luckValue)
                                 * normalizedHp
                                 * _getDefenseMultiplierWithBonus(defenseBonus + _tileMap.getTile({ x, y }).getDefenseAmountForUnit(targetUnit))
-                                / ConfigManager.UNIT_HP_NORMALIZER
+                                / Utility.ConfigManager.UNIT_HP_NORMALIZER
                             );
                             if (!map[x][y]) {
                                 map[x][y] = {
@@ -508,7 +508,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
             if ((unit.getPlayerIndex() === playerIndexInturn)                                                   &&
                 (unit.getActionState() === UnitActionState.Idle)                                                            &&
                 (unit.getMinAttackRange())                                                                      &&
-                (ConfigManager.checkIsUnitTypeInCategory(_configVersion, unit.getType(), Types.UnitCategory.Air))
+                (Utility.ConfigManager.checkIsUnitTypeInCategory(_configVersion, unit.getType(), Types.UnitCategory.Air))
             ) {
                 units.push(unit);
             }
@@ -747,7 +747,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         await _checkAndCallLater();
 
         let score = 10000;                                                                                                          // ADJUSTABLE
-        for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, ConfigManager.SILO_RADIUS, _mapSize)) {
+        for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, Utility.ConfigManager.SILO_RADIUS, _mapSize)) {
             score += unitValueMap[gridIndex.x][gridIndex.y] || 0;                                                                   // ADJUSTABLE
         }
         return score;
@@ -782,7 +782,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         const playerIndexInTurn = _turnManager.getPlayerIndexInTurn();
         const targetUnit        = new ScwUnit();
         targetUnit.init({
-            viewId  : ConfigManager.getUnitViewId(unitType, playerIndexInTurn),
+            viewId  : Utility.ConfigManager.getUnitViewId(unitType, playerIndexInTurn),
             unitId  : 0,
             gridX   : gridIndex.x,
             gridY   : gridIndex.y,
@@ -797,7 +797,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
 
         if (unitType !== UnitType.Infantry) {
             const restFactoriesCount = tileType === TileType.Factory ? idleFactoriesCount - 1 : idleFactoriesCount;
-            if (restFactoriesCount * ConfigManager.getUnitTemplateCfg(_configVersion, UnitType.Infantry).productionCost > restFund) {
+            if (restFactoriesCount * Utility.ConfigManager.getUnitTemplateCfg(_configVersion, UnitType.Infantry).productionCost > restFund) {
                 score += -999999;                                                                                                       // ADJUSTABLE
             }
         }
@@ -1100,7 +1100,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
                 score   : maxScore,
                 action  : { PlayerProduceUnit: {
                     unitType    : targetUnitType,
-                    unitHp      : ConfigManager.UNIT_MAX_HP,
+                    unitHp      : Utility.ConfigManager.UNIT_MAX_HP,
                     gridIndex,
                 } },
             }

@@ -253,7 +253,7 @@ namespace TinyWars.BaseWar {
             } else {
                 const version = this._war.getConfigVersion();
                 for (const skillId of currentSkills) {
-                    if (ConfigManager.getCoSkillCfg(version, skillId).showZone) {
+                    if (Utility.ConfigManager.getCoSkillCfg(version, skillId).showZone) {
                         return true;
                     }
                 }
@@ -272,7 +272,7 @@ namespace TinyWars.BaseWar {
             const coId = this.getCoId();
             return coId == null
                 ? null
-                : ConfigManager.getCoBasicCfg(this._war.getConfigVersion(), coId);
+                : Utility.ConfigManager.getCoBasicCfg(this._war.getConfigVersion(), coId);
         }
     }
 }

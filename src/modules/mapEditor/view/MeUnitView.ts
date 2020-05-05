@@ -1,12 +1,12 @@
 
 namespace TinyWars.MapEditor {
     import TimeModel            = Time.TimeModel;
+    import CommonModel          = Common.CommonModel;
     import Types                = Utility.Types;
     import Helpers              = Utility.Helpers;
     import UnitAnimationType    = Types.UnitAnimationType;
-    import GridIndex            = Types.GridIndex;
 
-    const { width: _GRID_WIDTH, height: _GRID_HEIGHT }  = ConfigManager.getGridSize();
+    const { width: _GRID_WIDTH, height: _GRID_HEIGHT }  = Utility.ConfigManager.getGridSize();
     const _IMG_UNIT_STAND_ANCHOR_OFFSET_X               = _GRID_WIDTH * 3 / 4;
     const _IMG_UNIT_STAND_ANCHOR_OFFSET_Y               = _GRID_HEIGHT / 2;
     const _IMG_UNIT_STAND_X                             = _GRID_WIDTH * 2 / 4;
@@ -67,9 +67,9 @@ namespace TinyWars.MapEditor {
         }
         public tickUnitAnimationFrame(): void {
             if (this._animationType === UnitAnimationType.Stand) {
-                this._imgUnit.source    = ConfigManager.getUnitIdleImageSource(this._unit.getViewId(), Math.floor(TimeModel.getUnitAnimationTickCount() / 2), this._isDark);
+                this._imgUnit.source = CommonModel.getUnitIdleImageSource(this._unit.getViewId(), this._isDark);
             } else {
-                this._imgUnit.source    = ConfigManager.getUnitMovingImageSource(this._unit.getViewId(), TimeModel.getUnitAnimationTickCount(), this._isDark);
+                this._imgUnit.source = CommonModel.getUnitMovingImageSource(this._unit.getViewId(), this._isDark);
             }
         }
 

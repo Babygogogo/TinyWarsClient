@@ -222,7 +222,7 @@ namespace TinyWars.BaseWar.BwHelpers {
 
     export function getUnitProductionCost(war: BwWar, unitType: UnitType): number | undefined {
         // TODO: take skills into account.
-        const cfg = ConfigManager.getUnitTemplateCfg(war.getConfigVersion(), unitType);
+        const cfg = Utility.ConfigManager.getUnitTemplateCfg(war.getConfigVersion(), unitType);
         return cfg ? cfg.productionCost : undefined;
     }
 
@@ -254,7 +254,7 @@ namespace TinyWars.BaseWar.BwHelpers {
 
     export function exeInstantSkill(war: BwWar, player: BwPlayer, gridIndex: GridIndex, skillId: number, extraData: ProtoTypes.IWarUseCoSkillExtraData): void {
         const configVersion = war.getConfigVersion();
-        const skillCfg      = ConfigManager.getCoSkillCfg(configVersion, skillId)!;
+        const skillCfg      = Utility.ConfigManager.getCoSkillCfg(configVersion, skillId)!;
         const playerIndex   = player.getPlayerIndex();
         const unitMap       = war.getUnitMap();
         const zoneRadius    = player.getCoZoneRadius()!;
@@ -262,10 +262,10 @@ namespace TinyWars.BaseWar.BwHelpers {
         if (skillCfg.selfHpGain) {
             const cfg       = skillCfg.selfHpGain;
             const category  = cfg[1];
-            const modifier  = cfg[2] * ConfigManager.UNIT_HP_NORMALIZER;
+            const modifier  = cfg[2] * Utility.ConfigManager.UNIT_HP_NORMALIZER;
             unitMap.forEachUnit(unit => {
                 if ((unit.getPlayerIndex() === playerIndex)                                         &&
-                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
+                    (Utility.ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
                 ) {
                     if (((cfg[0] === 0) && (GridIndexHelpers.getDistance(unit.getGridIndex(), gridIndex) <= zoneRadius)) ||
                         (cfg[0] === 1)
@@ -285,10 +285,10 @@ namespace TinyWars.BaseWar.BwHelpers {
         if (skillCfg.enemyHpGain) {
             const cfg       = skillCfg.enemyHpGain;
             const category  = cfg[1];
-            const modifier  = cfg[2] * ConfigManager.UNIT_HP_NORMALIZER;
+            const modifier  = cfg[2] * Utility.ConfigManager.UNIT_HP_NORMALIZER;
             unitMap.forEachUnit(unit => {
                 if ((unit.getPlayerIndex() !== playerIndex)                                         &&
-                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
+                    (Utility.ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
                 ) {
                     if (((cfg[0] === 0) && (GridIndexHelpers.getDistance(unit.getGridIndex(), gridIndex) <= zoneRadius)) ||
                         (cfg[0] === 1)
@@ -311,7 +311,7 @@ namespace TinyWars.BaseWar.BwHelpers {
             const modifier  = cfg[2];
             unitMap.forEachUnit(unit => {
                 if ((unit.getPlayerIndex() === playerIndex)                                         &&
-                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
+                    (Utility.ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
                 ) {
                     if (((cfg[0] === 0) && (GridIndexHelpers.getDistance(unit.getGridIndex(), gridIndex) <= zoneRadius)) ||
                         (cfg[0] === 1)
@@ -341,7 +341,7 @@ namespace TinyWars.BaseWar.BwHelpers {
             const modifier  = cfg[2];
             unitMap.forEachUnit(unit => {
                 if ((unit.getPlayerIndex() !== playerIndex)                                         &&
-                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
+                    (Utility.ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
                 ) {
                     if (((cfg[0] === 0) && (GridIndexHelpers.getDistance(unit.getGridIndex(), gridIndex) <= zoneRadius)) ||
                         (cfg[0] === 1)
@@ -371,7 +371,7 @@ namespace TinyWars.BaseWar.BwHelpers {
             const modifier  = cfg[2];
             unitMap.forEachUnit(unit => {
                 if ((unit.getPlayerIndex() === playerIndex)                                         &&
-                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
+                    (Utility.ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
                 ) {
                     if (((cfg[0] === 0) && (GridIndexHelpers.getDistance(unit.getGridIndex(), gridIndex) <= zoneRadius)) ||
                         (cfg[0] === 1)
@@ -416,7 +416,7 @@ namespace TinyWars.BaseWar.BwHelpers {
             const modifier  = cfg[2];
             unitMap.forEachUnit(unit => {
                 if ((unit.getPlayerIndex() !== playerIndex)                                         &&
-                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
+                    (Utility.ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
                 ) {
                     if (((cfg[0] === 0) && (GridIndexHelpers.getDistance(unit.getGridIndex(), gridIndex) <= zoneRadius)) ||
                         (cfg[0] === 1)
@@ -461,7 +461,7 @@ namespace TinyWars.BaseWar.BwHelpers {
             const modifier  = cfg[2];
             unitMap.forEachUnit(unit => {
                 if ((unit.getPlayerIndex() === playerIndex)                                         &&
-                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
+                    (Utility.ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
                 ) {
                     if (((cfg[0] === 0) && (GridIndexHelpers.getDistance(unit.getGridIndex(), gridIndex) <= zoneRadius)) ||
                         (cfg[0] === 1)
@@ -491,7 +491,7 @@ namespace TinyWars.BaseWar.BwHelpers {
             const modifier  = cfg[2];
             unitMap.forEachUnit(unit => {
                 if ((unit.getPlayerIndex() !== playerIndex)                                         &&
-                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
+                    (Utility.ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
                 ) {
                     if (((cfg[0] === 0) && (GridIndexHelpers.getDistance(unit.getGridIndex(), gridIndex) <= zoneRadius)) ||
                         (cfg[0] === 1)
@@ -520,7 +520,7 @@ namespace TinyWars.BaseWar.BwHelpers {
             if (!center) {
                 Logger.error("BwHelpers.exeInstantSkill() no center for indiscriminateAreaDamage!");
             } else {
-                const hpDamage = skillCfg.indiscriminateAreaDamage[2] * ConfigManager.UNIT_HP_NORMALIZER;
+                const hpDamage = skillCfg.indiscriminateAreaDamage[2] * Utility.ConfigManager.UNIT_HP_NORMALIZER;
                 for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(center as GridIndex, 0, skillCfg.indiscriminateAreaDamage[1], unitMap.getMapSize())) {
                     const unit = unitMap.getUnitOnMap(gridIndex);
                     if (unit) {
@@ -534,10 +534,10 @@ namespace TinyWars.BaseWar.BwHelpers {
             const cfg           = skillCfg.selfPromotionGain;
             const category      = cfg[1];
             const modifier      = cfg[2];
-            const maxPromotion  = ConfigManager.getUnitMaxPromotion(configVersion);
+            const maxPromotion  = Utility.ConfigManager.getUnitMaxPromotion(configVersion);
             unitMap.forEachUnit(unit => {
                 if ((unit.getPlayerIndex() === playerIndex)                                         &&
-                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
+                    (Utility.ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
                 ) {
                     if (((cfg[0] === 0) && (GridIndexHelpers.getDistance(unit.getGridIndex(), gridIndex) <= zoneRadius)) ||
                         (cfg[0] === 1)

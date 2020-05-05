@@ -207,7 +207,7 @@ namespace TinyWars.User {
             const info      = userId != null ? await UserModel.getUserPublicInfo(userId) : undefined;
             if (info) {
                 this._labelTitle.text       = Lang.getFormattedText(Lang.Type.F0009, info.nickname);
-                this._labelRankName.text    = ConfigManager.getRankName(ConfigManager.getNewestConfigVersion(), info.rank2pScore);
+                this._labelRankName.text    = Utility.ConfigManager.getRankName(Utility.ConfigManager.getNewestConfigVersion(), info.rank2pScore);
                 this._labelRank2pWins.text  = Lang.getFormattedText(Lang.Type.F0010, info.rank2pWins);
                 this._labelRank2pLoses.text = Lang.getFormattedText(Lang.Type.F0011, info.rank2pLoses);
                 this._labelRank2pDraws.text = Lang.getFormattedText(Lang.Type.F0012, info.rank2pDraws);

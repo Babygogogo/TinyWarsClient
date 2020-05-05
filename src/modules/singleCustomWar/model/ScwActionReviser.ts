@@ -237,12 +237,12 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
             (!destroyedUnits.has(unitMap.getUnitOnMap(coGridIndex)))
         ) {
             const configVersion     = war.getConfigVersion();
-            const unitHpNormalizer  = ConfigManager.UNIT_HP_NORMALIZER;
+            const unitHpNormalizer  = Utility.ConfigManager.UNIT_HP_NORMALIZER;
             const coZoneRadius      = playerInTurn.getCoZoneBaseRadius();
             const recoverDataList   : ProtoTypes.IWarUnitRepairData[] = [];
 
             for (const skillId of playerInTurn.getCoCurrentSkills() || []) {
-                const skillCfg = ConfigManager.getCoSkillCfg(configVersion, skillId);
+                const skillCfg = Utility.ConfigManager.getCoSkillCfg(configVersion, skillId);
 
                 if (skillCfg.selfHpRecovery) {
                     const recoverCfg    = skillCfg.selfHpRecovery;
@@ -250,7 +250,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
                     unitMap.forEachUnit(unit => {
                         if ((unit.getPlayerIndex() === playerIndexInTurn)                                           &&
                             (!destroyedUnits.has(unit))                                                             &&
-                            (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), recoverCfg[1]))
+                            (Utility.ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), recoverCfg[1]))
                         ) {
                             if ((recoverCfg[0] === Types.CoSkillAreaType.OnMap)                                                                                     ||
                                 ((recoverCfg[0] === Types.CoSkillAreaType.Zone) && (GridIndexHelpers.getDistance(unit.getGridIndex(), coGridIndex) <= coZoneRadius))
@@ -295,7 +295,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
                     unitMap.forEachUnit(unit => {
                         if ((unit.getPlayerIndex() === playerIndexInTurn)                                           &&
                             (!destroyedUnits.has(unit))                                                             &&
-                            (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), recoverCfg[1]))
+                            (Utility.ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), recoverCfg[1]))
                         ) {
                             if ((recoverCfg[0] === Types.CoSkillAreaType.OnMap)                                                                                   ||
                                 ((recoverCfg[0] === Types.CoSkillAreaType.Zone) && (GridIndexHelpers.getDistance(unit.getGridIndex(), coGridIndex) <= coZoneRadius))
@@ -322,7 +322,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
                     unitMap.forEachUnit(unit => {
                         if ((unit.getPlayerIndex() === playerIndexInTurn)                                           &&
                             (!destroyedUnits.has(unit))                                                             &&
-                            (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), recoverCfg[1]))
+                            (Utility.ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), recoverCfg[1]))
                         ) {
                             if ((recoverCfg[0] === Types.CoSkillAreaType.OnMap)                                                                                   ||
                                 ((recoverCfg[0] === Types.CoSkillAreaType.Zone) && (GridIndexHelpers.getDistance(unit.getGridIndex(), coGridIndex) <= coZoneRadius))
@@ -430,17 +430,17 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const gridIndex     = action.gridIndex;
         const unitHp        = action.unitHp;
         const skillCfg      = war.getTileMap().getTile(gridIndex).getEffectiveSelfUnitProductionSkillCfg(playerIndex);
-        const cfgCost       = ConfigManager.getUnitTemplateCfg(war.getConfigVersion(), unitType).productionCost;
+        const cfgCost       = Utility.ConfigManager.getUnitTemplateCfg(war.getConfigVersion(), unitType).productionCost;
 
         return {
             actionId                    : war.getNextActionId(),
             WarActionPlayerProduceUnit  : {
                 cost: cfgCost == null
                     ? null
-                    : Math.floor(cfgCost * (skillCfg ? skillCfg[5] : 100) / 100 * Helpers.getNormalizedHp(unitHp) / ConfigManager.UNIT_HP_NORMALIZER),
+                    : Math.floor(cfgCost * (skillCfg ? skillCfg[5] : 100) / 100 * Helpers.getNormalizedHp(unitHp) / Utility.ConfigManager.UNIT_HP_NORMALIZER),
                 unitData    : {
                     unitId      : war.getUnitMap().getNextUnitId(),
-                    viewId      : ConfigManager.getUnitViewId(unitType, playerIndex)!,
+                    viewId      : Utility.ConfigManager.getUnitViewId(unitType, playerIndex)!,
                     gridX       : gridIndex.x,
                     gridY       : gridIndex.y,
                     currentHp   : unitHp,
@@ -890,7 +890,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
 
         let needValueMaps   = false;
         for (const skillId of player.getCoSkills(skillType) || []) {
-            const skillCfg  = ConfigManager.getCoSkillCfg(configVersion, skillId)!;
+            const skillCfg  = Utility.ConfigManager.getCoSkillCfg(configVersion, skillId)!;
             skillCfgs.push(skillCfg);
             if (skillCfg.indiscriminateAreaDamage) {
                 needValueMaps = true;
@@ -1018,7 +1018,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
             for (let y = 0; y < height; ++y) {
                 if (srcHpMap[x][y] > 0) {
                     const realHpDamage      = Math.min(hpDamage, srcHpMap[x][y] - 1);
-                    const realFundDamage    = Math.floor(srcFundMap[x][y] * realHpDamage / ConfigManager.UNIT_HP_NORMALIZER);
+                    const realFundDamage    = Math.floor(srcFundMap[x][y] * realHpDamage / Utility.ConfigManager.UNIT_HP_NORMALIZER);
                     const isSameTeam        = srcSameTeamMap[x][y];
                     hpMap[x][y]             = isSameTeam ? -realHpDamage * 2 : realHpDamage;
                     fundMap[x][y]           = isSameTeam ? -realFundDamage * 2 : realFundDamage;

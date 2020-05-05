@@ -5,7 +5,7 @@ namespace TinyWars.Utility.GridIndexHelpers {
     import Direction    = Types.Direction;
     import Point        = Types.Point;
 
-    const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = ConfigManager.getGridSize();
+    const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = Utility.ConfigManager.getGridSize();
     const _ADJACENT_OFFSETS = [
         { offset: { x: -1, y:  0 }, direction: Direction.Left,  clockwiseOffset: { x:  1, y:  1 }, },
         { offset: { x:  1, y:  0 }, direction: Direction.Right, clockwiseOffset: { x: -1, y: -1 }, },
@@ -121,4 +121,3 @@ namespace TinyWars.Utility.GridIndexHelpers {
         return grids;
     }
 }
-

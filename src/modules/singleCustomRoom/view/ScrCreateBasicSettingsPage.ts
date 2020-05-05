@@ -182,7 +182,7 @@ namespace TinyWars.SingleCustomRoom {
             if (coId == null) {
                 this._labelCoName.text = `(${Lang.getText(Lang.Type.B0001)} CO)`;
             } else {
-                const cfg               = ConfigManager.getCoBasicCfg(ConfigManager.getNewestConfigVersion(), coId);
+                const cfg               = Utility.ConfigManager.getCoBasicCfg(Utility.ConfigManager.getNewestConfigVersion(), coId);
                 this._labelCoName.text  = `${cfg.name} (T${cfg.tier})`;
             }
         }

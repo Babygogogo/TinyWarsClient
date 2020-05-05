@@ -157,7 +157,7 @@ namespace TinyWars.MapEditor {
                     gridX       : t2.getGridX(),
                     gridY       : t2.getGridY(),
                     objectViewId: t2.getObjectViewId(),
-                    baseViewId  : ConfigManager.getSymmetricalTileBaseViewId(targetBaseViewId, symmetryType),
+                    baseViewId  : Utility.ConfigManager.getSymmetricalTileBaseViewId(targetBaseViewId, symmetryType),
                 }, this._configVersion);
                 t2.startRunning(this._war);
                 t2.updateView();
@@ -187,7 +187,7 @@ namespace TinyWars.MapEditor {
                 t2.init({
                     gridX       : t2.getGridX(),
                     gridY       : t2.getGridY(),
-                    objectViewId: ConfigManager.getSymmetricalTileObjectViewId(targetObjectViewId, symmetryType),
+                    objectViewId: Utility.ConfigManager.getSymmetricalTileObjectViewId(targetObjectViewId, symmetryType),
                     baseViewId  : t2.getBaseViewId(),
                 }, this._configVersion);
                 t2.startRunning(this._war);

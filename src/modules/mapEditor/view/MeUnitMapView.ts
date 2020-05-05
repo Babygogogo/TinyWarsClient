@@ -5,7 +5,7 @@ namespace TinyWars.MapEditor {
     import UnitCategory         = Types.UnitCategory;
     import ActionPlannerState   = Types.ActionPlannerState;
 
-    const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = ConfigManager.getGridSize();
+    const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = Utility.ConfigManager.getGridSize();
 
     export class MeUnitMapView extends egret.DisplayObjectContainer {
         private _layerForNaval  = new egret.DisplayObjectContainer();
@@ -114,11 +114,11 @@ namespace TinyWars.MapEditor {
 
         private _getLayerByUnitType(unitType: Types.UnitType): egret.DisplayObjectContainer | undefined {
             const version = this._unitMap.getConfigVersion();
-            if (ConfigManager.checkIsUnitTypeInCategory(version, unitType, UnitCategory.Air)) {
+            if (Utility.ConfigManager.checkIsUnitTypeInCategory(version, unitType, UnitCategory.Air)) {
                 return this._layerForAir;
-            } else if (ConfigManager.checkIsUnitTypeInCategory(version, unitType, UnitCategory.Ground)) {
+            } else if (Utility.ConfigManager.checkIsUnitTypeInCategory(version, unitType, UnitCategory.Ground)) {
                 return this._layerForGround;
-            } else if (ConfigManager.checkIsUnitTypeInCategory(version, unitType, UnitCategory.Naval)) {
+            } else if (Utility.ConfigManager.checkIsUnitTypeInCategory(version, unitType, UnitCategory.Naval)) {
                 return this._layerForNaval;
             } else {
                 return undefined;

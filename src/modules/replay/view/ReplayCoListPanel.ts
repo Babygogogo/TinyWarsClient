@@ -168,7 +168,7 @@ namespace TinyWars.Replay {
 
             const player    = data.player;
             const coId      = player.getCoId();
-            const cfg       = coId != null ? ConfigManager.getCoBasicCfg(data.configVersion, coId) : null;
+            const cfg       = coId != null ? Utility.ConfigManager.getCoBasicCfg(data.configVersion, coId) : null;
             if (!cfg) {
                 this._imgCoPortrait.source          = "";
                 this._labelName.text                = "--";
@@ -274,7 +274,7 @@ namespace TinyWars.Replay {
 
             const data              = this.data as DataForCoRenderer;
             const coId              = data.player.getCoId();
-            const cfg               = coId != null ? ConfigManager.getCoBasicCfg(data.configVersion, coId) : null;
+            const cfg               = coId != null ? Utility.ConfigManager.getCoBasicCfg(data.configVersion, coId) : null;
             this.currentState       = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
             this._labelName.text    = cfg ? cfg.name : `(${Lang.getText(Lang.Type.B0001)}CO)`;
         }
@@ -299,7 +299,7 @@ namespace TinyWars.Replay {
 
             const data              = this.data as DataForSkillRenderer;
             this._labelIndex.text   = `${data.index}.`;
-            this._labelDesc.text    = ConfigManager.getCoSkillCfg(ConfigManager.getNewestConfigVersion(), data.skillId).desc[Lang.getLanguageType()];
+            this._labelDesc.text    = Utility.ConfigManager.getCoSkillCfg(Utility.ConfigManager.getNewestConfigVersion(), data.skillId).desc[Lang.getLanguageType()];
         }
     }
 }

@@ -52,7 +52,7 @@ namespace TinyWars.Login {
             this._labelVersion.text = `v.${window.CLIENT_VERSION}`;
             this._updateBtnChangeLanguage();
 
-            if (ConfigManager.getNewestConfigVersion()) {
+            if (Utility.ConfigManager.getNewestConfigVersion()) {
                 this._initGroupUnits();
             }
         }
@@ -98,7 +98,7 @@ namespace TinyWars.Login {
             this._clearGroupUnits();
 
             const group     = this._groupUnits;
-            const gridWidth = ConfigManager.getGridSize().width;
+            const gridWidth = Utility.ConfigManager.getGridSize().width;
             const count     = Math.ceil(group.width / gridWidth);
             for (let i = 0; i < count; ++i) {
                 group.addChild(_createRandomUnitView());
@@ -122,17 +122,17 @@ namespace TinyWars.Login {
     function _createRandomUnitView(): eui.Component {
         const view = new WarMap.WarMapUnitView();
         view.update({
-            configVersion: ConfigManager.getNewestConfigVersion(),
+            configVersion: Utility.ConfigManager.getNewestConfigVersion(),
 
             gridX: 0,
             gridY: 0,
 
-            viewId: ConfigManager.getUnitViewId(Math.floor(Math.random() * 26), Math.floor(Math.random() * 4) + 1),
+            viewId: Utility.ConfigManager.getUnitViewId(Math.floor(Math.random() * 26), Math.floor(Math.random() * 4) + 1),
         });
 
         const container     = new eui.Component();
-        container.width     = ConfigManager.getGridSize().width;
-        container.height    = ConfigManager.getGridSize().height;
+        container.width     = Utility.ConfigManager.getGridSize().width;
+        container.height    = Utility.ConfigManager.getGridSize().height;
         container.addChild(view);
         return container;
     }

@@ -33,7 +33,7 @@ namespace TinyWars.MapEditor {
         public init(war: MeWar): void {
             this._war = war;
 
-            const gridSize  = ConfigManager.getGridSize();
+            const gridSize  = Utility.ConfigManager.getGridSize();
             const mapSize   = war.getTileMap().getMapSize();
             this._fieldContainer.removeAllContents();
             this._fieldContainer.setContentWidth(mapSize.width * gridSize.width);
@@ -60,7 +60,7 @@ namespace TinyWars.MapEditor {
         }
 
         public moveGridToCenter(gridIndex: Types.GridIndex): void {
-            const gridSize  = ConfigManager.getGridSize();
+            const gridSize  = Utility.ConfigManager.getGridSize();
             const stage     = Utility.StageManager.getStage();
             const container = this._fieldContainer;
             const contents  = container.getContents();

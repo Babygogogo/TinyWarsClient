@@ -1,8 +1,9 @@
 
 namespace TinyWars.BaseWar {
+    import CommonModel  = Common.CommonModel;
     import TimeModel    = Time.TimeModel;
 
-    const { width: GRID_WIDTH, height: GRID_HEIGHT } = ConfigManager.getGridSize();
+    const { width: GRID_WIDTH, height: GRID_HEIGHT } = Utility.ConfigManager.getGridSize();
 
     export abstract class BwTileView {
         private _tile       : BwTile;
@@ -53,15 +54,14 @@ namespace TinyWars.BaseWar {
         }
 
         protected _updateImages(): void {
-            const tile      = this._tile;
-            const tickCount = TimeModel.getTileAnimationTickCount();
+            const tile = this._tile;
 
             const objectId = tile.getObjectViewId();
             if (objectId == null) {
                 this._imgObject.visible = false;
             } else {
                 this._imgObject.visible = true;
-                this._imgObject.source  = ConfigManager.getTileObjectImageSource(objectId, tickCount, this._hasFog);
+                this._imgObject.source  = CommonModel.getTileObjectImageSource(objectId, this._hasFog);
             }
 
             const baseId = tile.getBaseViewId();
@@ -69,7 +69,7 @@ namespace TinyWars.BaseWar {
                 this._imgBase.visible = false;
             } else {
                 this._imgBase.visible = true;
-                this._imgBase.source  = ConfigManager.getTileBaseImageSource(baseId, tickCount, this._hasFog);
+                this._imgBase.source  = CommonModel.getTileBaseImageSource(baseId, this._hasFog);
             }
         }
     }

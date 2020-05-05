@@ -4,7 +4,7 @@ namespace TinyWars.BaseWar {
     import Helpers          = Utility.Helpers;
     import GridIndexHelpers = Utility.GridIndexHelpers;
 
-    const { width: GRID_WIDTH, height: GRID_HEIGHT } = ConfigManager.getGridSize();
+    const { width: GRID_WIDTH, height: GRID_HEIGHT } = Utility.ConfigManager.getGridSize();
 
     export abstract class BwTileMapView extends egret.DisplayObjectContainer {
         private _tileViews          = new Array<BwTileView>();

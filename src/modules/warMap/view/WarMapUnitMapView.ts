@@ -67,13 +67,13 @@ namespace TinyWars.WarMap {
         }
 
         private _addUnit(data: Types.UnitViewData, tickCount: number): void {
-            const unitType = ConfigManager.getUnitTypeAndPlayerIndex(data.viewId).unitType;
+            const unitType = Utility.ConfigManager.getUnitTypeAndPlayerIndex(data.viewId).unitType;
             const view     = new WarMapUnitView(data, tickCount);
             this._unitViews.push(view);
 
-            if (ConfigManager.checkIsUnitTypeInCategory(data.configVersion, unitType, Types.UnitCategory.Air)) {
+            if (Utility.ConfigManager.checkIsUnitTypeInCategory(data.configVersion, unitType, Types.UnitCategory.Air)) {
                 this._airLayer.addChild(view);
-            } else if (ConfigManager.checkIsUnitTypeInCategory(data.configVersion, unitType, Types.UnitCategory.Ground)) {
+            } else if (Utility.ConfigManager.checkIsUnitTypeInCategory(data.configVersion, unitType, Types.UnitCategory.Ground)) {
                 this._groundLayer.addChild(view);
             } else {
                 this._seaLayer.addChild(view);
@@ -89,7 +89,7 @@ namespace TinyWars.WarMap {
     }
 
     function _createUnitViewDataList(unitViewIds: number[], unitDataList: ProtoTypes.ISerializedWarUnit[], mapWidth: number, mapHeight: number): Types.UnitViewData[] {
-        const configVersion = ConfigManager.getNewestConfigVersion();
+        const configVersion = Utility.ConfigManager.getNewestConfigVersion();
         const dataList      : Types.UnitViewData[] = [];
 
         if (unitViewIds) {

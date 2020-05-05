@@ -1,10 +1,11 @@
 
 namespace TinyWars.WarMap {
-    import UiImage     = GameUi.UiImage;
-    import Types       = Utility.Types
-    import TimeModel   = Time.TimeModel;
+    import UiImage      = GameUi.UiImage;
+    import Types        = Utility.Types
+    import TimeModel    = Time.TimeModel;
+    import CommonModel  = Common.CommonModel;
 
-    const { width: GRID_WIDTH, height: GRID_HEIGHT } = ConfigManager.getGridSize();
+    const { width: GRID_WIDTH, height: GRID_HEIGHT } = Utility.ConfigManager.getGridSize();
 
     export class WarMapUnitView extends egret.DisplayObjectContainer {
         private _unitImage: UiImage;
@@ -42,9 +43,9 @@ namespace TinyWars.WarMap {
         public updateOnAnimationTick(tickCount: number): void {
             if (this._data) {
                 if (this._state === Types.UnitActionState.Idle) {
-                    this._unitImage.source = ConfigManager.getUnitIdleImageSource(this._data.viewId, tickCount, false);
+                    this._unitImage.source = CommonModel.getUnitIdleImageSource(this._data.viewId, false);
                 } else {
-                    this._unitImage.source = ConfigManager.getUnitMovingImageSource(this._data.viewId, tickCount, false);
+                    this._unitImage.source = CommonModel.getUnitMovingImageSource(this._data.viewId, false);
                 }
             }
         }

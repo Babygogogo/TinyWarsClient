@@ -225,7 +225,7 @@ namespace TinyWars.MultiCustomRoom {
             const unitMapView = new WarMap.WarMapUnitMapView();
             unitMapView.initWithMapRawData(mapRawData);
 
-            const gridSize = ConfigManager.getGridSize();
+            const gridSize = Utility.ConfigManager.getGridSize();
             this._zoomMap.removeAllContents();
             this._zoomMap.setContentWidth(mapRawData.mapWidth * gridSize.width);
             this._zoomMap.setContentHeight(mapRawData.mapHeight * gridSize.height);
@@ -305,7 +305,7 @@ namespace TinyWars.MultiCustomRoom {
             const data              = this.data as DataForPlayerRenderer;
             const playerName        = data.playerName;
             const coId              = data.coId;
-            const coConfig          = coId == null ? null : ConfigManager.getCoBasicCfg(data.configVersion, coId);
+            const coConfig          = coId == null ? null : Utility.ConfigManager.getCoBasicCfg(data.configVersion, coId);
             this._labelIndex.text   = Helpers.getColorTextForPlayerIndex(data.playerIndex);
             this._labelTeam.text    = data.teamIndex != null ? Helpers.getTeamText(data.teamIndex) : "??";
             this._labelName.text    = playerName

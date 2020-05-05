@@ -84,8 +84,8 @@ namespace TinyWars.MultiCustomRoom {
             const configVersion = openData.configVersion;
             const dict          = new Map<number, Map<number, number>>();
             for (const objectViewId of objectViewIdList) {
-                const { tileObjectType, playerIndex }   = ConfigManager.getTileObjectTypeAndPlayerIndex(objectViewId);
-                const template                          = ConfigManager.getTileTemplateCfg(configVersion, Types.TileBaseType.Plain, tileObjectType);
+                const { tileObjectType, playerIndex }   = Utility.ConfigManager.getTileObjectTypeAndPlayerIndex(objectViewId);
+                const template                          = Utility.ConfigManager.getTileTemplateCfg(configVersion, Types.TileBaseType.Plain, tileObjectType);
                 if ((template) && (template.maxCapturePoint != null)) {
                     const tileType = template.type;
                     if (!dict.has(tileType)) {
@@ -155,17 +155,17 @@ namespace TinyWars.MultiCustomRoom {
             const dict              = data.dict;
             const maxPlayerIndex    = data.maxPlayerIndex;
             let totalNum            = 0;
-            for (let playerIndex = 0; playerIndex <= ConfigManager.MAX_PLAYER_INDEX; ++playerIndex) {
+            for (let playerIndex = 0; playerIndex <= Utility.ConfigManager.MAX_PLAYER_INDEX; ++playerIndex) {
                 const num                               = dict.get(playerIndex) || 0;
                 totalNum                                += num;
                 this._labelNumList[playerIndex].text    = playerIndex <= maxPlayerIndex ? `${num}` : `--`;
             }
             this._labelTotalNum.text = `${totalNum}`;
 
-            const tileObjectType = ConfigManager.getTileObjectTypeByTileType(data.tileType);
+            const tileObjectType = Utility.ConfigManager.getTileObjectTypeByTileType(data.tileType);
             this._tileView.init(
                 null,
-                ConfigManager.getTileObjectViewId(tileObjectType, tileObjectType === Types.TileObjectType.Headquarters ? 1 : 0)
+                Utility.ConfigManager.getTileObjectViewId(tileObjectType, tileObjectType === Types.TileObjectType.Headquarters ? 1 : 0)
             );
             this._tileView.updateView();
         }

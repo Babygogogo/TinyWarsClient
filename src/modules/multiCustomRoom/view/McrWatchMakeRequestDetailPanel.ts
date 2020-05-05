@@ -202,7 +202,7 @@ namespace TinyWars.MultiCustomRoom {
             super.dataChanged();
 
             const data              = this.data as DataForPlayerRenderer;
-            const coConfig          = data.coId == null ? null : ConfigManager.getCoBasicCfg(data.configVersion, data.coId);
+            const coConfig          = data.coId == null ? null : Utility.ConfigManager.getCoBasicCfg(data.configVersion, data.coId);
             this._labelIndex.text   = Lang.getPlayerForceName(data.playerIndex);
             this._labelTeam.text    = Lang.getPlayerTeamName(data.teamIndex);
             this._labelName.text    = data.nickname + (coConfig ? `(${coConfig.name}(T${coConfig.tier}))` : `(${Lang.getText(Lang.Type.B0211)} CO)`);

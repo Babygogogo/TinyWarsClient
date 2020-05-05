@@ -5,7 +5,7 @@ namespace TinyWars.MapEditor {
     import Notify           = Utility.Notify;
     import ProtoTypes       = Utility.ProtoTypes;
     import FloatText        = Utility.FloatText;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.ConfigManager.COMMON_CONSTANTS;
 
     export class MeWarRulePanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;

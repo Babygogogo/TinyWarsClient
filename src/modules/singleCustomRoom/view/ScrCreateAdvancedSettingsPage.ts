@@ -9,7 +9,7 @@ namespace TinyWars.SingleCustomRoom {
     import ConfirmPanel     = Common.ConfirmPanel;
     import HelpPanel        = Common.HelpPanel;
     import WarMapModel      = WarMap.WarMapModel;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.ConfigManager.COMMON_CONSTANTS;
 
     export class ScrCreateAdvancedSettingsPage extends GameUi.UiTabPage {
         private _labelMapNameTitle      : GameUi.UiLabel;

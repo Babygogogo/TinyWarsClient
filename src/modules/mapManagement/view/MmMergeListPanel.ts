@@ -194,7 +194,7 @@ namespace TinyWars.MapManagement {
             const unitMapView = new WarMap.WarMapUnitMapView();
             unitMapView.initWithMapRawData(mapRawData);
 
-            const gridSize = ConfigManager.getGridSize();
+            const gridSize = Utility.ConfigManager.getGridSize();
             this._zoomMap.removeAllContents();
             this._zoomMap.setContentWidth(mapRawData.mapWidth * gridSize.width);
             this._zoomMap.setContentHeight(mapRawData.mapHeight * gridSize.height);
@@ -207,17 +207,17 @@ namespace TinyWars.MapManagement {
     function getSignatureForMap(mapRawData: Types.MapRawData): string {
         const strList: string[] = [];
         for (const tileBaseViewId of mapRawData.tileBases) {
-            strList.push("" + ConfigManager.getTileBaseType(tileBaseViewId));
+            strList.push("" + Utility.ConfigManager.getTileBaseType(tileBaseViewId));
         }
         for (const tileObjectViewId of mapRawData.tileObjects) {
-            const cfg = ConfigManager.getTileObjectTypeAndPlayerIndex(tileObjectViewId);
+            const cfg = Utility.ConfigManager.getTileObjectTypeAndPlayerIndex(tileObjectViewId);
             strList.push("" + cfg.playerIndex + cfg.tileObjectType);
         }
         for (const tileData of mapRawData.tileDataList || []) {
-            const cfg = ConfigManager.getTileObjectTypeAndPlayerIndex(tileData.objectViewId);
+            const cfg = Utility.ConfigManager.getTileObjectTypeAndPlayerIndex(tileData.objectViewId);
             strList.push(
                 `${tileData.gridX}${tileData.gridY}`                                                +
-                `${ConfigManager.getTileBaseType(tileData.baseViewId)}`                             +
+                `${Utility.ConfigManager.getTileBaseType(tileData.baseViewId)}`                             +
                 `${cfg.playerIndex}${cfg.tileObjectType}`                                           +
                 `${tileData.currentBuildPoint}${tileData.currentCapturePoint}${tileData.currentHp}`
             );

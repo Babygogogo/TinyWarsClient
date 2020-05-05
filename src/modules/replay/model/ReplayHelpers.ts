@@ -111,7 +111,7 @@ namespace TinyWars.Replay.ReplayHelpers {
 
     export function getUnitProductionCost(war: ReplayWar, unitType: UnitType): number | undefined {
         // TODO: take skills into account.
-        const cfg = ConfigManager.getUnitTemplateCfg(war.getConfigVersion(), unitType);
+        const cfg = Utility.ConfigManager.getUnitTemplateCfg(war.getConfigVersion(), unitType);
         return cfg ? cfg.productionCost : undefined;
     }
 

@@ -371,7 +371,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
             const playerIndex   = playerInTurn.getPlayerIndex();
             const unit          = new McwUnit().init({
                 unitId,
-                viewId  : ConfigManager.getUnitViewId(action.unitType, playerIndex)!,
+                viewId  : Utility.ConfigManager.getUnitViewId(action.unitType, playerIndex)!,
                 gridX   : gridIndex.x,
                 gridY   : gridIndex.y,
             }, war.getConfigVersion());
@@ -497,10 +497,10 @@ namespace TinyWars.MultiCustomWar.McwModel {
                 }
                 const attackerUnitType = attacker.getType();
                 for (const skillId of attackerPlayer.getCoCurrentSkills() || []) {
-                    const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)!.promotionBonusByAttack;
+                    const cfg = Utility.ConfigManager.getCoSkillCfg(configVersion, skillId)!.promotionBonusByAttack;
                     if ((cfg)                                                                           &&
                         (targetLostHp >= cfg[2])                                                        &&
-                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, attackerUnitType, cfg[1]))
+                        (Utility.ConfigManager.checkIsUnitTypeInCategory(configVersion, attackerUnitType, cfg[1]))
                     ) {
                         if (cfg[0] === Types.CoSkillAreaType.Zone) {
                             if (isAttackerInCoZone) {
@@ -530,10 +530,10 @@ namespace TinyWars.MultiCustomWar.McwModel {
                 const isTargetInCoZone  = targetPlayer.checkIsInCoZone(targetGridIndex, targetCoGridIndex);
                 const targetUnitType    = targetUnit.getType();
                 for (const skillId of targetPlayer.getCoCurrentSkills() || []) {
-                    const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)!.promotionBonusByAttack;
+                    const cfg = Utility.ConfigManager.getCoSkillCfg(configVersion, skillId)!.promotionBonusByAttack;
                     if ((cfg)                                                                           &&
                         (attackerLostHp >= cfg[2])                                                      &&
-                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, targetUnitType, cfg[1]))
+                        (Utility.ConfigManager.checkIsUnitTypeInCategory(configVersion, targetUnitType, cfg[1]))
                     ) {
                         if (cfg[0] === Types.CoSkillAreaType.Zone) {
                             if (isTargetInCoZone) {
@@ -905,7 +905,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
                 focusUnit.getNormalizedCurrentHp() + targetUnit.getNormalizedCurrentHp()
             );
             focusUnit.setCurrentHp(Math.max(
-                (joinedNormalizedHp - 1) * ConfigManager.UNIT_HP_NORMALIZER + 1,
+                (joinedNormalizedHp - 1) * Utility.ConfigManager.UNIT_HP_NORMALIZER + 1,
                 Math.min(focusUnit.getCurrentHp() + targetUnit.getCurrentHp(), focusUnit.getMaxHp())
             ));
 
@@ -1017,13 +1017,13 @@ namespace TinyWars.MultiCustomWar.McwModel {
             const tile              = war.getTileMap().getTile(pathNodes[pathNodes.length - 1]);
             tile.resetByObjectViewIdAndBaseViewId(focusUnit.getTileObjectViewIdAfterLaunchSilo());
 
-            const targetGrids   = GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, ConfigManager.SILO_RADIUS, unitMap.getMapSize());
+            const targetGrids   = GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, Utility.ConfigManager.SILO_RADIUS, unitMap.getMapSize());
             const targetUnits   = [] as McwUnit[];
             for (const grid of targetGrids) {
                 const unit = unitMap.getUnitOnMap(grid) as McwUnit;
                 if (unit) {
                     targetUnits.push(unit);
-                    unit.setCurrentHp(Math.max(1, unit.getCurrentHp() - ConfigManager.SILO_DAMAGE));
+                    unit.setCurrentHp(Math.max(1, unit.getCurrentHp() - Utility.ConfigManager.SILO_DAMAGE));
                 }
             }
 
@@ -1114,7 +1114,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
             const producedUnitId    = unitMap.getNextUnitId();
             const producedUnit      = new McwUnit().init({
                 unitId      : producedUnitId,
-                viewId      : ConfigManager.getUnitViewId(focusUnit.getProduceUnitType(), focusUnit.getPlayerIndex())!,
+                viewId      : Utility.ConfigManager.getUnitViewId(focusUnit.getProduceUnitType(), focusUnit.getPlayerIndex())!,
                 gridX       : gridIndex.x,
                 gridY       : gridIndex.y,
                 loaderUnitId: focusUnit.getUnitId(),
@@ -1288,7 +1288,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
 
                     const configVersion = war.getConfigVersion();
                     for (let i = 0; i < skills.length; ++i) {
-                        const skillCfg          = ConfigManager.getCoSkillCfg(configVersion, skills[i]);
+                        const skillCfg          = Utility.ConfigManager.getCoSkillCfg(configVersion, skills[i]);
                         const indiscriminateCfg = skillCfg ? skillCfg.indiscriminateAreaDamage : null;
                         if (indiscriminateCfg) {
                             for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(dataList[i].indiscriminateAreaDamageCenter as GridIndex, 0, indiscriminateCfg[1], unitMap.getMapSize())) {

@@ -1,12 +1,11 @@
 
 namespace TinyWars.SingleCustomWar {
-    import TimeModel    = Time.TimeModel;
+    import CommonModel  = Common.CommonModel;
     import Types        = Utility.Types;
 
     export class ScwTileView extends BaseWar.BwTileView {
         protected _updateImages(): void {
             const tile      = this._getTile();
-            const tickCount = TimeModel.getTileAnimationTickCount();
             const imgObject = this.getImgObject();
             const imgBase   = this.getImgBase();
             const hasFog    = this._getHasFog();
@@ -17,8 +16,8 @@ namespace TinyWars.SingleCustomWar {
             } else {
                 imgObject.visible = true;
                 imgObject.source  = ((hasFog) && (tile.getType() !== Types.TileType.Headquarters))
-                    ? ConfigManager.getTileObjectImageSource(tile.getNeutralObjectViewId(), tickCount, hasFog)
-                    : ConfigManager.getTileObjectImageSource(objectId, tickCount, hasFog);
+                    ? CommonModel.getTileObjectImageSource(tile.getNeutralObjectViewId(), hasFog)
+                    : CommonModel.getTileObjectImageSource(objectId, hasFog);
             }
 
             const baseId = tile.getBaseViewId();
@@ -26,7 +25,7 @@ namespace TinyWars.SingleCustomWar {
                 imgBase.visible = false;
             } else {
                 imgBase.visible = true;
-                imgBase.source  = ConfigManager.getTileBaseImageSource(baseId, tickCount, hasFog);
+                imgBase.source  = CommonModel.getTileBaseImageSource(baseId, hasFog);
             }
         }
     }

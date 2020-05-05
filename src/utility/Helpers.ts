@@ -195,7 +195,7 @@ namespace TinyWars.Utility.Helpers {
     }
 
     export function getNormalizedHp(hp: number): number {
-        return Math.ceil(hp / ConfigManager.UNIT_HP_NORMALIZER);
+        return Math.ceil(hp / Utility.ConfigManager.UNIT_HP_NORMALIZER);
     }
 
     export function getPointDistance(x1: number, y1: number, x2: number, y2: number): number {

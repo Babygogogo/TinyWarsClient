@@ -161,7 +161,7 @@ namespace TinyWars.MapManagement {
                 const unitMapView = new WarMap.WarMapUnitMapView();
                 unitMapView.initWithMapRawData(mapData);
 
-                const gridSize = ConfigManager.getGridSize();
+                const gridSize = Utility.ConfigManager.getGridSize();
                 this._zoomMap.removeAllContents();
                 this._zoomMap.setContentWidth(mapData.mapWidth * gridSize.width);
                 this._zoomMap.setContentHeight(mapData.mapHeight * gridSize.height);

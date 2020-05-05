@@ -196,7 +196,7 @@ namespace TinyWars.MapEditor {
                 title           : Lang.getText(Lang.Type.B0225),
                 tips            : null,
                 currentValue    : war.getMapName(),
-                maxChars        : ConfigManager.MAP_CONSTANTS.MaxMapNameLength,
+                maxChars        : Utility.ConfigManager.MAP_CONSTANTS.MaxMapNameLength,
                 charRestrict    : null,
                 callback        : (panel) => {
                     war.setMapName(panel.getInputText());
@@ -211,7 +211,7 @@ namespace TinyWars.MapEditor {
                 title           : Lang.getText(Lang.Type.B0299),
                 tips            : null,
                 currentValue    : war.getMapNameEnglish(),
-                maxChars        : ConfigManager.MAP_CONSTANTS.MaxMapNameEnglishLength,
+                maxChars        : Utility.ConfigManager.MAP_CONSTANTS.MaxMapNameEnglishLength,
                 charRestrict    : null,
                 callback        : (panel) => {
                     war.setMapNameEnglish(panel.getInputText());
@@ -226,7 +226,7 @@ namespace TinyWars.MapEditor {
                 title           : Lang.getText(Lang.Type.B0163),
                 tips            : null,
                 currentValue    : war.getMapDesigner(),
-                maxChars        : ConfigManager.MAP_CONSTANTS.MaxDesignerLength,
+                maxChars        : Utility.ConfigManager.MAP_CONSTANTS.MaxDesignerLength,
                 charRestrict    : null,
                 callback        : (panel) => {
                     war.setMapDesigner(panel.getInputText());
@@ -330,7 +330,7 @@ namespace TinyWars.MapEditor {
                 if (!tile.getObjectViewId()) {
                     const tileType      = tile.getType();
                     const playerIndex   = tile.getPlayerIndex();
-                    const baseViewId    = ConfigManager.getTileBaseViewId(ConfigManager.getTileBaseType(tile.getBaseViewId()));
+                    const baseViewId    = Utility.ConfigManager.getTileBaseViewId(Utility.ConfigManager.getTileBaseType(tile.getBaseViewId()));
                     if (dictForTileBases.has(baseViewId)) {
                         ++dictForTileBases.get(baseViewId).count;
                     } else {
@@ -345,7 +345,7 @@ namespace TinyWars.MapEditor {
                 } else {
                     const tileType      = tile.getType();
                     const playerIndex   = tile.getPlayerIndex();
-                    const objectViewId  = ConfigManager.getTileObjectViewId(ConfigManager.getTileObjectTypeByTileType(tileType), playerIndex);
+                    const objectViewId  = Utility.ConfigManager.getTileObjectViewId(Utility.ConfigManager.getTileObjectTypeByTileType(tileType), playerIndex);
                     if (dictForTileObjects.has(objectViewId)) {
                         ++dictForTileObjects.get(objectViewId).count;
                     } else {

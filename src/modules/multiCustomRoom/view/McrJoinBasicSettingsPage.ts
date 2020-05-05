@@ -242,7 +242,7 @@ namespace TinyWars.MultiCustomRoom {
             if (coId == null) {
                 this._labelCoName.text = `(${Lang.getText(Lang.Type.B0001)} CO)`;
             } else {
-                const cfg               = ConfigManager.getCoBasicCfg(ConfigManager.getNewestConfigVersion(), coId);
+                const cfg               = Utility.ConfigManager.getCoBasicCfg(Utility.ConfigManager.getNewestConfigVersion(), coId);
                 this._labelCoName.text  = `${cfg.name} (T${cfg.tier})`;
             }
         }
@@ -319,7 +319,7 @@ namespace TinyWars.MultiCustomRoom {
             if (data.coId == null) {
                 this._labelCoName.text = data.nickname == null ? "????" : `(${Lang.getText(Lang.Type.B0001)} CO)`;
             } else {
-                const cfg               = ConfigManager.getCoBasicCfg(ConfigManager.getNewestConfigVersion(), data.coId);
+                const cfg               = Utility.ConfigManager.getCoBasicCfg(Utility.ConfigManager.getNewestConfigVersion(), data.coId);
                 this._labelCoName.text  = `${cfg.name} (T${cfg.tier})`;
             }
         }

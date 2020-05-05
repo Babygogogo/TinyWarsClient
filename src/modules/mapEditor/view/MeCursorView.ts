@@ -6,7 +6,7 @@ namespace TinyWars.MapEditor {
     import Notify               = Utility.Notify;
     import GridIndex            = Types.GridIndex;
 
-    const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = ConfigManager.getGridSize();
+    const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = Utility.ConfigManager.getGridSize();
     const _PULSE_IN_DURATION                    = 150;
     const _PULSE_OUT_DURATION                   = 150;
     const _PULSE_INTERVAL_DURATION              = 300;

@@ -33,7 +33,7 @@ namespace TinyWars.MapEditor.MeManager {
         }
 
         mapRawData = mapRawData || MeUtility.createDefaultMapRawData(slotIndex);
-        _war = new MeWar().init(mapRawData, slotIndex, ConfigManager.getNewestConfigVersion(), isReview).startRunning().startRunningView();
+        _war = new MeWar().init(mapRawData, slotIndex, Utility.ConfigManager.getNewestConfigVersion(), isReview).startRunning().startRunningView();
         return _war;
     }
 

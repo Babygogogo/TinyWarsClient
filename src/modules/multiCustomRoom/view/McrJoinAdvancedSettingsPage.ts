@@ -4,7 +4,7 @@ namespace TinyWars.MultiCustomRoom {
     import Lang             = Utility.Lang;
     import Types            = Utility.Types;
     import WarMapModel      = WarMap.WarMapModel;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.ConfigManager.COMMON_CONSTANTS;
 
     export class McrJoinAdvancedSettingsPage extends GameUi.UiTabPage {
         private _labelTips          : GameUi.UiLabel;

@@ -113,7 +113,7 @@ namespace TinyWars.MapEditor {
 
         private _createDataForListCategory(): DataForCategoryRenderer[] {
             const mapping = new Map<number, number[]>();
-            ConfigManager.forEachTileObjectTypeAndPlayerIndex((value, objectViewId) => {
+            Utility.ConfigManager.forEachTileObjectTypeAndPlayerIndex((value, objectViewId) => {
                 const playerIndex = value.playerIndex;
                 if (objectViewId !== 0) {
                     if (mapping.has(playerIndex)) {
@@ -167,7 +167,7 @@ namespace TinyWars.MapEditor {
 
             const data                  = this.data as DataForCategoryRenderer;
             const objectViewIdList      = data.objectViewIdList;
-            this._labelCategory.text    = Lang.getPlayerForceName(ConfigManager.getTileObjectTypeAndPlayerIndex(objectViewIdList[0]).playerIndex);
+            this._labelCategory.text    = Lang.getPlayerForceName(Utility.ConfigManager.getTileObjectTypeAndPlayerIndex(objectViewIdList[0]).playerIndex);
 
             const dataListForTileObject : DataForTileObjectRenderer[] = [];
             const panel                 = data.panel;
@@ -216,7 +216,7 @@ namespace TinyWars.MapEditor {
 
         protected dataChanged(): void {
             const data              = this.data as DataForTileObjectRenderer;
-            this._labelName.text    = Lang.getTileName(ConfigManager.getTileType(Types.TileBaseType.Plain, ConfigManager.getTileObjectTypeAndPlayerIndex(data.objectViewId).tileObjectType));
+            this._labelName.text    = Lang.getTileName(Utility.ConfigManager.getTileType(Types.TileBaseType.Plain, Utility.ConfigManager.getTileObjectTypeAndPlayerIndex(data.objectViewId).tileObjectType));
             this._tileView.init(null, data.objectViewId);
             this._tileView.updateView();
         }

@@ -1,5 +1,6 @@
 
 namespace TinyWars.BaseWar {
+    import CommonModel  = Common.CommonModel;
     import Notify       = Utility.Notify;
     import Lang         = Utility.Lang;
     import Types        = Utility.Types;
@@ -10,7 +11,7 @@ namespace TinyWars.BaseWar {
         tile    : BwTile | MapEditor.MeTile;
     }
 
-    const { width: GRID_WIDTH, height: GRID_HEIGHT } = ConfigManager.getGridSize();
+    const { width: GRID_WIDTH, height: GRID_HEIGHT } = Utility.ConfigManager.getGridSize();
 
     export class BwTileDetailPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
@@ -109,9 +110,8 @@ namespace TinyWars.BaseWar {
         private _updateTileViewAndLabelName(): void {
             const data                  = this._openData;
             const tile                  = data.tile;
-            const tickCount             = Time.TimeModel.getTileAnimationTickCount();
-            this._imgTileBase.source    = ConfigManager.getTileBaseImageSource(tile.getBaseViewId(), tickCount, false);
-            this._imgTileObject.source  = ConfigManager.getTileObjectImageSource(tile.getObjectViewId(), tickCount, false);
+            this._imgTileBase.source    = CommonModel.getTileBaseImageSource(tile.getBaseViewId(), false);
+            this._imgTileObject.source  = CommonModel.getTileObjectImageSource(tile.getObjectViewId(), false);
             this._labelName.text        = Lang.getTileName(tile.getType());
         }
 
@@ -120,7 +120,7 @@ namespace TinyWars.BaseWar {
             const tile                  = data.tile;
             const configVersion         = tile.getConfigVersion();
             const tileType              = tile.getType();
-            const cfg                   = ConfigManager.getTileTemplateCfgByType(configVersion, tileType);
+            const cfg                   = Utility.ConfigManager.getTileTemplateCfgByType(configVersion, tileType);
             const defenseBonus          = cfg.defenseAmount;
             const income                = cfg.incomePerTurn;
             const visionRange           = cfg.visionRange;
@@ -302,11 +302,11 @@ namespace TinyWars.BaseWar {
             const openData          = this._openData;
             const tile              = openData.tile;
             const configVersion     = tile.getConfigVersion();
-            const tileCfg           = ConfigManager.getTileTemplateCfgByType(configVersion, tile.getType());
+            const tileCfg           = Utility.ConfigManager.getTileTemplateCfgByType(configVersion, tile.getType());
             const playerIndex       = tile.getPlayerIndex() || 1;
 
             const dataList = [] as DataForMoveRangeRenderer[];
-            for (const unitType of ConfigManager.getUnitTypesByCategory(configVersion, Types.UnitCategory.All)) {
+            for (const unitType of Utility.ConfigManager.getUnitTypesByCategory(configVersion, Types.UnitCategory.All)) {
                 dataList.push({
                     configVersion,
                     unitType,
@@ -392,14 +392,14 @@ namespace TinyWars.BaseWar {
             const data                  = this.data as DataForMoveRangeRenderer;
             const configVersion         = data.configVersion;
             const unitType              = data.unitType;
-            const moveCostCfg           = ConfigManager.getMoveCostCfgByTileType(configVersion, data.tileCfg.type);
-            const moveCost              = moveCostCfg[ConfigManager.getUnitTemplateCfg(configVersion, unitType).moveType].cost;
+            const moveCostCfg           = Utility.ConfigManager.getMoveCostCfgByTileType(configVersion, data.tileCfg.type);
+            const moveCost              = moveCostCfg[Utility.ConfigManager.getUnitTemplateCfg(configVersion, unitType).moveType].cost;
             this._labelMoveCost.text    = moveCost != null ? `${moveCost}` : `--`;
             this._unitView.update({
                 configVersion,
                 gridX           : 0,
                 gridY           : 0,
-                viewId          : ConfigManager.getUnitViewId(unitType, data.playerIndex),
+                viewId          : Utility.ConfigManager.getUnitViewId(unitType, data.playerIndex),
             }, Time.TimeModel.getUnitAnimationTickCount());
         }
     }

@@ -136,16 +136,16 @@ namespace TinyWars.Replay {
             const tile              = war.getTileMap().getTile(gridIndex);
             const skillCfg          = tile.getEffectiveSelfUnitProductionSkillCfg(playerIndex);
             const unitCategory      = skillCfg ? skillCfg[1] : tile.getCfgProduceUnitCategory();
-            const minNormalizedHp   = skillCfg ? Helpers.getNormalizedHp(skillCfg[3]) : Helpers.getNormalizedHp(ConfigManager.UNIT_MAX_HP);
+            const minNormalizedHp   = skillCfg ? Helpers.getNormalizedHp(skillCfg[3]) : Helpers.getNormalizedHp(Utility.ConfigManager.UNIT_MAX_HP);
 
-            for (const unitType of ConfigManager.getUnitTypesByCategory(configVersion, unitCategory)) {
+            for (const unitType of Utility.ConfigManager.getUnitTypesByCategory(configVersion, unitCategory)) {
                 const unit = new ReplayUnit().init({
                     gridX   : -1,
                     gridY   : -1,
                     unitId  : -1,
-                    viewId  : ConfigManager.getUnitViewId(unitType, playerIndex),
+                    viewId  : Utility.ConfigManager.getUnitViewId(unitType, playerIndex),
                 }, configVersion) as ReplayUnit;
-                const cfgCost = ConfigManager.getUnitTemplateCfg(configVersion, unitType).productionCost;
+                const cfgCost = Utility.ConfigManager.getUnitTemplateCfg(configVersion, unitType).productionCost;
                 dataList.push({
                     unitType,
                     currentFund,
@@ -155,7 +155,7 @@ namespace TinyWars.Replay {
                     cfgCost,
                     unitProductionSkillCfg  : skillCfg,
                     minCost                 : skillCfg
-                        ? Math.floor(cfgCost * minNormalizedHp * skillCfg[5] / ConfigManager.UNIT_HP_NORMALIZER / 100)
+                        ? Math.floor(cfgCost * minNormalizedHp * skillCfg[5] / Utility.ConfigManager.UNIT_HP_NORMALIZER / 100)
                         : cfgCost,
                 });
             }

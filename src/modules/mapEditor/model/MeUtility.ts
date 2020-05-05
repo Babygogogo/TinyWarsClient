@@ -4,8 +4,8 @@ namespace TinyWars.MapEditor.MeUtility {
     import Types            = Utility.Types;
     import Lang             = Utility.Lang;
     import Helpers          = Utility.Helpers;
-    import MapConstants     = ConfigManager.MAP_CONSTANTS;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import MapConstants     = Utility.ConfigManager.MAP_CONSTANTS;
+    import CommonConstants  = Utility.ConfigManager.COMMON_CONSTANTS;
     import MapRawData       = Types.MapRawData;
     import GridIndex        = Types.GridIndex;
     import SymmetryType     = Types.SymmetryType;
@@ -32,7 +32,7 @@ namespace TinyWars.MapEditor.MeUtility {
             isMultiPlayer   : true,
             isSinglePlayer  : true,
             playersCount    : 2,
-            tileBases       : (new Array(gridsCount)).fill(ConfigManager.getTileBaseViewId(Types.TileBaseType.Plain)),
+            tileBases       : (new Array(gridsCount)).fill(Utility.ConfigManager.getTileBaseViewId(Types.TileBaseType.Plain)),
             tileObjects     : (new Array(gridsCount)).fill(0),
             units           : null,
             unitDataList    : null,
@@ -66,7 +66,7 @@ namespace TinyWars.MapEditor.MeUtility {
     }
     function checkIsPlayersCountValid(mapRawData: ProtoTypes.IMapRawData): boolean {
         const playersCount = mapRawData.playersCount;
-        if ((playersCount == null) || (playersCount <= 1) || (playersCount > ConfigManager.MAX_PLAYER_INDEX)) {
+        if ((playersCount == null) || (playersCount <= 1) || (playersCount > Utility.ConfigManager.MAX_PLAYER_INDEX)) {
             return false;
         }
 
@@ -74,7 +74,7 @@ namespace TinyWars.MapEditor.MeUtility {
         for (const tileData of mapRawData.tileDataList || []) {
             const tileObjectViewId = tileData.objectViewId;
             if (tileObjectViewId != null) {
-                const cfg = ConfigManager.getTileObjectTypeAndPlayerIndex(tileObjectViewId);
+                const cfg = Utility.ConfigManager.getTileObjectTypeAndPlayerIndex(tileObjectViewId);
                 if (!cfg) {
                     return false;
                 } else {
@@ -83,7 +83,7 @@ namespace TinyWars.MapEditor.MeUtility {
             }
         }
         for (const tileObjectViewId of mapRawData.tileObjects || []) {
-            const cfg = ConfigManager.getTileObjectTypeAndPlayerIndex(tileObjectViewId);
+            const cfg = Utility.ConfigManager.getTileObjectTypeAndPlayerIndex(tileObjectViewId);
             if (!cfg) {
                 return false;
             } else {
@@ -92,7 +92,7 @@ namespace TinyWars.MapEditor.MeUtility {
         }
         for (const unitData of mapRawData.unitDataList || []) {
             const unitViewId    = unitData.viewId;
-            const cfg           = unitViewId == null ? null : ConfigManager.getUnitTypeAndPlayerIndex(unitViewId);
+            const cfg           = unitViewId == null ? null : Utility.ConfigManager.getUnitTypeAndPlayerIndex(unitViewId);
             if (!cfg) {
                 return false;
             } else {
@@ -100,7 +100,7 @@ namespace TinyWars.MapEditor.MeUtility {
             }
         }
         for (const unitViewId of mapRawData.units || []) {
-            const cfg = ConfigManager.getUnitTypeAndPlayerIndex(unitViewId);
+            const cfg = Utility.ConfigManager.getUnitTypeAndPlayerIndex(unitViewId);
             if (!cfg) {
                 return false;
             } else {
@@ -140,15 +140,15 @@ namespace TinyWars.MapEditor.MeUtility {
                 return false;
             }
             for (const unitViewId of unitViewIds) {
-                if ((unitViewId !== 0) && (!ConfigManager.getUnitTypeAndPlayerIndex(unitViewId))) {
+                if ((unitViewId !== 0) && (!Utility.ConfigManager.getUnitTypeAndPlayerIndex(unitViewId))) {
                     return false;
                 }
             }
         }
 
         if (unitDataList) {
-            const configVersion = ConfigManager.getNewestConfigVersion()!;
-            const maxPromotion  = ConfigManager.getUnitMaxPromotion(configVersion);
+            const configVersion = Utility.ConfigManager.getNewestConfigVersion()!;
+            const maxPromotion  = Utility.ConfigManager.getUnitMaxPromotion(configVersion);
             const units         = new Map<number, ProtoTypes.ISerializedWarUnit>();
             for (const unitData of unitDataList) {
                 const unitId = unitData.unitId;
@@ -167,12 +167,12 @@ namespace TinyWars.MapEditor.MeUtility {
                     return false;
                 }
 
-                const typeAndPlayerIndex = ConfigManager.getUnitTypeAndPlayerIndex(unitViewId);
+                const typeAndPlayerIndex = Utility.ConfigManager.getUnitTypeAndPlayerIndex(unitViewId);
                 if (!typeAndPlayerIndex) {
                     return false;
                 }
 
-                const cfg = ConfigManager.getUnitTemplateCfg(configVersion, typeAndPlayerIndex.unitType);
+                const cfg = Utility.ConfigManager.getUnitTemplateCfg(configVersion, typeAndPlayerIndex.unitType);
                 if (!cfg) {
                     return false;
                 }
@@ -244,9 +244,9 @@ namespace TinyWars.MapEditor.MeUtility {
                     if ((!loader) || (loader.gridX !== unitData.gridX) || (loader.gridY !== unitData.gridY)) {
                         return false;
                     }
-                    const category = ConfigManager.getUnitTemplateCfg(configVersion, ConfigManager.getUnitTypeAndPlayerIndex(loader.viewId!).unitType).loadUnitCategory;
+                    const category = Utility.ConfigManager.getUnitTemplateCfg(configVersion, Utility.ConfigManager.getUnitTypeAndPlayerIndex(loader.viewId!).unitType).loadUnitCategory;
                     if ((category == null)                                                                                                                      ||
-                        (!ConfigManager.checkIsUnitTypeInCategory(configVersion, ConfigManager.getUnitTypeAndPlayerIndex(unitData.viewId!).unitType, category))
+                        (!Utility.ConfigManager.checkIsUnitTypeInCategory(configVersion, Utility.ConfigManager.getUnitTypeAndPlayerIndex(unitData.viewId!).unitType, category))
                     ) {
                         return false;
                     }
@@ -278,18 +278,18 @@ namespace TinyWars.MapEditor.MeUtility {
         }
 
         for (const baseViewId of baseViewIds) {
-            if ((!baseViewId) || (!ConfigManager.getTileBaseType(baseViewId))) {
+            if ((!baseViewId) || (!Utility.ConfigManager.getTileBaseType(baseViewId))) {
                 return false;
             }
         }
 
         for (const objectViewId of objectViewIds) {
-            if ((objectViewId == null) || (!ConfigManager.getTileObjectTypeAndPlayerIndex(objectViewId))) {
+            if ((objectViewId == null) || (!Utility.ConfigManager.getTileObjectTypeAndPlayerIndex(objectViewId))) {
                 return false;
             }
         }
 
-        const configVersion = ConfigManager.getNewestConfigVersion()!;
+        const configVersion = Utility.ConfigManager.getNewestConfigVersion()!;
         for (const tileData of mapRawData.tileDataList || []) {
             const { gridX, gridY } = tileData;
             if ((gridX == null) || (gridY == null) || (gridX >= mapWidth || (gridY >= mapHeight))) {
@@ -305,10 +305,10 @@ namespace TinyWars.MapEditor.MeUtility {
                 return false;
             }
 
-            const cfg = ConfigManager.getTileTemplateCfg(
+            const cfg = Utility.ConfigManager.getTileTemplateCfg(
                 configVersion,
-                ConfigManager.getTileBaseType(baseViewId),
-                ConfigManager.getTileObjectTypeAndPlayerIndex(objectViewId).tileObjectType
+                Utility.ConfigManager.getTileBaseType(baseViewId),
+                Utility.ConfigManager.getTileObjectTypeAndPlayerIndex(objectViewId).tileObjectType
             );
 
             const currBuildPoint    = tileData.currentBuildPoint;
@@ -468,7 +468,7 @@ namespace TinyWars.MapEditor.MeUtility {
         const oldWidth      = mapRawData.mapWidth;
         const oldHeight     = mapRawData.mapHeight;
         const oldViewIds    = mapRawData.tileBases || [];
-        const defaultId     = ConfigManager.getTileBaseViewId(Types.TileBaseType.Plain);
+        const defaultId     = Utility.ConfigManager.getTileBaseViewId(Types.TileBaseType.Plain);
         const newViewIds    : number[] = [];
         for (let x = 0; x < newWidth; ++x) {
             for (let y = 0; y < newHeight; ++y) {
@@ -542,7 +542,7 @@ namespace TinyWars.MapEditor.MeUtility {
         const height        = mapRawData.mapHeight;
         const oldViewIds    = mapRawData.tileBases || [];
         const baseViewIds   : number[] = [];
-        const defaultId     = ConfigManager.getTileBaseViewId(Types.TileBaseType.Plain);
+        const defaultId     = Utility.ConfigManager.getTileBaseViewId(Types.TileBaseType.Plain);
         for (let newX = 0; newX < width; ++newX) {
             for (let newY = 0; newY < height; ++newY) {
                 const oldX      = newX - offsetX;
@@ -698,13 +698,13 @@ namespace TinyWars.MapEditor.MeUtility {
         }
     }
     function checkIsSymmetrical(tile1: MeTile, tile2: MeTile, symmetryType: SymmetryType): boolean {
-        if (tile1.getBaseViewId() !== ConfigManager.getSymmetricalTileBaseViewId(tile2.getBaseViewId(), symmetryType)) {
+        if (tile1.getBaseViewId() !== Utility.ConfigManager.getSymmetricalTileBaseViewId(tile2.getBaseViewId(), symmetryType)) {
             return false;
         } else {
             if ((tile1.getPlayerIndex() !== 0) || (tile2.getPlayerIndex() !== 0)) {
                 return tile1.getType() === tile2.getType();
             } else {
-                return (tile1.getObjectViewId() === ConfigManager.getSymmetricalTileObjectViewId(tile2.getObjectViewId(), symmetryType));
+                return (tile1.getObjectViewId() === Utility.ConfigManager.getSymmetricalTileObjectViewId(tile2.getObjectViewId(), symmetryType));
             }
         }
     }

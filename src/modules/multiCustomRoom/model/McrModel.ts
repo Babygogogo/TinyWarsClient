@@ -47,7 +47,7 @@ namespace TinyWars.MultiCustomRoom {
             warName         : "",
             warPassword     : "",
             warComment      : "",
-            configVersion   : ConfigManager.getNewestConfigVersion(),
+            configVersion   : Utility.ConfigManager.getNewestConfigVersion(),
 
             warRuleIndex    : null,
             playerIndex     : 0,
@@ -64,8 +64,8 @@ namespace TinyWars.MultiCustomRoom {
             attackPowerModifier : 0,
             visionRangeModifier : 0,
             bannedCoIdList      : [],
-            luckLowerLimit      : ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultLowerLimit,
-            luckUpperLimit      : ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultUpperLimit,
+            luckLowerLimit      : Utility.ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultLowerLimit,
+            luckUpperLimit      : Utility.ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultUpperLimit,
         };
 
         const _dataForJoinWar: DataForJoinWar = {
@@ -106,7 +106,7 @@ namespace TinyWars.MultiCustomRoom {
         export async function resetCreateWarData(mapFileName: string): Promise<void> {
             const mapRawData                        = await WarMapModel.getMapRawData(mapFileName);
             _dataForCreateWar.mapFileName           = mapFileName;
-            _dataForCreateWar.configVersion         = ConfigManager.getNewestConfigVersion();
+            _dataForCreateWar.configVersion         = Utility.ConfigManager.getNewestConfigVersion();
             _dataForCreateWar.bannedCoIdList.length = 0;
             setCreateWarName("");
             setCreateWarPassword("");
@@ -131,8 +131,8 @@ namespace TinyWars.MultiCustomRoom {
                 setCreateWarIncomeMultiplier(100);
                 setCreateWarInitialEnergy(0);
                 setCreateWarEnergyGrowthMultiplier(100);
-                setCreateWarLuckLowerLimit(ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultLowerLimit);
-                setCreateWarLuckUpperLimit(ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultUpperLimit);
+                setCreateWarLuckLowerLimit(Utility.ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultLowerLimit);
+                setCreateWarLuckUpperLimit(Utility.ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultUpperLimit);
                 setCreateWarMoveRangeModifier(DEFAULT_MOVE_RANGE_MODIFIER);
                 setCreateWarAttackPowerModifier(DEFAULT_ATTACK_MODIFIER);
                 setCreateWarVisionRangeModifier(DEFAULT_VISION_MODIFIER);
@@ -565,7 +565,7 @@ namespace TinyWars.MultiCustomRoom {
     function getRandomCoId(configVersion: string, bannedCoIdList: number[] | null): number | undefined {
         let highestTier         : number = null;
         let candidateCoIdList   : number[] = [];
-        for (const cfg of ConfigManager.getAvailableCoList(configVersion)) {
+        for (const cfg of Utility.ConfigManager.getAvailableCoList(configVersion)) {
             const coId = cfg.coId;
             if ((!bannedCoIdList) || (bannedCoIdList.indexOf(coId) < 0)) {
                 const tier = cfg ? cfg.tier : null;

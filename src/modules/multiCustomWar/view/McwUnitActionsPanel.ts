@@ -96,7 +96,7 @@ namespace TinyWars.MultiCustomWar {
                         gridX   : -1,
                         gridY   : -1,
                         unitId  : -1,
-                        viewId  : ConfigManager.getUnitViewId(data.produceUnitType, war.getPlayerIndexLoggedIn()),
+                        viewId  : Utility.ConfigManager.getUnitViewId(data.produceUnitType, war.getPlayerIndexLoggedIn()),
                     }, war.getConfigVersion());
 
                 dataForList.push({

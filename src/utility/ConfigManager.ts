@@ -1,10 +1,5 @@
 
-namespace TinyWars.ConfigManager {
-    import Notify           = Utility.Notify;
-    import Types            = Utility.Types;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import Logger           = Utility.Logger;
-    import Lang             = Utility.Lang;
+namespace TinyWars.Utility.ConfigManager {
     import NetManager       = Network.Manager;
     import ActionCode       = Network.Codes;
     import GridSize         = Types.Size;
@@ -1737,7 +1732,7 @@ namespace TinyWars.ConfigManager {
     export function init(): void {
         NetManager.addListeners([
             { msgCode: ActionCode.S_NewestConfigVersion, callback: _onSNewestConfigVersion },
-        ], ConfigManager);
+        ], Utility.ConfigManager);
 
         _initTileObjectViewIds();
         _initTileBaseViewIds();
@@ -1885,32 +1880,50 @@ namespace TinyWars.ConfigManager {
         return mapping ? mapping.get(playerIndex) : undefined;
     }
 
-    export function getTileBaseImageSource(tileBaseViewId: number, tickCount: number, hasFog: boolean): string {
+    export function getTileBaseImageSource(
+        version         : Types.UnitAndTileImageVersion,
+        tileBaseViewId  : number,
+        tickCount       : number,
+        hasFog          : boolean
+    ): string {
         const sources = hasFog
             ? _TILE_BASE_FOG_IMAGE_SOURCES.get(tileBaseViewId)!
             : _TILE_BASE_NORMAL_IMAGE_SOURCES.get(tileBaseViewId)!;
-        return sources[tickCount % sources.length];
+        return `v${Helpers.getNumText(version)}_${sources[tickCount % sources.length]}`;
     }
-
-    export function getTileObjectImageSource(tileObjectViewId: number, tickCount: number, hasFog: boolean): string {
+    export function getTileObjectImageSource(
+        version         : Types.UnitAndTileImageVersion,
+        tileObjectViewId: number,
+        tickCount       : number,
+        hasFog          : boolean
+    ): string {
         const sources = hasFog
             ? _TILE_OBJECT_FOG_IMAGE_SOURCES.get(tileObjectViewId)!
             : _TILE_OBJECT_NORMAL_IMAGE_SOURCES.get(tileObjectViewId)!;
-        return sources[tickCount % sources.length];
+        return `v${Helpers.getNumText(version)}_${sources[tickCount % sources.length]}`;
     }
 
-    export function getUnitIdleImageSource(viewId: number, tickCount: number, isDark: boolean): string {
+    export function getUnitIdleImageSource(
+        version     : Types.UnitAndTileImageVersion,
+        viewId      : number,
+        tickCount   : number,
+        isDark      : boolean
+    ): string {
         const sources = isDark
             ? _UNIT_IDLE_DARK_IMAGE_SOURCES.get(viewId)
             : _UNIT_IDLE_NORMAL_IMAGE_SOURCES.get(viewId);
-        return sources[tickCount % sources.length];
+        return `v${Helpers.getNumText(version)}_${sources[tickCount % sources.length]}`;
     }
-
-    export function getUnitMovingImageSource(viewId: number, tickCount: number, isDark: boolean): string {
+    export function getUnitMovingImageSource(
+        version     : Types.UnitAndTileImageVersion,
+        viewId      : number,
+        tickCount   : number,
+        isDark      : boolean
+    ): string {
         const sources = isDark
             ? _UNIT_MOVING_DARK_IMAGE_SOURCES.get(viewId)
             : _UNIT_MOVING_NORMAL_IMAGE_SOURCES.get(viewId);
-        return sources[tickCount % sources.length];
+        return `v${Helpers.getNumText(version)}_${sources[tickCount % sources.length]}`;
     }
 
     export function getRankName(version: string, rankScore: number): string {

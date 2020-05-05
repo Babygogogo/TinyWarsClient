@@ -191,7 +191,7 @@ namespace TinyWars.Replay {
             if ((war) && (war.getIsRunning())) {
                 const player        = war.getPlayerInTurn();
                 const coId          = player.getCoId();
-                this._labelCo.text  = `CO: ${coId == null ? "----" : ConfigManager.getCoBasicCfg(war.getConfigVersion(), coId).name}`;
+                this._labelCo.text  = `CO: ${coId == null ? "----" : Utility.ConfigManager.getCoBasicCfg(war.getConfigVersion(), coId).name}`;
 
                 const skillType = player.getCoUsingSkillType();
                 if (skillType === Types.CoSkillType.Power) {

@@ -145,7 +145,7 @@ namespace TinyWars.MultiCustomRoom {
             const bannedCoIdList    = McrModel.getCreateWarBannedCoIdList();
 
             let index = 0;
-            for (const cfg of ConfigManager.getAvailableCoList(ConfigManager.getNewestConfigVersion())) {
+            for (const cfg of Utility.ConfigManager.getAvailableCoList(Utility.ConfigManager.getNewestConfigVersion())) {
                 if (bannedCoIdList.indexOf(cfg.coId) < 0) {
                     data.push({
                         coBasicCfg  : cfg,
@@ -309,7 +309,7 @@ namespace TinyWars.MultiCustomRoom {
 
             const data              = this.data as DataForSkillRenderer;
             this._labelIndex.text   = `${data.index}.`;
-            this._labelDesc.text    = ConfigManager.getCoSkillCfg(ConfigManager.getNewestConfigVersion(), data.skillId).desc[Lang.getLanguageType()];
+            this._labelDesc.text    = Utility.ConfigManager.getCoSkillCfg(Utility.ConfigManager.getNewestConfigVersion(), data.skillId).desc[Lang.getLanguageType()];
         }
     }
 }

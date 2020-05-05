@@ -8,7 +8,7 @@ namespace TinyWars.MultiCustomRoom {
     import FloatText        = Utility.FloatText;
     import WarMapModel      = WarMap.WarMapModel;
     import HelpPanel        = Common.HelpPanel;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.ConfigManager.COMMON_CONSTANTS;
 
     export class McrCreateBasicSettingsPage extends GameUi.UiTabPage {
         private _btnMapNameTitle    : GameUi.UiButton;
@@ -304,7 +304,7 @@ namespace TinyWars.MultiCustomRoom {
             if (coId == null) {
                 this._labelCoName.text = `(${Lang.getText(Lang.Type.B0001)} CO)`;
             } else {
-                const cfg               = ConfigManager.getCoBasicCfg(ConfigManager.getNewestConfigVersion(), coId);
+                const cfg               = Utility.ConfigManager.getCoBasicCfg(Utility.ConfigManager.getNewestConfigVersion(), coId);
                 this._labelCoName.text  = `${cfg.name} (T${cfg.tier})`;
             }
         }

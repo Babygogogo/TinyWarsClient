@@ -4,7 +4,7 @@ namespace TinyWars.MultiCustomRoom {
     import Lang             = Utility.Lang;
     import Notify           = Utility.Notify;
     import Helpers          = Utility.Helpers;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.ConfigManager.COMMON_CONSTANTS;
 
     export class McrReplaySearchPanel extends GameUi.UiPanel {
         protected _IS_EXCLUSIVE = false;

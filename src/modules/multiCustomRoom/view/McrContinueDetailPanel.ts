@@ -255,7 +255,7 @@ namespace TinyWars.MultiCustomRoom {
         private _getCoName(coId: number | null): string {
             return coId == null
                 ? `(${Lang.getText(Lang.Type.B0001)}CO)`
-                : ConfigManager.getCoBasicCfg(ConfigManager.getNewestConfigVersion(), coId).name;
+                : Utility.ConfigManager.getCoBasicCfg(Utility.ConfigManager.getNewestConfigVersion(), coId).name;
         }
     }
 }

@@ -6,7 +6,7 @@ namespace TinyWars.Chat {
     import FloatText        = Utility.FloatText;
     import ProtoTypes       = Utility.ProtoTypes;
     import Helpers          = Utility.Helpers;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.ConfigManager.COMMON_CONSTANTS;
 
     type OpenDataForChatPanel = {
         toUserId?: number;

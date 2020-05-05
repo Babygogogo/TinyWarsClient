@@ -187,7 +187,7 @@ namespace TinyWars.SingleCustomRoom {
                 const unitMapView = new WarMap.WarMapUnitMapView();
                 unitMapView.initWithMapRawData(mapRawData);
 
-                const gridSize = ConfigManager.getGridSize();
+                const gridSize = Utility.ConfigManager.getGridSize();
                 zoomMap.setContentWidth(mapRawData.mapWidth * gridSize.width);
                 zoomMap.setContentHeight(mapRawData.mapHeight * gridSize.height);
                 zoomMap.addContent(tileMapView);

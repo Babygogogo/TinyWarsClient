@@ -1,8 +1,9 @@
 
 namespace TinyWars.MapEditor {
-    import TimeModel        = Time.TimeModel;
+    import TimeModel    = Time.TimeModel;
+    import CommonModel  = Common.CommonModel;
 
-    const { width: GRID_WIDTH, height: GRID_HEIGHT } = ConfigManager.getGridSize();
+    const { width: GRID_WIDTH, height: GRID_HEIGHT } = Utility.ConfigManager.getGridSize();
 
     export class MeTileSimpleView {
         private _imgBase    = new GameUi.UiImage();
@@ -47,14 +48,12 @@ namespace TinyWars.MapEditor {
         }
 
         protected _updateImages(): void {
-            const tickCount = TimeModel.getTileAnimationTickCount();
-
             const objectId = this._objectViewId;
             if (objectId == null) {
                 this._imgObject.visible = false;
             } else {
                 this._imgObject.visible = true;
-                this._imgObject.source  = ConfigManager.getTileObjectImageSource(objectId, tickCount, false);
+                this._imgObject.source  = CommonModel.getTileObjectImageSource(objectId, false);
             }
 
             const baseId = this._baseViewId;
@@ -62,7 +61,7 @@ namespace TinyWars.MapEditor {
                 this._imgBase.visible = false;
             } else {
                 this._imgBase.visible = true;
-                this._imgBase.source  = ConfigManager.getTileBaseImageSource(baseId, tickCount, false);
+                this._imgBase.source  = CommonModel.getTileBaseImageSource(baseId, false);
             }
         }
     }

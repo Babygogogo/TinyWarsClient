@@ -15,8 +15,8 @@ namespace TinyWars.MapEditor {
         private _moveRangeModifier      = 0;
         private _attackPowerModifier    = 0;
         private _visionRangeModifier    = 0;
-        private _luckLowerLimit         = ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultLowerLimit;
-        private _luckUpperLimit         = ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultUpperLimit;
+        private _luckLowerLimit         = Utility.ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultLowerLimit;
+        private _luckUpperLimit         = Utility.ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultUpperLimit;
         // private _bannedCoIdList         : number[] = []; // TODO
 
         private _playerRuleList : ProtoTypes.IRuleForPlayer[] = [];

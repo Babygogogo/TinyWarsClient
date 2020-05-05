@@ -3,8 +3,9 @@ namespace TinyWars.WarMap {
     import UiImage     = GameUi.UiImage;
     import Notify      = Utility.Notify;
     import TimeModel   = Time.TimeModel;
+    import CommonModel = Common.CommonModel;
 
-    const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = ConfigManager.getGridSize();
+    const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = Utility.ConfigManager.getGridSize();
 
     export class WarMapTileMapView extends egret.DisplayObjectContainer {
         private _isInitialized: boolean;
@@ -163,7 +164,7 @@ namespace TinyWars.WarMap {
         protected _getImageSource(id: number, tickCount: number): string {
             return id == null
                 ? undefined
-                : ConfigManager.getTileBaseImageSource(id, tickCount, false);
+                : CommonModel.getTileBaseImageSource(id, false);
         }
 
         protected _getImageY(gridY: number): number {
@@ -174,8 +175,8 @@ namespace TinyWars.WarMap {
     class TileObjectLayer extends TileLayerBase {
         protected _getImageSource(id: number, tickCount: number): string {
             return id == null
-            ? undefined
-            : ConfigManager.getTileObjectImageSource(id, tickCount, false);
+                ? undefined
+                : CommonModel.getTileObjectImageSource(id, false);
         }
 
         protected _getImageY(gridY: number): number {

@@ -283,7 +283,7 @@ namespace TinyWars.MapEditor {
             unitView.init(new MeUnit().init({
                 gridX   : 0,
                 gridY   : 0,
-                viewId  : ConfigManager.getUnitViewId(Types.UnitType.Infantry, 1),
+                viewId  : Utility.ConfigManager.getUnitViewId(Types.UnitType.Infantry, 1),
                 unitId  : 0,
             }, this._war.getConfigVersion()));
         }

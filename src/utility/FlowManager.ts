@@ -33,9 +33,8 @@ namespace TinyWars.Utility.FlowManager {
 
         Lang.init();
         NoSleepManager.init();
-        ConfigManager.init();
+        Utility.ConfigManager.init();
         Network.Manager.init();
-        Common.CommonProxy.init();
         McwProxy.init();
         McwModel.init();
         Time.TimeProxy.init();
@@ -54,6 +53,8 @@ namespace TinyWars.Utility.FlowManager {
         MapEditor.MeModel.init();
         MeManager.init();
         Chat.ChatProxy.init();
+        Common.CommonProxy.init();
+        Common.CommonModel.init();
 
         _removeLoadingDom();
         gotoLogin();
@@ -187,7 +188,7 @@ namespace TinyWars.Utility.FlowManager {
         return (!_hasOnceWentToLobby)
             && (User.UserModel.checkIsLoggedIn())
             && (ResManager.checkIsLoadedMainResource())
-            && (ConfigManager.checkIsConfigLoaded(ConfigManager.getNewestConfigVersion()))
+            && (Utility.ConfigManager.checkIsConfigLoaded(Utility.ConfigManager.getNewestConfigVersion()))
     }
 
     function _removeLoadingDom(): void {

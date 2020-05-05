@@ -12,7 +12,7 @@ namespace TinyWars.SingleCustomWar {
     import ProtoTypes       = Utility.ProtoTypes;
     import WarMapModel      = WarMap.WarMapModel;
     import TimeModel        = Time.TimeModel;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.ConfigManager.COMMON_CONSTANTS;
 
     const enum MenuType {
         Main,
@@ -938,7 +938,7 @@ namespace TinyWars.SingleCustomWar {
             menuPanel   : ScwWarMenuPanel,
         ): DataForInfoRenderer {
             const coId  = player.getCoId();
-            const cfg   = coId == null ? null : ConfigManager.getCoBasicCfg(ConfigManager.getNewestConfigVersion(), coId);
+            const cfg   = coId == null ? null : Utility.ConfigManager.getCoBasicCfg(Utility.ConfigManager.getNewestConfigVersion(), coId);
             return {
                 titleText               : `CO`,
                 infoText                : !cfg

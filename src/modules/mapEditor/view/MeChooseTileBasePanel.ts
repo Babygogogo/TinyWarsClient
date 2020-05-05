@@ -134,7 +134,7 @@ namespace TinyWars.MapEditor {
 
         private _createDataForListCategory(): DataForCategoryRenderer[] {
             const typeMap = new Map<number, number[]>();
-            ConfigManager.forEachTileBaseType((baseType, baseViewId) => {
+            Utility.ConfigManager.forEachTileBaseType((baseType, baseViewId) => {
                 if (baseViewId !== 0) {
                     if (typeMap.has(baseType)) {
                         typeMap.get(baseType).push(baseViewId);
@@ -186,7 +186,7 @@ namespace TinyWars.MapEditor {
 
             const data                  = this.data as DataForCategoryRenderer;
             const baseViewIdList        = data.baseViewIdList;
-            this._labelCategory.text    = Lang.getTileName(ConfigManager.getTileType(ConfigManager.getTileBaseType(baseViewIdList[0]), Types.TileObjectType.Empty));
+            this._labelCategory.text    = Lang.getTileName(Utility.ConfigManager.getTileType(Utility.ConfigManager.getTileBaseType(baseViewIdList[0]), Types.TileObjectType.Empty));
 
             const dataListForTileBase   : DataForTileBaseRenderer[] = [];
             const panel                 = data.panel;

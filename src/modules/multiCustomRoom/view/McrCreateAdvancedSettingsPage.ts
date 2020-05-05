@@ -8,7 +8,7 @@ namespace TinyWars.MultiCustomRoom {
     import Notify           = Utility.Notify;
     import ConfirmPanel     = Common.ConfirmPanel;
     import WarMapModel      = WarMap.WarMapModel;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.ConfigManager.COMMON_CONSTANTS;
 
     export class McrCreateAdvancedSettingsPage extends GameUi.UiTabPage {
         private _btnMapNameTitle    : GameUi.UiButton;
@@ -341,8 +341,8 @@ namespace TinyWars.MultiCustomRoom {
         private _onTouchedCoTierRenderer(e: egret.TouchEvent): void {
             const renderer  = e.currentTarget as RendererForCoTier;
             const coIdList  = renderer.getIsCustomSwitch()
-                ? ConfigManager.getCustomCoIdList(ConfigManager.getNewestConfigVersion())
-                : ConfigManager.getCoIdListInTier(ConfigManager.getNewestConfigVersion(), renderer.getCoTier());
+                ? Utility.ConfigManager.getCustomCoIdList(Utility.ConfigManager.getNewestConfigVersion())
+                : Utility.ConfigManager.getCoIdListInTier(Utility.ConfigManager.getNewestConfigVersion(), renderer.getCoTier());
 
             if (renderer.getState() === CoTierState.Unavailable) {
                 for (const coId of coIdList) {
@@ -477,7 +477,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _initGroupCoTiers(): void {
-            for (const tier of ConfigManager.getCoTiers(ConfigManager.getNewestConfigVersion())) {
+            for (const tier of Utility.ConfigManager.getCoTiers(Utility.ConfigManager.getNewestConfigVersion())) {
                 const renderer = new RendererForCoTier();
                 renderer.setCoTier(tier);
                 renderer.setState(CoTierState.AllAvailable);
@@ -505,8 +505,8 @@ namespace TinyWars.MultiCustomRoom {
             const bannedCoIdList = McrModel.getCreateWarBannedCoIdList();
             for (const renderer of this._renderersForCoTiers) {
                 const includedCoIdList = renderer.getIsCustomSwitch()
-                    ? ConfigManager.getCustomCoIdList(ConfigManager.getNewestConfigVersion())
-                    : ConfigManager.getCoIdListInTier(ConfigManager.getNewestConfigVersion(), renderer.getCoTier());
+                    ? Utility.ConfigManager.getCustomCoIdList(Utility.ConfigManager.getNewestConfigVersion())
+                    : Utility.ConfigManager.getCoIdListInTier(Utility.ConfigManager.getNewestConfigVersion(), renderer.getCoTier());
                 if (includedCoIdList.every(coId => bannedCoIdList.indexOf(coId) < 0)) {
                     renderer.setState(CoTierState.AllAvailable);
                 } else if (includedCoIdList.every(coId => bannedCoIdList.indexOf(coId) >= 0)) {
@@ -518,7 +518,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _initGroupCoNames(): void {
-            for (const cfg of ConfigManager.getAvailableCoList(ConfigManager.getNewestConfigVersion())) {
+            for (const cfg of Utility.ConfigManager.getAvailableCoList(Utility.ConfigManager.getNewestConfigVersion())) {
                 const renderer = new RendererForCoName();
                 renderer.setCoId(cfg.coId);
                 renderer.setIsSelected(true);
@@ -612,7 +612,7 @@ namespace TinyWars.MultiCustomRoom {
         public setCoId(coId: number): void {
             this._coId = coId;
 
-            const cfg               = ConfigManager.getCoBasicCfg(ConfigManager.getNewestConfigVersion(), coId);
+            const cfg               = Utility.ConfigManager.getCoBasicCfg(Utility.ConfigManager.getNewestConfigVersion(), coId);
             this._labelName.text    = `${cfg.name} (T${cfg.tier})`;
         }
         public getCoId(): number {

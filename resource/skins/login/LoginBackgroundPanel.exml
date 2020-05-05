@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
-    <GameUi:UiImage source="bg_001_png"  left="0" right="0" top="0" bottom="0"/>
+    <GameUi:UiImage source="bg_001_png" left="0" right="0" top="0" bottom="0" />
     <GameUi:UiLabel text="Caution: The game is under development.\nAny of your game data may be deleted without notice."
                     stroke="2" size="22" horizontalCenter="0" textAlign="center" verticalCenter="180" visible="false" />
     <GameUi:UiButton id="_btnChangeLanguage" label="Change Language" bottom="0" x="0">

@@ -214,7 +214,7 @@ namespace TinyWars.Replay.ReplayModel {
         const configVersion = war.getConfigVersion();
         const unitData      = action.unitData as Types.SerializedUnit;
         const unitType      = unitData
-            ? ConfigManager.getUnitTypeAndPlayerIndex(unitData.viewId).unitType
+            ? Utility.ConfigManager.getUnitTypeAndPlayerIndex(unitData.viewId).unitType
             : action.unitType;
         FloatText.show(`${Lang.getText(Lang.Type.B0095)} ${Lang.getUnitName(unitType)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
 
@@ -235,7 +235,7 @@ namespace TinyWars.Replay.ReplayModel {
             const playerIndex   = playerInTurn.getPlayerIndex();
             const unit          = new ReplayUnit().init({
                 unitId,
-                viewId  : ConfigManager.getUnitViewId(action.unitType, playerIndex)!,
+                viewId  : Utility.ConfigManager.getUnitViewId(action.unitType, playerIndex)!,
                 gridX   : gridIndex.x,
                 gridY   : gridIndex.y,
             }, configVersion);
@@ -365,10 +365,10 @@ namespace TinyWars.Replay.ReplayModel {
                 }
                 const attackerUnitType = attacker.getType();
                 for (const skillId of attackerPlayer.getCoCurrentSkills() || []) {
-                    const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)!.promotionBonusByAttack;
+                    const cfg = Utility.ConfigManager.getCoSkillCfg(configVersion, skillId)!.promotionBonusByAttack;
                     if ((cfg)                                                                           &&
                         (targetLostHp >= cfg[2])                                                        &&
-                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, attackerUnitType, cfg[1]))
+                        (Utility.ConfigManager.checkIsUnitTypeInCategory(configVersion, attackerUnitType, cfg[1]))
                     ) {
                         if (cfg[0] === Types.CoSkillAreaType.Zone) {
                             if (isAttackerInCoZone) {
@@ -398,10 +398,10 @@ namespace TinyWars.Replay.ReplayModel {
                 const isTargetInCoZone  = targetPlayer.checkIsInCoZone(targetGridIndex, targetCoGridIndex);
                 const targetUnitType    = targetUnit.getType();
                 for (const skillId of targetPlayer.getCoCurrentSkills() || []) {
-                    const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)!.promotionBonusByAttack;
+                    const cfg = Utility.ConfigManager.getCoSkillCfg(configVersion, skillId)!.promotionBonusByAttack;
                     if ((cfg)                                                                           &&
                         (attackerLostHp >= cfg[2])                                                      &&
-                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, targetUnitType, cfg[1]))
+                        (Utility.ConfigManager.checkIsUnitTypeInCategory(configVersion, targetUnitType, cfg[1]))
                     ) {
                         if (cfg[0] === Types.CoSkillAreaType.Zone) {
                             if (isTargetInCoZone) {
@@ -736,7 +736,7 @@ namespace TinyWars.Replay.ReplayModel {
                 focusUnit.getNormalizedCurrentHp() + targetUnit.getNormalizedCurrentHp()
             );
             focusUnit.setCurrentHp(Math.max(
-                (joinedNormalizedHp - 1) * ConfigManager.UNIT_HP_NORMALIZER + 1,
+                (joinedNormalizedHp - 1) * Utility.ConfigManager.UNIT_HP_NORMALIZER + 1,
                 Math.min(focusUnit.getCurrentHp() + targetUnit.getCurrentHp(), focusUnit.getMaxHp())
             ));
 
@@ -848,13 +848,13 @@ namespace TinyWars.Replay.ReplayModel {
             const tile              = war.getTileMap().getTile(pathNodes[pathNodes.length - 1]);
             tile.resetByObjectViewIdAndBaseViewId(focusUnit.getTileObjectViewIdAfterLaunchSilo());
 
-            const targetGrids   = GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, ConfigManager.SILO_RADIUS, unitMap.getMapSize());
+            const targetGrids   = GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, Utility.ConfigManager.SILO_RADIUS, unitMap.getMapSize());
             const targetUnits   = [] as ReplayUnit[];
             for (const grid of targetGrids) {
                 const unit = unitMap.getUnitOnMap(grid) as ReplayUnit;
                 if (unit) {
                     targetUnits.push(unit);
-                    unit.setCurrentHp(Math.max(1, unit.getCurrentHp() - ConfigManager.SILO_DAMAGE));
+                    unit.setCurrentHp(Math.max(1, unit.getCurrentHp() - Utility.ConfigManager.SILO_DAMAGE));
                 }
             }
 
@@ -945,7 +945,7 @@ namespace TinyWars.Replay.ReplayModel {
             const producedUnitId    = unitMap.getNextUnitId();
             const producedUnit      = new ReplayUnit().init({
                 unitId      : producedUnitId,
-                viewId      : ConfigManager.getUnitViewId(focusUnit.getProduceUnitType(), focusUnit.getPlayerIndex())!,
+                viewId      : Utility.ConfigManager.getUnitViewId(focusUnit.getProduceUnitType(), focusUnit.getPlayerIndex())!,
                 gridX       : gridIndex.x,
                 gridY       : gridIndex.y,
                 loaderUnitId: focusUnit.getUnitId(),
@@ -1110,7 +1110,7 @@ namespace TinyWars.Replay.ReplayModel {
 
                     const configVersion = war.getConfigVersion();
                     for (let i = 0; i < skills.length; ++i) {
-                        const skillCfg          = ConfigManager.getCoSkillCfg(configVersion, skills[i]);
+                        const skillCfg          = Utility.ConfigManager.getCoSkillCfg(configVersion, skills[i]);
                         const indiscriminateCfg = skillCfg ? skillCfg.indiscriminateAreaDamage : null;
                         if (indiscriminateCfg) {
                             for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(dataList[i].indiscriminateAreaDamageCenter as GridIndex, 0, indiscriminateCfg[1], unitMap.getMapSize())) {
@@ -1195,7 +1195,7 @@ namespace TinyWars.Replay.ReplayModel {
             const playerIndex   = playerInTurn.getPlayerIndex();
             const unit          = new ReplayUnit().init({
                 unitId,
-                viewId  : ConfigManager.getUnitViewId(action.unitType, playerIndex)!,
+                viewId  : Utility.ConfigManager.getUnitViewId(action.unitType, playerIndex)!,
                 gridX   : gridIndex.x,
                 gridY   : gridIndex.y,
             }, war.getConfigVersion());
@@ -1286,10 +1286,10 @@ namespace TinyWars.Replay.ReplayModel {
                 }
                 const attackerUnitType = attacker.getType();
                 for (const skillId of attackerPlayer.getCoCurrentSkills() || []) {
-                    const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)!.promotionBonusByAttack;
+                    const cfg = Utility.ConfigManager.getCoSkillCfg(configVersion, skillId)!.promotionBonusByAttack;
                     if ((cfg)                                                                           &&
                         (targetLostHp >= cfg[2])                                                        &&
-                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, attackerUnitType, cfg[1]))
+                        (Utility.ConfigManager.checkIsUnitTypeInCategory(configVersion, attackerUnitType, cfg[1]))
                     ) {
                         if (cfg[0] === Types.CoSkillAreaType.Zone) {
                             if (isAttackerInCoZone) {
@@ -1319,10 +1319,10 @@ namespace TinyWars.Replay.ReplayModel {
                 const isTargetInCoZone  = targetPlayer.checkIsInCoZone(targetGridIndex, targetCoGridIndex);
                 const targetUnitType    = targetUnit.getType();
                 for (const skillId of targetPlayer.getCoCurrentSkills() || []) {
-                    const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)!.promotionBonusByAttack;
+                    const cfg = Utility.ConfigManager.getCoSkillCfg(configVersion, skillId)!.promotionBonusByAttack;
                     if ((cfg)                                                                           &&
                         (attackerLostHp >= cfg[2])                                                      &&
-                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, targetUnitType, cfg[1]))
+                        (Utility.ConfigManager.checkIsUnitTypeInCategory(configVersion, targetUnitType, cfg[1]))
                     ) {
                         if (cfg[0] === Types.CoSkillAreaType.Zone) {
                             if (isTargetInCoZone) {
@@ -1516,7 +1516,7 @@ namespace TinyWars.Replay.ReplayModel {
                 focusUnit.getNormalizedCurrentHp() + targetUnit.getNormalizedCurrentHp()
             );
             focusUnit.setCurrentHp(Math.max(
-                (joinedNormalizedHp - 1) * ConfigManager.UNIT_HP_NORMALIZER + 1,
+                (joinedNormalizedHp - 1) * Utility.ConfigManager.UNIT_HP_NORMALIZER + 1,
                 Math.min(focusUnit.getCurrentHp() + targetUnit.getCurrentHp(), focusUnit.getMaxHp())
             ));
 
@@ -1583,13 +1583,13 @@ namespace TinyWars.Replay.ReplayModel {
             const tile              = war.getTileMap().getTile(pathNodes[pathNodes.length - 1]);
             tile.resetByObjectViewIdAndBaseViewId(focusUnit.getTileObjectViewIdAfterLaunchSilo());
 
-            const targetGrids   = GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, ConfigManager.SILO_RADIUS, unitMap.getMapSize());
+            const targetGrids   = GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, Utility.ConfigManager.SILO_RADIUS, unitMap.getMapSize());
             const targetUnits   = [] as ReplayUnit[];
             for (const grid of targetGrids) {
                 const unit = unitMap.getUnitOnMap(grid) as ReplayUnit;
                 if (unit) {
                     targetUnits.push(unit);
-                    unit.setCurrentHp(Math.max(1, unit.getCurrentHp() - ConfigManager.SILO_DAMAGE));
+                    unit.setCurrentHp(Math.max(1, unit.getCurrentHp() - Utility.ConfigManager.SILO_DAMAGE));
                 }
             }
         }
@@ -1634,7 +1634,7 @@ namespace TinyWars.Replay.ReplayModel {
             const producedUnitId    = unitMap.getNextUnitId();
             const producedUnit      = new ReplayUnit().init({
                 unitId      : producedUnitId,
-                viewId      : ConfigManager.getUnitViewId(focusUnit.getProduceUnitType(), focusUnit.getPlayerIndex())!,
+                viewId      : Utility.ConfigManager.getUnitViewId(focusUnit.getProduceUnitType(), focusUnit.getPlayerIndex())!,
                 gridX       : gridIndex.x,
                 gridY       : gridIndex.y,
                 loaderUnitId: focusUnit.getUnitId(),

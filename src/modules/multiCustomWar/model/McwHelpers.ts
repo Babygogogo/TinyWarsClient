@@ -124,7 +124,7 @@ namespace TinyWars.MultiCustomWar.McwHelpers {
 
     export function getUnitProductionCost(war: McwWar, unitType: UnitType): number | undefined {
         // TODO: take skills into account.
-        const cfg = ConfigManager.getUnitTemplateCfg(war.getConfigVersion(), unitType);
+        const cfg = Utility.ConfigManager.getUnitTemplateCfg(war.getConfigVersion(), unitType);
         return cfg ? cfg.productionCost : undefined;
     }
 

@@ -2,14 +2,15 @@
 namespace TinyWars.Utility {
     import localStorage = egret.localStorage;
 
-    const KEY_PREFIX                = "TinyWarsStorage_";
-    const KEY_ACCOUNT               = KEY_PREFIX + "Account";
-    const KEY_PASSWORD              = KEY_PREFIX + "Password";
-    const KEY_REMEMBER_PASSWORD     = KEY_PREFIX + "RememberPassword";
-    const KEY_LANGUAGE              = KEY_PREFIX + "Language";
-    const KEY_SHOW_TILE_ANIMATION   = KEY_PREFIX + "ShowTileAnimation";
-    const VALUE_TRUE                = "1";
-    const VALUE_FALSE               = "0";
+    const KEY_PREFIX                    = "TinyWarsStorage_";
+    const KEY_ACCOUNT                   = KEY_PREFIX + "Account";
+    const KEY_PASSWORD                  = KEY_PREFIX + "Password";
+    const KEY_REMEMBER_PASSWORD         = KEY_PREFIX + "RememberPassword";
+    const KEY_LANGUAGE                  = KEY_PREFIX + "Language";
+    const KEY_SHOW_TILE_ANIMATION       = KEY_PREFIX + "ShowTileAnimation";
+    const KEY_UNIT_TILE_IMAGE_VERSION   = KEY_PREFIX + "UnitAndTileImageVersion";
+    const VALUE_TRUE                    = "1";
+    const VALUE_FALSE                   = "0";
 
     export namespace LocalStorage {
         export function setAccount(account: string): void {
@@ -56,6 +57,16 @@ namespace TinyWars.Utility {
         export function getShowTileAnimation(): boolean {
             const data = localStorage.getItem(KEY_SHOW_TILE_ANIMATION);
             return (data == null) || (data === VALUE_TRUE);
+        }
+
+        export function setUnitAndTileImageVersion(version: Types.UnitAndTileImageVersion): void {
+            localStorage.setItem(KEY_UNIT_TILE_IMAGE_VERSION, "" + version);
+        }
+        export function getUnitAndTileImageVersion(): Types.UnitAndTileImageVersion {
+            const data = parseInt(localStorage.getItem(KEY_UNIT_TILE_IMAGE_VERSION));
+            return ((data === Types.UnitAndTileImageVersion.V1) || (data === Types.UnitAndTileImageVersion.V2))
+                ? data
+                : Types.UnitAndTileImageVersion.V1;
         }
     }
 }

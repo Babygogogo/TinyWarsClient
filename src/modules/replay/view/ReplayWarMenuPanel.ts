@@ -11,7 +11,7 @@ namespace TinyWars.Replay {
     import ProtoTypes       = Utility.ProtoTypes;
     import TimeModel        = Time.TimeModel;
     import WarMapModel      = WarMap.WarMapModel;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.ConfigManager.COMMON_CONSTANTS;
 
     const enum MenuType {
         Main,
@@ -461,7 +461,7 @@ namespace TinyWars.Replay {
                 const coId              = player.getCoId();
                 this._labelCoName.text  = coId == null
                     ? `(${Lang.getText(Lang.Type.B0001)}CO)`
-                    : ConfigManager.getCoBasicCfg(ConfigManager.getNewestConfigVersion(), coId).name;
+                    : Utility.ConfigManager.getCoBasicCfg(Utility.ConfigManager.getNewestConfigVersion(), coId).name;
 
                 const superPowerEnergy      = player.getCoSuperPowerEnergy();
                 const powerEnergy           = player.getCoPowerEnergy();

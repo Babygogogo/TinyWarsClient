@@ -21,7 +21,7 @@ namespace TinyWars.MapEditor.MeModel {
                 reviewComment   : data.reviewComment,
             });
         }
-        for (let i = 0; i < ConfigManager.COMMON_CONSTANTS.MapEditorSlotMaxCount; ++i) {
+        for (let i = 0; i < Utility.ConfigManager.COMMON_CONSTANTS.MapEditorSlotMaxCount; ++i) {
             if (!MAP_DICT.has(i)) {
                 MAP_DICT.set(i, createEmptyData(i));
             }
