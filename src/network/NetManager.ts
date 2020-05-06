@@ -16,6 +16,7 @@ namespace TinyWars.Network {
         const HOST_NAME = window.location.hostname;
         const PORT      = 3000;
         const FULL_URL  = `${PROTOCOL}://${HOST_NAME}:${PORT}`;
+        // const FULL_URL  = "wss://www.tinywars.online:3000";
 
         ////////////////////////////////////////////////////////////////////////////////
         // Type definitions.

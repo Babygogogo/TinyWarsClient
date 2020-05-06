@@ -204,6 +204,19 @@
                             </e:Skin>
                         </GameUi:skinName>
                     </GameUi:UiButton>
+                    <GameUi:UiButton id="_btnSwitchTexture" label="切换贴图" y="350" x="246" height="40" width="200">
+                        <GameUi:skinName>
+                            <e:Skin states="up,down,disabled">
+                                <e:Group left="0" right="0" top="0" bottom="0">
+                                    <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2" scaleX="1" scaleY="1"
+                                             left="0" right="0" top="0" bottom="0" />
+                                    <GameUi:UiLabel id="labelDisplay" size="20" textColor="0x00ff00" scaleX="1"
+                                                    scaleY="1" text="" horizontalCenter="0" verticalCenter="0"
+                                                    maxTextWidth="180" />
+                                </e:Group>
+                            </e:Skin>
+                        </GameUi:skinName>
+                    </GameUi:UiButton>
                     <e:layout>
                         <e:TileLayout orientation="rows" requestedColumnCount="4" />
                     </e:layout>

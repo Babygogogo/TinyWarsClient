@@ -14,6 +14,7 @@ namespace TinyWars.Utility.Notify {
         TileAnimationTick,
         UnitAnimationTick,
         GridAnimationTick,
+        UnitAndTileTextureVersionChanged,
 
         MouseWheel,
         GlobalTouchBegin,

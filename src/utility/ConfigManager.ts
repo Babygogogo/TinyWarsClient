@@ -1881,7 +1881,7 @@ namespace TinyWars.Utility.ConfigManager {
     }
 
     export function getTileBaseImageSource(
-        version         : Types.UnitAndTileImageVersion,
+        version         : Types.UnitAndTileTextureVersion,
         tileBaseViewId  : number,
         tickCount       : number,
         hasFog          : boolean
@@ -1892,7 +1892,7 @@ namespace TinyWars.Utility.ConfigManager {
         return `v${Helpers.getNumText(version)}_${sources[tickCount % sources.length]}`;
     }
     export function getTileObjectImageSource(
-        version         : Types.UnitAndTileImageVersion,
+        version         : Types.UnitAndTileTextureVersion,
         tileObjectViewId: number,
         tickCount       : number,
         hasFog          : boolean
@@ -1904,7 +1904,7 @@ namespace TinyWars.Utility.ConfigManager {
     }
 
     export function getUnitIdleImageSource(
-        version     : Types.UnitAndTileImageVersion,
+        version     : Types.UnitAndTileTextureVersion,
         viewId      : number,
         tickCount   : number,
         isDark      : boolean
@@ -1915,7 +1915,7 @@ namespace TinyWars.Utility.ConfigManager {
         return `v${Helpers.getNumText(version)}_${sources[tickCount % sources.length]}`;
     }
     export function getUnitMovingImageSource(
-        version     : Types.UnitAndTileImageVersion,
+        version     : Types.UnitAndTileTextureVersion,
         viewId      : number,
         tickCount   : number,
         isDark      : boolean

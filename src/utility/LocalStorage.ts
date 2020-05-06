@@ -59,14 +59,14 @@ namespace TinyWars.Utility {
             return (data == null) || (data === VALUE_TRUE);
         }
 
-        export function setUnitAndTileImageVersion(version: Types.UnitAndTileImageVersion): void {
+        export function setUnitAndTileTextureVersion(version: Types.UnitAndTileTextureVersion): void {
             localStorage.setItem(KEY_UNIT_TILE_IMAGE_VERSION, "" + version);
         }
-        export function getUnitAndTileImageVersion(): Types.UnitAndTileImageVersion {
+        export function getUnitAndTileTextureVersion(): Types.UnitAndTileTextureVersion {
             const data = parseInt(localStorage.getItem(KEY_UNIT_TILE_IMAGE_VERSION));
-            return ((data === Types.UnitAndTileImageVersion.V1) || (data === Types.UnitAndTileImageVersion.V2))
+            return ((data === Types.UnitAndTileTextureVersion.V1) || (data === Types.UnitAndTileTextureVersion.V2))
                 ? data
-                : Types.UnitAndTileImageVersion.V1;
+                : Types.UnitAndTileTextureVersion.V1;
         }
     }
 }

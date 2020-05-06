@@ -657,7 +657,7 @@ namespace TinyWars.Utility.Types {
         PublicCn    = 3,
     }
 
-    export const enum UnitAndTileImageVersion {
+    export const enum UnitAndTileTextureVersion {
         V1  = 1,
         V2  = 2,
     }

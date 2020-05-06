@@ -55,6 +55,7 @@ namespace TinyWars.User {
         private _btnChangeLanguage  : GameUi.UiButton;
         private _btnServerStatus    : GameUi.UiButton;
         private _btnChat            : GameUi.UiButton;
+        private _btnSwitchTexture   : GameUi.UiButton;
         private _btnClose           : GameUi.UiButton;
 
         private _userId: number;
@@ -82,10 +83,11 @@ namespace TinyWars.User {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.SGetUserPublicInfo,     callback: this._onNotifySGetUserPublicInfo },
-                { type: Notify.Type.SUserChangeNickname,    callback: this._onNotifySUserChangeNickname },
-                { type: Notify.Type.SUserChangeDiscordId,   callback: this._onNotifySUserChangeDiscordId },
-                { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.SGetUserPublicInfo,                 callback: this._onNotifySGetUserPublicInfo },
+                { type: Notify.Type.SUserChangeNickname,                callback: this._onNotifySUserChangeNickname },
+                { type: Notify.Type.SUserChangeDiscordId,               callback: this._onNotifySUserChangeDiscordId },
+                { type: Notify.Type.UnitAndTileTextureVersionChanged,   callback: this._onNotifyUnitAndTileTextureVersionChanged },
             ];
             this._uiListeners = [
                 { ui: this._btnChangeNickname,  callback: this._onTouchedBtnChangeNickname },
@@ -94,6 +96,7 @@ namespace TinyWars.User {
                 { ui: this._btnChangeLanguage,  callback: this._onTouchedBtnChangeLanguage },
                 { ui: this._btnServerStatus,    callback: this._onTouchedBtnServerStatus },
                 { ui: this._btnChat,            callback: this._onTouchedBtnChat },
+                { ui: this._btnSwitchTexture,   callback: this._onTouchedBtnSwitchTexture },
                 { ui: this._btnClose,           callback: this.close },
             ];
         }
@@ -106,6 +109,12 @@ namespace TinyWars.User {
             FlowManager.gotoLobby();
         }
 
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateComponentsForLanguage();
+        }
+        private _onNotifyUnitAndTileTextureVersionChanged(e: egret.Event): void {
+            this._updateBtnSwitchTexture();
+        }
         private _onNotifySGetUserPublicInfo(e: egret.Event): void {
             this._updateView();
         }
@@ -120,9 +129,6 @@ namespace TinyWars.User {
             if (userId === UserModel.getSelfUserId()) {
                 UserProxy.reqGetUserPublicInfo(this._userId);
             }
-        }
-        private _onNotifyLanguageChanged(e: egret.Event): void {
-            this._updateComponentsForLanguage();
         }
         private _onTouchedBtnChangeNickname(e: egret.TouchEvent): void {
             UserChangeNicknamePanel.show();
@@ -149,6 +155,13 @@ namespace TinyWars.User {
             const userId = this._userId;
             this.close();
             Chat.ChatPanel.show({ toUserId: userId });
+        }
+        private _onTouchedBtnSwitchTexture(e: egret.TouchEvent): void {
+            const model = Common.CommonModel;
+            model.setUnitAndTileTextureVersion(model.getUnitAndTileTextureVersion() === Types.UnitAndTileTextureVersion.V1
+                ? Types.UnitAndTileTextureVersion.V2
+                : Types.UnitAndTileTextureVersion.V1
+            );
         }
 
         private async _updateView(): Promise<void> {
@@ -178,6 +191,7 @@ namespace TinyWars.User {
             }
             group.addChild(this._btnShowOnlineUsers);
             group.addChild(this._btnChangeLanguage);
+            group.addChild(this._btnSwitchTexture);
             group.addChild(this._btnServerStatus);
         }
 
@@ -199,6 +213,7 @@ namespace TinyWars.User {
             this._updateBtnChangeDiscordId();
             this._updateBtnShowOnlineUsers();
             this._updateBtnChangeLanguage();
+            this._updateBtnSwitchTexture();
             this._updateBtnServerStatus();
             this._updateBtnChat();
         }
@@ -237,6 +252,11 @@ namespace TinyWars.User {
             this._btnChangeLanguage.label = Lang.getLanguageType() === Types.LanguageType.Chinese
                 ? Lang.getTextWithLanguage(Lang.Type.B0148, Types.LanguageType.English)
                 : Lang.getTextWithLanguage(Lang.Type.B0148, Types.LanguageType.Chinese);
+        }
+        private _updateBtnSwitchTexture(): void {
+            this._btnSwitchTexture.label = Common.CommonModel.getUnitAndTileTextureVersion() === Types.UnitAndTileTextureVersion.V1
+                ? Lang.getText(Lang.Type.B0386)
+                : Lang.getText(Lang.Type.B0385);
         }
         private _updateBtnServerStatus(): void {
             this._btnServerStatus.label = Lang.getText(Lang.Type.B0327);

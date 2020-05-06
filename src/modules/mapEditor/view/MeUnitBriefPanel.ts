@@ -5,6 +5,7 @@ namespace TinyWars.MapEditor {
     import StageManager     = Utility.StageManager;
     import GridIndexHelpers = Utility.GridIndexHelpers;
     import Types            = Utility.Types;
+    import CommonModel      = Common.CommonModel;
 
     const _CELL_WIDTH           = 80;
     const _LEFT_X               = 80;
@@ -246,7 +247,9 @@ namespace TinyWars.MapEditor {
 
             this._isChildrenCreated = true;
 
-            this._unitView = new MeUnitView();
+            this._imgHp.source      = CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_HP;
+            this._imgFuel.source    = CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_FUEL;
+            this._unitView          = new MeUnitView();
             this._conUnitView.addChild(this._unitView);
             this._updateView();
         }
@@ -276,22 +279,22 @@ namespace TinyWars.MapEditor {
 
                 if (unit.getCurrentBuildMaterial() != null) {
                     this._imgState.visible      = true;
-                    this._imgState.source       = _IMAGE_SOURCE_MATERIAL;
+                    this._imgState.source       = CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_MATERIAL;
                     this._labelState.visible    = true;
                     this._labelState.text       = `${unit.getCurrentBuildMaterial()}`;
                 } else if (unit.getCurrentProduceMaterial() != null) {
                     this._imgState.visible      = true;
-                    this._imgState.source       = _IMAGE_SOURCE_MATERIAL;
+                    this._imgState.source       = CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_MATERIAL;
                     this._labelState.visible    = true;
                     this._labelState.text       = `${unit.getCurrentProduceMaterial()}`;
                 } else if (unit.getFlareCurrentAmmo() != null) {
                     this._imgState.visible      = true;
-                    this._imgState.source       = _IMAGE_SOURCE_FLARE;
+                    this._imgState.source       = CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_FLARE;
                     this._labelState.visible    = true;
                     this._labelState.text       = `${unit.getFlareCurrentAmmo()}`;
                 } else if (unit.getPrimaryWeaponCurrentAmmo() != null) {
                     this._imgState.visible      = true;
-                    this._imgState.source       = _IMAGE_SOURCE_AMMO;
+                    this._imgState.source       = CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_AMMO;
                     this._labelState.visible    = true;
                     this._labelState.text       = `${unit.getPrimaryWeaponCurrentAmmo()}`;
                 } else {

@@ -3,8 +3,11 @@ namespace TinyWars.Common.CommonModel {
     import Types            = Utility.Types;
     import LocalStorage     = Utility.LocalStorage;
     import ConfigManager    = Utility.ConfigManager;
+    import Notify           = Utility.Notify;
+    import Helpers          = Utility.Helpers;
 
-    const _unitAndTileImageVersion      = Types.UnitAndTileImageVersion.V1;
+    let _unitAndTileTextureVersion      = Types.UnitAndTileTextureVersion.V1;
+    let _unitAndTileTexturePrefix       = `v01_`;
     const _tileBaseNormalImageSources   = new Map<number, string>();
     const _tileBaseFogImageSources      = new Map<number, string>();
     const _tileObjectNormalImageSources = new Map<number, string>();
@@ -15,40 +18,59 @@ namespace TinyWars.Common.CommonModel {
     const _unitMovingDarkImageSources   = new Map<number, string>();
 
     export function init(): void {
-        setUnitAndTileImageVersion(LocalStorage.getUnitAndTileImageVersion());
+        setUnitAndTileTextureVersion(LocalStorage.getUnitAndTileTextureVersion());
     }
 
-    export function setUnitAndTileImageVersion(version: Types.UnitAndTileImageVersion): void {
+    export function setUnitAndTileTextureVersion(version: Types.UnitAndTileTextureVersion): void {
+        _unitAndTileTextureVersion = version;
+        updateUnitAndTileTexturePrefix();
+        LocalStorage.setUnitAndTileTextureVersion(version);
+
         tickTileImageSources(Time.TimeModel.getTileAnimationTickCount());
         tickUnitImageSources(Time.TimeModel.getUnitAnimationTickCount());
+        Notify.dispatch(Notify.Type.UnitAndTileTextureVersionChanged);
+    }
+    export function getUnitAndTileTextureVersion(): Types.UnitAndTileTextureVersion {
+        return _unitAndTileTextureVersion;
+    }
+
+    export function getUnitAndTileTexturePrefix(): string {
+        return _unitAndTileTexturePrefix;
+    }
+    function updateUnitAndTileTexturePrefix(): void {
+        _unitAndTileTexturePrefix = `v${Helpers.getNumText(getUnitAndTileTextureVersion())}_`;
     }
 
     export function tickTileImageSources(tickCount: number): void {
-        const version = _unitAndTileImageVersion;
-        ConfigManager.forEachTileBaseType((v, tileBaseViewId) => {
-            _tileBaseNormalImageSources.set(
-                tileBaseViewId,
-                ConfigManager.getTileBaseImageSource(version, tileBaseViewId, tickCount, false)
-            );
-            _tileBaseFogImageSources.set(
-                tileBaseViewId,
-                ConfigManager.getTileBaseImageSource(version, tileBaseViewId, tickCount, true),
-            );
+        const version = _unitAndTileTextureVersion;
+        ConfigManager.forEachTileBaseType((tileBaseType, tileBaseViewId) => {
+            if (tileBaseType !== Types.TileBaseType.Empty) {
+                _tileBaseNormalImageSources.set(
+                    tileBaseViewId,
+                    ConfigManager.getTileBaseImageSource(version, tileBaseViewId, tickCount, false)
+                );
+                _tileBaseFogImageSources.set(
+                    tileBaseViewId,
+                    ConfigManager.getTileBaseImageSource(version, tileBaseViewId, tickCount, true),
+                );
+            }
         });
         ConfigManager.forEachTileObjectTypeAndPlayerIndex((v, tileObjectViewId) => {
-            _tileObjectNormalImageSources.set(
-                tileObjectViewId,
-                ConfigManager.getTileObjectImageSource(version, tileObjectViewId, tickCount, false),
-            );
-            _tileObjectFogImageSources.set(
-                tileObjectViewId,
-                ConfigManager.getTileObjectImageSource(version, tileObjectViewId, tickCount, true),
-            );
+            if (v.tileObjectType !== Types.TileObjectType.Empty) {
+                _tileObjectNormalImageSources.set(
+                    tileObjectViewId,
+                    ConfigManager.getTileObjectImageSource(version, tileObjectViewId, tickCount, false),
+                );
+                _tileObjectFogImageSources.set(
+                    tileObjectViewId,
+                    ConfigManager.getTileObjectImageSource(version, tileObjectViewId, tickCount, true),
+                );
+            }
         });
     }
 
     export function tickUnitImageSources(tickCount: number): void {
-        const version = _unitAndTileImageVersion;
+        const version = _unitAndTileTextureVersion;
         ConfigManager.forEachUnitTypeAndPlayerIndex((v, unitViewId) => {
             _unitIdleNormalImageSources.set(
                 unitViewId,
