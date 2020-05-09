@@ -8,10 +8,10 @@
         <GameUi:UiLabel id="_labelTitle" text="标题" y="10" size="24" horizontalCenter="0" textColor="0x000000"
                         locked="true" />
         <e:Group top="40" bottom="60">
-            <e:Scroller y="33" x="0" maxHeight="200" minHeight="80">
+            <e:Scroller id="_scrContent" y="33" x="0" maxHeight="200" minHeight="40">
                 <e:Group>
                     <GameUi:UiLabel id="_labelContent" text="内容" size="18" top="5" textAlign="center"
-                                    textColor="0x000000" width="400" x="0" />
+                                    textColor="0x000000" width="400" x="0" verticalAlign="middle" />
                 </e:Group>
             </e:Scroller>
             <e:layout>

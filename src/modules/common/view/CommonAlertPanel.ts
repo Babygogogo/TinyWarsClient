@@ -16,6 +16,7 @@ namespace TinyWars.Common {
 
         private static _instance: CommonAlertPanel;
 
+        private _scrContent     : eui.Scroller;
         private _labelTitle     : GameUi.UiLabel;
         private _labelContent   : GameUi.UiLabel;
         private _btnClose       : GameUi.UiButton;
@@ -55,8 +56,10 @@ namespace TinyWars.Common {
 
         protected _onOpened(): void {
             this._updateComponentsForLanguage();
+
             this._labelTitle.text = this._openData.title;
             this._labelContent.setRichText(this._openData.content);
+            this._scrContent.viewport.scrollV = 0;
         }
 
         private _onTouchedBtnClose(e: egret.TouchEvent): void {

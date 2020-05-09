@@ -11,7 +11,8 @@ namespace TinyWars.Login {
         private static _instance: LoginBackgroundPanel;
 
         private _labelVersion       : GameUi.UiLabel;
-        private _btnChangeLanguage  : GameUi.UiButton;
+        private _btnLanguage01      : GameUi.UiButton;
+        private _btnLanguage02      : GameUi.UiButton;
         private _groupUnits         : eui.Group;
 
         public static show(): void {
@@ -40,8 +41,12 @@ namespace TinyWars.Login {
                 { type: Notify.Type.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
             ];
             this._uiListeners = [
-                { ui: this._btnChangeLanguage, callback: this._onTouchedBtnChangeLanguage },
+                { ui: this._btnLanguage01, callback: this._onTouchedBtnLanguage01 },
+                { ui: this._btnLanguage02, callback: this._onTouchedBtnLanguage02 },
             ];
+
+            this._btnLanguage01.setImgDisplaySource("login_button_language_003");
+            this._btnLanguage01.setImgExtraSource("login_button_language_001");
         }
 
         protected _onOpened(): void {
@@ -50,7 +55,7 @@ namespace TinyWars.Login {
             ], this);
 
             this._labelVersion.text = `v.${window.CLIENT_VERSION}`;
-            this._updateBtnChangeLanguage();
+            this._updateBtnLanguages();
 
             if (Utility.ConfigManager.getNewestConfigVersion()) {
                 this._initGroupUnits();
@@ -66,7 +71,7 @@ namespace TinyWars.Login {
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
-            this._updateBtnChangeLanguage();
+            this._updateBtnLanguages();
         }
         private _onNotifyUnitAnimationTick(e: egret.Event): void {
             const group = this._groupUnits;
@@ -78,20 +83,29 @@ namespace TinyWars.Login {
         private _onSNewestConfigVersion(e: egret.Event): void {
             // this._initGroupUnits();
         }
-        private _onTouchedBtnChangeLanguage(e: egret.TouchEvent): void {
-            Lang.setLanguageType(Lang.getLanguageType() === Types.LanguageType.Chinese
-                ? Types.LanguageType.English
-                : Types.LanguageType.Chinese
-            );
-            Notify.dispatch(Notify.Type.LanguageChanged);
+        private _onTouchedBtnLanguage01(e: egret.TouchEvent): void {
+            if (Lang.getLanguageType() !== Types.LanguageType.Chinese) {
+                Lang.setLanguageType(Types.LanguageType.Chinese);
+                Notify.dispatch(Notify.Type.LanguageChanged);
+            }
+        }
+        private _onTouchedBtnLanguage02(e: egret.TouchEvent): void {
+            if (Lang.getLanguageType() !== Types.LanguageType.English) {
+                Lang.setLanguageType(Types.LanguageType.English);
+                Notify.dispatch(Notify.Type.LanguageChanged);
+            }
         }
 
-        private _updateBtnChangeLanguage(): void {
-            if (Lang.getLanguageType() === Types.LanguageType.Chinese) {
-                this._btnChangeLanguage.label = Lang.getTextWithLanguage(Lang.Type.B0148, Types.LanguageType.English);
-            } else {
-                this._btnChangeLanguage.label = Lang.getTextWithLanguage(Lang.Type.B0148, Types.LanguageType.Chinese);
-            }
+        private _updateBtnLanguages(): void {
+            const languageType = Lang.getLanguageType();
+            this._btnLanguage01.setImgDisplaySource(languageType === Types.LanguageType.Chinese
+                ? "login_button_language_001"
+                : "login_button_language_003"
+            );
+            this._btnLanguage02.setImgDisplaySource(languageType === Types.LanguageType.English
+                ? "login_button_language_002"
+                : "login_button_language_004"
+            );
         }
 
         private _initGroupUnits(): void {

@@ -83,7 +83,7 @@
 			"url": "assets/texture/login/login.json",
 			"type": "sheet",
 			"name": "login_json",
-			"subkeys": "button_login_001,button_login_002,button_register_001,button_register_002,login_title_001,text_account_001,text_account_002,text_findPassword_001,text_findPassword_002,text_password_001,text_password_002,text_remember_001,text_remember_002"
+			"subkeys": "login_button_language_001,login_button_language_002,login_button_language_003,login_button_language_004,login_button_login_001,login_button_login_002,login_button_register_001,login_button_register_002,login_text_account_001,login_text_account_002,login_text_findPassword_001,login_text_findPassword_002,login_text_password_001,login_text_password_002,login_text_remember_001,login_text_remember_002,login_title_001"
 		}
 	]
 }

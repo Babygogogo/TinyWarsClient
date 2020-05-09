@@ -1,24 +1,28 @@
 {
   "file": "login.png",
   "frames": { 
-    "button_login_001": {"x":0,"y":158,"w":100,"h":40},
-    "button_login_002": {"x":102,"y":158,"w":100,"h":40},
-    "button_register_001": {"x":204,"y":158,"w":100,"h":40},
-    "button_register_002": {"x":306,"y":158,"w":100,"h":40},
-    "login_title_001": {"x":0,"y":0,"w":533,"h":156,"offX":1,"offY":1,"sourceW":534,"sourceH":158},
-    "text_account_001": {"x":476,"y":177,"w":48,"h":19},
-    "text_account_002": {"x":140,"y":200,"w":66,"h":12},
-    "text_findPassword_001": {"x":208,"y":200,"w":52,"h":13},
-    "text_findPassword_002": {"x":262,"y":200,"w":36,"h":12},
-    "text_password_001": {"x":408,"y":195,"w":48,"h":19},
-    "text_password_002": {"x":408,"y":158,"w":78,"h":17},
-    "text_remember_001": {"x":408,"y":177,"w":66,"h":16},
-    "text_remember_002": {"x":0,"y":200,"w":138,"h":14}
+    "login_button_language_001": {"x":0,"y":158,"w":146,"h":41},
+    "login_button_language_002": {"x":148,"y":158,"w":146,"h":41},
+    "login_button_language_003": {"x":478,"y":177,"w":49,"h":23,"offX":25,"offY":8,"sourceW":146,"sourceH":41},
+    "login_button_language_004": {"x":398,"y":158,"w":84,"h":17,"offX":25,"offY":11,"sourceW":146,"sourceH":41},
+    "login_button_login_001": {"x":0,"y":201,"w":100,"h":40},
+    "login_button_login_002": {"x":102,"y":201,"w":100,"h":40},
+    "login_button_register_001": {"x":204,"y":201,"w":100,"h":40},
+    "login_button_register_002": {"x":296,"y":158,"w":100,"h":40},
+    "login_text_account_001": {"x":306,"y":216,"w":48,"h":19},
+    "login_text_account_002": {"x":406,"y":220,"w":66,"h":12},
+    "login_text_findPassword_001": {"x":474,"y":220,"w":52,"h":13},
+    "login_text_findPassword_002": {"x":484,"y":158,"w":36,"h":12},
+    "login_text_password_001": {"x":356,"y":216,"w":48,"h":19},
+    "login_text_password_002": {"x":398,"y":177,"w":78,"h":17},
+    "login_text_remember_001": {"x":446,"y":202,"w":66,"h":16},
+    "login_text_remember_002": {"x":306,"y":200,"w":138,"h":14},
+    "login_title_001": {"x":0,"y":0,"w":533,"h":156,"offX":1,"offY":1,"sourceW":534,"sourceH":158}
   },
   "meta": {
     "app": "https://www.codeandweb.com/texturepacker",
     "exporter": "egret",
-    "sheetsize": "533x214",
-    "smartupdate": "$TexturePacker:SmartUpdate:5c85a9edb4aa0a79d325d766de336731:aa13f98bbed17617b88848e60be08ece:ffb62af756263e4644c882ff552ab6d3$"
+    "sheetsize": "533x241",
+    "smartupdate": "$TexturePacker:SmartUpdate:0ee19f02e60fd41786bc92f4ec48692b:f957e6e82efc35dfcdee6cc0ddb91910:ffb62af756263e4644c882ff552ab6d3$"
   }
 }

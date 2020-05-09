@@ -115,19 +115,19 @@ namespace TinyWars.Login {
 
         private _updateComponentsForLanguage(): void {
             if (Lang.getLanguageType() === Types.LanguageType.Chinese) {
-                this._imgAccountTitle.source        = "text_account_001";
-                this._imgPasswordTitle.source       = "text_password_001";
-                this._imgRememberPassword.source    = "text_remember_001";
-                this._btnLogin.setImgDisplaySource("button_login_001");
-                this._btnRegister.setImgDisplaySource("button_register_001");
-                this._btnForgetPassword.setImgDisplaySource("text_findPassword_001");
+                this._imgAccountTitle.source        = "login_text_account_001";
+                this._imgPasswordTitle.source       = "login_text_password_001";
+                this._imgRememberPassword.source    = "login_text_remember_001";
+                this._btnLogin.setImgDisplaySource("login_button_login_001");
+                this._btnRegister.setImgDisplaySource("login_button_register_001");
+                this._btnForgetPassword.setImgDisplaySource("login_text_findPassword_001");
             } else {
-                this._imgAccountTitle.source        = "text_account_002";
-                this._imgPasswordTitle.source       = "text_password_002";
-                this._imgRememberPassword.source    = "text_remember_002";
-                this._btnLogin.setImgDisplaySource("button_login_002");
-                this._btnRegister.setImgDisplaySource("button_register_002");
-                this._btnForgetPassword.setImgDisplaySource("text_findPassword_002");
+                this._imgAccountTitle.source        = "login_text_account_002";
+                this._imgPasswordTitle.source       = "login_text_password_002";
+                this._imgRememberPassword.source    = "login_text_remember_002";
+                this._btnLogin.setImgDisplaySource("login_button_login_002");
+                this._btnRegister.setImgDisplaySource("login_button_register_002");
+                this._btnForgetPassword.setImgDisplaySource("login_text_findPassword_002");
             }
         }
     }
