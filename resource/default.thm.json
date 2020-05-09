@@ -13,6 +13,7 @@
 		"resource/skins/common/ErrorPanel.exml",
 		"resource/skins/common/HelpPanel.exml",
 		"resource/skins/common/InputPanel.exml",
+		"resource/skins/component/button/ButtonClose001.exml",
 		"resource/skins/component/CheckBox1.exml",
 		"resource/skins/component/input/Input001.exml",
 		"resource/skins/lobby/LobbyPanel.exml",

@@ -10,7 +10,7 @@ namespace TinyWars.Login {
 
     export class LoginPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = true;
+        protected readonly _IS_EXCLUSIVE = false;
 
         private _imgAccountTitle            : GameUi.UiImage;
         private _inputAccount               : GameUi.UiTextInput;
@@ -100,7 +100,6 @@ namespace TinyWars.Login {
             NoSleepManager.enable();
 
             RegisterPanel.show();
-            LoginPanel.hide();
         }
 
         private _onTouchedBtnForgetPassword(e: egret.TouchEvent): void {

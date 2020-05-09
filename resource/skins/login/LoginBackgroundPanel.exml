@@ -9,7 +9,7 @@
             <e:VerticalLayout gap="0" />
         </e:layout>
     </e:Group>
-    <GameUi:UiLabel id="_labelVersion" text="TinyWars  v19.0118.0149" bottom="16" right="20" size="20"
+    <GameUi:UiLabel id="_labelVersion" text="TinyWars  v19.0118.0149" bottom="16" right="20" size="18"
                     textColor="0x000000" italic="true" />
     <e:Group id="_groupUnits" width="4000" x="0" scaleX="0.25" scaleY="0.25" height="100">
         <e:layout>

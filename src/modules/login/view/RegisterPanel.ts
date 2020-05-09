@@ -3,22 +3,22 @@ namespace TinyWars.Login {
     import FloatText    = Utility.FloatText;
     import Lang         = Utility.Lang;
     import NotifyType   = Utility.Notify.Type;
+    import Types        = Utility.Types;
     import FlowManager  = Utility.FlowManager;
 
     export class RegisterPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = true;
+        protected readonly _IS_EXCLUSIVE = false;
 
-        private _labelRegister  : GameUi.UiLabel;
-        private _labelAccount   : GameUi.UiLabel;
-        private _inputAccount   : GameUi.UiTextInput;
-        private _labelPassword  : GameUi.UiLabel;
-        private _inputPassword  : GameUi.UiTextInput;
-        private _labelNickname  : GameUi.UiLabel;
-        private _inputNickname  : GameUi.UiTextInput;
-        private _btnRegister    : GameUi.UiButton;
-        private _btnLogin       : GameUi.UiButton;
-        private _labelHelp      : GameUi.UiLabel;
+        private _imgAccountTitle    : GameUi.UiImage;
+        private _inputAccount       : GameUi.UiTextInput;
+        private _imgPasswordTitle   : GameUi.UiImage;
+        private _inputPassword      : GameUi.UiTextInput;
+        private _imgNicknameTitle   : GameUi.UiImage;
+        private _inputNickname      : GameUi.UiTextInput;
+        private _btnRegister        : GameUi.UiButton;
+        private _btnLogin           : GameUi.UiButton;
+        private _imgTips            : GameUi.UiImage;
 
         private static _instance: RegisterPanel;
 
@@ -90,13 +90,19 @@ namespace TinyWars.Login {
         }
 
         private _updateOnLanguageChanged(): void {
-            this._labelRegister.text    = Lang.getText(Lang.Type.B0174);
-            this._labelAccount.text     = `${Lang.getText(Lang.Type.B0170)}: `;
-            this._labelPassword.text    = `${Lang.getText(Lang.Type.B0171)}: `;
-            this._labelNickname.text    = `${Lang.getText(Lang.Type.B0175)}: `;
-            this._btnLogin.label        = Lang.getText(Lang.Type.B0146);
-            this._btnRegister.label     = Lang.getText(Lang.Type.B0026);
-            this._labelHelp.setRichText(Lang.getRichText(Lang.RichType.R0005));
+            if (Lang.getLanguageType() === Types.LanguageType.Chinese) {
+                this._imgAccountTitle.source    = "login_text_account_001";
+                this._imgPasswordTitle.source   = "login_text_password_001";
+                this._imgNicknameTitle.source   = "login_text_nickname_001";
+                this._imgTips.source            = "login_text_registerTips_001";
+                this._btnRegister.setImgDisplaySource("login_button_register_003");
+            } else {
+                this._imgAccountTitle.source    = "login_text_account_002";
+                this._imgPasswordTitle.source   = "login_text_password_002";
+                this._imgNicknameTitle.source   = "login_text_nickname_002";
+                this._imgTips.source            = "login_text_registerTips_002";
+                this._btnRegister.setImgDisplaySource("login_button_register_004");
+            }
         }
     }
 }
