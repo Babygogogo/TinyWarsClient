@@ -58,7 +58,7 @@ namespace TinyWars.Login {
             this._updateBtnLanguages();
 
             if (Utility.ConfigManager.getNewestConfigVersion()) {
-                this._initGroupUnits();
+                // this._initGroupUnits();
             }
         }
 

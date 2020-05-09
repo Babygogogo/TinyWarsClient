@@ -16,6 +16,11 @@
 			"name": "bg_001_png"
 		},
 		{
+			"url": "assets/texture/background/bg_002.png",
+			"type": "image",
+			"name": "bg_002_png"
+		},
+		{
 			"url": "assets/egret_icon.png",
 			"type": "image",
 			"name": "egret_icon_png"
