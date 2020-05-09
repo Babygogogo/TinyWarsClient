@@ -13,7 +13,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
     import Notify               = Utility.Notify;
     import WarActionContainer   = ProtoTypes.IWarActionContainer;
     import BwHelpers            = BaseWar.BwHelpers;
-    import AlertPanel           = Common.AlertPanel;
+    import AlertPanel           = Common.CommonAlertPanel;
     import GridIndex            = Types.GridIndex;
     import SerializedBwTile     = Types.SerializedTile;
     import SerializedBwUnit     = Types.SerializedUnit;

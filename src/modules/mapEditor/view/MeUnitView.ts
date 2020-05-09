@@ -171,7 +171,7 @@ namespace TinyWars.MapEditor {
         }
 
         protected _getImageSourcePrefix(isDark: boolean): string {
-            return isDark ? `c07` : `c03`;
+            return CommonModel.getUnitAndTileTexturePrefix() + (isDark ? `c07` : `c03`);
         }
     }
 }

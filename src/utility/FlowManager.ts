@@ -154,7 +154,7 @@ namespace TinyWars.Utility.FlowManager {
         UserModel.clearLoginInfo();
         FlowManager.gotoLogin();
 
-        Common.AlertPanel.show({
+        Common.CommonAlertPanel.show({
             title   : Lang.getText(Lang.Type.B0025),
             content : Lang.getText(Lang.Type.A0020),
         });

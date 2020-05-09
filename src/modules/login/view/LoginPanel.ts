@@ -12,15 +12,17 @@ namespace TinyWars.Login {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private _labelAccount           : GameUi.UiLabel;
-        private _inputAccount           : GameUi.UiTextInput;
-        private _labelPassword          : GameUi.UiLabel;
-        private _inputPassword          : GameUi.UiTextInput;
-        private _btnRegister            : GameUi.UiButton;
-        private _groupRememberPassword  : eui.Group;
-        private _labelRememberPassword  : GameUi.UiLabel;
-        private _imgRememberPassword    : GameUi.UiImage;
-        private _btnLogin               : GameUi.UiButton;
+        private _imgAccountTitle            : GameUi.UiImage;
+        private _inputAccount               : GameUi.UiTextInput;
+        private _imgPasswordTitle           : GameUi.UiImage;
+        private _inputPassword              : GameUi.UiTextInput;
+        private _btnRegister                : GameUi.UiButton;
+        private _groupRememberPassword      : eui.Group;
+        private _labelRememberPassword      : GameUi.UiLabel;
+        private _imgRememberPasswordCheck   : GameUi.UiImage;
+        private _imgRememberPassword        : GameUi.UiImage;
+        private _btnForgetPassword          : GameUi.UiButton;
+        private _btnLogin                   : GameUi.UiButton;
 
         private static _instance: LoginPanel;
 
@@ -52,17 +54,18 @@ namespace TinyWars.Login {
             this._uiListeners = [
                 { ui: this._btnLogin,               callback: this._onTouchedBtnLogin },
                 { ui: this._btnRegister,            callback: this._onTouchedBtnRegister },
+                { ui: this._btnForgetPassword,      callback: this._onTouchedBtnForgetPassword },
                 { ui: this._groupRememberPassword,  callback: this._onTouchedGroupRememberPassword },
             ];
         }
 
         protected _onOpened(): void {
-            const isRememberPassword            = LocalStorage.getIsRememberPassword();
-            this._inputAccount.text             = LocalStorage.getAccount();
-            this._inputPassword.text            = isRememberPassword ? LocalStorage.getPassword() : null;
-            this._btnLogin.enabled              = true;
-            this._imgRememberPassword.visible   = isRememberPassword;
-            this._updateViewOnLanguageChanged();
+            const isRememberPassword                = LocalStorage.getIsRememberPassword();
+            this._inputAccount.text                 = LocalStorage.getAccount();
+            this._inputPassword.text                = isRememberPassword ? LocalStorage.getPassword() : null;
+            this._btnLogin.enabled                  = true;
+            this._imgRememberPasswordCheck.visible  = isRememberPassword;
+            this._updateComponentsForLanguage();
         }
 
         private _onNotifySLogin(e: egret.Event): void {
@@ -70,7 +73,7 @@ namespace TinyWars.Login {
             this._btnLogin.enabled = false;
         }
         private _onNotifyLanguageChanged(e: egret.Event): void {
-            this._updateViewOnLanguageChanged();
+            this._updateComponentsForLanguage();
         }
 
         private _onTouchedBtnLogin(e: egret.TouchEvent): void {
@@ -81,7 +84,7 @@ namespace TinyWars.Login {
             if (!Utility.Helpers.checkIsAccountValid(account)) {
                 FloatText.show(Lang.getText(Lang.Type.A0001));
             } else {
-                if ((isTestAccount(account)) && ((!password) || (!password.length))) {
+                if ((!password) || (!password.length)) {
                     LoginProxy.reqLogin(account, account, false); // For convenience for testing
                 } else {
                     if (!Utility.Helpers.checkIsPasswordValid(password)) {
@@ -100,30 +103,32 @@ namespace TinyWars.Login {
             LoginPanel.hide();
         }
 
+        private _onTouchedBtnForgetPassword(e: egret.TouchEvent): void {
+            FloatText.show(Lang.getText(Lang.Type.A0115));
+        }
+
         private _onTouchedGroupRememberPassword(e: egret.TouchEvent): void {
             const isRemember = LocalStorage.getIsRememberPassword();
             LocalStorage.setIsRememberPassword(!isRemember);
-            this._imgRememberPassword.visible = !isRemember;
+            this._imgRememberPasswordCheck.visible = !isRemember;
         }
 
-        private _updateViewOnLanguageChanged(): void {
-            this._labelAccount.text             = Lang.getText(Lang.Type.B0170);
-            this._labelPassword.text            = Lang.getText(Lang.Type.B0171);
-            this._labelRememberPassword.text    = Lang.getText(Lang.Type.B0172);
+        private _updateComponentsForLanguage(): void {
             if (Lang.getLanguageType() === Types.LanguageType.Chinese) {
-                this._btnLogin.label    = "";
-                this._btnRegister.label = "";
+                this._imgAccountTitle.source        = "text_account_001";
+                this._imgPasswordTitle.source       = "text_password_001";
+                this._imgRememberPassword.source    = "text_remember_001";
+                this._btnLogin.setImgDisplaySource("button_login_001");
+                this._btnRegister.setImgDisplaySource("button_register_001");
+                this._btnForgetPassword.setImgDisplaySource("text_findPassword_001");
             } else {
-                this._btnLogin.label    = Lang.getText(Lang.Type.B0173);
-                this._btnRegister.label = Lang.getText(Lang.Type.B0174);
+                this._imgAccountTitle.source        = "text_account_002";
+                this._imgPasswordTitle.source       = "text_password_002";
+                this._imgRememberPassword.source    = "text_remember_002";
+                this._btnLogin.setImgDisplaySource("button_login_002");
+                this._btnRegister.setImgDisplaySource("button_register_002");
+                this._btnForgetPassword.setImgDisplaySource("text_findPassword_002");
             }
         }
-    }
-
-    function isTestAccount(account: string): boolean {
-        return (account === "babytest1")
-            || (account === "babytest2")
-            || (account === "babytest3")
-            || (account === "babytest4");
     }
 }

@@ -13,7 +13,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
     import Notify               = Utility.Notify;
     import WarActionContainer   = ProtoTypes.IWarActionContainer;
     import BwHelpers            = BaseWar.BwHelpers;
-    import AlertPanel           = Common.AlertPanel;
+    import AlertPanel           = Common.CommonAlertPanel;
     import GridIndex            = Types.GridIndex;
     import SerializedMcwTile    = Types.SerializedTile;
     import SerializedMcwUnit    = Types.SerializedUnit;

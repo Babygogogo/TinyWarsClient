@@ -214,7 +214,7 @@ namespace TinyWars.MapEditor {
             const reviewStatus  = mapData.reviewStatus;
 
             if (reviewStatus === Types.MapReviewStatus.Rejected) {
-                Common.AlertPanel.show({
+                Common.CommonAlertPanel.show({
                     title   : Lang.getText(Lang.Type.B0305),
                     content : mapData.reviewComment || Lang.getText(Lang.Type.B0001),
                     callback: () => {
@@ -222,7 +222,7 @@ namespace TinyWars.MapEditor {
                     },
                 });
             } else if (reviewStatus === Types.MapReviewStatus.Accepted) {
-                Common.AlertPanel.show({
+                Common.CommonAlertPanel.show({
                     title   : Lang.getText(Lang.Type.B0326),
                     content : mapData.reviewComment || Lang.getText(Lang.Type.B0001),
                     callback: () => {

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*" xmlns:w="http://ns.egret.com/wing"
+        class="Skins.Component.Button.ButtonConfirm001">
+    <e:Group horizontalCenter="0" verticalCenter="0">
+        <e:Image id="_imgDisplay" width="100%" height="100%" source="button_confirm_001" />
+        <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="25" bold="true" textColor="0xffffff" />
+    </e:Group>
+</e:Skin>

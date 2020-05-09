@@ -578,6 +578,10 @@ namespace TinyWars.Utility.Lang {
             `您确定要切换该部队的下潜状态吗？`,
             `Are you sure to switch the unit's diving state?`,
         ],
+        [Type.A0115]: [
+            `请联系babygogogo以解决问题`,
+            `Please refer to babygogogo.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
