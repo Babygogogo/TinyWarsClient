@@ -29,7 +29,7 @@ namespace TinyWars.Chat.ChatProxy {
     function _onSChatAddMessage(e: egret.Event): void {
         const data = e.data as ProtoTypes.IS_ChatAddMessage;
         if (!data.errorCode) {
-            ChatModel.updateOnAddMessage(data.message);
+            ChatModel.updateOnAddMessage(data.message, true);
             Notify.dispatch(NotifyType.SChatAddMessage, data);
         }
     }

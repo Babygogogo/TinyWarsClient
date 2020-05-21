@@ -1,11 +1,8 @@
 
 namespace TinyWars.Chat.ChatModel {
-    import Notify       = Utility.Notify;
-    import NotifyType   = Utility.Notify.Type;
     import ProtoTypes   = Utility.ProtoTypes;
     import Logger       = Utility.Logger;
-    import NetManager   = Network.Manager;
-    import ActionCode   = Network.Codes;
+    import FloatText    = Utility.FloatText;
     import ChatMessage  = ProtoTypes.IChatMessage;
 
     type MessageDict        = Map<number, ChatMessage[]>;
@@ -19,25 +16,41 @@ namespace TinyWars.Chat.ChatModel {
         _privateMessages.clear();
 
         for (const msg of msgList || []) {
-           updateOnAddMessage(msg);
+           updateOnAddMessage(msg, false);
         }
     }
 
-    export function updateOnAddMessage(msg: ChatMessage): void {
-        const selfUserId = User.UserModel.getSelfUserId();
-        const toChannelId = msg.toChannelId;
-        if (toChannelId != null) {
-            addMessage(_channelMessages, msg, toChannelId);
+    export function updateOnAddMessage(msg: ChatMessage, showFloatText: boolean): void {
+        const fromUserId = msg.fromUserId;
+        if (fromUserId == null) {
+            Logger.warn(`ChatModel.updateOnAddMessage() invalid msg!`, msg);
         } else {
-            const toWarAndTeam = msg.toWarAndTeam;
-            if (toWarAndTeam != null) {
-                addMessage(_warMessages, msg, toWarAndTeam);
+            const toChannelId = msg.toChannelId;
+            if (toChannelId != null) {
+                addMessage(_channelMessages, msg, toChannelId);
             } else {
-                const userId = msg.fromUserId !== selfUserId ? msg.fromUserId : msg.toUserId;
-                if (userId != null) {
-                    addMessage(_privateMessages, msg, userId);
+                const toWarAndTeam  = msg.toWarAndTeam;
+                const isSentBySelf  = User.UserModel.getSelfUserId() === fromUserId;
+                const content       = msg.content;
+                if (toWarAndTeam != null) {
+                    addMessage(_warMessages, msg, toWarAndTeam);
+                    if ((!isSentBySelf) && (showFloatText) && (!ChatPanel.getIsOpening())) {
+                        User.UserModel.getUserPublicInfo(fromUserId).then(info => FloatText.show(`<font color=0x00FF00>${info.nickname}</font>: ${content}`));
+                    }
                 } else {
-                    Logger.warn(`ChatModel.updateOnAddMessage() invalid msg!`, msg);
+                    const toUserId = msg.toUserId;
+                    if (toUserId == null) {
+                        Logger.warn(`ChatModel.updateOnAddMessage() invalid msg!`, msg);
+                    } else {
+                        if (isSentBySelf) {
+                            addMessage(_privateMessages, msg, toUserId);
+                        } else {
+                            addMessage(_privateMessages, msg, fromUserId);
+                            if ((showFloatText) && (!ChatPanel.getIsOpening())) {
+                                User.UserModel.getUserPublicInfo(fromUserId).then(info => FloatText.show(`<font color=0x00FF00>${info.nickname}</font>: ${content}`));
+                            }
+                        }
+                    }
                 }
             }
         }

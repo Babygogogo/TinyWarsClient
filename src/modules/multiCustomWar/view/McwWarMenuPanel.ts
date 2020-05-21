@@ -294,6 +294,8 @@ namespace TinyWars.MultiCustomWar {
                 this._createCommandSimulation(),
                 this._createCommandShowTileAnimation(),
                 this._createCommandStopTileAnimation(),
+                this._createCommandUseOriginTexture(),
+                this._createCommandUseNewTexture(),
             ].filter(c => !!c);
         }
 
@@ -498,6 +500,32 @@ namespace TinyWars.MultiCustomWar {
                         this._updateView();
                     },
                 }
+            }
+        }
+        private _createCommandUseOriginTexture(): DataForCommandRenderer | null {
+            if (Common.CommonModel.getUnitAndTileTextureVersion() === Types.UnitAndTileTextureVersion.V1) {
+                return null;
+            } else {
+                return {
+                    name    : Lang.getText(Lang.Type.B0385),
+                    callback: () => {
+                        Common.CommonModel.setUnitAndTileTextureVersion(Types.UnitAndTileTextureVersion.V1);
+                        this._updateView();
+                    }
+                };
+            }
+        }
+        private _createCommandUseNewTexture(): DataForCommandRenderer | null {
+            if (Common.CommonModel.getUnitAndTileTextureVersion() === Types.UnitAndTileTextureVersion.V2) {
+                return null;
+            } else {
+                return {
+                    name    : Lang.getText(Lang.Type.B0386),
+                    callback: () => {
+                        Common.CommonModel.setUnitAndTileTextureVersion(Types.UnitAndTileTextureVersion.V2);
+                        this._updateView();
+                    }
+                };
             }
         }
     }

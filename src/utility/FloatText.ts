@@ -49,10 +49,11 @@ namespace TinyWars.Utility.FloatText {
         public constructor(text: string) {
             super();
 
-            const label = new GameUi.UiLabel(text);
+            const label     = new GameUi.UiLabel();
             label.textColor = 0xFFFFFF;
             label.stroke    = 2;
             label.size      = 20;
+            label.setRichText(text);
             this.addChild(label);
 
             this.horizontalCenter = 0;
