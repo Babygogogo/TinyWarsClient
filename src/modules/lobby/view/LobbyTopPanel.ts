@@ -91,8 +91,6 @@ namespace TinyWars.Lobby {
             const score                 = UserModel.getSelfRankScore();
             this._labelRankScore.text   = `${Lang.getText(Lang.Type.B0060)}: ${score}`;
             this._labelRankName.text    = Utility.ConfigManager.getRankName(Utility.ConfigManager.getNewestConfigVersion(), score);
-            this._btnMyInfo.label       = Lang.getText(Lang.Type.B0169);
-            this._btnChat.label         = Lang.getText(Lang.Type.B0383);
         }
 
         private _updateLabelNickname(): void {
