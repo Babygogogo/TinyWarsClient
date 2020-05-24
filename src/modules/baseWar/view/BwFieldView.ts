@@ -25,6 +25,9 @@ namespace TinyWars.BaseWar {
                 this.addChild(this._gridVisionEffectView);
             }
         }
+        public fastInit(field: BwField): void {
+            this._field = field;
+        }
 
         public startRunningView(): void {
         }

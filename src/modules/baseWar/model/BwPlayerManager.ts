@@ -15,6 +15,12 @@ namespace TinyWars.BaseWar {
             }
             return this;
         }
+        public fastInit(dataList: Types.SerializedPlayer[]): BwPlayerManager {
+            for (const data of dataList) {
+                this.getPlayer(data.playerIndex).init(data);
+            }
+            return this;
+        }
 
         public startRunning(war: BwWar): void {
             this._war = war;

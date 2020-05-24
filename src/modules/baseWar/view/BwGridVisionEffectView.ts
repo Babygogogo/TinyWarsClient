@@ -51,6 +51,9 @@ namespace TinyWars.BaseWar {
         public init(gridVisionEffect: BwGridVisionEffect): void {
             this._gridVisionEffect = gridVisionEffect;
         }
+        public fastInit(gridVisionEffect: BwGridVisionEffect): void {
+            this._gridVisionEffect = gridVisionEffect;
+        }
 
         public startRunningView(): void {
         }

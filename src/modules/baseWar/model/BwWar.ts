@@ -68,11 +68,14 @@ namespace TinyWars.BaseWar {
 
             return this;
         }
+
         protected _initView(): void {
             this._view = this._view || new (this._getViewClass());
             this._view.init(this);
         }
-
+        protected _fastInitView(): void {
+            this.getView().fastInit(this);
+        }
         public getView(): BwWarView {
             return this._view;
         }
@@ -274,6 +277,9 @@ namespace TinyWars.BaseWar {
             playerManager.init(data);
             this._setPlayerManager(playerManager);
         }
+        protected _fastInitPlayerManager(data: Types.SerializedPlayer[]): void {
+            this.getPlayerManager().fastInit(data);
+        }
         private _setPlayerManager(manager: BwPlayerManager): void {
             this._playerManager = manager;
         }
@@ -303,6 +309,14 @@ namespace TinyWars.BaseWar {
             await field.init(data, configVersion, mapFileName, mapSizeAndMaxPlayerIndex);
             this._setField(field);
         }
+        protected async _fastInitField(
+            data                        : Types.SerializedField,
+            configVersion               : string,
+            mapFileName                 : string | null | undefined,
+            mapSizeAndMaxPlayerIndex    : Types.MapSizeAndMaxPlayerIndex,
+        ): Promise<void> {
+            await this.getField().fastInit(data, configVersion, mapFileName, mapSizeAndMaxPlayerIndex);
+        }
         private _setField(field: BwField): void {
             this._field = field;
         }
@@ -330,6 +344,9 @@ namespace TinyWars.BaseWar {
             const turnManager = this.getTurnManager() || new (this._getTurnManagerClass())();
             turnManager.init(data);
             this._setTurnManager(turnManager);
+        }
+        protected _fastInitTurnManager(data: Types.SerializedTurn): void {
+            this.getTurnManager().fastInit(data);
         }
         private _setTurnManager(manager: BwTurnManager): void {
             this._turnManager = manager;

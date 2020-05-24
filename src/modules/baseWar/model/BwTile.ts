@@ -52,6 +52,9 @@ namespace TinyWars.BaseWar {
 
             return this;
         }
+        public fastInit(data: SerializedBwTile, configVersion: string): BwTile {
+            return this.init(data, configVersion);
+        }
 
         public startRunning(war: BwWar): void {
             this._war = war;

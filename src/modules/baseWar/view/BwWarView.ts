@@ -41,6 +41,9 @@ namespace TinyWars.BaseWar {
             this._fieldContainer.addContent(war.getField().getView());
             this._fieldContainer.setContentScale(0, true);
         }
+        public fastInit(war: BwWar): void {
+            this._war = war;
+        }
 
         public startRunningView(): void {
             Notify.addEventListeners(this._notifyListeners, this);

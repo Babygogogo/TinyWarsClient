@@ -64,6 +64,11 @@ namespace TinyWars.BaseWar {
 
             return this;
         }
+        public async fastInit(mapSizeAndMaxPlayerIndex: Types.MapSizeAndMaxPlayerIndex): Promise<BwActionPlanner> {
+            this.getView().fastInit(this);
+
+            return this;
+        }
 
         public startRunning(war: BwWar): void {
             this._war = war;

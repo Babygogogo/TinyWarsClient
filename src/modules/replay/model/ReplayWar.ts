@@ -22,7 +22,21 @@ namespace TinyWars.Replay {
 
             this.setCheckPointId(0, 0);
             this.setWarData(0, data);
-            await this._loadCheckPoint(0);
+
+            this.setNextActionId(data.nextActionId || 0);
+
+            this._initPlayerManager(data.players);
+            await Helpers.checkAndCallLater();
+            await this._initField(
+                data.field,
+                data.configVersion,
+                data.mapFileName,
+                await BaseWar.BwHelpers.getMapSizeAndMaxPlayerIndex(data)
+            );
+            this._initTurnManager(data.turn);
+
+            await Helpers.checkAndCallLater();
+            this._initView();
 
             return this;
         }
@@ -163,7 +177,7 @@ namespace TinyWars.Replay {
                     this.startRunning();
                 }
                 while (!this.getWarData(checkPointId)) {
-                    await Helpers.checkAndCallLater();
+                    // await Helpers.checkAndCallLater();
                     await ReplayModel.executeNextAction(this, true);
                 }
 
@@ -192,18 +206,18 @@ namespace TinyWars.Replay {
             const data = this.getWarData(checkPointId);
             this.setNextActionId(data.nextActionId || 0);
 
-            this._initPlayerManager(data.players);
+            this._fastInitPlayerManager(data.players);
             await Helpers.checkAndCallLater();
-            await this._initField(
+            await this._fastInitField(
                 data.field,
                 data.configVersion,
                 data.mapFileName,
                 await BaseWar.BwHelpers.getMapSizeAndMaxPlayerIndex(data)
             );
-            this._initTurnManager(data.turn);
+            this._fastInitTurnManager(data.turn);
 
             await Helpers.checkAndCallLater();
-            this._initView();
+            this._fastInitView();
         }
 
         public getTotalActionsCount(): number {

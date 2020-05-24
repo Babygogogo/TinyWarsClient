@@ -32,6 +32,9 @@ namespace TinyWars.BaseWar {
 
             return this;
         }
+        public async fastInit(data: SerializedBwFogMap, mapSizeAndMaxPlayerIndex: Types.MapSizeAndMaxPlayerIndex): Promise<BwFogMap> {
+            return this.init(data, mapSizeAndMaxPlayerIndex);
+        }
 
         public startRunning(war: BwWar): void {
             this._war = war;

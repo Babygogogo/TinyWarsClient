@@ -87,6 +87,9 @@ namespace TinyWars.BaseWar {
                 this._startTargetAnimation();
             }
         }
+        public fastInit(cursor: BwCursor): void {
+            this._cursor = cursor;
+        }
 
         public startRunningView(): void {
             const field         = this._cursor.getWar().getField();

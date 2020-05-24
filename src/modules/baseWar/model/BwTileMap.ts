@@ -36,6 +36,22 @@ namespace TinyWars.BaseWar {
 
             return this;
         }
+        public async fastInit(
+            data                    : SerializedBwTileMap | null | undefined,
+            configVersion           : string,
+            mapFileName             : string | null | undefined,
+            mapSizeAndMaxPlayerIndex: Types.MapSizeAndMaxPlayerIndex,
+        ): Promise<BwTileMap> {
+            if (mapFileName) {
+                await this._fastInitWithMapFileName(configVersion, mapFileName, data);
+            } else {
+                await this._fastInitWithoutMapFileName(configVersion, mapSizeAndMaxPlayerIndex, data);
+            }
+
+            this.getView().fastInit(this);
+
+            return this;
+        }
         private async _initWithMapFileName(configVersion: string, mapFileName: string, data?: SerializedBwTileMap): Promise<BwTileMap> {
             const mapData                   = await WarMapModel.getMapRawData(mapFileName);
             const { mapWidth, mapHeight }   = mapData;
@@ -73,6 +89,50 @@ namespace TinyWars.BaseWar {
 
             return this;
         }
+        private async _fastInitWithMapFileName(configVersion: string, mapFileName: string, data?: SerializedBwTileMap): Promise<BwTileMap> {
+            const mapData                   = await WarMapModel.getMapRawData(mapFileName);
+            const { mapWidth, mapHeight }   = mapData;
+            const map                       = this._map;
+            const flags                     = Helpers.createEmptyMap<boolean>(mapWidth);
+
+            for (const tileData of data ? data.tiles || [] : []) {
+                const { gridX, gridY } = tileData;
+                if (!flags[gridX][gridY]) {
+                    flags[gridX][gridY] = true;
+
+                    map[gridX][gridY].fastInit(tileData, configVersion);
+                }
+            }
+
+            for (const tileData of mapData.tileDataList || []) {
+                const { gridX, gridY } = tileData;
+                if (!flags[gridX][gridY]) {
+                    flags[gridX][gridY] = true;
+
+                    map[gridX][gridY].fastInit(tileData as Types.SerializedTile, configVersion);
+                }
+            }
+
+            for (let x = 0; x < mapWidth; ++x) {
+                for (let y = 0; y < mapHeight; ++y) {
+                    if (!flags[x][y]) {
+                        flags[x][y] = true;
+
+                        const index = x + y * mapWidth;
+                        map[x][y].fastInit({
+                            baseViewId  : mapData.tileBases[index],
+                            objectViewId: mapData.tileObjects[index],
+                            gridX       : x,
+                            gridY       : y,
+                        }, configVersion);
+                    }
+                }
+            }
+
+            this._mapRawData = mapData;
+
+            return this;
+        }
         private _initWithoutMapFileName(
             configVersion               : string,
             mapSizeAndMaxPlayerIndex    : Types.MapSizeAndMaxPlayerIndex,
@@ -87,6 +147,19 @@ namespace TinyWars.BaseWar {
 
             this._map = map;
             this._setMapSize(mapWidth, mapHeight);
+
+            return this;
+        }
+        private _fastInitWithoutMapFileName(
+            configVersion               : string,
+            mapSizeAndMaxPlayerIndex    : Types.MapSizeAndMaxPlayerIndex,
+            data                        : SerializedBwTileMap | null | undefined,
+        ): BwTileMap {
+            const map = this._map;
+
+            for (const tileData of data ? data.tiles || [] : []) {
+                map[tileData.gridX!][tileData.gridY!].fastInit(tileData, configVersion);
+            }
 
             return this;
         }

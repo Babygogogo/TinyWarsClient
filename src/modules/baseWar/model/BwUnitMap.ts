@@ -36,6 +36,14 @@ namespace TinyWars.BaseWar {
 
             return this;
         }
+        public async fastInit(
+            data                    : Types.SerializedUnitMap | null | undefined,
+            configVersion           : string,
+            mapFileName             : string | null | undefined,
+            mapSizeAndMaxPlayerIndex: MapSizeAndMaxPlayerIndex,
+        ): Promise<BwUnitMap> {
+            return this.init(data, configVersion, mapFileName, mapSizeAndMaxPlayerIndex);
+        }
         private async _initWithSerializedData(
             configVersion           : string,
             mapSizeAndMaxPlayerIndex: MapSizeAndMaxPlayerIndex,

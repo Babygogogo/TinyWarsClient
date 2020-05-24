@@ -117,6 +117,9 @@ namespace TinyWars.BaseWar {
             this._initConForAttackableGrids();
             this._initConForMovePath();
         }
+        public fastInit(actionPlanner: BwActionPlanner): void {
+            this._actionPlanner = actionPlanner;
+        }
 
         public startRunningView(): void {
             Notify.addEventListeners(this._notifyEvents, this);

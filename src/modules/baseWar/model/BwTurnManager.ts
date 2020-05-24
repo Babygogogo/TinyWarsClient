@@ -27,6 +27,9 @@ namespace TinyWars.BaseWar {
 
             return this;
         }
+        public fastInit(data: SerializedBwTurn): BwTurnManager {
+            return this.init(data);
+        }
 
         public startRunning(war: BwWar): void {
             this._war = war;

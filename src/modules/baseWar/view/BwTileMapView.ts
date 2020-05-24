@@ -52,6 +52,9 @@ namespace TinyWars.BaseWar {
                 this._objectLayer.addChild(imgObject);
             });
         }
+        public fastInit(tileMap: BwTileMap): void {
+            this._tileMap = tileMap;
+        }
 
         public startRunningView(): void {
             Notify.addEventListeners(this._notifyListeners, this);
