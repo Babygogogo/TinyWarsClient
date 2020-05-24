@@ -4,7 +4,7 @@ namespace TinyWars.Replay {
     import Notify               = Utility.Notify;
     import FloatText            = Utility.FloatText;
     import Lang                 = Utility.Lang;
-    import Logger               = Utility.Logger;
+    import Helpers              = Utility.Helpers;
     import WarActionContainer   = Types.WarActionContainer;
     import SerializedWar        = Types.SerializedWar;
 
@@ -146,7 +146,9 @@ namespace TinyWars.Replay {
                 this.setIsAutoReplay(false);
                 this.stopRunning();
 
+                await Helpers.checkAndCallLater();
                 await this._loadCheckPoint(checkPointId);
+                await Helpers.checkAndCallLater();
                 this.startRunning().startRunningView();
                 FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex() + 1})`);
 
@@ -155,15 +157,20 @@ namespace TinyWars.Replay {
 
                 if (!isWaitBeginTurn) {
                     this.stopRunning();
+                    await Helpers.checkAndCallLater();
                     await this._loadCheckPoint(checkPointId - 1);
+                    await Helpers.checkAndCallLater();
                     this.startRunning();
                 }
                 while (!this.getWarData(checkPointId)) {
+                    await Helpers.checkAndCallLater();
                     await ReplayModel.executeNextAction(this, true);
                 }
 
                 this.stopRunning();
+                await Helpers.checkAndCallLater();
                 await this._loadCheckPoint(checkPointId);
+                await Helpers.checkAndCallLater();
                 this.startRunning().startRunningView();
                 FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex() + 1})`);
             }
@@ -175,15 +182,18 @@ namespace TinyWars.Replay {
             this.setIsAutoReplay(false);
             this.stopRunning();
 
+            await Helpers.checkAndCallLater();
             await this._loadCheckPoint(this.getCheckPointId(this.getNextActionId()) - 1);
-            FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex() + 1})`);
+            await Helpers.checkAndCallLater();
             this.startRunning().startRunningView();
+            FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex() + 1})`);
         }
         private async _loadCheckPoint(checkPointId: number): Promise<void> {
             const data = this.getWarData(checkPointId);
             this.setNextActionId(data.nextActionId || 0);
 
             this._initPlayerManager(data.players);
+            await Helpers.checkAndCallLater();
             await this._initField(
                 data.field,
                 data.configVersion,
@@ -192,6 +202,7 @@ namespace TinyWars.Replay {
             );
             this._initTurnManager(data.turn);
 
+            await Helpers.checkAndCallLater();
             this._initView();
         }
 

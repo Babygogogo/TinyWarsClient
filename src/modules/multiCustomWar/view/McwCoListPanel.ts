@@ -73,12 +73,15 @@ namespace TinyWars.MultiCustomWar {
             super();
 
             this._setAutoAdjustHeightEnabled();
+            this._setTouchMaskEnabled();
+            this._callbackForTouchMask = () => this.close();
             this.skinName = "resource/skins/multiCustomWar/McwCoListPanel.exml";
         }
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.BwActionPlannerStateChanged,   callback: this._onNotifyMcwPlannerStateChanged },
+                { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyMcwPlannerStateChanged },
             ];
             this._uiListeners = [
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
@@ -89,6 +92,8 @@ namespace TinyWars.MultiCustomWar {
             this._listScop.setItemRenderer(SkillRenderer);
         }
         protected _onOpened(): void {
+            this._updateComponentsForLanguage();
+
             this._war           = McwModel.getWar();
             this._dataForListCo = this._createDataForListCo();
             this._listCo.bindData(this._dataForListCo);
@@ -131,6 +136,10 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateComponentsForLanguage();
+        }
+
         private _onNotifyMcwPlannerStateChanged(e: egret.Event): void {
             const war = this._war;
             if (war.getPlayerInTurn() === war.getPlayerLoggedIn()) {
@@ -141,8 +150,7 @@ namespace TinyWars.MultiCustomWar {
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
-            McwCoListPanel.hide();
-            McwWarMenuPanel.show();
+            this.close();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -179,8 +187,6 @@ namespace TinyWars.MultiCustomWar {
             } else {
                 this._scrCoInfo.visible = true;
 
-                this._labelCommanderInfo.text               = Lang.getText(Lang.Type.B0240);
-                this._btnBack.label                         = Lang.getText(Lang.Type.B0146);
                 this._labelNameTitle.text                   = `${Lang.getText(Lang.Type.B0162)}: `;
                 this._labelForceTitle.text                  = `${Lang.getText(Lang.Type.B0168)}: `;
                 this._labelDesignerTitle.text               = `${Lang.getText(Lang.Type.B0163)}: `;
@@ -283,6 +289,11 @@ namespace TinyWars.MultiCustomWar {
                 this._scrHelp.visible = true;
                 this._labelHelp.setRichText(Lang.getRichText(Lang.RichType.R0004));
             }
+        }
+
+        private _updateComponentsForLanguage(): void {
+            this._labelCommanderInfo.text   = Lang.getText(Lang.Type.B0240);
+            this._btnBack.label             = Lang.getText(Lang.Type.B0146);
         }
     }
 

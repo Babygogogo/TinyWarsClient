@@ -9,7 +9,7 @@ namespace TinyWars.User {
 
     export class UserPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = true;
+        protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: UserPanel;
 
@@ -78,6 +78,8 @@ namespace TinyWars.User {
             super();
 
             this._setAutoAdjustHeightEnabled();
+            this._setTouchMaskEnabled();
+            this._callbackForTouchMask = () => this.close();
             this.skinName = "resource/skins/user/UserPanel.exml";
         }
 
@@ -104,9 +106,6 @@ namespace TinyWars.User {
             UserProxy.reqGetUserPublicInfo(this._userId);
 
             this._updateView();
-        }
-        protected _onClosed(): void {
-            FlowManager.gotoLobby();
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {

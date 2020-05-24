@@ -560,12 +560,12 @@ namespace TinyWars.SingleCustomWar {
 
         private _createDataForMainMenu(): DataForCommandRenderer[] {
             return [
-                this._createCommandOpenCoInfoMenu(),
+                // this._createCommandOpenCoInfoMenu(),
                 this._createCommandSaveGame(),
                 this._createCommandLoadGame(),
                 this._createCommandEnableCheating(),
                 this._createCommandOpenAdvancedMenu(),
-                this._createCommandChat(),
+                // this._createCommandChat(),
                 this._createCommandGotoLobby(),
             ].filter(v => !!v);
         }

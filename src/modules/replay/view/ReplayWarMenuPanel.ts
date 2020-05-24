@@ -251,10 +251,10 @@ namespace TinyWars.Replay {
 
         private _createDataForMainMenu(): DataForCommandRenderer[] {
             return [
-                this._createCommandOpenCoInfoMenu(),
+                // this._createCommandOpenCoInfoMenu(),
                 this._createCommandOpenAdvancedMenu(),
                 this._createCommandRate(),
-                this._createCommandChat(),
+                // this._createCommandChat(),
                 this._createCommandGotoLobby(),
             ].filter(v => !!v);
         }

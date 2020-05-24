@@ -28,6 +28,7 @@ namespace TinyWars.Utility.Notify {
         ChatPanelClosed,
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        BwNextActionIdChanged,
         BwTurnIndexChanged,
         BwTurnPhaseCodeChanged,
         BwPlayerIndexInTurnChanged,

@@ -12,12 +12,19 @@ namespace TinyWars.Replay {
 
         private static _instance: ReplayTopPanel;
 
+        private _groupPlayer        : eui.Group;
         private _labelPlayer        : GameUi.UiLabel;
         private _labelFund          : GameUi.UiLabel;
+        private _labelTurnTitle     : GameUi.UiLabel;
+        private _labelTurn          : GameUi.UiLabel;
+        private _labelActionTitle   : GameUi.UiLabel;
+        private _labelAction        : GameUi.UiLabel;
+        private _groupCo            : eui.Group;
         private _labelCo            : GameUi.UiLabel;
         private _labelCurrEnergy    : GameUi.UiLabel;
         private _labelPowerEnergy   : GameUi.UiLabel;
         private _labelZoneEnergy    : GameUi.UiLabel;
+        private _btnChat            : GameUi.UiButton;
         private _btnFastRewind      : GameUi.UiButton;
         private _btnFastForward     : GameUi.UiButton;
         private _btnPlay            : GameUi.UiButton;
@@ -51,11 +58,15 @@ namespace TinyWars.Replay {
                 { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.BwPlayerFundChanged,        callback: this._onNotifyBwPlayerFundChanged },
                 { type: Notify.Type.BwPlayerIndexInTurnChanged, callback: this._onNotifyBwPlayerIndexInTurnChanged },
+                { type: Notify.Type.BwNextActionIdChanged,      callback: this._onNotifyBwNextActionIdChanged },
                 { type: Notify.Type.BwCoEnergyChanged,          callback: this._onNotifyBwCoEnergyChanged },
                 { type: Notify.Type.BwCoUsingSkillTypeChanged,  callback: this._onNotifyBwCoUsingSkillChanged },
                 { type: Notify.Type.ReplayAutoReplayChanged,    callback: this._onNotifyReplayAutoReplayChanged },
             ];
             this._uiListeners = [
+                { ui: this._groupPlayer,        callback: this._onTouchedGroupPlayer },
+                { ui: this._groupCo,            callback: this._onTouchedGroupCo },
+                { ui: this._btnChat,            callback: this._onTouchedBtnChat },
                 { ui: this._btnFastRewind,      callback: this._onTouchedBtnFastRewind },
                 { ui: this._btnFastForward,     callback: this._onTouchedBtnFastForward, },
                 { ui: this._btnPlay,            callback: this._onTouchedBtnPlay, },
@@ -71,7 +82,7 @@ namespace TinyWars.Replay {
         }
 
         protected _onClosed(): void {
-            delete this._war;
+            this._war = null;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -86,6 +97,9 @@ namespace TinyWars.Replay {
         private _onNotifyBwPlayerIndexInTurnChanged(e: egret.Event): void {
             this._updateView();
         }
+        private _onNotifyBwNextActionIdChanged(e: egret.Event): void {
+            this._updateLabelAction();
+        }
         private _onNotifyBwCoEnergyChanged(e: egret.Event): void {
             this._updateLabelCo();
         }
@@ -96,6 +110,18 @@ namespace TinyWars.Replay {
             this._updateView();
         }
 
+        private _onTouchedGroupPlayer(e: egret.TouchEvent): void {
+            const userId = this._war.getPlayerInTurn().getUserId();
+            (userId) && (User.UserPanel.show(userId));
+        }
+        private _onTouchedGroupCo(e: egret.TouchEvent): void {
+            ReplayCoListPanel.show(Math.max(this._war.getPlayerIndexInTurn() - 1, 0));
+            ReplayWarMenuPanel.hide();
+        }
+        private _onTouchedBtnChat(e: egret.TouchEvent): void {
+            ReplayWarMenuPanel.hide();
+            Chat.ChatPanel.show({});
+        }
         private async _onTouchedBtnFastRewind(e: egret.TouchEvent): Promise<void> {
             const war = this._war;
             war.setIsAutoReplay(false);
@@ -107,7 +133,9 @@ namespace TinyWars.Replay {
             } else if (war.checkIsInBeginning()) {
                 FloatText.show(Lang.getText(Lang.Type.A0042));
             } else {
+                await Helpers.checkAndCallLater();
                 await war.loadPreviousCheckPoint();
+                await Helpers.checkAndCallLater();
                 this._updateView();
             }
         }
@@ -122,7 +150,9 @@ namespace TinyWars.Replay {
             } else if (war.checkIsInEnd()) {
                 FloatText.show(Lang.getText(Lang.Type.A0043));
             } else {
+                await Helpers.checkAndCallLater();
                 await war.loadNextCheckPoint();
+                await Helpers.checkAndCallLater();
                 this._updateView();
             }
         }
@@ -152,17 +182,10 @@ namespace TinyWars.Replay {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for views.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _updateComponentsForLanguage(): void {
-            this._btnMenu.label         = Lang.getText(Lang.Type.B0155);
-            this._btnFastRewind.label   = Lang.getText(Lang.Type.B0247);
-            this._btnFastForward.label  = Lang.getText(Lang.Type.B0248);
-            this._btnPlay.label         = Lang.getText(Lang.Type.B0249);
-            this._btnPause.label        = Lang.getText(Lang.Type.B0250);
-            this._btnUnitList.label     = Lang.getText(Lang.Type.B0152);
-        }
-
         private _updateView(): void {
             this._updateComponentsForLanguage();
+            this._updateLabelTurn();
+            this._updateLabelAction();
             this._updateLabelPlayer();
             this._updateLabelFund();
             this._updateLabelCo();
@@ -170,11 +193,26 @@ namespace TinyWars.Replay {
             this._updateBtnPause();
         }
 
+        private _updateComponentsForLanguage(): void {
+            this._labelTurnTitle.text   = Lang.getText(Lang.Type.B0091);
+            this._labelActionTitle.text = Lang.getText(Lang.Type.B0090);
+        }
+
+        private _updateLabelTurn(): void {
+            const war               = this._war;
+            this._labelTurn.text    = `${war.getTurnManager().getTurnIndex() + 1}`;
+        }
+
+        private _updateLabelAction(): void {
+            const war               = this._war;
+            this._labelAction.text  = `${war.getNextActionId()}`;
+        }
+
         private _updateLabelPlayer(): void {
             const war               = this._war;
             const player            = war.getPlayerInTurn();
             this._labelPlayer.text  = player
-                ? `${Lang.getText(Lang.Type.B0031)}:${player.getNickname()} (${Helpers.getColorTextForPlayerIndex(player.getPlayerIndex())})`
+                ? `${player.getNickname()} (${Helpers.getColorTextForPlayerIndex(player.getPlayerIndex())})`
                 : ``;
         }
 
@@ -182,7 +220,7 @@ namespace TinyWars.Replay {
             const war     = this._war;
             const player  = war.getPlayerInTurn();
             this._labelFund.text = player
-                ? `${Lang.getText(Lang.Type.B0032)}: ${player.getFund()}`
+                ? `${player.getFund()}`
                 : ``;
         }
 
@@ -191,7 +229,7 @@ namespace TinyWars.Replay {
             if ((war) && (war.getIsRunning())) {
                 const player        = war.getPlayerInTurn();
                 const coId          = player.getCoId();
-                this._labelCo.text  = `CO: ${coId == null ? "----" : Utility.ConfigManager.getCoBasicCfg(war.getConfigVersion(), coId).name}`;
+                this._labelCo.text  = `${coId == null ? "----" : Utility.ConfigManager.getCoBasicCfg(war.getConfigVersion(), coId).name}`;
 
                 const skillType = player.getCoUsingSkillType();
                 if (skillType === Types.CoSkillType.Power) {

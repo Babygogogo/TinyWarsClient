@@ -69,12 +69,15 @@ namespace TinyWars.Replay {
             super();
 
             this._setAutoAdjustHeightEnabled();
+            this._setTouchMaskEnabled();
+            this._callbackForTouchMask = () => this.close();
             this.skinName = "resource/skins/replay/ReplayCoListPanel.exml";
         }
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.BwActionPlannerStateChanged,   callback: this._onNotifyBwPlannerStateChanged },
+                { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
             ];
             this._uiListeners = [
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
@@ -85,6 +88,8 @@ namespace TinyWars.Replay {
             this._listScop.setItemRenderer(SkillRenderer);
         }
         protected _onOpened(): void {
+            this._updateComponentsForLanguage();
+
             this._war           = ReplayModel.getWar();
             this._dataForListCo = this._createDataForListCo();
             this._listCo.bindData(this._dataForListCo);
@@ -124,13 +129,16 @@ namespace TinyWars.Replay {
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateComponentsForLanguage();
+        }
+
         private _onNotifyBwPlannerStateChanged(e: egret.Event): void {
             this.close();
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
-            ReplayCoListPanel.hide();
-            ReplayWarMenuPanel.show();
+            this.close();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -155,8 +163,6 @@ namespace TinyWars.Replay {
         }
 
         private _showCoInfo(data: DataForCoRenderer): void {
-            this._labelCommanderInfo.text               = Lang.getText(Lang.Type.B0240);
-            this._btnBack.label                         = Lang.getText(Lang.Type.B0146);
             this._labelNameTitle.text                   = `${Lang.getText(Lang.Type.B0162)}: `;
             this._labelForceTitle.text                  = `${Lang.getText(Lang.Type.B0168)}: `;
             this._labelDesignerTitle.text               = `${Lang.getText(Lang.Type.B0163)}: `;
@@ -249,6 +255,11 @@ namespace TinyWars.Replay {
                     this._listScop.bindData(data);
                 }
             }
+        }
+
+        private _updateComponentsForLanguage(): void {
+            this._labelCommanderInfo.text   = Lang.getText(Lang.Type.B0240);
+            this._btnBack.label             = Lang.getText(Lang.Type.B0146);
         }
     }
 

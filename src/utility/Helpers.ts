@@ -300,6 +300,20 @@ namespace TinyWars.Utility.Helpers {
         return map;
     }
 
+    let _frameBeginTime = 0;
+    export function checkAndCallLater(): Promise<void> {  // DONE
+        if (Date.now() - _frameBeginTime <= 13) {
+            return;
+        } else {
+            return new Promise<void>((resolve, reject) => {
+                egret.callLater(() => {
+                    _frameBeginTime = Date.now();
+                    resolve();
+                }, null);
+            });
+        }
+    }
+
     function getColorMatrix(color: Types.ColorType, value = 100): number[] {
         switch (color) {
             case Types.ColorType.Blue:

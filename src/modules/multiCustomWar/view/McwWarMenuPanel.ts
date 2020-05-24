@@ -65,6 +65,8 @@ namespace TinyWars.MultiCustomWar {
             super();
 
             this._setAutoAdjustHeightEnabled();
+            this._setTouchMaskEnabled();
+            this._callbackForTouchMask = () => this.close();
             this.skinName = `resource/skins/multiCustomWar/McwWarMenuPanel.exml`;
         }
 
@@ -277,10 +279,10 @@ namespace TinyWars.MultiCustomWar {
 
         private _createDataForMainMenu(): DataForCommandRenderer[] {
             return [
-                this._createCommandOpenCoInfoMenu(),
+                // this._createCommandOpenCoInfoMenu(),
                 this._createCommandOpenAdvancedMenu(),
                 this._createCommandSyncWar(),
-                this._createCommandChat(),
+                // this._createCommandChat(),
                 this._createCommandGotoLobby(),
             ].filter(c => !!c);
         }

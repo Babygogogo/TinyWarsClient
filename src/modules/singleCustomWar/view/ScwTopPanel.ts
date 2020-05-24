@@ -14,13 +14,16 @@ namespace TinyWars.SingleCustomWar {
 
         private static _instance: ScwTopPanel;
 
+        private _groupPlayer        : eui.Group;
         private _labelPlayer        : GameUi.UiLabel;
         private _labelSinglePlayer  : GameUi.UiLabel;
         private _labelFund          : GameUi.UiLabel;
+        private _groupCo            : eui.Group;
         private _labelCo            : GameUi.UiLabel;
         private _labelCurrEnergy    : GameUi.UiLabel;
         private _labelPowerEnergy   : GameUi.UiLabel;
         private _labelZoneEnergy    : GameUi.UiLabel;
+        private _btnChat            : GameUi.UiButton;
         private _btnUnitList        : GameUi.UiButton;
         private _btnFindBuilding    : GameUi.UiButton;
         private _btnEndTurn         : GameUi.UiButton;
@@ -59,6 +62,9 @@ namespace TinyWars.SingleCustomWar {
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
             ];
             this._uiListeners = [
+                { ui: this._groupPlayer,        callback: this._onTouchedGroupPlayer },
+                { ui: this._groupCo,            callback: this._onTouchedGroupCo },
+                { ui: this._btnChat,            callback: this._onTouchedBtnChat },
                 { ui: this._btnUnitList,        callback: this._onTouchedBtnUnitList, },
                 { ui: this._btnFindBuilding,    callback: this._onTouchedBtnFindBuilding, },
                 { ui: this._btnEndTurn,         callback: this._onTouchedBtnEndTurn, },
@@ -105,6 +111,18 @@ namespace TinyWars.SingleCustomWar {
             this._updateBtnCancel();
         }
 
+        private _onTouchedGroupPlayer(e: egret.TouchEvent): void {
+            const userId = this._war.getPlayerInTurn().getUserId();
+            (userId) && (User.UserPanel.show(userId));
+        }
+        private _onTouchedGroupCo(e: egret.TouchEvent): void {
+            ScwCoListPanel.show(Math.max(this._war.getPlayerIndexInTurn() - 1, 0));
+            ScwWarMenuPanel.hide();
+        }
+        private _onTouchedBtnChat(e: egret.TouchEvent): void {
+            ScwWarMenuPanel.hide();
+            Chat.ChatPanel.show({});
+        }
         private _onTouchedBtnUnitList(e: egret.TouchEvent): void {
             this._war.getField().getActionPlanner().setStateIdle();
             BwUnitListPanel.show();
@@ -163,7 +181,6 @@ namespace TinyWars.SingleCustomWar {
             this._updateBtnFindUnit();
             this._updateBtnFindBuilding();
             this._updateBtnCancel();
-            this._updateBtnMenu();
         }
 
         private _updateComponentsForLanguage(): void {
@@ -174,7 +191,7 @@ namespace TinyWars.SingleCustomWar {
             const war                   = this._war;
             const player                = war.getPlayerInTurn();
             const name                  = player.getUserId() != null ? Lang.getText(Lang.Type.B0031) : Lang.getText(Lang.Type.B0256);
-            this._labelPlayer.text      = `${Lang.getText(Lang.Type.B0031)}:${name} (${Helpers.getColorTextForPlayerIndex(player.getPlayerIndex())})`;
+            this._labelPlayer.text      = `${name} (${Helpers.getColorTextForPlayerIndex(player.getPlayerIndex())})`;
             this._labelPlayer.textColor = 0xFFFFFF;
         }
 
@@ -184,9 +201,9 @@ namespace TinyWars.SingleCustomWar {
             if ((war.getFogMap().checkHasFogCurrently())                                                                        &&
                 (!(war.getPlayerManager() as ScwPlayerManager).getWatcherTeamIndexesForScw().has(playerInTurn.getTeamIndex()))
             ) {
-                this._labelFund.text = `${Lang.getText(Lang.Type.B0032)}: ????`;
+                this._labelFund.text = `????`;
             } else {
-                this._labelFund.text = `${Lang.getText(Lang.Type.B0032)}: ${playerInTurn.getFund()}`;
+                this._labelFund.text = `${playerInTurn.getFund()}`;
             }
         }
 
@@ -195,7 +212,7 @@ namespace TinyWars.SingleCustomWar {
             if ((war) && (war.getIsRunning())) {
                 const player        = war.getPlayerInTurn();
                 const coId          = player.getCoId();
-                this._labelCo.text  = `CO: ${coId == null ? "----" : Utility.ConfigManager.getCoBasicCfg(war.getConfigVersion(), coId).name}`;
+                this._labelCo.text  = `${coId == null ? "----" : Utility.ConfigManager.getCoBasicCfg(war.getConfigVersion(), coId).name}`;
 
                 const skillType = player.getCoUsingSkillType();
                 if (skillType === Types.CoSkillType.Power) {
@@ -218,7 +235,6 @@ namespace TinyWars.SingleCustomWar {
         private _updateBtnEndTurn(): void {
             const war                   = this._war;
             const turnManager           = war.getTurnManager();
-            this._btnEndTurn.label      = Lang.getText(Lang.Type.B0036);
             this._btnEndTurn.visible    = (war.checkIsHumanInTurn())
                 && (turnManager.getPhaseCode() === Types.TurnPhaseCode.Main)
                 && (war.getActionPlanner().getState() === Types.ActionPlannerState.Idle);
@@ -227,7 +243,6 @@ namespace TinyWars.SingleCustomWar {
         private _updateBtnFindUnit(): void {
             const war                   = this._war;
             const turnManager           = war.getTurnManager();
-            this._btnUnitList.label     = Lang.getText(Lang.Type.B0152);
             this._btnUnitList.visible   = (war.checkIsHumanInTurn())
                 && (turnManager.getPhaseCode() === Types.TurnPhaseCode.Main);
         }
@@ -235,7 +250,6 @@ namespace TinyWars.SingleCustomWar {
         private _updateBtnFindBuilding(): void {
             const war                       = this._war;
             const turnManager               = war.getTurnManager();
-            this._btnFindBuilding.label     = Lang.getText(Lang.Type.B0153);
             this._btnFindBuilding.visible   = (war.checkIsHumanInTurn())
                 && (turnManager.getPhaseCode() === Types.TurnPhaseCode.Main);
         }
@@ -245,16 +259,11 @@ namespace TinyWars.SingleCustomWar {
             const turnManager       = war.getTurnManager();
             const actionPlanner     = war.getActionPlanner();
             const state             = actionPlanner.getState();
-            this._btnCancel.label   = Lang.getText(Lang.Type.B0154);
             this._btnCancel.visible = (war.checkIsHumanInTurn())
                 && (turnManager.getPhaseCode() === Types.TurnPhaseCode.Main)
                 && (state !== Types.ActionPlannerState.Idle)
                 && (state !== Types.ActionPlannerState.ExecutingAction)
                 && (!actionPlanner.checkIsStateRequesting());
-        }
-
-        private _updateBtnMenu(): void {
-            this._btnMenu.label = Lang.getText(Lang.Type.B0155);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

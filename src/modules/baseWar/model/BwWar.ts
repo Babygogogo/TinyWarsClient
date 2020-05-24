@@ -2,6 +2,7 @@
 namespace TinyWars.BaseWar {
     import Types            = Utility.Types;
     import Logger           = Utility.Logger;
+    import Notify           = Utility.Notify;
     import SerializedBwWar  = Types.SerializedWar;
 
     export abstract class BwWar {
@@ -81,7 +82,7 @@ namespace TinyWars.BaseWar {
             this.getPlayerManager().startRunning(this);
             this.getField().startRunning(this);
 
-            this._isRunning = true;
+            this.setIsRunning(true);
 
             return this;
         }
@@ -95,11 +96,14 @@ namespace TinyWars.BaseWar {
             this.getField().stopRunning();
             this.getView().stopRunning();
 
-            this._isRunning = false;
+            this.setIsRunning(false);
 
             return this;
         }
 
+        public setIsRunning(isRunning: boolean): void {
+            this._isRunning = isRunning;
+        }
         public getIsRunning(): boolean {
             return this._isRunning;
         }
@@ -262,6 +266,7 @@ namespace TinyWars.BaseWar {
         }
         public setNextActionId(actionId: number): void {
             this._nextActionId = actionId;
+            Notify.dispatch(Notify.Type.BwNextActionIdChanged);
         }
 
         protected _initPlayerManager(data: Types.SerializedPlayer[]): void {
