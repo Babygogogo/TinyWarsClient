@@ -142,7 +142,7 @@ namespace TinyWars.MultiCustomRoom {
             this._updateComponentsForLanguage();
             this._dataForListReplay = this._createDataForListReplay();
             this._updateListReplay();
-            this.setSelectedIndex(Math.floor(Math.random() * this._dataForListReplay.length));
+            this.setSelectedIndex(0);
         }
 
         private _updateComponentsForLanguage(): void {

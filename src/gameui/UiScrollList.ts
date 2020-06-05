@@ -32,9 +32,7 @@ namespace TinyWars.GameUi {
             const provider = this._dataProvider;
             for (let i = 0; i < data.length; ++i) {
                 const newItem = data[i];
-                let oldItem   = provider.getItemAt(i);
-
-                if (oldItem == null) {
+                if (provider.getItemAt(i) == null) {
                     provider.addItem(newItem);
                 } else {
                     provider.replaceItemAt(newItem, i);
@@ -44,11 +42,17 @@ namespace TinyWars.GameUi {
                 provider.removeItemAt(i);
             }
 
-            if ((this.viewport) && (this.viewport instanceof eui.List)) {
-                this.viewport.addEventListener(eui.ItemTapEvent.ITEM_TAP, this._onTouchedListItem, this);
-                if (this.viewport.dataProvider != provider) {
-                    this.viewport.dataProvider = provider;
+            const viewport = this.viewport;
+            if ((viewport) && (viewport instanceof eui.List)) {
+                viewport.addEventListener(eui.ItemTapEvent.ITEM_TAP, this._onTouchedListItem, this);
+                if (viewport.dataProvider != provider) {
+                    viewport.dataProvider = provider;
                 }
+
+                // 修正从多子项切换到少子项时，且曾经拖动到比较远的的情况下，切换后可能没有显示子项的问题
+                this.validateNow();
+                viewport.scrollV = Math.max(0, Math.min(viewport.scrollV, viewport.contentHeight - viewport.height));
+                viewport.scrollH = Math.max(0, Math.min(viewport.scrollH, viewport.contentWidth - viewport.width));
             }
         }
 
