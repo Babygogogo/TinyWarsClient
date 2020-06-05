@@ -163,13 +163,13 @@ namespace TinyWars.MultiCustomRoom {
             const data: DataForPlayerRenderer[] = [
                 {
                     playerIndex : 1,
-                    playerName  : warInfo.p1UserNickname,
+                    userId      : warInfo.p1UserId,
                     teamIndex   : warInfo.p1TeamIndex,
                     isAlive     : warInfo.p1IsAlive,
                 },
                 {
                     playerIndex : 2,
-                    playerName  : warInfo.p2UserNickname,
+                    userId      : warInfo.p2UserId,
                     teamIndex   : warInfo.p2TeamIndex,
                     isAlive     : warInfo.p2IsAlive,
                 },
@@ -177,7 +177,7 @@ namespace TinyWars.MultiCustomRoom {
             if (mapExtraData.playersCount >= 3) {
                 data.push({
                     playerIndex : 3,
-                    playerName  : warInfo.p3UserNickname,
+                    userId      : warInfo.p3UserId,
                     teamIndex   : warInfo.p3TeamIndex,
                     isAlive     : warInfo.p3IsAlive,
                 });
@@ -185,7 +185,7 @@ namespace TinyWars.MultiCustomRoom {
             if (mapExtraData.playersCount >= 4) {
                 data.push({
                     playerIndex : 4,
-                    playerName  : warInfo.p4UserNickname,
+                    userId      : warInfo.p4UserId,
                     teamIndex   : warInfo.p4TeamIndex,
                     isAlive     : warInfo.p4IsAlive,
                 });
@@ -284,7 +284,7 @@ namespace TinyWars.MultiCustomRoom {
 
     type DataForPlayerRenderer = {
         playerIndex     : number;
-        playerName      : string;
+        userId          : number | null;
         teamIndex       : number;
         isAlive         : boolean;
         defeatTimestamp?: number;
@@ -300,24 +300,28 @@ namespace TinyWars.MultiCustomRoom {
 
             const data = this.data as DataForPlayerRenderer;
             if (data.defeatTimestamp != null) {
-                const leftTime = data.defeatTimestamp - Time.TimeModel.getServerTimestamp();
+                const leftTime              = data.defeatTimestamp - Time.TimeModel.getServerTimestamp();
                 this._labelIndex.text       = Helpers.getColorTextForPlayerIndex(data.playerIndex);
                 this._labelIndex.textColor  = 0x00FF00;
                 this._labelTeam.text        = Helpers.getTeamText(data.teamIndex);
                 this._labelTeam.textColor   = 0x00FF00
-                this._labelName.text        = data.playerName + (leftTime > 0
-                    ? ` (${Lang.getText(Lang.Type.B0027)}:${Helpers.getTimeDurationText(leftTime)})`
-                    : ` (${Lang.getText(Lang.Type.B0028)})`);
                 this._labelName.textColor   = 0x00FF00;
+                User.UserModel.getUserPublicInfo(data.userId).then(info => {
+                    this._labelName.text    = info.nickname + (leftTime > 0
+                        ? ` (${Lang.getText(Lang.Type.B0027)}:${Helpers.getTimeDurationText(leftTime)})`
+                        : ` (${Lang.getText(Lang.Type.B0028)})`);
+                });
             } else {
                 this._labelIndex.text       = Helpers.getColorTextForPlayerIndex(data.playerIndex);
                 this._labelIndex.textColor  = 0xFFFFFF;
                 this._labelTeam.text        = Helpers.getTeamText(data.teamIndex);
                 this._labelTeam.textColor   = 0xFFFFFF;
-                this._labelName.text        = data.isAlive
-                    ? data.playerName
-                    : `${data.playerName} (${Lang.getText(Lang.Type.B0056)})`;
                 this._labelName.textColor   = 0xFFFFFF;
+                User.UserModel.getUserPublicInfo(data.userId).then(info => {
+                    this._labelName.text    = data.isAlive
+                        ? info.nickname
+                        : `${info.nickname} (${Lang.getText(Lang.Type.B0056)})`;
+                });
             }
         }
     }

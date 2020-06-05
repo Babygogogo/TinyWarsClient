@@ -1,10 +1,9 @@
 
 namespace TinyWars.MultiCustomRoom {
-    import ProtoTypes   = Utility.ProtoTypes;
-    import Notify       = Utility.Notify;
-    import Lang         = Utility.Lang;
-    import Helpers      = Utility.Helpers;
-    import Types        = Utility.Types;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import Notify           = Utility.Notify;
+    import Lang             = Utility.Lang;
+    import ConfigManager    = Utility.ConfigManager;
 
     export class McrWatchMakeRequestDetailPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
@@ -121,7 +120,6 @@ namespace TinyWars.MultiCustomRoom {
                 configVersion   : warDetail.configVersion,
                 playerIndex     : 1,
                 teamIndex       : warDetail.p1TeamIndex,
-                nickname        : warDetail.p1UserNickname,
                 coId            : warDetail.p1CoId,
                 isAlive         : warDetail.p1IsAlive,
                 userId          : warDetail.p1UserId,
@@ -133,7 +131,6 @@ namespace TinyWars.MultiCustomRoom {
                 configVersion   : warDetail.configVersion,
                 playerIndex     : 2,
                 teamIndex       : warDetail.p2TeamIndex,
-                nickname        : warDetail.p2UserNickname,
                 coId            : warDetail.p2CoId,
                 isAlive         : warDetail.p2IsAlive,
                 userId          : warDetail.p2UserId,
@@ -147,7 +144,6 @@ namespace TinyWars.MultiCustomRoom {
                     configVersion   : warDetail.configVersion,
                     playerIndex     : 3,
                     teamIndex       : warDetail.p3TeamIndex,
-                    nickname        : warDetail.p3UserNickname,
                     coId            : warDetail.p3CoId,
                     isAlive         : warDetail.p3IsAlive,
                     userId          : warDetail.p3UserId,
@@ -162,7 +158,6 @@ namespace TinyWars.MultiCustomRoom {
                     configVersion   : warDetail.configVersion,
                     playerIndex     : 4,
                     teamIndex       : warDetail.p4TeamIndex,
-                    nickname        : warDetail.p4UserNickname,
                     coId            : warDetail.p4CoId,
                     isAlive         : warDetail.p4IsAlive,
                     userId          : warDetail.p4UserId,
@@ -181,7 +176,6 @@ namespace TinyWars.MultiCustomRoom {
         configVersion   : string;
         playerIndex     : number;
         teamIndex       : number;
-        nickname        : string;
         coId            : number | null;
         isAlive         : boolean;
         userId          : number;
@@ -202,10 +196,11 @@ namespace TinyWars.MultiCustomRoom {
             super.dataChanged();
 
             const data              = this.data as DataForPlayerRenderer;
-            const coConfig          = data.coId == null ? null : Utility.ConfigManager.getCoBasicCfg(data.configVersion, data.coId);
             this._labelIndex.text   = Lang.getPlayerForceName(data.playerIndex);
             this._labelTeam.text    = Lang.getPlayerTeamName(data.teamIndex);
-            this._labelName.text    = data.nickname + (coConfig ? `(${coConfig.name}(T${coConfig.tier}))` : `(${Lang.getText(Lang.Type.B0211)} CO)`);
+            User.UserModel.getUserPublicInfo(data.userId).then(info => {
+                this._labelName.text = info.nickname + ConfigManager.getCoNameAndTierText(data.configVersion, data.coId);
+            });
             if (!data.isAlive) {
                 this._imgAccept.visible     = false;
                 this._imgDecline.visible    = false;

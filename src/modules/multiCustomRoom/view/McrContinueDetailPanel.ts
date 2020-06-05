@@ -1,13 +1,14 @@
 
 namespace TinyWars.MultiCustomRoom {
-    import ProtoTypes   = Utility.ProtoTypes;
-    import Helpers      = Utility.Helpers;
-    import Notify       = Utility.Notify;
-    import Lang         = Utility.Lang;
-    import Types        = Utility.Types;
-    import FlowManager  = Utility.FlowManager;
-    import HelpPanel    = Common.HelpPanel;
-    import BlockPanel   = Common.BlockPanel;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import Helpers          = Utility.Helpers;
+    import Notify           = Utility.Notify;
+    import Lang             = Utility.Lang;
+    import Types            = Utility.Types;
+    import FlowManager      = Utility.FlowManager;
+    import ConfigManager    = Utility.ConfigManager;
+    import HelpPanel        = Common.HelpPanel;
+    import BlockPanel       = Common.BlockPanel;
 
     export class McrContinueDetailPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
@@ -171,17 +172,20 @@ namespace TinyWars.MultiCustomRoom {
             if (!mapInfo) {
                 return [];
             } else {
-                const data: DataForPlayerRenderer[] = [
+                const configVersion = warInfo.configVersion;
+                const dataList      : DataForPlayerRenderer[] = [
                     {
+                        configVersion,
                         playerIndex : 1,
-                        playerName  : warInfo.p1UserNickname,
+                        userId      : warInfo.p1UserId,
                         teamIndex   : warInfo.p1TeamIndex,
                         isAlive     : warInfo.p1IsAlive,
                         coId        : warInfo.p1CoId,
                     },
                     {
+                        configVersion,
                         playerIndex : 2,
-                        playerName  : warInfo.p2UserNickname,
+                        userId      : warInfo.p2UserId,
                         teamIndex   : warInfo.p2TeamIndex,
                         isAlive     : warInfo.p2IsAlive,
                         coId        : warInfo.p2CoId,
@@ -189,33 +193,36 @@ namespace TinyWars.MultiCustomRoom {
                 ];
 
                 if (mapInfo.playersCount >= 3) {
-                    data.push({
+                    dataList.push({
+                        configVersion,
                         playerIndex : 3,
-                        playerName  : warInfo.p3UserNickname,
+                        userId      : warInfo.p3UserId,
                         teamIndex   : warInfo.p3TeamIndex,
                         isAlive     : warInfo.p3IsAlive,
                         coId        : warInfo.p3CoId,
                     });
                 }
                 if (mapInfo.playersCount >= 4) {
-                    data.push({
+                    dataList.push({
+                        configVersion,
                         playerIndex : 4,
-                        playerName  : warInfo.p4UserNickname,
+                        userId      : warInfo.p4UserId,
                         teamIndex   : warInfo.p4TeamIndex,
                         isAlive     : warInfo.p4IsAlive,
                         coId        : warInfo.p4CoId,
                     });
                 }
-                data[warInfo.playerIndexInTurn - 1].defeatTimestamp = warInfo.enterTurnTime + warInfo.timeLimit;
+                dataList[warInfo.playerIndexInTurn - 1].defeatTimestamp = warInfo.enterTurnTime + warInfo.timeLimit;
 
-                return data;
+                return dataList;
             }
         }
     }
 
     type DataForPlayerRenderer = {
+        configVersion   : string;
         playerIndex     : number;
-        playerName      : string;
+        userId          : number | null;
         teamIndex       : number;
         isAlive         : boolean;
         coId            : number | null;
@@ -231,31 +238,25 @@ namespace TinyWars.MultiCustomRoom {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data = this.data as DataForPlayerRenderer;
+            const data              = this.data as DataForPlayerRenderer;
+            this._labelIndex.text   = Helpers.getColorTextForPlayerIndex(data.playerIndex);
+            this._labelTeam.text    = Helpers.getTeamText(data.teamIndex);
+            User.UserModel.getUserPublicInfo(data.userId).then(info => {
+                this._labelNickname.text = info.nickname;
+            });
+
             if (data.defeatTimestamp != null) {
                 const leftTime                  = data.defeatTimestamp - Time.TimeModel.getServerTimestamp();
                 this.currentState               = "down";
-                this._labelIndex.text           = Helpers.getColorTextForPlayerIndex(data.playerIndex);
-                this._labelTeam.text            = Helpers.getTeamText(data.teamIndex);
-                this._labelNickname.text        = data.playerName;
                 this._labelNickname.textColor   = 0x00FF00;
-                this._labelCoName.text          = this._getCoName(data.coId) + (leftTime > 0
+                this._labelCoName.text          = ConfigManager.getCoNameAndTierText(data.configVersion, data.coId) + (leftTime > 0
                     ? ` (${Lang.getText(Lang.Type.B0027)}:${Helpers.getTimeDurationText(leftTime)})`
                     : ` (${Lang.getText(Lang.Type.B0028)})`);
             } else {
                 this.currentState               = "up";
-                this._labelIndex.text           = Helpers.getColorTextForPlayerIndex(data.playerIndex);
-                this._labelTeam.text            = Helpers.getTeamText(data.teamIndex);
-                this._labelNickname.text        = data.playerName;
                 this._labelNickname.textColor   = data.isAlive ? 0xFFFFFF : 0x999999;
-                this._labelCoName.text          = this._getCoName(data.coId);
+                this._labelCoName.text          = ConfigManager.getCoNameAndTierText(data.configVersion, data.coId);
             }
-        }
-
-        private _getCoName(coId: number | null): string {
-            return coId == null
-                ? `(${Lang.getText(Lang.Type.B0001)}CO)`
-                : Utility.ConfigManager.getCoBasicCfg(Utility.ConfigManager.getNewestConfigVersion(), coId).name;
         }
     }
 }

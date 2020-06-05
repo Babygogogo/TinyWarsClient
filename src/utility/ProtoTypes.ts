@@ -7759,9 +7759,6 @@ export declare interface IMcwOngoingDetail {
     /** McwOngoingDetail p1CoId */
     p1CoId?: (number|null);
 
-    /** McwOngoingDetail p1UserNickname */
-    p1UserNickname?: (string|null);
-
     /** McwOngoingDetail p2UserId */
     p2UserId?: (number|null);
 
@@ -7773,9 +7770,6 @@ export declare interface IMcwOngoingDetail {
 
     /** McwOngoingDetail p2CoId */
     p2CoId?: (number|null);
-
-    /** McwOngoingDetail p2UserNickname */
-    p2UserNickname?: (string|null);
 
     /** McwOngoingDetail p3UserId */
     p3UserId?: (number|null);
@@ -7789,9 +7783,6 @@ export declare interface IMcwOngoingDetail {
     /** McwOngoingDetail p3CoId */
     p3CoId?: (number|null);
 
-    /** McwOngoingDetail p3UserNickname */
-    p3UserNickname?: (string|null);
-
     /** McwOngoingDetail p4UserId */
     p4UserId?: (number|null);
 
@@ -7803,9 +7794,6 @@ export declare interface IMcwOngoingDetail {
 
     /** McwOngoingDetail p4CoId */
     p4CoId?: (number|null);
-
-    /** McwOngoingDetail p4UserNickname */
-    p4UserNickname?: (string|null);
 
     /** McwOngoingDetail playerIndexInTurn */
     playerIndexInTurn?: (number|null);
@@ -7883,9 +7871,6 @@ export declare class McwOngoingDetail implements IMcwOngoingDetail {
     /** McwOngoingDetail p1CoId. */
     public p1CoId: number;
 
-    /** McwOngoingDetail p1UserNickname. */
-    public p1UserNickname: string;
-
     /** McwOngoingDetail p2UserId. */
     public p2UserId: number;
 
@@ -7897,9 +7882,6 @@ export declare class McwOngoingDetail implements IMcwOngoingDetail {
 
     /** McwOngoingDetail p2CoId. */
     public p2CoId: number;
-
-    /** McwOngoingDetail p2UserNickname. */
-    public p2UserNickname: string;
 
     /** McwOngoingDetail p3UserId. */
     public p3UserId: number;
@@ -7913,9 +7895,6 @@ export declare class McwOngoingDetail implements IMcwOngoingDetail {
     /** McwOngoingDetail p3CoId. */
     public p3CoId: number;
 
-    /** McwOngoingDetail p3UserNickname. */
-    public p3UserNickname: string;
-
     /** McwOngoingDetail p4UserId. */
     public p4UserId: number;
 
@@ -7927,9 +7906,6 @@ export declare class McwOngoingDetail implements IMcwOngoingDetail {
 
     /** McwOngoingDetail p4CoId. */
     public p4CoId: number;
-
-    /** McwOngoingDetail p4UserNickname. */
-    public p4UserNickname: string;
 
     /** McwOngoingDetail playerIndexInTurn. */
     public playerIndexInTurn: number;

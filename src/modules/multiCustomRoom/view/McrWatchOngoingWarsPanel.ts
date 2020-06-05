@@ -1,14 +1,15 @@
 
 namespace TinyWars.MultiCustomRoom {
-    import Notify       = Utility.Notify;
-    import Types        = Utility.Types;
-    import FloatText    = Utility.FloatText;
-    import FlowManager  = Utility.FlowManager;
-    import Helpers      = Utility.Helpers;
-    import Lang         = Utility.Lang;
-    import ProtoTypes   = Utility.ProtoTypes;
-    import BlockPanel   = Common.BlockPanel;
-    import WarMapModel  = WarMap.WarMapModel;
+    import Notify           = Utility.Notify;
+    import Types            = Utility.Types;
+    import FloatText        = Utility.FloatText;
+    import FlowManager      = Utility.FlowManager;
+    import Helpers          = Utility.Helpers;
+    import Lang             = Utility.Lang;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import ConfigManager    = Utility.ConfigManager;
+    import BlockPanel       = Common.BlockPanel;
+    import WarMapModel      = WarMap.WarMapModel;
 
     export class McrWatchOngoingWarsPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
@@ -164,14 +165,14 @@ namespace TinyWars.MultiCustomRoom {
             const dataList      : DataForPlayerRenderer[] = [
                 {
                     playerIndex     : 1,
-                    playerName      : warInfo.p1UserNickname,
+                    userId          : warInfo.p1UserId,
                     teamIndex       : warInfo.p1TeamIndex,
                     coId            : warInfo.p1CoId,
                     configVersion,
                 },
                 {
                     playerIndex     : 2,
-                    playerName      : warInfo.p2UserNickname,
+                    userId          : warInfo.p2UserId,
                     teamIndex       : warInfo.p2TeamIndex,
                     coId            : warInfo.p2CoId,
                     configVersion,
@@ -180,7 +181,7 @@ namespace TinyWars.MultiCustomRoom {
             if (mapPlayersCount >= 3) {
                 dataList.push({
                     playerIndex     : 3,
-                    playerName      : warInfo.p3UserNickname,
+                    userId          : warInfo.p3UserId,
                     teamIndex       : warInfo.p3TeamIndex,
                     coId            : warInfo.p3CoId,
                     configVersion,
@@ -189,7 +190,7 @@ namespace TinyWars.MultiCustomRoom {
             if (mapPlayersCount >= 4) {
                 dataList.push({
                     playerIndex     : 4,
-                    playerName      : warInfo.p4UserNickname,
+                    userId          : warInfo.p4UserId,
                     teamIndex       : warInfo.p4TeamIndex,
                     coId            : warInfo.p4CoId,
                     configVersion,
@@ -221,7 +222,7 @@ namespace TinyWars.MultiCustomRoom {
             const unitMapView = new WarMap.WarMapUnitMapView();
             unitMapView.initWithMapRawData(mapRawData);
 
-            const gridSize = Utility.ConfigManager.getGridSize();
+            const gridSize = ConfigManager.getGridSize();
             this._zoomMap.removeAllContents();
             this._zoomMap.setContentWidth(mapRawData.mapWidth * gridSize.width);
             this._zoomMap.setContentHeight(mapRawData.mapHeight * gridSize.height);
@@ -282,7 +283,7 @@ namespace TinyWars.MultiCustomRoom {
 
     type DataForPlayerRenderer = {
         playerIndex     : number;
-        playerName      : string;
+        userId          : number | null;
         teamIndex       : number;
         coId            : number | null;
         configVersion   : string;
@@ -296,14 +297,12 @@ namespace TinyWars.MultiCustomRoom {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data = this.data as DataForPlayerRenderer;
-            this._labelIndex.text = Helpers.getColorTextForPlayerIndex(data.playerIndex);
-            this._labelTeam.text  = data.teamIndex != null ? Helpers.getTeamText(data.teamIndex) : "??";
-
-            const coConfig = data.coId == null ? null : Utility.ConfigManager.getCoBasicCfg(data.configVersion, data.coId);
-            this._labelName.text  = data.playerName + (coConfig
-                ? `(${coConfig.name}(T${coConfig.tier}))`
-                : `(${Lang.getText(Lang.Type.B0211)} CO)`);
+            const data              = this.data as DataForPlayerRenderer;
+            this._labelIndex.text   = Helpers.getColorTextForPlayerIndex(data.playerIndex);
+            this._labelTeam.text    = data.teamIndex != null ? Helpers.getTeamText(data.teamIndex) : "??";
+            User.UserModel.getUserPublicInfo(data.userId).then(info => {
+                this._labelName.text = info.nickname + ConfigManager.getCoNameAndTierText(data.configVersion, data.coId);
+            });
         }
     }
 }
