@@ -21,6 +21,7 @@ namespace TinyWars.MultiCustomRoom {
     export const DEFAULT_ENERGY_MODIFIER = 0;
 
     const TIME_LIMITS = [
+        60 * 5,             // 5 min
         60 * 15,            // 15 min
         60 * 60 * 24 * 1,   // 1 day
         60 * 60 * 24 * 2,   // 2 days
