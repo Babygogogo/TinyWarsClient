@@ -96,11 +96,11 @@ namespace TinyWars.Utility.FlowManager {
         MultiCustomWar.McwTileBriefPanel.show();
         MultiCustomWar.McwUnitBriefPanel.show();
     }
-    export async function gotoReplay(warData: Uint8Array, nicknames: string[]): Promise<void> {
+    export async function gotoReplay(warData: Uint8Array): Promise<void> {
         McwModel.unloadWar();
         ScwModel.unloadWar();
         MeManager.unloadWar();
-        await ReplayModel.loadWar(warData, nicknames);
+        await ReplayModel.loadWar(warData);
 
         StageManager.closeAllPanels();
         Replay.ReplayBackgroundPanel.show();

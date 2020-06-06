@@ -84,17 +84,13 @@ namespace TinyWars.Replay.ReplayModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for managing war.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export async function loadWar(encodedWarData: Uint8Array, nicknames: string[]): Promise<ReplayWar> {
+    export async function loadWar(encodedWarData: Uint8Array): Promise<ReplayWar> {
         if (_war) {
             Logger.warn(`ReplayModel.loadWar() another war has been loaded already!`);
             unloadWar();
         }
 
         const warData = ProtoManager.decodeAsSerializedWar(encodedWarData);
-        for (let i = 0; i < nicknames.length; ++i) {
-            warData.players[i + 1].nickname = nicknames[i];
-        }
-
         _war = (await new ReplayWar().init(warData)).startRunning().startRunningView() as ReplayWar;
         return _war;
     }

@@ -3082,9 +3082,6 @@ export declare interface ISerializedWarPlayer {
     /** SerializedWarPlayer userId */
     userId?: (number|null);
 
-    /** SerializedWarPlayer nickname */
-    nickname?: (string|null);
-
     /** SerializedWarPlayer coId */
     coId?: (number|null);
 
@@ -3133,9 +3130,6 @@ export declare class SerializedWarPlayer implements ISerializedWarPlayer {
 
     /** SerializedWarPlayer userId. */
     public userId: number;
-
-    /** SerializedWarPlayer nickname. */
-    public nickname: string;
 
     /** SerializedWarPlayer coId. */
     public coId: number;
@@ -16530,9 +16524,6 @@ export declare interface IS_McrGetReplayData {
 
     /** S_McrGetReplayData encodedWar */
     encodedWar?: (Uint8Array|null);
-
-    /** S_McrGetReplayData userNicknames */
-    userNicknames?: (string[]|null);
 }
 
 /** Represents a S_McrGetReplayData. */
@@ -16552,9 +16543,6 @@ export declare class S_McrGetReplayData implements IS_McrGetReplayData {
 
     /** S_McrGetReplayData encodedWar. */
     public encodedWar: Uint8Array;
-
-    /** S_McrGetReplayData userNicknames. */
-    public userNicknames: string[];
 
     /**
      * Creates a new S_McrGetReplayData instance using the specified properties.

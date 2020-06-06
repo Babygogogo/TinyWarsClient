@@ -34,12 +34,16 @@ namespace TinyWars.BaseWar {
             this._setWatchOngoingSrcUserIds(data.watchOngoingSrcUserIdList || []);
             this._setWatchRequestSrcUserIds(data.watchRequestSrcUserIdList || []);
             this.setUserId(data.userId);
-            this._setNickname(data.nickname || Lang.getText(Lang.Type.B0111));
             this._setCoId(data.coId);
             this.setCoUnitId(data.coUnitId);
             this.setCoCurrentEnergy(data.coCurrentEnergy);
             this.setCoUsingSkillType(data.coUsingSkillType);
             this.setCoIsDestroyedInTurn(data.coIsDestroyedInTurn);
+            if (data.userId == null) {
+                this._setNickname(Lang.getText(Lang.Type.B0111));
+            } else {
+                User.UserModel.getUserNickname(data.userId).then(name => this._setNickname(name));
+            }
 
             return this;
         }

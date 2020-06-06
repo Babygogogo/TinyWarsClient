@@ -115,7 +115,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onNotifySMcrGetReplayData(e: egret.Event): void {
             const data = McrModel.getReplayData();
-            FlowManager.gotoReplay(data.encodedWar, data.userNicknames);
+            FlowManager.gotoReplay(data.encodedWar);
         }
 
         private _onNotifySMcrGetReplayDataFailed(e: egret.Event): void {

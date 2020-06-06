@@ -13,7 +13,6 @@ namespace TinyWars.Replay {
                 watchRequestSrcUserIdList   : [...this.getWatchRequestSrcUserIds()],
                 watchOngoingSrcUserIdList   : [...this.getWatchOngoingSrcUserIds()],
                 userId                  : this.getUserId(),
-                nickname                : this.getNickname(),
                 coId                    : this.getCoId(),
                 coUnitId                : this.getCoUnitId(),
                 coCurrentEnergy         : this.getCoCurrentEnergy(),
