@@ -294,8 +294,8 @@ namespace TinyWars.MultiCustomRoom {
             const data              = this.data as DataForPlayerRenderer;
             this._labelIndex.text   = Helpers.getColorTextForPlayerIndex(data.playerIndex);
             this._labelTeam.text    = data.teamIndex != null ? Helpers.getTeamText(data.teamIndex) : "??";
-            User.UserModel.getUserPublicInfo(data.userId).then(info => {
-                this._labelName.text = info.nickname + ConfigManager.getCoNameAndTierText(data.configVersion, data.coId);
+            User.UserModel.getUserNickname(data.userId).then(name => {
+                this._labelName.text = name + ConfigManager.getCoNameAndTierText(data.configVersion, data.coId);
             });
         }
     }

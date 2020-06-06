@@ -306,8 +306,8 @@ namespace TinyWars.MultiCustomRoom {
                 this._labelTeam.text        = Helpers.getTeamText(data.teamIndex);
                 this._labelTeam.textColor   = 0x00FF00
                 this._labelName.textColor   = 0x00FF00;
-                User.UserModel.getUserPublicInfo(data.userId).then(info => {
-                    this._labelName.text    = info.nickname + (leftTime > 0
+                User.UserModel.getUserNickname(data.userId).then(name => {
+                    this._labelName.text    = name + (leftTime > 0
                         ? ` (${Lang.getText(Lang.Type.B0027)}:${Helpers.getTimeDurationText(leftTime)})`
                         : ` (${Lang.getText(Lang.Type.B0028)})`);
                 });
@@ -317,10 +317,10 @@ namespace TinyWars.MultiCustomRoom {
                 this._labelTeam.text        = Helpers.getTeamText(data.teamIndex);
                 this._labelTeam.textColor   = 0xFFFFFF;
                 this._labelName.textColor   = 0xFFFFFF;
-                User.UserModel.getUserPublicInfo(data.userId).then(info => {
+                User.UserModel.getUserNickname(data.userId).then(name => {
                     this._labelName.text    = data.isAlive
-                        ? info.nickname
-                        : `${info.nickname} (${Lang.getText(Lang.Type.B0056)})`;
+                        ? name
+                        : `${name} (${Lang.getText(Lang.Type.B0056)})`;
                 });
             }
         }

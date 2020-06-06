@@ -241,9 +241,7 @@ namespace TinyWars.MultiCustomRoom {
             const data              = this.data as DataForPlayerRenderer;
             this._labelIndex.text   = Helpers.getColorTextForPlayerIndex(data.playerIndex);
             this._labelTeam.text    = Helpers.getTeamText(data.teamIndex);
-            User.UserModel.getUserPublicInfo(data.userId).then(info => {
-                this._labelNickname.text = info.nickname;
-            });
+            User.UserModel.getUserNickname(data.userId).then(name => this._labelNickname.text = name);
 
             if (data.defeatTimestamp != null) {
                 const leftTime                  = data.defeatTimestamp - Time.TimeModel.getServerTimestamp();

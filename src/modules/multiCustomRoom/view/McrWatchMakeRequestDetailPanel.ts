@@ -198,8 +198,8 @@ namespace TinyWars.MultiCustomRoom {
             const data              = this.data as DataForPlayerRenderer;
             this._labelIndex.text   = Lang.getPlayerForceName(data.playerIndex);
             this._labelTeam.text    = Lang.getPlayerTeamName(data.teamIndex);
-            User.UserModel.getUserPublicInfo(data.userId).then(info => {
-                this._labelName.text = info.nickname + ConfigManager.getCoNameAndTierText(data.configVersion, data.coId);
+            User.UserModel.getUserNickname(data.userId).then(name => {
+                this._labelName.text = name + ConfigManager.getCoNameAndTierText(data.configVersion, data.coId);
             });
             if (!data.isAlive) {
                 this._imgAccept.visible     = false;

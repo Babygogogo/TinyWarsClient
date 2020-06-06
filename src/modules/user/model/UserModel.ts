@@ -66,7 +66,7 @@ namespace TinyWars.User {
         export function checkIsMapCommittee(): boolean {
             return !!_selfIsMapCommittee;
         }
-        export function checkIsCoCommitee(): boolean {
+        export function checkIsCoCommittee(): boolean {
             return !!_selfIsCoCommittee;
         }
         export function getSelfAccount(): string {
@@ -129,6 +129,10 @@ namespace TinyWars.User {
         }
         export function setUserPublicInfo(info: ProtoTypes.IS_GetUserPublicInfo): void {
             _userPublicInfoDict.set(info.id, info);
+        }
+        export async function getUserNickname(userId: number): Promise<string> {
+            const info = await getUserPublicInfo(userId);
+            return info ? info.nickname : "????";
         }
 
         function _onNotifyNetworkDisconnected(e: egret.Event): void {

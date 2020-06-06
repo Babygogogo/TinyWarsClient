@@ -244,27 +244,27 @@ namespace TinyWars.MultiCustomRoom {
             const data: DataForPlayerRenderer[] = [
                 {
                     playerIndex : 1,
-                    playerName  : info.p1UserNickname,
+                    userId      : info.p1UserId,
                     teamIndex   : info.p1TeamIndex,
                 },
                 {
                     playerIndex : 2,
-                    playerName  : info.p2UserNickname,
+                    userId      : info.p2UserId,
                     teamIndex   : info.p2TeamIndex,
                 },
             ];
             if (info.p3UserId != null) {
                 data.push({
                     playerIndex : 3,
-                    playerName  : info.p3UserNickname,
+                    userId      : info.p3UserId,
                     teamIndex   : info.p3TeamIndex,
                 });
             }
             if (info.p4UserId != null) {
                 data.push({
-                    playerIndex: 4,
-                    playerName : info.p4UserNickname,
-                    teamIndex  : info.p4TeamIndex,
+                    playerIndex : 4,
+                    userId      : info.p4UserId,
+                    teamIndex   : info.p4TeamIndex,
                 });
             }
 
@@ -321,9 +321,9 @@ namespace TinyWars.MultiCustomRoom {
     }
 
     type DataForPlayerRenderer = {
-        playerIndex: number;
-        playerName : string;
-        teamIndex  : number;
+        playerIndex : number;
+        userId      : number | null;
+        teamIndex   : number;
     }
 
     class PlayerRenderer extends eui.ItemRenderer {
@@ -336,8 +336,8 @@ namespace TinyWars.MultiCustomRoom {
 
             const data = this.data as DataForPlayerRenderer;
             this._labelIndex.text = Helpers.getColorTextForPlayerIndex(data.playerIndex);
-            this._labelName.text  = data.playerName || "????";
             this._labelTeam.text  = data.teamIndex != null ? Helpers.getTeamText(data.teamIndex) : "??";
+            User.UserModel.getUserNickname(data.userId).then(name => this._labelName.text = name);
         }
     }
 }

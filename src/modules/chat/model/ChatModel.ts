@@ -35,7 +35,7 @@ namespace TinyWars.Chat.ChatModel {
                 if (toWarAndTeam != null) {
                     addMessage(_warMessages, msg, toWarAndTeam);
                     if ((!isSentBySelf) && (showFloatText) && (!ChatPanel.getIsOpening())) {
-                        User.UserModel.getUserPublicInfo(fromUserId).then(info => FloatText.show(`<font color=0x00FF00>${info.nickname}</font>: ${content}`));
+                        User.UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${content}`));
                     }
                 } else {
                     const toUserId = msg.toUserId;
@@ -47,7 +47,7 @@ namespace TinyWars.Chat.ChatModel {
                         } else {
                             addMessage(_privateMessages, msg, fromUserId);
                             if ((showFloatText) && (!ChatPanel.getIsOpening())) {
-                                User.UserModel.getUserPublicInfo(fromUserId).then(info => FloatText.show(`<font color=0x00FF00>${info.nickname}</font>: ${content}`));
+                                User.UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${content}`));
                             }
                         }
                     }

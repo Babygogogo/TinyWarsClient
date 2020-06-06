@@ -120,7 +120,6 @@ namespace TinyWars.MultiCustomRoom {
                 const userId = info.userId;
                 dataList.push({
                     panel           : this,
-                    nickname        : info.nickname,
                     userId,
                     isWatchingOthers: !!info.isRequestingOthers || !!info.isWatchingOthers,
                     isOpponent      : (warInfo.p1UserId === userId) || (warInfo.p2UserId === userId) || (warInfo.p3UserId === userId) || (warInfo.p4UserId === userId),
@@ -134,7 +133,6 @@ namespace TinyWars.MultiCustomRoom {
 
     type DataForRequesterRenderer = {
         panel           : McrWatchDeleteWatcherDetailPanel;
-        nickname        : string;
         userId          : number;
         isWatchingOthers: boolean;
         isOpponent      : boolean;
@@ -152,11 +150,11 @@ namespace TinyWars.MultiCustomRoom {
             super.dataChanged();
 
             const data                          = this.data as DataForRequesterRenderer;
-            this._labelName.text                = data.nickname;
             this._labelIsOpponent.text          = data.isOpponent ? Lang.getText(Lang.Type.B0012) : "";
             this._labelIsWatchingOthers.text    = data.isWatchingOthers ? Lang.getText(Lang.Type.B0012) : "";
             this._imgDelete.visible             = data.isDelete;
             this._imgKeep.visible               = !data.isDelete;
+            User.UserModel.getUserNickname(data.userId).then(name => this._labelName.text = name);
         }
 
         public onItemTapEvent(e: eui.ItemTapEvent): void {

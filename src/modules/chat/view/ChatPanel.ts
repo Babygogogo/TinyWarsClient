@@ -384,9 +384,8 @@ namespace TinyWars.Chat {
 
             const toUserId = data.toUserId;
             if (toUserId != null) {
-                const userInfo          = await User.UserModel.getUserPublicInfo(toUserId);
-                this._labelType.text    = Lang.getText(Lang.Type.B0378);
-                this._labelName.text    = userInfo ? userInfo.nickname : "??";
+                this._labelType.text = Lang.getText(Lang.Type.B0378);
+                User.UserModel.getUserNickname(toUserId).then(name => this._labelName.text = name);
                 return;
             }
         }

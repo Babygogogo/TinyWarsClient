@@ -8026,17 +8026,11 @@ export declare interface IMcwReplayInfo {
     /** McwReplayInfo p1TeamIndex */
     p1TeamIndex?: (number|null);
 
-    /** McwReplayInfo p1UserNickname */
-    p1UserNickname?: (string|null);
-
     /** McwReplayInfo p2UserId */
     p2UserId?: (number|null);
 
     /** McwReplayInfo p2TeamIndex */
     p2TeamIndex?: (number|null);
-
-    /** McwReplayInfo p2UserNickname */
-    p2UserNickname?: (string|null);
 
     /** McwReplayInfo p3UserId */
     p3UserId?: (number|null);
@@ -8044,17 +8038,11 @@ export declare interface IMcwReplayInfo {
     /** McwReplayInfo p3TeamIndex */
     p3TeamIndex?: (number|null);
 
-    /** McwReplayInfo p3UserNickname */
-    p3UserNickname?: (string|null);
-
     /** McwReplayInfo p4UserId */
     p4UserId?: (number|null);
 
     /** McwReplayInfo p4TeamIndex */
     p4TeamIndex?: (number|null);
-
-    /** McwReplayInfo p4UserNickname */
-    p4UserNickname?: (string|null);
 }
 
 /** Represents a McwReplayInfo. */
@@ -8102,17 +8090,11 @@ export declare class McwReplayInfo implements IMcwReplayInfo {
     /** McwReplayInfo p1TeamIndex. */
     public p1TeamIndex: number;
 
-    /** McwReplayInfo p1UserNickname. */
-    public p1UserNickname: string;
-
     /** McwReplayInfo p2UserId. */
     public p2UserId: number;
 
     /** McwReplayInfo p2TeamIndex. */
     public p2TeamIndex: number;
-
-    /** McwReplayInfo p2UserNickname. */
-    public p2UserNickname: string;
 
     /** McwReplayInfo p3UserId. */
     public p3UserId: number;
@@ -8120,17 +8102,11 @@ export declare class McwReplayInfo implements IMcwReplayInfo {
     /** McwReplayInfo p3TeamIndex. */
     public p3TeamIndex: number;
 
-    /** McwReplayInfo p3UserNickname. */
-    public p3UserNickname: string;
-
     /** McwReplayInfo p4UserId. */
     public p4UserId: number;
 
     /** McwReplayInfo p4TeamIndex. */
     public p4TeamIndex: number;
-
-    /** McwReplayInfo p4UserNickname. */
-    public p4UserNickname: string;
 
     /**
      * Creates a new McwReplayInfo instance using the specified properties.
@@ -8209,9 +8185,6 @@ export declare interface IMcwWatchRequesterInfo {
     /** McwWatchRequesterInfo userId */
     userId?: (number|null);
 
-    /** McwWatchRequesterInfo nickname */
-    nickname?: (string|null);
-
     /** McwWatchRequesterInfo isRequestingOthers */
     isRequestingOthers?: (boolean|null);
 
@@ -8230,9 +8203,6 @@ export declare class McwWatchRequesterInfo implements IMcwWatchRequesterInfo {
 
     /** McwWatchRequesterInfo userId. */
     public userId: number;
-
-    /** McwWatchRequesterInfo nickname. */
-    public nickname: string;
 
     /** McwWatchRequesterInfo isRequestingOthers. */
     public isRequestingOthers: boolean;
