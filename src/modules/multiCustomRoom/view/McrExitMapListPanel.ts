@@ -158,12 +158,12 @@ namespace TinyWars.MultiCustomRoom {
             const data: DataForPlayerRenderer[] = [
                 {
                     playerIndex     : 1,
-                    playerName      : info1 ? info1.nickname : null,
+                    userId          : info1 ? info1.userId : null,
                     teamIndex       : info1 ? info1.teamIndex : null,
                 },
                 {
                     playerIndex     : 2,
-                    playerName      : info2 ? info2.nickname : null,
+                    userId          : info2 ? info2.userId : null,
                     teamIndex       : info2 ? info2.teamIndex : null,
                 },
             ];
@@ -173,7 +173,7 @@ namespace TinyWars.MultiCustomRoom {
                 const info = getPlayerInfo(playerInfoList, 3);
                 data.push({
                     playerIndex     : 3,
-                    playerName      : info ? info.nickname : null,
+                    userId          : info ? info.userId : null,
                     teamIndex       : info ? info.teamIndex : null,
                 });
             }
@@ -181,7 +181,7 @@ namespace TinyWars.MultiCustomRoom {
                 const info = getPlayerInfo(playerInfoList, 4);
                 data.push({
                     playerIndex     : 4,
-                    playerName      : info ? info.nickname : null,
+                    userId          : info ? info.userId : null,
                     teamIndex       : info ? info.teamIndex : null,
                 });
             }
@@ -273,9 +273,9 @@ namespace TinyWars.MultiCustomRoom {
     }
 
     type DataForPlayerRenderer = {
-        playerIndex: number;
-        playerName : string;
-        teamIndex  : number;
+        playerIndex : number;
+        userId      : number | null;
+        teamIndex   : number;
     }
 
     class PlayerRenderer extends eui.ItemRenderer {
@@ -286,10 +286,10 @@ namespace TinyWars.MultiCustomRoom {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data = this.data as DataForPlayerRenderer;
-            this._labelIndex.text = Helpers.getColorTextForPlayerIndex(data.playerIndex);
-            this._labelName.text  = data.playerName || "????";
-            this._labelTeam.text  = data.teamIndex != null ? Helpers.getTeamText(data.teamIndex) : "??";
+            const data              = this.data as DataForPlayerRenderer;
+            this._labelIndex.text   = Helpers.getColorTextForPlayerIndex(data.playerIndex);
+            this._labelTeam.text    = data.teamIndex != null ? Helpers.getTeamText(data.teamIndex) : "??";
+            User.UserModel.getUserNickname(data.userId).then(name => this._labelName.text = name);
         }
     }
 

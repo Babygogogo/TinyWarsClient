@@ -8511,9 +8511,6 @@ export declare interface IWarPlayerInfo {
 
     /** WarPlayerInfo coId */
     coId?: (number|null);
-
-    /** WarPlayerInfo nickname */
-    nickname?: (string|null);
 }
 
 /** Represents a WarPlayerInfo. */
@@ -8536,9 +8533,6 @@ export declare class WarPlayerInfo implements IWarPlayerInfo {
 
     /** WarPlayerInfo coId. */
     public coId: number;
-
-    /** WarPlayerInfo nickname. */
-    public nickname: string;
 
     /**
      * Creates a new WarPlayerInfo instance using the specified properties.

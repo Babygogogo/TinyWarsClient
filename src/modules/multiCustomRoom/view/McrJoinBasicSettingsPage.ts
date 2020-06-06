@@ -256,16 +256,19 @@ namespace TinyWars.MultiCustomRoom {
             const playerInfoList    = waitingInfo.playerInfoList;
             const info1             = getPlayerInfo(playerInfoList, 1);
             const info2             = getPlayerInfo(playerInfoList, 2);
+            const configVersion     = waitingInfo.configVersion;
             const data: DataForPlayerRenderer[] = [
                 {
+                    configVersion,
                     playerIndex     : 1,
-                    nickname        : info1 ? info1.nickname : null,
+                    userId          : info1 ? info1.userId : null,
                     teamIndex       : info1 ? info1.teamIndex : null,
                     coId            : info1 ? info1.coId : null,
                 },
                 {
+                    configVersion,
                     playerIndex     : 2,
-                    nickname        : info2 ? info2.nickname : null,
+                    userId          : info2 ? info2.userId : null,
                     teamIndex       : info2 ? info2.teamIndex : null,
                     coId            : info2 ? info2.coId : null,
                 },
@@ -275,8 +278,9 @@ namespace TinyWars.MultiCustomRoom {
             if (playersCount >= 3) {
                 const info = getPlayerInfo(playerInfoList, 3);
                 data.push({
+                    configVersion,
                     playerIndex     : 3,
-                    nickname        : info ? info.nickname : null,
+                    userId          : info ? info.userId : null,
                     teamIndex       : info ? info.teamIndex : null,
                     coId            : info ? info.coId : null,
                 });
@@ -284,8 +288,9 @@ namespace TinyWars.MultiCustomRoom {
             if (playersCount >= 4) {
                 const info = getPlayerInfo(playerInfoList, 4);
                 data.push({
+                    configVersion,
                     playerIndex     : 4,
-                    nickname        : info ? info.nickname : null,
+                    userId          : info ? info.userId : null,
                     teamIndex       : info ? info.teamIndex : null,
                     coId            : info ? info.coId : null,
                 });
@@ -296,10 +301,11 @@ namespace TinyWars.MultiCustomRoom {
     }
 
     type DataForPlayerRenderer = {
-        playerIndex : number | null;
-        nickname    : string | null;
-        teamIndex   : number | null;
-        coId        : number | null;
+        configVersion   : string;
+        playerIndex     : number | null;
+        userId          : number | null;
+        teamIndex       : number | null;
+        coId            : number | null;
     }
 
     class PlayerRenderer extends eui.ItemRenderer {
@@ -311,17 +317,11 @@ namespace TinyWars.MultiCustomRoom {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data                  = this.data as DataForPlayerRenderer;
-            this._labelIndex.text       = Helpers.getColorTextForPlayerIndex(data.playerIndex);
-            this._labelNickname.text    = data.nickname || "????";
-            this._labelTeam.text        = data.teamIndex != null ? Helpers.getTeamText(data.teamIndex) : "??";
-
-            if (data.coId == null) {
-                this._labelCoName.text = data.nickname == null ? "????" : `(${Lang.getText(Lang.Type.B0001)} CO)`;
-            } else {
-                const cfg               = Utility.ConfigManager.getCoBasicCfg(Utility.ConfigManager.getNewestConfigVersion(), data.coId);
-                this._labelCoName.text  = `${cfg.name} (T${cfg.tier})`;
-            }
+            const data              = this.data as DataForPlayerRenderer;
+            this._labelIndex.text   = Helpers.getColorTextForPlayerIndex(data.playerIndex);
+            this._labelTeam.text    = data.teamIndex != null ? Helpers.getTeamText(data.teamIndex) : "??";
+            this._labelCoName.text  = Utility.ConfigManager.getCoNameAndTierText(data.configVersion, data.coId);
+            User.UserModel.getUserNickname(data.userId).then(name => this._labelNickname.text = name);
         }
     }
 

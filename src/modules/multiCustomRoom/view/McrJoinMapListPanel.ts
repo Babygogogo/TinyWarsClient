@@ -2,8 +2,7 @@
 namespace TinyWars.MultiCustomRoom {
     import Notify           = Utility.Notify;
     import Types            = Utility.Types;
-    import StageManager     = Utility.StageManager;
-    import FloatText        = Utility.FloatText;
+    import ConfigManager    = Utility.ConfigManager;
     import Helpers          = Utility.Helpers;
     import Lang             = Utility.Lang;
     import ProtoTypes       = Utility.ProtoTypes;
@@ -165,14 +164,14 @@ namespace TinyWars.MultiCustomRoom {
             const data              : DataForPlayerRenderer[] = [
                 {
                     playerIndex     : 1,
-                    playerName      : info1 ? info1.nickname : null,
+                    userId          : info1 ? info1.userId : null,
                     teamIndex       : info1 ? info1.teamIndex : null,
                     coId            : info1 ? info1.coId : null,
                     configVersion,
                 },
                 {
                     playerIndex     : 2,
-                    playerName      : info2 ? info2.nickname : null,
+                    userId          : info2 ? info2.userId : null,
                     teamIndex       : info2 ? info2.teamIndex : null,
                     coId            : info2 ? info2.coId : null,
                     configVersion,
@@ -182,7 +181,7 @@ namespace TinyWars.MultiCustomRoom {
                 const info = getPlayerInfo(playerInfoList, 3);
                 data.push({
                     playerIndex     : 3,
-                    playerName      : info ? info.nickname : null,
+                    userId          : info ? info.userId : null,
                     teamIndex       : info ? info.teamIndex : null,
                     coId            : info ? info.coId : null,
                     configVersion,
@@ -192,7 +191,7 @@ namespace TinyWars.MultiCustomRoom {
                 const info = getPlayerInfo(playerInfoList, 4);
                 data.push({
                     playerIndex     : 4,
-                    playerName      : info ? info.nickname : null,
+                    userId          : info ? info.userId : null,
                     teamIndex       : info ? info.teamIndex : null,
                     coId            : info ? info.coId : null,
                     configVersion,
@@ -288,7 +287,7 @@ namespace TinyWars.MultiCustomRoom {
 
     type DataForPlayerRenderer = {
         playerIndex     : number;
-        playerName      : string;
+        userId          : number | null;
         teamIndex       : number;
         coId            : number;
         configVersion   : string;
@@ -303,14 +302,16 @@ namespace TinyWars.MultiCustomRoom {
             super.dataChanged();
 
             const data              = this.data as DataForPlayerRenderer;
-            const playerName        = data.playerName;
-            const coId              = data.coId;
-            const coConfig          = coId == null ? null : Utility.ConfigManager.getCoBasicCfg(data.configVersion, coId);
+            const userId            = data.userId;
             this._labelIndex.text   = Helpers.getColorTextForPlayerIndex(data.playerIndex);
             this._labelTeam.text    = data.teamIndex != null ? Helpers.getTeamText(data.teamIndex) : "??";
-            this._labelName.text    = playerName
-                ? `${playerName}${coConfig ? ` (${coConfig.name}(T${coConfig.tier}))` : ``}`
-                : "????";
+            if (userId == null) {
+                this._labelName.text = "????";
+            } else {
+                User.UserModel.getUserNickname(userId).then(name => {
+                    this._labelName.text = `${name} ${ConfigManager.getCoNameAndTierText(data.configVersion, data.coId)}`;
+                })
+            }
         }
     }
 
