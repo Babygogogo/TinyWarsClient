@@ -238,7 +238,7 @@ namespace TinyWars.MultiCustomRoom {
                 const maxValue = CommonConstants.WarRuleLuckMaxLimit;
                 const minValue = CommonConstants.WarRuleLuckMinLimit;
                 Common.InputPanel.show({
-                    title           : Lang.getText(Lang.Type.B0189),
+                    title           : Lang.getText(Lang.Type.B0190),
                     currentValue    : "" + McrModel.getCreateWarLuckUpperLimit(),
                     maxChars        : 5,
                     charRestrict    : null,

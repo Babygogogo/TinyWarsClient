@@ -28,7 +28,7 @@ namespace TinyWars.MultiCustomRoom {
         60 * 60 * 24 * 3,   // 3 days
         60 * 60 * 24 * 7,   // 7 days
     ];
-    const DEFAULT_TIME_LIMIT = TIME_LIMITS[3];
+    const DEFAULT_TIME_LIMIT = TIME_LIMITS[4];
 
     const MOVE_RANGE_MODIFIERS        = [-2, -1, 0, 1, 2];
     const DEFAULT_MOVE_RANGE_MODIFIER = 0;
