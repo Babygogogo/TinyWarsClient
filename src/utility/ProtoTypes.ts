@@ -9085,6 +9085,12 @@ export declare interface IMessageContainer {
     /** MessageContainer S_McwWatchContinueWar */
     S_McwWatchContinueWar?: (IS_McwWatchContinueWar|null);
 
+    /** MessageContainer C_McwCommonSerialization */
+    C_McwCommonSerialization?: (IC_McwCommonSerialization|null);
+
+    /** MessageContainer S_McwCommonSerialization */
+    S_McwCommonSerialization?: (IS_McwCommonSerialization|null);
+
     /** MessageContainer C_McwPlayerBeginTurn */
     C_McwPlayerBeginTurn?: (IC_McwPlayerBeginTurn|null);
 
@@ -9511,6 +9517,12 @@ export declare class MessageContainer implements IMessageContainer {
 
     /** MessageContainer S_McwWatchContinueWar. */
     public S_McwWatchContinueWar?: (IS_McwWatchContinueWar|null);
+
+    /** MessageContainer C_McwCommonSerialization. */
+    public C_McwCommonSerialization?: (IC_McwCommonSerialization|null);
+
+    /** MessageContainer S_McwCommonSerialization. */
+    public S_McwCommonSerialization?: (IS_McwCommonSerialization|null);
 
     /** MessageContainer C_McwPlayerBeginTurn. */
     public C_McwPlayerBeginTurn?: (IC_McwPlayerBeginTurn|null);
@@ -18128,6 +18140,192 @@ export declare class S_McwWatchContinueWar implements IS_McwWatchContinueWar {
 
     /**
      * Converts this S_McwWatchContinueWar to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_McwCommonSerialization. */
+export declare interface IC_McwCommonSerialization {
+
+    /** C_McwCommonSerialization warId */
+    warId?: (number|null);
+}
+
+/** Represents a C_McwCommonSerialization. */
+export declare class C_McwCommonSerialization implements IC_McwCommonSerialization {
+
+    /**
+     * Constructs a new C_McwCommonSerialization.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_McwCommonSerialization);
+
+    /** C_McwCommonSerialization warId. */
+    public warId: number;
+
+    /**
+     * Creates a new C_McwCommonSerialization instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_McwCommonSerialization instance
+     */
+    public static create(properties?: IC_McwCommonSerialization): C_McwCommonSerialization;
+
+    /**
+     * Encodes the specified C_McwCommonSerialization message. Does not implicitly {@link C_McwCommonSerialization.verify|verify} messages.
+     * @param message C_McwCommonSerialization message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_McwCommonSerialization, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_McwCommonSerialization message, length delimited. Does not implicitly {@link C_McwCommonSerialization.verify|verify} messages.
+     * @param message C_McwCommonSerialization message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_McwCommonSerialization, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_McwCommonSerialization message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_McwCommonSerialization
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_McwCommonSerialization;
+
+    /**
+     * Decodes a C_McwCommonSerialization message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_McwCommonSerialization
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_McwCommonSerialization;
+
+    /**
+     * Verifies a C_McwCommonSerialization message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_McwCommonSerialization message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_McwCommonSerialization
+     */
+    public static fromObject(object: { [k: string]: any }): C_McwCommonSerialization;
+
+    /**
+     * Creates a plain object from a C_McwCommonSerialization message. Also converts values to other types if specified.
+     * @param message C_McwCommonSerialization
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_McwCommonSerialization, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_McwCommonSerialization to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_McwCommonSerialization. */
+export declare interface IS_McwCommonSerialization {
+
+    /** S_McwCommonSerialization errorCode */
+    errorCode?: (number|null);
+
+    /** S_McwCommonSerialization warId */
+    warId?: (number|null);
+}
+
+/** Represents a S_McwCommonSerialization. */
+export declare class S_McwCommonSerialization implements IS_McwCommonSerialization {
+
+    /**
+     * Constructs a new S_McwCommonSerialization.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_McwCommonSerialization);
+
+    /** S_McwCommonSerialization errorCode. */
+    public errorCode: number;
+
+    /** S_McwCommonSerialization warId. */
+    public warId: number;
+
+    /**
+     * Creates a new S_McwCommonSerialization instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_McwCommonSerialization instance
+     */
+    public static create(properties?: IS_McwCommonSerialization): S_McwCommonSerialization;
+
+    /**
+     * Encodes the specified S_McwCommonSerialization message. Does not implicitly {@link S_McwCommonSerialization.verify|verify} messages.
+     * @param message S_McwCommonSerialization message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_McwCommonSerialization, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_McwCommonSerialization message, length delimited. Does not implicitly {@link S_McwCommonSerialization.verify|verify} messages.
+     * @param message S_McwCommonSerialization message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_McwCommonSerialization, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_McwCommonSerialization message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_McwCommonSerialization
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_McwCommonSerialization;
+
+    /**
+     * Decodes a S_McwCommonSerialization message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_McwCommonSerialization
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_McwCommonSerialization;
+
+    /**
+     * Verifies a S_McwCommonSerialization message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_McwCommonSerialization message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_McwCommonSerialization
+     */
+    public static fromObject(object: { [k: string]: any }): S_McwCommonSerialization;
+
+    /**
+     * Creates a plain object from a S_McwCommonSerialization message. Also converts values to other types if specified.
+     * @param message S_McwCommonSerialization
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_McwCommonSerialization, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_McwCommonSerialization to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };
