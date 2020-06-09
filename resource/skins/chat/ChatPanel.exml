@@ -51,7 +51,7 @@
                     </e:Skin>
                 </e:itemRendererSkinName>
                 <e:layout>
-                    <e:VerticalLayout paddingTop="4" gap="10" />
+                    <e:VerticalLayout paddingTop="4" gap="14" />
                 </e:layout>
             </e:List>
         </GameUi:UiScrollList>

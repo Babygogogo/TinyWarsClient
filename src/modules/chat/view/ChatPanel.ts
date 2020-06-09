@@ -6,8 +6,10 @@ namespace TinyWars.Chat {
     import FloatText        = Utility.FloatText;
     import ProtoTypes       = Utility.ProtoTypes;
     import Helpers          = Utility.Helpers;
+    import Logger           = Utility.Logger;
     import CommonConstants  = Utility.ConfigManager.COMMON_CONSTANTS;
     import ChatCategory     = Types.ChatMessageToCategory;
+    import ChatChannel      = Types.ChatChannel;
 
     type OpenDataForChatPanel = {
         toUserId?: number;
@@ -28,7 +30,7 @@ namespace TinyWars.Chat {
         private _btnSend        : TinyWars.GameUi.UiButton;
 
         private _openData       : OpenDataForChatPanel;
-        private _dataForListChat: DataForChatRenderer[] = [];
+        private _dataForListChat: DataForChatPageRenderer[] = [];
         private _selectedIndex  : number;
 
         public static show(openData: OpenDataForChatPanel): void {
@@ -67,7 +69,7 @@ namespace TinyWars.Chat {
                 { ui: this._btnBack,    callback: this.close },
                 { ui: this._btnSend,    callback: this._onTouchedBtnSend },
             ];
-            this._listChat.setItemRenderer(ChatRenderer);
+            this._listChat.setItemRenderer(ChatPageRenderer);
             this._listMessage.setItemRenderer(MessageRenderer);
         }
         protected _onOpened(): void {
@@ -180,8 +182,8 @@ namespace TinyWars.Chat {
             this._listMessage.scrollVerticalTo(100);
         }
 
-        private _createDataForListChat(): DataForChatRenderer[] {
-            const dataDict      = new Map<number, DataForChatRenderer>();
+        private _createDataForListChat(): DataForChatPageRenderer[] {
+            const dataDict      = new Map<number, DataForChatPageRenderer>();
             const timestampList : { index: number, timestamp: number }[] = [];
             let indexForSort    = 0;
             for (const [toChannelId, msgList] of ChatModel.getAllPublicChannelMessages()) {
@@ -224,9 +226,8 @@ namespace TinyWars.Chat {
                     dataDict.set(indexForSort, {
                         index       : indexForSort,
                         panel       : this,
-                        toCategory : null,
-                        toTarget    : null,
-                        toWarAndTeam: toWarAndTeam1,
+                        toCategory  : ChatCategory.WarAndTeam,
+                        toTarget    : toWarAndTeam1,
                     });
                     timestampList.push(getLatestTimestamp(indexForSort, null));
                     ++indexForSort;
@@ -236,9 +237,8 @@ namespace TinyWars.Chat {
                     dataDict.set(indexForSort, {
                         index       : indexForSort,
                         panel       : this,
-                        toCategory : null,
-                        toTarget    : null,
-                        toWarAndTeam: toWarAndTeam2,
+                        toCategory  : ChatCategory.WarAndTeam,
+                        toTarget    : toWarAndTeam2,
                     });
                     timestampList.push(getLatestTimestamp(indexForSort, null));
                     ++indexForSort;
@@ -251,9 +251,8 @@ namespace TinyWars.Chat {
                 dataDict.set(indexForSort, {
                     index       : indexForSort,
                     panel       : this,
-                    toCategory : null,
-                    toTarget: toUserId,
-                    toWarAndTeam: null,
+                    toCategory  : ChatCategory.Private,
+                    toTarget    : toUserId,
                 });
                 timestampList.push(getLatestTimestamp(indexForSort, null));
                 ++indexForSort;
@@ -261,7 +260,7 @@ namespace TinyWars.Chat {
 
             timestampList.sort((a, b) => b.timestamp - a.timestamp);
 
-            const dataList  : DataForChatRenderer[] = [];
+            const dataList  : DataForChatPageRenderer[] = [];
             let index       = 0;
             for (const v of timestampList) {
                 const data = dataDict.get(v.index);
@@ -270,22 +269,20 @@ namespace TinyWars.Chat {
                 ++index;
             }
 
-            if (dataList.every(d => d.toCategory !== Types.ChatChannel.PublicCn)) {
+            if (dataList.every(d => (d.toCategory !== ChatCategory.PublicChannel) || (d.toTarget !== ChatChannel.PublicCn))) {
                 dataList.push({
                     index       : dataList.length,
                     panel       : this,
-                    toCategory : Types.ChatChannel.PublicCn,
-                    toTarget    : null,
-                    toWarAndTeam: null,
+                    toCategory  : ChatCategory.PublicChannel,
+                    toTarget    : ChatChannel.PublicCn,
                 });
             }
-            if (dataList.every(d => d.toCategory !== Types.ChatChannel.PublicEn)) {
+            if (dataList.every(d => (d.toCategory !== ChatCategory.PublicChannel) || (d.toTarget !== ChatChannel.PublicEn))) {
                 dataList.push({
                     index       : dataList.length,
                     panel       : this,
-                    toCategory : Types.ChatChannel.PublicEn,
-                    toTarget    : null,
-                    toWarAndTeam: null,
+                    toCategory  : ChatCategory.PublicChannel,
+                    toTarget    : ChatChannel.PublicEn,
                 });
             }
 
@@ -316,81 +313,82 @@ namespace TinyWars.Chat {
             timestamp,
         };
     }
-    function getMessageList(data: DataForChatRenderer): ProtoTypes.IChatMessage[] | null {
-        if (data.toCategory) {
-            return ChatModel.getAllPublicChannelMessages().get(data.toCategory);
-        } else if (data.toTarget) {
-            return ChatModel.getAllPrivateMessages().get(data.toTarget);
-        } else if (data.toWarAndTeam) {
-            return ChatModel.getAllWarMessages().get(data.toWarAndTeam);
+    function getMessageList(data: DataForChatPageRenderer): ProtoTypes.IChatMessage[] | null {
+        const category  = data.toCategory;
+        const target    = data.toTarget;
+        if (category === ChatCategory.PublicChannel) {
+            return ChatModel.getAllPublicChannelMessages().get(target);
+        } else if (category === ChatCategory.Private) {
+            return ChatModel.getAllPrivateMessages().get(target);
+        } else if (category === ChatCategory.WarAndTeam) {
+            return ChatModel.getAllWarMessages().get(target);
         } else {
             return null;
         }
     }
-    function checkHasDataForWarAndTeam(dict: Map<number, DataForChatRenderer>, toWarAndTeam: number): boolean {
+    function checkHasDataForWarAndTeam(dict: Map<number, DataForChatPageRenderer>, toWarAndTeam: number): boolean {
         for (const [, data] of dict) {
-            if (data.toWarAndTeam === toWarAndTeam) {
+            if ((data.toCategory === ChatCategory.WarAndTeam) && (data.toTarget === toWarAndTeam)) {
                 return true;
             }
         }
         return false;
     }
-    function checkHasDataForUser(dict: Map<number, DataForChatRenderer>, toUserId: number): boolean {
+    function checkHasDataForUser(dict: Map<number, DataForChatPageRenderer>, toUserId: number): boolean {
         for (const [, data] of dict) {
-            if (data.toTarget === toUserId) {
+            if ((data.toCategory === ChatCategory.Private) && (data.toTarget === toUserId)) {
                 return true;
             }
         }
         return false;
     }
 
-    type DataForChatRenderer = {
-        index           : number;
-        panel           : ChatPanel;
-        toCategory      : number;
-        toTarget        : number;
+    type DataForChatPageRenderer = {
+        index       : number;
+        panel       : ChatPanel;
+        toCategory  : ChatCategory;
+        toTarget    : number;
     }
 
-    class ChatRenderer extends eui.ItemRenderer {
+    class ChatPageRenderer extends eui.ItemRenderer {
         private _labelName: GameUi.UiLabel;
         private _labelType: GameUi.UiLabel;
 
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data          = this.data as DataForChatRenderer;
+            const data          = this.data as DataForChatPageRenderer;
             this.currentState   = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
             this._updateLabels();
         }
 
         private async _updateLabels(): Promise<void> {
-            const data          = this.data as DataForChatRenderer;
-            const toChannelId   = data.toCategory;
-            if (toChannelId != null) {
+            const data          = this.data as DataForChatPageRenderer;
+            const toCategory    = data.toCategory;
+            const toTarget      = data.toTarget;
+            if (toCategory === ChatCategory.PublicChannel) {
                 this._labelType.text    = Lang.getText(Lang.Type.B0376);
-                this._labelName.text    = Lang.getChatChannelName(toChannelId);
-                return;
-            }
+                this._labelName.text    = Lang.getChatChannelName(toTarget);
 
-            const toWarAndTeam = data.toWarAndTeam;
-            if (toWarAndTeam != null) {
+            } else if (toCategory === ChatCategory.WarAndTeam) {
                 const divider           = CommonConstants.ChatTeamDivider;
-                const teamIndex         = toWarAndTeam % divider;
+                const teamIndex         = toTarget % divider;
                 this._labelType.text    = Lang.getText(Lang.Type.B0377);
-                this._labelName.text    = `ID:${Math.floor(toWarAndTeam / divider)} ${teamIndex === 0 ? Lang.getText(Lang.Type.B0379) : Lang.getPlayerTeamName(teamIndex)}`;
+                this._labelName.text    = `ID:${Math.floor(toTarget / divider)} ${teamIndex === 0 ? Lang.getText(Lang.Type.B0379) : Lang.getPlayerTeamName(teamIndex)}`;
                 return;
-            }
 
-            const toUserId = data.toTarget;
-            if (toUserId != null) {
+            } else if (toCategory === ChatCategory.Private) {
                 this._labelType.text = Lang.getText(Lang.Type.B0378);
-                User.UserModel.getUserNickname(toUserId).then(name => this._labelName.text = name);
+                User.UserModel.getUserNickname(toTarget).then(name => this._labelName.text = name);
                 return;
+
+            } else {
+                Logger.error(`ChatPanel.ChatPageRenderer._updateLabels() invalid data!`);
             }
         }
 
         public onItemTapEvent(e: egret.TouchEvent): void {
-            const data = this.data as DataForChatRenderer;
+            const data = this.data as DataForChatPageRenderer;
             data.panel.setSelectedIndex(data.index);
         }
     }
@@ -413,7 +411,7 @@ namespace TinyWars.Chat {
 
         public async onItemTapEvent(e: eui.ItemTapEvent): Promise<void> {
             const data = this.data as DataForMessageRenderer;
-            if (data.toCategory !== Types.ChatMessageToCategory.Private) {
+            if (data.toCategory !== ChatCategory.Private) {
                 const userId = data.fromUserId;
                 if (userId !== User.UserModel.getSelfUserId()) {
                     const info = await User.UserModel.getUserPublicInfo(userId);
