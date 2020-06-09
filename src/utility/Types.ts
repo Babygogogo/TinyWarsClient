@@ -657,6 +657,12 @@ namespace TinyWars.Utility.Types {
         PublicCn    = 3,
     }
 
+    export const enum ChatMessageToCategory {
+        Private         = 1,
+        WarAndTeam      = 2,
+        PublicChannel   = 3,
+    }
+
     export const enum UnitAndTileTextureVersion {
         V1  = 1,
         V2  = 2,

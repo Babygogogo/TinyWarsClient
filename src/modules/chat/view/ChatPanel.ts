@@ -7,6 +7,7 @@ namespace TinyWars.Chat {
     import ProtoTypes       = Utility.ProtoTypes;
     import Helpers          = Utility.Helpers;
     import CommonConstants  = Utility.ConfigManager.COMMON_CONSTANTS;
+    import ChatCategory     = Types.ChatMessageToCategory;
 
     type OpenDataForChatPanel = {
         toUserId?: number;
@@ -115,25 +116,27 @@ namespace TinyWars.Chat {
         }
 
         private _onNotifySChatAddMessage(e: egret.Event): void {
-            const message = (e.data as ProtoTypes.IS_ChatAddMessage).message;
-            if (message.fromUserId === User.UserModel.getSelfUserId()) {
+            const message       = (e.data as ProtoTypes.IS_ChatAddMessage).message;
+            const fromUserId    = message.fromUserId;
+            if (fromUserId === User.UserModel.getSelfUserId()) {
                 this._inputMessage.text = "";
             }
 
-            const currData = this._dataForListChat[this.getSelectedIndex()];
-            if ((message.toChannelId === currData.toChannelId)      ||
-                (message.toWarAndTeam === currData.toWarAndTeam)    ||
-                (message.toUserId === currData.toUserId)            ||
-                (message.fromUserId === currData.toUserId)
-            ) {
-                this._updateComponentsForMessage();
+            const pageData          = this._dataForListChat[this.getSelectedIndex()];
+            const pageToCategory    = pageData.toCategory;
+            if (message.toCategory === pageData.toCategory) {
+                const pageToTarget = pageData.toTarget;
+                if ((message.toTarget === pageToTarget)                                         ||
+                    ((pageToCategory === ChatCategory.Private) && (fromUserId === pageToTarget))
+                ) {
+                    this._updateComponentsForMessage();
+                }
             }
 
             const newDataList   = this._createDataForListChat();
             this._selectedIndex = newDataList.findIndex(v => {
-                return (v.toChannelId == currData.toChannelId)
-                    && (v.toUserId == currData.toUserId)
-                    && (v.toWarAndTeam == currData.toWarAndTeam);
+                return (v.toCategory == pageData.toCategory)
+                    && (v.toTarget == pageData.toTarget);
             });
             this._dataForListChat = newDataList;
             this._listChat.bindData(newDataList);
@@ -153,7 +156,7 @@ namespace TinyWars.Chat {
                 } else {
                     const data = this._dataForListChat[this.getSelectedIndex()];
                     if (data) {
-                        ChatProxy.reqChatAddMessage(content, data.toChannelId, data.toUserId, data.toWarAndTeam);
+                        ChatProxy.reqChatAddMessage(content, data.toCategory, data.toTarget);
                     }
                 }
             }
@@ -181,13 +184,12 @@ namespace TinyWars.Chat {
             const dataDict      = new Map<number, DataForChatRenderer>();
             const timestampList : { index: number, timestamp: number }[] = [];
             let indexForSort    = 0;
-            for (const [toChannelId, msgList] of ChatModel.getAllChannelMessages()) {
+            for (const [toChannelId, msgList] of ChatModel.getAllPublicChannelMessages()) {
                 dataDict.set(indexForSort, {
                     index       : indexForSort,
                     panel       : this,
-                    toChannelId,
-                    toUserId    : null,
-                    toWarAndTeam: null,
+                    toCategory  : ChatCategory.PublicChannel,
+                    toTarget    : toChannelId,
                 });
                 timestampList.push(getLatestTimestamp(indexForSort, msgList));
                 ++indexForSort;
@@ -196,9 +198,8 @@ namespace TinyWars.Chat {
                 dataDict.set(indexForSort, {
                     index       : indexForSort,
                     panel       : this,
-                    toChannelId : null,
-                    toUserId    : null,
-                    toWarAndTeam,
+                    toCategory  : ChatCategory.WarAndTeam,
+                    toTarget    : toWarAndTeam,
                 });
                 timestampList.push(getLatestTimestamp(indexForSort, msgList));
                 ++indexForSort;
@@ -207,9 +208,8 @@ namespace TinyWars.Chat {
                 dataDict.set(indexForSort, {
                     index       : indexForSort,
                     panel       : this,
-                    toChannelId : null,
-                    toUserId,
-                    toWarAndTeam: null,
+                    toCategory  : ChatCategory.Private,
+                    toTarget    : toUserId,
                 });
                 timestampList.push(getLatestTimestamp(indexForSort, msgList));
                 ++indexForSort;
@@ -224,8 +224,8 @@ namespace TinyWars.Chat {
                     dataDict.set(indexForSort, {
                         index       : indexForSort,
                         panel       : this,
-                        toChannelId : null,
-                        toUserId    : null,
+                        toCategory : null,
+                        toTarget    : null,
                         toWarAndTeam: toWarAndTeam1,
                     });
                     timestampList.push(getLatestTimestamp(indexForSort, null));
@@ -236,8 +236,8 @@ namespace TinyWars.Chat {
                     dataDict.set(indexForSort, {
                         index       : indexForSort,
                         panel       : this,
-                        toChannelId : null,
-                        toUserId    : null,
+                        toCategory : null,
+                        toTarget    : null,
                         toWarAndTeam: toWarAndTeam2,
                     });
                     timestampList.push(getLatestTimestamp(indexForSort, null));
@@ -251,8 +251,8 @@ namespace TinyWars.Chat {
                 dataDict.set(indexForSort, {
                     index       : indexForSort,
                     panel       : this,
-                    toChannelId : null,
-                    toUserId,
+                    toCategory : null,
+                    toTarget: toUserId,
                     toWarAndTeam: null,
                 });
                 timestampList.push(getLatestTimestamp(indexForSort, null));
@@ -270,21 +270,21 @@ namespace TinyWars.Chat {
                 ++index;
             }
 
-            if (dataList.every(d => d.toChannelId !== Types.ChatChannel.PublicCn)) {
+            if (dataList.every(d => d.toCategory !== Types.ChatChannel.PublicCn)) {
                 dataList.push({
                     index       : dataList.length,
                     panel       : this,
-                    toChannelId : Types.ChatChannel.PublicCn,
-                    toUserId    : null,
+                    toCategory : Types.ChatChannel.PublicCn,
+                    toTarget    : null,
                     toWarAndTeam: null,
                 });
             }
-            if (dataList.every(d => d.toChannelId !== Types.ChatChannel.PublicEn)) {
+            if (dataList.every(d => d.toCategory !== Types.ChatChannel.PublicEn)) {
                 dataList.push({
                     index       : dataList.length,
                     panel       : this,
-                    toChannelId : Types.ChatChannel.PublicEn,
-                    toUserId    : null,
+                    toCategory : Types.ChatChannel.PublicEn,
+                    toTarget    : null,
                     toWarAndTeam: null,
                 });
             }
@@ -297,7 +297,7 @@ namespace TinyWars.Chat {
             const toUserId  = openData.toUserId;
             if (toUserId != null) {
                 for (const data of this._dataForListChat || []) {
-                    if (data.toUserId === toUserId) {
+                    if (data.toTarget === toUserId) {
                         return data.index;
                     }
                 }
@@ -317,10 +317,10 @@ namespace TinyWars.Chat {
         };
     }
     function getMessageList(data: DataForChatRenderer): ProtoTypes.IChatMessage[] | null {
-        if (data.toChannelId) {
-            return ChatModel.getAllChannelMessages().get(data.toChannelId);
-        } else if (data.toUserId) {
-            return ChatModel.getAllPrivateMessages().get(data.toUserId);
+        if (data.toCategory) {
+            return ChatModel.getAllPublicChannelMessages().get(data.toCategory);
+        } else if (data.toTarget) {
+            return ChatModel.getAllPrivateMessages().get(data.toTarget);
         } else if (data.toWarAndTeam) {
             return ChatModel.getAllWarMessages().get(data.toWarAndTeam);
         } else {
@@ -337,7 +337,7 @@ namespace TinyWars.Chat {
     }
     function checkHasDataForUser(dict: Map<number, DataForChatRenderer>, toUserId: number): boolean {
         for (const [, data] of dict) {
-            if (data.toUserId === toUserId) {
+            if (data.toTarget === toUserId) {
                 return true;
             }
         }
@@ -347,9 +347,8 @@ namespace TinyWars.Chat {
     type DataForChatRenderer = {
         index           : number;
         panel           : ChatPanel;
-        toChannelId     : number | null;
-        toUserId        : number | null;
-        toWarAndTeam    : number | null;
+        toCategory      : number;
+        toTarget        : number;
     }
 
     class ChatRenderer extends eui.ItemRenderer {
@@ -366,7 +365,7 @@ namespace TinyWars.Chat {
 
         private async _updateLabels(): Promise<void> {
             const data          = this.data as DataForChatRenderer;
-            const toChannelId   = data.toChannelId;
+            const toChannelId   = data.toCategory;
             if (toChannelId != null) {
                 this._labelType.text    = Lang.getText(Lang.Type.B0376);
                 this._labelName.text    = Lang.getChatChannelName(toChannelId);
@@ -382,7 +381,7 @@ namespace TinyWars.Chat {
                 return;
             }
 
-            const toUserId = data.toUserId;
+            const toUserId = data.toTarget;
             if (toUserId != null) {
                 this._labelType.text = Lang.getText(Lang.Type.B0378);
                 User.UserModel.getUserNickname(toUserId).then(name => this._labelName.text = name);
@@ -414,7 +413,7 @@ namespace TinyWars.Chat {
 
         public async onItemTapEvent(e: eui.ItemTapEvent): Promise<void> {
             const data = this.data as DataForMessageRenderer;
-            if (data.toUserId == null) {
+            if (data.toCategory !== Types.ChatMessageToCategory.Private) {
                 const userId = data.fromUserId;
                 if (userId !== User.UserModel.getSelfUserId()) {
                     const info = await User.UserModel.getUserPublicInfo(userId);

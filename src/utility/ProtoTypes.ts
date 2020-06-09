@@ -8713,14 +8713,11 @@ export declare interface IChatMessage {
     /** ChatMessage fromUserId */
     fromUserId?: (number|null);
 
-    /** ChatMessage toChannelId */
-    toChannelId?: (number|null);
+    /** ChatMessage toCategory */
+    toCategory?: (number|null);
 
-    /** ChatMessage toUserId */
-    toUserId?: (number|null);
-
-    /** ChatMessage toWarAndTeam */
-    toWarAndTeam?: (number|null);
+    /** ChatMessage toTarget */
+    toTarget?: (number|null);
 
     /** ChatMessage content */
     content?: (string|null);
@@ -8741,14 +8738,11 @@ export declare class ChatMessage implements IChatMessage {
     /** ChatMessage fromUserId. */
     public fromUserId: number;
 
-    /** ChatMessage toChannelId. */
-    public toChannelId: number;
+    /** ChatMessage toCategory. */
+    public toCategory: number;
 
-    /** ChatMessage toUserId. */
-    public toUserId: number;
-
-    /** ChatMessage toWarAndTeam. */
-    public toWarAndTeam: number;
+    /** ChatMessage toTarget. */
+    public toTarget: number;
 
     /** ChatMessage content. */
     public content: string;
@@ -11806,14 +11800,11 @@ export declare class S_MeSaveMap implements IS_MeSaveMap {
 /** Properties of a C_ChatAddMessage. */
 export declare interface IC_ChatAddMessage {
 
-    /** C_ChatAddMessage toChannelId */
-    toChannelId?: (number|null);
+    /** C_ChatAddMessage toCategory */
+    toCategory?: (number|null);
 
-    /** C_ChatAddMessage toUserId */
-    toUserId?: (number|null);
-
-    /** C_ChatAddMessage toWarAndTeam */
-    toWarAndTeam?: (number|null);
+    /** C_ChatAddMessage toTarget */
+    toTarget?: (number|null);
 
     /** C_ChatAddMessage content */
     content?: (string|null);
@@ -11828,14 +11819,11 @@ export declare class C_ChatAddMessage implements IC_ChatAddMessage {
      */
     constructor(properties?: IC_ChatAddMessage);
 
-    /** C_ChatAddMessage toChannelId. */
-    public toChannelId: number;
+    /** C_ChatAddMessage toCategory. */
+    public toCategory: number;
 
-    /** C_ChatAddMessage toUserId. */
-    public toUserId: number;
-
-    /** C_ChatAddMessage toWarAndTeam. */
-    public toWarAndTeam: number;
+    /** C_ChatAddMessage toTarget. */
+    public toTarget: number;
 
     /** C_ChatAddMessage content. */
     public content: string;

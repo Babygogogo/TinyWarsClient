@@ -14,15 +14,13 @@ namespace TinyWars.Chat.ChatProxy {
     }
 
     export function reqChatAddMessage(
-        content         : string,
-        toChannelId     : number | null,
-        toUserId        : number | null,
-        toWarAndTeam    : number | null
+        content     : string,
+        toCategory  : number,
+        toTarget    : number,
     ): void {
         NetManager.send({ C_ChatAddMessage: {
-            toChannelId,
-            toUserId,
-            toWarAndTeam,
+            toCategory,
+            toTarget,
             content,
         }, });
     }
