@@ -8821,6 +8821,108 @@ export declare class ChatMessage implements IChatMessage {
     public toJSON(): { [k: string]: any };
 }
 
+/** Properties of a ChatReadProgress. */
+export declare interface IChatReadProgress {
+
+    /** ChatReadProgress toCategory */
+    toCategory?: (number|null);
+
+    /** ChatReadProgress toTarget */
+    toTarget?: (number|null);
+
+    /** ChatReadProgress timestamp */
+    timestamp?: (number|null);
+}
+
+/** Represents a ChatReadProgress. */
+export declare class ChatReadProgress implements IChatReadProgress {
+
+    /**
+     * Constructs a new ChatReadProgress.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IChatReadProgress);
+
+    /** ChatReadProgress toCategory. */
+    public toCategory: number;
+
+    /** ChatReadProgress toTarget. */
+    public toTarget: number;
+
+    /** ChatReadProgress timestamp. */
+    public timestamp: number;
+
+    /**
+     * Creates a new ChatReadProgress instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns ChatReadProgress instance
+     */
+    public static create(properties?: IChatReadProgress): ChatReadProgress;
+
+    /**
+     * Encodes the specified ChatReadProgress message. Does not implicitly {@link ChatReadProgress.verify|verify} messages.
+     * @param message ChatReadProgress message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IChatReadProgress, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified ChatReadProgress message, length delimited. Does not implicitly {@link ChatReadProgress.verify|verify} messages.
+     * @param message ChatReadProgress message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IChatReadProgress, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a ChatReadProgress message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns ChatReadProgress
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): ChatReadProgress;
+
+    /**
+     * Decodes a ChatReadProgress message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns ChatReadProgress
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): ChatReadProgress;
+
+    /**
+     * Verifies a ChatReadProgress message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a ChatReadProgress message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns ChatReadProgress
+     */
+    public static fromObject(object: { [k: string]: any }): ChatReadProgress;
+
+    /**
+     * Creates a plain object from a ChatReadProgress message. Also converts values to other types if specified.
+     * @param message ChatReadProgress
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: ChatReadProgress, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this ChatReadProgress to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
 /** Properties of a MessageContainer. */
 export declare interface IMessageContainer {
 
@@ -8928,6 +9030,18 @@ export declare interface IMessageContainer {
 
     /** MessageContainer S_ChatGetAllMessages */
     S_ChatGetAllMessages?: (IS_ChatGetAllMessages|null);
+
+    /** MessageContainer C_ChatUpdateReadProgress */
+    C_ChatUpdateReadProgress?: (IC_ChatUpdateReadProgress|null);
+
+    /** MessageContainer S_ChatUpdateReadProgress */
+    S_ChatUpdateReadProgress?: (IS_ChatUpdateReadProgress|null);
+
+    /** MessageContainer C_ChatGetAllReadProgressList */
+    C_ChatGetAllReadProgressList?: (IC_ChatGetAllReadProgressList|null);
+
+    /** MessageContainer S_ChatGetAllReadProgressList */
+    S_ChatGetAllReadProgressList?: (IS_ChatGetAllReadProgressList|null);
 
     /** MessageContainer C_MmChangeAvailability */
     C_MmChangeAvailability?: (IC_MmChangeAvailability|null);
@@ -9361,6 +9475,18 @@ export declare class MessageContainer implements IMessageContainer {
 
     /** MessageContainer S_ChatGetAllMessages. */
     public S_ChatGetAllMessages?: (IS_ChatGetAllMessages|null);
+
+    /** MessageContainer C_ChatUpdateReadProgress. */
+    public C_ChatUpdateReadProgress?: (IC_ChatUpdateReadProgress|null);
+
+    /** MessageContainer S_ChatUpdateReadProgress. */
+    public S_ChatUpdateReadProgress?: (IS_ChatUpdateReadProgress|null);
+
+    /** MessageContainer C_ChatGetAllReadProgressList. */
+    public C_ChatGetAllReadProgressList?: (IC_ChatGetAllReadProgressList|null);
+
+    /** MessageContainer S_ChatGetAllReadProgressList. */
+    public S_ChatGetAllReadProgressList?: (IS_ChatGetAllReadProgressList|null);
 
     /** MessageContainer C_MmChangeAvailability. */
     public C_MmChangeAvailability?: (IC_MmChangeAvailability|null);
@@ -12170,6 +12296,372 @@ export declare class S_ChatGetAllMessages implements IS_ChatGetAllMessages {
 
     /**
      * Converts this S_ChatGetAllMessages to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_ChatUpdateReadProgress. */
+export declare interface IC_ChatUpdateReadProgress {
+
+    /** C_ChatUpdateReadProgress progress */
+    progress?: (IChatReadProgress|null);
+}
+
+/** Represents a C_ChatUpdateReadProgress. */
+export declare class C_ChatUpdateReadProgress implements IC_ChatUpdateReadProgress {
+
+    /**
+     * Constructs a new C_ChatUpdateReadProgress.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_ChatUpdateReadProgress);
+
+    /** C_ChatUpdateReadProgress progress. */
+    public progress?: (IChatReadProgress|null);
+
+    /**
+     * Creates a new C_ChatUpdateReadProgress instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_ChatUpdateReadProgress instance
+     */
+    public static create(properties?: IC_ChatUpdateReadProgress): C_ChatUpdateReadProgress;
+
+    /**
+     * Encodes the specified C_ChatUpdateReadProgress message. Does not implicitly {@link C_ChatUpdateReadProgress.verify|verify} messages.
+     * @param message C_ChatUpdateReadProgress message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_ChatUpdateReadProgress, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_ChatUpdateReadProgress message, length delimited. Does not implicitly {@link C_ChatUpdateReadProgress.verify|verify} messages.
+     * @param message C_ChatUpdateReadProgress message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_ChatUpdateReadProgress, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_ChatUpdateReadProgress message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_ChatUpdateReadProgress
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_ChatUpdateReadProgress;
+
+    /**
+     * Decodes a C_ChatUpdateReadProgress message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_ChatUpdateReadProgress
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_ChatUpdateReadProgress;
+
+    /**
+     * Verifies a C_ChatUpdateReadProgress message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_ChatUpdateReadProgress message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_ChatUpdateReadProgress
+     */
+    public static fromObject(object: { [k: string]: any }): C_ChatUpdateReadProgress;
+
+    /**
+     * Creates a plain object from a C_ChatUpdateReadProgress message. Also converts values to other types if specified.
+     * @param message C_ChatUpdateReadProgress
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_ChatUpdateReadProgress, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_ChatUpdateReadProgress to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_ChatUpdateReadProgress. */
+export declare interface IS_ChatUpdateReadProgress {
+
+    /** S_ChatUpdateReadProgress errorCode */
+    errorCode?: (number|null);
+
+    /** S_ChatUpdateReadProgress progress */
+    progress?: (IChatReadProgress|null);
+}
+
+/** Represents a S_ChatUpdateReadProgress. */
+export declare class S_ChatUpdateReadProgress implements IS_ChatUpdateReadProgress {
+
+    /**
+     * Constructs a new S_ChatUpdateReadProgress.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_ChatUpdateReadProgress);
+
+    /** S_ChatUpdateReadProgress errorCode. */
+    public errorCode: number;
+
+    /** S_ChatUpdateReadProgress progress. */
+    public progress?: (IChatReadProgress|null);
+
+    /**
+     * Creates a new S_ChatUpdateReadProgress instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_ChatUpdateReadProgress instance
+     */
+    public static create(properties?: IS_ChatUpdateReadProgress): S_ChatUpdateReadProgress;
+
+    /**
+     * Encodes the specified S_ChatUpdateReadProgress message. Does not implicitly {@link S_ChatUpdateReadProgress.verify|verify} messages.
+     * @param message S_ChatUpdateReadProgress message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_ChatUpdateReadProgress, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_ChatUpdateReadProgress message, length delimited. Does not implicitly {@link S_ChatUpdateReadProgress.verify|verify} messages.
+     * @param message S_ChatUpdateReadProgress message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_ChatUpdateReadProgress, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_ChatUpdateReadProgress message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_ChatUpdateReadProgress
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_ChatUpdateReadProgress;
+
+    /**
+     * Decodes a S_ChatUpdateReadProgress message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_ChatUpdateReadProgress
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_ChatUpdateReadProgress;
+
+    /**
+     * Verifies a S_ChatUpdateReadProgress message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_ChatUpdateReadProgress message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_ChatUpdateReadProgress
+     */
+    public static fromObject(object: { [k: string]: any }): S_ChatUpdateReadProgress;
+
+    /**
+     * Creates a plain object from a S_ChatUpdateReadProgress message. Also converts values to other types if specified.
+     * @param message S_ChatUpdateReadProgress
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_ChatUpdateReadProgress, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_ChatUpdateReadProgress to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a C_ChatGetAllReadProgressList. */
+export declare interface IC_ChatGetAllReadProgressList {
+}
+
+/** Represents a C_ChatGetAllReadProgressList. */
+export declare class C_ChatGetAllReadProgressList implements IC_ChatGetAllReadProgressList {
+
+    /**
+     * Constructs a new C_ChatGetAllReadProgressList.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IC_ChatGetAllReadProgressList);
+
+    /**
+     * Creates a new C_ChatGetAllReadProgressList instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns C_ChatGetAllReadProgressList instance
+     */
+    public static create(properties?: IC_ChatGetAllReadProgressList): C_ChatGetAllReadProgressList;
+
+    /**
+     * Encodes the specified C_ChatGetAllReadProgressList message. Does not implicitly {@link C_ChatGetAllReadProgressList.verify|verify} messages.
+     * @param message C_ChatGetAllReadProgressList message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IC_ChatGetAllReadProgressList, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified C_ChatGetAllReadProgressList message, length delimited. Does not implicitly {@link C_ChatGetAllReadProgressList.verify|verify} messages.
+     * @param message C_ChatGetAllReadProgressList message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IC_ChatGetAllReadProgressList, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a C_ChatGetAllReadProgressList message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns C_ChatGetAllReadProgressList
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): C_ChatGetAllReadProgressList;
+
+    /**
+     * Decodes a C_ChatGetAllReadProgressList message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns C_ChatGetAllReadProgressList
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): C_ChatGetAllReadProgressList;
+
+    /**
+     * Verifies a C_ChatGetAllReadProgressList message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a C_ChatGetAllReadProgressList message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns C_ChatGetAllReadProgressList
+     */
+    public static fromObject(object: { [k: string]: any }): C_ChatGetAllReadProgressList;
+
+    /**
+     * Creates a plain object from a C_ChatGetAllReadProgressList message. Also converts values to other types if specified.
+     * @param message C_ChatGetAllReadProgressList
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: C_ChatGetAllReadProgressList, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this C_ChatGetAllReadProgressList to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_ChatGetAllReadProgressList. */
+export declare interface IS_ChatGetAllReadProgressList {
+
+    /** S_ChatGetAllReadProgressList errorCode */
+    errorCode?: (number|null);
+
+    /** S_ChatGetAllReadProgressList list */
+    list?: (IChatReadProgress[]|null);
+}
+
+/** Represents a S_ChatGetAllReadProgressList. */
+export declare class S_ChatGetAllReadProgressList implements IS_ChatGetAllReadProgressList {
+
+    /**
+     * Constructs a new S_ChatGetAllReadProgressList.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_ChatGetAllReadProgressList);
+
+    /** S_ChatGetAllReadProgressList errorCode. */
+    public errorCode: number;
+
+    /** S_ChatGetAllReadProgressList list. */
+    public list: IChatReadProgress[];
+
+    /**
+     * Creates a new S_ChatGetAllReadProgressList instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_ChatGetAllReadProgressList instance
+     */
+    public static create(properties?: IS_ChatGetAllReadProgressList): S_ChatGetAllReadProgressList;
+
+    /**
+     * Encodes the specified S_ChatGetAllReadProgressList message. Does not implicitly {@link S_ChatGetAllReadProgressList.verify|verify} messages.
+     * @param message S_ChatGetAllReadProgressList message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_ChatGetAllReadProgressList, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_ChatGetAllReadProgressList message, length delimited. Does not implicitly {@link S_ChatGetAllReadProgressList.verify|verify} messages.
+     * @param message S_ChatGetAllReadProgressList message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_ChatGetAllReadProgressList, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_ChatGetAllReadProgressList message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_ChatGetAllReadProgressList
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_ChatGetAllReadProgressList;
+
+    /**
+     * Decodes a S_ChatGetAllReadProgressList message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_ChatGetAllReadProgressList
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_ChatGetAllReadProgressList;
+
+    /**
+     * Verifies a S_ChatGetAllReadProgressList message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_ChatGetAllReadProgressList message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_ChatGetAllReadProgressList
+     */
+    public static fromObject(object: { [k: string]: any }): S_ChatGetAllReadProgressList;
+
+    /**
+     * Creates a plain object from a S_ChatGetAllReadProgressList message. Also converts values to other types if specified.
+     * @param message S_ChatGetAllReadProgressList
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_ChatGetAllReadProgressList, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_ChatGetAllReadProgressList to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };

@@ -88,6 +88,8 @@ namespace TinyWars.Utility.Notify {
 
         SChatGetAllMessages,
         SChatAddMessage,
+        SChatUpdateReadProgress,
+        SChatGetAllReadProgressList,
 
         SGetUserPublicInfo,
         SGetUserPublicInfoFailed,

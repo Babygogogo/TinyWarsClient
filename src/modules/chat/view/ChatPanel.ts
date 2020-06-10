@@ -176,7 +176,7 @@ namespace TinyWars.Chat {
 
         private _updateComponentsForMessage(): void {
             const data                      = this._dataForListChat[this.getSelectedIndex()];
-            const messageList               = getMessageList(data) || [];
+            const messageList               = ChatModel.getMessagesForCategory(data.toCategory).get(data.toTarget) || [];
             this._labelNoMessage.visible    = !messageList.length;
             this._listMessage.bindData(messageList);
             this._listMessage.scrollVerticalTo(100);
@@ -186,7 +186,7 @@ namespace TinyWars.Chat {
             const dataDict      = new Map<number, DataForChatPageRenderer>();
             const timestampList : { index: number, timestamp: number }[] = [];
             let indexForSort    = 0;
-            for (const [toChannelId, msgList] of ChatModel.getAllPublicChannelMessages()) {
+            for (const [toChannelId, msgList] of ChatModel.getMessagesForCategory(ChatCategory.PublicChannel)) {
                 dataDict.set(indexForSort, {
                     index       : indexForSort,
                     panel       : this,
@@ -196,7 +196,7 @@ namespace TinyWars.Chat {
                 timestampList.push(getLatestTimestamp(indexForSort, msgList));
                 ++indexForSort;
             }
-            for (const [toWarAndTeam, msgList] of ChatModel.getAllWarMessages()) {
+            for (const [toWarAndTeam, msgList] of ChatModel.getMessagesForCategory(ChatCategory.WarAndTeam)) {
                 dataDict.set(indexForSort, {
                     index       : indexForSort,
                     panel       : this,
@@ -206,7 +206,7 @@ namespace TinyWars.Chat {
                 timestampList.push(getLatestTimestamp(indexForSort, msgList));
                 ++indexForSort;
             }
-            for (const [toUserId, msgList] of ChatModel.getAllPrivateMessages()) {
+            for (const [toUserId, msgList] of ChatModel.getMessagesForCategory(ChatCategory.Private)) {
                 dataDict.set(indexForSort, {
                     index       : indexForSort,
                     panel       : this,
@@ -312,19 +312,6 @@ namespace TinyWars.Chat {
             index,
             timestamp,
         };
-    }
-    function getMessageList(data: DataForChatPageRenderer): ProtoTypes.IChatMessage[] | null {
-        const category  = data.toCategory;
-        const target    = data.toTarget;
-        if (category === ChatCategory.PublicChannel) {
-            return ChatModel.getAllPublicChannelMessages().get(target);
-        } else if (category === ChatCategory.Private) {
-            return ChatModel.getAllPrivateMessages().get(target);
-        } else if (category === ChatCategory.WarAndTeam) {
-            return ChatModel.getAllWarMessages().get(target);
-        } else {
-            return null;
-        }
     }
     function checkHasDataForWarAndTeam(dict: Map<number, DataForChatPageRenderer>, toWarAndTeam: number): boolean {
         for (const [, data] of dict) {

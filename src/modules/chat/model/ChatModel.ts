@@ -7,15 +7,12 @@ namespace TinyWars.Chat.ChatModel {
     import ChatCategory = Types.ChatMessageToCategory;
     import ChatMessage  = ProtoTypes.IChatMessage;
 
-    type MessageDict                = Map<number, ChatMessage[]>;
-    const _publicChannelMessages    = new Map<number, ChatMessage[]>();
-    const _warMessages              = new Map<number, ChatMessage[]>();
-    const _privateMessages          = new Map<number, ChatMessage[]>();
+    type MessageDict        = Map<number, ChatMessage[]>;
+    const _allMessageDict   = new Map<ChatCategory, MessageDict>();
+    const _allProgressDict  = new Map<ChatCategory, Map<number, number>>();
 
     export function setAllMessages(msgList: ChatMessage[]): void {
-        _publicChannelMessages.clear();
-        _warMessages.clear();
-        _privateMessages.clear();
+        _allMessageDict.clear();
 
         for (const msg of msgList || []) {
            updateOnAddMessage(msg, false);
@@ -33,19 +30,19 @@ namespace TinyWars.Chat.ChatModel {
             const isSentBySelf  = User.UserModel.getSelfUserId() === fromUserId;
 
             if (msgToCategory === ChatCategory.PublicChannel) {
-                addMessage(_publicChannelMessages, msg, msgToTarget);
+                addMessage(ChatCategory.PublicChannel, msg, msgToTarget);
 
             } else if (msgToCategory === ChatCategory.WarAndTeam) {
-                addMessage(_warMessages, msg, msgToTarget);
+                addMessage(ChatCategory.WarAndTeam, msg, msgToTarget);
                 if ((!isSentBySelf) && (showFloatText) && (!ChatPanel.getIsOpening())) {
                     User.UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
                 }
 
             } else if (msgToCategory === ChatCategory.Private) {
                 if (isSentBySelf) {
-                    addMessage(_privateMessages, msg, msgToTarget);
+                    addMessage(ChatCategory.Private, msg, msgToTarget);
                 } else {
-                    addMessage(_privateMessages, msg, fromUserId);
+                    addMessage(ChatCategory.Private, msg, fromUserId);
                     if ((showFloatText) && (!ChatPanel.getIsOpening())) {
                         User.UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
                     }
@@ -57,21 +54,67 @@ namespace TinyWars.Chat.ChatModel {
         }
     }
 
-    function addMessage(dict: MessageDict, msg: ChatMessage, key: number): void {
-        if (dict.has(key)) {
-            dict.get(key).push(msg);
+    export function getMessagesForCategory(toCategory: ChatCategory): MessageDict {
+        if (!_allMessageDict.has(toCategory)) {
+            _allMessageDict.set(toCategory, new Map());
+        }
+        return _allMessageDict.get(toCategory);
+    }
+
+    export function resetAllReadProgress(list: ProtoTypes.IChatReadProgress[]): void {
+        _allProgressDict.clear();
+        for (const p of list || []) {
+            setReadProgress(p);
+        }
+    }
+    export function setReadProgress(progress: ProtoTypes.IChatReadProgress): void {
+        const toCategory    = progress.toCategory;
+        const toTarget      = progress.toTarget;
+        const timestamp     = progress.timestamp;
+        const subDict       = _allProgressDict.get(toCategory);
+        if (subDict) {
+            subDict.set(toTarget, timestamp);
         } else {
-            dict.set(key, [msg]);
+            _allProgressDict.set(toCategory, new Map<number, number>([[toTarget, timestamp]]));
+        }
+    }
+    export function getReadProgressTimestamp(toCategory: ChatCategory, toTarget: number): number {
+        const subDict = _allProgressDict.get(toCategory);
+        return subDict
+            ? subDict.get(toTarget) || 0
+            : 0;
+    }
+
+    export function checkHasUnreadMessage(): boolean {
+        for (const [toCategory, dict] of _allMessageDict) {
+            for (const [toTarget, _] of dict) {
+                if (checkHasUnreadMessageForTarget(toCategory, toTarget)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    export function checkHasUnreadMessageForTarget(toCategory: ChatCategory, toTarget: number): boolean {
+        const messages  = getMessagesForCategory(toCategory).get(toTarget) || [];
+        const length    = messages.length;
+        if (!length) {
+            return false;
+        } else {
+            return getReadProgressTimestamp(toCategory, toTarget) < messages[length - 1].timestamp;
         }
     }
 
-    export function getAllPublicChannelMessages(): MessageDict {
-        return _publicChannelMessages;
-    }
-    export function getAllWarMessages(): MessageDict {
-        return _warMessages;
-    }
-    export function getAllPrivateMessages(): MessageDict {
-        return _privateMessages;
+    function addMessage(toCategory: ChatCategory, msg: ChatMessage, toTarget: number): void {
+        const dict = _allMessageDict.get(toCategory);
+        if (!dict) {
+            _allMessageDict.set(toCategory, new Map<number, ChatMessage[]>([[toTarget, [msg]]]));
+        } else {
+            if (dict.has(toTarget)) {
+                dict.get(toTarget).push(msg);
+            } else {
+                dict.set(toTarget, [msg]);
+            }
+        }
     }
 }
