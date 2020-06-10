@@ -102,8 +102,19 @@ namespace TinyWars.Chat {
                 this._listChat.updateSingleData(oldIndex, dataList[oldIndex]);
             }
             if (oldIndex !== newIndex) {
-                this._listChat.updateSingleData(newIndex, dataList[newIndex]);
+                const data = dataList[newIndex];
+                this._listChat.updateSingleData(newIndex, data);
                 this._updateComponentsForMessage();
+
+                const toCategory    = data.toCategory;
+                const toTarget      = data.toTarget;
+                if (ChatModel.checkHasUnreadMessageForTarget(toCategory, toTarget)) {
+                    ChatProxy.reqUpdateReadProgress(
+                        toCategory,
+                        toTarget,
+                        ChatModel.getLatestMessageTimestamp(toCategory, toTarget)
+                    );
+                }
             }
         }
         public getSelectedIndex(): number {
@@ -132,6 +143,14 @@ namespace TinyWars.Chat {
                     ((pageToCategory === ChatCategory.Private) && (fromUserId === pageToTarget))
                 ) {
                     this._updateComponentsForMessage();
+
+                    if (ChatModel.checkHasUnreadMessageForTarget(pageToCategory, pageToTarget)) {
+                        ChatProxy.reqUpdateReadProgress(
+                            pageToCategory,
+                            pageToTarget,
+                            ChatModel.getLatestMessageTimestamp(pageToCategory, pageToTarget)
+                        );
+                    }
                 }
             }
 
@@ -338,8 +357,51 @@ namespace TinyWars.Chat {
     }
 
     class ChatPageRenderer extends eui.ItemRenderer {
-        private _labelName: GameUi.UiLabel;
-        private _labelType: GameUi.UiLabel;
+        private _labelName      : GameUi.UiLabel;
+        private _labelType      : GameUi.UiLabel;
+        private _imgRed         : GameUi.UiLabel;
+        private _notifyEvents   : Notify.Listener[] = [
+            { type: Notify.Type.SChatGetAllMessages,            callback: this._onNotifySChatGetAllMessages },
+            { type: Notify.Type.SChatAddMessage,                callback: this._onNotifySChatAddMessage },
+            { type: Notify.Type.SChatGetAllReadProgressList,    callback: this._onNotifySChatGetAllReadProgressList },
+            { type: Notify.Type.SChatUpdateReadProgress,        callback: this._onNotifySChatUpdateReadProgress },
+        ];
+
+        protected childrenCreated(): void {
+            super.childrenCreated();
+
+            this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
+        }
+        private _onAddedToStage(e: egret.Event): void {
+            this.removeEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
+            this.addEventListener(egret.Event.REMOVED_FROM_STAGE, this._onRemovedFromStage, this);
+
+            Notify.addEventListeners(this._notifyEvents, this);
+        }
+        private _onRemovedFromStage(e: egret.Event): void {
+            this.removeEventListener(egret.Event.REMOVED_FROM_STAGE, this._onRemovedFromStage, this);
+            this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
+
+            Notify.removeEventListeners(this._notifyEvents, this);
+        }
+
+        public onItemTapEvent(e: egret.TouchEvent): void {
+            const data = this.data as DataForChatPageRenderer;
+            data.panel.setSelectedIndex(data.index);
+        }
+
+        private _onNotifySChatGetAllMessages(e: egret.Event): void {
+            this._updateImgRed();
+        }
+        private _onNotifySChatAddMessage(e: egret.Event): void {
+            this._updateImgRed();
+        }
+        private _onNotifySChatGetAllReadProgressList(e: egret.Event): void {
+            this._updateImgRed();
+        }
+        private _onNotifySChatUpdateReadProgress(e: egret.Event): void {
+            this._updateImgRed();
+        }
 
         protected dataChanged(): void {
             super.dataChanged();
@@ -347,9 +409,10 @@ namespace TinyWars.Chat {
             const data          = this.data as DataForChatPageRenderer;
             this.currentState   = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
             this._updateLabels();
+            this._updateImgRed();
         }
 
-        private async _updateLabels(): Promise<void> {
+        private _updateLabels(): void {
             const data          = this.data as DataForChatPageRenderer;
             const toCategory    = data.toCategory;
             const toTarget      = data.toTarget;
@@ -362,21 +425,19 @@ namespace TinyWars.Chat {
                 const teamIndex         = toTarget % divider;
                 this._labelType.text    = Lang.getText(Lang.Type.B0377);
                 this._labelName.text    = `ID:${Math.floor(toTarget / divider)} ${teamIndex === 0 ? Lang.getText(Lang.Type.B0379) : Lang.getPlayerTeamName(teamIndex)}`;
-                return;
 
             } else if (toCategory === ChatCategory.Private) {
                 this._labelType.text = Lang.getText(Lang.Type.B0378);
                 User.UserModel.getUserNickname(toTarget).then(name => this._labelName.text = name);
-                return;
 
             } else {
                 Logger.error(`ChatPanel.ChatPageRenderer._updateLabels() invalid data!`);
             }
         }
 
-        public onItemTapEvent(e: egret.TouchEvent): void {
-            const data = this.data as DataForChatPageRenderer;
-            data.panel.setSelectedIndex(data.index);
+        private _updateImgRed(): void {
+            const data              = this.data as DataForChatPageRenderer;
+            this._imgRed.visible    = ChatModel.checkHasUnreadMessageForTarget(data.toCategory, data.toTarget);
         }
     }
 
@@ -386,14 +447,16 @@ namespace TinyWars.Chat {
         private _labelName      : TinyWars.GameUi.UiLabel;
         private _labelContent   : TinyWars.GameUi.UiLabel;
 
-        protected async dataChanged(): Promise<void> {
+        protected dataChanged(): void {
             super.dataChanged();
 
             const data                  = this.data as DataForMessageRenderer;
-            const userInfo              = await User.UserModel.getUserPublicInfo(data.fromUserId);
-            this._labelName.textColor   = (userInfo) && (userInfo.id === User.UserModel.getSelfUserId()) ? 0x00FF00 : 0xFFFFFF;
-            this._labelName.text        = `${userInfo ? userInfo.nickname : `???`}    (${Helpers.getTimestampShortText(data.timestamp)})`;
+            const fromUserId            = data.fromUserId;
             this._labelContent.text     = data.content;
+            this._labelName.textColor   = fromUserId === User.UserModel.getSelfUserId() ? 0x00FF00 : 0xFFFFFF;
+            User.UserModel.getUserNickname(fromUserId).then(name => {
+                this._labelName.text = `${name || `???`}    (${Helpers.getTimestampShortText(data.timestamp)})`;
+            });
         }
 
         public async onItemTapEvent(e: eui.ItemTapEvent): Promise<void> {

@@ -56,6 +56,7 @@
                     <e:Image scaleX="0.8" scaleY="0.8" horizontalCenter="0" verticalCenter="0" source="icon_chat_001" />
                     <GameUi:UiLabel id="labelDisplay" size="14" textColor="0x00ff00" verticalCenter="0"
                                     horizontalCenter="0" maxTextWidth="70" />
+                    <GameUi:UiImage id="_imgRed" width="20" height="20" source="c04_t01_s01_f01" right="0" top="0" />
                 </e:Skin>
             </GameUi:skinName>
         </GameUi:UiButton>

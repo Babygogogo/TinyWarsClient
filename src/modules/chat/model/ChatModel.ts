@@ -60,6 +60,11 @@ namespace TinyWars.Chat.ChatModel {
         }
         return _allMessageDict.get(toCategory);
     }
+    export function getLatestMessageTimestamp(toCategory: ChatCategory, toTarget: number): number {
+        const messageList   = getMessagesForCategory(toCategory).get(toTarget) || [];
+        const message       = messageList[messageList.length - 1];
+        return message ? message.timestamp || 0 : 0;
+    }
 
     export function resetAllReadProgress(list: ProtoTypes.IChatReadProgress[]): void {
         _allProgressDict.clear();

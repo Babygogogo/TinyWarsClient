@@ -60,6 +60,10 @@ namespace TinyWars.SingleCustomWar {
                 { type: Notify.Type.BwCoEnergyChanged,              callback: this._onNotifyBwCoEnergyChanged },
                 { type: Notify.Type.BwCoUsingSkillTypeChanged,      callback: this._onNotifyBwCoUsingSkillChanged },
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
+                { type: Notify.Type.SChatGetAllReadProgressList,    callback: this._onNotifyChatGetAllReadProgressList },
+                { type: Notify.Type.SChatUpdateReadProgress,        callback: this._onNotifyChatUpdateReadProgress },
+                { type: Notify.Type.SChatGetAllMessages,            callback: this._onNotifyChatGetAllMessages },
+                { type: Notify.Type.SChatAddMessage,                callback: this._onNotifyChatAddMessage },
             ];
             this._uiListeners = [
                 { ui: this._groupPlayer,        callback: this._onTouchedGroupPlayer },
@@ -109,6 +113,18 @@ namespace TinyWars.SingleCustomWar {
         private _onNotifyBwActionPlannerStateChanged(e: egret.Event): void {
             this._updateBtnEndTurn();
             this._updateBtnCancel();
+        }
+        private _onNotifyChatGetAllReadProgressList(e: egret.Event): void {
+            this._updateBtnChat();
+        }
+        private _onNotifyChatUpdateReadProgress(e: egret.Event): void {
+            this._updateBtnChat();
+        }
+        private _onNotifyChatGetAllMessages(e: egret.Event): void {
+            this._updateBtnChat();
+        }
+        private _onNotifyChatAddMessage(e: egret.Event): void {
+            this._updateBtnChat();
         }
 
         private _onTouchedGroupPlayer(e: egret.TouchEvent): void {
@@ -181,6 +197,7 @@ namespace TinyWars.SingleCustomWar {
             this._updateBtnFindUnit();
             this._updateBtnFindBuilding();
             this._updateBtnCancel();
+            this._updateBtnChat();
         }
 
         private _updateComponentsForLanguage(): void {
@@ -264,6 +281,10 @@ namespace TinyWars.SingleCustomWar {
                 && (state !== Types.ActionPlannerState.Idle)
                 && (state !== Types.ActionPlannerState.ExecutingAction)
                 && (!actionPlanner.checkIsStateRequesting());
+        }
+
+        private _updateBtnChat(): void {
+            this._btnChat.setRedVisible(Chat.ChatModel.checkHasUnreadMessage());
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -58,6 +58,10 @@ namespace TinyWars.MultiCustomWar {
                 { type: Notify.Type.BwCoEnergyChanged,              callback: this._onNotifyMcwCoEnergyChanged },
                 { type: Notify.Type.BwCoUsingSkillTypeChanged,      callback: this._onNotifyMcwCoUsingSkillChanged },
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyMcwActionPlannerStateChanged },
+                { type: Notify.Type.SChatGetAllReadProgressList,    callback: this._onNotifyChatGetAllReadProgressList },
+                { type: Notify.Type.SChatUpdateReadProgress,        callback: this._onNotifyChatUpdateReadProgress },
+                { type: Notify.Type.SChatGetAllMessages,            callback: this._onNotifyChatGetAllMessages },
+                { type: Notify.Type.SChatAddMessage,                callback: this._onNotifyChatAddMessage },
             ];
             this._uiListeners = [
                 { ui: this._groupPlayer,        callback: this._onTouchedGroupPlayer },
@@ -104,6 +108,19 @@ namespace TinyWars.MultiCustomWar {
             this._updateBtnUnitList();
             this._updateBtnEndTurn();
             this._updateBtnCancel();
+        }
+
+        private _onNotifyChatGetAllReadProgressList(e: egret.Event): void {
+            this._updateBtnChat();
+        }
+        private _onNotifyChatUpdateReadProgress(e: egret.Event): void {
+            this._updateBtnChat();
+        }
+        private _onNotifyChatGetAllMessages(e: egret.Event): void {
+            this._updateBtnChat();
+        }
+        private _onNotifyChatAddMessage(e: egret.Event): void {
+            this._updateBtnChat();
         }
 
         private _onTouchedGroupPlayer(e: egret.TouchEvent): void {
@@ -178,6 +195,7 @@ namespace TinyWars.MultiCustomWar {
             this._updateBtnUnitList();
             this._updateBtnFindBuilding();
             this._updateBtnCancel();
+            this._updateBtnChat();
         }
 
         private _updateLabelPlayer(): void {
@@ -255,6 +273,10 @@ namespace TinyWars.MultiCustomWar {
                 && (state !== Types.ActionPlannerState.Idle)
                 && (state !== Types.ActionPlannerState.ExecutingAction)
                 && (!actionPlanner.checkIsStateRequesting());
+        }
+
+        private _updateBtnChat(): void {
+            this._btnChat.setRedVisible(Chat.ChatModel.checkHasUnreadMessage());
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
