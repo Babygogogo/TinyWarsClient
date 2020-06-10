@@ -37,10 +37,14 @@ namespace TinyWars.Lobby {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.SLogin,                 callback: this._onNotifySLogin },
-                { type: Notify.Type.SLogout,                callback: this._onNotifySLogout },
-                { type: Notify.Type.SUserChangeNickname,    callback: this._onNotifySUserChangeNickname },
-                { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.SLogin,                         callback: this._onNotifySLogin },
+                { type: Notify.Type.SLogout,                        callback: this._onNotifySLogout },
+                { type: Notify.Type.SUserChangeNickname,            callback: this._onNotifySUserChangeNickname },
+                { type: Notify.Type.SChatGetAllReadProgressList,    callback: this._onNotifyChatGetAllReadProgressList },
+                { type: Notify.Type.SChatUpdateReadProgress,        callback: this._onNotifyChatUpdateReadProgress },
+                { type: Notify.Type.SChatGetAllMessages,            callback: this._onNotifyChatGetAllMessages },
+                { type: Notify.Type.SChatAddMessage,                callback: this._onNotifyChatAddMessage },
             ];
             this._uiListeners = [
                 { ui: this._btnMyInfo,  callback: this._onTouchedBtnMyInfo },
@@ -64,6 +68,19 @@ namespace TinyWars.Lobby {
             this._updateLabelNickname();
         }
 
+        private _onNotifyChatGetAllReadProgressList(e: egret.Event): void {
+            this._updateBtnChat();
+        }
+        private _onNotifyChatUpdateReadProgress(e: egret.Event): void {
+            this._updateBtnChat();
+        }
+        private _onNotifyChatGetAllMessages(e: egret.Event): void {
+            this._updateBtnChat();
+        }
+        private _onNotifyChatAddMessage(e: egret.Event): void {
+            this._updateBtnChat();
+        }
+
         private _onNotifyLanguageChanged(e: egret.Event): void {
             this._updateComponentsForLanguage();
         }
@@ -85,6 +102,7 @@ namespace TinyWars.Lobby {
         private _updateView(): void {
             this._updateComponentsForLanguage();
             this._updateLabelNickname();
+            this._updateBtnChat();
         }
 
         private _updateComponentsForLanguage(): void {
@@ -95,6 +113,10 @@ namespace TinyWars.Lobby {
 
         private _updateLabelNickname(): void {
             this._labelNickname.text    = UserModel.getSelfNickname();
+        }
+
+        private _updateBtnChat(): void {
+            this._btnChat.setRedVisible(Chat.ChatModel.checkHasUnreadMessage());
         }
     }
 }
