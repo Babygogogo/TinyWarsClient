@@ -8020,11 +8020,17 @@ export declare interface IMcwReplayInfo {
     /** McwReplayInfo p1TeamIndex */
     p1TeamIndex?: (number|null);
 
+    /** McwReplayInfo p1CoId */
+    p1CoId?: (number|null);
+
     /** McwReplayInfo p2UserId */
     p2UserId?: (number|null);
 
     /** McwReplayInfo p2TeamIndex */
     p2TeamIndex?: (number|null);
+
+    /** McwReplayInfo p2CoId */
+    p2CoId?: (number|null);
 
     /** McwReplayInfo p3UserId */
     p3UserId?: (number|null);
@@ -8032,11 +8038,17 @@ export declare interface IMcwReplayInfo {
     /** McwReplayInfo p3TeamIndex */
     p3TeamIndex?: (number|null);
 
+    /** McwReplayInfo p3CoId */
+    p3CoId?: (number|null);
+
     /** McwReplayInfo p4UserId */
     p4UserId?: (number|null);
 
     /** McwReplayInfo p4TeamIndex */
     p4TeamIndex?: (number|null);
+
+    /** McwReplayInfo p4CoId */
+    p4CoId?: (number|null);
 }
 
 /** Represents a McwReplayInfo. */
@@ -8084,11 +8096,17 @@ export declare class McwReplayInfo implements IMcwReplayInfo {
     /** McwReplayInfo p1TeamIndex. */
     public p1TeamIndex: number;
 
+    /** McwReplayInfo p1CoId. */
+    public p1CoId: number;
+
     /** McwReplayInfo p2UserId. */
     public p2UserId: number;
 
     /** McwReplayInfo p2TeamIndex. */
     public p2TeamIndex: number;
+
+    /** McwReplayInfo p2CoId. */
+    public p2CoId: number;
 
     /** McwReplayInfo p3UserId. */
     public p3UserId: number;
@@ -8096,11 +8114,17 @@ export declare class McwReplayInfo implements IMcwReplayInfo {
     /** McwReplayInfo p3TeamIndex. */
     public p3TeamIndex: number;
 
+    /** McwReplayInfo p3CoId. */
+    public p3CoId: number;
+
     /** McwReplayInfo p4UserId. */
     public p4UserId: number;
 
     /** McwReplayInfo p4TeamIndex. */
     public p4TeamIndex: number;
+
+    /** McwReplayInfo p4CoId. */
+    public p4CoId: number;
 
     /**
      * Creates a new McwReplayInfo instance using the specified properties.

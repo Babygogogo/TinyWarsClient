@@ -7,6 +7,7 @@ namespace TinyWars.MultiCustomRoom {
     import Helpers          = Utility.Helpers;
     import ProtoTypes       = Utility.ProtoTypes;
     import FlowManager      = Utility.FlowManager;
+    import ConfigManager    = Utility.ConfigManager;
     import WarMapModel      = WarMap.WarMapModel;
 
     export class McrReplayListPanel extends GameUi.UiPanel {
@@ -241,30 +242,39 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _createDataForListPlayer(info: ProtoTypes.IMcwReplayInfo): DataForPlayerRenderer[] {
+            const configVersion = info.configVersion;
             const data: DataForPlayerRenderer[] = [
                 {
+                    configVersion,
                     playerIndex : 1,
                     userId      : info.p1UserId,
                     teamIndex   : info.p1TeamIndex,
+                    coId        : info.p1CoId,
                 },
                 {
+                    configVersion,
                     playerIndex : 2,
                     userId      : info.p2UserId,
                     teamIndex   : info.p2TeamIndex,
+                    coId        : info.p2CoId,
                 },
             ];
             if (info.p3UserId != null) {
                 data.push({
+                    configVersion,
                     playerIndex : 3,
                     userId      : info.p3UserId,
                     teamIndex   : info.p3TeamIndex,
+                    coId        : info.p3CoId,
                 });
             }
             if (info.p4UserId != null) {
                 data.push({
+                    configVersion,
                     playerIndex : 4,
                     userId      : info.p4UserId,
                     teamIndex   : info.p4TeamIndex,
+                    coId        : info.p4CoId,
                 });
             }
 
@@ -321,9 +331,11 @@ namespace TinyWars.MultiCustomRoom {
     }
 
     type DataForPlayerRenderer = {
-        playerIndex : number;
-        userId      : number | null;
-        teamIndex   : number;
+        configVersion   : string;
+        playerIndex     : number;
+        userId          : number | null;
+        teamIndex       : number;
+        coId            : number | null | undefined;
     }
 
     class PlayerRenderer extends eui.ItemRenderer {
@@ -334,10 +346,12 @@ namespace TinyWars.MultiCustomRoom {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data = this.data as DataForPlayerRenderer;
-            this._labelIndex.text = Helpers.getColorTextForPlayerIndex(data.playerIndex);
-            this._labelTeam.text  = data.teamIndex != null ? Helpers.getTeamText(data.teamIndex) : "??";
-            User.UserModel.getUserNickname(data.userId).then(name => this._labelName.text = name);
+            const data              = this.data as DataForPlayerRenderer;
+            this._labelIndex.text   = Helpers.getColorTextForPlayerIndex(data.playerIndex);
+            this._labelTeam.text    = data.teamIndex != null ? Helpers.getTeamText(data.teamIndex) : "??";
+            User.UserModel.getUserNickname(data.userId).then(name => {
+                this._labelName.text = name + ConfigManager.getCoNameAndTierText(data.configVersion, data.coId);
+            });
         }
     }
 }
