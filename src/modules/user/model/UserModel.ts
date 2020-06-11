@@ -7,17 +7,18 @@ namespace TinyWars.User {
     import ProtoTypes   = Utility.ProtoTypes;
 
     export namespace UserModel {
-        let _isLoggedIn             = false;
-        let _selfUserId             : number;
-        let _selfIsAdmin            : number;
-        let _selfIsMapCommittee     : number;
-        let _selfIsCoCommittee      : number;
-        let _selfAccount            : string;
-        let _selfPassword           : string;
-        let _selfNickname           : string;
-        let _selfDiscordId          : string;
-        let _selfRankScore          : number = 0;
-        const _userPublicInfoDict   = new Map<number, ProtoTypes.IS_GetUserPublicInfo>();
+        let _isLoggedIn                 = false;
+        let _selfUserId                 : number;
+        let _selfIsAdmin                : number;
+        let _selfIsMapCommittee         : number;
+        let _selfIsCoCommittee          : number;
+        let _selfAccount                : string;
+        let _selfPassword               : string;
+        let _selfNickname               : string;
+        let _selfDiscordId              : string;
+        let _selfRankScore              : number = 0;
+        const _userPublicInfoDict       = new Map<number, ProtoTypes.IS_GetUserPublicInfo>();
+        const _userPublicInfoRequests   = new Map<number, ((info: ProtoTypes.IS_GetUserPublicInfo | undefined | null) => void)[]>();
 
         export function init(): void {
             Notify.addEventListeners([
@@ -93,37 +94,57 @@ namespace TinyWars.User {
 
         export function getUserPublicInfo(userId: number): Promise<ProtoTypes.IS_GetUserPublicInfo | undefined | null> {
             if (userId == null) {
-                return null;
+                return new Promise((resolve, reject) => resolve(null));
             } else {
                 const localData = _userPublicInfoDict.get(userId);
                 if (localData) {
                     return new Promise(resolve => resolve(localData));
                 } else {
-                    return new Promise((resolve, reject) => {
-                        const callbackOnSucceed = (e: egret.Event): void => {
-                            const data = e.data as ProtoTypes.IS_GetUserPublicInfo;
-                            if (data.id === userId) {
-                                Notify.removeEventListener(Notify.Type.SGetUserPublicInfo,        callbackOnSucceed);
-                                Notify.removeEventListener(Notify.Type.SGetUserPublicInfoFailed,  callbackOnFailed);
+                    if (_userPublicInfoRequests.has(userId)) {
+                        return new Promise((resolve, reject) => {
+                            _userPublicInfoRequests.get(userId).push(info => resolve(info));
+                        });
+                    } else {
+                        new Promise((resolve, reject) => {
+                            const callbackOnSucceed = (e: egret.Event): void => {
+                                const data = e.data as ProtoTypes.IS_GetUserPublicInfo;
+                                if (data.id === userId) {
+                                    Notify.removeEventListener(Notify.Type.SGetUserPublicInfo,        callbackOnSucceed);
+                                    Notify.removeEventListener(Notify.Type.SGetUserPublicInfoFailed,  callbackOnFailed);
 
-                                resolve(data);
-                            }
-                        };
-                        const callbackOnFailed = (e: egret.Event): void => {
-                            const data = e.data as ProtoTypes.IS_GetUserPublicInfo;
-                            if (data.id === userId) {
-                                Notify.removeEventListener(Notify.Type.SGetUserPublicInfo,        callbackOnSucceed);
-                                Notify.removeEventListener(Notify.Type.SGetUserPublicInfoFailed,  callbackOnFailed);
+                                    for (const cb of _userPublicInfoRequests.get(userId)) {
+                                        cb(data);
+                                    }
+                                    _userPublicInfoRequests.delete(userId);
 
-                                resolve(null);
-                            }
-                        };
+                                    resolve();
+                                }
+                            };
+                            const callbackOnFailed = (e: egret.Event): void => {
+                                const data = e.data as ProtoTypes.IS_GetUserPublicInfo;
+                                if (data.id === userId) {
+                                    Notify.removeEventListener(Notify.Type.SGetUserPublicInfo,        callbackOnSucceed);
+                                    Notify.removeEventListener(Notify.Type.SGetUserPublicInfoFailed,  callbackOnFailed);
 
-                        Notify.addEventListener(Notify.Type.SGetUserPublicInfo,       callbackOnSucceed);
-                        Notify.addEventListener(Notify.Type.SGetUserPublicInfoFailed, callbackOnFailed);
+                                    for (const cb of _userPublicInfoRequests.get(userId)) {
+                                        cb(null);
+                                    }
+                                    _userPublicInfoRequests.delete(userId);
 
-                        UserProxy.reqGetUserPublicInfo(userId);
-                    });
+                                    resolve();
+                                }
+                            };
+
+                            Notify.addEventListener(Notify.Type.SGetUserPublicInfo,       callbackOnSucceed);
+                            Notify.addEventListener(Notify.Type.SGetUserPublicInfoFailed, callbackOnFailed);
+
+                            UserProxy.reqGetUserPublicInfo(userId);
+                        });
+
+                        return new Promise((resolve, reject) => {
+                            _userPublicInfoRequests.set(userId, [info => resolve(info)]);
+                        });
+                    }
                 }
             }
         }
