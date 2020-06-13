@@ -7,9 +7,10 @@ namespace TinyWars.Chat.ChatModel {
     import ChatCategory = Types.ChatMessageToCategory;
     import ChatMessage  = ProtoTypes.IChatMessage;
 
-    type MessageDict        = Map<number, ChatMessage[]>;
-    const _allMessageDict   = new Map<ChatCategory, MessageDict>();
-    const _allProgressDict  = new Map<ChatCategory, Map<number, number>>();
+    type MessageDict                    = Map<number, ChatMessage[]>;
+    const _allMessageDict               = new Map<ChatCategory, MessageDict>();
+    const _allProgressDict              = new Map<ChatCategory, Map<number, number>>();
+    let _timestampForNextSetAllMessages = 0;
 
     export function setAllMessages(msgList: ChatMessage[]): void {
         _allMessageDict.clear();
@@ -17,6 +18,13 @@ namespace TinyWars.Chat.ChatModel {
         for (const msg of msgList || []) {
            updateOnAddMessage(msg, false);
         }
+    }
+
+    export function setTimestampForNextReqAllMessages(timestamp: number): void {
+        _timestampForNextSetAllMessages = timestamp;
+    }
+    export function getTimestampForNextReqAllMessages(): number {
+        return _timestampForNextSetAllMessages;
     }
 
     export function updateOnAddMessage(msg: ChatMessage, showFloatText: boolean): void {

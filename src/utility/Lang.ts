@@ -2469,6 +2469,10 @@ namespace TinyWars.Utility.Lang {
             `要和玩家"%s"私聊吗？`,
             `Do you want to make a private chat with %s?`,
         ],
+        [Type.F0026]: [
+            `数据加载中，请%s秒后重试`,
+            `Now loading, please wait %ds and retry.`,
+        ],
     };
 
     const NET_ERROR_TEXT = {

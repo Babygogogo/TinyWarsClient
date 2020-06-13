@@ -24,6 +24,7 @@ namespace TinyWars.Chat {
         private _labelChatTitle : TinyWars.GameUi.UiLabel;
         private _listChat       : TinyWars.GameUi.UiScrollList;
         private _btnBack        : TinyWars.GameUi.UiButton;
+        private _btnRefresh     : TinyWars.GameUi.UiButton;
         private _labelNoMessage : TinyWars.GameUi.UiLabel;
         private _listMessage    : TinyWars.GameUi.UiScrollList;
         private _inputMessage   : TinyWars.GameUi.UiTextInput;
@@ -67,6 +68,7 @@ namespace TinyWars.Chat {
             ];
             this._uiListeners = [
                 { ui: this._btnBack,    callback: this.close },
+                { ui: this._btnRefresh, callback: this._onTouchedBtnRefresh },
                 { ui: this._btnSend,    callback: this._onTouchedBtnSend },
             ];
             this._listChat.setItemRenderer(ChatPageRenderer);
@@ -169,6 +171,17 @@ namespace TinyWars.Chat {
             this.setSelectedIndex(0);
         }
 
+        private _onTouchedBtnRefresh(e: egret.TouchEvent): void {
+            const currTime  = Time.TimeModel.getServerTimestamp();
+            const cdTime    = ChatModel.getTimestampForNextReqAllMessages() - currTime;
+            if (cdTime > 0) {
+                FloatText.show(Lang.getFormattedText(Lang.Type.F0026, cdTime));
+            } else {
+                ChatModel.setTimestampForNextReqAllMessages(currTime + 30);
+                ChatProxy.reqGetAllMessages();
+            }
+        }
+
         private _onTouchedBtnSend(e: egret.TouchEvent): void {
             const content = this._inputMessage.text;
             if (content) {
@@ -188,7 +201,6 @@ namespace TinyWars.Chat {
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
             this._labelChatTitle.text   = Lang.getText(Lang.Type.B0380);
-            this._btnBack.label         = Lang.getText(Lang.Type.B0146);
             this._labelNoMessage.text   = Lang.getText(Lang.Type.B0381);
             this._btnSend.label         = Lang.getText(Lang.Type.B0382);
         }
