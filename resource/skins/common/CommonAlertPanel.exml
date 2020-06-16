@@ -11,7 +11,7 @@
             <e:Scroller id="_scrContent" y="33" x="0" maxHeight="200" minHeight="40">
                 <e:Group>
                     <GameUi:UiLabel id="_labelContent" text="内容" size="18" top="5" textAlign="center"
-                                    textColor="0x000000" width="400" x="0" verticalAlign="middle" />
+                                    textColor="0x000000" width="400" x="0" verticalAlign="middle" wordWrap="true" />
                 </e:Group>
             </e:Scroller>
             <e:layout>

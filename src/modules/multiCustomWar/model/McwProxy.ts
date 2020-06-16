@@ -121,7 +121,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         }
     }
 
-    export function reqMcwPlayerSurrender(war: BwWar): void {
+    export function reqMcwPlayerSurrender(war: BwWar, isBoot: boolean): void {
         NetManager.send({
             C_McwPlayerSurrender: {
                 warId   : war.getWarId(),

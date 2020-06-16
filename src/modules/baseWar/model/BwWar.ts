@@ -172,6 +172,14 @@ namespace TinyWars.BaseWar {
         public getSettingsTimeLimit(): number {
             return this._timeLimit;
         }
+        public getBootRestTime(): number | null {
+            const player = this.getPlayerInTurn();
+            if (player.getPlayerIndex() === 0) {
+                return null;
+            } else {
+                return (this.getEnterTurnTime() + this.getSettingsTimeLimit() - Time.TimeModel.getServerTimestamp()) || null;
+            }
+        }
 
         private _setWarRuleIndex(index: number | null | undefined): void {
             this._warRuleIndex = index;

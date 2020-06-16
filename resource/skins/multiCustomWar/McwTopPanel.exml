@@ -7,9 +7,18 @@
         <e:Group id="_groupPlayer" x="0" verticalCenter="0">
             <GameUi:UiImage source="icon_person_001" x="0" y="0" scaleX="0.8" scaleY="0.8" />
             <GameUi:UiLabel id="_labelPlayer" text="玩家名居然能有十个字(红)" size="16" x="10" textColor="0xffffff" y="12"
-                            maxTextWidth="320" />
+                            maxTextWidth="230" />
             <e:layout>
                 <e:HorizontalLayout verticalAlign="middle" gap="0" />
+            </e:layout>
+        </e:Group>
+        <e:Group id="_groupTimer" x="270" verticalCenter="0">
+            <GameUi:UiLabel id="_labelTimerTitle" text="Timer:" size="12" x="0" textColor="0xFFFFFF" y="0"
+                            maxTextWidth="200" />
+            <GameUi:UiLabel id="_labelTimer" text="999:00:00" size="14" x="0" textColor="0xFFFFFF" y="14"
+                            maxTextWidth="200" />
+            <e:layout>
+                <e:VerticalLayout gap="2" />
             </e:layout>
         </e:Group>
         <e:Group x="340" verticalCenter="0">

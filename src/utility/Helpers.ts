@@ -243,6 +243,16 @@ namespace TinyWars.Utility.Helpers {
             return text;
         }
     }
+    export function getTimeDurationText2(totalSeconds: number): string {
+        if (totalSeconds <= 0) {
+            return `00:00:00`;
+        } else {
+            const seconds = totalSeconds % 60;
+            const minutes = Math.floor(totalSeconds / 60) % 60;
+            const hours   = Math.floor(totalSeconds / (60 * 60));
+            return `${getNumText(hours)}:${getNumText(minutes)}:${getNumText(seconds)}`;
+        }
+    }
 
     type TimeTextController = {
         year?   : boolean;

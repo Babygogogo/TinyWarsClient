@@ -17,6 +17,9 @@ namespace TinyWars.MultiCustomWar {
         private _groupPlayer        : eui.Group;
         private _labelPlayer        : GameUi.UiLabel;
         private _labelFund          : GameUi.UiLabel;
+        private _groupTimer         : eui.Group;
+        private _labelTimerTitle    : GameUi.UiLabel;
+        private _labelTimer         : GameUi.UiLabel;
         private _groupCo            : eui.Group;
         private _labelCo            : GameUi.UiLabel;
         private _labelCurrEnergy    : GameUi.UiLabel;
@@ -52,6 +55,8 @@ namespace TinyWars.MultiCustomWar {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
+                { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.TimeTick,                       callback: this._onNotifyTimeTick },
                 { type: Notify.Type.BwTurnPhaseCodeChanged,         callback: this._onNotifyMcwTurnPhaseCodeChanged },
                 { type: Notify.Type.BwPlayerFundChanged,            callback: this._onNotifyMcwPlayerFundChanged },
                 { type: Notify.Type.BwPlayerIndexInTurnChanged,     callback: this._onNotifyMcwPlayerIndexInTurnChanged },
@@ -87,6 +92,23 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateComponentsForLanguage();
+        }
+        private _onNotifyTimeTick(e: egret.Event): void {
+            this._updateGroupTimer();
+
+            const war       = this._war;
+            const planner   = (war ? war.getActionPlanner() : null) as McwActionPlanner;
+            if ((planner)                                                               &&
+                (planner.getState() === Types.ActionPlannerState.Idle)                  &&
+                (!war.getIsEnded())                                                     &&
+                (war.getBootRestTime() <= 0)                                            &&
+                (war.getPlayerInTurn().getUserId() === User.UserModel.getSelfUserId())
+            ) {
+                planner.setStateRequestingPlayerSurrender(true);
+            }
+        }
         private _onNotifyMcwTurnPhaseCodeChanged(e: egret.Event): void {
             this._updateBtnEndTurn();
             this._updateBtnFindBuilding();
@@ -188,7 +210,9 @@ namespace TinyWars.MultiCustomWar {
         // Functions for views.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
+            this._updateComponentsForLanguage();
             this._updateLabelPlayer();
+            this._updateGroupTimer();
             this._updateLabelFund();
             this._updateLabelCoAndEnergy();
             this._updateBtnEndTurn();
@@ -198,11 +222,32 @@ namespace TinyWars.MultiCustomWar {
             this._updateBtnChat();
         }
 
+        private _updateComponentsForLanguage(): void {
+            this._labelTimerTitle.text = Lang.getText(Lang.Type.B0188);
+        }
+
         private _updateLabelPlayer(): void {
             const war                   = this._war;
             const player                = war.getPlayerInTurn();
             this._labelPlayer.text      = `${player.getNickname()} (${Helpers.getColorTextForPlayerIndex(player.getPlayerIndex())})`;
             this._labelPlayer.textColor = player === war.getPlayerLoggedIn() ? 0x00FF00 : 0xFFFFFF;
+        }
+
+        private _updateGroupTimer(): void {
+            const war       = this._war;
+            const group     = this._groupTimer;
+            const restTime  = war ? war.getBootRestTime() : null;
+            if (restTime == null) {
+                group.visible = false;
+            } else {
+                group.visible = true;
+
+                const label     = this._labelTimer;
+                label.text      = Helpers.getTimeDurationText2(restTime);
+                label.textColor = restTime >= 30 * 60
+                    ? 0xFFFFFF
+                    : (restTime >= 5 * 60 ? 0xFFFF00 : 0xFF4400);
+            }
         }
 
         private _updateLabelFund(): void {
