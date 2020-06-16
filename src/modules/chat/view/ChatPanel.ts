@@ -466,8 +466,12 @@ namespace TinyWars.Chat {
             const fromUserId            = data.fromUserId;
             this._labelContent.text     = data.content;
             this._labelName.textColor   = fromUserId === User.UserModel.getSelfUserId() ? 0x00FF00 : 0xFFFFFF;
-            User.UserModel.getUserNickname(fromUserId).then(name => {
-                this._labelName.text = `${name || `???`}    (${Helpers.getTimestampShortText(data.timestamp)})`;
+            this._labelName.text        = `    (${Helpers.getTimestampShortText(data.timestamp)})`;
+            User.UserModel.getUserPublicInfo(fromUserId).then(info => {
+                const d = this.data as DataForMessageRenderer;
+                if ((d) && (info.id === d.fromUserId)) {
+                    this._labelName.text = `${info.nickname || `???`}    (${Helpers.getTimestampShortText(data.timestamp)})`;
+                }
             });
         }
 
