@@ -176,7 +176,7 @@ namespace TinyWars.Utility.Lang {
         ],
         [Type.A0019]: [
             "已成功加入房间。战局正式开始，请从“继续战斗”入口进入。",
-            "Joined successfully.",
+            "Joined successfully. The war has started.",
         ],
         [Type.A0020]: [
             `服务器维护中，请稍后登陆`,
@@ -581,6 +581,10 @@ namespace TinyWars.Utility.Lang {
         [Type.A0115]: [
             `请联系babygogogo以解决问题`,
             `Please refer to babygogogo.`,
+        ],
+        [Type.A0116]: [
+            `战局已开始，并已进入您的回合。要现在就进入战局吗？`,
+            `The war has started and it's your turn now. Do you want to play it now?`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

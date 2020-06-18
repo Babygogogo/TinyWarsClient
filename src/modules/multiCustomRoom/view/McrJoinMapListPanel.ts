@@ -55,8 +55,9 @@ namespace TinyWars.MultiCustomRoom {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.SMcrGetUnjoinedWaitingInfos,    callback: this._onNotifySMcrGetUnjoinedWaitingInfos },
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.SMcrGetUnjoinedWaitingInfos,    callback: this._onNotifySMcrGetUnjoinedWaitingInfos },
+                { type: Notify.Type.SMcrContinueWar,                callback: this._onNotifySMcrContinueWar },
             ];
             this._uiListeners = [
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
@@ -120,6 +121,11 @@ namespace TinyWars.MultiCustomRoom {
             }
             this.setSelectedIndex(0);
         }
+
+        private _onNotifySMcrContinueWar(e: egret.Event): void {
+            Utility.FlowManager.gotoMultiCustomWar((e.data as ProtoTypes.IS_McrContinueWar).war as Types.SerializedWar);
+        }
+
         private _onNotifyLanguageChanged(e: egret.Event): void {
             this._updateComponentsForLanguage();
         }

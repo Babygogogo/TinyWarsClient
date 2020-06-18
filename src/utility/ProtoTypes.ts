@@ -16321,8 +16321,11 @@ export declare interface IS_McrJoinWar {
     /** S_McrJoinWar errorCode */
     errorCode?: (number|null);
 
-    /** S_McrJoinWar isStarted */
-    isStarted?: (boolean|null);
+    /** S_McrJoinWar warId */
+    warId?: (number|null);
+
+    /** S_McrJoinWar isSelfInTurn */
+    isSelfInTurn?: (boolean|null);
 }
 
 /** Represents a S_McrJoinWar. */
@@ -16337,8 +16340,11 @@ export declare class S_McrJoinWar implements IS_McrJoinWar {
     /** S_McrJoinWar errorCode. */
     public errorCode: number;
 
-    /** S_McrJoinWar isStarted. */
-    public isStarted: boolean;
+    /** S_McrJoinWar warId. */
+    public warId: number;
+
+    /** S_McrJoinWar isSelfInTurn. */
+    public isSelfInTurn: boolean;
 
     /**
      * Creates a new S_McrJoinWar instance using the specified properties.

@@ -1,6 +1,7 @@
 
 namespace TinyWars.MultiCustomRoom {
     import Lang         = Utility.Lang;
+    import Types        = Utility.Types;
     import Notify       = Utility.Notify;
     import FloatText    = Utility.FloatText;
     import ProtoTypes   = Utility.ProtoTypes;
@@ -114,9 +115,21 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onNotifySMcrJoinWar(e: egret.Event): void {
-            const data = e.data as ProtoTypes.IS_McrJoinWar;
-            FloatText.show(Lang.getText(data.isStarted ? Lang.Type.A0019 : Lang.Type.A0018));
-            Utility.FlowManager.gotoLobby();
+            const data  = e.data as ProtoTypes.IS_McrJoinWar;
+            const warId = data.warId;
+            FloatText.show(Lang.getText(warId != null ? Lang.Type.A0019 : Lang.Type.A0018));
+            this.close();
+            McrJoinMapListPanel.show();
+
+            if (data.isSelfInTurn) {
+                ConfirmPanel.show({
+                    title   : Lang.getText(Lang.Type.B0088),
+                    content : Lang.getText(Lang.Type.A0116),
+                    callback: () => {
+                        McrProxy.reqContinueWar(warId);
+                    },
+                });
+            }
         }
 
         private _resetTimeoutForBtnConfirm(): void {
