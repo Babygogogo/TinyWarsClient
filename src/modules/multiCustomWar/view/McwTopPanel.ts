@@ -103,7 +103,7 @@ namespace TinyWars.MultiCustomWar {
             if ((planner)                                                               &&
                 (planner.getState() === Types.ActionPlannerState.Idle)                  &&
                 (!war.getIsEnded())                                                     &&
-                (war.getBootRestTime() <= 0)                                            &&
+                (war.getBootRestTime() < 0)                                             &&
                 (war.getPlayerInTurn().getUserId() === User.UserModel.getSelfUserId())
             ) {
                 planner.setStateRequestingPlayerSurrender(true);

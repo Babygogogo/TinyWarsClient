@@ -1,6 +1,7 @@
 
 namespace TinyWars.BaseWar {
-    import Types    = Utility.Types;
+    import Types            = Utility.Types;
+    import ConfigManager    = Utility.ConfigManager;
 
     export abstract class BwPlayerManager {
         private _players        = new Map<number, BwPlayer>();
@@ -50,6 +51,21 @@ namespace TinyWars.BaseWar {
 
         public getPlayerInTurn(): BwPlayer {
             return this.getPlayer(this._war.getTurnManager().getPlayerIndexInTurn());
+        }
+
+        public getListForRestTimeToBoot(): number[] {
+            const list: number[] = [];
+            for (let playerIndex = 0; playerIndex < this.getTotalPlayersCount(true); ++playerIndex) {
+                list.push(this.getPlayer(playerIndex)!.getRestTimeToBoot());
+            }
+            return list;
+        }
+        public setListForRestTimeToBoot(list: number[] | null): void {
+            list = list || [];
+            this.forEachPlayer(true, player => {
+                const time = list[player.getPlayerIndex()];
+                player.setRestTimeToBoot(time == null ? ConfigManager.COMMON_CONSTANTS.WarBootTimerRegularDefaultValue : time);
+            });
         }
 
         public getTeamIndex(playerIndex: number): number {

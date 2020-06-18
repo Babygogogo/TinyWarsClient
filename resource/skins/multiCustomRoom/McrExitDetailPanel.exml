@@ -14,7 +14,7 @@
                     <GameUi:UiLabel id="_labelWarPassword" text="0000" textColor="0xFFFFFF" y="0" size="20" x="120"
                                     width="100" textAlign="center" scaleX="1" scaleY="1" />
                 </e:Group>
-                <e:Group id="_groupHasFog" y="40" x="5">
+                <e:Group id="_groupHasFog" y="5" x="297">
                     <GameUi:UiLabel id="_labelHasFogTitle" text="战争迷雾：" textColor="0xFFFFFF" y="0" size="20"
                                     maxTextWidth="120" textAlign="right" x="0" scaleX="1" scaleY="1" />
                     <GameUi:UiLabel id="_labelHasFog" text="否" textColor="0xFFFFFF" y="0" size="20" x="120" width="100"
@@ -29,11 +29,11 @@
                         </GameUi:skinName>
                     </GameUi:UiButton>
                 </e:Group>
-                <e:Group id="_groupTimeLimit" y="40" x="297">
+                <e:Group id="_groupTimeLimit" y="40" x="5">
                     <GameUi:UiLabel id="_labelTimeLimitTitle" text="回合限时：" textColor="0xFFFFFF" y="0" size="20"
                                     maxTextWidth="120" textAlign="right" x="0" scaleX="1" scaleY="1" />
                     <GameUi:UiLabel id="_labelTimeLimit" text="3天" textColor="0xFFFFFF" y="0" size="20" x="120"
-                                    width="100" textAlign="center" scaleX="1" scaleY="1" />
+                                    textAlign="center" scaleX="1" scaleY="1" />
                     <GameUi:UiButton id="_btnHelpTimeLimit" label="(?)" x="230">
                         <GameUi:skinName>
                             <e:Skin states="up,down,disabled">
@@ -43,6 +43,9 @@
                             </e:Skin>
                         </GameUi:skinName>
                     </GameUi:UiButton>
+                    <e:layout>
+                        <e:HorizontalLayout/>
+                    </e:layout>
                 </e:Group>
                 <e:Group id="_groupInitialFund" y="75" x="5">
                     <GameUi:UiLabel id="_labelInitialFundTitle" text="初始资金：" textColor="0xFFFFFF" y="0" size="20"

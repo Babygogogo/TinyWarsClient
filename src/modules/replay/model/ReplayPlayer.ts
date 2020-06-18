@@ -5,19 +5,20 @@ namespace TinyWars.Replay {
     export class ReplayPlayer extends BaseWar.BwPlayer {
         public serialize(): Types.SerializedPlayer {
             return {
-                fund                    : this.getFund(),
-                hasVotedForDraw         : this.getHasVotedForDraw(),
-                isAlive                 : this.getIsAlive(),
-                playerIndex             : this.getPlayerIndex(),
-                teamIndex               : this.getTeamIndex(),
+                fund                        : this.getFund(),
+                hasVotedForDraw             : this.getHasVotedForDraw(),
+                isAlive                     : this.getIsAlive(),
+                playerIndex                 : this.getPlayerIndex(),
+                teamIndex                   : this.getTeamIndex(),
+                restTimeToBoot              : this.getRestTimeToBoot(),
                 watchRequestSrcUserIdList   : [...this.getWatchRequestSrcUserIds()],
                 watchOngoingSrcUserIdList   : [...this.getWatchOngoingSrcUserIds()],
-                userId                  : this.getUserId(),
-                coId                    : this.getCoId(),
-                coUnitId                : this.getCoUnitId(),
-                coCurrentEnergy         : this.getCoCurrentEnergy(),
-                coUsingSkillType        : this.getCoUsingSkillType(),
-                coIsDestroyedInTurn     : this.getCoIsDestroyedInTurn(),
+                userId                      : this.getUserId(),
+                coId                        : this.getCoId(),
+                coUnitId                    : this.getCoUnitId(),
+                coCurrentEnergy             : this.getCoCurrentEnergy(),
+                coUsingSkillType            : this.getCoUsingSkillType(),
+                coIsDestroyedInTurn         : this.getCoIsDestroyedInTurn(),
             };
         }
 
@@ -31,6 +32,7 @@ namespace TinyWars.Replay {
                 isAlive                     : this.getIsAlive(),
                 playerIndex,
                 teamIndex                   : this.getTeamIndex(),
+                restTimeToBoot              : this.getRestTimeToBoot(),
                 watchRequestSrcUserIdList   : [],
                 watchOngoingSrcUserIdList   : [],
                 userId                      : playerIndex > 0 ? selfUserId : null,

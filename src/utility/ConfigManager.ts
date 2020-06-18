@@ -1858,6 +1858,9 @@ namespace TinyWars.Utility.ConfigManager {
         WarNameMaxLength                : 20,
         WarCommentMaxLength             : 50,
         WarPasswordMaxLength            : 4,
+        WarBootTimerRegularMaxLimit     : 3600 * 24 * 7,
+        WarBootTimerRegularDefaultValue : 3600 * 24 * 3,
+        WarBootTimerIncrementalMaxLimit : 3600 * 24,
 
         WarRuleNameMaxLength                    : 15,
         WarRuleOffenseBonusMinLimit             : -100,

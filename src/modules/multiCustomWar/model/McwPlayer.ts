@@ -15,6 +15,7 @@ namespace TinyWars.MultiCustomWar {
                 isAlive                     : this.getIsAlive(),
                 playerIndex,
                 teamIndex                   : this.getTeamIndex(),
+                restTimeToBoot              : this.getRestTimeToBoot(),
                 watchRequestSrcUserIdList   : [],
                 watchOngoingSrcUserIdList   : [],
                 userId                      : playerIndex > 0 ? selfUserId : null,

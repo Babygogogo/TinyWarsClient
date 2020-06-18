@@ -3102,6 +3102,9 @@ export declare interface ISerializedWarPlayer {
 
     /** SerializedWarPlayer watchRequestSrcUserIdList */
     watchRequestSrcUserIdList?: (number[]|null);
+
+    /** SerializedWarPlayer restTimeToBoot */
+    restTimeToBoot?: (number|null);
 }
 
 /** Represents a SerializedWarPlayer. */
@@ -3151,6 +3154,9 @@ export declare class SerializedWarPlayer implements ISerializedWarPlayer {
 
     /** SerializedWarPlayer watchRequestSrcUserIdList. */
     public watchRequestSrcUserIdList: number[];
+
+    /** SerializedWarPlayer restTimeToBoot. */
+    public restTimeToBoot: number;
 
     /**
      * Creates a new SerializedWarPlayer instance using the specified properties.
@@ -3892,6 +3898,9 @@ export declare interface ISerializedWar {
     /** SerializedWar isSinglePlayerCheating */
     isSinglePlayerCheating?: (boolean|null);
 
+    /** SerializedWar bootTimerParams */
+    bootTimerParams?: (number[]|null);
+
     /** SerializedWar nextActionId */
     nextActionId?: (number|null);
 
@@ -3991,6 +4000,9 @@ export declare class SerializedWar implements ISerializedWar {
 
     /** SerializedWar isSinglePlayerCheating. */
     public isSinglePlayerCheating: boolean;
+
+    /** SerializedWar bootTimerParams. */
+    public bootTimerParams: number[];
 
     /** SerializedWar nextActionId. */
     public nextActionId: number;
@@ -4413,6 +4425,9 @@ export declare class WarActionPlayerBeginTurn implements IWarActionPlayerBeginTu
 
 /** Properties of a WarActionPlayerEndTurn. */
 export declare interface IWarActionPlayerEndTurn {
+
+    /** WarActionPlayerEndTurn listForRestTimeToBoot */
+    listForRestTimeToBoot?: (number[]|null);
 }
 
 /** Represents a WarActionPlayerEndTurn. */
@@ -4423,6 +4438,9 @@ export declare class WarActionPlayerEndTurn implements IWarActionPlayerEndTurn {
      * @param [properties] Properties to set
      */
     constructor(properties?: IWarActionPlayerEndTurn);
+
+    /** WarActionPlayerEndTurn listForRestTimeToBoot. */
+    public listForRestTimeToBoot: number[];
 
     /**
      * Creates a new WarActionPlayerEndTurn instance using the specified properties.
@@ -7548,6 +7566,9 @@ export declare interface IMcrWaitingInfo {
 
     /** McrWaitingInfo luckUpperLimit */
     luckUpperLimit?: (number|null);
+
+    /** McrWaitingInfo bootTimerParams */
+    bootTimerParams?: (number[]|null);
 }
 
 /** Represents a McrWaitingInfo. */
@@ -7621,6 +7642,9 @@ export declare class McrWaitingInfo implements IMcrWaitingInfo {
 
     /** McrWaitingInfo luckUpperLimit. */
     public luckUpperLimit: number;
+
+    /** McrWaitingInfo bootTimerParams. */
+    public bootTimerParams: number[];
 
     /**
      * Creates a new McrWaitingInfo instance using the specified properties.
@@ -7741,6 +7765,9 @@ export declare interface IMcwOngoingDetail {
     /** McwOngoingDetail visionRangeModifier */
     visionRangeModifier?: (number|null);
 
+    /** McwOngoingDetail bootTimerParams */
+    bootTimerParams?: (number[]|null);
+
     /** McwOngoingDetail p1UserId */
     p1UserId?: (number|null);
 
@@ -7752,6 +7779,9 @@ export declare interface IMcwOngoingDetail {
 
     /** McwOngoingDetail p1CoId */
     p1CoId?: (number|null);
+
+    /** McwOngoingDetail p1RestTimeToBoot */
+    p1RestTimeToBoot?: (number|null);
 
     /** McwOngoingDetail p2UserId */
     p2UserId?: (number|null);
@@ -7765,6 +7795,9 @@ export declare interface IMcwOngoingDetail {
     /** McwOngoingDetail p2CoId */
     p2CoId?: (number|null);
 
+    /** McwOngoingDetail p2RestTimeToBoot */
+    p2RestTimeToBoot?: (number|null);
+
     /** McwOngoingDetail p3UserId */
     p3UserId?: (number|null);
 
@@ -7777,6 +7810,9 @@ export declare interface IMcwOngoingDetail {
     /** McwOngoingDetail p3CoId */
     p3CoId?: (number|null);
 
+    /** McwOngoingDetail p3RestTimeToBoot */
+    p3RestTimeToBoot?: (number|null);
+
     /** McwOngoingDetail p4UserId */
     p4UserId?: (number|null);
 
@@ -7788,6 +7824,9 @@ export declare interface IMcwOngoingDetail {
 
     /** McwOngoingDetail p4CoId */
     p4CoId?: (number|null);
+
+    /** McwOngoingDetail p4RestTimeToBoot */
+    p4RestTimeToBoot?: (number|null);
 
     /** McwOngoingDetail playerIndexInTurn */
     playerIndexInTurn?: (number|null);
@@ -7853,6 +7892,9 @@ export declare class McwOngoingDetail implements IMcwOngoingDetail {
     /** McwOngoingDetail visionRangeModifier. */
     public visionRangeModifier: number;
 
+    /** McwOngoingDetail bootTimerParams. */
+    public bootTimerParams: number[];
+
     /** McwOngoingDetail p1UserId. */
     public p1UserId: number;
 
@@ -7864,6 +7906,9 @@ export declare class McwOngoingDetail implements IMcwOngoingDetail {
 
     /** McwOngoingDetail p1CoId. */
     public p1CoId: number;
+
+    /** McwOngoingDetail p1RestTimeToBoot. */
+    public p1RestTimeToBoot: number;
 
     /** McwOngoingDetail p2UserId. */
     public p2UserId: number;
@@ -7877,6 +7922,9 @@ export declare class McwOngoingDetail implements IMcwOngoingDetail {
     /** McwOngoingDetail p2CoId. */
     public p2CoId: number;
 
+    /** McwOngoingDetail p2RestTimeToBoot. */
+    public p2RestTimeToBoot: number;
+
     /** McwOngoingDetail p3UserId. */
     public p3UserId: number;
 
@@ -7889,6 +7937,9 @@ export declare class McwOngoingDetail implements IMcwOngoingDetail {
     /** McwOngoingDetail p3CoId. */
     public p3CoId: number;
 
+    /** McwOngoingDetail p3RestTimeToBoot. */
+    public p3RestTimeToBoot: number;
+
     /** McwOngoingDetail p4UserId. */
     public p4UserId: number;
 
@@ -7900,6 +7951,9 @@ export declare class McwOngoingDetail implements IMcwOngoingDetail {
 
     /** McwOngoingDetail p4CoId. */
     public p4CoId: number;
+
+    /** McwOngoingDetail p4RestTimeToBoot. */
+    public p4RestTimeToBoot: number;
 
     /** McwOngoingDetail playerIndexInTurn. */
     public playerIndexInTurn: number;
@@ -15346,8 +15400,8 @@ export declare interface IC_McrCreateWar {
     /** C_McrCreateWar hasFog */
     hasFog?: (number|null);
 
-    /** C_McrCreateWar timeLimit */
-    timeLimit?: (number|null);
+    /** C_McrCreateWar bootTimerParams */
+    bootTimerParams?: (number[]|null);
 
     /** C_McrCreateWar initialFund */
     initialFund?: (number|null);
@@ -15419,8 +15473,8 @@ export declare class C_McrCreateWar implements IC_McrCreateWar {
     /** C_McrCreateWar hasFog. */
     public hasFog: number;
 
-    /** C_McrCreateWar timeLimit. */
-    public timeLimit: number;
+    /** C_McrCreateWar bootTimerParams. */
+    public bootTimerParams: number[];
 
     /** C_McrCreateWar initialFund. */
     public initialFund: number;

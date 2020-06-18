@@ -112,6 +112,7 @@ namespace TinyWars.Utility.Types {
         isAlive         : boolean;
         playerIndex     : number;
         teamIndex       : number;
+        restTimeToBoot  : number;
         userId?         : number;
         coCurrentEnergy : number;
         coUsingSkillType: CoSkillType;
@@ -666,5 +667,10 @@ namespace TinyWars.Utility.Types {
     export const enum UnitAndTileTextureVersion {
         V1  = 1,
         V2  = 2,
+    }
+
+    export const enum BootTimerType {
+        Regular     = 1,
+        Incremental = 2,
     }
 }

@@ -1,6 +1,7 @@
 
 namespace TinyWars.MapEditor {
-    import Types = Utility.Types;
+    import Types            = Utility.Types;
+    import ConfigManager    = Utility.ConfigManager;
 
     export class MeWar {
         private _slotIndex      : number;
@@ -39,7 +40,7 @@ namespace TinyWars.MapEditor {
                 nextActionId            : 0,
                 remainingVotesForDraw   : null,
                 warRuleIndex            : null,
-                timeLimit               : null,
+                bootTimerParams         : [Types.BootTimerType.Regular, ConfigManager.COMMON_CONSTANTS.WarBootTimerRegularDefaultValue],
                 hasFogByDefault         : false,
                 incomeModifier          : 100,
                 energyGrowthModifier    : 100,
@@ -194,6 +195,7 @@ namespace TinyWars.MapEditor {
                     isAlive                     : true,
                     playerIndex,
                     teamIndex                   : playerIndex,
+                    restTimeToBoot              : 0,
                     watchRequestSrcUserIdList   : [],
                     watchOngoingSrcUserIdList   : [],
                     userId                      : playerIndex > 0 ? selfUserId : null,

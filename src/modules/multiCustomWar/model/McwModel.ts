@@ -339,6 +339,9 @@ namespace TinyWars.MultiCustomWar.McwModel {
         actionPlanner.setStateExecutingAction();
         await war.getTurnManager().endPhaseMain();
 
+        const action = data.WarActionPlayerEndTurn;
+        war.getPlayerManager().setListForRestTimeToBoot(action.listForRestTimeToBoot);
+
         if (war.getPlayerInTurn() === war.getPlayerLoggedIn()) {
             (actionPlanner as McwActionPlanner).setStateRequestingPlayerBeginTurn();
         } else {

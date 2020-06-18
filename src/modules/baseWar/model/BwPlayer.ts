@@ -3,8 +3,9 @@ namespace TinyWars.BaseWar {
     import Types            = Utility.Types;
     import Notify           = Utility.Notify;
     import Lang             = Utility.Lang;
-    import GridIndex        = Types.GridIndex;
+    import ConfigManager    = Utility.ConfigManager;
     import GridIndexHelpers = Utility.GridIndexHelpers;
+    import GridIndex        = Types.GridIndex;
 
     export abstract class BwPlayer {
         private _fund                   : number;
@@ -12,6 +13,7 @@ namespace TinyWars.BaseWar {
         private _isAlive                : boolean;
         private _playerIndex            : number;
         private _teamIndex              : number;
+        private _restTimeToBoot         : number;
         private _watchOngoingSrcUserIds : Set<number>;
         private _watchRequestSrcUserIds : Set<number>;
         private _userId?                : number;
@@ -31,6 +33,7 @@ namespace TinyWars.BaseWar {
             this.setIsAlive(data.isAlive!);
             this._setPlayerIndex(data.playerIndex!);
             this._setTeamIndex(data.teamIndex!);
+            this.setRestTimeToBoot(data.restTimeToBoot != null ? data.restTimeToBoot : ConfigManager.COMMON_CONSTANTS.WarBootTimerRegularDefaultValue);
             this._setWatchOngoingSrcUserIds(data.watchOngoingSrcUserIdList || []);
             this._setWatchRequestSrcUserIds(data.watchRequestSrcUserIdList || []);
             this.setUserId(data.userId);
@@ -92,6 +95,13 @@ namespace TinyWars.BaseWar {
         }
         public getTeamIndex(): number {
             return this._teamIndex;
+        }
+
+        public setRestTimeToBoot(seconds: number): void {
+            this._restTimeToBoot = seconds;
+        }
+        public getRestTimeToBoot(): number {
+            return this._restTimeToBoot;
         }
 
         private _setWatchOngoingSrcUserIds(list: number[]): void {

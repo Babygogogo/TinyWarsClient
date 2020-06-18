@@ -234,7 +234,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _updateLabelTimeLimit(): void {
-            this._labelTimeLimit.text = Helpers.getTimeDurationText(McrModel.getJoinWarRoomInfo().timeLimit);
+            this._labelTimeLimit.text = Lang.getBootTimerDesc(McrModel.getJoinWarRoomInfo().bootTimerParams);
         }
 
         private _updateLabelCoName(): void {

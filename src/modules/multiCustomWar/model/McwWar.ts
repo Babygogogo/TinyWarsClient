@@ -60,7 +60,7 @@ namespace TinyWars.MultiCustomWar {
                 nextActionId            : this.getNextActionId(),
                 remainingVotesForDraw   : this.getRemainingVotesForDraw(),
                 warRuleIndex            : this.getWarRuleIndex(),
-                timeLimit               : this.getSettingsTimeLimit(),
+                bootTimerParams         : this.getSettingsBootTimerParams(),
                 hasFogByDefault         : this.getSettingsHasFog(),
                 incomeModifier          : this.getSettingsIncomeModifier(),
                 energyGrowthModifier    : this.getSettingsEnergyGrowthMultiplier(),

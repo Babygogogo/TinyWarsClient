@@ -2118,6 +2118,22 @@ namespace TinyWars.Utility.Lang {
             `使用新版贴图`,
             `New Texture`,
         ],
+        [Type.B0387]: [
+            `常规`,
+            `Regular`,
+        ],
+        [Type.B0388]: [
+            `增量`,
+            `Incremental`,
+        ],
+        [Type.B0389]: [
+            `初始时间`,
+            `Initial Time`,
+        ],
+        [Type.B0390]: [
+            `增量时间`,
+            `Incremental Time`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -2660,21 +2676,33 @@ namespace TinyWars.Utility.Lang {
             [
                 `本选项影响所有玩家的每回合的时限。`,
                 ``,
-                `如果某个玩家的回合时间超出了本限制，则服务器将自动为该玩家执行投降操作。`,
-                `当战局满员，或某个玩家结束回合后，则服务器自动开始下个玩家回合的倒计时（无论该玩家是否在线）。`,
-                `因此，请仅在已约好对手的情况下才选择“15分”，以免造成不必要的败绩。`,
+                `如果某个玩家的回合时间超出了限制，则服务器将自动为该玩家执行投降操作。`,
+                `当战局正式开始，或某个玩家结束回合后，则服务器自动开始下个玩家回合的倒计时（无论该玩家是否在线）。`,
+                `当前有“常规”和“增量”两种计时模式可选。`,
                 ``,
-                `默认为“3天”。`,
+                `常规计时：每回合的可用时间是固定不变的。`,
+                ``,
+                `增量计时：玩家每回合可用的时间将受到前面回合所消耗的时间的影响。此模式有两个参数，分别为“初始时间”和“增量时间”。`,
+                `第一回合，玩家拥有的时间就是“初始时间”。`,
+                `第二及后续所有回合，玩家拥有的时间=上一个回合的剩余时间+（上回合结束时的剩余部队数*增量时间）。`,
+                ``,
+                `默认为“常规计时-3天”。`,
             ].join("\n"),
 
             [
                 `This option determines the boot timer, aka time available for each turn. `,
                 ``,
-                `If a player hit the boot timer, the player will resign automatically. `,
-                `When the game is full, or a player ends his turn, the timer of the next player will start to countdown, no matter that player is online or not. `,
-                `Therefore, please choose "15min" only when you have made an agreement with your opponent to avoid unnecessary boots. `,
+                `If a player hits the boot timer, the player will resign automatically. `,
+                `When the game starts, or a player ends his turn, the timer of the first (or the next) player will start to countdown, no matter that player is online or not. `,
+                `Currently, there are two timing modes available: regular and incremental.`,
                 ``,
-                `By default this option is selected as "3 days". `,
+                `Regular timing: the available time for each round is fixed.`,
+                ``,
+                `Incremental timing: The time available for each round will be affected by the time consumed in the previous round. This mode has two parameters, namely "Initial Time" and "Incremental Time".`,
+                `For the first round, the time the player has is "Initial Time".`,
+                `For the second round and all subsequent rounds, the time the player has equals the remaining time of the previous round plus (the number of troops remaining in the previous round multiplies the "increment time").`,
+                ``,
+                `By default this option is selected as "regular timer with 3 days per round". `,
             ].join("\n"),
         ],
 
@@ -3033,6 +3061,25 @@ namespace TinyWars.Utility.Lang {
             case Types.ChatChannel.PublicEn : return getText(Type.B0373);
             case Types.ChatChannel.PublicCn : return getText(Type.B0384);
             default                         : return null;
+        }
+    }
+
+    export function getBootTimerTypeName(type: Types.BootTimerType): string {
+        switch (type) {
+            case Types.BootTimerType.Regular    : return getText(Type.B0387);
+            case Types.BootTimerType.Incremental: return getText(Type.B0388);
+            default                             : return null;
+        }
+    }
+    export function getBootTimerDesc(params: number[]): string {
+        params          = params || [];
+        const timerType = params[0] as Types.BootTimerType;
+        if (timerType === Types.BootTimerType.Regular) {
+            return `${getText(Type.B0387)} ${Helpers.getTimeDurationText2(params[1])}`;
+        } else if (timerType === Types.BootTimerType.Incremental) {
+            return `${getText(Type.B0388)} ${Helpers.getTimeDurationText2(params[1])} + ${Helpers.getTimeDurationText2(params[2])}`;
+        } else {
+            return null;
         }
     }
 }

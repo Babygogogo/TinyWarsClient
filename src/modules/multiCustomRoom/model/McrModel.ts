@@ -1,8 +1,11 @@
 
 namespace TinyWars.MultiCustomRoom {
-    import Types        = Utility.Types;
-    import ProtoTypes   = Utility.ProtoTypes;
-    import WarMapModel  = WarMap.WarMapModel;
+    import Types            = Utility.Types;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import ConfigManager    = Utility.ConfigManager;
+    import WarMapModel      = WarMap.WarMapModel;
+    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import BootTimerType    = Types.BootTimerType;
 
     export const MAX_INITIAL_FUND     = 1000000;
     export const MIN_INITIAL_FUND     = 0;
@@ -20,15 +23,13 @@ namespace TinyWars.MultiCustomRoom {
     export const MIN_ENERGY_MODIFIER     = 0;
     export const DEFAULT_ENERGY_MODIFIER = 0;
 
-    const TIME_LIMITS = [
-        60 * 5,             // 5 min
-        60 * 15,            // 15 min
+    const REGULAR_TIME_LIMITS = [
         60 * 60 * 24 * 1,   // 1 day
         60 * 60 * 24 * 2,   // 2 days
         60 * 60 * 24 * 3,   // 3 days
         60 * 60 * 24 * 7,   // 7 days
     ];
-    const DEFAULT_TIME_LIMIT = TIME_LIMITS[4];
+    const DEFAULT_TIME_LIMIT = REGULAR_TIME_LIMITS[2];
 
     const MOVE_RANGE_MODIFIERS        = [-2, -1, 0, 1, 2];
     const DEFAULT_MOVE_RANGE_MODIFIER = 0;
@@ -56,7 +57,7 @@ namespace TinyWars.MultiCustomRoom {
             coId            : null,
 
             hasFog              : 0,
-            timeLimit           : 0,
+            bootTimerParams     : [BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue],
             initialFund         : 0,
             incomeModifier      : 0,
             initialEnergy       : 0,
@@ -65,8 +66,8 @@ namespace TinyWars.MultiCustomRoom {
             attackPowerModifier : 0,
             visionRangeModifier : 0,
             bannedCoIdList      : [],
-            luckLowerLimit      : Utility.ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultLowerLimit,
-            luckUpperLimit      : Utility.ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultUpperLimit,
+            luckLowerLimit      : CommonConstants.WarRuleLuckDefaultLowerLimit,
+            luckUpperLimit      : CommonConstants.WarRuleLuckDefaultUpperLimit,
         };
 
         const _dataForJoinWar: DataForJoinWar = {
@@ -122,7 +123,7 @@ namespace TinyWars.MultiCustomRoom {
             const warRuleIndex      = getCreateWarWarRuleIndex();
             const dataForCreateWar  = getCreateWarData();
             if (warRuleIndex == null) {
-                setCreateWarTimeLimit(DEFAULT_TIME_LIMIT);
+                setCreateWarBootTimerParams([BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue]);
                 setCreateWarPlayerIndex(1);
                 setCreateWarTeamIndex(1);
                 setCreateWarCoId(getRandomCoId(dataForCreateWar.configVersion, dataForCreateWar.bannedCoIdList));
@@ -132,8 +133,8 @@ namespace TinyWars.MultiCustomRoom {
                 setCreateWarIncomeMultiplier(100);
                 setCreateWarInitialEnergy(0);
                 setCreateWarEnergyGrowthMultiplier(100);
-                setCreateWarLuckLowerLimit(Utility.ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultLowerLimit);
-                setCreateWarLuckUpperLimit(Utility.ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultUpperLimit);
+                setCreateWarLuckLowerLimit(CommonConstants.WarRuleLuckDefaultLowerLimit);
+                setCreateWarLuckUpperLimit(CommonConstants.WarRuleLuckDefaultUpperLimit);
                 setCreateWarMoveRangeModifier(DEFAULT_MOVE_RANGE_MODIFIER);
                 setCreateWarAttackPowerModifier(DEFAULT_ATTACK_MODIFIER);
                 setCreateWarVisionRangeModifier(DEFAULT_VISION_MODIFIER);
@@ -141,7 +142,7 @@ namespace TinyWars.MultiCustomRoom {
                 const mapFileName   = getCreateWarMapFileName();
                 const playerIndex   = 1;
                 const warRule       = (await WarMapModel.getMapRawData(mapFileName)).warRuleList[warRuleIndex];
-                setCreateWarTimeLimit(DEFAULT_TIME_LIMIT);
+                setCreateWarBootTimerParams([BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue]);
                 setCreateWarPlayerIndex(playerIndex);
                 setCreateWarTeamIndex((await WarMapModel.getPlayerRule(mapFileName, warRuleIndex, playerIndex)).teamIndex);
                 setCreateWarCoId(getRandomCoId(dataForCreateWar.configVersion, dataForCreateWar.bannedCoIdList));
@@ -241,31 +242,39 @@ namespace TinyWars.MultiCustomRoom {
             return !!_dataForCreateWar.hasFog;
         }
 
-        export function setCreateWarTimeLimit(limit: number): void {
-            _dataForCreateWar.timeLimit = limit;
+        export function setCreateWarBootTimerParams(params: number[]): void {
+            _dataForCreateWar.bootTimerParams = params;
         }
-        export function setCreateWarPrevTimeLimit(): void {
-            const currLimit = getCreateWarTimeLimit();
-            const index     = TIME_LIMITS.indexOf(currLimit);
-            if (index < 0) {
-                setCreateWarTimeLimit(DEFAULT_TIME_LIMIT);
+        export function getCreateWarBootTimerParams(): number[] {
+            return _dataForCreateWar.bootTimerParams;
+        }
+        export function setCreateWarNextBootTimerType(): void {
+            const params = getCreateWarBootTimerParams();
+            if ((params) && (params[0] === BootTimerType.Regular)) {
+                setCreateWarBootTimerParams([BootTimerType.Incremental, 60 * 15, 15]);
             } else {
-                const newIndex = index - 1;
-                setCreateWarTimeLimit(newIndex >= 0 ? TIME_LIMITS[newIndex] : TIME_LIMITS[TIME_LIMITS.length - 1]);
+                setCreateWarBootTimerParams([BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue]);
             }
         }
-        export function setCreateWarNextTimeLimit(): void {
-            const currLimit = getCreateWarTimeLimit();
-            const index     = TIME_LIMITS.indexOf(currLimit);
-            if (index < 0) {
-                setCreateWarTimeLimit(DEFAULT_TIME_LIMIT);
+        export function setCreateWarNextTimerRegularTime(): void {
+            const params = getCreateWarBootTimerParams();
+            if (params[0] !== BootTimerType.Regular) {
+                setCreateWarNextBootTimerType();
             } else {
-                const newIndex = index + 1;
-                setCreateWarTimeLimit(newIndex < TIME_LIMITS.length ? TIME_LIMITS[newIndex] : TIME_LIMITS[0]);
+                const index = REGULAR_TIME_LIMITS.indexOf(params[1]);
+                if (index < 0) {
+                    setCreateWarNextBootTimerType();
+                } else {
+                    const newIndex  = index + 1;
+                    params[1]       = newIndex < REGULAR_TIME_LIMITS.length ? REGULAR_TIME_LIMITS[newIndex] : REGULAR_TIME_LIMITS[0];
+                }
             }
         }
-        export function getCreateWarTimeLimit(): number {
-            return _dataForCreateWar.timeLimit;
+        export function setCreateWarTimerIncrementalInitialTime(seconds: number): void {
+            _dataForCreateWar.bootTimerParams[1] = seconds;
+        }
+        export function setCreateWarTimerIncrementalIncrementalValue(seconds: number): void {
+            _dataForCreateWar.bootTimerParams[2] = seconds;
         }
 
         export function setCreateWarInitialFund(fund: number): void {

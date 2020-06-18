@@ -199,6 +199,9 @@ namespace TinyWars.Replay.ReplayModel {
         FloatText.show(`${Lang.getText(Lang.Type.B0036)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
 
         await war.getTurnManager().endPhaseMain();
+        const action = data.WarActionPlayerEndTurn;
+        war.getPlayerManager().setListForRestTimeToBoot(action.listForRestTimeToBoot);
+
         actionPlanner.setStateIdle();
     }
 
@@ -1168,6 +1171,8 @@ namespace TinyWars.Replay.ReplayModel {
 
     async function _fastExecuteMcwPlayerEndTurn(war: ReplayWar, data: WarActionContainer): Promise<void> {
         war.getTurnManager().endPhaseMain();
+        const action = data.WarActionPlayerEndTurn;
+        war.getPlayerManager().setListForRestTimeToBoot(action.listForRestTimeToBoot);
     }
 
     async function _fastExecuteMcwPlayerProduceUnit(war: ReplayWar, data: WarActionContainer): Promise<void> {

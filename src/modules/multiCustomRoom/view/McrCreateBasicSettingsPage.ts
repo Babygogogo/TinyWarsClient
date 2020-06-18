@@ -39,9 +39,15 @@ namespace TinyWars.MultiCustomRoom {
         private _imgHasFog          : GameUi.UiImage;
         private _btnHelpHasFog      : GameUi.UiButton;
 
-        private _btnModifyTimeLimit : GameUi.UiButton;
-        private _labelTimeLimit     : GameUi.UiLabel;
-        private _btnHelpTimeLimit   : GameUi.UiButton;
+        private _groupTimer                 : eui.Group;
+        private _btnModifyTimerType         : GameUi.UiButton;
+        private _labelTimerType             : GameUi.UiLabel;
+        private _btnHelpTimer               : GameUi.UiButton;
+        private _groupTimerRegular          : eui.Group;
+        private _btnModifyTimerRegular      : GameUi.UiButton;
+        private _groupTimerIncremental      : eui.Group;
+        private _btnModifyTimerIncremental1 : GameUi.UiButton;
+        private _btnModifyTimerIncremental2 : GameUi.UiButton;
 
         private _labelCoName        : GameUi.UiLabel;
         private _btnChangeCo        : GameUi.UiButton;
@@ -56,20 +62,23 @@ namespace TinyWars.MultiCustomRoom {
 
         protected _onFirstOpened(): void {
             this._uiListeners = [
-                { ui: this._btnModifyWarName,       callback: this._onTouchedBtnModifyWarName, },
-                { ui: this._btnModifyWarPassword,   callback: this._onTouchedBtnModifyWarPassword, },
-                { ui: this._btnModifyWarComment,    callback: this._onTouchedBtnModifyWarComment, },
-                { ui: this._btnModifyWarRule,       callback: this._onTouchedBtnModifyWarRule },
-                { ui: this._btnModifyPlayerIndex,   callback: this._onTouchedBtnModifyPlayerIndex, },
-                { ui: this._btnHelpPlayerIndex,     callback: this._onTouchedBtnHelpPlayerIndex, },
-                { ui: this._btnModifyTeam,          callback: this._onTouchedBtnModifyTeam, },
-                { ui: this._btnHelpTeam,            callback: this._onTouchedBtnHelpTeam, },
-                { ui: this._btnModifyHasFog,        callback: this._onTouchedBtnModifyHasFog, },
-                { ui: this._btnHelpHasFog,          callback: this._onTouchedBtnHelpHasFog, },
-                { ui: this._btnModifyTimeLimit,     callback: this._onTouchedBtnModifyTimeLimit, },
-                { ui: this._btnHelpTimeLimit,       callback: this._onTouchedBtnHelpTimeLimit, },
-                { ui: this._btnChangeCo,            callback: this._onTouchedBtnChangeCo, },
-                { ui: this._btnBuildings,           callback: this._onTouchedBtnBuildings },
+                { ui: this._btnModifyWarName,           callback: this._onTouchedBtnModifyWarName, },
+                { ui: this._btnModifyWarPassword,       callback: this._onTouchedBtnModifyWarPassword, },
+                { ui: this._btnModifyWarComment,        callback: this._onTouchedBtnModifyWarComment, },
+                { ui: this._btnModifyWarRule,           callback: this._onTouchedBtnModifyWarRule },
+                { ui: this._btnModifyPlayerIndex,       callback: this._onTouchedBtnModifyPlayerIndex, },
+                { ui: this._btnHelpPlayerIndex,         callback: this._onTouchedBtnHelpPlayerIndex, },
+                { ui: this._btnModifyTeam,              callback: this._onTouchedBtnModifyTeam, },
+                { ui: this._btnHelpTeam,                callback: this._onTouchedBtnHelpTeam, },
+                { ui: this._btnModifyHasFog,            callback: this._onTouchedBtnModifyHasFog, },
+                { ui: this._btnHelpHasFog,              callback: this._onTouchedBtnHelpHasFog, },
+                { ui: this._btnModifyTimerType,         callback: this._onTouchedBtnModifyTimerType, },
+                { ui: this._btnHelpTimer,               callback: this._onTouchedBtnHelpTimer, },
+                { ui: this._btnModifyTimerRegular,      callback: this._onTouchedBtnModifyTimerRegular, },
+                { ui: this._btnModifyTimerIncremental1, callback: this._onTouchedBtnModifyTimerIncremental1 },
+                { ui: this._btnModifyTimerIncremental2, callback: this._onTouchedBtnModifyTimerIncremental2 },
+                { ui: this._btnChangeCo,                callback: this._onTouchedBtnChangeCo, },
+                { ui: this._btnBuildings,               callback: this._onTouchedBtnBuildings },
             ];
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
@@ -202,15 +211,64 @@ namespace TinyWars.MultiCustomRoom {
             });
         }
 
-        private _onTouchedBtnModifyTimeLimit(e: egret.TouchEvent): void {
-            McrModel.setCreateWarNextTimeLimit();
-            this._updateLabelTimeLimit();
+        private _onTouchedBtnModifyTimerType(e: egret.TouchEvent): void {
+            McrModel.setCreateWarNextBootTimerType();
+            this._updateGroupTimer();
         }
 
-        private _onTouchedBtnHelpTimeLimit(e: egret.TouchEvent): void {
+        private _onTouchedBtnHelpTimer(e: egret.TouchEvent): void {
             HelpPanel.show({
                 title  : Lang.getText(Lang.Type.B0021),
                 content: Lang.getRichText(Lang.RichType.R0003),
+            });
+        }
+
+        private _onTouchedBtnModifyTimerRegular(e: egret.TouchEvent): void {
+            McrModel.setCreateWarNextTimerRegularTime();
+            this._updateGroupTimer();
+        }
+
+        private _onTouchedBtnModifyTimerIncremental1(e: egret.TouchEvent): void {
+            const minValue = 1;
+            const maxValue = CommonConstants.WarBootTimerIncrementalMaxLimit;
+            Common.InputPanel.show({
+                title           : Lang.getText(Lang.Type.B0389),
+                currentValue    : "" + McrModel.getCreateWarBootTimerParams()[1],
+                maxChars        : 5,
+                charRestrict    : "0-9",
+                tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}] (${Lang.getText(Lang.Type.B0017)})`,
+                callback        : panel => {
+                    const text  = panel.getInputText();
+                    const value = text ? Number(text) : NaN;
+                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                        FloatText.show(Lang.getText(Lang.Type.A0098));
+                    } else {
+                        McrModel.setCreateWarTimerIncrementalInitialTime(value);
+                        this._updateGroupTimer();
+                    }
+                },
+            });
+        }
+
+        private _onTouchedBtnModifyTimerIncremental2(e: egret.TouchEvent): void {
+            const minValue = 0;
+            const maxValue = CommonConstants.WarBootTimerIncrementalMaxLimit;
+            Common.InputPanel.show({
+                title           : Lang.getText(Lang.Type.B0390),
+                currentValue    : "" + McrModel.getCreateWarBootTimerParams()[2],
+                maxChars        : 5,
+                charRestrict    : "0-9",
+                tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}] (${Lang.getText(Lang.Type.B0017)})`,
+                callback        : panel => {
+                    const text  = panel.getInputText();
+                    const value = text ? Number(text) : NaN;
+                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                        FloatText.show(Lang.getText(Lang.Type.A0098));
+                    } else {
+                        McrModel.setCreateWarTimerIncrementalIncrementalValue(value);
+                        this._updateGroupTimer();
+                    }
+                },
             });
         }
 
@@ -236,7 +294,7 @@ namespace TinyWars.MultiCustomRoom {
             this._btnModifyHasFog.label         = Lang.getText(Lang.Type.B0020);
             this._btnModifyPlayerIndex.label    = Lang.getText(Lang.Type.B0018);
             this._btnModifyTeam.label           = Lang.getText(Lang.Type.B0019);
-            this._btnModifyTimeLimit.label      = Lang.getText(Lang.Type.B0188);
+            this._btnModifyTimerType.label      = Lang.getText(Lang.Type.B0188);
             this._btnModifyWarRule.label        = Lang.getText(Lang.Type.B0318);
             this._btnModifyWarName.label        = Lang.getText(Lang.Type.B0185);
             this._btnBuildings.label            = Lang.getText(Lang.Type.B0333);
@@ -247,7 +305,7 @@ namespace TinyWars.MultiCustomRoom {
             this._updateLabelPlayerIndex();
             this._updateLabelTeam();
             this._updateImgHasFog();
-            this._updateLabelTimeLimit();
+            this._updateGroupTimer();
             this._updateLabelCoName();
         }
 
@@ -295,8 +353,26 @@ namespace TinyWars.MultiCustomRoom {
             this._imgHasFog.visible = McrModel.getCreateWarHasFog();
         }
 
-        private _updateLabelTimeLimit(): void {
-            this._labelTimeLimit.text = Helpers.getTimeDurationText(McrModel.getCreateWarTimeLimit());
+        private _updateGroupTimer(): void {
+            const params                = McrModel.getCreateWarBootTimerParams();
+            const timerType             : Types.BootTimerType = params[0];
+            this._labelTimerType.text   = Lang.getBootTimerTypeName(timerType);
+
+            const groupTimer        = this._groupTimer;
+            const groupRegular      = this._groupTimerRegular;
+            const groupIncremental  = this._groupTimerIncremental;
+            (groupRegular.parent) && (groupRegular.parent.removeChild(groupRegular));
+            (groupIncremental.parent) && (groupIncremental.parent.removeChild(groupIncremental));
+
+            if (timerType === Types.BootTimerType.Regular) {
+                groupTimer.addChild(groupRegular);
+                this._btnModifyTimerRegular.label = Helpers.getTimeDurationText(params[1]);
+
+            } else if (timerType === Types.BootTimerType.Incremental) {
+                groupTimer.addChild(groupIncremental);
+                this._btnModifyTimerIncremental1.label  = Helpers.getTimeDurationText2(params[1]);
+                this._btnModifyTimerIncremental2.label  = Helpers.getTimeDurationText2(params[2]);
+            }
         }
 
         private _updateLabelCoName(): void {

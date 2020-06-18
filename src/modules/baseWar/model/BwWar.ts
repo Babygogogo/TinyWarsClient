@@ -3,6 +3,7 @@ namespace TinyWars.BaseWar {
     import Types            = Utility.Types;
     import Logger           = Utility.Logger;
     import Notify           = Utility.Notify;
+    import ConfigManager    = Utility.ConfigManager;
     import SerializedBwWar  = Types.SerializedWar;
 
     export abstract class BwWar {
@@ -13,7 +14,7 @@ namespace TinyWars.BaseWar {
         private _configVersion          : string;
         private _mapFileName            : string;
         private _warRuleIndex           : number | null | undefined;
-        private _timeLimit              : number;
+        private _bootTimerParams        : number[];
         private _hasFogByDefault        : boolean;
         private _incomeModifier         : number;
         private _energyGrowthModifier   : number;
@@ -51,7 +52,7 @@ namespace TinyWars.BaseWar {
             this.setMapFileName(data.mapFileName);
             this._setRandomNumberGenerator(new Math.seedrandom("", { state: data.seedRandomState || true }));
             this._setWarRuleIndex(data.warRuleIndex);
-            this._setSettingsTimeLimit(data.timeLimit);
+            this._setSettingsBootTimerParams(data.bootTimerParams || [Types.BootTimerType.Regular, ConfigManager.COMMON_CONSTANTS.WarBootTimerRegularDefaultValue]);
             this._setSettingsHasFog(data.hasFogByDefault);
             this.setSettingsIncomeModifier(data.incomeModifier);
             this.setSettingsEnergyGrowthMultiplier(data.energyGrowthModifier);
@@ -166,18 +167,18 @@ namespace TinyWars.BaseWar {
             return this._randomNumberGenerator;
         }
 
-        private _setSettingsTimeLimit(timeLimit: number): void {
-            this._timeLimit = timeLimit;
+        private _setSettingsBootTimerParams(params: number[]): void {
+            this._bootTimerParams = params;
         }
-        public getSettingsTimeLimit(): number {
-            return this._timeLimit;
+        public getSettingsBootTimerParams(): number[] {
+            return this._bootTimerParams;
         }
         public getBootRestTime(): number | null {
             const player = this.getPlayerInTurn();
             if (player.getPlayerIndex() === 0) {
                 return null;
             } else {
-                return (this.getEnterTurnTime() + this.getSettingsTimeLimit() - Time.TimeModel.getServerTimestamp()) || null;
+                return (this.getEnterTurnTime() + player.getRestTimeToBoot() - Time.TimeModel.getServerTimestamp()) || null;
             }
         }
 

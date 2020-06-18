@@ -160,37 +160,42 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _createDataForListPlayer(warInfo: ProtoTypes.IMcwOngoingDetail, mapExtraData: ProtoTypes.IMapExtraData): DataForPlayerRenderer[] {
-            const data: DataForPlayerRenderer[] = [
+            const enterTurnTime = warInfo.enterTurnTime;
+            const playerIndex   = warInfo.playerIndexInTurn;
+            const data          : DataForPlayerRenderer[] = [
                 {
-                    playerIndex : 1,
-                    userId      : warInfo.p1UserId,
-                    teamIndex   : warInfo.p1TeamIndex,
-                    isAlive     : warInfo.p1IsAlive,
+                    playerIndex     : 1,
+                    userId          : warInfo.p1UserId,
+                    teamIndex       : warInfo.p1TeamIndex,
+                    isAlive         : warInfo.p1IsAlive,
+                    defeatTimestamp : 1 === playerIndex ? enterTurnTime + warInfo.p1RestTimeToBoot : null,
                 },
                 {
-                    playerIndex : 2,
-                    userId      : warInfo.p2UserId,
-                    teamIndex   : warInfo.p2TeamIndex,
-                    isAlive     : warInfo.p2IsAlive,
+                    playerIndex     : 2,
+                    userId          : warInfo.p2UserId,
+                    teamIndex       : warInfo.p2TeamIndex,
+                    isAlive         : warInfo.p2IsAlive,
+                    defeatTimestamp : 2 === playerIndex ? enterTurnTime + warInfo.p2RestTimeToBoot : null,
                 },
             ];
             if (mapExtraData.playersCount >= 3) {
                 data.push({
-                    playerIndex : 3,
-                    userId      : warInfo.p3UserId,
-                    teamIndex   : warInfo.p3TeamIndex,
-                    isAlive     : warInfo.p3IsAlive,
+                    playerIndex     : 3,
+                    userId          : warInfo.p3UserId,
+                    teamIndex       : warInfo.p3TeamIndex,
+                    isAlive         : warInfo.p3IsAlive,
+                    defeatTimestamp : 3 === playerIndex ? enterTurnTime + warInfo.p3RestTimeToBoot : null,
                 });
             }
             if (mapExtraData.playersCount >= 4) {
                 data.push({
-                    playerIndex : 4,
-                    userId      : warInfo.p4UserId,
-                    teamIndex   : warInfo.p4TeamIndex,
-                    isAlive     : warInfo.p4IsAlive,
+                    playerIndex     : 4,
+                    userId          : warInfo.p4UserId,
+                    teamIndex       : warInfo.p4TeamIndex,
+                    isAlive         : warInfo.p4IsAlive,
+                    defeatTimestamp : 4 === playerIndex ? enterTurnTime + warInfo.p4RestTimeToBoot : null,
                 });
             }
-            data[warInfo.playerIndexInTurn - 1].defeatTimestamp = warInfo.enterTurnTime + warInfo.timeLimit;
 
             return data;
         }

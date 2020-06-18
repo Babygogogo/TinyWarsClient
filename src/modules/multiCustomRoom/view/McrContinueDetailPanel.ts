@@ -155,7 +155,7 @@ namespace TinyWars.MultiCustomRoom {
             const info = this._openData;
             this._labelWarPassword.text             = info.warPassword ? info.warPassword : "----";
             this._labelHasFog.text                  = Lang.getText(info.hasFog ? Lang.Type.B0012 : Lang.Type.B0013);
-            this._labelTimeLimit.text               = Helpers.getTimeDurationText(info.timeLimit);
+            this._labelTimeLimit.text               = Lang.getBootTimerDesc(info.bootTimerParams);
             this._labelInitialFund.text             = `${info.initialFund}`;
             this._labelIncomeModifier.text          = `${info.incomeModifier}%`;
             this._labelInitialEnergy.text           = `${info.initialEnergy}%`;
@@ -173,46 +173,51 @@ namespace TinyWars.MultiCustomRoom {
                 return [];
             } else {
                 const configVersion = warInfo.configVersion;
+                const enterTurnTime = warInfo.enterTurnTime;
+                const playerIndex   = warInfo.playerIndexInTurn;
                 const dataList      : DataForPlayerRenderer[] = [
                     {
                         configVersion,
-                        playerIndex : 1,
-                        userId      : warInfo.p1UserId,
-                        teamIndex   : warInfo.p1TeamIndex,
-                        isAlive     : warInfo.p1IsAlive,
-                        coId        : warInfo.p1CoId,
+                        playerIndex     : 1,
+                        userId          : warInfo.p1UserId,
+                        teamIndex       : warInfo.p1TeamIndex,
+                        isAlive         : warInfo.p1IsAlive,
+                        coId            : warInfo.p1CoId,
+                        defeatTimestamp : 1 === playerIndex ? enterTurnTime + warInfo.p1RestTimeToBoot : null,
                     },
                     {
                         configVersion,
-                        playerIndex : 2,
-                        userId      : warInfo.p2UserId,
-                        teamIndex   : warInfo.p2TeamIndex,
-                        isAlive     : warInfo.p2IsAlive,
-                        coId        : warInfo.p2CoId,
+                        playerIndex     : 2,
+                        userId          : warInfo.p2UserId,
+                        teamIndex       : warInfo.p2TeamIndex,
+                        isAlive         : warInfo.p2IsAlive,
+                        coId            : warInfo.p2CoId,
+                        defeatTimestamp : 2 === playerIndex ? enterTurnTime + warInfo.p2RestTimeToBoot : null,
                     },
                 ];
 
                 if (mapInfo.playersCount >= 3) {
                     dataList.push({
                         configVersion,
-                        playerIndex : 3,
-                        userId      : warInfo.p3UserId,
-                        teamIndex   : warInfo.p3TeamIndex,
-                        isAlive     : warInfo.p3IsAlive,
-                        coId        : warInfo.p3CoId,
+                        playerIndex     : 3,
+                        userId          : warInfo.p3UserId,
+                        teamIndex       : warInfo.p3TeamIndex,
+                        isAlive         : warInfo.p3IsAlive,
+                        coId            : warInfo.p3CoId,
+                        defeatTimestamp : 3 === playerIndex ? enterTurnTime + warInfo.p3RestTimeToBoot : null,
                     });
                 }
                 if (mapInfo.playersCount >= 4) {
                     dataList.push({
                         configVersion,
-                        playerIndex : 4,
-                        userId      : warInfo.p4UserId,
-                        teamIndex   : warInfo.p4TeamIndex,
-                        isAlive     : warInfo.p4IsAlive,
-                        coId        : warInfo.p4CoId,
+                        playerIndex     : 4,
+                        userId          : warInfo.p4UserId,
+                        teamIndex       : warInfo.p4TeamIndex,
+                        isAlive         : warInfo.p4IsAlive,
+                        coId            : warInfo.p4CoId,
+                        defeatTimestamp : 4 === playerIndex ? enterTurnTime + warInfo.p4RestTimeToBoot : null,
                     });
                 }
-                dataList[warInfo.playerIndexInTurn - 1].defeatTimestamp = warInfo.enterTurnTime + warInfo.timeLimit;
 
                 return dataList;
             }
