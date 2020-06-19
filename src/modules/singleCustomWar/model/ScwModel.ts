@@ -13,7 +13,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
     import Notify               = Utility.Notify;
     import WarActionContainer   = ProtoTypes.IWarActionContainer;
     import BwHelpers            = BaseWar.BwHelpers;
-    import AlertPanel           = Common.CommonAlertPanel;
+    import CommonAlertPanel     = Common.CommonAlertPanel;
     import GridIndex            = Types.GridIndex;
     import SerializedBwTile     = Types.SerializedTile;
     import SerializedBwUnit     = Types.SerializedUnit;
@@ -117,7 +117,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
                 if (!war.checkHasAliveWatcherTeam(User.UserModel.getSelfUserId())) {
                     if (war.getHumanPlayers().length > 0) {
                         war.setIsEnded(true);
-                        AlertPanel.show({
+                        CommonAlertPanel.show({
                             title   : Lang.getText(Lang.Type.B0035),
                             content : Lang.getText(Lang.Type.A0023),
                             callback: () => Utility.FlowManager.gotoLobby(),
@@ -125,7 +125,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
                     } else {
                         if (war.getPlayerManager().getAliveTeamsCount(false) <= 1) {
                             war.setIsEnded(true);
-                            AlertPanel.show({
+                            CommonAlertPanel.show({
                                 title   : Lang.getText(Lang.Type.B0034),
                                 content : Lang.getText(Lang.Type.A0022),
                                 callback: () => Utility.FlowManager.gotoLobby(),
@@ -143,7 +143,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
                 } else {
                     if (war.getRemainingVotesForDraw() === 0) {
                         war.setIsEnded(true);
-                        AlertPanel.show({
+                        CommonAlertPanel.show({
                             title   : Lang.getText(Lang.Type.B0082),
                             content : Lang.getText(Lang.Type.A0030),
                             callback: () => Utility.FlowManager.gotoLobby(),
@@ -152,7 +152,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
                     } else {
                         if (war.getPlayerManager().getAliveTeamsCount(false) <= 1) {
                             war.setIsEnded(true);
-                            AlertPanel.show({
+                            CommonAlertPanel.show({
                                 title   : Lang.getText(Lang.Type.B0034),
                                 content : Lang.getText(Lang.Type.A0022),
                                 callback: () => Utility.FlowManager.gotoLobby(),

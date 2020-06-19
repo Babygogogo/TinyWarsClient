@@ -13,7 +13,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
     import Notify               = Utility.Notify;
     import WarActionContainer   = ProtoTypes.IWarActionContainer;
     import BwHelpers            = BaseWar.BwHelpers;
-    import AlertPanel           = Common.CommonAlertPanel;
+    import CommonAlertPanel     = Common.CommonAlertPanel;
     import GridIndex            = Types.GridIndex;
     import SerializedMcwTile    = Types.SerializedTile;
     import SerializedMcwUnit    = Types.SerializedUnit;
@@ -98,7 +98,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
             const status = data.status as Types.SyncWarStatus;
             if (status === Types.SyncWarStatus.Defeated) {
                 war.setIsEnded(true);
-                AlertPanel.show({
+                CommonAlertPanel.show({
                     title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getText(Lang.Type.A0023),
                     callback: () => Utility.FlowManager.gotoLobby(),
@@ -106,7 +106,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
 
             } else if (status === Types.SyncWarStatus.EndedOrNotExists) {
                 war.setIsEnded(true);
-                AlertPanel.show({
+                CommonAlertPanel.show({
                     title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getText(Lang.Type.A0035),
                     callback: () => Utility.FlowManager.gotoLobby(),
@@ -145,7 +145,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
             } else if (status === Types.SyncWarStatus.NotJoined) {
                 // Something wrong!!
                 war.setIsEnded(true);
-                AlertPanel.show({
+                CommonAlertPanel.show({
                     title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getText(Lang.Type.A0037),
                     callback: () => Utility.FlowManager.gotoLobby(),
@@ -162,7 +162,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
             } else {
                 // Something wrong!!
                 war.setIsEnded(true);
-                AlertPanel.show({
+                CommonAlertPanel.show({
                     title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getText(Lang.Type.A0037),
                     callback: () => Utility.FlowManager.gotoLobby(),
@@ -262,7 +262,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
             if (war.getIsRunning()) {
                 if (!war.checkHasAliveWatcherTeam(User.UserModel.getSelfUserId())) {
                     war.setIsEnded(true);
-                    AlertPanel.show({
+                    CommonAlertPanel.show({
                         title   : Lang.getText(Lang.Type.B0035),
                         content : Lang.getText(Lang.Type.A0023),
                         callback: () => Utility.FlowManager.gotoLobby(),
@@ -271,7 +271,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
                 } else {
                     if (war.getRemainingVotesForDraw() === 0) {
                         war.setIsEnded(true);
-                        AlertPanel.show({
+                        CommonAlertPanel.show({
                             title   : Lang.getText(Lang.Type.B0082),
                             content : Lang.getText(Lang.Type.A0030),
                             callback: () => Utility.FlowManager.gotoLobby(),
@@ -280,7 +280,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
                     } else {
                         if (war.getPlayerManager().getAliveTeamsCount(false) <= 1) {
                             war.setIsEnded(true);
-                            AlertPanel.show({
+                            CommonAlertPanel.show({
                                 title   : Lang.getText(Lang.Type.B0034),
                                 content : Lang.getText(Lang.Type.A0022),
                                 callback: () => Utility.FlowManager.gotoLobby(),
