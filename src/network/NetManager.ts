@@ -31,8 +31,12 @@ namespace TinyWars.Network {
             public dispatchWithContainer(container: ProtoTypes.IMessageContainer): void {
                 const name      = Helpers.getMessageName(container);
                 const action    = container[name];
-                if (action.errorCode) {
-                    FloatText.show(Utility.Lang.getNetErrorText(action.errorCode));
+                if (container.S_McwCommonHandleBoot) {
+                    // Don't show the error text.
+                } else {
+                    if (action.errorCode) {
+                        FloatText.show(Utility.Lang.getNetErrorText(action.errorCode));
+                    }
                 }
                 this.dispatchEventWith(name, false, action);
             }
