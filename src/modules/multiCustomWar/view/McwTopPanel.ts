@@ -98,15 +98,12 @@ namespace TinyWars.MultiCustomWar {
         private _onNotifyTimeTick(e: egret.Event): void {
             this._updateGroupTimer();
 
-            const war       = this._war;
-            const planner   = (war ? war.getActionPlanner() : null) as McwActionPlanner;
-            if ((planner)                                                               &&
-                (planner.getState() === Types.ActionPlannerState.Idle)                  &&
-                (!war.getIsEnded())                                                     &&
-                (war.getBootRestTime() < 0)                                             &&
-                (war.getPlayerInTurn().getUserId() === User.UserModel.getSelfUserId())
+            const war = this._war;
+            if ((war)                           &&
+                (!war.getIsExecutingAction())   &&
+                (war.checkIsBoot())
             ) {
-                planner.setStateRequestingPlayerSurrender(true);
+                McwProxy.reqMcwCommonHandleBoot(war.getWarId());
             }
         }
         private _onNotifyMcwTurnPhaseCodeChanged(e: egret.Event): void {

@@ -384,8 +384,8 @@ namespace TinyWars.MultiCustomWar {
             this._updateView();
         }
 
-        public setStateRequestingPlayerSurrender(isBoot: boolean): void {
-            McwProxy.reqMcwPlayerSurrender(this._getWar(), isBoot);
+        public setStateRequestingPlayerSurrender(): void {
+            McwProxy.reqMcwPlayerSurrender(this._getWar());
 
             this._setState(State.RequestingPlayerSurrender);
             this._updateView();

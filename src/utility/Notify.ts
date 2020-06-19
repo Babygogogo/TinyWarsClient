@@ -134,6 +134,7 @@ namespace TinyWars.Utility.Notify {
         SMcwWatchContinueWarFailed,
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        SMcwCommonHandleBoot,
         SMcwPlayerSyncWar,
         SMcwPlayerBeginTurn,
         SMcwPlayerDeleteUnit,

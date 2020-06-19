@@ -89,6 +89,9 @@ namespace TinyWars.BaseWar {
         public getPlayerIndex(): number {
             return this._playerIndex;
         }
+        public checkIsNeutral(): boolean {
+            return this.getPlayerIndex() === 0;
+        }
 
         private _setTeamIndex(index: number): void {
             this._teamIndex = index;

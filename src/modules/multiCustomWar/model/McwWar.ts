@@ -1,7 +1,6 @@
 
 namespace TinyWars.MultiCustomWar {
-    import Types    = Utility.Types;
-    import Logger   = Utility.Logger;
+    import Types = Utility.Types;
 
     export class McwWar extends BaseWar.BwWar {
         private _isEnded = false;
@@ -90,6 +89,17 @@ namespace TinyWars.MultiCustomWar {
         }
         public getIsEnded(): boolean {
             return this._isEnded;
+        }
+
+        public checkIsBoot(): boolean {
+            if (this.getIsEnded()) {
+                return false;
+            } else {
+                const player = this.getPlayerInTurn();
+                return (player.getIsAlive())
+                    && (!player.checkIsNeutral())
+                    && (Time.TimeModel.getServerTimestamp() > this.getEnterTurnTime() + player.getRestTimeToBoot());
+            }
         }
 
         public getPlayerIndexLoggedIn(): number | undefined {
