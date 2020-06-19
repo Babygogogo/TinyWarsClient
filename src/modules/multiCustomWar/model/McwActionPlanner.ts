@@ -1,18 +1,18 @@
 
 namespace TinyWars.MultiCustomWar {
-    import Types            = Utility.Types;
-    import GridIndexHelpers = Utility.GridIndexHelpers;
-    import Logger           = Utility.Logger;
-    import FloatText        = Utility.FloatText;
-    import Lang             = Utility.Lang;
-    import TurnPhaseCode    = Types.TurnPhaseCode;
-    import UnitState        = Types.UnitActionState;
-    import GridIndex        = Types.GridIndex;
-    import State            = Types.ActionPlannerState;
-    import UnitActionType   = Types.UnitActionType;
-    import UnitType         = Types.UnitType;
-    import BwHelpers        = BaseWar.BwHelpers;
-    import ConfirmPanel     = Common.ConfirmPanel;
+    import Types                = Utility.Types;
+    import GridIndexHelpers     = Utility.GridIndexHelpers;
+    import Logger               = Utility.Logger;
+    import FloatText            = Utility.FloatText;
+    import Lang                 = Utility.Lang;
+    import TurnPhaseCode        = Types.TurnPhaseCode;
+    import UnitState            = Types.UnitActionState;
+    import GridIndex            = Types.GridIndex;
+    import State                = Types.ActionPlannerState;
+    import UnitActionType       = Types.UnitActionType;
+    import UnitType             = Types.UnitType;
+    import BwHelpers            = BaseWar.BwHelpers;
+    import CommonConfirmPanel   = Common.CommonConfirmPanel;
 
     export class McwActionPlanner extends BaseWar.BwActionPlanner {
         private _getPlayerIndexLoggedIn(): number {
@@ -676,7 +676,7 @@ namespace TinyWars.MultiCustomWar {
                     : [{
                         actionType  : UnitActionType.UseCoSuperPower,
                         callback    : () => {
-                            ConfirmPanel.show({
+                            CommonConfirmPanel.show({
                                 title   : Lang.getText(Lang.Type.B0088),
                                 content : Lang.getText(Lang.Type.A0058),
                                 callback: () => this._setStateRequestingUnitUseCoSuperPower(),
@@ -694,7 +694,7 @@ namespace TinyWars.MultiCustomWar {
                     : [{
                         actionType  : UnitActionType.UseCoPower,
                         callback    : () => {
-                            ConfirmPanel.show({
+                            CommonConfirmPanel.show({
                                 title   : Lang.getText(Lang.Type.B0088),
                                 content : Lang.getText(Lang.Type.A0054),
                                 callback: () => this._setStateRequestingUnitUseCoPower(),
@@ -817,7 +817,7 @@ namespace TinyWars.MultiCustomWar {
                         actionType  : UnitActionType.Wait,
                         callback    : !hasOtherAction
                             ? () => this._setStateRequestingUnitDropOnChooseAction()
-                            : () => ConfirmPanel.show({
+                            : () => CommonConfirmPanel.show({
                                 title   : Lang.getText(Lang.Type.B0088),
                                 content : Lang.getText(Lang.Type.A0055),
                                 callback: () => this._setStateRequestingUnitDropOnChooseAction(),
@@ -828,7 +828,7 @@ namespace TinyWars.MultiCustomWar {
                         actionType  : UnitActionType.Wait,
                         callback    : !hasOtherAction
                             ? () => this._setStateRequestingUnitWait()
-                            : () => ConfirmPanel.show({
+                            : () => CommonConfirmPanel.show({
                                 title   : Lang.getText(Lang.Type.B0088),
                                 content : Lang.getText(Lang.Type.A0055),
                                 callback: () => this._setStateRequestingUnitWait(),

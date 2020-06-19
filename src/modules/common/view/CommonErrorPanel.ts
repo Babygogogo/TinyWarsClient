@@ -2,41 +2,41 @@
 namespace TinyWars.Common {
     import Lang = Utility.Lang;
 
-    export type OpenDataForErrorPanel = {
+    export type OpenDataForCommonErrorPanel = {
         content     : string;
         callback?   : () => any;
     }
 
-    export class ErrorPanel extends GameUi.UiPanel {
+    export class CommonErrorPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Top;
         protected readonly _IS_EXCLUSIVE = false;
 
-        private static _instance: ErrorPanel;
+        private static _instance: CommonErrorPanel;
 
         private _labelTitle     : GameUi.UiLabel;
         private _labelContent   : GameUi.UiLabel;
         private _btnClose       : GameUi.UiButton;
 
-        private _openData: OpenDataForErrorPanel;
+        private _openData: OpenDataForCommonErrorPanel;
 
-        public static show(data: OpenDataForErrorPanel): void {
-            if (!ErrorPanel._instance) {
-                ErrorPanel._instance = new ErrorPanel();
+        public static show(data: OpenDataForCommonErrorPanel): void {
+            if (!CommonErrorPanel._instance) {
+                CommonErrorPanel._instance = new CommonErrorPanel();
             }
-            ErrorPanel._instance._openData = data;
-            ErrorPanel._instance.open();
+            CommonErrorPanel._instance._openData = data;
+            CommonErrorPanel._instance.open();
         }
 
         public static hide(): void {
-            if (ErrorPanel._instance) {
-                ErrorPanel._instance.close();
+            if (CommonErrorPanel._instance) {
+                CommonErrorPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/common/ErrorPanel.exml";
+            this.skinName = "resource/skins/common/CommonErrorPanel.exml";
             this._setAutoAdjustHeightEnabled();
             this._setTouchMaskEnabled();
         }
@@ -54,7 +54,7 @@ namespace TinyWars.Common {
         }
 
         private _onTouchedBtnClose(e: egret.TouchEvent): void {
-            ErrorPanel.hide();
+            CommonErrorPanel.hide();
             (this._openData.callback) && (this._openData.callback());
         }
     }

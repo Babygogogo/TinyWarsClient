@@ -1,6 +1,5 @@
 
 namespace TinyWars.MapEditor {
-    import ConfirmPanel = Common.ConfirmPanel;
     import Notify       = Utility.Notify;
     import Lang         = Utility.Lang;
     import Types        = Utility.Types;
@@ -8,9 +7,7 @@ namespace TinyWars.MapEditor {
     import Logger       = Utility.Logger;
     import FloatText    = Utility.FloatText;
     import LocalStorage = Utility.LocalStorage;
-    import ProtoManager = Utility.ProtoManager;
     import ProtoTypes   = Utility.ProtoTypes;
-    import WarMapModel  = WarMap.WarMapModel;
     import TimeModel    = Time.TimeModel;
 
     const enum MenuType {
@@ -148,7 +145,7 @@ namespace TinyWars.MapEditor {
 
         private _onNotifySScrCreateCustomWar(e: egret.Event): void {
             const data = e.data as ProtoTypes.IS_ScrCreateCustomWar;
-            Common.ConfirmPanel.show({
+            Common.CommonConfirmPanel.show({
                 title   : Lang.getText(Lang.Type.B0088),
                 content : Lang.getText(Lang.Type.A0107),
                 callback: () => {
@@ -192,7 +189,7 @@ namespace TinyWars.MapEditor {
 
         private _onTouchedBtnModifyMapName(e: egret.TouchEvent): void {
             const war = this._war;
-            Common.InputPanel.show({
+            Common.CommonInputPanel.show({
                 title           : Lang.getText(Lang.Type.B0225),
                 tips            : null,
                 currentValue    : war.getMapName(),
@@ -207,7 +204,7 @@ namespace TinyWars.MapEditor {
 
         private _onTouchedBtnModifyMapNameEnglish(e: egret.TouchEvent): void {
             const war = this._war;
-            Common.InputPanel.show({
+            Common.CommonInputPanel.show({
                 title           : Lang.getText(Lang.Type.B0299),
                 tips            : null,
                 currentValue    : war.getMapNameEnglish(),
@@ -222,7 +219,7 @@ namespace TinyWars.MapEditor {
 
         private _onTouchedBtnModifyMapDesigner(e: egret.TouchEvent): void {
             const war = this._war;
-            Common.InputPanel.show({
+            Common.CommonInputPanel.show({
                 title           : Lang.getText(Lang.Type.B0163),
                 tips            : null,
                 currentValue    : war.getMapDesigner(),
@@ -476,7 +473,7 @@ namespace TinyWars.MapEditor {
                 return {
                     name    : Lang.getText(Lang.Type.B0288),
                     callback: () => {
-                        Common.ConfirmPanel.show({
+                        Common.CommonConfirmPanel.show({
                             title   : Lang.getText(Lang.Type.B0088),
                             content : Lang.getText(Lang.Type.A0072),
                             callback: () => {
@@ -562,7 +559,7 @@ namespace TinyWars.MapEditor {
             return {
                 name    : Lang.getText(Lang.Type.B0054),
                 callback: () => {
-                    ConfirmPanel.show({
+                    Common.CommonConfirmPanel.show({
                         title   : Lang.getText(Lang.Type.B0054),
                         content : Lang.getText(Lang.Type.A0025),
                         callback: () => FlowManager.gotoLobby(),

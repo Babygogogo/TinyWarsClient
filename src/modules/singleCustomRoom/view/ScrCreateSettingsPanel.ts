@@ -5,7 +5,6 @@ namespace TinyWars.SingleCustomRoom {
     import FloatText    = Utility.FloatText;
     import ProtoTypes   = Utility.ProtoTypes;
     import Types        = Utility.Types;
-    import ConfirmPanel = Common.ConfirmPanel;
 
     const CONFIRM_INTERVAL_MS = 5000;
 
@@ -95,7 +94,7 @@ namespace TinyWars.SingleCustomRoom {
                 if (ScrModel.checkIsSaveSlotEmpty(data.saveSlotIndex)) {
                     func();
                 } else {
-                    ConfirmPanel.show({
+                    Common.CommonConfirmPanel.show({
                         title   : Lang.getText(Lang.Type.B0088),
                         content : Lang.getText(Lang.Type.A0070),
                         callback: func,

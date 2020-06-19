@@ -72,7 +72,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _onTouchedBtnHelp(e: egret.TouchEvent): void {
-            Common.HelpPanel.show({
+            Common.CommonHelpPanel.show({
                 title   : Lang.getText(Lang.Type.B0325),
                 content : Lang.getRichText(Lang.RichType.R0006),
             });
@@ -150,7 +150,7 @@ namespace TinyWars.SingleCustomRoom {
                 ScrProxy.reqScrCreateCustomWar(warData);
                 ScrCreateCustomSaveSlotsPanel.hide();
             } else {
-                Common.ConfirmPanel.show({
+                Common.CommonConfirmPanel.show({
                     title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getText(Lang.Type.A0070),
                     callback: () => {

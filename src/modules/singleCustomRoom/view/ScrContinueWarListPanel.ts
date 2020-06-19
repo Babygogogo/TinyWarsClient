@@ -104,7 +104,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _onNotifySScrContinueWarFailed(e: egret.Event): void {
-            Common.BlockPanel.hide();
+            Common.CommonBlockPanel.hide();
         }
 
         private _onNotifySScrContinueWar(e: egret.Event): void {
@@ -241,7 +241,7 @@ namespace TinyWars.SingleCustomRoom {
 
         private _onTouchTapBtnNext(): void {
             ScrProxy.reqContinueWar((this.data as DataForWarRenderer).slotInfo.slotIndex);
-            Common.BlockPanel.show({
+            Common.CommonBlockPanel.show({
                 title   : Lang.getText(Lang.Type.B0088),
                 content : Lang.getText(Lang.Type.A0021),
             });

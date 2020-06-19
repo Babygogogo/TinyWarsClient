@@ -1,6 +1,6 @@
 
 namespace TinyWars.MultiCustomRoom {
-    import BlockPanel       = Common.BlockPanel;
+    import CommonBlockPanel = Common.CommonBlockPanel;
     import Notify           = Utility.Notify;
     import Types            = Utility.Types;
     import Lang             = Utility.Lang;
@@ -120,7 +120,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onNotifySMcrGetReplayDataFailed(e: egret.Event): void {
-            BlockPanel.hide();
+            CommonBlockPanel.hide();
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
@@ -321,7 +321,7 @@ namespace TinyWars.MultiCustomRoom {
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
             const data = this.data as DataForMapNameRenderer;
             if (data) {
-                BlockPanel.show({
+                CommonBlockPanel.show({
                     title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getText(Lang.Type.A0040),
                 });

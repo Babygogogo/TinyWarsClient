@@ -1,12 +1,11 @@
 
 namespace TinyWars.MultiCustomRoom {
-    import ProtoTypes   = Utility.ProtoTypes;
-    import Helpers      = Utility.Helpers;
-    import Lang         = Utility.Lang;
-    import Notify       = Utility.Notify;
-    import Types        = Utility.Types;
-    import WarMapModel  = WarMap.WarMapModel;
-    import HelpPanel    = Common.HelpPanel;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import Helpers          = Utility.Helpers;
+    import Lang             = Utility.Lang;
+    import Notify           = Utility.Notify;
+    import WarMapModel      = WarMap.WarMapModel;
+    import CommonHelpPanel  = Common.CommonHelpPanel;
 
     export class McrExitDetailPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
@@ -90,13 +89,13 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onTouchedBtnHelpFog(e: egret.TouchEvent): void {
-            HelpPanel.show({
+            CommonHelpPanel.show({
                 title  : Lang.getText(Lang.Type.B0020),
                 content: Lang.getRichText(Lang.RichType.R0002),
             });
         }
         private _onTouchedBtnHelpTimeLimit(e: egret.TouchEvent): void {
-            HelpPanel.show({
+            CommonHelpPanel.show({
                 title  : Lang.getText(Lang.Type.B0021),
                 content: Lang.getRichText(Lang.RichType.R0003),
             });

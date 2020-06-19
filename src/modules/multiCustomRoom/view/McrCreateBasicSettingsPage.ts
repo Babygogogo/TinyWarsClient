@@ -7,7 +7,7 @@ namespace TinyWars.MultiCustomRoom {
     import Types            = Utility.Types;
     import FloatText        = Utility.FloatText;
     import WarMapModel      = WarMap.WarMapModel;
-    import HelpPanel        = Common.HelpPanel;
+    import CommonHelpPanel  = Common.CommonHelpPanel;
     import CommonConstants  = Utility.ConfigManager.COMMON_CONSTANTS;
 
     export class McrCreateBasicSettingsPage extends GameUi.UiTabPage {
@@ -104,7 +104,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onTouchedBtnModifyWarName(e: egret.TouchEvent): void {
-            Common.InputPanel.show({
+            Common.CommonInputPanel.show({
                 title           : Lang.getText(Lang.Type.B0185),
                 currentValue    : McrModel.getCreateWarName(),
                 maxChars        : CommonConstants.WarNameMaxLength,
@@ -118,7 +118,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onTouchedBtnModifyWarPassword(e: egret.Event): void {
-            Common.InputPanel.show({
+            Common.CommonInputPanel.show({
                 title           : Lang.getText(Lang.Type.B0186),
                 currentValue    : McrModel.getCreateWarPassword(),
                 maxChars        : CommonConstants.WarPasswordMaxLength,
@@ -132,7 +132,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onTouchedBtnModifyWarComment(e: egret.Event): void {
-            Common.InputPanel.show({
+            Common.CommonInputPanel.show({
                 title           : Lang.getText(Lang.Type.B0187),
                 currentValue    : McrModel.getCreateWarComment(),
                 maxChars        : CommonConstants.WarCommentMaxLength,
@@ -173,7 +173,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onTouchedBtnHelpPlayerIndex(e: egret.TouchEvent): void {
-            HelpPanel.show({
+            CommonHelpPanel.show({
                 title  : Lang.getText(Lang.Type.B0018),
                 content: Lang.getRichText(Lang.RichType.R0000),
             });
@@ -189,7 +189,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onTouchedBtnHelpTeam(e: egret.TouchEvent): void {
-            HelpPanel.show({
+            CommonHelpPanel.show({
                 title  : Lang.getText(Lang.Type.B0019),
                 content: Lang.getRichText(Lang.RichType.R0001),
             });
@@ -205,7 +205,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onTouchedBtnHelpHasFog(e: egret.TouchEvent): void {
-            HelpPanel.show({
+            CommonHelpPanel.show({
                 title  : Lang.getText(Lang.Type.B0020),
                 content: Lang.getRichText(Lang.RichType.R0002),
             });
@@ -217,7 +217,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onTouchedBtnHelpTimer(e: egret.TouchEvent): void {
-            HelpPanel.show({
+            CommonHelpPanel.show({
                 title  : Lang.getText(Lang.Type.B0021),
                 content: Lang.getRichText(Lang.RichType.R0003),
             });
@@ -231,7 +231,7 @@ namespace TinyWars.MultiCustomRoom {
         private _onTouchedBtnModifyTimerIncremental1(e: egret.TouchEvent): void {
             const minValue = 1;
             const maxValue = CommonConstants.WarBootTimerIncrementalMaxLimit;
-            Common.InputPanel.show({
+            Common.CommonInputPanel.show({
                 title           : Lang.getText(Lang.Type.B0389),
                 currentValue    : "" + McrModel.getCreateWarBootTimerParams()[1],
                 maxChars        : 5,
@@ -253,7 +253,7 @@ namespace TinyWars.MultiCustomRoom {
         private _onTouchedBtnModifyTimerIncremental2(e: egret.TouchEvent): void {
             const minValue = 0;
             const maxValue = CommonConstants.WarBootTimerIncrementalMaxLimit;
-            Common.InputPanel.show({
+            Common.CommonInputPanel.show({
                 title           : Lang.getText(Lang.Type.B0390),
                 currentValue    : "" + McrModel.getCreateWarBootTimerParams()[2],
                 maxChars        : 5,

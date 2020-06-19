@@ -110,7 +110,7 @@ namespace TinyWars.MapManagement {
                 dataList.push({
                     name    : Lang.getText(Lang.Type.B0262),
                     callback: () => {
-                        Common.ConfirmPanel.show({
+                        Common.CommonConfirmPanel.show({
                             title   : Lang.getText(Lang.Type.B0088),
                             content : Lang.getText(Lang.Type.A0074),
                             callback: () => WarMap.WarMapProxy.reqReloadAllMaps(),

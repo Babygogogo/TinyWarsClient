@@ -1,6 +1,5 @@
 
 namespace TinyWars.Replay {
-    import ConfirmPanel     = Common.ConfirmPanel;
     import Notify           = Utility.Notify;
     import Lang             = Utility.Lang;
     import FlowManager      = Utility.FlowManager;
@@ -137,7 +136,7 @@ namespace TinyWars.Replay {
 
         private _onNotifySScrCreateCustomWar(e: egret.Event): void {
             const data = e.data as ProtoTypes.IS_ScrCreateCustomWar;
-            Common.ConfirmPanel.show({
+            Common.CommonConfirmPanel.show({
                 title   : Lang.getText(Lang.Type.B0088),
                 content : Lang.getText(Lang.Type.A0107),
                 callback: () => {
@@ -293,7 +292,7 @@ namespace TinyWars.Replay {
             return {
                 name    : Lang.getText(Lang.Type.B0365),
                 callback: () => {
-                    Common.InputPanel.show({
+                    Common.CommonInputPanel.show({
                         title           : `${Lang.getText(Lang.Type.B0365)}`,
                         currentValue    : "",
                         maxChars        : 2,
@@ -327,7 +326,7 @@ namespace TinyWars.Replay {
             return {
                 name    : Lang.getText(Lang.Type.B0054),
                 callback: () => {
-                    ConfirmPanel.show({
+                    Common.CommonConfirmPanel.show({
                         title   : Lang.getText(Lang.Type.B0054),
                         content : Lang.getText(Lang.Type.A0025),
                         callback: () => FlowManager.gotoLobby(),

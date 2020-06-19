@@ -215,7 +215,7 @@ namespace TinyWars.BaseWar {
                 callbackOnTouchedTitle  : !isCheating
                     ? null
                     : () => {
-                        Common.InputPanel.show({
+                        Common.CommonInputPanel.show({
                             title           : Lang.getText(Lang.Type.B0339),
                             currentValue    : "" + currValue,
                             maxChars        : 3,
@@ -247,7 +247,7 @@ namespace TinyWars.BaseWar {
                 callbackOnTouchedTitle  : !isCheating
                     ? null
                     : () => {
-                        Common.InputPanel.show({
+                        Common.CommonInputPanel.show({
                             title           : Lang.getText(Lang.Type.B0342),
                             currentValue    : "" + currValue,
                             maxChars        : 2,
@@ -282,7 +282,7 @@ namespace TinyWars.BaseWar {
                     callbackOnTouchedTitle  : !isCheating
                         ? null
                         : () => {
-                            Common.InputPanel.show({
+                            Common.CommonInputPanel.show({
                                 title           : Lang.getText(Lang.Type.B0370),
                                 currentValue    : "" + currValue,
                                 maxChars        : 1,
@@ -318,7 +318,7 @@ namespace TinyWars.BaseWar {
                     callbackOnTouchedTitle  : !isCheating
                         ? null
                         : () => {
-                            Common.InputPanel.show({
+                            Common.CommonInputPanel.show({
                                 title           : Lang.getText(Lang.Type.B0350),
                                 currentValue    : "" + currValue,
                                 maxChars        : 2,
@@ -354,7 +354,7 @@ namespace TinyWars.BaseWar {
                     callbackOnTouchedTitle  : !isCheating
                         ? null
                         : () => {
-                            Common.InputPanel.show({
+                            Common.CommonInputPanel.show({
                                 title           : Lang.getText(Lang.Type.B0347),
                                 currentValue    : "" + currValue,
                                 maxChars        : 2,
@@ -390,7 +390,7 @@ namespace TinyWars.BaseWar {
                     callbackOnTouchedTitle  : !isCheating
                         ? null
                         : () => {
-                            Common.InputPanel.show({
+                            Common.CommonInputPanel.show({
                                 title           : Lang.getText(Lang.Type.B0348),
                                 currentValue    : "" + currValue,
                                 maxChars        : 2,
@@ -426,7 +426,7 @@ namespace TinyWars.BaseWar {
                     callbackOnTouchedTitle  : !isCheating
                         ? null
                         : () => {
-                            Common.InputPanel.show({
+                            Common.CommonInputPanel.show({
                                 title           : Lang.getText(Lang.Type.B0349),
                                 currentValue    : "" + currValue,
                                 maxChars        : 2,
@@ -458,7 +458,7 @@ namespace TinyWars.BaseWar {
                     titleText               : Lang.getText(Lang.Type.B0367),
                     valueText               : Lang.getUnitActionStateText(state),
                     callbackOnTouchedTitle  : () => {
-                        Common.ConfirmPanel.show({
+                        Common.CommonConfirmPanel.show({
                             title       : Lang.getText(Lang.Type.B0349),
                             content     : Lang.getText(Lang.Type.A0113),
                             callback    : () => {
@@ -483,7 +483,7 @@ namespace TinyWars.BaseWar {
                     callbackOnTouchedTitle  : !isCheating
                         ? null
                         : () => {
-                            Common.ConfirmPanel.show({
+                            Common.CommonConfirmPanel.show({
                                 title       : Lang.getText(Lang.Type.B0371),
                                 content     : Lang.getText(Lang.Type.A0114),
                                 callback    : () => {

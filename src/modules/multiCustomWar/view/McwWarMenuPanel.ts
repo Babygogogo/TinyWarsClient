@@ -1,17 +1,17 @@
 
 namespace TinyWars.MultiCustomWar {
-    import ConfirmPanel     = Common.ConfirmPanel;
-    import Notify           = Utility.Notify;
-    import Lang             = Utility.Lang;
-    import Types            = Utility.Types;
-    import FlowManager      = Utility.FlowManager;
-    import Logger           = Utility.Logger;
-    import FloatText        = Utility.FloatText;
-    import LocalStorage     = Utility.LocalStorage;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import WarMapModel      = WarMap.WarMapModel;
-    import TimeModel        = Time.TimeModel;
-    import CommonConstants  = Utility.ConfigManager.COMMON_CONSTANTS;
+    import CommonConfirmPanel   = Common.CommonConfirmPanel;
+    import Notify               = Utility.Notify;
+    import Lang                 = Utility.Lang;
+    import Types                = Utility.Types;
+    import FlowManager          = Utility.FlowManager;
+    import Logger               = Utility.Logger;
+    import FloatText            = Utility.FloatText;
+    import LocalStorage         = Utility.LocalStorage;
+    import ProtoTypes           = Utility.ProtoTypes;
+    import WarMapModel          = WarMap.WarMapModel;
+    import TimeModel            = Time.TimeModel;
+    import CommonConstants      = Utility.ConfigManager.COMMON_CONSTANTS;
 
     const enum MenuType {
         Main,
@@ -122,7 +122,7 @@ namespace TinyWars.MultiCustomWar {
         }
         private _onNotifySScrCreateCustomWar(e: egret.Event): void {
             const data = e.data as ProtoTypes.IS_ScrCreateCustomWar;
-            Common.ConfirmPanel.show({
+            Common.CommonConfirmPanel.show({
                 title   : Lang.getText(Lang.Type.B0088),
                 content : Lang.getText(Lang.Type.A0107),
                 callback: () => {
@@ -351,7 +351,7 @@ namespace TinyWars.MultiCustomWar {
             return {
                 name    : Lang.getText(Lang.Type.B0054),
                 callback: () => {
-                    ConfirmPanel.show({
+                    CommonConfirmPanel.show({
                         title   : Lang.getText(Lang.Type.B0054),
                         content : Lang.getText(Lang.Type.A0025),
                         callback: () => FlowManager.gotoLobby(),
@@ -371,7 +371,7 @@ namespace TinyWars.MultiCustomWar {
                 return {
                     name    : Lang.getText(Lang.Type.B0055),
                     callback: () => {
-                        ConfirmPanel.show({
+                        CommonConfirmPanel.show({
                             title   : Lang.getText(Lang.Type.B0055),
                             content : Lang.getText(Lang.Type.A0026),
                             callback: () => this._actionPlanner.setStateRequestingPlayerSurrender(),
@@ -409,7 +409,7 @@ namespace TinyWars.MultiCustomWar {
                 return {
                     name    : title,
                     callback: () => {
-                        ConfirmPanel.show({
+                        CommonConfirmPanel.show({
                             title,
                             content : war.getRemainingVotesForDraw() == null ? Lang.getText(Lang.Type.A0031) : Lang.getText(Lang.Type.A0032),
                             callback: () => this._actionPlanner.setStateRequestingPlayerVoteForDraw(true),
@@ -434,7 +434,7 @@ namespace TinyWars.MultiCustomWar {
                 return {
                     name    : title,
                     callback: () => {
-                        ConfirmPanel.show({
+                        CommonConfirmPanel.show({
                             title,
                             content : Lang.getText(Lang.Type.A0033),
                             callback: () => this._actionPlanner.setStateRequestingPlayerVoteForDraw(false),
@@ -465,7 +465,7 @@ namespace TinyWars.MultiCustomWar {
                         } else if (unitMap.countUnitsOnMapForPlayer(playerIndex) <= 1) {
                             FloatText.show(Lang.getText(Lang.Type.A0076));
                         } else {
-                            ConfirmPanel.show({
+                            CommonConfirmPanel.show({
                                 title   : Lang.getText(Lang.Type.B0081),
                                 content : Lang.getText(Lang.Type.A0029),
                                 callback: () => this._actionPlanner.setStateRequestingPlayerDeleteUnit(),

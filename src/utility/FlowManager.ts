@@ -21,7 +21,7 @@ namespace TinyWars.Utility.FlowManager {
 
     export async function startGame(stage: egret.Stage): Promise<void> {
         window.onerror = (message, filename, row, col, err) => {
-            Common.ErrorPanel.show({
+            Common.CommonErrorPanel.show({
                 content : `${message}\n\n${err ? err.stack : "No available call stack."}`,
             });
         };

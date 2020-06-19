@@ -2,43 +2,43 @@
 namespace TinyWars.Common {
     import Lang = Utility.Lang;
 
-    export type OpenDataForConfirmPanel = {
+    export type OpenDataForCommonConfirmPanel = {
         title   : string;
         content : string;
         callback: () => any;
     }
 
-    export class ConfirmPanel extends GameUi.UiPanel {
+    export class CommonConfirmPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud3;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: ConfirmPanel;
+        private static _instance: CommonConfirmPanel;
 
         private _labelTitle     : GameUi.UiLabel;
         private _labelContent   : GameUi.UiLabel;
         private _btnCancel      : GameUi.UiButton;
         private _btnConfirm     : GameUi.UiButton;
 
-        private _openData: OpenDataForConfirmPanel;
+        private _openData: OpenDataForCommonConfirmPanel;
 
-        public static show(data: OpenDataForConfirmPanel): void {
-            if (!ConfirmPanel._instance) {
-                ConfirmPanel._instance = new ConfirmPanel();
+        public static show(data: OpenDataForCommonConfirmPanel): void {
+            if (!CommonConfirmPanel._instance) {
+                CommonConfirmPanel._instance = new CommonConfirmPanel();
             }
-            ConfirmPanel._instance._openData = data;
-            ConfirmPanel._instance.open();
+            CommonConfirmPanel._instance._openData = data;
+            CommonConfirmPanel._instance.open();
         }
 
         public static hide(): void {
-            if (ConfirmPanel._instance) {
-                ConfirmPanel._instance.close();
+            if (CommonConfirmPanel._instance) {
+                CommonConfirmPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/common/ConfirmPanel.exml";
+            this.skinName = "resource/skins/common/CommonConfirmPanel.exml";
             this._setAutoAdjustHeightEnabled();
             this._setTouchMaskEnabled();
         }
@@ -58,11 +58,11 @@ namespace TinyWars.Common {
         }
 
         private _onTouchedBtnCancel(e: egret.TouchEvent): void {
-            ConfirmPanel.hide();
+            CommonConfirmPanel.hide();
         }
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            ConfirmPanel.hide();
+            CommonConfirmPanel.hide();
             this._openData.callback();
         }
     }

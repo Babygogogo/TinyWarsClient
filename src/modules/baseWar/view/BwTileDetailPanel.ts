@@ -198,7 +198,7 @@ namespace TinyWars.BaseWar {
                     callbackOnTouchedTitle  : !isCheating
                         ? null
                         : () => {
-                            Common.InputPanel.show({
+                            Common.CommonInputPanel.show({
                                 title           : Lang.getText(Lang.Type.B0339),
                                 currentValue    : "" + currValue,
                                 maxChars        : 3,
@@ -234,7 +234,7 @@ namespace TinyWars.BaseWar {
                     callbackOnTouchedTitle  : !isCheating
                         ? null
                         : () => {
-                            Common.InputPanel.show({
+                            Common.CommonInputPanel.show({
                                 title           : Lang.getText(Lang.Type.B0361),
                                 currentValue    : "" + currValue,
                                 maxChars        : 3,
@@ -270,7 +270,7 @@ namespace TinyWars.BaseWar {
                     callbackOnTouchedTitle  : !isCheating
                         ? null
                         : () => {
-                            Common.InputPanel.show({
+                            Common.CommonInputPanel.show({
                                 title           : Lang.getText(Lang.Type.B0362),
                                 currentValue    : "" + currValue,
                                 maxChars        : 3,

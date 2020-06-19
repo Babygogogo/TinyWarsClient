@@ -3,7 +3,6 @@ namespace TinyWars.MultiCustomRoom {
     import Lang         = Utility.Lang;
     import Notify       = Utility.Notify;
     import FloatText    = Utility.FloatText;
-    import ConfirmPanel = Common.ConfirmPanel;
 
     const CONFIRM_INTERVAL_MS = 5000;
 
@@ -89,7 +88,7 @@ namespace TinyWars.MultiCustomRoom {
             if (data.coId != null) {
                 callback();
             } else {
-                ConfirmPanel.show({
+                Common.CommonConfirmPanel.show({
                     title   : Lang.getText(Lang.Type.B0088),
                     content : `${Lang.getText(Lang.Type.A0050)}\n${Lang.getText(Lang.Type.A0051)}`,
                     callback,

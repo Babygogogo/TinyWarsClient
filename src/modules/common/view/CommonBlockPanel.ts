@@ -1,41 +1,39 @@
 
 namespace TinyWars.Common {
-    import Lang = Utility.Lang;
-
-    export type OpenDataForBlockPanel = {
+    export type OpenDataForCommonBlockPanel = {
         title  : string;
         content: string;
     }
 
-    export class BlockPanel extends GameUi.UiPanel {
+    export class CommonBlockPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud3;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: BlockPanel;
+        private static _instance: CommonBlockPanel;
 
         private _labelTitle     : GameUi.UiLabel;
         private _labelContent   : GameUi.UiLabel;
 
-        private _openData: OpenDataForBlockPanel;
+        private _openData: OpenDataForCommonBlockPanel;
 
-        public static show(data: OpenDataForBlockPanel): void {
-            if (!BlockPanel._instance) {
-                BlockPanel._instance = new BlockPanel();
+        public static show(data: OpenDataForCommonBlockPanel): void {
+            if (!CommonBlockPanel._instance) {
+                CommonBlockPanel._instance = new CommonBlockPanel();
             }
-            BlockPanel._instance._openData = data;
-            BlockPanel._instance.open();
+            CommonBlockPanel._instance._openData = data;
+            CommonBlockPanel._instance.open();
         }
 
         public static hide(): void {
-            if (BlockPanel._instance) {
-                BlockPanel._instance.close();
+            if (CommonBlockPanel._instance) {
+                CommonBlockPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/common/BlockPanel.exml";
+            this.skinName = "resource/skins/common/CommonBlockPanel.exml";
             this._setAutoAdjustHeightEnabled();
             this._setTouchMaskEnabled();
         }

@@ -176,7 +176,7 @@ namespace TinyWars.MapEditor {
                 if (field.getWarRuleList().length <= 1) {
                     FloatText.show(Lang.getText(Lang.Type.A0096));
                 } else {
-                    Common.ConfirmPanel.show({
+                    Common.CommonConfirmPanel.show({
                         title   : Lang.getText(Lang.Type.B0088),
                         content : Lang.getText(Lang.Type.A0097),
                         callback: () => {
@@ -203,7 +203,7 @@ namespace TinyWars.MapEditor {
             if (rule) {
                 const maxValue = CommonConstants.WarRuleOffenseBonusMaxLimit;
                 const minValue = CommonConstants.WarRuleOffenseBonusMinLimit;
-                Common.InputPanel.show({
+                Common.CommonInputPanel.show({
                     title           : Lang.getText(Lang.Type.B0183),
                     currentValue    : "" + rule.getAttackPowerModifier(),
                     maxChars        : 5,
@@ -227,7 +227,7 @@ namespace TinyWars.MapEditor {
             if (rule) {
                 const maxValue = CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit;
                 const minValue = CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit;
-                Common.InputPanel.show({
+                Common.CommonInputPanel.show({
                     title           : Lang.getText(Lang.Type.B0181),
                     currentValue    : "" + rule.getEnergyGrowthMultiplier(),
                     maxChars        : 5,
@@ -251,7 +251,7 @@ namespace TinyWars.MapEditor {
             if (rule) {
                 const maxValue = CommonConstants.WarRuleIncomeMultiplierMaxLimit;
                 const minValue = CommonConstants.WarRuleIncomeMultiplierMinLimit;
-                Common.InputPanel.show({
+                Common.CommonInputPanel.show({
                     title           : Lang.getText(Lang.Type.B0179),
                     currentValue    : "" + rule.getIncomeMultiplier(),
                     maxChars        : 5,
@@ -275,7 +275,7 @@ namespace TinyWars.MapEditor {
             if (rule) {
                 const maxValue = CommonConstants.WarRuleInitialEnergyMaxLimit;
                 const minValue = CommonConstants.WarRuleInitialEnergyMinLimit;
-                Common.InputPanel.show({
+                Common.CommonInputPanel.show({
                     title           : Lang.getText(Lang.Type.B0180),
                     currentValue    : "" + rule.getInitialEnergy(),
                     maxChars        : 5,
@@ -299,7 +299,7 @@ namespace TinyWars.MapEditor {
             if (rule) {
                 const maxValue = CommonConstants.WarRuleInitialFundMaxLimit;
                 const minValue = CommonConstants.WarRuleInitialFundMinLimit;
-                Common.InputPanel.show({
+                Common.CommonInputPanel.show({
                     title           : Lang.getText(Lang.Type.B0178),
                     currentValue    : "" + rule.getInitialFund(),
                     maxChars        : 7,
@@ -323,7 +323,7 @@ namespace TinyWars.MapEditor {
             if (rule) {
                 const maxValue = CommonConstants.WarRuleLuckMaxLimit;
                 const minValue = CommonConstants.WarRuleLuckMinLimit;
-                Common.InputPanel.show({
+                Common.CommonInputPanel.show({
                     title           : Lang.getText(Lang.Type.B0189),
                     currentValue    : "" + rule.getLuckLowerLimit(),
                     maxChars        : 5,
@@ -347,7 +347,7 @@ namespace TinyWars.MapEditor {
             if (rule) {
                 const maxValue = CommonConstants.WarRuleLuckMaxLimit;
                 const minValue = CommonConstants.WarRuleLuckMinLimit;
-                Common.InputPanel.show({
+                Common.CommonInputPanel.show({
                     title           : Lang.getText(Lang.Type.B0189),
                     currentValue    : "" + rule.getLuckUpperLimit(),
                     maxChars        : 5,
@@ -371,7 +371,7 @@ namespace TinyWars.MapEditor {
             if (rule) {
                 const maxValue = CommonConstants.WarRuleMoveRangeModifierMaxLimit;
                 const minValue = CommonConstants.WarRuleMoveRangeModifierMinLimit;
-                Common.InputPanel.show({
+                Common.CommonInputPanel.show({
                     title           : Lang.getText(Lang.Type.B0182),
                     currentValue    : "" + rule.getMoveRangeModifier(),
                     maxChars        : 5,
@@ -395,7 +395,7 @@ namespace TinyWars.MapEditor {
             if (rule) {
                 const maxValue = CommonConstants.WarRuleVisionRangeModifierMaxLimit;
                 const minValue = CommonConstants.WarRuleVisionRangeModifierMinLimit;
-                Common.InputPanel.show({
+                Common.CommonInputPanel.show({
                     title           : Lang.getText(Lang.Type.B0184),
                     currentValue    : "" + rule.getVisionRangeModifier(),
                     maxChars        : 5,
@@ -417,7 +417,7 @@ namespace TinyWars.MapEditor {
         private _onTouchedBtnModifyRuleName(e: egret.TouchEvent): void {
             const rule = this._selectedRule;
             if (rule) {
-                Common.InputPanel.show({
+                Common.CommonInputPanel.show({
                     title           : Lang.getText(Lang.Type.B0315),
                     currentValue    : rule.getRuleName(),
                     maxChars        : CommonConstants.WarRuleNameMaxLength,
@@ -439,7 +439,7 @@ namespace TinyWars.MapEditor {
         private _onTouchedBtnModifyRuleNameEnglish(e: egret.TouchEvent): void {
             const rule = this._selectedRule;
             if (rule) {
-                Common.InputPanel.show({
+                Common.CommonInputPanel.show({
                     title           : Lang.getText(Lang.Type.B0316),
                     currentValue    : rule.getRuleNameEnglish(),
                     maxChars        : CommonConstants.WarRuleNameMaxLength,

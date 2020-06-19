@@ -2,13 +2,11 @@
 namespace TinyWars.MultiCustomRoom {
     import Notify           = Utility.Notify;
     import Types            = Utility.Types;
-    import FloatText        = Utility.FloatText;
     import FlowManager      = Utility.FlowManager;
     import Helpers          = Utility.Helpers;
     import Lang             = Utility.Lang;
     import ProtoTypes       = Utility.ProtoTypes;
     import ConfigManager    = Utility.ConfigManager;
-    import BlockPanel       = Common.BlockPanel;
     import WarMapModel      = WarMap.WarMapModel;
 
     export class McrWatchOngoingWarsPanel extends GameUi.UiPanel {
@@ -133,7 +131,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onNotifySMcwWatchContinueWarFailed(e: egret.Event): void {
-            BlockPanel.hide();
+            Common.CommonBlockPanel.hide();
             McrProxy.reqWatchGetOngoingWarInfos();
         }
 

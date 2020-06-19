@@ -3,20 +3,20 @@ namespace TinyWars.Common {
     import Lang     = Utility.Lang;
     import Notify   = Utility.Notify;
 
-    export type OpenDataForInputPanel = {
+    export type OpenDataForCommonInputPanel = {
         title           : string;
         currentValue    : string;
         tips            : string | null;
         maxChars        : number | null;
         charRestrict    : string | null;
-        callback        : (panel: InputPanel) => any;
+        callback        : (panel: CommonInputPanel) => any;
     }
 
-    export class InputPanel extends GameUi.UiPanel {
+    export class CommonInputPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud3;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: InputPanel;
+        private static _instance: CommonInputPanel;
 
         private _labelTitle     : GameUi.UiLabel;
         private _labelTips      : GameUi.UiLabel;
@@ -24,26 +24,26 @@ namespace TinyWars.Common {
         private _btnCancel      : GameUi.UiButton;
         private _btnConfirm     : GameUi.UiButton;
 
-        private _openData: OpenDataForInputPanel;
+        private _openData: OpenDataForCommonInputPanel;
 
-        public static show(data: OpenDataForInputPanel): void {
-            if (!InputPanel._instance) {
-                InputPanel._instance = new InputPanel();
+        public static show(data: OpenDataForCommonInputPanel): void {
+            if (!CommonInputPanel._instance) {
+                CommonInputPanel._instance = new CommonInputPanel();
             }
-            InputPanel._instance._openData = data;
-            InputPanel._instance.open();
+            CommonInputPanel._instance._openData = data;
+            CommonInputPanel._instance.open();
         }
 
         public static hide(): void {
-            if (InputPanel._instance) {
-                InputPanel._instance.close();
+            if (CommonInputPanel._instance) {
+                CommonInputPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/common/InputPanel.exml";
+            this.skinName = "resource/skins/common/CommonInputPanel.exml";
             this._setAutoAdjustHeightEnabled();
             this._setTouchMaskEnabled();
         }
@@ -75,11 +75,11 @@ namespace TinyWars.Common {
         }
 
         private _onTouchedBtnCancel(e: egret.TouchEvent): void {
-            InputPanel.hide();
+            CommonInputPanel.hide();
         }
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            InputPanel.hide();
+            CommonInputPanel.hide();
             this._openData.callback(this);
         }
 

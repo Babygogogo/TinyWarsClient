@@ -1,11 +1,9 @@
 
 namespace TinyWars.SingleCustomRoom {
     import ProtoTypes       = Utility.ProtoTypes;
-    import Helpers          = Utility.Helpers;
     import Lang             = Utility.Lang;
     import Notify           = Utility.Notify;
     import WarMapModel      = WarMap.WarMapModel;
-    import HelpPanel        = Common.HelpPanel;
 
     export class ScrCreateBasicSettingsPage extends GameUi.UiTabPage {
         private _labelMapNameTitle      : GameUi.UiLabel;
@@ -92,7 +90,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _onTouchedBtnHelpFog(e: egret.TouchEvent): void {
-            HelpPanel.show({
+            Common.CommonHelpPanel.show({
                 title  : Lang.getText(Lang.Type.B0020),
                 content: Lang.getRichText(Lang.RichType.R0002),
             });

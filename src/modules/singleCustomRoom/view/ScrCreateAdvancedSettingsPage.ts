@@ -1,13 +1,9 @@
 
 namespace TinyWars.SingleCustomRoom {
-    import Types            = Utility.Types;
     import ProtoTypes       = Utility.ProtoTypes;
     import FloatText        = Utility.FloatText;
-    import Helpers          = Utility.Helpers;
     import Lang             = Utility.Lang;
     import Notify           = Utility.Notify;
-    import ConfirmPanel     = Common.ConfirmPanel;
-    import HelpPanel        = Common.HelpPanel;
     import WarMapModel      = WarMap.WarMapModel;
     import CommonConstants  = Utility.ConfigManager.COMMON_CONSTANTS;
 
@@ -98,7 +94,7 @@ namespace TinyWars.SingleCustomRoom {
         private _onTouchedBtnModifyInitialFund(e: egret.TouchEvent): void {
             const maxValue = CommonConstants.WarRuleInitialFundMaxLimit;
             const minValue = CommonConstants.WarRuleInitialFundMinLimit;
-            Common.InputPanel.show({
+            Common.CommonInputPanel.show({
                 title           : Lang.getText(Lang.Type.B0178),
                 currentValue    : "" + ScrModel.getCreateWarInitialFund(),
                 maxChars        : 7,
@@ -119,7 +115,7 @@ namespace TinyWars.SingleCustomRoom {
         private _onTouchedBtnModifyIncomeMultiplier(e: egret.TouchEvent): void {
             const maxValue = CommonConstants.WarRuleIncomeMultiplierMaxLimit;
             const minValue = CommonConstants.WarRuleIncomeMultiplierMinLimit;
-            Common.InputPanel.show({
+            Common.CommonInputPanel.show({
                 title           : Lang.getText(Lang.Type.B0179),
                 currentValue    : "" + ScrModel.getCreateWarIncomeMultiplier(),
                 maxChars        : 5,
@@ -140,7 +136,7 @@ namespace TinyWars.SingleCustomRoom {
         private _onTouchedBtnModifyInitialEnergy(e: egret.TouchEvent): void {
             const maxValue = CommonConstants.WarRuleInitialEnergyMaxLimit;
             const minValue = CommonConstants.WarRuleInitialEnergyMinLimit;
-            Common.InputPanel.show({
+            Common.CommonInputPanel.show({
                 title           : Lang.getText(Lang.Type.B0180),
                 currentValue    : "" + ScrModel.getCreateWarInitialEnergy(),
                 maxChars        : 5,
@@ -161,7 +157,7 @@ namespace TinyWars.SingleCustomRoom {
         private _onTouchedBtnModifyEnergyGrowthMultiplier(e: egret.TouchEvent): void {
             const maxValue = CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit;
             const minValue = CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit;
-            Common.InputPanel.show({
+            Common.CommonInputPanel.show({
                 title           : Lang.getText(Lang.Type.B0181),
                 currentValue    : "" + ScrModel.getCreateWarEnergyGrowthMultiplier(),
                 maxChars        : 5,
@@ -182,7 +178,7 @@ namespace TinyWars.SingleCustomRoom {
         private _onTouchedBtnModifyLuckLowerLimit(e: egret.TouchEvent): void {
             const maxValue = CommonConstants.WarRuleLuckMaxLimit;
             const minValue = CommonConstants.WarRuleLuckMinLimit;
-            Common.InputPanel.show({
+            Common.CommonInputPanel.show({
                 title           : Lang.getText(Lang.Type.B0189),
                 currentValue    : "" + ScrModel.getCreateWarLuckLowerLimit(),
                 maxChars        : 5,
@@ -203,7 +199,7 @@ namespace TinyWars.SingleCustomRoom {
         private _onTouchedBtnModifyLuckUpperLimit(e: egret.TouchEvent): void {
             const maxValue = CommonConstants.WarRuleLuckMaxLimit;
             const minValue = CommonConstants.WarRuleLuckMinLimit;
-            Common.InputPanel.show({
+            Common.CommonInputPanel.show({
                 title           : Lang.getText(Lang.Type.B0189),
                 currentValue    : "" + ScrModel.getCreateWarLuckUpperLimit(),
                 maxChars        : 5,
@@ -224,7 +220,7 @@ namespace TinyWars.SingleCustomRoom {
         private _onTouchedBtnModifyMoveRange(e: egret.TouchEvent): void {
             const maxValue = CommonConstants.WarRuleMoveRangeModifierMaxLimit;
             const minValue = CommonConstants.WarRuleMoveRangeModifierMinLimit;
-            Common.InputPanel.show({
+            Common.CommonInputPanel.show({
                 title           : Lang.getText(Lang.Type.B0182),
                 currentValue    : "" + ScrModel.getCreateWarMoveRangeModifier(),
                 maxChars        : 5,
@@ -245,7 +241,7 @@ namespace TinyWars.SingleCustomRoom {
         private _onTouchedBtnModifyAttackPower(e: egret.TouchEvent): void {
             const maxValue = CommonConstants.WarRuleOffenseBonusMaxLimit;
             const minValue = CommonConstants.WarRuleOffenseBonusMinLimit;
-            Common.InputPanel.show({
+            Common.CommonInputPanel.show({
                 title           : Lang.getText(Lang.Type.B0183),
                 currentValue    : "" + ScrModel.getCreateWarAttackPowerModifier(),
                 maxChars        : 5,
@@ -266,7 +262,7 @@ namespace TinyWars.SingleCustomRoom {
         private _onTouchedBtnModifyVisionRange(e: egret.TouchEvent): void {
             const maxValue = CommonConstants.WarRuleVisionRangeModifierMaxLimit;
             const minValue = CommonConstants.WarRuleVisionRangeModifierMinLimit;
-            Common.InputPanel.show({
+            Common.CommonInputPanel.show({
                 title           : Lang.getText(Lang.Type.B0184),
                 currentValue    : "" + ScrModel.getCreateWarVisionRangeModifier(),
                 maxChars        : 5,

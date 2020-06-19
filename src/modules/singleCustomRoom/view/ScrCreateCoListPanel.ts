@@ -2,7 +2,6 @@
 namespace TinyWars.SingleCustomRoom {
     import Types        = Utility.Types;
     import Lang         = Utility.Lang;
-    import HelpPanel    = Common.HelpPanel;
 
     type OpenData = {
         dataIndex   : number;
@@ -115,7 +114,7 @@ namespace TinyWars.SingleCustomRoom {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnHelp(e: egret.TouchEvent): void {
-            HelpPanel.show({
+            Common.CommonHelpPanel.show({
                 title   : Lang.getText(Lang.Type.B0147),
                 content : Lang.getRichText(Lang.RichType.R0004),
             });

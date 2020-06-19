@@ -1,6 +1,5 @@
 
 namespace TinyWars.MultiCustomWar {
-    import ConfirmPanel     = Common.ConfirmPanel;
     import BwHelpers        = BaseWar.BwHelpers;
     import FloatText        = Utility.FloatText;
     import Lang             = Utility.Lang;
@@ -184,7 +183,7 @@ namespace TinyWars.MultiCustomWar {
             if ((war.getRemainingVotesForDraw()) && (!war.getPlayerInTurn().getHasVotedForDraw())) {
                 FloatText.show(Lang.getText(Lang.Type.A0034));
             } else {
-                ConfirmPanel.show({
+                Common.CommonConfirmPanel.show({
                     title   : Lang.getText(Lang.Type.B0036),
                     content : this._getHintForEndTurn(),
                     callback: () => (this._war.getActionPlanner() as McwActionPlanner).setStateRequestingPlayerEndTurn(),

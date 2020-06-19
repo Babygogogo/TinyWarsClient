@@ -13,7 +13,7 @@ namespace TinyWars.SingleCustomWar {
     import UnitActionType       = Types.UnitActionType;
     import UnitType             = Types.UnitType;
     import BwHelpers            = BaseWar.BwHelpers;
-    import ConfirmPanel         = Common.ConfirmPanel;
+    import CommonConfirmPanel   = Common.CommonConfirmPanel;
 
     export class ScwActionPlanner extends BaseWar.BwActionPlanner {
         private _getPlayerIndexInTurn(): number {
@@ -681,7 +681,7 @@ namespace TinyWars.SingleCustomWar {
                     : [{
                         actionType  : UnitActionType.UseCoSuperPower,
                         callback    : () => {
-                            ConfirmPanel.show({
+                            CommonConfirmPanel.show({
                                 title   : Lang.getText(Lang.Type.B0088),
                                 content : Lang.getText(Lang.Type.A0058),
                                 callback: () => this._setStateRequestingUnitUseCoSuperPower(),
@@ -699,7 +699,7 @@ namespace TinyWars.SingleCustomWar {
                     : [{
                         actionType  : UnitActionType.UseCoPower,
                         callback    : () => {
-                            ConfirmPanel.show({
+                            CommonConfirmPanel.show({
                                 title   : Lang.getText(Lang.Type.B0088),
                                 content : Lang.getText(Lang.Type.A0054),
                                 callback: () => this._setStateRequestingUnitUseCoPower(),
@@ -822,7 +822,7 @@ namespace TinyWars.SingleCustomWar {
                         actionType  : UnitActionType.Wait,
                         callback    : !hasOtherAction
                             ? () => this._setStateRequestingUnitDropOnChooseAction()
-                            : () => ConfirmPanel.show({
+                            : () => CommonConfirmPanel.show({
                                 title   : Lang.getText(Lang.Type.B0088),
                                 content : Lang.getText(Lang.Type.A0055),
                                 callback: () => this._setStateRequestingUnitDropOnChooseAction(),
@@ -833,7 +833,7 @@ namespace TinyWars.SingleCustomWar {
                         actionType  : UnitActionType.Wait,
                         callback    : !hasOtherAction
                             ? () => this._setStateRequestingUnitWait()
-                            : () => ConfirmPanel.show({
+                            : () => CommonConfirmPanel.show({
                                 title   : Lang.getText(Lang.Type.B0088),
                                 content : Lang.getText(Lang.Type.A0055),
                                 callback: () => this._setStateRequestingUnitWait(),

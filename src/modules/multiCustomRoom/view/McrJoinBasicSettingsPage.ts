@@ -1,13 +1,13 @@
 
 namespace TinyWars.MultiCustomRoom {
-    import ProtoTypes   = Utility.ProtoTypes;
-    import Helpers      = Utility.Helpers;
-    import Lang         = Utility.Lang;
-    import Types        = Utility.Types;
-    import Notify       = Utility.Notify;
-    import FloatText    = Utility.FloatText;
-    import HelpPanel    = Common.HelpPanel;
-    import WarMapModel  = WarMap.WarMapModel;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import Helpers          = Utility.Helpers;
+    import Lang             = Utility.Lang;
+    import Types            = Utility.Types;
+    import Notify           = Utility.Notify;
+    import FloatText        = Utility.FloatText;
+    import CommonHelpPanel  = Common.CommonHelpPanel;
+    import WarMapModel      = WarMap.WarMapModel;
 
     export class McrJoinBasicSettingsPage extends GameUi.UiTabPage {
         private _btnMapNameTitle        : GameUi.UiButton;
@@ -118,7 +118,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onTouchedBtnHelpPlayerIndex(e: egret.TouchEvent): void {
-            HelpPanel.show({
+            CommonHelpPanel.show({
                 title  : Lang.getText(Lang.Type.B0018),
                 content: Lang.getRichText(Lang.RichType.R0000),
             });
@@ -139,21 +139,21 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onTouchedBtnHelpTeam(e: egret.TouchEvent): void {
-            HelpPanel.show({
+            CommonHelpPanel.show({
                 title  : Lang.getText(Lang.Type.B0019),
                 content: Lang.getRichText(Lang.RichType.R0001),
             });
         }
 
         private _onTouchedBtnHelpHasFog(e: egret.TouchEvent): void {
-            HelpPanel.show({
+            CommonHelpPanel.show({
                 title  : Lang.getText(Lang.Type.B0020),
                 content: Lang.getRichText(Lang.RichType.R0002),
             });
         }
 
         private _onTouchedBtnHelpTimeLimit(e: egret.TouchEvent): void {
-            HelpPanel.show({
+            CommonHelpPanel.show({
                 title  : Lang.getText(Lang.Type.B0021),
                 content: Lang.getRichText(Lang.RichType.R0003),
             });

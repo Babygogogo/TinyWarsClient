@@ -81,7 +81,7 @@ namespace TinyWars.MapEditor {
                 MeProxy.reqSaveMap(this._slotIndex, this._mapRawData, needReview);
                 this.close();
             } else {
-                Common.ConfirmPanel.show({
+                Common.CommonConfirmPanel.show({
                     title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getText(Lang.Type.A0084),
                     callback: () => {

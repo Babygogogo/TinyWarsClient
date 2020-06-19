@@ -482,7 +482,7 @@ namespace TinyWars.Chat {
                 if (userId !== User.UserModel.getSelfUserId()) {
                     const info = await User.UserModel.getUserPublicInfo(userId);
                     if (info) {
-                        Common.ConfirmPanel.show({
+                        Common.CommonConfirmPanel.show({
                             title   : Lang.getText(Lang.Type.B0088),
                             content : Lang.getFormattedText(Lang.Type.F0025, info.nickname),
                             callback: () => {

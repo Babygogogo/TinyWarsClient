@@ -1,11 +1,11 @@
 
 namespace TinyWars.MultiCustomRoom {
-    import Lang         = Utility.Lang;
-    import Types        = Utility.Types;
-    import Notify       = Utility.Notify;
-    import FloatText    = Utility.FloatText;
-    import ProtoTypes   = Utility.ProtoTypes;
-    import ConfirmPanel = Common.ConfirmPanel;
+    import Lang                 = Utility.Lang;
+    import Types                = Utility.Types;
+    import Notify               = Utility.Notify;
+    import FloatText            = Utility.FloatText;
+    import ProtoTypes           = Utility.ProtoTypes;
+    import CommonConfirmPanel   = Common.CommonConfirmPanel;
 
     const CONFIRM_INTERVAL_MS = 5000;
 
@@ -91,7 +91,7 @@ namespace TinyWars.MultiCustomRoom {
                 if (data.coId != null) {
                     callback1();
                 } else {
-                    ConfirmPanel.show({
+                    CommonConfirmPanel.show({
                         title   : Lang.getText(Lang.Type.B0088),
                         content : `${Lang.getText(Lang.Type.A0050)}\n${Lang.getText(Lang.Type.A0052)}`,
                         callback: callback1,
@@ -102,7 +102,7 @@ namespace TinyWars.MultiCustomRoom {
             if (McrModel.getJoinWarWarRuleIndex() != null) {
                 callback2();
             } else {
-                ConfirmPanel.show({
+                CommonConfirmPanel.show({
                     title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getText(Lang.Type.A0102),
                     callback: callback2,
@@ -122,7 +122,7 @@ namespace TinyWars.MultiCustomRoom {
             McrJoinMapListPanel.show();
 
             if (data.isSelfInTurn) {
-                ConfirmPanel.show({
+                CommonConfirmPanel.show({
                     title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getText(Lang.Type.A0116),
                     callback: () => {

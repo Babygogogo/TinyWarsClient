@@ -248,7 +248,7 @@ namespace TinyWars.MapEditor {
                 panel.close();
                 MeManager.getWar().getDrawer().setModeDrawTileBase(baseViewId);
             } else {
-                Common.ConfirmPanel.show({
+                Common.CommonConfirmPanel.show({
                     title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getText(Lang.Type.A0089),
                     callback: () => {

@@ -276,7 +276,7 @@ namespace TinyWars.MapManagement {
                 if (!srcData) {
                     FloatText.show(Lang.getText(Lang.Type.B0269));
                 } else {
-                    Common.ConfirmPanel.show({
+                    Common.CommonConfirmPanel.show({
                         title   : Lang.getText(Lang.Type.B0088),
                         content : Lang.getText(Lang.Type.A0079),
                         callback: () => {

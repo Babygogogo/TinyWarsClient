@@ -1,14 +1,14 @@
 
 namespace TinyWars.MultiCustomRoom {
-    import Types            = Utility.Types;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import FloatText        = Utility.FloatText;
-    import Helpers          = Utility.Helpers;
-    import Lang             = Utility.Lang;
-    import Notify           = Utility.Notify;
-    import ConfirmPanel     = Common.ConfirmPanel;
-    import WarMapModel      = WarMap.WarMapModel;
-    import CommonConstants  = Utility.ConfigManager.COMMON_CONSTANTS;
+    import Types                = Utility.Types;
+    import ProtoTypes           = Utility.ProtoTypes;
+    import FloatText            = Utility.FloatText;
+    import Helpers              = Utility.Helpers;
+    import Lang                 = Utility.Lang;
+    import Notify               = Utility.Notify;
+    import CommonConfirmPanel   = Common.CommonConfirmPanel;
+    import WarMapModel          = WarMap.WarMapModel;
+    import CommonConstants      = Utility.ConfigManager.COMMON_CONSTANTS;
 
     export class McrCreateAdvancedSettingsPage extends GameUi.UiTabPage {
         private _btnMapNameTitle    : GameUi.UiButton;
@@ -112,7 +112,7 @@ namespace TinyWars.MultiCustomRoom {
             } else {
                 const maxValue = CommonConstants.WarRuleInitialFundMaxLimit;
                 const minValue = CommonConstants.WarRuleInitialFundMinLimit;
-                Common.InputPanel.show({
+                Common.CommonInputPanel.show({
                     title           : Lang.getText(Lang.Type.B0178),
                     currentValue    : "" + McrModel.getCreateWarInitialFund(),
                     maxChars        : 7,
@@ -137,7 +137,7 @@ namespace TinyWars.MultiCustomRoom {
             } else {
                 const maxValue = CommonConstants.WarRuleIncomeMultiplierMaxLimit;
                 const minValue = CommonConstants.WarRuleIncomeMultiplierMinLimit;
-                Common.InputPanel.show({
+                Common.CommonInputPanel.show({
                     title           : Lang.getText(Lang.Type.B0179),
                     currentValue    : "" + McrModel.getCreateWarIncomeMultiplier(),
                     maxChars        : 5,
@@ -162,7 +162,7 @@ namespace TinyWars.MultiCustomRoom {
             } else {
                 const maxValue = CommonConstants.WarRuleInitialEnergyMaxLimit;
                 const minValue = CommonConstants.WarRuleInitialEnergyMinLimit;
-                Common.InputPanel.show({
+                Common.CommonInputPanel.show({
                     title           : Lang.getText(Lang.Type.B0180),
                     currentValue    : "" + McrModel.getCreateWarInitialEnergy(),
                     maxChars        : 5,
@@ -187,7 +187,7 @@ namespace TinyWars.MultiCustomRoom {
             } else {
                 const maxValue = CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit;
                 const minValue = CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit;
-                Common.InputPanel.show({
+                Common.CommonInputPanel.show({
                     title           : Lang.getText(Lang.Type.B0181),
                     currentValue    : "" + McrModel.getCreateWarEnergyGrowthMultiplier(),
                     maxChars        : 5,
@@ -212,7 +212,7 @@ namespace TinyWars.MultiCustomRoom {
             } else {
                 const maxValue = CommonConstants.WarRuleLuckMaxLimit;
                 const minValue = CommonConstants.WarRuleLuckMinLimit;
-                Common.InputPanel.show({
+                Common.CommonInputPanel.show({
                     title           : Lang.getText(Lang.Type.B0189),
                     currentValue    : "" + McrModel.getCreateWarLuckLowerLimit(),
                     maxChars        : 5,
@@ -237,7 +237,7 @@ namespace TinyWars.MultiCustomRoom {
             } else {
                 const maxValue = CommonConstants.WarRuleLuckMaxLimit;
                 const minValue = CommonConstants.WarRuleLuckMinLimit;
-                Common.InputPanel.show({
+                Common.CommonInputPanel.show({
                     title           : Lang.getText(Lang.Type.B0190),
                     currentValue    : "" + McrModel.getCreateWarLuckUpperLimit(),
                     maxChars        : 5,
@@ -262,7 +262,7 @@ namespace TinyWars.MultiCustomRoom {
             } else {
                 const maxValue = CommonConstants.WarRuleMoveRangeModifierMaxLimit;
                 const minValue = CommonConstants.WarRuleMoveRangeModifierMinLimit;
-                Common.InputPanel.show({
+                Common.CommonInputPanel.show({
                     title           : Lang.getText(Lang.Type.B0182),
                     currentValue    : "" + McrModel.getCreateWarMoveRangeModifier(),
                     maxChars        : 5,
@@ -287,7 +287,7 @@ namespace TinyWars.MultiCustomRoom {
             } else {
                 const maxValue = CommonConstants.WarRuleOffenseBonusMaxLimit;
                 const minValue = CommonConstants.WarRuleOffenseBonusMinLimit;
-                Common.InputPanel.show({
+                Common.CommonInputPanel.show({
                     title           : Lang.getText(Lang.Type.B0183),
                     currentValue    : "" + McrModel.getCreateWarAttackPowerModifier(),
                     maxChars        : 5,
@@ -312,7 +312,7 @@ namespace TinyWars.MultiCustomRoom {
             } else {
                 const maxValue = CommonConstants.WarRuleVisionRangeModifierMaxLimit;
                 const minValue = CommonConstants.WarRuleVisionRangeModifierMinLimit;
-                Common.InputPanel.show({
+                Common.CommonInputPanel.show({
                     title           : Lang.getText(Lang.Type.B0184),
                     currentValue    : "" + McrModel.getCreateWarVisionRangeModifier(),
                     maxChars        : 5,
@@ -361,7 +361,7 @@ namespace TinyWars.MultiCustomRoom {
                     this._updateGroupCoNames();
 
                 } else {
-                    ConfirmPanel.show({
+                    CommonConfirmPanel.show({
                         title   : Lang.getText(Lang.Type.B0088),
                         content : Lang.getText(Lang.Type.A0057),
                         callback: () => {
@@ -392,7 +392,7 @@ namespace TinyWars.MultiCustomRoom {
                     this._updateGroupCoNames();
 
                 } else {
-                    ConfirmPanel.show({
+                    CommonConfirmPanel.show({
                         title   : Lang.getText(Lang.Type.B0088),
                         content : Lang.getText(Lang.Type.A0057),
                         callback: () => {

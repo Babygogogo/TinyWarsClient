@@ -1,18 +1,18 @@
 
 namespace TinyWars.SingleCustomWar {
-    import ConfirmPanel     = Common.ConfirmPanel;
-    import Notify           = Utility.Notify;
-    import Lang             = Utility.Lang;
-    import Types            = Utility.Types;
-    import FlowManager      = Utility.FlowManager;
-    import Logger           = Utility.Logger;
-    import FloatText        = Utility.FloatText;
-    import LocalStorage     = Utility.LocalStorage;
-    import ProtoManager     = Utility.ProtoManager;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import WarMapModel      = WarMap.WarMapModel;
-    import TimeModel        = Time.TimeModel;
-    import CommonConstants  = Utility.ConfigManager.COMMON_CONSTANTS;
+    import CommonConfirmPanel   = Common.CommonConfirmPanel;
+    import Notify               = Utility.Notify;
+    import Lang                 = Utility.Lang;
+    import Types                = Utility.Types;
+    import FlowManager          = Utility.FlowManager;
+    import Logger               = Utility.Logger;
+    import FloatText            = Utility.FloatText;
+    import LocalStorage         = Utility.LocalStorage;
+    import ProtoManager         = Utility.ProtoManager;
+    import ProtoTypes           = Utility.ProtoTypes;
+    import WarMapModel          = WarMap.WarMapModel;
+    import TimeModel            = Time.TimeModel;
+    import CommonConstants      = Utility.ConfigManager.COMMON_CONSTANTS;
 
     const enum MenuType {
         Main,
@@ -130,7 +130,7 @@ namespace TinyWars.SingleCustomWar {
 
         private _onNotifySScrCreateCustomWar(e: egret.Event): void {
             const data = e.data as ProtoTypes.IS_ScrCreateCustomWar;
-            Common.ConfirmPanel.show({
+            Common.CommonConfirmPanel.show({
                 title   : Lang.getText(Lang.Type.B0088),
                 content : Lang.getText(Lang.Type.A0107),
                 callback: () => {
@@ -246,7 +246,7 @@ namespace TinyWars.SingleCustomWar {
                 callbackOnTouchedTitle  : !war.getIsSinglePlayerCheating()
                     ? null
                     : () => {
-                        Common.InputPanel.show({
+                        Common.CommonInputPanel.show({
                             title           : Lang.getText(Lang.Type.B0178),
                             currentValue    : "" + currValue,
                             maxChars        : 7,
@@ -279,7 +279,7 @@ namespace TinyWars.SingleCustomWar {
                 callbackOnTouchedTitle  : !war.getIsSinglePlayerCheating()
                     ? null
                     : () => {
-                        Common.InputPanel.show({
+                        Common.CommonInputPanel.show({
                             title           : Lang.getText(Lang.Type.B0179),
                             currentValue    : "" + currValue,
                             maxChars        : 5,
@@ -312,7 +312,7 @@ namespace TinyWars.SingleCustomWar {
                 callbackOnTouchedTitle  : !war.getIsSinglePlayerCheating()
                     ? null
                     : () => {
-                        Common.InputPanel.show({
+                        Common.CommonInputPanel.show({
                             title           : Lang.getText(Lang.Type.B0180),
                             currentValue    : "" + currValue,
                             maxChars        : 3,
@@ -345,7 +345,7 @@ namespace TinyWars.SingleCustomWar {
                 callbackOnTouchedTitle  : !war.getIsSinglePlayerCheating()
                     ? null
                     : () => {
-                        Common.InputPanel.show({
+                        Common.CommonInputPanel.show({
                             title           : Lang.getText(Lang.Type.B0181),
                             currentValue    : "" + currValue,
                             maxChars        : 5,
@@ -378,7 +378,7 @@ namespace TinyWars.SingleCustomWar {
                 callbackOnTouchedTitle  : !war.getIsSinglePlayerCheating()
                     ? null
                     : () => {
-                        Common.InputPanel.show({
+                        Common.CommonInputPanel.show({
                             title           : Lang.getText(Lang.Type.B0182),
                             currentValue    : "" + currValue,
                             maxChars        : 3,
@@ -411,7 +411,7 @@ namespace TinyWars.SingleCustomWar {
                 callbackOnTouchedTitle  : !war.getIsSinglePlayerCheating()
                     ? null
                     : () => {
-                        Common.InputPanel.show({
+                        Common.CommonInputPanel.show({
                             title           : Lang.getText(Lang.Type.B0183),
                             currentValue    : "" + currValue,
                             maxChars        : 5,
@@ -444,7 +444,7 @@ namespace TinyWars.SingleCustomWar {
                 callbackOnTouchedTitle  : !war.getIsSinglePlayerCheating()
                     ? null
                     : () => {
-                        Common.InputPanel.show({
+                        Common.CommonInputPanel.show({
                             title           : Lang.getText(Lang.Type.B0184),
                             currentValue    : "" + currValue,
                             maxChars        : 3,
@@ -477,7 +477,7 @@ namespace TinyWars.SingleCustomWar {
                 callbackOnTouchedTitle  : !war.getIsSinglePlayerCheating()
                     ? null
                     : () => {
-                        Common.InputPanel.show({
+                        Common.CommonInputPanel.show({
                             title           : Lang.getText(Lang.Type.B0189),
                             currentValue    : "" + currValue,
                             maxChars        : 4,
@@ -516,7 +516,7 @@ namespace TinyWars.SingleCustomWar {
                 callbackOnTouchedTitle  : !war.getIsSinglePlayerCheating()
                     ? null
                     : () => {
-                        Common.InputPanel.show({
+                        Common.CommonInputPanel.show({
                             title           : Lang.getText(Lang.Type.B0190),
                             currentValue    : "" + currValue,
                             maxChars        : 4,
@@ -623,7 +623,7 @@ namespace TinyWars.SingleCustomWar {
                 return {
                     name    : Lang.getText(Lang.Type.B0260),
                     callback: () => {
-                        Common.ConfirmPanel.show({
+                        Common.CommonConfirmPanel.show({
                             title   : Lang.getText(Lang.Type.B0088),
                             content : Lang.getText(Lang.Type.A0071),
                             callback: () => {
@@ -647,7 +647,7 @@ namespace TinyWars.SingleCustomWar {
                 return {
                     name    : Lang.getText(Lang.Type.B0261),
                     callback: () => {
-                        Common.ConfirmPanel.show({
+                        Common.CommonConfirmPanel.show({
                             title   : Lang.getText(Lang.Type.B0088),
                             content : Lang.getText(Lang.Type.A0072),
                             callback: () => {
@@ -667,7 +667,7 @@ namespace TinyWars.SingleCustomWar {
                 return {
                     name    : Lang.getText(Lang.Type.B0366),
                     callback: () => {
-                        Common.ConfirmPanel.show({
+                        Common.CommonConfirmPanel.show({
                             title   : Lang.getText(Lang.Type.B0088),
                             content : Lang.getText(Lang.Type.A0108),
                             callback: () => {
@@ -684,7 +684,7 @@ namespace TinyWars.SingleCustomWar {
             return {
                 name    : Lang.getText(Lang.Type.B0054),
                 callback: () => {
-                    ConfirmPanel.show({
+                    CommonConfirmPanel.show({
                         title   : Lang.getText(Lang.Type.B0054),
                         content : Lang.getText(Lang.Type.A0025),
                         callback: () => FlowManager.gotoLobby(),
@@ -710,7 +710,7 @@ namespace TinyWars.SingleCustomWar {
                         } else if ((unit.getPlayerIndex() !== war.getPlayerIndexInTurn()) || (unit.getActionState() !== Types.UnitActionState.Idle)) {
                             FloatText.show(Lang.getText(Lang.Type.A0028));
                         } else {
-                            ConfirmPanel.show({
+                            CommonConfirmPanel.show({
                                 title   : Lang.getText(Lang.Type.B0081),
                                 content : Lang.getText(Lang.Type.A0029),
                                 callback: () => this._actionPlanner.setStateRequestingPlayerDeleteUnit(),
@@ -875,7 +875,7 @@ namespace TinyWars.SingleCustomWar {
             if (war.getIsSinglePlayerCheating()) {
                 const player    = data.player;
                 const isHuman   = player.getUserId() != null;
-                Common.ConfirmPanel.show({
+                Common.CommonConfirmPanel.show({
                     title   : Lang.getText(Lang.Type.B0088),
                     content : isHuman ? Lang.getText(Lang.Type.A0110) : Lang.getText(Lang.Type.A0111),
                     callback: () => {
@@ -923,7 +923,7 @@ namespace TinyWars.SingleCustomWar {
                 callbackOnTouchedTitle  : !isCheating
                     ? null
                     : () => {
-                        Common.InputPanel.show({
+                        Common.CommonInputPanel.show({
                             title           : `P${player.getPlayerIndex()} ${Lang.getText(Lang.Type.B0032)}`,
                             currentValue    : "" + currValue,
                             maxChars        : 7,
@@ -1003,7 +1003,7 @@ namespace TinyWars.SingleCustomWar {
                         if (player.getCoUnitId() == null) {
                             FloatText.show(Lang.getText(Lang.Type.A0109));
                         } else {
-                            Common.InputPanel.show({
+                            Common.CommonInputPanel.show({
                                 title           : `P${player.getPlayerIndex()} ${Lang.getText(Lang.Type.B0159)}`,
                                 currentValue    : "" + currValue,
                                 maxChars        : 3,

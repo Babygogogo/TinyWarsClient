@@ -106,7 +106,7 @@ namespace TinyWars.MapEditor {
         public onItemTapEvent(): void {
             const data          = this.data as DataForTileBaseRenderer;
             const mapFileName   = data.mapFileName;
-            Common.ConfirmPanel.show({
+            Common.CommonConfirmPanel.show({
                 title   : Lang.getText(Lang.Type.B0088),
                 content : Lang.getText(Lang.Type.A0095) + `\n"${data.mapName}"`,
                 callback: async () => {

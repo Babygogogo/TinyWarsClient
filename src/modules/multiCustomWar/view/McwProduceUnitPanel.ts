@@ -239,7 +239,7 @@ namespace TinyWars.MultiCustomWar {
                             rawMaxHp,
                             Math.floor(data.currentFund * Utility.ConfigManager.UNIT_MAX_HP / (data.cfgCost * skillCfg[5] / 100) / normalizer) * normalizer
                         );
-                        Common.InputPanel.show({
+                        Common.CommonInputPanel.show({
                             title           : `${Lang.getUnitName(unitType)} HP`,
                             currentValue    : "" + maxHp,
                             maxChars        : 3,

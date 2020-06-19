@@ -1,12 +1,9 @@
 
 namespace TinyWars.MultiCustomRoom {
     import ProtoTypes   = Utility.ProtoTypes;
-    import Helpers      = Utility.Helpers;
-    import Notify       = Utility.Notify;
     import Lang         = Utility.Lang;
     import FloatText    = Utility.FloatText;
     import WarMapModel  = WarMap.WarMapModel;
-    import HelpPanel    = Common.HelpPanel;
 
     export class McrJoinPasswordPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;

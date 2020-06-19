@@ -7,8 +7,8 @@ namespace TinyWars.MultiCustomRoom {
     import Types            = Utility.Types;
     import FlowManager      = Utility.FlowManager;
     import ConfigManager    = Utility.ConfigManager;
-    import HelpPanel        = Common.HelpPanel;
-    import BlockPanel       = Common.BlockPanel;
+    import CommonHelpPanel  = Common.CommonHelpPanel;
+    import CommonBlockPanel = Common.CommonBlockPanel;
 
     export class McrContinueDetailPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
@@ -98,13 +98,13 @@ namespace TinyWars.MultiCustomRoom {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnHelpFog(e: egret.TouchEvent): void {
-            HelpPanel.show({
+            CommonHelpPanel.show({
                 title  : Lang.getText(Lang.Type.B0020),
                 content: Lang.getRichText(Lang.RichType.R0002),
             });
         }
         private _onTouchedBtnHelpTimeLimit(e: egret.TouchEvent): void {
-            HelpPanel.show({
+            CommonHelpPanel.show({
                 title  : Lang.getText(Lang.Type.B0021),
                 content: Lang.getRichText(Lang.RichType.R0003),
             });
@@ -113,7 +113,7 @@ namespace TinyWars.MultiCustomRoom {
             McrContinueDetailPanel.hide();
         }
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            BlockPanel.show({
+            CommonBlockPanel.show({
                 title   : Lang.getText(Lang.Type.B0029),
                 content : Lang.getText(Lang.Type.A0021),
             });
@@ -124,7 +124,7 @@ namespace TinyWars.MultiCustomRoom {
             FlowManager.gotoMultiCustomWar((e.data as ProtoTypes.IS_McrContinueWar).war as Types.SerializedWar);
         }
         private _onNotifySMcrContinueWarFailed(e: egret.Event): void {
-            BlockPanel.hide();
+            CommonBlockPanel.hide();
             McrContinueDetailPanel.hide();
         }
         private _onNotifyLanguageChanged(e: egret.Event): void {
