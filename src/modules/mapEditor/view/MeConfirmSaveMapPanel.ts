@@ -1,8 +1,9 @@
 
 namespace TinyWars.MapEditor {
-    import Lang     = Utility.Lang;
-    import Notify   = Utility.Notify;
-    import Types    = Utility.Types;
+    import Lang             = Utility.Lang;
+    import Notify           = Utility.Notify;
+    import Types            = Utility.Types;
+    import InvalidationType = Types.CustomMapInvalidationType;
 
     export class MeConfirmSaveMapPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud3;
@@ -64,11 +65,11 @@ namespace TinyWars.MapEditor {
             war.getUnitMap().reviseAllUnitIds();
 
             const mapRawData                = war.getField().serialize();
-            const isValidMap                = MeUtility.checkIsValidMap(mapRawData);
+            const invalidationType          = MeUtility.getMapInvalidationType(mapRawData);
             this._mapRawData                = mapRawData;
             this._slotIndex                 = war.getSlotIndex();
-            this._labelReviewDesc.visible   = !isValidMap;
-            this._groupNeedReview.visible   = isValidMap;
+            this._groupNeedReview.visible   = invalidationType === InvalidationType.Valid;
+            this._labelReviewDesc.text      = getMapInvalidationDesc(invalidationType);
         }
 
         private _onTouchedBtnCancel(e: egret.TouchEvent): void {
@@ -112,6 +113,19 @@ namespace TinyWars.MapEditor {
 
         private _updateImgNeedReview(): void {
             this._imgNeedReview.visible = this._needReview;
+        }
+    }
+
+    function getMapInvalidationDesc(type: InvalidationType): string {
+        switch (type) {
+            case InvalidationType.InvalidMapDesigner    : return Lang.getText(Lang.Type.A0118);
+            case InvalidationType.InvalidMapName        : return Lang.getText(Lang.Type.A0119);
+            case InvalidationType.InvalidMapNameEnglish : return Lang.getText(Lang.Type.A0120);
+            case InvalidationType.InvalidPlayersCount   : return Lang.getText(Lang.Type.A0121);
+            case InvalidationType.InvalidTiles          : return Lang.getText(Lang.Type.A0122);
+            case InvalidationType.InvalidUnits          : return Lang.getText(Lang.Type.A0123);
+            case InvalidationType.InvalidWarRuleList    : return Lang.getText(Lang.Type.A0124);
+            default: return "";
         }
     }
 }

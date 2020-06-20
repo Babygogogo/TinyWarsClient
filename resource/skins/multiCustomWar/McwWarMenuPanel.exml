@@ -8,7 +8,7 @@
                         horizontalCenter="0" />
         <GameUi:UiLabel id="_labelNoCommand" text="(暂无可用选项)" bold="true" size="20" textColor="0xFFFFFF"
                         horizontalCenter="0" verticalCenter="0" />
-        <GameUi:UiScrollList id="_listCommand" left="0" right="0" bottom="35" top="35">
+        <GameUi:UiScrollList id="_listCommand" left="0" right="0" bottom="50" top="35">
             <e:List>
                 <e:itemRendererSkinName>
                     <e:Skin width="160" height="50" currentState="up" states="down,up">
@@ -23,15 +23,10 @@
                 </e:itemRendererSkinName>
             </e:List>
         </GameUi:UiScrollList>
-        <GameUi:UiButton id="_btnBack" label="返回" horizontalCenter="0" bottom="10">
-            <GameUi:skinName>
-                <e:Skin states="up,down,disabled">
-                    <e:Image width="100%" height="100%" />
-                    <e:Label id="labelDisplay" size="20" bold="true" left="0" right="0" top="0" bottom="0"
-                             textColor="0xffffff" />
-                </e:Skin>
-            </GameUi:skinName>
-        </GameUi:UiButton>
+        <GameUi:UiButton id="_btnBack" label="" skinName="Skins.Component.Button.ButtonClose002" bottom="0" left="0" width="50"
+                         height="40"></GameUi:UiButton>
+        <GameUi:UiButton id="_btnHome" label="" bottom="0" skinName="Skins.Component.Button.ButtonHome001" right="0"
+                         width="50" height="40" />
     </e:Group>
     <e:Group id="_groupInfo" top="40" bottom="0" right="0" left="160">
         <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"

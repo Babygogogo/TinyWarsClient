@@ -437,6 +437,7 @@ namespace TinyWars.MapEditor {
                 this._createCommandStopTileAnimation(),
                 this._createCommandUseOriginTexture(),
                 this._createCommandUseNewTexture(),
+                this._createCommandClear(),
                 this._createCommandResize(),
                 this._createCommandOffset(),
                 this._createCommandImport(),
@@ -629,6 +630,18 @@ namespace TinyWars.MapEditor {
                         Common.CommonModel.setUnitAndTileTextureVersion(Types.UnitAndTileTextureVersion.V2);
                         this._updateView();
                     }
+                };
+            }
+        }
+        private _createCommandClear(): DataForCommandRenderer | null {
+            if (this._war.getIsReview()) {
+                return null;
+            } else {
+                return {
+                    name    : Lang.getText(Lang.Type.B0391),
+                    callback: () => {
+                        MeClearPanel.show();
+                    },
                 };
             }
         }

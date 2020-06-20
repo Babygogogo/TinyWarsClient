@@ -673,4 +673,15 @@ namespace TinyWars.Utility.Types {
         Regular     = 1,
         Incremental = 2,
     }
+
+    export const enum CustomMapInvalidationType {
+        Valid,
+        InvalidMapDesigner,
+        InvalidMapName,
+        InvalidMapNameEnglish,
+        InvalidPlayersCount,
+        InvalidUnits,
+        InvalidTiles,
+        InvalidWarRuleList,
+    }
 }

@@ -586,6 +586,38 @@ namespace TinyWars.Utility.Lang {
             `战局已开始，并已进入您的回合。要现在就进入战局吗？`,
             `The war has started and it's your turn now. Do you want to play it now?`,
         ],
+        [Type.A0117]: [
+            `注：清空后，所有地形都会被设置为平原，所有部队都会被删除！`,
+            `Caution: All tiles will be set as plain and all units will be deleted!`,
+        ],
+        [Type.A0118]: [
+            `设计者名称不合法`,
+            `Invalid MapDesigner.`,
+        ],
+        [Type.A0119]: [
+            `地图名称不合法`,
+            `Invalid MapName.`,
+        ],
+        [Type.A0120]: [
+            `地图英文名称不合法`,
+            `Invalid English MapName.`,
+        ],
+        [Type.A0121]: [
+            `请确保至少有两名玩家，且没有跳过势力颜色`,
+            `Invalid forces.`,
+        ],
+        [Type.A0122]: [
+            `部队数据不合法`,
+            `Invalid units.`,
+        ],
+        [Type.A0123]: [
+            `地形数据不合法`,
+            `Invalid tiles.`,
+        ],
+        [Type.A0124]: [
+            `预设规则未设置或不合法`,
+            `Preset rules are not set or invalid.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -2137,6 +2169,10 @@ namespace TinyWars.Utility.Lang {
         [Type.B0390]: [
             `增量时间`,
             `Incremental Time`,
+        ],
+        [Type.B0391]: [
+            `清空`,
+            `Clear`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
