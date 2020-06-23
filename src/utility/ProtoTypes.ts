@@ -9283,6 +9283,9 @@ export declare interface IMessageContainer {
     /** MessageContainer S_McwCommonHandleBoot */
     S_McwCommonHandleBoot?: (IS_McwCommonHandleBoot|null);
 
+    /** MessageContainer S_McwCommonBroadcastGameStart */
+    S_McwCommonBroadcastGameStart?: (IS_McwCommonBroadcastGameStart|null);
+
     /** MessageContainer C_McwPlayerBeginTurn */
     C_McwPlayerBeginTurn?: (IC_McwPlayerBeginTurn|null);
 
@@ -9733,6 +9736,9 @@ export declare class MessageContainer implements IMessageContainer {
 
     /** MessageContainer S_McwCommonHandleBoot. */
     public S_McwCommonHandleBoot?: (IS_McwCommonHandleBoot|null);
+
+    /** MessageContainer S_McwCommonBroadcastGameStart. */
+    public S_McwCommonBroadcastGameStart?: (IS_McwCommonBroadcastGameStart|null);
 
     /** MessageContainer C_McwPlayerBeginTurn. */
     public C_McwPlayerBeginTurn?: (IC_McwPlayerBeginTurn|null);
@@ -19088,6 +19094,108 @@ export declare class S_McwCommonHandleBoot implements IS_McwCommonHandleBoot {
 
     /**
      * Converts this S_McwCommonHandleBoot to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a S_McwCommonBroadcastGameStart. */
+export declare interface IS_McwCommonBroadcastGameStart {
+
+    /** S_McwCommonBroadcastGameStart warId */
+    warId?: (number|null);
+
+    /** S_McwCommonBroadcastGameStart mapFileName */
+    mapFileName?: (string|null);
+
+    /** S_McwCommonBroadcastGameStart userIdList */
+    userIdList?: (number[]|null);
+}
+
+/** Represents a S_McwCommonBroadcastGameStart. */
+export declare class S_McwCommonBroadcastGameStart implements IS_McwCommonBroadcastGameStart {
+
+    /**
+     * Constructs a new S_McwCommonBroadcastGameStart.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IS_McwCommonBroadcastGameStart);
+
+    /** S_McwCommonBroadcastGameStart warId. */
+    public warId: number;
+
+    /** S_McwCommonBroadcastGameStart mapFileName. */
+    public mapFileName: string;
+
+    /** S_McwCommonBroadcastGameStart userIdList. */
+    public userIdList: number[];
+
+    /**
+     * Creates a new S_McwCommonBroadcastGameStart instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns S_McwCommonBroadcastGameStart instance
+     */
+    public static create(properties?: IS_McwCommonBroadcastGameStart): S_McwCommonBroadcastGameStart;
+
+    /**
+     * Encodes the specified S_McwCommonBroadcastGameStart message. Does not implicitly {@link S_McwCommonBroadcastGameStart.verify|verify} messages.
+     * @param message S_McwCommonBroadcastGameStart message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IS_McwCommonBroadcastGameStart, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified S_McwCommonBroadcastGameStart message, length delimited. Does not implicitly {@link S_McwCommonBroadcastGameStart.verify|verify} messages.
+     * @param message S_McwCommonBroadcastGameStart message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IS_McwCommonBroadcastGameStart, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a S_McwCommonBroadcastGameStart message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns S_McwCommonBroadcastGameStart
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): S_McwCommonBroadcastGameStart;
+
+    /**
+     * Decodes a S_McwCommonBroadcastGameStart message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns S_McwCommonBroadcastGameStart
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): S_McwCommonBroadcastGameStart;
+
+    /**
+     * Verifies a S_McwCommonBroadcastGameStart message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a S_McwCommonBroadcastGameStart message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns S_McwCommonBroadcastGameStart
+     */
+    public static fromObject(object: { [k: string]: any }): S_McwCommonBroadcastGameStart;
+
+    /**
+     * Creates a plain object from a S_McwCommonBroadcastGameStart message. Also converts values to other types if specified.
+     * @param message S_McwCommonBroadcastGameStart
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: S_McwCommonBroadcastGameStart, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this S_McwCommonBroadcastGameStart to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };

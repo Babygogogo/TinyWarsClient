@@ -5,36 +5,51 @@ namespace TinyWars.MultiCustomWar.McwProxy {
     import Types        = Utility.Types;
     import ProtoTypes   = Utility.ProtoTypes;
     import Notify       = Utility.Notify;
+    import Lang         = Utility.Lang;
     import GridIndex    = Types.GridIndex;
     import UnitType     = Types.UnitType;
     import BwWar        = BaseWar.BwWar;
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: Codes.S_McwCommonHandleBoot,     callback: _onSMcwCommonHandleBoot },
-            { msgCode: Codes.S_McwPlayerSyncWar,        callback: _onSMcwPlayerSyncWar, },
-            { msgCode: Codes.S_McwPlayerBeginTurn,      callback: _onSMcwPlayerBeginTurn, },
-            { msgCode: Codes.S_McwPlayerDeleteUnit,     callback: _onSMcwPlayerDeleteUnit },
-            { msgCode: Codes.S_McwPlayerEndTurn,        callback: _onSMcwPlayerEndTurn, },
-            { msgCode: Codes.S_McwPlayerProduceUnit,    callback: _onSMcwPlayerProduceUnit },
-            { msgCode: Codes.S_McwPlayerSurrender,      callback: _onSMcwPlayerSurrender },
-            { msgCode: Codes.S_McwPlayerVoteForDraw,    callback: _onSMcwPlayerVoteForDraw },
-            { msgCode: Codes.S_McwUnitAttack,           callback: _onSMcwUnitAttack },
-            { msgCode: Codes.S_McwUnitBeLoaded,         callback: _onSMcwUnitBeLoaded },
-            { msgCode: Codes.S_McwUnitBuildTile,        callback: _onSMcwUnitBuildTile },
-            { msgCode: Codes.S_McwUnitCaptureTile,      callback: _onSMcwUnitCaptureTile },
-            { msgCode: Codes.S_McwUnitDive,             callback: _onSMcwUnitDive },
-            { msgCode: Codes.S_McwUnitDrop,             callback: _onSMcwUnitDrop },
-            { msgCode: Codes.S_McwUnitJoin,             callback: _onSMcwUnitJoin },
-            { msgCode: Codes.S_McwUnitLaunchFlare,      callback: _onSMcwUnitLaunchFlare },
-            { msgCode: Codes.S_McwUnitLaunchSilo,       callback: _onSMcwUnitLaunchSilo },
-            { msgCode: Codes.S_McwUnitLoadCo,           callback: _onSMcwUnitLoadCo },
-            { msgCode: Codes.S_McwUnitProduceUnit,      callback: _onSMcwUnitProduceUnit },
-            { msgCode: Codes.S_McwUnitSupply,           callback: _onSMcwUnitSupply },
-            { msgCode: Codes.S_McwUnitSurface,          callback: _onSMcwUnitSurface },
-            { msgCode: Codes.S_McwUnitUseCoSkill,       callback: _onSMcwUnitUseCoSkill },
-            { msgCode: Codes.S_McwUnitWait,             callback: _onSMcwUnitWait },
+            { msgCode: Codes.S_McwCommonBroadcastGameStart, callback: _onSMcwCommonBroadcastGameStart },
+            { msgCode: Codes.S_McwCommonHandleBoot,         callback: _onSMcwCommonHandleBoot },
+            { msgCode: Codes.S_McwPlayerSyncWar,            callback: _onSMcwPlayerSyncWar, },
+            { msgCode: Codes.S_McwPlayerBeginTurn,          callback: _onSMcwPlayerBeginTurn, },
+            { msgCode: Codes.S_McwPlayerDeleteUnit,         callback: _onSMcwPlayerDeleteUnit },
+            { msgCode: Codes.S_McwPlayerEndTurn,            callback: _onSMcwPlayerEndTurn, },
+            { msgCode: Codes.S_McwPlayerProduceUnit,        callback: _onSMcwPlayerProduceUnit },
+            { msgCode: Codes.S_McwPlayerSurrender,          callback: _onSMcwPlayerSurrender },
+            { msgCode: Codes.S_McwPlayerVoteForDraw,        callback: _onSMcwPlayerVoteForDraw },
+            { msgCode: Codes.S_McwUnitAttack,               callback: _onSMcwUnitAttack },
+            { msgCode: Codes.S_McwUnitBeLoaded,             callback: _onSMcwUnitBeLoaded },
+            { msgCode: Codes.S_McwUnitBuildTile,            callback: _onSMcwUnitBuildTile },
+            { msgCode: Codes.S_McwUnitCaptureTile,          callback: _onSMcwUnitCaptureTile },
+            { msgCode: Codes.S_McwUnitDive,                 callback: _onSMcwUnitDive },
+            { msgCode: Codes.S_McwUnitDrop,                 callback: _onSMcwUnitDrop },
+            { msgCode: Codes.S_McwUnitJoin,                 callback: _onSMcwUnitJoin },
+            { msgCode: Codes.S_McwUnitLaunchFlare,          callback: _onSMcwUnitLaunchFlare },
+            { msgCode: Codes.S_McwUnitLaunchSilo,           callback: _onSMcwUnitLaunchSilo },
+            { msgCode: Codes.S_McwUnitLoadCo,               callback: _onSMcwUnitLoadCo },
+            { msgCode: Codes.S_McwUnitProduceUnit,          callback: _onSMcwUnitProduceUnit },
+            { msgCode: Codes.S_McwUnitSupply,               callback: _onSMcwUnitSupply },
+            { msgCode: Codes.S_McwUnitSurface,              callback: _onSMcwUnitSurface },
+            { msgCode: Codes.S_McwUnitUseCoSkill,           callback: _onSMcwUnitUseCoSkill },
+            { msgCode: Codes.S_McwUnitWait,                 callback: _onSMcwUnitWait },
         ], McwProxy);
+    }
+
+    function _onSMcwCommonBroadcastGameStart(e: egret.Event): void {
+        const data = e.data as ProtoTypes.IS_McwCommonBroadcastGameStart;
+        Lang.getGameStartDesc(data).then(desc => {
+            Common.CommonConfirmPanel.show({
+                title   : Lang.getText(Lang.Type.B0392),
+                content : desc,
+                callback: () => {
+                    MultiCustomRoom.McrProxy.reqContinueWar(data.warId);
+                },
+            });
+        });
     }
 
     export function reqMcwCommonHandleBoot(warId: number): void {

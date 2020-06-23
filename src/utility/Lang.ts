@@ -618,6 +618,10 @@ namespace TinyWars.Utility.Lang {
             `预设规则未设置或不合法`,
             `Preset rules are not set or invalid.`,
         ],
+        [Type.A0125]: [
+            `要现在就进入战局吗？`,
+            `Do you want to play it now?`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -2174,6 +2178,10 @@ namespace TinyWars.Utility.Lang {
             `清空`,
             `Clear`,
         ],
+        [Type.B0392]: [
+            `游戏已开始`,
+            `Game Started`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -2528,6 +2536,10 @@ namespace TinyWars.Utility.Lang {
         [Type.F0026]: [
             `数据加载中，请%s秒后重试`,
             `Now loading, please wait %ds and retry.`,
+        ],
+        [Type.F0027]: [
+            `"%s"上的一局多人对战已经正式开始！`,
+            `A game on "%s" has started!`
         ],
     };
 
@@ -3121,5 +3133,18 @@ namespace TinyWars.Utility.Lang {
         } else {
             return null;
         }
+    }
+    export async function getGameStartDesc(data: ProtoTypes.IS_McwCommonBroadcastGameStart): Promise<string> {
+        const playerList: string[] = [];
+        let playerIndex = 1;
+        for (const userId of data.userIdList) {
+            playerList.push(`P${playerIndex}: ${await User.UserModel.getUserNickname(userId)}`);
+            ++playerIndex;
+        }
+        return [
+            getFormattedText(Type.F0027, await WarMap.WarMapModel.getMapNameInLanguage(data.mapFileName)),
+            ...playerList,
+            getText(Type.A0125)
+        ].join("\n");
     }
 }
