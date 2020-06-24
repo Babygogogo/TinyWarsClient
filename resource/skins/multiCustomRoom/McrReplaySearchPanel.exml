@@ -2,19 +2,12 @@
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
     <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="semi_transparent" />
-    <e:Group width="430" height="280" horizontalCenter="0" verticalCenter="0">
+    <e:Group width="430" height="350" horizontalCenter="0" verticalCenter="0">
         <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" />
         <GameUi:UiLabel id="_labelTitle" text="查找地图" textColor="0xffffff" y="13" horizontalCenter="0" size="20" />
-        <GameUi:UiButton id="_btnClose" label="关闭" y="12" right="10">
-            <GameUi:skinName>
-                <e:Skin states="up,down,disabled">
-                    <e:Image width="100%" height="100%" />
-                    <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="22" bold="true"
-                             textColor="0xff0000" />
-                </e:Skin>
-            </GameUi:skinName>
-        </GameUi:UiButton>
+        <GameUi:UiButton id="_btnClose" label="" skinName="Skins.Component.Button.ButtonClose002" right="0" top="0" width="50"
+                         height="40"></GameUi:UiButton>
         <e:Group x="40" y="44">
             <e:Group y="0" x="0">
                 <GameUi:UiLabel id="_labelReplayIdTitle" text="回放ID" textColor="0xFFFFFF" y="3" size="20"
@@ -68,6 +61,38 @@
                 <GameUi:UiLabel id="_labelMapNameTitle" text="地图名称" textColor="0xFFFFFF" y="3" size="20"
                                 textAlign="right" maxTextWidth="120" right="230" />
                 <GameUi:UiTextInput id="_inputMapName" width="220" x="130" y="0" anchorOffsetX="0" anchorOffsetY="0"
+                                    maxChars="20">
+                    <GameUi:skinName>
+                        <e:Skin width="100" height="30">
+                            <e:Image source="c08_t06_s01_f01" left="0" right="0" y="27" />
+                            <e:EditableText id="textDisplay" size="24" left="0" right="0" height="30"
+                                            textColor="0xffffff" />
+                            <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0" right="0" text=""
+                                     height="30" textColor="0x808080" />
+                        </e:Skin>
+                    </GameUi:skinName>
+                </GameUi:UiTextInput>
+            </e:Group>
+            <e:Group y="50" x="10">
+                <GameUi:UiLabel id="_labelUserNicknameTitle" text="玩家昵称" textColor="0xFFFFFF" y="3" size="20"
+                                textAlign="right" maxTextWidth="120" right="230" />
+                <GameUi:UiTextInput id="_inputUserNickname" width="220" x="130" y="0" anchorOffsetX="0"
+                                    anchorOffsetY="0" maxChars="20">
+                    <GameUi:skinName>
+                        <e:Skin width="100" height="30">
+                            <e:Image source="c08_t06_s01_f01" left="0" right="0" y="27" />
+                            <e:EditableText id="textDisplay" size="24" left="0" right="0" height="30"
+                                            textColor="0xffffff" />
+                            <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0" right="0" text=""
+                                     height="30" textColor="0x808080" />
+                        </e:Skin>
+                    </GameUi:skinName>
+                </GameUi:UiTextInput>
+            </e:Group>
+            <e:Group y="60" x="20">
+                <GameUi:UiLabel id="_labelCoNameTitle" text="CO名称" textColor="0xFFFFFF" y="3" size="20"
+                                textAlign="right" maxTextWidth="120" right="230" />
+                <GameUi:UiTextInput id="_inputCoName" width="220" x="130" y="0" anchorOffsetX="0" anchorOffsetY="0"
                                     maxChars="20">
                     <GameUi:skinName>
                         <e:Skin width="100" height="30">

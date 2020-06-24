@@ -126,7 +126,6 @@ namespace TinyWars.MultiCustomRoom {
             this._labelUserNicknameTitle.text   = Lang.getText(Lang.Type.B0393);
             this._labelCoNameTitle.text         = Lang.getText(Lang.Type.B0394);
             this._labelDesc.text                = Lang.getText(Lang.Type.A0063);
-            this._btnClose.label                = Lang.getText(Lang.Type.B0146);
             this._btnReset.label                = Lang.getText(Lang.Type.B0233);
             this._btnSearch.label               = Lang.getText(Lang.Type.B0228);
         }
