@@ -1,9 +1,10 @@
 
 namespace TinyWars.MultiCustomRoom.McrProxy {
-    import NetManager = Network.Manager;
-    import ActionCode = Network.Codes;
-    import ProtoTypes = Utility.ProtoTypes;
-    import Notify     = Utility.Notify;
+    import NetManager   = Network.Manager;
+    import ActionCode   = Network.Codes;
+    import ProtoTypes   = Utility.ProtoTypes;
+    import Notify       = Utility.Notify;
+    import Types        = Utility.Types;
 
     export function init(): void {
         NetManager.addListeners([
@@ -116,6 +117,7 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
         if (data.errorCode) {
             Notify.dispatch(Notify.Type.SMcrContinueWarFailed, data);
         } else {
+            Utility.FlowManager.gotoMultiCustomWar((e.data as ProtoTypes.IS_McrContinueWar).war as Types.SerializedWar);
             Notify.dispatch(Notify.Type.SMcrContinueWar, data);
         }
     }

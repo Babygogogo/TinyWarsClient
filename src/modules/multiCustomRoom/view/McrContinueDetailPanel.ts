@@ -77,7 +77,6 @@ namespace TinyWars.MultiCustomRoom {
                 { ui: this._btnConfirm,       callback: this._onTouchedBtnConfirm },
             ];
             this._notifyListeners = [
-                { type: Notify.Type.SMcrContinueWar,        callback: this._onNotifySMcrContinueWar },
                 { type: Notify.Type.SMcrContinueWarFailed,  callback: this._onNotifySMcrContinueWarFailed },
                 { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
             ];
@@ -120,9 +119,6 @@ namespace TinyWars.MultiCustomRoom {
             McrProxy.reqContinueWar(this._openData.id);
         }
 
-        private _onNotifySMcrContinueWar(e: egret.Event): void {
-            FlowManager.gotoMultiCustomWar((e.data as ProtoTypes.IS_McrContinueWar).war as Types.SerializedWar);
-        }
         private _onNotifySMcrContinueWarFailed(e: egret.Event): void {
             CommonBlockPanel.hide();
             McrContinueDetailPanel.hide();

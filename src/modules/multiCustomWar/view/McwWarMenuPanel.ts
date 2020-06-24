@@ -28,6 +28,7 @@ namespace TinyWars.MultiCustomWar {
         private _listCommand    : GameUi.UiScrollList;
         private _labelNoCommand : GameUi.UiLabel;
         private _btnBack        : GameUi.UiButton;
+        private _btnHome        : GameUi.UiButton;
 
         private _groupInfo              : eui.Group;
         private _labelMenuTitle         : GameUi.UiLabel;
@@ -78,6 +79,7 @@ namespace TinyWars.MultiCustomWar {
             ];
             this._uiListeners = [
                 { ui: this._btnBack,        callback: this._onTouchedBtnBack },
+                { ui: this._btnHome,        callback: this._onTouchedBtnHome },
                 { ui: this._btnBuildings,   callback: this._onTouchedBtnBuildings },
             ];
             this._listCommand.setItemRenderer(CommandRenderer);
@@ -144,6 +146,14 @@ namespace TinyWars.MultiCustomWar {
             }
         }
 
+        private _onTouchedBtnHome(e: egret.TouchEvent): void {
+            CommonConfirmPanel.show({
+                title   : Lang.getText(Lang.Type.B0054),
+                content : Lang.getText(Lang.Type.A0025),
+                callback: () => FlowManager.gotoLobby(),
+            });
+        }
+
         private _onTouchedBtnBuildings(e: egret.TouchEvent): void {
             McwBuildingListPanel.show();
         }
@@ -175,7 +185,6 @@ namespace TinyWars.MultiCustomWar {
             this._labelPlayerInfoTitle.text             = Lang.getText(Lang.Type.B0224);
             this._btnMapNameTitle.label                 = Lang.getText(Lang.Type.B0225);
             this._btnBuildings.label                    = Lang.getText(Lang.Type.B0333);
-            this._btnBack.label                         = Lang.getText(Lang.Type.B0146);
             this._updateListWarInfo();
         }
 
@@ -279,11 +288,8 @@ namespace TinyWars.MultiCustomWar {
 
         private _createDataForMainMenu(): DataForCommandRenderer[] {
             return [
-                // this._createCommandOpenCoInfoMenu(),
                 this._createCommandOpenAdvancedMenu(),
                 this._createCommandSyncWar(),
-                // this._createCommandChat(),
-                this._createCommandGotoLobby(),
             ].filter(c => !!c);
         }
 
@@ -343,19 +349,6 @@ namespace TinyWars.MultiCustomWar {
                 callback: () => {
                     this.close();
                     Chat.ChatPanel.show({});
-                },
-            }
-        }
-
-        private _createCommandGotoLobby(): DataForCommandRenderer | undefined {
-            return {
-                name    : Lang.getText(Lang.Type.B0054),
-                callback: () => {
-                    CommonConfirmPanel.show({
-                        title   : Lang.getText(Lang.Type.B0054),
-                        content : Lang.getText(Lang.Type.A0025),
-                        callback: () => FlowManager.gotoLobby(),
-                    });
                 },
             }
         }

@@ -4,11 +4,13 @@ namespace TinyWars.MapEditor.MeUtility {
     import Types            = Utility.Types;
     import Lang             = Utility.Lang;
     import Helpers          = Utility.Helpers;
-    import MapConstants     = Utility.ConfigManager.MAP_CONSTANTS;
-    import CommonConstants  = Utility.ConfigManager.COMMON_CONSTANTS;
+    import ConfigManager    = Utility.ConfigManager;
     import MapRawData       = Types.MapRawData;
     import GridIndex        = Types.GridIndex;
     import SymmetryType     = Types.SymmetryType;
+    import InvalidationType = Types.CustomMapInvalidationType;
+    import MapConstants     = ConfigManager.MAP_CONSTANTS;
+    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
     export type AsymmetricalCounters = {
         UpToDown            : number | null;
@@ -40,14 +42,24 @@ namespace TinyWars.MapEditor.MeUtility {
         }
     }
 
-    export function checkIsValidMap(mapRawData: ProtoTypes.IMapRawData): boolean {
-        return (checkIsMapDesignerValid(mapRawData.mapDesigner))
-            && (checkIsMapNameValid(mapRawData.mapName))
-            && (checkIsMapNameEnglishValid(mapRawData.mapNameEnglish))
-            && (checkIsPlayersCountValid(mapRawData))
-            && (checkIsUnitsValid(mapRawData))
-            && (checkIsTilesValid(mapRawData))
-            && (checkIsWarRuleListValid(mapRawData.warRuleList, mapRawData.playersCount!));
+    export function getMapInvalidationType(mapRawData: ProtoTypes.IMapRawData): InvalidationType {
+        if (!checkIsMapDesignerValid(mapRawData.mapDesigner)) {
+            return InvalidationType.InvalidMapDesigner;
+        } else if (!checkIsMapNameValid(mapRawData.mapName)) {
+            return InvalidationType.InvalidMapName;
+        } else if (!checkIsMapNameEnglishValid(mapRawData.mapNameEnglish)) {
+            return InvalidationType.InvalidMapNameEnglish;
+        } else if (!checkIsPlayersCountValid(mapRawData)) {
+            return InvalidationType.InvalidPlayersCount;
+        } else if (!checkIsUnitsValid(mapRawData)) {
+            return InvalidationType.InvalidUnits;
+        } else if (!checkIsTilesValid(mapRawData)) {
+            return InvalidationType.InvalidTiles;
+        } else if (!checkIsWarRuleListValid(mapRawData.warRuleList, mapRawData.playersCount!)) {
+            return InvalidationType.InvalidWarRuleList;
+        } else {
+            return InvalidationType.Valid;
+        }
     }
     function checkIsMapDesignerValid(mapDesigner: string | null | undefined): boolean {
         return (mapDesigner != null)
@@ -445,7 +457,24 @@ namespace TinyWars.MapEditor.MeUtility {
         return true;
     }
 
-
+    export function clearMap(mapRawData: MapRawData, newWidth: number, newHeight: number): MapRawData {
+        return {
+            isMultiPlayer   : mapRawData.isMultiPlayer,
+            isSinglePlayer  : mapRawData.isSinglePlayer,
+            mapDesigner     : mapRawData.mapDesigner,
+            mapName         : mapRawData.mapName,
+            mapNameEnglish  : mapRawData.mapNameEnglish,
+            designerUserId  : mapRawData.designerUserId,
+            playersCount    : mapRawData.playersCount,
+            mapHeight       : newHeight,
+            mapWidth        : newWidth,
+            tileBases       : new Array(newWidth * newHeight).fill(ConfigManager.getTileBaseViewId(Types.TileBaseType.Plain)),
+            tileObjects     : new Array(newWidth * newHeight).fill(0),
+            tileDataList    : null,
+            unitDataList    : null,
+            units           : null,
+        };
+    }
     export function resizeMap(mapRawData: MapRawData, newWidth: number, newHeight: number): MapRawData {
         return {
             isMultiPlayer   : mapRawData.isMultiPlayer,

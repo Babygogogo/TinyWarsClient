@@ -103,15 +103,7 @@
                 </e:Skin>
             </GameUi:skinName>
         </GameUi:UiButton>
-        <GameUi:UiButton id="_btnMenu" label="" width="50" top="0" bottom="0" x="910">
-            <GameUi:skinName>
-                <e:Skin states="up,down,disabled">
-                    <e:Image width="100%" height="100%" source="c04_t01_s02_f01" scale9Grid="9,9,2,2" />
-                    <e:Image source="icon_home_001" scaleX="0.8" scaleY="0.8" horizontalCenter="0" verticalCenter="0" />
-                    <GameUi:UiLabel id="labelDisplay" size="14" textColor="0x00ff00" verticalCenter="0"
-                                    horizontalCenter="0" maxTextWidth="70" />
-                </e:Skin>
-            </GameUi:skinName>
+        <GameUi:UiButton id="_btnMenu" label="" width="50" top="0" bottom="0" x="910" skinName="Skins.Component.Button.ButtonMenu001">
         </GameUi:UiButton>
     </e:Group>
 </e:Skin>

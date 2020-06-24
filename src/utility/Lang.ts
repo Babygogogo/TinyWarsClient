@@ -586,6 +586,42 @@ namespace TinyWars.Utility.Lang {
             `战局已开始，并已进入您的回合。要现在就进入战局吗？`,
             `The war has started and it's your turn now. Do you want to play it now?`,
         ],
+        [Type.A0117]: [
+            `注：清空后，所有地形都会被设置为平原，所有部队都会被删除！`,
+            `Caution: All tiles will be set as plain and all units will be deleted!`,
+        ],
+        [Type.A0118]: [
+            `设计者名称不合法`,
+            `Invalid MapDesigner.`,
+        ],
+        [Type.A0119]: [
+            `地图名称不合法`,
+            `Invalid MapName.`,
+        ],
+        [Type.A0120]: [
+            `地图英文名称不合法`,
+            `Invalid English MapName.`,
+        ],
+        [Type.A0121]: [
+            `请确保至少有两名玩家，且没有跳过势力颜色`,
+            `Invalid forces.`,
+        ],
+        [Type.A0122]: [
+            `部队数据不合法`,
+            `Invalid units.`,
+        ],
+        [Type.A0123]: [
+            `地形数据不合法`,
+            `Invalid tiles.`,
+        ],
+        [Type.A0124]: [
+            `预设规则未设置或不合法`,
+            `Preset rules are not set or invalid.`,
+        ],
+        [Type.A0125]: [
+            `要现在就进入战局吗？`,
+            `Do you want to play it now?`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -2139,10 +2175,18 @@ namespace TinyWars.Utility.Lang {
             `Incremental Time`,
         ],
         [Type.B0391]: [
+            `清空`,
+            `Clear`,
+        ],
+        [Type.B0392]: [
+            `游戏已开始`,
+            `Game Started`,
+        ],
+        [Type.B0393]: [
             `玩家昵称`,
             `User Nickname`,
         ],
-        [Type.B0392]: [
+        [Type.B0394]: [
             `CO名称`,
             `CO Name`,
         ],
@@ -2500,6 +2544,10 @@ namespace TinyWars.Utility.Lang {
         [Type.F0026]: [
             `数据加载中，请%s秒后重试`,
             `Now loading, please wait %ds and retry.`,
+        ],
+        [Type.F0027]: [
+            `"%s"上的一局多人对战已经正式开始！`,
+            `A game on "%s" has started!`
         ],
     };
 
@@ -3093,5 +3141,18 @@ namespace TinyWars.Utility.Lang {
         } else {
             return null;
         }
+    }
+    export async function getGameStartDesc(data: ProtoTypes.IS_McwCommonBroadcastGameStart): Promise<string> {
+        const playerList: string[] = [];
+        let playerIndex = 1;
+        for (const userId of data.userIdList) {
+            playerList.push(`P${playerIndex}: ${await User.UserModel.getUserNickname(userId)}`);
+            ++playerIndex;
+        }
+        return [
+            getFormattedText(Type.F0027, await WarMap.WarMapModel.getMapNameInLanguage(data.mapFileName)),
+            ...playerList,
+            getText(Type.A0125)
+        ].join("\n");
     }
 }
