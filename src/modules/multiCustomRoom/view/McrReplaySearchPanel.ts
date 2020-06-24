@@ -25,6 +25,10 @@ namespace TinyWars.MultiCustomRoom {
         private _inputMyRating          : GameUi.UiTextInput;
         private _labelGlobalRatingTitle : GameUi.UiLabel;
         private _inputGlobalRating      : GameUi.UiTextInput;
+        private _labelCoNameTitle       : GameUi.UiLabel;
+        private _inputCoName            : GameUi.UiTextInput;
+        private _labelUserNicknameTitle : GameUi.UiLabel;
+        private _inputUserNickname      : GameUi.UiTextInput;
 
         public static show(): void {
             if (!McrReplaySearchPanel._instance) {
@@ -90,6 +94,8 @@ namespace TinyWars.MultiCustomRoom {
                 mapName         : this._inputMapName.text || null,
                 minMyRating     : myRating != null ? Math.min(myRating, CommonConstants.ReplayMaxRating) : null,
                 minGlobalRating : globalRating != null ? Math.min(globalRating, CommonConstants.ReplayMaxRating) : null,
+                userNickname    : this._inputUserNickname.text || null,
+                coName          : this._inputCoName.text || null,
             });
 
             this.close();
@@ -117,6 +123,8 @@ namespace TinyWars.MultiCustomRoom {
             this._labelMapNameTitle.text        = Lang.getText(Lang.Type.B0225);
             this._labelMyRatingTitle.text       = Lang.getText(Lang.Type.B0363);
             this._labelGlobalRatingTitle.text   = Lang.getText(Lang.Type.B0364);
+            this._labelUserNicknameTitle.text   = Lang.getText(Lang.Type.B0391);
+            this._labelCoNameTitle.text         = Lang.getText(Lang.Type.B0392);
             this._labelDesc.text                = Lang.getText(Lang.Type.A0063);
             this._btnClose.label                = Lang.getText(Lang.Type.B0146);
             this._btnReset.label                = Lang.getText(Lang.Type.B0233);
