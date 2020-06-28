@@ -1411,7 +1411,10 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
 
         let scoreAndAction : ScoreAndAction;
         for (const unit of await _getCandidateUnitsForPhase1()) {
-            scoreAndAction = _getBetterScoreAndAction(scoreAndAction, await _getActionForMaxScoreWithCandidateUnit(unit));
+            const candidate = await _getActionForMaxScoreWithCandidateUnit(unit);
+            if ((candidate) && (candidate.action.UnitAttack)) {
+                scoreAndAction = _getBetterScoreAndAction(scoreAndAction, candidate);
+            }
         }
         if (scoreAndAction) {
             return scoreAndAction.action;
