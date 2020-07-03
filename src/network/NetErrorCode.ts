@@ -3,6 +3,8 @@ namespace TinyWars.Network {
 export const enum NetErrorCode {
     NoError = 0,
 
+    InternalError,
+
     IllegalRequest,
 
     Login_InvalidAccountOrPassword,
