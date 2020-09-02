@@ -177,7 +177,7 @@ namespace TinyWars.SingleCustomRoom {
                 if (!mapFileName) {
                     this._labelMapName.text = `(${Lang.getText(Lang.Type.B0321)})`;
                 } else {
-                    WarMap.WarMapModel.getMapNameInLanguage(mapFileName).then(value => this._labelMapName.text = value);
+                    WarMap.WarMapModel.getMapNameInCurrentLanguage(mapFileName).then(value => this._labelMapName.text = value);
                 }
             }
         }

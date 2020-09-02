@@ -260,7 +260,7 @@ namespace TinyWars.MapManagement {
 
             const data          = this.data as DataForMapNameRenderer;
             this.currentState   = data.mapFileName === data.panel.getSelectedMapFileName() ? Types.UiState.Down : Types.UiState.Up;
-            WarMapModel.getMapNameInLanguage(data.mapFileName).then(v => this._labelName.text = v);
+            WarMapModel.getMapNameInCurrentLanguage(data.mapFileName).then(v => this._labelName.text = v);
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {

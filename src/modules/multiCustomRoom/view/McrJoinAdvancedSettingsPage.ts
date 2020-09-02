@@ -120,7 +120,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private async _updateLabelMapName(): Promise<void> {
             const mapFileName       = this._mapExtraData.mapFileName;
-            this._labelMapName.text = `${await WarMapModel.getMapNameInLanguage(mapFileName) || "----"} (${Lang.getText(Lang.Type.B0163)}: ${await WarMapModel.getMapDesigner(mapFileName) || "----"})`;
+            this._labelMapName.text = `${await WarMapModel.getMapNameInCurrentLanguage(mapFileName) || "----"} (${Lang.getText(Lang.Type.B0163)}: ${await WarMapModel.getDesignerName(mapFileName) || "----"})`;
         }
     }
 

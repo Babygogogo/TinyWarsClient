@@ -1,7 +1,9 @@
 
 namespace TinyWars.Utility.Helpers {
-    import ColorType    = Types.ColorType;
-    import MessageCodes = Network.Codes;
+    import ColorType            = Types.ColorType;
+    import MessageCodes         = Network.Codes;
+    import IMessageContainer    = ProtoTypes.NetMessage.IMessageContainer;
+    import IActionContainer     = ProtoTypes.WarAction.IActionContainer;
 
     const COLOR_MATRIX_FILTERS = {
         [ColorType.Gray]: new egret.ColorMatrixFilter([
@@ -108,22 +110,22 @@ namespace TinyWars.Utility.Helpers {
         }
     }
 
-    export function getMessageCode(container: ProtoTypes.IMessageContainer): MessageCodes | undefined {
+    export function getMessageCode(container: IMessageContainer): MessageCodes | undefined {
         const name = getMessageName(container);
         return name == null ? undefined : MessageCodes[name as any] as any;
     }
-    export function getMessageName(container: ProtoTypes.IMessageContainer): string | undefined {
+    export function getMessageName(container: IMessageContainer): string | undefined {
         for (const k in container) {
             return k;
         }
         return undefined;
     }
 
-    export function getWarActionCode(container: ProtoTypes.IWarActionContainer): WarActionCodes | null {
+    export function getWarActionCode(container: IActionContainer): WarActionCodes | null {
         const name = getWarActionName(container);
         return name == null ? null : WarActionCodes[name];
     }
-    export function getWarActionName(container: ProtoTypes.IWarActionContainer): string | null {
+    export function getWarActionName(container: IActionContainer): string | null {
         for (const k in container) {
             if (k !== "actionId") {
                 return k;

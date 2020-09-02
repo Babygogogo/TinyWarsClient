@@ -3142,15 +3142,15 @@ namespace TinyWars.Utility.Lang {
             return null;
         }
     }
-    export async function getGameStartDesc(data: ProtoTypes.IS_McwCommonBroadcastGameStart): Promise<string> {
+    export async function getGameStartDesc(data: ProtoTypes.NetMessage.IS_McwCommonBroadcastGameStart): Promise<string> {
         const playerList: string[] = [];
         let playerIndex = 1;
-        for (const userId of data.userIdList) {
-            playerList.push(`P${playerIndex}: ${await User.UserModel.getUserNickname(userId)}`);
+        for (const playerInfo of data.playerInfoList) {
+            playerList.push(`P${playerIndex}: ${await User.UserModel.getUserNickname(playerInfo.userId)}`);
             ++playerIndex;
         }
         return [
-            getFormattedText(Type.F0027, await WarMap.WarMapModel.getMapNameInLanguage(data.mapFileName)),
+            getFormattedText(Type.F0027, await WarMap.WarMapModel.getMapNameInCurrentLanguage(data.mapId)),
             ...playerList,
             getText(Type.A0125)
         ].join("\n");

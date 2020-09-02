@@ -10,10 +10,10 @@ namespace TinyWars.WarMap {
     export class WarMapUnitView extends egret.DisplayObjectContainer {
         private _unitImage: UiImage;
 
-        private _data : Types.UnitViewData;
+        private _data : Types.WarMapUnitViewData;
         private _state: Types.UnitActionState = Types.UnitActionState.Idle;
 
-        public constructor(data?: Types.UnitViewData, tickCount?: number) {
+        public constructor(data?: Types.WarMapUnitViewData, tickCount?: number) {
             super();
 
             const unitImage  = new UiImage();
@@ -24,14 +24,14 @@ namespace TinyWars.WarMap {
             (data) && (this.update(data, tickCount));
         }
 
-        public update(data: Types.UnitViewData, tickCount?: number): void {
+        public update(data: Types.WarMapUnitViewData, tickCount?: number): void {
             this._data = data;
             this.updateOnAnimationTick(tickCount || TimeModel.getUnitAnimationTickCount());
             this.x = data.gridX * GRID_WIDTH - GRID_WIDTH / 4;
             this.y = data.gridY * GRID_HEIGHT - GRID_HEIGHT / 2;
         }
 
-        public getData(): Types.UnitViewData {
+        public getData(): Types.WarMapUnitViewData {
             return this._data;
         }
 

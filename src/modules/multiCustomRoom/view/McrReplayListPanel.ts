@@ -181,7 +181,7 @@ namespace TinyWars.MultiCustomRoom {
                 const info                      = data.info;
                 const mapExtraData              = await WarMapModel.getExtraData(info.mapFileName);
                 const totalRaters               = info.totalRaters;
-                this._labelMapName.text         = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInLanguage(mapExtraData.mapFileName));
+                this._labelMapName.text         = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapExtraData.mapFileName));
                 this._labelDesigner.text        = Lang.getFormattedText(Lang.Type.F0001, mapExtraData.mapDesigner);
                 this._labelHasFog.text          = Lang.getFormattedText(Lang.Type.F0005, Lang.getText(info.hasFog ? Lang.Type.B0012 : Lang.Type.B0001));
                 this._labelTurnIndex.text       = `${Lang.getText(Lang.Type.B0091)}: ${info.turnIndex + 1}`;
@@ -310,7 +310,7 @@ namespace TinyWars.MultiCustomRoom {
             this.currentState           = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
             this._labelTurnIndex.text   = `${Lang.getText(Lang.Type.B0091)}: ${info.turnIndex + 1}`;
             this._labelReplayId.text    = `ID: ${info.replayId}`;
-            WarMapModel.getMapNameInLanguage(info.mapFileName).then(v => this._labelName.text = v);
+            WarMapModel.getMapNameInCurrentLanguage(info.mapFileName).then(v => this._labelName.text = v);
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {

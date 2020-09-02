@@ -1,11 +1,74 @@
 
 namespace TinyWars.Utility.Types {
-    import Codes = Network.Codes;
-
     ////////////////////////////////////////////////////////////////////////////////
     // Config types.
     ////////////////////////////////////////////////////////////////////////////////
-    export interface FullConfig extends ProtoTypes.IFullConfig {
+    export interface TileCategoryCfg extends ProtoTypes.Config.ITileCategoryCfg {
+        category: TileCategory;
+    }
+    export interface UnitCategoryCfg extends ProtoTypes.Config.IUnitCategoryCfg {
+        category: UnitCategory;
+    }
+    export interface TileTemplateCfg extends ProtoTypes.Config.ITileTemplateCfg {
+        type                : TileType;
+        defenseAmount       : number;
+        defenseUnitCategory : UnitCategory;
+        visionRange         : number;
+    }
+    export interface UnitTemplateCfg extends ProtoTypes.Config.IUnitTemplateCfg {
+        type                    : UnitType;
+        maxHp                   : number;
+        armorType               : ArmorType;
+        isAffectedByLuck        : number;
+        moveRange               : number;
+        moveType                : MoveType;
+        maxFuel                 : number;
+        fuelConsumptionPerTurn  : number;
+        productionCost          : number;
+        visionRange             : number;
+    }
+    export interface DamageChartCfg extends ProtoTypes.Config.IDamageChartCfg {
+        attackerType: UnitType;
+        armorType   : ArmorType;
+        weaponType  : WeaponType;
+    }
+    export interface MoveCostCfg extends ProtoTypes.Config.IMoveCostCfg {
+        tileType    : TileType;
+        moveType    : MoveType;
+    }
+    export interface UnitPromotionCfg extends ProtoTypes.Config.IUnitPromotionCfg {
+        promotion   : number;
+        attackBonus : number;
+        defenseBonus: number;
+    }
+    export interface VisionBonusCfg extends ProtoTypes.Config.IVisionBonusCfg {
+        unitType    : UnitType;
+        tileType    : TileType;
+        visionBonus : number;
+    }
+    export interface BuildableTileCfg extends ProtoTypes.Config.IBuildableTileCfg {
+        unitType        : UnitType;
+        srcBaseType     : TileBaseType;
+        srcObjectType   : TileObjectType;
+        dstBaseType     : TileBaseType;
+        dstObjectType   : TileObjectType;
+    }
+    export interface PlayerRankCfg extends ProtoTypes.Config.PlayerRankCfg {
+        minScore    : number;
+        rank        : number;
+    }
+    export interface CoBasicCfg extends ProtoTypes.Config.ICoBasicCfg {
+        coId                : number;
+        name                : string;
+        zoneRadius          : number;
+        boardCostPercentage : number;
+        maxLoadCount        : number;
+    }
+    export interface CoSkillCfg extends ProtoTypes.Config.ICoSkillCfg {
+        skillId     : number;
+        name        : string;
+    }
+    export interface FullConfig extends ProtoTypes.Config.FullConfig {
         TileCategory    : TileCategoryCfg[];
         UnitCategory    : UnitCategoryCfg[];
         TileTemplate    : TileTemplateCfg[];
@@ -18,145 +81,6 @@ namespace TinyWars.Utility.Types {
         PlayerRank      : PlayerRankCfg[];
         CoBasic         : CoBasicCfg[];
         CoSkill         : CoSkillCfg[];
-    }
-    export interface TileCategoryCfg extends ProtoTypes.ITileCategoryCfg {
-        category: TileCategory;
-    }
-    export interface UnitCategoryCfg extends ProtoTypes.IUnitCategoryCfg {
-        category: UnitCategory;
-    }
-    export interface TileTemplateCfg extends ProtoTypes.ITileTemplateCfg {
-        type                : TileType;
-        defenseAmount       : number;
-        defenseUnitCategory : UnitCategory;
-        hideUnitCategory?   : UnitCategory;
-    }
-    export interface UnitTemplateCfg extends ProtoTypes.IUnitTemplateCfg {
-        type                    : UnitType;
-        maxHp                   : number;
-        armorType               : ArmorType;
-        isAffectedByLuck        : number;
-        moveRange               : number;
-        moveType                : MoveType;
-        maxFuel                 : number;
-        fuelConsumptionPerTurn  : number;
-        productionCost          : number;
-        visionRange             : number;
-    }
-    export interface DamageChartCfg extends ProtoTypes.IDamageChartCfg {
-        attackerType: UnitType;
-        armorType   : ArmorType;
-        weaponType  : WeaponType;
-    }
-    export interface MoveCostCfg extends ProtoTypes.IMoveCostCfg {
-        tileType    : TileType;
-        moveType    : MoveType;
-    }
-    export interface UnitPromotionCfg extends ProtoTypes.IUnitPromotionCfg {
-        promotion   : number;
-        attackBonus : number;
-        defenseBonus: number;
-    }
-    export interface VisionBonusCfg extends ProtoTypes.IVisionBonusCfg {
-        unitType    : UnitType;
-        tileType    : TileType;
-        visionBonus : number;
-    }
-    export interface BuildableTileCfg extends ProtoTypes.IBuildableTileCfg {
-        unitType    : UnitType;
-        srcTileType : TileType;
-        dstTileType : TileType;
-    }
-    export interface PlayerRankCfg extends ProtoTypes.IPlayerRankCfg {
-        minScore: number;
-        rank    : number;
-    }
-    export interface CoBasicCfg extends ProtoTypes.ICoBasicCfg {
-        coId                : number;
-        name                : string;
-        zoneRadius          : number;
-        boardCostPercentage : number;
-    }
-    export interface CoSkillCfg extends ProtoTypes.ICoSkillCfg {
-        skillId     : number;
-        name        : string;
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Serialization data types.
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export interface WarActionContainer extends ProtoTypes.IWarActionContainer {
-    }
-    export interface SerializedTile extends ProtoTypes.ISerializedWarTile {
-        gridX           : number;
-        gridY           : number;
-        baseViewId      : number;
-        objectViewId    : number;
-    };
-    export interface SerializedUnit extends ProtoTypes.ISerializedWarUnit {
-        gridX   : number;
-        gridY   : number;
-        unitId  : number;
-        viewId  : number;
-    }
-    export interface SerializedTileMap extends ProtoTypes.ISerializedWarTileMap {
-        tiles?: SerializedTile[];
-    }
-    export interface SerializedUnitMap extends ProtoTypes.ISerializedWarUnitMap {
-        units?      : SerializedUnit[];
-        nextUnitId  : number;
-    }
-    export interface SerializedPlayer extends ProtoTypes.ISerializedWarPlayer {
-        fund            : number;
-        hasVotedForDraw : boolean;
-        isAlive         : boolean;
-        playerIndex     : number;
-        teamIndex       : number;
-        restTimeToBoot  : number;
-        userId?         : number;
-        coCurrentEnergy : number;
-        coUsingSkillType: CoSkillType;
-    }
-    export interface SerializedFogMap extends ProtoTypes.ISerializedWarFogMap {
-        mapsForPath?: SerializedBwFogMapForPath[];
-    }
-    export interface SerializedBwFogMapForPath extends ProtoTypes.ISerializedWarFogMapForPath {
-        playerIndex : number;
-        encodedMap  : string;
-    }
-    export interface SerializedField extends ProtoTypes.ISerializedWarField {
-        fogMap  : SerializedFogMap;
-        unitMap?: SerializedUnitMap;
-        tileMap?: SerializedTileMap;
-    }
-    export interface SerializedTurn extends ProtoTypes.ISerializedWarTurn {
-        turnIndex       : number;
-        playerIndex     : number;
-        turnPhaseCode   : TurnPhaseCode;
-        enterTurnTime   : number;
-    }
-    export interface SerializedWar extends ProtoTypes.ISerializedWar {
-        warId           : number;
-        configVersion   : string;
-        mapFileName     : string;
-        warName         : string;
-        warPassword     : string;
-        warComment      : string;
-
-        hasFogByDefault     : boolean;
-        initialFund         : number;
-        incomeModifier      : number;
-        initialEnergy       : number;
-        energyGrowthModifier: number;
-        moveRangeModifier   : number;
-        attackPowerModifier : number;
-        visionRangeModifier : number;
-
-        remainingVotesForDraw?  : number;
-        executedActions         : WarActionContainer[];
-        players                 : SerializedPlayer[];
-        turn                    : SerializedTurn;
-        field                   : SerializedField;
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -323,29 +247,13 @@ namespace TinyWars.Utility.Types {
         TrueVision      = 2,
     }
 
-    export interface MapRawData extends ProtoTypes.IMapRawData {
-        mapDesigner     : string;
-        mapName         : string;
-        mapNameEnglish  : string;
-        mapWidth        : number;
-        mapHeight       : number;
-        isMultiPlayer   : boolean;
-        isSinglePlayer  : boolean;
-        playersCount    : number;
-        tileBases       : number[];
-        tileObjects     : number[];
-        units           : number[];
-        unitDataList    : SerializedUnit[];
-        tileDataList    : SerializedTile[];
-    }
-
     export type MapAvailability = {
         canMcw : boolean;
         canWr  : boolean;
         canScw : boolean;
     }
 
-    export type UnitViewData = {
+    export type WarMapUnitViewData = {
         configVersion: string;
 
         gridX: number;
@@ -368,12 +276,6 @@ namespace TinyWars.Utility.Types {
         fuel        : number;
         primaryAmmo : number | null;
         flareAmmo   : number | null;
-    }
-
-    export interface MeMapData extends ProtoTypes.IMapEditorData {
-        slotIndex   : number;
-        reviewStatus: MapReviewStatus;
-        mapRawData  : ProtoTypes.IMapRawData | null | undefined;
     }
 
     export type MapSizeAndMaxPlayerIndex = {

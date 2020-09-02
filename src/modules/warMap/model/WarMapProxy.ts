@@ -34,10 +34,10 @@ namespace TinyWars.WarMap.WarMapProxy {
         }
     }
 
-    export function reqGetMapExtraData(mapFileName: string): void {
+    export function reqGetMapExtraData(mapId: number): void {
         NetManager.send({
             C_MapGetExtraData: {
-                mapFileName,
+                mapId: mapId,
             },
         });
     }
@@ -51,10 +51,10 @@ namespace TinyWars.WarMap.WarMapProxy {
         }
     }
 
-    export function reqGetMapRawData(mapFileName: string): void {
+    export function reqGetMapRawData(mapId: number): void {
         NetManager.send({
             C_MapGetRawData: {
-                mapFileName,
+                mapId,
             },
         });
     }

@@ -183,7 +183,7 @@ namespace TinyWars.MultiCustomRoom {
         private async _showMap(mapFileName: string): Promise<void> {
             const mapRawData                = await WarMapModel.getMapRawData(mapFileName);
             const mapExtraData              = await WarMapModel.getExtraData(mapFileName);
-            this._labelMapName.text         = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInLanguage(mapFileName));
+            this._labelMapName.text         = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapFileName));
             this._labelDesigner.text        = Lang.getFormattedText(Lang.Type.F0001, mapRawData.mapDesigner);
             this._labelPlayersCount.text    = Lang.getFormattedText(Lang.Type.F0002, mapRawData.playersCount);
             this._labelRating.text          = Lang.getFormattedText(Lang.Type.F0003, mapExtraData.rating != null ? mapExtraData.rating.toFixed(2) : Lang.getText(Lang.Type.B0001));
@@ -234,7 +234,7 @@ namespace TinyWars.MultiCustomRoom {
 
             const data          = this.data as DataForMapNameRenderer;
             this.currentState   = data.mapFileName === data.panel.getSelectedMapFileName() ? Types.UiState.Down : Types.UiState.Up;
-            WarMapModel.getMapNameInLanguage(data.mapFileName).then(v => this._labelName.text = v);
+            WarMapModel.getMapNameInCurrentLanguage(data.mapFileName).then(v => this._labelName.text = v);
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {

@@ -75,7 +75,7 @@ namespace TinyWars.MapEditor {
             for (const [mapFileName] of WarMap.WarMapModel.getExtraDataDict()) {
                 dataList.push({
                     mapFileName,
-                    mapName     : await WarMap.WarMapModel.getMapNameInLanguage(mapFileName),
+                    mapName     : await WarMap.WarMapModel.getMapNameInCurrentLanguage(mapFileName),
                     panel       : this,
                 });
             }

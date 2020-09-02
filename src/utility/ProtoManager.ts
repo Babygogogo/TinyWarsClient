@@ -1,23 +1,27 @@
 
 namespace TinyWars.Utility.ProtoManager {
+    import IMessageContainer    = ProtoTypes.NetMessage.IMessageContainer;
+    import ISerialWar           = ProtoTypes.WarSerialization.ISerialWar;
+    import IMapRawData          = ProtoTypes.Map.IMapRawData;
+
     const PROTO_FILENAME = "resource/config/NetMessageProto.json";
 
-    let _messageContainerClass  : typeof ProtoTypes.MessageContainer;
-    let _fullConfigClass        : typeof ProtoTypes.FullConfig;
-    let _serializedWarClass     : typeof ProtoTypes.SerializedWar;
-    let _mapRawDataClass        : typeof ProtoTypes.MapRawData;
+    let MessageContainerClass   : typeof ProtoTypes.NetMessage.MessageContainer;
+    let FullConfigClass         : typeof ProtoTypes.Config.FullConfig;
+    let SerialWarClass          : typeof ProtoTypes.WarSerialization.SerialWar;
+    let MapRawDataClass         : typeof ProtoTypes.Map.MapRawData;
 
     export function init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             protobuf.load(PROTO_FILENAME).then(
-                root => {
-                    if (!root) {
+                protoRoot => {
+                    if (!protoRoot) {
                         reject("no root!");
                     } else {
-                        _messageContainerClass  = root.lookupType("MessageContainer") as any;
-                        _fullConfigClass        = root.lookupType("FullConfig") as any;
-                        _serializedWarClass     = root.lookupType("SerializedWar") as any;
-                        _mapRawDataClass        = root.lookupType("MapRawData") as any;
+                        MessageContainerClass   = protoRoot.lookupType("NetMessage.MessageContainer") as any;
+                        FullConfigClass         = protoRoot.lookupType("Config.FullConfig") as any;
+                        SerialWarClass          = protoRoot.lookupType("WarSerialization.SerialWar") as any;
+                        MapRawDataClass         = protoRoot.lookupType("Map.MapRawData") as any;
                         resolve();
                     }
                 },
@@ -26,34 +30,34 @@ namespace TinyWars.Utility.ProtoManager {
         });
     }
 
-    export function encodeAsMessageContainer(action: ProtoTypes.IMessageContainer): Uint8Array | undefined {
+    export function encodeAsMessageContainer(action: IMessageContainer): Uint8Array | undefined {
         if (Helpers.getMessageCode(action) != null) {
-            return _messageContainerClass.encode(action).finish();
+            return MessageContainerClass.encode(action).finish();
         } else {
             Logger.assert(false, "ProtoManager.encodeAsMessageContainer() invalid message! ", JSON.stringify(action));
             return undefined;
         }
     }
-    export function decodeAsMessageContainer(data: any): ProtoTypes.IMessageContainer {
-        return _messageContainerClass.toObject(_messageContainerClass.decode(getDataForDecode(data)));
+    export function decodeAsMessageContainer(data: any): IMessageContainer {
+        return MessageContainerClass.toObject(MessageContainerClass.decode(getDataForDecode(data)));
     }
 
     export function decodeAsFullConfig(data: any): Types.FullConfig {
-        return _fullConfigClass.toObject(_fullConfigClass.decode(getDataForDecode(data))) as any;
+        return FullConfigClass.toObject(FullConfigClass.decode(getDataForDecode(data))) as any;
     }
 
-    export function encodeAsSerializedWar(data: Types.SerializedWar): Uint8Array {
-        return _serializedWarClass.encode(data).finish();
+    export function encodeAsSerializedWar(data: ISerialWar): Uint8Array {
+        return SerialWarClass.encode(data).finish();
     }
-    export function decodeAsSerializedWar(data: any): Types.SerializedWar {
-        return _serializedWarClass.toObject(_serializedWarClass.decode(data)) as any;
+    export function decodeAsSerializedWar(data: any): ISerialWar {
+        return SerialWarClass.toObject(SerialWarClass.decode(data)) as any;
     }
 
-    export function encodeAsMapRawData(data: Types.MapRawData): Uint8Array {
-        return _mapRawDataClass.encode(data).finish();
+    export function encodeAsMapRawData(data: IMapRawData): Uint8Array {
+        return MapRawDataClass.encode(data).finish();
     }
-    export function decodeAsMapRawData(data: any): ProtoTypes.IMapRawData {
-        return _mapRawDataClass.toObject(_mapRawDataClass.decode(data));
+    export function decodeAsMapRawData(data: any): IMapRawData {
+        return MapRawDataClass.toObject(MapRawDataClass.decode(data));
     }
 
     function getDataForDecode(encodedData: any): Uint8Array | protobuf.Reader {

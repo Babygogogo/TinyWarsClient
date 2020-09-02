@@ -110,7 +110,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _updateLabelMapName(): void {
-            WarMapModel.getMapNameInLanguage(this._mapExtraData.mapFileName).then(v => this._labelMapName.text = v);
+            WarMapModel.getMapNameInCurrentLanguage(this._mapExtraData.mapFileName).then(v => this._labelMapName.text = v);
         }
 
         private _updateLabelPlayersCount(): void {

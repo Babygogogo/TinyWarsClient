@@ -23,7 +23,7 @@ namespace TinyWars.WarMap {
             ], this);
         }
 
-        public initWithDataList(dataList: Types.UnitViewData[]): void {
+        public initWithDataList(dataList: Types.WarMapUnitViewData[]): void {
             this._clearUnits();
 
             const tickCount = TimeModel.getUnitAnimationTickCount();
@@ -32,8 +32,8 @@ namespace TinyWars.WarMap {
             }
             this._reviseZOrderForAllUnits();
         }
-        public initWithMapRawData(mapRawData: ProtoTypes.IMapRawData): void {
-            this.initWithDataList(_createUnitViewDataList(mapRawData.units, mapRawData.unitDataList, mapRawData.mapWidth, mapRawData.mapHeight));
+        public initWithMapRawData(mapRawData: ProtoTypes.Map.IMapRawData): void {
+            this.initWithDataList(_createUnitViewDataList(mapRawData.unitDataList, mapRawData.mapWidth, mapRawData.mapHeight));
         }
 
         private _onNotifyUnitAnimationTick(e: egret.Event): void {
@@ -66,7 +66,7 @@ namespace TinyWars.WarMap {
             }
         }
 
-        private _addUnit(data: Types.UnitViewData, tickCount: number): void {
+        private _addUnit(data: Types.WarMapUnitViewData, tickCount: number): void {
             const unitType = Utility.ConfigManager.getUnitTypeAndPlayerIndex(data.viewId).unitType;
             const view     = new WarMapUnitView(data, tickCount);
             this._unitViews.push(view);
@@ -88,27 +88,11 @@ namespace TinyWars.WarMap {
         }
     }
 
-    function _createUnitViewDataList(unitViewIds: number[], unitDataList: ProtoTypes.ISerializedWarUnit[], mapWidth: number, mapHeight: number): Types.UnitViewData[] {
+    function _createUnitViewDataList(unitDataList: ProtoTypes.WarSerialization.ISerialUnit[], mapWidth: number, mapHeight: number): Types.WarMapUnitViewData[] {
         const configVersion = Utility.ConfigManager.getNewestConfigVersion();
-        const dataList      : Types.UnitViewData[] = [];
+        const dataList      : Types.WarMapUnitViewData[] = [];
 
-        if (unitViewIds) {
-            let index = 0;
-            for (let y = 0; y < mapHeight; ++y) {
-                for (let x = 0; x < mapWidth; ++x) {
-                    const viewId = unitViewIds[index];
-                    ++index;
-                    if (viewId > 0) {
-                        dataList.push({
-                            configVersion: configVersion,
-                            gridX        : x,
-                            gridY        : y,
-                            viewId       : viewId,
-                        });
-                    }
-                }
-            }
-        } else if (unitDataList) {
+        if (unitDataList) {
             for (const unitData of unitDataList) {
                 if (unitData.loaderUnitId == null) {
                     dataList.push({

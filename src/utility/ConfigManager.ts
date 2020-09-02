@@ -45,7 +45,7 @@ namespace TinyWars.Utility.ConfigManager {
         MoveCost                : { [tileType: number]: { [moveType: number]: MoveCostCfg } };
         UnitPromotion           : { [promotion: number]: UnitPromotionCfg };
         VisionBonus             : { [unitType: number]: { [tileType: number]: VisionBonusCfg } };
-        BuildableTile           : { [unitType: number]: { [srcTileType: number]: BuildableTileCfg } };
+        BuildableTile           : { [unitType: number]: { [srcBaseType: number]: { [srcObjectType: number]: BuildableTileCfg } } };
         PlayerRank              : { [minScore: number]: PlayerRankCfg };
         CoBasic                 : { [coId: number]: CoBasicCfg };
         CoSkill                 : { [skillId: number]: CoSkillCfg };
@@ -1560,100 +1560,100 @@ namespace TinyWars.Utility.ConfigManager {
         [ 40, ["c03_t10_s04_f11", "c03_t10_s04_f12", "c03_t10_s04_f13", "c03_t10_s04_f14",]],
 
         ////////// antitank //////////
-        [ 41, ["c03_t11_s01_f11", "c03_t11_s01_f12", "c03_t11_s01_f13",]],
-        [ 42, ["c03_t11_s02_f11", "c03_t11_s02_f12", "c03_t11_s02_f13",]],
-        [ 43, ["c03_t11_s03_f11", "c03_t11_s03_f12", "c03_t11_s03_f13",]],
-        [ 44, ["c03_t11_s04_f11", "c03_t11_s04_f12", "c03_t11_s04_f13",]],
+        [ 41, ["c03_t11_s01_f11", "c03_t11_s01_f12", "c03_t11_s01_f13", "c03_t11_s01_f14",]],
+        [ 42, ["c03_t11_s02_f11", "c03_t11_s02_f12", "c03_t11_s02_f13", "c03_t11_s02_f14",]],
+        [ 43, ["c03_t11_s03_f11", "c03_t11_s03_f12", "c03_t11_s03_f13", "c03_t11_s03_f14",]],
+        [ 44, ["c03_t11_s04_f11", "c03_t11_s04_f12", "c03_t11_s04_f13", "c03_t11_s04_f14",]],
 
         ////////// rockets //////////
-        [ 45, ["c03_t12_s01_f11", "c03_t12_s01_f12", "c03_t12_s01_f13",]],
-        [ 46, ["c03_t12_s02_f11", "c03_t12_s02_f12", "c03_t12_s02_f13",]],
-        [ 47, ["c03_t12_s03_f11", "c03_t12_s03_f12", "c03_t12_s03_f13",]],
-        [ 48, ["c03_t12_s04_f11", "c03_t12_s04_f12", "c03_t12_s04_f13",]],
+        [ 45, ["c03_t12_s01_f11", "c03_t12_s01_f12", "c03_t12_s01_f13", "c03_t12_s01_f14",]],
+        [ 46, ["c03_t12_s02_f11", "c03_t12_s02_f12", "c03_t12_s02_f13", "c03_t12_s02_f14",]],
+        [ 47, ["c03_t12_s03_f11", "c03_t12_s03_f12", "c03_t12_s03_f13", "c03_t12_s03_f14",]],
+        [ 48, ["c03_t12_s04_f11", "c03_t12_s04_f12", "c03_t12_s04_f13", "c03_t12_s04_f14",]],
 
         ////////// missiles //////////
-        [ 49, ["c03_t13_s01_f11", "c03_t13_s01_f12", "c03_t13_s01_f13",]],
-        [ 50, ["c03_t13_s02_f11", "c03_t13_s02_f12", "c03_t13_s02_f13",]],
-        [ 51, ["c03_t13_s03_f11", "c03_t13_s03_f12", "c03_t13_s03_f13",]],
-        [ 52, ["c03_t13_s04_f11", "c03_t13_s04_f12", "c03_t13_s04_f13",]],
+        [ 49, ["c03_t13_s01_f11", "c03_t13_s01_f12", "c03_t13_s01_f13", "c03_t13_s01_f14",]],
+        [ 50, ["c03_t13_s02_f11", "c03_t13_s02_f12", "c03_t13_s02_f13", "c03_t13_s02_f14",]],
+        [ 51, ["c03_t13_s03_f11", "c03_t13_s03_f12", "c03_t13_s03_f13", "c03_t13_s03_f14",]],
+        [ 52, ["c03_t13_s04_f11", "c03_t13_s04_f12", "c03_t13_s04_f13", "c03_t13_s04_f14",]],
 
         ////////// rig //////////
-        [ 53, ["c03_t14_s01_f11", "c03_t14_s01_f12", "c03_t14_s01_f13",]],
-        [ 54, ["c03_t14_s02_f11", "c03_t14_s02_f12", "c03_t14_s02_f13",]],
-        [ 55, ["c03_t14_s03_f11", "c03_t14_s03_f12", "c03_t14_s03_f13",]],
-        [ 56, ["c03_t14_s04_f11", "c03_t14_s04_f12", "c03_t14_s04_f13",]],
+        [ 53, ["c03_t14_s01_f11", "c03_t14_s01_f12", "c03_t14_s01_f13", "c03_t14_s01_f14",]],
+        [ 54, ["c03_t14_s02_f11", "c03_t14_s02_f12", "c03_t14_s02_f13", "c03_t14_s02_f14",]],
+        [ 55, ["c03_t14_s03_f11", "c03_t14_s03_f12", "c03_t14_s03_f13", "c03_t14_s03_f14",]],
+        [ 56, ["c03_t14_s04_f11", "c03_t14_s04_f12", "c03_t14_s04_f13", "c03_t14_s04_f14",]],
 
         ////////// fighter //////////
-        [ 57, ["c03_t15_s01_f11", "c03_t15_s01_f12", "c03_t15_s01_f13",]],
-        [ 58, ["c03_t15_s02_f11", "c03_t15_s02_f12", "c03_t15_s02_f13",]],
-        [ 59, ["c03_t15_s03_f11", "c03_t15_s03_f12", "c03_t15_s03_f13",]],
-        [ 60, ["c03_t15_s04_f11", "c03_t15_s04_f12", "c03_t15_s04_f13",]],
+        [ 57, ["c03_t15_s01_f11", "c03_t15_s01_f12", ]],
+        [ 58, ["c03_t15_s02_f11", "c03_t15_s02_f12", ]],
+        [ 59, ["c03_t15_s03_f11", "c03_t15_s03_f12", ]],
+        [ 60, ["c03_t15_s04_f11", "c03_t15_s04_f12", ]],
 
         ////////// bomber //////////
-        [ 61, ["c03_t16_s01_f11", "c03_t16_s01_f12", "c03_t16_s01_f13",]],
-        [ 62, ["c03_t16_s02_f11", "c03_t16_s02_f12", "c03_t16_s02_f13",]],
-        [ 63, ["c03_t16_s03_f11", "c03_t16_s03_f12", "c03_t16_s03_f13",]],
-        [ 64, ["c03_t16_s04_f11", "c03_t16_s04_f12", "c03_t16_s04_f13",]],
+        [ 61, ["c03_t16_s01_f11", "c03_t16_s01_f12", ]],
+        [ 62, ["c03_t16_s02_f11", "c03_t16_s02_f12", ]],
+        [ 63, ["c03_t16_s03_f11", "c03_t16_s03_f12", ]],
+        [ 64, ["c03_t16_s04_f11", "c03_t16_s04_f12", ]],
 
         ////////// duster //////////
-        [ 65, ["c03_t17_s01_f11", "c03_t17_s01_f12", "c03_t17_s01_f13",]],
-        [ 66, ["c03_t17_s02_f11", "c03_t17_s02_f12", "c03_t17_s02_f13",]],
-        [ 67, ["c03_t17_s03_f11", "c03_t17_s03_f12", "c03_t17_s03_f13",]],
-        [ 68, ["c03_t17_s04_f11", "c03_t17_s04_f12", "c03_t17_s04_f13",]],
+        [ 65, ["c03_t17_s01_f11", "c03_t17_s01_f12", ]],
+        [ 66, ["c03_t17_s02_f11", "c03_t17_s02_f12", ]],
+        [ 67, ["c03_t17_s03_f11", "c03_t17_s03_f12", ]],
+        [ 68, ["c03_t17_s04_f11", "c03_t17_s04_f12", ]],
 
         ////////// battle copter //////////
-        [ 69, ["c03_t18_s01_f11", "c03_t18_s01_f12", "c03_t18_s01_f13",]],
-        [ 70, ["c03_t18_s02_f11", "c03_t18_s02_f12", "c03_t18_s02_f13",]],
-        [ 71, ["c03_t18_s03_f11", "c03_t18_s03_f12", "c03_t18_s03_f13",]],
-        [ 72, ["c03_t18_s04_f11", "c03_t18_s04_f12", "c03_t18_s04_f13",]],
+        [ 69, ["c03_t18_s01_f11", "c03_t18_s01_f12", ]],
+        [ 70, ["c03_t18_s02_f11", "c03_t18_s02_f12", ]],
+        [ 71, ["c03_t18_s03_f11", "c03_t18_s03_f12", ]],
+        [ 72, ["c03_t18_s04_f11", "c03_t18_s04_f12", ]],
 
         ////////// transport copter //////////
-        [ 73, ["c03_t19_s01_f11", "c03_t19_s01_f12", "c03_t19_s01_f13",]],
-        [ 74, ["c03_t19_s02_f11", "c03_t19_s02_f12", "c03_t19_s02_f13",]],
-        [ 75, ["c03_t19_s03_f11", "c03_t19_s03_f12", "c03_t19_s03_f13",]],
-        [ 76, ["c03_t19_s04_f11", "c03_t19_s04_f12", "c03_t19_s04_f13",]],
+        [ 73, ["c03_t19_s01_f11", "c03_t19_s01_f12", ]],
+        [ 74, ["c03_t19_s02_f11", "c03_t19_s02_f12", ]],
+        [ 75, ["c03_t19_s03_f11", "c03_t19_s03_f12", ]],
+        [ 76, ["c03_t19_s04_f11", "c03_t19_s04_f12", ]],
 
         ////////// seaplane //////////
-        [ 77, ["c03_t20_s01_f11", "c03_t20_s01_f12", "c03_t20_s01_f13",]],
-        [ 78, ["c03_t20_s02_f11", "c03_t20_s02_f12", "c03_t20_s02_f13",]],
-        [ 79, ["c03_t20_s03_f11", "c03_t20_s03_f12", "c03_t20_s03_f13",]],
-        [ 80, ["c03_t20_s04_f11", "c03_t20_s04_f12", "c03_t20_s04_f13",]],
+        [ 77, ["c03_t20_s01_f11", "c03_t20_s01_f12", ]],
+        [ 78, ["c03_t20_s02_f11", "c03_t20_s02_f12", ]],
+        [ 79, ["c03_t20_s03_f11", "c03_t20_s03_f12", ]],
+        [ 80, ["c03_t20_s04_f11", "c03_t20_s04_f12", ]],
 
         ////////// battleship //////////
-        [ 81, ["c03_t21_s01_f11", "c03_t21_s01_f12", "c03_t21_s01_f13",]],
-        [ 82, ["c03_t21_s02_f11", "c03_t21_s02_f12", "c03_t21_s02_f13",]],
-        [ 83, ["c03_t21_s03_f11", "c03_t21_s03_f12", "c03_t21_s03_f13",]],
-        [ 84, ["c03_t21_s04_f11", "c03_t21_s04_f12", "c03_t21_s04_f13",]],
+        [ 81, ["c03_t21_s01_f11", "c03_t21_s01_f12", ]],
+        [ 82, ["c03_t21_s02_f11", "c03_t21_s02_f12", ]],
+        [ 83, ["c03_t21_s03_f11", "c03_t21_s03_f12", ]],
+        [ 84, ["c03_t21_s04_f11", "c03_t21_s04_f12", ]],
 
         ////////// carrier //////////
-        [ 85, ["c03_t22_s01_f11", "c03_t22_s01_f12", "c03_t22_s01_f13",]],
-        [ 86, ["c03_t22_s02_f11", "c03_t22_s02_f12", "c03_t22_s02_f13",]],
-        [ 87, ["c03_t22_s03_f11", "c03_t22_s03_f12", "c03_t22_s03_f13",]],
-        [ 88, ["c03_t22_s04_f11", "c03_t22_s04_f12", "c03_t22_s04_f13",]],
+        [ 85, ["c03_t22_s01_f11", "c03_t22_s01_f12", ]],
+        [ 86, ["c03_t22_s02_f11", "c03_t22_s02_f12", ]],
+        [ 87, ["c03_t22_s03_f11", "c03_t22_s03_f12", ]],
+        [ 88, ["c03_t22_s04_f11", "c03_t22_s04_f12", ]],
 
         ////////// submarine //////////
-        [ 89, ["c03_t23_s01_f11", "c03_t23_s01_f12", "c03_t23_s01_f13",]],
-        [ 90, ["c03_t23_s02_f11", "c03_t23_s02_f12", "c03_t23_s02_f13",]],
-        [ 91, ["c03_t23_s03_f11", "c03_t23_s03_f12", "c03_t23_s03_f13",]],
-        [ 92, ["c03_t23_s04_f11", "c03_t23_s04_f12", "c03_t23_s04_f13",]],
+        [ 89, ["c03_t23_s01_f11", "c03_t23_s01_f12", ]],
+        [ 90, ["c03_t23_s02_f11", "c03_t23_s02_f12", ]],
+        [ 91, ["c03_t23_s03_f11", "c03_t23_s03_f12", ]],
+        [ 92, ["c03_t23_s04_f11", "c03_t23_s04_f12", ]],
 
         ////////// cruiser //////////
-        [ 93, ["c03_t24_s01_f11", "c03_t24_s01_f12", "c03_t24_s01_f13",]],
-        [ 94, ["c03_t24_s02_f11", "c03_t24_s02_f12", "c03_t24_s02_f13",]],
-        [ 95, ["c03_t24_s03_f11", "c03_t24_s03_f12", "c03_t24_s03_f13",]],
-        [ 96, ["c03_t24_s04_f11", "c03_t24_s04_f12", "c03_t24_s04_f13",]],
+        [ 93, ["c03_t24_s01_f11", "c03_t24_s01_f12", ]],
+        [ 94, ["c03_t24_s02_f11", "c03_t24_s02_f12", ]],
+        [ 95, ["c03_t24_s03_f11", "c03_t24_s03_f12", ]],
+        [ 96, ["c03_t24_s04_f11", "c03_t24_s04_f12", ]],
 
         ////////// lander //////////
-        [ 97, ["c03_t25_s01_f11", "c03_t25_s01_f12", "c03_t25_s01_f13",]],
-        [ 98, ["c03_t25_s02_f11", "c03_t25_s02_f12", "c03_t25_s02_f13",]],
-        [ 99, ["c03_t25_s03_f11", "c03_t25_s03_f12", "c03_t25_s03_f13",]],
-        [100, ["c03_t25_s04_f11", "c03_t25_s04_f12", "c03_t25_s04_f13",]],
+        [ 97, ["c03_t25_s01_f11", "c03_t25_s01_f12", ]],
+        [ 98, ["c03_t25_s02_f11", "c03_t25_s02_f12", ]],
+        [ 99, ["c03_t25_s03_f11", "c03_t25_s03_f12", ]],
+        [100, ["c03_t25_s04_f11", "c03_t25_s04_f12", ]],
 
         ////////// gunboat //////////
-        [101, ["c03_t26_s01_f11", "c03_t26_s01_f12", "c03_t26_s01_f13",]],
-        [102, ["c03_t26_s02_f11", "c03_t26_s02_f12", "c03_t26_s02_f13",]],
-        [103, ["c03_t26_s03_f11", "c03_t26_s03_f12", "c03_t26_s03_f13",]],
-        [104, ["c03_t26_s04_f11", "c03_t26_s04_f12", "c03_t26_s04_f13",]],
+        [101, ["c03_t26_s01_f11", "c03_t26_s01_f12", ]],
+        [102, ["c03_t26_s02_f11", "c03_t26_s02_f12", ]],
+        [103, ["c03_t26_s03_f11", "c03_t26_s03_f12", ]],
+        [104, ["c03_t26_s04_f11", "c03_t26_s04_f12", ]],
     ]);
     const _V2_UNIT_MOVING_DARK_IMAGE_SOURCES = new Map<number, string[]>();
     for (const [viewId, rawSources] of _V2_UNIT_MOVING_NORMAL_IMAGE_SOURCES) {
@@ -1731,12 +1731,16 @@ namespace TinyWars.Utility.ConfigManager {
         }
         return dst;
     }
-    function _destructBuildableTileCfg(data: BuildableTileCfg[]): { [unitType: number]: { [srcTileType: number]: BuildableTileCfg } } {
-        const dst: { [unitType: number]: { [srcTileType: number]: BuildableTileCfg } } = {};
+    function _destructBuildableTileCfg(
+        data: BuildableTileCfg[]
+    ): { [unitType: number]: { [srcBaseType: number]: { [srcObjectType: number]: BuildableTileCfg } } } {
+        const dst: { [unitType: number]: { [srcBaseType: number]: { [srcObjectType: number]: BuildableTileCfg } } } = {};
         for (const d of data) {
-            const unitType                  = d.unitType!;
-            dst[unitType]                   = dst[unitType] || {};
-            dst[unitType][d.srcTileType!]   = d;
+            const unitType                                  = d.unitType!;
+            const srcBaseType                               = d.srcBaseType!;
+            dst[unitType]                                   = dst[unitType] || {};
+            dst[unitType][srcBaseType]                      = dst[unitType][srcBaseType] || {};
+            dst[unitType][srcBaseType][d.srcObjectType!]    = d;
         }
         return dst;
     }
@@ -1821,7 +1825,7 @@ namespace TinyWars.Utility.ConfigManager {
     }
 
     function _onSNewestConfigVersion(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_NewestConfigVersion;
+        const data = e.data as ProtoTypes.NetMessage.IS_NewestConfigVersion;
         _newestFormalVersion = data.version;
         loadConfig(_newestFormalVersion);
     }
@@ -2004,7 +2008,7 @@ namespace TinyWars.Utility.ConfigManager {
         return _ALL_CONFIGS.get(version)!.DamageChart[attackerType];
     }
 
-    export function getBuildableTileCfgs(version: string, unitType: UnitType): { [srcTileType: number]: BuildableTileCfg } | undefined {
+    export function getBuildableTileCfgs(version: string, unitType: UnitType): { [srcBaseType: number]: { [srcObjectType: number]: BuildableTileCfg } } | undefined {
         return _ALL_CONFIGS.get(version)!.BuildableTile[unitType];
     }
 

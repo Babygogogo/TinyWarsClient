@@ -83,7 +83,7 @@ namespace TinyWars.Utility.FlowManager {
         Lobby.LobbyPanel.show();
         Lobby.LobbyTopPanel.show();
     }
-    export async function gotoMultiCustomWar(data: Types.SerializedWar): Promise<void> {
+    export async function gotoMultiCustomWar(data: ProtoTypes.WarSerialization.ISerialWar): Promise<void> {
         ReplayModel.unloadWar();
         ScwModel.unloadWar();
         MeManager.unloadWar();
@@ -109,7 +109,7 @@ namespace TinyWars.Utility.FlowManager {
         Replay.ReplayTileBriefPanel.show();
         Replay.ReplayUnitBriefPanel.show();
     }
-    export async function gotoSingleCustomWar(data: Types.SerializedWar): Promise<void> {
+    export async function gotoSingleCustomWar(data: ProtoTypes.WarSerialization.ISerialWar): Promise<void> {
         McwModel.unloadWar();
         ReplayModel.unloadWar();
         MeManager.unloadWar();
@@ -122,7 +122,7 @@ namespace TinyWars.Utility.FlowManager {
         SingleCustomWar.ScwTileBriefPanel.show();
         SingleCustomWar.ScwUnitBriefPanel.show();
     }
-    export function gotoMapEditor(mapRawData: Types.MapRawData, slotIndex: number, isReview: boolean): void {
+    export function gotoMapEditor(mapRawData: ProtoTypes.Map.IMapRawData, slotIndex: number, isReview: boolean): void {
         McwModel.unloadWar();
         ScwModel.unloadWar();
         ReplayModel.unloadWar();
@@ -148,7 +148,7 @@ namespace TinyWars.Utility.FlowManager {
     }
 
     function _onNetSServerDisconnect(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_ServerDisconnect;
+        const data = e.data as ProtoTypes.NetMessage.IS_ServerDisconnect;
 
         _hasOnceWentToLobby = false;
         UserModel.clearLoginInfo();

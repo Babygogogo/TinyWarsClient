@@ -28,7 +28,7 @@ namespace TinyWars.Network {
         }
 
         class NetMessageDispatcherCls extends egret.EventDispatcher {
-            public dispatchWithContainer(container: ProtoTypes.IMessageContainer): void {
+            public dispatchWithContainer(container: ProtoTypes.NetMessage.IMessageContainer): void {
                 const name      = Helpers.getMessageName(container);
                 const action    = container[name];
                 if (container.S_McwCommonHandleBoot) {
@@ -77,7 +77,7 @@ namespace TinyWars.Network {
             }
         }
 
-        export function send(container: ProtoTypes.IMessageContainer): void {
+        export function send(container: ProtoTypes.NetMessage.IMessageContainer): void {
             if ((!_socket) || (!_socket.connected)) {
                 FloatText.show(Lang.getText(Lang.Type.A0014));
             } else {

@@ -191,7 +191,7 @@ namespace TinyWars.MultiCustomWar {
         private async _updateGroupInfo(): Promise<void> {
             const war                   = this._war;
             const mapFileName           = war.getMapFileName();
-            this._labelMapName.text     = `${await WarMapModel.getMapNameInLanguage(mapFileName) || "----"} (${Lang.getText(Lang.Type.B0163)}: ${await WarMapModel.getMapDesigner(mapFileName) || "----"})`;
+            this._labelMapName.text     = `${await WarMapModel.getMapNameInCurrentLanguage(mapFileName) || "----"} (${Lang.getText(Lang.Type.B0163)}: ${await WarMapModel.getDesignerName(mapFileName) || "----"})`;
         }
 
         private _updateListWarInfo(): void {

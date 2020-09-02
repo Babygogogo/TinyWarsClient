@@ -170,7 +170,7 @@ namespace TinyWars.SingleCustomRoom {
             } else {
                 const mapRawData            = await WarMapModel.getMapRawData(mapFileName);
                 const mapExtraData          = await WarMapModel.getExtraData(mapFileName);
-                this._labelMapName.text     = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInLanguage(mapFileName));
+                this._labelMapName.text     = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapFileName));
                 this._labelDesigner.text    = Lang.getFormattedText(Lang.Type.F0001, mapExtraData.mapDesigner);
                 this._labelNoPreview.text   = "";
 
@@ -230,7 +230,7 @@ namespace TinyWars.SingleCustomRoom {
             if (!mapFileName) {
                 this._labelName.text = `(${Lang.getText(Lang.Type.B0321)})`;
             } else {
-                WarMapModel.getMapNameInLanguage(mapFileName).then(v => this._labelName.text = v);
+                WarMapModel.getMapNameInCurrentLanguage(mapFileName).then(v => this._labelName.text = v);
             }
         }
 

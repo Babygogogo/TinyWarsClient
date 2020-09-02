@@ -73,7 +73,7 @@ namespace TinyWars.MultiCustomRoom {
             if (info.warName) {
                 this._labelWarName.text = info.warName;
             } else {
-                WarMapModel.getMapNameInLanguage(info.mapFileName).then(v => this._labelWarName.text = v);
+                WarMapModel.getMapNameInCurrentLanguage(info.mapFileName).then(v => this._labelWarName.text = v);
             }
         }
     }

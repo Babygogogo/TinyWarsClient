@@ -9,6 +9,7 @@ namespace TinyWars.Utility {
     const KEY_LANGUAGE                  = KEY_PREFIX + "Language";
     const KEY_SHOW_TILE_ANIMATION       = KEY_PREFIX + "ShowTileAnimation";
     const KEY_UNIT_TILE_IMAGE_VERSION   = KEY_PREFIX + "UnitAndTileImageVersion";
+    const KEY_MAP_RAW_DATA_PREFIX       = KEY_PREFIX + "MapRawData_";
     const VALUE_TRUE                    = "1";
     const VALUE_FALSE                   = "0";
 
@@ -35,11 +36,11 @@ namespace TinyWars.Utility {
             return (value == null) || (value === VALUE_TRUE);
         }
 
-        export function setMapRawData(mapFileName: string, data: ProtoTypes.IMapRawData): void {
-            localStorage.setItem(mapFileName, JSON.stringify(data));
+        export function setMapRawData(mapId: number, data: ProtoTypes.Map.IMapRawData): void {
+            localStorage.setItem(KEY_MAP_RAW_DATA_PREFIX + mapId, JSON.stringify(data));
         }
-        export function getMapRawData(mapFileName: string): ProtoTypes.IMapRawData | null {
-            const data = localStorage.getItem(mapFileName);
+        export function getMapRawData(mapId: number): ProtoTypes.Map.IMapRawData | null {
+            const data = localStorage.getItem(KEY_MAP_RAW_DATA_PREFIX + mapId);
             return data ? JSON.parse(data) : null;
         }
 

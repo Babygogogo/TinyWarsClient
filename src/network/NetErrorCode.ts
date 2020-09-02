@@ -3,6 +3,8 @@ namespace TinyWars.Network {
 export const enum NetErrorCode {
     NoError = 0,
 
+    InternalError,
+
     IllegalRequest,
 
     Login_InvalidAccountOrPassword,
@@ -20,6 +22,7 @@ export const enum NetErrorCode {
     MmMergeMap_NoDstStatisticsData,
 
     CreateMultiCustomWar_TooManyJoinedWars,
+    CreateMultiCustomWar_TooManyCreatedRooms,
     CreateMultiCustomWar_InvalidParams,
 
     ExitMultiCustomWar_WarInfoNotExist,
