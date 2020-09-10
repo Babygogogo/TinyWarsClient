@@ -50,9 +50,9 @@ namespace TinyWars.User {
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
             ];
         }
-        protected _onOpened(): void {
+        protected async _onOpened(): Promise<void> {
             this._isRequesting          = false;
-            this._inputDiscordId.text   = UserModel.getSelfDiscordId();
+            this._inputDiscordId.text   = await UserModel.getSelfDiscordId();
             this._updateComponentsForLanguage();
         }
 

@@ -190,7 +190,7 @@ namespace TinyWars.MultiCustomWar {
 
         private async _updateGroupInfo(): Promise<void> {
             const war                   = this._war;
-            const mapFileName           = war.getMapFileName();
+            const mapFileName           = war.getMapId();
             this._labelMapName.text     = `${await WarMapModel.getMapNameInCurrentLanguage(mapFileName) || "----"} (${Lang.getText(Lang.Type.B0163)}: ${await WarMapModel.getDesignerName(mapFileName) || "----"})`;
         }
 
@@ -212,7 +212,7 @@ namespace TinyWars.MultiCustomWar {
                 },
                 {
                     titleText   : Lang.getText(Lang.Type.B0091),
-                    infoText    : `${war.getTurnManager().getTurnIndex() + 1} (${Lang.getText(Lang.Type.B0090)}: ${war.getNextActionId() + 1})`,
+                    infoText    : `${war.getTurnManager().getTurnIndex() + 1} (${Lang.getText(Lang.Type.B0090)}: ${war.getExecutedActionsCount() + 1})`,
                     infoColor   : 0xFFFFFF,
                 },
                 {

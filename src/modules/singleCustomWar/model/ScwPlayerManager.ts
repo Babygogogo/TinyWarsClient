@@ -1,21 +1,39 @@
 
 namespace TinyWars.SingleCustomWar {
-    import Types = Utility.Types;
+    import ProtoTypes           = Utility.ProtoTypes;
+    import Logger               = Utility.Logger;
+    import WarSerialization     = ProtoTypes.WarSerialization;
+    import ISerialPlayerManager = WarSerialization.ISerialPlayerManager;
+    import ISerialPlayer        = WarSerialization.ISerialPlayer;
 
     export class ScwPlayerManager extends BaseWar.BwPlayerManager {
-        public serialize(): Types.SerializedPlayer[] {
-            const data: Types.SerializedPlayer[] = [];
-            this.forEachPlayer(true, (player: ScwPlayer) => {
-                data.push(player.serialize());
-            });
-            return data;
+        public serialize(): ISerialPlayerManager | undefined {
+            const players: ISerialPlayer[] = [];
+            for (const [, player] of this._getPlayersMap()) {
+                const serialPlayer = (player as ScwPlayer).serialize();
+                if (serialPlayer == null) {
+                    Logger.error(`ScwPlayerManager.serialize() empty serialPlayer.`);
+                    return undefined;
+                }
+
+                players.push(serialPlayer);
+            }
+
+            return { players };
         }
+        public serializeForSimulation(): ISerialPlayerManager | undefined {
+            const players: ISerialPlayer[] = [];
+            for (const [, player] of this._getPlayersMap()) {
+                const serialPlayer = (player as ScwPlayer).serializeForSimulation();
+                if (serialPlayer == null) {
+                    Logger.error(`ScwPlayerManager.serialize() empty serialPlayer.`);
+                    return undefined;
+                }
 
-        public serializeForSimulation(): Types.SerializedPlayer[] {
-            const dataList: Types.SerializedPlayer[] = [];
-            this.forEachPlayer(true, (player: ScwPlayer) => dataList.push(player.serializeForSimulation()));
+                players.push(serialPlayer);
+            }
 
-            return dataList;
+            return { players };
         }
 
         protected _getPlayerClass(): new () => BaseWar.BwPlayer {
@@ -27,7 +45,7 @@ namespace TinyWars.SingleCustomWar {
         ////////////////////////////////////////////////////////////////////////////////
         public getHumanPlayers(): ScwPlayer[] {
             const players: ScwPlayer[] = [];
-            for (const [, player] of this.getAllPlayers()) {
+            for (const [, player] of this._getPlayersMap()) {
                 if (player.getUserId() != null) {
                     players.push(player as ScwPlayer);
                 }

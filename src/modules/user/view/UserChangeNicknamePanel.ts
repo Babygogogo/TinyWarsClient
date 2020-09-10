@@ -50,9 +50,9 @@ namespace TinyWars.User {
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
             ];
         }
-        protected _onOpened(): void {
+        protected async _onOpened(): Promise<void> {
             this._isRequesting          = false;
-            this._inputNickname.text    = UserModel.getSelfNickname();
+            this._inputNickname.text    = await UserModel.getSelfNickname();
             this._updateComponentsForLanguage();
         }
 

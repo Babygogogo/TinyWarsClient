@@ -93,10 +93,10 @@ namespace TinyWars.SingleCustomWar {
                 const unitForProduce = data.produceUnitType == null
                     ? undefined
                     : new ScwUnit().init({
-                        gridX   : -1,
-                        gridY   : -1,
-                        unitId  : -1,
-                        viewId  : Utility.ConfigManager.getUnitViewId(data.produceUnitType, war.getPlayerIndexInTurn()),
+                        gridIndex   : { x: -1, y: -1 },
+                        unitId      : -1,
+                        unitType    : data.produceUnitType,
+                        playerIndex : war.getPlayerIndexInTurn(),
                     }, war.getConfigVersion());
 
                 dataForList.push({

@@ -52,9 +52,9 @@ namespace TinyWars.Lobby {
             this._listCommand.setItemRenderer(CommandRenderer);
         }
 
-        protected _onOpened(): void {
+        protected async _onOpened(): Promise<void> {
             this._updateComponentsForLanguage();
-            this._listCommand.bindData(this._createDataForListCommand());
+            this._listCommand.bindData(await this._createDataForListCommand());
         }
 
         protected _onClosed(): void {
@@ -87,7 +87,7 @@ namespace TinyWars.Lobby {
             this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0155);
         }
 
-        private _createDataForListCommand(): DataForCommandRenderer[] {
+        private async _createDataForListCommand(): Promise<DataForCommandRenderer[]> {
             const dataList: DataForCommandRenderer[] = [
                 {
                     name    : Lang.getText(Lang.Type.B0137),
@@ -112,7 +112,7 @@ namespace TinyWars.Lobby {
                 }
             ];
 
-            if ((UserModel.checkIsAdmin()) || (UserModel.checkIsMapCommittee())) {
+            if ((await UserModel.getIsSelfAdmin()) || (await UserModel.getIsSelfMapCommittee())) {
                 dataList.push({
                     name    : Lang.getText(Lang.Type.B0192),
                     callback: (): void => {

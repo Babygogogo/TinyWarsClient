@@ -5,6 +5,7 @@ namespace TinyWars.WarMap.WarMapProxy {
     import ProtoTypes   = Utility.ProtoTypes;
     import Types        = Utility.Types;
     import Notify       = Utility.Notify;
+    import NetMessage   = ProtoTypes.NetMessage;
 
     export function init(): void {
         NetManager.addListeners([
@@ -13,7 +14,7 @@ namespace TinyWars.WarMap.WarMapProxy {
             { msgCode: MsgCode.S_MapGetRawData,                 callback: _onSMapGetRawData },
             { msgCode: MsgCode.S_MmChangeAvailability,          callback: _onSMmChangeAvailability },
             { msgCode: MsgCode.S_MmReloadAllMaps,               callback: _onSMmReloadAllMaps },
-            { msgCode: MsgCode.S_MmMergeMap,                    callback: _onSMmMergeMap },
+            // { msgCode: MsgCode.S_MmMergeMap,                    callback: _onSMmMergeMap },
             { msgCode: MsgCode.S_MmDeleteMap,                   callback: _onSMmDeleteMap },
             { msgCode: MsgCode.S_MmGetReviewingMaps,            callback: _onSMmGetReviewingMaps },
             { msgCode: MsgCode.S_MmReviewMap,                   callback: _onSMmReviewMap },
@@ -27,7 +28,7 @@ namespace TinyWars.WarMap.WarMapProxy {
         });
     }
     function _onSMapGetEnabledExtraDataList(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_MapGetEnabledExtraDataList;
+        const data = e.data as NetMessage.IS_MapGetEnabledExtraDataList;
         if (!data.errorCode) {
             WarMapModel.resetExtraDataDict(data.dataList);
             Notify.dispatch(Notify.Type.SMapGetEnabledExtraDataList, data);
@@ -37,12 +38,12 @@ namespace TinyWars.WarMap.WarMapProxy {
     export function reqGetMapExtraData(mapId: number): void {
         NetManager.send({
             C_MapGetExtraData: {
-                mapId: mapId,
+                mapId,
             },
         });
     }
     function _onSMapGetExtraData(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_MapGetExtraData;
+        const data = e.data as NetMessage.IS_MapGetExtraData;
         if (data.errorCode) {
             Notify.dispatch(Notify.Type.SMapGetExtraDataFailed, data);
         } else {
@@ -59,27 +60,25 @@ namespace TinyWars.WarMap.WarMapProxy {
         });
     }
     function _onSMapGetRawData(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_MapGetRawData;
+        const data = e.data as NetMessage.IS_MapGetRawData;
         if (data.errorCode) {
             Notify.dispatch(Notify.Type.SMapGetRawDataFailed, data);
         } else {
-            WarMapModel.setMapRawData(data.mapFileName, data.mapRawData);
+            WarMapModel.setMapRawData(data.mapId, data.mapRawData);
             Notify.dispatch(Notify.Type.SMapGetRawData, data);
         }
     }
 
-    export function reqMmChangeAvailability(mapFileName: string, availability: Types.MapAvailability): void {
+    export function reqMmChangeAvailability(mapId: number, availability: ProtoTypes.Map.IDataForMapAvailability): void {
         NetManager.send({
             C_MmChangeAvailability: {
-                mapFileName,
-                canMcw  : availability.canMcw,
-                canWr   : availability.canWr,
-                canScw  : availability.canScw,
+                mapId,
+                availability,
             },
         });
     }
     function _onSMmChangeAvailability(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_MmChangeAvailability;
+        const data = e.data as NetMessage.IS_MmChangeAvailability;
         if (!data.errorCode) {
             Notify.dispatch(Notify.Type.SMmChangeAvailability);
         }
@@ -91,41 +90,41 @@ namespace TinyWars.WarMap.WarMapProxy {
         });
     }
     function _onSMmReloadAllMaps(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_MmReloadAllMaps;
+        const data = e.data as NetMessage.IS_MmReloadAllMaps;
         if (!data.errorCode) {
             Notify.dispatch(Notify.Type.SMmReloadAllMaps);
         }
     }
 
-    export function reqMergeMap(srcMapFileName: string, dstMapFileName: string): void {
-        NetManager.send({
-            C_MmMergeMap: {
-                srcMapFileName,
-                dstMapFileName,
-            },
-        });
-    }
-    function _onSMmMergeMap(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_MmMergeMap;
-        if (!data.errorCode) {
-            WarMapModel.setMapRawData(data.dstMapFileName, data.dstMapRawData);
-            WarMapModel.setExtraData(data.dstMapExtraData);
-            WarMapModel.deleteExtraData(data.srcMapFileName);
-            Notify.dispatch(Notify.Type.SMmMergeMap, data);
-        }
-    }
+    // export function reqMergeMap(srcMapFileName: string, dstMapFileName: string): void {
+    //     NetManager.send({
+    //         C_MmMergeMap: {
+    //             srcMapFileName,
+    //             dstMapFileName,
+    //         },
+    //     });
+    // }
+    // function _onSMmMergeMap(e: egret.Event): void {
+    //     const data = e.data as ProtoTypes.IS_MmMergeMap;
+    //     if (!data.errorCode) {
+    //         WarMapModel.setMapRawData(data.dstMapFileName, data.dstMapRawData);
+    //         WarMapModel.setExtraData(data.dstMapExtraData);
+    //         WarMapModel.deleteExtraData(data.srcMapFileName);
+    //         Notify.dispatch(Notify.Type.SMmMergeMap, data);
+    //     }
+    // }
 
-    export function reqMmDeleteMap(mapFileName: string): void {
+    export function reqMmDeleteMap(mapId: number): void {
         NetManager.send({
             C_MmDeleteMap: {
-                mapFileName,
+                mapId,
             },
         });
     }
     function _onSMmDeleteMap(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_MmDeleteMap;
+        const data = e.data as NetMessage.IS_MmDeleteMap;
         if (!data.errorCode) {
-            WarMapModel.deleteExtraData(data.mapFileName);
+            WarMapModel.deleteExtraData(data.mapId);
             Notify.dispatch(Notify.Type.SMmDeleteMap, data);
         }
     }
@@ -136,7 +135,7 @@ namespace TinyWars.WarMap.WarMapProxy {
         });
     }
     function _onSMmGetReviewingMaps(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_MmGetReviewingMaps;
+        const data = e.data as NetMessage.IS_MmGetReviewingMaps;
         if (!data.errorCode) {
             WarMapModel.setMmReviewingMaps(data.maps);
             Notify.dispatch(Notify.Type.SMmGetReviewingMaps, data);
@@ -161,7 +160,7 @@ namespace TinyWars.WarMap.WarMapProxy {
         });
     }
     function _onSMmReviewMap(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_MmReviewMap;
+        const data = e.data as NetMessage.IS_MmReviewMap;
         if (!data.errorCode) {
             Notify.dispatch(Notify.Type.SMmReviewMap, data);
         }

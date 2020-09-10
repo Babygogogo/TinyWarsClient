@@ -55,6 +55,16 @@ namespace TinyWars.Utility.GridIndexHelpers {
     export function getDistance(g1: GridIndex, g2: GridIndex): number {
         return Math.abs(g1.x - g2.x) + Math.abs(g1.y - g2.y);
     }
+    export function getMinDistance(gridIndex: GridIndex, list: GridIndex[]): number | undefined {
+        let minDistance: number | undefined;
+        for (const g of list) {
+            const distance = getDistance(gridIndex, g);
+            if ((minDistance == null) || (distance < minDistance)) {
+                minDistance = distance;
+            }
+        }
+        return minDistance;
+    }
 
     export function checkIsAdjacent(g1: GridIndex, g2: GridIndex): boolean {
         return getDistance(g1, g2) === 1;

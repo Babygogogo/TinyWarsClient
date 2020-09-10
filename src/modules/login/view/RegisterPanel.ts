@@ -5,6 +5,7 @@ namespace TinyWars.Login {
     import NotifyType   = Utility.Notify.Type;
     import Types        = Utility.Types;
     import FlowManager  = Utility.FlowManager;
+    import LocalStorage = Utility.LocalStorage;
 
     export class RegisterPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
@@ -62,9 +63,16 @@ namespace TinyWars.Login {
             FloatText.show(Lang.getText(Lang.Type.A0000));
         }
         private _onNotifySRegister(e: egret.Event): void {
-            const data = e.data as Utility.ProtoTypes.IS_Register;
+            const data = e.data as Utility.ProtoTypes.NetMessage.IS_Register;
             FloatText.show(Lang.getText(Lang.Type.A0004));
-            LoginProxy.reqLogin(data.account, data.password, false);
+
+            const account   = data.account;
+            const password  = data.password;
+            LocalStorage.setAccount(account);
+            LocalStorage.setPassword(password);
+            User.UserModel.setSelfAccount(account);
+            User.UserModel.setSelfPassword(password);
+            LoginProxy.reqLogin(account, password, false);
         }
         private _onNotifyLanguageChanged(e: egret.Event): void {
             this._updateOnLanguageChanged();

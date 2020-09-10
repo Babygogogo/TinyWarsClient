@@ -4368,8 +4368,8 @@ export declare namespace WarSerialization {
         /** SerialUnit unitId */
         unitId?: (number|null);
 
-        /** SerialUnit state */
-        state?: (number|null);
+        /** SerialUnit actionState */
+        actionState?: (number|null);
 
         /** SerialUnit primaryWeaponCurrentAmmo */
         primaryWeaponCurrentAmmo?: (number|null);
@@ -4429,8 +4429,8 @@ export declare namespace WarSerialization {
         /** SerialUnit unitId. */
         public unitId: number;
 
-        /** SerialUnit state. */
-        public state: number;
+        /** SerialUnit actionState. */
+        public actionState: number;
 
         /** SerialUnit primaryWeaponCurrentAmmo. */
         public primaryWeaponCurrentAmmo: number;
@@ -5325,8 +5325,8 @@ export declare namespace WarSerialization {
         /** SerialWar executedActions */
         executedActions?: (WarAction.IActionContainer[]|null);
 
-        /** SerialWar nextActionId */
-        nextActionId?: (number|null);
+        /** SerialWar executedActionsCount */
+        executedActionsCount?: (number|null);
 
         /** SerialWar remainingVotesForDraw */
         remainingVotesForDraw?: (number|null);
@@ -5371,8 +5371,8 @@ export declare namespace WarSerialization {
         /** SerialWar executedActions. */
         public executedActions: WarAction.IActionContainer[];
 
-        /** SerialWar nextActionId. */
-        public nextActionId: number;
+        /** SerialWar executedActionsCount. */
+        public executedActionsCount: number;
 
         /** SerialWar remainingVotesForDraw. */
         public remainingVotesForDraw: number;
@@ -11670,8 +11670,8 @@ export declare namespace MultiCustomWar {
         /** McwReplayInfo turnIndex */
         turnIndex?: (number|null);
 
-        /** McwReplayInfo nextActionId */
-        nextActionId?: (number|null);
+        /** McwReplayInfo executedActionsCount */
+        executedActionsCount?: (number|null);
 
         /** McwReplayInfo warEndTime */
         warEndTime?: (number|null);
@@ -11713,8 +11713,8 @@ export declare namespace MultiCustomWar {
         /** McwReplayInfo turnIndex. */
         public turnIndex: number;
 
-        /** McwReplayInfo nextActionId. */
-        public nextActionId: number;
+        /** McwReplayInfo executedActionsCount. */
+        public executedActionsCount: number;
 
         /** McwReplayInfo warEndTime. */
         public warEndTime: number;
@@ -25284,8 +25284,8 @@ export declare namespace NetMessage {
         /** C_McwPlayerSyncWar warId */
         warId?: (number|null);
 
-        /** C_McwPlayerSyncWar nextActionId */
-        nextActionId?: (number|null);
+        /** C_McwPlayerSyncWar executedActionsCount */
+        executedActionsCount?: (number|null);
 
         /** C_McwPlayerSyncWar requestType */
         requestType?: (number|null);
@@ -25303,8 +25303,8 @@ export declare namespace NetMessage {
         /** C_McwPlayerSyncWar warId. */
         public warId: number;
 
-        /** C_McwPlayerSyncWar nextActionId. */
-        public nextActionId: number;
+        /** C_McwPlayerSyncWar executedActionsCount. */
+        public executedActionsCount: number;
 
         /** C_McwPlayerSyncWar requestType. */
         public requestType: number;
@@ -25389,8 +25389,8 @@ export declare namespace NetMessage {
         /** S_McwPlayerSyncWar warId */
         warId?: (number|null);
 
-        /** S_McwPlayerSyncWar nextActionId */
-        nextActionId?: (number|null);
+        /** S_McwPlayerSyncWar executedActionsCount */
+        executedActionsCount?: (number|null);
 
         /** S_McwPlayerSyncWar war */
         war?: (WarSerialization.ISerialWar|null);
@@ -25417,8 +25417,8 @@ export declare namespace NetMessage {
         /** S_McwPlayerSyncWar warId. */
         public warId: number;
 
-        /** S_McwPlayerSyncWar nextActionId. */
-        public nextActionId: number;
+        /** S_McwPlayerSyncWar executedActionsCount. */
+        public executedActionsCount: number;
 
         /** S_McwPlayerSyncWar war. */
         public war?: (WarSerialization.ISerialWar|null);

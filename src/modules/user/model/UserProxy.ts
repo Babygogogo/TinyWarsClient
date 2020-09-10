@@ -4,6 +4,7 @@ namespace TinyWars.User.UserProxy {
     import NetMessageCodes  = Network.Codes;
     import ProtoTypes       = Utility.ProtoTypes;
     import Notify           = Utility.Notify;
+    import NetMessage       = ProtoTypes.NetMessage;
 
     export function init(): void {
         NetManager.addListeners([
@@ -22,7 +23,7 @@ namespace TinyWars.User.UserProxy {
         });
     }
     function _onSGetUserPublicInfo(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_GetUserPublicInfo;
+        const data = e.data as NetMessage.IS_GetUserPublicInfo;
         if (data.errorCode) {
             Notify.dispatch(Notify.Type.SGetUserPublicInfoFailed, data);
         } else {
@@ -39,11 +40,10 @@ namespace TinyWars.User.UserProxy {
         });
     }
     function _onSUserChangeNickname(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_UserChangeNickname;
+        const data = e.data as NetMessage.IS_UserChangeNickname;
         if (data.errorCode) {
             Notify.dispatch(Notify.Type.SUserChangeNicknameFailed, data);
         } else {
-            UserModel.setSelfNickname(data.nickname);
             Notify.dispatch(Notify.Type.SUserChangeNickname, data);
         }
     }
@@ -56,11 +56,10 @@ namespace TinyWars.User.UserProxy {
         });
     }
     function _onSUserChangeDiscordId(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_UserChangeDiscordId;
+        const data = e.data as NetMessage.IS_UserChangeDiscordId;
         if (data.errorCode) {
             Notify.dispatch(Notify.Type.SUserChangeDiscordIdFailed, data);
         } else {
-            UserModel.setSelfDiscordId(data.discordId);
             Notify.dispatch(Notify.Type.SUserChangeDiscordId, data);
         }
     }
@@ -71,7 +70,7 @@ namespace TinyWars.User.UserProxy {
         });
     }
     function _onSUserGetOnlineUsers(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_UserGetOnlineUsers;
+        const data = e.data as NetMessage.IS_UserGetOnlineUsers;
         if (!data.errorCode) {
             Notify.dispatch(Notify.Type.SUserGetOnlineUsers, data);
         }

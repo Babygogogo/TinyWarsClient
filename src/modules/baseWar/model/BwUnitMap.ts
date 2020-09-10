@@ -3,6 +3,7 @@ namespace TinyWars.BaseWar {
     import Types                    = Utility.Types;
     import Helpers                  = Utility.Helpers;
     import GridIndexHelpers         = Utility.GridIndexHelpers;
+    import Logger                   = Utility.Logger;
     import MapSizeAndMaxPlayerIndex = Types.MapSizeAndMaxPlayerIndex;
 
     export abstract class BwUnitMap {
@@ -227,6 +228,17 @@ namespace TinyWars.BaseWar {
             return units;
         }
 
+        private _getAllUnitsOnMap(): BwUnit[] {
+            const units: BwUnit[] = [];
+            this.forEachUnitOnMap(unit => units.push(unit));
+            return units;
+        }
+        protected _getAllUnits(): BwUnit[] {
+            const units = this._getAllUnitsOnMap();
+            this.forEachUnitLoaded(unit => units.push(unit));
+            return units;
+        }
+
         public swapUnit(gridIndex1: Types.GridIndex, gridIndex2: Types.GridIndex): void {
             if (!GridIndexHelpers.checkIsEqual(gridIndex1, gridIndex2)) {
                 const {x: x1, y: y1}    = gridIndex1;
@@ -312,6 +324,87 @@ namespace TinyWars.BaseWar {
                 }
             }
             return false;
+        }
+
+        public checkIsCoLoadedByAnyUnit(playerIndex: number): boolean | undefined {
+            return (this.checkIsCoLoadedByAnyUnitOnMap(playerIndex))
+                || (this.checkIsCoLoadedByAnyUnitLoaded(playerIndex))
+        }
+        public checkIsCoLoadedByAnyUnitLoaded(playerIndex: number): boolean | undefined {
+            const units = this._getLoadedUnits();
+            if (units == null) {
+                Logger.error(`BwUnitMap.checkIsCoLoadedByAnyUnitLoaded() empty units.`);
+                return undefined;
+            }
+
+            for (const [_, unit] of units) {
+                if ((unit.getPlayerIndex() === playerIndex) && (unit.getHasLoadedCo())) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        public checkIsCoLoadedByAnyUnitOnMap(playerIndex: number): boolean | undefined {
+            const map = this._getMap();
+            if (map == null) {
+                Logger.error(`BwUnitMap.checkIsCoLoadedByAnyUnitOnMap() empty map.`);
+                return undefined;
+            }
+
+            return map.some(v => v.some(u => (u?.getPlayerIndex() === playerIndex) && (u.getHasLoadedCo())));
+        }
+
+        public getCoGridIndexListOnMap(playerIndex: number): GridIndex[] | undefined {
+            const map = this._getMap();
+            if (map == null) {
+                Logger.error(`BwUnitMap.getCoGridIndexListOnMap() empty map.`);
+                return undefined;
+            }
+
+            const list: GridIndex[] = [];
+            for (const column of map) {
+                for (const unit of column) {
+                    if ((unit) && (unit.getHasLoadedCo()) && (unit.getPlayerIndex() === playerIndex)) {
+                        const gridIndex = unit.getGridIndex();
+                        if (gridIndex == null) {
+                            Logger.error(`BwUnitMap.getCoGridIndexListOnMap() empty gridIndex.`);
+                            return undefined;
+                        }
+                        list.push(gridIndex);
+                    }
+                }
+            }
+
+            return list;
+        }
+
+        public getAllCoUnits(playerIndex: number): BwUnit[] | undefined {
+            const loadedUnits = this._getLoadedUnits();
+            if (loadedUnits == null) {
+                Logger.error(`BwUnitMap.getCoUnitsCount() empty loadedUnits.`);
+                return undefined;
+            }
+
+            const map = this._getMap();
+            if (map == null) {
+                Logger.error(`BwUnitMap.checkIsCoLoadedByAnyUnitOnMap() empty map.`);
+                return undefined;
+            }
+
+            const coUnits: BwUnit[] = [];
+            for (const [_, unit] of loadedUnits) {
+                if ((unit.getPlayerIndex() === playerIndex) && (unit.getHasLoadedCo())) {
+                    coUnits.push(unit);
+                }
+            }
+            for (const column of map) {
+                for (const unit of column) {
+                    if ((unit) && (unit.getPlayerIndex() == playerIndex) && (unit.getHasLoadedCo())) {
+                        coUnits.push(unit);
+                    }
+                }
+            }
+            return coUnits;
         }
     }
 }

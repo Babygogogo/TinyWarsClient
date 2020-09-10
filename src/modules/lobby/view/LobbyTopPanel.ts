@@ -106,13 +106,13 @@ namespace TinyWars.Lobby {
         }
 
         private _updateComponentsForLanguage(): void {
-            const score                 = UserModel.getSelfRankScore();
+            const score                 = await UserModel.getSelfRankScore();
             this._labelRankScore.text   = `${Lang.getText(Lang.Type.B0060)}: ${score}`;
             this._labelRankName.text    = Utility.ConfigManager.getRankName(Utility.ConfigManager.getNewestConfigVersion(), score);
         }
 
         private _updateLabelNickname(): void {
-            this._labelNickname.text    = UserModel.getSelfNickname();
+            this._labelNickname.text    = await UserModel.getSelfNickname();
         }
 
         private _updateBtnChat(): void {

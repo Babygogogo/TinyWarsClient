@@ -411,7 +411,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         if (!length) {
             return null;
         } else {
-            return arr.splice(Math.floor(_war.getRandomNumberGenerator()() * length), 1)[0];
+            return arr.splice(Math.floor(_war.getRandomNumber() * length), 1)[0];
         }
     }
 
@@ -1547,7 +1547,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         (!action) && (action = await _getActionForPhase7());
         (!action) && (action = await _getActionForPhase8());
         (!action) && (action = await _getActionForPhase9());
-        action.actionId = _war.getNextActionId();
+        action.actionId = _war.getExecutedActionsCount();
 
         _clearVariables();
 

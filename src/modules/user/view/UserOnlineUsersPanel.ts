@@ -2,7 +2,6 @@
 namespace TinyWars.User {
     import Notify       = Utility.Notify;
     import Lang         = Utility.Lang;
-    import Types        = Utility.Types;
     import ProtoTypes   = Utility.ProtoTypes;
 
     export class UserOnlineUsersPanel extends GameUi.UiPanel {
@@ -21,7 +20,7 @@ namespace TinyWars.User {
         private _labelLoading   : GameUi.UiLabel;
         private _btnClose       : GameUi.UiButton;
 
-        private _msg        : ProtoTypes.IS_UserGetOnlineUsers;
+        private _msg        : ProtoTypes.NetMessage.IS_UserGetOnlineUsers;
         private _dataForList: DataForUserRenderer[];
 
         public static show(): void {

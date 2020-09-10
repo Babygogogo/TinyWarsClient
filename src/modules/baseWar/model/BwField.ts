@@ -1,6 +1,9 @@
 
 namespace TinyWars.BaseWar {
     import Types                    = Utility.Types;
+    import Logger                   = Utility.Logger;
+    import ProtoTypes               = Utility.ProtoTypes;
+    import ISerialField             = ProtoTypes.WarSerialization.ISerialField;
     import MapSizeAndMaxPlayerIndex = Types.MapSizeAndMaxPlayerIndex;
 
     export abstract class BwField {
@@ -21,14 +24,50 @@ namespace TinyWars.BaseWar {
         protected abstract _getViewClass(): new () => BwFieldView;
 
         public async init(
-            data                    : Types.SerializedField,
+            data                    : ISerialField,
             configVersion           : string,
-            mapFileName             : string | null | undefined,
             mapSizeAndMaxPlayerIndex: MapSizeAndMaxPlayerIndex
-        ): Promise<BwField> {
-            await this._initFogMap(data.fogMap, mapSizeAndMaxPlayerIndex);
-            await this._initTileMap(data.tileMap, configVersion, mapFileName, mapSizeAndMaxPlayerIndex);
-            await this._initUnitMap(data.unitMap, configVersion, mapFileName, mapSizeAndMaxPlayerIndex);
+        ): Promise<BwField | undefined> {
+            const fogMapData = data.fogMap;
+            if (fogMapData == null) {
+                Logger.error(`BwField.init() empty fogMapData.`);
+                return undefined;
+            }
+
+            const tileMapData = data.tileMap;
+            if (tileMapData == null) {
+                Logger.error(`BwField.init() empty tileMapData.`);
+                return undefined;
+            }
+
+            const unitMapData = data.unitMap;
+            if (unitMapData == null) {
+                Logger.error(`BwField.init() empty unitMapData.`);
+                return undefined;
+            }
+
+            const fogMap = await (this.getFogMap() || new (this._getFogMapClass())()).init(fogMapData, mapSizeAndMaxPlayerIndex);
+            if (fogMap == null) {
+                Logger.error(`BwField.init() empty fogMap.`);
+                return undefined;
+            }
+
+            const tileMap = await (this.getTileMap() || new (this._getTileMapClass())()).init(tileMapData, configVersion, mapSizeAndMaxPlayerIndex);
+            if (tileMap == null) {
+                Logger.error(`BwField.init() empty tileMap.`);
+                return undefined;
+            }
+
+            const unitMap = await (this.getUnitMap() || new (this._getUnitMapClass())()).init(unitMapData, configVersion, mapSizeAndMaxPlayerIndex);
+            if (unitMap == null) {
+                Logger.error(`BwField.init() empty unitMap.`);
+                return undefined;
+            }
+
+            this._setFogMap(fogMap);
+            this._setTileMap(tileMap);
+            this._setUnitMap(unitMap);
+
             await this._initCursor(mapSizeAndMaxPlayerIndex);
             await this._initActionPlanner(mapSizeAndMaxPlayerIndex);
             await this._initGridVisionEffect();
@@ -39,7 +78,7 @@ namespace TinyWars.BaseWar {
             return this;
         }
         public async fastInit(
-            data                    : Types.SerializedField,
+            data                    : ISerialField,
             configVersion           : string,
             mapFileName             : string | null | undefined,
             mapSizeAndMaxPlayerIndex: MapSizeAndMaxPlayerIndex

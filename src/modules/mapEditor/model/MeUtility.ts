@@ -25,7 +25,7 @@ namespace TinyWars.MapEditor.MeUtility {
         const mapHeight     = 15;
         const gridsCount    = mapWidth * mapHeight;
         return {
-            mapDesigner     : User.UserModel.getSelfNickname(),
+            mapDesigner     : await User.UserModel.getSelfNickname(),
             mapName         : `${Lang.getText(Lang.Type.B0279)} - ${slotIndex}`,
             mapNameEnglish  : `${Lang.getText(Lang.Type.B0279)} - ${slotIndex}`,
             mapWidth,

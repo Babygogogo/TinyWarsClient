@@ -1,11 +1,13 @@
 
 namespace TinyWars.User {
-    import Lang         = Utility.Lang;
-    import Helpers      = Utility.Helpers;
-    import Notify       = Utility.Notify;
-    import FlowManager  = Utility.FlowManager;
-    import Types        = Utility.Types;
-    import LocalStorage = Utility.LocalStorage;
+    import Lang                     = Utility.Lang;
+    import Helpers                  = Utility.Helpers;
+    import Notify                   = Utility.Notify;
+    import FlowManager              = Utility.FlowManager;
+    import Types                    = Utility.Types;
+    import LocalStorage             = Utility.LocalStorage;
+    import ProtoTypes               = Utility.ProtoTypes;
+    import IDataForWarStatistics    = ProtoTypes.User.IDataForWarStatistics;
 
     export class UserPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
@@ -167,7 +169,7 @@ namespace TinyWars.User {
             const userId    = this._userId;
             const info      = userId != null ? await UserModel.getUserPublicInfo(userId) : undefined;
             if (info) {
-                this._labelRankScore.text       = `${info.rank2pScore}`;
+                this._labelRankScore.text       = "";   // `${info.rank2pScore}`; // TODO
                 this._labelRegisterTime.text    = Helpers.getTimestampShortText(info.registerTime);
                 this._labelLastLoginTime.text   = Helpers.getTimestampShortText(info.lastLoginTime);
                 this._labelLoginCount.text      = `${info.loginCount}`;
@@ -221,21 +223,18 @@ namespace TinyWars.User {
             const info      = userId != null ? await UserModel.getUserPublicInfo(userId) : undefined;
             if (info) {
                 this._labelTitle.text       = Lang.getFormattedText(Lang.Type.F0009, info.nickname);
-                this._labelRankName.text    = Utility.ConfigManager.getRankName(Utility.ConfigManager.getNewestConfigVersion(), info.rank2pScore);
-                this._labelRank2pWins.text  = Lang.getFormattedText(Lang.Type.F0010, info.rank2pWins);
-                this._labelRank2pLoses.text = Lang.getFormattedText(Lang.Type.F0011, info.rank2pLoses);
-                this._labelRank2pDraws.text = Lang.getFormattedText(Lang.Type.F0012, info.rank2pDraws);
+                this._labelOnlineTime.text  = Helpers.getTimeDurationText2(info.onlineTime);
 
-                this._labelMcw2pWins.text   = Lang.getFormattedText(Lang.Type.F0010, info.mcw2pWins);
-                this._labelMcw2pLoses.text  = Lang.getFormattedText(Lang.Type.F0011, info.mcw2pLoses);
-                this._labelMcw2pDraws.text  = Lang.getFormattedText(Lang.Type.F0012, info.mcw2pDraws);
-                this._labelMcw3pWins.text   = Lang.getFormattedText(Lang.Type.F0010, info.mcw3pWins);
-                this._labelMcw3pLoses.text  = Lang.getFormattedText(Lang.Type.F0011, info.mcw3pLoses);
-                this._labelMcw3pDraws.text  = Lang.getFormattedText(Lang.Type.F0012, info.mcw3pDraws);
-                this._labelMcw4pWins.text   = Lang.getFormattedText(Lang.Type.F0010, info.mcw4pWins);
-                this._labelMcw4pLoses.text  = Lang.getFormattedText(Lang.Type.F0011, info.mcw4pLoses);
-                this._labelMcw4pDraws.text  = Lang.getFormattedText(Lang.Type.F0012, info.mcw4pDraws);
-                this._labelOnlineTime.text  = Helpers.getTimeDurationText(info.onlineTime);
+                const rankNormal            = info.rankStatisticsList || [];
+                const rankFog               = info.rankFogStatisticsList || [];
+                this._labelRankName.text    = ""; // Utility.ConfigManager.getRankName(Utility.ConfigManager.getNewestConfigVersion(), info.rank2pScore);   // TODO
+                updateLabelsForStatistics(this._labelRank2pWins, this._labelRank2pLoses, this._labelRank2pDraws, rankNormal.find(v => v.playersCount === 2), rankFog.find(v => v.playersCount === 2));
+
+                const mcwNormal = info.mcwStatisticsList || [];
+                const mcwFog    = info.mcwFogStatisticsList || [];
+                updateLabelsForStatistics(this._labelMcw2pWins, this._labelMcw2pLoses, this._labelMcw2pDraws, mcwNormal.find(v => v.playersCount === 2), mcwFog.find(v => v.playersCount === 2));
+                updateLabelsForStatistics(this._labelMcw3pWins, this._labelMcw3pLoses, this._labelMcw3pDraws, mcwNormal.find(v => v.playersCount === 3), mcwFog.find(v => v.playersCount === 3));
+                updateLabelsForStatistics(this._labelMcw4pWins, this._labelMcw4pLoses, this._labelMcw4pDraws, mcwNormal.find(v => v.playersCount === 4), mcwFog.find(v => v.playersCount === 4));
             }
         }
         private _updateBtnChangeNickname(): void {
@@ -263,5 +262,17 @@ namespace TinyWars.User {
         private _updateBtnChat(): void {
             this._btnChat.label = Lang.getText(Lang.Type.B0383);
         }
+    }
+
+    function updateLabelsForStatistics(
+        lbWin           : GameUi.UiLabel,
+        lbLose          : GameUi.UiLabel,
+        lbDraw          : GameUi.UiLabel,
+        dataForNormal   : IDataForWarStatistics,
+        dataForFog      : IDataForWarStatistics
+    ): void {
+        lbWin.text  = `${dataForNormal ? dataForNormal.wins || 0 : 0} / ${dataForFog ? dataForFog.wins || 0 : 0}`;
+        lbLose.text = `${dataForNormal ? dataForNormal.loses || 0 : 0} / ${dataForFog ? dataForFog.loses || 0 : 0}`;
+        lbDraw.text = `${dataForNormal ? dataForNormal.draws || 0 : 0} / ${dataForFog ? dataForFog.draws || 0 : 0}`;
     }
 }

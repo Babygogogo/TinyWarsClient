@@ -1,6 +1,7 @@
 
 namespace TinyWars.MultiCustomWar {
-    import Types = Utility.Types;
+    import Types    = Utility.Types;
+    import Logger   = Utility.Logger;
 
     export class McwWar extends BaseWar.BwWar {
         private _isEnded = false;
@@ -8,7 +9,18 @@ namespace TinyWars.MultiCustomWar {
         public async init(data: Types.SerializedWar): Promise<McwWar> {
             this._baseInit(data);
 
-            this._initPlayerManager(data.players);
+            const dataForPlayerManager = data.playerManager;
+            if (dataForPlayerManager == null) {
+                Logger.error(`McwWar.init() empty dataForPlayerManager.`);
+                return undefined;
+            }
+
+            const playerManager = (this.getPlayerManager() || new (this._getPlayerManagerClass())()).init(dataForPlayerManager);
+            if (playerManager == null) {
+                Logger.error(`McwWar.init() empty playerManager.`);
+                return undefined;
+            }
+
             await this._initField(
                 data.field,
                 data.configVersion,
@@ -17,7 +29,7 @@ namespace TinyWars.MultiCustomWar {
             );
             this._initTurnManager(data.turn);
 
-            this.setNextActionId(data.nextActionId);
+            this._setPlayerManager(playerManager);
 
             this._initView();
 
@@ -56,7 +68,7 @@ namespace TinyWars.MultiCustomWar {
                 warComment              : this.getWarComment(),
                 configVersion           : this.getConfigVersion(),
                 executedActions         : [],
-                nextActionId            : this.getNextActionId(),
+                nextActionId            : this.getExecutedActionsCount(),
                 remainingVotesForDraw   : this.getRemainingVotesForDraw(),
                 warRuleIndex            : this.getWarRuleIndex(),
                 bootTimerParams         : this.getSettingsBootTimerParams(),
@@ -73,7 +85,7 @@ namespace TinyWars.MultiCustomWar {
                 luckUpperLimit          : this.getSettingsLuckUpperLimit(),
                 singlePlayerWarType     : Types.SinglePlayerWarType.Custom,
                 isSinglePlayerCheating  : true,
-                mapFileName             : this.getMapFileName(),
+                mapFileName             : this.getMapId(),
                 players                 : playerDataList,
                 field                   : fieldData,
                 turn                    : (this.getTurnManager() as McwTurnManager).serializeForSimulation(),

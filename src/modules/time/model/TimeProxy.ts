@@ -21,7 +21,7 @@ namespace TinyWars.Time {
             });
         }
         function _onSHeartbeat(e: egret.Event): void {
-            const data = e.data as ProtoTypes.IS_Heartbeat;
+            const data = e.data as ProtoTypes.NetMessage.IS_Heartbeat;
             if (!data.errorCode) {
                 Notify.dispatch(NotifyType.SHeartbeat, data);
             }

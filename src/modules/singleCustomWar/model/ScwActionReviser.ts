@@ -69,7 +69,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const unitMap                   = war.getUnitMap();
         const unitAttributesMap         = new Map<BwUnit, UnitAttributes>();
         const action                    : WarAction = {
-            actionId                : war.getNextActionId(),
+            actionId                : war.getExecutedActionsCount(),
             WarActionPlayerBeginTurn: {},
         };
         unitMap.forEachUnit(unit => {
@@ -397,7 +397,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         );
 
         return {
-            actionId                    : war.getNextActionId(),
+            actionId                    : war.getExecutedActionsCount(),
             WarActionPlayerDeleteUnit   : {
                 gridIndex: container.PlayerDeleteUnit.gridIndex,
             },
@@ -412,7 +412,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         );
 
         return {
-            actionId                : war.getNextActionId(),
+            actionId                : war.getExecutedActionsCount(),
             WarActionPlayerEndTurn  : {}
         };
     }
@@ -433,7 +433,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const cfgCost       = Utility.ConfigManager.getUnitTemplateCfg(war.getConfigVersion(), unitType).productionCost;
 
         return {
-            actionId                    : war.getNextActionId(),
+            actionId                    : war.getExecutedActionsCount(),
             WarActionPlayerProduceUnit  : {
                 cost: cfgCost == null
                     ? null
@@ -468,7 +468,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const [attackDamage, counterDamage] = DamageCalculator.getFinalBattleDamage(war, rawPath, launchUnitId, targetGridIndex);
         const lostPlayerIndex               = getLostPlayerIndex(war, attacker, attackTarget, attackDamage, counterDamage);
         return {
-            actionId            : war.getNextActionId(),
+            actionId            : war.getExecutedActionsCount(),
             WarActionUnitAttack : {
                 path    : revisedPath,
                 launchUnitId,
@@ -492,7 +492,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const action        = rawAction.UnitBeLoaded;
         const launchUnitId  = action.launchUnitId;
         return {
-            actionId                : war.getNextActionId(),
+            actionId                : war.getExecutedActionsCount(),
             WarActionUnitBeLoaded   : {
                 path    : getRevisedPath(war, action.path, launchUnitId),
                 launchUnitId,
@@ -510,7 +510,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const action        = rawAction.UnitBuildTile;
         const launchUnitId  = action.launchUnitId;
         return {
-            actionId                : war.getNextActionId(),
+            actionId                : war.getExecutedActionsCount(),
             WarActionUnitBuildTile  : {
                 path    : getRevisedPath(war, action.path, launchUnitId),
                 launchUnitId,
@@ -528,7 +528,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const action        = rawAction.UnitCaptureTile;
         const launchUnitId  = action.launchUnitId;
         return {
-            actionId                : war.getNextActionId(),
+            actionId                : war.getExecutedActionsCount(),
             WarActionUnitCaptureTile: {
                 path    : getRevisedPath(war, action.path, launchUnitId),
                 launchUnitId,
@@ -546,7 +546,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const action        = rawAction.UnitDive;
         const launchUnitId  = action.launchUnitId;
         return {
-            actionId            : war.getNextActionId(),
+            actionId            : war.getExecutedActionsCount(),
             WarActionUnitDive   : {
                 path    : getRevisedPath(war, action.path, launchUnitId),
                 launchUnitId,
@@ -567,7 +567,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const revisedDropDestinations   = getRevisedDropDestinations(war, action, revisedPath);
         const isDropBlocked             =  (!revisedPath.isBlocked) && (revisedDropDestinations.length < action.dropDestinations!.length);
         return {
-            actionId            : war.getNextActionId(),
+            actionId            : war.getExecutedActionsCount(),
             WarActionUnitDrop   : {
                 path            : getRevisedPath(war, action.path, launchUnitId),
                 launchUnitId,
@@ -587,7 +587,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const action        = rawAction.UnitJoin;
         const launchUnitId  = action.launchUnitId;
         return {
-            actionId            : war.getNextActionId(),
+            actionId            : war.getExecutedActionsCount(),
             WarActionUnitJoin   : {
                 path    : getRevisedPath(war, action.path, launchUnitId),
                 launchUnitId,
@@ -605,7 +605,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const action        = rawAction.UnitLaunchFlare;
         const launchUnitId  = action.launchUnitId;
         return {
-            actionId                : war.getNextActionId(),
+            actionId                : war.getExecutedActionsCount(),
             WarActionUnitLaunchFlare: {
                 path            : getRevisedPath(war, action.path, launchUnitId),
                 launchUnitId,
@@ -624,7 +624,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const action        = rawAction.UnitLaunchSilo;
         const launchUnitId  = action.launchUnitId;
         return {
-            actionId                : war.getNextActionId(),
+            actionId                : war.getExecutedActionsCount(),
             WarActionUnitLaunchSilo : {
                 path            : getRevisedPath(war, action.path, launchUnitId),
                 launchUnitId,
@@ -643,7 +643,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const action        = rawAction.UnitLoadCo;
         const launchUnitId  = action.launchUnitId;
         return {
-            actionId            : war.getNextActionId(),
+            actionId            : war.getExecutedActionsCount(),
             WarActionUnitLoadCo : {
                 path    : getRevisedPath(war, action.path, launchUnitId),
                 launchUnitId,
@@ -661,7 +661,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const action        = rawAction.UnitProduceUnit;
         const launchUnitId  = action.launchUnitId;
         return {
-            actionId                    : war.getNextActionId(),
+            actionId                    : war.getExecutedActionsCount(),
             WarActionUnitProduceUnit    : {
                 path    : getRevisedPath(war, action.path, launchUnitId),
                 launchUnitId,
@@ -679,7 +679,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const action        = rawAction.UnitSupply;
         const launchUnitId  = action.launchUnitId;
         return {
-            actionId            : war.getNextActionId(),
+            actionId            : war.getExecutedActionsCount(),
             WarActionUnitSupply : {
                 path    : getRevisedPath(war, action.path, launchUnitId),
                 launchUnitId,
@@ -697,7 +697,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const action        = rawAction.UnitSurface;
         const launchUnitId  = action.launchUnitId;
         return {
-            actionId            : war.getNextActionId(),
+            actionId            : war.getExecutedActionsCount(),
             WarActionUnitSurface: {
                 path    : getRevisedPath(war, action.path, launchUnitId),
                 launchUnitId,
@@ -721,7 +721,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
             : getUseCoSkillExtraDataList(war, war.getPlayerInTurn(), skillType, revisedPath, launchUnitId);
 
         return {
-            actionId                : war.getNextActionId(),
+            actionId                : war.getExecutedActionsCount(),
             WarActionUnitUseCoSkill : {
                 path    : revisedPath,
                 launchUnitId,
@@ -741,7 +741,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const action        = rawAction.UnitWait;
         const launchUnitId  = action.launchUnitId;
         return {
-            actionId            : war.getNextActionId(),
+            actionId            : war.getExecutedActionsCount(),
             WarActionUnitWait   : {
                 path    : getRevisedPath(war, action.path, launchUnitId),
                 launchUnitId,
@@ -934,7 +934,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
             return getIndiscriminateAreaDamageCenterForType2(valueMaps, radius, hpDamage);
 
         } else if (targetType === 3) {  // random: HP or fund
-            return war.getRandomNumberGenerator()() < 0.5
+            return war.getRandomNumber() < 0.5
                 ? getIndiscriminateAreaDamageCenterForType1(valueMaps, radius, hpDamage)
                 : getIndiscriminateAreaDamageCenterForType2(valueMaps, radius, hpDamage);
 

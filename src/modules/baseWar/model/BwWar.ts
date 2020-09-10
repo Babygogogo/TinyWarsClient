@@ -1,18 +1,23 @@
 
 namespace TinyWars.BaseWar {
-    import Types            = Utility.Types;
-    import Logger           = Utility.Logger;
-    import Notify           = Utility.Notify;
-    import ConfigManager    = Utility.ConfigManager;
-    import SerializedBwWar  = Types.SerializedWar;
+    import Types                    = Utility.Types;
+    import Logger                   = Utility.Logger;
+    import Notify                   = Utility.Notify;
+    import ConfigManager            = Utility.ConfigManager;
+    import ProtoTypes               = Utility.ProtoTypes;
+    import ISerialWar               = ProtoTypes.WarSerialization.ISerialWar;
+    import IWarSettingsForCommon    = ProtoTypes.WarSettings.ISettingsForCommon;
+    import ISeedRandomState         = ProtoTypes.Structure.ISeedRandomState;
 
     export abstract class BwWar {
         private _warId                  : number;
+        private _settingsForCommon      : IWarSettingsForCommon;
+        private _seedRandomInitialState : ISeedRandomState;
+
         private _warName                : string;
         private _warPassword            : string;
         private _warComment             : string;
         private _configVersion          : string;
-        private _mapFileName            : string;
         private _warRuleIndex           : number | null | undefined;
         private _bootTimerParams        : number[];
         private _hasFogByDefault        : boolean;
@@ -33,38 +38,41 @@ namespace TinyWars.BaseWar {
         private _turnManager            : BwTurnManager;
         private _randomNumberGenerator  : seedrandom.prng;
         private _remainingVotesForDraw  : number;
-        private _nextActionId           : number;
+        private _executedActionsCount   : number;
         private _isRunning              = false;
         private _isExecutingAction      = false;
 
-        public async abstract init(data: SerializedBwWar): Promise<BwWar>;
+        public async abstract init(data: ISerialWar): Promise<BwWar>;
         protected abstract _getPlayerManagerClass(): new () => BwPlayerManager;
         protected abstract _getTurnManagerClass(): new () => BwTurnManager;
         protected abstract _getFieldClass(): new () => BwField;
         protected abstract _getViewClass(): new () => BwWarView;
 
-        protected _baseInit(data: SerializedBwWar): BwWar {
-            this._setWarId(data.warId);
-            this._setWarName(data.warName);
-            this._setWarPassword(data.warPassword);
-            this._setWarComment(data.warComment);
-            this._setConfigVersion(data.configVersion);
-            this.setMapFileName(data.mapFileName);
-            this._setRandomNumberGenerator(new Math.seedrandom("", { state: data.seedRandomState || true }));
-            this._setWarRuleIndex(data.warRuleIndex);
-            this._setSettingsBootTimerParams(data.bootTimerParams || [Types.BootTimerType.Regular, ConfigManager.COMMON_CONSTANTS.WarBootTimerRegularDefaultValue]);
-            this._setSettingsHasFog(data.hasFogByDefault);
-            this.setSettingsIncomeModifier(data.incomeModifier);
-            this.setSettingsEnergyGrowthMultiplier(data.energyGrowthModifier);
-            this.setSettingsAttackPowerModifier(data.attackPowerModifier);
-            this.setSettingsMoveRangeModifier(data.moveRangeModifier);
-            this.setSettingsVisionRangeModifier(data.visionRangeModifier);
-            this.setSettingsInitialFund(data.initialFund);
-            this.setSettingsInitialEnergy(data.initialEnergy);
-            this._setSettingsBannedCoIdList(data.bannedCoIdList);
-            this.setSettingsLuckLowerLimit(data.luckLowerLimit);
-            this.setSettingsLuckUpperLimit(data.luckUpperLimit);
+        protected _baseInit(data: ISerialWar): BwWar {
+            const settingsForCommon = data.settingsForCommon;
+            if (settingsForCommon == null) {
+                Logger.error(`BwWar._baseInit() empty settingsForCommon.`);
+                return undefined;
+            }
 
+            const executedActionsCount = data.executedActionsCount;
+            if (executedActionsCount == null) {
+                Logger.error(`BwWar._baseInit() empty executedActionsCount.`);
+                return undefined;
+            }
+
+            const seedRandomInitialState    = data.seedRandomInitialState;
+            const seedRandomCurrentState    = executedActionsCount === 0 ? seedRandomInitialState : data.seedRandomCurrentState;
+            if (seedRandomCurrentState == null) {
+                Logger.error(`BwWar._baseInit() empty seedRandomCurrentState.`);
+                return undefined;
+            }
+
+            this._setWarId(data.warId);
+            this._setSettingsForCommon(settingsForCommon);
+            this._setExecutedActionsCount(executedActionsCount);
+            this._setRandomNumberGenerator(new Math.seedrandom("", { state: seedRandomCurrentState }));
+            this._setSeedRandomInitialState(seedRandomInitialState);
             this.setRemainingVotesForDraw(data.remainingVotesForDraw);
 
             return this;
@@ -153,18 +161,39 @@ namespace TinyWars.BaseWar {
             return this._configVersion;
         }
 
-        public setMapFileName(mapFileName: string): void {
-            this._mapFileName = mapFileName;
+        private _setSettingsForCommon(settings: IWarSettingsForCommon): void {
+            this._settingsForCommon = settings;
         }
-        public getMapFileName(): string {
-            return this._mapFileName;
+        public getSettingsForCommon(): IWarSettingsForCommon | undefined {
+            return this._settingsForCommon;
+        }
+
+        public getMapId(): number {
+            const settingsForCommon = this.getSettingsForCommon();
+            return settingsForCommon ? settingsForCommon.mapId : undefined;
         }
 
         private _setRandomNumberGenerator(generator: seedrandom.prng): void {
             this._randomNumberGenerator = generator;
         }
-        public getRandomNumberGenerator(): seedrandom.prng {
+        private _getRandomNumberGenerator(): seedrandom.prng {
             return this._randomNumberGenerator;
+        }
+        public getRandomNumber(): number | undefined {
+            const generator = this._getRandomNumberGenerator();
+            if (generator == null) {
+                Logger.error(`BwWar.getRandomNumber() empty generator.`);
+                return undefined;
+            }
+            return generator();
+        }
+        protected _getSeedRandomCurrentState(): ISeedRandomState | undefined {
+            const generator = this._getRandomNumberGenerator();
+            if (generator == null) {
+                Logger.error(`BwWar.getRandomNumber() empty generator.`);
+                return undefined;
+            }
+            return generator.state();
         }
 
         private _setSettingsBootTimerParams(params: number[]): void {
@@ -273,23 +302,22 @@ namespace TinyWars.BaseWar {
             return this._remainingVotesForDraw;
         }
 
-        public getNextActionId(): number {
-            return this._nextActionId;
+        public getExecutedActionsCount(): number {
+            return this._executedActionsCount;
         }
-        public setNextActionId(actionId: number): void {
-            this._nextActionId = actionId;
-            Notify.dispatch(Notify.Type.BwNextActionIdChanged);
+        protected _setExecutedActionsCount(count: number): void {
+            this._executedActionsCount = count;
+            Notify.dispatch(Notify.Type.BwExecutedActionsCountChanged);
         }
 
-        protected _initPlayerManager(data: Types.SerializedPlayer[]): void {
-            const playerManager = this.getPlayerManager() || new (this._getPlayerManagerClass())();
-            playerManager.init(data);
-            this._setPlayerManager(playerManager);
+        private _setSeedRandomInitialState(state: ISeedRandomState): void {
+            this._seedRandomInitialState = state;
         }
-        protected _fastInitPlayerManager(data: Types.SerializedPlayer[]): void {
-            this.getPlayerManager().fastInit(data);
+        protected _getSeedRandomInitialState(): ISeedRandomState | undefined {
+            return this._seedRandomInitialState;
         }
-        private _setPlayerManager(manager: BwPlayerManager): void {
+
+        protected _setPlayerManager(manager: BwPlayerManager): void {
             this._playerManager = manager;
         }
         public getPlayerManager(): BwPlayerManager {
@@ -305,19 +333,6 @@ namespace TinyWars.BaseWar {
             return this.getTurnManager().getPlayerIndexInTurn();
         }
 
-        protected async _initField(
-            data                        : Types.SerializedField,
-            configVersion               : string,
-            mapFileName                 : string | null | undefined,
-            mapSizeAndMaxPlayerIndex    : Types.MapSizeAndMaxPlayerIndex,
-        ): Promise<void> {
-            if (!mapSizeAndMaxPlayerIndex) {
-                Logger.error("BwWar._initField() empty mapSizeAndMaxPlayerIndex!");
-            }
-            const field = this.getField() || new (this._getFieldClass())();
-            await field.init(data, configVersion, mapFileName, mapSizeAndMaxPlayerIndex);
-            this._setField(field);
-        }
         protected async _fastInitField(
             data                        : Types.SerializedField,
             configVersion               : string,
@@ -326,7 +341,7 @@ namespace TinyWars.BaseWar {
         ): Promise<void> {
             await this.getField().fastInit(data, configVersion, mapFileName, mapSizeAndMaxPlayerIndex);
         }
-        private _setField(field: BwField): void {
+        protected _setField(field: BwField): void {
             this._field = field;
         }
         public getField(): BwField {
@@ -349,15 +364,10 @@ namespace TinyWars.BaseWar {
             return this.getField().getGridVisionEffect();
         }
 
-        protected _initTurnManager(data: Types.SerializedTurn): void {
-            const turnManager = this.getTurnManager() || new (this._getTurnManagerClass())();
-            turnManager.init(data);
-            this._setTurnManager(turnManager);
-        }
         protected _fastInitTurnManager(data: Types.SerializedTurn): void {
             this.getTurnManager().fastInit(data);
         }
-        private _setTurnManager(manager: BwTurnManager): void {
+        protected _setTurnManager(manager: BwTurnManager): void {
             this._turnManager = manager;
         }
         public getTurnManager(): BwTurnManager {

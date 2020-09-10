@@ -119,8 +119,8 @@ namespace TinyWars.SingleCustomWar {
         }
 
         private _onNotifySScrContinueWar(e: egret.Event): void {
-            const data      = e.data as ProtoTypes.IS_ScrContinueWar;
-            const warData   = ProtoManager.decodeAsSerializedWar(data.encodedWar);
+            const data      = e.data as ProtoTypes.NetMessage.IS_ScrContinueWar;
+            const warData   = ProtoManager.decodeAsSerialWar(data.encodedWar);
             Utility.FlowManager.gotoSingleCustomWar(warData);
         }
 
@@ -129,12 +129,12 @@ namespace TinyWars.SingleCustomWar {
         }
 
         private _onNotifySScrCreateCustomWar(e: egret.Event): void {
-            const data = e.data as ProtoTypes.IS_ScrCreateCustomWar;
+            const data = e.data as ProtoTypes.NetMessage.IS_ScrCreateCustomWar;
             Common.CommonConfirmPanel.show({
                 title   : Lang.getText(Lang.Type.B0088),
                 content : Lang.getText(Lang.Type.A0107),
                 callback: () => {
-                    FlowManager.gotoSingleCustomWar(data.warData as Types.SerializedWar);
+                    FlowManager.gotoSingleCustomWar(data.warData);
                 },
             });
         }
@@ -188,7 +188,7 @@ namespace TinyWars.SingleCustomWar {
 
         private async _updateGroupInfo(): Promise<void> {
             const war               = this._war;
-            const mapFileName       = war.getMapFileName();
+            const mapFileName       = war.getMapId();
             this._labelMapName.text = `${await WarMapModel.getMapNameInCurrentLanguage(mapFileName) || "----"} (${Lang.getText(Lang.Type.B0163)}: ${await WarMapModel.getDesignerName(mapFileName) || "----"})`;
         }
 
@@ -228,7 +228,7 @@ namespace TinyWars.SingleCustomWar {
             const war = this._war;
             return {
                 titleText               : Lang.getText(Lang.Type.B0091),
-                infoText                : `${war.getTurnManager().getTurnIndex() + 1} (${Lang.getText(Lang.Type.B0090)}: ${war.getNextActionId() + 1})`,
+                infoText                : `${war.getTurnManager().getTurnIndex() + 1} (${Lang.getText(Lang.Type.B0090)}: ${war.getExecutedActionsCount() + 1})`,
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : null,
             };

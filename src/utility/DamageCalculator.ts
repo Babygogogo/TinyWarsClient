@@ -18,7 +18,7 @@ namespace TinyWars.Utility.DamageCalculator {
         // TODO: take skill into account.
         const lowerLimit    = war.getSettingsLuckLowerLimit();
         const upperLimit    = war.getSettingsLuckUpperLimit();
-        return Math.floor(war.getRandomNumberGenerator()() * (upperLimit - lowerLimit + 1)) + lowerLimit;
+        return Math.floor(war.getRandomNumber() * (upperLimit - lowerLimit + 1)) + lowerLimit;
     }
 
     function getAttackBonusMultiplier(war: BwWar, attacker: BwUnit, attackerGridIndex: GridIndex, target: BwUnit | BwTile, targetGridIndex: GridIndex): number {

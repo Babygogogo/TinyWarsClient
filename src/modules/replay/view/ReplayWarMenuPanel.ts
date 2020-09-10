@@ -205,12 +205,12 @@ namespace TinyWars.Replay {
 
         private async _updateGroupInfo(): Promise<void> {
             const war                               = this._war;
-            const mapFileName                       = war.getMapFileName();
+            const mapFileName                       = war.getMapId();
             this._labelMapName.text                 = await WarMapModel.getMapNameInCurrentLanguage(mapFileName) || "----";
             this._labelMapDesigner.text             = await WarMapModel.getDesignerName(mapFileName) || "----";
             this._labelWarId.text                   = `${war.getWarId()}`;
             this._labelTurnIndex.text               = `${war.getTurnManager().getTurnIndex() + 1}`;
-            this._labelActionId.text                = `${war.getNextActionId() - 1}`;
+            this._labelActionId.text                = `${war.getExecutedActionsCount() - 1}`;
             this._labelIncomeModifier.text          = `${war.getSettingsIncomeModifier()}%`;
             this._labelEnergyGrowthModifier.text    = `${war.getSettingsEnergyGrowthMultiplier()}%`;
             this._labelInitialEnergy.text           = `${war.getSettingsInitialEnergy()}%`;

@@ -1,7 +1,10 @@
 
 namespace TinyWars.BaseWar {
-    import Types            = Utility.Types;
-    import ConfigManager    = Utility.ConfigManager;
+    import ConfigManager        = Utility.ConfigManager;
+    import Logger               = Utility.Logger;
+    import WarSerialization     = Utility.ProtoTypes.WarSerialization;
+    import ISerialPlayerManager = WarSerialization.ISerialPlayerManager;
+    import ISerialPlayer        = WarSerialization.ISerialPlayer;
 
     export abstract class BwPlayerManager {
         private _players        = new Map<number, BwPlayer>();
@@ -9,16 +12,37 @@ namespace TinyWars.BaseWar {
 
         protected abstract _getPlayerClass(): new () => BwPlayer;
 
-        public init(dataList: Types.SerializedPlayer[]): BwPlayerManager {
-            this._players.clear();
-            for (const data of dataList) {
-                this._players.set(data.playerIndex!, (new (this._getPlayerClass())).init(data));
+        public init(data: ISerialPlayerManager): BwPlayerManager | undefined {
+            const playersMap = this._getPlayersMap();
+            playersMap.clear();
+
+            const playerList = data.players;
+            if ((!playerList) || (!playerList.length)) {
+                Logger.error(`BwPlayerManager.init() empty players! data: ${JSON.stringify(data)}`);
+                return undefined;
             }
+
+            for (const d of playerList) {
+                const playerIndex = d.playerIndex;
+                if (playerIndex == null) {
+                    Logger.error(`BwPlayerManager.init() empty playerIndex.`);
+                    return undefined;
+                }
+
+                const player = (new (this._getPlayerClass())()).init(d);
+                if (player == null) {
+                    Logger.error(`BwPlayerManager.init() empty player.`);
+                    return undefined;
+                }
+
+                playersMap.set(playerIndex, player);
+            }
+
             return this;
         }
-        public fastInit(dataList: Types.SerializedPlayer[]): BwPlayerManager {
-            for (const data of dataList) {
-                this.getPlayer(data.playerIndex).init(data);
+        public fastInit(data: ISerialPlayerManager): BwPlayerManager {
+            for (const d of data.players) {
+                this.getPlayer(d.playerIndex).init(d);
             }
             return this;
         }
@@ -36,7 +60,7 @@ namespace TinyWars.BaseWar {
         public getPlayer(playerIndex: number): BwPlayer | undefined {
             return this._players.get(playerIndex);
         }
-        public getAllPlayers(): Map<number, BwPlayer> {
+        protected _getPlayersMap(): Map<number, BwPlayer> {
             return this._players;
         }
 

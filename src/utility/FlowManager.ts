@@ -142,7 +142,7 @@ namespace TinyWars.Utility.FlowManager {
     function _onNotifyNetworkConnected(e: egret.Event): void {
         const account   = UserModel.getSelfAccount();
         const password  = UserModel.getSelfPassword();
-        if ((!UserModel.checkIsLoggedIn()) && (account != null) && (password != null)) {
+        if ((!UserModel.getIsLoggedIn()) && (account != null) && (password != null)) {
             Login.LoginProxy.reqLogin(account, password, true);
         }
     }
@@ -186,7 +186,7 @@ namespace TinyWars.Utility.FlowManager {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     function _checkCanFirstGoToLobby(): boolean {
         return (!_hasOnceWentToLobby)
-            && (User.UserModel.checkIsLoggedIn())
+            && (User.UserModel.getIsLoggedIn())
             && (ResManager.checkIsLoadedMainResource())
             && (Utility.ConfigManager.checkIsConfigLoaded(Utility.ConfigManager.getNewestConfigVersion()))
     }

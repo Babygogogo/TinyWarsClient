@@ -96,13 +96,14 @@ namespace TinyWars.Time.TimeModel {
     }
 
     function _onSHeartbeat(e: egret.Event): void {
-        const data = e.data as Utility.ProtoTypes.IS_Heartbeat;
+        const data = e.data as Utility.ProtoTypes.NetMessage.IS_Heartbeat;
         if (data.counter === _heartbeatCounter) {
             _isHeartbeatAnswered = true;
             ++_heartbeatCounter;
 
-            if ((!_serverTimestamp) || (Math.abs(data.timestamp - _serverTimestamp) > 3)) {
-                _serverTimestamp = data.timestamp;
+            const timestamp = data.timestamp;
+            if ((!_serverTimestamp) || (Math.abs(timestamp - _serverTimestamp) > 3)) {
+                _serverTimestamp = timestamp;
             }
         }
     }

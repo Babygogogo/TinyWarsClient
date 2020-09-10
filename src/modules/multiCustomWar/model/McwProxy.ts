@@ -70,7 +70,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         NetManager.send({
             C_McwPlayerSyncWar: {
                 warId       : war.getWarId(),
-                nextActionId: war.getNextActionId(),
+                nextActionId: war.getExecutedActionsCount(),
                 requestType,
             },
         });
@@ -87,7 +87,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         NetManager.send({
             C_McwPlayerBeginTurn: {
                 warId   : war.getWarId(),
-                actionId: war.getNextActionId(),
+                actionId: war.getExecutedActionsCount(),
             },
         });
     }
@@ -103,7 +103,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         NetManager.send({
             C_McwPlayerDeleteUnit: {
                 warId   : war.getWarId(),
-                actionId: war.getNextActionId(),
+                actionId: war.getExecutedActionsCount(),
                 gridIndex,
             },
         });
@@ -120,7 +120,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         NetManager.send({
             C_McwPlayerEndTurn: {
                 warId   : war.getWarId(),
-                actionId: war.getNextActionId(),
+                actionId: war.getExecutedActionsCount(),
             },
         });
     }
@@ -136,7 +136,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         NetManager.send({
             C_McwPlayerProduceUnit: {
                 warId   : war.getWarId(),
-                actionId: war.getNextActionId(),
+                actionId: war.getExecutedActionsCount(),
                 gridIndex,
                 unitType,
                 unitHp,
@@ -155,7 +155,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         NetManager.send({
             C_McwPlayerSurrender: {
                 warId   : war.getWarId(),
-                actionId: war.getNextActionId(),
+                actionId: war.getExecutedActionsCount(),
                 isBoot  : false,
             },
         })
@@ -172,7 +172,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         NetManager.send({
             C_McwPlayerVoteForDraw: {
                 warId   : war.getWarId(),
-                actionId: war.getNextActionId(),
+                actionId: war.getExecutedActionsCount(),
                 isAgree,
             },
         });
@@ -189,7 +189,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         NetManager.send({
             C_McwUnitAttack: {
                 warId       : war.getWarId(),
-                actionId    : war.getNextActionId(),
+                actionId    : war.getExecutedActionsCount(),
                 path,
                 launchUnitId,
                 targetGridIndex,
@@ -208,7 +208,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         NetManager.send({
             C_McwUnitBeLoaded: {
                 warId       : war.getWarId(),
-                actionId    : war.getNextActionId(),
+                actionId    : war.getExecutedActionsCount(),
                 path,
                 launchUnitId,
             },
@@ -226,7 +226,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         NetManager.send({
             C_McwUnitBuildTile: {
                 warId       : war.getWarId(),
-                actionId    : war.getNextActionId(),
+                actionId    : war.getExecutedActionsCount(),
                 path,
                 launchUnitId,
             },
@@ -244,7 +244,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         NetManager.send({
             C_McwUnitCaptureTile: {
                 warId       : war.getWarId(),
-                actionId    : war.getNextActionId(),
+                actionId    : war.getExecutedActionsCount(),
                 path,
                 launchUnitId,
             },
@@ -262,7 +262,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         NetManager.send({
             C_McwUnitDive: {
                 warId       : war.getWarId(),
-                actionId    : war.getNextActionId(),
+                actionId    : war.getExecutedActionsCount(),
                 path,
                 launchUnitId,
             },
@@ -280,7 +280,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         NetManager.send({
             C_McwUnitDrop: {
                 warId   : war.getWarId(),
-                actionId: war.getNextActionId(),
+                actionId: war.getExecutedActionsCount(),
                 path,
                 launchUnitId,
                 dropDestinations,
@@ -299,7 +299,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         NetManager.send({
             C_McwUnitJoin: {
                 warId       : war.getWarId(),
-                actionId    : war.getNextActionId(),
+                actionId    : war.getExecutedActionsCount(),
                 path,
                 launchUnitId,
             },
@@ -317,7 +317,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         NetManager.send({
             C_McwUnitLaunchFlare: {
                 warId       : war.getWarId(),
-                actionId    : war.getNextActionId(),
+                actionId    : war.getExecutedActionsCount(),
                 path,
                 launchUnitId,
                 targetGridIndex,
@@ -336,7 +336,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         NetManager.send({
             C_McwUnitLaunchSilo: {
                 warId       : war.getWarId(),
-                actionId    : war.getNextActionId(),
+                actionId    : war.getExecutedActionsCount(),
                 path,
                 launchUnitId,
                 targetGridIndex,
@@ -355,7 +355,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         NetManager.send({
             C_McwUnitLoadCo: {
                 warId       : war.getWarId(),
-                actionId    : war.getNextActionId(),
+                actionId    : war.getExecutedActionsCount(),
                 path,
                 launchUnitId,
             },
@@ -373,7 +373,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         NetManager.send({
             C_McwUnitProduceUnit: {
                 warId       : war.getWarId(),
-                actionId    : war.getNextActionId(),
+                actionId    : war.getExecutedActionsCount(),
                 path,
                 launchUnitId,
             },
@@ -391,7 +391,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         NetManager.send({
             C_McwUnitSupply: {
                 warId       : war.getWarId(),
-                actionId    : war.getNextActionId(),
+                actionId    : war.getExecutedActionsCount(),
                 path,
                 launchUnitId,
             },
@@ -409,7 +409,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         NetManager.send({
             C_McwUnitSurface: {
                 warId       : war.getWarId(),
-                actionId    : war.getNextActionId(),
+                actionId    : war.getExecutedActionsCount(),
                 path,
                 launchUnitId,
             },
@@ -427,7 +427,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         NetManager.send({
             C_McwUnitUseCoSkill: {
                 warId       : war.getWarId(),
-                actionId    : war.getNextActionId(),
+                actionId    : war.getExecutedActionsCount(),
                 skillType,
                 path,
                 launchUnitId,
@@ -446,7 +446,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         NetManager.send({
             C_McwUnitWait: {
                 warId       : war.getWarId(),
-                actionId    : war.getNextActionId(),
+                actionId    : war.getExecutedActionsCount(),
                 path,
                 launchUnitId,
             },

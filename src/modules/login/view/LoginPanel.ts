@@ -85,11 +85,19 @@ namespace TinyWars.Login {
                 FloatText.show(Lang.getText(Lang.Type.A0001));
             } else {
                 if ((!password) || (!password.length)) {
+                    LocalStorage.setAccount(account);
+                    LocalStorage.setPassword(password);
+                    User.UserModel.setSelfAccount(account);
+                    User.UserModel.setSelfPassword(password);
                     LoginProxy.reqLogin(account, account, false); // For convenience for testing
                 } else {
                     if (!Utility.Helpers.checkIsPasswordValid(password)) {
                         FloatText.show(Lang.getText(Lang.Type.A0003));
                     } else {
+                        LocalStorage.setAccount(account);
+                        LocalStorage.setPassword(password);
+                        User.UserModel.setSelfAccount(account);
+                        User.UserModel.setSelfPassword(password);
                         LoginProxy.reqLogin(account, password, false);
                     }
                 }

@@ -1,9 +1,10 @@
 
 namespace TinyWars.WarMap {
-    import Notify       = Utility.Notify;
-    import Types        = Utility.Types
-    import ProtoTypes   = Utility.ProtoTypes;
-    import TimeModel    = Time.TimeModel;
+    import Notify           = Utility.Notify;
+    import Types            = Utility.Types
+    import ProtoTypes       = Utility.ProtoTypes;
+    import ConfigManager    = Utility.ConfigManager;
+    import TimeModel        = Time.TimeModel;
 
     export class WarMapUnitMapView extends egret.DisplayObjectContainer {
         private _unitViews  : WarMapUnitView[] = [];
@@ -33,7 +34,7 @@ namespace TinyWars.WarMap {
             this._reviseZOrderForAllUnits();
         }
         public initWithMapRawData(mapRawData: ProtoTypes.Map.IMapRawData): void {
-            this.initWithDataList(_createUnitViewDataList(mapRawData.unitDataList, mapRawData.mapWidth, mapRawData.mapHeight));
+            this.initWithDataList(_createUnitViewDataList(mapRawData.unitDataList));
         }
 
         private _onNotifyUnitAnimationTick(e: egret.Event): void {
@@ -55,10 +56,12 @@ namespace TinyWars.WarMap {
             for (let i = 0; i < unitsCount; ++i) {
                 unitViews.push(layer.getChildAt(i) as WarMapUnitView);
             }
-            unitViews.sort((a, b): number => {
-                const dataA = a.getData();
-                const dataB = b.getData();
-                return dataA.gridY !== dataB.gridY ? dataA.gridY - dataB.gridY : dataA.gridX - dataB.gridY;
+            unitViews.sort((v1, v2): number => {
+                const g1 = v1.getData().gridIndex;
+                const g2 = v2.getData().gridIndex;
+                const y1 = g1.y;
+                const y2 = g2.y;
+                return y1 !== y2 ? y1 - y2 : g1.x - g2.x;
             })
 
             for (let i = 0; i < unitsCount; ++i) {
@@ -67,13 +70,14 @@ namespace TinyWars.WarMap {
         }
 
         private _addUnit(data: Types.WarMapUnitViewData, tickCount: number): void {
-            const unitType = Utility.ConfigManager.getUnitTypeAndPlayerIndex(data.viewId).unitType;
+            const unitType = data.unitType;
             const view     = new WarMapUnitView(data, tickCount);
             this._unitViews.push(view);
 
-            if (Utility.ConfigManager.checkIsUnitTypeInCategory(data.configVersion, unitType, Types.UnitCategory.Air)) {
+            const configVersion = ConfigManager.getNewestConfigVersion();
+            if (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, Types.UnitCategory.Air)) {
                 this._airLayer.addChild(view);
-            } else if (Utility.ConfigManager.checkIsUnitTypeInCategory(data.configVersion, unitType, Types.UnitCategory.Ground)) {
+            } else if (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, Types.UnitCategory.Ground)) {
                 this._groundLayer.addChild(view);
             } else {
                 this._seaLayer.addChild(view);
@@ -88,18 +92,16 @@ namespace TinyWars.WarMap {
         }
     }
 
-    function _createUnitViewDataList(unitDataList: ProtoTypes.WarSerialization.ISerialUnit[], mapWidth: number, mapHeight: number): Types.WarMapUnitViewData[] {
-        const configVersion = Utility.ConfigManager.getNewestConfigVersion();
-        const dataList      : Types.WarMapUnitViewData[] = [];
-
+    function _createUnitViewDataList(unitDataList: ProtoTypes.WarSerialization.ISerialUnit[]): Types.WarMapUnitViewData[] {
+        const dataList: Types.WarMapUnitViewData[] = [];
         if (unitDataList) {
             for (const unitData of unitDataList) {
                 if (unitData.loaderUnitId == null) {
                     dataList.push({
-                        configVersion,
-                        gridX   : unitData.gridX,
-                        gridY   : unitData.gridY,
-                        viewId  : unitData.viewId,
+                        gridIndex       : unitData.gridIndex as Types.GridIndex,
+                        skinId          : ConfigManager.getUnitAndTileDefaultSkinId(unitData.playerIndex),
+                        unitType        : unitData.unitType,
+                        unitActionState : unitData.actionState,
                     });
                 }
             }

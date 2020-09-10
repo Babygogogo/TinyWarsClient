@@ -247,19 +247,11 @@ namespace TinyWars.Utility.Types {
         TrueVision      = 2,
     }
 
-    export type MapAvailability = {
-        canMcw : boolean;
-        canWr  : boolean;
-        canScw : boolean;
-    }
-
     export type WarMapUnitViewData = {
-        configVersion: string;
-
-        gridX: number;
-        gridY: number;
-
-        viewId: number;
+        gridIndex       : GridIndex;
+        skinId          : number;
+        unitType        : UnitType;
+        unitActionState : UnitActionState;
     }
 
     export type MovableArea = {

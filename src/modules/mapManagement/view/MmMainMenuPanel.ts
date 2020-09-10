@@ -48,9 +48,9 @@ namespace TinyWars.MapManagement {
             this._listCommand.setItemRenderer(CommandRenderer);
         }
 
-        protected _onOpened(): void {
+        protected async _onOpened(): Promise<void> {
             this._updateView();
-            this._listCommand.bindData(this._createDataForListCommand());
+            this._listCommand.bindData(await this._createDataForListCommand());
         }
 
         protected _onClosed(): void {
@@ -76,13 +76,13 @@ namespace TinyWars.MapManagement {
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
-        private _updateView(): void {
+        private async _updateView(): Promise<void> {
             this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0192);
             this._btnBack.label         = Lang.getText(Lang.Type.B0146);
-            this._listCommand.bindData(this._createDataForListCommand());
+            this._listCommand.bindData(await this._createDataForListCommand());
         }
 
-        private _createDataForListCommand(): DataForCommandRenderer[] {
+        private async _createDataForListCommand(): Promise<DataForCommandRenderer[]> {
             const dataList: DataForCommandRenderer[] = [
                 {
                     name    : Lang.getText(Lang.Type.B0193),
@@ -106,7 +106,7 @@ namespace TinyWars.MapManagement {
                     },
                 },
             ];
-            if (User.UserModel.checkIsAdmin()) {
+            if (await User.UserModel.getIsSelfAdmin()) {
                 dataList.push({
                     name    : Lang.getText(Lang.Type.B0262),
                     callback: () => {

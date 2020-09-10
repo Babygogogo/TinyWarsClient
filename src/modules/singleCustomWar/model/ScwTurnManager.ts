@@ -6,9 +6,10 @@ namespace TinyWars.SingleCustomWar {
     import Types                = Utility.Types;
     import Lang                 = Utility.Lang;
     import FloatText            = Utility.FloatText;
+    import ISerialTurnManager   = ProtoTypes.WarSerialization.ISerialTurnManager;
 
     export class ScwTurnManager extends BaseWar.BwTurnManager {
-        public serialize(): Types.SerializedTurn {
+        public serialize(): ISerialTurnManager {
             return {
                 turnIndex       : this.getTurnIndex(),
                 playerIndex     : this.getPlayerIndexInTurn(),
@@ -17,7 +18,7 @@ namespace TinyWars.SingleCustomWar {
             };
         }
 
-        public serializeForSimulation(): Types.SerializedTurn {
+        public serializeForSimulation(): ISerialTurnManager {
             return {
                 turnIndex       : this.getTurnIndex(),
                 playerIndex     : this.getPlayerIndexInTurn(),
@@ -29,10 +30,10 @@ namespace TinyWars.SingleCustomWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The functions for running turn.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        protected _runPhaseMain(data: ProtoTypes.IWarActionPlayerBeginTurn): void {
+        protected _runPhaseMain(data: ProtoTypes.WarAction.IActionPlayerBeginTurn): void {
             const playerIndex   = this.getPlayerIndexInTurn();
             const war           = this._getWar() as ScwWar;
-            if (data.isDefeated) {
+            if (data.extraData.isDefeated) {
                 FloatText.show(Lang.getFormattedText(Lang.Type.F0014, war.getPlayer(playerIndex).getNickname()));
                 DestructionHelpers.destroyPlayerForce(war, playerIndex, true);
                 ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);

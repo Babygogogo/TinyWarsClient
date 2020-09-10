@@ -49,18 +49,18 @@ namespace TinyWars.SingleCustomWar.ScwModel {
     let _cachedActions  = new Array<WarActionContainer>();
 
     export function init(): void {
-        Notify.addEventListeners([
-            { type: Notify.Type.SMmMergeMap, callback: _onNotifySMmMergeMap, thisObject: ScwModel },
-        ]);
+        // Notify.addEventListeners([
+        //     { type: Notify.Type.SMmMergeMap, callback: _onNotifySMmMergeMap, thisObject: ScwModel },
+        // ]);
     }
 
-    function _onNotifySMmMergeMap(e: egret.Event): void {
-        const data  = e.data as ProtoTypes.IS_MmMergeMap;
-        const war   = getWar();
-        if ((war) && (war.getMapFileName() === data.srcMapFileName)) {
-            war.setMapFileName(data.dstMapFileName);
-        }
-    }
+    // function _onNotifySMmMergeMap(e: egret.Event): void {
+    //     const data  = e.data as ProtoTypes.IS_MmMergeMap;
+    //     const war   = getWar();
+    //     if ((war) && (war.getMapId() === data.srcMapFileName)) {
+    //         war.setMapId(data.dstMapFileName);
+    //     }
+    // }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for managing war.
@@ -95,7 +95,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
     export function updateByWarAction(container: WarActionContainer): void {
         const war = getWar();
         if (war) {
-            if (container.actionId !== war.getNextActionId() + _cachedActions.length) {
+            if (container.actionId !== war.getExecutedActionsCount() + _cachedActions.length) {
                 Logger.error(`ScwModel._updateByActionContainer() invalid action id: ${container.actionId}`);
             } else {
                 _cachedActions.push(container);
@@ -109,7 +109,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         const container = _cachedActions.length ? _cachedActions.shift() : undefined;
         if ((container) && (war.getIsRunning()) && (!war.getIsEnded()) && (!war.getIsExecutingAction())) {
             war.setIsExecutingAction(true);
-            war.setNextActionId(war.getNextActionId() + 1);
+            war._setExecutedActionsCount(war.getExecutedActionsCount() + 1);
             await _EXECUTORS.get(Helpers.getWarActionCode(container))(war, container);
             war.setIsExecutingAction(false);
 

@@ -9,7 +9,7 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ScwModel.updateByWarAction(ScwActionReviser.revise(
             war,
             {
-                actionId        : war.getNextActionId(),
+                actionId        : war.getExecutedActionsCount(),
                 PlayerBeginTurn : {},
             }
         ));
@@ -19,7 +19,7 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ScwModel.updateByWarAction(ScwActionReviser.revise(
             war,
             {
-                actionId        : war.getNextActionId(),
+                actionId        : war.getExecutedActionsCount(),
                 PlayerDeleteUnit: {
                     gridIndex,
                 },
@@ -31,7 +31,7 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ScwModel.updateByWarAction(ScwActionReviser.revise(
             war,
             {
-                actionId        : war.getNextActionId(),
+                actionId        : war.getExecutedActionsCount(),
                 PlayerEndTurn   : {},
             }
         ));
@@ -41,7 +41,7 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ScwModel.updateByWarAction(ScwActionReviser.revise(
             war,
             {
-                actionId            : war.getNextActionId(),
+                actionId            : war.getExecutedActionsCount(),
                 PlayerProduceUnit   : {
                     gridIndex,
                     unitType,
@@ -55,7 +55,7 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ScwModel.updateByWarAction(ScwActionReviser.revise(
             war,
             {
-                actionId    : war.getNextActionId(),
+                actionId    : war.getExecutedActionsCount(),
                 UnitAttack  : {
                     path,
                     launchUnitId,
@@ -69,7 +69,7 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ScwModel.updateByWarAction(ScwActionReviser.revise(
             war,
             {
-                actionId    : war.getNextActionId(),
+                actionId    : war.getExecutedActionsCount(),
                 UnitBeLoaded: {
                     path,
                     launchUnitId,
@@ -82,7 +82,7 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ScwModel.updateByWarAction(ScwActionReviser.revise(
             war,
             {
-                actionId        : war.getNextActionId(),
+                actionId        : war.getExecutedActionsCount(),
                 UnitBuildTile   : {
                     path,
                     launchUnitId,
@@ -95,7 +95,7 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ScwModel.updateByWarAction(ScwActionReviser.revise(
             war,
             {
-                actionId        : war.getNextActionId(),
+                actionId        : war.getExecutedActionsCount(),
                 UnitCaptureTile : {
                     path,
                     launchUnitId,
@@ -108,7 +108,7 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ScwModel.updateByWarAction(ScwActionReviser.revise(
             war,
             {
-                actionId: war.getNextActionId(),
+                actionId: war.getExecutedActionsCount(),
                 UnitDive: {
                     path,
                     launchUnitId,
@@ -121,7 +121,7 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ScwModel.updateByWarAction(ScwActionReviser.revise(
             war,
             {
-                actionId: war.getNextActionId(),
+                actionId: war.getExecutedActionsCount(),
                 UnitDrop: {
                     path,
                     launchUnitId,
@@ -135,7 +135,7 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ScwModel.updateByWarAction(ScwActionReviser.revise(
             war,
             {
-                actionId: war.getNextActionId(),
+                actionId: war.getExecutedActionsCount(),
                 UnitJoin: {
                     path,
                     launchUnitId,
@@ -148,7 +148,7 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ScwModel.updateByWarAction(ScwActionReviser.revise(
             war,
             {
-                actionId        : war.getNextActionId(),
+                actionId        : war.getExecutedActionsCount(),
                 UnitLaunchFlare : {
                     path,
                     launchUnitId,
@@ -162,7 +162,7 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ScwModel.updateByWarAction(ScwActionReviser.revise(
             war,
             {
-                actionId        : war.getNextActionId(),
+                actionId        : war.getExecutedActionsCount(),
                 UnitLaunchSilo  : {
                     path,
                     launchUnitId,
@@ -176,7 +176,7 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ScwModel.updateByWarAction(ScwActionReviser.revise(
             war,
             {
-                actionId    : war.getNextActionId(),
+                actionId    : war.getExecutedActionsCount(),
                 UnitLoadCo  : {
                     path,
                     launchUnitId,
@@ -189,7 +189,7 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ScwModel.updateByWarAction(ScwActionReviser.revise(
             war,
             {
-                actionId        : war.getNextActionId(),
+                actionId        : war.getExecutedActionsCount(),
                 UnitProduceUnit : {
                     path,
                     launchUnitId,
@@ -202,7 +202,7 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ScwModel.updateByWarAction(ScwActionReviser.revise(
             war,
             {
-                actionId    : war.getNextActionId(),
+                actionId    : war.getExecutedActionsCount(),
                 UnitSupply  : {
                     path,
                     launchUnitId,
@@ -215,7 +215,7 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ScwModel.updateByWarAction(ScwActionReviser.revise(
             war,
             {
-                actionId    : war.getNextActionId(),
+                actionId    : war.getExecutedActionsCount(),
                 UnitSurface : {
                     path,
                     launchUnitId,
@@ -228,7 +228,7 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ScwModel.updateByWarAction(ScwActionReviser.revise(
             war,
             {
-                actionId        : war.getNextActionId(),
+                actionId        : war.getExecutedActionsCount(),
                 UnitUseCoSkill  : {
                     skillType,
                     path,
@@ -242,7 +242,7 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ScwModel.updateByWarAction(ScwActionReviser.revise(
             war,
             {
-                actionId: war.getNextActionId(),
+                actionId: war.getExecutedActionsCount(),
                 UnitWait: {
                     path,
                     launchUnitId,

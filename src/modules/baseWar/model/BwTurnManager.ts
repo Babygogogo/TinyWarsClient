@@ -1,15 +1,16 @@
 
 namespace TinyWars.BaseWar {
-    import Types                = Utility.Types;
-    import DestructionHelpers   = Utility.DestructionHelpers;
-    import VisibilityHelpers    = Utility.VisibilityHelpers;
-    import Logger               = Utility.Logger;
-    import Notify               = Utility.Notify;
-    import ProtoTypes           = Utility.ProtoTypes;
-    import TimeModel            = Time.TimeModel;
-    import SerializedBwTurn     = Types.SerializedTurn;
-    import TurnPhaseCode        = Types.TurnPhaseCode;
-    import GridIndex            = Types.GridIndex;
+    import Types                    = Utility.Types;
+    import DestructionHelpers       = Utility.DestructionHelpers;
+    import VisibilityHelpers        = Utility.VisibilityHelpers;
+    import Logger                   = Utility.Logger;
+    import Notify                   = Utility.Notify;
+    import ProtoTypes               = Utility.ProtoTypes;
+    import TimeModel                = Time.TimeModel;
+    import TurnPhaseCode            = Types.TurnPhaseCode;
+    import GridIndex                = Types.GridIndex;
+    import ISerialTurnManager       = ProtoTypes.WarSerialization.ISerialTurnManager;
+    import IActionPlayerBeginTurn   = ProtoTypes.WarAction.IActionPlayerBeginTurn;
 
     export abstract class BwTurnManager {
         private _turnIndex          : number;
@@ -19,7 +20,7 @@ namespace TinyWars.BaseWar {
 
         private _war                : BwWar;
 
-        public init(data: SerializedBwTurn): BwTurnManager {
+        public init(data: ISerialTurnManager): BwTurnManager {
             this._setTurnIndex(data.turnIndex);
             this._setPlayerIndexInTurn(data.playerIndex);
             this._setPhaseCode(data.turnPhaseCode);
@@ -27,7 +28,7 @@ namespace TinyWars.BaseWar {
 
             return this;
         }
-        public fastInit(data: SerializedBwTurn): BwTurnManager {
+        public fastInit(data: ISerialTurnManager): BwTurnManager {
             return this.init(data);
         }
 
@@ -164,7 +165,7 @@ namespace TinyWars.BaseWar {
         private _runPhaseActivateMapWeapon(data: ProtoTypes.IWarActionPlayerBeginTurn): void {
             // TODO
         }
-        protected abstract _runPhaseMain(data: ProtoTypes.IWarActionPlayerBeginTurn): void;
+        protected abstract _runPhaseMain(data: IActionPlayerBeginTurn): void;
 
         private _runPhaseResetUnitState(): void {
             const playerIndex = this.getPlayerIndexInTurn();

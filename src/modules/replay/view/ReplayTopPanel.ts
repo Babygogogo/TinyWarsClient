@@ -58,7 +58,7 @@ namespace TinyWars.Replay {
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.BwPlayerFundChanged,            callback: this._onNotifyBwPlayerFundChanged },
                 { type: Notify.Type.BwPlayerIndexInTurnChanged,     callback: this._onNotifyBwPlayerIndexInTurnChanged },
-                { type: Notify.Type.BwNextActionIdChanged,          callback: this._onNotifyBwNextActionIdChanged },
+                { type: Notify.Type.BwExecutedActionsCountChanged,          callback: this._onNotifyBwNextActionIdChanged },
                 { type: Notify.Type.BwCoEnergyChanged,              callback: this._onNotifyBwCoEnergyChanged },
                 { type: Notify.Type.BwCoUsingSkillTypeChanged,      callback: this._onNotifyBwCoUsingSkillChanged },
                 { type: Notify.Type.ReplayAutoReplayChanged,        callback: this._onNotifyReplayAutoReplayChanged },
@@ -222,7 +222,7 @@ namespace TinyWars.Replay {
 
         private _updateLabelAction(): void {
             const war               = this._war;
-            this._labelAction.text  = `${war.getNextActionId()}`;
+            this._labelAction.text  = `${war.getExecutedActionsCount()}`;
         }
 
         private _updateLabelPlayer(): void {

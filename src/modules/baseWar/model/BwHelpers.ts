@@ -5,12 +5,21 @@ namespace TinyWars.BaseWar.BwHelpers {
     import ProtoTypes           = Utility.ProtoTypes;
     import Logger               = Utility.Logger;
     import Helpers              = Utility.Helpers;
+    import ConfigManager        = Utility.ConfigManager;
     import GridIndex            = Types.GridIndex;
     import MovableArea          = Types.MovableArea;
     import AttackableArea       = Types.AttackableArea;
     import MapSize              = Types.MapSize;
+    import UnitActionState      = Types.UnitActionState;
     import MovePathNode         = Types.MovePathNode;
     import UnitType             = Types.UnitType;
+    import CoSkillAreaType      = Types.CoSkillAreaType;
+    import WarSerialization     = ProtoTypes.WarSerialization;
+    import ISerialUnit          = WarSerialization.ISerialUnit;
+    import ISerialTile          = WarSerialization.ISerialTile;
+    import ISerialWar           = WarSerialization.ISerialWar;
+    import IGridIndex           = ProtoTypes.Structure.IGridIndex;
+    import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
 
     type AvailableMovableGrid = {
         currGridIndex   : GridIndex;
@@ -219,10 +228,34 @@ namespace TinyWars.BaseWar.BwHelpers {
         const { x, y } = gridIndex;
         return (!!area[x]) && (!!area[x][y]);
     }
+    export function checkIsGridIndexInsideCoSkillArea(
+        gridIndex               : GridIndex,
+        coSkillAreaType         : CoSkillAreaType,
+        coGridIndexListOnMap    : GridIndex[],
+        coZoneRadius            : number,
+    ): boolean | undefined {
+        if (coSkillAreaType === CoSkillAreaType.Halo) {
+            return true;
+        } else if (coSkillAreaType === CoSkillAreaType.OnMap) {
+            return coGridIndexListOnMap.length > 0;
+        } else if (coSkillAreaType === CoSkillAreaType.Zone) {
+            const distance = GridIndexHelpers.getMinDistance(gridIndex, coGridIndexListOnMap);
+            return (distance != null) && (distance <= coZoneRadius);
+        } else {
+            Logger.error(`BwHelpers.checkIsGridIndexInsideSkillArea() invalid areaType: ${coSkillAreaType}`);
+            return undefined;
+        }
+    }
+
+    export function convertGridIndex(raw: IGridIndex | undefined | null): GridIndex | undefined {
+        return ((!raw) || (raw.x == null) || (raw.y == null))
+            ? undefined
+            : raw as GridIndex;
+    }
 
     export function getUnitProductionCost(war: BwWar, unitType: UnitType): number | undefined {
         // TODO: take skills into account.
-        const cfg = Utility.ConfigManager.getUnitTemplateCfg(war.getConfigVersion(), unitType);
+        const cfg = ConfigManager.getUnitTemplateCfg(war.getConfigVersion(), unitType);
         return cfg ? cfg.productionCost : undefined;
     }
 
@@ -252,9 +285,15 @@ namespace TinyWars.BaseWar.BwHelpers {
             || (state === Types.ActionPlannerState.RequestingUnitWait);
     }
 
-    export function exeInstantSkill(war: BwWar, player: BwPlayer, gridIndex: GridIndex, skillId: number, extraData: ProtoTypes.IWarUseCoSkillExtraData): void {
+    export function exeInstantSkill(
+        war         : BwWar,
+        player      : BwPlayer,
+        gridIndex   : GridIndex,
+        skillId     : number,
+        extraData   : ProtoTypes.Structure.IDataForUseCoSkill
+    ): void {
         const configVersion = war.getConfigVersion();
-        const skillCfg      = Utility.ConfigManager.getCoSkillCfg(configVersion, skillId)!;
+        const skillCfg      = ConfigManager.getCoSkillCfg(configVersion, skillId)!;
         const playerIndex   = player.getPlayerIndex();
         const unitMap       = war.getUnitMap();
         const zoneRadius    = player.getCoZoneRadius()!;
@@ -262,10 +301,10 @@ namespace TinyWars.BaseWar.BwHelpers {
         if (skillCfg.selfHpGain) {
             const cfg       = skillCfg.selfHpGain;
             const category  = cfg[1];
-            const modifier  = cfg[2] * Utility.ConfigManager.UNIT_HP_NORMALIZER;
+            const modifier  = cfg[2] * CommonConstants.UnitHpNormalizer;
             unitMap.forEachUnit(unit => {
                 if ((unit.getPlayerIndex() === playerIndex)                                         &&
-                    (Utility.ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
+                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
                 ) {
                     if (((cfg[0] === 0) && (GridIndexHelpers.getDistance(unit.getGridIndex(), gridIndex) <= zoneRadius)) ||
                         (cfg[0] === 1)
@@ -285,10 +324,10 @@ namespace TinyWars.BaseWar.BwHelpers {
         if (skillCfg.enemyHpGain) {
             const cfg       = skillCfg.enemyHpGain;
             const category  = cfg[1];
-            const modifier  = cfg[2] * Utility.ConfigManager.UNIT_HP_NORMALIZER;
+            const modifier  = cfg[2] * CommonConstants.UnitHpNormalizer;
             unitMap.forEachUnit(unit => {
                 if ((unit.getPlayerIndex() !== playerIndex)                                         &&
-                    (Utility.ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
+                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
                 ) {
                     if (((cfg[0] === 0) && (GridIndexHelpers.getDistance(unit.getGridIndex(), gridIndex) <= zoneRadius)) ||
                         (cfg[0] === 1)
@@ -311,7 +350,7 @@ namespace TinyWars.BaseWar.BwHelpers {
             const modifier  = cfg[2];
             unitMap.forEachUnit(unit => {
                 if ((unit.getPlayerIndex() === playerIndex)                                         &&
-                    (Utility.ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
+                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
                 ) {
                     if (((cfg[0] === 0) && (GridIndexHelpers.getDistance(unit.getGridIndex(), gridIndex) <= zoneRadius)) ||
                         (cfg[0] === 1)
@@ -341,7 +380,7 @@ namespace TinyWars.BaseWar.BwHelpers {
             const modifier  = cfg[2];
             unitMap.forEachUnit(unit => {
                 if ((unit.getPlayerIndex() !== playerIndex)                                         &&
-                    (Utility.ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
+                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
                 ) {
                     if (((cfg[0] === 0) && (GridIndexHelpers.getDistance(unit.getGridIndex(), gridIndex) <= zoneRadius)) ||
                         (cfg[0] === 1)
@@ -371,7 +410,7 @@ namespace TinyWars.BaseWar.BwHelpers {
             const modifier  = cfg[2];
             unitMap.forEachUnit(unit => {
                 if ((unit.getPlayerIndex() === playerIndex)                                         &&
-                    (Utility.ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
+                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
                 ) {
                     if (((cfg[0] === 0) && (GridIndexHelpers.getDistance(unit.getGridIndex(), gridIndex) <= zoneRadius)) ||
                         (cfg[0] === 1)
@@ -416,7 +455,7 @@ namespace TinyWars.BaseWar.BwHelpers {
             const modifier  = cfg[2];
             unitMap.forEachUnit(unit => {
                 if ((unit.getPlayerIndex() !== playerIndex)                                         &&
-                    (Utility.ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
+                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
                 ) {
                     if (((cfg[0] === 0) && (GridIndexHelpers.getDistance(unit.getGridIndex(), gridIndex) <= zoneRadius)) ||
                         (cfg[0] === 1)
@@ -461,7 +500,7 @@ namespace TinyWars.BaseWar.BwHelpers {
             const modifier  = cfg[2];
             unitMap.forEachUnit(unit => {
                 if ((unit.getPlayerIndex() === playerIndex)                                         &&
-                    (Utility.ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
+                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
                 ) {
                     if (((cfg[0] === 0) && (GridIndexHelpers.getDistance(unit.getGridIndex(), gridIndex) <= zoneRadius)) ||
                         (cfg[0] === 1)
@@ -491,7 +530,7 @@ namespace TinyWars.BaseWar.BwHelpers {
             const modifier  = cfg[2];
             unitMap.forEachUnit(unit => {
                 if ((unit.getPlayerIndex() !== playerIndex)                                         &&
-                    (Utility.ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
+                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
                 ) {
                     if (((cfg[0] === 0) && (GridIndexHelpers.getDistance(unit.getGridIndex(), gridIndex) <= zoneRadius)) ||
                         (cfg[0] === 1)
@@ -520,7 +559,7 @@ namespace TinyWars.BaseWar.BwHelpers {
             if (!center) {
                 Logger.error("BwHelpers.exeInstantSkill() no center for indiscriminateAreaDamage!");
             } else {
-                const hpDamage = skillCfg.indiscriminateAreaDamage[2] * Utility.ConfigManager.UNIT_HP_NORMALIZER;
+                const hpDamage = skillCfg.indiscriminateAreaDamage[2] * CommonConstants.UnitHpNormalizer;
                 for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(center as GridIndex, 0, skillCfg.indiscriminateAreaDamage[1], unitMap.getMapSize())) {
                     const unit = unitMap.getUnitOnMap(gridIndex);
                     if (unit) {
@@ -534,10 +573,10 @@ namespace TinyWars.BaseWar.BwHelpers {
             const cfg           = skillCfg.selfPromotionGain;
             const category      = cfg[1];
             const modifier      = cfg[2];
-            const maxPromotion  = Utility.ConfigManager.getUnitMaxPromotion(configVersion);
+            const maxPromotion  = ConfigManager.getUnitMaxPromotion(configVersion);
             unitMap.forEachUnit(unit => {
                 if ((unit.getPlayerIndex() === playerIndex)                                         &&
-                    (Utility.ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
+                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
                 ) {
                     if (((cfg[0] === 0) && (GridIndexHelpers.getDistance(unit.getGridIndex(), gridIndex) <= zoneRadius)) ||
                         (cfg[0] === 1)
@@ -599,33 +638,90 @@ namespace TinyWars.BaseWar.BwHelpers {
         return null;
     }
 
-    export async function getMapSizeAndMaxPlayerIndex(data: Types.SerializedWar): Promise<Types.MapSizeAndMaxPlayerIndex | null> {
-        const mapFileName = data.mapFileName;
-        if (mapFileName) {
-            const mapExtraData = await WarMap.WarMapModel.getExtraData(mapFileName);
-            return !mapExtraData
-                ? null
-                : {
-                    mapWidth        : mapExtraData.mapWidth,
-                    mapHeight       : mapExtraData.mapHeight,
-                    maxPlayerIndex  : mapExtraData.playersCount,
-                };
-        } else {
-            const tiles             = data.field.tileMap.tiles;
-            const maxPlayerIndex    = data.players.length - 1;
-            if ((!tiles) || (!tiles.length) || (!maxPlayerIndex)) {
-                return null;
-            } else {
-                let mapWidth   = 0;
-                let mapHeight  = 0;
-                for (const tile of tiles) {
-                    mapWidth   = Math.max(mapWidth, (tile.gridX || 0) + 1);
-                    mapHeight  = Math.max(mapHeight, (tile.gridY || 0) + 1);
-                }
-                return ((mapWidth > 0) && (mapHeight > 0))
-                    ? { mapWidth, mapHeight, maxPlayerIndex }
-                    : null;
+    export async function getMapSizeAndMaxPlayerIndex(data: ISerialWar): Promise<Types.MapSizeAndMaxPlayerIndex | null> {
+        const settingsForCommon = data.settingsForCommon;
+        const mapId             = settingsForCommon ? settingsForCommon.mapId : null;
+        if (mapId != null) {
+            const mapRawData = await WarMap.WarMapModel.getMapRawData(mapId);
+            if (mapRawData == null) {
+                Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() empty mapRawData.`);
+                return undefined;
             }
+
+            const mapWidth = mapRawData.mapWidth;
+            if (mapWidth == null) {
+                Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() empty mapWidth.`);
+                return undefined;
+            }
+
+            const mapHeight = mapRawData.mapHeight;
+            if (mapHeight == null) {
+                Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() empty mapHeight.`);
+                return undefined;
+            }
+
+            const maxPlayerIndex = mapRawData.playersCount;
+            if (maxPlayerIndex == null) {
+                Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() empty maxPlayerIndex.`);
+                return undefined;
+            }
+
+            return {
+                mapWidth,
+                mapHeight,
+                maxPlayerIndex,
+            };
+
+        } else {
+            const fieldData     = data.field;
+            const tileMapData   = fieldData ? fieldData.tileMap : null;
+            const tiles         = tileMapData ? tileMapData.tiles : null;
+            if (tiles == null) {
+                Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() empty tiles.`);
+                return undefined;
+            }
+
+            const playerManagerData             = data.playerManager;
+            const playersData                   = playerManagerData ? playerManagerData.players : null;
+            const playersCountIncludingNeutral  = playersData ? playersData.length : null;
+            if (playersCountIncludingNeutral == null) {
+                Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() empty playersCountIncludingNeutral.`);
+                return undefined;
+            }
+
+            const maxPlayerIndex = playersCountIncludingNeutral - 1;
+            if (maxPlayerIndex <= 1) {
+                Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() invalid maxPlayerIndex: ${maxPlayerIndex}`);
+                return undefined;
+            }
+
+            let mapWidth   = 0;
+            let mapHeight  = 0;
+            for (const tile of tiles) {
+                const gridIndex = convertGridIndex(tile.gridIndex);
+                if (gridIndex == null) {
+                    Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() empty gridIndex.`);
+                    return undefined;
+                }
+
+                mapWidth   = Math.max(mapWidth, gridIndex.x + 1);
+                mapHeight  = Math.max(mapHeight, gridIndex.y + 1);
+            }
+
+            if (mapWidth <= 0) {
+                Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() mapWidth <= 0: ${mapWidth}`);
+                return undefined;
+            }
+            if (mapHeight <= 0) {
+                Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() mapHeight <= 0: ${mapHeight}`);
+                return undefined;
+            }
+
+            return {
+                mapWidth,
+                mapHeight,
+                maxPlayerIndex,
+            };
         }
     }
 
@@ -644,17 +740,77 @@ namespace TinyWars.BaseWar.BwHelpers {
         return needSerialize ? data.join(``) : undefined;
     }
 
-    export function checkShouldSerializeTile(
-        tileData            : Types.SerializedTile,
-        initialBaseViewId   : number | null,
-        initialObjectViewId : number | null,
-    ): boolean {
-        return (tileData.currentBuildPoint      != null)
-            || (tileData.currentCapturePoint    != null)
-            || (tileData.currentHp              != null)
-            || (tileData.baseViewId             != initialBaseViewId)
-            || (tileData.objectViewId           != initialObjectViewId)
-            || (initialBaseViewId               == null)
-            || (initialObjectViewId             == null);
+    export function serializeUnit(unit: BwUnit): ISerialUnit | undefined {
+        const gridIndex = unit.getGridIndex();
+        if (gridIndex == null) {
+            Logger.error(`BwHelpers.serializeUnit() empty gridIndex.`);
+            return undefined;
+        }
+
+        const playerIndex = unit.getPlayerIndex();
+        if (playerIndex == null) {
+            Logger.error(`BwHelpers.serializeUnit() empty playerIndex.`);
+            return undefined;
+        }
+
+        const unitType = unit.getType();
+        if (unitType == null) {
+            Logger.error(`BwHelpers.serializeUnit() empty unitType.`);
+            return undefined;
+        }
+
+        const unitId = unit.getUnitId();
+        if (unitId == null) {
+            Logger.error(`BwHelpers.serializeUnit() unitId is empty.`);
+            return undefined;
+        }
+
+        const data: ISerialUnit = {
+            gridIndex,
+            playerIndex,
+            unitType,
+            unitId,
+        };
+
+        const actionState = unit.getActionState();
+        (actionState != UnitActionState.Idle) && (data.actionState = actionState);
+
+        const currentHp = unit.getCurrentHp();
+        (currentHp != unit.getMaxHp()) && (data.currentHp = currentHp);
+
+        const currentAmmo = unit.getPrimaryWeaponCurrentAmmo();
+        (currentAmmo != unit.getPrimaryWeaponMaxAmmo()) && (data.primaryWeaponCurrentAmmo = currentAmmo);
+
+        const isCapturing = unit.getIsCapturingTile();
+        (isCapturing) && (data.isCapturingTile = isCapturing);
+
+        const currentFuel = unit.getCurrentFuel();
+        (currentFuel != unit.getMaxFuel()) && (data.currentFuel = currentFuel);
+
+        const flareAmmo = unit.getFlareCurrentAmmo();
+        (flareAmmo != unit.getFlareMaxAmmo()) && (data.flareCurrentAmmo = flareAmmo);
+
+        const produceMaterial = unit.getCurrentProduceMaterial();
+        (produceMaterial != unit.getMaxProduceMaterial()) && (data.currentProduceMaterial = produceMaterial);
+
+        const currentPromotion = unit.getCurrentPromotion();
+        (currentPromotion != 0) && (data.currentPromotion = currentPromotion);
+
+        const isBuildingTile = unit.getIsBuildingTile();
+        (isBuildingTile) && (data.isBuildingTile = isBuildingTile);
+
+        const buildMaterial = unit.getCurrentBuildMaterial();
+        (buildMaterial != unit.getMaxBuildMaterial()) && (data.currentBuildMaterial = buildMaterial);
+
+        const isDiving = unit.getIsDiving();
+        (isDiving != unit.checkIsDivingByDefault()) && (data.isDiving = isDiving);
+
+        const hasLoadedCo = unit.getHasLoadedCo();
+        (hasLoadedCo) && (data.hasLoadedCo = hasLoadedCo);
+
+        const loaderUnitId = unit.getLoaderUnitId();
+        (loaderUnitId != null) && (data.loaderUnitId = loaderUnitId);
+
+        return data;
     }
 }

@@ -5,8 +5,9 @@ namespace TinyWars.BaseWar {
     import Logger           = Utility.Logger;
     import GridIndexHelpers = Utility.GridIndexHelpers;
     import ProtoTypes       = Utility.ProtoTypes;
-    import SerializedBwUnit = Types.SerializedUnit;
-    import UnitActionState        = Types.UnitActionState;
+    import ConfigManager    = Utility.ConfigManager;
+    import ISerialUnit      = Utility.ProtoTypes.WarSerialization.ISerialUnit;
+    import UnitActionState  = Types.UnitActionState;
     import ArmorType        = Types.ArmorType;
     import TileType         = Types.TileType;
     import UnitType         = Types.UnitType;
@@ -27,7 +28,7 @@ namespace TinyWars.BaseWar {
         private _playerIndex        : number;
         private _teamIndex          : number;
 
-        private _state                      : UnitActionState;
+        private _actionState                : UnitActionState;
         private _currentHp                  : number;
         private _currentFuel                : number;
         private _currentPromotion           : number;
@@ -39,6 +40,7 @@ namespace TinyWars.BaseWar {
         private _isDiving                   : boolean  | undefined;
         private _loaderUnitId               : number   | undefined;
         private _primaryWeaponCurrentAmmo   : number   | undefined;
+        private _hasLoadedCo                : boolean;
 
         private _war    : BwWar;
         private _view   : BwUnitView;
@@ -48,7 +50,7 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         protected abstract _getViewClass(): new () => BwUnitView;
 
-        public init(data: SerializedBwUnit, configVersion: string): BwUnit {
+        public init(data: ISerialUnit, configVersion: string): BwUnit {
             const t = Utility.ConfigManager.getUnitTypeAndPlayerIndex(data.viewId);
             Logger.assert(t, "UnitModel.deserialize() invalid SerializedUnit! ", data);
 
@@ -104,6 +106,13 @@ namespace TinyWars.BaseWar {
             return war ? war.getPlayer(this.getPlayerIndex()) : null;
         }
 
+        private _setTemplateCfg(templateCfg: Types.UnitTemplateCfg): void {
+            this._templateCfg = templateCfg;
+        }
+        private _getTemplateCfg(): Types.UnitTemplateCfg | undefined {
+            return this._templateCfg;
+        }
+
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////
@@ -155,10 +164,10 @@ namespace TinyWars.BaseWar {
         // Functions for state.
         ////////////////////////////////////////////////////////////////////////////////
         public getActionState(): UnitActionState {
-            return this._state;
+            return this._actionState;
         }
         public setActionState(state: UnitActionState): void {
-            this._state = state;
+            this._actionState = state;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -490,6 +499,15 @@ namespace TinyWars.BaseWar {
             this._isDiving = isDiving;
         }
 
+        public checkIsDivingByDefault(): boolean | undefined {
+            const templateCfg = this._getTemplateCfg();
+            if (templateCfg == null) {
+                Logger.error(`BwUnit.checkIsDivingByDefault() empty templateCfg.`);
+                return undefined;
+            }
+
+            return ConfigManager.checkIsUnitDivingByDefaultWithTemplateCfg(templateCfg);
+        }
         public checkIsDiver(): boolean {
             return this._templateCfg.fuelConsumptionInDiving != null;
         }
@@ -1014,8 +1032,21 @@ namespace TinyWars.BaseWar {
         }
 
         ////////////////////////////////////////////////////////////////////////////////
-        // Functions for load co.
+        // Functions for co.
         ////////////////////////////////////////////////////////////////////////////////
+        public setHasLoadedCo(isCoOnBoard: boolean): void {
+            this._hasLoadedCo = isCoOnBoard;
+        }
+        public getHasLoadedCo(): boolean | undefined {
+            const hasLoadedCo = this._hasLoadedCo;
+            if (hasLoadedCo == null) {
+                Logger.error(`BwUnit.getHasLoadedCo() empty hasLoadedCo.`);
+                return undefined;
+            }
+
+            return hasLoadedCo;
+        }
+
         public checkCanLoadCoAfterMovePath(movePath: GridIndex[]): boolean {
             if ((movePath.length !== 1) || (this.getLoaderUnitId() != null)) {
                 return false;

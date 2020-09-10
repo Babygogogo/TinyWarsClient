@@ -49,18 +49,18 @@ namespace TinyWars.MultiCustomWar.McwModel {
     let _cachedActions  = new Array<WarActionContainer>();
 
     export function init(): void {
-        Notify.addEventListeners([
-            { type: Notify.Type.SMmMergeMap, callback: _onNotifySMmMergeMap, thisObject: McwModel },
-        ]);
+        // Notify.addEventListeners([
+        //     { type: Notify.Type.SMmMergeMap, callback: _onNotifySMmMergeMap, thisObject: McwModel },
+        // ]);
     }
 
-    function _onNotifySMmMergeMap(e: egret.Event): void {
-        const data  = e.data as ProtoTypes.IS_MmMergeMap;
-        const war   = getWar();
-        if ((war) && (war.getMapFileName() === data.srcMapFileName)) {
-            war.setMapFileName(data.dstMapFileName);
-        }
-    }
+    // function _onNotifySMmMergeMap(e: egret.Event): void {
+    //     const data  = e.data as ProtoTypes.IS_MmMergeMap;
+    //     const war   = getWar();
+    //     if ((war) && (war.getMapId() === data.srcMapFileName)) {
+    //         war.setMapId(data.dstMapFileName);
+    //     }
+    // }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for managing war.
@@ -121,7 +121,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
 
                 } else {
                     const cachedActionsCount = _cachedActions.length;
-                    if (data.nextActionId !== war.getNextActionId() + cachedActionsCount) {
+                    if (data.nextActionId !== war.getExecutedActionsCount() + cachedActionsCount) {
                         war.setIsEnded(true);
                         await Utility.FlowManager.gotoMultiCustomWar(data.war as Types.SerializedWar);
                         FloatText.show(Lang.getText(Lang.Type.A0036));
@@ -241,7 +241,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
     function _updateByActionContainer(container: WarActionContainer, warId: number): void {
         const war = getWar();
         if ((war) && (war.getWarId() === warId)) {
-            if (container.actionId !== war.getNextActionId() + _cachedActions.length) {
+            if (container.actionId !== war.getExecutedActionsCount() + _cachedActions.length) {
                 McwProxy.reqMcwPlayerSyncWar(war, Types.SyncWarRequestType.ReconnectionRequest);
             } else {
                 _cachedActions.push(container);
@@ -255,7 +255,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         const container = _cachedActions.length ? _cachedActions.shift() : undefined;
         if ((container) && (war.getIsRunning()) && (!war.getIsEnded()) && (!war.getIsExecutingAction())) {
             war.setIsExecutingAction(true);
-            war.setNextActionId(war.getNextActionId() + 1);
+            war._setExecutedActionsCount(war.getExecutedActionsCount() + 1);
             await _EXECUTORS.get(Helpers.getWarActionCode(container))(war, container);
             war.setIsExecutingAction(false);
 
