@@ -143,6 +143,13 @@ namespace TinyWars.BaseWar {
             this.getView().stopRunningView();
         }
 
+        private _setMap(map: (BwUnit | undefined)[][]): void {
+            this._map = map;
+        }
+        private _getMap(): (BwUnit | undefined)[][] | undefined {
+            return this._map;
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other public functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -248,21 +255,51 @@ namespace TinyWars.BaseWar {
             }
         }
 
-        public setUnitLoaded(gridIndex: Types.GridIndex): void {
-            const { x, y }  = gridIndex;
-            const unit      = this._map[x][y]!;
-            this._map[x][y] = undefined;
-            this._loadedUnits.set(unit.getUnitId(), unit);
+        public setUnitLoaded(unit: BwUnit): void {
+            const loadedUnits = this.getUnitsLoaded();
+            if (loadedUnits == null) {
+                Logger.error(`BwUnitMap.setUnitLoaded() the map is not initialized.`);
+                return;
+            }
+
+            const unitId = unit.getUnitId();
+            if (unitId == null) {
+                Logger.error(`BwUnitMap.setUnitLoaded() the unit has no unitId.`);
+                return;
+            }
+
+            if (loadedUnits.has(unitId)) {
+                Logger.error(`BwUnitMap.setUnitLoaded() the unit is already loaded?!?.`);
+                return;
+            }
+
+            loadedUnits.set(unitId, unit);
+            this.getView().addUnit(unit.getView(), true);
         }
         public setUnitUnloaded(unitId: number, gridIndex: Types.GridIndex): void {
             this._map[gridIndex.x][gridIndex.y] = this._loadedUnits.get(unitId);
             this._loadedUnits.delete(unitId);
         }
 
-        public addUnitOnMap(unit: BwUnit): void {
-            const x = unit.getGridX();
-            const y = unit.getGridY();
-            this._map[x][y] = unit;
+        public setUnitOnMap(unit: BwUnit): void {
+            const mapSize   = this.getMapSize();
+            const map       = this._getMap();
+            if ((!mapSize) || (!map)) {
+                Logger.error(`BwUnitMap.setUnitOnMap() the map is not initialized.`);
+                return;
+            }
+
+            const gridIndex = unit.getGridIndex();
+            if ((!gridIndex) || (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize))) {
+                Logger.error(`BwUnitMap.setUnitOnMap() the unit is outside map! gridIndex: ${JSON.stringify(gridIndex)}`);
+                return;
+            }
+            if (this.getUnitOnMap(gridIndex)) {
+                Logger.error(`BwUnitMap.setUnitOnMap() another unit exists in the same grid! gridIndex: ${JSON.stringify(gridIndex)}`);
+                return;
+            }
+
+            map[gridIndex.x][gridIndex.y] = unit;
             this.getView().addUnit(unit.getView(), true);
         }
         public removeUnitOnMap(gridIndex: Types.GridIndex, removeView: boolean): void {
@@ -271,10 +308,6 @@ namespace TinyWars.BaseWar {
             (removeView) && (this.getView().removeUnit(unit.getView()));
         }
 
-        public addUnitLoaded(unit: BwUnit): void {
-            this._loadedUnits.set(unit.getUnitId(), unit);
-            this.getView().addUnit(unit.getView(), true);
-        }
         public removeUnitLoaded(unitId: number): void {
             const unit = this._loadedUnits.get(unitId);
             this._loadedUnits.delete(unitId);

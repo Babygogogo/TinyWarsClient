@@ -43,7 +43,7 @@ namespace TinyWars.Time.TimeModel {
 
         egret.setInterval(() => {
             ++_unitAnimationTickCount;
-            Common.CommonModel.tickUnitImageSources(_unitAnimationTickCount);
+            // Common.CommonModel.tickUnitImageSources(_unitAnimationTickCount);
             Notify.dispatch(Notify.Type.UnitAnimationTick);
         }, TimeModel, UNIT_ANIMATION_INTERVAL_MS);
     }
@@ -57,7 +57,7 @@ namespace TinyWars.Time.TimeModel {
 
         _intervalIdForTileAnimation = egret.setInterval(() => {
             ++_tileAnimationTickCount;
-            Common.CommonModel.tickTileImageSources(_tileAnimationTickCount);
+            // Common.CommonModel.tickTileImageSources(_tileAnimationTickCount);
             Notify.dispatch(Notify.Type.TileAnimationTick);
         }, TimeModel, TILE_ANIMATION_INTERVAL_MS);
     }

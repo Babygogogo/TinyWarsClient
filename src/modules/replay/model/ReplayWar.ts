@@ -88,14 +88,14 @@ namespace TinyWars.Replay {
                 remainingVotesForDraw   : this.getRemainingVotesForDraw(),
                 warRuleIndex            : this.getWarRuleIndex(),
                 bootTimerParams         : this.getSettingsBootTimerParams(),
-                hasFogByDefault         : this.getSettingsHasFog(),
-                incomeModifier          : this.getSettingsIncomeModifier(),
+                hasFogByDefault         : this.getSettingsHasFogByDefault(),
+                incomeModifier          : this.getSettingsIncomeMultiplier(),
                 energyGrowthModifier    : this.getSettingsEnergyGrowthMultiplier(),
                 attackPowerModifier     : this.getSettingsAttackPowerModifier(),
                 moveRangeModifier       : this.getSettingsMoveRangeModifier(),
                 visionRangeModifier     : this.getSettingsVisionRangeModifier(),
                 initialFund             : this.getSettingsInitialFund(),
-                initialEnergy           : this.getSettingsInitialEnergy(),
+                initialEnergy           : this.getSettingsInitialEnergyPercentage(),
                 bannedCoIdList          : this.getSettingsBannedCoIdList(),
                 luckLowerLimit          : this.getSettingsLuckLowerLimit(),
                 luckUpperLimit          : this.getSettingsLuckUpperLimit(),
@@ -118,14 +118,14 @@ namespace TinyWars.Replay {
                 remainingVotesForDraw   : this.getRemainingVotesForDraw(),
                 warRuleIndex            : this.getWarRuleIndex(),
                 bootTimerParams         : this.getSettingsBootTimerParams(),
-                hasFogByDefault         : this.getSettingsHasFog(),
-                incomeModifier          : this.getSettingsIncomeModifier(),
+                hasFogByDefault         : this.getSettingsHasFogByDefault(),
+                incomeModifier          : this.getSettingsIncomeMultiplier(),
                 energyGrowthModifier    : this.getSettingsEnergyGrowthMultiplier(),
                 attackPowerModifier     : this.getSettingsAttackPowerModifier(),
                 moveRangeModifier       : this.getSettingsMoveRangeModifier(),
                 visionRangeModifier     : this.getSettingsVisionRangeModifier(),
                 initialFund             : this.getSettingsInitialFund(),
-                initialEnergy           : this.getSettingsInitialEnergy(),
+                initialEnergy           : this.getSettingsInitialEnergyPercentage(),
                 bannedCoIdList          : this.getSettingsBannedCoIdList(),
                 luckLowerLimit          : this.getSettingsLuckLowerLimit(),
                 luckUpperLimit          : this.getSettingsLuckUpperLimit(),
@@ -230,13 +230,8 @@ namespace TinyWars.Replay {
 
             this._fastInitPlayerManager(data.players);
             await Helpers.checkAndCallLater();
-            await this._fastInitField(
-                data.field,
-                data.configVersion,
-                data.mapFileName,
-                await BaseWar.BwHelpers.getMapSizeAndMaxPlayerIndex(data)
-            );
-            this._fastInitTurnManager(data.turn);
+            await this.getField().fastInit(data.field, configVersion, mapFileName, mapSizeAndMaxPlayerIndex);
+            await this.getTurnManager().fastInit(data.turnManager);
 
             await Helpers.checkAndCallLater();
             this._fastInitView();

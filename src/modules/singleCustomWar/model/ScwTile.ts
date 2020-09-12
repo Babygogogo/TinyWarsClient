@@ -4,6 +4,7 @@ namespace TinyWars.SingleCustomWar {
     import Types                = Utility.Types;
     import VisibilityHelpers    = Utility.VisibilityHelpers;
     import ProtoTypes           = Utility.ProtoTypes;
+    import ConfigManager        = Utility.ConfigManager;
     import BwHelpers            = BaseWar.BwHelpers;
     import ISerialTile          = ProtoTypes.WarSerialization.ISerialTile;
 
@@ -91,43 +92,29 @@ namespace TinyWars.SingleCustomWar {
                     return undefined;
                 }
 
-                if (this.getType() === Types.TileType.Headquarters) {
-                    const data: ISerialTile = {
-                        gridX       : this.getGridX(),
-                        gridY       : this.getGridY(),
-                        baseViewId  : this.getBaseViewId(),
-                        objectViewId: this.getObjectViewId(),
-                    };
-                    return BwHelpers.checkShouldSerializeTile(data, this.getInitialBaseViewId(), this.getInitialObjectViewId())
-                        ? data
-                        : null;
-
-                } else {
-                    if (this.getPlayerIndex() !== 0) {
-                        const data: ISerialTile = {
-                            gridX       : this.getGridX(),
-                            gridY       : this.getGridY(),
-                            baseViewId  : this.getBaseViewId(),
-                            objectViewId: this.getNeutralObjectViewId(),
-                        };
-                        return BwHelpers.checkShouldSerializeTile(data, this.getInitialBaseViewId(), this.getInitialObjectViewId())
-                            ? data
-                            : null;
-
-                    } else {
-                        const currentHp = this.getCurrentHp();
-                        const data      : ISerialTile = {
-                            gridX       : this.getGridX(),
-                            gridY       : this.getGridY(),
-                            baseViewId  : this.getBaseViewId(),
-                            objectViewId: this.getObjectViewId(),
-                            currentHp   : currentHp == this.getMaxHp() ? undefined : currentHp,
-                        };
-                        return BwHelpers.checkShouldSerializeTile(data, this.getInitialBaseViewId(), this.getInitialObjectViewId())
-                            ? data
-                            : null;
-                    }
+                const playerIndex = this.getPlayerIndex();
+                if (playerIndex == null) {
+                    Logger.error(`ScwTile.serializeForSimulation() empty playerIndex.`);
+                    return undefined;
                 }
+
+                const data: ISerialTile = {
+                    gridIndex,
+                    baseType,
+                    objectType,
+                    playerIndex : objectType === Types.TileObjectType.Headquarters ? playerIndex : ConfigManager.COMMON_CONSTANTS.WarNeutralPlayerIndex,
+                };
+
+                const currentHp = this.getCurrentHp();
+                (currentHp !== this.getMaxHp()) && (data.currentHp = currentHp);
+
+                const baseShapeId = this.getBaseShapeId();
+                (baseShapeId !== 0) && (data.baseShapeId = baseShapeId);
+
+                const objectShapeId = this.getObjectShapeId();
+                (objectShapeId !== 0) && (data.objectShapeId = objectShapeId);
+
+                return data;
             }
         }
 

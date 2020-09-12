@@ -3,9 +3,13 @@ namespace TinyWars.BaseWar {
     import Types            = Utility.Types;
     import Logger           = Utility.Logger;
     import Helpers          = Utility.Helpers;
-    import SerializedBwTile = Types.SerializedTile;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import ConfigManager    = Utility.ConfigManager;
     import TileType         = Types.TileType;
     import TileObjectType   = Types.TileObjectType;
+    import TileBaseType     = Types.TileBaseType;
+    import ISerialTile      = ProtoTypes.WarSerialization.ISerialTile;
+    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
     export abstract class BwTile {
         private _configVersion  : string;
@@ -13,8 +17,8 @@ namespace TinyWars.BaseWar {
         private _moveCostCfg    : { [moveType: number]: Types.MoveCostCfg };
         private _gridX          : number;
         private _gridY          : number;
-        private _baseViewId     : number;
-        private _objectViewId   : number;
+        private _baseShapeId    : number | null;
+        private _objectShapeId  : number | null;
         private _baseType       : Types.TileBaseType;
         private _objectType     : TileObjectType;
         private _playerIndex    : number;
@@ -29,20 +33,54 @@ namespace TinyWars.BaseWar {
 
         protected abstract _getViewClass(): new () => BwTileView;
 
-        public init(data: SerializedBwTile, configVersion: string): BwTile {
-            const t = Utility.ConfigManager.getTileObjectTypeAndPlayerIndex(data.objectViewId!);
-            Logger.assert(t, "TileModel.init() invalid SerializedTile! ", data);
+        public init(data: ISerialTile, configVersion: string): BwTile {
+            const gridIndex = BwHelpers.convertGridIndex(data.gridIndex);
+            if (gridIndex == null) {
+                Logger.error(`BwTile.init() empty gridIndex.`);
+                return undefined;
+            }
 
-            this._configVersion = configVersion;
-            this._setGridX(data.gridX);
-            this._setGridY(data.gridY);
-            this._setBaseViewId(data.baseViewId);
-            this._setObjectViewId(data.objectViewId);
-            this._baseType      = Utility.ConfigManager.getTileBaseType(data.baseViewId);
-            this._objectType    = t.tileObjectType;
-            this._setPlayerIndex(t.playerIndex);
-            this._templateCfg   = Utility.ConfigManager.getTileTemplateCfg(configVersion, this._baseType, this._objectType);
-            this._moveCostCfg   = Utility.ConfigManager.getMoveCostCfg(configVersion, this._baseType, this._objectType);
+            const objectType = data.objectType as TileObjectType;
+            if (objectType == null) {
+                Logger.error(`BwTile.init() empty objectType.`);
+                return undefined;
+            }
+
+            const baseType = data.baseType as TileBaseType;
+            if (baseType == null) {
+                Logger.error(`BwTile.init() empty baseType.`);
+                return undefined;
+            }
+
+            const playerIndex = data.playerIndex;
+            if (playerIndex == null) {
+                Logger.error(`BwTile.init() empty playerIndex.`);
+                return undefined;
+            }
+
+            const templateCfg = ConfigManager.getTileTemplateCfg(configVersion, baseType, objectType);
+            if (templateCfg == null) {
+                Logger.error(`BwTile.init() no templateCfg.`);
+                return undefined;
+            }
+
+            const moveCostCfg = ConfigManager.getMoveCostCfg(configVersion, baseType, objectType);
+            if (moveCostCfg == null) {
+                Logger.error(`BwTile.init() no moveCostCfg.`)
+                return undefined;
+            }
+
+            this._setGridX(gridIndex.x);
+            this._setGridY(gridIndex.y);
+            this._setBaseType(baseType);
+            this._setObjectType(objectType);
+            this._setPlayerIndex(playerIndex);
+
+            this._setConfigVersion(configVersion);
+            this._setTemplateCfg(templateCfg);
+            this._setMoveCosts(moveCostCfg);
+            this.setBaseShapeId(data.baseShapeId);
+            this.setObjectShapeId(data.objectShapeId);
             this.setCurrentHp(          data.currentHp           != null ? data.currentHp           : this.getMaxHp());
             this.setCurrentBuildPoint(  data.currentBuildPoint   != null ? data.currentBuildPoint   : this.getMaxBuildPoint());
             this.setCurrentCapturePoint(data.currentCapturePoint != null ? data.currentCapturePoint : this.getMaxCapturePoint());
@@ -52,7 +90,7 @@ namespace TinyWars.BaseWar {
 
             return this;
         }
-        public fastInit(data: SerializedBwTile, configVersion: string): BwTile {
+        public fastInit(data: ISerialTile, configVersion: string): BwTile {
             return this.init(data, configVersion);
         }
 
@@ -70,6 +108,20 @@ namespace TinyWars.BaseWar {
             return this._war;
         }
 
+        private _setConfigVersion(configVersion: string): void {
+            this._configVersion = configVersion;
+        }
+        private _getConfigVersion(): string | undefined {
+            return this._configVersion;
+        }
+
+        private _setTemplateCfg(cfg: Types.TileTemplateCfg): void {
+            this._templateCfg = cfg;
+        }
+        private _getTemplateCfg(): Types.TileTemplateCfg | undefined {
+            return this._templateCfg;
+        }
+
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////
@@ -81,31 +133,42 @@ namespace TinyWars.BaseWar {
             this.getView().updateView();
         }
 
-        private _setBaseViewId(id: number): void {
-            this._baseViewId = id;
+        private _setBaseType(baseType: TileBaseType): void {
+            this._baseType = baseType;
         }
-        public getBaseViewId(): number {
-            return this._baseViewId;
-        }
-        public getInitialBaseViewId(): number | null {
-            const war       = this.getWar();
-            const tileMap   = war ? war.getTileMap() : null;
-            return tileMap ? tileMap.getInitialBaseViewId(this.getGridIndex()) : null;
+        public getBaseType(): TileBaseType | undefined {
+            return this._baseType;
         }
 
-        private _setObjectViewId(id: number): void {
-            this._objectViewId = id;
+        private _setObjectType(objectType: TileObjectType): void {
+            this._objectType = objectType;
         }
-        public getObjectViewId(): number {
-            return this._objectViewId;
+        public getObjectType(): TileObjectType | undefined {
+            return this._objectType;
         }
-        public getInitialObjectViewId(): number | null {
-            const war       = this.getWar();
-            const tileMap   = war ? war.getTileMap() : null;
-            return tileMap ? tileMap.getInitialObjectViewId(this.getGridIndex()) : null;
+
+        public setBaseShapeId(id: number | null | undefined): void {
+            this._baseShapeId = id;
         }
-        public getNeutralObjectViewId(): number {
-            return this.getObjectViewId() - this.getPlayerIndex();
+        public getBaseShapeId(): number {
+            return this._baseShapeId || 0;
+        }
+
+        public setObjectShapeId(id: number | null | undefined): void {
+            this._objectShapeId = id;
+        }
+        public getObjectShapeId(): number {
+            return this._objectShapeId || 0;
+        }
+
+        public getSkinId(): number | undefined {
+            const player = this.getPlayer();
+            if (player == null) {
+                Logger.error(`BwTile.getSkinId() empty player.`);
+                return undefined;
+            }
+
+            return player.getUnitAndTileSkinId();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -183,6 +246,11 @@ namespace TinyWars.BaseWar {
             return this._templateCfg.isDefeatedOnCapture === 1;
         }
 
+        public updateOnUnitLeave(): void {
+            this.setCurrentBuildPoint(this.getMaxBuildPoint());
+            this.setCurrentCapturePoint(this.getMaxCapturePoint());
+        }
+
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for defense amount for units.
         ////////////////////////////////////////////////////////////////////////////////
@@ -231,39 +299,52 @@ namespace TinyWars.BaseWar {
             return this._templateCfg.type;
         }
 
-        public resetByObjectViewIdAndBaseViewId(objectViewId: number, baseViewId = this.getBaseViewId()): void {
-            this.init({
-                gridX       : this.getGridX(),
-                gridY       : this.getGridY(),
-                objectViewId: objectViewId,
-                baseViewId  : baseViewId,
-            }, this._configVersion);
-
-            this.startRunning(this._war);
-        }
-
-        public resetByPlayerIndex(playerIndex: number): void {
-            if (this.getType() === TileType.Headquarters) {
-                this.init({
-                    gridX       : this.getGridX(),
-                    gridY       : this.getGridY(),
-                    objectViewId: Utility.ConfigManager.getTileObjectViewId(TileObjectType.City, playerIndex)!,
-                    baseViewId  : this.getBaseViewId(),
-                }, this._configVersion);
-            } else {
-                this.init({
-                    gridX       : this.getGridX(),
-                    gridY       : this.getGridY(),
-                    objectViewId: this.getNeutralObjectViewId() + playerIndex,
-                    baseViewId  : this.getBaseViewId(),
-                }, this._configVersion);
+        public resetByTypeAndPlayerIndex(
+            baseType    : TileBaseType,
+            objectType  : TileObjectType,
+            playerIndex : number,
+        ): void {
+            const configVersion = this._getConfigVersion();
+            if (configVersion == null) {
+                Logger.error(`BwTile.resetByTypeAndPlayerIndex() configVersion is empty.`)
+                return;
             }
 
-            this.startRunning(this._war);
+            const war = this.getWar();
+            if (war == null) {
+                Logger.error(`BwTile.resetByTypeAndPlayerIndex() war is empty.`);
+                return;
+            }
+
+            const gridIndex = this.getGridIndex();
+            if (gridIndex == null) {
+                Logger.error(`BwTile.resetByTypeAndPlayerIndex() empty gridIndex.`);
+                return undefined;
+            }
+
+            if (!ConfigManager.checkIsValidPlayerIndexForTile(playerIndex, baseType, objectType)) {
+                Logger.error(`BwTile.resetByTypeAndPlayerIndex() invalid params`);
+                return undefined;
+            }
+
+            if (!this.init({
+                gridIndex,
+                objectType,
+                baseType,
+                playerIndex,
+            }, configVersion)) {
+                Logger.error(`BwTile.resetByTypeAndPlayerIndex() failed to init!`);
+                return undefined;
+            }
+            this.startRunning(war);
         }
 
         public destroyTileObject(): void {
-            this.resetByObjectViewIdAndBaseViewId(0);
+            this.resetByTypeAndPlayerIndex(
+                this.getBaseType(),
+                TileObjectType.Empty,
+                CommonConstants.WarNeutralPlayerIndex,
+            )
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -277,7 +358,7 @@ namespace TinyWars.BaseWar {
             if ((baseIncome == null) || (this.getPlayerIndex() !== playerIndex)) {
                 return 0;
             } else {
-                return Math.floor(baseIncome * this._war.getSettingsIncomeModifier() / 100);
+                return Math.floor(baseIncome * this._war.getSettingsIncomeMultiplier() / 100);
             }
         }
 
@@ -290,6 +371,21 @@ namespace TinyWars.BaseWar {
         public getPlayerIndex(): number {
             return this._playerIndex;
         }
+        public getPlayer(): BwPlayer | undefined {
+            const war = this.getWar();
+            if (war == null) {
+                Logger.error(`BwTile.getPlayer() empty war.`);
+                return undefined;
+            }
+
+            const playerIndex = this.getPlayerIndex();
+            if (playerIndex == null) {
+                Logger.error(`BwTile.getPlayer() empty playerIndex.`);
+                return undefined;
+            }
+
+            return war.getPlayer(playerIndex);
+        }
 
         public getTeamIndex(): number {
             return this._war.getPlayer(this.getPlayerIndex())!.getTeamIndex();
@@ -298,7 +394,10 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for move cost.
         ////////////////////////////////////////////////////////////////////////////////
-        public getMoveCosts(): { [moveType: number]: Types.MoveCostCfg } {
+        private _setMoveCosts(cfg: { [moveType: number]: Types.MoveCostCfg }): void {
+            this._moveCostCfg = cfg;
+        }
+        public getMoveCosts(): { [moveType: number]: Types.MoveCostCfg } | undefined {
             return this._moveCostCfg;
         }
 
@@ -473,7 +572,7 @@ namespace TinyWars.BaseWar {
         // Functions for fog.
         ////////////////////////////////////////////////////////////////////////////////
         public abstract setFogEnabled(): void;
-        public abstract setFogDisabled(data?: SerializedBwTile): void;
+        public abstract setFogDisabled(data?: ISerialTile): void;
 
         protected _setIsFogEnabled(isEnabled: boolean): void {
             this._isFogEnabled = isEnabled;

@@ -269,7 +269,7 @@ namespace TinyWars.SingleCustomWar {
 
         private _createWarInfoIncomeModifier(): DataForInfoRenderer {
             const war       = this._war;
-            const currValue = war.getSettingsIncomeModifier();
+            const currValue = war.getSettingsIncomeMultiplier();
             const maxValue  = CommonConstants.WarRuleIncomeMultiplierMaxLimit;
             const minValue  = CommonConstants.WarRuleIncomeMultiplierMinLimit;
             return {
@@ -302,7 +302,7 @@ namespace TinyWars.SingleCustomWar {
 
         private _createWarInfoInitialEnergy(): DataForInfoRenderer {
             const war       = this._war;
-            const currValue = war.getSettingsInitialEnergy();
+            const currValue = war.getSettingsInitialEnergyPercentage();
             const minValue  = CommonConstants.WarRuleInitialEnergyMinLimit;
             const maxValue  = CommonConstants.WarRuleInitialEnergyMaxLimit;
             return {

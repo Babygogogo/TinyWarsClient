@@ -8,7 +8,7 @@ namespace TinyWars.SingleCustomWar {
     import GridIndex            = Types.GridIndex;
 
     export class ScwUnitView extends BaseWar.BwUnitView {
-        public moveAlongPath(path: GridIndex[], isDiving: boolean, isBlocked: boolean, callback: Function, aiming?: GridIndex): void {
+        public moveAlongPath(path: GridIndex[], isDiving: boolean, isBlocked: boolean, aiming?: GridIndex): Promise<void> {
             this.showUnitAnimation(UnitAnimationType.Move);
 
             const startingPoint = GridIndexHelpers.createPointByGridIndex(path[0]);
@@ -79,32 +79,34 @@ namespace TinyWars.SingleCustomWar {
                 tween.to(GridIndexHelpers.createPointByGridIndex(gridIndex), 200);
             }
 
-            if (!aiming) {
-                tween.call(() => {
-                    this._setImgUnitFlippedX(false);
-                    (isBlocked) && (war.getGridVisionEffect().showEffectBlock(path[path.length - 1]));
+            return new Promise<void>(resolve => {
+                if (!aiming) {
+                    tween.call(() => {
+                        this._setImgUnitFlippedX(false);
+                        (isBlocked) && (war.getGridVisionEffect().showEffectBlock(path[path.length - 1]));
 
-                    (callback) && (callback());
-                });
-            } else {
-                const cursor = war.getField().getCursor();
-                tween.call(() => {
-                    cursor.setIsMovableByTouches(false);
-                    cursor.setGridIndex(aiming);
-                    cursor.updateView();
-                    cursor.setVisibleForConForTarget(true);
-                    cursor.setVisibleForConForNormal(false);
-                })
-                .wait(500)
-                .call(() => {
-                    cursor.setIsMovableByTouches(true);
-                    cursor.updateView();
-                    this._setImgUnitFlippedX(false);
-                    (isBlocked) && (war.getGridVisionEffect().showEffectBlock(path[path.length - 1]));
+                        resolve();
+                    });
+                } else {
+                    const cursor = war.getField().getCursor();
+                    tween.call(() => {
+                        cursor.setIsMovableByTouches(false);
+                        cursor.setGridIndex(aiming);
+                        cursor.updateView();
+                        cursor.setVisibleForConForTarget(true);
+                        cursor.setVisibleForConForNormal(false);
+                    })
+                    .wait(500)
+                    .call(() => {
+                        cursor.setIsMovableByTouches(true);
+                        cursor.updateView();
+                        this._setImgUnitFlippedX(false);
+                        (isBlocked) && (war.getGridVisionEffect().showEffectBlock(path[path.length - 1]));
 
-                    (callback) && (callback());
-                });
-            }
+                        resolve();
+                    });
+                }
+            });
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

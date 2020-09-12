@@ -15,7 +15,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
     import BwPlayer             = BaseWar.BwPlayer;
     import TurnPhaseCode        = Types.TurnPhaseCode;
     import RawWarAction         = Types.RawWarActionContainer;
-    import WarAction            = Types.WarActionContainer;
+    import WarAction            = ProtoTypes.WarAction.IActionContainer;
     import GridIndex            = Types.GridIndex;
     import UnitActionState      = Types.UnitActionState;
     import DropDestination      = Types.DropDestination;

@@ -8,7 +8,7 @@ namespace TinyWars.MultiCustomWar {
     import GridIndex            = Types.GridIndex;
 
     export class McwUnitView extends BaseWar.BwUnitView {
-        public moveAlongPath(path: GridIndex[], isDiving: boolean, isBlocked: boolean, callback: Function, aiming?: GridIndex): void {
+        public moveAlongPath(path: GridIndex[], isDiving: boolean, isBlocked: boolean, aiming?: GridIndex): Promise<void> {
             this.showUnitAnimation(UnitAnimationType.Move);
 
             const startingPoint = GridIndexHelpers.createPointByGridIndex(path[0]);
@@ -80,54 +80,56 @@ namespace TinyWars.MultiCustomWar {
             }
 
             const endingGridIndex = path[path.length - 1];
-            if (!aiming) {
-                tween.call(() => {
-                    this._setImgUnitFlippedX(false);
-                    if ((isBlocked)                                         &&
-                        (VisibilityHelpers.checkIsUnitOnMapVisibleToUser({
-                            war,
-                            unitType,
-                            isDiving,
-                            gridIndex       : endingGridIndex,
-                            unitPlayerIndex : playerIndex,
-                            observerUserId  : userId,
-                        }))
-                    ) {
-                        war.getGridVisionEffect().showEffectBlock(endingGridIndex);
-                    }
+            return new Promise<void>(resolve => {
+                if (!aiming) {
+                    tween.call(() => {
+                        this._setImgUnitFlippedX(false);
+                        if ((isBlocked)                                         &&
+                            (VisibilityHelpers.checkIsUnitOnMapVisibleToUser({
+                                war,
+                                unitType,
+                                isDiving,
+                                gridIndex       : endingGridIndex,
+                                unitPlayerIndex : playerIndex,
+                                observerUserId  : userId,
+                            }))
+                        ) {
+                            war.getGridVisionEffect().showEffectBlock(endingGridIndex);
+                        }
 
-                    (callback) && (callback());
-                });
-            } else {
-                const cursor = war.getField().getCursor();
-                tween.call(() => {
-                    cursor.setIsMovableByTouches(false);
-                    cursor.setGridIndex(aiming);
-                    cursor.updateView();
-                    cursor.setVisibleForConForTarget(true);
-                    cursor.setVisibleForConForNormal(false);
-                })
-                .wait(500)
-                .call(() => {
-                    cursor.setIsMovableByTouches(true);
-                    cursor.updateView();
-                    this._setImgUnitFlippedX(false);
-                    if ((isBlocked)                                         &&
-                        (VisibilityHelpers.checkIsUnitOnMapVisibleToUser({
-                            war,
-                            unitType,
-                            isDiving,
-                            gridIndex       : endingGridIndex,
-                            unitPlayerIndex : playerIndex,
-                            observerUserId  : userId,
-                        }))
-                    ) {
-                        war.getGridVisionEffect().showEffectBlock(endingGridIndex);
-                    }
+                        resolve();
+                    });
+                } else {
+                    const cursor = war.getField().getCursor();
+                    tween.call(() => {
+                        cursor.setIsMovableByTouches(false);
+                        cursor.setGridIndex(aiming);
+                        cursor.updateView();
+                        cursor.setVisibleForConForTarget(true);
+                        cursor.setVisibleForConForNormal(false);
+                    })
+                    .wait(500)
+                    .call(() => {
+                        cursor.setIsMovableByTouches(true);
+                        cursor.updateView();
+                        this._setImgUnitFlippedX(false);
+                        if ((isBlocked)                                         &&
+                            (VisibilityHelpers.checkIsUnitOnMapVisibleToUser({
+                                war,
+                                unitType,
+                                isDiving,
+                                gridIndex       : endingGridIndex,
+                                unitPlayerIndex : playerIndex,
+                                observerUserId  : userId,
+                            }))
+                        ) {
+                            war.getGridVisionEffect().showEffectBlock(endingGridIndex);
+                        }
 
-                    (callback) && (callback());
-                });
-            }
+                        resolve();
+                    });
+                }
+            });
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

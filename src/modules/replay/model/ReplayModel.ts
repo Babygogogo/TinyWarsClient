@@ -227,7 +227,7 @@ namespace TinyWars.Replay.ReplayModel {
             unit.startRunning(war);
             unit.startRunningView();
 
-            unitMap.addUnitOnMap(unit);
+            unitMap.setUnitOnMap(unit);
 
         } else if ((gridIndex) && (action.unitType != null)) {
             // TODO: take skills into account.
@@ -242,7 +242,7 @@ namespace TinyWars.Replay.ReplayModel {
             unit.startRunning(war);
             unit.startRunningView();
 
-            unitMap.addUnitOnMap(unit);
+            unitMap.setUnitOnMap(unit);
         }
 
         unitMap.setNextUnitId(unitId + 1);
@@ -519,7 +519,7 @@ namespace TinyWars.Replay.ReplayModel {
             } else {
                 focusUnit.setIsBuildingTile(false);
                 focusUnit.setCurrentBuildMaterial(focusUnit.getCurrentBuildMaterial() - 1);
-                tile.resetByObjectViewIdAndBaseViewId(focusUnit.getBuildTargetTileObjectViewId(tile.getType()));
+                tile.resetByTypeAndPlayerIndex(focusUnit.getBuildTargetTileObjectViewId(tile.getType()));
 
                 const playerIndex = focusUnit.getPlayerIndex();
             }
@@ -845,7 +845,7 @@ namespace TinyWars.Replay.ReplayModel {
         } else {
             const targetGridIndex   = action.targetGridIndex as GridIndex;
             const tile              = war.getTileMap().getTile(pathNodes[pathNodes.length - 1]);
-            tile.resetByObjectViewIdAndBaseViewId(focusUnit.getTileObjectViewIdAfterLaunchSilo());
+            tile.resetByTypeAndPlayerIndex(focusUnit.getTileObjectViewIdAfterLaunchSilo());
 
             const targetGrids   = GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, Utility.ConfigManager.SILO_RADIUS, unitMap.getMapSize());
             const targetUnits   = [] as ReplayUnit[];
@@ -899,7 +899,7 @@ namespace TinyWars.Replay.ReplayModel {
             const maxEnergy = player.getCoMaxEnergy();
             player.setFund(player.getFund() - focusUnit.getLoadCoCost()!);
             player.setCoUnitId(focusUnit.getUnitId());
-            player.setCoCurrentEnergy(maxEnergy == null ? 0 : Math.floor(maxEnergy * war.getSettingsInitialEnergy() / 100));
+            player.setCoCurrentEnergy(maxEnergy == null ? 0 : Math.floor(maxEnergy * war.getSettingsInitialEnergyPercentage() / 100));
             player.setCoUsingSkillType(Types.CoSkillType.Passive);
         }
 
@@ -955,7 +955,7 @@ namespace TinyWars.Replay.ReplayModel {
             const player = war.getPlayerInTurn();
             player.setFund(player.getFund() - action.cost);
             unitMap.setNextUnitId(producedUnitId + 1);
-            unitMap.addUnitLoaded(producedUnit);
+            unitMap.setUnitLoaded(producedUnit);
             focusUnit.setCurrentProduceMaterial(focusUnit.getCurrentProduceMaterial()! - 1);
 
             return new Promise<void>(resolve => {
@@ -1189,7 +1189,7 @@ namespace TinyWars.Replay.ReplayModel {
             unit.startRunning(war);
             unit.startRunningView();
 
-            unitMap.addUnitOnMap(unit);
+            unitMap.setUnitOnMap(unit);
 
         } else if ((gridIndex) && (action.unitType != null)) {
             // TODO: take skills into account.
@@ -1204,7 +1204,7 @@ namespace TinyWars.Replay.ReplayModel {
             unit.startRunning(war);
             unit.startRunningView();
 
-            unitMap.addUnitOnMap(unit);
+            unitMap.setUnitOnMap(unit);
         }
 
         unitMap.setNextUnitId(unitId + 1);
@@ -1400,7 +1400,7 @@ namespace TinyWars.Replay.ReplayModel {
             } else {
                 focusUnit.setIsBuildingTile(false);
                 focusUnit.setCurrentBuildMaterial(focusUnit.getCurrentBuildMaterial() - 1);
-                tile.resetByObjectViewIdAndBaseViewId(focusUnit.getBuildTargetTileObjectViewId(tile.getType()));
+                tile.resetByTypeAndPlayerIndex(focusUnit.getBuildTargetTileObjectViewId(tile.getType()));
 
                 const playerIndex = focusUnit.getPlayerIndex();
             }
@@ -1582,7 +1582,7 @@ namespace TinyWars.Replay.ReplayModel {
         } else {
             const targetGridIndex   = action.targetGridIndex as GridIndex;
             const tile              = war.getTileMap().getTile(pathNodes[pathNodes.length - 1]);
-            tile.resetByObjectViewIdAndBaseViewId(focusUnit.getTileObjectViewIdAfterLaunchSilo());
+            tile.resetByTypeAndPlayerIndex(focusUnit.getTileObjectViewIdAfterLaunchSilo());
 
             const targetGrids   = GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, Utility.ConfigManager.SILO_RADIUS, unitMap.getMapSize());
             const targetUnits   = [] as ReplayUnit[];
@@ -1613,7 +1613,7 @@ namespace TinyWars.Replay.ReplayModel {
             const maxEnergy = player.getCoMaxEnergy();
             player.setFund(player.getFund() - focusUnit.getLoadCoCost()!);
             player.setCoUnitId(focusUnit.getUnitId());
-            player.setCoCurrentEnergy(maxEnergy == null ? 0 : Math.floor(maxEnergy * war.getSettingsInitialEnergy() / 100));
+            player.setCoCurrentEnergy(maxEnergy == null ? 0 : Math.floor(maxEnergy * war.getSettingsInitialEnergyPercentage() / 100));
             player.setCoUsingSkillType(Types.CoSkillType.Passive);
         }
     }
@@ -1646,7 +1646,7 @@ namespace TinyWars.Replay.ReplayModel {
             const player = war.getPlayerInTurn();
             player.setFund(player.getFund() - action.cost);
             unitMap.setNextUnitId(producedUnitId + 1);
-            unitMap.addUnitLoaded(producedUnit);
+            unitMap.setUnitLoaded(producedUnit);
             focusUnit.setCurrentProduceMaterial(focusUnit.getCurrentProduceMaterial()! - 1);
         }
     }

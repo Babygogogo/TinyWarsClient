@@ -9758,8 +9758,8 @@ export declare namespace WarAction {
             /** ExtraDataForUnitUseCoSkill actingUnits */
             actingUnits?: (WarSerialization.ISerialUnit[]|null);
 
-            /** ExtraDataForUnitUseCoSkill extraDataList */
-            extraDataList?: (Structure.IDataForUseCoSkill[]|null);
+            /** ExtraDataForUnitUseCoSkill skillDataList */
+            skillDataList?: (Structure.IDataForUseCoSkill[]|null);
         }
 
         /** Represents an ExtraDataForUnitUseCoSkill. */
@@ -9780,8 +9780,8 @@ export declare namespace WarAction {
             /** ExtraDataForUnitUseCoSkill actingUnits. */
             public actingUnits: WarSerialization.ISerialUnit[];
 
-            /** ExtraDataForUnitUseCoSkill extraDataList. */
-            public extraDataList: Structure.IDataForUseCoSkill[];
+            /** ExtraDataForUnitUseCoSkill skillDataList. */
+            public skillDataList: Structure.IDataForUseCoSkill[];
 
             /**
              * Creates a new ExtraDataForUnitUseCoSkill instance using the specified properties.

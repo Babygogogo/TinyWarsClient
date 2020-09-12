@@ -196,9 +196,9 @@ namespace TinyWars.MultiCustomWar {
 
         private _updateListWarInfo(): void {
             const war                   = this._war;
-            const incomeModifier        = war.getSettingsIncomeModifier();
+            const incomeModifier        = war.getSettingsIncomeMultiplier();
             const energyGrowthModifier  = war.getSettingsEnergyGrowthMultiplier();
-            const initialEnergy         = war.getSettingsInitialEnergy();
+            const initialEnergy         = war.getSettingsInitialEnergyPercentage();
             const moveRangeModifier     = war.getSettingsMoveRangeModifier();
             const attackPowerModifier   = war.getSettingsAttackPowerModifier();
             const visionRangeModifier   = war.getSettingsVisionRangeModifier();

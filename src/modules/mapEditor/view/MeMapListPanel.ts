@@ -154,7 +154,7 @@ namespace TinyWars.MapEditor {
 
                 const tileMapView = new WarMap.WarMapTileMapView();
                 tileMapView.init(mapData.mapWidth, mapData.mapHeight);
-                tileMapView.updateWithBaseViewIdArray(mapData.tileBases);
+                tileMapView.updateWithTileDataList(mapData.tileBases);
                 tileMapView.updateWithObjectViewIdArray(mapData.tileObjects);
 
                 const unitMapView = new WarMap.WarMapUnitMapView();

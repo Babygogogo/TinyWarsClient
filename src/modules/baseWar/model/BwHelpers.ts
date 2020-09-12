@@ -285,6 +285,80 @@ namespace TinyWars.BaseWar.BwHelpers {
             || (state === Types.ActionPlannerState.RequestingUnitWait);
     }
 
+    /**
+     * The unit is dangling after moving!
+     * You must call unitMap.addUnitOnMap() or unitMap.addUnitLoaded() after calling this function.
+     */
+    export function moveUnit(
+        params: {
+            war             : BwWar;
+            pathNodes       : GridIndex[];
+            launchUnitId    : number | null | undefined;
+            fuelConsumption : number;
+        }
+    ): void {
+        const { war, pathNodes, launchUnitId, fuelConsumption } = params;
+        const unitMap = war.getUnitMap();
+        if (unitMap == null) {
+            Logger.error(`BwHelpers.moveUnit() empty unitMap.`);
+            return undefined;
+        }
+
+        const tileMap = war.getTileMap();
+        if (tileMap == null) {
+            Logger.error(`BwHelpers.getTileMap() empty tileMap.`);
+            return undefined;
+        }
+
+        const fogMap = war.getFogMap();
+        if (fogMap == null) {
+            Logger.error(`BwHelpers.getFogMap() empty fogMap.`);
+            return undefined;
+        }
+
+        const beginningGridIndex    = pathNodes[0];
+        const focusUnit             = unitMap.getUnit(beginningGridIndex, launchUnitId);
+        if (focusUnit == null) {
+            Logger.error(`BwHelpers.moveUnit() empty focusUnit.`);
+            return undefined;
+        }
+
+        const currentFuel = focusUnit.getCurrentFuel();
+        if (currentFuel == null) {
+            Logger.error(`BwHelpers.moveUnit() empty currentFuel.`);
+            return undefined;
+        }
+
+        const tile = tileMap.getTile(beginningGridIndex);
+        if (tile == null) {
+            Logger.error(`BwHelpers.moveUnit() empty tile.`);
+            return undefined;
+        }
+
+        fogMap.updateMapFromPathsByUnitAndPath(focusUnit, pathNodes);
+        focusUnit.setCurrentFuel(currentFuel - fuelConsumption);
+        if (launchUnitId == null) {
+            unitMap.removeUnitOnMap(beginningGridIndex, false);
+        } else {
+            unitMap.removeUnitLoaded(launchUnitId);
+        }
+
+        if (pathNodes.length > 1) {
+            const endingGridIndex = pathNodes[pathNodes.length - 1];
+            focusUnit.setIsCapturingTile(false);
+            focusUnit.setIsBuildingTile(false);
+            focusUnit.setLoaderUnitId(undefined);
+            focusUnit.setGridIndex(endingGridIndex);
+            for (const unit of unitMap.getUnitsLoadedByLoader(focusUnit, true)) {
+                unit.setGridIndex(endingGridIndex);
+            }
+
+            if (launchUnitId == null) {
+                tile.updateOnUnitLeave();
+            }
+        }
+    }
+
     export function exeInstantSkill(
         war         : BwWar,
         player      : BwPlayer,

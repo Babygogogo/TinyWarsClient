@@ -211,9 +211,9 @@ namespace TinyWars.Replay {
             this._labelWarId.text                   = `${war.getWarId()}`;
             this._labelTurnIndex.text               = `${war.getTurnManager().getTurnIndex() + 1}`;
             this._labelActionId.text                = `${war.getExecutedActionsCount() - 1}`;
-            this._labelIncomeModifier.text          = `${war.getSettingsIncomeModifier()}%`;
+            this._labelIncomeModifier.text          = `${war.getSettingsIncomeMultiplier()}%`;
             this._labelEnergyGrowthModifier.text    = `${war.getSettingsEnergyGrowthMultiplier()}%`;
-            this._labelInitialEnergy.text           = `${war.getSettingsInitialEnergy()}%`;
+            this._labelInitialEnergy.text           = `${war.getSettingsInitialEnergyPercentage()}%`;
             this._labelMoveRangeModifier.text       = `${war.getSettingsMoveRangeModifier()}`;
             this._labelAttackPowerModifier.text     = `${war.getSettingsAttackPowerModifier()}%`;
             this._labelVisionRangeModifier.text     = `${war.getSettingsVisionRangeModifier()}`;

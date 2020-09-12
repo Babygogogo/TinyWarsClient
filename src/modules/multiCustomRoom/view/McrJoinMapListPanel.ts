@@ -219,7 +219,7 @@ namespace TinyWars.MultiCustomRoom {
 
             const tileMapView = new WarMap.WarMapTileMapView();
             tileMapView.init(mapRawData.mapWidth, mapRawData.mapHeight);
-            tileMapView.updateWithBaseViewIdArray(mapRawData.tileBases);
+            tileMapView.updateWithTileDataList(mapRawData.tileBases);
             tileMapView.updateWithObjectViewIdArray(mapRawData.tileObjects);
 
             const unitMapView = new WarMap.WarMapUnitMapView();

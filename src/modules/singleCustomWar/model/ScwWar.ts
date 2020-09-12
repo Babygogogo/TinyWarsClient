@@ -3,11 +3,11 @@ namespace TinyWars.SingleCustomWar {
     import Types                    = Utility.Types;
     import ProtoTypes               = Utility.ProtoTypes;
     import Logger                   = Utility.Logger;
+    import Helpers                  = Utility.Helpers;
     import BwHelpers                = BaseWar.BwHelpers;
     import ISerialWar               = ProtoTypes.WarSerialization.ISerialWar;
     import ISettingsForSinglePlayer = ProtoTypes.WarSettings.ISettingsForSinglePlayer;
     import IActionContainer         = ProtoTypes.WarAction.IActionContainer;
-    import ISeedRandomState         = ProtoTypes.Structure.ISeedRandomState;
 
     export class ScwWar extends BaseWar.BwWar {
         private _settingsForSinglePlayer    : ISettingsForSinglePlayer;
@@ -331,8 +331,21 @@ namespace TinyWars.SingleCustomWar {
         private _getAllExecutedActions(): IActionContainer[] | null {
             return this._executedActions;
         }
-        public pushExecutedAction(action: IActionContainer): void {
-            this._executedActions.push(action);
+        public addExecutedAction(action: IActionContainer): void {
+            const executedActions = this._getAllExecutedActions();
+            if (executedActions == null) {
+                Logger.error(`ScwWar.addExecutedAction() empty executedActions.`);
+                return undefined;
+            }
+
+            const executedActionsCount = this.getExecutedActionsCount();
+            if (executedActionsCount !== executedActions.length) {
+                Logger.error(`ScwWar.addExecutedAction() invalid executedActionsCount!`);
+                return undefined;
+            }
+
+            executedActions.push(Helpers.deepClone(action));
+            this._setExecutedActionsCount(executedActionsCount + 1);
         }
 
         private _setSettingsForSinglePlayer(settings: ISettingsForSinglePlayer): void {

@@ -19,7 +19,7 @@ namespace TinyWars.BaseWar {
         private _configVersion      : string;
         private _templateCfg        : Types.UnitTemplateCfg;
         private _damageChartCfg     : { [armorType: number]: { [weaponType: number]: Types.DamageChartCfg } };
-        private _buildableTileCfg   : { [srcTileType: number]: Types.BuildableTileCfg };
+        private _buildableTileCfg?  : { [srcBaseType: number]: { [srcObjectType: number]: Types.BuildableTileCfg } };
         private _visionBonusCfg     : { [tileType: number]: Types.VisionBonusCfg };
         private _gridX              : number;
         private _gridY              : number;
@@ -113,6 +113,13 @@ namespace TinyWars.BaseWar {
             return this._templateCfg;
         }
 
+        private _setBuildableTileCfg(buildableTileCfg: { [srcBaseType: number]: { [srcObjectType: number]: Types.BuildableTileCfg } } | undefined): void {
+            this._buildableTileCfg = buildableTileCfg;
+        }
+        private _getBuildableTileCfg(): { [srcBaseType: number]: { [srcObjectType: number]: Types.BuildableTileCfg } } | undefined {
+            return this._buildableTileCfg;
+        }
+
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////
@@ -133,8 +140,8 @@ namespace TinyWars.BaseWar {
             this.getView().visible = visible;
         }
 
-        public moveViewAlongPath(pathNodes: GridIndex[], isDiving: boolean, isBlocked: boolean, callback: () => void, aiming?: GridIndex): void {
-            this.getView().moveAlongPath(pathNodes, isDiving, isBlocked, callback, aiming);
+        public moveViewAlongPath(pathNodes: GridIndex[], isDiving: boolean, isBlocked: boolean, aiming?: GridIndex): Promise<void> {
+            return this.getView().moveAlongPath(pathNodes, isDiving, isBlocked, aiming);
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -774,6 +781,12 @@ namespace TinyWars.BaseWar {
             return dstType == null
                 ? undefined
                 : Utility.ConfigManager.getTileObjectViewId(Utility.ConfigManager.getTileObjectTypeByTileType(dstType), this.getPlayerIndex());
+        }
+
+        public getBuildTargetTileCfg(baseType: TileBaseType, objectType: TileObjectType): Types.BuildableTileCfg | undefined {
+            const buildableCfgs = this._getBuildableTileCfg();
+            const cfgs          = buildableCfgs ? buildableCfgs[baseType] : undefined;
+            return cfgs ? cfgs[objectType] : undefined;
         }
 
         public getBuildAmount(): number | undefined {

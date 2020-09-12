@@ -16,11 +16,11 @@ namespace TinyWars.BaseWar {
         private _restTimeToBoot         : number;
         private _watchOngoingSrcUserIds : Set<number>;
         private _watchRequestSrcUserIds : Set<number>;
-        private _userId?                : number;
-        private _nickname?              : string | null;
+        private _userId                 : number;
+        private _unitAndTileSkinId      : number;
+        private _nickname               : string | null;
 
         private _coId               : number | null | undefined;
-        private _coUnitId           : number | null | undefined;
         private _coCurrentEnergy    : number;
         private _coUsingSkillType   : Types.CoSkillType;
         private _coIsDestroyedInTurn: boolean;
@@ -38,7 +38,6 @@ namespace TinyWars.BaseWar {
             this._setWatchRequestSrcUserIds(data.watchRequestSrcUserIdList || []);
             this.setUserId(data.userId);
             this._setCoId(data.coId);
-            this.setCoUnitId(data.coUnitId);
             this.setCoCurrentEnergy(data.coCurrentEnergy);
             this.setCoUsingSkillType(data.coUsingSkillType);
             this.setCoIsDestroyedInTurn(data.coIsDestroyedInTurn);
@@ -146,6 +145,13 @@ namespace TinyWars.BaseWar {
             return this._userId;
         }
 
+        private _setUnitAndTileSkinId(unitAndTileSkinId: number): void {
+            this._unitAndTileSkinId = unitAndTileSkinId;
+        }
+        public getUnitAndTileSkinId(): number | undefined {
+            return this._unitAndTileSkinId;
+        }
+
         private _setNickname(nickname: string): void {
             this._nickname = nickname;
         }
@@ -158,13 +164,6 @@ namespace TinyWars.BaseWar {
         }
         public getCoId(): number | null | undefined {
             return this._coId;
-        }
-
-        public setCoUnitId(coUnitId: number | null | undefined): void {
-            this._coUnitId = coUnitId;
-        }
-        public getCoUnitId(): number | null | undefined {
-            return this._coUnitId;
         }
 
         public setCoCurrentEnergy(energy: number): void {

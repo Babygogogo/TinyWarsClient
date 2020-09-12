@@ -106,7 +106,7 @@ namespace TinyWars.BaseWar {
                 : this._framesForStateAnimation[Math.floor(TimeModel.getUnitAnimationTickCount() / 6) % framesCount];
         }
 
-        public abstract moveAlongPath(path: GridIndex[], isDiving: boolean, isBlocked: boolean, callback: Function, aiming?: GridIndex): void;
+        public abstract moveAlongPath(path: GridIndex[], isDiving: boolean, isBlocked: boolean, aiming?: GridIndex): Promise<void>;
 
         protected _getIsDark(): boolean {
             return this._isDark;
