@@ -1,7 +1,5 @@
 
 namespace TinyWars.Replay {
-    import Types = Utility.Types;
-
     export class ReplayField extends BaseWar.BwField {
         protected _getFogMapClass(): new () => BaseWar.BwFogMap {
             return ReplayFogMap;
@@ -23,21 +21,6 @@ namespace TinyWars.Replay {
         }
         protected _getViewClass(): new () => BaseWar.BwFieldView {
             return ReplayFieldView;
-        }
-
-        public serialize(): Types.SerializedField {
-            return {
-                fogMap  : (this.getFogMap() as ReplayFogMap).serialize(),
-                unitMap : (this.getUnitMap() as ReplayUnitMap).serialize(),
-                tileMap : (this.getTileMap() as ReplayTileMap).serialize(),
-            };
-        }
-        public serializeForSimulation(): Types.SerializedField {
-            return {
-                fogMap  : (this.getFogMap() as ReplayFogMap).serializeForSimulation(),
-                unitMap : (this.getUnitMap() as ReplayUnitMap).serializeForSimulation(),
-                tileMap : (this.getTileMap() as ReplayTileMap).serializeForSimulation(),
-            };
         }
     }
 }

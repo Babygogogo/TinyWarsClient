@@ -149,7 +149,7 @@ namespace TinyWars.SingleCustomWar {
         } else if ((stateA !== Types.UnitActionState.Idle) && (stateB === Types.UnitActionState.Idle)) {
             return 1;
         } else {
-            return unitA.getViewId() - unitB.getViewId();
+            return unitA.getType() - unitB.getType();
         }
     }
 

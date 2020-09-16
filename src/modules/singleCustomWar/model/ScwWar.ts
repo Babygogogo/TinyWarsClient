@@ -5,6 +5,7 @@ namespace TinyWars.SingleCustomWar {
     import Logger                   = Utility.Logger;
     import Helpers                  = Utility.Helpers;
     import BwHelpers                = BaseWar.BwHelpers;
+    import BwSettingsHelper         = BaseWar.BwSettingsHelper;
     import ISerialWar               = ProtoTypes.WarSerialization.ISerialWar;
     import ISettingsForSinglePlayer = ProtoTypes.WarSettings.ISettingsForSinglePlayer;
     import IActionContainer         = ProtoTypes.WarAction.IActionContainer;
@@ -323,6 +324,88 @@ namespace TinyWars.SingleCustomWar {
             }
 
             return settingsForSinglePlayer.isCheating;
+        }
+
+        public setSettingsIncomeMultiplier(playerIndex: number, value: number): void {
+            const settingsForCommon = this.getSettingsForCommon();
+            if (settingsForCommon == null) {
+                Logger.error(`BwWar.setSettingsIncomeMultiplier() empty settingsForCommon.`);
+                return undefined;
+            }
+
+            BwSettingsHelper.setIncomeMultiplier(settingsForCommon, playerIndex, value);
+        }
+        public setSettingsEnergyGrowthMultiplier(playerIndex: number, value: number): void {
+            const settingsForCommon = this.getSettingsForCommon();
+            if (settingsForCommon == null) {
+                Logger.error(`BwWar.setSettingsEnergyGrowthMultiplier() empty settingsForCommon.`);
+                return undefined;
+            }
+
+            BwSettingsHelper.setEnergyGrowthMultiplier(settingsForCommon, playerIndex, value);
+        }
+        public setSettingsAttackPowerModifier(playerIndex: number, value: number): void {
+            const settingsForCommon = this.getSettingsForCommon();
+            if (settingsForCommon == null) {
+                Logger.error(`BwWar.setSettingsAttackPowerModifier() empty settingsForCommon.`);
+                return undefined;
+            }
+
+            BwSettingsHelper.setAttackPowerModifier(settingsForCommon, playerIndex, value);
+        }
+        public setSettingsMoveRangeModifier(playerIndex: number, value: number): void {
+            const settingsForCommon = this.getSettingsForCommon();
+            if (settingsForCommon == null) {
+                Logger.error(`BwWar.setSettingsMoveRangeModifier() empty settingsForCommon.`);
+                return undefined;
+            }
+
+            BwSettingsHelper.setMoveRangeModifier(settingsForCommon, playerIndex, value);
+        }
+        public setSettingsVisionRangeModifier(playerIndex: number, value: number): void {
+            const settingsForCommon = this.getSettingsForCommon();
+            if (settingsForCommon == null) {
+                Logger.error(`BwWar.setSettingsVisionRangeModifier() empty settingsForCommon.`);
+                return undefined;
+            }
+
+            BwSettingsHelper.setVisionRangeModifier(settingsForCommon, playerIndex, value);
+        }
+        public setSettingsInitialFund(playerIndex: number, value: number): void {
+            const settingsForCommon = this.getSettingsForCommon();
+            if (settingsForCommon == null) {
+                Logger.error(`BwWar.setSettingsInitialFund() empty settingsForCommon.`);
+                return undefined;
+            }
+
+            BwSettingsHelper.setInitialFund(settingsForCommon, playerIndex, value);
+        }
+        public setSettingsInitialEnergyPercentage(playerIndex: number, value: number): void {
+            const settingsForCommon = this.getSettingsForCommon();
+            if (settingsForCommon == null) {
+                Logger.error(`BwWar.setSettingsInitialEnergyPercentage() empty settingsForCommon.`);
+                return undefined;
+            }
+
+            BwSettingsHelper.setInitialEnergyPercentage(settingsForCommon, playerIndex, value);
+        }
+        public setSettingsLuckLowerLimit(playerIndex: number, value: number): void {
+            const settingsForCommon = this.getSettingsForCommon();
+            if (settingsForCommon == null) {
+                Logger.error(`BwWar.setSettingsLuckLowerLimit() empty settingsForCommon.`);
+                return undefined;
+            }
+
+            BwSettingsHelper.setLuckLowerLimit(settingsForCommon, playerIndex, value);
+        }
+        public setSettingsLuckUpperLimit(playerIndex: number, value: number): void {
+            const settingsForCommon = this.getSettingsForCommon();
+            if (settingsForCommon == null) {
+                Logger.error(`BwWar.setSettingsLuckUpperLimit() empty settingsForCommon.`);
+                return undefined;
+            }
+
+            BwSettingsHelper.setLuckUpperLimit(settingsForCommon, playerIndex, value);
         }
 
         private _setAllExecutedActions(actions: IActionContainer[]): void {

@@ -168,7 +168,7 @@ namespace TinyWars.MultiCustomRoom {
             const info = McrModel.getJoinWarRoomInfo();
             McrBuildingListPanel.show({
                 configVersion   : info.configVersion,
-                mapRawData      : await WarMapModel.getMapRawData(info.mapFileName) as Types.MapRawData,
+                mapRawData      : await WarMapModel.getRawData(info.mapFileName) as Types.MapRawData,
             });
         }
 

@@ -38,24 +38,10 @@ namespace TinyWars.Replay {
             const war           = this._getWar();
             war.getFogMap().resetMapFromPathsForPlayer(playerIndex);
 
-            this._resetFogForPlayerInTurn();
+            ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
         }
         protected _runPhaseResetVisionForNextPlayer(): void {
-            this._resetFogForPlayerInTurn();
-        }
-
-        private _resetFogForPlayerInTurn(): void {
-            const war           = this._getWar();
-            const visibleTiles  = VisibilityHelpers.getAllTilesVisibleToTeam(war, war.getPlayerInTurn().getTeamIndex());
-
-            war.getTileMap().forEachTile(tile => {
-                if (visibleTiles.has(tile)) {
-                    tile.setFogDisabled();
-                } else {
-                    tile.setFogEnabled();
-                }
-                tile.updateView();
-            });
+            ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(this._getWar());
         }
     }
 }

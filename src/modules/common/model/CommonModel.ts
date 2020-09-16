@@ -17,10 +17,6 @@ namespace TinyWars.Common.CommonModel {
 
     let _unitAndTileTextureVersion      = TextureVersion.V1;
     let _unitAndTileTexturePrefix       = `v01_`;
-    // const _tileBaseNormalImageSources   = new Map<number, string>();
-    // const _tileBaseFogImageSources      = new Map<number, string>();
-    // const _tileObjectNormalImageSources = new Map<number, string>();
-    // const _tileObjectFogImageSources    = new Map<number, string>();
     const _unitImageSourceDict          = new Map<TextureVersion, Map<boolean, Map<boolean, Map<number, Map<UnitType, FrameCfg>>>>>();
     const _tileBaseImageSourceDict      = new Map<TextureVersion, Map<number, Map<TileBaseType, Map<boolean, Map<number, Map<number, FrameCfg>>>>>>();
     const _tileObjectImageSourceDict    = new Map<TextureVersion, Map<number, Map<TileObjectType, Map<boolean, Map<number, Map<number, FrameCfg>>>>>>();
@@ -34,8 +30,8 @@ namespace TinyWars.Common.CommonModel {
         updateUnitAndTileTexturePrefix();
         LocalStorage.setUnitAndTileTextureVersion(version);
 
-        // tickTileImageSources(Time.TimeModel.getTileAnimationTickCount());
-        // tickUnitImageSources(Time.TimeModel.getUnitAnimationTickCount());
+        tickTileImageSources();
+        tickUnitImageSources();
         Notify.dispatch(Notify.Type.UnitAndTileTextureVersionChanged);
     }
     export function getUnitAndTileTextureVersion(): TextureVersion {
@@ -49,66 +45,14 @@ namespace TinyWars.Common.CommonModel {
         _unitAndTileTexturePrefix = `v${Helpers.getNumText(getUnitAndTileTextureVersion())}_`;
     }
 
-    // export function tickTileImageSources(tickCount: number): void {
-    //     const version = getUnitAndTileTextureVersion();
-    //     ConfigManager.forEachTileBaseType((tileBaseType, tileBaseViewId) => {
-    //         if (tileBaseType !== Types.TileBaseType.Empty) {
-    //             _tileBaseNormalImageSources.set(
-    //                 tileBaseViewId,
-    //                 ConfigManager.getTileBaseImageSource({ version, tileBaseViewId, tickCount, hasFog: false })
-    //             );
-    //             _tileBaseFogImageSources.set(
-    //                 tileBaseViewId,
-    //                 ConfigManager.getTileBaseImageSource({ version, tileBaseViewId, tickCount, hasFog: true }),
-    //             );
-    //         }
-    //     });
-    //     ConfigManager.forEachTileObjectTypeAndPlayerIndex((v, tileObjectViewId) => {
-    //         if (v.tileObjectType !== Types.TileObjectType.Empty) {
-    //             _tileObjectNormalImageSources.set(
-    //                 tileObjectViewId,
-    //                 ConfigManager.getTileObjectImageSource(version, tileObjectViewId, tickCount, false),
-    //             );
-    //             _tileObjectFogImageSources.set(
-    //                 tileObjectViewId,
-    //                 ConfigManager.getTileObjectImageSource(version, tileObjectViewId, tickCount, true),
-    //             );
-    //         }
-    //     });
-    // }
+    export function tickTileImageSources(): void {
+        _tileBaseImageSourceDict.clear();
+        _tileObjectImageSourceDict.clear();
+    }
 
-    // export function tickUnitImageSources(tickCount: number): void {
-    //     const version = getUnitAndTileTextureVersion();
-    //     ConfigManager.forEachUnitTypeAndPlayerIndex((v, unitViewId) => {
-    //         _unitIdleNormalImageSources.set(
-    //             unitViewId,
-    //             ConfigManager.getUnitIdleImageSource(version, unitViewId, tickCount, false)
-    //         );
-    //         _unitIdleDarkImageSources.set(
-    //             unitViewId,
-    //             ConfigManager.getUnitIdleImageSource(version, unitViewId, tickCount, true)
-    //         );
-    //         _unitMovingNormalImageSources.set(
-    //             unitViewId,
-    //             ConfigManager.getUnitMovingImageSource(version, unitViewId, tickCount, false)
-    //         );
-    //         _unitMovingDarkImageSources.set(
-    //             unitViewId,
-    //             ConfigManager.getUnitMovingImageSource(version, unitViewId, tickCount, true)
-    //         );
-    //     });
-    // }
-
-    // export function getTileBaseImageSource(tileBaseViewId: number, isDark: boolean): string {
-    //     return isDark
-    //         ? _tileBaseFogImageSources.get(tileBaseViewId)
-    //         : _tileBaseNormalImageSources.get(tileBaseViewId);
-    // }
-    // export function getTileObjectImageSource(tileObjectViewId: number, isDark: boolean): string {
-    //     return isDark
-    //         ? _tileObjectFogImageSources.get(tileObjectViewId)
-    //         : _tileObjectNormalImageSources.get(tileObjectViewId);
-    // }
+    export function tickUnitImageSources(): void {
+        _unitImageSourceDict.clear();
+    }
 
     export function getCachedUnitImageSource(
         params: {

@@ -11,6 +11,7 @@ namespace TinyWars.BaseWar {
         private _war            : BwWar;
 
         protected abstract _getPlayerClass(): new () => BwPlayer;
+        public abstract getWatcherTeamIndexesForSelf(): Set<number>;
 
         public init(data: ISerialPlayerManager): BwPlayerManager | undefined {
             const playersMap = this._getPlayersMap();
@@ -163,7 +164,7 @@ namespace TinyWars.BaseWar {
             const indexes = new Set<number>();
             this.forEachPlayer(false, player => {
                 if (player.getIsAlive()) {
-                    if ((player.getUserId() === watcherUserId) ||
+                    if ((player.getUserId() === watcherUserId)                  ||
                         (player.getWatchOngoingSrcUserIds().has(watcherUserId))
                     ) {
                         indexes.add(player.getTeamIndex());

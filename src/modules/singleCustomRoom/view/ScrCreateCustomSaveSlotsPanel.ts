@@ -4,8 +4,9 @@ namespace TinyWars.SingleCustomRoom {
     import Lang         = Utility.Lang;
     import ProtoTypes   = Utility.ProtoTypes;
     import Types        = Utility.Types;
+    import ISerialWar   = ProtoTypes.WarSerialization.ISerialWar;
 
-    export type OpenDataForScrCreateCustomSaveSlotsPanel = Types.SerializedWar;
+    export type OpenDataForScrCreateCustomSaveSlotsPanel = ISerialWar;
 
     export class ScrCreateCustomSaveSlotsPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
@@ -106,7 +107,7 @@ namespace TinyWars.SingleCustomRoom {
             for (let i = 0; i < Utility.ConfigManager.COMMON_CONSTANTS.ScwSaveSlotMaxCount; ++i) {
                 dataList.push({
                     slotIndex   : i,
-                    slotInfo    : slotList.find(v => v.slotIndex === i),
+                    slotInfo    : slotList.find(v => v.saveSlotIndex === i),
                     warData,
                 });
             }
@@ -117,8 +118,8 @@ namespace TinyWars.SingleCustomRoom {
 
     type DataForSlotRenderer = {
         slotIndex   : number;
-        slotInfo    : ProtoTypes.ISaveSlotInfo | null;
-        warData     : Types.SerializedWar;
+        slotInfo    : ProtoTypes.SingleCustomRoom.IScrSaveSlotInfo | null;
+        warData     : ISerialWar;
     }
 
     class SlotRenderer extends eui.ItemRenderer {
@@ -143,9 +144,9 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _onTouchedImgBg(e: egret.TouchEvent): void {
-            const data              = this.data as DataForSlotRenderer;
-            const warData           = data.warData;
-            warData.saveSlotIndex   = data.slotIndex;
+            const data                                      = this.data as DataForSlotRenderer;
+            const warData                                   = data.warData;
+            warData.settingsForSinglePlayer.saveSlotIndex   = data.slotIndex;
             if (!data.slotInfo) {
                 ScrProxy.reqScrCreateCustomWar(warData);
                 ScrCreateCustomSaveSlotsPanel.hide();
@@ -173,11 +174,11 @@ namespace TinyWars.SingleCustomRoom {
             if (!slotInfo) {
                 this._labelMapName.text = "----";
             } else {
-                const mapFileName = slotInfo.mapFileName;
-                if (!mapFileName) {
+                const mapId = slotInfo.mapId;
+                if (mapId == null) {
                     this._labelMapName.text = `(${Lang.getText(Lang.Type.B0321)})`;
                 } else {
-                    WarMap.WarMapModel.getMapNameInCurrentLanguage(mapFileName).then(value => this._labelMapName.text = value);
+                    WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId).then(value => this._labelMapName.text = value);
                 }
             }
         }

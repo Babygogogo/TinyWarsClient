@@ -6,8 +6,8 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
     import DamageCalculator = Utility.DamageCalculator;
     import ConfigManager    = Utility.ConfigManager;
     import BwHelpers        = BaseWar.BwHelpers;
-    import BwUnit           = BaseWar.BwUnit;
     import WarAction        = Types.RawWarActionContainer;
+    import WeaponType       = Types.WeaponType;
     import GridIndex        = Types.GridIndex;
     import MovableArea      = Types.MovableArea;
     import MovePathNode     = Types.MovePathNode;
@@ -20,6 +20,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         baseDamage      : number;
         normalizedHp    : number;
         fuel            : number;
+        luckValue       : number;
     }
     type ScoreAndAction = {
         score   : number;
@@ -394,10 +395,6 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         }
     }
 
-    function _checkIsCoUnit(unit: BwUnit): boolean {    // DONE
-        return _playerManager.getPlayer(unit.getPlayerIndex()).getCoUnitId() === unit.getUnitId();
-    }
-
     function _getBetterScoreAndAction(data1: ScoreAndAction | null, data2: ScoreAndAction | null): ScoreAndAction | null {  // DONE
         if (!data1) {
             return data2;
@@ -485,7 +482,8 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
     function _getAttackBonusForAllPlayers(): Map<number, number> {  // DONE
         const bonuses = new Map<number, number>();
         _playerManager.forEachPlayer(false, player => {
-            bonuses.set(player.getPlayerIndex(), _war.getSettingsAttackPowerModifier());
+            const playerIndex = player.getPlayerIndex();
+            bonuses.set(playerIndex, _war.getSettingsAttackPowerModifier(playerIndex));
         });
 
         _tileMap.forEachTile(tile => {
@@ -512,15 +510,21 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
     }
 
     function _getAttackInfo(attacker: ScwUnit, target: ScwUnit): AttackInfo {   // DONE
-        const gridIndex = attacker.getGridIndex();
+        const gridIndex             = attacker.getGridIndex();
+        const attackerPlayerIndex   = attacker.getPlayerIndex();
+        const luckValue             = (_war.getSettingsLuckLowerLimit(attackerPlayerIndex) + _war.getSettingsLuckUpperLimit(attackerPlayerIndex)) / 2;
+        const targetArmorType       = target.getArmorType();
+        const baseDamageWithAmmo    =  attacker.getCfgBaseDamage(targetArmorType, attacker.checkHasPrimaryWeapon() ? WeaponType.Primary : WeaponType.Secondary);
+
         if (attacker.getLoaderUnitId() == null) {
             const tile          = _tileMap.getTile(gridIndex);
             const repairInfo    = tile.getRepairHpAndCostForUnit(attacker);
             if (repairInfo) {
                 return {
-                    baseDamage  : attacker.getCfgBaseDamage(target.getArmorType()),
+                    baseDamage  : baseDamageWithAmmo,
                     normalizedHp: Math.floor((attacker.getCurrentHp() + repairInfo.hp) / CommonConstants.UnitHpNormalizer),
                     fuel        : attacker.getMaxFuel(),
+                    luckValue,
                 };
             } else {
                 if ((tile.checkCanSupplyUnit(attacker))                                     ||
@@ -530,15 +534,17 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
                     }))
                 ) {
                     return {
-                        baseDamage  : attacker.getCfgBaseDamage(target.getArmorType()),
+                        baseDamage  : baseDamageWithAmmo,
                         normalizedHp: attacker.getNormalizedCurrentHp(),
                         fuel        : attacker.getMaxFuel(),
+                        luckValue,
                     };
                 } else {
                     return {
-                        baseDamage  : attacker.getBaseDamage(target.getArmorType()),
+                        baseDamage  : attacker.getBaseDamage(targetArmorType),
                         normalizedHp: attacker.getNormalizedCurrentHp(),
                         fuel        : attacker.getCurrentFuel(),
+                        luckValue,
                     };
                 }
             }
@@ -553,27 +559,31 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
                     baseDamage  : null,
                     normalizedHp: attacker.getNormalizedCurrentHp(),
                     fuel        : attacker.getCurrentFuel(),
+                    luckValue,
                 };
             } else {
                 const repairInfo = loader.getRepairHpAndCostForLoadedUnit(attacker);
                 if (repairInfo) {
                     return {
-                        baseDamage  : attacker.getCfgBaseDamage(target.getArmorType()),
+                        baseDamage  : baseDamageWithAmmo,
                         normalizedHp: Math.floor((attacker.getCurrentHp() + repairInfo.hp) / CommonConstants.UnitHpNormalizer),
                         fuel        : attacker.getMaxFuel(),
+                        luckValue,
                     };
                 } else {
                     if (loader.checkCanSupplyLoadedUnit()) {
                         return {
-                            baseDamage  : attacker.getCfgBaseDamage(target.getArmorType()),
+                            baseDamage  : baseDamageWithAmmo,
                             normalizedHp: attacker.getNormalizedCurrentHp(),
                             fuel        : attacker.getMaxFuel(),
+                            luckValue,
                         };
                     } else {
                         return {
-                            baseDamage  : attacker.getBaseDamage(target.getArmorType()),
+                            baseDamage  : attacker.getBaseDamage(targetArmorType),
                             normalizedHp: attacker.getNormalizedCurrentHp(),
                             fuel        : attacker.getCurrentFuel(),
+                            luckValue,
                         }
                     }
                 }
@@ -594,7 +604,6 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         const attackBonuses     = _getAttackBonusForAllPlayers();
         const defenseBonus      = _getDefenseBonusForTargetUnit(targetUnit);
         const targetTeamIndex   = targetUnit.getTeamIndex();
-        const luckValue         = (_war.getSettingsLuckLowerLimit() + _war.getSettingsLuckUpperLimit()) / 2;
         _unitMap.forEachUnit(async (attacker: ScwUnit) => {
             await _checkAndCallLater();
 
@@ -608,7 +617,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
                 return;
             }
 
-            const { baseDamage, normalizedHp, fuel } = _getAttackInfo(attacker, targetUnit);
+            const { baseDamage, normalizedHp, fuel, luckValue } = _getAttackInfo(attacker, targetUnit);
             if (baseDamage == null) {
                 return;
             }
@@ -812,7 +821,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         const maxDamage     = Math.min(data ? data.max : 0, hp);
         const totalDamage   = Math.min(data ? data.total : 0, hp);
         return - ((maxDamage + (maxDamage >= hp ? 30 : 0)) )
-            * unit.getProductionFinalCost() / 3000 / Math.max(1, _unitValueRatio) * (_checkIsCoUnit(unit) ? 2 : 1); // ADJUSTABLE
+            * unit.getProductionFinalCost() / 3000 / Math.max(1, _unitValueRatio) * (unit.getHasLoadedCo() ? 2 : 1); // ADJUSTABLE
     }
 
     async function _getScoreForPosition(unit: ScwUnit, gridIndex: GridIndex, damageMap: DamageMapData[][], scoreMapForDistance: number[][] | null): Promise<number> {  // DONE
@@ -937,7 +946,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         attackDamage        = Math.min(attackDamage, targetHp);
         let score           = (attackDamage + (attackDamage >= targetHp ? 20 : 0))
             * targetUnit.getProductionFinalCost() / 3000 * Math.max(1, _unitValueRatio)
-            * (_checkIsCoUnit(targetUnit) ? 2 : 1)
+            * (targetUnit.getHasLoadedCo() ? 2 : 1)
             * (_DAMAGE_SCORE_SCALERS[attackerType][targetType] || 1);                                   // ADJUSTABLE
 
         if (targetUnit.getIsCapturingTile()) {
@@ -956,7 +965,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
             counterDamage       = Math.min(counterDamage, attackerHp);
             score               += - (counterDamage + (counterDamage >= attackerHp ? 20 : 0))
                 * unit.getProductionFinalCost() / 3000 / Math.max(1, _unitValueRatio)
-                * (_checkIsCoUnit(unit) ? 2 : 1)
+                * (unit.getHasLoadedCo() ? 2 : 1)
                 * (_DAMAGE_SCORE_SCALERS[targetType][attackerType] || 1);                               // ADJUSTABLE
         }
 

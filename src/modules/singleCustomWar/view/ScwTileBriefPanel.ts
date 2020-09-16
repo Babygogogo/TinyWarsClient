@@ -131,7 +131,7 @@ namespace TinyWars.SingleCustomWar {
             this._updateView();
         }
         private _onNotifyTileAnimationTick(e: egret.Event): void {
-            this._tileView.updateOnAnimationTick();
+            this._tileView.updateView();
         }
 
         private _onTouchedThis(e: egret.TouchEvent): void {
@@ -148,13 +148,18 @@ namespace TinyWars.SingleCustomWar {
             } else {
                 this.visible = true;
 
-                const gridIndex = this._cursor.getGridIndex();
-                // const tile      = this._getScwTileForShow(gridIndex);
-                const tile      = this._war.getTileMap().getTile(gridIndex);
-                this._tileView.init(tile).startRunningView();
+                const gridIndex             = this._cursor.getGridIndex();
+                const tileView              = this._tileView;
+                const tile                  = this._war.getTileMap().getTile(gridIndex);
                 this._labelDefense.text     = `${Math.floor(tile.getDefenseAmount() / 10)}`;
                 this._labelName.text        = Lang.getTileName(tile.getType());
                 this._labelGridIndex.text   = `x${gridIndex.x} y${gridIndex.y}`;
+                tileView.setData({
+                    tileData    : tile.serialize(),
+                    hasFog      : tile.getHasFog(),
+                    skinId      : tile.getSkinId(),
+                });
+                tileView.updateView();
 
                 if (tile.getCurrentHp() != null) {
                     this._imgState.visible      = true;

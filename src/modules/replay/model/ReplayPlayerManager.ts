@@ -21,5 +21,9 @@ namespace TinyWars.Replay {
             });
             return data;
         }
+
+        public getWatcherTeamIndexesForSelf(): Set<number> {
+            return this.getAliveTeamIndexes(false);
+        }
     }
 }

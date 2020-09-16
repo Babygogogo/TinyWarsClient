@@ -35,7 +35,7 @@ namespace TinyWars.SingleCustomRoom {
 
         private _mapFilters         : FiltersForMapList = {};
         private _dataForList        : DataForMapNameRenderer[] = [];
-        private _selectedMapFileName: string;
+        private _selectedMapId      : number;
 
         public static show(mapFilters?: FiltersForMapList): void {
             if (!ScrCreateMapListPanel._instance) {
@@ -87,37 +87,37 @@ namespace TinyWars.SingleCustomRoom {
             egret.Tween.removeTweens(this._groupInfo);
         }
 
-        public async setSelectedMapFileName(newMapFileName: string): Promise<void> {
+        public async setSelectedMapId(newMapId: number): Promise<void> {
             const dataList = this._dataForList;
             if (dataList.length <= 0) {
-                this._selectedMapFileName = null;
+                this._selectedMapId = null;
             } else {
-                const index                 = dataList.findIndex(data => data.mapFileName === newMapFileName);
-                const newIndex              = index >= 0 ? index : Math.floor(Math.random() * dataList.length);
-                const oldIndex              = dataList.findIndex(data => data.mapFileName === this._selectedMapFileName);
-                this._selectedMapFileName   = dataList[newIndex].mapFileName;
+                const index         = dataList.findIndex(data => data.mapId === newMapId);
+                const newIndex      = index >= 0 ? index : Math.floor(Math.random() * dataList.length);
+                const oldIndex      = dataList.findIndex(data => data.mapId === this._selectedMapId);
+                this._selectedMapId = dataList[newIndex].mapId;
                 (dataList[oldIndex])    && (this._listMap.updateSingleData(oldIndex, dataList[oldIndex]));
                 (oldIndex !== newIndex) && (this._listMap.updateSingleData(newIndex, dataList[newIndex]));
 
-                await this._showMap(dataList[newIndex].mapFileName);
+                await this._showMap(dataList[newIndex].mapId);
             }
         }
-        public getSelectedMapFileName(): string {
-            return this._selectedMapFileName;
+        public getSelectedMapId(): number {
+            return this._selectedMapId;
         }
 
-        public setMapFilters(mapFilters: FiltersForMapList): void {
+        public async setMapFilters(mapFilters: FiltersForMapList): Promise<void> {
             this._mapFilters            = mapFilters;
-            this._dataForList           = this._createDataForListMap();
+            this._dataForList           = await this._createDataForListMap();
 
             const length                = this._dataForList.length;
             this._labelNoMap.visible    = length <= 0;
             this._listMap.bindData(this._dataForList);
-            this.setSelectedMapFileName(this._selectedMapFileName);
+            this.setSelectedMapId(this._selectedMapId);
 
             if (length) {
                 for (let index = 0; index < length; ++index) {
-                    if (this._dataForList[index].mapFileName === this._selectedMapFileName) {
+                    if (this._dataForList[index].mapId === this._selectedMapId) {
                         this._listMap.scrollVerticalTo((index + 1) / length * 100);
                         break;
                     }
@@ -150,27 +150,28 @@ namespace TinyWars.SingleCustomRoom {
             this._btnSearch.label       = Lang.getText(Lang.Type.B0228);
         }
 
-        private _createDataForListMap(): DataForMapNameRenderer[] {
+        private async _createDataForListMap(): Promise<DataForMapNameRenderer[]> {
             const data: DataForMapNameRenderer[] = [];
             let { mapName, mapDesigner, playersCount, playedTimes, minRating } = this._mapFilters;
             (mapName)       && (mapName     = mapName.toLowerCase());
             (mapDesigner)   && (mapDesigner = mapDesigner.toLowerCase());
 
-            for (const [mapFileName, extraData] of WarMapModel.getExtraDataDict()) {
-                const name = Lang.getLanguageType() === Types.LanguageType.Chinese ? extraData.mapName : extraData.mapNameEnglish;
-                if ((extraData.isDeleted)                                                               ||
-                    (!extraData.canScw)                                                                 ||
-                    ((mapName) && (name.toLowerCase().indexOf(mapName) < 0))                            ||
-                    ((mapDesigner) && (extraData.mapDesigner.toLowerCase().indexOf(mapDesigner) < 0))   ||
-                    ((playersCount) && (extraData.playersCount !== playersCount))                       ||
-                    ((playedTimes != null) && (extraData.mcwPlayedTimes < playedTimes))                 ||
-                    ((minRating != null) && (extraData.rating < minRating))
+            for (const [mapId, extraData] of WarMapModel.getExtraDataDict()) {
+                const rawData       = await WarMapModel.getRawData(mapId);
+                const mapNameList   = rawData.mapNameList;
+                const mapName       = mapNameList[Lang.getLanguageType() === Types.LanguageType.Chinese ? 0 : 1] || mapNameList[0];
+                if ((!extraData.mapComplexInfo.availability.canScw)                                                     ||
+                    ((mapName) && (mapName.toLowerCase().indexOf(mapName) < 0))                                         ||
+                    ((mapDesigner) && (rawData.designerName.toLowerCase().indexOf(mapDesigner) < 0))                    ||
+                    ((playersCount) && (rawData.playersCount !== playersCount))                                         ||
+                    ((playedTimes != null) && (await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId) < playedTimes))  ||
+                    ((minRating != null) && (!(await WarMapModel.getAverageRating(mapId) >= minRating)))
                 ) {
                     continue;
                 } else {
                     data.push({
-                        mapFileName,
-                        mapName : name,
+                        mapId: mapId,
+                        mapName : mapName,
                         panel   : this,
                     });
                 }
@@ -180,14 +181,15 @@ namespace TinyWars.SingleCustomRoom {
             return data;
         }
 
-        private async _showMap(mapFileName: string): Promise<void> {
-            const mapRawData                = await WarMapModel.getMapRawData(mapFileName);
-            const mapExtraData              = await WarMapModel.getExtraData(mapFileName);
-            this._labelMapName.text         = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapFileName));
-            this._labelDesigner.text        = Lang.getFormattedText(Lang.Type.F0001, mapRawData.mapDesigner);
+        private async _showMap(mapId: number): Promise<void> {
+            const mapRawData                = await WarMapModel.getRawData(mapId);
+            const mapExtraData              = await WarMapModel.getExtraData(mapId);
+            const averageRating             = await WarMapModel.getAverageRating(mapId);
+            this._labelMapName.text         = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
+            this._labelDesigner.text        = Lang.getFormattedText(Lang.Type.F0001, mapRawData.designerName);
             this._labelPlayersCount.text    = Lang.getFormattedText(Lang.Type.F0002, mapRawData.playersCount);
-            this._labelRating.text          = Lang.getFormattedText(Lang.Type.F0003, mapExtraData.rating != null ? mapExtraData.rating.toFixed(2) : Lang.getText(Lang.Type.B0001));
-            this._labelPlayedTimes.text     = Lang.getFormattedText(Lang.Type.F0004, mapExtraData.mcwPlayedTimes + mapExtraData.rankPlayedTimes);
+            this._labelRating.text          = Lang.getFormattedText(Lang.Type.F0003, averageRating != null ? averageRating.toFixed(2) : Lang.getText(Lang.Type.B0001));
+            this._labelPlayedTimes.text     = Lang.getFormattedText(Lang.Type.F0004, await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId));
             this._groupInfo.visible         = true;
             this._groupInfo.alpha           = 1;
             egret.Tween.removeTweens(this._groupInfo);
@@ -195,8 +197,7 @@ namespace TinyWars.SingleCustomRoom {
 
             const tileMapView = new WarMap.WarMapTileMapView();
             tileMapView.init(mapRawData.mapWidth, mapRawData.mapHeight);
-            tileMapView.updateWithTileDataList(mapRawData.tileBases);
-            tileMapView.updateWithObjectViewIdArray(mapRawData.tileObjects);
+            tileMapView.updateWithTileDataList(mapRawData.tileDataList);
 
             const unitMapView = new WarMap.WarMapUnitMapView();
             unitMapView.initWithMapRawData(mapRawData);
@@ -212,7 +213,7 @@ namespace TinyWars.SingleCustomRoom {
     }
 
     type DataForMapNameRenderer = {
-        mapFileName : string;
+        mapId       : number;
         mapName     : string;
         panel       : ScrCreateMapListPanel;
     }
@@ -233,19 +234,19 @@ namespace TinyWars.SingleCustomRoom {
             super.dataChanged();
 
             const data          = this.data as DataForMapNameRenderer;
-            this.currentState   = data.mapFileName === data.panel.getSelectedMapFileName() ? Types.UiState.Down : Types.UiState.Up;
-            WarMapModel.getMapNameInCurrentLanguage(data.mapFileName).then(v => this._labelName.text = v);
+            this.currentState   = data.mapId === data.panel.getSelectedMapId() ? Types.UiState.Down : Types.UiState.Up;
+            WarMapModel.getMapNameInCurrentLanguage(data.mapId).then(v => this._labelName.text = v);
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
             const data = this.data as DataForMapNameRenderer;
-            data.panel.setSelectedMapFileName(data.mapFileName);
+            data.panel.setSelectedMapId(data.mapId);
         }
 
         private async _onTouchTapBtnNext(e: egret.TouchEvent): Promise<void> {
             ScrCreateMapListPanel.hide();
 
-            await ScrModel.resetCreateWarData((this.data as DataForMapNameRenderer).mapFileName);
+            await ScrModel.resetCreateWarData((this.data as DataForMapNameRenderer).mapId);
             ScrCreateSettingsPanel.show();
         }
     }

@@ -98,7 +98,7 @@ namespace TinyWars.WarMap {
         }
 
         export async function getMapNameInCurrentLanguage(mapId: number): Promise<string | null> {
-            const rawData = await getMapRawData(mapId);
+            const rawData = await getRawData(mapId);
             if (!rawData) {
                 return null;
             } else {
@@ -113,11 +113,11 @@ namespace TinyWars.WarMap {
             }
         }
         export async function getDesignerName(mapId: number): Promise<string | null> {
-            const rawData = await getMapRawData(mapId);
+            const rawData = await getRawData(mapId);
             return rawData ? rawData.designerName : null;
         }
         export async function getPlayerRule(mapId: number, warRuleId: number, playerIndex: number): Promise<ProtoTypes.WarRule.IDataForPlayerRule | undefined> {
-            const mapRawData = await getMapRawData(mapId);
+            const mapRawData = await getRawData(mapId);
             if (mapRawData == null) {
                 return undefined;
             }
@@ -134,8 +134,36 @@ namespace TinyWars.WarMap {
 
             return (ruleForPlayers.playerRuleDataList || []).find(v => v.playerIndex === playerIndex);
         }
+        export async function getMultiPlayerTotalPlayedTimes(mapId: number): Promise<number> {
+            const mapExtraData = await getExtraData(mapId);
+            if (!mapExtraData) {
+                return undefined;
+            }
 
-        export function getMapRawData(mapId: number): Promise<IMapRawData | undefined> {
+            const complexInfo   = mapExtraData.mapComplexInfo;
+            let totalTimes      = 0;
+            if (complexInfo) {
+                const mcwInfo   = complexInfo.mcwStatistics;
+                totalTimes      += mcwInfo ? mcwInfo.totalPlayedTimes : 0;
+
+                const mcwFogInfo    = complexInfo.mcwFogStatistics;
+                totalTimes          += mcwFogInfo ? mcwFogInfo.totalPlayedTimes : 0;
+
+                const rankInfo  = complexInfo.rankStatistics;
+                totalTimes      += rankInfo ? rankInfo.totalPlayedTimes : 0;
+
+                const rankFogInfo   = complexInfo.rankFogStatistics;
+                totalTimes          += rankFogInfo ? rankFogInfo.totalPlayedTimes : 0;
+            }
+            return totalTimes;
+        }
+        export async function getAverageRating(mapId: number): Promise<number> {
+            const mapExtraData  = await getExtraData(mapId);
+            const totalRaters   = mapExtraData ? mapExtraData.totalRaters : null;
+            return totalRaters ? mapExtraData.totalRating / totalRaters : undefined;
+        }
+
+        export function getRawData(mapId: number): Promise<IMapRawData | undefined> {
             if (mapId == null) {
                 return new Promise<IMapRawData>((resolve, reject) => resolve(undefined));
             }
@@ -191,7 +219,7 @@ namespace TinyWars.WarMap {
                 _rawDataRequests.set(mapId, [info => resolve(info.mapRawData)]);
             });
         }
-        export function setMapRawData(mapId: number, mapRawData: IMapRawData): void {
+        export function setRawData(mapId: number, mapRawData: IMapRawData): void {
             // LocalStorage的地图版本可能比服务器上的旧，因此暂时禁用
             // LocalStorage.setMapRawData(mapId, mapRawData);
 

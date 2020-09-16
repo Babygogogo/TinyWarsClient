@@ -203,7 +203,7 @@ namespace TinyWars.MultiCustomRoom {
                 this._zoomMap.visible = true;
 
                 const mapFileName   = data.info.mapFileName;
-                const mapRawData    = await WarMapModel.getMapRawData(mapFileName);
+                const mapRawData    = await WarMapModel.getRawData(mapFileName);
                 const tileMapView   = new WarMap.WarMapTileMapView();
                 tileMapView.init(mapRawData.mapWidth, mapRawData.mapHeight);
                 tileMapView.updateWithTileDataList(mapRawData.tileBases);

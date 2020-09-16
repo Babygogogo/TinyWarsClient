@@ -68,18 +68,7 @@ namespace TinyWars.Replay.ReplayModel {
     let _war: ReplayWar;
 
     export function init(): void {
-        // Notify.addEventListeners([
-        //     { type: Notify.Type.SMmMergeMap, callback: _onNotifySMmMergeMap, thisObject: ReplayModel },
-        // ]);
     }
-
-    // function _onNotifySMmMergeMap(e: egret.Event): void {
-    //     const data  = e.data as ProtoTypes.IS_MmMergeMap;
-    //     const war   = getWar();
-    //     if ((war) && (war.getMapId() === data.srcMapFileName)) {
-    //         war.setMapId(data.dstMapFileName);
-    //     }
-    // }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for managing war.
@@ -350,7 +339,7 @@ namespace TinyWars.Replay.ReplayModel {
                 const configVersion         = war.getConfigVersion();
                 const attackerPlayer        = war.getPlayer(attacker.getPlayerIndex())!;
                 const targetLostHp          = Helpers.getNormalizedHp(targetOldHp) - Helpers.getNormalizedHp(targetNewHp);
-                const attackerCoGridIndex   = attackerPlayer.getCoGridIndexOnMap();
+                const attackerCoGridIndex   = attackerPlayer.getCoGridIndexListOnMap();
                 const isAttackerInCoZone    = (attacker.getUnitId() === attackerPlayer.getCoUnitId()) || (attackerPlayer.checkIsInCoZone(destination, attackerCoGridIndex));
                 if ((targetLostHp > 0)                              &&
                     (attackerPlayer.getCoId() != null)              &&
@@ -382,7 +371,7 @@ namespace TinyWars.Replay.ReplayModel {
                 }
 
                 const targetPlayer      = war.getPlayer(targetUnit.getPlayerIndex())!;
-                const targetCoGridIndex = targetPlayer.getCoGridIndexOnMap();
+                const targetCoGridIndex = targetPlayer.getCoGridIndexListOnMap();
                 const attackerLostHp    = Helpers.getNormalizedHp(attackerOldHp) - Helpers.getNormalizedHp(attackerNewHp);
                 if ((attackerLostHp > 0)                                        &&
                     (targetPlayer.getCoId() != null)                            &&
@@ -430,7 +419,7 @@ namespace TinyWars.Replay.ReplayModel {
                     }
 
                     if (targetNewHp > 0) {
-                        attackTarget.updateView();
+                        attackTarget.flushDataToView();
                         gridVisionEffect.showEffectDamage(targetGridIndex);
                     } else {
                         if (targetUnit) {
@@ -440,12 +429,12 @@ namespace TinyWars.Replay.ReplayModel {
                                 for (const gridIndex of getAdjacentPlasmas(tileMap, targetGridIndex)) {
                                     const plasma = tileMap.getTile(gridIndex);
                                     plasma.destroyTileObject();
-                                    plasma.updateView();
+                                    plasma.flushDataToView();
                                     gridVisionEffect.showEffectExplosion(gridIndex);
                                 }
                             }
                             (attackTarget as ReplayTile).destroyTileObject();
-                            attackTarget.updateView();
+                            attackTarget.flushDataToView();
                             gridVisionEffect.showEffectExplosion(targetGridIndex);
                         }
                     }
@@ -580,7 +569,7 @@ namespace TinyWars.Replay.ReplayModel {
                 return new Promise<void>(resolve => {
                     focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false, () => {
                         focusUnit.updateView();
-                        tile.updateView();
+                        tile.flushDataToView();
                         ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                         actionPlanner.setStateIdle();
@@ -591,7 +580,7 @@ namespace TinyWars.Replay.ReplayModel {
                 return new Promise<void>(resolve => {
                     focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false, () => {
                         focusUnit.updateView();
-                        tile.updateView();
+                        tile.flushDataToView();
                         FloatText.show(Lang.getFormattedText(Lang.Type.F0016, war.getPlayerManager().getPlayer(lostPlayerIndex).getNickname()));
                         DestructionHelpers.destroyPlayerForce(war, lostPlayerIndex, true);
                         ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
@@ -868,7 +857,7 @@ namespace TinyWars.Replay.ReplayModel {
                     }
 
                     focusUnit.updateView();
-                    tile.updateView();
+                    tile.flushDataToView();
                     ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                     actionPlanner.setStateIdle();
@@ -1273,7 +1262,7 @@ namespace TinyWars.Replay.ReplayModel {
                 const configVersion         = war.getConfigVersion();
                 const attackerPlayer        = war.getPlayer(attacker.getPlayerIndex())!;
                 const targetLostHp          = Helpers.getNormalizedHp(targetOldHp) - Helpers.getNormalizedHp(targetNewHp);
-                const attackerCoGridIndex   = attackerPlayer.getCoGridIndexOnMap();
+                const attackerCoGridIndex   = attackerPlayer.getCoGridIndexListOnMap();
                 const isAttackerInCoZone    = (attacker.getUnitId() === attackerPlayer.getCoUnitId()) || (attackerPlayer.checkIsInCoZone(destination, attackerCoGridIndex));
                 if ((targetLostHp > 0)                              &&
                     (attackerPlayer.getCoId() != null)              &&
@@ -1305,7 +1294,7 @@ namespace TinyWars.Replay.ReplayModel {
                 }
 
                 const targetPlayer      = war.getPlayer(targetUnit.getPlayerIndex())!;
-                const targetCoGridIndex = targetPlayer.getCoGridIndexOnMap();
+                const targetCoGridIndex = targetPlayer.getCoGridIndexListOnMap();
                 const attackerLostHp    = Helpers.getNormalizedHp(attackerOldHp) - Helpers.getNormalizedHp(attackerNewHp);
                 if ((attackerLostHp > 0)                                        &&
                     (targetPlayer.getCoId() != null)                            &&

@@ -46,22 +46,10 @@ namespace TinyWars.SingleCustomWar {
             const playerInTurn  = war.getPlayerInTurn();
             war.getFogMap().resetMapFromPathsForPlayer(playerInTurn.getPlayerIndex());
 
-            // if (war.getWatcherTeamIndexes(User.UserModel.getSelfUserId()).has(playerInTurn.getTeamIndex())) {
-                this._resetFogForWatcher();
-            // }
+            ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(this._getWar());
         }
         protected _runPhaseResetVisionForNextPlayer(): void {
-            const war = this._getWar();
-            // if (war.getWatcherTeamIndexes(User.UserModel.getSelfUserId()).has(war.getPlayerInTurn().getTeamIndex())) {
-                this._resetFogForWatcher();
-            // }
-        }
-
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        // The other functions.
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _resetFogForWatcher(): void {
-            ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(this._getWar() as ScwWar);
+            ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(this._getWar());
         }
     }
 }

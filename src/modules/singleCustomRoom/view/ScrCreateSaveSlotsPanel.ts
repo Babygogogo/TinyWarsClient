@@ -89,7 +89,7 @@ namespace TinyWars.SingleCustomRoom {
             for (let i = 0; i < Utility.ConfigManager.COMMON_CONSTANTS.ScwSaveSlotMaxCount; ++i) {
                 dataList.push({
                     slotIndex   : i,
-                    slotInfo    : slotList.find(v => v.slotIndex === i),
+                    slotInfo    : slotList.find(v => v.saveSlotIndex === i),
                 })
             }
 
@@ -99,7 +99,7 @@ namespace TinyWars.SingleCustomRoom {
 
     type DataForSlotRenderer = {
         slotIndex   : number;
-        slotInfo    : ProtoTypes.ISaveSlotInfo | null;
+        slotInfo    : ProtoTypes.SingleCustomRoom.IScrSaveSlotInfo | null;
     }
 
     class SlotRenderer extends eui.ItemRenderer {
@@ -140,11 +140,11 @@ namespace TinyWars.SingleCustomRoom {
             if (!slotInfo) {
                 this._labelMapName.text = "----";
             } else {
-                const mapFileName = slotInfo.mapFileName;
-                if (!mapFileName) {
+                const mapId = slotInfo.mapId;
+                if (mapId == null) {
                     this._labelMapName.text = `(${Lang.getText(Lang.Type.B0321)})`;
                 } else {
-                    WarMap.WarMapModel.getMapNameInCurrentLanguage(mapFileName).then(value => this._labelMapName.text = value);
+                    WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId).then(value => this._labelMapName.text = value);
                 }
             }
         }

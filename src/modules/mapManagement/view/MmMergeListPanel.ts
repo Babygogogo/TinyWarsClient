@@ -147,7 +147,7 @@ namespace TinyWars.MapManagement {
             const dict = new Map<string, DataForMapNameRenderer[]>();
             for (const [mapFileName, extraData] of WarMapModel.getExtraDataDict()) {
                 if (!extraData.isDeleted) {
-                    const signature = getSignatureForMap((await WarMapModel.getMapRawData(mapFileName)) as Types.MapRawData);
+                    const signature = getSignatureForMap((await WarMapModel.getRawData(mapFileName)) as Types.MapRawData);
                     const data      : DataForMapNameRenderer = {
                         mapFileName,
                         signature,
@@ -171,7 +171,7 @@ namespace TinyWars.MapManagement {
         }
 
         private async _showMap(mapFileName: string): Promise<void> {
-            const mapRawData                = await WarMapModel.getMapRawData(mapFileName);
+            const mapRawData                = await WarMapModel.getRawData(mapFileName);
             const mapExtraData              = await WarMapModel.getExtraData(mapFileName);
             const modifiedTime              = mapRawData.modifiedTime;
             this._labelMapName.text         = Lang.getFormattedText(Lang.Type.F0000, mapExtraData.mapName);

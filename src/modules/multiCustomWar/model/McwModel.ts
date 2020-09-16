@@ -1,25 +1,24 @@
 
 namespace TinyWars.MultiCustomWar.McwModel {
-    import Types                = Utility.Types;
-    import Logger               = Utility.Logger;
-    import ProtoTypes           = Utility.ProtoTypes;
-    import Helpers              = Utility.Helpers;
-    import DestructionHelpers   = Utility.DestructionHelpers;
-    import GridIndexHelpers     = Utility.GridIndexHelpers;
-    import VisibilityHelpers    = Utility.VisibilityHelpers;
-    import Lang                 = Utility.Lang;
-    import FloatText            = Utility.FloatText;
-    import WarActionCodes       = Utility.WarActionCodes;
-    import Notify               = Utility.Notify;
-    import WarActionContainer   = ProtoTypes.IWarActionContainer;
-    import BwHelpers            = BaseWar.BwHelpers;
-    import CommonAlertPanel     = Common.CommonAlertPanel;
-    import GridIndex            = Types.GridIndex;
-    import SerializedMcwTile    = Types.SerializedTile;
-    import SerializedMcwUnit    = Types.SerializedUnit;
-    import UnitState            = Types.UnitActionState;
-    import MovePath             = Types.MovePath;
-    import TileType             = Types.TileType;
+    import Types                    = Utility.Types;
+    import Logger                   = Utility.Logger;
+    import ProtoTypes               = Utility.ProtoTypes;
+    import Helpers                  = Utility.Helpers;
+    import DestructionHelpers       = Utility.DestructionHelpers;
+    import GridIndexHelpers         = Utility.GridIndexHelpers;
+    import VisibilityHelpers        = Utility.VisibilityHelpers;
+    import Lang                     = Utility.Lang;
+    import FloatText                = Utility.FloatText;
+    import WarActionCodes           = Utility.WarActionCodes;
+    import WarActionContainer       = ProtoTypes.IWarActionContainer;
+    import BwHelpers                = BaseWar.BwHelpers;
+    import CommonAlertPanel         = Common.CommonAlertPanel;
+    import GridIndex                = Types.GridIndex;
+    import SerializedMcwTile        = Types.SerializedTile;
+    import SerializedMcwUnit        = Types.SerializedUnit;
+    import UnitState                = Types.UnitActionState;
+    import MovePath                 = Types.MovePath;
+    import TileType                 = Types.TileType;
 
     const _EXECUTORS = new Map<WarActionCodes, (war: McwWar, data: WarActionContainer) => Promise<void>>([
         [WarActionCodes.WarActionPlayerBeginTurn,       _executeMcwPlayerBeginTurn],
@@ -49,18 +48,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
     let _cachedActions  = new Array<WarActionContainer>();
 
     export function init(): void {
-        // Notify.addEventListeners([
-        //     { type: Notify.Type.SMmMergeMap, callback: _onNotifySMmMergeMap, thisObject: McwModel },
-        // ]);
     }
-
-    // function _onNotifySMmMergeMap(e: egret.Event): void {
-    //     const data  = e.data as ProtoTypes.IS_MmMergeMap;
-    //     const war   = getWar();
-    //     if ((war) && (war.getMapId() === data.srcMapFileName)) {
-    //         war.setMapId(data.dstMapFileName);
-    //     }
-    // }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for managing war.
@@ -354,7 +342,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         actionPlanner.setStateExecutingAction();
 
         const action = data.WarActionPlayerProduceUnit;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
+        BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const gridIndex     = action.gridIndex as GridIndex;
         const unitMap       = war.getUnitMap();
@@ -432,7 +420,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         actionPlanner.setStateExecutingAction();
 
         const action = data.WarActionUnitAttack;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
+        BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path      = action.path as MovePath;
         const pathNodes = path.nodes;
@@ -486,7 +474,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
             if (targetUnit) {
                 const configVersion         = war.getConfigVersion();
                 const targetLostHp          = Helpers.getNormalizedHp(targetOldHp) - Helpers.getNormalizedHp(targetNewHp);
-                const attackerCoGridIndex   = attackerPlayer.getCoGridIndexOnMap();
+                const attackerCoGridIndex   = attackerPlayer.getCoGridIndexListOnMap();
                 const isAttackerInCoZone    = (attacker.getUnitId() === attackerPlayer.getCoUnitId()) || (attackerPlayer.checkIsInCoZone(destination, attackerCoGridIndex));
                 if ((targetLostHp > 0)                              &&
                     (attackerPlayer.getCoId() != null)              &&
@@ -518,7 +506,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
                 }
 
                 const targetPlayer      = war.getPlayer(targetUnit.getPlayerIndex())!;
-                const targetCoGridIndex = targetPlayer.getCoGridIndexOnMap();
+                const targetCoGridIndex = targetPlayer.getCoGridIndexListOnMap();
                 const attackerLostHp    = Helpers.getNormalizedHp(attackerOldHp) - Helpers.getNormalizedHp(attackerNewHp);
                 if ((attackerLostHp > 0)                                        &&
                     (targetPlayer.getCoId() != null)                            &&
@@ -584,22 +572,22 @@ namespace TinyWars.MultiCustomWar.McwModel {
                     }
 
                     if (targetNewHp > 0) {
-                        attackTarget.updateView();
+                        attackTarget.flushDataToView();
                         gridVisionEffect.showEffectDamage(targetGridIndex);
                     } else {
                         if (targetUnit) {
                             DestructionHelpers.destroyUnitOnMap(war, targetGridIndex, true);
                         } else {
                             if ((attackTarget as McwTile).getType() === TileType.Meteor) {
-                                for (const gridIndex of getAdjacentPlasmas(tileMap, targetGridIndex)) {
+                                for (const gridIndex of BwHelpers.getAdjacentPlasmas(tileMap, targetGridIndex)) {
                                     const plasma = tileMap.getTile(gridIndex);
                                     plasma.destroyTileObject();
-                                    plasma.updateView();
+                                    plasma.flushDataToView();
                                     gridVisionEffect.showEffectExplosion(gridIndex);
                                 }
                             }
                             (attackTarget as McwTile).destroyTileObject();
-                            attackTarget.updateView();
+                            attackTarget.flushDataToView();
                             gridVisionEffect.showEffectExplosion(targetGridIndex);
                         }
                     }
@@ -623,7 +611,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         actionPlanner.setStateExecutingAction();
 
         const action = data.WarActionUnitBeLoaded;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
+        BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path          = action.path as MovePath;
         const pathNodes     = path.nodes;
@@ -652,7 +640,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         actionPlanner.setStateExecutingAction();
 
         const action = data.WarActionUnitBuildTile;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
+        BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path      = action.path as MovePath;
         const pathNodes = path.nodes;
@@ -693,7 +681,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         actionPlanner.setStateExecutingAction();
 
         const action = data.WarActionUnitCaptureTile;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
+        BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path      = action.path as MovePath;
         const pathNodes = path.nodes;
@@ -732,7 +720,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
                 return new Promise<void>(resolve => {
                     focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false, () => {
                         focusUnit.updateView();
-                        tile.updateView();
+                        tile.flushDataToView();
                         McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                         actionPlanner.setStateIdle();
@@ -743,7 +731,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
                 return new Promise<void>(resolve => {
                     focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false, () => {
                         focusUnit.updateView();
-                        tile.updateView();
+                        tile.flushDataToView();
                         FloatText.show(Lang.getFormattedText(Lang.Type.F0016, war.getPlayerManager().getPlayer(lostPlayerIndex).getNickname()));
                         DestructionHelpers.destroyPlayerForce(war, lostPlayerIndex, true);
                         McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
@@ -761,7 +749,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         actionPlanner.setStateExecutingAction();
 
         const action = data.WarActionUnitDive;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
+        BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path          = action.path as MovePath;
         const pathNodes     = path.nodes;
@@ -800,7 +788,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         actionPlanner.setStateExecutingAction();
 
         const action = data.WarActionUnitDrop;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
+        BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path              = action.path as MovePath;
         const pathNodes         = path.nodes;
@@ -874,7 +862,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         actionPlanner.setStateExecutingAction();
 
         const action = data.WarActionUnitJoin;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
+        BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path              = action.path as MovePath;
         const pathNodes         = path.nodes;
@@ -957,7 +945,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         actionPlanner.setStateExecutingAction();
 
         const action = data.WarActionUnitLaunchFlare;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
+        BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path      = action.path as MovePath;
         const pathNodes = path.nodes;
@@ -996,7 +984,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         actionPlanner.setStateExecutingAction();
 
         const action = data.WarActionUnitLaunchSilo;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
+        BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path      = action.path as MovePath;
         const pathNodes = path.nodes;
@@ -1041,7 +1029,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
                     }
 
                     focusUnit.updateView();
-                    tile.updateView();
+                    tile.flushDataToView();
                     McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
                     actionPlanner.setStateIdle();
@@ -1056,7 +1044,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         actionPlanner.setStateExecutingAction();
 
         const action = data.WarActionUnitLoadCo;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
+        BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path      = action.path as MovePath;
         const pathNodes = path.nodes;
@@ -1092,7 +1080,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         actionPlanner.setStateExecutingAction();
 
         const action = data.WarActionUnitProduceUnit;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
+        BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path          = action.path as MovePath;
         const pathNodes     = path.nodes;
@@ -1148,7 +1136,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         actionPlanner.setStateExecutingAction();
 
         const action = data.WarActionUnitSupply;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
+        BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path      = action.path as MovePath;
         const pathNodes = path.nodes;
@@ -1208,7 +1196,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         actionPlanner.setStateExecutingAction();
 
         const action = data.WarActionUnitSurface;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
+        BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path          = action.path as MovePath;
         const pathNodes     = path.nodes;
@@ -1247,7 +1235,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         actionPlanner.setStateExecutingAction();
 
         const action = data.WarActionUnitUseCoSkill;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
+        BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path          = action.path as MovePath;
         const pathNodes     = path.nodes;
@@ -1315,7 +1303,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         actionPlanner.setStateExecutingAction();
 
         const action = data.WarActionUnitWait;
-        updateTilesAndUnitsBeforeExecutingAction(war, action);
+        BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, action);
 
         const path      = action.path as MovePath;
         const pathNodes = path.nodes;
@@ -1337,54 +1325,6 @@ namespace TinyWars.MultiCustomWar.McwModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Helpers for executors.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    function addUnits(war: McwWar, unitsData: SerializedMcwUnit[] | undefined | null, isViewVisible: boolean): void {
-        if ((unitsData) && (unitsData.length)) {
-            const unitMap       = war.getUnitMap();
-            const configVersion = war.getConfigVersion();
-
-            for (const unitData of unitsData) {
-                if (!unitMap.getUnitById(unitData.unitId)) {
-                    const unit      = new McwUnit().init(unitData, configVersion);
-                    const isOnMap   = unit.getLoaderUnitId() == null;
-                    if (isOnMap) {
-                        unitMap.setUnitOnMap(unit);
-                    } else {
-                        unitMap.setUnitLoaded(unit);
-                    }
-                    unit.startRunning(war);
-                    unit.startRunningView();
-                    unit.setViewVisible(isViewVisible);
-                }
-            }
-        }
-    }
-    function updateTiles(war: McwWar, tilesData: SerializedMcwTile[] | undefined | null): void {
-        if ((tilesData) && (tilesData.length)) {
-            const tileMap   = war.getTileMap();
-            for (const tileData of tilesData) {
-                const gridIndex = { x: tileData.gridX, y: tileData.gridY };
-                const tile      = tileMap.getTile(gridIndex);
-                if (tile.getIsFogEnabled()) {
-                    tile.setFogDisabled(tileData);
-                }
-            }
-        }
-    }
-    function updateTilesAndUnitsBeforeExecutingAction(
-        war     : McwWar,
-        action  : {
-            actingTiles?    : ProtoTypes.ISerializedWarTile[],
-            actingUnits?    : ProtoTypes.ISerializedWarUnit[],
-            discoveredTiles?: ProtoTypes.ISerializedWarTile[],
-            discoveredUnits?: ProtoTypes.ISerializedWarUnit[],
-        }
-    ): void {
-        addUnits(war, action.actingUnits as SerializedMcwUnit[] | undefined | null, false);
-        addUnits(war, action.discoveredUnits as SerializedMcwUnit[] | undefined | null, false);
-        updateTiles(war, action.actingTiles as SerializedMcwTile[] | undefined | null);
-        updateTiles(war, action.discoveredTiles as SerializedMcwTile[] | undefined | null);
-    }
-
     function moveUnit(war: McwWar, actionCode: WarActionCodes, revisedPath: MovePath, launchUnitId: number | null | undefined, fuelConsumption: number): void {
         const pathNodes             = revisedPath.nodes;
         const beginningGridIndex    = pathNodes[0];
@@ -1432,33 +1372,5 @@ namespace TinyWars.MultiCustomWar.McwModel {
                 tile.setCurrentCapturePoint(tile.getMaxCapturePoint());
             }
         }
-    }
-
-    function getAdjacentPlasmas(tileMap: McwTileMap, origin: GridIndex): GridIndex[] {
-        const plasmas           = [origin];
-        const mapSize           = tileMap.getMapSize();
-        const mapHeight         = mapSize.height;
-        const searchedIndexes   = new Set<number>([getIndexOfGridIndex(mapHeight, origin)]);
-
-        let i = 0;
-        while (i < plasmas.length) {
-            for (const adjacentGridIndex of GridIndexHelpers.getAdjacentGrids(plasmas[i], mapSize)) {
-                if (tileMap.getTile(adjacentGridIndex).getType() === TileType.Plasma) {
-                    const searchIndex = getIndexOfGridIndex(mapHeight, adjacentGridIndex);
-                    if (!searchedIndexes.has(searchIndex)) {
-                        searchedIndexes.add(searchIndex);
-                        plasmas.push(adjacentGridIndex);
-                    }
-                }
-            }
-            ++i;
-        }
-
-        plasmas.shift();
-        return plasmas;
-    }
-
-    function getIndexOfGridIndex(mapHeight: number, gridIndex: GridIndex): number {
-        return gridIndex.x * mapHeight + gridIndex.y;
     }
 }

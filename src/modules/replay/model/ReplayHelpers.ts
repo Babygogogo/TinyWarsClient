@@ -4,6 +4,7 @@ namespace TinyWars.Replay.ReplayHelpers {
     import GridIndexHelpers     = Utility.GridIndexHelpers;
     import VisibilityHelpers    = Utility.VisibilityHelpers;
     import ProtoTypes           = Utility.ProtoTypes;
+    import BwWar                = BaseWar.BwWar;
     import GridIndex            = Types.GridIndex;
     import MovableArea          = Types.MovableArea;
     import AttackableArea       = Types.AttackableArea;
@@ -91,20 +92,14 @@ namespace TinyWars.Replay.ReplayHelpers {
         }
     }
 
-    export function updateTilesAndUnitsOnVisibilityChanged(war: ReplayWar): void {
+    export function updateTilesAndUnitsOnVisibilityChanged(war: BwWar): void {
+        // No need to update units.
+
         const tileMap       = war.getTileMap();
         const visibleTiles  = VisibilityHelpers.getAllTilesVisibleToTeam(war, war.getPlayerInTurn().getTeamIndex());
         tileMap.forEachTile(tile => {
-            if (visibleTiles.has(tile)) {
-                if (tile.getIsFogEnabled()) {
-                    tile.setFogDisabled();
-                }
-            } else {
-                if (!tile.getIsFogEnabled()) {
-                    tile.setFogEnabled();
-                }
-            }
-            tile.updateView();
+            tile.setHasFog(!visibleTiles.has(tile));
+            tile.flushDataToView();
         });
         tileMap.getView().updateCoZone();
     }

@@ -37,41 +37,14 @@ namespace TinyWars.MultiCustomWar {
             war.getFogMap().resetMapFromPathsForPlayer(playerInTurn.getPlayerIndex());
 
             if (war.getWatcherTeamIndexes(User.UserModel.getSelfUserId()).has(playerInTurn.getTeamIndex())) {
-                this._resetFogForWatcher();
+                McwHelpers.updateTilesAndUnitsOnVisibilityChanged(this._getWar());
             }
         }
         protected _runPhaseResetVisionForNextPlayer(): void {
             const war = this._getWar();
             if (war.getWatcherTeamIndexes(User.UserModel.getSelfUserId()).has(war.getPlayerInTurn().getTeamIndex())) {
-                this._resetFogForWatcher();
+                McwHelpers.updateTilesAndUnitsOnVisibilityChanged(this._getWar());
             }
-        }
-
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        // The other functions.
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _resetFogForWatcher(): void {
-            const war               = this._getWar() as McwWar;
-            const userId            = User.UserModel.getSelfUserId();
-            const visibleUnitsOnMap = VisibilityHelpers.getAllUnitsOnMapVisibleToUser(war, userId);
-            war.getUnitMap().forEachUnitOnMap(unit => {
-                if (!visibleUnitsOnMap.has(unit)) {
-                    DestructionHelpers.removeUnitOnMap(war, unit.getGridIndex());
-                }
-            });
-            DestructionHelpers.removeInvisibleLoadedUnits(war, userId);
-
-            const tileMap       = war.getTileMap();
-            const visibleTiles  = VisibilityHelpers.getAllTilesVisibleToUser(war, userId);
-            tileMap.forEachTile(tile => {
-                if (visibleTiles.has(tile)) {
-                    tile.setFogDisabled();
-                } else {
-                    tile.setFogEnabled();
-                }
-                tile.updateView();
-            });
-            tileMap.getView().updateCoZone();
         }
     }
 }

@@ -1,8 +1,9 @@
 
 namespace TinyWars.BaseWar {
-    import Notify           = Utility.Notify;
-    import Helpers          = Utility.Helpers;
-    import GridIndexHelpers = Utility.GridIndexHelpers;
+    import Notify               = Utility.Notify;
+    import Helpers              = Utility.Helpers;
+    import GridIndexHelpers     = Utility.GridIndexHelpers;
+    import VisibilityHelpers    = Utility.VisibilityHelpers;
 
     const { width: GRID_WIDTH, height: GRID_HEIGHT } = Utility.ConfigManager.getGridSize();
 
@@ -119,18 +120,33 @@ namespace TinyWars.BaseWar {
             const tileMap                                   = this._tileMap;
             const war                                       = tileMap.getWar();
             const { width: mapWidth, height: mapHeight }    = tileMap.getMapSize();
-            const playersCount                              = war.getPlayerManager().getTotalPlayersCount(false);
+            const playerManager                             = war.getPlayerManager();
+            const playersCount                              = playerManager.getTotalPlayersCount(false);
+            const watcherTeamIndexes                        = playerManager.getWatcherTeamIndexesForSelf();
+            const unitMap                                   = war.getUnitMap();
 
             for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
-                const matrix        = this._coZoneImages.get(playerIndex);
                 const player        = war.getPlayer(playerIndex);
-                const gridIndex     = player.getCoGridIndexOnMap();
                 const radius        = player.getCoZoneRadius();
-                const canShow       = (!!gridIndex) && (radius != null) && (player.checkHasZoneSkillForCurrentSkills());
+                const gridIndexList = ((radius == null) || (!player.checkHasZoneSkillForCurrentSkills()))
+                    ? []
+                    : player.getCoGridIndexListOnMap().filter(gridIndex => {
+                        const unit = unitMap.getUnitOnMap(gridIndex);
+                        return (!!unit)
+                            && (VisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                                war,
+                                gridIndex,
+                                unitType: unit.getType(),
+                                isDiving: unit.getIsDiving(),
+                                unitPlayerIndex: playerIndex,
+                                observerTeamIndexes: watcherTeamIndexes
+                            }));
+                    });
 
+                const matrix = this._coZoneImages.get(playerIndex);
                 for (let x = 0; x < mapWidth; ++x) {
                     for (let y = 0; y < mapHeight; ++y) {
-                        matrix[x][y].visible = (canShow) && (radius >= GridIndexHelpers.getDistance({ x, y }, gridIndex));
+                        matrix[x][y].visible = (gridIndexList.length > 0) && (radius >= GridIndexHelpers.getMinDistance({ x, y }, gridIndexList));
                     }
                 }
             }
@@ -138,7 +154,7 @@ namespace TinyWars.BaseWar {
 
         private _onNotifyTileAnimationTick(e: egret.Event): void {
             for (const view of this._tileViews) {
-                view.updateOnAnimationTick();
+                view.updateView();
             }
         }
     }

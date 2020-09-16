@@ -334,7 +334,7 @@ namespace TinyWars.MultiCustomRoom {
         private async _onTouchedBtnBuildings(e: egret.TouchEvent): Promise<void> {
             McrBuildingListPanel.show({
                 configVersion   : McrModel.getCreateWarData().configVersion,
-                mapRawData      : await WarMapModel.getMapRawData(McrModel.getCreateWarMapFileName()) as Types.MapRawData,
+                mapRawData      : await WarMapModel.getRawData(McrModel.getCreateWarMapFileName()) as Types.MapRawData,
             });
         }
 

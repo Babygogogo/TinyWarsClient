@@ -195,15 +195,6 @@ namespace TinyWars.SingleCustomWar {
         private _updateListWarInfo(): void {
             const dataList: DataForInfoRenderer[] = [
                 this._createWarInfoTurnIndex(),
-                this._createWarInfoInitialFund(),
-                this._createWarInfoIncomeModifier(),
-                this._createWarInfoInitialEnergy(),
-                this._createWarInfoEnergyGrowthMultiplier(),
-                this._createWarInfoMoveRangeModifier(),
-                this._createWarInfoAttackPowerModifier(),
-                this._createWarInfoVisionRangeModifier(),
-                this._createWarInfoLuckLowerLimit(),
-                this._createWarInfoLuckUpperLimit(),
             ];
             this._listWarInfo.bindData(dataList);
         }
@@ -214,8 +205,8 @@ namespace TinyWars.SingleCustomWar {
             war.getPlayerManager().forEachPlayer(false, (player: ScwPlayer) => {
                 data.push({
                     war,
-                    player,
-                    panel   : this,
+                    playerIndex : player.getPlayerIndex(),
+                    panel       : this,
                 });
             });
             this._listPlayer.bindData(data);
@@ -231,315 +222,6 @@ namespace TinyWars.SingleCustomWar {
                 infoText                : `${war.getTurnManager().getTurnIndex() + 1} (${Lang.getText(Lang.Type.B0090)}: ${war.getExecutedActionsCount() + 1})`,
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : null,
-            };
-        }
-
-        private _createWarInfoInitialFund(): DataForInfoRenderer {
-            const war       = this._war;
-            const currValue = war.getSettingsInitialFund();
-            const maxValue  = CommonConstants.WarRuleInitialFundMaxLimit;
-            const minValue  = CommonConstants.WarRuleInitialFundMinLimit;
-            return {
-                titleText               : Lang.getText(Lang.Type.B0178),
-                infoText                : `${currValue}`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault),
-                callbackOnTouchedTitle  : !war.getIsSinglePlayerCheating()
-                    ? null
-                    : () => {
-                        Common.CommonInputPanel.show({
-                            title           : Lang.getText(Lang.Type.B0178),
-                            currentValue    : "" + currValue,
-                            maxChars        : 7,
-                            charRestrict    : "0-9",
-                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                const text  = panel.getInputText();
-                                const value = text ? Number(text) : NaN;
-                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(Lang.Type.A0098));
-                                } else {
-                                    war.setSettingsInitialFund(value);
-                                    this._updateListWarInfo();
-                                }
-                            },
-                        });
-                },
-            };
-        }
-
-        private _createWarInfoIncomeModifier(): DataForInfoRenderer {
-            const war       = this._war;
-            const currValue = war.getSettingsIncomeMultiplier();
-            const maxValue  = CommonConstants.WarRuleIncomeMultiplierMaxLimit;
-            const minValue  = CommonConstants.WarRuleIncomeMultiplierMinLimit;
-            return {
-                titleText               : Lang.getText(Lang.Type.B0179),
-                infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault),
-                callbackOnTouchedTitle  : !war.getIsSinglePlayerCheating()
-                    ? null
-                    : () => {
-                        Common.CommonInputPanel.show({
-                            title           : Lang.getText(Lang.Type.B0179),
-                            currentValue    : "" + currValue,
-                            maxChars        : 5,
-                            charRestrict    : "0-9",
-                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                const text  = panel.getInputText();
-                                const value = text ? Number(text) : NaN;
-                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(Lang.Type.A0098));
-                                } else {
-                                    war.setSettingsIncomeModifier(value);
-                                    this._updateListWarInfo();
-                                }
-                            },
-                        });
-                    },
-            };
-        }
-
-        private _createWarInfoInitialEnergy(): DataForInfoRenderer {
-            const war       = this._war;
-            const currValue = war.getSettingsInitialEnergyPercentage();
-            const minValue  = CommonConstants.WarRuleInitialEnergyMinLimit;
-            const maxValue  = CommonConstants.WarRuleInitialEnergyMaxLimit;
-            return {
-                titleText               : Lang.getText(Lang.Type.B0180),
-                infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialEnergyDefault),
-                callbackOnTouchedTitle  : !war.getIsSinglePlayerCheating()
-                    ? null
-                    : () => {
-                        Common.CommonInputPanel.show({
-                            title           : Lang.getText(Lang.Type.B0180),
-                            currentValue    : "" + currValue,
-                            maxChars        : 3,
-                            charRestrict    : "0-9",
-                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                const text  = panel.getInputText();
-                                const value = text ? Number(text) : NaN;
-                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(Lang.Type.A0098));
-                                } else {
-                                    war.setSettingsInitialEnergy(value);
-                                    this._updateListWarInfo();
-                                }
-                            },
-                        });
-                    },
-            };
-        }
-
-        private _createWarInfoEnergyGrowthMultiplier(): DataForInfoRenderer {
-            const war       = this._war;
-            const currValue = war.getSettingsEnergyGrowthMultiplier();
-            const minValue  = CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit;
-            const maxValue  = CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit;
-            return {
-                titleText               : Lang.getText(Lang.Type.B0181),
-                infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault),
-                callbackOnTouchedTitle  : !war.getIsSinglePlayerCheating()
-                    ? null
-                    : () => {
-                        Common.CommonInputPanel.show({
-                            title           : Lang.getText(Lang.Type.B0181),
-                            currentValue    : "" + currValue,
-                            maxChars        : 5,
-                            charRestrict    : "0-9",
-                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                const text  = panel.getInputText();
-                                const value = text ? Number(text) : NaN;
-                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(Lang.Type.A0098));
-                                } else {
-                                    war.setSettingsEnergyGrowthMultiplier(value);
-                                    this._updateListWarInfo();
-                                }
-                            },
-                        });
-                    },
-            };
-        }
-
-        private _createWarInfoMoveRangeModifier(): DataForInfoRenderer {
-            const war       = this._war;
-            const currValue = war.getSettingsMoveRangeModifier();
-            const minValue  = CommonConstants.WarRuleMoveRangeModifierMinLimit;
-            const maxValue  = CommonConstants.WarRuleMoveRangeModifierMaxLimit;
-            return {
-                titleText               : Lang.getText(Lang.Type.B0182),
-                infoText                : `${currValue}`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault),
-                callbackOnTouchedTitle  : !war.getIsSinglePlayerCheating()
-                    ? null
-                    : () => {
-                        Common.CommonInputPanel.show({
-                            title           : Lang.getText(Lang.Type.B0182),
-                            currentValue    : "" + currValue,
-                            maxChars        : 3,
-                            charRestrict    : "0-9\\-",
-                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                const text  = panel.getInputText();
-                                const value = text ? Number(text) : NaN;
-                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(Lang.Type.A0098));
-                                } else {
-                                    war.setSettingsMoveRangeModifier(value);
-                                    this._updateListWarInfo();
-                                }
-                            },
-                        });
-                    },
-            };
-        }
-
-        private _createWarInfoAttackPowerModifier(): DataForInfoRenderer {
-            const war       = this._war;
-            const currValue = war.getSettingsAttackPowerModifier();
-            const minValue  = CommonConstants.WarRuleOffenseBonusMinLimit;
-            const maxValue  = CommonConstants.WarRuleOffenseBonusMaxLimit;
-            return {
-                titleText               : Lang.getText(Lang.Type.B0183),
-                infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault),
-                callbackOnTouchedTitle  : !war.getIsSinglePlayerCheating()
-                    ? null
-                    : () => {
-                        Common.CommonInputPanel.show({
-                            title           : Lang.getText(Lang.Type.B0183),
-                            currentValue    : "" + currValue,
-                            maxChars        : 5,
-                            charRestrict    : "0-9\\-",
-                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                const text  = panel.getInputText();
-                                const value = text ? Number(text) : NaN;
-                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(Lang.Type.A0098));
-                                } else {
-                                    war.setSettingsAttackPowerModifier(value);
-                                    this._updateListWarInfo();
-                                }
-                            },
-                        });
-                    },
-            };
-        }
-
-        private _createWarInfoVisionRangeModifier(): DataForInfoRenderer {
-            const war       = this._war;
-            const currValue = war.getSettingsVisionRangeModifier();
-            const minValue  = CommonConstants.WarRuleVisionRangeModifierMinLimit;
-            const maxValue  = CommonConstants.WarRuleVisionRangeModifierMaxLimit;
-            return {
-                titleText               : Lang.getText(Lang.Type.B0184),
-                infoText                : `${currValue}`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault),
-                callbackOnTouchedTitle  : !war.getIsSinglePlayerCheating()
-                    ? null
-                    : () => {
-                        Common.CommonInputPanel.show({
-                            title           : Lang.getText(Lang.Type.B0184),
-                            currentValue    : "" + currValue,
-                            maxChars        : 3,
-                            charRestrict    : "0-9\\-",
-                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                const text  = panel.getInputText();
-                                const value = text ? Number(text) : NaN;
-                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(Lang.Type.A0098));
-                                } else {
-                                    war.setSettingsVisionRangeModifier(value);
-                                    this._updateListWarInfo();
-                                }
-                            },
-                        });
-                    },
-            };
-        }
-
-        private _createWarInfoLuckLowerLimit(): DataForInfoRenderer {
-            const war       = this._war;
-            const currValue = war.getSettingsLuckLowerLimit();
-            const minValue  = CommonConstants.WarRuleLuckMinLimit;
-            const maxValue  = CommonConstants.WarRuleLuckMaxLimit;
-            return {
-                titleText               : Lang.getText(Lang.Type.B0189),
-                infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit),
-                callbackOnTouchedTitle  : !war.getIsSinglePlayerCheating()
-                    ? null
-                    : () => {
-                        Common.CommonInputPanel.show({
-                            title           : Lang.getText(Lang.Type.B0189),
-                            currentValue    : "" + currValue,
-                            maxChars        : 4,
-                            charRestrict    : "0-9\\-",
-                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                const text  = panel.getInputText();
-                                const value = text ? Number(text) : NaN;
-                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(Lang.Type.A0098));
-                                } else {
-                                    const upperLimit = war.getSettingsLuckUpperLimit();
-                                    if (value <= upperLimit) {
-                                        war.setSettingsLuckLowerLimit(value);
-                                    } else {
-                                        war.setSettingsLuckUpperLimit(value);
-                                        war.setSettingsLuckLowerLimit(upperLimit);
-                                    }
-                                    this._updateListWarInfo();
-                                }
-                            },
-                        });
-                    },
-            };
-        }
-
-        private _createWarInfoLuckUpperLimit(): DataForInfoRenderer {
-            const war       = this._war;
-            const currValue = war.getSettingsLuckUpperLimit();
-            const minValue  = CommonConstants.WarRuleLuckMinLimit;
-            const maxValue  = CommonConstants.WarRuleLuckMaxLimit;
-            return {
-                titleText               : Lang.getText(Lang.Type.B0190),
-                infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit),
-                callbackOnTouchedTitle  : !war.getIsSinglePlayerCheating()
-                    ? null
-                    : () => {
-                        Common.CommonInputPanel.show({
-                            title           : Lang.getText(Lang.Type.B0190),
-                            currentValue    : "" + currValue,
-                            maxChars        : 4,
-                            charRestrict    : "0-9\\-",
-                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                const text  = panel.getInputText();
-                                const value = text ? Number(text) : NaN;
-                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(Lang.Type.A0098));
-                                } else {
-                                    const lowerLimit = war.getSettingsLuckLowerLimit();
-                                    if (value >= lowerLimit) {
-                                        war.setSettingsLuckUpperLimit(value);
-                                    } else {
-                                        war.setSettingsLuckLowerLimit(value);
-                                        war.setSettingsLuckUpperLimit(lowerLimit);
-                                    }
-                                    this._updateListWarInfo();
-                                }
-                            },
-                        });
-                    },
             };
         }
 
@@ -827,9 +509,9 @@ namespace TinyWars.SingleCustomWar {
     }
 
     type DataForPlayerRenderer = {
-        war     : ScwWar;
-        player  : ScwPlayer;
-        panel   : ScwWarMenuPanel;
+        war         : ScwWar;
+        playerIndex : number;
+        panel       : ScwWarMenuPanel;
     }
 
     class PlayerRenderer extends eui.ItemRenderer {
@@ -849,14 +531,43 @@ namespace TinyWars.SingleCustomWar {
         protected dataChanged(): void {
             super.dataChanged();
 
+            this._updateView();
+        }
+
+        private _onTouchedBtnName(e: egret.TouchEvent): void {
+            const data  = this.data as DataForPlayerRenderer;
+            const war   = data.war;
+            if (war.getIsSinglePlayerCheating()) {
+                const playerIndex   = data.playerIndex;
+                const player        = war.getPlayer(playerIndex);
+                const isHuman       = player.getUserId() != null;
+                Common.CommonConfirmPanel.show({
+                    title   : Lang.getText(Lang.Type.B0088),
+                    content : isHuman ? Lang.getText(Lang.Type.A0110) : Lang.getText(Lang.Type.A0111),
+                    callback: () => {
+                        if (!isHuman) {
+                            player.setUserId(User.UserModel.getSelfUserId());
+                        } else {
+                            player.setUserId(null);
+                            ScwModel.checkAndRequestBeginTurnOrRunRobot(war);
+                        }
+                        this._updateView();
+                    },
+                });
+            }
+        }
+
+        private _updateView(): void {
             const data                  = this.data as DataForPlayerRenderer;
             const war                   = data.war;
-            const player                = data.player;
+            const playerIndex           = data.playerIndex;
+            const player                = war.getPlayer(playerIndex);
+            const isPlayerInTurn        = playerIndex === war.getPlayerIndexInTurn();
             this._btnName.label         = player.getUserId() != null ? Lang.getText(Lang.Type.B0031) : Lang.getText(Lang.Type.B0256);
-            this._labelForce.text       = `${Lang.getPlayerForceName(player.getPlayerIndex())}`
+            this._labelForce.textColor  = isPlayerInTurn ? 0x00FF00 : 0xFFFFFF;
+            this._labelForce.text       = `${Lang.getPlayerForceName(playerIndex)}`
                 + `  ${Lang.getPlayerTeamName(player.getTeamIndex())}`
-                + `  ${player === war.getPlayerInTurn() ? Lang.getText(Lang.Type.B0086) : ""}`;
-            this._labelForce.textColor  = player === war.getPlayerInTurn() ? 0x00FF00 : 0xFFFFFF;
+                + `  ${isPlayerInTurn ? Lang.getText(Lang.Type.B0086) : ""}`;
             (this._btnName.labelDisplay as GameUi.UiLabel).textColor = war.getIsSinglePlayerCheating() ? 0x00FF00 : 0xFFFFFF;
 
             if (!player.getIsAlive()) {
@@ -869,53 +580,40 @@ namespace TinyWars.SingleCustomWar {
             }
         }
 
-        private _onTouchedBtnName(e: egret.TouchEvent): void {
-            const data  = this.data as DataForPlayerRenderer;
-            const war   = data.war;
-            if (war.getIsSinglePlayerCheating()) {
-                const player    = data.player;
-                const isHuman   = player.getUserId() != null;
-                Common.CommonConfirmPanel.show({
-                    title   : Lang.getText(Lang.Type.B0088),
-                    content : isHuman ? Lang.getText(Lang.Type.A0110) : Lang.getText(Lang.Type.A0111),
-                    callback: () => {
-                        if (!isHuman) {
-                            player.setUserId(User.UserModel.getSelfUserId());
-                        } else {
-                            player.setUserId(null);
-                            ScwModel.checkAndRequestBeginTurnOrRunRobot(war);
-                        }
-                        data.panel.updateListPlayer();
-                    },
-                });
-            }
-        }
-
         private _createDataForListInfo(): DataForInfoRenderer[] {
             const data          = this.data as DataForPlayerRenderer;
             const war           = data.war;
-            const player        = data.player;
+            const playerIndex   = data.playerIndex;
             const panel         = data.panel;
-            const isCheating    = war.getIsSinglePlayerCheating();
-            const isInfoKnown   = (!war.getFogMap().checkHasFogCurrently()) || ((war.getPlayerManager() as ScwPlayerManager).getWatcherTeamIndexesForScw().has(player.getTeamIndex()));
+            const player        = war.getPlayer(playerIndex) as ScwPlayer;
+            const isInfoKnown   = (!war.getFogMap().checkHasFogCurrently()) || ((war.getPlayerManager() as ScwPlayerManager).getWatcherTeamIndexesForSelf().has(player.getTeamIndex()));
             return [
-                this._createDataFund(war, player, isInfoKnown, isCheating, panel),
-                this._createDataBuildings(war, player, isInfoKnown, isCheating, panel),
-                this._createDataCoName(war, player, isInfoKnown, isCheating, panel),
-                this._createDataEnergy(war, player, isInfoKnown, isCheating, panel),
-                this._createDataUnitAndValue(war, player, isInfoKnown, isCheating, panel),
+                this._createDataFund(war, player, isInfoKnown, panel),
+                this._createDataBuildings(war, player, isInfoKnown, panel),
+                this._createDataCoName(war, player, isInfoKnown, panel),
+                this._createDataEnergy(war, player, isInfoKnown, panel),
+                this._createDataUnitAndValue(war, player, isInfoKnown, panel),
+                this._createDataInitialFund(war, player, isInfoKnown, panel),
+                this._createDataIncomeMultiplier(war, player, isInfoKnown, panel),
+                this._createDataInitialEnergy(war, player, isInfoKnown, panel),
+                this._createDataEnergyGrowthMultiplier(war, player, isInfoKnown, panel),
+                this._createDataMoveRangeModifier(war, player, isInfoKnown, panel),
+                this._createDataAttackPowerModifier(war, player, isInfoKnown, panel),
+                this._createDataVisionRangeModifier(war, player, isInfoKnown, panel),
+                this._createDataLuckLowerLimit(war, player, isInfoKnown, panel),
+                this._createDataLuckUpperLimit(war, player, isInfoKnown, panel),
             ];
         }
         private _createDataFund(
             war         : ScwWar,
             player      : ScwPlayer,
             isInfoKnown : boolean,
-            isCheating  : boolean,
             menuPanel   : ScwWarMenuPanel,
         ): DataForInfoRenderer {
-            const currValue = player.getFund();
-            const maxValue  = CommonConstants.WarRuleInitialFundMaxLimit;
-            const minValue  = CommonConstants.WarRuleInitialFundMinLimit;
+            const currValue     = player.getFund();
+            const maxValue      = CommonConstants.WarRuleInitialFundMaxLimit;
+            const minValue      = CommonConstants.WarRuleInitialFundMinLimit;
+            const isCheating    = war.getIsSinglePlayerCheating();
             return {
                 titleText               : Lang.getText(Lang.Type.B0032),
                 infoText                : (isInfoKnown || isCheating) ? `${player.getFund()}` : `?`,
@@ -927,7 +625,7 @@ namespace TinyWars.SingleCustomWar {
                             title           : `P${player.getPlayerIndex()} ${Lang.getText(Lang.Type.B0032)}`,
                             currentValue    : "" + currValue,
                             maxChars        : 7,
-                            charRestrict    : "0-9",
+                            charRestrict    : "0-9\\-",
                             tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
                                 const text  = panel.getInputText();
@@ -947,10 +645,9 @@ namespace TinyWars.SingleCustomWar {
             war         : ScwWar,
             player      : ScwPlayer,
             isInfoKnown : boolean,
-            isCheating  : boolean,
             menuPanel   : ScwWarMenuPanel,
         ): DataForInfoRenderer {
-            const info = this._getTilesCountAndIncome(war, player.getPlayerIndex());
+            const info = getTilesCountAndIncome(war, player.getPlayerIndex());
             return {
                 titleText               : Lang.getText(Lang.Type.B0158),
                 infoText                : `${info.count} / +${info.income}${isInfoKnown ? `` : `  ?`}`,
@@ -962,7 +659,6 @@ namespace TinyWars.SingleCustomWar {
             war         : ScwWar,
             player      : ScwPlayer,
             isInfoKnown : boolean,
-            isCheating  : boolean,
             menuPanel   : ScwWarMenuPanel,
         ): DataForInfoRenderer {
             const coId  = player.getCoId();
@@ -980,7 +676,6 @@ namespace TinyWars.SingleCustomWar {
             war         : ScwWar,
             player      : ScwPlayer,
             isInfoKnown : boolean,
-            isCheating  : boolean,
             menuPanel   : ScwWarMenuPanel,
         ): DataForInfoRenderer {
             const currValue         = player.getCoCurrentEnergy();
@@ -989,22 +684,24 @@ namespace TinyWars.SingleCustomWar {
             const powerEnergy       = player.getCoPowerEnergy();
             const superPowerEnergy  = player.getCoSuperPowerEnergy();
             const skillType         = player.getCoUsingSkillType();
+            const playerIndex       = player.getPlayerIndex();
+            const hasLoadedCo       = war.getUnitMap().checkIsCoLoadedByAnyUnit(playerIndex);
             const currEnergyText    = skillType === Types.CoSkillType.Passive
                 ? "" + currValue
                 : skillType === Types.CoSkillType.Power ? "COP" : "SCOP";
 
             return {
                 titleText               : Lang.getText(Lang.Type.B0159),
-                infoText                : `${player.getCoUnitId() == null ? `--` : currEnergyText} / ${powerEnergy == null ? "--" : powerEnergy} / ${superPowerEnergy == null ? "--" : superPowerEnergy}`,
+                infoText                : `${!hasLoadedCo ? `--` : currEnergyText} / ${powerEnergy == null ? "--" : powerEnergy} / ${superPowerEnergy == null ? "--" : superPowerEnergy}`,
                 infoColor               : 0xFFFFFF,
-                callbackOnTouchedTitle  : ((!isCheating) || (!maxValue))
+                callbackOnTouchedTitle  : ((!war.getIsSinglePlayerCheating()) || (!maxValue))
                     ? null
                     : () => {
-                        if (player.getCoUnitId() == null) {
+                        if (!hasLoadedCo) {
                             FloatText.show(Lang.getText(Lang.Type.A0109));
                         } else {
                             Common.CommonInputPanel.show({
-                                title           : `P${player.getPlayerIndex()} ${Lang.getText(Lang.Type.B0159)}`,
+                                title           : `P${playerIndex} ${Lang.getText(Lang.Type.B0159)}`,
                                 currentValue    : "" + currValue,
                                 maxChars        : 3,
                                 charRestrict    : "0-9",
@@ -1028,10 +725,9 @@ namespace TinyWars.SingleCustomWar {
             war         : ScwWar,
             player      : ScwPlayer,
             isInfoKnown : boolean,
-            isCheating  : boolean,
             menuPanel   : ScwWarMenuPanel
         ): DataForInfoRenderer {
-            const unitsCountAndValue = this._getUnitsCountAndValue(war, player.getPlayerIndex());
+            const unitsCountAndValue = getUnitsCountAndValue(war, player.getPlayerIndex());
             return {
                 titleText               : Lang.getText(Lang.Type.B0160),
                 infoText                : `${unitsCountAndValue.count} / ${unitsCountAndValue.value}${isInfoKnown ? `` : `  ?`}`,
@@ -1039,38 +735,350 @@ namespace TinyWars.SingleCustomWar {
                 callbackOnTouchedTitle  : null,
             };
         }
-
-        private _getTilesCountAndIncome(war: ScwWar, playerIndex: number): { count: number, income: number } {
-            let count   = 0;
-            let income  = 0;
-            war.getTileMap().forEachTile(tile => {
-                if (tile.getPlayerIndex() === playerIndex) {
-                    ++count;
-                    income += tile.getIncomeForPlayer(playerIndex);
-                }
-            });
-            return { count, income };
+        private _createDataInitialFund(
+            war         : ScwWar,
+            player      : ScwPlayer,
+            isInfoKnown : boolean,
+            menuPanel   : ScwWarMenuPanel,
+        ): DataForInfoRenderer {
+            const playerIndex   = player.getPlayerIndex();
+            const currValue     = war.getSettingsInitialFund(playerIndex);
+            return {
+                titleText               : Lang.getText(Lang.Type.B0178),
+                infoText                : `${currValue}`,
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault),
+                callbackOnTouchedTitle  : !war.getIsSinglePlayerCheating()
+                    ? null
+                    : () => {
+                        const maxValue  = CommonConstants.WarRuleInitialFundMaxLimit;
+                        const minValue  = CommonConstants.WarRuleInitialFundMinLimit;
+                        Common.CommonInputPanel.show({
+                            title           : Lang.getText(Lang.Type.B0178),
+                            currentValue    : "" + currValue,
+                            maxChars        : 7,
+                            charRestrict    : "0-9\\-",
+                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                            callback        : panel => {
+                                const text  = panel.getInputText();
+                                const value = text ? Number(text) : NaN;
+                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                                } else {
+                                    war.setSettingsInitialFund(playerIndex, value);
+                                    this._updateView();
+                                }
+                            },
+                        });
+                },
+            };
         }
-
-        private _getUnitsCountAndValue(war: ScwWar, playerIndex: number): { count: number, value: number } {
-            const teamIndexes   = war.getPlayerManager().getWatcherTeamIndexes(User.UserModel.getSelfUserId());
-            const unitMap       = war.getUnitMap();
-            let count           = 0;
-            let value           = 0;
-            unitMap.forEachUnitOnMap(unit => {
-                if (unit.getPlayerIndex() === playerIndex) {
-                    ++count;
-                    value += Math.floor(unit.getProductionFinalCost() * unit.getNormalizedCurrentHp() / unit.getNormalizedMaxHp());
-
-                    if ((teamIndexes.has(unit.getTeamIndex())) || (!war.getFogMap().checkHasFogCurrently())) {
-                        for (const unitLoaded of unitMap.getUnitsLoadedByLoader(unit, true)) {
-                            ++count;
-                            value += Math.floor(unitLoaded.getProductionFinalCost() * unitLoaded.getNormalizedCurrentHp() / unitLoaded.getNormalizedMaxHp());
-                        }
-                    }
-                }
-            });
-            return { count, value };
+        private _createDataIncomeMultiplier(
+            war         : ScwWar,
+            player      : ScwPlayer,
+            isInfoKnown : boolean,
+            menuPanel   : ScwWarMenuPanel,
+        ): DataForInfoRenderer {
+            const playerIndex   = player.getPlayerIndex();
+            const currValue     = war.getSettingsIncomeMultiplier(playerIndex);
+            const maxValue      = CommonConstants.WarRuleIncomeMultiplierMaxLimit;
+            const minValue      = CommonConstants.WarRuleIncomeMultiplierMinLimit;
+            return {
+                titleText               : Lang.getText(Lang.Type.B0179),
+                infoText                : `${currValue}%`,
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault),
+                callbackOnTouchedTitle  : !war.getIsSinglePlayerCheating()
+                    ? null
+                    : () => {
+                        Common.CommonInputPanel.show({
+                            title           : Lang.getText(Lang.Type.B0179),
+                            currentValue    : "" + currValue,
+                            maxChars        : 5,
+                            charRestrict    : "0-9",
+                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                            callback        : panel => {
+                                const text  = panel.getInputText();
+                                const value = text ? Number(text) : NaN;
+                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                                } else {
+                                    war.setSettingsIncomeMultiplier(playerIndex, value);
+                                    this._updateView();
+                                }
+                            },
+                        });
+                    },
+            };
+        }
+        private _createDataInitialEnergy(
+            war         : ScwWar,
+            player      : ScwPlayer,
+            isInfoKnown : boolean,
+            menuPanel   : ScwWarMenuPanel,
+        ): DataForInfoRenderer {
+            const playerIndex   = player.getPlayerIndex();
+            const currValue     = war.getSettingsInitialEnergyPercentage(playerIndex);
+            const minValue      = CommonConstants.WarRuleInitialEnergyMinLimit;
+            const maxValue      = CommonConstants.WarRuleInitialEnergyMaxLimit;
+            return {
+                titleText               : Lang.getText(Lang.Type.B0180),
+                infoText                : `${currValue}%`,
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialEnergyDefault),
+                callbackOnTouchedTitle  : !war.getIsSinglePlayerCheating()
+                    ? null
+                    : () => {
+                        Common.CommonInputPanel.show({
+                            title           : Lang.getText(Lang.Type.B0180),
+                            currentValue    : "" + currValue,
+                            maxChars        : 3,
+                            charRestrict    : "0-9",
+                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                            callback        : panel => {
+                                const text  = panel.getInputText();
+                                const value = text ? Number(text) : NaN;
+                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                                } else {
+                                    war.setSettingsInitialEnergyPercentage(playerIndex, value);
+                                    this._updateView();
+                                }
+                            },
+                        });
+                    },
+            };
+        }
+        private _createDataEnergyGrowthMultiplier(
+            war         : ScwWar,
+            player      : ScwPlayer,
+            isInfoKnown : boolean,
+            menuPanel   : ScwWarMenuPanel,
+        ): DataForInfoRenderer {
+            const playerIndex   = player.getPlayerIndex();
+            const currValue     = war.getSettingsEnergyGrowthMultiplier(playerIndex);
+            const minValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit;
+            const maxValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit;
+            return {
+                titleText               : Lang.getText(Lang.Type.B0181),
+                infoText                : `${currValue}%`,
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault),
+                callbackOnTouchedTitle  : !war.getIsSinglePlayerCheating()
+                    ? null
+                    : () => {
+                        Common.CommonInputPanel.show({
+                            title           : Lang.getText(Lang.Type.B0181),
+                            currentValue    : "" + currValue,
+                            maxChars        : 5,
+                            charRestrict    : "0-9",
+                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                            callback        : panel => {
+                                const text  = panel.getInputText();
+                                const value = text ? Number(text) : NaN;
+                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                                } else {
+                                    war.setSettingsEnergyGrowthMultiplier(playerIndex, value);
+                                    this._updateView();
+                                }
+                            },
+                        });
+                    },
+            };
+        }
+        private _createDataMoveRangeModifier(
+            war         : ScwWar,
+            player      : ScwPlayer,
+            isInfoKnown : boolean,
+            menuPanel   : ScwWarMenuPanel,
+        ): DataForInfoRenderer {
+            const playerIndex   = player.getPlayerIndex();
+            const currValue     = war.getSettingsMoveRangeModifier(playerIndex);
+            const minValue      = CommonConstants.WarRuleMoveRangeModifierMinLimit;
+            const maxValue      = CommonConstants.WarRuleMoveRangeModifierMaxLimit;
+            return {
+                titleText               : Lang.getText(Lang.Type.B0182),
+                infoText                : `${currValue}`,
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault),
+                callbackOnTouchedTitle  : !war.getIsSinglePlayerCheating()
+                    ? null
+                    : () => {
+                        Common.CommonInputPanel.show({
+                            title           : Lang.getText(Lang.Type.B0182),
+                            currentValue    : "" + currValue,
+                            maxChars        : 3,
+                            charRestrict    : "0-9\\-",
+                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                            callback        : panel => {
+                                const text  = panel.getInputText();
+                                const value = text ? Number(text) : NaN;
+                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                                } else {
+                                    war.setSettingsMoveRangeModifier(playerIndex, value);
+                                    this._updateView();
+                                }
+                            },
+                        });
+                    },
+            };
+        }
+        private _createDataAttackPowerModifier(
+            war         : ScwWar,
+            player      : ScwPlayer,
+            isInfoKnown : boolean,
+            menuPanel   : ScwWarMenuPanel,
+        ): DataForInfoRenderer {
+            const playerIndex   = player.getPlayerIndex();
+            const currValue     = war.getSettingsAttackPowerModifier(playerIndex);
+            const minValue      = CommonConstants.WarRuleOffenseBonusMinLimit;
+            const maxValue      = CommonConstants.WarRuleOffenseBonusMaxLimit;
+            return {
+                titleText               : Lang.getText(Lang.Type.B0183),
+                infoText                : `${currValue}%`,
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault),
+                callbackOnTouchedTitle  : !war.getIsSinglePlayerCheating()
+                    ? null
+                    : () => {
+                        Common.CommonInputPanel.show({
+                            title           : Lang.getText(Lang.Type.B0183),
+                            currentValue    : "" + currValue,
+                            maxChars        : 5,
+                            charRestrict    : "0-9\\-",
+                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                            callback        : panel => {
+                                const text  = panel.getInputText();
+                                const value = text ? Number(text) : NaN;
+                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                                } else {
+                                    war.setSettingsAttackPowerModifier(playerIndex, value);
+                                    this._updateView();
+                                }
+                            },
+                        });
+                    },
+            };
+        }
+        private _createDataVisionRangeModifier(
+            war         : ScwWar,
+            player      : ScwPlayer,
+            isInfoKnown : boolean,
+            menuPanel   : ScwWarMenuPanel,
+        ): DataForInfoRenderer {
+            const playerIndex   = player.getPlayerIndex();
+            const currValue     = war.getSettingsVisionRangeModifier(playerIndex);
+            const minValue      = CommonConstants.WarRuleVisionRangeModifierMinLimit;
+            const maxValue      = CommonConstants.WarRuleVisionRangeModifierMaxLimit;
+            return {
+                titleText               : Lang.getText(Lang.Type.B0184),
+                infoText                : `${currValue}`,
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault),
+                callbackOnTouchedTitle  : !war.getIsSinglePlayerCheating()
+                    ? null
+                    : () => {
+                        Common.CommonInputPanel.show({
+                            title           : Lang.getText(Lang.Type.B0184),
+                            currentValue    : "" + currValue,
+                            maxChars        : 3,
+                            charRestrict    : "0-9\\-",
+                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                            callback        : panel => {
+                                const text  = panel.getInputText();
+                                const value = text ? Number(text) : NaN;
+                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                                } else {
+                                    war.setSettingsVisionRangeModifier(playerIndex, value);
+                                    this._updateView();
+                                }
+                            },
+                        });
+                    },
+            };
+        }
+        private _createDataLuckLowerLimit(
+            war         : ScwWar,
+            player      : ScwPlayer,
+            isInfoKnown : boolean,
+            menuPanel   : ScwWarMenuPanel,
+        ): DataForInfoRenderer {
+            const playerIndex   = player.getPlayerIndex();
+            const currValue     = war.getSettingsLuckLowerLimit(playerIndex);
+            const minValue      = CommonConstants.WarRuleLuckMinLimit;
+            const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
+            return {
+                titleText               : Lang.getText(Lang.Type.B0189),
+                infoText                : `${currValue}%`,
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit),
+                callbackOnTouchedTitle  : !war.getIsSinglePlayerCheating()
+                    ? null
+                    : () => {
+                        Common.CommonInputPanel.show({
+                            title           : Lang.getText(Lang.Type.B0189),
+                            currentValue    : "" + currValue,
+                            maxChars        : 4,
+                            charRestrict    : "0-9\\-",
+                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                            callback        : panel => {
+                                const text  = panel.getInputText();
+                                const value = text ? Number(text) : NaN;
+                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                                } else {
+                                    const upperLimit = war.getSettingsLuckUpperLimit(playerIndex);
+                                    if (value <= upperLimit) {
+                                        war.setSettingsLuckLowerLimit(playerIndex, value);
+                                    } else {
+                                        war.setSettingsLuckUpperLimit(playerIndex, value);
+                                        war.setSettingsLuckLowerLimit(playerIndex, upperLimit);
+                                    }
+                                    this._updateView();
+                                }
+                            },
+                        });
+                    },
+            };
+        }
+        private _createDataLuckUpperLimit(
+            war         : ScwWar,
+            player      : ScwPlayer,
+            isInfoKnown : boolean,
+            menuPanel   : ScwWarMenuPanel,
+        ): DataForInfoRenderer {
+            const playerIndex   = player.getPlayerIndex();
+            const currValue     = war.getSettingsLuckUpperLimit(playerIndex);
+            const minValue      = CommonConstants.WarRuleLuckMinLimit;
+            const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
+            return {
+                titleText               : Lang.getText(Lang.Type.B0190),
+                infoText                : `${currValue}%`,
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit),
+                callbackOnTouchedTitle  : !war.getIsSinglePlayerCheating()
+                    ? null
+                    : () => {
+                        Common.CommonInputPanel.show({
+                            title           : Lang.getText(Lang.Type.B0190),
+                            currentValue    : "" + currValue,
+                            maxChars        : 4,
+                            charRestrict    : "0-9\\-",
+                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                            callback        : panel => {
+                                const text  = panel.getInputText();
+                                const value = text ? Number(text) : NaN;
+                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                                } else {
+                                    const lowerLimit = war.getSettingsLuckLowerLimit(playerIndex);
+                                    if (value >= lowerLimit) {
+                                        war.setSettingsLuckUpperLimit(playerIndex, value);
+                                    } else {
+                                        war.setSettingsLuckLowerLimit(playerIndex, value);
+                                        war.setSettingsLuckUpperLimit(playerIndex, lowerLimit);
+                                    }
+                                    this._updateView();
+                                }
+                            },
+                        });
+                    },
+            };
         }
     }
 
@@ -1106,5 +1114,38 @@ namespace TinyWars.SingleCustomWar {
             const callback  = data ? data.callbackOnTouchedTitle : null;
             (callback) && (callback());
         }
+    }
+
+    function getTilesCountAndIncome(war: ScwWar, playerIndex: number): { count: number, income: number } {
+        let count   = 0;
+        let income  = 0;
+        war.getTileMap().forEachTile(tile => {
+            if (tile.getPlayerIndex() === playerIndex) {
+                ++count;
+                income += tile.getIncomeForPlayer(playerIndex);
+            }
+        });
+        return { count, income };
+    }
+
+    function getUnitsCountAndValue(war: ScwWar, playerIndex: number): { count: number, value: number } {
+        const teamIndexes   = war.getPlayerManager().getWatcherTeamIndexes(User.UserModel.getSelfUserId());
+        const unitMap       = war.getUnitMap();
+        let count           = 0;
+        let value           = 0;
+        unitMap.forEachUnitOnMap(unit => {
+            if (unit.getPlayerIndex() === playerIndex) {
+                ++count;
+                value += Math.floor(unit.getProductionFinalCost() * unit.getNormalizedCurrentHp() / unit.getNormalizedMaxHp());
+
+                if ((teamIndexes.has(unit.getTeamIndex())) || (!war.getFogMap().checkHasFogCurrently())) {
+                    for (const unitLoaded of unitMap.getUnitsLoadedByLoader(unit, true)) {
+                        ++count;
+                        value += Math.floor(unitLoaded.getProductionFinalCost() * unitLoaded.getNormalizedCurrentHp() / unitLoaded.getNormalizedMaxHp());
+                    }
+                }
+            }
+        });
+        return { count, value };
     }
 }

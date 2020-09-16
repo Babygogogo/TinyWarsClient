@@ -14,7 +14,6 @@ namespace TinyWars.WarMap.WarMapProxy {
             { msgCode: MsgCode.S_MapGetRawData,                 callback: _onSMapGetRawData },
             { msgCode: MsgCode.S_MmChangeAvailability,          callback: _onSMmChangeAvailability },
             { msgCode: MsgCode.S_MmReloadAllMaps,               callback: _onSMmReloadAllMaps },
-            // { msgCode: MsgCode.S_MmMergeMap,                    callback: _onSMmMergeMap },
             { msgCode: MsgCode.S_MmDeleteMap,                   callback: _onSMmDeleteMap },
             { msgCode: MsgCode.S_MmGetReviewingMaps,            callback: _onSMmGetReviewingMaps },
             { msgCode: MsgCode.S_MmReviewMap,                   callback: _onSMmReviewMap },
@@ -64,7 +63,7 @@ namespace TinyWars.WarMap.WarMapProxy {
         if (data.errorCode) {
             Notify.dispatch(Notify.Type.SMapGetRawDataFailed, data);
         } else {
-            WarMapModel.setMapRawData(data.mapId, data.mapRawData);
+            WarMapModel.setRawData(data.mapId, data.mapRawData);
             Notify.dispatch(Notify.Type.SMapGetRawData, data);
         }
     }
@@ -95,24 +94,6 @@ namespace TinyWars.WarMap.WarMapProxy {
             Notify.dispatch(Notify.Type.SMmReloadAllMaps);
         }
     }
-
-    // export function reqMergeMap(srcMapFileName: string, dstMapFileName: string): void {
-    //     NetManager.send({
-    //         C_MmMergeMap: {
-    //             srcMapFileName,
-    //             dstMapFileName,
-    //         },
-    //     });
-    // }
-    // function _onSMmMergeMap(e: egret.Event): void {
-    //     const data = e.data as ProtoTypes.IS_MmMergeMap;
-    //     if (!data.errorCode) {
-    //         WarMapModel.setMapRawData(data.dstMapFileName, data.dstMapRawData);
-    //         WarMapModel.setExtraData(data.dstMapExtraData);
-    //         WarMapModel.deleteExtraData(data.srcMapFileName);
-    //         Notify.dispatch(Notify.Type.SMmMergeMap, data);
-    //     }
-    // }
 
     export function reqMmDeleteMap(mapId: number): void {
         NetManager.send({

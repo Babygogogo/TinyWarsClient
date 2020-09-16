@@ -215,7 +215,7 @@ namespace TinyWars.SingleCustomWar {
             const war               = this._war;
             const playerInTurn      = war.getPlayerInTurn();
             if ((war.getFogMap().checkHasFogCurrently())                                                                        &&
-                (!(war.getPlayerManager() as ScwPlayerManager).getWatcherTeamIndexesForScw().has(playerInTurn.getTeamIndex()))
+                (!(war.getPlayerManager() as ScwPlayerManager).getWatcherTeamIndexesForSelf().has(playerInTurn.getTeamIndex()))
             ) {
                 this._labelFund.text = `????`;
             } else {
@@ -236,7 +236,8 @@ namespace TinyWars.SingleCustomWar {
                 } else if (skillType === Types.CoSkillType.SuperPower) {
                     this._labelCurrEnergy.text = "SCOP";
                 } else {
-                    this._labelCurrEnergy.text = `${player.getCoUnitId() != null ? player.getCoCurrentEnergy() : `--`}`;
+                    const currentEnergy = player.getCoCurrentEnergy();
+                    this._labelCurrEnergy.text = `${currentEnergy == null ? `--` : currentEnergy}`;
                 }
 
                 const powerEnergy           = player.getCoPowerEnergy();

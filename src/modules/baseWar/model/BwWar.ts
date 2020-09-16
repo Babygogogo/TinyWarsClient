@@ -298,13 +298,6 @@ namespace TinyWars.BaseWar {
             return this._warRuleIndex;
         }
 
-        private _setSettingsBannedCoIdList(list: number[] | null): void {
-            this._bannedCoIdList = list || [];
-        }
-        public getSettingsBannedCoIdList(): number[] {
-            return this._bannedCoIdList;
-        }
-
         public setRemainingVotesForDraw(votes: number | undefined): void {
             this._remainingVotesForDraw = votes;
         }

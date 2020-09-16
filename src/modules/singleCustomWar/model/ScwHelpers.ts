@@ -1,11 +1,10 @@
 
 namespace TinyWars.SingleCustomWar.ScwHelpers {
     import Types                = Utility.Types;
-    import ProtoTypes           = Utility.ProtoTypes;
     import Helpers              = Utility.Helpers;
     import GridIndexHelpers     = Utility.GridIndexHelpers;
     import VisibilityHelpers    = Utility.VisibilityHelpers;
-    import DestructionHelpers   = Utility.DestructionHelpers;
+    import BwWar                = BaseWar.BwWar;
     import GridIndex            = Types.GridIndex;
     import MovableArea          = Types.MovableArea;
     import AttackableArea       = Types.AttackableArea;
@@ -93,22 +92,18 @@ namespace TinyWars.SingleCustomWar.ScwHelpers {
         }
     }
 
-    export function updateTilesAndUnitsOnVisibilityChanged(war: ScwWar): void {
-        const teamIndexes   = (war.getPlayerManager() as ScwPlayerManager).getWatcherTeamIndexesForScw();
+    export function updateTilesAndUnitsOnVisibilityChanged(war: BwWar): void {
+        const teamIndexes   = war.getPlayerManager().getWatcherTeamIndexesForSelf();
         const visibleUnits  = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes);
         war.getUnitMap().forEachUnitOnMap(unit => {
             unit.setViewVisible(visibleUnits.has(unit));
         });
 
-        const tileMap       = war.getTileMap();
         const visibleTiles  = VisibilityHelpers.getAllTilesVisibleToTeams(war, teamIndexes);
+        const tileMap       = war.getTileMap();
         tileMap.forEachTile(tile => {
-            if (visibleTiles.has(tile)) {
-                tile.setFogDisabled();
-            } else {
-                tile.setFogEnabled();
-            }
-            tile.updateView();
+            tile.setHasFog(!visibleTiles.has(tile));
+            tile.flushDataToView();
         });
         tileMap.getView().updateCoZone();
     }

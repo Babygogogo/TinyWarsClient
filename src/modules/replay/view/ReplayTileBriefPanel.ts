@@ -128,7 +128,7 @@ namespace TinyWars.Replay {
             this._updateView();
         }
         private _onNotifyTileAnimationTick(e: egret.Event): void {
-            this._tileView.updateOnAnimationTick();
+            this._tileView.updateView();
         }
 
         private _onTouchedThis(e: egret.TouchEvent): void {
@@ -147,7 +147,7 @@ namespace TinyWars.Replay {
 
                 const gridIndex = this._cursor.getGridIndex();
                 const tile      = this._tileMap.getTile(gridIndex);
-                this._tileView.init(tile).startRunningView();
+                this._tileView.setData(tile).startRunningView();
                 this._labelDefense.text     = `${Math.floor(tile.getDefenseAmount() / 10)}`;
                 this._labelName.text        = Lang.getTileName(tile.getType());
                 this._labelGridIndex.text   = `x${gridIndex.x} y${gridIndex.y}`;

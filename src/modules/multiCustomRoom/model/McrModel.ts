@@ -99,14 +99,14 @@ namespace TinyWars.MultiCustomRoom {
             return WarMapModel.getExtraData(getCreateWarMapFileName());
         }
         export function getCreateWarMapRawData(): Promise<ProtoTypes.IMapRawData> {
-            return WarMapModel.getMapRawData(getCreateWarMapFileName());
+            return WarMapModel.getRawData(getCreateWarMapFileName());
         }
         export function getCreateWarMapFileName(): string {
             return _dataForCreateWar.mapFileName;
         }
 
         export async function resetCreateWarData(mapFileName: string): Promise<void> {
-            const mapRawData                        = await WarMapModel.getMapRawData(mapFileName);
+            const mapRawData                        = await WarMapModel.getRawData(mapFileName);
             _dataForCreateWar.mapFileName           = mapFileName;
             _dataForCreateWar.configVersion         = Utility.ConfigManager.getNewestConfigVersion();
             _dataForCreateWar.bannedCoIdList.length = 0;
@@ -141,7 +141,7 @@ namespace TinyWars.MultiCustomRoom {
             } else {
                 const mapFileName   = getCreateWarMapFileName();
                 const playerIndex   = 1;
-                const warRule       = (await WarMapModel.getMapRawData(mapFileName)).warRuleList[warRuleIndex];
+                const warRule       = (await WarMapModel.getRawData(mapFileName)).warRuleList[warRuleIndex];
                 setCreateWarBootTimerParams([BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue]);
                 setCreateWarPlayerIndex(playerIndex);
                 setCreateWarTeamIndex((await WarMapModel.getPlayerRule(mapFileName, warRuleIndex, playerIndex)).teamIndex);
@@ -439,7 +439,7 @@ namespace TinyWars.MultiCustomRoom {
             return WarMapModel.getExtraData(getJoinWarMapFileName());
         }
         export function getJoinWarMapRawData(): Promise<ProtoTypes.IMapRawData> {
-            return WarMapModel.getMapRawData(getJoinWarMapFileName());
+            return WarMapModel.getRawData(getJoinWarMapFileName());
         }
         export function getJoinWarWarRuleIndex(): number | null {
             return _joinWarRoomInfo.warRuleIndex;

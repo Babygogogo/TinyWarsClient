@@ -22,7 +22,7 @@ namespace TinyWars.SingleCustomRoom.ScrProxy {
         });
     }
     function _onSScrCreateWar(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_ScrCreateWar;
+        const data = e.data as ProtoTypes.NetMessage.IS_ScrCreateWar;
         if (!data.errorCode) {
             Notify.dispatch(Notify.Type.SScrCreateWar, data);
         }
@@ -34,7 +34,7 @@ namespace TinyWars.SingleCustomRoom.ScrProxy {
         });
     }
     function _onSScrGetSaveSlotInfoList(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_ScrGetSaveSlotInfoList;
+        const data = e.data as ProtoTypes.NetMessage.IS_ScrGetSaveSlotInfoList;
         if (!data.errorCode) {
             ScrModel.setSaveSlotInfoList(data.infoList);
             Notify.dispatch(Notify.Type.SScrGetSaveInfoList, data);
@@ -49,7 +49,7 @@ namespace TinyWars.SingleCustomRoom.ScrProxy {
         });
     }
     function _onSScrContinueWar(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_ScrContinueWar;
+        const data = e.data as ProtoTypes.NetMessage.IS_ScrContinueWar;
         if (data.errorCode) {
             Notify.dispatch(Notify.Type.SScrContinueWarFailed, data);
         } else {
@@ -66,13 +66,13 @@ namespace TinyWars.SingleCustomRoom.ScrProxy {
         });
     }
     function _onSScrSaveWar(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_ScrSaveWar;
+        const data = e.data as ProtoTypes.NetMessage.IS_ScrSaveWar;
         if (!data.errorCode) {
             Notify.dispatch(Notify.Type.SScrSaveWar, data);
         }
     }
 
-    export function reqScrCreateCustomWar(warData: Types.SerializedWar): void {
+    export function reqScrCreateCustomWar(warData: ProtoTypes.WarSerialization.ISerialWar): void {
         NetManager.send({
             C_ScrCreateCustomWar: {
                 warData,
@@ -80,7 +80,7 @@ namespace TinyWars.SingleCustomRoom.ScrProxy {
         });
     }
     function _onSScrCreateCustomWar(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_ScrCreateCustomWar;
+        const data = e.data as ProtoTypes.NetMessage.IS_ScrCreateCustomWar;
         if (!data.errorCode) {
             Notify.dispatch(Notify.Type.SScrCreateCustomWar, data);
         }

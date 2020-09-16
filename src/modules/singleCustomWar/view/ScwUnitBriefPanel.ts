@@ -150,17 +150,17 @@ namespace TinyWars.SingleCustomWar {
                 const gridIndex     = this._cursor.getGridIndex();
                 const unitOnMap     = this._unitMap.getUnitOnMap(gridIndex) as ScwUnit;
                 const war           = this._war;
-                const teamIndexes   = (war.getPlayerManager() as ScwPlayerManager).getWatcherTeamIndexesForScw();
+                const teamIndexes   = (war.getPlayerManager() as ScwPlayerManager).getWatcherTeamIndexesForSelf();
 
                 if ((unitOnMap)                                         &&
-                    (VisibilityHelpers.checkIsUnitOnMapVisibleToTeams(
+                    (VisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                         war,
                         gridIndex,
-                        unitOnMap.getType(),
-                        unitOnMap.getIsDiving(),
-                        unitOnMap.getPlayerIndex(),
-                        teamIndexes
-                    ))
+                        unitType: unitOnMap.getType(),
+                        isDiving: unitOnMap.getIsDiving(),
+                        unitPlayerIndex: unitOnMap.getPlayerIndex(),
+                        observerTeamIndexes: teamIndexes
+                    }))
                 ) {
                     unitList.push(unitOnMap);
 

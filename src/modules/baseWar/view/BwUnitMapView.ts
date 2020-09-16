@@ -2,6 +2,7 @@
 namespace TinyWars.BaseWar {
     import Notify               = Utility.Notify;
     import Types                = Utility.Types;
+    import VisibilityHelpers    = Utility.VisibilityHelpers;
     import UnitCategory         = Types.UnitCategory;
     import ActionPlannerState   = Types.ActionPlannerState;
 
@@ -192,8 +193,13 @@ namespace TinyWars.BaseWar {
             }
         }
 
-        protected _resetVisibleForAllUnitsOnMap(): void {
-            this._unitMap.forEachUnitOnMap(unit => unit.setViewVisible(true));
+        private _resetVisibleForAllUnitsOnMap(): void {
+            const unitMap       = this._getUnitMap();
+            const war           = unitMap.getWar();
+            const visibleUnits  = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getWatcherTeamIndexesForSelf());
+            unitMap.forEachUnitOnMap(unit => {
+                unit.setViewVisible(visibleUnits.has(unit));
+            });
         }
     }
 }

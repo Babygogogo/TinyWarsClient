@@ -1,10 +1,12 @@
 
 namespace TinyWars.MultiCustomWar.McwHelpers {
     import Types                = Utility.Types;
+    import Logger               = Utility.Logger;
     import Helpers              = Utility.Helpers;
     import GridIndexHelpers     = Utility.GridIndexHelpers;
     import VisibilityHelpers    = Utility.VisibilityHelpers;
     import DestructionHelpers   = Utility.DestructionHelpers;
+    import BwWar                = BaseWar.BwWar;
     import GridIndex            = Types.GridIndex;
     import MovableArea          = Types.MovableArea;
     import AttackableArea       = Types.AttackableArea;
@@ -92,24 +94,9 @@ namespace TinyWars.MultiCustomWar.McwHelpers {
         }
     }
 
-    export function updateTilesAndUnitsOnVisibilityChanged(war: McwWar): void {
-        const userId        = User.UserModel.getSelfUserId();
-        const visibleTiles  = VisibilityHelpers.getAllTilesVisibleToUser(war, userId);
-        const tileMap       = war.getTileMap();
-        tileMap.forEachTile(tile => {
-            if (visibleTiles.has(tile)) {
-                if (tile.getIsFogEnabled()) {
-                    tile.setFogDisabled();
-                }
-            } else {
-                if (!tile.getIsFogEnabled()) {
-                    tile.setFogEnabled();
-                }
-            }
-            tile.updateView();
-        });
-
-        const visibleUnitsOnMap = VisibilityHelpers.getAllUnitsOnMapVisibleToUser(war, userId);
+    export function updateTilesAndUnitsOnVisibilityChanged(war: BwWar): void {
+        const watcherTeamIndexes    = war.getPlayerManager().getWatcherTeamIndexesForSelf();
+        const visibleUnitsOnMap     = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, watcherTeamIndexes);
         war.getUnitMap().forEachUnitOnMap(unit => {
             if (visibleUnitsOnMap.has(unit)) {
                 unit.setViewVisible(true);
@@ -117,8 +104,25 @@ namespace TinyWars.MultiCustomWar.McwHelpers {
                 DestructionHelpers.removeUnitOnMap(war, unit.getGridIndex());
             }
         });
-        DestructionHelpers.removeInvisibleLoadedUnits(war, userId);
+        DestructionHelpers.removeInvisibleLoadedUnits(war, watcherTeamIndexes);
 
+        const visibleTiles  = VisibilityHelpers.getAllTilesVisibleToTeams(war, watcherTeamIndexes);
+        const tileMap       = war.getTileMap();
+        tileMap.forEachTile(tile => {
+            if (!(tile instanceof McwTile)) {
+                Logger.error(`McwHelpers.updateTilesAndUnitsOnVisibilityChanged() invalid tile.`);
+                return;
+            }
+
+            if (visibleTiles.has(tile)) {
+                tile.setHasFog(false);
+            } else {
+                if (!tile.getHasFog()) {
+                    tile.resetDataAsHasFog();
+                }
+            }
+            tile.flushDataToView();
+        });
         tileMap.getView().updateCoZone();
     }
 

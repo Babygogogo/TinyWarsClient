@@ -1,10 +1,12 @@
 
 namespace TinyWars.SingleCustomRoom {
-    import Types        = Utility.Types;
-    import Lang         = Utility.Lang;
-    import ProtoTypes   = Utility.ProtoTypes;
-    import Notify       = Utility.Notify;
-    import WarMapModel  = WarMap.WarMapModel;
+    import Types            = Utility.Types;
+    import Lang             = Utility.Lang;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import Notify           = Utility.Notify;
+    import ConfigManager    = Utility.ConfigManager;
+    import WarMapModel      = WarMap.WarMapModel;
+    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
     export const MAX_INITIAL_FUND     = 1000000;
     export const MIN_INITIAL_FUND     = 0;
@@ -31,13 +33,17 @@ namespace TinyWars.SingleCustomRoom {
     const VISION_MODIFIERS        = [-2, -1, 0, 1, 2];
     const DEFAULT_VISION_MODIFIER = 0;
 
-    export type DataForCreateWar    = ProtoTypes.IC_ScrCreateWar;
+    export type DataForCreateWar    = ProtoTypes.NetMessage.IC_ScrCreateWar;
 
     export namespace ScrModel {
         const _dataForCreateWar: DataForCreateWar = {
-            mapFileName     : "",
-            saveSlotIndex   : 0,
-            configVersion   : Utility.ConfigManager.getNewestConfigVersion(),
+            settingsForCommon: {
+                mapId           : undefined,
+                configVersion   : Utility.ConfigManager.getNewestConfigVersion(),
+            },
+            settingsForSinglePlayer: {
+                saveSlotIndex   : 0,
+            },
 
             playerInfoList  : [],
 
@@ -53,34 +59,25 @@ namespace TinyWars.SingleCustomRoom {
             luckUpperLimit      : Utility.ConfigManager.COMMON_CONSTANTS.WarRuleLuckDefaultUpperLimit,
         };
 
-        let _saveSlotInfoList   : ProtoTypes.ISaveSlotInfo[];
+        let _saveSlotInfoList   : ProtoTypes.SingleCustomRoom.IScrSaveSlotInfo[];
 
         export function init(): void {
-            Notify.addEventListeners([
-                { type: Notify.Type.SMmMergeMap, callback: _onNotifySMmMergeMap, thisObject: ScrModel },
-            ]);
-        }
-
-        function _onNotifySMmMergeMap(e: egret.Event): void {
-            const data = e.data as ProtoTypes.IS_MmMergeMap;
-            for (const slot of _saveSlotInfoList || []) {
-                if (slot.mapFileName === data.srcMapFileName) {
-                    slot.mapFileName = data.dstMapFileName;
-                }
-            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for creating wars.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        export function getCreateWarMapExtraData(): Promise<ProtoTypes.IMapExtraData> {
-            return WarMapModel.getExtraData(_dataForCreateWar.mapFileName);
+        export function getCreateWarMapExtraData(): Promise<ProtoTypes.Map.IMapExtraData> {
+            return WarMapModel.getExtraData(_dataForCreateWar.settingsForCommon.mapId);
+        }
+        export function getCreateWarMapRawData(): Promise<ProtoTypes.Map.IMapRawData> {
+            return WarMapModel.getRawData(_dataForCreateWar.settingsForCommon.mapId);
         }
 
-        export async function resetCreateWarData(mapFileName: string): Promise<void> {
-            _dataForCreateWar.mapFileName       = mapFileName;
+        export async function resetCreateWarData(mapId: number): Promise<void> {
+            _dataForCreateWar.mapFileName       = mapId;
             _dataForCreateWar.configVersion     = Utility.ConfigManager.getNewestConfigVersion();
-            _dataForCreateWar.playerInfoList    = await generateCreateWarPlayerInfoList(mapFileName);
+            _dataForCreateWar.playerInfoList    = await generateCreateWarPlayerInfoList(mapId);
             setCreateWarSaveSlotIndex(getAvailableSaveSlot(this.getSaveSlotInfoList()));
             setCreateWarHasFog(false);
 
@@ -99,13 +96,14 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         export function setCreateWarSaveSlotIndex(slot: number): void {
-            if (_dataForCreateWar.saveSlotIndex !== slot) {
-                _dataForCreateWar.saveSlotIndex = slot;
+            const settingsForSinglePlayer = _dataForCreateWar.settingsForSinglePlayer;
+            if (settingsForSinglePlayer.saveSlotIndex !== slot) {
+                settingsForSinglePlayer.saveSlotIndex = slot;
                 Notify.dispatch(Notify.Type.ScrCreateWarSaveSlotChanged);
             }
         }
         export function getCreateWarSaveSlotIndex(): number {
-            return _dataForCreateWar.saveSlotIndex;
+            return _dataForCreateWar.settingsForSinglePlayer.saveSlotIndex;
         }
 
         export function tickCreateWarUserId(dataIndex: number): void {
@@ -117,7 +115,7 @@ namespace TinyWars.SingleCustomRoom {
         export async function tickCreateWarTeamIndex(dataIndex: number): Promise<void> {
             const data          = _dataForCreateWar.playerInfoList[dataIndex];
             const currTeamIndex = data.teamIndex;
-            data.teamIndex      = currTeamIndex < (await getCreateWarMapExtraData()).playersCount ? currTeamIndex + 1 : 1;
+            data.teamIndex      = currTeamIndex < (await getCreateWarMapRawData()).playersCount ? currTeamIndex + 1 : 1;
             Notify.dispatch(Notify.Type.ScrCreateWarPlayerInfoListChanged);
         }
         export function setCreateWarCoId(dataIndex: number, coId: number | null): void {
@@ -125,8 +123,8 @@ namespace TinyWars.SingleCustomRoom {
             Notify.dispatch(Notify.Type.ScrCreateWarPlayerInfoListChanged);
         }
 
-        export function setCreateWarHasFog(has: boolean): void {
-            _dataForCreateWar.hasFog = has ? 1 : 0;
+        export function setCreateWarHasFog(hasFog: boolean): void {
+            _dataForCreateWar.hasFog = hasFog ? 1 : 0;
         }
         export function setCreateWarPrevHasFog(): void {
             setCreateWarHasFog(!getCreateWarHasFog());
@@ -283,24 +281,24 @@ namespace TinyWars.SingleCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for save slots.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        export function setSaveSlotInfoList(infoList: ProtoTypes.ISaveSlotInfo[]): void {
+        export function setSaveSlotInfoList(infoList: ProtoTypes.SingleCustomRoom.IScrSaveSlotInfo[]): void {
             _saveSlotInfoList = infoList;
         }
-        export function getSaveSlotInfoList(): ProtoTypes.ISaveSlotInfo[] | null {
+        export function getSaveSlotInfoList(): ProtoTypes.SingleCustomRoom.IScrSaveSlotInfo[] | null {
             return _saveSlotInfoList;
         }
         export function checkIsSaveSlotEmpty(slotIndex: number): boolean {
             if (!_saveSlotInfoList) {
                 return true;
             } else {
-                return _saveSlotInfoList.every(v => v.slotIndex !== slotIndex);
+                return _saveSlotInfoList.every(v => v.saveSlotIndex !== slotIndex);
             }
         }
     }
 
-    async function generateCreateWarPlayerInfoList(mapFileName: string): Promise<ProtoTypes.IWarPlayerInfo[]> {
-        const playersCount  = (await WarMapModel.getExtraData(mapFileName)).playersCount;
-        const list          : ProtoTypes.IWarPlayerInfo[] = [{
+    async function generateCreateWarPlayerInfoList(mapId: number): Promise<ProtoTypes.Structure.IWarPlayerInfo[]> {
+        const playersCount  = (await WarMapModel.getRawData(mapId)).playersCount;
+        const list          : ProtoTypes.Structure.IWarPlayerInfo[] = [{
             playerIndex : 1,
             userId      : User.UserModel.getSelfUserId(),
             teamIndex   : 1,
@@ -317,12 +315,12 @@ namespace TinyWars.SingleCustomRoom {
         return list;
     }
 
-    function getAvailableSaveSlot(infoList: ProtoTypes.ISaveSlotInfo[] | null): number {
+    function getAvailableSaveSlot(infoList: ProtoTypes.SingleCustomRoom.IScrSaveSlotInfo[] | null): number {
         if (!infoList) {
             return 0;
         } else {
-            for (let i = 0; i < Utility.ConfigManager.COMMON_CONSTANTS.ScwSaveSlotMaxCount; ++i) {
-                if (infoList.every(info => info.slotIndex !== i)) {
+            for (let i = 0; i < CommonConstants.ScwSaveSlotMaxCount; ++i) {
+                if (infoList.every(info => info.saveSlotIndex !== i)) {
                     return i;
                 }
             }

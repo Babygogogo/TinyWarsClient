@@ -196,10 +196,6 @@ namespace TinyWars.Utility.Helpers {
         return repeatString("0", targetLength - getDigitsCount(num)) + num;
     }
 
-    export function getNormalizedHp(hp: number): number {
-        return Math.ceil(hp / Utility.ConfigManager.COMMON_CONSTANTS.UnitHpNormalizer);
-    }
-
     export function getPointDistance(x1: number, y1: number, x2: number, y2: number): number {
         return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
     }

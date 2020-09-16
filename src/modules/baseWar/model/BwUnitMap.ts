@@ -4,7 +4,13 @@ namespace TinyWars.BaseWar {
     import Helpers                  = Utility.Helpers;
     import GridIndexHelpers         = Utility.GridIndexHelpers;
     import Logger                   = Utility.Logger;
+    import ProtoTypes               = Utility.ProtoTypes;
+    import VisibilityHelpers        = Utility.VisibilityHelpers;
     import MapSizeAndMaxPlayerIndex = Types.MapSizeAndMaxPlayerIndex;
+    import GridIndex                = Types.GridIndex;
+    import WarSerialization         = ProtoTypes.WarSerialization;
+    import ISerialUnitMap           = WarSerialization.ISerialUnitMap;
+    import ISerialUnit              = WarSerialization.ISerialUnit;
 
     export abstract class BwUnitMap {
         private _war            : BwWar;
@@ -17,115 +23,64 @@ namespace TinyWars.BaseWar {
         private _view   : BwUnitMapView;
 
         protected abstract _getViewClass(): new () => BwUnitMapView;
-        protected abstract _getBwUnitClass(): new () => BwUnit;
+        protected abstract _getUnitClass(): new () => BwUnit;
 
-        public async init(
-            data                    : Types.SerializedUnitMap | null | undefined,
+        public init(
+            data                    : ISerialUnitMap,
             configVersion           : string,
-            mapFileName             : string | null | undefined,
             mapSizeAndMaxPlayerIndex: MapSizeAndMaxPlayerIndex,
-        ): Promise<BwUnitMap> {
-            this._configVersion = configVersion;
-            if (data) {
-                await this._initWithSerializedData(configVersion, mapSizeAndMaxPlayerIndex, data);
-            } else {
-                await this._initWithoutSerializedData(configVersion, mapSizeAndMaxPlayerIndex, mapFileName);
+        ): BwUnitMap | undefined {
+            const nextUnitId = data.nextUnitId;
+            if (nextUnitId == null) {
+                Logger.error(`BwUnitMap.init() empty nextUnitId.`);
+                return undefined;
             }
 
-            this._view = this._view || new (this._getViewClass())();
-            this._view.init(this);
+            const { mapWidth, mapHeight }   = mapSizeAndMaxPlayerIndex;
+            const map                       = Helpers.createEmptyMap<BwUnit>(mapWidth);
+            const loadedUnits               = new Map<number, BwUnit>();
+            for (const unitData of data.units || []) {
+                const unit = new (this._getUnitClass())().init(unitData, configVersion);
+                if (!unit) {
+                    Logger.error(`BwUnitMap.init() failed to create a unit! unitData: ${JSON.stringify(unitData)}`);
+                    return undefined;
+                }
+
+                const gridIndex = unit.getGridIndex();
+                if ((!gridIndex) || (!GridIndexHelpers.checkIsInsideMap(gridIndex, { width: mapWidth, height: mapHeight }))) {
+                    Logger.error(`BwUnitMap.init() invalid gridIndex: ${JSON.stringify(gridIndex)}`);
+                    return undefined;
+                }
+
+                if (unit.getLoaderUnitId() == null) {
+                    map[gridIndex.x][gridIndex.y] = unit;
+                } else {
+                    const unitId = unit.getUnitId();
+                    if (unitId == null) {
+                        Logger.error(`BwUnitMap.init() empty unitId! unitData: ${JSON.stringify(unitData)}`);
+                        return;
+                    }
+                    loadedUnits.set(unitId, unit);
+                }
+            }
+
+            this._setMap(map);
+            this._setLoadedUnits(loadedUnits);
+            this._setMapSize(mapWidth, mapHeight);
+            this.setNextUnitId(nextUnitId);
+
+            const view = this.getView() || new (this._getViewClass())();
+            view.init(this);
+            this._setView(view);
 
             return this;
         }
         public async fastInit(
-            data                    : Types.SerializedUnitMap | null | undefined,
-            configVersion           : string,
-            mapFileName             : string | null | undefined,
-            mapSizeAndMaxPlayerIndex: MapSizeAndMaxPlayerIndex,
-        ): Promise<BwUnitMap> {
-            return this.init(data, configVersion, mapFileName, mapSizeAndMaxPlayerIndex);
-        }
-        private async _initWithSerializedData(
+            data                    : ISerialUnitMap | null | undefined,
             configVersion           : string,
             mapSizeAndMaxPlayerIndex: MapSizeAndMaxPlayerIndex,
-            data                    : Types.SerializedUnitMap
         ): Promise<BwUnitMap> {
-            const { mapWidth, mapHeight }   = mapSizeAndMaxPlayerIndex;
-            const unitDataList              = data.units;
-            const map                       = Helpers.createEmptyMap<BwUnit>(mapWidth);
-            const loadedUnits               = new Map<number, BwUnit>();
-            if (unitDataList) {
-                for (const unitData of unitDataList) {
-                    const unit = new (this._getBwUnitClass())().init(unitData, configVersion);
-                    if (unit.getLoaderUnitId() == null) {
-                        map[unit.getGridX()][unit.getGridY()] = unit;
-                    } else {
-                        loadedUnits.set(unit.getUnitId(), unit);
-                    }
-                }
-            }
-
-            this._map           = map;
-            this._loadedUnits   = loadedUnits;
-            this._setMapSize(mapWidth, mapHeight);
-            this.setNextUnitId(data.nextUnitId!);
-
-            return this;
-        }
-        private async _initWithoutSerializedData(
-            configVersion           : string,
-            mapSizeAndMaxPlayerIndex: MapSizeAndMaxPlayerIndex,
-            mapFileName             : string
-        ): Promise<BwUnitMap> {
-            const mapRawData                = await WarMap.WarMapModel.getMapRawData(mapFileName);
-            const { mapWidth, mapHeight }   = mapSizeAndMaxPlayerIndex;
-            const map                       = Helpers.createEmptyMap<BwUnit>(mapWidth);
-            const loadedUnits               = new Map<number, BwUnit>();
-
-            const unitViewIds = mapRawData.units;
-            if (unitViewIds) {
-                let nextUnitId = 0;
-                for (let x = 0; x < mapWidth; ++x) {
-                    for (let y = 0; y < mapHeight; ++y) {
-                        const viewId = unitViewIds[x + y * mapWidth];
-                        if (viewId !== 0) {
-                            map[x][y] = new (this._getBwUnitClass())().init({
-                                gridX   : x,
-                                gridY   : y,
-                                viewId  : viewId,
-                                unitId  : nextUnitId,
-                            }, configVersion);
-                            ++nextUnitId;
-                        }
-                    }
-                }
-                this.setNextUnitId(nextUnitId);
-
-            } else {
-                const unitDataList = mapRawData.unitDataList;
-                if (unitDataList) {
-                    let nextUnitId = 0;
-                    for (const unitData of unitDataList) {
-                        const unit  = new (this._getBwUnitClass())().init(unitData as Types.SerializedUnit, configVersion);
-                        nextUnitId  = Math.max(nextUnitId, unitData.unitId! + 1);
-                        if (unit.getLoaderUnitId() == null) {
-                            map[unit.getGridX()][unit.getGridY()] = unit;
-                        } else {
-                            loadedUnits.set(unit.getUnitId(), unit);
-                        }
-                    }
-                    this.setNextUnitId(nextUnitId);
-
-                } else {
-                    this.setNextUnitId(0);
-                }
-            }
-
-            this._map           = map;
-            this._loadedUnits   = loadedUnits;
-            this._setMapSize(mapWidth, mapHeight);
-
-            return this;
+            return this.init(data, configVersion, mapSizeAndMaxPlayerIndex);
         }
 
         public startRunning(war: BwWar): void {
@@ -143,6 +98,55 @@ namespace TinyWars.BaseWar {
             this.getView().stopRunningView();
         }
 
+        public serialize(): ISerialUnitMap | undefined {
+            const nextUnitId = this.getNextUnitId();
+            if (nextUnitId == null) {
+                Logger.error(`BwUnitMap.serialize() empty nextUnitId.`);
+                return undefined;
+            }
+
+            const units: ISerialUnit[] = [];
+            for (const unit of this._getAllUnits()) {
+                const serializedUnit = unit.serialize();
+                if (!serializedUnit) {
+                    Logger.error(`BwUnitMap.serialize() empty serializedUnit.`);
+                    return undefined;
+                }
+
+                units.push(serializedUnit);
+            }
+
+            return {
+                units,
+                nextUnitId,
+            };
+        }
+        public serializeForSimulation(): ISerialUnitMap | undefined {
+            const nextUnitId = this.getNextUnitId();
+            if (nextUnitId == null) {
+                Logger.error(`BwUnitMap.serializeForSimulation() empty nextUnitId.`);
+                return undefined;
+            }
+
+            const war           = this.getWar();
+            const units         : ISerialUnit[] = [];
+            const teamIndexes   = war.getPlayerManager().getWatcherTeamIndexesForSelf();
+            for (const unit of VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes)) {
+                units.push(unit.serializeForSimulation());
+
+                if (teamIndexes.has(unit.getTeamIndex())) {
+                    for (const loadedUnit of this.getUnitsLoadedByLoader(unit, true)) {
+                        units.push(loadedUnit.serializeForSimulation());
+                    }
+                }
+            }
+
+            return {
+                units,
+                nextUnitId,
+            };
+        }
+
         private _setMap(map: (BwUnit | undefined)[][]): void {
             this._map = map;
         }
@@ -153,6 +157,9 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other public functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _setView(view: BwUnitMapView): void {
+            this._view = view;
+        }
         public getView(): BwUnitMapView {
             return this._view;
         }
@@ -221,7 +228,10 @@ namespace TinyWars.BaseWar {
         public getUnitLoadedById(unitId: number): BwUnit | undefined {
             return this._loadedUnits.get(unitId);
         }
-        public getUnitsLoaded(): Map<number, BwUnit> {
+        private _setLoadedUnits(units: Map<number, BwUnit>): void {
+            this._loadedUnits = units;
+        }
+        public getLoadedUnits(): Map<number, BwUnit> {
             return this._loadedUnits;
         }
         public getUnitsLoadedByLoader(loader: BwUnit, isRecursive: boolean): BwUnit[] {
@@ -256,7 +266,7 @@ namespace TinyWars.BaseWar {
         }
 
         public setUnitLoaded(unit: BwUnit): void {
-            const loadedUnits = this.getUnitsLoaded();
+            const loadedUnits = this.getLoadedUnits();
             if (loadedUnits == null) {
                 Logger.error(`BwUnitMap.setUnitLoaded() the map is not initialized.`);
                 return;
@@ -364,7 +374,7 @@ namespace TinyWars.BaseWar {
                 || (this.checkIsCoLoadedByAnyUnitLoaded(playerIndex))
         }
         public checkIsCoLoadedByAnyUnitLoaded(playerIndex: number): boolean | undefined {
-            const units = this._getLoadedUnits();
+            const units = this.getLoadedUnits();
             if (units == null) {
                 Logger.error(`BwUnitMap.checkIsCoLoadedByAnyUnitLoaded() empty units.`);
                 return undefined;
@@ -412,7 +422,7 @@ namespace TinyWars.BaseWar {
         }
 
         public getAllCoUnits(playerIndex: number): BwUnit[] | undefined {
-            const loadedUnits = this._getLoadedUnits();
+            const loadedUnits = this.getLoadedUnits();
             if (loadedUnits == null) {
                 Logger.error(`BwUnitMap.getCoUnitsCount() empty loadedUnits.`);
                 return undefined;

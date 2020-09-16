@@ -1,5 +1,5 @@
 
-namespace TinyWars.BaseWar.BwCoSkillHelpers {
+namespace TinyWars.BaseWar.BwCoSkillHelper {
     import Types                    = Utility.Types;
     import ProtoTypes               = Utility.ProtoTypes;
     import GridIndexHelpers         = Utility.GridIndexHelpers;

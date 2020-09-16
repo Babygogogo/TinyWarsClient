@@ -2961,6 +2961,30 @@ export declare namespace WarRule {
         /** DataForPlayerRule initialFund */
         initialFund?: (number|null);
 
+        /** DataForPlayerRule incomeMultiplier */
+        incomeMultiplier?: (number|null);
+
+        /** DataForPlayerRule initialEnergyPercentage */
+        initialEnergyPercentage?: (number|null);
+
+        /** DataForPlayerRule energyGrowthMultiplier */
+        energyGrowthMultiplier?: (number|null);
+
+        /** DataForPlayerRule moveRangeModifier */
+        moveRangeModifier?: (number|null);
+
+        /** DataForPlayerRule attackPowerModifier */
+        attackPowerModifier?: (number|null);
+
+        /** DataForPlayerRule visionRangeModifier */
+        visionRangeModifier?: (number|null);
+
+        /** DataForPlayerRule luckLowerLimit */
+        luckLowerLimit?: (number|null);
+
+        /** DataForPlayerRule luckUpperLimit */
+        luckUpperLimit?: (number|null);
+
         /** DataForPlayerRule availableCoIdList */
         availableCoIdList?: (number[]|null);
     }
@@ -2982,6 +3006,30 @@ export declare namespace WarRule {
 
         /** DataForPlayerRule initialFund. */
         public initialFund: number;
+
+        /** DataForPlayerRule incomeMultiplier. */
+        public incomeMultiplier: number;
+
+        /** DataForPlayerRule initialEnergyPercentage. */
+        public initialEnergyPercentage: number;
+
+        /** DataForPlayerRule energyGrowthMultiplier. */
+        public energyGrowthMultiplier: number;
+
+        /** DataForPlayerRule moveRangeModifier. */
+        public moveRangeModifier: number;
+
+        /** DataForPlayerRule attackPowerModifier. */
+        public attackPowerModifier: number;
+
+        /** DataForPlayerRule visionRangeModifier. */
+        public visionRangeModifier: number;
+
+        /** DataForPlayerRule luckLowerLimit. */
+        public luckLowerLimit: number;
+
+        /** DataForPlayerRule luckUpperLimit. */
+        public luckUpperLimit: number;
 
         /** DataForPlayerRule availableCoIdList. */
         public availableCoIdList: number[];
@@ -3272,36 +3320,6 @@ export declare namespace WarRule {
 
         /** RuleForGlobalParams hasFogByDefault */
         hasFogByDefault?: (boolean|null);
-
-        /** RuleForGlobalParams initialFund */
-        initialFund?: (number|null);
-
-        /** RuleForGlobalParams incomeMultiplier */
-        incomeMultiplier?: (number|null);
-
-        /** RuleForGlobalParams initialEnergyPercentage */
-        initialEnergyPercentage?: (number|null);
-
-        /** RuleForGlobalParams energyGrowthMultiplier */
-        energyGrowthMultiplier?: (number|null);
-
-        /** RuleForGlobalParams moveRangeModifier */
-        moveRangeModifier?: (number|null);
-
-        /** RuleForGlobalParams attackPowerModifier */
-        attackPowerModifier?: (number|null);
-
-        /** RuleForGlobalParams visionRangeModifier */
-        visionRangeModifier?: (number|null);
-
-        /** RuleForGlobalParams luckLowerLimit */
-        luckLowerLimit?: (number|null);
-
-        /** RuleForGlobalParams luckUpperLimit */
-        luckUpperLimit?: (number|null);
-
-        /** RuleForGlobalParams availableCoIdList */
-        availableCoIdList?: (number[]|null);
     }
 
     /** Represents a RuleForGlobalParams. */
@@ -3315,36 +3333,6 @@ export declare namespace WarRule {
 
         /** RuleForGlobalParams hasFogByDefault. */
         public hasFogByDefault: boolean;
-
-        /** RuleForGlobalParams initialFund. */
-        public initialFund: number;
-
-        /** RuleForGlobalParams incomeMultiplier. */
-        public incomeMultiplier: number;
-
-        /** RuleForGlobalParams initialEnergyPercentage. */
-        public initialEnergyPercentage: number;
-
-        /** RuleForGlobalParams energyGrowthMultiplier. */
-        public energyGrowthMultiplier: number;
-
-        /** RuleForGlobalParams moveRangeModifier. */
-        public moveRangeModifier: number;
-
-        /** RuleForGlobalParams attackPowerModifier. */
-        public attackPowerModifier: number;
-
-        /** RuleForGlobalParams visionRangeModifier. */
-        public visionRangeModifier: number;
-
-        /** RuleForGlobalParams luckLowerLimit. */
-        public luckLowerLimit: number;
-
-        /** RuleForGlobalParams luckUpperLimit. */
-        public luckUpperLimit: number;
-
-        /** RuleForGlobalParams availableCoIdList. */
-        public availableCoIdList: number[];
 
         /**
          * Creates a new RuleForGlobalParams instance using the specified properties.
@@ -4125,8 +4113,8 @@ export declare namespace WarSerialization {
         /** DataForFogMapFromPath playerIndex */
         playerIndex?: (number|null);
 
-        /** DataForFogMapFromPath encodedMap */
-        encodedMap?: (string|null);
+        /** DataForFogMapFromPath visibilityList */
+        visibilityList?: (number[]|null);
     }
 
     /** Represents a DataForFogMapFromPath. */
@@ -4141,8 +4129,8 @@ export declare namespace WarSerialization {
         /** DataForFogMapFromPath playerIndex. */
         public playerIndex: number;
 
-        /** DataForFogMapFromPath encodedMap. */
-        public encodedMap: string;
+        /** DataForFogMapFromPath visibilityList. */
+        public visibilityList: number[];
 
         /**
          * Creates a new DataForFogMapFromPath instance using the specified properties.

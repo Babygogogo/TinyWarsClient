@@ -4,8 +4,8 @@ namespace TinyWars.SingleCustomWar {
     import Lang             = Utility.Lang;
     import Types            = Utility.Types;
     import FloatText        = Utility.FloatText;
-    import Helpers          = Utility.Helpers;
     import ConfigManager    = Utility.ConfigManager;
+    import BwHelpers        = BaseWar.BwHelpers;
     import UnitType         = Types.UnitType;
     import GridIndex        = Types.GridIndex;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
@@ -121,7 +121,7 @@ namespace TinyWars.SingleCustomWar {
             const tile              = war.getTileMap().getTile(gridIndex);
             const skillCfg          = tile.getEffectiveSelfUnitProductionSkillCfg(playerIndex);
             const unitCategory      = skillCfg ? skillCfg[1] : tile.getCfgProduceUnitCategory();
-            const minNormalizedHp   = skillCfg ? Helpers.getNormalizedHp(skillCfg[3]) : Helpers.getNormalizedHp(CommonConstants.UnitMaxHp);
+            const minNormalizedHp   = skillCfg ? BwHelpers.getNormalizedHp(skillCfg[3]) : BwHelpers.getNormalizedHp(CommonConstants.UnitMaxHp);
 
             for (const unitType of Utility.ConfigManager.getUnitTypesByCategory(configVersion, unitCategory)) {
                 const unit = new ScwUnit().init({

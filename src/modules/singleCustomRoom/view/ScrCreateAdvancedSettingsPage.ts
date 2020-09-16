@@ -42,7 +42,7 @@ namespace TinyWars.SingleCustomRoom {
         private _labelVisionRange                   : TinyWars.GameUi.UiLabel;
         private _btnModifyVisionRange               : TinyWars.GameUi.UiButton;
 
-        protected _mapExtraData: ProtoTypes.IMapExtraData;
+        protected _mapRawData   : ProtoTypes.Map.IMapRawData;
 
         public constructor() {
             super();
@@ -68,7 +68,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         protected async _onOpened(): Promise<void> {
-            this._mapExtraData = await ScrModel.getCreateWarMapExtraData();
+            this._mapRawData = await ScrModel.getCreateWarMapRawData();
 
             this._updateComponentsForLanguage();
             this._updateLabelMapName();
@@ -323,11 +323,11 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _updateLabelMapName(): void {
-            WarMapModel.getMapNameInCurrentLanguage(this._mapExtraData.mapFileName).then(v => this._labelMapName.text = v);
+            WarMapModel.getMapNameInCurrentLanguage(this._mapRawData.mapId).then(v => this._labelMapName.text = v);
         }
 
         private _updateLabelPlayersCount(): void {
-            this._labelPlayersCount.text = "" + this._mapExtraData.playersCount;
+            this._labelPlayersCount.text = "" + this._mapRawData.playersCount;
         }
 
         private _updateLabelMoveRange(): void {

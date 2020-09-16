@@ -5,62 +5,12 @@ namespace TinyWars.SingleCustomWar {
     import VisibilityHelpers    = Utility.VisibilityHelpers;
     import ProtoTypes           = Utility.ProtoTypes;
     import ConfigManager        = Utility.ConfigManager;
-    import BwHelpers            = BaseWar.BwHelpers;
     import ISerialTile          = ProtoTypes.WarSerialization.ISerialTile;
+    import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
 
     export class ScwTile extends BaseWar.BwTile {
         protected _getViewClass(): new () => BaseWar.BwTileView {
             return ScwTileView;
-        }
-
-        public serialize(): ISerialTile | undefined {
-            const gridIndex = this.getGridIndex();
-            if (gridIndex == null) {
-                Logger.error(`ScwTile.serialize() empty gridIndex.`);
-                return undefined;
-            }
-
-            const baseType = this.getBaseType();
-            if (baseType == null) {
-                Logger.error(`ScwTile.serialize() empty baseType.`);
-                return undefined;
-            }
-
-            const objectType = this.getObjectType();
-            if (objectType == null) {
-                Logger.error(`ScwTile.serialize() empty objectType.`);
-                return undefined;
-            }
-
-            const playerIndex = this.getPlayerIndex();
-            if (playerIndex == null) {
-                Logger.error(`ScwTile.serialize() empty playerIndex.`);
-                return undefined;
-            }
-
-            const data: ISerialTile = {
-                gridIndex,
-                baseType,
-                objectType,
-                playerIndex,
-            };
-
-            const currentHp = this.getCurrentHp();
-            (currentHp !== this.getMaxHp()) && (data.currentHp = currentHp);
-
-            const buildPoint = this.getCurrentBuildPoint();
-            (buildPoint !== this.getMaxBuildPoint()) && (data.currentBuildPoint = buildPoint);
-
-            const capturePoint = this.getCurrentCapturePoint();
-            (capturePoint !== this.getMaxCapturePoint()) && (data.currentCapturePoint = capturePoint);
-
-            const baseShapeId = this.getBaseShapeId();
-            (baseShapeId !== 0) && (data.baseShapeId = baseShapeId);
-
-            const objectShapeId = this.getObjectShapeId();
-            (objectShapeId !== 0) && (data.objectShapeId = objectShapeId);
-
-            return data;
         }
 
         public serializeForSimulation(): ISerialTile | null {
@@ -102,7 +52,7 @@ namespace TinyWars.SingleCustomWar {
                     gridIndex,
                     baseType,
                     objectType,
-                    playerIndex : objectType === Types.TileObjectType.Headquarters ? playerIndex : ConfigManager.COMMON_CONSTANTS.WarNeutralPlayerIndex,
+                    playerIndex : objectType === Types.TileObjectType.Headquarters ? playerIndex : CommonConstants.WarNeutralPlayerIndex,
                 };
 
                 const currentHp = this.getCurrentHp();
@@ -115,21 +65,6 @@ namespace TinyWars.SingleCustomWar {
                 (objectShapeId !== 0) && (data.objectShapeId = objectShapeId);
 
                 return data;
-            }
-        }
-
-        ////////////////////////////////////////////////////////////////////////////////
-        // Functions for fog.
-        ////////////////////////////////////////////////////////////////////////////////
-        public setFogEnabled(): void {
-            if (!this.getIsFogEnabled()) {
-                this._setIsFogEnabled(true);
-            }
-        }
-
-        public setFogDisabled(data?: ISerialTile): void {
-            if (this.getIsFogEnabled()) {
-                this._setIsFogEnabled(false);
             }
         }
     }

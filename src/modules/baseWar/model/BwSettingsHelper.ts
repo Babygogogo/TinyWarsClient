@@ -4,6 +4,7 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
     import ProtoTypes           = Utility.ProtoTypes;
     import WarSettings          = ProtoTypes.WarSettings;
     import ISettingsForCommon   = WarSettings.ISettingsForCommon;
+    import IDataForPlayerRule   = ProtoTypes.WarRule.IDataForPlayerRule;
 
     export function getHasFogByDefault(settingsForCommon: ISettingsForCommon): boolean | null | undefined {
         const warRule = settingsForCommon.warRule;
@@ -22,161 +23,250 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
     }
 
     export function getIncomeMultiplier(settingsForCommon: ISettingsForCommon, playerIndex: number): number | null | undefined {
-        const warRule = settingsForCommon.warRule;
-        if (warRule == null) {
-            Logger.error(`BwCommonSettingsHelper.getIncomeMultiplier() empty warRule.`);
+        const playerRule = getPlayerRule(settingsForCommon, playerIndex);
+        if (playerRule == null) {
+            Logger.error(`BwCommonSettingsHelper.getIncomeMultiplier() empty playerRule.`);
             return undefined;
         }
 
-        const ruleForGlobalParams = warRule.ruleForGlobalParams;
-        if (ruleForGlobalParams == null) {
-            Logger.error(`BwCommonSettingsHelper.getIncomeMultiplier() empty ruleForGlobalParams.`);
+        const incomeMultiplier = playerRule.incomeMultiplier;
+        if (incomeMultiplier == null) {
+            Logger.error(`BwCommonSettingsHelper.getIncomeMultiplier() empty incomeMultiplier.`);
             return undefined;
         }
 
-        return ruleForGlobalParams.incomeMultiplier;
+        return incomeMultiplier;
+    }
+    export function setIncomeMultiplier(settingsForCommon: ISettingsForCommon, playerIndex: number, value: number): void {
+        const playerRule = getPlayerRule(settingsForCommon, playerIndex);
+        if (playerRule == null) {
+            Logger.error(`BwCommonSettingsHelper.setIncomeMultiplier() empty playerRule.`);
+            return undefined;
+        }
+
+        playerRule.incomeMultiplier = value;
     }
 
     export function getEnergyGrowthMultiplier(settingsForCommon: ISettingsForCommon, playerIndex: number): number | null | undefined {
-        const warRule = settingsForCommon.warRule;
-        if (warRule == null) {
-            Logger.error(`BwCommonSettingsHelper.getEnergyGrowthMultiplier() empty warRule.`);
+        const playerRule = getPlayerRule(settingsForCommon, playerIndex);
+        if (playerRule == null) {
+            Logger.error(`BwCommonSettingsHelper.getEnergyGrowthMultiplier() empty playerRule.`);
             return undefined;
         }
 
-        const ruleForGlobalParams = warRule.ruleForGlobalParams;
-        if (ruleForGlobalParams == null) {
-            Logger.error(`BwCommonSettingsHelper.getEnergyGrowthMultiplier() empty ruleForGlobalParams.`);
+        const energyGrowthMultiplier = playerRule.energyGrowthMultiplier;
+        if (energyGrowthMultiplier == null) {
+            Logger.error(`BwCommonSettingsHelper.getEnergyGrowthMultiplier() empty energyGrowthMultiplier.`);
             return undefined;
         }
 
-        return ruleForGlobalParams.energyGrowthMultiplier;
+        return energyGrowthMultiplier;
+    }
+    export function setEnergyGrowthMultiplier(settingsForCommon: ISettingsForCommon, playerIndex: number, value: number): undefined {
+        const playerRule = getPlayerRule(settingsForCommon, playerIndex);
+        if (playerRule == null) {
+            Logger.error(`BwCommonSettingsHelper.setEnergyGrowthMultiplier() empty playerRule.`);
+            return undefined;
+        }
+
+        playerRule.energyGrowthMultiplier = value;
     }
 
     export function getAttackPowerModifier(settingsForCommon: ISettingsForCommon, playerIndex: number): number | null | undefined {
-        const warRule = settingsForCommon.warRule;
-        if (warRule == null) {
-            Logger.error(`BwCommonSettingsHelper.getAttackPowerModifier() empty warRule.`);
+        const playerRule = getPlayerRule(settingsForCommon, playerIndex);
+        if (playerRule == null) {
+            Logger.error(`BwCommonSettingsHelper.getAttackPowerModifier() empty playerRule.`);
             return undefined;
         }
 
-        const ruleForGlobalParams = warRule.ruleForGlobalParams;
-        if (ruleForGlobalParams == null) {
-            Logger.error(`BwCommonSettingsHelper.getAttackPowerModifier() empty ruleForGlobalParams.`);
+        const attackPowerModifier = playerRule.attackPowerModifier;
+        if (attackPowerModifier == null) {
+            Logger.error(`BwCommonSettingsHelper.getAttackPowerModifier() empty attackPowerModifier.`);
             return undefined;
         }
 
-        return ruleForGlobalParams.attackPowerModifier;
+        return attackPowerModifier;
+    }
+    export function setAttackPowerModifier(settingsForCommon: ISettingsForCommon, playerIndex: number, value: number): undefined {
+        const playerRule = getPlayerRule(settingsForCommon, playerIndex);
+        if (playerRule == null) {
+            Logger.error(`BwCommonSettingsHelper.setAttackPowerModifier() empty playerRule.`);
+            return undefined;
+        }
+
+        playerRule.attackPowerModifier = value;
     }
 
     export function getMoveRangeModifier(settingsForCommon: ISettingsForCommon, playerIndex: number): number | null | undefined {
-        const warRule = settingsForCommon.warRule;
-        if (warRule == null) {
-            Logger.error(`BwCommonSettingsHelper.getMoveRangeModifier() empty warRule.`);
+        const playerRule = getPlayerRule(settingsForCommon, playerIndex);
+        if (playerRule == null) {
+            Logger.error(`BwCommonSettingsHelper.getMoveRangeModifier() empty playerRule.`);
             return undefined;
         }
 
-        const ruleForGlobalParams = warRule.ruleForGlobalParams;
-        if (ruleForGlobalParams == null) {
-            Logger.error(`BwCommonSettingsHelper.getMoveRangeModifier() empty ruleForGlobalParams.`);
+        const moveRangeModifier = playerRule.moveRangeModifier;
+        if (moveRangeModifier == null) {
+            Logger.error(`BwCommonSettingsHelper.getMoveRangeModifier() empty moveRangeModifier.`);
             return undefined;
         }
 
-        return ruleForGlobalParams.moveRangeModifier;
+        return moveRangeModifier;
+    }
+    export function setMoveRangeModifier(settingsForCommon: ISettingsForCommon, playerIndex: number, value: number): undefined {
+        const playerRule = getPlayerRule(settingsForCommon, playerIndex);
+        if (playerRule == null) {
+            Logger.error(`BwCommonSettingsHelper.setMoveRangeModifier() empty playerRule.`);
+            return undefined;
+        }
+
+        playerRule.moveRangeModifier = value;
     }
 
     export function getVisionRangeModifier(settingsForCommon: ISettingsForCommon, playerIndex: number): number | null | undefined {
-        const warRule = settingsForCommon.warRule;
-        if (warRule == null) {
-            Logger.error(`BwCommonSettingsHelper.getVisionRangeModifier() empty warRule.`);
+        const playerRule = getPlayerRule(settingsForCommon, playerIndex);
+        if (playerRule == null) {
+            Logger.error(`BwCommonSettingsHelper.getVisionRangeModifier() empty playerRule.`);
             return undefined;
         }
 
-        const ruleForGlobalParams = warRule.ruleForGlobalParams;
-        if (ruleForGlobalParams == null) {
-            Logger.error(`BwCommonSettingsHelper.getVisionRangeModifier() empty ruleForGlobalParams.`);
+        const visionRangeModifier = playerRule.visionRangeModifier;
+        if (visionRangeModifier == null) {
+            Logger.error(`BwCommonSettingsHelper.getVisionRangeModifier() empty visionRangeModifier.`);
             return undefined;
         }
 
-        return ruleForGlobalParams.visionRangeModifier;
+        return visionRangeModifier;
+    }
+    export function setVisionRangeModifier(settingsForCommon: ISettingsForCommon, playerIndex: number, value: number): undefined {
+        const playerRule = getPlayerRule(settingsForCommon, playerIndex);
+        if (playerRule == null) {
+            Logger.error(`BwCommonSettingsHelper.setVisionRangeModifier() empty playerRule.`);
+            return undefined;
+        }
+
+        playerRule.visionRangeModifier = value;
     }
 
     export function getInitialFund(settingsForCommon: ISettingsForCommon, playerIndex: number): number | null | undefined {
-        const warRule = settingsForCommon.warRule;
-        if (warRule == null) {
-            Logger.error(`BwCommonSettingsHelper.getInitialFund() empty warRule.`);
+        const playerRule = getPlayerRule(settingsForCommon, playerIndex);
+        if (playerRule == null) {
+            Logger.error(`BwCommonSettingsHelper.getInitialFund() empty playerRule.`);
             return undefined;
         }
 
-        const playerRuleDataList = warRule.ruleForPlayers?.playerRuleDataList;
-        if (playerRuleDataList == null) {
-            Logger.error(`BwCommonSettingsHelper.getInitialFund() empty playerRuleDataList.`);
+        const initialFund = playerRule.initialFund;
+        if (initialFund == null) {
+            Logger.error(`BwCommonSettingsHelper.getInitialFund() empty initialFund.`);
             return undefined;
         }
 
-        for (const rule of playerRuleDataList) {
-            if (rule.playerIndex === playerIndex) {
-                const fund = rule.initialFund;
-                if (fund != null) {
-                    return fund;
-                }
-            }
-        }
-
-        const ruleForGlobalParams = warRule.ruleForGlobalParams;
-        if (ruleForGlobalParams == null) {
-            Logger.error(`BwCommonSettingsHelper.getInitialFund() empty ruleForGlobalParams.`);
+        return initialFund;
+    }
+    export function setInitialFund(settingsForCommon: ISettingsForCommon, playerIndex: number, value: number): undefined {
+        const playerRule = getPlayerRule(settingsForCommon, playerIndex);
+        if (playerRule == null) {
+            Logger.error(`BwCommonSettingsHelper.setInitialFund() empty playerRule.`);
             return undefined;
         }
 
-        return ruleForGlobalParams.initialEnergyPercentage;
+        playerRule.initialFund = value;
     }
 
     export function getInitialEnergyPercentage(settingsForCommon: ISettingsForCommon, playerIndex: number): number | null | undefined {
-        const warRule = settingsForCommon.warRule;
-        if (warRule == null) {
-            Logger.error(`BwCommonSettingsHelper.getInitialEnergyPercentage() empty warRule.`);
+        const playerRule = getPlayerRule(settingsForCommon, playerIndex);
+        if (playerRule == null) {
+            Logger.error(`BwCommonSettingsHelper.getInitialEnergyPercentage() empty playerRule.`);
             return undefined;
         }
 
-        const ruleForGlobalParams = warRule.ruleForGlobalParams;
-        if (ruleForGlobalParams == null) {
-            Logger.error(`BwCommonSettingsHelper.getInitialEnergyPercentage() empty ruleForGlobalParams.`);
+        const initialEnergyPercentage = playerRule.initialEnergyPercentage;
+        if (initialEnergyPercentage == null) {
+            Logger.error(`BwCommonSettingsHelper.getInitialEnergyPercentage() empty initialEnergyPercentage.`);
             return undefined;
         }
 
-        return ruleForGlobalParams.initialEnergyPercentage;
+        return initialEnergyPercentage;
+    }
+    export function setInitialEnergyPercentage(settingsForCommon: ISettingsForCommon, playerIndex: number, value: number): undefined {
+        const playerRule = getPlayerRule(settingsForCommon, playerIndex);
+        if (playerRule == null) {
+            Logger.error(`BwCommonSettingsHelper.setInitialEnergyPercentage() empty playerRule.`);
+            return undefined;
+        }
+
+        playerRule.initialEnergyPercentage = value;
     }
 
     export function getLuckLowerLimit(settingsForCommon: ISettingsForCommon, playerIndex: number): number | null | undefined {
-        const warRule = settingsForCommon.warRule;
-        if (warRule == null) {
-            Logger.error(`BwCommonSettingsHelper.getLuckLowerLimit() empty warRule.`);
+        const playerRule = getPlayerRule(settingsForCommon, playerIndex);
+        if (playerRule == null) {
+            Logger.error(`BwCommonSettingsHelper.getLuckLowerLimit() empty playerRule.`);
             return undefined;
         }
 
-        const ruleForGlobalParams = warRule.ruleForGlobalParams;
-        if (ruleForGlobalParams == null) {
-            Logger.error(`BwCommonSettingsHelper.getLuckLowerLimit() empty ruleForGlobalParams.`);
+        const luckLowerLimit = playerRule.luckLowerLimit;
+        if (luckLowerLimit == null) {
+            Logger.error(`BwCommonSettingsHelper.getLuckLowerLimit() empty luckLowerLimit.`);
             return undefined;
         }
 
-        return ruleForGlobalParams.luckLowerLimit;
+        return luckLowerLimit;
+    }
+    export function setLuckLowerLimit(settingsForCommon: ISettingsForCommon, playerIndex: number, value: number): undefined {
+        const playerRule = getPlayerRule(settingsForCommon, playerIndex);
+        if (playerRule == null) {
+            Logger.error(`BwCommonSettingsHelper.setLuckLowerLimit() empty playerRule.`);
+            return undefined;
+        }
+
+        playerRule.luckLowerLimit = value;
     }
 
     export function getLuckUpperLimit(settingsForCommon: ISettingsForCommon, playerIndex: number): number | null | undefined {
+        const playerRule = getPlayerRule(settingsForCommon, playerIndex);
+        if (playerRule == null) {
+            Logger.error(`BwCommonSettingsHelper.getLuckUpperLimit() empty playerRule.`);
+            return undefined;
+        }
+
+        const luckUpperLimit = playerRule.luckUpperLimit;
+        if (luckUpperLimit == null) {
+            Logger.error(`BwCommonSettingsHelper.getLuckUpperLimit() empty luckUpperLimit.`);
+            return undefined;
+        }
+
+        return luckUpperLimit;
+    }
+    export function setLuckUpperLimit(settingsForCommon: ISettingsForCommon, playerIndex: number, value: number): undefined {
+        const playerRule = getPlayerRule(settingsForCommon, playerIndex);
+        if (playerRule == null) {
+            Logger.error(`BwCommonSettingsHelper.setLuckUpperLimit() empty playerRule.`);
+            return undefined;
+        }
+
+        playerRule.luckUpperLimit = value;
+    }
+
+    function getPlayerRule(settingsForCommon: ISettingsForCommon, playerIndex: number): IDataForPlayerRule | undefined {
         const warRule = settingsForCommon.warRule;
         if (warRule == null) {
-            Logger.error(`BwCommonSettingsHelper.getLuckUpperLimit() empty warRule.`);
+            Logger.error(`BwCommonSettingsHelper.getPlayerRule() empty warRule.`);
             return undefined;
         }
 
-        const ruleForGlobalParams = warRule.ruleForGlobalParams;
-        if (ruleForGlobalParams == null) {
-            Logger.error(`BwCommonSettingsHelper.getLuckUpperLimit() empty ruleForGlobalParams.`);
+        const ruleForPlayers = warRule.ruleForPlayers;
+        if (ruleForPlayers == null) {
+            Logger.error(`BwCommonSettingsHelper.getPlayerRule() empty ruleForPlayers.`);
             return undefined;
         }
 
-        return ruleForGlobalParams.luckUpperLimit;
+        const playerRuleDataList = ruleForPlayers.playerRuleDataList;
+        if (playerRuleDataList == null) {
+            Logger.error(`BwCommonSettingsHelper.getPlayerRule() empty playerRuleDataList.`);
+            return undefined;
+        }
+
+        return playerRuleDataList.find(v => v.playerIndex === playerIndex);
     }
+
 }

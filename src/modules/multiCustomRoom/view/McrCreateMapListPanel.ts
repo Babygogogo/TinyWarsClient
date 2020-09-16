@@ -181,7 +181,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _showMap(mapFileName: string): Promise<void> {
-            const mapRawData                = await WarMapModel.getMapRawData(mapFileName);
+            const mapRawData                = await WarMapModel.getRawData(mapFileName);
             const mapExtraData              = await WarMapModel.getExtraData(mapFileName);
             this._labelMapName.text         = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapFileName));
             this._labelDesigner.text        = Lang.getFormattedText(Lang.Type.F0001, mapRawData.mapDesigner);

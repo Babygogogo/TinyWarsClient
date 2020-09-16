@@ -101,7 +101,7 @@ namespace TinyWars.Replay {
                 luckUpperLimit          : this.getSettingsLuckUpperLimit(),
                 mapFileName             : this.getMapId(),
                 players                 : (this.getPlayerManager() as ReplayPlayerManager).serialize(),
-                field                   : (this.getField() as ReplayField).serialize(),
+                field                   : this.getField().serialize(),
                 turn                    : (this.getTurnManager() as ReplayTurnManager).serialize(),
             };
         }

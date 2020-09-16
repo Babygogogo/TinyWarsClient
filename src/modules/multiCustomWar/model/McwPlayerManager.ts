@@ -36,5 +36,9 @@ namespace TinyWars.MultiCustomWar {
             const player = this.getPlayerLoggedIn();
             return player ? player.getPlayerIndex() : undefined;
         }
+
+        public getWatcherTeamIndexesForSelf(): Set<number> {
+            return this.getWatcherTeamIndexes(User.UserModel.getSelfUserId());
+        }
     }
 }

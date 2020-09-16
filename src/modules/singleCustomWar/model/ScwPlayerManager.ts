@@ -61,25 +61,26 @@ namespace TinyWars.SingleCustomWar {
             return playerIndexes;
         }
 
-        public getWatcherTeamIndexesForScw(): Set<number> {
+        public getWatcherTeamIndexesForSelf(): Set<number> {
             const humanPlayers = this.getHumanPlayers();
             if (!humanPlayers.length) {
                 return this.getAliveTeamIndexes(false);
             } else {
-                const player = this.getPlayerInTurn();
-                if (player.getUserId() != null) {
-                    return new Set<number>([player.getTeamIndex()]);
-                } else {
-                    const teamIndexes = new Set<number>();
-                    for (const player of humanPlayers) {
-                        teamIndexes.add(player.getTeamIndex());
-                    }
-                    if (teamIndexes.size <= 1) {
-                        return teamIndexes;
-                    } else {
-                        return new Set<number>();
-                    }
-                }
+                return this.getWatcherTeamIndexes(User.UserModel.getSelfUserId());
+                // const player = this.getPlayerInTurn();
+                // if (player.getUserId() != null) {
+                //     return new Set<number>([player.getTeamIndex()]);
+                // } else {
+                //     const teamIndexes = new Set<number>();
+                //     for (const player of humanPlayers) {
+                //         teamIndexes.add(player.getTeamIndex());
+                //     }
+                //     if (teamIndexes.size <= 1) {
+                //         return teamIndexes;
+                //     } else {
+                //         return new Set<number>();
+                //     }
+                // }
             }
         }
     }

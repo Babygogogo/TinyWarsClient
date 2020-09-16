@@ -3,6 +3,8 @@ namespace TinyWars.BaseWar {
     import TimeModel            = Time.TimeModel;
     import CommonModel          = Common.CommonModel;
     import Types                = Utility.Types;
+    import VisibilityHelpers    = Utility.VisibilityHelpers;
+    import GridIndexHelpers     = Utility.GridIndexHelpers;
     import Helpers              = Utility.Helpers;
     import UnitAnimationType    = Types.UnitAnimationType;
     import GridIndex            = Types.GridIndex;
@@ -40,7 +42,7 @@ namespace TinyWars.BaseWar {
         }
 
         public init(unit: BwUnit): BwUnitView {
-            this._unit = unit;
+            this._setUnit(unit);
 
             return this;
         }
@@ -51,12 +53,15 @@ namespace TinyWars.BaseWar {
             return this;
         }
 
+        private _setUnit(unit: BwUnit): void {
+            this._unit = unit;
+        }
         public getUnit(): BwUnit {
             return this._unit;
         }
 
         public resetAllViews(): void {
-            this._isDark = this._unit.getActionState() === Types.UnitActionState.Acted;
+            this._isDark = this.getUnit().getActionState() === Types.UnitActionState.Acted;
             this.resetStateAnimationFrames();
             this.showUnitAnimation(UnitAnimationType.Stand);
             this.updateImageHp();
@@ -67,11 +72,15 @@ namespace TinyWars.BaseWar {
             this.tickUnitAnimationFrame();
         }
         public tickUnitAnimationFrame(): void {
-            if (this._animationType === UnitAnimationType.Stand) {
-                this._imgUnit.source = CommonModel.getUnitIdleImageSource(this._unit.getViewId(), this._isDark);
-            } else {
-                this._imgUnit.source = CommonModel.getUnitMovingImageSource(this._unit.getViewId(), this._isDark);
-            }
+            const unit              = this.getUnit();
+            this._imgUnit.source    = CommonModel.getCachedUnitImageSource({
+                version     : CommonModel.getUnitAndTileTextureVersion(),
+                isDark      : this._isDark,
+                isMoving    : this._animationType === UnitAnimationType.Move,
+                tickCount   : Time.TimeModel.getUnitAnimationTickCount(),
+                skinId      : unit.getSkinId(),
+                unitType    : unit.getType(),
+            });
         }
 
         public updateImageHp(): void {
@@ -106,8 +115,6 @@ namespace TinyWars.BaseWar {
                 : this._framesForStateAnimation[Math.floor(TimeModel.getUnitAnimationTickCount() / 6) % framesCount];
         }
 
-        public abstract moveAlongPath(path: GridIndex[], isDiving: boolean, isBlocked: boolean, aiming?: GridIndex): Promise<void>;
-
         protected _getIsDark(): boolean {
             return this._isDark;
         }
@@ -116,6 +123,131 @@ namespace TinyWars.BaseWar {
         }
         protected _getUnit(): BwUnit {
             return this._unit;
+        }
+
+        public moveAlongPath(
+            path        : GridIndex[],
+            isDiving    : boolean,
+            isBlocked   : boolean,
+            aiming      : GridIndex | null | undefined
+        ): Promise<void> {
+            this.showUnitAnimation(UnitAnimationType.Move);
+
+            const startingPoint = GridIndexHelpers.createPointByGridIndex(path[0]);
+            this.x              = startingPoint.x;
+            this.y              = startingPoint.y;
+
+            const unit                  = this._getUnit();
+            const war                   = unit.getWar();
+            const playerIndex           = unit.getPlayerIndex();
+            const playerIndexMod        = playerIndex % 2;
+            const unitType              = unit.getType();
+            const watcherTeamIndexes    = war.getPlayerManager().getWatcherTeamIndexesForSelf();
+            const isAlwaysVisible       = watcherTeamIndexes.has(unit.getTeamIndex());
+            const tween                 = egret.Tween.get(this);
+            if (isAlwaysVisible) {
+                this.visible = true;
+            }
+
+            for (let i = 1; i < path.length; ++i) {
+                const gridIndex = path[i];
+                const currentX  = gridIndex.x;
+                const previousX = path[i - 1].x;
+                if (currentX < previousX) {
+                    tween.call(() => this._setImgUnitFlippedX(playerIndexMod === 1));
+                } else if (currentX > previousX) {
+                    tween.call(() => this._setImgUnitFlippedX(playerIndexMod === 0));
+                }
+
+                if (!isAlwaysVisible) {
+                    if (isDiving) {
+                        tween.call(() => {
+                            this.visible = (i === path.length - 1)
+                                && (VisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                                    war,
+                                    gridIndex,
+                                    unitType,
+                                    isDiving,
+                                    unitPlayerIndex     : playerIndex,
+                                    observerTeamIndexes : watcherTeamIndexes,
+                                }));
+                        });
+                    } else {
+                        tween.call(() => {
+                            this.visible = (VisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                                war,
+                                gridIndex           : path[i - 1],
+                                unitType,
+                                isDiving,
+                                unitPlayerIndex     : playerIndex,
+                                observerTeamIndexes : watcherTeamIndexes,
+                            }))
+                            || (VisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                                war,
+                                gridIndex,
+                                unitType,
+                                isDiving,
+                                unitPlayerIndex     : playerIndex,
+                                observerTeamIndexes : watcherTeamIndexes,
+                            }));
+                        });
+                    }
+                }
+
+                tween.to(GridIndexHelpers.createPointByGridIndex(gridIndex), 200);
+            }
+
+            const endingGridIndex = path[path.length - 1];
+            return new Promise<void>(resolve => {
+                if (!aiming) {
+                    tween.call(() => {
+                        this._setImgUnitFlippedX(false);
+                        if ((isBlocked)                                         &&
+                            (VisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                                war,
+                                unitType,
+                                isDiving,
+                                gridIndex           : endingGridIndex,
+                                unitPlayerIndex     : playerIndex,
+                                observerTeamIndexes : watcherTeamIndexes,
+                            }))
+                        ) {
+                            war.getGridVisionEffect().showEffectBlock(endingGridIndex);
+                        }
+
+                        resolve();
+                    });
+                } else {
+                    const cursor = war.getField().getCursor();
+                    tween.call(() => {
+                        cursor.setIsMovableByTouches(false);
+                        cursor.setGridIndex(aiming);
+                        cursor.updateView();
+                        cursor.setVisibleForConForTarget(true);
+                        cursor.setVisibleForConForNormal(false);
+                    })
+                    .wait(500)
+                    .call(() => {
+                        cursor.setIsMovableByTouches(true);
+                        cursor.updateView();
+                        this._setImgUnitFlippedX(false);
+                        if ((isBlocked)                                         &&
+                            (VisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                                war,
+                                unitType,
+                                isDiving,
+                                gridIndex           : endingGridIndex,
+                                unitPlayerIndex     : playerIndex,
+                                observerTeamIndexes : watcherTeamIndexes,
+                            }))
+                        ) {
+                            war.getGridVisionEffect().showEffectBlock(endingGridIndex);
+                        }
+
+                        resolve();
+                    });
+                }
+            });
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -132,9 +264,8 @@ namespace TinyWars.BaseWar {
             }
         }
         private _addFrameForPromotion(): void {
-            const unit      = this._unit;
-            const player    = unit.getPlayer();
-            if ((player) && (unit.getUnitId() === player.getCoUnitId())) {
+            const unit = this._unit;
+            if (unit.getHasLoadedCo()) {
                 this._framesForStateAnimation.push(`${this._getImageSourcePrefix(this._isDark)}_t99_s05_f99`);
             } else {
                 const promotion = unit.getCurrentPromotion();
@@ -168,7 +299,26 @@ namespace TinyWars.BaseWar {
                 this._framesForStateAnimation.push(`${this._getImageSourcePrefix(this._isDark)}_t99_s04_f${Helpers.getNumText(this._unit.getPlayerIndex())}`);
             }
         }
-        protected abstract _addFrameForLoader(): void;
+        private _addFrameForLoader(): void {
+            const unit  = this._getUnit();
+            const war   = unit.getWar();
+            if ((war) && (unit.getMaxLoadUnitsCount())) {
+                const unitPlayerIndex = unit.getPlayerIndex();
+                if (!war.getFogMap().checkHasFogCurrently()) {
+                    if (unit.getLoadedUnitsCount() > 0) {
+                        this._getFramesForStateAnimation().push(`${this._getImageSourcePrefix(this._getIsDark())}_t99_s06_f${Helpers.getNumText(unitPlayerIndex)}`);
+                    }
+                } else {
+                    if (!war.getPlayerManager().getWatcherTeamIndexesForSelf().has(unit.getTeamIndex())) {
+                        this._getFramesForStateAnimation().push(`${this._getImageSourcePrefix(this._getIsDark())}_t99_s06_f${Helpers.getNumText(unitPlayerIndex)}`);
+                    } else {
+                        if (unit.getLoadedUnitsCount() > 0) {
+                            this._getFramesForStateAnimation().push(`${this._getImageSourcePrefix(this._getIsDark())}_t99_s06_f${Helpers.getNumText(unitPlayerIndex)}`);
+                        }
+                    }
+                }
+            }
+        }
         private _addFrameForMaterial(): void {
             if ((this._unit.checkIsBuildMaterialInShort()) || (this._unit.checkIsProduceMaterialInShort())) {
                 this._framesForStateAnimation.push(`${this._getImageSourcePrefix(this._isDark)}_t99_s02_f04`);

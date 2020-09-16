@@ -91,7 +91,7 @@ namespace TinyWars.SingleCustomRoom {
                     this._resetTimeoutForBtnConfirm();
                 }
 
-                if (ScrModel.checkIsSaveSlotEmpty(data.saveSlotIndex)) {
+                if (ScrModel.checkIsSaveSlotEmpty(data.settingsForSinglePlayer.saveSlotIndex)) {
                     func();
                 } else {
                     Common.CommonConfirmPanel.show({
@@ -104,8 +104,8 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _onNotifySScrCreateWar(e: egret.Event): void {
-            const data = e.data as ProtoTypes.IS_ScrCreateWar;
-            Utility.FlowManager.gotoSingleCustomWar(data.warData as Types.SerializedWar);
+            const data = e.data as ProtoTypes.NetMessage.IS_ScrCreateWar;
+            Utility.FlowManager.gotoSingleCustomWar(data.warData);
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {

@@ -1,25 +1,26 @@
 
 namespace TinyWars.BaseWar.BwHelpers {
-    import Types                = Utility.Types;
-    import GridIndexHelpers     = Utility.GridIndexHelpers;
-    import ProtoTypes           = Utility.ProtoTypes;
-    import Logger               = Utility.Logger;
-    import Helpers              = Utility.Helpers;
-    import ConfigManager        = Utility.ConfigManager;
-    import GridIndex            = Types.GridIndex;
-    import MovableArea          = Types.MovableArea;
-    import AttackableArea       = Types.AttackableArea;
-    import MapSize              = Types.MapSize;
-    import UnitActionState      = Types.UnitActionState;
-    import MovePathNode         = Types.MovePathNode;
-    import UnitType             = Types.UnitType;
-    import CoSkillAreaType      = Types.CoSkillAreaType;
-    import WarSerialization     = ProtoTypes.WarSerialization;
-    import ISerialUnit          = WarSerialization.ISerialUnit;
-    import ISerialTile          = WarSerialization.ISerialTile;
-    import ISerialWar           = WarSerialization.ISerialWar;
-    import IGridIndex           = ProtoTypes.Structure.IGridIndex;
-    import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
+    import Types                    = Utility.Types;
+    import GridIndexHelpers         = Utility.GridIndexHelpers;
+    import ProtoTypes               = Utility.ProtoTypes;
+    import Logger                   = Utility.Logger;
+    import Helpers                  = Utility.Helpers;
+    import ConfigManager            = Utility.ConfigManager;
+    import GridIndex                = Types.GridIndex;
+    import MovableArea              = Types.MovableArea;
+    import AttackableArea           = Types.AttackableArea;
+    import MapSize                  = Types.MapSize;
+    import MovePathNode             = Types.MovePathNode;
+    import UnitType                 = Types.UnitType;
+    import TileType                 = Types.TileType;
+    import Visibility               = Types.Visibility;
+    import CoSkillAreaType          = Types.CoSkillAreaType;
+    import WarSerialization         = ProtoTypes.WarSerialization;
+    import ISerialUnit              = WarSerialization.ISerialUnit;
+    import ISerialTile              = WarSerialization.ISerialTile;
+    import ISerialWar               = WarSerialization.ISerialWar;
+    import IGridIndex               = ProtoTypes.Structure.IGridIndex;
+    import CommonConstants          = ConfigManager.COMMON_CONSTANTS;
 
     type AvailableMovableGrid = {
         currGridIndex   : GridIndex;
@@ -259,6 +260,10 @@ namespace TinyWars.BaseWar.BwHelpers {
         return cfg ? cfg.productionCost : undefined;
     }
 
+    export function getNormalizedHp(hp: number): number {
+        return Math.ceil(hp / CommonConstants.UnitHpNormalizer);
+    }
+
     export function checkIsStateRequesting(state: Types.ActionPlannerState): boolean {
         return (state === Types.ActionPlannerState.RequestingPlayerActivateSkill)
             || (state === Types.ActionPlannerState.RequestingPlayerBeginTurn)
@@ -355,6 +360,68 @@ namespace TinyWars.BaseWar.BwHelpers {
 
             if (launchUnitId == null) {
                 tile.updateOnUnitLeave();
+            }
+        }
+    }
+
+    export function updateTilesAndUnitsBeforeExecutingAction(
+        war         : BwWar,
+        unitClass   : new () => BwUnit,
+        extraData   : {
+            actingTiles?    : ISerialTile[],
+            actingUnits?    : ISerialUnit[],
+            discoveredTiles?: ISerialTile[],
+            discoveredUnits?: ISerialUnit[],
+        } | undefined | null,
+    ): void {
+        if (extraData) {
+            addUnitsBeforeExecutingAction(war, unitClass, extraData.actingUnits, false);
+            addUnitsBeforeExecutingAction(war, unitClass, extraData.discoveredUnits, false);
+            updateTilesBeforeExecutingAction(war, extraData.actingTiles);
+            updateTilesBeforeExecutingAction(war, extraData.discoveredTiles);
+        }
+    }
+    function addUnitsBeforeExecutingAction(
+        war             : BwWar,
+        unitClass       : new () => BwUnit,
+        unitsData       : ISerialUnit[] | undefined | null,
+        isViewVisible   : boolean
+    ): void {
+        if ((unitsData) && (unitsData.length)) {
+            const unitMap       = war.getUnitMap();
+            const configVersion = war.getConfigVersion();
+
+            for (const unitData of unitsData) {
+                if (!unitMap.getUnitById(unitData.unitId)) {
+                    const unit      = new unitClass().init(unitData, configVersion);
+                    const isOnMap   = unit.getLoaderUnitId() == null;
+                    if (isOnMap) {
+                        unitMap.setUnitOnMap(unit);
+                    } else {
+                        unitMap.setUnitLoaded(unit);
+                    }
+                    unit.startRunning(war);
+                    unit.startRunningView();
+                    unit.setViewVisible(isViewVisible);
+                }
+            }
+        }
+    }
+    function updateTilesBeforeExecutingAction(war: BwWar, tilesData: ISerialTile[] | undefined | null): void {
+        if ((tilesData) && (tilesData.length)) {
+            const tileMap   = war.getTileMap();
+            for (const tileData of tilesData) {
+                const gridIndex = BwHelpers.convertGridIndex(tileData.gridIndex);
+                if (gridIndex == null) {
+                    Logger.error(`BwHelpers.updateTilesBeforeExecutingAction() empty gridIndex.`);
+                    return undefined;
+                }
+
+                const tile = tileMap.getTile(gridIndex);
+                if (tile.getHasFog()) {
+                    tile.setHasFog(false);
+                    tile.deserialize(tileData, tile.getConfigVersion());
+                }
             }
         }
     }
@@ -668,6 +735,34 @@ namespace TinyWars.BaseWar.BwHelpers {
         }
     }
 
+    export function getAdjacentPlasmas(tileMap: BwTileMap, origin: GridIndex): GridIndex[] {
+        const plasmas           = [origin];
+        const mapSize           = tileMap.getMapSize();
+        const mapHeight         = mapSize.height;
+        const searchedIndexes   = new Set<number>([getIndexOfGridIndex(mapHeight, origin)]);
+
+        let i = 0;
+        while (i < plasmas.length) {
+            for (const adjacentGridIndex of GridIndexHelpers.getAdjacentGrids(plasmas[i], mapSize)) {
+                if (tileMap.getTile(adjacentGridIndex).getType() === TileType.Plasma) {
+                    const searchIndex = getIndexOfGridIndex(mapHeight, adjacentGridIndex);
+                    if (!searchedIndexes.has(searchIndex)) {
+                        searchedIndexes.add(searchIndex);
+                        plasmas.push(adjacentGridIndex);
+                    }
+                }
+            }
+            ++i;
+        }
+
+        plasmas.shift();
+        return plasmas;
+    }
+
+    function getIndexOfGridIndex(mapHeight: number, gridIndex: GridIndex): number {
+        return gridIndex.x * mapHeight + gridIndex.y;
+    }
+
     export function getIdleBuildingGridIndex(war: BwWar): Types.GridIndex | null {
         const field                     = war.getField();
         const tileMap                   = field.getTileMap();
@@ -716,7 +811,7 @@ namespace TinyWars.BaseWar.BwHelpers {
         const settingsForCommon = data.settingsForCommon;
         const mapId             = settingsForCommon ? settingsForCommon.mapId : null;
         if (mapId != null) {
-            const mapRawData = await WarMap.WarMapModel.getMapRawData(mapId);
+            const mapRawData = await WarMap.WarMapModel.getRawData(mapId);
             if (mapRawData == null) {
                 Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() empty mapRawData.`);
                 return undefined;
@@ -799,7 +894,7 @@ namespace TinyWars.BaseWar.BwHelpers {
         }
     }
 
-    export function encodeFogMapForPaths(map: number[][], mapSize: MapSize): string | undefined {
+    export function getVisibilityListWithMapFromPath(map: Visibility[][], mapSize: MapSize): Visibility[] | undefined {
         const { width, height } = mapSize;
         const data              = new Array(width * height);
         let needSerialize       = false;
@@ -807,84 +902,12 @@ namespace TinyWars.BaseWar.BwHelpers {
         for (let x = 0; x < width; ++x) {
             for (let y = 0; y < height; ++y) {
                 data[x + y * width] = map[x][y];
-                (!needSerialize) && (map[x][y] > 0) && (needSerialize = true);
+                if ((!needSerialize) && (map[x][y] !== Visibility.OutsideVision)) {
+                    needSerialize = true;
+                }
             }
         }
 
-        return needSerialize ? data.join(``) : undefined;
-    }
-
-    export function serializeUnit(unit: BwUnit): ISerialUnit | undefined {
-        const gridIndex = unit.getGridIndex();
-        if (gridIndex == null) {
-            Logger.error(`BwHelpers.serializeUnit() empty gridIndex.`);
-            return undefined;
-        }
-
-        const playerIndex = unit.getPlayerIndex();
-        if (playerIndex == null) {
-            Logger.error(`BwHelpers.serializeUnit() empty playerIndex.`);
-            return undefined;
-        }
-
-        const unitType = unit.getType();
-        if (unitType == null) {
-            Logger.error(`BwHelpers.serializeUnit() empty unitType.`);
-            return undefined;
-        }
-
-        const unitId = unit.getUnitId();
-        if (unitId == null) {
-            Logger.error(`BwHelpers.serializeUnit() unitId is empty.`);
-            return undefined;
-        }
-
-        const data: ISerialUnit = {
-            gridIndex,
-            playerIndex,
-            unitType,
-            unitId,
-        };
-
-        const actionState = unit.getActionState();
-        (actionState != UnitActionState.Idle) && (data.actionState = actionState);
-
-        const currentHp = unit.getCurrentHp();
-        (currentHp != unit.getMaxHp()) && (data.currentHp = currentHp);
-
-        const currentAmmo = unit.getPrimaryWeaponCurrentAmmo();
-        (currentAmmo != unit.getPrimaryWeaponMaxAmmo()) && (data.primaryWeaponCurrentAmmo = currentAmmo);
-
-        const isCapturing = unit.getIsCapturingTile();
-        (isCapturing) && (data.isCapturingTile = isCapturing);
-
-        const currentFuel = unit.getCurrentFuel();
-        (currentFuel != unit.getMaxFuel()) && (data.currentFuel = currentFuel);
-
-        const flareAmmo = unit.getFlareCurrentAmmo();
-        (flareAmmo != unit.getFlareMaxAmmo()) && (data.flareCurrentAmmo = flareAmmo);
-
-        const produceMaterial = unit.getCurrentProduceMaterial();
-        (produceMaterial != unit.getMaxProduceMaterial()) && (data.currentProduceMaterial = produceMaterial);
-
-        const currentPromotion = unit.getCurrentPromotion();
-        (currentPromotion != 0) && (data.currentPromotion = currentPromotion);
-
-        const isBuildingTile = unit.getIsBuildingTile();
-        (isBuildingTile) && (data.isBuildingTile = isBuildingTile);
-
-        const buildMaterial = unit.getCurrentBuildMaterial();
-        (buildMaterial != unit.getMaxBuildMaterial()) && (data.currentBuildMaterial = buildMaterial);
-
-        const isDiving = unit.getIsDiving();
-        (isDiving != unit.checkIsDivingByDefault()) && (data.isDiving = isDiving);
-
-        const hasLoadedCo = unit.getHasLoadedCo();
-        (hasLoadedCo) && (data.hasLoadedCo = hasLoadedCo);
-
-        const loaderUnitId = unit.getLoaderUnitId();
-        (loaderUnitId != null) && (data.loaderUnitId = loaderUnitId);
-
-        return data;
+        return needSerialize ? data : undefined;
     }
 }

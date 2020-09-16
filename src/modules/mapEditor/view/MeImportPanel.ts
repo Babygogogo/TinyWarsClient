@@ -112,7 +112,7 @@ namespace TinyWars.MapEditor {
                 callback: async () => {
                     const war = MeManager.getWar();
                     war.stopRunning()
-                        .init(await WarMap.WarMapModel.getMapRawData(mapFileName) as Types.MapRawData, war.getSlotIndex(), war.getConfigVersion(), war.getIsReview())
+                        .init(await WarMap.WarMapModel.getRawData(mapFileName) as Types.MapRawData, war.getSlotIndex(), war.getConfigVersion(), war.getIsReview())
                         .startRunning()
                         .startRunningView();
 

@@ -211,7 +211,7 @@ namespace TinyWars.BaseWar {
                                         FloatText.show(Lang.getText(Lang.Type.A0098));
                                     } else {
                                         tile.setCurrentHp(value);
-                                        tile.updateView();
+                                        tile.flushDataToView();
                                         this._updateListInfo();
                                     }
                                 },
@@ -247,7 +247,7 @@ namespace TinyWars.BaseWar {
                                         FloatText.show(Lang.getText(Lang.Type.A0098));
                                     } else {
                                         tile.setCurrentCapturePoint(value);
-                                        tile.updateView();
+                                        tile.flushDataToView();
                                         this._updateListInfo();
                                     }
                                 },
@@ -283,7 +283,7 @@ namespace TinyWars.BaseWar {
                                         FloatText.show(Lang.getText(Lang.Type.A0098));
                                     } else {
                                         tile.setCurrentBuildPoint(value);
-                                        tile.updateView();
+                                        tile.flushDataToView();
                                         this._updateListInfo();
                                     }
                                 },
