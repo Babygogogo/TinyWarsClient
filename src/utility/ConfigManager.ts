@@ -1525,6 +1525,7 @@ namespace TinyWars.Utility.ConfigManager {
         WarBootTimerRegularDefaultValue         : 3600 * 24 * 3,
         WarBootTimerIncrementalMaxLimit         : 3600 * 24,
 
+        WarRuleFirstId                          : 0,
         WarRuleNameMaxLength                    : 15,
         WarRuleOffenseBonusMinLimit             : -100,
         WarRuleOffenseBonusMaxLimit             : 10000,

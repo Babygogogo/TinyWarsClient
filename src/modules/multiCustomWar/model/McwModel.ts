@@ -243,7 +243,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         const container = _cachedActions.length ? _cachedActions.shift() : undefined;
         if ((container) && (war.getIsRunning()) && (!war.getIsEnded()) && (!war.getIsExecutingAction())) {
             war.setIsExecutingAction(true);
-            war._setExecutedActionsCount(war.getExecutedActionsCount() + 1);
+            war.setExecutedActionsCount(war.getExecutedActionsCount() + 1);
             await _EXECUTORS.get(Helpers.getWarActionCode(container))(war, container);
             war.setIsExecutingAction(false);
 

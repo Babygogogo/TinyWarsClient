@@ -111,7 +111,7 @@ namespace TinyWars.Replay.ReplayModel {
 
     async function _executeAction(war: ReplayWar, container: WarActionContainer, isFastExecute: boolean): Promise<void> {
         war.setIsExecutingAction(true);
-        war._setExecutedActionsCount(war.getExecutedActionsCount() + 1);
+        war.setExecutedActionsCount(war.getExecutedActionsCount() + 1);
 
         const actionId = war.getExecutedActionsCount();
         if (war.getTurnManager().getPhaseCode() === Types.TurnPhaseCode.WaitBeginTurn) {
@@ -139,7 +139,7 @@ namespace TinyWars.Replay.ReplayModel {
         if ((war.getTurnManager().getPhaseCode() === Types.TurnPhaseCode.WaitBeginTurn) || (war.checkIsInEnd())) {
             const checkPointId = war.getCheckPointId(actionId);
             if (war.getWarData(checkPointId) == null) {
-                war.setWarData(checkPointId, war.serialize());
+                war.setWarData(checkPointId, war.serializeForCheckPoint());
             }
         }
 

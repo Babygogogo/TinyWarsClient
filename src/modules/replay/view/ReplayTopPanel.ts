@@ -254,7 +254,8 @@ namespace TinyWars.Replay {
                 } else if (skillType === Types.CoSkillType.SuperPower) {
                     this._labelCurrEnergy.text = "SCOP";
                 } else {
-                    this._labelCurrEnergy.text = `${player.getCoUnitId() != null ? player.getCoCurrentEnergy() : `--`}`;
+                    const energy                = player.getCoCurrentEnergy();
+                    this._labelCurrEnergy.text  = `${energy != null ? energy : `--`}`;
                 }
 
                 const powerEnergy           = player.getCoPowerEnergy();

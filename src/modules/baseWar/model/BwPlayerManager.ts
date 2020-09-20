@@ -55,6 +55,35 @@ namespace TinyWars.BaseWar {
             }
         }
 
+        public serialize(): ISerialPlayerManager | undefined {
+            const players: ISerialPlayer[] = [];
+            for (const [, player] of this._getPlayersMap()) {
+                const serialPlayer = player.serialize();
+                if (serialPlayer == null) {
+                    Logger.error(`BwPlayerManager.serialize() empty serialPlayer.`);
+                    return undefined;
+                }
+
+                players.push(serialPlayer);
+            }
+
+            return { players };
+        }
+        public serializeForSimulation(): ISerialPlayerManager | undefined {
+            const players: ISerialPlayer[] = [];
+            for (const [, player] of this._getPlayersMap()) {
+                const serialPlayer = player.serializeForSimulation();
+                if (serialPlayer == null) {
+                    Logger.error(`BwPlayerManager.serializeForSimulation() empty serialPlayer.`);
+                    return undefined;
+                }
+
+                players.push(serialPlayer);
+            }
+
+            return { players };
+        }
+
         ////////////////////////////////////////////////////////////////////////////////
         // The other public functions.
         ////////////////////////////////////////////////////////////////////////////////
@@ -76,21 +105,6 @@ namespace TinyWars.BaseWar {
 
         public getPlayerInTurn(): BwPlayer {
             return this.getPlayer(this._war.getTurnManager().getPlayerIndexInTurn());
-        }
-
-        public getListForRestTimeToBoot(): number[] {
-            const list: number[] = [];
-            for (let playerIndex = 0; playerIndex < this.getTotalPlayersCount(true); ++playerIndex) {
-                list.push(this.getPlayer(playerIndex)!.getRestTimeToBoot());
-            }
-            return list;
-        }
-        public setListForRestTimeToBoot(list: number[] | null): void {
-            list = list || [];
-            this.forEachPlayer(true, player => {
-                const time = list[player.getPlayerIndex()];
-                player.setRestTimeToBoot(time == null ? ConfigManager.COMMON_CONSTANTS.WarBootTimerRegularDefaultValue : time);
-            });
         }
 
         public getTeamIndex(playerIndex: number): number {

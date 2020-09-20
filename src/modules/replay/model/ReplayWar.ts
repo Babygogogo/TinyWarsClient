@@ -7,6 +7,7 @@ namespace TinyWars.Replay {
     import Helpers              = Utility.Helpers;
     import Logger               = Utility.Logger;
     import ProtoTypes           = Utility.ProtoTypes;
+    import BwHelpers            = BaseWar.BwHelpers;
     import IActionContainer     = ProtoTypes.WarAction.IActionContainer;
     import ISerialWar           = ProtoTypes.WarSerialization.ISerialWar;
 
@@ -18,7 +19,22 @@ namespace TinyWars.Replay {
         private _warDataListForCheckPointId     = new Map<number, ISerialWar>();
 
         public async init(data: ISerialWar): Promise<ReplayWar> {
-            this._baseInit(data);
+            if (!this._baseInit(data)) {
+                Logger.error(`ReplayWar.init() failed this._baseInit().`);
+                return undefined;
+            }
+
+            const settingsForCommon = data.settingsForCommon;
+            if (!settingsForCommon) {
+                Logger.error(`ReplayWar.init() empty settingsForCommon! ${JSON.stringify(data)}`);
+                return undefined;
+            }
+
+            const configVersion = settingsForCommon.configVersion;
+            if (configVersion == null) {
+                Logger.error(`ReplayWar.init() empty configVersion.`);
+                return undefined;
+            }
 
             const executedActions = data.executedActions;
             if (executedActions == null) {
@@ -26,13 +42,27 @@ namespace TinyWars.Replay {
                 return undefined;
             }
 
-            this._setAllExecutedActions(executedActions);
-            this.setCheckPointId(0, 0);
-            this.setWarData(0, data);
-
             const dataForPlayerManager = data.playerManager;
             if (dataForPlayerManager == null) {
                 Logger.error(`ReplayWar.init() empty dataForPlayerManager.`);
+                return undefined;
+            }
+
+            const dataForTurnManager = data.turnManager;
+            if (dataForTurnManager == null) {
+                Logger.error(`ReplayWar.init() empty dataForTurnManager.`);
+                return undefined;
+            }
+
+            const dataForField = data.field;
+            if (dataForField == null) {
+                Logger.error(`ReplayWar.init() empty dataForField.`);
+                return undefined;
+            }
+
+            const mapSizeAndMaxPlayerIndex = await BwHelpers.getMapSizeAndMaxPlayerIndex(data);
+            if (!mapSizeAndMaxPlayerIndex) {
+                Logger.error(`ReplayWar.init() invalid war data! ${JSON.stringify(data)}`);
                 return undefined;
             }
 
@@ -42,25 +72,31 @@ namespace TinyWars.Replay {
                 return undefined;
             }
 
-            await Helpers.checkAndCallLater();
-            await this._initField(
-                data.field,
-                data.configVersion,
-                data.mapFileName,
-                await BaseWar.BwHelpers.getMapSizeAndMaxPlayerIndex(data)
-            );
-            this._initTurnManager(data.turn);
+            const turnManager = (this.getTurnManager() || new (this._getTurnManagerClass())()).init(dataForTurnManager);
+            if (turnManager == null) {
+                Logger.error(`ReplayWar.init() empty turnManager.`);
+                return undefined;
+            }
 
+            const field = await (this.getField() || new (this._getFieldClass())()).init(dataForField, configVersion, mapSizeAndMaxPlayerIndex);
+            if (field == null) {
+                Logger.error(`ReplayWar.init() empty field.`);
+                return undefined;
+            }
+
+            this._setAllExecutedActions(executedActions);
             this._setPlayerManager(playerManager);
+            this._setTurnManager(turnManager);
+            this._setField(field);
 
-            await Helpers.checkAndCallLater();
+            this.setCheckPointId(0, 0);
+            this.setWarData(0, data);
+
+            // await Helpers.checkAndCallLater();
+
             this._initView();
 
             return this;
-        }
-
-        private _fastInitPlayerManager(data: Types.SerializedPlayer[]): void {
-            this.getPlayerManager().fastInit(data);
         }
 
         protected _getViewClass(): new () => ReplayWarView {
@@ -76,66 +112,147 @@ namespace TinyWars.Replay {
             return ReplayTurnManager;
         }
 
-        public serialize(): ISerialWar {
+        public serializeForCheckPoint(): ISerialWar {
+            const seedRandomCurrentState = this._getSeedRandomCurrentState();
+            if (seedRandomCurrentState == null) {
+                Logger.error(`ReplayWar.serializeForCheckPoint() empty seedRandomCurrentState.`);
+                return undefined;
+            }
+
+            const executedActionsCount = this.getExecutedActionsCount();
+            if (executedActionsCount == null) {
+                Logger.error(`ReplayWar.serializeForCheckPoint() empty executedActionsCount`);
+                return undefined;
+            }
+
+            const playerManager = this.getPlayerManager();
+            if (playerManager == null) {
+                Logger.error(`ReplayWar.serializeForCheckPoint() empty playerManager.`);
+                return undefined;
+            }
+
+            const turnManager = this.getTurnManager();
+            if (turnManager == null) {
+                Logger.error(`ReplayWar.serializeForCheckPoint() empty turnManager.`);
+                return undefined;
+            }
+
+            const field = this.getField();
+            if (field == null) {
+                Logger.error(`ReplayWar.serializeForCheckPoint() empty field.`);
+                return undefined;
+            }
+
+            const serialPlayerManager = playerManager.serialize();
+            if (serialPlayerManager == null) {
+                Logger.error(`ReplayWar.serializeForCheckPoint() empty serialPlayerManager.`);
+                return undefined;
+            }
+
+            const serialTurnManager = turnManager.serialize();
+            if (serialTurnManager == null) {
+                Logger.error(`ReplayWar.serializeForCheckPoint() empty serialTurnManager.`);
+                return undefined;
+            }
+
+            const serialField = field.serialize();
+            if (serialField == null) {
+                Logger.error(`ReplayWar.serializeForCheckPoint() empty serialField.`);
+                return undefined;
+            }
+
             return {
-                warId                   : this.getWarId(),
-                warName                 : this.getWarName(),
-                warPassword             : this.getWarPassword(),
-                warComment              : this.getWarComment(),
-                configVersion           : this.getConfigVersion(),
-                executedActions         : this._getAllExecutedActions(),
-                nextActionId            : this.getExecutedActionsCount(),
-                remainingVotesForDraw   : this.getRemainingVotesForDraw(),
-                warRuleIndex            : this.getWarRuleIndex(),
-                bootTimerParams         : this.getSettingsBootTimerParams(),
-                hasFogByDefault         : this.getSettingsHasFogByDefault(),
-                incomeModifier          : this.getSettingsIncomeMultiplier(),
-                energyGrowthModifier    : this.getSettingsEnergyGrowthMultiplier(),
-                attackPowerModifier     : this.getSettingsAttackPowerModifier(),
-                moveRangeModifier       : this.getSettingsMoveRangeModifier(),
-                visionRangeModifier     : this.getSettingsVisionRangeModifier(),
-                initialFund             : this.getSettingsInitialFund(),
-                initialEnergy           : this.getSettingsInitialEnergyPercentage(),
-                bannedCoIdList          : this.getSettingsBannedCoIdList(),
-                luckLowerLimit          : this.getSettingsLuckLowerLimit(),
-                luckUpperLimit          : this.getSettingsLuckUpperLimit(),
-                mapFileName             : this.getMapId(),
-                players                 : (this.getPlayerManager() as ReplayPlayerManager).serialize(),
-                field                   : this.getField().serialize(),
-                turn                    : (this.getTurnManager() as ReplayTurnManager).serialize(),
+                settingsForCommon           : null,
+                settingsForMultiPlayer      : null,
+                settingsForSinglePlayer     : null,
+
+                warId                       : null,
+                seedRandomInitialState      : null,
+                seedRandomCurrentState,
+                executedActions             : null,
+                executedActionsCount,
+                remainingVotesForDraw       : this.getRemainingVotesForDraw(),
+                playerManager               : serialPlayerManager,
+                turnManager                 : serialTurnManager,
+                field                       : serialField,
             };
         }
 
-        public serializeForSimulation(): Types.SerializedWar {
+        public serializeForSimulation(): ISerialWar {
+            const settingsForCommon = this.getSettingsForCommon();
+            if (settingsForCommon == null) {
+                Logger.error(`Replay.serializeForSimulation() empty settingsForCommon.`);
+                return undefined;
+            }
+
+            const seedRandomCurrentState = this._getSeedRandomCurrentState();
+            if (seedRandomCurrentState == null) {
+                Logger.error(`ReplayWar.serializeForSimulation() empty seedRandomCurrentState.`);
+                return undefined;
+            }
+
+            const executedActionsCount = this.getExecutedActionsCount();
+            if (executedActionsCount == null) {
+                Logger.error(`ReplayWar.serializeForSimulation() empty executedActionsCount`);
+                return undefined;
+            }
+
+            const warId = this.getWarId();
+            if (warId == null) {
+                Logger.error(`ReplayWar.serializeForSimulation() empty warId.`);
+                return undefined;
+            }
+
+            const playerManager = this.getPlayerManager();
+            if (playerManager == null) {
+                Logger.error(`ReplayWar.serializeForSimulation() empty playerManager.`);
+                return undefined;
+            }
+
+            const turnManager = this.getTurnManager();
+            if (turnManager == null) {
+                Logger.error(`ReplayWar.serializeForSimulation() empty turnManager.`);
+                return undefined;
+            }
+
+            const field = this.getField();
+            if (field == null) {
+                Logger.error(`ReplayWar.serializeForSimulation() empty field.`);
+                return undefined;
+            }
+
+            const serialPlayerManager = playerManager.serializeForSimulation();
+            if (serialPlayerManager == null) {
+                Logger.error(`ReplayWar.serializeForSimulation() empty serialPlayerManager.`);
+                return undefined;
+            }
+
+            const serialTurnManager = turnManager.serializeForSimulation();
+            if (serialTurnManager == null) {
+                Logger.error(`ReplayWar.serializeForSimulation() empty serialTurnManager.`);
+                return undefined;
+            }
+
+            const serialField = field.serializeForSimulation();
+            if (serialField == null) {
+                Logger.error(`ReplayWar.serializeForSimulation() empty serialField.`);
+                return undefined;
+            }
+
             return {
-                warId                   : this.getWarId(),
-                warName                 : this.getWarName(),
-                warPassword             : this.getWarPassword(),
-                warComment              : this.getWarComment(),
-                configVersion           : this.getConfigVersion(),
-                executedActions         : [],
-                nextActionId            : this.getExecutedActionsCount(),
-                remainingVotesForDraw   : this.getRemainingVotesForDraw(),
-                warRuleIndex            : this.getWarRuleIndex(),
-                bootTimerParams         : this.getSettingsBootTimerParams(),
-                hasFogByDefault         : this.getSettingsHasFogByDefault(),
-                incomeModifier          : this.getSettingsIncomeMultiplier(),
-                energyGrowthModifier    : this.getSettingsEnergyGrowthMultiplier(),
-                attackPowerModifier     : this.getSettingsAttackPowerModifier(),
-                moveRangeModifier       : this.getSettingsMoveRangeModifier(),
-                visionRangeModifier     : this.getSettingsVisionRangeModifier(),
-                initialFund             : this.getSettingsInitialFund(),
-                initialEnergy           : this.getSettingsInitialEnergyPercentage(),
-                bannedCoIdList          : this.getSettingsBannedCoIdList(),
-                luckLowerLimit          : this.getSettingsLuckLowerLimit(),
-                luckUpperLimit          : this.getSettingsLuckUpperLimit(),
-                singlePlayerWarType     : Types.SinglePlayerWarType.Custom,
-                isSinglePlayerCheating  : true,
-                mapFileName             : this.getMapId(),
-                players                 : (this.getPlayerManager() as ReplayPlayerManager).serializeForSimulation(),
-                field                   : (this.getField() as ReplayField).serializeForSimulation(),
-                turn                    : (this.getTurnManager() as ReplayTurnManager).serializeForSimulation(),
-                seedRandomState         : null,
+                settingsForCommon,
+                settingsForMultiPlayer      : null,
+                settingsForSinglePlayer     : null,
+
+                warId,
+                seedRandomInitialState      : null,
+                seedRandomCurrentState,
+                executedActions             : [],
+                executedActionsCount,
+                remainingVotesForDraw       : this.getRemainingVotesForDraw(),
+                playerManager               : serialPlayerManager,
+                turnManager                 : serialTurnManager,
+                field                       : serialField,
             };
         }
 
@@ -226,12 +343,22 @@ namespace TinyWars.Replay {
         }
         private async _loadCheckPoint(checkPointId: number): Promise<void> {
             const data = this.getWarData(checkPointId);
-            this._setExecutedActionsCount(data.nextActionId || 0);
 
-            this._fastInitPlayerManager(data.players);
-            await Helpers.checkAndCallLater();
-            await this.getField().fastInit(data.field, configVersion, mapFileName, mapSizeAndMaxPlayerIndex);
-            await this.getTurnManager().fastInit(data.turnManager);
+            const mapSize = this.getTileMap().getMapSize();
+            this.setExecutedActionsCount(data.executedActionsCount);
+            this.getPlayerManager().fastInit(data.playerManager);
+            this.getTurnManager().fastInit(data.turnManager);
+            await this.getField().fastInit(
+                data.field,
+                this.getConfigVersion(),
+                {
+                    mapHeight       : mapSize.height,
+                    mapWidth        : mapSize.width,
+                    maxPlayerIndex  : this.getPlayerManager().getTotalPlayersCount(false),
+                }
+            );
+            this.setRemainingVotesForDraw(data.remainingVotesForDraw);
+            this._setRandomNumberGenerator(new Math.seedrandom("", { state: data.seedRandomCurrentState }));
 
             await Helpers.checkAndCallLater();
             this._fastInitView();

@@ -246,7 +246,7 @@ namespace TinyWars.SingleCustomRoom {
         private async _onTouchTapBtnNext(e: egret.TouchEvent): Promise<void> {
             ScrCreateMapListPanel.hide();
 
-            await ScrModel.resetCreateWarData((this.data as DataForMapNameRenderer).mapId);
+            await ScrModel.resetCreateWarDataByMapId((this.data as DataForMapNameRenderer).mapId);
             ScrCreateSettingsPanel.show();
         }
     }

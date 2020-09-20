@@ -7,21 +7,6 @@ namespace TinyWars.Replay {
             return ReplayPlayer;
         }
 
-        public serializeForSimulation(): Types.SerializedPlayer[] {
-            const dataList: Types.SerializedPlayer[] = [];
-            this.forEachPlayer(true, (player: ReplayPlayer) => dataList.push(player.serializeForSimulation()));
-
-            return dataList;
-        }
-
-        public serialize(): Types.SerializedPlayer[] {
-            const data: Types.SerializedPlayer[] = [];
-            this.forEachPlayer(true, (player: ReplayPlayer) => {
-                data.push(player.serialize());
-            });
-            return data;
-        }
-
         public getWatcherTeamIndexesForSelf(): Set<number> {
             return this.getAliveTeamIndexes(false);
         }

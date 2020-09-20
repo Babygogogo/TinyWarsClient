@@ -104,7 +104,11 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         const container = _cachedActions.length ? _cachedActions.shift() : undefined;
         if ((container) && (war.getIsRunning()) && (!war.getIsEnded()) && (!war.getIsExecutingAction())) {
             war.setIsExecutingAction(true);
-            war.addExecutedAction(container);
+            if (war.getIsSinglePlayerCheating()) {
+                war.setExecutedActionsCount(war.getExecutedActionsCount() + 1);
+            } else {
+                war.addExecutedAction(container);
+            }
             await _EXECUTORS.get(Helpers.getWarActionCode(container))(war, container);
             war.setIsExecutingAction(false);
 
@@ -194,7 +198,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
             ));
         }
 
-        await war.getTurnManager().endPhaseWaitBeginTurn(data);
+        await war.getTurnManager().endPhaseWaitBeginTurn(data.ActionPlayerBeginTurn);
         actionPlanner.setStateIdle();
     }
 
@@ -217,7 +221,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
     async function _executeScwPlayerEndTurn(war: ScwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        await war.getTurnManager().endPhaseMain();
+        await war.getTurnManager().endPhaseMain(data.ActionPlayerEndTurn);
 
         actionPlanner.setStateIdle();
     }

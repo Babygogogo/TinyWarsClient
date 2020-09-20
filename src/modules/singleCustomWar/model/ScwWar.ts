@@ -426,9 +426,13 @@ namespace TinyWars.SingleCustomWar {
                 Logger.error(`ScwWar.addExecutedAction() invalid executedActionsCount!`);
                 return undefined;
             }
+            if (executedActionsCount !== action.actionId) {
+                Logger.error(`ScwWar.addExecutedAction() invalid actionId!`);
+                return undefined;
+            }
 
             executedActions.push(Helpers.deepClone(action));
-            this._setExecutedActionsCount(executedActionsCount + 1);
+            this.setExecutedActionsCount(executedActionsCount + 1);
         }
 
         private _setSettingsForSinglePlayer(settings: ISettingsForSinglePlayer): void {

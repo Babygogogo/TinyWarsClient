@@ -405,6 +405,21 @@ namespace TinyWars.BaseWar {
             this._primaryWeaponCurrentAmmo = ammo;
         }
 
+        public getPrimaryWeaponUsedAmmo(): number | undefined {
+            const maxAmmo = this.getPrimaryWeaponMaxAmmo();
+            if (maxAmmo == null) {
+                return undefined;
+            } else {
+                const currentAmmo = this.getPrimaryWeaponCurrentAmmo();
+                if (currentAmmo == null) {
+                    Logger.error(`BwUnit.getPrimaryWeaponUsedAmmo() empty currentAmmo!`);
+                    return undefined;
+                } else {
+                    return maxAmmo - currentAmmo;
+                }
+            }
+        }
+
         public checkIsPrimaryWeaponAmmoInShort(): boolean {
             const maxAmmo = this.getPrimaryWeaponMaxAmmo();
             return maxAmmo != null ? this.getPrimaryWeaponCurrentAmmo()! <= maxAmmo * 0.4 : false;
@@ -767,6 +782,22 @@ namespace TinyWars.BaseWar {
             return this._templateCfg.maxFuel;
         }
 
+        public getUsedFuel(): number | undefined {
+            const maxFuel = this.getMaxFuel();
+            if (maxFuel == null) {
+                Logger.error(`BwUnit.getUsedFuel() empty maxFuel.`);
+                return undefined;
+            }
+
+            const currentFuel = this.getCurrentFuel();
+            if (currentFuel == null) {
+                Logger.error(`BwUnit.getUsedFuel() empty currentFuel.`);
+                return undefined;
+            }
+
+            return maxFuel - currentFuel;
+        }
+
         public getFuelConsumptionPerTurn(): number | null | undefined {
             const templateCfg = this._getTemplateCfg();
             if (templateCfg == null) {
@@ -821,6 +852,21 @@ namespace TinyWars.BaseWar {
             }
 
             this._flareCurrentAmmo = ammo;
+        }
+
+        public getFlareUsedAmmo(): number | undefined {
+            const maxAmmo = this.getFlareMaxAmmo();
+            if (maxAmmo == null) {
+                return undefined;
+            } else {
+                const currentAmmo = this.getFlareCurrentAmmo();
+                if (currentAmmo == null) {
+                    Logger.error(`BwUnit.getFlareUsedAmmo() empty currentAmmo!`);
+                    return undefined;
+                } else {
+                    return maxAmmo - currentAmmo;
+                }
+            }
         }
 
         public checkIsFlareAmmoInShort(): boolean {

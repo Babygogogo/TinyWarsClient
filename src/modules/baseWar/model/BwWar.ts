@@ -32,6 +32,7 @@ namespace TinyWars.BaseWar {
         private _isExecutingAction      = false;
 
         public async abstract init(data: ISerialWar): Promise<BwWar>;
+        public abstract serializeForSimulation(): ISerialWar | undefined;
         protected abstract _getPlayerManagerClass(): new () => BwPlayerManager;
         protected abstract _getTurnManagerClass(): new () => BwTurnManager;
         protected abstract _getFieldClass(): new () => BwField;
@@ -59,7 +60,7 @@ namespace TinyWars.BaseWar {
 
             this._setWarId(data.warId);
             this._setSettingsForCommon(settingsForCommon);
-            this._setExecutedActionsCount(executedActionsCount);
+            this.setExecutedActionsCount(executedActionsCount);
             this._setRandomNumberGenerator(new Math.seedrandom("", { state: seedRandomCurrentState }));
             this._setSeedRandomInitialState(seedRandomInitialState);
             this.setRemainingVotesForDraw(data.remainingVotesForDraw);
@@ -253,7 +254,7 @@ namespace TinyWars.BaseWar {
             return BwSettingsHelper.getLuckUpperLimit(settingsForCommon, playerIndex);
         }
 
-        private _setRandomNumberGenerator(generator: seedrandom.prng): void {
+        protected _setRandomNumberGenerator(generator: seedrandom.prng): void {
             this._randomNumberGenerator = generator;
         }
         private _getRandomNumberGenerator(): seedrandom.prng {
@@ -308,7 +309,7 @@ namespace TinyWars.BaseWar {
         public getExecutedActionsCount(): number {
             return this._executedActionsCount;
         }
-        protected _setExecutedActionsCount(count: number): void {
+        public setExecutedActionsCount(count: number): void {
             this._executedActionsCount = count;
             Notify.dispatch(Notify.Type.BwExecutedActionsCountChanged);
         }

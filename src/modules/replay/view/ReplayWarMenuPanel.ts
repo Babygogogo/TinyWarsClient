@@ -42,27 +42,10 @@ namespace TinyWars.Replay {
         private _labelTurnIndex                 : GameUi.UiLabel;
         private _labelActionIdTitle             : GameUi.UiLabel;
         private _labelActionId                  : GameUi.UiLabel;
-        private _labelIncomeModifierTitle       : GameUi.UiLabel;
-        private _labelIncomeModifier            : GameUi.UiLabel;
-        private _labelEnergyGrowthModifierTitle : GameUi.UiLabel;
-        private _labelEnergyGrowthModifier      : GameUi.UiLabel;
-        private _labelInitialEnergyTitle        : GameUi.UiLabel;
-        private _labelInitialEnergy             : GameUi.UiLabel;
-        private _labelMoveRangeModifierTitle    : GameUi.UiLabel;
-        private _labelMoveRangeModifier         : GameUi.UiLabel;
-        private _labelAttackPowerModifierTitle  : GameUi.UiLabel;
-        private _labelAttackPowerModifier       : GameUi.UiLabel;
-        private _labelVisionRangeModifierTitle  : GameUi.UiLabel;
-        private _labelVisionRangeModifier       : GameUi.UiLabel;
-        private _labelLuckLowerLimitTitle       : GameUi.UiLabel;
-        private _labelLuckLowerLimit            : GameUi.UiLabel;
-        private _labelLuckUpperLimitTitle       : GameUi.UiLabel;
-        private _labelLuckUpperLimit            : GameUi.UiLabel;
         private _listPlayer                     : GameUi.UiScrollList;
 
         private _war        : ReplayWar;
         private _unitMap    : ReplayUnitMap;
-        private _turnManager: ReplayTurnManager;
         private _dataForList: DataForCommandRenderer[];
         private _menuType   = MenuType.Main;
 
@@ -106,7 +89,6 @@ namespace TinyWars.Replay {
             const war           = ReplayModel.getWar();
             this._war           = war;
             this._unitMap       = war.getUnitMap() as ReplayUnitMap;
-            this._turnManager   = war.getTurnManager() as ReplayTurnManager;
             this._menuType      = MenuType.Main;
 
             this._updateView();
@@ -135,12 +117,12 @@ namespace TinyWars.Replay {
         }
 
         private _onNotifySScrCreateCustomWar(e: egret.Event): void {
-            const data = e.data as ProtoTypes.IS_ScrCreateCustomWar;
+            const data = e.data as ProtoTypes.NetMessage.IS_ScrCreateCustomWar;
             Common.CommonConfirmPanel.show({
                 title   : Lang.getText(Lang.Type.B0088),
                 content : Lang.getText(Lang.Type.A0107),
                 callback: () => {
-                    FlowManager.gotoSingleCustomWar(data.warData as Types.SerializedWar);
+                    FlowManager.gotoSingleCustomWar(data.warData);
                 },
             });
         }
@@ -192,14 +174,6 @@ namespace TinyWars.Replay {
             this._labelWarIdTitle.text                  = `${Lang.getText(Lang.Type.B0226)}: `;
             this._labelTurnIndexTitle.text              = `${Lang.getText(Lang.Type.B0091)}: `;
             this._labelActionIdTitle.text               = `${Lang.getText(Lang.Type.B0090)}: `;
-            this._labelIncomeModifierTitle.text         = `${Lang.getText(Lang.Type.B0179)}: `;
-            this._labelInitialEnergyTitle.text          = `${Lang.getText(Lang.Type.B0180)}: `;
-            this._labelEnergyGrowthModifierTitle.text   = `${Lang.getText(Lang.Type.B0181)}: `;
-            this._labelMoveRangeModifierTitle.text      = `${Lang.getText(Lang.Type.B0182)}: `;
-            this._labelAttackPowerModifierTitle.text    = `${Lang.getText(Lang.Type.B0183)}: `;
-            this._labelVisionRangeModifierTitle.text    = `${Lang.getText(Lang.Type.B0184)}: `;
-            this._labelLuckLowerLimitTitle.text         = `${Lang.getText(Lang.Type.B0189)}: `;
-            this._labelLuckUpperLimitTitle.text         = `${Lang.getText(Lang.Type.B0190)}: `;
             this._btnBack.label                         = Lang.getText(Lang.Type.B0146);
         }
 
@@ -211,14 +185,6 @@ namespace TinyWars.Replay {
             this._labelWarId.text                   = `${war.getWarId()}`;
             this._labelTurnIndex.text               = `${war.getTurnManager().getTurnIndex() + 1}`;
             this._labelActionId.text                = `${war.getExecutedActionsCount() - 1}`;
-            this._labelIncomeModifier.text          = `${war.getSettingsIncomeMultiplier()}%`;
-            this._labelEnergyGrowthModifier.text    = `${war.getSettingsEnergyGrowthMultiplier()}%`;
-            this._labelInitialEnergy.text           = `${war.getSettingsInitialEnergyPercentage()}%`;
-            this._labelMoveRangeModifier.text       = `${war.getSettingsMoveRangeModifier()}`;
-            this._labelAttackPowerModifier.text     = `${war.getSettingsAttackPowerModifier()}%`;
-            this._labelVisionRangeModifier.text     = `${war.getSettingsVisionRangeModifier()}`;
-            this._labelLuckLowerLimit.text          = `${war.getSettingsLuckLowerLimit()}%`;
-            this._labelLuckUpperLimit.text          = `${war.getSettingsLuckUpperLimit()}%`;
         }
 
         private _updateListPlayer(): void {
@@ -436,34 +402,25 @@ namespace TinyWars.Replay {
     }
 
     class PlayerRenderer extends eui.ItemRenderer {
-        private _group          : eui.Group;
-        private _labelName      : GameUi.UiLabel;
-        private _labelForce     : GameUi.UiLabel;
-        private _labelLost      : GameUi.UiLabel;
+        private _group      : eui.Group;
+        private _labelName  : GameUi.UiLabel;
+        private _labelForce : GameUi.UiLabel;
+        private _labelLost  : GameUi.UiLabel;
+        private _listInfo   : GameUi.UiScrollList;
 
-        private _groupInfo              : eui.Group;
-        private _labelFundTitle         : GameUi.UiLabel;
-        private _labelFund              : GameUi.UiLabel;
-        private _labelIncomeTitle       : GameUi.UiLabel;
-        private _labelIncome            : GameUi.UiLabel;
-        private _labelBuildingsTitle    : GameUi.UiLabel;
-        private _labelBuildings         : GameUi.UiLabel;
-        private _labelCoName            : GameUi.UiLabel;
-        private _labelEnergyTitle       : GameUi.UiLabel;
-        private _labelEnergy            : GameUi.UiLabel;
-        private _labelUnitsTitle        : GameUi.UiLabel;
-        private _labelUnits             : GameUi.UiLabel;
-        private _labelUnitsValueTitle   : GameUi.UiLabel;
-        private _labelUnitsValue        : GameUi.UiLabel;
+        protected childrenCreated(): void {
+            super.childrenCreated();
 
-        protected dataChanged(): void {
+            this._listInfo.setItemRenderer(InfoRenderer);
+        }
+
+        protected async dataChanged(): Promise<void> {
             super.dataChanged();
 
             const data                  = this.data as DataForPlayerRenderer;
             const war                   = data.war;
             const player                = data.player;
-            const playerIndex           = player.getPlayerIndex();
-            this._labelName.text        = player.getNickname();
+            this._labelName.text        = await player.getNickname();
             this._labelName.textColor   = player === war.getPlayerInTurn() ? 0x00FF00 : 0xFFFFFF;
             this._labelForce.text       = `${Lang.getPlayerForceName(player.getPlayerIndex())}`
                 + `  ${Lang.getPlayerTeamName(player.getTeamIndex())}`
@@ -471,40 +428,212 @@ namespace TinyWars.Replay {
 
             if (!player.getIsAlive()) {
                 this._labelLost.visible = true;
-                this._groupInfo.visible = false;
+                this._listInfo.visible  = false;
             } else {
                 this._labelLost.visible = false;
-                this._groupInfo.visible = true;
-
-                const isInfoKnown               = true;
-                const tilesCountAndIncome       = this._getTilesCountAndIncome(war, playerIndex);
-                this._labelFundTitle.text       = Lang.getText(Lang.Type.B0156);
-                this._labelFund.text            = isInfoKnown ? `${player.getFund()}` : `?`;
-                this._labelIncomeTitle.text     = Lang.getText(Lang.Type.B0157);
-                this._labelIncome.text          = `${tilesCountAndIncome.income}${isInfoKnown ? `` : `  ?`}`;
-                this._labelBuildingsTitle.text  = Lang.getText(Lang.Type.B0158);
-                this._labelBuildings.text       = `${tilesCountAndIncome.count}${isInfoKnown ? `` : `  ?`}`;
-
-                const coId              = player.getCoId();
-                this._labelCoName.text  = coId == null
-                    ? `(${Lang.getText(Lang.Type.B0001)}CO)`
-                    : Utility.ConfigManager.getCoBasicCfg(Utility.ConfigManager.getNewestConfigVersion(), coId).name;
-
-                const superPowerEnergy      = player.getCoSuperPowerEnergy();
-                const powerEnergy           = player.getCoPowerEnergy();
-                const skillType             = player.getCoUsingSkillType();
-                const currEnergyText        = skillType === Types.CoSkillType.Passive
-                    ? "" + player.getCoCurrentEnergy()
-                    : skillType === Types.CoSkillType.Power ? "COP" : "SCOP";
-                this._labelEnergyTitle.text = Lang.getText(Lang.Type.B0159);
-                this._labelEnergy.text      = `${currEnergyText} / ${powerEnergy == null ? "--" : powerEnergy} / ${superPowerEnergy == null ? "--" : superPowerEnergy}`;
-
-                const unitsCountAndValue        = this._getUnitsCountAndValue(war, playerIndex);
-                this._labelUnitsTitle.text      = Lang.getText(Lang.Type.B0160);
-                this._labelUnits.text           = `${unitsCountAndValue.count}${isInfoKnown ? `` : `  ?`}`;
-                this._labelUnitsValueTitle.text = Lang.getText(Lang.Type.B0161);
-                this._labelUnitsValue.text      = `${unitsCountAndValue.value}${isInfoKnown ? `` : `  ?`}`;
+                this._listInfo.visible  = true;
+                this._listInfo.bindData(this._createDataForListInfo());
             }
+        }
+
+        private _createDataForListInfo(): DataForInfoRenderer[] {
+            const data          = this.data as DataForPlayerRenderer;
+            const war           = data.war;
+            const player        = data.player;
+            const playerIndex   = player.getPlayerIndex();
+            return [
+                this._createDataFund(war, playerIndex, player),
+                this._createDataBuildings(war, playerIndex, player),
+                this._createDataCoName(war, playerIndex, player),
+                this._createDataEnergy(war, playerIndex, player),
+                this._createDataUnitAndValue(war, playerIndex, player),
+                this._createDataInitialFund(war, playerIndex, player),
+                this._createDataIncomeMultiplier(war, playerIndex, player),
+                this._createDataInitialEnergyPercentage(war, playerIndex, player),
+                this._createDataEnergyGrowthMultiplier(war, playerIndex, player),
+                this._createDataMoveRangeModifier(war, playerIndex, player),
+                this._createDataAttackPowerModifier(war, playerIndex, player),
+                this._createDataVisionRangeModifier(war, playerIndex, player),
+                this._createDataLuckLowerLimit(war, playerIndex, player),
+                this._createDataLuckUpperLimit(war, playerIndex, player),
+            ];
+        }
+        private _createDataFund(
+            war         : ReplayWar,
+            playerIndex : number,
+            player      : ReplayPlayer,
+        ): DataForInfoRenderer {
+            return {
+                titleText               : Lang.getText(Lang.Type.B0032),
+                infoText                : `${player.getFund()}`,
+                infoColor               : 0xFFFFFF,
+            };
+        }
+        private _createDataBuildings(
+            war         : ReplayWar,
+            playerIndex : number,
+            player      : ReplayPlayer,
+        ): DataForInfoRenderer {
+            const info = this._getTilesCountAndIncome(war, playerIndex);
+            return {
+                titleText               : Lang.getText(Lang.Type.B0158),
+                infoText                : `${info.count} / +${info.income}`,
+                infoColor               : 0xFFFFFF,
+            };
+        }
+        private _createDataCoName(
+            war         : ReplayWar,
+            playerIndex : number,
+            player      : ReplayPlayer,
+        ): DataForInfoRenderer {
+            const cfg = Utility.ConfigManager.getCoBasicCfg(war.getConfigVersion(), player.getCoId());
+            return {
+                titleText               : `CO`,
+                infoText                : !cfg
+                    ? `(${Lang.getText(Lang.Type.B0001)})`
+                    : `${cfg.name}(T${cfg.tier})`,
+                infoColor               : 0xFFFFFF,
+            };
+        }
+        private _createDataEnergy(
+            war         : ReplayWar,
+            playerIndex : number,
+            player      : ReplayPlayer,
+        ): DataForInfoRenderer {
+            const currValue         = player.getCoCurrentEnergy();
+            const powerEnergy       = player.getCoPowerEnergy();
+            const superPowerEnergy  = player.getCoSuperPowerEnergy();
+            const skillType         = player.getCoUsingSkillType();
+            const hasLoadedCo       = war.getUnitMap().checkIsCoLoadedByAnyUnit(playerIndex);
+            const currEnergyText    = skillType === Types.CoSkillType.Passive
+                ? "" + currValue
+                : skillType === Types.CoSkillType.Power ? "COP" : "SCOP";
+
+            return {
+                titleText               : Lang.getText(Lang.Type.B0159),
+                infoText                : `${!hasLoadedCo ? `--` : currEnergyText} / ${powerEnergy == null ? "--" : powerEnergy} / ${superPowerEnergy == null ? "--" : superPowerEnergy}`,
+                infoColor               : 0xFFFFFF,
+            };
+        }
+        private _createDataUnitAndValue(
+            war         : ReplayWar,
+            playerIndex : number,
+            player      : ReplayPlayer,
+        ): DataForInfoRenderer {
+            const unitsCountAndValue = this._getUnitsCountAndValue(war, playerIndex);
+            return {
+                titleText               : Lang.getText(Lang.Type.B0160),
+                infoText                : `${unitsCountAndValue.count} / ${unitsCountAndValue.value}`,
+                infoColor               : 0xFFFFFF,
+            };
+        }
+        private _createDataInitialFund(
+            war         : ReplayWar,
+            playerIndex : number,
+            player      : ReplayPlayer,
+        ): DataForInfoRenderer {
+            const currValue = war.getSettingsInitialFund(playerIndex);
+            return {
+                titleText               : Lang.getText(Lang.Type.B0178),
+                infoText                : `${currValue}`,
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault),
+            };
+        }
+        private _createDataIncomeMultiplier(
+            war         : ReplayWar,
+            playerIndex : number,
+            player      : ReplayPlayer,
+        ): DataForInfoRenderer {
+            const currValue = war.getSettingsIncomeMultiplier(playerIndex);
+            return {
+                titleText               : Lang.getText(Lang.Type.B0179),
+                infoText                : `${currValue}%`,
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault),
+            };
+        }
+        private _createDataInitialEnergyPercentage(
+            war         : ReplayWar,
+            playerIndex : number,
+            player      : ReplayPlayer,
+        ): DataForInfoRenderer {
+            const currValue = war.getSettingsInitialEnergyPercentage(playerIndex);
+            return {
+                titleText               : Lang.getText(Lang.Type.B0180),
+                infoText                : `${currValue}%`,
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialEnergyDefault),
+            };
+        }
+        private _createDataEnergyGrowthMultiplier(
+            war         : ReplayWar,
+            playerIndex : number,
+            player      : ReplayPlayer,
+        ): DataForInfoRenderer {
+            const currValue = war.getSettingsEnergyGrowthMultiplier(playerIndex);
+            return {
+                titleText               : Lang.getText(Lang.Type.B0181),
+                infoText                : `${currValue}%`,
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault),
+            };
+        }
+        private _createDataMoveRangeModifier(
+            war         : ReplayWar,
+            playerIndex : number,
+            player      : ReplayPlayer,
+        ): DataForInfoRenderer {
+            const currValue = war.getSettingsMoveRangeModifier(playerIndex);
+            return {
+                titleText               : Lang.getText(Lang.Type.B0182),
+                infoText                : `${currValue}`,
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault),
+            };
+        }
+        private _createDataAttackPowerModifier(
+            war         : ReplayWar,
+            playerIndex : number,
+            player      : ReplayPlayer,
+        ): DataForInfoRenderer {
+            const currValue = war.getSettingsAttackPowerModifier(playerIndex);
+            return {
+                titleText               : Lang.getText(Lang.Type.B0183),
+                infoText                : `${currValue}%`,
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault),
+            };
+        }
+        private _createDataVisionRangeModifier(
+            war         : ReplayWar,
+            playerIndex : number,
+            player      : ReplayPlayer,
+        ): DataForInfoRenderer {
+            const currValue = war.getSettingsVisionRangeModifier(playerIndex);
+            return {
+                titleText               : Lang.getText(Lang.Type.B0184),
+                infoText                : `${currValue}`,
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault),
+            };
+        }
+        private _createDataLuckLowerLimit(
+            war         : ReplayWar,
+            playerIndex : number,
+            player      : ReplayPlayer,
+        ): DataForInfoRenderer {
+            const currValue = war.getSettingsLuckLowerLimit(playerIndex);
+            return {
+                titleText               : Lang.getText(Lang.Type.B0189),
+                infoText                : `${currValue}%`,
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit),
+            };
+        }
+        private _createDataLuckUpperLimit(
+            war         : ReplayWar,
+            playerIndex : number,
+            player      : ReplayPlayer,
+        ): DataForInfoRenderer {
+            const currValue = war.getSettingsLuckUpperLimit(playerIndex);
+            return {
+                titleText               : Lang.getText(Lang.Type.B0190),
+                infoText                : `${currValue}%`,
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit),
+            };
         }
 
         private _getTilesCountAndIncome(war: ReplayWar, playerIndex: number): { count: number, income: number } {
@@ -535,6 +664,36 @@ namespace TinyWars.Replay {
                 }
             });
             return { count, value };
+        }
+    }
+
+    type DataForInfoRenderer = {
+        titleText               : string;
+        infoText                : string;
+        infoColor               : number;
+    }
+
+    class InfoRenderer extends eui.ItemRenderer {
+        private _btnTitle   : GameUi.UiButton;
+        private _labelValue : GameUi.UiLabel;
+
+        protected dataChanged(): void {
+            super.dataChanged();
+
+            const data                  = this.data as DataForInfoRenderer;
+            this._labelValue.text       = data.infoText;
+            this._labelValue.textColor  = data.infoColor;
+            this._btnTitle.label        = data.titleText;
+        }
+    }
+
+    function getTextColor(value: number, defaultValue: number): number {
+        if (value > defaultValue) {
+            return 0x00FF00;
+        } else if (value < defaultValue) {
+            return 0xFF0000;
+        } else {
+            return 0xFFFFFF;
         }
     }
 }

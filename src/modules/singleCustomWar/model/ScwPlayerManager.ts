@@ -1,41 +1,6 @@
 
 namespace TinyWars.SingleCustomWar {
-    import ProtoTypes           = Utility.ProtoTypes;
-    import Logger               = Utility.Logger;
-    import WarSerialization     = ProtoTypes.WarSerialization;
-    import ISerialPlayerManager = WarSerialization.ISerialPlayerManager;
-    import ISerialPlayer        = WarSerialization.ISerialPlayer;
-
     export class ScwPlayerManager extends BaseWar.BwPlayerManager {
-        public serialize(): ISerialPlayerManager | undefined {
-            const players: ISerialPlayer[] = [];
-            for (const [, player] of this._getPlayersMap()) {
-                const serialPlayer = (player as ScwPlayer).serialize();
-                if (serialPlayer == null) {
-                    Logger.error(`ScwPlayerManager.serialize() empty serialPlayer.`);
-                    return undefined;
-                }
-
-                players.push(serialPlayer);
-            }
-
-            return { players };
-        }
-        public serializeForSimulation(): ISerialPlayerManager | undefined {
-            const players: ISerialPlayer[] = [];
-            for (const [, player] of this._getPlayersMap()) {
-                const serialPlayer = (player as ScwPlayer).serializeForSimulation();
-                if (serialPlayer == null) {
-                    Logger.error(`ScwPlayerManager.serialize() empty serialPlayer.`);
-                    return undefined;
-                }
-
-                players.push(serialPlayer);
-            }
-
-            return { players };
-        }
-
         protected _getPlayerClass(): new () => BaseWar.BwPlayer {
             return ScwPlayer;
         }

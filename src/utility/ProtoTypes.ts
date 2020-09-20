@@ -3411,9 +3411,6 @@ export declare namespace WarRule {
         /** WarRule ruleId */
         ruleId?: (number|null);
 
-        /** WarRule isEnabled */
-        isEnabled?: (boolean|null);
-
         /** WarRule ruleNameList */
         ruleNameList?: (string[]|null);
 
@@ -3438,9 +3435,6 @@ export declare namespace WarRule {
 
         /** WarRule ruleId. */
         public ruleId: number;
-
-        /** WarRule isEnabled. */
-        public isEnabled: boolean;
 
         /** WarRule ruleNameList. */
         public ruleNameList: string[];
@@ -5834,8 +5828,8 @@ export declare namespace WarAction {
         /** Properties of an ExtraDataForPlayerEndTurn. */
         interface IExtraDataForPlayerEndTurn {
 
-            /** ExtraDataForPlayerEndTurn listForRestTimeToBoot */
-            listForRestTimeToBoot?: (number[]|null);
+            /** ExtraDataForPlayerEndTurn restTimeToBootForCurrentPlayer */
+            restTimeToBootForCurrentPlayer?: (number|null);
         }
 
         /** Represents an ExtraDataForPlayerEndTurn. */
@@ -5847,8 +5841,8 @@ export declare namespace WarAction {
              */
             constructor(properties?: WarAction.ActionPlayerEndTurn.IExtraDataForPlayerEndTurn);
 
-            /** ExtraDataForPlayerEndTurn listForRestTimeToBoot. */
-            public listForRestTimeToBoot: number[];
+            /** ExtraDataForPlayerEndTurn restTimeToBootForCurrentPlayer. */
+            public restTimeToBootForCurrentPlayer: number;
 
             /**
              * Creates a new ExtraDataForPlayerEndTurn instance using the specified properties.
@@ -10557,11 +10551,11 @@ export declare namespace Structure {
         /** WarPlayerInfo userId */
         userId?: (number|null);
 
-        /** WarPlayerInfo teamIndex */
-        teamIndex?: (number|null);
-
         /** WarPlayerInfo coId */
         coId?: (number|null);
+
+        /** WarPlayerInfo teamIndex */
+        teamIndex?: (number|null);
 
         /** WarPlayerInfo isAlive */
         isAlive?: (boolean|null);
@@ -10585,11 +10579,11 @@ export declare namespace Structure {
         /** WarPlayerInfo userId. */
         public userId: number;
 
-        /** WarPlayerInfo teamIndex. */
-        public teamIndex: number;
-
         /** WarPlayerInfo coId. */
         public coId: number;
+
+        /** WarPlayerInfo teamIndex. */
+        public teamIndex: number;
 
         /** WarPlayerInfo isAlive. */
         public isAlive: boolean;
@@ -10663,6 +10657,108 @@ export declare namespace Structure {
 
         /**
          * Converts this WarPlayerInfo to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a WarPlayerInitialInfo. */
+    interface IWarPlayerInitialInfo {
+
+        /** WarPlayerInitialInfo playerIndex */
+        playerIndex?: (number|null);
+
+        /** WarPlayerInitialInfo userId */
+        userId?: (number|null);
+
+        /** WarPlayerInitialInfo coId */
+        coId?: (number|null);
+    }
+
+    /** Represents a WarPlayerInitialInfo. */
+    class WarPlayerInitialInfo implements IWarPlayerInitialInfo {
+
+        /**
+         * Constructs a new WarPlayerInitialInfo.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: Structure.IWarPlayerInitialInfo);
+
+        /** WarPlayerInitialInfo playerIndex. */
+        public playerIndex: number;
+
+        /** WarPlayerInitialInfo userId. */
+        public userId: number;
+
+        /** WarPlayerInitialInfo coId. */
+        public coId: number;
+
+        /**
+         * Creates a new WarPlayerInitialInfo instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WarPlayerInitialInfo instance
+         */
+        public static create(properties?: Structure.IWarPlayerInitialInfo): Structure.WarPlayerInitialInfo;
+
+        /**
+         * Encodes the specified WarPlayerInitialInfo message. Does not implicitly {@link Structure.WarPlayerInitialInfo.verify|verify} messages.
+         * @param message WarPlayerInitialInfo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: Structure.IWarPlayerInitialInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WarPlayerInitialInfo message, length delimited. Does not implicitly {@link Structure.WarPlayerInitialInfo.verify|verify} messages.
+         * @param message WarPlayerInitialInfo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: Structure.IWarPlayerInitialInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WarPlayerInitialInfo message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WarPlayerInitialInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): Structure.WarPlayerInitialInfo;
+
+        /**
+         * Decodes a WarPlayerInitialInfo message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WarPlayerInitialInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): Structure.WarPlayerInitialInfo;
+
+        /**
+         * Verifies a WarPlayerInitialInfo message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WarPlayerInitialInfo message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WarPlayerInitialInfo
+         */
+        public static fromObject(object: { [k: string]: any }): Structure.WarPlayerInitialInfo;
+
+        /**
+         * Creates a plain object from a WarPlayerInitialInfo message. Also converts values to other types if specified.
+         * @param message WarPlayerInitialInfo
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: Structure.WarPlayerInitialInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WarPlayerInitialInfo to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
@@ -30118,7 +30214,7 @@ export declare namespace NetMessage {
         settingsForSinglePlayer?: (WarSettings.ISettingsForSinglePlayer|null);
 
         /** C_ScrCreateWar playerInfoList */
-        playerInfoList?: (Structure.IWarPlayerInfo[]|null);
+        playerInfoList?: (Structure.IWarPlayerInitialInfo[]|null);
     }
 
     /** Represents a C_ScrCreateWar. */
@@ -30137,7 +30233,7 @@ export declare namespace NetMessage {
         public settingsForSinglePlayer?: (WarSettings.ISettingsForSinglePlayer|null);
 
         /** C_ScrCreateWar playerInfoList. */
-        public playerInfoList: Structure.IWarPlayerInfo[];
+        public playerInfoList: Structure.IWarPlayerInitialInfo[];
 
         /**
          * Creates a new C_ScrCreateWar instance using the specified properties.

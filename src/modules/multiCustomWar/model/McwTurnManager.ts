@@ -1,29 +1,30 @@
 
 namespace TinyWars.MultiCustomWar {
-    import DestructionHelpers   = Utility.DestructionHelpers;
-    import VisibilityHelpers    = Utility.VisibilityHelpers;
-    import ProtoTypes           = Utility.ProtoTypes;
-    import Lang                 = Utility.Lang;
-    import FloatText            = Utility.FloatText;
-    import Types                = Utility.Types;
+    import DestructionHelpers       = Utility.DestructionHelpers;
+    import ProtoTypes               = Utility.ProtoTypes;
+    import Lang                     = Utility.Lang;
+    import FloatText                = Utility.FloatText;
+    import BwTurnManagerHelper      = BaseWar.BwTurnManagerHelper;
+    import IActionPlayerBeginTurn   = ProtoTypes.WarAction.IActionPlayerBeginTurn;
+    import IActionPlayerEndTurn     = ProtoTypes.WarAction.IActionPlayerEndTurn;
 
     export class McwTurnManager extends BaseWar.BwTurnManager {
-        public serializeForSimulation(): Types.SerializedTurn {
-            return {
-                turnIndex       : this.getTurnIndex(),
-                playerIndex     : this.getPlayerIndexInTurn(),
-                turnPhaseCode   : this.getPhaseCode(),
-                enterTurnTime   : this.getEnterTurnTime(),
-            };
+        protected _runPhaseGetFund(data: IActionPlayerBeginTurn): void {
+            BwTurnManagerHelper.runPhaseGetFundWithExtraData(this, data);
         }
-
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        // The functions for running turn.
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        protected _runPhaseMain(data: ProtoTypes.IWarActionPlayerBeginTurn): void {
+        protected _runPhaseRepairUnitByTile(data: IActionPlayerBeginTurn): void {
+            BwTurnManagerHelper.runPhaseRepairUnitByTileWithExtraData(this, data);
+        }
+        protected _runPhaseRepairUnitByUnit(data: IActionPlayerBeginTurn): void {
+            BwTurnManagerHelper.runPhaseRepairUnitByUnitWithExtraData(this, data);
+        }
+        protected _runPhaseRecoverUnitByCo(data: IActionPlayerBeginTurn): void {
+            BwTurnManagerHelper.runPhaseRecoverUnitByCoWithExtraData(this, data);
+        }
+        protected _runPhaseMain(data: IActionPlayerBeginTurn): void {
             const playerIndex   = this.getPlayerIndexInTurn();
-            const war           = this._getWar() as McwWar;
-            if (data.isDefeated) {
+            const war           = this.getWar();
+            if (data.extraData.isDefeated) {
                 FloatText.show(Lang.getFormattedText(Lang.Type.F0014, war.getPlayer(playerIndex).getNickname()));
                 DestructionHelpers.destroyPlayerForce(war, playerIndex, true);
                 McwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
@@ -31,20 +32,16 @@ namespace TinyWars.MultiCustomWar {
                 war.getUnitMap().forEachUnitOnMap(unit => (unit.getPlayerIndex() === playerIndex) && (unit.updateView()));
             }
         }
-        protected _runPhaseResetVisionForCurrentPlayer(): void {
-            const war           = this._getWar();
-            const playerInTurn  = war.getPlayerInTurn();
-            war.getFogMap().resetMapFromPathsForPlayer(playerInTurn.getPlayerIndex());
 
-            if (war.getWatcherTeamIndexes(User.UserModel.getSelfUserId()).has(playerInTurn.getTeamIndex())) {
-                McwHelpers.updateTilesAndUnitsOnVisibilityChanged(this._getWar());
-            }
+        protected _runPhaseTickTurnAndPlayerIndex(data: IActionPlayerEndTurn): void {
+            BwTurnManagerHelper.runPhaseTickTurnAndPlayerIndexWithExtraData(this, data);
+        }
+        protected _runPhaseResetVisionForCurrentPlayer(): void {
+            const war = this.getWar();
+            war.getFogMap().resetMapFromPathsForPlayer(war.getPlayerIndexInTurn());
         }
         protected _runPhaseResetVisionForNextPlayer(): void {
-            const war = this._getWar();
-            if (war.getWatcherTeamIndexes(User.UserModel.getSelfUserId()).has(war.getPlayerInTurn().getTeamIndex())) {
-                McwHelpers.updateTilesAndUnitsOnVisibilityChanged(this._getWar());
-            }
+            McwHelpers.updateTilesAndUnitsOnVisibilityChanged(this.getWar());
         }
     }
 }
