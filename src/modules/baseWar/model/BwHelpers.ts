@@ -20,6 +20,7 @@ namespace TinyWars.BaseWar.BwHelpers {
     import ISerialTile              = WarSerialization.ISerialTile;
     import ISerialWar               = WarSerialization.ISerialWar;
     import IGridIndex               = ProtoTypes.Structure.IGridIndex;
+    import IRuleForPlayers          = ProtoTypes.WarRule.IRuleForPlayers;
     import CommonConstants          = ConfigManager.COMMON_CONSTANTS;
 
     type AvailableMovableGrid = {
@@ -366,7 +367,6 @@ namespace TinyWars.BaseWar.BwHelpers {
 
     export function updateTilesAndUnitsBeforeExecutingAction(
         war         : BwWar,
-        unitClass   : new () => BwUnit,
         extraData   : {
             actingTiles?    : ISerialTile[],
             actingUnits?    : ISerialUnit[],
@@ -375,21 +375,21 @@ namespace TinyWars.BaseWar.BwHelpers {
         } | undefined | null,
     ): void {
         if (extraData) {
-            addUnitsBeforeExecutingAction(war, unitClass, extraData.actingUnits, false);
-            addUnitsBeforeExecutingAction(war, unitClass, extraData.discoveredUnits, false);
+            addUnitsBeforeExecutingAction(war, extraData.actingUnits, false);
+            addUnitsBeforeExecutingAction(war, extraData.discoveredUnits, false);
             updateTilesBeforeExecutingAction(war, extraData.actingTiles);
             updateTilesBeforeExecutingAction(war, extraData.discoveredTiles);
         }
     }
     function addUnitsBeforeExecutingAction(
         war             : BwWar,
-        unitClass       : new () => BwUnit,
         unitsData       : ISerialUnit[] | undefined | null,
         isViewVisible   : boolean
     ): void {
         if ((unitsData) && (unitsData.length)) {
             const unitMap       = war.getUnitMap();
             const configVersion = war.getConfigVersion();
+            const unitClass     = unitMap.getUnitClass();
 
             for (const unitData of unitsData) {
                 if (!unitMap.getUnitById(unitData.unitId)) {
@@ -892,6 +892,15 @@ namespace TinyWars.BaseWar.BwHelpers {
                 maxPlayerIndex,
             };
         }
+    }
+
+    export function getTeamIndexByRuleForPlayers(ruleForPlayers: IRuleForPlayers, playerIndex: number): number | null | undefined {
+        for (const playerRule of ruleForPlayers?.playerRuleDataList || []) {
+            if (playerRule.playerIndex === playerIndex) {
+                return playerRule.teamIndex;
+            }
+        }
+        return undefined;
     }
 
     export function getVisibilityListWithMapFromPath(map: Visibility[][], mapSize: MapSize): Visibility[] | undefined {

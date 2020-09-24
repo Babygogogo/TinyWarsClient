@@ -171,7 +171,7 @@ namespace TinyWars.Utility.Lang {
             "Invalid password.",
         ],
         [Type.A0018]: [
-            "已成功加入房间。战局尚未开始，请继续耐心等候他人加入。",
+            "已成功加入房间。",
             "Joined successfully.",
         ],
         [Type.A0019]: [
@@ -2194,6 +2194,10 @@ namespace TinyWars.Utility.Lang {
             `玩家列表`,
             `Players List`,
         ],
+        [Type.B0396]: [
+            `超时告负`,
+            `Boot`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -2553,6 +2557,10 @@ namespace TinyWars.Utility.Lang {
             `"%s"上的一局多人对战已经正式开始！`,
             `A game on "%s" has started!`
         ],
+        [Type.F0028]: [
+            `玩家[%s]因超时而告负！`,
+            `Player [%s] has ran out of time!`,
+        ],
     };
 
     const NET_ERROR_TEXT = {
@@ -2907,14 +2915,15 @@ namespace TinyWars.Utility.Lang {
     }
 
     export function getPlayerForceName(playerIndex: number): string {
-        switch (playerIndex) {
-            case 0  : return getText(Type.B0030);
-            case 1  : return getText(Type.B0004);
-            case 2  : return getText(Type.B0005);
-            case 3  : return getText(Type.B0006);
-            case 4  : return getText(Type.B0007);
-            default : return undefined;
-        }
+        // switch (playerIndex) {
+        //     case 0  : return getText(Type.B0030);
+        //     case 1  : return getText(Type.B0004);
+        //     case 2  : return getText(Type.B0005);
+        //     case 3  : return getText(Type.B0006);
+        //     case 4  : return getText(Type.B0007);
+        //     default : return undefined;
+        // }
+        return `${playerIndex}.`;
     }
 
     export function getPlayerTeamName(teamIndex: number): string {

@@ -1,8 +1,10 @@
 
 namespace TinyWars.MultiCustomWar {
-    import Notify   = Utility.Notify;
-    import Lang     = Utility.Lang;
-    import Types    = Utility.Types;
+    import Notify           = Utility.Notify;
+    import Lang             = Utility.Lang;
+    import Types            = Utility.Types;
+    import ConfigManager    = Utility.ConfigManager;
+    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
     export class McwBuildingListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud3;
@@ -138,7 +140,7 @@ namespace TinyWars.MultiCustomWar {
             const dict              = data.dict;
             const playerManager     = data.playerManager;
             let totalNum            = 0;
-            for (let playerIndex = 0; playerIndex <= Utility.ConfigManager.MAX_PLAYER_INDEX; ++playerIndex) {
+            for (let playerIndex = 0; playerIndex <= CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
                 const num                               = dict.get(playerIndex) || 0;
                 totalNum                                += num;
                 this._labelNumList[playerIndex].text    = playerManager.getPlayer(playerIndex) ? `${num}` : `--`;

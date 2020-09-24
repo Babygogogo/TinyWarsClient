@@ -7,7 +7,7 @@ namespace TinyWars.MultiCustomWar {
         public startRunning(war: McwWar): void {
             this._setWar(war);
 
-            const visibleTiles = VisibilityHelpers.getAllTilesVisibleToTeams(war, war.getPlayerManager().getWatcherTeamIndexesForSelf());
+            const visibleTiles = VisibilityHelpers.getAllTilesVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
             war.getTileMap().forEachTile(tile => {
                 if (!(tile instanceof McwTile)) {
                     Logger.error(`McwFogMap.startRunning() invalid tile.`);

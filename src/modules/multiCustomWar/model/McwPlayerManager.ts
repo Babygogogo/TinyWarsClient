@@ -27,8 +27,8 @@ namespace TinyWars.MultiCustomWar {
             return player ? player.getPlayerIndex() : undefined;
         }
 
-        public getWatcherTeamIndexesForSelf(): Set<number> {
-            return this.getWatcherTeamIndexes(User.UserModel.getSelfUserId());
+        public getAliveWatcherTeamIndexesForSelf(): Set<number> {
+            return this.getAliveWatcherTeamIndexes(User.UserModel.getSelfUserId());
         }
     }
 }

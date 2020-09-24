@@ -5,7 +5,7 @@ namespace TinyWars.Replay {
         protected _getViewClass(): new () => BaseWar.BwUnitMapView {
             return ReplayUnitMapView;
         }
-        protected _getUnitClass(): new () => BaseWar.BwUnit {
+        public getUnitClass(): new () => BaseWar.BwUnit {
             return ReplayUnit;
         }
     }

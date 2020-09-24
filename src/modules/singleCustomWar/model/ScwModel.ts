@@ -20,35 +20,33 @@ namespace TinyWars.SingleCustomWar.ScwModel {
     import MovePath                 = Types.MovePath;
     import TileType                 = Types.TileType;
     import WarSerialization         = ProtoTypes.WarSerialization;
-    import ISerialTile              = WarSerialization.ISerialTile;
-    import ISerialUnit              = WarSerialization.ISerialUnit;
     import IActionContainer         = ProtoTypes.WarAction.IActionContainer;
     import IDataForUseCoSkill       = ProtoTypes.Structure.IDataForUseCoSkill;
     import CommonConstants          = ConfigManager.COMMON_CONSTANTS;
 
     const _EXECUTORS = new Map<WarActionCodes, (war: ScwWar, data: IActionContainer) => Promise<void>>([
-        [WarActionCodes.ActionPlayerBeginTurn,      _executeScwPlayerBeginTurn],
-        [WarActionCodes.ActionPlayerDeleteUnit,     _executeScwPlayerDeleteUnit],
-        [WarActionCodes.ActionPlayerEndTurn,        _executeScwPlayerEndTurn],
-        [WarActionCodes.ActionPlayerProduceUnit,    _executeScwPlayerProduceUnit],
-        [WarActionCodes.ActionPlayerSurrender,      _executeScwPlayerSurrender],
-        [WarActionCodes.ActionPlayerVoteForDraw,    _executeScwPlayerVoteForDraw],
-        [WarActionCodes.ActionUnitAttackUnit,       _executeScwUnitAttackUnit],
-        [WarActionCodes.ActionUnitAttackTile,       _executeScwUnitAttackTile],
-        [WarActionCodes.ActionUnitBeLoaded,         _executeScwUnitBeLoaded],
-        [WarActionCodes.ActionUnitBuildTile,        _executeScwUnitBuildTile],
-        [WarActionCodes.ActionUnitCaptureTile,      _executeScwUnitCaptureTile],
-        [WarActionCodes.ActionUnitDive,             _executeScwUnitDive],
-        [WarActionCodes.ActionUnitDrop,             _executeScwUnitDrop],
-        [WarActionCodes.ActionUnitJoin,             _executeScwUnitJoin],
-        [WarActionCodes.ActionUnitLaunchFlare,      _executeScwUnitLaunchFlare],
-        [WarActionCodes.ActionUnitLaunchSilo,       _executeScwUnitLaunchSilo],
-        [WarActionCodes.ActionUnitLoadCo,           _executeScwUnitLoadCo],
-        [WarActionCodes.ActionUnitProduceUnit,      _executeScwUnitProduceUnit],
-        [WarActionCodes.ActionUnitSupply,           _executeScwUnitSupply],
-        [WarActionCodes.ActionUnitSurface,          _executeScwUnitSurface],
-        [WarActionCodes.ActionUnitUseCoSkill,       _executeScwUnitUseCoSkill],
-        [WarActionCodes.ActionUnitWait,             _executeScwUnitWait],
+        [WarActionCodes.ActionPlayerBeginTurn,      _exePlayerBeginTurn],
+        [WarActionCodes.ActionPlayerDeleteUnit,     _exePlayerDeleteUnit],
+        [WarActionCodes.ActionPlayerEndTurn,        _exePlayerEndTurn],
+        [WarActionCodes.ActionPlayerProduceUnit,    _exePlayerProduceUnit],
+        [WarActionCodes.ActionPlayerSurrender,      _exePlayerSurrender],
+        [WarActionCodes.ActionPlayerVoteForDraw,    _exePlayerVoteForDraw],
+        [WarActionCodes.ActionUnitAttackUnit,       _exeUnitAttackUnit],
+        [WarActionCodes.ActionUnitAttackTile,       _exeUnitAttackTile],
+        [WarActionCodes.ActionUnitBeLoaded,         _exeUnitBeLoaded],
+        [WarActionCodes.ActionUnitBuildTile,        _exeUnitBuildTile],
+        [WarActionCodes.ActionUnitCaptureTile,      _exeUnitCaptureTile],
+        [WarActionCodes.ActionUnitDive,             _exeUnitDive],
+        [WarActionCodes.ActionUnitDrop,             _exeUnitDrop],
+        [WarActionCodes.ActionUnitJoin,             _exeUnitJoin],
+        [WarActionCodes.ActionUnitLaunchFlare,      _exeUnitLaunchFlare],
+        [WarActionCodes.ActionUnitLaunchSilo,       _exeUnitLaunchSilo],
+        [WarActionCodes.ActionUnitLoadCo,           _exeUnitLoadCo],
+        [WarActionCodes.ActionUnitProduceUnit,      _exeUnitProduceUnit],
+        [WarActionCodes.ActionUnitSupply,           _exeUnitSupply],
+        [WarActionCodes.ActionUnitSurface,          _exeUnitSurface],
+        [WarActionCodes.ActionUnitUseCoSkill,       _exeUnitUseCoSkill],
+        [WarActionCodes.ActionUnitWait,             _exeUnitWait],
     ]);
 
     let _war            : ScwWar;
@@ -113,7 +111,8 @@ namespace TinyWars.SingleCustomWar.ScwModel {
             war.setIsExecutingAction(false);
 
             if (war.getIsRunning()) {
-                if (!war.checkHasAliveWatcherTeam(User.UserModel.getSelfUserId())) {
+                const playerManager = war.getPlayerManager();
+                if (!playerManager.getAliveWatcherTeamIndexesForSelf().size) {
                     if (war.getHumanPlayers().length > 0) {
                         war.setIsEnded(true);
                         CommonAlertPanel.show({
@@ -122,7 +121,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
                             callback: () => Utility.FlowManager.gotoLobby(),
                         });
                     } else {
-                        if (war.getPlayerManager().getAliveTeamsCount(false) <= 1) {
+                        if (playerManager.getAliveTeamsCount(false) <= 1) {
                             war.setIsEnded(true);
                             CommonAlertPanel.show({
                                 title   : Lang.getText(Lang.Type.B0034),
@@ -149,7 +148,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
                         });
 
                     } else {
-                        if (war.getPlayerManager().getAliveTeamsCount(false) <= 1) {
+                        if (playerManager.getAliveTeamsCount(false) <= 1) {
                             war.setIsEnded(true);
                             CommonAlertPanel.show({
                                 title   : Lang.getText(Lang.Type.B0034),
@@ -183,7 +182,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // The 'true' executors for war actions.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function _executeScwPlayerBeginTurn(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exePlayerBeginTurn(war: ScwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
@@ -202,7 +201,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         actionPlanner.setStateIdle();
     }
 
-    async function _executeScwPlayerDeleteUnit(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exePlayerDeleteUnit(war: ScwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
@@ -218,7 +217,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         actionPlanner.setStateIdle();
     }
 
-    async function _executeScwPlayerEndTurn(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exePlayerEndTurn(war: ScwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
         await war.getTurnManager().endPhaseMain(data.ActionPlayerEndTurn);
@@ -226,13 +225,11 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         actionPlanner.setStateIdle();
     }
 
-    async function _executeScwPlayerProduceUnit(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exePlayerProduceUnit(war: ScwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action = data.ActionPlayerProduceUnit;
-        BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, ScwUnit, action.extraData);
-
+        const action        = data.ActionPlayerProduceUnit;
         const gridIndex     = action.gridIndex as GridIndex;
         const unitType      = action.unitType;
         const unitHp        = action.unitHp;
@@ -244,7 +241,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         const skillCfg      = war.getTileMap().getTile(gridIndex).getEffectiveSelfUnitProductionSkillCfg(playerIndex);
         const cfgCost       = ConfigManager.getUnitTemplateCfg(configVersion, unitType).productionCost;
         const cost          = Math.floor(cfgCost * (skillCfg ? skillCfg[5] : 100) / 100 * BwHelpers.getNormalizedHp(unitHp) / CommonConstants.UnitHpNormalizer);
-        const unit          = new ScwUnit().init({
+        const unit          = (new (unitMap.getUnitClass())).init({
             gridIndex,
             playerIndex,
             unitType,
@@ -262,19 +259,19 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         actionPlanner.setStateIdle();
     }
 
-    async function _executeScwPlayerSurrender(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exePlayerSurrender(war: ScwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
+        const player        = war.getPlayerInTurn();
         actionPlanner.setStateExecutingAction();
+        FloatText.show(Lang.getFormattedText(data.ActionPlayerSurrender.isBoot ? Lang.Type.F0028 : Lang.Type.F0008, await player.getNickname()));
 
-        const player = war.getPlayerInTurn();
         DestructionHelpers.destroyPlayerForce(war, player.getPlayerIndex(), true);
-        ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
-        FloatText.show(Lang.getFormattedText(Lang.Type.F0008, player.getNickname()));
 
+        ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
         actionPlanner.setStateIdle();
     }
 
-    async function _executeScwPlayerVoteForDraw(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exePlayerVoteForDraw(war: ScwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
@@ -284,14 +281,14 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         playerInTurn.setHasVotedForDraw(true);
 
         if (!action.isAgree) {
-            FloatText.show(Lang.getFormattedText(Lang.Type.F0017, playerInTurn.getNickname()));
+            FloatText.show(Lang.getFormattedText(Lang.Type.F0017, await playerInTurn.getNickname()));
             war.setRemainingVotesForDraw(undefined);
         } else {
             const remainingVotes = war.getRemainingVotesForDraw();
             if (remainingVotes) {
-                FloatText.show(Lang.getFormattedText(Lang.Type.F0018, playerInTurn.getNickname()));
+                FloatText.show(Lang.getFormattedText(Lang.Type.F0018, await playerInTurn.getNickname()));
             } else {
-                FloatText.show(Lang.getFormattedText(Lang.Type.F0019, playerInTurn.getNickname()));
+                FloatText.show(Lang.getFormattedText(Lang.Type.F0019, await playerInTurn.getNickname()));
             }
             war.setRemainingVotesForDraw((remainingVotes || war.getPlayerManager().getAlivePlayersCount(false)) - 1);
         }
@@ -299,13 +296,11 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         actionPlanner.setStateIdle();
     }
 
-    async function _executeScwUnitAttackUnit(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitAttackUnit(war: ScwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action = data.ActionUnitAttackUnit;
-        BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, ScwUnit, action.extraData);
-
+        const action        = data.ActionUnitAttackUnit;
         const path          = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
@@ -330,7 +325,6 @@ namespace TinyWars.SingleCustomWar.ScwModel {
             const attackerGridIndex             = pathNodes[pathNodes.length - 1];
             const targetGridIndex               = action.targetGridIndex as GridIndex;
             const [attackDamage, counterDamage] = DamageCalculator.getFinalBattleDamage(war, pathNodes, launchUnitId, targetGridIndex);
-            const tileMap                       = war.getTileMap();
             const targetUnit                    = unitMap.getUnitOnMap(targetGridIndex);
 
             // Handle ammo.
@@ -381,13 +375,13 @@ namespace TinyWars.SingleCustomWar.ScwModel {
             if (attackerPlayer.getCoId()) {
                 const attackerCoZoneRadius = attackerPlayer.getCoZoneRadius();
                 if (attackerCoZoneRadius == null) {
-                    Logger.error(`ScwModel._executeScwUnitAttackUnit() empty attackerCoZoneRadius.`);
+                    Logger.error(`ScwModel._exeUnitAttackUnit() empty attackerCoZoneRadius.`);
                     return undefined;
                 }
 
                 const hasAttackerLoadedCo = attackerUnit.getHasLoadedCo();
                 if (hasAttackerLoadedCo == null) {
-                    Logger.error(`ScwModel._executeScwUnitAttackUnit() empty hasAttackerLoadedCo.`);
+                    Logger.error(`ScwModel._exeUnitAttackUnit() empty hasAttackerLoadedCo.`);
                     return undefined;
                 }
 
@@ -477,7 +471,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
                     : (undefined)
                 );
             if (lostPlayerIndex) {
-                FloatText.show(Lang.getFormattedText(Lang.Type.F0015, war.getPlayerManager().getPlayer(lostPlayerIndex).getNickname()));
+                FloatText.show(Lang.getFormattedText(Lang.Type.F0015, await war.getPlayerManager().getPlayer(lostPlayerIndex).getNickname()));
                 DestructionHelpers.destroyPlayerForce(war, lostPlayerIndex, true);
             }
 
@@ -486,13 +480,11 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         }
     }
 
-    async function _executeScwUnitAttackTile(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitAttackTile(war: ScwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action = data.ActionUnitAttackTile;
-        BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, ScwUnit, action.extraData);
-
+        const action        = data.ActionUnitAttackTile;
         const path          = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
@@ -553,13 +545,11 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         }
     }
 
-    async function _executeScwUnitBeLoaded(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitBeLoaded(war: ScwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action = data.ActionUnitBeLoaded;
-        BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, ScwUnit, action.extraData);
-
+        const action        = data.ActionUnitBeLoaded;
         const path          = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
@@ -588,13 +578,11 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         }
     }
 
-    async function _executeScwUnitBuildTile(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitBuildTile(war: ScwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action = data.ActionUnitBuildTile;
-        BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, ScwUnit, action.extraData);
-
+        const action        = data.ActionUnitBuildTile;
         const path          = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
@@ -637,13 +625,11 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         actionPlanner.setStateIdle();
     }
 
-    async function _executeScwUnitCaptureTile(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitCaptureTile(war: ScwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action = data.ActionUnitCaptureTile;
-        BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, ScwUnit, action.extraData);
-
+        const action        = data.ActionUnitCaptureTile;
         const path          = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
@@ -691,7 +677,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
                 await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false);
                 focusUnit.updateView();
                 tile.flushDataToView();
-                FloatText.show(Lang.getFormattedText(Lang.Type.F0016, war.getPlayerManager().getPlayer(lostPlayerIndex).getNickname()));
+                FloatText.show(Lang.getFormattedText(Lang.Type.F0016, await war.getPlayerManager().getPlayer(lostPlayerIndex).getNickname()));
                 DestructionHelpers.destroyPlayerForce(war, lostPlayerIndex, true);
                 ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
                 actionPlanner.setStateIdle();
@@ -699,13 +685,11 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         }
     }
 
-    async function _executeScwUnitDive(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitDive(war: ScwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action = data.ActionUnitDive;
-        BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, ScwUnit, action.extraData);
-
+        const action        = data.ActionUnitDive;
         const path          = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
@@ -721,12 +705,12 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         focusUnit.updateView();
         if (isSuccessful) {
             const endingGridIndex = pathNodes[pathNodes.length - 1];
-            if (VisibilityHelpers.checkIsUnitOnMapVisibleToUser({
+            if (VisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                 war,
                 unitType            : focusUnit.getType(),
                 unitPlayerIndex     : focusUnit.getPlayerIndex(),
                 gridIndex           : endingGridIndex,
-                observerUserId      : User.UserModel.getSelfUserId(),
+                observerTeamIndexes : war.getPlayerManager().getAliveWatcherTeamIndexesForSelf(),
                 isDiving            : false,
             })) {
                 war.getGridVisionEffect().showEffectDive(endingGridIndex);
@@ -737,13 +721,11 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         actionPlanner.setStateIdle();
     }
 
-    async function _executeScwUnitDrop(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitDrop(war: ScwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action = data.ActionUnitDrop;
-        BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, ScwUnit, action.extraData);
-
+        const action            = data.ActionUnitDrop;
         const path              = action.path as MovePath;
         const launchUnitId      = action.launchUnitId;
         const pathNodes         = path.nodes;
@@ -754,7 +736,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
 
-        const shouldUpdateFogMap    = war.getWatcherTeamIndexes(User.UserModel.getSelfUserId()).has(focusUnit.getTeamIndex());
+        const shouldUpdateFogMap    = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(focusUnit.getTeamIndex());
         const fogMap                = war.getFogMap();
         const unitsForDrop          = [] as ScwUnit[];
         for (const { unitId, gridIndex } of (action.dropDestinations || []) as Types.DropDestination[]) {
@@ -793,13 +775,11 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         actionPlanner.setStateIdle();
     }
 
-    async function _executeScwUnitJoin(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitJoin(war: ScwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action = data.ActionUnitJoin;
-        BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, ScwUnit, action.extraData);
-
+        const action            = data.ActionUnitJoin;
         const path              = action.path as MovePath;
         const launchUnitId      = action.launchUnitId;
         const pathNodes         = path.nodes;
@@ -883,13 +863,11 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         }
     }
 
-    async function _executeScwUnitLaunchFlare(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitLaunchFlare(war: ScwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action = data.ActionUnitLaunchFlare;
-        BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, ScwUnit, action.extraData);
-
+        const action        = data.ActionUnitLaunchFlare;
         const path          = action.path as MovePath;
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
@@ -908,7 +886,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         }
 
         await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
-        if ((isFlareSucceeded) && (war.getWatcherTeamIndexes(User.UserModel.getSelfUserId()).has(focusUnit.getTeamIndex()))) {
+        if ((isFlareSucceeded) && (war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(focusUnit.getTeamIndex()))) {
             const effect = war.getGridVisionEffect();
             for (const grid of GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, flareRadius, war.getTileMap().getMapSize())) {
                 effect.showEffectFlare(grid);
@@ -920,13 +898,11 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         actionPlanner.setStateIdle();
     }
 
-    async function _executeScwUnitLaunchSilo(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitLaunchSilo(war: ScwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action = data.ActionUnitLaunchSilo;
-        BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, ScwUnit, action.extraData);
-
+        const action        = data.ActionUnitLaunchSilo;
         const path          = action.path as MovePath;
         const pathNodes     = path.nodes;
         const launchUnitId  = action.launchUnitId;
@@ -977,13 +953,11 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         }
     }
 
-    async function _executeScwUnitLoadCo(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitLoadCo(war: ScwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action = data.ActionUnitLoadCo;
-        BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, ScwUnit, action.extraData);
-
+        const action        = data.ActionUnitLoadCo;
         const path          = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
@@ -998,7 +972,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
             const playerIndex               = focusUnit.getPlayerIndex();
             const initialEnergyPercentage   = war.getSettingsInitialEnergyPercentage(playerIndex);
             if (initialEnergyPercentage == null) {
-                Logger.error(`ScwModel._executeScwUnitLoadCo() empty initialEnergyPercentage.`);
+                Logger.error(`ScwModel._exeUnitLoadCo() empty initialEnergyPercentage.`);
                 return undefined;
             }
 
@@ -1018,13 +992,11 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         actionPlanner.setStateIdle();
     }
 
-    async function _executeScwUnitProduceUnit(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitProduceUnit(war: ScwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action = data.ActionUnitProduceUnit;
-        BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, ScwUnit, action.extraData);
-
+        const action        = data.ActionUnitProduceUnit;
         const path          = action.path as MovePath;
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
@@ -1043,7 +1015,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         } else {
             const gridIndex         = focusUnit.getGridIndex();
             const producedUnitId    = unitMap.getNextUnitId();
-            const producedUnit      = new ScwUnit().init({
+            const producedUnit      = (new (unitMap.getUnitClass())).init({
                 gridIndex,
                 playerIndex : focusUnit.getPlayerIndex(),
                 unitType    : focusUnit.getProduceUnitType(),
@@ -1066,13 +1038,11 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         }
     }
 
-    async function _executeScwUnitSupply(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitSupply(war: ScwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action = data.ActionUnitSupply;
-        BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, ScwUnit, action.extraData);
-
+        const action        = data.ActionUnitSupply;
         const revisedPath   = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = revisedPath.nodes;
@@ -1120,16 +1090,14 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         }
     }
 
-    async function _executeScwUnitSurface(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitSurface(war: ScwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action = data.ActionUnitSurface;
-        BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, ScwUnit, action.extraData);
-
-        const unitMap = war.getUnitMap();
+        const action    = data.ActionUnitSurface;
+        const unitMap   = war.getUnitMap();
         if (unitMap == null) {
-            Logger.error(`ScwModel._executeScwUnitSurface() empty unitMap.`);
+            Logger.error(`ScwModel._exeUnitSurface() empty unitMap.`);
             return undefined;
         }
 
@@ -1147,38 +1115,36 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         focusUnit.updateView();
         if (isSuccessful) {
             const endingGridIndex = pathNodes[pathNodes.length - 1];
-            if (VisibilityHelpers.checkIsUnitOnMapVisibleToUser({
+            if (VisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                 war,
                 unitType            : focusUnit.getType(),
                 unitPlayerIndex     : focusUnit.getPlayerIndex(),
                 gridIndex           : endingGridIndex,
-                observerUserId      : User.UserModel.getSelfUserId(),
+                observerTeamIndexes : war.getPlayerManager().getAliveWatcherTeamIndexesForSelf(),
                 isDiving            : false,
             })) {
                 war.getGridVisionEffect().showEffectSurface(endingGridIndex);
             }
         }
-        ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
+        ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
         actionPlanner.setStateIdle();
     }
 
-    async function _executeScwUnitUseCoSkill(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitUseCoSkill(war: ScwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
         const action    = data.ActionUnitUseCoSkill;
         const skillType = action.skillType;
         if (skillType == null) {
-            Logger.error(`ScwModel._executeScwUnitUseCoSkill() empty skillType.`);
+            Logger.error(`ScwModel._exeUnitUseCoSkill() empty skillType.`);
             return undefined;
         }
 
-        BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, ScwUnit, action.extraData);
-
         const unitMap = war.getUnitMap();
         if (unitMap == null) {
-            Logger.error(`ScwModel._executeScwUnitUseCoSkill() empty unitMap.`);
+            Logger.error(`ScwModel._exeUnitUseCoSkill() empty unitMap.`);
             return undefined;
         }
 
@@ -1187,25 +1153,25 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         const launchUnitId  = action.launchUnitId;
         const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
         if (focusUnit == null) {
-            Logger.error(`ScwModel._executeScwUnitUseCoSkill() empty focusUnit.`);
+            Logger.error(`ScwModel._exeUnitUseCoSkill() empty focusUnit.`);
             return undefined;
         }
 
         const teamIndexInTurn = focusUnit.getTeamIndex();
         if (teamIndexInTurn == null) {
-            Logger.error(`ScwModel._executeScwUnitUseCoSkill() empty teamIndexInTurn.`);
+            Logger.error(`ScwModel._exeUnitUseCoSkill() empty teamIndexInTurn.`);
             return undefined;
         }
 
         const player = focusUnit.getPlayer();
         if (player == null) {
-            Logger.error(`ScwModel._executeScwUnitUseCoSkill() empty player.`);
+            Logger.error(`ScwModel._exeUnitUseCoSkill() empty player.`);
             return undefined;
         }
 
         const currentEnergy = player.getCoCurrentEnergy();
         if (currentEnergy == null) {
-            Logger.error(`ScwModel._executeScwUnitUseCoSkill() empty currentEnergy.`);
+            Logger.error(`ScwModel._exeUnitUseCoSkill() empty currentEnergy.`);
             return undefined;
         }
 
@@ -1229,7 +1195,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
             if (skillType === Types.CoSkillType.Power) {
                 const powerEnergy = player.getCoPowerEnergy();
                 if (powerEnergy == null) {
-                    Logger.error(`ScwModel._executeScwUnitUseCoSkill() empty powerEnergy.`);
+                    Logger.error(`ScwModel._exeUnitUseCoSkill() empty powerEnergy.`);
                     return undefined;
                 }
                 player.setCoCurrentEnergy(currentEnergy - powerEnergy);
@@ -1237,14 +1203,14 @@ namespace TinyWars.SingleCustomWar.ScwModel {
             } else if (skillType === Types.CoSkillType.SuperPower) {
                 const superPowerEnergy = player.getCoSuperPowerEnergy();
                 if (superPowerEnergy == null) {
-                    Logger.error(`ScwModel._executeScwUnitUseCoSkill() empty superPowerEnergy.`);
+                    Logger.error(`ScwModel._exeUnitUseCoSkill() empty superPowerEnergy.`);
                     return undefined;
                 }
 
                 player.setCoCurrentEnergy(currentEnergy - superPowerEnergy);
 
             } else {
-                Logger.error(`ScwModel._executeScwUnitUseCoSkill() invalid skillType: ${skillType}`);
+                Logger.error(`ScwModel._exeUnitUseCoSkill() invalid skillType: ${skillType}`);
                 return undefined;
             }
 
@@ -1253,7 +1219,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
             for (let skillIndex = 0; skillIndex < skillIdList.length; ++skillIndex) {
                 const dataForUseCoSkill = BwCoSkillHelper.getDataForUseCoSkill(war, player, skillIndex);
                 if (dataForUseCoSkill == null) {
-                    Logger.error(`ScwModel._executeScwUnitUseCoSkill() empty dataForUseCoSkill.`);
+                    Logger.error(`ScwModel._exeUnitUseCoSkill() empty dataForUseCoSkill.`);
                     return undefined;
                 }
 
@@ -1293,16 +1259,14 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         }
     }
 
-    async function _executeScwUnitWait(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitWait(war: ScwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action = data.ActionUnitWait;
-        BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, ScwUnit, action.extraData);
-
-        const unitMap = war.getUnitMap();
+        const action    = data.ActionUnitWait;
+        const unitMap   = war.getUnitMap();
         if (unitMap == null) {
-            Logger.error(`ScwModel._executeScwUnitWait() empty unitMap.`);
+            Logger.error(`ScwModel._exeUnitWait() empty unitMap.`);
             return undefined;
         }
 

@@ -207,7 +207,7 @@ namespace TinyWars.SingleCustomWar {
             const war                   = this._war;
             const player                = war.getPlayerInTurn();
             const name                  = player.getUserId() != null ? Lang.getText(Lang.Type.B0031) : Lang.getText(Lang.Type.B0256);
-            this._labelPlayer.text      = `${name} (${Helpers.getColorTextForPlayerIndex(player.getPlayerIndex())})`;
+            this._labelPlayer.text      = `${name} (${Lang.getPlayerForceName(player.getPlayerIndex())})`;
             this._labelPlayer.textColor = 0xFFFFFF;
         }
 
@@ -215,7 +215,7 @@ namespace TinyWars.SingleCustomWar {
             const war               = this._war;
             const playerInTurn      = war.getPlayerInTurn();
             if ((war.getFogMap().checkHasFogCurrently())                                                                        &&
-                (!(war.getPlayerManager() as ScwPlayerManager).getWatcherTeamIndexesForSelf().has(playerInTurn.getTeamIndex()))
+                (!(war.getPlayerManager() as ScwPlayerManager).getAliveWatcherTeamIndexesForSelf().has(playerInTurn.getTeamIndex()))
             ) {
                 this._labelFund.text = `????`;
             } else {

@@ -427,7 +427,7 @@ namespace TinyWars.SingleCustomWar {
                         unitType: unit.getType(),
                         isDiving: unit.getIsDiving(),
                         unitPlayerIndex,
-                        observerTeamIndexes: war.getPlayerManager().getWatcherTeamIndexesForSelf()
+                        observerTeamIndexes: war.getPlayerManager().getAliveWatcherTeamIndexesForSelf()
                     })) {
                         return State.Idle;
                     } else {
@@ -860,7 +860,7 @@ namespace TinyWars.SingleCustomWar {
                         unitType: existingUnit.getType(),
                         isDiving: existingUnit.getIsDiving(),
                         unitPlayerIndex: existingUnit.getPlayerIndex(),
-                        observerTeamIndexes: war.getPlayerManager().getWatcherTeamIndexesForSelf()
+                        observerTeamIndexes: war.getPlayerManager().getAliveWatcherTeamIndexesForSelf()
                     }))
                 ) {
                     return undefined;
@@ -878,7 +878,7 @@ namespace TinyWars.SingleCustomWar {
             const hasAmmo               = (focusUnit.getPrimaryWeaponCurrentAmmo() > 0) || (focusUnit.checkHasSecondaryWeapon());
             const unitMap               = this._getUnitMap();
             const war                   = this._getWar();
-            const teamIndexes           = (war.getPlayerManager() as ScwPlayerManager).getWatcherTeamIndexesForSelf();
+            const teamIndexes           = (war.getPlayerManager() as ScwPlayerManager).getAliveWatcherTeamIndexesForSelf();
             this._setAttackableArea(BwHelpers.createAttackableArea(
                 this.getMovableArea(),
                 this.getMapSize(),
@@ -918,7 +918,7 @@ namespace TinyWars.SingleCustomWar {
             const mapSize               = this.getMapSize();
             const unitMap               = this._getUnitMap();
             const war                   = this._getWar();
-            const teamIndexes           = (war.getPlayerManager() as ScwPlayerManager).getWatcherTeamIndexesForSelf();
+            const teamIndexes           = (war.getPlayerManager() as ScwPlayerManager).getAliveWatcherTeamIndexesForSelf();
             const newArea               = BwHelpers.createAttackableArea(
                 BwHelpers.createMovableArea(
                     unit.getGridIndex(),

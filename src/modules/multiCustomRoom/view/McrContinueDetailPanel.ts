@@ -77,8 +77,8 @@ namespace TinyWars.MultiCustomRoom {
                 { ui: this._btnConfirm,       callback: this._onTouchedBtnConfirm },
             ];
             this._notifyListeners = [
-                { type: Notify.Type.SMcrContinueWarFailed,  callback: this._onNotifySMcrContinueWarFailed },
-                { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.SMcwCommonContinueWarFailed,    callback: this._onNotifySMcrContinueWarFailed },
+                { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
             ];
 
             this._listPlayer.setItemRenderer(PlayerRenderer);

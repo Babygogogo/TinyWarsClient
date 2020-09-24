@@ -44,7 +44,7 @@ namespace TinyWars.MultiCustomRoom {
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
             ];
             this._notifyListeners = [
-                { type: Notify.Type.SMcrCreateWar,      callback: this._onNotifySCreateCustomOnlineWar },
+                { type: Notify.Type.SMcrCreateRoom,      callback: this._onNotifySCreateCustomOnlineWar },
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ];
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
@@ -79,7 +79,7 @@ namespace TinyWars.MultiCustomRoom {
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
             const data      = McrModel.getCreateWarData();
             const callback  = () => {
-                McrProxy.reqCreate(data);
+                McrProxy.reqCreateRoom(data);
 
                 this._btnConfirm.enabled = false;
                 this._resetTimeoutForBtnConfirm();

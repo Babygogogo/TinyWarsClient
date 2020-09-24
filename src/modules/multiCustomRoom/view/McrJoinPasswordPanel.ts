@@ -16,9 +16,9 @@ namespace TinyWars.MultiCustomRoom {
         private _btnConfirm         : GameUi.UiButton;
         private _btnCancel          : GameUi.UiButton;
 
-        private _openData: ProtoTypes.IMcrWaitingInfo;
+        private _openData: ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
 
-        public static show(data: ProtoTypes.IMcrWaitingInfo): void {
+        public static show(data: ProtoTypes.MultiCustomRoom.IMcrRoomInfo): void {
             if (!McrJoinPasswordPanel._instance) {
                 McrJoinPasswordPanel._instance = new McrJoinPasswordPanel();
             }
@@ -56,7 +56,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _onTouchedBtnConfirm(e: egret.TouchEvent): Promise<void> {
-            if (this._inputWarPassword.text !== this._openData.warPassword) {
+            if (this._inputWarPassword.text !== this._openData.settingsForMultiPlayer.warPassword) {
                 FloatText.show(Lang.getText(Lang.Type.A0017));
             } else {
                 McrJoinPasswordPanel.hide();
@@ -70,10 +70,12 @@ namespace TinyWars.MultiCustomRoom {
         private _updateView(): void {
             const info                  = this._openData;
             this._inputWarPassword.text = "";
-            if (info.warName) {
-                this._labelWarName.text = info.warName;
+
+            const warName = info.settingsForMultiPlayer.warName;
+            if (warName) {
+                this._labelWarName.text = warName;
             } else {
-                WarMapModel.getMapNameInCurrentLanguage(info.mapFileName).then(v => this._labelWarName.text = v);
+                WarMapModel.getMapNameInCurrentLanguage(info.settingsForCommon.mapId).then(v => this._labelWarName.text = v);
             }
         }
     }

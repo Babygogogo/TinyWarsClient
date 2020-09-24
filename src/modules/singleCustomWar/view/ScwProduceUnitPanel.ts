@@ -117,6 +117,7 @@ namespace TinyWars.SingleCustomWar {
             const playerIndex       = player.getPlayerIndex();
             const configVersion     = war.getConfigVersion();
             const actionPlanner     = war.getActionPlanner() as ScwActionPlanner;
+            const unitMap           = war.getUnitMap();
             const gridIndex         = this._gridIndex;
             const tile              = war.getTileMap().getTile(gridIndex);
             const skillCfg          = tile.getEffectiveSelfUnitProductionSkillCfg(playerIndex);
@@ -124,7 +125,7 @@ namespace TinyWars.SingleCustomWar {
             const minNormalizedHp   = skillCfg ? BwHelpers.getNormalizedHp(skillCfg[3]) : BwHelpers.getNormalizedHp(CommonConstants.UnitMaxHp);
 
             for (const unitType of Utility.ConfigManager.getUnitTypesByCategory(configVersion, unitCategory)) {
-                const unit = new ScwUnit().init({
+                const unit = (new (unitMap.getUnitClass())).init({
                     gridIndex   : { x: -1, y: -1 },
                     unitId      : -1,
                     unitType,

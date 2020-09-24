@@ -31,7 +31,9 @@ namespace TinyWars.SingleCustomWar {
                 (this._getHasUnitOnBeginningTurn())                     &&
                 (!unitMap.checkHasUnit(playerIndex))
             ) {
-                FloatText.show(Lang.getFormattedText(Lang.Type.F0014, war.getPlayer(playerIndex).getNickname()));
+                war.getPlayer(playerIndex).getNickname().then(name => {
+                    FloatText.show(Lang.getFormattedText(Lang.Type.F0014, name));
+                });
                 DestructionHelpers.destroyPlayerForce(war, playerIndex, true);
                 ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
             } else {

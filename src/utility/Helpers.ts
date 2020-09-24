@@ -203,27 +203,6 @@ namespace TinyWars.Utility.Helpers {
         return (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2);
     }
 
-    export function getColorTextForPlayerIndex(playerIndex: number): string {
-        switch (playerIndex) {
-            case 0  : return Lang.getText(Lang.Type.B0030);
-            case 1  : return Lang.getText(Lang.Type.B0004);
-            case 2  : return Lang.getText(Lang.Type.B0005);
-            case 3  : return Lang.getText(Lang.Type.B0006);
-            case 4  : return Lang.getText(Lang.Type.B0007);
-            default : return undefined;
-        }
-    }
-
-    export function getTeamText(teamIndex: number): string {
-        switch (teamIndex) {
-            case 1  : return Lang.getText(Lang.Type.B0008);
-            case 2  : return Lang.getText(Lang.Type.B0009);
-            case 3  : return Lang.getText(Lang.Type.B0010);
-            case 4  : return Lang.getText(Lang.Type.B0011);
-            default : return undefined;
-        }
-    }
-
     export function getTimeDurationText(totalSeconds: number): string {
         if (totalSeconds <= 0) {
             return `0${Lang.getText(Lang.Type.B0017)}`;

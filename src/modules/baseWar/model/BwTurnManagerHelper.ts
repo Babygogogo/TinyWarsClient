@@ -124,7 +124,7 @@ namespace TinyWars.BaseWar.BwTurnManagerHelper {
         const war               = turnManager.getWar();
         const unitMap           = war.getUnitMap();
         const gridVisionEffect  = war.getGridVisionEffect();
-        const visibleUnits      = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getWatcherTeamIndexesForSelf());
+        const visibleUnits      = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
 
         for (const repairData of extraData.recoveryDataByTile || []) {
             const gridIndex = repairData.gridIndex as GridIndex;
@@ -180,7 +180,7 @@ namespace TinyWars.BaseWar.BwTurnManagerHelper {
             });
 
             const gridVisionEffect  = war.getGridVisionEffect();
-            const visibleUnits      = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getWatcherTeamIndexesForSelf());
+            const visibleUnits      = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
             for (const unit of allUnitsOnMap.sort(sorterForRepairUnits)) {
                 const gridIndex = unit.getGridIndex();
                 if (gridIndex == null) {
@@ -237,7 +237,7 @@ namespace TinyWars.BaseWar.BwTurnManagerHelper {
         const war               = turnManager.getWar();
         const unitMap           = war.getUnitMap();
         const gridVisionEffect  = war.getGridVisionEffect();
-        const visibleUnits      = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getWatcherTeamIndexesForSelf());
+        const visibleUnits      = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
 
         for (const repairData of data.extraData.recoveryDataByUnit || []) {
             const gridIndex = repairData.gridIndex as GridIndex;
@@ -287,7 +287,7 @@ namespace TinyWars.BaseWar.BwTurnManagerHelper {
                 return undefined;
             }
 
-            const visibleUnits      = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getWatcherTeamIndexesForSelf());
+            const visibleUnits      = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
             const gridVisionEffect  = war.getGridVisionEffect();
             const allUnitsLoaded    : BwUnit[] = [];
             unitMap.forEachUnitLoaded(unit => {
@@ -415,7 +415,7 @@ namespace TinyWars.BaseWar.BwTurnManagerHelper {
         const war               = turnManager.getWar();
         const unitMap           = war.getUnitMap();
         const gridVisionEffect  = war.getGridVisionEffect();
-        const visibleUnits      = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getWatcherTeamIndexesForSelf());
+        const visibleUnits      = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
 
         for (const repairData of data.extraData.recoveryDataByCo || []) {
             const gridIndex = repairData.gridIndex as GridIndex;
@@ -478,7 +478,7 @@ namespace TinyWars.BaseWar.BwTurnManagerHelper {
             }
 
             const gridVisionEffect  = war.getGridVisionEffect();
-            const visibleUnits      = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getWatcherTeamIndexesForSelf());
+            const visibleUnits      = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
             for (const skillId of player.getCoCurrentSkills() || []) {
                 const skillCfg = ConfigManager.getCoSkillCfg(configVersion, skillId)!;
 

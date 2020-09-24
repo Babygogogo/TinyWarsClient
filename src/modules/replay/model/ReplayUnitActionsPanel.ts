@@ -87,19 +87,20 @@ namespace TinyWars.Replay {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            const war           = ReplayModel.getWar();
-            const datasForList  = [] as DataForUnitActionRenderer[];
+            const war       = ReplayModel.getWar();
+            const unitMap   = war.getUnitMap();
+            const dataList  : DataForUnitActionRenderer[] = [];
             for (const data of this._openData) {
                 const unitForProduce = data.produceUnitType == null
                     ? undefined
-                    : new ReplayUnit().init({
-                        gridX   : -1,
-                        gridY   : -1,
-                        unitId  : -1,
-                        viewId  : Utility.ConfigManager.getUnitViewId(data.produceUnitType, war.getPlayerInTurn().getPlayerIndex()),
+                    : (new (unitMap.getUnitClass())).init({
+                        gridIndex   : { x: -1, y: -1 },
+                        unitId      : -1,
+                        unitType    : data.produceUnitType,
+                        playerIndex : war.getPlayerIndexInTurn(),
                     }, war.getConfigVersion()) as ReplayUnit;
 
-                datasForList.push({
+                dataList.push({
                     actionType      : data.actionType,
                     callback        : data.callback,
                     unit            : data.unitForDrop || data.unitForLaunch || unitForProduce,
@@ -107,7 +108,7 @@ namespace TinyWars.Replay {
                 });
             }
 
-            this._listAction.bindData(datasForList);
+            this._listAction.bindData(dataList);
         }
 
         private _adjustPositionOnTouch(e: egret.TouchEvent): void {

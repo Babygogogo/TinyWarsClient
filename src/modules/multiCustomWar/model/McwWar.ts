@@ -1,6 +1,5 @@
 
 namespace TinyWars.MultiCustomWar {
-    import Types                    = Utility.Types;
     import Logger                   = Utility.Logger;
     import BwHelpers                = BaseWar.BwHelpers;
     import ProtoTypes               = Utility.ProtoTypes;
@@ -187,6 +186,52 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        public getWarName(): string {
+            const settingsForMultiPlayer = this.getSettingsForMultiPlayer();
+            if (settingsForMultiPlayer == null) {
+                Logger.error(`McwWar.getWarName() empty settingsForMultiPlayer.`);
+                return undefined;
+            }
+
+            return settingsForMultiPlayer.warName;
+        }
+        public getWarPassword(): string {
+            const settingsForMultiPlayer = this.getSettingsForMultiPlayer();
+            if (settingsForMultiPlayer == null) {
+                Logger.error(`McwWar.getWarPassword() empty settingsForMultiPlayer.`);
+                return undefined;
+            }
+
+            return settingsForMultiPlayer.warPassword;
+        }
+        public getWarComment(): string {
+            const settingsForMultiPlayer = this.getSettingsForMultiPlayer();
+            if (settingsForMultiPlayer == null) {
+                Logger.error(`McwWar.getWarComment() empty settingsForMultiPlayer.`);
+                return undefined;
+            }
+
+            return settingsForMultiPlayer.warComment;
+        }
+
+        public getSettingsBootTimerParams(): number[] {
+            const settingsForMultiPlayer = this.getSettingsForMultiPlayer();
+            if (settingsForMultiPlayer == null) {
+                Logger.error(`McwWar.getSettingsBootTimerParams() empty settingsForMultiPlayer.`);
+                return undefined;
+            }
+
+            return settingsForMultiPlayer.bootTimerParams;
+        }
+        public getBootRestTime(): number | null {
+            const player = this.getPlayerInTurn();
+            if (player.getPlayerIndex() === 0) {
+                return null;
+            } else {
+                return (this.getEnterTurnTime() + player.getRestTimeToBoot() - Time.TimeModel.getServerTimestamp()) || null;
+            }
+        }
+
         public setIsEnded(ended: boolean): void {
             this._isEnded = ended;
         }

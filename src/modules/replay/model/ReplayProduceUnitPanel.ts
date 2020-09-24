@@ -1,12 +1,14 @@
 
 namespace TinyWars.Replay {
-    import Notify       = Utility.Notify;
-    import Lang         = Utility.Lang;
-    import Types        = Utility.Types;
-    import FloatText    = Utility.FloatText;
-    import Helpers      = Utility.Helpers;
-    import UnitType     = Types.UnitType;
-    import GridIndex    = Types.GridIndex;
+    import Notify           = Utility.Notify;
+    import Lang             = Utility.Lang;
+    import Types            = Utility.Types;
+    import Helpers          = Utility.Helpers;
+    import ConfigManager    = Utility.ConfigManager;
+    import BwHelpers        = BaseWar.BwHelpers;
+    import UnitType         = Types.UnitType;
+    import GridIndex        = Types.GridIndex;
+    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
     export class ReplayProduceUnitPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
@@ -132,18 +134,19 @@ namespace TinyWars.Replay {
             const playerIndex       = player.getPlayerIndex();
             const configVersion     = war.getConfigVersion();
             const actionPlanner     = war.getActionPlanner() as ReplayActionPlanner;
+            const unitMap           = war.getUnitMap();
             const gridIndex         = this._gridIndex;
             const tile              = war.getTileMap().getTile(gridIndex);
             const skillCfg          = tile.getEffectiveSelfUnitProductionSkillCfg(playerIndex);
             const unitCategory      = skillCfg ? skillCfg[1] : tile.getCfgProduceUnitCategory();
-            const minNormalizedHp   = skillCfg ? Helpers.getNormalizedHp(skillCfg[3]) : Helpers.getNormalizedHp(Utility.ConfigManager.UNIT_MAX_HP);
+            const minNormalizedHp   = skillCfg ? BwHelpers.getNormalizedHp(skillCfg[3]) : BwHelpers.getNormalizedHp(CommonConstants.UnitMaxHp);
 
             for (const unitType of Utility.ConfigManager.getUnitTypesByCategory(configVersion, unitCategory)) {
-                const unit = new ReplayUnit().init({
-                    gridX   : -1,
-                    gridY   : -1,
-                    unitId  : -1,
-                    viewId  : Utility.ConfigManager.getUnitViewId(unitType, playerIndex),
+                const unit = (new (unitMap.getUnitClass())).init({
+                    gridIndex   : { x: -1, y: -1 },
+                    unitId      : -1,
+                    unitType,
+                    playerIndex,
                 }, configVersion) as ReplayUnit;
                 const cfgCost = Utility.ConfigManager.getUnitTemplateCfg(configVersion, unitType).productionCost;
                 dataList.push({
@@ -155,7 +158,7 @@ namespace TinyWars.Replay {
                     cfgCost,
                     unitProductionSkillCfg  : skillCfg,
                     minCost                 : skillCfg
-                        ? Math.floor(cfgCost * minNormalizedHp * skillCfg[5] / Utility.ConfigManager.UNIT_HP_NORMALIZER / 100)
+                        ? Math.floor(cfgCost * minNormalizedHp * skillCfg[5] / CommonConstants.UnitMaxHp / 100)
                         : cfgCost,
                 });
             }

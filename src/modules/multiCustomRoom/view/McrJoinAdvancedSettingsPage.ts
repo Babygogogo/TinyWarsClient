@@ -13,7 +13,7 @@ namespace TinyWars.MultiCustomRoom {
         private _listInfo           : GameUi.UiScrollList;
         private _btnBuildings       : GameUi.UiButton;
 
-        protected _mapExtraData: ProtoTypes.IMapExtraData;
+        private _mapRawData : ProtoTypes.Map.IMapRawData;
 
         public constructor() {
             super();
@@ -29,7 +29,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         protected async _onOpened(): Promise<void> {
-            this._mapExtraData = await McrModel.getJoinWarMapExtraData();
+            this._mapRawData = await McrModel.getJoinWarMapExtraData();
 
             this._updateComponentsForLanguage();
         }
@@ -39,10 +39,10 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _onTouchedBtnBuildings(e: egret.TouchEvent): Promise<void> {
-            const info = McrModel.getJoinWarRoomInfo();
+            const settingsForCommon = McrModel.getJoinWarRoomInfo().settingsForCommon;
             McrBuildingListPanel.show({
-                configVersion   : info.configVersion,
-                mapRawData      : await WarMapModel.getRawData(info.mapFileName) as Types.MapRawData,
+                configVersion   : settingsForCommon.configVersion,
+                mapRawData      : await WarMapModel.getRawData(settingsForCommon.mapId),
             });
         }
 
@@ -58,16 +58,16 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _updateListInfo(): void {
-            const info                  = McrModel.getJoinWarRoomInfo();
-            const initialFund           = info.initialFund;
-            const incomeModifier        = info.incomeModifier;
-            const initialEnergy         = info.initialEnergy;
-            const energyGrowthModifier  = info.energyGrowthModifier;
-            const luckLowerLimit        = info.luckLowerLimit;
-            const luckUpperLimit        = info.luckUpperLimit;
-            const moveRangeModifier     = info.moveRangeModifier;
-            const attackPowerModifier   = info.attackPowerModifier;
-            const visionRangeModifier   = info.visionRangeModifier;
+            const playerRuleList        = McrModel.getJoinWarRoomInfo().settingsForCommon.warRule.ruleForPlayers;
+            const initialFund           = playerRuleList.initialFund;
+            const incomeModifier        = playerRuleList.incomeModifier;
+            const initialEnergy         = playerRuleList.initialEnergy;
+            const energyGrowthModifier  = playerRuleList.energyGrowthModifier;
+            const luckLowerLimit        = playerRuleList.luckLowerLimit;
+            const luckUpperLimit        = playerRuleList.luckUpperLimit;
+            const moveRangeModifier     = playerRuleList.moveRangeModifier;
+            const attackPowerModifier   = playerRuleList.attackPowerModifier;
+            const visionRangeModifier   = playerRuleList.visionRangeModifier;
             const dataList              : DataForInfoRenderer[] = [
                 {
                     titleText   : Lang.getText(Lang.Type.B0178),
@@ -119,8 +119,8 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _updateLabelMapName(): Promise<void> {
-            const mapFileName       = this._mapExtraData.mapFileName;
-            this._labelMapName.text = `${await WarMapModel.getMapNameInCurrentLanguage(mapFileName) || "----"} (${Lang.getText(Lang.Type.B0163)}: ${await WarMapModel.getDesignerName(mapFileName) || "----"})`;
+            const mapId             = this._mapRawData.mapId;
+            this._labelMapName.text = `${await WarMapModel.getMapNameInCurrentLanguage(mapId) || "----"} (${Lang.getText(Lang.Type.B0163)}: ${await WarMapModel.getDesignerName(mapId) || "----"})`;
         }
     }
 

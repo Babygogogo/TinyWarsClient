@@ -23,7 +23,7 @@ namespace TinyWars.BaseWar {
         private _view   : BwUnitMapView;
 
         protected abstract _getViewClass(): new () => BwUnitMapView;
-        protected abstract _getUnitClass(): new () => BwUnit;
+        public abstract getUnitClass(): new () => BwUnit;
 
         public init(
             data                    : ISerialUnitMap,
@@ -40,7 +40,7 @@ namespace TinyWars.BaseWar {
             const map                       = Helpers.createEmptyMap<BwUnit>(mapWidth);
             const loadedUnits               = new Map<number, BwUnit>();
             for (const unitData of data.units || []) {
-                const unit = new (this._getUnitClass())().init(unitData, configVersion);
+                const unit = new (this.getUnitClass())().init(unitData, configVersion);
                 if (!unit) {
                     Logger.error(`BwUnitMap.init() failed to create a unit! unitData: ${JSON.stringify(unitData)}`);
                     return undefined;
@@ -130,7 +130,7 @@ namespace TinyWars.BaseWar {
 
             const war           = this.getWar();
             const units         : ISerialUnit[] = [];
-            const teamIndexes   = war.getPlayerManager().getWatcherTeamIndexesForSelf();
+            const teamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
             for (const unit of VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes)) {
                 units.push(unit.serializeForSimulation());
 

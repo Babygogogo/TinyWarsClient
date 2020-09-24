@@ -225,11 +225,11 @@ namespace TinyWars.Replay {
             this._labelAction.text  = `${war.getExecutedActionsCount()}`;
         }
 
-        private _updateLabelPlayer(): void {
+        private async _updateLabelPlayer(): Promise<void> {
             const war               = this._war;
             const player            = war.getPlayerInTurn();
             this._labelPlayer.text  = player
-                ? `${player.getNickname()} (${Helpers.getColorTextForPlayerIndex(player.getPlayerIndex())})`
+                ? `${await player.getNickname()} (${Lang.getPlayerForceName(player.getPlayerIndex())})`
                 : ``;
         }
 

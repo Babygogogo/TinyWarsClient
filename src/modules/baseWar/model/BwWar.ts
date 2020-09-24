@@ -1,33 +1,26 @@
 
 namespace TinyWars.BaseWar {
-    import Types                    = Utility.Types;
     import Logger                   = Utility.Logger;
     import Notify                   = Utility.Notify;
-    import ConfigManager            = Utility.ConfigManager;
     import ProtoTypes               = Utility.ProtoTypes;
     import ISerialWar               = ProtoTypes.WarSerialization.ISerialWar;
     import IWarSettingsForCommon    = ProtoTypes.WarSettings.ISettingsForCommon;
     import ISeedRandomState         = ProtoTypes.Structure.ISeedRandomState;
 
     export abstract class BwWar {
-        private _warId                  : number;
-        private _settingsForCommon      : IWarSettingsForCommon;
-        private _seedRandomInitialState : ISeedRandomState;
+        private _settingsForCommon          : IWarSettingsForCommon;
 
-        private _warName                : string;
-        private _warPassword            : string;
-        private _warComment             : string;
-        private _configVersion          : string;
-        private _warRuleIndex           : number | null | undefined;
-        private _bootTimerParams        : number[];
+        private _warId                      : number;
+        private _executedActionsCount       : number;
+        private _remainingVotesForDraw      : number | null | undefined;
+        private _seedRandomInitialState     : ProtoTypes.Structure.ISeedRandomState;
+
+        private _playerManager              : BwPlayerManager;
+        private _field                      : BwField;
+        private _turnManager                : BwTurnManager;
+        private _randomNumberGenerator      : seedrandom.prng;
 
         private _view                   : BwWarView;
-        private _field                  : BwField;
-        private _playerManager          : BwPlayerManager;
-        private _turnManager            : BwTurnManager;
-        private _randomNumberGenerator  : seedrandom.prng;
-        private _remainingVotesForDraw  : number;
-        private _executedActionsCount   : number;
         private _isRunning              = false;
         private _isExecutingAction      = false;
 
@@ -123,32 +116,14 @@ namespace TinyWars.BaseWar {
             return this._warId;
         }
 
-        private _setWarName(warName: string): void {
-            this._warName = warName;
-        }
-        public getWarName(): string {
-            return this._warName;
-        }
-
-        private _setWarPassword(warPassword: string): void {
-            this._warPassword = warPassword;
-        }
-        public getWarPassword(): string {
-            return this._warPassword;
-        }
-
-        private _setWarComment(warComment: string): void {
-            this._warComment = warComment;
-        }
-        public getWarComment(): string {
-            return this._warComment;
-        }
-
-        private _setConfigVersion(configVersion: string): void {
-            this._configVersion = configVersion;
-        }
         public getConfigVersion(): string {
-            return this._configVersion;
+            const settingsForCommon = this.getSettingsForCommon();
+            if (settingsForCommon == null) {
+                Logger.error(`BwWar.getConfigVersion() empty settingsForCommon.`);
+                return undefined;
+            }
+
+            return settingsForCommon.configVersion;
         }
 
         private _setSettingsForCommon(settings: IWarSettingsForCommon): void {
@@ -277,28 +252,6 @@ namespace TinyWars.BaseWar {
             return generator.state();
         }
 
-        private _setSettingsBootTimerParams(params: number[]): void {
-            this._bootTimerParams = params;
-        }
-        public getSettingsBootTimerParams(): number[] {
-            return this._bootTimerParams;
-        }
-        public getBootRestTime(): number | null {
-            const player = this.getPlayerInTurn();
-            if (player.getPlayerIndex() === 0) {
-                return null;
-            } else {
-                return (this.getEnterTurnTime() + player.getRestTimeToBoot() - Time.TimeModel.getServerTimestamp()) || null;
-            }
-        }
-
-        private _setWarRuleIndex(index: number | null | undefined): void {
-            this._warRuleIndex = index;
-        }
-        public getWarRuleIndex(): number | null | undefined {
-            return this._warRuleIndex;
-        }
-
         public setRemainingVotesForDraw(votes: number | undefined): void {
             this._remainingVotesForDraw = votes;
         }
@@ -371,10 +324,7 @@ namespace TinyWars.BaseWar {
         }
 
         public getWatcherTeamIndexes(watcherUserId: number): Set<number> {
-            return this.getPlayerManager().getWatcherTeamIndexes(watcherUserId);
-        }
-        public checkHasAliveWatcherTeam(watcherUserId: number): boolean {
-            return this.getPlayerManager().checkHasAliveWatcherTeam(watcherUserId);
+            return this.getPlayerManager().getAliveWatcherTeamIndexes(watcherUserId);
         }
     }
 }

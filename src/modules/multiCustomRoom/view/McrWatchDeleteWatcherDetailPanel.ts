@@ -21,10 +21,10 @@ namespace TinyWars.MultiCustomRoom {
         private _btnConfirm             : GameUi.UiButton;
         private _btnCancel              : GameUi.UiButton;
 
-        private _openData           : ProtoTypes.IMcwWatchInfo;
+        private _openData           : ProtoTypes.MultiCustomWar.IMcwWatchInfo;
         private _dataForListPlayer  : DataForRequesterRenderer[];
 
-        public static show(warInfo: ProtoTypes.IMcwWatchInfo): void {
+        public static show(warInfo: ProtoTypes.MultiCustomWar.IMcwWatchInfo): void {
             if (!McrWatchDeleteWatcherDetailPanel._instance) {
                 McrWatchDeleteWatcherDetailPanel._instance = new McrWatchDeleteWatcherDetailPanel();
             }
@@ -89,7 +89,7 @@ namespace TinyWars.MultiCustomRoom {
                 }
             }
             if (deleteUserIds.length) {
-                McrProxy.reqWatchDeleteWatcher(this._openData.mcwDetail.id, deleteUserIds);
+                McrProxy.reqWatchDeleteWatcher(this._openData.warInfo.warId, deleteUserIds);
             }
             this.close();
         }
@@ -113,16 +113,17 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _generateDataForListPlayer(): DataForRequesterRenderer[] {
-            const openData  = this._openData;
-            const warInfo   = openData.mcwDetail;
-            const dataList  : DataForRequesterRenderer[] = [];
+            const openData          = this._openData;
+            const warInfo           = openData.warInfo;
+            const playerInfoList    = warInfo.playerInfoList;
+            const dataList          : DataForRequesterRenderer[] = [];
             for (const info of this._openData.requesterInfos) {
                 const userId = info.userId;
                 dataList.push({
                     panel           : this,
                     userId,
                     isWatchingOthers: !!info.isRequestingOthers || !!info.isWatchingOthers,
-                    isOpponent      : (warInfo.p1UserId === userId) || (warInfo.p2UserId === userId) || (warInfo.p3UserId === userId) || (warInfo.p4UserId === userId),
+                    isOpponent      : playerInfoList.some(v => v.userId === userId),
                     isDelete        : false,
                 });
             }

@@ -9520,9 +9520,6 @@ export declare namespace WarAction {
 
             /** ExtraDataForUnitLoadCo actingUnits */
             actingUnits?: (WarSerialization.ISerialUnit[]|null);
-
-            /** ExtraDataForUnitLoadCo cost */
-            cost?: (number|null);
         }
 
         /** Represents an ExtraDataForUnitLoadCo. */
@@ -9542,9 +9539,6 @@ export declare namespace WarAction {
 
             /** ExtraDataForUnitLoadCo actingUnits. */
             public actingUnits: WarSerialization.ISerialUnit[];
-
-            /** ExtraDataForUnitLoadCo cost. */
-            public cost: number;
 
             /**
              * Creates a new ExtraDataForUnitLoadCo instance using the specified properties.
@@ -20790,8 +20784,8 @@ export declare namespace NetMessage {
         /** S_McrGetJoinedRoomInfoList errorCode */
         errorCode?: (number|null);
 
-        /** S_McrGetJoinedRoomInfoList warInfos */
-        warInfos?: (MultiCustomRoom.IMcrRoomInfo[]|null);
+        /** S_McrGetJoinedRoomInfoList roomInfoList */
+        roomInfoList?: (MultiCustomRoom.IMcrRoomInfo[]|null);
     }
 
     /** Represents a S_McrGetJoinedRoomInfoList. */
@@ -20806,8 +20800,8 @@ export declare namespace NetMessage {
         /** S_McrGetJoinedRoomInfoList errorCode. */
         public errorCode: number;
 
-        /** S_McrGetJoinedRoomInfoList warInfos. */
-        public warInfos: MultiCustomRoom.IMcrRoomInfo[];
+        /** S_McrGetJoinedRoomInfoList roomInfoList. */
+        public roomInfoList: MultiCustomRoom.IMcrRoomInfo[];
 
         /**
          * Creates a new S_McrGetJoinedRoomInfoList instance using the specified properties.
@@ -21162,8 +21156,8 @@ export declare namespace NetMessage {
         /** S_McrGetUnjoinedRoomInfoList errorCode */
         errorCode?: (number|null);
 
-        /** S_McrGetUnjoinedRoomInfoList warInfos */
-        warInfos?: (MultiCustomRoom.IMcrRoomInfo[]|null);
+        /** S_McrGetUnjoinedRoomInfoList roomInfoList */
+        roomInfoList?: (MultiCustomRoom.IMcrRoomInfo[]|null);
     }
 
     /** Represents a S_McrGetUnjoinedRoomInfoList. */
@@ -21178,8 +21172,8 @@ export declare namespace NetMessage {
         /** S_McrGetUnjoinedRoomInfoList errorCode. */
         public errorCode: number;
 
-        /** S_McrGetUnjoinedRoomInfoList warInfos. */
-        public warInfos: MultiCustomRoom.IMcrRoomInfo[];
+        /** S_McrGetUnjoinedRoomInfoList roomInfoList. */
+        public roomInfoList: MultiCustomRoom.IMcrRoomInfo[];
 
         /**
          * Creates a new S_McrGetUnjoinedRoomInfoList instance using the specified properties.

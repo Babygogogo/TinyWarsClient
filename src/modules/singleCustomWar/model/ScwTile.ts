@@ -14,8 +14,8 @@ namespace TinyWars.SingleCustomWar {
         }
 
         public serializeForSimulation(): ISerialTile | null {
-            const userId = User.UserModel.getSelfUserId();
-            if (VisibilityHelpers.checkIsTileVisibleToUser(this.getWar(), this.getGridIndex(), userId)) {
+            const war = this.getWar();
+            if (VisibilityHelpers.checkIsTileVisibleToTeams(war, this.getGridIndex(), war.getPlayerManager().getAliveWatcherTeamIndexesForSelf())) {
                 const data = this.serialize();
                 if (data == null) {
                     Logger.error(`ScwTile.serializeForSimulation() empty data.`);

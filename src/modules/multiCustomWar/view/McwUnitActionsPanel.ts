@@ -88,15 +88,16 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
             const war           = McwModel.getWar();
+            const unitClass     = war.getUnitMap().getUnitClass();
             const dataForList   = [] as DataForUnitActionRenderer[];
             for (const data of this._openData) {
                 const unitForProduce = data.produceUnitType == null
                     ? undefined
-                    : new McwUnit().init({
-                        gridX   : -1,
-                        gridY   : -1,
-                        unitId  : -1,
-                        viewId  : Utility.ConfigManager.getUnitViewId(data.produceUnitType, war.getPlayerIndexLoggedIn()),
+                    : new unitClass().init({
+                        gridIndex   : { x: -1, y: -1 },
+                        unitId      : -1,
+                        unitType    : data.produceUnitType,
+                        playerIndex : war.getPlayerIndexLoggedIn(),
                     }, war.getConfigVersion());
 
                 dataForList.push({

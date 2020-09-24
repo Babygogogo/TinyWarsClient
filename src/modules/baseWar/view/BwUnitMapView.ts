@@ -196,7 +196,7 @@ namespace TinyWars.BaseWar {
         private _resetVisibleForAllUnitsOnMap(): void {
             const unitMap       = this._getUnitMap();
             const war           = unitMap.getWar();
-            const visibleUnits  = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getWatcherTeamIndexesForSelf());
+            const visibleUnits  = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
             unitMap.forEachUnitOnMap(unit => {
                 unit.setViewVisible(visibleUnits.has(unit));
             });

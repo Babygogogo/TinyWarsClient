@@ -586,7 +586,7 @@ namespace TinyWars.SingleCustomWar {
             const playerIndex   = data.playerIndex;
             const panel         = data.panel;
             const player        = war.getPlayer(playerIndex) as ScwPlayer;
-            const isInfoKnown   = (!war.getFogMap().checkHasFogCurrently()) || ((war.getPlayerManager() as ScwPlayerManager).getWatcherTeamIndexesForSelf().has(player.getTeamIndex()));
+            const isInfoKnown   = (!war.getFogMap().checkHasFogCurrently()) || ((war.getPlayerManager() as ScwPlayerManager).getAliveWatcherTeamIndexesForSelf().has(player.getTeamIndex()));
             return [
                 this._createDataFund(war, player, isInfoKnown, panel),
                 this._createDataBuildings(war, player, isInfoKnown, panel),
@@ -1128,7 +1128,7 @@ namespace TinyWars.SingleCustomWar {
     }
 
     function getUnitsCountAndValue(war: ScwWar, playerIndex: number): { count: number, value: number } {
-        const teamIndexes   = war.getPlayerManager().getWatcherTeamIndexes(User.UserModel.getSelfUserId());
+        const teamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
         const unitMap       = war.getUnitMap();
         let count           = 0;
         let value           = 0;

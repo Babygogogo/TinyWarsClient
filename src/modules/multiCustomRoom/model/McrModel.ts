@@ -4,8 +4,10 @@ namespace TinyWars.MultiCustomRoom {
     import ProtoTypes       = Utility.ProtoTypes;
     import ConfigManager    = Utility.ConfigManager;
     import WarMapModel      = WarMap.WarMapModel;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
     import BootTimerType    = Types.BootTimerType;
+    import IMcwWatchInfo    = ProtoTypes.MultiCustomWar.IMcwWatchInfo;
+    import IMcrRoomInfo     = ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
+    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
     export const MAX_INITIAL_FUND     = 1000000;
     export const MIN_INITIAL_FUND     = 0;
@@ -40,11 +42,11 @@ namespace TinyWars.MultiCustomRoom {
     const VISION_MODIFIERS        = [-2, -1, 0, 1, 2];
     const DEFAULT_VISION_MODIFIER = 0;
 
-    export type DataForCreateWar    = ProtoTypes.IC_McrCreateWar;
-    export type DataForJoinWar      = ProtoTypes.IC_McrJoinWar;
+    export type DataForCreateRoom   = ProtoTypes.NetMessage.IC_McrCreateRoom;
+    export type DataForJoinRoom     = ProtoTypes.NetMessage.IC_McrJoinRoom;
 
     export namespace McrModel {
-        const _dataForCreateWar: DataForCreateWar = {
+        const _dataForCreateRoom: DataForCreateRoom = {
             mapFileName     : "",
             warName         : "",
             warPassword     : "",
@@ -70,7 +72,7 @@ namespace TinyWars.MultiCustomRoom {
             luckUpperLimit      : CommonConstants.WarRuleLuckDefaultUpperLimit,
         };
 
-        const _dataForJoinWar: DataForJoinWar = {
+        const _dataForJoinWar: DataForJoinRoom = {
             infoId      : null,
             playerIndex : null,
             teamIndex   : null,
@@ -78,46 +80,46 @@ namespace TinyWars.MultiCustomRoom {
         };
         let _joinWarAvailablePlayerIndexes  : number[];
         let _joinWarAvailableTeamIndexes    : number[];
-        let _joinWarRoomInfo                : ProtoTypes.IMcrWaitingInfo;
+        let _joinWarRoomInfo                : IMcrRoomInfo;
 
-        let _unjoinedWaitingInfos   : ProtoTypes.IMcrWaitingInfo[];
-        let _joinedWaitingInfos     : ProtoTypes.IMcrWaitingInfo[];
+        let _unjoinedWaitingInfos   : IMcrRoomInfo[];
+        let _joinedWaitingInfos     : IMcrRoomInfo[];
         let _joinedOngoingInfos     : ProtoTypes.IMcwOngoingDetail[];
 
-        let _replayInfos: ProtoTypes.IMcwReplayInfo[];
+        let _replayInfos: ProtoTypes.MultiCustomWar.IMcwReplayInfo[];
         let _replayData : ProtoTypes.S_McrGetReplayData;
 
-        let _unwatchedWarInfos      : ProtoTypes.IMcwWatchInfo[];
-        let _watchOngoingWarInfos   : ProtoTypes.IMcwWatchInfo[];
-        let _watchRequestedWarInfos : ProtoTypes.IMcwWatchInfo[];
-        let _watchedWarInfos        : ProtoTypes.IMcwWatchInfo[];
+        let _unwatchedWarInfos      : IMcwWatchInfo[];
+        let _watchOngoingWarInfos   : IMcwWatchInfo[];
+        let _watchRequestedWarInfos : IMcwWatchInfo[];
+        let _watchedWarInfos        : IMcwWatchInfo[];
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for creating wars.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        export function getCreateWarMapExtraData(): Promise<ProtoTypes.IMapExtraData> {
-            return WarMapModel.getExtraData(getCreateWarMapFileName());
+        export function getCreateWarMapExtraData(): Promise<ProtoTypes.Map.IMapExtraData> {
+            return WarMapModel.getExtraData(getCreateRoomMapId());
         }
-        export function getCreateWarMapRawData(): Promise<ProtoTypes.IMapRawData> {
-            return WarMapModel.getRawData(getCreateWarMapFileName());
+        export function getCreateWarMapRawData(): Promise<ProtoTypes.Map.IMapRawData> {
+            return WarMapModel.getRawData(getCreateRoomMapId());
         }
-        export function getCreateWarMapFileName(): string {
-            return _dataForCreateWar.mapFileName;
+        export function getCreateRoomMapId(): number {
+            return _dataForCreateRoom.settingsForCommon.mapId;
         }
 
         export async function resetCreateWarData(mapFileName: string): Promise<void> {
             const mapRawData                        = await WarMapModel.getRawData(mapFileName);
-            _dataForCreateWar.mapFileName           = mapFileName;
-            _dataForCreateWar.configVersion         = Utility.ConfigManager.getNewestConfigVersion();
-            _dataForCreateWar.bannedCoIdList.length = 0;
+            _dataForCreateRoom.mapFileName           = mapFileName;
+            _dataForCreateRoom.configVersion         = Utility.ConfigManager.getNewestConfigVersion();
+            _dataForCreateRoom.bannedCoIdList.length = 0;
             setCreateWarName("");
             setCreateWarPassword("");
             setCreateWarComment("");
             setCreateWarWarRuleIndex(mapRawData.warRuleList ? 0 : null);
             await resetCreateWarDataForSelectedRule();
         }
-        export function getCreateWarData(): DataForCreateWar {
-            return _dataForCreateWar;
+        export function getCreateWarData(): DataForCreateRoom {
+            return _dataForCreateRoom;
         }
         export async function resetCreateWarDataForSelectedRule(): Promise<void> {
             const warRuleIndex      = getCreateWarWarRuleIndex();
@@ -139,7 +141,7 @@ namespace TinyWars.MultiCustomRoom {
                 setCreateWarAttackPowerModifier(DEFAULT_ATTACK_MODIFIER);
                 setCreateWarVisionRangeModifier(DEFAULT_VISION_MODIFIER);
             } else {
-                const mapFileName   = getCreateWarMapFileName();
+                const mapFileName   = getCreateRoomMapId();
                 const playerIndex   = 1;
                 const warRule       = (await WarMapModel.getRawData(mapFileName)).warRuleList[warRuleIndex];
                 setCreateWarBootTimerParams([BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue]);
@@ -161,35 +163,35 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         export function setCreateWarName(name: string): void {
-            _dataForCreateWar.warName = name;
+            _dataForCreateRoom.warName = name;
         }
         export function getCreateWarName(): string {
-            return _dataForCreateWar.warName;
+            return _dataForCreateRoom.warName;
         }
 
         export function setCreateWarPassword(password: string): void {
-            _dataForCreateWar.warPassword = password;
+            _dataForCreateRoom.warPassword = password;
         }
         export function getCreateWarPassword(): string {
-            return _dataForCreateWar.warPassword;
+            return _dataForCreateRoom.warPassword;
         }
 
         export function setCreateWarComment(comment: string): void {
-            _dataForCreateWar.warComment = comment;
+            _dataForCreateRoom.warComment = comment;
         }
         export function getCreateWarComment(): string {
-            return _dataForCreateWar.warComment;
+            return _dataForCreateRoom.warComment;
         }
 
         export function setCreateWarWarRuleIndex(index: number): void {
-            _dataForCreateWar.warRuleIndex = index;
+            _dataForCreateRoom.warRuleIndex = index;
         }
         export function getCreateWarWarRuleIndex(): number | null {
-            return _dataForCreateWar.warRuleIndex;
+            return _dataForCreateRoom.warRuleIndex;
         }
 
         export function setCreateWarPlayerIndex(index: number): void {
-            _dataForCreateWar.playerIndex = index;
+            _dataForCreateRoom.playerIndex = index;
         }
         export async function setCreateWarPrevPlayerIndex(): Promise<void> {
             const mapInfo   = await getCreateWarMapExtraData();
@@ -202,11 +204,11 @@ namespace TinyWars.MultiCustomRoom {
             setCreateWarPlayerIndex(index > mapInfo.playersCount ? 1 : index);
         }
         export function getCreateWarPlayerIndex(): number {
-            return _dataForCreateWar.playerIndex;
+            return _dataForCreateRoom.playerIndex;
         }
 
         export function setCreateWarTeamIndex(index: number): void {
-            _dataForCreateWar.teamIndex = index;
+            _dataForCreateRoom.teamIndex = index;
         }
         export async function setCreateWarPrevTeamIndex(): Promise<void> {
             const mapInfo   = await getCreateWarMapExtraData();
@@ -219,18 +221,18 @@ namespace TinyWars.MultiCustomRoom {
             setCreateWarTeamIndex(index > mapInfo.playersCount ? 1 : index);
         }
         export function getCreateWarTeamIndex(): number {
-            return _dataForCreateWar.teamIndex;
+            return _dataForCreateRoom.teamIndex;
         }
 
         export function setCreateWarCoId(coId: number | null): void {
-            _dataForCreateWar.coId = coId;
+            _dataForCreateRoom.coId = coId;
         }
         export function getCreateWarCoId(): number | null {
-            return _dataForCreateWar.coId;
+            return _dataForCreateRoom.coId;
         }
 
         export function setCreateWarHasFog(has: boolean): void {
-            _dataForCreateWar.hasFog = has ? 1 : 0;
+            _dataForCreateRoom.hasFog = has ? 1 : 0;
         }
         export function setCreateWarPrevHasFog(): void {
             setCreateWarHasFog(!getCreateWarHasFog());
@@ -239,14 +241,14 @@ namespace TinyWars.MultiCustomRoom {
             setCreateWarHasFog(!getCreateWarHasFog());
         }
         export function getCreateWarHasFog(): boolean {
-            return !!_dataForCreateWar.hasFog;
+            return !!_dataForCreateRoom.hasFog;
         }
 
         export function setCreateWarBootTimerParams(params: number[]): void {
-            _dataForCreateWar.bootTimerParams = params;
+            _dataForCreateRoom.bootTimerParams = params;
         }
         export function getCreateWarBootTimerParams(): number[] {
-            return _dataForCreateWar.bootTimerParams;
+            return _dataForCreateRoom.bootTimerParams;
         }
         export function setCreateWarNextBootTimerType(): void {
             const params = getCreateWarBootTimerParams();
@@ -271,69 +273,69 @@ namespace TinyWars.MultiCustomRoom {
             }
         }
         export function setCreateWarTimerIncrementalInitialTime(seconds: number): void {
-            _dataForCreateWar.bootTimerParams[1] = seconds;
+            _dataForCreateRoom.bootTimerParams[1] = seconds;
         }
         export function setCreateWarTimerIncrementalIncrementalValue(seconds: number): void {
-            _dataForCreateWar.bootTimerParams[2] = seconds;
+            _dataForCreateRoom.bootTimerParams[2] = seconds;
         }
 
         export function setCreateWarInitialFund(fund: number): void {
-            _dataForCreateWar.initialFund = fund;
+            _dataForCreateRoom.initialFund = fund;
         }
         export function getCreateWarInitialFund(): number {
-            return _dataForCreateWar.initialFund;
+            return _dataForCreateRoom.initialFund;
         }
 
         export function setCreateWarIncomeMultiplier(multiplier: number): void {
-            _dataForCreateWar.incomeModifier = multiplier;
+            _dataForCreateRoom.incomeModifier = multiplier;
         }
         export function getCreateWarIncomeMultiplier(): number {
-            return _dataForCreateWar.incomeModifier;
+            return _dataForCreateRoom.incomeModifier;
         }
 
         export function setCreateWarInitialEnergy(energy: number): void {
-            _dataForCreateWar.initialEnergy = energy;
+            _dataForCreateRoom.initialEnergy = energy;
         }
         export function getCreateWarInitialEnergy(): number {
-            return _dataForCreateWar.initialEnergy;
+            return _dataForCreateRoom.initialEnergy;
         }
 
         export function setCreateWarEnergyGrowthMultiplier(multiplier: number): void {
-            _dataForCreateWar.energyGrowthModifier = multiplier;
+            _dataForCreateRoom.energyGrowthModifier = multiplier;
         }
         export function getCreateWarEnergyGrowthMultiplier(): number {
-            return _dataForCreateWar.energyGrowthModifier;
+            return _dataForCreateRoom.energyGrowthModifier;
         }
 
         export function getCreateWarBannedCoIdList(): number[] {
-            return _dataForCreateWar.bannedCoIdList;
+            return _dataForCreateRoom.bannedCoIdList;
         }
         export function addCreateWarBannedCoId(coId: number): void {
-            const list = _dataForCreateWar.bannedCoIdList;
+            const list = _dataForCreateRoom.bannedCoIdList;
             (list.indexOf(coId) < 0) && (list.push(coId));
         }
         export function removeCreateWarBannedCoId(coId: number): void {
-            const set = new Set<number>(_dataForCreateWar.bannedCoIdList);
+            const set = new Set<number>(_dataForCreateRoom.bannedCoIdList);
             set.delete(coId);
-            _dataForCreateWar.bannedCoIdList = Array.from(set);
+            _dataForCreateRoom.bannedCoIdList = Array.from(set);
         }
 
         export function setCreateWarLuckLowerLimit(limit: number): void {
-            _dataForCreateWar.luckLowerLimit = limit;
+            _dataForCreateRoom.luckLowerLimit = limit;
         }
         export function getCreateWarLuckLowerLimit(): number {
-            return _dataForCreateWar.luckLowerLimit;
+            return _dataForCreateRoom.luckLowerLimit;
         }
 
         export function setCreateWarLuckUpperLimit(limit: number): void {
-            _dataForCreateWar.luckUpperLimit = limit;
+            _dataForCreateRoom.luckUpperLimit = limit;
         }
         export function getCreateWarLuckUpperLimit(): number {
-            return _dataForCreateWar.luckUpperLimit;
+            return _dataForCreateRoom.luckUpperLimit;
         }
 
         export function setCreateWarMoveRangeModifier(modifier: number): void {
-            _dataForCreateWar.moveRangeModifier = modifier;
+            _dataForCreateRoom.moveRangeModifier = modifier;
         }
         export function setCreateWarPrevMoveRangeModifier(): void {
             const currModifier = getCreateWarMoveRangeModifier();
@@ -358,11 +360,11 @@ namespace TinyWars.MultiCustomRoom {
             }
         }
         export function getCreateWarMoveRangeModifier(): number {
-            return _dataForCreateWar.moveRangeModifier;
+            return _dataForCreateRoom.moveRangeModifier;
         }
 
         export function setCreateWarAttackPowerModifier(modifier: number): void {
-            _dataForCreateWar.attackPowerModifier = modifier;
+            _dataForCreateRoom.attackPowerModifier = modifier;
         }
         export function setCreateWarPrevAttackPowerModifier(): void {
             const currModifier = getCreateWarAttackPowerModifier();
@@ -387,11 +389,11 @@ namespace TinyWars.MultiCustomRoom {
             }
         }
         export function getCreateWarAttackPowerModifier(): number {
-            return _dataForCreateWar.attackPowerModifier;
+            return _dataForCreateRoom.attackPowerModifier;
         }
 
         export function setCreateWarVisionRangeModifier(modifier: number): void {
-            _dataForCreateWar.visionRangeModifier = modifier;
+            _dataForCreateRoom.visionRangeModifier = modifier;
         }
         export function setCreateWarPrevVisionRangeModifier(): void {
             const currModifier = getCreateWarVisionRangeModifier();
@@ -416,36 +418,36 @@ namespace TinyWars.MultiCustomRoom {
             }
         }
         export function getCreateWarVisionRangeModifier(): number {
-            return _dataForCreateWar.visionRangeModifier;
+            return _dataForCreateRoom.visionRangeModifier;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for joining wars.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        export function setUnjoinedWaitingInfos(infos: ProtoTypes.IMcrWaitingInfo[]): void {
+        export function setUnjoinedRoomList(infos: IMcrRoomInfo[]): void {
             _unjoinedWaitingInfos = infos;
         }
-        export function getUnjoinedWaitingInfos(): ProtoTypes.IMcrWaitingInfo[] {
+        export function getUnjoinedWaitingInfos(): IMcrRoomInfo[] {
             return _unjoinedWaitingInfos;
         }
 
-        export function getJoinWarRoomInfo(): ProtoTypes.IMcrWaitingInfo {
+        export function getJoinWarRoomInfo(): IMcrRoomInfo {
             return _joinWarRoomInfo;
         }
-        export function getJoinWarMapFileName(): string {
+        export function getJoinWarMapId(): number {
             return getJoinWarRoomInfo().mapFileName;
         }
         export function getJoinWarMapExtraData(): Promise<ProtoTypes.IMapExtraData> {
-            return WarMapModel.getExtraData(getJoinWarMapFileName());
+            return WarMapModel.getExtraData(getJoinWarMapId());
         }
         export function getJoinWarMapRawData(): Promise<ProtoTypes.IMapRawData> {
-            return WarMapModel.getRawData(getJoinWarMapFileName());
+            return WarMapModel.getRawData(getJoinWarMapId());
         }
         export function getJoinWarWarRuleIndex(): number | null {
             return _joinWarRoomInfo.warRuleIndex;
         }
 
-        export async function resetJoinWarData(info: ProtoTypes.IMcrWaitingInfo): Promise<void> {
+        export async function resetJoinWarData(info: IMcrRoomInfo): Promise<void> {
             _joinWarRoomInfo                = info;
             _joinWarAvailablePlayerIndexes  = await getAvailablePlayerIndexes(info);
             _joinWarAvailableTeamIndexes    = await getAvailableTeamIndexes(info);
@@ -457,10 +459,10 @@ namespace TinyWars.MultiCustomRoom {
             if (warRuleIndex == null) {
                 setJoinWarTeamIndex(_joinWarAvailableTeamIndexes[0]);
             } else {
-                setJoinWarTeamIndex((await WarMapModel.getPlayerRule(getJoinWarMapFileName(), warRuleIndex, getJoinWarPlayerIndex())).teamIndex);
+                setJoinWarTeamIndex((await WarMapModel.getPlayerRule(getJoinWarMapId(), warRuleIndex, getJoinWarPlayerIndex())).teamIndex);
             }
         }
-        export function getJoinWarData(): DataForJoinWar {
+        export function getJoinWarData(): DataForJoinRoom {
             return _dataForJoinWar;
         }
 
@@ -506,10 +508,10 @@ namespace TinyWars.MultiCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for exiting joined waiting wars.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        export function setJoinedWaitingInfos(infos: ProtoTypes.IMcrWaitingInfo[]): void {
+        export function setJoinedRoomInfoList(infos: IMcrRoomInfo[]): void {
             _joinedWaitingInfos = infos;
         }
-        export function getJoinedWaitingInfos(): ProtoTypes.IMcrWaitingInfo[] {
+        export function getJoinedWaitingInfos(): IMcrRoomInfo[] {
             return _joinedWaitingInfos;
         }
 
@@ -543,31 +545,31 @@ namespace TinyWars.MultiCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for watch.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        export function setUnwatchedWarInfos(infos: ProtoTypes.IMcwWatchInfo[]): void {
+        export function setUnwatchedWarInfos(infos: IMcwWatchInfo[]): void {
             _unwatchedWarInfos = infos;
         }
-        export function getUnwatchedWarInfos(): ProtoTypes.IMcwWatchInfo[] | null {
+        export function getUnwatchedWarInfos(): IMcwWatchInfo[] | null {
             return _unwatchedWarInfos;
         }
 
-        export function setWatchOngoingWarInfos(infos: ProtoTypes.IMcwWatchInfo[]): void {
+        export function setWatchOngoingWarInfos(infos: IMcwWatchInfo[]): void {
             _watchOngoingWarInfos = infos;
         }
-        export function getWatchOngoingWarInfos(): ProtoTypes.IMcwWatchInfo[] | null {
+        export function getWatchOngoingWarInfos(): IMcwWatchInfo[] | null {
             return _watchOngoingWarInfos;
         }
 
-        export function setWatchRequestedWarInfos(infos: ProtoTypes.IMcwWatchInfo[]): void {
+        export function setWatchRequestedWarInfos(infos: IMcwWatchInfo[]): void {
             _watchRequestedWarInfos = infos;
         }
-        export function getWatchRequestedWarInfos(): ProtoTypes.IMcwWatchInfo[] | null {
+        export function getWatchRequestedWarInfos(): IMcwWatchInfo[] | null {
             return _watchRequestedWarInfos;
         }
 
-        export function setWatchedWarInfos(infos: ProtoTypes.IMcwWatchInfo[]): void {
+        export function setWatchedWarInfos(infos: IMcwWatchInfo[]): void {
             _watchedWarInfos = infos;
         }
-        export function getWatchedWarInfos(): ProtoTypes.IMcwWatchInfo[] | null {
+        export function getWatchedWarInfos(): IMcwWatchInfo[] | null {
             return _watchedWarInfos;
         }
     }
@@ -592,7 +594,7 @@ namespace TinyWars.MultiCustomRoom {
         return Utility.Helpers.pickRandomElement(candidateCoIdList);
     }
 
-    async function getAvailablePlayerIndexes(info: ProtoTypes.IMcrWaitingInfo): Promise<number[]> {
+    async function getAvailablePlayerIndexes(info: IMcrRoomInfo): Promise<number[]> {
         const playersCount      = (await WarMapModel.getExtraData(info.mapFileName)).playersCount;
         const playerInfoList    = info.playerInfoList;
         const indexes           : number[] = [];
@@ -604,7 +606,7 @@ namespace TinyWars.MultiCustomRoom {
         return indexes;
     }
 
-    async function getAvailableTeamIndexes(info: ProtoTypes.IMcrWaitingInfo): Promise<number[]> {
+    async function getAvailableTeamIndexes(info: IMcrRoomInfo): Promise<number[]> {
         const dict: {[index: number]: number} = {};
         for (const playerInfo of info.playerInfoList) {
             const teamIndex = playerInfo.teamIndex;

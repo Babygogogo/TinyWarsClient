@@ -100,7 +100,7 @@ namespace TinyWars.BaseWar {
         public serializeForSimulation(): ISerialFogMap | undefined {
             const mapSize           = this.getMapSize();
             const war               = this._getWar();
-            const targetTeamIndexes = war.getPlayerManager().getWatcherTeamIndexes(User.UserModel.getSelfUserId());
+            const targetTeamIndexes = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
             const mapsFromPath       : IDataForFogMapFromPath[] = [];
 
             for (const [playerIndex, map] of this._getAllMapsFromPath()) {
@@ -278,9 +278,9 @@ namespace TinyWars.BaseWar {
             }
             return resultMap;
         }
-        public getVisibilityMapFromPathsForUser(userId: number): Visibility[][] {
-            return this.getVisibilityMapFromPathsForTeams(this._getWar().getWatcherTeamIndexes(userId));
-        }
+        // public getVisibilityMapFromPathsForUser(userId: number): Visibility[][] {
+        //     return this.getVisibilityMapFromPathsForTeams(this._getWar().getWatcherTeamIndexes(userId));
+        // }
 
         public getVisibilityFromTilesForPlayer(gridIndex: GridIndex, playerIndex: number): Visibility {
             if (!this.checkHasFogCurrently()) {
@@ -336,9 +336,9 @@ namespace TinyWars.BaseWar {
             }
             return resultMap;
         }
-        public getVisibilityMapFromTilesForUser(userId: number): Visibility[][] {
-            return this.getVisibilityMapFromTilesForTeams(this._getWar().getWatcherTeamIndexes(userId));
-        }
+        // public getVisibilityMapFromTilesForUser(userId: number): Visibility[][] {
+        //     return this.getVisibilityMapFromTilesForTeams(this._getWar().getWatcherTeamIndexes(userId));
+        // }
 
         public getVisibilityFromUnitsForPlayer(gridIndex: GridIndex, playerIndex: number): Visibility | undefined {
             if (!this.checkHasFogCurrently()) {
@@ -427,9 +427,9 @@ namespace TinyWars.BaseWar {
             }
             return resultMap;
         }
-        public getVisibilityMapFromUnitsForUser(userId: number): Visibility[][] {
-            return this.getVisibilityMapFromUnitsForTeams(this._getWar().getWatcherTeamIndexes(userId));
-        }
+        // public getVisibilityMapFromUnitsForUser(userId: number): Visibility[][] {
+        //     return this.getVisibilityMapFromUnitsForTeams(this._getWar().getWatcherTeamIndexes(userId));
+        // }
     }
 
     function createEmptyMaps<T extends (number | Visibility)>(mapSize: MapSize, maxPlayerIndex: number): Map<number, T[][]> {

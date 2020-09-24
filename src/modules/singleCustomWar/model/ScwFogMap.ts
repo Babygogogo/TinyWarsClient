@@ -6,7 +6,7 @@ namespace TinyWars.SingleCustomWar {
         public startRunning(war: ScwWar): void {
             this._setWar(war);
 
-            const visibleTiles = VisibilityHelpers.getAllTilesVisibleToTeams(war, war.getPlayerManager().getWatcherTeamIndexesForSelf());
+            const visibleTiles = VisibilityHelpers.getAllTilesVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
             war.getTileMap().forEachTile(tile => {
                 tile.setHasFog(!visibleTiles.has(tile));
             });

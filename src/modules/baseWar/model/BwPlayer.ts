@@ -252,7 +252,7 @@ namespace TinyWars.BaseWar {
             }
 
             const war               = this._getWar();
-            const shouldShowFund    = (!war.getFogMap().checkHasFogCurrently()) || (war.getPlayerManager().getWatcherTeamIndexesForSelf().has(this.getTeamIndex()));
+            const shouldShowFund    = (!war.getFogMap().checkHasFogCurrently()) || (war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(this.getTeamIndex()));
             return {
                 playerIndex,
                 teamIndex,

@@ -1,12 +1,15 @@
 
 namespace TinyWars.MultiCustomWar {
-    import Notify       = Utility.Notify;
-    import Lang         = Utility.Lang;
-    import Types        = Utility.Types;
-    import Helpers      = Utility.Helpers;
-    import FloatText    = Utility.FloatText;
-    import UnitType     = Types.UnitType;
-    import GridIndex    = Types.GridIndex;
+    import Notify           = Utility.Notify;
+    import Lang             = Utility.Lang;
+    import Types            = Utility.Types;
+    import FloatText        = Utility.FloatText;
+    import ConfigManager    = Utility.ConfigManager;
+    import BwHelpers        = BaseWar.BwHelpers;
+    import BwUnit           = BaseWar.BwUnit;
+    import UnitType         = Types.UnitType;
+    import GridIndex        = Types.GridIndex;
+    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
     export class McwProduceUnitPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
@@ -134,18 +137,19 @@ namespace TinyWars.MultiCustomWar {
             const configVersion     = war.getConfigVersion();
             const actionPlanner     = war.getActionPlanner() as McwActionPlanner;
             const gridIndex         = this._gridIndex;
+            const unitClass         = war.getUnitMap().getUnitClass();
             const tile              = war.getTileMap().getTile(gridIndex);
             const skillCfg          = tile.getEffectiveSelfUnitProductionSkillCfg(playerIndex);
             const unitCategory      = skillCfg ? skillCfg[1] : tile.getCfgProduceUnitCategory();
-            const minNormalizedHp   = skillCfg ? Helpers.getNormalizedHp(skillCfg[3]) : Helpers.getNormalizedHp(Utility.ConfigManager.UNIT_MAX_HP);
+            const minNormalizedHp   = skillCfg ? BwHelpers.getNormalizedHp(skillCfg[3]) : BwHelpers.getNormalizedHp(CommonConstants.UnitMaxHp);
 
             for (const unitType of Utility.ConfigManager.getUnitTypesByCategory(configVersion, unitCategory)) {
-                const unit = new McwUnit().init({
-                    gridX   : -1,
-                    gridY   : -1,
-                    unitId  : -1,
-                    viewId  : Utility.ConfigManager.getUnitViewId(unitType, playerIndex),
-                }, configVersion) as McwUnit;
+                const unit = new unitClass().init({
+                    gridIndex   : { x: -1, y: -1 },
+                    unitId      : -1,
+                    unitType,
+                    playerIndex,
+                }, configVersion);
                 const cfgCost = Utility.ConfigManager.getUnitTemplateCfg(configVersion, unitType).productionCost;
                 dataList.push({
                     unitType,
@@ -156,7 +160,7 @@ namespace TinyWars.MultiCustomWar {
                     cfgCost,
                     unitProductionSkillCfg  : skillCfg,
                     minCost                 : skillCfg
-                        ? Math.floor(cfgCost * minNormalizedHp * skillCfg[5] / Utility.ConfigManager.UNIT_HP_NORMALIZER / 100)
+                        ? Math.floor(cfgCost * minNormalizedHp * skillCfg[5] / CommonConstants.UnitHpNormalizer / 100)
                         : cfgCost,
                 });
             }
@@ -171,7 +175,7 @@ namespace TinyWars.MultiCustomWar {
 
     type DataForUnitRenderer = {
         unitType                : UnitType;
-        unit                    : McwUnit;
+        unit                    : BwUnit;
         minCost                 : number;
         cfgCost                 : number;
         currentFund             : number;
@@ -226,18 +230,18 @@ namespace TinyWars.MultiCustomWar {
                 const gridIndex     = data.gridIndex;
                 const actionPlanner = data.actionPlanner;
                 if (!skillCfg) {
-                    actionPlanner.setStateRequestingPlayerProduceUnit(gridIndex, unitType, Utility.ConfigManager.UNIT_MAX_HP);
+                    actionPlanner.setStateRequestingPlayerProduceUnit(gridIndex, unitType, CommonConstants.UnitMaxHp);
                 } else {
                     const rawMinHp = skillCfg[3];
                     const rawMaxHp = skillCfg[4];
                     if (rawMinHp === rawMaxHp) {
                         actionPlanner.setStateRequestingPlayerProduceUnit(gridIndex, unitType, rawMinHp);
                     } else {
-                        const normalizer    = Utility.ConfigManager.UNIT_HP_NORMALIZER;
+                        const normalizer    = CommonConstants.UnitHpNormalizer;
                         const minHp         = rawMinHp;
                         const maxHp         = Math.min(
                             rawMaxHp,
-                            Math.floor(data.currentFund * Utility.ConfigManager.UNIT_MAX_HP / (data.cfgCost * skillCfg[5] / 100) / normalizer) * normalizer
+                            Math.floor(data.currentFund * CommonConstants.UnitMaxHp / (data.cfgCost * skillCfg[5] / 100) / normalizer) * normalizer
                         );
                         Common.CommonInputPanel.show({
                             title           : `${Lang.getUnitName(unitType)} HP`,

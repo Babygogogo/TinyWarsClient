@@ -9,60 +9,67 @@ namespace TinyWars.Replay.ReplayModel {
     import Lang                 = Utility.Lang;
     import FloatText            = Utility.FloatText;
     import ProtoManager         = Utility.ProtoManager;
+    import DamageCalculator     = Utility.DamageCalculator;
     import WarActionCodes       = Utility.WarActionCodes;
-    import Notify               = Utility.Notify;
-    import WarActionContainer   = ProtoTypes.IWarActionContainer;
+    import ConfigManager        = Utility.ConfigManager;
     import BwHelpers            = BaseWar.BwHelpers;
+    import BwUnit               = BaseWar.BwUnit;
+    import BwCoSkillHelper      = BaseWar.BwCoSkillHelper;
     import GridIndex            = Types.GridIndex;
-    import UnitState            = Types.UnitActionState;
+    import UnitActionState      = Types.UnitActionState;
     import MovePath             = Types.MovePath;
     import TileType             = Types.TileType;
+    import ActionContainer      = ProtoTypes.WarAction.IActionContainer;
+    import IDataForUseCoSkill   = ProtoTypes.Structure.IDataForUseCoSkill;
+    import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
 
-    const _EXECUTORS = new Map<WarActionCodes, (war: ReplayWar, data: WarActionContainer) => Promise<void>>([
-        [WarActionCodes.WarActionPlayerBeginTurn,       _executeMcwPlayerBeginTurn],
-        [WarActionCodes.WarActionPlayerDeleteUnit,      _executeMcwPlayerDeleteUnit],
-        [WarActionCodes.WarActionPlayerEndTurn,         _executeMcwPlayerEndTurn],
-        [WarActionCodes.WarActionPlayerProduceUnit,     _executeMcwPlayerProduceUnit],
-        [WarActionCodes.WarActionPlayerSurrender,       _executeMcwPlayerSurrender],
-        [WarActionCodes.WarActionPlayerVoteForDraw,     _executeMcwPlayerVoteForDraw],
-        [WarActionCodes.WarActionUnitAttack,            _executeMcwUnitAttack],
-        [WarActionCodes.WarActionUnitBeLoaded,          _executeMcwUnitBeLoaded],
-        [WarActionCodes.WarActionUnitBuildTile,         _executeMcwUnitBuildTile],
-        [WarActionCodes.WarActionUnitCaptureTile,       _executeMcwUnitCaptureTile],
-        [WarActionCodes.WarActionUnitDive,              _executeMcwUnitDive],
-        [WarActionCodes.WarActionUnitDrop,              _executeMcwUnitDrop],
-        [WarActionCodes.WarActionUnitJoin,              _executeMcwUnitJoin],
-        [WarActionCodes.WarActionUnitLaunchFlare,       _executeMcwUnitLaunchFlare],
-        [WarActionCodes.WarActionUnitLaunchSilo,        _executeMcwUnitLaunchSilo],
-        [WarActionCodes.WarActionUnitLoadCo,            _executeMcwUnitLoadCo],
-        [WarActionCodes.WarActionUnitProduceUnit,       _executeMcwUnitProduceUnit],
-        [WarActionCodes.WarActionUnitSupply,            _executeMcwUnitSupply],
-        [WarActionCodes.WarActionUnitSurface,           _executeMcwUnitSurface],
-        [WarActionCodes.WarActionUnitUseCoSkill,        _executeMcwUnitUseCoSkill],
-        [WarActionCodes.WarActionUnitWait,              _executeMcwUnitWait],
+    const _EXECUTORS = new Map<WarActionCodes, (war: ReplayWar, data: ActionContainer) => Promise<void>>([
+        [WarActionCodes.ActionPlayerBeginTurn,      _exePlayerBeginTurn],
+        [WarActionCodes.ActionPlayerDeleteUnit,     _exePlayerDeleteUnit],
+        [WarActionCodes.ActionPlayerEndTurn,        _exePlayerEndTurn],
+        [WarActionCodes.ActionPlayerProduceUnit,    _exePlayerProduceUnit],
+        [WarActionCodes.ActionPlayerSurrender,      _exePlayerSurrender],
+        [WarActionCodes.ActionPlayerVoteForDraw,    _exePlayerVoteForDraw],
+        [WarActionCodes.ActionUnitAttackUnit,       _exeUnitAttackUnit],
+        [WarActionCodes.ActionUnitAttackTile,       _exeUnitAttackTile],
+        [WarActionCodes.ActionUnitBeLoaded,         _exeUnitBeLoaded],
+        [WarActionCodes.ActionUnitBuildTile,        _exeUnitBuildTile],
+        [WarActionCodes.ActionUnitCaptureTile,      _exeUnitCaptureTile],
+        [WarActionCodes.ActionUnitDive,             _exeUnitDive],
+        [WarActionCodes.ActionUnitDrop,             _exeUnitDrop],
+        [WarActionCodes.ActionUnitJoin,             _exeUnitJoin],
+        [WarActionCodes.ActionUnitLaunchFlare,      _exeUnitLaunchFlare],
+        [WarActionCodes.ActionUnitLaunchSilo,       _exeUnitLaunchSilo],
+        [WarActionCodes.ActionUnitLoadCo,           _exeUnitLoadCo],
+        [WarActionCodes.ActionUnitProduceUnit,      _exeUnitProduceUnit],
+        [WarActionCodes.ActionUnitSupply,           _exeUnitSupply],
+        [WarActionCodes.ActionUnitSurface,          _exeUnitSurface],
+        [WarActionCodes.ActionUnitUseCoSkill,       _exeUnitUseCoSkill],
+        [WarActionCodes.ActionUnitWait,             _exeUnitWait],
     ]);
-    const _FAST_EXECUTORS = new Map<WarActionCodes, (war: ReplayWar, data: WarActionContainer) => Promise<void>>([
-        [WarActionCodes.WarActionPlayerBeginTurn,       _fastExecuteMcwPlayerBeginTurn],
-        [WarActionCodes.WarActionPlayerDeleteUnit,      _fastExecuteMcwPlayerDeleteUnit],
-        [WarActionCodes.WarActionPlayerEndTurn,         _fastExecuteMcwPlayerEndTurn],
-        [WarActionCodes.WarActionPlayerProduceUnit,     _fastExecuteMcwPlayerProduceUnit],
-        [WarActionCodes.WarActionPlayerSurrender,       _fastExecuteMcwPlayerSurrender],
-        [WarActionCodes.WarActionPlayerVoteForDraw,     _fastExecuteMcwPlayerVoteForDraw],
-        [WarActionCodes.WarActionUnitAttack,            _fastExecuteMcwUnitAttack],
-        [WarActionCodes.WarActionUnitBeLoaded,          _fastExecuteMcwUnitBeLoaded],
-        [WarActionCodes.WarActionUnitBuildTile,         _fastExecuteMcwUnitBuildTile],
-        [WarActionCodes.WarActionUnitCaptureTile,       _fastExecuteMcwUnitCaptureTile],
-        [WarActionCodes.WarActionUnitDive,              _fastExecuteMcwUnitDive],
-        [WarActionCodes.WarActionUnitDrop,              _fastExecuteMcwUnitDrop],
-        [WarActionCodes.WarActionUnitJoin,              _fastExecuteMcwUnitJoin],
-        [WarActionCodes.WarActionUnitLaunchFlare,       _fastExecuteMcwUnitLaunchFlare],
-        [WarActionCodes.WarActionUnitLaunchSilo,        _fastExecuteMcwUnitLaunchSilo],
-        [WarActionCodes.WarActionUnitLoadCo,            _fastExecuteMcwUnitLoadCo],
-        [WarActionCodes.WarActionUnitProduceUnit,       _fastExecuteMcwUnitProduceUnit],
-        [WarActionCodes.WarActionUnitSupply,            _fastExecuteMcwUnitSupply],
-        [WarActionCodes.WarActionUnitSurface,           _fastExecuteMcwUnitSurface],
-        [WarActionCodes.WarActionUnitUseCoSkill,        _fastExecuteMcwUnitUseCoSkill],
-        [WarActionCodes.WarActionUnitWait,              _fastExecuteMcwUnitWait],
+    const _FAST_EXECUTORS = new Map<WarActionCodes, (war: ReplayWar, data: ActionContainer) => Promise<void>>([
+        [WarActionCodes.ActionPlayerBeginTurn,      _fastExePlayerBeginTurn],
+        [WarActionCodes.ActionPlayerDeleteUnit,     _fastExePlayerDeleteUnit],
+        [WarActionCodes.ActionPlayerEndTurn,        _fastExePlayerEndTurn],
+        [WarActionCodes.ActionPlayerProduceUnit,    _fastExePlayerProduceUnit],
+        [WarActionCodes.ActionPlayerSurrender,      _fastExePlayerSurrender],
+        [WarActionCodes.ActionPlayerVoteForDraw,    _fastExePlayerVoteForDraw],
+        [WarActionCodes.ActionUnitAttackUnit,       _fastExeUnitAttackUnit],
+        [WarActionCodes.ActionUnitAttackTile,       _fastExeUnitAttackTile],
+        [WarActionCodes.ActionUnitBeLoaded,         _fastExeUnitBeLoaded],
+        [WarActionCodes.ActionUnitBuildTile,        _fastExeUnitBuildTile],
+        [WarActionCodes.ActionUnitCaptureTile,      _fastExeUnitCaptureTile],
+        [WarActionCodes.ActionUnitDive,             _fastExeUnitDive],
+        [WarActionCodes.ActionUnitDrop,             _fastExeUnitDrop],
+        [WarActionCodes.ActionUnitJoin,             _fastExeUnitJoin],
+        [WarActionCodes.ActionUnitLaunchFlare,      _fastExeUnitLaunchFlare],
+        [WarActionCodes.ActionUnitLaunchSilo,       _fastExeUnitLaunchSilo],
+        [WarActionCodes.ActionUnitLoadCo,           _fastExeUnitLoadCo],
+        [WarActionCodes.ActionUnitProduceUnit,      _fastExeUnitProduceUnit],
+        [WarActionCodes.ActionUnitSupply,           _fastExeUnitSupply],
+        [WarActionCodes.ActionUnitSurface,          _fastExeUnitSurface],
+        [WarActionCodes.ActionUnitUseCoSkill,       _fastExeUnitUseCoSkill],
+        [WarActionCodes.ActionUnitWait,             _fastExeUnitWait],
     ]);
 
     let _war: ReplayWar;
@@ -109,7 +116,7 @@ namespace TinyWars.Replay.ReplayModel {
         }
     }
 
-    async function _executeAction(war: ReplayWar, container: WarActionContainer, isFastExecute: boolean): Promise<void> {
+    async function _executeAction(war: ReplayWar, container: ActionContainer, isFastExecute: boolean): Promise<void> {
         war.setIsExecutingAction(true);
         war.setExecutedActionsCount(war.getExecutedActionsCount() + 1);
 
@@ -155,345 +162,420 @@ namespace TinyWars.Replay.ReplayModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // The 'true' executors for war actions.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function _executeMcwPlayerBeginTurn(war: ReplayWar, data: WarActionContainer): Promise<void> {
+    async function _exePlayerBeginTurn(war: ReplayWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${war.getPlayerInTurn().getNickname()} ${Lang.getText(Lang.Type.B0094)} (${war.getExecutedActionsCount()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${await war.getPlayerInTurn().getNickname()} ${Lang.getText(Lang.Type.B0094)} (${war.getExecutedActionsCount()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
 
-        await war.getTurnManager().endPhaseWaitBeginTurn(data);
+        war.getTurnManager().endPhaseWaitBeginTurn(data.ActionPlayerBeginTurn);
+
         actionPlanner.setStateIdle();
     }
 
-    async function _executeMcwPlayerDeleteUnit(war: ReplayWar, data: WarActionContainer): Promise<void> {
+    async function _exePlayerDeleteUnit(war: ReplayWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
         FloatText.show(`${Lang.getText(Lang.Type.B0081)} (${war.getExecutedActionsCount()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
 
-        const action    = data.WarActionPlayerDeleteUnit;
+        const action    = data.ActionPlayerDeleteUnit;
         const gridIndex = action.gridIndex as GridIndex;
         const focusUnit = war.getUnitMap().getUnitOnMap(gridIndex);
-        if (focusUnit) {
-            war.getFogMap().updateMapFromPathsByUnitAndPath(focusUnit, [gridIndex]);
-            DestructionHelpers.destroyUnitOnMap(war, gridIndex, true);
+        if (focusUnit == null) {
+            Logger.error(`ReplayModel._exePlayerDeleteUnit() empty focusUnit.`);
+            return undefined;
         }
 
-        ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+        war.getFogMap().updateMapFromPathsByUnitAndPath(focusUnit, [gridIndex]);
+        DestructionHelpers.destroyUnitOnMap(war, gridIndex, true);
 
+        ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
         actionPlanner.setStateIdle();
     }
 
-    async function _executeMcwPlayerEndTurn(war: ReplayWar, data: WarActionContainer): Promise<void> {
+    async function _exePlayerEndTurn(war: ReplayWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
         FloatText.show(`${Lang.getText(Lang.Type.B0036)} (${war.getExecutedActionsCount()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
 
-        await war.getTurnManager().endPhaseMain();
-        const action = data.WarActionPlayerEndTurn;
-        war.getPlayerManager().setListForRestTimeToBoot(action.listForRestTimeToBoot);
+        war.getTurnManager().endPhaseMain(data.ActionPlayerEndTurn);
 
         actionPlanner.setStateIdle();
     }
 
-    async function _executeMcwPlayerProduceUnit(war: ReplayWar, data: WarActionContainer): Promise<void> {
+    async function _exePlayerProduceUnit(war: ReplayWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
+        const action        = data.ActionPlayerProduceUnit;
+        const unitType      = action.unitType;
         actionPlanner.setStateExecutingAction();
-
-        const action        = data.WarActionPlayerProduceUnit;
-        const configVersion = war.getConfigVersion();
-        const unitData      = action.unitData as Types.SerializedUnit;
-        const unitType      = unitData
-            ? Utility.ConfigManager.getUnitTypeAndPlayerIndex(unitData.viewId).unitType
-            : action.unitType;
         FloatText.show(`${Lang.getText(Lang.Type.B0095)} ${Lang.getUnitName(unitType)} (${war.getExecutedActionsCount()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
 
         const gridIndex     = action.gridIndex as GridIndex;
+        const unitHp        = action.unitHp;
+        const configVersion = war.getConfigVersion();
         const unitMap       = war.getUnitMap();
         const unitId        = unitMap.getNextUnitId();
         const playerInTurn  = war.getPlayerInTurn();
-
-        if (unitData) {
-            const unit = new ReplayUnit().init(unitData, configVersion);
-            unit.startRunning(war);
-            unit.startRunningView();
-
-            unitMap.setUnitOnMap(unit);
-
-        } else if ((gridIndex) && (action.unitType != null)) {
-            // TODO: take skills into account.
-            const playerIndex   = playerInTurn.getPlayerIndex();
-            const unit          = new ReplayUnit().init({
-                unitId,
-                viewId  : Utility.ConfigManager.getUnitViewId(action.unitType, playerIndex)!,
-                gridX   : gridIndex.x,
-                gridY   : gridIndex.y,
-            }, configVersion);
-            unit.setActionState(UnitState.Acted);
-            unit.startRunning(war);
-            unit.startRunningView();
-
-            unitMap.setUnitOnMap(unit);
-        }
-
+        const playerIndex   = playerInTurn.getPlayerIndex();
+        const skillCfg      = war.getTileMap().getTile(gridIndex).getEffectiveSelfUnitProductionSkillCfg(playerIndex);
+        const cfgCost       = ConfigManager.getUnitTemplateCfg(configVersion, unitType).productionCost;
+        const cost          = Math.floor(cfgCost * (skillCfg ? skillCfg[5] : 100) / 100 * BwHelpers.getNormalizedHp(unitHp) / CommonConstants.UnitHpNormalizer);
+        const unit          = (new (unitMap.getUnitClass())).init({
+            gridIndex,
+            playerIndex,
+            unitType,
+            unitId,
+            actionState : ((skillCfg) && (skillCfg[6] === 1)) ? UnitActionState.Idle : UnitActionState.Acted,
+            currentHp   : unitHp != null ? unitHp : CommonConstants.UnitMaxHp,
+        }, configVersion);
+        unit.startRunning(war);
+        unit.startRunningView();
+        unitMap.setUnitOnMap(unit);
         unitMap.setNextUnitId(unitId + 1);
-        playerInTurn.setFund(playerInTurn.getFund() - action.cost);
+        playerInTurn.setFund(playerInTurn.getFund() - cost);
 
         ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
-
         actionPlanner.setStateIdle();
     }
 
-    async function _executeMcwPlayerSurrender(war: ReplayWar, data: WarActionContainer): Promise<void> {
+    async function _exePlayerSurrender(war: ReplayWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
+        const player        = war.getPlayerInTurn();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${war.getPlayerInTurn().getNickname()} ${Lang.getText(Lang.Type.B0055)} (${war.getExecutedActionsCount()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${await player.getNickname()} ${Lang.getText(data.ActionPlayerSurrender.isBoot ? Lang.Type.B0396: Lang.Type.B0055)} (${war.getExecutedActionsCount()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
 
-        const player = war.getPlayerInTurn();
         DestructionHelpers.destroyPlayerForce(war, player.getPlayerIndex(), true);
-        ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
 
+        ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
         actionPlanner.setStateIdle();
     }
 
-    async function _executeMcwPlayerVoteForDraw(war: ReplayWar, data: WarActionContainer): Promise<void> {
+    async function _exePlayerVoteForDraw(war: ReplayWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
+        const action        = data.ActionPlayerVoteForDraw;
         actionPlanner.setStateExecutingAction();
         FloatText.show(
-            `${war.getPlayerInTurn().getNickname()} ${data.WarActionPlayerVoteForDraw.isAgree ? Lang.getText(Lang.Type.B0096) : Lang.getText(Lang.Type.B0085)}` +
+            `${await war.getPlayerInTurn().getNickname()} ${action.isAgree ? Lang.getText(Lang.Type.B0096) : Lang.getText(Lang.Type.B0085)}` +
             `(${war.getExecutedActionsCount()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`
         );
 
         const playerInTurn = war.getPlayerInTurn();
         playerInTurn.setHasVotedForDraw(true);
 
-        if (!data.WarActionPlayerVoteForDraw.isAgree) {
-            FloatText.show(Lang.getFormattedText(Lang.Type.F0017, playerInTurn.getNickname()));
+        if (!action.isAgree) {
+            FloatText.show(Lang.getFormattedText(Lang.Type.F0017, await playerInTurn.getNickname()));
             war.setRemainingVotesForDraw(undefined);
         } else {
-            if (war.getRemainingVotesForDraw()) {
-                FloatText.show(Lang.getFormattedText(Lang.Type.F0018, playerInTurn.getNickname()));
+            const remainingVotes = war.getRemainingVotesForDraw();
+            if (remainingVotes) {
+                FloatText.show(Lang.getFormattedText(Lang.Type.F0018, await playerInTurn.getNickname()));
             } else {
-                FloatText.show(Lang.getFormattedText(Lang.Type.F0019, playerInTurn.getNickname()));
+                FloatText.show(Lang.getFormattedText(Lang.Type.F0019, await playerInTurn.getNickname()));
             }
-            war.setRemainingVotesForDraw((war.getRemainingVotesForDraw() || war.getPlayerManager().getAlivePlayersCount(false)) - 1);
+            war.setRemainingVotesForDraw((remainingVotes || war.getPlayerManager().getAlivePlayersCount(false)) - 1);
         }
 
         actionPlanner.setStateIdle();
     }
 
-    async function _executeMcwUnitAttack(war: ReplayWar, data: WarActionContainer): Promise<void> {
+    async function _exeUnitAttackUnit(war: ReplayWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
         FloatText.show(`${Lang.getText(Lang.Type.B0097)} (${war.getExecutedActionsCount()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
 
-        const action = data.WarActionUnitAttack;
-
-        const path      = action.path as MovePath;
-        const pathNodes = path.nodes;
-        const unitMap   = war.getUnitMap();
-        const attacker  = unitMap.getUnit(pathNodes[0], action.launchUnitId);
-        moveUnit(war, WarActionCodes.WarActionUnitAttack, path, action.launchUnitId, path.fuelConsumption);
-        attacker.setActionState(UnitState.Acted);
+        const action        = data.ActionUnitAttackUnit;
+        const path          = action.path as MovePath;
+        const launchUnitId  = action.launchUnitId;
+        const pathNodes     = path.nodes;
+        const unitMap       = war.getUnitMap();
+        const attackerUnit  = unitMap.getUnit(pathNodes[0], launchUnitId);
 
         if (path.isBlocked) {
-            return new Promise<void>(resolve => {
-                attacker.moveViewAlongPath(pathNodes, attacker.getIsDiving(), true, () => {
-                    attacker.updateView();
-                    ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+            BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+            unitMap.setUnitOnMap(attackerUnit);
+            attackerUnit.setActionState(UnitActionState.Acted);
 
-                    actionPlanner.setStateIdle();
-                    resolve();
-                });
-            });
+            await attackerUnit.moveViewAlongPath(pathNodes, attackerUnit.getIsDiving(), true);
+            attackerUnit.updateView();
+            ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+            actionPlanner.setStateIdle();
+
         } else {
-            const counterDamage     = action.counterDamage;
-            const targetGridIndex   = action.targetGridIndex as GridIndex;
-            const tileMap           = war.getTileMap() as ReplayTileMap;
-            const attackTarget      = unitMap.getUnitOnMap(targetGridIndex) || tileMap.getTile(targetGridIndex);
-            const targetUnit        = attackTarget instanceof ReplayUnit ? attackTarget : undefined;
+            BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+            unitMap.setUnitOnMap(attackerUnit);
+            attackerUnit.setActionState(UnitActionState.Acted);
 
-            if (attacker.getPrimaryWeaponBaseDamage(attackTarget.getArmorType()) != null) {
-                attacker.setPrimaryWeaponCurrentAmmo(attacker.getPrimaryWeaponCurrentAmmo()! - 1);
+            const attackerGridIndex             = pathNodes[pathNodes.length - 1];
+            const targetGridIndex               = action.targetGridIndex as GridIndex;
+            const [attackDamage, counterDamage] = DamageCalculator.getFinalBattleDamage(war, pathNodes, launchUnitId, targetGridIndex);
+            const targetUnit                    = unitMap.getUnitOnMap(targetGridIndex);
+
+            // Handle ammo.
+            const attackerAmmo = attackerUnit.getPrimaryWeaponCurrentAmmo();
+            const targetAmmo = targetUnit.getPrimaryWeaponCurrentAmmo();
+            if ((attackerAmmo != null)                                                                      &&
+                (attackerAmmo > 0)                                                                          &&
+                (attackerUnit.getCfgBaseDamage(targetUnit.getArmorType(), Types.WeaponType.Primary) != null)
+            ) {
+                attackerUnit.setPrimaryWeaponCurrentAmmo(attackerAmmo - 1);
             }
-            if ((counterDamage != null) && (targetUnit) && (targetUnit.getPrimaryWeaponBaseDamage(attacker.getArmorType()) != null)) {
-                targetUnit.setPrimaryWeaponCurrentAmmo(targetUnit.getPrimaryWeaponCurrentAmmo()! - 1);
+            if ((counterDamage != null)                                                                     &&
+                (targetAmmo != null)                                                                        &&
+                (targetAmmo > 0)                                                                            &&
+                (targetUnit.getCfgBaseDamage(attackerUnit.getArmorType(), Types.WeaponType.Primary) != null)
+            ) {
+                targetUnit.setPrimaryWeaponCurrentAmmo(targetAmmo - 1);
             }
 
-            // TODO: deal with skills and energy.
-
-            const attackerOldHp = attacker.getCurrentHp();
+            // Handle hp.
+            const attackerOldHp = attackerUnit.getCurrentHp();
             const attackerNewHp = Math.max(0, attackerOldHp - (counterDamage || 0));
-            attacker.setCurrentHp(attackerNewHp);
-            if ((attackerNewHp === 0) && (targetUnit)) {
+            const targetOldHp   = targetUnit.getCurrentHp();
+            const targetNewHp   = Math.max(0, targetOldHp - attackDamage);
+            targetUnit.setCurrentHp(targetNewHp);
+            attackerUnit.setCurrentHp(attackerNewHp);
+
+            // Handle promotion.
+            const configVersion                 = war.getConfigVersion();
+            const attackerPlayer                = attackerUnit.getPlayer();
+            const targetPlayer                  = targetUnit.getPlayer();
+            const attackerPlayerIndex           = attackerUnit.getPlayerIndex();
+            const targetPlayerIndex             = targetUnit.getPlayerIndex();
+            const attackerLostNormalizedHp      = counterDamage == null ? undefined : BwHelpers.getNormalizedHp(attackerOldHp) - BwHelpers.getNormalizedHp(attackerNewHp);
+            const targetLostNormalizedHp        = BwHelpers.getNormalizedHp(targetOldHp) - BwHelpers.getNormalizedHp(targetNewHp);
+            const attackerUnitType              = attackerUnit.getType();
+            const targetUnitType                = targetUnit.getType();
+            const attackerCoGridIndexListOnMap  = unitMap.getCoGridIndexListOnMap(attackerPlayerIndex);
+            const targetCoGridIndexListOnMap    = unitMap.getCoGridIndexListOnMap(targetPlayerIndex);
+            const isAttackerDestroyed           = attackerNewHp <= 0;
+            const isTargetDestroyed             = targetNewHp <= 0;
+            if (isAttackerDestroyed) {
                 targetUnit.addPromotion();
             }
-
-            const targetOldHp = attackTarget.getCurrentHp()!;
-            const targetNewHp = Math.max(0, targetOldHp - action.attackDamage);
-            attackTarget.setCurrentHp(targetNewHp);
-            if ((targetNewHp === 0) && (targetUnit)) {
-                attacker.addPromotion();
+            if (isTargetDestroyed) {
+                attackerUnit.addPromotion();
             }
-
-            const destination = pathNodes[pathNodes.length - 1];
-            if (targetUnit) {
-                const configVersion         = war.getConfigVersion();
-                const attackerPlayer        = war.getPlayer(attacker.getPlayerIndex())!;
-                const targetLostHp          = Helpers.getNormalizedHp(targetOldHp) - Helpers.getNormalizedHp(targetNewHp);
-                const attackerCoGridIndex   = attackerPlayer.getCoGridIndexListOnMap();
-                const isAttackerInCoZone    = (attacker.getUnitId() === attackerPlayer.getCoUnitId()) || (attackerPlayer.checkIsInCoZone(destination, attackerCoGridIndex));
-                if ((targetLostHp > 0)                              &&
-                    (attackerPlayer.getCoId() != null)              &&
-                    (!attackerPlayer.checkCoIsUsingActiveSkill())   &&
-                    (isAttackerInCoZone)
-                ) {
-                    attackerPlayer.setCoCurrentEnergy(Math.min(
-                        attackerPlayer.getCoMaxEnergy(),
-                        attackerPlayer.getCoCurrentEnergy() + Math.floor(targetLostHp * war.getSettingsEnergyGrowthMultiplier() / 100)
-                    ));
+            if (attackerPlayer.getCoId()) {
+                const attackerCoZoneRadius = attackerPlayer.getCoZoneRadius();
+                if (attackerCoZoneRadius == null) {
+                    Logger.error(`ReplayModel._exeUnitAttackUnit() empty attackerCoZoneRadius.`);
+                    return undefined;
                 }
-                const attackerUnitType = attacker.getType();
+
+                const hasAttackerLoadedCo = attackerUnit.getHasLoadedCo();
+                if (hasAttackerLoadedCo == null) {
+                    Logger.error(`ReplayModel._exeUnitAttackUnit() empty hasAttackerLoadedCo.`);
+                    return undefined;
+                }
+
                 for (const skillId of attackerPlayer.getCoCurrentSkills() || []) {
-                    const cfg = Utility.ConfigManager.getCoSkillCfg(configVersion, skillId)!.promotionBonusByAttack;
-                    if ((cfg)                                                                           &&
-                        (targetLostHp >= cfg[2])                                                        &&
-                        (Utility.ConfigManager.checkIsUnitTypeInCategory(configVersion, attackerUnitType, cfg[1]))
+                    const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.promotionBonusByAttack;
+                    if ((cfg)                                                                                                                                                   &&
+                        (targetLostNormalizedHp >= cfg[2])                                                                                                                      &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, attackerUnitType, cfg[1]))                                                                      &&
+                        ((hasAttackerLoadedCo) || (BwHelpers.checkIsGridIndexInsideCoSkillArea(attackerGridIndex, cfg[0], attackerCoGridIndexListOnMap, attackerCoZoneRadius)))
                     ) {
-                        if (cfg[0] === Types.CoSkillAreaType.Zone) {
-                            if (isAttackerInCoZone) {
-                                attacker.addPromotion();
-                            }
-                        } else if (cfg[0] === Types.CoSkillAreaType.OnMap) {
-                            if (!!attackerCoGridIndex) {
-                                attacker.addPromotion();
-                            }
-                        }
+                        attackerUnit.addPromotion();
                     }
                 }
-
-                const targetPlayer      = war.getPlayer(targetUnit.getPlayerIndex())!;
-                const targetCoGridIndex = targetPlayer.getCoGridIndexListOnMap();
-                const attackerLostHp    = Helpers.getNormalizedHp(attackerOldHp) - Helpers.getNormalizedHp(attackerNewHp);
-                if ((attackerLostHp > 0)                                        &&
-                    (targetPlayer.getCoId() != null)                            &&
-                    (!targetPlayer.checkCoIsUsingActiveSkill())                 &&
-                    (targetPlayer.checkIsInCoZone(destination, targetCoGridIndex))
-                ) {
-                    targetPlayer.setCoCurrentEnergy(Math.min(
-                        targetPlayer.getCoMaxEnergy(),
-                        targetPlayer.getCoCurrentEnergy() + Math.floor(attackerLostHp * war.getSettingsEnergyGrowthMultiplier() / 100)
-                    ));
+            }
+            if (targetPlayer.getCoId()) {
+                const targetCoZoneRadius = targetPlayer.getCoZoneRadius();
+                if (targetCoZoneRadius == null) {
+                    Logger.error(`ReplayModel._exeUnitAttackUnit() empty targetCoZoneRadius.`);
+                    return undefined;
                 }
-                const isTargetInCoZone  = targetPlayer.checkIsInCoZone(targetGridIndex, targetCoGridIndex);
-                const targetUnitType    = targetUnit.getType();
+
                 for (const skillId of targetPlayer.getCoCurrentSkills() || []) {
-                    const cfg = Utility.ConfigManager.getCoSkillCfg(configVersion, skillId)!.promotionBonusByAttack;
-                    if ((cfg)                                                                           &&
-                        (attackerLostHp >= cfg[2])                                                      &&
-                        (Utility.ConfigManager.checkIsUnitTypeInCategory(configVersion, targetUnitType, cfg[1]))
+                    const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.promotionBonusByAttack;
+                    if ((cfg)                                                                                                                   &&
+                        (attackerLostNormalizedHp != null)                                                                                      &&
+                        (attackerLostNormalizedHp >= cfg[2])                                                                                    &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, targetUnitType, cfg[1]))                                        &&
+                        (BwHelpers.checkIsGridIndexInsideCoSkillArea(targetGridIndex, cfg[0], targetCoGridIndexListOnMap, targetCoZoneRadius))
                     ) {
-                        if (cfg[0] === Types.CoSkillAreaType.Zone) {
-                            if (isTargetInCoZone) {
-                                targetUnit.addPromotion();
-                            }
-                        } else if (cfg[0] === Types.CoSkillAreaType.OnMap) {
-                            if (!!targetCoGridIndex) {
-                                targetUnit.addPromotion();
-                            }
-                        }
+                        targetUnit.addPromotion();
                     }
                 }
             }
 
-            const lostPlayerIndex   = action.lostPlayerIndex;
-            const gridVisionEffect  = war.getGridVisionEffect();
+            // Handle co energy.
+            const attackerEnergy                = attackerPlayer.getCoCurrentEnergy();
+            const targetEnergy                  = targetPlayer.getCoCurrentEnergy();
+            const multiplierForAttacker         = war.getSettingsEnergyGrowthMultiplier(attackerPlayerIndex);
+            const multiplierForTarget           = war.getSettingsEnergyGrowthMultiplier(targetPlayerIndex);
+            const isAttackerInAttackerCoZone    = (attackerUnit.getHasLoadedCo()) || (attackerPlayer.checkIsInCoZone(attackerGridIndex, attackerCoGridIndexListOnMap));
+            const isAttackerInTargetCoZone      = targetPlayer.checkIsInCoZone(attackerGridIndex, targetCoGridIndexListOnMap);
+            if ((targetLostNormalizedHp > 0)                    &&
+                (attackerEnergy != null)                        &&
+                (!attackerPlayer.checkCoIsUsingActiveSkill())   &&
+                (isAttackerInAttackerCoZone)
+            ) {
+                attackerPlayer.setCoCurrentEnergy(Math.min(
+                    attackerPlayer.getCoMaxEnergy(),
+                    attackerEnergy + Math.floor(targetLostNormalizedHp * multiplierForAttacker / 100)
+                ));
+            }
+            if ((attackerLostNormalizedHp != null)              &&
+                (attackerLostNormalizedHp > 0)                  &&
+                (targetEnergy != null)                          &&
+                (!targetPlayer.checkCoIsUsingActiveSkill())     &&
+                (isAttackerInTargetCoZone)
+            ) {
+                targetPlayer.setCoCurrentEnergy(Math.min(
+                    targetPlayer.getCoMaxEnergy(),
+                    targetEnergy + Math.floor(attackerLostNormalizedHp * multiplierForTarget / 100)
+                ));
+            }
 
-            return new Promise<void>(resolve => {
-                attacker.moveViewAlongPath(pathNodes, attacker.getIsDiving(), false, () => {
-                    if (attackerNewHp > 0) {
-                        attacker.updateView();
-                        if ((counterDamage != null) && (targetNewHp > 0)) {
-                             gridVisionEffect.showEffectDamage(destination);
-                        }
-                    } else {
-                        DestructionHelpers.destroyUnitOnMap(war, destination, true);
-                    }
+            // Handle animation and destruction.
+            const gridVisionEffect = war.getGridVisionEffect();
+            await attackerUnit.moveViewAlongPath(pathNodes, attackerUnit.getIsDiving(), false, targetGridIndex);
+            if (!isAttackerDestroyed) {
+                attackerUnit.updateView();
+                if ((counterDamage != null) && (!isTargetDestroyed)) {
+                    gridVisionEffect.showEffectDamage(attackerGridIndex);
+                }
+            } else {
+                DestructionHelpers.destroyUnitOnMap(war, attackerGridIndex, true);
+            }
 
-                    if (targetNewHp > 0) {
-                        attackTarget.flushDataToView();
-                        gridVisionEffect.showEffectDamage(targetGridIndex);
-                    } else {
-                        if (targetUnit) {
-                            DestructionHelpers.destroyUnitOnMap(war, targetGridIndex, true);
-                        } else {
-                            if ((attackTarget as ReplayTile).getType() === TileType.Meteor) {
-                                for (const gridIndex of getAdjacentPlasmas(tileMap, targetGridIndex)) {
-                                    const plasma = tileMap.getTile(gridIndex);
-                                    plasma.destroyTileObject();
-                                    plasma.flushDataToView();
-                                    gridVisionEffect.showEffectExplosion(gridIndex);
-                                }
-                            }
-                            (attackTarget as ReplayTile).destroyTileObject();
-                            attackTarget.flushDataToView();
-                            gridVisionEffect.showEffectExplosion(targetGridIndex);
-                        }
-                    }
+            if (!isTargetDestroyed) {
+                targetUnit.updateView();
+                gridVisionEffect.showEffectDamage(targetGridIndex);
+            } else {
+                DestructionHelpers.destroyUnitOnMap(war, targetGridIndex, true);
+            }
 
-                    if (lostPlayerIndex) {
-                        FloatText.show(Lang.getFormattedText(Lang.Type.F0015, war.getPlayerManager().getPlayer(lostPlayerIndex).getNickname()));
-                        DestructionHelpers.destroyPlayerForce(war, lostPlayerIndex, true);
-                    }
+            const lostPlayerIndex = ((isTargetDestroyed) && (!unitMap.checkHasUnit(targetPlayerIndex)))
+                ? (targetPlayerIndex)
+                : (((isAttackerDestroyed) && (!unitMap.checkHasUnit(attackerPlayerIndex)))
+                    ? (attackerPlayerIndex)
+                    : (undefined)
+                );
+            if (lostPlayerIndex) {
+                FloatText.show(Lang.getFormattedText(Lang.Type.F0015, await war.getPlayerManager().getPlayer(lostPlayerIndex).getNickname()));
+                DestructionHelpers.destroyPlayerForce(war, lostPlayerIndex, true);
+            }
 
-                    ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
-
-                    actionPlanner.setStateIdle();
-                    resolve();
-                }, targetGridIndex);
-            });
+            ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+            actionPlanner.setStateIdle();
         }
     }
 
-    async function _executeMcwUnitBeLoaded(war: ReplayWar, data: WarActionContainer): Promise<void> {
+    async function _exeUnitAttackTile(war: ReplayWar, data: ActionContainer): Promise<void> {
+        const actionPlanner = war.getActionPlanner();
+        actionPlanner.setStateExecutingAction();
+        FloatText.show(`${Lang.getText(Lang.Type.B0097)} (${war.getExecutedActionsCount()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+
+        const action        = data.ActionUnitAttackTile;
+        const path          = action.path as MovePath;
+        const launchUnitId  = action.launchUnitId;
+        const pathNodes     = path.nodes;
+        const unitMap       = war.getUnitMap();
+        const attackerUnit  = unitMap.getUnit(pathNodes[0], launchUnitId);
+
+        if (path.isBlocked) {
+            BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+            unitMap.setUnitOnMap(attackerUnit);
+            attackerUnit.setActionState(UnitActionState.Acted);
+
+            await attackerUnit.moveViewAlongPath(pathNodes, attackerUnit.getIsDiving(), true);
+            attackerUnit.updateView();
+            ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+            actionPlanner.setStateIdle();
+
+        } else {
+            BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+            unitMap.setUnitOnMap(attackerUnit);
+            attackerUnit.setActionState(UnitActionState.Acted);
+
+            const targetGridIndex               = action.targetGridIndex as GridIndex;
+            const [attackDamage, counterDamage] = DamageCalculator.getFinalBattleDamage(war, pathNodes, launchUnitId, targetGridIndex);
+            const tileMap                       = war.getTileMap();
+            const targetTile                    = tileMap.getTile(targetGridIndex);
+            if (attackerUnit.getCfgBaseDamage(targetTile.getArmorType(), Types.WeaponType.Primary) != null) {
+                const attackerAmmo = attackerUnit.getPrimaryWeaponCurrentAmmo();
+                if ((attackerAmmo != null) && (attackerAmmo > 0)) {
+                    attackerUnit.setPrimaryWeaponCurrentAmmo(attackerAmmo - 1);
+                }
+            }
+
+            const targetNewHp = Math.max(0, targetTile.getCurrentHp() - attackDamage);
+            targetTile.setCurrentHp(targetNewHp);
+
+            const gridVisionEffect = war.getGridVisionEffect();
+            await attackerUnit.moveViewAlongPath(pathNodes, attackerUnit.getIsDiving(), false, targetGridIndex);
+            attackerUnit.updateView();
+            if (targetNewHp > 0) {
+                targetTile.flushDataToView();
+                gridVisionEffect.showEffectDamage(targetGridIndex);
+            } else {
+                if (targetTile.getType() === TileType.Meteor) {
+                    for (const gridIndex of BwHelpers.getAdjacentPlasmas(tileMap, targetGridIndex)) {
+                        const plasma = tileMap.getTile(gridIndex);
+                        plasma.destroyTileObject();
+                        plasma.flushDataToView();
+                        gridVisionEffect.showEffectExplosion(gridIndex);
+                    }
+                }
+                targetTile.destroyTileObject();
+                targetTile.flushDataToView();
+                gridVisionEffect.showEffectExplosion(targetGridIndex);
+            }
+
+            ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+            actionPlanner.setStateIdle();
+        }
+    }
+
+    async function _exeUnitBeLoaded(war: ReplayWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
         FloatText.show(`${Lang.getText(Lang.Type.B0098)} (${war.getExecutedActionsCount()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
 
-        const action = data.WarActionUnitBeLoaded;
-
+        const action        = data.ActionUnitBeLoaded;
         const path          = action.path as MovePath;
+        const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
-        const focusUnit     = unitMap.getUnit(pathNodes[0], action.launchUnitId);
-        const loaderUnit    = path.isBlocked ? undefined : unitMap.getUnitOnMap(pathNodes[pathNodes.length - 1]);
-        moveUnit(war, WarActionCodes.WarActionUnitBeLoaded, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setActionState(UnitState.Acted);
-        (loaderUnit) && (focusUnit.setLoaderUnitId(loaderUnit.getUnitId()));
+        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+        focusUnit.setActionState(UnitActionState.Acted);
+        if (path.isBlocked) {
+            unitMap.setUnitOnMap(focusUnit);
 
-        return new Promise<void>(resolve => {
-            focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
-                focusUnit.updateView();
-                focusUnit.setViewVisible(false);
-                (loaderUnit) && (loaderUnit.updateView());
-                ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
+            focusUnit.updateView();
+            ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+            actionPlanner.setStateIdle();
+        } else {
+            const loaderUnit = unitMap.getUnitOnMap(pathNodes[pathNodes.length - 1]);
+            unitMap.setUnitLoaded(focusUnit);
+            focusUnit.setLoaderUnitId(loaderUnit.getUnitId());
 
-                actionPlanner.setStateIdle();
-                resolve();
-            });
-        })
+            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
+            focusUnit.updateView();
+            focusUnit.setViewVisible(false);
+            loaderUnit.updateView();
+            ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+            actionPlanner.setStateIdle();
+        }
     }
 
-    async function _executeMcwUnitBuildTile(war: ReplayWar, data: WarActionContainer): Promise<void> {
+    async function _exeUnitBuildTile(war: ReplayWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
         FloatText.show(`${Lang.getText(Lang.Type.B0099)} (${war.getExecutedActionsCount()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
 
-        const action = data.WarActionUnitBuildTile;
-
-        const path      = action.path as MovePath;
-        const pathNodes = path.nodes;
-        const focusUnit = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
-        moveUnit(war, WarActionCodes.WarActionUnitBuildTile, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setActionState(UnitState.Acted);
+        const action        = data.ActionUnitBuildTile;
+        const path          = action.path as MovePath;
+        const launchUnitId  = action.launchUnitId;
+        const pathNodes     = path.nodes;
+        const unitMap       = war.getUnitMap();
+        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+        unitMap.setUnitOnMap(focusUnit);
+        focusUnit.setActionState(UnitActionState.Acted);
 
         if (!path.isBlocked) {
             const endingGridIndex   = pathNodes[pathNodes.length - 1];
@@ -506,48 +588,49 @@ namespace TinyWars.Replay.ReplayModel {
                 focusUnit.setIsBuildingTile(true);
                 tile.setCurrentBuildPoint(buildPoint);
             } else {
+                const targetTileCfg = focusUnit.getBuildTargetTileCfg(tile.getBaseType(), tile.getObjectType());
+                if (targetTileCfg == null) {
+                    Logger.error(`ReplayModel._exeUnitBuildTile() empty targetTileCfg.`);
+                    return undefined;
+                }
+
                 focusUnit.setIsBuildingTile(false);
                 focusUnit.setCurrentBuildMaterial(focusUnit.getCurrentBuildMaterial() - 1);
-                tile.resetByTypeAndPlayerIndex(focusUnit.getBuildTargetTileObjectViewId(tile.getType()));
-
-                const playerIndex = focusUnit.getPlayerIndex();
+                tile.resetByTypeAndPlayerIndex(
+                    targetTileCfg.dstBaseType,
+                    targetTileCfg.dstObjectType,
+                    focusUnit.getPlayerIndex(),
+                );
             }
         }
 
-        return new Promise<void>(resolve => {
-            focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
-                focusUnit.updateView();
-                ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
-
-                actionPlanner.setStateIdle();
-                resolve();
-            })
-        });
+        await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
+        focusUnit.updateView();
+        ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+        actionPlanner.setStateIdle();
     }
 
-    async function _executeMcwUnitCaptureTile(war: ReplayWar, data: WarActionContainer): Promise<void> {
+    async function _exeUnitCaptureTile(war: ReplayWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
         FloatText.show(`${Lang.getText(Lang.Type.B0100)} (${war.getExecutedActionsCount()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
 
-        const action = data.WarActionUnitCaptureTile;
-
-        const path      = action.path as MovePath;
-        const pathNodes = path.nodes;
-        const focusUnit = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
-        moveUnit(war, WarActionCodes.WarActionUnitCaptureTile, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setActionState(UnitState.Acted);
+        const action        = data.ActionUnitCaptureTile;
+        const path          = action.path as MovePath;
+        const launchUnitId  = action.launchUnitId;
+        const pathNodes     = path.nodes;
+        const unitMap       = war.getUnitMap();
+        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+        unitMap.setUnitOnMap(focusUnit);
+        focusUnit.setActionState(UnitActionState.Acted);
 
         if (path.isBlocked) {
-            return new Promise<void>(resolve => {
-                focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), true, () => {
-                    focusUnit.updateView();
-                    ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), true);
+            focusUnit.updateView();
+            ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+            actionPlanner.setStateIdle();
 
-                    actionPlanner.setStateIdle();
-                    resolve();
-                });
-            });
         } else {
             const destination           = pathNodes[pathNodes.length - 1];
             const tile                  = war.getTileMap().getTile(destination);
@@ -559,89 +642,83 @@ namespace TinyWars.Replay.ReplayModel {
                 focusUnit.setIsCapturingTile(true);
                 tile.setCurrentCapturePoint(restCapturePoint);
             } else {
-                const playerIndexActing = focusUnit.getPlayerIndex();
+                const tileObjectType = tile.getObjectType();
                 focusUnit.setIsCapturingTile(false);
                 tile.setCurrentCapturePoint(tile.getMaxCapturePoint());
-                tile.resetByPlayerIndex(playerIndexActing);
+                tile.resetByTypeAndPlayerIndex(
+                    tile.getBaseType(),
+                    tileObjectType === Types.TileObjectType.Headquarters ? Types.TileObjectType.City : tileObjectType,
+                    focusUnit.getPlayerIndex(),
+                );
             }
 
-            if (!lostPlayerIndex) {
-                return new Promise<void>(resolve => {
-                    focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false, () => {
-                        focusUnit.updateView();
-                        tile.flushDataToView();
-                        ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+            if (lostPlayerIndex == null) {
+                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false);
+                focusUnit.updateView();
+                tile.flushDataToView();
+                ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                actionPlanner.setStateIdle();
 
-                        actionPlanner.setStateIdle();
-                        resolve();
-                    });
-                });
             } else {
-                return new Promise<void>(resolve => {
-                    focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false, () => {
-                        focusUnit.updateView();
-                        tile.flushDataToView();
-                        FloatText.show(Lang.getFormattedText(Lang.Type.F0016, war.getPlayerManager().getPlayer(lostPlayerIndex).getNickname()));
-                        DestructionHelpers.destroyPlayerForce(war, lostPlayerIndex, true);
-                        ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
-
-                        actionPlanner.setStateIdle();
-                        resolve();
-                    });
-                });
+                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false);
+                focusUnit.updateView();
+                tile.flushDataToView();
+                FloatText.show(Lang.getFormattedText(Lang.Type.F0016, await war.getPlayerManager().getPlayer(lostPlayerIndex).getNickname()));
+                DestructionHelpers.destroyPlayerForce(war, lostPlayerIndex, true);
+                ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                actionPlanner.setStateIdle();
             }
         }
     }
 
-    async function _executeMcwUnitDive(war: ReplayWar, data: WarActionContainer): Promise<void> {
+    async function _exeUnitDive(war: ReplayWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
         FloatText.show(`${Lang.getText(Lang.Type.B0101)} (${war.getExecutedActionsCount()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
 
-        const action = data.WarActionUnitDive;
-
+        const action        = data.ActionUnitDive;
         const path          = action.path as MovePath;
+        const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
-        const focusUnit     = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
+        const unitMap       = war.getUnitMap();
+        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
         const isSuccessful  = !path.isBlocked;
-        moveUnit(war, WarActionCodes.WarActionUnitDive, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setActionState(UnitState.Acted);
+        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+        unitMap.setUnitOnMap(focusUnit);
+        focusUnit.setActionState(UnitActionState.Acted);
         (isSuccessful) && (focusUnit.setIsDiving(true));
 
-        return new Promise<void>(resolve => {
-            focusUnit.moveViewAlongPath(pathNodes, false, path.isBlocked, () => {
-                focusUnit.updateView();
-                if (isSuccessful) {
-                    const endingGridIndex = pathNodes[pathNodes.length - 1];
-                    war.getGridVisionEffect().showEffectDive(endingGridIndex);
-                }
-                ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+        await focusUnit.moveViewAlongPath(pathNodes, false, path.isBlocked);
+        focusUnit.updateView();
+        if (isSuccessful) {
+            war.getGridVisionEffect().showEffectDive(pathNodes[pathNodes.length - 1]);
+        }
 
-                actionPlanner.setStateIdle();
-                resolve();
-            });
-        });
+        ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+        actionPlanner.setStateIdle();
     }
 
-    async function _executeMcwUnitDrop(war: ReplayWar, data: WarActionContainer): Promise<void> {
+    async function _exeUnitDrop(war: ReplayWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
         FloatText.show(`${Lang.getText(Lang.Type.B0102)} (${war.getExecutedActionsCount()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
 
-        const action = data.WarActionUnitDrop;
-
+        const action            = data.ActionUnitDrop;
         const path              = action.path as MovePath;
+        const launchUnitId      = action.launchUnitId;
         const pathNodes         = path.nodes;
         const unitMap           = war.getUnitMap();
         const endingGridIndex   = pathNodes[pathNodes.length - 1];
-        const focusUnit         = unitMap.getUnit(pathNodes[0], action.launchUnitId);
-        moveUnit(war, WarActionCodes.WarActionUnitDrop, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setActionState(UnitState.Acted);
+        const focusUnit         = unitMap.getUnit(pathNodes[0], launchUnitId);
+        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+        unitMap.setUnitOnMap(focusUnit);
+        focusUnit.setActionState(UnitActionState.Acted);
 
+        const shouldUpdateFogMap    = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(focusUnit.getTeamIndex());
         const fogMap                = war.getFogMap();
-        const unitsForDrop          = [] as ReplayUnit[];
+        const unitsForDrop          : BwUnit[] = [];
         for (const { unitId, gridIndex } of (action.dropDestinations || []) as Types.DropDestination[]) {
-            const unitForDrop = unitMap.getUnitLoadedById(unitId) as ReplayUnit;
+            const unitForDrop = unitMap.getUnitLoadedById(unitId);
             unitMap.setUnitUnloaded(unitId, gridIndex);
             for (const unit of unitMap.getUnitsLoadedByLoader(unitForDrop, true)) {
                 unit.setGridIndex(gridIndex);
@@ -649,63 +726,65 @@ namespace TinyWars.Replay.ReplayModel {
 
             unitForDrop.setLoaderUnitId(undefined);
             unitForDrop.setGridIndex(gridIndex);
-            unitForDrop.setActionState(UnitState.Acted);
+            unitForDrop.setActionState(UnitActionState.Acted);
             unitsForDrop.push(unitForDrop);
 
-            fogMap.updateMapFromPathsByUnitAndPath(unitForDrop, [endingGridIndex, gridIndex]);
+            if (shouldUpdateFogMap) {
+                fogMap.updateMapFromPathsByUnitAndPath(unitForDrop, [endingGridIndex, gridIndex]);
+            }
         }
 
-        return new Promise<void>(resolve => {
-            focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
-                if (action.isDropBlocked) {
-                    war.getGridVisionEffect().showEffectBlock(endingGridIndex);
-                }
-                focusUnit.updateView();
+        await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
+        if (action.isDropBlocked) {
+            war.getGridVisionEffect().showEffectBlock(endingGridIndex);
+        }
+        focusUnit.updateView();
 
-                const promises = [] as Promise<void>[];
-                for (const unitForDrop of unitsForDrop) {
-                    promises.push(new Promise<void>(r => {
-                        unitForDrop.moveViewAlongPath(
-                            [endingGridIndex, unitForDrop.getGridIndex()],
-                            unitForDrop.getIsDiving(),
-                            false,
-                            () => {
-                                unitForDrop.updateView();
-                                r();
-                            }
-                        );
-                    }))
-                }
-                Promise.all(promises).then(() => {
-                    ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
-                    actionPlanner.setStateIdle();
-                    resolve();
-                });
-            });
-        });
+        const promises: Promise<void>[] = [];
+        for (const unitForDrop of unitsForDrop) {
+            promises.push(unitForDrop.moveViewAlongPath(
+                [endingGridIndex, unitForDrop.getGridIndex()],
+                unitForDrop.getIsDiving(),
+                false,
+            ));
+        }
+        await Promise.all(promises);
+        ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+        actionPlanner.setStateIdle();
     }
 
-    async function _executeMcwUnitJoin(war: ReplayWar, data: WarActionContainer): Promise<void> {
+    async function _exeUnitJoin(war: ReplayWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
         FloatText.show(`${Lang.getText(Lang.Type.B0103)} (${war.getExecutedActionsCount()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
 
-        const action = data.WarActionUnitJoin;
-
+        const action            = data.ActionUnitJoin;
         const path              = action.path as MovePath;
+        const launchUnitId      = action.launchUnitId;
         const pathNodes         = path.nodes;
         const endingGridIndex   = pathNodes[pathNodes.length - 1];
         const unitMap           = war.getUnitMap();
-        const focusUnit         = unitMap.getUnit(pathNodes[0], action.launchUnitId);
-        const targetUnit        = path.isBlocked ? undefined : unitMap.getUnitOnMap(endingGridIndex);
-        moveUnit(war, WarActionCodes.WarActionUnitJoin, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setActionState(UnitState.Acted);
+        const focusUnit         = unitMap.getUnit(pathNodes[0], launchUnitId);
 
-        if (targetUnit) {
-            const player = war.getPlayer(focusUnit.getPlayerIndex())!;
-            if (player.getCoUnitId() === targetUnit.getUnitId()) {
-                player.setCoUnitId(focusUnit.getUnitId());
-            }
+        if (path.isBlocked) {
+            BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+            unitMap.setUnitOnMap(focusUnit);
+            focusUnit.setActionState(UnitActionState.Acted);
+
+            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
+            focusUnit.updateView();
+            ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+            actionPlanner.setStateIdle();
+
+        } else {
+            const targetUnit    = unitMap.getUnitOnMap(endingGridIndex);
+            const player        = war.getPlayer(focusUnit.getPlayerIndex());
+            unitMap.removeUnitOnMap(endingGridIndex, false);
+            BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+            unitMap.setUnitOnMap(focusUnit);
+            focusUnit.setActionState(UnitActionState.Acted);
+
+            focusUnit.setHasLoadedCo(focusUnit.getHasLoadedCo() || targetUnit.getHasLoadedCo());
 
             if (focusUnit.checkHasPrimaryWeapon()) {
                 focusUnit.setPrimaryWeaponCurrentAmmo(Math.min(
@@ -724,7 +803,7 @@ namespace TinyWars.Replay.ReplayModel {
                 focusUnit.getNormalizedCurrentHp() + targetUnit.getNormalizedCurrentHp()
             );
             focusUnit.setCurrentHp(Math.max(
-                (joinedNormalizedHp - 1) * Utility.ConfigManager.UNIT_HP_NORMALIZER + 1,
+                (joinedNormalizedHp - 1) * CommonConstants.UnitHpNormalizer + 1,
                 Math.min(focusUnit.getCurrentHp() + targetUnit.getCurrentHp(), focusUnit.getMaxHp())
             ));
 
@@ -754,32 +833,29 @@ namespace TinyWars.Replay.ReplayModel {
             focusUnit.setIsCapturingTile(targetUnit.getIsCapturingTile());
 
             focusUnit.setIsBuildingTile(targetUnit.getIsBuildingTile());
+
+            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
+            focusUnit.updateView();
+            unitMap.getView().removeUnit(targetUnit.getView());
+            ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+            actionPlanner.setStateIdle();
         }
-
-        return new Promise<void>(resolve => {
-            focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
-                focusUnit.updateView();
-                (targetUnit) && (unitMap.getView().removeUnit(targetUnit.getView()));
-                ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
-
-                actionPlanner.setStateIdle();
-                resolve();
-            });
-        });
     }
 
-    async function _executeMcwUnitLaunchFlare(war: ReplayWar, data: WarActionContainer): Promise<void> {
+    async function _exeUnitLaunchFlare(war: ReplayWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
         FloatText.show(`${Lang.getText(Lang.Type.B0104)} (${war.getExecutedActionsCount()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
 
-        const action = data.WarActionUnitLaunchFlare;
-
-        const path      = action.path as MovePath;
-        const pathNodes = path.nodes;
-        const focusUnit = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
-        moveUnit(war, WarActionCodes.WarActionUnitLaunchFlare, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setActionState(UnitState.Acted);
+        const action        = data.ActionUnitLaunchFlare;
+        const path          = action.path as MovePath;
+        const pathNodes     = path.nodes;
+        const unitMap       = war.getUnitMap();
+        const launchUnitId  = action.launchUnitId;
+        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+        unitMap.setUnitOnMap(focusUnit);
+        focusUnit.setActionState(UnitActionState.Acted);
 
         const isFlareSucceeded  = !path.isBlocked;
         const targetGridIndex   = action.targetGridIndex as GridIndex;
@@ -789,205 +865,189 @@ namespace TinyWars.Replay.ReplayModel {
             war.getFogMap().updateMapFromPathsByFlare(focusUnit.getPlayerIndex(), targetGridIndex, flareRadius);
         }
 
-        return new Promise<void>(resolve => {
-            focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
-                if (isFlareSucceeded) {
-                    const effect = war.getGridVisionEffect();
-                    for (const grid of GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, flareRadius, war.getTileMap().getMapSize())) {
-                        effect.showEffectFlare(grid);
-                    }
-                }
+        await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
+        if ((isFlareSucceeded) && (war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(focusUnit.getTeamIndex()))) {
+            const effect = war.getGridVisionEffect();
+            for (const grid of GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, flareRadius, war.getTileMap().getMapSize())) {
+                effect.showEffectFlare(grid);
+            }
+        }
 
-                focusUnit.updateView();
-                ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
-
-                actionPlanner.setStateIdle();
-                resolve();
-            });
-        });
+        focusUnit.updateView();
+        ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+        actionPlanner.setStateIdle();
     }
 
-    async function _executeMcwUnitLaunchSilo(war: ReplayWar, data: WarActionContainer): Promise<void> {
+    async function _exeUnitLaunchSilo(war: ReplayWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
         FloatText.show(`${Lang.getText(Lang.Type.B0105)} (${war.getExecutedActionsCount()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
 
-        const action = data.WarActionUnitLaunchSilo;
-
-        const path      = action.path as MovePath;
-        const pathNodes = path.nodes;
-        const unitMap   = war.getUnitMap();
-        const focusUnit = unitMap.getUnit(pathNodes[0], action.launchUnitId);
-        moveUnit(war, WarActionCodes.WarActionUnitLaunchSilo, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setActionState(UnitState.Acted);
+        const action        = data.ActionUnitLaunchSilo;
+        const path          = action.path as MovePath;
+        const pathNodes     = path.nodes;
+        const launchUnitId  = action.launchUnitId;
+        const unitMap       = war.getUnitMap();
+        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+        unitMap.setUnitOnMap(focusUnit);
+        focusUnit.setActionState(UnitActionState.Acted);
 
         if (path.isBlocked) {
-            return new Promise<void>(resolve => {
-                focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
-                    focusUnit.updateView();
-                    ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
+            focusUnit.updateView();
+            ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+            actionPlanner.setStateIdle();
 
-                    actionPlanner.setStateIdle();
-                    resolve();
-                });
-            });
         } else {
             const targetGridIndex   = action.targetGridIndex as GridIndex;
             const tile              = war.getTileMap().getTile(pathNodes[pathNodes.length - 1]);
-            tile.resetByTypeAndPlayerIndex(focusUnit.getTileObjectViewIdAfterLaunchSilo());
+            tile.resetByTypeAndPlayerIndex(
+                tile.getBaseType(),
+                Types.TileObjectType.EmptySilo,
+                CommonConstants.WarNeutralPlayerIndex,
+            );
 
             const targetGrids   = GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, Utility.ConfigManager.SILO_RADIUS, unitMap.getMapSize());
-            const targetUnits   = [] as ReplayUnit[];
+            const targetUnits   : BwUnit[] = [];
             for (const grid of targetGrids) {
-                const unit = unitMap.getUnitOnMap(grid) as ReplayUnit;
+                const unit = unitMap.getUnitOnMap(grid);
                 if (unit) {
                     targetUnits.push(unit);
                     unit.setCurrentHp(Math.max(1, unit.getCurrentHp() - Utility.ConfigManager.SILO_DAMAGE));
                 }
             }
 
-            return new Promise<void>(resolve => {
-                focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
-                    const effect = war.getGridVisionEffect();
-                    for (const grid of targetGrids) {
-                        effect.showEffectSiloExplosion(grid);
-                    }
-                    for (const unit of targetUnits) {
-                        unit.updateView();
-                    }
+            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
+            const effect = war.getGridVisionEffect();
+            for (const grid of targetGrids) {
+                effect.showEffectSiloExplosion(grid);
+            }
+            for (const unit of targetUnits) {
+                unit.updateView();
+            }
 
-                    focusUnit.updateView();
-                    tile.flushDataToView();
-                    ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
-
-                    actionPlanner.setStateIdle();
-                    resolve();
-                });
-            });
+            focusUnit.updateView();
+            tile.flushDataToView();
+            ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+            actionPlanner.setStateIdle();
         }
     }
 
-    async function _executeMcwUnitLoadCo(war: ReplayWar, data: WarActionContainer): Promise<void> {
+    async function _exeUnitLoadCo(war: ReplayWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
         FloatText.show(`${Lang.getText(Lang.Type.B0139)} (${war.getExecutedActionsCount()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
 
-        const action = data.WarActionUnitLoadCo;
-
-        const path      = action.path as MovePath;
-        const pathNodes = path.nodes;
-        const focusUnit = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
-        moveUnit(war, WarActionCodes.WarActionUnitLoadCo, path, action.launchUnitId, path.fuelConsumption);
+        const action        = data.ActionUnitLoadCo;
+        const path          = action.path as MovePath;
+        const launchUnitId  = action.launchUnitId;
+        const pathNodes     = path.nodes;
+        const unitMap       = war.getUnitMap();
+        const focusUnit     = unitMap.getUnit(pathNodes[0], action.launchUnitId);
+        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+        unitMap.setUnitOnMap(focusUnit);
 
         if (path.isBlocked) {
-            focusUnit.setActionState(UnitState.Acted);
+            focusUnit.setActionState(UnitActionState.Acted);
         } else {
+            const playerIndex               = focusUnit.getPlayerIndex();
+            const initialEnergyPercentage   = war.getSettingsInitialEnergyPercentage(playerIndex);
+            if (initialEnergyPercentage == null) {
+                Logger.error(`ReplayModel._exeUnitLoadCo() empty initialEnergyPercentage.`);
+                return undefined;
+            }
+
             focusUnit.setCurrentPromotion(focusUnit.getMaxPromotion());
 
-            const player    = war.getPlayer(focusUnit.getPlayerIndex())!;
-            const maxEnergy = player.getCoMaxEnergy();
+            const player = war.getPlayer(playerIndex);
             player.setFund(player.getFund() - focusUnit.getLoadCoCost()!);
-            player.setCoUnitId(focusUnit.getUnitId());
-            player.setCoCurrentEnergy(maxEnergy == null ? 0 : Math.floor(maxEnergy * war.getSettingsInitialEnergyPercentage() / 100));
+            if (player.getCoCurrentEnergy() == null) {
+                player.setCoCurrentEnergy(Math.floor(player.getCoMaxEnergy() * initialEnergyPercentage / 100));
+            }
             player.setCoUsingSkillType(Types.CoSkillType.Passive);
         }
 
-        return new Promise<void>(resolve => {
-            focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
-                focusUnit.updateView();
-                ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
-
-                actionPlanner.setStateIdle();
-                resolve();
-            });
-        });
+        await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
+        focusUnit.updateView();
+        ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+        actionPlanner.setStateIdle();
     }
 
-    async function _executeMcwUnitProduceUnit(war: ReplayWar, data: WarActionContainer): Promise<void> {
+    async function _exeUnitProduceUnit(war: ReplayWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
         FloatText.show(`${Lang.getText(Lang.Type.B0106)} (${war.getExecutedActionsCount()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
 
-        const action = data.WarActionUnitProduceUnit;
-
+        const action        = data.ActionUnitProduceUnit;
         const path          = action.path as MovePath;
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
-        const focusUnit     = unitMap.getUnit(pathNodes[0], action.launchUnitId);
-        moveUnit(war, WarActionCodes.WarActionUnitProduceUnit, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setActionState(UnitState.Acted);
+        const launchUnitId  = action.launchUnitId;
+        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+        unitMap.setUnitOnMap(focusUnit);
+        focusUnit.setActionState(UnitActionState.Acted);
 
         if (path.isBlocked) {
-            return new Promise<void>(resolve => {
-                focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
-                    focusUnit.updateView();
-                    ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
+            focusUnit.updateView();
+            ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+            actionPlanner.setStateIdle();
 
-                    actionPlanner.setStateIdle();
-                    resolve();
-                });
-            });
         } else {
-            // TODO: take skills into account.
             const gridIndex         = focusUnit.getGridIndex();
             const producedUnitId    = unitMap.getNextUnitId();
-            const producedUnit      = new ReplayUnit().init({
+            const producedUnit      = (new (unitMap.getUnitClass())).init({
+                gridIndex,
+                playerIndex : focusUnit.getPlayerIndex(),
+                unitType    : focusUnit.getProduceUnitType(),
                 unitId      : producedUnitId,
-                viewId      : Utility.ConfigManager.getUnitViewId(focusUnit.getProduceUnitType(), focusUnit.getPlayerIndex())!,
-                gridX       : gridIndex.x,
-                gridY       : gridIndex.y,
                 loaderUnitId: focusUnit.getUnitId(),
             }, war.getConfigVersion());
             producedUnit.startRunning(war);
-            producedUnit.setActionState(Types.UnitActionState.Acted);
+            producedUnit.setActionState(UnitActionState.Acted);
 
             const player = war.getPlayerInTurn();
-            player.setFund(player.getFund() - action.cost);
+            player.setFund(player.getFund() - focusUnit.getProduceUnitCost());
             unitMap.setNextUnitId(producedUnitId + 1);
             unitMap.setUnitLoaded(producedUnit);
             focusUnit.setCurrentProduceMaterial(focusUnit.getCurrentProduceMaterial()! - 1);
 
-            return new Promise<void>(resolve => {
-                focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
-                    focusUnit.updateView();
-                    ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
-
-                    actionPlanner.setStateIdle();
-                    resolve();
-                });
-            });
+            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
+            focusUnit.updateView();
+            ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+            actionPlanner.setStateIdle();
         }
     }
 
-    async function _executeMcwUnitSupply(war: ReplayWar, data: WarActionContainer): Promise<void> {
+    async function _exeUnitSupply(war: ReplayWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
         FloatText.show(`${Lang.getText(Lang.Type.B0107)} (${war.getExecutedActionsCount()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
 
-        const action = data.WarActionUnitSupply;
+        const action        = data.ActionUnitSupply;
+        const revisedPath   = action.path as MovePath;
+        const launchUnitId  = action.launchUnitId;
+        const pathNodes     = revisedPath.nodes;
+        const unitMap       = war.getUnitMap();
+        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
+        unitMap.setUnitOnMap(focusUnit);
+        focusUnit.setActionState(UnitActionState.Acted);
 
-        const path      = action.path as MovePath;
-        const pathNodes = path.nodes;
-        const unitMap   = war.getUnitMap();
-        const focusUnit = unitMap.getUnit(pathNodes[0], action.launchUnitId);
-        moveUnit(war, WarActionCodes.WarActionUnitSupply, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setActionState(UnitState.Acted);
+        const isBlocked = revisedPath.isBlocked;
+        if (isBlocked) {
+            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), isBlocked);
+            focusUnit.updateView();
+            ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+            actionPlanner.setStateIdle();
 
-        if (path.isBlocked) {
-            return new Promise<void>(resolve => {
-                focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
-                    focusUnit.updateView();
-                    ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
-
-                    actionPlanner.setStateIdle();
-                    resolve();
-                });
-            });
         } else {
-            const suppliedUnits = [] as ReplayUnit[];
+            const suppliedUnits : BwUnit[] = [];
             const playerIndex   = focusUnit.getPlayerIndex();
             for (const gridIndex of GridIndexHelpers.getAdjacentGrids(pathNodes[pathNodes.length - 1], unitMap.getMapSize())) {
-                const unit = unitMap.getUnitOnMap(gridIndex) as ReplayUnit;
+                const unit = unitMap.getUnitOnMap(gridIndex);
                 if ((unit) && (unit !== focusUnit) && (unit.getPlayerIndex() === playerIndex) && (unit.checkCanBeSupplied())) {
                     const maxFlareAmmo          = unit.getFlareMaxAmmo();
                     const maxPrimaryWeaponAmmo  = unit.getPrimaryWeaponMaxAmmo();
@@ -1000,381 +1060,509 @@ namespace TinyWars.Replay.ReplayModel {
                 }
             }
 
-            return new Promise<void>(resolve => {
-                focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
-                    focusUnit.updateView();
+            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), isBlocked);
+            focusUnit.updateView();
 
-                    const gridVisionEffect = war.getGridVisionEffect();
-                    for (const unit of suppliedUnits) {
-                        unit.updateView();
-                        gridVisionEffect.showEffectSupply(unit.getGridIndex());
-                    }
+            const gridVisionEffect = war.getGridVisionEffect();
+            for (const unit of suppliedUnits) {
+                unit.updateView();
+                gridVisionEffect.showEffectSupply(unit.getGridIndex());
+            }
 
-                    ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
-
-                    actionPlanner.setStateIdle();
-                    resolve();
-                });
-            });
+            ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+            actionPlanner.setStateIdle();
         }
     }
 
-    async function _executeMcwUnitSurface(war: ReplayWar, data: WarActionContainer): Promise<void> {
+    async function _exeUnitSurface(war: ReplayWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
         FloatText.show(`${Lang.getText(Lang.Type.B0108)} (${war.getExecutedActionsCount()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
 
-        const action = data.WarActionUnitSurface;
+        const action    = data.ActionUnitSurface;
+        const unitMap   = war.getUnitMap();
+        if (unitMap == null) {
+            Logger.error(`ReplayModel._exeUnitSurface() empty unitMap.`);
+            return undefined;
+        }
 
-        const path          = action.path as MovePath;
-        const pathNodes     = path.nodes;
-        const focusUnit     = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
-        const isSuccessful  = !path.isBlocked;
-        moveUnit(war, WarActionCodes.WarActionUnitSurface, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setActionState(UnitState.Acted);
+        const revisedPath   = action.path as MovePath;
+        const pathNodes     = revisedPath.nodes;
+        const launchUnitId  = action.launchUnitId;
+        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const isSuccessful  = !revisedPath.isBlocked;
+        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
+        unitMap.setUnitOnMap(focusUnit);
+        focusUnit.setActionState(UnitActionState.Acted);
         (isSuccessful) && (focusUnit.setIsDiving(false));
 
-        return new Promise<void>(resolve => {
-            focusUnit.moveViewAlongPath(pathNodes, true, path.isBlocked, () => {
-                focusUnit.updateView();
-                if (isSuccessful) {
-                    const endingGridIndex = pathNodes[pathNodes.length - 1];
-                    war.getGridVisionEffect().showEffectSurface(endingGridIndex);
-                }
-                ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+        await focusUnit.moveViewAlongPath(pathNodes, true, revisedPath.isBlocked);
+        focusUnit.updateView();
+        if (isSuccessful) {
+            const endingGridIndex = pathNodes[pathNodes.length - 1];
+            war.getGridVisionEffect().showEffectSurface(endingGridIndex);
+        }
 
-                actionPlanner.setStateIdle();
-                resolve();
-            });
-        });
+        ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+        actionPlanner.setStateIdle();
     }
 
-    async function _executeMcwUnitUseCoSkill(war: ReplayWar, data: WarActionContainer): Promise<void> {
+    async function _exeUnitUseCoSkill(war: ReplayWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
         FloatText.show(`${Lang.getText(Lang.Type.B0142)} (${war.getExecutedActionsCount()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
 
-        const action = data.WarActionUnitUseCoSkill;
-
-        const path          = action.path as MovePath;
-        const pathNodes     = path.nodes;
-        const focusUnit     = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
-        const isSuccessful  = !path.isBlocked;
-        moveUnit(war, WarActionCodes.WarActionUnitUseCoSkill, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setActionState(UnitState.Acted);
-
-        const player    = focusUnit.getPlayer();
+        const action    = data.ActionUnitUseCoSkill;
         const skillType = action.skillType;
-        const skills    = player.getCoSkills(skillType) || [];
-        const dataList  = action.extraDataList || [];
-        if (isSuccessful) {
-            player.setCoUsingSkillType(skillType);
-            for (let i = 0; i < skills.length; ++i) {
-                BwHelpers.exeInstantSkill(war, player, pathNodes[pathNodes.length - 1], skills[i], dataList[i]);
-            }
-
-            if (skillType === Types.CoSkillType.Power) {
-                player.setCoCurrentEnergy(Math.max(0, player.getCoCurrentEnergy() - player.getCoPowerEnergy()!));
-            } else if (skillType === Types.CoSkillType.SuperPower) {
-                player.setCoCurrentEnergy(Math.max(0, player.getCoCurrentEnergy() - player.getCoSuperPowerEnergy()!));
-            }
+        if (skillType == null) {
+            Logger.error(`ReplayModel._exeUnitUseCoSkill() empty skillType.`);
+            return undefined;
         }
 
-        return new Promise<void>(resolve => {
-            focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
-                focusUnit.updateView();
-                ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+        const unitMap = war.getUnitMap();
+        if (unitMap == null) {
+            Logger.error(`ReplayModel._exeUnitUseCoSkill() empty unitMap.`);
+            return undefined;
+        }
 
-                if (isSuccessful) {
-                    const gridVisionEffect  = war.getGridVisionEffect();
-                    const playerIndex       = focusUnit.getPlayerIndex();
-                    const unitMap           = war.getUnitMap();
-                    unitMap.forEachUnitOnMap(unit => {
-                        unit.updateView();
-                        if (unit.getPlayerIndex() === playerIndex) {
-                            gridVisionEffect.showEffectSkillActivation(unit.getGridIndex());
-                        }
-                    });
+        const revisedPath   = action.path as MovePath;
+        const pathNodes     = revisedPath.nodes;
+        const launchUnitId  = action.launchUnitId;
+        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        if (focusUnit == null) {
+            Logger.error(`ReplayModel._exeUnitUseCoSkill() empty focusUnit.`);
+            return undefined;
+        }
 
-                    const configVersion = war.getConfigVersion();
-                    for (let i = 0; i < skills.length; ++i) {
-                        const skillCfg          = Utility.ConfigManager.getCoSkillCfg(configVersion, skills[i]);
-                        const indiscriminateCfg = skillCfg ? skillCfg.indiscriminateAreaDamage : null;
-                        if (indiscriminateCfg) {
-                            for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(dataList[i].indiscriminateAreaDamageCenter as GridIndex, 0, indiscriminateCfg[1], unitMap.getMapSize())) {
-                                const unit = unitMap.getUnitOnMap(gridIndex);
-                                (unit) && (unit.updateView());
+        const teamIndexInTurn = focusUnit.getTeamIndex();
+        if (teamIndexInTurn == null) {
+            Logger.error(`ReplayModel._exeUnitUseCoSkill() empty teamIndexInTurn.`);
+            return undefined;
+        }
 
-                                gridVisionEffect.showEffectExplosion(gridIndex);
-                            }
-                        }
-                    }
+        const player = focusUnit.getPlayer();
+        if (player == null) {
+            Logger.error(`ReplayModel._exeUnitUseCoSkill() empty player.`);
+            return undefined;
+        }
+
+        const currentEnergy = player.getCoCurrentEnergy();
+        if (currentEnergy == null) {
+            Logger.error(`ReplayModel._exeUnitUseCoSkill() empty currentEnergy.`);
+            return undefined;
+        }
+
+        if (revisedPath.isBlocked) {
+            BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
+            unitMap.setUnitOnMap(focusUnit);
+            focusUnit.setActionState(UnitActionState.Acted);
+
+            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), revisedPath.isBlocked);
+            focusUnit.updateView();
+            ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+            actionPlanner.setStateIdle();
+
+        } else {
+            BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
+            unitMap.setUnitOnMap(focusUnit);
+            focusUnit.setActionState(UnitActionState.Acted);
+
+            player.setCoUsingSkillType(skillType);
+
+            if (skillType === Types.CoSkillType.Power) {
+                const powerEnergy = player.getCoPowerEnergy();
+                if (powerEnergy == null) {
+                    Logger.error(`ReplayModel._exeUnitUseCoSkill() empty powerEnergy.`);
+                    return undefined;
+                }
+                player.setCoCurrentEnergy(currentEnergy - powerEnergy);
+
+            } else if (skillType === Types.CoSkillType.SuperPower) {
+                const superPowerEnergy = player.getCoSuperPowerEnergy();
+                if (superPowerEnergy == null) {
+                    Logger.error(`ReplayModel._exeUnitUseCoSkill() empty superPowerEnergy.`);
+                    return undefined;
                 }
 
-                actionPlanner.setStateIdle();
-                resolve();
+                player.setCoCurrentEnergy(currentEnergy - superPowerEnergy);
+
+            } else {
+                Logger.error(`ReplayModel._exeUnitUseCoSkill() invalid skillType: ${skillType}`);
+                return undefined;
+            }
+
+            const skillDataList : IDataForUseCoSkill[] = [];
+            const skillIdList   = player.getCoCurrentSkills() || [];
+            for (let skillIndex = 0; skillIndex < skillIdList.length; ++skillIndex) {
+                const dataForUseCoSkill = BwCoSkillHelper.getDataForUseCoSkill(war, player, skillIndex);
+                if (dataForUseCoSkill == null) {
+                    Logger.error(`ReplayModel._exeUnitUseCoSkill() empty dataForUseCoSkill.`);
+                    return undefined;
+                }
+
+                BwCoSkillHelper.exeInstantSkill(war, player, pathNodes[pathNodes.length - 1], skillIdList[skillIndex], dataForUseCoSkill);
+                skillDataList.push(dataForUseCoSkill);
+            }
+
+            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), revisedPath.isBlocked);
+            focusUnit.updateView();
+            ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+
+            const gridVisionEffect  = war.getGridVisionEffect();
+            const playerIndex       = focusUnit.getPlayerIndex();
+            unitMap.forEachUnitOnMap(unit => {
+                unit.updateView();
+                if (unit.getPlayerIndex() === playerIndex) {
+                    gridVisionEffect.showEffectSkillActivation(unit.getGridIndex());
+                }
             });
-        });
+
+            const configVersion = war.getConfigVersion();
+            const mapSize       = unitMap.getMapSize();
+            for (let i = 0; i < skillIdList.length; ++i) {
+                const skillCfg          = Utility.ConfigManager.getCoSkillCfg(configVersion, skillIdList[i]);
+                const indiscriminateCfg = skillCfg ? skillCfg.indiscriminateAreaDamage : null;
+                if (indiscriminateCfg) {
+                    for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(skillDataList[i].indiscriminateAreaDamageCenter as GridIndex, 0, indiscriminateCfg[1], mapSize)) {
+                        const unit = unitMap.getUnitOnMap(gridIndex);
+                        (unit) && (unit.updateView());
+
+                        gridVisionEffect.showEffectExplosion(gridIndex);
+                    }
+                }
+            }
+
+            actionPlanner.setStateIdle();
+        }
     }
 
-    async function _executeMcwUnitWait(war: ReplayWar, data: WarActionContainer): Promise<void> {
+    async function _exeUnitWait(war: ReplayWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
         FloatText.show(`${Lang.getText(Lang.Type.B0109)} (${war.getExecutedActionsCount()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
 
-        const action = data.WarActionUnitWait;
+        const action    = data.ActionUnitWait;
+        const unitMap   = war.getUnitMap();
+        if (unitMap == null) {
+            Logger.error(`ReplayModel._exeUnitWait() empty unitMap.`);
+            return undefined;
+        }
 
-        const path      = action.path as MovePath;
-        const pathNodes = path.nodes;
-        const focusUnit = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
-        moveUnit(war, WarActionCodes.WarActionUnitWait, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setActionState(UnitState.Acted);
+        const path          = action.path as MovePath;
+        const launchUnitId  = action.launchUnitId;
+        const pathNodes     = path.nodes;
+        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption, });
+        unitMap.setUnitOnMap(focusUnit);
+        focusUnit.setActionState(UnitActionState.Acted);
 
-        return new Promise<void>(resolve => {
-            focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked, () => {
-                focusUnit.updateView();
-                ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
-
-                actionPlanner.setStateIdle();
-                resolve();
-            });
-        });
+        await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
+        focusUnit.updateView();
+        ReplayHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+        actionPlanner.setStateIdle();
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // The fast executors for war actions.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function _fastExecuteMcwPlayerBeginTurn(war: ReplayWar, data: WarActionContainer): Promise<void> {
-        war.getTurnManager().endPhaseWaitBeginTurn(data);
+    async function _fastExePlayerBeginTurn(war: ReplayWar, data: ActionContainer): Promise<void> {
+        war.getTurnManager().endPhaseWaitBeginTurn(data.ActionPlayerBeginTurn);
     }
 
-    async function _fastExecuteMcwPlayerDeleteUnit(war: ReplayWar, data: WarActionContainer): Promise<void> {
-        const action    = data.WarActionPlayerDeleteUnit;
+    async function _fastExePlayerDeleteUnit(war: ReplayWar, data: ActionContainer): Promise<void> {
+        const action    = data.ActionPlayerDeleteUnit;
         const gridIndex = action.gridIndex as GridIndex;
         const focusUnit = war.getUnitMap().getUnitOnMap(gridIndex);
-        if (focusUnit) {
-            war.getFogMap().updateMapFromPathsByUnitAndPath(focusUnit, [gridIndex]);
-            DestructionHelpers.destroyUnitOnMap(war, gridIndex, false);
+        if (focusUnit == null) {
+            Logger.error(`ReplayModel._fastExePlayerDeleteUnit() empty focusUnit.`);
+            return undefined;
         }
+
+        war.getFogMap().updateMapFromPathsByUnitAndPath(focusUnit, [gridIndex]);
+        DestructionHelpers.destroyUnitOnMap(war, gridIndex, false);
     }
 
-    async function _fastExecuteMcwPlayerEndTurn(war: ReplayWar, data: WarActionContainer): Promise<void> {
-        war.getTurnManager().endPhaseMain();
-        const action = data.WarActionPlayerEndTurn;
-        war.getPlayerManager().setListForRestTimeToBoot(action.listForRestTimeToBoot);
+    async function _fastExePlayerEndTurn(war: ReplayWar, data: ActionContainer): Promise<void> {
+        war.getTurnManager().endPhaseMain(data.ActionPlayerEndTurn);
     }
 
-    async function _fastExecuteMcwPlayerProduceUnit(war: ReplayWar, data: WarActionContainer): Promise<void> {
-        const action = data.WarActionPlayerProduceUnit;
-
+    async function _fastExePlayerProduceUnit(war: ReplayWar, data: ActionContainer): Promise<void> {
+        const action        = data.ActionPlayerProduceUnit;
+        const unitType      = action.unitType;
         const gridIndex     = action.gridIndex as GridIndex;
+        const unitHp        = action.unitHp;
+        const configVersion = war.getConfigVersion();
         const unitMap       = war.getUnitMap();
         const unitId        = unitMap.getNextUnitId();
         const playerInTurn  = war.getPlayerInTurn();
-        const unitData      = action.unitData as Types.SerializedUnit;
-
-        if (unitData) {
-            const unit = new ReplayUnit().init(unitData, war.getConfigVersion());
-            unit.startRunning(war);
-            unit.startRunningView();
-
-            unitMap.setUnitOnMap(unit);
-
-        } else if ((gridIndex) && (action.unitType != null)) {
-            // TODO: take skills into account.
-            const playerIndex   = playerInTurn.getPlayerIndex();
-            const unit          = new ReplayUnit().init({
-                unitId,
-                viewId  : Utility.ConfigManager.getUnitViewId(action.unitType, playerIndex)!,
-                gridX   : gridIndex.x,
-                gridY   : gridIndex.y,
-            }, war.getConfigVersion());
-            unit.setActionState(UnitState.Acted);
-            unit.startRunning(war);
-            unit.startRunningView();
-
-            unitMap.setUnitOnMap(unit);
-        }
-
+        const playerIndex   = playerInTurn.getPlayerIndex();
+        const skillCfg      = war.getTileMap().getTile(gridIndex).getEffectiveSelfUnitProductionSkillCfg(playerIndex);
+        const cfgCost       = ConfigManager.getUnitTemplateCfg(configVersion, unitType).productionCost;
+        const cost          = Math.floor(cfgCost * (skillCfg ? skillCfg[5] : 100) / 100 * BwHelpers.getNormalizedHp(unitHp) / CommonConstants.UnitHpNormalizer);
+        const unit          = (new (unitMap.getUnitClass())).init({
+            gridIndex,
+            playerIndex,
+            unitType,
+            unitId,
+            actionState : ((skillCfg) && (skillCfg[6] === 1)) ? UnitActionState.Idle : UnitActionState.Acted,
+            currentHp   : unitHp != null ? unitHp : CommonConstants.UnitMaxHp,
+        }, configVersion);
+        unit.startRunning(war);
+        unit.startRunningView();
+        unitMap.setUnitOnMap(unit);
         unitMap.setNextUnitId(unitId + 1);
-        playerInTurn.setFund(playerInTurn.getFund() - action.cost);
+        playerInTurn.setFund(playerInTurn.getFund() - cost);
     }
 
-    async function _fastExecuteMcwPlayerSurrender(war: ReplayWar, data: WarActionContainer): Promise<void> {
-        const player = war.getPlayerInTurn();
-        DestructionHelpers.destroyPlayerForce(war, player.getPlayerIndex(), false);
+    async function _fastExePlayerSurrender(war: ReplayWar, data: ActionContainer): Promise<void> {
+        DestructionHelpers.destroyPlayerForce(war, war.getPlayerIndexInTurn(), false);
     }
 
-    async function _fastExecuteMcwPlayerVoteForDraw(war: ReplayWar, data: WarActionContainer): Promise<void> {
-        const playerInTurn = war.getPlayerInTurn();
+    async function _fastExePlayerVoteForDraw(war: ReplayWar, data: ActionContainer): Promise<void> {
+        const action        = data.ActionPlayerVoteForDraw;
+        const playerInTurn  = war.getPlayerInTurn();
         playerInTurn.setHasVotedForDraw(true);
 
-        if (!data.WarActionPlayerVoteForDraw.isAgree) {
+        if (!action.isAgree) {
             war.setRemainingVotesForDraw(undefined);
         } else {
             war.setRemainingVotesForDraw((war.getRemainingVotesForDraw() || war.getPlayerManager().getAlivePlayersCount(false)) - 1);
         }
     }
 
-    async function _fastExecuteMcwUnitAttack(war: ReplayWar, data: WarActionContainer): Promise<void> {
-        const action = data.WarActionUnitAttack;
-
-        const path      = action.path as MovePath;
-        const pathNodes = path.nodes;
-        const unitMap   = war.getUnitMap();
-        const attacker  = unitMap.getUnit(pathNodes[0], action.launchUnitId);
-        moveUnit(war, WarActionCodes.WarActionUnitAttack, path, action.launchUnitId, path.fuelConsumption);
-        attacker.setActionState(UnitState.Acted);
+    async function _fastExeUnitAttackUnit(war: ReplayWar, data: ActionContainer): Promise<void> {
+        const action        = data.ActionUnitAttackUnit;
+        const path          = action.path as MovePath;
+        const launchUnitId  = action.launchUnitId;
+        const pathNodes     = path.nodes;
+        const unitMap       = war.getUnitMap();
+        const attackerUnit  = unitMap.getUnit(pathNodes[0], launchUnitId);
 
         if (path.isBlocked) {
+            BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+            unitMap.setUnitOnMap(attackerUnit);
+            attackerUnit.setActionState(UnitActionState.Acted);
         } else {
-            const counterDamage     = action.counterDamage;
-            const targetGridIndex   = action.targetGridIndex as GridIndex;
-            const tileMap           = war.getTileMap() as ReplayTileMap;
-            const attackTarget      = unitMap.getUnitOnMap(targetGridIndex) || tileMap.getTile(targetGridIndex);
-            const targetUnit        = attackTarget instanceof ReplayUnit ? attackTarget : undefined;
+            BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+            unitMap.setUnitOnMap(attackerUnit);
+            attackerUnit.setActionState(UnitActionState.Acted);
 
-            if (attacker.getPrimaryWeaponBaseDamage(attackTarget.getArmorType()) != null) {
-                attacker.setPrimaryWeaponCurrentAmmo(attacker.getPrimaryWeaponCurrentAmmo()! - 1);
+            const attackerGridIndex             = pathNodes[pathNodes.length - 1];
+            const targetGridIndex               = action.targetGridIndex as GridIndex;
+            const [attackDamage, counterDamage] = DamageCalculator.getFinalBattleDamage(war, pathNodes, launchUnitId, targetGridIndex);
+            const targetUnit                    = unitMap.getUnitOnMap(targetGridIndex);
+
+            // Handle ammo.
+            const attackerAmmo = attackerUnit.getPrimaryWeaponCurrentAmmo();
+            const targetAmmo = targetUnit.getPrimaryWeaponCurrentAmmo();
+            if ((attackerAmmo != null)                                                                      &&
+                (attackerAmmo > 0)                                                                          &&
+                (attackerUnit.getCfgBaseDamage(targetUnit.getArmorType(), Types.WeaponType.Primary) != null)
+            ) {
+                attackerUnit.setPrimaryWeaponCurrentAmmo(attackerAmmo - 1);
             }
-            if ((counterDamage != null) && (targetUnit) && (targetUnit.getPrimaryWeaponBaseDamage(attacker.getArmorType()) != null)) {
-                targetUnit.setPrimaryWeaponCurrentAmmo(targetUnit.getPrimaryWeaponCurrentAmmo()! - 1);
+            if ((counterDamage != null)                                                                     &&
+                (targetAmmo != null)                                                                        &&
+                (targetAmmo > 0)                                                                            &&
+                (targetUnit.getCfgBaseDamage(attackerUnit.getArmorType(), Types.WeaponType.Primary) != null)
+            ) {
+                targetUnit.setPrimaryWeaponCurrentAmmo(targetAmmo - 1);
             }
 
-            // TODO: deal with skills and energy.
-
-            const attackerOldHp = attacker.getCurrentHp();
+            // Handle hp.
+            const attackerOldHp = attackerUnit.getCurrentHp();
             const attackerNewHp = Math.max(0, attackerOldHp - (counterDamage || 0));
-            attacker.setCurrentHp(attackerNewHp);
-            if ((attackerNewHp === 0) && (targetUnit)) {
+            const targetOldHp   = targetUnit.getCurrentHp();
+            const targetNewHp   = Math.max(0, targetOldHp - attackDamage);
+            targetUnit.setCurrentHp(targetNewHp);
+            attackerUnit.setCurrentHp(attackerNewHp);
+
+            // Handle promotion.
+            const configVersion                 = war.getConfigVersion();
+            const attackerPlayer                = attackerUnit.getPlayer();
+            const targetPlayer                  = targetUnit.getPlayer();
+            const attackerPlayerIndex           = attackerUnit.getPlayerIndex();
+            const targetPlayerIndex             = targetUnit.getPlayerIndex();
+            const attackerLostNormalizedHp      = counterDamage == null ? undefined : BwHelpers.getNormalizedHp(attackerOldHp) - BwHelpers.getNormalizedHp(attackerNewHp);
+            const targetLostNormalizedHp        = BwHelpers.getNormalizedHp(targetOldHp) - BwHelpers.getNormalizedHp(targetNewHp);
+            const attackerUnitType              = attackerUnit.getType();
+            const targetUnitType                = targetUnit.getType();
+            const attackerCoGridIndexListOnMap  = unitMap.getCoGridIndexListOnMap(attackerPlayerIndex);
+            const targetCoGridIndexListOnMap    = unitMap.getCoGridIndexListOnMap(targetPlayerIndex);
+            const isAttackerDestroyed           = attackerNewHp <= 0;
+            const isTargetDestroyed             = targetNewHp <= 0;
+            if (isAttackerDestroyed) {
                 targetUnit.addPromotion();
             }
-
-            const targetOldHp = attackTarget.getCurrentHp()!;
-            const targetNewHp = Math.max(0, targetOldHp - action.attackDamage);
-            attackTarget.setCurrentHp(targetNewHp);
-            if ((targetNewHp === 0) && (targetUnit)) {
-                attacker.addPromotion();
+            if (isTargetDestroyed) {
+                attackerUnit.addPromotion();
             }
-
-            const destination = pathNodes[pathNodes.length - 1];
-            if (targetUnit) {
-                const configVersion         = war.getConfigVersion();
-                const attackerPlayer        = war.getPlayer(attacker.getPlayerIndex())!;
-                const targetLostHp          = Helpers.getNormalizedHp(targetOldHp) - Helpers.getNormalizedHp(targetNewHp);
-                const attackerCoGridIndex   = attackerPlayer.getCoGridIndexListOnMap();
-                const isAttackerInCoZone    = (attacker.getUnitId() === attackerPlayer.getCoUnitId()) || (attackerPlayer.checkIsInCoZone(destination, attackerCoGridIndex));
-                if ((targetLostHp > 0)                              &&
-                    (attackerPlayer.getCoId() != null)              &&
-                    (!attackerPlayer.checkCoIsUsingActiveSkill())   &&
-                    (isAttackerInCoZone)
-                ) {
-                    attackerPlayer.setCoCurrentEnergy(Math.min(
-                        attackerPlayer.getCoMaxEnergy(),
-                        attackerPlayer.getCoCurrentEnergy() + Math.floor(targetLostHp * war.getSettingsEnergyGrowthMultiplier() / 100)
-                    ));
+            if (attackerPlayer.getCoId()) {
+                const attackerCoZoneRadius = attackerPlayer.getCoZoneRadius();
+                if (attackerCoZoneRadius == null) {
+                    Logger.error(`ReplayModel._fastExeUnitAttackUnit() empty attackerCoZoneRadius.`);
+                    return undefined;
                 }
-                const attackerUnitType = attacker.getType();
+
+                const hasAttackerLoadedCo = attackerUnit.getHasLoadedCo();
+                if (hasAttackerLoadedCo == null) {
+                    Logger.error(`ReplayModel._fastExeUnitAttackUnit() empty hasAttackerLoadedCo.`);
+                    return undefined;
+                }
+
                 for (const skillId of attackerPlayer.getCoCurrentSkills() || []) {
-                    const cfg = Utility.ConfigManager.getCoSkillCfg(configVersion, skillId)!.promotionBonusByAttack;
-                    if ((cfg)                                                                           &&
-                        (targetLostHp >= cfg[2])                                                        &&
-                        (Utility.ConfigManager.checkIsUnitTypeInCategory(configVersion, attackerUnitType, cfg[1]))
+                    const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.promotionBonusByAttack;
+                    if ((cfg)                                                                                                                                                   &&
+                        (targetLostNormalizedHp >= cfg[2])                                                                                                                      &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, attackerUnitType, cfg[1]))                                                                      &&
+                        ((hasAttackerLoadedCo) || (BwHelpers.checkIsGridIndexInsideCoSkillArea(attackerGridIndex, cfg[0], attackerCoGridIndexListOnMap, attackerCoZoneRadius)))
                     ) {
-                        if (cfg[0] === Types.CoSkillAreaType.Zone) {
-                            if (isAttackerInCoZone) {
-                                attacker.addPromotion();
-                            }
-                        } else if (cfg[0] === Types.CoSkillAreaType.OnMap) {
-                            if (!!attackerCoGridIndex) {
-                                attacker.addPromotion();
-                            }
-                        }
+                        attackerUnit.addPromotion();
                     }
                 }
-
-                const targetPlayer      = war.getPlayer(targetUnit.getPlayerIndex())!;
-                const targetCoGridIndex = targetPlayer.getCoGridIndexListOnMap();
-                const attackerLostHp    = Helpers.getNormalizedHp(attackerOldHp) - Helpers.getNormalizedHp(attackerNewHp);
-                if ((attackerLostHp > 0)                                        &&
-                    (targetPlayer.getCoId() != null)                            &&
-                    (!targetPlayer.checkCoIsUsingActiveSkill())                 &&
-                    (targetPlayer.checkIsInCoZone(destination, targetCoGridIndex))
-                ) {
-                    targetPlayer.setCoCurrentEnergy(Math.min(
-                        targetPlayer.getCoMaxEnergy(),
-                        targetPlayer.getCoCurrentEnergy() + Math.floor(attackerLostHp * war.getSettingsEnergyGrowthMultiplier() / 100)
-                    ));
+            }
+            if (targetPlayer.getCoId()) {
+                const targetCoZoneRadius = targetPlayer.getCoZoneRadius();
+                if (targetCoZoneRadius == null) {
+                    Logger.error(`ReplayModel._fastExeUnitAttackUnit() empty targetCoZoneRadius.`);
+                    return undefined;
                 }
-                const isTargetInCoZone  = targetPlayer.checkIsInCoZone(targetGridIndex, targetCoGridIndex);
-                const targetUnitType    = targetUnit.getType();
+
                 for (const skillId of targetPlayer.getCoCurrentSkills() || []) {
-                    const cfg = Utility.ConfigManager.getCoSkillCfg(configVersion, skillId)!.promotionBonusByAttack;
-                    if ((cfg)                                                                           &&
-                        (attackerLostHp >= cfg[2])                                                      &&
-                        (Utility.ConfigManager.checkIsUnitTypeInCategory(configVersion, targetUnitType, cfg[1]))
+                    const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.promotionBonusByAttack;
+                    if ((cfg)                                                                                                                   &&
+                        (attackerLostNormalizedHp != null)                                                                                      &&
+                        (attackerLostNormalizedHp >= cfg[2])                                                                                    &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, targetUnitType, cfg[1]))                                        &&
+                        (BwHelpers.checkIsGridIndexInsideCoSkillArea(targetGridIndex, cfg[0], targetCoGridIndexListOnMap, targetCoZoneRadius))
                     ) {
-                        if (cfg[0] === Types.CoSkillAreaType.Zone) {
-                            if (isTargetInCoZone) {
-                                targetUnit.addPromotion();
-                            }
-                        } else if (cfg[0] === Types.CoSkillAreaType.OnMap) {
-                            if (!!targetCoGridIndex) {
-                                targetUnit.addPromotion();
-                            }
-                        }
+                        targetUnit.addPromotion();
                     }
                 }
             }
 
-            const lostPlayerIndex   = action.lostPlayerIndex;
-            if (attackerNewHp > 0) {
-            } else {
-                DestructionHelpers.destroyUnitOnMap(war, destination, false);
+            // Handle co energy.
+            const attackerEnergy                = attackerPlayer.getCoCurrentEnergy();
+            const targetEnergy                  = targetPlayer.getCoCurrentEnergy();
+            const multiplierForAttacker         = war.getSettingsEnergyGrowthMultiplier(attackerPlayerIndex);
+            const multiplierForTarget           = war.getSettingsEnergyGrowthMultiplier(targetPlayerIndex);
+            const isAttackerInAttackerCoZone    = (attackerUnit.getHasLoadedCo()) || (attackerPlayer.checkIsInCoZone(attackerGridIndex, attackerCoGridIndexListOnMap));
+            const isAttackerInTargetCoZone      = targetPlayer.checkIsInCoZone(attackerGridIndex, targetCoGridIndexListOnMap);
+            if ((targetLostNormalizedHp > 0)                    &&
+                (attackerEnergy != null)                        &&
+                (!attackerPlayer.checkCoIsUsingActiveSkill())   &&
+                (isAttackerInAttackerCoZone)
+            ) {
+                attackerPlayer.setCoCurrentEnergy(Math.min(
+                    attackerPlayer.getCoMaxEnergy(),
+                    attackerEnergy + Math.floor(targetLostNormalizedHp * multiplierForAttacker / 100)
+                ));
+            }
+            if ((attackerLostNormalizedHp != null)              &&
+                (attackerLostNormalizedHp > 0)                  &&
+                (targetEnergy != null)                          &&
+                (!targetPlayer.checkCoIsUsingActiveSkill())     &&
+                (isAttackerInTargetCoZone)
+            ) {
+                targetPlayer.setCoCurrentEnergy(Math.min(
+                    targetPlayer.getCoMaxEnergy(),
+                    targetEnergy + Math.floor(attackerLostNormalizedHp * multiplierForTarget / 100)
+                ));
             }
 
-            if (targetNewHp > 0) {
-            } else {
-                if (targetUnit) {
-                    DestructionHelpers.destroyUnitOnMap(war, targetGridIndex, false);
-                } else {
-                    if ((attackTarget as ReplayTile).getType() === TileType.Meteor) {
-                        for (const gridIndex of getAdjacentPlasmas(tileMap, targetGridIndex)) {
-                            const plasma = tileMap.getTile(gridIndex);
-                            plasma.destroyTileObject();
-                        }
-                    }
-                    (attackTarget as ReplayTile).destroyTileObject();
-                }
+            // Handle animation and destruction.
+            if (isAttackerDestroyed) {
+                DestructionHelpers.destroyUnitOnMap(war, attackerGridIndex, false);
             }
 
+            if (isTargetDestroyed) {
+                DestructionHelpers.destroyUnitOnMap(war, targetGridIndex, false);
+            }
+
+            const lostPlayerIndex = ((isTargetDestroyed) && (!unitMap.checkHasUnit(targetPlayerIndex)))
+                ? (targetPlayerIndex)
+                : (((isAttackerDestroyed) && (!unitMap.checkHasUnit(attackerPlayerIndex)))
+                    ? (attackerPlayerIndex)
+                    : (undefined)
+                );
             if (lostPlayerIndex) {
                 DestructionHelpers.destroyPlayerForce(war, lostPlayerIndex, false);
             }
         }
     }
 
-    async function _fastExecuteMcwUnitBeLoaded(war: ReplayWar, data: WarActionContainer): Promise<void> {
-        const action = data.WarActionUnitBeLoaded;
-
+    async function _fastExeUnitAttackTile(war: ReplayWar, data: ActionContainer): Promise<void> {
+        const action        = data.ActionUnitAttackTile;
         const path          = action.path as MovePath;
+        const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
-        const focusUnit     = unitMap.getUnit(pathNodes[0], action.launchUnitId);
-        const loaderUnit    = path.isBlocked ? undefined : unitMap.getUnitOnMap(pathNodes[pathNodes.length - 1]);
-        moveUnit(war, WarActionCodes.WarActionUnitBeLoaded, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setActionState(UnitState.Acted);
-        (loaderUnit) && (focusUnit.setLoaderUnitId(loaderUnit.getUnitId()));
+        const attackerUnit  = unitMap.getUnit(pathNodes[0], launchUnitId);
+
+        if (path.isBlocked) {
+            BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+            unitMap.setUnitOnMap(attackerUnit);
+            attackerUnit.setActionState(UnitActionState.Acted);
+        } else {
+            BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+            unitMap.setUnitOnMap(attackerUnit);
+            attackerUnit.setActionState(UnitActionState.Acted);
+
+            const targetGridIndex               = action.targetGridIndex as GridIndex;
+            const [attackDamage, counterDamage] = DamageCalculator.getFinalBattleDamage(war, pathNodes, launchUnitId, targetGridIndex);
+            const tileMap                       = war.getTileMap();
+            const targetTile                    = tileMap.getTile(targetGridIndex);
+            if (attackerUnit.getCfgBaseDamage(targetTile.getArmorType(), Types.WeaponType.Primary) != null) {
+                const attackerAmmo = attackerUnit.getPrimaryWeaponCurrentAmmo();
+                if ((attackerAmmo != null) && (attackerAmmo > 0)) {
+                    attackerUnit.setPrimaryWeaponCurrentAmmo(attackerAmmo - 1);
+                }
+            }
+
+            const targetNewHp = Math.max(0, targetTile.getCurrentHp() - attackDamage);
+            targetTile.setCurrentHp(targetNewHp);
+
+            if (targetNewHp > 0) {
+            } else {
+                if (targetTile.getType() === TileType.Meteor) {
+                    for (const gridIndex of BwHelpers.getAdjacentPlasmas(tileMap, targetGridIndex)) {
+                        const plasma = tileMap.getTile(gridIndex);
+                        plasma.destroyTileObject();
+                    }
+                }
+                targetTile.destroyTileObject();
+            }
+        }
     }
 
-    async function _fastExecuteMcwUnitBuildTile(war: ReplayWar, data: WarActionContainer): Promise<void> {
-        const action = data.WarActionUnitBuildTile;
+    async function _fastExeUnitBeLoaded(war: ReplayWar, data: ActionContainer): Promise<void> {
+        const action        = data.ActionUnitBeLoaded;
+        const path          = action.path as MovePath;
+        const launchUnitId  = action.launchUnitId;
+        const pathNodes     = path.nodes;
+        const unitMap       = war.getUnitMap();
+        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+        focusUnit.setActionState(UnitActionState.Acted);
+        if (path.isBlocked) {
+            unitMap.setUnitOnMap(focusUnit);
+        } else {
+            const loaderUnit = unitMap.getUnitOnMap(pathNodes[pathNodes.length - 1]);
+            unitMap.setUnitLoaded(focusUnit);
+            focusUnit.setLoaderUnitId(loaderUnit.getUnitId());
+        }
+    }
 
-        const path      = action.path as MovePath;
-        const pathNodes = path.nodes;
-        const focusUnit = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
-        moveUnit(war, WarActionCodes.WarActionUnitBuildTile, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setActionState(UnitState.Acted);
+    async function _fastExeUnitBuildTile(war: ReplayWar, data: ActionContainer): Promise<void> {
+        const action        = data.ActionUnitBuildTile;
+        const path          = action.path as MovePath;
+        const launchUnitId  = action.launchUnitId;
+        const pathNodes     = path.nodes;
+        const unitMap       = war.getUnitMap();
+        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+        unitMap.setUnitOnMap(focusUnit);
+        focusUnit.setActionState(UnitActionState.Acted);
 
         if (!path.isBlocked) {
             const endingGridIndex   = pathNodes[pathNodes.length - 1];
@@ -1387,23 +1575,33 @@ namespace TinyWars.Replay.ReplayModel {
                 focusUnit.setIsBuildingTile(true);
                 tile.setCurrentBuildPoint(buildPoint);
             } else {
+                const targetTileCfg = focusUnit.getBuildTargetTileCfg(tile.getBaseType(), tile.getObjectType());
+                if (targetTileCfg == null) {
+                    Logger.error(`ReplayModel._fastExeUnitBuildTile() empty targetTileCfg.`);
+                    return undefined;
+                }
+
                 focusUnit.setIsBuildingTile(false);
                 focusUnit.setCurrentBuildMaterial(focusUnit.getCurrentBuildMaterial() - 1);
-                tile.resetByTypeAndPlayerIndex(focusUnit.getBuildTargetTileObjectViewId(tile.getType()));
-
-                const playerIndex = focusUnit.getPlayerIndex();
+                tile.resetByTypeAndPlayerIndex(
+                    targetTileCfg.dstBaseType,
+                    targetTileCfg.dstObjectType,
+                    focusUnit.getPlayerIndex(),
+                );
             }
         }
     }
 
-    async function _fastExecuteMcwUnitCaptureTile(war: ReplayWar, data: WarActionContainer): Promise<void> {
-        const action = data.WarActionUnitCaptureTile;
-
-        const path      = action.path as MovePath;
-        const pathNodes = path.nodes;
-        const focusUnit = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
-        moveUnit(war, WarActionCodes.WarActionUnitCaptureTile, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setActionState(UnitState.Acted);
+    async function _fastExeUnitCaptureTile(war: ReplayWar, data: ActionContainer): Promise<void> {
+        const action        = data.ActionUnitCaptureTile;
+        const path          = action.path as MovePath;
+        const launchUnitId  = action.launchUnitId;
+        const pathNodes     = path.nodes;
+        const unitMap       = war.getUnitMap();
+        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+        unitMap.setUnitOnMap(focusUnit);
+        focusUnit.setActionState(UnitActionState.Acted);
 
         if (path.isBlocked) {
         } else {
@@ -1417,46 +1615,54 @@ namespace TinyWars.Replay.ReplayModel {
                 focusUnit.setIsCapturingTile(true);
                 tile.setCurrentCapturePoint(restCapturePoint);
             } else {
-                const playerIndexActing = focusUnit.getPlayerIndex();
+                const tileObjectType = tile.getObjectType();
                 focusUnit.setIsCapturingTile(false);
                 tile.setCurrentCapturePoint(tile.getMaxCapturePoint());
-                tile.resetByPlayerIndex(playerIndexActing);
+                tile.resetByTypeAndPlayerIndex(
+                    tile.getBaseType(),
+                    tileObjectType === Types.TileObjectType.Headquarters ? Types.TileObjectType.City : tileObjectType,
+                    focusUnit.getPlayerIndex(),
+                );
             }
 
-            if (!lostPlayerIndex) {
+            if (lostPlayerIndex == null) {
             } else {
                 DestructionHelpers.destroyPlayerForce(war, lostPlayerIndex, false);
             }
         }
     }
 
-    async function _fastExecuteMcwUnitDive(war: ReplayWar, data: WarActionContainer): Promise<void> {
-        const action = data.WarActionUnitDive;
-
+    async function _fastExeUnitDive(war: ReplayWar, data: ActionContainer): Promise<void> {
+        const action        = data.ActionUnitDive;
         const path          = action.path as MovePath;
+        const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
-        const focusUnit     = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
+        const unitMap       = war.getUnitMap();
+        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
         const isSuccessful  = !path.isBlocked;
-        moveUnit(war, WarActionCodes.WarActionUnitDive, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setActionState(UnitState.Acted);
+        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+        unitMap.setUnitOnMap(focusUnit);
+        focusUnit.setActionState(UnitActionState.Acted);
         (isSuccessful) && (focusUnit.setIsDiving(true));
     }
 
-    async function _fastExecuteMcwUnitDrop(war: ReplayWar, data: WarActionContainer): Promise<void> {
-        const action = data.WarActionUnitDrop;
-
+    async function _fastExeUnitDrop(war: ReplayWar, data: ActionContainer): Promise<void> {
+        const action            = data.ActionUnitDrop;
         const path              = action.path as MovePath;
+        const launchUnitId      = action.launchUnitId;
         const pathNodes         = path.nodes;
         const unitMap           = war.getUnitMap();
         const endingGridIndex   = pathNodes[pathNodes.length - 1];
-        const focusUnit         = unitMap.getUnit(pathNodes[0], action.launchUnitId);
-        moveUnit(war, WarActionCodes.WarActionUnitDrop, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setActionState(UnitState.Acted);
+        const focusUnit         = unitMap.getUnit(pathNodes[0], launchUnitId);
+        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+        unitMap.setUnitOnMap(focusUnit);
+        focusUnit.setActionState(UnitActionState.Acted);
 
+        const shouldUpdateFogMap    = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(focusUnit.getTeamIndex());
         const fogMap                = war.getFogMap();
-        const unitsForDrop          = [] as ReplayUnit[];
+        const unitsForDrop          : BwUnit[] = [];
         for (const { unitId, gridIndex } of (action.dropDestinations || []) as Types.DropDestination[]) {
-            const unitForDrop = unitMap.getUnitLoadedById(unitId) as ReplayUnit;
+            const unitForDrop = unitMap.getUnitLoadedById(unitId);
             unitMap.setUnitUnloaded(unitId, gridIndex);
             for (const unit of unitMap.getUnitsLoadedByLoader(unitForDrop, true)) {
                 unit.setGridIndex(gridIndex);
@@ -1464,30 +1670,38 @@ namespace TinyWars.Replay.ReplayModel {
 
             unitForDrop.setLoaderUnitId(undefined);
             unitForDrop.setGridIndex(gridIndex);
-            unitForDrop.setActionState(UnitState.Acted);
+            unitForDrop.setActionState(UnitActionState.Acted);
             unitsForDrop.push(unitForDrop);
 
-            fogMap.updateMapFromPathsByUnitAndPath(unitForDrop, [endingGridIndex, gridIndex]);
+            if (shouldUpdateFogMap) {
+                fogMap.updateMapFromPathsByUnitAndPath(unitForDrop, [endingGridIndex, gridIndex]);
+            }
         }
     }
 
-    async function _fastExecuteMcwUnitJoin(war: ReplayWar, data: WarActionContainer): Promise<void> {
-        const action = data.WarActionUnitJoin;
-
+    async function _fastExeUnitJoin(war: ReplayWar, data: ActionContainer): Promise<void> {
+        const action            = data.ActionUnitJoin;
         const path              = action.path as MovePath;
+        const launchUnitId      = action.launchUnitId;
         const pathNodes         = path.nodes;
         const endingGridIndex   = pathNodes[pathNodes.length - 1];
         const unitMap           = war.getUnitMap();
-        const focusUnit         = unitMap.getUnit(pathNodes[0], action.launchUnitId);
-        const targetUnit        = path.isBlocked ? undefined : unitMap.getUnitOnMap(endingGridIndex);
-        moveUnit(war, WarActionCodes.WarActionUnitJoin, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setActionState(UnitState.Acted);
+        const focusUnit         = unitMap.getUnit(pathNodes[0], launchUnitId);
 
-        if (targetUnit) {
-            const player = war.getPlayer(focusUnit.getPlayerIndex())!;
-            if (player.getCoUnitId() === targetUnit.getUnitId()) {
-                player.setCoUnitId(focusUnit.getUnitId());
-            }
+        if (path.isBlocked) {
+            BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+            unitMap.setUnitOnMap(focusUnit);
+            focusUnit.setActionState(UnitActionState.Acted);
+
+        } else {
+            const targetUnit    = unitMap.getUnitOnMap(endingGridIndex);
+            const player        = war.getPlayer(focusUnit.getPlayerIndex());
+            unitMap.removeUnitOnMap(endingGridIndex, true);
+            BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+            unitMap.setUnitOnMap(focusUnit);
+            focusUnit.setActionState(UnitActionState.Acted);
+
+            focusUnit.setHasLoadedCo(focusUnit.getHasLoadedCo() || targetUnit.getHasLoadedCo());
 
             if (focusUnit.checkHasPrimaryWeapon()) {
                 focusUnit.setPrimaryWeaponCurrentAmmo(Math.min(
@@ -1506,7 +1720,7 @@ namespace TinyWars.Replay.ReplayModel {
                 focusUnit.getNormalizedCurrentHp() + targetUnit.getNormalizedCurrentHp()
             );
             focusUnit.setCurrentHp(Math.max(
-                (joinedNormalizedHp - 1) * Utility.ConfigManager.UNIT_HP_NORMALIZER + 1,
+                (joinedNormalizedHp - 1) * CommonConstants.UnitHpNormalizer + 1,
                 Math.min(focusUnit.getCurrentHp() + targetUnit.getCurrentHp(), focusUnit.getMaxHp())
             ));
 
@@ -1539,14 +1753,16 @@ namespace TinyWars.Replay.ReplayModel {
         }
     }
 
-    async function _fastExecuteMcwUnitLaunchFlare(war: ReplayWar, data: WarActionContainer): Promise<void> {
-        const action = data.WarActionUnitLaunchFlare;
-
-        const path      = action.path as MovePath;
-        const pathNodes = path.nodes;
-        const focusUnit = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
-        moveUnit(war, WarActionCodes.WarActionUnitLaunchFlare, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setActionState(UnitState.Acted);
+    async function _fastExeUnitLaunchFlare(war: ReplayWar, data: ActionContainer): Promise<void> {
+        const action        = data.ActionUnitLaunchFlare;
+        const path          = action.path as MovePath;
+        const pathNodes     = path.nodes;
+        const unitMap       = war.getUnitMap();
+        const launchUnitId  = action.launchUnitId;
+        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+        unitMap.setUnitOnMap(focusUnit);
+        focusUnit.setActionState(UnitActionState.Acted);
 
         const isFlareSucceeded  = !path.isBlocked;
         const targetGridIndex   = action.targetGridIndex as GridIndex;
@@ -1557,26 +1773,32 @@ namespace TinyWars.Replay.ReplayModel {
         }
     }
 
-    async function _fastExecuteMcwUnitLaunchSilo(war: ReplayWar, data: WarActionContainer): Promise<void> {
-        const action = data.WarActionUnitLaunchSilo;
-
-        const path      = action.path as MovePath;
-        const pathNodes = path.nodes;
-        const unitMap   = war.getUnitMap();
-        const focusUnit = unitMap.getUnit(pathNodes[0], action.launchUnitId);
-        moveUnit(war, WarActionCodes.WarActionUnitLaunchSilo, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setActionState(UnitState.Acted);
+    async function _fastExeUnitLaunchSilo(war: ReplayWar, data: ActionContainer): Promise<void> {
+        const action        = data.ActionUnitLaunchSilo;
+        const path          = action.path as MovePath;
+        const pathNodes     = path.nodes;
+        const launchUnitId  = action.launchUnitId;
+        const unitMap       = war.getUnitMap();
+        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+        unitMap.setUnitOnMap(focusUnit);
+        focusUnit.setActionState(UnitActionState.Acted);
 
         if (path.isBlocked) {
+
         } else {
             const targetGridIndex   = action.targetGridIndex as GridIndex;
             const tile              = war.getTileMap().getTile(pathNodes[pathNodes.length - 1]);
-            tile.resetByTypeAndPlayerIndex(focusUnit.getTileObjectViewIdAfterLaunchSilo());
+            tile.resetByTypeAndPlayerIndex(
+                tile.getBaseType(),
+                Types.TileObjectType.EmptySilo,
+                CommonConstants.WarNeutralPlayerIndex,
+            );
 
             const targetGrids   = GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, Utility.ConfigManager.SILO_RADIUS, unitMap.getMapSize());
-            const targetUnits   = [] as ReplayUnit[];
+            const targetUnits   : BwUnit[] = [];
             for (const grid of targetGrids) {
-                const unit = unitMap.getUnitOnMap(grid) as ReplayUnit;
+                const unit = unitMap.getUnitOnMap(grid);
                 if (unit) {
                     targetUnits.push(unit);
                     unit.setCurrentHp(Math.max(1, unit.getCurrentHp() - Utility.ConfigManager.SILO_DAMAGE));
@@ -1585,77 +1807,90 @@ namespace TinyWars.Replay.ReplayModel {
         }
     }
 
-    async function _fastExecuteMcwUnitLoadCo(war: ReplayWar, data: WarActionContainer): Promise<void> {
-        const action = data.WarActionUnitLoadCo;
-
-        const path      = action.path as MovePath;
-        const pathNodes = path.nodes;
-        const focusUnit = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
-        moveUnit(war, WarActionCodes.WarActionUnitLoadCo, path, action.launchUnitId, path.fuelConsumption);
+    async function _fastExeUnitLoadCo(war: ReplayWar, data: ActionContainer): Promise<void> {
+        const action        = data.ActionUnitLoadCo;
+        const path          = action.path as MovePath;
+        const launchUnitId  = action.launchUnitId;
+        const pathNodes     = path.nodes;
+        const unitMap       = war.getUnitMap();
+        const focusUnit     = unitMap.getUnit(pathNodes[0], action.launchUnitId);
+        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+        unitMap.setUnitOnMap(focusUnit);
 
         if (path.isBlocked) {
-            focusUnit.setActionState(UnitState.Acted);
+            focusUnit.setActionState(UnitActionState.Acted);
         } else {
+            const playerIndex               = focusUnit.getPlayerIndex();
+            const initialEnergyPercentage   = war.getSettingsInitialEnergyPercentage(playerIndex);
+            if (initialEnergyPercentage == null) {
+                Logger.error(`ReplayModel._fastExeUnitLoadCo() empty initialEnergyPercentage.`);
+                return undefined;
+            }
+
             focusUnit.setCurrentPromotion(focusUnit.getMaxPromotion());
 
-            const player    = war.getPlayer(focusUnit.getPlayerIndex())!;
-            const maxEnergy = player.getCoMaxEnergy();
+            const player = war.getPlayer(playerIndex);
             player.setFund(player.getFund() - focusUnit.getLoadCoCost()!);
-            player.setCoUnitId(focusUnit.getUnitId());
-            player.setCoCurrentEnergy(maxEnergy == null ? 0 : Math.floor(maxEnergy * war.getSettingsInitialEnergyPercentage() / 100));
+            if (player.getCoCurrentEnergy() == null) {
+                player.setCoCurrentEnergy(Math.floor(player.getCoMaxEnergy() * initialEnergyPercentage / 100));
+            }
             player.setCoUsingSkillType(Types.CoSkillType.Passive);
         }
     }
 
-    async function _fastExecuteMcwUnitProduceUnit(war: ReplayWar, data: WarActionContainer): Promise<void> {
-        const action = data.WarActionUnitProduceUnit;
-
+    async function _fastExeUnitProduceUnit(war: ReplayWar, data: ActionContainer): Promise<void> {
+        const action        = data.ActionUnitProduceUnit;
         const path          = action.path as MovePath;
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
-        const focusUnit     = unitMap.getUnit(pathNodes[0], action.launchUnitId);
-        moveUnit(war, WarActionCodes.WarActionUnitProduceUnit, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setActionState(UnitState.Acted);
+        const launchUnitId  = action.launchUnitId;
+        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+        unitMap.setUnitOnMap(focusUnit);
+        focusUnit.setActionState(UnitActionState.Acted);
 
         if (path.isBlocked) {
+
         } else {
-            // TODO: take skills into account.
             const gridIndex         = focusUnit.getGridIndex();
             const producedUnitId    = unitMap.getNextUnitId();
-            const producedUnit      = new ReplayUnit().init({
+            const producedUnit      = (new (unitMap.getUnitClass())).init({
+                gridIndex,
+                playerIndex : focusUnit.getPlayerIndex(),
+                unitType    : focusUnit.getProduceUnitType(),
                 unitId      : producedUnitId,
-                viewId      : Utility.ConfigManager.getUnitViewId(focusUnit.getProduceUnitType(), focusUnit.getPlayerIndex())!,
-                gridX       : gridIndex.x,
-                gridY       : gridIndex.y,
                 loaderUnitId: focusUnit.getUnitId(),
             }, war.getConfigVersion());
             producedUnit.startRunning(war);
-            producedUnit.setActionState(Types.UnitActionState.Acted);
+            producedUnit.setActionState(UnitActionState.Acted);
 
             const player = war.getPlayerInTurn();
-            player.setFund(player.getFund() - action.cost);
+            player.setFund(player.getFund() - focusUnit.getProduceUnitCost());
             unitMap.setNextUnitId(producedUnitId + 1);
             unitMap.setUnitLoaded(producedUnit);
             focusUnit.setCurrentProduceMaterial(focusUnit.getCurrentProduceMaterial()! - 1);
         }
     }
 
-    async function _fastExecuteMcwUnitSupply(war: ReplayWar, data: WarActionContainer): Promise<void> {
-        const action = data.WarActionUnitSupply;
+    async function _fastExeUnitSupply(war: ReplayWar, data: ActionContainer): Promise<void> {
+        const action        = data.ActionUnitSupply;
+        const revisedPath   = action.path as MovePath;
+        const launchUnitId  = action.launchUnitId;
+        const pathNodes     = revisedPath.nodes;
+        const unitMap       = war.getUnitMap();
+        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
+        unitMap.setUnitOnMap(focusUnit);
+        focusUnit.setActionState(UnitActionState.Acted);
 
-        const path      = action.path as MovePath;
-        const pathNodes = path.nodes;
-        const unitMap   = war.getUnitMap();
-        const focusUnit = unitMap.getUnit(pathNodes[0], action.launchUnitId);
-        moveUnit(war, WarActionCodes.WarActionUnitSupply, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setActionState(UnitState.Acted);
+        const isBlocked = revisedPath.isBlocked;
+        if (isBlocked) {
 
-        if (path.isBlocked) {
         } else {
-            const suppliedUnits = [] as ReplayUnit[];
+            const suppliedUnits : BwUnit[] = [];
             const playerIndex   = focusUnit.getPlayerIndex();
             for (const gridIndex of GridIndexHelpers.getAdjacentGrids(pathNodes[pathNodes.length - 1], unitMap.getMapSize())) {
-                const unit = unitMap.getUnitOnMap(gridIndex) as ReplayUnit;
+                const unit = unitMap.getUnitOnMap(gridIndex);
                 if ((unit) && (unit !== focusUnit) && (unit.getPlayerIndex() === playerIndex) && (unit.checkCanBeSupplied())) {
                     const maxFlareAmmo          = unit.getFlareMaxAmmo();
                     const maxPrimaryWeaponAmmo  = unit.getPrimaryWeaponMaxAmmo();
@@ -1670,131 +1905,129 @@ namespace TinyWars.Replay.ReplayModel {
         }
     }
 
-    async function _fastExecuteMcwUnitSurface(war: ReplayWar, data: WarActionContainer): Promise<void> {
-        const action = data.WarActionUnitSurface;
+    async function _fastExeUnitSurface(war: ReplayWar, data: ActionContainer): Promise<void> {
+        const action    = data.ActionUnitSurface;
+        const unitMap   = war.getUnitMap();
+        if (unitMap == null) {
+            Logger.error(`ReplayModel._exeUnitSurface() empty unitMap.`);
+            return undefined;
+        }
 
-        const path          = action.path as MovePath;
-        const pathNodes     = path.nodes;
-        const focusUnit     = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
-        const isSuccessful  = !path.isBlocked;
-        moveUnit(war, WarActionCodes.WarActionUnitSurface, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setActionState(UnitState.Acted);
+        const revisedPath   = action.path as MovePath;
+        const pathNodes     = revisedPath.nodes;
+        const launchUnitId  = action.launchUnitId;
+        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const isSuccessful  = !revisedPath.isBlocked;
+        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
+        unitMap.setUnitOnMap(focusUnit);
+        focusUnit.setActionState(UnitActionState.Acted);
         (isSuccessful) && (focusUnit.setIsDiving(false));
     }
 
-    async function _fastExecuteMcwUnitUseCoSkill(war: ReplayWar, data: WarActionContainer): Promise<void> {
-        const action = data.WarActionUnitUseCoSkill;
-
-        const path          = action.path as MovePath;
-        const pathNodes     = path.nodes;
-        const focusUnit     = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
-        const isSuccessful  = !path.isBlocked;
-        moveUnit(war, WarActionCodes.WarActionUnitUseCoSkill, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setActionState(UnitState.Acted);
-
-        const player    = focusUnit.getPlayer();
+    async function _fastExeUnitUseCoSkill(war: ReplayWar, data: ActionContainer): Promise<void> {
+        const action    = data.ActionUnitUseCoSkill;
         const skillType = action.skillType;
-        const skills    = player.getCoSkills(skillType) || [];
-        const dataList  = action.extraDataList || [];
-        if (isSuccessful) {
+        if (skillType == null) {
+            Logger.error(`ReplayModel._fastExeUnitUseCoSkill() empty skillType.`);
+            return undefined;
+        }
+
+        const unitMap = war.getUnitMap();
+        if (unitMap == null) {
+            Logger.error(`ReplayModel._fastExeUnitUseCoSkill() empty unitMap.`);
+            return undefined;
+        }
+
+        const revisedPath   = action.path as MovePath;
+        const pathNodes     = revisedPath.nodes;
+        const launchUnitId  = action.launchUnitId;
+        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        if (focusUnit == null) {
+            Logger.error(`ReplayModel._fastExeUnitUseCoSkill() empty focusUnit.`);
+            return undefined;
+        }
+
+        const teamIndexInTurn = focusUnit.getTeamIndex();
+        if (teamIndexInTurn == null) {
+            Logger.error(`ReplayModel._fastExeUnitUseCoSkill() empty teamIndexInTurn.`);
+            return undefined;
+        }
+
+        const player = focusUnit.getPlayer();
+        if (player == null) {
+            Logger.error(`ReplayModel._fastExeUnitUseCoSkill() empty player.`);
+            return undefined;
+        }
+
+        const currentEnergy = player.getCoCurrentEnergy();
+        if (currentEnergy == null) {
+            Logger.error(`ReplayModel._fastExeUnitUseCoSkill() empty currentEnergy.`);
+            return undefined;
+        }
+
+        if (revisedPath.isBlocked) {
+            BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
+            unitMap.setUnitOnMap(focusUnit);
+            focusUnit.setActionState(UnitActionState.Acted);
+
+        } else {
+            BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
+            unitMap.setUnitOnMap(focusUnit);
+            focusUnit.setActionState(UnitActionState.Acted);
+
             player.setCoUsingSkillType(skillType);
-            for (let i = 0; i < skills.length; ++i) {
-                BwHelpers.exeInstantSkill(war, player, pathNodes[pathNodes.length - 1], skills[i], dataList[i]);
-            }
 
             if (skillType === Types.CoSkillType.Power) {
-                player.setCoCurrentEnergy(Math.max(0, player.getCoCurrentEnergy() - player.getCoPowerEnergy()!));
+                const powerEnergy = player.getCoPowerEnergy();
+                if (powerEnergy == null) {
+                    Logger.error(`ReplayModel._fastExeUnitUseCoSkill() empty powerEnergy.`);
+                    return undefined;
+                }
+                player.setCoCurrentEnergy(currentEnergy - powerEnergy);
+
             } else if (skillType === Types.CoSkillType.SuperPower) {
-                player.setCoCurrentEnergy(Math.max(0, player.getCoCurrentEnergy() - player.getCoSuperPowerEnergy()!));
-            }
-        }
-    }
-
-    async function _fastExecuteMcwUnitWait(war: ReplayWar, data: WarActionContainer): Promise<void> {
-        const action = data.WarActionUnitWait;
-
-        const path      = action.path as MovePath;
-        const pathNodes = path.nodes;
-        const focusUnit = war.getUnitMap().getUnit(pathNodes[0], action.launchUnitId);
-        moveUnit(war, WarActionCodes.WarActionUnitWait, path, action.launchUnitId, path.fuelConsumption);
-        focusUnit.setActionState(UnitState.Acted);
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Helpers for executors.
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    function moveUnit(war: ReplayWar, actionCode: WarActionCodes, revisedPath: MovePath, launchUnitId: number | null | undefined, fuelConsumption: number): void {
-        const pathNodes             = revisedPath.nodes;
-        const beginningGridIndex    = pathNodes[0];
-        const fogMap                = war.getFogMap();
-        const unitMap               = war.getUnitMap();
-        const focusUnit             = unitMap.getUnit(beginningGridIndex, launchUnitId)!;
-        const isUnitBeLoaded        = (actionCode === WarActionCodes.WarActionUnitBeLoaded) && (!revisedPath.isBlocked);
-        fogMap.updateMapFromPathsByUnitAndPath(focusUnit, pathNodes);
-
-        if (pathNodes.length > 1) {
-            const endingGridIndex   = pathNodes[pathNodes.length - 1];
-            const isLaunching       = launchUnitId != null;
-
-            focusUnit.setGridIndex(endingGridIndex);
-            focusUnit.setIsCapturingTile(false);
-            focusUnit.setIsBuildingTile(false);
-            focusUnit.setCurrentFuel(focusUnit.getCurrentFuel() - fuelConsumption);
-            for (const unit of unitMap.getUnitsLoadedByLoader(focusUnit, true)) {
-                unit.setGridIndex(endingGridIndex);
-            }
-
-            if ((actionCode === WarActionCodes.WarActionUnitJoin) && (!revisedPath.isBlocked)) {
-                unitMap.removeUnitOnMap(endingGridIndex, false);
-            }
-
-            if (isLaunching) {
-                focusUnit.setLoaderUnitId(undefined);
-                const loaderUnit = unitMap.getUnitOnMap(beginningGridIndex);
-                (loaderUnit) && (loaderUnit.updateView());
-
-                if (!isUnitBeLoaded) {
-                    unitMap.setUnitUnloaded(launchUnitId!, endingGridIndex);
+                const superPowerEnergy = player.getCoSuperPowerEnergy();
+                if (superPowerEnergy == null) {
+                    Logger.error(`ReplayModel._fastExeUnitUseCoSkill() empty superPowerEnergy.`);
+                    return undefined;
                 }
+
+                player.setCoCurrentEnergy(currentEnergy - superPowerEnergy);
+
             } else {
-                if (isUnitBeLoaded) {
-                    unitMap.setUnitLoaded(beginningGridIndex);
-                } else {
-                    unitMap.swapUnit(beginningGridIndex, endingGridIndex);
+                Logger.error(`ReplayModel._fastExeUnitUseCoSkill() invalid skillType: ${skillType}`);
+                return undefined;
+            }
+
+            const skillDataList : IDataForUseCoSkill[] = [];
+            const skillIdList   = player.getCoCurrentSkills() || [];
+            for (let skillIndex = 0; skillIndex < skillIdList.length; ++skillIndex) {
+                const dataForUseCoSkill = BwCoSkillHelper.getDataForUseCoSkill(war, player, skillIndex);
+                if (dataForUseCoSkill == null) {
+                    Logger.error(`ReplayModel._fastExeUnitUseCoSkill() empty dataForUseCoSkill.`);
+                    return undefined;
                 }
 
-                const tile = war.getTileMap().getTile(beginningGridIndex);
-                tile.setCurrentBuildPoint(tile.getMaxBuildPoint());
-                tile.setCurrentCapturePoint(tile.getMaxCapturePoint());
+                BwCoSkillHelper.exeInstantSkill(war, player, pathNodes[pathNodes.length - 1], skillIdList[skillIndex], dataForUseCoSkill);
+                skillDataList.push(dataForUseCoSkill);
             }
         }
     }
 
-    function getAdjacentPlasmas(tileMap: ReplayTileMap, origin: GridIndex): GridIndex[] {
-        const plasmas           = [origin];
-        const mapSize           = tileMap.getMapSize();
-        const mapHeight         = mapSize.height;
-        const searchedIndexes   = new Set<number>([getIndexOfGridIndex(mapHeight, origin)]);
-
-        let i = 0;
-        while (i < plasmas.length) {
-            for (const adjacentGridIndex of GridIndexHelpers.getAdjacentGrids(plasmas[i], mapSize)) {
-                if (tileMap.getTile(adjacentGridIndex).getType() === TileType.Plasma) {
-                    const searchIndex = getIndexOfGridIndex(mapHeight, adjacentGridIndex);
-                    if (!searchedIndexes.has(searchIndex)) {
-                        searchedIndexes.add(searchIndex);
-                        plasmas.push(adjacentGridIndex);
-                    }
-                }
-            }
-            ++i;
+    async function _fastExeUnitWait(war: ReplayWar, data: ActionContainer): Promise<void> {
+        const action    = data.ActionUnitWait;
+        const unitMap   = war.getUnitMap();
+        if (unitMap == null) {
+            Logger.error(`ReplayModel._exeUnitWait() empty unitMap.`);
+            return undefined;
         }
 
-        plasmas.shift();
-        return plasmas;
-    }
-
-    function getIndexOfGridIndex(mapHeight: number, gridIndex: GridIndex): number {
-        return gridIndex.x * mapHeight + gridIndex.y;
+        const path          = action.path as MovePath;
+        const launchUnitId  = action.launchUnitId;
+        const pathNodes     = path.nodes;
+        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption, });
+        unitMap.setUnitOnMap(focusUnit);
+        focusUnit.setActionState(UnitActionState.Acted);
     }
 }

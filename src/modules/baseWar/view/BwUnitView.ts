@@ -142,7 +142,7 @@ namespace TinyWars.BaseWar {
             const playerIndex           = unit.getPlayerIndex();
             const playerIndexMod        = playerIndex % 2;
             const unitType              = unit.getType();
-            const watcherTeamIndexes    = war.getPlayerManager().getWatcherTeamIndexesForSelf();
+            const watcherTeamIndexes    = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
             const isAlwaysVisible       = watcherTeamIndexes.has(unit.getTeamIndex());
             const tween                 = egret.Tween.get(this);
             if (isAlwaysVisible) {
@@ -309,7 +309,7 @@ namespace TinyWars.BaseWar {
                         this._getFramesForStateAnimation().push(`${this._getImageSourcePrefix(this._getIsDark())}_t99_s06_f${Helpers.getNumText(unitPlayerIndex)}`);
                     }
                 } else {
-                    if (!war.getPlayerManager().getWatcherTeamIndexesForSelf().has(unit.getTeamIndex())) {
+                    if (!war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(unit.getTeamIndex())) {
                         this._getFramesForStateAnimation().push(`${this._getImageSourcePrefix(this._getIsDark())}_t99_s06_f${Helpers.getNumText(unitPlayerIndex)}`);
                     } else {
                         if (unit.getLoadedUnitsCount() > 0) {

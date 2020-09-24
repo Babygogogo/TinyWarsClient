@@ -48,7 +48,7 @@ namespace TinyWars.MultiCustomRoom {
             ];
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.SMcrJoinWar,        callback: this._onNotifySMcrJoinWar },
+                { type: Notify.Type.SMcrJoinRoom,       callback: this._onNotifySMcrJoinWar },
             ];
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
         }
@@ -82,7 +82,7 @@ namespace TinyWars.MultiCustomRoom {
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
             const data      = McrModel.getJoinWarData();
             const callback1 = () => {
-                McrProxy.reqJoin(data);
+                McrProxy.reqMcrJoinRoom(data);
 
                 this._btnConfirm.enabled = false;
                 this._resetTimeoutForBtnConfirm();
@@ -115,21 +115,9 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onNotifySMcrJoinWar(e: egret.Event): void {
-            const data  = e.data as ProtoTypes.IS_McrJoinWar;
-            const warId = data.warId;
-            FloatText.show(Lang.getText(warId != null ? Lang.Type.A0019 : Lang.Type.A0018));
+            FloatText.show(Lang.getText(Lang.Type.A0018));
             this.close();
             McrJoinMapListPanel.show();
-
-            if (data.isSelfInTurn) {
-                CommonConfirmPanel.show({
-                    title   : Lang.getText(Lang.Type.B0088),
-                    content : Lang.getText(Lang.Type.A0116),
-                    callback: () => {
-                        McrProxy.reqContinueWar(warId);
-                    },
-                });
-            }
         }
 
         private _resetTimeoutForBtnConfirm(): void {

@@ -123,12 +123,12 @@ namespace TinyWars.MultiCustomWar {
             this._updateComponentsForLanguage();
         }
         private _onNotifySScrCreateCustomWar(e: egret.Event): void {
-            const data = e.data as ProtoTypes.IS_ScrCreateCustomWar;
+            const data = e.data as ProtoTypes.NetMessage.IS_ScrCreateCustomWar;
             Common.CommonConfirmPanel.show({
                 title   : Lang.getText(Lang.Type.B0088),
                 content : Lang.getText(Lang.Type.A0107),
                 callback: () => {
-                    FlowManager.gotoSingleCustomWar(data.warData as Types.SerializedWar);
+                    FlowManager.gotoSingleCustomWar(data.warData);
                 },
             });
         }
@@ -195,16 +195,8 @@ namespace TinyWars.MultiCustomWar {
         }
 
         private _updateListWarInfo(): void {
-            const war                   = this._war;
-            const incomeModifier        = war.getSettingsIncomeMultiplier();
-            const energyGrowthModifier  = war.getSettingsEnergyGrowthMultiplier();
-            const initialEnergy         = war.getSettingsInitialEnergyPercentage();
-            const moveRangeModifier     = war.getSettingsMoveRangeModifier();
-            const attackPowerModifier   = war.getSettingsAttackPowerModifier();
-            const visionRangeModifier   = war.getSettingsVisionRangeModifier();
-            const luckLowerLimit        = war.getSettingsLuckLowerLimit();
-            const luckUpperLimit        = war.getSettingsLuckUpperLimit();
-            const dataList              : DataForInfoRenderer[] = [
+            const war       = this._war;
+            const dataList  : DataForInfoRenderer[] = [
                 {
                     titleText   : Lang.getText(Lang.Type.B0226),
                     infoText    : `${war.getWarId()}`,
@@ -214,46 +206,6 @@ namespace TinyWars.MultiCustomWar {
                     titleText   : Lang.getText(Lang.Type.B0091),
                     infoText    : `${war.getTurnManager().getTurnIndex() + 1} (${Lang.getText(Lang.Type.B0090)}: ${war.getExecutedActionsCount() + 1})`,
                     infoColor   : 0xFFFFFF,
-                },
-                {
-                    titleText   : Lang.getText(Lang.Type.B0179),
-                    infoText    : `${incomeModifier}%`,
-                    infoColor   : getTextColor(incomeModifier, CommonConstants.WarRuleIncomeMultiplierDefault),
-                },
-                {
-                    titleText   : Lang.getText(Lang.Type.B0180),
-                    infoText    : `${initialEnergy}%`,
-                    infoColor   : getTextColor(initialEnergy, CommonConstants.WarRuleInitialEnergyDefault),
-                },
-                {
-                    titleText   : Lang.getText(Lang.Type.B0181),
-                    infoText    : `${energyGrowthModifier}%`,
-                    infoColor   : getTextColor(energyGrowthModifier, CommonConstants.WarRuleEnergyGrowthMultiplierDefault),
-                },
-                {
-                    titleText   : Lang.getText(Lang.Type.B0182),
-                    infoText    : `${moveRangeModifier}`,
-                    infoColor   : getTextColor(moveRangeModifier, CommonConstants.WarRuleMoveRangeModifierDefault),
-                },
-                {
-                    titleText   : Lang.getText(Lang.Type.B0183),
-                    infoText    : `${attackPowerModifier}%`,
-                    infoColor   : getTextColor(attackPowerModifier, CommonConstants.WarRuleOffenseBonusDefault),
-                },
-                {
-                    titleText   : Lang.getText(Lang.Type.B0184),
-                    infoText    : `${visionRangeModifier}`,
-                    infoColor   : getTextColor(visionRangeModifier, CommonConstants.WarRuleVisionRangeModifierDefault),
-                },
-                {
-                    titleText   : Lang.getText(Lang.Type.B0189),
-                    infoText    : `${luckLowerLimit}%`,
-                    infoColor   : getTextColor(luckLowerLimit, CommonConstants.WarRuleLuckDefaultLowerLimit),
-                },
-                {
-                    titleText   : Lang.getText(Lang.Type.B0190),
-                    infoText    : `${luckUpperLimit}%`,
-                    infoColor   : getTextColor(luckUpperLimit, CommonConstants.WarRuleLuckDefaultUpperLimit),
                 },
             ];
             this._listWarInfo.bindData(dataList);
@@ -578,13 +530,13 @@ namespace TinyWars.MultiCustomWar {
             this._listInfo.setItemRenderer(InfoRenderer);
         }
 
-        protected dataChanged(): void {
+        protected async dataChanged(): Promise<void> {
             super.dataChanged();
 
             const data                  = this.data as DataForPlayerRenderer;
             const war                   = data.war;
             const player                = data.player;
-            this._labelName.text        = player.getNickname();
+            this._labelName.text        = await player.getNickname();
             this._labelName.textColor   = player === war.getPlayerInTurn() ? 0x00FF00 : 0xFFFFFF;
             this._labelForce.text       = `${Lang.getPlayerForceName(player.getPlayerIndex())}`
                 + `  ${Lang.getPlayerTeamName(player.getTeamIndex())}`
@@ -604,14 +556,23 @@ namespace TinyWars.MultiCustomWar {
             const data          = this.data as DataForPlayerRenderer;
             const war           = data.war;
             const player        = data.player;
-            const isInfoKnown   = (!war.getFogMap().checkHasFogCurrently())
-                || (war.getPlayerManager().getWatcherTeamIndexes(User.UserModel.getSelfUserId()).has(player.getTeamIndex()));
+            const isInfoKnown   = (!war.getFogMap().checkHasFogCurrently()) || (war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(player.getTeamIndex()));
             return [
                 this._createDataFund(war, player, isInfoKnown),
                 this._createDataBuildings(war, player, isInfoKnown),
                 this._createDataCoName(war, player, isInfoKnown),
                 this._createDataEnergy(war, player, isInfoKnown),
                 this._createDataUnitAndValue(war, player, isInfoKnown),
+
+                this._createDataInitialFund(war, player, isInfoKnown),
+                this._createDataIncomeMultiplier(war, player, isInfoKnown),
+                this._createDataInitialEnergy(war, player, isInfoKnown),
+                this._createDataEnergyGrowthMultiplier(war, player, isInfoKnown),
+                this._createDataMoveRangeModifier(war, player, isInfoKnown),
+                this._createDataAttackPowerModifier(war, player, isInfoKnown),
+                this._createDataVisionRangeModifier(war, player, isInfoKnown),
+                this._createDataLuckLowerLimit(war, player, isInfoKnown),
+                this._createDataLuckUpperLimit(war, player, isInfoKnown),
             ];
         }
         private _createDataFund(
@@ -666,7 +627,7 @@ namespace TinyWars.MultiCustomWar {
                 : skillType === Types.CoSkillType.Power ? "COP" : "SCOP";
             return {
                 titleText               : Lang.getText(Lang.Type.B0159),
-                infoText                : `${player.getCoUnitId() == null ? `--` : currEnergyText} / ${powerEnergy == null ? "--" : powerEnergy} / ${superPowerEnergy == null ? "--" : superPowerEnergy}`,
+                infoText                : `${currValue == null ? `--` : currEnergyText} / ${powerEnergy == null ? "--" : powerEnergy} / ${superPowerEnergy == null ? "--" : superPowerEnergy}`,
                 infoColor               : 0xFFFFFF,
             };
         }
@@ -680,6 +641,139 @@ namespace TinyWars.MultiCustomWar {
                 titleText               : Lang.getText(Lang.Type.B0160),
                 infoText                : `${unitsCountAndValue.count} / ${unitsCountAndValue.value}${isInfoKnown ? `` : `  ?`}`,
                 infoColor               : 0xFFFFFF,
+            };
+        }
+        private _createDataInitialFund(
+            war         : McwWar,
+            player      : McwPlayer,
+            isInfoKnown : boolean,
+        ): DataForInfoRenderer {
+            const playerIndex   = player.getPlayerIndex();
+            const currValue     = war.getSettingsInitialFund(playerIndex);
+            return {
+                titleText               : Lang.getText(Lang.Type.B0178),
+                infoText                : `${currValue}`,
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault),
+            };
+        }
+        private _createDataIncomeMultiplier(
+            war         : McwWar,
+            player      : McwPlayer,
+            isInfoKnown : boolean,
+        ): DataForInfoRenderer {
+            const playerIndex   = player.getPlayerIndex();
+            const currValue     = war.getSettingsIncomeMultiplier(playerIndex);
+            const maxValue      = CommonConstants.WarRuleIncomeMultiplierMaxLimit;
+            const minValue      = CommonConstants.WarRuleIncomeMultiplierMinLimit;
+            return {
+                titleText               : Lang.getText(Lang.Type.B0179),
+                infoText                : `${currValue}%`,
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault),
+            };
+        }
+        private _createDataInitialEnergy(
+            war         : McwWar,
+            player      : McwPlayer,
+            isInfoKnown : boolean,
+        ): DataForInfoRenderer {
+            const playerIndex   = player.getPlayerIndex();
+            const currValue     = war.getSettingsInitialEnergyPercentage(playerIndex);
+            const minValue      = CommonConstants.WarRuleInitialEnergyMinLimit;
+            const maxValue      = CommonConstants.WarRuleInitialEnergyMaxLimit;
+            return {
+                titleText               : Lang.getText(Lang.Type.B0180),
+                infoText                : `${currValue}%`,
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialEnergyDefault),
+            };
+        }
+        private _createDataEnergyGrowthMultiplier(
+            war         : McwWar,
+            player      : McwPlayer,
+            isInfoKnown : boolean,
+        ): DataForInfoRenderer {
+            const playerIndex   = player.getPlayerIndex();
+            const currValue     = war.getSettingsEnergyGrowthMultiplier(playerIndex);
+            const minValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit;
+            const maxValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit;
+            return {
+                titleText               : Lang.getText(Lang.Type.B0181),
+                infoText                : `${currValue}%`,
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault),
+            };
+        }
+        private _createDataMoveRangeModifier(
+            war         : McwWar,
+            player      : McwPlayer,
+            isInfoKnown : boolean,
+        ): DataForInfoRenderer {
+            const playerIndex   = player.getPlayerIndex();
+            const currValue     = war.getSettingsMoveRangeModifier(playerIndex);
+            const minValue      = CommonConstants.WarRuleMoveRangeModifierMinLimit;
+            const maxValue      = CommonConstants.WarRuleMoveRangeModifierMaxLimit;
+            return {
+                titleText               : Lang.getText(Lang.Type.B0182),
+                infoText                : `${currValue}`,
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault),
+            };
+        }
+        private _createDataAttackPowerModifier(
+            war         : McwWar,
+            player      : McwPlayer,
+            isInfoKnown : boolean,
+        ): DataForInfoRenderer {
+            const playerIndex   = player.getPlayerIndex();
+            const currValue     = war.getSettingsAttackPowerModifier(playerIndex);
+            const minValue      = CommonConstants.WarRuleOffenseBonusMinLimit;
+            const maxValue      = CommonConstants.WarRuleOffenseBonusMaxLimit;
+            return {
+                titleText               : Lang.getText(Lang.Type.B0183),
+                infoText                : `${currValue}%`,
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault),
+            };
+        }
+        private _createDataVisionRangeModifier(
+            war         : McwWar,
+            player      : McwPlayer,
+            isInfoKnown : boolean,
+        ): DataForInfoRenderer {
+            const playerIndex   = player.getPlayerIndex();
+            const currValue     = war.getSettingsVisionRangeModifier(playerIndex);
+            const minValue      = CommonConstants.WarRuleVisionRangeModifierMinLimit;
+            const maxValue      = CommonConstants.WarRuleVisionRangeModifierMaxLimit;
+            return {
+                titleText               : Lang.getText(Lang.Type.B0184),
+                infoText                : `${currValue}`,
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault),
+            };
+        }
+        private _createDataLuckLowerLimit(
+            war         : McwWar,
+            player      : McwPlayer,
+            isInfoKnown : boolean,
+        ): DataForInfoRenderer {
+            const playerIndex   = player.getPlayerIndex();
+            const currValue     = war.getSettingsLuckLowerLimit(playerIndex);
+            const minValue      = CommonConstants.WarRuleLuckMinLimit;
+            const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
+            return {
+                titleText               : Lang.getText(Lang.Type.B0189),
+                infoText                : `${currValue}%`,
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit),
+            };
+        }
+        private _createDataLuckUpperLimit(
+            war         : McwWar,
+            player      : McwPlayer,
+            isInfoKnown : boolean,
+        ): DataForInfoRenderer {
+            const playerIndex   = player.getPlayerIndex();
+            const currValue     = war.getSettingsLuckUpperLimit(playerIndex);
+            const minValue      = CommonConstants.WarRuleLuckMinLimit;
+            const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
+            return {
+                titleText               : Lang.getText(Lang.Type.B0190),
+                infoText                : `${currValue}%`,
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit),
             };
         }
 
@@ -696,7 +790,7 @@ namespace TinyWars.MultiCustomWar {
         }
 
         private _getUnitsCountAndValue(war: McwWar, playerIndex: number): { count: number, value: number } {
-            const teamIndexes   = war.getPlayerManager().getWatcherTeamIndexes(User.UserModel.getSelfUserId());
+            const teamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
             const unitMap       = war.getUnitMap();
             let count           = 0;
             let value           = 0;

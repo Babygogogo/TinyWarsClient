@@ -152,8 +152,8 @@ namespace TinyWars.MultiCustomWar {
                     unitList.push(unitOnMap);
 
                     const war = this._war;
-                    if ((!war.getFogMap().checkHasFogCurrently()) ||
-                        (war.getWatcherTeamIndexes(User.UserModel.getSelfUserId()).has(unitOnMap.getTeamIndex()))
+                    if ((!war.getFogMap().checkHasFogCurrently())                                               ||
+                        (war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(unitOnMap.getTeamIndex()))
                     ) {
                         for (const loadedUnit of this._unitMap.getUnitsLoadedByLoader(unitOnMap, true)) {
                             unitList.push(loadedUnit as McwUnit);

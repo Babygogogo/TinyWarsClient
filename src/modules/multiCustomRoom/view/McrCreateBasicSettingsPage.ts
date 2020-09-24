@@ -52,7 +52,7 @@ namespace TinyWars.MultiCustomRoom {
         private _labelCoName        : GameUi.UiLabel;
         private _btnChangeCo        : GameUi.UiButton;
 
-        protected _mapExtraData: ProtoTypes.IMapExtraData;
+        private _mapRawData : ProtoTypes.Map.IMapRawData;
 
         public constructor() {
             super();
@@ -86,7 +86,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         protected async _onOpened(): Promise<void> {
-            this._mapExtraData = await McrModel.getCreateWarMapExtraData();
+            this._mapRawData = await McrModel.getCreateWarMapExtraData();
 
             this._updateComponentsForLanguage();
             this._updateComponentsForWarRule();
@@ -167,7 +167,7 @@ namespace TinyWars.MultiCustomRoom {
 
             const index = McrModel.getCreateWarWarRuleIndex();
             if (index != null) {
-                McrModel.setCreateWarTeamIndex((await WarMapModel.getPlayerRule(McrModel.getCreateWarMapFileName(), index, McrModel.getCreateWarPlayerIndex())).teamIndex);
+                McrModel.setCreateWarTeamIndex((await WarMapModel.getPlayerRule(McrModel.getCreateRoomMapId(), index, McrModel.getCreateWarPlayerIndex())).teamIndex);
                 this._updateLabelTeam();
             }
         }
@@ -279,8 +279,8 @@ namespace TinyWars.MultiCustomRoom {
 
         private async _onTouchedBtnBuildings(e: egret.TouchEvent): Promise<void> {
             McrBuildingListPanel.show({
-                configVersion   : McrModel.getCreateWarData().configVersion,
-                mapRawData      : await WarMapModel.getRawData(McrModel.getCreateWarMapFileName()) as Types.MapRawData,
+                configVersion   : McrModel.getCreateWarData().settingsForCommon.configVersion,
+                mapRawData      : await WarMapModel.getRawData(McrModel.getCreateRoomMapId()),
             });
         }
 
@@ -322,8 +322,8 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _updateLabelMapName(): void {
-            WarMapModel.getMapNameInCurrentLanguage(this._mapExtraData.mapFileName).then(v =>
-                this._labelMapName.text = `${v} (${this._mapExtraData.playersCount}P)`
+            WarMapModel.getMapNameInCurrentLanguage(this._mapRawData.mapId).then(v =>
+                this._labelMapName.text = `${v} (${this._mapRawData.playersCount}P)`
             );
         }
 
@@ -333,20 +333,20 @@ namespace TinyWars.MultiCustomRoom {
             if (index == null) {
                 label.text = Lang.getText(Lang.Type.B0321);
             } else {
-                const rule  = (await McrModel.getCreateWarMapRawData()).warRuleList[index];
-                label.text  = Lang.getLanguageType() === Types.LanguageType.Chinese
-                    ? rule.ruleName
-                    : rule.ruleNameEnglish;
+                const ruleNameList  = (await McrModel.getCreateWarMapRawData()).warRuleList[index].ruleNameList;
+                label.text          = Lang.getLanguageType() === Types.LanguageType.Chinese
+                    ? ruleNameList[0]
+                    : ruleNameList[1] || ruleNameList[0];
             }
         }
 
         private _updateLabelPlayerIndex(): void {
             const index = McrModel.getCreateWarPlayerIndex();
-            this._labelPlayerIndex.text = `${index} (${Helpers.getColorTextForPlayerIndex(index)})`;
+            this._labelPlayerIndex.text = `${index} (${Lang.getPlayerForceName(index)})`;
         }
 
         private _updateLabelTeam(): void {
-            this._labelTeam.text = Helpers.getTeamText(McrModel.getCreateWarTeamIndex());
+            this._labelTeam.text = Lang.getPlayerTeamName(McrModel.getCreateWarTeamIndex());
         }
 
         private _updateImgHasFog(): void {

@@ -26,12 +26,12 @@ namespace TinyWars.SingleCustomWar {
             return playerIndexes;
         }
 
-        public getWatcherTeamIndexesForSelf(): Set<number> {
+        public getAliveWatcherTeamIndexesForSelf(): Set<number> {
             const humanPlayers = this.getHumanPlayers();
             if (!humanPlayers.length) {
                 return this.getAliveTeamIndexes(false);
             } else {
-                return this.getWatcherTeamIndexes(User.UserModel.getSelfUserId());
+                return this.getAliveWatcherTeamIndexes(User.UserModel.getSelfUserId());
                 // const player = this.getPlayerInTurn();
                 // if (player.getUserId() != null) {
                 //     return new Set<number>([player.getTeamIndex()]);

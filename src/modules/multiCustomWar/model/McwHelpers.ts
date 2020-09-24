@@ -95,7 +95,7 @@ namespace TinyWars.MultiCustomWar.McwHelpers {
     }
 
     export function updateTilesAndUnitsOnVisibilityChanged(war: BwWar): void {
-        const watcherTeamIndexes    = war.getPlayerManager().getWatcherTeamIndexesForSelf();
+        const watcherTeamIndexes    = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
         const visibleUnitsOnMap     = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, watcherTeamIndexes);
         war.getUnitMap().forEachUnitOnMap(unit => {
             if (visibleUnitsOnMap.has(unit)) {

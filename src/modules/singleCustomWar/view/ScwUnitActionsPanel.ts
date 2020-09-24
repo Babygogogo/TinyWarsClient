@@ -88,11 +88,12 @@ namespace TinyWars.SingleCustomWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
             const war           = ScwModel.getWar();
+            const unitMap       = war.getUnitMap();
             const dataForList   = [] as DataForUnitActionRenderer[];
             for (const data of this._openData) {
                 const unitForProduce = data.produceUnitType == null
                     ? undefined
-                    : new ScwUnit().init({
+                    : (new (unitMap.getUnitClass())).init({
                         gridIndex   : { x: -1, y: -1 },
                         unitId      : -1,
                         unitType    : data.produceUnitType,

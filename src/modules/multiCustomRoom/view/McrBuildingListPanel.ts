@@ -1,13 +1,13 @@
 
 namespace TinyWars.MultiCustomRoom {
-    import Notify   = Utility.Notify;
-    import Lang     = Utility.Lang;
-    import Types    = Utility.Types;
-    import Helpers  = Utility.Helpers;
+    import Notify       = Utility.Notify;
+    import Lang         = Utility.Lang;
+    import Types        = Utility.Types;
+    import ProtoTypes   = Utility.ProtoTypes;
 
     type OpenDataForMcrBuildingListPanel = {
         configVersion   : string;
-        mapRawData      : Types.MapRawData;
+        mapRawData      : ProtoTypes.Map.IMapRawData;
     }
 
     export class McrBuildingListPanel extends GameUi.UiPanel {

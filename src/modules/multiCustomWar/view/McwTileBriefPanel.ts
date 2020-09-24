@@ -147,7 +147,13 @@ namespace TinyWars.MultiCustomWar {
 
                 const gridIndex = this._cursor.getGridIndex();
                 const tile      = this._tileMap.getTile(gridIndex);
-                this._tileView.setData(tile).startRunningView();
+                const tileView  = this._tileView;
+                tileView.setData({
+                    tileData    : tile.serialize(),
+                    hasFog      : tile.getHasFog(),
+                    skinId      : tile.getSkinId(),
+                });
+                tileView.updateView();
                 this._labelDefense.text     = `${Math.floor(tile.getDefenseAmount() / 10)}`;
                 this._labelName.text        = Lang.getTileName(tile.getType());
                 this._labelGridIndex.text   = `x${gridIndex.x} y${gridIndex.y}`;

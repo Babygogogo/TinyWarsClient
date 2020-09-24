@@ -9,11 +9,13 @@ namespace TinyWars.MultiCustomWar.McwProxy {
     import GridIndex    = Types.GridIndex;
     import UnitType     = Types.UnitType;
     import BwWar        = BaseWar.BwWar;
+    import NetMessage   = ProtoTypes.NetMessage;
 
     export function init(): void {
         NetManager.addListeners([
             { msgCode: Codes.S_McwCommonBroadcastGameStart, callback: _onSMcwCommonBroadcastGameStart },
             { msgCode: Codes.S_McwCommonHandleBoot,         callback: _onSMcwCommonHandleBoot },
+            { msgCode: Codes.S_McwCommonContinueWar,        callback: _onSMcwCommonContinueWar },
             { msgCode: Codes.S_McwPlayerSyncWar,            callback: _onSMcwPlayerSyncWar, },
             { msgCode: Codes.S_McwPlayerBeginTurn,          callback: _onSMcwPlayerBeginTurn, },
             { msgCode: Codes.S_McwPlayerDeleteUnit,         callback: _onSMcwPlayerDeleteUnit },
@@ -21,7 +23,8 @@ namespace TinyWars.MultiCustomWar.McwProxy {
             { msgCode: Codes.S_McwPlayerProduceUnit,        callback: _onSMcwPlayerProduceUnit },
             { msgCode: Codes.S_McwPlayerSurrender,          callback: _onSMcwPlayerSurrender },
             { msgCode: Codes.S_McwPlayerVoteForDraw,        callback: _onSMcwPlayerVoteForDraw },
-            { msgCode: Codes.S_McwUnitAttack,               callback: _onSMcwUnitAttack },
+            { msgCode: Codes.S_McwUnitAttackUnit,           callback: _onSMcwUnitAttackUnit },
+            { msgCode: Codes.S_McwUnitAttackTile,           callback: _onSMcwUnitAttackTile },
             { msgCode: Codes.S_McwUnitBeLoaded,             callback: _onSMcwUnitBeLoaded },
             { msgCode: Codes.S_McwUnitBuildTile,            callback: _onSMcwUnitBuildTile },
             { msgCode: Codes.S_McwUnitCaptureTile,          callback: _onSMcwUnitCaptureTile },
@@ -40,16 +43,33 @@ namespace TinyWars.MultiCustomWar.McwProxy {
     }
 
     function _onSMcwCommonBroadcastGameStart(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_McwCommonBroadcastGameStart;
+        const data = e.data as NetMessage.IS_McwCommonBroadcastGameStart;
         Lang.getGameStartDesc(data).then(desc => {
             Common.CommonConfirmPanel.show({
                 title   : Lang.getText(Lang.Type.B0392),
                 content : desc,
                 callback: () => {
-                    MultiCustomRoom.McrProxy.reqContinueWar(data.warId);
+                    reqMcwCommonContinueWar(data.warId);
                 },
             });
         });
+    }
+
+    export function reqMcwCommonContinueWar(warId: number): void {
+        NetManager.send({
+            C_McwCommonContinueWar: {
+                warId,
+            },
+        });
+    }
+    function _onSMcwCommonContinueWar(e: egret.Event): void {
+        const data = e.data as NetMessage.IS_McwCommonContinueWar;
+        if (data.errorCode) {
+            Notify.dispatch(Notify.Type.SMcwCommonContinueWarFailed, data);
+        } else {
+            Utility.FlowManager.gotoMultiCustomWar(data.war);
+            Notify.dispatch(Notify.Type.SMcwCommonContinueWar, data);
+        }
     }
 
     export function reqMcwCommonHandleBoot(warId: number): void {
@@ -60,7 +80,7 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         });
     }
     function _onSMcwCommonHandleBoot(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_McwCommonHandleBoot;
+        const data = e.data as NetMessage.IS_McwCommonHandleBoot;
         if (!data.errorCode) {
             Notify.dispatch(Notify.Type.SMcwCommonHandleBoot, data);
         }
@@ -69,14 +89,14 @@ namespace TinyWars.MultiCustomWar.McwProxy {
     export function reqMcwPlayerSyncWar(war: BwWar, requestType: Types.SyncWarRequestType): void {
         NetManager.send({
             C_McwPlayerSyncWar: {
-                warId       : war.getWarId(),
-                nextActionId: war.getExecutedActionsCount(),
+                warId               : war.getWarId(),
+                executedActionsCount: war.getExecutedActionsCount(),
                 requestType,
             },
         });
     }
     function _onSMcwPlayerSyncWar(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_McwPlayerSyncWar;
+        const data = e.data as NetMessage.IS_McwPlayerSyncWar;
         if (!data.errorCode) {
             McwModel.updateOnPlayerSyncWar(data);
             Notify.dispatch(Notify.Type.SMcwPlayerSyncWar);
@@ -92,9 +112,9 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         });
     }
     function _onSMcwPlayerBeginTurn(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_McwPlayerBeginTurn;
+        const data = e.data as NetMessage.IS_McwPlayerBeginTurn;
         if (!data.errorCode) {
-            McwModel.updateOnPlayerBeginTurn(data);
+            McwModel.updateByActionContainer(data.actionContainer, data.warId);
             Notify.dispatch(Notify.Type.SMcwPlayerBeginTurn, data);
         }
     }
@@ -109,9 +129,9 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         });
     }
     function _onSMcwPlayerDeleteUnit(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_McwPlayerDeleteUnit;
+        const data = e.data as NetMessage.IS_McwPlayerDeleteUnit;
         if (!data.errorCode) {
-            McwModel.updateOnPlayerDeleteUnit(data);
+            McwModel.updateByActionContainer(data.actionContainer, data.warId);
             Notify.dispatch(Notify.Type.SMcwPlayerDeleteUnit);
         }
     }
@@ -125,9 +145,9 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         });
     }
     function _onSMcwPlayerEndTurn(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_McwPlayerEndTurn;
+        const data = e.data as NetMessage.IS_McwPlayerEndTurn;
         if (!data.errorCode) {
-            McwModel.updateOnPlayerEndTurn(data);
+            McwModel.updateByActionContainer(data.actionContainer, data.warId);
             Notify.dispatch(Notify.Type.SMcwPlayerEndTurn, data);
         }
     }
@@ -144,9 +164,9 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         });
     }
     function _onSMcwPlayerProduceUnit(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_McwPlayerProduceUnit;
+        const data = e.data as NetMessage.IS_McwPlayerProduceUnit;
         if (!data.errorCode) {
-            McwModel.updateOnPlayerProduceUnit(data);
+            McwModel.updateByActionContainer(data.actionContainer, data.warId);
             Notify.dispatch(Notify.Type.SMcwPlayerProduceUnit);
         }
     }
@@ -161,9 +181,9 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         })
     }
     function _onSMcwPlayerSurrender(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_McwPlayerSurrender;
+        const data = e.data as NetMessage.IS_McwPlayerSurrender;
         if (!data.errorCode) {
-            McwModel.updateOnPlayerSurrender(data);
+            McwModel.updateByActionContainer(data.actionContainer, data.warId);
             Notify.dispatch(Notify.Type.SMcwPlayerSurrender);
         }
     }
@@ -178,16 +198,16 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         });
     }
     function _onSMcwPlayerVoteForDraw(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_McwPlayerVoteForDraw;
+        const data = e.data as NetMessage.IS_McwPlayerVoteForDraw;
         if (!data.errorCode) {
-            McwModel.updateOnPlayerVoteForDraw(data);
+            McwModel.updateByActionContainer(data.actionContainer, data.warId);
             Notify.dispatch(Notify.Type.SMcwPlayerVoteForDraw);
         }
     }
 
     export function reqMcwUnitAttack(war: BwWar, path: GridIndex[], launchUnitId: number | undefined, targetGridIndex: GridIndex): void {
         NetManager.send({
-            C_McwUnitAttack: {
+            C_McwUnitAttackUnit: {
                 warId       : war.getWarId(),
                 actionId    : war.getExecutedActionsCount(),
                 path,
@@ -196,10 +216,29 @@ namespace TinyWars.MultiCustomWar.McwProxy {
             },
         });
     }
-    function _onSMcwUnitAttack(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_McwUnitAttack;
+    function _onSMcwUnitAttackUnit(e: egret.Event): void {
+        const data = e.data as NetMessage.IS_McwUnitAttackUnit;
         if (!data.errorCode) {
-            McwModel.updateOnUnitAttack(data);
+            McwModel.updateByActionContainer(data.actionContainer, data.warId);
+            Notify.dispatch(Notify.Type.SMcwUnitAttack);
+        }
+    }
+
+    export function reqMcwUnitAttackTile(war: BwWar, path: GridIndex[], launchUnitId: number | undefined, targetGridIndex: GridIndex): void {
+        NetManager.send({
+            C_McwUnitAttackTile: {
+                warId       : war.getWarId(),
+                actionId    : war.getExecutedActionsCount(),
+                path,
+                launchUnitId,
+                targetGridIndex,
+            },
+        });
+    }
+    function _onSMcwUnitAttackTile(e: egret.Event): void {
+        const data = e.data as NetMessage.IS_McwUnitAttackTile;
+        if (!data.errorCode) {
+            McwModel.updateByActionContainer(data.actionContainer, data.warId);
             Notify.dispatch(Notify.Type.SMcwUnitAttack);
         }
     }
@@ -215,9 +254,9 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         });
     }
     function _onSMcwUnitBeLoaded(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_McwUnitBeLoaded;
+        const data = e.data as NetMessage.IS_McwUnitBeLoaded;
         if (!data.errorCode) {
-            McwModel.updateOnUnitBeLoaded(data);
+            McwModel.updateByActionContainer(data.actionContainer, data.warId);
             Notify.dispatch(Notify.Type.SMcwUnitBeLoaded);
         }
     }
@@ -233,9 +272,9 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         });
     }
     function _onSMcwUnitBuildTile(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_McwUnitBuildTile;
+        const data = e.data as NetMessage.IS_McwUnitBuildTile;
         if (!data.errorCode) {
-            McwModel.updateOnUnitBuildTile(data);
+            McwModel.updateByActionContainer(data.actionContainer, data.warId);
             Notify.dispatch(Notify.Type.SMcwUnitBuildTile);
         }
     }
@@ -251,9 +290,9 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         });
     }
     function _onSMcwUnitCaptureTile(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_McwUnitCaptureTile;
+        const data = e.data as NetMessage.IS_McwUnitCaptureTile;
         if (!data.errorCode) {
-            McwModel.updateOnUnitCaptureTile(data);
+            McwModel.updateByActionContainer(data.actionContainer, data.warId);
             Notify.dispatch(Notify.Type.SMcwUnitCaptureTile);
         }
     }
@@ -269,9 +308,9 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         });
     }
     function _onSMcwUnitDive(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_McwUnitDive;
+        const data = e.data as NetMessage.IS_McwUnitDive;
         if (!data.errorCode) {
-            McwModel.updateOnUnitDive(data);
+            McwModel.updateByActionContainer(data.actionContainer, data.warId);
             Notify.dispatch(Notify.Type.SMcwUnitDive);
         }
     }
@@ -288,9 +327,9 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         });
     }
     function _onSMcwUnitDrop(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_McwUnitDrop;
+        const data = e.data as NetMessage.IS_McwUnitDrop;
         if (!data.errorCode) {
-            McwModel.updateOnUnitDrop(data);
+            McwModel.updateByActionContainer(data.actionContainer, data.warId);
             Notify.dispatch(Notify.Type.SMcwUnitDrop);
         }
     }
@@ -306,9 +345,9 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         });
     }
     function _onSMcwUnitJoin(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_McwUnitJoin;
+        const data = e.data as NetMessage.IS_McwUnitJoin;
         if (!data.errorCode) {
-            McwModel.updateOnUnitJoin(data);
+            McwModel.updateByActionContainer(data.actionContainer, data.warId);
             Notify.dispatch(Notify.Type.SMcwUnitJoin);
         }
     }
@@ -325,9 +364,9 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         });
     }
     function _onSMcwUnitLaunchFlare(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_McwUnitLaunchFlare;
+        const data = e.data as NetMessage.IS_McwUnitLaunchFlare;
         if (!data.errorCode) {
-            McwModel.updateOnUnitLaunchFlare(data);
+            McwModel.updateByActionContainer(data.actionContainer, data.warId);
             Notify.dispatch(Notify.Type.SMcwUnitLaunchFlare);
         }
     }
@@ -344,9 +383,9 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         });
     }
     function _onSMcwUnitLaunchSilo(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_McwUnitLaunchSilo;
+        const data = e.data as NetMessage.IS_McwUnitLaunchSilo;
         if (!data.errorCode) {
-            McwModel.updateOnUnitLaunchSilo(data);
+            McwModel.updateByActionContainer(data.actionContainer, data.warId);
             Notify.dispatch(Notify.Type.SMcwUnitLaunchSilo);
         }
     }
@@ -362,9 +401,9 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         });
     }
     function _onSMcwUnitLoadCo(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_McwUnitLoadCo;
+        const data = e.data as NetMessage.IS_McwUnitLoadCo;
         if (!data.errorCode) {
-            McwModel.updateOnUnitLoadCo(data);
+            McwModel.updateByActionContainer(data.actionContainer, data.warId);
             Notify.dispatch(Notify.Type.SMcwUnitLoadCo);
         }
     }
@@ -380,9 +419,9 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         });
     }
     function _onSMcwUnitProduceUnit(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_McwUnitProduceUnit;
+        const data = e.data as NetMessage.IS_McwUnitProduceUnit;
         if (!data.errorCode) {
-            McwModel.updateOnUnitProduceUnit(data);
+            McwModel.updateByActionContainer(data.actionContainer, data.warId);
             Notify.dispatch(Notify.Type.SMcwUnitProduceUnit);
         }
     }
@@ -398,9 +437,9 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         });
     }
     function _onSMcwUnitSupply(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_McwUnitSupply;
+        const data = e.data as NetMessage.IS_McwUnitSupply;
         if (!data.errorCode) {
-            McwModel.updateOnUnitSupply(data);
+            McwModel.updateByActionContainer(data.actionContainer, data.warId);
             Notify.dispatch(Notify.Type.SMcwUnitSupply);
         }
     }
@@ -416,9 +455,9 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         });
     }
     function _onSMcwUnitSurface(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_McwUnitSurface;
+        const data = e.data as NetMessage.IS_McwUnitSurface;
         if (!data.errorCode) {
-            McwModel.updateOnUnitSurface(data);
+            McwModel.updateByActionContainer(data.actionContainer, data.warId);
             Notify.dispatch(Notify.Type.SMcwUnitSurface);
         }
     }
@@ -435,9 +474,9 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         });
     }
     function _onSMcwUnitUseCoSkill(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_McwUnitUseCoSkill;
+        const data = e.data as NetMessage.IS_McwUnitUseCoSkill;
         if (!data.errorCode) {
-            McwModel.updateOnUnitUseCoSkill(data);
+            McwModel.updateByActionContainer(data.actionContainer, data.warId);
             Notify.dispatch(Notify.Type.SMcwUnitUseCoSkill);
         }
     }
@@ -453,9 +492,9 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         });
     }
     function _onSMcwUnitWait(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_McwUnitWait;
+        const data = e.data as NetMessage.IS_McwUnitWait;
         if (!data.errorCode) {
-            McwModel.updateOnUnitWait(data);
+            McwModel.updateByActionContainer(data.actionContainer, data.warId);
             Notify.dispatch(Notify.Type.SMcwUnitWait, data);
         }
     }

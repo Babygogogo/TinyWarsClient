@@ -7,7 +7,7 @@ namespace TinyWars.Replay {
             return ReplayPlayer;
         }
 
-        public getWatcherTeamIndexesForSelf(): Set<number> {
+        public getAliveWatcherTeamIndexesForSelf(): Set<number> {
             return this.getAliveTeamIndexes(false);
         }
     }

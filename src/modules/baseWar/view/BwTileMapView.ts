@@ -122,7 +122,7 @@ namespace TinyWars.BaseWar {
             const { width: mapWidth, height: mapHeight }    = tileMap.getMapSize();
             const playerManager                             = war.getPlayerManager();
             const playersCount                              = playerManager.getTotalPlayersCount(false);
-            const watcherTeamIndexes                        = playerManager.getWatcherTeamIndexesForSelf();
+            const watcherTeamIndexes                        = playerManager.getAliveWatcherTeamIndexesForSelf();
             const unitMap                                   = war.getUnitMap();
 
             for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {

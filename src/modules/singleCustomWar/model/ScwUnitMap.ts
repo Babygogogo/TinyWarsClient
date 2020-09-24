@@ -5,7 +5,7 @@ namespace TinyWars.SingleCustomWar {
         protected _getViewClass(): new () => BaseWar.BwUnitMapView {
             return ScwUnitMapView;
         }
-        protected _getUnitClass(): new () => BaseWar.BwUnit {
+        public getUnitClass(): new () => BaseWar.BwUnit {
             return ScwUnit;
         }
     }

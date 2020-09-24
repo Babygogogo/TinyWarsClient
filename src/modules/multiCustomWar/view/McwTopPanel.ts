@@ -222,10 +222,10 @@ namespace TinyWars.MultiCustomWar {
             this._labelTimerTitle.text = Lang.getText(Lang.Type.B0188);
         }
 
-        private _updateLabelPlayer(): void {
+        private async _updateLabelPlayer(): Promise<void> {
             const war                   = this._war;
             const player                = war.getPlayerInTurn();
-            this._labelPlayer.text      = `${player.getNickname()} (${Helpers.getColorTextForPlayerIndex(player.getPlayerIndex())})`;
+            this._labelPlayer.text      = `${await player.getNickname()} (${Lang.getPlayerForceName(player.getPlayerIndex())})`;
             this._labelPlayer.textColor = player === war.getPlayerLoggedIn() ? 0x00FF00 : 0xFFFFFF;
         }
 
@@ -250,7 +250,7 @@ namespace TinyWars.MultiCustomWar {
             const war               = this._war;
             const playerInTurn      = war.getPlayerInTurn();
             if ((war.getFogMap().checkHasFogCurrently())                                                                        &&
-                (!war.getPlayerManager().getWatcherTeamIndexes(User.UserModel.getSelfUserId()).has(playerInTurn.getTeamIndex()))
+                (!war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(playerInTurn.getTeamIndex()))
             ) {
                 this._labelFund.text = `????`;
             } else {
@@ -271,7 +271,8 @@ namespace TinyWars.MultiCustomWar {
                 } else if (skillType === Types.CoSkillType.SuperPower) {
                     this._labelCurrEnergy.text = "SCOP";
                 } else {
-                    this._labelCurrEnergy.text = `${player.getCoUnitId() != null ? player.getCoCurrentEnergy() : `--`}`;
+                    const currentEnergy = player.getCoCurrentEnergy();
+                    this._labelCurrEnergy.text = `${currentEnergy != null ? currentEnergy : `--`}`;
                 }
 
                 const powerEnergy           = player.getCoPowerEnergy();
