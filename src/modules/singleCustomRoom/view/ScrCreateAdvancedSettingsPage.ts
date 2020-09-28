@@ -37,6 +37,7 @@ namespace TinyWars.SingleCustomRoom {
             this._updateComponentsForLanguage();
             this._updateLabelMapName();
             this._updateLabelPlayersCount();
+            this._updateListPlayer();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -61,6 +62,15 @@ namespace TinyWars.SingleCustomRoom {
 
         private _updateLabelPlayersCount(): void {
             this._labelPlayersCount.text = "" + this._mapRawData.playersCount;
+        }
+
+        private _updateListPlayer(): void {
+            const playersCount  = this._mapRawData.playersCount;
+            const dataList      : DataForPlayerRenderer[] = [];
+            for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
+                dataList.push({ playerIndex });
+            }
+            this._listPlayer.bindData(dataList);
         }
     }
 

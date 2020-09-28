@@ -1,6 +1,8 @@
 
 namespace TinyWars.BaseWar.BwSettingsHelper {
+    import ConfigManager        = Utility.ConfigManager;
     import Logger               = Utility.Logger;
+    import Helpers              = Utility.Helpers;
     import ProtoTypes           = Utility.ProtoTypes;
     import WarSettings          = ProtoTypes.WarSettings;
     import ISettingsForCommon   = WarSettings.ISettingsForCommon;
@@ -247,7 +249,50 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
         playerRule.luckUpperLimit = value;
     }
 
-    function getPlayerRule(settingsForCommon: ISettingsForCommon, playerIndex: number): IDataForPlayerRule | undefined {
+    export function getAvailableCoIdList(settingsForCommon: ISettingsForCommon, playerIndex: number): number[] {
+        const playerRule = getPlayerRule(settingsForCommon, playerIndex);
+        if (playerRule == null) {
+            Logger.error(`BwSettingsHelper.getAvailableCoIdList() empty playerRule.`);
+            return undefined;
+        }
+
+        const coIdList = playerRule.availableCoIdList;
+        if ((coIdList == null) || (!coIdList.length)) {
+            Logger.error(`BwSettingsHelper.getAvailableCoIdList() empty coIdList.`);
+            return undefined;
+        }
+
+        return coIdList;
+    }
+    export function addAvailableCoId(settingsForCommon: ISettingsForCommon, playerIndex: number, coId: number): void {
+        const coIdList = getAvailableCoIdList(settingsForCommon, playerIndex);
+        if (coIdList == null) {
+            Logger.error(`BwSettingsHelper.addAvailableCoId() empty coIdList.`);
+            return undefined;
+        }
+
+        if (coIdList.indexOf(coId) < 0) {
+            coIdList.push(coId);
+        }
+    }
+    export function removeAvailableCoId(settingsForCommon: ISettingsForCommon, playerIndex: number, coId: number): void {
+        const coIdList = getAvailableCoIdList(settingsForCommon, playerIndex);
+        if (coIdList == null) {
+            Logger.error(`BwSettingsHelper.removeAvailableCoId() empty coIdList.`);
+            return undefined;
+        }
+
+        while (true) {
+            const index = coIdList.indexOf(coId);
+            if (index >= 0) {
+                coIdList.splice(index, 1);
+            } else {
+                break;
+            }
+        }
+    }
+
+    export function getPlayerRule(settingsForCommon: ISettingsForCommon, playerIndex: number): IDataForPlayerRule | undefined {
         const warRule = settingsForCommon.warRule;
         if (warRule == null) {
             Logger.error(`BwCommonSettingsHelper.getPlayerRule() empty warRule.`);
@@ -269,4 +314,11 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
         return playerRuleDataList.find(v => v.playerIndex === playerIndex);
     }
 
+    export function getRandomCoId(settingsForCommon: ISettingsForCommon, playerIndex: number): number {
+        const configVersion = settingsForCommon.configVersion;
+        return Helpers.pickRandomElement(getPlayerRule(settingsForCommon, playerIndex).availableCoIdList.filter(coId => {
+            const cfg = ConfigManager.getCoBasicCfg(configVersion, coId);
+            return (cfg != null) && (cfg.isEnabled);
+        }));
+    }
 }

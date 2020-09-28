@@ -157,6 +157,14 @@
                         <e:HorizontalLayout gap="10" verticalAlign="middle" />
                     </e:layout>
                 </e:Group>
+                <e:Group height="28" y="10" x="10">
+                    <GameUi:UiButton id="_btnModifyReady" label="已准备就绪" y="0" right="0"
+                                     skinName="Skins.Component.Button.ButtonSelfAdaption001" width="160" />
+                    <GameUi:UiLabel id="_labelReady" text="是" size="16" textColor="0xFFFFFF" x="180" verticalCenter="0" />
+                    <e:layout>
+                        <e:HorizontalLayout gap="10" verticalAlign="middle" />
+                    </e:layout>
+                </e:Group>
                 <e:layout>
                     <e:VerticalLayout/>
                 </e:layout>

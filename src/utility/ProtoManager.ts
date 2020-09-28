@@ -64,7 +64,6 @@ namespace TinyWars.Utility.ProtoManager {
         if (encodedData instanceof ArrayBuffer) {
             return new Uint8Array(encodedData);
         } else {
-            // TODO: fix the type
             return Object.keys(encodedData).map(function(k) {
                 return encodedData[k];
             }) as any as Uint8Array;

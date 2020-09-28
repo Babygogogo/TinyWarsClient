@@ -8,6 +8,7 @@ namespace TinyWars.SingleCustomRoom {
     import Logger                   = Utility.Logger;
     import Helpers                  = Utility.Helpers;
     import WarMapModel              = WarMap.WarMapModel;
+    import BwSettingsHelper         = BaseWar.BwSettingsHelper;
     import IC_ScrCreateWar          = ProtoTypes.NetMessage.IC_ScrCreateWar;
     import IDataForPlayerRule       = ProtoTypes.WarRule.IDataForPlayerRule;
     import IWarPlayerInitialInfo    = ProtoTypes.Structure.IWarPlayerInitialInfo;
@@ -28,15 +29,6 @@ namespace TinyWars.SingleCustomRoom {
     export const MAX_ENERGY_MODIFIER     = 1000;
     export const MIN_ENERGY_MODIFIER     = 0;
     export const DEFAULT_ENERGY_MODIFIER = 0;
-
-    const MOVE_RANGE_MODIFIERS        = [-2, -1, 0, 1, 2];
-    const DEFAULT_MOVE_RANGE_MODIFIER = 0;
-
-    const ATTACK_MODIFIERS        = [-30, -20, -10, 0, 10, 20, 30];
-    const DEFAULT_ATTACK_MODIFIER = 0;
-
-    const VISION_MODIFIERS        = [-2, -1, 0, 1, 2];
-    const DEFAULT_VISION_MODIFIER = 0;
 
     export type DataForCreateWar  = IC_ScrCreateWar;
 
@@ -69,7 +61,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         export function getCreateWarPlayerRule(playerIndex: number): IDataForPlayerRule {
-            return getCreateWarData().settingsForCommon.warRule.ruleForPlayers.playerRuleDataList.find(v => v.playerIndex === playerIndex);
+            return BwSettingsHelper.getPlayerRule(getCreateWarData().settingsForCommon, playerIndex);
         }
         export function getCreateWarPlayerInfo(playerIndex: number): IWarPlayerInitialInfo {
             return getCreateWarData().playerInfoList.find(v => v.playerIndex === playerIndex);
@@ -120,12 +112,13 @@ namespace TinyWars.SingleCustomRoom {
 
         async function resetCreateWarPlayerInfoList(): Promise<void> {
             const playersCount      = (await getCreateWarMapRawData()).playersCount;
+            const settingsForCommon = getCreateWarData().settingsForCommon;
             const list              : ProtoTypes.Structure.IWarPlayerInfo[] = [];
             for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
                 list.push({
                     playerIndex,
                     userId      : playerIndex === 1 ? User.UserModel.getSelfUserId() : null,
-                    coId        : getCreateWarPlayerRule(playerIndex).availableCoIdList[0],
+                    coId        : BwSettingsHelper.getRandomCoId(settingsForCommon, playerIndex),
                 });
             }
 

@@ -107,15 +107,12 @@ namespace TinyWars.MultiCustomRoom {
                         MultiCustomRoom.McrContinueWarListPanel.show();
                     },
                     redChecker  : () => {
-                        const warInfos  = McrModel.getJoinedOngoingInfos();
-                        const userId    = User.UserModel.getSelfUserId();
-                        return (!!warInfos) && (warInfos.some(info => {
-                            const playerIndex = info.playerIndexInTurn!;
-                            return ((playerIndex === 1) && (info.p1UserId === userId))
-                                || ((playerIndex === 2) && (info.p2UserId === userId))
-                                || ((playerIndex === 3) && (info.p3UserId === userId))
-                                || ((playerIndex === 4) && (info.p4UserId === userId));
-                        }));
+                        const warInfoList   = McrModel.getOngoingWarInfoList();
+                        const selfUserId    = User.UserModel.getSelfUserId();
+                        return (!!warInfoList)
+                            && (warInfoList.some(warInfo => {
+                                return warInfo.playerInfoList.find(v => v.playerIndex === warInfo.playerIndexInTurn).userId === selfUserId;
+                            }));
                     },
                 },
                 {

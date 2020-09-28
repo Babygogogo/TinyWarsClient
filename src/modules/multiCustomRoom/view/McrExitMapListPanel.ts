@@ -55,7 +55,7 @@ namespace TinyWars.MultiCustomRoom {
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.SMcrGetJoinedRoomInfoList,  callback: this._onNotifySMcrGetJoinedWaitingInfos },
-                { type: Notify.Type.SMcrExitWar,                callback: this._onNotifySMcrExitWar },
+                { type: Notify.Type.SMcrExitRoom,                callback: this._onNotifySMcrExitWar },
             ];
             this._uiListeners = [
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
@@ -110,8 +110,8 @@ namespace TinyWars.MultiCustomRoom {
             this._updateComponentsForLanguage();
         }
 
-        private _onNotifySMcrGetJoinedWaitingInfos(e: egret.Event): void {
-            const newData        = this._createDataForListWar(McrModel.getJoinedWaitingInfos());
+        private async _onNotifySMcrGetJoinedWaitingInfos(e: egret.Event): Promise<void> {
+            const newData        = this._createDataForListWar(await McrModel.getJoinedRoomInfoList());
             this._dataForListWar = newData;
 
             if (newData.length > 0) {
@@ -141,7 +141,7 @@ namespace TinyWars.MultiCustomRoom {
             if (infos) {
                 for (let i = 0; i < infos.length; ++i) {
                     data.push({
-                        warInfo : infos[i],
+                        roomInfo: infos[i],
                         index   : i,
                         panel   : this,
                     });
@@ -168,15 +168,15 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _showMap(index: number): Promise<void> {
-            const warInfo               = this._dataForListWar[index].warInfo;
-            const settingsForCommon     = warInfo.settingsForCommon;
+            const roomInfo              = this._dataForListWar[index].roomInfo;
+            const settingsForCommon     = roomInfo.settingsForCommon;
             const mapId                 = settingsForCommon.mapId;
             const mapRawData            = await WarMapModel.getRawData(mapId);
             this._labelMapName.text     = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
             this._labelDesigner.text    = Lang.getFormattedText(Lang.Type.F0001, mapRawData.designerName);
             this._labelHasFog.text      = Lang.getFormattedText(Lang.Type.F0005, Lang.getText(settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault ? Lang.Type.B0012 : Lang.Type.B0013));
-            this._labelWarComment.text  = warInfo.settingsForMultiPlayer.warComment || "----";
-            this._listPlayer.bindData(this._createDataForListPlayer(warInfo, mapRawData));
+            this._labelWarComment.text  = roomInfo.settingsForMultiPlayer.warComment || "----";
+            this._listPlayer.bindData(this._createDataForListPlayer(roomInfo, mapRawData));
 
             this._groupInfo.visible      = true;
             this._groupInfo.alpha        = 1;
@@ -209,7 +209,7 @@ namespace TinyWars.MultiCustomRoom {
     }
 
     type DataForWarRenderer = {
-        warInfo : ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
+        roomInfo: ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
         index   : number;
         panel   : McrExitMapListPanel;
     }
@@ -230,14 +230,14 @@ namespace TinyWars.MultiCustomRoom {
             super.dataChanged();
 
             const data          = this.data as DataForWarRenderer;
-            const warInfo       = data.warInfo;
+            const roomInfo      = data.roomInfo;
             this.currentState   = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
 
-            const warName = warInfo.settingsForMultiPlayer.warName;
+            const warName = roomInfo.settingsForMultiPlayer.warName;
             if (warName) {
                 this._labelName.text = warName;
             } else {
-                WarMapModel.getMapNameInCurrentLanguage(warInfo.settingsForCommon.mapId).then(v => this._labelName.text = v);
+                WarMapModel.getMapNameInCurrentLanguage(roomInfo.settingsForCommon.mapId).then(v => this._labelName.text = v);
             }
         }
 
@@ -248,7 +248,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
             const data = this.data as DataForWarRenderer;
-            McrExitDetailPanel.show(data.warInfo);
+            McrRoomInfoPanel.show(data.roomInfo.roomId);
         }
     }
 

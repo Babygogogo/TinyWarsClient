@@ -2,6 +2,8 @@
 namespace TinyWars.MultiCustomRoom {
     import Types            = Utility.Types;
     import Lang             = Utility.Lang;
+    import ConfigManager    = Utility.ConfigManager;
+    import BwSettingsHelper = BaseWar.BwSettingsHelper;
     import CommonHelpPanel  = Common.CommonHelpPanel;
 
     export class McrJoinCoListPanel extends GameUi.UiPanel {
@@ -130,8 +132,8 @@ namespace TinyWars.MultiCustomRoom {
             this._btnBack.label         = Lang.getText(Lang.Type.B0146);
         }
 
-        private _initListCo(): void {
-            this._dataForListCo = this._createDataForListCo();
+        private async _initListCo(): Promise<void> {
+            this._dataForListCo = await this._createDataForListCo();
             this._listCo.bindData(this._dataForListCo);
             this._listCo.scrollVerticalTo(0);
             this.setSelectedIndex(this._dataForListCo.findIndex(data => {
@@ -140,14 +142,15 @@ namespace TinyWars.MultiCustomRoom {
             }));
         }
 
-        private _createDataForListCo(): DataForCoRenderer[] {
-            const data              : DataForCoRenderer[] = [];
-            const bannedCoIdList    = McrModel.getJoinWarRoomInfo().bannedCoIdList || [];
-
-            let index = 0;
-            for (const cfg of Utility.ConfigManager.getAvailableCoList(Utility.ConfigManager.getNewestConfigVersion())) {
-                if (bannedCoIdList.indexOf(cfg.coId) < 0) {
-                    data.push({
+        private async _createDataForListCo(): Promise<DataForCoRenderer[]> {
+            const dataList      : DataForCoRenderer[] = [];
+            const playerIndex   = McrModel.Join.getPlayerIndex();
+            const configVersion = ConfigManager.getNewestConfigVersion();
+            let index           = 0;
+            for (const coId of BwSettingsHelper.getPlayerRule((await McrModel.Join.getRoomInfo()).settingsForCommon, playerIndex).availableCoIdList) {
+                const cfg = ConfigManager.getCoBasicCfg(configVersion, coId);
+                if ((cfg) && (cfg.isEnabled)) {
+                    dataList.push({
                         coBasicCfg  : cfg,
                         index,
                         panel       : this,
@@ -155,12 +158,12 @@ namespace TinyWars.MultiCustomRoom {
                     ++index;
                 }
             }
-            data.push({
+            dataList.push({
                 coBasicCfg  : null,
                 index,
                 panel       : this,
             });
-            return data;
+            return dataList;
         }
 
         private _showCoInfo(data: DataForCoRenderer): void {
@@ -290,7 +293,7 @@ namespace TinyWars.MultiCustomRoom {
             McrJoinCoListPanel.hide();
 
             const cfg = (this.data as DataForCoRenderer).coBasicCfg;
-            McrModel.setJoinWarCoId(cfg ? cfg.coId : null);
+            McrModel.Join.setCoId(cfg ? cfg.coId : null);
             McrJoinSettingsPanel.show();
         }
     }

@@ -70,6 +70,17 @@ namespace TinyWars.Utility.Lang {
         B0380, B0381, B0382, B0383, B0384, B0385, B0386, B0387, B0388, B0389,
         B0390, B0391, B0392, B0393, B0394, B0395, B0396, B0397, B0398, B0399,
 
+        B0400, B0401, B0402, B0403, B0404, B0405, B0406, B0407, B0408, B0409,
+        B0410, B0411, B0412, B0413, B0414, B0415, B0416, B0417, B0418, B0419,
+        B0420, B0421, B0422, B0423, B0424, B0425, B0426, B0427, B0428, B0429,
+        B0430, B0431, B0432, B0433, B0434, B0435, B0436, B0437, B0438, B0439,
+        B0440, B0441, B0442, B0443, B0444, B0445, B0446, B0447, B0448, B0449,
+        B0450, B0451, B0452, B0453, B0454, B0455, B0456, B0457, B0458, B0459,
+        B0460, B0461, B0462, B0463, B0464, B0465, B0466, B0467, B0468, B0469,
+        B0470, B0471, B0472, B0473, B0474, B0475, B0476, B0477, B0478, B0479,
+        B0480, B0481, B0482, B0483, B0484, B0485, B0486, B0487, B0488, B0489,
+        B0490, B0491, B0492, B0493, B0494, B0495, B0496, B0497, B0498, B0499,
+
         B1000, B1001, B1002, B1003, B1004, B1005, B1006, B1007, B1008, B1009,
         B1010, B1011, B1012, B1013, B1014, B1015, B1016, B1017, B1018, B1019,
         B1020, B1021, B1022, B1023, B1024, B1025, B1026, B1027, B1028, B1029,
@@ -175,8 +186,8 @@ namespace TinyWars.Utility.Lang {
             "Joined successfully.",
         ],
         [Type.A0019]: [
-            "已成功加入房间。战局正式开始，请从“继续战斗”入口进入。",
-            "Joined successfully. The war has started.",
+            "该房间已被销毁。",
+            "The room has been destroyed.",
         ],
         [Type.A0020]: [
             `服务器维护中，请稍后登陆`,
@@ -622,6 +633,18 @@ namespace TinyWars.Utility.Lang {
             `要现在就进入战局吗？`,
             `Do you want to play it now?`,
         ],
+        [Type.A0126]: [
+            `您确定要退出此房间吗？`,
+            `Are you sure to exit the room?`,
+        ],
+        [Type.A0127]: [
+            `您已被请出此房间。`,
+            `You have been removed from the room.`,
+        ],
+        [Type.A0128]: [
+            `请先取消您的准备状态`,
+            `Please cancel the "ready" state first.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -643,19 +666,19 @@ namespace TinyWars.Utility.Lang {
             "Advanced Settings",
         ],
         [Type.B0004]: [
-            "红方",
+            "红",
             "Red",
         ],
         [Type.B0005]: [
-            "蓝方",
+            "蓝",
             "Blue",
         ],
         [Type.B0006]: [
-            "黄方",
+            "黄",
             "Yellow",
         ],
         [Type.B0007]: [
-            "黑方",
+            "黑",
             "Black",
         ],
         [Type.B0008]: [
@@ -2198,6 +2221,30 @@ namespace TinyWars.Utility.Lang {
             `超时告负`,
             `Boot`,
         ],
+        [Type.B0397]: [
+            `势力颜色`,
+            `Color`,
+        ],
+        [Type.B0398]: [
+            `房间信息`,
+            `Room Info`,
+        ],
+        [Type.B0399]: [
+            `修改规则`,
+            `Modify Rules`,
+        ],
+        [Type.B0400]: [
+            `删除房间`,
+            `Delete Room`,
+        ],
+        [Type.B0401]: [
+            `开战`,
+            `Start Game`,
+        ],
+        [Type.B0402]: [
+            `准备就绪`,
+            `Ready`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -2677,50 +2724,37 @@ namespace TinyWars.Utility.Lang {
     const RICH_DATA = {
         [RichType.R0000]: [
             [
-                `本选项影响您在回合中的行动顺序。`,
+                `本选项影响您在回合中的行动顺序，以及您所属的队伍（由地图规则设定）`,
                 ``,
-                `本游戏固定了每回合中的行动顺序为：`,
-                `1 红方`,
-                `2 蓝方`,
-                `3 黄方`,
-                `4 黑方`,
-                `其中，2人局不存在黄方和黑方，3人局不存在黑方。`,
-                `每个玩家只能选择其中一项，不能重复。`,
+                `战局中，属于同一队伍的玩家共享视野，部队能够相互穿越，不能相互攻击/装载/用后勤车补给。`,
+                `此外，可以使用队友的建筑来维修/补给自己的部队（消耗自己的金钱），但不能占领队友的建筑。`,
                 ``,
-                `默认为当前可用选项中最靠前的一项。`,
+                `预览地图时，各个势力的颜色与行动顺序的对应关系如下（您可以在创建/加入房间时选择您想要的颜色）：`,
+                `红=1，蓝=2，黄=3，黑=4`,
+                ``,
+                `默认为当前可用选项中的第一项。`,
             ].join("\n"),
 
             [
-                `This option determines your turn order. `,
+                `This option determines your turn order and your team. `,
                 ``,
-                `The turn order this game is listed as below. `,
-                `1st: Red`,
-                `2nd: Blue`,
-                `3rd: Yellow`,
-                `4th: Black`,
-                `Yellow and Black is not available for games with 2 players, while Black is not available for ones with 3 players. `,
+                `In the game players in the same team share the vision. Their troops will not block and attack each other. It is not possible to supply your allies' troops with Rigs or load into allies' transports. `,
+                `You may use allies' properties to repair (use your own funds) and supply your troops and you cannot capture allies' properties`,
                 ``,
-                `By default you will be given the first choice among available ones`,
+                `When previewing the map, the colors of the forces correspond to the order of action as follows (you can choose the color you want when creating/adding rooms)`,
+                `Red = 1, Blue = 2, Yellow = 3, Black = 4`,
+                ``,
+                `By default you will be given the first choice among the available ones.`,
             ].join("\n"),
         ],
 
         [RichType.R0001]: [
             [
-                `本选项规定您所属的队伍。`,
-                ``,
-                `战局中，属于同一队伍的玩家共享视野，部队能够相互穿越，不能相互攻击/装载/用后勤车补给。`,
-                `此外，可以使用队友的建筑来维修/补给自己的部队（消耗自己的金钱），但不能占领队友的建筑。`,
-                ``,
-                `默认为当前未被其他玩家选用的队伍中最靠前的一项。`,
+                `本选项影响您部队和建筑的外观（颜色）。`,
             ].join("\n"),
 
-             [
-                `You can choose your team with this option. `,
-                ``,
-                `In the game players in the same team share the vision. Their troops will not block and attack each other. It is not possible to supply your allies' troops with Rigs or load into allies' transports. `,
-                `You may use allies' properties to repair (use your own funds) and supply your troops and you cannot capture allies' properties`,
-                ``,
-                `By default you got the 1st team with no other members. `,
+            [
+                `This option determines the color of your troops and properties.`,
             ].join("\n"),
         ],
 
@@ -3134,6 +3168,16 @@ namespace TinyWars.Utility.Lang {
             case Types.ChatChannel.PublicEn : return getText(Type.B0373);
             case Types.ChatChannel.PublicCn : return getText(Type.B0384);
             default                         : return null;
+        }
+    }
+
+    export function getUnitAndTileSkinName(skinId: number): string {
+        switch (skinId) {
+            case 1  : return getText(Type.B0004);
+            case 2  : return getText(Type.B0005);
+            case 3  : return getText(Type.B0006);
+            case 4  : return getText(Type.B0007);
+            default : return null;
         }
     }
 

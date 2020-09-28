@@ -2,6 +2,7 @@
 namespace TinyWars.MultiCustomRoom {
     import Types            = Utility.Types;
     import Lang             = Utility.Lang;
+    import ConfigManager    = Utility.ConfigManager;
     import CommonHelpPanel  = Common.CommonHelpPanel;
 
     export class McrCreateCoListPanel extends GameUi.UiPanel {
@@ -142,11 +143,11 @@ namespace TinyWars.MultiCustomRoom {
 
         private _createDataForListCo(): DataForCoRenderer[] {
             const data              : DataForCoRenderer[] = [];
-            const bannedCoIdList    = McrModel.getCreateWarBannedCoIdList();
+            const availableCoIdList = McrModel.Create.getAvailableCoIdList(McrModel.Create.getSelfPlayerIndex());
 
             let index = 0;
-            for (const cfg of Utility.ConfigManager.getAvailableCoList(Utility.ConfigManager.getNewestConfigVersion())) {
-                if (bannedCoIdList.indexOf(cfg.coId) < 0) {
+            for (const cfg of ConfigManager.getAvailableCoList(ConfigManager.getNewestConfigVersion())) {
+                if (availableCoIdList.indexOf(cfg.coId) >= 0) {
                     data.push({
                         coBasicCfg  : cfg,
                         index,
@@ -290,7 +291,7 @@ namespace TinyWars.MultiCustomRoom {
             McrCreateCoListPanel.hide();
 
             const cfg = (this.data as DataForCoRenderer).coBasicCfg;
-            McrModel.setCreateWarCoId(cfg ? cfg.coId : null);
+            McrModel.Create.setSelfCoId(cfg.coId);
             McrCreateSettingsPanel.show();
         }
     }
@@ -309,7 +310,7 @@ namespace TinyWars.MultiCustomRoom {
 
             const data              = this.data as DataForSkillRenderer;
             this._labelIndex.text   = `${data.index}.`;
-            this._labelDesc.text    = Utility.ConfigManager.getCoSkillCfg(Utility.ConfigManager.getNewestConfigVersion(), data.skillId).desc[Lang.getLanguageType()];
+            this._labelDesc.text    = ConfigManager.getCoSkillCfg(ConfigManager.getNewestConfigVersion(), data.skillId).desc[Lang.getLanguageType()];
         }
     }
 }

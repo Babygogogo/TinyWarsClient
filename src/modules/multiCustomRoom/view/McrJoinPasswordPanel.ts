@@ -62,7 +62,7 @@ namespace TinyWars.MultiCustomRoom {
                 McrJoinPasswordPanel.hide();
                 McrJoinMapListPanel.hide();
 
-                await McrModel.resetJoinWarData(this._openData);
+                await McrModel.Join.resetData(this._openData);
                 McrJoinSettingsPanel.show();
             }
         }

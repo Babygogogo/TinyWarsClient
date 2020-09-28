@@ -1,12 +1,20 @@
 
 namespace TinyWars.MultiCustomRoom {
     import Types            = Utility.Types;
+    import Logger           = Utility.Logger;
     import ProtoTypes       = Utility.ProtoTypes;
+    import Notify           = Utility.Notify;
+    import Helpers          = Utility.Helpers;
     import ConfigManager    = Utility.ConfigManager;
     import WarMapModel      = WarMap.WarMapModel;
+    import BwSettingsHelper = BaseWar.BwSettingsHelper;
     import BootTimerType    = Types.BootTimerType;
-    import IMcwWatchInfo    = ProtoTypes.MultiCustomWar.IMcwWatchInfo;
+    import MultiCustomWar   = ProtoTypes.MultiCustomWar;
     import IMcrRoomInfo     = ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
+    import NetMessage       = ProtoTypes.NetMessage;
+    import IMcwWatchInfo    = MultiCustomWar.IMcwWatchInfo;
+    import IMcwWarInfo      = MultiCustomWar.IMcwWarInfo;
+    import IMcwReplayInfo   = MultiCustomWar.IMcwReplayInfo;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
     export const MAX_INITIAL_FUND     = 1000000;
@@ -33,61 +41,20 @@ namespace TinyWars.MultiCustomRoom {
     ];
     const DEFAULT_TIME_LIMIT = REGULAR_TIME_LIMITS[2];
 
-    const MOVE_RANGE_MODIFIERS        = [-2, -1, 0, 1, 2];
-    const DEFAULT_MOVE_RANGE_MODIFIER = 0;
-
-    const ATTACK_MODIFIERS        = [-30, -20, -10, 0, 10, 20, 30];
-    const DEFAULT_ATTACK_MODIFIER = 0;
-
-    const VISION_MODIFIERS        = [-2, -1, 0, 1, 2];
-    const DEFAULT_VISION_MODIFIER = 0;
-
     export type DataForCreateRoom   = ProtoTypes.NetMessage.IC_McrCreateRoom;
     export type DataForJoinRoom     = ProtoTypes.NetMessage.IC_McrJoinRoom;
 
     export namespace McrModel {
-        const _dataForCreateRoom: DataForCreateRoom = {
-            mapFileName     : "",
-            warName         : "",
-            warPassword     : "",
-            warComment      : "",
-            configVersion   : Utility.ConfigManager.getNewestConfigVersion(),
+        const _roomInfoDict         = new Map<number, IMcrRoomInfo>();
+        const _roomInfoRequests     = new Map<number, ((info: NetMessage.IS_McrGetRoomInfo | undefined | null) => void)[]>();
 
-            warRuleIndex    : null,
-            playerIndex     : 0,
-            teamIndex       : 0,
-            coId            : null,
+        const _unjoinedRoomIdSet    = new Set<number>();
+        const _joinedRoomIdSet      = new Set<number>();
 
-            hasFog              : 0,
-            bootTimerParams     : [BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue],
-            initialFund         : 0,
-            incomeModifier      : 0,
-            initialEnergy       : 0,
-            energyGrowthModifier: 0,
-            moveRangeModifier   : 0,
-            attackPowerModifier : 0,
-            visionRangeModifier : 0,
-            bannedCoIdList      : [],
-            luckLowerLimit      : CommonConstants.WarRuleLuckDefaultLowerLimit,
-            luckUpperLimit      : CommonConstants.WarRuleLuckDefaultUpperLimit,
-        };
+        let _ongoingWarInfoList     : IMcwWarInfo[] = [];
 
-        const _dataForJoinWar: DataForJoinRoom = {
-            infoId      : null,
-            playerIndex : null,
-            teamIndex   : null,
-            coId        : null,
-        };
-        let _joinWarAvailablePlayerIndexes  : number[];
-        let _joinWarAvailableTeamIndexes    : number[];
-        let _joinWarRoomInfo                : IMcrRoomInfo;
-
-        let _unjoinedWaitingInfos   : IMcrRoomInfo[];
-        let _joinedWaitingInfos     : IMcrRoomInfo[];
-        let _joinedOngoingInfos     : ProtoTypes.IMcwOngoingDetail[];
-
-        let _replayInfos: ProtoTypes.MultiCustomWar.IMcwReplayInfo[];
-        let _replayData : ProtoTypes.S_McrGetReplayData;
+        let _replayInfos: IMcwReplayInfo[];
+        let _replayData : ProtoTypes.NetMessage.IS_McrGetReplayData;
 
         let _unwatchedWarInfos      : IMcwWatchInfo[];
         let _watchOngoingWarInfos   : IMcwWatchInfo[];
@@ -95,450 +62,446 @@ namespace TinyWars.MultiCustomRoom {
         let _watchedWarInfos        : IMcwWatchInfo[];
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Functions for creating wars.
+        // Functions for rooms.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        export function getCreateWarMapExtraData(): Promise<ProtoTypes.Map.IMapExtraData> {
-            return WarMapModel.getExtraData(getCreateRoomMapId());
+        export function getRoomInfo(roomId: number): Promise<IMcrRoomInfo | undefined | null> {
+            if (roomId == null) {
+                return new Promise((resolve, reject) => resolve(null));
+            }
+
+            const localData = _roomInfoDict.get(roomId);
+            if (localData) {
+                return new Promise(resolve => resolve(localData));
+            }
+
+            if (_roomInfoRequests.has(roomId)) {
+                return new Promise((resolve, reject) => {
+                    _roomInfoRequests.get(roomId).push(info => resolve(info.roomInfo));
+                });
+            }
+
+            new Promise((resolve, reject) => {
+                const callbackOnSucceed = (e: egret.Event): void => {
+                    const data = e.data as NetMessage.IS_McrGetRoomInfo;
+                    if (data.roomId === roomId) {
+                        Notify.removeEventListener(Notify.Type.SMcrGetRoomInfo,         callbackOnSucceed);
+                        Notify.removeEventListener(Notify.Type.SMcrGetRoomInfoFailed,   callbackOnFailed);
+
+                        for (const cb of _roomInfoRequests.get(roomId)) {
+                            cb(data);
+                        }
+                        _roomInfoRequests.delete(roomId);
+
+                        resolve();
+                    }
+                };
+                const callbackOnFailed = (e: egret.Event): void => {
+                    const data = e.data as NetMessage.IS_McrGetRoomInfo;
+                    if (data.roomId === roomId) {
+                        Notify.removeEventListener(Notify.Type.SMcrGetRoomInfo,         callbackOnSucceed);
+                        Notify.removeEventListener(Notify.Type.SMcrGetRoomInfoFailed,   callbackOnFailed);
+
+                        for (const cb of _roomInfoRequests.get(roomId)) {
+                            cb(data);
+                        }
+                        _roomInfoRequests.delete(roomId);
+
+                        resolve();
+                    }
+                };
+
+                Notify.addEventListener(Notify.Type.SMcrGetRoomInfo,        callbackOnSucceed);
+                Notify.addEventListener(Notify.Type.SMcrGetRoomInfoFailed,  callbackOnFailed);
+
+                McrProxy.reqMcrGetRoomInfo(roomId);
+            });
+
+            return new Promise((resolve, reject) => {
+                _roomInfoRequests.set(roomId, [info => resolve(info.roomInfo)]);
+            });
         }
-        export function getCreateWarMapRawData(): Promise<ProtoTypes.Map.IMapRawData> {
-            return WarMapModel.getRawData(getCreateRoomMapId());
+        export function setRoomInfo(info: IMcrRoomInfo): void {
+            _roomInfoDict.set(info.roomId, info);
         }
-        export function getCreateRoomMapId(): number {
-            return _dataForCreateRoom.settingsForCommon.mapId;
+        export function removeRoomInfo(roomId: number): void {
+            _roomInfoDict.delete(roomId);
+            _unjoinedRoomIdSet.delete(roomId);
+            _joinedRoomIdSet.delete(roomId);
         }
 
-        export async function resetCreateWarData(mapFileName: string): Promise<void> {
-            const mapRawData                        = await WarMapModel.getRawData(mapFileName);
-            _dataForCreateRoom.mapFileName           = mapFileName;
-            _dataForCreateRoom.configVersion         = Utility.ConfigManager.getNewestConfigVersion();
-            _dataForCreateRoom.bannedCoIdList.length = 0;
-            setCreateWarName("");
-            setCreateWarPassword("");
-            setCreateWarComment("");
-            setCreateWarWarRuleIndex(mapRawData.warRuleList ? 0 : null);
-            await resetCreateWarDataForSelectedRule();
-        }
-        export function getCreateWarData(): DataForCreateRoom {
-            return _dataForCreateRoom;
-        }
-        export async function resetCreateWarDataForSelectedRule(): Promise<void> {
-            const warRuleIndex      = getCreateWarWarRuleIndex();
-            const dataForCreateWar  = getCreateWarData();
-            if (warRuleIndex == null) {
-                setCreateWarBootTimerParams([BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue]);
-                setCreateWarPlayerIndex(1);
-                setCreateWarTeamIndex(1);
-                setCreateWarCoId(getRandomCoId(dataForCreateWar.configVersion, dataForCreateWar.bannedCoIdList));
-                setCreateWarHasFog(false);
-
-                setCreateWarInitialFund(0);
-                setCreateWarIncomeMultiplier(100);
-                setCreateWarInitialEnergy(0);
-                setCreateWarEnergyGrowthMultiplier(100);
-                setCreateWarLuckLowerLimit(CommonConstants.WarRuleLuckDefaultLowerLimit);
-                setCreateWarLuckUpperLimit(CommonConstants.WarRuleLuckDefaultUpperLimit);
-                setCreateWarMoveRangeModifier(DEFAULT_MOVE_RANGE_MODIFIER);
-                setCreateWarAttackPowerModifier(DEFAULT_ATTACK_MODIFIER);
-                setCreateWarVisionRangeModifier(DEFAULT_VISION_MODIFIER);
-            } else {
-                const mapFileName   = getCreateRoomMapId();
-                const playerIndex   = 1;
-                const warRule       = (await WarMapModel.getRawData(mapFileName)).warRuleList[warRuleIndex];
-                setCreateWarBootTimerParams([BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue]);
-                setCreateWarPlayerIndex(playerIndex);
-                setCreateWarTeamIndex((await WarMapModel.getPlayerRule(mapFileName, warRuleIndex, playerIndex)).teamIndex);
-                setCreateWarCoId(getRandomCoId(dataForCreateWar.configVersion, dataForCreateWar.bannedCoIdList));
-                setCreateWarHasFog(!!warRule.hasFog);
-
-                setCreateWarInitialFund(warRule.initialFund);
-                setCreateWarIncomeMultiplier(warRule.incomeModifier);
-                setCreateWarInitialEnergy(warRule.initialEnergy);
-                setCreateWarEnergyGrowthMultiplier(warRule.energyGrowthModifier);
-                setCreateWarLuckLowerLimit(warRule.luckLowerLimit);
-                setCreateWarLuckUpperLimit(warRule.luckUpperLimit);
-                setCreateWarMoveRangeModifier(warRule.moveRangeModifier);
-                setCreateWarAttackPowerModifier(warRule.attackPowerModifier);
-                setCreateWarVisionRangeModifier(warRule.visionRangeModifier);
+        export function setUnjoinedRoomInfoList(infoList: IMcrRoomInfo[]): void {
+            _unjoinedRoomIdSet.clear();
+            for (const roomInfo of infoList || []) {
+                _unjoinedRoomIdSet.add(roomInfo.roomId);
+                setRoomInfo(roomInfo);
             }
         }
-
-        export function setCreateWarName(name: string): void {
-            _dataForCreateRoom.warName = name;
-        }
-        export function getCreateWarName(): string {
-            return _dataForCreateRoom.warName;
-        }
-
-        export function setCreateWarPassword(password: string): void {
-            _dataForCreateRoom.warPassword = password;
-        }
-        export function getCreateWarPassword(): string {
-            return _dataForCreateRoom.warPassword;
+        export async function getUnjoinedRoomInfoList(): Promise<IMcrRoomInfo[]> {
+            const infoList: IMcrRoomInfo[] = [];
+            for (const roomId of _unjoinedRoomIdSet) {
+                infoList.push(await getRoomInfo(roomId));
+            }
+            return infoList;
         }
 
-        export function setCreateWarComment(comment: string): void {
-            _dataForCreateRoom.warComment = comment;
-        }
-        export function getCreateWarComment(): string {
-            return _dataForCreateRoom.warComment;
-        }
-
-        export function setCreateWarWarRuleIndex(index: number): void {
-            _dataForCreateRoom.warRuleIndex = index;
-        }
-        export function getCreateWarWarRuleIndex(): number | null {
-            return _dataForCreateRoom.warRuleIndex;
-        }
-
-        export function setCreateWarPlayerIndex(index: number): void {
-            _dataForCreateRoom.playerIndex = index;
-        }
-        export async function setCreateWarPrevPlayerIndex(): Promise<void> {
-            const mapInfo   = await getCreateWarMapExtraData();
-            const index     = getCreateWarPlayerIndex() - 1;
-            setCreateWarPlayerIndex(index > 0 ? index : mapInfo.playersCount);
-        }
-        export async function setCreateWarNextPlayerIndex(): Promise<void> {
-            const mapInfo   = await getCreateWarMapExtraData();
-            const index     = getCreateWarPlayerIndex() + 1;
-            setCreateWarPlayerIndex(index > mapInfo.playersCount ? 1 : index);
-        }
-        export function getCreateWarPlayerIndex(): number {
-            return _dataForCreateRoom.playerIndex;
-        }
-
-        export function setCreateWarTeamIndex(index: number): void {
-            _dataForCreateRoom.teamIndex = index;
-        }
-        export async function setCreateWarPrevTeamIndex(): Promise<void> {
-            const mapInfo   = await getCreateWarMapExtraData();
-            const index     = getCreateWarTeamIndex() - 1;
-            setCreateWarTeamIndex(index > 0 ? index : mapInfo.playersCount);
-        }
-        export async function setCreateWarNextTeamIndex(): Promise<void> {
-            const mapInfo   = await getCreateWarMapExtraData();
-            const index     = getCreateWarTeamIndex() + 1;
-            setCreateWarTeamIndex(index > mapInfo.playersCount ? 1 : index);
-        }
-        export function getCreateWarTeamIndex(): number {
-            return _dataForCreateRoom.teamIndex;
-        }
-
-        export function setCreateWarCoId(coId: number | null): void {
-            _dataForCreateRoom.coId = coId;
-        }
-        export function getCreateWarCoId(): number | null {
-            return _dataForCreateRoom.coId;
-        }
-
-        export function setCreateWarHasFog(has: boolean): void {
-            _dataForCreateRoom.hasFog = has ? 1 : 0;
-        }
-        export function setCreateWarPrevHasFog(): void {
-            setCreateWarHasFog(!getCreateWarHasFog());
-        }
-        export function setCreateWarNextHasFog(): void {
-            setCreateWarHasFog(!getCreateWarHasFog());
-        }
-        export function getCreateWarHasFog(): boolean {
-            return !!_dataForCreateRoom.hasFog;
-        }
-
-        export function setCreateWarBootTimerParams(params: number[]): void {
-            _dataForCreateRoom.bootTimerParams = params;
-        }
-        export function getCreateWarBootTimerParams(): number[] {
-            return _dataForCreateRoom.bootTimerParams;
-        }
-        export function setCreateWarNextBootTimerType(): void {
-            const params = getCreateWarBootTimerParams();
-            if ((params) && (params[0] === BootTimerType.Regular)) {
-                setCreateWarBootTimerParams([BootTimerType.Incremental, 60 * 15, 15]);
-            } else {
-                setCreateWarBootTimerParams([BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue]);
+        export function setJoinedRoomInfoList(infoList: IMcrRoomInfo[]): void {
+            _joinedRoomIdSet.clear();
+            for (const roomInfo of infoList || []) {
+                _joinedRoomIdSet.add(roomInfo.roomId);
+                setRoomInfo(roomInfo);
             }
         }
-        export function setCreateWarNextTimerRegularTime(): void {
-            const params = getCreateWarBootTimerParams();
-            if (params[0] !== BootTimerType.Regular) {
-                setCreateWarNextBootTimerType();
-            } else {
-                const index = REGULAR_TIME_LIMITS.indexOf(params[1]);
-                if (index < 0) {
-                    setCreateWarNextBootTimerType();
+        export async function getJoinedRoomInfoList(): Promise<IMcrRoomInfo[]> {
+            const infoList: IMcrRoomInfo[] = [];
+            for (const roomId of _joinedRoomIdSet) {
+                infoList.push(await getRoomInfo(roomId));
+            }
+            return infoList;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Functions for creating rooms.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        export namespace Create {
+            const _dataForCreateRoom: DataForCreateRoom = {
+                settingsForCommon: {},
+                settingsForMultiPlayer: {},
+
+                selfCoId                : null,
+                selfPlayerIndex         : null,
+                selfUnitAndTileSkinId   : null,
+            };
+
+            export function getMapRawData(): Promise<ProtoTypes.Map.IMapRawData> {
+                return WarMapModel.getRawData(getMapId());
+            }
+
+            export async function resetDataByMapId(mapId: number): Promise<void> {
+                setMapId(mapId);
+                setConfigVersion(Utility.ConfigManager.getNewestConfigVersion());
+                setWarName("");
+                setWarPassword("");
+                setWarComment("");
+                setSelfPlayerIndex(CommonConstants.WarFirstPlayerIndex);
+                await resetDataByPresetWarRuleId(CommonConstants.WarRuleFirstId);
+            }
+            export function getData(): DataForCreateRoom {
+                return _dataForCreateRoom;
+            }
+
+            export function getMapId(): number {
+                return getData().settingsForCommon.mapId;
+            }
+            function setMapId(mapId: number): void {
+                getData().settingsForCommon.mapId = mapId;
+            }
+
+            function setConfigVersion(version: string): void {
+                getData().settingsForCommon.configVersion = version;
+            }
+
+            export async function resetDataByPresetWarRuleId(ruleId: number): Promise<void> {
+                const warRule = (await getMapRawData()).warRuleList.find(warRule => warRule.ruleId === ruleId);
+                if (warRule == null) {
+                    Logger.error(`McwModel.resetDataByPresetWarRuleId() empty warRule.`);
+                    return undefined;
+                }
+
+                const settingsForCommon     = getData().settingsForCommon;
+                settingsForCommon.warRule   = Helpers.deepClone(warRule);
+                setPresetWarRuleId(ruleId);
+                setSelfCoId(BwSettingsHelper.getRandomCoId(settingsForCommon, getSelfPlayerIndex()));
+            }
+            export function setPresetWarRuleId(ruleId: number | null | undefined): void {
+                const settingsForCommon             = getData().settingsForCommon;
+                settingsForCommon.warRule.ruleId    = ruleId;
+                settingsForCommon.presetWarRuleId   = ruleId;
+            }
+            export function getPresetWarRuleId(): number | undefined {
+                return getData().settingsForCommon.presetWarRuleId;
+            }
+            export async function tickPresetWarRuleId(): Promise<void> {
+                const currWarRuleId = getPresetWarRuleId();
+                if (currWarRuleId == null) {
+                    await resetDataByPresetWarRuleId(CommonConstants.WarRuleFirstId);
                 } else {
-                    const newIndex  = index + 1;
-                    params[1]       = newIndex < REGULAR_TIME_LIMITS.length ? REGULAR_TIME_LIMITS[newIndex] : REGULAR_TIME_LIMITS[0];
+                    await resetDataByPresetWarRuleId((currWarRuleId + 1) % (await getMapRawData()).warRuleList.length);
                 }
             }
-        }
-        export function setCreateWarTimerIncrementalInitialTime(seconds: number): void {
-            _dataForCreateRoom.bootTimerParams[1] = seconds;
-        }
-        export function setCreateWarTimerIncrementalIncrementalValue(seconds: number): void {
-            _dataForCreateRoom.bootTimerParams[2] = seconds;
-        }
 
-        export function setCreateWarInitialFund(fund: number): void {
-            _dataForCreateRoom.initialFund = fund;
-        }
-        export function getCreateWarInitialFund(): number {
-            return _dataForCreateRoom.initialFund;
-        }
-
-        export function setCreateWarIncomeMultiplier(multiplier: number): void {
-            _dataForCreateRoom.incomeModifier = multiplier;
-        }
-        export function getCreateWarIncomeMultiplier(): number {
-            return _dataForCreateRoom.incomeModifier;
-        }
-
-        export function setCreateWarInitialEnergy(energy: number): void {
-            _dataForCreateRoom.initialEnergy = energy;
-        }
-        export function getCreateWarInitialEnergy(): number {
-            return _dataForCreateRoom.initialEnergy;
-        }
-
-        export function setCreateWarEnergyGrowthMultiplier(multiplier: number): void {
-            _dataForCreateRoom.energyGrowthModifier = multiplier;
-        }
-        export function getCreateWarEnergyGrowthMultiplier(): number {
-            return _dataForCreateRoom.energyGrowthModifier;
-        }
-
-        export function getCreateWarBannedCoIdList(): number[] {
-            return _dataForCreateRoom.bannedCoIdList;
-        }
-        export function addCreateWarBannedCoId(coId: number): void {
-            const list = _dataForCreateRoom.bannedCoIdList;
-            (list.indexOf(coId) < 0) && (list.push(coId));
-        }
-        export function removeCreateWarBannedCoId(coId: number): void {
-            const set = new Set<number>(_dataForCreateRoom.bannedCoIdList);
-            set.delete(coId);
-            _dataForCreateRoom.bannedCoIdList = Array.from(set);
-        }
-
-        export function setCreateWarLuckLowerLimit(limit: number): void {
-            _dataForCreateRoom.luckLowerLimit = limit;
-        }
-        export function getCreateWarLuckLowerLimit(): number {
-            return _dataForCreateRoom.luckLowerLimit;
-        }
-
-        export function setCreateWarLuckUpperLimit(limit: number): void {
-            _dataForCreateRoom.luckUpperLimit = limit;
-        }
-        export function getCreateWarLuckUpperLimit(): number {
-            return _dataForCreateRoom.luckUpperLimit;
-        }
-
-        export function setCreateWarMoveRangeModifier(modifier: number): void {
-            _dataForCreateRoom.moveRangeModifier = modifier;
-        }
-        export function setCreateWarPrevMoveRangeModifier(): void {
-            const currModifier = getCreateWarMoveRangeModifier();
-            const modifiers    = MOVE_RANGE_MODIFIERS;
-            const index        = modifiers.indexOf(currModifier);
-            if (index < 0) {
-                setCreateWarMoveRangeModifier(DEFAULT_MOVE_RANGE_MODIFIER);
-            } else {
-                const newIndex = index - 1;
-                setCreateWarMoveRangeModifier(newIndex >= 0 ? modifiers[newIndex] : modifiers[modifiers.length - 1]);
+            export function setWarName(name: string): void {
+                getData().settingsForMultiPlayer.warName = name;
             }
-        }
-        export function setCreateWarNextMoveRangeModifier(): void {
-            const currModifier = getCreateWarMoveRangeModifier();
-            const modifiers    = MOVE_RANGE_MODIFIERS;
-            const index        = modifiers.indexOf(currModifier);
-            if (index < 0) {
-                setCreateWarMoveRangeModifier(DEFAULT_MOVE_RANGE_MODIFIER);
-            } else {
-                const newIndex = index + 1;
-                setCreateWarMoveRangeModifier(newIndex < modifiers.length ? modifiers[newIndex] : modifiers[0]);
+            export function getWarName(): string {
+                return getData().settingsForMultiPlayer.warName;
             }
-        }
-        export function getCreateWarMoveRangeModifier(): number {
-            return _dataForCreateRoom.moveRangeModifier;
-        }
 
-        export function setCreateWarAttackPowerModifier(modifier: number): void {
-            _dataForCreateRoom.attackPowerModifier = modifier;
-        }
-        export function setCreateWarPrevAttackPowerModifier(): void {
-            const currModifier = getCreateWarAttackPowerModifier();
-            const modifiers    = ATTACK_MODIFIERS;
-            const index        = modifiers.indexOf(currModifier);
-            if (index < 0) {
-                setCreateWarAttackPowerModifier(DEFAULT_ATTACK_MODIFIER);
-            } else {
-                const newIndex = index - 1;
-                setCreateWarAttackPowerModifier(newIndex >= 0 ? modifiers[newIndex] : modifiers[modifiers.length - 1]);
+            export function setWarPassword(password: string): void {
+                getData().settingsForMultiPlayer.warPassword = password;
             }
-        }
-        export function setCreateWarNextAttackPowerModifier(): void {
-            const currModifier = getCreateWarAttackPowerModifier();
-            const modifiers    = ATTACK_MODIFIERS;
-            const index        = modifiers.indexOf(currModifier);
-            if (index < 0) {
-                setCreateWarAttackPowerModifier(DEFAULT_ATTACK_MODIFIER);
-            } else {
-                const newIndex = index + 1;
-                setCreateWarAttackPowerModifier(newIndex < modifiers.length ? modifiers[newIndex] : modifiers[0]);
+            export function getWarPassword(): string {
+                return getData().settingsForMultiPlayer.warPassword;
             }
-        }
-        export function getCreateWarAttackPowerModifier(): number {
-            return _dataForCreateRoom.attackPowerModifier;
-        }
 
-        export function setCreateWarVisionRangeModifier(modifier: number): void {
-            _dataForCreateRoom.visionRangeModifier = modifier;
-        }
-        export function setCreateWarPrevVisionRangeModifier(): void {
-            const currModifier = getCreateWarVisionRangeModifier();
-            const modifiers    = VISION_MODIFIERS;
-            const index        = modifiers.indexOf(currModifier);
-            if (index < 0) {
-                setCreateWarVisionRangeModifier(DEFAULT_VISION_MODIFIER);
-            } else {
-                const newIndex = index - 1;
-                setCreateWarVisionRangeModifier(newIndex >= 0 ? modifiers[newIndex] : modifiers[modifiers.length - 1]);
+            export function setWarComment(comment: string): void {
+                getData().settingsForMultiPlayer.warComment = comment;
             }
-        }
-        export function setNextVisionRangeModifier(): void {
-            const currModifier = getCreateWarVisionRangeModifier();
-            const modifiers    = VISION_MODIFIERS;
-            const index        = modifiers.indexOf(currModifier);
-            if (index < 0) {
-                setCreateWarVisionRangeModifier(DEFAULT_VISION_MODIFIER);
-            } else {
-                const newIndex = index + 1;
-                setCreateWarVisionRangeModifier(newIndex < modifiers.length ? modifiers[newIndex] : modifiers[0]);
+            export function getWarComment(): string {
+                return getData().settingsForMultiPlayer.warComment;
             }
-        }
-        export function getCreateWarVisionRangeModifier(): number {
-            return _dataForCreateRoom.visionRangeModifier;
+
+            function setSelfPlayerIndex(playerIndex: number): void {
+                getData().selfPlayerIndex = playerIndex;
+            }
+            export async function tickSelfPlayerIndex(): Promise<void> {
+                const playersCount = getData().settingsForCommon.warRule.ruleForPlayers.playerRuleDataList.length;
+                setSelfPlayerIndex(getSelfPlayerIndex() % playersCount + 1);
+            }
+            export function getSelfPlayerIndex(): number {
+                return getData().selfPlayerIndex;
+            }
+
+            export function setSelfCoId(coId: number): void {
+                getData().selfCoId = coId;
+            }
+            export function getSelfCoId(): number | null {
+                return getData().selfCoId;
+            }
+
+            function setSelfUnitAndTileSkinId(skinId: number): void {
+                getData().selfUnitAndTileSkinId = skinId;
+            }
+            export function tickSelfUnitAndTileSkinId(): void {
+                setSelfUnitAndTileSkinId(getSelfUnitAndTileSkinId() % CommonConstants.UnitAndTileMaxSkinId + 1);
+            }
+            export function getSelfUnitAndTileSkinId(): number {
+                return getData().selfUnitAndTileSkinId;
+            }
+
+            export function setHasFog(hasFog: boolean): void {
+                getData().settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault = hasFog;
+            }
+            export function getHasFog(): boolean {
+                return getData().settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault;
+            }
+
+            export function setBootTimerParams(params: number[]): void {
+                getData().settingsForMultiPlayer.bootTimerParams = params;
+            }
+            export function getBootTimerParams(): number[] {
+                return getData().settingsForMultiPlayer.bootTimerParams;
+            }
+            export function tickBootTimerType(): void {
+                const params = getBootTimerParams();
+                if ((params) && (params[0] === BootTimerType.Regular)) {
+                    setBootTimerParams([BootTimerType.Incremental, 60 * 15, 15]);
+                } else {
+                    setBootTimerParams([BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue]);
+                }
+            }
+            export function tickTimerRegularTime(): void {
+                const params = getBootTimerParams();
+                if (params[0] !== BootTimerType.Regular) {
+                    tickBootTimerType();
+                } else {
+                    const index = REGULAR_TIME_LIMITS.indexOf(params[1]);
+                    if (index < 0) {
+                        tickBootTimerType();
+                    } else {
+                        const newIndex  = index + 1;
+                        params[1]       = newIndex < REGULAR_TIME_LIMITS.length ? REGULAR_TIME_LIMITS[newIndex] : REGULAR_TIME_LIMITS[0];
+                    }
+                }
+            }
+            export function setTimerIncrementalInitialTime(seconds: number): void {
+                getBootTimerParams()[1] = seconds;
+            }
+            export function setTimerIncrementalIncrementalValue(seconds: number): void {
+                getBootTimerParams()[2] = seconds;
+            }
+
+            export function setInitialFund(playerIndex, fund: number): void {
+                BwSettingsHelper.setInitialFund(getData().settingsForCommon, playerIndex, fund);
+            }
+            export function getInitialFund(playerIndex: number): number {
+                return BwSettingsHelper.getInitialFund(getData().settingsForCommon, playerIndex);
+            }
+
+            export function setIncomeMultiplier(playerIndex: number, multiplier: number): void {
+                BwSettingsHelper.setIncomeMultiplier(getData().settingsForCommon, playerIndex, multiplier);
+            }
+            export function getIncomeMultiplier(playerIndex: number): number {
+                return BwSettingsHelper.getIncomeMultiplier(getData().settingsForCommon, playerIndex);
+            }
+
+            export function setInitialEnergyPercentage(playerIndex: number, percentage: number): void {
+                BwSettingsHelper.setInitialEnergyPercentage(getData().settingsForCommon, playerIndex, percentage);
+            }
+            export function getInitialEnergyPercentage(playerIndex: number): number {
+                return BwSettingsHelper.getInitialEnergyPercentage(getData().settingsForCommon, playerIndex);
+            }
+
+            export function setEnergyGrowthMultiplier(playerIndex: number, multiplier: number): void {
+                BwSettingsHelper.setEnergyGrowthMultiplier(getData().settingsForCommon, playerIndex, multiplier);
+            }
+            export function getEnergyGrowthMultiplier(playerIndex: number): number {
+                return BwSettingsHelper.getEnergyGrowthMultiplier(getData().settingsForCommon, playerIndex);
+            }
+
+            export function getAvailableCoIdList(playerIndex: number): number[] {
+                return BwSettingsHelper.getAvailableCoIdList(getData().settingsForCommon, playerIndex);
+            }
+            export function addAvailableCoId(playerIndex: number, coId: number): void {
+                BwSettingsHelper.addAvailableCoId(getData().settingsForCommon, playerIndex, coId);
+            }
+            export function removeAvailableCoId(playerIndex: number, coId: number): void {
+                BwSettingsHelper.removeAvailableCoId(getData().settingsForCommon, playerIndex, coId);
+            }
+
+            export function setLuckLowerLimit(playerIndex: number, limit: number): void {
+                BwSettingsHelper.setLuckLowerLimit(getData().settingsForCommon, playerIndex, limit);
+            }
+            export function getLuckLowerLimit(playerIndex: number): number {
+                return BwSettingsHelper.getLuckLowerLimit(getData().settingsForCommon, playerIndex);
+            }
+
+            export function setLuckUpperLimit(playerIndex: number, limit: number): void {
+                BwSettingsHelper.setLuckUpperLimit(getData().settingsForCommon, playerIndex, limit);
+            }
+            export function getLuckUpperLimit(playerIndex: number): number {
+                return BwSettingsHelper.getLuckUpperLimit(getData().settingsForCommon, playerIndex);
+            }
+
+            export function setMoveRangeModifier(playerIndex: number, modifier: number): void {
+                BwSettingsHelper.setMoveRangeModifier(getData().settingsForCommon, playerIndex, modifier);
+            }
+            export function getMoveRangeModifier(playerIndex: number): number {
+                return BwSettingsHelper.getMoveRangeModifier(getData().settingsForCommon, playerIndex);
+            }
+
+            export function setAttackPowerModifier(playerIndex: number, modifier: number): void {
+                BwSettingsHelper.setAttackPowerModifier(getData().settingsForCommon, playerIndex, modifier);
+            }
+            export function getAttackPowerModifier(playerIndex: number): number {
+                return BwSettingsHelper.getAttackPowerModifier(getData().settingsForCommon, playerIndex);
+            }
+
+            export function setVisionRangeModifier(playerIndex: number, modifier: number): void {
+                BwSettingsHelper.setVisionRangeModifier(getData().settingsForCommon, playerIndex, modifier);
+            }
+            export function getVisionRangeModifier(playerIndex: number): number {
+                return BwSettingsHelper.getVisionRangeModifier(getData().settingsForCommon, playerIndex);
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Functions for joining wars.
+        // Functions for joining room.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        export function setUnjoinedRoomList(infos: IMcrRoomInfo[]): void {
-            _unjoinedWaitingInfos = infos;
-        }
-        export function getUnjoinedWaitingInfos(): IMcrRoomInfo[] {
-            return _unjoinedWaitingInfos;
-        }
+        export namespace Join {
+            const _dataForJoinRoom: DataForJoinRoom = {
+                roomId              : null,
+                playerIndex         : null,
+                coId                : null,
+                isReady             : true,
+                unitAndTileSkinId   : null,
+            };
+            let _joinWarAvailablePlayerIndexList: number[];
+            let _joinWarAvailableSkinIdList     : number[];
 
-        export function getJoinWarRoomInfo(): IMcrRoomInfo {
-            return _joinWarRoomInfo;
-        }
-        export function getJoinWarMapId(): number {
-            return getJoinWarRoomInfo().mapFileName;
-        }
-        export function getJoinWarMapExtraData(): Promise<ProtoTypes.IMapExtraData> {
-            return WarMapModel.getExtraData(getJoinWarMapId());
-        }
-        export function getJoinWarMapRawData(): Promise<ProtoTypes.IMapRawData> {
-            return WarMapModel.getRawData(getJoinWarMapId());
-        }
-        export function getJoinWarWarRuleIndex(): number | null {
-            return _joinWarRoomInfo.warRuleIndex;
-        }
-
-        export async function resetJoinWarData(info: IMcrRoomInfo): Promise<void> {
-            _joinWarRoomInfo                = info;
-            _joinWarAvailablePlayerIndexes  = await getAvailablePlayerIndexes(info);
-            _joinWarAvailableTeamIndexes    = await getAvailableTeamIndexes(info);
-            _dataForJoinWar.infoId          = info.infoId;
-            setJoinWarPlayerIndex(_joinWarAvailablePlayerIndexes[0]);
-            setJoinWarCoId(getRandomCoId(info.configVersion, info.bannedCoIdList));
-
-            const warRuleIndex = getJoinWarWarRuleIndex();
-            if (warRuleIndex == null) {
-                setJoinWarTeamIndex(_joinWarAvailableTeamIndexes[0]);
-            } else {
-                setJoinWarTeamIndex((await WarMapModel.getPlayerRule(getJoinWarMapId(), warRuleIndex, getJoinWarPlayerIndex())).teamIndex);
+            export function getData(): DataForJoinRoom {
+                return _dataForJoinRoom;
             }
-        }
-        export function getJoinWarData(): DataForJoinRoom {
-            return _dataForJoinWar;
-        }
+            export async function getRoomInfo(): Promise<IMcrRoomInfo | null> {
+                return await McrModel.getRoomInfo(getData().roomId);
+            }
+            export async function getMapId(): Promise<number> {
+                const info = await getRoomInfo();
+                return info ? info.settingsForCommon.mapId : null;
+            }
+            export async function getMapRawData(): Promise<ProtoTypes.Map.IMapRawData> {
+                return await WarMapModel.getRawData(await getMapId());
+            }
+            export async function getTeamIndex(): Promise<number> {
+                const data = getData();
+                return BwSettingsHelper.getPlayerRule((await McrModel.getRoomInfo(data.roomId)).settingsForCommon, data.playerIndex).teamIndex;
+            }
 
-        function setJoinWarPlayerIndex(playerIndex: number): void {
-            _dataForJoinWar.playerIndex = playerIndex;
-        }
-        export function setJoinWarNextPlayerIndex(): void {
-            const list = _joinWarAvailablePlayerIndexes;
-            setJoinWarPlayerIndex(list[(list.indexOf(getJoinWarPlayerIndex()) + 1) % list.length]);
-        }
-        export function setJoinWarPrevPlayerIndex(): void {
-            const list  = _joinWarAvailablePlayerIndexes;
-            const index = list.indexOf(getJoinWarPlayerIndex()) - 1;
-            setJoinWarPlayerIndex(list[index >= 0 ? index : list.length - 1]);
-        }
-        export function getJoinWarPlayerIndex(): number {
-            return _dataForJoinWar.playerIndex;
-        }
+            export async function resetData(roomInfo: IMcrRoomInfo): Promise<void> {
+                getData().roomId                    = roomInfo.roomId;
+                _joinWarAvailablePlayerIndexList    = getAvailablePlayerIndexList(roomInfo);
+                _joinWarAvailableSkinIdList         = getAvailableSkinIdList(roomInfo);
+                const playerIndex                   = _joinWarAvailablePlayerIndexList[0];
+                setPlayerIndex(playerIndex);
+                setUnitAndTileSkinId(_joinWarAvailableSkinIdList[0]);
+                setCoId(BwSettingsHelper.getRandomCoId(roomInfo.settingsForCommon, playerIndex));
+                setIsReady(true);
+            }
 
-        export function setJoinWarTeamIndex(teamIndex: number): void {
-            _dataForJoinWar.teamIndex = teamIndex;
-        }
-        export function setJoinWarNextTeamIndex(): void {
-            const list = _joinWarAvailableTeamIndexes;
-            setJoinWarTeamIndex(list[(list.indexOf(getJoinWarTeamIndex()) + 1) % list.length]);
-        }
-        export function setJoinWarPrevTeamIndex(): void {
-            const list  = _joinWarAvailableTeamIndexes;
-            const index = list.indexOf(getJoinWarTeamIndex()) - 1;
-            setJoinWarTeamIndex(list[index >= 0 ? index : list.length - 1]);
-        }
-        export function getJoinWarTeamIndex(): number {
-            return _dataForJoinWar.teamIndex;
-        }
+            function setPlayerIndex(playerIndex: number): void {
+                getData().playerIndex = playerIndex;
+            }
+            export async function tickPlayerIndex(): Promise<void> {
+                const list = _joinWarAvailablePlayerIndexList;
+                if (list.length > 1) {
+                    const playerIndex = list[(list.indexOf(getPlayerIndex()) + 1) % list.length];
+                    setPlayerIndex(playerIndex);
+                    setCoId(BwSettingsHelper.getRandomCoId((await getRoomInfo()).settingsForCommon, playerIndex));
+                }
+            }
+            export function getPlayerIndex(): number {
+                return _dataForJoinRoom.playerIndex;
+            }
 
-        export function setJoinWarCoId(coId: number | null): void {
-            _dataForJoinWar.coId = coId;
-        }
-        export function getJoinWarCoId(): number | null {
-            return _dataForJoinWar.coId;
-        }
+            function setUnitAndTileSkinId(skinId: number): void {
+                getData().unitAndTileSkinId = skinId;
+            }
+            export function tickUnitAndTileSkinId(): void {
+                const list = _joinWarAvailableSkinIdList;
+                setUnitAndTileSkinId(list[(list.indexOf(getUnitAndTileSkinId()) + 1) % list.length]);
+            }
+            export function getUnitAndTileSkinId(): number {
+                return getData().unitAndTileSkinId;
+            }
 
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Functions for exiting joined waiting wars.
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        export function setJoinedRoomInfoList(infos: IMcrRoomInfo[]): void {
-            _joinedWaitingInfos = infos;
-        }
-        export function getJoinedWaitingInfos(): IMcrRoomInfo[] {
-            return _joinedWaitingInfos;
+            export function setCoId(coId: number | null): void {
+                _dataForJoinRoom.coId = coId;
+            }
+            export function getCoId(): number | null {
+                return _dataForJoinRoom.coId;
+            }
+
+            export function setIsReady(isReady: boolean): void {
+                getData().isReady = isReady;
+            }
+            export function getIsReady(): boolean {
+                return getData().isReady;
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for continuing joined ongoing wars.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        export function setJoinedOngoingInfos(infos: ProtoTypes.IMcwOngoingDetail[]): void {
-            _joinedOngoingInfos = infos;
+        export function setOngoingWarInfoList(infoList: IMcwWarInfo[]): void {
+            _ongoingWarInfoList = infoList;
         }
-        export function getJoinedOngoingInfos(): ProtoTypes.IMcwOngoingDetail[] | undefined {
-            return _joinedOngoingInfos;
+        export function getOngoingWarInfoList(): IMcwWarInfo[] | undefined {
+            return _ongoingWarInfoList;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for replays.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        export function setReplayInfos(infos: ProtoTypes.IMcwReplayInfo[]): void {
+        export function setReplayInfos(infos: IMcwReplayInfo[]): void {
             _replayInfos = infos;
         }
-        export function getReplayInfos(): ProtoTypes.IMcwReplayInfo[] | undefined {
+        export function getReplayInfos(): IMcwReplayInfo[] | undefined {
             return _replayInfos;
         }
 
-        export function setReplayData(data: ProtoTypes.S_McrGetReplayData): void {
+        export function setReplayData(data: ProtoTypes.NetMessage.IS_McrGetReplayData): void {
             _replayData = data;
         }
-        export function getReplayData(): ProtoTypes.S_McrGetReplayData | undefined {
+        export function getReplayData(): ProtoTypes.NetMessage.IS_McrGetReplayData | undefined {
             return _replayData;
         }
 
@@ -574,29 +537,9 @@ namespace TinyWars.MultiCustomRoom {
         }
     }
 
-    function getRandomCoId(configVersion: string, bannedCoIdList: number[] | null): number | undefined {
-        let highestTier         : number = null;
-        let candidateCoIdList   : number[] = [];
-        for (const cfg of Utility.ConfigManager.getAvailableCoList(configVersion)) {
-            const coId = cfg.coId;
-            if ((!bannedCoIdList) || (bannedCoIdList.indexOf(coId) < 0)) {
-                const tier = cfg ? cfg.tier : null;
-                if (tier >= 1) {
-                    if ((highestTier > tier) || (highestTier == null)) {
-                        highestTier         = tier;
-                        candidateCoIdList   = [coId];
-                    } else if (highestTier === tier) {
-                        candidateCoIdList.push(coId);
-                    }
-                }
-            }
-        }
-        return Utility.Helpers.pickRandomElement(candidateCoIdList);
-    }
-
-    async function getAvailablePlayerIndexes(info: IMcrRoomInfo): Promise<number[]> {
-        const playersCount      = (await WarMapModel.getExtraData(info.mapFileName)).playersCount;
-        const playerInfoList    = info.playerInfoList;
+    function getAvailablePlayerIndexList(info: IMcrRoomInfo): number[] {
+        const playersCount      = info.settingsForCommon.warRule.ruleForPlayers.playerRuleDataList.length;
+        const playerInfoList    = info.playerDataList;
         const indexes           : number[] = [];
         for (let i = 1; i <= playersCount; ++i) {
             if (playerInfoList.every(v => v.playerIndex !== i)) {
@@ -606,40 +549,13 @@ namespace TinyWars.MultiCustomRoom {
         return indexes;
     }
 
-    async function getAvailableTeamIndexes(info: IMcrRoomInfo): Promise<number[]> {
-        const dict: {[index: number]: number} = {};
-        for (const playerInfo of info.playerInfoList) {
-            const teamIndex = playerInfo.teamIndex;
-            dict[teamIndex] = (dict[teamIndex] || 0) + 1;
-        }
-
-        let teamsCount  = 0;
-        let currPlayers = 0;
-        for (let i = 1; i <= 4; ++i) {
-            if (dict[i]) {
-                ++teamsCount;
-                currPlayers += dict[i];
+    function getAvailableSkinIdList(roomInfo: IMcrRoomInfo): number[] {
+        const idList: number[] = [];
+        for (let skinId = CommonConstants.UnitAndTileMinSkinId; skinId <= CommonConstants.UnitAndTileMaxSkinId; ++skinId) {
+            if (roomInfo.playerDataList.every(v => v.unitAndTileSkinId !== skinId)) {
+                idList.push(skinId);
             }
         }
-
-        const totalPlayers = (await WarMapModel.getExtraData(info.mapFileName)).playersCount;
-        if ((teamsCount > 1) || (currPlayers < totalPlayers - 1)) {
-            const indexes: number[] = [];
-            for (let i = 1; i <= totalPlayers; ++i) {
-                indexes.push(i);
-            }
-            while (dict[indexes[0]]) {
-                indexes.push(indexes.shift());
-            }
-            return indexes;
-        } else {
-            const indexes: number[] = [];
-            for (let i = 1; i <= totalPlayers; ++i) {
-                if (!dict[i]) {
-                    indexes.push(i);
-                }
-            }
-            return indexes;
-        }
+        return idList;
     }
 }

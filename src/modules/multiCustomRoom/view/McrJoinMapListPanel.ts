@@ -107,8 +107,8 @@ namespace TinyWars.MultiCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onNotifySMcrGetUnjoinedWaitingInfos(e: egret.Event): void {
-            const newData        = this._createDataForListWar(McrModel.getUnjoinedWaitingInfos());
+        private async _onNotifySMcrGetUnjoinedWaitingInfos(e: egret.Event): Promise<void> {
+            const newData        = this._createDataForListWar(await McrModel.getUnjoinedRoomInfoList());
             this._dataForListWar = newData;
 
             if (newData.length > 0) {
@@ -257,7 +257,7 @@ namespace TinyWars.MultiCustomRoom {
             } else {
                 McrJoinMapListPanel.hide();
 
-                await McrModel.resetJoinWarData(data.roomInfo);
+                await McrModel.Join.resetData(data.roomInfo);
                 McrJoinSettingsPanel.show();
             }
         }

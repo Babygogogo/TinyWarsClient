@@ -3,35 +3,44 @@ namespace TinyWars.MultiCustomRoom {
     import ProtoTypes       = Utility.ProtoTypes;
     import Lang             = Utility.Lang;
     import ConfigManager    = Utility.ConfigManager;
+    import Notify           = Utility.Notify;
     import WarMapModel      = WarMap.WarMapModel;
     import BwSettingsHelper = BaseWar.BwSettingsHelper;
-    import IMcrRoomInfo     = ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
+    import IMcwWarInfo      = ProtoTypes.MultiCustomWar.IMcwWarInfo;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
-    export class McrJoinAdvancedSettingsPage extends GameUi.UiTabPage {
+    export type OpenParamForContinueWarAdvancedSettingsPage = {
+        warInfo : IMcwWarInfo;
+    }
+
+    export class McrContinueWarAdvancedSettingsPage extends GameUi.UiTabPage {
         private _btnMapNameTitle    : TinyWars.GameUi.UiButton;
         private _labelMapName       : TinyWars.GameUi.UiLabel;
         private _btnBuildings       : TinyWars.GameUi.UiButton;
         private _labelPlayerList    : TinyWars.GameUi.UiLabel;
         private _listPlayer         : TinyWars.GameUi.UiScrollList;
 
-        private _mapRawData : ProtoTypes.Map.IMapRawData;
+        protected _dataForOpen  : OpenParamForContinueWarAdvancedSettingsPage;
+        private _warInfo       : IMcwWarInfo;
 
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/multiCustomRoom/McrJoinAdvancedSettingsPage.exml";
+            this.skinName = "resource/skins/multiCustomRoom/McrContinueWarAdvancedSettingsPage.exml";
         }
 
         public _onFirstOpened(): void {
             this._uiListeners = [
                 { ui: this._btnBuildings,   callback: this._onTouchedBtnBuildings },
             ];
+            this._notifyListeners = [
+                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            ];
             this._listPlayer.setItemRenderer(PlayerRenderer);
         }
 
         protected async _onOpened(): Promise<void> {
-            this._mapRawData = await McrModel.Join.getMapRawData();
+            this._warInfo = this._dataForOpen.warInfo;
 
             this._updateComponentsForLanguage();
         }
@@ -41,11 +50,18 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _onTouchedBtnBuildings(e: egret.TouchEvent): Promise<void> {
-            const settingsForCommon = (await McrModel.Join.getRoomInfo()).settingsForCommon;
-            McrBuildingListPanel.show({
-                configVersion   : settingsForCommon.configVersion,
-                mapRawData      : await WarMapModel.getRawData(settingsForCommon.mapId),
-            });
+            const warInfo = this._warInfo;
+            if (warInfo) {
+                const settingsForCommon = warInfo.settingsForCommon;
+                McrBuildingListPanel.show({
+                    configVersion   : settingsForCommon.configVersion,
+                    mapRawData      : await WarMapModel.getRawData(settingsForCommon.mapId),
+                });
+            }
+        }
+
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateComponentsForLanguage();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -60,22 +76,32 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _updateListPlayer(): void {
-            const playersCount  = this._mapRawData.playersCount;
-            const dataList      : DataForPlayerRenderer[] = [];
-            for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
-                dataList.push({ playerIndex });
+            const warInfo = this._warInfo;
+            if (warInfo) {
+                const playersCount  = warInfo.settingsForCommon.warRule.ruleForPlayers.playerRuleDataList.length;
+                const dataList      : DataForPlayerRenderer[] = [];
+                for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
+                    dataList.push({
+                        playerIndex,
+                        warInfo: warInfo,
+                    });
+                }
+                this._listPlayer.bindData(dataList);
             }
-            this._listPlayer.bindData(dataList);
         }
 
         private async _updateLabelMapName(): Promise<void> {
-            const mapId             = this._mapRawData.mapId;
-            this._labelMapName.text = `${await WarMapModel.getMapNameInCurrentLanguage(mapId) || "----"} (${Lang.getText(Lang.Type.B0163)}: ${await WarMapModel.getDesignerName(mapId) || "----"})`;
+            const warInfo = this._warInfo;
+            if (warInfo) {
+                const mapId             = warInfo.settingsForCommon.mapId;
+                this._labelMapName.text = `${await WarMapModel.getMapNameInCurrentLanguage(mapId) || "----"} (${Lang.getText(Lang.Type.B0163)}: ${await WarMapModel.getDesignerName(mapId) || "----"})`;
+            }
         }
     }
 
     type DataForPlayerRenderer = {
         playerIndex : number;
+        warInfo     : IMcwWarInfo;
     }
 
     class PlayerRenderer extends eui.ItemRenderer {
@@ -93,37 +119,37 @@ namespace TinyWars.MultiCustomRoom {
             this._updateView();
         }
 
-        private async _updateView(): Promise<void> {
-            this._listInfo.bindData(await this._createDataForListInfo());
+        private _updateView(): void {
+            this._listInfo.bindData(this._createDataForListInfo());
         }
 
-        private async _createDataForListInfo(): Promise<DataForInfoRenderer[]> {
+        private _createDataForListInfo(): DataForInfoRenderer[] {
             const data          = this.data as DataForPlayerRenderer;
             const playerIndex   = data.playerIndex;
-            const roomInfo      = await McrModel.Join.getRoomInfo();
+            const warInfo       = data.warInfo;
             return [
-                this._createDataPlayerIndex(roomInfo, playerIndex),
-                this._createDataInitialFund(roomInfo, playerIndex),
-                this._createDataIncomeMultiplier(roomInfo, playerIndex),
-                this._createDataInitialEnergyPercentage(roomInfo, playerIndex),
-                this._createDataEnergyGrowthMultiplier(roomInfo, playerIndex),
-                this._createDataMoveRangeModifier(roomInfo, playerIndex),
-                this._createDataAttackPowerModifier(roomInfo, playerIndex),
-                this._createDataVisionRangeModifier(roomInfo, playerIndex),
-                this._createDataLuckLowerLimit(roomInfo, playerIndex),
-                this._createDataLuckUpperLimit(roomInfo, playerIndex),
+                this._createDataPlayerIndex(warInfo, playerIndex),
+                this._createDataInitialFund(warInfo, playerIndex),
+                this._createDataIncomeMultiplier(warInfo, playerIndex),
+                this._createDataInitialEnergyPercentage(warInfo, playerIndex),
+                this._createDataEnergyGrowthMultiplier(warInfo, playerIndex),
+                this._createDataMoveRangeModifier(warInfo, playerIndex),
+                this._createDataAttackPowerModifier(warInfo, playerIndex),
+                this._createDataVisionRangeModifier(warInfo, playerIndex),
+                this._createDataLuckLowerLimit(warInfo, playerIndex),
+                this._createDataLuckUpperLimit(warInfo, playerIndex),
             ];
         }
-        private _createDataPlayerIndex(roomInfo: IMcrRoomInfo, playerIndex: number): DataForInfoRenderer {
-            const playerRule = BwSettingsHelper.getPlayerRule(roomInfo.settingsForCommon, playerIndex);
+        private _createDataPlayerIndex(warInfo: IMcwWarInfo, playerIndex: number): DataForInfoRenderer {
+            const playerRule = BwSettingsHelper.getPlayerRule(warInfo.settingsForCommon, playerIndex);
             return {
                 titleText   : Lang.getText(Lang.Type.B0018),
                 infoText    : `${Lang.getPlayerForceName(playerIndex)} (${Lang.getPlayerTeamName(playerRule.teamIndex)})`,
                 infoColor   : 0xFFFFFF,
             };
         }
-        private _createDataInitialFund(roomInfo: IMcrRoomInfo, playerIndex: number): DataForInfoRenderer {
-            const playerRule    = BwSettingsHelper.getPlayerRule(roomInfo.settingsForCommon, playerIndex);
+        private _createDataInitialFund(warInfo: IMcwWarInfo, playerIndex: number): DataForInfoRenderer {
+            const playerRule    = BwSettingsHelper.getPlayerRule(warInfo.settingsForCommon, playerIndex);
             const currValue     = playerRule.initialFund;
             return {
                 titleText       : Lang.getText(Lang.Type.B0178),
@@ -131,8 +157,8 @@ namespace TinyWars.MultiCustomRoom {
                 infoColor       : getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault),
             };
         }
-        private _createDataIncomeMultiplier(roomInfo: IMcrRoomInfo, playerIndex: number): DataForInfoRenderer {
-            const playerRule    = BwSettingsHelper.getPlayerRule(roomInfo.settingsForCommon, playerIndex);
+        private _createDataIncomeMultiplier(warInfo: IMcwWarInfo, playerIndex: number): DataForInfoRenderer {
+            const playerRule    = BwSettingsHelper.getPlayerRule(warInfo.settingsForCommon, playerIndex);
             const currValue     = playerRule.incomeMultiplier;
             return {
                 titleText       : Lang.getText(Lang.Type.B0179),
@@ -140,8 +166,8 @@ namespace TinyWars.MultiCustomRoom {
                 infoColor       : getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault),
             };
         }
-        private _createDataInitialEnergyPercentage(roomInfo: IMcrRoomInfo, playerIndex: number): DataForInfoRenderer {
-            const playerRule    = BwSettingsHelper.getPlayerRule(roomInfo.settingsForCommon, playerIndex);
+        private _createDataInitialEnergyPercentage(warInfo: IMcwWarInfo, playerIndex: number): DataForInfoRenderer {
+            const playerRule    = BwSettingsHelper.getPlayerRule(warInfo.settingsForCommon, playerIndex);
             const currValue     = playerRule.initialEnergyPercentage;
             return {
                 titleText       : Lang.getText(Lang.Type.B0180),
@@ -149,8 +175,8 @@ namespace TinyWars.MultiCustomRoom {
                 infoColor       : getTextColor(currValue, CommonConstants.WarRuleInitialEnergyDefault),
             };
         }
-        private _createDataEnergyGrowthMultiplier(roomInfo: IMcrRoomInfo, playerIndex: number): DataForInfoRenderer {
-            const playerRule    = BwSettingsHelper.getPlayerRule(roomInfo.settingsForCommon, playerIndex);
+        private _createDataEnergyGrowthMultiplier(warInfo: IMcwWarInfo, playerIndex: number): DataForInfoRenderer {
+            const playerRule    = BwSettingsHelper.getPlayerRule(warInfo.settingsForCommon, playerIndex);
             const currValue     = playerRule.energyGrowthMultiplier;
             return {
                 titleText       : Lang.getText(Lang.Type.B0181),
@@ -158,8 +184,8 @@ namespace TinyWars.MultiCustomRoom {
                 infoColor       : getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault),
             };
         }
-        private _createDataMoveRangeModifier(roomInfo: IMcrRoomInfo, playerIndex: number): DataForInfoRenderer {
-            const playerRule    = BwSettingsHelper.getPlayerRule(roomInfo.settingsForCommon, playerIndex);
+        private _createDataMoveRangeModifier(warInfo: IMcwWarInfo, playerIndex: number): DataForInfoRenderer {
+            const playerRule    = BwSettingsHelper.getPlayerRule(warInfo.settingsForCommon, playerIndex);
             const currValue     = playerRule.moveRangeModifier;
             return {
                 titleText       : Lang.getText(Lang.Type.B0182),
@@ -167,8 +193,8 @@ namespace TinyWars.MultiCustomRoom {
                 infoColor       : getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault),
             };
         }
-        private _createDataAttackPowerModifier(roomInfo: IMcrRoomInfo, playerIndex: number): DataForInfoRenderer {
-            const playerRule    = BwSettingsHelper.getPlayerRule(roomInfo.settingsForCommon, playerIndex);
+        private _createDataAttackPowerModifier(warInfo: IMcwWarInfo, playerIndex: number): DataForInfoRenderer {
+            const playerRule    = BwSettingsHelper.getPlayerRule(warInfo.settingsForCommon, playerIndex);
             const currValue     = playerRule.attackPowerModifier;
             return {
                 titleText       : Lang.getText(Lang.Type.B0183),
@@ -176,8 +202,8 @@ namespace TinyWars.MultiCustomRoom {
                 infoColor       : getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault),
             };
         }
-        private _createDataVisionRangeModifier(roomInfo: IMcrRoomInfo, playerIndex: number): DataForInfoRenderer {
-            const playerRule    = BwSettingsHelper.getPlayerRule(roomInfo.settingsForCommon, playerIndex);
+        private _createDataVisionRangeModifier(warInfo: IMcwWarInfo, playerIndex: number): DataForInfoRenderer {
+            const playerRule    = BwSettingsHelper.getPlayerRule(warInfo.settingsForCommon, playerIndex);
             const currValue     = playerRule.visionRangeModifier;
             return {
                 titleText       : Lang.getText(Lang.Type.B0184),
@@ -185,8 +211,8 @@ namespace TinyWars.MultiCustomRoom {
                 infoColor       : getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault),
             };
         }
-        private _createDataLuckLowerLimit(roomInfo: IMcrRoomInfo, playerIndex: number): DataForInfoRenderer {
-            const playerRule    = BwSettingsHelper.getPlayerRule(roomInfo.settingsForCommon, playerIndex);
+        private _createDataLuckLowerLimit(warInfo: IMcwWarInfo, playerIndex: number): DataForInfoRenderer {
+            const playerRule    = BwSettingsHelper.getPlayerRule(warInfo.settingsForCommon, playerIndex);
             const currValue     = playerRule.luckLowerLimit;
             return {
                 titleText       : Lang.getText(Lang.Type.B0189),
@@ -194,8 +220,8 @@ namespace TinyWars.MultiCustomRoom {
                 infoColor       : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit),
             };
         }
-        private _createDataLuckUpperLimit(roomInfo: IMcrRoomInfo, playerIndex: number): DataForInfoRenderer {
-            const playerRule    = BwSettingsHelper.getPlayerRule(roomInfo.settingsForCommon, playerIndex);
+        private _createDataLuckUpperLimit(warInfo: IMcwWarInfo, playerIndex: number): DataForInfoRenderer {
+            const playerRule    = BwSettingsHelper.getPlayerRule(warInfo.settingsForCommon, playerIndex);
             const currValue     = playerRule.luckUpperLimit;
             return {
                 titleText       : Lang.getText(Lang.Type.B0190),

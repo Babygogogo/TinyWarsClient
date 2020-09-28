@@ -11,46 +11,46 @@ namespace TinyWars.MultiCustomRoom {
     import CommonConstants  = Utility.ConfigManager.COMMON_CONSTANTS;
 
     export class McrCreateBasicSettingsPage extends GameUi.UiTabPage {
-        private _btnMapNameTitle    : GameUi.UiButton;
-        private _labelMapName       : GameUi.UiLabel;
-        private _btnBuildings       : GameUi.UiButton;
+        private _btnMapNameTitle            : TinyWars.GameUi.UiButton;
+        private _labelMapName               : TinyWars.GameUi.UiLabel;
+        private _btnBuildings               : TinyWars.GameUi.UiButton;
 
-        private _btnModifyWarName   : GameUi.UiButton;
-        private _labelWarName       : GameUi.UiLabel;
+        private _btnModifyWarName           : TinyWars.GameUi.UiButton;
+        private _labelWarName               : TinyWars.GameUi.UiLabel;
 
-        private _btnModifyWarPassword   : GameUi.UiButton;
-        private _labelWarPassword       : GameUi.UiLabel;
+        private _btnModifyWarPassword       : TinyWars.GameUi.UiButton;
+        private _labelWarPassword           : TinyWars.GameUi.UiLabel;
 
-        private _btnModifyWarComment    : GameUi.UiButton;
-        private _labelWarComment        : GameUi.UiLabel;
+        private _btnModifyWarComment        : TinyWars.GameUi.UiButton;
+        private _labelWarComment            : TinyWars.GameUi.UiLabel;
 
-        private _labelWarRule           : GameUi.UiLabel;
-        private _btnModifyWarRule       : GameUi.UiButton;
+        private _btnModifyWarRule           : TinyWars.GameUi.UiButton;
+        private _labelWarRule               : TinyWars.GameUi.UiLabel;
 
-        private _btnModifyPlayerIndex   : GameUi.UiButton;
-        private _labelPlayerIndex       : GameUi.UiLabel;
-        private _btnHelpPlayerIndex     : GameUi.UiButton;
-
-        private _btnModifyTeam  : GameUi.UiButton;
-        private _labelTeam      : GameUi.UiLabel;
-        private _btnHelpTeam    : GameUi.UiButton;
-
-        private _btnModifyHasFog    : GameUi.UiButton;
-        private _imgHasFog          : GameUi.UiImage;
-        private _btnHelpHasFog      : GameUi.UiButton;
+        private _btnModifyHasFog            : TinyWars.GameUi.UiButton;
+        private _imgHasFog                  : TinyWars.GameUi.UiImage;
+        private _btnHelpHasFog              : TinyWars.GameUi.UiButton;
 
         private _groupTimer                 : eui.Group;
-        private _btnModifyTimerType         : GameUi.UiButton;
-        private _labelTimerType             : GameUi.UiLabel;
-        private _btnHelpTimer               : GameUi.UiButton;
+        private _btnModifyTimerType         : TinyWars.GameUi.UiButton;
+        private _btnHelpTimer               : TinyWars.GameUi.UiButton;
+        private _labelTimerType             : TinyWars.GameUi.UiLabel;
         private _groupTimerRegular          : eui.Group;
-        private _btnModifyTimerRegular      : GameUi.UiButton;
+        private _btnModifyTimerRegular      : TinyWars.GameUi.UiButton;
         private _groupTimerIncremental      : eui.Group;
-        private _btnModifyTimerIncremental1 : GameUi.UiButton;
-        private _btnModifyTimerIncremental2 : GameUi.UiButton;
+        private _btnModifyTimerIncremental1 : TinyWars.GameUi.UiButton;
+        private _btnModifyTimerIncremental2 : TinyWars.GameUi.UiButton;
 
-        private _labelCoName        : GameUi.UiLabel;
-        private _btnChangeCo        : GameUi.UiButton;
+        private _btnModifyPlayerIndex       : TinyWars.GameUi.UiButton;
+        private _labelPlayerIndex           : TinyWars.GameUi.UiLabel;
+        private _btnHelpPlayerIndex         : TinyWars.GameUi.UiButton;
+
+        private _btnChangeCo                : TinyWars.GameUi.UiButton;
+        private _labelCoName                : TinyWars.GameUi.UiLabel;
+
+        private _btnModifySkinId            : TinyWars.GameUi.UiButton;
+        private _labelSkinId                : TinyWars.GameUi.UiLabel;
+        private _btnHelpSkinId              : TinyWars.GameUi.UiButton;
 
         private _mapRawData : ProtoTypes.Map.IMapRawData;
 
@@ -86,7 +86,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         protected async _onOpened(): Promise<void> {
-            this._mapRawData = await McrModel.getCreateWarMapExtraData();
+            this._mapRawData = await McrModel.Create.getMapRawData();
 
             this._updateComponentsForLanguage();
             this._updateComponentsForWarRule();
@@ -106,12 +106,12 @@ namespace TinyWars.MultiCustomRoom {
         private _onTouchedBtnModifyWarName(e: egret.TouchEvent): void {
             Common.CommonInputPanel.show({
                 title           : Lang.getText(Lang.Type.B0185),
-                currentValue    : McrModel.getCreateWarName(),
+                currentValue    : McrModel.Create.getWarName(),
                 maxChars        : CommonConstants.WarNameMaxLength,
                 charRestrict    : null,
                 tips            : null,
                 callback        : panel => {
-                    McrModel.setCreateWarName(panel.getInputText());
+                    McrModel.Create.setWarName(panel.getInputText());
                     this._updateLabelWarName();
                 },
             });
@@ -120,12 +120,12 @@ namespace TinyWars.MultiCustomRoom {
         private _onTouchedBtnModifyWarPassword(e: egret.Event): void {
             Common.CommonInputPanel.show({
                 title           : Lang.getText(Lang.Type.B0186),
-                currentValue    : McrModel.getCreateWarPassword(),
+                currentValue    : McrModel.Create.getWarPassword(),
                 maxChars        : CommonConstants.WarPasswordMaxLength,
                 charRestrict    : "0-9",
                 tips            : Lang.getText(Lang.Type.B0323),
                 callback        : panel => {
-                    McrModel.setCreateWarPassword(panel.getInputText());
+                    McrModel.Create.setWarPassword(panel.getInputText());
                     this._updateLabelWarPassword();
                 },
             });
@@ -134,29 +134,29 @@ namespace TinyWars.MultiCustomRoom {
         private _onTouchedBtnModifyWarComment(e: egret.Event): void {
             Common.CommonInputPanel.show({
                 title           : Lang.getText(Lang.Type.B0187),
-                currentValue    : McrModel.getCreateWarComment(),
+                currentValue    : McrModel.Create.getWarComment(),
                 maxChars        : CommonConstants.WarCommentMaxLength,
                 charRestrict    : null,
                 tips            : null,
                 callback        : panel => {
-                    McrModel.setCreateWarComment(panel.getInputText());
+                    McrModel.Create.setWarComment(panel.getInputText());
                     this._updateLabelWarComment();
                 },
             });
         }
 
         private async _onTouchedBtnModifyWarRule(e: egret.TouchEvent): Promise<void> {
-            const rules         = (await McrModel.getCreateWarMapRawData()).warRuleList;
+            const rules         = (await McrModel.Create.getMapRawData()).warRuleList;
             const rulesCount    = rules ? rules.length : 0;
             if (rulesCount <= 0) {
                 FloatText.show(Lang.getText(Lang.Type.A0100));
             } else {
-                const currIndex = McrModel.getCreateWarWarRuleIndex();
+                const currIndex = McrModel.Create.getCreateWarWarRuleIndex();
                 const newIndex  = currIndex == null
                     ? 0
                     : (currIndex + 1 >= rulesCount ? null : currIndex + 1);
                 McrModel.setCreateWarWarRuleIndex(newIndex);
-                await McrModel.resetCreateWarDataForSelectedRule();
+                await McrModel.Create.resetDataByPresetWarRuleId();
                 this._updateComponentsForWarRule();
             }
         }
@@ -167,7 +167,7 @@ namespace TinyWars.MultiCustomRoom {
 
             const index = McrModel.getCreateWarWarRuleIndex();
             if (index != null) {
-                McrModel.setCreateWarTeamIndex((await WarMapModel.getPlayerRule(McrModel.getCreateRoomMapId(), index, McrModel.getCreateWarPlayerIndex())).teamIndex);
+                McrModel.setCreateWarTeamIndex((await WarMapModel.getPlayerRule(McrModel.Create.getMapId(), index, McrModel.getCreateWarPlayerIndex())).teamIndex);
                 this._updateLabelTeam();
             }
         }
@@ -183,7 +183,7 @@ namespace TinyWars.MultiCustomRoom {
             if (McrModel.getCreateWarWarRuleIndex() != null) {
                 FloatText.show(Lang.getText(Lang.Type.A0101));
             } else {
-                await McrModel.setCreateWarNextTeamIndex();
+                await McrModel.tickCreateWarTeamIndex();
                 this._updateLabelTeam();
             }
         }
@@ -279,8 +279,8 @@ namespace TinyWars.MultiCustomRoom {
 
         private async _onTouchedBtnBuildings(e: egret.TouchEvent): Promise<void> {
             McrBuildingListPanel.show({
-                configVersion   : McrModel.getCreateWarData().settingsForCommon.configVersion,
-                mapRawData      : await WarMapModel.getRawData(McrModel.getCreateRoomMapId()),
+                configVersion   : McrModel.Create.getData().settingsForCommon.configVersion,
+                mapRawData      : await WarMapModel.getRawData(McrModel.Create.getMapId()),
             });
         }
 
@@ -333,7 +333,7 @@ namespace TinyWars.MultiCustomRoom {
             if (index == null) {
                 label.text = Lang.getText(Lang.Type.B0321);
             } else {
-                const ruleNameList  = (await McrModel.getCreateWarMapRawData()).warRuleList[index].ruleNameList;
+                const ruleNameList  = (await McrModel.Create.getMapRawData()).warRuleList[index].ruleNameList;
                 label.text          = Lang.getLanguageType() === Types.LanguageType.Chinese
                     ? ruleNameList[0]
                     : ruleNameList[1] || ruleNameList[0];

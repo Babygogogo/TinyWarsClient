@@ -79,8 +79,8 @@ namespace TinyWars.MultiCustomRoom {
             McrJoinMapListPanel.show();
         }
 
-        private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            const data      = McrModel.getJoinWarData();
+        private async _onTouchedBtnConfirm(e: egret.TouchEvent): Promise<void> {
+            const data      = McrModel.Join.getData();
             const callback1 = () => {
                 McrProxy.reqMcrJoinRoom(data);
 
@@ -99,7 +99,7 @@ namespace TinyWars.MultiCustomRoom {
                 }
             }
 
-            if (McrModel.getJoinWarWarRuleIndex() != null) {
+            if ((await McrModel.Join.getRoomInfo()).settingsForCommon.presetWarRuleId != null) {
                 callback2();
             } else {
                 CommonConfirmPanel.show({

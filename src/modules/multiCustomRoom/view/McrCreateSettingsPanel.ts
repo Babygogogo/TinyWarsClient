@@ -44,7 +44,7 @@ namespace TinyWars.MultiCustomRoom {
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
             ];
             this._notifyListeners = [
-                { type: Notify.Type.SMcrCreateRoom,      callback: this._onNotifySCreateCustomOnlineWar },
+                { type: Notify.Type.SMcrCreateRoom,     callback: this._onNotifySCreateCustomOnlineWar },
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ];
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
@@ -77,23 +77,11 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            const data      = McrModel.getCreateWarData();
-            const callback  = () => {
-                McrProxy.reqCreateRoom(data);
+            const data = McrModel.Create.getData();
+            McrProxy.reqCreateRoom(data);
 
-                this._btnConfirm.enabled = false;
-                this._resetTimeoutForBtnConfirm();
-            }
-
-            if (data.coId != null) {
-                callback();
-            } else {
-                Common.CommonConfirmPanel.show({
-                    title   : Lang.getText(Lang.Type.B0088),
-                    content : `${Lang.getText(Lang.Type.A0050)}\n${Lang.getText(Lang.Type.A0051)}`,
-                    callback,
-                });
-            }
+            this._btnConfirm.enabled = false;
+            this._resetTimeoutForBtnConfirm();
         }
 
         private _onNotifySCreateCustomOnlineWar(e: egret.Event): void {

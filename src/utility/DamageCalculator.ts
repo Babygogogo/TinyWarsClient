@@ -21,7 +21,6 @@ namespace TinyWars.Utility.DamageCalculator {
     }
 
     function getLuckValue(war: BwWar, playerIndex: number): number | undefined {
-        // TODO: take skill into account.
         const randomNumber = war.getRandomNumber();
         if (randomNumber == null) {
             Logger.error(`DamageCalculator.getLuckValue() empty randomNumber.`);

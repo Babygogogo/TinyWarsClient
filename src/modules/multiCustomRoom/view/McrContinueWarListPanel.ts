@@ -53,8 +53,7 @@ namespace TinyWars.MultiCustomRoom {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.SMcrGetJoinedOngoingInfos,  callback: this._onNotifySMcrGetJoinedOngoingInfos },
-                { type: Notify.Type.SMcrExitWar,                callback: this._onNotifySMcrExitWar },
+                { type: Notify.Type.SMcwCommonGetWarInfoList,  callback: this._onNotifySMcrGetJoinedOngoingInfos },
                 { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
             ];
             this._uiListeners = [
@@ -70,7 +69,7 @@ namespace TinyWars.MultiCustomRoom {
             this._zoomMap.setTouchListenerEnabled(true);
             this._updateComponentsForLanguage();
 
-            McrProxy.reqGetJoinedOngoingInfos();
+            McrProxy.reqMcwCommonGetWarInfoList();
         }
 
         protected _onClosed(): void {
@@ -107,7 +106,7 @@ namespace TinyWars.MultiCustomRoom {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
         private _onNotifySMcrGetJoinedOngoingInfos(e: egret.Event): void {
-            const newData        = this._createDataForListWar(McrModel.getJoinedOngoingInfos());
+            const newData        = this._createDataForListWar(McrModel.getOngoingWarInfoList());
             this._dataForListWar = newData;
 
             if (newData.length > 0) {
@@ -118,10 +117,6 @@ namespace TinyWars.MultiCustomRoom {
                 this._listWar.clear();
             }
             this.setSelectedIndex(0);
-        }
-
-        private _onNotifySMcrExitWar(e: egret.Event): void {
-            FloatText.show(Lang.getText(Lang.Type.A0016));
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
@@ -274,7 +269,8 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
             const data = this.data as DataForWarRenderer;
-            McrContinueDetailPanel.show(data.warInfo);
+            McrContinueWarListPanel.hide();
+            McrContinueWarInfoPanel.show(data.warInfo);
         }
 
         private _checkIsInTurn(info: ProtoTypes.IMcwOngoingDetail): boolean {
