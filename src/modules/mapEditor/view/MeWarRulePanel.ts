@@ -645,7 +645,7 @@ namespace TinyWars.MapEditor {
     type DataForPlayerRuleRenderer = {
         index       : number;
         warRule     : MeWarRule;
-        playerRule  : ProtoTypes.IRuleForPlayer;
+        playerRule  : ProtoTypes.WarRule.IDataForPlayerRule;
         panel       : MeWarRulePanel;
     }
 

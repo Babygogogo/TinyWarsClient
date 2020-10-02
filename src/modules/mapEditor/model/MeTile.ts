@@ -2,8 +2,8 @@
 namespace TinyWars.MapEditor {
     import Types            = Utility.Types;
     import Logger           = Utility.Logger;
-    import Helpers          = Utility.Helpers;
-    import SerializedBwTile = Types.SerializedTile;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import ISerialTile      = ProtoTypes.WarSerialization.ISerialTile;
     import TileType         = Types.TileType;
     import TileObjectType   = Types.TileObjectType;
 
@@ -27,7 +27,7 @@ namespace TinyWars.MapEditor {
         private _view           : MeTileView;
         private _isFogEnabled   : boolean;
 
-        public init(data: SerializedBwTile, configVersion: string): MeTile {
+        public init(data: ISerialTile, configVersion: string): MeTile {
             const t = Utility.ConfigManager.getTileObjectTypeAndPlayerIndex(data.objectViewId!);
             Logger.assert(t, "TileModel.init() invalid SerializedTile! ", data);
 
@@ -88,7 +88,7 @@ namespace TinyWars.MapEditor {
             return needSerialize ? data : null;
         }
 
-        public serializeForSimulation(): SerializedBwTile {
+        public serializeForSimulation(): ISerialTile {
             const data: Types.SerializedTile = {
                 gridX         : this.getGridX(),
                 gridY         : this.getGridY(),

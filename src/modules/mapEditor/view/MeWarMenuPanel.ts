@@ -1,14 +1,15 @@
 
 namespace TinyWars.MapEditor {
-    import Notify       = Utility.Notify;
-    import Lang         = Utility.Lang;
-    import Types        = Utility.Types;
-    import FlowManager  = Utility.FlowManager;
-    import Logger       = Utility.Logger;
-    import FloatText    = Utility.FloatText;
-    import LocalStorage = Utility.LocalStorage;
-    import ProtoTypes   = Utility.ProtoTypes;
-    import TimeModel    = Time.TimeModel;
+    import Notify           = Utility.Notify;
+    import Lang             = Utility.Lang;
+    import Types            = Utility.Types;
+    import FlowManager      = Utility.FlowManager;
+    import Logger           = Utility.Logger;
+    import ConfigManager    = Utility.ConfigManager;
+    import FloatText        = Utility.FloatText;
+    import LocalStorage     = Utility.LocalStorage;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import TimeModel        = Time.TimeModel;
 
     const enum MenuType {
         Main,
@@ -134,7 +135,7 @@ namespace TinyWars.MapEditor {
         }
 
         private _onNotifySMmReviewMap(e: egret.Event): void {
-            const data = e.data as ProtoTypes.IS_MmReviewMap;
+            const data = e.data as ProtoTypes.NetMessage.IS_MmReviewMap;
             if (data.isAccept) {
                 FloatText.show(Lang.getText(Lang.Type.A0092));
             } else {
@@ -144,12 +145,12 @@ namespace TinyWars.MapEditor {
         }
 
         private _onNotifySScrCreateCustomWar(e: egret.Event): void {
-            const data = e.data as ProtoTypes.IS_ScrCreateCustomWar;
+            const data = e.data as ProtoTypes.NetMessage.IS_ScrCreateCustomWar;
             Common.CommonConfirmPanel.show({
                 title   : Lang.getText(Lang.Type.B0088),
                 content : Lang.getText(Lang.Type.A0107),
                 callback: () => {
-                    FlowManager.gotoSingleCustomWar(data.warData as Types.SerializedWar);
+                    FlowManager.gotoSingleCustomWar(data.warData);
                 },
             });
         }
@@ -327,7 +328,7 @@ namespace TinyWars.MapEditor {
                 if (!tile.getObjectViewId()) {
                     const tileType      = tile.getType();
                     const playerIndex   = tile.getPlayerIndex();
-                    const baseViewId    = Utility.ConfigManager.getTileBaseViewId(Utility.ConfigManager.getTileBaseType(tile.getBaseViewId()));
+                    const baseViewId    = ConfigManager.getTileBaseViewId(ConfigManager.getTileBaseType(tile.getBaseViewId()));
                     if (dictForTileBases.has(baseViewId)) {
                         ++dictForTileBases.get(baseViewId).count;
                     } else {
@@ -342,7 +343,7 @@ namespace TinyWars.MapEditor {
                 } else {
                     const tileType      = tile.getType();
                     const playerIndex   = tile.getPlayerIndex();
-                    const objectViewId  = Utility.ConfigManager.getTileObjectViewId(Utility.ConfigManager.getTileObjectTypeByTileType(tileType), playerIndex);
+                    const objectViewId  = ConfigManager.getTileObjectViewId(ConfigManager.getTileObjectTypeByTileType(tileType), playerIndex);
                     if (dictForTileObjects.has(objectViewId)) {
                         ++dictForTileObjects.get(objectViewId).count;
                     } else {
@@ -483,7 +484,7 @@ namespace TinyWars.MapEditor {
                                 const data      = MeModel.getData(slotIndex);
                                 war.stopRunning()
                                     .init(
-                                        (data ? data.mapRawData as Types.MapRawData : null) || MeUtility.createDefaultMapRawData(slotIndex),
+                                        (data ? data.mapRawData : null) || MeUtility.createDefaultMapRawData(slotIndex),
                                         slotIndex,
                                         war.getConfigVersion(),
                                         war.getIsReview()

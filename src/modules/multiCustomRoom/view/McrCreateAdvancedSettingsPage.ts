@@ -25,7 +25,8 @@ namespace TinyWars.MultiCustomRoom {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.McrCreateAvailableCoIdListChanged,  callback: this._onNotifyMcrCreateAvailableCoIdListChanged },
             ];
 
             this._listPlayer.setItemRenderer(PlayerRenderer);
@@ -45,6 +46,9 @@ namespace TinyWars.MultiCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////
         private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
+        }
+        private _onNotifyMcrCreateAvailableCoIdListChanged(e: egret.Event): void {
+            this._updateListPlayer();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -135,7 +139,7 @@ namespace TinyWars.MultiCustomRoom {
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        McrModel.Create.tickTeamIndex(playerIndex);
+                        McrCreateAvailableCoPanel.show(playerIndex);
                     });
                 },
             };

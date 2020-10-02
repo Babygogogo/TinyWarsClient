@@ -278,7 +278,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onTouchedBtnChangeCo(e: egret.TouchEvent): void {
             McrCreateSettingsPanel.hide();
-            McrCreateCoListPanel.show(McrModel.Create.getSelfCoId());
+            McrCreateChooseCoPanel.show(McrModel.Create.getSelfCoId());
         }
 
         private async _onTouchedBtnBuildings(e: egret.TouchEvent): Promise<void> {

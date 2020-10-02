@@ -368,6 +368,9 @@ namespace TinyWars.MultiCustomRoom {
             export function removeAvailableCoId(playerIndex: number, coId: number): void {
                 BwSettingsHelper.removeAvailableCoId(getData().settingsForCommon, playerIndex, coId);
             }
+            export function setAvailableCoIdList(playerIndex: number, coIdSet: Set<number>): void {
+                BwSettingsHelper.setAvailableCoIdList(getData().settingsForCommon, playerIndex, coIdSet);
+            }
 
             export function setLuckLowerLimit(playerIndex: number, limit: number): void {
                 BwSettingsHelper.setLuckLowerLimit(getData().settingsForCommon, playerIndex, limit);

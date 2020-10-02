@@ -91,13 +91,13 @@ namespace TinyWars.MapManagement {
                         MmAvailabilityListPanel.show({});
                     },
                 },
-                {
-                    name    : Lang.getText(Lang.Type.B0268),
-                    callback: (): void => {
-                        this.close();
-                        MmMergeListPanel.show();
-                    },
-                },
+                // {
+                //     name    : Lang.getText(Lang.Type.B0268),
+                //     callback: (): void => {
+                //         this.close();
+                //         MmMergeListPanel.show();
+                //     },
+                // },
                 {
                     name    : Lang.getText(Lang.Type.B0295),
                     callback: (): void => {

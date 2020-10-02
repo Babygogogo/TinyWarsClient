@@ -1936,7 +1936,7 @@ namespace TinyWars.Utility.ConfigManager {
         return _CO_TIERS.get(version);
     }
 
-    export function getCoIdListInTier(version: string, tier: number): number[] {
+    export function getAvailableCoIdListInTier(version: string, tier: number): number[] {
         if (!_CO_ID_LIST_IN_TIER.has(version)) {
             _CO_ID_LIST_IN_TIER.set(version, new Map<number, number[]>());
         }
@@ -1954,7 +1954,7 @@ namespace TinyWars.Utility.ConfigManager {
         return cfgs.get(tier);
     }
 
-    export function getCustomCoIdList(version: string): number[] {
+    export function getAvailableCustomCoIdList(version: string): number[] {
         if (!_CUSTOM_CO_ID_LIST.has(version)) {
             const idList: number[] = [];
             for (const cfg of getAvailableCoList(version)) {

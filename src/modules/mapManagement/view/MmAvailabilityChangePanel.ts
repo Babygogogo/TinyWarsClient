@@ -1,8 +1,6 @@
 
 namespace TinyWars.MapManagement {
-    import FloatText    = Utility.FloatText;
     import Lang         = Utility.Lang;
-    import Types        = Utility.Types;
     import NotifyType   = Utility.Notify.Type;
     import WarMapModel  = WarMap.WarMapModel;
     import WarMapProxy  = WarMap.WarMapProxy;
@@ -10,6 +8,8 @@ namespace TinyWars.MapManagement {
     export class MmAvailabilityChangePanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
+
+        private static _instance: MmAvailabilityChangePanel;
 
         private _groupMcw   : eui.Group;
         private _labelMcw   : GameUi.UiLabel;
@@ -23,14 +23,13 @@ namespace TinyWars.MapManagement {
         private _btnDelete  : GameUi.UiButton;
         private _btnConfirm : GameUi.UiButton;
 
-        private static _instance: MmAvailabilityChangePanel;
-        private _mapFileName    : string;
+        private _mapId      : number;
 
-        public static show(mapFileName: string): void {
+        public static show(mapId: number): void {
             if (!MmAvailabilityChangePanel._instance) {
                 MmAvailabilityChangePanel._instance = new MmAvailabilityChangePanel();
             }
-            MmAvailabilityChangePanel._instance._mapFileName = mapFileName;
+            MmAvailabilityChangePanel._instance._mapId = mapId;
             MmAvailabilityChangePanel._instance.open();
         }
 
@@ -63,9 +62,9 @@ namespace TinyWars.MapManagement {
         protected async _onOpened(): Promise<void> {
             this._updateComponentsForLanguage();
 
-            const mapExtraData      = await WarMapModel.getExtraData(this._mapFileName);
-            this._imgMcw.visible    = !!mapExtraData.canMcw;
-            this._imgScw.visible    = !!mapExtraData.canScw;
+            const availability      = (await WarMapModel.getExtraData(this._mapId)).mapComplexInfo.availability;
+            this._imgMcw.visible    = !!availability.canMcw;
+            this._imgScw.visible    = !!availability.canScw;
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
@@ -73,7 +72,7 @@ namespace TinyWars.MapManagement {
         }
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            WarMapProxy.reqMmChangeAvailability(this._mapFileName, {
+            WarMapProxy.reqMmChangeAvailability(this._mapId, {
                 canMcw : this._imgMcw.visible,
                 canWr  : false,
                 canScw : this._imgScw.visible,
@@ -86,7 +85,7 @@ namespace TinyWars.MapManagement {
                 title   : Lang.getText(Lang.Type.B0088),
                 content : Lang.getText(Lang.Type.A0080),
                 callback: () => {
-                    WarMapProxy.reqMmDeleteMap(this._mapFileName);
+                    WarMapProxy.reqMmDeleteMap(this._mapId);
                     this.close();
                 },
             });

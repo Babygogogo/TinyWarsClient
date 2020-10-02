@@ -27,6 +27,8 @@ namespace TinyWars.Utility.Notify {
         ChatPanelOpened,
         ChatPanelClosed,
 
+        McrCreateAvailableCoIdListChanged,
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         BwExecutedActionsCountChanged,
         BwTurnIndexChanged,

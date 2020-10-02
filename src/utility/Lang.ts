@@ -649,6 +649,10 @@ namespace TinyWars.Utility.Lang {
             `您确定要使用自定义规则吗？`,
             `Are you sure to use a custom rule?`,
         ],
+        [Type.A0130]: [
+            `您需要保留最少一个可选CO（可以是无CO）`,
+            `There must be at least one available CO.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -3197,6 +3201,16 @@ namespace TinyWars.Utility.Lang {
             return getLanguageType() === LanguageType.Chinese
                 ? list[0]
                 : list[1] || list[0];
+        }
+    }
+
+    export function getNameInCurrentLanguage(nameList: string[] | null | undefined): string | undefined {
+        if (!nameList) {
+            return undefined;
+        } else {
+            return getLanguageType() === LanguageType.Chinese
+                ? nameList[0]
+                : nameList[1] || nameList[0];
         }
     }
 

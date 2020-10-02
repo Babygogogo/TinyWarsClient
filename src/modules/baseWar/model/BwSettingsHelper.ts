@@ -291,6 +291,18 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
             }
         }
     }
+    export function setAvailableCoIdList(settingsForCommon: ISettingsForCommon, playerIndex: number, coIdSet: Set<number>): void {
+        const coIdList = getAvailableCoIdList(settingsForCommon, playerIndex);
+        if (coIdList == null) {
+            Logger.error(`BwSettingsHelper.setAvailableCoIdList() empty coIdList.`);
+            return undefined;
+        }
+
+        coIdList.length = 0;
+        for (const coId of coIdSet) {
+            coIdList.push(coId);
+        }
+    }
 
     export function getTeamIndex(settingsForCommon: ISettingsForCommon, playerIndex: number): number {
         const playerRule = getPlayerRule(settingsForCommon, playerIndex);

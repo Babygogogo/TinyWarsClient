@@ -1,13 +1,14 @@
 
 namespace TinyWars.MapManagement {
-    import Notify       = Utility.Notify;
-    import Types        = Utility.Types;
-    import FloatText    = Utility.FloatText;
-    import Helpers      = Utility.Helpers;
-    import Lang         = Utility.Lang;
-    import ProtoTypes   = Utility.ProtoTypes;
-    import WarMapModel  = WarMap.WarMapModel;
-    import WarMapProxy  = WarMap.WarMapProxy;
+    import Notify           = Utility.Notify;
+    import Types            = Utility.Types;
+    import FloatText        = Utility.FloatText;
+    import Helpers          = Utility.Helpers;
+    import Lang             = Utility.Lang;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import WarMapModel      = WarMap.WarMapModel;
+    import WarMapProxy      = WarMap.WarMapProxy;
+    import IMapEditorData   = ProtoTypes.Map.IMapEditorData;
 
     export class MmReviewListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
@@ -131,7 +132,7 @@ namespace TinyWars.MapManagement {
             this._btnBack.label         = Lang.getText(Lang.Type.B0146);
         }
 
-        private _createDataForListMap(rawDataList: ProtoTypes.IMapEditorData[] | null): DataForMapRenderer[] {
+        private _createDataForListMap(rawDataList: IMapEditorData[] | null): DataForMapRenderer[] {
             const dataList: DataForMapRenderer[] = [];
 
             let index = 0;
@@ -139,7 +140,7 @@ namespace TinyWars.MapManagement {
                 dataList.push({
                     index,
                     panel   : this,
-                    mapData : data,
+                    mapEditorData : data,
                 });
                 ++index;
             }
@@ -148,15 +149,14 @@ namespace TinyWars.MapManagement {
         }
 
         private async _showMap(index: number): Promise<void> {
-            const mapData = this._dataForListMap[index].mapData.mapRawData;
+            const mapData = this._dataForListMap[index].mapEditorData.mapRawData;
             if (!mapData) {
                 this._zoomMap.removeAllContents();
 
             } else {
                 const tileMapView = new WarMap.WarMapTileMapView();
                 tileMapView.init(mapData.mapWidth, mapData.mapHeight);
-                tileMapView.updateWithTileDataList(mapData.tileBases);
-                tileMapView.updateWithObjectViewIdArray(mapData.tileObjects);
+                tileMapView.updateWithTileDataList(mapData.tileDataList);
 
                 const unitMapView = new WarMap.WarMapUnitMapView();
                 unitMapView.initWithMapRawData(mapData);
@@ -174,7 +174,7 @@ namespace TinyWars.MapManagement {
 
     type DataForMapRenderer = {
         index   : number;
-        mapData : ProtoTypes.IMapEditorData;
+        mapEditorData : IMapEditorData;
         panel   : MmReviewListPanel;
     }
 
@@ -195,13 +195,13 @@ namespace TinyWars.MapManagement {
             super.dataChanged();
 
             const data                  = this.data as DataForMapRenderer;
-            const mapData               = data.mapData;
-            const mapRawData            = mapData.mapRawData;
-            const status                = mapData.reviewStatus;
+            const mapEditorData         = data.mapEditorData;
+            const mapRawData            = mapEditorData.mapRawData;
+            const status                = mapEditorData.reviewStatus;
             this.currentState           = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
             this._labelStatus.text      = Lang.getMapReviewStatusText(status);
             this._labelStatus.textColor = getReviewStatusTextColor(status);
-            this._labelName.text        = (mapRawData ? mapRawData.mapName : null) || `(${Lang.getText(Lang.Type.B0277)})`;
+            this._labelName.text        = Lang.getNameInCurrentLanguage(mapRawData ? mapRawData.mapNameList : null) || `(${Lang.getText(Lang.Type.B0277)})`;
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
@@ -210,8 +210,8 @@ namespace TinyWars.MapManagement {
         }
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
-            const data = (this.data as DataForMapRenderer).mapData;
-            Utility.FlowManager.gotoMapEditor(data.mapRawData as Types.MapRawData, data.slotIndex, true);
+            const data = (this.data as DataForMapRenderer).mapEditorData;
+            Utility.FlowManager.gotoMapEditor(data.mapRawData, data.slotIndex, true);
         }
     }
 
