@@ -568,7 +568,7 @@ namespace TinyWars.SingleCustomWar {
             this._labelForce.text       = `${Lang.getPlayerForceName(playerIndex)}`
                 + `  ${Lang.getPlayerTeamName(player.getTeamIndex())}`
                 + `  ${isPlayerInTurn ? Lang.getText(Lang.Type.B0086) : ""}`;
-            (this._btnName.labelDisplay as GameUi.UiLabel).textColor = war.getIsSinglePlayerCheating() ? 0x00FF00 : 0xFFFFFF;
+            this._btnName.setTextColor(war.getIsSinglePlayerCheating() ? 0x00FF00 : 0xFFFFFF);
 
             if (!player.getIsAlive()) {
                 this._labelLost.visible = true;
@@ -1105,7 +1105,7 @@ namespace TinyWars.SingleCustomWar {
             this._labelValue.text       = data.infoText;
             this._labelValue.textColor  = data.infoColor;
             this._btnTitle.label        = data.titleText;
-            (this._btnTitle.labelDisplay as GameUi.UiLabel).textColor = data.callbackOnTouchedTitle ? 0x00FF00 : 0xFFFFFF;
+            this._btnTitle.setTextColor(data.callbackOnTouchedTitle ? 0x00FF00 : 0xFFFFFF);
         }
 
         private _onTouchedBtnTitle(e: egret.TouchEvent): void {

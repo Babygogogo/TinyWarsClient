@@ -254,8 +254,7 @@ namespace TinyWars.MultiCustomRoom {
                 getData().selfPlayerIndex = playerIndex;
             }
             export async function tickSelfPlayerIndex(): Promise<void> {
-                const playersCount = getData().settingsForCommon.warRule.ruleForPlayers.playerRuleDataList.length;
-                setSelfPlayerIndex(getSelfPlayerIndex() % playersCount + 1);
+                setSelfPlayerIndex(getSelfPlayerIndex() % BwSettingsHelper.getPlayersCount(getData().settingsForCommon) + 1);
             }
             export function getSelfPlayerIndex(): number {
                 return getData().selfPlayerIndex;
@@ -318,6 +317,18 @@ namespace TinyWars.MultiCustomRoom {
             }
             export function setTimerIncrementalIncrementalValue(seconds: number): void {
                 getBootTimerParams()[2] = seconds;
+            }
+
+            export function tickTeamIndex(playerIndex: number): void {
+                const settingsForCommon = getData().settingsForCommon;
+                BwSettingsHelper.setTeamIndex(
+                    settingsForCommon,
+                    playerIndex,
+                    getTeamIndex(playerIndex) % BwSettingsHelper.getPlayersCount(settingsForCommon) + 1
+                );
+            }
+            export function getTeamIndex(playerIndex: number): number {
+                return BwSettingsHelper.getTeamIndex(getData().settingsForCommon, playerIndex);
             }
 
             export function setInitialFund(playerIndex, fund: number): void {
@@ -538,7 +549,7 @@ namespace TinyWars.MultiCustomRoom {
     }
 
     function getAvailablePlayerIndexList(info: IMcrRoomInfo): number[] {
-        const playersCount      = info.settingsForCommon.warRule.ruleForPlayers.playerRuleDataList.length;
+        const playersCount      = BwSettingsHelper.getPlayersCount(info.settingsForCommon);
         const playerInfoList    = info.playerDataList;
         const indexes           : number[] = [];
         for (let i = 1; i <= playersCount; ++i) {

@@ -73,9 +73,9 @@ namespace TinyWars.MultiCustomRoom {
             ];
 
             this._listPlayer.setItemRenderer(PlayerRenderer);
-            (this._btnModifyPlayerIndex.labelDisplay as GameUi.UiLabel).textColor   = 0x00FF00;
-            (this._btnModifySkinId.labelDisplay as GameUi.UiLabel).textColor        = 0x00FF00;
-            (this._btnChangeCo.labelDisplay as GameUi.UiLabel).textColor            = 0x00FF00;
+            this._btnModifyPlayerIndex.setTextColor(0x00FF00);
+            this._btnModifySkinId.setTextColor(0x00FF00);
+            this._btnChangeCo.setTextColor(0x00FF00);
         }
 
         protected async _onOpened(): Promise<void> {
@@ -199,10 +199,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _updateLabelWarRule(): Promise<void> {
-            const ruleNameList      = (await McrModel.Join.getRoomInfo()).settingsForCommon.warRule.ruleNameList;
-            this._labelWarRule.text = Lang.getLanguageType() === Types.LanguageType.Chinese
-                ? ruleNameList[0]
-                : ruleNameList[1] || ruleNameList[0];
+            this._labelWarRule.text = Lang.getWarRuleNameInLanguage((await McrModel.Join.getRoomInfo()).settingsForCommon.warRule);
         }
 
         private async _updateLabelPlayerIndex(): Promise<void> {

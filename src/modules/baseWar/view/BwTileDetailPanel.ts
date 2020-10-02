@@ -343,7 +343,7 @@ namespace TinyWars.BaseWar {
             const data              = this.data as DataForInfoRenderer;
             this._btnTitle.label    = data.titleText;
             this._labelValue.text   = data.valueText;
-            (this._btnTitle.labelDisplay as GameUi.UiLabel).textColor = data.callbackOnTouchedTitle ? 0x00FF00 : 0xFFFFFF;
+            this._btnTitle.setTextColor(data.callbackOnTouchedTitle ? 0x00FF00 : 0xFFFFFF);
         }
 
         private _onTouchedBtnTitle(e: egret.TouchEvent): void {

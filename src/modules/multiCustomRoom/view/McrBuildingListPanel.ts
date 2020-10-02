@@ -1,9 +1,11 @@
 
 namespace TinyWars.MultiCustomRoom {
-    import Notify       = Utility.Notify;
-    import Lang         = Utility.Lang;
-    import Types        = Utility.Types;
-    import ProtoTypes   = Utility.ProtoTypes;
+    import Notify           = Utility.Notify;
+    import Lang             = Utility.Lang;
+    import Types            = Utility.Types;
+    import ConfigManager    = Utility.ConfigManager;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
     type OpenDataForMcrBuildingListPanel = {
         configVersion   : string;
@@ -73,25 +75,20 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _updateListTile(): void {
-            const openData          = this._openData;
-            const mapRawData        = openData.mapRawData;
-            const mapWidth          = mapRawData.mapWidth;
-            const objectViewIdList  = (mapRawData.tileObjects || []).concat();
-            for (const tile of mapRawData.tileDataList || []) {
-                objectViewIdList[tile.gridX + tile.gridY * mapWidth] = tile.objectViewId;
-            }
-
+            const openData      = this._openData;
+            const mapRawData    = openData.mapRawData;
             const configVersion = openData.configVersion;
             const dict          = new Map<number, Map<number, number>>();
-            for (const objectViewId of objectViewIdList) {
-                const { tileObjectType, playerIndex }   = Utility.ConfigManager.getTileObjectTypeAndPlayerIndex(objectViewId);
-                const template                          = Utility.ConfigManager.getTileTemplateCfg(configVersion, Types.TileBaseType.Plain, tileObjectType);
+            for (const tileData of mapRawData.tileDataList) {
+                const template = ConfigManager.getTileTemplateCfg(configVersion, Types.TileBaseType.Plain, tileData.objectType);
                 if ((template) && (template.maxCapturePoint != null)) {
                     const tileType = template.type;
                     if (!dict.has(tileType)) {
                         dict.set(tileType, new Map<number, number>());
                     }
-                    const subDict = dict.get(tileType);
+
+                    const playerIndex   = tileData.playerIndex;
+                    const subDict       = dict.get(tileType);
                     subDict.set(playerIndex, (subDict.get(playerIndex) || 0) + 1);
                 }
             }
@@ -155,7 +152,7 @@ namespace TinyWars.MultiCustomRoom {
             const dict              = data.dict;
             const maxPlayerIndex    = data.maxPlayerIndex;
             let totalNum            = 0;
-            for (let playerIndex = 0; playerIndex <= Utility.ConfigManager.MAX_PLAYER_INDEX; ++playerIndex) {
+            for (let playerIndex = CommonConstants.WarNeutralPlayerIndex; playerIndex <= CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
                 const num                               = dict.get(playerIndex) || 0;
                 totalNum                                += num;
                 this._labelNumList[playerIndex].text    = playerIndex <= maxPlayerIndex ? `${num}` : `--`;

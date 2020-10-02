@@ -1,12 +1,13 @@
 
 namespace TinyWars.MultiCustomRoom {
-    import Notify       = Utility.Notify;
-    import Types        = Utility.Types;
-    import FloatText    = Utility.FloatText;
-    import Helpers      = Utility.Helpers;
-    import Lang         = Utility.Lang;
-    import ProtoTypes   = Utility.ProtoTypes;
-    import WarMapModel  = WarMap.WarMapModel;
+    import Notify           = Utility.Notify;
+    import Types            = Utility.Types;
+    import Helpers          = Utility.Helpers;
+    import Lang             = Utility.Lang;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import WarMapModel      = WarMap.WarMapModel;
+    import IMcwWarInfo      = ProtoTypes.MultiCustomWar.IMcwWarInfo;
+    import IWarPlayerInfo   = ProtoTypes.Structure.IWarPlayerInfo;
 
     export class McrContinueWarListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
@@ -139,12 +140,12 @@ namespace TinyWars.MultiCustomRoom {
             this._btnBack.label             = Lang.getText(Lang.Type.B0146);
         }
 
-        private _createDataForListWar(infos: ProtoTypes.IMcwOngoingDetail[]): DataForWarRenderer[] {
+        private _createDataForListWar(warInfoList: IMcwWarInfo[]): DataForWarRenderer[] {
             const data: DataForWarRenderer[] = [];
-            if (infos) {
-                for (let i = 0; i < infos.length; ++i) {
+            if (warInfoList) {
+                for (let i = 0; i < warInfoList.length; ++i) {
                     data.push({
-                        warInfo : infos[i],
+                        warInfo : warInfoList[i],
                         index   : i,
                         panel   : this,
                     });
@@ -154,56 +155,32 @@ namespace TinyWars.MultiCustomRoom {
             return data;
         }
 
-        private _createDataForListPlayer(warInfo: ProtoTypes.IMcwOngoingDetail, mapExtraData: ProtoTypes.IMapExtraData): DataForPlayerRenderer[] {
-            const enterTurnTime = warInfo.enterTurnTime;
-            const playerIndex   = warInfo.playerIndexInTurn;
-            const data          : DataForPlayerRenderer[] = [
-                {
-                    playerIndex     : 1,
-                    userId          : warInfo.p1UserId,
-                    teamIndex       : warInfo.p1TeamIndex,
-                    isAlive         : warInfo.p1IsAlive,
-                    defeatTimestamp : 1 === playerIndex ? enterTurnTime + warInfo.p1RestTimeToBoot : null,
-                },
-                {
-                    playerIndex     : 2,
-                    userId          : warInfo.p2UserId,
-                    teamIndex       : warInfo.p2TeamIndex,
-                    isAlive         : warInfo.p2IsAlive,
-                    defeatTimestamp : 2 === playerIndex ? enterTurnTime + warInfo.p2RestTimeToBoot : null,
-                },
-            ];
-            if (mapExtraData.playersCount >= 3) {
-                data.push({
-                    playerIndex     : 3,
-                    userId          : warInfo.p3UserId,
-                    teamIndex       : warInfo.p3TeamIndex,
-                    isAlive         : warInfo.p3IsAlive,
-                    defeatTimestamp : 3 === playerIndex ? enterTurnTime + warInfo.p3RestTimeToBoot : null,
-                });
-            }
-            if (mapExtraData.playersCount >= 4) {
-                data.push({
-                    playerIndex     : 4,
-                    userId          : warInfo.p4UserId,
-                    teamIndex       : warInfo.p4TeamIndex,
-                    isAlive         : warInfo.p4IsAlive,
-                    defeatTimestamp : 4 === playerIndex ? enterTurnTime + warInfo.p4RestTimeToBoot : null,
+        private _createDataForListPlayer(warInfo: IMcwWarInfo, mapExtraData: ProtoTypes.Map.IMapExtraData): DataForPlayerRenderer[] {
+            const enterTurnTime     = warInfo.enterTurnTime;
+            const playerIndexInTurn = warInfo.playerIndexInTurn;
+            const playerInfoList    = warInfo.playerInfoList;
+            const dataList          : DataForPlayerRenderer[] = [];
+            for (let playerIndex = 1; playerIndex < playerInfoList.length; ++playerIndex) {
+                dataList.push({
+                    playerInfo      : playerInfoList.find(v => v.playerIndex === playerIndex),
+                    enterTurnTime,
+                    playerIndexInTurn,
                 });
             }
 
-            return data;
+            return dataList;
         }
 
         private async _showMap(index: number): Promise<void> {
             const warInfo               = this._dataForListWar[index].warInfo;
-            const mapFileName           = warInfo.mapFileName;
-            const mapRawData            = await WarMapModel.getRawData(mapFileName);
-            const mapExtraData          = await WarMapModel.getExtraData(mapFileName);
-            this._labelMapName.text     = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapFileName));
-            this._labelDesigner.text    = Lang.getFormattedText(Lang.Type.F0001, mapExtraData.mapDesigner);
-            this._labelHasFog.text      = Lang.getFormattedText(Lang.Type.F0005, Lang.getText(warInfo.hasFog ? Lang.Type.B0012 : Lang.Type.B0013));
-            this._labelWarComment.text  = warInfo.warComment || "----";
+            const settingsForCommon     = warInfo.settingsForCommon;
+            const mapId                 = settingsForCommon.mapId;
+            const mapRawData            = await WarMapModel.getRawData(mapId);
+            const mapExtraData          = await WarMapModel.getExtraData(mapId);
+            this._labelMapName.text     = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
+            this._labelDesigner.text    = Lang.getFormattedText(Lang.Type.F0001, mapRawData.designerName);
+            this._labelHasFog.text      = Lang.getFormattedText(Lang.Type.F0005, Lang.getText(settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault ? Lang.Type.B0012 : Lang.Type.B0013));
+            this._labelWarComment.text  = warInfo.settingsForMultiPlayer.warComment || "----";
             this._listPlayer.bindData(this._createDataForListPlayer(warInfo, mapExtraData));
 
             this._groupInfo.visible      = true;
@@ -213,8 +190,7 @@ namespace TinyWars.MultiCustomRoom {
 
             const tileMapView = new WarMap.WarMapTileMapView();
             tileMapView.init(mapRawData.mapWidth, mapRawData.mapHeight);
-            tileMapView.updateWithTileDataList(mapRawData.tileBases);
-            tileMapView.updateWithObjectViewIdArray(mapRawData.tileObjects);
+            tileMapView.updateWithTileDataList(mapRawData.tileDataList);
 
             const unitMapView = new WarMap.WarMapUnitMapView();
             unitMapView.initWithMapRawData(mapRawData);
@@ -230,7 +206,7 @@ namespace TinyWars.MultiCustomRoom {
     }
 
     type DataForWarRenderer = {
-        warInfo : ProtoTypes.IMcwOngoingDetail;
+        warInfo : IMcwWarInfo;
         index   : number;
         panel   : McrContinueWarListPanel;
     }
@@ -255,10 +231,12 @@ namespace TinyWars.MultiCustomRoom {
             const warInfo           = data.warInfo;
             this.currentState       = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
             this._labelInTurn.text  = this._checkIsInTurn(warInfo) ? Lang.getText(Lang.Type.B0231) : "";
-            if (warInfo.warName) {
-                this._labelName.text = warInfo.warName;
+
+            const warName = warInfo.settingsForMultiPlayer.warName;
+            if (warName) {
+                this._labelName.text = warName;
             } else {
-                WarMapModel.getMapNameInCurrentLanguage(warInfo.mapFileName).then(v => this._labelName.text = v);
+                WarMapModel.getMapNameInCurrentLanguage(warInfo.settingsForCommon.mapId).then(v => this._labelName.text = v);
             }
         }
 
@@ -273,53 +251,52 @@ namespace TinyWars.MultiCustomRoom {
             McrContinueWarInfoPanel.show(data.warInfo);
         }
 
-        private _checkIsInTurn(info: ProtoTypes.IMcwOngoingDetail): boolean {
-            const userId        = User.UserModel.getSelfUserId();
-            const playerIndex   = info.playerIndexInTurn;
-            return ((playerIndex === 1) && (userId === info.p1UserId))
-                || ((playerIndex === 2) && (userId === info.p2UserId))
-                || ((playerIndex === 3) && (userId === info.p3UserId))
-                || ((playerIndex === 4) && (userId === info.p4UserId));
+        private _checkIsInTurn(info: IMcwWarInfo): boolean {
+            return info.playerInfoList.find(v => v.playerIndex === info.playerIndexInTurn).userId === User.UserModel.getSelfUserId();
         }
     }
 
     type DataForPlayerRenderer = {
-        playerIndex     : number;
-        userId          : number | null;
-        teamIndex       : number;
-        isAlive         : boolean;
-        defeatTimestamp?: number;
+        playerInfo          : IWarPlayerInfo;
+        enterTurnTime       : number;
+        playerIndexInTurn   : number;
     }
 
     class PlayerRenderer extends eui.ItemRenderer {
         private _labelName      : GameUi.UiLabel;
         private _labelIndex     : GameUi.UiLabel;
-        private _labelTeam      : GameUi.UiLabel;
+        private _labelSkinId    : GameUi.UiLabel;
 
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data = this.data as DataForPlayerRenderer;
-            if (data.defeatTimestamp != null) {
-                const leftTime              = data.defeatTimestamp - Time.TimeModel.getServerTimestamp();
-                this._labelIndex.text       = Helpers.getColorTextForPlayerIndex(data.playerIndex);
-                this._labelIndex.textColor  = 0x00FF00;
-                this._labelTeam.text        = Helpers.getTeamText(data.teamIndex);
-                this._labelTeam.textColor   = 0x00FF00
-                this._labelName.textColor   = 0x00FF00;
-                User.UserModel.getUserNickname(data.userId).then(name => {
-                    this._labelName.text    = name + (leftTime > 0
+            const data              = this.data as DataForPlayerRenderer;
+            const playerInfo        = data.playerInfo;
+            const playerIndex       = playerInfo.playerIndex;
+            const teamIndex         = playerInfo.teamIndex;
+            const defeatTimestamp   = data.playerIndexInTurn === playerIndex ? data.enterTurnTime + playerInfo.restTimeToBoot : null;
+            const labelIndex        = this._labelIndex;
+            const labelSkinId       = this._labelSkinId;
+            const labelName         = this._labelName;
+            labelIndex.text         = `${Lang.getPlayerForceName(playerIndex)} (${Lang.getPlayerTeamName(teamIndex)})`;
+            labelSkinId.text        = `${Lang.getUnitAndTileSkinName(playerInfo.unitAndTileSkinId)}`;
+
+            if (defeatTimestamp != null) {
+                const leftTime          = defeatTimestamp - Time.TimeModel.getServerTimestamp();
+                labelIndex.textColor    = 0x00FF00;
+                labelSkinId.textColor   = 0x00FF00
+                labelName.textColor     = 0x00FF00;
+                User.UserModel.getUserNickname(playerInfo.userId).then(name => {
+                    labelName.text = name + (leftTime > 0
                         ? ` (${Lang.getText(Lang.Type.B0027)}:${Helpers.getTimeDurationText(leftTime)})`
                         : ` (${Lang.getText(Lang.Type.B0028)})`);
                 });
             } else {
-                this._labelIndex.text       = Helpers.getColorTextForPlayerIndex(data.playerIndex);
-                this._labelIndex.textColor  = 0xFFFFFF;
-                this._labelTeam.text        = Helpers.getTeamText(data.teamIndex);
-                this._labelTeam.textColor   = 0xFFFFFF;
-                this._labelName.textColor   = 0xFFFFFF;
-                User.UserModel.getUserNickname(data.userId).then(name => {
-                    this._labelName.text    = data.isAlive
+                labelIndex.textColor    = 0xFFFFFF;
+                labelSkinId.textColor   = 0xFFFFFF;
+                labelName.textColor     = 0xFFFFFF;
+                User.UserModel.getUserNickname(playerInfo.userId).then(name => {
+                    labelName.text = playerInfo.isAlive
                         ? name
                         : `${name} (${Lang.getText(Lang.Type.B0056)})`;
                 });

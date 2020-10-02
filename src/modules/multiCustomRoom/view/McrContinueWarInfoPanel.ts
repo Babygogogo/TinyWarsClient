@@ -52,8 +52,8 @@ namespace TinyWars.MultiCustomRoom {
             ];
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
 
-            (this._btnBack.labelDisplay as GameUi.UiLabel).textColor        = 0x00FF00;
-            (this._btnContinueWar.labelDisplay as GameUi.UiLabel).textColor = 0x00FF00;
+            this._btnBack.setTextColor(0x00FF00);
+            this._btnContinueWar.setTextColor(0x00FF00);
         }
 
         protected _onOpened(): void {

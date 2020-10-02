@@ -103,6 +103,7 @@ namespace TinyWars.MultiCustomRoom {
             const playerIndex   = data.playerIndex;
             return [
                 this._createDataTeamIndex(playerIndex),
+                this._createDataAvailableCoIdList(playerIndex),
                 this._createDataInitialFund(playerIndex),
                 this._createDataIncomeMultiplier(playerIndex),
                 this._createDataInitialEnergyPercentage(playerIndex),
@@ -117,45 +118,61 @@ namespace TinyWars.MultiCustomRoom {
         private _createDataTeamIndex(playerIndex: number): DataForInfoRenderer {
             return {
                 titleText               : Lang.getText(Lang.Type.B0019),
-                infoText                : Lang.getPlayerTeamName(McrModel.getCreateWarTeamIndex(playerIndex)),
+                infoText                : Lang.getPlayerTeamName(McrModel.Create.getTeamIndex(playerIndex)),
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : () => {
-                    McrModel.tickCreateWarTeamIndex(playerIndex);
-                    this._updateView();
+                    this._confirmUseCustomRule(() => {
+                        McrModel.Create.tickTeamIndex(playerIndex);
+                        this._updateView();
+                    });
+                },
+            };
+        }
+        private _createDataAvailableCoIdList(playerIndex: number): DataForInfoRenderer {
+            return {
+                titleText               : Lang.getText(Lang.Type.B0403),
+                infoText                : `${McrModel.Create.getAvailableCoIdList(playerIndex).length}`,
+                infoColor               : 0xFFFFFF,
+                callbackOnTouchedTitle  : () => {
+                    this._confirmUseCustomRule(() => {
+                        McrModel.Create.tickTeamIndex(playerIndex);
+                    });
                 },
             };
         }
         private _createDataInitialFund(playerIndex: number): DataForInfoRenderer {
-            const currValue = McrModel.getCreateWarInitialFund(playerIndex);
+            const currValue = McrModel.Create.getInitialFund(playerIndex);
             return {
                 titleText               : Lang.getText(Lang.Type.B0178),
                 infoText                : `${currValue}`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault),
                 callbackOnTouchedTitle  : () => {
-                    const maxValue  = CommonConstants.WarRuleInitialFundMaxLimit;
-                    const minValue  = CommonConstants.WarRuleInitialFundMinLimit;
-                    Common.CommonInputPanel.show({
-                        title           : Lang.getText(Lang.Type.B0178),
-                        currentValue    : "" + currValue,
-                        maxChars        : 7,
-                        charRestrict    : "0-9\\-",
-                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
-                        callback        : panel => {
-                            const text  = panel.getInputText();
-                            const value = text ? Number(text) : NaN;
-                            if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                FloatText.show(Lang.getText(Lang.Type.A0098));
-                            } else {
-                                McrModel.setCreateWarInitialFund(playerIndex, value);
-                                this._updateView();
-                            }
-                        },
+                    this._confirmUseCustomRule(() => {
+                        const maxValue  = CommonConstants.WarRuleInitialFundMaxLimit;
+                        const minValue  = CommonConstants.WarRuleInitialFundMinLimit;
+                        Common.CommonInputPanel.show({
+                            title           : Lang.getText(Lang.Type.B0178),
+                            currentValue    : "" + currValue,
+                            maxChars        : 7,
+                            charRestrict    : "0-9\\-",
+                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                            callback        : panel => {
+                                const text  = panel.getInputText();
+                                const value = text ? Number(text) : NaN;
+                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                                } else {
+                                    McrModel.Create.setInitialFund(playerIndex, value);
+                                    this._updateView();
+                                }
+                            },
+                        });
                     });
-                },
+                }
             };
         }
         private _createDataIncomeMultiplier(playerIndex: number): DataForInfoRenderer {
-            const currValue = McrModel.getCreateWarIncomeMultiplier(playerIndex);
+            const currValue = McrModel.Create.getIncomeMultiplier(playerIndex);
             const maxValue  = CommonConstants.WarRuleIncomeMultiplierMaxLimit;
             const minValue  = CommonConstants.WarRuleIncomeMultiplierMinLimit;
             return {
@@ -163,28 +180,30 @@ namespace TinyWars.MultiCustomRoom {
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault),
                 callbackOnTouchedTitle  : () => {
-                    Common.CommonInputPanel.show({
-                        title           : Lang.getText(Lang.Type.B0179),
-                        currentValue    : "" + currValue,
-                        maxChars        : 5,
-                        charRestrict    : "0-9",
-                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
-                        callback        : panel => {
-                            const text  = panel.getInputText();
-                            const value = text ? Number(text) : NaN;
-                            if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                FloatText.show(Lang.getText(Lang.Type.A0098));
-                            } else {
-                                McrModel.setCreateWarIncomeMultiplier(playerIndex, value);
-                                this._updateView();
-                            }
-                        },
+                    this._confirmUseCustomRule(() => {
+                        Common.CommonInputPanel.show({
+                            title           : Lang.getText(Lang.Type.B0179),
+                            currentValue    : "" + currValue,
+                            maxChars        : 5,
+                            charRestrict    : "0-9",
+                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                            callback        : panel => {
+                                const text  = panel.getInputText();
+                                const value = text ? Number(text) : NaN;
+                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                                } else {
+                                    McrModel.Create.setIncomeMultiplier(playerIndex, value);
+                                    this._updateView();
+                                }
+                            },
+                        });
                     });
                 },
             };
         }
         private _createDataInitialEnergyPercentage(playerIndex: number): DataForInfoRenderer {
-            const currValue     = McrModel.getCreateWarInitialEnergyPercentage(playerIndex);
+            const currValue     = McrModel.Create.getInitialEnergyPercentage(playerIndex);
             const minValue      = CommonConstants.WarRuleInitialEnergyMinLimit;
             const maxValue      = CommonConstants.WarRuleInitialEnergyMaxLimit;
             return {
@@ -192,28 +211,30 @@ namespace TinyWars.MultiCustomRoom {
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialEnergyDefault),
                 callbackOnTouchedTitle  : () => {
-                    Common.CommonInputPanel.show({
-                        title           : Lang.getText(Lang.Type.B0180),
-                        currentValue    : "" + currValue,
-                        maxChars        : 3,
-                        charRestrict    : "0-9",
-                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
-                        callback        : panel => {
-                            const text  = panel.getInputText();
-                            const value = text ? Number(text) : NaN;
-                            if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                FloatText.show(Lang.getText(Lang.Type.A0098));
-                            } else {
-                                McrModel.setCreateWarInitialEnergyPercentage(playerIndex, value);
-                                this._updateView();
-                            }
-                        },
+                    this._confirmUseCustomRule(() => {
+                        Common.CommonInputPanel.show({
+                            title           : Lang.getText(Lang.Type.B0180),
+                            currentValue    : "" + currValue,
+                            maxChars        : 3,
+                            charRestrict    : "0-9",
+                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                            callback        : panel => {
+                                const text  = panel.getInputText();
+                                const value = text ? Number(text) : NaN;
+                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                                } else {
+                                    McrModel.Create.setInitialEnergyPercentage(playerIndex, value);
+                                    this._updateView();
+                                }
+                            },
+                        });
                     });
                 },
             };
         }
         private _createDataEnergyGrowthMultiplier(playerIndex: number): DataForInfoRenderer {
-            const currValue     = McrModel.getCreateWarEnergyGrowthMultiplier(playerIndex);
+            const currValue     = McrModel.Create.getEnergyGrowthMultiplier(playerIndex);
             const minValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit;
             const maxValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit;
             return {
@@ -221,28 +242,30 @@ namespace TinyWars.MultiCustomRoom {
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault),
                 callbackOnTouchedTitle  : () => {
-                    Common.CommonInputPanel.show({
-                        title           : Lang.getText(Lang.Type.B0181),
-                        currentValue    : "" + currValue,
-                        maxChars        : 5,
-                        charRestrict    : "0-9",
-                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
-                        callback        : panel => {
-                            const text  = panel.getInputText();
-                            const value = text ? Number(text) : NaN;
-                            if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                FloatText.show(Lang.getText(Lang.Type.A0098));
-                            } else {
-                                McrModel.setCreateWarEnergyGrowthMultiplier(playerIndex, value);
-                                this._updateView();
-                            }
-                        },
+                    this._confirmUseCustomRule(() => {
+                        Common.CommonInputPanel.show({
+                            title           : Lang.getText(Lang.Type.B0181),
+                            currentValue    : "" + currValue,
+                            maxChars        : 5,
+                            charRestrict    : "0-9",
+                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                            callback        : panel => {
+                                const text  = panel.getInputText();
+                                const value = text ? Number(text) : NaN;
+                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                                } else {
+                                    McrModel.Create.setEnergyGrowthMultiplier(playerIndex, value);
+                                    this._updateView();
+                                }
+                            },
+                        });
                     });
                 },
             };
         }
         private _createDataMoveRangeModifier(playerIndex: number): DataForInfoRenderer {
-            const currValue     = McrModel.getCreateWarMoveRangeModifier(playerIndex);
+            const currValue     = McrModel.Create.getMoveRangeModifier(playerIndex);
             const minValue      = CommonConstants.WarRuleMoveRangeModifierMinLimit;
             const maxValue      = CommonConstants.WarRuleMoveRangeModifierMaxLimit;
             return {
@@ -250,28 +273,30 @@ namespace TinyWars.MultiCustomRoom {
                 infoText                : `${currValue}`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault),
                 callbackOnTouchedTitle  : () => {
-                    Common.CommonInputPanel.show({
-                        title           : Lang.getText(Lang.Type.B0182),
-                        currentValue    : "" + currValue,
-                        maxChars        : 3,
-                        charRestrict    : "0-9\\-",
-                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
-                        callback        : panel => {
-                            const text  = panel.getInputText();
-                            const value = text ? Number(text) : NaN;
-                            if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                FloatText.show(Lang.getText(Lang.Type.A0098));
-                            } else {
-                                McrModel.setCreateWarMoveRangeModifier(playerIndex, value);
-                                this._updateView();
-                            }
-                        },
+                    this._confirmUseCustomRule(() => {
+                        Common.CommonInputPanel.show({
+                            title           : Lang.getText(Lang.Type.B0182),
+                            currentValue    : "" + currValue,
+                            maxChars        : 3,
+                            charRestrict    : "0-9\\-",
+                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                            callback        : panel => {
+                                const text  = panel.getInputText();
+                                const value = text ? Number(text) : NaN;
+                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                                } else {
+                                    McrModel.Create.setMoveRangeModifier(playerIndex, value);
+                                    this._updateView();
+                                }
+                            },
+                        });
                     });
                 },
             };
         }
         private _createDataAttackPowerModifier(playerIndex: number): DataForInfoRenderer {
-            const currValue     = McrModel.getCreateWarAttackPowerModifier(playerIndex);
+            const currValue     = McrModel.Create.getAttackPowerModifier(playerIndex);
             const minValue      = CommonConstants.WarRuleOffenseBonusMinLimit;
             const maxValue      = CommonConstants.WarRuleOffenseBonusMaxLimit;
             return {
@@ -279,28 +304,30 @@ namespace TinyWars.MultiCustomRoom {
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault),
                 callbackOnTouchedTitle  : () => {
-                    Common.CommonInputPanel.show({
-                        title           : Lang.getText(Lang.Type.B0183),
-                        currentValue    : "" + currValue,
-                        maxChars        : 5,
-                        charRestrict    : "0-9\\-",
-                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
-                        callback        : panel => {
-                            const text  = panel.getInputText();
-                            const value = text ? Number(text) : NaN;
-                            if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                FloatText.show(Lang.getText(Lang.Type.A0098));
-                            } else {
-                                McrModel.setCreateWarAttackPowerModifier(playerIndex, value);
-                                this._updateView();
-                            }
-                        },
+                    this._confirmUseCustomRule(() => {
+                        Common.CommonInputPanel.show({
+                            title           : Lang.getText(Lang.Type.B0183),
+                            currentValue    : "" + currValue,
+                            maxChars        : 5,
+                            charRestrict    : "0-9\\-",
+                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                            callback        : panel => {
+                                const text  = panel.getInputText();
+                                const value = text ? Number(text) : NaN;
+                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                                } else {
+                                    McrModel.Create.setAttackPowerModifier(playerIndex, value);
+                                    this._updateView();
+                                }
+                            },
+                        });
                     });
                 },
             };
         }
         private _createDataVisionRangeModifier(playerIndex: number): DataForInfoRenderer {
-            const currValue     = McrModel.getCreateWarVisionRangeModifier(playerIndex);
+            const currValue     = McrModel.Create.getVisionRangeModifier(playerIndex);
             const minValue      = CommonConstants.WarRuleVisionRangeModifierMinLimit;
             const maxValue      = CommonConstants.WarRuleVisionRangeModifierMaxLimit;
             return {
@@ -308,28 +335,30 @@ namespace TinyWars.MultiCustomRoom {
                 infoText                : `${currValue}`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault),
                 callbackOnTouchedTitle  : () => {
-                    Common.CommonInputPanel.show({
-                        title           : Lang.getText(Lang.Type.B0184),
-                        currentValue    : "" + currValue,
-                        maxChars        : 3,
-                        charRestrict    : "0-9\\-",
-                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
-                        callback        : panel => {
-                            const text  = panel.getInputText();
-                            const value = text ? Number(text) : NaN;
-                            if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                FloatText.show(Lang.getText(Lang.Type.A0098));
-                            } else {
-                                McrModel.setCreateWarVisionRangeModifier(playerIndex, value);
-                                this._updateView();
-                            }
-                        },
+                    this._confirmUseCustomRule(() => {
+                        Common.CommonInputPanel.show({
+                            title           : Lang.getText(Lang.Type.B0184),
+                            currentValue    : "" + currValue,
+                            maxChars        : 3,
+                            charRestrict    : "0-9\\-",
+                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                            callback        : panel => {
+                                const text  = panel.getInputText();
+                                const value = text ? Number(text) : NaN;
+                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                                } else {
+                                    McrModel.Create.setVisionRangeModifier(playerIndex, value);
+                                    this._updateView();
+                                }
+                            },
+                        });
                     });
                 },
             };
         }
         private _createDataLuckLowerLimit(playerIndex: number): DataForInfoRenderer {
-            const currValue     = McrModel.getCreateWarLuckLowerLimit(playerIndex);
+            const currValue     = McrModel.Create.getLuckLowerLimit(playerIndex);
             const minValue      = CommonConstants.WarRuleLuckMinLimit;
             const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
             return {
@@ -337,34 +366,36 @@ namespace TinyWars.MultiCustomRoom {
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit),
                 callbackOnTouchedTitle  : () => {
-                    Common.CommonInputPanel.show({
-                        title           : Lang.getText(Lang.Type.B0189),
-                        currentValue    : "" + currValue,
-                        maxChars        : 4,
-                        charRestrict    : "0-9\\-",
-                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
-                        callback        : panel => {
-                            const text  = panel.getInputText();
-                            const value = text ? Number(text) : NaN;
-                            if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                FloatText.show(Lang.getText(Lang.Type.A0098));
-                            } else {
-                                const upperLimit = McrModel.getCreateWarLuckUpperLimit(playerIndex);
-                                if (value <= upperLimit) {
-                                    McrModel.setCreateWarLuckLowerLimit(playerIndex, value);
+                    this._confirmUseCustomRule(() => {
+                        Common.CommonInputPanel.show({
+                            title           : Lang.getText(Lang.Type.B0189),
+                            currentValue    : "" + currValue,
+                            maxChars        : 4,
+                            charRestrict    : "0-9\\-",
+                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                            callback        : panel => {
+                                const text  = panel.getInputText();
+                                const value = text ? Number(text) : NaN;
+                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                    FloatText.show(Lang.getText(Lang.Type.A0098));
                                 } else {
-                                    McrModel.setCreateWarLuckUpperLimit(playerIndex, value);
-                                    McrModel.setCreateWarLuckLowerLimit(playerIndex, upperLimit);
+                                    const upperLimit = McrModel.Create.getLuckUpperLimit(playerIndex);
+                                    if (value <= upperLimit) {
+                                        McrModel.Create.setLuckLowerLimit(playerIndex, value);
+                                    } else {
+                                        McrModel.Create.setLuckUpperLimit(playerIndex, value);
+                                        McrModel.Create.setLuckLowerLimit(playerIndex, upperLimit);
+                                    }
+                                    this._updateView();
                                 }
-                                this._updateView();
-                            }
-                        },
+                            },
+                        });
                     });
                 },
             };
         }
         private _createDataLuckUpperLimit(playerIndex: number): DataForInfoRenderer {
-            const currValue     = McrModel.getCreateWarLuckUpperLimit(playerIndex);
+            const currValue     = McrModel.Create.getLuckUpperLimit(playerIndex);
             const minValue      = CommonConstants.WarRuleLuckMinLimit;
             const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
             return {
@@ -372,6 +403,7 @@ namespace TinyWars.MultiCustomRoom {
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit),
                 callbackOnTouchedTitle  : () => {
+                    this._confirmUseCustomRule(() => {
                         Common.CommonInputPanel.show({
                             title           : Lang.getText(Lang.Type.B0190),
                             currentValue    : "" + currValue,
@@ -384,19 +416,35 @@ namespace TinyWars.MultiCustomRoom {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(Lang.Type.A0098));
                                 } else {
-                                    const lowerLimit = McrModel.getCreateWarLuckLowerLimit(playerIndex);
+                                    const lowerLimit = McrModel.Create.getLuckLowerLimit(playerIndex);
                                     if (value >= lowerLimit) {
-                                        McrModel.setCreateWarLuckUpperLimit(playerIndex, value);
+                                        McrModel.Create.setLuckUpperLimit(playerIndex, value);
                                     } else {
-                                        McrModel.setCreateWarLuckLowerLimit(playerIndex, value);
-                                        McrModel.setCreateWarLuckUpperLimit(playerIndex, lowerLimit);
+                                        McrModel.Create.setLuckLowerLimit(playerIndex, value);
+                                        McrModel.Create.setLuckUpperLimit(playerIndex, lowerLimit);
                                     }
                                     this._updateView();
                                 }
                             },
                         });
-                    },
+                    });
+                },
             };
+        }
+
+        private _confirmUseCustomRule(callback: () => void): void {
+            if (McrModel.Create.getPresetWarRuleId() == null) {
+                callback();
+            } else {
+                Common.CommonConfirmPanel.show({
+                    title   : Lang.getText(Lang.Type.B0088),
+                    content : Lang.getText(Lang.Type.A0129),
+                    callback: () => {
+                        McrModel.Create.setPresetWarRuleId(null);
+                        callback();
+                    },
+                });
+            }
         }
     }
 
@@ -424,7 +472,7 @@ namespace TinyWars.MultiCustomRoom {
             this._labelValue.text       = data.infoText;
             this._labelValue.textColor  = data.infoColor;
             this._btnTitle.label        = data.titleText;
-            (this._btnTitle.labelDisplay as GameUi.UiLabel).textColor = data.callbackOnTouchedTitle ? 0x00FF00 : 0xFFFFFF;
+            this._btnTitle.setTextColor(data.callbackOnTouchedTitle ? 0x00FF00 : 0xFFFFFF);
         }
 
         private _onTouchedBtnTitle(e: egret.TouchEvent): void {

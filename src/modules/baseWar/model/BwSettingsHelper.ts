@@ -292,26 +292,73 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
         }
     }
 
+    export function getTeamIndex(settingsForCommon: ISettingsForCommon, playerIndex: number): number {
+        const playerRule = getPlayerRule(settingsForCommon, playerIndex);
+        if (playerRule == null) {
+            Logger.error(`BwSettingsHelper.getTeamIndex() empty playerRule.`);
+            return undefined;
+        }
+
+        const teamIndex = playerRule.teamIndex;
+        if (teamIndex == null) {
+            Logger.error(`BwSettingsHelper.getTeamIndex() empty teamIndex.`);
+            return undefined;
+        }
+
+        return teamIndex;
+    }
+    export function setTeamIndex(settingsForCommon: ISettingsForCommon, playerIndex: number, teamIndex: number): void {
+        const playerRule = getPlayerRule(settingsForCommon, playerIndex);
+        if (playerRule == null) {
+            Logger.error(`BwSettingsHelper.getTeamIndex() empty playerRule.`);
+            return undefined;
+        }
+
+        playerRule.teamIndex = teamIndex;
+    }
+
     export function getPlayerRule(settingsForCommon: ISettingsForCommon, playerIndex: number): IDataForPlayerRule | undefined {
         const warRule = settingsForCommon.warRule;
         if (warRule == null) {
-            Logger.error(`BwCommonSettingsHelper.getPlayerRule() empty warRule.`);
+            Logger.error(`BwSettingsHelper.getPlayerRule() empty warRule.`);
             return undefined;
         }
 
         const ruleForPlayers = warRule.ruleForPlayers;
         if (ruleForPlayers == null) {
-            Logger.error(`BwCommonSettingsHelper.getPlayerRule() empty ruleForPlayers.`);
+            Logger.error(`BwSettingsHelper.getPlayerRule() empty ruleForPlayers.`);
             return undefined;
         }
 
         const playerRuleDataList = ruleForPlayers.playerRuleDataList;
         if (playerRuleDataList == null) {
-            Logger.error(`BwCommonSettingsHelper.getPlayerRule() empty playerRuleDataList.`);
+            Logger.error(`BwSettingsHelper.getPlayerRule() empty playerRuleDataList.`);
             return undefined;
         }
 
         return playerRuleDataList.find(v => v.playerIndex === playerIndex);
+    }
+
+    export function getPlayersCount(settingsForCommon: ISettingsForCommon): number {
+        const warRule = settingsForCommon.warRule;
+        if (warRule == null) {
+            Logger.error(`BwSettingsHelper.getPlayersCount() empty warRule.`);
+            return undefined;
+        }
+
+        const ruleForPlayers = warRule.ruleForPlayers;
+        if (ruleForPlayers == null) {
+            Logger.error(`BwSettingsHelper.getPlayersCount() empty ruleForPlayers.`);
+            return undefined;
+        }
+
+        const playerRuleDataList = ruleForPlayers.playerRuleDataList;
+        if (playerRuleDataList == null) {
+            Logger.error(`BwSettingsHelper.getPlayersCount() empty playerRuleDataList.`);
+            return undefined;
+        }
+
+        return playerRuleDataList.length;
     }
 
     export function getRandomCoId(settingsForCommon: ISettingsForCommon, playerIndex: number): number {

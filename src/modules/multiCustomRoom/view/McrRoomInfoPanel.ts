@@ -60,11 +60,11 @@ namespace TinyWars.MultiCustomRoom {
             ];
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
 
-            (this._btnBack.labelDisplay as GameUi.UiLabel).textColor        = 0x00FF00;
-            (this._btnStartGame.labelDisplay as GameUi.UiLabel).textColor   = 0x00FF00;
-            (this._btnDeleteRoom.labelDisplay as GameUi.UiLabel).textColor  = 0xFF0000;
-            (this._btnModifyRule.labelDisplay as GameUi.UiLabel).textColor  = 0x00FF00;
-            (this._btnExitRoom.labelDisplay as GameUi.UiLabel).textColor    = 0xFF0000;
+            this._btnBack.setTextColor(0x00FF00);
+            this._btnStartGame.setTextColor(0x00FF00);
+            this._btnDeleteRoom.setTextColor(0xFF0000);
+            this._btnModifyRule.setTextColor(0x00FF00);
+            this._btnExitRoom.setTextColor(0xFF0000);
         }
 
         protected _onOpened(): void {

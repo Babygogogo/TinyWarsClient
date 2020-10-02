@@ -149,7 +149,7 @@ namespace TinyWars.SingleCustomRoom {
             setCreateWarPresetWarRuleId(null);
 
             const playerRule        = getCreateWarPlayerRule(playerIndex);
-            playerRule.teamIndex    = playerRule.teamIndex % (getCreateWarData().settingsForCommon.warRule.ruleForPlayers.playerRuleDataList.length) + 1;
+            playerRule.teamIndex    = playerRule.teamIndex % (BwSettingsHelper.getPlayersCount(getCreateWarData().settingsForCommon)) + 1;
 
             Notify.dispatch(Notify.Type.ScrCreateWarPlayerInfoListChanged);
         }

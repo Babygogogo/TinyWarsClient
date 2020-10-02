@@ -86,10 +86,10 @@ namespace TinyWars.MultiCustomRoom {
             ];
 
             this._listPlayer.setItemRenderer(PlayerRenderer);
-            (this._btnModifyPlayerIndex.labelDisplay as GameUi.UiLabel).textColor   = 0x00FF00;
-            (this._btnModifySkinId.labelDisplay as GameUi.UiLabel).textColor        = 0x00FF00;
-            (this._btnChangeCo.labelDisplay as GameUi.UiLabel).textColor            = 0x00FF00;
-            (this._btnModifyReady.labelDisplay as GameUi.UiLabel).textColor         = 0x00FF00;
+            this._btnModifyPlayerIndex.setTextColor(0x00FF00);
+            this._btnModifySkinId.setTextColor(0x00FF00);
+            this._btnChangeCo.setTextColor(0x00FF00);
+            this._btnModifyReady.setTextColor(0x00FF00);
         }
 
         protected async _onOpened(): Promise<void> {
@@ -275,7 +275,7 @@ namespace TinyWars.MultiCustomRoom {
             if (roomInfo) {
                 const settingsForCommon = roomInfo.settingsForCommon;
                 WarMapModel.getMapNameInCurrentLanguage(settingsForCommon.mapId).then(v =>
-                    this._labelMapName.text = `${v} (${settingsForCommon.warRule.ruleForPlayers.playerRuleDataList.length}P)`
+                    this._labelMapName.text = `${v} (${BwSettingsHelper.getPlayersCount(settingsForCommon)}P)`
                 );
             }
         }
@@ -283,10 +283,7 @@ namespace TinyWars.MultiCustomRoom {
         private _updateLabelWarRule(): void {
             const roomInfo = this._roomInfo;
             if (roomInfo) {
-                const ruleNameList      = roomInfo.settingsForCommon.warRule.ruleNameList;
-                this._labelWarRule.text = Lang.getLanguageType() === Types.LanguageType.Chinese
-                    ? ruleNameList[0]
-                    : ruleNameList[1] || ruleNameList[0];
+                this._labelWarRule.text = Lang.getWarRuleNameInLanguage(roomInfo.settingsForCommon.warRule);
             }
         }
 

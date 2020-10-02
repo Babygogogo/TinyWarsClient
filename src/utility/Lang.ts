@@ -645,6 +645,10 @@ namespace TinyWars.Utility.Lang {
             `请先取消您的准备状态`,
             `Please cancel the "ready" state first.`,
         ],
+        [Type.A0129]: [
+            `您确定要使用自定义规则吗？`,
+            `Are you sure to use a custom rule?`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -2245,6 +2249,10 @@ namespace TinyWars.Utility.Lang {
             `准备就绪`,
             `Ready`,
         ],
+        [Type.B0403]: [
+            `可用CO列表`,
+            `Available COs`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -3178,6 +3186,17 @@ namespace TinyWars.Utility.Lang {
             case 3  : return getText(Type.B0006);
             case 4  : return getText(Type.B0007);
             default : return null;
+        }
+    }
+
+    export function getWarRuleNameInLanguage(warRule: ProtoTypes.WarRule.IWarRule): string | undefined {
+        if (warRule.ruleId == null) {
+            return getText(Type.B0321);
+        } else {
+            const list = warRule.ruleNameList;
+            return getLanguageType() === LanguageType.Chinese
+                ? list[0]
+                : list[1] || list[0];
         }
     }
 

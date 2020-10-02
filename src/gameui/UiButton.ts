@@ -45,6 +45,13 @@ namespace TinyWars.GameUi {
             (img) && (img.source = source);
         }
 
+        public setTextColor(color: number): void {
+            const label = this.labelDisplay;
+            if (label instanceof UiLabel) {
+                label.textColor = color;
+            }
+        }
+
         private _onCompleted(e: egret.Event): void {
             this.removeEventListener(egret.Event.COMPLETE, this._onCompleted, this);
 

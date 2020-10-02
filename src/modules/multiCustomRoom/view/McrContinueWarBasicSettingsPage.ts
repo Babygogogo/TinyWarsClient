@@ -197,19 +197,16 @@ namespace TinyWars.MultiCustomRoom {
             if (warInfo) {
                 const settingsForCommon = warInfo.settingsForCommon;
                 WarMapModel.getMapNameInCurrentLanguage(settingsForCommon.mapId).then(v =>
-                    this._labelMapName.text = `${v} (${settingsForCommon.warRule.ruleForPlayers.playerRuleDataList.length}P)`
+                    this._labelMapName.text = `${v} (${BwSettingsHelper.getPlayersCount(settingsForCommon)}P)`
                 );
             }
         }
 
         private _updateLabelWarRule(): void {
-            const warInfo = this._warInfo;
-            if (warInfo) {
-                const ruleNameList      = warInfo.settingsForCommon.warRule.ruleNameList;
-                this._labelWarRule.text = Lang.getLanguageType() === Types.LanguageType.Chinese
-                    ? ruleNameList[0]
-                    : ruleNameList[1] || ruleNameList[0];
-            }
+            const warInfo           = this._warInfo;
+            this._labelWarRule.text = warInfo
+                ? Lang.getWarRuleNameInLanguage(warInfo.settingsForCommon.warRule)
+                : undefined;
         }
 
         private _updateLabelPlayerIndex(): void {

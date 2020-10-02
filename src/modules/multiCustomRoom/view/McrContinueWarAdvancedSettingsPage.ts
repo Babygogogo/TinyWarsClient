@@ -78,7 +78,7 @@ namespace TinyWars.MultiCustomRoom {
         private _updateListPlayer(): void {
             const warInfo = this._warInfo;
             if (warInfo) {
-                const playersCount  = warInfo.settingsForCommon.warRule.ruleForPlayers.playerRuleDataList.length;
+                const playersCount  = BwSettingsHelper.getPlayersCount(warInfo.settingsForCommon);
                 const dataList      : DataForPlayerRenderer[] = [];
                 for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
                     dataList.push({
