@@ -204,7 +204,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private async _updateLabelPlayerIndex(): Promise<void> {
             const playerIndex           = McrModel.Join.getPlayerIndex();
-            const playerRule            = BwSettingsHelper.getPlayerRule((await McrModel.Join.getRoomInfo()).settingsForCommon, playerIndex);
+            const playerRule            = BwSettingsHelper.getPlayerRule((await McrModel.Join.getRoomInfo()).settingsForCommon.warRule, playerIndex);
             this._labelPlayerIndex.text = `${Lang.getPlayerForceName(playerIndex)} (${Lang.getPlayerTeamName(playerRule.teamIndex)})`;
         }
 

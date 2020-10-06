@@ -208,12 +208,12 @@ namespace TinyWars.MultiCustomRoom {
         }
         private _createDataInitialEnergyPercentage(playerIndex: number): DataForInfoRenderer {
             const currValue     = McrModel.Create.getInitialEnergyPercentage(playerIndex);
-            const minValue      = CommonConstants.WarRuleInitialEnergyMinLimit;
-            const maxValue      = CommonConstants.WarRuleInitialEnergyMaxLimit;
+            const minValue      = CommonConstants.WarRuleInitialEnergyPercentageMinLimit;
+            const maxValue      = CommonConstants.WarRuleInitialEnergyPercentageMaxLimit;
             return {
                 titleText               : Lang.getText(Lang.Type.B0180),
                 infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialEnergyDefault),
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialEnergyPercentageDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
                         Common.CommonInputPanel.show({

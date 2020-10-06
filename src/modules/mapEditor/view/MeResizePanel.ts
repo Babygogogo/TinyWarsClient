@@ -76,7 +76,7 @@ namespace TinyWars.MapEditor {
             this.close();
         }
 
-        private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
+        private async _onTouchedBtnConfirm(e: egret.TouchEvent): Promise<void> {
             const width         = this._newWidth;
             const height        = this._newHeight;
             const gridsCount    = width * height;
@@ -86,9 +86,12 @@ namespace TinyWars.MapEditor {
                 const war       = MeManager.getWar();
                 const currSize  = war.getTileMap().getMapSize();
                 if ((width !== currSize.width) || (height !== currSize.height)) {
-                    war.stopRunning()
-                        .init(MeUtility.resizeMap(war.getField().serialize(), width, height), war.getSlotIndex(), war.getConfigVersion(), war.getIsReview())
-                        .startRunning()
+                    war.stopRunning();
+                    await war.initWithMapEditorData({
+                        mapRawData  : MeUtility.resizeMap(war.serializeForMap(), width, height),
+                        slotIndex   : war.getMapSlotIndex(),
+                    });
+                    war.startRunning()
                         .startRunningView();
                 }
 

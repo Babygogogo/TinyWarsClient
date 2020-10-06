@@ -337,7 +337,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _updateLabelPlayerIndex(): void {
             const playerIndex           = McrModel.Create.getSelfPlayerIndex();
-            const teamIndex             = BwSettingsHelper.getTeamIndex(McrModel.Create.getData().settingsForCommon, playerIndex);
+            const teamIndex             = BwSettingsHelper.getTeamIndex(McrModel.Create.getData().settingsForCommon.warRule, playerIndex);
             this._labelPlayerIndex.text = `${Lang.getPlayerForceName(playerIndex)} (${Lang.getPlayerTeamName(teamIndex)})`;
         }
 

@@ -185,12 +185,12 @@ namespace TinyWars.SingleCustomRoom {
         }
         private _createDataInitialEnergyPercentage(playerIndex: number): DataForInfoRenderer {
             const currValue     = ScrModel.getCreateWarInitialEnergyPercentage(playerIndex);
-            const minValue      = CommonConstants.WarRuleInitialEnergyMinLimit;
-            const maxValue      = CommonConstants.WarRuleInitialEnergyMaxLimit;
+            const minValue      = CommonConstants.WarRuleInitialEnergyPercentageMinLimit;
+            const maxValue      = CommonConstants.WarRuleInitialEnergyPercentageMaxLimit;
             return {
                 titleText               : Lang.getText(Lang.Type.B0180),
                 infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialEnergyDefault),
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialEnergyPercentageDefault),
                 callbackOnTouchedTitle  : () => {
                     Common.CommonInputPanel.show({
                         title           : Lang.getText(Lang.Type.B0180),

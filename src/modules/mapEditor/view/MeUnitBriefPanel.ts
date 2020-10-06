@@ -64,16 +64,17 @@ namespace TinyWars.MapEditor {
             ];
         }
         protected _onOpened(): void {
-            this._war       = MeManager.getWar();
-            this._unitMap   = this._war.getUnitMap();
-            this._cursor    = this._war.getField().getCursor();
+            const war       = MeManager.getWar();
+            this._war       = war;
+            this._unitMap   = war.getUnitMap() as MeUnitMap;
+            this._cursor    = war.getField().getCursor() as MeCursor;
 
             this._updateView();
         }
         protected _onClosed(): void {
-            delete this._war;
-            delete this._unitMap;
-            delete this._cursor;
+            this._war       = null;
+            this._unitMap   = null;
+            this._cursor    = null;
 
             for (const cell of this._cellList) {
                 this._destroyCell(cell);

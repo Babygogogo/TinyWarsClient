@@ -4,17 +4,17 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
     import Logger               = Utility.Logger;
     import Helpers              = Utility.Helpers;
     import ProtoTypes           = Utility.ProtoTypes;
+    import Lang                 = Utility.Lang;
+    import Types                = Utility.Types;
+    import LanguageType         = Types.LanguageType;
     import WarSettings          = ProtoTypes.WarSettings;
+    import WarRule              = ProtoTypes.WarRule;
     import ISettingsForCommon   = WarSettings.ISettingsForCommon;
-    import IDataForPlayerRule   = ProtoTypes.WarRule.IDataForPlayerRule;
+    import IDataForPlayerRule   = WarRule.IDataForPlayerRule;
+    import IWarRule             = WarRule.IWarRule;
+    import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
 
-    export function getHasFogByDefault(settingsForCommon: ISettingsForCommon): boolean | null | undefined {
-        const warRule = settingsForCommon.warRule;
-        if (warRule == null) {
-            Logger.error(`BwCommonSettingsHelper.getHasFogByDefault() empty warRule.`);
-            return undefined;
-        }
-
+    export function getHasFogByDefault(warRule: IWarRule): boolean | null | undefined {
         const ruleForGlobalParams = warRule.ruleForGlobalParams;
         if (ruleForGlobalParams == null) {
             Logger.error(`BwCommonSettingsHelper.getHasFogByDefault() empty ruleForGlobalParams.`);
@@ -23,9 +23,18 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
 
         return ruleForGlobalParams.hasFogByDefault;
     }
+    export function setHasFogByDefault(warRule: IWarRule, hasFog: boolean): void {
+        const ruleForGlobalParams = warRule.ruleForGlobalParams;
+        if (ruleForGlobalParams == null) {
+            Logger.error(`BwCommonSettingsHelper.setHasFogByDefault() empty ruleForGlobalParams.`);
+            return undefined;
+        }
 
-    export function getIncomeMultiplier(settingsForCommon: ISettingsForCommon, playerIndex: number): number | null | undefined {
-        const playerRule = getPlayerRule(settingsForCommon, playerIndex);
+        ruleForGlobalParams.hasFogByDefault = hasFog;
+    }
+
+    export function getIncomeMultiplier(warRule: IWarRule, playerIndex: number): number | null | undefined {
+        const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
             Logger.error(`BwCommonSettingsHelper.getIncomeMultiplier() empty playerRule.`);
             return undefined;
@@ -39,8 +48,8 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
 
         return incomeMultiplier;
     }
-    export function setIncomeMultiplier(settingsForCommon: ISettingsForCommon, playerIndex: number, value: number): void {
-        const playerRule = getPlayerRule(settingsForCommon, playerIndex);
+    export function setIncomeMultiplier(warRule: IWarRule, playerIndex: number, value: number): void {
+        const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
             Logger.error(`BwCommonSettingsHelper.setIncomeMultiplier() empty playerRule.`);
             return undefined;
@@ -49,8 +58,8 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
         playerRule.incomeMultiplier = value;
     }
 
-    export function getEnergyGrowthMultiplier(settingsForCommon: ISettingsForCommon, playerIndex: number): number | null | undefined {
-        const playerRule = getPlayerRule(settingsForCommon, playerIndex);
+    export function getEnergyGrowthMultiplier(warRule: IWarRule, playerIndex: number): number | null | undefined {
+        const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
             Logger.error(`BwCommonSettingsHelper.getEnergyGrowthMultiplier() empty playerRule.`);
             return undefined;
@@ -64,8 +73,8 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
 
         return energyGrowthMultiplier;
     }
-    export function setEnergyGrowthMultiplier(settingsForCommon: ISettingsForCommon, playerIndex: number, value: number): undefined {
-        const playerRule = getPlayerRule(settingsForCommon, playerIndex);
+    export function setEnergyGrowthMultiplier(warRule: IWarRule, playerIndex: number, value: number): undefined {
+        const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
             Logger.error(`BwCommonSettingsHelper.setEnergyGrowthMultiplier() empty playerRule.`);
             return undefined;
@@ -74,8 +83,8 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
         playerRule.energyGrowthMultiplier = value;
     }
 
-    export function getAttackPowerModifier(settingsForCommon: ISettingsForCommon, playerIndex: number): number | null | undefined {
-        const playerRule = getPlayerRule(settingsForCommon, playerIndex);
+    export function getAttackPowerModifier(warRule: IWarRule, playerIndex: number): number | null | undefined {
+        const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
             Logger.error(`BwCommonSettingsHelper.getAttackPowerModifier() empty playerRule.`);
             return undefined;
@@ -89,8 +98,8 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
 
         return attackPowerModifier;
     }
-    export function setAttackPowerModifier(settingsForCommon: ISettingsForCommon, playerIndex: number, value: number): undefined {
-        const playerRule = getPlayerRule(settingsForCommon, playerIndex);
+    export function setAttackPowerModifier(warRule: IWarRule, playerIndex: number, value: number): undefined {
+        const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
             Logger.error(`BwCommonSettingsHelper.setAttackPowerModifier() empty playerRule.`);
             return undefined;
@@ -99,8 +108,8 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
         playerRule.attackPowerModifier = value;
     }
 
-    export function getMoveRangeModifier(settingsForCommon: ISettingsForCommon, playerIndex: number): number | null | undefined {
-        const playerRule = getPlayerRule(settingsForCommon, playerIndex);
+    export function getMoveRangeModifier(warRule: IWarRule, playerIndex: number): number | null | undefined {
+        const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
             Logger.error(`BwCommonSettingsHelper.getMoveRangeModifier() empty playerRule.`);
             return undefined;
@@ -114,8 +123,8 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
 
         return moveRangeModifier;
     }
-    export function setMoveRangeModifier(settingsForCommon: ISettingsForCommon, playerIndex: number, value: number): undefined {
-        const playerRule = getPlayerRule(settingsForCommon, playerIndex);
+    export function setMoveRangeModifier(warRule: IWarRule, playerIndex: number, value: number): undefined {
+        const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
             Logger.error(`BwCommonSettingsHelper.setMoveRangeModifier() empty playerRule.`);
             return undefined;
@@ -124,8 +133,8 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
         playerRule.moveRangeModifier = value;
     }
 
-    export function getVisionRangeModifier(settingsForCommon: ISettingsForCommon, playerIndex: number): number | null | undefined {
-        const playerRule = getPlayerRule(settingsForCommon, playerIndex);
+    export function getVisionRangeModifier(warRule: IWarRule, playerIndex: number): number | null | undefined {
+        const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
             Logger.error(`BwCommonSettingsHelper.getVisionRangeModifier() empty playerRule.`);
             return undefined;
@@ -139,8 +148,8 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
 
         return visionRangeModifier;
     }
-    export function setVisionRangeModifier(settingsForCommon: ISettingsForCommon, playerIndex: number, value: number): undefined {
-        const playerRule = getPlayerRule(settingsForCommon, playerIndex);
+    export function setVisionRangeModifier(warRule: IWarRule, playerIndex: number, value: number): undefined {
+        const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
             Logger.error(`BwCommonSettingsHelper.setVisionRangeModifier() empty playerRule.`);
             return undefined;
@@ -149,8 +158,8 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
         playerRule.visionRangeModifier = value;
     }
 
-    export function getInitialFund(settingsForCommon: ISettingsForCommon, playerIndex: number): number | null | undefined {
-        const playerRule = getPlayerRule(settingsForCommon, playerIndex);
+    export function getInitialFund(warRule: IWarRule, playerIndex: number): number | null | undefined {
+        const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
             Logger.error(`BwCommonSettingsHelper.getInitialFund() empty playerRule.`);
             return undefined;
@@ -164,8 +173,8 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
 
         return initialFund;
     }
-    export function setInitialFund(settingsForCommon: ISettingsForCommon, playerIndex: number, value: number): undefined {
-        const playerRule = getPlayerRule(settingsForCommon, playerIndex);
+    export function setInitialFund(warRule: IWarRule, playerIndex: number, value: number): undefined {
+        const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
             Logger.error(`BwCommonSettingsHelper.setInitialFund() empty playerRule.`);
             return undefined;
@@ -174,8 +183,8 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
         playerRule.initialFund = value;
     }
 
-    export function getInitialEnergyPercentage(settingsForCommon: ISettingsForCommon, playerIndex: number): number | null | undefined {
-        const playerRule = getPlayerRule(settingsForCommon, playerIndex);
+    export function getInitialEnergyPercentage(warRule: IWarRule, playerIndex: number): number | null | undefined {
+        const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
             Logger.error(`BwCommonSettingsHelper.getInitialEnergyPercentage() empty playerRule.`);
             return undefined;
@@ -189,8 +198,8 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
 
         return initialEnergyPercentage;
     }
-    export function setInitialEnergyPercentage(settingsForCommon: ISettingsForCommon, playerIndex: number, value: number): undefined {
-        const playerRule = getPlayerRule(settingsForCommon, playerIndex);
+    export function setInitialEnergyPercentage(warRule: IWarRule, playerIndex: number, value: number): undefined {
+        const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
             Logger.error(`BwCommonSettingsHelper.setInitialEnergyPercentage() empty playerRule.`);
             return undefined;
@@ -199,8 +208,8 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
         playerRule.initialEnergyPercentage = value;
     }
 
-    export function getLuckLowerLimit(settingsForCommon: ISettingsForCommon, playerIndex: number): number | null | undefined {
-        const playerRule = getPlayerRule(settingsForCommon, playerIndex);
+    export function getLuckLowerLimit(warRule: IWarRule, playerIndex: number): number | null | undefined {
+        const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
             Logger.error(`BwCommonSettingsHelper.getLuckLowerLimit() empty playerRule.`);
             return undefined;
@@ -214,8 +223,8 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
 
         return luckLowerLimit;
     }
-    export function setLuckLowerLimit(settingsForCommon: ISettingsForCommon, playerIndex: number, value: number): undefined {
-        const playerRule = getPlayerRule(settingsForCommon, playerIndex);
+    export function setLuckLowerLimit(warRule: IWarRule, playerIndex: number, value: number): undefined {
+        const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
             Logger.error(`BwCommonSettingsHelper.setLuckLowerLimit() empty playerRule.`);
             return undefined;
@@ -224,8 +233,8 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
         playerRule.luckLowerLimit = value;
     }
 
-    export function getLuckUpperLimit(settingsForCommon: ISettingsForCommon, playerIndex: number): number | null | undefined {
-        const playerRule = getPlayerRule(settingsForCommon, playerIndex);
+    export function getLuckUpperLimit(warRule: IWarRule, playerIndex: number): number | null | undefined {
+        const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
             Logger.error(`BwCommonSettingsHelper.getLuckUpperLimit() empty playerRule.`);
             return undefined;
@@ -239,8 +248,8 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
 
         return luckUpperLimit;
     }
-    export function setLuckUpperLimit(settingsForCommon: ISettingsForCommon, playerIndex: number, value: number): undefined {
-        const playerRule = getPlayerRule(settingsForCommon, playerIndex);
+    export function setLuckUpperLimit(warRule: IWarRule, playerIndex: number, value: number): undefined {
+        const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
             Logger.error(`BwCommonSettingsHelper.setLuckUpperLimit() empty playerRule.`);
             return undefined;
@@ -249,8 +258,8 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
         playerRule.luckUpperLimit = value;
     }
 
-    export function getAvailableCoIdList(settingsForCommon: ISettingsForCommon, playerIndex: number): number[] {
-        const playerRule = getPlayerRule(settingsForCommon, playerIndex);
+    export function getAvailableCoIdList(warRule: IWarRule, playerIndex: number): number[] {
+        const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
             Logger.error(`BwSettingsHelper.getAvailableCoIdList() empty playerRule.`);
             return undefined;
@@ -264,8 +273,8 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
 
         return coIdList;
     }
-    export function addAvailableCoId(settingsForCommon: ISettingsForCommon, playerIndex: number, coId: number): void {
-        const coIdList = getAvailableCoIdList(settingsForCommon, playerIndex);
+    export function addAvailableCoId(warRule: IWarRule, playerIndex: number, coId: number): void {
+        const coIdList = getAvailableCoIdList(warRule, playerIndex);
         if (coIdList == null) {
             Logger.error(`BwSettingsHelper.addAvailableCoId() empty coIdList.`);
             return undefined;
@@ -275,8 +284,8 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
             coIdList.push(coId);
         }
     }
-    export function removeAvailableCoId(settingsForCommon: ISettingsForCommon, playerIndex: number, coId: number): void {
-        const coIdList = getAvailableCoIdList(settingsForCommon, playerIndex);
+    export function removeAvailableCoId(warRule: IWarRule, playerIndex: number, coId: number): void {
+        const coIdList = getAvailableCoIdList(warRule, playerIndex);
         if (coIdList == null) {
             Logger.error(`BwSettingsHelper.removeAvailableCoId() empty coIdList.`);
             return undefined;
@@ -291,8 +300,8 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
             }
         }
     }
-    export function setAvailableCoIdList(settingsForCommon: ISettingsForCommon, playerIndex: number, coIdSet: Set<number>): void {
-        const coIdList = getAvailableCoIdList(settingsForCommon, playerIndex);
+    export function setAvailableCoIdList(warRule: IWarRule, playerIndex: number, coIdSet: Set<number>): void {
+        const coIdList = getAvailableCoIdList(warRule, playerIndex);
         if (coIdList == null) {
             Logger.error(`BwSettingsHelper.setAvailableCoIdList() empty coIdList.`);
             return undefined;
@@ -304,8 +313,8 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
         }
     }
 
-    export function getTeamIndex(settingsForCommon: ISettingsForCommon, playerIndex: number): number {
-        const playerRule = getPlayerRule(settingsForCommon, playerIndex);
+    export function getTeamIndex(warRule: IWarRule, playerIndex: number): number {
+        const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
             Logger.error(`BwSettingsHelper.getTeamIndex() empty playerRule.`);
             return undefined;
@@ -319,8 +328,8 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
 
         return teamIndex;
     }
-    export function setTeamIndex(settingsForCommon: ISettingsForCommon, playerIndex: number, teamIndex: number): void {
-        const playerRule = getPlayerRule(settingsForCommon, playerIndex);
+    export function setTeamIndex(warRule: IWarRule, playerIndex: number, teamIndex: number): void {
+        const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
             Logger.error(`BwSettingsHelper.getTeamIndex() empty playerRule.`);
             return undefined;
@@ -328,14 +337,15 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
 
         playerRule.teamIndex = teamIndex;
     }
+    export function tickTeamIndex(warRule: IWarRule, playerIndex: number): void {
+        setTeamIndex(
+            warRule,
+            playerIndex,
+            getTeamIndex(warRule, playerIndex) % getPlayersCount(warRule) + 1
+        );
+    }
 
-    export function getPlayerRule(settingsForCommon: ISettingsForCommon, playerIndex: number): IDataForPlayerRule | undefined {
-        const warRule = settingsForCommon.warRule;
-        if (warRule == null) {
-            Logger.error(`BwSettingsHelper.getPlayerRule() empty warRule.`);
-            return undefined;
-        }
-
+    export function getPlayerRule(warRule: IWarRule, playerIndex: number): IDataForPlayerRule | undefined {
         const ruleForPlayers = warRule.ruleForPlayers;
         if (ruleForPlayers == null) {
             Logger.error(`BwSettingsHelper.getPlayerRule() empty ruleForPlayers.`);
@@ -351,13 +361,7 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
         return playerRuleDataList.find(v => v.playerIndex === playerIndex);
     }
 
-    export function getPlayersCount(settingsForCommon: ISettingsForCommon): number {
-        const warRule = settingsForCommon.warRule;
-        if (warRule == null) {
-            Logger.error(`BwSettingsHelper.getPlayersCount() empty warRule.`);
-            return undefined;
-        }
-
+    export function getPlayersCount(warRule: IWarRule): number {
         const ruleForPlayers = warRule.ruleForPlayers;
         if (ruleForPlayers == null) {
             Logger.error(`BwSettingsHelper.getPlayersCount() empty ruleForPlayers.`);
@@ -375,9 +379,209 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
 
     export function getRandomCoId(settingsForCommon: ISettingsForCommon, playerIndex: number): number {
         const configVersion = settingsForCommon.configVersion;
-        return Helpers.pickRandomElement(getPlayerRule(settingsForCommon, playerIndex).availableCoIdList.filter(coId => {
+        return Helpers.pickRandomElement(getPlayerRule(settingsForCommon.warRule, playerIndex).availableCoIdList.filter(coId => {
             const cfg = ConfigManager.getCoBasicCfg(configVersion, coId);
             return (cfg != null) && (cfg.isEnabled);
         }));
+    }
+
+    export function createDefaultWarRule(ruleId: number, playersCount: number): IWarRule {
+        return {
+            ruleId          : ruleId,
+            ruleNameList    : [
+                Lang.getTextWithLanguage(Lang.Type.B0001, LanguageType.Chinese),
+                Lang.getTextWithLanguage(Lang.Type.B0001, LanguageType.English),
+            ],
+            ruleAvailability: {
+                canMcw  : true,
+                canScw  : true,
+                canRank : false,
+                canWr   : false,
+            },
+            ruleForGlobalParams : {
+                hasFogByDefault : false,
+            },
+            ruleForPlayers: {
+                playerRuleDataList: createDefaultPlayerRuleList(playersCount),
+            },
+        }
+    }
+    function createDefaultPlayerRuleList(playersCount: number): IDataForPlayerRule[] {
+        const playerRuleDataList: IDataForPlayerRule[] = [];
+        for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
+            playerRuleDataList.push(createDefaultPlayerRule(playerIndex));
+        }
+        return playerRuleDataList;
+    }
+    function createDefaultPlayerRule(playerIndex: number): IDataForPlayerRule {
+        return {
+            playerIndex,
+            teamIndex               : playerIndex,
+            initialFund             : CommonConstants.WarRuleInitialFundDefault,
+            incomeMultiplier        : CommonConstants.WarRuleIncomeMultiplierDefault,
+            initialEnergyPercentage : CommonConstants.WarRuleInitialEnergyPercentageDefault,
+            energyGrowthMultiplier  : CommonConstants.WarRuleEnergyGrowthMultiplierDefault,
+            moveRangeModifier       : CommonConstants.WarRuleMoveRangeModifierDefault,
+            attackPowerModifier     : CommonConstants.WarRuleOffenseBonusDefault,
+            visionRangeModifier     : CommonConstants.WarRuleVisionRangeModifierDefault,
+            luckLowerLimit          : CommonConstants.WarRuleLuckDefaultLowerLimit,
+            luckUpperLimit          : CommonConstants.WarRuleLuckDefaultUpperLimit,
+            availableCoIdList       : ConfigManager.getAvailableCoList(ConfigManager.getNewestConfigVersion()).map(v => v.coId),
+        }
+    }
+    export function reviseWarRule(warRule: IWarRule, playersCount: number): void {
+        const playerRuleDataList = warRule.ruleForPlayers.playerRuleDataList;
+        for (let index = 0; index < playerRuleDataList.length; ++index) {
+            const playerRule = playerRuleDataList[index];
+            if (playerRule.playerIndex > playersCount) {
+                playerRuleDataList.splice(index, 1);
+                --index;
+                continue;
+            }
+        }
+
+        for (const playerRule of playerRuleDataList) {
+            playerRule.teamIndex = Math.min(playerRule.teamIndex, playersCount);
+        }
+
+        for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
+            if (playerRuleDataList.find(v => v.playerIndex === playerIndex) == null) {
+                playerRuleDataList.push(createDefaultPlayerRule(playerIndex));
+            }
+        }
+    }
+
+    export function checkIsValidWarRule(rule: IWarRule): boolean {
+        const ruleNameList = rule.ruleNameList;
+        if ((!ruleNameList) || (!ruleNameList.length)) {
+            return false;
+        }
+        for (const ruleName of ruleNameList) {
+            const length = ruleName.length;
+            if ((length <= 0) || (length > CommonConstants.WarRuleNameMaxLength)) {
+                return false;
+            }
+        }
+
+        const ruleForPlayers = rule.ruleForPlayers;
+        if ((!ruleForPlayers) || (!checkIsValidRuleForPlayers(ruleForPlayers))) {
+            return false;
+        }
+
+        const availability = rule.ruleAvailability;
+        if ((!availability) || (!checkIsValidWarRuleAvailability(availability))) {
+            return false;
+        }
+
+        const ruleForGlobalParams = rule.ruleForGlobalParams;
+        if ((!ruleForGlobalParams) || (!checkIsValidRuleForGlobalParams(ruleForGlobalParams))) {
+            return false;
+        }
+
+        return true;
+    }
+    export function checkIsValidRuleForPlayers(ruleForPlayers: WarRule.IRuleForPlayers): boolean | undefined {
+        const configVersion = ConfigManager.getNewestConfigVersion();
+        if (configVersion == null) {
+            Logger.error(`BwSettingsHelper.checkIsValidRuleForPlayers() empty configVersion.`);
+            return undefined;
+        }
+
+        const ruleList = ruleForPlayers.playerRuleDataList;
+        if (!ruleList) {
+            return false;
+        }
+
+        const playersCount = ruleList.length;
+        if (playersCount < 2) {
+            return false;
+        }
+
+        const playerIndexSet    = new Set<number>();
+        const teamIndexSet      = new Set<number>();
+        for (const data of ruleList) {
+            const playerIndex   = data.playerIndex;
+            const teamIndex     = data.teamIndex;
+            if ((playerIndex    ==  null)                                       ||
+                (playerIndex    <   1)                                          ||
+                (playerIndex    >   playersCount)                               ||
+                (playerIndexSet.has(playerIndex))                               ||
+                (teamIndex      ==  null)                                       ||
+                (teamIndex      <   1)                                          ||
+                (teamIndex      >   playersCount)
+            ) {
+                return false;
+            }
+
+            const {
+                initialFund,        availableCoIdList,      incomeMultiplier,       initialEnergyPercentage,    energyGrowthMultiplier,
+                moveRangeModifier,  attackPowerModifier,    visionRangeModifier,    luckUpperLimit,             luckLowerLimit,
+            } = data;
+            if ((initialFund                == null)                                                    ||
+                (initialFund                > CommonConstants.WarRuleInitialFundMaxLimit)               ||
+                (initialFund                < CommonConstants.WarRuleInitialFundMinLimit)               ||
+                (incomeMultiplier           == null)                                                    ||
+                (incomeMultiplier           > CommonConstants.WarRuleIncomeMultiplierMaxLimit)          ||
+                (incomeMultiplier           < CommonConstants.WarRuleIncomeMultiplierMinLimit)          ||
+                (initialEnergyPercentage    == null)                                                    ||
+                (initialEnergyPercentage    > CommonConstants.WarRuleInitialEnergyPercentageMaxLimit)   ||
+                (initialEnergyPercentage    < CommonConstants.WarRuleInitialEnergyPercentageMinLimit)   ||
+                (energyGrowthMultiplier     == null)                                                    ||
+                (energyGrowthMultiplier     > CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit)    ||
+                (energyGrowthMultiplier     < CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit)    ||
+                (moveRangeModifier          == null)                                                    ||
+                (moveRangeModifier          > CommonConstants.WarRuleMoveRangeModifierMaxLimit)         ||
+                (moveRangeModifier          < CommonConstants.WarRuleMoveRangeModifierMinLimit)         ||
+                (attackPowerModifier        == null)                                                    ||
+                (attackPowerModifier        > CommonConstants.WarRuleOffenseBonusMaxLimit)              ||
+                (attackPowerModifier        < CommonConstants.WarRuleOffenseBonusMinLimit)              ||
+                (visionRangeModifier        == null)                                                    ||
+                (visionRangeModifier        > CommonConstants.WarRuleVisionRangeModifierMaxLimit)       ||
+                (visionRangeModifier        < CommonConstants.WarRuleVisionRangeModifierMinLimit)       ||
+                (luckLowerLimit             == null)                                                    ||
+                (luckLowerLimit             > CommonConstants.WarRuleLuckMaxLimit)                      ||
+                (luckLowerLimit             < CommonConstants.WarRuleLuckMinLimit)                      ||
+                (luckUpperLimit             == null)                                                    ||
+                (luckUpperLimit             > CommonConstants.WarRuleLuckMaxLimit)                      ||
+                (luckUpperLimit             < CommonConstants.WarRuleLuckMinLimit)                      ||
+                (luckUpperLimit             < luckLowerLimit)                                           ||
+                (availableCoIdList          == null)                                                    ||
+                (availableCoIdList.length   <= 0)                                                       ||
+                (availableCoIdList.some(coId => ConfigManager.getCoBasicCfg(configVersion, coId) == null))
+            ) {
+                return false;
+            }
+
+            playerIndexSet.add(playerIndex);
+            teamIndexSet.add(teamIndex);
+        }
+
+        return (playerIndexSet.size === playersCount)
+            && (teamIndexSet.size > 1);
+    }
+    function checkIsValidWarRuleAvailability(availability: WarRule.IDataForWarRuleAvailability): boolean {
+        const {
+            canMcw,     canScw,     canRank,    canWr,
+        } = availability;
+        return (!!canMcw)
+            || (!!canScw)
+            || (!!canRank)
+            || (!!canWr);
+    }
+    function checkIsValidRuleForGlobalParams(rule: WarRule.IRuleForGlobalParams): boolean | undefined {
+        const configVersion = ConfigManager.getNewestConfigVersion();
+        if (configVersion == null) {
+            Logger.error(`BwSettingsHelper.checkIsValidRuleForGlobalParams() empty configVersion.`);
+            return undefined;
+        }
+
+        const {
+            hasFogByDefault,
+        } = rule;
+        if (hasFogByDefault == null) {
+            return false;
+        }
+
+        return true;
     }
 }

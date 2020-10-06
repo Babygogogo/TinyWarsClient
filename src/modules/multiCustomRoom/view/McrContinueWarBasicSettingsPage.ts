@@ -197,7 +197,7 @@ namespace TinyWars.MultiCustomRoom {
             if (warInfo) {
                 const settingsForCommon = warInfo.settingsForCommon;
                 WarMapModel.getMapNameInCurrentLanguage(settingsForCommon.mapId).then(v =>
-                    this._labelMapName.text = `${v} (${BwSettingsHelper.getPlayersCount(settingsForCommon)}P)`
+                    this._labelMapName.text = `${v} (${BwSettingsHelper.getPlayersCount(settingsForCommon.warRule)}P)`
                 );
             }
         }
@@ -216,7 +216,7 @@ namespace TinyWars.MultiCustomRoom {
                 const playerData = warInfo.playerInfoList.find(v => v.userId === selfUserId);
                 if (playerData) {
                     const playerIndex           = playerData.playerIndex;
-                    const playerRule            = BwSettingsHelper.getPlayerRule(warInfo.settingsForCommon, playerIndex);
+                    const playerRule            = BwSettingsHelper.getPlayerRule(warInfo.settingsForCommon.warRule, playerIndex);
                     this._labelPlayerIndex.text = `${Lang.getPlayerForceName(playerIndex)} (${Lang.getPlayerTeamName(playerRule.teamIndex)})`;
                 }
             }

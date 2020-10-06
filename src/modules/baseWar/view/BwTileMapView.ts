@@ -76,11 +76,18 @@ namespace TinyWars.BaseWar {
             egret.Tween.removeTweens(this._coZoneContainer);
         }
 
-        protected _getTileMap(): BwTileMap {
-            return this._tileMap;
+        public setBaseLayerVisible(visible: boolean): void {
+            this._baseLayer.visible = visible;
         }
-        protected _getCoZoneImages(): Map<number, GameUi.UiImage[][]> {
-            return this._coZoneImages;
+        public getBaseLayerVisible(): boolean {
+            return this._baseLayer.visible;
+        }
+
+        public setObjectLayerVisible(visible: boolean): void {
+            this._objectLayer.visible = visible;
+        }
+        public getObjectLayerVisible(): boolean {
+            return this._objectLayer.visible;
         }
 
         private _initCoZoneContainer(): void {

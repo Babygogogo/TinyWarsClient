@@ -327,85 +327,85 @@ namespace TinyWars.SingleCustomWar {
         }
 
         public setSettingsIncomeMultiplier(playerIndex: number, value: number): void {
-            const settingsForCommon = this.getSettingsForCommon();
-            if (settingsForCommon == null) {
+            const warRule = this.getWarRule();
+            if (warRule == null) {
                 Logger.error(`BwWar.setSettingsIncomeMultiplier() empty settingsForCommon.`);
                 return undefined;
             }
 
-            BwSettingsHelper.setIncomeMultiplier(settingsForCommon, playerIndex, value);
+            BwSettingsHelper.setIncomeMultiplier(warRule, playerIndex, value);
         }
         public setSettingsEnergyGrowthMultiplier(playerIndex: number, value: number): void {
-            const settingsForCommon = this.getSettingsForCommon();
-            if (settingsForCommon == null) {
+            const warRule = this.getWarRule();
+            if (warRule == null) {
                 Logger.error(`BwWar.setSettingsEnergyGrowthMultiplier() empty settingsForCommon.`);
                 return undefined;
             }
 
-            BwSettingsHelper.setEnergyGrowthMultiplier(settingsForCommon, playerIndex, value);
+            BwSettingsHelper.setEnergyGrowthMultiplier(warRule, playerIndex, value);
         }
         public setSettingsAttackPowerModifier(playerIndex: number, value: number): void {
-            const settingsForCommon = this.getSettingsForCommon();
-            if (settingsForCommon == null) {
+            const warRule = this.getWarRule();
+            if (warRule == null) {
                 Logger.error(`BwWar.setSettingsAttackPowerModifier() empty settingsForCommon.`);
                 return undefined;
             }
 
-            BwSettingsHelper.setAttackPowerModifier(settingsForCommon, playerIndex, value);
+            BwSettingsHelper.setAttackPowerModifier(warRule, playerIndex, value);
         }
         public setSettingsMoveRangeModifier(playerIndex: number, value: number): void {
-            const settingsForCommon = this.getSettingsForCommon();
-            if (settingsForCommon == null) {
+            const warRule = this.getWarRule();
+            if (warRule == null) {
                 Logger.error(`BwWar.setSettingsMoveRangeModifier() empty settingsForCommon.`);
                 return undefined;
             }
 
-            BwSettingsHelper.setMoveRangeModifier(settingsForCommon, playerIndex, value);
+            BwSettingsHelper.setMoveRangeModifier(warRule, playerIndex, value);
         }
         public setSettingsVisionRangeModifier(playerIndex: number, value: number): void {
-            const settingsForCommon = this.getSettingsForCommon();
-            if (settingsForCommon == null) {
+            const warRule = this.getWarRule();
+            if (warRule == null) {
                 Logger.error(`BwWar.setSettingsVisionRangeModifier() empty settingsForCommon.`);
                 return undefined;
             }
 
-            BwSettingsHelper.setVisionRangeModifier(settingsForCommon, playerIndex, value);
+            BwSettingsHelper.setVisionRangeModifier(warRule, playerIndex, value);
         }
         public setSettingsInitialFund(playerIndex: number, value: number): void {
-            const settingsForCommon = this.getSettingsForCommon();
-            if (settingsForCommon == null) {
+            const warRule = this.getWarRule();
+            if (warRule == null) {
                 Logger.error(`BwWar.setSettingsInitialFund() empty settingsForCommon.`);
                 return undefined;
             }
 
-            BwSettingsHelper.setInitialFund(settingsForCommon, playerIndex, value);
+            BwSettingsHelper.setInitialFund(warRule, playerIndex, value);
         }
         public setSettingsInitialEnergyPercentage(playerIndex: number, value: number): void {
-            const settingsForCommon = this.getSettingsForCommon();
-            if (settingsForCommon == null) {
+            const warRule = this.getWarRule();
+            if (warRule == null) {
                 Logger.error(`BwWar.setSettingsInitialEnergyPercentage() empty settingsForCommon.`);
                 return undefined;
             }
 
-            BwSettingsHelper.setInitialEnergyPercentage(settingsForCommon, playerIndex, value);
+            BwSettingsHelper.setInitialEnergyPercentage(warRule, playerIndex, value);
         }
         public setSettingsLuckLowerLimit(playerIndex: number, value: number): void {
-            const settingsForCommon = this.getSettingsForCommon();
-            if (settingsForCommon == null) {
-                Logger.error(`BwWar.setSettingsLuckLowerLimit() empty settingsForCommon.`);
+            const warRule = this.getWarRule();
+            if (warRule == null) {
+                Logger.error(`BwWar.setSettingsLuckLowerLimit() empty warRule.`);
                 return undefined;
             }
 
-            BwSettingsHelper.setLuckLowerLimit(settingsForCommon, playerIndex, value);
+            BwSettingsHelper.setLuckLowerLimit(warRule, playerIndex, value);
         }
         public setSettingsLuckUpperLimit(playerIndex: number, value: number): void {
-            const settingsForCommon = this.getSettingsForCommon();
-            if (settingsForCommon == null) {
-                Logger.error(`BwWar.setSettingsLuckUpperLimit() empty settingsForCommon.`);
+            const warRule = this.getWarRule();
+            if (warRule == null) {
+                Logger.error(`BwWar.setSettingsLuckUpperLimit() empty warRule.`);
                 return undefined;
             }
 
-            BwSettingsHelper.setLuckUpperLimit(settingsForCommon, playerIndex, value);
+            BwSettingsHelper.setLuckUpperLimit(warRule, playerIndex, value);
         }
 
         private _setAllExecutedActions(actions: IActionContainer[]): void {

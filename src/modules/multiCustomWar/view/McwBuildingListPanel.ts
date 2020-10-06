@@ -148,10 +148,15 @@ namespace TinyWars.MultiCustomWar {
             this._labelTotalNum.text = `${totalNum}`;
 
             const tileObjectType = Utility.ConfigManager.getTileObjectTypeByTileType(data.tileType);
-            this._tileView.init(
-                null,
-                Utility.ConfigManager.getTileObjectViewId(tileObjectType, tileObjectType === Types.TileObjectType.Headquarters ? 1 : 0)
-            );
+            this._tileView.init({
+                tileBaseType        : null,
+                tileBaseShapeId     : null,
+                tileObjectType      : tileObjectType,
+                tileObjectShapeId   : 0,
+                playerIndex         : tileObjectType === Types.TileObjectType.Headquarters
+                    ? CommonConstants.WarFirstPlayerIndex
+                    : CommonConstants.WarNeutralPlayerIndex,
+            });
             this._tileView.updateView();
         }
 

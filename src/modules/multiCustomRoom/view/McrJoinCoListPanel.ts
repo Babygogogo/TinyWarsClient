@@ -147,7 +147,7 @@ namespace TinyWars.MultiCustomRoom {
             const playerIndex   = McrModel.Join.getPlayerIndex();
             const configVersion = ConfigManager.getNewestConfigVersion();
             let index           = 0;
-            for (const coId of BwSettingsHelper.getPlayerRule((await McrModel.Join.getRoomInfo()).settingsForCommon, playerIndex).availableCoIdList) {
+            for (const coId of BwSettingsHelper.getPlayerRule((await McrModel.Join.getRoomInfo()).settingsForCommon.warRule, playerIndex).availableCoIdList) {
                 const cfg = ConfigManager.getCoBasicCfg(configVersion, coId);
                 if ((cfg) && (cfg.isEnabled)) {
                     dataList.push({

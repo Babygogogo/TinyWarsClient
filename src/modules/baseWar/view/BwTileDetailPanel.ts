@@ -110,8 +110,25 @@ namespace TinyWars.BaseWar {
         private _updateTileViewAndLabelName(): void {
             const data                  = this._openData;
             const tile                  = data.tile;
-            this._imgTileBase.source    = CommonModel.getTileBaseImageSource(tile.getBaseViewId(), false);
-            this._imgTileObject.source  = CommonModel.getTileObjectImageSource(tile.getObjectViewId(), false);
+            const version               = CommonModel.getUnitAndTileTextureVersion();
+            const tickCount             = Time.TimeModel.getTileAnimationTickCount();
+            const skinId                = tile.getSkinId();
+            this._imgTileBase.source    = CommonModel.getCachedTileBaseImageSource({
+                version,
+                skinId,
+                baseType    : tile.getBaseType(),
+                isDark      : false,
+                shapeId     : tile.getBaseShapeId(),
+                tickCount,
+            });
+            this._imgTileObject.source  = CommonModel.getCachedTileObjectImageSource({
+                version,
+                skinId,
+                objectType  : tile.getObjectType(),
+                isDark      : false,
+                shapeId     : tile.getObjectShapeId(),
+                tickCount,
+            });
             this._labelName.text        = Lang.getTileName(tile.getType());
         }
 
@@ -396,10 +413,10 @@ namespace TinyWars.BaseWar {
             const moveCost              = moveCostCfg[Utility.ConfigManager.getUnitTemplateCfg(configVersion, unitType).moveType].cost;
             this._labelMoveCost.text    = moveCost != null ? `${moveCost}` : `--`;
             this._unitView.update({
-                configVersion,
-                gridX           : 0,
-                gridY           : 0,
-                viewId          : Utility.ConfigManager.getUnitViewId(unitType, data.playerIndex),
+                gridIndex       : { x: 0, y: 0 },
+                skinId          : data.playerIndex,
+                unitType        : data.unitType,
+                unitActionState : Types.UnitActionState.Idle,
             }, Time.TimeModel.getUnitAnimationTickCount());
         }
     }

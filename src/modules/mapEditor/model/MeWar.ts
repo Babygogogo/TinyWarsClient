@@ -1,142 +1,211 @@
 
 namespace TinyWars.MapEditor {
-    import Types            = Utility.Types;
-    import ConfigManager    = Utility.ConfigManager;
+    import Logger           = Utility.Logger;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import BwSettingsHelper = BaseWar.BwSettingsHelper;
+    import BwHelpers        = BaseWar.BwHelpers;
+    import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
+    import IWarRule         = ProtoTypes.WarRule.IWarRule;
+    import IMapRawData      = ProtoTypes.Map.IMapRawData;
 
-    export class MeWar {
-        private _slotIndex      : number;
-        private _configVersion  : string;
-        private _isReview       : boolean;
-        private _isRunning      = false;
+    export class MeWar extends BaseWar.BwWar {
+        private _drawer             : MeDrawer;
+        private _mapModifiedTime    : number;
+        private _mapSlotIndex       : number;
+        private _mapDesignerUserId  : number;
+        private _mapDesignerName    : string;
+        private _mapNameList        : string[];
+        private _isReviewingMap     = false;
+        private _warRuleList        : IWarRule[] = [];
 
-        private _view           : MeWarView;
-        private _field          : MeField;
-        private _drawer         : MeDrawer;
+        public async init(data: ISerialWar): Promise<MeWar> {
+            if (!this._baseInit(data)) {
+                Logger.error(`MeWar.init() failed this._baseInit().`);
+                return undefined;
+            }
 
-        public init(data: Types.MapRawData, slotIndex: number, configVersion: string, isReview: boolean): MeWar {
-            this._setSlotIndex(slotIndex);
-            this._setConfigVersion(configVersion);
-            this._setIsReview(isReview);
+            const settingsForMultiPlayer = data.settingsForMultiPlayer;
+            if (!settingsForMultiPlayer) {
+                Logger.error(`MeWar.init() invalid settingsForMultiPlayer! ${JSON.stringify(data)}`);
+                return undefined;
+            }
 
-            this._setField((this.getField() || new MeField()).init(data, configVersion));
-            this._setDrawer((this.getDrawer() || new MeDrawer()).init(data));
+            const mapSizeAndMaxPlayerIndex = await BwHelpers.getMapSizeAndMaxPlayerIndex(data);
+            if (!mapSizeAndMaxPlayerIndex) {
+                Logger.error(`MeWar.init() invalid war data! ${JSON.stringify(data)}`);
+                return undefined;
+            }
+
+            const settingsForCommon = data.settingsForCommon;
+            if (!settingsForCommon) {
+                Logger.error(`MeWar.init() empty settingsForCommon! ${JSON.stringify(data)}`);
+                return undefined;
+            }
+
+            const configVersion = settingsForCommon.configVersion;
+            if (configVersion == null) {
+                Logger.error(`MeWar.init() empty configVersion.`);
+                return undefined;
+            }
+
+            const dataForPlayerManager = data.playerManager;
+            if (dataForPlayerManager == null) {
+                Logger.error(`MeWar.init() empty dataForPlayerManager.`);
+                return undefined;
+            }
+
+            const dataForTurnManager = data.turnManager;
+            if (dataForTurnManager == null) {
+                Logger.error(`MeWar.init() empty dataForTurnManager.`);
+                return undefined;
+            }
+
+            const dataForField = data.field;
+            if (dataForField == null) {
+                Logger.error(`MeWar.init() empty dataForField.`);
+                return undefined;
+            }
+
+            const playerManager = (this.getPlayerManager() || new (this._getPlayerManagerClass())()).init(dataForPlayerManager);
+            if (playerManager == null) {
+                Logger.error(`MeWar.init() empty playerManager.`);
+                return undefined;
+            }
+
+            const turnManager = (this.getTurnManager() || new (this._getTurnManagerClass())()).init(dataForTurnManager);
+            if (turnManager == null) {
+                Logger.error(`MeWar.init() empty turnManager.`);
+                return undefined;
+            }
+
+            const field = await (this.getField() || new (this._getFieldClass())()).init(dataForField, configVersion, mapSizeAndMaxPlayerIndex);
+            if (field == null) {
+                Logger.error(`MeWar.init() empty field.`);
+                return undefined;
+            }
+
+            this._setPlayerManager(playerManager);
+            this._setTurnManager(turnManager);
+            this._setField(field);
+            this._setDrawer((this.getDrawer() || new MeDrawer()).init());
+
             this._initView();
 
             return this;
         }
-        private _initView(): void {
-            this._view = this._view || new MeWarView();
-            this._view.init(this);
+        public async initWithMapEditorData(data: ProtoTypes.Map.IMapEditorData): Promise<void> {
+            await this.init(MeUtility.createISerialWar(data));
+
+            const mapRawData = data.mapRawData;
+            this.setMapSlotIndex(data.slotIndex);
+            this.setMapModifiedTime(mapRawData.modifiedTime);
+            this.setMapDesignerUserId(mapRawData.designerUserId);
+            this.setMapDesignerName(mapRawData.designerName);
+            this.setMapNameList(mapRawData.mapNameList);
+            this.setWarRuleList(mapRawData.warRuleList);
         }
 
-        public serializeForSimulation(): Types.SerializedWar {
+        public serializeForSimulation(): ISerialWar | undefined {
+            const warId = this.getWarId();
+            if (warId == null) {
+                Logger.error(`MeWar.serializeForSimulation() empty warId.`);
+                return undefined;
+            }
+
+            const settingsForCommon = this.getSettingsForCommon();
+            if (settingsForCommon == null) {
+                Logger.error(`MeWar.serializeForSimulation() empty settingsForCommon.`);
+                return undefined;
+            }
+
+            const executedActionsCount = this.getExecutedActionsCount();
+            if (executedActionsCount == null) {
+                Logger.error(`MeWar.serializeForSimulation() empty executedActionsCount.`);
+                return undefined;
+            }
+
+            const playerManager = this.getPlayerManager();
+            if (playerManager == null) {
+                Logger.error(`MeWar.serializeForSimulation() empty playerManager.`);
+                return undefined;
+            }
+
+            const turnManager = this.getTurnManager();
+            if (turnManager == null) {
+                Logger.error(`MeWar.serializeForSimulation() empty turnManager.`);
+                return undefined;
+            }
+
+            const field = this.getField();
+            if (field == null) {
+                Logger.error(`MeWar.serializeForSimulation() empty field.`);
+                return undefined;
+            }
+
+            const serialPlayerManager = playerManager.serializeForSimulation();
+            if (serialPlayerManager == null) {
+                Logger.error(`MeWar.serializeForSimulation() empty serialPlayerManager.`);
+                return undefined;
+            }
+
+            const serialTurnManager = turnManager.serializeForSimulation();
+            if (serialTurnManager == null) {
+                Logger.error(`MeWar.serializeForSimulation() empty serialTurnManager.`);
+                return undefined;
+            }
+
+            const serialField = field.serializeForSimulation();
+            if (serialField == null) {
+                Logger.error(`MeWar.serializeForSimulation() empty serialField.`);
+                return undefined;
+            }
+
             return {
-                warId                   : null,
-                warName                 : null,
-                warPassword             : null,
-                warComment              : null,
-                configVersion           : this.getConfigVersion(),
-                executedActions         : [],
-                nextActionId            : 0,
-                remainingVotesForDraw   : null,
-                warRuleIndex            : null,
-                bootTimerParams         : [Types.BootTimerType.Regular, ConfigManager.COMMON_CONSTANTS.WarBootTimerRegularDefaultValue],
-                hasFogByDefault         : false,
-                incomeModifier          : 100,
-                energyGrowthModifier    : 100,
-                attackPowerModifier     : 0,
-                moveRangeModifier       : 0,
-                visionRangeModifier     : 0,
-                initialFund             : 0,
-                initialEnergy           : 0,
-                bannedCoIdList          : [],
-                luckLowerLimit          : 0,
-                luckUpperLimit          : 10,
-                singlePlayerWarType     : Types.SinglePlayerWarType.Custom,
-                isSinglePlayerCheating  : true,
-                mapFileName             : null,
-                players                 : this._generateSimulationDataForPlayerManager(),
-                field                   : this.getField().serializeForSimulation(),
-                turn                    : this._generateSimulationDataForTurnManager(),
-                seedRandomState         : null,
+                settingsForCommon,
+
+                warId,
+                seedRandomInitialState      : null,
+                seedRandomCurrentState      : new Math.seedrandom("" + Math.random(), { state: true }).state(),
+                executedActions             : [],
+                executedActionsCount,
+                remainingVotesForDraw       : this.getRemainingVotesForDraw(),
+                playerManager               : serialPlayerManager,
+                turnManager                 : serialTurnManager,
+                field                       : serialField,
             };
         }
 
-        public getView(): MeWarView {
-            return this._view;
+        public serializeForMap(): IMapRawData {
+            const tileMap   = this.getTileMap();
+            const mapSize   = tileMap.getMapSize();
+            const unitMap   = this.getUnitMap() as MeUnitMap;
+            unitMap.reviseAllUnitIds();
+
+            return {
+                designerName    : this.getMapDesignerName(),
+                designerUserId  : this.getMapDesignerUserId(),
+                mapNameList     : this.getMapNameList(),
+                mapWidth        : mapSize.width,
+                mapHeight       : mapSize.height,
+                playersCount    : (this.getField() as MeField).getMaxPlayerIndex(),
+                modifiedTime    : Time.TimeModel.getServerTimestamp(),
+                tileDataList    : tileMap.serialize().tiles,
+                unitDataList    : unitMap.serialize().units,
+                warRuleList     : this.getWarRuleList(),
+            };
         }
 
-        public startRunning(): MeWar {
-            this.getField().startRunning(this);
-            this.getDrawer().startRunning(this);
-
-            this._isRunning = true;
-
-            return this;
+        protected _getViewClass(): new () => MeWarView {
+            return MeWarView;
         }
-        public startRunningView(): MeWar {
-            this.getView().startRunningView();
-            this.getField().startRunningView();
-
-            return this;
+        protected _getFieldClass(): new () => MeField {
+            return MeField;
         }
-        public stopRunning(): MeWar {
-            this.getField().stopRunning();
-            this.getDrawer().stopRunning();
-            this.getView().stopRunning();
-
-            this._isRunning = false;
-
-            return this;
+        protected _getPlayerManagerClass(): new () => MePlayerManager {
+            return MePlayerManager;
         }
-        public getIsRunning(): boolean {
-            return this._isRunning;
-        }
-
-        private _setSlotIndex(warId: number): void {
-            this._slotIndex = warId;
-        }
-        public getSlotIndex(): number {
-            return this._slotIndex;
-        }
-
-        private _setIsReview(isReview: boolean): void {
-            this._isReview = isReview;
-        }
-        public getIsReview(): boolean {
-            return this._isReview;
-        }
-
-        private _setConfigVersion(configVersion: string): void {
-            this._configVersion = configVersion;
-        }
-        public getConfigVersion(): string {
-            return this._configVersion;
-        }
-
-        public setMapDesigner(designer: string): void {
-            this.getField().setMapDesigner(designer);
-        }
-        public getMapDesigner(): string {
-            return this.getField().getMapDesigner();
-        }
-
-        public setDesignerUserId(id: number): void {
-            this.getField().setDesignerUserId(id);
-        }
-        public getDesignerUserId(): number {
-            return this.getField().getDesignerUserId();
-        }
-
-        public getModifiedTime(): number {
-            return this.getField().getModifiedTime();
-        }
-
-        private _setField(field: MeField): void {
-            this._field = field;
-        }
-        public getField(): MeField {
-            return this._field;
+        protected _getTurnManagerClass(): new () => MeTurnManager {
+            return MeTurnManager;
         }
 
         private _setDrawer(drawer: MeDrawer): void {
@@ -146,77 +215,79 @@ namespace TinyWars.MapEditor {
             return this._drawer;
         }
 
-        public getUnitMap(): MeUnitMap {
-            return this.getField().getUnitMap();
+        public setMapModifiedTime(time: number): void {
+            this._mapModifiedTime = time;
         }
-        public getTileMap(): MeTileMap {
-            return this.getField().getTileMap();
-        }
-        public getGridVisionEffect(): MeGridVisionEffect {
-            return this.getField().getGridVisionEffect();
+        public getMapModifiedTime(): number {
+            return this._mapModifiedTime;
         }
 
-        public setMapName(name: string): void {
-            this.getField().setMapName(name);
+        public getMapSlotIndex(): number {
+            return this._mapSlotIndex;
         }
-        public getMapName(): string {
-            return this.getField().getMapName();
-        }
-
-        public setMapNameEnglish(name: string): void {
-            this.getField().setMapNameEnglish(name);
-        }
-        public getMapNameEnglish(): string {
-            return this.getField().getMapNameEnglish();
+        public setMapSlotIndex(value: number) {
+            this._mapSlotIndex = value;
         }
 
-        public setIsMultiPlayer(isMultiPlayer: boolean): void {
-            this.getField().setIsMultiPlayer(isMultiPlayer);
+        public getMapDesignerUserId(): number {
+            return this._mapDesignerUserId;
         }
-        public getIsMultiPlayer(): boolean {
-            return this.getField().getIsMultiPlayer();
-        }
-
-        public setIsSinglePlayer(isSinglePlayer: boolean): void {
-            this.getField().setIsSinglePlayer(isSinglePlayer);
-        }
-        public getIsSinglePlayer(): boolean {
-            return this.getField().getIsSinglePlayer();
+        public setMapDesignerUserId(value: number) {
+            this._mapDesignerUserId = value;
         }
 
-        private _generateSimulationDataForPlayerManager(): Types.SerializedPlayer[] {
-            const maxPlayerIndex    = this.getField().getMaxPlayerIndex();
-            const selfUserId        = User.UserModel.getSelfUserId();
-            const dataList          : Types.SerializedPlayer[] = [];
-            for (let playerIndex = 0; playerIndex <= maxPlayerIndex; ++playerIndex) {
-                dataList.push({
-                    fund                        : 0,
-                    hasVotedForDraw             : false,
-                    isAlive                     : true,
-                    playerIndex,
-                    teamIndex                   : playerIndex,
-                    restTimeToBoot              : 0,
-                    watchRequestSrcUserIdList   : [],
-                    watchOngoingSrcUserIdList   : [],
-                    userId                      : playerIndex > 0 ? selfUserId : null,
-                    coId                        : null,
-                    coUnitId                    : null,
-                    coCurrentEnergy             : null,
-                    coUsingSkillType            : Types.CoSkillType.Passive,
-                    coIsDestroyedInTurn         : false,
-                });
+        public getMapDesignerName(): string {
+            return this._mapDesignerName;
+        }
+        public setMapDesignerName(value: string) {
+            this._mapDesignerName = value;
+        }
+
+        public getMapNameList(): string[] {
+            return this._mapNameList;
+        }
+        public setMapNameList(value: string[]) {
+            this._mapNameList = value;
+        }
+
+        public getWarRuleList(): IWarRule[] {
+            return this._warRuleList;
+        }
+        public setWarRuleList(value: IWarRule[]) {
+            this._warRuleList = value;
+        }
+
+        public getIsReviewingMap(): boolean {
+            return this._isReviewingMap;
+        }
+        public setIsReviewingMap(value: boolean) {
+            this._isReviewingMap = value;
+        }
+
+        public reviseWarRuleList(): void {
+            const ruleList = this.getWarRuleList();
+            if (!ruleList.length) {
+                this.addWarRule();
+            } else {
+                const playersCount = (this.getField() as MeField).getMaxPlayerIndex();
+                for (const rule of ruleList) {
+                    BwSettingsHelper.reviseWarRule(rule, playersCount);
+                }
             }
-
-            return dataList;
         }
-
-        private _generateSimulationDataForTurnManager(): Types.SerializedTurn {
-            return {
-                turnIndex       : 0,
-                playerIndex     : 0,
-                turnPhaseCode   : Types.TurnPhaseCode.WaitBeginTurn,
-                enterTurnTime   : null,
-            };
+        public addWarRule(): void {
+            const ruleList = this.getWarRuleList();
+            ruleList.push(BwSettingsHelper.createDefaultWarRule(ruleList.length, (this.getField() as MeField).getMaxPlayerIndex()));
+        }
+        public deleteWarRule(ruleId: number): void {
+            const ruleList  = this.getWarRuleList();
+            const ruleIndex = ruleList.findIndex(v => v.ruleId === ruleId);
+            if (ruleIndex >= 0) {
+                ruleList.splice(ruleIndex, 1);
+                for (let index = ruleIndex; index < ruleList.length; ++index) {
+                    --ruleList[index].ruleId;
+                }
+            }
         }
     }
 }

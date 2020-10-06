@@ -1,10 +1,11 @@
 
 namespace TinyWars.Common.CommonProxy {
-    import Notify     = Utility.Notify;
-    import NotifyType = Utility.Notify.Type;
-    import ProtoTypes = Utility.ProtoTypes;
-    import NetManager = Network.Manager;
-    import ActionCode = Network.Codes;
+    import Notify       = Utility.Notify;
+    import NotifyType   = Utility.Notify.Type;
+    import ProtoTypes   = Utility.ProtoTypes;
+    import NetMessage   = ProtoTypes.NetMessage;
+    import NetManager   = Network.Manager;
+    import ActionCode   = Network.Codes;
 
     export function init(): void {
         NetManager.addListeners([
@@ -17,7 +18,7 @@ namespace TinyWars.Common.CommonProxy {
         NetManager.send({ C_CommonGetServerStatus: {}, });
     }
     function _onSCommonGetServerStatus(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_CommonGetServerStatus;
+        const data = e.data as NetMessage.IS_CommonGetServerStatus;
         if (!data.errorCode) {
             Notify.dispatch(NotifyType.SCommonGetServerStatus, data);
         }
@@ -32,7 +33,7 @@ namespace TinyWars.Common.CommonProxy {
         });
     }
     function _onSCommonRateMultiPlayerReplay(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_CommonRateMultiPlayerReplay;
+        const data = e.data as NetMessage.IS_CommonRateMultiPlayerReplay;
         if (!data.errorCode) {
             Notify.dispatch(NotifyType.SCommonRateMultiPlayerReplay, data);
         }

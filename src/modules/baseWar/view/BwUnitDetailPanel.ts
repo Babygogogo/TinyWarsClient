@@ -1,11 +1,13 @@
 
 namespace TinyWars.BaseWar {
-    import Notify       = Utility.Notify;
-    import Lang         = Utility.Lang;
-    import Types        = Utility.Types;
-    import FloatText    = Utility.FloatText;
-    import UnitType     = Types.UnitType;
-    import TileType     = Types.TileType;
+    import Notify           = Utility.Notify;
+    import Lang             = Utility.Lang;
+    import Types            = Utility.Types;
+    import FloatText        = Utility.FloatText;
+    import ConfigManager    = Utility.ConfigManager;
+    import UnitType         = Types.UnitType;
+    import TileType         = Types.TileType;
+    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
     export type OpenDataForBwUnitDetailPanel = {
         unit: BwUnit | MapEditor.MeUnit;
@@ -130,10 +132,10 @@ namespace TinyWars.BaseWar {
             const unit              = this._openData.unit;
             this._labelName.text    = Lang.getUnitName(unit.getType());
             this._unitView.update({
-                configVersion   : unit.getConfigVersion(),
-                viewId          : unit.getViewId(),
-                gridX           : 0,
-                gridY           : 0,
+                gridIndex       : { x: 0, y: 0},
+                skinId          : unit.getSkinId(),
+                unitType        : unit.getType(),
+                unitActionState : unit.getActionState(),
             }, Time.TimeModel.getUnitAnimationTickCount());
         }
 
@@ -141,7 +143,7 @@ namespace TinyWars.BaseWar {
             const unit          = this._openData.unit;
             const configVersion = unit.getConfigVersion();
             const unitType      = unit.getType();
-            const cfg           = Utility.ConfigManager.getUnitTemplateCfg(configVersion, unitType);
+            const cfg           = ConfigManager.getUnitTemplateCfg(configVersion, unitType);
             const war           = unit.getWar();
             const isCheating    = (unit instanceof MapEditor.MeUnit)
                 || ((war instanceof SingleCustomWar.ScwWar) && (war.getIsSinglePlayerCheating()));
@@ -164,7 +166,7 @@ namespace TinyWars.BaseWar {
                 {
                     // Fuel consumption
                     titleText               : Lang.getText(Lang.Type.B0343),
-                    valueText               : `${cfg.fuelConsumptionPerTurn}${cfg.fuelConsumptionInDiving == null ? `` : ` (${cfg.fuelConsumptionInDiving})`}`,
+                    valueText               : `${cfg.fuelConsumptionPerTurn}${cfg.diveCfgs == null ? `` : ` (${cfg.diveCfgs[0]})`}`,
                     callbackOnTouchedTitle  : null,
                 },
                 {
@@ -509,7 +511,7 @@ namespace TinyWars.BaseWar {
             const playerIndex       = unit.getPlayerIndex();
 
             const dataList = [] as DataForDamageRenderer[];
-            for (const targetUnitType of Utility.ConfigManager.getUnitTypesByCategory(configVersion, Types.UnitCategory.All)) {
+            for (const targetUnitType of ConfigManager.getUnitTypesByCategory(configVersion, Types.UnitCategory.All)) {
                 dataList.push({
                     configVersion,
                     attackUnitType,
@@ -517,7 +519,7 @@ namespace TinyWars.BaseWar {
                     playerIndex,
                 });
             }
-            for (const targetTileType of Utility.ConfigManager.getTileTypesByCategory(configVersion, Types.TileCategory.Destroyable)) {
+            for (const targetTileType of ConfigManager.getTileTypesByCategory(configVersion, Types.TileCategory.Destroyable)) {
                 dataList.push({
                     configVersion,
                     attackUnitType,
@@ -612,21 +614,21 @@ namespace TinyWars.BaseWar {
                 this._unitView.visible = true;
                 this._tileView.visible = false;
                 this._unitView.update({
-                    configVersion,
-                    gridX           : 0,
-                    gridY           : 0,
-                    viewId          : Utility.ConfigManager.getUnitViewId(targetUnitType, data.playerIndex),
+                    gridIndex       : { x: 0, y: 0 },
+                    unitType        : targetUnitType,
+                    skinId          : data.playerIndex,
+                    unitActionState : Types.UnitActionState.Idle,
                 }, Time.TimeModel.getUnitAnimationTickCount());
 
-                const attackCfg                 = Utility.ConfigManager.getDamageChartCfgs(configVersion, attackUnitType);
-                const targetArmorType           = Utility.ConfigManager.getUnitTemplateCfg(configVersion, targetUnitType).armorType;
+                const attackCfg                 = ConfigManager.getDamageChartCfgs(configVersion, attackUnitType);
+                const targetArmorType           = ConfigManager.getUnitTemplateCfg(configVersion, targetUnitType).armorType;
                 const primaryAttackDamage       = attackCfg[targetArmorType][Types.WeaponType.Primary].damage;
                 const secondaryAttackDamage     = attackCfg[targetArmorType][Types.WeaponType.Secondary].damage;
                 this._labelPrimaryAttack.text   = primaryAttackDamage == null ? `--` : `${primaryAttackDamage}`;
                 this._labelSecondaryAttack.text = secondaryAttackDamage == null ? `--` : `${secondaryAttackDamage}`;
 
-                const defendCfg                 = Utility.ConfigManager.getDamageChartCfgs(configVersion, targetUnitType);
-                const attackerArmorType         = Utility.ConfigManager.getUnitTemplateCfg(configVersion, attackUnitType).armorType;
+                const defendCfg                 = ConfigManager.getDamageChartCfgs(configVersion, targetUnitType);
+                const attackerArmorType         = ConfigManager.getUnitTemplateCfg(configVersion, attackUnitType).armorType;
                 const primaryDefendDamage       = defendCfg[attackerArmorType][Types.WeaponType.Primary].damage;
                 const secondaryDefendDamage     = defendCfg[attackerArmorType][Types.WeaponType.Secondary].damage;
                 this._labelPrimaryDefend.text   = primaryDefendDamage == null ? `--` : `${primaryDefendDamage}`;
@@ -637,13 +639,19 @@ namespace TinyWars.BaseWar {
                 this._tileView.visible = true;
 
                 const targetTileType            = data.targetTileType;
-                const attackCfg                 = Utility.ConfigManager.getDamageChartCfgs(configVersion, attackUnitType);
-                const targetCfg                 = Utility.ConfigManager.getTileTemplateCfgByType(configVersion, targetTileType)
+                const attackCfg                 = ConfigManager.getDamageChartCfgs(configVersion, attackUnitType);
+                const targetCfg                 = ConfigManager.getTileTemplateCfgByType(configVersion, targetTileType)
                 const targetArmorType           = targetCfg.armorType;
                 const primaryAttackDamage       = attackCfg[targetArmorType][Types.WeaponType.Primary].damage;
                 const secondaryAttackDamage     = attackCfg[targetArmorType][Types.WeaponType.Secondary].damage;
-                const viewId                    = Utility.ConfigManager.getTileObjectViewId(Utility.ConfigManager.getTileObjectTypeByTileType(targetTileType), 0);
-                this._tileView.source           = Common.CommonModel.getTileObjectImageSource(viewId, false);
+                this._tileView.source           = Common.CommonModel.getCachedTileObjectImageSource({
+                    version     : Common.CommonModel.getUnitAndTileTextureVersion(),
+                    skinId      : CommonConstants.UnitAndTileNeutralSkinId,
+                    objectType  : ConfigManager.getTileObjectTypeByTileType(targetTileType),
+                    isDark      : false,
+                    shapeId     : 0,
+                    tickCount   : Time.TimeModel.getTileAnimationTickCount(),
+                });
                 this._labelPrimaryAttack.text   = primaryAttackDamage == null ? `--` : `${primaryAttackDamage}`;
                 this._labelSecondaryAttack.text = secondaryAttackDamage == null ? `--` : `${secondaryAttackDamage}`;
                 this._labelPrimaryDefend.text   = `--`;

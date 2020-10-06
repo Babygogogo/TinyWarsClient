@@ -2257,6 +2257,14 @@ namespace TinyWars.Utility.Lang {
             `可用CO列表`,
             `Available COs`,
         ],
+        [Type.B0404]: [
+            `排位赛`,
+            `Ranking Match`,
+        ],
+        [Type.B0405]: [
+            `War Room`,
+            `War Room`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [

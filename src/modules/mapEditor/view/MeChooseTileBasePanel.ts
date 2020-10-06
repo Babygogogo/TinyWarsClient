@@ -1,8 +1,9 @@
 
 namespace TinyWars.MapEditor {
-    import Notify   = Utility.Notify;
-    import Lang     = Utility.Lang;
-    import Types    = Utility.Types;
+    import Notify           = Utility.Notify;
+    import Lang             = Utility.Lang;
+    import Types            = Utility.Types;
+    import ConfigManager    = Utility.ConfigManager;
 
     const MAX_RECENT_COUNT = 10;
 
@@ -75,12 +76,16 @@ namespace TinyWars.MapEditor {
             return this._needFill;
         }
 
-        public updateOnChooseTileBase(baseViewId: number): void {
+        public updateOnChooseTileBase(data: DataForDrawTileBase): void {
             const dataList      = this._dataListForRecent;
-            const filteredList  = dataList.filter(v => v.baseViewId !== baseViewId);
+            const filteredList  = dataList.filter(v => {
+                const oldData = v.dataForDrawTileBase;
+                return (oldData.baseType != data.baseType)
+                    || (oldData.shapeId != data.shapeId);
+            });
             dataList.length     = 0;
             dataList[0]         = {
-                baseViewId,
+                dataForDrawTileBase: data,
                 panel   : this,
             };
             for (const v of filteredList) {
@@ -133,21 +138,26 @@ namespace TinyWars.MapEditor {
         }
 
         private _createDataForListCategory(): DataForCategoryRenderer[] {
-            const typeMap = new Map<number, number[]>();
-            Utility.ConfigManager.forEachTileBaseType((baseType, baseViewId) => {
-                if (baseViewId !== 0) {
-                    if (typeMap.has(baseType)) {
-                        typeMap.get(baseType).push(baseViewId);
-                    } else {
-                        typeMap.set(baseType, [baseViewId]);
-                    }
+            const typeMap = new Map<number, DataForDrawTileBase[]>();
+            for (const [baseType, cfg] of ConfigManager.getTileBaseShapeCfgs()) {
+                if (!typeMap.has(baseType)) {
+                    typeMap.set(baseType, []);
                 }
-            });
+
+                const list = typeMap.get(baseType);
+                for (let shapeId = 0; shapeId < cfg.shapesCount; ++shapeId) {
+                    list.push({
+                        baseType,
+                        shapeId,
+                    });
+                }
+            }
+
             const dataList: DataForCategoryRenderer[] = [];
-            for (const [, baseViewIdList] of typeMap) {
+            for (const [, dataListForDrawTileBase] of typeMap) {
                 dataList.push({
-                    baseViewIdList,
-                    panel   : this,
+                    dataListForDrawTileBase,
+                    panel                   : this,
                 });
             }
 
@@ -166,8 +176,8 @@ namespace TinyWars.MapEditor {
     }
 
     type DataForCategoryRenderer = {
-        baseViewIdList  : number[];
-        panel           : MeChooseTileBasePanel;
+        dataListForDrawTileBase : DataForDrawTileBase[];
+        panel                   : MeChooseTileBasePanel;
     }
 
     class CategoryRenderer extends eui.ItemRenderer {
@@ -184,16 +194,16 @@ namespace TinyWars.MapEditor {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data                  = this.data as DataForCategoryRenderer;
-            const baseViewIdList        = data.baseViewIdList;
-            this._labelCategory.text    = Lang.getTileName(Utility.ConfigManager.getTileType(Utility.ConfigManager.getTileBaseType(baseViewIdList[0]), Types.TileObjectType.Empty));
+            const data                      = this.data as DataForCategoryRenderer;
+            const dataListForDrawTileBase   = data.dataListForDrawTileBase;
+            this._labelCategory.text        = Lang.getTileName(Utility.ConfigManager.getTileType(dataListForDrawTileBase[0].baseType, Types.TileObjectType.Empty));
 
             const dataListForTileBase   : DataForTileBaseRenderer[] = [];
             const panel                 = data.panel;
-            for (const baseViewId of baseViewIdList) {
+            for (const dataForDrawTileBase of dataListForDrawTileBase) {
                 dataListForTileBase.push({
                     panel,
-                    baseViewId,
+                    dataForDrawTileBase,
                 });
             }
             this._listTileBase.bindData(dataListForTileBase);
@@ -209,8 +219,8 @@ namespace TinyWars.MapEditor {
     }
 
     type DataForTileBaseRenderer = {
-        baseViewId  : number;
-        panel       : MeChooseTileBasePanel;
+        dataForDrawTileBase : DataForDrawTileBase;
+        panel               : MeChooseTileBasePanel;
     }
 
     class TileBaseRenderer extends eui.ItemRenderer {
@@ -233,20 +243,26 @@ namespace TinyWars.MapEditor {
         }
 
         protected dataChanged(): void {
-            const data          = this.data as DataForTileBaseRenderer;
-            const baseViewId    = data.baseViewId;
-            this._tileView.init(baseViewId, null);
+            const data                  = this.data as DataForTileBaseRenderer;
+            const dataForDrawTileBase   = data.dataForDrawTileBase;
+            this._tileView.init({
+                tileBaseShapeId     : dataForDrawTileBase.shapeId,
+                tileBaseType        : dataForDrawTileBase.baseType,
+                tileObjectShapeId   : null,
+                tileObjectType      : null,
+                playerIndex         : null,
+            });
             this._tileView.updateView();
         }
 
         public onItemTapEvent(): void {
-            const data          = this.data as DataForTileBaseRenderer;
-            const panel         = data.panel;
-            const baseViewId    = data.baseViewId;
+            const data                  = this.data as DataForTileBaseRenderer;
+            const panel                 = data.panel;
+            const dataForDrawTileBase   = data.dataForDrawTileBase;
             if (!panel.getNeedFill()) {
-                panel.updateOnChooseTileBase(baseViewId);
+                panel.updateOnChooseTileBase(dataForDrawTileBase);
                 panel.close();
-                MeManager.getWar().getDrawer().setModeDrawTileBase(baseViewId);
+                MeManager.getWar().getDrawer().setModeDrawTileBase(dataForDrawTileBase);
             } else {
                 Common.CommonConfirmPanel.show({
                     title   : Lang.getText(Lang.Type.B0088),
@@ -256,16 +272,18 @@ namespace TinyWars.MapEditor {
                         const configVersion = war.getConfigVersion();
                         war.getTileMap().forEachTile(tile => {
                             tile.init({
-                                gridX       : tile.getGridX(),
-                                gridY       : tile.getGridY(),
-                                objectViewId: tile.getObjectViewId(),
-                                baseViewId  : data.baseViewId,
+                                gridIndex       : tile.getGridIndex(),
+                                objectShapeId   : tile.getObjectShapeId(),
+                                objectType      : tile.getObjectType(),
+                                playerIndex     : tile.getPlayerIndex(),
+                                baseShapeId     : dataForDrawTileBase.shapeId,
+                                baseType        : dataForDrawTileBase.baseType,
                             }, configVersion);
                             tile.startRunning(war);
-                            tile.updateView();
+                            tile.flushDataToView();
                         });
 
-                        panel.updateOnChooseTileBase(baseViewId);
+                        panel.updateOnChooseTileBase(dataForDrawTileBase);
                         panel.close();
                         Notify.dispatch(Notify.Type.MeTileChanged, { gridIndex: war.getField().getCursor().getGridIndex() } as Notify.Data.MeTileChanged);
                     },

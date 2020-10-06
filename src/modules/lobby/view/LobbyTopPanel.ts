@@ -105,13 +105,13 @@ namespace TinyWars.Lobby {
             this._updateBtnChat();
         }
 
-        private _updateComponentsForLanguage(): void {
+        private async _updateComponentsForLanguage(): Promise<void> {
             const score                 = await UserModel.getSelfRankScore();
             this._labelRankScore.text   = `${Lang.getText(Lang.Type.B0060)}: ${score}`;
             this._labelRankName.text    = Utility.ConfigManager.getRankName(Utility.ConfigManager.getNewestConfigVersion(), score);
         }
 
-        private _updateLabelNickname(): void {
+        private async _updateLabelNickname(): Promise<void> {
             this._labelNickname.text    = await UserModel.getSelfNickname();
         }
 

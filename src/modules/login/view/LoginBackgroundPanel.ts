@@ -108,46 +108,46 @@ namespace TinyWars.Login {
             );
         }
 
-        private _initGroupUnits(): void {
-            this._clearGroupUnits();
+        // private _initGroupUnits(): void {
+        //     this._clearGroupUnits();
 
-            const group     = this._groupUnits;
-            const gridWidth = Utility.ConfigManager.getGridSize().width;
-            const count     = Math.ceil(group.width / gridWidth);
-            for (let i = 0; i < count; ++i) {
-                group.addChild(_createRandomUnitView());
-            }
+        //     const group     = this._groupUnits;
+        //     const gridWidth = Utility.ConfigManager.getGridSize().width;
+        //     const count     = Math.ceil(group.width / gridWidth);
+        //     for (let i = 0; i < count; ++i) {
+        //         group.addChild(_createRandomUnitView());
+        //     }
 
-            group.x = 0;
-            egret.Tween.get(group, { loop: true })
-                .to({ x: -gridWidth / 4 }, 500)
-                .call(() => {
-                    group.x = 0;
-                    group.removeChildAt(0);
-                    group.addChild(_createRandomUnitView());
-                });
-        }
+        //     group.x = 0;
+        //     egret.Tween.get(group, { loop: true })
+        //         .to({ x: -gridWidth / 4 }, 500)
+        //         .call(() => {
+        //             group.x = 0;
+        //             group.removeChildAt(0);
+        //             group.addChild(_createRandomUnitView());
+        //         });
+        // }
         private _clearGroupUnits(): void {
             this._groupUnits.removeChildren();
             egret.Tween.removeTweens(this._groupUnits);
         }
     }
 
-    function _createRandomUnitView(): eui.Component {
-        const view = new WarMap.WarMapUnitView();
-        view.update({
-            configVersion: Utility.ConfigManager.getNewestConfigVersion(),
+    // function _createRandomUnitView(): eui.Component {
+    //     const view = new WarMap.WarMapUnitView();
+    //     view.update({
+    //         configVersion: Utility.ConfigManager.getNewestConfigVersion(),
 
-            gridX: 0,
-            gridY: 0,
+    //         gridX: 0,
+    //         gridY: 0,
 
-            viewId: Utility.ConfigManager.getUnitViewId(Math.floor(Math.random() * 26), Math.floor(Math.random() * 4) + 1),
-        });
+    //         viewId: Utility.ConfigManager.getUnitViewId(Math.floor(Math.random() * 26), Math.floor(Math.random() * 4) + 1),
+    //     });
 
-        const container     = new eui.Component();
-        container.width     = Utility.ConfigManager.getGridSize().width;
-        container.height    = Utility.ConfigManager.getGridSize().height;
-        container.addChild(view);
-        return container;
-    }
+    //     const container     = new eui.Component();
+    //     container.width     = Utility.ConfigManager.getGridSize().width;
+    //     container.height    = Utility.ConfigManager.getGridSize().height;
+    //     container.addChild(view);
+    //     return container;
+    // }
 }

@@ -560,7 +560,7 @@ namespace TinyWars.Replay {
             return {
                 titleText               : Lang.getText(Lang.Type.B0180),
                 infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialEnergyDefault),
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialEnergyPercentageDefault),
             };
         }
         private _createDataEnergyGrowthMultiplier(

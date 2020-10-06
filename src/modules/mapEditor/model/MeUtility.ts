@@ -5,10 +5,20 @@ namespace TinyWars.MapEditor.MeUtility {
     import Lang             = Utility.Lang;
     import Helpers          = Utility.Helpers;
     import ConfigManager    = Utility.ConfigManager;
-    import MapRawData       = Types.MapRawData;
+    import GridIndexHelpers = Utility.GridIndexHelpers;
+    import BwSettingsHelper = BaseWar.BwSettingsHelper;
+    import BwTile           = BaseWar.BwTile;
     import GridIndex        = Types.GridIndex;
+    import TileObjectType   = Types.TileObjectType;
+    import TileBaseType     = Types.TileBaseType;
     import SymmetryType     = Types.SymmetryType;
+    import LanguageType     = Types.LanguageType;
     import InvalidationType = Types.CustomMapInvalidationType;
+    import IMapRawData      = ProtoTypes.Map.IMapRawData;
+    import IWarRule         = ProtoTypes.WarRule.IWarRule;
+    import WarSerialization = ProtoTypes.WarSerialization;
+    import ISerialTile      = WarSerialization.ISerialTile;
+    import ISerialUnit      = WarSerialization.ISerialUnit;
     import MapConstants     = ConfigManager.MAP_CONSTANTS;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
@@ -20,35 +30,106 @@ namespace TinyWars.MapEditor.MeUtility {
         Rotation            : number | null;
     }
 
-    export function createDefaultMapRawData(slotIndex: number): Types.MapRawData {
-        const mapWidth      = 20;
-        const mapHeight     = 15;
-        const gridsCount    = mapWidth * mapHeight;
+    export async function createDefaultMapRawData(slotIndex: number): Promise<IMapRawData> {
+        const mapWidth  = 20;
+        const mapHeight = 15;
         return {
-            mapDesigner     : await User.UserModel.getSelfNickname(),
-            mapName         : `${Lang.getText(Lang.Type.B0279)} - ${slotIndex}`,
-            mapNameEnglish  : `${Lang.getText(Lang.Type.B0279)} - ${slotIndex}`,
+            designerName    : await User.UserModel.getSelfNickname(),
+            designerUserId  : User.UserModel.getSelfUserId(),
+            mapNameList     : [
+                `${Lang.getTextWithLanguage(Lang.Type.B0279, LanguageType.Chinese)} - ${slotIndex}`,
+                `${Lang.getTextWithLanguage(Lang.Type.B0279, LanguageType.English)} - ${slotIndex}`,
+            ],
             mapWidth,
             mapHeight,
-            designerUserId  : User.UserModel.getSelfUserId(),
-            isMultiPlayer   : true,
-            isSinglePlayer  : true,
             playersCount    : 2,
-            tileBases       : (new Array(gridsCount)).fill(Utility.ConfigManager.getTileBaseViewId(Types.TileBaseType.Plain)),
-            tileObjects     : (new Array(gridsCount)).fill(0),
-            units           : null,
-            unitDataList    : null,
-            tileDataList    : null,
+            modifiedTime    : Time.TimeModel.getServerTimestamp(),
+            tileDataList    : createDefaultTileDataList(mapWidth, mapHeight, TileBaseType.Plain),
+            unitDataList    : [],
+        };
+    }
+    function createDefaultTileDataList(mapWidth: number, mapHeight: number, tileBaseType: TileBaseType): ISerialTile[] {
+        const dataList: ISerialTile[] = [];
+        for (let x = 0; x < mapWidth; ++x) {
+            for (let y = 0; y < mapHeight; ++y) {
+                dataList.push(createDefaultTileData({ x, y }, tileBaseType));
+            }
         }
+        return dataList;
+    }
+    function createDefaultTileData(gridIndex: GridIndex, tileBaseType: TileBaseType): ISerialTile {
+        return {
+            gridIndex,
+            baseType    : tileBaseType,
+            objectType  : TileObjectType.Empty,
+            playerIndex : CommonConstants.WarNeutralPlayerIndex,
+        };
     }
 
-    export function getMapInvalidationType(mapRawData: ProtoTypes.IMapRawData): InvalidationType {
-        if (!checkIsMapDesignerValid(mapRawData.mapDesigner)) {
+    export function createISerialWar(data: ProtoTypes.Map.IMapEditorData): WarSerialization.ISerialWar {
+        const mapRawData    = data.mapRawData;
+        const warRule       = mapRawData.warRuleList[0];
+        return {
+            settingsForCommon   : {
+                configVersion   : ConfigManager.getNewestConfigVersion(),
+                mapId           : data.mapRawData.mapId,
+                presetWarRuleId : warRule ? warRule.ruleId : null,
+                warRule,
+            },
+            settingsForMultiPlayer  : null,
+            settingsForSinglePlayer : null,
+            warId                   : null,
+            seedRandomInitialState  : new Math.seedrandom(null, { state: true }).state(),
+            seedRandomCurrentState  : null,
+            executedActions         : null,
+            executedActionsCount    : 0,
+            remainingVotesForDraw   : null,
+            playerManager           : createISerialPlayerManager(),
+            turnManager             : {
+                turnIndex       : 0,
+                turnPhaseCode   : Types.TurnPhaseCode.WaitBeginTurn,
+                playerIndex     : CommonConstants.WarNeutralPlayerIndex,
+                enterTurnTime   : 0,
+            },
+            field                   : {
+                fogMap  : null,
+                tileMap : { tiles: mapRawData.tileDataList },
+                unitMap : {
+                    units       : mapRawData.unitDataList,
+                    nextUnitId  : mapRawData.unitDataList.length,
+                },
+            },
+        };
+    }
+    function createISerialPlayerManager(): WarSerialization.ISerialPlayerManager {
+        const players: WarSerialization.ISerialPlayer[] = [];
+        for (let playerIndex = CommonConstants.WarNeutralPlayerIndex; playerIndex <= CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
+            players.push({
+                fund                        : 0,
+                hasVotedForDraw             : false,
+                isAlive                     : true,
+                playerIndex,
+                teamIndex                   : playerIndex,
+                userId                      : null,
+                coId                        : null,
+                coCurrentEnergy             : null,
+                coUsingSkillType            : Types.CoSkillType.Passive,
+                coIsDestroyedInTurn         : false,
+                watchOngoingSrcUserIdList   : null,
+                watchRequestSrcUserIdList   : null,
+                restTimeToBoot              : 0,
+                unitAndTileSkinId           : playerIndex,
+            });
+        }
+
+        return { players };
+    }
+
+    export function getMapInvalidationType(mapRawData: IMapRawData): InvalidationType {
+        if (!checkIsMapDesignerNameValid(mapRawData.designerName)) {
             return InvalidationType.InvalidMapDesigner;
-        } else if (!checkIsMapNameValid(mapRawData.mapName)) {
+        } else if (!checkIsMapNameListValid(mapRawData.mapNameList)) {
             return InvalidationType.InvalidMapName;
-        } else if (!checkIsMapNameEnglishValid(mapRawData.mapNameEnglish)) {
-            return InvalidationType.InvalidMapNameEnglish;
         } else if (!checkIsPlayersCountValid(mapRawData)) {
             return InvalidationType.InvalidPlayersCount;
         } else if (!checkIsUnitsValid(mapRawData)) {
@@ -61,63 +142,30 @@ namespace TinyWars.MapEditor.MeUtility {
             return InvalidationType.Valid;
         }
     }
-    function checkIsMapDesignerValid(mapDesigner: string | null | undefined): boolean {
+    function checkIsMapDesignerNameValid(mapDesigner: string | null | undefined): boolean {
         return (mapDesigner != null)
             && (mapDesigner.length > 0)
             && (mapDesigner.length <= MapConstants.MaxDesignerLength);
     }
-    function checkIsMapNameValid(mapName: string | null | undefined): boolean {
-        return (mapName != null)
-            && (mapName.length > 0)
-            && (mapName.length <= MapConstants.MaxMapNameLength);
+    function checkIsMapNameListValid(mapNameList: string[] | null | undefined): boolean {
+        return (mapNameList != null)
+            && (mapNameList.length > 0)
+            && (mapNameList.every(mapName => {
+                return (!!mapName) && (mapName.length <= MapConstants.MaxMapNameLength);
+            }));
     }
-    function checkIsMapNameEnglishValid(mapNameEnglish: string | null | undefined): boolean {
-        return (mapNameEnglish != null)
-            && (mapNameEnglish.length > 0)
-            && (mapNameEnglish.length <= MapConstants.MaxMapNameEnglishLength);
-    }
-    function checkIsPlayersCountValid(mapRawData: ProtoTypes.IMapRawData): boolean {
+    function checkIsPlayersCountValid(mapRawData: IMapRawData): boolean {
         const playersCount = mapRawData.playersCount;
-        if ((playersCount == null) || (playersCount <= 1) || (playersCount > Utility.ConfigManager.MAX_PLAYER_INDEX)) {
+        if ((playersCount == null) || (playersCount <= 1) || (playersCount > CommonConstants.WarMaxPlayerIndex)) {
             return false;
         }
 
         const playerIndexes = new Set<number>();
         for (const tileData of mapRawData.tileDataList || []) {
-            const tileObjectViewId = tileData.objectViewId;
-            if (tileObjectViewId != null) {
-                const cfg = Utility.ConfigManager.getTileObjectTypeAndPlayerIndex(tileObjectViewId);
-                if (!cfg) {
-                    return false;
-                } else {
-                    playerIndexes.add(cfg.playerIndex);
-                }
-            }
-        }
-        for (const tileObjectViewId of mapRawData.tileObjects || []) {
-            const cfg = Utility.ConfigManager.getTileObjectTypeAndPlayerIndex(tileObjectViewId);
-            if (!cfg) {
-                return false;
-            } else {
-                playerIndexes.add(cfg.playerIndex);
-            }
+            playerIndexes.add(tileData.playerIndex);
         }
         for (const unitData of mapRawData.unitDataList || []) {
-            const unitViewId    = unitData.viewId;
-            const cfg           = unitViewId == null ? null : Utility.ConfigManager.getUnitTypeAndPlayerIndex(unitViewId);
-            if (!cfg) {
-                return false;
-            } else {
-                playerIndexes.add(cfg.playerIndex);
-            }
-        }
-        for (const unitViewId of mapRawData.units || []) {
-            const cfg = Utility.ConfigManager.getUnitTypeAndPlayerIndex(unitViewId);
-            if (!cfg) {
-                return false;
-            } else {
-                playerIndexes.add(cfg.playerIndex);
-            }
+            playerIndexes.add(unitData.playerIndex);
         }
 
         let maxPlayerIndex = 0;
@@ -130,7 +178,7 @@ namespace TinyWars.MapEditor.MeUtility {
 
         return maxPlayerIndex === playersCount;
     }
-    function checkIsUnitsValid(mapRawData: ProtoTypes.IMapRawData): boolean {
+    function checkIsUnitsValid(mapRawData: IMapRawData): boolean {
         const mapHeight = mapRawData.mapHeight;
         const mapWidth  = mapRawData.mapWidth;
         if ((!mapHeight) || (!mapWidth)) {
@@ -141,27 +189,12 @@ namespace TinyWars.MapEditor.MeUtility {
             return false;
         }
 
-        const unitViewIds   = mapRawData.units;
         const unitDataList  = mapRawData.unitDataList;
-        if ((unitViewIds) && (unitDataList)) {
-            return false;
-        }
-
-        if (unitViewIds) {
-            if (unitViewIds.length !== gridsCount) {
-                return false;
-            }
-            for (const unitViewId of unitViewIds) {
-                if ((unitViewId !== 0) && (!Utility.ConfigManager.getUnitTypeAndPlayerIndex(unitViewId))) {
-                    return false;
-                }
-            }
-        }
-
         if (unitDataList) {
-            const configVersion = Utility.ConfigManager.getNewestConfigVersion()!;
-            const maxPromotion  = Utility.ConfigManager.getUnitMaxPromotion(configVersion);
-            const units         = new Map<number, ProtoTypes.ISerializedWarUnit>();
+            const configVersion         = ConfigManager.getNewestConfigVersion()!;
+            const maxPromotion          = ConfigManager.getUnitMaxPromotion(configVersion);
+            const units                 = new Map<number, ISerialUnit>();
+            const indexesForUnitOnMap   = new Set<number>();
             for (const unitData of unitDataList) {
                 const unitId = unitData.unitId;
                 if ((unitId == null) || (units.has(unitId))) {
@@ -169,22 +202,20 @@ namespace TinyWars.MapEditor.MeUtility {
                 }
                 units.set(unitId, unitData);
 
-                const { gridX, gridY } = unitData;
+                const { x: gridX, y: gridY } = unitData.gridIndex;
                 if ((gridX == null) || (gridY == null) || (gridX >= mapWidth) || (gridY >= mapHeight)) {
                     return false;
                 }
 
-                const unitViewId = unitData.viewId;
-                if (!unitViewId) {
-                    return false;
+                if (unitData.loaderUnitId == null) {
+                    const index = gridY * mapWidth + gridX;
+                    if (indexesForUnitOnMap.has(index)) {
+                        return false;
+                    }
+                    indexesForUnitOnMap.add(index);
                 }
 
-                const typeAndPlayerIndex = Utility.ConfigManager.getUnitTypeAndPlayerIndex(unitViewId);
-                if (!typeAndPlayerIndex) {
-                    return false;
-                }
-
-                const cfg = Utility.ConfigManager.getUnitTemplateCfg(configVersion, typeAndPlayerIndex.unitType);
+                const cfg = Utility.ConfigManager.getUnitTemplateCfg(configVersion, unitData.unitType);
                 if (!cfg) {
                     return false;
                 }
@@ -236,7 +267,7 @@ namespace TinyWars.MapEditor.MeUtility {
                     return false;
                 }
 
-                if ((unitData.isDiving) && (cfg.fuelConsumptionInDiving == null)) {
+                if ((unitData.isDiving) && (cfg.diveCfgs == null)) {
                     return false;
                 }
 
@@ -253,12 +284,12 @@ namespace TinyWars.MapEditor.MeUtility {
                 const loaderUnitId = unitData.loaderUnitId;
                 if (loaderUnitId != null) {
                     const loader = units.get(loaderUnitId);
-                    if ((!loader) || (loader.gridX !== unitData.gridX) || (loader.gridY !== unitData.gridY)) {
+                    if ((!loader) || (!GridIndexHelpers.checkIsEqual(loader.gridIndex as GridIndex, unitData.gridIndex as GridIndex))) {
                         return false;
                     }
-                    const category = Utility.ConfigManager.getUnitTemplateCfg(configVersion, Utility.ConfigManager.getUnitTypeAndPlayerIndex(loader.viewId!).unitType).loadUnitCategory;
-                    if ((category == null)                                                                                                                      ||
-                        (!Utility.ConfigManager.checkIsUnitTypeInCategory(configVersion, Utility.ConfigManager.getUnitTypeAndPlayerIndex(unitData.viewId!).unitType, category))
+                    const category = ConfigManager.getUnitTemplateCfg(configVersion, loader.unitType).loadUnitCategory;
+                    if ((category == null)                                                                  ||
+                        (!ConfigManager.checkIsUnitTypeInCategory(configVersion, unitData.unitType, category))
                     ) {
                         return false;
                     }
@@ -268,7 +299,7 @@ namespace TinyWars.MapEditor.MeUtility {
 
         return true;
     }
-    function checkIsTilesValid(mapRawData: ProtoTypes.IMapRawData): boolean {
+    function checkIsTilesValid(mapRawData: IMapRawData): boolean {
         const mapHeight = mapRawData.mapHeight;
         const mapWidth  = mapRawData.mapWidth;
         if ((!mapHeight) || (!mapWidth)) {
@@ -279,49 +310,39 @@ namespace TinyWars.MapEditor.MeUtility {
             return false;
         }
 
-        const baseViewIds   = mapRawData.tileBases;
-        const objectViewIds = mapRawData.tileObjects;
-        if ((!baseViewIds)                      ||
-            (!objectViewIds)                    ||
-            (baseViewIds.length !== gridsCount) ||
-            (objectViewIds.length !== gridsCount)
-        ) {
+        const tileDataList = mapRawData.tileDataList;
+        if ((tileDataList == null) || (tileDataList.length !== gridsCount)) {
             return false;
         }
 
-        for (const baseViewId of baseViewIds) {
-            if ((!baseViewId) || (!Utility.ConfigManager.getTileBaseType(baseViewId))) {
-                return false;
-            }
-        }
-
-        for (const objectViewId of objectViewIds) {
-            if ((objectViewId == null) || (!Utility.ConfigManager.getTileObjectTypeAndPlayerIndex(objectViewId))) {
-                return false;
-            }
-        }
-
-        const configVersion = Utility.ConfigManager.getNewestConfigVersion()!;
+        const indexes       = new Set<number>();
+        const configVersion = ConfigManager.getNewestConfigVersion()!;
         for (const tileData of mapRawData.tileDataList || []) {
-            const { gridX, gridY } = tileData;
+            const { x: gridX, y: gridY } = tileData.gridIndex;
             if ((gridX == null) || (gridY == null) || (gridX >= mapWidth || (gridY >= mapHeight))) {
                 return false;
             }
-            const index                         = gridX + gridY * mapWidth;
-            const { objectViewId, baseViewId }  = tileData;
-            if ((objectViewId == null)                  ||
-                (objectViewId !== baseViewIds[index])   ||
-                (baseViewId == null)                    ||
-                (baseViewId !== baseViewIds[index])
-            ) {
+
+            const index = gridX + gridY * mapWidth;
+            if (indexes.has(index)) {
+                return false;
+            }
+            indexes.add(index);
+
+            const baseType = tileData.baseType;
+            if (!ConfigManager.checkIsValidTileBaseShapeId(baseType, tileData.baseShapeId)) {
                 return false;
             }
 
-            const cfg = Utility.ConfigManager.getTileTemplateCfg(
-                configVersion,
-                Utility.ConfigManager.getTileBaseType(baseViewId),
-                Utility.ConfigManager.getTileObjectTypeAndPlayerIndex(objectViewId).tileObjectType
-            );
+            const objectType = tileData.objectType;
+            if (!ConfigManager.checkIsValidTileObjectShapeId(objectType, tileData.objectShapeId)) {
+                return false;
+            }
+
+            const cfg = ConfigManager.getTileTemplateCfg(configVersion, baseType, objectType);
+            if (!cfg) {
+                return false;
+            }
 
             const currBuildPoint    = tileData.currentBuildPoint;
             const maxBuildPoint     = cfg.maxBuildPoint;
@@ -350,292 +371,139 @@ namespace TinyWars.MapEditor.MeUtility {
 
         return true;
     }
-    function checkIsWarRuleListValid(ruleList: ProtoTypes.IRuleForWar[] | null | undefined, playersCount: number): boolean {
+    function checkIsWarRuleListValid(ruleList: IWarRule[] | null | undefined, playersCount: number): boolean {
         if ((!ruleList) || (!ruleList.length) || (ruleList.length > CommonConstants.WarRuleMaxCount)) {
             return false;
         }
         for (const rule of ruleList) {
-            if (!checkIsWarRuleValid(rule, playersCount)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-    function checkIsWarRuleValid(rule: ProtoTypes.IRuleForWar, playersCount: number): boolean {
-        const {
-            attackPowerModifier,    energyGrowthModifier,   incomeModifier,     initialEnergy,      initialFund,
-            luckLowerLimit,         luckUpperLimit,         moveRangeModifier,  ruleName,           ruleNameEnglish,
-            visionRangeModifier
-        } = rule;
-        if ((rule.hasFog            == null)                                                    ||
-            (attackPowerModifier    == null)                                                    ||
-            (attackPowerModifier    > CommonConstants.WarRuleOffenseBonusMaxLimit)              ||
-            (attackPowerModifier    < CommonConstants.WarRuleOffenseBonusMinLimit)              ||
-            (energyGrowthModifier   == null)                                                    ||
-            (energyGrowthModifier   > CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit)    ||
-            (energyGrowthModifier   < CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit)    ||
-            (incomeModifier         == null)                                                    ||
-            (incomeModifier         > CommonConstants.WarRuleIncomeMultiplierMaxLimit)          ||
-            (incomeModifier         < CommonConstants.WarRuleIncomeMultiplierMinLimit)          ||
-            (initialEnergy          == null)                                                    ||
-            (initialEnergy          > CommonConstants.WarRuleInitialEnergyMaxLimit)             ||
-            (initialEnergy          < CommonConstants.WarRuleInitialEnergyMinLimit)             ||
-            (initialFund            == null)                                                    ||
-            (initialFund            > CommonConstants.WarRuleInitialFundMaxLimit)               ||
-            (initialFund            < CommonConstants.WarRuleInitialFundMinLimit)               ||
-            (luckLowerLimit         == null)                                                    ||
-            (luckLowerLimit         > CommonConstants.WarRuleLuckMaxLimit)                      ||
-            (luckLowerLimit         < CommonConstants.WarRuleLuckMinLimit)                      ||
-            (luckUpperLimit         == null)                                                    ||
-            (luckUpperLimit         > CommonConstants.WarRuleLuckMaxLimit)                      ||
-            (luckUpperLimit         < CommonConstants.WarRuleLuckMinLimit)                      ||
-            (luckUpperLimit         < luckLowerLimit)                                           ||
-            (moveRangeModifier      == null)                                                    ||
-            (moveRangeModifier      > CommonConstants.WarRuleMoveRangeModifierMaxLimit)         ||
-            (moveRangeModifier      < CommonConstants.WarRuleMoveRangeModifierMinLimit)         ||
-            (ruleName               == null)                                                    ||
-            (ruleName.length        > CommonConstants.WarRuleNameMaxLength)                     ||
-            (ruleName.length        <= 0)                                                       ||
-            (ruleNameEnglish        == null)                                                    ||
-            (ruleNameEnglish.length > CommonConstants.WarRuleNameMaxLength)                     ||
-            (ruleNameEnglish.length <= 0)                                                       ||
-            (visionRangeModifier    == null)                                                    ||
-            (visionRangeModifier    > CommonConstants.WarRuleVisionRangeModifierMaxLimit)       ||
-            (visionRangeModifier    < CommonConstants.WarRuleVisionRangeModifierMinLimit)
-        ) {
-            return false;
-        }
-        if (!checkIsPlayerRuleListValid(rule.playerRuleList, playersCount)) {
-            return false;
-        }
-        if (!checkIsBannedCoIdListValid(rule.bannedCoIdList)) {
-            return false;
-        }
-
-        return true;
-    }
-    function checkIsPlayerRuleListValid(ruleList: ProtoTypes.IRuleForPlayer[] | null | undefined, playersCount: number): boolean {
-        if ((!ruleList) || (ruleList.length !== playersCount)) {
-            return false;
-        }
-
-        const playerIndexes = new Set<number>();
-        const teamIndexes   = new Set<number>();
-        for (const rule of ruleList) {
-            const playerIndex = rule.playerIndex;
-            if ((playerIndex == null)           ||
-                (playerIndex <= 0)              ||
-                (playerIndex > playersCount)    ||
-                (playerIndexes.has(playerIndex))
+            if ((!BwSettingsHelper.checkIsValidWarRule(rule))           ||
+                (BwSettingsHelper.getPlayersCount(rule) !== playersCount)
             ) {
                 return false;
             }
-            playerIndexes.add(playerIndex);
-
-            const teamIndex = rule.teamIndex;
-            if ((teamIndex == null)         ||
-                (teamIndex <= 0)            ||
-                (teamIndex > playersCount)
-            ) {
-                return false;
-            }
-            teamIndexes.add(teamIndex);
-        }
-
-        if (playerIndexes.size !== playersCount) {
-            return false;
-        }
-        if (teamIndexes.size <= 1) {
-            return false;
         }
 
         return true;
     }
-    function checkIsBannedCoIdListValid(list: number[] | null | undefined): boolean {
-        // TODO
-        return true;
-    }
 
-    export function clearMap(mapRawData: MapRawData, newWidth: number, newHeight: number): MapRawData {
+    export function clearMap(mapRawData: IMapRawData, newWidth: number, newHeight: number): IMapRawData {
         return {
-            isMultiPlayer   : mapRawData.isMultiPlayer,
-            isSinglePlayer  : mapRawData.isSinglePlayer,
-            mapDesigner     : mapRawData.mapDesigner,
-            mapName         : mapRawData.mapName,
-            mapNameEnglish  : mapRawData.mapNameEnglish,
+            mapId           : mapRawData.mapId,
+            designerName    : mapRawData.designerName,
             designerUserId  : mapRawData.designerUserId,
-            playersCount    : mapRawData.playersCount,
-            mapHeight       : newHeight,
+            mapNameList     : mapRawData.mapNameList,
             mapWidth        : newWidth,
-            tileBases       : new Array(newWidth * newHeight).fill(ConfigManager.getTileBaseViewId(Types.TileBaseType.Plain)),
-            tileObjects     : new Array(newWidth * newHeight).fill(0),
-            tileDataList    : null,
+            mapHeight       : newHeight,
+            playersCount    : mapRawData.playersCount,
+            modifiedTime    : Time.TimeModel.getServerTimestamp(),
+            tileDataList    : createDefaultTileDataList(newWidth, newHeight, TileBaseType.Plain),
             unitDataList    : null,
-            units           : null,
+            warRuleList     : mapRawData.warRuleList,
         };
     }
-    export function resizeMap(mapRawData: MapRawData, newWidth: number, newHeight: number): MapRawData {
+    export function resizeMap(mapRawData: IMapRawData, newWidth: number, newHeight: number): IMapRawData {
         return {
-            isMultiPlayer   : mapRawData.isMultiPlayer,
-            isSinglePlayer  : mapRawData.isSinglePlayer,
-            mapDesigner     : mapRawData.mapDesigner,
-            mapName         : mapRawData.mapName,
-            mapNameEnglish  : mapRawData.mapNameEnglish,
+            mapId           : mapRawData.mapId,
+            designerName    : mapRawData.designerName,
             designerUserId  : mapRawData.designerUserId,
-            playersCount    : mapRawData.playersCount,
-            mapHeight       : newHeight,
+            mapNameList     : mapRawData.mapNameList,
             mapWidth        : newWidth,
-            tileBases       : getNewTileBaseViewIdsForResize(mapRawData, newWidth, newHeight),
-            tileObjects     : getNewTileObjectViewIdsForResize(mapRawData, newWidth, newHeight),
+            mapHeight       : newHeight,
+            playersCount    : mapRawData.playersCount,
+            modifiedTime    : Time.TimeModel.getServerTimestamp(),
             tileDataList    : getNewTileDataListForResize(mapRawData, newWidth, newHeight),
             unitDataList    : getNewUnitDataListForResize(mapRawData, newWidth, newHeight),
-            units           : null,
+            warRuleList     : mapRawData.warRuleList,
         };
     }
-    function getNewTileBaseViewIdsForResize(mapRawData: MapRawData, newWidth: number, newHeight: number): number[] {
-        const oldWidth      = mapRawData.mapWidth;
-        const oldHeight     = mapRawData.mapHeight;
-        const oldViewIds    = mapRawData.tileBases || [];
-        const defaultId     = Utility.ConfigManager.getTileBaseViewId(Types.TileBaseType.Plain);
-        const newViewIds    : number[] = [];
-        for (let x = 0; x < newWidth; ++x) {
-            for (let y = 0; y < newHeight; ++y) {
-                const newIndex = x + y * newWidth;
-                if ((x >= oldWidth) || (y >= oldHeight)) {
-                    newViewIds[newIndex] = defaultId;
-                } else {
-                    newViewIds[newIndex] = oldViewIds[x + y * oldWidth] || defaultId;
-                }
-            }
-        }
-        return newViewIds;
-    }
-    function getNewTileObjectViewIdsForResize(mapRawData: MapRawData, newWidth: number, newHeight: number): number[] {
-        const oldWidth      = mapRawData.mapWidth;
-        const oldHeight     = mapRawData.mapHeight;
-        const oldViewIds    = mapRawData.tileObjects || [];
-        const defaultId     = 0;
-        const newViewIds    : number[] = [];
-        for (let x = 0; x < newWidth; ++x) {
-            for (let y = 0; y < newHeight; ++y) {
-                const newIndex = x + y * newWidth;
-                if ((x >= oldWidth) || (y >= oldHeight)) {
-                    newViewIds[newIndex] = defaultId;
-                } else {
-                    newViewIds[newIndex] = oldViewIds[x + y * oldWidth] || defaultId;
-                }
-            }
-        }
-        return newViewIds;
-    }
-    function getNewTileDataListForResize(mapRawData: MapRawData, newWidth: number, newHeight: number): Types.SerializedTile[] {
-        const tileList: Types.SerializedTile[] = [];
+    function getNewTileDataListForResize(mapRawData: IMapRawData, newWidth: number, newHeight: number): ISerialTile[] {
+        const tileList: ISerialTile[] = [];
         for (const tileData of mapRawData.tileDataList || []) {
-            if ((tileData.gridX < newWidth) && (tileData.gridY < newHeight)) {
+            const gridIndex = tileData.gridIndex;
+            if ((gridIndex.x < newWidth) && (gridIndex.y < newHeight)) {
                 tileList.push(tileData);
             }
         }
+
+        const oldWidth  = mapRawData.mapWidth;
+        const oldHeight = mapRawData.mapHeight;
+        for (let x = 0; x < newWidth; ++x) {
+            for (let y = 0; y < newHeight; ++y) {
+                if ((x >= oldWidth) || (y >= oldHeight)) {
+                    tileList.push(createDefaultTileData({ x, y }, TileBaseType.Plain));
+                }
+            }
+        }
+
         return tileList;
     }
-    function getNewUnitDataListForResize(mapRawData: MapRawData, newWidth: number, newHeight: number): Types.SerializedUnit[] {
-        const unitList: Types.SerializedUnit[] = [];
+    function getNewUnitDataListForResize(mapRawData: IMapRawData, newWidth: number, newHeight: number): ISerialUnit[] {
+        const unitList: ISerialUnit[] = [];
         for (const unitData of mapRawData.unitDataList || []) {
-            if ((unitData.gridX < newWidth) && (unitData.gridY < newHeight)) {
+            const gridIndex = unitData.gridIndex;
+            if ((gridIndex.x < newWidth) && (gridIndex.y < newHeight)) {
                 unitList.push(unitData);
             }
         }
+
         return unitList;
     }
 
-    export function addOffset(mapRawData: MapRawData, offsetX: number, offsetY: number): MapRawData {
+    export function addOffset(mapRawData: IMapRawData, offsetX: number, offsetY: number): IMapRawData {
         return {
-            isMultiPlayer   : mapRawData.isMultiPlayer,
-            isSinglePlayer  : mapRawData.isSinglePlayer,
-            mapDesigner     : mapRawData.mapDesigner,
-            mapName         : mapRawData.mapName,
-            mapNameEnglish  : mapRawData.mapNameEnglish,
+            mapId           : mapRawData.mapId,
+            designerName    : mapRawData.designerName,
             designerUserId  : mapRawData.designerUserId,
-            playersCount    : mapRawData.playersCount,
-            mapHeight       : mapRawData.mapHeight,
+            mapNameList     : mapRawData.mapNameList,
             mapWidth        : mapRawData.mapWidth,
-            tileBases       : getNewTileBaseViewIdsForOffset(mapRawData, offsetX, offsetY),
-            tileObjects     : getNewTileObjectViewIdsForOffset(mapRawData, offsetX, offsetY),
+            mapHeight       : mapRawData.mapHeight,
+            playersCount    : mapRawData.playersCount,
+            modifiedTime    : Time.TimeModel.getServerTimestamp(),
             tileDataList    : getNewTileDataListForOffset(mapRawData, offsetX, offsetY),
             unitDataList    : getNewUnitDataListForOffset(mapRawData, offsetX, offsetY),
-            units           : null,
+            warRuleList     : mapRawData.warRuleList,
         }
     }
-    function getNewTileBaseViewIdsForOffset(mapRawData: MapRawData, offsetX: number, offsetY: number): number[] {
+    function getNewTileDataListForOffset(mapRawData: IMapRawData, offsetX: number, offsetY: number): ISerialTile[] {
         const width         = mapRawData.mapWidth;
         const height        = mapRawData.mapHeight;
-        const oldViewIds    = mapRawData.tileBases || [];
-        const baseViewIds   : number[] = [];
-        const defaultId     = Utility.ConfigManager.getTileBaseViewId(Types.TileBaseType.Plain);
-        for (let newX = 0; newX < width; ++newX) {
-            for (let newY = 0; newY < height; ++newY) {
-                const oldX      = newX - offsetX;
-                const oldY      = newY - offsetY
-                const newIndex  = newX + newY * width;
-                if ((oldX >= 0) && (oldX < width) && (oldY >= 0) && (oldY < height)) {
-                    baseViewIds[newIndex] = oldViewIds[oldX + oldY * width] || defaultId;
-                } else {
-                    baseViewIds[newIndex] = defaultId;
-                }
-            }
-        }
-
-        return baseViewIds;
-    }
-    function getNewTileObjectViewIdsForOffset(mapRawData: MapRawData, offsetX: number, offsetY: number): number[] {
-        const width         = mapRawData.mapWidth;
-        const height        = mapRawData.mapHeight;
-        const oldViewIds    = mapRawData.tileObjects || [];
-        const objectViewIds : number[] = [];
-        const defaultId     = 0;
-        for (let newX = 0; newX < width; ++newX) {
-            for (let newY = 0; newY < height; ++newY) {
-                const oldX      = newX - offsetX;
-                const oldY      = newY - offsetY
-                const newIndex  = newX + newY * width;
-                if ((oldX >= 0) && (oldX < width) && (oldY >= 0) && (oldY < height)) {
-                    objectViewIds[newIndex] = oldViewIds[oldX + oldY * width] || defaultId;
-                } else {
-                    objectViewIds[newIndex] = defaultId;
-                }
-            }
-        }
-
-        return objectViewIds;
-    }
-    function getNewTileDataListForOffset(mapRawData: MapRawData, offsetX: number, offsetY: number): Types.SerializedTile[] {
-        const width         = mapRawData.mapWidth;
-        const height        = mapRawData.mapHeight;
-        const tileDataList  : Types.SerializedTile[] = [];
-        for (const tileData of mapRawData.tileDataList || []) {
-            const newX = tileData.gridX + offsetX;
-            const newY = tileData.gridY + offsetY;
+        const tileDataList  : ISerialTile[] = [];
+        for (const tileData of mapRawData.tileDataList) {
+            const gridIndex = tileData.gridIndex;
+            const newX      = gridIndex.x + offsetX;
+            const newY      = gridIndex.y + offsetY;
             if ((newX >= 0) && (newX < width) && (newY >= 0) && (newY < height)) {
-                const newData   = Helpers.deepClone(tileData);
-                newData.gridX   = newX;
-                newData.gridY   = newY;
+                const newData       = Helpers.deepClone(tileData);
+                newData.gridIndex   = { x: newX, y: newY };
                 tileDataList.push(newData);
+            }
+        }
+
+        for (let x = 0; x < width; ++x) {
+            for (let y = 0; y < height; ++y) {
+                if (((offsetX > 0) && (x < offsetX))            ||
+                    ((offsetX < 0) && (x >= width + offsetX))   ||
+                    ((offsetY > 0) && (y < offsetY))            ||
+                    ((offsetY < 0) && (y >= height + offsetY))
+                ) {
+                    tileDataList.push(createDefaultTileData({ x, y }, TileBaseType.Plain));
+                }
             }
         }
 
         return tileDataList;
     }
-    function getNewUnitDataListForOffset(mapRawData: MapRawData, offsetX: number, offsetY: number): Types.SerializedUnit[] {
+    function getNewUnitDataListForOffset(mapRawData: IMapRawData, offsetX: number, offsetY: number): ISerialUnit[] {
         const width         = mapRawData.mapWidth;
         const height        = mapRawData.mapHeight;
-        const unitDataList  : Types.SerializedUnit[] = [];
+        const unitDataList  : ISerialUnit[] = [];
         for (const unitData of mapRawData.unitDataList || []) {
-            const newX = unitData.gridX + offsetX;
-            const newY = unitData.gridY + offsetY;
+            const gridIndex = unitData.gridIndex;
+            const newX      = gridIndex.x + offsetX;
+            const newY      = gridIndex.y + offsetY;
             if ((newX >= 0) && (newX < width) && (newY >= 0) && (newY < height)) {
-                const newData   = Helpers.deepClone(unitData);
-                newData.gridX   = newX;
-                newData.gridY   = newY;
+                const newData       = Helpers.deepClone(unitData);
+                newData.gridIndex   = { x: newX, y: newY };
                 unitDataList.push(newData);
             }
         }
@@ -726,15 +594,22 @@ namespace TinyWars.MapEditor.MeUtility {
             return null;
         }
     }
-    function checkIsSymmetrical(tile1: MeTile, tile2: MeTile, symmetryType: SymmetryType): boolean {
-        if (tile1.getBaseViewId() !== Utility.ConfigManager.getSymmetricalTileBaseViewId(tile2.getBaseViewId(), symmetryType)) {
-            return false;
-        } else {
-            if ((tile1.getPlayerIndex() !== 0) || (tile2.getPlayerIndex() !== 0)) {
-                return tile1.getType() === tile2.getType();
-            } else {
-                return (tile1.getObjectViewId() === Utility.ConfigManager.getSymmetricalTileObjectViewId(tile2.getObjectViewId(), symmetryType));
-            }
-        }
+    function checkIsSymmetrical(tile1: BwTile, tile2: BwTile, symmetryType: SymmetryType): boolean {
+        const baseType      = tile1.getBaseType();
+        const objectType    = tile1.getObjectType();
+        return (baseType === tile2.getBaseType())
+            && (objectType === tile2.getObjectType())
+            && (ConfigManager.checkIsTileBaseSymmetrical({
+                baseType,
+                shapeId1    : tile1.getBaseShapeId(),
+                shapeId2    : tile2.getBaseShapeId(),
+                symmetryType,
+            }))
+            && (ConfigManager.checkIsTileObjectSymmetrical({
+                objectType,
+                shapeId1    : tile1.getObjectShapeId(),
+                shapeId2    : tile2.getObjectShapeId(),
+                symmetryType,
+            }));
     }
 }

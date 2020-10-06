@@ -80,14 +80,17 @@ namespace TinyWars.MapEditor {
             this._conTileView.addChild(this._tileView.getImgObject());
         }
         protected _onOpened(): void {
-            this._war       = MeManager.getWar();
-            this._tileMap   = this._war.getTileMap();
-            this._cursor    = this._war.getField().getCursor();
+            const war       = MeManager.getWar();
+            this._war       = war;
+            this._tileMap   = war.getTileMap() as MeTileMap;
+            this._cursor    = war.getField().getCursor() as MeCursor;
 
             this._updateView();
         }
         protected _onClosed(): void {
-            delete this._war;
+            this._war       = null;
+            this._tileMap   = null;
+            this._cursor    = null;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -127,7 +130,7 @@ namespace TinyWars.MapEditor {
             }
         }
         private _onNotifyTileAnimationTick(e: egret.Event): void {
-            this._tileView.updateOnAnimationTick();
+            this._tileView.updateView();
         }
 
         private _onTouchedThis(e: egret.TouchEvent): void {
@@ -146,7 +149,12 @@ namespace TinyWars.MapEditor {
 
                 const gridIndex = this._cursor.getGridIndex();
                 const tile      = this._tileMap.getTile(gridIndex);
-                this._tileView.init(tile).startRunningView();
+                this._tileView.setData({
+                    tileData    : tile.serialize(),
+                    hasFog      : false,
+                    skinId      : tile.getSkinId(),
+                });
+                this._tileView.updateView();
                 this._labelDefense.text     = `${Math.floor(tile.getDefenseAmount() / 10)}`;
                 this._labelName.text        = Lang.getTileName(tile.getType());
                 this._labelGridIndex.text   = `x${gridIndex.x} y${gridIndex.y}`;

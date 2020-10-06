@@ -7,9 +7,11 @@ namespace TinyWars.Chat {
     import ProtoTypes       = Utility.ProtoTypes;
     import Helpers          = Utility.Helpers;
     import Logger           = Utility.Logger;
-    import CommonConstants  = Utility.ConfigManager.COMMON_CONSTANTS;
+    import ConfigManager    = Utility.ConfigManager;
     import ChatCategory     = Types.ChatMessageToCategory;
     import ChatChannel      = Types.ChatChannel;
+    import NetMessage       = ProtoTypes.NetMessage;
+    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
     type OpenDataForChatPanel = {
         toUserId?: number;
@@ -131,7 +133,7 @@ namespace TinyWars.Chat {
         }
 
         private _onNotifySChatAddMessage(e: egret.Event): void {
-            const message       = (e.data as ProtoTypes.IS_ChatAddMessage).message;
+            const message       = (e.data as NetMessage.IS_ChatAddMessage).message;
             const fromUserId    = message.fromUserId;
             if (fromUserId === User.UserModel.getSelfUserId()) {
                 this._inputMessage.text = "";
@@ -334,7 +336,7 @@ namespace TinyWars.Chat {
         }
     }
 
-    function getLatestTimestamp(index: number, msgList: ProtoTypes.IChatMessage[] | null): { index: number, timestamp: number } {
+    function getLatestTimestamp(index: number, msgList: ProtoTypes.Chat.IChatMessage[] | null): { index: number, timestamp: number } {
         let timestamp = 0;
         for (const msg of msgList || []) {
             timestamp = Math.max(timestamp, msg.timestamp);
@@ -453,7 +455,7 @@ namespace TinyWars.Chat {
         }
     }
 
-    type DataForMessageRenderer = ProtoTypes.IChatMessage;
+    type DataForMessageRenderer = ProtoTypes.Chat.IChatMessage;
 
     class MessageRenderer extends eui.ItemRenderer {
         private _labelName      : TinyWars.GameUi.UiLabel;
@@ -469,7 +471,7 @@ namespace TinyWars.Chat {
             this._labelName.text        = `    (${Helpers.getTimestampShortText(data.timestamp)})`;
             User.UserModel.getUserPublicInfo(fromUserId).then(info => {
                 const d = this.data as DataForMessageRenderer;
-                if ((d) && (info.id === d.fromUserId)) {
+                if ((d) && (info.userId === d.fromUserId)) {
                     this._labelName.text = `${info.nickname || `???`}    (${Helpers.getTimestampShortText(data.timestamp)})`;
                 }
             });

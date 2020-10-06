@@ -57,10 +57,76 @@ namespace TinyWars.Utility.ConfigManager {
         framesCount     : number;
         ticksPerFrame   : number;
     }
+    type TileObjectShapeCfg = {
+        minPlayerIndex  : number;
+        maxPlayerIndex  : number;
+        shapesCount     : number;
+    }
+    type TileBaseShapeCfg = {
+        shapesCount     : number;
+    }
 
     ////////////////////////////////////////////////////////////////////////////////
     // Constants.
     ////////////////////////////////////////////////////////////////////////////////
+    export const COMMON_CONSTANTS           = {
+        MapEditorSlotMaxCount                   : 3,
+        ScwSaveSlotMaxCount                     : 10,
+
+        ChatContentMaxLength                    : 200,
+        ChatTeamDivider                         : 100,
+
+        UnitHpNormalizer                        : 10,
+        UnitMaxHp                               : 100,
+        UnitAndTileMinSkinId                    : 1,
+        UnitAndTileMaxSkinId                    : 4,
+        UnitAndTileNeutralSkinId                : 0,
+
+        WarNeutralPlayerIndex                   : 0,
+        WarFirstPlayerIndex                     : 1,
+        WarMaxPlayerIndex                       : 4,
+        WarFirstTeamIndex                       : 1,
+
+        ReplayMaxRating                         : 10,
+        ReplayMinRating                         : 0,
+
+        WarNameMaxLength                        : 20,
+        WarCommentMaxLength                     : 50,
+        WarPasswordMaxLength                    : 4,
+        WarBootTimerRegularMaxLimit             : 3600 * 24 * 7,
+        WarBootTimerRegularDefaultValue         : 3600 * 24 * 3,
+        WarBootTimerIncrementalMaxLimit         : 3600 * 24,
+
+        WarRuleFirstId                          : 0,
+        WarRuleNameMaxLength                    : 15,
+        WarRuleOffenseBonusMinLimit             : -100,
+        WarRuleOffenseBonusMaxLimit             : 10000,
+        WarRuleOffenseBonusDefault              : 0,
+        WarRuleEnergyGrowthMultiplierMinLimit   : 0,
+        WarRuleEnergyGrowthMultiplierMaxLimit   : 10000,
+        WarRuleEnergyGrowthMultiplierDefault    : 100,
+        WarRuleIncomeMultiplierMinLimit         : 0,
+        WarRuleIncomeMultiplierMaxLimit         : 10000,
+        WarRuleIncomeMultiplierDefault          : 100,
+        WarRuleInitialEnergyPercentageMinLimit  : 0,
+        WarRuleInitialEnergyPercentageMaxLimit  : 100,
+        WarRuleInitialEnergyPercentageDefault   : 0,
+        WarRuleInitialFundMinLimit              : 0,
+        WarRuleInitialFundMaxLimit              : 1000000,
+        WarRuleInitialFundDefault               : 0,
+        WarRuleLuckMinLimit                     : -100,
+        WarRuleLuckMaxLimit                     : 100,
+        WarRuleLuckDefaultLowerLimit            : 0,
+        WarRuleLuckDefaultUpperLimit            : 10,
+        WarRuleMoveRangeModifierMinLimit        : -10,
+        WarRuleMoveRangeModifierMaxLimit        : 10,
+        WarRuleMoveRangeModifierDefault         : 0,
+        WarRuleVisionRangeModifierMinLimit      : -10,
+        WarRuleVisionRangeModifierMaxLimit      : 10,
+        WarRuleVisionRangeModifierDefault       : 0,
+        WarRuleMaxCount                         : 5,
+    };
+
     const _GRID_SIZE: GridSize = {
         width: 72,
         height: 72
@@ -214,7 +280,7 @@ namespace TinyWars.Utility.ConfigManager {
         [TileType.Wood,             TileObjectType.Wood],
     ]);
 
-    const _TILE_BASE_IMAGE_CFGS = new Map([
+    const _TILE_BASE_FRAME_CFGS = new Map([
         [
             Types.UnitAndTileTextureVersion.V1,
             new Map<TileBaseType, FrameCfg >([
@@ -234,10 +300,16 @@ namespace TinyWars.Utility.ConfigManager {
             ]),
         ],
     ]);
-    const _TILE_OBJECT_IMAGE_CFGS = new Map([
+    const _TILE_BASE_SHAPE_CFGS = new Map<TileBaseType, TileBaseShapeCfg>([
+        [ TileBaseType.Beach,   { shapesCount: 36,  }],
+        [ TileBaseType.Plain,   { shapesCount: 1,   }],
+        [ TileBaseType.River,   { shapesCount: 16,  }],
+        [ TileBaseType.Sea,     { shapesCount: 47,  }],
+    ]);
+    const _TILE_OBJECT_FRAME_CFGS = new Map([
         [
             Types.UnitAndTileTextureVersion.V1,
-            new Map<TileObjectType, FrameCfg >([
+            new Map<TileObjectType, FrameCfg>([
                 [ TileObjectType.Airport,       { framesCount: 3,   ticksPerFrame: 1                }],
                 [ TileObjectType.Bridge,        { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
                 [ TileObjectType.City,          { framesCount: 3,   ticksPerFrame: 1                }],
@@ -293,6 +365,32 @@ namespace TinyWars.Utility.ConfigManager {
                 [ TileObjectType.Wood,          { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
             ]),
         ],
+    ]);
+    const _TILE_OBJECT_SHAPE_CFGS = new Map<TileObjectType, TileObjectShapeCfg>([
+        [ TileObjectType.Airport,       { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarMaxPlayerIndex,     shapesCount: 1,     }],
+        [ TileObjectType.Bridge,        { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex, shapesCount: 11,    }],
+        [ TileObjectType.City,          { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarMaxPlayerIndex,     shapesCount: 1,     }],
+        [ TileObjectType.CommandTower,  { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarMaxPlayerIndex,     shapesCount: 1,     }],
+        [ TileObjectType.EmptySilo,     { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex, shapesCount: 1,     }],
+        [ TileObjectType.Factory,       { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarMaxPlayerIndex,     shapesCount: 1,     }],
+        [ TileObjectType.Fire,          { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex, shapesCount: 1,     }],
+        [ TileObjectType.GreenPlasma,   { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex, shapesCount: 16,    }],
+        [ TileObjectType.Headquarters,  { minPlayerIndex: COMMON_CONSTANTS.WarFirstPlayerIndex,     maxPlayerIndex: COMMON_CONSTANTS.WarMaxPlayerIndex,     shapesCount: 1,     }],
+        [ TileObjectType.Meteor,        { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex, shapesCount: 1,     }],
+        [ TileObjectType.Mist,          { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex, shapesCount: 1,     }],
+        [ TileObjectType.Mountain,      { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex, shapesCount: 1,     }],
+        [ TileObjectType.Plasma,        { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex, shapesCount: 16,    }],
+        [ TileObjectType.Radar,         { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarMaxPlayerIndex,     shapesCount: 1,     }],
+        [ TileObjectType.Reef,          { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex, shapesCount: 1,     }],
+        [ TileObjectType.Road,          { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex, shapesCount: 11,    }],
+        [ TileObjectType.Rough,         { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex, shapesCount: 1,     }],
+        [ TileObjectType.Ruins,         { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex, shapesCount: 1,     }],
+        [ TileObjectType.Seaport,       { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarMaxPlayerIndex,     shapesCount: 1,     }],
+        [ TileObjectType.Silo,          { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex, shapesCount: 1,     }],
+        [ TileObjectType.TempAirport,   { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarMaxPlayerIndex,     shapesCount: 1,     }],
+        [ TileObjectType.TempSeaport,   { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarMaxPlayerIndex,     shapesCount: 1,     }],
+        [ TileObjectType.Wasteland,     { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex, shapesCount: 1,     }],
+        [ TileObjectType.Wood,          { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex, shapesCount: 1,     }],
     ]);
 
     // const _TILE_BASE_NORMAL_IMAGE_SOURCES = new Map<number, string[]>([
@@ -859,237 +957,247 @@ namespace TinyWars.Utility.ConfigManager {
     //     [109, { tileObjectType: TileObjectType.GreenPlasma, playerIndex: 0 }],
     // ]);
 
-    const _TILE_BASE_SYMMETRY = new Map<number, number[]>([
+    const _TILE_BASE_SYMMETRY = new Map<TileBaseType, Map<number, number[]>>([
         //          上下对称 左下右上 左右对称 左上右下 旋转对称    // 对称方式
         // 原图     上下翻转 左下右上 左右翻转 左上右下 逆时针180  // 图块变换
         ////////// plain: 1 (1 total) //////////
-        [ 1,    [   1,      1,      1,      1,      1]],
-
-        ////////// river: 2 - 17 (16 total) //////////
-        [ 2,    [   2,      2,      2,      2,      2]],
-        [ 3,    [   3,      5,      4,      6,      4]],
-        [ 4,    [   4,      6,      3,      5,      3]],
-        [ 5,    [   6,      3,      5,      4,      6]],
-        [ 6,    [   5,      4,      6,      3,      5]],
-        [ 7,    [   7,      12,     7,      12,     7]],
-        [ 8,    [   10,     8,      9,      11,     11]],
-        [ 9,    [   11,     10,     8,      9,      10]],
-        [ 10,   [   8,      9,      11,     10,     9]],
-        [ 11,   [   9,      11,     10,     8,      8]],
-        [ 12,   [   12,     7,      12,     7,      12]],
-        [ 13,   [   14,     15,     13,     16,     14]],
-        [ 14,   [   13,     16,     14,     15,     13]],
-        [ 15,   [   15,     13,     16,     14,     16]],
-        [ 16,   [   16,     14,     15,     13,     15]],
-        [ 17,   [   17,     17,     17,     17,     17]],
-
-        ////////// sea: 18 - 64 (47 total) //////////
-        [ 18,   [   18,     18,     18,     18,     18]],
-        [ 19,   [   20,     19,     22,     26,     26]],
-        [ 20,   [   19,     22,     26,     20,     22]],
-        [ 21,   [   21,     23,     30,     28,     30]],
-        [ 22,   [   26,     20,     19,     22,     20]],
-        [ 23,   [   28,     21,     23,     30,     28]],
-        [ 24,   [   27,     24,     27,     24,     24]],
-        [ 25,   [   29,     25,     31,     32,     32]],
-        [ 26,   [   22,     26,     20,     19,     19]],
-        [ 27,   [   24,     27,     24,     27,     27]],
-        [ 28,   [   23,     30,     28,     21,     23]],
-        [ 29,   [   25,     31,     32,     29,     31]],
-        [ 30,   [   30,     28,     21,     23,     21]],
-        [ 31,   [   32,     29,     25,     31,     29]],
-        [ 32,   [   31,     32,     29,     25,     25]],
-        [ 33,   [   33,     33,     33,     33,     33]],
-        [ 34,   [   34,     43,     38,     52,     38]],
-        [ 35,   [   36,     44,     39,     54,     40]],
-        [ 36,   [   35,     45,     40,     53,     39]],
-        [ 37,   [   37,     46,     41,     55,     41]],
-        [ 38,   [   38,     52,     34,     43,     34]],
-        [ 39,   [   40,     53,     35,     45,     36]],
-        [ 40,   [   39,     54,     36,     44,     35]],
-        [ 41,   [   41,     55,     37,     46,     37]],
-        [ 42,   [   42,     61,     42,     61,     42]],
-        [ 43,   [   52,     34,     43,     38,     52]],
-        [ 44,   [   53,     35,     45,     40,     54]],
-        [ 45,   [   54,     36,     44,     39,     53]],
-        [ 46,   [   55,     37,     46,     41,     55]],
-        [ 47,   [   56,     47,     49,     58,     58]],
-        [ 48,   [   57,     48,     50,     59,     59]],
-        [ 49,   [   58,     56,     47,     49,     56]],
-        [ 50,   [   59,     57,     48,     50,     57]],
-        [ 51,   [   60,     62,     51,     63,     60]],
-        [ 52,   [   43,     38,     52,     34,     43]],
-        [ 53,   [   44,     39,     54,     36,     45]],
-        [ 54,   [   45,     40,     53,     35,     44]],
-        [ 55,   [   46,     41,     55,     37,     46]],
-        [ 56,   [   47,     49,     58,     56,     49]],
-        [ 57,   [   48,     50,     59,     57,     50]],
-        [ 58,   [   49,     58,     56,     47,     47]],
-        [ 59,   [   50,     59,     57,     48,     48]],
-        [ 60,   [   51,     63,     60,     62,     51]],
-        [ 61,   [   61,     42,     61,     42,     61]],
-        [ 62,   [   62,     51,     63,     60,     63]],
-        [ 63,   [   63,     60,     62,     51,     62]],
-        [ 64,   [   64,     64,     64,     64,     64]],
-
-        ////////// beach: 65 - 100 (36 total) //////////
-        [ 65,   [   66,     67,     65,     68,     66]],
-        [ 66,   [   65,     68,     66,     67,     65]],
-        [ 67,   [   67,     65,     68,     66,     68]],
-        [ 68,   [   68,     66,     67,     65,     67]],
-        [ 69,   [   70,     71,     69,     72,     70]],
-        [ 70,   [   69,     72,     70,     71,     69]],
-        [ 71,   [   71,     69,     72,     70,     72]],
-        [ 72,   [   72,     70,     71,     69,     71]],
-        [ 73,   [   78,     79,     77,     80,     74]],
-        [ 74,   [   77,     80,     78,     79,     73]],
-        [ 75,   [   79,     77,     80,     78,     76]],
-        [ 76,   [   80,     78,     79,     77,     75]],
-        [ 77,   [   74,     75,     73,     76,     78]],
-        [ 78,   [   73,     76,     74,     75,     77]],
-        [ 79,   [   75,     73,     76,     74,     80]],
-        [ 80,   [   76,     74,     75,     73,     79]],
-        [ 81,   [   84,     81,     82,     83,     83]],
-        [ 82,   [   83,     84,     81,     82,     84]],
-        [ 83,   [   82,     83,     84,     81,     81]],
-        [ 84,   [   81,     82,     83,     84,     82]],
-        [ 85,   [   88,     85,     86,     87,     87]],
-        [ 86,   [   87,     88,     85,     86,     88]],
-        [ 87,   [   86,     87,     88,     85,     85]],
-        [ 88,   [   85,     86,     87,     88,     86]],
-        [ 89,   [   96,     93,     94,     95,     91]],
-        [ 90,   [   95,     96,     93,     94,     92]],
-        [ 91,   [   94,     95,     96,     93,     89]],
-        [ 92,   [   93,     94,     95,     96,     90]],
-        [ 93,   [   92,     89,     90,     91,     95]],
-        [ 94,   [   91,     92,     89,     90,     96]],
-        [ 95,   [   90,     91,     92,     89,     93]],
-        [ 96,   [   89,     90,     91,     92,     94]],
-        [ 97,   [   98,     99,     97,     100,    98]],
-        [ 98,   [   97,     100,    98,     99,     97]],
-        [ 99,   [   99,     97,     100,    98,     100]],
-        [ 100,  [   100,    98,     99,     97,     99]],
+        [TileBaseType.Plain, new Map([
+            [   0,  [   0,      0,      0,      0,      0,  ]],
+        ])],
+        [TileBaseType.River, new Map([
+            [   0,  [   0,      0,      0,      0,      0,  ]],
+            [   1,  [   1,      3,      2,      4,      2,  ]],
+            [   2,  [   2,      4,      1,      3,      1,  ]],
+            [   3,  [   4,      1,      3,      2,      4,  ]],
+            [   4,  [   3,      2,      4,      1,      3,  ]],
+            [   5,  [   5,      10,     5,      10,     5,  ]],
+            [   6,  [   8,      6,      7,      9,      9,  ]],
+            [   7,  [   9,      8,      6,      7,      8,  ]],
+            [   8,  [   6,      7,      9,      8,      7,  ]],
+            [   9,  [   7,      9,      8,      6,      6,  ]],
+            [   10, [   10,     5,      10,     5,      10, ]],
+            [   11, [   12,     13,     11,     14,     12, ]],
+            [   12, [   11,     14,     12,     13,     11, ]],
+            [   13, [   13,     11,     14,     12,     14, ]],
+            [   14, [   14,     12,     13,     11,     13, ]],
+            [   15, [   15,     15,     15,     15,     15, ]],
+        ])],
+        [TileBaseType.Sea, new Map([
+            [   0,  [   0,      0,      0,      0,      0,  ]],
+            [   1,  [   2,      1,      4,      8,      8,  ]],
+            [   2,  [   1,      4,      8,      2,      4,  ]],
+            [   3,  [   3,      5,      12,     10,     12, ]],
+            [   4,  [   8,      2,      1,      4,      2,  ]],
+            [   5,  [   10,     3,      5,      12,     10, ]],
+            [   6,  [   9,      6,      9,      6,      6,  ]],
+            [   7,  [   11,     7,      13,     14,     14, ]],
+            [   8,  [   4,      8,      2,      1,      1,  ]],
+            [   9,  [   6,      9,      6,      9,      9,  ]],
+            [   10, [   5,      12,     10,     3,      5,  ]],
+            [   11, [   7,      13,     14,     11,     13, ]],
+            [   12, [   12,     10,     3,      5,      3,  ]],
+            [   13, [   14,     11,     7,      13,     11, ]],
+            [   14, [   13,     14,     11,     7,      7,  ]],
+            [   15, [   15,     15,     15,     15,     15, ]],
+            [   16, [   16,     25,     20,     34,     20, ]],
+            [   17, [   18,     26,     21,     36,     22, ]],
+            [   18, [   17,     27,     22,     35,     21, ]],
+            [   19, [   19,     28,     23,     37,     23, ]],
+            [   20, [   20,     34,     16,     25,     16, ]],
+            [   21, [   22,     35,     17,     27,     18, ]],
+            [   22, [   21,     36,     18,     26,     17, ]],
+            [   23, [   23,     37,     19,     28,     19, ]],
+            [   24, [   24,     43,     24,     43,     24, ]],
+            [   25, [   34,     16,     25,     20,     34, ]],
+            [   26, [   35,     17,     27,     22,     36, ]],
+            [   27, [   36,     18,     26,     21,     35, ]],
+            [   28, [   37,     19,     28,     23,     37, ]],
+            [   29, [   38,     29,     31,     40,     40, ]],
+            [   30, [   39,     30,     32,     41,     41, ]],
+            [   31, [   40,     38,     29,     31,     38, ]],
+            [   32, [   41,     39,     30,     32,     39, ]],
+            [   33, [   42,     44,     33,     45,     42, ]],
+            [   34, [   25,     20,     34,     16,     25, ]],
+            [   35, [   26,     21,     36,     18,     27, ]],
+            [   36, [   27,     22,     35,     17,     26, ]],
+            [   37, [   28,     23,     37,     19,     28, ]],
+            [   38, [   29,     31,     40,     38,     31, ]],
+            [   39, [   30,     32,     41,     39,     32, ]],
+            [   40, [   31,     40,     38,     29,     29, ]],
+            [   41, [   32,     41,     39,     30,     30, ]],
+            [   42, [   33,     45,     42,     44,     33, ]],
+            [   43, [   43,     24,     43,     24,     43, ]],
+            [   44, [   44,     33,     45,     42,     45, ]],
+            [   45, [   45,     42,     44,     33,     44, ]],
+            [   46, [   46,     46,     46,     46,     46, ]],
+        ])],
+        [TileBaseType.Beach, new Map([
+            [   0,  [   1,      2,      0,      3,      1,  ]],
+            [   1,  [   0,      3,      1,      2,      0,  ]],
+            [   2,  [   2,      0,      3,      1,      3,  ]],
+            [   3,  [   3,      1,      2,      0,      2,  ]],
+            [   4,  [   5,      6,      4,      7,      5,  ]],
+            [   5,  [   4,      7,      5,      6,      4,  ]],
+            [   6,  [   6,      4,      7,      5,      7,  ]],
+            [   7,  [   7,      5,      6,      4,      6,  ]],
+            [   8,  [   13,     14,     12,     15,     9,  ]],
+            [   9,  [   12,     15,     13,     14,     8,  ]],
+            [   10, [   14,     12,     15,     13,     11, ]],
+            [   11, [   15,     13,     14,     12,     10, ]],
+            [   12, [   9,      10,     8,      11,     13, ]],
+            [   13, [   8,      11,     9,      10,     12, ]],
+            [   14, [   10,     8,      11,     9,      15, ]],
+            [   15, [   11,     9,      10,     8,      14, ]],
+            [   16, [   19,     16,     17,     18,     18, ]],
+            [   17, [   18,     19,     16,     17,     19, ]],
+            [   18, [   17,     18,     19,     16,     16, ]],
+            [   19, [   16,     17,     18,     19,     17, ]],
+            [   20, [   23,     20,     21,     22,     22, ]],
+            [   21, [   22,     23,     20,     21,     23, ]],
+            [   22, [   21,     22,     23,     20,     20, ]],
+            [   23, [   20,     21,     22,     23,     21, ]],
+            [   24, [   31,     28,     29,     30,     26, ]],
+            [   25, [   30,     31,     28,     29,     27, ]],
+            [   26, [   29,     30,     31,     28,     24, ]],
+            [   27, [   28,     29,     30,     31,     25, ]],
+            [   28, [   27,     24,     25,     26,     30, ]],
+            [   29, [   26,     27,     24,     25,     31, ]],
+            [   30, [   25,     26,     27,     24,     28, ]],
+            [   31, [   24,     25,     26,     27,     29, ]],
+            [   32, [   33,     34,     32,     35,     33, ]],
+            [   33, [   32,     35,     33,     34,     32, ]],
+            [   34, [   34,     32,     35,     33,     35, ]],
+            [   35, [   35,     33,     34,     32,     34, ]],
+        ])],
     ]);
 
-    const _TILE_OBJECT_SYMMETRY = new Map<number, number[]>([
+    const _TILE_OBJECT_SYMMETRY = new Map<TileObjectType, Map<number, number[]>>([
         // 原图     上下翻转 左下右上 左右翻转 左上右下 逆时针180  // 图块变换
-        [ 0,    [   0,      0,      0,      0,      0]],
-        [ 1,    [   1,      2,      1,      2,      1]],
-        [ 2,    [   2,      1,      2,      1,      2]],
-        [ 3,    [   5,      3,      4,      6,      6]],
-        [ 4,    [   6,      5,      3,      4,      5]],
-        [ 5,    [   3,      4,      6,      5,      4]],
-        [ 6,    [   4,      6,      5,      3,      3]],
-        [ 7,    [   8,      9,      7,      10,     8]],
-        [ 8,    [   7,      10,     8,      9,      7]],
-        [ 9,    [   9,      7,      10,     8,      10]],
-        [ 10,   [   10,     8,      9,      7,      9]],
-        [ 11,   [   11,     11,     11,     11,     11]],
-
-        [ 12,   [   12,     13,     12,     13,     12]],
-        [ 13,   [   13,     12,     13,     12,     13]],
-        [ 14,   [   16,     14,     15,     17,     17]],
-        [ 15,   [   17,     16,     14,     15,     16]],
-        [ 16,   [   14,     15,     17,     16,     15]],
-        [ 17,   [   15,     17,     16,     14,     14]],
-        [ 18,   [   19,     20,     18,     21,     19]],
-        [ 19,   [   18,     21,     19,     20,     18]],
-        [ 20,   [   20,     18,     21,     19,     21]],
-        [ 21,   [   21,     19,     20,     18,     20]],
-        [ 22,   [   22,     22,     22,     22,     22]],
-
-        [ 23,   [   23,     23,     23,     23,     23]],
-        [ 24,   [   24,     24,     24,     24,     24]],
-        [ 25,   [   25,     25,     25,     25,     25]],
-        [ 26,   [   26,     26,     26,     26,     26]],
-        [ 27,   [   27,     27,     27,     27,     27]],
-        [ 28,   [   28,     28,     28,     28,     28]],
-        [ 29,   [   29,     29,     29,     29,     29]],
-        [ 30,   [   30,     30,     30,     30,     30]],
-
-        // 原图     上下翻转 左下右上 左右翻转 左上右下 逆时针180  // 图块变换
-        [ 31,   [   31,     31,     31,     31,     31]],
-        [ 32,   [   34,     33,     32,     35,     34]],
-        [ 33,   [   33,     32,     35,     34,     35]],
-        [ 34,   [   32,     35,     34,     33,     32]],
-        [ 35,   [   35,     34,     33,     32,     33]],
-        [ 36,   [   38,     37,     36,     39,     38]],
-        [ 37,   [   37,     36,     39,     38,     39]],
-        [ 38,   [   36,     39,     38,     37,     36]],
-        [ 39,   [   39,     38,     37,     36,     37]],
-        [ 40,   [   41,     40,     43,     42,     42]],
-        [ 41,   [   40,     43,     42,     41,     43]],
-        [ 42,   [   43,     42,     41,     40,     40]],
-        [ 43,   [   42,     41,     40,     43,     41]],
-        [ 44,   [   44,     44,     44,     44,     44]],
-        [ 45,   [   45,     46,     45,     46,     45]],
-        [ 46,   [   46,     45,     46,     45,     46]],
-
-        [ 47,   [   47,     47,     47,     47,     47]],
-        [ 48,   [   48,     48,     48,     48,     48]],
-        [ 49,   [   49,     49,     49,     49,     49]],
-
-        [ 50,   [   51,     51,     51,     51,     51]],
-        [ 51,   [   50,     50,     50,     50,     50]],
-        [ 52,   [   53,     53,     53,     53,     53]],
-        [ 53,   [   52,     52,     52,     52,     52]],
-        [ 54,   [   54,     54,     54,     54,     54]],
-        [ 55,   [   56,     56,     56,     56,     56]],
-        [ 56,   [   55,     55,     55,     55,     55]],
-        [ 57,   [   58,     58,     58,     58,     58]],
-        [ 58,   [   57,     57,     57,     57,     57]],
-        [ 59,   [   59,     59,     59,     59,     59]],
-        [ 60,   [   61,     61,     61,     61,     61]],
-        [ 61,   [   60,     60,     60,     60,     60]],
-        [ 62,   [   63,     63,     63,     63,     63]],
-        [ 63,   [   62,     62,     62,     62,     62]],
-        [ 64,   [   64,     64,     64,     64,     64]],
-        [ 65,   [   66,     66,     66,     66,     66]],
-        [ 66,   [   65,     65,     65,     65,     65]],
-        [ 67,   [   68,     68,     68,     68,     68]],
-        [ 68,   [   67,     67,     67,     67,     67]],
-        [ 69,   [   69,     69,     69,     69,     69]],
-        [ 70,   [   71,     71,     71,     71,     71]],
-        [ 71,   [   70,     70,     70,     70,     70]],
-        [ 72,   [   73,     73,     73,     73,     73]],
-        [ 73,   [   72,     72,     72,     72,     72]],
-        [ 74,   [   74,     74,     74,     74,     74]],
-        [ 75,   [   76,     76,     76,     76,     76]],
-        [ 76,   [   75,     75,     75,     75,     75]],
-        [ 77,   [   78,     78,     78,     78,     78]],
-        [ 78,   [   77,     77,     77,     77,     77]],
-        [ 79,   [   79,     79,     79,     79,     79]],
-        [ 80,   [   81,     81,     81,     81,     81]],
-        [ 81,   [   80,     80,     80,     80,     80]],
-        [ 82,   [   83,     83,     83,     83,     83]],
-        [ 83,   [   82,     82,     82,     82,     82]],
-        [ 84,   [   84,     84,     84,     84,     84]],
-        [ 85,   [   86,     86,     86,     86,     86]],
-        [ 86,   [   85,     85,     85,     85,     85]],
-        [ 87,   [   88,     88,     88,     88,     88]],
-        [ 88,   [   87,     87,     87,     87,     87]],
-        [ 89,   [   89,     89,     89,     89,     89]],
-        [ 90,   [   91,     91,     91,     91,     91]],
-        [ 91,   [   90,     90,     90,     90,     90]],
-        [ 92,   [   93,     93,     93,     93,     93]],
-        [ 93,   [   92,     92,     92,     92,     92]],
-
-        [ 94,   [   94,     94,     94,     94,     94]],
-        [ 95,   [   97,     96,     95,     98,     97]],
-        [ 96,   [   96,     95,     98,     97,     98]],
-        [ 97,   [   95,     98,     97,     96,     95]],
-        [ 98,   [   98,     97,     96,     95,     96]],
-        [ 99,   [   101,    100,    99,     102,    101]],
-        [ 100,  [   100,    99,     102,    101,    102]],
-        [ 101,  [   99,     102,    101,    100,    99]],
-        [ 102,  [   102,    101,    100,    99,     100]],
-        [ 103,  [   104,    103,    106,    105,    105]],
-        [ 104,  [   103,    106,    105,    104,    106]],
-        [ 105,  [   106,    105,    104,    103,    103]],
-        [ 106,  [   105,    104,    103,    106,    104]],
-        [ 107,  [   107,    107,    107,    107,    107]],
-        [ 108,  [   108,    109,    108,    109,    108]],
-        [ 109,  [   109,    108,    109,    108,    109]],
+        [TileObjectType.Empty, new Map([
+            [   0,  [   0,      0,      0,      0,      0,  ]],
+        ])],
+        [TileObjectType.Road, new Map([
+            [   0,  [   0,      1,      0,      1,      0,  ]],
+            [   1,  [   1,      0,      1,      0,      1,  ]],
+            [   2,  [   4,      2,      3,      5,      5,  ]],
+            [   3,  [   5,      4,      2,      3,      4,  ]],
+            [   4,  [   2,      3,      5,      4,      3,  ]],
+            [   5,  [   3,      5,      4,      2,      2,  ]],
+            [   6,  [   7,      8,      6,      9,      7,  ]],
+            [   7,  [   6,      9,      7,      8,      6,  ]],
+            [   8,  [   8,      6,      9,      7,      9,  ]],
+            [   9,  [   9,      7,      8,      6,      8,  ]],
+            [   10, [   10,     10,     10,     10,     10, ]],
+        ])],
+        [TileObjectType.Bridge, new Map([
+            [   0,  [   0,      1,      0,      1,      0,  ]],
+            [   1,  [   1,      0,      1,      0,      1,  ]],
+            [   2,  [   4,      2,      3,      5,      5,  ]],
+            [   3,  [   5,      4,      2,      3,      4,  ]],
+            [   4,  [   2,      3,      5,      4,      3,  ]],
+            [   5,  [   3,      5,      4,      2,      2,  ]],
+            [   6,  [   7,      8,      6,      9,      7,  ]],
+            [   7,  [   6,      9,      7,      8,      6,  ]],
+            [   8,  [   8,      6,      9,      7,      9,  ]],
+            [   9,  [   9,      7,      8,      6,      8,  ]],
+            [   10, [   10,     10,     10,     10,     10, ]],
+        ])],
+        [TileObjectType.Wood, new Map([
+            [   0,  [   0,      0,      0,      0,      0,  ]],
+        ])],
+        [TileObjectType.Mountain, new Map([
+            [   0,  [   0,      0,      0,      0,      0,  ]],
+        ])],
+        [TileObjectType.Wasteland, new Map([
+            [   0,  [   0,      0,      0,      0,      0,  ]],
+        ])],
+        [TileObjectType.Ruins, new Map([
+            [   0,  [   0,      0,      0,      0,      0,  ]],
+        ])],
+        [TileObjectType.Fire, new Map([
+            [   0,  [   0,      0,      0,      0,      0,  ]],
+        ])],
+        [TileObjectType.Rough, new Map([
+            [   0,  [   0,      0,      0,      0,      0,  ]],
+        ])],
+        [TileObjectType.Mist, new Map([
+            [   0,  [   0,      0,      0,      0,      0,  ]],
+        ])],
+        [TileObjectType.Reef, new Map([
+            [   0,  [   0,      0,      0,      0,      0,  ]],
+        ])],
+        [TileObjectType.Plasma, new Map([
+            [   0,  [   0,      0,      0,      0,      0,  ]],
+            [   1,  [   3,      2,      1,      4,      3,  ]],
+            [   2,  [   2,      1,      4,      3,      4,  ]],
+            [   3,  [   1,      4,      3,      2,      1,  ]],
+            [   4,  [   4,      3,      2,      1,      2,  ]],
+            [   5,  [   7,      6,      5,      8,      7,  ]],
+            [   6,  [   6,      5,      8,      7,      8,  ]],
+            [   7,  [   5,      8,      7,      6,      5,  ]],
+            [   8,  [   8,      7,      6,      5,      6,  ]],
+            [   9,  [   10,     9,      12,     11,     11, ]],
+            [   10, [   9,      12,     11,     10,     12, ]],
+            [   11, [   12,     11,     10,     9,      9,  ]],
+            [   12, [   11,     10,     9,      12,     10, ]],
+            [   13, [   13,     13,     13,     13,     13, ]],
+            [   14, [   14,     15,     14,     15,     14, ]],
+            [   15, [   15,     14,     15,     14,     15, ]],
+        ])],
+        [TileObjectType.Meteor, new Map([
+            [   0,  [   0,      0,      0,      0,      0,  ]],
+        ])],
+        [TileObjectType.Silo, new Map([
+            [   0,  [   0,      0,      0,      0,      0,  ]],
+        ])],
+        [TileObjectType.EmptySilo, new Map([
+            [   0,  [   0,      0,      0,      0,      0,  ]],
+        ])],
+        [TileObjectType.Headquarters, new Map([
+            [   0,  [   0,      0,      0,      0,      0,  ]],
+        ])],
+        [TileObjectType.City, new Map([
+            [   0,  [   0,      0,      0,      0,      0,  ]],
+        ])],
+        [TileObjectType.CommandTower, new Map([
+            [   0,  [   0,      0,      0,      0,      0,  ]],
+        ])],
+        [TileObjectType.Radar, new Map([
+            [   0,  [   0,      0,      0,      0,      0,  ]],
+        ])],
+        [TileObjectType.Factory, new Map([
+            [   0,  [   0,      0,      0,      0,      0,  ]],
+        ])],
+        [TileObjectType.Airport, new Map([
+            [   0,  [   0,      0,      0,      0,      0,  ]],
+        ])],
+        [TileObjectType.Seaport, new Map([
+            [   0,  [   0,      0,      0,      0,      0,  ]],
+        ])],
+        [TileObjectType.TempAirport, new Map([
+            [   0,  [   0,      0,      0,      0,      0,  ]],
+        ])],
+        [TileObjectType.TempSeaport, new Map([
+            [   0,  [   0,      0,      0,      0,      0,  ]],
+        ])],
+        [TileObjectType.GreenPlasma, new Map([
+            [   0,  [   0,      0,      0,      0,      0,  ]],
+            [   1,  [   3,      2,      1,      4,      3,  ]],
+            [   2,  [   2,      1,      4,      3,      4,  ]],
+            [   3,  [   1,      4,      3,      2,      1,  ]],
+            [   4,  [   4,      3,      2,      1,      2,  ]],
+            [   5,  [   7,      6,      5,      8,      7,  ]],
+            [   6,  [   6,      5,      8,      7,      8,  ]],
+            [   7,  [   5,      8,      7,      6,      5,  ]],
+            [   8,  [   8,      7,      6,      5,      6,  ]],
+            [   9,  [   10,     9,      12,     11,     11, ]],
+            [   10, [   9,      12,     11,     10,     12, ]],
+            [   11, [   12,     11,     10,     9,      9,  ]],
+            [   12, [   11,     10,     9,      12,     10, ]],
+            [   13, [   13,     13,     13,     13,     13, ]],
+            [   14, [   14,     15,     14,     15,     14, ]],
+            [   15, [   15,     14,     15,     14,     15, ]],
+        ])],
     ]);
 
     // const _UNIT_TYPES_AND_PLAYER_INDEX = new Map<number, UnitTypeAndPlayerIndex>([
@@ -1497,64 +1605,6 @@ namespace TinyWars.Utility.ConfigManager {
     export const SILO_RADIUS                = 2;
     export const SILO_DAMAGE                = 30;
 
-    export const COMMON_CONSTANTS           = {
-        MapEditorSlotMaxCount                   : 3,
-        ScwSaveSlotMaxCount                     : 10,
-
-        ChatContentMaxLength                    : 200,
-        ChatTeamDivider                         : 100,
-
-        UnitHpNormalizer                        : 10,
-        UnitMaxHp                               : 100,
-        UnitAndTileMinSkinId                    : 1,
-        UnitAndTileMaxSkinId                    : 4,
-        UnitAndTileNeutralSkinId                : 0,
-
-        WarNeutralPlayerIndex                   : 0,
-        WarFirstPlayerIndex                     : 1,
-        WarMaxPlayerIndex                       : 4,
-        WarFirstTeamIndex                       : 1,
-
-        ReplayMaxRating                         : 10,
-        ReplayMinRating                         : 0,
-
-        WarNameMaxLength                        : 20,
-        WarCommentMaxLength                     : 50,
-        WarPasswordMaxLength                    : 4,
-        WarBootTimerRegularMaxLimit             : 3600 * 24 * 7,
-        WarBootTimerRegularDefaultValue         : 3600 * 24 * 3,
-        WarBootTimerIncrementalMaxLimit         : 3600 * 24,
-
-        WarRuleFirstId                          : 0,
-        WarRuleNameMaxLength                    : 15,
-        WarRuleOffenseBonusMinLimit             : -100,
-        WarRuleOffenseBonusMaxLimit             : 10000,
-        WarRuleOffenseBonusDefault              : 0,
-        WarRuleEnergyGrowthMultiplierMinLimit   : 0,
-        WarRuleEnergyGrowthMultiplierMaxLimit   : 10000,
-        WarRuleEnergyGrowthMultiplierDefault    : 100,
-        WarRuleIncomeMultiplierMinLimit         : 0,
-        WarRuleIncomeMultiplierMaxLimit         : 10000,
-        WarRuleIncomeMultiplierDefault          : 100,
-        WarRuleInitialEnergyMinLimit            : 0,
-        WarRuleInitialEnergyMaxLimit            : 100,
-        WarRuleInitialEnergyDefault             : 0,
-        WarRuleInitialFundMinLimit              : 0,
-        WarRuleInitialFundMaxLimit              : 1000000,
-        WarRuleInitialFundDefault               : 0,
-        WarRuleLuckMinLimit                     : -100,
-        WarRuleLuckMaxLimit                     : 100,
-        WarRuleLuckDefaultLowerLimit            : 0,
-        WarRuleLuckDefaultUpperLimit            : 10,
-        WarRuleMoveRangeModifierMinLimit        : -10,
-        WarRuleMoveRangeModifierMaxLimit        : 10,
-        WarRuleMoveRangeModifierDefault         : 0,
-        WarRuleVisionRangeModifierMinLimit      : -10,
-        WarRuleVisionRangeModifierMaxLimit      : 10,
-        WarRuleVisionRangeModifierDefault       : 0,
-        WarRuleMaxCount                         : 5,
-    };
-
     export const MAP_CONSTANTS              = {
         MaxGridsCount           : 1000,
         MaxMapNameLength        : 30,
@@ -1760,19 +1810,19 @@ namespace TinyWars.Utility.ConfigManager {
     //     return _UNIT_TYPES_AND_PLAYER_INDEX.get(unitViewId)!;
     // }
 
-    export function getTileObjectViewId(type: Types.TileObjectType, playerIndex: number): number | undefined {
-        const mapping = _TILE_OBJECT_VIEW_IDS.get(type);
-        return mapping ? mapping.get(playerIndex) : undefined;
-    }
+    // export function getTileObjectViewId(type: Types.TileObjectType, playerIndex: number): number | undefined {
+    //     const mapping = _TILE_OBJECT_VIEW_IDS.get(type);
+    //     return mapping ? mapping.get(playerIndex) : undefined;
+    // }
 
     export function getTileObjectTypeByTileType(type: TileType): TileObjectType {
         return _TILE_TYPE_TO_TILE_OBJECT_TYPE.get(type)!;
     }
 
-    export function getUnitViewId(type: Types.UnitType, playerIndex: number): number | undefined {
-        const mapping = _UNIT_VIEW_IDS.get(type);
-        return mapping ? mapping.get(playerIndex) : undefined;
-    }
+    // export function getUnitViewId(type: Types.UnitType, playerIndex: number): number | undefined {
+    //     const mapping = _UNIT_VIEW_IDS.get(type);
+    //     return mapping ? mapping.get(playerIndex) : undefined;
+    // }
 
     export function getTileBaseImageSource(
         params: {
@@ -1789,7 +1839,7 @@ namespace TinyWars.Utility.ConfigManager {
             return undefined;
         }
 
-        const cfgForVersion = _TILE_BASE_IMAGE_CFGS.get(version);
+        const cfgForVersion = _TILE_BASE_FRAME_CFGS.get(version);
         const cfgForFrame   = cfgForVersion ? cfgForVersion.get(baseType) : undefined;
         if (cfgForFrame == null) {
             return undefined;
@@ -1821,7 +1871,7 @@ namespace TinyWars.Utility.ConfigManager {
             return undefined;
         }
 
-        const cfgForVersion = _TILE_OBJECT_IMAGE_CFGS.get(version);
+        const cfgForVersion = _TILE_OBJECT_FRAME_CFGS.get(version);
         const cfgForFrame   = cfgForVersion ? cfgForVersion.get(objectType) : undefined;
         if (cfgForFrame == null) {
             return undefined;
@@ -1989,13 +2039,47 @@ namespace TinyWars.Utility.ConfigManager {
     // export function forEachUnitTypeAndPlayerIndex(func: (value: UnitTypeAndPlayerIndex, unitViewId: number) => void): void {
     //     _UNIT_TYPES_AND_PLAYER_INDEX.forEach(func);
     // }
-
-    export function getSymmetricalTileBaseViewId(tileBaseViewId: number, symmetryType: Types.SymmetryType): number | null {
-        const cfg = _TILE_BASE_SYMMETRY.get(tileBaseViewId);
-        return cfg ? cfg[symmetryType] : null;
+    export function getTileObjectShapeCfgs(): Map<TileObjectType, TileObjectShapeCfg> {
+        return _TILE_OBJECT_SHAPE_CFGS;
     }
-    export function getSymmetricalTileObjectViewId(tileObjectViewId: number, symmetryType: Types.SymmetryType): number | null {
-        const cfg = _TILE_OBJECT_SYMMETRY.get(tileObjectViewId);
-        return cfg ? cfg[symmetryType] : null;
+    export function getTileBaseShapeCfgs(): Map<TileBaseType, TileBaseShapeCfg> {
+        return _TILE_BASE_SHAPE_CFGS;
+    }
+    export function checkIsValidTileObjectShapeId(tileObjectType: TileObjectType, shapeId: number): boolean {
+        const cfg = getTileObjectShapeCfgs().get(tileObjectType);
+        return (!!cfg)
+            && ((shapeId == null) || ((shapeId >= 0) && (shapeId < cfg.shapesCount)));
+    }
+    export function checkIsValidTileBaseShapeId(tileBaseType: TileBaseType, shapeId: number): boolean {
+        const cfg = getTileBaseShapeCfgs().get(tileBaseType);
+        return (!!cfg)
+            && ((shapeId == null) || ((shapeId >= 0) && (shapeId < cfg.shapesCount)));
+    }
+
+    export function getSymmetricalTileBaseShapeId(baseType: TileBaseType, shapeId: number, symmetryType: Types.SymmetryType): number | null {
+        const cfg           = _TILE_BASE_SYMMETRY.get(baseType);
+        const shapeIdList   = cfg ? cfg.get(shapeId || 0) : null;
+        return shapeIdList ? shapeIdList[symmetryType] : null;
+    }
+    export function getSymmetricalTileObjectShapeId(objectType: TileObjectType, shapeId: number, symmetryType: Types.SymmetryType): number | null {
+        const cfg           = _TILE_OBJECT_SYMMETRY.get(objectType);
+        const shapeIdList   = cfg ? cfg.get(shapeId || 0) : null;
+        return shapeIdList ? shapeIdList[symmetryType] : null;
+    }
+    export function checkIsTileBaseSymmetrical(params: {
+        baseType    : TileBaseType;
+        shapeId1    : number;
+        shapeId2    : number;
+        symmetryType: Types.SymmetryType;
+    }): boolean {
+        return getSymmetricalTileBaseShapeId(params.baseType, params.shapeId1, params.symmetryType) === (params.shapeId2 || 0);
+    }
+    export function checkIsTileObjectSymmetrical(params: {
+        objectType  : TileObjectType;
+        shapeId1    : number;
+        shapeId2    : number;
+        symmetryType: Types.SymmetryType;
+    }): boolean {
+        return getSymmetricalTileObjectShapeId(params.objectType, params.shapeId1, params.symmetryType) === (params.shapeId2 || 0);
     }
 }

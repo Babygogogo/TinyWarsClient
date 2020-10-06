@@ -1,7 +1,9 @@
 
 namespace TinyWars.MapEditor {
-    import TimeModel    = Time.TimeModel;
-    import CommonModel  = Common.CommonModel;
+    import Types            = Utility.Types;
+    import CommonModel      = Common.CommonModel;
+    import TileObjectType   = Types.TileObjectType;
+    import TileBaseType     = Types.TileBaseType;
 
     const { width: GRID_WIDTH, height: GRID_HEIGHT } = Utility.ConfigManager.getGridSize();
 
@@ -9,17 +11,29 @@ namespace TinyWars.MapEditor {
         private _imgBase    = new GameUi.UiImage();
         private _imgObject  = new GameUi.UiImage();
 
-        private _baseViewId     : number;
-        private _objectViewId   : number;
+        private _baseType       : TileBaseType;
+        private _baseShapeId    : number;
+        private _objectType     : TileObjectType;
+        private _objectShapeId  : number;
+        private _playerIndex    : number;
 
         public constructor() {
             this._imgBase.anchorOffsetY     = GRID_HEIGHT;
             this._imgObject.anchorOffsetY   = GRID_HEIGHT * 2;
         }
 
-        public init(tileBaseViewId: number, tileObjectViewId: number): MeTileSimpleView {
-            this._baseViewId    = tileBaseViewId;
-            this._objectViewId  = tileObjectViewId;
+        public init(params: {
+            tileBaseType        : TileBaseType;
+            tileBaseShapeId     : number;
+            tileObjectType      : TileObjectType;
+            tileObjectShapeId   : number;
+            playerIndex         : number;
+        }): MeTileSimpleView {
+            this._baseType      = params.tileBaseType;
+            this._baseShapeId   = params.tileBaseShapeId;
+            this._objectType    = params.tileObjectType;
+            this._objectShapeId = params.tileObjectShapeId;
+            this._playerIndex   = params.playerIndex;
 
             return this;
         }
@@ -48,20 +62,38 @@ namespace TinyWars.MapEditor {
         }
 
         protected _updateImages(): void {
-            const objectId = this._objectViewId;
-            if (objectId == null) {
+            const version   = CommonModel.getUnitAndTileTextureVersion();
+            const tickCount = Time.TimeModel.getTileAnimationTickCount();
+            const skinId    = this._playerIndex;
+
+            const objectType = this._objectType;
+            if ((objectType == null) || (objectType === TileObjectType.Empty)) {
                 this._imgObject.visible = false;
             } else {
                 this._imgObject.visible = true;
-                this._imgObject.source  = CommonModel.getTileObjectImageSource(objectId, false);
+                this._imgObject.source  = CommonModel.getCachedTileObjectImageSource({
+                    version,
+                    skinId,
+                    objectType,
+                    isDark      : false,
+                    shapeId     : this._objectShapeId,
+                    tickCount,
+                });
             }
 
-            const baseId = this._baseViewId;
-            if (baseId == null) {
+            const baseType = this._baseType;
+            if ((baseType == null) || (baseType === TileBaseType.Empty)) {
                 this._imgBase.visible = false;
             } else {
                 this._imgBase.visible = true;
-                this._imgBase.source  = CommonModel.getTileBaseImageSource(baseId, false);
+                this._imgBase.source  = CommonModel.getCachedTileBaseImageSource({
+                    version,
+                    skinId,
+                    baseType,
+                    isDark      : false,
+                    shapeId     : this._baseShapeId,
+                    tickCount,
+                });
             }
         }
     }

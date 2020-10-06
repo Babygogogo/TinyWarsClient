@@ -2,61 +2,59 @@
 namespace TinyWars.MapEditor.MeProxy {
     import NetManager   = Network.Manager;
     import NetCodes     = Network.Codes;
-    import Helpers      = Utility.Helpers;
-    import Types        = Utility.Types;
-    import ProtoManager = Utility.ProtoManager;
     import ProtoTypes   = Utility.ProtoTypes;
     import Notify       = Utility.Notify;
+    import NetMessage   = ProtoTypes.NetMessage;
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: NetCodes.S_MeGetDataList,    callback: _onSMeGetDataList },
-            { msgCode: NetCodes.S_MeGetData,        callback: _onSMeGetData },
-            { msgCode: NetCodes.S_MeSaveMap,        callback: _onSMeSaveMap },
+            { msgCode: NetCodes.S_MeGetMapDataList, callback: _onSMeGetMapDataList },
+            { msgCode: NetCodes.S_MeGetMapData,     callback: _onSMeGetMapData },
+            { msgCode: NetCodes.S_MeSubmitMap,      callback: _onSMeSubmitMap },
         ], MeProxy);
     }
 
-    export function reqGetDataList(): void {
+    export function reqMeGetMapDataList(): void {
         NetManager.send({
-            C_MeGetDataList: {},
+            C_MeGetMapDataList: {},
         });
     }
-    function _onSMeGetDataList(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_MeGetDataList;
+    function _onSMeGetMapDataList(e: egret.Event): void {
+        const data = e.data as NetMessage.IS_MeGetMapDataList;
         if (!data.errorCode) {
             MeModel.resetDataList(data.dataList);
             Notify.dispatch(Notify.Type.SMeGetDataList, data);
         }
     }
 
-    export function reqGetData(slotIndex: number): void {
+    export function reqMeGetMapData(slotIndex: number): void {
         NetManager.send({
-            C_MeGetData: {
+            C_MeGetMapData: {
                 slotIndex,
             },
         });
     }
-    function _onSMeGetData(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_MeGetData;
+    function _onSMeGetMapData(e: egret.Event): void {
+        const data = e.data as NetMessage.IS_MeGetMapData;
         if (!data.errorCode) {
             MeModel.updateData(data.slotIndex, data.data);
             Notify.dispatch(Notify.Type.SMeGetData, data);
         }
     }
 
-    export function reqSaveMap(slotIndex: number, mapRawData: Types.MapRawData, needReview: boolean): void {
+    export function reqMeSubmitMap(slotIndex: number, mapRawData: ProtoTypes.Map.IMapRawData, needReview: boolean): void {
         NetManager.send({
-            C_MeSaveMap: {
+            C_MeSubmitMap: {
                 slotIndex,
                 needReview,
                 mapRawData,
             },
         });
     }
-    function _onSMeSaveMap(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_MeSaveMap;
+    function _onSMeSubmitMap(e: egret.Event): void {
+        const data = e.data as NetMessage.IS_MeSubmitMap;
         if (!data.errorCode) {
-            Notify.dispatch(Notify.Type.SMeSaveMap, data);
+            Notify.dispatch(Notify.Type.SMeSubmitMap, data);
         }
     }
 }

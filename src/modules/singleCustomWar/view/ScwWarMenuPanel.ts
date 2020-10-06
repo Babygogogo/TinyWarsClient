@@ -816,12 +816,12 @@ namespace TinyWars.SingleCustomWar {
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
             const currValue     = war.getSettingsInitialEnergyPercentage(playerIndex);
-            const minValue      = CommonConstants.WarRuleInitialEnergyMinLimit;
-            const maxValue      = CommonConstants.WarRuleInitialEnergyMaxLimit;
+            const minValue      = CommonConstants.WarRuleInitialEnergyPercentageMinLimit;
+            const maxValue      = CommonConstants.WarRuleInitialEnergyPercentageMaxLimit;
             return {
                 titleText               : Lang.getText(Lang.Type.B0180),
                 infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialEnergyDefault),
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialEnergyPercentageDefault),
                 callbackOnTouchedTitle  : !war.getIsSinglePlayerCheating()
                     ? null
                     : () => {

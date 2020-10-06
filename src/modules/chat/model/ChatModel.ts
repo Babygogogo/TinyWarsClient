@@ -5,14 +5,15 @@ namespace TinyWars.Chat.ChatModel {
     import FloatText    = Utility.FloatText;
     import Types        = Utility.Types;
     import ChatCategory = Types.ChatMessageToCategory;
-    import ChatMessage  = ProtoTypes.IChatMessage;
+    import NetMessage   = ProtoTypes.NetMessage;
+    import IChatMessage = ProtoTypes.Chat.IChatMessage;
 
-    type MessageDict                    = Map<number, ChatMessage[]>;
+    type MessageDict                    = Map<number, IChatMessage[]>;
     const _allMessageDict               = new Map<ChatCategory, MessageDict>();
     const _allProgressDict              = new Map<ChatCategory, Map<number, number>>();
     let _timestampForNextSetAllMessages = 0;
 
-    export function setAllMessages(msgList: ChatMessage[]): void {
+    export function setAllMessages(msgList: IChatMessage[]): void {
         _allMessageDict.clear();
 
         for (const msg of msgList || []) {
@@ -27,7 +28,7 @@ namespace TinyWars.Chat.ChatModel {
         return _timestampForNextSetAllMessages;
     }
 
-    export function updateOnAddMessage(msg: ChatMessage, showFloatText: boolean): void {
+    export function updateOnAddMessage(msg: IChatMessage, showFloatText: boolean): void {
         const fromUserId = msg.fromUserId;
         if (fromUserId == null) {
             Logger.warn(`ChatModel.updateOnAddMessage() invalid msg!`, msg);
@@ -74,13 +75,13 @@ namespace TinyWars.Chat.ChatModel {
         return message ? message.timestamp || 0 : 0;
     }
 
-    export function resetAllReadProgress(list: ProtoTypes.IChatReadProgress[]): void {
+    export function resetAllReadProgress(list: ProtoTypes.Chat.IChatReadProgress[]): void {
         _allProgressDict.clear();
         for (const p of list || []) {
             setReadProgress(p);
         }
     }
-    export function setReadProgress(progress: ProtoTypes.IChatReadProgress): void {
+    export function setReadProgress(progress: ProtoTypes.Chat.IChatReadProgress): void {
         const toCategory    = progress.toCategory;
         const toTarget      = progress.toTarget;
         const timestamp     = progress.timestamp;
@@ -118,10 +119,10 @@ namespace TinyWars.Chat.ChatModel {
         }
     }
 
-    function addMessage(toCategory: ChatCategory, msg: ChatMessage, toTarget: number): void {
+    function addMessage(toCategory: ChatCategory, msg: IChatMessage, toTarget: number): void {
         const dict = _allMessageDict.get(toCategory);
         if (!dict) {
-            _allMessageDict.set(toCategory, new Map<number, ChatMessage[]>([[toTarget, [msg]]]));
+            _allMessageDict.set(toCategory, new Map<number, IChatMessage[]>([[toTarget, [msg]]]));
         } else {
             if (dict.has(toTarget)) {
                 dict.get(toTarget).push(msg);

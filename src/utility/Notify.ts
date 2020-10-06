@@ -103,7 +103,7 @@ namespace TinyWars.Utility.Notify {
 
         SMeGetDataList,
         SMeGetData,
-        SMeSaveMap,
+        SMeSubmitMap,
 
         SMmChangeAvailability,
         SMmReloadAllMaps,

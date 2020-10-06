@@ -74,7 +74,7 @@ namespace TinyWars.MapEditor {
             const dataList: DataForTileBaseRenderer[] = [];
             for (const [mapFileName] of WarMap.WarMapModel.getExtraDataDict()) {
                 dataList.push({
-                    mapFileName,
+                    mapId: mapFileName,
                     mapName     : await WarMap.WarMapModel.getMapNameInCurrentLanguage(mapFileName),
                     panel       : this,
                 });
@@ -89,9 +89,9 @@ namespace TinyWars.MapEditor {
     }
 
     type DataForTileBaseRenderer = {
-        mapFileName : string;
-        mapName     : string;
-        panel       : MeImportPanel;
+        mapId   : number;
+        mapName : string;
+        panel   : MeImportPanel;
     }
 
     class MapRenderer extends eui.ItemRenderer {
@@ -104,16 +104,18 @@ namespace TinyWars.MapEditor {
         }
 
         public onItemTapEvent(): void {
-            const data          = this.data as DataForTileBaseRenderer;
-            const mapFileName   = data.mapFileName;
+            const data = this.data as DataForTileBaseRenderer;
             Common.CommonConfirmPanel.show({
                 title   : Lang.getText(Lang.Type.B0088),
                 content : Lang.getText(Lang.Type.A0095) + `\n"${data.mapName}"`,
                 callback: async () => {
                     const war = MeManager.getWar();
-                    war.stopRunning()
-                        .init(await WarMap.WarMapModel.getRawData(mapFileName) as Types.MapRawData, war.getSlotIndex(), war.getConfigVersion(), war.getIsReview())
-                        .startRunning()
+                    war.stopRunning();
+                    await war.initWithMapEditorData({
+                        mapRawData  : await WarMap.WarMapModel.getRawData(data.mapId),
+                        slotIndex   : war.getMapSlotIndex(),
+                    });
+                    war.startRunning()
                         .startRunningView();
 
                     data.panel.close();

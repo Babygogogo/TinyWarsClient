@@ -49,7 +49,7 @@ namespace TinyWars.BaseWar {
         }
 
         public startRunning(war: BwWar): void {
-            this._war = war;
+            this._setWar(war);
             for (const [, player] of this._players) {
                 player.startRunning(war);
             }
@@ -84,6 +84,13 @@ namespace TinyWars.BaseWar {
             return { players };
         }
 
+        private _setWar(war: BwWar): void {
+            this._war = war;
+        }
+        protected _getWar(): BwWar {
+            return this._war;
+        }
+
         ////////////////////////////////////////////////////////////////////////////////
         // The other public functions.
         ////////////////////////////////////////////////////////////////////////////////
@@ -104,7 +111,7 @@ namespace TinyWars.BaseWar {
         }
 
         public getPlayerInTurn(): BwPlayer {
-            return this.getPlayer(this._war.getTurnManager().getPlayerIndexInTurn());
+            return this.getPlayer(this._getWar().getTurnManager().getPlayerIndexInTurn());
         }
 
         public getTeamIndex(playerIndex: number): number {

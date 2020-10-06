@@ -221,7 +221,16 @@ namespace TinyWars.MapEditor {
             const tileView  = this._tileView;
             if ((mode === DrawerMode.DrawTileBase) || (mode === DrawerMode.DrawTileObject)) {
                 con.visible = true;
-                tileView.init(drawer.getDrawTargetTileBaseViewId(), drawer.getDrawTargetTileObjectViewId());
+
+                const tileBaseData      = drawer.getDrawTargetTileBaseData();
+                const tileObjectData    = drawer.getDrawTargetTileObjectData();
+                tileView.init({
+                    tileBaseShapeId     : tileBaseData.shapeId,
+                    tileBaseType        : tileBaseData.baseType,
+                    tileObjectShapeId   : tileObjectData.shapeId,
+                    tileObjectType      : tileObjectData.objectType,
+                    playerIndex         : tileObjectData.playerIndex,
+                });
                 tileView.updateView();
             } else {
                 con.visible = false;
@@ -243,27 +252,27 @@ namespace TinyWars.MapEditor {
         }
 
         private _updateBtnModeDrawUnit(): void {
-            this._btnModeDrawUnit.visible = !this._war.getIsReview();
+            this._btnModeDrawUnit.visible = !this._war.getIsReviewingMap();
         }
 
         private _updateBtnModeDrawTileObject(): void {
-            this._btnModeDrawTileObject.visible = !this._war.getIsReview();
+            this._btnModeDrawTileObject.visible = !this._war.getIsReviewingMap();
         }
 
         private _updateBtnModePreview(): void {
-            this._btnModePreview.visible = !this._war.getIsReview();
+            this._btnModePreview.visible = !this._war.getIsReviewingMap();
         }
 
         private _updateBtnDrawTileBase(): void {
-            this._btnModeDrawTileBase.visible = !this._war.getIsReview();
+            this._btnModeDrawTileBase.visible = !this._war.getIsReviewingMap();
         }
 
         private _updateBtnDeleteUnit(): void {
-            this._btnModeDeleteUnit.visible = !this._war.getIsReview();
+            this._btnModeDeleteUnit.visible = !this._war.getIsReviewingMap();
         }
 
         private _updateBtnDeleteTileObject(): void {
-            this._btnModeDeleteTileObject.visible = !this._war.getIsReview();
+            this._btnModeDeleteTileObject.visible = !this._war.getIsReviewingMap();
         }
 
         private _updateBtnMenu(): void {
@@ -275,16 +284,22 @@ namespace TinyWars.MapEditor {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _initTileView(): void {
             const tileView = this._tileView;
-            tileView.init(null, null);
+            tileView.init({
+                tileBaseType        : null,
+                tileBaseShapeId     : null,
+                tileObjectType      : null,
+                tileObjectShapeId   : null,
+                playerIndex         : null,
+            });
             tileView.startRunningView();
         }
         private _initUnitView(): void {
             const unitView = this._unitView;
             unitView.init(new MeUnit().init({
-                gridX   : 0,
-                gridY   : 0,
-                viewId  : Utility.ConfigManager.getUnitViewId(Types.UnitType.Infantry, 1),
-                unitId  : 0,
+                gridIndex   : { x: 0, y: 0 },
+                unitId      : 0,
+                unitType    : Types.UnitType.Infantry,
+                playerIndex : Utility.ConfigManager.COMMON_CONSTANTS.WarFirstPlayerIndex,
             }, this._war.getConfigVersion()));
         }
     }

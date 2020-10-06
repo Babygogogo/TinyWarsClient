@@ -55,7 +55,7 @@ namespace TinyWars.MapManagement {
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
             const war = MapEditor.MeManager.getWar();
-            WarMap.WarMapProxy.reqReviewMap(war.getDesignerUserId(), war.getSlotIndex(), war.getModifiedTime(), true, this._inputReason.text);
+            WarMap.WarMapProxy.reqReviewMap(war.getMapDesignerUserId(), war.getMapSlotIndex(), war.getMapModifiedTime(), true, this._inputReason.text);
             this.close();
         }
     }

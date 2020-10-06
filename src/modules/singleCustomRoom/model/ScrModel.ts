@@ -61,7 +61,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         export function getCreateWarPlayerRule(playerIndex: number): IDataForPlayerRule {
-            return BwSettingsHelper.getPlayerRule(getCreateWarData().settingsForCommon, playerIndex);
+            return BwSettingsHelper.getPlayerRule(getCreateWarData().settingsForCommon.warRule, playerIndex);
         }
         export function getCreateWarPlayerInfo(playerIndex: number): IWarPlayerInitialInfo {
             return getCreateWarData().playerInfoList.find(v => v.playerIndex === playerIndex);
@@ -149,7 +149,7 @@ namespace TinyWars.SingleCustomRoom {
             setCreateWarPresetWarRuleId(null);
 
             const playerRule        = getCreateWarPlayerRule(playerIndex);
-            playerRule.teamIndex    = playerRule.teamIndex % (BwSettingsHelper.getPlayersCount(getCreateWarData().settingsForCommon)) + 1;
+            playerRule.teamIndex    = playerRule.teamIndex % (BwSettingsHelper.getPlayersCount(getCreateWarData().settingsForCommon.warRule)) + 1;
 
             Notify.dispatch(Notify.Type.ScrCreateWarPlayerInfoListChanged);
         }

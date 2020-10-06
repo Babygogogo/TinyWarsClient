@@ -94,7 +94,7 @@ namespace TinyWars.BaseWar {
             this._setDamageChartCfg(damageChartCfg);
             this._setBuildableTileCfg(ConfigManager.getBuildableTileCfgs(configVersion, unitType));
             this._setVisionBonusCfg(ConfigManager.getVisionBonusCfg(configVersion, unitType));
-            this._setUnitId(unitId);
+            this.setUnitId(unitId);
             this._setPlayerIndex(playerIndex);
             this._setWar(undefined);
             this.setIsDiving(data.isDiving || ConfigManager.checkIsUnitDivingByDefaultWithTemplateCfg(unitTemplateCfg));
@@ -270,7 +270,7 @@ namespace TinyWars.BaseWar {
         public getUnitId(): number {
             return this._unitId;
         }
-        private _setUnitId(id: number): void {
+        public setUnitId(id: number): void {
             this._unitId = id;
         }
 
@@ -1086,10 +1086,6 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////
         public checkCanLaunchSiloOnTile(tile: BwTile): boolean {
             return (this._templateCfg.canLaunchSilo === 1) && (tile.getType() === TileType.Silo);
-        }
-
-        public getTileObjectViewIdAfterLaunchSilo(): number {
-            return Utility.ConfigManager.getTileObjectViewId(Types.TileObjectType.EmptySilo, 0);
         }
 
         ////////////////////////////////////////////////////////////////////////////////

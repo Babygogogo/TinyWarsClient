@@ -6,6 +6,7 @@ namespace TinyWars.Chat.ChatProxy {
     import Types        = Utility.Types;
     import NetManager   = Network.Manager;
     import ActionCode   = Network.Codes;
+    import NetMessage   = ProtoTypes.NetMessage;
 
     export function init(): void {
         NetManager.addListeners([
@@ -28,7 +29,7 @@ namespace TinyWars.Chat.ChatProxy {
         }, });
     }
     function _onSChatAddMessage(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_ChatAddMessage;
+        const data = e.data as NetMessage.IS_ChatAddMessage;
         if (!data.errorCode) {
             ChatModel.updateOnAddMessage(data.message, true);
             Notify.dispatch(NotifyType.SChatAddMessage, data);
@@ -39,7 +40,7 @@ namespace TinyWars.Chat.ChatProxy {
         NetManager.send({ C_ChatGetAllMessages: {} });
     }
     function _onSChatGetAllMessages(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_ChatGetAllMessages;
+        const data = e.data as NetMessage.IS_ChatGetAllMessages;
         if (!data.errorCode) {
             ChatModel.setAllMessages(data.messageList);
             Notify.dispatch(NotifyType.SChatGetAllMessages, data);
@@ -60,7 +61,7 @@ namespace TinyWars.Chat.ChatProxy {
         } });
     }
     function _onSChatUpdateReadProgress(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_ChatUpdateReadProgress;
+        const data = e.data as NetMessage.IS_ChatUpdateReadProgress;
         if (!data.errorCode) {
             ChatModel.setReadProgress(data.progress);
             Notify.dispatch(NotifyType.SChatUpdateReadProgress, data);
@@ -71,7 +72,7 @@ namespace TinyWars.Chat.ChatProxy {
         NetManager.send({ C_ChatGetAllReadProgressList: {} });
     }
     function _onSChatGetAllReadProgressList(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_ChatGetAllReadProgressList;
+        const data = e.data as NetMessage.IS_ChatGetAllReadProgressList;
         if (!data.errorCode) {
             ChatModel.resetAllReadProgress(data.list);
             Notify.dispatch(NotifyType.SChatGetAllReadProgressList, data);

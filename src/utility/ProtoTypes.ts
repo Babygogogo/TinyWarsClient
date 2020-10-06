@@ -3114,14 +3114,8 @@ export declare namespace WarRule {
         /** DataForWarRuleAvailability canScw */
         canScw?: (boolean|null);
 
-        /** DataForWarRuleAvailability canRankT1 */
-        canRankT1?: (boolean|null);
-
-        /** DataForWarRuleAvailability canRankT2 */
-        canRankT2?: (boolean|null);
-
-        /** DataForWarRuleAvailability canRankT3 */
-        canRankT3?: (boolean|null);
+        /** DataForWarRuleAvailability canRank */
+        canRank?: (boolean|null);
 
         /** DataForWarRuleAvailability canWr */
         canWr?: (boolean|null);
@@ -3142,14 +3136,8 @@ export declare namespace WarRule {
         /** DataForWarRuleAvailability canScw. */
         public canScw: boolean;
 
-        /** DataForWarRuleAvailability canRankT1. */
-        public canRankT1: boolean;
-
-        /** DataForWarRuleAvailability canRankT2. */
-        public canRankT2: boolean;
-
-        /** DataForWarRuleAvailability canRankT3. */
-        public canRankT3: boolean;
+        /** DataForWarRuleAvailability canRank. */
+        public canRank: boolean;
 
         /** DataForWarRuleAvailability canWr. */
         public canWr: boolean;

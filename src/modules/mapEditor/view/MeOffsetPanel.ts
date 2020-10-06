@@ -68,14 +68,17 @@ namespace TinyWars.MapEditor {
             this.close();
         }
 
-        private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
+        private async _onTouchedBtnConfirm(e: egret.TouchEvent): Promise<void> {
             const offsetX   = this._offsetX;
             const offsetY   = this._offsetY;
             const war       = MeManager.getWar();
             if ((offsetX !== 0) || (offsetY !== 0)) {
-                war.stopRunning()
-                    .init(MeUtility.addOffset(war.getField().serialize(), offsetX, offsetY), war.getSlotIndex(), war.getConfigVersion(), war.getIsReview())
-                    .startRunning()
+                war.stopRunning();
+                await war.initWithMapEditorData({
+                    mapRawData  : MeUtility.addOffset(war.serializeForMap(), offsetX, offsetY),
+                    slotIndex   : war.getMapSlotIndex(),
+                 });
+                war.startRunning()
                     .startRunningView();
             }
 
