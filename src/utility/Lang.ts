@@ -578,6 +578,10 @@ namespace TinyWars.Utility.Lang {
             `您确定要切换该部队的下潜状态吗？`,
             `Are you sure to switch the unit's diving state?`,
         ],
+		[Type.A0131]: [
+            `请输入房间密码`,
+            `Please enter the password`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -2105,6 +2109,10 @@ namespace TinyWars.Utility.Lang {
         [Type.B0384]: [
             `公共(中文)`,
             `Public(CN)`,
+        ],
+		[Type.B0406]: [
+            `私人房间`,
+            `Private Room`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

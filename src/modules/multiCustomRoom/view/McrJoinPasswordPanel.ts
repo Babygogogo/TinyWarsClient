@@ -14,10 +14,12 @@ namespace TinyWars.MultiCustomRoom {
 
         private static _instance: McrJoinPasswordPanel;
 
-        private _inputWarPassword   : GameUi.UiLabel;
-        private _labelWarName       : GameUi.UiLabel;
-        private _btnConfirm         : GameUi.UiButton;
-        private _btnCancel          : GameUi.UiButton;
+		private _inputWarPasswordTitle  : GameUi.UiLabel;
+        private _inputWarPassword   	: GameUi.UiLabel;
+        private _labelWarNameTitle  	: GameUi.UiLabel;
+		private _labelWarName       	: GameUi.UiLabel;
+        private _btnConfirm         	: GameUi.UiButton;
+        private _btnCancel          	: GameUi.UiButton;
 
         private _openData: ProtoTypes.IMcrWaitingInfo;
 
@@ -44,6 +46,9 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         protected _onFirstOpened(): void {
+			 this._notifyListeners = [
+                { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
+            ];
             this._uiListeners = [
                 { ui: this._btnCancel,        callback: this._onTouchedBtnCancel },
                 { ui: this._btnConfirm,       callback: this._onTouchedBtnConfirm },
@@ -52,8 +57,12 @@ namespace TinyWars.MultiCustomRoom {
 
         protected _onOpened(): void {
             this._updateView();
+			this._updateComponentsForLanguage();
         }
 
+        ////////////////////////////////////////////////////////////////////////////////
+        // Callbacks.
+        ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnHelpFog(e: egret.TouchEvent): void {
             HelpPanel.show({
                 title  : Lang.getText(Lang.Type.B0020),
@@ -72,6 +81,10 @@ namespace TinyWars.MultiCustomRoom {
             McrJoinPasswordPanel.hide();
         }
 
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateComponentsForLanguage();
+        }
+
         private async _onTouchedBtnConfirm(e: egret.TouchEvent): Promise<void> {
             if (this._inputWarPassword.text !== this._openData.warPassword) {
                 FloatText.show(Lang.getText(Lang.Type.A0017));
@@ -83,7 +96,18 @@ namespace TinyWars.MultiCustomRoom {
                 McrJoinSettingsPanel.show();
             }
         }
-
+		
+        ////////////////////////////////////////////////////////////////////////////////
+        // Private functions.
+        ////////////////////////////////////////////////////////////////////////////////
+        private _updateComponentsForLanguage(): void {
+			this._labelTitle.text				= Lang.getText(Lang.Type.A0131);
+            this._inputWarPasswordTitle.text  	= Lang.getText(Lang.Type.B0186);
+            this._labelWarNameTitle.text      	= Lang.getText(Lang.Type.B0185);
+            this._btnConfirm.text 				= `${Lang.getText(Lang.Type.B0026)}:`;
+            this._btnCancel.text         		= `${Lang.getText(Lang.Type.B0154)}:`;
+        }
+		
         private _updateView(): void {
             const info                  = this._openData;
             this._inputWarPassword.text = "";
@@ -93,5 +117,6 @@ namespace TinyWars.MultiCustomRoom {
                 WarMapModel.getMapNameInLanguage(info.mapFileName).then(v => this._labelWarName.text = v);
             }
         }
+		
     }
 }
