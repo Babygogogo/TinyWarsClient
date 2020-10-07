@@ -58,7 +58,7 @@
                         </GameUi:UiButton>
                         <GameUi:UiLabel id="_labelName" text="地图名称" x="10" size="16" verticalCenter="0"
                                         textColor.down="0x00ff00" maxTextWidth="150" />
-                        <GameUi:UiLabel id="_labelPassword" text="密码" x="5" size="10" y="0" textColor="0xff0000" />
+                        <GameUi:UiLabel id="_labelIfPrivateRoom" text="私人房间" x="5" size="10" y="0" textColor="0xff0000" />
                         <GameUi:UiButton id="_btnNext" label="&gt;&gt;" x="160" verticalCenter="0" visible.up="false">
                             <e:skinName>
                                 <e:Skin states="up,down,disabled">

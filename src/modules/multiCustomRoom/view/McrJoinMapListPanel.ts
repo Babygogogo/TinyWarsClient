@@ -242,10 +242,10 @@ namespace TinyWars.MultiCustomRoom {
     }
 
     class WarRenderer extends eui.ItemRenderer {
-        private _btnChoose      : GameUi.UiButton;
-        private _btnNext        : GameUi.UiButton;
-        private _labelName      : GameUi.UiLabel;
-        private _labelPassword  : GameUi.UiLabel;
+        private _btnChoose      		: GameUi.UiButton;
+        private _btnNext        		: GameUi.UiButton;
+        private _labelName      		: GameUi.UiLabel;
+        private _labelIfPrivateRoom  	: GameUi.UiLabel;
 
         protected childrenCreated(): void {
             super.childrenCreated();
@@ -260,7 +260,8 @@ namespace TinyWars.MultiCustomRoom {
             const data                  = this.data as DataForWarRenderer;
             const warInfo               = data.warInfo;
             this.currentState           = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
-            this._labelPassword.visible = (warInfo.warPassword != null) && (warInfo.warPassword.length > 0);
+            this._labelIfPrivateRoom.visible = (warInfo.warPassword != null) && (warInfo.warPassword.length > 0);
+			this._labelIfPrivateRoom.text    = Lang.getText(Lang.Type.B0406);
             if (warInfo.warName) {
                 this._labelName.text = warInfo.warName;
             } else {
