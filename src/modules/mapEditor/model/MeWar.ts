@@ -24,12 +24,6 @@ namespace TinyWars.MapEditor {
                 return undefined;
             }
 
-            const settingsForMultiPlayer = data.settingsForMultiPlayer;
-            if (!settingsForMultiPlayer) {
-                Logger.error(`MeWar.init() invalid settingsForMultiPlayer! ${JSON.stringify(data)}`);
-                return undefined;
-            }
-
             const mapSizeAndMaxPlayerIndex = await BwHelpers.getMapSizeAndMaxPlayerIndex(data);
             if (!mapSizeAndMaxPlayerIndex) {
                 Logger.error(`MeWar.init() invalid war data! ${JSON.stringify(data)}`);

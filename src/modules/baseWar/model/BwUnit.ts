@@ -226,7 +226,11 @@ namespace TinyWars.BaseWar {
 
         public getPlayer(): BwPlayer {
             const war = this.getWar();
-            return war ? war.getPlayer(this.getPlayerIndex()) : null;
+            if (war == null) {
+                Logger.error(`BwUnit.getPlayer() empty war.`);
+                return undefined;
+            }
+            return war.getPlayer(this.getPlayerIndex());
         }
 
         private _setTemplateCfg(templateCfg: Types.UnitTemplateCfg): void {

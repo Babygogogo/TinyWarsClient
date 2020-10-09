@@ -10650,108 +10650,6 @@ export declare namespace Structure {
         public toJSON(): { [k: string]: any };
     }
 
-    /** Properties of a WarPlayerInitialInfo. */
-    interface IWarPlayerInitialInfo {
-
-        /** WarPlayerInitialInfo playerIndex */
-        playerIndex?: (number|null);
-
-        /** WarPlayerInitialInfo userId */
-        userId?: (number|null);
-
-        /** WarPlayerInitialInfo coId */
-        coId?: (number|null);
-    }
-
-    /** Represents a WarPlayerInitialInfo. */
-    class WarPlayerInitialInfo implements IWarPlayerInitialInfo {
-
-        /**
-         * Constructs a new WarPlayerInitialInfo.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: Structure.IWarPlayerInitialInfo);
-
-        /** WarPlayerInitialInfo playerIndex. */
-        public playerIndex: number;
-
-        /** WarPlayerInitialInfo userId. */
-        public userId: number;
-
-        /** WarPlayerInitialInfo coId. */
-        public coId: number;
-
-        /**
-         * Creates a new WarPlayerInitialInfo instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns WarPlayerInitialInfo instance
-         */
-        public static create(properties?: Structure.IWarPlayerInitialInfo): Structure.WarPlayerInitialInfo;
-
-        /**
-         * Encodes the specified WarPlayerInitialInfo message. Does not implicitly {@link Structure.WarPlayerInitialInfo.verify|verify} messages.
-         * @param message WarPlayerInitialInfo message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: Structure.IWarPlayerInitialInfo, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Encodes the specified WarPlayerInitialInfo message, length delimited. Does not implicitly {@link Structure.WarPlayerInitialInfo.verify|verify} messages.
-         * @param message WarPlayerInitialInfo message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: Structure.IWarPlayerInitialInfo, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Decodes a WarPlayerInitialInfo message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns WarPlayerInitialInfo
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): Structure.WarPlayerInitialInfo;
-
-        /**
-         * Decodes a WarPlayerInitialInfo message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns WarPlayerInitialInfo
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): Structure.WarPlayerInitialInfo;
-
-        /**
-         * Verifies a WarPlayerInitialInfo message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a WarPlayerInitialInfo message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns WarPlayerInitialInfo
-         */
-        public static fromObject(object: { [k: string]: any }): Structure.WarPlayerInitialInfo;
-
-        /**
-         * Creates a plain object from a WarPlayerInitialInfo message. Also converts values to other types if specified.
-         * @param message WarPlayerInitialInfo
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: Structure.WarPlayerInitialInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this WarPlayerInitialInfo to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
-    }
-
     /** Properties of a DataForModifyUnit. */
     interface IDataForModifyUnit {
 
@@ -11087,6 +10985,120 @@ export declare namespace Structure {
          */
         public toJSON(): { [k: string]: any };
     }
+
+    /** Properties of a DataForPlayerInRoom. */
+    interface IDataForPlayerInRoom {
+
+        /** DataForPlayerInRoom playerIndex */
+        playerIndex?: (number|null);
+
+        /** DataForPlayerInRoom userId */
+        userId?: (number|null);
+
+        /** DataForPlayerInRoom coId */
+        coId?: (number|null);
+
+        /** DataForPlayerInRoom isReady */
+        isReady?: (boolean|null);
+
+        /** DataForPlayerInRoom unitAndTileSkinId */
+        unitAndTileSkinId?: (number|null);
+    }
+
+    /** Represents a DataForPlayerInRoom. */
+    class DataForPlayerInRoom implements IDataForPlayerInRoom {
+
+        /**
+         * Constructs a new DataForPlayerInRoom.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: Structure.IDataForPlayerInRoom);
+
+        /** DataForPlayerInRoom playerIndex. */
+        public playerIndex: number;
+
+        /** DataForPlayerInRoom userId. */
+        public userId: number;
+
+        /** DataForPlayerInRoom coId. */
+        public coId: number;
+
+        /** DataForPlayerInRoom isReady. */
+        public isReady: boolean;
+
+        /** DataForPlayerInRoom unitAndTileSkinId. */
+        public unitAndTileSkinId: number;
+
+        /**
+         * Creates a new DataForPlayerInRoom instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns DataForPlayerInRoom instance
+         */
+        public static create(properties?: Structure.IDataForPlayerInRoom): Structure.DataForPlayerInRoom;
+
+        /**
+         * Encodes the specified DataForPlayerInRoom message. Does not implicitly {@link Structure.DataForPlayerInRoom.verify|verify} messages.
+         * @param message DataForPlayerInRoom message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: Structure.IDataForPlayerInRoom, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified DataForPlayerInRoom message, length delimited. Does not implicitly {@link Structure.DataForPlayerInRoom.verify|verify} messages.
+         * @param message DataForPlayerInRoom message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: Structure.IDataForPlayerInRoom, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a DataForPlayerInRoom message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns DataForPlayerInRoom
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): Structure.DataForPlayerInRoom;
+
+        /**
+         * Decodes a DataForPlayerInRoom message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns DataForPlayerInRoom
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): Structure.DataForPlayerInRoom;
+
+        /**
+         * Verifies a DataForPlayerInRoom message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a DataForPlayerInRoom message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns DataForPlayerInRoom
+         */
+        public static fromObject(object: { [k: string]: any }): Structure.DataForPlayerInRoom;
+
+        /**
+         * Creates a plain object from a DataForPlayerInRoom message. Also converts values to other types if specified.
+         * @param message DataForPlayerInRoom
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: Structure.DataForPlayerInRoom, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this DataForPlayerInRoom to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
 }
 
 /** Properties of a MultiCustomRoom. */
@@ -11175,120 +11187,6 @@ export declare class MultiCustomRoom implements IMultiCustomRoom {
 
 export declare namespace MultiCustomRoom {
 
-    /** Properties of a DataForPlayerInRoom. */
-    interface IDataForPlayerInRoom {
-
-        /** DataForPlayerInRoom playerIndex */
-        playerIndex?: (number|null);
-
-        /** DataForPlayerInRoom userId */
-        userId?: (number|null);
-
-        /** DataForPlayerInRoom coId */
-        coId?: (number|null);
-
-        /** DataForPlayerInRoom isReady */
-        isReady?: (boolean|null);
-
-        /** DataForPlayerInRoom unitAndTileSkinId */
-        unitAndTileSkinId?: (number|null);
-    }
-
-    /** Represents a DataForPlayerInRoom. */
-    class DataForPlayerInRoom implements IDataForPlayerInRoom {
-
-        /**
-         * Constructs a new DataForPlayerInRoom.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: MultiCustomRoom.IDataForPlayerInRoom);
-
-        /** DataForPlayerInRoom playerIndex. */
-        public playerIndex: number;
-
-        /** DataForPlayerInRoom userId. */
-        public userId: number;
-
-        /** DataForPlayerInRoom coId. */
-        public coId: number;
-
-        /** DataForPlayerInRoom isReady. */
-        public isReady: boolean;
-
-        /** DataForPlayerInRoom unitAndTileSkinId. */
-        public unitAndTileSkinId: number;
-
-        /**
-         * Creates a new DataForPlayerInRoom instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns DataForPlayerInRoom instance
-         */
-        public static create(properties?: MultiCustomRoom.IDataForPlayerInRoom): MultiCustomRoom.DataForPlayerInRoom;
-
-        /**
-         * Encodes the specified DataForPlayerInRoom message. Does not implicitly {@link MultiCustomRoom.DataForPlayerInRoom.verify|verify} messages.
-         * @param message DataForPlayerInRoom message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: MultiCustomRoom.IDataForPlayerInRoom, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Encodes the specified DataForPlayerInRoom message, length delimited. Does not implicitly {@link MultiCustomRoom.DataForPlayerInRoom.verify|verify} messages.
-         * @param message DataForPlayerInRoom message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: MultiCustomRoom.IDataForPlayerInRoom, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Decodes a DataForPlayerInRoom message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns DataForPlayerInRoom
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): MultiCustomRoom.DataForPlayerInRoom;
-
-        /**
-         * Decodes a DataForPlayerInRoom message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns DataForPlayerInRoom
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): MultiCustomRoom.DataForPlayerInRoom;
-
-        /**
-         * Verifies a DataForPlayerInRoom message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a DataForPlayerInRoom message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns DataForPlayerInRoom
-         */
-        public static fromObject(object: { [k: string]: any }): MultiCustomRoom.DataForPlayerInRoom;
-
-        /**
-         * Creates a plain object from a DataForPlayerInRoom message. Also converts values to other types if specified.
-         * @param message DataForPlayerInRoom
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: MultiCustomRoom.DataForPlayerInRoom, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this DataForPlayerInRoom to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
-    }
-
     /** Properties of a McrRoomInfo. */
     interface IMcrRoomInfo {
 
@@ -11311,7 +11209,7 @@ export declare namespace MultiCustomRoom {
         settingsForMultiPlayer?: (WarSettings.ISettingsForMultiPlayer|null);
 
         /** McrRoomInfo playerDataList */
-        playerDataList?: (MultiCustomRoom.IDataForPlayerInRoom[]|null);
+        playerDataList?: (Structure.IDataForPlayerInRoom[]|null);
     }
 
     /** Represents a McrRoomInfo. */
@@ -11342,7 +11240,7 @@ export declare namespace MultiCustomRoom {
         public settingsForMultiPlayer?: (WarSettings.ISettingsForMultiPlayer|null);
 
         /** McrRoomInfo playerDataList. */
-        public playerDataList: MultiCustomRoom.IDataForPlayerInRoom[];
+        public playerDataList: Structure.IDataForPlayerInRoom[];
 
         /**
          * Creates a new McrRoomInfo instance using the specified properties.
@@ -30214,7 +30112,7 @@ export declare namespace NetMessage {
         settingsForSinglePlayer?: (WarSettings.ISettingsForSinglePlayer|null);
 
         /** C_ScrCreateWar playerInfoList */
-        playerInfoList?: (Structure.IWarPlayerInitialInfo[]|null);
+        playerInfoList?: (Structure.IDataForPlayerInRoom[]|null);
     }
 
     /** Represents a C_ScrCreateWar. */
@@ -30233,7 +30131,7 @@ export declare namespace NetMessage {
         public settingsForSinglePlayer?: (WarSettings.ISettingsForSinglePlayer|null);
 
         /** C_ScrCreateWar playerInfoList. */
-        public playerInfoList: Structure.IWarPlayerInitialInfo[];
+        public playerInfoList: Structure.IDataForPlayerInRoom[];
 
         /**
          * Creates a new C_ScrCreateWar instance using the specified properties.

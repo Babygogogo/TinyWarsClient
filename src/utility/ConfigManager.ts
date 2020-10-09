@@ -1047,13 +1047,13 @@ namespace TinyWars.Utility.ConfigManager {
         } else {
             const ticksPerFrame     = cfgForFrame.ticksPerFrame;
             const textForDark       = isDark ? `state01` : `state00`;
-            const textForShapeId    = `shape${Helpers.getNumText(shapeId)}`;
+            const textForShapeId    = `shape${Helpers.getNumText(shapeId || 0)}`;
             const textForVersion    = `ver${Helpers.getNumText(version)}`;
             const textForSkin       = `skin${Helpers.getNumText(skinId)}`;
             const textForType       = `type${Helpers.getNumText(baseType)}`;
             const textForFrame      = ticksPerFrame < Number.MAX_VALUE
                 ? `frame${Helpers.getNumText(Math.floor((tickCount % (cfgForFrame.framesCount * ticksPerFrame)) / ticksPerFrame))}`
-                : `frame01`;
+                : `frame00`;
             return `tileBase_${textForVersion}_${textForType}_${textForDark}_${textForShapeId}_${textForSkin}_${textForFrame}`;
         }
     }
@@ -1085,7 +1085,7 @@ namespace TinyWars.Utility.ConfigManager {
             const textForType       = `type${Helpers.getNumText(objectType)}`;
             const textForFrame      = ticksPerFrame < Number.MAX_VALUE
                 ? `frame${Helpers.getNumText(Math.floor((tickCount % (cfgForFrame.framesCount * ticksPerFrame)) / ticksPerFrame))}`
-                : `frame01`;
+                : `frame00`;
             return `tileObject_${textForVersion}_${textForType}_${textForDark}_${textForShapeId}_${textForSkin}_${textForFrame}`;
         }
     }
@@ -1118,7 +1118,7 @@ namespace TinyWars.Utility.ConfigManager {
             const textForVersion    = `ver${Helpers.getNumText(version)}`;
             const textForSkin       = `skin${Helpers.getNumText(skinId)}`;
             const textForType       = `type${Helpers.getNumText(unitType)}`;
-            const textForFrame      = `frame${Math.floor((tickCount % (cfgForFrame.framesCount * ticksPerFrame)) / ticksPerFrame)}`;
+            const textForFrame      = `frame${Helpers.getNumText(Math.floor((tickCount % (cfgForFrame.framesCount * ticksPerFrame)) / ticksPerFrame))}`;
             return `unit_${textForVersion}_${textForType}_${textForDark}_${textForMoving}_${textForSkin}_${textForFrame}`;
         }
     }

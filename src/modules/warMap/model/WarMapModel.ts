@@ -26,7 +26,7 @@ namespace TinyWars.WarMap {
 
         export function resetExtraDataDict(dataList: IMapExtraData[]): void {
             _EXTRA_DATA_DICT.clear();
-            for (const data of dataList) {
+            for (const data of dataList || []) {
                 _EXTRA_DATA_DICT.set(data.mapId, data);
             }
         }

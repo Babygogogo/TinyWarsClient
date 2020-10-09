@@ -1,6 +1,5 @@
 
 namespace TinyWars.SingleCustomRoom {
-    import Types                    = Utility.Types;
     import Lang                     = Utility.Lang;
     import ProtoTypes               = Utility.ProtoTypes;
     import Notify                   = Utility.Notify;
@@ -11,7 +10,7 @@ namespace TinyWars.SingleCustomRoom {
     import BwSettingsHelper         = BaseWar.BwSettingsHelper;
     import IC_ScrCreateWar          = ProtoTypes.NetMessage.IC_ScrCreateWar;
     import IDataForPlayerRule       = ProtoTypes.WarRule.IDataForPlayerRule;
-    import IWarPlayerInitialInfo    = ProtoTypes.Structure.IWarPlayerInitialInfo;
+    import IDataForPlayerInRoom     = ProtoTypes.Structure.IDataForPlayerInRoom;
     import CommonConstants          = ConfigManager.COMMON_CONSTANTS;
 
     export const MAX_INITIAL_FUND     = 1000000;
@@ -63,7 +62,7 @@ namespace TinyWars.SingleCustomRoom {
         export function getCreateWarPlayerRule(playerIndex: number): IDataForPlayerRule {
             return BwSettingsHelper.getPlayerRule(getCreateWarData().settingsForCommon.warRule, playerIndex);
         }
-        export function getCreateWarPlayerInfo(playerIndex: number): IWarPlayerInitialInfo {
+        export function getCreateWarPlayerInfo(playerIndex: number): IDataForPlayerInRoom {
             return getCreateWarData().playerInfoList.find(v => v.playerIndex === playerIndex);
         }
 

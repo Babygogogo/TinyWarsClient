@@ -138,7 +138,7 @@ namespace TinyWars.Common.CommonModel {
         if (!dict5.has(tickCount)) {
             dict5.set(tickCount, { source: undefined, tick: undefined });
         }
-        const cfg = dict5.get(baseType);
+        const cfg = dict5.get(tickCount);
 
         if (cfg.tick !== tickCount) {
             cfg.tick    = tickCount;
@@ -187,7 +187,7 @@ namespace TinyWars.Common.CommonModel {
         if (!dict5.has(tickCount)) {
             dict5.set(tickCount, { source: undefined, tick: undefined });
         }
-        const cfg = dict5.get(objectType);
+        const cfg = dict5.get(tickCount);
 
         if (cfg.tick !== tickCount) {
             cfg.tick    = tickCount;

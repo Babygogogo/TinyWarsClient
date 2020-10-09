@@ -19,7 +19,7 @@ namespace TinyWars.MapEditor.MeManager {
 
         mapRawData = mapRawData || await MeUtility.createDefaultMapRawData(slotIndex);
         _war = new MeWar();
-        _war.initWithMapEditorData({
+        await _war.initWithMapEditorData({
             mapRawData,
             slotIndex
         });

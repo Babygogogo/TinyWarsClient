@@ -380,7 +380,7 @@ namespace TinyWars.MultiCustomRoom {
         configVersion   : string;
         playerIndex     : number;
         teamIndex       : number;
-        playerData      : ProtoTypes.MultiCustomRoom.IDataForPlayerInRoom;
+        playerData      : ProtoTypes.Structure.IDataForPlayerInRoom;
     }
 
     class PlayerRenderer extends eui.ItemRenderer {

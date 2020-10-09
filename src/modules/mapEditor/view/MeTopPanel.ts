@@ -294,13 +294,16 @@ namespace TinyWars.MapEditor {
             tileView.startRunningView();
         }
         private _initUnitView(): void {
-            const unitView = this._unitView;
-            unitView.init(new MeUnit().init({
+            const war   = this._war;
+            const unit  = new MeUnit().init({
                 gridIndex   : { x: 0, y: 0 },
                 unitId      : 0,
                 unitType    : Types.UnitType.Infantry,
                 playerIndex : Utility.ConfigManager.COMMON_CONSTANTS.WarFirstPlayerIndex,
-            }, this._war.getConfigVersion()));
+            }, this._war.getConfigVersion());
+            unit.startRunning(war);
+
+            this._unitView.init(unit);
         }
     }
 

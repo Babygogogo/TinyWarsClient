@@ -68,7 +68,8 @@ namespace TinyWars.MapEditor.MeUtility {
 
     export function createISerialWar(data: ProtoTypes.Map.IMapEditorData): WarSerialization.ISerialWar {
         const mapRawData    = data.mapRawData;
-        const warRule       = mapRawData.warRuleList[0];
+        const warRuleList   = mapRawData.warRuleList;
+        const warRule       = warRuleList ? warRuleList[0] : null;
         return {
             settingsForCommon   : {
                 configVersion   : ConfigManager.getNewestConfigVersion(),
@@ -92,7 +93,12 @@ namespace TinyWars.MapEditor.MeUtility {
                 enterTurnTime   : 0,
             },
             field                   : {
-                fogMap  : null,
+                fogMap  : {
+                    forceFogCode            : Types.ForceFogCode.None,
+                    forceExpirePlayerIndex  : null,
+                    forceExpireTurnIndex    : null,
+                    mapsFromPath            : null,
+                },
                 tileMap : { tiles: mapRawData.tileDataList },
                 unitMap : {
                     units       : mapRawData.unitDataList,
@@ -111,7 +117,7 @@ namespace TinyWars.MapEditor.MeUtility {
                 playerIndex,
                 teamIndex                   : playerIndex,
                 userId                      : null,
-                coId                        : null,
+                coId                        : 0,
                 coCurrentEnergy             : null,
                 coUsingSkillType            : Types.CoSkillType.Passive,
                 coIsDestroyedInTurn         : false,

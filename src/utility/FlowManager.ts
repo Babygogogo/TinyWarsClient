@@ -122,11 +122,11 @@ namespace TinyWars.Utility.FlowManager {
         SingleCustomWar.ScwTileBriefPanel.show();
         SingleCustomWar.ScwUnitBriefPanel.show();
     }
-    export function gotoMapEditor(mapRawData: ProtoTypes.Map.IMapRawData, slotIndex: number, isReview: boolean): void {
+    export async function gotoMapEditor(mapRawData: ProtoTypes.Map.IMapRawData, slotIndex: number, isReview: boolean): Promise<void> {
         McwModel.unloadWar();
         ScwModel.unloadWar();
         ReplayModel.unloadWar();
-        MeManager.loadWar(mapRawData, slotIndex, isReview);
+        await MeManager.loadWar(mapRawData, slotIndex, isReview);
 
         StageManager.closeAllPanels();
         MapEditor.MeBackgroundPanel.show();

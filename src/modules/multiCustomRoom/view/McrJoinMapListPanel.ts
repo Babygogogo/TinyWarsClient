@@ -267,7 +267,7 @@ namespace TinyWars.MultiCustomRoom {
         configVersion   : string;
         playerIndex     : number;
         teamIndex       : number;
-        playerData      : ProtoTypes.MultiCustomRoom.IDataForPlayerInRoom | null;
+        playerData      : ProtoTypes.Structure.IDataForPlayerInRoom | null;
     }
 
     class PlayerRenderer extends eui.ItemRenderer {
