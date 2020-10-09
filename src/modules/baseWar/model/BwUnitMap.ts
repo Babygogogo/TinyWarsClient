@@ -394,7 +394,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            return map.some(v => v.some(u => (u?.getPlayerIndex() === playerIndex) && (u.getHasLoadedCo())));
+            return map.some(v => v.some(u => (u.getPlayerIndex() === playerIndex) && (u.getHasLoadedCo())));
         }
 
         public getCoGridIndexListOnMap(playerIndex: number): GridIndex[] | undefined {

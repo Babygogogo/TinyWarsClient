@@ -590,7 +590,7 @@ namespace TinyWars.BaseWar {
         public getCfgBaseDamage(targetArmorType: Types.ArmorType, weaponType: Types.WeaponType): number | null | undefined {
             const cfgs  = this._getDamageChartCfg();
             const cfg   = cfgs ? cfgs[targetArmorType] : undefined;
-            return cfg ? cfg[weaponType]?.damage : undefined;
+            return cfg ? cfg[weaponType].damage : undefined;
         }
         public getBaseDamage(armorType: ArmorType): number | undefined | null {
             const primaryDamage = this.getPrimaryWeaponBaseDamage(armorType);
@@ -653,7 +653,7 @@ namespace TinyWars.BaseWar {
             const hasLoadedCo   = this.getHasLoadedCo();
             let modifier        = 0;
             for (const skillId of player.getCoCurrentSkills() || []) {
-                const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.maxAttackRangeBonus;
+                const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId).maxAttackRangeBonus;
                 if ((cfg)                                                                                                                       &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))                                                  &&
                     ((hasLoadedCo) || (BwHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, cfg[0], coGridIndexListOnMap, coZoneRadius)))
@@ -1030,7 +1030,7 @@ namespace TinyWars.BaseWar {
             const hasLoadedCo   = this.getHasLoadedCo();
             let modifier        = 0;
             for (const skillId of player.getCoCurrentSkills() || []) {
-                const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.moveRangeBonus;
+                const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId).moveRangeBonus;
                 if ((cfg)                                                                                                                       &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))                                                  &&
                     ((hasLoadedCo) || (BwHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, cfg[0], coGridIndexListOnMap, coZoneRadius)))
@@ -1416,7 +1416,7 @@ namespace TinyWars.BaseWar {
             let modifier        = 0;
             const hasLoadedCo   = this.getHasLoadedCo();
             for (const skillId of player.getCoCurrentSkills() || []) {
-                const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.unitVisionRangeBonus;
+                const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId).unitVisionRangeBonus;
                 if ((cfg)                                                                                                                   &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))                                              &&
                     ((hasLoadedCo) || (BwHelpers.checkIsGridIndexInsideCoSkillArea(selfGridIndex, cfg[0], coGridIndexListOnMap, coZoneRadius)))
@@ -1465,7 +1465,7 @@ namespace TinyWars.BaseWar {
 
             const hasLoadedCo = this.getHasLoadedCo();
             for (const skillId of player.getCoCurrentSkills() || []) {
-                const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.unitTrueVision;
+                const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId).unitTrueVision;
                 if ((cfg)                                                                                                                   &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))                                              &&
                     ((hasLoadedCo) || (BwHelpers.checkIsGridIndexInsideCoSkillArea(gridIndex, cfg[0], coGridIndexListOnMap, coZoneRadius)))

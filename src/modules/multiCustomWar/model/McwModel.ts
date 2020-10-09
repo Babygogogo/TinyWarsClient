@@ -1320,7 +1320,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
             const skillDataList = extraData.skillDataList;
             const skillIdList   = player.getCoCurrentSkills() || [];
             for (let skillIndex = 0; skillIndex < skillIdList.length; ++skillIndex) {
-                const dataForUseCoSkill = skillDataList.find(v => v.skillIndex = skillIndex);
+                const dataForUseCoSkill = skillDataList.find(v => v.skillIndex === skillIndex);
                 if (dataForUseCoSkill == null) {
                     Logger.error(`McwModel._exeUnitUseCoSkill() empty dataForUseCoSkill.`);
                     return undefined;

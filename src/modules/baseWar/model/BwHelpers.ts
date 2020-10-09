@@ -895,7 +895,7 @@ namespace TinyWars.BaseWar.BwHelpers {
     }
 
     export function getTeamIndexByRuleForPlayers(ruleForPlayers: IRuleForPlayers, playerIndex: number): number | null | undefined {
-        for (const playerRule of ruleForPlayers?.playerRuleDataList || []) {
+        for (const playerRule of ruleForPlayers.playerRuleDataList || []) {
             if (playerRule.playerIndex === playerIndex) {
                 return playerRule.teamIndex;
             }

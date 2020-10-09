@@ -23,7 +23,7 @@ namespace TinyWars.BaseWar {
 
         public abstract startRunning(war: BwWar): void;
 
-        public async init(data: ISerialFogMap, mapSizeAndMaxPlayerIndex: Types.MapSizeAndMaxPlayerIndex): Promise<BwFogMap> | undefined {
+        public async init(data: ISerialFogMap, mapSizeAndMaxPlayerIndex: Types.MapSizeAndMaxPlayerIndex): Promise<BwFogMap | undefined> {
             const forceFogCode = data.forceFogCode;
             if (forceFogCode == null) {
                 Logger.error(`BwFogMap.init() empty forceFogCode.`);

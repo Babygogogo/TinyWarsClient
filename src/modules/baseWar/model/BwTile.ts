@@ -623,7 +623,7 @@ namespace TinyWars.BaseWar {
             }
 
             for (const skillId of player.getCoCurrentSkills() || []) {
-                const skillCfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.selfUnitProduction;
+                const skillCfg = ConfigManager.getCoSkillCfg(configVersion, skillId).selfUnitProduction;
                 if (skillCfg) {
                     const tileCategory = skillCfg[2];
                     if ((tileCategory != null)                                                                                  &&

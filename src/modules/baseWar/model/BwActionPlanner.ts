@@ -1,6 +1,5 @@
 
 namespace TinyWars.BaseWar {
-    import WarMapModel          = WarMap.WarMapModel;
     import Types                = Utility.Types;
     import Notify               = Utility.Notify;
     import GridIndexHelpers     = Utility.GridIndexHelpers;

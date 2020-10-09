@@ -386,7 +386,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
                 }
 
                 for (const skillId of attackerPlayer.getCoCurrentSkills() || []) {
-                    const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.promotionBonusByAttack;
+                    const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId).promotionBonusByAttack;
                     if ((cfg)                                                                                                                                                   &&
                         (targetLostNormalizedHp >= cfg[2])                                                                                                                      &&
                         (ConfigManager.checkIsUnitTypeInCategory(configVersion, attackerUnitType, cfg[1]))                                                                      &&
@@ -404,7 +404,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
                 }
 
                 for (const skillId of targetPlayer.getCoCurrentSkills() || []) {
-                    const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.promotionBonusByAttack;
+                    const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId).promotionBonusByAttack;
                     if ((cfg)                                                                                                                   &&
                         (attackerLostNormalizedHp != null)                                                                                      &&
                         (attackerLostNormalizedHp >= cfg[2])                                                                                    &&
