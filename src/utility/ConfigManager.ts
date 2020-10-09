@@ -282,7 +282,7 @@ namespace TinyWars.Utility.ConfigManager {
 
     const _TILE_BASE_FRAME_CFGS = new Map([
         [
-            Types.UnitAndTileTextureVersion.V1,
+            Types.UnitAndTileTextureVersion.V0,
             new Map<TileBaseType, FrameCfg >([
                 [ TileBaseType.Beach,   { framesCount: 6,   ticksPerFrame: 1                }],
                 [ TileBaseType.Plain,   { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
@@ -291,7 +291,7 @@ namespace TinyWars.Utility.ConfigManager {
             ]),
         ],
         [
-            Types.UnitAndTileTextureVersion.V2,
+            Types.UnitAndTileTextureVersion.V1,
             new Map<TileBaseType, FrameCfg >([
                 [ TileBaseType.Beach,   { framesCount: 6,   ticksPerFrame: 1                }],
                 [ TileBaseType.Plain,   { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
@@ -308,7 +308,7 @@ namespace TinyWars.Utility.ConfigManager {
     ]);
     const _TILE_OBJECT_FRAME_CFGS = new Map([
         [
-            Types.UnitAndTileTextureVersion.V1,
+            Types.UnitAndTileTextureVersion.V0,
             new Map<TileObjectType, FrameCfg>([
                 [ TileObjectType.Airport,       { framesCount: 3,   ticksPerFrame: 1                }],
                 [ TileObjectType.Bridge,        { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
@@ -337,7 +337,7 @@ namespace TinyWars.Utility.ConfigManager {
             ]),
         ],
         [
-            Types.UnitAndTileTextureVersion.V2,
+            Types.UnitAndTileTextureVersion.V1,
             new Map<TileObjectType, FrameCfg >([
                 [ TileObjectType.Airport,       { framesCount: 3,   ticksPerFrame: 1                }],
                 [ TileObjectType.Bridge,        { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
@@ -1360,7 +1360,7 @@ namespace TinyWars.Utility.ConfigManager {
 
     const _UNIT_IMAGE_CFGS = new Map([
         [
-            Types.UnitAndTileTextureVersion.V1,
+            Types.UnitAndTileTextureVersion.V0,
             new Map<UnitType, { idle: FrameCfg, moving: FrameCfg }>([
                 [ UnitType.Infantry,        { idle: { framesCount: 4,   ticksPerFrame: 2 },     moving: { framesCount: 4,   ticksPerFrame: 1 } } ],
                 [ UnitType.Mech,            { idle: { framesCount: 4,   ticksPerFrame: 2 },     moving: { framesCount: 4,   ticksPerFrame: 1 } } ],
@@ -1391,7 +1391,7 @@ namespace TinyWars.Utility.ConfigManager {
             ]),
         ],
         [
-            Types.UnitAndTileTextureVersion.V2,
+            Types.UnitAndTileTextureVersion.V1,
             new Map<UnitType, { idle: FrameCfg, moving: FrameCfg }>([
                 [ UnitType.Infantry,        { idle: { framesCount: 4,   ticksPerFrame: 2 },     moving: { framesCount: 4,   ticksPerFrame: 1 } } ],
                 [ UnitType.Mech,            { idle: { framesCount: 4,   ticksPerFrame: 2 },     moving: { framesCount: 4,   ticksPerFrame: 1 } } ],
@@ -1845,15 +1845,15 @@ namespace TinyWars.Utility.ConfigManager {
             return undefined;
         } else {
             const ticksPerFrame     = cfgForFrame.ticksPerFrame;
-            const textForDark       = isDark ? `dark` : `normal`;
+            const textForDark       = isDark ? `state01` : `state00`;
             const textForShapeId    = `shape${Helpers.getNumText(shapeId)}`;
             const textForVersion    = `ver${Helpers.getNumText(version)}`;
             const textForSkin       = `skin${Helpers.getNumText(skinId)}`;
             const textForType       = `type${Helpers.getNumText(baseType)}`;
             const textForFrame      = ticksPerFrame < Number.MAX_VALUE
                 ? `frame${Helpers.getNumText(Math.floor((tickCount % (cfgForFrame.framesCount * ticksPerFrame)) / ticksPerFrame))}`
-                : `frame1`;
-            return `tileBase_${textForDark}_${textForShapeId}_${textForVersion}_${textForSkin}_${textForType}_${textForFrame}`;
+                : `frame01`;
+            return `tileBase_${textForVersion}_${textForType}_${textForDark}_${textForShapeId}_${textForSkin}_${textForFrame}`;
         }
     }
     export function getTileObjectImageSource(
@@ -1877,15 +1877,15 @@ namespace TinyWars.Utility.ConfigManager {
             return undefined;
         } else {
             const ticksPerFrame     = cfgForFrame.ticksPerFrame;
-            const textForDark       = isDark ? `dark` : `normal`;
+            const textForDark       = isDark ? `state01` : `state00`;
             const textForShapeId    = `shape${Helpers.getNumText(shapeId)}`;
             const textForVersion    = `ver${Helpers.getNumText(version)}`;
             const textForSkin       = `skin${Helpers.getNumText(skinId)}`;
             const textForType       = `type${Helpers.getNumText(objectType)}`;
             const textForFrame      = ticksPerFrame < Number.MAX_VALUE
                 ? `frame${Helpers.getNumText(Math.floor((tickCount % (cfgForFrame.framesCount * ticksPerFrame)) / ticksPerFrame))}`
-                : `frame1`;
-            return `tileObject_${textForDark}_${textForShapeId}_${textForVersion}_${textForSkin}_${textForType}_${textForFrame}`;
+                : `frame01`;
+            return `tileObject_${textForVersion}_${textForType}_${textForDark}_${textForShapeId}_${textForSkin}_${textForFrame}`;
         }
     }
 
@@ -1912,13 +1912,13 @@ namespace TinyWars.Utility.ConfigManager {
             return undefined;
         } else {
             const ticksPerFrame     = cfgForFrame.ticksPerFrame;
-            const textForDark       = isDark ? `dark` : `normal`;
-            const textForMoving     = isMoving ? `moving` : `idle`;
+            const textForDark       = isDark ? `state01` : `state00`;
+            const textForMoving     = isMoving ? `act01` : `act00`;
             const textForVersion    = `ver${Helpers.getNumText(version)}`;
             const textForSkin       = `skin${Helpers.getNumText(skinId)}`;
             const textForType       = `type${Helpers.getNumText(unitType)}`;
             const textForFrame      = `frame${Math.floor((tickCount % (cfgForFrame.framesCount * ticksPerFrame)) / ticksPerFrame)}`;
-            return `unit_${textForDark}_${textForMoving}_${textForVersion}_${textForSkin}_${textForType}_${textForFrame}`;
+            return `unit_${textForVersion}_${textForType}_${textForDark}_${textForMoving}_${textForSkin}_${textForFrame}`;
         }
     }
 

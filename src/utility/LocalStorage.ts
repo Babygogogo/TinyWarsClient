@@ -65,9 +65,9 @@ namespace TinyWars.Utility {
         }
         export function getUnitAndTileTextureVersion(): Types.UnitAndTileTextureVersion {
             const data = parseInt(localStorage.getItem(KEY_UNIT_TILE_IMAGE_VERSION));
-            return ((data === Types.UnitAndTileTextureVersion.V1) || (data === Types.UnitAndTileTextureVersion.V2))
+            return ((data === Types.UnitAndTileTextureVersion.V0) || (data === Types.UnitAndTileTextureVersion.V1))
                 ? data
-                : Types.UnitAndTileTextureVersion.V1;
+                : Types.UnitAndTileTextureVersion.V0;
         }
     }
 }

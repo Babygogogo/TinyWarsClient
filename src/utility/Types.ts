@@ -559,8 +559,8 @@ namespace TinyWars.Utility.Types {
     }
 
     export const enum UnitAndTileTextureVersion {
+        V0  = 0,
         V1  = 1,
-        V2  = 2,
     }
 
     export const enum BootTimerType {

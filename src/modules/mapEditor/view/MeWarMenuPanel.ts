@@ -576,26 +576,26 @@ namespace TinyWars.MapEditor {
             }
         }
         private _createCommandUseOriginTexture(): DataForCommandRenderer | null {
-            if (Common.CommonModel.getUnitAndTileTextureVersion() === Types.UnitAndTileTextureVersion.V1) {
+            if (Common.CommonModel.getUnitAndTileTextureVersion() === Types.UnitAndTileTextureVersion.V0) {
                 return null;
             } else {
                 return {
                     name    : Lang.getText(Lang.Type.B0385),
                     callback: () => {
-                        Common.CommonModel.setUnitAndTileTextureVersion(Types.UnitAndTileTextureVersion.V1);
+                        Common.CommonModel.setUnitAndTileTextureVersion(Types.UnitAndTileTextureVersion.V0);
                         this._updateView();
                     }
                 };
             }
         }
         private _createCommandUseNewTexture(): DataForCommandRenderer | null {
-            if (Common.CommonModel.getUnitAndTileTextureVersion() === Types.UnitAndTileTextureVersion.V2) {
+            if (Common.CommonModel.getUnitAndTileTextureVersion() === Types.UnitAndTileTextureVersion.V1) {
                 return null;
             } else {
                 return {
                     name    : Lang.getText(Lang.Type.B0386),
                     callback: () => {
-                        Common.CommonModel.setUnitAndTileTextureVersion(Types.UnitAndTileTextureVersion.V2);
+                        Common.CommonModel.setUnitAndTileTextureVersion(Types.UnitAndTileTextureVersion.V1);
                         this._updateView();
                     }
                 };

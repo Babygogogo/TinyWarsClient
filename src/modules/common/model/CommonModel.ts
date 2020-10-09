@@ -15,7 +15,7 @@ namespace TinyWars.Common.CommonModel {
         tick    : number;
     }
 
-    let _unitAndTileTextureVersion      = TextureVersion.V1;
+    let _unitAndTileTextureVersion      = TextureVersion.V0;
     let _unitAndTileTexturePrefix       = `v01_`;
     const _unitImageSourceDict          = new Map<TextureVersion, Map<boolean, Map<boolean, Map<number, Map<UnitType, FrameCfg>>>>>();
     const _tileBaseImageSourceDict      = new Map<TextureVersion, Map<number, Map<TileBaseType, Map<boolean, Map<number, Map<number, FrameCfg>>>>>>();
