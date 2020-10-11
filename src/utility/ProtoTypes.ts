@@ -2751,9 +2751,6 @@ export declare namespace Map {
     /** Properties of a MapEditorData. */
     interface IMapEditorData {
 
-        /** MapEditorData designerUserId */
-        designerUserId?: (number|null);
-
         /** MapEditorData slotIndex */
         slotIndex?: (number|null);
 
@@ -2775,9 +2772,6 @@ export declare namespace Map {
          * @param [properties] Properties to set
          */
         constructor(properties?: Map.IMapEditorData);
-
-        /** MapEditorData designerUserId. */
-        public designerUserId: number;
 
         /** MapEditorData slotIndex. */
         public slotIndex: number;

@@ -4,6 +4,7 @@ namespace TinyWars.MapEditor {
     import Lang             = Utility.Lang;
     import Types            = Utility.Types;
     import ConfigManager    = Utility.ConfigManager;
+    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
     const MAX_RECENT_COUNT = 10;
 
@@ -85,8 +86,8 @@ namespace TinyWars.MapEditor {
             });
             dataList.length     = 0;
             dataList[0]         = {
-                dataForDrawTileBase: data,
-                panel   : this,
+                dataForDrawTileBase : data,
+                panel               : this,
             };
             for (const v of filteredList) {
                 if (dataList.length < MAX_RECENT_COUNT) {
@@ -250,7 +251,7 @@ namespace TinyWars.MapEditor {
                 tileBaseType        : dataForDrawTileBase.baseType,
                 tileObjectShapeId   : null,
                 tileObjectType      : null,
-                playerIndex         : null,
+                playerIndex         : CommonConstants.WarNeutralPlayerIndex,
             });
             this._tileView.updateView();
         }

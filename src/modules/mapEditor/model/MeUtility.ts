@@ -69,12 +69,13 @@ namespace TinyWars.MapEditor.MeUtility {
     export function createISerialWar(data: ProtoTypes.Map.IMapEditorData): WarSerialization.ISerialWar {
         const mapRawData    = data.mapRawData;
         const warRuleList   = mapRawData.warRuleList;
-        const warRule       = warRuleList ? warRuleList[0] : null;
+        const warRule       = (warRuleList ? warRuleList[0] : null) || BwSettingsHelper.createDefaultWarRule(0, CommonConstants.WarMaxPlayerIndex);
+        const unitDataList  = mapRawData.unitDataList || [];
         return {
             settingsForCommon   : {
                 configVersion   : ConfigManager.getNewestConfigVersion(),
                 mapId           : data.mapRawData.mapId,
-                presetWarRuleId : warRule ? warRule.ruleId : null,
+                presetWarRuleId : warRule.ruleId,
                 warRule,
             },
             settingsForMultiPlayer  : null,
@@ -101,8 +102,8 @@ namespace TinyWars.MapEditor.MeUtility {
                 },
                 tileMap : { tiles: mapRawData.tileDataList },
                 unitMap : {
-                    units       : mapRawData.unitDataList,
-                    nextUnitId  : mapRawData.unitDataList.length,
+                    units       : unitDataList,
+                    nextUnitId  : unitDataList.length,
                 },
             },
         };

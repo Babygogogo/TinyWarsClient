@@ -1,11 +1,11 @@
 
 namespace TinyWars.MapEditor {
-    import FloatText        = Utility.FloatText;
     import Lang             = Utility.Lang;
-    import ProtoTypes       = Utility.ProtoTypes;
     import Notify           = Utility.Notify;
     import Types            = Utility.Types;
+    import ConfigManager    = Utility.ConfigManager;
     import DrawerMode       = Types.MapEditorDrawerMode;
+    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
     export class MeTopPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
@@ -219,19 +219,32 @@ namespace TinyWars.MapEditor {
             const mode      = drawer.getMode();
             const con       = this._conTileView;
             const tileView  = this._tileView;
-            if ((mode === DrawerMode.DrawTileBase) || (mode === DrawerMode.DrawTileObject)) {
+            if (mode === DrawerMode.DrawTileBase) {
                 con.visible = true;
 
-                const tileBaseData      = drawer.getDrawTargetTileBaseData();
-                const tileObjectData    = drawer.getDrawTargetTileObjectData();
+                const tileBaseData = drawer.getDrawTargetTileBaseData();
                 tileView.init({
                     tileBaseShapeId     : tileBaseData.shapeId,
                     tileBaseType        : tileBaseData.baseType,
+                    tileObjectShapeId   : null,
+                    tileObjectType      : null,
+                    playerIndex         : CommonConstants.WarNeutralPlayerIndex,
+                });
+                tileView.updateView();
+
+            } else if (mode === DrawerMode.DrawTileObject) {
+                con.visible = true;
+
+                const tileObjectData    = drawer.getDrawTargetTileObjectData();
+                tileView.init({
+                    tileBaseShapeId     : null,
+                    tileBaseType        : null,
                     tileObjectShapeId   : tileObjectData.shapeId,
                     tileObjectType      : tileObjectData.objectType,
                     playerIndex         : tileObjectData.playerIndex,
                 });
                 tileView.updateView();
+
             } else {
                 con.visible = false;
             }
@@ -289,7 +302,7 @@ namespace TinyWars.MapEditor {
                 tileBaseShapeId     : null,
                 tileObjectType      : null,
                 tileObjectShapeId   : null,
-                playerIndex         : null,
+                playerIndex         : CommonConstants.WarNeutralPlayerIndex,
             });
             tileView.startRunningView();
         }
@@ -299,7 +312,7 @@ namespace TinyWars.MapEditor {
                 gridIndex   : { x: 0, y: 0 },
                 unitId      : 0,
                 unitType    : Types.UnitType.Infantry,
-                playerIndex : Utility.ConfigManager.COMMON_CONSTANTS.WarFirstPlayerIndex,
+                playerIndex : CommonConstants.WarFirstPlayerIndex,
             }, this._war.getConfigVersion());
             unit.startRunning(war);
 

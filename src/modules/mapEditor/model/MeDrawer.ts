@@ -49,7 +49,7 @@ namespace TinyWars.MapEditor {
         }
 
         public startRunning(war: MeWar): void {
-            this._war           = war;
+            this._setWar(war);
             this._tileMap       = war.getTileMap() as MeTileMap;
             this._unitMap       = war.getUnitMap() as MeUnitMap;
             this._configVersion = war.getConfigVersion();
@@ -57,7 +57,7 @@ namespace TinyWars.MapEditor {
             Notify.addEventListeners(this._notifyListeners, this);
         }
         public stopRunning(): void {
-            this._war       = null;
+            this._setWar(null);
             this._tileMap   = null;
             this._unitMap   = null;
 
@@ -72,6 +72,13 @@ namespace TinyWars.MapEditor {
         private _onNotifyBwCursorDragged(e: egret.Event): void {
             const data = e.data as Notify.Data.BwCursorDragged;
             this._handleAction(data.draggedTo);
+        }
+
+        private _setWar(war: MeWar): void {
+            this._war = war;
+        }
+        private _getWar(): MeWar {
+            return this._war;
         }
 
         private _setMode(mode: DrawerMode): void {
@@ -115,12 +122,16 @@ namespace TinyWars.MapEditor {
         }
 
         public setModeDrawUnit(data: DataForDrawUnit): void {
-            this._setDrawTargetUnit(new MeUnit().init({
+            const war   = this._getWar();
+            const unit  = new MeUnit().init({
                 gridIndex   : { x: 0, y: 0 },
                 unitId      : 0,
                 unitType    : data.unitType,
                 playerIndex : data.playerIndex,
-            }, this._war.getConfigVersion()));
+            }, war.getConfigVersion());
+            unit.startRunning(war);
+
+            this._setDrawTargetUnit(unit);
             this._setMode(DrawerMode.DrawUnit);
         }
         private _setDrawTargetUnit(unit: BwUnit): void {
@@ -169,7 +180,7 @@ namespace TinyWars.MapEditor {
                 baseType,
                 baseShapeId,
             }, this._configVersion);
-            tile.startRunning(this._war);
+            tile.startRunning(this._getWar());
             tile.flushDataToView();
 
             Notify.dispatch(Notify.Type.MeTileChanged, { gridIndex } as Notify.Data.MeTileChanged);
@@ -186,7 +197,7 @@ namespace TinyWars.MapEditor {
                     baseType        : baseType,
                     baseShapeId     : ConfigManager.getSymmetricalTileBaseShapeId(baseType, baseShapeId, symmetryType),
                 }, this._configVersion);
-                t2.startRunning(this._war);
+                t2.startRunning(this._getWar());
                 t2.flushDataToView();
 
                 Notify.dispatch(Notify.Type.MeTileChanged, { gridIndex: symGridIndex } as Notify.Data.MeTileChanged);
@@ -207,7 +218,7 @@ namespace TinyWars.MapEditor {
                 objectType,
                 objectShapeId,
             }, this._configVersion);
-            tile.startRunning(this._war);
+            tile.startRunning(this._getWar());
             tile.flushDataToView();
 
             Notify.dispatch(Notify.Type.MeTileChanged, { gridIndex } as Notify.Data.MeTileChanged);
@@ -220,11 +231,11 @@ namespace TinyWars.MapEditor {
                     gridIndex       : t2.getGridIndex(),
                     baseType        : t2.getBaseType(),
                     baseShapeId     : t2.getBaseShapeId(),
-                    playerIndex     : CommonConstants.WarNeutralPlayerIndex,
+                    playerIndex,
                     objectType,
                     objectShapeId   : ConfigManager.getSymmetricalTileObjectShapeId(objectType, objectShapeId, symmetryType),
                 }, this._configVersion);
-                t2.startRunning(this._war);
+                t2.startRunning(this._getWar());
                 t2.flushDataToView();
 
                 Notify.dispatch(Notify.Type.MeTileChanged, { gridIndex: symGridIndex } as Notify.Data.MeTileChanged);
@@ -242,7 +253,7 @@ namespace TinyWars.MapEditor {
                 unitType    : targetUnit.getType(),
                 unitId,
             }, this._configVersion);
-            unit.startRunning(this._war);
+            unit.startRunning(this._getWar());
             unit.startRunningView();
 
             unitMap.setUnitOnMap(unit);
@@ -270,7 +281,7 @@ namespace TinyWars.MapEditor {
         }
         private _handleDeleteUnit(gridIndex: GridIndex): void {
             if (this._unitMap.getUnitOnMap(gridIndex)) {
-                DestructionHelpers.destroyUnitOnMap(this._war, gridIndex, true);
+                DestructionHelpers.destroyUnitOnMap(this._getWar(), gridIndex, true);
                 Notify.dispatch(Notify.Type.MeUnitChanged, { gridIndex } as Notify.Data.MeUnitChanged);
             }
         }

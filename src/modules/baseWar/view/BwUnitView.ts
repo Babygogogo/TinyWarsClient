@@ -84,8 +84,9 @@ namespace TinyWars.BaseWar {
         }
 
         public updateImageHp(): void {
-            const normalizedHp = this._unit.getNormalizedCurrentHp();
-            if ((normalizedHp >= this._unit.getNormalizedMaxHp()) || (normalizedHp <= 0)) {
+            const unit          = this.getUnit();
+            const normalizedHp  = unit.getNormalizedCurrentHp();
+            if ((normalizedHp >= unit.getNormalizedMaxHp()) || (normalizedHp <= 0)) {
                 this._imgHp.visible = false;
             } else {
                 this._imgHp.visible = true;
@@ -121,9 +122,6 @@ namespace TinyWars.BaseWar {
         protected _getFramesForStateAnimation(): string[] {
             return this._framesForStateAnimation;
         }
-        protected _getUnit(): BwUnit {
-            return this._unit;
-        }
 
         public moveAlongPath(
             path        : GridIndex[],
@@ -137,7 +135,7 @@ namespace TinyWars.BaseWar {
             this.x              = startingPoint.x;
             this.y              = startingPoint.y;
 
-            const unit                  = this._getUnit();
+            const unit                  = this.getUnit();
             const war                   = unit.getWar();
             const playerIndex           = unit.getPlayerIndex();
             const playerIndexMod        = playerIndex % 2;
@@ -300,7 +298,7 @@ namespace TinyWars.BaseWar {
             }
         }
         private _addFrameForLoader(): void {
-            const unit  = this._getUnit();
+            const unit  = this.getUnit();
             const war   = unit.getWar();
             if ((war) && (unit.getMaxLoadUnitsCount())) {
                 const unitPlayerIndex = unit.getPlayerIndex();

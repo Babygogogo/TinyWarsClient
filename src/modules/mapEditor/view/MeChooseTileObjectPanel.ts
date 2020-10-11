@@ -75,8 +75,8 @@ namespace TinyWars.MapEditor {
             });
             dataList.length     = 0;
             dataList[0]         = {
-                dataForDrawTileObject: data,
-                panel   : this,
+                dataForDrawTileObject   : data,
+                panel                   : this,
             };
             for (const v of filteredList) {
                 if (dataList.length < MAX_RECENT_COUNT) {

@@ -1,11 +1,13 @@
 
 namespace TinyWars.WarMap {
-    import Notify       = Utility.Notify;
-    import ProtoTypes   = Utility.ProtoTypes;
-    import UiImage      = GameUi.UiImage;
-    import TimeModel    = Time.TimeModel;
-    import CommonModel  = Common.CommonModel;
-    import ISerialTile  = ProtoTypes.WarSerialization.ISerialTile;
+    import Notify           = Utility.Notify;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import ConfigManager    = Utility.ConfigManager;
+    import UiImage          = GameUi.UiImage;
+    import TimeModel        = Time.TimeModel;
+    import CommonModel      = Common.CommonModel;
+    import ISerialTile      = ProtoTypes.WarSerialization.ISerialTile;
+    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
     const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = Utility.ConfigManager.getGridSize();
 
@@ -121,14 +123,10 @@ namespace TinyWars.WarMap {
 
         public updateWithTileDataList(tileDataList: ISerialTile[]): void {
             const tickCount = TimeModel.getTileAnimationTickCount();
-            const cols      = this._colCount;
-            const rows      = this._rowCount;
-            for (let x = 0; x < cols; ++x) {
-                for (let y = 0; y < rows; ++y) {
-                    const tileData              = tileDataList[x + y * cols];
-                    this._tileDataMap[x][y]     = tileData;
-                    this._images[x][y].source   = this._getImageSource(tileData, tickCount);
-                }
+            for (const tileData of tileDataList) {
+                const { x, y }              = tileData.gridIndex;
+                this._tileDataMap[x][y]     = tileData;
+                this._images[x][y].source   = this._getImageSource(tileData, tickCount);
             }
         }
 
@@ -172,7 +170,7 @@ namespace TinyWars.WarMap {
                     baseType: tileData.baseType,
                     shapeId : tileData.baseShapeId || 0,
                     isDark  : false,
-                    skinId  : tileData.playerIndex,
+                    skinId  : CommonConstants.UnitAndTileNeutralSkinId,
                     tickCount,
                 });
         }

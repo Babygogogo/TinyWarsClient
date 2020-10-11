@@ -64,6 +64,7 @@ namespace TinyWars.BaseWar {
                 }
             }
 
+            this._setConfigVersion(configVersion);
             this._setMap(map);
             this._setLoadedUnits(loadedUnits);
             this._setMapSize(mapWidth, mapHeight);
@@ -171,6 +172,9 @@ namespace TinyWars.BaseWar {
             return this._war;
         }
 
+        private _setConfigVersion(configVersion: string): void {
+            this._configVersion = configVersion;
+        }
         public getConfigVersion(): string {
             return this._configVersion;
         }

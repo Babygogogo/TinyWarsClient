@@ -653,6 +653,10 @@ namespace TinyWars.Utility.Lang {
             `您需要保留最少一个可选CO（可以是无CO）`,
             `There must be at least one available CO.`,
         ],
+        [Type.A0131]: [
+            `请尽量同时提供中英文名，以英文逗号分隔`,
+            `Please write down a Chinese Name and an English name if possible. Use a , as a separator.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -2254,8 +2258,8 @@ namespace TinyWars.Utility.Lang {
             `Ready`,
         ],
         [Type.B0403]: [
-            `可用CO列表`,
-            `Available COs`,
+            `可用CO数量`,
+            `Available COs Num`,
         ],
         [Type.B0404]: [
             `排位赛`,
@@ -2264,6 +2268,14 @@ namespace TinyWars.Utility.Lang {
         [Type.B0405]: [
             `War Room`,
             `War Room`,
+        ],
+        [Type.B0406]: [
+            `规则可用性`,
+            `Rule Availability`,
+        ],
+        [Type.B0407]: [
+            `玩家规则列表`,
+            `Player Rule List`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

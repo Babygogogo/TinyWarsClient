@@ -1,11 +1,14 @@
 
 namespace TinyWars.MapEditor {
     import Types            = Utility.Types;
+    import Logger           = Utility.Logger;
+    import ConfigManager    = Utility.ConfigManager;
     import CommonModel      = Common.CommonModel;
     import TileObjectType   = Types.TileObjectType;
     import TileBaseType     = Types.TileBaseType;
+    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
-    const { width: GRID_WIDTH, height: GRID_HEIGHT } = Utility.ConfigManager.getGridSize();
+    const { width: GRID_WIDTH, height: GRID_HEIGHT } = ConfigManager.getGridSize();
 
     export class MeTileSimpleView {
         private _imgBase    = new GameUi.UiImage();
@@ -22,18 +25,25 @@ namespace TinyWars.MapEditor {
             this._imgObject.anchorOffsetY   = GRID_HEIGHT * 2;
         }
 
-        public init(params: {
-            tileBaseType        : TileBaseType;
-            tileBaseShapeId     : number;
-            tileObjectType      : TileObjectType;
-            tileObjectShapeId   : number;
-            playerIndex         : number;
-        }): MeTileSimpleView {
-            this._baseType      = params.tileBaseType;
-            this._baseShapeId   = params.tileBaseShapeId;
-            this._objectType    = params.tileObjectType;
-            this._objectShapeId = params.tileObjectShapeId;
-            this._playerIndex   = params.playerIndex;
+        public init(
+            { tileBaseType, tileBaseShapeId, tileObjectType, tileObjectShapeId, playerIndex }: {
+                tileBaseType        : TileBaseType;
+                tileBaseShapeId     : number;
+                tileObjectType      : TileObjectType;
+                tileObjectShapeId   : number;
+                playerIndex         : number;
+            }
+        ): MeTileSimpleView {
+            if (playerIndex == null) {
+                Logger.error(`MeTileSimpleView.init() empty playerIndex.`);
+                return undefined;
+            }
+
+            this._baseType      = tileBaseType;
+            this._baseShapeId   = tileBaseShapeId;
+            this._objectType    = tileObjectType;
+            this._objectShapeId = tileObjectShapeId;
+            this._playerIndex   = playerIndex;
 
             return this;
         }
@@ -88,7 +98,7 @@ namespace TinyWars.MapEditor {
                 this._imgBase.visible = true;
                 this._imgBase.source  = CommonModel.getCachedTileBaseImageSource({
                     version,
-                    skinId,
+                    skinId      : CommonConstants.UnitAndTileNeutralSkinId,
                     baseType,
                     isDark      : false,
                     shapeId     : this._baseShapeId,

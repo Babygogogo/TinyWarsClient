@@ -217,14 +217,19 @@ namespace TinyWars.MapEditor {
             const data              = this.data as DataForUnitRenderer;
             const dataForDrawUnit   = data.dataForDrawUnit;
             const unitType          = dataForDrawUnit.unitType;
+            const war               = MeManager.getWar();
             this._labelName.text    = Lang.getUnitName(unitType);
-            this._unitView.init(new MeUnit().init({
+
+            const unitView  = this._unitView;
+            const unit      = new MeUnit().init({
                 gridIndex   : { x: 0, y: 0 },
                 unitId      : 0,
                 unitType,
                 playerIndex : dataForDrawUnit.playerIndex,
-            }, MeManager.getWar().getConfigVersion()));
-            this._unitView.startRunningView();
+            }, war.getConfigVersion());
+            unit.startRunning(war);
+            unitView.init(unit);
+            unitView.startRunningView();
         }
 
         public onItemTapEvent(): void {

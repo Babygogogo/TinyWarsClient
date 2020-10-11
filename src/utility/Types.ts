@@ -572,7 +572,6 @@ namespace TinyWars.Utility.Types {
         Valid,
         InvalidMapDesigner,
         InvalidMapName,
-        InvalidMapNameEnglish,
         InvalidPlayersCount,
         InvalidUnits,
         InvalidTiles,

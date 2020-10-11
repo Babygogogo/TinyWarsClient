@@ -121,10 +121,9 @@ namespace TinyWars.MapEditor {
         switch (type) {
             case InvalidationType.InvalidMapDesigner    : return Lang.getText(Lang.Type.A0118);
             case InvalidationType.InvalidMapName        : return Lang.getText(Lang.Type.A0119);
-            case InvalidationType.InvalidMapNameEnglish : return Lang.getText(Lang.Type.A0120);
             case InvalidationType.InvalidPlayersCount   : return Lang.getText(Lang.Type.A0121);
-            case InvalidationType.InvalidTiles          : return Lang.getText(Lang.Type.A0122);
-            case InvalidationType.InvalidUnits          : return Lang.getText(Lang.Type.A0123);
+            case InvalidationType.InvalidTiles          : return Lang.getText(Lang.Type.A0123);
+            case InvalidationType.InvalidUnits          : return Lang.getText(Lang.Type.A0122);
             case InvalidationType.InvalidWarRuleList    : return Lang.getText(Lang.Type.A0124);
             default: return "";
         }

@@ -88,7 +88,8 @@ namespace TinyWars.MapEditor {
             return this;
         }
         public async initWithMapEditorData(data: ProtoTypes.Map.IMapEditorData): Promise<void> {
-            await this.init(MeUtility.createISerialWar(data));
+            const warData = MeUtility.createISerialWar(data);
+            await this.init(warData);
 
             const mapRawData = data.mapRawData;
             this.setMapSlotIndex(data.slotIndex);
@@ -96,7 +97,22 @@ namespace TinyWars.MapEditor {
             this.setMapDesignerUserId(mapRawData.designerUserId);
             this.setMapDesignerName(mapRawData.designerName);
             this.setMapNameList(mapRawData.mapNameList);
-            this.setWarRuleList(mapRawData.warRuleList);
+            this.setWarRuleList(mapRawData.warRuleList || [warData.settingsForCommon.warRule]);
+        }
+
+        public startRunning(): BaseWar.BwWar {
+            super.startRunning();
+
+            this.getDrawer().startRunning(this);
+
+            return this;
+        }
+        public stopRunning(): BaseWar.BwWar {
+            super.stopRunning();
+
+            this.getDrawer().stopRunning();
+
+            return this;
         }
 
         public serializeForSimulation(): ISerialWar | undefined {

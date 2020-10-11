@@ -78,7 +78,7 @@ namespace TinyWars.BaseWar {
                 imgObject.source    = CommonModel.getCachedTileObjectImageSource({
                     version,
                     skinId      : ((hasFog) && (objectType !== TileObjectType.Headquarters)) ? CommonConstants.UnitAndTileNeutralSkinId : skinId,
-                    shapeId     : tileData.objectShapeId,
+                    shapeId     : tileData.objectShapeId || 0,
                     objectType,
                     isDark      : hasFog,
                     tickCount,
@@ -95,8 +95,8 @@ namespace TinyWars.BaseWar {
                 imgBase.visible = true;
                 imgBase.source  = CommonModel.getCachedTileBaseImageSource({
                     version,
-                    skinId,
-                    shapeId     : tileData.baseShapeId,
+                    skinId      : CommonConstants.UnitAndTileNeutralSkinId,
+                    shapeId     : tileData.baseShapeId || 0,
                     baseType,
                     isDark      : hasFog,
                     tickCount,

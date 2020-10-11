@@ -71,6 +71,7 @@ namespace TinyWars.BaseWar {
             this.updateCoZone();
         }
         public stopRunningView(): void {
+            this._isCoZoneInitialized = false;
             Notify.removeEventListeners(this._notifyListeners, this);
 
             egret.Tween.removeTweens(this._coZoneContainer);

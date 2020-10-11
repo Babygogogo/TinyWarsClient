@@ -27,7 +27,7 @@ namespace TinyWars.User.UserProxy {
         if (data.errorCode) {
             Notify.dispatch(Notify.Type.SGetUserPublicInfoFailed, data);
         } else {
-            UserModel.setUserPublicInfo(data);
+            UserModel.setUserPublicInfo(data.userPublicInfo);
             Notify.dispatch(Notify.Type.SGetUserPublicInfo, data);
         }
     }

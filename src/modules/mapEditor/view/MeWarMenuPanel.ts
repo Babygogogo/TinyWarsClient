@@ -75,7 +75,7 @@ namespace TinyWars.MapEditor {
                 { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.TileAnimationTick,      callback: this._onNotifyTileAnimationTick },
                 { type: Notify.Type.UnitAnimationTick,      callback: this._onNotifyUnitAnimationTick },
-                { type: Notify.Type.SMeSubmitMap,             callback: this._onNotifySMeSaveMap },
+                { type: Notify.Type.SMeSubmitMap,           callback: this._onNotifySMeSaveMap },
                 { type: Notify.Type.SMmReviewMap,           callback: this._onNotifySMmReviewMap },
                 { type: Notify.Type.SScrCreateCustomWar,    callback: this._onNotifySScrCreateCustomWar },
             ];
@@ -174,9 +174,9 @@ namespace TinyWars.MapEditor {
                 const mapNameList = war.getMapNameList();
                 Common.CommonInputPanel.show({
                     title           : Lang.getText(Lang.Type.B0225),
-                    tips            : null,
+                    tips            : Lang.getText(Lang.Type.A0131),
                     currentValue    : mapNameList.join(","),
-                    maxChars        : Utility.ConfigManager.MAP_CONSTANTS.MaxMapNameLength,
+                    maxChars        : Utility.ConfigManager.MAP_CONSTANTS.MaxMapNameLength * 2 + 1,
                     charRestrict    : null,
                     callback        : (panel) => {
                         const value         = panel.getInputText();
@@ -231,11 +231,12 @@ namespace TinyWars.MapEditor {
         private _updateView(): void {
             this._updateComponentsForLanguage();
 
-            const isReviewing = this._war.getIsReviewingMap();
+            const isReviewing       = this._war.getIsReviewingMap();
+            const colorForButtons   = isReviewing ? 0xFFFFFF : 0x00FF00;
             this._btnBack.setTextColor(0x00FF00);
-            this._btnModifyMapDesigner.setTextColor(isReviewing ? 0xFFFFFF : 0x00FF00);
-            this._btnModifyMapName.setTextColor(isReviewing ? 0xFFFFFF : 0x00FF00);
-            this._btnModifyMapSize.setTextColor(isReviewing ? 0xFFFFFF : 0x00FF00);
+            this._btnModifyMapDesigner.setTextColor(colorForButtons);
+            this._btnModifyMapName.setTextColor(colorForButtons);
+            this._btnModifyMapSize.setTextColor(colorForButtons);
 
             this._updateListCommand();
             this._updateLabelMapName();
@@ -263,8 +264,6 @@ namespace TinyWars.MapEditor {
             this._btnModifyMapDesigner.label            = Lang.getText(Lang.Type.B0163);
             this._btnModifyMapSize.label                = Lang.getText(Lang.Type.B0300);
             this._btnBack.label                         = Lang.getText(Lang.Type.B0146);
-            this._btnModifyMapDesigner.label            = Lang.getText(Lang.Type.B0317);
-            this._btnModifyMapName.label                = Lang.getText(Lang.Type.B0317);
         }
 
         private _updateLabelMapName(): void {
@@ -346,7 +345,7 @@ namespace TinyWars.MapEditor {
                 if (subDict.has(playerIndex)) {
                     ++subDict.get(playerIndex).count;
                 } else {
-                    subDict.set(unitType, {
+                    subDict.set(playerIndex, {
                         count           : 1,
                         dataForDrawUnit : {
                             unitType,
@@ -365,10 +364,12 @@ namespace TinyWars.MapEditor {
             this._listUnit.bindData(dataList.sort((v1, v2) => {
                 const d1 = v1.dataForDrawUnit;
                 const d2 = v2.dataForDrawUnit;
-                if (d1.unitType !== d2.unitType) {
-                    return d1.unitType - d2.unitType;
+                const p1 = d1.playerIndex;
+                const p2 = d2.playerIndex;
+                if (p1 !== p2) {
+                    return p1 - p2;
                 } else {
-                    return d1.playerIndex - d2.playerIndex;
+                    return d1.unitType - d2.unitType;
                 }
             }));
         }
@@ -747,13 +748,19 @@ namespace TinyWars.MapEditor {
             const data              = this.data as DataForUnitRenderer;
             const dataForDrawUnit   = data.dataForDrawUnit;
             this._labelNum.text    = "" + data.count;
-            this._unitView.init(new MeUnit().init({
+
+            const war   = MeManager.getWar();
+            const unit  = new MeUnit().init({
                 gridIndex   : { x: 0, y: 0 },
                 unitId      : 0,
                 unitType    : dataForDrawUnit.unitType,
                 playerIndex : dataForDrawUnit.playerIndex,
-            }, MeManager.getWar().getConfigVersion()));
-            this._unitView.startRunningView();
+            }, war.getConfigVersion());
+            unit.startRunning(war);
+
+            const unitView = this._unitView;
+            unitView.init(unit);
+            unitView.startRunningView();
         }
 
         public onItemTapEvent(): void {

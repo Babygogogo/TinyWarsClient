@@ -32,7 +32,7 @@ namespace TinyWars.MapEditor {
         private _imgHasFog          : TinyWars.GameUi.UiImage;
         private _btnHelpHasFog      : TinyWars.GameUi.UiButton;
 
-        private _labelAvailability     : TinyWars.GameUi.UiLabel;
+        private _labelAvailability  : TinyWars.GameUi.UiLabel;
         private _btnAvailabilityMcw : TinyWars.GameUi.UiButton;
         private _imgAvailabilityMcw : TinyWars.GameUi.UiImage;
         private _btnAvailabilityScw : TinyWars.GameUi.UiButton;
@@ -190,9 +190,9 @@ namespace TinyWars.MapEditor {
                 Common.CommonInputPanel.show({
                     title           : Lang.getText(Lang.Type.B0315),
                     currentValue    : rule.ruleNameList.join(","),
-                    maxChars        : CommonConstants.WarRuleNameMaxLength * 2,
+                    maxChars        : CommonConstants.WarRuleNameMaxLength * 2 + 1,
                     charRestrict    : null,
-                    tips            : null,
+                    tips            : Lang.getText(Lang.Type.A0131),
                     callback        : panel => {
                         const value     = panel.getInputText();
                         const nameList  : string[] = [];
@@ -253,12 +253,17 @@ namespace TinyWars.MapEditor {
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _resetView(): void {
-            const canModify = !this._war.getIsReviewingMap();
+            const canModify         = !this._war.getIsReviewingMap();
+            const colorForButtons   = canModify ? 0x00FF00 : 0xFFFFFF;
             this._btnBack.setTextColor(0x00FF00);
+            this._btnAvailabilityMcw.setTextColor(colorForButtons);
+            this._btnAvailabilityRank.setTextColor(colorForButtons);
+            this._btnAvailabilityScw.setTextColor(colorForButtons);
+            this._btnAvailabilityWr.setTextColor(colorForButtons);
             this._btnDelete.setTextColor(canModify ? 0xFF0000 : 0xFFFFFF);
-            this._btnModifyHasFog.setTextColor(canModify ? 0x00FF00 : 0xFFFFFF);
-            this._btnAddRule.setTextColor(canModify ? 0x00FF00 : 0xFFFFFF);
-            this._btnModifyRuleName.setTextColor(canModify ? 0x00FF00 : 0xFFFFFF);
+            this._btnModifyHasFog.setTextColor(colorForButtons);
+            this._btnAddRule.setTextColor(colorForButtons);
+            this._btnModifyRuleName.setTextColor(colorForButtons);
 
             this._dataForListWarRule = this._createDataForListWarRule();
             this._listWarRule.bindData(this._dataForListWarRule);
@@ -267,8 +272,8 @@ namespace TinyWars.MapEditor {
 
         private _updateComponentsForLanguage(): void {
             this._labelMenuTitle.text           = Lang.getText(Lang.Type.B0314);
-            this._labelPlayerList.text          = Lang.getText(Lang.Type.B0395);
-            this._labelAvailability.text        = Lang.getText(Lang.Type.B0193);
+            this._labelAvailability.text        = Lang.getText(Lang.Type.B0406);
+            this._labelPlayerList.text          = Lang.getText(Lang.Type.B0407);
             this._btnAvailabilityMcw.label      = Lang.getText(Lang.Type.B0137);
             this._btnAvailabilityScw.label      = Lang.getText(Lang.Type.B0138);
             this._btnAvailabilityRank.label     = Lang.getText(Lang.Type.B0404);
@@ -411,6 +416,7 @@ namespace TinyWars.MapEditor {
             const playerRule    = data.playerRule;
             const isReviewing   = data.isReviewing;
             return [
+                this._createDataPlayerIndex(warRule, playerRule, isReviewing),
                 this._createDataTeamIndex(warRule, playerRule, isReviewing),
                 this._createDataAvailableCoIdList(warRule, playerRule, isReviewing),
                 this._createDataInitialFund(warRule, playerRule, isReviewing),
@@ -423,6 +429,14 @@ namespace TinyWars.MapEditor {
                 this._createDataLuckLowerLimit(warRule, playerRule, isReviewing),
                 this._createDataLuckUpperLimit(warRule, playerRule, isReviewing),
             ];
+        }
+            private _createDataPlayerIndex(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+            return {
+                titleText               : Lang.getText(Lang.Type.B0018),
+                infoText                : Lang.getPlayerForceName(playerRule.playerIndex),
+                infoColor               : 0xFFFFFF,
+                callbackOnTouchedTitle  : null,
+            };
         }
         private _createDataTeamIndex(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
             return {
