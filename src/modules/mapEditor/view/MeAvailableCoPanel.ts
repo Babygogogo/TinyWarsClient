@@ -108,6 +108,7 @@ namespace TinyWars.MapEditor {
             } else {
                 const openParam = this._openParam;
                 BwSettingsHelper.setAvailableCoIdList(openParam.warRule, openParam.playerRule.playerIndex, availableCoIdSet);
+                this.close();
             }
         }
 
@@ -159,7 +160,9 @@ namespace TinyWars.MapEditor {
         // View functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._labelAvailableCoTitle.text = `${Lang.getText(Lang.Type.B0238)} (P${this._openParam})`;
+            this._btnCancel.label               = Lang.getText(Lang.Type.B0154);
+            this._btnConfirm.label              = Lang.getText(Lang.Type.B0026);
+            this._labelAvailableCoTitle.text    = `${Lang.getText(Lang.Type.B0238)} (P${this._openParam.playerRule.playerIndex})`;
         }
 
         private _initGroupCoTiers(): void {

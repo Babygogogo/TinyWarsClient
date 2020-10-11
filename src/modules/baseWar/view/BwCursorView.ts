@@ -83,8 +83,6 @@ namespace TinyWars.BaseWar {
                 this.width      = this._mapSize.width * _GRID_WIDTH;
                 this.height     = this._mapSize.height * _GRID_HEIGHT;
 
-                this._startNormalAnimation();
-                this._startTargetAnimation();
             }
         }
         public fastInit(cursor: BwCursor): void {
@@ -101,10 +99,13 @@ namespace TinyWars.BaseWar {
             this.addEventListener(egret.TouchEvent.TOUCH_RELEASE_OUTSIDE,   this._onTouchReleaseOutside,    this);
 
             this.updateView();
+
+            this._startNormalAnimation();
+            this._startTargetAnimation();
         }
         public stopRunningView(): void {
-            // this._stopNormalAnimation();
-            // this._stopTargetAnimation();
+            this._stopNormalAnimation();
+            this._stopTargetAnimation();
 
             this.removeEventListener(egret.TouchEvent.TOUCH_BEGIN,              this._onTouchBegin,             this);
             this.removeEventListener(egret.TouchEvent.TOUCH_CANCEL,             this._onTouchCancel,            this);
@@ -113,9 +114,10 @@ namespace TinyWars.BaseWar {
             this.removeEventListener(egret.TouchEvent.TOUCH_MOVE,               this._onTouchMove,              this);
             this._currGlobalTouchPoints.clear();
             this._prevGlobalTouchPoints.clear();
-            delete this._initialGlobalTouchPoint;
-            delete this._isTouchMovedOrMultiple;
-            delete this._touchIdForTouchingCursor;
+            this._initialGlobalTouchPoint   = null;
+            this._isTouchMovedOrMultiple    = null;
+            this._touchIdForTouchingCursor  = null;
+            this._cursor                    = null;
         }
 
         public updateView(): void {

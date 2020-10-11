@@ -2981,15 +2981,7 @@ namespace TinyWars.Utility.Lang {
     }
 
     export function getPlayerForceName(playerIndex: number): string {
-        // switch (playerIndex) {
-        //     case 0  : return getText(Type.B0030);
-        //     case 1  : return getText(Type.B0004);
-        //     case 2  : return getText(Type.B0005);
-        //     case 3  : return getText(Type.B0006);
-        //     case 4  : return getText(Type.B0007);
-        //     default : return undefined;
-        // }
-        return `${playerIndex}.`;
+        return `P${playerIndex}`;
     }
 
     export function getPlayerTeamName(teamIndex: number): string {

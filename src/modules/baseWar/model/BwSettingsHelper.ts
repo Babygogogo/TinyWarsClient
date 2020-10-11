@@ -430,7 +430,12 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
         }
     }
     export function reviseWarRule(warRule: IWarRule, playersCount: number): void {
-        const playerRuleDataList = warRule.ruleForPlayers.playerRuleDataList;
+        const ruleForPlayers = warRule.ruleForPlayers;
+        if (!ruleForPlayers.playerRuleDataList) {
+            ruleForPlayers.playerRuleDataList = [];
+        }
+
+        const playerRuleDataList = ruleForPlayers.playerRuleDataList;
         for (let index = 0; index < playerRuleDataList.length; ++index) {
             const playerRule = playerRuleDataList[index];
             if (playerRule.playerIndex > playersCount) {

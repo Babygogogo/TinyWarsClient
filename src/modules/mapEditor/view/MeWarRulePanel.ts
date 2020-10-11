@@ -186,7 +186,7 @@ namespace TinyWars.MapEditor {
 
         private _onTouchedBtnModifyRuleName(e: egret.TouchEvent): void {
             const rule = this._selectedRule;
-            if (rule) {
+            if ((rule) && (!this._war.getIsReviewingMap())) {
                 Common.CommonInputPanel.show({
                     title           : Lang.getText(Lang.Type.B0315),
                     currentValue    : rule.ruleNameList.join(","),
@@ -219,7 +219,7 @@ namespace TinyWars.MapEditor {
 
         private _onTouchedBtnAvailabilityMcw(e: egret.TouchEvent): void {
             const rule = this._selectedRule;
-            if (rule) {
+            if ((rule) && (!this._war.getIsReviewingMap())) {
                 rule.ruleAvailability.canMcw = !rule.ruleAvailability.canMcw;
                 this._updateImgAvailabilityMcw(rule);
             }
@@ -227,7 +227,7 @@ namespace TinyWars.MapEditor {
 
         private _onTouchedBtnAvailabilityScw(e: egret.TouchEvent): void {
             const rule = this._selectedRule;
-            if (rule) {
+            if ((rule) && (!this._war.getIsReviewingMap())) {
                 rule.ruleAvailability.canScw = !rule.ruleAvailability.canScw;
                 this._updateImgAvailabilityScw(rule);
             }
@@ -235,7 +235,7 @@ namespace TinyWars.MapEditor {
 
         private _onTouchedBtnAvailabilityRank(e: egret.TouchEvent): void {
             const rule = this._selectedRule;
-            if (rule) {
+            if ((rule) && (!this._war.getIsReviewingMap())) {
                 rule.ruleAvailability.canRank = !rule.ruleAvailability.canRank;
                 this._updateImgAvailabilityRank(rule);
             }
@@ -243,7 +243,7 @@ namespace TinyWars.MapEditor {
 
         private _onTouchedBtnAvailabilityWr(e: egret.TouchEvent): void {
             const rule = this._selectedRule;
-            if (rule) {
+            if ((rule) && (!this._war.getIsReviewingMap())) {
                 rule.ruleAvailability.canWr = !rule.ruleAvailability.canWr;
                 this._updateImgAvailabilityWr(rule);
             }
@@ -253,15 +253,17 @@ namespace TinyWars.MapEditor {
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _resetView(): void {
-            const canModify         = !this._war.getIsReviewingMap();
-            const colorForButtons   = canModify ? 0x00FF00 : 0xFFFFFF;
+            const canModify             = !this._war.getIsReviewingMap();
+            const colorForButtons       = canModify ? 0x00FF00 : 0xFFFFFF;
+            this._btnDelete.visible     = canModify;
+            this._btnAddRule.visible    = canModify;
             this._btnBack.setTextColor(0x00FF00);
             this._btnAvailabilityMcw.setTextColor(colorForButtons);
             this._btnAvailabilityRank.setTextColor(colorForButtons);
             this._btnAvailabilityScw.setTextColor(colorForButtons);
             this._btnAvailabilityWr.setTextColor(colorForButtons);
-            this._btnDelete.setTextColor(canModify ? 0xFF0000 : 0xFFFFFF);
             this._btnModifyHasFog.setTextColor(colorForButtons);
+            this._btnDelete.setTextColor(0xFF0000);
             this._btnAddRule.setTextColor(colorForButtons);
             this._btnModifyRuleName.setTextColor(colorForButtons);
 
@@ -430,7 +432,7 @@ namespace TinyWars.MapEditor {
                 this._createDataLuckUpperLimit(warRule, playerRule, isReviewing),
             ];
         }
-            private _createDataPlayerIndex(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+        private _createDataPlayerIndex(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
             return {
                 titleText               : Lang.getText(Lang.Type.B0018),
                 infoText                : Lang.getPlayerForceName(playerRule.playerIndex),
@@ -443,12 +445,12 @@ namespace TinyWars.MapEditor {
                 titleText               : Lang.getText(Lang.Type.B0019),
                 infoText                : Lang.getPlayerTeamName(playerRule.teamIndex),
                 infoColor               : 0xFFFFFF,
-                callbackOnTouchedTitle  : () => {
-                    if (!isReviewing) {
+                callbackOnTouchedTitle  : isReviewing
+                    ? null
+                    : () => {
                         BwSettingsHelper.tickTeamIndex(warRule, playerRule.playerIndex);
                         this._updateView();
-                    }
-                },
+                    },
             };
         }
         private _createDataAvailableCoIdList(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
@@ -456,16 +458,18 @@ namespace TinyWars.MapEditor {
                 titleText               : Lang.getText(Lang.Type.B0403),
                 infoText                : `${playerRule.availableCoIdList.length}`,
                 infoColor               : 0xFFFFFF,
-                callbackOnTouchedTitle  : () => {
-                    MeAvailableCoPanel.show({
-                        warRule,
-                        playerRule,
-                        isReviewing,
-                        callbackOnClose : () => {
-                            this._updateView();
-                        },
-                    });
-                },
+                callbackOnTouchedTitle  : isReviewing
+                    ? null
+                    : () => {
+                        MeAvailableCoPanel.show({
+                            warRule,
+                            playerRule,
+                            isReviewing,
+                            callbackOnClose : () => {
+                                this._updateView();
+                            },
+                        });
+                    },
             };
         }
         private _createDataInitialFund(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
@@ -474,8 +478,9 @@ namespace TinyWars.MapEditor {
                 titleText               : Lang.getText(Lang.Type.B0178),
                 infoText                : `${currValue}`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault),
-                callbackOnTouchedTitle  : () => {
-                    if (!isReviewing) {
+                callbackOnTouchedTitle  : isReviewing
+                    ? null
+                    : () => {
                         const maxValue  = CommonConstants.WarRuleInitialFundMaxLimit;
                         const minValue  = CommonConstants.WarRuleInitialFundMinLimit;
                         Common.CommonInputPanel.show({
@@ -496,7 +501,6 @@ namespace TinyWars.MapEditor {
                             },
                         });
                     }
-                }
             };
         }
         private _createDataIncomeMultiplier(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
@@ -505,8 +509,9 @@ namespace TinyWars.MapEditor {
                 titleText               : Lang.getText(Lang.Type.B0179),
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault),
-                callbackOnTouchedTitle  : () => {
-                    if (!isReviewing) {
+                callbackOnTouchedTitle  : isReviewing
+                    ? null
+                    : () => {
                         const maxValue  = CommonConstants.WarRuleIncomeMultiplierMaxLimit;
                         const minValue  = CommonConstants.WarRuleIncomeMultiplierMinLimit;
                         Common.CommonInputPanel.show({
@@ -526,8 +531,7 @@ namespace TinyWars.MapEditor {
                                 }
                             },
                         });
-                    }
-                },
+                    },
             };
         }
         private _createDataInitialEnergyPercentage(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
@@ -536,8 +540,9 @@ namespace TinyWars.MapEditor {
                 titleText               : Lang.getText(Lang.Type.B0180),
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialEnergyPercentageDefault),
-                callbackOnTouchedTitle  : () => {
-                    if (!isReviewing) {
+                callbackOnTouchedTitle  : isReviewing
+                    ? null
+                    : () => {
                         const minValue      = CommonConstants.WarRuleInitialEnergyPercentageMinLimit;
                         const maxValue      = CommonConstants.WarRuleInitialEnergyPercentageMaxLimit;
                         Common.CommonInputPanel.show({
@@ -557,8 +562,7 @@ namespace TinyWars.MapEditor {
                                 }
                             },
                         });
-                    }
-                },
+                    },
             };
         }
         private _createDataEnergyGrowthMultiplier(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
@@ -567,8 +571,9 @@ namespace TinyWars.MapEditor {
                 titleText               : Lang.getText(Lang.Type.B0181),
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault),
-                callbackOnTouchedTitle  : () => {
-                    if (!isReviewing) {
+                callbackOnTouchedTitle  : isReviewing
+                    ? null
+                    : () => {
                         const minValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit;
                         const maxValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit;
                         Common.CommonInputPanel.show({
@@ -588,7 +593,6 @@ namespace TinyWars.MapEditor {
                                 }
                             },
                         });
-                    }
                 },
             };
         }
@@ -598,8 +602,9 @@ namespace TinyWars.MapEditor {
                 titleText               : Lang.getText(Lang.Type.B0182),
                 infoText                : `${currValue}`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault),
-                callbackOnTouchedTitle  : () => {
-                    if (!isReviewing) {
+                callbackOnTouchedTitle  : isReviewing
+                    ? null
+                    : () => {
                         const minValue      = CommonConstants.WarRuleMoveRangeModifierMinLimit;
                         const maxValue      = CommonConstants.WarRuleMoveRangeModifierMaxLimit;
                         Common.CommonInputPanel.show({
@@ -619,7 +624,6 @@ namespace TinyWars.MapEditor {
                                 }
                             },
                         });
-                    }
                 },
             };
         }
@@ -629,8 +633,9 @@ namespace TinyWars.MapEditor {
                 titleText               : Lang.getText(Lang.Type.B0183),
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault),
-                callbackOnTouchedTitle  : () => {
-                    if (!isReviewing) {
+                callbackOnTouchedTitle  : isReviewing
+                    ? null
+                    : () => {
                         const minValue      = CommonConstants.WarRuleOffenseBonusMinLimit;
                         const maxValue      = CommonConstants.WarRuleOffenseBonusMaxLimit;
                         Common.CommonInputPanel.show({
@@ -650,7 +655,6 @@ namespace TinyWars.MapEditor {
                                 }
                             },
                         });
-                    }
                 },
             };
         }
@@ -660,8 +664,9 @@ namespace TinyWars.MapEditor {
                 titleText               : Lang.getText(Lang.Type.B0184),
                 infoText                : `${currValue}`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault),
-                callbackOnTouchedTitle  : () => {
-                    if (!isReviewing) {
+                callbackOnTouchedTitle  : isReviewing
+                    ? null
+                    : () => {
                         const minValue      = CommonConstants.WarRuleVisionRangeModifierMinLimit;
                         const maxValue      = CommonConstants.WarRuleVisionRangeModifierMaxLimit;
                         Common.CommonInputPanel.show({
@@ -681,7 +686,6 @@ namespace TinyWars.MapEditor {
                                 }
                             },
                         });
-                    }
                 },
             };
         }
@@ -692,8 +696,9 @@ namespace TinyWars.MapEditor {
                 titleText               : Lang.getText(Lang.Type.B0189),
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit),
-                callbackOnTouchedTitle  : () => {
-                    if (!isReviewing) {
+                callbackOnTouchedTitle  : isReviewing
+                    ? null
+                    : () => {
                         const minValue      = CommonConstants.WarRuleLuckMinLimit;
                         const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
                         Common.CommonInputPanel.show({
@@ -719,7 +724,6 @@ namespace TinyWars.MapEditor {
                                 }
                             },
                         });
-                    }
                 },
             };
         }
@@ -730,8 +734,9 @@ namespace TinyWars.MapEditor {
                 titleText               : Lang.getText(Lang.Type.B0190),
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit),
-                callbackOnTouchedTitle  : () => {
-                    if (!isReviewing) {
+                callbackOnTouchedTitle  : isReviewing
+                    ? null
+                    : () => {
                         const minValue      = CommonConstants.WarRuleLuckMinLimit;
                         const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
                         Common.CommonInputPanel.show({
@@ -757,7 +762,6 @@ namespace TinyWars.MapEditor {
                                 }
                             },
                         });
-                    }
                 },
             };
         }

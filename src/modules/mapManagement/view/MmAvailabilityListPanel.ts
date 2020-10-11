@@ -156,16 +156,16 @@ namespace TinyWars.MapManagement {
 
         private async _createDataForListMap(): Promise<DataForMapNameRenderer[]> {
             const data: DataForMapNameRenderer[] = [];
-            let { mapName, mapDesigner, playersCount, playedTimes, minRating } = this._mapFilters;
-            (mapName)       && (mapName     = mapName.toLowerCase());
-            (mapDesigner)   && (mapDesigner = mapDesigner.toLowerCase());
+            let { mapName: mapNameForFilter, mapDesigner, playersCount, playedTimes, minRating } = this._mapFilters;
+            (mapNameForFilter)  && (mapNameForFilter = mapNameForFilter.toLowerCase());
+            (mapDesigner)       && (mapDesigner = mapDesigner.toLowerCase());
 
             for (const [mapId, extraData] of WarMapModel.getExtraDataDict()) {
                 const mapRawData    = await WarMapModel.getRawData(mapId);
                 const mapName       = Lang.getNameInCurrentLanguage(mapRawData.mapNameList);
 
                 if ((!extraData.isEnabled)                                                                                  ||
-                    ((mapName) && (mapName.toLowerCase().indexOf(mapName) < 0))                                             ||
+                    ((mapNameForFilter) && (mapName.toLowerCase().indexOf(mapNameForFilter) < 0))                           ||
                     ((mapDesigner) && (mapRawData.designerName.toLowerCase().indexOf(mapDesigner) < 0))                     ||
                     ((playersCount) && (mapRawData.playersCount !== playersCount))                                          ||
                     ((playedTimes != null) && ((await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId)) < playedTimes))    ||
@@ -175,7 +175,7 @@ namespace TinyWars.MapManagement {
                 } else {
                     data.push({
                         mapId,
-                        mapName : mapName,
+                        mapName,
                         panel   : this,
                     });
                 }

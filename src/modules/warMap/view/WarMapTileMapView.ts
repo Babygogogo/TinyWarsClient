@@ -187,7 +187,7 @@ namespace TinyWars.WarMap {
                 : CommonModel.getCachedTileObjectImageSource({
                     version     : CommonModel.getUnitAndTileTextureVersion(),
                     objectType  : tileData.objectType,
-                    shapeId     : tileData.baseShapeId || 0,
+                    shapeId     : tileData.objectShapeId || 0,
                     isDark      : false,
                     skinId      : tileData.playerIndex,
                     tickCount,

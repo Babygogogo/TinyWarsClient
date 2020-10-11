@@ -300,25 +300,25 @@ namespace TinyWars.Utility.ConfigManager {
         [
             Types.UnitAndTileTextureVersion.V0,
             new Map<TileObjectType, FrameCfg>([
-                [ TileObjectType.Airport,       { framesCount: 3,   ticksPerFrame: 1                }],
+                [ TileObjectType.Airport,       { framesCount: 2,   ticksPerFrame: 3                }],
                 [ TileObjectType.Bridge,        { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
-                [ TileObjectType.City,          { framesCount: 3,   ticksPerFrame: 1                }],
-                [ TileObjectType.CommandTower,  { framesCount: 3,   ticksPerFrame: 1                }],
+                [ TileObjectType.City,          { framesCount: 2,   ticksPerFrame: 3                }],
+                [ TileObjectType.CommandTower,  { framesCount: 2,   ticksPerFrame: 3                }],
                 [ TileObjectType.EmptySilo,     { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
-                [ TileObjectType.Factory,       { framesCount: 3,   ticksPerFrame: 1                }],
-                [ TileObjectType.Fire,          { framesCount: 3,   ticksPerFrame: 1                }],
+                [ TileObjectType.Factory,       { framesCount: 2,   ticksPerFrame: 3                }],
+                [ TileObjectType.Fire,          { framesCount: 5,   ticksPerFrame: 1                }],
                 [ TileObjectType.GreenPlasma,   { framesCount: 3,   ticksPerFrame: 1                }],
-                [ TileObjectType.Headquarters,  { framesCount: 3,   ticksPerFrame: 1                }],
+                [ TileObjectType.Headquarters,  { framesCount: 2,   ticksPerFrame: 3                }],
                 [ TileObjectType.Meteor,        { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
                 [ TileObjectType.Mist,          { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
                 [ TileObjectType.Mountain,      { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
                 [ TileObjectType.Plasma,        { framesCount: 3,   ticksPerFrame: 1                }],
-                [ TileObjectType.Radar,         { framesCount: 3,   ticksPerFrame: 1                }],
-                [ TileObjectType.Reef,          { framesCount: 8,   ticksPerFrame: 1                }],
+                [ TileObjectType.Radar,         { framesCount: 2,   ticksPerFrame: 3                }],
+                [ TileObjectType.Reef,          { framesCount: 6,   ticksPerFrame: 1                }],
                 [ TileObjectType.Road,          { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
                 [ TileObjectType.Rough,         { framesCount: 6,   ticksPerFrame: 1                }],
                 [ TileObjectType.Ruins,         { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
-                [ TileObjectType.Seaport,       { framesCount: 3,   ticksPerFrame: 1                }],
+                [ TileObjectType.Seaport,       { framesCount: 2,   ticksPerFrame: 3                }],
                 [ TileObjectType.Silo,          { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
                 [ TileObjectType.TempAirport,   { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
                 [ TileObjectType.TempSeaport,   { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
@@ -342,7 +342,7 @@ namespace TinyWars.Utility.ConfigManager {
                 [ TileObjectType.Mist,          { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
                 [ TileObjectType.Mountain,      { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
                 [ TileObjectType.Plasma,        { framesCount: 3,   ticksPerFrame: 1                }],
-                [ TileObjectType.Radar,         { framesCount: 2,   ticksPerFrame: 1                }],
+                [ TileObjectType.Radar,         { framesCount: 2,   ticksPerFrame: 3                }],
                 [ TileObjectType.Reef,          { framesCount: 6,   ticksPerFrame: 1                }],
                 [ TileObjectType.Road,          { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
                 [ TileObjectType.Rough,         { framesCount: 6,   ticksPerFrame: 1                }],
@@ -1238,9 +1238,13 @@ namespace TinyWars.Utility.ConfigManager {
         return _TILE_BASE_SHAPE_CFGS;
     }
     export function checkIsValidTileObjectShapeId(tileObjectType: TileObjectType, shapeId: number): boolean {
-        const cfg = getTileObjectShapeCfgs().get(tileObjectType);
-        return ((!!cfg) || (tileObjectType === TileObjectType.Empty))
-            && ((shapeId == null) || ((shapeId >= 0) && (shapeId < cfg.shapesCount)));
+        if (tileObjectType === TileObjectType.Empty) {
+            return !shapeId;
+        } else {
+            const cfg = getTileObjectShapeCfgs().get(tileObjectType);
+            return (!!cfg)
+                && ((shapeId == null) || ((shapeId >= 0) && (shapeId < cfg.shapesCount)));
+        }
     }
     export function checkIsValidTileBaseShapeId(tileBaseType: TileBaseType, shapeId: number): boolean {
         const cfg = getTileBaseShapeCfgs().get(tileBaseType);
