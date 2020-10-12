@@ -1,14 +1,12 @@
 
 namespace TinyWars.WarMap {
     import Types                = Utility.Types;
-    import Helpers              = Utility.Helpers;
     import ProtoTypes           = Utility.ProtoTypes;
-    import LocalStorage         = Utility.LocalStorage;
     import Notify               = Utility.Notify;
     import Lang                 = Utility.Lang;
     import NetMessage           = ProtoTypes.NetMessage;
-    import IS_MapGetRawData     = NetMessage.IS_MapGetRawData;
-    import IS_MapGetExtraData   = NetMessage.IS_MapGetExtraData;
+    import MsgMapGetRawDataIs   = NetMessage.MsgMapGetRawData.IS;
+    import MsgMapGetExtraDataIs = NetMessage.MsgMapGetExtraData.IS;
     import IMapRawData          = ProtoTypes.Map.IMapRawData;
     import IMapExtraData        = ProtoTypes.Map.IMapExtraData;
     import IMapEditorData       = ProtoTypes.Map.IMapEditorData;
@@ -18,8 +16,8 @@ namespace TinyWars.WarMap {
         const _EXTRA_DATA_DICT      = new Map<number, IMapExtraData>();
 
         let _reviewingMaps          : IMapEditorData[];
-        const _rawDataRequests      = new Map<number, ((info: IS_MapGetRawData | undefined | null) => void)[]>();
-        const _extraDataRequests    = new Map<number, ((info: IS_MapGetExtraData | undefined | null) => void)[]>();
+        const _rawDataRequests      = new Map<number, ((info: MsgMapGetRawDataIs | undefined | null) => void)[]>();
+        const _extraDataRequests    = new Map<number, ((info: MsgMapGetExtraDataIs | undefined | null) => void)[]>();
 
         export function init(): void {
         }
@@ -55,10 +53,10 @@ namespace TinyWars.WarMap {
 
             new Promise((resolve, reject) => {
                 const callbackOnSucceed = (e: egret.Event): void => {
-                    const data = e.data as IS_MapGetExtraData;
+                    const data = e.data as MsgMapGetExtraDataIs;
                     if (data.mapId === mapId) {
-                        Notify.removeEventListener(Notify.Type.SMapGetExtraData,        callbackOnSucceed);
-                        Notify.removeEventListener(Notify.Type.SMapGetExtraDataFailed,  callbackOnFailed);
+                        Notify.removeEventListener(Notify.Type.MsgMapGetExtraData,        callbackOnSucceed);
+                        Notify.removeEventListener(Notify.Type.MsgMapGetExtraDataFailed,  callbackOnFailed);
 
                         for (const cb of _extraDataRequests.get(mapId)) {
                             cb(data);
@@ -69,10 +67,10 @@ namespace TinyWars.WarMap {
                     }
                 };
                 const callbackOnFailed = (e: egret.Event): void => {
-                    const data = e.data as IS_MapGetExtraData;
+                    const data = e.data as MsgMapGetExtraDataIs;
                     if (data.mapId === mapId) {
-                        Notify.removeEventListener(Notify.Type.SMapGetExtraData,        callbackOnSucceed);
-                        Notify.removeEventListener(Notify.Type.SMapGetExtraDataFailed,  callbackOnFailed);
+                        Notify.removeEventListener(Notify.Type.MsgMapGetExtraData,        callbackOnSucceed);
+                        Notify.removeEventListener(Notify.Type.MsgMapGetExtraDataFailed,  callbackOnFailed);
 
                         for (const cb of _extraDataRequests.get(mapId)) {
                             cb(data);
@@ -83,8 +81,8 @@ namespace TinyWars.WarMap {
                     }
                 };
 
-                Notify.addEventListener(Notify.Type.SMapGetExtraData,       callbackOnSucceed);
-                Notify.addEventListener(Notify.Type.SMapGetExtraDataFailed, callbackOnFailed);
+                Notify.addEventListener(Notify.Type.MsgMapGetExtraData,       callbackOnSucceed);
+                Notify.addEventListener(Notify.Type.MsgMapGetExtraDataFailed, callbackOnFailed);
 
                 WarMapProxy.reqGetMapExtraData(mapId);
             });
@@ -181,10 +179,10 @@ namespace TinyWars.WarMap {
 
             new Promise((resolve, reject) => {
                 const callbackOnSucceed = (e: egret.Event): void => {
-                    const data = e.data as IS_MapGetRawData;
+                    const data = e.data as MsgMapGetRawDataIs;
                     if (data.mapId === mapId) {
-                        Notify.removeEventListener(Notify.Type.SMapGetRawData,        callbackOnSucceed);
-                        Notify.removeEventListener(Notify.Type.SMapGetRawDataFailed,  callbackOnFailed);
+                        Notify.removeEventListener(Notify.Type.MsgMapGetRawData,        callbackOnSucceed);
+                        Notify.removeEventListener(Notify.Type.MsgMapGetRawDataFailed,  callbackOnFailed);
 
                         for (const cb of _rawDataRequests.get(mapId)) {
                             cb(data);
@@ -195,10 +193,10 @@ namespace TinyWars.WarMap {
                     }
                 };
                 const callbackOnFailed = (e: egret.Event): void => {
-                    const data = e.data as IS_MapGetRawData;
+                    const data = e.data as MsgMapGetRawDataIs;
                     if (data.mapId === mapId) {
-                        Notify.removeEventListener(Notify.Type.SMapGetRawData,        callbackOnSucceed);
-                        Notify.removeEventListener(Notify.Type.SMapGetRawDataFailed,  callbackOnFailed);
+                        Notify.removeEventListener(Notify.Type.MsgMapGetRawData,        callbackOnSucceed);
+                        Notify.removeEventListener(Notify.Type.MsgMapGetRawDataFailed,  callbackOnFailed);
 
                         for (const cb of _rawDataRequests.get(mapId)) {
                             cb(data);
@@ -209,8 +207,8 @@ namespace TinyWars.WarMap {
                     }
                 };
 
-                Notify.addEventListener(Notify.Type.SMapGetRawData,       callbackOnSucceed);
-                Notify.addEventListener(Notify.Type.SMapGetRawDataFailed, callbackOnFailed);
+                Notify.addEventListener(Notify.Type.MsgMapGetRawData,       callbackOnSucceed);
+                Notify.addEventListener(Notify.Type.MsgMapGetRawDataFailed, callbackOnFailed);
 
                 WarMapProxy.reqGetMapRawData(mapId);
             });

@@ -149,7 +149,7 @@ namespace TinyWars.Network {
             const name      = Helpers.getMessageName(container);
             Logger.log("%cNetManager receive: ", "background:#FFD777", name, ", length: ", data.length, "\n", container[name]);
 
-            if (container.S_ServerDisconnect) {
+            if (container.MsgCommonServerDisconnect) {
                 setCanAutoReconnect(false);
             }
 

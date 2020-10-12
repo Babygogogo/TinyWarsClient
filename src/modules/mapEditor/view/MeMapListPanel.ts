@@ -44,7 +44,7 @@ namespace TinyWars.MapEditor {
         protected _onFirstOpened(): void {
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.SMeGetDataList,     callback: this._onNotifySMeGetDataList },
+                { type: Notify.Type.MsgMeGetDataList,     callback: this._onNotifySMeGetDataList },
             ];
             this._uiListeners = [
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },

@@ -13,7 +13,7 @@ namespace TinyWars.User {
         let _selfAccount                : string;
         let _selfPassword               : string;
         const _userPublicInfoDict       = new Map<number, IUserPublicInfo>();
-        const _userPublicInfoRequests   = new Map<number, ((info: NetMessage.IS_GetUserPublicInfo | undefined | null) => void)[]>();
+        const _userPublicInfoRequests   = new Map<number, ((info: NetMessage.MsgUserGetPublicInfo.IS | undefined | null) => void)[]>();
 
         export function init(): void {
             Notify.addEventListeners([
@@ -107,10 +107,10 @@ namespace TinyWars.User {
 
             new Promise((resolve, reject) => {
                 const callbackOnSucceed = (e: egret.Event): void => {
-                    const data = e.data as NetMessage.IS_GetUserPublicInfo;
+                    const data = e.data as NetMessage.MsgUserGetPublicInfo.IS;
                     if (data.userId === userId) {
-                        Notify.removeEventListener(Notify.Type.SGetUserPublicInfo,        callbackOnSucceed);
-                        Notify.removeEventListener(Notify.Type.SGetUserPublicInfoFailed,  callbackOnFailed);
+                        Notify.removeEventListener(Notify.Type.MsgUserGetPublicInfo,        callbackOnSucceed);
+                        Notify.removeEventListener(Notify.Type.MsgUserGetPublicInfoFailed,  callbackOnFailed);
 
                         for (const cb of _userPublicInfoRequests.get(userId)) {
                             cb(data);
@@ -121,10 +121,10 @@ namespace TinyWars.User {
                     }
                 };
                 const callbackOnFailed = (e: egret.Event): void => {
-                    const data = e.data as NetMessage.IS_GetUserPublicInfo;
+                    const data = e.data as NetMessage.MsgUserGetPublicInfo.IS;
                     if (data.userId === userId) {
-                        Notify.removeEventListener(Notify.Type.SGetUserPublicInfo,        callbackOnSucceed);
-                        Notify.removeEventListener(Notify.Type.SGetUserPublicInfoFailed,  callbackOnFailed);
+                        Notify.removeEventListener(Notify.Type.MsgUserGetPublicInfo,        callbackOnSucceed);
+                        Notify.removeEventListener(Notify.Type.MsgUserGetPublicInfoFailed,  callbackOnFailed);
 
                         for (const cb of _userPublicInfoRequests.get(userId)) {
                             cb(data);
@@ -135,10 +135,10 @@ namespace TinyWars.User {
                     }
                 };
 
-                Notify.addEventListener(Notify.Type.SGetUserPublicInfo,       callbackOnSucceed);
-                Notify.addEventListener(Notify.Type.SGetUserPublicInfoFailed, callbackOnFailed);
+                Notify.addEventListener(Notify.Type.MsgUserGetPublicInfo,       callbackOnSucceed);
+                Notify.addEventListener(Notify.Type.MsgUserGetPublicInfoFailed, callbackOnFailed);
 
-                UserProxy.reqGetUserPublicInfo(userId);
+                UserProxy.reqUserGetPublicInfo(userId);
             });
 
             return new Promise((resolve, reject) => {

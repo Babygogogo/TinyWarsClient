@@ -352,7 +352,7 @@ namespace TinyWars.MultiCustomWar {
 
             const data              = this.data as DataForSkillRenderer;
             this._labelIndex.text   = `${data.index}.`;
-            this._labelDesc.text    = Utility.ConfigManager.getCoSkillCfg(Utility.ConfigManager.getNewestConfigVersion(), data.skillId).desc[Lang.getLanguageType()];
+            this._labelDesc.text    = Utility.ConfigManager.getCoSkillCfg(Utility.ConfigManager.getLatestConfigVersion(), data.skillId).desc[Lang.getLanguageType()];
         }
     }
 }

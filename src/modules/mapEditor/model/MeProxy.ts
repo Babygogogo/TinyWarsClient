@@ -8,53 +8,53 @@ namespace TinyWars.MapEditor.MeProxy {
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: NetCodes.S_MeGetMapDataList, callback: _onSMeGetMapDataList },
-            { msgCode: NetCodes.S_MeGetMapData,     callback: _onSMeGetMapData },
-            { msgCode: NetCodes.S_MeSubmitMap,      callback: _onSMeSubmitMap },
+            { msgCode: NetCodes.MsgMeGetMapDataList,    callback: _onMsgMeGetMapDataList    },
+            { msgCode: NetCodes.MsgMeGetMapData,        callback: _onMsgMeGetMapData        },
+            { msgCode: NetCodes.MsgMeSubmitMap,         callback: _onMsgMeSubmitMap         },
         ], MeProxy);
     }
 
     export function reqMeGetMapDataList(): void {
         NetManager.send({
-            C_MeGetMapDataList: {},
+            MsgMeGetMapDataList: { c: {} },
         });
     }
-    function _onSMeGetMapDataList(e: egret.Event): void {
-        const data = e.data as NetMessage.IS_MeGetMapDataList;
+    function _onMsgMeGetMapDataList(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMeGetMapDataList.IS;
         if (!data.errorCode) {
             MeModel.resetDataList(data.dataList);
-            Notify.dispatch(Notify.Type.SMeGetDataList, data);
+            Notify.dispatch(Notify.Type.MsgMeGetDataList, data);
         }
     }
 
     export function reqMeGetMapData(slotIndex: number): void {
         NetManager.send({
-            C_MeGetMapData: {
+            MsgMeGetMapData: { c: {
                 slotIndex,
-            },
+            }, }
         });
     }
-    function _onSMeGetMapData(e: egret.Event): void {
-        const data = e.data as NetMessage.IS_MeGetMapData;
+    function _onMsgMeGetMapData(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMeGetMapData.IS;
         if (!data.errorCode) {
             MeModel.updateData(data.slotIndex, data.data);
-            Notify.dispatch(Notify.Type.SMeGetData, data);
+            Notify.dispatch(Notify.Type.MsgMeGetData, data);
         }
     }
 
     export function reqMeSubmitMap(slotIndex: number, mapRawData: ProtoTypes.Map.IMapRawData, needReview: boolean): void {
         NetManager.send({
-            C_MeSubmitMap: {
+            MsgMeSubmitMap: { c: {
                 slotIndex,
                 needReview,
                 mapRawData,
-            },
+            }, }
         });
     }
-    function _onSMeSubmitMap(e: egret.Event): void {
-        const data = e.data as NetMessage.IS_MeSubmitMap;
+    function _onMsgMeSubmitMap(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMeSubmitMap.IS;
         if (!data.errorCode) {
-            Notify.dispatch(Notify.Type.SMeSubmitMap, data);
+            Notify.dispatch(Notify.Type.MsgMeSubmitMap, data);
         }
     }
 }

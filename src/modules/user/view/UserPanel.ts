@@ -88,9 +88,9 @@ namespace TinyWars.User {
         protected _onFirstOpened(): void {
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.SGetUserPublicInfo,                 callback: this._onNotifySGetUserPublicInfo },
-                { type: Notify.Type.SUserChangeNickname,                callback: this._onNotifySUserChangeNickname },
-                { type: Notify.Type.SUserChangeDiscordId,               callback: this._onNotifySUserChangeDiscordId },
+                { type: Notify.Type.MsgUserGetPublicInfo,                 callback: this._onNotifySGetUserPublicInfo },
+                { type: Notify.Type.MsgUserChangeNickname,                callback: this._onNotifySUserChangeNickname },
+                { type: Notify.Type.MsgUserChangeDiscordId,               callback: this._onNotifySUserChangeDiscordId },
                 { type: Notify.Type.UnitAndTileTextureVersionChanged,   callback: this._onNotifyUnitAndTileTextureVersionChanged },
             ];
             this._uiListeners = [
@@ -105,7 +105,7 @@ namespace TinyWars.User {
             ];
         }
         protected _onOpened(): void {
-            UserProxy.reqGetUserPublicInfo(this._userId);
+            UserProxy.reqUserGetPublicInfo(this._userId);
 
             this._updateView();
         }
@@ -122,13 +122,13 @@ namespace TinyWars.User {
         private _onNotifySUserChangeNickname(e: egret.Event): void {
             const userId = this._userId;
             if (userId === UserModel.getSelfUserId()) {
-                UserProxy.reqGetUserPublicInfo(this._userId);
+                UserProxy.reqUserGetPublicInfo(this._userId);
             }
         }
         private _onNotifySUserChangeDiscordId(e: egret.Event): void {
             const userId = this._userId;
             if (userId === UserModel.getSelfUserId()) {
-                UserProxy.reqGetUserPublicInfo(this._userId);
+                UserProxy.reqUserGetPublicInfo(this._userId);
             }
         }
         private _onTouchedBtnChangeNickname(e: egret.TouchEvent): void {

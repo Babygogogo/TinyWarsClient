@@ -117,6 +117,6 @@ namespace TinyWars.Time.TimeModel {
                 NetManager.init();
             }
         }
-        TimeProxy.reqCommonHeartbeat(_heartbeatCounter);
+        Common.CommonProxy.reqCommonHeartbeat(_heartbeatCounter);
     }
 }

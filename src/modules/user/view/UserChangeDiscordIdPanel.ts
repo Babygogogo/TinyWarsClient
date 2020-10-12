@@ -42,8 +42,8 @@ namespace TinyWars.User {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: NotifyType.SUserChangeDiscordId,         callback: this._onSUserChangeDiscordId },
-                { type: NotifyType.SUserChangeDiscordIdFailed,   callback: this._onSUserChangeDiscordIdFailed },
+                { type: NotifyType.MsgUserChangeDiscordId,         callback: this._onSUserChangeDiscordId },
+                { type: NotifyType.MsgUserChangeDiscordIdFailed,   callback: this._onSUserChangeDiscordIdFailed },
                 { type: NotifyType.LanguageChanged,              callback: this._onNotifyLanguageChanged },
             ];
             this._uiListeners = [

@@ -817,18 +817,12 @@ namespace TinyWars.Utility.ConfigManager {
         return flags;
     }
 
-    function _onSNewestConfigVersion(e: egret.Event): void {
-        const data = e.data as ProtoTypes.NetMessage.IS_NewestConfigVersion;
-        _newestFormalVersion = data.version;
-        loadConfig(_newestFormalVersion);
-    }
-
     const _ALL_CONFIGS          = new Map<string, ExtendedFullConfig>();
     const _AVAILABLE_CO_LIST    = new Map<string, CoBasicCfg[]>();
     const _CO_TIERS             = new Map<string, number[]>();
     const _CO_ID_LIST_IN_TIER   = new Map<string, Map<number, number[]>>();
     const _CUSTOM_CO_ID_LIST    = new Map<string, number[]>();
-    let _newestFormalVersion    : string;
+    let _latestFormalVersion    : string;
 
     ////////////////////////////////////////////////////////////////////////////////
     // Exports.
@@ -844,13 +838,13 @@ namespace TinyWars.Utility.ConfigManager {
     };
 
     export function init(): void {
-        NetManager.addListeners([
-            { msgCode: ActionCode.S_NewestConfigVersion, callback: _onSNewestConfigVersion },
-        ], Utility.ConfigManager);
     }
 
-    export function getNewestConfigVersion(): string {
-        return _newestFormalVersion;
+    export function getLatestConfigVersion(): string {
+        return _latestFormalVersion;
+    }
+    export function setLatestConfigVersion(version: string): void {
+        _latestFormalVersion = version;
     }
 
     export function checkIsConfigLoaded(version: string): boolean {

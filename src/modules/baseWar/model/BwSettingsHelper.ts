@@ -426,7 +426,7 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
             visionRangeModifier     : CommonConstants.WarRuleVisionRangeModifierDefault,
             luckLowerLimit          : CommonConstants.WarRuleLuckDefaultLowerLimit,
             luckUpperLimit          : CommonConstants.WarRuleLuckDefaultUpperLimit,
-            availableCoIdList       : ConfigManager.getAvailableCoList(ConfigManager.getNewestConfigVersion()).map(v => v.coId),
+            availableCoIdList       : ConfigManager.getAvailableCoList(ConfigManager.getLatestConfigVersion()).map(v => v.coId),
         }
     }
     export function reviseWarRule(warRule: IWarRule, playersCount: number): void {
@@ -486,7 +486,7 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
         return true;
     }
     export function checkIsValidRuleForPlayers(ruleForPlayers: WarRule.IRuleForPlayers): boolean | undefined {
-        const configVersion = ConfigManager.getNewestConfigVersion();
+        const configVersion = ConfigManager.getLatestConfigVersion();
         if (configVersion == null) {
             Logger.error(`BwSettingsHelper.checkIsValidRuleForPlayers() empty configVersion.`);
             return undefined;
@@ -574,7 +574,7 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
             || (!!canWr);
     }
     function checkIsValidRuleForGlobalParams(rule: WarRule.IRuleForGlobalParams): boolean | undefined {
-        const configVersion = ConfigManager.getNewestConfigVersion();
+        const configVersion = ConfigManager.getLatestConfigVersion();
         if (configVersion == null) {
             Logger.error(`BwSettingsHelper.checkIsValidRuleForGlobalParams() empty configVersion.`);
             return undefined;

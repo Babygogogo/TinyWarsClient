@@ -35,7 +35,7 @@ namespace TinyWars.SingleCustomRoom {
         const _dataForCreateWar: DataForCreateWar = {
             settingsForCommon: {
                 mapId           : undefined,
-                configVersion   : Utility.ConfigManager.getNewestConfigVersion(),
+                configVersion   : Utility.ConfigManager.getLatestConfigVersion(),
             },
             settingsForSinglePlayer: {
                 saveSlotIndex   : 0,
@@ -68,7 +68,7 @@ namespace TinyWars.SingleCustomRoom {
 
         export async function resetCreateWarDataByMapId(mapId: number): Promise<void> {
             getCreateWarData().settingsForCommon.mapId = mapId;
-            setCreateWarConfigVersion(Utility.ConfigManager.getNewestConfigVersion());
+            setCreateWarConfigVersion(Utility.ConfigManager.getLatestConfigVersion());
             await resetCreateWarDataByPresetWarRuleId(CommonConstants.WarRuleFirstId);
             setCreateWarSaveSlotIndex(getAvailableSaveSlot(getSaveSlotInfoList()));
         }

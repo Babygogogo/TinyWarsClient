@@ -37,8 +37,9 @@ namespace TinyWars.Login {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
+                { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
+                { type: Notify.Type.MsgCommonLatestConfigVersion,   callback: this._onMsgCommonLatestConfigVersion },
             ];
             this._uiListeners = [
                 { ui: this._btnLanguage01, callback: this._onTouchedBtnLanguage01 },
@@ -50,23 +51,15 @@ namespace TinyWars.Login {
         }
 
         protected _onOpened(): void {
-            Network.Manager.addListeners([
-                { msgCode: Network.Codes.S_NewestConfigVersion, callback: this._onSNewestConfigVersion },
-            ], this);
-
             this._labelVersion.text = `v.${window.CLIENT_VERSION}`;
             this._updateBtnLanguages();
 
-            if (Utility.ConfigManager.getNewestConfigVersion()) {
+            if (Utility.ConfigManager.getLatestConfigVersion()) {
                 // this._initGroupUnits();
             }
         }
 
         protected _onClosed(): void {
-            Network.Manager.addListeners([
-                { msgCode: Network.Codes.S_NewestConfigVersion, callback: this._onSNewestConfigVersion },
-            ], this);
-
             this._clearGroupUnits();
         }
 
@@ -80,7 +73,7 @@ namespace TinyWars.Login {
                 ((group.getChildAt(i) as eui.Component).getChildAt(0) as WarMap.WarMapUnitView).updateOnAnimationTick(tick);
             }
         }
-        private _onSNewestConfigVersion(e: egret.Event): void {
+        private _onMsgCommonLatestConfigVersion(e: egret.Event): void {
             // this._initGroupUnits();
         }
         private _onTouchedBtnLanguage01(e: egret.TouchEvent): void {

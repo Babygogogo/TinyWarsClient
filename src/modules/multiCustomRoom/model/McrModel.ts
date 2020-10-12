@@ -178,7 +178,7 @@ namespace TinyWars.MultiCustomRoom {
 
             export async function resetDataByMapId(mapId: number): Promise<void> {
                 setMapId(mapId);
-                setConfigVersion(Utility.ConfigManager.getNewestConfigVersion());
+                setConfigVersion(Utility.ConfigManager.getLatestConfigVersion());
                 setWarName("");
                 setWarPassword("");
                 setWarComment("");

@@ -321,7 +321,7 @@ namespace TinyWars.MultiCustomRoom {
                 const playerData    = roomInfo.playerDataList.find(v => v.userId === selfUserId);
                 const coId          = playerData ? playerData.coId : null;
                 if (coId != null) {
-                    const cfg               = ConfigManager.getCoBasicCfg(ConfigManager.getNewestConfigVersion(), coId);
+                    const cfg               = ConfigManager.getCoBasicCfg(ConfigManager.getLatestConfigVersion(), coId);
                     this._labelCoName.text  = `${cfg.name} (T${cfg.tier})`;
                 }
             }

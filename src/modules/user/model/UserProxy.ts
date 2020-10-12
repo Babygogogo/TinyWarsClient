@@ -9,13 +9,13 @@ namespace TinyWars.User.UserProxy {
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: NetMessageCodes.MsgUserLogin,            callback: _onMsgUserLogin,          },
-            { msgCode: NetMessageCodes.MsgUserRegister,         callback: _onMsgUserRegister,       },
-            { msgCode: NetMessageCodes.MsgUserLogout,           callback: _onMsgUserLogout,         },
-            { msgCode: NetMessageCodes.S_GetUserPublicInfo,     callback: _onSGetUserPublicInfo,    },
-            { msgCode: NetMessageCodes.S_UserChangeNickname,    callback: _onSUserChangeNickname,   },
-            { msgCode: NetMessageCodes.S_UserChangeDiscordId,   callback: _onSUserChangeDiscordId,  },
-            { msgCode: NetMessageCodes.S_UserGetOnlineUsers,    callback: _onSUserGetOnlineUsers,   },
+            { msgCode: NetMessageCodes.MsgUserLogin,            callback: _onMsgUserLogin,              },
+            { msgCode: NetMessageCodes.MsgUserRegister,         callback: _onMsgUserRegister,           },
+            { msgCode: NetMessageCodes.MsgUserLogout,           callback: _onMsgUserLogout,             },
+            { msgCode: NetMessageCodes.MsgUserGetPublicInfo,    callback: _onMsgUserGetPublicInfo,      },
+            { msgCode: NetMessageCodes.MsgUserChangeNickname,   callback: _onMsgUserChangeNickname,     },
+            { msgCode: NetMessageCodes.MsgUserChangeDiscordId,  callback: _onMsgUserChangeDiscordId,    },
+            { msgCode: NetMessageCodes.MsgUserGetOnlineUsers,   callback: _onMsgUserGetOnlineUsers,     },
         ]);
     }
 
@@ -65,62 +65,62 @@ namespace TinyWars.User.UserProxy {
         }
     }
 
-    export function reqGetUserPublicInfo(userId: number): void {
+    export function reqUserGetPublicInfo(userId: number): void {
         NetManager.send({
-            C_GetUserPublicInfo: {
+            MsgUserGetPublicInfo: { c: {
                 userId,
-            },
+            } },
         });
     }
-    function _onSGetUserPublicInfo(e: egret.Event): void {
-        const data = e.data as NetMessage.IS_GetUserPublicInfo;
+    function _onMsgUserGetPublicInfo(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgUserGetPublicInfo.IS;
         if (data.errorCode) {
-            Notify.dispatch(Notify.Type.SGetUserPublicInfoFailed, data);
+            Notify.dispatch(Notify.Type.MsgUserGetPublicInfoFailed, data);
         } else {
             UserModel.setUserPublicInfo(data.userPublicInfo);
-            Notify.dispatch(Notify.Type.SGetUserPublicInfo, data);
+            Notify.dispatch(Notify.Type.MsgUserGetPublicInfo, data);
         }
     }
 
     export function reqChangeNickname(nickname: string): void {
         NetManager.send({
-            C_UserChangeNickname: {
+            MsgUserChangeNickname: { c: {
                 nickname,
-            },
+            }, },
         });
     }
-    function _onSUserChangeNickname(e: egret.Event): void {
-        const data = e.data as NetMessage.IS_UserChangeNickname;
+    function _onMsgUserChangeNickname(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgUserChangeNickname.IS;
         if (data.errorCode) {
-            Notify.dispatch(Notify.Type.SUserChangeNicknameFailed, data);
+            Notify.dispatch(Notify.Type.MsgUserChangeNicknameFailed, data);
         } else {
-            Notify.dispatch(Notify.Type.SUserChangeNickname, data);
+            Notify.dispatch(Notify.Type.MsgUserChangeNickname, data);
         }
     }
 
     export function reqChangeDiscordId(discordId: string): void {
         NetManager.send({
-            C_UserChangeDiscordId: {
+            MsgUserChangeDiscordId: { c: {
                 discordId,
-            },
+            }, },
         });
     }
-    function _onSUserChangeDiscordId(e: egret.Event): void {
-        const data = e.data as NetMessage.IS_UserChangeDiscordId;
+    function _onMsgUserChangeDiscordId(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgUserChangeDiscordId.IS;
         if (data.errorCode) {
-            Notify.dispatch(Notify.Type.SUserChangeDiscordIdFailed, data);
+            Notify.dispatch(Notify.Type.MsgUserChangeDiscordIdFailed, data);
         } else {
-            Notify.dispatch(Notify.Type.SUserChangeDiscordId, data);
+            Notify.dispatch(Notify.Type.MsgUserChangeDiscordId, data);
         }
     }
 
     export function reqUserGetOnlineUsers(): void {
         NetManager.send({
-            C_UserGetOnlineUsers: {},
+            MsgUserGetOnlineUsers: { c: {} },
         });
     }
-    function _onSUserGetOnlineUsers(e: egret.Event): void {
-        const data = e.data as NetMessage.IS_UserGetOnlineUsers;
+    function _onMsgUserGetOnlineUsers(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgUserGetOnlineUsers.IS;
         if (!data.errorCode) {
             Notify.dispatch(Notify.Type.SUserGetOnlineUsers, data);
         }

@@ -75,7 +75,7 @@ namespace TinyWars.MapEditor {
                 { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.TileAnimationTick,      callback: this._onNotifyTileAnimationTick },
                 { type: Notify.Type.UnitAnimationTick,      callback: this._onNotifyUnitAnimationTick },
-                { type: Notify.Type.SMeSubmitMap,           callback: this._onNotifySMeSaveMap },
+                { type: Notify.Type.MsgMeSubmitMap,           callback: this._onNotifySMeSaveMap },
                 { type: Notify.Type.SMmReviewMap,           callback: this._onNotifySMmReviewMap },
                 { type: Notify.Type.SScrCreateCustomWar,    callback: this._onNotifySScrCreateCustomWar },
             ];

@@ -305,7 +305,6 @@
 		"bin-debug/modules/singleCustomWar/view/ScwWarPanel.js",
 		"bin-debug/modules/singleCustomWar/view/ScwWarView.js",
 		"bin-debug/modules/singlePlayerLobby/view/SinglePlayerLobbyPanel.js",
-		"bin-debug/modules/time/model/TimeProxy.js",
 		"bin-debug/modules/user/model/UserProxy.js",
 		"bin-debug/modules/user/view/UserChangeDiscordIdPanel.js",
 		"bin-debug/modules/user/view/UserChangeNicknamePanel.js",

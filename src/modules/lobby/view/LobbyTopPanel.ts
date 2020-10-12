@@ -40,7 +40,7 @@ namespace TinyWars.Lobby {
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.SLogin,                         callback: this._onNotifySLogin },
                 { type: Notify.Type.SLogout,                        callback: this._onNotifySLogout },
-                { type: Notify.Type.SUserChangeNickname,            callback: this._onNotifySUserChangeNickname },
+                { type: Notify.Type.MsgUserChangeNickname,            callback: this._onNotifySUserChangeNickname },
                 { type: Notify.Type.SChatGetAllReadProgressList,    callback: this._onNotifyChatGetAllReadProgressList },
                 { type: Notify.Type.SChatUpdateReadProgress,        callback: this._onNotifyChatUpdateReadProgress },
                 { type: Notify.Type.SChatGetAllMessages,            callback: this._onNotifyChatGetAllMessages },
@@ -108,7 +108,7 @@ namespace TinyWars.Lobby {
         private async _updateComponentsForLanguage(): Promise<void> {
             const score                 = await UserModel.getSelfRankScore();
             this._labelRankScore.text   = `${Lang.getText(Lang.Type.B0060)}: ${score}`;
-            this._labelRankName.text    = Utility.ConfigManager.getRankName(Utility.ConfigManager.getNewestConfigVersion(), score);
+            this._labelRankName.text    = Utility.ConfigManager.getRankName(Utility.ConfigManager.getLatestConfigVersion(), score);
         }
 
         private async _updateLabelNickname(): Promise<void> {

@@ -42,8 +42,8 @@ namespace TinyWars.User {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: NotifyType.SUserChangeNickname,         callback: this._onSUserChangeNickname },
-                { type: NotifyType.SUserChangeNicknameFailed,   callback: this._onSUserChangeNicknameFailed },
+                { type: NotifyType.MsgUserChangeNickname,         callback: this._onSUserChangeNickname },
+                { type: NotifyType.MsgUserChangeNicknameFailed,   callback: this._onSUserChangeNicknameFailed },
                 { type: NotifyType.LanguageChanged,             callback: this._onNotifyLanguageChanged },
             ];
             this._uiListeners = [

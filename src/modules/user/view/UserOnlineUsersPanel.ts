@@ -20,7 +20,7 @@ namespace TinyWars.User {
         private _labelLoading   : GameUi.UiLabel;
         private _btnClose       : GameUi.UiButton;
 
-        private _msg        : ProtoTypes.NetMessage.IS_UserGetOnlineUsers;
+        private _msg        : ProtoTypes.NetMessage.MsgUserGetOnlineUsers.IS;
         private _dataForList: DataForUserRenderer[];
 
         public static show(): void {

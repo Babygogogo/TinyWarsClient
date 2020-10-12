@@ -73,7 +73,7 @@ namespace TinyWars.MapEditor.MeUtility {
         const unitDataList  = mapRawData.unitDataList || [];
         return {
             settingsForCommon   : {
-                configVersion   : ConfigManager.getNewestConfigVersion(),
+                configVersion   : ConfigManager.getLatestConfigVersion(),
                 mapId           : data.mapRawData.mapId,
                 presetWarRuleId : warRule.ruleId,
                 warRule,
@@ -198,7 +198,7 @@ namespace TinyWars.MapEditor.MeUtility {
 
         const unitDataList  = mapRawData.unitDataList;
         if (unitDataList) {
-            const configVersion         = ConfigManager.getNewestConfigVersion()!;
+            const configVersion         = ConfigManager.getLatestConfigVersion()!;
             const maxPromotion          = ConfigManager.getUnitMaxPromotion(configVersion);
             const units                 = new Map<number, ISerialUnit>();
             const indexesForUnitOnMap   = new Set<number>();
@@ -323,7 +323,7 @@ namespace TinyWars.MapEditor.MeUtility {
         }
 
         const indexes       = new Set<number>();
-        const configVersion = ConfigManager.getNewestConfigVersion()!;
+        const configVersion = ConfigManager.getLatestConfigVersion()!;
         for (const tileData of mapRawData.tileDataList || []) {
             const { x: gridX, y: gridY } = tileData.gridIndex;
             if ((gridX == null) || (gridY == null) || (gridX >= mapWidth || (gridY >= mapHeight))) {

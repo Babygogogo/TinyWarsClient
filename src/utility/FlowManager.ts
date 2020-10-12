@@ -8,7 +8,7 @@ namespace TinyWars.Utility.FlowManager {
     import MeManager    = MapEditor.MeManager;
 
     const _NET_EVENTS = [
-        { msgCode: Network.Codes.S_ServerDisconnect,   callback: _onNetSServerDisconnect },
+        { msgCode: Network.Codes.MsgCommonServerDisconnect, callback: _onMsgCommonServerDisconnect },
     ];
     const _NOTIFY_EVENTS = [
         { type: Notify.Type.NetworkConnected,   callback: _onNotifyNetworkConnected, },
@@ -37,7 +37,6 @@ namespace TinyWars.Utility.FlowManager {
         Network.Manager.init();
         McwProxy.init();
         McwModel.init();
-        Time.TimeProxy.init();
         Time.TimeModel.init();
         User.UserProxy.init();
         User.UserModel.init();
@@ -146,8 +145,8 @@ namespace TinyWars.Utility.FlowManager {
         }
     }
 
-    function _onNetSServerDisconnect(e: egret.Event): void {
-        const data = e.data as ProtoTypes.NetMessage.IS_ServerDisconnect;
+    function _onMsgCommonServerDisconnect(e: egret.Event): void {
+        const data = e.data as ProtoTypes.NetMessage.MsgCommonServerDisconnect.IS;
 
         _hasOnceWentToLobby = false;
         UserModel.clearLoginInfo();
@@ -187,7 +186,7 @@ namespace TinyWars.Utility.FlowManager {
         return (!_hasOnceWentToLobby)
             && (User.UserModel.getIsLoggedIn())
             && (ResManager.checkIsLoadedMainResource())
-            && (Utility.ConfigManager.checkIsConfigLoaded(Utility.ConfigManager.getNewestConfigVersion()))
+            && (Utility.ConfigManager.checkIsConfigLoaded(Utility.ConfigManager.getLatestConfigVersion()))
     }
 
     function _removeLoadingDom(): void {
