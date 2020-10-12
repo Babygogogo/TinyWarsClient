@@ -13341,29 +13341,17 @@ export declare namespace NetMessage {
     /** Properties of a MessageContainer. */
     interface IMessageContainer {
 
-        /** MessageContainer C_Heartbeat */
-        C_Heartbeat?: (NetMessage.IC_Heartbeat|null);
+        /** MessageContainer MsgCommonHeartbeat */
+        MsgCommonHeartbeat?: (NetMessage.IMsgCommonHeartbeat|null);
 
-        /** MessageContainer S_Heartbeat */
-        S_Heartbeat?: (NetMessage.IS_Heartbeat|null);
+        /** MessageContainer MsgUserRegister */
+        MsgUserRegister?: (NetMessage.IMsgUserRegister|null);
 
-        /** MessageContainer C_Register */
-        C_Register?: (NetMessage.IC_Register|null);
+        /** MessageContainer MsgUserLogin */
+        MsgUserLogin?: (NetMessage.IMsgUserLogin|null);
 
-        /** MessageContainer S_Register */
-        S_Register?: (NetMessage.IS_Register|null);
-
-        /** MessageContainer C_Login */
-        C_Login?: (NetMessage.IC_Login|null);
-
-        /** MessageContainer S_Login */
-        S_Login?: (NetMessage.IS_Login|null);
-
-        /** MessageContainer C_Logout */
-        C_Logout?: (NetMessage.IC_Logout|null);
-
-        /** MessageContainer S_Logout */
-        S_Logout?: (NetMessage.IS_Logout|null);
+        /** MessageContainer MsgUserLogout */
+        MsgUserLogout?: (NetMessage.IMsgUserLogout|null);
 
         /** MessageContainer S_Error */
         S_Error?: (NetMessage.IS_Error|null);
@@ -13861,29 +13849,17 @@ export declare namespace NetMessage {
          */
         constructor(properties?: NetMessage.IMessageContainer);
 
-        /** MessageContainer C_Heartbeat. */
-        public C_Heartbeat?: (NetMessage.IC_Heartbeat|null);
+        /** MessageContainer MsgCommonHeartbeat. */
+        public MsgCommonHeartbeat?: (NetMessage.IMsgCommonHeartbeat|null);
 
-        /** MessageContainer S_Heartbeat. */
-        public S_Heartbeat?: (NetMessage.IS_Heartbeat|null);
+        /** MessageContainer MsgUserRegister. */
+        public MsgUserRegister?: (NetMessage.IMsgUserRegister|null);
 
-        /** MessageContainer C_Register. */
-        public C_Register?: (NetMessage.IC_Register|null);
+        /** MessageContainer MsgUserLogin. */
+        public MsgUserLogin?: (NetMessage.IMsgUserLogin|null);
 
-        /** MessageContainer S_Register. */
-        public S_Register?: (NetMessage.IS_Register|null);
-
-        /** MessageContainer C_Login. */
-        public C_Login?: (NetMessage.IC_Login|null);
-
-        /** MessageContainer S_Login. */
-        public S_Login?: (NetMessage.IS_Login|null);
-
-        /** MessageContainer C_Logout. */
-        public C_Logout?: (NetMessage.IC_Logout|null);
-
-        /** MessageContainer S_Logout. */
-        public S_Logout?: (NetMessage.IS_Logout|null);
+        /** MessageContainer MsgUserLogout. */
+        public MsgUserLogout?: (NetMessage.IMsgUserLogout|null);
 
         /** MessageContainer S_Error. */
         public S_Error?: (NetMessage.IS_Error|null);
@@ -14442,778 +14418,1174 @@ export declare namespace NetMessage {
         public toJSON(): { [k: string]: any };
     }
 
-    /** Properties of a C_Heartbeat. */
-    interface IC_Heartbeat {
+    /** Properties of a MsgCommonHeartbeat. */
+    interface IMsgCommonHeartbeat {
 
-        /** C_Heartbeat counter */
-        counter?: (number|null);
+        /** MsgCommonHeartbeat c */
+        c?: (NetMessage.MsgCommonHeartbeat.IC|null);
+
+        /** MsgCommonHeartbeat s */
+        s?: (NetMessage.MsgCommonHeartbeat.IS|null);
     }
 
-    /** Represents a C_Heartbeat. */
-    class C_Heartbeat implements IC_Heartbeat {
+    /** Represents a MsgCommonHeartbeat. */
+    class MsgCommonHeartbeat implements IMsgCommonHeartbeat {
 
         /**
-         * Constructs a new C_Heartbeat.
+         * Constructs a new MsgCommonHeartbeat.
          * @param [properties] Properties to set
          */
-        constructor(properties?: NetMessage.IC_Heartbeat);
+        constructor(properties?: NetMessage.IMsgCommonHeartbeat);
 
-        /** C_Heartbeat counter. */
-        public counter: number;
+        /** MsgCommonHeartbeat c. */
+        public c?: (NetMessage.MsgCommonHeartbeat.IC|null);
+
+        /** MsgCommonHeartbeat s. */
+        public s?: (NetMessage.MsgCommonHeartbeat.IS|null);
 
         /**
-         * Creates a new C_Heartbeat instance using the specified properties.
+         * Creates a new MsgCommonHeartbeat instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns C_Heartbeat instance
+         * @returns MsgCommonHeartbeat instance
          */
-        public static create(properties?: NetMessage.IC_Heartbeat): NetMessage.C_Heartbeat;
+        public static create(properties?: NetMessage.IMsgCommonHeartbeat): NetMessage.MsgCommonHeartbeat;
 
         /**
-         * Encodes the specified C_Heartbeat message. Does not implicitly {@link NetMessage.C_Heartbeat.verify|verify} messages.
-         * @param message C_Heartbeat message or plain object to encode
+         * Encodes the specified MsgCommonHeartbeat message. Does not implicitly {@link NetMessage.MsgCommonHeartbeat.verify|verify} messages.
+         * @param message MsgCommonHeartbeat message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: NetMessage.IC_Heartbeat, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: NetMessage.IMsgCommonHeartbeat, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified C_Heartbeat message, length delimited. Does not implicitly {@link NetMessage.C_Heartbeat.verify|verify} messages.
-         * @param message C_Heartbeat message or plain object to encode
+         * Encodes the specified MsgCommonHeartbeat message, length delimited. Does not implicitly {@link NetMessage.MsgCommonHeartbeat.verify|verify} messages.
+         * @param message MsgCommonHeartbeat message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: NetMessage.IC_Heartbeat, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: NetMessage.IMsgCommonHeartbeat, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a C_Heartbeat message from the specified reader or buffer.
+         * Decodes a MsgCommonHeartbeat message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns C_Heartbeat
+         * @returns MsgCommonHeartbeat
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.C_Heartbeat;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgCommonHeartbeat;
 
         /**
-         * Decodes a C_Heartbeat message from the specified reader or buffer, length delimited.
+         * Decodes a MsgCommonHeartbeat message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns C_Heartbeat
+         * @returns MsgCommonHeartbeat
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.C_Heartbeat;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgCommonHeartbeat;
 
         /**
-         * Verifies a C_Heartbeat message.
+         * Verifies a MsgCommonHeartbeat message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a C_Heartbeat message from a plain object. Also converts values to their respective internal types.
+         * Creates a MsgCommonHeartbeat message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns C_Heartbeat
+         * @returns MsgCommonHeartbeat
          */
-        public static fromObject(object: { [k: string]: any }): NetMessage.C_Heartbeat;
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgCommonHeartbeat;
 
         /**
-         * Creates a plain object from a C_Heartbeat message. Also converts values to other types if specified.
-         * @param message C_Heartbeat
+         * Creates a plain object from a MsgCommonHeartbeat message. Also converts values to other types if specified.
+         * @param message MsgCommonHeartbeat
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: NetMessage.C_Heartbeat, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: NetMessage.MsgCommonHeartbeat, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this C_Heartbeat to JSON.
+         * Converts this MsgCommonHeartbeat to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
     }
 
-    /** Properties of a S_Heartbeat. */
-    interface IS_Heartbeat {
+    namespace MsgCommonHeartbeat {
 
-        /** S_Heartbeat errorCode */
-        errorCode?: (number|null);
+        /** Properties of a C. */
+        interface IC {
 
-        /** S_Heartbeat counter */
-        counter?: (number|null);
+            /** C counter */
+            counter?: (number|null);
+        }
 
-        /** S_Heartbeat timestamp */
-        timestamp?: (number|null);
+        /** Represents a C. */
+        class C implements IC {
+
+            /**
+             * Constructs a new C.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgCommonHeartbeat.IC);
+
+            /** C counter. */
+            public counter: number;
+
+            /**
+             * Creates a new C instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C instance
+             */
+            public static create(properties?: NetMessage.MsgCommonHeartbeat.IC): NetMessage.MsgCommonHeartbeat.C;
+
+            /**
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgCommonHeartbeat.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgCommonHeartbeat.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgCommonHeartbeat.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgCommonHeartbeat.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgCommonHeartbeat.C;
+
+            /**
+             * Decodes a C message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgCommonHeartbeat.C;
+
+            /**
+             * Verifies a C message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a C message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgCommonHeartbeat.C;
+
+            /**
+             * Creates a plain object from a C message. Also converts values to other types if specified.
+             * @param message C
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgCommonHeartbeat.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+
+            /** S counter */
+            counter?: (number|null);
+
+            /** S timestamp */
+            timestamp?: (number|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgCommonHeartbeat.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /** S counter. */
+            public counter: number;
+
+            /** S timestamp. */
+            public timestamp: number;
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgCommonHeartbeat.IS): NetMessage.MsgCommonHeartbeat.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgCommonHeartbeat.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgCommonHeartbeat.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgCommonHeartbeat.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgCommonHeartbeat.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgCommonHeartbeat.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgCommonHeartbeat.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgCommonHeartbeat.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgCommonHeartbeat.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
     }
 
-    /** Represents a S_Heartbeat. */
-    class S_Heartbeat implements IS_Heartbeat {
+    /** Properties of a MsgUserRegister. */
+    interface IMsgUserRegister {
+
+        /** MsgUserRegister c */
+        c?: (NetMessage.MsgUserRegister.IC|null);
+
+        /** MsgUserRegister s */
+        s?: (NetMessage.MsgUserRegister.IS|null);
+    }
+
+    /** Represents a MsgUserRegister. */
+    class MsgUserRegister implements IMsgUserRegister {
 
         /**
-         * Constructs a new S_Heartbeat.
+         * Constructs a new MsgUserRegister.
          * @param [properties] Properties to set
          */
-        constructor(properties?: NetMessage.IS_Heartbeat);
+        constructor(properties?: NetMessage.IMsgUserRegister);
 
-        /** S_Heartbeat errorCode. */
-        public errorCode: number;
+        /** MsgUserRegister c. */
+        public c?: (NetMessage.MsgUserRegister.IC|null);
 
-        /** S_Heartbeat counter. */
-        public counter: number;
-
-        /** S_Heartbeat timestamp. */
-        public timestamp: number;
+        /** MsgUserRegister s. */
+        public s?: (NetMessage.MsgUserRegister.IS|null);
 
         /**
-         * Creates a new S_Heartbeat instance using the specified properties.
+         * Creates a new MsgUserRegister instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns S_Heartbeat instance
+         * @returns MsgUserRegister instance
          */
-        public static create(properties?: NetMessage.IS_Heartbeat): NetMessage.S_Heartbeat;
+        public static create(properties?: NetMessage.IMsgUserRegister): NetMessage.MsgUserRegister;
 
         /**
-         * Encodes the specified S_Heartbeat message. Does not implicitly {@link NetMessage.S_Heartbeat.verify|verify} messages.
-         * @param message S_Heartbeat message or plain object to encode
+         * Encodes the specified MsgUserRegister message. Does not implicitly {@link NetMessage.MsgUserRegister.verify|verify} messages.
+         * @param message MsgUserRegister message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: NetMessage.IS_Heartbeat, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: NetMessage.IMsgUserRegister, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified S_Heartbeat message, length delimited. Does not implicitly {@link NetMessage.S_Heartbeat.verify|verify} messages.
-         * @param message S_Heartbeat message or plain object to encode
+         * Encodes the specified MsgUserRegister message, length delimited. Does not implicitly {@link NetMessage.MsgUserRegister.verify|verify} messages.
+         * @param message MsgUserRegister message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: NetMessage.IS_Heartbeat, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: NetMessage.IMsgUserRegister, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a S_Heartbeat message from the specified reader or buffer.
+         * Decodes a MsgUserRegister message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns S_Heartbeat
+         * @returns MsgUserRegister
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.S_Heartbeat;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserRegister;
 
         /**
-         * Decodes a S_Heartbeat message from the specified reader or buffer, length delimited.
+         * Decodes a MsgUserRegister message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns S_Heartbeat
+         * @returns MsgUserRegister
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.S_Heartbeat;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserRegister;
 
         /**
-         * Verifies a S_Heartbeat message.
+         * Verifies a MsgUserRegister message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a S_Heartbeat message from a plain object. Also converts values to their respective internal types.
+         * Creates a MsgUserRegister message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns S_Heartbeat
+         * @returns MsgUserRegister
          */
-        public static fromObject(object: { [k: string]: any }): NetMessage.S_Heartbeat;
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserRegister;
 
         /**
-         * Creates a plain object from a S_Heartbeat message. Also converts values to other types if specified.
-         * @param message S_Heartbeat
+         * Creates a plain object from a MsgUserRegister message. Also converts values to other types if specified.
+         * @param message MsgUserRegister
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: NetMessage.S_Heartbeat, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: NetMessage.MsgUserRegister, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this S_Heartbeat to JSON.
+         * Converts this MsgUserRegister to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
     }
 
-    /** Properties of a C_Register. */
-    interface IC_Register {
+    namespace MsgUserRegister {
 
-        /** C_Register account */
-        account?: (string|null);
+        /** Properties of a C. */
+        interface IC {
 
-        /** C_Register password */
-        password?: (string|null);
+            /** C account */
+            account?: (string|null);
 
-        /** C_Register nickname */
-        nickname?: (string|null);
+            /** C password */
+            password?: (string|null);
+
+            /** C nickname */
+            nickname?: (string|null);
+        }
+
+        /** Represents a C. */
+        class C implements IC {
+
+            /**
+             * Constructs a new C.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgUserRegister.IC);
+
+            /** C account. */
+            public account: string;
+
+            /** C password. */
+            public password: string;
+
+            /** C nickname. */
+            public nickname: string;
+
+            /**
+             * Creates a new C instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C instance
+             */
+            public static create(properties?: NetMessage.MsgUserRegister.IC): NetMessage.MsgUserRegister.C;
+
+            /**
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgUserRegister.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgUserRegister.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgUserRegister.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgUserRegister.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserRegister.C;
+
+            /**
+             * Decodes a C message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserRegister.C;
+
+            /**
+             * Verifies a C message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a C message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserRegister.C;
+
+            /**
+             * Creates a plain object from a C message. Also converts values to other types if specified.
+             * @param message C
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgUserRegister.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+
+            /** S account */
+            account?: (string|null);
+
+            /** S password */
+            password?: (string|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgUserRegister.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /** S account. */
+            public account: string;
+
+            /** S password. */
+            public password: string;
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgUserRegister.IS): NetMessage.MsgUserRegister.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgUserRegister.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgUserRegister.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgUserRegister.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgUserRegister.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserRegister.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserRegister.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserRegister.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgUserRegister.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
     }
 
-    /** Represents a C_Register. */
-    class C_Register implements IC_Register {
+    /** Properties of a MsgUserLogin. */
+    interface IMsgUserLogin {
+
+        /** MsgUserLogin c */
+        c?: (NetMessage.MsgUserLogin.IC|null);
+
+        /** MsgUserLogin s */
+        s?: (NetMessage.MsgUserLogin.IS|null);
+    }
+
+    /** Represents a MsgUserLogin. */
+    class MsgUserLogin implements IMsgUserLogin {
 
         /**
-         * Constructs a new C_Register.
+         * Constructs a new MsgUserLogin.
          * @param [properties] Properties to set
          */
-        constructor(properties?: NetMessage.IC_Register);
+        constructor(properties?: NetMessage.IMsgUserLogin);
 
-        /** C_Register account. */
-        public account: string;
+        /** MsgUserLogin c. */
+        public c?: (NetMessage.MsgUserLogin.IC|null);
 
-        /** C_Register password. */
-        public password: string;
-
-        /** C_Register nickname. */
-        public nickname: string;
+        /** MsgUserLogin s. */
+        public s?: (NetMessage.MsgUserLogin.IS|null);
 
         /**
-         * Creates a new C_Register instance using the specified properties.
+         * Creates a new MsgUserLogin instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns C_Register instance
+         * @returns MsgUserLogin instance
          */
-        public static create(properties?: NetMessage.IC_Register): NetMessage.C_Register;
+        public static create(properties?: NetMessage.IMsgUserLogin): NetMessage.MsgUserLogin;
 
         /**
-         * Encodes the specified C_Register message. Does not implicitly {@link NetMessage.C_Register.verify|verify} messages.
-         * @param message C_Register message or plain object to encode
+         * Encodes the specified MsgUserLogin message. Does not implicitly {@link NetMessage.MsgUserLogin.verify|verify} messages.
+         * @param message MsgUserLogin message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: NetMessage.IC_Register, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: NetMessage.IMsgUserLogin, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified C_Register message, length delimited. Does not implicitly {@link NetMessage.C_Register.verify|verify} messages.
-         * @param message C_Register message or plain object to encode
+         * Encodes the specified MsgUserLogin message, length delimited. Does not implicitly {@link NetMessage.MsgUserLogin.verify|verify} messages.
+         * @param message MsgUserLogin message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: NetMessage.IC_Register, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: NetMessage.IMsgUserLogin, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a C_Register message from the specified reader or buffer.
+         * Decodes a MsgUserLogin message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns C_Register
+         * @returns MsgUserLogin
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.C_Register;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserLogin;
 
         /**
-         * Decodes a C_Register message from the specified reader or buffer, length delimited.
+         * Decodes a MsgUserLogin message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns C_Register
+         * @returns MsgUserLogin
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.C_Register;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserLogin;
 
         /**
-         * Verifies a C_Register message.
+         * Verifies a MsgUserLogin message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a C_Register message from a plain object. Also converts values to their respective internal types.
+         * Creates a MsgUserLogin message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns C_Register
+         * @returns MsgUserLogin
          */
-        public static fromObject(object: { [k: string]: any }): NetMessage.C_Register;
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserLogin;
 
         /**
-         * Creates a plain object from a C_Register message. Also converts values to other types if specified.
-         * @param message C_Register
+         * Creates a plain object from a MsgUserLogin message. Also converts values to other types if specified.
+         * @param message MsgUserLogin
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: NetMessage.C_Register, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: NetMessage.MsgUserLogin, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this C_Register to JSON.
+         * Converts this MsgUserLogin to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
     }
 
-    /** Properties of a S_Register. */
-    interface IS_Register {
+    namespace MsgUserLogin {
 
-        /** S_Register errorCode */
-        errorCode?: (number|null);
+        /** Properties of a C. */
+        interface IC {
 
-        /** S_Register account */
-        account?: (string|null);
+            /** C account */
+            account?: (string|null);
 
-        /** S_Register password */
-        password?: (string|null);
+            /** C password */
+            password?: (string|null);
+
+            /** C isAutoRelogin */
+            isAutoRelogin?: (boolean|null);
+        }
+
+        /** Represents a C. */
+        class C implements IC {
+
+            /**
+             * Constructs a new C.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgUserLogin.IC);
+
+            /** C account. */
+            public account: string;
+
+            /** C password. */
+            public password: string;
+
+            /** C isAutoRelogin. */
+            public isAutoRelogin: boolean;
+
+            /**
+             * Creates a new C instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C instance
+             */
+            public static create(properties?: NetMessage.MsgUserLogin.IC): NetMessage.MsgUserLogin.C;
+
+            /**
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgUserLogin.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgUserLogin.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgUserLogin.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgUserLogin.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserLogin.C;
+
+            /**
+             * Decodes a C message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserLogin.C;
+
+            /**
+             * Verifies a C message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a C message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserLogin.C;
+
+            /**
+             * Creates a plain object from a C message. Also converts values to other types if specified.
+             * @param message C
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgUserLogin.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+
+            /** S userPublicInfo */
+            userPublicInfo?: (User.IUserPublicInfo|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgUserLogin.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /** S userPublicInfo. */
+            public userPublicInfo?: (User.IUserPublicInfo|null);
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgUserLogin.IS): NetMessage.MsgUserLogin.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgUserLogin.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgUserLogin.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgUserLogin.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgUserLogin.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserLogin.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserLogin.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserLogin.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgUserLogin.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
     }
 
-    /** Represents a S_Register. */
-    class S_Register implements IS_Register {
+    /** Properties of a MsgUserLogout. */
+    interface IMsgUserLogout {
+
+        /** MsgUserLogout c */
+        c?: (NetMessage.MsgUserLogout.IC|null);
+
+        /** MsgUserLogout s */
+        s?: (NetMessage.MsgUserLogout.IS|null);
+    }
+
+    /** Represents a MsgUserLogout. */
+    class MsgUserLogout implements IMsgUserLogout {
 
         /**
-         * Constructs a new S_Register.
+         * Constructs a new MsgUserLogout.
          * @param [properties] Properties to set
          */
-        constructor(properties?: NetMessage.IS_Register);
+        constructor(properties?: NetMessage.IMsgUserLogout);
 
-        /** S_Register errorCode. */
-        public errorCode: number;
+        /** MsgUserLogout c. */
+        public c?: (NetMessage.MsgUserLogout.IC|null);
 
-        /** S_Register account. */
-        public account: string;
-
-        /** S_Register password. */
-        public password: string;
+        /** MsgUserLogout s. */
+        public s?: (NetMessage.MsgUserLogout.IS|null);
 
         /**
-         * Creates a new S_Register instance using the specified properties.
+         * Creates a new MsgUserLogout instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns S_Register instance
+         * @returns MsgUserLogout instance
          */
-        public static create(properties?: NetMessage.IS_Register): NetMessage.S_Register;
+        public static create(properties?: NetMessage.IMsgUserLogout): NetMessage.MsgUserLogout;
 
         /**
-         * Encodes the specified S_Register message. Does not implicitly {@link NetMessage.S_Register.verify|verify} messages.
-         * @param message S_Register message or plain object to encode
+         * Encodes the specified MsgUserLogout message. Does not implicitly {@link NetMessage.MsgUserLogout.verify|verify} messages.
+         * @param message MsgUserLogout message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: NetMessage.IS_Register, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: NetMessage.IMsgUserLogout, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified S_Register message, length delimited. Does not implicitly {@link NetMessage.S_Register.verify|verify} messages.
-         * @param message S_Register message or plain object to encode
+         * Encodes the specified MsgUserLogout message, length delimited. Does not implicitly {@link NetMessage.MsgUserLogout.verify|verify} messages.
+         * @param message MsgUserLogout message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: NetMessage.IS_Register, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: NetMessage.IMsgUserLogout, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a S_Register message from the specified reader or buffer.
+         * Decodes a MsgUserLogout message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns S_Register
+         * @returns MsgUserLogout
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.S_Register;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserLogout;
 
         /**
-         * Decodes a S_Register message from the specified reader or buffer, length delimited.
+         * Decodes a MsgUserLogout message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns S_Register
+         * @returns MsgUserLogout
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.S_Register;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserLogout;
 
         /**
-         * Verifies a S_Register message.
+         * Verifies a MsgUserLogout message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a S_Register message from a plain object. Also converts values to their respective internal types.
+         * Creates a MsgUserLogout message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns S_Register
+         * @returns MsgUserLogout
          */
-        public static fromObject(object: { [k: string]: any }): NetMessage.S_Register;
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserLogout;
 
         /**
-         * Creates a plain object from a S_Register message. Also converts values to other types if specified.
-         * @param message S_Register
+         * Creates a plain object from a MsgUserLogout message. Also converts values to other types if specified.
+         * @param message MsgUserLogout
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: NetMessage.S_Register, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: NetMessage.MsgUserLogout, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this S_Register to JSON.
+         * Converts this MsgUserLogout to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
     }
 
-    /** Properties of a C_Login. */
-    interface IC_Login {
+    namespace MsgUserLogout {
 
-        /** C_Login account */
-        account?: (string|null);
+        /** Properties of a C. */
+        interface IC {
+        }
 
-        /** C_Login password */
-        password?: (string|null);
+        /** Represents a C. */
+        class C implements IC {
 
-        /** C_Login isAutoRelogin */
-        isAutoRelogin?: (boolean|null);
-    }
+            /**
+             * Constructs a new C.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgUserLogout.IC);
 
-    /** Represents a C_Login. */
-    class C_Login implements IC_Login {
+            /**
+             * Creates a new C instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C instance
+             */
+            public static create(properties?: NetMessage.MsgUserLogout.IC): NetMessage.MsgUserLogout.C;
 
-        /**
-         * Constructs a new C_Login.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: NetMessage.IC_Login);
+            /**
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgUserLogout.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgUserLogout.IC, writer?: protobuf.Writer): protobuf.Writer;
 
-        /** C_Login account. */
-        public account: string;
+            /**
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgUserLogout.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgUserLogout.IC, writer?: protobuf.Writer): protobuf.Writer;
 
-        /** C_Login password. */
-        public password: string;
+            /**
+             * Decodes a C message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserLogout.C;
 
-        /** C_Login isAutoRelogin. */
-        public isAutoRelogin: boolean;
+            /**
+             * Decodes a C message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserLogout.C;
 
-        /**
-         * Creates a new C_Login instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns C_Login instance
-         */
-        public static create(properties?: NetMessage.IC_Login): NetMessage.C_Login;
+            /**
+             * Verifies a C message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
 
-        /**
-         * Encodes the specified C_Login message. Does not implicitly {@link NetMessage.C_Login.verify|verify} messages.
-         * @param message C_Login message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: NetMessage.IC_Login, writer?: protobuf.Writer): protobuf.Writer;
+            /**
+             * Creates a C message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserLogout.C;
 
-        /**
-         * Encodes the specified C_Login message, length delimited. Does not implicitly {@link NetMessage.C_Login.verify|verify} messages.
-         * @param message C_Login message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: NetMessage.IC_Login, writer?: protobuf.Writer): protobuf.Writer;
+            /**
+             * Creates a plain object from a C message. Also converts values to other types if specified.
+             * @param message C
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgUserLogout.C, options?: protobuf.IConversionOptions): { [k: string]: any };
 
-        /**
-         * Decodes a C_Login message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns C_Login
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.C_Login;
+            /**
+             * Converts this C to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
 
-        /**
-         * Decodes a C_Login message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns C_Login
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.C_Login;
+        /** Properties of a S. */
+        interface IS {
 
-        /**
-         * Verifies a C_Login message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
+            /** S errorCode */
+            errorCode?: (number|null);
 
-        /**
-         * Creates a C_Login message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns C_Login
-         */
-        public static fromObject(object: { [k: string]: any }): NetMessage.C_Login;
+            /** S reason */
+            reason?: (number|null);
+        }
 
-        /**
-         * Creates a plain object from a C_Login message. Also converts values to other types if specified.
-         * @param message C_Login
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: NetMessage.C_Login, options?: protobuf.IConversionOptions): { [k: string]: any };
+        /** Represents a S. */
+        class S implements IS {
 
-        /**
-         * Converts this C_Login to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
-    }
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgUserLogout.IS);
 
-    /** Properties of a S_Login. */
-    interface IS_Login {
+            /** S errorCode. */
+            public errorCode: number;
 
-        /** S_Login errorCode */
-        errorCode?: (number|null);
+            /** S reason. */
+            public reason: number;
 
-        /** S_Login userPublicInfo */
-        userPublicInfo?: (User.IUserPublicInfo|null);
-    }
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgUserLogout.IS): NetMessage.MsgUserLogout.S;
 
-    /** Represents a S_Login. */
-    class S_Login implements IS_Login {
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgUserLogout.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgUserLogout.IS, writer?: protobuf.Writer): protobuf.Writer;
 
-        /**
-         * Constructs a new S_Login.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: NetMessage.IS_Login);
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgUserLogout.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgUserLogout.IS, writer?: protobuf.Writer): protobuf.Writer;
 
-        /** S_Login errorCode. */
-        public errorCode: number;
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserLogout.S;
 
-        /** S_Login userPublicInfo. */
-        public userPublicInfo?: (User.IUserPublicInfo|null);
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserLogout.S;
 
-        /**
-         * Creates a new S_Login instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns S_Login instance
-         */
-        public static create(properties?: NetMessage.IS_Login): NetMessage.S_Login;
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
 
-        /**
-         * Encodes the specified S_Login message. Does not implicitly {@link NetMessage.S_Login.verify|verify} messages.
-         * @param message S_Login message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: NetMessage.IS_Login, writer?: protobuf.Writer): protobuf.Writer;
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserLogout.S;
 
-        /**
-         * Encodes the specified S_Login message, length delimited. Does not implicitly {@link NetMessage.S_Login.verify|verify} messages.
-         * @param message S_Login message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: NetMessage.IS_Login, writer?: protobuf.Writer): protobuf.Writer;
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgUserLogout.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
-        /**
-         * Decodes a S_Login message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns S_Login
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.S_Login;
-
-        /**
-         * Decodes a S_Login message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns S_Login
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.S_Login;
-
-        /**
-         * Verifies a S_Login message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a S_Login message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns S_Login
-         */
-        public static fromObject(object: { [k: string]: any }): NetMessage.S_Login;
-
-        /**
-         * Creates a plain object from a S_Login message. Also converts values to other types if specified.
-         * @param message S_Login
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: NetMessage.S_Login, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this S_Login to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
-    }
-
-    /** Properties of a C_Logout. */
-    interface IC_Logout {
-    }
-
-    /** Represents a C_Logout. */
-    class C_Logout implements IC_Logout {
-
-        /**
-         * Constructs a new C_Logout.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: NetMessage.IC_Logout);
-
-        /**
-         * Creates a new C_Logout instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns C_Logout instance
-         */
-        public static create(properties?: NetMessage.IC_Logout): NetMessage.C_Logout;
-
-        /**
-         * Encodes the specified C_Logout message. Does not implicitly {@link NetMessage.C_Logout.verify|verify} messages.
-         * @param message C_Logout message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: NetMessage.IC_Logout, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Encodes the specified C_Logout message, length delimited. Does not implicitly {@link NetMessage.C_Logout.verify|verify} messages.
-         * @param message C_Logout message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: NetMessage.IC_Logout, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Decodes a C_Logout message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns C_Logout
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.C_Logout;
-
-        /**
-         * Decodes a C_Logout message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns C_Logout
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.C_Logout;
-
-        /**
-         * Verifies a C_Logout message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a C_Logout message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns C_Logout
-         */
-        public static fromObject(object: { [k: string]: any }): NetMessage.C_Logout;
-
-        /**
-         * Creates a plain object from a C_Logout message. Also converts values to other types if specified.
-         * @param message C_Logout
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: NetMessage.C_Logout, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this C_Logout to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
-    }
-
-    /** Properties of a S_Logout. */
-    interface IS_Logout {
-
-        /** S_Logout errorCode */
-        errorCode?: (number|null);
-
-        /** S_Logout reason */
-        reason?: (number|null);
-    }
-
-    /** Represents a S_Logout. */
-    class S_Logout implements IS_Logout {
-
-        /**
-         * Constructs a new S_Logout.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: NetMessage.IS_Logout);
-
-        /** S_Logout errorCode. */
-        public errorCode: number;
-
-        /** S_Logout reason. */
-        public reason: number;
-
-        /**
-         * Creates a new S_Logout instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns S_Logout instance
-         */
-        public static create(properties?: NetMessage.IS_Logout): NetMessage.S_Logout;
-
-        /**
-         * Encodes the specified S_Logout message. Does not implicitly {@link NetMessage.S_Logout.verify|verify} messages.
-         * @param message S_Logout message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: NetMessage.IS_Logout, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Encodes the specified S_Logout message, length delimited. Does not implicitly {@link NetMessage.S_Logout.verify|verify} messages.
-         * @param message S_Logout message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: NetMessage.IS_Logout, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Decodes a S_Logout message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns S_Logout
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.S_Logout;
-
-        /**
-         * Decodes a S_Logout message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns S_Logout
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.S_Logout;
-
-        /**
-         * Verifies a S_Logout message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a S_Logout message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns S_Logout
-         */
-        public static fromObject(object: { [k: string]: any }): NetMessage.S_Logout;
-
-        /**
-         * Creates a plain object from a S_Logout message. Also converts values to other types if specified.
-         * @param message S_Logout
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: NetMessage.S_Logout, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this S_Logout to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
     }
 
     /** Properties of a S_Error. */

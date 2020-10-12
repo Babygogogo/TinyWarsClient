@@ -96,7 +96,6 @@
 		"bin-debug/modules/common/view/CommonServerStatusPanel.js",
 		"bin-debug/modules/lobby/view/LobbyPanel.js",
 		"bin-debug/modules/lobby/view/LobbyTopPanel.js",
-		"bin-debug/modules/login/model/LoginProxy.js",
 		"bin-debug/modules/login/view/LoginBackgroundPanel.js",
 		"bin-debug/modules/login/view/LoginPanel.js",
 		"bin-debug/modules/login/view/RegisterPanel.js",

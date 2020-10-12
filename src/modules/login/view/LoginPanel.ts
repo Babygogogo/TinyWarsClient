@@ -89,7 +89,7 @@ namespace TinyWars.Login {
                     LocalStorage.setPassword(password);
                     User.UserModel.setSelfAccount(account);
                     User.UserModel.setSelfPassword(password);
-                    LoginProxy.reqLogin(account, account, false); // For convenience for testing
+                    User.UserProxy.reqLogin(account, account, false); // For convenience for testing
                 } else {
                     if (!Utility.Helpers.checkIsPasswordValid(password)) {
                         FloatText.show(Lang.getText(Lang.Type.A0003));
@@ -98,7 +98,7 @@ namespace TinyWars.Login {
                         LocalStorage.setPassword(password);
                         User.UserModel.setSelfAccount(account);
                         User.UserModel.setSelfPassword(password);
-                        LoginProxy.reqLogin(account, password, false);
+                        User.UserProxy.reqLogin(account, password, false);
                     }
                 }
             }

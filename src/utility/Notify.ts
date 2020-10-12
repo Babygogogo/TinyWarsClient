@@ -76,9 +76,9 @@ namespace TinyWars.Utility.Notify {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         SNewestConfigVersion,
         SLogin,
-        SRegister,
+        MsgUserRegister,
         SLogout,
-        SHeartbeat,
+        MsgCommonHeartbeat,
         SMapGetRawData,
         SMapGetRawDataFailed,
         SMapGetEnabledExtraDataList,

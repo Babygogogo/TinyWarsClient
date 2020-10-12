@@ -22,9 +22,9 @@ namespace TinyWars.Time.TimeModel {
 
     export function init(): void {
         Notify.addEventListeners([
-            { type: Notify.Type.NetworkConnected,    callback: _onNotifyNetworkConnected,    thisObject: TimeModel },
-            { type: Notify.Type.NetworkDisconnected, callback: _onNotifyNetworkDisconnected, thisObject: TimeModel },
-            { type: Notify.Type.SHeartbeat,          callback: _onSHeartbeat,                thisObject: TimeModel },
+            { type: Notify.Type.NetworkConnected,       callback: _onNotifyNetworkConnected,    thisObject: TimeModel },
+            { type: Notify.Type.NetworkDisconnected,    callback: _onNotifyNetworkDisconnected, thisObject: TimeModel },
+            { type: Notify.Type.MsgCommonHeartbeat,     callback: _onMsgCommonHeartbeat,        thisObject: TimeModel },
         ]);
 
         egret.setInterval(() => {
@@ -95,8 +95,8 @@ namespace TinyWars.Time.TimeModel {
         (_heartbeatIntervalId != null) && (egret.clearInterval(_heartbeatIntervalId));
     }
 
-    function _onSHeartbeat(e: egret.Event): void {
-        const data = e.data as Utility.ProtoTypes.NetMessage.IS_Heartbeat;
+    function _onMsgCommonHeartbeat(e: egret.Event): void {
+        const data = e.data as Utility.ProtoTypes.NetMessage.MsgCommonHeartbeat.IS;
         if (data.counter === _heartbeatCounter) {
             _isHeartbeatAnswered = true;
             ++_heartbeatCounter;
@@ -117,6 +117,6 @@ namespace TinyWars.Time.TimeModel {
                 NetManager.init();
             }
         }
-        TimeProxy.reqHeartbeat(_heartbeatCounter);
+        TimeProxy.reqCommonHeartbeat(_heartbeatCounter);
     }
 }

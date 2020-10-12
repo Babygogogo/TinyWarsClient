@@ -45,9 +45,9 @@ namespace TinyWars.Login {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: NotifyType.SLogin,          callback: this._onNotifySLogin },
-                { type: NotifyType.SRegister,       callback: this._onNotifySRegister },
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.SLogin,          callback: this._onNotifySLogin },
+                { type: NotifyType.MsgUserRegister, callback: this._onMsgUserRegister },
             ];
             this._uiListeners = [
                 { ui: this._btnLogin,    callback: this._onTouchedBtnLogin },
@@ -62,8 +62,8 @@ namespace TinyWars.Login {
         private _onNotifySLogin(e: egret.Event): void {
             FloatText.show(Lang.getText(Lang.Type.A0000));
         }
-        private _onNotifySRegister(e: egret.Event): void {
-            const data = e.data as Utility.ProtoTypes.NetMessage.IS_Register;
+        private _onMsgUserRegister(e: egret.Event): void {
+            const data = e.data as Utility.ProtoTypes.NetMessage.MsgUserRegister.IS;
             FloatText.show(Lang.getText(Lang.Type.A0004));
 
             const account   = data.account;
@@ -72,7 +72,7 @@ namespace TinyWars.Login {
             LocalStorage.setPassword(password);
             User.UserModel.setSelfAccount(account);
             User.UserModel.setSelfPassword(password);
-            LoginProxy.reqLogin(account, password, false);
+            User.UserProxy.reqLogin(account, password, false);
         }
         private _onNotifyLanguageChanged(e: egret.Event): void {
             this._updateOnLanguageChanged();
@@ -93,7 +93,7 @@ namespace TinyWars.Login {
             } else if (!Utility.Helpers.checkIsNicknameValid(nickname)) {
                 FloatText.show(Lang.getText(Lang.Type.A0002));
             } else {
-                LoginProxy.reqRegister(account, password, nickname);
+                User.UserProxy.reqUserRegister(account, password, nickname);
             }
         }
 

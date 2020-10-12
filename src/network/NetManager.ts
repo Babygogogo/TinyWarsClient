@@ -30,7 +30,12 @@ namespace TinyWars.Network {
         class NetMessageDispatcherCls extends egret.EventDispatcher {
             public dispatchWithContainer(container: ProtoTypes.NetMessage.IMessageContainer): void {
                 const name      = Helpers.getMessageName(container);
-                const action    = container[name];
+                const action    = container[name].s;
+                if (action == null) {
+                    Logger.error(`NetManager.NetMessageDispatcherCls.dispatchWithContainer() empty action.`);
+                    return undefined;
+                }
+
                 if (container.S_McwCommonHandleBoot) {
                     // Don't show the error text.
                 } else {

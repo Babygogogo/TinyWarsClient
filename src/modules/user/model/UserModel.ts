@@ -22,8 +22,8 @@ namespace TinyWars.User {
             ], UserModel);
         }
 
-        export function updateOnLogin(data: NetMessage.IS_Login): void {
-            const userPublicInfo    = data.userPublicInfo;
+        export function updateOnLogin(data: NetMessage.MsgUserLogin.IS): void {
+            const userPublicInfo = data.userPublicInfo;
             setIsLoggedIn(true);
             setSelfUserId(userPublicInfo.userId);
             setUserPublicInfo(userPublicInfo);
@@ -159,7 +159,7 @@ namespace TinyWars.User {
         }
 
         function _onNotifySLogout(e: egret.Event): void {
-            const data = e.data as NetMessage.IS_Logout;
+            const data = e.data as NetMessage.MsgUserLogout.IS;
             if (data.reason === Types.LogoutType.SelfRequest) {
                 Utility.FloatText.show(Lang.getText(Lang.Type.A0005));
             } else if (data.reason === Types.LogoutType.LoginCollision) {

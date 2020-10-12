@@ -1,14 +1,10 @@
 
 namespace TinyWars.Network {
 export enum Codes {
-C_Heartbeat = 0,
-S_Heartbeat = 1,
-C_Register = 2,
-S_Register = 3,
-C_Login = 4,
-S_Login = 5,
-C_Logout = 6,
-S_Logout = 7,
+MsgCommonHeartbeat = 0,
+MsgUserRegister = 1,
+MsgUserLogin = 2,
+MsgUserLogout = 3,
 S_Error = 9,
 S_ServerDisconnect = 11,
 S_NewestConfigVersion = 13,

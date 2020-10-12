@@ -43,7 +43,6 @@ namespace TinyWars.Utility.FlowManager {
         User.UserModel.init();
         WarMap.WarMapProxy.init();
         WarMap.WarMapModel.init();
-        Login.LoginProxy.init();
         MultiCustomRoom.McrProxy.init();
         ReplayModel.init();
         SingleCustomRoom.ScrProxy.init();
@@ -143,7 +142,7 @@ namespace TinyWars.Utility.FlowManager {
         const account   = UserModel.getSelfAccount();
         const password  = UserModel.getSelfPassword();
         if ((!UserModel.getIsLoggedIn()) && (account != null) && (password != null)) {
-            Login.LoginProxy.reqLogin(account, password, true);
+            User.UserProxy.reqLogin(account, password, true);
         }
     }
 
