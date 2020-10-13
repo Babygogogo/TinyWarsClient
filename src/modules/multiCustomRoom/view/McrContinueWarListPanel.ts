@@ -54,7 +54,7 @@ namespace TinyWars.MultiCustomRoom {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.SMcwCommonGetWarInfoList,  callback: this._onNotifySMcrGetJoinedOngoingInfos },
+                { type: Notify.Type.MsgMcwCommonGetWarInfoList,  callback: this._onNotifySMcrGetJoinedOngoingInfos },
                 { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
             ];
             this._uiListeners = [
@@ -70,7 +70,7 @@ namespace TinyWars.MultiCustomRoom {
             this._zoomMap.setTouchListenerEnabled(true);
             this._updateComponentsForLanguage();
 
-            McrProxy.reqMcwCommonGetWarInfoList();
+            MultiCustomWar.McwProxy.reqMcwCommonGetWarInfoList();
         }
 
         protected _onClosed(): void {
@@ -107,7 +107,7 @@ namespace TinyWars.MultiCustomRoom {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
         private _onNotifySMcrGetJoinedOngoingInfos(e: egret.Event): void {
-            const newData        = this._createDataForListWar(McrModel.getOngoingWarInfoList());
+            const newData        = this._createDataForListWar(MultiCustomWar.McwModel.getOngoingWarInfoList());
             this._dataForListWar = newData;
 
             if (newData.length > 0) {

@@ -71,7 +71,7 @@ namespace TinyWars.MultiCustomRoom {
             this._zoomMap.setTouchListenerEnabled(true);
             this._updateComponentsForLanguage();
 
-            McrProxy.reqWatchRequestedWarInfos();
+            MultiCustomWar.McwProxy.reqWatchRequestedWarInfos();
         }
 
         protected _onClosed(): void {
@@ -112,7 +112,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onNotifySMcwWatchGetRequestedWarInfos(e: egret.Event): void {
-            const newData        = this._createDataForListWar(McrModel.getWatchRequestedWarInfos());
+            const newData        = this._createDataForListWar(MultiCustomWar.McwModel.getWatchRequestedWarInfos());
             this._dataForListWar = newData;
 
             if (newData.length > 0) {
@@ -127,7 +127,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onNotifySMcwWatchHandleRequest(e: egret.Event): void {
             FloatText.show(Lang.getText(Lang.Type.A0061));
-            McrProxy.reqWatchRequestedWarInfos();
+            MultiCustomWar.McwProxy.reqWatchRequestedWarInfos();
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {

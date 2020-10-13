@@ -45,7 +45,7 @@ namespace TinyWars.Lobby {
                 { ui: this, callback: this._onResize, eventType: egret.Event.RESIZE },
             ];
             this._notifyListeners = [
-                { type: Notify.Type.SLogout,            callback: this._onNotifySLogout },
+                { type: Notify.Type.MsgUserLogout,            callback: this._onNotifySLogout },
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ];
 

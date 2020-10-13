@@ -37,7 +37,7 @@ namespace TinyWars.SingleCustomRoom {
                 { ui: this._btnBack, callback: this._onTouchedBtnBack },
             ];
             this._notifyListeners = [
-                { type: Utility.Notify.Type.SLogout, callback: this._onNotifySLogout },
+                { type: Utility.Notify.Type.MsgUserLogout, callback: this._onNotifySLogout },
             ];
 
             this._listCommand.setItemRenderer(CommandRenderer);

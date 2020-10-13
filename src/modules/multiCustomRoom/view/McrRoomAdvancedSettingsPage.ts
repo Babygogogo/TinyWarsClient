@@ -69,7 +69,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onNotifySMcrGetRoomInfo(e: egret.Event): void {
-            const data          = e.data as NetMessage.IS_McrGetRoomInfo;
+            const data          = e.data as NetMessage.MsgMcrGetRoomInfo.IS;
             const roomId        = data.roomId;
             const currRoomInfo  = this._roomInfo;
             if ((currRoomInfo) && (roomId === currRoomInfo.roomId)) {

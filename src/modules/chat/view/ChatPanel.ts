@@ -65,8 +65,8 @@ namespace TinyWars.Chat {
         protected _onFirstOpened(): void {
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.SChatAddMessage,        callback: this._onNotifySChatAddMessage },
-                { type: Notify.Type.SChatGetAllMessages,    callback: this._onNotifySChatGetAllMessages },
+                { type: Notify.Type.MsgChatAddMessage,        callback: this._onNotifySChatAddMessage },
+                { type: Notify.Type.MsgChatGetAllMessages,    callback: this._onNotifySChatGetAllMessages },
             ];
             this._uiListeners = [
                 { ui: this._btnBack,    callback: this.close },
@@ -133,7 +133,7 @@ namespace TinyWars.Chat {
         }
 
         private _onNotifySChatAddMessage(e: egret.Event): void {
-            const message       = (e.data as NetMessage.IS_ChatAddMessage).message;
+            const message       = (e.data as NetMessage.MsgChatAddMessage.IS).message;
             const fromUserId    = message.fromUserId;
             if (fromUserId === User.UserModel.getSelfUserId()) {
                 this._inputMessage.text = "";
@@ -375,10 +375,10 @@ namespace TinyWars.Chat {
         private _labelType      : GameUi.UiLabel;
         private _imgRed         : GameUi.UiLabel;
         private _notifyEvents   : Notify.Listener[] = [
-            { type: Notify.Type.SChatGetAllMessages,            callback: this._onNotifySChatGetAllMessages },
-            { type: Notify.Type.SChatAddMessage,                callback: this._onNotifySChatAddMessage },
-            { type: Notify.Type.SChatGetAllReadProgressList,    callback: this._onNotifySChatGetAllReadProgressList },
-            { type: Notify.Type.SChatUpdateReadProgress,        callback: this._onNotifySChatUpdateReadProgress },
+            { type: Notify.Type.MsgChatGetAllMessages,            callback: this._onNotifySChatGetAllMessages },
+            { type: Notify.Type.MsgChatAddMessage,                callback: this._onNotifySChatAddMessage },
+            { type: Notify.Type.MsgChatGetAllReadProgressList,    callback: this._onNotifySChatGetAllReadProgressList },
+            { type: Notify.Type.MsgChatUpdateReadProgress,        callback: this._onNotifySChatUpdateReadProgress },
         ];
 
         protected childrenCreated(): void {

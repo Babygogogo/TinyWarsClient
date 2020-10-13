@@ -41,8 +41,8 @@ namespace TinyWars.MapManagement {
             ];
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.SLogout,            callback: this._onNotifySLogout },
-                { type: Notify.Type.SMmReloadAllMaps,   callback: this._onNotifySMmReloadAllMaps },
+                { type: Notify.Type.MsgUserLogout,            callback: this._onNotifySLogout },
+                { type: Notify.Type.MsgMmReloadAllMaps,   callback: this._onNotifySMmReloadAllMaps },
             ];
 
             this._listCommand.setItemRenderer(CommandRenderer);
@@ -91,13 +91,6 @@ namespace TinyWars.MapManagement {
                         MmAvailabilityListPanel.show({});
                     },
                 },
-                // {
-                //     name    : Lang.getText(Lang.Type.B0268),
-                //     callback: (): void => {
-                //         this.close();
-                //         MmMergeListPanel.show();
-                //     },
-                // },
                 {
                     name    : Lang.getText(Lang.Type.B0295),
                     callback: (): void => {
@@ -106,18 +99,6 @@ namespace TinyWars.MapManagement {
                     },
                 },
             ];
-            if (await User.UserModel.getIsSelfAdmin()) {
-                dataList.push({
-                    name    : Lang.getText(Lang.Type.B0262),
-                    callback: () => {
-                        Common.CommonConfirmPanel.show({
-                            title   : Lang.getText(Lang.Type.B0088),
-                            content : Lang.getText(Lang.Type.A0074),
-                            callback: () => WarMap.WarMapProxy.reqReloadAllMaps(),
-                        })
-                    },
-                });
-            }
 
             return dataList;
         }

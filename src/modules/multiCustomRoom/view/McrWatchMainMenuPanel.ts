@@ -39,7 +39,7 @@ namespace TinyWars.MultiCustomRoom {
                 { ui: this._btnBack, callback: this._onTouchedBtnBack },
             ];
             this._notifyListeners = [
-                { type: Notify.Type.SLogout,            callback: this._onNotifySLogout },
+                { type: Notify.Type.MsgUserLogout,            callback: this._onNotifySLogout },
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ];
 
@@ -94,7 +94,7 @@ namespace TinyWars.MultiCustomRoom {
                         McrWatchHandleRequestWarsPanel.show();
                     },
                     redChecker  : () => {
-                        const watchInfos = McrModel.getWatchRequestedWarInfos();
+                        const watchInfos = MultiCustomWar.McwModel.getWatchRequestedWarInfos();
                         return (!!watchInfos) && (watchInfos.length > 0);
                     },
                 },

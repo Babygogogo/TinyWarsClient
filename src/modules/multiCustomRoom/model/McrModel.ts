@@ -9,29 +9,9 @@ namespace TinyWars.MultiCustomRoom {
     import WarMapModel      = WarMap.WarMapModel;
     import BwSettingsHelper = BaseWar.BwSettingsHelper;
     import BootTimerType    = Types.BootTimerType;
-    import MultiCustomWar   = ProtoTypes.MultiCustomWar;
     import IMcrRoomInfo     = ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
     import NetMessage       = ProtoTypes.NetMessage;
-    import IMcwWatchInfo    = MultiCustomWar.IMcwWatchInfo;
-    import IMcwWarInfo      = MultiCustomWar.IMcwWarInfo;
-    import IMcwReplayInfo   = MultiCustomWar.IMcwReplayInfo;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
-
-    export const MAX_INITIAL_FUND     = 1000000;
-    export const MIN_INITIAL_FUND     = 0;
-    export const DEFAULT_INITIAL_FUND = 0;
-
-    export const MAX_INCOME_MODIFIER     = 1000;
-    export const MIN_INCOME_MODIFIER     = 0;
-    export const DEFAULT_INCOME_MODIFIER = 0;
-
-    export const MAX_INITIAL_ENERGY     = 100;
-    export const MIN_INITIAL_ENERGY     = 0;
-    export const DEFAULT_INITIAL_ENERGY = 0;
-
-    export const MAX_ENERGY_MODIFIER     = 1000;
-    export const MIN_ENERGY_MODIFIER     = 0;
-    export const DEFAULT_ENERGY_MODIFIER = 0;
 
     const REGULAR_TIME_LIMITS = [
         60 * 60 * 24 * 1,   // 1 day
@@ -39,27 +19,16 @@ namespace TinyWars.MultiCustomRoom {
         60 * 60 * 24 * 3,   // 3 days
         60 * 60 * 24 * 7,   // 7 days
     ];
-    const DEFAULT_TIME_LIMIT = REGULAR_TIME_LIMITS[2];
 
-    export type DataForCreateRoom   = ProtoTypes.NetMessage.IC_McrCreateRoom;
-    export type DataForJoinRoom     = ProtoTypes.NetMessage.IC_McrJoinRoom;
+    export type DataForCreateRoom   = ProtoTypes.NetMessage.MsgMcrCreateRoom.IC;
+    export type DataForJoinRoom     = ProtoTypes.NetMessage.MsgMcrJoinRoom.IC;
 
     export namespace McrModel {
         const _roomInfoDict         = new Map<number, IMcrRoomInfo>();
-        const _roomInfoRequests     = new Map<number, ((info: NetMessage.IS_McrGetRoomInfo | undefined | null) => void)[]>();
+        const _roomInfoRequests     = new Map<number, ((info: NetMessage.MsgMcrGetRoomInfo.IS | undefined | null) => void)[]>();
 
         const _unjoinedRoomIdSet    = new Set<number>();
         const _joinedRoomIdSet      = new Set<number>();
-
-        let _ongoingWarInfoList     : IMcwWarInfo[] = [];
-
-        let _replayInfos: IMcwReplayInfo[];
-        let _replayData : ProtoTypes.NetMessage.IS_McrGetReplayData;
-
-        let _unwatchedWarInfos      : IMcwWatchInfo[];
-        let _watchOngoingWarInfos   : IMcwWatchInfo[];
-        let _watchRequestedWarInfos : IMcwWatchInfo[];
-        let _watchedWarInfos        : IMcwWatchInfo[];
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for rooms.
@@ -82,7 +51,7 @@ namespace TinyWars.MultiCustomRoom {
 
             new Promise((resolve, reject) => {
                 const callbackOnSucceed = (e: egret.Event): void => {
-                    const data = e.data as NetMessage.IS_McrGetRoomInfo;
+                    const data = e.data as NetMessage.MsgMcrGetRoomInfo.IS;
                     if (data.roomId === roomId) {
                         Notify.removeEventListener(Notify.Type.SMcrGetRoomInfo,         callbackOnSucceed);
                         Notify.removeEventListener(Notify.Type.SMcrGetRoomInfoFailed,   callbackOnFailed);
@@ -96,7 +65,7 @@ namespace TinyWars.MultiCustomRoom {
                     }
                 };
                 const callbackOnFailed = (e: egret.Event): void => {
-                    const data = e.data as NetMessage.IS_McrGetRoomInfo;
+                    const data = e.data as NetMessage.MsgMcrGetRoomInfo.IS;
                     if (data.roomId === roomId) {
                         Notify.removeEventListener(Notify.Type.SMcrGetRoomInfo,         callbackOnSucceed);
                         Notify.removeEventListener(Notify.Type.SMcrGetRoomInfoFailed,   callbackOnFailed);
@@ -488,64 +457,6 @@ namespace TinyWars.MultiCustomRoom {
             export function getIsReady(): boolean {
                 return getData().isReady;
             }
-        }
-
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Functions for continuing joined ongoing wars.
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        export function setOngoingWarInfoList(infoList: IMcwWarInfo[]): void {
-            _ongoingWarInfoList = infoList;
-        }
-        export function getOngoingWarInfoList(): IMcwWarInfo[] | undefined {
-            return _ongoingWarInfoList;
-        }
-
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Functions for replays.
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        export function setReplayInfos(infos: IMcwReplayInfo[]): void {
-            _replayInfos = infos;
-        }
-        export function getReplayInfos(): IMcwReplayInfo[] | undefined {
-            return _replayInfos;
-        }
-
-        export function setReplayData(data: ProtoTypes.NetMessage.IS_McrGetReplayData): void {
-            _replayData = data;
-        }
-        export function getReplayData(): ProtoTypes.NetMessage.IS_McrGetReplayData | undefined {
-            return _replayData;
-        }
-
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Functions for watch.
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        export function setUnwatchedWarInfos(infos: IMcwWatchInfo[]): void {
-            _unwatchedWarInfos = infos;
-        }
-        export function getUnwatchedWarInfos(): IMcwWatchInfo[] | null {
-            return _unwatchedWarInfos;
-        }
-
-        export function setWatchOngoingWarInfos(infos: IMcwWatchInfo[]): void {
-            _watchOngoingWarInfos = infos;
-        }
-        export function getWatchOngoingWarInfos(): IMcwWatchInfo[] | null {
-            return _watchOngoingWarInfos;
-        }
-
-        export function setWatchRequestedWarInfos(infos: IMcwWatchInfo[]): void {
-            _watchRequestedWarInfos = infos;
-        }
-        export function getWatchRequestedWarInfos(): IMcwWatchInfo[] | null {
-            return _watchRequestedWarInfos;
-        }
-
-        export function setWatchedWarInfos(infos: IMcwWatchInfo[]): void {
-            _watchedWarInfos = infos;
-        }
-        export function getWatchedWarInfos(): IMcwWatchInfo[] | null {
-            return _watchedWarInfos;
         }
     }
 

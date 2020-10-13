@@ -87,7 +87,7 @@ namespace TinyWars.MultiCustomRoom {
                 }
             }
             if (userIds.length > 0) {
-                McrProxy.reqWatchMakeRequest(this._openData.warInfo.warId, userIds);
+                MultiCustomWar.McwProxy.reqWatchMakeRequest(this._openData.warInfo.warId, userIds);
             }
             this.close();
         }

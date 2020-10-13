@@ -8,39 +8,28 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: ActionCode.S_McrCreateRoom,                  callback: _onSMcrCreateRoom },
-            { msgCode: ActionCode.S_McrJoinRoom,                    callback: _onSMcrJoinRoom, },
-            { msgCode: ActionCode.S_McrDestroyRoom,                 callback: _onSMcrDestroyRoom },
-            { msgCode: ActionCode.S_McrExitRoom,                    callback: _onSMcrExitRoom, },
-            { msgCode: ActionCode.S_McrSetWarRule,                  callback: _onSMcrSetWarRule },
-            { msgCode: ActionCode.S_McrRemovePlayer,                callback: _onSMcrRemovePlayer },
-            { msgCode: ActionCode.S_McrSetReady,                    callback: _onSMcrSetReady },
-            { msgCode: ActionCode.S_McrSetSelfSettings,             callback: _onSMcrSetSelfSettings },
-            { msgCode: ActionCode.S_McrGetRoomInfo,                 callback: _onSMcrGetRoomInfo },
-            { msgCode: ActionCode.S_McrGetUnjoinedRoomInfoList,     callback: _onSMcrGetUnjoinedRoomInfoList, },
-            { msgCode: ActionCode.S_McrGetJoinedRoomInfoList,       callback: _onSMcrGetJoinedRoomInfoList, },
-            { msgCode: ActionCode.S_McrStartWar,                    callback: _onSMcrStartWar },
-            { msgCode: ActionCode.S_McwCommonGetWarInfoList,        callback: _onSMcwCommonGetWarInfoList, },
-            { msgCode: ActionCode.S_McrGetReplayInfos,              callback: _onSMcrGetReplayInfos, },
-            { msgCode: ActionCode.S_McrGetReplayData,               callback: _onSMcrGetReplayData, },
-            { msgCode: ActionCode.S_McwWatchGetUnwatchedWarInfos,   callback: _onSMcwWatchGetUnwatchedWarInfos, },
-            { msgCode: ActionCode.S_McwWatchGetOngoingWarInfos,     callback: _onSMcwWatchGetOngoingWarInfos },
-            { msgCode: ActionCode.S_McwWatchGetRequestedWarInfos,   callback: _onSMcwWatchGetRequestedWarInfos, },
-            { msgCode: ActionCode.S_McwWatchGetWatchedWarInfos,     callback: _onSMcwWatchGetWatchedWarInfos },
-            { msgCode: ActionCode.S_McwWatchMakeRequest,            callback: _onSMcwWatchMakeRequest },
-            { msgCode: ActionCode.S_McwWatchHandleRequest,          callback: _onSMcwWatchHandleRequest },
-            { msgCode: ActionCode.S_McwWatchDeleteWatcher,          callback: _onSMcwWatchDeleteWatcher },
-            { msgCode: ActionCode.S_McwWatchContinueWar,            callback: _onSMcwWatchContinueWar },
+            { msgCode: ActionCode.MsgMcrCreateRoom,                 callback: _onMsgMcrCreateRoom               },
+            { msgCode: ActionCode.MsgMcrJoinRoom,                   callback: _onMsgMcrJoinRoom                 },
+            { msgCode: ActionCode.MsgMcrDeleteRoom,                 callback: _onMsgMcrDeleteRoom               },
+            { msgCode: ActionCode.MsgMcrExitRoom,                   callback: _onMsgMcrExitRoom                 },
+            { msgCode: ActionCode.MsgMcrSetWarRule,                 callback: _onMsgMcrSetWarRule               },
+            { msgCode: ActionCode.MsgMcrDeletePlayer,               callback: _onMsgMcrDeletePlayer             },
+            { msgCode: ActionCode.MsgMcrSetReady,                   callback: _onMsgMcrSetReady                 },
+            { msgCode: ActionCode.MsgMcrSetSelfSettings,            callback: _onMsgMcrSetSelfSettings          },
+            { msgCode: ActionCode.MsgMcrGetRoomInfo,                callback: _onMsgMcrGetRoomInfo              },
+            { msgCode: ActionCode.MsgMcrGetUnjoinedRoomInfoList,    callback: _onMsgMcrGetUnjoinedRoomInfoList  },
+            { msgCode: ActionCode.MsgMcrGetJoinedRoomInfoList,      callback: _onMsgMcrGetJoinedRoomInfoList    },
+            { msgCode: ActionCode.MsgMcrStartWar,                   callback: _onMsgMcrStartWar                 },
         ], McrProxy);
     }
 
     export function reqCreateRoom(param: DataForCreateRoom): void {
         NetManager.send({
-            C_McrCreateRoom: param,
+            MsgMcrCreateRoom: { c: param },
         });
     }
-    function _onSMcrCreateRoom(e: egret.Event): void {
-        const data = e.data as NetMessage.IS_McrCreateRoom;
+    function _onMsgMcrCreateRoom(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMcrCreateRoom.IS;
         if (!data.errorCode) {
             Notify.dispatch(Notify.Type.SMcrCreateRoom, data);
         }
@@ -48,11 +37,11 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
 
     export function reqMcrJoinRoom(data: DataForJoinRoom): void {
         NetManager.send({
-            C_McrJoinRoom: data,
+            MsgMcrJoinRoom: { c: data },
         });
     }
-    function _onSMcrJoinRoom(e: egret.Event): void {
-        const data = e.data as NetMessage.IS_McrJoinRoom;
+    function _onMsgMcrJoinRoom(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMcrJoinRoom.IS;
         if (!data.errorCode) {
             Notify.dispatch(Notify.Type.SMcrJoinRoom, data);
         }
@@ -60,13 +49,13 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
 
     export function reqMcrDestroyRoom(roomId: number): void {
         NetManager.send({
-            C_McrDestroyRoom: {
+            MsgMcrDeleteRoom: { c: {
                 roomId,
-            },
+            } },
         });
     }
-    function _onSMcrDestroyRoom(e: egret.Event): void {
-        const data = e.data as NetMessage.IS_McrDestroyRoom;
+    function _onMsgMcrDeleteRoom(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMcrDeleteRoom.IS;
         if (!data.errorCode) {
             McrModel.removeRoomInfo(data.roomId);
             Notify.dispatch(Notify.Type.SMcrDestroyRoom, data);
@@ -75,25 +64,25 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
 
     export function reqMcrExitRoom(roomId: number): void {
         NetManager.send({
-            C_McrExitRoom: {
+            MsgMcrExitRoom: { c: {
                 roomId,
-            },
+            }, },
         });
     }
-    function _onSMcrExitRoom(e: egret.Event): void {
-        const data = e.data as NetMessage.IS_McrExitRoom;
+    function _onMsgMcrExitRoom(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMcrExitRoom.IS;
         if (!data.errorCode) {
             Notify.dispatch(Notify.Type.SMcrExitRoom, data);
         }
     }
 
-    export function reqMcrSetWarRule(data: NetMessage.IC_McrSetWarRule): void {
+    export function reqMcrSetWarRule(data: NetMessage.MsgMcrSetWarRule.IC): void {
         NetManager.send({
-            C_McrSetWarRule: data,
+            MsgMcrSetWarRule: { c: data },
         });
     }
-    function _onSMcrSetWarRule(e: egret.Event): void {
-        const data = e.data as NetMessage.IS_McrSetWarRule;
+    function _onMsgMcrSetWarRule(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMcrSetWarRule.IS;
         if (!data.errorCode) {
             Notify.dispatch(Notify.Type.SMcrSetWarRule, data);
         }
@@ -101,14 +90,14 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
 
     export function reqMcrRemovePlayer(roomId: number, playerIndex: number): void {
         NetManager.send({
-            C_McrRemovePlayer: {
+            MsgMcrDeletePlayer: { c: {
                 roomId,
                 playerIndex,
-            },
+            }, },
         });
     }
-    function _onSMcrRemovePlayer(e: egret.Event): void {
-        const data = e.data as NetMessage.IS_McrRemovePlayer;
+    function _onMsgMcrDeletePlayer(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMcrDeletePlayer.IS;
         if (!data.errorCode) {
             Notify.dispatch(Notify.Type.SMcrRemovePlayer, data);
         }
@@ -116,26 +105,26 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
 
     export function reqMcrSetReady(roomId: number, isReady: boolean): void {
         NetManager.send({
-            C_McrSetReady: {
+            MsgMcrSetReady: { c: {
                 roomId,
                 isReady,
-            },
+            }, },
         });
     }
-    function _onSMcrSetReady(e: egret.Event): void {
-        const data = e.data as NetMessage.IS_McrSetReady;
+    function _onMsgMcrSetReady(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMcrSetReady.IS;
         if (!data.errorCode) {
-            Notify.dispatch(Notify.Type.SMcrSetReady, data);
+            Notify.dispatch(Notify.Type.MsgMcrSetReady, data);
         }
     }
 
-    export function reqMcrSetSelfSettings(data: NetMessage.IC_McrSetSelfSettings): void {
+    export function reqMcrSetSelfSettings(data: NetMessage.MsgMcrSetSelfSettings.IC): void {
         NetManager.send({
-            C_McrSetSelfSettings: data,
+            MsgMcrSetSelfSettings: { c: data },
         });
     }
-    function _onSMcrSetSelfSettings(e: egret.Event): void {
-        const data = e.data as NetMessage.IS_McrSetSelfSettings;
+    function _onMsgMcrSetSelfSettings(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMcrSetSelfSettings.IS;
         if (!data.errorCode) {
             Notify.dispatch(Notify.Type.SMcrSetSelfSettings, data);
         }
@@ -143,13 +132,13 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
 
     export function reqMcrGetRoomInfo(roomId: number): void {
         NetManager.send({
-            C_McrGetRoomInfo: {
+            MsgMcrGetRoomInfo: { c: {
                 roomId,
-            },
+            }, },
         });
     }
-    function _onSMcrGetRoomInfo(e: egret.Event): void {
-        const data = e.data as NetMessage.IS_McrGetRoomInfo;
+    function _onMsgMcrGetRoomInfo(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMcrGetRoomInfo.IS;
         if (data.errorCode) {
             Notify.dispatch(Notify.Type.SMcrGetRoomInfoFailed, data);
         } else {
@@ -160,12 +149,12 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
 
     export function reqMcrGetUnjoinedRoomInfoList(): void {
         NetManager.send({
-            C_McrGetUnjoinedRoomInfoList: {
-            },
+            MsgMcrGetUnjoinedRoomInfoList: { c: {
+            }, },
         });
     }
-    function _onSMcrGetUnjoinedRoomInfoList(e: egret.Event): void {
-        const data = e.data as NetMessage.IS_McrGetUnjoinedRoomInfoList;
+    function _onMsgMcrGetUnjoinedRoomInfoList(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMcrGetUnjoinedRoomInfoList.IS;
         if (!data.errorCode) {
             McrModel.setUnjoinedRoomInfoList(data.roomInfoList);
             Notify.dispatch(Notify.Type.SMcrGetUnjoinedRoomInfoList, data);
@@ -174,12 +163,12 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
 
     export function reqMcrGetJoinedRoomInfoList(): void {
         NetManager.send({
-            C_McrGetJoinedRoomInfoList: {
-            },
+            MsgMcrGetJoinedRoomInfoList: { c: {
+            }, }
         });
     }
-    function _onSMcrGetJoinedRoomInfoList(e: egret.Event): void {
-        const data = e.data as NetMessage.IS_McrGetJoinedRoomInfoList;
+    function _onMsgMcrGetJoinedRoomInfoList(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMcrGetJoinedRoomInfoList.IS;
         if (!data.errorCode) {
             McrModel.setJoinedRoomInfoList(data.roomInfoList);
             Notify.dispatch(Notify.Type.SMcrGetJoinedRoomInfoList, data);
@@ -188,175 +177,16 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
 
     export function reqMcrStartWar(roomId: number): void {
         NetManager.send({
-            C_McrStartWar: {
+            MsgMcrStartWar: { c: {
                 roomId,
-            },
+            }, },
         });
     }
-    function _onSMcrStartWar(e: egret.Event): void {
-        const data = e.data as NetMessage.IS_McrStartWar;
+    function _onMsgMcrStartWar(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMcrStartWar.IS;
         if (!data.errorCode) {
             McrModel.removeRoomInfo(data.roomId);
             Notify.dispatch(Notify.Type.SMcrStartWar, data);
-        }
-    }
-
-    export function reqMcwCommonGetWarInfoList(): void {
-        NetManager.send({
-            C_McwCommonGetWarInfoList: {},
-        });
-    }
-    function _onSMcwCommonGetWarInfoList(e: egret.Event): void {
-        const data = e.data as NetMessage.IS_McwCommonGetWarInfoList;
-        McrModel.setOngoingWarInfoList(data.infos);
-        Notify.dispatch(Notify.Type.SMcwCommonGetWarInfoList, data);
-    }
-
-    export function reqReplayInfos(params?: NetMessage.IC_McrGetReplayInfos): void {
-        NetManager.send({
-            C_McrGetReplayInfos: params || {},
-        });
-    }
-    function _onSMcrGetReplayInfos(e: egret.Event): void {
-        const data = e.data as NetMessage.IS_McrGetReplayInfos;
-        if (!data.errorCode) {
-            McrModel.setReplayInfos(data.infos);
-            Notify.dispatch(Notify.Type.SMcrGetReplayInfos);
-        }
-    }
-
-    export function reqReplayData(replayId: number): void {
-        NetManager.send({
-            C_McrGetReplayData: {
-                replayId,
-            },
-        });
-    }
-    function _onSMcrGetReplayData(e: egret.Event): void {
-        const data = e.data as NetMessage.IS_McrGetReplayData;
-        if (data.errorCode) {
-            Notify.dispatch(Notify.Type.SMcrGetReplayDataFailed);
-        } else {
-            McrModel.setReplayData(data);
-            Notify.dispatch(Notify.Type.SMcrGetReplayData);
-        }
-    }
-
-    export function reqUnwatchedWarInfos(): void {
-        NetManager.send({
-            C_McwWatchGetUnwatchedWarInfos: {
-            },
-        });
-    }
-    function _onSMcwWatchGetUnwatchedWarInfos(e: egret.Event): void {
-        const data = e.data as NetMessage.IS_McwWatchGetUnwatchedWarInfos;
-        if (!data.errorCode) {
-            McrModel.setUnwatchedWarInfos(data.infos);
-            Notify.dispatch(Notify.Type.SMcwWatchGetUnwatchedWarInfos, data);
-        }
-    }
-
-    export function reqWatchGetOngoingWarInfos(): void {
-        NetManager.send({
-            C_McwWatchGetOngoingWarInfos: {
-            },
-        })
-    }
-    function _onSMcwWatchGetOngoingWarInfos(e: egret.Event): void {
-        const data = e.data as NetMessage.IS_McwWatchGetOngoingWarInfos;
-        if (!data.errorCode) {
-            McrModel.setWatchOngoingWarInfos(data.infos);
-            Notify.dispatch(Notify.Type.SMcwWatchGetOngoingWarInfos, data);
-        }
-    }
-
-    export function reqWatchRequestedWarInfos(): void {
-        NetManager.send({
-            C_McwWatchGetRequestedWarInfos: {
-            },
-        });
-    }
-    function _onSMcwWatchGetRequestedWarInfos(e: egret.Event): void {
-        const data = e.data as NetMessage.IS_McwWatchGetRequestedWarInfos;
-        if (!data.errorCode) {
-            McrModel.setWatchRequestedWarInfos(data.infos);
-            Notify.dispatch(Notify.Type.SMcwWatchGetRequestedWarInfos, data);
-        }
-    }
-
-    export function reqWatchedWarInfos(): void {
-        NetManager.send({
-            C_McwWatchGetWatchedWarInfos: {
-            },
-        });
-    }
-    function _onSMcwWatchGetWatchedWarInfos(e: egret.Event): void {
-        const data = e.data as NetMessage.IS_McwWatchGetWatchedWarInfos;
-        if (!data.errorCode) {
-            McrModel.setWatchedWarInfos(data.infos);
-            Notify.dispatch(Notify.Type.SMcwWatchGetWatchedWarInfos, data);
-        }
-    }
-
-    export function reqWatchMakeRequest(warId: number, dstUserIds: number[]): void {
-        NetManager.send({
-            C_McwWatchMakeRequest: {
-                warId,
-                dstUserIds,
-            },
-        });
-    }
-    function _onSMcwWatchMakeRequest(e: egret.Event): void {
-        const data = e.data as NetMessage.IS_McwWatchMakeRequest;
-        if (!data.errorCode) {
-            Notify.dispatch(Notify.Type.SMcwWatchMakeRequest, data);
-        }
-    }
-
-    export function reqWatchHandleRequest(warId: number, acceptSrcUserIds: number[], declineSrcUserIds: number[]): void {
-        NetManager.send({
-            C_McwWatchHandleRequest: {
-                warId,
-                acceptSrcUserIds,
-                declineSrcUserIds,
-            },
-        });
-    }
-    function _onSMcwWatchHandleRequest(e: egret.Event): void {
-        const data = e.data as NetMessage.IS_McwWatchHandleRequest;
-        if (!data.errorCode) {
-            Notify.dispatch(Notify.Type.SMcwWatchHandleRequest, data);
-        }
-    }
-
-    export function reqWatchDeleteWatcher(warId: number, watcherUserIds: number[]): void {
-        NetManager.send({
-            C_McwWatchDeleteWatcher: {
-                warId,
-                watcherUserIds,
-            },
-        });
-    }
-    function _onSMcwWatchDeleteWatcher(e: egret.Event): void {
-        const data = e.data as NetMessage.IS_McwWatchDeleteWatcher;
-        if (!data.errorCode) {
-            Notify.dispatch(Notify.Type.SMcwWatchDeleteWatcher, data);
-        }
-    }
-
-    export function reqWatchContinueWar(warId: number): void {
-        NetManager.send({
-            C_McwWatchContinueWar: {
-                warId,
-            },
-        });
-    }
-    function _onSMcwWatchContinueWar(e: egret.Event): void {
-        const data = e.data as NetMessage.IS_McwWatchContinueWar;
-        if (data.errorCode) {
-            Notify.dispatch(Notify.Type.SMcwWatchContinueWarFailed, data);
-        } else {
-            Notify.dispatch(Notify.Type.SMcwWatchContinueWar, data);
         }
     }
 }

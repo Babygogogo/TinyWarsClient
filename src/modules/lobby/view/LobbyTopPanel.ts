@@ -38,13 +38,13 @@ namespace TinyWars.Lobby {
         protected _onFirstOpened(): void {
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.SLogin,                         callback: this._onNotifySLogin },
-                { type: Notify.Type.SLogout,                        callback: this._onNotifySLogout },
-                { type: Notify.Type.MsgUserChangeNickname,            callback: this._onNotifySUserChangeNickname },
-                { type: Notify.Type.SChatGetAllReadProgressList,    callback: this._onNotifyChatGetAllReadProgressList },
-                { type: Notify.Type.SChatUpdateReadProgress,        callback: this._onNotifyChatUpdateReadProgress },
-                { type: Notify.Type.SChatGetAllMessages,            callback: this._onNotifyChatGetAllMessages },
-                { type: Notify.Type.SChatAddMessage,                callback: this._onNotifyChatAddMessage },
+                { type: Notify.Type.MsgUserLogin,                         callback: this._onNotifySLogin },
+                { type: Notify.Type.MsgUserLogout,                        callback: this._onNotifySLogout },
+                { type: Notify.Type.MsgUserSetNickname,            callback: this._onNotifySUserChangeNickname },
+                { type: Notify.Type.MsgChatGetAllReadProgressList,    callback: this._onNotifyChatGetAllReadProgressList },
+                { type: Notify.Type.MsgChatUpdateReadProgress,        callback: this._onNotifyChatUpdateReadProgress },
+                { type: Notify.Type.MsgChatGetAllMessages,            callback: this._onNotifyChatGetAllMessages },
+                { type: Notify.Type.MsgChatAddMessage,                callback: this._onNotifyChatAddMessage },
             ];
             this._uiListeners = [
                 { ui: this._btnMyInfo,  callback: this._onTouchedBtnMyInfo },

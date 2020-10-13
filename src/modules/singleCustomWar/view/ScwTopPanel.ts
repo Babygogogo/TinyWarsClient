@@ -59,10 +59,10 @@ namespace TinyWars.SingleCustomWar {
                 { type: Notify.Type.BwCoEnergyChanged,              callback: this._onNotifyBwCoEnergyChanged },
                 { type: Notify.Type.BwCoUsingSkillTypeChanged,      callback: this._onNotifyBwCoUsingSkillChanged },
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
-                { type: Notify.Type.SChatGetAllReadProgressList,    callback: this._onNotifyChatGetAllReadProgressList },
-                { type: Notify.Type.SChatUpdateReadProgress,        callback: this._onNotifyChatUpdateReadProgress },
-                { type: Notify.Type.SChatGetAllMessages,            callback: this._onNotifyChatGetAllMessages },
-                { type: Notify.Type.SChatAddMessage,                callback: this._onNotifyChatAddMessage },
+                { type: Notify.Type.MsgChatGetAllReadProgressList,    callback: this._onNotifyChatGetAllReadProgressList },
+                { type: Notify.Type.MsgChatUpdateReadProgress,        callback: this._onNotifyChatUpdateReadProgress },
+                { type: Notify.Type.MsgChatGetAllMessages,            callback: this._onNotifyChatGetAllMessages },
+                { type: Notify.Type.MsgChatAddMessage,                callback: this._onNotifyChatAddMessage },
             ];
             this._uiListeners = [
                 { ui: this._groupPlayer,        callback: this._onTouchedGroupPlayer },

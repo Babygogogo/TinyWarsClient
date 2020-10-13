@@ -39,7 +39,7 @@ namespace TinyWars.SinglePlayerLobby {
                 { ui: this._btnBack,    callback: this._onTouchedBtnBack },
             ];
             this._notifyListeners = [
-                { type: Notify.Type.SLogout,            callback: this._onNotifySLogout },
+                { type: Notify.Type.MsgUserLogout,            callback: this._onNotifySLogout },
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ];
 

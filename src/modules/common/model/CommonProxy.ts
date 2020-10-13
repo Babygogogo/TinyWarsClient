@@ -10,11 +10,10 @@ namespace TinyWars.Common.CommonProxy {
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: ActionCode.MsgCommonHeartbeat,               callback: _onMsgCommonHeartbeat             },
-            { msgCode: ActionCode.MsgCommonError,                   callback: _onMsgCommonError,                },
-            { msgCode: ActionCode.MsgCommonLatestConfigVersion,     callback: _onMsgCommonLatestConfigVersion   },
-            { msgCode: ActionCode.S_CommonGetServerStatus,          callback: _onSCommonGetServerStatus,        },
-            { msgCode: ActionCode.S_CommonRateMultiPlayerReplay,    callback: _onSCommonRateMultiPlayerReplay   },
+            { msgCode: ActionCode.MsgCommonHeartbeat,           callback: _onMsgCommonHeartbeat             },
+            { msgCode: ActionCode.MsgCommonError,               callback: _onMsgCommonError,                },
+            { msgCode: ActionCode.MsgCommonLatestConfigVersion, callback: _onMsgCommonLatestConfigVersion   },
+            { msgCode: ActionCode.MsgCommonGetServerStatus,     callback: _onMsgCommonGetServerStatus,      },
         ], CommonProxy);
     }
 
@@ -46,27 +45,12 @@ namespace TinyWars.Common.CommonProxy {
     }
 
     export function reqCommonGetServerStatus(): void {
-        NetManager.send({ C_CommonGetServerStatus: {}, });
+        NetManager.send({ MsgCommonGetServerStatus: { c: {} }, });
     }
-    function _onSCommonGetServerStatus(e: egret.Event): void {
-        const data = e.data as NetMessage.IS_CommonGetServerStatus;
+    function _onMsgCommonGetServerStatus(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgCommonGetServerStatus.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.SCommonGetServerStatus, data);
-        }
-    }
-
-    export function reqCommonRateMultiPlayerReplay(replayId: number, rating: number): void {
-        NetManager.send({
-            C_CommonRateMultiPlayerReplay: {
-                replayId,
-                rating,
-            },
-        });
-    }
-    function _onSCommonRateMultiPlayerReplay(e: egret.Event): void {
-        const data = e.data as NetMessage.IS_CommonRateMultiPlayerReplay;
-        if (!data.errorCode) {
-            Notify.dispatch(NotifyType.SCommonRateMultiPlayerReplay, data);
+            Notify.dispatch(NotifyType.MsgCommonGetServerStatus, data);
         }
     }
 }

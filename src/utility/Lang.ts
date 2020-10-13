@@ -3244,7 +3244,7 @@ namespace TinyWars.Utility.Lang {
             return null;
         }
     }
-    export async function getGameStartDesc(data: ProtoTypes.NetMessage.IS_McwCommonBroadcastGameStart): Promise<string> {
+    export async function getGameStartDesc(data: ProtoTypes.NetMessage.MsgMcwCommonBroadcastGameStart.IS): Promise<string> {
         const playerList: string[] = [];
         let playerIndex = 1;
         for (const playerInfo of data.playerInfoList) {

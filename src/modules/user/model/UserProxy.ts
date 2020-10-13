@@ -13,8 +13,8 @@ namespace TinyWars.User.UserProxy {
             { msgCode: NetMessageCodes.MsgUserRegister,         callback: _onMsgUserRegister,           },
             { msgCode: NetMessageCodes.MsgUserLogout,           callback: _onMsgUserLogout,             },
             { msgCode: NetMessageCodes.MsgUserGetPublicInfo,    callback: _onMsgUserGetPublicInfo,      },
-            { msgCode: NetMessageCodes.MsgUserChangeNickname,   callback: _onMsgUserChangeNickname,     },
-            { msgCode: NetMessageCodes.MsgUserChangeDiscordId,  callback: _onMsgUserChangeDiscordId,    },
+            { msgCode: NetMessageCodes.MsgUserSetNickname,      callback: _onMsgUserSetNickname,        },
+            { msgCode: NetMessageCodes.MsgUserSetDiscordId,     callback: _onMsgUserSetDiscordId,       },
             { msgCode: NetMessageCodes.MsgUserGetOnlineUsers,   callback: _onMsgUserGetOnlineUsers,     },
         ]);
     }
@@ -32,7 +32,7 @@ namespace TinyWars.User.UserProxy {
         const data = e.data as NetMessage.MsgUserLogin.IS;
         if (!data.errorCode) {
             User.UserModel.updateOnLogin(data);
-            Notify.dispatch(NotifyType.SLogin, data);
+            Notify.dispatch(NotifyType.MsgUserLogin, data);
         }
     }
 
@@ -61,7 +61,7 @@ namespace TinyWars.User.UserProxy {
     function _onMsgUserLogout(e: egret.Event): void {
         const data = e.data as NetMessage.MsgUserLogout.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.SLogout, data);
+            Notify.dispatch(NotifyType.MsgUserLogout, data);
         }
     }
 
@@ -82,35 +82,35 @@ namespace TinyWars.User.UserProxy {
         }
     }
 
-    export function reqChangeNickname(nickname: string): void {
+    export function reqSetNickname(nickname: string): void {
         NetManager.send({
-            MsgUserChangeNickname: { c: {
+            MsgUserSetNickname: { c: {
                 nickname,
             }, },
         });
     }
-    function _onMsgUserChangeNickname(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgUserChangeNickname.IS;
+    function _onMsgUserSetNickname(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgUserSetNickname.IS;
         if (data.errorCode) {
-            Notify.dispatch(Notify.Type.MsgUserChangeNicknameFailed, data);
+            Notify.dispatch(Notify.Type.MsgUserSetNicknameFailed, data);
         } else {
-            Notify.dispatch(Notify.Type.MsgUserChangeNickname, data);
+            Notify.dispatch(Notify.Type.MsgUserSetNickname, data);
         }
     }
 
-    export function reqChangeDiscordId(discordId: string): void {
+    export function reqSetDiscordId(discordId: string): void {
         NetManager.send({
-            MsgUserChangeDiscordId: { c: {
+            MsgUserSetDiscordId: { c: {
                 discordId,
             }, },
         });
     }
-    function _onMsgUserChangeDiscordId(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgUserChangeDiscordId.IS;
+    function _onMsgUserSetDiscordId(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgUserSetDiscordId.IS;
         if (data.errorCode) {
-            Notify.dispatch(Notify.Type.MsgUserChangeDiscordIdFailed, data);
+            Notify.dispatch(Notify.Type.MsgUserSetDiscordIdFailed, data);
         } else {
-            Notify.dispatch(Notify.Type.MsgUserChangeDiscordId, data);
+            Notify.dispatch(Notify.Type.MsgUserSetDiscordId, data);
         }
     }
 
@@ -122,7 +122,7 @@ namespace TinyWars.User.UserProxy {
     function _onMsgUserGetOnlineUsers(e: egret.Event): void {
         const data = e.data as NetMessage.MsgUserGetOnlineUsers.IS;
         if (!data.errorCode) {
-            Notify.dispatch(Notify.Type.SUserGetOnlineUsers, data);
+            Notify.dispatch(Notify.Type.MsgUserGetOnlineUsers, data);
         }
     }
 }

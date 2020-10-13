@@ -39,7 +39,7 @@ namespace TinyWars.MultiCustomRoom {
                 { ui: this._btnBack, callback: this._onTouchedBtnBack },
             ];
             this._notifyListeners = [
-                { type: Notify.Type.SLogout,            callback: this._onNotifySLogout },
+                { type: Notify.Type.MsgUserLogout,            callback: this._onNotifySLogout },
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ];
 
@@ -107,7 +107,7 @@ namespace TinyWars.MultiCustomRoom {
                         MultiCustomRoom.McrContinueWarListPanel.show();
                     },
                     redChecker  : () => {
-                        const warInfoList   = McrModel.getOngoingWarInfoList();
+                        const warInfoList   = MultiCustomWar.McwModel.getOngoingWarInfoList();
                         const selfUserId    = User.UserModel.getSelfUserId();
                         return (!!warInfoList)
                             && (warInfoList.some(warInfo => {
@@ -122,7 +122,7 @@ namespace TinyWars.MultiCustomRoom {
                         McrWatchMainMenuPanel.show();
                     },
                     redChecker  : () => {
-                        const watchInfos = McrModel.getWatchRequestedWarInfos();
+                        const watchInfos = MultiCustomWar.McwModel.getWatchRequestedWarInfos();
                         return (!!watchInfos) && (watchInfos.length > 0);
                     },
                 },
@@ -130,7 +130,7 @@ namespace TinyWars.MultiCustomRoom {
                     name    : Lang.getText(Lang.Type.B0092),
                     callback: () => {
                         McrMainMenuPanel.hide();
-                        MultiCustomRoom.McrReplayListPanel.show();
+                        ReplayWar.RwReplayListPanel.show();
                     },
                 },
             ];

@@ -65,8 +65,8 @@ namespace TinyWars.MapManagement {
         protected _onFirstOpened(): void {
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.SMmChangeAvailability,  callback: this._onNotifySMmChangeAvailability },
-                { type: Notify.Type.SMmDeleteMap,           callback: this._onNotifySMmDeleteMap },
+                { type: Notify.Type.MsgMmSetMapAvailability,  callback: this._onNotifySMmChangeAvailability },
+                { type: Notify.Type.MsgMmDeleteMap,           callback: this._onNotifySMmDeleteMap },
             ];
             this._uiListeners = [
                 { ui: this._btnSearch, callback: this._onTouchTapBtnSearch },

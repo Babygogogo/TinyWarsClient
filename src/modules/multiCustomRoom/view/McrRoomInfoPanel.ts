@@ -135,7 +135,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _onNotifySMcrGetRoomInfo(e: egret.Event): Promise<void> {
-            const data      = e.data as NetMessage.IS_McrGetRoomInfo;
+            const data      = e.data as NetMessage.MsgMcrGetRoomInfo.IS;
             const roomId    = data.roomId;
             if (roomId === this._roomId) {
                 const selfUserId = User.UserModel.getSelfUserId();
@@ -150,7 +150,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onNotifySMcrExitRoom(e: egret.Event): void {
-            const data = e.data as NetMessage.IS_McrExitRoom;
+            const data = e.data as NetMessage.MsgMcrExitRoom.IS;
             if (data.roomId === this._roomId) {
                 FloatText.show(Lang.getText(Lang.Type.A0016));
                 this.close();
@@ -159,7 +159,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onNotifySMcrDestroyRoom(e: egret.Event): void {
-            const data = e.data as NetMessage.IS_McrDestroyRoom;
+            const data = e.data as NetMessage.MsgMcrDeleteRoom.IS;
             if (data.roomId === this._roomId) {
                 FloatText.show(Lang.getText(Lang.Type.A0019));
                 this.close();
@@ -168,7 +168,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onNotifySMcrStartWar(e: egret.Event): void {
-            const data = e.data as NetMessage.IS_McrStartWar;
+            const data = e.data as NetMessage.MsgMcrStartWar.IS;
             if (data.roomId === this._roomId) {
                 this.close();
                 McrExitMapListPanel.show();

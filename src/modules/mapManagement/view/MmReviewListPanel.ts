@@ -48,7 +48,7 @@ namespace TinyWars.MapManagement {
         protected _onFirstOpened(): void {
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.SMmGetReviewingMaps,    callback: this._onNotifySMmGetReviewingMaps },
+                { type: Notify.Type.MsgMmGetReviewingMaps,    callback: this._onNotifySMmGetReviewingMaps },
             ];
             this._uiListeners = [
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },

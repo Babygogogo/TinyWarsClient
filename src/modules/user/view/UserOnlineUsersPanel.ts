@@ -49,7 +49,7 @@ namespace TinyWars.User {
         protected _onFirstOpened(): void {
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.SUserGetOnlineUsers,    callback: this._onNotifySUserGetOnlineUsers },
+                { type: Notify.Type.MsgUserGetOnlineUsers,    callback: this._onNotifySUserGetOnlineUsers },
             ];
             this._uiListeners = [
                 { ui: this._btnClose, callback: this.close },

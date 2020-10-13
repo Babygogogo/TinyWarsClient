@@ -10,10 +10,10 @@ namespace TinyWars.Chat.ChatProxy {
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: ActionCode.S_ChatAddMessage,             callback: _onSChatAddMessage, },
-            { msgCode: ActionCode.S_ChatGetAllMessages,         callback: _onSChatGetAllMessages },
-            { msgCode: ActionCode.S_ChatUpdateReadProgress,     callback: _onSChatUpdateReadProgress },
-            { msgCode: ActionCode.S_ChatGetAllReadProgressList, callback: _onSChatGetAllReadProgressList },
+            { msgCode: ActionCode.MsgChatAddMessage,                callback: _onMsgChatAddMessage,             },
+            { msgCode: ActionCode.MsgChatGetAllMessages,            callback: _onMsgChatGetAllMessages          },
+            { msgCode: ActionCode.MsgChatUpdateReadProgress,        callback: _onMsgChatUpdateReadProgress      },
+            { msgCode: ActionCode.MsgChatGetAllReadProgressList,    callback: _onMsgChatGetAllReadProgressList  },
         ], ChatProxy);
     }
 
@@ -22,28 +22,28 @@ namespace TinyWars.Chat.ChatProxy {
         toCategory  : number,
         toTarget    : number,
     ): void {
-        NetManager.send({ C_ChatAddMessage: {
+        NetManager.send({ MsgChatAddMessage: { c: {
             toCategory,
             toTarget,
             content,
-        }, });
+        }, } });
     }
-    function _onSChatAddMessage(e: egret.Event): void {
-        const data = e.data as NetMessage.IS_ChatAddMessage;
+    function _onMsgChatAddMessage(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgChatAddMessage.IS;
         if (!data.errorCode) {
             ChatModel.updateOnAddMessage(data.message, true);
-            Notify.dispatch(NotifyType.SChatAddMessage, data);
+            Notify.dispatch(NotifyType.MsgChatAddMessage, data);
         }
     }
 
     export function reqGetAllMessages(): void {
-        NetManager.send({ C_ChatGetAllMessages: {} });
+        NetManager.send({ MsgChatGetAllMessages: { c: {} } });
     }
-    function _onSChatGetAllMessages(e: egret.Event): void {
-        const data = e.data as NetMessage.IS_ChatGetAllMessages;
+    function _onMsgChatGetAllMessages(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgChatGetAllMessages.IS;
         if (!data.errorCode) {
             ChatModel.setAllMessages(data.messageList);
-            Notify.dispatch(NotifyType.SChatGetAllMessages, data);
+            Notify.dispatch(NotifyType.MsgChatGetAllMessages, data);
         }
     }
 
@@ -52,30 +52,30 @@ namespace TinyWars.Chat.ChatProxy {
         toTarget    : number,
         timestamp   = Time.TimeModel.getServerTimestamp(),
     ): void {
-        NetManager.send({ C_ChatUpdateReadProgress: {
+        NetManager.send({ MsgChatUpdateReadProgress: { c: {
             progress: {
                 toCategory,
                 toTarget,
                 timestamp,
-            },
+            }, }
         } });
     }
-    function _onSChatUpdateReadProgress(e: egret.Event): void {
-        const data = e.data as NetMessage.IS_ChatUpdateReadProgress;
+    function _onMsgChatUpdateReadProgress(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgChatUpdateReadProgress.IS;
         if (!data.errorCode) {
             ChatModel.setReadProgress(data.progress);
-            Notify.dispatch(NotifyType.SChatUpdateReadProgress, data);
+            Notify.dispatch(NotifyType.MsgChatUpdateReadProgress, data);
         }
     }
 
     export function reqGetAllReadProgressList(): void {
-        NetManager.send({ C_ChatGetAllReadProgressList: {} });
+        NetManager.send({ MsgChatGetAllReadProgressList: { c: {} } });
     }
-    function _onSChatGetAllReadProgressList(e: egret.Event): void {
-        const data = e.data as NetMessage.IS_ChatGetAllReadProgressList;
+    function _onMsgChatGetAllReadProgressList(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgChatGetAllReadProgressList.IS;
         if (!data.errorCode) {
             ChatModel.resetAllReadProgress(data.list);
-            Notify.dispatch(NotifyType.SChatGetAllReadProgressList, data);
+            Notify.dispatch(NotifyType.MsgChatGetAllReadProgressList, data);
         }
     }
 }

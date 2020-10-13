@@ -89,8 +89,8 @@ namespace TinyWars.User {
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgUserGetPublicInfo,                 callback: this._onNotifySGetUserPublicInfo },
-                { type: Notify.Type.MsgUserChangeNickname,                callback: this._onNotifySUserChangeNickname },
-                { type: Notify.Type.MsgUserChangeDiscordId,               callback: this._onNotifySUserChangeDiscordId },
+                { type: Notify.Type.MsgUserSetNickname,                callback: this._onNotifySUserChangeNickname },
+                { type: Notify.Type.MsgUserSetDiscordId,               callback: this._onNotifySUserChangeDiscordId },
                 { type: Notify.Type.UnitAndTileTextureVersionChanged,   callback: this._onNotifyUnitAndTileTextureVersionChanged },
             ];
             this._uiListeners = [

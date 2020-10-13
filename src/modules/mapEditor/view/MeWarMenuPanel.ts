@@ -75,8 +75,8 @@ namespace TinyWars.MapEditor {
                 { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.TileAnimationTick,      callback: this._onNotifyTileAnimationTick },
                 { type: Notify.Type.UnitAnimationTick,      callback: this._onNotifyUnitAnimationTick },
-                { type: Notify.Type.MsgMeSubmitMap,           callback: this._onNotifySMeSaveMap },
-                { type: Notify.Type.SMmReviewMap,           callback: this._onNotifySMmReviewMap },
+                { type: Notify.Type.MsgMeSubmitMap,         callback: this._onNotifyMsgMeSaveMap },
+                { type: Notify.Type.MsgMmReviewMap,         callback: this._onNotifyMsgMmReviewMap },
                 { type: Notify.Type.SScrCreateCustomWar,    callback: this._onNotifySScrCreateCustomWar },
             ];
             this._uiListeners = [
@@ -109,13 +109,13 @@ namespace TinyWars.MapEditor {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _onNotifySMeSaveMap(e: egret.Event): void {
+        private _onNotifyMsgMeSaveMap(e: egret.Event): void {
             FloatText.show(Lang.getText(Lang.Type.A0085));
             this.close();
         }
 
-        private _onNotifySMmReviewMap(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.IS_MmReviewMap;
+        private _onNotifyMsgMmReviewMap(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgMmReviewMap.IS;
             if (data.isAccept) {
                 FloatText.show(Lang.getText(Lang.Type.A0092));
             } else {

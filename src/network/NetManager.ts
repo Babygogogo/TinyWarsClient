@@ -36,7 +36,7 @@ namespace TinyWars.Network {
                     return undefined;
                 }
 
-                if (container.S_McwCommonHandleBoot) {
+                if (container.MsgMcwCommonHandleBoot) {
                     // Don't show the error text.
                 } else {
                     if (action.errorCode) {

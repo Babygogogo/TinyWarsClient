@@ -72,7 +72,7 @@ namespace TinyWars.MapManagement {
         }
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            WarMapProxy.reqMmChangeAvailability(this._mapId, {
+            WarMapProxy.reqMmSetMapAvailability(this._mapId, {
                 canMcw : this._imgMcw.visible,
                 canWr  : false,
                 canScw : this._imgScw.visible,

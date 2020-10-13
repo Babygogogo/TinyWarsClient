@@ -42,8 +42,8 @@ namespace TinyWars.User {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: NotifyType.MsgUserChangeNickname,         callback: this._onSUserChangeNickname },
-                { type: NotifyType.MsgUserChangeNicknameFailed,   callback: this._onSUserChangeNicknameFailed },
+                { type: NotifyType.MsgUserSetNickname,         callback: this._onSUserChangeNickname },
+                { type: NotifyType.MsgUserSetNicknameFailed,   callback: this._onSUserChangeNicknameFailed },
                 { type: NotifyType.LanguageChanged,             callback: this._onNotifyLanguageChanged },
             ];
             this._uiListeners = [
@@ -65,7 +65,7 @@ namespace TinyWars.User {
                     FloatText.show(Lang.getText(Lang.Type.A0002));
                 } else {
                     this._isRequesting = true;
-                    UserProxy.reqChangeNickname(nickname);
+                    UserProxy.reqSetNickname(nickname);
                 }
             }
         }

@@ -42,8 +42,8 @@ namespace TinyWars.User {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: NotifyType.MsgUserChangeDiscordId,         callback: this._onSUserChangeDiscordId },
-                { type: NotifyType.MsgUserChangeDiscordIdFailed,   callback: this._onSUserChangeDiscordIdFailed },
+                { type: NotifyType.MsgUserSetDiscordId,         callback: this._onSUserChangeDiscordId },
+                { type: NotifyType.MsgUserSetDiscordIdFailed,   callback: this._onSUserChangeDiscordIdFailed },
                 { type: NotifyType.LanguageChanged,              callback: this._onNotifyLanguageChanged },
             ];
             this._uiListeners = [
@@ -65,7 +65,7 @@ namespace TinyWars.User {
                     FloatText.show(Lang.getText(Lang.Type.A0048));
                 } else {
                     this._isRequesting = true;
-                    UserProxy.reqChangeDiscordId(discordId);
+                    UserProxy.reqSetDiscordId(discordId);
                 }
             }
         }

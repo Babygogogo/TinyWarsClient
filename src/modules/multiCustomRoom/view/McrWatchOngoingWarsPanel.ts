@@ -72,7 +72,7 @@ namespace TinyWars.MultiCustomRoom {
             this._zoomMap.setTouchListenerEnabled(true);
             this._updateComponentsForLanguage();
 
-            McrProxy.reqWatchGetOngoingWarInfos();
+            MultiCustomWar.McwProxy.reqWatchGetOngoingWarInfos();
         }
 
         protected _onClosed(): void {
@@ -113,7 +113,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onNotifySMcwWatchGetOngoingWarInfos(e: egret.Event): void {
-            const newData        = this._createDataForListWar(McrModel.getWatchOngoingWarInfos());
+            const newData        = this._createDataForListWar(MultiCustomWar.McwModel.getWatchOngoingWarInfos());
             this._dataForListWar = newData;
 
             if (newData.length > 0) {
@@ -127,12 +127,12 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onNotifySMcwWatchContinueWar(e: egret.Event): void {
-            FlowManager.gotoMultiCustomWar((e.data as ProtoTypes.NetMessage.IS_McwWatchContinueWar).war);
+            FlowManager.gotoMultiCustomWar((e.data as ProtoTypes.NetMessage.MsgMcwWatchContinueWar.IS).war);
         }
 
         private _onNotifySMcwWatchContinueWarFailed(e: egret.Event): void {
             Common.CommonBlockPanel.hide();
-            McrProxy.reqWatchGetOngoingWarInfos();
+            MultiCustomWar.McwProxy.reqWatchGetOngoingWarInfos();
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
@@ -252,7 +252,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _onTouchTapBtnNext(e: egret.TouchEvent): Promise<void> {
-            McrProxy.reqWatchContinueWar((this.data as DataForWarRenderer).info.warInfo.warId);
+            MultiCustomWar.McwProxy.reqWatchContinueWar((this.data as DataForWarRenderer).info.warInfo.warId);
         }
     }
 

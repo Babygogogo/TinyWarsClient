@@ -4,7 +4,7 @@ namespace TinyWars.Utility.FlowManager {
     import McwProxy     = MultiCustomWar.McwProxy;
     import McwModel     = MultiCustomWar.McwModel;
     import ScwModel     = SingleCustomWar.ScwModel;
-    import ReplayModel  = Replay.ReplayModel;
+    import ReplayModel  = ReplayWar.RwModel;
     import MeManager    = MapEditor.MeManager;
 
     const _NET_EVENTS = [
@@ -13,8 +13,8 @@ namespace TinyWars.Utility.FlowManager {
     const _NOTIFY_EVENTS = [
         { type: Notify.Type.NetworkConnected,   callback: _onNotifyNetworkConnected, },
         { type: Notify.Type.ConfigLoaded,       callback: _onNotifyConfigLoaded },
-        { type: Notify.Type.SLogin,             callback: _onNotifySLogin },
-        { type: Notify.Type.SLogout,            callback: _onNotifySLogout },
+        { type: Notify.Type.MsgUserLogin,             callback: _onNotifySLogin },
+        { type: Notify.Type.MsgUserLogout,            callback: _onNotifySLogout },
     ];
 
     let _hasOnceWentToLobby = false;
@@ -101,11 +101,11 @@ namespace TinyWars.Utility.FlowManager {
         await ReplayModel.loadWar(warData);
 
         StageManager.closeAllPanels();
-        Replay.ReplayBackgroundPanel.show();
-        Replay.ReplayTopPanel.show();
-        Replay.ReplayWarPanel.show();
-        Replay.ReplayTileBriefPanel.show();
-        Replay.ReplayUnitBriefPanel.show();
+        ReplayWar.RwBackgroundPanel.show();
+        ReplayWar.RwTopPanel.show();
+        ReplayWar.RwWarPanel.show();
+        ReplayWar.RwTileBriefPanel.show();
+        ReplayWar.RwUnitBriefPanel.show();
     }
     export async function gotoSingleCustomWar(data: ProtoTypes.WarSerialization.ISerialWar): Promise<void> {
         McwModel.unloadWar();

@@ -13,9 +13,20 @@ namespace TinyWars.MultiCustomWar.McwProxy {
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: Codes.S_McwCommonBroadcastGameStart, callback: _onSMcwCommonBroadcastGameStart },
-            { msgCode: Codes.S_McwCommonHandleBoot,         callback: _onSMcwCommonHandleBoot },
-            { msgCode: Codes.S_McwCommonContinueWar,        callback: _onSMcwCommonContinueWar },
+            { msgCode: Codes.MsgMcwCommonBroadcastGameStart,    callback: _onMsgMcwCommonBroadcastGameStart     },
+            { msgCode: Codes.MsgMcwCommonHandleBoot,            callback: _onMsgMcwCommonHandleBoot             },
+            { msgCode: Codes.MsgMcwCommonContinueWar,           callback: _onMsgMcwCommonContinueWar            },
+            { msgCode: Codes.MsgMcwCommonGetWarInfoList,        callback: _onMsgMcwCommonGetWarInfoList         },
+
+            { msgCode: Codes.MsgMcwWatchGetUnwatchedWarInfos,   callback: _onMsgMcwWatchGetUnwatchedWarInfos    },
+            { msgCode: Codes.MsgMcwWatchGetOngoingWarInfos,     callback: _onMsgMcwWatchGetOngoingWarInfos      },
+            { msgCode: Codes.MsgMcwWatchGetRequestedWarInfos,   callback: _onMsgMcwWatchGetRequestedWarInfos    },
+            { msgCode: Codes.MsgMcwWatchGetWatchedWarInfos,     callback: _onMsgMcwWatchGetWatchedWarInfos      },
+            { msgCode: Codes.MsgMcwWatchMakeRequest,            callback: _onMsgMcwWatchMakeRequest             },
+            { msgCode: Codes.MsgMcwWatchHandleRequest,          callback: _onMsgMcwWatchHandleRequest           },
+            { msgCode: Codes.MsgMcwWatchDeleteWatcher,          callback: _onMsgMcwWatchDeleteWatcher           },
+            { msgCode: Codes.MsgMcwWatchContinueWar,            callback: _onMsgMcwWatchContinueWar             },
+
             { msgCode: Codes.S_McwPlayerSyncWar,            callback: _onSMcwPlayerSyncWar, },
             { msgCode: Codes.S_McwPlayerBeginTurn,          callback: _onSMcwPlayerBeginTurn, },
             { msgCode: Codes.S_McwPlayerDeleteUnit,         callback: _onSMcwPlayerDeleteUnit },
@@ -42,8 +53,8 @@ namespace TinyWars.MultiCustomWar.McwProxy {
         ], McwProxy);
     }
 
-    function _onSMcwCommonBroadcastGameStart(e: egret.Event): void {
-        const data = e.data as NetMessage.IS_McwCommonBroadcastGameStart;
+    function _onMsgMcwCommonBroadcastGameStart(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMcwCommonBroadcastGameStart.IS;
         Lang.getGameStartDesc(data).then(desc => {
             Common.CommonConfirmPanel.show({
                 title   : Lang.getText(Lang.Type.B0392),
@@ -57,30 +68,159 @@ namespace TinyWars.MultiCustomWar.McwProxy {
 
     export function reqMcwCommonContinueWar(warId: number): void {
         NetManager.send({
-            C_McwCommonContinueWar: {
+            MsgMcwCommonContinueWar: { c: {
                 warId,
-            },
+            }, },
         });
     }
-    function _onSMcwCommonContinueWar(e: egret.Event): void {
-        const data = e.data as NetMessage.IS_McwCommonContinueWar;
+    function _onMsgMcwCommonContinueWar(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMcwCommonContinueWar.IS;
         if (data.errorCode) {
-            Notify.dispatch(Notify.Type.SMcwCommonContinueWarFailed, data);
+            Notify.dispatch(Notify.Type.MsgMcwCommonContinueWarFailed, data);
         } else {
             Utility.FlowManager.gotoMultiCustomWar(data.war);
-            Notify.dispatch(Notify.Type.SMcwCommonContinueWar, data);
+            Notify.dispatch(Notify.Type.MsgMcwCommonContinueWar, data);
+        }
+    }
+
+    export function reqMcwCommonGetWarInfoList(): void {
+        NetManager.send({
+            MsgMcwCommonGetWarInfoList: { c: {} },
+        });
+    }
+    function _onMsgMcwCommonGetWarInfoList(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMcwCommonGetWarInfoList.IS;
+        McwModel.setOngoingWarInfoList(data.infos);
+        Notify.dispatch(Notify.Type.MsgMcwCommonGetWarInfoList, data);
+    }
+
+    export function reqUnwatchedWarInfos(): void {
+        NetManager.send({
+            MsgMcwWatchGetUnwatchedWarInfos: { c: {
+            } },
+        });
+    }
+    function _onMsgMcwWatchGetUnwatchedWarInfos(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMcwWatchGetUnwatchedWarInfos.IS;
+        if (!data.errorCode) {
+            McwModel.setUnwatchedWarInfos(data.infos);
+            Notify.dispatch(Notify.Type.SMcwWatchGetUnwatchedWarInfos, data);
+        }
+    }
+
+    export function reqWatchGetOngoingWarInfos(): void {
+        NetManager.send({
+            MsgMcwWatchGetOngoingWarInfos: { c: {
+            } },
+        })
+    }
+    function _onMsgMcwWatchGetOngoingWarInfos(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMcwWatchGetOngoingWarInfos.IS;
+        if (!data.errorCode) {
+            McwModel.setWatchOngoingWarInfos(data.infos);
+            Notify.dispatch(Notify.Type.SMcwWatchGetOngoingWarInfos, data);
+        }
+    }
+
+    export function reqWatchRequestedWarInfos(): void {
+        NetManager.send({
+            MsgMcwWatchGetRequestedWarInfos: { c: {
+            }, }
+        });
+    }
+    function _onMsgMcwWatchGetRequestedWarInfos(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMcwWatchGetRequestedWarInfos.IS;
+        if (!data.errorCode) {
+            McwModel.setWatchRequestedWarInfos(data.infos);
+            Notify.dispatch(Notify.Type.SMcwWatchGetRequestedWarInfos, data);
+        }
+    }
+
+    export function reqWatchedWarInfos(): void {
+        NetManager.send({
+            MsgMcwWatchGetWatchedWarInfos: { c: {
+            }, }
+        });
+    }
+    function _onMsgMcwWatchGetWatchedWarInfos(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMcwWatchGetWatchedWarInfos.IS;
+        if (!data.errorCode) {
+            McwModel.setWatchedWarInfos(data.infos);
+            Notify.dispatch(Notify.Type.SMcwWatchGetWatchedWarInfos, data);
+        }
+    }
+
+    export function reqWatchMakeRequest(warId: number, dstUserIds: number[]): void {
+        NetManager.send({
+            MsgMcwWatchMakeRequest: { c: {
+                warId,
+                dstUserIds,
+            }, }
+        });
+    }
+    function _onMsgMcwWatchMakeRequest(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMcwWatchMakeRequest.IS;
+        if (!data.errorCode) {
+            Notify.dispatch(Notify.Type.SMcwWatchMakeRequest, data);
+        }
+    }
+
+    export function reqWatchHandleRequest(warId: number, acceptSrcUserIds: number[], declineSrcUserIds: number[]): void {
+        NetManager.send({
+            MsgMcwWatchHandleRequest: { c: {
+                warId,
+                acceptSrcUserIds,
+                declineSrcUserIds,
+            }, }
+        });
+    }
+    function _onMsgMcwWatchHandleRequest(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMcwWatchHandleRequest.IS;
+        if (!data.errorCode) {
+            Notify.dispatch(Notify.Type.SMcwWatchHandleRequest, data);
+        }
+    }
+
+    export function reqWatchDeleteWatcher(warId: number, watcherUserIds: number[]): void {
+        NetManager.send({
+            MsgMcwWatchDeleteWatcher: { c: {
+                warId,
+                watcherUserIds,
+            }, }
+        });
+    }
+    function _onMsgMcwWatchDeleteWatcher(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMcwWatchDeleteWatcher.IS;
+        if (!data.errorCode) {
+            Notify.dispatch(Notify.Type.SMcwWatchDeleteWatcher, data);
+        }
+    }
+
+    export function reqWatchContinueWar(warId: number): void {
+        NetManager.send({
+            MsgMcwWatchContinueWar: { c: {
+                warId,
+            }, }
+        });
+    }
+    function _onMsgMcwWatchContinueWar(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMcwWatchContinueWar.IS;
+        if (data.errorCode) {
+            Notify.dispatch(Notify.Type.SMcwWatchContinueWarFailed, data);
+        } else {
+            Notify.dispatch(Notify.Type.SMcwWatchContinueWar, data);
         }
     }
 
     export function reqMcwCommonHandleBoot(warId: number): void {
         NetManager.send({
-            C_McwCommonHandleBoot: {
+            MsgMcwCommonHandleBoot: { c: {
                 warId,
-            },
+            }, },
         });
     }
-    function _onSMcwCommonHandleBoot(e: egret.Event): void {
-        const data = e.data as NetMessage.IS_McwCommonHandleBoot;
+    function _onMsgMcwCommonHandleBoot(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMcwCommonHandleBoot.IS;
         if (!data.errorCode) {
             Notify.dispatch(Notify.Type.SMcwCommonHandleBoot, data);
         }

@@ -48,7 +48,7 @@ namespace TinyWars.Login {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: NotifyType.SLogin,          callback: this._onNotifySLogin },
+                { type: NotifyType.MsgUserLogin,          callback: this._onNotifySLogin },
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ];
             this._uiListeners = [
