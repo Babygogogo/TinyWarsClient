@@ -47,7 +47,7 @@ namespace TinyWars.SingleCustomRoom {
             ];
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.SScrCreateWar,      callback: this._onNotifySScrCreateWar },
+                { type: Notify.Type.MsgScrCreateWar,      callback: this._onNotifySScrCreateWar },
             ];
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
         }
@@ -104,7 +104,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _onNotifySScrCreateWar(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.IS_ScrCreateWar;
+            const data = e.data as ProtoTypes.NetMessage.MsgScrCreateWar.IS;
             Utility.FlowManager.gotoSingleCustomWar(data.warData);
         }
 

@@ -48,7 +48,7 @@ namespace TinyWars.MultiCustomRoom {
             ];
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.SMcrJoinRoom,       callback: this._onNotifySMcrJoinWar },
+                { type: Notify.Type.MsgMcrJoinRoom,       callback: this._onNotifySMcrJoinWar },
             ];
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
         }

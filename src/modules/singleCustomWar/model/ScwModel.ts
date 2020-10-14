@@ -37,13 +37,13 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         [WarActionCodes.ActionUnitBuildTile,        _exeUnitBuildTile],
         [WarActionCodes.ActionUnitCaptureTile,      _exeUnitCaptureTile],
         [WarActionCodes.ActionUnitDive,             _exeUnitDive],
-        [WarActionCodes.ActionUnitDrop,             _exeUnitDrop],
-        [WarActionCodes.ActionUnitJoin,             _exeUnitJoin],
+        [WarActionCodes.ActionUnitDropUnit,         _exeUnitDropUnit],
+        [WarActionCodes.ActionUnitJoinUnit,         _exeUnitJoinUnit],
         [WarActionCodes.ActionUnitLaunchFlare,      _exeUnitLaunchFlare],
         [WarActionCodes.ActionUnitLaunchSilo,       _exeUnitLaunchSilo],
         [WarActionCodes.ActionUnitLoadCo,           _exeUnitLoadCo],
         [WarActionCodes.ActionUnitProduceUnit,      _exeUnitProduceUnit],
-        [WarActionCodes.ActionUnitSupply,           _exeUnitSupply],
+        [WarActionCodes.ActionUnitSupplyUnit,       _exeUnitSupplyUnit],
         [WarActionCodes.ActionUnitSurface,          _exeUnitSurface],
         [WarActionCodes.ActionUnitUseCoSkill,       _exeUnitUseCoSkill],
         [WarActionCodes.ActionUnitWait,             _exeUnitWait],
@@ -721,11 +721,11 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         actionPlanner.setStateIdle();
     }
 
-    async function _exeUnitDrop(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitDropUnit(war: ScwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action            = data.ActionUnitDrop;
+        const action            = data.ActionUnitDropUnit;
         const path              = action.path as MovePath;
         const launchUnitId      = action.launchUnitId;
         const pathNodes         = path.nodes;
@@ -775,11 +775,11 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         actionPlanner.setStateIdle();
     }
 
-    async function _exeUnitJoin(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitJoinUnit(war: ScwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action            = data.ActionUnitJoin;
+        const action            = data.ActionUnitJoinUnit;
         const path              = action.path as MovePath;
         const launchUnitId      = action.launchUnitId;
         const pathNodes         = path.nodes;
@@ -1038,11 +1038,11 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         }
     }
 
-    async function _exeUnitSupply(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitSupplyUnit(war: ScwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action        = data.ActionUnitSupply;
+        const action        = data.ActionUnitSupplyUnit;
         const revisedPath   = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = revisedPath.nodes;

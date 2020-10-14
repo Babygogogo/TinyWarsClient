@@ -53,8 +53,8 @@ namespace TinyWars.MultiCustomRoom {
                 const callbackOnSucceed = (e: egret.Event): void => {
                     const data = e.data as NetMessage.MsgMcrGetRoomInfo.IS;
                     if (data.roomId === roomId) {
-                        Notify.removeEventListener(Notify.Type.SMcrGetRoomInfo,         callbackOnSucceed);
-                        Notify.removeEventListener(Notify.Type.SMcrGetRoomInfoFailed,   callbackOnFailed);
+                        Notify.removeEventListener(Notify.Type.MsgMcrGetRoomInfo,         callbackOnSucceed);
+                        Notify.removeEventListener(Notify.Type.MsgMcrGetRoomInfoFailed,   callbackOnFailed);
 
                         for (const cb of _roomInfoRequests.get(roomId)) {
                             cb(data);
@@ -67,8 +67,8 @@ namespace TinyWars.MultiCustomRoom {
                 const callbackOnFailed = (e: egret.Event): void => {
                     const data = e.data as NetMessage.MsgMcrGetRoomInfo.IS;
                     if (data.roomId === roomId) {
-                        Notify.removeEventListener(Notify.Type.SMcrGetRoomInfo,         callbackOnSucceed);
-                        Notify.removeEventListener(Notify.Type.SMcrGetRoomInfoFailed,   callbackOnFailed);
+                        Notify.removeEventListener(Notify.Type.MsgMcrGetRoomInfo,         callbackOnSucceed);
+                        Notify.removeEventListener(Notify.Type.MsgMcrGetRoomInfoFailed,   callbackOnFailed);
 
                         for (const cb of _roomInfoRequests.get(roomId)) {
                             cb(data);
@@ -79,8 +79,8 @@ namespace TinyWars.MultiCustomRoom {
                     }
                 };
 
-                Notify.addEventListener(Notify.Type.SMcrGetRoomInfo,        callbackOnSucceed);
-                Notify.addEventListener(Notify.Type.SMcrGetRoomInfoFailed,  callbackOnFailed);
+                Notify.addEventListener(Notify.Type.MsgMcrGetRoomInfo,        callbackOnSucceed);
+                Notify.addEventListener(Notify.Type.MsgMcrGetRoomInfoFailed,  callbackOnFailed);
 
                 McrProxy.reqMcrGetRoomInfo(roomId);
             });

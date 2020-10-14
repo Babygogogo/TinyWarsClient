@@ -35,13 +35,13 @@ namespace TinyWars.MultiCustomWar.McwActionExecutor {
         [WarActionCodes.ActionUnitBuildTile,        _exeUnitBuildTile],
         [WarActionCodes.ActionUnitCaptureTile,      _exeUnitCaptureTile],
         [WarActionCodes.ActionUnitDive,             _exeUnitDive],
-        [WarActionCodes.ActionUnitDrop,             _exeUnitDrop],
-        [WarActionCodes.ActionUnitJoin,             _exeUnitJoin],
+        [WarActionCodes.ActionUnitDropUnit,         _exeUnitDropUnit],
+        [WarActionCodes.ActionUnitJoinUnit,         _exeUnitJoinUnit],
         [WarActionCodes.ActionUnitLaunchFlare,      _exeUnitLaunchFlare],
         [WarActionCodes.ActionUnitLaunchSilo,       _exeUnitLaunchSilo],
         [WarActionCodes.ActionUnitLoadCo,           _exeUnitLoadCo],
         [WarActionCodes.ActionUnitProduceUnit,      _exeUnitProduceUnit],
-        [WarActionCodes.ActionUnitSupply,           _exeUnitSupply],
+        [WarActionCodes.ActionUnitSupplyUnit,       _exeUnitSupplyUnit],
         [WarActionCodes.ActionUnitSurface,          _exeUnitSurface],
         [WarActionCodes.ActionUnitUseCoSkill,       _exeUnitUseCoSkill],
         [WarActionCodes.ActionUnitWait,             _exeUnitWait],
@@ -709,9 +709,9 @@ namespace TinyWars.MultiCustomWar.McwActionExecutor {
         actionPlanner.setStateIdle();
     }
 
-    async function _exeUnitDrop(war: McwWar, data: ActionContainer): Promise<void> {
+    async function _exeUnitDropUnit(war: McwWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
-        const action        = data.ActionUnitDrop;
+        const action        = data.ActionUnitDropUnit;
         const extraData     = action.extraData;
         actionPlanner.setStateExecutingAction();
         BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
@@ -765,9 +765,9 @@ namespace TinyWars.MultiCustomWar.McwActionExecutor {
         actionPlanner.setStateIdle();
     }
 
-    async function _exeUnitJoin(war: McwWar, data: ActionContainer): Promise<void> {
+    async function _exeUnitJoinUnit(war: McwWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
-        const action        = data.ActionUnitJoin;
+        const action        = data.ActionUnitJoinUnit;
         const extraData     = action.extraData;
         actionPlanner.setStateExecutingAction();
         BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
@@ -1038,9 +1038,9 @@ namespace TinyWars.MultiCustomWar.McwActionExecutor {
         }
     }
 
-    async function _exeUnitSupply(war: McwWar, data: ActionContainer): Promise<void> {
+    async function _exeUnitSupplyUnit(war: McwWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
-        const action        = data.ActionUnitSupply;
+        const action        = data.ActionUnitSupplyUnit;
         const extraData     = action.extraData;
         actionPlanner.setStateExecutingAction();
         BwHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);

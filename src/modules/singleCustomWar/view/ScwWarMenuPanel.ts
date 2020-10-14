@@ -73,9 +73,9 @@ namespace TinyWars.SingleCustomWar {
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
-                { type: Notify.Type.SScrContinueWar,                callback: this._onNotifySScrContinueWar },
-                { type: Notify.Type.SScrSaveWar,                    callback: this._onNotifySScrSaveWar },
-                { type: Notify.Type.SScrCreateCustomWar,            callback: this._onNotifySScrCreateCustomWar },
+                { type: Notify.Type.MsgScrContinueWar,                callback: this._onNotifySScrContinueWar },
+                { type: Notify.Type.MsgScrSaveWar,                    callback: this._onNotifySScrSaveWar },
+                { type: Notify.Type.MsgScrCreateCustomWar,            callback: this._onNotifySScrCreateCustomWar },
             ];
             this._uiListeners = [
                 { ui: this._btnBack, callback: this._onTouchedBtnBack },
@@ -119,7 +119,7 @@ namespace TinyWars.SingleCustomWar {
         }
 
         private _onNotifySScrContinueWar(e: egret.Event): void {
-            const data      = e.data as ProtoTypes.NetMessage.IS_ScrContinueWar;
+            const data      = e.data as ProtoTypes.NetMessage.MsgScrContinueWar.IS;
             const warData   = ProtoManager.decodeAsSerialWar(data.encodedWar);
             Utility.FlowManager.gotoSingleCustomWar(warData);
         }
@@ -129,7 +129,7 @@ namespace TinyWars.SingleCustomWar {
         }
 
         private _onNotifySScrCreateCustomWar(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.IS_ScrCreateCustomWar;
+            const data = e.data as ProtoTypes.NetMessage.MsgScrCreateCustomWar.IS;
             Common.CommonConfirmPanel.show({
                 title   : Lang.getText(Lang.Type.B0088),
                 content : Lang.getText(Lang.Type.A0107),

@@ -91,7 +91,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Handlers for war actions that McwProxy receives.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export async function updateOnPlayerSyncWar(data: ProtoTypes.NetMessage.IS_McwPlayerSyncWar): Promise<void> {
+    export async function updateOnPlayerSyncWar(data: ProtoTypes.NetMessage.MsgMcwCommonSyncWar.IS): Promise<void> {
         const war = getWar();
         if ((war) && (war.getWarId() === data.warId)) {
             const status = data.status as Types.SyncWarStatus;
@@ -174,7 +174,7 @@ namespace TinyWars.MultiCustomWar.McwModel {
         const war = getWar();
         if ((war) && (war.getWarId() === warId)) {
             if (container.actionId !== war.getExecutedActionsCount() + _cachedActions.length) {
-                McwProxy.reqMcwPlayerSyncWar(war, Types.SyncWarRequestType.ReconnectionRequest);
+                McwProxy.reqMcwCommonSyncWar(war, Types.SyncWarRequestType.ReconnectionRequest);
             } else {
                 _cachedActions.push(container);
                 McwActionExecutor.checkAndRunFirstCachedAction(war, _cachedActions);

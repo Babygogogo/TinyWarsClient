@@ -8,7 +8,6 @@ namespace TinyWars.SingleCustomRoom {
     import Helpers                  = Utility.Helpers;
     import WarMapModel              = WarMap.WarMapModel;
     import BwSettingsHelper         = BaseWar.BwSettingsHelper;
-    import IC_ScrCreateWar          = ProtoTypes.NetMessage.IC_ScrCreateWar;
     import IDataForPlayerRule       = ProtoTypes.WarRule.IDataForPlayerRule;
     import IDataForPlayerInRoom     = ProtoTypes.Structure.IDataForPlayerInRoom;
     import CommonConstants          = ConfigManager.COMMON_CONSTANTS;
@@ -29,7 +28,7 @@ namespace TinyWars.SingleCustomRoom {
     export const MIN_ENERGY_MODIFIER     = 0;
     export const DEFAULT_ENERGY_MODIFIER = 0;
 
-    export type DataForCreateWar  = IC_ScrCreateWar;
+    export type DataForCreateWar = ProtoTypes.NetMessage.MsgScrCreateWar.IC;
 
     export namespace ScrModel {
         const _dataForCreateWar: DataForCreateWar = {

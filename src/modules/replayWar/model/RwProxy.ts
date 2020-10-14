@@ -37,7 +37,7 @@ namespace TinyWars.ReplayWar.RwProxy {
     function _onMsgReplayGetData(e: egret.Event): void {
         const data = e.data as NetMessage.MsgReplayGetData.IS;
         if (data.errorCode) {
-            Notify.dispatch(Notify.Type.SMcrGetReplayDataFailed);
+            Notify.dispatch(Notify.Type.MsgReplayGetDataFailed);
         } else {
             RwModel.setReplayData(data);
             Notify.dispatch(Notify.Type.MsgReplayGetData, data);

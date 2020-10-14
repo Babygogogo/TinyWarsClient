@@ -168,7 +168,7 @@ namespace TinyWars.Utility.FlowManager {
         } else {
             const mcwWar = McwModel.getWar();
             if (mcwWar) {
-                McwProxy.reqMcwPlayerSyncWar(mcwWar, Types.SyncWarRequestType.ReconnectionRequest);
+                McwProxy.reqMcwCommonSyncWar(mcwWar, Types.SyncWarRequestType.ReconnectionRequest);
             }
         }
     }

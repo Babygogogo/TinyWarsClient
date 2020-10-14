@@ -62,7 +62,7 @@ namespace TinyWars.ReplayWar {
             this._notifyListeners = [
                 { type: Notify.Type.MsgReplayGetInfoList,       callback: this._onNotifySMcrGetReplayInfos },
                 { type: Notify.Type.MsgReplayGetData,           callback: this._onNotifySMcrGetReplayData },
-                { type: Notify.Type.SMcrGetReplayDataFailed,    callback: this._onNotifySMcrGetReplayDataFailed },
+                { type: Notify.Type.MsgReplayGetDataFailed,    callback: this._onNotifySMcrGetReplayDataFailed },
                 { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
             ];
             this._uiListeners = [

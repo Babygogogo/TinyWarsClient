@@ -77,7 +77,7 @@ namespace TinyWars.MapEditor {
                 { type: Notify.Type.UnitAnimationTick,      callback: this._onNotifyUnitAnimationTick },
                 { type: Notify.Type.MsgMeSubmitMap,         callback: this._onNotifyMsgMeSaveMap },
                 { type: Notify.Type.MsgMmReviewMap,         callback: this._onNotifyMsgMmReviewMap },
-                { type: Notify.Type.SScrCreateCustomWar,    callback: this._onNotifySScrCreateCustomWar },
+                { type: Notify.Type.MsgScrCreateCustomWar,    callback: this._onNotifySScrCreateCustomWar },
             ];
             this._uiListeners = [
                 { ui: this._btnBack,                callback: this._onTouchedBtnBack },
@@ -125,7 +125,7 @@ namespace TinyWars.MapEditor {
         }
 
         private _onNotifySScrCreateCustomWar(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.IS_ScrCreateCustomWar;
+            const data = e.data as ProtoTypes.NetMessage.MsgScrCreateCustomWar.IS;
             Common.CommonConfirmPanel.show({
                 title   : Lang.getText(Lang.Type.B0088),
                 content : Lang.getText(Lang.Type.A0107),

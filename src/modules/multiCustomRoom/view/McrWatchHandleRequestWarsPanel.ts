@@ -55,8 +55,8 @@ namespace TinyWars.MultiCustomRoom {
         protected _onFirstOpened(): void {
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.SMcwWatchGetRequestedWarInfos,  callback: this._onNotifySMcwWatchGetRequestedWarInfos },
-                { type: Notify.Type.SMcwWatchHandleRequest,         callback: this._onNotifySMcwWatchHandleRequest },
+                { type: Notify.Type.MsgMcwWatchGetRequestedWarInfos,  callback: this._onNotifySMcwWatchGetRequestedWarInfos },
+                { type: Notify.Type.MsgMcwWatchHandleRequest,         callback: this._onNotifySMcwWatchHandleRequest },
             ];
             this._uiListeners = [
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },

@@ -50,8 +50,8 @@ namespace TinyWars.SingleCustomRoom {
         protected _onFirstOpened(): void {
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.SScrContinueWarFailed,  callback: this._onNotifySScrContinueWarFailed },
-                { type: Notify.Type.SScrContinueWar,        callback: this._onNotifySScrContinueWar },
+                { type: Notify.Type.MsgScrContinueWarFailed,  callback: this._onNotifySScrContinueWarFailed },
+                { type: Notify.Type.MsgScrContinueWar,        callback: this._onNotifySScrContinueWar },
             ];
             this._uiListeners = [
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
@@ -108,7 +108,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _onNotifySScrContinueWar(e: egret.Event): void {
-            const data      = e.data as ProtoTypes.NetMessage.IS_ScrContinueWar;
+            const data      = e.data as ProtoTypes.NetMessage.MsgScrContinueWar.IS;
             const warData   = ProtoManager.decodeAsSerialWar(data.encodedWar);
             Utility.FlowManager.gotoSingleCustomWar(warData);
         }

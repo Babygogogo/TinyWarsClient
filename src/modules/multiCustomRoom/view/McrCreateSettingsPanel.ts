@@ -44,7 +44,7 @@ namespace TinyWars.MultiCustomRoom {
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
             ];
             this._notifyListeners = [
-                { type: Notify.Type.SMcrCreateRoom,     callback: this._onNotifySCreateCustomOnlineWar },
+                { type: Notify.Type.MsgMcrCreateRoom,     callback: this._onNotifySCreateCustomOnlineWar },
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ];
             this._tabSettings.setBarItemRenderer(TabItemRenderer);

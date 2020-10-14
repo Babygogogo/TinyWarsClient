@@ -82,7 +82,7 @@ namespace TinyWars.MultiCustomRoom {
             ];
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.SMcrGetRoomInfo,    callback: this._onNotifySMcrGetRoomInfo },
+                { type: Notify.Type.MsgMcrGetRoomInfo,    callback: this._onNotifySMcrGetRoomInfo },
             ];
 
             this._listPlayer.setItemRenderer(PlayerRenderer);

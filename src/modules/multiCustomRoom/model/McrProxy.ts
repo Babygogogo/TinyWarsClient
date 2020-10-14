@@ -31,7 +31,7 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
     function _onMsgMcrCreateRoom(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMcrCreateRoom.IS;
         if (!data.errorCode) {
-            Notify.dispatch(Notify.Type.SMcrCreateRoom, data);
+            Notify.dispatch(Notify.Type.MsgMcrCreateRoom, data);
         }
     }
 
@@ -43,7 +43,7 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
     function _onMsgMcrJoinRoom(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMcrJoinRoom.IS;
         if (!data.errorCode) {
-            Notify.dispatch(Notify.Type.SMcrJoinRoom, data);
+            Notify.dispatch(Notify.Type.MsgMcrJoinRoom, data);
         }
     }
 
@@ -58,7 +58,7 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
         const data = e.data as NetMessage.MsgMcrDeleteRoom.IS;
         if (!data.errorCode) {
             McrModel.removeRoomInfo(data.roomId);
-            Notify.dispatch(Notify.Type.SMcrDestroyRoom, data);
+            Notify.dispatch(Notify.Type.MsgMcrDeleteRoom, data);
         }
     }
 
@@ -72,7 +72,7 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
     function _onMsgMcrExitRoom(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMcrExitRoom.IS;
         if (!data.errorCode) {
-            Notify.dispatch(Notify.Type.SMcrExitRoom, data);
+            Notify.dispatch(Notify.Type.MsgMcrExitRoom, data);
         }
     }
 
@@ -84,7 +84,7 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
     function _onMsgMcrSetWarRule(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMcrSetWarRule.IS;
         if (!data.errorCode) {
-            Notify.dispatch(Notify.Type.SMcrSetWarRule, data);
+            Notify.dispatch(Notify.Type.MsgMcrSetWarRule, data);
         }
     }
 
@@ -99,7 +99,7 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
     function _onMsgMcrDeletePlayer(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMcrDeletePlayer.IS;
         if (!data.errorCode) {
-            Notify.dispatch(Notify.Type.SMcrRemovePlayer, data);
+            Notify.dispatch(Notify.Type.MsgMcrDeletePlayer, data);
         }
     }
 
@@ -126,7 +126,7 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
     function _onMsgMcrSetSelfSettings(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMcrSetSelfSettings.IS;
         if (!data.errorCode) {
-            Notify.dispatch(Notify.Type.SMcrSetSelfSettings, data);
+            Notify.dispatch(Notify.Type.MsgMcrSetSelfSettings, data);
         }
     }
 
@@ -140,10 +140,10 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
     function _onMsgMcrGetRoomInfo(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMcrGetRoomInfo.IS;
         if (data.errorCode) {
-            Notify.dispatch(Notify.Type.SMcrGetRoomInfoFailed, data);
+            Notify.dispatch(Notify.Type.MsgMcrGetRoomInfoFailed, data);
         } else {
             McrModel.setRoomInfo(data.roomInfo);
-            Notify.dispatch(Notify.Type.SMcrGetRoomInfo, data);
+            Notify.dispatch(Notify.Type.MsgMcrGetRoomInfo, data);
         }
     }
 
@@ -157,7 +157,7 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
         const data = e.data as NetMessage.MsgMcrGetUnjoinedRoomInfoList.IS;
         if (!data.errorCode) {
             McrModel.setUnjoinedRoomInfoList(data.roomInfoList);
-            Notify.dispatch(Notify.Type.SMcrGetUnjoinedRoomInfoList, data);
+            Notify.dispatch(Notify.Type.MsgMcrGetUnjoinedRoomInfoList, data);
         }
     }
 
@@ -171,7 +171,7 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
         const data = e.data as NetMessage.MsgMcrGetJoinedRoomInfoList.IS;
         if (!data.errorCode) {
             McrModel.setJoinedRoomInfoList(data.roomInfoList);
-            Notify.dispatch(Notify.Type.SMcrGetJoinedRoomInfoList, data);
+            Notify.dispatch(Notify.Type.MsgMcrGetJoinedRoomInfoList, data);
         }
     }
 
@@ -186,7 +186,7 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
         const data = e.data as NetMessage.MsgMcrStartWar.IS;
         if (!data.errorCode) {
             McrModel.removeRoomInfo(data.roomId);
-            Notify.dispatch(Notify.Type.SMcrStartWar, data);
+            Notify.dispatch(Notify.Type.MsgMcrStartWar, data);
         }
     }
 }

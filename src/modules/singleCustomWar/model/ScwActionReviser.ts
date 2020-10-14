@@ -240,7 +240,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const isDropBlocked             =  (!revisedPath.isBlocked) && (revisedDropDestinations.length < action.dropDestinations!.length);
         return {
             actionId            : war.getExecutedActionsCount(),
-            ActionUnitDrop   : {
+            ActionUnitDropUnit  : {
                 path            : getRevisedPath(war, action.path, launchUnitId),
                 launchUnitId,
                 dropDestinations: revisedDropDestinations,
@@ -260,7 +260,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const launchUnitId  = action.launchUnitId;
         return {
             actionId            : war.getExecutedActionsCount(),
-            ActionUnitJoin   : {
+            ActionUnitJoinUnit  : {
                 path    : getRevisedPath(war, action.path, launchUnitId),
                 launchUnitId,
             },
@@ -351,8 +351,8 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const action        = rawAction.UnitSupply;
         const launchUnitId  = action.launchUnitId;
         return {
-            actionId            : war.getExecutedActionsCount(),
-            ActionUnitSupply : {
+            actionId                : war.getExecutedActionsCount(),
+            ActionUnitSupplyUnit    : {
                 path    : getRevisedPath(war, action.path, launchUnitId),
                 launchUnitId,
             },
@@ -541,7 +541,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         }
     }
 
-    function getRevisedDropDestinations(war: BwWar, action: ProtoTypes.NetMessage.IC_McwUnitDrop, revisedPath: Types.MovePath): DropDestination[] {
+    function getRevisedDropDestinations(war: BwWar, action: ProtoTypes.NetMessage.MsgMcwActionUnitDropUnit.IC, revisedPath: Types.MovePath): DropDestination[] {
         const destinations: DropDestination[] = [];
         if (!revisedPath.isBlocked) {
             const unitMap       = war.getUnitMap();

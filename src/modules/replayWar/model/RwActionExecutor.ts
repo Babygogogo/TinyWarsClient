@@ -35,13 +35,13 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         [WarActionCodes.ActionUnitBuildTile,        _exeUnitBuildTile],
         [WarActionCodes.ActionUnitCaptureTile,      _exeUnitCaptureTile],
         [WarActionCodes.ActionUnitDive,             _exeUnitDive],
-        [WarActionCodes.ActionUnitDrop,             _exeUnitDrop],
-        [WarActionCodes.ActionUnitJoin,             _exeUnitJoin],
+        [WarActionCodes.ActionUnitDropUnit,         _exeUnitDropUnit],
+        [WarActionCodes.ActionUnitJoinUnit,         _exeUnitJoinUnit],
         [WarActionCodes.ActionUnitLaunchFlare,      _exeUnitLaunchFlare],
         [WarActionCodes.ActionUnitLaunchSilo,       _exeUnitLaunchSilo],
         [WarActionCodes.ActionUnitLoadCo,           _exeUnitLoadCo],
         [WarActionCodes.ActionUnitProduceUnit,      _exeUnitProduceUnit],
-        [WarActionCodes.ActionUnitSupply,           _exeUnitSupply],
+        [WarActionCodes.ActionUnitSupplyUnit,       _exeUnitSupplyUnit],
         [WarActionCodes.ActionUnitSurface,          _exeUnitSurface],
         [WarActionCodes.ActionUnitUseCoSkill,       _exeUnitUseCoSkill],
         [WarActionCodes.ActionUnitWait,             _exeUnitWait],
@@ -59,13 +59,13 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         [WarActionCodes.ActionUnitBuildTile,        _fastExeUnitBuildTile],
         [WarActionCodes.ActionUnitCaptureTile,      _fastExeUnitCaptureTile],
         [WarActionCodes.ActionUnitDive,             _fastExeUnitDive],
-        [WarActionCodes.ActionUnitDrop,             _fastExeUnitDrop],
-        [WarActionCodes.ActionUnitJoin,             _fastExeUnitJoin],
+        [WarActionCodes.ActionUnitDropUnit,         _fastExeUnitDropUnit],
+        [WarActionCodes.ActionUnitJoinUnit,         _fastExeUnitJoinUnit],
         [WarActionCodes.ActionUnitLaunchFlare,      _fastExeUnitLaunchFlare],
         [WarActionCodes.ActionUnitLaunchSilo,       _fastExeUnitLaunchSilo],
         [WarActionCodes.ActionUnitLoadCo,           _fastExeUnitLoadCo],
         [WarActionCodes.ActionUnitProduceUnit,      _fastExeUnitProduceUnit],
-        [WarActionCodes.ActionUnitSupply,           _fastExeUnitSupply],
+        [WarActionCodes.ActionUnitSupplyUnit,       _fastExeUnitSupplyUnit],
         [WarActionCodes.ActionUnitSurface,          _fastExeUnitSurface],
         [WarActionCodes.ActionUnitUseCoSkill,       _fastExeUnitUseCoSkill],
         [WarActionCodes.ActionUnitWait,             _fastExeUnitWait],
@@ -667,12 +667,12 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         actionPlanner.setStateIdle();
     }
 
-    async function _exeUnitDrop(war: RwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitDropUnit(war: RwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
         FloatText.show(`${Lang.getText(Lang.Type.B0102)} (${war.getExecutedActionsCount()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
 
-        const action            = data.ActionUnitDrop;
+        const action            = data.ActionUnitDropUnit;
         const path              = action.path as MovePath;
         const launchUnitId      = action.launchUnitId;
         const pathNodes         = path.nodes;
@@ -722,12 +722,12 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         actionPlanner.setStateIdle();
     }
 
-    async function _exeUnitJoin(war: RwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitJoinUnit(war: RwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
         FloatText.show(`${Lang.getText(Lang.Type.B0103)} (${war.getExecutedActionsCount()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
 
-        const action            = data.ActionUnitJoin;
+        const action            = data.ActionUnitJoinUnit;
         const path              = action.path as MovePath;
         const launchUnitId      = action.launchUnitId;
         const pathNodes         = path.nodes;
@@ -990,12 +990,12 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         }
     }
 
-    async function _exeUnitSupply(war: RwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitSupplyUnit(war: RwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
         FloatText.show(`${Lang.getText(Lang.Type.B0107)} (${war.getExecutedActionsCount()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
 
-        const action        = data.ActionUnitSupply;
+        const action        = data.ActionUnitSupplyUnit;
         const revisedPath   = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = revisedPath.nodes;
@@ -1615,8 +1615,8 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         (isSuccessful) && (focusUnit.setIsDiving(true));
     }
 
-    async function _fastExeUnitDrop(war: RwWar, data: IActionContainer): Promise<void> {
-        const action            = data.ActionUnitDrop;
+    async function _fastExeUnitDropUnit(war: RwWar, data: IActionContainer): Promise<void> {
+        const action            = data.ActionUnitDropUnit;
         const path              = action.path as MovePath;
         const launchUnitId      = action.launchUnitId;
         const pathNodes         = path.nodes;
@@ -1648,8 +1648,8 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         }
     }
 
-    async function _fastExeUnitJoin(war: RwWar, data: IActionContainer): Promise<void> {
-        const action            = data.ActionUnitJoin;
+    async function _fastExeUnitJoinUnit(war: RwWar, data: IActionContainer): Promise<void> {
+        const action            = data.ActionUnitJoinUnit;
         const path              = action.path as MovePath;
         const launchUnitId      = action.launchUnitId;
         const pathNodes         = path.nodes;
@@ -1841,8 +1841,8 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         }
     }
 
-    async function _fastExeUnitSupply(war: RwWar, data: IActionContainer): Promise<void> {
-        const action        = data.ActionUnitSupply;
+    async function _fastExeUnitSupplyUnit(war: RwWar, data: IActionContainer): Promise<void> {
+        const action        = data.ActionUnitSupplyUnit;
         const revisedPath   = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = revisedPath.nodes;

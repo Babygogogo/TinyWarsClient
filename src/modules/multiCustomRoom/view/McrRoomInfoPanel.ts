@@ -53,10 +53,10 @@ namespace TinyWars.MultiCustomRoom {
             ];
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.SMcrGetRoomInfo,    callback: this._onNotifySMcrGetRoomInfo },
-                { type: Notify.Type.SMcrExitRoom,       callback: this._onNotifySMcrExitRoom },
-                { type: Notify.Type.SMcrDestroyRoom,    callback: this._onNotifySMcrDestroyRoom },
-                { type: Notify.Type.SMcrStartWar,       callback: this._onNotifySMcrStartWar },
+                { type: Notify.Type.MsgMcrGetRoomInfo,    callback: this._onNotifySMcrGetRoomInfo },
+                { type: Notify.Type.MsgMcrExitRoom,       callback: this._onNotifySMcrExitRoom },
+                { type: Notify.Type.MsgMcrDeleteRoom,    callback: this._onNotifySMcrDestroyRoom },
+                { type: Notify.Type.MsgMcrStartWar,       callback: this._onNotifySMcrStartWar },
             ];
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
 

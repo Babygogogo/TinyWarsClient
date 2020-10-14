@@ -76,7 +76,7 @@ namespace TinyWars.ReplayWar {
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyMcwPlannerStateChanged },
-                { type: Notify.Type.SScrCreateCustomWar,            callback: this._onNotifySScrCreateCustomWar },
+                { type: Notify.Type.MsgScrCreateCustomWar,            callback: this._onNotifySScrCreateCustomWar },
                 { type: Notify.Type.MsgReplaySetRating,   callback: this._onNotifySCommonRateMultiPlayerReplay },
             ];
             this._uiListeners = [
@@ -117,7 +117,7 @@ namespace TinyWars.ReplayWar {
         }
 
         private _onNotifySScrCreateCustomWar(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.IS_ScrCreateCustomWar;
+            const data = e.data as ProtoTypes.NetMessage.MsgScrCreateCustomWar.IS;
             Common.CommonConfirmPanel.show({
                 title   : Lang.getText(Lang.Type.B0088),
                 content : Lang.getText(Lang.Type.A0107),
