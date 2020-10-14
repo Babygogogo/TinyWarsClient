@@ -71,7 +71,7 @@ namespace TinyWars.MultiCustomRoom {
             this._zoomMap.setTouchListenerEnabled(true);
             this._updateComponentsForLanguage();
 
-            MultiCustomWar.McwProxy.reqUnwatchedWarInfos();
+            MultiPlayerWar.MpwProxy.reqUnwatchedWarInfos();
         }
 
         protected _onClosed(): void {
@@ -112,7 +112,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onNotifySMcwWatchGetUnwatchedWarInfos(e: egret.Event): void {
-            const newData        = this._createDataForListWar(MultiCustomWar.McwModel.getUnwatchedWarInfos());
+            const newData        = this._createDataForListWar(MultiPlayerWar.MpwModel.getUnwatchedWarInfos());
             this._dataForListWar = newData;
 
             if (newData.length > 0) {
@@ -127,7 +127,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onNotifySMcwWatchMakeRequest(e: egret.Event): void {
             FloatText.show(Lang.getText(Lang.Type.A0060));
-            MultiCustomWar.McwProxy.reqUnwatchedWarInfos();
+            MultiPlayerWar.MpwProxy.reqUnwatchedWarInfos();
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
@@ -175,7 +175,7 @@ namespace TinyWars.MultiCustomRoom {
             this._labelMapName.text     = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
             this._labelDesigner.text    = Lang.getFormattedText(Lang.Type.F0001, mapRawData.designerName);
             this._labelHasFog.text      = Lang.getFormattedText(Lang.Type.F0005, Lang.getText(settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault ? Lang.Type.B0012 : Lang.Type.B0001));
-            this._labelWarComment.text  = warInfo.settingsForMultiPlayer.warComment || "----";
+            this._labelWarComment.text  = warInfo.settingsForMcw.warComment || "----";
             this._listPlayer.bindData(this._createDataForListPlayer(warInfo, mapRawData.playersCount));
 
             this._groupInfo.visible      = true;
@@ -233,7 +233,7 @@ namespace TinyWars.MultiCustomRoom {
             const warInfo       = data.info.warInfo;
             this.currentState   = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
 
-            const warName = warInfo.settingsForMultiPlayer.warName;
+            const warName = warInfo.settingsForMcw.warName;
             if (warName) {
                 this._labelName.text = warName;
             } else {

@@ -144,9 +144,9 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _onTouchedImgBg(e: egret.TouchEvent): void {
-            const data                                      = this.data as DataForSlotRenderer;
-            const warData                                   = data.warData;
-            warData.settingsForSinglePlayer.saveSlotIndex   = data.slotIndex;
+            const data                              = this.data as DataForSlotRenderer;
+            const warData                           = data.warData;
+            warData.settingsForScw.saveSlotIndex    = data.slotIndex;
             if (!data.slotInfo) {
                 ScrProxy.reqScrCreateCustomWar(warData);
                 ScrCreateCustomSaveSlotsPanel.hide();

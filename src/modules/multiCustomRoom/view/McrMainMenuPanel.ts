@@ -107,7 +107,7 @@ namespace TinyWars.MultiCustomRoom {
                         MultiCustomRoom.McrContinueWarListPanel.show();
                     },
                     redChecker  : () => {
-                        const warInfoList   = MultiCustomWar.McwModel.getOngoingWarInfoList();
+                        const warInfoList   = MultiPlayerWar.MpwModel.getOngoingWarInfoList();
                         const selfUserId    = User.UserModel.getSelfUserId();
                         return (!!warInfoList)
                             && (warInfoList.some(warInfo => {
@@ -122,7 +122,7 @@ namespace TinyWars.MultiCustomRoom {
                         McrWatchMainMenuPanel.show();
                     },
                     redChecker  : () => {
-                        const watchInfos = MultiCustomWar.McwModel.getWatchRequestedWarInfos();
+                        const watchInfos = MultiPlayerWar.MpwModel.getWatchRequestedWarInfos();
                         return (!!watchInfos) && (watchInfos.length > 0);
                     },
                 },

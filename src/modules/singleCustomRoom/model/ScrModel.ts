@@ -36,7 +36,7 @@ namespace TinyWars.SingleCustomRoom {
                 mapId           : undefined,
                 configVersion   : Utility.ConfigManager.getLatestConfigVersion(),
             },
-            settingsForSinglePlayer: {
+            settingsForScw: {
                 saveSlotIndex   : 0,
             },
 
@@ -124,14 +124,14 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         export function setCreateWarSaveSlotIndex(slot: number): void {
-            const settingsForSinglePlayer = getCreateWarData().settingsForSinglePlayer;
+            const settingsForSinglePlayer = getCreateWarData().settingsForScw;
             if (settingsForSinglePlayer.saveSlotIndex !== slot) {
                 settingsForSinglePlayer.saveSlotIndex = slot;
                 Notify.dispatch(Notify.Type.ScrCreateWarSaveSlotChanged);
             }
         }
         export function getCreateWarSaveSlotIndex(): number {
-            return getCreateWarData().settingsForSinglePlayer.saveSlotIndex;
+            return getCreateWarData().settingsForScw.saveSlotIndex;
         }
 
         export function tickCreateWarUserId(playerIndex: number): void {

@@ -133,8 +133,8 @@ namespace TinyWars.MultiCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         export namespace Create {
             const _dataForCreateRoom: DataForCreateRoom = {
-                settingsForCommon: {},
-                settingsForMultiPlayer: {},
+                settingsForCommon       : {},
+                settingsForMcw          : {},
 
                 selfCoId                : null,
                 selfPlayerIndex         : null,
@@ -202,24 +202,24 @@ namespace TinyWars.MultiCustomRoom {
             }
 
             export function setWarName(name: string): void {
-                getData().settingsForMultiPlayer.warName = name;
+                getData().settingsForMcw.warName = name;
             }
             export function getWarName(): string {
-                return getData().settingsForMultiPlayer.warName;
+                return getData().settingsForMcw.warName;
             }
 
             export function setWarPassword(password: string): void {
-                getData().settingsForMultiPlayer.warPassword = password;
+                getData().settingsForMcw.warPassword = password;
             }
             export function getWarPassword(): string {
-                return getData().settingsForMultiPlayer.warPassword;
+                return getData().settingsForMcw.warPassword;
             }
 
             export function setWarComment(comment: string): void {
-                getData().settingsForMultiPlayer.warComment = comment;
+                getData().settingsForMcw.warComment = comment;
             }
             export function getWarComment(): string {
-                return getData().settingsForMultiPlayer.warComment;
+                return getData().settingsForMcw.warComment;
             }
 
             function setSelfPlayerIndex(playerIndex: number): void {
@@ -257,10 +257,10 @@ namespace TinyWars.MultiCustomRoom {
             }
 
             export function setBootTimerParams(params: number[]): void {
-                getData().settingsForMultiPlayer.bootTimerParams = params;
+                getData().settingsForMcw.bootTimerParams = params;
             }
             export function getBootTimerParams(): number[] {
-                return getData().settingsForMultiPlayer.bootTimerParams;
+                return getData().settingsForMcw.bootTimerParams;
             }
             export function tickBootTimerType(): void {
                 const params = getBootTimerParams();

@@ -3786,211 +3786,301 @@ export declare namespace WarSettings {
         public toJSON(): { [k: string]: any };
     }
 
-    /** Properties of a SettingsForMultiPlayer. */
-    interface ISettingsForMultiPlayer {
+    /** Properties of a SettingsForMcw. */
+    interface ISettingsForMcw {
 
-        /** SettingsForMultiPlayer warName */
+        /** SettingsForMcw warName */
         warName?: (string|null);
 
-        /** SettingsForMultiPlayer warPassword */
+        /** SettingsForMcw warPassword */
         warPassword?: (string|null);
 
-        /** SettingsForMultiPlayer warComment */
+        /** SettingsForMcw warComment */
         warComment?: (string|null);
 
-        /** SettingsForMultiPlayer bootTimerParams */
+        /** SettingsForMcw bootTimerParams */
         bootTimerParams?: (number[]|null);
     }
 
-    /** Represents a SettingsForMultiPlayer. */
-    class SettingsForMultiPlayer implements ISettingsForMultiPlayer {
+    /** Represents a SettingsForMcw. */
+    class SettingsForMcw implements ISettingsForMcw {
 
         /**
-         * Constructs a new SettingsForMultiPlayer.
+         * Constructs a new SettingsForMcw.
          * @param [properties] Properties to set
          */
-        constructor(properties?: WarSettings.ISettingsForMultiPlayer);
+        constructor(properties?: WarSettings.ISettingsForMcw);
 
-        /** SettingsForMultiPlayer warName. */
+        /** SettingsForMcw warName. */
         public warName: string;
 
-        /** SettingsForMultiPlayer warPassword. */
+        /** SettingsForMcw warPassword. */
         public warPassword: string;
 
-        /** SettingsForMultiPlayer warComment. */
+        /** SettingsForMcw warComment. */
         public warComment: string;
 
-        /** SettingsForMultiPlayer bootTimerParams. */
+        /** SettingsForMcw bootTimerParams. */
         public bootTimerParams: number[];
 
         /**
-         * Creates a new SettingsForMultiPlayer instance using the specified properties.
+         * Creates a new SettingsForMcw instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns SettingsForMultiPlayer instance
+         * @returns SettingsForMcw instance
          */
-        public static create(properties?: WarSettings.ISettingsForMultiPlayer): WarSettings.SettingsForMultiPlayer;
+        public static create(properties?: WarSettings.ISettingsForMcw): WarSettings.SettingsForMcw;
 
         /**
-         * Encodes the specified SettingsForMultiPlayer message. Does not implicitly {@link WarSettings.SettingsForMultiPlayer.verify|verify} messages.
-         * @param message SettingsForMultiPlayer message or plain object to encode
+         * Encodes the specified SettingsForMcw message. Does not implicitly {@link WarSettings.SettingsForMcw.verify|verify} messages.
+         * @param message SettingsForMcw message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: WarSettings.ISettingsForMultiPlayer, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: WarSettings.ISettingsForMcw, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified SettingsForMultiPlayer message, length delimited. Does not implicitly {@link WarSettings.SettingsForMultiPlayer.verify|verify} messages.
-         * @param message SettingsForMultiPlayer message or plain object to encode
+         * Encodes the specified SettingsForMcw message, length delimited. Does not implicitly {@link WarSettings.SettingsForMcw.verify|verify} messages.
+         * @param message SettingsForMcw message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: WarSettings.ISettingsForMultiPlayer, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: WarSettings.ISettingsForMcw, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a SettingsForMultiPlayer message from the specified reader or buffer.
+         * Decodes a SettingsForMcw message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns SettingsForMultiPlayer
+         * @returns SettingsForMcw
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarSettings.SettingsForMultiPlayer;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarSettings.SettingsForMcw;
 
         /**
-         * Decodes a SettingsForMultiPlayer message from the specified reader or buffer, length delimited.
+         * Decodes a SettingsForMcw message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns SettingsForMultiPlayer
+         * @returns SettingsForMcw
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarSettings.SettingsForMultiPlayer;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarSettings.SettingsForMcw;
 
         /**
-         * Verifies a SettingsForMultiPlayer message.
+         * Verifies a SettingsForMcw message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a SettingsForMultiPlayer message from a plain object. Also converts values to their respective internal types.
+         * Creates a SettingsForMcw message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns SettingsForMultiPlayer
+         * @returns SettingsForMcw
          */
-        public static fromObject(object: { [k: string]: any }): WarSettings.SettingsForMultiPlayer;
+        public static fromObject(object: { [k: string]: any }): WarSettings.SettingsForMcw;
 
         /**
-         * Creates a plain object from a SettingsForMultiPlayer message. Also converts values to other types if specified.
-         * @param message SettingsForMultiPlayer
+         * Creates a plain object from a SettingsForMcw message. Also converts values to other types if specified.
+         * @param message SettingsForMcw
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: WarSettings.SettingsForMultiPlayer, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: WarSettings.SettingsForMcw, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this SettingsForMultiPlayer to JSON.
+         * Converts this SettingsForMcw to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
     }
 
-    /** Properties of a SettingsForSinglePlayer. */
-    interface ISettingsForSinglePlayer {
+    /** Properties of a SettingsForScw. */
+    interface ISettingsForScw {
 
-        /** SettingsForSinglePlayer warType */
+        /** SettingsForScw warType */
         warType?: (number|null);
 
-        /** SettingsForSinglePlayer saveSlotIndex */
+        /** SettingsForScw saveSlotIndex */
         saveSlotIndex?: (number|null);
 
-        /** SettingsForSinglePlayer isCheating */
+        /** SettingsForScw isCheating */
         isCheating?: (boolean|null);
     }
 
-    /** Represents a SettingsForSinglePlayer. */
-    class SettingsForSinglePlayer implements ISettingsForSinglePlayer {
+    /** Represents a SettingsForScw. */
+    class SettingsForScw implements ISettingsForScw {
 
         /**
-         * Constructs a new SettingsForSinglePlayer.
+         * Constructs a new SettingsForScw.
          * @param [properties] Properties to set
          */
-        constructor(properties?: WarSettings.ISettingsForSinglePlayer);
+        constructor(properties?: WarSettings.ISettingsForScw);
 
-        /** SettingsForSinglePlayer warType. */
+        /** SettingsForScw warType. */
         public warType: number;
 
-        /** SettingsForSinglePlayer saveSlotIndex. */
+        /** SettingsForScw saveSlotIndex. */
         public saveSlotIndex: number;
 
-        /** SettingsForSinglePlayer isCheating. */
+        /** SettingsForScw isCheating. */
         public isCheating: boolean;
 
         /**
-         * Creates a new SettingsForSinglePlayer instance using the specified properties.
+         * Creates a new SettingsForScw instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns SettingsForSinglePlayer instance
+         * @returns SettingsForScw instance
          */
-        public static create(properties?: WarSettings.ISettingsForSinglePlayer): WarSettings.SettingsForSinglePlayer;
+        public static create(properties?: WarSettings.ISettingsForScw): WarSettings.SettingsForScw;
 
         /**
-         * Encodes the specified SettingsForSinglePlayer message. Does not implicitly {@link WarSettings.SettingsForSinglePlayer.verify|verify} messages.
-         * @param message SettingsForSinglePlayer message or plain object to encode
+         * Encodes the specified SettingsForScw message. Does not implicitly {@link WarSettings.SettingsForScw.verify|verify} messages.
+         * @param message SettingsForScw message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: WarSettings.ISettingsForSinglePlayer, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: WarSettings.ISettingsForScw, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified SettingsForSinglePlayer message, length delimited. Does not implicitly {@link WarSettings.SettingsForSinglePlayer.verify|verify} messages.
-         * @param message SettingsForSinglePlayer message or plain object to encode
+         * Encodes the specified SettingsForScw message, length delimited. Does not implicitly {@link WarSettings.SettingsForScw.verify|verify} messages.
+         * @param message SettingsForScw message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: WarSettings.ISettingsForSinglePlayer, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: WarSettings.ISettingsForScw, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a SettingsForSinglePlayer message from the specified reader or buffer.
+         * Decodes a SettingsForScw message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns SettingsForSinglePlayer
+         * @returns SettingsForScw
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarSettings.SettingsForSinglePlayer;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarSettings.SettingsForScw;
 
         /**
-         * Decodes a SettingsForSinglePlayer message from the specified reader or buffer, length delimited.
+         * Decodes a SettingsForScw message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns SettingsForSinglePlayer
+         * @returns SettingsForScw
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarSettings.SettingsForSinglePlayer;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarSettings.SettingsForScw;
 
         /**
-         * Verifies a SettingsForSinglePlayer message.
+         * Verifies a SettingsForScw message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a SettingsForSinglePlayer message from a plain object. Also converts values to their respective internal types.
+         * Creates a SettingsForScw message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns SettingsForSinglePlayer
+         * @returns SettingsForScw
          */
-        public static fromObject(object: { [k: string]: any }): WarSettings.SettingsForSinglePlayer;
+        public static fromObject(object: { [k: string]: any }): WarSettings.SettingsForScw;
 
         /**
-         * Creates a plain object from a SettingsForSinglePlayer message. Also converts values to other types if specified.
-         * @param message SettingsForSinglePlayer
+         * Creates a plain object from a SettingsForScw message. Also converts values to other types if specified.
+         * @param message SettingsForScw
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: WarSettings.SettingsForSinglePlayer, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: WarSettings.SettingsForScw, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this SettingsForSinglePlayer to JSON.
+         * Converts this SettingsForScw to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a SettingsForRmw. */
+    interface ISettingsForRmw {
+
+        /** SettingsForRmw dataListForBanCo */
+        dataListForBanCo?: (Structure.IDataForPlayerBanCo[]|null);
+    }
+
+    /** Represents a SettingsForRmw. */
+    class SettingsForRmw implements ISettingsForRmw {
+
+        /**
+         * Constructs a new SettingsForRmw.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarSettings.ISettingsForRmw);
+
+        /** SettingsForRmw dataListForBanCo. */
+        public dataListForBanCo: Structure.IDataForPlayerBanCo[];
+
+        /**
+         * Creates a new SettingsForRmw instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns SettingsForRmw instance
+         */
+        public static create(properties?: WarSettings.ISettingsForRmw): WarSettings.SettingsForRmw;
+
+        /**
+         * Encodes the specified SettingsForRmw message. Does not implicitly {@link WarSettings.SettingsForRmw.verify|verify} messages.
+         * @param message SettingsForRmw message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarSettings.ISettingsForRmw, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified SettingsForRmw message, length delimited. Does not implicitly {@link WarSettings.SettingsForRmw.verify|verify} messages.
+         * @param message SettingsForRmw message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarSettings.ISettingsForRmw, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a SettingsForRmw message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns SettingsForRmw
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarSettings.SettingsForRmw;
+
+        /**
+         * Decodes a SettingsForRmw message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns SettingsForRmw
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarSettings.SettingsForRmw;
+
+        /**
+         * Verifies a SettingsForRmw message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a SettingsForRmw message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns SettingsForRmw
+         */
+        public static fromObject(object: { [k: string]: any }): WarSettings.SettingsForRmw;
+
+        /**
+         * Creates a plain object from a SettingsForRmw message. Also converts values to other types if specified.
+         * @param message SettingsForRmw
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarSettings.SettingsForRmw, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this SettingsForRmw to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
@@ -5271,11 +5361,14 @@ export declare namespace WarSerialization {
         /** SerialWar settingsForCommon */
         settingsForCommon?: (WarSettings.ISettingsForCommon|null);
 
-        /** SerialWar settingsForMultiPlayer */
-        settingsForMultiPlayer?: (WarSettings.ISettingsForMultiPlayer|null);
+        /** SerialWar settingsForMcw */
+        settingsForMcw?: (WarSettings.ISettingsForMcw|null);
 
-        /** SerialWar settingsForSinglePlayer */
-        settingsForSinglePlayer?: (WarSettings.ISettingsForSinglePlayer|null);
+        /** SerialWar settingsForScw */
+        settingsForScw?: (WarSettings.ISettingsForScw|null);
+
+        /** SerialWar settingsForRmw */
+        settingsForRmw?: (WarSettings.ISettingsForRmw|null);
 
         /** SerialWar warId */
         warId?: (number|null);
@@ -5317,11 +5410,14 @@ export declare namespace WarSerialization {
         /** SerialWar settingsForCommon. */
         public settingsForCommon?: (WarSettings.ISettingsForCommon|null);
 
-        /** SerialWar settingsForMultiPlayer. */
-        public settingsForMultiPlayer?: (WarSettings.ISettingsForMultiPlayer|null);
+        /** SerialWar settingsForMcw. */
+        public settingsForMcw?: (WarSettings.ISettingsForMcw|null);
 
-        /** SerialWar settingsForSinglePlayer. */
-        public settingsForSinglePlayer?: (WarSettings.ISettingsForSinglePlayer|null);
+        /** SerialWar settingsForScw. */
+        public settingsForScw?: (WarSettings.ISettingsForScw|null);
+
+        /** SerialWar settingsForRmw. */
+        public settingsForRmw?: (WarSettings.ISettingsForRmw|null);
 
         /** SerialWar warId. */
         public warId: number;
@@ -11093,6 +11189,102 @@ export declare namespace Structure {
          */
         public toJSON(): { [k: string]: any };
     }
+
+    /** Properties of a DataForPlayerBanCo. */
+    interface IDataForPlayerBanCo {
+
+        /** DataForPlayerBanCo playerIndex */
+        playerIndex?: (number|null);
+
+        /** DataForPlayerBanCo bannedCoIdList */
+        bannedCoIdList?: (number[]|null);
+    }
+
+    /** Represents a DataForPlayerBanCo. */
+    class DataForPlayerBanCo implements IDataForPlayerBanCo {
+
+        /**
+         * Constructs a new DataForPlayerBanCo.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: Structure.IDataForPlayerBanCo);
+
+        /** DataForPlayerBanCo playerIndex. */
+        public playerIndex: number;
+
+        /** DataForPlayerBanCo bannedCoIdList. */
+        public bannedCoIdList: number[];
+
+        /**
+         * Creates a new DataForPlayerBanCo instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns DataForPlayerBanCo instance
+         */
+        public static create(properties?: Structure.IDataForPlayerBanCo): Structure.DataForPlayerBanCo;
+
+        /**
+         * Encodes the specified DataForPlayerBanCo message. Does not implicitly {@link Structure.DataForPlayerBanCo.verify|verify} messages.
+         * @param message DataForPlayerBanCo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: Structure.IDataForPlayerBanCo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified DataForPlayerBanCo message, length delimited. Does not implicitly {@link Structure.DataForPlayerBanCo.verify|verify} messages.
+         * @param message DataForPlayerBanCo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: Structure.IDataForPlayerBanCo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a DataForPlayerBanCo message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns DataForPlayerBanCo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): Structure.DataForPlayerBanCo;
+
+        /**
+         * Decodes a DataForPlayerBanCo message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns DataForPlayerBanCo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): Structure.DataForPlayerBanCo;
+
+        /**
+         * Verifies a DataForPlayerBanCo message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a DataForPlayerBanCo message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns DataForPlayerBanCo
+         */
+        public static fromObject(object: { [k: string]: any }): Structure.DataForPlayerBanCo;
+
+        /**
+         * Creates a plain object from a DataForPlayerBanCo message. Also converts values to other types if specified.
+         * @param message DataForPlayerBanCo
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: Structure.DataForPlayerBanCo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this DataForPlayerBanCo to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
 }
 
 /** Properties of a MultiCustomRoom. */
@@ -11199,8 +11391,8 @@ export declare namespace MultiCustomRoom {
         /** McrRoomInfo settingsForCommon */
         settingsForCommon?: (WarSettings.ISettingsForCommon|null);
 
-        /** McrRoomInfo settingsForMultiPlayer */
-        settingsForMultiPlayer?: (WarSettings.ISettingsForMultiPlayer|null);
+        /** McrRoomInfo settingsForMcw */
+        settingsForMcw?: (WarSettings.ISettingsForMcw|null);
 
         /** McrRoomInfo playerDataList */
         playerDataList?: (Structure.IDataForPlayerInRoom[]|null);
@@ -11230,8 +11422,8 @@ export declare namespace MultiCustomRoom {
         /** McrRoomInfo settingsForCommon. */
         public settingsForCommon?: (WarSettings.ISettingsForCommon|null);
 
-        /** McrRoomInfo settingsForMultiPlayer. */
-        public settingsForMultiPlayer?: (WarSettings.ISettingsForMultiPlayer|null);
+        /** McrRoomInfo settingsForMcw. */
+        public settingsForMcw?: (WarSettings.ISettingsForMcw|null);
 
         /** McrRoomInfo playerDataList. */
         public playerDataList: Structure.IDataForPlayerInRoom[];
@@ -11772,8 +11964,8 @@ export declare namespace MultiCustomWar {
         /** McwWarInfo settingsForCommon */
         settingsForCommon?: (WarSettings.ISettingsForCommon|null);
 
-        /** McwWarInfo settingsForMultiPlayer */
-        settingsForMultiPlayer?: (WarSettings.ISettingsForMultiPlayer|null);
+        /** McwWarInfo settingsForMcw */
+        settingsForMcw?: (WarSettings.ISettingsForMcw|null);
 
         /** McwWarInfo warId */
         warId?: (number|null);
@@ -11803,8 +11995,8 @@ export declare namespace MultiCustomWar {
         /** McwWarInfo settingsForCommon. */
         public settingsForCommon?: (WarSettings.ISettingsForCommon|null);
 
-        /** McwWarInfo settingsForMultiPlayer. */
-        public settingsForMultiPlayer?: (WarSettings.ISettingsForMultiPlayer|null);
+        /** McwWarInfo settingsForMcw. */
+        public settingsForMcw?: (WarSettings.ISettingsForMcw|null);
 
         /** McwWarInfo warId. */
         public warId: number;
@@ -23552,8 +23744,8 @@ export declare namespace NetMessage {
             /** C settingsForCommon */
             settingsForCommon?: (WarSettings.ISettingsForCommon|null);
 
-            /** C settingsForMultiPlayer */
-            settingsForMultiPlayer?: (WarSettings.ISettingsForMultiPlayer|null);
+            /** C settingsForMcw */
+            settingsForMcw?: (WarSettings.ISettingsForMcw|null);
 
             /** C selfPlayerIndex */
             selfPlayerIndex?: (number|null);
@@ -23577,8 +23769,8 @@ export declare namespace NetMessage {
             /** C settingsForCommon. */
             public settingsForCommon?: (WarSettings.ISettingsForCommon|null);
 
-            /** C settingsForMultiPlayer. */
-            public settingsForMultiPlayer?: (WarSettings.ISettingsForMultiPlayer|null);
+            /** C settingsForMcw. */
+            public settingsForMcw?: (WarSettings.ISettingsForMcw|null);
 
             /** C selfPlayerIndex. */
             public selfPlayerIndex: number;
@@ -37790,8 +37982,8 @@ export declare namespace NetMessage {
             /** C settingsForCommon */
             settingsForCommon?: (WarSettings.ISettingsForCommon|null);
 
-            /** C settingsForSinglePlayer */
-            settingsForSinglePlayer?: (WarSettings.ISettingsForSinglePlayer|null);
+            /** C settingsForScw */
+            settingsForScw?: (WarSettings.ISettingsForScw|null);
 
             /** C playerInfoList */
             playerInfoList?: (Structure.IDataForPlayerInRoom[]|null);
@@ -37809,8 +38001,8 @@ export declare namespace NetMessage {
             /** C settingsForCommon. */
             public settingsForCommon?: (WarSettings.ISettingsForCommon|null);
 
-            /** C settingsForSinglePlayer. */
-            public settingsForSinglePlayer?: (WarSettings.ISettingsForSinglePlayer|null);
+            /** C settingsForScw. */
+            public settingsForScw?: (WarSettings.ISettingsForScw|null);
 
             /** C playerInfoList. */
             public playerInfoList: Structure.IDataForPlayerInRoom[];

@@ -91,7 +91,7 @@ namespace TinyWars.SingleCustomRoom {
                     this._resetTimeoutForBtnConfirm();
                 }
 
-                if (ScrModel.checkIsSaveSlotEmpty(data.settingsForSinglePlayer.saveSlotIndex)) {
+                if (ScrModel.checkIsSaveSlotEmpty(data.settingsForScw.saveSlotIndex)) {
                     func();
                 } else {
                     Common.CommonConfirmPanel.show({

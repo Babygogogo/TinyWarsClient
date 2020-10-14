@@ -70,7 +70,7 @@ namespace TinyWars.MultiCustomRoom {
             this._zoomMap.setTouchListenerEnabled(true);
             this._updateComponentsForLanguage();
 
-            MultiCustomWar.McwProxy.reqMcwCommonGetWarInfoList();
+            MultiPlayerWar.MpwProxy.reqMcwCommonGetWarInfoList();
         }
 
         protected _onClosed(): void {
@@ -107,7 +107,7 @@ namespace TinyWars.MultiCustomRoom {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
         private _onNotifySMcrGetJoinedOngoingInfos(e: egret.Event): void {
-            const newData        = this._createDataForListWar(MultiCustomWar.McwModel.getOngoingWarInfoList());
+            const newData        = this._createDataForListWar(MultiPlayerWar.MpwModel.getOngoingWarInfoList());
             this._dataForListWar = newData;
 
             if (newData.length > 0) {
@@ -180,7 +180,7 @@ namespace TinyWars.MultiCustomRoom {
             this._labelMapName.text     = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
             this._labelDesigner.text    = Lang.getFormattedText(Lang.Type.F0001, mapRawData.designerName);
             this._labelHasFog.text      = Lang.getFormattedText(Lang.Type.F0005, Lang.getText(settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault ? Lang.Type.B0012 : Lang.Type.B0013));
-            this._labelWarComment.text  = warInfo.settingsForMultiPlayer.warComment || "----";
+            this._labelWarComment.text  = warInfo.settingsForMcw.warComment || "----";
             this._listPlayer.bindData(this._createDataForListPlayer(warInfo, mapExtraData));
 
             this._groupInfo.visible      = true;
@@ -232,7 +232,7 @@ namespace TinyWars.MultiCustomRoom {
             this.currentState       = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
             this._labelInTurn.text  = this._checkIsInTurn(warInfo) ? Lang.getText(Lang.Type.B0231) : "";
 
-            const warName = warInfo.settingsForMultiPlayer.warName;
+            const warName = warInfo.settingsForMcw.warName;
             if (warName) {
                 this._labelName.text = warName;
             } else {

@@ -163,8 +163,8 @@ namespace TinyWars.ReplayWar {
 
             return {
                 settingsForCommon           : null,
-                settingsForMultiPlayer      : null,
-                settingsForSinglePlayer     : null,
+                settingsForMcw              : null,
+                settingsForScw              : null,
 
                 warId                       : null,
                 seedRandomInitialState      : null,
@@ -241,8 +241,8 @@ namespace TinyWars.ReplayWar {
 
             return {
                 settingsForCommon,
-                settingsForMultiPlayer      : null,
-                settingsForSinglePlayer     : null,
+                settingsForMcw              : null,
+                settingsForScw              : null,
 
                 warId,
                 seedRandomInitialState      : null,

@@ -181,15 +181,15 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _updateLabelWarName(): Promise<void> {
-            this._labelWarName.text = (await McrModel.Join.getRoomInfo()).settingsForMultiPlayer.warName || "--";
+            this._labelWarName.text = (await McrModel.Join.getRoomInfo()).settingsForMcw.warName || "--";
         }
 
         private async _updateLabelWarPassword(): Promise<void> {
-            this._labelWarPassword.text = (await McrModel.Join.getRoomInfo()).settingsForMultiPlayer.warPassword || "--";
+            this._labelWarPassword.text = (await McrModel.Join.getRoomInfo()).settingsForMcw.warPassword || "--";
         }
 
         private async _updateLabelWarComment(): Promise<void> {
-            this._labelWarComment.text = (await McrModel.Join.getRoomInfo()).settingsForMultiPlayer.warComment || "--";
+            this._labelWarComment.text = (await McrModel.Join.getRoomInfo()).settingsForMcw.warComment || "--";
         }
 
         private _updateLabelMapName(): void {
@@ -213,7 +213,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _updateLabelTimeLimit(): Promise<void> {
-            this._labelTimeLimit.text = Lang.getBootTimerDesc((await McrModel.Join.getRoomInfo()).settingsForMultiPlayer.bootTimerParams);
+            this._labelTimeLimit.text = Lang.getBootTimerDesc((await McrModel.Join.getRoomInfo()).settingsForMcw.bootTimerParams);
         }
 
         private _updateLabelCoName(): void {

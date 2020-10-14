@@ -175,7 +175,7 @@ namespace TinyWars.MultiCustomRoom {
             this._labelMapName.text     = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
             this._labelDesigner.text    = Lang.getFormattedText(Lang.Type.F0001, mapRawData.designerName);
             this._labelHasFog.text      = Lang.getFormattedText(Lang.Type.F0005, Lang.getText(settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault ? Lang.Type.B0012 : Lang.Type.B0013));
-            this._labelWarComment.text  = roomInfo.settingsForMultiPlayer.warComment || "----";
+            this._labelWarComment.text  = roomInfo.settingsForMcw.warComment || "----";
             this._listPlayer.bindData(this._createDataForListPlayer(roomInfo, mapRawData));
 
             this._groupInfo.visible      = true;
@@ -233,7 +233,7 @@ namespace TinyWars.MultiCustomRoom {
             const roomInfo      = data.roomInfo;
             this.currentState   = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
 
-            const warName = roomInfo.settingsForMultiPlayer.warName;
+            const warName = roomInfo.settingsForMcw.warName;
             if (warName) {
                 this._labelName.text = warName;
             } else {

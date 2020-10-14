@@ -1,8 +1,8 @@
 
 namespace TinyWars.Utility.FlowManager {
     import UserModel    = User.UserModel;
-    import McwProxy     = MultiCustomWar.McwProxy;
-    import McwModel     = MultiCustomWar.McwModel;
+    import McwProxy     = MultiPlayerWar.MpwProxy;
+    import McwModel     = MultiPlayerWar.MpwModel;
     import ScwModel     = SingleCustomWar.ScwModel;
     import ReplayModel  = ReplayWar.RwModel;
     import MeManager    = MapEditor.MeManager;
@@ -88,11 +88,11 @@ namespace TinyWars.Utility.FlowManager {
         await McwModel.loadWar(data);
 
         StageManager.closeAllPanels();
-        MultiCustomWar.McwBackgroundPanel.show();
-        MultiCustomWar.McwTopPanel.show();
-        MultiCustomWar.McwWarPanel.show();
-        MultiCustomWar.McwTileBriefPanel.show();
-        MultiCustomWar.McwUnitBriefPanel.show();
+        MultiPlayerWar.McwBackgroundPanel.show();
+        MultiPlayerWar.McwTopPanel.show();
+        MultiPlayerWar.McwWarPanel.show();
+        MultiPlayerWar.McwTileBriefPanel.show();
+        MultiPlayerWar.McwUnitBriefPanel.show();
     }
     export async function gotoReplay(warData: Uint8Array): Promise<void> {
         McwModel.unloadWar();

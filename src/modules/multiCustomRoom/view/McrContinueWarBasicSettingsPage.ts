@@ -174,21 +174,21 @@ namespace TinyWars.MultiCustomRoom {
         private _updateLabelWarName(): void {
             const warInfo = this._warInfo;
             if (warInfo) {
-                this._labelWarName.text = warInfo.settingsForMultiPlayer.warName || "--";
+                this._labelWarName.text = warInfo.settingsForMcw.warName || "--";
             }
         }
 
         private _updateLabelWarPassword(): void {
             const warInfo = this._warInfo;
             if (warInfo) {
-                this._labelWarPassword.text = warInfo.settingsForMultiPlayer.warPassword || "--";
+                this._labelWarPassword.text = warInfo.settingsForMcw.warPassword || "--";
             }
         }
 
         private _updateLabelWarComment(): void {
             const warInfo = this._warInfo;
             if (warInfo) {
-                this._labelWarComment.text = warInfo.settingsForMultiPlayer.warComment || "--";
+                this._labelWarComment.text = warInfo.settingsForMcw.warComment || "--";
             }
         }
 
@@ -232,7 +232,7 @@ namespace TinyWars.MultiCustomRoom {
         private _updateLabelTimeLimit(): void {
             const warInfo = this._warInfo;
             if (warInfo) {
-                this._labelTimeLimit.text = Lang.getBootTimerDesc(warInfo.settingsForMultiPlayer.bootTimerParams);
+                this._labelTimeLimit.text = Lang.getBootTimerDesc(warInfo.settingsForMcw.bootTimerParams);
             }
         }
 

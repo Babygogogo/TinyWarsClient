@@ -250,7 +250,7 @@ namespace TinyWars.Chat {
                 ++indexForSort;
             }
 
-            const war           = MultiCustomWar.McwModel.getWar();
+            const war           = MultiPlayerWar.MpwModel.getWar();
             const playerManager = war ? war.getPlayerManager() : null;
             const player        = playerManager ? playerManager.getPlayerByUserId(User.UserModel.getSelfUserId()) : null;
             if ((player) && (player.getIsAlive())) {

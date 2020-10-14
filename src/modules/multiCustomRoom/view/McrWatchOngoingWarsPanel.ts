@@ -72,7 +72,7 @@ namespace TinyWars.MultiCustomRoom {
             this._zoomMap.setTouchListenerEnabled(true);
             this._updateComponentsForLanguage();
 
-            MultiCustomWar.McwProxy.reqWatchGetOngoingWarInfos();
+            MultiPlayerWar.MpwProxy.reqWatchGetOngoingWarInfos();
         }
 
         protected _onClosed(): void {
@@ -113,7 +113,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onNotifySMcwWatchGetOngoingWarInfos(e: egret.Event): void {
-            const newData        = this._createDataForListWar(MultiCustomWar.McwModel.getWatchOngoingWarInfos());
+            const newData        = this._createDataForListWar(MultiPlayerWar.MpwModel.getWatchOngoingWarInfos());
             this._dataForListWar = newData;
 
             if (newData.length > 0) {
@@ -132,7 +132,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onNotifySMcwWatchContinueWarFailed(e: egret.Event): void {
             Common.CommonBlockPanel.hide();
-            MultiCustomWar.McwProxy.reqWatchGetOngoingWarInfos();
+            MultiPlayerWar.MpwProxy.reqWatchGetOngoingWarInfos();
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
@@ -180,7 +180,7 @@ namespace TinyWars.MultiCustomRoom {
             this._labelMapName.text     = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
             this._labelDesigner.text    = Lang.getFormattedText(Lang.Type.F0001, mapRawData.designerName);
             this._labelHasFog.text      = Lang.getFormattedText(Lang.Type.F0005, Lang.getText(settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault ? Lang.Type.B0012 : Lang.Type.B0001));
-            this._labelWarComment.text  = warInfo.settingsForMultiPlayer.warComment || "----";
+            this._labelWarComment.text  = warInfo.settingsForMcw.warComment || "----";
             this._listPlayer.bindData(this._createDataForListPlayer(warInfo, mapRawData.playersCount));
 
             this._groupInfo.visible      = true;
@@ -238,7 +238,7 @@ namespace TinyWars.MultiCustomRoom {
             const warInfo           = data.info.warInfo;
             this.currentState       = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
 
-            const warName = warInfo.settingsForMultiPlayer.warName
+            const warName = warInfo.settingsForMcw.warName
             if (warName) {
                 this._labelName.text = warName;
             } else {
@@ -252,7 +252,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _onTouchTapBtnNext(e: egret.TouchEvent): Promise<void> {
-            MultiCustomWar.McwProxy.reqWatchContinueWar((this.data as DataForWarRenderer).info.warInfo.warId);
+            MultiPlayerWar.MpwProxy.reqWatchContinueWar((this.data as DataForWarRenderer).info.warInfo.warId);
         }
     }
 

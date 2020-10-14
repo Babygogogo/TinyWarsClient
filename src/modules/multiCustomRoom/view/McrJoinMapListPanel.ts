@@ -184,7 +184,7 @@ namespace TinyWars.MultiCustomRoom {
             this._labelDesigner.text    = Lang.getFormattedText(Lang.Type.F0001, mapRawData.designerName);
             this._labelHasFog.text      = Lang.getText(hasFog ? Lang.Type.B0012 : Lang.Type.B0001);
             this._labelHasFog.textColor = hasFog ? 0xFF0000 : 0x00FF00;
-            this._labelWarComment.text  = roomInfo.settingsForMultiPlayer.warComment || "----";
+            this._labelWarComment.text  = roomInfo.settingsForMcw.warComment || "----";
             this._listPlayer.bindData(this._createDataForListPlayer(roomInfo, mapRawData.playersCount));
 
             this._groupInfo.visible      = true;
@@ -231,13 +231,13 @@ namespace TinyWars.MultiCustomRoom {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data                      = this.data as DataForWarRenderer;
-            const warInfo                   = data.roomInfo;
-            const settingsForMultiPlayer    = warInfo.settingsForMultiPlayer;
-            this.currentState               = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
-            this._labelPassword.visible     = !!settingsForMultiPlayer.warPassword;
+            const data                  = this.data as DataForWarRenderer;
+            const warInfo               = data.roomInfo;
+            const settingsForMcw        = warInfo.settingsForMcw;
+            this.currentState           = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
+            this._labelPassword.visible = !!settingsForMcw.warPassword;
 
-            const warName = settingsForMultiPlayer.warName;
+            const warName = settingsForMcw.warName;
             if (warName) {
                 this._labelName.text = warName;
             } else {
@@ -252,7 +252,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private async _onTouchTapBtnNext(e: egret.TouchEvent): Promise<void> {
             const data = this.data as DataForWarRenderer;
-            if (data.roomInfo.settingsForMultiPlayer.warPassword) {
+            if (data.roomInfo.settingsForMcw.warPassword) {
                 McrJoinPasswordPanel.show(data.roomInfo);
             } else {
                 McrJoinMapListPanel.hide();

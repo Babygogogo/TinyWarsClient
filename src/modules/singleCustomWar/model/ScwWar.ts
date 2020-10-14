@@ -1,17 +1,17 @@
 
 namespace TinyWars.SingleCustomWar {
-    import Types                    = Utility.Types;
-    import ProtoTypes               = Utility.ProtoTypes;
-    import Logger                   = Utility.Logger;
-    import Helpers                  = Utility.Helpers;
-    import BwHelpers                = BaseWar.BwHelpers;
-    import BwSettingsHelper         = BaseWar.BwSettingsHelper;
-    import ISerialWar               = ProtoTypes.WarSerialization.ISerialWar;
-    import ISettingsForSinglePlayer = ProtoTypes.WarSettings.ISettingsForSinglePlayer;
-    import IActionContainer         = ProtoTypes.WarAction.IActionContainer;
+    import Types                = Utility.Types;
+    import ProtoTypes           = Utility.ProtoTypes;
+    import Logger               = Utility.Logger;
+    import Helpers              = Utility.Helpers;
+    import BwHelpers            = BaseWar.BwHelpers;
+    import BwSettingsHelper     = BaseWar.BwSettingsHelper;
+    import ISerialWar           = ProtoTypes.WarSerialization.ISerialWar;
+    import ISettingsForScw      = ProtoTypes.WarSettings.ISettingsForScw;
+    import IActionContainer     = ProtoTypes.WarAction.IActionContainer;
 
     export class ScwWar extends BaseWar.BwWar {
-        private _settingsForSinglePlayer    : ISettingsForSinglePlayer;
+        private _settingsForSinglePlayer    : ISettingsForScw;
         private _executedActions            : IActionContainer[];
 
         private _isEnded                    = false;
@@ -22,9 +22,9 @@ namespace TinyWars.SingleCustomWar {
                 return undefined;
             }
 
-            const settingsForSinglePlayer = data.settingsForSinglePlayer;
-            if (settingsForSinglePlayer == null) {
-                Logger.error(`ScwWar.init() empty settingsForSinglePlayer.`);
+            const settingsForScw = data.settingsForScw;
+            if (settingsForScw == null) {
+                Logger.error(`ScwWar.init() empty settingsForScw.`);
                 return undefined;
             }
 
@@ -42,7 +42,7 @@ namespace TinyWars.SingleCustomWar {
 
             const executedActionsCount  = data.executedActionsCount;
             const executedActions       = data.executedActions || [];
-            if ((!settingsForSinglePlayer.isCheating) && (executedActionsCount !== executedActions.length)) {
+            if ((!settingsForScw.isCheating) && (executedActionsCount !== executedActions.length)) {
                 Logger.error(`ScwWar.init() nextActionId !== executedActions.length! nextActionId: ${executedActionsCount}`);
                 return undefined;
             }
@@ -90,7 +90,7 @@ namespace TinyWars.SingleCustomWar {
             }
 
             this._setAllExecutedActions(executedActions);
-            this._setSettingsForSinglePlayer(settingsForSinglePlayer);
+            this._setSettingsForSinglePlayer(settingsForScw);
             this._setPlayerManager(playerManager);
             this._setTurnManager(turnManager);
             this._setField(field);
@@ -120,9 +120,9 @@ namespace TinyWars.SingleCustomWar {
                 return undefined;
             }
 
-            const settingsForSinglePlayer = this.getSettingsForSinglePlayer();
-            if (settingsForSinglePlayer == null) {
-                Logger.error(`ScwWar.serialize() empty settingsForSinglePlayer.`);
+            const settingsForScw = this.getSettingsForScw();
+            if (settingsForScw == null) {
+                Logger.error(`ScwWar.serialize() empty settingsForScw.`);
                 return undefined;
             }
 
@@ -170,7 +170,7 @@ namespace TinyWars.SingleCustomWar {
 
             return {
                 settingsForCommon,
-                settingsForSinglePlayer,
+                settingsForScw,
 
                 warId                       : this.getWarId(),
                 seedRandomInitialState,
@@ -191,9 +191,9 @@ namespace TinyWars.SingleCustomWar {
                 return undefined;
             }
 
-            const settingsForSinglePlayer = this.getSettingsForSinglePlayer();
-            if (settingsForSinglePlayer == null) {
-                Logger.error(`ScwWar.serializeForSimulation() empty settingsForSinglePlayer.`);
+            const settingsForScw = this.getSettingsForScw();
+            if (settingsForScw == null) {
+                Logger.error(`ScwWar.serializeForSimulation() empty settingsForScw.`);
                 return undefined;
             }
 
@@ -241,7 +241,7 @@ namespace TinyWars.SingleCustomWar {
 
             return {
                 settingsForCommon,
-                settingsForSinglePlayer,
+                settingsForScw,
 
                 warId                       : this.getWarId(),
                 seedRandomInitialState      : null,
@@ -279,7 +279,7 @@ namespace TinyWars.SingleCustomWar {
         }
 
         public setSaveSlotIndex(index: number): void {
-            const settingsForSinglePlayer = this.getSettingsForSinglePlayer();
+            const settingsForSinglePlayer = this.getSettingsForScw();
             if (settingsForSinglePlayer == null) {
                 Logger.error(`ScwWar._setSaveSlotIndex() empty settingsForSinglePlayer.`);
                 return undefined;
@@ -288,7 +288,7 @@ namespace TinyWars.SingleCustomWar {
             settingsForSinglePlayer.saveSlotIndex = index;
         }
         public getSaveSlotIndex(): number {
-            const settingsForSinglePlayer = this.getSettingsForSinglePlayer();
+            const settingsForSinglePlayer = this.getSettingsForScw();
             if (settingsForSinglePlayer == null) {
                 Logger.error(`ScwWar.getSaveSlotIndex() empty settingsForSinglePlayer.`);
                 return undefined;
@@ -298,7 +298,7 @@ namespace TinyWars.SingleCustomWar {
         }
 
         public getWarType(): Types.SinglePlayerWarType {
-            const settingsForSinglePlayer = this.getSettingsForSinglePlayer();
+            const settingsForSinglePlayer = this.getSettingsForScw();
             if (settingsForSinglePlayer == null) {
                 Logger.error(`ScwWar.getWarType() empty settingsForSinglePlayer.`);
                 return undefined;
@@ -308,7 +308,7 @@ namespace TinyWars.SingleCustomWar {
         }
 
         public setIsSinglePlayerCheating(isCheating: boolean): void {
-            const settingsForSinglePlayer = this.getSettingsForSinglePlayer();
+            const settingsForSinglePlayer = this.getSettingsForScw();
             if (settingsForSinglePlayer == null) {
                 Logger.error(`ScwWar.setIsSinglePlayerCheating() empty settingsForSinglePlayer.`);
                 return undefined;
@@ -317,7 +317,7 @@ namespace TinyWars.SingleCustomWar {
             settingsForSinglePlayer.isCheating = isCheating;
         }
         public getIsSinglePlayerCheating(): boolean {
-            const settingsForSinglePlayer = this.getSettingsForSinglePlayer();
+            const settingsForSinglePlayer = this.getSettingsForScw();
             if (settingsForSinglePlayer == null) {
                 Logger.error(`ScwWar.getIsSinglePlayerCheating() empty settingsForSinglePlayer.`);
                 return undefined;
@@ -435,10 +435,10 @@ namespace TinyWars.SingleCustomWar {
             this.setExecutedActionsCount(executedActionsCount + 1);
         }
 
-        private _setSettingsForSinglePlayer(settings: ISettingsForSinglePlayer): void {
+        private _setSettingsForSinglePlayer(settings: ISettingsForScw): void {
             this._settingsForSinglePlayer = settings;
         }
-        public getSettingsForSinglePlayer(): ISettingsForSinglePlayer | null | undefined {
+        public getSettingsForScw(): ISettingsForScw | null | undefined {
             return this._settingsForSinglePlayer;
         }
 

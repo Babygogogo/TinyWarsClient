@@ -94,7 +94,7 @@ namespace TinyWars.MultiCustomRoom {
                         McrWatchHandleRequestWarsPanel.show();
                     },
                     redChecker  : () => {
-                        const watchInfos = MultiCustomWar.McwModel.getWatchRequestedWarInfos();
+                        const watchInfos = MultiPlayerWar.MpwModel.getWatchRequestedWarInfos();
                         return (!!watchInfos) && (watchInfos.length > 0);
                     },
                 },

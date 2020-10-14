@@ -1,14 +1,13 @@
 
 namespace TinyWars.MultiCustomWar {
-    import Logger                   = Utility.Logger;
-    import BwHelpers                = BaseWar.BwHelpers;
-    import ProtoTypes               = Utility.ProtoTypes;
-    import ISerialWar               = ProtoTypes.WarSerialization.ISerialWar;
-    import ISettingsForMultiPlayer  = ProtoTypes.WarSettings.ISettingsForMultiPlayer;
+    import Logger           = Utility.Logger;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import BwHelpers        = BaseWar.BwHelpers;
+    import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
+    import ISettingsForMcw  = ProtoTypes.WarSettings.ISettingsForMcw;
 
-    export class McwWar extends BaseWar.BwWar {
-        private _settingsForMultiPlayer?: ISettingsForMultiPlayer;
-        private _isEnded                = false;
+    export class McwWar extends MultiPlayerWar.MpwWar {
+        private _settingsForMcw?: ISettingsForMcw;
 
         public async init(data: ISerialWar): Promise<McwWar> {
             if (!this._baseInit(data)) {
@@ -16,9 +15,9 @@ namespace TinyWars.MultiCustomWar {
                 return undefined;
             }
 
-            const settingsForMultiPlayer = data.settingsForMultiPlayer;
-            if (!settingsForMultiPlayer) {
-                Logger.error(`McwWar.init() invalid settingsForMultiPlayer! ${JSON.stringify(data)}`);
+            const settingsForMcw = data.settingsForMcw;
+            if (!settingsForMcw) {
+                Logger.error(`McwWar.init() invalid settingsForMcw! ${JSON.stringify(data)}`);
                 return undefined;
             }
 
@@ -76,7 +75,7 @@ namespace TinyWars.MultiCustomWar {
                 return undefined;
             }
 
-            this._setSettingsForMultiPlayer(settingsForMultiPlayer);
+            this._setSettingsForMcw(settingsForMcw);
             this._setPlayerManager(playerManager);
             this._setTurnManager(turnManager);
             this._setField(field);
@@ -99,9 +98,9 @@ namespace TinyWars.MultiCustomWar {
                 return undefined;
             }
 
-            const settingsForMultiPlayer = this.getSettingsForMultiPlayer();
-            if (settingsForMultiPlayer == null) {
-                Logger.error(`McwWar.serializeForSimulation() empty settingsForMultiPlayer.`);
+            const settingsForMcw = this.getSettingsForMcw();
+            if (settingsForMcw == null) {
+                Logger.error(`McwWar.serializeForSimulation() empty settingsForMcw.`);
                 return undefined;
             }
 
@@ -149,7 +148,7 @@ namespace TinyWars.MultiCustomWar {
 
             return {
                 settingsForCommon,
-                settingsForMultiPlayer,
+                settingsForMcw,
 
                 warId,
                 seedRandomInitialState      : null,
@@ -163,98 +162,52 @@ namespace TinyWars.MultiCustomWar {
             };
         }
 
-        protected _getViewClass(): new () => McwWarView {
-            return McwWarView;
+        private _setSettingsForMcw(settings: ISettingsForMcw): void {
+            this._settingsForMcw = settings;
         }
-        protected _getFieldClass(): new () => McwField {
-            return McwField;
-        }
-        protected _getPlayerManagerClass(): new () => McwPlayerManager {
-            return McwPlayerManager;
-        }
-        protected _getTurnManagerClass(): new () => McwTurnManager {
-            return McwTurnManager;
-        }
-
-        private _setSettingsForMultiPlayer(settings: ISettingsForMultiPlayer): void {
-            this._settingsForMultiPlayer = settings;
-        }
-        public getSettingsForMultiPlayer(): ISettingsForMultiPlayer | null | undefined {
-            return this._settingsForMultiPlayer;
+        public getSettingsForMcw(): ISettingsForMcw | null | undefined {
+            return this._settingsForMcw;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         public getWarName(): string {
-            const settingsForMultiPlayer = this.getSettingsForMultiPlayer();
-            if (settingsForMultiPlayer == null) {
-                Logger.error(`McwWar.getWarName() empty settingsForMultiPlayer.`);
+            const settingsForMcw = this.getSettingsForMcw();
+            if (settingsForMcw == null) {
+                Logger.error(`McwWar.getWarName() empty settingsForMcw.`);
                 return undefined;
             }
 
-            return settingsForMultiPlayer.warName;
+            return settingsForMcw.warName;
         }
         public getWarPassword(): string {
-            const settingsForMultiPlayer = this.getSettingsForMultiPlayer();
-            if (settingsForMultiPlayer == null) {
-                Logger.error(`McwWar.getWarPassword() empty settingsForMultiPlayer.`);
+            const settingsForMcw = this.getSettingsForMcw();
+            if (settingsForMcw == null) {
+                Logger.error(`McwWar.getWarPassword() empty settingsForMcw.`);
                 return undefined;
             }
 
-            return settingsForMultiPlayer.warPassword;
+            return settingsForMcw.warPassword;
         }
         public getWarComment(): string {
-            const settingsForMultiPlayer = this.getSettingsForMultiPlayer();
-            if (settingsForMultiPlayer == null) {
-                Logger.error(`McwWar.getWarComment() empty settingsForMultiPlayer.`);
+            const settingsForMcw = this.getSettingsForMcw();
+            if (settingsForMcw == null) {
+                Logger.error(`McwWar.getWarComment() empty settingsForMcw.`);
                 return undefined;
             }
 
-            return settingsForMultiPlayer.warComment;
+            return settingsForMcw.warComment;
         }
 
         public getSettingsBootTimerParams(): number[] {
-            const settingsForMultiPlayer = this.getSettingsForMultiPlayer();
-            if (settingsForMultiPlayer == null) {
-                Logger.error(`McwWar.getSettingsBootTimerParams() empty settingsForMultiPlayer.`);
+            const settingsForMcw = this.getSettingsForMcw();
+            if (settingsForMcw == null) {
+                Logger.error(`McwWar.getSettingsBootTimerParams() empty settingsForMcw.`);
                 return undefined;
             }
 
-            return settingsForMultiPlayer.bootTimerParams;
-        }
-        public getBootRestTime(): number | null {
-            const player = this.getPlayerInTurn();
-            if (player.getPlayerIndex() === 0) {
-                return null;
-            } else {
-                return (this.getEnterTurnTime() + player.getRestTimeToBoot() - Time.TimeModel.getServerTimestamp()) || null;
-            }
-        }
-
-        public setIsEnded(ended: boolean): void {
-            this._isEnded = ended;
-        }
-        public getIsEnded(): boolean {
-            return this._isEnded;
-        }
-
-        public checkIsBoot(): boolean {
-            if (this.getIsEnded()) {
-                return false;
-            } else {
-                const player = this.getPlayerInTurn();
-                return (player.getIsAlive())
-                    && (!player.checkIsNeutral())
-                    && (Time.TimeModel.getServerTimestamp() > this.getEnterTurnTime() + player.getRestTimeToBoot());
-            }
-        }
-
-        public getPlayerIndexLoggedIn(): number | undefined {
-            return (this.getPlayerManager() as McwPlayerManager).getPlayerIndexLoggedIn();
-        }
-        public getPlayerLoggedIn(): McwPlayer {
-            return (this.getPlayerManager() as McwPlayerManager).getPlayerLoggedIn();
+            return settingsForMcw.bootTimerParams;
         }
     }
 }

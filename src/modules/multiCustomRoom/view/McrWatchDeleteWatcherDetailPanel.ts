@@ -89,7 +89,7 @@ namespace TinyWars.MultiCustomRoom {
                 }
             }
             if (deleteUserIds.length) {
-                MultiCustomWar.McwProxy.reqWatchDeleteWatcher(this._openData.warInfo.warId, deleteUserIds);
+                MultiPlayerWar.MpwProxy.reqWatchDeleteWatcher(this._openData.warInfo.warId, deleteUserIds);
             }
             this.close();
         }

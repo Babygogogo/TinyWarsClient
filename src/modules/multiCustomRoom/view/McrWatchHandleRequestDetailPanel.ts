@@ -89,7 +89,7 @@ namespace TinyWars.MultiCustomRoom {
                     declineUserIds.push(data.userId);
                 }
             }
-            MultiCustomWar.McwProxy.reqWatchHandleRequest(this._openData.warInfo.warId, acceptUserIds, declineUserIds);
+            MultiPlayerWar.MpwProxy.reqWatchHandleRequest(this._openData.warInfo.warId, acceptUserIds, declineUserIds);
             this.close();
         }
 

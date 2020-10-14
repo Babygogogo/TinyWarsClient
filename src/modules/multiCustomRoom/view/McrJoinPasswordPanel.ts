@@ -56,7 +56,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _onTouchedBtnConfirm(e: egret.TouchEvent): Promise<void> {
-            if (this._inputWarPassword.text !== this._openData.settingsForMultiPlayer.warPassword) {
+            if (this._inputWarPassword.text !== this._openData.settingsForMcw.warPassword) {
                 FloatText.show(Lang.getText(Lang.Type.A0017));
             } else {
                 McrJoinPasswordPanel.hide();
@@ -71,7 +71,7 @@ namespace TinyWars.MultiCustomRoom {
             const info                  = this._openData;
             this._inputWarPassword.text = "";
 
-            const warName = info.settingsForMultiPlayer.warName;
+            const warName = info.settingsForMcw.warName;
             if (warName) {
                 this._labelWarName.text = warName;
             } else {

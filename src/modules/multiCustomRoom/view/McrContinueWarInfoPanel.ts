@@ -4,7 +4,7 @@ namespace TinyWars.MultiCustomRoom {
     import Notify       = Utility.Notify;
     import ProtoTypes   = Utility.ProtoTypes;
     import FlowManager  = Utility.FlowManager;
-    import McwProxy     = MultiCustomWar.McwProxy;
+    import McwProxy     = MultiPlayerWar.MpwProxy;
     import NetMessage   = ProtoTypes.NetMessage;
     import IMcwWarInfo  = ProtoTypes.MultiCustomWar.IMcwWarInfo;
 
