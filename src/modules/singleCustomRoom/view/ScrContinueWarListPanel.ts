@@ -222,7 +222,7 @@ namespace TinyWars.SingleCustomRoom {
             const slotInfo              = data.slotInfo;
             this.currentState           = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
             this._labelSlotIndex.text   = "" + slotInfo.saveSlotIndex;
-            this._labelWarType.text     = Lang.getSinglePlayerWarTypeName(slotInfo.warType);
+            this._labelWarType.text     = Lang.getWarTypeName(slotInfo.warType);
 
             const mapId = slotInfo.mapId;
             if (mapId == null) {

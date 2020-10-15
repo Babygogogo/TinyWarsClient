@@ -207,7 +207,7 @@ namespace TinyWars.MapEditor {
         }
 
         public getWarType(): Types.WarType {
-            return Types.WarType.Scw;
+            return Types.WarType.Me;
         }
 
         protected _getViewClass(): new () => MeWarView {

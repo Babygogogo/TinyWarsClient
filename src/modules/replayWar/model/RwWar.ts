@@ -265,17 +265,19 @@ namespace TinyWars.ReplayWar {
             };
         }
 
-        public getWarType(): Types.WarType {
+        public getWarType(): WarType {
             const hasFog = this.getSettingsHasFogByDefault();
             if (this._settingsForMcw) {
-
+                return hasFog ? WarType.McwFog : WarType.McwStd;
             } else if (this._settingsForRmw) {
-
+                return hasFog ? WarType.RmwFog : WarType.RmwStd;
             } else if (this._settingsForScw) {
-
+                return WarType.Scw;
             } else if (this._settingsForWrw) {
-
+                return WarType.Wrw;
             } else {
+                Logger.error(`RwWar.getWarType() unknown warType.`);
+                return undefined;
             }
         }
 

@@ -3156,11 +3156,11 @@ namespace TinyWars.Utility.Lang {
         }
     }
 
-    export function getSinglePlayerWarTypeName(type: Types.WarType): string {
+    export function getWarTypeName(type: Types.WarType): string {
         switch (type) {
-            case Types.WarType.Scw   : return getText(Type.B0254);
-            case Types.WarType.Wr  : return getText(Type.B0257);
-            default                                 : return null;
+            case Types.WarType.Scw  : return getText(Type.B0254);
+            case Types.WarType.Wrw  : return getText(Type.B0257);
+            default                 : return null;
         }
     }
 

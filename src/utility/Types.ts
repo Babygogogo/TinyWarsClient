@@ -522,7 +522,8 @@ namespace TinyWars.Utility.Types {
         RmwStd      = 3,
         RmwFog      = 4,
         Scw         = 5,
-        Wr          = 6,
+        Wrw         = 6,
+        Me          = 7,
     }
 
     export const enum MapReviewStatus {
