@@ -55,8 +55,8 @@ namespace TinyWars.MultiCustomRoom {
         protected _onFirstOpened(): void {
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgMcwWatchGetRequestedWarInfos,  callback: this._onNotifySMcwWatchGetRequestedWarInfos },
-                { type: Notify.Type.MsgMcwWatchHandleRequest,         callback: this._onNotifySMcwWatchHandleRequest },
+                { type: Notify.Type.MsgMpwWatchGetRequestedWarInfos,  callback: this._onNotifySMcwWatchGetRequestedWarInfos },
+                { type: Notify.Type.MsgMpwWatchHandleRequest,         callback: this._onNotifySMcwWatchHandleRequest },
             ];
             this._uiListeners = [
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
@@ -138,7 +138,7 @@ namespace TinyWars.MultiCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
-        private _createDataForListWar(infos: ProtoTypes.MultiCustomWar.IMcwWatchInfo[]): DataForWarRenderer[] {
+        private _createDataForListWar(infos: ProtoTypes.MultiPlayerWar.IMpwWatchInfo[]): DataForWarRenderer[] {
             const data: DataForWarRenderer[] = [];
             if (infos) {
                 for (let i = 0; i < infos.length; ++i) {
@@ -153,7 +153,7 @@ namespace TinyWars.MultiCustomRoom {
             return data;
         }
 
-        private _createDataForListPlayer(warInfo: ProtoTypes.MultiCustomWar.IMcwWarInfo, mapPlayersCount: number): DataForPlayerRenderer[] {
+        private _createDataForListPlayer(warInfo: ProtoTypes.MultiPlayerWar.IMpwWarInfo, mapPlayersCount: number): DataForPlayerRenderer[] {
             const configVersion     = warInfo.settingsForCommon.configVersion;
             const playerInfoList    = warInfo.playerInfoList;
             const dataList          : DataForPlayerRenderer[] = [];
@@ -209,7 +209,7 @@ namespace TinyWars.MultiCustomRoom {
     }
 
     type DataForWarRenderer = {
-        info    : ProtoTypes.MultiCustomWar.IMcwWatchInfo;
+        info    : ProtoTypes.MultiPlayerWar.IMpwWatchInfo;
         index   : number;
         panel   : McrWatchHandleRequestWarsPanel;
     }

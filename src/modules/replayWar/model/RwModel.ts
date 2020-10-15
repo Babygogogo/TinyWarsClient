@@ -1,21 +1,21 @@
 
 namespace TinyWars.ReplayWar.RwModel {
-    import Logger           = Utility.Logger;
-    import ProtoManager     = Utility.ProtoManager;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import IMcwReplayInfo   = ProtoTypes.MultiCustomWar.IMcwReplayInfo;
+    import Logger       = Utility.Logger;
+    import ProtoManager = Utility.ProtoManager;
+    import ProtoTypes   = Utility.ProtoTypes;
+    import IReplayInfo  = ProtoTypes.Replay.IReplayInfo;
 
-    let _replayInfoList : IMcwReplayInfo[];
+    let _replayInfoList : IReplayInfo[];
     let _replayData     : ProtoTypes.NetMessage.MsgReplayGetData.IS;
     let _war            : RwWar;
 
     export function init(): void {
     }
 
-    export function setReplayInfoList(infoList: IMcwReplayInfo[]): void {
+    export function setReplayInfoList(infoList: IReplayInfo[]): void {
         _replayInfoList = infoList;
     }
-    export function getReplayInfoList(): IMcwReplayInfo[] | undefined {
+    export function getReplayInfoList(): IReplayInfo[] | undefined {
         return _replayInfoList;
     }
 

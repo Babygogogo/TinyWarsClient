@@ -4,9 +4,10 @@ namespace TinyWars.WarMap {
     import ProtoTypes           = Utility.ProtoTypes;
     import Notify               = Utility.Notify;
     import Lang                 = Utility.Lang;
-    import NetMessage           = ProtoTypes.NetMessage;
+    import WarType              = Types.WarType;
     import MsgMapGetRawDataIs   = NetMessage.MsgMapGetRawData.IS;
     import MsgMapGetExtraDataIs = NetMessage.MsgMapGetExtraData.IS;
+    import NetMessage           = ProtoTypes.NetMessage;
     import IMapRawData          = ProtoTypes.Map.IMapRawData;
     import IMapExtraData        = ProtoTypes.Map.IMapExtraData;
     import IMapEditorData       = ProtoTypes.Map.IMapEditorData;
@@ -140,19 +141,16 @@ namespace TinyWars.WarMap {
 
             const complexInfo   = mapExtraData.mapComplexInfo;
             let totalTimes      = 0;
-            if (complexInfo) {
-                const mcwInfo   = complexInfo.mcwStatistics;
-                totalTimes      += mcwInfo ? mcwInfo.totalPlayedTimes : 0;
-
-                const mcwFogInfo    = complexInfo.mcwFogStatistics;
-                totalTimes          += mcwFogInfo ? mcwFogInfo.totalPlayedTimes : 0;
-
-                const rankInfo  = complexInfo.rankStatistics;
-                totalTimes      += rankInfo ? rankInfo.totalPlayedTimes : 0;
-
-                const rankFogInfo   = complexInfo.rankFogStatistics;
-                totalTimes          += rankFogInfo ? rankFogInfo.totalPlayedTimes : 0;
+            for (const info of complexInfo ? complexInfo.warStatisticsList : []) {
+                if ((info.warType === WarType.McwFog) ||
+                    (info.warType === WarType.McwStd) ||
+                    (info.warType === WarType.RmwFog) ||
+                    (info.warType === WarType.RmwStd)
+                ) {
+                    totalTimes += info.totalPlayedTimes || 0;
+                }
             }
+
             return totalTimes;
         }
         export async function getAverageRating(mapId: number): Promise<number> {

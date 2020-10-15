@@ -18,10 +18,10 @@ namespace TinyWars.MultiCustomRoom {
         private _btnConfirm     : GameUi.UiButton;
         private _btnCancel      : GameUi.UiButton;
 
-        private _openData           : ProtoTypes.MultiCustomWar.IMcwWatchInfo;
+        private _openData           : ProtoTypes.MultiPlayerWar.IMpwWatchInfo;
         private _dataForListPlayer  : DataForPlayerRenderer[];
 
-        public static show(warInfo: ProtoTypes.MultiCustomWar.IMcwWatchInfo): void {
+        public static show(warInfo: ProtoTypes.MultiPlayerWar.IMpwWatchInfo): void {
             if (!McrWatchMakeRequestDetailPanel._instance) {
                 McrWatchMakeRequestDetailPanel._instance = new McrWatchMakeRequestDetailPanel();
             }

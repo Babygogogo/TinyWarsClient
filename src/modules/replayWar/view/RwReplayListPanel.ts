@@ -239,7 +239,7 @@ namespace TinyWars.ReplayWar {
             return data;
         }
 
-        private _createDataForListPlayer(info: ProtoTypes.MultiCustomWar.IMcwReplayInfo): DataForPlayerRenderer[] {
+        private _createDataForListPlayer(info: ProtoTypes.Replay.IReplayInfo): DataForPlayerRenderer[] {
             const configVersion     = info.configVersion;
             const playerInfoList    = info.playerInfoList;
             const dataList          : DataForPlayerRenderer[] = [];
@@ -255,7 +255,7 @@ namespace TinyWars.ReplayWar {
     }
 
     type DataForMapNameRenderer = {
-        info        : ProtoTypes.MultiCustomWar.IMcwReplayInfo;
+        info        : ProtoTypes.Replay.IReplayInfo;
         index       : number;
         panel       : RwReplayListPanel;
     }

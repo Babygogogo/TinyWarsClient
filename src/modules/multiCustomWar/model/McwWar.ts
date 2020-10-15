@@ -1,6 +1,7 @@
 
 namespace TinyWars.MultiCustomWar {
     import Logger           = Utility.Logger;
+    import Types            = Utility.Types;
     import ProtoTypes       = Utility.ProtoTypes;
     import BwHelpers        = BaseWar.BwHelpers;
     import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
@@ -160,6 +161,12 @@ namespace TinyWars.MultiCustomWar {
                 turnManager                 : serialTurnManager,
                 field                       : serialField,
             };
+        }
+
+        public getWarType(): Types.WarType {
+            return this.getSettingsHasFogByDefault()
+                ? Types.WarType.McwFog
+                : Types.WarType.McwStd;
         }
 
         private _setSettingsForMcw(settings: ISettingsForMcw): void {

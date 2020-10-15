@@ -516,9 +516,13 @@ namespace TinyWars.Utility.Types {
         AlreadyAccepted,
     }
 
-    export const enum SinglePlayerWarType {
-        Custom  = 0,
-        WarRoom = 1,
+    export const enum WarType {
+        McwStd      = 1,
+        McwFog      = 2,
+        RmwStd      = 3,
+        RmwFog      = 4,
+        Scw         = 5,
+        Wr          = 6,
     }
 
     export const enum MapReviewStatus {

@@ -6,7 +6,7 @@ namespace TinyWars.MultiCustomRoom {
     import FlowManager  = Utility.FlowManager;
     import McwProxy     = MultiPlayerWar.MpwProxy;
     import NetMessage   = ProtoTypes.NetMessage;
-    import IMcwWarInfo  = ProtoTypes.MultiCustomWar.IMcwWarInfo;
+    import IMpwWarInfo  = ProtoTypes.MultiPlayerWar.IMpwWarInfo;
 
     export class McrContinueWarInfoPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
@@ -19,9 +19,9 @@ namespace TinyWars.MultiCustomRoom {
         private _btnContinueWar : TinyWars.GameUi.UiButton;
         private _btnBack        : TinyWars.GameUi.UiButton;
 
-        private _warInfo        : IMcwWarInfo;
+        private _warInfo        : IMpwWarInfo;
 
-        public static show(warInfo: IMcwWarInfo): void {
+        public static show(warInfo: IMpwWarInfo): void {
             if (!McrContinueWarInfoPanel._instance) {
                 McrContinueWarInfoPanel._instance = new McrContinueWarInfoPanel();
             }
@@ -47,8 +47,8 @@ namespace TinyWars.MultiCustomRoom {
                 { ui: this._btnContinueWar,   callback: this._onTouchedBtnStartGame },
             ];
             this._notifyListeners = [
-                { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgMcwCommonContinueWar,  callback: this._onNotifySMcwCommonContinueWar },
+                { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.MsgMpwCommonContinueWar,    callback: this._onMsgMpwCommonContinueWar },
             ];
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
 
@@ -101,8 +101,8 @@ namespace TinyWars.MultiCustomRoom {
             this._updateComponentsForLanguage();
         }
 
-        private _onNotifySMcwCommonContinueWar(e: egret.Event): void {
-            const data = e.data as NetMessage.MsgMcwCommonContinueWar.IS;
+        private _onMsgMpwCommonContinueWar(e: egret.Event): void {
+            const data = e.data as NetMessage.MsgMpwCommonContinueWar.IS;
             FlowManager.gotoMultiCustomWar(data.war);
         }
 

@@ -297,14 +297,8 @@ namespace TinyWars.SingleCustomWar {
             return settingsForSinglePlayer.saveSlotIndex;
         }
 
-        public getWarType(): Types.SinglePlayerWarType {
-            const settingsForSinglePlayer = this.getSettingsForScw();
-            if (settingsForSinglePlayer == null) {
-                Logger.error(`ScwWar.getWarType() empty settingsForSinglePlayer.`);
-                return undefined;
-            }
-
-            return settingsForSinglePlayer.warType;
+        public getWarType(): Types.WarType {
+            return Types.WarType.Scw;
         }
 
         public setIsSinglePlayerCheating(isCheating: boolean): void {

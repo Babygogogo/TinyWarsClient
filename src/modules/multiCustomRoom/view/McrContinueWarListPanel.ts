@@ -6,7 +6,7 @@ namespace TinyWars.MultiCustomRoom {
     import Lang             = Utility.Lang;
     import ProtoTypes       = Utility.ProtoTypes;
     import WarMapModel      = WarMap.WarMapModel;
-    import IMcwWarInfo      = ProtoTypes.MultiCustomWar.IMcwWarInfo;
+    import IMpwWarInfo      = ProtoTypes.MultiPlayerWar.IMpwWarInfo;
     import IWarPlayerInfo   = ProtoTypes.Structure.IWarPlayerInfo;
 
     export class McrContinueWarListPanel extends GameUi.UiPanel {
@@ -54,7 +54,7 @@ namespace TinyWars.MultiCustomRoom {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.MsgMcwCommonGetWarInfoList,  callback: this._onNotifySMcrGetJoinedOngoingInfos },
+                { type: Notify.Type.MsgMpwCommonGetWarInfoList,  callback: this._onNotifySMcrGetJoinedOngoingInfos },
                 { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
             ];
             this._uiListeners = [
@@ -140,7 +140,7 @@ namespace TinyWars.MultiCustomRoom {
             this._btnBack.label             = Lang.getText(Lang.Type.B0146);
         }
 
-        private _createDataForListWar(warInfoList: IMcwWarInfo[]): DataForWarRenderer[] {
+        private _createDataForListWar(warInfoList: IMpwWarInfo[]): DataForWarRenderer[] {
             const data: DataForWarRenderer[] = [];
             if (warInfoList) {
                 for (let i = 0; i < warInfoList.length; ++i) {
@@ -155,7 +155,7 @@ namespace TinyWars.MultiCustomRoom {
             return data;
         }
 
-        private _createDataForListPlayer(warInfo: IMcwWarInfo, mapExtraData: ProtoTypes.Map.IMapExtraData): DataForPlayerRenderer[] {
+        private _createDataForListPlayer(warInfo: IMpwWarInfo, mapExtraData: ProtoTypes.Map.IMapExtraData): DataForPlayerRenderer[] {
             const enterTurnTime     = warInfo.enterTurnTime;
             const playerIndexInTurn = warInfo.playerIndexInTurn;
             const playerInfoList    = warInfo.playerInfoList;
@@ -206,7 +206,7 @@ namespace TinyWars.MultiCustomRoom {
     }
 
     type DataForWarRenderer = {
-        warInfo : IMcwWarInfo;
+        warInfo : IMpwWarInfo;
         index   : number;
         panel   : McrContinueWarListPanel;
     }
@@ -251,7 +251,7 @@ namespace TinyWars.MultiCustomRoom {
             McrContinueWarInfoPanel.show(data.warInfo);
         }
 
-        private _checkIsInTurn(info: IMcwWarInfo): boolean {
+        private _checkIsInTurn(info: IMpwWarInfo): boolean {
             return info.playerInfoList.find(v => v.playerIndex === info.playerIndexInTurn).userId === User.UserModel.getSelfUserId();
         }
     }

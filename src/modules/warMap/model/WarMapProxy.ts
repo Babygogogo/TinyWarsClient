@@ -110,12 +110,15 @@ namespace TinyWars.WarMap.WarMapProxy {
     }
 
     export function reqMmReviewMap(
-        designerUserId  : number,
-        slotIndex       : number,
-        modifiedTime    : number,
-        isAccept        : boolean,
-        reviewComment   : string | null
-    ) : void {
+        { designerUserId, slotIndex, modifiedTime, isAccept, reviewComment, availability }: {
+            designerUserId  : number;
+            slotIndex       : number;
+            modifiedTime    : number;
+            isAccept        : boolean;
+            reviewComment   : string | null;
+            availability    : ProtoTypes.Map.IDataForMapAvailability;
+        }
+    ): void {
         NetManager.send({
             MsgMmReviewMap: { c: {
                 designerUserId,
@@ -123,6 +126,7 @@ namespace TinyWars.WarMap.WarMapProxy {
                 modifiedTime,
                 isAccept,
                 reviewComment,
+                availability,
             }, },
         });
     }

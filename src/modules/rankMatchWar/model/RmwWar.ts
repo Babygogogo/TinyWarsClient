@@ -165,6 +165,12 @@ namespace TinyWars.RankMatchWar {
             };
         }
 
+        public getWarType(): Types.WarType {
+            return this.getSettingsHasFogByDefault()
+                ? Types.WarType.RmwFog
+                : Types.WarType.RmwStd;
+        }
+
         private _setSettingsForRmw(settings: ISettingsForRmw): void {
             this._settingsForRmw = settings;
         }

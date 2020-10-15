@@ -2,6 +2,7 @@
 namespace TinyWars.BaseWar {
     import Logger                   = Utility.Logger;
     import Notify                   = Utility.Notify;
+    import Types                    = Utility.Types;
     import ProtoTypes               = Utility.ProtoTypes;
     import ISerialWar               = ProtoTypes.WarSerialization.ISerialWar;
     import IWarSettingsForCommon    = ProtoTypes.WarSettings.ISettingsForCommon;
@@ -26,6 +27,7 @@ namespace TinyWars.BaseWar {
 
         public async abstract init(data: ISerialWar): Promise<BwWar>;
         public abstract serializeForSimulation(): ISerialWar | undefined;
+        public abstract getWarType(): Types.WarType;
         protected abstract _getPlayerManagerClass(): new () => BwPlayerManager;
         protected abstract _getTurnManagerClass(): new () => BwTurnManager;
         protected abstract _getFieldClass(): new () => BwField;

@@ -1,13 +1,13 @@
 
 namespace TinyWars.User {
-    import Lang                     = Utility.Lang;
-    import Helpers                  = Utility.Helpers;
-    import Notify                   = Utility.Notify;
-    import FlowManager              = Utility.FlowManager;
-    import Types                    = Utility.Types;
-    import LocalStorage             = Utility.LocalStorage;
-    import ProtoTypes               = Utility.ProtoTypes;
-    import IDataForWarStatistics    = ProtoTypes.User.IDataForWarStatistics;
+    import Lang                         = Utility.Lang;
+    import Helpers                      = Utility.Helpers;
+    import Notify                       = Utility.Notify;
+    import Types                        = Utility.Types;
+    import LocalStorage                 = Utility.LocalStorage;
+    import ProtoTypes                   = Utility.ProtoTypes;
+    import WarType                      = Types.WarType;
+    import IDataForUserWarStatistics    = ProtoTypes.User.IDataForUserWarStatistics;
 
     export class UserPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
@@ -225,13 +225,14 @@ namespace TinyWars.User {
                 this._labelTitle.text       = Lang.getFormattedText(Lang.Type.F0009, info.nickname);
                 this._labelOnlineTime.text  = Helpers.getTimeDurationText2(info.onlineTime);
 
-                const rankNormal            = info.rankStatisticsList || [];
-                const rankFog               = info.rankFogStatisticsList || [];
+                const warStatisticsList     = info.warStatisticsList || [];
+                const rankNormal            = warStatisticsList.filter(v => v.warType === WarType.RmwStd) || [];
+                const rankFog               = warStatisticsList.filter(v => v.warType === WarType.RmwFog) || [];
                 this._labelRankName.text    = ""; // Utility.ConfigManager.getRankName(Utility.ConfigManager.getNewestConfigVersion(), info.rank2pScore);   // TODO
                 updateLabelsForStatistics(this._labelRank2pWins, this._labelRank2pLoses, this._labelRank2pDraws, rankNormal.find(v => v.playersCount === 2), rankFog.find(v => v.playersCount === 2));
 
-                const mcwNormal = info.mcwStatisticsList || [];
-                const mcwFog    = info.mcwFogStatisticsList || [];
+                const mcwNormal = warStatisticsList.filter(v => v.warType === WarType.McwStd) || [];
+                const mcwFog    = warStatisticsList.filter(v => v.warType === WarType.McwStd) || [];
                 updateLabelsForStatistics(this._labelMcw2pWins, this._labelMcw2pLoses, this._labelMcw2pDraws, mcwNormal.find(v => v.playersCount === 2), mcwFog.find(v => v.playersCount === 2));
                 updateLabelsForStatistics(this._labelMcw3pWins, this._labelMcw3pLoses, this._labelMcw3pDraws, mcwNormal.find(v => v.playersCount === 3), mcwFog.find(v => v.playersCount === 3));
                 updateLabelsForStatistics(this._labelMcw4pWins, this._labelMcw4pLoses, this._labelMcw4pDraws, mcwNormal.find(v => v.playersCount === 4), mcwFog.find(v => v.playersCount === 4));
@@ -268,8 +269,8 @@ namespace TinyWars.User {
         lbWin           : GameUi.UiLabel,
         lbLose          : GameUi.UiLabel,
         lbDraw          : GameUi.UiLabel,
-        dataForNormal   : IDataForWarStatistics,
-        dataForFog      : IDataForWarStatistics
+        dataForNormal   : IDataForUserWarStatistics,
+        dataForFog      : IDataForUserWarStatistics
     ): void {
         lbWin.text  = `${dataForNormal ? dataForNormal.wins || 0 : 0} / ${dataForFog ? dataForFog.wins || 0 : 0}`;
         lbLose.text = `${dataForNormal ? dataForNormal.loses || 0 : 0} / ${dataForFog ? dataForFog.loses || 0 : 0}`;

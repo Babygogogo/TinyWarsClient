@@ -2,21 +2,18 @@
 namespace TinyWars.MultiCustomRoom {
     import ProtoTypes       = Utility.ProtoTypes;
     import Lang             = Utility.Lang;
-    import Types            = Utility.Types;
     import Notify           = Utility.Notify;
-    import FloatText        = Utility.FloatText;
     import ConfigManager    = Utility.ConfigManager;
     import CommonHelpPanel  = Common.CommonHelpPanel;
     import BwHelpers        = BaseWar.BwHelpers;
     import BwSettingsHelper = BaseWar.BwSettingsHelper;
     import WarMapModel      = WarMap.WarMapModel;
     import UserModel        = User.UserModel;
-    import NetMessage       = ProtoTypes.NetMessage;
-    import IMcwWarInfo      = ProtoTypes.MultiCustomWar.IMcwWarInfo;
+    import IMpwWarInfo      = ProtoTypes.MultiPlayerWar.IMpwWarInfo;
     import IWarPlayerInfo   = ProtoTypes.Structure.IWarPlayerInfo;
 
     export type OpenParamForContinueWarBasicSettingsPage = {
-        warInfo  : IMcwWarInfo;
+        warInfo  : IMpwWarInfo;
     }
 
     export class McrContinueWarBasicSettingsPage extends GameUi.UiTabPage {
@@ -59,7 +56,7 @@ namespace TinyWars.MultiCustomRoom {
         private _listPlayer             : TinyWars.GameUi.UiScrollList;
 
         protected _dataForOpen  : OpenParamForContinueWarBasicSettingsPage;
-        private _warInfo        : IMcwWarInfo;
+        private _warInfo        : IMpwWarInfo;
 
         public constructor() {
             super();

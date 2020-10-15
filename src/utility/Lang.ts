@@ -2277,6 +2277,14 @@ namespace TinyWars.Utility.Lang {
             `玩家规则列表`,
             `Player Rule List`,
         ],
+        [Type.B0408]: [
+            `排位赛(雾战)`,
+            `Ranking Match (FoW)`,
+        ],
+        [Type.B0409]: [
+            `单人自由对战`,
+            `SP Free Games`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -3148,10 +3156,10 @@ namespace TinyWars.Utility.Lang {
         }
     }
 
-    export function getSinglePlayerWarTypeName(type: Types.SinglePlayerWarType): string {
+    export function getSinglePlayerWarTypeName(type: Types.WarType): string {
         switch (type) {
-            case Types.SinglePlayerWarType.Custom   : return getText(Type.B0254);
-            case Types.SinglePlayerWarType.WarRoom  : return getText(Type.B0257);
+            case Types.WarType.Scw   : return getText(Type.B0254);
+            case Types.WarType.Wr  : return getText(Type.B0257);
             default                                 : return null;
         }
     }
@@ -3244,7 +3252,7 @@ namespace TinyWars.Utility.Lang {
             return null;
         }
     }
-    export async function getGameStartDesc(data: ProtoTypes.NetMessage.MsgMcwCommonBroadcastGameStart.IS): Promise<string> {
+    export async function getGameStartDesc(data: ProtoTypes.NetMessage.MsgMpwCommonBroadcastGameStart.IS): Promise<string> {
         const playerList: string[] = [];
         let playerIndex = 1;
         for (const playerInfo of data.playerInfoList) {

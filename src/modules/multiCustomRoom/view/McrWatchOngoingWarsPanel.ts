@@ -55,9 +55,9 @@ namespace TinyWars.MultiCustomRoom {
         protected _onFirstOpened(): void {
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgMcwWatchGetOngoingWarInfos,    callback: this._onNotifySMcwWatchGetOngoingWarInfos },
-                { type: Notify.Type.MsgMcwWatchContinueWar,           callback: this._onNotifySMcwWatchContinueWar },
-                { type: Notify.Type.MsgMcwWatchContinueWarFailed,     callback: this._onNotifySMcwWatchContinueWarFailed },
+                { type: Notify.Type.MsgMpwWatchGetOngoingWarInfos,    callback: this._onNotifySMcwWatchGetOngoingWarInfos },
+                { type: Notify.Type.MsgMpwWatchContinueWar,           callback: this._onNotifySMcwWatchContinueWar },
+                { type: Notify.Type.MsgMpwWatchContinueWarFailed,     callback: this._onNotifySMcwWatchContinueWarFailed },
             ];
             this._uiListeners = [
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
@@ -127,7 +127,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onNotifySMcwWatchContinueWar(e: egret.Event): void {
-            FlowManager.gotoMultiCustomWar((e.data as ProtoTypes.NetMessage.MsgMcwWatchContinueWar.IS).war);
+            FlowManager.gotoMultiCustomWar((e.data as ProtoTypes.NetMessage.MsgMpwWatchContinueWar.IS).war);
         }
 
         private _onNotifySMcwWatchContinueWarFailed(e: egret.Event): void {
@@ -143,7 +143,7 @@ namespace TinyWars.MultiCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
-        private _createDataForListWar(infos: ProtoTypes.MultiCustomWar.IMcwWatchInfo[]): DataForWarRenderer[] {
+        private _createDataForListWar(infos: ProtoTypes.MultiPlayerWar.IMpwWatchInfo[]): DataForWarRenderer[] {
             const data: DataForWarRenderer[] = [];
             if (infos) {
                 for (let i = 0; i < infos.length; ++i) {
@@ -158,7 +158,7 @@ namespace TinyWars.MultiCustomRoom {
             return data;
         }
 
-        private _createDataForListPlayer(warInfo: ProtoTypes.MultiCustomWar.IMcwWarInfo, mapPlayersCount: number): DataForPlayerRenderer[] {
+        private _createDataForListPlayer(warInfo: ProtoTypes.MultiPlayerWar.IMpwWarInfo, mapPlayersCount: number): DataForPlayerRenderer[] {
             const configVersion     = warInfo.settingsForCommon.configVersion;
             const playerInfoList    = warInfo.playerInfoList;
             const dataList          : DataForPlayerRenderer[] = [];
@@ -214,7 +214,7 @@ namespace TinyWars.MultiCustomRoom {
     }
 
     type DataForWarRenderer = {
-        info    : ProtoTypes.MultiCustomWar.IMcwWatchInfo;
+        info    : ProtoTypes.MultiPlayerWar.IMpwWatchInfo;
         index   : number;
         panel   : McrWatchOngoingWarsPanel;
     }

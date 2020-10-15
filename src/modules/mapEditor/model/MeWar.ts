@@ -1,5 +1,6 @@
 
 namespace TinyWars.MapEditor {
+    import Types            = Utility.Types;
     import Logger           = Utility.Logger;
     import ProtoTypes       = Utility.ProtoTypes;
     import BwSettingsHelper = BaseWar.BwSettingsHelper;
@@ -203,6 +204,10 @@ namespace TinyWars.MapEditor {
                 unitDataList    : unitMap.serialize().units,
                 warRuleList     : this.getWarRuleList(),
             };
+        }
+
+        public getWarType(): Types.WarType {
+            return Types.WarType.Scw;
         }
 
         protected _getViewClass(): new () => MeWarView {

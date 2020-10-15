@@ -6,53 +6,53 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
     import Lang                 = Utility.Lang;
     import FloatText            = Utility.FloatText;
     import CommonAlertPanel     = Common.CommonAlertPanel;
-    import IMcwWarInfo          = ProtoTypes.MultiCustomWar.IMcwWarInfo;
-    import IMcwWatchInfo        = ProtoTypes.MultiCustomWar.IMcwWatchInfo;
+    import IMpwWarInfo          = ProtoTypes.MultiPlayerWar.IMpwWarInfo;
+    import IMpwWatchInfo        = ProtoTypes.MultiPlayerWar.IMpwWatchInfo;
     import ActionContainer      = ProtoTypes.WarAction.IActionContainer;
 
-    let _ongoingWarInfoList     : IMcwWarInfo[] = [];
-    let _unwatchedWarInfos      : IMcwWatchInfo[];
-    let _watchOngoingWarInfos   : IMcwWatchInfo[];
-    let _watchRequestedWarInfos : IMcwWatchInfo[];
-    let _watchedWarInfos        : IMcwWatchInfo[];
+    let _ongoingWarInfoList     : IMpwWarInfo[] = [];
+    let _unwatchedWarInfos      : IMpwWatchInfo[];
+    let _watchOngoingWarInfos   : IMpwWatchInfo[];
+    let _watchRequestedWarInfos : IMpwWatchInfo[];
+    let _watchedWarInfos        : IMpwWatchInfo[];
     let _war                    : MpwWar;
     let _cachedActions          : ActionContainer[] = [];
 
     export function init(): void {
     }
 
-    export function setOngoingWarInfoList(infoList: IMcwWarInfo[]): void {
+    export function setOngoingWarInfoList(infoList: IMpwWarInfo[]): void {
         _ongoingWarInfoList = infoList;
     }
-    export function getOngoingWarInfoList(): IMcwWarInfo[] | undefined {
+    export function getOngoingWarInfoList(): IMpwWarInfo[] | undefined {
         return _ongoingWarInfoList;
     }
 
-    export function setUnwatchedWarInfos(infos: IMcwWatchInfo[]): void {
+    export function setUnwatchedWarInfos(infos: IMpwWatchInfo[]): void {
         _unwatchedWarInfos = infos;
     }
-    export function getUnwatchedWarInfos(): IMcwWatchInfo[] | null {
+    export function getUnwatchedWarInfos(): IMpwWatchInfo[] | null {
         return _unwatchedWarInfos;
     }
 
-    export function setWatchOngoingWarInfos(infos: IMcwWatchInfo[]): void {
+    export function setWatchOngoingWarInfos(infos: IMpwWatchInfo[]): void {
         _watchOngoingWarInfos = infos;
     }
-    export function getWatchOngoingWarInfos(): IMcwWatchInfo[] | null {
+    export function getWatchOngoingWarInfos(): IMpwWatchInfo[] | null {
         return _watchOngoingWarInfos;
     }
 
-    export function setWatchRequestedWarInfos(infos: IMcwWatchInfo[]): void {
+    export function setWatchRequestedWarInfos(infos: IMpwWatchInfo[]): void {
         _watchRequestedWarInfos = infos;
     }
-    export function getWatchRequestedWarInfos(): IMcwWatchInfo[] | null {
+    export function getWatchRequestedWarInfos(): IMpwWatchInfo[] | null {
         return _watchRequestedWarInfos;
     }
 
-    export function setWatchedWarInfos(infos: IMcwWatchInfo[]): void {
+    export function setWatchedWarInfos(infos: IMpwWatchInfo[]): void {
         _watchedWarInfos = infos;
     }
-    export function getWatchedWarInfos(): IMcwWatchInfo[] | null {
+    export function getWatchedWarInfos(): IMpwWatchInfo[] | null {
         return _watchedWarInfos;
     }
 
@@ -92,7 +92,7 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Handlers for war actions that McwProxy receives.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export async function updateOnPlayerSyncWar(data: ProtoTypes.NetMessage.MsgMcwCommonSyncWar.IS): Promise<void> {
+    export async function updateOnPlayerSyncWar(data: ProtoTypes.NetMessage.MsgMpwCommonSyncWar.IS): Promise<void> {
         const war = getWar();
         if ((war) && (war.getWarId() === data.warId)) {
             const status = data.status as Types.SyncWarStatus;

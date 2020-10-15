@@ -541,7 +541,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         }
     }
 
-    function getRevisedDropDestinations(war: BwWar, action: ProtoTypes.NetMessage.MsgMcwActionUnitDropUnit.IC, revisedPath: Types.MovePath): DropDestination[] {
+    function getRevisedDropDestinations(war: BwWar, action: ProtoTypes.NetMessage.MsgMpwActionUnitDropUnit.IC, revisedPath: Types.MovePath): DropDestination[] {
         const destinations: DropDestination[] = [];
         if (!revisedPath.isBlocked) {
             const unitMap       = war.getUnitMap();

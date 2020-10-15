@@ -8,11 +8,16 @@ namespace TinyWars.ReplayWar {
     import Logger               = Utility.Logger;
     import ProtoTypes           = Utility.ProtoTypes;
     import BwHelpers            = BaseWar.BwHelpers;
+    import WarType              = Types.WarType;
     import IActionContainer     = ProtoTypes.WarAction.IActionContainer;
     import ISerialWar           = ProtoTypes.WarSerialization.ISerialWar;
 
     export class RwWar extends BaseWar.BwWar {
         private _executedActions                : IActionContainer[];
+        private _settingsForMcw                 : ProtoTypes.WarSettings.ISettingsForMcw;
+        private _settingsForScw                 : ProtoTypes.WarSettings.ISettingsForScw;
+        private _settingsForRmw                 : ProtoTypes.WarSettings.ISettingsForRmw;
+        private _settingsForWrw                 : ProtoTypes.WarSettings.ISettingsForWrw;
 
         private _isAutoReplay                   = false;
         private _checkPointIdsForNextActionId   = new Map<number, number>();
@@ -84,6 +89,10 @@ namespace TinyWars.ReplayWar {
                 return undefined;
             }
 
+            this._settingsForMcw = data.settingsForMcw;
+            this._settingsForScw = data.settingsForScw;
+            this._settingsForWrw = data.settingsForMcw;
+            this._settingsForRmw = data.settingsForRmw;
             this._setAllExecutedActions(executedActions);
             this._setPlayerManager(playerManager);
             this._setTurnManager(turnManager);
@@ -254,6 +263,20 @@ namespace TinyWars.ReplayWar {
                 turnManager                 : serialTurnManager,
                 field                       : serialField,
             };
+        }
+
+        public getWarType(): Types.WarType {
+            const hasFog = this.getSettingsHasFogByDefault();
+            if (this._settingsForMcw) {
+
+            } else if (this._settingsForRmw) {
+
+            } else if (this._settingsForScw) {
+
+            } else if (this._settingsForWrw) {
+
+            } else {
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
