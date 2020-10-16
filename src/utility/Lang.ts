@@ -650,8 +650,8 @@ namespace TinyWars.Utility.Lang {
             `Are you sure to use a custom rule?`,
         ],
         [Type.A0130]: [
-            `您需要保留最少一个可选CO（可以是无CO）`,
-            `There must be at least one available CO.`,
+            `您必须保留"无CO"选项。`,
+            `The 'No CO' option must be available.`,
         ],
         [Type.A0131]: [
             `请尽量同时提供中英文名，以英文逗号分隔`,

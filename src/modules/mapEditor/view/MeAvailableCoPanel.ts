@@ -8,6 +8,7 @@ namespace TinyWars.MapEditor {
     import ProtoTypes       = Utility.ProtoTypes;
     import BwSettingsHelper = BaseWar.BwSettingsHelper;
     import WarRule          = ProtoTypes.WarRule;
+    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
     type OpenParam = {
         playerRule      : WarRule.IDataForPlayerRule;
@@ -100,7 +101,7 @@ namespace TinyWars.MapEditor {
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
             const availableCoIdSet = this._availableCoIdSet;
-            if (!availableCoIdSet.size) {
+            if ((!availableCoIdSet.size) || (!availableCoIdSet.has(CommonConstants.CoEmptyId))) {
                 Common.CommonAlertPanel.show({
                     title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getText(Lang.Type.A0130),

@@ -4,6 +4,7 @@ namespace TinyWars.User.UserProxy {
     import NetMessageCodes  = Network.Codes;
     import ProtoTypes       = Utility.ProtoTypes;
     import Notify           = Utility.Notify;
+    import Helpers          = Utility.Helpers;
     import NotifyType       = Notify.Type;
     import NetMessage       = ProtoTypes.NetMessage;
 
@@ -19,11 +20,11 @@ namespace TinyWars.User.UserProxy {
         ]);
     }
 
-    export function reqLogin(account: string, password: string, isAutoRelogin: boolean): void {
+    export function reqLogin(account: string, rawPassword: string, isAutoRelogin: boolean): void {
         NetManager.send({
             MsgUserLogin: { c: {
                 account,
-                password,
+                password    : Helpers.Sha1Generator.b64_sha1(rawPassword),
                 isAutoRelogin,
             } },
         });
@@ -36,11 +37,11 @@ namespace TinyWars.User.UserProxy {
         }
     }
 
-    export function reqUserRegister(account: string, password: string, nickname: string): void {
+    export function reqUserRegister(account: string, rawPassword: string, nickname: string): void {
         NetManager.send({
             MsgUserRegister: { c: {
                 account,
-                password,
+                password: Helpers.Sha1Generator.b64_sha1(rawPassword),
                 nickname,
             } },
         });

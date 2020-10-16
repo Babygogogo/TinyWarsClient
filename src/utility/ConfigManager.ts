@@ -72,6 +72,8 @@ namespace TinyWars.Utility.ConfigManager {
         UnitAndTileMaxSkinId                    : 4,
         UnitAndTileNeutralSkinId                : 0,
 
+        CoEmptyId                               : 0,
+
         WarNeutralPlayerIndex                   : 0,
         WarFirstPlayerIndex                     : 1,
         WarMaxPlayerIndex                       : 4,

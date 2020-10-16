@@ -551,7 +551,7 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
                 (luckUpperLimit             < CommonConstants.WarRuleLuckMinLimit)                      ||
                 (luckUpperLimit             < luckLowerLimit)                                           ||
                 (availableCoIdList          == null)                                                    ||
-                (availableCoIdList.length   <= 0)                                                       ||
+                (availableCoIdList.every(v => v !== CommonConstants.CoEmptyId))                         ||
                 (availableCoIdList.some(coId => ConfigManager.getCoBasicCfg(configVersion, coId) == null))
             ) {
                 return false;

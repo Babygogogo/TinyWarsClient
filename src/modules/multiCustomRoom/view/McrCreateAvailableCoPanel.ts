@@ -6,6 +6,7 @@ namespace TinyWars.MultiCustomRoom {
     import Notify           = Utility.Notify;
     import ConfigManager    = Utility.ConfigManager;
     import ConfirmPanel     = Common.CommonConfirmPanel;
+    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
     export class McrCreateAvailableCoPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud2;
@@ -88,7 +89,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
             const availableCoIdSet = this._availableCoIdSet;
-            if (!availableCoIdSet.size) {
+            if ((!availableCoIdSet.size) || (!availableCoIdSet.has(CommonConstants.CoEmptyId))) {
                 Common.CommonAlertPanel.show({
                     title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getText(Lang.Type.A0130),
