@@ -166,8 +166,11 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _onTouchedBtnModifyPlayerIndex(e: egret.TouchEvent): Promise<void> {
-            await McrModel.Create.tickSelfPlayerIndex();
+            const creator = McrModel.Create;
+            await creator.tickSelfPlayerIndex();
+            creator.setSelfCoId(BwSettingsHelper.getRandomCoId(creator.getData().settingsForCommon, creator.getSelfPlayerIndex()));
             this._updateLabelPlayerIndex();
+            this._updateLabelCoName();
         }
 
         private _onTouchedBtnHelpPlayerIndex(e: egret.TouchEvent): void {
@@ -193,7 +196,8 @@ namespace TinyWars.MultiCustomRoom {
             const callback = () => {
                 McrModel.Create.setHasFog(!McrModel.Create.getHasFog());
                 this._updateImgHasFog();
-            }
+                this._updateLabelWarRule();
+            };
             if (McrModel.Create.getPresetWarRuleId() == null) {
                 callback();
             } else {
@@ -332,7 +336,10 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _updateLabelWarRule(): Promise<void> {
-            this._labelWarRule.text = Lang.getWarRuleNameInLanguage(McrModel.Create.getData().settingsForCommon.warRule);
+            const label             = this._labelWarRule;
+            const settingsForCommon = McrModel.Create.getData().settingsForCommon;
+            label.text              = Lang.getWarRuleNameInLanguage(settingsForCommon.warRule);
+            label.textColor         = settingsForCommon.presetWarRuleId == null ? 0xFF0000 : 0x00FF00;
         }
 
         private _updateLabelPlayerIndex(): void {

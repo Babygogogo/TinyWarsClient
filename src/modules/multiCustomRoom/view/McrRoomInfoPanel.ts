@@ -53,10 +53,11 @@ namespace TinyWars.MultiCustomRoom {
             ];
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgMcrGetRoomInfo,    callback: this._onNotifySMcrGetRoomInfo },
-                { type: Notify.Type.MsgMcrExitRoom,       callback: this._onNotifySMcrExitRoom },
-                { type: Notify.Type.MsgMcrDeleteRoom,    callback: this._onNotifySMcrDestroyRoom },
-                { type: Notify.Type.MsgMcrStartWar,       callback: this._onNotifySMcrStartWar },
+                { type: Notify.Type.MsgMcrGetRoomInfo,  callback: this._onMsgMcrGetRoomInfo },
+                { type: Notify.Type.MsgMcrExitRoom,     callback: this._onMsgMcrExitRoom },
+                { type: Notify.Type.MsgMcrDeleteRoom,   callback: this._onMsgMcrDeleteRoom },
+                { type: Notify.Type.MsgMcrStartWar,     callback: this._onMsgMcrStartWar },
+                { type: Notify.Type.MsgMcrDeletePlayer, callback: this._onMsgMcrDeletePlayer },
             ];
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
 
@@ -99,7 +100,7 @@ namespace TinyWars.MultiCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnBack(e: egret.TouchEvent): void {
             this.close();
-            McrExitMapListPanel.show();
+            McrMyRoomListPanel.show();
         }
 
         private _onTouchedBtnStartGame(e: egret.TouchEvent): void {
@@ -134,44 +135,49 @@ namespace TinyWars.MultiCustomRoom {
             this._updateComponentsForLanguage();
         }
 
-        private async _onNotifySMcrGetRoomInfo(e: egret.Event): Promise<void> {
+        private async _onMsgMcrGetRoomInfo(e: egret.Event): Promise<void> {
             const data      = e.data as NetMessage.MsgMcrGetRoomInfo.IS;
             const roomId    = data.roomId;
             if (roomId === this._roomId) {
                 const selfUserId = User.UserModel.getSelfUserId();
                 if ((await McrModel.getRoomInfo(roomId)).playerDataList.some(v => v.userId === selfUserId)) {
                     this._updateComponentsForRoomInfo();
-                } else {
-                    FloatText.show(Lang.getText(Lang.Type.A0127));
-                    this.close();
-                    McrExitMapListPanel.show();
                 }
             }
         }
 
-        private _onNotifySMcrExitRoom(e: egret.Event): void {
+        private _onMsgMcrExitRoom(e: egret.Event): void {
             const data = e.data as NetMessage.MsgMcrExitRoom.IS;
             if (data.roomId === this._roomId) {
                 FloatText.show(Lang.getText(Lang.Type.A0016));
                 this.close();
-                McrExitMapListPanel.show();
+                McrMyRoomListPanel.show();
             }
         }
 
-        private _onNotifySMcrDestroyRoom(e: egret.Event): void {
+        private _onMsgMcrDeleteRoom(e: egret.Event): void {
             const data = e.data as NetMessage.MsgMcrDeleteRoom.IS;
             if (data.roomId === this._roomId) {
                 FloatText.show(Lang.getText(Lang.Type.A0019));
                 this.close();
-                McrExitMapListPanel.show();
+                McrMyRoomListPanel.show();
             }
         }
 
-        private _onNotifySMcrStartWar(e: egret.Event): void {
+        private _onMsgMcrStartWar(e: egret.Event): void {
             const data = e.data as NetMessage.MsgMcrStartWar.IS;
             if (data.roomId === this._roomId) {
                 this.close();
-                McrExitMapListPanel.show();
+                McrMyRoomListPanel.show();
+            }
+        }
+
+        private _onMsgMcrDeletePlayer(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgMcrDeletePlayer.IS;
+            if ((data.roomId === this._roomId) && (data.targetUserId === User.UserModel.getSelfUserId())) {
+                FloatText.show(Lang.getText(Lang.Type.A0127));
+                this.close();
+                McrMyRoomListPanel.show();
             }
         }
 

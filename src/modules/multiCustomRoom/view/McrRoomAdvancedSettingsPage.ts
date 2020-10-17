@@ -78,10 +78,6 @@ namespace TinyWars.MultiCustomRoom {
                 if (newRoomInfo.playerDataList.some(v => v.userId === selfUserId)) {
                     this._roomInfo = newRoomInfo;
                     this._updateListPlayer();
-                } else {
-                    FloatText.show(Lang.getText(Lang.Type.A0127));
-                    this.close();
-                    McrExitMapListPanel.show();
                 }
             }
         }

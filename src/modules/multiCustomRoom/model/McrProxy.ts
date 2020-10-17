@@ -88,7 +88,7 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
         }
     }
 
-    export function reqMcrRemovePlayer(roomId: number, playerIndex: number): void {
+    export function reqMcrDeletePlayer(roomId: number, playerIndex: number): void {
         NetManager.send({
             MsgMcrDeletePlayer: { c: {
                 roomId,
@@ -99,6 +99,7 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
     function _onMsgMcrDeletePlayer(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMcrDeletePlayer.IS;
         if (!data.errorCode) {
+            McrModel.updateOnDeletePlayer(data);
             Notify.dispatch(Notify.Type.MsgMcrDeletePlayer, data);
         }
     }

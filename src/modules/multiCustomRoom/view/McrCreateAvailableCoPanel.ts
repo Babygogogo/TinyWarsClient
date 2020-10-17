@@ -89,7 +89,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
             const availableCoIdSet = this._availableCoIdSet;
-            if ((!availableCoIdSet.size) || (!availableCoIdSet.has(CommonConstants.CoEmptyId))) {
+            if (!availableCoIdSet.has(CommonConstants.CoEmptyId)) {
                 Common.CommonAlertPanel.show({
                     title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getText(Lang.Type.A0130),
@@ -99,6 +99,7 @@ namespace TinyWars.MultiCustomRoom {
                 const callback      = () => {
                     McrModel.Create.setAvailableCoIdList(playerIndex, availableCoIdSet);
                     Notify.dispatch(Notify.Type.McrCreateAvailableCoIdListChanged);
+                    this.close();
                 };
                 if ((playerIndex !== McrModel.Create.getSelfPlayerIndex()) ||
                     (availableCoIdSet.has(McrModel.Create.getSelfCoId()))
@@ -189,7 +190,9 @@ namespace TinyWars.MultiCustomRoom {
         // View functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._labelAvailableCoTitle.text = `${Lang.getText(Lang.Type.B0238)} (P${this._playerIndex})`;
+            this._btnCancel.label               = Lang.getText(Lang.Type.B0154);
+            this._btnConfirm.label              = Lang.getText(Lang.Type.B0026);
+            this._labelAvailableCoTitle.text    = `${Lang.getText(Lang.Type.B0238)} (P${this._playerIndex})`;
         }
 
         private _initGroupCoTiers(): void {

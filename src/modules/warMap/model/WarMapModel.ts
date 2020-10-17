@@ -141,7 +141,7 @@ namespace TinyWars.WarMap {
 
             const complexInfo   = mapExtraData.mapComplexInfo;
             let totalTimes      = 0;
-            for (const info of complexInfo ? complexInfo.warStatisticsList : []) {
+            for (const info of complexInfo ? complexInfo.warStatisticsList || [] : []) {
                 if ((info.warType === WarType.McwFog) ||
                     (info.warType === WarType.McwStd) ||
                     (info.warType === WarType.RmwFog) ||

@@ -114,7 +114,7 @@
                 </e:layout>
             </e:Group>
             <e:Group y="246" x="0">
-                <e:Group height="28" y="0" x="0">
+                <e:Group id="_groupPlayerIndex" height="28" y="0" x="0">
                     <GameUi:UiButton id="_btnModifyPlayerIndex" label="行动次序" y="0" right="0"
                                      skinName="Skins.Component.Button.ButtonSelfAdaption001" width="160" />
                     <GameUi:UiLabel id="_labelPlayerIndex" text="1" size="16" textColor="0xFFFFFF" x="78" y="6" />
@@ -131,7 +131,7 @@
                         <e:HorizontalLayout gap="10" verticalAlign="middle" />
                     </e:layout>
                 </e:Group>
-                <e:Group height="28" y="0" x="0">
+                <e:Group id="_groupCo" height="28" y="0" x="0">
                     <GameUi:UiButton id="_btnChangeCo" label="CO" y="0" right="0"
                                      skinName="Skins.Component.Button.ButtonSelfAdaption001" width="160" />
                     <GameUi:UiLabel id="_labelCoName" text="(No CO)" size="16" textColor="0xFFFFFF" x="180"
@@ -140,7 +140,7 @@
                         <e:HorizontalLayout gap="10" verticalAlign="middle" />
                     </e:layout>
                 </e:Group>
-                <e:Group height="28" y="10" x="10">
+                <e:Group id="_groupSkinId" height="28" y="10" x="10">
                     <GameUi:UiButton id="_btnModifySkinId" label="颜色" y="0" right="0"
                                      skinName="Skins.Component.Button.ButtonSelfAdaption001" width="160" />
                     <GameUi:UiLabel id="_labelSkinId" text="红" size="16" textColor="0xFFFFFF" x="180" verticalCenter="0" />
@@ -157,7 +157,7 @@
                         <e:HorizontalLayout gap="10" verticalAlign="middle" />
                     </e:layout>
                 </e:Group>
-                <e:Group height="28" y="10" x="10">
+                <e:Group id="_groupReady" height="28" y="10" x="10">
                     <GameUi:UiButton id="_btnModifyReady" label="已准备就绪" y="0" right="0"
                                      skinName="Skins.Component.Button.ButtonSelfAdaption001" width="160" />
                     <GameUi:UiLabel id="_labelReady" text="是" size="16" textColor="0xFFFFFF" x="180" verticalCenter="0" />
@@ -173,18 +173,24 @@
                 <e:VerticalLayout gap="10" />
             </e:layout>
         </e:Group>
-        <e:Group y="180" touchThrough="true" touchEnabled="false" touchChildren="false" x="350">
+        <e:Group y="180" x="350">
             <GameUi:UiLabel id="_labelPlayersTitle" text="已参战玩家：" size="20" scaleX="1" scaleY="1" />
             <GameUi:UiScrollList id="_listPlayer" left="0" right="0" top="25" bottom="0">
                 <e:List>
                     <e:itemRendererSkinName>
-                        <e:Skin height="22" currentState="up" states="up,down" width="400">
-                            <GameUi:UiLabel id="_labelIndex" text="红方" size="16" x="4" bottom="0" maxTextWidth="32" />
-                            <GameUi:UiLabel id="_labelTeam" text="A队" size="16" x="45" bottom="0" maxTextWidth="30" />
-                            <GameUi:UiLabel id="_labelNickname" text="玩家名称居然有十个字" x="80" size="16"
-                                            textColor.down="0x00ff00" bottom="0" maxTextWidth="210" />
-                            <GameUi:UiLabel id="_labelCoName" text="CO名称" x="300" size="16" bottom="0"
-                                            maxTextWidth="100" />
+                        <e:Skin width="390">
+                            <GameUi:UiLabel id="_labelIndex" text="红方" size="16" x="4" maxTextWidth="60"
+                                            verticalCenter="0" />
+                            <e:Group x="70" verticalCenter="0">
+                                <GameUi:UiLabel id="_labelNickname" text="玩家名称居然有十个字" x="-9" size="16"
+                                                verticalCenter="0" y="89" scaleX="1" scaleY="1" />
+                                <GameUi:UiButton id="_btnDelete" label="踢出"
+                                                 skinName="Skins.Component.Button.ButtonSelfAdaption001" right="0"
+                                                 x="271" y="-7" scaleX="1" scaleY="1" />
+                                <e:layout>
+                                    <e:HorizontalLayout verticalAlign="middle" />
+                                </e:layout>
+                            </e:Group>
                         </e:Skin>
                     </e:itemRendererSkinName>
                     <e:layout>

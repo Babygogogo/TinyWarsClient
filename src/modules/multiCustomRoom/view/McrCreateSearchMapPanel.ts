@@ -2,9 +2,7 @@
 namespace TinyWars.MultiCustomRoom {
     import Types      = Utility.Types;
     import Lang       = Utility.Lang;
-    import FloatText  = Utility.FloatText;
     import Notify     = Utility.Notify;
-    import ProtoTypes = Utility.ProtoTypes;
 
     export class McrCreateSearchMapPanel extends GameUi.UiPanel {
         protected _IS_EXCLUSIVE = false;

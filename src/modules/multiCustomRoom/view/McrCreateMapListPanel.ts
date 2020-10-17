@@ -157,12 +157,12 @@ namespace TinyWars.MultiCustomRoom {
             (mapDesigner)   && (mapDesigner = mapDesigner.toLowerCase());
 
             for (const [mapId, extraData] of WarMapModel.getExtraDataDict()) {
-                const rawData   = await WarMapModel.getRawData(mapId);
-                const mapName   = await WarMapModel.getMapNameInCurrentLanguage(mapId);
-                const rating    = await WarMapModel.getAverageRating(mapId);
+                const rawData       = await WarMapModel.getRawData(mapId);
+                const realMapName   = await WarMapModel.getMapNameInCurrentLanguage(mapId);
+                const rating        = await WarMapModel.getAverageRating(mapId);
                 if ((!extraData.isEnabled)                                                                              ||
                     (!extraData.mapComplexInfo.availability.canMcw)                                                     ||
-                    ((mapName) && (mapName.toLowerCase().indexOf(mapName) < 0))                                         ||
+                    ((mapName) && (realMapName.toLowerCase().indexOf(mapName) < 0))                                     ||
                     ((mapDesigner) && (rawData.designerName.toLowerCase().indexOf(mapDesigner) < 0))                    ||
                     ((playersCount) && (rawData.playersCount !== playersCount))                                         ||
                     ((playedTimes != null) && (await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId) < playedTimes))  ||
@@ -172,7 +172,7 @@ namespace TinyWars.MultiCustomRoom {
                 } else {
                     data.push({
                         mapId,
-                        mapName : mapName,
+                        mapName : realMapName,
                         panel   : this,
                     });
                 }

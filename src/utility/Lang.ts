@@ -2285,6 +2285,14 @@ namespace TinyWars.Utility.Lang {
             `单人自由对战`,
             `SP Free Games`,
         ],
+        [Type.B0410]: [
+            `我的房间`,
+            `My Rooms`,
+        ],
+        [Type.B0411]: [
+            `踢出`,
+            `Kick Off`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -2647,6 +2655,10 @@ namespace TinyWars.Utility.Lang {
         [Type.F0028]: [
             `玩家[%s]因超时而告负！`,
             `Player [%s] has ran out of time!`,
+        ],
+        [Type.F0029]: [
+            `您确定要踢掉玩家"%s"吗？`,
+            `Are you sure to kick off the player '%s'?`,
         ],
     };
 

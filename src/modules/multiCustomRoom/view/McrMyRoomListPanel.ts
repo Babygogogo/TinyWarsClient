@@ -8,11 +8,11 @@ namespace TinyWars.MultiCustomRoom {
     import BwHelpers    = BaseWar.BwHelpers;
     import WarMapModel  = WarMap.WarMapModel;
 
-    export class McrExitMapListPanel extends GameUi.UiPanel {
+    export class McrMyRoomListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: McrExitMapListPanel;
+        private static _instance: McrMyRoomListPanel;
 
         private _labelMenuTitle : GameUi.UiLabel;
         private _listWar        : GameUi.UiScrollList;
@@ -33,14 +33,14 @@ namespace TinyWars.MultiCustomRoom {
         private _selectedWarIndex   : number;
 
         public static show(): void {
-            if (!McrExitMapListPanel._instance) {
-                McrExitMapListPanel._instance = new McrExitMapListPanel();
+            if (!McrMyRoomListPanel._instance) {
+                McrMyRoomListPanel._instance = new McrMyRoomListPanel();
             }
-            McrExitMapListPanel._instance.open();
+            McrMyRoomListPanel._instance.open();
         }
         public static hide(): void {
-            if (McrExitMapListPanel._instance) {
-                McrExitMapListPanel._instance.close();
+            if (McrMyRoomListPanel._instance) {
+                McrMyRoomListPanel._instance.close();
             }
         }
 
@@ -48,14 +48,15 @@ namespace TinyWars.MultiCustomRoom {
             super();
 
             this._setAutoAdjustHeightEnabled();
-            this.skinName = "resource/skins/multiCustomRoom/McrExitMapListPanel.exml";
+            this.skinName = "resource/skins/multiCustomRoom/McrMyRoomListPanel.exml";
         }
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgMcrGetJoinedRoomInfoList,  callback: this._onNotifySMcrGetJoinedWaitingInfos },
-                { type: Notify.Type.MsgMcrExitRoom,                callback: this._onNotifySMcrExitWar },
+                { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.MsgMcrGetJoinedRoomInfoList,    callback: this._onMsgMcrGetJoinedRoomInfoList },
+                { type: Notify.Type.MsgMcrExitRoom,                 callback: this._onMsgMcrExitRoom },
+                { type: Notify.Type.MsgMcrDeletePlayer,             callback: this._onMsgMcrDeletePlayer },
             ];
             this._uiListeners = [
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
@@ -110,26 +111,23 @@ namespace TinyWars.MultiCustomRoom {
             this._updateComponentsForLanguage();
         }
 
-        private async _onNotifySMcrGetJoinedWaitingInfos(e: egret.Event): Promise<void> {
-            const newData        = this._createDataForListWar(await McrModel.getJoinedRoomInfoList());
-            this._dataForListWar = newData;
-
-            if (newData.length > 0) {
-                this._labelNoWar.visible = false;
-                this._listWar.bindData(newData);
-            } else {
-                this._labelNoWar.visible = true;
-                this._listWar.clear();
-            }
-            this.setSelectedIndex(0);
+        private _onMsgMcrGetJoinedRoomInfoList(e: egret.Event): void {
+            this._updateComponentsForRoomList();
         }
 
-        private _onNotifySMcrExitWar(e: egret.Event): void {
+        private _onMsgMcrExitRoom(e: egret.Event): void {
             FloatText.show(Lang.getText(Lang.Type.A0016));
         }
 
+        private _onMsgMcrDeletePlayer(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgMcrDeletePlayer.IS;
+            if (data.targetUserId === User.UserModel.getSelfUserId()) {
+                this._updateComponentsForRoomList();
+            }
+        }
+
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
-            McrExitMapListPanel.hide();
+            McrMyRoomListPanel.hide();
             McrMainMenuPanel.show();
         }
 
@@ -201,17 +199,31 @@ namespace TinyWars.MultiCustomRoom {
 
         private _updateComponentsForLanguage(): void {
             this._btnBack.label             = Lang.getText(Lang.Type.B0146);
-            this._labelMenuTitle.text       = Lang.getText(Lang.Type.B0022);
+            this._labelMenuTitle.text       = Lang.getText(Lang.Type.B0410);
             this._labelNoWar.text           = Lang.getText(Lang.Type.B0210);
             this._labelCommentTitle.text    = `${Lang.getText(Lang.Type.B0187)}:`;
             this._labelPlayersTitle.text    = `${Lang.getText(Lang.Type.B0232)}:`;
+        }
+
+        private async _updateComponentsForRoomList(): Promise<void> {
+            const newData        = this._createDataForListWar(await McrModel.getJoinedRoomInfoList());
+            this._dataForListWar = newData;
+
+            if (newData.length > 0) {
+                this._labelNoWar.visible = false;
+                this._listWar.bindData(newData);
+            } else {
+                this._labelNoWar.visible = true;
+                this._listWar.clear();
+            }
+            this.setSelectedIndex(0);
         }
     }
 
     type DataForWarRenderer = {
         roomInfo: ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
         index   : number;
-        panel   : McrExitMapListPanel;
+        panel   : McrMyRoomListPanel;
     }
 
     class WarRenderer extends eui.ItemRenderer {

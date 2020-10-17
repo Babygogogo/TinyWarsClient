@@ -128,6 +128,14 @@ namespace TinyWars.MultiCustomRoom {
             return infoList;
         }
 
+        export function updateOnDeletePlayer(data: ProtoTypes.NetMessage.MsgMcrDeletePlayer.IS): void {
+            if (data.targetUserId === User.UserModel.getSelfUserId()) {
+                const roomId = data.roomId;
+                _unjoinedRoomIdSet.add(roomId);
+                _joinedRoomIdSet.delete(roomId);
+            }
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for creating rooms.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -138,7 +146,7 @@ namespace TinyWars.MultiCustomRoom {
 
                 selfCoId                : null,
                 selfPlayerIndex         : null,
-                selfUnitAndTileSkinId   : null,
+                selfUnitAndTileSkinId   : CommonConstants.UnitAndTileMinSkinId,
             };
 
             export function getMapRawData(): Promise<ProtoTypes.Map.IMapRawData> {
@@ -151,6 +159,7 @@ namespace TinyWars.MultiCustomRoom {
                 setWarName("");
                 setWarPassword("");
                 setWarComment("");
+                setBootTimerParams([BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue]);
                 setSelfPlayerIndex(CommonConstants.WarFirstPlayerIndex);
                 await resetDataByPresetWarRuleId(CommonConstants.WarRuleFirstId);
             }

@@ -156,11 +156,6 @@ namespace TinyWars.MultiCustomRoom {
                     ++index;
                 }
             }
-            data.push({
-                coBasicCfg  : null,
-                index,
-                panel       : this,
-            });
             return data;
         }
 

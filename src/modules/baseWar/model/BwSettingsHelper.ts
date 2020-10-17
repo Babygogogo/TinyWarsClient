@@ -378,11 +378,16 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
     }
 
     export function getRandomCoId(settingsForCommon: ISettingsForCommon, playerIndex: number): number {
-        const configVersion = settingsForCommon.configVersion;
-        return Helpers.pickRandomElement(getPlayerRule(settingsForCommon.warRule, playerIndex).availableCoIdList.filter(coId => {
+        const configVersion     = settingsForCommon.configVersion;
+        const availableCoIdList = getPlayerRule(settingsForCommon.warRule, playerIndex).availableCoIdList.filter(coId => {
             const cfg = ConfigManager.getCoBasicCfg(configVersion, coId);
             return (cfg != null) && (cfg.isEnabled);
-        }));
+        });
+        if (availableCoIdList.length <= 1) {
+            return availableCoIdList[0];
+        } else {
+            return Helpers.pickRandomElement(availableCoIdList.filter(v => v !== CommonConstants.CoEmptyId));
+        }
     }
 
     export function createDefaultWarRule(ruleId: number, playersCount: number): IWarRule {

@@ -98,7 +98,7 @@ namespace TinyWars.WarMap.WarMapProxy {
 
     export function reqMmGetReviewingMaps(): void {
         NetManager.send({
-            MsgMmGetReviewingMaps: { s: {} },
+            MsgMmGetReviewingMaps: { c: {} },
         });
     }
     function _onMsgMmGetReviewingMaps(e: egret.Event): void {

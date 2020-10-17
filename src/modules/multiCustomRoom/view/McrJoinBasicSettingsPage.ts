@@ -2,11 +2,10 @@
 namespace TinyWars.MultiCustomRoom {
     import ProtoTypes       = Utility.ProtoTypes;
     import Lang             = Utility.Lang;
-    import Types            = Utility.Types;
+    import ConfigManager    = Utility.ConfigManager;
     import Notify           = Utility.Notify;
     import FloatText        = Utility.FloatText;
     import CommonHelpPanel  = Common.CommonHelpPanel;
-    import BwHelpers        = BaseWar.BwHelpers;
     import BwSettingsHelper = BaseWar.BwSettingsHelper;
     import WarMapModel      = WarMap.WarMapModel;
 
@@ -173,11 +172,11 @@ namespace TinyWars.MultiCustomRoom {
             this._btnModifyWarComment.label     = Lang.getText(Lang.Type.B0187);
             this._btnModifyWarRule.label        = Lang.getText(Lang.Type.B0318);
             this._btnModifyPlayerIndex.label    = Lang.getText(Lang.Type.B0018);
-            this._btnModifySkinId.label         = Lang.getText(Lang.Type.B0019);
+            this._btnModifySkinId.label         = Lang.getText(Lang.Type.B0397);
             this._btnModifyHasFog.label         = Lang.getText(Lang.Type.B0020);
             this._btnModifyTimeLimit.label      = Lang.getText(Lang.Type.B0188);
             this._btnBuildings.label            = Lang.getText(Lang.Type.B0333);
-            this._labelPlayersTitle.text        = `${Lang.getText(Lang.Type.B0232)}:`;
+            this._labelPlayersTitle.text        = `${Lang.getText(Lang.Type.B0395)}:`;
         }
 
         private async _updateLabelWarName(): Promise<void> {
@@ -236,18 +235,12 @@ namespace TinyWars.MultiCustomRoom {
 
         private async _getDataForListPlayer(): Promise<DataForPlayerRenderer[]> {
             const roomInfo          = await McrModel.Join.getRoomInfo();
-            const settingsForCommon = roomInfo.settingsForCommon;
-            const playerDataList    = roomInfo.playerDataList;
-            const playerRules       = settingsForCommon.warRule.ruleForPlayers;
-            const configVersion     = settingsForCommon.configVersion;
-            const playersCount      = (await WarMapModel.getRawData(settingsForCommon.mapId)).playersCount;
+            const playersCount      = BwSettingsHelper.getPlayersCount(roomInfo.settingsForCommon.warRule);
             const dataList          : DataForPlayerRenderer[] = [];
             for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
                 dataList.push({
-                    configVersion,
+                    roomInfo,
                     playerIndex,
-                    teamIndex   : BwHelpers.getTeamIndexByRuleForPlayers(playerRules, playerIndex),
-                    playerData  : playerDataList.find(v => v.playerIndex === playerIndex),
                 });
             }
 
@@ -256,34 +249,34 @@ namespace TinyWars.MultiCustomRoom {
     }
 
     type DataForPlayerRenderer = {
-        configVersion   : string;
+        roomInfo        : ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
         playerIndex     : number;
-        teamIndex       : number;
-        playerData      : ProtoTypes.Structure.IDataForPlayerInRoom;
     }
 
     class PlayerRenderer extends eui.ItemRenderer {
-        private _labelNickname  : GameUi.UiLabel;
         private _labelIndex     : GameUi.UiLabel;
-        private _labelTeam      : GameUi.UiLabel;
-        private _labelCoName    : GameUi.UiLabel;
+        private _labelNickname  : GameUi.UiLabel;
 
         protected dataChanged(): void {
             super.dataChanged();
 
             const data              = this.data as DataForPlayerRenderer;
-            this._labelIndex.text   = Lang.getPlayerForceName(data.playerIndex);
-            this._labelTeam.text    = Lang.getPlayerTeamName(data.teamIndex);
+            const playerIndex       = data.playerIndex;
+            const roomInfo          = data.roomInfo;
+            const labelIndex        = this._labelIndex;
+            const playerData        = roomInfo.playerDataList.find(v => v.playerIndex === playerIndex);
+            labelIndex.text         = `${Lang.getPlayerForceName(playerIndex)} (${Lang.getPlayerTeamName(BwSettingsHelper.getTeamIndex(roomInfo.settingsForCommon.warRule, playerIndex))})`;
+            labelIndex.textColor    = (playerData && playerData.isReady) ? 0x00FF00 : 0xFFFFFF;
 
-            const playerData    = data.playerData;
-            const lbCoName      = this._labelCoName;
-            const lbNickname    = this._labelNickname;
-            if (playerData) {
-                lbCoName.text = Utility.ConfigManager.getCoNameAndTierText(data.configVersion, playerData.coId);
-                User.UserModel.getUserNickname(playerData.userId).then(name => lbNickname.text = name);
-            } else {
-                lbCoName.text   = "----";
+            const lbNickname        = this._labelNickname;
+            lbNickname.textColor    = roomInfo.ownerPlayerIndex === playerIndex ? 0x00FF00 : 0xFFFFFF;
+            if (!playerData) {
                 lbNickname.text = "----";
+            } else {
+                lbNickname.text = "";
+                User.UserModel.getUserNickname(playerData.userId).then(name => {
+                    lbNickname.text = `${name} ${ConfigManager.getCoNameAndTierText(roomInfo.settingsForCommon.configVersion, playerData.coId)}`;
+                });
             }
         }
     }

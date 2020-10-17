@@ -2,7 +2,6 @@
 namespace TinyWars.MultiCustomRoom {
     import ProtoTypes       = Utility.ProtoTypes;
     import Lang             = Utility.Lang;
-    import Types            = Utility.Types;
     import Notify           = Utility.Notify;
     import FloatText        = Utility.FloatText;
     import ConfigManager    = Utility.ConfigManager;
@@ -12,6 +11,7 @@ namespace TinyWars.MultiCustomRoom {
     import WarMapModel      = WarMap.WarMapModel;
     import UserModel        = User.UserModel;
     import NetMessage       = ProtoTypes.NetMessage;
+    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
     export type OpenParamForRoomBasicSettingsPage = {
         roomId  : number;
@@ -42,17 +42,21 @@ namespace TinyWars.MultiCustomRoom {
         private _labelTimeLimit         : TinyWars.GameUi.UiLabel;
         private _btnHelpTimeLimit       : TinyWars.GameUi.UiButton;
 
+        private _groupPlayerIndex       : eui.Group;
         private _btnModifyPlayerIndex   : TinyWars.GameUi.UiButton;
         private _labelPlayerIndex       : TinyWars.GameUi.UiLabel;
         private _btnHelpPlayerIndex     : TinyWars.GameUi.UiButton;
 
+        private _groupCo                : eui.Group;
         private _btnChangeCo            : TinyWars.GameUi.UiButton;
         private _labelCoName            : TinyWars.GameUi.UiLabel;
 
+        private _groupSkinId            : eui.Group;
         private _btnModifySkinId        : TinyWars.GameUi.UiButton;
         private _labelSkinId            : TinyWars.GameUi.UiLabel;
         private _btnHelpSkinId          : TinyWars.GameUi.UiButton;
 
+        private _groupReady             : eui.Group;
         private _btnModifyReady         : TinyWars.GameUi.UiButton;
         private _labelReady             : TinyWars.GameUi.UiLabel;
 
@@ -82,7 +86,7 @@ namespace TinyWars.MultiCustomRoom {
             ];
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgMcrGetRoomInfo,    callback: this._onNotifySMcrGetRoomInfo },
+                { type: Notify.Type.MsgMcrGetRoomInfo,  callback: this._onNotifySMcrGetRoomInfo },
             ];
 
             this._listPlayer.setItemRenderer(PlayerRenderer);
@@ -122,10 +126,6 @@ namespace TinyWars.MultiCustomRoom {
                 if (newRoomInfo.playerDataList.some(v => v.userId === selfUserId)) {
                     this._roomInfo = newRoomInfo;
                     this._updateComponentsForRoomInfo();
-                } else {
-                    FloatText.show(Lang.getText(Lang.Type.A0127));
-                    this.close();
-                    McrExitMapListPanel.show();
                 }
             }
         }
@@ -151,12 +151,34 @@ namespace TinyWars.MultiCustomRoom {
         private _onTouchedBtnModifyPlayerIndex(e: egret.TouchEvent): void {
             const roomInfo = this._roomInfo;
             if (roomInfo) {
-                const selfUserId = UserModel.getSelfUserId();
-                const playerData = roomInfo.playerDataList.find(v => v.userId === selfUserId);
-                if ((playerData) && (!playerData.isReady)) {
-                    // TODO: open McrRoomSetSelfSettingsPanel
-                } else {
-                    FloatText.show(Lang.getText(Lang.Type.A0128));
+                const selfUserId        = UserModel.getSelfUserId();
+                const playerDataList    = roomInfo.playerDataList;
+                const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
+                if (selfPlayerData != null) {
+                    if (selfPlayerData.isReady) {
+                        FloatText.show(Lang.getText(Lang.Type.A0128));
+                    } else {
+                        const playersCount          = BwSettingsHelper.getPlayersCount(roomInfo.settingsForCommon.warRule);
+                        const selfPlayerIndex       = selfPlayerData.playerIndex;
+                        const availablePlayerIndexes: number[] = [];
+                        for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCount; ++playerIndex) {
+                            if ((playerIndex === selfPlayerIndex) || (playerDataList.every(v => v.userId == null || v.playerIndex !== playerIndex))) {
+                                availablePlayerIndexes.push(playerIndex);
+                            }
+                        }
+
+                        if (availablePlayerIndexes.length <= 1) {
+                            FloatText.show(Lang.getText(Lang.Type.B0332));
+                        } else {
+                            const newPlayerIndex = availablePlayerIndexes[(availablePlayerIndexes.indexOf(selfPlayerIndex) + 1) % availablePlayerIndexes.length]
+                            McrProxy.reqMcrSetSelfSettings({
+                                roomId              : roomInfo.roomId,
+                                playerIndex         : newPlayerIndex,
+                                unitAndTileSkinId   : selfPlayerData.unitAndTileSkinId,
+                                coId                : BwSettingsHelper.getRandomCoId(roomInfo.settingsForCommon, newPlayerIndex),
+                            });
+                        }
+                    }
                 }
             }
         }
@@ -171,12 +193,33 @@ namespace TinyWars.MultiCustomRoom {
         private _onTouchedBtnModifySkinId(e: egret.TouchEvent): void {
             const roomInfo = this._roomInfo;
             if (roomInfo) {
-                const selfUserId = UserModel.getSelfUserId();
-                const playerData = roomInfo.playerDataList.find(v => v.userId === selfUserId);
-                if ((playerData) && (!playerData.isReady)) {
-                    // TODO: open McrRoomSetSelfSettingsPanel
-                } else {
-                    FloatText.show(Lang.getText(Lang.Type.A0128));
+                const selfUserId        = UserModel.getSelfUserId();
+                const playerDataList    = roomInfo.playerDataList;
+                const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
+                if (selfPlayerData != null) {
+                    if (selfPlayerData.isReady) {
+                        FloatText.show(Lang.getText(Lang.Type.A0128));
+                    } else {
+                        const selfSkinId        = selfPlayerData.unitAndTileSkinId;
+                        const availableSkinIds  : number[] = [];
+                        for (let skinId = CommonConstants.UnitAndTileMinSkinId; skinId <= CommonConstants.UnitAndTileMaxSkinId; ++skinId) {
+                            if ((skinId === selfSkinId) || (playerDataList.every(v => v.userId == null || v.unitAndTileSkinId !== skinId))) {
+                                availableSkinIds.push(skinId);
+                            }
+                        }
+
+                        if (availableSkinIds.length <= 1) {
+                            FloatText.show(Lang.getText(Lang.Type.B0332));
+                        } else {
+                            const newSkinId = availableSkinIds[(availableSkinIds.indexOf(selfSkinId) + 1) % availableSkinIds.length]
+                            McrProxy.reqMcrSetSelfSettings({
+                                roomId              : roomInfo.roomId,
+                                playerIndex         : selfPlayerData.playerIndex,
+                                unitAndTileSkinId   : newSkinId,
+                                coId                : selfPlayerData.coId,
+                            });
+                        }
+                    }
                 }
             }
         }
@@ -206,12 +249,19 @@ namespace TinyWars.MultiCustomRoom {
         private _onTouchedBtnChangeCo(e: egret.TouchEvent): void {
             const roomInfo = this._roomInfo;
             if (roomInfo) {
-                const selfUserId = UserModel.getSelfUserId();
-                const playerData = roomInfo.playerDataList.find(v => v.userId === selfUserId);
-                if ((playerData) && (!playerData.isReady)) {
-                    // TODO: open McrRoomSetSelfSettingsPanel
-                } else {
-                    FloatText.show(Lang.getText(Lang.Type.A0128));
+                const selfUserId        = UserModel.getSelfUserId();
+                const playerDataList    = roomInfo.playerDataList;
+                const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
+                if (selfPlayerData != null) {
+                    if (selfPlayerData.isReady) {
+                        FloatText.show(Lang.getText(Lang.Type.A0128));
+                    } else {
+                        McrRoomChooseCoPanel.show({
+                            roomInfo,
+                            selfPlayerData,
+                        });
+                        McrRoomInfoPanel.hide();
+                    }
                 }
             }
         }
@@ -226,12 +276,12 @@ namespace TinyWars.MultiCustomRoom {
             this._btnModifyWarComment.label     = Lang.getText(Lang.Type.B0187);
             this._btnModifyWarRule.label        = Lang.getText(Lang.Type.B0318);
             this._btnModifyPlayerIndex.label    = Lang.getText(Lang.Type.B0018);
-            this._btnModifySkinId.label         = Lang.getText(Lang.Type.B0019);
+            this._btnModifySkinId.label         = Lang.getText(Lang.Type.B0397);
             this._btnModifyReady.label          = Lang.getText(Lang.Type.B0402);
             this._btnModifyHasFog.label         = Lang.getText(Lang.Type.B0020);
             this._btnModifyTimeLimit.label      = Lang.getText(Lang.Type.B0188);
             this._btnBuildings.label            = Lang.getText(Lang.Type.B0333);
-            this._labelPlayersTitle.text        = `${Lang.getText(Lang.Type.B0232)}:`;
+            this._labelPlayersTitle.text        = `${Lang.getText(Lang.Type.B0395)}:`;
         }
 
         private _updateComponentsForRoomInfo(): void {
@@ -240,12 +290,12 @@ namespace TinyWars.MultiCustomRoom {
             this._updateLabelWarComment();
             this._updateLabelMapName();
             this._updateLabelWarRule();
-            this._updateLabelPlayerIndex();
+            this._updateGroupPlayerIndex();
             this._updateImgHasFog();
             this._updateLabelTimeLimit();
-            this._updateLabelCoName();
-            this._updateLabelSkinId();
-            this._updateLabelReady();
+            this._updateGroupCo();
+            this._updateGroupSkinId();
+            this._updateGroupReady();
             this._updateListPlayer();
         }
 
@@ -287,12 +337,16 @@ namespace TinyWars.MultiCustomRoom {
             }
         }
 
-        private _updateLabelPlayerIndex(): void {
+        private _updateGroupPlayerIndex(): void {
             const roomInfo = this._roomInfo;
             if (roomInfo) {
-                const selfUserId = UserModel.getSelfUserId();
-                const playerData = roomInfo.playerDataList.find(v => v.userId === selfUserId);
-                if (playerData) {
+                const selfUserId    = UserModel.getSelfUserId();
+                const playerData    = roomInfo.playerDataList.find(v => v.userId === selfUserId);
+                const group         = this._groupPlayerIndex;
+                if (playerData == null) {
+                    group.visible = false;
+                } else {
+                    group.visible               = true;
                     const playerIndex           = playerData.playerIndex;
                     const playerRule            = BwSettingsHelper.getPlayerRule(roomInfo.settingsForCommon.warRule, playerIndex);
                     this._labelPlayerIndex.text = `${Lang.getPlayerForceName(playerIndex)} (${Lang.getPlayerTeamName(playerRule.teamIndex)})`;
@@ -314,38 +368,57 @@ namespace TinyWars.MultiCustomRoom {
             }
         }
 
-        private _updateLabelCoName(): void {
+        private _updateGroupCo(): void {
             const roomInfo = this._roomInfo;
             if (roomInfo) {
                 const selfUserId    = UserModel.getSelfUserId();
                 const playerData    = roomInfo.playerDataList.find(v => v.userId === selfUserId);
-                const coId          = playerData ? playerData.coId : null;
-                if (coId != null) {
-                    const cfg               = ConfigManager.getCoBasicCfg(ConfigManager.getLatestConfigVersion(), coId);
-                    this._labelCoName.text  = `${cfg.name} (T${cfg.tier})`;
+                const group         = this._groupCo;
+                if (playerData == null) {
+                    group.visible   = false;
+                } else {
+                    group.visible   = true;
+                    const coId      = playerData ? playerData.coId : null;
+                    if (coId != null) {
+                        const cfg               = ConfigManager.getCoBasicCfg(ConfigManager.getLatestConfigVersion(), coId);
+                        this._labelCoName.text  = `${cfg.name} (T${cfg.tier})`;
+                    }
                 }
             }
         }
 
-        private _updateLabelSkinId(): void {
+        private _updateGroupSkinId(): void {
             const roomInfo = this._roomInfo;
             if (roomInfo) {
                 const selfUserId    = UserModel.getSelfUserId();
                 const playerData    = roomInfo.playerDataList.find(v => v.userId === selfUserId);
-                const skinId        = playerData ? playerData.unitAndTileSkinId : null;
-                if (skinId != null) {
-                    this._labelSkinId.text = Lang.getUnitAndTileSkinName(skinId);
+                const group         = this._groupSkinId;
+                if (playerData == null) {
+                    group.visible   = false;
+                } else {
+                    group.visible   = true;
+                    const skinId    = playerData ? playerData.unitAndTileSkinId : null;
+                    if (skinId != null) {
+                        this._labelSkinId.text = Lang.getUnitAndTileSkinName(skinId);
+                    }
                 }
             }
         }
 
-        private _updateLabelReady(): void {
+        private _updateGroupReady(): void {
             const roomInfo = this._roomInfo;
             if (roomInfo) {
-                const selfUserId        = UserModel.getSelfUserId();
-                this._labelReady.text   = roomInfo.playerDataList.find(v => v.userId === selfUserId).isReady
-                    ? Lang.getText(Lang.Type.B0012)
-                    : Lang.getText(Lang.Type.B0013);
+                const selfUserId    = UserModel.getSelfUserId();
+                const playerData    = roomInfo.playerDataList.find(v => v.userId === selfUserId);
+                const group         = this._groupReady;
+                if (playerData == null) {
+                    group.visible   = false;
+                } else {
+                    group.visible           = true;
+                    this._labelReady.text   = playerData.isReady
+                        ? Lang.getText(Lang.Type.B0012)
+                        : Lang.getText(Lang.Type.B0013);
+                }
             }
         }
 
@@ -360,11 +433,10 @@ namespace TinyWars.MultiCustomRoom {
                 const settingsForCommon = roomInfo.settingsForCommon;
                 const playerDataList    = roomInfo.playerDataList;
                 const playerRules       = settingsForCommon.warRule.ruleForPlayers;
-                const configVersion     = settingsForCommon.configVersion;
                 const playersCount      = (await WarMapModel.getRawData(settingsForCommon.mapId)).playersCount;
                 for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
                     dataList.push({
-                        configVersion,
+                        roomInfo,
                         playerIndex,
                         teamIndex   : BwHelpers.getTeamIndexByRuleForPlayers(playerRules, playerIndex),
                         playerData  : playerDataList.find(v => v.playerIndex === playerIndex),
@@ -377,7 +449,7 @@ namespace TinyWars.MultiCustomRoom {
     }
 
     type DataForPlayerRenderer = {
-        configVersion   : string;
+        roomInfo        : ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
         playerIndex     : number;
         teamIndex       : number;
         playerData      : ProtoTypes.Structure.IDataForPlayerInRoom;
@@ -386,25 +458,59 @@ namespace TinyWars.MultiCustomRoom {
     class PlayerRenderer extends eui.ItemRenderer {
         private _labelNickname  : GameUi.UiLabel;
         private _labelIndex     : GameUi.UiLabel;
-        private _labelTeam      : GameUi.UiLabel;
-        private _labelCoName    : GameUi.UiLabel;
+        private _btnDelete      : GameUi.UiButton;
+
+        protected childrenCreated(): void {
+            super.childrenCreated();
+
+            const btnDelete = this._btnDelete;
+            btnDelete.label = Lang.getText(Lang.Type.B0411);
+            btnDelete.setTextColor(0xFF0000);
+            btnDelete.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedBtnDelete, this);
+        }
 
         protected dataChanged(): void {
             super.dataChanged();
 
             const data              = this.data as DataForPlayerRenderer;
-            this._labelIndex.text   = Lang.getPlayerForceName(data.playerIndex);
-            this._labelTeam.text    = Lang.getPlayerTeamName(data.teamIndex);
+            const roomInfo          = data.roomInfo;
+            const selfUserId        = UserModel.getSelfUserId();
+            const selfPlayerData    = roomInfo.playerDataList.find(v => v.userId === selfUserId);
+            const selfPlayerIndex   = selfPlayerData ? selfPlayerData.playerIndex : null;
+            const playerData        = data.playerData;
+            const labelIndex        = this._labelIndex;
+            const playerIndex       = data.playerIndex;
+            labelIndex.text         = `${Lang.getPlayerForceName(playerIndex)}(${Lang.getPlayerTeamName(data.teamIndex)})`;
+            labelIndex.textColor    = (playerData && playerData.isReady) ? 0x00FF00 : 0xFFFFFF;
+            this._btnDelete.visible = (selfPlayerIndex != null)
+                && (roomInfo.ownerPlayerIndex === selfPlayerIndex)
+                && (data.playerIndex !== selfPlayerIndex)
+                && (playerData != null);
 
-            const playerData    = data.playerData;
-            const lbCoName      = this._labelCoName;
-            const lbNickname    = this._labelNickname;
-            if (playerData) {
-                lbCoName.text = ConfigManager.getCoNameAndTierText(data.configVersion, playerData.coId);
-                User.UserModel.getUserNickname(playerData.userId).then(name => lbNickname.text = name);
-            } else {
-                lbCoName.text   = "----";
+            const lbNickname        = this._labelNickname;
+            lbNickname.textColor    = roomInfo.ownerPlayerIndex === playerIndex ? 0x00FF00 : 0xFFFFFF;
+            if (playerData == null) {
                 lbNickname.text = "----";
+            } else {
+                lbNickname.text = "";
+                UserModel.getUserNickname(playerData.userId).then(name => {
+                    lbNickname.text = `${name} ${ConfigManager.getCoNameAndTierText(roomInfo.settingsForCommon.configVersion, playerData.coId)}`;
+                });
+            }
+        }
+
+        private async _onTouchedBtnDelete(e: egret.TouchEvent): Promise<void> {
+            const data          = this.data as DataForPlayerRenderer;
+            const playerData    = data ? data.playerData : null;
+            if (playerData) {
+                const userId = playerData.userId;
+                Common.CommonConfirmPanel.show({
+                    title   : Lang.getText(Lang.Type.B0088),
+                    content : Lang.getFormattedText(Lang.Type.F0029, await User.UserModel.getUserNickname(userId)),
+                    callback: () => {
+                        McrProxy.reqMcrDeletePlayer(data.roomInfo.roomId, playerData.playerIndex);
+                    },
+                });
             }
         }
     }

@@ -12111,8 +12111,8 @@ export declare namespace RankMatchRoom {
         /** DataForRmrQueue timestamp */
         timestamp?: (number|null);
 
-        /** DataForRmrQueue counter */
-        counter?: (number|null);
+        /** DataForRmrQueue maxConcurrentCount */
+        maxConcurrentCount?: (number|null);
     }
 
     /** Represents a DataForRmrQueue. */
@@ -12133,8 +12133,8 @@ export declare namespace RankMatchRoom {
         /** DataForRmrQueue timestamp. */
         public timestamp: number;
 
-        /** DataForRmrQueue counter. */
-        public counter: number;
+        /** DataForRmrQueue maxConcurrentCount. */
+        public maxConcurrentCount: number;
 
         /**
          * Creates a new DataForRmrQueue instance using the specified properties.
@@ -14439,8 +14439,8 @@ export declare namespace NetMessage {
         /** MessageContainer MsgScrCreateCustomWar */
         MsgScrCreateCustomWar?: (NetMessage.IMsgScrCreateCustomWar|null);
 
-        /** MessageContainer MsgRmrSetQueueCounter */
-        MsgRmrSetQueueCounter?: (NetMessage.IMsgRmrSetQueueCounter|null);
+        /** MessageContainer MsgRmrSetMaxConcurrentCount */
+        MsgRmrSetMaxConcurrentCount?: (NetMessage.IMsgRmrSetMaxConcurrentCount|null);
 
         /** MessageContainer MsgRmrGetRoomInfoList */
         MsgRmrGetRoomInfoList?: (NetMessage.IMsgRmrGetRoomInfoList|null);
@@ -14719,8 +14719,8 @@ export declare namespace NetMessage {
         /** MessageContainer MsgScrCreateCustomWar. */
         public MsgScrCreateCustomWar?: (NetMessage.IMsgScrCreateCustomWar|null);
 
-        /** MessageContainer MsgRmrSetQueueCounter. */
-        public MsgRmrSetQueueCounter?: (NetMessage.IMsgRmrSetQueueCounter|null);
+        /** MessageContainer MsgRmrSetMaxConcurrentCount. */
+        public MsgRmrSetMaxConcurrentCount?: (NetMessage.IMsgRmrSetMaxConcurrentCount|null);
 
         /** MessageContainer MsgRmrGetRoomInfoList. */
         public MsgRmrGetRoomInfoList?: (NetMessage.IMsgRmrGetRoomInfoList|null);
@@ -26827,6 +26827,15 @@ export declare namespace NetMessage {
 
             /** S errorCode */
             errorCode?: (number|null);
+
+            /** S roomId */
+            roomId?: (number|null);
+
+            /** S targetPlayerIndex */
+            targetPlayerIndex?: (number|null);
+
+            /** S targetUserId */
+            targetUserId?: (number|null);
         }
 
         /** Represents a S. */
@@ -26840,6 +26849,15 @@ export declare namespace NetMessage {
 
             /** S errorCode. */
             public errorCode: number;
+
+            /** S roomId. */
+            public roomId: number;
+
+            /** S targetPlayerIndex. */
+            public targetPlayerIndex: number;
+
+            /** S targetUserId. */
+            public targetUserId: number;
 
             /**
              * Creates a new S instance using the specified properties.
@@ -39999,103 +40017,103 @@ export declare namespace NetMessage {
         }
     }
 
-    /** Properties of a MsgRmrSetQueueCounter. */
-    interface IMsgRmrSetQueueCounter {
+    /** Properties of a MsgRmrSetMaxConcurrentCount. */
+    interface IMsgRmrSetMaxConcurrentCount {
 
-        /** MsgRmrSetQueueCounter c */
-        c?: (NetMessage.MsgRmrSetQueueCounter.IC|null);
+        /** MsgRmrSetMaxConcurrentCount c */
+        c?: (NetMessage.MsgRmrSetMaxConcurrentCount.IC|null);
 
-        /** MsgRmrSetQueueCounter s */
-        s?: (NetMessage.MsgRmrSetQueueCounter.IS|null);
+        /** MsgRmrSetMaxConcurrentCount s */
+        s?: (NetMessage.MsgRmrSetMaxConcurrentCount.IS|null);
     }
 
-    /** Represents a MsgRmrSetQueueCounter. */
-    class MsgRmrSetQueueCounter implements IMsgRmrSetQueueCounter {
+    /** Represents a MsgRmrSetMaxConcurrentCount. */
+    class MsgRmrSetMaxConcurrentCount implements IMsgRmrSetMaxConcurrentCount {
 
         /**
-         * Constructs a new MsgRmrSetQueueCounter.
+         * Constructs a new MsgRmrSetMaxConcurrentCount.
          * @param [properties] Properties to set
          */
-        constructor(properties?: NetMessage.IMsgRmrSetQueueCounter);
+        constructor(properties?: NetMessage.IMsgRmrSetMaxConcurrentCount);
 
-        /** MsgRmrSetQueueCounter c. */
-        public c?: (NetMessage.MsgRmrSetQueueCounter.IC|null);
+        /** MsgRmrSetMaxConcurrentCount c. */
+        public c?: (NetMessage.MsgRmrSetMaxConcurrentCount.IC|null);
 
-        /** MsgRmrSetQueueCounter s. */
-        public s?: (NetMessage.MsgRmrSetQueueCounter.IS|null);
+        /** MsgRmrSetMaxConcurrentCount s. */
+        public s?: (NetMessage.MsgRmrSetMaxConcurrentCount.IS|null);
 
         /**
-         * Creates a new MsgRmrSetQueueCounter instance using the specified properties.
+         * Creates a new MsgRmrSetMaxConcurrentCount instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns MsgRmrSetQueueCounter instance
+         * @returns MsgRmrSetMaxConcurrentCount instance
          */
-        public static create(properties?: NetMessage.IMsgRmrSetQueueCounter): NetMessage.MsgRmrSetQueueCounter;
+        public static create(properties?: NetMessage.IMsgRmrSetMaxConcurrentCount): NetMessage.MsgRmrSetMaxConcurrentCount;
 
         /**
-         * Encodes the specified MsgRmrSetQueueCounter message. Does not implicitly {@link NetMessage.MsgRmrSetQueueCounter.verify|verify} messages.
-         * @param message MsgRmrSetQueueCounter message or plain object to encode
+         * Encodes the specified MsgRmrSetMaxConcurrentCount message. Does not implicitly {@link NetMessage.MsgRmrSetMaxConcurrentCount.verify|verify} messages.
+         * @param message MsgRmrSetMaxConcurrentCount message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: NetMessage.IMsgRmrSetQueueCounter, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: NetMessage.IMsgRmrSetMaxConcurrentCount, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified MsgRmrSetQueueCounter message, length delimited. Does not implicitly {@link NetMessage.MsgRmrSetQueueCounter.verify|verify} messages.
-         * @param message MsgRmrSetQueueCounter message or plain object to encode
+         * Encodes the specified MsgRmrSetMaxConcurrentCount message, length delimited. Does not implicitly {@link NetMessage.MsgRmrSetMaxConcurrentCount.verify|verify} messages.
+         * @param message MsgRmrSetMaxConcurrentCount message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: NetMessage.IMsgRmrSetQueueCounter, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: NetMessage.IMsgRmrSetMaxConcurrentCount, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a MsgRmrSetQueueCounter message from the specified reader or buffer.
+         * Decodes a MsgRmrSetMaxConcurrentCount message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns MsgRmrSetQueueCounter
+         * @returns MsgRmrSetMaxConcurrentCount
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgRmrSetQueueCounter;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgRmrSetMaxConcurrentCount;
 
         /**
-         * Decodes a MsgRmrSetQueueCounter message from the specified reader or buffer, length delimited.
+         * Decodes a MsgRmrSetMaxConcurrentCount message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns MsgRmrSetQueueCounter
+         * @returns MsgRmrSetMaxConcurrentCount
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgRmrSetQueueCounter;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgRmrSetMaxConcurrentCount;
 
         /**
-         * Verifies a MsgRmrSetQueueCounter message.
+         * Verifies a MsgRmrSetMaxConcurrentCount message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a MsgRmrSetQueueCounter message from a plain object. Also converts values to their respective internal types.
+         * Creates a MsgRmrSetMaxConcurrentCount message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns MsgRmrSetQueueCounter
+         * @returns MsgRmrSetMaxConcurrentCount
          */
-        public static fromObject(object: { [k: string]: any }): NetMessage.MsgRmrSetQueueCounter;
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgRmrSetMaxConcurrentCount;
 
         /**
-         * Creates a plain object from a MsgRmrSetQueueCounter message. Also converts values to other types if specified.
-         * @param message MsgRmrSetQueueCounter
+         * Creates a plain object from a MsgRmrSetMaxConcurrentCount message. Also converts values to other types if specified.
+         * @param message MsgRmrSetMaxConcurrentCount
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: NetMessage.MsgRmrSetQueueCounter, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: NetMessage.MsgRmrSetMaxConcurrentCount, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this MsgRmrSetQueueCounter to JSON.
+         * Converts this MsgRmrSetMaxConcurrentCount to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
     }
 
-    namespace MsgRmrSetQueueCounter {
+    namespace MsgRmrSetMaxConcurrentCount {
 
         /** Properties of a C. */
         interface IC {
@@ -40103,8 +40121,8 @@ export declare namespace NetMessage {
             /** C hasFog */
             hasFog?: (boolean|null);
 
-            /** C counter */
-            counter?: (number|null);
+            /** C maxCount */
+            maxCount?: (number|null);
         }
 
         /** Represents a C. */
@@ -40114,36 +40132,36 @@ export declare namespace NetMessage {
              * Constructs a new C.
              * @param [properties] Properties to set
              */
-            constructor(properties?: NetMessage.MsgRmrSetQueueCounter.IC);
+            constructor(properties?: NetMessage.MsgRmrSetMaxConcurrentCount.IC);
 
             /** C hasFog. */
             public hasFog: boolean;
 
-            /** C counter. */
-            public counter: number;
+            /** C maxCount. */
+            public maxCount: number;
 
             /**
              * Creates a new C instance using the specified properties.
              * @param [properties] Properties to set
              * @returns C instance
              */
-            public static create(properties?: NetMessage.MsgRmrSetQueueCounter.IC): NetMessage.MsgRmrSetQueueCounter.C;
+            public static create(properties?: NetMessage.MsgRmrSetMaxConcurrentCount.IC): NetMessage.MsgRmrSetMaxConcurrentCount.C;
 
             /**
-             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgRmrSetQueueCounter.C.verify|verify} messages.
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgRmrSetMaxConcurrentCount.C.verify|verify} messages.
              * @param message C message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: NetMessage.MsgRmrSetQueueCounter.IC, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: NetMessage.MsgRmrSetMaxConcurrentCount.IC, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgRmrSetQueueCounter.C.verify|verify} messages.
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgRmrSetMaxConcurrentCount.C.verify|verify} messages.
              * @param message C message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: NetMessage.MsgRmrSetQueueCounter.IC, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: NetMessage.MsgRmrSetMaxConcurrentCount.IC, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
              * Decodes a C message from the specified reader or buffer.
@@ -40153,7 +40171,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgRmrSetQueueCounter.C;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgRmrSetMaxConcurrentCount.C;
 
             /**
              * Decodes a C message from the specified reader or buffer, length delimited.
@@ -40162,7 +40180,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgRmrSetQueueCounter.C;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgRmrSetMaxConcurrentCount.C;
 
             /**
              * Verifies a C message.
@@ -40176,7 +40194,7 @@ export declare namespace NetMessage {
              * @param object Plain object
              * @returns C
              */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgRmrSetQueueCounter.C;
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgRmrSetMaxConcurrentCount.C;
 
             /**
              * Creates a plain object from a C message. Also converts values to other types if specified.
@@ -40184,7 +40202,7 @@ export declare namespace NetMessage {
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: NetMessage.MsgRmrSetQueueCounter.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: NetMessage.MsgRmrSetMaxConcurrentCount.C, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this C to JSON.
@@ -40207,7 +40225,7 @@ export declare namespace NetMessage {
              * Constructs a new S.
              * @param [properties] Properties to set
              */
-            constructor(properties?: NetMessage.MsgRmrSetQueueCounter.IS);
+            constructor(properties?: NetMessage.MsgRmrSetMaxConcurrentCount.IS);
 
             /** S errorCode. */
             public errorCode: number;
@@ -40217,23 +40235,23 @@ export declare namespace NetMessage {
              * @param [properties] Properties to set
              * @returns S instance
              */
-            public static create(properties?: NetMessage.MsgRmrSetQueueCounter.IS): NetMessage.MsgRmrSetQueueCounter.S;
+            public static create(properties?: NetMessage.MsgRmrSetMaxConcurrentCount.IS): NetMessage.MsgRmrSetMaxConcurrentCount.S;
 
             /**
-             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgRmrSetQueueCounter.S.verify|verify} messages.
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgRmrSetMaxConcurrentCount.S.verify|verify} messages.
              * @param message S message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: NetMessage.MsgRmrSetQueueCounter.IS, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: NetMessage.MsgRmrSetMaxConcurrentCount.IS, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgRmrSetQueueCounter.S.verify|verify} messages.
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgRmrSetMaxConcurrentCount.S.verify|verify} messages.
              * @param message S message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: NetMessage.MsgRmrSetQueueCounter.IS, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: NetMessage.MsgRmrSetMaxConcurrentCount.IS, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
              * Decodes a S message from the specified reader or buffer.
@@ -40243,7 +40261,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgRmrSetQueueCounter.S;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgRmrSetMaxConcurrentCount.S;
 
             /**
              * Decodes a S message from the specified reader or buffer, length delimited.
@@ -40252,7 +40270,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgRmrSetQueueCounter.S;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgRmrSetMaxConcurrentCount.S;
 
             /**
              * Verifies a S message.
@@ -40266,7 +40284,7 @@ export declare namespace NetMessage {
              * @param object Plain object
              * @returns S
              */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgRmrSetQueueCounter.S;
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgRmrSetMaxConcurrentCount.S;
 
             /**
              * Creates a plain object from a S message. Also converts values to other types if specified.
@@ -40274,7 +40292,7 @@ export declare namespace NetMessage {
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: NetMessage.MsgRmrSetQueueCounter.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: NetMessage.MsgRmrSetMaxConcurrentCount.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.

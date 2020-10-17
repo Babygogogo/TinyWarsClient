@@ -94,10 +94,10 @@ namespace TinyWars.MultiCustomRoom {
                     },
                 },
                 {
-                    name    : Lang.getText(Lang.Type.B0022),
+                    name    : Lang.getText(Lang.Type.B0410),
                     callback: (): void => {
                         McrMainMenuPanel.hide();
-                        MultiCustomRoom.McrExitMapListPanel.show();
+                        MultiCustomRoom.McrMyRoomListPanel.show();
                     },
                 },
                 {
