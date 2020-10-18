@@ -58,12 +58,18 @@ namespace TinyWars.Utility.DestructionHelpers {
 
         tileMap.forEachTile(tile => {
             if (tile.getPlayerIndex() === playerIndex) {
-                const objectType = tile.getObjectType();
+                const objectType    = tile.getObjectType();
+                const hp            = tile.getCurrentHp();
+                const buildPoint    = tile.getCurrentBuildPoint();
+                const capturePoint  = tile.getCurrentCapturePoint();
                 tile.resetByTypeAndPlayerIndex(
                     tile.getBaseType(),
                     objectType === TileObjectType.Headquarters ? TileObjectType.City : objectType,
                     CommonConstants.WarNeutralPlayerIndex,
                 );
+                tile.setCurrentHp(hp);
+                tile.setCurrentBuildPoint(buildPoint);
+                tile.setCurrentCapturePoint(capturePoint);
             };
         });
 

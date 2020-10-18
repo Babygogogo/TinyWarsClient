@@ -121,9 +121,9 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _onTouchedBtnModifyPlayerIndex(e: egret.TouchEvent): Promise<void> {
-            const playerIndex = McrModel.Join.getPlayerIndex();
+            const currPlayerIndex = McrModel.Join.getPlayerIndex();
             await McrModel.Join.tickPlayerIndex();
-            if (playerIndex === McrModel.Join.getPlayerIndex()) {
+            if (currPlayerIndex === McrModel.Join.getPlayerIndex()) {
                 FloatText.show(Lang.getText(Lang.Type.B0332));
             } else {
                 this._updateLabelPlayerIndex();
@@ -139,8 +139,13 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onTouchedBtnModifySkinId(e: egret.TouchEvent): void {
+            const currSkinId = McrModel.Join.getUnitAndTileSkinId();
             McrModel.Join.tickUnitAndTileSkinId();
-            this._updateLabelSkinId();
+            if (currSkinId === McrModel.Join.getUnitAndTileSkinId()) {
+                FloatText.show(Lang.getText(Lang.Type.B0332));
+            } else {
+                this._updateLabelSkinId();
+            }
         }
 
         private _onTouchedBtnHelpSkinId(e: egret.TouchEvent): void {

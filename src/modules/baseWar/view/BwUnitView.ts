@@ -138,7 +138,7 @@ namespace TinyWars.BaseWar {
             const unit                  = this.getUnit();
             const war                   = unit.getWar();
             const playerIndex           = unit.getPlayerIndex();
-            const playerIndexMod        = playerIndex % 2;
+            const skinIdMod             = unit.getSkinId() % 2;
             const unitType              = unit.getType();
             const watcherTeamIndexes    = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
             const isAlwaysVisible       = watcherTeamIndexes.has(unit.getTeamIndex());
@@ -152,9 +152,9 @@ namespace TinyWars.BaseWar {
                 const currentX  = gridIndex.x;
                 const previousX = path[i - 1].x;
                 if (currentX < previousX) {
-                    tween.call(() => this._setImgUnitFlippedX(playerIndexMod === 1));
+                    tween.call(() => this._setImgUnitFlippedX(skinIdMod === 1));
                 } else if (currentX > previousX) {
-                    tween.call(() => this._setImgUnitFlippedX(playerIndexMod === 0));
+                    tween.call(() => this._setImgUnitFlippedX(skinIdMod === 0));
                 }
 
                 if (!isAlwaysVisible) {
@@ -252,13 +252,14 @@ namespace TinyWars.BaseWar {
         // Other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _addFrameForCoSkill(): void {
-            const unit      = this._unit;
-            const player    = unit.getPlayer();
-            const skillType = player ? player.getCoUsingSkillType() : null;
+            const unit          = this._unit;
+            const player        = unit.getPlayer();
+            const skillType     = player ? player.getCoUsingSkillType() : null;
+            const strForSkinId  = Helpers.getNumText(unit.getSkinId());
             if (skillType === Types.CoSkillType.Power) {
-                this._framesForStateAnimation.push(`${this._getImageSourcePrefix(this._isDark)}_t99_s08_f${Helpers.getNumText(unit.getPlayerIndex())}`);
+                this._framesForStateAnimation.push(`${this._getImageSourcePrefix(this._isDark)}_t99_s08_f${strForSkinId}`);
             } else if (skillType === Types.CoSkillType.SuperPower) {
-                this._framesForStateAnimation.push(`${this._getImageSourcePrefix(this._isDark)}_t99_s07_f${Helpers.getNumText(unit.getPlayerIndex())}`);
+                this._framesForStateAnimation.push(`${this._getImageSourcePrefix(this._isDark)}_t99_s07_f${strForSkinId}`);
             }
         }
         private _addFrameForPromotion(): void {
@@ -283,35 +284,38 @@ namespace TinyWars.BaseWar {
             }
         }
         private _addFrameForDive(): void {
-            if (this._unit.getIsDiving()) {
-                this._framesForStateAnimation.push(`${this._getImageSourcePrefix(this._isDark)}_t99_s03_f${Helpers.getNumText(this._unit.getPlayerIndex())}`);
+            const unit = this._unit;
+            if (unit.getIsDiving()) {
+                this._framesForStateAnimation.push(`${this._getImageSourcePrefix(this._isDark)}_t99_s03_f${Helpers.getNumText(unit.getSkinId())}`);
             }
         }
         private _addFrameForCapture(): void {
-            if (this._unit.getIsCapturingTile()) {
-                this._framesForStateAnimation.push(`${this._getImageSourcePrefix(this._isDark)}_t99_s04_f${Helpers.getNumText(this._unit.getPlayerIndex())}`);
+            const unit = this._unit;
+            if (unit.getIsCapturingTile()) {
+                this._framesForStateAnimation.push(`${this._getImageSourcePrefix(this._isDark)}_t99_s04_f${Helpers.getNumText(unit.getSkinId())}`);
             }
         }
         private _addFrameForBuild(): void {
-            if (this._unit.getIsBuildingTile()) {
-                this._framesForStateAnimation.push(`${this._getImageSourcePrefix(this._isDark)}_t99_s04_f${Helpers.getNumText(this._unit.getPlayerIndex())}`);
+            const unit = this._unit;
+            if (unit.getIsBuildingTile()) {
+                this._framesForStateAnimation.push(`${this._getImageSourcePrefix(this._isDark)}_t99_s04_f${Helpers.getNumText(unit.getSkinId())}`);
             }
         }
         private _addFrameForLoader(): void {
             const unit  = this.getUnit();
             const war   = unit.getWar();
             if ((war) && (unit.getMaxLoadUnitsCount())) {
-                const unitPlayerIndex = unit.getPlayerIndex();
+                const strForSkinId = Helpers.getNumText(unit.getSkinId());
                 if (!war.getFogMap().checkHasFogCurrently()) {
                     if (unit.getLoadedUnitsCount() > 0) {
-                        this._getFramesForStateAnimation().push(`${this._getImageSourcePrefix(this._getIsDark())}_t99_s06_f${Helpers.getNumText(unitPlayerIndex)}`);
+                        this._getFramesForStateAnimation().push(`${this._getImageSourcePrefix(this._getIsDark())}_t99_s06_f${strForSkinId}`);
                     }
                 } else {
                     if (!war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(unit.getTeamIndex())) {
-                        this._getFramesForStateAnimation().push(`${this._getImageSourcePrefix(this._getIsDark())}_t99_s06_f${Helpers.getNumText(unitPlayerIndex)}`);
+                        this._getFramesForStateAnimation().push(`${this._getImageSourcePrefix(this._getIsDark())}_t99_s06_f${strForSkinId}`);
                     } else {
                         if (unit.getLoadedUnitsCount() > 0) {
-                            this._getFramesForStateAnimation().push(`${this._getImageSourcePrefix(this._getIsDark())}_t99_s06_f${Helpers.getNumText(unitPlayerIndex)}`);
+                            this._getFramesForStateAnimation().push(`${this._getImageSourcePrefix(this._getIsDark())}_t99_s06_f${strForSkinId}`);
                         }
                     }
                 }

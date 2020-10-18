@@ -160,7 +160,7 @@ namespace TinyWars.MultiCustomRoom {
             const playerIndexInTurn = warInfo.playerIndexInTurn;
             const playerInfoList    = warInfo.playerInfoList;
             const dataList          : DataForPlayerRenderer[] = [];
-            for (let playerIndex = 1; playerIndex < playerInfoList.length; ++playerIndex) {
+            for (let playerIndex = 1; playerIndex <= playerInfoList.length; ++playerIndex) {
                 dataList.push({
                     playerInfo      : playerInfoList.find(v => v.playerIndex === playerIndex),
                     enterTurnTime,
@@ -263,9 +263,9 @@ namespace TinyWars.MultiCustomRoom {
     }
 
     class PlayerRenderer extends eui.ItemRenderer {
-        private _labelName      : GameUi.UiLabel;
         private _labelIndex     : GameUi.UiLabel;
-        private _labelSkinId    : GameUi.UiLabel;
+        private _labelName      : GameUi.UiLabel;
+        private _labelStatus    : GameUi.UiLabel;
 
         protected dataChanged(): void {
             super.dataChanged();
@@ -276,30 +276,25 @@ namespace TinyWars.MultiCustomRoom {
             const teamIndex         = playerInfo.teamIndex;
             const defeatTimestamp   = data.playerIndexInTurn === playerIndex ? data.enterTurnTime + playerInfo.restTimeToBoot : null;
             const labelIndex        = this._labelIndex;
-            const labelSkinId       = this._labelSkinId;
             const labelName         = this._labelName;
+            const labelStatus       = this._labelStatus;
             labelIndex.text         = `${Lang.getPlayerForceName(playerIndex)} (${Lang.getPlayerTeamName(teamIndex)})`;
-            labelSkinId.text        = `${Lang.getUnitAndTileSkinName(playerInfo.unitAndTileSkinId)}`;
+            labelName.text          = ``;
+            User.UserModel.getUserNickname(playerInfo.userId).then(name => labelName.text = name);
 
             if (defeatTimestamp != null) {
                 const leftTime          = defeatTimestamp - Time.TimeModel.getServerTimestamp();
                 labelIndex.textColor    = 0x00FF00;
-                labelSkinId.textColor   = 0x00FF00
                 labelName.textColor     = 0x00FF00;
-                User.UserModel.getUserNickname(playerInfo.userId).then(name => {
-                    labelName.text = name + (leftTime > 0
-                        ? ` (${Lang.getText(Lang.Type.B0027)}:${Helpers.getTimeDurationText(leftTime)})`
-                        : ` (${Lang.getText(Lang.Type.B0028)})`);
-                });
+                labelStatus.textColor   = 0x00FF00;
+                labelStatus.text        = (leftTime > 0
+                    ? ` (${Lang.getText(Lang.Type.B0027)}:${Helpers.getTimeDurationText(leftTime)})`
+                    : ` (${Lang.getText(Lang.Type.B0028)})`)
             } else {
                 labelIndex.textColor    = 0xFFFFFF;
-                labelSkinId.textColor   = 0xFFFFFF;
                 labelName.textColor     = 0xFFFFFF;
-                User.UserModel.getUserNickname(playerInfo.userId).then(name => {
-                    labelName.text = playerInfo.isAlive
-                        ? name
-                        : `${name} (${Lang.getText(Lang.Type.B0056)})`;
-                });
+                labelStatus.textColor   = 0xFFFFFF;
+                labelStatus.text        = playerInfo.isAlive ? `` : `${name} (${Lang.getText(Lang.Type.B0056)})`;
             }
         }
     }

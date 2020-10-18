@@ -57,7 +57,7 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
     function _onMsgMcrDeleteRoom(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMcrDeleteRoom.IS;
         if (!data.errorCode) {
-            McrModel.removeRoomInfo(data.roomId);
+            McrModel.deleteRoomInfo(data.roomId);
             Notify.dispatch(Notify.Type.MsgMcrDeleteRoom, data);
         }
     }
@@ -186,7 +186,7 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
     function _onMsgMcrStartWar(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMcrStartWar.IS;
         if (!data.errorCode) {
-            McrModel.removeRoomInfo(data.roomId);
+            McrModel.deleteRoomInfo(data.roomId);
             Notify.dispatch(Notify.Type.MsgMcrStartWar, data);
         }
     }

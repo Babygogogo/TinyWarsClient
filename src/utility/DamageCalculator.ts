@@ -2,6 +2,7 @@
 namespace TinyWars.Utility.DamageCalculator {
     import BwUnit       = BaseWar.BwUnit;
     import BwWar        = BaseWar.BwWar;
+    import SpwWar       = SinglePlayerWar.SpwWar;
     import BwTile       = BaseWar.BwTile;
     import BwHelpers    = BaseWar.BwHelpers;
     import GridIndex    = Types.GridIndex;
@@ -21,6 +22,11 @@ namespace TinyWars.Utility.DamageCalculator {
     }
 
     function getLuckValue(war: BwWar, playerIndex: number): number | undefined {
+        if (!(war instanceof SpwWar)) {
+            Logger.error(`DamageCalculator.getLuckValue() war is not SpwWar!`);
+            return undefined;
+        }
+
         const randomNumber = war.getRandomNumber();
         if (randomNumber == null) {
             Logger.error(`DamageCalculator.getLuckValue() empty randomNumber.`);
@@ -269,7 +275,6 @@ namespace TinyWars.Utility.DamageCalculator {
 
         const targetHp = target.getCurrentHp();
         if (targetHp == null) {
-            Logger.error(`DamageCalculator.getBattleDamage() failed the target hp is empty!`);
             return [];
         }
 
@@ -284,7 +289,8 @@ namespace TinyWars.Utility.DamageCalculator {
             } else {
                 if ((target instanceof BwTile)                                              ||
                     (GridIndexHelpers.getDistance(attackerGridIndex, targetGridIndex) > 1)  ||
-                    (!checkCanAttack(target, undefined, attacker, attackerMovePath))
+                    (!checkCanAttack(target, undefined, attacker, attackerMovePath))        ||
+                    (attackDamage >= targetHp)
                 ) {
                     return [attackDamage, undefined];
                 } else {
@@ -301,7 +307,7 @@ namespace TinyWars.Utility.DamageCalculator {
         return getBattleDamage(war, attackerMovePath, launchUnitId, targetGridIndex, false);
     }
 
-    export function getFinalBattleDamage(war: BwWar, attackerMovePath: GridIndex[], launchUnitId: number | undefined | null, targetGridIndex: GridIndex): (number | undefined)[] {
+    export function getFinalBattleDamage(war: SpwWar, attackerMovePath: GridIndex[], launchUnitId: number | undefined | null, targetGridIndex: GridIndex): (number | undefined)[] {
         return getBattleDamage(war, attackerMovePath, launchUnitId, targetGridIndex, true);
     }
 }

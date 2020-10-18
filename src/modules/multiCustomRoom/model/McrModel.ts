@@ -92,7 +92,7 @@ namespace TinyWars.MultiCustomRoom {
         export function setRoomInfo(info: IMcrRoomInfo): void {
             _roomInfoDict.set(info.roomId, info);
         }
-        export function removeRoomInfo(roomId: number): void {
+        export function deleteRoomInfo(roomId: number): void {
             _roomInfoDict.delete(roomId);
             _unjoinedRoomIdSet.delete(roomId);
             _joinedRoomIdSet.delete(roomId);

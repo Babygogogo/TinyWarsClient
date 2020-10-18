@@ -36,7 +36,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         sameTeamMap : boolean[][];
     }
 
-    export function revise(war: BwWar, container: RawWarAction): WarAction {
+    export function revise(war: ScwWar, container: RawWarAction): WarAction {
         if      (container.PlayerBeginTurn)     { return revisePlayerBeginTurn(war, container); }
         else if (container.PlayerDeleteUnit)    { return revisePlayerDeleteUnit(war, container); }
         else if (container.PlayerEndTurn)       { return revisePlayerEndTurn(war, container); }
@@ -125,7 +125,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         };
     }
 
-    function reviseUnitAttackUnit(war: BwWar, container: RawWarAction): WarAction { // DONE
+    function reviseUnitAttackUnit(war: ScwWar, container: RawWarAction): WarAction { // DONE
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
@@ -377,7 +377,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         };
     }
 
-    function reviseUnitUseCoSkill(war: BwWar, rawAction: RawWarAction): WarAction { // DONE
+    function reviseUnitUseCoSkill(war: ScwWar, rawAction: RawWarAction): WarAction { // DONE
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
@@ -559,7 +559,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
     }
 
     function getUseCoSkillExtraDataList(
-        war             : BwWar,
+        war             : ScwWar,
         player          : BwPlayer,
         skillType       : Types.CoSkillType,
         movePath        : Types.MovePath,
@@ -603,7 +603,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         return dataList;
     }
 
-    function getIndiscriminateAreaDamageCenter(war: BwWar, valueMaps: ValueMaps, indiscriminateCfg: number[]): GridIndex | null {
+    function getIndiscriminateAreaDamageCenter(war: ScwWar, valueMaps: ValueMaps, indiscriminateCfg: number[]): GridIndex | null {
         const targetType    = indiscriminateCfg[0];
         const radius        = indiscriminateCfg[1];
         const hpDamage      = indiscriminateCfg[2];

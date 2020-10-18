@@ -3,9 +3,8 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
     import Types        = Utility.Types;
     import GridIndex    = Types.GridIndex;
     import UnitType     = Types.UnitType;
-    import BwWar        = BaseWar.BwWar;
 
-    export function reqPlayerBeginTurn(war: BwWar): void {
+    export function reqPlayerBeginTurn(war: ScwWar): void {
         ScwModel.updateByWarAction(ScwActionReviser.revise(
             war,
             {
@@ -15,7 +14,7 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ));
     }
 
-    export function reqPlayerDeleteUnit(war: BwWar, gridIndex: GridIndex): void {
+    export function reqPlayerDeleteUnit(war: ScwWar, gridIndex: GridIndex): void {
         ScwModel.updateByWarAction(ScwActionReviser.revise(
             war,
             {
@@ -27,7 +26,7 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ));
     }
 
-    export function reqPlayerEndTurn(war: BwWar): void {
+    export function reqPlayerEndTurn(war: ScwWar): void {
         ScwModel.updateByWarAction(ScwActionReviser.revise(
             war,
             {
@@ -37,7 +36,7 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ));
     }
 
-    export function reqPlayerProduceUnit(war: BwWar, gridIndex: GridIndex, unitType: UnitType, unitHp: number): void {
+    export function reqPlayerProduceUnit(war: ScwWar, gridIndex: GridIndex, unitType: UnitType, unitHp: number): void {
         ScwModel.updateByWarAction(ScwActionReviser.revise(
             war,
             {
@@ -51,7 +50,7 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ));
     }
 
-    export function reqUnitAttack(war: BwWar, path: GridIndex[], launchUnitId: number | undefined, targetGridIndex: GridIndex): void {
+    export function reqUnitAttack(war: ScwWar, path: GridIndex[], launchUnitId: number | undefined, targetGridIndex: GridIndex): void {
         ScwModel.updateByWarAction(ScwActionReviser.revise(
             war,
             {
@@ -65,7 +64,7 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ));
     }
 
-    export function reqUnitBeLoaded(war: BwWar, path: GridIndex[], launchUnitId: number | null): void {
+    export function reqUnitBeLoaded(war: ScwWar, path: GridIndex[], launchUnitId: number | null): void {
         ScwModel.updateByWarAction(ScwActionReviser.revise(
             war,
             {
@@ -78,7 +77,7 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ));
     }
 
-    export function reqUnitBuildTile(war: BwWar, path: GridIndex[], launchUnitId?: number): void {
+    export function reqUnitBuildTile(war: ScwWar, path: GridIndex[], launchUnitId?: number): void {
         ScwModel.updateByWarAction(ScwActionReviser.revise(
             war,
             {
@@ -91,7 +90,7 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ));
     }
 
-    export function reqUnitCaptureTile(war: BwWar, path: GridIndex[], launchUnitId: number | null): void {
+    export function reqUnitCaptureTile(war: ScwWar, path: GridIndex[], launchUnitId: number | null): void {
         ScwModel.updateByWarAction(ScwActionReviser.revise(
             war,
             {
@@ -104,7 +103,7 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ));
     }
 
-    export function reqUnitDive(war: BwWar, path: GridIndex[], launchUnitId: number | undefined): void {
+    export function reqUnitDive(war: ScwWar, path: GridIndex[], launchUnitId: number | undefined): void {
         ScwModel.updateByWarAction(ScwActionReviser.revise(
             war,
             {
@@ -117,7 +116,7 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ));
     }
 
-    export function reqUnitDrop(war: BwWar, path: GridIndex[], launchUnitId: number | undefined, dropDestinations: Types.DropDestination[]): void {
+    export function reqUnitDrop(war: ScwWar, path: GridIndex[], launchUnitId: number | undefined, dropDestinations: Types.DropDestination[]): void {
         ScwModel.updateByWarAction(ScwActionReviser.revise(
             war,
             {
@@ -131,7 +130,7 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ));
     }
 
-    export function reqUnitJoin(war: BwWar, path: GridIndex[], launchUnitId: number | undefined): void {
+    export function reqUnitJoin(war: ScwWar, path: GridIndex[], launchUnitId: number | undefined): void {
         ScwModel.updateByWarAction(ScwActionReviser.revise(
             war,
             {
@@ -144,7 +143,7 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ));
     }
 
-    export function reqUnitLaunchFlare(war: BwWar, path: GridIndex[], launchUnitId: number | undefined, targetGridIndex: GridIndex): void {
+    export function reqUnitLaunchFlare(war: ScwWar, path: GridIndex[], launchUnitId: number | undefined, targetGridIndex: GridIndex): void {
         ScwModel.updateByWarAction(ScwActionReviser.revise(
             war,
             {
@@ -158,7 +157,7 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ));
     }
 
-    export function reqUnitLaunchSilo(war: BwWar, path: GridIndex[], launchUnitId: number | undefined, targetGridIndex: GridIndex): void {
+    export function reqUnitLaunchSilo(war: ScwWar, path: GridIndex[], launchUnitId: number | undefined, targetGridIndex: GridIndex): void {
         ScwModel.updateByWarAction(ScwActionReviser.revise(
             war,
             {
@@ -172,7 +171,7 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ));
     }
 
-    export function reqUnitLoadCo(war: BwWar, path: GridIndex[], launchUnitId: number | undefined): void {
+    export function reqUnitLoadCo(war: ScwWar, path: GridIndex[], launchUnitId: number | undefined): void {
         ScwModel.updateByWarAction(ScwActionReviser.revise(
             war,
             {
@@ -185,7 +184,7 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ));
     }
 
-    export function reqUnitProduceUnit(war: BwWar, path: GridIndex[], launchUnitId: number | undefined): void {
+    export function reqUnitProduceUnit(war: ScwWar, path: GridIndex[], launchUnitId: number | undefined): void {
         ScwModel.updateByWarAction(ScwActionReviser.revise(
             war,
             {
@@ -198,7 +197,7 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ));
     }
 
-    export function reqUnitSupply(war: BwWar, path: GridIndex[], launchUnitId: number | undefined): void {
+    export function reqUnitSupply(war: ScwWar, path: GridIndex[], launchUnitId: number | undefined): void {
         ScwModel.updateByWarAction(ScwActionReviser.revise(
             war,
             {
@@ -211,7 +210,7 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ));
     }
 
-    export function reqUnitSurface(war: BwWar, path: GridIndex[], launchUnitId: number | undefined): void {
+    export function reqUnitSurface(war: ScwWar, path: GridIndex[], launchUnitId: number | undefined): void {
         ScwModel.updateByWarAction(ScwActionReviser.revise(
             war,
             {
@@ -224,7 +223,7 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ));
     }
 
-    export function reqUnitUseCoSkill(war: BwWar, skillType: Types.CoSkillType, path: GridIndex[], launchUnitId: number | null): void {
+    export function reqUnitUseCoSkill(war: ScwWar, skillType: Types.CoSkillType, path: GridIndex[], launchUnitId: number | null): void {
         ScwModel.updateByWarAction(ScwActionReviser.revise(
             war,
             {
@@ -238,7 +237,7 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ));
     }
 
-    export function reqUnitWait(war: BwWar, path: GridIndex[], launchUnitId?: number): void {
+    export function reqUnitWait(war: ScwWar, path: GridIndex[], launchUnitId?: number): void {
         ScwModel.updateByWarAction(ScwActionReviser.revise(
             war,
             {

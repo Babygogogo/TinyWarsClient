@@ -150,6 +150,7 @@ namespace TinyWars.MultiPlayerWar {
                     unitType,
                     playerIndex,
                 }, configVersion);
+                unit.startRunning(war);
                 const cfgCost = Utility.ConfigManager.getUnitTemplateCfg(configVersion, unitType).productionCost;
                 dataList.push({
                     unitType,

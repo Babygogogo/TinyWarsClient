@@ -5,6 +5,7 @@ namespace TinyWars.BaseWar {
     import GridIndexHelpers     = Utility.GridIndexHelpers;
     import ProtoTypes           = Utility.ProtoTypes;
     import ConfigManager        = Utility.ConfigManager;
+    import VisibilityHelpers    = Utility.VisibilityHelpers;
     import UnitActionState      = Types.UnitActionState;
     import ArmorType            = Types.ArmorType;
     import TileType             = Types.TileType;
@@ -680,25 +681,58 @@ namespace TinyWars.BaseWar {
             const destination   = movePath[pathLength - 1];
             const distance      = GridIndexHelpers.getDistance(destination, targetGridIndex);
             const primaryAmmo   = this.getPrimaryWeaponCurrentAmmo();
-            const unitMap       = this.getWar().getUnitMap();
+            const war           = this.getWar();
+            const unitMap       = war.getUnitMap();
             if (((!this.checkCanAttackAfterMove()) && (pathLength > 1))                             ||
                 ((this.getLoaderUnitId() != null) && (pathLength <= 1))                             ||
-                ((pathLength > 1) && (unitMap.getUnitOnMap(destination)))                           ||
                 ((!primaryAmmo) && (!this.checkHasSecondaryWeapon()))                               ||
                 (!((distance <= this.getFinalMaxAttackRange()!) && (distance >= this.getMinAttackRange()!)))
             ) {
                 return false;
-            } else {
-                const targetUnit = unitMap.getUnitOnMap(targetGridIndex);
-                if (targetUnit) {
-                    const armorType = targetUnit.getArmorType();
-                    return (targetUnit.getTeamIndex() !== this.getTeamIndex())
-                        && ((!targetUnit.getIsDiving()) || (this.checkCanAttackDivingUnits()))
-                        && (this.getBaseDamage(armorType) != null);
-                } else {
-                    const armorType = this.getWar().getTileMap().getTile(targetGridIndex).getArmorType();
-                    return (armorType != null) && (this.getBaseDamage(armorType) != null);
+            }
+
+            const teamIndex         = this.getTeamIndex();
+            const unitOnDestination = unitMap.getUnitOnMap(destination);
+            if ((pathLength > 1) && (unitOnDestination)) {
+                const unitType = unitOnDestination.getType();
+                if (unitType == null) {
+                    Logger.error(`BwUnit.checkCanAttackTargetAfterMovePath() empty unitType.`);
+                    return undefined;
                 }
+
+                const unitPlayerIndex = unitOnDestination.getPlayerIndex();
+                if (unitPlayerIndex == null) {
+                    Logger.error(`BwUnit.checkCanAttackTargetAfterMovePath() empty unitPlayerIndex.`);
+                    return undefined;
+                }
+
+                const isDiving = unitOnDestination.getIsDiving();
+                if (isDiving == null) {
+                    Logger.error(`BwUnit.checkCanAttackTargetAfterMovePath() empty isDiving.`);
+                    return undefined;
+                }
+
+                if (VisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
+                    war,
+                    observerTeamIndex   : teamIndex,
+                    gridIndex           : destination,
+                    unitType,
+                    unitPlayerIndex,
+                    isDiving,
+                })) {
+                    return false;
+                }
+            }
+
+            const targetUnit = unitMap.getUnitOnMap(targetGridIndex);
+            if (targetUnit) {
+                const armorType = targetUnit.getArmorType();
+                return (targetUnit.getTeamIndex() !== teamIndex)
+                    && ((!targetUnit.getIsDiving()) || (this.checkCanAttackDivingUnits()))
+                    && (this.getBaseDamage(armorType) != null);
+            } else {
+                const armorType = war.getTileMap().getTile(targetGridIndex).getArmorType();
+                return (armorType != null) && (this.getBaseDamage(armorType) != null);
             }
         }
 
@@ -709,27 +743,27 @@ namespace TinyWars.BaseWar {
             return this._isCapturingTile || false;
         }
         public setIsCapturingTile(isCapturing: boolean): void {
-            if (!this.checkCanCapture()) {
-                Logger.assert(!isCapturing, "UnitModel.setIsCapturingTile() error, isCapturing: ", isCapturing);
+            if ((!this.checkIsCapturer()) && (isCapturing)) {
+                Logger.error("UnitModel.setIsCapturingTile() error, isCapturing: ", isCapturing);
             }
             this._isCapturingTile = isCapturing;
         }
 
-        public checkCanCapture(): boolean {
+        public checkIsCapturer(): boolean {
             return this._templateCfg.canCaptureTile === 1;
         }
         public checkCanCaptureTile(tile: BwTile): boolean {
-            return (this.checkCanCapture())
+            return (this.checkIsCapturer())
                 && (this.getTeamIndex() !== tile.getTeamIndex())
                 && (tile.getMaxCapturePoint() != null);
         }
 
         public getCaptureAmount(): number | undefined {
             // TODO: take the skills into account.
-            return this.checkCanCapture() ? this.getNormalizedCurrentHp() : undefined;
+            return this.checkIsCapturer() ? this.getNormalizedCurrentHp() : undefined;
         }
         public getCfgCaptureAmount(): number | undefined {
-            return this.checkCanCapture() ? this.getNormalizedCurrentHp() : undefined;
+            return this.checkIsCapturer() ? this.getNormalizedCurrentHp() : undefined;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -739,8 +773,8 @@ namespace TinyWars.BaseWar {
             return this._isDiving || false;
         }
         public setIsDiving(isDiving: boolean): void {
-            if (!this.checkIsDiver()) {
-                Logger.assert(!isDiving, "UnitModel.setIsDiving() error, isDiving: ", isDiving);
+            if ((!this.checkIsDiver()) && (isDiving)) {
+                Logger.error("UnitModel.setIsDiving() error, isDiving: ", isDiving);
             }
             this._isDiving = isDiving;
         }
@@ -1099,8 +1133,8 @@ namespace TinyWars.BaseWar {
             return this._isBuildingTile || false;
         }
         public setIsBuildingTile(isBuilding: boolean): void {
-            if (!this.checkIsTileBuilder()) {
-                Logger.assert(!isBuilding, "UnitModel.setIsBuildingTile() error, isBuilding: ", isBuilding);
+            if ((!this.checkIsTileBuilder()) && (isBuilding)) {
+                Logger.error("UnitModel.setIsBuildingTile() error, isBuilding: ", isBuilding);
             }
             this._isBuildingTile = isBuilding;
         }
@@ -1589,6 +1623,7 @@ namespace TinyWars.BaseWar {
             if ((!player.getCoId())                 ||
                 (allCoUnits.length >= maxLoadCount) ||
                 (player.getCoIsDestroyedInTurn())   ||
+                (this.getHasLoadedCo())             ||
                 (cost == null)                      ||
                 (cost > fund)
             ) {

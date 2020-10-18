@@ -171,12 +171,25 @@
                 <e:List>
                     <e:itemRendererSkinName>
                         <e:Skin height="22" currentState="up" states="up,down" width="400">
-                            <GameUi:UiLabel id="_labelIndex" text="红方" size="16" x="4" bottom="0" maxTextWidth="32" />
-                            <GameUi:UiLabel id="_labelTeam" text="A队" size="16" x="45" bottom="0" maxTextWidth="30" />
-                            <GameUi:UiLabel id="_labelNickname" text="玩家名称居然有十个字" x="80" size="16"
-                                            textColor.down="0x00ff00" bottom="0" maxTextWidth="210" />
-                            <GameUi:UiLabel id="_labelCoName" text="CO名称" x="300" size="16" bottom="0"
-                                            maxTextWidth="100" />
+                            <e:Group x="4" verticalCenter="0">
+                                <GameUi:UiLabel id="_labelIndex" text="红方" size="16" x="4" bottom="0" maxTextWidth="32"
+                                                y="2" scaleX="1" scaleY="1" />
+                                <GameUi:UiLabel id="_labelTeam" text="A队" size="16" x="4" bottom="0" maxTextWidth="30"
+                                                y="2" scaleX="1" scaleY="1" />
+                                <e:layout>
+                                    <e:HorizontalLayout/>
+                                </e:layout>
+                            </e:Group>
+                            <e:Group x="90" verticalCenter="0">
+                                <GameUi:UiLabel id="_labelNickname" text="玩家名称居然有十个字" x="-21" size="16"
+                                                textColor.down="0x00ff00" bottom="0" maxTextWidth="210" y="-2"
+                                                scaleX="1" scaleY="1" />
+                                <GameUi:UiLabel id="_labelCoName" text="CO名称" x="199" size="16" bottom="0"
+                                                maxTextWidth="100" y="-2" scaleX="1" scaleY="1" />
+                                <e:layout>
+                                    <e:HorizontalLayout/>
+                                </e:layout>
+                            </e:Group>
                         </e:Skin>
                     </e:itemRendererSkinName>
                     <e:layout>

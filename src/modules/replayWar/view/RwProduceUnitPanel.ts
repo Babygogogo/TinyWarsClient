@@ -147,6 +147,7 @@ namespace TinyWars.ReplayWar {
                     unitType,
                     playerIndex,
                 }, configVersion) as RwUnit;
+                unit.startRunning(war);
                 const cfgCost = Utility.ConfigManager.getUnitTemplateCfg(configVersion, unitType).productionCost;
                 dataList.push({
                     unitType,

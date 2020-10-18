@@ -318,14 +318,13 @@ namespace TinyWars.SingleCustomWar.ScwModel {
             actionPlanner.setStateIdle();
 
         } else {
-            BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
-            unitMap.setUnitOnMap(attackerUnit);
-            attackerUnit.setActionState(UnitActionState.Acted);
-
             const attackerGridIndex             = pathNodes[pathNodes.length - 1];
             const targetGridIndex               = action.targetGridIndex as GridIndex;
             const [attackDamage, counterDamage] = DamageCalculator.getFinalBattleDamage(war, pathNodes, launchUnitId, targetGridIndex);
             const targetUnit                    = unitMap.getUnitOnMap(targetGridIndex);
+            BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+            unitMap.setUnitOnMap(attackerUnit);
+            attackerUnit.setActionState(UnitActionState.Acted);
 
             // Handle ammo.
             const attackerAmmo = attackerUnit.getPrimaryWeaponCurrentAmmo();
@@ -502,14 +501,14 @@ namespace TinyWars.SingleCustomWar.ScwModel {
             actionPlanner.setStateIdle();
 
         } else {
-            BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
-            unitMap.setUnitOnMap(attackerUnit);
-            attackerUnit.setActionState(UnitActionState.Acted);
-
             const targetGridIndex               = action.targetGridIndex as GridIndex;
             const [attackDamage, counterDamage] = DamageCalculator.getFinalBattleDamage(war, pathNodes, launchUnitId, targetGridIndex);
             const tileMap                       = war.getTileMap() as ScwTileMap;
             const targetTile                    = tileMap.getTile(targetGridIndex);
+            BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+            unitMap.setUnitOnMap(attackerUnit);
+            attackerUnit.setActionState(UnitActionState.Acted);
+
             if (attackerUnit.getCfgBaseDamage(targetTile.getArmorType(), Types.WeaponType.Primary) != null) {
                 const attackerAmmo = attackerUnit.getPrimaryWeaponCurrentAmmo();
                 if ((attackerAmmo != null) && (attackerAmmo > 0)) {
@@ -977,6 +976,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
             }
 
             focusUnit.setCurrentPromotion(focusUnit.getMaxPromotion());
+            focusUnit.setHasLoadedCo(true);
 
             const player = war.getPlayer(playerIndex);
             player.setFund(player.getFund() - focusUnit.getLoadCoCost()!);

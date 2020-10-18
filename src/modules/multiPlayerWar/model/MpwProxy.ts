@@ -79,7 +79,6 @@ namespace TinyWars.MultiPlayerWar.MpwProxy {
         if (data.errorCode) {
             Notify.dispatch(Notify.Type.MsgMpwCommonContinueWarFailed, data);
         } else {
-            Utility.FlowManager.gotoMultiCustomWar(data.war);
             Notify.dispatch(Notify.Type.MsgMpwCommonContinueWar, data);
         }
     }

@@ -3,6 +3,7 @@ namespace TinyWars.ReplayWar.RwModel {
     import Logger       = Utility.Logger;
     import ProtoManager = Utility.ProtoManager;
     import ProtoTypes   = Utility.ProtoTypes;
+    import WarMapModel  = WarMap.WarMapModel;
     import IReplayInfo  = ProtoTypes.Replay.IReplayInfo;
 
     let _replayInfoList : IReplayInfo[];
@@ -35,7 +36,16 @@ namespace TinyWars.ReplayWar.RwModel {
             unloadWar();
         }
 
-        const warData = ProtoManager.decodeAsSerialWar(encodedWarData);
+        const warData       = ProtoManager.decodeAsSerialWar(encodedWarData);
+        const mapRawData    = await WarMapModel.getRawData(warData.settingsForCommon.mapId);
+        const unitDataList  = mapRawData.unitDataList || [];
+        const field         = warData.field;
+        field.tileMap       = { tiles: mapRawData.tileDataList };
+        field.unitMap       = {
+            units       : unitDataList,
+            nextUnitId  : unitDataList.length,
+        };
+
         _war = (await new RwWar().init(warData)).startRunning().startRunningView() as RwWar;
         return _war;
     }

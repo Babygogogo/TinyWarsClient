@@ -99,7 +99,9 @@ namespace TinyWars.SingleCustomWar {
                         unitType    : data.produceUnitType,
                         playerIndex : war.getPlayerIndexInTurn(),
                     }, war.getConfigVersion());
-
+                if (unitForProduce) {
+                    unitForProduce.startRunning(war);
+                }
                 dataForList.push({
                     actionType      : data.actionType,
                     callback        : data.callback,

@@ -2660,6 +2660,10 @@ namespace TinyWars.Utility.Lang {
             `您确定要踢掉玩家"%s"吗？`,
             `Are you sure to kick off the player '%s'?`,
         ],
+        [Type.F0030]: [
+            `%s (p%d) 回合结束。`,
+            `%s (p%d) has ended the turn!!`,
+        ],
     };
 
     const NET_ERROR_TEXT = {
@@ -3217,6 +3221,7 @@ namespace TinyWars.Utility.Lang {
 
     export function getUnitAndTileSkinName(skinId: number): string {
         switch (skinId) {
+            case 0  : return "";
             case 1  : return getText(Type.B0004);
             case 2  : return getText(Type.B0005);
             case 3  : return getText(Type.B0006);

@@ -229,7 +229,7 @@ namespace TinyWars.ReplayWar {
             const war               = this._war;
             const player            = war.getPlayerInTurn();
             this._labelPlayer.text  = player
-                ? `${await player.getNickname()} (${Lang.getPlayerForceName(player.getPlayerIndex())})`
+                ? `${await player.getNickname()} (${Lang.getPlayerForceName(player.getPlayerIndex())}, ${Lang.getUnitAndTileSkinName(player.getUnitAndTileSkinId())})`
                 : ``;
         }
 

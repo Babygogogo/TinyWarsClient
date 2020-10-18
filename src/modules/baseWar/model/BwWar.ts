@@ -6,7 +6,6 @@ namespace TinyWars.BaseWar {
     import ProtoTypes               = Utility.ProtoTypes;
     import ISerialWar               = ProtoTypes.WarSerialization.ISerialWar;
     import IWarSettingsForCommon    = ProtoTypes.WarSettings.ISettingsForCommon;
-    import ISeedRandomState         = ProtoTypes.Structure.ISeedRandomState;
 
     export abstract class BwWar {
         private _settingsForCommon          : IWarSettingsForCommon;
@@ -14,12 +13,10 @@ namespace TinyWars.BaseWar {
         private _warId                      : number;
         private _executedActionsCount       : number;
         private _remainingVotesForDraw      : number | null | undefined;
-        private _seedRandomInitialState     : ProtoTypes.Structure.ISeedRandomState;
 
         private _playerManager              : BwPlayerManager;
         private _field                      : BwField;
         private _turnManager                : BwTurnManager;
-        private _randomNumberGenerator      : seedrandom.prng;
 
         private _view                   : BwWarView;
         private _isRunning              = false;
@@ -46,18 +43,9 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            const seedRandomInitialState    = data.seedRandomInitialState;
-            const seedRandomCurrentState    = executedActionsCount === 0 ? seedRandomInitialState : data.seedRandomCurrentState;
-            if (seedRandomCurrentState == null) {
-                Logger.error(`BwWar._baseInit() empty seedRandomCurrentState.`);
-                return undefined;
-            }
-
             this._setWarId(data.warId);
             this._setSettingsForCommon(settingsForCommon);
             this.setExecutedActionsCount(executedActionsCount);
-            this._setRandomNumberGenerator(new Math.seedrandom("", { state: seedRandomCurrentState }));
-            this._setSeedRandomInitialState(seedRandomInitialState);
             this.setRemainingVotesForDraw(data.remainingVotesForDraw);
 
             return this;
@@ -241,29 +229,6 @@ namespace TinyWars.BaseWar {
             return BwSettingsHelper.getLuckUpperLimit(warRule, playerIndex);
         }
 
-        protected _setRandomNumberGenerator(generator: seedrandom.prng): void {
-            this._randomNumberGenerator = generator;
-        }
-        private _getRandomNumberGenerator(): seedrandom.prng {
-            return this._randomNumberGenerator;
-        }
-        public getRandomNumber(): number | undefined {
-            const generator = this._getRandomNumberGenerator();
-            if (generator == null) {
-                Logger.error(`BwWar.getRandomNumber() empty generator.`);
-                return undefined;
-            }
-            return generator();
-        }
-        protected _getSeedRandomCurrentState(): ISeedRandomState | undefined {
-            const generator = this._getRandomNumberGenerator();
-            if (generator == null) {
-                Logger.error(`BwWar.getRandomNumber() empty generator.`);
-                return undefined;
-            }
-            return generator.state();
-        }
-
         public setRemainingVotesForDraw(votes: number | undefined): void {
             this._remainingVotesForDraw = votes;
         }
@@ -277,13 +242,6 @@ namespace TinyWars.BaseWar {
         public setExecutedActionsCount(count: number): void {
             this._executedActionsCount = count;
             Notify.dispatch(Notify.Type.BwExecutedActionsCountChanged);
-        }
-
-        private _setSeedRandomInitialState(state: ISeedRandomState): void {
-            this._seedRandomInitialState = state;
-        }
-        protected _getSeedRandomInitialState(): ISeedRandomState | undefined {
-            return this._seedRandomInitialState;
         }
 
         protected _setPlayerManager(manager: BwPlayerManager): void {

@@ -22,7 +22,7 @@ namespace TinyWars.SingleCustomWar {
                     con.visible = false;
 
                 } else if (state === ActionPlannerState.MakingMovePath) {
-                    const war                           = cursor.getWar();
+                    const war                           = cursor.getWar() as ScwWar;
                     const focusUnitLoaded               = actionPlanner.getFocusUnitLoaded();
                     const [attackDamage, counterDamage] = DamageCalculator.getEstimatedBattleDamage(
                         war,
@@ -43,7 +43,7 @@ namespace TinyWars.SingleCustomWar {
                     con.visible = false;
 
                 } else if (state === ActionPlannerState.ChoosingAttackTarget) {
-                    const war                           = cursor.getWar();
+                    const war                           = cursor.getWar() as ScwWar;
                     const focusUnitLoaded               = actionPlanner.getFocusUnitLoaded();
                     const [attackDamage, counterDamage] = DamageCalculator.getEstimatedBattleDamage(
                         war,

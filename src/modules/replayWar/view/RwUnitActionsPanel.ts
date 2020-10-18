@@ -99,6 +99,9 @@ namespace TinyWars.ReplayWar {
                         unitType    : data.produceUnitType,
                         playerIndex : war.getPlayerIndexInTurn(),
                     }, war.getConfigVersion()) as RwUnit;
+                if (unitForProduce) {
+                    unitForProduce.startRunning(war);
+                }
 
                 dataList.push({
                     actionType      : data.actionType,

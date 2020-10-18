@@ -57,6 +57,8 @@ namespace TinyWars.MultiCustomRoom {
                 { type: Notify.Type.MsgMcrGetJoinedRoomInfoList,    callback: this._onMsgMcrGetJoinedRoomInfoList },
                 { type: Notify.Type.MsgMcrExitRoom,                 callback: this._onMsgMcrExitRoom },
                 { type: Notify.Type.MsgMcrDeletePlayer,             callback: this._onMsgMcrDeletePlayer },
+                { type: Notify.Type.MsgMcrDeleteRoom,               callback: this._onMsgMcrDeleteRoom },
+                { type: Notify.Type.MsgMcrStartWar,                 callback: this._onMsgMcrStartWar },
             ];
             this._uiListeners = [
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
@@ -124,6 +126,14 @@ namespace TinyWars.MultiCustomRoom {
             if (data.targetUserId === User.UserModel.getSelfUserId()) {
                 this._updateComponentsForRoomList();
             }
+        }
+
+        private _onMsgMcrDeleteRoom(e: egret.Event): void {
+            this._updateComponentsForRoomList();
+        }
+
+        private _onMsgMcrStartWar(e: egret.Event): void {
+            this._updateComponentsForRoomList();
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {

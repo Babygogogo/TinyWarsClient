@@ -225,7 +225,7 @@ namespace TinyWars.MultiPlayerWar {
         private async _updateLabelPlayer(): Promise<void> {
             const war                   = this._war;
             const player                = war.getPlayerInTurn();
-            this._labelPlayer.text      = `${await player.getNickname()} (${Lang.getPlayerForceName(player.getPlayerIndex())})`;
+            this._labelPlayer.text      = `${await player.getNickname()} (${Lang.getPlayerForceName(player.getPlayerIndex())}, ${Lang.getUnitAndTileSkinName(player.getUnitAndTileSkinId())})`;
             this._labelPlayer.textColor = player === war.getPlayerLoggedIn() ? 0x00FF00 : 0xFFFFFF;
         }
 

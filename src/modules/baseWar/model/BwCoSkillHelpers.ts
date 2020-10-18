@@ -745,7 +745,7 @@ namespace TinyWars.BaseWar.BwCoSkillHelper {
     }
 
     export function getDataForUseCoSkill(
-        war         : BwWar,
+        war         : SinglePlayerWar.SpwWar,
         player      : BwPlayer,
         skillIndex  : number,
     ): IDataForUseCoSkill | undefined {
@@ -808,7 +808,7 @@ namespace TinyWars.BaseWar.BwCoSkillHelper {
         return dataForUseCoSkill;
     }
 
-    function getIndiscriminateAreaDamageCenter(war: BwWar, valueMaps: ValueMaps, indiscriminateCfg: number[]): GridIndex | undefined {
+    function getIndiscriminateAreaDamageCenter(war: SinglePlayerWar.SpwWar, valueMaps: ValueMaps, indiscriminateCfg: number[]): GridIndex | undefined {
         const targetType    = indiscriminateCfg[0];
         const radius        = indiscriminateCfg[1];
         const hpDamage      = indiscriminateCfg[2];

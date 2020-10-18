@@ -6,26 +6,51 @@
         <GameUi:UiZoomableComponent id="_zoomMap" left="20" right="20" top="20" bottom="20" />
         <e:Group id="_groupInfo" y="10" touchThrough="true" touchEnabled="false" touchChildren="false" left="8"
                  right="8">
-            <GameUi:UiLabel id="_labelMapName" text="地图名: 未知" y="0" stroke="2" size="20" scaleX="1" scaleY="1" />
-            <GameUi:UiLabel id="_labelDesigner" text="作者: 未知" y="25" stroke="2" size="20" scaleX="1" scaleY="1" />
-            <GameUi:UiLabel id="_labelHasFog" text="战争迷雾: 否" y="60" stroke="2" size="20" scaleX="1" scaleY="1" />
-            <GameUi:UiLabel id="_labelWarCommentTitle" text="附言:" stroke="2" size="20" scaleX="1" scaleY="1" x="0"
-                            y="95" />
-            <GameUi:UiLabel id="_labelWarComment" text="ASDF" stroke="2" size="20" scaleX="1" scaleY="1" height="50"
-                            y="120" left="0" right="0" />
-            <GameUi:UiLabel id="_labelPlayers" text="已参战玩家:" stroke="2" size="20" scaleX="1" scaleY="1" y="180" />
-            <GameUi:UiScrollList id="_listPlayer" height="140" y="205" width="740" x="0">
-                <e:List>
-                    <e:itemRendererSkinName>
-                        <e:Skin width="740" height="26" currentState="up" states="up,down">
-                            <GameUi:UiLabel id="_labelIndex" text="红方" size="18" verticalCenter="0" stroke="2" x="4" maxTextWidth="36"/>
-                            <GameUi:UiLabel id="_labelSkinId" text="A队" size="18" verticalCenter="0" stroke="2" x="49" maxTextWidth="32" />
-                            <GameUi:UiLabel id="_labelName" text="玩家名称居然有十个字" x="90" size="18" verticalCenter="0"
-                                            stroke="2" textColor.down="0x00ff00" maxTextWidth="500" />
-                        </e:Skin>
-                    </e:itemRendererSkinName>
-                </e:List>
-            </GameUi:UiScrollList>
+            <e:Group x="0" y="0">
+                <GameUi:UiLabel id="_labelMapName" text="地图名: 未知" y="0" stroke="2" size="20" scaleX="1" scaleY="1" x="0" />
+                <GameUi:UiLabel id="_labelDesigner" text="作者: 未知" y="25" stroke="2" size="20" scaleX="1" scaleY="1"
+                                x="0" />
+                <e:layout>
+                    <e:HorizontalLayout gap="20" />
+                </e:layout>
+            </e:Group>
+            <GameUi:UiLabel id="_labelHasFog" text="战争迷雾: 否" y="40" stroke="2" size="20" scaleX="1" scaleY="1" x="0" />
+            <e:Group x="0" y="80">
+                <GameUi:UiLabel id="_labelWarCommentTitle" text="附言:" stroke="2" size="20" scaleX="1" scaleY="1" x="0"
+                                y="0" />
+                <GameUi:UiLabel id="_labelWarComment" text="ASDF" stroke="2" size="20" scaleX="1" scaleY="1" y="25"
+                                x="0" width="740" />
+                <e:layout>
+                    <e:VerticalLayout/>
+                </e:layout>
+            </e:Group>
+            <e:Group x="0" y="146">
+                <GameUi:UiLabel id="_labelPlayers" text="已参战玩家:" stroke="2" size="20" scaleX="1" scaleY="1" y="0" x="0" />
+                <GameUi:UiScrollList id="_listPlayer" y="25" x="0">
+                    <e:List>
+                        <e:itemRendererSkinName>
+                            <e:Skin width="740" height="26" currentState="up" states="up,down">
+                                <GameUi:UiLabel id="_labelIndex" text="红方" size="18" verticalCenter="0" stroke="2" x="4" />
+                                <e:Group x="90" verticalCenter="0">
+                                    <GameUi:UiLabel id="_labelName" text="玩家名称居然有十个字" x="0" size="18" verticalCenter="0"
+                                                    stroke="2" textColor.down="0x00ff00" y="-7" scaleX="1" scaleY="1" />
+                                    <GameUi:UiLabel id="_labelStatus" text="玩家名称居然有十个字" x="0" size="18"
+                                                    verticalCenter="0" stroke="2" y="-7" scaleX="1" scaleY="1" />
+                                    <e:layout>
+                                        <e:HorizontalLayout/>
+                                    </e:layout>
+                                </e:Group>
+                            </e:Skin>
+                        </e:itemRendererSkinName>
+                    </e:List>
+                </GameUi:UiScrollList>
+                <e:layout>
+                    <e:VerticalLayout/>
+                </e:layout>
+            </e:Group>
+            <e:layout>
+                <e:VerticalLayout gap="20" />
+            </e:layout>
         </e:Group>
     </e:Group>
     <e:Group top="40" bottom="0" width="200" right="0">
@@ -35,7 +60,7 @@
                         horizontalCenter="0" />
         <GameUi:UiLabel id="_labelNoWar" text="暂无战局" bold="true" size="26" x="47" verticalCenter="0"
                         textColor="0xffffff" />
-        <GameUi:UiScrollList id="_listWar" left="0" right="0" bottom="50" top="50">
+        <GameUi:UiScrollList id="_listWar" left="0" right="0" bottom="40" top="50">
             <e:List>
                 <e:itemRendererSkinName>
                     <e:Skin width="200" height="44" currentState="up" states="up,down">
@@ -67,14 +92,7 @@
                 </e:layout>
             </e:List>
         </GameUi:UiScrollList>
-        <GameUi:UiButton id="_btnBack" label="&lt;&lt;返回大厅" horizontalCenter="0" bottom="14">
-            <e:skinName>
-                <e:Skin states="up,down,disabled">
-                    <e:Image width="100%" height="100%" />
-                    <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="25" bold="true"
-                             textColor="0xffffff" />
-                </e:Skin>
-            </e:skinName>
-        </GameUi:UiButton>
+        <GameUi:UiButton id="_btnBack" label="返回大厅" skinName="Skins.Component.Button.ButtonSelfAdaption001" bottom="0" left="0"
+                         right="0"></GameUi:UiButton>
     </e:Group>
 </e:Skin>

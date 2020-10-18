@@ -132,6 +132,7 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
     async function _exePlayerEndTurn(war: MpwWar, data: ActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
+        FloatText.show(Lang.getFormattedText(Lang.Type.F0030, await war.getPlayerInTurn().getNickname(), war.getPlayerIndexInTurn()));
 
         const action = data.ActionPlayerEndTurn;
         await war.getTurnManager().endPhaseMain(action);
@@ -436,6 +437,8 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
             const gridVisionEffect = war.getGridVisionEffect();
             if (attackerUnitAfterAction) {
                 attackerUnit.init(attackerUnitAfterAction, attackerUnit.getConfigVersion());
+                attackerUnit.startRunning(war);
+                attackerUnit.startRunningView();
                 attackerUnit.updateView();
                 if (counterDamage != null) {
                     gridVisionEffect.showEffectDamage(attackerGridIndex);
@@ -446,6 +449,8 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
 
             if (targetUnitAfterAction) {
                 targetUnit.init(targetUnitAfterAction, targetUnit.getConfigVersion());
+                targetUnit.startRunning(war);
+                targetUnit.startRunningView();
                 targetUnit.updateView();
                 gridVisionEffect.showEffectDamage(targetGridIndex);
             } else {
@@ -975,6 +980,7 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
             }
 
             focusUnit.setCurrentPromotion(focusUnit.getMaxPromotion());
+            focusUnit.setHasLoadedCo(true);
 
             const player = war.getPlayer(playerIndex);
             player.setFund(player.getFund() - focusUnit.getLoadCoCost()!);

@@ -131,6 +131,7 @@ namespace TinyWars.SingleCustomWar {
                     unitType,
                     playerIndex,
                 }, configVersion) as ScwUnit;
+                unit.startRunning(war);
                 const cfgCost = Utility.ConfigManager.getUnitTemplateCfg(configVersion, unitType).productionCost;
                 dataList.push({
                     unitType,

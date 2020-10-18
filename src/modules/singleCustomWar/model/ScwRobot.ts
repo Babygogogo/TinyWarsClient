@@ -737,7 +737,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         _unitMap.forEachUnitOnMap((unit: ScwUnit) => {
             if ((unit.getPlayerIndex() === playerIndexInturn)   &&
                 (unit.getActionState() === UnitActionState.Idle)            &&
-                (unit.checkCanCapture())
+                (unit.checkIsCapturer())
             ) {
                 units.push(unit);
             }

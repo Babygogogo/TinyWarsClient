@@ -14,6 +14,21 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
     import IWarRule             = WarRule.IWarRule;
     import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
 
+    const DEFAULT_PLAYER_RULE: ProtoTypes.WarRule.IDataForPlayerRule = {
+        playerIndex             : CommonConstants.WarNeutralPlayerIndex,
+        teamIndex               : 0,
+        attackPowerModifier     : 0,
+        availableCoIdList       : [0],
+        energyGrowthMultiplier  : 100,
+        initialEnergyPercentage : 0,
+        initialFund             : 0,
+        incomeMultiplier        : 100,
+        luckLowerLimit          : 0,
+        luckUpperLimit          : 10,
+        moveRangeModifier       : 0,
+        visionRangeModifier     : 0,
+    };
+
     export function getHasFogByDefault(warRule: IWarRule): boolean | null | undefined {
         const ruleForGlobalParams = warRule.ruleForGlobalParams;
         if (ruleForGlobalParams == null) {
@@ -346,6 +361,10 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
     }
 
     export function getPlayerRule(warRule: IWarRule, playerIndex: number): IDataForPlayerRule | undefined {
+        if (playerIndex === CommonConstants.WarNeutralPlayerIndex) {
+            return DEFAULT_PLAYER_RULE;
+        }
+
         const ruleForPlayers = warRule.ruleForPlayers;
         if (ruleForPlayers == null) {
             Logger.error(`BwSettingsHelper.getPlayerRule() empty ruleForPlayers.`);

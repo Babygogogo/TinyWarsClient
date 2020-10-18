@@ -147,7 +147,7 @@ namespace TinyWars.MultiCustomRoom {
             this._btnModifyWarComment.label     = Lang.getText(Lang.Type.B0187);
             this._btnModifyWarRule.label        = Lang.getText(Lang.Type.B0318);
             this._btnModifyPlayerIndex.label    = Lang.getText(Lang.Type.B0018);
-            this._btnModifySkinId.label         = Lang.getText(Lang.Type.B0019);
+            this._btnModifySkinId.label         = Lang.getText(Lang.Type.B0397);
             this._btnModifyHasFog.label         = Lang.getText(Lang.Type.B0020);
             this._btnModifyTimeLimit.label      = Lang.getText(Lang.Type.B0188);
             this._btnBuildings.label            = Lang.getText(Lang.Type.B0333);

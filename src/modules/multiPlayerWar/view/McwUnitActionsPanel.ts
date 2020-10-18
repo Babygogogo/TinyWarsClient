@@ -99,6 +99,9 @@ namespace TinyWars.MultiPlayerWar {
                         unitType    : data.produceUnitType,
                         playerIndex : war.getPlayerIndexLoggedIn(),
                     }, war.getConfigVersion());
+                if (unitForProduce) {
+                    unitForProduce.startRunning(war);
+                }
 
                 dataForList.push({
                     actionType      : data.actionType,
