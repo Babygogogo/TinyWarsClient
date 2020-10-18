@@ -71,7 +71,6 @@ namespace TinyWars.BaseWar {
             this.updateCoZone();
         }
         public stopRunningView(): void {
-            this._isCoZoneInitialized = false;
             Notify.removeEventListeners(this._notifyListeners, this);
 
             egret.Tween.removeTweens(this._coZoneContainer);
@@ -103,10 +102,11 @@ namespace TinyWars.BaseWar {
 
                 const tileMap                                   = this._tileMap;
                 const { width: mapWidth, height: mapHeight }    = tileMap.getMapSize();
-                const playersCount                              = tileMap.getWar().getPlayerManager().getTotalPlayersCount(false);
+                const playerManager                             = tileMap.getWar().getPlayerManager();
+                const playersCount                              = playerManager.getTotalPlayersCount(false);
                 for (let i = 1; i <= playersCount; ++i) {
                     const layer     = new egret.DisplayObjectContainer();
-                    const imgSource = `c08_t03_s${Helpers.getNumText(i)}_f01`;
+                    const imgSource = `c08_t03_s${Helpers.getNumText(playerManager.getPlayer(i).getUnitAndTileSkinId())}_f01`;
                     const matrix: GameUi.UiImage[][] = [];
                     for (let x = 0; x < mapWidth; ++x) {
                         matrix[x] = [];
