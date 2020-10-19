@@ -435,21 +435,25 @@ namespace TinyWars.BaseWar {
             this._stopNormalAnimation();
 
             egret.Tween.get(this._imgUpperLeftCorner, { loop: true })
+                .set({ x: _UPPER_LEFT_CORNER_OUTER_X, y: _UPPER_LEFT_CORNER_OUTER_Y })
                 .to({ x: _UPPER_LEFT_CORNER_INNER_X, y: _UPPER_LEFT_CORNER_INNER_Y }, _PULSE_IN_DURATION)
                 .to({ x: _UPPER_LEFT_CORNER_OUTER_X, y: _UPPER_LEFT_CORNER_OUTER_Y }, _PULSE_OUT_DURATION)
                 .wait(_PULSE_INTERVAL_DURATION);
 
             egret.Tween.get(this._imgUpperRightCorner, { loop: true })
+                .set({ x: _UPPER_RIGHT_CORNER_OUTER_X, y: _UPPER_RIGHT_CORNER_OUTER_Y })
                 .to({ x: _UPPER_RIGHT_CORNER_INNER_X, y: _UPPER_RIGHT_CORNER_INNER_Y }, _PULSE_IN_DURATION)
                 .to({ x: _UPPER_RIGHT_CORNER_OUTER_X, y: _UPPER_RIGHT_CORNER_OUTER_Y }, _PULSE_OUT_DURATION)
                 .wait(_PULSE_INTERVAL_DURATION);
 
             egret.Tween.get(this._imgLowerLeftCorner, { loop: true })
+                .set({ x: _LOWER_LEFT_CORNER_OUTER_X, y: _LOWER_LEFT_CORNER_OUTER_Y })
                 .to({ x: _LOWER_LEFT_CORNER_INNER_X, y: _LOWER_LEFT_CORNER_INNER_Y }, _PULSE_IN_DURATION)
                 .to({ x: _LOWER_LEFT_CORNER_OUTER_X, y: _LOWER_LEFT_CORNER_OUTER_Y }, _PULSE_OUT_DURATION)
                 .wait(_PULSE_INTERVAL_DURATION);
 
             egret.Tween.get(this._imgLowerRightCorner, { loop: true })
+                .set({ x: _LOWER_RIGHT_CORNER_OUTER_X, y: _LOWER_RIGHT_CORNER_OUTER_Y })
                 .to({ x: _LOWER_RIGHT_CORNER_INNER_X, y: _LOWER_RIGHT_CORNER_INNER_Y }, _PULSE_IN_DURATION)
                 .to({ x: _LOWER_RIGHT_CORNER_OUTER_X, y: _LOWER_RIGHT_CORNER_OUTER_Y }, _PULSE_OUT_DURATION)
                 .wait(_PULSE_INTERVAL_DURATION);
@@ -474,6 +478,7 @@ namespace TinyWars.BaseWar {
                 });
         }
         private _stopTargetAnimation(): void {
+            this._frameIndexForImgTarget = 0;
             egret.Tween.removeTweens(this._imgTarget);
         }
 

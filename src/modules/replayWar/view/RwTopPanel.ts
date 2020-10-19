@@ -222,7 +222,7 @@ namespace TinyWars.ReplayWar {
 
         private _updateLabelAction(): void {
             const war               = this._war;
-            this._labelAction.text  = `${war.getExecutedActionsCount()}`;
+            this._labelAction.text  = `${war.getNextActionId()}`;
         }
 
         private async _updateLabelPlayer(): Promise<void> {

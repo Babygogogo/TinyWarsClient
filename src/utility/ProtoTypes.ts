@@ -11265,8 +11265,8 @@ export declare namespace Structure {
     /** Properties of a DataForPlayerBanCo. */
     interface IDataForPlayerBanCo {
 
-        /** DataForPlayerBanCo playerIndex */
-        playerIndex?: (number|null);
+        /** DataForPlayerBanCo srcPlayerIndex */
+        srcPlayerIndex?: (number|null);
 
         /** DataForPlayerBanCo bannedCoIdList */
         bannedCoIdList?: (number[]|null);
@@ -11281,8 +11281,8 @@ export declare namespace Structure {
          */
         constructor(properties?: Structure.IDataForPlayerBanCo);
 
-        /** DataForPlayerBanCo playerIndex. */
-        public playerIndex: number;
+        /** DataForPlayerBanCo srcPlayerIndex. */
+        public srcPlayerIndex: number;
 
         /** DataForPlayerBanCo bannedCoIdList. */
         public bannedCoIdList: number[];
@@ -12306,6 +12306,9 @@ export declare namespace RankMatchRoom {
         /** RmrRoomInfo createTime */
         createTime?: (number|null);
 
+        /** RmrRoomInfo timeForStartSetSelfSettings */
+        timeForStartSetSelfSettings?: (number|null);
+
         /** RmrRoomInfo settingsForCommon */
         settingsForCommon?: (WarSettings.ISettingsForCommon|null);
 
@@ -12330,6 +12333,9 @@ export declare namespace RankMatchRoom {
 
         /** RmrRoomInfo createTime. */
         public createTime: number;
+
+        /** RmrRoomInfo timeForStartSetSelfSettings. */
+        public timeForStartSetSelfSettings: number;
 
         /** RmrRoomInfo settingsForCommon. */
         public settingsForCommon?: (WarSettings.ISettingsForCommon|null);
