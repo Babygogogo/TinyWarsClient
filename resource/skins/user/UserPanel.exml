@@ -5,23 +5,7 @@
         <GameUi:UiImage source="c04_t01_s02_f01" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" left="0" right="0"
                         top="0" bottom="0" scale9Grid="9,9,2,2" />
         <GameUi:UiLabel id="_labelTitle" text="XXX的履历" y="10" horizontalCenter="0" textColor="0xffffff" size="25" />
-        <GameUi:UiButton id="_btnClose" label="关闭" y="0" right="0">
-            <GameUi:skinName>
-                <e:Skin states="up,down,disabled">
-                    <e:Group y="0" x="0">
-                        <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2" scaleX="1" scaleY="1" left="0" right="0"
-                                 top="0" bottom="0" />
-                        <e:Group>
-                            <GameUi:UiLabel id="labelDisplay" size="22" verticalCenter="0" horizontalCenter="0"
-                                            textColor="0x00ff00" x="98" y="97" scaleX="1" scaleY="1" text="" />
-                            <e:layout>
-                                <e:HorizontalLayout paddingTop="8" paddingBottom="8" paddingLeft="10" paddingRight="10" />
-                            </e:layout>
-                        </e:Group>
-                    </e:Group>
-                </e:Skin>
-            </GameUi:skinName>
-        </GameUi:UiButton>
+        <GameUi:UiButton id="_btnClose" label="关闭" y="0" right="0" skinName="Skins.Component.Button.ButtonSelfAdaption001"></GameUi:UiButton>
         <e:Scroller left="0" right="0" top="40" bottom="5">
             <e:Group x="20" y="0">
                 <e:Group x="20" y="10">
@@ -124,98 +108,20 @@
                     </e:layout>
                 </e:Group>
                 <e:Group id="_groupButtons" y="220" horizontalCenter="0">
-                    <GameUi:UiButton id="_btnChangeNickname" label="更改昵称" y="290" x="186" height="40" width="200">
-                        <GameUi:skinName>
-                            <e:Skin states="up,down,disabled">
-                                <e:Group left="0" right="0" top="0" bottom="0">
-                                    <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2" scaleX="1" scaleY="1"
-                                             left="0" right="0" top="0" bottom="0" />
-                                    <GameUi:UiLabel id="labelDisplay" size="20" textColor="0x00ff00" scaleX="1"
-                                                    scaleY="1" text="" horizontalCenter="0" verticalCenter="0"
-                                                    maxTextWidth="180" />
-                                </e:Group>
-                            </e:Skin>
-                        </GameUi:skinName>
-                    </GameUi:UiButton>
-                    <GameUi:UiButton id="_btnChangeDiscordId" label="更改Discord ID" y="300" x="196" height="40"
-                                     width="200">
-                        <GameUi:skinName>
-                            <e:Skin states="up,down,disabled">
-                                <e:Group left="0" right="0" top="0" bottom="0">
-                                    <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2" scaleX="1" scaleY="1"
-                                             left="0" right="0" top="0" bottom="0" />
-                                    <GameUi:UiLabel id="labelDisplay" size="20" textColor="0x00ff00" scaleX="1"
-                                                    scaleY="1" text="" horizontalCenter="0" verticalCenter="0"
-                                                    maxTextWidth="180" />
-                                </e:Group>
-                            </e:Skin>
-                        </GameUi:skinName>
-                    </GameUi:UiButton>
-                    <GameUi:UiButton id="_btnShowOnlineUsers" label="在线玩家" y="310" x="206" height="40" width="200">
-                        <GameUi:skinName>
-                            <e:Skin states="up,down,disabled">
-                                <e:Group left="0" right="0" top="0" bottom="0">
-                                    <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2" scaleX="1" scaleY="1"
-                                             left="0" right="0" top="0" bottom="0" />
-                                    <GameUi:UiLabel id="labelDisplay" size="20" textColor="0x00ff00" scaleX="1"
-                                                    scaleY="1" text="" horizontalCenter="0" verticalCenter="0"
-                                                    maxTextWidth="180" />
-                                </e:Group>
-                            </e:Skin>
-                        </GameUi:skinName>
-                    </GameUi:UiButton>
-                    <GameUi:UiButton id="_btnChangeLanguage" label="Language" y="320" x="216" height="40" width="200">
-                        <GameUi:skinName>
-                            <e:Skin states="up,down,disabled">
-                                <e:Group left="0" right="0" top="0" bottom="0">
-                                    <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2" scaleX="1" scaleY="1"
-                                             left="0" right="0" top="0" bottom="0" />
-                                    <GameUi:UiLabel id="labelDisplay" size="20" textColor="0x00ff00" scaleX="1"
-                                                    scaleY="1" text="" horizontalCenter="0" verticalCenter="0"
-                                                    maxTextWidth="180" />
-                                </e:Group>
-                            </e:Skin>
-                        </GameUi:skinName>
-                    </GameUi:UiButton>
-                    <GameUi:UiButton id="_btnServerStatus" label="服务器状态" y="330" x="226" height="40" width="200">
-                        <GameUi:skinName>
-                            <e:Skin states="up,down,disabled">
-                                <e:Group left="0" right="0" top="0" bottom="0">
-                                    <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2" scaleX="1" scaleY="1"
-                                             left="0" right="0" top="0" bottom="0" />
-                                    <GameUi:UiLabel id="labelDisplay" size="20" textColor="0x00ff00" scaleX="1"
-                                                    scaleY="1" text="" horizontalCenter="0" verticalCenter="0"
-                                                    maxTextWidth="180" />
-                                </e:Group>
-                            </e:Skin>
-                        </GameUi:skinName>
-                    </GameUi:UiButton>
-                    <GameUi:UiButton id="_btnChat" label="聊天" y="340" x="236" height="40" width="200">
-                        <GameUi:skinName>
-                            <e:Skin states="up,down,disabled">
-                                <e:Group left="0" right="0" top="0" bottom="0">
-                                    <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2" scaleX="1" scaleY="1"
-                                             left="0" right="0" top="0" bottom="0" />
-                                    <GameUi:UiLabel id="labelDisplay" size="20" textColor="0x00ff00" scaleX="1"
-                                                    scaleY="1" text="" horizontalCenter="0" verticalCenter="0"
-                                                    maxTextWidth="180" />
-                                </e:Group>
-                            </e:Skin>
-                        </GameUi:skinName>
-                    </GameUi:UiButton>
-                    <GameUi:UiButton id="_btnSwitchTexture" label="切换贴图" y="350" x="246" height="40" width="200">
-                        <GameUi:skinName>
-                            <e:Skin states="up,down,disabled">
-                                <e:Group left="0" right="0" top="0" bottom="0">
-                                    <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2" scaleX="1" scaleY="1"
-                                             left="0" right="0" top="0" bottom="0" />
-                                    <GameUi:UiLabel id="labelDisplay" size="20" textColor="0x00ff00" scaleX="1"
-                                                    scaleY="1" text="" horizontalCenter="0" verticalCenter="0"
-                                                    maxTextWidth="180" />
-                                </e:Group>
-                            </e:Skin>
-                        </GameUi:skinName>
-                    </GameUi:UiButton>
+                    <GameUi:UiButton id="_btnChangeNickname" label="更改昵称" y="290" x="186" width="200"
+                                     skinName="Skins.Component.Button.ButtonSelfAdaption001"></GameUi:UiButton>
+                    <GameUi:UiButton id="_btnChangeDiscordId" label="更改Discord ID" y="300" x="196" width="200"
+                                     skinName="Skins.Component.Button.ButtonSelfAdaption001"></GameUi:UiButton>
+                    <GameUi:UiButton id="_btnShowOnlineUsers" label="在线玩家" y="310" x="206" width="200"
+                                     skinName="Skins.Component.Button.ButtonSelfAdaption001"></GameUi:UiButton>
+                    <GameUi:UiButton id="_btnChangeLanguage" label="Language" y="320" x="216" width="200"
+                                     skinName="Skins.Component.Button.ButtonSelfAdaption001"></GameUi:UiButton>
+                    <GameUi:UiButton id="_btnServerStatus" label="服务器状态" y="330" x="226" width="200"
+                                     skinName="Skins.Component.Button.ButtonSelfAdaption001"></GameUi:UiButton>
+                    <GameUi:UiButton id="_btnChat" label="聊天" y="340" x="236" width="200"
+                                     skinName="Skins.Component.Button.ButtonSelfAdaption001"></GameUi:UiButton>
+                    <GameUi:UiButton id="_btnSwitchTexture" label="切换贴图" y="350" x="246" width="200"
+                                     skinName="Skins.Component.Button.ButtonSelfAdaption001"></GameUi:UiButton>
                     <e:layout>
                         <e:TileLayout orientation="rows" requestedColumnCount="4" />
                     </e:layout>

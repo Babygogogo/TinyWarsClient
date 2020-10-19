@@ -7,7 +7,8 @@
                         left="0" right="0" top="0" bottom="2" />
         <GameUi:UiLabel id="_labelName" text="更改Discord ID" textColor="0xffffff" y="13" horizontalCenter="0" size="20" />
         <e:Group y="54" horizontalCenter="0">
-            <GameUi:UiLabel id="_labelDiscordId" text="新ID：" textColor="0xFFFFFF" size="20"  verticalCenter="1" horizontalCenter="-150" textAlign="center"/>
+            <GameUi:UiLabel id="_labelDiscordId" text="新ID：" textColor="0xFFFFFF" size="20" verticalCenter="1"
+                            horizontalCenter="-150" textAlign="center" />
             <GameUi:UiTextInput id="_inputDiscordId" width="260" anchorOffsetX="0" anchorOffsetY="0" maxChars="18"
                                 horizontalCenter="30" verticalCenter="0">
                 <GameUi:skinName>
@@ -20,17 +21,11 @@
                 </GameUi:skinName>
             </GameUi:UiTextInput>
         </e:Group>
-        <GameUi:UiButton id="_btnConfirm" label="确认&gt;&gt;" y="97" horizontalCenter="0.5">
-            <e:skinName>
-                <e:Skin states="up,down,disabled">
-                    <e:Image width="100%" height="100%" />
-                    <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="25" bold="true"
-                             textColor="0xffffff" />
-                </e:Skin>
-            </e:skinName>
-        </GameUi:UiButton>
-        <GameUi:UiLabel id="_labelNote" text="输入正确的Discord ID，并加入以下游戏频道（可点击链接复制）\n即可实时收到游戏相关消息，如回合轮转等。" textColor="0xFFFFFF"
-                        size="15" lineSpacing="3" horizontalCenter="0"  textAlign="center" y="150" maxTextWidth="430"/>
+        <GameUi:UiButton id="_btnConfirm" label="确认" y="97" skinName="Skins.Component.Button.ButtonSelfAdaption001" width="200"
+                         horizontalCenter="0"></GameUi:UiButton>
+        <GameUi:UiLabel id="_labelNote" text="输入正确的Discord ID，并加入以下游戏频道（可点击链接复制）\n即可实时收到游戏相关消息，如回合轮转等。"
+                        textColor="0xFFFFFF" size="15" lineSpacing="3" horizontalCenter="0" textAlign="center" y="150"
+                        maxTextWidth="430" />
         <GameUi:UiTextInput y="210" anchorOffsetX="0" anchorOffsetY="0" maxChars="20" horizontalCenter="0.5" width="333">
             <GameUi:skinName>
                 <e:Skin width="100" height="30">

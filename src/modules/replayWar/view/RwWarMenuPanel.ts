@@ -28,21 +28,21 @@ namespace TinyWars.ReplayWar {
         private _labelNoCommand : GameUi.UiLabel;
         private _btnBack        : GameUi.UiButton;
 
-        private _groupInfo                  : eui.Group;
-        private _labelMenuTitle                 : GameUi.UiLabel;
-        private _labelWarInfoTitle              : GameUi.UiLabel;
-        private _labelPlayerInfoTitle           : GameUi.UiLabel;
-        private _labelMapNameTitle              : GameUi.UiLabel;
-        private _labelMapName                   : GameUi.UiLabel;
-        private _labelMapDesignerTitle          : GameUi.UiLabel;
-        private _labelMapDesigner               : GameUi.UiLabel;
-        private _labelWarIdTitle                : GameUi.UiLabel;
-        private _labelWarId                     : GameUi.UiLabel;
-        private _labelTurnIndexTitle            : GameUi.UiLabel;
-        private _labelTurnIndex                 : GameUi.UiLabel;
-        private _labelActionIdTitle             : GameUi.UiLabel;
-        private _labelActionId                  : GameUi.UiLabel;
-        private _listPlayer                     : GameUi.UiScrollList;
+        private _groupInfo              : eui.Group;
+        private _labelMenuTitle         : GameUi.UiLabel;
+        private _labelWarInfoTitle      : GameUi.UiLabel;
+        private _labelPlayerInfoTitle   : GameUi.UiLabel;
+        private _btnMapName             : GameUi.UiButton;
+        private _labelMapName           : GameUi.UiLabel;
+        private _btnMapDesigner         : GameUi.UiButton;
+        private _labelMapDesigner       : GameUi.UiLabel;
+        private _btnWarId               : GameUi.UiButton;
+        private _labelWarId             : GameUi.UiLabel;
+        private _btnTurnIndex           : GameUi.UiButton;
+        private _labelTurnIndex         : GameUi.UiLabel;
+        private _btnActionId            : GameUi.UiButton;
+        private _labelActionId          : GameUi.UiLabel;
+        private _listPlayer             : GameUi.UiScrollList;
 
         private _war        : RwWar;
         private _unitMap    : RwUnitMap;
@@ -166,15 +166,15 @@ namespace TinyWars.ReplayWar {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelMenuTitle.text                   = Lang.getText(Lang.Type.B0155);
-            this._labelWarInfoTitle.text                = Lang.getText(Lang.Type.B0223);
-            this._labelPlayerInfoTitle.text             = Lang.getText(Lang.Type.B0224);
-            this._labelMapNameTitle.text                = `${Lang.getText(Lang.Type.B0225)}: `;
-            this._labelMapDesignerTitle.text            = `${Lang.getText(Lang.Type.B0163)}: `;
-            this._labelWarIdTitle.text                  = `${Lang.getText(Lang.Type.B0226)}: `;
-            this._labelTurnIndexTitle.text              = `${Lang.getText(Lang.Type.B0091)}: `;
-            this._labelActionIdTitle.text               = `${Lang.getText(Lang.Type.B0090)}: `;
-            this._btnBack.label                         = Lang.getText(Lang.Type.B0146);
+            this._labelMenuTitle.text       = Lang.getText(Lang.Type.B0155);
+            this._labelWarInfoTitle.text    = Lang.getText(Lang.Type.B0223);
+            this._labelPlayerInfoTitle.text = Lang.getText(Lang.Type.B0224);
+            this._btnMapName.label          = Lang.getText(Lang.Type.B0225);
+            this._btnMapDesigner.label      = Lang.getText(Lang.Type.B0163);
+            this._btnWarId.label            = Lang.getText(Lang.Type.B0226);
+            this._btnTurnIndex.label        = Lang.getText(Lang.Type.B0091);
+            this._btnActionId.label         = Lang.getText(Lang.Type.B0090);
+            this._btnBack.label             = Lang.getText(Lang.Type.B0146);
         }
 
         private async _updateGroupInfo(): Promise<void> {
