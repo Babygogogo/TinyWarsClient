@@ -232,7 +232,7 @@
             </e:layout>
         </e:Group>
         <e:layout>
-            <e:VerticalLayout gap="10" />
+            <e:VerticalLayout gap="10" paddingTop="5" paddingBottom="5" />
         </e:layout>
     </e:Group>
 </e:Skin>

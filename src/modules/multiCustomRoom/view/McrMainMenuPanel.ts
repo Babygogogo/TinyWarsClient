@@ -90,7 +90,7 @@ namespace TinyWars.MultiCustomRoom {
                     name    : Lang.getText(Lang.Type.B0023),
                     callback: (): void => {
                         McrMainMenuPanel.hide();
-                        MultiCustomRoom.McrJoinMapListPanel.show();
+                        MultiCustomRoom.McrJoinRoomListPanel.show();
                     },
                 },
                 {

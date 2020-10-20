@@ -76,7 +76,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onTouchedBtnBack(e: egret.TouchEvent): void {
             McrJoinSettingsPanel.hide();
-            McrJoinMapListPanel.show();
+            McrJoinRoomListPanel.show();
         }
 
         private async _onTouchedBtnConfirm(e: egret.TouchEvent): Promise<void> {
@@ -117,7 +117,7 @@ namespace TinyWars.MultiCustomRoom {
         private _onNotifySMcrJoinWar(e: egret.Event): void {
             FloatText.show(Lang.getText(Lang.Type.A0018));
             this.close();
-            McrJoinMapListPanel.show();
+            McrJoinRoomListPanel.show();
         }
 
         private _resetTimeoutForBtnConfirm(): void {

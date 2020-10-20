@@ -109,7 +109,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0155);
+            this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0000);
             this._btnBack.label         = Lang.getText(Lang.Type.B0146);
             this._btnConfirm.label      = Lang.getText(Lang.Type.B0026);
         }

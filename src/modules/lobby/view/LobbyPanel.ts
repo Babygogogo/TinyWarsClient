@@ -45,7 +45,7 @@ namespace TinyWars.Lobby {
                 { ui: this, callback: this._onResize, eventType: egret.Event.RESIZE },
             ];
             this._notifyListeners = [
-                { type: Notify.Type.MsgUserLogout,            callback: this._onNotifySLogout },
+                { type: Notify.Type.MsgUserLogout,      callback: this._onMsgUserLogout },
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ];
 
@@ -54,7 +54,6 @@ namespace TinyWars.Lobby {
 
         protected async _onOpened(): Promise<void> {
             this._updateComponentsForLanguage();
-            this._listCommand.bindData(await this._createDataForListCommand());
         }
 
         protected _onClosed(): void {
@@ -71,7 +70,7 @@ namespace TinyWars.Lobby {
             this._group4.height = (this.height - 40 - 90) / 2;
         }
 
-        private _onNotifySLogout(e: egret.Event): void {
+        private _onMsgUserLogout(e: egret.Event): void {
             LobbyPanel.hide();
         }
 
@@ -82,9 +81,10 @@ namespace TinyWars.Lobby {
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
-        private _updateComponentsForLanguage(): void {
+        private async _updateComponentsForLanguage(): Promise<void> {
             this._labelTips.text        = Lang.getRichText(Lang.RichType.R0007),
             this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0155);
+            this._listCommand.bindData(await this._createDataForListCommand());
         }
 
         private async _createDataForListCommand(): Promise<DataForCommandRenderer[]> {

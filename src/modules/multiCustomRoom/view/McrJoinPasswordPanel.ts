@@ -60,7 +60,7 @@ namespace TinyWars.MultiCustomRoom {
                 FloatText.show(Lang.getText(Lang.Type.A0017));
             } else {
                 McrJoinPasswordPanel.hide();
-                McrJoinMapListPanel.hide();
+                McrJoinRoomListPanel.hide();
 
                 await McrModel.Join.resetData(this._openData);
                 McrJoinSettingsPanel.show();

@@ -8,11 +8,11 @@ namespace TinyWars.MultiCustomRoom {
     import WarMapModel      = WarMap.WarMapModel;
     import BwHelpers        = BaseWar.BwHelpers;
 
-    export class McrJoinMapListPanel extends GameUi.UiPanel {
+    export class McrJoinRoomListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: McrJoinMapListPanel;
+        private static _instance: McrJoinRoomListPanel;
 
         private _labelMenuTitle : GameUi.UiLabel;
         private _listWar        : GameUi.UiScrollList;
@@ -35,14 +35,14 @@ namespace TinyWars.MultiCustomRoom {
         private _selectedWarIndex   : number;
 
         public static show(): void {
-            if (!McrJoinMapListPanel._instance) {
-                McrJoinMapListPanel._instance = new McrJoinMapListPanel();
+            if (!McrJoinRoomListPanel._instance) {
+                McrJoinRoomListPanel._instance = new McrJoinRoomListPanel();
             }
-            McrJoinMapListPanel._instance.open();
+            McrJoinRoomListPanel._instance.open();
         }
         public static hide(): void {
-            if (McrJoinMapListPanel._instance) {
-                McrJoinMapListPanel._instance.close();
+            if (McrJoinRoomListPanel._instance) {
+                McrJoinRoomListPanel._instance.close();
             }
         }
 
@@ -50,7 +50,7 @@ namespace TinyWars.MultiCustomRoom {
             super();
 
             this._setAutoAdjustHeightEnabled();
-            this.skinName = "resource/skins/multiCustomRoom/McrJoinMapListPanel.exml";
+            this.skinName = "resource/skins/multiCustomRoom/McrJoinRoomListPanel.exml";
         }
 
         protected _onFirstOpened(): void {
@@ -126,7 +126,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
-            McrJoinMapListPanel.hide();
+            McrJoinRoomListPanel.hide();
             McrMainMenuPanel.show()
         }
 
@@ -212,7 +212,7 @@ namespace TinyWars.MultiCustomRoom {
     type DataForWarRenderer = {
         roomInfo: ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
         index   : number;
-        panel   : McrJoinMapListPanel;
+        panel   : McrJoinRoomListPanel;
     }
 
     class WarRenderer extends eui.ItemRenderer {
@@ -255,7 +255,7 @@ namespace TinyWars.MultiCustomRoom {
             if (data.roomInfo.settingsForMcw.warPassword) {
                 McrJoinPasswordPanel.show(data.roomInfo);
             } else {
-                McrJoinMapListPanel.hide();
+                McrJoinRoomListPanel.hide();
 
                 await McrModel.Join.resetData(data.roomInfo);
                 McrJoinSettingsPanel.show();
