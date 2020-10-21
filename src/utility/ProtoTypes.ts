@@ -1301,6 +1301,9 @@ export declare namespace Config {
 
         /** PlayerRankCfg rank */
         rank?: (number|null);
+
+        /** PlayerRankCfg nameList */
+        nameList?: (string[]|null);
     }
 
     /** Represents a PlayerRankCfg. */
@@ -1317,6 +1320,9 @@ export declare namespace Config {
 
         /** PlayerRankCfg rank. */
         public rank: number;
+
+        /** PlayerRankCfg nameList. */
+        public nameList: string[];
 
         /**
          * Creates a new PlayerRankCfg instance using the specified properties.
@@ -13449,6 +13455,108 @@ export declare namespace User {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a DataForUserRankScore. */
+    interface IDataForUserRankScore {
+
+        /** DataForUserRankScore warType */
+        warType?: (number|null);
+
+        /** DataForUserRankScore playersCount */
+        playersCount?: (number|null);
+
+        /** DataForUserRankScore currentScore */
+        currentScore?: (number|null);
+    }
+
+    /** Represents a DataForUserRankScore. */
+    class DataForUserRankScore implements IDataForUserRankScore {
+
+        /**
+         * Constructs a new DataForUserRankScore.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: User.IDataForUserRankScore);
+
+        /** DataForUserRankScore warType. */
+        public warType: number;
+
+        /** DataForUserRankScore playersCount. */
+        public playersCount: number;
+
+        /** DataForUserRankScore currentScore. */
+        public currentScore: number;
+
+        /**
+         * Creates a new DataForUserRankScore instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns DataForUserRankScore instance
+         */
+        public static create(properties?: User.IDataForUserRankScore): User.DataForUserRankScore;
+
+        /**
+         * Encodes the specified DataForUserRankScore message. Does not implicitly {@link User.DataForUserRankScore.verify|verify} messages.
+         * @param message DataForUserRankScore message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: User.IDataForUserRankScore, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified DataForUserRankScore message, length delimited. Does not implicitly {@link User.DataForUserRankScore.verify|verify} messages.
+         * @param message DataForUserRankScore message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: User.IDataForUserRankScore, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a DataForUserRankScore message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns DataForUserRankScore
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): User.DataForUserRankScore;
+
+        /**
+         * Decodes a DataForUserRankScore message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns DataForUserRankScore
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): User.DataForUserRankScore;
+
+        /**
+         * Verifies a DataForUserRankScore message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a DataForUserRankScore message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns DataForUserRankScore
+         */
+        public static fromObject(object: { [k: string]: any }): User.DataForUserRankScore;
+
+        /**
+         * Creates a plain object from a DataForUserRankScore message. Also converts values to other types if specified.
+         * @param message DataForUserRankScore
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: User.DataForUserRankScore, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this DataForUserRankScore to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a UserBriefInfo. */
     interface IUserBriefInfo {
 
@@ -13650,11 +13758,8 @@ export declare namespace User {
     /** Properties of a UserRankScore. */
     interface IUserRankScore {
 
-        /** UserRankScore currentStdScore */
-        currentStdScore?: (number|null);
-
-        /** UserRankScore currentFogScore */
-        currentFogScore?: (number|null);
+        /** UserRankScore dataList */
+        dataList?: (User.IDataForUserRankScore[]|null);
     }
 
     /** Represents a UserRankScore. */
@@ -13666,11 +13771,8 @@ export declare namespace User {
          */
         constructor(properties?: User.IUserRankScore);
 
-        /** UserRankScore currentStdScore. */
-        public currentStdScore: number;
-
-        /** UserRankScore currentFogScore. */
-        public currentFogScore: number;
+        /** UserRankScore dataList. */
+        public dataList: User.IDataForUserRankScore[];
 
         /**
          * Creates a new UserRankScore instance using the specified properties.
@@ -13743,6 +13845,96 @@ export declare namespace User {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a UserWarStatistics. */
+    interface IUserWarStatistics {
+
+        /** UserWarStatistics dataList */
+        dataList?: (User.IDataForUserWarStatistics[]|null);
+    }
+
+    /** Represents a UserWarStatistics. */
+    class UserWarStatistics implements IUserWarStatistics {
+
+        /**
+         * Constructs a new UserWarStatistics.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: User.IUserWarStatistics);
+
+        /** UserWarStatistics dataList. */
+        public dataList: User.IDataForUserWarStatistics[];
+
+        /**
+         * Creates a new UserWarStatistics instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns UserWarStatistics instance
+         */
+        public static create(properties?: User.IUserWarStatistics): User.UserWarStatistics;
+
+        /**
+         * Encodes the specified UserWarStatistics message. Does not implicitly {@link User.UserWarStatistics.verify|verify} messages.
+         * @param message UserWarStatistics message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: User.IUserWarStatistics, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified UserWarStatistics message, length delimited. Does not implicitly {@link User.UserWarStatistics.verify|verify} messages.
+         * @param message UserWarStatistics message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: User.IUserWarStatistics, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a UserWarStatistics message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns UserWarStatistics
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): User.UserWarStatistics;
+
+        /**
+         * Decodes a UserWarStatistics message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns UserWarStatistics
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): User.UserWarStatistics;
+
+        /**
+         * Verifies a UserWarStatistics message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a UserWarStatistics message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns UserWarStatistics
+         */
+        public static fromObject(object: { [k: string]: any }): User.UserWarStatistics;
+
+        /**
+         * Creates a plain object from a UserWarStatistics message. Also converts values to other types if specified.
+         * @param message UserWarStatistics
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: User.UserWarStatistics, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this UserWarStatistics to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a UserComplexInfo. */
     interface IUserComplexInfo {
 
@@ -13752,8 +13944,8 @@ export declare namespace User {
         /** UserComplexInfo userRankScore */
         userRankScore?: (User.IUserRankScore|null);
 
-        /** UserComplexInfo warStatisticsList */
-        warStatisticsList?: (User.IDataForUserWarStatistics[]|null);
+        /** UserComplexInfo userWarStatistics */
+        userWarStatistics?: (User.IUserWarStatistics|null);
     }
 
     /** Represents a UserComplexInfo. */
@@ -13771,8 +13963,8 @@ export declare namespace User {
         /** UserComplexInfo userRankScore. */
         public userRankScore?: (User.IUserRankScore|null);
 
-        /** UserComplexInfo warStatisticsList. */
-        public warStatisticsList: User.IDataForUserWarStatistics[];
+        /** UserComplexInfo userWarStatistics. */
+        public userWarStatistics?: (User.IUserWarStatistics|null);
 
         /**
          * Creates a new UserComplexInfo instance using the specified properties.
@@ -13875,8 +14067,8 @@ export declare namespace User {
         /** UserPublicInfo userRankScore */
         userRankScore?: (User.IUserRankScore|null);
 
-        /** UserPublicInfo warStatisticsList */
-        warStatisticsList?: (User.IDataForUserWarStatistics[]|null);
+        /** UserPublicInfo userWarStatistics */
+        userWarStatistics?: (User.IUserWarStatistics|null);
     }
 
     /** Represents a UserPublicInfo. */
@@ -13915,8 +14107,8 @@ export declare namespace User {
         /** UserPublicInfo userRankScore. */
         public userRankScore?: (User.IUserRankScore|null);
 
-        /** UserPublicInfo warStatisticsList. */
-        public warStatisticsList: User.IDataForUserWarStatistics[];
+        /** UserPublicInfo userWarStatistics. */
+        public userWarStatistics?: (User.IUserWarStatistics|null);
 
         /**
          * Creates a new UserPublicInfo instance using the specified properties.
@@ -14538,6 +14730,9 @@ export declare namespace NetMessage {
         /** MessageContainer MsgRmrSetMaxConcurrentCount */
         MsgRmrSetMaxConcurrentCount?: (NetMessage.IMsgRmrSetMaxConcurrentCount|null);
 
+        /** MessageContainer MsgRmrGetMaxConcurrentCount */
+        MsgRmrGetMaxConcurrentCount?: (NetMessage.IMsgRmrGetMaxConcurrentCount|null);
+
         /** MessageContainer MsgRmrGetRoomPublicInfoList */
         MsgRmrGetRoomPublicInfoList?: (NetMessage.IMsgRmrGetRoomPublicInfoList|null);
 
@@ -14820,6 +15015,9 @@ export declare namespace NetMessage {
 
         /** MessageContainer MsgRmrSetMaxConcurrentCount. */
         public MsgRmrSetMaxConcurrentCount?: (NetMessage.IMsgRmrSetMaxConcurrentCount|null);
+
+        /** MessageContainer MsgRmrGetMaxConcurrentCount. */
+        public MsgRmrGetMaxConcurrentCount?: (NetMessage.IMsgRmrGetMaxConcurrentCount|null);
 
         /** MessageContainer MsgRmrGetRoomPublicInfoList. */
         public MsgRmrGetRoomPublicInfoList?: (NetMessage.IMsgRmrGetRoomPublicInfoList|null);
@@ -40407,6 +40605,291 @@ export declare namespace NetMessage {
              * @returns Plain object
              */
             public static toObject(message: NetMessage.MsgRmrSetMaxConcurrentCount.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Properties of a MsgRmrGetMaxConcurrentCount. */
+    interface IMsgRmrGetMaxConcurrentCount {
+
+        /** MsgRmrGetMaxConcurrentCount c */
+        c?: (NetMessage.MsgRmrGetMaxConcurrentCount.IC|null);
+
+        /** MsgRmrGetMaxConcurrentCount s */
+        s?: (NetMessage.MsgRmrGetMaxConcurrentCount.IS|null);
+    }
+
+    /** Represents a MsgRmrGetMaxConcurrentCount. */
+    class MsgRmrGetMaxConcurrentCount implements IMsgRmrGetMaxConcurrentCount {
+
+        /**
+         * Constructs a new MsgRmrGetMaxConcurrentCount.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: NetMessage.IMsgRmrGetMaxConcurrentCount);
+
+        /** MsgRmrGetMaxConcurrentCount c. */
+        public c?: (NetMessage.MsgRmrGetMaxConcurrentCount.IC|null);
+
+        /** MsgRmrGetMaxConcurrentCount s. */
+        public s?: (NetMessage.MsgRmrGetMaxConcurrentCount.IS|null);
+
+        /**
+         * Creates a new MsgRmrGetMaxConcurrentCount instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MsgRmrGetMaxConcurrentCount instance
+         */
+        public static create(properties?: NetMessage.IMsgRmrGetMaxConcurrentCount): NetMessage.MsgRmrGetMaxConcurrentCount;
+
+        /**
+         * Encodes the specified MsgRmrGetMaxConcurrentCount message. Does not implicitly {@link NetMessage.MsgRmrGetMaxConcurrentCount.verify|verify} messages.
+         * @param message MsgRmrGetMaxConcurrentCount message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: NetMessage.IMsgRmrGetMaxConcurrentCount, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MsgRmrGetMaxConcurrentCount message, length delimited. Does not implicitly {@link NetMessage.MsgRmrGetMaxConcurrentCount.verify|verify} messages.
+         * @param message MsgRmrGetMaxConcurrentCount message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: NetMessage.IMsgRmrGetMaxConcurrentCount, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MsgRmrGetMaxConcurrentCount message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MsgRmrGetMaxConcurrentCount
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgRmrGetMaxConcurrentCount;
+
+        /**
+         * Decodes a MsgRmrGetMaxConcurrentCount message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MsgRmrGetMaxConcurrentCount
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgRmrGetMaxConcurrentCount;
+
+        /**
+         * Verifies a MsgRmrGetMaxConcurrentCount message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MsgRmrGetMaxConcurrentCount message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MsgRmrGetMaxConcurrentCount
+         */
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgRmrGetMaxConcurrentCount;
+
+        /**
+         * Creates a plain object from a MsgRmrGetMaxConcurrentCount message. Also converts values to other types if specified.
+         * @param message MsgRmrGetMaxConcurrentCount
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: NetMessage.MsgRmrGetMaxConcurrentCount, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MsgRmrGetMaxConcurrentCount to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace MsgRmrGetMaxConcurrentCount {
+
+        /** Properties of a C. */
+        interface IC {
+
+            /** C hasFog */
+            hasFog?: (boolean|null);
+        }
+
+        /** Represents a C. */
+        class C implements IC {
+
+            /**
+             * Constructs a new C.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgRmrGetMaxConcurrentCount.IC);
+
+            /** C hasFog. */
+            public hasFog: boolean;
+
+            /**
+             * Creates a new C instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C instance
+             */
+            public static create(properties?: NetMessage.MsgRmrGetMaxConcurrentCount.IC): NetMessage.MsgRmrGetMaxConcurrentCount.C;
+
+            /**
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgRmrGetMaxConcurrentCount.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgRmrGetMaxConcurrentCount.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgRmrGetMaxConcurrentCount.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgRmrGetMaxConcurrentCount.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgRmrGetMaxConcurrentCount.C;
+
+            /**
+             * Decodes a C message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgRmrGetMaxConcurrentCount.C;
+
+            /**
+             * Verifies a C message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a C message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgRmrGetMaxConcurrentCount.C;
+
+            /**
+             * Creates a plain object from a C message. Also converts values to other types if specified.
+             * @param message C
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgRmrGetMaxConcurrentCount.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+
+            /** S maxCount */
+            maxCount?: (number|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgRmrGetMaxConcurrentCount.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /** S maxCount. */
+            public maxCount: number;
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgRmrGetMaxConcurrentCount.IS): NetMessage.MsgRmrGetMaxConcurrentCount.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgRmrGetMaxConcurrentCount.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgRmrGetMaxConcurrentCount.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgRmrGetMaxConcurrentCount.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgRmrGetMaxConcurrentCount.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgRmrGetMaxConcurrentCount.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgRmrGetMaxConcurrentCount.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgRmrGetMaxConcurrentCount.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgRmrGetMaxConcurrentCount.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.
