@@ -12,8 +12,8 @@ namespace TinyWars.BaseWar {
 
     export abstract class BwTile {
         private _configVersion  : string;
-        private _templateCfg    : Types.TileTemplateCfg;
-        private _moveCostCfg    : { [moveType: number]: Types.MoveCostCfg };
+        private _templateCfg    : ProtoTypes.Config.ITileTemplateCfg;
+        private _moveCostCfg    : { [moveType: number]: ProtoTypes.Config.IMoveCostCfg };
 
         private _gridX          : number;
         private _gridY          : number;
@@ -174,10 +174,10 @@ namespace TinyWars.BaseWar {
             return this._configVersion;
         }
 
-        private _setTemplateCfg(cfg: Types.TileTemplateCfg): void {
+        private _setTemplateCfg(cfg: ProtoTypes.Config.ITileTemplateCfg): void {
             this._templateCfg = cfg;
         }
-        private _getTemplateCfg(): Types.TileTemplateCfg | undefined {
+        private _getTemplateCfg(): ProtoTypes.Config.ITileTemplateCfg | undefined {
             return this._templateCfg;
         }
 
@@ -462,10 +462,10 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for move cost.
         ////////////////////////////////////////////////////////////////////////////////
-        private _setMoveCosts(cfg: { [moveType: number]: Types.MoveCostCfg }): void {
+        private _setMoveCosts(cfg: { [moveType: number]: ProtoTypes.Config.IMoveCostCfg }): void {
             this._moveCostCfg = cfg;
         }
-        public getMoveCosts(): { [moveType: number]: Types.MoveCostCfg } | undefined {
+        public getMoveCosts(): { [moveType: number]: ProtoTypes.Config.IMoveCostCfg } | undefined {
             return this._moveCostCfg;
         }
 

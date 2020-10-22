@@ -5,6 +5,7 @@ namespace TinyWars.BaseWar {
     import Lang         = Utility.Lang;
     import Types        = Utility.Types;
     import FloatText    = Utility.FloatText;
+    import ProtoTypes   = Utility.ProtoTypes;
     import UnitType     = Types.UnitType;
 
     export type OpenDataForBwTileDetailPanel = {
@@ -373,7 +374,7 @@ namespace TinyWars.BaseWar {
     type DataForMoveRangeRenderer = {
         configVersion   : string;
         unitType        : UnitType;
-        tileCfg         : Types.TileTemplateCfg;
+        tileCfg         : ProtoTypes.Config.ITileTemplateCfg;
         playerIndex     : number;
     }
 

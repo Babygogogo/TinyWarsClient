@@ -28,9 +28,11 @@ namespace TinyWars.Utility.Notify {
         ChatPanelClosed,
 
         McrCreateAvailableCoIdListChanged,
+        RmrMyRoomAdded,
+        RmrMyRoomDeleted,
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        BwExecutedActionsCountChanged,
+        RwNextActionIdChanged,
         BwTurnIndexChanged,
         BwTurnPhaseCodeChanged,
         BwPlayerIndexInTurnChanged,
@@ -127,12 +129,21 @@ namespace TinyWars.Utility.Notify {
         MsgMcrSetSelfSettings,
         MsgMcrStartWar,
 
+        MsgRmrGetMaxConcurrentCount,
+        MsgRmrSetMaxConcurrentCount,
+        MsgRmrGetRoomPublicInfo,
+        MsgRmrGetRoomPublicInfoFailed,
+        MsgRmrGetMyRoomPublicInfoList,
+        MsgRmrSetBannedCoIdList,
+        MsgRmrSetSelfSettings,
+        MsgRmrDeleteRoom,
+
         MsgReplayGetInfoList,
         MsgReplayGetData,
         MsgReplayGetDataFailed,
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        MsgMpwCommonGetWarInfoList,
+        MsgMpwCommonGetMyWarInfoList,
         MsgMpwCommonContinueWarFailed,
         MsgMpwCommonContinueWar,
         MsgMpwCommonSyncWar,

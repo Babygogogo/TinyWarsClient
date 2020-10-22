@@ -42,8 +42,8 @@ namespace TinyWars.Utility.ProtoManager {
         return MessageContainerClass.toObject(MessageContainerClass.decode(getDataForDecode(data)));
     }
 
-    export function decodeAsFullConfig(data: any): Types.FullConfig {
-        return FullConfigClass.toObject(FullConfigClass.decode(getDataForDecode(data))) as any;
+    export function decodeAsFullConfig(data: any): ProtoTypes.Config.IFullConfig {
+        return FullConfigClass.toObject(FullConfigClass.decode(getDataForDecode(data)));
     }
 
     export function encodeAsSerialWar(data: ISerialWar): Uint8Array {

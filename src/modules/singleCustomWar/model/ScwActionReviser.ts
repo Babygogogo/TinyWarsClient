@@ -566,7 +566,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         launchUnitId    : number | null | undefined
     ): IWarUseCoSkillExtraData[] {
         const configVersion = war.getConfigVersion();
-        const skillCfgs     : Types.CoSkillCfg[] = [];
+        const skillCfgs     : ProtoTypes.Config.ICoSkillCfg[] = [];
 
         let needValueMaps   = false;
         for (const skillId of player.getCoSkills(skillType) || []) {

@@ -5,12 +5,13 @@ namespace TinyWars.BaseWar {
     import Types            = Utility.Types;
     import FloatText        = Utility.FloatText;
     import ConfigManager    = Utility.ConfigManager;
+    import ProtoTypes       = Utility.ProtoTypes;
     import UnitType         = Types.UnitType;
     import TileType         = Types.TileType;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
     export type OpenDataForBwUnitDetailPanel = {
-        unit: BwUnit | MapEditor.MeUnit;
+        unit: BwUnit;
     }
 
     export class BwUnitDetailPanel extends GameUi.UiPanel {
@@ -207,7 +208,7 @@ namespace TinyWars.BaseWar {
             this._listInfo.bindData(dataList);
         }
 
-        private _createInfoHp(unit: BwUnit | MapEditor.MeUnit, cfg: Types.UnitTemplateCfg, isCheating: boolean): DataForInfoRenderer {
+        private _createInfoHp(unit: BwUnit, cfg: ProtoTypes.Config.IUnitTemplateCfg, isCheating: boolean): DataForInfoRenderer {
             const currValue = unit.getCurrentHp();
             const maxValue  = unit.getMaxHp();
             const minValue  = 1;
@@ -239,7 +240,11 @@ namespace TinyWars.BaseWar {
             };
         }
 
-        private _createInfoFuel(unit: BwUnit | MapEditor.MeUnit, cfg: Types.UnitTemplateCfg, isCheating: boolean): DataForInfoRenderer {
+        private _createInfoFuel(
+            unit        : BwUnit,
+            cfg         : ProtoTypes.Config.IUnitTemplateCfg,
+            isCheating  : boolean
+        ): DataForInfoRenderer {
             const currValue = unit.getCurrentFuel();
             const maxValue  = unit.getMaxFuel();
             const minValue  = 0;
@@ -271,7 +276,11 @@ namespace TinyWars.BaseWar {
             };
         }
 
-        private _createInfoPromotion(unit: BwUnit | MapEditor.MeUnit, cfg: Types.UnitTemplateCfg, isCheating: boolean): DataForInfoRenderer | null {
+        private _createInfoPromotion(
+            unit        : BwUnit,
+            cfg         : ProtoTypes.Config.IUnitTemplateCfg,
+            isCheating  : boolean
+        ): DataForInfoRenderer | null {
             const maxValue = unit.getMaxPromotion();
             if (maxValue == null) {
                 return null;
@@ -307,7 +316,11 @@ namespace TinyWars.BaseWar {
             }
         }
 
-        private _createInfoPrimaryWeaponAmmo(unit: BwUnit | MapEditor.MeUnit, cfg: Types.UnitTemplateCfg, isCheating: boolean): DataForInfoRenderer | null {
+        private _createInfoPrimaryWeaponAmmo(
+            unit        : BwUnit,
+            cfg         : ProtoTypes.Config.IUnitTemplateCfg,
+            isCheating  : boolean
+        ): DataForInfoRenderer | null {
             const maxValue = unit.getPrimaryWeaponMaxAmmo();
             if (maxValue == null) {
                 return null;
@@ -343,7 +356,11 @@ namespace TinyWars.BaseWar {
             }
         }
 
-        private _createInfoBuildMaterial(unit: BwUnit | MapEditor.MeUnit, cfg: Types.UnitTemplateCfg, isCheating: boolean): DataForInfoRenderer | null {
+        private _createInfoBuildMaterial(
+            unit        : BwUnit,
+            cfg         : ProtoTypes.Config.IUnitTemplateCfg,
+            isCheating  : boolean
+        ): DataForInfoRenderer | null {
             const maxValue = unit.getMaxBuildMaterial();
             if (maxValue == null) {
                 return null;
@@ -379,7 +396,11 @@ namespace TinyWars.BaseWar {
             }
         }
 
-        private _createInfoProduceMaterial(unit: BwUnit | MapEditor.MeUnit, cfg: Types.UnitTemplateCfg, isCheating: boolean): DataForInfoRenderer | null {
+        private _createInfoProduceMaterial(
+            unit        : BwUnit,
+            cfg         : ProtoTypes.Config.IUnitTemplateCfg,
+            isCheating  : boolean
+        ): DataForInfoRenderer | null {
             const maxValue = unit.getMaxProduceMaterial();
             if (maxValue == null) {
                 return null;
@@ -415,7 +436,11 @@ namespace TinyWars.BaseWar {
             }
         }
 
-        private _createInfoFlareAmmo(unit: BwUnit | MapEditor.MeUnit, cfg: Types.UnitTemplateCfg, isCheating: boolean): DataForInfoRenderer | null {
+        private _createInfoFlareAmmo(
+            unit        : BwUnit,
+            cfg         : ProtoTypes.Config.IUnitTemplateCfg,
+            isCheating  : boolean
+        ): DataForInfoRenderer | null {
             const maxValue = unit.getFlareMaxAmmo();
             if (maxValue == null) {
                 return null;
@@ -451,7 +476,11 @@ namespace TinyWars.BaseWar {
             }
         }
 
-        private _createInfoActionState(unit: BwUnit | MapEditor.MeUnit, cfg: Types.UnitTemplateCfg, isCheating: boolean): DataForInfoRenderer | null {
+        private _createInfoActionState(
+            unit        : BwUnit,
+            cfg         : ProtoTypes.Config.IUnitTemplateCfg,
+            isCheating  : boolean
+        ): DataForInfoRenderer | null {
             if (!isCheating) {
                 return null;
             } else {
@@ -474,7 +503,11 @@ namespace TinyWars.BaseWar {
             }
         }
 
-        private _createInfoDiving(unit: BwUnit | MapEditor.MeUnit, cfg: Types.UnitTemplateCfg, isCheating: boolean): DataForInfoRenderer | null {
+        private _createInfoDiving(
+            unit        : BwUnit,
+            cfg         : ProtoTypes.Config.IUnitTemplateCfg,
+            isCheating  : boolean
+        ): DataForInfoRenderer | null {
             if (!unit.checkIsDiver()) {
                 return null;
             } else {

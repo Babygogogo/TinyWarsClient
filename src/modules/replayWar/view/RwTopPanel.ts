@@ -58,14 +58,14 @@ namespace TinyWars.ReplayWar {
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.BwPlayerFundChanged,            callback: this._onNotifyBwPlayerFundChanged },
                 { type: Notify.Type.BwPlayerIndexInTurnChanged,     callback: this._onNotifyBwPlayerIndexInTurnChanged },
-                { type: Notify.Type.BwExecutedActionsCountChanged,          callback: this._onNotifyBwNextActionIdChanged },
+                { type: Notify.Type.RwNextActionIdChanged,          callback: this._onNotifyBwNextActionIdChanged },
                 { type: Notify.Type.BwCoEnergyChanged,              callback: this._onNotifyBwCoEnergyChanged },
                 { type: Notify.Type.BwCoUsingSkillTypeChanged,      callback: this._onNotifyBwCoUsingSkillChanged },
                 { type: Notify.Type.ReplayAutoReplayChanged,        callback: this._onNotifyReplayAutoReplayChanged },
-                { type: Notify.Type.MsgChatGetAllReadProgressList,    callback: this._onNotifyChatGetAllReadProgressList },
-                { type: Notify.Type.MsgChatUpdateReadProgress,        callback: this._onNotifyChatUpdateReadProgress },
-                { type: Notify.Type.MsgChatGetAllMessages,            callback: this._onNotifyChatGetAllMessages },
-                { type: Notify.Type.MsgChatAddMessage,                callback: this._onNotifyChatAddMessage },
+                { type: Notify.Type.MsgChatGetAllReadProgressList,  callback: this._onMsgChatUpdateReadProgressList },
+                { type: Notify.Type.MsgChatUpdateReadProgress,      callback: this._onMsgChatUpdateReadProgress },
+                { type: Notify.Type.MsgChatGetAllMessages,          callback: this._onMsgChatGetAllMessages },
+                { type: Notify.Type.MsgChatAddMessage,              callback: this._onMsgChatAddMessage },
             ];
             this._uiListeners = [
                 { ui: this._groupPlayer,        callback: this._onTouchedGroupPlayer },
@@ -113,16 +113,16 @@ namespace TinyWars.ReplayWar {
         private _onNotifyReplayAutoReplayChanged(e: egret.Event): void {
             this._updateView();
         }
-        private _onNotifyChatGetAllReadProgressList(e: egret.Event): void {
+        private _onMsgChatUpdateReadProgressList(e: egret.Event): void {
             this._updateBtnChat();
         }
-        private _onNotifyChatUpdateReadProgress(e: egret.Event): void {
+        private _onMsgChatUpdateReadProgress(e: egret.Event): void {
             this._updateBtnChat();
         }
-        private _onNotifyChatGetAllMessages(e: egret.Event): void {
+        private _onMsgChatGetAllMessages(e: egret.Event): void {
             this._updateBtnChat();
         }
-        private _onNotifyChatAddMessage(e: egret.Event): void {
+        private _onMsgChatAddMessage(e: egret.Event): void {
             this._updateBtnChat();
         }
 

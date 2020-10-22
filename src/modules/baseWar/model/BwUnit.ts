@@ -17,14 +17,15 @@ namespace TinyWars.BaseWar {
     import MovePathNode         = Types.MovePathNode;
     import ISerialUnit          = ProtoTypes.WarSerialization.ISerialUnit;
     import IWarUnitRepairData   = ProtoTypes.Structure.IDataForModifyUnit;
+    import Config               = ProtoTypes.Config;
     import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
 
     export abstract class BwUnit {
         private _configVersion      : string;
-        private _templateCfg        : Types.UnitTemplateCfg;
-        private _damageChartCfg     : { [armorType: number]: { [weaponType: number]: Types.DamageChartCfg } };
-        private _buildableTileCfg   : { [srcBaseType: number]: { [srcObjectType: number]: Types.BuildableTileCfg } };
-        private _visionBonusCfg     : { [tileType: number]: Types.VisionBonusCfg };
+        private _templateCfg        : Config.IUnitTemplateCfg;
+        private _damageChartCfg     : { [armorType: number]: { [weaponType: number]: Config.IDamageChartCfg } };
+        private _buildableTileCfg   : { [srcBaseType: number]: { [srcObjectType: number]: Config.IBuildableTileCfg } };
+        private _visionBonusCfg     : { [tileType: number]: Config.IVisionBonusCfg };
         private _playerIndex        : number;
 
         private _gridX                      : number;
@@ -234,17 +235,17 @@ namespace TinyWars.BaseWar {
             return war.getPlayer(this.getPlayerIndex());
         }
 
-        private _setTemplateCfg(templateCfg: Types.UnitTemplateCfg): void {
+        private _setTemplateCfg(templateCfg: Config.IUnitTemplateCfg): void {
             this._templateCfg = templateCfg;
         }
-        private _getTemplateCfg(): Types.UnitTemplateCfg | undefined {
+        private _getTemplateCfg(): Config.IUnitTemplateCfg | undefined {
             return this._templateCfg;
         }
 
-        private _setBuildableTileCfg(buildableTileCfg: { [srcBaseType: number]: { [srcObjectType: number]: Types.BuildableTileCfg } } | undefined): void {
+        private _setBuildableTileCfg(buildableTileCfg: { [srcBaseType: number]: { [srcObjectType: number]: Config.IBuildableTileCfg } } | undefined): void {
             this._buildableTileCfg = buildableTileCfg;
         }
-        private _getBuildableTileCfg(): { [srcBaseType: number]: { [srcObjectType: number]: Types.BuildableTileCfg } } | undefined {
+        private _getBuildableTileCfg(): { [srcBaseType: number]: { [srcObjectType: number]: Config.IBuildableTileCfg } } | undefined {
             return this._buildableTileCfg;
         }
 
@@ -586,10 +587,10 @@ namespace TinyWars.BaseWar {
                 : undefined;
         }
 
-        private _setDamageChartCfg(damageChartCfg: { [armorType: number]: { [weaponType: number]: Types.DamageChartCfg } }): void {
+        private _setDamageChartCfg(damageChartCfg: { [armorType: number]: { [weaponType: number]: Config.IDamageChartCfg } }): void {
             this._damageChartCfg = damageChartCfg;
         }
-        private _getDamageChartCfg(): { [armorType: number]: { [weaponType: number]: Types.DamageChartCfg } } | undefined {
+        private _getDamageChartCfg(): { [armorType: number]: { [weaponType: number]: Config.IDamageChartCfg } } | undefined {
             return this._damageChartCfg;
         }
         public getCfgBaseDamage(targetArmorType: Types.ArmorType, weaponType: Types.WeaponType): number | null | undefined {
@@ -1161,7 +1162,7 @@ namespace TinyWars.BaseWar {
                 && (this.getBuildTargetTileCfg(tileBaseType, tileObjectType) != null);
         }
 
-        public getBuildTargetTileCfg(baseType: TileBaseType, objectType: TileObjectType): Types.BuildableTileCfg | undefined {
+        public getBuildTargetTileCfg(baseType: TileBaseType, objectType: TileObjectType): Config.IBuildableTileCfg | undefined {
             const buildableCfgs = this._getBuildableTileCfg();
             const cfgs          = buildableCfgs ? buildableCfgs[baseType] : undefined;
             return cfgs ? cfgs[objectType] : undefined;
@@ -1342,10 +1343,10 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for vision.
         ////////////////////////////////////////////////////////////////////////////////
-        private _setVisionBonusCfg(cfg: { [tileType: number]: Types.VisionBonusCfg } | undefined): void {
+        private _setVisionBonusCfg(cfg: { [tileType: number]: Config.IVisionBonusCfg } | undefined): void {
             this._visionBonusCfg = cfg;
         }
-        private _getVisionBonusCfg(): { [tileType: number]: Types.VisionBonusCfg } | undefined {
+        private _getVisionBonusCfg(): { [tileType: number]: Config.IVisionBonusCfg } | undefined {
             return this._visionBonusCfg;
         }
 

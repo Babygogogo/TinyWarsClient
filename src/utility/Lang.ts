@@ -657,6 +657,18 @@ namespace TinyWars.Utility.Lang {
             `请尽量同时提供中英文名，以英文逗号分隔`,
             `Please write down a Chinese Name and an English name if possible. Use a , as a separator.`,
         ],
+        [Type.A0132]: [
+            `请设定您愿意同时进行的排位赛的数量上限（设置为0等同于您不参加排位赛）。`,
+            `Please set the maximum number of qualifying matches you are willing to play at the same time (setting it to 0 is equivalent to not participating in qualifying).`,
+        ],
+        [Type.A0133]: [
+            `正在等待对战各方禁用CO。`,
+            `Waiting for the COs to be banned from all sides.`,
+        ],
+        [Type.A0134]: [
+            `正在等待对战各方选择CO和势力颜色。`,
+            `Waiting for the CO and the force color to be chosen from all sides.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -2292,6 +2304,18 @@ namespace TinyWars.Utility.Lang {
         [Type.B0411]: [
             `踢出`,
             `Kick Off`,
+        ],
+        [Type.B0412]: [
+            `数量`,
+            `Number`,
+        ],
+        [Type.B0413]: [
+            `设定战局数量`,
+            `Set Games Num`,
+        ],
+        [Type.B0414]: [
+            `房间状态`,
+            `Room Status`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

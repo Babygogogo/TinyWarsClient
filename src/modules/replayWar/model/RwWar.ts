@@ -310,6 +310,7 @@ namespace TinyWars.ReplayWar {
         }
         public setNextActionId(nextActionId: number): void {
             this._nextActionId = nextActionId;
+            Notify.dispatch(Notify.Type.RwNextActionIdChanged);
         }
 
         public getIsAutoReplay(): boolean {

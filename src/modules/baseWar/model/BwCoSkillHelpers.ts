@@ -66,7 +66,7 @@ namespace TinyWars.BaseWar.BwCoSkillHelper {
 
     function exeSelfHpGain(
         configVersion   : string,
-        skillCfg        : Types.CoSkillCfg,
+        skillCfg        : ProtoTypes.Config.ICoSkillCfg,
         unitMap         : BwUnitMap,
         player          : BwPlayer,
         coGridIndexList : GridIndex[],
@@ -130,7 +130,7 @@ namespace TinyWars.BaseWar.BwCoSkillHelper {
 
     function exeEnemyHpGain(
         configVersion   : string,
-        skillCfg        : Types.CoSkillCfg,
+        skillCfg        : ProtoTypes.Config.ICoSkillCfg,
         unitMap         : BwUnitMap,
         player          : BwPlayer,
         coGridIndexList : GridIndex[],
@@ -194,7 +194,7 @@ namespace TinyWars.BaseWar.BwCoSkillHelper {
 
     function exeSelfFuelGain(
         configVersion   : string,
-        skillCfg        : Types.CoSkillCfg,
+        skillCfg        : ProtoTypes.Config.ICoSkillCfg,
         unitMap         : BwUnitMap,
         player          : BwPlayer,
         coGridIndexList : GridIndex[],
@@ -262,7 +262,7 @@ namespace TinyWars.BaseWar.BwCoSkillHelper {
 
     function exeEnemyFuelGain(
         configVersion   : string,
-        skillCfg        : Types.CoSkillCfg,
+        skillCfg        : ProtoTypes.Config.ICoSkillCfg,
         unitMap         : BwUnitMap,
         player          : BwPlayer,
         coGridIndexList : GridIndex[],
@@ -330,7 +330,7 @@ namespace TinyWars.BaseWar.BwCoSkillHelper {
 
     function exeSelfMaterialGain(
         configVersion   : string,
-        skillCfg        : Types.CoSkillCfg,
+        skillCfg        : ProtoTypes.Config.ICoSkillCfg,
         unitMap         : BwUnitMap,
         player          : BwPlayer,
         coGridIndexList : GridIndex[],
@@ -420,7 +420,7 @@ namespace TinyWars.BaseWar.BwCoSkillHelper {
 
     function exeEnemyMaterialGain(
         configVersion   : string,
-        skillCfg        : Types.CoSkillCfg,
+        skillCfg        : ProtoTypes.Config.ICoSkillCfg,
         unitMap         : BwUnitMap,
         player          : BwPlayer,
         coGridIndexList : GridIndex[],
@@ -510,7 +510,7 @@ namespace TinyWars.BaseWar.BwCoSkillHelper {
 
     function exeSelfPrimaryAmmoGain(
         configVersion   : string,
-        skillCfg        : Types.CoSkillCfg,
+        skillCfg        : ProtoTypes.Config.ICoSkillCfg,
         unitMap         : BwUnitMap,
         player          : BwPlayer,
         coGridIndexList : GridIndex[],
@@ -577,7 +577,7 @@ namespace TinyWars.BaseWar.BwCoSkillHelper {
 
     function exeEnemyPrimaryAmmoGain(
         configVersion   : string,
-        skillCfg        : Types.CoSkillCfg,
+        skillCfg        : ProtoTypes.Config.ICoSkillCfg,
         unitMap         : BwUnitMap,
         player          : BwPlayer,
         coGridIndexList : GridIndex[],
@@ -644,7 +644,7 @@ namespace TinyWars.BaseWar.BwCoSkillHelper {
 
     function exeIndiscriminateAreaDamage(
         configVersion   : string,
-        skillCfg        : Types.CoSkillCfg,
+        skillCfg        : ProtoTypes.Config.ICoSkillCfg,
         unitMap         : BwUnitMap,
         player          : BwPlayer,
         coGridIndexList : GridIndex[],
@@ -682,7 +682,7 @@ namespace TinyWars.BaseWar.BwCoSkillHelper {
 
     function exeSelfPromotionGain(
         configVersion   : string,
-        skillCfg        : Types.CoSkillCfg,
+        skillCfg        : ProtoTypes.Config.ICoSkillCfg,
         unitMap         : BwUnitMap,
         player          : BwPlayer,
         coGridIndexList : GridIndex[],

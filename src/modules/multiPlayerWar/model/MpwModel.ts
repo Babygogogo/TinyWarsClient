@@ -10,7 +10,7 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
     import IMpwWatchInfo        = ProtoTypes.MultiPlayerWar.IMpwWatchInfo;
     import ActionContainer      = ProtoTypes.WarAction.IActionContainer;
 
-    let _ongoingWarInfoList     : IMpwWarInfo[] = [];
+    let _allWarInfoList         : IMpwWarInfo[] = [];
     let _unwatchedWarInfos      : IMpwWatchInfo[];
     let _watchOngoingWarInfos   : IMpwWatchInfo[];
     let _watchRequestedWarInfos : IMpwWatchInfo[];
@@ -21,11 +21,30 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
     export function init(): void {
     }
 
-    export function setOngoingWarInfoList(infoList: IMpwWarInfo[]): void {
-        _ongoingWarInfoList = infoList;
+    export function setAllMyWarInfoList(infoList: IMpwWarInfo[]): void {
+        _allWarInfoList = infoList || [];
     }
-    export function getOngoingWarInfoList(): IMpwWarInfo[] | undefined {
-        return _ongoingWarInfoList;
+    function getAllMyWarInfoList(): IMpwWarInfo[] {
+        return _allWarInfoList;
+    }
+    export function getMyMcwWarInfoList(): IMpwWarInfo[] {
+        return getAllMyWarInfoList().filter(v => v.settingsForMcw != null);
+    }
+    export function getMyRmwWarInfoList(): IMpwWarInfo[] {
+        return getAllMyWarInfoList().filter(v => v.settingsForRmw != null);
+    }
+
+    export function checkIsRedForMyMcwWars(): boolean {
+        const selfUserId = User.UserModel.getSelfUserId();
+        return getMyMcwWarInfoList().some(warInfo => {
+            return warInfo.playerInfoList.some(v => (v.playerIndex === warInfo.playerIndexInTurn) && (v.userId === selfUserId));
+        });
+    }
+    export function checkIsRedForMyRmwWars(): boolean {
+        const selfUserId = User.UserModel.getSelfUserId();
+        return getMyRmwWarInfoList().some(warInfo => {
+            return warInfo.playerInfoList.some(v => (v.playerIndex === warInfo.playerIndexInTurn) && (v.userId === selfUserId));
+        });
     }
 
     export function setUnwatchedWarInfos(infos: IMpwWatchInfo[]): void {

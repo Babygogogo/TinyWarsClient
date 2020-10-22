@@ -43,7 +43,7 @@ namespace TinyWars.MultiCustomRoom {
             this.skinName = "resource/skins/multiCustomRoom/McrBuildingListPanel.exml";
             this._setAutoAdjustHeightEnabled();
             this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => McrBuildingListPanel.hide();
+            this._callbackForTouchMask = () => this.close();
         }
 
         protected _onFirstOpened(): void {

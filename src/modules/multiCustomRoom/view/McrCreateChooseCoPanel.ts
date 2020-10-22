@@ -2,6 +2,7 @@
 namespace TinyWars.MultiCustomRoom {
     import Types            = Utility.Types;
     import Lang             = Utility.Lang;
+    import ProtoTypes       = Utility.ProtoTypes;
     import ConfigManager    = Utility.ConfigManager;
     import CommonHelpPanel  = Common.CommonHelpPanel;
 
@@ -251,7 +252,7 @@ namespace TinyWars.MultiCustomRoom {
     }
 
     type DataForCoRenderer = {
-        coBasicCfg  : Types.CoBasicCfg;
+        coBasicCfg  : ProtoTypes.Config.ICoBasicCfg;
         index       : number;
         panel       : McrCreateChooseCoPanel;
     }

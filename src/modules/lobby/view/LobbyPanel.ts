@@ -95,6 +95,20 @@ namespace TinyWars.Lobby {
                         this.close();
                         MultiCustomRoom.McrMainMenuPanel.show();
                     },
+                    redChecker  : async () => {
+                        return MultiPlayerWar.MpwModel.checkIsRedForMyMcwWars();
+                    },
+                },
+                {
+                    name        : Lang.getText(Lang.Type.B0404),
+                    callback    : () => {
+                        this.close();
+                        RankMatchRoom.RmrMainMenuPanel.show();
+                    },
+                    redChecker  : async () => {
+                        return (MultiPlayerWar.MpwModel.checkIsRedForMyRmwWars())
+                            || (await RankMatchRoom.RmrModel.checkIsRed());
+                    }
                 },
                 {
                     name    : Lang.getText(Lang.Type.B0138),
@@ -127,18 +141,21 @@ namespace TinyWars.Lobby {
     }
 
     type DataForCommandRenderer = {
-        name    : string;
-        callback: () => void;
+        name        : string;
+        callback    : () => void;
+        redChecker? : () => Promise<boolean>;
     }
 
     class CommandRenderer extends eui.ItemRenderer {
-        private _labelCommand: GameUi.UiLabel;
+        private _labelCommand   : GameUi.UiLabel;
+        private _imgRed         : GameUi.UiImage;
 
-        protected dataChanged(): void {
+        protected async dataChanged(): Promise<void> {
             super.dataChanged();
 
-            const data = this.data as DataForCommandRenderer;
+            const data              = this.data as DataForCommandRenderer;
             this._labelCommand.text = data.name;
+            this._imgRed.visible    = (data.redChecker != null) && (await data.redChecker());
         }
 
         public onItemTapEvent(e: eui.ItemTapEvent): void {

@@ -264,7 +264,7 @@ namespace TinyWars.MultiCustomRoom {
     type DataForCoRenderer = {
         roomInfo        : ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
         selfPlayerData  : ProtoTypes.Structure.IDataForPlayerInRoom;
-        coBasicCfg      : Types.CoBasicCfg;
+        coBasicCfg      : ProtoTypes.Config.ICoBasicCfg;
         index           : number;
         panel           : McrRoomChooseCoPanel;
     }

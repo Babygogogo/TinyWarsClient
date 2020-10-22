@@ -1,7 +1,5 @@
 
 namespace TinyWars.Utility.ConfigManager {
-    import NetManager       = Network.Manager;
-    import ActionCode       = Network.Codes;
     import GridSize         = Types.Size;
     import TileBaseType     = Types.TileBaseType;
     import TileObjectType   = Types.TileObjectType;
@@ -10,24 +8,24 @@ namespace TinyWars.Utility.ConfigManager {
     import UnitCategory     = Types.UnitCategory;
     import TileCategory     = Types.TileCategory;
     import WeaponType       = Types.WeaponType;
-    import TileCategoryCfg  = Types.TileCategoryCfg;
-    import UnitCategoryCfg  = Types.UnitCategoryCfg;
-    import TileTemplateCfg  = Types.TileTemplateCfg;
-    import UnitTemplateCfg  = Types.UnitTemplateCfg;
-    import DamageChartCfg   = Types.DamageChartCfg;
-    import MoveCostCfg      = Types.MoveCostCfg;
-    import UnitPromotionCfg = Types.UnitPromotionCfg;
-    import VisionBonusCfg   = Types.VisionBonusCfg;
-    import BuildableTileCfg = Types.BuildableTileCfg;
-    import PlayerRankCfg    = Types.PlayerRankCfg;
-    import CoBasicCfg       = Types.CoBasicCfg;
-    import CoSkillCfg       = Types.CoSkillCfg;
+    import ITileCategoryCfg = ProtoTypes.Config.ITileCategoryCfg;
+    import UnitCategoryCfg  = ProtoTypes.Config.IUnitCategoryCfg;
+    import TileTemplateCfg  = ProtoTypes.Config.ITileTemplateCfg;
+    import UnitTemplateCfg  = ProtoTypes.Config.IUnitTemplateCfg;
+    import DamageChartCfg   = ProtoTypes.Config.IDamageChartCfg;
+    import MoveCostCfg      = ProtoTypes.Config.IMoveCostCfg;
+    import UnitPromotionCfg = ProtoTypes.Config.IUnitPromotionCfg;
+    import VisionBonusCfg   = ProtoTypes.Config.IVisionBonusCfg;
+    import BuildableTileCfg = ProtoTypes.Config.IBuildableTileCfg;
+    import IPlayerRankCfg   = ProtoTypes.Config.IPlayerRankCfg;
+    import CoBasicCfg       = ProtoTypes.Config.ICoBasicCfg;
+    import CoSkillCfg       = ProtoTypes.Config.ICoSkillCfg;
 
     ////////////////////////////////////////////////////////////////////////////////
     // Internal types.
     ////////////////////////////////////////////////////////////////////////////////
     type ExtendedFullConfig = {
-        TileCategory            : { [category: number]: TileCategoryCfg };
+        TileCategory            : { [category: number]: ITileCategoryCfg };
         UnitCategory            : { [category: number]: UnitCategoryCfg };
         TileTemplate            : { [tileType: number]: TileTemplateCfg };
         UnitTemplate            : { [unitType: number]: UnitTemplateCfg };
@@ -36,7 +34,7 @@ namespace TinyWars.Utility.ConfigManager {
         UnitPromotion           : { [promotion: number]: UnitPromotionCfg };
         VisionBonus             : { [unitType: number]: { [tileType: number]: VisionBonusCfg } };
         BuildableTile           : { [unitType: number]: { [srcBaseType: number]: { [srcObjectType: number]: BuildableTileCfg } } };
-        PlayerRank              : { [minScore: number]: PlayerRankCfg };
+        PlayerRank              : { [minScore: number]: IPlayerRankCfg };
         CoBasic                 : { [coId: number]: CoBasicCfg };
         CoSkill                 : { [skillId: number]: CoSkillCfg };
         maxUnitPromotion?       : number;
@@ -62,6 +60,10 @@ namespace TinyWars.Utility.ConfigManager {
     export const COMMON_CONSTANTS           = {
         MapEditorSlotMaxCount                   : 3,
         ScwSaveSlotMaxCount                     : 10,
+
+        RankInitialScore                        : 1200,
+        RankMaxConcurrentCount                  : 5,
+        RankMaxBanCoCount                       : 3,
 
         ChatContentMaxLength                    : 200,
         ChatTeamDivider                         : 100,
@@ -696,8 +698,8 @@ namespace TinyWars.Utility.ConfigManager {
     ////////////////////////////////////////////////////////////////////////////////
     // Initializers.
     ////////////////////////////////////////////////////////////////////////////////
-    function _destructTileCategoryCfg(data: TileCategoryCfg[]): { [category: number]: TileCategoryCfg } {
-        const dst: { [category: number]: TileCategoryCfg } = {};
+    function _destructTileCategoryCfg(data: ITileCategoryCfg[]): { [category: number]: ITileCategoryCfg } {
+        const dst: { [category: number]: ITileCategoryCfg } = {};
         for (const d of data) {
             dst[d.category!] = d;
         }
@@ -773,8 +775,8 @@ namespace TinyWars.Utility.ConfigManager {
         }
         return dst;
     }
-    function _destructPlayerRankCfg(data: PlayerRankCfg[]): { [minScore: number]: PlayerRankCfg } {
-        const dst: { [minScore: number]: PlayerRankCfg } = {};
+    function _destructPlayerRankCfg(data: IPlayerRankCfg[]): { [minScore: number]: IPlayerRankCfg } {
+        const dst: { [minScore: number]: IPlayerRankCfg } = {};
         for (const d of data) {
             dst[d.minScore!] = d;
         }
@@ -1120,18 +1122,23 @@ namespace TinyWars.Utility.ConfigManager {
     }
 
     export function getRankName(version: string, rankScore: number): string {
-        return Lang.getRankName(getPlayerRank(version, rankScore));
+        const cfg = getPlayerRankCfg(version, rankScore);
+        return cfg ? Lang.getNameInCurrentLanguage(cfg.nameList) : undefined;
     }
-    export function getPlayerRank(version: string, rankScore: number): number | undefined {
+    export function getPlayerRankCfg(version: string, rankScore: number): IPlayerRankCfg {
         const cfgs  = _ALL_CONFIGS.get(version)!.PlayerRank;
-        let maxRank = 0;
+        let maxRank = -1;
+        let maxCfg  : IPlayerRankCfg;
+
         for (const i in cfgs) {
-            const cfg = cfgs[i];
-            if (rankScore >= cfg.minScore) {
-                maxRank = cfg.rank;
+            const currCfg   = cfgs[i];
+            const currRank  = currCfg.rank;
+            if ((rankScore >= currCfg.minScore) && (currRank > maxRank)) {
+                maxRank = currRank;
+                maxCfg  = currCfg;
             }
         }
-        return maxRank;
+        return maxCfg;
     }
 
     export function getCoBasicCfg(version: string, coId: number): CoBasicCfg | null {
@@ -1222,7 +1229,7 @@ namespace TinyWars.Utility.ConfigManager {
         }
         return checkIsUnitDivingByDefaultWithTemplateCfg(templateCfg);
     }
-    export function checkIsUnitDivingByDefaultWithTemplateCfg(templateCfg: Types.UnitTemplateCfg): boolean {
+    export function checkIsUnitDivingByDefaultWithTemplateCfg(templateCfg: UnitTemplateCfg): boolean {
         const diveCfgs = templateCfg.diveCfgs;
         return (diveCfgs != null) && (!!diveCfgs[1]);
     }

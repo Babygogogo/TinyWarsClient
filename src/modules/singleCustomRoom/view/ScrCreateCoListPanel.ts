@@ -2,6 +2,7 @@
 namespace TinyWars.SingleCustomRoom {
     import Types        = Utility.Types;
     import Lang         = Utility.Lang;
+    import ProtoTypes   = Utility.ProtoTypes;
 
     type OpenData = {
         dataIndex   : number;
@@ -260,10 +261,10 @@ namespace TinyWars.SingleCustomRoom {
     }
 
     type DataForCoRenderer = {
-        dataIndexForCreateWarPlayerList   : number;
-        coBasicCfg  : Types.CoBasicCfg;
-        index       : number;
-        panel       : ScrCreateCoListPanel;
+        dataIndexForCreateWarPlayerList : number;
+        coBasicCfg                      : ProtoTypes.Config.ICoBasicCfg;
+        index                           : number;
+        panel                           : ScrCreateCoListPanel;
     }
 
     class CoRenderer extends eui.ItemRenderer {

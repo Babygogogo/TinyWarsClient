@@ -241,7 +241,6 @@ namespace TinyWars.BaseWar {
         }
         public setExecutedActionsCount(count: number): void {
             this._executedActionsCount = count;
-            Notify.dispatch(Notify.Type.BwExecutedActionsCountChanged);
         }
 
         protected _setPlayerManager(manager: BwPlayerManager): void {

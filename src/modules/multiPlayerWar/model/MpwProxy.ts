@@ -16,7 +16,7 @@ namespace TinyWars.MultiPlayerWar.MpwProxy {
             { msgCode: Codes.MsgMpwCommonBroadcastGameStart,    callback: _onMsgMpwCommonBroadcastGameStart     },
             { msgCode: Codes.MsgMpwCommonHandleBoot,            callback: _onMsgMpwCommonHandleBoot             },
             { msgCode: Codes.MsgMpwCommonContinueWar,           callback: _onMsgMpwCommonContinueWar            },
-            { msgCode: Codes.MsgMpwCommonGetWarInfoList,        callback: _onMsgMpwCommonGetWarInfoList         },
+            { msgCode: Codes.MsgMpwCommonGetMyWarInfoList,      callback: _onMsgMpwCommonGetMyWarInfoList       },
             { msgCode: Codes.MsgMpwCommonSyncWar,               callback: _onMsgMpwCommonSyncWar,               },
 
             { msgCode: Codes.MsgMpwWatchGetUnwatchedWarInfos,   callback: _onMsgMpwWatchGetUnwatchedWarInfos    },
@@ -83,15 +83,15 @@ namespace TinyWars.MultiPlayerWar.MpwProxy {
         }
     }
 
-    export function reqMcwCommonGetWarInfoList(): void {
+    export function reqMpwCommonGetMyWarInfoList(): void {
         NetManager.send({
-            MsgMpwCommonGetWarInfoList: { c: {} },
+            MsgMpwCommonGetMyWarInfoList: { c: {} },
         });
     }
-    function _onMsgMpwCommonGetWarInfoList(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMpwCommonGetWarInfoList.IS;
-        MpwModel.setOngoingWarInfoList(data.infos);
-        Notify.dispatch(Notify.Type.MsgMpwCommonGetWarInfoList, data);
+    function _onMsgMpwCommonGetMyWarInfoList(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMpwCommonGetMyWarInfoList.IS;
+        MpwModel.setAllMyWarInfoList(data.infos);
+        Notify.dispatch(Notify.Type.MsgMpwCommonGetMyWarInfoList, data);
     }
 
     export function reqMcwCommonSyncWar(war: BwWar, requestType: Types.SyncWarRequestType): void {

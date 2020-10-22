@@ -225,7 +225,7 @@ namespace TinyWars.User {
                 this._labelTitle.text       = Lang.getFormattedText(Lang.Type.F0009, info.nickname);
                 this._labelOnlineTime.text  = Helpers.getTimeDurationText2(info.onlineTime);
 
-                const warStatisticsList     = info.warStatisticsList || [];
+                const warStatisticsList     = info.userWarStatistics.dataList || [];
                 const rankNormal            = warStatisticsList.filter(v => v.warType === WarType.RmwStd) || [];
                 const rankFog               = warStatisticsList.filter(v => v.warType === WarType.RmwFog) || [];
                 this._labelRankName.text    = ""; // Utility.ConfigManager.getRankName(Utility.ConfigManager.getNewestConfigVersion(), info.rank2pScore);   // TODO

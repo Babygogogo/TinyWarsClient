@@ -528,7 +528,7 @@ namespace TinyWars.BaseWar {
             return cfg.maxLoadCount;
         }
 
-        private _getCoBasicCfg(): Types.CoBasicCfg | null {
+        private _getCoBasicCfg(): ProtoTypes.Config.ICoBasicCfg | null {
             const coId = this.getCoId();
             return coId == null
                 ? null
