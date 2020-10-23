@@ -65,8 +65,6 @@ namespace TinyWars.RankMatchRoom {
 
         protected _dataForOpen      : OpenParamForRoomBasicSettingsPage;
         private _roomInfo           : ProtoTypes.RankMatchRoom.IRmrRoomInfo;
-        private _unitAndTileSkinId  : number;
-        private _coId               : number;
 
         public constructor() {
             super();
@@ -127,7 +125,7 @@ namespace TinyWars.RankMatchRoom {
             const roomInfo = this._roomInfo;
             if (roomInfo) {
                 const settingsForCommon = roomInfo.settingsForCommon;
-                MultiCustomRoom.McrBuildingListPanel.show({
+                WarMap.WarMapBuildingListPanel.show({
                     configVersion   : settingsForCommon.configVersion,
                     mapRawData      : await WarMapModel.getRawData(settingsForCommon.mapId),
                 });
@@ -148,35 +146,35 @@ namespace TinyWars.RankMatchRoom {
             });
         }
 
+        private _onTouchedBtnChangeCo(e: egret.TouchEvent): void {
+            const roomInfo = this._roomInfo;
+            if (roomInfo) {
+                const selfUserId        = UserModel.getSelfUserId();
+                const playerDataList    = roomInfo.playerDataList;
+                const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
+                if ((selfPlayerData != null) && (!selfPlayerData.isReady)) {
+                    RmrRoomChooseCoPanel.show({
+                        roomInfo,
+                        playerIndex: selfPlayerData.playerIndex,
+                    });
+                    RmrRoomInfoPanel.hide();
+                }
+            }
+        }
+
         private _onTouchedBtnModifySkinId(e: egret.TouchEvent): void {
             const roomInfo = this._roomInfo;
             if (roomInfo) {
                 const selfUserId        = UserModel.getSelfUserId();
                 const playerDataList    = roomInfo.playerDataList;
                 const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
-                if (selfPlayerData != null) {
-                    if (selfPlayerData.isReady) {
-                        FloatText.show(Lang.getText(Lang.Type.A0128));
+                if ((selfPlayerData != null) && (!selfPlayerData.isReady)) {
+                    const currSkinId = RmrModel.SelfSettings.getUnitAndTileSkinId();
+                    RmrModel.SelfSettings.tickUnitAndTileSkinId(roomInfo);
+                    if (currSkinId === RmrModel.SelfSettings.getUnitAndTileSkinId()) {
+                        FloatText.show(Lang.getText(Lang.Type.B0332));
                     } else {
-                        const selfSkinId        = selfPlayerData.unitAndTileSkinId;
-                        const availableSkinIds  : number[] = [];
-                        for (let skinId = CommonConstants.UnitAndTileMinSkinId; skinId <= CommonConstants.UnitAndTileMaxSkinId; ++skinId) {
-                            if ((skinId === selfSkinId) || (playerDataList.every(v => v.userId == null || v.unitAndTileSkinId !== skinId))) {
-                                availableSkinIds.push(skinId);
-                            }
-                        }
-
-                        if (availableSkinIds.length <= 1) {
-                            FloatText.show(Lang.getText(Lang.Type.B0332));
-                        } else {
-                            const newSkinId = availableSkinIds[(availableSkinIds.indexOf(selfSkinId) + 1) % availableSkinIds.length]
-                            McrProxy.reqMcrSetSelfSettings({
-                                roomId              : roomInfo.roomId,
-                                playerIndex         : selfPlayerData.playerIndex,
-                                unitAndTileSkinId   : newSkinId,
-                                coId                : selfPlayerData.coId,
-                            });
-                        }
+                        this._updateGroupSkinId();
                     }
                 }
             }
@@ -185,8 +183,22 @@ namespace TinyWars.RankMatchRoom {
         private _onTouchedBtnModifyReady(e: egret.TouchEvent): void {
             const roomInfo = this._roomInfo;
             if (roomInfo) {
-                const selfUserId = UserModel.getSelfUserId();
-                McrProxy.reqMcrSetReady(roomInfo.roomId, !roomInfo.playerDataList.find(v => v.userId === selfUserId).isReady);
+                const selfUserId        = UserModel.getSelfUserId();
+                const playerDataList    = roomInfo.playerDataList;
+                const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
+                if ((selfPlayerData != null) && (!selfPlayerData.isReady)) {
+                    Common.CommonConfirmPanel.show({
+                        title   : Lang.getText(Lang.Type.B0088),
+                        content : Lang.getText(Lang.Type.A0137),
+                        callback: () => {
+                            RmrProxy.reqRmrSetSelfSettings(
+                                roomInfo.roomId,
+                                RmrModel.SelfSettings.getCoId(),
+                                RmrModel.SelfSettings.getUnitAndTileSkinId(),
+                            );
+                        }
+                    });
+                }
             }
         }
 
@@ -204,28 +216,17 @@ namespace TinyWars.RankMatchRoom {
             });
         }
 
-        private _onTouchedBtnChangeCo(e: egret.TouchEvent): void {
+        private _onTouchedBtnBanCo(e: egret.TouchEvent): void {
             const roomInfo = this._roomInfo;
-            if (roomInfo) {
-                const selfUserId        = UserModel.getSelfUserId();
-                const playerDataList    = roomInfo.playerDataList;
-                const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
-                if (selfPlayerData != null) {
-                    if (selfPlayerData.isReady) {
-                        FloatText.show(Lang.getText(Lang.Type.A0128));
-                    } else {
-                        McrRoomChooseCoPanel.show({
-                            roomInfo,
-                            selfPlayerData,
-                        });
-                        McrRoomInfoPanel.hide();
-                    }
+            if ((roomInfo != null) && (roomInfo.timeForStartSetSelfSettings == null)) {
+                const selfUserId        = User.UserModel.getSelfUserId();
+                const selfPlayerData    = roomInfo.playerDataList.find(v => v.userId === selfUserId);
+                if ((selfPlayerData != null)                                                                                            &&
+                    ((roomInfo.settingsForRmw.dataListForBanCo || []).find(v => v.srcPlayerIndex === selfPlayerData.playerIndex) == null)
+                ) {
+                    // TODO open the ban co panel.
                 }
             }
-        }
-
-        private _onTouchedBtnBanCo(e: egret.TouchEvent): void {
-            // TODO
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -316,67 +317,119 @@ namespace TinyWars.RankMatchRoom {
         }
 
         private _updateGroupBanCo(): void {
-            // TODO
+            const roomInfo  = this._roomInfo;
+            const group     = this._groupBanCo;
+            if ((roomInfo == null) || (roomInfo.timeForStartSetSelfSettings != null)) {
+                (group.parent) && (group.parent.removeChild(group));
+                return;
+            }
+
+            const selfUserId        = User.UserModel.getSelfUserId();
+            const selfPlayerData    = roomInfo.playerDataList.find(v => v.userId === selfUserId);
+            if (selfPlayerData == null) {
+                (group.parent) && (group.parent.removeChild(group));
+                return;
+            }
+
+            (!group.parent) && (this._groupSelfInfo.addChild(group));
+
+            const dataForBanCo  = (roomInfo.settingsForRmw.dataListForBanCo || []).find(v => v.srcPlayerIndex === selfPlayerData.playerIndex);
+            const label         = this._labelBanCo;
+            const btn           = this._btnBanCo;
+            if (dataForBanCo) {
+                label.text = generateTextForBanCo(roomInfo.settingsForCommon.configVersion, dataForBanCo.bannedCoIdList);
+                btn.setTextColor(0xFFFFFF);
+                btn.setRedVisible(false);
+            } else {
+                label.text = Lang.getText(Lang.Type.A0135);
+                btn.setTextColor(0x00FF00);
+                btn.setRedVisible(true);
+            }
         }
 
         private _updateGroupCo(): void {
-            // TODO
-            this._btnChangeCo.setTextColor(0x00FF00);
+            const roomInfo  = this._roomInfo;
+            const group     = this._groupCo;
+            if ((roomInfo == null) || (roomInfo.timeForStartSetSelfSettings == null)) {
+                (group.parent) && (group.parent.removeChild(group));
+                return;
+            }
 
-            const roomInfo = this._roomInfo;
-            if (roomInfo) {
-                const selfUserId    = UserModel.getSelfUserId();
-                const playerData    = roomInfo.playerDataList.find(v => v.userId === selfUserId);
-                const group         = this._groupCo;
-                if (playerData == null) {
-                    group.visible   = false;
-                } else {
-                    group.visible   = true;
-                    const coId      = playerData ? playerData.coId : null;
-                    if (coId != null) {
-                        const cfg               = ConfigManager.getCoBasicCfg(ConfigManager.getLatestConfigVersion(), coId);
-                        this._labelCoName.text  = `${cfg.name} (T${cfg.tier})`;
-                    }
-                }
+            const selfUserId        = User.UserModel.getSelfUserId();
+            const selfPlayerData    = roomInfo.playerDataList.find(v => v.userId === selfUserId);
+            if (selfPlayerData == null) {
+                (group.parent) && (group.parent.removeChild(group));
+                return;
+            }
+
+            (!group.parent) && (this._groupSelfInfo.addChild(group));
+
+            const btn               = this._btnChangeCo;
+            this._labelCoName.text  = ConfigManager.getCoNameAndTierText(roomInfo.settingsForCommon.configVersion, RmrModel.SelfSettings.getCoId());
+            if (selfPlayerData.isReady) {
+                btn.setTextColor(0xFFFFFF);
+                btn.setRedVisible(false);
+            } else {
+                btn.setTextColor(0x00FF00);
+                btn.setRedVisible(true);
             }
         }
 
         private _updateGroupSkinId(): void {
-            // TODO
-            this._btnModifySkinId.setTextColor(0x00FF00);
-            const roomInfo = this._roomInfo;
-            if (roomInfo) {
-                const selfUserId    = UserModel.getSelfUserId();
-                const playerData    = roomInfo.playerDataList.find(v => v.userId === selfUserId);
-                const group         = this._groupSkinId;
-                if (playerData == null) {
-                    group.visible   = false;
-                } else {
-                    group.visible   = true;
-                    const skinId    = playerData ? playerData.unitAndTileSkinId : null;
-                    if (skinId != null) {
-                        this._labelSkinId.text = Lang.getUnitAndTileSkinName(skinId);
-                    }
-                }
+            const roomInfo  = this._roomInfo;
+            const group     = this._groupSkinId;
+            if ((roomInfo == null) || (roomInfo.timeForStartSetSelfSettings == null)) {
+                (group.parent) && (group.parent.removeChild(group));
+                return;
+            }
+
+            const selfUserId        = User.UserModel.getSelfUserId();
+            const selfPlayerData    = roomInfo.playerDataList.find(v => v.userId === selfUserId);
+            if (selfPlayerData == null) {
+                (group.parent) && (group.parent.removeChild(group));
+                return;
+            }
+
+            (!group.parent) && (this._groupSelfInfo.addChild(group));
+
+            const btn               = this._btnModifySkinId;
+            this._labelSkinId.text  = Lang.getUnitAndTileSkinName(RmrModel.SelfSettings.getUnitAndTileSkinId());
+            if (selfPlayerData.isReady) {
+                btn.setTextColor(0xFFFFFF);
+                btn.setRedVisible(false);
+            } else {
+                btn.setTextColor(0x00FF00);
+                btn.setRedVisible(true);
             }
         }
 
         private _updateGroupReady(): void {
-            // TODO
-            this._btnModifyReady.setTextColor(0x00FF00);
-            const roomInfo = this._roomInfo;
-            if (roomInfo) {
-                const selfUserId    = UserModel.getSelfUserId();
-                const playerData    = roomInfo.playerDataList.find(v => v.userId === selfUserId);
-                const group         = this._groupReady;
-                if (playerData == null) {
-                    group.visible   = false;
-                } else {
-                    group.visible           = true;
-                    this._labelReady.text   = playerData.isReady
-                        ? Lang.getText(Lang.Type.B0012)
-                        : Lang.getText(Lang.Type.B0013);
-                }
+            const roomInfo  = this._roomInfo;
+            const group     = this._groupReady;
+            if ((roomInfo == null) || (roomInfo.timeForStartSetSelfSettings == null)) {
+                (group.parent) && (group.parent.removeChild(group));
+                return;
+            }
+
+            const selfUserId        = User.UserModel.getSelfUserId();
+            const selfPlayerData    = roomInfo.playerDataList.find(v => v.userId === selfUserId);
+            if (selfPlayerData == null) {
+                (group.parent) && (group.parent.removeChild(group));
+                return;
+            }
+
+            (!group.parent) && (this._groupSelfInfo.addChild(group));
+
+            const label     = this._labelReady;
+            const btn       = this._btnModifyReady;
+            if (selfPlayerData.isReady) {
+                label.text = Lang.getText(Lang.Type.B0012);
+                btn.setRedVisible(false);
+                btn.setTextColor(0xFFFFFF);
+            } else {
+                label.text = Lang.getText(Lang.Type.B0013);
+                btn.setRedVisible(true);
+                btn.setTextColor(0x00FF00);
             }
         }
 
@@ -440,6 +493,18 @@ namespace TinyWars.RankMatchRoom {
                     });
                 }
             }
+        }
+    }
+
+    function generateTextForBanCo(configVersion: string, bannedCoIdList: number[]): string {
+        if ((bannedCoIdList == null) || (bannedCoIdList.length <= 0)) {
+            return Lang.getText(Lang.Type.A0136)
+        } else {
+            const coNameList: string[] = [];
+            for (const coId of bannedCoIdList) {
+                coNameList.push(ConfigManager.getCoNameAndTierText(configVersion, coId));
+            }
+            return coNameList.join();
         }
     }
 }

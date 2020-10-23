@@ -33,7 +33,6 @@ namespace TinyWars.Common.CommonProxy {
 
     function _onMsgCommonError(e: egret.Event): void {
         const data = e.data as ProtoTypes.NetMessage.MsgCommonError.IS;
-        // TODO: show error messages.
     }
 
     function _onMsgCommonLatestConfigVersion(e: egret.Event): void {

@@ -1,5 +1,5 @@
 
-namespace TinyWars.MultiCustomRoom {
+namespace TinyWars.RankMatchRoom {
     import Notify           = Utility.Notify;
     import Types            = Utility.Types;
     import Helpers          = Utility.Helpers;
@@ -9,11 +9,11 @@ namespace TinyWars.MultiCustomRoom {
     import IMpwWarInfo      = ProtoTypes.MultiPlayerWar.IMpwWarInfo;
     import IWarPlayerInfo   = ProtoTypes.Structure.IWarPlayerInfo;
 
-    export class McrContinueWarListPanel extends GameUi.UiPanel {
+    export class RmrMyWarListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: McrContinueWarListPanel;
+        private static _instance: RmrMyWarListPanel;
 
         private _labelMenuTitle : GameUi.UiLabel;
         private _listWar        : GameUi.UiScrollList;
@@ -25,8 +25,6 @@ namespace TinyWars.MultiCustomRoom {
         private _labelMapName           : GameUi.UiLabel;
         private _labelDesigner          : GameUi.UiLabel;
         private _labelHasFog            : GameUi.UiLabel;
-        private _labelWarCommentTitle   : GameUi.UiLabel;
-        private _labelWarComment        : GameUi.UiLabel;
         private _labelPlayers           : GameUi.UiLabel;
         private _listPlayer             : GameUi.UiScrollList;
 
@@ -34,14 +32,14 @@ namespace TinyWars.MultiCustomRoom {
         private _selectedWarIndex   : number;
 
         public static show(): void {
-            if (!McrContinueWarListPanel._instance) {
-                McrContinueWarListPanel._instance = new McrContinueWarListPanel();
+            if (!RmrMyWarListPanel._instance) {
+                RmrMyWarListPanel._instance = new RmrMyWarListPanel();
             }
-            McrContinueWarListPanel._instance.open();
+            RmrMyWarListPanel._instance.open();
         }
         public static hide(): void {
-            if (McrContinueWarListPanel._instance) {
-                McrContinueWarListPanel._instance.close();
+            if (RmrMyWarListPanel._instance) {
+                RmrMyWarListPanel._instance.close();
             }
         }
 
@@ -49,7 +47,7 @@ namespace TinyWars.MultiCustomRoom {
             super();
 
             this._setAutoAdjustHeightEnabled();
-            this.skinName = "resource/skins/multiCustomRoom/McrContinueWarListPanel.exml";
+            this.skinName = "resource/skins/rankMatchRoom/RmrMyWarListPanel.exml";
         }
 
         protected _onFirstOpened(): void {
@@ -107,7 +105,7 @@ namespace TinyWars.MultiCustomRoom {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
         private _onMsgMpwCommonGetMyWarInfoList(e: egret.Event): void {
-            const newData        = this._createDataForListWar(MultiPlayerWar.MpwModel.getMyMcwWarInfoList());
+            const newData        = this._createDataForListWar(MultiPlayerWar.MpwModel.getMyRmwWarInfoList());
             this._dataForListWar = newData;
 
             if (newData.length > 0) {
@@ -126,7 +124,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
             this.close();
-            McrMainMenuPanel.show();
+            RmrMainMenuPanel.show();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -135,7 +133,6 @@ namespace TinyWars.MultiCustomRoom {
         private _updateComponentsForLanguage(): void {
             this._labelMenuTitle.text       = Lang.getText(Lang.Type.B0024);
             this._labelNoWar.text           = Lang.getText(Lang.Type.B0210);
-            this._labelWarCommentTitle.text = `${Lang.getText(Lang.Type.B0187)}:`;
             this._labelPlayers.text         = `${Lang.getText(Lang.Type.B0232)}:`;
             this._btnBack.label             = Lang.getText(Lang.Type.B0146);
         }
@@ -180,7 +177,6 @@ namespace TinyWars.MultiCustomRoom {
             this._labelMapName.text     = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
             this._labelDesigner.text    = Lang.getFormattedText(Lang.Type.F0001, mapRawData.designerName);
             this._labelHasFog.text      = Lang.getFormattedText(Lang.Type.F0005, Lang.getText(settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault ? Lang.Type.B0012 : Lang.Type.B0013));
-            this._labelWarComment.text  = warInfo.settingsForMcw.warComment || "----";
             this._listPlayer.bindData(this._createDataForListPlayer(warInfo, mapExtraData));
 
             this._groupInfo.visible      = true;
@@ -208,7 +204,7 @@ namespace TinyWars.MultiCustomRoom {
     type DataForWarRenderer = {
         warInfo : IMpwWarInfo;
         index   : number;
-        panel   : McrContinueWarListPanel;
+        panel   : RmrMyWarListPanel;
     }
 
     class WarRenderer extends eui.ItemRenderer {
@@ -229,15 +225,11 @@ namespace TinyWars.MultiCustomRoom {
 
             const data              = this.data as DataForWarRenderer;
             const warInfo           = data.warInfo;
+            const labelName         = this._labelName;
             this.currentState       = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
             this._labelInTurn.text  = this._checkIsInTurn(warInfo) ? Lang.getText(Lang.Type.B0231) : "";
-
-            const warName = warInfo.settingsForMcw.warName;
-            if (warName) {
-                this._labelName.text = warName;
-            } else {
-                WarMapModel.getMapNameInCurrentLanguage(warInfo.settingsForCommon.mapId).then(v => this._labelName.text = v);
-            }
+            labelName.text          = "";
+            WarMapModel.getMapNameInCurrentLanguage(warInfo.settingsForCommon.mapId).then(v => labelName.text = v);
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
@@ -247,8 +239,8 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
             const data = this.data as DataForWarRenderer;
-            McrContinueWarListPanel.hide();
-            McrContinueWarInfoPanel.show(data.warInfo);
+            RmrMyWarListPanel.hide();
+            RmrWarInfoPanel.show(data.warInfo);
         }
 
         private _checkIsInTurn(info: IMpwWarInfo): boolean {

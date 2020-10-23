@@ -760,7 +760,6 @@ namespace TinyWars.BaseWar {
         }
 
         public getCaptureAmount(): number | undefined {
-            // TODO: take the skills into account.
             return this.checkIsCapturer() ? this.getNormalizedCurrentHp() : undefined;
         }
         public getCfgCaptureAmount(): number | undefined {
@@ -946,7 +945,6 @@ namespace TinyWars.BaseWar {
         }
 
         public getProduceUnitCost(): number | undefined {
-            // TODO: take skills into account.
             const type = this.getProduceUnitType();
             if (type == null) {
                 return undefined;

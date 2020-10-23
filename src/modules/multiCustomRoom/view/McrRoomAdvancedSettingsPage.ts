@@ -57,7 +57,7 @@ namespace TinyWars.MultiCustomRoom {
             const roomInfo = this._roomInfo;
             if (roomInfo) {
                 const settingsForCommon = roomInfo.settingsForCommon;
-                McrBuildingListPanel.show({
+                WarMap.WarMapBuildingListPanel.show({
                     configVersion   : settingsForCommon.configVersion,
                     mapRawData      : await WarMapModel.getRawData(settingsForCommon.mapId),
                 });

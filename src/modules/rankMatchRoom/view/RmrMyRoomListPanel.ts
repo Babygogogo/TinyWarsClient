@@ -248,8 +248,10 @@ namespace TinyWars.RankMatchRoom {
         }
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
-            const data = this.data as DataForWarRenderer;
-            RmrRoomInfoPanel.show(data.roomInfo.roomId);
+            const data      = this.data as DataForWarRenderer;
+            const roomInfo  = data.roomInfo;
+            RmrModel.SelfSettings.resetData(roomInfo);
+            RmrRoomInfoPanel.show(roomInfo.roomId);
         }
     }
 

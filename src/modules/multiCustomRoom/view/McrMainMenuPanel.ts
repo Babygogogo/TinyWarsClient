@@ -65,7 +65,7 @@ namespace TinyWars.MultiCustomRoom {
             this._updateView();
         }
         private _onMsgUserLogout(e: egret.Event): void {
-            McrMainMenuPanel.hide();
+            this.close();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -82,29 +82,29 @@ namespace TinyWars.MultiCustomRoom {
                 {
                     name    : Lang.getText(Lang.Type.B0000),
                     callback: (): void => {
-                        McrMainMenuPanel.hide();
-                        MultiCustomRoom.McrCreateMapListPanel.show({});
+                        this.close();
+                        McrCreateMapListPanel.show({});
                     },
                 },
                 {
                     name    : Lang.getText(Lang.Type.B0023),
                     callback: (): void => {
-                        McrMainMenuPanel.hide();
-                        MultiCustomRoom.McrJoinRoomListPanel.show();
+                        this.close();
+                        McrJoinRoomListPanel.show();
                     },
                 },
                 {
                     name    : Lang.getText(Lang.Type.B0410),
                     callback: (): void => {
-                        McrMainMenuPanel.hide();
-                        MultiCustomRoom.McrMyRoomListPanel.show();
+                        this.close();
+                        McrMyRoomListPanel.show();
                     },
                 },
                 {
                     name    : Lang.getText(Lang.Type.B0024),
                     callback: () => {
-                        McrMainMenuPanel.hide();
-                        MultiCustomRoom.McrContinueWarListPanel.show();
+                        this.close();
+                        McrMyWarListPanel.show();
                     },
                     redChecker  : () => {
                         return MultiPlayerWar.MpwModel.checkIsRedForMyMcwWars();
@@ -113,7 +113,7 @@ namespace TinyWars.MultiCustomRoom {
                 {
                     name    : Lang.getText(Lang.Type.B0206),
                     callback: () => {
-                        McrMainMenuPanel.hide();
+                        this.close();
                         McrWatchMainMenuPanel.show();
                     },
                     redChecker  : () => {
@@ -124,7 +124,7 @@ namespace TinyWars.MultiCustomRoom {
                 {
                     name    : Lang.getText(Lang.Type.B0092),
                     callback: () => {
-                        McrMainMenuPanel.hide();
+                        this.close();
                         ReplayWar.RwReplayListPanel.show();
                     },
                 },

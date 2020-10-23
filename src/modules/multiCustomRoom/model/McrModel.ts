@@ -191,7 +191,7 @@ namespace TinyWars.MultiCustomRoom {
                 const settingsForCommon     = getData().settingsForCommon;
                 settingsForCommon.warRule   = Helpers.deepClone(warRule);
                 setPresetWarRuleId(ruleId);
-                setSelfCoId(BwSettingsHelper.getRandomCoId(settingsForCommon, getSelfPlayerIndex()));
+                setSelfCoId(BwSettingsHelper.getRandomCoIdWithSettingsForCommon(settingsForCommon, getSelfPlayerIndex()));
             }
             export function setPresetWarRuleId(ruleId: number | null | undefined): void {
                 const settingsForCommon             = getData().settingsForCommon;
@@ -423,7 +423,7 @@ namespace TinyWars.MultiCustomRoom {
                 const playerIndex                   = _joinWarAvailablePlayerIndexList[0];
                 setPlayerIndex(playerIndex);
                 setUnitAndTileSkinId(_joinWarAvailableSkinIdList[0]);
-                setCoId(BwSettingsHelper.getRandomCoId(roomInfo.settingsForCommon, playerIndex));
+                setCoId(BwSettingsHelper.getRandomCoIdWithSettingsForCommon(roomInfo.settingsForCommon, playerIndex));
                 setIsReady(true);
             }
 
@@ -435,7 +435,7 @@ namespace TinyWars.MultiCustomRoom {
                 if (list.length > 1) {
                     const playerIndex = list[(list.indexOf(getPlayerIndex()) + 1) % list.length];
                     setPlayerIndex(playerIndex);
-                    setCoId(BwSettingsHelper.getRandomCoId((await getRoomInfo()).settingsForCommon, playerIndex));
+                    setCoId(BwSettingsHelper.getRandomCoIdWithSettingsForCommon((await getRoomInfo()).settingsForCommon, playerIndex));
                 }
             }
             export function getPlayerIndex(): number {

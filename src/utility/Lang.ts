@@ -666,8 +666,20 @@ namespace TinyWars.Utility.Lang {
             `Waiting for the COs to be banned from all sides.`,
         ],
         [Type.A0134]: [
-            `正在等待对战各方选择CO和势力颜色。`,
-            `Waiting for the CO and the force color to be chosen from all sides.`,
+            `正在等待对战各方选择CO和势力颜色并进入准备状态。`,
+            `Waiting for all the players to be ready for the game.`,
+        ],
+        [Type.A0135]: [
+            `您尚未禁用任何CO。`,
+            `You have not banned any COs.`,
+        ],
+        [Type.A0136]: [
+            `您已选择不禁用任何CO。`,
+            `You have chosen not to ban any COs.`,
+        ],
+        [Type.A0137]: [
+            `进入准备状态后，您将无法再次修改CO和势力颜色设定。确定要继续吗？`,
+            `You can't change your CO and color settings after being ready. Are you sure to continue?`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2687,6 +2699,10 @@ namespace TinyWars.Utility.Lang {
         [Type.F0030]: [
             `%s (p%d) 回合结束。`,
             `%s (p%d) has ended the turn!!`,
+        ],
+        [Type.F0031]: [
+            `您最多只能禁用%d名CO。`,
+            `You can only ban up to %d COs.`,
         ],
     };
 

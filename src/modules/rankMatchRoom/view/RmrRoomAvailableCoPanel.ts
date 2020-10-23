@@ -1,18 +1,20 @@
 
-namespace TinyWars.MultiCustomRoom {
+namespace TinyWars.RankMatchRoom {
     import Types            = Utility.Types;
     import Helpers          = Utility.Helpers;
     import Lang             = Utility.Lang;
     import Notify           = Utility.Notify;
     import ConfigManager    = Utility.ConfigManager;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import IRmrRoomInfo     = ProtoTypes.RankMatchRoom.IRmrRoomInfo;
     import ConfirmPanel     = Common.CommonConfirmPanel;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
-    export class McrCreateAvailableCoPanel extends GameUi.UiPanel {
+    export class RmrRoomAvailableCoPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud2;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: McrCreateAvailableCoPanel;
+        private static _instance: RmrRoomAvailableCoPanel;
 
         private _labelAvailableCoTitle  : TinyWars.GameUi.UiLabel;
         private _groupCoTiers           : eui.Group;
@@ -23,27 +25,31 @@ namespace TinyWars.MultiCustomRoom {
         private _renderersForCoTiers    : RendererForCoTier[] = [];
         private _renderersForCoNames    : RendererForCoName[] = [];
 
-        private _playerIndex            : number;
+        private _roomInfo               : IRmrRoomInfo;
+        private _srcPlayerIndex         : number;
         private _availableCoIdSet       = new Set<number>();
+        private _allCoIdSet             = new Set<number>();
 
-        public static show(playerIndex: number): void {
-            if (!McrCreateAvailableCoPanel._instance) {
-                McrCreateAvailableCoPanel._instance = new McrCreateAvailableCoPanel();
+        public static show(roomInfo: IRmrRoomInfo, srcPlayerIndex: number): void {
+            if (!RmrRoomAvailableCoPanel._instance) {
+                RmrRoomAvailableCoPanel._instance = new RmrRoomAvailableCoPanel();
             }
-            McrCreateAvailableCoPanel._instance._playerIndex = playerIndex;
-            McrCreateAvailableCoPanel._instance.open();
+            const instance              = RmrRoomAvailableCoPanel._instance;
+            instance._roomInfo          = roomInfo;
+            instance._srcPlayerIndex    = srcPlayerIndex;
+            instance.open();
         }
 
         public static hide(): void {
-            if (McrCreateAvailableCoPanel._instance) {
-                McrCreateAvailableCoPanel._instance.close();
+            if (RmrRoomAvailableCoPanel._instance) {
+                RmrRoomAvailableCoPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/multiCustomRoom/McrCreateAvailableCoPanel.exml";
+            this.skinName = "resource/skins/rankMatchRoom/RmrRoomAvailableCoPanel.exml";
             this._setAutoAdjustHeightEnabled();
             this._setTouchMaskEnabled();
             this._callbackForTouchMask = () => this.close();
@@ -55,15 +61,19 @@ namespace TinyWars.MultiCustomRoom {
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
             ];
             this._notifyListeners = [
-                { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.MsgRmrDeleteRoom,   callback: this._onMsgRmrDeleteRoom },
             ];
         }
 
         protected _onOpened(): void {
-            const availableCoIdSet = this._availableCoIdSet;
+            const availableCoIdSet  = this._availableCoIdSet;
+            const allCoIdSet        = this._allCoIdSet;
             availableCoIdSet.clear();
-            for (const coId of McrModel.Create.getAvailableCoIdList(this._playerIndex)) {
+            allCoIdSet.clear();
+            for (const coId of generateAvailableCoIdList(this._roomInfo, this._srcPlayerIndex)) {
                 availableCoIdSet.add(coId);
+                allCoIdSet.add(coId);
             }
 
             this._updateComponentsForLanguage();
@@ -83,6 +93,13 @@ namespace TinyWars.MultiCustomRoom {
             this._updateComponentsForLanguage();
         }
 
+        private _onMsgRmrDeleteRoom(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgRmrDeleteRoom.IS;
+            if (data.roomId === this._roomInfo.roomId) {
+                this.close();
+            }
+        }
+
         private _onTouchedBtnCancel(e: egret.TouchEvent): void {
             this.close();
         }
@@ -94,64 +111,59 @@ namespace TinyWars.MultiCustomRoom {
                     title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getText(Lang.Type.A0130),
                 });
-            } else {
-                const playerIndex   = this._playerIndex;
-                const callback      = () => {
-                    McrModel.Create.setAvailableCoIdList(playerIndex, availableCoIdSet);
-                    Notify.dispatch(Notify.Type.McrCreateAvailableCoIdListChanged);
-                    this.close();
-                };
-                if ((playerIndex !== McrModel.Create.getSelfPlayerIndex()) ||
-                    (availableCoIdSet.has(McrModel.Create.getSelfCoId()))
-                ) {
-                    callback();
-                } else {
-                    ConfirmPanel.show({
-                        title   : Lang.getText(Lang.Type.B0088),
-                        content : Lang.getText(Lang.Type.A0057),
-                        callback: () => {
-                            McrModel.Create.setSelfCoId(Helpers.pickRandomElement([...availableCoIdSet]));
-                            callback();
-                        },
-                    });
+                return;
+            }
+
+            const bannedCoIdList: number[] = [];
+            for (const coId of this._allCoIdSet) {
+                if (!availableCoIdSet.has(coId)) {
+                    bannedCoIdList.push(coId);
                 }
             }
+
+            if (bannedCoIdList.length > CommonConstants.RankMaxBanCoCount) {
+                Common.CommonAlertPanel.show({
+                    title   : Lang.getText(Lang.Type.B0088),
+                    content : Lang.getFormattedText(Lang.Type.F0031, CommonConstants.RankMaxBanCoCount),
+                });
+                return;
+            }
+
+            const playerIndex   = this._srcPlayerIndex;
+            const callback      = () => {
+                McrModel.Create.setAvailableCoIdList(playerIndex, availableCoIdSet);
+                Notify.dispatch(Notify.Type.McrCreateAvailableCoIdListChanged);
+                this.close();
+            };
+            callback();
         }
 
         private _onTouchedCoTierRenderer(e: egret.TouchEvent): void {
             const renderer          = e.currentTarget as RendererForCoTier;
             const availableCoIdSet  = this._availableCoIdSet;
+            const allCoIdSet        = this._allCoIdSet;
+            const configVersion     = this._roomInfo.settingsForCommon.configVersion;
             const coIdList          = renderer.getIsCustomSwitch()
-                ? ConfigManager.getAvailableCustomCoIdList(ConfigManager.getLatestConfigVersion())
-                : ConfigManager.getAvailableCoIdListInTier(ConfigManager.getLatestConfigVersion(), renderer.getCoTier());
+                ? ConfigManager.getAvailableCustomCoIdList(configVersion)
+                : ConfigManager.getAvailableCoIdListInTier(configVersion, renderer.getCoTier());
 
             if (renderer.getState() === CoTierState.Unavailable) {
                 for (const coId of coIdList) {
-                    availableCoIdSet.add(coId);
+                    if (allCoIdSet.has(coId)) {
+                        availableCoIdSet.add(coId);
+                    }
                 }
                 this._updateGroupCoTiers();
                 this._updateGroupCoNames();
 
             } else {
-                const callback = () => {
-                    for (const coId of coIdList) {
+                for (const coId of coIdList) {
+                    if (allCoIdSet.has(coId)) {
                         availableCoIdSet.delete(coId);
                     }
-                    this._updateGroupCoTiers();
-                    this._updateGroupCoNames();
                 }
-
-                if ((this._playerIndex !== McrModel.Create.getSelfPlayerIndex()) ||
-                    (coIdList.indexOf(McrModel.Create.getSelfCoId()) < 0)
-                ) {
-                    callback();
-                } else {
-                    ConfirmPanel.show({
-                        title   : Lang.getText(Lang.Type.B0088),
-                        content : Lang.getText(Lang.Type.A0057),
-                        callback,
-                    });
-                }
+                this._updateGroupCoTiers();
+                this._updateGroupCoNames();
             }
         }
 
@@ -166,23 +178,9 @@ namespace TinyWars.MultiCustomRoom {
                 this._updateGroupCoNames();
 
             } else {
-                const callback = () => {
-                    availableCoIdSet.delete(coId);
-                    this._updateGroupCoTiers();
-                    this._updateGroupCoNames();
-                };
-
-                if ((this._playerIndex !== McrModel.Create.getSelfPlayerIndex()) ||
-                    (coId !== McrModel.Create.getSelfCoId())
-                ) {
-                    callback();
-                } else {
-                    ConfirmPanel.show({
-                        title   : Lang.getText(Lang.Type.B0088),
-                        content : Lang.getText(Lang.Type.A0057),
-                        callback,
-                    });
-                }
+                availableCoIdSet.delete(coId);
+                this._updateGroupCoTiers();
+                this._updateGroupCoNames();
             }
         }
 
@@ -192,11 +190,11 @@ namespace TinyWars.MultiCustomRoom {
         private _updateComponentsForLanguage(): void {
             this._btnCancel.label               = Lang.getText(Lang.Type.B0154);
             this._btnConfirm.label              = Lang.getText(Lang.Type.B0026);
-            this._labelAvailableCoTitle.text    = `${Lang.getText(Lang.Type.B0238)} (P${this._playerIndex})`;
+            this._labelAvailableCoTitle.text    = Lang.getText(Lang.Type.B0238);
         }
 
         private _initGroupCoTiers(): void {
-            for (const tier of ConfigManager.getCoTiers(ConfigManager.getLatestConfigVersion())) {
+            for (const tier of ConfigManager.getCoTiers(this._roomInfo.settingsForCommon.configVersion)) {
                 const renderer = new RendererForCoTier();
                 renderer.setCoTier(tier);
                 renderer.setState(CoTierState.AllAvailable);
@@ -222,15 +220,16 @@ namespace TinyWars.MultiCustomRoom {
 
         private _updateGroupCoTiers(): void {
             const availableCoIdSet  = this._availableCoIdSet;
-            const configVersion     = McrModel.Create.getData().settingsForCommon.configVersion;
+            const allCoIdSet        = this._allCoIdSet;
+            const configVersion     = this._roomInfo.settingsForCommon.configVersion;
             for (const renderer of this._renderersForCoTiers) {
                 const includedCoIdList = renderer.getIsCustomSwitch()
                     ? ConfigManager.getAvailableCustomCoIdList(configVersion)
                     : ConfigManager.getAvailableCoIdListInTier(configVersion, renderer.getCoTier());
 
-                if (includedCoIdList.every(coId => availableCoIdSet.has(coId))) {
+                if (includedCoIdList.every(coId => (allCoIdSet.has(coId)) && (availableCoIdSet.has(coId)))) {
                     renderer.setState(CoTierState.AllAvailable);
-                } else if (includedCoIdList.every(coId => !availableCoIdSet.has(coId))) {
+                } else if (includedCoIdList.every(coId => (allCoIdSet.has(coId)) && (!availableCoIdSet.has(coId)))) {
                     renderer.setState(CoTierState.Unavailable);
                 } else {
                     renderer.setState(CoTierState.PartialAvailable);
@@ -239,9 +238,11 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _initGroupCoNames(): void {
-            for (const cfg of ConfigManager.getAvailableCoList(ConfigManager.getLatestConfigVersion())) {
+            const configVersion = this._roomInfo.settingsForCommon.configVersion;
+            for (const coId of this._allCoIdSet) {
                 const renderer = new RendererForCoName();
-                renderer.setCoId(cfg.coId);
+                renderer.setConfigVersion(configVersion);
+                renderer.setCoId(coId);
                 renderer.setIsSelected(true);
 
                 renderer.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedCoNameRenderer, this);
@@ -322,6 +323,7 @@ namespace TinyWars.MultiCustomRoom {
         private _labelName  : GameUi.UiLabel;
 
         private _coId           : number;
+        private _configVersion  : string;
         private _isSelected     : boolean;
 
         public constructor() {
@@ -330,10 +332,14 @@ namespace TinyWars.MultiCustomRoom {
             this.skinName = "resource/skins/component/CheckBox1.exml";
         }
 
+        public setConfigVersion(version: string): void {
+            this._configVersion = version;
+        }
+
         public setCoId(coId: number): void {
             this._coId = coId;
 
-            const cfg               = ConfigManager.getCoBasicCfg(ConfigManager.getLatestConfigVersion(), coId);
+            const cfg               = ConfigManager.getCoBasicCfg(this._configVersion, coId);
             this._labelName.text    = `${cfg.name} (T${cfg.tier})`;
         }
         public getCoId(): number {
@@ -348,5 +354,17 @@ namespace TinyWars.MultiCustomRoom {
         public getIsSelected(): boolean {
             return this._isSelected;
         }
+    }
+
+    function generateAvailableCoIdList(roomInfo: IRmrRoomInfo, srcPlayerIndex: number): Set<number> {
+        const coIds = new Set<number>();
+        for (const playerRule of roomInfo.settingsForCommon.warRule.ruleForPlayers.playerRuleDataList) {
+            if (playerRule.playerIndex !== srcPlayerIndex) {
+                for (const coId of playerRule.availableCoIdList) {
+                    coIds.add(coId);
+                }
+            }
+        }
+        return coIds;
     }
 }

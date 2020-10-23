@@ -1,9 +1,13 @@
 
 namespace TinyWars.RankMatchRoom.RmrModel {
-    import ProtoTypes   = Utility.ProtoTypes;
-    import Notify       = Utility.Notify;
-    import NetMessage   = ProtoTypes.NetMessage;
-    import IRmrRoomInfo = ProtoTypes.RankMatchRoom.IRmrRoomInfo;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import Notify           = Utility.Notify;
+    import Logger           = Utility.Logger;
+    import ConfigManager    = Utility.ConfigManager;
+    import BwSettingsHelper = BaseWar.BwSettingsHelper;
+    import NetMessage       = ProtoTypes.NetMessage;
+    import IRmrRoomInfo     = ProtoTypes.RankMatchRoom.IRmrRoomInfo;
+    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
     let _maxConcurrentCountForStd   = 0;
     let _maxConcurrentCountForFog   = 0;
@@ -147,6 +151,149 @@ namespace TinyWars.RankMatchRoom.RmrModel {
             if ((list == null) || (list.every(v => v.srcPlayerIndex !== playerData.playerIndex))) {
                 return true;
             }
+        }
+    }
+
+    export namespace SelfSettings {
+        let _coId               : number | null | undefined;
+        let _unitAndTileSkinId  : number | null | undefined;
+
+        export function resetData(roomInfo: IRmrRoomInfo): void {
+            if (roomInfo.timeForStartSetSelfSettings == null) {
+                setCoId(null);
+                setUnitAndTileSkinId(null);
+                return;
+            }
+
+            const playerDataList    = roomInfo.playerDataList;
+            const selfUserId        = User.UserModel.getSelfUserId();
+            const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
+            if (selfPlayerData == null) {
+                setCoId(null);
+                setUnitAndTileSkinId(null);
+            } else {
+                if (selfPlayerData.isReady) {
+                    setCoId(selfPlayerData.coId);
+                    setUnitAndTileSkinId(selfPlayerData.unitAndTileSkinId);
+                } else {
+                    const selfPlayerIndex   = selfPlayerData.playerIndex;
+                    const availableCoIdList = generateAvailableCoIdList(roomInfo, selfPlayerIndex);
+                    if ((availableCoIdList == null) || (!availableCoIdList.length)) {
+                        Logger.error(`RmrModel.SelfSettings.resetData() empty availableCoIdList.`);
+                        return undefined;
+                    }
+
+                    const availableSkinIdList = generateAvailableSkinIdList(roomInfo);
+                    if ((availableSkinIdList == null) || (!availableSkinIdList.length)) {
+                        Logger.error(`RmrModel.SelfSettings.resetData() empty availableSkinIdList.`);
+                        return undefined;
+                    }
+
+                    setCoId(BwSettingsHelper.getRandomCoIdWithCoIdList(availableCoIdList));
+                    setUnitAndTileSkinId(availableSkinIdList.indexOf(selfPlayerIndex) >= 0 ? selfPlayerIndex : availableSkinIdList[0]);
+                }
+            }
+        }
+
+        export function setCoId(coId: number | null | undefined): void {
+            _coId = coId;
+        }
+        export function getCoId(): number | null | undefined {
+            return _coId;
+        }
+
+        function setUnitAndTileSkinId(skinId: number | null | undefined): void {
+            _unitAndTileSkinId = skinId;
+        }
+        export function getUnitAndTileSkinId(): number | null | undefined {
+            return _unitAndTileSkinId;
+        }
+        export function tickUnitAndTileSkinId(roomInfo: IRmrRoomInfo): void {
+            const availableSkinIdList = generateAvailableSkinIdList(roomInfo);
+            if ((availableSkinIdList == null) || (!availableSkinIdList.length)) {
+                Logger.error(`RmrModel.SelfSettings.tickUnitAndTileSkinId() empty availableSkinIdList.`);
+                return;
+            }
+
+            const index = availableSkinIdList.indexOf(getUnitAndTileSkinId());
+            setUnitAndTileSkinId(availableSkinIdList[(index + 1) % availableSkinIdList.length]);
+        }
+
+        export function generateAvailableCoIdList(roomInfo: IRmrRoomInfo, playerIndex: number): number[] | undefined {
+            const settingsForCommon = roomInfo.settingsForCommon;
+            if (settingsForCommon == null) {
+                Logger.error(`RmrModel.generateAvailableCoIdList() empty settingsForCommon.`);
+                return undefined;
+            }
+
+            const configVersion = settingsForCommon.configVersion;
+            if (configVersion == null) {
+                Logger.error(`RmrModel.generateAvailableCoIdList() empty configVersion.`);
+                return undefined;
+            }
+
+            const dataListForBanCo = roomInfo.settingsForRmw?.dataListForBanCo;
+            if (dataListForBanCo == null) {
+                Logger.error(`RmrModel.generateAvailableCoIdList() empty dataListForBanCo.`);
+                return undefined;
+            }
+
+            const playerRule = BwSettingsHelper.getPlayerRule(settingsForCommon.warRule, playerIndex);
+            if (playerRule == null) {
+                Logger.error(`RmrModel.generateAvailableCoIdList() empty playerRule.`);
+                return undefined;
+            }
+
+            const rawAvailableCoIdList = playerRule.availableCoIdList;
+            if (rawAvailableCoIdList == null) {
+                Logger.error(`RmrModel.generateAvailableCoIdList() empty rawAvailableCoIdList.`);
+                return undefined;
+            }
+
+            const bannedCoIds = new Set<number>();
+            for (const data of dataListForBanCo) {
+                for (const coId of data.bannedCoIdList || []) {
+                    bannedCoIds.add(coId);
+                }
+            }
+
+            const availableCoIdList: number[] = [];
+            for (const coId of rawAvailableCoIdList) {
+                if ((ConfigManager.getCoBasicCfg(configVersion, coId)?.isEnabled) &&
+                    (!bannedCoIds.has(coId))
+                ) {
+                    availableCoIdList.push(coId);
+                }
+            }
+            return availableCoIdList;
+        }
+        function generateAvailableSkinIdList(roomInfo: IRmrRoomInfo): number[] | undefined {
+            const playerDataList = roomInfo.playerDataList;
+            if (playerDataList == null) {
+                Logger.error(`RmrModel.SelfSettings.generateAvailableSkinIdList() empty playerDataList.`);
+                return undefined;
+            }
+
+            const usedSkinIds = new Set<number>();
+            for (const playerData of playerDataList) {
+                if (playerData.isReady) {
+                    const skinId = playerData.unitAndTileSkinId;
+                    if (usedSkinIds.has(skinId)) {
+                        Logger.error(`RmrModel.SelfSettings.generateAvailableSkinIdList() duplicated skinId!`);
+                        return undefined;
+                    }
+
+                    usedSkinIds.add(skinId);
+                }
+            }
+
+            const availableSkinIdList: number[] = [];
+            for (let skinId = CommonConstants.UnitAndTileMinSkinId; skinId <= CommonConstants.UnitAndTileMaxSkinId; ++skinId) {
+                if (!usedSkinIds.has(skinId)) {
+                    availableSkinIdList.push(skinId);
+                }
+            }
+            return availableSkinIdList;
         }
     }
 

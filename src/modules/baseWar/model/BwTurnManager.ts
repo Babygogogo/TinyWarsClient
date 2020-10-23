@@ -188,7 +188,6 @@ namespace TinyWars.BaseWar {
             }
         }
         private _runPhaseActivateMapWeapon(data: IActionPlayerBeginTurn): void {
-            // TODO
         }
 
         private _runPhaseResetUnitState(): void {

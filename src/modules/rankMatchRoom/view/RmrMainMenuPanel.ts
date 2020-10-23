@@ -99,7 +99,7 @@ namespace TinyWars.RankMatchRoom {
                     name    : Lang.getText(Lang.Type.B0024),
                     callback: () => {
                         this.close();
-                        RmrContinueWarListPanel.show();
+                        RmrMyWarListPanel.show();
                     },
                     redChecker  : async () => {
                         return MultiPlayerWar.MpwModel.checkIsRedForMyRmwWars();

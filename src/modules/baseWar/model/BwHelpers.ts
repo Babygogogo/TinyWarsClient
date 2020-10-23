@@ -255,12 +255,6 @@ namespace TinyWars.BaseWar.BwHelpers {
             : raw as GridIndex;
     }
 
-    export function getUnitProductionCost(war: BwWar, unitType: UnitType): number | undefined {
-        // TODO: take skills into account.
-        const cfg = ConfigManager.getUnitTemplateCfg(war.getConfigVersion(), unitType);
-        return cfg ? cfg.productionCost : undefined;
-    }
-
     export function getNormalizedHp(hp: number): number {
         return Math.ceil(hp / CommonConstants.UnitHpNormalizer);
     }

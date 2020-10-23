@@ -9,24 +9,24 @@ namespace TinyWars.MultiCustomRoom {
     import IMpwWarInfo      = ProtoTypes.MultiPlayerWar.IMpwWarInfo;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
-    export type OpenParamForContinueWarAdvancedSettingsPage = {
+    export type OpenParamForWarAdvancedSettingsPage = {
         warInfo : IMpwWarInfo;
     }
 
-    export class McrContinueWarAdvancedSettingsPage extends GameUi.UiTabPage {
+    export class McrWarAdvancedSettingsPage extends GameUi.UiTabPage {
         private _btnMapNameTitle    : TinyWars.GameUi.UiButton;
         private _labelMapName       : TinyWars.GameUi.UiLabel;
         private _btnBuildings       : TinyWars.GameUi.UiButton;
         private _labelPlayerList    : TinyWars.GameUi.UiLabel;
         private _listPlayer         : TinyWars.GameUi.UiScrollList;
 
-        protected _dataForOpen  : OpenParamForContinueWarAdvancedSettingsPage;
+        protected _dataForOpen  : OpenParamForWarAdvancedSettingsPage;
         private _warInfo        : IMpwWarInfo;
 
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/multiCustomRoom/McrContinueWarAdvancedSettingsPage.exml";
+            this.skinName = "resource/skins/multiCustomRoom/McrWarAdvancedSettingsPage.exml";
         }
 
         public _onFirstOpened(): void {
@@ -53,7 +53,7 @@ namespace TinyWars.MultiCustomRoom {
             const warInfo = this._warInfo;
             if (warInfo) {
                 const settingsForCommon = warInfo.settingsForCommon;
-                McrBuildingListPanel.show({
+                WarMap.WarMapBuildingListPanel.show({
                     configVersion   : settingsForCommon.configVersion,
                     mapRawData      : await WarMapModel.getRawData(settingsForCommon.mapId),
                 });

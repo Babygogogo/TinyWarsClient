@@ -107,7 +107,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private async _onTouchedBtnBuildings(e: egret.TouchEvent): Promise<void> {
             const settingsForCommon = (await McrModel.Join.getRoomInfo()).settingsForCommon;
-            McrBuildingListPanel.show({
+            WarMap.WarMapBuildingListPanel.show({
                 configVersion   : settingsForCommon.configVersion,
                 mapRawData      : await WarMapModel.getRawData(settingsForCommon.mapId),
             });

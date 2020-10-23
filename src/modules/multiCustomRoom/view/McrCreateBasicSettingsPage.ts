@@ -168,7 +168,7 @@ namespace TinyWars.MultiCustomRoom {
         private async _onTouchedBtnModifyPlayerIndex(e: egret.TouchEvent): Promise<void> {
             const creator = McrModel.Create;
             await creator.tickSelfPlayerIndex();
-            creator.setSelfCoId(BwSettingsHelper.getRandomCoId(creator.getData().settingsForCommon, creator.getSelfPlayerIndex()));
+            creator.setSelfCoId(BwSettingsHelper.getRandomCoIdWithSettingsForCommon(creator.getData().settingsForCommon, creator.getSelfPlayerIndex()));
             this._updateLabelPlayerIndex();
             this._updateLabelCoName();
         }
@@ -286,7 +286,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _onTouchedBtnBuildings(e: egret.TouchEvent): Promise<void> {
-            McrBuildingListPanel.show({
+            WarMap.WarMapBuildingListPanel.show({
                 configVersion   : McrModel.Create.getData().settingsForCommon.configVersion,
                 mapRawData      : await WarMapModel.getRawData(McrModel.Create.getMapId()),
             });

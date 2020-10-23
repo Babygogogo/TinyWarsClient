@@ -1,5 +1,5 @@
 
-namespace TinyWars.MultiCustomRoom {
+namespace TinyWars.WarMap {
     import Notify           = Utility.Notify;
     import Lang             = Utility.Lang;
     import Types            = Utility.Types;
@@ -7,40 +7,40 @@ namespace TinyWars.MultiCustomRoom {
     import ProtoTypes       = Utility.ProtoTypes;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
-    type OpenDataForMcrBuildingListPanel = {
+    type OpenDataForBuildingListPanel = {
         configVersion   : string;
         mapRawData      : ProtoTypes.Map.IMapRawData;
     }
 
-    export class McrBuildingListPanel extends GameUi.UiPanel {
+    export class WarMapBuildingListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud3;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: McrBuildingListPanel;
+        private static _instance: WarMapBuildingListPanel;
 
         public _labelTitle  : GameUi.UiLabel;
         public _listTile    : GameUi.UiScrollList;
 
-        private _openData   : OpenDataForMcrBuildingListPanel;
+        private _openData   : OpenDataForBuildingListPanel;
 
-        public static show(openData: OpenDataForMcrBuildingListPanel): void {
-            if (!McrBuildingListPanel._instance) {
-                McrBuildingListPanel._instance = new McrBuildingListPanel();
+        public static show(openData: OpenDataForBuildingListPanel): void {
+            if (!WarMapBuildingListPanel._instance) {
+                WarMapBuildingListPanel._instance = new WarMapBuildingListPanel();
             }
-            McrBuildingListPanel._instance._openData = openData;
-            McrBuildingListPanel._instance.open();
+            WarMapBuildingListPanel._instance._openData = openData;
+            WarMapBuildingListPanel._instance.open();
         }
 
         public static hide(): void {
-            if (McrBuildingListPanel._instance) {
-                McrBuildingListPanel._instance.close();
+            if (WarMapBuildingListPanel._instance) {
+                WarMapBuildingListPanel._instance.close();
             }
         }
 
         private constructor() {
             super();
 
-            this.skinName = "resource/skins/multiCustomRoom/McrBuildingListPanel.exml";
+            this.skinName = "resource/skins/warMap/WarMapBuildingListPanel.exml";
             this._setAutoAdjustHeightEnabled();
             this._setTouchMaskEnabled();
             this._callbackForTouchMask = () => this.close();

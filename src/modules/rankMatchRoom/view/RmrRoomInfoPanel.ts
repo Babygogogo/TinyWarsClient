@@ -51,26 +51,31 @@ namespace TinyWars.RankMatchRoom {
             this._btnBack.setTextColor(0x00FF00);
         }
 
-        protected _onOpened(): void {
-            const roomId = this._roomId;
-            this._tabSettings.bindData([
-                {
-                    tabItemData : { name: Lang.getText(Lang.Type.B0002) },
-                    pageClass   : RmrRoomBasicSettingsPage,
-                    pageData    : {
-                        roomId
-                    } as OpenParamForRoomBasicSettingsPage,
-                },
-                {
-                    tabItemData: { name: Lang.getText(Lang.Type.B0003) },
-                    pageClass  : RmrRoomAdvancedSettingsPage,
-                    pageData    : {
-                        roomId
-                    } as OpenParamForRoomAdvancedSettingsPage,
-                },
-            ]);
-
+        protected async _onOpened(): Promise<void> {
             this._updateComponentsForLanguage();
+
+            const roomId = this._roomId;
+            if ((await RmrModel.getRoomInfo(roomId)) == null) {
+                this.close();
+                RmrMyRoomListPanel.show();
+            } else {
+                this._tabSettings.bindData([
+                    {
+                        tabItemData : { name: Lang.getText(Lang.Type.B0002) },
+                        pageClass   : RmrRoomBasicSettingsPage,
+                        pageData    : {
+                            roomId
+                        } as OpenParamForRoomBasicSettingsPage,
+                    },
+                    {
+                        tabItemData: { name: Lang.getText(Lang.Type.B0003) },
+                        pageClass  : RmrRoomAdvancedSettingsPage,
+                        pageData    : {
+                            roomId
+                        } as OpenParamForRoomAdvancedSettingsPage,
+                    },
+                ]);
+            }
         }
 
         protected _onClosed(): void {

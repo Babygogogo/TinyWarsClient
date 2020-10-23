@@ -1,8 +1,9 @@
 
-namespace TinyWars.MultiCustomRoom {
+namespace TinyWars.RankMatchRoom {
     import ProtoTypes       = Utility.ProtoTypes;
     import Lang             = Utility.Lang;
     import Notify           = Utility.Notify;
+    import Types            = Utility.Types;
     import ConfigManager    = Utility.ConfigManager;
     import CommonHelpPanel  = Common.CommonHelpPanel;
     import BwHelpers        = BaseWar.BwHelpers;
@@ -11,24 +12,16 @@ namespace TinyWars.MultiCustomRoom {
     import UserModel        = User.UserModel;
     import IMpwWarInfo      = ProtoTypes.MultiPlayerWar.IMpwWarInfo;
     import IWarPlayerInfo   = ProtoTypes.Structure.IWarPlayerInfo;
+    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
-    export type OpenParamForContinueWarBasicSettingsPage = {
+    export type OpenParamForWarBasicSettingsPage = {
         warInfo  : IMpwWarInfo;
     }
 
-    export class McrContinueWarBasicSettingsPage extends GameUi.UiTabPage {
+    export class RmrWarBasicSettingsPage extends GameUi.UiTabPage {
         private _btnMapNameTitle        : TinyWars.GameUi.UiButton;
         private _labelMapName           : TinyWars.GameUi.UiLabel;
         private _btnBuildings           : TinyWars.GameUi.UiButton;
-
-        private _btnModifyWarName       : TinyWars.GameUi.UiButton;
-        private _labelWarName           : TinyWars.GameUi.UiLabel;
-
-        private _btnModifyWarPassword   : TinyWars.GameUi.UiButton;
-        private _labelWarPassword       : TinyWars.GameUi.UiLabel;
-
-        private _btnModifyWarComment    : TinyWars.GameUi.UiButton;
-        private _labelWarComment        : TinyWars.GameUi.UiLabel;
 
         private _btnModifyWarRule       : TinyWars.GameUi.UiButton;
         private _labelWarRule           : TinyWars.GameUi.UiLabel;
@@ -55,13 +48,13 @@ namespace TinyWars.MultiCustomRoom {
         private _labelPlayersTitle      : TinyWars.GameUi.UiLabel;
         private _listPlayer             : TinyWars.GameUi.UiScrollList;
 
-        protected _dataForOpen  : OpenParamForContinueWarBasicSettingsPage;
+        protected _dataForOpen  : OpenParamForWarBasicSettingsPage;
         private _warInfo        : IMpwWarInfo;
 
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/multiCustomRoom/McrContinueWarBasicSettingsPage.exml";
+            this.skinName = "resource/skins/rankMatchRoom/RmrWarBasicSettingsPage.exml";
         }
 
         protected _onFirstOpened(): void {
@@ -102,7 +95,7 @@ namespace TinyWars.MultiCustomRoom {
             const warInfo = this._warInfo;
             if (warInfo) {
                 const settingsForCommon = warInfo.settingsForCommon;
-                McrBuildingListPanel.show({
+                WarMap.WarMapBuildingListPanel.show({
                     configVersion   : settingsForCommon.configVersion,
                     mapRawData      : await WarMapModel.getRawData(settingsForCommon.mapId),
                 });
@@ -142,9 +135,6 @@ namespace TinyWars.MultiCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
             this._btnMapNameTitle.label         = Lang.getText(Lang.Type.B0225);
-            this._btnModifyWarName.label        = Lang.getText(Lang.Type.B0185);
-            this._btnModifyWarPassword.label    = Lang.getText(Lang.Type.B0186);
-            this._btnModifyWarComment.label     = Lang.getText(Lang.Type.B0187);
             this._btnModifyWarRule.label        = Lang.getText(Lang.Type.B0318);
             this._btnModifyPlayerIndex.label    = Lang.getText(Lang.Type.B0018);
             this._btnModifySkinId.label         = Lang.getText(Lang.Type.B0397);
@@ -155,9 +145,6 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _updateComponentsForWarInfo(): void {
-            this._updateLabelWarName();
-            this._updateLabelWarPassword();
-            this._updateLabelWarComment();
             this._updateLabelMapName();
             this._updateLabelWarRule();
             this._updateLabelPlayerIndex();
@@ -166,27 +153,6 @@ namespace TinyWars.MultiCustomRoom {
             this._updateLabelCoName();
             this._updateLabelSkinId();
             this._updateListPlayer();
-        }
-
-        private _updateLabelWarName(): void {
-            const warInfo = this._warInfo;
-            if (warInfo) {
-                this._labelWarName.text = warInfo.settingsForMcw.warName || "--";
-            }
-        }
-
-        private _updateLabelWarPassword(): void {
-            const warInfo = this._warInfo;
-            if (warInfo) {
-                this._labelWarPassword.text = warInfo.settingsForMcw.warPassword || "--";
-            }
-        }
-
-        private _updateLabelWarComment(): void {
-            const warInfo = this._warInfo;
-            if (warInfo) {
-                this._labelWarComment.text = warInfo.settingsForMcw.warComment || "--";
-            }
         }
 
         private _updateLabelMapName(): void {
@@ -227,10 +193,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _updateLabelTimeLimit(): void {
-            const warInfo = this._warInfo;
-            if (warInfo) {
-                this._labelTimeLimit.text = Lang.getBootTimerDesc(warInfo.settingsForMcw.bootTimerParams);
-            }
+            this._labelTimeLimit.text = Lang.getBootTimerDesc([Types.BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue]);
         }
 
         private _updateLabelCoName(): void {

@@ -116,7 +116,7 @@ namespace TinyWars.SingleCustomRoom {
                 list.push({
                     playerIndex,
                     userId      : playerIndex === 1 ? User.UserModel.getSelfUserId() : null,
-                    coId        : BwSettingsHelper.getRandomCoId(settingsForCommon, playerIndex),
+                    coId        : BwSettingsHelper.getRandomCoIdWithSettingsForCommon(settingsForCommon, playerIndex),
                 });
             }
 

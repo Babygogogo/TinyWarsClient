@@ -134,7 +134,7 @@ namespace TinyWars.MultiCustomRoom {
             const roomInfo = this._roomInfo;
             if (roomInfo) {
                 const settingsForCommon = roomInfo.settingsForCommon;
-                McrBuildingListPanel.show({
+                WarMap.WarMapBuildingListPanel.show({
                     configVersion   : settingsForCommon.configVersion,
                     mapRawData      : await WarMapModel.getRawData(settingsForCommon.mapId),
                 });
@@ -175,7 +175,7 @@ namespace TinyWars.MultiCustomRoom {
                                 roomId              : roomInfo.roomId,
                                 playerIndex         : newPlayerIndex,
                                 unitAndTileSkinId   : selfPlayerData.unitAndTileSkinId,
-                                coId                : BwSettingsHelper.getRandomCoId(roomInfo.settingsForCommon, newPlayerIndex),
+                                coId                : BwSettingsHelper.getRandomCoIdWithSettingsForCommon(roomInfo.settingsForCommon, newPlayerIndex),
                             });
                         }
                     }

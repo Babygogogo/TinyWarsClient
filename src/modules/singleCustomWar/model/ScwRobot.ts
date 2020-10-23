@@ -1331,8 +1331,6 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
     async function _getMaxScoreAndActionPlayerProduceUnitWithGridIndex(gridIndex: GridIndex, idleFactoriesCount: number): Promise<ScoreAndAction | null> {  // DONE
         await _checkAndCallLater();
 
-        // TODO: take the unit production skills into account.
-
         let maxScore        : number;
         let targetUnitType  : number;
         for (const t in _PRODUCTION_CANDIDATES[_tileMap.getTile(gridIndex).getType()]) {

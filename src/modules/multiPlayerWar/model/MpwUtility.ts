@@ -126,12 +126,6 @@ namespace TinyWars.MultiPlayerWar.MpwUtility {
         tileMap.getView().updateCoZone();
     }
 
-    export function getUnitProductionCost(war: MpwWar, unitType: UnitType): number | undefined {
-        // TODO: take skills into account.
-        const cfg = Utility.ConfigManager.getUnitTemplateCfg(war.getConfigVersion(), unitType);
-        return cfg ? cfg.productionCost : undefined;
-    }
-
     function _pushToAvailableMovableGrids(grids: AvailableMovableGrid[], gridIndex: GridIndex, prev: GridIndex, totalMoveCost: number): void {
         grids.push({
             currGridIndex: gridIndex,
