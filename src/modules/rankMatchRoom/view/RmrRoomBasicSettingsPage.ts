@@ -224,7 +224,7 @@ namespace TinyWars.RankMatchRoom {
                 if ((selfPlayerData != null)                                                                                            &&
                     ((roomInfo.settingsForRmw.dataListForBanCo || []).find(v => v.srcPlayerIndex === selfPlayerData.playerIndex) == null)
                 ) {
-                    // TODO open the ban co panel.
+                    RmrRoomAvailableCoPanel.show(roomInfo, selfPlayerData.playerIndex);
                 }
             }
         }

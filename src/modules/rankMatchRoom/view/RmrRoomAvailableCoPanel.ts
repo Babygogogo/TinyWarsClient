@@ -129,13 +129,14 @@ namespace TinyWars.RankMatchRoom {
                 return;
             }
 
-            const playerIndex   = this._srcPlayerIndex;
-            const callback      = () => {
-                McrModel.Create.setAvailableCoIdList(playerIndex, availableCoIdSet);
-                Notify.dispatch(Notify.Type.McrCreateAvailableCoIdListChanged);
-                this.close();
-            };
-            callback();
+            Common.CommonConfirmPanel.show({
+                title   : Lang.getText(Lang.Type.B0088),
+                content : bannedCoIdList.length ? Lang.getText(Lang.Type.A0138) : Lang.getText(Lang.Type.A0139),
+                callback: () => {
+                    RmrProxy.reqRmrSetBannedCoIdList(this._roomInfo.roomId, bannedCoIdList);
+                    this.close();
+                },
+            });
         }
 
         private _onTouchedCoTierRenderer(e: egret.TouchEvent): void {

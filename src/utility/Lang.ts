@@ -681,6 +681,14 @@ namespace TinyWars.Utility.Lang {
             `进入准备状态后，您将无法再次修改CO和势力颜色设定。确定要继续吗？`,
             `You can't change your CO and color settings after being ready. Are you sure to continue?`,
         ],
+        [Type.A0138]: [
+            `确定要禁用这些CO吗？`,
+            `Are you sure to ban these CO?`,
+        ],
+        [Type.A0139]: [
+            `确定要不禁用任何CO吗？`,
+            `Are you sure to ban no CO?`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
