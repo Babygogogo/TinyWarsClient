@@ -86,7 +86,7 @@ namespace TinyWars.MultiCustomRoom {
             ];
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgMcrGetRoomInfo,  callback: this._onNotifySMcrGetRoomInfo },
+                { type: Notify.Type.MsgMcrGetRoomInfo,  callback: this._onMsgMcrGetRoomInfo },
             ];
 
             this._listPlayer.setItemRenderer(PlayerRenderer);
@@ -116,7 +116,7 @@ namespace TinyWars.MultiCustomRoom {
             this._updateComponentsForLanguage();
         }
 
-        private _onNotifySMcrGetRoomInfo(e: egret.Event): void {
+        private _onMsgMcrGetRoomInfo(e: egret.Event): void {
             const data          = e.data as NetMessage.MsgMcrGetRoomInfo.IS;
             const roomId        = data.roomId;
             const currRoomInfo  = this._roomInfo;
@@ -415,9 +415,11 @@ namespace TinyWars.MultiCustomRoom {
                     group.visible   = false;
                 } else {
                     group.visible           = true;
-                    this._labelReady.text   = playerData.isReady
+                    const isReady           = playerData.isReady;
+                    this._labelReady.text   = isReady
                         ? Lang.getText(Lang.Type.B0012)
                         : Lang.getText(Lang.Type.B0013);
+                    this._btnModifyReady.setRedVisible(!isReady);
                 }
             }
         }

@@ -172,8 +172,8 @@
                     <e:itemRendererSkinName>
                         <e:Skin currentState="up" states="up,down" width="390" height="30">
                             <GameUi:UiLabel id="_labelIndex" text="红方" size="16" x="4" verticalCenter="0" />
-                            <GameUi:UiLabel id="_labelNickname" text="玩家名称居然有十个字" x="70" size="16"
-                                            textColor.down="0x00ff00" width="320" verticalCenter="0" />
+                            <GameUi:UiLabel id="_labelNickname" text="玩家名称居然有十个字" x="100" size="16"
+                                            textColor.down="0x00ff00" width="290" verticalCenter="0" />
                         </e:Skin>
                     </e:itemRendererSkinName>
                     <e:layout>

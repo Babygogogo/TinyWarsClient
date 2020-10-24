@@ -119,6 +119,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onTouchedBtnModifyRule(e: egret.TouchEvent): void {
             // TODO: open McrModifyRulePanel
+            FloatText.show("TODO");
         }
 
         private async _onTouchedBtnExitRoom(e: egret.TouchEvent): Promise<void> {
@@ -187,11 +188,14 @@ namespace TinyWars.MultiCustomRoom {
         private async _updateComponentsForRoomInfo(): Promise<void> {
             const roomId                = this._roomId;
             const roomInfo              = await McrModel.getRoomInfo(roomId);
-            const ownerInfo             = roomInfo.playerDataList.find(v => v.playerIndex === roomInfo.ownerPlayerIndex);
+            const playerDataList        = roomInfo.playerDataList;
+            const ownerInfo             = playerDataList.find(v => v.playerIndex === roomInfo.ownerPlayerIndex);
             const isSelfOwner           = (!!ownerInfo) && (ownerInfo.userId === User.UserModel.getSelfUserId());
-            this._btnStartGame.visible  = isSelfOwner;
+            const btnStartGame          = this._btnStartGame;
             this._btnDeleteRoom.visible = isSelfOwner;
             this._btnModifyRule.visible = isSelfOwner;
+            btnStartGame.visible        = isSelfOwner;
+            btnStartGame.setRedVisible(playerDataList.every(v => (v.isReady) && (v.userId != null)));
         }
 
         private _updateComponentsForLanguage(): void {

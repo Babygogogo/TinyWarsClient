@@ -99,6 +99,9 @@ namespace TinyWars.MultiCustomRoom {
                         this.close();
                         McrMyRoomListPanel.show();
                     },
+                    redChecker: async () => {
+                        return await McrModel.checkIsRed();
+                    },
                 },
                 {
                     name    : Lang.getText(Lang.Type.B0024),
@@ -106,7 +109,7 @@ namespace TinyWars.MultiCustomRoom {
                         this.close();
                         McrMyWarListPanel.show();
                     },
-                    redChecker  : () => {
+                    redChecker  : async () => {
                         return MultiPlayerWar.MpwModel.checkIsRedForMyMcwWars();
                     },
                 },
@@ -116,7 +119,7 @@ namespace TinyWars.MultiCustomRoom {
                         this.close();
                         McrWatchMainMenuPanel.show();
                     },
-                    redChecker  : () => {
+                    redChecker  : async () => {
                         const watchInfos = MultiPlayerWar.MpwModel.getWatchRequestedWarInfos();
                         return (!!watchInfos) && (watchInfos.length > 0);
                     },
@@ -135,19 +138,19 @@ namespace TinyWars.MultiCustomRoom {
     type DataForCommandRenderer = {
         name        : string;
         callback    : () => void;
-        redChecker? : () => boolean;
+        redChecker? : () => Promise<boolean>;
     }
 
     class CommandRenderer extends eui.ItemRenderer {
         private _labelCommand   : GameUi.UiLabel;
         private _imgRed         : GameUi.UiImage;
 
-        protected dataChanged(): void {
+        protected async dataChanged(): Promise<void> {
             super.dataChanged();
 
             const data              = this.data as DataForCommandRenderer;
             this._labelCommand.text = data.name;
-            this._imgRed.visible    = (!!data.redChecker) && (data.redChecker());
+            this._imgRed.visible    = (!!data.redChecker) && (await data.redChecker());
         }
 
         public onItemTapEvent(e: eui.ItemTapEvent): void {

@@ -6,8 +6,10 @@ namespace TinyWars.User {
     import Types                        = Utility.Types;
     import LocalStorage                 = Utility.LocalStorage;
     import ProtoTypes                   = Utility.ProtoTypes;
+    import ConfigManager                = Utility.ConfigManager;
     import WarType                      = Types.WarType;
     import IDataForUserWarStatistics    = ProtoTypes.User.IDataForUserWarStatistics;
+    import CommonConstants              = ConfigManager.COMMON_CONSTANTS;
 
     export class UserPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
@@ -15,50 +17,36 @@ namespace TinyWars.User {
 
         private static _instance: UserPanel;
 
-        private _labelTitle         : GameUi.UiLabel;
+        private _labelTitle                 : TinyWars.GameUi.UiLabel;
+        private _btnClose                   : TinyWars.GameUi.UiButton;
 
-        private _labelRankMatchTitle: GameUi.UiLabel;
-        private _labelRankScoreTitle: GameUi.UiLabel;
-        private _labelRankScore     : GameUi.UiLabel;
-        private _labelRankName      : GameUi.UiLabel;
-        private _labelRank2pWins    : GameUi.UiLabel;
-        private _labelRank2pLoses   : GameUi.UiLabel;
-        private _labelRank2pDraws   : GameUi.UiLabel;
+        private _labelStdRankTitle          : TinyWars.GameUi.UiLabel;
+        private _labelStdRankScore          : TinyWars.GameUi.UiLabel;
+        private _labelFogRankTitle          : TinyWars.GameUi.UiLabel;
+        private _labelFogRankScore          : TinyWars.GameUi.UiLabel;
 
-        private _labelMcwTitle      : GameUi.UiLabel;
-        private _labelMcw2pTitle    : GameUi.UiLabel;
-        private _labelMcw3pTitle    : GameUi.UiLabel;
-        private _labelMcw4pTitle    : GameUi.UiLabel;
-        private _labelMcw2pWins     : GameUi.UiLabel;
-        private _labelMcw2pLoses    : GameUi.UiLabel;
-        private _labelMcw2pDraws    : GameUi.UiLabel;
-        private _labelMcw3pWins     : GameUi.UiLabel;
-        private _labelMcw3pLoses    : GameUi.UiLabel;
-        private _labelMcw3pDraws    : GameUi.UiLabel;
-        private _labelMcw4pWins     : GameUi.UiLabel;
-        private _labelMcw4pLoses    : GameUi.UiLabel;
-        private _labelMcw4pDraws    : GameUi.UiLabel;
+        private _labelRegisterTimeTitle     : TinyWars.GameUi.UiLabel;
+        private _labelRegisterTime          : TinyWars.GameUi.UiLabel;
+        private _labelLastLoginTimeTitle    : TinyWars.GameUi.UiLabel;
+        private _labelLastLoginTime         : TinyWars.GameUi.UiLabel;
+        private _labelOnlineTimeTitle       : TinyWars.GameUi.UiLabel;
+        private _labelOnlineTime            : TinyWars.GameUi.UiLabel;
+        private _labelLoginCountTitle       : TinyWars.GameUi.UiLabel;
+        private _labelLoginCount            : TinyWars.GameUi.UiLabel;
+        private _labelUserId                : TinyWars.GameUi.UiLabel;
+        private _labelDiscordId             : TinyWars.GameUi.UiLabel;
 
-        private _labelRegisterTimeTitle : GameUi.UiLabel;
-        private _labelLastLoginTimeTitle: GameUi.UiLabel;
-        private _labelOnlineTimeTitle   : GameUi.UiLabel;
-        private _labelLoginCountTitle   : GameUi.UiLabel;
-        private _labelRegisterTime      : GameUi.UiLabel;
-        private _labelLastLoginTime     : GameUi.UiLabel;
-        private _labelOnlineTime        : GameUi.UiLabel;
-        private _labelLoginCount        : GameUi.UiLabel;
-        private _labelUserId            : GameUi.UiLabel;
-        private _labelDiscordId         : GameUi.UiLabel;
+        private _labelHistoryTitle          : TinyWars.GameUi.UiLabel;
+        private _sclHistory                 : TinyWars.GameUi.UiScrollList;
 
-        private _groupButtons       : eui.Group;
-        private _btnChangeDiscordId : GameUi.UiButton;
-        private _btnChangeNickname  : GameUi.UiButton;
-        private _btnShowOnlineUsers : GameUi.UiButton;
-        private _btnChangeLanguage  : GameUi.UiButton;
-        private _btnServerStatus    : GameUi.UiButton;
-        private _btnChat            : GameUi.UiButton;
-        private _btnSwitchTexture   : GameUi.UiButton;
-        private _btnClose           : GameUi.UiButton;
+        private _groupButtons               : eui.Group;
+        private _btnChangeNickname          : TinyWars.GameUi.UiButton;
+        private _btnChangeDiscordId         : TinyWars.GameUi.UiButton;
+        private _btnShowOnlineUsers         : TinyWars.GameUi.UiButton;
+        private _btnChangeLanguage          : TinyWars.GameUi.UiButton;
+        private _btnServerStatus            : TinyWars.GameUi.UiButton;
+        private _btnChat                    : TinyWars.GameUi.UiButton;
+        private _btnSwitchTexture           : TinyWars.GameUi.UiButton;
 
         private _userId: number;
 
@@ -88,10 +76,10 @@ namespace TinyWars.User {
         protected _onFirstOpened(): void {
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgUserGetPublicInfo,                 callback: this._onNotifySGetUserPublicInfo },
-                { type: Notify.Type.MsgUserSetNickname,                callback: this._onNotifySUserChangeNickname },
-                { type: Notify.Type.MsgUserSetDiscordId,               callback: this._onNotifySUserChangeDiscordId },
                 { type: Notify.Type.UnitAndTileTextureVersionChanged,   callback: this._onNotifyUnitAndTileTextureVersionChanged },
+                { type: Notify.Type.MsgUserGetPublicInfo,               callback: this._onMsgUserGetPublicInfo },
+                { type: Notify.Type.MsgUserSetNickname,                 callback: this._onMsgUserSetNickname },
+                { type: Notify.Type.MsgUserSetDiscordId,                callback: this._onMsgUserSetDiscordId },
             ];
             this._uiListeners = [
                 { ui: this._btnChangeNickname,  callback: this._onTouchedBtnChangeNickname },
@@ -103,6 +91,7 @@ namespace TinyWars.User {
                 { ui: this._btnSwitchTexture,   callback: this._onTouchedBtnSwitchTexture },
                 { ui: this._btnClose,           callback: this.close },
             ];
+            this._sclHistory.setItemRenderer(HistoryRenderer);
         }
         protected _onOpened(): void {
             UserProxy.reqUserGetPublicInfo(this._userId);
@@ -116,16 +105,16 @@ namespace TinyWars.User {
         private _onNotifyUnitAndTileTextureVersionChanged(e: egret.Event): void {
             this._updateBtnSwitchTexture();
         }
-        private _onNotifySGetUserPublicInfo(e: egret.Event): void {
+        private _onMsgUserGetPublicInfo(e: egret.Event): void {
             this._updateView();
         }
-        private _onNotifySUserChangeNickname(e: egret.Event): void {
+        private _onMsgUserSetNickname(e: egret.Event): void {
             const userId = this._userId;
             if (userId === UserModel.getSelfUserId()) {
                 UserProxy.reqUserGetPublicInfo(this._userId);
             }
         }
-        private _onNotifySUserChangeDiscordId(e: egret.Event): void {
+        private _onMsgUserSetDiscordId(e: egret.Event): void {
             const userId = this._userId;
             if (userId === UserModel.getSelfUserId()) {
                 UserProxy.reqUserGetPublicInfo(this._userId);
@@ -169,7 +158,6 @@ namespace TinyWars.User {
             const userId    = this._userId;
             const info      = userId != null ? await UserModel.getUserPublicInfo(userId) : undefined;
             if (info) {
-                this._labelRankScore.text       = "";   // `${info.rank2pScore}`; // TODO
                 this._labelRegisterTime.text    = Helpers.getTimestampShortText(info.registerTime);
                 this._labelLastLoginTime.text   = Helpers.getTimestampShortText(info.lastLoginTime);
                 this._labelLoginCount.text      = `${info.loginCount}`;
@@ -178,6 +166,7 @@ namespace TinyWars.User {
             }
 
             this._updateComponentsForLanguage();
+            this._updateLabelOnlineTime();
             this._updateGroupButtons();
         }
 
@@ -197,19 +186,19 @@ namespace TinyWars.User {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelRankMatchTitle.text      = `${Lang.getText(Lang.Type.B0198)}:`;
-            this._labelRankScoreTitle.text      = `${Lang.getText(Lang.Type.B0199)}:`;
+            this._labelStdRankTitle.text        = `${Lang.getText(Lang.Type.B0198)}:`;
+            this._labelFogRankTitle.text        = `${Lang.getText(Lang.Type.B0199)}:`;
             this._labelRegisterTimeTitle.text   = `${Lang.getText(Lang.Type.B0194)}:`;
             this._labelLastLoginTimeTitle.text  = `${Lang.getText(Lang.Type.B0195)}:`;
             this._labelOnlineTimeTitle.text     = `${Lang.getText(Lang.Type.B0196)}:`;
             this._labelLoginCountTitle.text     = `${Lang.getText(Lang.Type.B0197)}:`;
-            this._labelMcwTitle.text            = `${Lang.getText(Lang.Type.B0200)}:`;
-            this._labelMcw2pTitle.text          = `${Lang.getText(Lang.Type.B0201)}:`;
-            this._labelMcw3pTitle.text          = `${Lang.getText(Lang.Type.B0202)}:`;
-            this._labelMcw4pTitle.text          = `${Lang.getText(Lang.Type.B0203)}:`;
+            this._labelHistoryTitle.text        = `${Lang.getText(Lang.Type.B0201)}:`;
             this._btnClose.label                = `${Lang.getText(Lang.Type.B0204)}`;
+            this._updateLabelTitle();
+            this._updateLabelStdRankScore();
+            this._updateLabelFogRankScore();
+            this._updateSclHistory();
 
-            this._updateLabelsForLanguage();
             this._updateBtnChangeNickname();
             this._updateBtnChangeDiscordId();
             this._updateBtnShowOnlineUsers();
@@ -218,25 +207,53 @@ namespace TinyWars.User {
             this._updateBtnServerStatus();
             this._updateBtnChat();
         }
-        private async _updateLabelsForLanguage(): Promise<void> {
+
+        private async _updateLabelTitle(): Promise<void> {
+            const nickname          = await UserModel.getUserNickname(this._userId);
+            this._labelTitle.text   = Lang.getFormattedText(Lang.Type.F0009, nickname);
+        }
+        private async _updateLabelStdRankScore(): Promise<void> {
+            const data                      = await UserModel.getRankScoreData(this._userId, WarType.RmwStd, 2);
+            const rawScore                  = data ? data.currentScore : null;
+            const score                     = rawScore != null ? rawScore : CommonConstants.RankInitialScore;
+            this._labelStdRankScore.text    = `${score} (${ConfigManager.getRankName(ConfigManager.getLatestConfigVersion(), score)})`;
+        }
+        private async _updateLabelFogRankScore(): Promise<void> {
+            const data                      = await UserModel.getRankScoreData(this._userId, WarType.RmwFog, 2);
+            const rawScore                  = data ? data.currentScore : null;
+            const score                     = rawScore != null ? rawScore : CommonConstants.RankInitialScore;
+            this._labelFogRankScore.text    = `${score} (${ConfigManager.getRankName(ConfigManager.getLatestConfigVersion(), score)})`;
+        }
+        private async _updateSclHistory(): Promise<void> {
             const userId    = this._userId;
-            const info      = userId != null ? await UserModel.getUserPublicInfo(userId) : undefined;
-            if (info) {
-                this._labelTitle.text       = Lang.getFormattedText(Lang.Type.F0009, info.nickname);
-                this._labelOnlineTime.text  = Helpers.getTimeDurationText2(info.onlineTime);
-
-                const warStatisticsList     = info.userWarStatistics.dataList || [];
-                const rankNormal            = warStatisticsList.filter(v => v.warType === WarType.RmwStd) || [];
-                const rankFog               = warStatisticsList.filter(v => v.warType === WarType.RmwFog) || [];
-                this._labelRankName.text    = ""; // Utility.ConfigManager.getRankName(Utility.ConfigManager.getNewestConfigVersion(), info.rank2pScore);   // TODO
-                updateLabelsForStatistics(this._labelRank2pWins, this._labelRank2pLoses, this._labelRank2pDraws, rankNormal.find(v => v.playersCount === 2), rankFog.find(v => v.playersCount === 2));
-
-                const mcwNormal = warStatisticsList.filter(v => v.warType === WarType.McwStd) || [];
-                const mcwFog    = warStatisticsList.filter(v => v.warType === WarType.McwStd) || [];
-                updateLabelsForStatistics(this._labelMcw2pWins, this._labelMcw2pLoses, this._labelMcw2pDraws, mcwNormal.find(v => v.playersCount === 2), mcwFog.find(v => v.playersCount === 2));
-                updateLabelsForStatistics(this._labelMcw3pWins, this._labelMcw3pLoses, this._labelMcw3pDraws, mcwNormal.find(v => v.playersCount === 3), mcwFog.find(v => v.playersCount === 3));
-                updateLabelsForStatistics(this._labelMcw4pWins, this._labelMcw4pLoses, this._labelMcw4pDraws, mcwNormal.find(v => v.playersCount === 4), mcwFog.find(v => v.playersCount === 4));
+            const dataList  : DataForHistoryRenderer[] = [
+                {
+                    userId,
+                    warType     : WarType.RmwStd,
+                    playersCount: 2,
+                },
+                {
+                    userId,
+                    warType     : WarType.RmwFog,
+                    playersCount: 2,
+                },
+            ];
+            for (let playersCount = 2; playersCount <= CommonConstants.WarMaxPlayerIndex; ++playersCount) {
+                dataList.push({
+                    userId,
+                    warType     : WarType.McwStd,
+                    playersCount,
+                }, {
+                    userId,
+                    warType     : WarType.McwFog,
+                    playersCount,
+                });
             }
+            this._sclHistory.bindData(dataList);
+        }
+        private async _updateLabelOnlineTime(): Promise<void> {
+            const info                  = await UserModel.getUserPublicInfo(this._userId);
+            this._labelOnlineTime.text  = info ? Helpers.getTimeDurationText2(info.onlineTime) : `???`;
         }
         private _updateBtnChangeNickname(): void {
             this._btnChangeNickname.label = Lang.getText(Lang.Type.B0149);
@@ -265,15 +282,28 @@ namespace TinyWars.User {
         }
     }
 
-    function updateLabelsForStatistics(
-        lbWin           : GameUi.UiLabel,
-        lbLose          : GameUi.UiLabel,
-        lbDraw          : GameUi.UiLabel,
-        dataForNormal   : IDataForUserWarStatistics,
-        dataForFog      : IDataForUserWarStatistics
-    ): void {
-        lbWin.text  = `${dataForNormal ? dataForNormal.wins || 0 : 0} / ${dataForFog ? dataForFog.wins || 0 : 0}`;
-        lbLose.text = `${dataForNormal ? dataForNormal.loses || 0 : 0} / ${dataForFog ? dataForFog.loses || 0 : 0}`;
-        lbDraw.text = `${dataForNormal ? dataForNormal.draws || 0 : 0} / ${dataForFog ? dataForFog.draws || 0 : 0}`;
+    type DataForHistoryRenderer = {
+        userId      : number;
+        warType     : WarType;
+        playersCount: number;
+    }
+
+    class HistoryRenderer extends eui.ItemRenderer {
+        private _labelType  : TinyWars.GameUi.UiLabel;
+        private _labelCount : TinyWars.GameUi.UiLabel;
+
+        protected async dataChanged(): Promise<void> {
+            super.dataChanged();
+
+            const data              = this.data as DataForHistoryRenderer;
+            const warType           = data.warType;
+            const playersCount      = data.playersCount;
+            this._labelType.text    = `${playersCount}P ${Lang.getWarTypeName(warType)}`
+
+            const info              = await UserModel.getUserWarStatisticsData(data.userId, warType, playersCount);
+            this._labelCount.text   = info
+                ? `${info.wins} / ${info.loses} / ${info.draws}`
+                : `0 / 0 / 0`;
+        }
     }
 }

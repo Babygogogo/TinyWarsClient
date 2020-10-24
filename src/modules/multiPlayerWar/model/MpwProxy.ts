@@ -345,7 +345,7 @@ namespace TinyWars.MultiPlayerWar.MpwProxy {
         }
     }
 
-    export function reqMcwUnitAttack(war: BwWar, path: GridIndex[], launchUnitId: number | undefined, targetGridIndex: GridIndex): void {
+    export function reqMcwUnitAttackUnit(war: BwWar, path: GridIndex[], launchUnitId: number | undefined, targetGridIndex: GridIndex): void {
         NetManager.send({
             MsgMpwActionUnitAttackUnit: { c: {
                 warId       : war.getWarId(),

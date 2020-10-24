@@ -5,10 +5,7 @@
         <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" />
         <e:Group x="10" y="12">
-            <GameUi:UiLabel id="_labelNickname" text="babygogogo" y="0" size="16" x="0" textColor="0xffffff"
-                            maxTextWidth="180" />
-            <GameUi:UiLabel id="_labelRankScore" text="排位积分:-9999" y="0" size="16" x="98" textColor="0xffffff" />
-            <GameUi:UiLabel id="_labelRankName" text="军衔:军士长" y="0" size="16" x="221" textColor="0xffffff" />
+            <GameUi:UiLabel id="_labelNickname" text="babygogogo" y="0" size="16" x="0" textColor="0xffffff" />
             <e:layout>
                 <e:HorizontalLayout gap="10" />
             </e:layout>

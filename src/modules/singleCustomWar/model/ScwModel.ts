@@ -111,56 +111,64 @@ namespace TinyWars.SingleCustomWar.ScwModel {
             war.setIsExecutingAction(false);
 
             if (war.getIsRunning()) {
-                const playerManager = war.getPlayerManager();
-                if (!playerManager.getAliveWatcherTeamIndexesForSelf().size) {
-                    if (war.getHumanPlayers().length > 0) {
-                        war.setIsEnded(true);
-                        CommonAlertPanel.show({
-                            title   : Lang.getText(Lang.Type.B0035),
-                            content : Lang.getText(Lang.Type.A0023),
-                            callback: () => Utility.FlowManager.gotoLobby(),
-                        });
+                if (war.getPlayerIndexInTurn() === CommonConstants.WarNeutralPlayerIndex) {
+                    if (_cachedActions.length) {
+                        _checkAndRunFirstCachedAction();
                     } else {
-                        if (playerManager.getAliveTeamsCount(false) <= 1) {
+                        checkAndRequestBeginTurnOrRunRobot(war);
+                    }
+                } else {
+                    const playerManager = war.getPlayerManager();
+                    if (!playerManager.getAliveWatcherTeamIndexesForSelf().size) {
+                        if (war.getHumanPlayers().length > 0) {
                             war.setIsEnded(true);
                             CommonAlertPanel.show({
-                                title   : Lang.getText(Lang.Type.B0034),
-                                content : Lang.getText(Lang.Type.A0022),
+                                title   : Lang.getText(Lang.Type.B0035),
+                                content : Lang.getText(Lang.Type.A0023),
                                 callback: () => Utility.FlowManager.gotoLobby(),
                             });
-
                         } else {
-                            if (_cachedActions.length) {
-                                _checkAndRunFirstCachedAction();
+                            if (playerManager.getAliveTeamsCount(false) <= 1) {
+                                war.setIsEnded(true);
+                                CommonAlertPanel.show({
+                                    title   : Lang.getText(Lang.Type.B0034),
+                                    content : Lang.getText(Lang.Type.A0022),
+                                    callback: () => Utility.FlowManager.gotoLobby(),
+                                });
+
                             } else {
-                                checkAndRequestBeginTurnOrRunRobot(war);
+                                if (_cachedActions.length) {
+                                    _checkAndRunFirstCachedAction();
+                                } else {
+                                    checkAndRequestBeginTurnOrRunRobot(war);
+                                }
                             }
                         }
-                    }
-
-                } else {
-                    if (war.getRemainingVotesForDraw() === 0) {
-                        war.setIsEnded(true);
-                        CommonAlertPanel.show({
-                            title   : Lang.getText(Lang.Type.B0082),
-                            content : Lang.getText(Lang.Type.A0030),
-                            callback: () => Utility.FlowManager.gotoLobby(),
-                        });
 
                     } else {
-                        if (playerManager.getAliveTeamsCount(false) <= 1) {
+                        if (war.getRemainingVotesForDraw() === 0) {
                             war.setIsEnded(true);
                             CommonAlertPanel.show({
-                                title   : Lang.getText(Lang.Type.B0034),
-                                content : Lang.getText(Lang.Type.A0022),
+                                title   : Lang.getText(Lang.Type.B0082),
+                                content : Lang.getText(Lang.Type.A0030),
                                 callback: () => Utility.FlowManager.gotoLobby(),
                             });
 
                         } else {
-                            if (_cachedActions.length) {
-                                _checkAndRunFirstCachedAction();
+                            if (playerManager.getAliveTeamsCount(false) <= 1) {
+                                war.setIsEnded(true);
+                                CommonAlertPanel.show({
+                                    title   : Lang.getText(Lang.Type.B0034),
+                                    content : Lang.getText(Lang.Type.A0022),
+                                    callback: () => Utility.FlowManager.gotoLobby(),
+                                });
+
                             } else {
-                                checkAndRequestBeginTurnOrRunRobot(war);
+                                if (_cachedActions.length) {
+                                    _checkAndRunFirstCachedAction();
+                                } else {
+                                    checkAndRequestBeginTurnOrRunRobot(war);
+                                }
                             }
                         }
                     }
@@ -213,7 +221,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
             DestructionHelpers.destroyUnitOnMap(war, gridIndex, true);
         }
 
-        ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+        ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
         actionPlanner.setStateIdle();
     }
 
@@ -255,7 +263,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         unitMap.setNextUnitId(unitId + 1);
         playerInTurn.setFund(playerInTurn.getFund() - cost);
 
-        ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+        ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
         actionPlanner.setStateIdle();
     }
 
@@ -267,7 +275,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
 
         DestructionHelpers.destroyPlayerForce(war, player.getPlayerIndex(), true);
 
-        ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+        ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
         actionPlanner.setStateIdle();
     }
 
@@ -314,7 +322,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
 
             await attackerUnit.moveViewAlongPath(pathNodes, attackerUnit.getIsDiving(), true);
             attackerUnit.updateView();
-            ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+            ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
             actionPlanner.setStateIdle();
 
         } else {
@@ -474,7 +482,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
                 DestructionHelpers.destroyPlayerForce(war, lostPlayerIndex, true);
             }
 
-            ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+            ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
             actionPlanner.setStateIdle();
         }
     }
@@ -497,7 +505,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
 
             await attackerUnit.moveViewAlongPath(pathNodes, attackerUnit.getIsDiving(), true);
             attackerUnit.updateView();
-            ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+            ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
             actionPlanner.setStateIdle();
 
         } else {
@@ -539,7 +547,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
                 gridVisionEffect.showEffectExplosion(targetGridIndex);
             }
 
-            ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+            ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
             actionPlanner.setStateIdle();
         }
     }
@@ -561,7 +569,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
 
             await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
             focusUnit.updateView();
-            ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+            ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
             actionPlanner.setStateIdle();
         } else {
             const loaderUnit = unitMap.getUnitOnMap(pathNodes[pathNodes.length - 1]);
@@ -572,7 +580,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
             focusUnit.updateView();
             focusUnit.setViewVisible(false);
             loaderUnit.updateView();
-            ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+            ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
             actionPlanner.setStateIdle();
         }
     }
@@ -620,7 +628,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
 
         await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
         focusUnit.updateView();
-        ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+        ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
         actionPlanner.setStateIdle();
     }
 
@@ -641,7 +649,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         if (path.isBlocked) {
             await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), true);
             focusUnit.updateView();
-            ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+            ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
             actionPlanner.setStateIdle();
 
         } else {
@@ -669,7 +677,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
                 await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false);
                 focusUnit.updateView();
                 tile.flushDataToView();
-                ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
                 actionPlanner.setStateIdle();
 
             } else {
@@ -678,7 +686,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
                 tile.flushDataToView();
                 FloatText.show(Lang.getFormattedText(Lang.Type.F0016, await war.getPlayerManager().getPlayer(lostPlayerIndex).getNickname()));
                 DestructionHelpers.destroyPlayerForce(war, lostPlayerIndex, true);
-                ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
                 actionPlanner.setStateIdle();
             }
         }
@@ -716,7 +724,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
             }
         }
 
-        ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+        ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
         actionPlanner.setStateIdle();
     }
 
@@ -763,14 +771,17 @@ namespace TinyWars.SingleCustomWar.ScwModel {
 
         const promises: Promise<void>[] = [];
         for (const unitForDrop of unitsForDrop) {
-            promises.push(unitForDrop.moveViewAlongPath(
-                [endingGridIndex, unitForDrop.getGridIndex()],
-                unitForDrop.getIsDiving(),
-                false,
-            ));
+            promises.push((async () => {
+                await unitForDrop.moveViewAlongPath(
+                    [endingGridIndex, unitForDrop.getGridIndex()],
+                    unitForDrop.getIsDiving(),
+                    false,
+                );
+                unitForDrop.updateView();
+            })());
         }
         await Promise.all(promises);
-        ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+        ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
         actionPlanner.setStateIdle();
     }
 
@@ -793,7 +804,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
 
             await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
             focusUnit.updateView();
-            ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+            ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
             actionPlanner.setStateIdle();
 
         } else {
@@ -857,7 +868,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
             await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
             focusUnit.updateView();
             unitMap.getView().removeUnit(targetUnit.getView());
-            ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+            ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
             actionPlanner.setStateIdle();
         }
     }
@@ -893,7 +904,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         }
 
         focusUnit.updateView();
-        ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+        ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
         actionPlanner.setStateIdle();
     }
 
@@ -914,7 +925,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         if (path.isBlocked) {
             await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
             focusUnit.updateView();
-            ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+            ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
             actionPlanner.setStateIdle();
 
         } else {
@@ -947,7 +958,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
 
             focusUnit.updateView();
             tile.flushDataToView();
-            ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+            ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
             actionPlanner.setStateIdle();
         }
     }
@@ -988,7 +999,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
 
         await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
         focusUnit.updateView();
-        ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+        ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
         actionPlanner.setStateIdle();
     }
 
@@ -1009,7 +1020,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         if (path.isBlocked) {
             await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
             focusUnit.updateView();
-            ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+            ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
             actionPlanner.setStateIdle();
 
         } else {
@@ -1033,7 +1044,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
 
             await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
             focusUnit.updateView();
-            ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+            ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
             actionPlanner.setStateIdle();
         }
     }
@@ -1056,7 +1067,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         if (isBlocked) {
             await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), isBlocked);
             focusUnit.updateView();
-            ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+            ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
             actionPlanner.setStateIdle();
 
         } else {
@@ -1085,7 +1096,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
                 gridVisionEffect.showEffectSupply(unit.getGridIndex());
             }
 
-            ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+            ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
             actionPlanner.setStateIdle();
         }
     }
@@ -1127,7 +1138,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
             }
         }
 
-        ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+        ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
         actionPlanner.setStateIdle();
     }
 
@@ -1182,7 +1193,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
 
             await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), revisedPath.isBlocked);
             focusUnit.updateView();
-            ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+            ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
             actionPlanner.setStateIdle();
 
         } else {
@@ -1229,7 +1240,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
 
             await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), revisedPath.isBlocked);
             focusUnit.updateView();
-            ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+            ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
 
             const gridVisionEffect  = war.getGridVisionEffect();
             const playerIndex       = focusUnit.getPlayerIndex();
@@ -1280,7 +1291,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
 
         await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
         focusUnit.updateView();
-        ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+        ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
         actionPlanner.setStateIdle();
     }
 }

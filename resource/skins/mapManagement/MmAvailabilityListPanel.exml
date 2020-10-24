@@ -16,19 +16,10 @@
         <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" />
         <GameUi:UiLabel id="_labelMenuTitle" text="选择地图" y="14" bold="true" size="25" textColor="0xffffff"
-                        horizontalCenter="-30" maxTextWidth="110" />
-        <GameUi:UiButton id="_btnSearch" label="查找&gt;&gt;" y="18" right="10">
-            <GameUi:skinName>
-                <e:Skin states="up,down,disabled">
-                    <e:Image width="100%" height="100%" />
-                    <e:Label id="labelDisplay" size="18" bold="true" left="0" right="0" top="0" bottom="0"
-                             textColor="0x00ff00" />
-                </e:Skin>
-            </GameUi:skinName>
-        </GameUi:UiButton>
+                        horizontalCenter="0" />
         <GameUi:UiLabel id="_labelNoMap" text="没有符合条件的地图" bold="true" size="20" textColor="0xFFFFFF"
                         horizontalCenter="0" width="160" textAlign="center" verticalCenter="0" />
-        <GameUi:UiScrollList id="_listMap" left="0" right="0" bottom="50" top="50">
+        <GameUi:UiScrollList id="_listMap" left="0" right="0" bottom="70" top="50">
             <e:List>
                 <e:itemRendererSkinName>
                     <e:Skin width="200" height="40" currentState="up" states="up,down">
@@ -57,14 +48,14 @@
                 </e:itemRendererSkinName>
             </e:List>
         </GameUi:UiScrollList>
-        <GameUi:UiButton id="_btnBack" label="&lt;&lt;返回大厅" horizontalCenter="0" bottom="14">
-            <e:skinName>
-                <e:Skin states="up,down,disabled">
-                    <e:Image width="100%" height="100%" />
-                    <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="25" bold="true"
-                             textColor="0xffffff" />
-                </e:Skin>
-            </e:skinName>
-        </GameUi:UiButton>
+        <e:Group bottom="0" x="0">
+            <GameUi:UiButton id="_btnSearch" label="查找" y="0" x="71" skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                             width="200"></GameUi:UiButton>
+            <GameUi:UiButton id="_btnBack" label="&lt;&lt;返回大厅" skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                             x="0" y="440" width="200" />
+            <e:layout>
+                <e:VerticalLayout/>
+            </e:layout>
+        </e:Group>
     </e:Group>
 </e:Skin>

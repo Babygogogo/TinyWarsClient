@@ -5,7 +5,6 @@ namespace TinyWars.SingleCustomWar {
     import Logger               = Utility.Logger;
     import FloatText            = Utility.FloatText;
     import Lang                 = Utility.Lang;
-    import VisibilityHelpers    = Utility.VisibilityHelpers;
     import TurnPhaseCode        = Types.TurnPhaseCode;
     import UnitState            = Types.UnitActionState;
     import GridIndex            = Types.GridIndex;
@@ -65,8 +64,11 @@ namespace TinyWars.SingleCustomWar {
                 } else if (nextState === State.PreviewingMovableArea) {
                     this._setStatePreviewingMovableAreaOnTap(gridIndex);
 
-                } else if (nextState === State.RequestingUnitAttack) {
-                    this._setStateRequestingUnitAttack(gridIndex);
+                } else if (nextState === State.RequestingUnitAttackUnit) {
+                    this._setStateRequestingUnitAttackUnit(gridIndex);
+
+                } else if (nextState === State.RequestingUnitAttackTile) {
+                    this._setStateRequestingUnitAttackTile(gridIndex);
 
                 } else if (nextState === State.RequestingUnitBeLoaded) {
                     Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() error 1, nextState: ${nextState}`);
@@ -269,12 +271,20 @@ namespace TinyWars.SingleCustomWar {
             ScwLocalProxy.reqUnitWait(this._getWar() as ScwWar, this.getMovePath(), unit ? unit.getUnitId() : undefined);
         }
 
-        private _setStateRequestingUnitAttack(targetGridIndex: GridIndex): void {
-            this._setState(State.RequestingUnitAttack);
+        private _setStateRequestingUnitAttackUnit(targetGridIndex: GridIndex): void {
+            this._setState(State.RequestingUnitAttackUnit);
             this._updateView();
 
             const unit = this.getFocusUnitLoaded();
-            ScwLocalProxy.reqUnitAttack(this._getWar() as ScwWar, this.getMovePath(), unit ? unit.getUnitId() : undefined, targetGridIndex);
+            ScwLocalProxy.reqUnitAttackUnit(this._getWar() as ScwWar, this.getMovePath(), unit ? unit.getUnitId() : undefined, targetGridIndex);
+        }
+
+        private _setStateRequestingUnitAttackTile(targetGridIndex: GridIndex): void {
+            this._setState(State.RequestingUnitAttackTile);
+            this._updateView();
+
+            const unit = this.getFocusUnitLoaded();
+            ScwLocalProxy.reqUnitAttackTile(this._getWar() as ScwWar, this.getMovePath(), unit ? unit.getUnitId() : undefined, targetGridIndex);
         }
 
         private _setStateRequestingUnitBuildTile(): void {
@@ -411,7 +421,7 @@ namespace TinyWars.SingleCustomWar {
             ) {
                 return State.Idle;
             } else {
-                const unit = this._getUnitMap().getUnitOnMap(gridIndex);
+                const unit = this._getUnitMap().getVisibleUnitOnMap(gridIndex);
                 if (!unit) {
                     const tile = this._getTileMap().getTile(gridIndex);
                     if (tile.checkIsUnitProducerForPlayer(playerIndexInTurn)) {
@@ -420,32 +430,20 @@ namespace TinyWars.SingleCustomWar {
                         return State.Idle;
                     }
                 } else {
-                    const unitPlayerIndex = unit.getPlayerIndex();
-                    if (!VisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
-                        war,
-                        gridIndex,
-                        unitType: unit.getType(),
-                        isDiving: unit.getIsDiving(),
-                        unitPlayerIndex,
-                        observerTeamIndexes: war.getPlayerManager().getAliveWatcherTeamIndexesForSelf()
-                    })) {
-                        return State.Idle;
+                    if ((unit.getActionState() === UnitState.Idle) && (playerIndexInTurn === unit.getPlayerIndex())) {
+                        return State.MakingMovePath;
                     } else {
-                        if ((unit.getActionState() === UnitState.Idle) && (playerIndexInTurn === unitPlayerIndex)) {
-                            return State.MakingMovePath;
+                        if (unit.checkHasWeapon()) {
+                            return State.PreviewingAttackableArea;
                         } else {
-                            if (unit.checkHasWeapon()) {
-                                return State.PreviewingAttackableArea;
-                            } else {
-                                return State.PreviewingMovableArea;
-                            }
+                            return State.PreviewingMovableArea;
                         }
                     }
                 }
             }
         }
         protected _getNextStateOnTapWhenMakingMovePath(gridIndex: GridIndex): State {
-            const existingUnit      = this._getUnitMap().getUnitOnMap(gridIndex);
+            const existingUnit      = this._getUnitMap().getVisibleUnitOnMap(gridIndex);
             const selfPlayerIndex   = this._getPlayerIndexInTurn();
             if (BwHelpers.checkAreaHasGrid(this.getMovableArea(), gridIndex)) {
                 if (!existingUnit) {
@@ -484,7 +482,11 @@ namespace TinyWars.SingleCustomWar {
                         return State.MakingMovePath;
                     } else {
                         if (this.getFocusUnit().checkCanAttackTargetAfterMovePath(this.getMovePath(), gridIndex)) {
-                            return State.RequestingUnitAttack;
+                            if (existingUnit) {
+                                return State.RequestingUnitAttackUnit;
+                            } else {
+                                return State.RequestingUnitAttackTile;
+                            }
                         } else {
                             return State.MakingMovePath;
                         }
@@ -515,7 +517,11 @@ namespace TinyWars.SingleCustomWar {
                 return State.ChoosingAction;
             } else {
                 if (GridIndexHelpers.checkIsEqual(this.getCursor().getPreviousGridIndex(), gridIndex)) {
-                    return State.RequestingUnitAttack;
+                    if (this._getUnitMap().getUnitOnMap(gridIndex)) {
+                        return State.RequestingUnitAttackUnit;
+                    } else {
+                        return State.RequestingUnitAttackTile;
+                    }
                 } else {
                     return State.ChoosingAttackTarget;
                 }
@@ -565,7 +571,7 @@ namespace TinyWars.SingleCustomWar {
                 return State.ChoosingProductionTarget;
             } else {
                 const turnManager       = this._getTurnManager();
-                const unit              = this._getUnitMap().getUnitOnMap(gridIndex);
+                const unit              = this._getUnitMap().getVisibleUnitOnMap(gridIndex);
                 const selfPlayerIndex   = this._getPlayerIndexInTurn();
                 const isSelfInTurn      = (turnManager.getPlayerIndexInTurn() === selfPlayerIndex) && (turnManager.getPhaseCode() === TurnPhaseCode.Main);
                 if (!unit) {
@@ -590,7 +596,7 @@ namespace TinyWars.SingleCustomWar {
         }
         protected _getNextStateOnTapWhenPreviewingAttackableArea(gridIndex: GridIndex): State {
             const turnManager       = this._getTurnManager();
-            const unit              = this._getUnitMap().getUnitOnMap(gridIndex);
+            const unit              = this._getUnitMap().getVisibleUnitOnMap(gridIndex);
             const selfPlayerIndex   = this._getPlayerIndexInTurn();
             const isSelfInTurn      = (turnManager.getPlayerIndexInTurn() === selfPlayerIndex) && (turnManager.getPhaseCode() === TurnPhaseCode.Main);
             if (!unit) {
@@ -618,7 +624,7 @@ namespace TinyWars.SingleCustomWar {
         }
         protected _getNextStateOnTapWhenPreviewingMovableArea(gridIndex: GridIndex): State {
             const turnManager       = this._getTurnManager();
-            const unit              = this._getUnitMap().getUnitOnMap(gridIndex);
+            const unit              = this._getUnitMap().getVisibleUnitOnMap(gridIndex);
             const selfPlayerIndex   = this._getPlayerIndexInTurn();
             const isSelfInTurn      = (turnManager.getPlayerIndexInTurn() === selfPlayerIndex) && (turnManager.getPhaseCode() === TurnPhaseCode.Main);
             if (!unit) {
@@ -813,7 +819,7 @@ namespace TinyWars.SingleCustomWar {
             }
         }
         protected _getActionUnitWait(hasOtherAction: boolean): BaseWar.DataForUnitActionRenderer[] {
-            const existingUnit = this._getUnitMap().getUnitOnMap(this.getMovePathDestination());
+            const existingUnit = this._getUnitMap().getVisibleUnitOnMap(this.getMovePathDestination());
             if ((existingUnit) && (existingUnit !== this.getFocusUnit())) {
                 return [];
             } else {
@@ -851,17 +857,9 @@ namespace TinyWars.SingleCustomWar {
                 return undefined;
             } else {
                 const war           = this._getWar();
-                const existingUnit  = this._getUnitMap().getUnitOnMap(targetGridIndex);
+                const existingUnit  = this._getUnitMap().getVisibleUnitOnMap(targetGridIndex);
                 if ((existingUnit)                                              &&
-                    (existingUnit.getTeamIndex() !== movingUnit.getTeamIndex()) &&
-                    (VisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
-                        war,
-                        gridIndex: targetGridIndex,
-                        unitType: existingUnit.getType(),
-                        isDiving: existingUnit.getIsDiving(),
-                        unitPlayerIndex: existingUnit.getPlayerIndex(),
-                        observerTeamIndexes: war.getPlayerManager().getAliveWatcherTeamIndexesForSelf()
-                    }))
+                    (existingUnit.getTeamIndex() !== movingUnit.getTeamIndex())
                 ) {
                     return undefined;
                 } else {
@@ -878,7 +876,6 @@ namespace TinyWars.SingleCustomWar {
             const hasAmmo               = (focusUnit.getPrimaryWeaponCurrentAmmo() > 0) || (focusUnit.checkHasSecondaryWeapon());
             const unitMap               = this._getUnitMap();
             const war                   = this._getWar();
-            const teamIndexes           = (war.getPlayerManager() as ScwPlayerManager).getAliveWatcherTeamIndexesForSelf();
             this._setAttackableArea(BwHelpers.createAttackableArea(
                 this.getMovableArea(),
                 this.getMapSize(),
@@ -888,18 +885,8 @@ namespace TinyWars.SingleCustomWar {
                     if (!hasAmmo) {
                         return false;
                     } else {
-                        const existingUnit = unitMap.getUnitOnMap(moveGridIndex);
-                        if ((existingUnit)                                      &&
-                            (existingUnit !== focusUnit)                        &&
-                            (VisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
-                                war,
-                                gridIndex: moveGridIndex,
-                                unitType: existingUnit.getType(),
-                                isDiving: existingUnit.getIsDiving(),
-                                unitPlayerIndex: existingUnit.getPlayerIndex(),
-                                observerTeamIndexes: teamIndexes
-                            }))
-                        ) {
+                        const existingUnit = unitMap.getVisibleUnitOnMap(moveGridIndex);
+                        if ((existingUnit) && (existingUnit !== focusUnit)) {
                             return false;
                         } else {
                             const hasMoved = !GridIndexHelpers.checkIsEqual(moveGridIndex, beginningGridIndex);
@@ -929,8 +916,8 @@ namespace TinyWars.SingleCustomWar {
                 unit.getMinAttackRange(),
                 unit.getFinalMaxAttackRange(),
                 (moveGridIndex, attackGridIndex) => {
-                    const existingUnit = unitMap.getUnitOnMap(moveGridIndex);
-                    return ((!existingUnit) || (existingUnit === unit) || (!VisibilityHelpers.checkIsUnitOnMapVisibleToTeams({ war, gridIndex: moveGridIndex, unitType: existingUnit.getType(), isDiving: existingUnit.getIsDiving(), unitPlayerIndex: existingUnit.getPlayerIndex(), observerTeamIndexes: teamIndexes })))
+                    const existingUnit = unitMap.getVisibleUnitOnMap(moveGridIndex);
+                    return ((!existingUnit) || (existingUnit === unit))
                         && (hasAmmo)
                         && ((canAttackAfterMove) || (GridIndexHelpers.checkIsEqual(moveGridIndex, beginningGridIndex)));
                 }

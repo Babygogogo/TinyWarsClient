@@ -31,21 +31,21 @@ namespace TinyWars.SingleCustomWar {
             if (!humanPlayers.length) {
                 return this.getAliveTeamIndexes(false);
             } else {
-                return this.getAliveWatcherTeamIndexes(User.UserModel.getSelfUserId());
-                // const player = this.getPlayerInTurn();
-                // if (player.getUserId() != null) {
-                //     return new Set<number>([player.getTeamIndex()]);
-                // } else {
-                //     const teamIndexes = new Set<number>();
-                //     for (const player of humanPlayers) {
-                //         teamIndexes.add(player.getTeamIndex());
-                //     }
-                //     if (teamIndexes.size <= 1) {
-                //         return teamIndexes;
-                //     } else {
-                //         return new Set<number>();
-                //     }
-                // }
+                // return this.getAliveWatcherTeamIndexes(User.UserModel.getSelfUserId());
+                const player = this.getPlayerInTurn();
+                if (player.getUserId() != null) {
+                    return new Set<number>([player.getTeamIndex()]);
+                } else {
+                    const teamIndexes = new Set<number>();
+                    for (const player of humanPlayers) {
+                        teamIndexes.add(player.getTeamIndex());
+                    }
+                    if (teamIndexes.size <= 1) {
+                        return teamIndexes;
+                    } else {
+                        return new Set<number>();
+                    }
+                }
             }
         }
     }

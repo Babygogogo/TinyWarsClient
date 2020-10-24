@@ -45,8 +45,10 @@ namespace TinyWars.Lobby {
                 { ui: this, callback: this._onResize, eventType: egret.Event.RESIZE },
             ];
             this._notifyListeners = [
-                { type: Notify.Type.MsgUserLogout,      callback: this._onMsgUserLogout },
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.MsgUserLogout,                  callback: this._onMsgUserLogout },
+                { type: Notify.Type.MsgMcrGetJoinedRoomInfoList,    callback: this._onMsgMcrGetJoinedRoomInfoList },
+                { type: Notify.Type.MsgRmrGetMyRoomPublicInfoList,  callback: this._onMsgRmrGetMyRoomPublicInfoList },
             ];
 
             this._listCommand.setItemRenderer(CommandRenderer);
@@ -71,7 +73,15 @@ namespace TinyWars.Lobby {
         }
 
         private _onMsgUserLogout(e: egret.Event): void {
-            LobbyPanel.hide();
+            this.close();
+        }
+
+        private _onMsgMcrGetJoinedRoomInfoList(e: egret.Event): void {
+            this._listCommand.refresh();
+        }
+
+        private _onMsgRmrGetMyRoomPublicInfoList(e: egret.Event): void {
+            this._listCommand.refresh();
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
@@ -96,7 +106,8 @@ namespace TinyWars.Lobby {
                         MultiCustomRoom.McrMainMenuPanel.show();
                     },
                     redChecker  : async () => {
-                        return MultiPlayerWar.MpwModel.checkIsRedForMyMcwWars();
+                        return (MultiPlayerWar.MpwModel.checkIsRedForMyMcwWars())
+                            || (await MultiCustomRoom.McrModel.checkIsRed());
                     },
                 },
                 {

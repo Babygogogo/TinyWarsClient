@@ -1,5 +1,5 @@
 
-namespace TinyWars.SingleCustomWar.ScwHelpers {
+namespace TinyWars.SingleCustomWar.ScwUtility {
     import Types                = Utility.Types;
     import Helpers              = Utility.Helpers;
     import GridIndexHelpers     = Utility.GridIndexHelpers;

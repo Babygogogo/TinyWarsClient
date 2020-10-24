@@ -50,12 +50,26 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ));
     }
 
-    export function reqUnitAttack(war: ScwWar, path: GridIndex[], launchUnitId: number | undefined, targetGridIndex: GridIndex): void {
+    export function reqUnitAttackUnit(war: ScwWar, path: GridIndex[], launchUnitId: number | undefined, targetGridIndex: GridIndex): void {
         ScwModel.updateByWarAction(ScwActionReviser.revise(
             war,
             {
                 actionId    : war.getExecutedActionsCount(),
-                UnitAttack  : {
+                UnitAttackUnit  : {
+                    path,
+                    launchUnitId,
+                    targetGridIndex,
+                },
+            }
+        ));
+    }
+
+    export function reqUnitAttackTile(war: ScwWar, path: GridIndex[], launchUnitId: number | undefined, targetGridIndex: GridIndex): void {
+        ScwModel.updateByWarAction(ScwActionReviser.revise(
+            war,
+            {
+                actionId        : war.getExecutedActionsCount(),
+                UnitAttackTile  : {
                     path,
                     launchUnitId,
                     targetGridIndex,

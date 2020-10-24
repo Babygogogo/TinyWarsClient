@@ -11,10 +11,11 @@ namespace TinyWars.Utility.FlowManager {
         { msgCode: Network.Codes.MsgCommonServerDisconnect, callback: _onMsgCommonServerDisconnect },
     ];
     const _NOTIFY_EVENTS = [
-        { type: Notify.Type.NetworkConnected,   callback: _onNotifyNetworkConnected, },
-        { type: Notify.Type.ConfigLoaded,       callback: _onNotifyConfigLoaded },
-        { type: Notify.Type.MsgUserLogin,             callback: _onNotifySLogin },
-        { type: Notify.Type.MsgUserLogout,            callback: _onNotifySLogout },
+        { type: Notify.Type.NetworkConnected,           callback: _onNotifyNetworkConnected, },
+        { type: Notify.Type.ConfigLoaded,               callback: _onNotifyConfigLoaded },
+        { type: Notify.Type.MsgUserLogin,               callback: _onMsgUserLogin },
+        { type: Notify.Type.MsgUserLogout,              callback: _onMsgUserLogout },
+        { type: Notify.Type.MsgMpwCommonContinueWar,    callback: _onMsgMpwCommonContinueWar },
     ];
 
     let _hasOnceWentToLobby = false;
@@ -164,7 +165,7 @@ namespace TinyWars.Utility.FlowManager {
         (_checkCanFirstGoToLobby()) && (gotoLobby());
     }
 
-    function _onNotifySLogin(e: egret.Event): void {
+    function _onMsgUserLogin(e: egret.Event): void {
         if (_checkCanFirstGoToLobby()) {
             gotoLobby();
         } else {
@@ -175,10 +176,15 @@ namespace TinyWars.Utility.FlowManager {
         }
     }
 
-    function _onNotifySLogout(e: egret.Event): void {
+    function _onMsgUserLogout(e: egret.Event): void {
         _hasOnceWentToLobby = false;
         UserModel.clearLoginInfo();
         gotoLogin();
+    }
+
+    function _onMsgMpwCommonContinueWar(e: egret.Event): void {
+        const data = e.data as ProtoTypes.NetMessage.MsgMpwCommonContinueWar.IS;
+        gotoMultiCustomWar(data.war);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -153,6 +153,14 @@ namespace TinyWars.User {
             const info = await getUserPublicInfo(userId);
             return info ? info.nickname : undefined;
         }
+        export async function getRankScoreData(userId: number, warType: Types.WarType, playersCount: number): Promise<ProtoTypes.User.IDataForUserRankScore> {
+            const info = await getUserPublicInfo(userId);
+            return (info ? info.userRankScore.dataList || [] : []).find(v => (v.warType === warType) && (v.playersCount === playersCount));
+        }
+        export async function getUserWarStatisticsData(userId: number, warType: Types.WarType, playersCount: number): Promise<ProtoTypes.User.IDataForUserWarStatistics> {
+            const info = await getUserPublicInfo(userId);
+            return (info ? info.userWarStatistics.dataList || [] : []).find(v => (v.warType === warType) && (v.playersCount === playersCount));
+        }
 
         function _onNotifyNetworkDisconnected(e: egret.Event): void {
             setIsLoggedIn(false);

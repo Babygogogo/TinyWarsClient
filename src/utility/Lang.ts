@@ -787,7 +787,7 @@ namespace TinyWars.Utility.Lang {
         ],
         [Type.B0023]: [
             "加入房间",
-            "Join Game"
+            "Join Room"
         ],
         [Type.B0024]: [
             "继续战斗",
@@ -1486,20 +1486,20 @@ namespace TinyWars.Utility.Lang {
             `Login Times`,
         ],
         [Type.B0198]: [
-            `排位战绩`,
-            `Ranking Matches`,
+            `明战排位积分`,
+            `Std Rank Score`,
         ],
         [Type.B0199]: [
-            `积分`,
-            `Score`,
+            `雾战排位积分`,
+            `FoW Rank Score`,
         ],
         [Type.B0200]: [
             `多人自由对战`,
-            `MP Free Games`,
+            `MP Custom Games`,
         ],
         [Type.B0201]: [
-            `2人局`,
-            `2P`,
+            `历史战绩`,
+            `History`,
         ],
         [Type.B0202]: [
             `3人局`,
@@ -2311,11 +2311,11 @@ namespace TinyWars.Utility.Lang {
         ],
         [Type.B0408]: [
             `排位赛(雾战)`,
-            `Ranking Match (FoW)`,
+            `Ranking Match FoW`,
         ],
         [Type.B0409]: [
             `单人自由对战`,
-            `SP Free Games`,
+            `SP Custom Games`,
         ],
         [Type.B0410]: [
             `我的房间`,
@@ -2336,6 +2336,26 @@ namespace TinyWars.Utility.Lang {
         [Type.B0414]: [
             `房间状态`,
             `Room Status`,
+        ],
+        [Type.B0415]: [
+            `排位明战`,
+            `Rank Std`,
+        ],
+        [Type.B0416]: [
+            `排位雾战`,
+            `Rank FoW`,
+        ],
+        [Type.B0417]: [
+            `自由明战`,
+            `Custom Std`,
+        ],
+        [Type.B0418]: [
+            `自由雾战`,
+            `Custom FoW`,
+        ],
+        [Type.B0419]: [
+            `地图编辑器`,
+            `Map Editor`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3222,9 +3242,14 @@ namespace TinyWars.Utility.Lang {
 
     export function getWarTypeName(type: Types.WarType): string {
         switch (type) {
-            case Types.WarType.Scw  : return getText(Type.B0254);
-            case Types.WarType.Wrw  : return getText(Type.B0257);
-            default                 : return null;
+            case Types.WarType.McwStd   : return getText(Type.B0417);
+            case Types.WarType.McwFog   : return getText(Type.B0418);
+            case Types.WarType.Me       : return getText(Type.B0419);
+            case Types.WarType.RmwStd   : return getText(Type.B0415);
+            case Types.WarType.RmwFog   : return getText(Type.B0416);
+            case Types.WarType.Scw      : return getText(Type.B0254);
+            case Types.WarType.Wrw      : return getText(Type.B0257);
+            default                     : return null;
         }
     }
 

@@ -88,6 +88,10 @@ namespace TinyWars.GameUi {
             dataProvider.replaceItemAt(data, index);
         }
 
+        public refresh(): void {
+            this._dataProvider.refresh();
+        }
+
         public clear() : void {
             this.bindData([]);
             if (this.viewport) {

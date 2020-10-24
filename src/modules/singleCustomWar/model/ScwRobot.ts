@@ -1136,16 +1136,23 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         for (const targetGridIndex of GridIndexHelpers.getGridsWithinDistance(gridIndex, minRange, maxRange, _mapSize)) {
             const damages = DamageCalculator.getEstimatedBattleDamage(_war, pathNodes, launchUnitId, targetGridIndex);
             if (damages[0] != null) {
+                const isAttackUnit = _unitMap.getUnitOnMap(targetGridIndex) != null;
                 data = _getBetterScoreAndAction(
                     data,
-                {
-                    score   : await _getScoreForActionUnitAttack(unit, gridIndex, targetGridIndex, pathNodes, damages[0], damages[1]),
-                    action  : { UnitAttack: {
-                        path    : pathNodes,
-                        targetGridIndex,
-                        launchUnitId,
-                    } },
-                }
+                    {
+                        score   : await _getScoreForActionUnitAttack(unit, gridIndex, targetGridIndex, pathNodes, damages[0], damages[1]),
+                        action  : isAttackUnit
+                            ? { UnitAttackUnit: {
+                                path    : pathNodes,
+                                targetGridIndex,
+                                launchUnitId,
+                            } }
+                            : { UnitAttackTile: {
+                                path    : pathNodes,
+                                targetGridIndex,
+                                launchUnitId,
+                            }, },
+                    }
                 );
             }
         }
@@ -1421,7 +1428,10 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         let scoreAndAction : ScoreAndAction;
         for (const unit of await _getCandidateUnitsForPhase1()) {
             const candidate = await _getActionForMaxScoreWithCandidateUnit(unit);
-            if ((candidate) && (candidate.action.UnitAttack)) {
+            const action    = candidate ? candidate.action : null;
+            if ((action)                                            &&
+                ((action.UnitAttackUnit) || (action.UnitAttackTile))
+            ) {
                 scoreAndAction = _getBetterScoreAndAction(scoreAndAction, candidate);
             }
         }

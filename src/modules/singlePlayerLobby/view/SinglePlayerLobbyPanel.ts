@@ -80,13 +80,14 @@ namespace TinyWars.SinglePlayerLobby {
 
         private _createDataForListCommand(): DataForCommandRenderer[] {
             return [
-                {
-                    name    : Lang.getText(Lang.Type.B0254),
-                    callback: (): void => {
-                        this.close();
-                        SingleCustomRoom.ScrCreateMapListPanel.show();
-                    },
-                },
+                // TODO enable creating new wars.
+                // {
+                //     name    : Lang.getText(Lang.Type.B0254),
+                //     callback: (): void => {
+                //         this.close();
+                //         SingleCustomRoom.ScrCreateMapListPanel.show();
+                //     },
+                // },
                 {
                     name    : Lang.getText(Lang.Type.B0024),
                     callback: (): void => {

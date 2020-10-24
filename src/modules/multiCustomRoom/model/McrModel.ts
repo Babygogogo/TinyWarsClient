@@ -136,6 +136,33 @@ namespace TinyWars.MultiCustomRoom {
             }
         }
 
+        export async function checkIsRed(): Promise<boolean> {
+            for (const roomId of _joinedRoomIdSet) {
+                if (await checkIsRedForRoom(roomId)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        export async function checkIsRedForRoom(roomId: number): Promise<boolean> {
+            const roomInfo = await getRoomInfo(roomId);
+            if (roomInfo) {
+                const selfUserId        = User.UserModel.getSelfUserId();
+                const playerDataList    = roomInfo.playerDataList || [];
+                if (playerDataList.some(v => (v.userId === selfUserId) && (!v.isReady))) {
+                    return true;
+                }
+
+                if ((playerDataList.length === BwSettingsHelper.getPlayersCount(roomInfo.settingsForCommon.warRule)) &&
+                    (playerDataList.every(v => (v.isReady) && (v.userId != null)))
+                ) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for creating rooms.
         ////////////////////////////////////////////////////////////////////////////////////////////////////

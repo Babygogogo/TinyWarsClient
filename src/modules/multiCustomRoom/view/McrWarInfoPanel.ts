@@ -48,7 +48,6 @@ namespace TinyWars.MultiCustomRoom {
             ];
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgMpwCommonContinueWar,    callback: this._onMsgMpwCommonContinueWar },
             ];
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
 
@@ -99,11 +98,6 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
             this._updateComponentsForLanguage();
-        }
-
-        private _onMsgMpwCommonContinueWar(e: egret.Event): void {
-            const data = e.data as NetMessage.MsgMpwCommonContinueWar.IS;
-            FlowManager.gotoMultiCustomWar(data.war);
         }
 
         ////////////////////////////////////////////////////////////////////////////////

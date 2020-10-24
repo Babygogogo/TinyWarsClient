@@ -48,7 +48,7 @@ namespace TinyWars.SingleCustomWar {
             }
 
             const seedRandomInitialState = data.seedRandomInitialState;
-            if (seedRandomInitialState == null) {
+            if ((!settingsForScw.isCheating) && (seedRandomInitialState == null)) {
                 Logger.error(`ScwWar.init() empty seedRandomInitialState.`);
                 return undefined;
             }
@@ -256,6 +256,9 @@ namespace TinyWars.SingleCustomWar {
             return {
                 settingsForCommon,
                 settingsForScw,
+                settingsForMcw              : null,
+                settingsForRmw              : null,
+                settingsForWrw              : null,
 
                 warId                       : this.getWarId(),
                 seedRandomInitialState      : null,

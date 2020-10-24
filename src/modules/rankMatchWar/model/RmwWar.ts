@@ -151,7 +151,10 @@ namespace TinyWars.RankMatchWar {
 
             return {
                 settingsForCommon,
-                settingsForRmw,
+                settingsForRmw              : null,
+                settingsForMcw              : null,
+                settingsForWrw              : null,
+                settingsForScw              : { isCheating: true },
 
                 warId,
                 seedRandomInitialState      : null,

@@ -237,9 +237,10 @@ namespace TinyWars.MultiCustomRoom {
     }
 
     class WarRenderer extends eui.ItemRenderer {
-        private _btnChoose: GameUi.UiButton;
-        private _btnNext  : GameUi.UiButton;
-        private _labelName: GameUi.UiLabel;
+        private _btnChoose  : GameUi.UiButton;
+        private _btnNext    : GameUi.UiButton;
+        private _labelName  : GameUi.UiLabel;
+        private _imgRed     : GameUi.UiImage;
 
         protected childrenCreated(): void {
             super.childrenCreated();
@@ -248,18 +249,21 @@ namespace TinyWars.MultiCustomRoom {
             this._btnNext.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchTapBtnNext, this);
         }
 
-        protected dataChanged(): void {
+        protected async dataChanged(): Promise<void> {
             super.dataChanged();
 
-            const data          = this.data as DataForWarRenderer;
-            const roomInfo      = data.roomInfo;
-            this.currentState   = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
+            const data              = this.data as DataForWarRenderer;
+            const roomInfo          = data.roomInfo;
+            this.currentState       = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
+            this._imgRed.visible    = await McrModel.checkIsRedForRoom(roomInfo.roomId);
 
-            const warName = roomInfo.settingsForMcw.warName;
+            const warName   = roomInfo.settingsForMcw.warName;
+            const labelName = this._labelName;
             if (warName) {
-                this._labelName.text = warName;
+                labelName.text = warName;
             } else {
-                WarMapModel.getMapNameInCurrentLanguage(roomInfo.settingsForCommon.mapId).then(v => this._labelName.text = v);
+                labelName.text = "";
+                labelName.text = await WarMapModel.getMapNameInCurrentLanguage(roomInfo.settingsForCommon.mapId);
             }
         }
 
@@ -283,14 +287,12 @@ namespace TinyWars.MultiCustomRoom {
     class PlayerRenderer extends eui.ItemRenderer {
         private _labelName : GameUi.UiLabel;
         private _labelIndex: GameUi.UiLabel;
-        private _labelTeam : GameUi.UiLabel;
 
         protected dataChanged(): void {
             super.dataChanged();
 
             const data              = this.data as DataForPlayerRenderer;
-            this._labelIndex.text   = Lang.getPlayerForceName(data.playerIndex);
-            this._labelTeam.text    = data.teamIndex != null ? Lang.getPlayerTeamName(data.teamIndex) : "??";
+            this._labelIndex.text   = `${Lang.getPlayerForceName(data.playerIndex)} (${Lang.getPlayerTeamName(data.teamIndex)})`;
             User.UserModel.getUserNickname(data.userId).then(name => this._labelName.text = name || "----");
         }
     }

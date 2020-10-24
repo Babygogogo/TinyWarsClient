@@ -6,9 +6,17 @@ namespace TinyWars.SingleCustomWar {
         public startRunning(war: ScwWar): void {
             this._setWar(war);
 
-            const visibleTiles = VisibilityHelpers.getAllTilesVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
-            war.getTileMap().forEachTile(tile => {
+            const teamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
+            const visibleUnits  = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes);
+            war.getUnitMap().forEachUnitOnMap(unit => {
+                unit.setViewVisible(visibleUnits.has(unit));
+            });
+
+            const visibleTiles  = VisibilityHelpers.getAllTilesVisibleToTeams(war, teamIndexes);
+            const tileMap       = war.getTileMap();
+            tileMap.forEachTile(tile => {
                 tile.setHasFog(!visibleTiles.has(tile));
+                tile.flushDataToView();
             });
         }
     }

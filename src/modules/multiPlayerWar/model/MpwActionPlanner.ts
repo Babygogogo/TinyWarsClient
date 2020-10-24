@@ -64,8 +64,11 @@ namespace TinyWars.MultiPlayerWar {
                 } else if (nextState === State.PreviewingMovableArea) {
                     this._setStatePreviewingMovableAreaOnTap(gridIndex);
 
-                } else if (nextState === State.RequestingUnitAttack) {
-                    this._setStateRequestingUnitAttack(gridIndex);
+                } else if (nextState === State.RequestingUnitAttackUnit) {
+                    this._setStateRequestingUnitAttackUnit(gridIndex);
+
+                } else if (nextState === State.RequestingUnitAttackTile) {
+                    this._setStateRequestingUnitAttackTile(gridIndex);
 
                 } else if (nextState === State.RequestingUnitBeLoaded) {
                     Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() error 1, nextState: ${nextState}`);
@@ -276,11 +279,19 @@ namespace TinyWars.MultiPlayerWar {
             this._updateView();
         }
 
-        private _setStateRequestingUnitAttack(targetGridIndex: GridIndex): void {
+        private _setStateRequestingUnitAttackUnit(targetGridIndex: GridIndex): void {
             const unit = this.getFocusUnitLoaded();
-            MpwProxy.reqMcwUnitAttack(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined, targetGridIndex);
+            MpwProxy.reqMcwUnitAttackUnit(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined, targetGridIndex);
 
-            this._setState(State.RequestingUnitAttack);
+            this._setState(State.RequestingUnitAttackUnit);
+            this._updateView();
+        }
+
+        private _setStateRequestingUnitAttackTile(targetGridIndex: GridIndex): void {
+            const unit = this.getFocusUnitLoaded();
+            MpwProxy.reqMcwUnitAttackTile(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined, targetGridIndex);
+
+            this._setState(State.RequestingUnitAttackTile);
             this._updateView();
         }
 
@@ -479,7 +490,11 @@ namespace TinyWars.MultiPlayerWar {
                         return State.MakingMovePath;
                     } else {
                         if (this.getFocusUnit().checkCanAttackTargetAfterMovePath(this.getMovePath(), gridIndex)) {
-                            return State.RequestingUnitAttack;
+                            if (existingUnit) {
+                                return State.RequestingUnitAttackUnit;
+                            } else {
+                                return State.RequestingUnitAttackTile;
+                            }
                         } else {
                             return State.MakingMovePath;
                         }
@@ -510,7 +525,11 @@ namespace TinyWars.MultiPlayerWar {
                 return State.ChoosingAction;
             } else {
                 if (GridIndexHelpers.checkIsEqual(this.getCursor().getPreviousGridIndex(), gridIndex)) {
-                    return State.RequestingUnitAttack;
+                    if (this._getUnitMap().getUnitOnMap(gridIndex)) {
+                        return State.RequestingUnitAttackUnit;
+                    } else {
+                        return State.RequestingUnitAttackTile;
+                    }
                 } else {
                     return State.ChoosingAttackTarget;
                 }

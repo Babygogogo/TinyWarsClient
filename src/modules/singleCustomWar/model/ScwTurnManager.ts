@@ -35,7 +35,7 @@ namespace TinyWars.SingleCustomWar {
                     FloatText.show(Lang.getFormattedText(Lang.Type.F0014, name));
                 });
                 DestructionHelpers.destroyPlayerForce(war, playerIndex, true);
-                ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
             } else {
                 unitMap.forEachUnitOnMap(unit => (unit.getPlayerIndex() === playerIndex) && (unit.updateView()));
             }
@@ -49,7 +49,7 @@ namespace TinyWars.SingleCustomWar {
             war.getFogMap().resetMapFromPathsForPlayer(war.getPlayerIndexInTurn());
         }
         protected _runPhaseResetVisionForNextPlayer(): void {
-            ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(this.getWar());
+            ScwUtility.updateTilesAndUnitsOnVisibilityChanged(this.getWar());
         }
     }
 }

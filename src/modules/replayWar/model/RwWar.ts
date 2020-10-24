@@ -272,7 +272,9 @@ namespace TinyWars.ReplayWar {
             return {
                 settingsForCommon,
                 settingsForMcw              : null,
-                settingsForScw              : null,
+                settingsForScw              : { isCheating: true },
+                settingsForRmw              : null,
+                settingsForWrw              : null,
 
                 warId,
                 seedRandomInitialState      : null,

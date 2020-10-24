@@ -232,7 +232,13 @@ namespace TinyWars.RankMatchRoom.RmrModel {
                 return undefined;
             }
 
-            const dataListForBanCo = roomInfo.settingsForRmw?.dataListForBanCo;
+            const settingsForRmw = roomInfo.settingsForRmw;
+            if (settingsForRmw == null) {
+                Logger.error(`RmrModel.generateAvailableCoIdList() empty settingsForRmw.`);
+                return undefined;
+            }
+
+            const dataListForBanCo = settingsForRmw.dataListForBanCo;
             if (dataListForBanCo == null) {
                 Logger.error(`RmrModel.generateAvailableCoIdList() empty dataListForBanCo.`);
                 return undefined;
@@ -259,9 +265,8 @@ namespace TinyWars.RankMatchRoom.RmrModel {
 
             const availableCoIdList: number[] = [];
             for (const coId of rawAvailableCoIdList) {
-                if ((ConfigManager.getCoBasicCfg(configVersion, coId)?.isEnabled) &&
-                    (!bannedCoIds.has(coId))
-                ) {
+                const cfg = ConfigManager.getCoBasicCfg(configVersion, coId);
+                if ((cfg) && (cfg.isEnabled) &&(!bannedCoIds.has(coId))) {
                     availableCoIdList.push(coId);
                 }
             }

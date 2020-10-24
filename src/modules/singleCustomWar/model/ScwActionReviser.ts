@@ -41,7 +41,8 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         else if (container.PlayerDeleteUnit)    { return revisePlayerDeleteUnit(war, container); }
         else if (container.PlayerEndTurn)       { return revisePlayerEndTurn(war, container); }
         else if (container.PlayerProduceUnit)   { return revisePlayerProduceUnit(war, container); }
-        else if (container.UnitAttack)          { return reviseUnitAttackUnit(war, container); }
+        else if (container.UnitAttackUnit)      { return reviseUnitAttackUnit(war, container); }
+        else if (container.UnitAttackTile)      { return reviseUnitAttackTile(war, container); }
         else if (container.UnitBeLoaded)        { return reviseUnitBeLoaded(war, container); }
         else if (container.UnitBuildTile)       { return reviseUnitBuildTile(war, container); }
         else if (container.UnitCaptureTile)     { return reviseUnitCaptureTile(war, container); }
@@ -129,19 +130,14 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
-            `ScwActionReviser.reviseUnitAttack() invalid turn phase code: ${currPhaseCode}`
+            `ScwActionReviser.reviseUnitAttackUnit() invalid turn phase code: ${currPhaseCode}`
         );
 
-        const action                        = container.UnitAttack;
+        const action                        = container.UnitAttackUnit;
         const rawPath                       = action.path;
         const launchUnitId                  = action.launchUnitId;
         const targetGridIndex               = action.targetGridIndex;
         const revisedPath                   = getRevisedPath(war, rawPath, launchUnitId);
-        const unitMap                       = war.getUnitMap();
-        const attacker                      = unitMap.getUnit(revisedPath.nodes[0], launchUnitId);
-        const attackTarget                  = unitMap.getUnitOnMap(targetGridIndex) || war.getTileMap().getTile(targetGridIndex);
-        const [attackDamage, counterDamage] = DamageCalculator.getFinalBattleDamage(war, rawPath, launchUnitId, targetGridIndex);
-        const lostPlayerIndex               = getLostPlayerIndex(war, attacker, attackTarget, attackDamage, counterDamage);
         return {
             actionId            : war.getExecutedActionsCount(),
             ActionUnitAttackUnit : {
@@ -150,8 +146,28 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
                 targetGridIndex,
             },
         };
+    }
 
-        return null;
+    function reviseUnitAttackTile(war: ScwWar, container: RawWarAction): WarAction { // DONE
+        const currPhaseCode = war.getTurnManager().getPhaseCode();
+        Logger.assert(
+            currPhaseCode === TurnPhaseCode.Main,
+            `ScwActionReviser.reviseUnitAttackTile() invalid turn phase code: ${currPhaseCode}`
+        );
+
+        const action                        = container.UnitAttackTile;
+        const rawPath                       = action.path;
+        const launchUnitId                  = action.launchUnitId;
+        const targetGridIndex               = action.targetGridIndex;
+        const revisedPath                   = getRevisedPath(war, rawPath, launchUnitId);
+        return {
+            actionId            : war.getExecutedActionsCount(),
+            ActionUnitAttackTile : {
+                path    : revisedPath,
+                launchUnitId,
+                targetGridIndex,
+            },
+        };
     }
 
     function reviseUnitBeLoaded(war: BwWar, rawAction: RawWarAction): WarAction {   // DONE

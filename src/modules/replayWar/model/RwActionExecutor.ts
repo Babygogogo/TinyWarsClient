@@ -269,14 +269,13 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
             actionPlanner.setStateIdle();
 
         } else {
-            BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
-            unitMap.setUnitOnMap(attackerUnit);
-            attackerUnit.setActionState(UnitActionState.Acted);
-
             const attackerGridIndex             = pathNodes[pathNodes.length - 1];
             const targetGridIndex               = action.targetGridIndex as GridIndex;
             const [attackDamage, counterDamage] = DamageCalculator.getFinalBattleDamage(war, pathNodes, launchUnitId, targetGridIndex);
             const targetUnit                    = unitMap.getUnitOnMap(targetGridIndex);
+            BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+            unitMap.setUnitOnMap(attackerUnit);
+            attackerUnit.setActionState(UnitActionState.Acted);
 
             // Handle ammo.
             const attackerAmmo = attackerUnit.getPrimaryWeaponCurrentAmmo();
@@ -454,14 +453,14 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
             actionPlanner.setStateIdle();
 
         } else {
-            BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
-            unitMap.setUnitOnMap(attackerUnit);
-            attackerUnit.setActionState(UnitActionState.Acted);
-
             const targetGridIndex               = action.targetGridIndex as GridIndex;
             const [attackDamage, counterDamage] = DamageCalculator.getFinalBattleDamage(war, pathNodes, launchUnitId, targetGridIndex);
             const tileMap                       = war.getTileMap();
             const targetTile                    = tileMap.getTile(targetGridIndex);
+            BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+            unitMap.setUnitOnMap(attackerUnit);
+            attackerUnit.setActionState(UnitActionState.Acted);
+
             if (attackerUnit.getCfgBaseDamage(targetTile.getArmorType(), Types.WeaponType.Primary) != null) {
                 const attackerAmmo = attackerUnit.getPrimaryWeaponCurrentAmmo();
                 if ((attackerAmmo != null) && (attackerAmmo > 0)) {
@@ -711,11 +710,14 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
 
         const promises: Promise<void>[] = [];
         for (const unitForDrop of unitsForDrop) {
-            promises.push(unitForDrop.moveViewAlongPath(
-                [endingGridIndex, unitForDrop.getGridIndex()],
-                unitForDrop.getIsDiving(),
-                false,
-            ));
+            promises.push((async () => {
+                await unitForDrop.moveViewAlongPath(
+                    [endingGridIndex, unitForDrop.getGridIndex()],
+                    unitForDrop.getIsDiving(),
+                    false,
+                );
+                unitForDrop.updateView();
+            })());
         }
         await Promise.all(promises);
         RwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
@@ -1473,14 +1475,14 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
             unitMap.setUnitOnMap(attackerUnit);
             attackerUnit.setActionState(UnitActionState.Acted);
         } else {
-            BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
-            unitMap.setUnitOnMap(attackerUnit);
-            attackerUnit.setActionState(UnitActionState.Acted);
-
             const targetGridIndex               = action.targetGridIndex as GridIndex;
             const [attackDamage, counterDamage] = DamageCalculator.getFinalBattleDamage(war, pathNodes, launchUnitId, targetGridIndex);
             const tileMap                       = war.getTileMap();
             const targetTile                    = tileMap.getTile(targetGridIndex);
+            BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+            unitMap.setUnitOnMap(attackerUnit);
+            attackerUnit.setActionState(UnitActionState.Acted);
+
             if (attackerUnit.getCfgBaseDamage(targetTile.getArmorType(), Types.WeaponType.Primary) != null) {
                 const attackerAmmo = attackerUnit.getPrimaryWeaponCurrentAmmo();
                 if ((attackerAmmo != null) && (attackerAmmo > 0)) {

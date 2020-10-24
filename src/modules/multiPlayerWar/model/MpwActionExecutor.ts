@@ -577,11 +577,14 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
 
         const promises: Promise<void>[] = [];
         for (const unitForDrop of unitsForDrop) {
-            promises.push(unitForDrop.moveViewAlongPath(
-                [endingGridIndex, unitForDrop.getGridIndex()],
-                unitForDrop.getIsDiving(),
-                false,
-            ));
+            promises.push((async () => {
+                await unitForDrop.moveViewAlongPath(
+                    [endingGridIndex, unitForDrop.getGridIndex()],
+                    unitForDrop.getIsDiving(),
+                    false,
+                );
+                unitForDrop.updateView();
+            })());
         }
         await Promise.all(promises);
         MpwUtility.updateTilesAndUnitsOnVisibilityChanged(war);

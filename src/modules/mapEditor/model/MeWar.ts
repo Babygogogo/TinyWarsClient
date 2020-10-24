@@ -173,6 +173,10 @@ namespace TinyWars.MapEditor {
 
             return {
                 settingsForCommon,
+                settingsForMcw              : null,
+                settingsForRmw              : null,
+                settingsForScw              : { isCheating: true },
+                settingsForWrw              : null,
 
                 warId,
                 seedRandomInitialState      : null,

@@ -58,8 +58,11 @@ namespace TinyWars.ReplayWar {
                 } else if (nextState === State.PreviewingMovableArea) {
                     this._setStatePreviewingMovableAreaOnTap(gridIndex);
 
-                } else if (nextState === State.RequestingUnitAttack) {
+                } else if (nextState === State.RequestingUnitAttackUnit) {
                     Logger.error(`ReplayActionPlanner._onNotifyMcwCursorTapped() error 11, nextState: ${nextState}`);
+
+                } else if (nextState === State.RequestingUnitAttackTile) {
+                    Logger.error(`ReplayActionPlanner._onNotifyMcwCursorTapped() error 15, nextState: ${nextState}`);
 
                 } else if (nextState === State.RequestingUnitBeLoaded) {
                     Logger.error(`ReplayActionPlanner._onNotifyMcwCursorTapped() error 1, nextState: ${nextState}`);

@@ -229,6 +229,60 @@ namespace TinyWars.BaseWar {
         public getUnitOnMap(gridIndex: Types.GridIndex): BwUnit | undefined {
             return this._map[gridIndex.x][gridIndex.y];
         }
+        public getVisibleUnitOnMap(gridIndex: GridIndex): BwUnit | undefined | null {
+            const unit = this.getUnitOnMap(gridIndex);
+            if (unit == null) {
+                return null;
+            }
+
+            const war = this._war;
+            if (war == null) {
+                Logger.error(`BwUnitMap.getVisibleUnitOnMap() empty war.`);
+                return undefined;
+            }
+
+            const unitType = unit.getType();
+            if (unitType == null) {
+                Logger.error(`BwUnitMap.getVisibleUnitOnMap() empty unitType.`);
+                return undefined;
+            }
+
+            const isDiving = unit.getIsDiving();
+            if (isDiving == null) {
+                Logger.error(`BwUnitMap.getVisibleUnitOnMap() empty isDiving.`);
+                return undefined;
+            }
+
+            const playerInTurn = war.getPlayerInTurn();
+            if (playerInTurn == null) {
+                Logger.error(`BwUnitMap.getVisibleUnitOnMap() empty playerInTurn.`);
+                return undefined;
+            }
+
+            const observerTeamIndex = playerInTurn.getTeamIndex();
+            if (observerTeamIndex == null) {
+                Logger.error(`BwUnitMap.getVisibleUnitOnMap() empty observerTeamIndex.`);
+                return undefined;
+            }
+
+            const unitPlayerIndex = unit.getPlayerIndex();
+            if (unitPlayerIndex == null) {
+                Logger.error(`BwUnitMap.getVisibleUnitOnMap() empty unitPlayerIndex.`);
+                return undefined;
+            }
+
+            return (VisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
+                war,
+                unitType,
+                isDiving,
+                observerTeamIndex,
+                gridIndex,
+                unitPlayerIndex,
+            }))
+            ? unit
+            : null;
+        }
+
         public getUnitLoadedById(unitId: number): BwUnit | undefined {
             return this._loadedUnits.get(unitId);
         }
@@ -398,7 +452,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            return map.some(v => v.some(u => (u.getPlayerIndex() === playerIndex) && (u.getHasLoadedCo())));
+            return map.some(v => v.some(u => (u != null) && (u.getPlayerIndex() === playerIndex) && (u.getHasLoadedCo())));
         }
 
         public getCoGridIndexListOnMap(playerIndex: number): GridIndex[] | undefined {

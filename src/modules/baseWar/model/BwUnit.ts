@@ -725,7 +725,7 @@ namespace TinyWars.BaseWar {
                 }
             }
 
-            const targetUnit = unitMap.getUnitOnMap(targetGridIndex);
+            const targetUnit = unitMap.getVisibleUnitOnMap(targetGridIndex);
             if (targetUnit) {
                 const armorType = targetUnit.getArmorType();
                 return (targetUnit.getTeamIndex() !== teamIndex)

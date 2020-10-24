@@ -7,6 +7,7 @@ namespace TinyWars.MapEditor.MeUtility {
     import ConfigManager    = Utility.ConfigManager;
     import GridIndexHelpers = Utility.GridIndexHelpers;
     import BwSettingsHelper = BaseWar.BwSettingsHelper;
+    import BwHelpers        = BaseWar.BwHelpers;
     import BwTile           = BaseWar.BwTile;
     import GridIndex        = Types.GridIndex;
     import TileObjectType   = Types.TileObjectType;
@@ -325,7 +326,8 @@ namespace TinyWars.MapEditor.MeUtility {
         const indexes       = new Set<number>();
         const configVersion = ConfigManager.getLatestConfigVersion()!;
         for (const tileData of mapRawData.tileDataList || []) {
-            const { x: gridX, y: gridY } = tileData.gridIndex;
+            const gridIndex                 = tileData.gridIndex as GridIndex;
+            const { x: gridX, y: gridY }    = gridIndex;
             if ((gridX == null) || (gridY == null) || (gridX >= mapWidth || (gridY >= mapHeight))) {
                 return false;
             }
@@ -363,6 +365,15 @@ namespace TinyWars.MapEditor.MeUtility {
             const maxHp     = cfg.maxHp;
             if ((currHp != null)                    &&
                 ((maxHp == null) || (currHp >= maxHp))
+            ) {
+                return false;
+            }
+
+            if ((currHp != null)                                                        &&
+                ((mapRawData.unitDataList || []).some(v => {
+                    const g = BwHelpers.convertGridIndex(v.gridIndex);
+                    return ((g != null) && (GridIndexHelpers.checkIsEqual(g, gridIndex)))
+                }))
             ) {
                 return false;
             }

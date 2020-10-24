@@ -30,8 +30,9 @@
                     <e:List>
                         <e:itemRendererSkinName>
                             <e:Skin width="740" height="26" currentState="up" states="up,down">
-                                <GameUi:UiLabel id="_labelIndex" text="红方" size="18" verticalCenter="0" stroke="2" x="4" />
-                                <e:Group x="90" verticalCenter="0">
+                                <GameUi:UiLabel id="_labelIndex" text="红方" size="18" verticalCenter="0" stroke="2" x="4"
+                                                maxTextWidth="110" />
+                                <e:Group x="120" verticalCenter="0">
                                     <GameUi:UiLabel id="_labelName" text="玩家名称居然有十个字" x="0" size="18" verticalCenter="0"
                                                     stroke="2" textColor.down="0x00ff00" y="-7" scaleX="1" scaleY="1" />
                                     <GameUi:UiLabel id="_labelStatus" text="玩家名称居然有十个字" x="0" size="18"

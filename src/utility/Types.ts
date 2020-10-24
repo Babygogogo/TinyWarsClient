@@ -9,7 +9,8 @@ namespace TinyWars.Utility.Types {
         PlayerDeleteUnit?   : RawWarActionPlayerDeleteUnit;
         PlayerEndTurn?      : RawWarActionPlayerEndTurn;
         PlayerProduceUnit?  : RawWarActionPlayerProduceUnit;
-        UnitAttack?         : RawWarActionUnitAttack;
+        UnitAttackUnit?     : RawWarActionUnitAttackUnit;
+        UnitAttackTile?     : RawWarActionUnitAttackTile;
         UnitBeLoaded?       : RawWarActionUnitBeLoaded;
         UnitBuildTile?      : RawWarActionUnitBuildTile;
         UnitCaptureTile?    : RawWarActionUnitCaptureTile;
@@ -37,7 +38,12 @@ namespace TinyWars.Utility.Types {
         unitType    : UnitType;
         unitHp      : number;
     }
-    export type RawWarActionUnitAttack = {
+    export type RawWarActionUnitAttackUnit = {
+        path            : GridIndex[];
+        launchUnitId    : number | null;
+        targetGridIndex : GridIndex;
+    }
+    export type RawWarActionUnitAttackTile = {
         path            : GridIndex[];
         launchUnitId    : number | null;
         targetGridIndex : GridIndex;
@@ -371,7 +377,8 @@ namespace TinyWars.Utility.Types {
         RequestingPlayerSurrender,
         RequestingPlayerVoteForDraw,
         RequestingPlayerProduceUnit,
-        RequestingUnitAttack,
+        RequestingUnitAttackUnit,
+        RequestingUnitAttackTile,
         RequestingUnitBeLoaded,
         RequestingUnitBuildTile,
         RequestingUnitCaptureTile,
