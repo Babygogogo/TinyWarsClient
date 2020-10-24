@@ -1146,10 +1146,11 @@ namespace TinyWars.Utility.ConfigManager {
     }
 
     export function getCoNameAndTierText(version: string, coId: number | null): string {
-        const coConfig = coId == null ? null : Utility.ConfigManager.getCoBasicCfg(version, coId);
+        const coConfig = coId == null ? null : getCoBasicCfg(version, coId);
         return coConfig
-            ? `(${coConfig.name}(T${coConfig.tier}))`
-            : `(${Lang.getText(Lang.Type.B0211)} CO)`;
+            // ? `(${coConfig.name}(T${coConfig.tier}))`
+            ? `${coConfig.name}`
+            : undefined;
     }
 
     export function getCoSkillCfg(version: string, skillId: number): CoSkillCfg | null {

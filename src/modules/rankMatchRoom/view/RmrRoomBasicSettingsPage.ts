@@ -115,8 +115,10 @@ namespace TinyWars.RankMatchRoom {
         private _onMsgRmrGetRoomPublicInfo(e: egret.Event): void {
             const data          = e.data as NetMessage.MsgRmrGetRoomPublicInfo.IS;
             const currRoomInfo  = this._roomInfo;
-            if ((currRoomInfo) && (data.roomId === currRoomInfo.roomId)) {
-                this._roomInfo = data.roomInfo;
+            const newRoomInfo   = data.roomInfo;
+            if ((currRoomInfo) && (newRoomInfo.roomId === currRoomInfo.roomId)) {
+                RmrModel.SelfSettings.resetData(newRoomInfo)
+                this._roomInfo = newRoomInfo;
                 this._updateComponentsForRoomInfo();
             }
         }

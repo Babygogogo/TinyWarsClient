@@ -683,7 +683,7 @@ namespace TinyWars.Utility.Lang {
         ],
         [Type.A0138]: [
             `确定要禁用这些CO吗？`,
-            `Are you sure to ban these CO?`,
+            `Are you sure to ban these COs?`,
         ],
         [Type.A0139]: [
             `确定要不禁用任何CO吗？`,

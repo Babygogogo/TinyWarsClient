@@ -6,8 +6,8 @@ namespace TinyWars.RankMatchRoom {
     import Notify           = Utility.Notify;
     import ConfigManager    = Utility.ConfigManager;
     import ProtoTypes       = Utility.ProtoTypes;
+    import Logger           = Utility.Logger;
     import IRmrRoomInfo     = ProtoTypes.RankMatchRoom.IRmrRoomInfo;
-    import ConfirmPanel     = Common.CommonConfirmPanel;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
     export class RmrRoomAvailableCoPanel extends GameUi.UiPanel {
@@ -121,7 +121,8 @@ namespace TinyWars.RankMatchRoom {
                 }
             }
 
-            if (bannedCoIdList.length > CommonConstants.RankMaxBanCoCount) {
+            const bannedCoCount = bannedCoIdList.length;
+            if (bannedCoCount > CommonConstants.RankMaxBanCoCount) {
                 Common.CommonAlertPanel.show({
                     title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getFormattedText(Lang.Type.F0031, CommonConstants.RankMaxBanCoCount),
@@ -129,11 +130,14 @@ namespace TinyWars.RankMatchRoom {
                 return;
             }
 
+            const roomInfo = this._roomInfo;
             Common.CommonConfirmPanel.show({
                 title   : Lang.getText(Lang.Type.B0088),
-                content : bannedCoIdList.length ? Lang.getText(Lang.Type.A0138) : Lang.getText(Lang.Type.A0139),
+                content : bannedCoCount
+                    ? Lang.getText(Lang.Type.A0138) + `\n${generateCoNameList(roomInfo.settingsForCommon.configVersion, bannedCoIdList)}`
+                    : Lang.getText(Lang.Type.A0139),
                 callback: () => {
-                    RmrProxy.reqRmrSetBannedCoIdList(this._roomInfo.roomId, bannedCoIdList);
+                    RmrProxy.reqRmrSetBannedCoIdList(roomInfo.roomId, bannedCoIdList);
                     this.close();
                 },
             });
@@ -145,23 +149,19 @@ namespace TinyWars.RankMatchRoom {
             const allCoIdSet        = this._allCoIdSet;
             const configVersion     = this._roomInfo.settingsForCommon.configVersion;
             const coIdList          = renderer.getIsCustomSwitch()
-                ? ConfigManager.getAvailableCustomCoIdList(configVersion)
-                : ConfigManager.getAvailableCoIdListInTier(configVersion, renderer.getCoTier());
+                ? ConfigManager.getAvailableCustomCoIdList(configVersion).filter(v => allCoIdSet.has(v))
+                : ConfigManager.getAvailableCoIdListInTier(configVersion, renderer.getCoTier()).filter(v => allCoIdSet.has(v));
 
             if (renderer.getState() === CoTierState.Unavailable) {
                 for (const coId of coIdList) {
-                    if (allCoIdSet.has(coId)) {
-                        availableCoIdSet.add(coId);
-                    }
+                    availableCoIdSet.add(coId);
                 }
                 this._updateGroupCoTiers();
                 this._updateGroupCoNames();
 
             } else {
                 for (const coId of coIdList) {
-                    if (allCoIdSet.has(coId)) {
-                        availableCoIdSet.delete(coId);
-                    }
+                    availableCoIdSet.delete(coId);
                 }
                 this._updateGroupCoTiers();
                 this._updateGroupCoNames();
@@ -225,15 +225,19 @@ namespace TinyWars.RankMatchRoom {
             const configVersion     = this._roomInfo.settingsForCommon.configVersion;
             for (const renderer of this._renderersForCoTiers) {
                 const includedCoIdList = renderer.getIsCustomSwitch()
-                    ? ConfigManager.getAvailableCustomCoIdList(configVersion)
-                    : ConfigManager.getAvailableCoIdListInTier(configVersion, renderer.getCoTier());
+                    ? ConfigManager.getAvailableCustomCoIdList(configVersion).filter(v => allCoIdSet.has(v))
+                    : ConfigManager.getAvailableCoIdListInTier(configVersion, renderer.getCoTier()).filter(v => allCoIdSet.has(v));
 
-                if (includedCoIdList.every(coId => (allCoIdSet.has(coId)) && (availableCoIdSet.has(coId)))) {
-                    renderer.setState(CoTierState.AllAvailable);
-                } else if (includedCoIdList.every(coId => (allCoIdSet.has(coId)) && (!availableCoIdSet.has(coId)))) {
+                if (includedCoIdList.length <= 0) {
                     renderer.setState(CoTierState.Unavailable);
                 } else {
-                    renderer.setState(CoTierState.PartialAvailable);
+                    if (includedCoIdList.every(coId => availableCoIdSet.has(coId))) {
+                        renderer.setState(CoTierState.AllAvailable);
+                    } else if (includedCoIdList.every(coId => !availableCoIdSet.has(coId))) {
+                        renderer.setState(CoTierState.Unavailable);
+                    } else {
+                        renderer.setState(CoTierState.PartialAvailable);
+                    }
                 }
             }
         }
@@ -367,5 +371,19 @@ namespace TinyWars.RankMatchRoom {
             }
         }
         return coIds;
+    }
+
+    function generateCoNameList(configVersion: string, coIdList: number[]): string {
+        const nameList: string[] = [];
+        for (const coId of coIdList) {
+            const name = ConfigManager.getCoNameAndTierText(configVersion, coId);
+            if (name == null) {
+                Logger.error(`RmrRoomAvailableCoPanel.generateCoNameList() invalid coId.`);
+                return undefined;
+            }
+
+            nameList.push(name);
+        }
+        return nameList.join(`\n`);
     }
 }
