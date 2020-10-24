@@ -164,24 +164,15 @@
                 <e:VerticalLayout gap="10" />
             </e:layout>
         </e:Group>
-        <e:Group y="180" x="350">
+        <e:Group y="110" x="370">
             <GameUi:UiLabel id="_labelPlayersTitle" text="已参战玩家：" size="20" scaleX="1" scaleY="1" />
             <GameUi:UiScrollList id="_listPlayer" left="0" right="0" top="25" bottom="0">
                 <e:List>
                     <e:itemRendererSkinName>
-                        <e:Skin width="390">
-                            <GameUi:UiLabel id="_labelIndex" text="红方" size="16" x="4" maxTextWidth="60"
-                                            verticalCenter="0" />
-                            <e:Group x="70" verticalCenter="0">
-                                <GameUi:UiLabel id="_labelNickname" text="玩家名称居然有十个字" x="-9" size="16"
-                                                verticalCenter="0" y="89" scaleX="1" scaleY="1" />
-                                <GameUi:UiButton id="_btnDelete" label="踢出"
-                                                 skinName="Skins.Component.Button.ButtonSelfAdaption001" right="0"
-                                                 x="271" y="-7" scaleX="1" scaleY="1" />
-                                <e:layout>
-                                    <e:HorizontalLayout verticalAlign="middle" />
-                                </e:layout>
-                            </e:Group>
+                        <e:Skin width="370">
+                            <GameUi:UiLabel id="_labelIndex" text="红方" size="16" verticalCenter="0" />
+                            <GameUi:UiLabel id="_labelNickname" text="玩家名称居然有十个字" x="100" size="16" verticalCenter="0"
+                                            y="89" scaleX="1" scaleY="1" width="270" />
                         </e:Skin>
                     </e:itemRendererSkinName>
                     <e:layout>
@@ -189,6 +180,9 @@
                     </e:layout>
                 </e:List>
             </GameUi:UiScrollList>
+            <e:layout>
+                <e:VerticalLayout/>
+            </e:layout>
         </e:Group>
     </e:Group>
 </e:Skin>

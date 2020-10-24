@@ -119,10 +119,12 @@ namespace TinyWars.ReplayWar {
             this._setTurnManager(turnManager);
             this._setField(field);
 
+            const warDataForCheckPoint                  = Helpers.deepClone(warData);
+            warDataForCheckPoint.seedRandomCurrentState = warDataForCheckPoint.seedRandomInitialState;
             this.setCheckPointId(0, 0);
             this.setCheckPointData(0, {
                 nextActionId    : 0,
-                warData,
+                warData         : warDataForCheckPoint,
             });
 
             // await Helpers.checkAndCallLater();

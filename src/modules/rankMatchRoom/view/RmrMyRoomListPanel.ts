@@ -264,14 +264,12 @@ namespace TinyWars.RankMatchRoom {
     class PlayerRenderer extends eui.ItemRenderer {
         private _labelName : GameUi.UiLabel;
         private _labelIndex: GameUi.UiLabel;
-        private _labelTeam : GameUi.UiLabel;
 
         protected dataChanged(): void {
             super.dataChanged();
 
             const data              = this.data as DataForPlayerRenderer;
-            this._labelIndex.text   = Lang.getPlayerForceName(data.playerIndex);
-            this._labelTeam.text    = data.teamIndex != null ? Lang.getPlayerTeamName(data.teamIndex) : "??";
+            this._labelIndex.text   = `${Lang.getPlayerForceName(data.playerIndex)} (${Lang.getPlayerTeamName(data.teamIndex)})`;
             User.UserModel.getUserNickname(data.userId).then(name => this._labelName.text = name || "----");
         }
     }

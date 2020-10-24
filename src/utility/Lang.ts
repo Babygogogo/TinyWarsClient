@@ -659,7 +659,7 @@ namespace TinyWars.Utility.Lang {
         ],
         [Type.A0132]: [
             `请设定您愿意同时进行的排位赛的数量上限（设置为0等同于您不参加排位赛）。`,
-            `Please set the maximum number of qualifying matches you are willing to play at the same time (setting it to 0 is equivalent to not participating in qualifying).`,
+            `Please set the maximum number of qualifying matches you are willing to play at the same time (setting it to 0 is equivalent to not participating in qualifying matches).`,
         ],
         [Type.A0133]: [
             `正在等待对战各方禁用CO。`,

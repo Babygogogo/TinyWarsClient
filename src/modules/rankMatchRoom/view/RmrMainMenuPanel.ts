@@ -39,8 +39,10 @@ namespace TinyWars.RankMatchRoom {
                 { ui: this._btnBack, callback: this._onTouchedBtnBack },
             ];
             this._notifyListeners = [
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgUserLogout,      callback: this._onMsgUserLogout },
+                { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.MsgUserLogout,                  callback: this._onMsgUserLogout },
+                { type: Notify.Type.MsgRmrGetRoomPublicInfo,        callback: this._onMsgRmrGetRoomPublicInfo },
+                { type: Notify.Type.MsgRmrGetMyRoomPublicInfoList,  callback: this._onMsgRmrGetMyRoomPublicInfoList },
             ];
 
             this._listCommand.setItemRenderer(CommandRenderer);
@@ -67,13 +69,27 @@ namespace TinyWars.RankMatchRoom {
         private _onMsgUserLogout(e: egret.Event): void {
             RmrMainMenuPanel.hide();
         }
+        private _onMsgRmrGetRoomPublicInfo(e: egret.Event): void {
+            this._listCommand.refresh();
+        }
+        private _onMsgRmrGetMyRoomPublicInfoList(e: egret.Event): void {
+            this._updateListCommand();
+        }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
+            this._updateComponentsForLanguage();
+            this._updateListCommand();
+        }
+
+        private _updateComponentsForLanguage(): void {
             this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0404);
             this._btnBack.label         = Lang.getText(Lang.Type.B0146);
+        }
+
+        private _updateListCommand(): void {
             this._listCommand.bindData(this._createDataForListCommand());
         }
 

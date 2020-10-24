@@ -3,9 +3,7 @@ namespace TinyWars.RankMatchRoom {
     import Lang         = Utility.Lang;
     import Notify       = Utility.Notify;
     import ProtoTypes   = Utility.ProtoTypes;
-    import FlowManager  = Utility.FlowManager;
     import McwProxy     = MultiPlayerWar.MpwProxy;
-    import NetMessage   = ProtoTypes.NetMessage;
     import IMpwWarInfo  = ProtoTypes.MultiPlayerWar.IMpwWarInfo;
 
     export class RmrWarInfoPanel extends GameUi.UiPanel {
