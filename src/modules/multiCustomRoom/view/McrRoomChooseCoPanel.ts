@@ -298,13 +298,16 @@ namespace TinyWars.MultiCustomRoom {
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
             const data              = this.data as DataForCoRenderer;
             const selfPlayerData    = data.selfPlayerData;
+            const newCoId           = data.coBasicCfg.coId;
             const roomId            = data.roomInfo.roomId;
-            McrProxy.reqMcrSetSelfSettings({
-                roomId,
-                playerIndex         : selfPlayerData.playerIndex,
-                coId                : data.coBasicCfg.coId,
-                unitAndTileSkinId   : selfPlayerData.unitAndTileSkinId,
-            });
+            if (newCoId !== selfPlayerData.coId) {
+                McrProxy.reqMcrSetSelfSettings({
+                    roomId,
+                    playerIndex         : selfPlayerData.playerIndex,
+                    coId                : newCoId,
+                    unitAndTileSkinId   : selfPlayerData.unitAndTileSkinId,
+                });
+            }
             data.panel.close();
             McrRoomInfoPanel.show(roomId);
         }
