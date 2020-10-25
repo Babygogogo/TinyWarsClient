@@ -67,7 +67,7 @@ namespace TinyWars.Login {
             FloatText.show(Lang.getText(Lang.Type.A0004));
 
             const account   = data.account;
-            const password  = data.password;
+            const password  = this._inputPassword.text;
             LocalStorage.setAccount(account);
             LocalStorage.setPassword(password);
             User.UserModel.setSelfAccount(account);
