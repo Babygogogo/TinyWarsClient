@@ -419,9 +419,7 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
                 focusUnit.setIsBuildingTile(false);
                 focusUnit.setCurrentBuildMaterial(focusUnit.getCurrentBuildMaterial() - 1);
                 tile.resetByTypeAndPlayerIndex(
-                    targetTileCfg.dstBaseType,
-                    targetTileCfg.dstObjectType,
-                    focusUnit.getPlayerIndex(),
+                    { baseType: targetTileCfg.dstBaseType, objectType: targetTileCfg.dstObjectType, playerIndex: focusUnit.getPlayerIndex() },
                 );
             }
         }
@@ -469,9 +467,7 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
                 focusUnit.setIsCapturingTile(false);
                 tile.setCurrentCapturePoint(tile.getMaxCapturePoint());
                 tile.resetByTypeAndPlayerIndex(
-                    tile.getBaseType(),
-                    tileObjectType === Types.TileObjectType.Headquarters ? Types.TileObjectType.City : tileObjectType,
-                    focusUnit.getPlayerIndex(),
+                    { baseType: tile.getBaseType(), objectType: tileObjectType === Types.TileObjectType.Headquarters ? Types.TileObjectType.City : tileObjectType, playerIndex: focusUnit.getPlayerIndex() },
                 );
             }
 
@@ -744,9 +740,7 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
             const targetGridIndex   = action.targetGridIndex as GridIndex;
             const tile              = war.getTileMap().getTile(pathNodes[pathNodes.length - 1]);
             tile.resetByTypeAndPlayerIndex(
-                tile.getBaseType(),
-                Types.TileObjectType.EmptySilo,
-                CommonConstants.WarNeutralPlayerIndex,
+                { baseType: tile.getBaseType(), objectType: Types.TileObjectType.EmptySilo, playerIndex: CommonConstants.WarNeutralPlayerIndex },
             );
 
             const targetGrids   = GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, Utility.ConfigManager.SILO_RADIUS, unitMap.getMapSize());

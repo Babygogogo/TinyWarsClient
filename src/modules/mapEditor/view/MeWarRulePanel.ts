@@ -205,6 +205,8 @@ namespace TinyWars.MapEditor {
 
                         if (!nameList.length) {
                             FloatText.show(Lang.getText(Lang.Type.A0098));
+                        } else if (nameList.some(v => v.length > CommonConstants.WarRuleNameMaxLength)) {
+                            FloatText.show(Lang.getFormattedText(Lang.Type.F0032, CommonConstants.WarRuleNameMaxLength))
                         } else {
                             rule.ruleNameList.length = 0;
                             for (const ruleName of nameList) {

@@ -543,7 +543,12 @@ namespace TinyWars.MapEditor {
             return {
                 name    : Lang.getText(Lang.Type.B0325),
                 callback: () => {
-                    SingleCustomRoom.ScrCreateCustomSaveSlotsPanel.show(war.serializeForSimulation());
+                    const invalidationType = MeUtility.getMapInvalidationType(war.serializeForMap());
+                    if (invalidationType === Types.CustomMapInvalidationType.Valid) {
+                        SingleCustomRoom.ScrCreateCustomSaveSlotsPanel.show(war.serializeForSimulation());
+                    } else {
+                        FloatText.show(Lang.getMapInvalidationDesc(invalidationType));
+                    }
                 },
             };
         }

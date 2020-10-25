@@ -2732,6 +2732,10 @@ namespace TinyWars.Utility.Lang {
             `您最多只能禁用%d名CO。`,
             `You can only ban up to %d COs.`,
         ],
+        [Type.F0032]: [
+            `请把名称长度控制在%d个字符以内。`,
+            `Please limit the length of the name to %d characters.`
+        ],
     };
 
     const NET_ERROR_TEXT = {
@@ -3260,6 +3264,18 @@ namespace TinyWars.Utility.Lang {
             case Types.MapReviewStatus.Rejected     : return getText(Type.B0275);
             case Types.MapReviewStatus.Accepted     : return getText(Type.B0276);
             default                                 : return null;
+        }
+    }
+
+    export function getMapInvalidationDesc(type: Types.CustomMapInvalidationType): string {
+        switch (type) {
+            case Types.CustomMapInvalidationType.InvalidMapDesigner     : return Lang.getText(Lang.Type.A0118);
+            case Types.CustomMapInvalidationType.InvalidMapName         : return Lang.getText(Lang.Type.A0119);
+            case Types.CustomMapInvalidationType.InvalidPlayersCount    : return Lang.getText(Lang.Type.A0121);
+            case Types.CustomMapInvalidationType.InvalidTiles           : return Lang.getText(Lang.Type.A0123);
+            case Types.CustomMapInvalidationType.InvalidUnits           : return Lang.getText(Lang.Type.A0122);
+            case Types.CustomMapInvalidationType.InvalidWarRuleList     : return Lang.getText(Lang.Type.A0124);
+            default                                                     : return "";
         }
     }
 

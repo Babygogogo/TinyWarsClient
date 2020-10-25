@@ -366,11 +366,11 @@ namespace TinyWars.BaseWar {
             return this._templateCfg.type;
         }
 
-        public resetByTypeAndPlayerIndex(
-            baseType    : TileBaseType,
-            objectType  : TileObjectType,
-            playerIndex : number,
-        ): void {
+        public resetByTypeAndPlayerIndex({ baseType, objectType, playerIndex }: {
+            baseType        : TileBaseType;
+            objectType      : TileObjectType;
+            playerIndex     : number;
+        }): void {
             const configVersion = this.getConfigVersion();
             if (configVersion == null) {
                 Logger.error(`BwTile.resetByTypeAndPlayerIndex() configVersion is empty.`)
@@ -399,6 +399,8 @@ namespace TinyWars.BaseWar {
                 objectType,
                 baseType,
                 playerIndex,
+                baseShapeId     : baseType === this.getBaseType() ? this.getBaseShapeId() : null,
+                objectShapeId   : objectType === this.getObjectType() ? this.getObjectShapeId() : null,
             }, configVersion)) {
                 Logger.error(`BwTile.resetByTypeAndPlayerIndex() failed to init!`);
                 return undefined;
@@ -407,11 +409,11 @@ namespace TinyWars.BaseWar {
         }
 
         public destroyTileObject(): void {
-            this.resetByTypeAndPlayerIndex(
-                this.getBaseType(),
-                TileObjectType.Empty,
-                CommonConstants.WarNeutralPlayerIndex,
-            )
+            this.resetByTypeAndPlayerIndex({
+                baseType        : this.getBaseType(),
+                objectType      : TileObjectType.Empty,
+                playerIndex     : CommonConstants.WarNeutralPlayerIndex,
+            });
         }
 
         ////////////////////////////////////////////////////////////////////////////////

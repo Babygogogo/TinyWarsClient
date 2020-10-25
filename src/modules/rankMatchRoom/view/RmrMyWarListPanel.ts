@@ -244,7 +244,8 @@ namespace TinyWars.RankMatchRoom {
         }
 
         private _checkIsInTurn(info: IMpwWarInfo): boolean {
-            return info.playerInfoList.find(v => v.playerIndex === info.playerIndexInTurn).userId === User.UserModel.getSelfUserId();
+            const playerData = info.playerInfoList.find(v => v.playerIndex === info.playerIndexInTurn);
+            return (playerData != null) && (playerData.userId === User.UserModel.getSelfUserId());
         }
     }
 

@@ -3,7 +3,6 @@ namespace TinyWars.SingleCustomRoom {
     import Notify       = Utility.Notify;
     import Lang         = Utility.Lang;
     import ProtoTypes   = Utility.ProtoTypes;
-    import Types        = Utility.Types;
     import ISerialWar   = ProtoTypes.WarSerialization.ISerialWar;
 
     export type OpenDataForScrCreateCustomSaveSlotsPanel = ISerialWar;

@@ -70,7 +70,7 @@ namespace TinyWars.MapEditor {
             this._mapRawData                = mapRawData;
             this._slotIndex                 = war.getMapSlotIndex();
             this._groupNeedReview.visible   = invalidationType === InvalidationType.Valid;
-            this._labelReviewDesc.text      = getMapInvalidationDesc(invalidationType);
+            this._labelReviewDesc.text      = Lang.getMapInvalidationDesc(invalidationType);
         }
 
         private _onTouchedBtnCancel(e: egret.TouchEvent): void {
@@ -114,18 +114,6 @@ namespace TinyWars.MapEditor {
 
         private _updateImgNeedReview(): void {
             this._imgNeedReview.visible = this._needReview;
-        }
-    }
-
-    function getMapInvalidationDesc(type: InvalidationType): string {
-        switch (type) {
-            case InvalidationType.InvalidMapDesigner    : return Lang.getText(Lang.Type.A0118);
-            case InvalidationType.InvalidMapName        : return Lang.getText(Lang.Type.A0119);
-            case InvalidationType.InvalidPlayersCount   : return Lang.getText(Lang.Type.A0121);
-            case InvalidationType.InvalidTiles          : return Lang.getText(Lang.Type.A0123);
-            case InvalidationType.InvalidUnits          : return Lang.getText(Lang.Type.A0122);
-            case InvalidationType.InvalidWarRuleList    : return Lang.getText(Lang.Type.A0124);
-            default: return "";
         }
     }
 }

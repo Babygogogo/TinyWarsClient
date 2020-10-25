@@ -117,12 +117,6 @@ namespace TinyWars.MapEditor {
         }
 
         public serializeForSimulation(): ISerialWar | undefined {
-            const warId = this.getWarId();
-            if (warId == null) {
-                Logger.error(`MeWar.serializeForSimulation() empty warId.`);
-                return undefined;
-            }
-
             const settingsForCommon = this.getSettingsForCommon();
             if (settingsForCommon == null) {
                 Logger.error(`MeWar.serializeForSimulation() empty settingsForCommon.`);
@@ -178,9 +172,9 @@ namespace TinyWars.MapEditor {
                 settingsForScw              : { isCheating: true },
                 settingsForWrw              : null,
 
-                warId,
-                seedRandomInitialState      : null,
-                seedRandomCurrentState      : new Math.seedrandom("" + Math.random(), { state: true }).state(),
+                warId                       : this.getWarId(),
+                seedRandomInitialState      : new Math.seedrandom("" + Math.random(), { state: true }).state(),
+                seedRandomCurrentState      : null,
                 executedActions             : [],
                 executedActionsCount,
                 remainingVotesForDraw       : this.getRemainingVotesForDraw(),
