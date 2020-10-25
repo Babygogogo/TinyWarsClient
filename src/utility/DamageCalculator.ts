@@ -229,7 +229,7 @@ namespace TinyWars.Utility.DamageCalculator {
             return undefined;
         }
 
-        return Math.max(0, Math.floor(
+        return Math.max(0, Math.floor(0.000001 +
             (baseAttackDamage * attackBonusMultiplier + luckValue)  *
             (BwHelpers.getNormalizedHp(attackerHp) / 10)            *
             defenseBonusMultiplier
