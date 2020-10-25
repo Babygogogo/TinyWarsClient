@@ -150,12 +150,15 @@ namespace TinyWars.MultiCustomRoom {
             if (roomInfo) {
                 const selfUserId        = User.UserModel.getSelfUserId();
                 const playerDataList    = roomInfo.playerDataList || [];
-                if (playerDataList.some(v => (v.userId === selfUserId) && (!v.isReady))) {
+                const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
+                if ((selfPlayerData) && (!selfPlayerData.isReady)) {
                     return true;
                 }
 
-                if ((playerDataList.length === BwSettingsHelper.getPlayersCount(roomInfo.settingsForCommon.warRule)) &&
-                    (playerDataList.every(v => (v.isReady) && (v.userId != null)))
+                if ((playerDataList.length === BwSettingsHelper.getPlayersCount(roomInfo.settingsForCommon.warRule))    &&
+                    (playerDataList.every(v => (v.isReady) && (v.userId != null)))                                      &&
+                    (selfPlayerData)                                                                                    &&
+                    (roomInfo.ownerPlayerIndex === selfPlayerData.playerIndex)
                 ) {
                     return true;
                 }
