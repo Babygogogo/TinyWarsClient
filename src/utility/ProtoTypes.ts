@@ -14505,6 +14505,9 @@ export declare namespace NetMessage {
         /** MessageContainer MsgUserSetDiscordId */
         MsgUserSetDiscordId?: (NetMessage.IMsgUserSetDiscordId|null);
 
+        /** MessageContainer MsgUserSetPrivilege */
+        MsgUserSetPrivilege?: (NetMessage.IMsgUserSetPrivilege|null);
+
         /** MessageContainer MsgMapGetEnabledExtraDataList */
         MsgMapGetEnabledExtraDataList?: (NetMessage.IMsgMapGetEnabledExtraDataList|null);
 
@@ -14793,6 +14796,9 @@ export declare namespace NetMessage {
 
         /** MessageContainer MsgUserSetDiscordId. */
         public MsgUserSetDiscordId?: (NetMessage.IMsgUserSetDiscordId|null);
+
+        /** MessageContainer MsgUserSetPrivilege. */
+        public MsgUserSetPrivilege?: (NetMessage.IMsgUserSetPrivilege|null);
 
         /** MessageContainer MsgMapGetEnabledExtraDataList. */
         public MsgMapGetEnabledExtraDataList?: (NetMessage.IMsgMapGetEnabledExtraDataList|null);
@@ -18261,6 +18267,291 @@ export declare namespace NetMessage {
              * @returns Plain object
              */
             public static toObject(message: NetMessage.MsgUserGetOnlineUsers.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Properties of a MsgUserSetPrivilege. */
+    interface IMsgUserSetPrivilege {
+
+        /** MsgUserSetPrivilege c */
+        c?: (NetMessage.MsgUserSetPrivilege.IC|null);
+
+        /** MsgUserSetPrivilege s */
+        s?: (NetMessage.MsgUserSetPrivilege.IS|null);
+    }
+
+    /** Represents a MsgUserSetPrivilege. */
+    class MsgUserSetPrivilege implements IMsgUserSetPrivilege {
+
+        /**
+         * Constructs a new MsgUserSetPrivilege.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: NetMessage.IMsgUserSetPrivilege);
+
+        /** MsgUserSetPrivilege c. */
+        public c?: (NetMessage.MsgUserSetPrivilege.IC|null);
+
+        /** MsgUserSetPrivilege s. */
+        public s?: (NetMessage.MsgUserSetPrivilege.IS|null);
+
+        /**
+         * Creates a new MsgUserSetPrivilege instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MsgUserSetPrivilege instance
+         */
+        public static create(properties?: NetMessage.IMsgUserSetPrivilege): NetMessage.MsgUserSetPrivilege;
+
+        /**
+         * Encodes the specified MsgUserSetPrivilege message. Does not implicitly {@link NetMessage.MsgUserSetPrivilege.verify|verify} messages.
+         * @param message MsgUserSetPrivilege message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: NetMessage.IMsgUserSetPrivilege, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MsgUserSetPrivilege message, length delimited. Does not implicitly {@link NetMessage.MsgUserSetPrivilege.verify|verify} messages.
+         * @param message MsgUserSetPrivilege message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: NetMessage.IMsgUserSetPrivilege, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MsgUserSetPrivilege message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MsgUserSetPrivilege
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserSetPrivilege;
+
+        /**
+         * Decodes a MsgUserSetPrivilege message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MsgUserSetPrivilege
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserSetPrivilege;
+
+        /**
+         * Verifies a MsgUserSetPrivilege message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MsgUserSetPrivilege message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MsgUserSetPrivilege
+         */
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserSetPrivilege;
+
+        /**
+         * Creates a plain object from a MsgUserSetPrivilege message. Also converts values to other types if specified.
+         * @param message MsgUserSetPrivilege
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: NetMessage.MsgUserSetPrivilege, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MsgUserSetPrivilege to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace MsgUserSetPrivilege {
+
+        /** Properties of a C. */
+        interface IC {
+
+            /** C userId */
+            userId?: (number|null);
+
+            /** C userPrivilege */
+            userPrivilege?: (User.IUserPrivilege|null);
+        }
+
+        /** Represents a C. */
+        class C implements IC {
+
+            /**
+             * Constructs a new C.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgUserSetPrivilege.IC);
+
+            /** C userId. */
+            public userId: number;
+
+            /** C userPrivilege. */
+            public userPrivilege?: (User.IUserPrivilege|null);
+
+            /**
+             * Creates a new C instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C instance
+             */
+            public static create(properties?: NetMessage.MsgUserSetPrivilege.IC): NetMessage.MsgUserSetPrivilege.C;
+
+            /**
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgUserSetPrivilege.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgUserSetPrivilege.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgUserSetPrivilege.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgUserSetPrivilege.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserSetPrivilege.C;
+
+            /**
+             * Decodes a C message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserSetPrivilege.C;
+
+            /**
+             * Verifies a C message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a C message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserSetPrivilege.C;
+
+            /**
+             * Creates a plain object from a C message. Also converts values to other types if specified.
+             * @param message C
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgUserSetPrivilege.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgUserSetPrivilege.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgUserSetPrivilege.IS): NetMessage.MsgUserSetPrivilege.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgUserSetPrivilege.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgUserSetPrivilege.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgUserSetPrivilege.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgUserSetPrivilege.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserSetPrivilege.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserSetPrivilege.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserSetPrivilege.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgUserSetPrivilege.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.

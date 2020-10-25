@@ -17,6 +17,7 @@ namespace TinyWars.User.UserProxy {
             { msgCode: NetMessageCodes.MsgUserSetNickname,      callback: _onMsgUserSetNickname,        },
             { msgCode: NetMessageCodes.MsgUserSetDiscordId,     callback: _onMsgUserSetDiscordId,       },
             { msgCode: NetMessageCodes.MsgUserGetOnlineUsers,   callback: _onMsgUserGetOnlineUsers,     },
+            { msgCode: NetMessageCodes.MsgUserSetPrivilege,     callback: _onMsgUserSetPrivilege,       },
         ]);
     }
 
@@ -125,5 +126,15 @@ namespace TinyWars.User.UserProxy {
         if (!data.errorCode) {
             Notify.dispatch(Notify.Type.MsgUserGetOnlineUsers, data);
         }
+    }
+
+    export function reqUserSetPrivilege(userId: number, userPrivilege: ProtoTypes.User.IUserPrivilege): void {
+        NetManager.send({ MsgUserSetPrivilege: { c: {
+            userId,
+            userPrivilege,
+        } } });
+    }
+    function _onMsgUserSetPrivilege(e: egret.Event): void {
+        const data = e.data as ProtoTypes.NetMessage.MsgUserSetPrivilege.IS;
     }
 }
