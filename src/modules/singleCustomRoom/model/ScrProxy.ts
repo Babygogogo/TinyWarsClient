@@ -96,6 +96,7 @@ namespace TinyWars.SingleCustomRoom.ScrProxy {
     function _onMsgScrDeleteWar(e: egret.Event): void {
         const data = e.data as ProtoTypes.NetMessage.MsgScrDeleteWar.IS;
         if (!data.errorCode) {
+            ScrModel.deleteSaveSlot(data.slotIndex);
             Notify.dispatch(Notify.Type.MsgScrDeleteWar, data);
         }
     }

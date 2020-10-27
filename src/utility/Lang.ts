@@ -659,7 +659,8 @@ namespace TinyWars.Utility.Lang {
         ],
         [Type.A0132]: [
             `请设定您愿意同时进行的排位赛的数量上限（设置为0等同于您不参加排位赛；明战和雾战需要分别设定）。`,
-            `Please set the maximum number of qualifying matches you are willing to play at the same time. Setting it to 0 is equivalent to not participating in qualifying matches.`,
+            `Please set the maximum number of qualifying matches you are willing to play at the same time. Setting it to 0 is equivalent to not participating in qualifying matches.` +
+            `\nNote: You need to set the numbers with fog on/off separately.`,
         ],
         [Type.A0133]: [
             `正在等待对战各方禁用CO。`,
@@ -691,7 +692,11 @@ namespace TinyWars.Utility.Lang {
         ],
         [Type.A0140]: [
             `确定要删除当前存档吗？（注：其他存档不受影响；您可以继续游玩当前游戏并存档）`,
-            `Are you sure to delete the current save slot?`,
+            `Are you sure to clear the current save slot?`,
+        ],
+        [Type.A0141]: [
+            `已成功删除存档。`,
+            `The save slot has been cleared.`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

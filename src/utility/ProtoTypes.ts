@@ -40825,6 +40825,9 @@ export declare namespace NetMessage {
 
             /** S errorCode */
             errorCode?: (number|null);
+
+            /** S slotIndex */
+            slotIndex?: (number|null);
         }
 
         /** Represents a S. */
@@ -40838,6 +40841,9 @@ export declare namespace NetMessage {
 
             /** S errorCode. */
             public errorCode: number;
+
+            /** S slotIndex. */
+            public slotIndex: number;
 
             /**
              * Creates a new S instance using the specified properties.

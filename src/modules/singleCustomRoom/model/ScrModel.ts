@@ -280,6 +280,16 @@ namespace TinyWars.SingleCustomRoom {
         export function getSaveSlotInfoList(): ProtoTypes.SingleCustomRoom.IScrSaveSlotInfo[] | null {
             return _saveSlotInfoList;
         }
+        export function deleteSaveSlot(slotIndex: number): void {
+            if (_saveSlotInfoList) {
+                for (let i = 0; i < _saveSlotInfoList.length; ++i) {
+                    if (_saveSlotInfoList[i].saveSlotIndex === slotIndex) {
+                        _saveSlotInfoList.splice(i, 1);
+                        return;
+                    }
+                }
+            }
+        }
         export function checkIsSaveSlotEmpty(slotIndex: number): boolean {
             if (!_saveSlotInfoList) {
                 return true;

@@ -73,9 +73,10 @@ namespace TinyWars.SingleCustomWar {
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
-                { type: Notify.Type.MsgScrContinueWar,                callback: this._onNotifySScrContinueWar },
-                { type: Notify.Type.MsgScrSaveWar,                    callback: this._onNotifySScrSaveWar },
-                { type: Notify.Type.MsgScrCreateCustomWar,            callback: this._onNotifySScrCreateCustomWar },
+                { type: Notify.Type.MsgScrContinueWar,              callback: this._onMsgScrContinueWar },
+                { type: Notify.Type.MsgScrSaveWar,                  callback: this._onMsgScrSaveWar },
+                { type: Notify.Type.MsgScrCreateCustomWar,          callback: this._onMsgScrCreateCustomWar },
+                { type: Notify.Type.MsgScrDeleteWar,                callback: this._onMsgScrDeleteWar },
             ];
             this._uiListeners = [
                 { ui: this._btnBack, callback: this._onTouchedBtnBack },
@@ -118,17 +119,17 @@ namespace TinyWars.SingleCustomWar {
             }
         }
 
-        private _onNotifySScrContinueWar(e: egret.Event): void {
+        private _onMsgScrContinueWar(e: egret.Event): void {
             const data      = e.data as ProtoTypes.NetMessage.MsgScrContinueWar.IS;
             const warData   = ProtoManager.decodeAsSerialWar(data.encodedWar);
             Utility.FlowManager.gotoSingleCustomWar(warData);
         }
 
-        private _onNotifySScrSaveWar(e: egret.Event): void {
+        private _onMsgScrSaveWar(e: egret.Event): void {
             FloatText.show(Lang.getText(Lang.Type.A0073));
         }
 
-        private _onNotifySScrCreateCustomWar(e: egret.Event): void {
+        private _onMsgScrCreateCustomWar(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgScrCreateCustomWar.IS;
             Common.CommonConfirmPanel.show({
                 title   : Lang.getText(Lang.Type.B0088),
@@ -137,6 +138,10 @@ namespace TinyWars.SingleCustomWar {
                     FlowManager.gotoSingleCustomWar(data.warData);
                 },
             });
+        }
+
+        private _onMsgScrDeleteWar(e: egret.Event): void {
+            FloatText.show(Lang.getFormattedText(Lang.Type.A0141));
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
