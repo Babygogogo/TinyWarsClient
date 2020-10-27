@@ -390,10 +390,19 @@ namespace TinyWars.MapEditor.MeUtility {
         return true;
     }
     function checkIsWarRuleListValid(ruleList: IWarRule[] | null | undefined, playersCount: number): boolean {
-        if ((!ruleList) || (!ruleList.length) || (ruleList.length > CommonConstants.WarRuleMaxCount)) {
+        const rulesCount = ruleList ? ruleList.length : 0;
+        if ((rulesCount <= 0) || (rulesCount > CommonConstants.WarRuleMaxCount)) {
             return false;
         }
+
+        const ruleIdSet = new Set<number>();
         for (const rule of ruleList) {
+            const ruleId = rule.ruleId;
+            if ((ruleId == null) || (ruleId < 0) || (ruleId >= rulesCount) || (ruleIdSet.has(ruleId))) {
+                return false;
+            }
+            ruleIdSet.add(ruleId);
+
             if ((!BwSettingsHelper.checkIsValidWarRule(rule))           ||
                 (BwSettingsHelper.getPlayersCount(rule) !== playersCount)
             ) {

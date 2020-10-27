@@ -12,6 +12,7 @@ namespace TinyWars.SingleCustomRoom.ScrProxy {
             { msgCode: ActionCode.MsgScrContinueWar,            callback: _onMsgScrContinueWar,         },
             { msgCode: ActionCode.MsgScrSaveWar,                callback: _onMsgScrSaveWar,             },
             { msgCode: ActionCode.MsgScrCreateCustomWar,        callback: _onMsgScrCreateCustomWar      },
+            { msgCode: ActionCode.MsgScrDeleteWar,              callback: _onMsgScrDeleteWar            },
         ], ScrProxy);
     }
 
@@ -82,6 +83,20 @@ namespace TinyWars.SingleCustomRoom.ScrProxy {
         const data = e.data as ProtoTypes.NetMessage.MsgScrCreateCustomWar.IS;
         if (!data.errorCode) {
             Notify.dispatch(Notify.Type.MsgScrCreateCustomWar, data);
+        }
+    }
+
+    export function reqScrDeleteWar(slotIndex: number): void {
+        NetManager.send({
+            MsgScrDeleteWar: { c: {
+                slotIndex,
+            } },
+        })
+    }
+    function _onMsgScrDeleteWar(e: egret.Event): void {
+        const data = e.data as ProtoTypes.NetMessage.MsgScrDeleteWar.IS;
+        if (!data.errorCode) {
+            Notify.dispatch(Notify.Type.MsgScrDeleteWar, data);
         }
     }
 }

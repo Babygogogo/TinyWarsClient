@@ -417,7 +417,7 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
 
     export function createDefaultWarRule(ruleId: number, playersCount: number): IWarRule {
         return {
-            ruleId          : ruleId,
+            ruleId,
             ruleNameList    : [
                 Lang.getTextWithLanguage(Lang.Type.B0001, LanguageType.Chinese),
                 Lang.getTextWithLanguage(Lang.Type.B0001, LanguageType.English),

@@ -658,8 +658,8 @@ namespace TinyWars.Utility.Lang {
             `Please write down a Chinese Name and an English name if possible. Use a , as a separator.`,
         ],
         [Type.A0132]: [
-            `请设定您愿意同时进行的排位赛的数量上限（设置为0等同于您不参加排位赛）。`,
-            `Please set the maximum number of qualifying matches you are willing to play at the same time (setting it to 0 is equivalent to not participating in qualifying matches).`,
+            `请设定您愿意同时进行的排位赛的数量上限（设置为0等同于您不参加排位赛；明战和雾战需要分别设定）。`,
+            `Please set the maximum number of qualifying matches you are willing to play at the same time. Setting it to 0 is equivalent to not participating in qualifying matches.`,
         ],
         [Type.A0133]: [
             `正在等待对战各方禁用CO。`,
@@ -688,6 +688,10 @@ namespace TinyWars.Utility.Lang {
         [Type.A0139]: [
             `确定要不禁用任何CO吗？`,
             `Are you sure to ban no CO?`,
+        ],
+        [Type.A0140]: [
+            `确定要删除当前存档吗？（注：其他存档不受影响；您可以继续游玩当前游戏并存档）`,
+            `Are you sure to delete the current save slot?`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2356,6 +2360,10 @@ namespace TinyWars.Utility.Lang {
         [Type.B0419]: [
             `地图编辑器`,
             `Map Editor`,
+        ],
+        [Type.B0420]: [
+            `删除存档`,
+            `Delete War`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

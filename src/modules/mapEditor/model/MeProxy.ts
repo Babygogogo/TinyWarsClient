@@ -19,10 +19,10 @@ namespace TinyWars.MapEditor.MeProxy {
             MsgMeGetMapDataList: { c: {} },
         });
     }
-    function _onMsgMeGetMapDataList(e: egret.Event): void {
+    async function _onMsgMeGetMapDataList(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMeGetMapDataList.IS;
         if (!data.errorCode) {
-            MeModel.resetDataList(data.dataList);
+            await MeModel.resetDataList(data.dataList);
             Notify.dispatch(Notify.Type.MsgMeGetDataList, data);
         }
     }

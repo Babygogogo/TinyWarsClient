@@ -192,6 +192,7 @@ namespace TinyWars.Utility.Notify {
         MsgScrContinueWar,
         MsgScrSaveWar,
         MsgScrCreateCustomWar,
+        MsgScrDeleteWar,
     }
 
     ////////////////////////////////////////////////////////////////////////////////

@@ -191,7 +191,9 @@ namespace TinyWars.MultiCustomRoom {
                 setWarComment("");
                 setBootTimerParams([BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue]);
                 setSelfPlayerIndex(CommonConstants.WarFirstPlayerIndex);
-                await resetDataByPresetWarRuleId(CommonConstants.WarRuleFirstId);
+
+                const warRule = (await getMapRawData()).warRuleList.find(v => v.ruleAvailability.canMcw);
+                await resetDataByPresetWarRuleId(warRule ? warRule.ruleId : null);
             }
             export function getData(): DataForCreateRoom {
                 return _dataForCreateRoom;
@@ -211,17 +213,25 @@ namespace TinyWars.MultiCustomRoom {
                 getData().settingsForCommon.configVersion = version;
             }
 
-            export async function resetDataByPresetWarRuleId(ruleId: number): Promise<void> {
-                const warRule = (await getMapRawData()).warRuleList.find(warRule => warRule.ruleId === ruleId);
-                if (warRule == null) {
-                    Logger.error(`McwModel.resetDataByPresetWarRuleId() empty warRule.`);
-                    return undefined;
-                }
+            async function resetDataByPresetWarRuleId(ruleId: number | null): Promise<void> {
+                const mapRawData        = await getMapRawData();
+                const settingsForCommon = getData().settingsForCommon;
+                if (ruleId == null) {
+                    settingsForCommon.warRule = BwSettingsHelper.createDefaultWarRule(ruleId, mapRawData.playersCount);
+                    setPresetWarRuleId(ruleId);
+                    setSelfCoId(BwSettingsHelper.getRandomCoIdWithSettingsForCommon(settingsForCommon, getSelfPlayerIndex()));
 
-                const settingsForCommon     = getData().settingsForCommon;
-                settingsForCommon.warRule   = Helpers.deepClone(warRule);
-                setPresetWarRuleId(ruleId);
-                setSelfCoId(BwSettingsHelper.getRandomCoIdWithSettingsForCommon(settingsForCommon, getSelfPlayerIndex()));
+                } else {
+                    const warRule = mapRawData.warRuleList.find(warRule => warRule.ruleId === ruleId);
+                    if (warRule == null) {
+                        Logger.error(`McwModel.resetDataByPresetWarRuleId() empty warRule.`);
+                        return undefined;
+                    }
+
+                    settingsForCommon.warRule = Helpers.deepClone(warRule);
+                    setPresetWarRuleId(ruleId);
+                    setSelfCoId(BwSettingsHelper.getRandomCoIdWithSettingsForCommon(settingsForCommon, getSelfPlayerIndex()));
+                }
             }
             export function setPresetWarRuleId(ruleId: number | null | undefined): void {
                 const settingsForCommon             = getData().settingsForCommon;
@@ -233,10 +243,24 @@ namespace TinyWars.MultiCustomRoom {
             }
             export async function tickPresetWarRuleId(): Promise<void> {
                 const currWarRuleId = getPresetWarRuleId();
+                const warRuleList   = (await getMapRawData()).warRuleList;
                 if (currWarRuleId == null) {
-                    await resetDataByPresetWarRuleId(CommonConstants.WarRuleFirstId);
+                    const warRule = warRuleList.find(v => v.ruleAvailability.canMcw);
+                    await resetDataByPresetWarRuleId(warRule ? warRule.ruleId : null);
                 } else {
-                    await resetDataByPresetWarRuleId((currWarRuleId + 1) % (await getMapRawData()).warRuleList.length);
+                    const warRuleIdList: number[] = [];
+                    for (let ruleId = currWarRuleId + 1; ruleId < warRuleList.length; ++ ruleId) {
+                        warRuleIdList.push(ruleId);
+                    }
+                    for (let ruleId = 0; ruleId < currWarRuleId; ++ruleId) {
+                        warRuleIdList.push(ruleId);
+                    }
+                    for (const ruleId of warRuleIdList) {
+                        if (warRuleList.find(v => v.ruleId === ruleId).ruleAvailability.canMcw) {
+                            await resetDataByPresetWarRuleId(ruleId);
+                            return;
+                        }
+                    }
                 }
             }
 

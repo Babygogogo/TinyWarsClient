@@ -12,10 +12,10 @@ namespace TinyWars.MapEditor.MeModel {
     export function init(): void {
     }
 
-    export function resetDataList(rawDataList: IMapEditorData[]): void {
+    export async function resetDataList(rawDataList: IMapEditorData[]): Promise<void> {
         MAP_DICT.clear();
         for (const data of rawDataList || []) {
-            const slotIndex     = data.slotIndex;
+            const slotIndex = data.slotIndex;
             MAP_DICT.set(slotIndex, {
                 slotIndex,
                 reviewStatus    : data.reviewStatus,
@@ -23,7 +23,11 @@ namespace TinyWars.MapEditor.MeModel {
                 reviewComment   : data.reviewComment,
             });
         }
-        for (let i = 0; i < CommonConstants.MapEditorSlotMaxCount; ++i) {
+
+        const maxSlotsCount = await User.UserModel.getIsSelfMapCommittee()
+            ? CommonConstants.MapEditorSlotMaxCountForCommittee
+            : CommonConstants.MapEditorSlotMaxCountForNormal;
+        for (let i = 0; i < maxSlotsCount; ++i) {
             if (!MAP_DICT.has(i)) {
                 MAP_DICT.set(i, createEmptyData(i));
             }

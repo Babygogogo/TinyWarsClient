@@ -256,6 +256,7 @@ namespace TinyWars.SingleCustomWar {
             return [
                 this._createCommandPlayerDeleteUnit(),
                 this._createCommandSimulation(),
+                this._createCommandDeleteWar(),
                 this._createCommandShowTileAnimation(),
                 this._createCommandStopTileAnimation(),
                 this._createCommandUseOriginTexture(),
@@ -419,6 +420,25 @@ namespace TinyWars.SingleCustomWar {
                     }
                 },
             };
+        }
+
+        private _createCommandDeleteWar(): DataForCommandRenderer | null {
+            const war           = this._war;
+            const saveSlotIndex = war ? war.getSaveSlotIndex() : null;
+            return saveSlotIndex == null
+                ? null
+                : {
+                    name    : Lang.getText(Lang.Type.B0420),
+                    callback: () => {
+                        CommonConfirmPanel.show({
+                            title   : Lang.getText(Lang.Type.B0088),
+                            content : Lang.getText(Lang.Type.A0140),
+                            callback: () => {
+                                SingleCustomRoom.ScrProxy.reqScrDeleteWar(saveSlotIndex);
+                            },
+                        });
+                    },
+                };
         }
 
         private _createCommandShowTileAnimation(): DataForCommandRenderer | null {
