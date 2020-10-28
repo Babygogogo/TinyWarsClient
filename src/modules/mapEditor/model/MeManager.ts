@@ -23,6 +23,7 @@ namespace TinyWars.MapEditor.MeManager {
             mapRawData,
             slotIndex
         });
+        _war.setIsMapModified(false);
         _war.setIsReviewingMap(isReview);
         _war.startRunning()
             .startRunningView();

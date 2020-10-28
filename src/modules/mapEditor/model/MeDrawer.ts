@@ -165,6 +165,8 @@ namespace TinyWars.MapEditor {
             } else if (mode === DrawerMode.DeleteUnit) {
                 this._handleDeleteUnit(gridIndex);
             }
+
+            this._war.setIsMapModified(true);
         }
         private _handleDrawTileBase(gridIndex: GridIndex): void {
             const tileMap           = this._tileMap;

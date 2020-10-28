@@ -73,6 +73,7 @@ namespace TinyWars.SingleCustomWar {
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
+                { type: Notify.Type.BwCoIdChanged,                  callback: this._onNotifyBwCoIdChanged },
                 { type: Notify.Type.MsgScrContinueWar,              callback: this._onMsgScrContinueWar },
                 { type: Notify.Type.MsgScrSaveWar,                  callback: this._onMsgScrSaveWar },
                 { type: Notify.Type.MsgScrCreateCustomWar,          callback: this._onMsgScrCreateCustomWar },
@@ -117,6 +118,10 @@ namespace TinyWars.SingleCustomWar {
             } else {
                 this.updateListPlayer();
             }
+        }
+
+        private _onNotifyBwCoIdChanged(e: egret.Event): void {
+            this.updateListPlayer();
         }
 
         private _onMsgScrContinueWar(e: egret.Event): void {
@@ -335,13 +340,7 @@ namespace TinyWars.SingleCustomWar {
                 return {
                     name    : Lang.getText(Lang.Type.B0261),
                     callback: () => {
-                        Common.CommonConfirmPanel.show({
-                            title   : Lang.getText(Lang.Type.B0088),
-                            content : Lang.getText(Lang.Type.A0072),
-                            callback: () => {
-                                SingleCustomRoom.ScrProxy.reqContinueWar(war.getSaveSlotIndex());
-                            },
-                        })
+                        ScwLoadWarPanel.show();
                     },
                 };
             }
@@ -693,11 +692,16 @@ namespace TinyWars.SingleCustomWar {
             const cfg = Utility.ConfigManager.getCoBasicCfg(war.getConfigVersion(), player.getCoId());
             return {
                 titleText               : `CO`,
-                infoText                : !cfg
-                    ? `(${Lang.getText(Lang.Type.B0001)})`
-                    : `${cfg.name}(T${cfg.tier})`,
+                infoText                : cfg.name,
                 infoColor               : 0xFFFFFF,
-                callbackOnTouchedTitle  : null,
+                callbackOnTouchedTitle  : !war.getIsSinglePlayerCheating()
+                    ? null
+                    : () => {
+                        ScwChooseCoPanel.show({
+                            war,
+                            playerIndex: player.getPlayerIndex(),
+                        });
+                    },
             };
         }
         private _createDataEnergy(

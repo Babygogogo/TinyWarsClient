@@ -97,11 +97,11 @@ namespace TinyWars.Utility.FlowManager {
         MultiPlayerWar.McwTileBriefPanel.show();
         MultiPlayerWar.McwUnitBriefPanel.show();
     }
-    export async function gotoReplay(warData: Uint8Array): Promise<void> {
+    export async function gotoReplay(warData: Uint8Array, replayId: number): Promise<void> {
         McwModel.unloadWar();
         ScwModel.unloadWar();
         MeManager.unloadWar();
-        await RwModel.loadWar(warData);
+        await RwModel.loadWar(warData, replayId);
 
         StageManager.closeAllPanels();
         ReplayWar.RwBackgroundPanel.show();
@@ -135,6 +135,25 @@ namespace TinyWars.Utility.FlowManager {
         MapEditor.MeWarPanel.show();
         MapEditor.MeTileBriefPanel.show();
         MapEditor.MeUnitBriefPanel.show();
+    }
+
+    export function gotoRmrMyWarListPanel(): void {
+        McwModel.unloadWar();
+        RwModel.unloadWar();
+        ScwModel.unloadWar();
+        MeManager.unloadWar();
+        StageManager.closeAllPanels();
+        Lobby.LobbyTopPanel.show();
+        RankMatchRoom.RmrMyWarListPanel.show();
+    }
+    export function gotoMcrMyWarListPanel(): void {
+        McwModel.unloadWar();
+        RwModel.unloadWar();
+        ScwModel.unloadWar();
+        MeManager.unloadWar();
+        StageManager.closeAllPanels();
+        Lobby.LobbyTopPanel.show();
+        MultiCustomRoom.McrMyWarListPanel.show();
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

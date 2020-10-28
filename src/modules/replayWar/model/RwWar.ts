@@ -24,6 +24,7 @@ namespace TinyWars.ReplayWar {
         private _settingsForRmw                 : ProtoTypes.WarSettings.ISettingsForRmw;
         private _settingsForWrw                 : ProtoTypes.WarSettings.ISettingsForWrw;
 
+        private _replayId                           : number;
         private _isAutoReplay                       = false;
         private _nextActionId                       = 0;
         private _checkPointIdsForNextActionId       = new Map<number, number>();
@@ -309,6 +310,13 @@ namespace TinyWars.ReplayWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        public getReplayId(): number {
+            return this._replayId;
+        }
+        public setReplayId(replayId: number): void {
+            this._replayId = replayId;
+        }
+
         public getNextActionId(): number {
             return this._nextActionId;
         }

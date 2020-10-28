@@ -115,6 +115,7 @@ namespace TinyWars.MapEditor {
                         mapRawData  : await WarMap.WarMapModel.getRawData(data.mapId),
                         slotIndex   : war.getMapSlotIndex(),
                     });
+                    war.setIsMapModified(true);
                     war.startRunning()
                         .startRunningView();
 

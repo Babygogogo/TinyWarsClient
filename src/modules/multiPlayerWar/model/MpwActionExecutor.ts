@@ -71,7 +71,13 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
                 CommonAlertPanel.show({
                     title   : Lang.getText(Lang.Type.B0035),
                     content : Lang.getText(Lang.Type.A0023),
-                    callback: () => Utility.FlowManager.gotoLobby(),
+                    callback: () => {
+                        if (war instanceof RankMatchWar.RmwWar) {
+                            Utility.FlowManager.gotoRmrMyWarListPanel();
+                        } else {
+                            Utility.FlowManager.gotoMcrMyWarListPanel();
+                        }
+                    },
                 });
 
             } else {
@@ -80,7 +86,13 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
                     CommonAlertPanel.show({
                         title   : Lang.getText(Lang.Type.B0082),
                         content : Lang.getText(Lang.Type.A0030),
-                        callback: () => Utility.FlowManager.gotoLobby(),
+                        callback: () => {
+                            if (war instanceof RankMatchWar.RmwWar) {
+                                Utility.FlowManager.gotoRmrMyWarListPanel();
+                            } else {
+                                Utility.FlowManager.gotoMcrMyWarListPanel();
+                            }
+                        },
                     });
 
                 } else {
@@ -89,7 +101,13 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
                         CommonAlertPanel.show({
                             title   : Lang.getText(Lang.Type.B0034),
                             content : Lang.getText(Lang.Type.A0022),
-                            callback: () => Utility.FlowManager.gotoLobby(),
+                            callback: () => {
+                                if (war instanceof RankMatchWar.RmwWar) {
+                                    Utility.FlowManager.gotoRmrMyWarListPanel();
+                                } else {
+                                    Utility.FlowManager.gotoMcrMyWarListPanel();
+                                }
+                            },
                         });
 
                     } else {

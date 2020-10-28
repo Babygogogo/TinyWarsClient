@@ -3,9 +3,10 @@ namespace TinyWars.Common {
     import Lang = Utility.Lang;
 
     export type OpenDataForCommonConfirmPanel = {
-        title   : string;
-        content : string;
-        callback: () => any;
+        title               : string;
+        content             : string;
+        callback            : () => any;
+        callbackOnCancel?   : () => any;
     }
 
     export class CommonConfirmPanel extends GameUi.UiPanel {
@@ -60,13 +61,20 @@ namespace TinyWars.Common {
             this._labelContent.setRichText(this._openData.content);
         }
 
+        protected _onClosed(): void {
+            this._openData = null;
+        }
+
         private _onTouchedBtnCancel(e: egret.TouchEvent): void {
-            CommonConfirmPanel.hide();
+            const openData = this._openData;
+            this.close();
+            (openData.callbackOnCancel) && (openData.callbackOnCancel());
         }
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            CommonConfirmPanel.hide();
-            this._openData.callback();
+            const openData = this._openData;
+            this.close();
+            openData.callback();
         }
     }
 }

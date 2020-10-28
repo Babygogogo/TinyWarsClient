@@ -120,7 +120,13 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
                 CommonAlertPanel.show({
                     title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getText(Lang.Type.A0023),
-                    callback: () => Utility.FlowManager.gotoLobby(),
+                    callback: () => {
+                        if (war instanceof RankMatchWar.RmwWar) {
+                            Utility.FlowManager.gotoRmrMyWarListPanel();
+                        } else {
+                            Utility.FlowManager.gotoMcrMyWarListPanel();
+                        }
+                    },
                 });
 
             } else if (status === Types.SyncWarStatus.EndedOrNotExists) {
@@ -128,7 +134,13 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
                 CommonAlertPanel.show({
                     title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getText(Lang.Type.A0035),
-                    callback: () => Utility.FlowManager.gotoLobby(),
+                    callback: () => {
+                        if (war instanceof RankMatchWar.RmwWar) {
+                            Utility.FlowManager.gotoRmrMyWarListPanel();
+                        } else {
+                            Utility.FlowManager.gotoMcrMyWarListPanel();
+                        }
+                    },
                 });
 
             } else if (status === Types.SyncWarStatus.NoError) {

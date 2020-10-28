@@ -40,6 +40,7 @@ namespace TinyWars.Utility.Notify {
         BwPlayerFundChanged,
         BwCoEnergyChanged,
         BwCoUsingSkillTypeChanged,
+        BwCoIdChanged,
 
         BwCursorTapped,
         BwCursorDragged,

@@ -91,6 +91,7 @@ namespace TinyWars.MapEditor {
                         mapRawData  : MeUtility.resizeMap(war.serializeForMap(), width, height),
                         slotIndex   : war.getMapSlotIndex(),
                     });
+                    war.setIsMapModified(true);
                     war.startRunning()
                         .startRunningView();
                 }

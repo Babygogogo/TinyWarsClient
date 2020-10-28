@@ -89,7 +89,8 @@ namespace TinyWars.MapEditor {
                     await war.initWithMapEditorData({
                         mapRawData  : MeUtility.clearMap(war.serializeForMap(), width, height),
                         slotIndex   : war.getMapSlotIndex(),
-                     });
+                    });
+                    war.setIsMapModified(true);
                     war.startRunning()
                         .startRunningView();
                 }

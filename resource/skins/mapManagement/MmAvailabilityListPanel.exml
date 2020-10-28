@@ -23,6 +23,13 @@
             <e:List>
                 <e:itemRendererSkinName>
                     <e:Skin width="200" height="40" currentState="up" states="up,down">
+                        <e:Group x="10" verticalCenter="0">
+                            <GameUi:UiLabel id="_labelId" text="ID: 0" size="12" textColor.down="0x00ff00" x="0" maxTextWidth="150" y="2"/>
+                            <GameUi:UiLabel id="_labelName" text="地图名称" size="16" textColor.down="0x00ff00" x="0" maxTextWidth="150" y="0"/>
+                            <e:layout>
+                                <e:VerticalLayout gap="2"/>
+                            </e:layout>
+                        </e:Group>
                         <GameUi:UiButton id="_btnChoose" label="" left="0" right="0" top="0" bottom="0"
                                          visible.down="false">
                             <GameUi:skinName>
@@ -33,8 +40,6 @@
                                 </e:Skin>
                             </GameUi:skinName>
                         </GameUi:UiButton>
-                        <GameUi:UiLabel id="_labelName" text="地图名称" size="16" verticalCenter="0"
-                                        textColor.down="0x00ff00" x="10" maxTextWidth="150" />
                         <GameUi:UiButton id="_btnNext" label="&gt;&gt;" verticalCenter="0" visible.up="false" right="10">
                             <e:skinName>
                                 <e:Skin states="up,down,disabled">

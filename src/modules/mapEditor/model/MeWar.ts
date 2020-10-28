@@ -18,6 +18,7 @@ namespace TinyWars.MapEditor {
         private _mapNameList        : string[];
         private _isReviewingMap     = false;
         private _warRuleList        : IWarRule[] = [];
+        private _isMapModified      = false;
 
         public async init(data: ISerialWar): Promise<MeWar> {
             if (!this._baseInit(data)) {
@@ -275,6 +276,13 @@ namespace TinyWars.MapEditor {
         }
         public setIsReviewingMap(value: boolean) {
             this._isReviewingMap = value;
+        }
+
+        public getIsMapModified(): boolean {
+            return this._isMapModified;
+        }
+        public setIsMapModified(hasSubmitted: boolean): void {
+            this._isMapModified = hasSubmitted;
         }
 
         public reviseWarRuleList(): void {

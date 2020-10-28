@@ -203,6 +203,7 @@ namespace TinyWars.BaseWar {
                 this._createInfoFlareAmmo(unit, cfg, isCheating),
                 this._createInfoActionState(unit, cfg, isCheating),
                 this._createInfoDiving(unit, cfg, isCheating),
+                this._createInfoCo(unit, cfg, isCheating),
             ].filter(v => !!v);
 
             this._listInfo.bindData(dataList);
@@ -530,6 +531,34 @@ namespace TinyWars.BaseWar {
                     },
                 };
             }
+        }
+
+        private _createInfoCo(
+            unit        : BwUnit,
+            cfg         : ProtoTypes.Config.IUnitTemplateCfg,
+            isCheating  : boolean
+        ): DataForInfoRenderer | null {
+            const hasLoadedCo = unit.getHasLoadedCo();
+            return {
+                titleText               : Lang.getText(Lang.Type.B0421),
+                valueText               : hasLoadedCo ? Lang.getText(Lang.Type.B0012) : Lang.getText(Lang.Type.B0013),
+                callbackOnTouchedTitle  : !isCheating
+                    ? null
+                    : () => {
+                        unit.setHasLoadedCo(!hasLoadedCo);
+                        unit.updateView();
+                        this._updateListInfo();
+
+                        const war       = unit.getWar();
+                        const player    = unit.getPlayer();
+                        war.getTileMap().getView().updateCoZone();
+                        if (war.getUnitMap().checkIsCoLoadedByAnyUnit(player.getPlayerIndex())) {
+                            player.setCoCurrentEnergy(player.getCoCurrentEnergy() || 0);
+                        } else {
+                            player.setCoCurrentEnergy(null);
+                        }
+                    },
+            };
         }
 
         private _updateListDamageChart(): void {

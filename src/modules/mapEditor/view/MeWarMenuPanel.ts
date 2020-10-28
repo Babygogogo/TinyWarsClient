@@ -75,9 +75,9 @@ namespace TinyWars.MapEditor {
                 { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.TileAnimationTick,      callback: this._onNotifyTileAnimationTick },
                 { type: Notify.Type.UnitAnimationTick,      callback: this._onNotifyUnitAnimationTick },
-                { type: Notify.Type.MsgMeSubmitMap,         callback: this._onNotifyMsgMeSaveMap },
-                { type: Notify.Type.MsgMmReviewMap,         callback: this._onNotifyMsgMmReviewMap },
-                { type: Notify.Type.MsgScrCreateCustomWar,    callback: this._onNotifySScrCreateCustomWar },
+                { type: Notify.Type.MsgMeSubmitMap,         callback: this._onMsgMeSubmitMap },
+                { type: Notify.Type.MsgMmReviewMap,         callback: this._onMsgMmReviewMap },
+                { type: Notify.Type.MsgScrCreateCustomWar,  callback: this._onMsgScrCreateCustomWar },
             ];
             this._uiListeners = [
                 { ui: this._btnBack,                callback: this._onTouchedBtnBack },
@@ -109,12 +109,12 @@ namespace TinyWars.MapEditor {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyMsgMeSaveMap(e: egret.Event): void {
+        private _onMsgMeSubmitMap(e: egret.Event): void {
             FloatText.show(Lang.getText(Lang.Type.A0085));
-            this.close();
+            this._war.setIsMapModified(false);
         }
 
-        private _onNotifyMsgMmReviewMap(e: egret.Event): void {
+        private _onMsgMmReviewMap(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgMmReviewMap.IS;
             if (data.isAccept) {
                 FloatText.show(Lang.getText(Lang.Type.A0092));
@@ -124,7 +124,7 @@ namespace TinyWars.MapEditor {
             Utility.FlowManager.gotoLobby();
         }
 
-        private _onNotifySScrCreateCustomWar(e: egret.Event): void {
+        private _onMsgScrCreateCustomWar(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgScrCreateCustomWar.IS;
             Common.CommonConfirmPanel.show({
                 title   : Lang.getText(Lang.Type.B0088),
@@ -391,7 +391,7 @@ namespace TinyWars.MapEditor {
 
         private _createDataForMainMenu(): DataForCommandRenderer[] {
             return [
-                this._createCommandSaveMap(),
+                this._createCommandSubmitMap(),
                 this._createCommandLoadMap(),
                 this._createCommandWarRule(),
                 this._createCommandReviewAccept(),
@@ -426,7 +426,7 @@ namespace TinyWars.MapEditor {
             };
         }
 
-        private _createCommandSaveMap(): DataForCommandRenderer | null {
+        private _createCommandSubmitMap(): DataForCommandRenderer | null {
             if (this._war.getIsReviewingMap()) {
                 return null;
             } else {
@@ -458,11 +458,12 @@ namespace TinyWars.MapEditor {
                                     mapRawData: (data ? data.mapRawData : null) || await MeUtility.createDefaultMapRawData(slotIndex),
                                     slotIndex,
                                 });
+                                war.setIsMapModified(false);
                                 war.startRunning()
                                     .startRunningView();
                                 this.close();
                             },
-                        })
+                        });
                     },
                 };
             }
@@ -531,7 +532,7 @@ namespace TinyWars.MapEditor {
                 callback: () => {
                     Common.CommonConfirmPanel.show({
                         title   : Lang.getText(Lang.Type.B0054),
-                        content : Lang.getText(Lang.Type.A0025),
+                        content : this._war.getIsMapModified() ? Lang.getText(Lang.Type.A0143) : Lang.getText(Lang.Type.A0025),
                         callback: () => FlowManager.gotoLobby(),
                     });
                 },
@@ -544,10 +545,29 @@ namespace TinyWars.MapEditor {
                 name    : Lang.getText(Lang.Type.B0325),
                 callback: () => {
                     const invalidationType = MeUtility.getMapInvalidationType(war.serializeForMap());
-                    if (invalidationType === Types.CustomMapInvalidationType.Valid) {
-                        SingleCustomRoom.ScrCreateCustomSaveSlotsPanel.show(war.serializeForSimulation());
-                    } else {
+                    if (invalidationType !== Types.CustomMapInvalidationType.Valid) {
                         FloatText.show(Lang.getMapInvalidationDesc(invalidationType));
+                        return;
+                    }
+
+                    const cb = () => {
+                        war.reviseWarRuleList();
+                        SingleCustomRoom.ScrCreateCustomSaveSlotsPanel.show(war.serializeForSimulation());
+                    };
+
+                    if (!war.getIsMapModified()) {
+                        cb();
+                    } else {
+                        Common.CommonConfirmPanel.show({
+                            title           : Lang.getText(Lang.Type.B0088),
+                            content         : Lang.getText(Lang.Type.A0142),
+                            callback        : () => {
+                                MeConfirmSaveMapPanel.show();
+                            },
+                            callbackOnCancel: () => {
+                                cb();
+                            },
+                        });
                     }
                 },
             };

@@ -698,6 +698,14 @@ namespace TinyWars.Utility.Lang {
             `已成功删除存档。`,
             `The save slot has been cleared.`,
         ],
+        [Type.A0142]: [
+            `此地图已被修改，需要先保存吗？`,
+            `The map has been modified. Do you want to save the map?`,
+        ],
+        [Type.A0143]: [
+            `此地图已被修改，确定不保存直接退出吗？`,
+            `The map has been modified. Are you sure to exit anyway?`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -2369,6 +2377,10 @@ namespace TinyWars.Utility.Lang {
         [Type.B0420]: [
             `删除存档`,
             `Delete War`,
+        ],
+        [Type.B0421]: [
+            `已搭载CO`,
+            `CO on board`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -27,8 +27,9 @@ namespace TinyWars.MapManagement {
         private _labelRankFog   : GameUi.UiLabel;
         private _imgRankFog     : GameUi.UiImage;
 
-        private _btnCancel      : GameUi.UiButton;
         private _btnDelete      : GameUi.UiButton;
+        private _btnWarRule     : GameUi.UiButton;
+        private _btnCancel      : GameUi.UiButton;
         private _btnConfirm     : GameUi.UiButton;
 
         private _mapId          : number;
@@ -51,6 +52,7 @@ namespace TinyWars.MapManagement {
             super();
 
             this._setAutoAdjustHeightEnabled();
+            this._setTouchMaskEnabled();
             this.skinName = "resource/skins/mapManagement/MmAvailabilityChangePanel.exml";
         }
 
@@ -62,11 +64,14 @@ namespace TinyWars.MapManagement {
                 { ui: this._btnConfirm,     callback: this._onTouchedBtnConfirm },
                 { ui: this._btnDelete,      callback: this._onTouchedBtnDelete },
                 { ui: this._btnCancel,      callback: this._onTouchedBtnCancel },
+                { ui: this._btnWarRule,     callback: this._onTouchedBtnWarRule },
                 { ui: this._groupMcw,       callback: this._onTouchedGroupMcw },
                 { ui: this._groupScw,       callback: this._onTouchedGroupScw },
                 { ui: this._groupRank,      callback: this._onTouchedGroupRank },
                 { ui: this._groupRankFog,   callback: this._onTouchedGroupRankFog },
             ];
+
+            this._btnDelete.setTextColor(0xFF0000);
         }
 
         protected async _onOpened(): Promise<void> {
@@ -105,6 +110,11 @@ namespace TinyWars.MapManagement {
             });
         }
 
+        private async _onTouchedBtnWarRule(e: egret.TouchEvent): Promise<void> {
+            MmWarRulePanel.show(await WarMapModel.getRawData(this._mapId));
+            this.close();
+        }
+
         private _onTouchedBtnCancel(e: egret.TouchEvent): void {
             this.close();
         }
@@ -126,6 +136,7 @@ namespace TinyWars.MapManagement {
             this._btnCancel.label   = Lang.getText(Lang.Type.B0154);
             this._btnConfirm.label  = Lang.getText(Lang.Type.B0026);
             this._btnDelete.label   = Lang.getText(Lang.Type.B0270);
+            this._btnWarRule.label  = Lang.getText(Lang.Type.B0314);
             this._labelMcw.text     = Lang.getText(Lang.Type.B0200);
             this._labelRank.text    = Lang.getText(Lang.Type.B0404);
             this._labelRankFog.text = Lang.getText(Lang.Type.B0408);

@@ -100,7 +100,7 @@ namespace TinyWars.BaseWar {
             this.setCoIsDestroyedInTurn(coIsDestroyedInTurn);
             this.setUserId(data.userId);
             this._setUnitAndTileSkinId(unitAndTileSkinId);
-            this._setCoId(coId);
+            this.setCoId(coId);
             this.setCoCurrentEnergy(data.coCurrentEnergy);
             this._setWatchOngoingSrcUserIds(data.watchOngoingSrcUserIdList || []);
             this._setWatchRequestSrcUserIds(data.watchRequestSrcUserIdList || []);
@@ -379,8 +379,11 @@ namespace TinyWars.BaseWar {
                 : await User.UserModel.getUserNickname(userId) || `??`;
         }
 
-        private _setCoId(coId: number | null | undefined): void {
-            this._coId = coId;
+        public setCoId(coId: number | null | undefined): void {
+            if (this._coId != coId) {
+                this._coId = coId;
+                Notify.dispatch(Notify.Type.BwCoIdChanged);
+            }
         }
         public getCoId(): number | null | undefined {
             return this._coId;

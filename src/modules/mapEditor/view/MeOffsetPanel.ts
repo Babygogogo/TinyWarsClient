@@ -77,7 +77,8 @@ namespace TinyWars.MapEditor {
                 await war.initWithMapEditorData({
                     mapRawData  : MeUtility.addOffset(war.serializeForMap(), offsetX, offsetY),
                     slotIndex   : war.getMapSlotIndex(),
-                 });
+                });
+                war.setIsMapModified(true);
                 war.startRunning()
                     .startRunningView();
             }

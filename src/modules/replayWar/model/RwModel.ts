@@ -30,7 +30,7 @@ namespace TinyWars.ReplayWar.RwModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for managing war.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export async function loadWar(encodedWarData: Uint8Array): Promise<RwWar> {
+    export async function loadWar(encodedWarData: Uint8Array, replayId: number): Promise<RwWar> {
         if (_war) {
             Logger.warn(`ReplayModel.loadWar() another war has been loaded already!`);
             unloadWar();
@@ -47,6 +47,7 @@ namespace TinyWars.ReplayWar.RwModel {
         };
 
         _war = (await new RwWar().init(warData)).startRunning().startRunningView() as RwWar;
+        _war.setReplayId(replayId);
         return _war;
     }
 

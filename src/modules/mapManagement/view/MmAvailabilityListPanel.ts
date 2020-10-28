@@ -220,9 +220,10 @@ namespace TinyWars.MapManagement {
     }
 
     class MapNameRenderer extends eui.ItemRenderer {
-        private _btnChoose: GameUi.UiButton;
-        private _btnNext  : GameUi.UiButton;
-        private _labelName: GameUi.UiLabel;
+        private _btnChoose  : GameUi.UiButton;
+        private _btnNext    : GameUi.UiButton;
+        private _labelId    : GameUi.UiLabel;
+        private _labelName  : GameUi.UiLabel;
 
         protected childrenCreated(): void {
             super.childrenCreated();
@@ -235,8 +236,12 @@ namespace TinyWars.MapManagement {
             super.dataChanged();
 
             const data          = this.data as DataForMapNameRenderer;
-            this.currentState   = data.mapId === data.panel.getSelectedMapId() ? Types.UiState.Down : Types.UiState.Up;
-            WarMapModel.getMapNameInCurrentLanguage(data.mapId).then(v => this._labelName.text = v);
+            const mapId         = data.mapId;
+            const labelName     = this._labelName;
+            this.currentState   = mapId === data.panel.getSelectedMapId() ? Types.UiState.Down : Types.UiState.Up;
+            this._labelId.text  = `ID: ${mapId}`;
+            labelName.text      = ``;
+            WarMapModel.getMapNameInCurrentLanguage(mapId).then(v => labelName.text = v);
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {

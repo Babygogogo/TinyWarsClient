@@ -76,8 +76,8 @@ namespace TinyWars.ReplayWar {
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyMcwPlannerStateChanged },
-                { type: Notify.Type.MsgScrCreateCustomWar,            callback: this._onNotifySScrCreateCustomWar },
-                { type: Notify.Type.MsgReplaySetRating,   callback: this._onNotifySCommonRateMultiPlayerReplay },
+                { type: Notify.Type.MsgScrCreateCustomWar,          callback: this._onMsgScrCreateCustomWar },
+                { type: Notify.Type.MsgReplaySetRating,             callback: this._onMsgReplaySetRating },
             ];
             this._uiListeners = [
                 { ui: this._btnBack, callback: this._onTouchedBtnBack },
@@ -116,7 +116,7 @@ namespace TinyWars.ReplayWar {
             this._updateComponentsForLanguage();
         }
 
-        private _onNotifySScrCreateCustomWar(e: egret.Event): void {
+        private _onMsgScrCreateCustomWar(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgScrCreateCustomWar.IS;
             Common.CommonConfirmPanel.show({
                 title   : Lang.getText(Lang.Type.B0088),
@@ -127,7 +127,7 @@ namespace TinyWars.ReplayWar {
             });
         }
 
-        private _onNotifySCommonRateMultiPlayerReplay(e: egret.Event): void {
+        private _onMsgReplaySetRating(e: egret.Event): void {
             FloatText.show(Lang.getText(Lang.Type.A0106));
         }
 
@@ -171,7 +171,7 @@ namespace TinyWars.ReplayWar {
             this._labelPlayerInfoTitle.text = Lang.getText(Lang.Type.B0224);
             this._btnMapName.label          = Lang.getText(Lang.Type.B0225);
             this._btnMapDesigner.label      = Lang.getText(Lang.Type.B0163);
-            this._btnWarId.label            = Lang.getText(Lang.Type.B0226);
+            this._btnWarId.label            = Lang.getText(Lang.Type.B0235);
             this._btnTurnIndex.label        = Lang.getText(Lang.Type.B0091);
             this._btnActionId.label         = Lang.getText(Lang.Type.B0090);
             this._btnBack.label             = Lang.getText(Lang.Type.B0146);
@@ -182,7 +182,7 @@ namespace TinyWars.ReplayWar {
             const mapFileName                       = war.getMapId();
             this._labelMapName.text                 = await WarMapModel.getMapNameInCurrentLanguage(mapFileName) || "----";
             this._labelMapDesigner.text             = await WarMapModel.getDesignerName(mapFileName) || "----";
-            this._labelWarId.text                   = `${war.getWarId()}`;
+            this._labelWarId.text                   = `${war.getReplayId()}`;
             this._labelTurnIndex.text               = `${war.getTurnManager().getTurnIndex() + 1}`;
             this._labelActionId.text                = `${war.getNextActionId()} / ${war.getExecutedActionsCount()}`;
         }
@@ -270,7 +270,7 @@ namespace TinyWars.ReplayWar {
                             if ((!text) || (isNaN(value)) || (value > CommonConstants.ReplayMaxRating) || (value < CommonConstants.ReplayMinRating)) {
                                 FloatText.show(Lang.getText(Lang.Type.A0098));
                             } else {
-                                RwProxy.reqReplaySetRating(this._war.getWarId(), value);
+                                RwProxy.reqReplaySetRating(this._war.getReplayId(), value);
                             }
                         },
                     });
