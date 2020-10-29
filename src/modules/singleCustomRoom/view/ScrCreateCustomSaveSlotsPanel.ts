@@ -1,9 +1,11 @@
 
 namespace TinyWars.SingleCustomRoom {
-    import Notify       = Utility.Notify;
-    import Lang         = Utility.Lang;
-    import ProtoTypes   = Utility.ProtoTypes;
-    import ISerialWar   = ProtoTypes.WarSerialization.ISerialWar;
+    import Notify           = Utility.Notify;
+    import Lang             = Utility.Lang;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import ConfigManager    = Utility.ConfigManager;
+    import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
+    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
     export type OpenDataForScrCreateCustomSaveSlotsPanel = ISerialWar;
 
@@ -103,10 +105,10 @@ namespace TinyWars.SingleCustomRoom {
             const dataList  : DataForSlotRenderer[] = [];
             const warData   = this._openData;
             const slotList  = ScrModel.getSaveSlotInfoList() || [];
-            for (let i = 0; i < Utility.ConfigManager.COMMON_CONSTANTS.ScwSaveSlotMaxCount; ++i) {
+            for (let i = 0; i < CommonConstants.ScwSaveSlotMaxCount; ++i) {
                 dataList.push({
                     slotIndex   : i,
-                    slotInfo    : slotList.find(v => v.saveSlotIndex === i),
+                    slotInfo    : slotList.find(v => v.slotIndex === i),
                     warData,
                 });
             }
@@ -143,20 +145,31 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _onTouchedImgBg(e: egret.TouchEvent): void {
-            const data                              = this.data as DataForSlotRenderer;
-            const warData                           = data.warData;
-            warData.settingsForScw.saveSlotIndex    = data.slotIndex;
+            const data      = this.data as DataForSlotRenderer;
+            const callback  = () => {
+                Common.CommonInputPanel.show({
+                    title       : Lang.getText(Lang.Type.B0088),
+                    maxChars    : CommonConstants.ScwSaveSlotCommentMaxLength,
+                    currentValue: ``,
+                    tips        : Lang.getText(Lang.Type.A0144),
+                    charRestrict: null,
+                    callback    : (panel) => {
+                        ScrProxy.reqScrCreateCustomWar({
+                            slotIndex   : data.slotIndex,
+                            slotComment : panel.getInputText(),
+                            warData     : data.warData,
+                        });
+                        ScrCreateCustomSaveSlotsPanel.hide();
+                    }
+                });
+            };
             if (!data.slotInfo) {
-                ScrProxy.reqScrCreateCustomWar(warData);
-                ScrCreateCustomSaveSlotsPanel.hide();
+                callback();
             } else {
                 Common.CommonConfirmPanel.show({
                     title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getText(Lang.Type.A0070),
-                    callback: () => {
-                        ScrProxy.reqScrCreateCustomWar(warData);
-                        ScrCreateCustomSaveSlotsPanel.hide();
-                    },
+                    callback,
                 });
             }
         }
@@ -170,14 +183,22 @@ namespace TinyWars.SingleCustomRoom {
             this._labelSlotIndex.text   = "" + data.slotIndex;
             this._labelType.text        = slotInfo ? Lang.getWarTypeName(slotInfo.warType) : "----";
             this._labelChoose.text      = Lang.getText(Lang.Type.B0258);
+
+            const labelMapName = this._labelMapName;
             if (!slotInfo) {
-                this._labelMapName.text = "----";
+                labelMapName.text = "----";
             } else {
-                const mapId = slotInfo.mapId;
-                if (mapId == null) {
-                    this._labelMapName.text = `(${Lang.getText(Lang.Type.B0321)})`;
+                const comment = slotInfo.slotComment;
+                if (comment) {
+                    labelMapName.text = comment;
                 } else {
-                    WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId).then(value => this._labelMapName.text = value);
+                    const mapId = slotInfo.mapId;
+                    if (mapId == null) {
+                        labelMapName.text = `(${Lang.getText(Lang.Type.B0321)})`;
+                    } else {
+                        labelMapName.text = ``;
+                        WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId).then(value => labelMapName.text = value);
+                    }
                 }
             }
         }

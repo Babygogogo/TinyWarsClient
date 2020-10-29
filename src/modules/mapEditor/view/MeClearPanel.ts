@@ -82,18 +82,15 @@ namespace TinyWars.MapEditor {
             if ((!gridsCount) || (gridsCount <= 0)) {
                 FloatText.show(Lang.getText(Lang.Type.A0087));
             } else {
-                const war       = MeManager.getWar();
-                const currSize  = war.getTileMap().getMapSize();
-                if ((width !== currSize.width) || (height !== currSize.height)) {
-                    war.stopRunning();
-                    await war.initWithMapEditorData({
-                        mapRawData  : MeUtility.clearMap(war.serializeForMap(), width, height),
-                        slotIndex   : war.getMapSlotIndex(),
-                    });
-                    war.setIsMapModified(true);
-                    war.startRunning()
-                        .startRunningView();
-                }
+                const war = MeManager.getWar();
+                war.stopRunning();
+                await war.initWithMapEditorData({
+                    mapRawData  : MeUtility.clearMap(war.serializeForMap(), width, height),
+                    slotIndex   : war.getMapSlotIndex(),
+                });
+                war.setIsMapModified(true);
+                war.startRunning()
+                    .startRunningView();
 
                 this.close();
                 MeWarMenuPanel.hide();

@@ -32,12 +32,12 @@ namespace TinyWars.SingleCustomRoom {
 
     export namespace ScrModel {
         const _dataForCreateWar: DataForCreateWar = {
-            settingsForCommon: {
+            slotIndex           : 0,
+            settingsForCommon   : {
                 mapId           : undefined,
                 configVersion   : Utility.ConfigManager.getLatestConfigVersion(),
             },
             settingsForScw: {
-                saveSlotIndex   : 0,
             },
 
             playerInfoList  : [],
@@ -123,15 +123,15 @@ namespace TinyWars.SingleCustomRoom {
             getCreateWarData().playerInfoList = list;
         }
 
-        export function setCreateWarSaveSlotIndex(slot: number): void {
-            const settingsForSinglePlayer = getCreateWarData().settingsForScw;
-            if (settingsForSinglePlayer.saveSlotIndex !== slot) {
-                settingsForSinglePlayer.saveSlotIndex = slot;
+        export function setCreateWarSaveSlotIndex(slotIndex: number): void {
+            const data = getCreateWarData();
+            if (data.slotIndex !== slotIndex) {
+                data.slotIndex = slotIndex;
                 Notify.dispatch(Notify.Type.ScrCreateWarSaveSlotChanged);
             }
         }
         export function getCreateWarSaveSlotIndex(): number {
-            return getCreateWarData().settingsForScw.saveSlotIndex;
+            return getCreateWarData().slotIndex;
         }
 
         export function tickCreateWarUserId(playerIndex: number): void {
@@ -283,7 +283,7 @@ namespace TinyWars.SingleCustomRoom {
         export function deleteSaveSlot(slotIndex: number): void {
             if (_saveSlotInfoList) {
                 for (let i = 0; i < _saveSlotInfoList.length; ++i) {
-                    if (_saveSlotInfoList[i].saveSlotIndex === slotIndex) {
+                    if (_saveSlotInfoList[i].slotIndex === slotIndex) {
                         _saveSlotInfoList.splice(i, 1);
                         return;
                     }
@@ -294,7 +294,7 @@ namespace TinyWars.SingleCustomRoom {
             if (!_saveSlotInfoList) {
                 return true;
             } else {
-                return _saveSlotInfoList.every(v => v.saveSlotIndex !== slotIndex);
+                return _saveSlotInfoList.every(v => v.slotIndex !== slotIndex);
             }
         }
     }
@@ -304,7 +304,7 @@ namespace TinyWars.SingleCustomRoom {
             return 0;
         } else {
             for (let i = 0; i < CommonConstants.ScwSaveSlotMaxCount; ++i) {
-                if (infoList.every(info => info.saveSlotIndex !== i)) {
+                if (infoList.every(info => info.slotIndex !== i)) {
                     return i;
                 }
             }

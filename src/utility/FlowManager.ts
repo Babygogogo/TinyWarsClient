@@ -110,11 +110,15 @@ namespace TinyWars.Utility.FlowManager {
         ReplayWar.RwTileBriefPanel.show();
         ReplayWar.RwUnitBriefPanel.show();
     }
-    export async function gotoSingleCustomWar(data: ProtoTypes.WarSerialization.ISerialWar): Promise<void> {
+    export async function gotoSingleCustomWar({ warData, slotIndex, slotComment }: {
+        warData     : ProtoTypes.WarSerialization.ISerialWar;
+        slotIndex   : number;
+        slotComment : string;
+    }): Promise<void> {
         McwModel.unloadWar();
         RwModel.unloadWar();
         MeManager.unloadWar();
-        await ScwModel.loadWar(data);
+        await ScwModel.loadWar({ warData, slotIndex, slotComment });
 
         StageManager.closeAllPanels();
         SingleCustomWar.ScwBackgroundPanel.show();

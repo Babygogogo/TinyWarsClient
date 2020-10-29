@@ -49,9 +49,9 @@ namespace TinyWars.SingleCustomRoom {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgScrContinueWarFailed,  callback: this._onNotifySScrContinueWarFailed },
-                { type: Notify.Type.MsgScrContinueWar,        callback: this._onNotifySScrContinueWar },
+                { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.MsgScrContinueWarFailed,    callback: this._onMsgScrContinueWarFailed },
+                { type: Notify.Type.MsgScrContinueWar,          callback: this._onMsgScrContinueWar },
             ];
             this._uiListeners = [
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
@@ -103,14 +103,17 @@ namespace TinyWars.SingleCustomRoom {
             this._updateComponentsForLanguage();
         }
 
-        private _onNotifySScrContinueWarFailed(e: egret.Event): void {
+        private _onMsgScrContinueWarFailed(e: egret.Event): void {
             Common.CommonBlockPanel.hide();
         }
 
-        private _onNotifySScrContinueWar(e: egret.Event): void {
-            const data      = e.data as ProtoTypes.NetMessage.MsgScrContinueWar.IS;
-            const warData   = ProtoManager.decodeAsSerialWar(data.encodedWar);
-            Utility.FlowManager.gotoSingleCustomWar(warData);
+        private _onMsgScrContinueWar(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgScrContinueWar.IS;
+            Utility.FlowManager.gotoSingleCustomWar({
+                slotIndex   : data.slotIndex,
+                slotComment : ProtoManager.decodeAsScrSaveSlotInfo(data.encodedSlot).slotComment,
+                warData     : ProtoManager.decodeAsSerialWar(data.encodedWar),
+            });
         }
 
         private _onTouchTapBtnBack(): void {
@@ -221,14 +224,21 @@ namespace TinyWars.SingleCustomRoom {
             const data                  = this.data as DataForWarRenderer;
             const slotInfo              = data.slotInfo;
             this.currentState           = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
-            this._labelSlotIndex.text   = "" + slotInfo.saveSlotIndex;
+            this._labelSlotIndex.text   = "" + slotInfo.slotIndex;
             this._labelWarType.text     = Lang.getWarTypeName(slotInfo.warType);
 
-            const mapId = slotInfo.mapId;
-            if (mapId == null) {
-                this._labelName.text = `(${Lang.getText(Lang.Type.B0321)})`;
+            const comment   = slotInfo.slotComment;
+            const labelName = this._labelName;
+            if (comment) {
+                labelName.text = comment;
             } else {
-                WarMapModel.getMapNameInCurrentLanguage(mapId).then(v => this._labelName.text = v);
+                const mapId = slotInfo.mapId;
+                if (mapId == null) {
+                    labelName.text = `(${Lang.getText(Lang.Type.B0321)})`;
+                } else {
+                    labelName.text = ``;
+                    WarMapModel.getMapNameInCurrentLanguage(mapId).then(v => labelName.text = v);
+                }
             }
         }
 
@@ -238,7 +248,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _onTouchTapBtnNext(): void {
-            ScrProxy.reqContinueWar((this.data as DataForWarRenderer).slotInfo.saveSlotIndex);
+            ScrProxy.reqContinueWar((this.data as DataForWarRenderer).slotInfo.slotIndex);
             Common.CommonBlockPanel.show({
                 title   : Lang.getText(Lang.Type.B0088),
                 content : Lang.getText(Lang.Type.A0021),

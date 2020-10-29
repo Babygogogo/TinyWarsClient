@@ -13,6 +13,8 @@ namespace TinyWars.SingleCustomWar {
     export class ScwWar extends SinglePlayerWar.SpwWar {
         private _settingsForSinglePlayer    : ISettingsForScw;
         private _executedActions            : IActionContainer[];
+        private _saveSlotIndex              : number;
+        private _saveSlotComment            : string;
 
         private _isEnded                    = false;
 
@@ -295,23 +297,18 @@ namespace TinyWars.SingleCustomWar {
             return this._isEnded;
         }
 
-        public setSaveSlotIndex(index: number): void {
-            const settingsForSinglePlayer = this.getSettingsForScw();
-            if (settingsForSinglePlayer == null) {
-                Logger.error(`ScwWar._setSaveSlotIndex() empty settingsForSinglePlayer.`);
-                return undefined;
-            }
-
-            settingsForSinglePlayer.saveSlotIndex = index;
+        public setSaveSlotIndex(slotIndex: number): void {
+            this._saveSlotIndex = slotIndex;
         }
         public getSaveSlotIndex(): number {
-            const settingsForSinglePlayer = this.getSettingsForScw();
-            if (settingsForSinglePlayer == null) {
-                Logger.error(`ScwWar.getSaveSlotIndex() empty settingsForSinglePlayer.`);
-                return undefined;
-            }
+            return this._saveSlotIndex;
+        }
 
-            return settingsForSinglePlayer.saveSlotIndex;
+        public setSaveSlotComment(comment: string | null | undefined): void {
+            this._saveSlotComment = comment;
+        }
+        public getSaveSlotComment(): string | null | undefined {
+            return this._saveSlotComment;
         }
 
         public getWarType(): Types.WarType {

@@ -3,9 +3,7 @@ namespace TinyWars.MultiCustomRoom {
     import Lang         = Utility.Lang;
     import Notify       = Utility.Notify;
     import ProtoTypes   = Utility.ProtoTypes;
-    import FlowManager  = Utility.FlowManager;
-    import McwProxy     = MultiPlayerWar.MpwProxy;
-    import NetMessage   = ProtoTypes.NetMessage;
+    import MpwProxy     = MultiPlayerWar.MpwProxy;
     import IMpwWarInfo  = ProtoTypes.MultiPlayerWar.IMpwWarInfo;
 
     export class McrWarInfoPanel extends GameUi.UiPanel {
@@ -44,10 +42,10 @@ namespace TinyWars.MultiCustomRoom {
         protected _onFirstOpened(): void {
             this._uiListeners = [
                 { ui: this._btnBack,        callback: this._onTouchedBtnBack },
-                { ui: this._btnContinueWar,   callback: this._onTouchedBtnStartGame },
+                { ui: this._btnContinueWar, callback: this._onTouchedBtnStartGame },
             ];
             this._notifyListeners = [
-                { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ];
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
 
@@ -92,7 +90,7 @@ namespace TinyWars.MultiCustomRoom {
         private _onTouchedBtnStartGame(e: egret.TouchEvent): void {
             const warInfo = this._warInfo;
             if (warInfo) {
-                McwProxy.reqMcwCommonContinueWar(warInfo.warId);
+                MpwProxy.reqMcwCommonContinueWar(warInfo.warId);
             }
         }
 

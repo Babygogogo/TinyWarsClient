@@ -75,7 +75,7 @@ namespace TinyWars.MultiPlayerWar {
             this._notifyListeners = [
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyMcwPlannerStateChanged },
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgScrCreateCustomWar,            callback: this._onNotifySScrCreateCustomWar },
+                { type: Notify.Type.MsgScrCreateCustomWar,          callback: this._onMsgScrCreateCustomWar },
             ];
             this._uiListeners = [
                 { ui: this._btnBack,        callback: this._onTouchedBtnBack },
@@ -122,13 +122,17 @@ namespace TinyWars.MultiPlayerWar {
         private _onNotifyLanguageChanged(e: egret.Event): void {
             this._updateComponentsForLanguage();
         }
-        private _onNotifySScrCreateCustomWar(e: egret.Event): void {
+        private _onMsgScrCreateCustomWar(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgScrCreateCustomWar.IS;
             Common.CommonConfirmPanel.show({
                 title   : Lang.getText(Lang.Type.B0088),
                 content : Lang.getText(Lang.Type.A0107),
                 callback: () => {
-                    FlowManager.gotoSingleCustomWar(data.warData);
+                    FlowManager.gotoSingleCustomWar({
+                        slotIndex   : data.slotIndex,
+                        slotComment : data.slotComment,
+                        warData     : data.warData,
+                    });
                 },
             });
         }

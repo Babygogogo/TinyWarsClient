@@ -3,6 +3,7 @@ namespace TinyWars.Utility.ProtoManager {
     import IMessageContainer    = ProtoTypes.NetMessage.IMessageContainer;
     import ISerialWar           = ProtoTypes.WarSerialization.ISerialWar;
     import IMapRawData          = ProtoTypes.Map.IMapRawData;
+    import IScrSaveSlotInfo     = ProtoTypes.SingleCustomRoom.IScrSaveSlotInfo;
 
     const PROTO_FILENAME = "resource/config/NetMessageProto.json";
 
@@ -10,6 +11,7 @@ namespace TinyWars.Utility.ProtoManager {
     let FullConfigClass         : typeof ProtoTypes.Config.FullConfig;
     let SerialWarClass          : typeof ProtoTypes.WarSerialization.SerialWar;
     let MapRawDataClass         : typeof ProtoTypes.Map.MapRawData;
+    let ScrSaveSlotInfoClass    : typeof ProtoTypes.SingleCustomRoom.ScrSaveSlotInfo;
 
     export function init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
@@ -22,6 +24,7 @@ namespace TinyWars.Utility.ProtoManager {
                         FullConfigClass         = protoRoot.lookupType("Config.FullConfig") as any;
                         SerialWarClass          = protoRoot.lookupType("WarSerialization.SerialWar") as any;
                         MapRawDataClass         = protoRoot.lookupType("Map.MapRawData") as any;
+                        ScrSaveSlotInfoClass    = protoRoot.lookupType("SingleCustomRoom.ScrSaveSlotInfo") as any;
                         resolve();
                     }
                 },
@@ -58,6 +61,13 @@ namespace TinyWars.Utility.ProtoManager {
     }
     export function decodeAsMapRawData(data: any): IMapRawData {
         return MapRawDataClass.toObject(MapRawDataClass.decode(data));
+    }
+
+    export function encodeAsScrSaveSlotInfo(data: IScrSaveSlotInfo): Uint8Array {
+        return ScrSaveSlotInfoClass.encode(data).finish();
+    }
+    export function decodeAsScrSaveSlotInfo(data: Uint8Array): IScrSaveSlotInfo {
+        return ScrSaveSlotInfoClass.toObject(ScrSaveSlotInfoClass.decode(data));
     }
 
     function getDataForDecode(encodedData: any): Uint8Array | protobuf.Reader {

@@ -125,9 +125,12 @@ namespace TinyWars.SingleCustomWar {
         }
 
         private _onMsgScrContinueWar(e: egret.Event): void {
-            const data      = e.data as ProtoTypes.NetMessage.MsgScrContinueWar.IS;
-            const warData   = ProtoManager.decodeAsSerialWar(data.encodedWar);
-            Utility.FlowManager.gotoSingleCustomWar(warData);
+            const data = e.data as ProtoTypes.NetMessage.MsgScrContinueWar.IS;
+            Utility.FlowManager.gotoSingleCustomWar({
+                slotIndex   : data.slotIndex,
+                slotComment : ProtoManager.decodeAsScrSaveSlotInfo(data.encodedSlot).slotComment,
+                warData     : ProtoManager.decodeAsSerialWar(data.encodedWar),
+            });
         }
 
         private _onMsgScrSaveWar(e: egret.Event): void {
@@ -140,7 +143,11 @@ namespace TinyWars.SingleCustomWar {
                 title   : Lang.getText(Lang.Type.B0088),
                 content : Lang.getText(Lang.Type.A0107),
                 callback: () => {
-                    FlowManager.gotoSingleCustomWar(data.warData);
+                    FlowManager.gotoSingleCustomWar({
+                        slotIndex   : data.slotIndex,
+                        slotComment : data.slotComment,
+                        warData     : data.warData,
+                    });
                 },
             });
         }

@@ -58,13 +58,19 @@ namespace TinyWars.SingleCustomWar.ScwModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for managing war.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export async function loadWar(data: WarSerialization.ISerialWar): Promise<ScwWar> {
+    export async function loadWar({ warData, slotIndex, slotComment }: {
+        warData     : WarSerialization.ISerialWar;
+        slotIndex   : number;
+        slotComment : string;
+    }): Promise<ScwWar> {
         if (_war) {
             Logger.warn(`McwModel.loadWar() another war has been loaded already!`);
             unloadWar();
         }
 
-        _war = (await new SingleCustomWar.ScwWar().init(data)).startRunning().startRunningView() as ScwWar;
+        _war = (await new SingleCustomWar.ScwWar().init(warData)).startRunning().startRunningView() as ScwWar;
+        _war.setSaveSlotIndex(slotIndex);
+        _war.setSaveSlotComment(slotComment);
         checkAndRequestBeginTurnOrRunRobot(_war);
 
         return _war;

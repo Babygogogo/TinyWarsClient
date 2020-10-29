@@ -1,18 +1,16 @@
 
-namespace TinyWars.SingleCustomRoom {
+namespace TinyWars.MapEditor {
     import Lang         = Utility.Lang;
     import Notify       = Utility.Notify;
     import FloatText    = Utility.FloatText;
-    import ProtoTypes   = Utility.ProtoTypes;
-    import Types        = Utility.Types;
 
     const CONFIRM_INTERVAL_MS = 5000;
 
-    export class ScrCreateSettingsPanel extends GameUi.UiPanel {
+    export class MeSimSettingsPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: ScrCreateSettingsPanel;
+        private static _instance: MeSimSettingsPanel;
 
         private _tabSettings    : GameUi.UiTab;
         private _labelMenuTitle : GameUi.UiLabel;
@@ -22,14 +20,14 @@ namespace TinyWars.SingleCustomRoom {
         private _timeoutIdForBtnConfirm: number;
 
         public static show(): void {
-            if (!ScrCreateSettingsPanel._instance) {
-                ScrCreateSettingsPanel._instance = new ScrCreateSettingsPanel();
+            if (!MeSimSettingsPanel._instance) {
+                MeSimSettingsPanel._instance = new MeSimSettingsPanel();
             }
-            ScrCreateSettingsPanel._instance.open();
+            MeSimSettingsPanel._instance.open();
         }
         public static hide(): void {
-            if (ScrCreateSettingsPanel._instance) {
-                ScrCreateSettingsPanel._instance.close();
+            if (MeSimSettingsPanel._instance) {
+                MeSimSettingsPanel._instance.close();
             }
         }
 
@@ -37,7 +35,7 @@ namespace TinyWars.SingleCustomRoom {
             super();
 
             this._setAutoAdjustHeightEnabled(true);
-            this.skinName = "resource/skins/singleCustomRoom/ScrCreateSettingsPanel.exml";
+            this.skinName = "resource/skins/mapEditor/MeSimSettingsPanel.exml";
         }
 
         protected _onFirstOpened(): void {
@@ -46,8 +44,8 @@ namespace TinyWars.SingleCustomRoom {
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
             ];
             this._notifyListeners = [
+                { type: Notify.Type.MsgMcrCreateRoom,     callback: this._onNotifySCreateCustomOnlineWar },
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgScrCreateWar,    callback: this._onMsgScrCreateWar },
             ];
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
         }
@@ -56,11 +54,11 @@ namespace TinyWars.SingleCustomRoom {
             this._tabSettings.bindData([
                 {
                     tabItemData: { name: Lang.getText(Lang.Type.B0002) },
-                    pageClass  : ScrCreateBasicSettingsPage,
+                    pageClass  : MeSimBasicSettingsPage,
                 },
                 {
                     tabItemData: { name: Lang.getText(Lang.Type.B0003) },
-                    pageClass  : ScrCreateAdvancedSettingsPage,
+                    pageClass  : MeSimAdvancedSettingsPage,
                 },
             ]);
 
@@ -75,41 +73,19 @@ namespace TinyWars.SingleCustomRoom {
 
         private _onTouchedBtnBack(e: egret.TouchEvent): void {
             this.close();
-            ScrCreateMapListPanel.show();
         }
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            const tips = ScrModel.getCreateWarInvalidParamTips();
-            if (tips) {
-                FloatText.show(tips);
-            } else {
-                const data  = ScrModel.getCreateWarData();
-                const func  = () => {
-                    ScrProxy.reqScrCreateWar(ScrModel.getCreateWarData());
+            const data = McrModel.Create.getData();
+            McrProxy.reqCreateRoom(data);
 
-                    this._btnConfirm.enabled = false;
-                    this._resetTimeoutForBtnConfirm();
-                }
-
-                if (ScrModel.checkIsSaveSlotEmpty(data.slotIndex)) {
-                    func();
-                } else {
-                    Common.CommonConfirmPanel.show({
-                        title   : Lang.getText(Lang.Type.B0088),
-                        content : Lang.getText(Lang.Type.A0070),
-                        callback: func,
-                    });
-                }
-            }
+            this._btnConfirm.enabled = false;
+            this._resetTimeoutForBtnConfirm();
         }
 
-        private _onMsgScrCreateWar(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgScrCreateWar.IS;
-            Utility.FlowManager.gotoSingleCustomWar({
-                slotComment : null,
-                slotIndex   : data.slotIndex,
-                warData     : data.warData,
-            });
+        private _onNotifySCreateCustomOnlineWar(e: egret.Event): void {
+            FloatText.show(Lang.getText(Lang.Type.A0015));
+            Utility.FlowManager.gotoLobby();
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
@@ -132,7 +108,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0155);
+            this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0000);
             this._btnBack.label         = Lang.getText(Lang.Type.B0146);
             this._btnConfirm.label      = Lang.getText(Lang.Type.B0026);
         }

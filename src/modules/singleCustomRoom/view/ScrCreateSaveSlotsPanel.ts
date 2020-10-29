@@ -89,7 +89,7 @@ namespace TinyWars.SingleCustomRoom {
             for (let i = 0; i < Utility.ConfigManager.COMMON_CONSTANTS.ScwSaveSlotMaxCount; ++i) {
                 dataList.push({
                     slotIndex   : i,
-                    slotInfo    : slotList.find(v => v.saveSlotIndex === i),
+                    slotInfo    : slotList.find(v => v.slotIndex === i),
                 })
             }
 
@@ -137,14 +137,22 @@ namespace TinyWars.SingleCustomRoom {
             this._labelSlotIndex.text   = "" + data.slotIndex;
             this._labelType.text        = slotInfo ? Lang.getWarTypeName(slotInfo.warType) : "----";
             this._labelChoose.text      = Lang.getText(Lang.Type.B0258);
+
+            const labelMapName = this._labelMapName;
             if (!slotInfo) {
-                this._labelMapName.text = "----";
+                labelMapName.text = "----";
             } else {
-                const mapId = slotInfo.mapId;
-                if (mapId == null) {
-                    this._labelMapName.text = `(${Lang.getText(Lang.Type.B0321)})`;
+                const comment = slotInfo.slotComment;
+                if (comment) {
+                    labelMapName.text = comment;
                 } else {
-                    WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId).then(value => this._labelMapName.text = value);
+                    const mapId = slotInfo.mapId;
+                    if (mapId == null) {
+                        labelMapName.text = `(${Lang.getText(Lang.Type.B0321)})`;
+                    } else {
+                        labelMapName.text = ``;
+                        WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId).then(value => labelMapName.text = value);
+                    }
                 }
             }
         }

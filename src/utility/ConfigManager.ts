@@ -61,6 +61,7 @@ namespace TinyWars.Utility.ConfigManager {
         MapEditorSlotMaxCountForNormal          : 3,
         MapEditorSlotMaxCountForCommittee       : 10,
         ScwSaveSlotMaxCount                     : 10,
+        ScwSaveSlotCommentMaxLength             : 15,
 
         RankInitialScore                        : 1200,
         RankMaxConcurrentCount                  : 5,

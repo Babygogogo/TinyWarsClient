@@ -61,6 +61,7 @@ namespace TinyWars.SingleCustomRoom.ScrProxy {
         NetManager.send({
             MsgScrSaveWar: { c: {
                 slotIndex   : war.getSaveSlotIndex(),
+                slotComment : war.getSaveSlotComment(),
                 warData     : war.serialize(),
             }, },
         });
@@ -72,11 +73,17 @@ namespace TinyWars.SingleCustomRoom.ScrProxy {
         }
     }
 
-    export function reqScrCreateCustomWar(warData: ProtoTypes.WarSerialization.ISerialWar): void {
+    export function reqScrCreateCustomWar({ slotIndex, slotComment, warData }: {
+        slotIndex   : number;
+        slotComment : string | null | undefined;
+        warData     : ProtoTypes.WarSerialization.ISerialWar;
+    }): void {
         NetManager.send({
             MsgScrCreateCustomWar: { c: {
+                slotIndex,
+                slotComment,
                 warData,
-            }, }
+            }, },
         });
     }
     function _onMsgScrCreateCustomWar(e: egret.Event): void {

@@ -3981,9 +3981,6 @@ export declare namespace WarSettings {
     /** Properties of a SettingsForScw. */
     interface ISettingsForScw {
 
-        /** SettingsForScw saveSlotIndex */
-        saveSlotIndex?: (number|null);
-
         /** SettingsForScw isCheating */
         isCheating?: (boolean|null);
     }
@@ -3996,9 +3993,6 @@ export declare namespace WarSettings {
          * @param [properties] Properties to set
          */
         constructor(properties?: WarSettings.ISettingsForScw);
-
-        /** SettingsForScw saveSlotIndex. */
-        public saveSlotIndex: number;
 
         /** SettingsForScw isCheating. */
         public isCheating: boolean;
@@ -12603,8 +12597,8 @@ export declare namespace SingleCustomRoom {
     /** Properties of a ScrSaveSlotInfo. */
     interface IScrSaveSlotInfo {
 
-        /** ScrSaveSlotInfo saveSlotIndex */
-        saveSlotIndex?: (number|null);
+        /** ScrSaveSlotInfo slotIndex */
+        slotIndex?: (number|null);
 
         /** ScrSaveSlotInfo mapId */
         mapId?: (number|null);
@@ -12614,6 +12608,9 @@ export declare namespace SingleCustomRoom {
 
         /** ScrSaveSlotInfo configVersion */
         configVersion?: (string|null);
+
+        /** ScrSaveSlotInfo slotComment */
+        slotComment?: (string|null);
     }
 
     /** Represents a ScrSaveSlotInfo. */
@@ -12625,8 +12622,8 @@ export declare namespace SingleCustomRoom {
          */
         constructor(properties?: SingleCustomRoom.IScrSaveSlotInfo);
 
-        /** ScrSaveSlotInfo saveSlotIndex. */
-        public saveSlotIndex: number;
+        /** ScrSaveSlotInfo slotIndex. */
+        public slotIndex: number;
 
         /** ScrSaveSlotInfo mapId. */
         public mapId: number;
@@ -12636,6 +12633,9 @@ export declare namespace SingleCustomRoom {
 
         /** ScrSaveSlotInfo configVersion. */
         public configVersion: string;
+
+        /** ScrSaveSlotInfo slotComment. */
+        public slotComment: string;
 
         /**
          * Creates a new ScrSaveSlotInfo instance using the specified properties.
@@ -39290,6 +39290,9 @@ export declare namespace NetMessage {
         /** Properties of a C. */
         interface IC {
 
+            /** C slotIndex */
+            slotIndex?: (number|null);
+
             /** C settingsForCommon */
             settingsForCommon?: (WarSettings.ISettingsForCommon|null);
 
@@ -39308,6 +39311,9 @@ export declare namespace NetMessage {
              * @param [properties] Properties to set
              */
             constructor(properties?: NetMessage.MsgScrCreateWar.IC);
+
+            /** C slotIndex. */
+            public slotIndex: number;
 
             /** C settingsForCommon. */
             public settingsForCommon?: (WarSettings.ISettingsForCommon|null);
@@ -39395,6 +39401,9 @@ export declare namespace NetMessage {
             /** S errorCode */
             errorCode?: (number|null);
 
+            /** S slotIndex */
+            slotIndex?: (number|null);
+
             /** S warData */
             warData?: (WarSerialization.ISerialWar|null);
         }
@@ -39410,6 +39419,9 @@ export declare namespace NetMessage {
 
             /** S errorCode. */
             public errorCode: number;
+
+            /** S slotIndex. */
+            public slotIndex: number;
 
             /** S warData. */
             public warData?: (WarSerialization.ISerialWar|null);
@@ -39962,6 +39974,9 @@ export declare namespace NetMessage {
             /** S slotIndex */
             slotIndex?: (number|null);
 
+            /** S encodedSlot */
+            encodedSlot?: (Uint8Array|null);
+
             /** S encodedWar */
             encodedWar?: (Uint8Array|null);
         }
@@ -39980,6 +39995,9 @@ export declare namespace NetMessage {
 
             /** S slotIndex. */
             public slotIndex: number;
+
+            /** S encodedSlot. */
+            public encodedSlot: Uint8Array;
 
             /** S encodedWar. */
             public encodedWar: Uint8Array;
@@ -40160,6 +40178,9 @@ export declare namespace NetMessage {
             /** C slotIndex */
             slotIndex?: (number|null);
 
+            /** C slotComment */
+            slotComment?: (string|null);
+
             /** C warData */
             warData?: (WarSerialization.ISerialWar|null);
         }
@@ -40175,6 +40196,9 @@ export declare namespace NetMessage {
 
             /** C slotIndex. */
             public slotIndex: number;
+
+            /** C slotComment. */
+            public slotComment: string;
 
             /** C warData. */
             public warData?: (WarSerialization.ISerialWar|null);
@@ -40448,6 +40472,12 @@ export declare namespace NetMessage {
         /** Properties of a C. */
         interface IC {
 
+            /** C slotIndex */
+            slotIndex?: (number|null);
+
+            /** C slotComment */
+            slotComment?: (string|null);
+
             /** C warData */
             warData?: (WarSerialization.ISerialWar|null);
         }
@@ -40460,6 +40490,12 @@ export declare namespace NetMessage {
              * @param [properties] Properties to set
              */
             constructor(properties?: NetMessage.MsgScrCreateCustomWar.IC);
+
+            /** C slotIndex. */
+            public slotIndex: number;
+
+            /** C slotComment. */
+            public slotComment: string;
 
             /** C warData. */
             public warData?: (WarSerialization.ISerialWar|null);
@@ -40541,6 +40577,12 @@ export declare namespace NetMessage {
             /** S errorCode */
             errorCode?: (number|null);
 
+            /** S slotIndex */
+            slotIndex?: (number|null);
+
+            /** S slotComment */
+            slotComment?: (string|null);
+
             /** S warData */
             warData?: (WarSerialization.ISerialWar|null);
         }
@@ -40556,6 +40598,12 @@ export declare namespace NetMessage {
 
             /** S errorCode. */
             public errorCode: number;
+
+            /** S slotIndex. */
+            public slotIndex: number;
+
+            /** S slotComment. */
+            public slotComment: string;
 
             /** S warData. */
             public warData?: (WarSerialization.ISerialWar|null);

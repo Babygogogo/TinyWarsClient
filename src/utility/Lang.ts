@@ -706,6 +706,10 @@ namespace TinyWars.Utility.Lang {
             `此地图已被修改，确定不保存直接退出吗？`,
             `The map has been modified. Are you sure to exit anyway?`,
         ],
+        [Type.A0144]: [
+            `请输入存档备注以便于区分，可留空`,
+            `Please input a comment for the save slot.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -2381,6 +2385,14 @@ namespace TinyWars.Utility.Lang {
         [Type.B0421]: [
             `已搭载CO`,
             `CO on board`,
+        ],
+        [Type.B0422]: [
+            `战斗`,
+            `Fight`,
+        ],
+        [Type.B0423]: [
+            `信息`,
+            `Info`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
